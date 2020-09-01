@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMultiRangeSpawnStrategy : ISpawnTreeSpawnStrategy
 	{
-		[Ordinal(0)] [RED("primaryMinSpawnRange")] 		public CFloat PrimaryMinSpawnRange { get; set;}
+		[Ordinal(1)] [RED("primaryMinSpawnRange")] 		public CFloat PrimaryMinSpawnRange { get; set;}
 
-		[Ordinal(0)] [RED("primaryMaxSpawnRange")] 		public CFloat PrimaryMaxSpawnRange { get; set;}
+		[Ordinal(2)] [RED("primaryMaxSpawnRange")] 		public CFloat PrimaryMaxSpawnRange { get; set;}
 
-		[Ordinal(0)] [RED("visibilityTestRange")] 		public CFloat VisibilityTestRange { get; set;}
+		[Ordinal(3)] [RED("visibilityTestRange")] 		public CFloat VisibilityTestRange { get; set;}
 
-		[Ordinal(0)] [RED("primaryMinPoolRange")] 		public CFloat PrimaryMinPoolRange { get; set;}
+		[Ordinal(4)] [RED("primaryMinPoolRange")] 		public CFloat PrimaryMinPoolRange { get; set;}
 
-		[Ordinal(0)] [RED("orientedRanges", 2,0)] 		public CArray<SSpawnStrategyRange> OrientedRanges { get; set;}
+		[Ordinal(5)] [RED("orientedRanges", 2,0)] 		public CArray<SSpawnStrategyRange> OrientedRanges { get; set;}
 
-		[Ordinal(0)] [RED("canPoolOnSight")] 		public CBool CanPoolOnSight { get; set;}
+		[Ordinal(6)] [RED("canPoolOnSight")] 		public CBool CanPoolOnSight { get; set;}
 
-		[Ordinal(0)] [RED("forcePoolRange")] 		public CFloat ForcePoolRange { get; set;}
+		[Ordinal(7)] [RED("forcePoolRange")] 		public CFloat ForcePoolRange { get; set;}
 
-		[Ordinal(0)] [RED("poolDelay")] 		public CFloat PoolDelay { get; set;}
+		[Ordinal(8)] [RED("poolDelay")] 		public CFloat PoolDelay { get; set;}
 
 		public CMultiRangeSpawnStrategy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

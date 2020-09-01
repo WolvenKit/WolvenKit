@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcCriticalStateFlying : CAICombatActionTree
 	{
-		[Ordinal(0)] [RED("params")] 		public CHandle<CAINpcCriticalStateParams> Params { get; set;}
+		[Ordinal(1)] [RED("params")] 		public CHandle<CAINpcCriticalStateParams> Params { get; set;}
 
 		public CAINpcCriticalStateFlying(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

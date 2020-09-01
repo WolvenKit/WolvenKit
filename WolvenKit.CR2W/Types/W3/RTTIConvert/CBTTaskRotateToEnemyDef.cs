@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRotateToEnemyDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("toleranceAngle")] 		public CFloat ToleranceAngle { get; set;}
+		[Ordinal(1)] [RED("("toleranceAngle")] 		public CFloat ToleranceAngle { get; set;}
 
-		[Ordinal(0)] [RED("("rotateOnRotateEvent")] 		public CBool RotateOnRotateEvent { get; set;}
+		[Ordinal(2)] [RED("("rotateOnRotateEvent")] 		public CBool RotateOnRotateEvent { get; set;}
 
 		public CBTTaskRotateToEnemyDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

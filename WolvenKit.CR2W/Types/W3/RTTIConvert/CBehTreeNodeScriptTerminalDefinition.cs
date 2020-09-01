@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeScriptTerminalDefinition : IBehTreeNodeDefinition
 	{
-		[Ordinal(0)] [RED("taskOrigin")] 		public CHandle<IBehTreeTaskDefinition> TaskOrigin { get; set;}
+		[Ordinal(1)] [RED("taskOrigin")] 		public CHandle<IBehTreeTaskDefinition> TaskOrigin { get; set;}
 
-		[Ordinal(0)] [RED("skipIfActive")] 		public CBool SkipIfActive { get; set;}
+		[Ordinal(2)] [RED("skipIfActive")] 		public CBool SkipIfActive { get; set;}
 
-		[Ordinal(0)] [RED("runMainOnActivation")] 		public CBool RunMainOnActivation { get; set;}
+		[Ordinal(3)] [RED("runMainOnActivation")] 		public CBool RunMainOnActivation { get; set;}
 
 		public CBehTreeNodeScriptTerminalDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

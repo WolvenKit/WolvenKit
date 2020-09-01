@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskCompleteOnAnimEventDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("animEvent")] 		public CName AnimEvent { get; set;}
+		[Ordinal(1)] [RED("animEvent")] 		public CName AnimEvent { get; set;}
 
-		[Ordinal(0)] [RED("sucess")] 		public CBool Sucess { get; set;}
+		[Ordinal(2)] [RED("sucess")] 		public CBool Sucess { get; set;}
 
 		public BTTaskCompleteOnAnimEventDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3GuiPaperdollInventoryComponent : W3GuiPlayerInventoryComponent
 	{
-		[Ordinal(0)] [RED("("previewSlots", 2,0)] 		public CArray<CBool> PreviewSlots { get; set;}
+		[Ordinal(1)] [RED("("previewSlots", 2,0)] 		public CArray<CBool> PreviewSlots { get; set;}
 
 		public W3GuiPaperdollInventoryComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

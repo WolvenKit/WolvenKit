@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateSkateSlide : CExplorationStateSkatingDrift
 	{
-		[Ordinal(0)] [RED("inputRangeToEnter")] 		public CFloat InputRangeToEnter { get; set;}
+		[Ordinal(1)] [RED("inputRangeToEnter")] 		public CFloat InputRangeToEnter { get; set;}
 
-		[Ordinal(0)] [RED("height")] 		public CFloat Height { get; set;}
+		[Ordinal(2)] [RED("height")] 		public CFloat Height { get; set;}
 
 		public CExplorationStateSkateSlide(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

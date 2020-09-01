@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCombatStorageDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("setIsShooting")] 		public CBool SetIsShooting { get; set;}
+		[Ordinal(1)] [RED("("setIsShooting")] 		public CBool SetIsShooting { get; set;}
 
-		[Ordinal(0)] [RED("("setIsAiming")] 		public CBool SetIsAiming { get; set;}
+		[Ordinal(2)] [RED("("setIsAiming")] 		public CBool SetIsAiming { get; set;}
 
 		public CBTTaskCombatStorageDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

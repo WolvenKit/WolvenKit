@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvShadowsParameters : CVariable
 	{
-		[Ordinal(0)] [RED("("activatedAutoHide")] 		public CBool ActivatedAutoHide { get; set;}
+		[Ordinal(1)] [RED("("activatedAutoHide")] 		public CBool ActivatedAutoHide { get; set;}
 
-		[Ordinal(0)] [RED("("autoHideBoxSizeMin")] 		public SSimpleCurve AutoHideBoxSizeMin { get; set;}
+		[Ordinal(2)] [RED("("autoHideBoxSizeMin")] 		public SSimpleCurve AutoHideBoxSizeMin { get; set;}
 
-		[Ordinal(0)] [RED("("autoHideBoxSizeMax")] 		public SSimpleCurve AutoHideBoxSizeMax { get; set;}
+		[Ordinal(3)] [RED("("autoHideBoxSizeMax")] 		public SSimpleCurve AutoHideBoxSizeMax { get; set;}
 
-		[Ordinal(0)] [RED("("autoHideBoxCompMaxX")] 		public SSimpleCurve AutoHideBoxCompMaxX { get; set;}
+		[Ordinal(4)] [RED("("autoHideBoxCompMaxX")] 		public SSimpleCurve AutoHideBoxCompMaxX { get; set;}
 
-		[Ordinal(0)] [RED("("autoHideBoxCompMaxY")] 		public SSimpleCurve AutoHideBoxCompMaxY { get; set;}
+		[Ordinal(5)] [RED("("autoHideBoxCompMaxY")] 		public SSimpleCurve AutoHideBoxCompMaxY { get; set;}
 
-		[Ordinal(0)] [RED("("autoHideBoxCompMaxZ")] 		public SSimpleCurve AutoHideBoxCompMaxZ { get; set;}
+		[Ordinal(6)] [RED("("autoHideBoxCompMaxZ")] 		public SSimpleCurve AutoHideBoxCompMaxZ { get; set;}
 
-		[Ordinal(0)] [RED("("autoHideDistScale")] 		public SSimpleCurve AutoHideDistScale { get; set;}
+		[Ordinal(7)] [RED("("autoHideDistScale")] 		public SSimpleCurve AutoHideDistScale { get; set;}
 
 		public CEnvShadowsParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

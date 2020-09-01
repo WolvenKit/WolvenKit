@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SRestoredSkill : CVariable
 	{
-		[Ordinal(0)] [RED("("level")] 		public CInt32 Level { get; set;}
+		[Ordinal(1)] [RED("("level")] 		public CInt32 Level { get; set;}
 
-		[Ordinal(0)] [RED("("skillType")] 		public CEnum<ESkill> SkillType { get; set;}
+		[Ordinal(2)] [RED("("skillType")] 		public CEnum<ESkill> SkillType { get; set;}
 
-		[Ordinal(0)] [RED("("isNew")] 		public CBool IsNew { get; set;}
+		[Ordinal(3)] [RED("("isNew")] 		public CBool IsNew { get; set;}
 
-		[Ordinal(0)] [RED("("remainingBlockedTime")] 		public CFloat RemainingBlockedTime { get; set;}
+		[Ordinal(4)] [RED("("remainingBlockedTime")] 		public CFloat RemainingBlockedTime { get; set;}
 
 		public SRestoredSkill(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

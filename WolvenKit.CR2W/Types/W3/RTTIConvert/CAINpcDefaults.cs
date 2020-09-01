@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcDefaults : CAIDefaults
 	{
-		[Ordinal(0)] [RED("npcGroupType")] 		public CHandle<CAINPCGroupTypeRedefinition> NpcGroupType { get; set;}
+		[Ordinal(1)] [RED("npcGroupType")] 		public CHandle<CAINPCGroupTypeRedefinition> NpcGroupType { get; set;}
 
-		[Ordinal(0)] [RED("combatTree")] 		public CHandle<CAINpcCombat> CombatTree { get; set;}
+		[Ordinal(2)] [RED("combatTree")] 		public CHandle<CAINpcCombat> CombatTree { get; set;}
 
-		[Ordinal(0)] [RED("idleTree")] 		public CHandle<CAIIdleTree> IdleTree { get; set;}
+		[Ordinal(3)] [RED("idleTree")] 		public CHandle<CAIIdleTree> IdleTree { get; set;}
 
-		[Ordinal(0)] [RED("deathTree")] 		public CHandle<CAIDeathTree> DeathTree { get; set;}
+		[Ordinal(4)] [RED("deathTree")] 		public CHandle<CAIDeathTree> DeathTree { get; set;}
 
-		[Ordinal(0)] [RED("reactionTree")] 		public CHandle<CAINpcReactionsTree> ReactionTree { get; set;}
+		[Ordinal(5)] [RED("reactionTree")] 		public CHandle<CAINpcReactionsTree> ReactionTree { get; set;}
 
-		[Ordinal(0)] [RED("softReactionTree")] 		public CHandle<CAISoftReactionTree> SoftReactionTree { get; set;}
+		[Ordinal(6)] [RED("softReactionTree")] 		public CHandle<CAISoftReactionTree> SoftReactionTree { get; set;}
 
-		[Ordinal(0)] [RED("hasDrinkingMinigame")] 		public CBool HasDrinkingMinigame { get; set;}
+		[Ordinal(7)] [RED("hasDrinkingMinigame")] 		public CBool HasDrinkingMinigame { get; set;}
 
-		[Ordinal(0)] [RED("morphInCombat")] 		public CBool MorphInCombat { get; set;}
+		[Ordinal(8)] [RED("morphInCombat")] 		public CBool MorphInCombat { get; set;}
 
-		[Ordinal(0)] [RED("tempNpcGroupType")] 		public CEnum<ENPCGroupType> TempNpcGroupType { get; set;}
+		[Ordinal(9)] [RED("tempNpcGroupType")] 		public CEnum<ENPCGroupType> TempNpcGroupType { get; set;}
 
 		public CAINpcDefaults(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

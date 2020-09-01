@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CReactionOrCondition : IReactionCondition
 	{
-		[Ordinal(0)] [RED("conditions", 2,0)] 		public CArray<CPtr<IReactionCondition>> Conditions { get; set;}
+		[Ordinal(1)] [RED("conditions", 2,0)] 		public CArray<CPtr<IReactionCondition>> Conditions { get; set;}
 
 		public CReactionOrCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

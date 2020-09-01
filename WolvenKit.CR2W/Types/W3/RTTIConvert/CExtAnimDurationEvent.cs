@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimDurationEvent : CExtAnimEvent
 	{
-		[Ordinal(0)] [RED("("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(1)] [RED("("duration")] 		public CFloat Duration { get; set;}
 
-		[Ordinal(0)] [RED("("alwaysFiresEnd")] 		public CBool AlwaysFiresEnd { get; set;}
+		[Ordinal(2)] [RED("("alwaysFiresEnd")] 		public CBool AlwaysFiresEnd { get; set;}
 
 		public CExtAnimDurationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

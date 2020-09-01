@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalChildBase : CJournalBase
 	{
-		[Ordinal(0)] [RED("parentGuid")] 		public CGUID ParentGuid { get; set;}
+		[Ordinal(1)] [RED("parentGuid")] 		public CGUID ParentGuid { get; set;}
 
-		[Ordinal(0)] [RED("linkedParentGuid")] 		public CGUID LinkedParentGuid { get; set;}
+		[Ordinal(2)] [RED("linkedParentGuid")] 		public CGUID LinkedParentGuid { get; set;}
 
 		public CJournalChildBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

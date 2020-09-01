@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIProfile : CEntityTemplateParam
 	{
-		[Ordinal(0)] [RED("reactions", 2,0)] 		public CArray<CHandle<CAIReaction>> Reactions { get; set;}
+		[Ordinal(1)] [RED("reactions", 2,0)] 		public CArray<CHandle<CAIReaction>> Reactions { get; set;}
 
-		[Ordinal(0)] [RED("senseVisionParams")] 		public CPtr<CAISenseParams> SenseVisionParams { get; set;}
+		[Ordinal(2)] [RED("senseVisionParams")] 		public CPtr<CAISenseParams> SenseVisionParams { get; set;}
 
-		[Ordinal(0)] [RED("senseAbsoluteParams")] 		public CPtr<CAISenseParams> SenseAbsoluteParams { get; set;}
+		[Ordinal(3)] [RED("senseAbsoluteParams")] 		public CPtr<CAISenseParams> SenseAbsoluteParams { get; set;}
 
-		[Ordinal(0)] [RED("attitudeGroup")] 		public CName AttitudeGroup { get; set;}
+		[Ordinal(4)] [RED("attitudeGroup")] 		public CName AttitudeGroup { get; set;}
 
-		[Ordinal(0)] [RED("minigameParams")] 		public SAIMinigameParams MinigameParams { get; set;}
+		[Ordinal(5)] [RED("minigameParams")] 		public SAIMinigameParams MinigameParams { get; set;}
 
-		[Ordinal(0)] [RED("aiWizardRes")] 		public CHandle<CResource> AiWizardRes { get; set;}
+		[Ordinal(6)] [RED("aiWizardRes")] 		public CHandle<CResource> AiWizardRes { get; set;}
 
 		public CAIProfile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

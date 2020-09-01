@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3IgniEntityStateIgniChanneled : W3SignEntityStateChanneling
 	{
-		[Ordinal(0)] [RED("("reusableProjectiles", 2,0)] 		public CArray<CHandle<W3IgniProjectile>> ReusableProjectiles { get; set;}
+		[Ordinal(1)] [RED("("reusableProjectiles", 2,0)] 		public CArray<CHandle<W3IgniProjectile>> ReusableProjectiles { get; set;}
 
 		public W3IgniEntityStateIgniChanneled(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

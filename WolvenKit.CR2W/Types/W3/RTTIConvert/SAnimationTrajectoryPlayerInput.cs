@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAnimationTrajectoryPlayerInput : CVariable
 	{
-		[Ordinal(0)] [RED("localToWorld")] 		public CMatrix LocalToWorld { get; set;}
+		[Ordinal(1)] [RED("localToWorld")] 		public CMatrix LocalToWorld { get; set;}
 
-		[Ordinal(0)] [RED("pointWS")] 		public Vector PointWS { get; set;}
+		[Ordinal(2)] [RED("pointWS")] 		public Vector PointWS { get; set;}
 
-		[Ordinal(0)] [RED("directionWS")] 		public Vector DirectionWS { get; set;}
+		[Ordinal(3)] [RED("directionWS")] 		public Vector DirectionWS { get; set;}
 
-		[Ordinal(0)] [RED("tagId")] 		public CName TagId { get; set;}
+		[Ordinal(4)] [RED("tagId")] 		public CName TagId { get; set;}
 
-		[Ordinal(0)] [RED("selectorType")] 		public CEnum<EAnimationTrajectorySelectorType> SelectorType { get; set;}
+		[Ordinal(5)] [RED("selectorType")] 		public CEnum<EAnimationTrajectorySelectorType> SelectorType { get; set;}
 
-		[Ordinal(0)] [RED("proxySyncType")] 		public CEnum<EActionMoveAnimationSyncType> ProxySyncType { get; set;}
+		[Ordinal(6)] [RED("proxySyncType")] 		public CEnum<EActionMoveAnimationSyncType> ProxySyncType { get; set;}
 
-		[Ordinal(0)] [RED("proxy")] 		public CHandle<CActionMoveAnimationProxy> Proxy { get; set;}
+		[Ordinal(7)] [RED("proxy")] 		public CHandle<CActionMoveAnimationProxy> Proxy { get; set;}
 
 		public SAnimationTrajectoryPlayerInput(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

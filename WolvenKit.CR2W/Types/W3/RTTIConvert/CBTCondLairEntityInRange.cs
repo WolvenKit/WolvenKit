@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondLairEntityInRange : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
+		[Ordinal(1)] [RED("("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
 
-		[Ordinal(0)] [RED("("checkCount")] 		public CInt32 CheckCount { get; set;}
+		[Ordinal(2)] [RED("("checkCount")] 		public CInt32 CheckCount { get; set;}
 
-		[Ordinal(0)] [RED("("timeStamp")] 		public CFloat TimeStamp { get; set;}
+		[Ordinal(3)] [RED("("timeStamp")] 		public CFloat TimeStamp { get; set;}
 
 		public CBTCondLairEntityInRange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

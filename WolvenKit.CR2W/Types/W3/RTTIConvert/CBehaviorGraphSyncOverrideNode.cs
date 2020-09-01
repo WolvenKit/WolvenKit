@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphSyncOverrideNode : CBehaviorGraphNode
 	{
-		[Ordinal(0)] [RED("rootBoneName")] 		public CString RootBoneName { get; set;}
+		[Ordinal(1)] [RED("rootBoneName")] 		public CString RootBoneName { get; set;}
 
-		[Ordinal(0)] [RED("blendRootParent")] 		public CBool BlendRootParent { get; set;}
+		[Ordinal(2)] [RED("blendRootParent")] 		public CBool BlendRootParent { get; set;}
 
-		[Ordinal(0)] [RED("defaultWeight")] 		public CFloat DefaultWeight { get; set;}
+		[Ordinal(3)] [RED("defaultWeight")] 		public CFloat DefaultWeight { get; set;}
 
-		[Ordinal(0)] [RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
+		[Ordinal(4)] [RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
 
-		[Ordinal(0)] [RED("cachedOverrideInputNode")] 		public CPtr<CBehaviorGraphNode> CachedOverrideInputNode { get; set;}
+		[Ordinal(5)] [RED("cachedOverrideInputNode")] 		public CPtr<CBehaviorGraphNode> CachedOverrideInputNode { get; set;}
 
-		[Ordinal(0)] [RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
+		[Ordinal(6)] [RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
 
 		public CBehaviorGraphSyncOverrideNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

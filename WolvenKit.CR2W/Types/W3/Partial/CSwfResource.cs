@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CSwfResource : CResource
 	{
-		[Ordinal(0)] [RED("linkageName")] 		public CString LinkageName { get; set;}
+		[Ordinal(1)] [RED("linkageName")] 		public CString LinkageName { get; set;}
 
-		[Ordinal(0)] [RED("fonts", 2,0)] 		public CArray<SSwfFontDesc> Fonts { get; set;}
+		[Ordinal(2)] [RED("fonts", 2,0)] 		public CArray<SSwfFontDesc> Fonts { get; set;}
 
-		[Ordinal(0)] [RED("textures", 2,0)] 		public CArray<CHandle<CSwfTexture>> Textures { get; set;}
+		[Ordinal(3)] [RED("textures", 2,0)] 		public CArray<CHandle<CSwfTexture>> Textures { get; set;}
 
-		[Ordinal(0)] [RED("header")] 		public SSwfHeaderInfo Header { get; set;}
+		[Ordinal(4)] [RED("header")] 		public SSwfHeaderInfo Header { get; set;}
 
-		[Ordinal(0)] [RED("imageImportOptions")] 		public CString ImageImportOptions { get; set;}
+		[Ordinal(5)] [RED("imageImportOptions")] 		public CString ImageImportOptions { get; set;}
 
 		public CSwfResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

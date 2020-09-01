@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DisarmClue : W3MonsterClue
 	{
-		[Ordinal(0)] [RED("("connectedTripwireTag")] 		public CName ConnectedTripwireTag { get; set;}
+		[Ordinal(1)] [RED("("connectedTripwireTag")] 		public CName ConnectedTripwireTag { get; set;}
 
-		[Ordinal(0)] [RED("("connectedTripwire")] 		public CHandle<W3TripwireSwitch> ConnectedTripwire { get; set;}
+		[Ordinal(2)] [RED("("connectedTripwire")] 		public CHandle<W3TripwireSwitch> ConnectedTripwire { get; set;}
 
 		public W3DisarmClue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

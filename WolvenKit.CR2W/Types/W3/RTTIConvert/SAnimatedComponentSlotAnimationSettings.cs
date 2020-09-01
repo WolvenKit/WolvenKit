@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAnimatedComponentSlotAnimationSettings : CVariable
 	{
-		[Ordinal(0)] [RED("blendIn")] 		public CFloat BlendIn { get; set;}
+		[Ordinal(1)] [RED("blendIn")] 		public CFloat BlendIn { get; set;}
 
-		[Ordinal(0)] [RED("blendOut")] 		public CFloat BlendOut { get; set;}
+		[Ordinal(2)] [RED("blendOut")] 		public CFloat BlendOut { get; set;}
 
 		public SAnimatedComponentSlotAnimationSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SHouseDecorationItemData : CVariable
 	{
-		[Ordinal(0)] [RED("("decorationItemName")] 		public CName DecorationItemName { get; set;}
+		[Ordinal(1)] [RED("("decorationItemName")] 		public CName DecorationItemName { get; set;}
 
-		[Ordinal(0)] [RED("("decorationAppearance")] 		public CName DecorationAppearance { get; set;}
+		[Ordinal(2)] [RED("("decorationAppearance")] 		public CName DecorationAppearance { get; set;}
 
 		public SHouseDecorationItemData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

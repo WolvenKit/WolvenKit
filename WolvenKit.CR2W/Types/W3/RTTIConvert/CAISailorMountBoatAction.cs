@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAISailorMountBoatAction : ISailorActionTree
 	{
-		[Ordinal(0)] [RED("("params")] 		public CHandle<CAISailorMountBoatActionParams> Params { get; set;}
+		[Ordinal(1)] [RED("("params")] 		public CHandle<CAISailorMountBoatActionParams> Params { get; set;}
 
 		public CAISailorMountBoatAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

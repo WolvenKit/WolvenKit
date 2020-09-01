@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ITicketAlgorithmScript : IScriptable
 	{
-		[Ordinal(0)] [RED("overrideTicketsCount")] 		public CInt32 OverrideTicketsCount { get; set;}
+		[Ordinal(1)] [RED("overrideTicketsCount")] 		public CInt32 OverrideTicketsCount { get; set;}
 
 		public ITicketAlgorithmScript(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

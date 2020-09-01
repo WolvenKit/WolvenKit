@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class COldCommunitySpawnStrategy : IEngineSpawnStrategy
 	{
-		[Ordinal(0)] [RED("spawnRadius")] 		public CFloat SpawnRadius { get; set;}
+		[Ordinal(1)] [RED("spawnRadius")] 		public CFloat SpawnRadius { get; set;}
 
-		[Ordinal(0)] [RED("despawnRadius")] 		public CFloat DespawnRadius { get; set;}
+		[Ordinal(2)] [RED("despawnRadius")] 		public CFloat DespawnRadius { get; set;}
 
 		public COldCommunitySpawnStrategy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

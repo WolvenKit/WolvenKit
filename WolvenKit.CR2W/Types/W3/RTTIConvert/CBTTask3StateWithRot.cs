@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTask3StateWithRot : CBTTask3StateAttack
 	{
-		[Ordinal(0)] [RED("("endLeft")] 		public CEnum<EAttackType> EndLeft { get; set;}
+		[Ordinal(1)] [RED("("endLeft")] 		public CEnum<EAttackType> EndLeft { get; set;}
 
-		[Ordinal(0)] [RED("("endRight")] 		public CEnum<EAttackType> EndRight { get; set;}
+		[Ordinal(2)] [RED("("endRight")] 		public CEnum<EAttackType> EndRight { get; set;}
 
 		public CBTTask3StateWithRot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

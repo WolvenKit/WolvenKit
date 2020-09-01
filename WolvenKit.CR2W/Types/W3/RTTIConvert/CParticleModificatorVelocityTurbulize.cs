@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleModificatorVelocityTurbulize : IParticleModificator
 	{
-		[Ordinal(0)] [RED("("scale")] 		public CPtr<IEvaluatorVector> Scale { get; set;}
+		[Ordinal(1)] [RED("("scale")] 		public CPtr<IEvaluatorVector> Scale { get; set;}
 
-		[Ordinal(0)] [RED("("timelifeLimit")] 		public CPtr<IEvaluatorFloat> TimelifeLimit { get; set;}
+		[Ordinal(2)] [RED("("timelifeLimit")] 		public CPtr<IEvaluatorFloat> TimelifeLimit { get; set;}
 
-		[Ordinal(0)] [RED("("noiseInterval")] 		public CFloat NoiseInterval { get; set;}
+		[Ordinal(3)] [RED("("noiseInterval")] 		public CFloat NoiseInterval { get; set;}
 
-		[Ordinal(0)] [RED("("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(4)] [RED("("duration")] 		public CFloat Duration { get; set;}
 
 		public CParticleModificatorVelocityTurbulize(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

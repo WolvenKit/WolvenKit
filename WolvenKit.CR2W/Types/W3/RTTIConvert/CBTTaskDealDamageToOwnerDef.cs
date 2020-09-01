@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskDealDamageToOwnerDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
-		[Ordinal(0)] [RED("owner")] 		public CHandle<CNewNPC> Owner { get; set;}
+		[Ordinal(1)] [RED("owner")] 		public CHandle<CNewNPC> Owner { get; set;}
 
-		[Ordinal(0)] [RED("attacker")] 		public CHandle<CActor> Attacker { get; set;}
+		[Ordinal(2)] [RED("attacker")] 		public CHandle<CActor> Attacker { get; set;}
 
-		[Ordinal(0)] [RED("damageValue")] 		public CFloat DamageValue { get; set;}
+		[Ordinal(3)] [RED("damageValue")] 		public CFloat DamageValue { get; set;}
 
-		[Ordinal(0)] [RED("action")] 		public CHandle<W3Action_Attack> Action { get; set;}
+		[Ordinal(4)] [RED("action")] 		public CHandle<W3Action_Attack> Action { get; set;}
 
-		[Ordinal(0)] [RED("attackName")] 		public CName AttackName { get; set;}
+		[Ordinal(5)] [RED("attackName")] 		public CName AttackName { get; set;}
 
-		[Ordinal(0)] [RED("skillName")] 		public CName SkillName { get; set;}
+		[Ordinal(6)] [RED("skillName")] 		public CName SkillName { get; set;}
 
-		[Ordinal(0)] [RED("onAnimEventName")] 		public CName OnAnimEventName { get; set;}
+		[Ordinal(7)] [RED("onAnimEventName")] 		public CName OnAnimEventName { get; set;}
 
 		public CBTTaskDealDamageToOwnerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

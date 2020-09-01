@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIActionLoop : IAIActionTree
 	{
-		[Ordinal(0)] [RED("loopCount")] 		public CInt32 LoopCount { get; set;}
+		[Ordinal(1)] [RED("loopCount")] 		public CInt32 LoopCount { get; set;}
 
-		[Ordinal(0)] [RED("loopedAction")] 		public CHandle<IAIActionTree> LoopedAction { get; set;}
+		[Ordinal(2)] [RED("loopedAction")] 		public CHandle<IAIActionTree> LoopedAction { get; set;}
 
 		public CAIActionLoop(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSteeringCompositeCondition : IMoveSteeringCondition
 	{
-		[Ordinal(0)] [RED("firstCondition")] 		public CPtr<IMoveSteeringCondition> FirstCondition { get; set;}
+		[Ordinal(1)] [RED("firstCondition")] 		public CPtr<IMoveSteeringCondition> FirstCondition { get; set;}
 
-		[Ordinal(0)] [RED("notFirstCondition")] 		public CBool NotFirstCondition { get; set;}
+		[Ordinal(2)] [RED("notFirstCondition")] 		public CBool NotFirstCondition { get; set;}
 
-		[Ordinal(0)] [RED("operator")] 		public CEnum<ELogicOperator> Operator { get; set;}
+		[Ordinal(3)] [RED("operator")] 		public CEnum<ELogicOperator> Operator { get; set;}
 
-		[Ordinal(0)] [RED("secondCondition")] 		public CPtr<IMoveSteeringCondition> SecondCondition { get; set;}
+		[Ordinal(4)] [RED("secondCondition")] 		public CPtr<IMoveSteeringCondition> SecondCondition { get; set;}
 
-		[Ordinal(0)] [RED("notSecondCondition")] 		public CBool NotSecondCondition { get; set;}
+		[Ordinal(5)] [RED("notSecondCondition")] 		public CBool NotSecondCondition { get; set;}
 
 		public CMoveSteeringCompositeCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

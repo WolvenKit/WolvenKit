@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CSwarmCellMap : CResource
 	{
-		[Ordinal(0)] [RED("cellSize")] 		public CFloat CellSize { get; set;}
+		[Ordinal(1)] [RED("cellSize")] 		public CFloat CellSize { get; set;}
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSwarmCellMap(cr2w, parent, name);
 

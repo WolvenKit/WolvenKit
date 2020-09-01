@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCAgentSpeed : IMoveSteeringCondition
 	{
-		[Ordinal(0)] [RED("rangeMin")] 		public CFloat RangeMin { get; set;}
+		[Ordinal(1)] [RED("rangeMin")] 		public CFloat RangeMin { get; set;}
 
-		[Ordinal(0)] [RED("rangeMax")] 		public CFloat RangeMax { get; set;}
+		[Ordinal(2)] [RED("rangeMax")] 		public CFloat RangeMax { get; set;}
 
 		public CMoveSCAgentSpeed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

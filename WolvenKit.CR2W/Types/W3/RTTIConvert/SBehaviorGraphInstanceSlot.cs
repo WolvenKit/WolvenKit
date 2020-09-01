@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorGraphInstanceSlot : CVariable
 	{
-		[Ordinal(0)] [RED("("instanceName")] 		public CName InstanceName { get; set;}
+		[Ordinal(1)] [RED("("instanceName")] 		public CName InstanceName { get; set;}
 
-		[Ordinal(0)] [RED("("graph")] 		public CHandle<CBehaviorGraph> Graph { get; set;}
+		[Ordinal(2)] [RED("("graph")] 		public CHandle<CBehaviorGraph> Graph { get; set;}
 
-		[Ordinal(0)] [RED("("alwaysOnTopOfStack")] 		public CBool AlwaysOnTopOfStack { get; set;}
+		[Ordinal(3)] [RED("("alwaysOnTopOfStack")] 		public CBool AlwaysOnTopOfStack { get; set;}
 
 		public SBehaviorGraphInstanceSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

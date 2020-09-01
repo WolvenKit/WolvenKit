@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcCombatStyle : CAISubTree
 	{
-		[Ordinal(0)] [RED("params")] 		public CHandle<CAINpcCombatStyleParams> Params { get; set;}
+		[Ordinal(1)] [RED("params")] 		public CHandle<CAINpcCombatStyleParams> Params { get; set;}
 
-		[Ordinal(0)] [RED("highPriority")] 		public CBool HighPriority { get; set;}
+		[Ordinal(2)] [RED("highPriority")] 		public CBool HighPriority { get; set;}
 
 		public CAINpcCombatStyle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrack : CFXBase
 	{
-		[Ordinal(0)] [RED("trackItems", 2,0)] 		public CArray<CPtr<CFXTrackItem>> TrackItems { get; set;}
+		[Ordinal(1)] [RED("trackItems", 2,0)] 		public CArray<CPtr<CFXTrackItem>> TrackItems { get; set;}
 
-		[Ordinal(0)] [RED("name")] 		public CString Name { get; set;}
+		[Ordinal(2)] [RED("name")] 		public CString Name { get; set;}
 
 		public CFXTrack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSwarmShieldDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
-		[Ordinal(0)] [RED("("stabilizationTimer")] 		public CFloat StabilizationTimer { get; set;}
+		[Ordinal(1)] [RED("("stabilizationTimer")] 		public CFloat StabilizationTimer { get; set;}
 
-		[Ordinal(0)] [RED("("disperse")] 		public CBool Disperse { get; set;}
+		[Ordinal(2)] [RED("("disperse")] 		public CBool Disperse { get; set;}
 
 		public CBTTaskSwarmShieldDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

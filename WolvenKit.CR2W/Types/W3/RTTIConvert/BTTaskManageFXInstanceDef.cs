@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskManageFXInstanceDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("hasAbilityCondition")] 		public CName HasAbilityCondition { get; set;}
+		[Ordinal(1)] [RED("hasAbilityCondition")] 		public CName HasAbilityCondition { get; set;}
 
-		[Ordinal(0)] [RED("fxName")] 		public CName FxName { get; set;}
+		[Ordinal(2)] [RED("fxName")] 		public CName FxName { get; set;}
 
-		[Ordinal(0)] [RED("fxTickets")] 		public CInt32 FxTickets { get; set;}
+		[Ordinal(3)] [RED("fxTickets")] 		public CInt32 FxTickets { get; set;}
 
-		[Ordinal(0)] [RED("distanceToAnotherFx")] 		public CFloat DistanceToAnotherFx { get; set;}
+		[Ordinal(4)] [RED("distanceToAnotherFx")] 		public CFloat DistanceToAnotherFx { get; set;}
 
-		[Ordinal(0)] [RED("fxInstanceCheckInterval")] 		public CFloat FxInstanceCheckInterval { get; set;}
+		[Ordinal(5)] [RED("fxInstanceCheckInterval")] 		public CFloat FxInstanceCheckInterval { get; set;}
 
-		[Ordinal(0)] [RED("stopFxAfterDeath")] 		public CBool StopFxAfterDeath { get; set;}
+		[Ordinal(6)] [RED("stopFxAfterDeath")] 		public CBool StopFxAfterDeath { get; set;}
 
 		public BTTaskManageFXInstanceDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

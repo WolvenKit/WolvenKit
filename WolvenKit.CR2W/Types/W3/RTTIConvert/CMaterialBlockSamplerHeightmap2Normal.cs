@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockSamplerHeightmap2Normal : CMaterialBlockSampler
 	{
-		[Ordinal(0)] [RED("scale")] 		public Vector Scale { get; set;}
+		[Ordinal(1)] [RED("scale")] 		public Vector Scale { get; set;}
 
 		public CMaterialBlockSamplerHeightmap2Normal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

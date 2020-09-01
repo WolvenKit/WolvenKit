@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockCombineNormals : CMaterialBlock
 	{
-		[Ordinal(0)] [RED("firstWeight")] 		public CFloat FirstWeight { get; set;}
+		[Ordinal(1)] [RED("firstWeight")] 		public CFloat FirstWeight { get; set;}
 
-		[Ordinal(0)] [RED("secondWeight")] 		public CFloat SecondWeight { get; set;}
+		[Ordinal(2)] [RED("secondWeight")] 		public CFloat SecondWeight { get; set;}
 
-		[Ordinal(0)] [RED("tangentToWorld")] 		public CBool TangentToWorld { get; set;}
+		[Ordinal(3)] [RED("tangentToWorld")] 		public CBool TangentToWorld { get; set;}
 
 		public CMaterialBlockCombineNormals(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

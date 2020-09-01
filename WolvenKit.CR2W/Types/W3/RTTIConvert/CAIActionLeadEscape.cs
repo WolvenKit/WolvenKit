@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIActionLeadEscape : CAIMonsterActionSubtree
 	{
-		[Ordinal(0)] [RED("saveReactionTargetUnder")] 		public CName SaveReactionTargetUnder { get; set;}
+		[Ordinal(1)] [RED("saveReactionTargetUnder")] 		public CName SaveReactionTargetUnder { get; set;}
 
 		public CAIActionLeadEscape(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

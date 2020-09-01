@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimDangleConstraint_Hinge : CAnimSkeletalDangleConstraint
 	{
-		[Ordinal(0)] [RED("name")] 		public CString Name { get; set;}
+		[Ordinal(1)] [RED("name")] 		public CString Name { get; set;}
 
-		[Ordinal(0)] [RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(2)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		[Ordinal(0)] [RED("limit")] 		public CFloat Limit { get; set;}
+		[Ordinal(3)] [RED("limit")] 		public CFloat Limit { get; set;}
 
-		[Ordinal(0)] [RED("bounce")] 		public CFloat Bounce { get; set;}
+		[Ordinal(4)] [RED("bounce")] 		public CFloat Bounce { get; set;}
 
-		[Ordinal(0)] [RED("damp")] 		public CFloat Damp { get; set;}
+		[Ordinal(5)] [RED("damp")] 		public CFloat Damp { get; set;}
 
-		[Ordinal(0)] [RED("min")] 		public CFloat Min { get; set;}
+		[Ordinal(6)] [RED("min")] 		public CFloat Min { get; set;}
 
-		[Ordinal(0)] [RED("max")] 		public CFloat Max { get; set;}
+		[Ordinal(7)] [RED("max")] 		public CFloat Max { get; set;}
 
-		[Ordinal(0)] [RED("inertia")] 		public CFloat Inertia { get; set;}
+		[Ordinal(8)] [RED("inertia")] 		public CFloat Inertia { get; set;}
 
-		[Ordinal(0)] [RED("gravity")] 		public CFloat Gravity { get; set;}
+		[Ordinal(9)] [RED("gravity")] 		public CFloat Gravity { get; set;}
 
-		[Ordinal(0)] [RED("spring")] 		public CFloat Spring { get; set;}
+		[Ordinal(10)] [RED("spring")] 		public CFloat Spring { get; set;}
 
 		public CAnimDangleConstraint_Hinge(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

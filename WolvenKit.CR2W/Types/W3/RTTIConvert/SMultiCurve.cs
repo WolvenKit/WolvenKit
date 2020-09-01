@@ -10,49 +10,49 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMultiCurve : CVariable
 	{
-		[Ordinal(0)] [RED("("type")] 		public CEnum<ECurveType> Type { get; set;}
+		[Ordinal(1)] [RED("("type")] 		public CEnum<ECurveType> Type { get; set;}
 
-		[Ordinal(0)] [RED("("color")] 		public CColor Color { get; set;}
+		[Ordinal(2)] [RED("("color")] 		public CColor Color { get; set;}
 
-		[Ordinal(0)] [RED("("showFlags")] 		public CEnum<EShowFlags> ShowFlags { get; set;}
+		[Ordinal(3)] [RED("("showFlags")] 		public CEnum<EShowFlags> ShowFlags { get; set;}
 
-		[Ordinal(0)] [RED("("positionInterpolationMode")] 		public CEnum<ECurveInterpolationMode> PositionInterpolationMode { get; set;}
+		[Ordinal(4)] [RED("("positionInterpolationMode")] 		public CEnum<ECurveInterpolationMode> PositionInterpolationMode { get; set;}
 
-		[Ordinal(0)] [RED("("positionManualMode")] 		public CEnum<ECurveManualMode> PositionManualMode { get; set;}
+		[Ordinal(5)] [RED("("positionManualMode")] 		public CEnum<ECurveManualMode> PositionManualMode { get; set;}
 
-		[Ordinal(0)] [RED("("rotationInterpolationMode")] 		public CEnum<ECurveInterpolationMode> RotationInterpolationMode { get; set;}
+		[Ordinal(6)] [RED("("rotationInterpolationMode")] 		public CEnum<ECurveInterpolationMode> RotationInterpolationMode { get; set;}
 
-		[Ordinal(0)] [RED("("totalTime")] 		public CFloat TotalTime { get; set;}
+		[Ordinal(7)] [RED("("totalTime")] 		public CFloat TotalTime { get; set;}
 
-		[Ordinal(0)] [RED("("automaticPositionInterpolationSmoothness")] 		public CFloat AutomaticPositionInterpolationSmoothness { get; set;}
+		[Ordinal(8)] [RED("("automaticPositionInterpolationSmoothness")] 		public CFloat AutomaticPositionInterpolationSmoothness { get; set;}
 
-		[Ordinal(0)] [RED("("automaticRotationInterpolationSmoothness")] 		public CFloat AutomaticRotationInterpolationSmoothness { get; set;}
+		[Ordinal(9)] [RED("("automaticRotationInterpolationSmoothness")] 		public CFloat AutomaticRotationInterpolationSmoothness { get; set;}
 
-		[Ordinal(0)] [RED("("enableConsistentNumberOfControlPoints")] 		public CBool EnableConsistentNumberOfControlPoints { get; set;}
+		[Ordinal(10)] [RED("("enableConsistentNumberOfControlPoints")] 		public CBool EnableConsistentNumberOfControlPoints { get; set;}
 
-		[Ordinal(0)] [RED("("enableAutomaticTimeByDistanceRecalculation")] 		public CBool EnableAutomaticTimeByDistanceRecalculation { get; set;}
+		[Ordinal(11)] [RED("("enableAutomaticTimeByDistanceRecalculation")] 		public CBool EnableAutomaticTimeByDistanceRecalculation { get; set;}
 
-		[Ordinal(0)] [RED("("enableAutomaticTimeRecalculation")] 		public CBool EnableAutomaticTimeRecalculation { get; set;}
+		[Ordinal(12)] [RED("("enableAutomaticTimeRecalculation")] 		public CBool EnableAutomaticTimeRecalculation { get; set;}
 
-		[Ordinal(0)] [RED("("enableAutomaticRotationFromDirectionRecalculation")] 		public CBool EnableAutomaticRotationFromDirectionRecalculation { get; set;}
+		[Ordinal(13)] [RED("("enableAutomaticRotationFromDirectionRecalculation")] 		public CBool EnableAutomaticRotationFromDirectionRecalculation { get; set;}
 
-		[Ordinal(0)] [RED("("curves", 2,0)] 		public CArray<SCurveData> Curves { get; set;}
+		[Ordinal(14)] [RED("("curves", 2,0)] 		public CArray<SCurveData> Curves { get; set;}
 
-		[Ordinal(0)] [RED("("leftTangents", 142,0)] 		public CArray<Vector> LeftTangents { get; set;}
+		[Ordinal(15)] [RED("("leftTangents", 142,0)] 		public CArray<Vector> LeftTangents { get; set;}
 
-		[Ordinal(0)] [RED("("rightTangents", 142,0)] 		public CArray<Vector> RightTangents { get; set;}
+		[Ordinal(16)] [RED("("rightTangents", 142,0)] 		public CArray<Vector> RightTangents { get; set;}
 
-		[Ordinal(0)] [RED("("easeParams", 2,0)] 		public CArray<SCurveEaseParam> EaseParams { get; set;}
+		[Ordinal(17)] [RED("("easeParams", 2,0)] 		public CArray<SCurveEaseParam> EaseParams { get; set;}
 
-		[Ordinal(0)] [RED("("translationRelativeMode")] 		public CEnum<ECurveRelativeMode> TranslationRelativeMode { get; set;}
+		[Ordinal(18)] [RED("("translationRelativeMode")] 		public CEnum<ECurveRelativeMode> TranslationRelativeMode { get; set;}
 
-		[Ordinal(0)] [RED("("rotationRelativeMode")] 		public CEnum<ECurveRelativeMode> RotationRelativeMode { get; set;}
+		[Ordinal(19)] [RED("("rotationRelativeMode")] 		public CEnum<ECurveRelativeMode> RotationRelativeMode { get; set;}
 
-		[Ordinal(0)] [RED("("scaleRelativeMode")] 		public CEnum<ECurveRelativeMode> ScaleRelativeMode { get; set;}
+		[Ordinal(20)] [RED("("scaleRelativeMode")] 		public CEnum<ECurveRelativeMode> ScaleRelativeMode { get; set;}
 
-		[Ordinal(0)] [RED("("initialParentTransform")] 		public EngineTransform InitialParentTransform { get; set;}
+		[Ordinal(21)] [RED("("initialParentTransform")] 		public EngineTransform InitialParentTransform { get; set;}
 
-		[Ordinal(0)] [RED("("hasInitialParentTransform")] 		public CBool HasInitialParentTransform { get; set;}
+		[Ordinal(22)] [RED("("hasInitialParentTransform")] 		public CBool HasInitialParentTransform { get; set;}
 
 		public SMultiCurve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

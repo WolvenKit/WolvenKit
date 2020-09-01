@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTMove : CMoveSTRotate
 	{
-		[Ordinal(0)] [RED("headingImportance")] 		public CFloat HeadingImportance { get; set;}
+		[Ordinal(1)] [RED("headingImportance")] 		public CFloat HeadingImportance { get; set;}
 
-		[Ordinal(0)] [RED("speedImportance")] 		public CFloat SpeedImportance { get; set;}
+		[Ordinal(2)] [RED("speedImportance")] 		public CFloat SpeedImportance { get; set;}
 
 		public CMoveSTMove(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

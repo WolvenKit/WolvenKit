@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskIdleDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("toleranceAngle")] 		public CFloat ToleranceAngle { get; set;}
+		[Ordinal(1)] [RED("toleranceAngle")] 		public CFloat ToleranceAngle { get; set;}
 
-		[Ordinal(0)] [RED("checkRotation")] 		public CBool CheckRotation { get; set;}
+		[Ordinal(2)] [RED("checkRotation")] 		public CBool CheckRotation { get; set;}
 
 		public CBTTaskIdleDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

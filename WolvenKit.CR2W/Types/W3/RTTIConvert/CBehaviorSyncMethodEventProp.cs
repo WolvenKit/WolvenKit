@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorSyncMethodEventProp : IBehaviorSyncMethodEvent
 	{
-		[Ordinal(0)] [RED("offset")] 		public CFloat Offset { get; set;}
+		[Ordinal(1)] [RED("offset")] 		public CFloat Offset { get; set;}
 
 		public CBehaviorSyncMethodEventProp(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

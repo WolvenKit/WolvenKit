@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4FinishersDLCMounter : IGameplayDLCMounter
 	{
-		[Ordinal(0)] [RED("("customCameraAnimSet")] 		public CHandle<CSkeletalAnimationSet> CustomCameraAnimSet { get; set;}
+		[Ordinal(1)] [RED("("customCameraAnimSet")] 		public CHandle<CSkeletalAnimationSet> CustomCameraAnimSet { get; set;}
 
-		[Ordinal(0)] [RED("("finishers", 2,0)] 		public CArray<CPtr<CR4FinisherDLC>> Finishers { get; set;}
+		[Ordinal(2)] [RED("("finishers", 2,0)] 		public CArray<CPtr<CR4FinisherDLC>> Finishers { get; set;}
 
 		public CR4FinishersDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

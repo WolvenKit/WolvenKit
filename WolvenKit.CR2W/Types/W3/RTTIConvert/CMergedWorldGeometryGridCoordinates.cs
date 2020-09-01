@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMergedWorldGeometryGridCoordinates : CVariable
 	{
-		[Ordinal(0)] [RED("x")] 		public CInt16 X { get; set;}
+		[Ordinal(1)] [RED("x")] 		public CInt16 X { get; set;}
 
-		[Ordinal(0)] [RED("y")] 		public CInt16 Y { get; set;}
+		[Ordinal(2)] [RED("y")] 		public CInt16 Y { get; set;}
 
 		public CMergedWorldGeometryGridCoordinates(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

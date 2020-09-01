@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CHudResource : IGuiResource
 	{
-		[Ordinal(0)] [RED("("hudClass")] 		public CName HudClass { get; set;}
+		[Ordinal(1)] [RED("("hudClass")] 		public CName HudClass { get; set;}
 
-		[Ordinal(0)] [RED("("hudFlashSwf")] 		public CSoft<CSwfResource> HudFlashSwf { get; set;}
+		[Ordinal(2)] [RED("("hudFlashSwf")] 		public CSoft<CSwfResource> HudFlashSwf { get; set;}
 
 		public CHudResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

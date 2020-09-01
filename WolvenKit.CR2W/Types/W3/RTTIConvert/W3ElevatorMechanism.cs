@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ElevatorMechanism : CEntity
 	{
-		[Ordinal(0)] [RED("("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(1)] [RED("("radius")] 		public CFloat Radius { get; set;}
 
-		[Ordinal(0)] [RED("("clockwiseRotation")] 		public CBool ClockwiseRotation { get; set;}
+		[Ordinal(2)] [RED("("clockwiseRotation")] 		public CBool ClockwiseRotation { get; set;}
 
-		[Ordinal(0)] [RED("("rotationSpeed")] 		public CFloat RotationSpeed { get; set;}
+		[Ordinal(3)] [RED("("rotationSpeed")] 		public CFloat RotationSpeed { get; set;}
 
-		[Ordinal(0)] [RED("("forwardDirection")] 		public CBool ForwardDirection { get; set;}
+		[Ordinal(4)] [RED("("forwardDirection")] 		public CBool ForwardDirection { get; set;}
 
-		[Ordinal(0)] [RED("("transformMatrix")] 		public CMatrix TransformMatrix { get; set;}
+		[Ordinal(5)] [RED("("transformMatrix")] 		public CMatrix TransformMatrix { get; set;}
 
-		[Ordinal(0)] [RED("("localRotation")] 		public EulerAngles LocalRotation { get; set;}
+		[Ordinal(6)] [RED("("localRotation")] 		public EulerAngles LocalRotation { get; set;}
 
 		public W3ElevatorMechanism(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

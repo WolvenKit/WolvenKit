@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskForceChangeGuardDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(1)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[Ordinal(0)] [RED("("onDectivate")] 		public CBool OnDectivate { get; set;}
+		[Ordinal(2)] [RED("("onDectivate")] 		public CBool OnDectivate { get; set;}
 
-		[Ordinal(0)] [RED("("raiseGuard")] 		public CBool RaiseGuard { get; set;}
+		[Ordinal(3)] [RED("("raiseGuard")] 		public CBool RaiseGuard { get; set;}
 
-		[Ordinal(0)] [RED("("lowerGuard")] 		public CBool LowerGuard { get; set;}
+		[Ordinal(4)] [RED("("lowerGuard")] 		public CBool LowerGuard { get; set;}
 
 		public CBTTaskForceChangeGuardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

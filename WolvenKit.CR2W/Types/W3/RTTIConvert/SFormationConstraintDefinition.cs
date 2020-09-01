@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFormationConstraintDefinition : CVariable
 	{
-		[Ordinal(0)] [RED("("referenceRelativeIndex")] 		public CBool ReferenceRelativeIndex { get; set;}
+		[Ordinal(1)] [RED("("referenceRelativeIndex")] 		public CBool ReferenceRelativeIndex { get; set;}
 
-		[Ordinal(0)] [RED("("referenceSlot")] 		public CInt32 ReferenceSlot { get; set;}
+		[Ordinal(2)] [RED("("referenceSlot")] 		public CInt32 ReferenceSlot { get; set;}
 
-		[Ordinal(0)] [RED("("type")] 		public CEnum<EFormationConstraintType> Type { get; set;}
+		[Ordinal(3)] [RED("("type")] 		public CEnum<EFormationConstraintType> Type { get; set;}
 
-		[Ordinal(0)] [RED("("value")] 		public Vector2 Value { get; set;}
+		[Ordinal(4)] [RED("("value")] 		public Vector2 Value { get; set;}
 
-		[Ordinal(0)] [RED("("strength")] 		public CFloat Strength { get; set;}
+		[Ordinal(5)] [RED("("strength")] 		public CFloat Strength { get; set;}
 
-		[Ordinal(0)] [RED("("tolerance")] 		public CFloat Tolerance { get; set;}
+		[Ordinal(6)] [RED("("tolerance")] 		public CFloat Tolerance { get; set;}
 
 		public SFormationConstraintDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

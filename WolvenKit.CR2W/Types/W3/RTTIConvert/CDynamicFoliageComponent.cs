@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDynamicFoliageComponent : CComponent
 	{
-		[Ordinal(0)] [RED("("baseTree")] 		public CSoft<CSRTBaseTree> BaseTree { get; set;}
+		[Ordinal(1)] [RED("("baseTree")] 		public CSoft<CSRTBaseTree> BaseTree { get; set;}
 
-		[Ordinal(0)] [RED("("minimumStreamingDistance")] 		public CUInt32 MinimumStreamingDistance { get; set;}
+		[Ordinal(2)] [RED("("minimumStreamingDistance")] 		public CUInt32 MinimumStreamingDistance { get; set;}
 
 		public CDynamicFoliageComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

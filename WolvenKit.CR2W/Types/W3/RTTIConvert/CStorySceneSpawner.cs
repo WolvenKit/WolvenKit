@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneSpawner : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("storyScene")] 		public CHandle<CStoryScene> StoryScene { get; set;}
+		[Ordinal(1)] [RED("storyScene")] 		public CHandle<CStoryScene> StoryScene { get; set;}
 
-		[Ordinal(0)] [RED("inputName")] 		public CString InputName { get; set;}
+		[Ordinal(2)] [RED("inputName")] 		public CString InputName { get; set;}
 
-		[Ordinal(0)] [RED("useSpawnerLocation")] 		public CBool UseSpawnerLocation { get; set;}
+		[Ordinal(3)] [RED("useSpawnerLocation")] 		public CBool UseSpawnerLocation { get; set;}
 
 		public CStorySceneSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

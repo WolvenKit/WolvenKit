@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskPlayHitOnShield : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("resourceName")] 		public CName ResourceName { get; set;}
+		[Ordinal(1)] [RED("resourceName")] 		public CName ResourceName { get; set;}
 
-		[Ordinal(0)] [RED("shieldFxName")] 		public CName ShieldFxName { get; set;}
+		[Ordinal(2)] [RED("shieldFxName")] 		public CName ShieldFxName { get; set;}
 
-		[Ordinal(0)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(3)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[Ordinal(0)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(4)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
 		public BTTaskPlayHitOnShield(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

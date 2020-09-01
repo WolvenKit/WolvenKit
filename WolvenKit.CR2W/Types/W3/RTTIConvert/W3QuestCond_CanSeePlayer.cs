@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_CanSeePlayer : CQuestScriptedCondition
 	{
-		[Ordinal(0)] [RED("("actorTag")] 		public CName ActorTag { get; set;}
+		[Ordinal(1)] [RED("("actorTag")] 		public CName ActorTag { get; set;}
 
-		[Ordinal(0)] [RED("("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(2)] [RED("("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[Ordinal(0)] [RED("("listener")] 		public CHandle<W3QuestCond_CanSeePlayer_Listener> Listener { get; set;}
+		[Ordinal(3)] [RED("("listener")] 		public CHandle<W3QuestCond_CanSeePlayer_Listener> Listener { get; set;}
 
 		public W3QuestCond_CanSeePlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestInputCondition : IQuestCondition
 	{
-		[Ordinal(0)] [RED("gameInput")] 		public CName GameInput { get; set;}
+		[Ordinal(1)] [RED("gameInput")] 		public CName GameInput { get; set;}
 
-		[Ordinal(0)] [RED("valueCompareFunc")] 		public CEnum<EInputCompareFunc> ValueCompareFunc { get; set;}
+		[Ordinal(2)] [RED("valueCompareFunc")] 		public CEnum<EInputCompareFunc> ValueCompareFunc { get; set;}
 
-		[Ordinal(0)] [RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(3)] [RED("value")] 		public CFloat Value { get; set;}
 
 		public CQuestInputCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvDistanceRangeParameters : CVariable
 	{
-		[Ordinal(0)] [RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(1)] [RED("activated")] 		public CBool Activated { get; set;}
 
-		[Ordinal(0)] [RED("distance")] 		public SSimpleCurve Distance { get; set;}
+		[Ordinal(2)] [RED("distance")] 		public SSimpleCurve Distance { get; set;}
 
-		[Ordinal(0)] [RED("range")] 		public SSimpleCurve Range { get; set;}
+		[Ordinal(3)] [RED("range")] 		public SSimpleCurve Range { get; set;}
 
 		public CEnvDistanceRangeParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

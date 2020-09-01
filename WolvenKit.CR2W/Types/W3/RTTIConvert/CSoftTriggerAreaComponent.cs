@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSoftTriggerAreaComponent : CTriggerAreaComponent
 	{
-		[Ordinal(0)] [RED("outerClippingAreaTags")] 		public TagList OuterClippingAreaTags { get; set;}
+		[Ordinal(1)] [RED("outerClippingAreaTags")] 		public TagList OuterClippingAreaTags { get; set;}
 
-		[Ordinal(0)] [RED("outerIncludedChannels")] 		public ETriggerChannel OuterIncludedChannels { get; set;}
+		[Ordinal(2)] [RED("outerIncludedChannels")] 		public ETriggerChannel OuterIncludedChannels { get; set;}
 
-		[Ordinal(0)] [RED("outerExcludedChannels")] 		public ETriggerChannel OuterExcludedChannels { get; set;}
+		[Ordinal(3)] [RED("outerExcludedChannels")] 		public ETriggerChannel OuterExcludedChannels { get; set;}
 
-		[Ordinal(0)] [RED("invertPenetrationFraction")] 		public CBool InvertPenetrationFraction { get; set;}
+		[Ordinal(4)] [RED("invertPenetrationFraction")] 		public CBool InvertPenetrationFraction { get; set;}
 
 		public CSoftTriggerAreaComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

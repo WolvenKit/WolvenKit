@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskDodgeDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
-		[Ordinal(0)] [RED("navmeshCheckDist")] 		public CFloat NavmeshCheckDist { get; set;}
+		[Ordinal(1)] [RED("navmeshCheckDist")] 		public CFloat NavmeshCheckDist { get; set;}
 
-		[Ordinal(0)] [RED("minDelayBetweenDodges")] 		public CFloat MinDelayBetweenDodges { get; set;}
+		[Ordinal(2)] [RED("minDelayBetweenDodges")] 		public CFloat MinDelayBetweenDodges { get; set;}
 
-		[Ordinal(0)] [RED("maxDistanceFromTarget")] 		public CFloat MaxDistanceFromTarget { get; set;}
+		[Ordinal(3)] [RED("maxDistanceFromTarget")] 		public CFloat MaxDistanceFromTarget { get; set;}
 
-		[Ordinal(0)] [RED("movementAdjustorSlideDistance")] 		public CFloat MovementAdjustorSlideDistance { get; set;}
+		[Ordinal(4)] [RED("movementAdjustorSlideDistance")] 		public CFloat MovementAdjustorSlideDistance { get; set;}
 
-		[Ordinal(0)] [RED("disableIsDodgingFlagAfter")] 		public CFloat DisableIsDodgingFlagAfter { get; set;}
+		[Ordinal(5)] [RED("disableIsDodgingFlagAfter")] 		public CFloat DisableIsDodgingFlagAfter { get; set;}
 
-		[Ordinal(0)] [RED("allowDodgeWhileAttacking")] 		public CBool AllowDodgeWhileAttacking { get; set;}
+		[Ordinal(6)] [RED("allowDodgeWhileAttacking")] 		public CBool AllowDodgeWhileAttacking { get; set;}
 
-		[Ordinal(0)] [RED("signalGameplayEventWhileInHitAnim")] 		public CBool SignalGameplayEventWhileInHitAnim { get; set;}
+		[Ordinal(7)] [RED("signalGameplayEventWhileInHitAnim")] 		public CBool SignalGameplayEventWhileInHitAnim { get; set;}
 
-		[Ordinal(0)] [RED("alwaysAvailableOnDodgeType")] 		public CEnum<EDodgeType> AlwaysAvailableOnDodgeType { get; set;}
+		[Ordinal(8)] [RED("alwaysAvailableOnDodgeType")] 		public CEnum<EDodgeType> AlwaysAvailableOnDodgeType { get; set;}
 
-		[Ordinal(0)] [RED("allowDodgeOverlap")] 		public CBool AllowDodgeOverlap { get; set;}
+		[Ordinal(9)] [RED("allowDodgeOverlap")] 		public CBool AllowDodgeOverlap { get; set;}
 
-		[Ordinal(0)] [RED("earlyDodgeActivation")] 		public CBool EarlyDodgeActivation { get; set;}
+		[Ordinal(10)] [RED("earlyDodgeActivation")] 		public CBool EarlyDodgeActivation { get; set;}
 
-		[Ordinal(0)] [RED("interruptTaskToExecuteCounter")] 		public CBool InterruptTaskToExecuteCounter { get; set;}
+		[Ordinal(11)] [RED("interruptTaskToExecuteCounter")] 		public CBool InterruptTaskToExecuteCounter { get; set;}
 
-		[Ordinal(0)] [RED("ignoreDodgeChanceStats")] 		public CBool IgnoreDodgeChanceStats { get; set;}
+		[Ordinal(12)] [RED("ignoreDodgeChanceStats")] 		public CBool IgnoreDodgeChanceStats { get; set;}
 
-		[Ordinal(0)] [RED("delayDodgeHeavyAttack")] 		public CFloat DelayDodgeHeavyAttack { get; set;}
+		[Ordinal(13)] [RED("delayDodgeHeavyAttack")] 		public CFloat DelayDodgeHeavyAttack { get; set;}
 
 		public CBTTaskDodgeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

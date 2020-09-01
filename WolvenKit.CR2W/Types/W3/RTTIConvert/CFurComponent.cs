@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFurComponent : CMeshComponent
 	{
-		[Ordinal(0)] [RED("("furMesh")] 		public CHandle<CFurMeshResource> FurMesh { get; set;}
+		[Ordinal(1)] [RED("("furMesh")] 		public CHandle<CFurMeshResource> FurMesh { get; set;}
 
 		public CFurComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

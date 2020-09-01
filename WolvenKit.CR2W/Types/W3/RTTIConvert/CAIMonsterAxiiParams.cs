@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterAxiiParams : CAIAxiiParameters
 	{
-		[Ordinal(0)] [RED("canFly")] 		public CBool CanFly { get; set;}
+		[Ordinal(1)] [RED("canFly")] 		public CBool CanFly { get; set;}
 
-		[Ordinal(0)] [RED("onSpotLanding")] 		public CBool OnSpotLanding { get; set;}
+		[Ordinal(2)] [RED("onSpotLanding")] 		public CBool OnSpotLanding { get; set;}
 
-		[Ordinal(0)] [RED("landingGroundOffset")] 		public CFloat LandingGroundOffset { get; set;}
+		[Ordinal(3)] [RED("landingGroundOffset")] 		public CFloat LandingGroundOffset { get; set;}
 
 		public CAIMonsterAxiiParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

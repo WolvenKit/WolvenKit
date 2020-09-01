@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4StartupMoviesMenu : CR4MenuBase
 	{
-		[Ordinal(0)] [RED("m_fxSetGameLogoLanguage")] 		public CHandle<CScriptedFlashFunction> M_fxSetGameLogoLanguage { get; set;}
+		[Ordinal(1)] [RED("m_fxSetGameLogoLanguage")] 		public CHandle<CScriptedFlashFunction> M_fxSetGameLogoLanguage { get; set;}
 
-		[Ordinal(0)] [RED("m_MovieData", 2,0)] 		public CArray<SMovieData> M_MovieData { get; set;}
+		[Ordinal(2)] [RED("m_MovieData", 2,0)] 		public CArray<SMovieData> M_MovieData { get; set;}
 
-		[Ordinal(0)] [RED("m_CurrentMovieID")] 		public CInt32 M_CurrentMovieID { get; set;}
+		[Ordinal(3)] [RED("m_CurrentMovieID")] 		public CInt32 M_CurrentMovieID { get; set;}
 
-		[Ordinal(0)] [RED("guiManager")] 		public CHandle<CR4GuiManager> GuiManager { get; set;}
+		[Ordinal(4)] [RED("guiManager")] 		public CHandle<CR4GuiManager> GuiManager { get; set;}
 
-		[Ordinal(0)] [RED("wasSkipped")] 		public CBool WasSkipped { get; set;}
+		[Ordinal(5)] [RED("wasSkipped")] 		public CBool WasSkipped { get; set;}
 
-		[Ordinal(0)] [RED("languageName")] 		public CString LanguageName { get; set;}
+		[Ordinal(6)] [RED("languageName")] 		public CString LanguageName { get; set;}
 
 		public CR4StartupMoviesMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModSbUiW2SceneDescriptionWriter : CObject
 	{
-		[Ordinal(0)] [RED("("backslash")] 		public CString Backslash { get; set;}
+		[Ordinal(1)] [RED("("backslash")] 		public CString Backslash { get; set;}
 
 		public CModSbUiW2SceneDescriptionWriter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

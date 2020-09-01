@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGameResource : CResource
 	{
-		[Ordinal(0)] [RED("("worlds", 2,0)] 		public CArray<SWorldDescription> Worlds { get; set;}
+		[Ordinal(1)] [RED("("worlds", 2,0)] 		public CArray<SWorldDescription> Worlds { get; set;}
 
-		[Ordinal(0)] [RED("("defaultPlayerTemplate")] 		public CSoft<CEntityTemplate> DefaultPlayerTemplate { get; set;}
+		[Ordinal(2)] [RED("("defaultPlayerTemplate")] 		public CSoft<CEntityTemplate> DefaultPlayerTemplate { get; set;}
 
-		[Ordinal(0)] [RED("("defaultCameraTemplate")] 		public CSoft<CEntityTemplate> DefaultCameraTemplate { get; set;}
+		[Ordinal(3)] [RED("("defaultCameraTemplate")] 		public CSoft<CEntityTemplate> DefaultCameraTemplate { get; set;}
 
-		[Ordinal(0)] [RED("("startingPoint")] 		public EngineTransform StartingPoint { get; set;}
+		[Ordinal(4)] [RED("("startingPoint")] 		public EngineTransform StartingPoint { get; set;}
 
-		[Ordinal(0)] [RED("("newGameLoadingVideo")] 		public CString NewGameLoadingVideo { get; set;}
+		[Ordinal(5)] [RED("("newGameLoadingVideo")] 		public CString NewGameLoadingVideo { get; set;}
 
-		[Ordinal(0)] [RED("("playGoChunksToActivate", 2,0)] 		public CArray<CName> PlayGoChunksToActivate { get; set;}
+		[Ordinal(6)] [RED("("playGoChunksToActivate", 2,0)] 		public CArray<CName> PlayGoChunksToActivate { get; set;}
 
 		public CGameResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

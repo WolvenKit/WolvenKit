@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSSBoneTransform : CVariable
 	{
-		[Ordinal(0)] [RED("("bone")] 		public CName Bone { get; set;}
+		[Ordinal(1)] [RED("("bone")] 		public CName Bone { get; set;}
 
-		[Ordinal(0)] [RED("("transform")] 		public EngineTransform Transform { get; set;}
+		[Ordinal(2)] [RED("("transform")] 		public EngineTransform Transform { get; set;}
 
 		public SSSBoneTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBirdSpawnpoint : CVariable
 	{
-		[Ordinal(0)] [RED("("isBirdSpawned")] 		public CBool IsBirdSpawned { get; set;}
+		[Ordinal(1)] [RED("("isBirdSpawned")] 		public CBool IsBirdSpawned { get; set;}
 
-		[Ordinal(0)] [RED("("isFlying")] 		public CBool IsFlying { get; set;}
+		[Ordinal(2)] [RED("("isFlying")] 		public CBool IsFlying { get; set;}
 
-		[Ordinal(0)] [RED("("entityId")] 		public CInt32 EntityId { get; set;}
+		[Ordinal(3)] [RED("("entityId")] 		public CInt32 EntityId { get; set;}
 
-		[Ordinal(0)] [RED("("entitySpawnTimestamp")] 		public CFloat EntitySpawnTimestamp { get; set;}
+		[Ordinal(4)] [RED("("entitySpawnTimestamp")] 		public CFloat EntitySpawnTimestamp { get; set;}
 
-		[Ordinal(0)] [RED("("bird")] 		public CHandle<W3Bird> Bird { get; set;}
+		[Ordinal(5)] [RED("("bird")] 		public CHandle<W3Bird> Bird { get; set;}
 
-		[Ordinal(0)] [RED("("position")] 		public Vector Position { get; set;}
+		[Ordinal(6)] [RED("("position")] 		public Vector Position { get; set;}
 
-		[Ordinal(0)] [RED("("rotation")] 		public EulerAngles Rotation { get; set;}
+		[Ordinal(7)] [RED("("rotation")] 		public EulerAngles Rotation { get; set;}
 
 		public SBirdSpawnpoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

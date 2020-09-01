@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CVitalSpotsParam : CGameplayEntityParam
 	{
-		[Ordinal(0)] [RED("journalCreaturVitalSpotsPath")] 		public CHandle<CJournalPath> JournalCreaturVitalSpotsPath { get; set;}
+		[Ordinal(1)] [RED("journalCreaturVitalSpotsPath")] 		public CHandle<CJournalPath> JournalCreaturVitalSpotsPath { get; set;}
 
-		[Ordinal(0)] [RED("vitalSpots", 2,0)] 		public CArray<CPtr<CVitalSpot>> VitalSpots { get; set;}
+		[Ordinal(2)] [RED("vitalSpots", 2,0)] 		public CArray<CPtr<CVitalSpot>> VitalSpots { get; set;}
 
 		public CVitalSpotsParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestTeleportBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("locationTag")] 		public TagList LocationTag { get; set;}
+		[Ordinal(1)] [RED("locationTag")] 		public TagList LocationTag { get; set;}
 
-		[Ordinal(0)] [RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(2)] [RED("distance")] 		public CFloat Distance { get; set;}
 
-		[Ordinal(0)] [RED("distanceToDestination")] 		public CFloat DistanceToDestination { get; set;}
+		[Ordinal(3)] [RED("distanceToDestination")] 		public CFloat DistanceToDestination { get; set;}
 
-		[Ordinal(0)] [RED("actorsTags")] 		public TagList ActorsTags { get; set;}
+		[Ordinal(4)] [RED("actorsTags")] 		public TagList ActorsTags { get; set;}
 
 		public CQuestTeleportBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

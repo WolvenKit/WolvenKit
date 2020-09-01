@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CxplorationTransitionTurnToJump : CExplorationStateTransitionAbstract
 	{
-		[Ordinal(0)] [RED("timeToExit")] 		public CFloat TimeToExit { get; set;}
+		[Ordinal(1)] [RED("timeToExit")] 		public CFloat TimeToExit { get; set;}
 
-		[Ordinal(0)] [RED("angleToTrigger")] 		public CFloat AngleToTrigger { get; set;}
+		[Ordinal(2)] [RED("angleToTrigger")] 		public CFloat AngleToTrigger { get; set;}
 
 		public CxplorationTransitionTurnToJump(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

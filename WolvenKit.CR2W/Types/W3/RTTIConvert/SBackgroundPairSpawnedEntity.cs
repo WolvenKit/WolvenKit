@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBackgroundPairSpawnedEntity : CVariable
 	{
-		[Ordinal(0)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(1)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[Ordinal(0)] [RED("slotName")] 		public CName SlotName { get; set;}
+		[Ordinal(2)] [RED("slotName")] 		public CName SlotName { get; set;}
 
-		[Ordinal(0)] [RED("referenceName")] 		public CName ReferenceName { get; set;}
+		[Ordinal(3)] [RED("referenceName")] 		public CName ReferenceName { get; set;}
 
 		public SBackgroundPairSpawnedEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

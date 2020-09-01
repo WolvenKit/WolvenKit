@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEdEntitySetupListParam : CGameplayEntityParam
 	{
-		[Ordinal(0)] [RED("("effectors", 2,0)] 		public CArray<CHandle<IEdEntitySetupEffector>> Effectors { get; set;}
+		[Ordinal(1)] [RED("("effectors", 2,0)] 		public CArray<CHandle<IEdEntitySetupEffector>> Effectors { get; set;}
 
-		[Ordinal(0)] [RED("("detachFromTemplate")] 		public CBool DetachFromTemplate { get; set;}
+		[Ordinal(2)] [RED("("detachFromTemplate")] 		public CBool DetachFromTemplate { get; set;}
 
 		public CEdEntitySetupListParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SInventoryItem : CVariable
 	{
-		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
+		[Ordinal(1)] [RED("("name")] 		public CName Name { get; set;}
 
-		[Ordinal(0)] [RED("("itemQuantity")] 		public CUInt32 ItemQuantity { get; set;}
+		[Ordinal(2)] [RED("("itemQuantity")] 		public CUInt32 ItemQuantity { get; set;}
 
-		[Ordinal(0)] [RED("("uniqueId")] 		public SItemUniqueId UniqueId { get; set;}
+		[Ordinal(3)] [RED("("uniqueId")] 		public SItemUniqueId UniqueId { get; set;}
 
-		[Ordinal(0)] [RED("("flags")] 		public CUInt64 Flags { get; set;}
+		[Ordinal(4)] [RED("("flags")] 		public CUInt64 Flags { get; set;}
 
-		[Ordinal(0)] [RED("("staticRandomSeed")] 		public CUInt16 StaticRandomSeed { get; set;}
+		[Ordinal(5)] [RED("("staticRandomSeed")] 		public CUInt16 StaticRandomSeed { get; set;}
 
-		[Ordinal(0)] [RED("("uiData")] 		public SInventoryItemUIData UiData { get; set;}
+		[Ordinal(6)] [RED("("uiData")] 		public SInventoryItemUIData UiData { get; set;}
 
-		[Ordinal(0)] [RED("("craftedAbilities", 2,0)] 		public CArray<CName> CraftedAbilities { get; set;}
+		[Ordinal(7)] [RED("("craftedAbilities", 2,0)] 		public CArray<CName> CraftedAbilities { get; set;}
 
-		[Ordinal(0)] [RED("("enchantmentName")] 		public CName EnchantmentName { get; set;}
+		[Ordinal(8)] [RED("("enchantmentName")] 		public CName EnchantmentName { get; set;}
 
-		[Ordinal(0)] [RED("("enchantmentStats")] 		public CName EnchantmentStats { get; set;}
+		[Ordinal(9)] [RED("("enchantmentStats")] 		public CName EnchantmentStats { get; set;}
 
-		[Ordinal(0)] [RED("("dyeColorName")] 		public CName DyeColorName { get; set;}
+		[Ordinal(10)] [RED("("dyeColorName")] 		public CName DyeColorName { get; set;}
 
-		[Ordinal(0)] [RED("("dyeColorAbilityName")] 		public CName DyeColorAbilityName { get; set;}
+		[Ordinal(11)] [RED("("dyeColorAbilityName")] 		public CName DyeColorAbilityName { get; set;}
 
-		[Ordinal(0)] [RED("("dyePreviewColorName")] 		public CName DyePreviewColorName { get; set;}
+		[Ordinal(12)] [RED("("dyePreviewColorName")] 		public CName DyePreviewColorName { get; set;}
 
 		public SInventoryItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

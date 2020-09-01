@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWraithDrainDanceDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
-		[Ordinal(0)] [RED("("drainTemplate")] 		public CHandle<CEntityTemplate> DrainTemplate { get; set;}
+		[Ordinal(1)] [RED("("drainTemplate")] 		public CHandle<CEntityTemplate> DrainTemplate { get; set;}
 
 		public CBTTaskWraithDrainDanceDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

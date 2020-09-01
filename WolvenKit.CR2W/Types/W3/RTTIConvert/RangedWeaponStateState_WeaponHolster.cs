@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class RangedWeaponStateState_WeaponHolster : CScriptableState
 	{
-		[Ordinal(0)] [RED("isSettingItems")] 		public CBool IsSettingItems { get; set;}
+		[Ordinal(1)] [RED("isSettingItems")] 		public CBool IsSettingItems { get; set;}
 
 		public RangedWeaponStateState_WeaponHolster(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ICollisionShape : CObject
 	{
-		[Ordinal(0)] [RED("pose")] 		public CMatrix Pose { get; set;}
+		[Ordinal(1)] [RED("pose")] 		public CMatrix Pose { get; set;}
 
-		[Ordinal(0)] [RED("densityScaler")] 		public CFloat DensityScaler { get; set;}
+		[Ordinal(2)] [RED("densityScaler")] 		public CFloat DensityScaler { get; set;}
 
 		public ICollisionShape(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

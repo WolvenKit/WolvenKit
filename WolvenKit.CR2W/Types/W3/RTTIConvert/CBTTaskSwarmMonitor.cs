@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSwarmMonitor : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("monitorShieldSwarm")] 		public CBool MonitorShieldSwarm { get; set;}
+		[Ordinal(1)] [RED("monitorShieldSwarm")] 		public CBool MonitorShieldSwarm { get; set;}
 
-		[Ordinal(0)] [RED("respawnShieldBirds")] 		public CBool RespawnShieldBirds { get; set;}
+		[Ordinal(2)] [RED("respawnShieldBirds")] 		public CBool RespawnShieldBirds { get; set;}
 
-		[Ordinal(0)] [RED("respawnThreshold")] 		public CFloat RespawnThreshold { get; set;}
+		[Ordinal(3)] [RED("respawnThreshold")] 		public CFloat RespawnThreshold { get; set;}
 
-		[Ordinal(0)] [RED("respawnCooldown")] 		public CFloat RespawnCooldown { get; set;}
+		[Ordinal(4)] [RED("respawnCooldown")] 		public CFloat RespawnCooldown { get; set;}
 
-		[Ordinal(0)] [RED("disableBoidPOIComponents")] 		public CBool DisableBoidPOIComponents { get; set;}
+		[Ordinal(5)] [RED("disableBoidPOIComponents")] 		public CBool DisableBoidPOIComponents { get; set;}
 
-		[Ordinal(0)] [RED("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
+		[Ordinal(6)] [RED("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
 
-		[Ordinal(0)] [RED("boidPOIComponents", 2,0)] 		public CArray<CHandle<CComponent>> BoidPOIComponents { get; set;}
+		[Ordinal(7)] [RED("boidPOIComponents", 2,0)] 		public CArray<CHandle<CComponent>> BoidPOIComponents { get; set;}
 
 		public CBTTaskSwarmMonitor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

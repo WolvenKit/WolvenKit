@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalRoot : CObject
 	{
-		[Ordinal(0)] [RED("objects", 2,0)] 		public CArray<CHandle<CJournalResource>> Objects { get; set;}
+		[Ordinal(1)] [RED("objects", 2,0)] 		public CArray<CHandle<CJournalResource>> Objects { get; set;}
 
 		public CJournalRoot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

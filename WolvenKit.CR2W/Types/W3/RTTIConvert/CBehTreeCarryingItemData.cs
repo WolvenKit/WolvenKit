@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeCarryingItemData : CVariable
 	{
-		[Ordinal(0)] [RED("carriedItem")] 		public CHandle<CEntity> CarriedItem { get; set;}
+		[Ordinal(1)] [RED("carriedItem")] 		public CHandle<CEntity> CarriedItem { get; set;}
 
 		public CBehTreeCarryingItemData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

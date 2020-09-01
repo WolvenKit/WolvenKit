@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockOutputColorDecalModulative : CMaterialRootDecalBlock
 	{
-		[Ordinal(0)] [RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
+		[Ordinal(1)] [RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
 
 		public CMaterialBlockOutputColorDecalModulative(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

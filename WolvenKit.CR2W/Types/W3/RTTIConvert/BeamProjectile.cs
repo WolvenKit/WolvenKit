@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BeamProjectile : W3AdvancedProjectile
 	{
-		[Ordinal(0)] [RED("beamFx")] 		public CName BeamFx { get; set;}
+		[Ordinal(1)] [RED("beamFx")] 		public CName BeamFx { get; set;}
 
-		[Ordinal(0)] [RED("pullEffectDuration")] 		public CFloat PullEffectDuration { get; set;}
+		[Ordinal(2)] [RED("pullEffectDuration")] 		public CFloat PullEffectDuration { get; set;}
 
 		public BeamProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

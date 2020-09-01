@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorConstraintStirrups : CBehaviorGraphPoseConstraintNode
 	{
-		[Ordinal(0)] [RED("common")] 		public SBehaviorConstraintStirrupsCommmonData Common { get; set;}
+		[Ordinal(1)] [RED("common")] 		public SBehaviorConstraintStirrupsCommmonData Common { get; set;}
 
-		[Ordinal(0)] [RED("left")] 		public SBehaviorConstraintStirrupData Left { get; set;}
+		[Ordinal(2)] [RED("left")] 		public SBehaviorConstraintStirrupData Left { get; set;}
 
-		[Ordinal(0)] [RED("right")] 		public SBehaviorConstraintStirrupData Right { get; set;}
+		[Ordinal(3)] [RED("right")] 		public SBehaviorConstraintStirrupData Right { get; set;}
 
 		public CBehaviorConstraintStirrups(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

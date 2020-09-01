@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskSummonCreaturesOnSpotsDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("entityToSpawn")] 		public CHandle<CEntityTemplate> EntityToSpawn { get; set;}
+		[Ordinal(1)] [RED("entityToSpawn")] 		public CHandle<CEntityTemplate> EntityToSpawn { get; set;}
 
-		[Ordinal(0)] [RED("summonOnAnimEvent")] 		public CName SummonOnAnimEvent { get; set;}
+		[Ordinal(2)] [RED("summonOnAnimEvent")] 		public CName SummonOnAnimEvent { get; set;}
 
-		[Ordinal(0)] [RED("spotTag")] 		public CName SpotTag { get; set;}
+		[Ordinal(3)] [RED("spotTag")] 		public CName SpotTag { get; set;}
 
-		[Ordinal(0)] [RED("minDistance")] 		public CFloat MinDistance { get; set;}
+		[Ordinal(4)] [RED("minDistance")] 		public CFloat MinDistance { get; set;}
 
-		[Ordinal(0)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(5)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[Ordinal(0)] [RED("maxSpawnQuantity")] 		public CInt32 MaxSpawnQuantity { get; set;}
+		[Ordinal(6)] [RED("maxSpawnQuantity")] 		public CInt32 MaxSpawnQuantity { get; set;}
 
-		[Ordinal(0)] [RED("betweenSpawnDelay")] 		public SRangeF BetweenSpawnDelay { get; set;}
+		[Ordinal(7)] [RED("betweenSpawnDelay")] 		public SRangeF BetweenSpawnDelay { get; set;}
 
-		[Ordinal(0)] [RED("completeAfterSpawn")] 		public CBool CompleteAfterSpawn { get; set;}
+		[Ordinal(8)] [RED("completeAfterSpawn")] 		public CBool CompleteAfterSpawn { get; set;}
 
-		[Ordinal(0)] [RED("spawnAreaCenter")] 		public CEnum<ETargetName> SpawnAreaCenter { get; set;}
+		[Ordinal(9)] [RED("spawnAreaCenter")] 		public CEnum<ETargetName> SpawnAreaCenter { get; set;}
 
-		[Ordinal(0)] [RED("minDistanceFromSpawner")] 		public CFloat MinDistanceFromSpawner { get; set;}
+		[Ordinal(10)] [RED("minDistanceFromSpawner")] 		public CFloat MinDistanceFromSpawner { get; set;}
 
-		[Ordinal(0)] [RED("spawnBehVarName")] 		public CName SpawnBehVarName { get; set;}
+		[Ordinal(11)] [RED("spawnBehVarName")] 		public CName SpawnBehVarName { get; set;}
 
-		[Ordinal(0)] [RED("spawnBehVar")] 		public CFloat SpawnBehVar { get; set;}
+		[Ordinal(12)] [RED("spawnBehVar")] 		public CFloat SpawnBehVar { get; set;}
 
-		[Ordinal(0)] [RED("shouldForceBehaviorOnSpawn")] 		public CBool ShouldForceBehaviorOnSpawn { get; set;}
+		[Ordinal(13)] [RED("shouldForceBehaviorOnSpawn")] 		public CBool ShouldForceBehaviorOnSpawn { get; set;}
 
 		public BTTaskSummonCreaturesOnSpotsDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

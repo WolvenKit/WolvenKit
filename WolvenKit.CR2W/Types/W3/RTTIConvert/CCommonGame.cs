@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCommonGame : CGame
 	{
-		[Ordinal(0)] [RED("player")] 		public CHandle<CPlayer> Player { get; set;}
+		[Ordinal(1)] [RED("player")] 		public CHandle<CPlayer> Player { get; set;}
 
-		[Ordinal(0)] [RED("dlcManager")] 		public CPtr<CDLCManager> DlcManager { get; set;}
+		[Ordinal(2)] [RED("dlcManager")] 		public CPtr<CDLCManager> DlcManager { get; set;}
 
-		[Ordinal(0)] [RED("tooltipSettings")] 		public CHandle<C2dArray> TooltipSettings { get; set;}
+		[Ordinal(3)] [RED("tooltipSettings")] 		public CHandle<C2dArray> TooltipSettings { get; set;}
 
 		public CCommonGame(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

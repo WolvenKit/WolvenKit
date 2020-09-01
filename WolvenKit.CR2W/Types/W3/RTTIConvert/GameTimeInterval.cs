@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class GameTimeInterval : CVariable
 	{
-		[Ordinal(0)] [RED("begin")] 		public GameTime Begin { get; set;}
+		[Ordinal(1)] [RED("begin")] 		public GameTime Begin { get; set;}
 
-		[Ordinal(0)] [RED("end")] 		public GameTime End { get; set;}
+		[Ordinal(2)] [RED("end")] 		public GameTime End { get; set;}
 
 		public GameTimeInterval(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

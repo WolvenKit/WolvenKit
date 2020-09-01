@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIQuestScriptedActionsTree : IAITree
 	{
-		[Ordinal(0)] [RED("actionTree")] 		public CHandle<IAITree> ActionTree { get; set;}
+		[Ordinal(1)] [RED("actionTree")] 		public CHandle<IAITree> ActionTree { get; set;}
 
-		[Ordinal(0)] [RED("listener")] 		public SBehTreeExternalListenerPtr Listener { get; set;}
+		[Ordinal(2)] [RED("listener")] 		public SBehTreeExternalListenerPtr Listener { get; set;}
 
 		public CAIQuestScriptedActionsTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventEquipItem : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("("leftItem")] 		public CName LeftItem { get; set;}
+		[Ordinal(1)] [RED("("leftItem")] 		public CName LeftItem { get; set;}
 
-		[Ordinal(0)] [RED("("rightItem")] 		public CName RightItem { get; set;}
+		[Ordinal(2)] [RED("("rightItem")] 		public CName RightItem { get; set;}
 
-		[Ordinal(0)] [RED("("actor")] 		public CName Actor { get; set;}
+		[Ordinal(3)] [RED("("actor")] 		public CName Actor { get; set;}
 
-		[Ordinal(0)] [RED("("ignoreItemsWithTag")] 		public CName IgnoreItemsWithTag { get; set;}
+		[Ordinal(4)] [RED("("ignoreItemsWithTag")] 		public CName IgnoreItemsWithTag { get; set;}
 
-		[Ordinal(0)] [RED("("internalMode")] 		public CEnum<ESceneItemEventMode> InternalMode { get; set;}
+		[Ordinal(5)] [RED("("internalMode")] 		public CEnum<ESceneItemEventMode> InternalMode { get; set;}
 
-		[Ordinal(0)] [RED("("instant")] 		public CBool Instant { get; set;}
+		[Ordinal(6)] [RED("("instant")] 		public CBool Instant { get; set;}
 
 		public CStorySceneEventEquipItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

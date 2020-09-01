@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDoorComponent : CInteractionComponent
 	{
-		[Ordinal(0)] [RED("("initialState")] 		public CEnum<EDoorState> InitialState { get; set;}
+		[Ordinal(1)] [RED("("initialState")] 		public CEnum<EDoorState> InitialState { get; set;}
 
-		[Ordinal(0)] [RED("("isTrapdoor")] 		public CBool IsTrapdoor { get; set;}
+		[Ordinal(2)] [RED("("isTrapdoor")] 		public CBool IsTrapdoor { get; set;}
 
-		[Ordinal(0)] [RED("("doorsEnebled")] 		public CBool DoorsEnebled { get; set;}
+		[Ordinal(3)] [RED("("doorsEnebled")] 		public CBool DoorsEnebled { get; set;}
 
-		[Ordinal(0)] [RED("("openName")] 		public CString OpenName { get; set;}
+		[Ordinal(4)] [RED("("openName")] 		public CString OpenName { get; set;}
 
-		[Ordinal(0)] [RED("("closeName")] 		public CString CloseName { get; set;}
+		[Ordinal(5)] [RED("("closeName")] 		public CString CloseName { get; set;}
 
 		public CDoorComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

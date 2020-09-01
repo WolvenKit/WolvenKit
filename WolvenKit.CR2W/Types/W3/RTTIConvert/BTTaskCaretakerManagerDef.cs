@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskCaretakerManagerDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("drainTemplate")] 		public CHandle<CEntityTemplate> DrainTemplate { get; set;}
+		[Ordinal(1)] [RED("drainTemplate")] 		public CHandle<CEntityTemplate> DrainTemplate { get; set;}
 
-		[Ordinal(0)] [RED("recoverPercPerHit")] 		public CFloat RecoverPercPerHit { get; set;}
+		[Ordinal(2)] [RED("recoverPercPerHit")] 		public CFloat RecoverPercPerHit { get; set;}
 
-		[Ordinal(0)] [RED("shadesModifier")] 		public CFloat ShadesModifier { get; set;}
+		[Ordinal(3)] [RED("shadesModifier")] 		public CFloat ShadesModifier { get; set;}
 
 		public BTTaskCaretakerManagerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

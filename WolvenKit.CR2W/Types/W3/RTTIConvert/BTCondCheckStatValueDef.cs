@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondCheckStatValueDef : IBehTreeConditionalTaskDefinition
 	{
-		[Ordinal(0)] [RED("checkedActor")] 		public CEnum<EStatOwner> CheckedActor { get; set;}
+		[Ordinal(1)] [RED("checkedActor")] 		public CEnum<EStatOwner> CheckedActor { get; set;}
 
-		[Ordinal(0)] [RED("baseStatType")] 		public CEnum<EBaseCharacterStats> BaseStatType { get; set;}
+		[Ordinal(2)] [RED("baseStatType")] 		public CEnum<EBaseCharacterStats> BaseStatType { get; set;}
 
-		[Ordinal(0)] [RED("autoCheckHPType")] 		public CBool AutoCheckHPType { get; set;}
+		[Ordinal(3)] [RED("autoCheckHPType")] 		public CBool AutoCheckHPType { get; set;}
 
-		[Ordinal(0)] [RED("statValue")] 		public CFloat StatValue { get; set;}
+		[Ordinal(4)] [RED("statValue")] 		public CFloat StatValue { get; set;}
 
-		[Ordinal(0)] [RED("percentage")] 		public CBool Percentage { get; set;}
+		[Ordinal(5)] [RED("percentage")] 		public CBool Percentage { get; set;}
 
-		[Ordinal(0)] [RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
+		[Ordinal(6)] [RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
 		public BTCondCheckStatValueDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

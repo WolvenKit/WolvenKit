@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SR4PlayerTargetingPrecalcs : CVariable
 	{
-		[Ordinal(0)] [RED("("playerPosition")] 		public Vector PlayerPosition { get; set;}
+		[Ordinal(1)] [RED("("playerPosition")] 		public Vector PlayerPosition { get; set;}
 
-		[Ordinal(0)] [RED("("playerHeading")] 		public CFloat PlayerHeading { get; set;}
+		[Ordinal(2)] [RED("("playerHeading")] 		public CFloat PlayerHeading { get; set;}
 
-		[Ordinal(0)] [RED("("playerHeadingVector")] 		public Vector PlayerHeadingVector { get; set;}
+		[Ordinal(3)] [RED("("playerHeadingVector")] 		public Vector PlayerHeadingVector { get; set;}
 
-		[Ordinal(0)] [RED("("playerRadius")] 		public CFloat PlayerRadius { get; set;}
+		[Ordinal(4)] [RED("("playerRadius")] 		public CFloat PlayerRadius { get; set;}
 
-		[Ordinal(0)] [RED("("cameraPosition")] 		public Vector CameraPosition { get; set;}
+		[Ordinal(5)] [RED("("cameraPosition")] 		public Vector CameraPosition { get; set;}
 
-		[Ordinal(0)] [RED("("cameraDirection")] 		public Vector CameraDirection { get; set;}
+		[Ordinal(6)] [RED("("cameraDirection")] 		public Vector CameraDirection { get; set;}
 
-		[Ordinal(0)] [RED("("cameraHeading")] 		public CFloat CameraHeading { get; set;}
+		[Ordinal(7)] [RED("("cameraHeading")] 		public CFloat CameraHeading { get; set;}
 
-		[Ordinal(0)] [RED("("cameraHeadingVector")] 		public Vector CameraHeadingVector { get; set;}
+		[Ordinal(8)] [RED("("cameraHeadingVector")] 		public Vector CameraHeadingVector { get; set;}
 
 		public SR4PlayerTargetingPrecalcs(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

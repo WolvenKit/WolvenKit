@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQCDistanceTo : IActorConditionType
 	{
-		[Ordinal(0)] [RED("targetNodeTag")] 		public CName TargetNodeTag { get; set;}
+		[Ordinal(1)] [RED("targetNodeTag")] 		public CName TargetNodeTag { get; set;}
 
-		[Ordinal(0)] [RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
+		[Ordinal(2)] [RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
 
-		[Ordinal(0)] [RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(3)] [RED("distance")] 		public CFloat Distance { get; set;}
 
 		public CQCDistanceTo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

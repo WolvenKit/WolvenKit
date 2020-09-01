@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCurve3DData : CVariable
 	{
-		[Ordinal(0)] [RED("("curveX")] 		public SCurveData CurveX { get; set;}
+		[Ordinal(1)] [RED("("curveX")] 		public SCurveData CurveX { get; set;}
 
-		[Ordinal(0)] [RED("("curveY")] 		public SCurveData CurveY { get; set;}
+		[Ordinal(2)] [RED("("curveY")] 		public SCurveData CurveY { get; set;}
 
-		[Ordinal(0)] [RED("("curveZ")] 		public SCurveData CurveZ { get; set;}
+		[Ordinal(3)] [RED("("curveZ")] 		public SCurveData CurveZ { get; set;}
 
 		public SCurve3DData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

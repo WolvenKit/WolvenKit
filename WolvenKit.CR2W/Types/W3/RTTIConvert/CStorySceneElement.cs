@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneElement : CObject
 	{
-		[Ordinal(0)] [RED("("elementID")] 		public CString ElementID { get; set;}
+		[Ordinal(1)] [RED("("elementID")] 		public CString ElementID { get; set;}
 
-		[Ordinal(0)] [RED("("approvedDuration")] 		public CFloat ApprovedDuration { get; set;}
+		[Ordinal(2)] [RED("("approvedDuration")] 		public CFloat ApprovedDuration { get; set;}
 
-		[Ordinal(0)] [RED("("isCopy")] 		public CBool IsCopy { get; set;}
+		[Ordinal(3)] [RED("("isCopy")] 		public CBool IsCopy { get; set;}
 
 		public CStorySceneElement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

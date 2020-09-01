@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphCameraVerticalDampNode : CBehaviorGraphVectorValueBaseNode
 	{
-		[Ordinal(0)] [RED("("length")] 		public CFloat Length { get; set;}
+		[Ordinal(1)] [RED("("length")] 		public CFloat Length { get; set;}
 
-		[Ordinal(0)] [RED("("dampSpeed")] 		public CFloat DampSpeed { get; set;}
+		[Ordinal(2)] [RED("("dampSpeed")] 		public CFloat DampSpeed { get; set;}
 
 		public CBehaviorGraphCameraVerticalDampNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSbDescIdlePose : CVariable
 	{
-		[Ordinal(0)] [RED("("repoPoseId")] 		public CString RepoPoseId { get; set;}
+		[Ordinal(1)] [RED("("repoPoseId")] 		public CString RepoPoseId { get; set;}
 
-		[Ordinal(0)] [RED("("idleAnimName")] 		public CString IdleAnimName { get; set;}
+		[Ordinal(2)] [RED("("idleAnimName")] 		public CString IdleAnimName { get; set;}
 
-		[Ordinal(0)] [RED("("poseName")] 		public CString PoseName { get; set;}
+		[Ordinal(3)] [RED("("poseName")] 		public CString PoseName { get; set;}
 
-		[Ordinal(0)] [RED("("poseStatus")] 		public CString PoseStatus { get; set;}
+		[Ordinal(4)] [RED("("poseStatus")] 		public CString PoseStatus { get; set;}
 
-		[Ordinal(0)] [RED("("poseEmotionalState")] 		public CString PoseEmotionalState { get; set;}
+		[Ordinal(5)] [RED("("poseEmotionalState")] 		public CString PoseEmotionalState { get; set;}
 
 		public SSbDescIdlePose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

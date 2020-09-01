@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MagicalThing : CProjectileTrajectory
 	{
-		[Ordinal(0)] [RED("("dmg")] 		public CFloat Dmg { get; set;}
+		[Ordinal(1)] [RED("("dmg")] 		public CFloat Dmg { get; set;}
 
 		public W3MagicalThing(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

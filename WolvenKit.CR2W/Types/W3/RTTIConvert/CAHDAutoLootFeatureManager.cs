@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAHDAutoLootFeatureManager : CObject
 	{
-		[Ordinal(0)] [RED("isInitialized")] 		public CBool IsInitialized { get; set;}
+		[Ordinal(1)] [RED("isInitialized")] 		public CBool IsInitialized { get; set;}
 
-		[Ordinal(0)] [RED("AutoLootConfig")] 		public CHandle<CAHDAutoLootConfig> AutoLootConfig { get; set;}
+		[Ordinal(2)] [RED("AutoLootConfig")] 		public CHandle<CAHDAutoLootConfig> AutoLootConfig { get; set;}
 
-		[Ordinal(0)] [RED("AutoLootNotificationManager")] 		public CHandle<CAHDAutoLootNotificationManager> AutoLootNotificationManager { get; set;}
+		[Ordinal(3)] [RED("AutoLootNotificationManager")] 		public CHandle<CAHDAutoLootNotificationManager> AutoLootNotificationManager { get; set;}
 
-		[Ordinal(0)] [RED("UserSettings")] 		public CHandle<CInGameConfigWrapper> UserSettings { get; set;}
+		[Ordinal(4)] [RED("UserSettings")] 		public CHandle<CInGameConfigWrapper> UserSettings { get; set;}
 
-		[Ordinal(0)] [RED("AHDAL_TRUE_AUTOLOOT_MODE")] 		public CString AHDAL_TRUE_AUTOLOOT_MODE { get; set;}
+		[Ordinal(5)] [RED("AHDAL_TRUE_AUTOLOOT_MODE")] 		public CString AHDAL_TRUE_AUTOLOOT_MODE { get; set;}
 
-		[Ordinal(0)] [RED("AHDAL_RADIUS_LOOT")] 		public CString AHDAL_RADIUS_LOOT { get; set;}
+		[Ordinal(6)] [RED("AHDAL_RADIUS_LOOT")] 		public CString AHDAL_RADIUS_LOOT { get; set;}
 
 		public CAHDAutoLootFeatureManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

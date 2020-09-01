@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWayPointComponent : CSpriteComponent
 	{
-		[Ordinal(0)] [RED("usedByPathLib")] 		public CBool UsedByPathLib { get; set;}
+		[Ordinal(1)] [RED("usedByPathLib")] 		public CBool UsedByPathLib { get; set;}
 
 		public CWayPointComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

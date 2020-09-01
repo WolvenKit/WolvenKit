@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimFootstepEvent : CExtAnimSoundEvent
 	{
-		[Ordinal(0)] [RED("("fx")] 		public CBool Fx { get; set;}
+		[Ordinal(1)] [RED("("fx")] 		public CBool Fx { get; set;}
 
-		[Ordinal(0)] [RED("("customFxName")] 		public CName CustomFxName { get; set;}
+		[Ordinal(2)] [RED("("customFxName")] 		public CName CustomFxName { get; set;}
 
 		public CExtAnimFootstepEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSetBehVarOnScriptEventDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("activationEventName")] 		public CName ActivationEventName { get; set;}
+		[Ordinal(1)] [RED("("activationEventName")] 		public CName ActivationEventName { get; set;}
 
-		[Ordinal(0)] [RED("("behVarName")] 		public CName BehVarName { get; set;}
+		[Ordinal(2)] [RED("("behVarName")] 		public CName BehVarName { get; set;}
 
-		[Ordinal(0)] [RED("("behVarValue")] 		public CFloat BehVarValue { get; set;}
+		[Ordinal(3)] [RED("("behVarValue")] 		public CFloat BehVarValue { get; set;}
 
-		[Ordinal(0)] [RED("("delay")] 		public CFloat Delay { get; set;}
+		[Ordinal(4)] [RED("("delay")] 		public CFloat Delay { get; set;}
 
-		[Ordinal(0)] [RED("("previousValueOnDurationEnd")] 		public CBool PreviousValueOnDurationEnd { get; set;}
+		[Ordinal(5)] [RED("("previousValueOnDurationEnd")] 		public CBool PreviousValueOnDurationEnd { get; set;}
 
 		public CBTTaskSetBehVarOnScriptEventDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

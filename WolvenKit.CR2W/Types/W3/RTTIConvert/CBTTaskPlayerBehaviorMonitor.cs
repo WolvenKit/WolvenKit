@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPlayerBehaviorMonitor : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("eventNameToRaise")] 		public CName EventNameToRaise { get; set;}
+		[Ordinal(1)] [RED("eventNameToRaise")] 		public CName EventNameToRaise { get; set;}
 
-		[Ordinal(0)] [RED("scanningCooldown")] 		public CFloat ScanningCooldown { get; set;}
+		[Ordinal(2)] [RED("scanningCooldown")] 		public CFloat ScanningCooldown { get; set;}
 
-		[Ordinal(0)] [RED("extraWindow")] 		public CFloat ExtraWindow { get; set;}
+		[Ordinal(3)] [RED("extraWindow")] 		public CFloat ExtraWindow { get; set;}
 
-		[Ordinal(0)] [RED("sendEvent")] 		public CBool SendEvent { get; set;}
+		[Ordinal(4)] [RED("sendEvent")] 		public CBool SendEvent { get; set;}
 
 		public CBTTaskPlayerBehaviorMonitor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

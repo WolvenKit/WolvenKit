@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TooltipComponent : CObject
 	{
-		[Ordinal(0)] [RED("("m_playerInv")] 		public CHandle<CInventoryComponent> M_playerInv { get; set;}
+		[Ordinal(1)] [RED("("m_playerInv")] 		public CHandle<CInventoryComponent> M_playerInv { get; set;}
 
-		[Ordinal(0)] [RED("("m_itemInv")] 		public CHandle<CInventoryComponent> M_itemInv { get; set;}
+		[Ordinal(2)] [RED("("m_itemInv")] 		public CHandle<CInventoryComponent> M_itemInv { get; set;}
 
-		[Ordinal(0)] [RED("("m_shopInv")] 		public CHandle<CInventoryComponent> M_shopInv { get; set;}
+		[Ordinal(3)] [RED("("m_shopInv")] 		public CHandle<CInventoryComponent> M_shopInv { get; set;}
 
-		[Ordinal(0)] [RED("("m_flashValueStorage")] 		public CHandle<CScriptedFlashValueStorage> M_flashValueStorage { get; set;}
+		[Ordinal(4)] [RED("("m_flashValueStorage")] 		public CHandle<CScriptedFlashValueStorage> M_flashValueStorage { get; set;}
 
-		[Ordinal(0)] [RED("("m_enchantmentManager")] 		public CHandle<W3EnchantmentManager> M_enchantmentManager { get; set;}
+		[Ordinal(5)] [RED("("m_enchantmentManager")] 		public CHandle<W3EnchantmentManager> M_enchantmentManager { get; set;}
 
 		public W3TooltipComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

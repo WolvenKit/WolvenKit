@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskActivateOnlyOnceDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("successOnly")] 		public CBool SuccessOnly { get; set;}
+		[Ordinal(1)] [RED("("successOnly")] 		public CBool SuccessOnly { get; set;}
 
-		[Ordinal(0)] [RED("("resetWhenReattachFromPool")] 		public CBool ResetWhenReattachFromPool { get; set;}
+		[Ordinal(2)] [RED("("resetWhenReattachFromPool")] 		public CBool ResetWhenReattachFromPool { get; set;}
 
-		[Ordinal(0)] [RED("("resetOnGameplayEvent")] 		public CName ResetOnGameplayEvent { get; set;}
+		[Ordinal(3)] [RED("("resetOnGameplayEvent")] 		public CName ResetOnGameplayEvent { get; set;}
 
 		public CBTTaskActivateOnlyOnceDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

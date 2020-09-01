@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CNavmesh : CResource
 	{
-		[Ordinal(0)] [RED("vertexCount")] 		public CUInt16 VertexCount { get; set;}
+		[Ordinal(1)] [RED("vertexCount")] 		public CUInt16 VertexCount { get; set;}
 
-		[Ordinal(0)] [RED("triangleCount")] 		public CUInt16 TriangleCount { get; set;}
+		[Ordinal(2)] [RED("triangleCount")] 		public CUInt16 TriangleCount { get; set;}
 
-		[Ordinal(0)] [RED("phantomEdgesCount")] 		public CUInt16 PhantomEdgesCount { get; set;}
+		[Ordinal(3)] [RED("phantomEdgesCount")] 		public CUInt16 PhantomEdgesCount { get; set;}
 
-		[Ordinal(0)] [RED("binariesVersion")] 		public CUInt16 BinariesVersion { get; set;}
+		[Ordinal(4)] [RED("binariesVersion")] 		public CUInt16 BinariesVersion { get; set;}
 
-		[Ordinal(0)] [RED("centralPoint")] 		public Vector CentralPoint { get; set;}
+		[Ordinal(5)] [RED("centralPoint")] 		public Vector CentralPoint { get; set;}
 
-		[Ordinal(0)] [RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(6)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		[Ordinal(0)] [RED("bbox")] 		public Box Bbox { get; set;}
+		[Ordinal(7)] [RED("bbox")] 		public Box Bbox { get; set;}
 
 		public CNavmesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MonsterHuntInvestigationArea : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(1)] [RED("("enabled")] 		public CBool Enabled { get; set;}
 
-		[Ordinal(0)] [RED("("investigationMusicStartEvent")] 		public CString InvestigationMusicStartEvent { get; set;}
+		[Ordinal(2)] [RED("("investigationMusicStartEvent")] 		public CString InvestigationMusicStartEvent { get; set;}
 
-		[Ordinal(0)] [RED("("investigationMusicStopEvent")] 		public CString InvestigationMusicStopEvent { get; set;}
+		[Ordinal(3)] [RED("("investigationMusicStopEvent")] 		public CString InvestigationMusicStopEvent { get; set;}
 
-		[Ordinal(0)] [RED("("requiredTrackedQuest")] 		public CName RequiredTrackedQuest { get; set;}
+		[Ordinal(4)] [RED("("requiredTrackedQuest")] 		public CName RequiredTrackedQuest { get; set;}
 
-		[Ordinal(0)] [RED("("active")] 		public CBool Active { get; set;}
+		[Ordinal(5)] [RED("("active")] 		public CBool Active { get; set;}
 
 		public W3MonsterHuntInvestigationArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

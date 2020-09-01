@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimRaiseEventEvent : CExtAnimEvent
 	{
-		[Ordinal(0)] [RED("("eventToBeRaisedName")] 		public CName EventToBeRaisedName { get; set;}
+		[Ordinal(1)] [RED("("eventToBeRaisedName")] 		public CName EventToBeRaisedName { get; set;}
 
-		[Ordinal(0)] [RED("("forceRaiseEvent")] 		public CBool ForceRaiseEvent { get; set;}
+		[Ordinal(2)] [RED("("forceRaiseEvent")] 		public CBool ForceRaiseEvent { get; set;}
 
 		public CExtAnimRaiseEventEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

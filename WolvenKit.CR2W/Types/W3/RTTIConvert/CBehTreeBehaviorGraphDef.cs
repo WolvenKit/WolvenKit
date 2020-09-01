@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeBehaviorGraphDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("graph")] 		public CHandle<CBTEnumBehaviorGraph> Graph { get; set;}
+		[Ordinal(1)] [RED("graph")] 		public CHandle<CBTEnumBehaviorGraph> Graph { get; set;}
 
-		[Ordinal(0)] [RED("forceHighPriority")] 		public CBehTreeValBool ForceHighPriority { get; set;}
+		[Ordinal(2)] [RED("forceHighPriority")] 		public CBehTreeValBool ForceHighPriority { get; set;}
 
 		public CBehTreeBehaviorGraphDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

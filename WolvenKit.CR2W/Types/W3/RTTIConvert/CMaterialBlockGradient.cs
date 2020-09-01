@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockGradient : CMaterialBlock
 	{
-		[Ordinal(0)] [RED("gradientType")] 		public EGradientTypes GradientType { get; set;}
+		[Ordinal(1)] [RED("gradientType")] 		public EGradientTypes GradientType { get; set;}
 
-		[Ordinal(0)] [RED("reverse")] 		public CBool Reverse { get; set;}
+		[Ordinal(2)] [RED("reverse")] 		public CBool Reverse { get; set;}
 
-		[Ordinal(0)] [RED("loop")] 		public CBool Loop { get; set;}
+		[Ordinal(3)] [RED("loop")] 		public CBool Loop { get; set;}
 
-		[Ordinal(0)] [RED("offset")] 		public CFloat Offset { get; set;}
+		[Ordinal(4)] [RED("offset")] 		public CFloat Offset { get; set;}
 
-		[Ordinal(0)] [RED("gradientExtrapolationMode")] 		public EGradientExtrapolationModes GradientExtrapolationMode { get; set;}
+		[Ordinal(5)] [RED("gradientExtrapolationMode")] 		public EGradientExtrapolationModes GradientExtrapolationMode { get; set;}
 
-		[Ordinal(0)] [RED("gradient")] 		public SSimpleCurve Gradient { get; set;}
+		[Ordinal(6)] [RED("gradient")] 		public SSimpleCurve Gradient { get; set;}
 
 		public CMaterialBlockGradient(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

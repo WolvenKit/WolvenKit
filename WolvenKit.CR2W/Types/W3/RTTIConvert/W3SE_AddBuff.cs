@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_AddBuff : W3SwitchEvent
 	{
-		[Ordinal(0)] [RED("("applyEffect")] 		public CEnum<EEffectType> ApplyEffect { get; set;}
+		[Ordinal(1)] [RED("("applyEffect")] 		public CEnum<EEffectType> ApplyEffect { get; set;}
 
-		[Ordinal(0)] [RED("("useDefaultValuesFromXML")] 		public CBool UseDefaultValuesFromXML { get; set;}
+		[Ordinal(2)] [RED("("useDefaultValuesFromXML")] 		public CBool UseDefaultValuesFromXML { get; set;}
 
-		[Ordinal(0)] [RED("("effectDuration")] 		public CFloat EffectDuration { get; set;}
+		[Ordinal(3)] [RED("("effectDuration")] 		public CFloat EffectDuration { get; set;}
 
-		[Ordinal(0)] [RED("("customDamageValuePerSec")] 		public SAbilityAttributeValue CustomDamageValuePerSec { get; set;}
+		[Ordinal(4)] [RED("("customDamageValuePerSec")] 		public SAbilityAttributeValue CustomDamageValuePerSec { get; set;}
 
 		public W3SE_AddBuff(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

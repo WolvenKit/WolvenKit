@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBrushCompiledData : CObject
 	{
-		[Ordinal(0)] [RED("brushes", 2,0)] 		public CArray<CPtr<CBrushComponent>> Brushes { get; set;}
+		[Ordinal(1)] [RED("brushes", 2,0)] 		public CArray<CPtr<CBrushComponent>> Brushes { get; set;}
 
 		public CBrushCompiledData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

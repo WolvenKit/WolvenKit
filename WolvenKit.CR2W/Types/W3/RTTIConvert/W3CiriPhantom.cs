@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3CiriPhantom : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("owner")] 		public CHandle<CActor> Owner { get; set;}
+		[Ordinal(1)] [RED("("owner")] 		public CHandle<CActor> Owner { get; set;}
 
-		[Ordinal(0)] [RED("("target")] 		public CHandle<CActor> Target { get; set;}
+		[Ordinal(2)] [RED("("target")] 		public CHandle<CActor> Target { get; set;}
 
-		[Ordinal(0)] [RED("("rotationDamper")] 		public CHandle<EulerAnglesSpringDamper> RotationDamper { get; set;}
+		[Ordinal(3)] [RED("("rotationDamper")] 		public CHandle<EulerAnglesSpringDamper> RotationDamper { get; set;}
 
 		public W3CiriPhantom(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

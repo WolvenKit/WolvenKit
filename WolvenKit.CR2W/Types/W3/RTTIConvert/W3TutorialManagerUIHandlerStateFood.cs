@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateFood : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[Ordinal(0)] [RED("("SELECT_TAB")] 		public CName SELECT_TAB { get; set;}
+		[Ordinal(1)] [RED("("SELECT_TAB")] 		public CName SELECT_TAB { get; set;}
 
-		[Ordinal(0)] [RED("("SELECT_FOOD")] 		public CName SELECT_FOOD { get; set;}
+		[Ordinal(2)] [RED("("SELECT_FOOD")] 		public CName SELECT_FOOD { get; set;}
 
-		[Ordinal(0)] [RED("("EQUIP_FOOD")] 		public CName EQUIP_FOOD { get; set;}
+		[Ordinal(3)] [RED("("EQUIP_FOOD")] 		public CName EQUIP_FOOD { get; set;}
 
-		[Ordinal(0)] [RED("("USAGE")] 		public CName USAGE { get; set;}
+		[Ordinal(4)] [RED("("USAGE")] 		public CName USAGE { get; set;}
 
-		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(5)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateFood(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

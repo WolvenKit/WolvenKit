@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStoryBoardAnimationInfo : CVariable
 	{
-		[Ordinal(0)] [RED("("path")] 		public CString Path { get; set;}
+		[Ordinal(1)] [RED("("path")] 		public CString Path { get; set;}
 
-		[Ordinal(0)] [RED("("cat1")] 		public CString Cat1 { get; set;}
+		[Ordinal(2)] [RED("("cat1")] 		public CString Cat1 { get; set;}
 
-		[Ordinal(0)] [RED("("cat2")] 		public CString Cat2 { get; set;}
+		[Ordinal(3)] [RED("("cat2")] 		public CString Cat2 { get; set;}
 
-		[Ordinal(0)] [RED("("cat3")] 		public CString Cat3 { get; set;}
+		[Ordinal(4)] [RED("("cat3")] 		public CString Cat3 { get; set;}
 
-		[Ordinal(0)] [RED("("id")] 		public CName Id { get; set;}
+		[Ordinal(5)] [RED("("id")] 		public CName Id { get; set;}
 
-		[Ordinal(0)] [RED("("caption")] 		public CString Caption { get; set;}
+		[Ordinal(6)] [RED("("caption")] 		public CString Caption { get; set;}
 
-		[Ordinal(0)] [RED("("frames")] 		public CInt32 Frames { get; set;}
+		[Ordinal(7)] [RED("("frames")] 		public CInt32 Frames { get; set;}
 
 		public SStoryBoardAnimationInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestEnterTriggerCondition : CQuestTriggerCondition
 	{
-		[Ordinal(0)] [RED("onAreaEntry")] 		public CBool OnAreaEntry { get; set;}
+		[Ordinal(1)] [RED("onAreaEntry")] 		public CBool OnAreaEntry { get; set;}
 
 		public CQuestEnterTriggerCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

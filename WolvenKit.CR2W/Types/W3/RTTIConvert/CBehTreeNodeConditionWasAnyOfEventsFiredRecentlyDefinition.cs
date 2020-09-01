@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionWasAnyOfEventsFiredRecentlyDefinition : IBehTreeNodeConditionWasEventFiredRecentlyBaseDefinition
 	{
-		[Ordinal(0)] [RED("eventsNames", 2,0)] 		public CArray<CName> EventsNames { get; set;}
+		[Ordinal(1)] [RED("eventsNames", 2,0)] 		public CArray<CName> EventsNames { get; set;}
 
 		public CBehTreeNodeConditionWasAnyOfEventsFiredRecentlyDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

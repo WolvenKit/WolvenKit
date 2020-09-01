@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DestroyItemConfPopup : ConfirmationPopupData
 	{
-		[Ordinal(0)] [RED("("menuRef")] 		public CHandle<CR4InventoryMenu> MenuRef { get; set;}
+		[Ordinal(1)] [RED("("menuRef")] 		public CHandle<CR4InventoryMenu> MenuRef { get; set;}
 
-		[Ordinal(0)] [RED("("item")] 		public SItemUniqueId Item { get; set;}
+		[Ordinal(2)] [RED("("item")] 		public SItemUniqueId Item { get; set;}
 
-		[Ordinal(0)] [RED("("quantity")] 		public CInt32 Quantity { get; set;}
+		[Ordinal(3)] [RED("("quantity")] 		public CInt32 Quantity { get; set;}
 
 		public W3DestroyItemConfPopup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFollowPartyMemeberTree : CAIIdleTree
 	{
-		[Ordinal(0)] [RED("followPartyMember")] 		public CName FollowPartyMember { get; set;}
+		[Ordinal(1)] [RED("followPartyMember")] 		public CName FollowPartyMember { get; set;}
 
-		[Ordinal(0)] [RED("followDistance")] 		public CFloat FollowDistance { get; set;}
+		[Ordinal(2)] [RED("followDistance")] 		public CFloat FollowDistance { get; set;}
 
-		[Ordinal(0)] [RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(3)] [RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
 		public CAIFollowPartyMemeberTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

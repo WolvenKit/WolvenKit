@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskToadEatCorpse : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(1)] [RED("("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[Ordinal(0)] [RED("("corpsePos")] 		public Vector CorpsePos { get; set;}
+		[Ordinal(2)] [RED("("corpsePos")] 		public Vector CorpsePos { get; set;}
 
-		[Ordinal(0)] [RED("("corpse")] 		public CHandle<CEntity> Corpse { get; set;}
+		[Ordinal(3)] [RED("("corpse")] 		public CHandle<CEntity> Corpse { get; set;}
 
-		[Ordinal(0)] [RED("("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(4)] [RED("("distance")] 		public CFloat Distance { get; set;}
 
 		public CBTTaskToadEatCorpse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

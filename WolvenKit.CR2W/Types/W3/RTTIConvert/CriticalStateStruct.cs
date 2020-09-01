@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CriticalStateStruct : CVariable
 	{
-		[Ordinal(0)] [RED("CSType")] 		public CEnum<ECriticalStateType> CSType { get; set;}
+		[Ordinal(1)] [RED("CSType")] 		public CEnum<ECriticalStateType> CSType { get; set;}
 
-		[Ordinal(0)] [RED("isActive")] 		public CBool IsActive { get; set;}
+		[Ordinal(2)] [RED("isActive")] 		public CBool IsActive { get; set;}
 
-		[Ordinal(0)] [RED("lastTimeActive")] 		public CFloat LastTimeActive { get; set;}
+		[Ordinal(3)] [RED("lastTimeActive")] 		public CFloat LastTimeActive { get; set;}
 
 		public CriticalStateStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

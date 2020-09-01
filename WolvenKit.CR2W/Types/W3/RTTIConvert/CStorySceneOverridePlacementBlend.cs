@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneOverridePlacementBlend : CStorySceneEventCurveBlend
 	{
-		[Ordinal(0)] [RED("actorName")] 		public CName ActorName { get; set;}
+		[Ordinal(1)] [RED("actorName")] 		public CName ActorName { get; set;}
 
-		[Ordinal(0)] [RED("animationStartName")] 		public CName AnimationStartName { get; set;}
+		[Ordinal(2)] [RED("animationStartName")] 		public CName AnimationStartName { get; set;}
 
-		[Ordinal(0)] [RED("animationLoopName")] 		public CName AnimationLoopName { get; set;}
+		[Ordinal(3)] [RED("animationLoopName")] 		public CName AnimationLoopName { get; set;}
 
-		[Ordinal(0)] [RED("animationStopName")] 		public CName AnimationStopName { get; set;}
+		[Ordinal(4)] [RED("animationStopName")] 		public CName AnimationStopName { get; set;}
 
 		public CStorySceneOverridePlacementBlend(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMagicMineEntity : CInteractiveEntity
 	{
-		[Ordinal(0)] [RED("tellTime")] 		public CFloat TellTime { get; set;}
+		[Ordinal(1)] [RED("tellTime")] 		public CFloat TellTime { get; set;}
 
-		[Ordinal(0)] [RED("damageVal")] 		public CFloat DamageVal { get; set;}
+		[Ordinal(2)] [RED("damageVal")] 		public CFloat DamageVal { get; set;}
 
-		[Ordinal(0)] [RED("boatDamageVal")] 		public CFloat BoatDamageVal { get; set;}
+		[Ordinal(3)] [RED("boatDamageVal")] 		public CFloat BoatDamageVal { get; set;}
 
-		[Ordinal(0)] [RED("damageRadius")] 		public CFloat DamageRadius { get; set;}
+		[Ordinal(4)] [RED("damageRadius")] 		public CFloat DamageRadius { get; set;}
 
-		[Ordinal(0)] [RED("mineTrigger")] 		public CHandle<CTriggerAreaComponent> MineTrigger { get; set;}
+		[Ordinal(5)] [RED("mineTrigger")] 		public CHandle<CTriggerAreaComponent> MineTrigger { get; set;}
 
 		public CMagicMineEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3IceSpearProjectile : W3AdvancedProjectile
 	{
-		[Ordinal(0)] [RED("("initFxName")] 		public CName InitFxName { get; set;}
+		[Ordinal(1)] [RED("("initFxName")] 		public CName InitFxName { get; set;}
 
-		[Ordinal(0)] [RED("("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
+		[Ordinal(2)] [RED("("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
 
-		[Ordinal(0)] [RED("("spawnEntityTemplate")] 		public CHandle<CEntityTemplate> SpawnEntityTemplate { get; set;}
+		[Ordinal(3)] [RED("("spawnEntityTemplate")] 		public CHandle<CEntityTemplate> SpawnEntityTemplate { get; set;}
 
-		[Ordinal(0)] [RED("("customDuration")] 		public CFloat CustomDuration { get; set;}
+		[Ordinal(4)] [RED("("customDuration")] 		public CFloat CustomDuration { get; set;}
 
-		[Ordinal(0)] [RED("("onCollisionVictimFxName")] 		public CName OnCollisionVictimFxName { get; set;}
+		[Ordinal(5)] [RED("("onCollisionVictimFxName")] 		public CName OnCollisionVictimFxName { get; set;}
 
-		[Ordinal(0)] [RED("("immediatelyStopVictimFX")] 		public CBool ImmediatelyStopVictimFX { get; set;}
+		[Ordinal(6)] [RED("("immediatelyStopVictimFX")] 		public CBool ImmediatelyStopVictimFX { get; set;}
 
-		[Ordinal(0)] [RED("("projectileHitGround")] 		public CBool ProjectileHitGround { get; set;}
+		[Ordinal(7)] [RED("("projectileHitGround")] 		public CBool ProjectileHitGround { get; set;}
 
 		public W3IceSpearProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

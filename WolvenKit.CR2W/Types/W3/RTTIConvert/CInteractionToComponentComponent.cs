@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CInteractionToComponentComponent : CInteractionComponent
 	{
-		[Ordinal(0)] [RED("targetComponentName")] 		public CString TargetComponentName { get; set;}
+		[Ordinal(1)] [RED("targetComponentName")] 		public CString TargetComponentName { get; set;}
 
 		public CInteractionToComponentComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

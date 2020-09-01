@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcActiveIdleParams : CAIIdleParameters
 	{
-		[Ordinal(0)] [RED("wanderTree")] 		public CHandle<CAIWanderTree> WanderTree { get; set;}
+		[Ordinal(1)] [RED("wanderTree")] 		public CHandle<CAIWanderTree> WanderTree { get; set;}
 
-		[Ordinal(0)] [RED("workTree")] 		public CHandle<CAINpcWork> WorkTree { get; set;}
+		[Ordinal(2)] [RED("workTree")] 		public CHandle<CAINpcWork> WorkTree { get; set;}
 
 		public CAINpcActiveIdleParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

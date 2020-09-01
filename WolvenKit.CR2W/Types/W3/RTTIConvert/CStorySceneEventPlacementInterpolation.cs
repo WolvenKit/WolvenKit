@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventPlacementInterpolation : CStorySceneEventInterpolation
 	{
-		[Ordinal(0)] [RED("keys", 2,0)] 		public CArray<CStorySceneEventPlacementInterpolationKey> Keys { get; set;}
+		[Ordinal(1)] [RED("keys", 2,0)] 		public CArray<CStorySceneEventPlacementInterpolationKey> Keys { get; set;}
 
 		public CStorySceneEventPlacementInterpolation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IFXPhysicalForce : CObject
 	{
-		[Ordinal(0)] [RED("fieldType")] 		public CEnum<EFieldType> FieldType { get; set;}
+		[Ordinal(1)] [RED("fieldType")] 		public CEnum<EFieldType> FieldType { get; set;}
 
-		[Ordinal(0)] [RED("simulateLocalyInEntity")] 		public CBool SimulateLocalyInEntity { get; set;}
+		[Ordinal(2)] [RED("simulateLocalyInEntity")] 		public CBool SimulateLocalyInEntity { get; set;}
 
 		public IFXPhysicalForce(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

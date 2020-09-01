@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWanderPointComponent : CWayPointComponent
 	{
-		[Ordinal(0)] [RED("connectedPoints", 2,0)] 		public CArray<SWanderPointConnection> ConnectedPoints { get; set;}
+		[Ordinal(1)] [RED("connectedPoints", 2,0)] 		public CArray<SWanderPointConnection> ConnectedPoints { get; set;}
 
-		[Ordinal(0)] [RED("wanderPointRadius")] 		public CFloat WanderPointRadius { get; set;}
+		[Ordinal(2)] [RED("wanderPointRadius")] 		public CFloat WanderPointRadius { get; set;}
 
 		public CWanderPointComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

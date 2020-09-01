@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimProjectileEvent : CExtAnimEvent
 	{
-		[Ordinal(0)] [RED("("spell")] 		public CHandle<CEntityTemplate> Spell { get; set;}
+		[Ordinal(1)] [RED("("spell")] 		public CHandle<CEntityTemplate> Spell { get; set;}
 
-		[Ordinal(0)] [RED("("castPosition")] 		public CEnum<EProjectileCastPosition> CastPosition { get; set;}
+		[Ordinal(2)] [RED("("castPosition")] 		public CEnum<EProjectileCastPosition> CastPosition { get; set;}
 
-		[Ordinal(0)] [RED("("boneName")] 		public CName BoneName { get; set;}
+		[Ordinal(3)] [RED("("boneName")] 		public CName BoneName { get; set;}
 
 		public CExtAnimProjectileEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

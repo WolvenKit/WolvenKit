@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockGlossinessPack : CMaterialBlock
 	{
-		[Ordinal(0)] [RED("unpack")] 		public CBool Unpack { get; set;}
+		[Ordinal(1)] [RED("unpack")] 		public CBool Unpack { get; set;}
 
 		public CMaterialBlockGlossinessPack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

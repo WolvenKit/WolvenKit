@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAISenseParams : CObject
 	{
-		[Ordinal(0)] [RED("("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(1)] [RED("("enabled")] 		public CBool Enabled { get; set;}
 
-		[Ordinal(0)] [RED("("rangeMin")] 		public CFloat RangeMin { get; set;}
+		[Ordinal(2)] [RED("("rangeMin")] 		public CFloat RangeMin { get; set;}
 
-		[Ordinal(0)] [RED("("rangeMax")] 		public CFloat RangeMax { get; set;}
+		[Ordinal(3)] [RED("("rangeMax")] 		public CFloat RangeMax { get; set;}
 
-		[Ordinal(0)] [RED("("rangeAngle")] 		public CFloat RangeAngle { get; set;}
+		[Ordinal(4)] [RED("("rangeAngle")] 		public CFloat RangeAngle { get; set;}
 
-		[Ordinal(0)] [RED("("height")] 		public CFloat Height { get; set;}
+		[Ordinal(5)] [RED("("height")] 		public CFloat Height { get; set;}
 
-		[Ordinal(0)] [RED("("testLOS")] 		public CBool TestLOS { get; set;}
+		[Ordinal(6)] [RED("("testLOS")] 		public CBool TestLOS { get; set;}
 
-		[Ordinal(0)] [RED("("detectOnlyHostiles")] 		public CBool DetectOnlyHostiles { get; set;}
+		[Ordinal(7)] [RED("("detectOnlyHostiles")] 		public CBool DetectOnlyHostiles { get; set;}
 
 		public CAISenseParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphStateTransitionMatchToPoseNode : CBehaviorGraphStateTransitionBlendNode
 	{
-		[Ordinal(0)] [RED("useMathMethod")] 		public CBool UseMathMethod { get; set;}
+		[Ordinal(1)] [RED("useMathMethod")] 		public CBool UseMathMethod { get; set;}
 
 		public CBehaviorGraphStateTransitionMatchToPoseNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

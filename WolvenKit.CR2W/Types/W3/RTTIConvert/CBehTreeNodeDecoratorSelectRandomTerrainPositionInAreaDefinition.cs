@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDecoratorSelectRandomTerrainPositionInAreaDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[Ordinal(0)] [RED("areaSelection")] 		public SBehTreeAreaSelection AreaSelection { get; set;}
+		[Ordinal(1)] [RED("areaSelection")] 		public SBehTreeAreaSelection AreaSelection { get; set;}
 
 		public CBehTreeNodeDecoratorSelectRandomTerrainPositionInAreaDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

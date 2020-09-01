@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestInterestPointBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("interestPoint")] 		public CPtr<CInterestPoint> InterestPoint { get; set;}
+		[Ordinal(1)] [RED("interestPoint")] 		public CPtr<CInterestPoint> InterestPoint { get; set;}
 
-		[Ordinal(0)] [RED("positionTag")] 		public CName PositionTag { get; set;}
+		[Ordinal(2)] [RED("positionTag")] 		public CName PositionTag { get; set;}
 
-		[Ordinal(0)] [RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(3)] [RED("duration")] 		public CFloat Duration { get; set;}
 
 		public CQuestInterestPointBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

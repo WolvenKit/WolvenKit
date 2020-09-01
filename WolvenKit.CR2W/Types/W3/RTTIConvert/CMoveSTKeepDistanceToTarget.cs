@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTKeepDistanceToTarget : IMoveTargetPositionSteeringTask
 	{
-		[Ordinal(0)] [RED("importance")] 		public CFloat Importance { get; set;}
+		[Ordinal(1)] [RED("importance")] 		public CFloat Importance { get; set;}
 
-		[Ordinal(0)] [RED("acceleration")] 		public CFloat Acceleration { get; set;}
+		[Ordinal(2)] [RED("acceleration")] 		public CFloat Acceleration { get; set;}
 
-		[Ordinal(0)] [RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
+		[Ordinal(3)] [RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 
-		[Ordinal(0)] [RED("minRange")] 		public CFloat MinRange { get; set;}
+		[Ordinal(4)] [RED("minRange")] 		public CFloat MinRange { get; set;}
 
-		[Ordinal(0)] [RED("maxRange")] 		public CFloat MaxRange { get; set;}
+		[Ordinal(5)] [RED("maxRange")] 		public CFloat MaxRange { get; set;}
 
-		[Ordinal(0)] [RED("tolerance")] 		public CFloat Tolerance { get; set;}
+		[Ordinal(6)] [RED("tolerance")] 		public CFloat Tolerance { get; set;}
 
-		[Ordinal(0)] [RED("brakeDistance")] 		public CFloat BrakeDistance { get; set;}
+		[Ordinal(7)] [RED("brakeDistance")] 		public CFloat BrakeDistance { get; set;}
 
-		[Ordinal(0)] [RED("randomizationFrequency")] 		public CFloat RandomizationFrequency { get; set;}
+		[Ordinal(8)] [RED("randomizationFrequency")] 		public CFloat RandomizationFrequency { get; set;}
 
 		public CMoveSTKeepDistanceToTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

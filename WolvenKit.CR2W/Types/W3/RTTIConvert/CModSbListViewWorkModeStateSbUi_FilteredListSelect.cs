@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModSbListViewWorkModeStateSbUi_FilteredListSelect : CScriptableState
 	{
-		[Ordinal(0)] [RED("("listProvider")] 		public CHandle<CModUiFilteredList> ListProvider { get; set;}
+		[Ordinal(1)] [RED("("listProvider")] 		public CHandle<CModUiFilteredList> ListProvider { get; set;}
 
 		public CModSbListViewWorkModeStateSbUi_FilteredListSelect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

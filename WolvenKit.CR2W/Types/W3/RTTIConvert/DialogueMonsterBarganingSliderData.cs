@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class DialogueMonsterBarganingSliderData : DialogueSliderData
 	{
-		[Ordinal(0)] [RED("baseValue")] 		public CInt32 BaseValue { get; set;}
+		[Ordinal(1)] [RED("baseValue")] 		public CInt32 BaseValue { get; set;}
 
-		[Ordinal(0)] [RED("anger")] 		public CFloat Anger { get; set;}
+		[Ordinal(2)] [RED("anger")] 		public CFloat Anger { get; set;}
 
-		[Ordinal(0)] [RED("alternativeRewardType")] 		public CBool AlternativeRewardType { get; set;}
+		[Ordinal(3)] [RED("alternativeRewardType")] 		public CBool AlternativeRewardType { get; set;}
 
 		public DialogueMonsterBarganingSliderData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

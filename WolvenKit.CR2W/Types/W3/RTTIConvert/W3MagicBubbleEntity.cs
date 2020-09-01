@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MagicBubbleEntity : W3BuffImmunityEntity
 	{
-		[Ordinal(0)] [RED("("activeFxName")] 		public CName ActiveFxName { get; set;}
+		[Ordinal(1)] [RED("("activeFxName")] 		public CName ActiveFxName { get; set;}
 
-		[Ordinal(0)] [RED("("damper")] 		public CHandle<VectorSpringDamper> Damper { get; set;}
+		[Ordinal(2)] [RED("("damper")] 		public CHandle<VectorSpringDamper> Damper { get; set;}
 
 		public W3MagicBubbleEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

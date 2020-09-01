@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CScriptedAnimEventsListenerComponent : CScriptedComponent
 	{
-		[Ordinal(0)] [RED("("listeners", 2,0)] 		public CArray<CHandle<CComponent>> Listeners { get; set;}
+		[Ordinal(1)] [RED("("listeners", 2,0)] 		public CArray<CHandle<CComponent>> Listeners { get; set;}
 
 		public CScriptedAnimEventsListenerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

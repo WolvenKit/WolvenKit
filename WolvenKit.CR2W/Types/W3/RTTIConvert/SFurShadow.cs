@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurShadow : CVariable
 	{
-		[Ordinal(0)] [RED("("shadowSigma")] 		public CFloat ShadowSigma { get; set;}
+		[Ordinal(1)] [RED("("shadowSigma")] 		public CFloat ShadowSigma { get; set;}
 
-		[Ordinal(0)] [RED("("shadowDensityScale")] 		public CFloat ShadowDensityScale { get; set;}
+		[Ordinal(2)] [RED("("shadowDensityScale")] 		public CFloat ShadowDensityScale { get; set;}
 
-		[Ordinal(0)] [RED("("castShadows")] 		public CBool CastShadows { get; set;}
+		[Ordinal(3)] [RED("("castShadows")] 		public CBool CastShadows { get; set;}
 
-		[Ordinal(0)] [RED("("receiveShadows")] 		public CBool ReceiveShadows { get; set;}
+		[Ordinal(4)] [RED("("receiveShadows")] 		public CBool ReceiveShadows { get; set;}
 
 		public SFurShadow(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

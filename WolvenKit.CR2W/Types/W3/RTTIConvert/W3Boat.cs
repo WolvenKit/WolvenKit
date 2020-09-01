@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Boat : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("teleportedFromOtherHUB")] 		public CBool TeleportedFromOtherHUB { get; set;}
+		[Ordinal(1)] [RED("("teleportedFromOtherHUB")] 		public CBool TeleportedFromOtherHUB { get; set;}
 
-		[Ordinal(0)] [RED("("boatComp")] 		public CHandle<CBoatComponent> BoatComp { get; set;}
+		[Ordinal(2)] [RED("("boatComp")] 		public CHandle<CBoatComponent> BoatComp { get; set;}
 
-		[Ordinal(0)] [RED("("mountInteractionComp")] 		public CHandle<CInteractionComponent> MountInteractionComp { get; set;}
+		[Ordinal(3)] [RED("("mountInteractionComp")] 		public CHandle<CInteractionComponent> MountInteractionComp { get; set;}
 
-		[Ordinal(0)] [RED("("mountInteractionCompPassenger")] 		public CHandle<CInteractionComponent> MountInteractionCompPassenger { get; set;}
+		[Ordinal(4)] [RED("("mountInteractionCompPassenger")] 		public CHandle<CInteractionComponent> MountInteractionCompPassenger { get; set;}
 
-		[Ordinal(0)] [RED("("canBeDestroyed")] 		public CBool CanBeDestroyed { get; set;}
+		[Ordinal(5)] [RED("("canBeDestroyed")] 		public CBool CanBeDestroyed { get; set;}
 
-		[Ordinal(0)] [RED("("needEnableInteractions")] 		public CBool NeedEnableInteractions { get; set;}
+		[Ordinal(6)] [RED("("needEnableInteractions")] 		public CBool NeedEnableInteractions { get; set;}
 
 		public W3Boat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4DeckBuilderMenu : CR4GwintBaseMenu
 	{
-		[Ordinal(0)] [RED("m_fxSetSelectedDeck")] 		public CHandle<CScriptedFlashFunction> M_fxSetSelectedDeck { get; set;}
+		[Ordinal(1)] [RED("m_fxSetSelectedDeck")] 		public CHandle<CScriptedFlashFunction> M_fxSetSelectedDeck { get; set;}
 
-		[Ordinal(0)] [RED("m_fxSetGwintGamePending")] 		public CHandle<CScriptedFlashFunction> M_fxSetGwintGamePending { get; set;}
+		[Ordinal(2)] [RED("m_fxSetGwintGamePending")] 		public CHandle<CScriptedFlashFunction> M_fxSetGwintGamePending { get; set;}
 
-		[Ordinal(0)] [RED("m_fxShowTutorial")] 		public CHandle<CScriptedFlashFunction> M_fxShowTutorial { get; set;}
+		[Ordinal(3)] [RED("m_fxShowTutorial")] 		public CHandle<CScriptedFlashFunction> M_fxShowTutorial { get; set;}
 
-		[Ordinal(0)] [RED("m_fxContinueTutorial")] 		public CHandle<CScriptedFlashFunction> M_fxContinueTutorial { get; set;}
+		[Ordinal(4)] [RED("m_fxContinueTutorial")] 		public CHandle<CScriptedFlashFunction> M_fxContinueTutorial { get; set;}
 
-		[Ordinal(0)] [RED("m_fxSetPassiveAbilString")] 		public CHandle<CScriptedFlashFunction> M_fxSetPassiveAbilString { get; set;}
+		[Ordinal(5)] [RED("m_fxSetPassiveAbilString")] 		public CHandle<CScriptedFlashFunction> M_fxSetPassiveAbilString { get; set;}
 
 		public CR4DeckBuilderMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

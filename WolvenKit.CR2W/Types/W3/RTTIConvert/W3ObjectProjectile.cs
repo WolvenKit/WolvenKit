@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ObjectProjectile : CProjectileTrajectory
 	{
-		[Ordinal(0)] [RED("("action")] 		public CHandle<W3DamageAction> Action { get; set;}
+		[Ordinal(1)] [RED("("action")] 		public CHandle<W3DamageAction> Action { get; set;}
 
-		[Ordinal(0)] [RED("("owner")] 		public CHandle<CActor> Owner { get; set;}
+		[Ordinal(2)] [RED("("owner")] 		public CHandle<CActor> Owner { get; set;}
 
 		public W3ObjectProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

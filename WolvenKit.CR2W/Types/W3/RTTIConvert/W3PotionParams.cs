@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PotionParams : W3BuffCustomParams
 	{
-		[Ordinal(0)] [RED("("potionItemName")] 		public CName PotionItemName { get; set;}
+		[Ordinal(1)] [RED("("potionItemName")] 		public CName PotionItemName { get; set;}
 
 		public W3PotionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

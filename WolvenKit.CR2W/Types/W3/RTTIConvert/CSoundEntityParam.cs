@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSoundEntityParam : CEntityTemplateParam
 	{
-		[Ordinal(0)] [RED("fallTauntEvent")] 		public CString FallTauntEvent { get; set;}
+		[Ordinal(1)] [RED("fallTauntEvent")] 		public CString FallTauntEvent { get; set;}
 
 		public CSoundEntityParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

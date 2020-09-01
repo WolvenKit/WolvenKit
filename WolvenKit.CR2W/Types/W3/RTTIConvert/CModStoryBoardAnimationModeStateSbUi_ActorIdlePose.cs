@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardAnimationModeStateSbUi_ActorIdlePose : CModSbListViewWorkModeStateSbUi_FilteredListSelect
 	{
-		[Ordinal(0)] [RED("("actor")] 		public CHandle<CModStoryBoardActor> Actor { get; set;}
+		[Ordinal(1)] [RED("("actor")] 		public CHandle<CModStoryBoardActor> Actor { get; set;}
 
-		[Ordinal(0)] [RED("("newPose")] 		public SStoryBoardPoseSettings NewPose { get; set;}
+		[Ordinal(2)] [RED("("newPose")] 		public SStoryBoardPoseSettings NewPose { get; set;}
 
 		public CModStoryBoardAnimationModeStateSbUi_ActorIdlePose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateMeditationWait : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[Ordinal(0)] [RED("("WAIT")] 		public CName WAIT { get; set;}
+		[Ordinal(1)] [RED("("WAIT")] 		public CName WAIT { get; set;}
 
 		public W3TutorialManagerUIHandlerStateMeditationWait(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

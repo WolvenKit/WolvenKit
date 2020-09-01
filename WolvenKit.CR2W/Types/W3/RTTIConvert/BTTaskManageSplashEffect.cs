@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskManageSplashEffect : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("m_SplashEntityTemplate")] 		public CHandle<CEntityTemplate> M_SplashEntityTemplate { get; set;}
+		[Ordinal(1)] [RED("m_SplashEntityTemplate")] 		public CHandle<CEntityTemplate> M_SplashEntityTemplate { get; set;}
 
-		[Ordinal(0)] [RED("m_PreviousDistanceFromSurface")] 		public CFloat M_PreviousDistanceFromSurface { get; set;}
+		[Ordinal(2)] [RED("m_PreviousDistanceFromSurface")] 		public CFloat M_PreviousDistanceFromSurface { get; set;}
 
-		[Ordinal(0)] [RED("m_CrossedOnce")] 		public CBool M_CrossedOnce { get; set;}
+		[Ordinal(3)] [RED("m_CrossedOnce")] 		public CBool M_CrossedOnce { get; set;}
 
-		[Ordinal(0)] [RED("couldntLoadResource")] 		public CBool CouldntLoadResource { get; set;}
+		[Ordinal(4)] [RED("couldntLoadResource")] 		public CBool CouldntLoadResource { get; set;}
 
 		public BTTaskManageSplashEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

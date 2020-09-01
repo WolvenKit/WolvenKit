@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeStrafingAlgorithmFastSurroundDefinition : CBehTreeStrafingAlgorithmDefinition
 	{
-		[Ordinal(0)] [RED("usageDelay")] 		public CBehTreeValFloat UsageDelay { get; set;}
+		[Ordinal(1)] [RED("usageDelay")] 		public CBehTreeValFloat UsageDelay { get; set;}
 
-		[Ordinal(0)] [RED("distanceToActivate")] 		public CBehTreeValFloat DistanceToActivate { get; set;}
+		[Ordinal(2)] [RED("distanceToActivate")] 		public CBehTreeValFloat DistanceToActivate { get; set;}
 
-		[Ordinal(0)] [RED("speedMinToActivate")] 		public CBehTreeValFloat SpeedMinToActivate { get; set;}
+		[Ordinal(3)] [RED("speedMinToActivate")] 		public CBehTreeValFloat SpeedMinToActivate { get; set;}
 
-		[Ordinal(0)] [RED("distanceToBreak")] 		public CBehTreeValFloat DistanceToBreak { get; set;}
+		[Ordinal(4)] [RED("distanceToBreak")] 		public CBehTreeValFloat DistanceToBreak { get; set;}
 
-		[Ordinal(0)] [RED("verticalHeadingLimitToBreak")] 		public CBehTreeValFloat VerticalHeadingLimitToBreak { get; set;}
+		[Ordinal(5)] [RED("verticalHeadingLimitToBreak")] 		public CBehTreeValFloat VerticalHeadingLimitToBreak { get; set;}
 
-		[Ordinal(0)] [RED("speedMinLimitToBreak")] 		public CBehTreeValFloat SpeedMinLimitToBreak { get; set;}
+		[Ordinal(6)] [RED("speedMinLimitToBreak")] 		public CBehTreeValFloat SpeedMinLimitToBreak { get; set;}
 
-		[Ordinal(0)] [RED("surroundMoveType")] 		public CBehTreeValEMoveType SurroundMoveType { get; set;}
+		[Ordinal(7)] [RED("surroundMoveType")] 		public CBehTreeValEMoveType SurroundMoveType { get; set;}
 
 		public CBehTreeStrafingAlgorithmFastSurroundDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

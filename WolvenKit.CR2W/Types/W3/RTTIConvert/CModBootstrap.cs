@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModBootstrap : CObject
 	{
-		[Ordinal(0)] [RED("("modRegistry")] 		public CHandle<CModRegistry> ModRegistry { get; set;}
+		[Ordinal(1)] [RED("("modRegistry")] 		public CHandle<CModRegistry> ModRegistry { get; set;}
 
-		[Ordinal(0)] [RED("("log")] 		public CHandle<CModLogger> Log { get; set;}
+		[Ordinal(2)] [RED("("log")] 		public CHandle<CModLogger> Log { get; set;}
 
 		public CModBootstrap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

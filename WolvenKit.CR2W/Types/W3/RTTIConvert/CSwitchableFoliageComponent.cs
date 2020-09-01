@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSwitchableFoliageComponent : CComponent
 	{
-		[Ordinal(0)] [RED("resource")] 		public CHandle<CSwitchableFoliageResource> Resource { get; set;}
+		[Ordinal(1)] [RED("resource")] 		public CHandle<CSwitchableFoliageResource> Resource { get; set;}
 
-		[Ordinal(0)] [RED("minimumStreamingDistance")] 		public CUInt32 MinimumStreamingDistance { get; set;}
+		[Ordinal(2)] [RED("minimumStreamingDistance")] 		public CUInt32 MinimumStreamingDistance { get; set;}
 
-		[Ordinal(0)] [RED("currEntryName")] 		public CName CurrEntryName { get; set;}
+		[Ordinal(3)] [RED("currEntryName")] 		public CName CurrEntryName { get; set;}
 
 		public CSwitchableFoliageComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

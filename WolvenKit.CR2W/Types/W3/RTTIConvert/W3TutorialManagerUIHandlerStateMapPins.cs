@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateMapPins : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[Ordinal(0)] [RED("("PLACE_PINS")] 		public CName PLACE_PINS { get; set;}
+		[Ordinal(1)] [RED("("PLACE_PINS")] 		public CName PLACE_PINS { get; set;}
 
-		[Ordinal(0)] [RED("("CUSTOM_PINS")] 		public CName CUSTOM_PINS { get; set;}
+		[Ordinal(2)] [RED("("CUSTOM_PINS")] 		public CName CUSTOM_PINS { get; set;}
 
-		[Ordinal(0)] [RED("("PINS_MAX_COUNT")] 		public CName PINS_MAX_COUNT { get; set;}
+		[Ordinal(3)] [RED("("PINS_MAX_COUNT")] 		public CName PINS_MAX_COUNT { get; set;}
 
-		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(4)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateMapPins(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

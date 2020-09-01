@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSetAttitude : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("towardsActionTarget")] 		public CBool TowardsActionTarget { get; set;}
+		[Ordinal(1)] [RED("("towardsActionTarget")] 		public CBool TowardsActionTarget { get; set;}
 
-		[Ordinal(0)] [RED("("attitude")] 		public CEnum<EAIAttitude> Attitude { get; set;}
+		[Ordinal(2)] [RED("("attitude")] 		public CEnum<EAIAttitude> Attitude { get; set;}
 
-		[Ordinal(0)] [RED("("currentAttitude")] 		public CEnum<EAIAttitude> CurrentAttitude { get; set;}
+		[Ordinal(3)] [RED("("currentAttitude")] 		public CEnum<EAIAttitude> CurrentAttitude { get; set;}
 
-		[Ordinal(0)] [RED("("sender")] 		public CHandle<CActor> Sender { get; set;}
+		[Ordinal(4)] [RED("("sender")] 		public CHandle<CActor> Sender { get; set;}
 
-		[Ordinal(0)] [RED("("petard")] 		public CHandle<W3Petard> Petard { get; set;}
+		[Ordinal(5)] [RED("("petard")] 		public CHandle<W3Petard> Petard { get; set;}
 
-		[Ordinal(0)] [RED("("reactionDataStorage")] 		public CHandle<CAIStorageReactionData> ReactionDataStorage { get; set;}
+		[Ordinal(6)] [RED("("reactionDataStorage")] 		public CHandle<CAIStorageReactionData> ReactionDataStorage { get; set;}
 
 		public CBTTaskSetAttitude(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

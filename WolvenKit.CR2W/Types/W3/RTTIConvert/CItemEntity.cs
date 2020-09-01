@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CItemEntity : CEntity
 	{
-		[Ordinal(0)] [RED("timeToDespawn")] 		public CFloat TimeToDespawn { get; set;}
+		[Ordinal(1)] [RED("timeToDespawn")] 		public CFloat TimeToDespawn { get; set;}
 
-		[Ordinal(0)] [RED("reportToScript")] 		public CBool ReportToScript { get; set;}
+		[Ordinal(2)] [RED("reportToScript")] 		public CBool ReportToScript { get; set;}
 
 		public CItemEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

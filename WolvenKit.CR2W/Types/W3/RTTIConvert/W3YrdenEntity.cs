@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3YrdenEntity : W3SignEntity
 	{
-		[Ordinal(0)] [RED("("effects", 2,0)] 		public CArray<SYrdenEffects> Effects { get; set;}
+		[Ordinal(1)] [RED("("effects", 2,0)] 		public CArray<SYrdenEffects> Effects { get; set;}
 
-		[Ordinal(0)] [RED("("projTemplate")] 		public CHandle<CEntityTemplate> ProjTemplate { get; set;}
+		[Ordinal(2)] [RED("("projTemplate")] 		public CHandle<CEntityTemplate> ProjTemplate { get; set;}
 
-		[Ordinal(0)] [RED("("projDestroyFxEntTemplate")] 		public CHandle<CEntityTemplate> ProjDestroyFxEntTemplate { get; set;}
+		[Ordinal(3)] [RED("("projDestroyFxEntTemplate")] 		public CHandle<CEntityTemplate> ProjDestroyFxEntTemplate { get; set;}
 
-		[Ordinal(0)] [RED("("runeTemplates", 2,0)] 		public CArray<CHandle<CEntityTemplate>> RuneTemplates { get; set;}
+		[Ordinal(4)] [RED("("runeTemplates", 2,0)] 		public CArray<CHandle<CEntityTemplate>> RuneTemplates { get; set;}
 
-		[Ordinal(0)] [RED("("validTargetsInArea", 2,0)] 		public CArray<CHandle<CActor>> ValidTargetsInArea { get; set;}
+		[Ordinal(5)] [RED("("validTargetsInArea", 2,0)] 		public CArray<CHandle<CActor>> ValidTargetsInArea { get; set;}
 
-		[Ordinal(0)] [RED("("allActorsInArea", 2,0)] 		public CArray<CHandle<CActor>> AllActorsInArea { get; set;}
+		[Ordinal(6)] [RED("("allActorsInArea", 2,0)] 		public CArray<CHandle<CActor>> AllActorsInArea { get; set;}
 
-		[Ordinal(0)] [RED("("flyersInArea", 2,0)] 		public CArray<CHandle<CNewNPC>> FlyersInArea { get; set;}
+		[Ordinal(7)] [RED("("flyersInArea", 2,0)] 		public CArray<CHandle<CNewNPC>> FlyersInArea { get; set;}
 
-		[Ordinal(0)] [RED("("trapDuration")] 		public CFloat TrapDuration { get; set;}
+		[Ordinal(8)] [RED("("trapDuration")] 		public CFloat TrapDuration { get; set;}
 
-		[Ordinal(0)] [RED("("charges")] 		public CInt32 Charges { get; set;}
+		[Ordinal(9)] [RED("("charges")] 		public CInt32 Charges { get; set;}
 
-		[Ordinal(0)] [RED("("isPlayerInside")] 		public CBool IsPlayerInside { get; set;}
+		[Ordinal(10)] [RED("("isPlayerInside")] 		public CBool IsPlayerInside { get; set;}
 
-		[Ordinal(0)] [RED("("baseModeRange")] 		public CFloat BaseModeRange { get; set;}
+		[Ordinal(11)] [RED("("baseModeRange")] 		public CFloat BaseModeRange { get; set;}
 
-		[Ordinal(0)] [RED("("notFromPlayerCast")] 		public CBool NotFromPlayerCast { get; set;}
+		[Ordinal(12)] [RED("("notFromPlayerCast")] 		public CBool NotFromPlayerCast { get; set;}
 
-		[Ordinal(0)] [RED("("fxEntities", 2,0)] 		public CArray<CHandle<CEntity>> FxEntities { get; set;}
+		[Ordinal(13)] [RED("("fxEntities", 2,0)] 		public CArray<CHandle<CEntity>> FxEntities { get; set;}
 
 		public W3YrdenEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

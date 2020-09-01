@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SModUiListItem : CVariable
 	{
-		[Ordinal(0)] [RED("("id")] 		public CString Id { get; set;}
+		[Ordinal(1)] [RED("("id")] 		public CString Id { get; set;}
 
-		[Ordinal(0)] [RED("("caption")] 		public CString Caption { get; set;}
+		[Ordinal(2)] [RED("("caption")] 		public CString Caption { get; set;}
 
-		[Ordinal(0)] [RED("("isSelected")] 		public CBool IsSelected { get; set;}
+		[Ordinal(3)] [RED("("isSelected")] 		public CBool IsSelected { get; set;}
 
-		[Ordinal(0)] [RED("("prefix")] 		public CString Prefix { get; set;}
+		[Ordinal(4)] [RED("("prefix")] 		public CString Prefix { get; set;}
 
-		[Ordinal(0)] [RED("("suffix")] 		public CString Suffix { get; set;}
+		[Ordinal(5)] [RED("("suffix")] 		public CString Suffix { get; set;}
 
 		public SModUiListItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

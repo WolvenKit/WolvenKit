@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphOnSlopeMovementNode : CBehaviorGraphValueNode
 	{
-		[Ordinal(0)] [RED("("angles", 2,0)] 		public CArray<CFloat> Angles { get; set;}
+		[Ordinal(1)] [RED("("angles", 2,0)] 		public CArray<CFloat> Angles { get; set;}
 
-		[Ordinal(0)] [RED("("slopeBlendTime")] 		public CFloat SlopeBlendTime { get; set;}
+		[Ordinal(2)] [RED("("slopeBlendTime")] 		public CFloat SlopeBlendTime { get; set;}
 
-		[Ordinal(0)] [RED("("slopeMaxBlendSpeed")] 		public CFloat SlopeMaxBlendSpeed { get; set;}
+		[Ordinal(3)] [RED("("slopeMaxBlendSpeed")] 		public CFloat SlopeMaxBlendSpeed { get; set;}
 
-		[Ordinal(0)] [RED("("neverReachBorderValues")] 		public CBool NeverReachBorderValues { get; set;}
+		[Ordinal(4)] [RED("("neverReachBorderValues")] 		public CBool NeverReachBorderValues { get; set;}
 
 		public CBehaviorGraphOnSlopeMovementNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

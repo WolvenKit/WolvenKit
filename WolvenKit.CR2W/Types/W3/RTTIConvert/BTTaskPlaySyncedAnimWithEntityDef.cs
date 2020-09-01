@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskPlaySyncedAnimWithEntityDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(1)] [RED("entityTag")] 		public CName EntityTag { get; set;}
 
-		[Ordinal(0)] [RED("syncAnimName")] 		public CName SyncAnimName { get; set;}
+		[Ordinal(2)] [RED("syncAnimName")] 		public CName SyncAnimName { get; set;}
 
 		public BTTaskPlaySyncedAnimWithEntityDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

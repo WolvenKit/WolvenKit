@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CLightEntitySimple : CScheduledUsableEntity
 	{
-		[Ordinal(0)] [RED("isOn")] 		public CBool IsOn { get; set;}
+		[Ordinal(1)] [RED("isOn")] 		public CBool IsOn { get; set;}
 
 		public CLightEntitySimple(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

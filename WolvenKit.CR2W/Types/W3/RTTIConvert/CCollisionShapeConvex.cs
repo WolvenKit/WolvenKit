@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCollisionShapeConvex : ICollisionShape
 	{
-		[Ordinal(0)] [RED("physicalMaterialName")] 		public CName PhysicalMaterialName { get; set;}
+		[Ordinal(1)] [RED("physicalMaterialName")] 		public CName PhysicalMaterialName { get; set;}
 
-		[Ordinal(0)] [RED("vertices", 94,0)] 		public CArray<Vector> Vertices { get; set;}
+		[Ordinal(2)] [RED("vertices", 94,0)] 		public CArray<Vector> Vertices { get; set;}
 
-		[Ordinal(0)] [RED("planes", 94,0)] 		public CArray<Vector> Planes { get; set;}
+		[Ordinal(3)] [RED("planes", 94,0)] 		public CArray<Vector> Planes { get; set;}
 
-		[Ordinal(0)] [RED("polygons", 94,0)] 		public CArray<CUInt16> Polygons { get; set;}
+		[Ordinal(4)] [RED("polygons", 94,0)] 		public CArray<CUInt16> Polygons { get; set;}
 
 		public CCollisionShapeConvex(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

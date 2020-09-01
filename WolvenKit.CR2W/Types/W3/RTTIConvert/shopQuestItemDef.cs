@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class shopQuestItemDef : CVariable
 	{
-		[Ordinal(0)] [RED("("itemName")] 		public CName ItemName { get; set;}
+		[Ordinal(1)] [RED("("itemName")] 		public CName ItemName { get; set;}
 
-		[Ordinal(0)] [RED("("requiredFact")] 		public CString RequiredFact { get; set;}
+		[Ordinal(2)] [RED("("requiredFact")] 		public CString RequiredFact { get; set;}
 
-		[Ordinal(0)] [RED("("forbiddenFact")] 		public CString ForbiddenFact { get; set;}
+		[Ordinal(3)] [RED("("forbiddenFact")] 		public CString ForbiddenFact { get; set;}
 
-		[Ordinal(0)] [RED("("quantity")] 		public CInt32 Quantity { get; set;}
+		[Ordinal(4)] [RED("("quantity")] 		public CInt32 Quantity { get; set;}
 
 		public shopQuestItemDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

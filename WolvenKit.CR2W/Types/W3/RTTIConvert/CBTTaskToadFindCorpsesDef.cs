@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskToadFindCorpsesDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("searchRange")] 		public CFloat SearchRange { get; set;}
+		[Ordinal(1)] [RED("("searchRange")] 		public CFloat SearchRange { get; set;}
 
-		[Ordinal(0)] [RED("("maxResults")] 		public CInt32 MaxResults { get; set;}
+		[Ordinal(2)] [RED("("maxResults")] 		public CInt32 MaxResults { get; set;}
 
-		[Ordinal(0)] [RED("("tag")] 		public CName Tag { get; set;}
+		[Ordinal(3)] [RED("("tag")] 		public CName Tag { get; set;}
 
 		public CBTTaskToadFindCorpsesDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

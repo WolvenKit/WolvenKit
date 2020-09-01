@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudEventController : CObject
 	{
-		[Ordinal(0)] [RED("("delayedEvents", 2,0)] 		public CArray<CHandle<CHudEvent>> DelayedEvents { get; set;}
+		[Ordinal(1)] [RED("("delayedEvents", 2,0)] 		public CArray<CHandle<CHudEvent>> DelayedEvents { get; set;}
 
 		public CR4HudEventController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

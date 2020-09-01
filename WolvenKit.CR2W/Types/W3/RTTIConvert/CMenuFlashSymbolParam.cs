@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMenuFlashSymbolParam : IMenuFlashParam
 	{
-		[Ordinal(0)] [RED("flashSymbolName")] 		public CString FlashSymbolName { get; set;}
+		[Ordinal(1)] [RED("flashSymbolName")] 		public CString FlashSymbolName { get; set;}
 
 		public CMenuFlashSymbolParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

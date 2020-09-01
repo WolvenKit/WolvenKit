@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CComponentReference : CVariable
 	{
-		[Ordinal(0)] [RED("("name")] 		public CString Name { get; set;}
+		[Ordinal(1)] [RED("("name")] 		public CString Name { get; set;}
 
-		[Ordinal(0)] [RED("("className")] 		public CName ClassName { get; set;}
+		[Ordinal(2)] [RED("("className")] 		public CName ClassName { get; set;}
 
 		public CComponentReference(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

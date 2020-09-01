@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestLayersHiderBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("world")] 		public CString World { get; set;}
+		[Ordinal(1)] [RED("world")] 		public CString World { get; set;}
 
-		[Ordinal(0)] [RED("layersToShow", 2,0)] 		public CArray<CString> LayersToShow { get; set;}
+		[Ordinal(2)] [RED("layersToShow", 2,0)] 		public CArray<CString> LayersToShow { get; set;}
 
-		[Ordinal(0)] [RED("layersToHide", 2,0)] 		public CArray<CString> LayersToHide { get; set;}
+		[Ordinal(3)] [RED("layersToHide", 2,0)] 		public CArray<CString> LayersToHide { get; set;}
 
-		[Ordinal(0)] [RED("syncOperation")] 		public CBool SyncOperation { get; set;}
+		[Ordinal(4)] [RED("syncOperation")] 		public CBool SyncOperation { get; set;}
 
-		[Ordinal(0)] [RED("purgeSavedData")] 		public CBool PurgeSavedData { get; set;}
+		[Ordinal(5)] [RED("purgeSavedData")] 		public CBool PurgeSavedData { get; set;}
 
 		public CQuestLayersHiderBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

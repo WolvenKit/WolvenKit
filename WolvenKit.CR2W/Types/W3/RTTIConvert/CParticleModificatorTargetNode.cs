@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleModificatorTargetNode : IParticleModificator
 	{
-		[Ordinal(0)] [RED("("forceScale")] 		public CPtr<IEvaluatorFloat> ForceScale { get; set;}
+		[Ordinal(1)] [RED("("forceScale")] 		public CPtr<IEvaluatorFloat> ForceScale { get; set;}
 
-		[Ordinal(0)] [RED("("killRadius")] 		public CPtr<IEvaluatorFloat> KillRadius { get; set;}
+		[Ordinal(2)] [RED("("killRadius")] 		public CPtr<IEvaluatorFloat> KillRadius { get; set;}
 
-		[Ordinal(0)] [RED("("maxForce")] 		public CFloat MaxForce { get; set;}
+		[Ordinal(3)] [RED("("maxForce")] 		public CFloat MaxForce { get; set;}
 
 		public CParticleModificatorTargetNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

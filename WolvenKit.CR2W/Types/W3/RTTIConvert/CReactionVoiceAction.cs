@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CReactionVoiceAction : IReactionAction
 	{
-		[Ordinal(0)] [RED("voiceset")] 		public CString Voiceset { get; set;}
+		[Ordinal(1)] [RED("voiceset")] 		public CString Voiceset { get; set;}
 
-		[Ordinal(0)] [RED("cooldown")] 		public CFloat Cooldown { get; set;}
+		[Ordinal(2)] [RED("cooldown")] 		public CFloat Cooldown { get; set;}
 
 		public CReactionVoiceAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

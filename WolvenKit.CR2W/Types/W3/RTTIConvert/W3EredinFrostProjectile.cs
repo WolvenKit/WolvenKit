@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3EredinFrostProjectile : W3TraceGroundProjectile
 	{
-		[Ordinal(0)] [RED("("action")] 		public CHandle<W3DamageAction> Action { get; set;}
+		[Ordinal(1)] [RED("("action")] 		public CHandle<W3DamageAction> Action { get; set;}
 
 		public W3EredinFrostProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

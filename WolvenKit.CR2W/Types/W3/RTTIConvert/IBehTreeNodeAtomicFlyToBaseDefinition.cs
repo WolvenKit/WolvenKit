@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeNodeAtomicFlyToBaseDefinition : IBehTreeNodeAtomicFlightDefinition
 	{
-		[Ordinal(0)] [RED("skipHeightCheck")] 		public CBool SkipHeightCheck { get; set;}
+		[Ordinal(1)] [RED("skipHeightCheck")] 		public CBool SkipHeightCheck { get; set;}
 
-		[Ordinal(0)] [RED("useAbsoluteHeightDifference")] 		public CBool UseAbsoluteHeightDifference { get; set;}
+		[Ordinal(2)] [RED("useAbsoluteHeightDifference")] 		public CBool UseAbsoluteHeightDifference { get; set;}
 
-		[Ordinal(0)] [RED("checkDistanceWithoutOffsets")] 		public CBool CheckDistanceWithoutOffsets { get; set;}
+		[Ordinal(3)] [RED("checkDistanceWithoutOffsets")] 		public CBool CheckDistanceWithoutOffsets { get; set;}
 
-		[Ordinal(0)] [RED("distanceOffset")] 		public CBehTreeValFloat DistanceOffset { get; set;}
+		[Ordinal(4)] [RED("distanceOffset")] 		public CBehTreeValFloat DistanceOffset { get; set;}
 
-		[Ordinal(0)] [RED("heightOffset")] 		public CBehTreeValFloat HeightOffset { get; set;}
+		[Ordinal(5)] [RED("heightOffset")] 		public CBehTreeValFloat HeightOffset { get; set;}
 
-		[Ordinal(0)] [RED("min2DDistance")] 		public CBehTreeValFloat Min2DDistance { get; set;}
+		[Ordinal(6)] [RED("min2DDistance")] 		public CBehTreeValFloat Min2DDistance { get; set;}
 
-		[Ordinal(0)] [RED("minHeight")] 		public CBehTreeValFloat MinHeight { get; set;}
+		[Ordinal(7)] [RED("minHeight")] 		public CBehTreeValFloat MinHeight { get; set;}
 
 		public IBehTreeNodeAtomicFlyToBaseDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SWanderPointConnection : CVariable
 	{
-		[Ordinal(0)] [RED("("destination")] 		public EntityHandle Destination { get; set;}
+		[Ordinal(1)] [RED("("destination")] 		public EntityHandle Destination { get; set;}
 
-		[Ordinal(0)] [RED("("forcePathfinding")] 		public CBool ForcePathfinding { get; set;}
+		[Ordinal(2)] [RED("("forcePathfinding")] 		public CBool ForcePathfinding { get; set;}
 
 		public SWanderPointConnection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

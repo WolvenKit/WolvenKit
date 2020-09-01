@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTResolveStucking : IMoveSteeringTask
 	{
-		[Ordinal(0)] [RED("stuckFramesThreshold")] 		public CUInt32 StuckFramesThreshold { get; set;}
+		[Ordinal(1)] [RED("stuckFramesThreshold")] 		public CUInt32 StuckFramesThreshold { get; set;}
 
-		[Ordinal(0)] [RED("distanceThreshold")] 		public CFloat DistanceThreshold { get; set;}
+		[Ordinal(2)] [RED("distanceThreshold")] 		public CFloat DistanceThreshold { get; set;}
 
-		[Ordinal(0)] [RED("signalName")] 		public CName SignalName { get; set;}
+		[Ordinal(3)] [RED("signalName")] 		public CName SignalName { get; set;}
 
 		public CMoveSTResolveStucking(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

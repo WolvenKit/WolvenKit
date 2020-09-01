@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSSceneTimetableScenesEntry : CVariable
 	{
-		[Ordinal(0)] [RED("("storyScene")] 		public CHandle<CStoryScene> StoryScene { get; set;}
+		[Ordinal(1)] [RED("("storyScene")] 		public CHandle<CStoryScene> StoryScene { get; set;}
 
-		[Ordinal(0)] [RED("("sceneInputSection")] 		public CString SceneInputSection { get; set;}
+		[Ordinal(2)] [RED("("sceneInputSection")] 		public CString SceneInputSection { get; set;}
 
-		[Ordinal(0)] [RED("("cooldownTime")] 		public CFloat CooldownTime { get; set;}
+		[Ordinal(3)] [RED("("cooldownTime")] 		public CFloat CooldownTime { get; set;}
 
-		[Ordinal(0)] [RED("("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(4)] [RED("("weight")] 		public CFloat Weight { get; set;}
 
-		[Ordinal(0)] [RED("("priority")] 		public CEnum<EArbitratorPriorities> Priority { get; set;}
+		[Ordinal(5)] [RED("("priority")] 		public CEnum<EArbitratorPriorities> Priority { get; set;}
 
-		[Ordinal(0)] [RED("("forceMode")] 		public CEnum<EStorySceneForcingMode> ForceMode { get; set;}
+		[Ordinal(6)] [RED("("forceMode")] 		public CEnum<EStorySceneForcingMode> ForceMode { get; set;}
 
 		public CSSceneTimetableScenesEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

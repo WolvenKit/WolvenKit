@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterCombatLogic : CAISubTree
 	{
-		[Ordinal(0)] [RED("params")] 		public CHandle<CAIMonsterCombatLogicParams> Params { get; set;}
+		[Ordinal(1)] [RED("params")] 		public CHandle<CAIMonsterCombatLogicParams> Params { get; set;}
 
 		public CAIMonsterCombatLogic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimItemEffectEvent : CExtAnimEvent
 	{
-		[Ordinal(0)] [RED("("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(1)] [RED("("effectName")] 		public CName EffectName { get; set;}
 
-		[Ordinal(0)] [RED("("itemSlot")] 		public CName ItemSlot { get; set;}
+		[Ordinal(2)] [RED("("itemSlot")] 		public CName ItemSlot { get; set;}
 
-		[Ordinal(0)] [RED("("action")] 		public CEnum<EItemEffectAction> Action { get; set;}
+		[Ordinal(3)] [RED("("action")] 		public CEnum<EItemEffectAction> Action { get; set;}
 
 		public CExtAnimItemEffectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

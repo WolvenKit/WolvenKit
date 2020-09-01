@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphPositionControllerNode : CBehaviorGraphPositionControllerBaseNode
 	{
-		[Ordinal(0)] [RED("("continueUpdate")] 		public CBool ContinueUpdate { get; set;}
+		[Ordinal(1)] [RED("("continueUpdate")] 		public CBool ContinueUpdate { get; set;}
 
-		[Ordinal(0)] [RED("("useAnimEvent")] 		public CBool UseAnimEvent { get; set;}
+		[Ordinal(2)] [RED("("useAnimEvent")] 		public CBool UseAnimEvent { get; set;}
 
-		[Ordinal(0)] [RED("("eventAllowTrans")] 		public CName EventAllowTrans { get; set;}
+		[Ordinal(3)] [RED("("eventAllowTrans")] 		public CName EventAllowTrans { get; set;}
 
 		public CBehaviorGraphPositionControllerNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

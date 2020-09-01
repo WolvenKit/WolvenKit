@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCheckAttitudesDef : IBehTreeReactionTaskDefinition
 	{
-		[Ordinal(0)] [RED("("useReactionTarget")] 		public CBool UseReactionTarget { get; set;}
+		[Ordinal(1)] [RED("("useReactionTarget")] 		public CBool UseReactionTarget { get; set;}
 
 		public CBTTaskCheckAttitudesDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

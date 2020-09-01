@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFormationPatternRepeatNode : CFormationPatternCompositeNode
 	{
-		[Ordinal(0)] [RED("("repeatCount")] 		public CInt32 RepeatCount { get; set;}
+		[Ordinal(1)] [RED("("repeatCount")] 		public CInt32 RepeatCount { get; set;}
 
 		public CFormationPatternRepeatNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

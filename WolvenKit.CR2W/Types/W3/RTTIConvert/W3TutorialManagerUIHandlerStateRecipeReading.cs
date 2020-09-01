@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateRecipeReading : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[Ordinal(0)] [RED("("OPEN_INVENTORY")] 		public CName OPEN_INVENTORY { get; set;}
+		[Ordinal(1)] [RED("("OPEN_INVENTORY")] 		public CName OPEN_INVENTORY { get; set;}
 
-		[Ordinal(0)] [RED("("SELECT_TAB")] 		public CName SELECT_TAB { get; set;}
+		[Ordinal(2)] [RED("("SELECT_TAB")] 		public CName SELECT_TAB { get; set;}
 
-		[Ordinal(0)] [RED("("SELECT_BOOK")] 		public CName SELECT_BOOK { get; set;}
+		[Ordinal(3)] [RED("("SELECT_BOOK")] 		public CName SELECT_BOOK { get; set;}
 
-		[Ordinal(0)] [RED("("USE")] 		public CName USE { get; set;}
+		[Ordinal(4)] [RED("("USE")] 		public CName USE { get; set;}
 
-		[Ordinal(0)] [RED("("READ")] 		public CName READ { get; set;}
+		[Ordinal(5)] [RED("("READ")] 		public CName READ { get; set;}
 
-		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(6)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateRecipeReading(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

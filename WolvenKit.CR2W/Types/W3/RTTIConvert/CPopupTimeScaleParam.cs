@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPopupTimeScaleParam : IPopupTimeParam
 	{
-		[Ordinal(0)] [RED("timeScale")] 		public CFloat TimeScale { get; set;}
+		[Ordinal(1)] [RED("timeScale")] 		public CFloat TimeScale { get; set;}
 
-		[Ordinal(0)] [RED("multiplicative")] 		public CBool Multiplicative { get; set;}
+		[Ordinal(2)] [RED("multiplicative")] 		public CBool Multiplicative { get; set;}
 
 		public CPopupTimeScaleParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

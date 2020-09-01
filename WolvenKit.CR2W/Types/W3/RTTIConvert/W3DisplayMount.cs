@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DisplayMount : W3Container
 	{
-		[Ordinal(0)] [RED("("ids", 2,0)] 		public CArray<SItemUniqueId> Ids { get; set;}
+		[Ordinal(1)] [RED("("ids", 2,0)] 		public CArray<SItemUniqueId> Ids { get; set;}
 
-		[Ordinal(0)] [RED("("i")] 		public CInt32 I { get; set;}
+		[Ordinal(2)] [RED("("i")] 		public CInt32 I { get; set;}
 
 		public W3DisplayMount(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

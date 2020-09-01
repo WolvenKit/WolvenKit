@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFocusActionComponent : CComponent
 	{
-		[Ordinal(0)] [RED("("actionName")] 		public CName ActionName { get; set;}
+		[Ordinal(1)] [RED("("actionName")] 		public CName ActionName { get; set;}
 
 		public CFocusActionComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

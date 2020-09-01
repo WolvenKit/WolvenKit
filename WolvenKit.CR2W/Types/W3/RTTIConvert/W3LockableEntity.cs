@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3LockableEntity : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("isEnabledOnSpawn")] 		public CBool IsEnabledOnSpawn { get; set;}
+		[Ordinal(1)] [RED("("isEnabledOnSpawn")] 		public CBool IsEnabledOnSpawn { get; set;}
 
-		[Ordinal(0)] [RED("("lockedByKey")] 		public CBool LockedByKey { get; set;}
+		[Ordinal(2)] [RED("("lockedByKey")] 		public CBool LockedByKey { get; set;}
 
-		[Ordinal(0)] [RED("("keyItemName")] 		public CName KeyItemName { get; set;}
+		[Ordinal(3)] [RED("("keyItemName")] 		public CName KeyItemName { get; set;}
 
-		[Ordinal(0)] [RED("("removeKeyOnUse")] 		public CBool RemoveKeyOnUse { get; set;}
+		[Ordinal(4)] [RED("("removeKeyOnUse")] 		public CBool RemoveKeyOnUse { get; set;}
 
-		[Ordinal(0)] [RED("("enabledByFact")] 		public CString EnabledByFact { get; set;}
+		[Ordinal(5)] [RED("("enabledByFact")] 		public CString EnabledByFact { get; set;}
 
-		[Ordinal(0)] [RED("("factOnLockedAttempt")] 		public CString FactOnLockedAttempt { get; set;}
+		[Ordinal(6)] [RED("("factOnLockedAttempt")] 		public CString FactOnLockedAttempt { get; set;}
 
-		[Ordinal(0)] [RED("("factOnUnlockedByKey")] 		public CString FactOnUnlockedByKey { get; set;}
+		[Ordinal(7)] [RED("("factOnUnlockedByKey")] 		public CString FactOnUnlockedByKey { get; set;}
 
-		[Ordinal(0)] [RED("("mainInteractionComponent")] 		public CHandle<CDoorComponent> MainInteractionComponent { get; set;}
+		[Ordinal(8)] [RED("("mainInteractionComponent")] 		public CHandle<CDoorComponent> MainInteractionComponent { get; set;}
 
-		[Ordinal(0)] [RED("("isEnabled")] 		public CBool IsEnabled { get; set;}
+		[Ordinal(9)] [RED("("isEnabled")] 		public CBool IsEnabled { get; set;}
 
-		[Ordinal(0)] [RED("("isPlayerInActivationRange")] 		public CBool IsPlayerInActivationRange { get; set;}
+		[Ordinal(10)] [RED("("isPlayerInActivationRange")] 		public CBool IsPlayerInActivationRange { get; set;}
 
-		[Ordinal(0)] [RED("("isInteractionBlocked")] 		public CBool IsInteractionBlocked { get; set;}
+		[Ordinal(11)] [RED("("isInteractionBlocked")] 		public CBool IsInteractionBlocked { get; set;}
 
 		public W3LockableEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

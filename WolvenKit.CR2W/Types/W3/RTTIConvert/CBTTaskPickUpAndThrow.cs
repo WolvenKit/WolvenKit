@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPickUpAndThrow : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("projectileTemplate")] 		public CHandle<CEntityTemplate> ProjectileTemplate { get; set;}
+		[Ordinal(1)] [RED("projectileTemplate")] 		public CHandle<CEntityTemplate> ProjectileTemplate { get; set;}
 
-		[Ordinal(0)] [RED("proj")] 		public CHandle<W3AdvancedProjectile> Proj { get; set;}
+		[Ordinal(2)] [RED("proj")] 		public CHandle<W3AdvancedProjectile> Proj { get; set;}
 
-		[Ordinal(0)] [RED("range")] 		public CFloat Range { get; set;}
+		[Ordinal(3)] [RED("range")] 		public CFloat Range { get; set;}
 
-		[Ordinal(0)] [RED("tag")] 		public CName Tag { get; set;}
+		[Ordinal(4)] [RED("tag")] 		public CName Tag { get; set;}
 
-		[Ordinal(0)] [RED("angleDist")] 		public CFloat AngleDist { get; set;}
+		[Ordinal(5)] [RED("angleDist")] 		public CFloat AngleDist { get; set;}
 
-		[Ordinal(0)] [RED("slotName")] 		public CName SlotName { get; set;}
+		[Ordinal(6)] [RED("slotName")] 		public CName SlotName { get; set;}
 
-		[Ordinal(0)] [RED("pickUp")] 		public CBool PickUp { get; set;}
+		[Ordinal(7)] [RED("pickUp")] 		public CBool PickUp { get; set;}
 
-		[Ordinal(0)] [RED("dodgeable")] 		public CBool Dodgeable { get; set;}
+		[Ordinal(8)] [RED("dodgeable")] 		public CBool Dodgeable { get; set;}
 
-		[Ordinal(0)] [RED("physicalComponent")] 		public CHandle<CComponent> PhysicalComponent { get; set;}
+		[Ordinal(9)] [RED("physicalComponent")] 		public CHandle<CComponent> PhysicalComponent { get; set;}
 
-		[Ordinal(0)] [RED("wantedHeadingVec")] 		public Vector WantedHeadingVec { get; set;}
+		[Ordinal(10)] [RED("wantedHeadingVec")] 		public Vector WantedHeadingVec { get; set;}
 
 		public CBTTaskPickUpAndThrow(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

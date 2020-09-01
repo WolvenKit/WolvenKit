@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTEnumCriticalState : IBehTreeValueEnum
 	{
-		[Ordinal(0)] [RED("("value")] 		public CEnum<ECriticalStateType> Value { get; set;}
+		[Ordinal(1)] [RED("("value")] 		public CEnum<ECriticalStateType> Value { get; set;}
 
 		public CBTEnumCriticalState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

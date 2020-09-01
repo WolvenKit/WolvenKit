@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4LootContainerParam : CVariable
 	{
-		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
+		[Ordinal(1)] [RED("("name")] 		public CName Name { get; set;}
 
-		[Ordinal(0)] [RED("("chance")] 		public CFloat Chance { get; set;}
+		[Ordinal(2)] [RED("("chance")] 		public CFloat Chance { get; set;}
 
-		[Ordinal(0)] [RED("("respawnTime")] 		public CUInt32 RespawnTime { get; set;}
+		[Ordinal(3)] [RED("("respawnTime")] 		public CUInt32 RespawnTime { get; set;}
 
 		public CR4LootContainerParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

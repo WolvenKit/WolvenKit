@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSpendablePoints : CVariable
 	{
-		[Ordinal(0)] [RED("("free")] 		public CInt32 Free { get; set;}
+		[Ordinal(1)] [RED("("free")] 		public CInt32 Free { get; set;}
 
-		[Ordinal(0)] [RED("("used")] 		public CInt32 Used { get; set;}
+		[Ordinal(2)] [RED("("used")] 		public CInt32 Used { get; set;}
 
 		public SSpendablePoints(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

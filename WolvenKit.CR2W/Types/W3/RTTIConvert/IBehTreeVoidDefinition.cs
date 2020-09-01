@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeVoidDefinition : IBehTreeMetanodeDefinition
 	{
-		[Ordinal(0)] [RED("voidNodes", 2,0)] 		public CArray<CPtr<IBehTreeNodeDefinition>> VoidNodes { get; set;}
+		[Ordinal(1)] [RED("voidNodes", 2,0)] 		public CArray<CPtr<IBehTreeNodeDefinition>> VoidNodes { get; set;}
 
 		public IBehTreeVoidDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

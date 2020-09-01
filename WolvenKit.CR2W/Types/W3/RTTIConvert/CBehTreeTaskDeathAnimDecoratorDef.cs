@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTaskDeathAnimDecoratorDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("completeTimer")] 		public CFloat CompleteTimer { get; set;}
+		[Ordinal(1)] [RED("completeTimer")] 		public CFloat CompleteTimer { get; set;}
 
-		[Ordinal(0)] [RED("disableCollisionOnAnim")] 		public CBehTreeValBool DisableCollisionOnAnim { get; set;}
+		[Ordinal(2)] [RED("disableCollisionOnAnim")] 		public CBehTreeValBool DisableCollisionOnAnim { get; set;}
 
-		[Ordinal(0)] [RED("disableCollisionOnAnimDelay")] 		public CBehTreeValFloat DisableCollisionOnAnimDelay { get; set;}
+		[Ordinal(3)] [RED("disableCollisionOnAnimDelay")] 		public CBehTreeValFloat DisableCollisionOnAnimDelay { get; set;}
 
-		[Ordinal(0)] [RED("stopFXOnActivate")] 		public CBehTreeValCName StopFXOnActivate { get; set;}
+		[Ordinal(4)] [RED("stopFXOnActivate")] 		public CBehTreeValCName StopFXOnActivate { get; set;}
 
-		[Ordinal(0)] [RED("stopFXOnDeactivate")] 		public CBehTreeValCName StopFXOnDeactivate { get; set;}
+		[Ordinal(5)] [RED("stopFXOnDeactivate")] 		public CBehTreeValCName StopFXOnDeactivate { get; set;}
 
-		[Ordinal(0)] [RED("playFXOnActivate")] 		public CBehTreeValCName PlayFXOnActivate { get; set;}
+		[Ordinal(6)] [RED("playFXOnActivate")] 		public CBehTreeValCName PlayFXOnActivate { get; set;}
 
-		[Ordinal(0)] [RED("playFXOnDeactivate")] 		public CBehTreeValCName PlayFXOnDeactivate { get; set;}
+		[Ordinal(7)] [RED("playFXOnDeactivate")] 		public CBehTreeValCName PlayFXOnDeactivate { get; set;}
 
-		[Ordinal(0)] [RED("playSFXOnActivate")] 		public CBehTreeValCName PlaySFXOnActivate { get; set;}
+		[Ordinal(8)] [RED("playSFXOnActivate")] 		public CBehTreeValCName PlaySFXOnActivate { get; set;}
 
 		public CBehTreeTaskDeathAnimDecoratorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

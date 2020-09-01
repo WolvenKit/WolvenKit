@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphStoreAnimEventNode : CBehaviorGraphBaseNode
 	{
-		[Ordinal(0)] [RED("animEventName")] 		public CName AnimEventName { get; set;}
+		[Ordinal(1)] [RED("animEventName")] 		public CName AnimEventName { get; set;}
 
 		public CBehaviorGraphStoreAnimEventNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFear : CBTTaskPlayAnimationEventDecorator
 	{
-		[Ordinal(0)] [RED("("useDirectionalAnims")] 		public CBool UseDirectionalAnims { get; set;}
+		[Ordinal(1)] [RED("("useDirectionalAnims")] 		public CBool UseDirectionalAnims { get; set;}
 
 		public CBTTaskFear(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

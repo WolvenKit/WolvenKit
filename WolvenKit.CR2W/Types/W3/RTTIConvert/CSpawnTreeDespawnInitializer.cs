@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeDespawnInitializer : ISpawnTreeInitializer
 	{
-		[Ordinal(0)] [RED("instantDespawnConfiguration")] 		public SSpawnTreeDespawnConfiguration InstantDespawnConfiguration { get; set;}
+		[Ordinal(1)] [RED("instantDespawnConfiguration")] 		public SSpawnTreeDespawnConfiguration InstantDespawnConfiguration { get; set;}
 
 		public CSpawnTreeDespawnInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

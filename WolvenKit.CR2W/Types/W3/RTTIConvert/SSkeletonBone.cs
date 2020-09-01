@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSkeletonBone : CVariable
 	{
-		[Ordinal(0)] [RED("("name")] 		public StringAnsi Name { get; set;}
+		[Ordinal(1)] [RED("("name")] 		public StringAnsi Name { get; set;}
 
-		[Ordinal(0)] [RED("("nameAsCName")] 		public CName NameAsCName { get; set;}
+		[Ordinal(2)] [RED("("nameAsCName")] 		public CName NameAsCName { get; set;}
 
-		[Ordinal(0)] [RED("("flags")] 		public CEnum<ESkeletonBoneFlags> Flags { get; set;}
+		[Ordinal(3)] [RED("("flags")] 		public CEnum<ESkeletonBoneFlags> Flags { get; set;}
 
 		public SSkeletonBone(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

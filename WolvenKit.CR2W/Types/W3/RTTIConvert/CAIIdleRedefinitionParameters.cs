@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIIdleRedefinitionParameters : CAIRedefinitionParameters
 	{
-		[Ordinal(0)] [RED("idleTree")] 		public CHandle<CAIIdleTree> IdleTree { get; set;}
+		[Ordinal(1)] [RED("idleTree")] 		public CHandle<CAIIdleTree> IdleTree { get; set;}
 
 		public CAIIdleRedefinitionParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

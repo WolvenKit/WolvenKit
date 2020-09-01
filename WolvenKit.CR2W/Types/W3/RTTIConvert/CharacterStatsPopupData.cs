@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CharacterStatsPopupData : TextPopupData
 	{
-		[Ordinal(0)] [RED("m_flashValueStorage")] 		public CHandle<CScriptedFlashValueStorage> M_flashValueStorage { get; set;}
+		[Ordinal(1)] [RED("m_flashValueStorage")] 		public CHandle<CScriptedFlashValueStorage> M_flashValueStorage { get; set;}
 
 		public CharacterStatsPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

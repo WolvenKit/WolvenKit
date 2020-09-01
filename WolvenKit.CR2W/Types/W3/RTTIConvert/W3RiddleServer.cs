@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3RiddleServer : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("OnGoodCombinationEvents", 2,0)] 		public CArray<CHandle<W3SwitchEvent>> OnGoodCombinationEvents { get; set;}
+		[Ordinal(1)] [RED("("OnGoodCombinationEvents", 2,0)] 		public CArray<CHandle<W3SwitchEvent>> OnGoodCombinationEvents { get; set;}
 
-		[Ordinal(0)] [RED("("pairedNodes", 2,0)] 		public CArray<EntityHandle> PairedNodes { get; set;}
+		[Ordinal(2)] [RED("("pairedNodes", 2,0)] 		public CArray<EntityHandle> PairedNodes { get; set;}
 
-		[Ordinal(0)] [RED("("riddleNodesNumber")] 		public CInt32 RiddleNodesNumber { get; set;}
+		[Ordinal(3)] [RED("("riddleNodesNumber")] 		public CInt32 RiddleNodesNumber { get; set;}
 
-		[Ordinal(0)] [RED("("isDisabled")] 		public CBool IsDisabled { get; set;}
+		[Ordinal(4)] [RED("("isDisabled")] 		public CBool IsDisabled { get; set;}
 
-		[Ordinal(0)] [RED("("nodesAtValidPosNumber")] 		public CInt32 NodesAtValidPosNumber { get; set;}
+		[Ordinal(5)] [RED("("nodesAtValidPosNumber")] 		public CInt32 NodesAtValidPosNumber { get; set;}
 
 		public W3RiddleServer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

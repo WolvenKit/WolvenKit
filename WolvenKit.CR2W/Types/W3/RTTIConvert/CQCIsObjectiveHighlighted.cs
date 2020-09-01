@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQCIsObjectiveHighlighted : IUIConditionType
 	{
-		[Ordinal(0)] [RED("objectiveEntry")] 		public CHandle<CJournalPath> ObjectiveEntry { get; set;}
+		[Ordinal(1)] [RED("objectiveEntry")] 		public CHandle<CJournalPath> ObjectiveEntry { get; set;}
 
 		public CQCIsObjectiveHighlighted(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

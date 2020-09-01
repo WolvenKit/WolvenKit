@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIDespawnParameters : IAIActionParameters
 	{
-		[Ordinal(0)] [RED("despawnAction")] 		public CHandle<IAIActionTree> DespawnAction { get; set;}
+		[Ordinal(1)] [RED("despawnAction")] 		public CHandle<IAIActionTree> DespawnAction { get; set;}
 
 		public CAIDespawnParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

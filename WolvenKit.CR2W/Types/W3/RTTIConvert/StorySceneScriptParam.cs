@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class StorySceneScriptParam : CVariable
 	{
-		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
+		[Ordinal(1)] [RED("("name")] 		public CName Name { get; set;}
 
-		[Ordinal(0)] [RED("("value")] 		public CVariant Value { get; set;}
+		[Ordinal(2)] [RED("("value")] 		public CVariant Value { get; set;}
 
 		public StorySceneScriptParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

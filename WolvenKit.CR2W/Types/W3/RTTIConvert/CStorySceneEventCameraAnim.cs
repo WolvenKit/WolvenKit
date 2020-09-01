@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventCameraAnim : CStorySceneEventAnimClip
 	{
-		[Ordinal(0)] [RED("("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(1)] [RED("("animationName")] 		public CName AnimationName { get; set;}
 
-		[Ordinal(0)] [RED("("isIdle")] 		public CBool IsIdle { get; set;}
+		[Ordinal(2)] [RED("("isIdle")] 		public CBool IsIdle { get; set;}
 
 		public CStorySceneEventCameraAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

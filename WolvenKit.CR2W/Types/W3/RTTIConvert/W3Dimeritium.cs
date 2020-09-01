@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Dimeritium : W3Petard
 	{
-		[Ordinal(0)] [RED("("affectedFX")] 		public CName AffectedFX { get; set;}
+		[Ordinal(1)] [RED("("affectedFX")] 		public CName AffectedFX { get; set;}
 
-		[Ordinal(0)] [RED("("affectedFXCluster")] 		public CName AffectedFXCluster { get; set;}
+		[Ordinal(2)] [RED("("affectedFXCluster")] 		public CName AffectedFXCluster { get; set;}
 
-		[Ordinal(0)] [RED("("disableTimerCalled")] 		public CBool DisableTimerCalled { get; set;}
+		[Ordinal(3)] [RED("("disableTimerCalled")] 		public CBool DisableTimerCalled { get; set;}
 
-		[Ordinal(0)] [RED("("DISABLED_FX_CHECK_DELAY")] 		public CFloat DISABLED_FX_CHECK_DELAY { get; set;}
+		[Ordinal(4)] [RED("("DISABLED_FX_CHECK_DELAY")] 		public CFloat DISABLED_FX_CHECK_DELAY { get; set;}
 
-		[Ordinal(0)] [RED("("disabledFxDT")] 		public CFloat DisabledFxDT { get; set;}
+		[Ordinal(5)] [RED("("disabledFxDT")] 		public CFloat DisabledFxDT { get; set;}
 
 		public W3Dimeritium(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

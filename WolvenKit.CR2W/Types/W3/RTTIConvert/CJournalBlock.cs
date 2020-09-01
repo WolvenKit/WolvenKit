@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("entry")] 		public CHandle<CJournalPath> Entry { get; set;}
+		[Ordinal(1)] [RED("entry")] 		public CHandle<CJournalPath> Entry { get; set;}
 
-		[Ordinal(0)] [RED("showInfoOnScreen")] 		public CBool ShowInfoOnScreen { get; set;}
+		[Ordinal(2)] [RED("showInfoOnScreen")] 		public CBool ShowInfoOnScreen { get; set;}
 
 		public CJournalBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

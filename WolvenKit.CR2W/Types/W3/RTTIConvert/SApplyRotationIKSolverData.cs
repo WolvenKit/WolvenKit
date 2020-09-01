@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SApplyRotationIKSolverData : CVariable
 	{
-		[Ordinal(0)] [RED("bone")] 		public CName Bone { get; set;}
+		[Ordinal(1)] [RED("bone")] 		public CName Bone { get; set;}
 
 		public SApplyRotationIKSolverData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

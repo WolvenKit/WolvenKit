@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneCutscenePlayer : CStorySceneElement
 	{
-		[Ordinal(0)] [RED("("descriptionText")] 		public CString DescriptionText { get; set;}
+		[Ordinal(1)] [RED("("descriptionText")] 		public CString DescriptionText { get; set;}
 
 		public CStorySceneCutscenePlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

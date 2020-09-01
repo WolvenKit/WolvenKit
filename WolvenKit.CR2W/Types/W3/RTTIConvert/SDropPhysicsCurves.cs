@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SDropPhysicsCurves : CVariable
 	{
-		[Ordinal(0)] [RED("("trajectory")] 		public SMultiCurve Trajectory { get; set;}
+		[Ordinal(1)] [RED("("trajectory")] 		public SMultiCurve Trajectory { get; set;}
 
-		[Ordinal(0)] [RED("("rotation")] 		public SMultiCurve Rotation { get; set;}
+		[Ordinal(2)] [RED("("rotation")] 		public SMultiCurve Rotation { get; set;}
 
 		public SDropPhysicsCurves(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

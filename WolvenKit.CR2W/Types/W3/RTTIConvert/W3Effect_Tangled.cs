@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Tangled : W3ImmobilizeEffect
 	{
-		[Ordinal(0)] [RED("("particleEnt")] 		public CHandle<W3VisualFx> ParticleEnt { get; set;}
+		[Ordinal(1)] [RED("("particleEnt")] 		public CHandle<W3VisualFx> ParticleEnt { get; set;}
 
 		public W3Effect_Tangled(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

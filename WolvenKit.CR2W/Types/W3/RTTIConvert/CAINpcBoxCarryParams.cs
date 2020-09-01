@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcBoxCarryParams : CAINpcIdleParams
 	{
-		[Ordinal(0)] [RED("workCarryItemTemplate")] 		public CHandle<CEntityTemplate> WorkCarryItemTemplate { get; set;}
+		[Ordinal(1)] [RED("workCarryItemTemplate")] 		public CHandle<CEntityTemplate> WorkCarryItemTemplate { get; set;}
 
-		[Ordinal(0)] [RED("workCarryPickupPoint")] 		public CName WorkCarryPickupPoint { get; set;}
+		[Ordinal(2)] [RED("workCarryPickupPoint")] 		public CName WorkCarryPickupPoint { get; set;}
 
-		[Ordinal(0)] [RED("workCarryDropPoint")] 		public CName WorkCarryDropPoint { get; set;}
+		[Ordinal(3)] [RED("workCarryDropPoint")] 		public CName WorkCarryDropPoint { get; set;}
 
 		public CAINpcBoxCarryParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

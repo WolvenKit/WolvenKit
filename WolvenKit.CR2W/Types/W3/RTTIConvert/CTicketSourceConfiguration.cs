@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTicketSourceConfiguration : CVariable
 	{
-		[Ordinal(0)] [RED("name")] 		public CName Name { get; set;}
+		[Ordinal(1)] [RED("name")] 		public CName Name { get; set;}
 
-		[Ordinal(0)] [RED("ticketsPoolSize")] 		public CUInt16 TicketsPoolSize { get; set;}
+		[Ordinal(2)] [RED("ticketsPoolSize")] 		public CUInt16 TicketsPoolSize { get; set;}
 
-		[Ordinal(0)] [RED("minimalImportance")] 		public CFloat MinimalImportance { get; set;}
+		[Ordinal(3)] [RED("minimalImportance")] 		public CFloat MinimalImportance { get; set;}
 
 		public CTicketSourceConfiguration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

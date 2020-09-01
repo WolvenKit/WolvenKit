@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PreparationPotionsAndBombsMenu : CR4MenuBase
 	{
-		[Ordinal(0)] [RED("_gridInv")] 		public CHandle<W3GuiPreparationPotionsAndBombsInventoryComponent> _gridInv { get; set;}
+		[Ordinal(1)] [RED("_gridInv")] 		public CHandle<W3GuiPreparationPotionsAndBombsInventoryComponent> _gridInv { get; set;}
 
-		[Ordinal(0)] [RED("_currentInv")] 		public CHandle<W3GuiBaseInventoryComponent> _currentInv { get; set;}
+		[Ordinal(2)] [RED("_currentInv")] 		public CHandle<W3GuiBaseInventoryComponent> _currentInv { get; set;}
 
-		[Ordinal(0)] [RED("_inv")] 		public CHandle<CInventoryComponent> _inv { get; set;}
+		[Ordinal(3)] [RED("_inv")] 		public CHandle<CInventoryComponent> _inv { get; set;}
 
-		[Ordinal(0)] [RED("optionsItemActions", 2,0)] 		public CArray<CEnum<EInventoryActionType>> OptionsItemActions { get; set;}
+		[Ordinal(4)] [RED("optionsItemActions", 2,0)] 		public CArray<CEnum<EInventoryActionType>> OptionsItemActions { get; set;}
 
-		[Ordinal(0)] [RED("_currentQuickSlot")] 		public CEnum<EEquipmentSlots> _currentQuickSlot { get; set;}
+		[Ordinal(5)] [RED("_currentQuickSlot")] 		public CEnum<EEquipmentSlots> _currentQuickSlot { get; set;}
 
-		[Ordinal(0)] [RED("ITEMS_SIZE")] 		public CInt32 ITEMS_SIZE { get; set;}
+		[Ordinal(6)] [RED("ITEMS_SIZE")] 		public CInt32 ITEMS_SIZE { get; set;}
 
 		public CR4PreparationPotionsAndBombsMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3AardProjectile : W3SignProjectile
 	{
-		[Ordinal(0)] [RED("("staminaDrainPerc")] 		public CFloat StaminaDrainPerc { get; set;}
+		[Ordinal(1)] [RED("("staminaDrainPerc")] 		public CFloat StaminaDrainPerc { get; set;}
 
 		public W3AardProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

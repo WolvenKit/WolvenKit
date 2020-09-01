@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Mutation7Debuff : W3Mutation7BaseEffect
 	{
-		[Ordinal(0)] [RED("("minCapStacks")] 		public CInt32 MinCapStacks { get; set;}
+		[Ordinal(1)] [RED("("minCapStacks")] 		public CInt32 MinCapStacks { get; set;}
 
 		public W3Effect_Mutation7Debuff(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

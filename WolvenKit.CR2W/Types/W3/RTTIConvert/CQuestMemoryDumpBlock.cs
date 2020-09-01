@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestMemoryDumpBlock : CQuestTestBlock
 	{
-		[Ordinal(0)] [RED("tag")] 		public CString Tag { get; set;}
+		[Ordinal(1)] [RED("tag")] 		public CString Tag { get; set;}
 
 		public CQuestMemoryDumpBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

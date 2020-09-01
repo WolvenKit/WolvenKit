@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskManageAnimatedMovementDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(1)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[Ordinal(0)] [RED("overrideOnly")] 		public CBool OverrideOnly { get; set;}
+		[Ordinal(2)] [RED("overrideOnly")] 		public CBool OverrideOnly { get; set;}
 
-		[Ordinal(0)] [RED("flag")] 		public CBool Flag { get; set;}
+		[Ordinal(3)] [RED("flag")] 		public CBool Flag { get; set;}
 
 		public BTTaskManageAnimatedMovementDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

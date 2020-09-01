@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSetTimeFunction : IQuestTimeFunction
 	{
-		[Ordinal(0)] [RED("("newTime")] 		public GameTime NewTime { get; set;}
+		[Ordinal(1)] [RED("("newTime")] 		public GameTime NewTime { get; set;}
 
-		[Ordinal(0)] [RED("("callEvents")] 		public CBool CallEvents { get; set;}
+		[Ordinal(2)] [RED("("callEvents")] 		public CBool CallEvents { get; set;}
 
 		public CSetTimeFunction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

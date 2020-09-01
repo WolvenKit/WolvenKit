@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SpawnMeteor : W3AdvancedProjectile
 	{
-		[Ordinal(0)] [RED("("initFxName")] 		public CName InitFxName { get; set;}
+		[Ordinal(1)] [RED("("initFxName")] 		public CName InitFxName { get; set;}
 
-		[Ordinal(0)] [RED("("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
+		[Ordinal(2)] [RED("("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
 
-		[Ordinal(0)] [RED("("onCollisionFxName2")] 		public CName OnCollisionFxName2 { get; set;}
+		[Ordinal(3)] [RED("("onCollisionFxName2")] 		public CName OnCollisionFxName2 { get; set;}
 
-		[Ordinal(0)] [RED("("startFxName")] 		public CName StartFxName { get; set;}
+		[Ordinal(4)] [RED("("startFxName")] 		public CName StartFxName { get; set;}
 
-		[Ordinal(0)] [RED("("ent")] 		public CHandle<CEntity> Ent { get; set;}
+		[Ordinal(5)] [RED("("ent")] 		public CHandle<CEntity> Ent { get; set;}
 
-		[Ordinal(0)] [RED("("projectileHitGround")] 		public CBool ProjectileHitGround { get; set;}
+		[Ordinal(6)] [RED("("projectileHitGround")] 		public CBool ProjectileHitGround { get; set;}
 
-		[Ordinal(0)] [RED("("playerPos")] 		public Vector PlayerPos { get; set;}
+		[Ordinal(7)] [RED("("playerPos")] 		public Vector PlayerPos { get; set;}
 
-		[Ordinal(0)] [RED("("projPos")] 		public Vector ProjPos { get; set;}
+		[Ordinal(8)] [RED("("projPos")] 		public Vector ProjPos { get; set;}
 
-		[Ordinal(0)] [RED("("projSpawnPos")] 		public Vector ProjSpawnPos { get; set;}
+		[Ordinal(9)] [RED("("projSpawnPos")] 		public Vector ProjSpawnPos { get; set;}
 
 		public W3SpawnMeteor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

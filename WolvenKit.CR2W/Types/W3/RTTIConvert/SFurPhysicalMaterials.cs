@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurPhysicalMaterials : CVariable
 	{
-		[Ordinal(0)] [RED("("simulation")] 		public SFurSimulation Simulation { get; set;}
+		[Ordinal(1)] [RED("("simulation")] 		public SFurSimulation Simulation { get; set;}
 
-		[Ordinal(0)] [RED("("volume")] 		public SFurVolume Volume { get; set;}
+		[Ordinal(2)] [RED("("volume")] 		public SFurVolume Volume { get; set;}
 
-		[Ordinal(0)] [RED("("strandWidth")] 		public SFurStrandWidth StrandWidth { get; set;}
+		[Ordinal(3)] [RED("("strandWidth")] 		public SFurStrandWidth StrandWidth { get; set;}
 
-		[Ordinal(0)] [RED("("stiffness")] 		public SFurStiffness Stiffness { get; set;}
+		[Ordinal(4)] [RED("("stiffness")] 		public SFurStiffness Stiffness { get; set;}
 
-		[Ordinal(0)] [RED("("clumping")] 		public SFurClumping Clumping { get; set;}
+		[Ordinal(5)] [RED("("clumping")] 		public SFurClumping Clumping { get; set;}
 
-		[Ordinal(0)] [RED("("waveness")] 		public SFurWaveness Waveness { get; set;}
+		[Ordinal(6)] [RED("("waveness")] 		public SFurWaveness Waveness { get; set;}
 
 		public SFurPhysicalMaterials(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeInitializerGuardArea : ISpawnTreeInitializerGuardAreaBase
 	{
-		[Ordinal(0)] [RED("("guardAreaTag")] 		public CName GuardAreaTag { get; set;}
+		[Ordinal(1)] [RED("("guardAreaTag")] 		public CName GuardAreaTag { get; set;}
 
-		[Ordinal(0)] [RED("("pursuitAreaTag")] 		public CName PursuitAreaTag { get; set;}
+		[Ordinal(2)] [RED("("pursuitAreaTag")] 		public CName PursuitAreaTag { get; set;}
 
-		[Ordinal(0)] [RED("("findAreasInEncounter")] 		public CBool FindAreasInEncounter { get; set;}
+		[Ordinal(3)] [RED("("findAreasInEncounter")] 		public CBool FindAreasInEncounter { get; set;}
 
 		public CSpawnTreeInitializerGuardArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

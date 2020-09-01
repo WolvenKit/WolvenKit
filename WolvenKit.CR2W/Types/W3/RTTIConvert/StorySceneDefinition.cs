@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class StorySceneDefinition : CVariable
 	{
-		[Ordinal(0)] [RED("("scene")] 		public CSoft<CStoryScene> Scene { get; set;}
+		[Ordinal(1)] [RED("("scene")] 		public CSoft<CStoryScene> Scene { get; set;}
 
-		[Ordinal(0)] [RED("("input")] 		public CName Input { get; set;}
+		[Ordinal(2)] [RED("("input")] 		public CName Input { get; set;}
 
 		public StorySceneDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

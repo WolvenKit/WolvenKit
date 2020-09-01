@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SPredictionInfo : CVariable
 	{
-		[Ordinal(0)] [RED("("distanceToCollision")] 		public CFloat DistanceToCollision { get; set;}
+		[Ordinal(1)] [RED("("distanceToCollision")] 		public CFloat DistanceToCollision { get; set;}
 
-		[Ordinal(0)] [RED("("normalYaw")] 		public CFloat NormalYaw { get; set;}
+		[Ordinal(2)] [RED("("normalYaw")] 		public CFloat NormalYaw { get; set;}
 
-		[Ordinal(0)] [RED("("turnAngle")] 		public CFloat TurnAngle { get; set;}
+		[Ordinal(3)] [RED("("turnAngle")] 		public CFloat TurnAngle { get; set;}
 
-		[Ordinal(0)] [RED("("leftGroundLevel")] 		public CFloat LeftGroundLevel { get; set;}
+		[Ordinal(4)] [RED("("leftGroundLevel")] 		public CFloat LeftGroundLevel { get; set;}
 
-		[Ordinal(0)] [RED("("frontGroundLevel")] 		public CFloat FrontGroundLevel { get; set;}
+		[Ordinal(5)] [RED("("frontGroundLevel")] 		public CFloat FrontGroundLevel { get; set;}
 
-		[Ordinal(0)] [RED("("rightGroundLevel")] 		public CFloat RightGroundLevel { get; set;}
+		[Ordinal(6)] [RED("("rightGroundLevel")] 		public CFloat RightGroundLevel { get; set;}
 
 		public SPredictionInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

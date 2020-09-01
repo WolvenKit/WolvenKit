@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskUpdateLookatTargetByTagDef : BTTaskUpdateLookatTargetDef
 	{
-		[Ordinal(0)] [RED("targetTag")] 		public CBehTreeValCName TargetTag { get; set;}
+		[Ordinal(1)] [RED("targetTag")] 		public CBehTreeValCName TargetTag { get; set;}
 
 		public BTTaskUpdateLookatTargetByTagDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

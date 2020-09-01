@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeTeleportToActionTargetCheckPositionDefinition : CBehTreeNodeTeleportToActionTargetDefinition
 	{
-		[Ordinal(0)] [RED("queryDelay")] 		public CBehTreeValFloat QueryDelay { get; set;}
+		[Ordinal(1)] [RED("queryDelay")] 		public CBehTreeValFloat QueryDelay { get; set;}
 
-		[Ordinal(0)] [RED("filter")] 		public SPositioningFilter Filter { get; set;}
+		[Ordinal(2)] [RED("filter")] 		public SPositioningFilter Filter { get; set;}
 
 		public CBehTreeNodeTeleportToActionTargetCheckPositionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

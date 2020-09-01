@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFollowOwnerTRGDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("activationDistance")] 		public CFloat ActivationDistance { get; set;}
+		[Ordinal(1)] [RED("("activationDistance")] 		public CFloat ActivationDistance { get; set;}
 
-		[Ordinal(0)] [RED("("minimumDistance")] 		public CFloat MinimumDistance { get; set;}
+		[Ordinal(2)] [RED("("minimumDistance")] 		public CFloat MinimumDistance { get; set;}
 
-		[Ordinal(0)] [RED("("ignoreEntityWithTag")] 		public CName IgnoreEntityWithTag { get; set;}
+		[Ordinal(3)] [RED("("ignoreEntityWithTag")] 		public CName IgnoreEntityWithTag { get; set;}
 
 		public CBTTaskFollowOwnerTRGDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

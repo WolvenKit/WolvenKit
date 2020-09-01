@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAvailableFastTravelMapPin : CVariable
 	{
-		[Ordinal(0)] [RED("tag")] 		public CName Tag { get; set;}
+		[Ordinal(1)] [RED("tag")] 		public CName Tag { get; set;}
 
-		[Ordinal(0)] [RED("type")] 		public CName Type { get; set;}
+		[Ordinal(2)] [RED("type")] 		public CName Type { get; set;}
 
-		[Ordinal(0)] [RED("area")] 		public CEnum<EAreaName> Area { get; set;}
+		[Ordinal(3)] [RED("area")] 		public CEnum<EAreaName> Area { get; set;}
 
 		public SAvailableFastTravelMapPin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

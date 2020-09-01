@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneComment : CStorySceneElement
 	{
-		[Ordinal(0)] [RED("("commentText")] 		public LocalizedString CommentText { get; set;}
+		[Ordinal(1)] [RED("("commentText")] 		public LocalizedString CommentText { get; set;}
 
 		public CStorySceneComment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

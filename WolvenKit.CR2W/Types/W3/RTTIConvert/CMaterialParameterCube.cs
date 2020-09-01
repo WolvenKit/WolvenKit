@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialParameterCube : CMaterialParameter
 	{
-		[Ordinal(0)] [RED("cube")] 		public CHandle<CCubeTexture> Cube { get; set;}
+		[Ordinal(1)] [RED("cube")] 		public CHandle<CCubeTexture> Cube { get; set;}
 
 		public CMaterialParameterCube(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

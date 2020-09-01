@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PopupData : CObject
 	{
-		[Ordinal(0)] [RED("("ButtonsDef", 2,0)] 		public CArray<SKeyBinding> ButtonsDef { get; set;}
+		[Ordinal(1)] [RED("("ButtonsDef", 2,0)] 		public CArray<SKeyBinding> ButtonsDef { get; set;}
 
-		[Ordinal(0)] [RED("("PopupRef")] 		public CHandle<CR4MenuPopup> PopupRef { get; set;}
+		[Ordinal(2)] [RED("("PopupRef")] 		public CHandle<CR4MenuPopup> PopupRef { get; set;}
 
-		[Ordinal(0)] [RED("("ScreenPosX")] 		public CFloat ScreenPosX { get; set;}
+		[Ordinal(3)] [RED("("ScreenPosX")] 		public CFloat ScreenPosX { get; set;}
 
-		[Ordinal(0)] [RED("("ScreenPosY")] 		public CFloat ScreenPosY { get; set;}
+		[Ordinal(4)] [RED("("ScreenPosY")] 		public CFloat ScreenPosY { get; set;}
 
-		[Ordinal(0)] [RED("("BlurBackground")] 		public CBool BlurBackground { get; set;}
+		[Ordinal(5)] [RED("("BlurBackground")] 		public CBool BlurBackground { get; set;}
 
-		[Ordinal(0)] [RED("("PauseGame")] 		public CBool PauseGame { get; set;}
+		[Ordinal(6)] [RED("("PauseGame")] 		public CBool PauseGame { get; set;}
 
-		[Ordinal(0)] [RED("("HideTutorial")] 		public CBool HideTutorial { get; set;}
+		[Ordinal(7)] [RED("("HideTutorial")] 		public CBool HideTutorial { get; set;}
 
 		public W3PopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

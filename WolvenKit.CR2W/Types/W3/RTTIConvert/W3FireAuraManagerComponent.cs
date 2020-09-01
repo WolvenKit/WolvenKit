@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FireAuraManagerComponent : CR4Component
 	{
-		[Ordinal(0)] [RED("("fireAuraEffect")] 		public CName FireAuraEffect { get; set;}
+		[Ordinal(1)] [RED("("fireAuraEffect")] 		public CName FireAuraEffect { get; set;}
 
-		[Ordinal(0)] [RED("("m_PostFxOnGroundCmp")] 		public CHandle<W3PostFXOnGroundComponent> M_PostFxOnGroundCmp { get; set;}
+		[Ordinal(2)] [RED("("m_PostFxOnGroundCmp")] 		public CHandle<W3PostFXOnGroundComponent> M_PostFxOnGroundCmp { get; set;}
 
 		public W3FireAuraManagerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

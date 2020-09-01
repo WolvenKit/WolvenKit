@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphIk3Node : CBehaviorGraphBaseNode
 	{
-		[Ordinal(0)] [RED("("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
+		[Ordinal(1)] [RED("("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
 
-		[Ordinal(0)] [RED("("cachedTargetPosNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetPosNode { get; set;}
+		[Ordinal(2)] [RED("("cachedTargetPosNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetPosNode { get; set;}
 
-		[Ordinal(0)] [RED("("firstBone")] 		public CString FirstBone { get; set;}
+		[Ordinal(3)] [RED("("firstBone")] 		public CString FirstBone { get; set;}
 
-		[Ordinal(0)] [RED("("secondBone")] 		public CString SecondBone { get; set;}
+		[Ordinal(4)] [RED("("secondBone")] 		public CString SecondBone { get; set;}
 
-		[Ordinal(0)] [RED("("thirdBone")] 		public CString ThirdBone { get; set;}
+		[Ordinal(5)] [RED("("thirdBone")] 		public CString ThirdBone { get; set;}
 
-		[Ordinal(0)] [RED("("endBone")] 		public CString EndBone { get; set;}
+		[Ordinal(6)] [RED("("endBone")] 		public CString EndBone { get; set;}
 
-		[Ordinal(0)] [RED("("hingeAxis")] 		public CEnum<EAxis> HingeAxis { get; set;}
+		[Ordinal(7)] [RED("("hingeAxis")] 		public CEnum<EAxis> HingeAxis { get; set;}
 
 		public CBehaviorGraphIk3Node(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

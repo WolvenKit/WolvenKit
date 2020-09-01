@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPartySpawnPointComponent : CSpawnPointComponent
 	{
-		[Ordinal(0)] [RED("("partyWaypoints", 2,0)] 		public CArray<SPartyWaypointHandle> PartyWaypoints { get; set;}
+		[Ordinal(1)] [RED("("partyWaypoints", 2,0)] 		public CArray<SPartyWaypointHandle> PartyWaypoints { get; set;}
 
 		public CPartySpawnPointComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

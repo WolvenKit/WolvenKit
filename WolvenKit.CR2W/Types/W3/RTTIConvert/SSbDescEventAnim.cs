@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSbDescEventAnim : CVariable
 	{
-		[Ordinal(0)] [RED("("prodAnimId")] 		public CString ProdAnimId { get; set;}
+		[Ordinal(1)] [RED("("prodAnimId")] 		public CString ProdAnimId { get; set;}
 
 		public SSbDescEventAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

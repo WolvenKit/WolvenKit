@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CReactionSceneActorComponent : CComponent
 	{
-		[Ordinal(0)] [RED("cooldownInterval")] 		public CFloat CooldownInterval { get; set;}
+		[Ordinal(1)] [RED("cooldownInterval")] 		public CFloat CooldownInterval { get; set;}
 
-		[Ordinal(0)] [RED("sceneStartedSuccesfully")] 		public CBool SceneStartedSuccesfully { get; set;}
+		[Ordinal(2)] [RED("sceneStartedSuccesfully")] 		public CBool SceneStartedSuccesfully { get; set;}
 
 		public CReactionSceneActorComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDecoratorGlideDefinition : IBehTreeNodeFlightDecoratorDefinition
 	{
-		[Ordinal(0)] [RED("minChangeDelay")] 		public CFloat MinChangeDelay { get; set;}
+		[Ordinal(1)] [RED("minChangeDelay")] 		public CFloat MinChangeDelay { get; set;}
 
-		[Ordinal(0)] [RED("glideChance")] 		public CFloat GlideChance { get; set;}
+		[Ordinal(2)] [RED("glideChance")] 		public CFloat GlideChance { get; set;}
 
-		[Ordinal(0)] [RED("stopGlideChance")] 		public CFloat StopGlideChance { get; set;}
+		[Ordinal(3)] [RED("stopGlideChance")] 		public CFloat StopGlideChance { get; set;}
 
 		public CBehTreeNodeDecoratorGlideDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

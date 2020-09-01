@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4QuestDLCMounter : IGameplayDLCMounter
 	{
-		[Ordinal(0)] [RED("quest")] 		public CHandle<CQuest> Quest { get; set;}
+		[Ordinal(1)] [RED("quest")] 		public CHandle<CQuest> Quest { get; set;}
 
-		[Ordinal(0)] [RED("taintFact")] 		public CName TaintFact { get; set;}
+		[Ordinal(2)] [RED("taintFact")] 		public CName TaintFact { get; set;}
 
-		[Ordinal(0)] [RED("sceneVoiceTagsTableFilePath")] 		public CString SceneVoiceTagsTableFilePath { get; set;}
+		[Ordinal(3)] [RED("sceneVoiceTagsTableFilePath")] 		public CString SceneVoiceTagsTableFilePath { get; set;}
 
-		[Ordinal(0)] [RED("questLevelsFilePath")] 		public CString QuestLevelsFilePath { get; set;}
+		[Ordinal(4)] [RED("questLevelsFilePath")] 		public CString QuestLevelsFilePath { get; set;}
 
 		public CR4QuestDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

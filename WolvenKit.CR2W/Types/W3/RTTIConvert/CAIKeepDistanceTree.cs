@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIKeepDistanceTree : CAISubTree
 	{
-		[Ordinal(0)] [RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(1)] [RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
 		public CAIKeepDistanceTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

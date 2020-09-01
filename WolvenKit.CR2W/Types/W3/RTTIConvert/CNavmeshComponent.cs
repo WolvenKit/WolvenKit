@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CNavmeshComponent : CAreaComponent
 	{
-		[Ordinal(0)] [RED("navmeshParams")] 		public SNavmeshParams NavmeshParams { get; set;}
+		[Ordinal(1)] [RED("navmeshParams")] 		public SNavmeshParams NavmeshParams { get; set;}
 
-		[Ordinal(0)] [RED("pathlibAreaId")] 		public CUInt16 PathlibAreaId { get; set;}
+		[Ordinal(2)] [RED("pathlibAreaId")] 		public CUInt16 PathlibAreaId { get; set;}
 
-		[Ordinal(0)] [RED("sharedFileName")] 		public CString SharedFileName { get; set;}
+		[Ordinal(3)] [RED("sharedFileName")] 		public CString SharedFileName { get; set;}
 
-		[Ordinal(0)] [RED("generationRootPoints", 2,0)] 		public CArray<Vector> GenerationRootPoints { get; set;}
+		[Ordinal(4)] [RED("generationRootPoints", 2,0)] 		public CArray<Vector> GenerationRootPoints { get; set;}
 
 		public CNavmeshComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

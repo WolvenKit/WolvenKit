@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPropertyAnimationSet : CObject
 	{
-		[Ordinal(0)] [RED("animations", 2,0)] 		public CArray<SPropertyAnimation> Animations { get; set;}
+		[Ordinal(1)] [RED("animations", 2,0)] 		public CArray<SPropertyAnimation> Animations { get; set;}
 
 		public CPropertyAnimationSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

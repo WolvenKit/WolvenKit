@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockNormalmapBlend : CMaterialBlock
 	{
-		[Ordinal(0)] [RED("firstMapWeight")] 		public CFloat FirstMapWeight { get; set;}
+		[Ordinal(1)] [RED("firstMapWeight")] 		public CFloat FirstMapWeight { get; set;}
 
-		[Ordinal(0)] [RED("secondMapWeight")] 		public CFloat SecondMapWeight { get; set;}
+		[Ordinal(2)] [RED("secondMapWeight")] 		public CFloat SecondMapWeight { get; set;}
 
 		public CMaterialBlockNormalmapBlend(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

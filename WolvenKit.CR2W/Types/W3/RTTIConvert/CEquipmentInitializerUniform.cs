@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEquipmentInitializerUniform : IEquipmentInitializer
 	{
-		[Ordinal(0)] [RED("("itemName")] 		public CName ItemName { get; set;}
+		[Ordinal(1)] [RED("("itemName")] 		public CName ItemName { get; set;}
 
 		public CEquipmentInitializerUniform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

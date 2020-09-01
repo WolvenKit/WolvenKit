@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3IceSpike : W3DurationObstacle
 	{
-		[Ordinal(0)] [RED("("damageValue")] 		public CFloat DamageValue { get; set;}
+		[Ordinal(1)] [RED("("damageValue")] 		public CFloat DamageValue { get; set;}
 
-		[Ordinal(0)] [RED("("weaponSlot")] 		public CName WeaponSlot { get; set;}
+		[Ordinal(2)] [RED("("weaponSlot")] 		public CName WeaponSlot { get; set;}
 
-		[Ordinal(0)] [RED("("canBeDestroyed")] 		public CBool CanBeDestroyed { get; set;}
+		[Ordinal(3)] [RED("("canBeDestroyed")] 		public CBool CanBeDestroyed { get; set;}
 
-		[Ordinal(0)] [RED("("destroyAfterTime")] 		public CFloat DestroyAfterTime { get; set;}
+		[Ordinal(4)] [RED("("destroyAfterTime")] 		public CFloat DestroyAfterTime { get; set;}
 
-		[Ordinal(0)] [RED("("delayToDealDamage")] 		public CFloat DelayToDealDamage { get; set;}
+		[Ordinal(5)] [RED("("delayToDealDamage")] 		public CFloat DelayToDealDamage { get; set;}
 
 		public W3IceSpike(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTask_DebugLog : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("taskName")] 		public CString TaskName { get; set;}
+		[Ordinal(1)] [RED("taskName")] 		public CString TaskName { get; set;}
 
 		public BTTask_DebugLog(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

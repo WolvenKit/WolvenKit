@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SItemDataStub : CVariable
 	{
-		[Ordinal(0)] [RED("("id")] 		public SItemUniqueId Id { get; set;}
+		[Ordinal(1)] [RED("("id")] 		public SItemUniqueId Id { get; set;}
 
-		[Ordinal(0)] [RED("("quantity")] 		public CInt32 Quantity { get; set;}
+		[Ordinal(2)] [RED("("quantity")] 		public CInt32 Quantity { get; set;}
 
-		[Ordinal(0)] [RED("("iconPath")] 		public CString IconPath { get; set;}
+		[Ordinal(3)] [RED("("iconPath")] 		public CString IconPath { get; set;}
 
-		[Ordinal(0)] [RED("("gridPosition")] 		public CInt32 GridPosition { get; set;}
+		[Ordinal(4)] [RED("("gridPosition")] 		public CInt32 GridPosition { get; set;}
 
-		[Ordinal(0)] [RED("("gridSize")] 		public CInt32 GridSize { get; set;}
+		[Ordinal(5)] [RED("("gridSize")] 		public CInt32 GridSize { get; set;}
 
-		[Ordinal(0)] [RED("("slotType")] 		public CInt32 SlotType { get; set;}
+		[Ordinal(6)] [RED("("slotType")] 		public CInt32 SlotType { get; set;}
 
-		[Ordinal(0)] [RED("("isNew")] 		public CBool IsNew { get; set;}
+		[Ordinal(7)] [RED("("isNew")] 		public CBool IsNew { get; set;}
 
-		[Ordinal(0)] [RED("("actionType")] 		public CInt32 ActionType { get; set;}
+		[Ordinal(8)] [RED("("actionType")] 		public CInt32 ActionType { get; set;}
 
-		[Ordinal(0)] [RED("("price")] 		public CInt32 Price { get; set;}
+		[Ordinal(9)] [RED("("price")] 		public CInt32 Price { get; set;}
 
-		[Ordinal(0)] [RED("("userData")] 		public CString UserData { get; set;}
+		[Ordinal(10)] [RED("("userData")] 		public CString UserData { get; set;}
 
-		[Ordinal(0)] [RED("("category")] 		public CString Category { get; set;}
+		[Ordinal(11)] [RED("("category")] 		public CString Category { get; set;}
 
-		[Ordinal(0)] [RED("("equipped")] 		public CInt32 Equipped { get; set;}
+		[Ordinal(12)] [RED("("equipped")] 		public CInt32 Equipped { get; set;}
 
-		[Ordinal(0)] [RED("("isReaded")] 		public CBool IsReaded { get; set;}
+		[Ordinal(13)] [RED("("isReaded")] 		public CBool IsReaded { get; set;}
 
 		public SItemDataStub(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

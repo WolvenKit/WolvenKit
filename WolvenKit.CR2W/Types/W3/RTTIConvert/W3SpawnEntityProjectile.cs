@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SpawnEntityProjectile : W3TraceGroundProjectile
 	{
-		[Ordinal(0)] [RED("("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(1)] [RED("("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[Ordinal(0)] [RED("("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(2)] [RED("("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
 		public W3SpawnEntityProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

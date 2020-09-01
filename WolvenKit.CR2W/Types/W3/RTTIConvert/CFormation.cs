@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFormation : CResource
 	{
-		[Ordinal(0)] [RED("("uniqueFormationName")] 		public CName UniqueFormationName { get; set;}
+		[Ordinal(1)] [RED("("uniqueFormationName")] 		public CName UniqueFormationName { get; set;}
 
-		[Ordinal(0)] [RED("("formationLogic")] 		public CPtr<IFormationLogic> FormationLogic { get; set;}
+		[Ordinal(2)] [RED("("formationLogic")] 		public CPtr<IFormationLogic> FormationLogic { get; set;}
 
-		[Ordinal(0)] [RED("("steeringGraph")] 		public CHandle<CMoveSteeringBehavior> SteeringGraph { get; set;}
+		[Ordinal(3)] [RED("("steeringGraph")] 		public CHandle<CMoveSteeringBehavior> SteeringGraph { get; set;}
 
 		public CFormation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

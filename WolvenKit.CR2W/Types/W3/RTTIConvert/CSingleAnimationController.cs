@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSingleAnimationController : IAnimationController
 	{
-		[Ordinal(0)] [RED("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(1)] [RED("animationName")] 		public CName AnimationName { get; set;}
 
 		public CSingleAnimationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorSyncMethodEventStart : IBehaviorSyncMethodEvent
 	{
-		[Ordinal(0)] [RED("startAtRandomEvent")] 		public CBool StartAtRandomEvent { get; set;}
+		[Ordinal(1)] [RED("startAtRandomEvent")] 		public CBool StartAtRandomEvent { get; set;}
 
 		public CBehaviorSyncMethodEventStart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

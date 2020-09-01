@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SafeModeTrigger : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("enable")] 		public CBool Enable { get; set;}
+		[Ordinal(1)] [RED("("enable")] 		public CBool Enable { get; set;}
 
 		public W3SafeModeTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

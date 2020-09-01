@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PlayerStateMountTheVehicle : CPlayerStateBase
 	{
-		[Ordinal(0)] [RED("vehicle")] 		public CHandle<CVehicleComponent> Vehicle { get; set;}
+		[Ordinal(1)] [RED("vehicle")] 		public CHandle<CVehicleComponent> Vehicle { get; set;}
 
-		[Ordinal(0)] [RED("mountType")] 		public CEnum<EMountType> MountType { get; set;}
+		[Ordinal(2)] [RED("mountType")] 		public CEnum<EMountType> MountType { get; set;}
 
-		[Ordinal(0)] [RED("vehicleSlot")] 		public CEnum<EVehicleSlot> VehicleSlot { get; set;}
+		[Ordinal(3)] [RED("vehicleSlot")] 		public CEnum<EVehicleSlot> VehicleSlot { get; set;}
 
-		[Ordinal(0)] [RED("camera")] 		public CHandle<CCustomCamera> Camera { get; set;}
+		[Ordinal(4)] [RED("camera")] 		public CHandle<CCustomCamera> Camera { get; set;}
 
 		public CR4PlayerStateMountTheVehicle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

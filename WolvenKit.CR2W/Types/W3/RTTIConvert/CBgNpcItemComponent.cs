@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBgNpcItemComponent : CBgMeshComponent
 	{
-		[Ordinal(0)] [RED("itemName")] 		public CName ItemName { get; set;}
+		[Ordinal(1)] [RED("itemName")] 		public CName ItemName { get; set;}
 
-		[Ordinal(0)] [RED("itemCategory")] 		public CName ItemCategory { get; set;}
+		[Ordinal(2)] [RED("itemCategory")] 		public CName ItemCategory { get; set;}
 
-		[Ordinal(0)] [RED("defaultState")] 		public CEnum<EItemState> DefaultState { get; set;}
+		[Ordinal(3)] [RED("defaultState")] 		public CEnum<EItemState> DefaultState { get; set;}
 
-		[Ordinal(0)] [RED("equipSlot")] 		public CName EquipSlot { get; set;}
+		[Ordinal(4)] [RED("equipSlot")] 		public CName EquipSlot { get; set;}
 
-		[Ordinal(0)] [RED("holdSlot")] 		public CName HoldSlot { get; set;}
+		[Ordinal(5)] [RED("holdSlot")] 		public CName HoldSlot { get; set;}
 
 		public CBgNpcItemComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

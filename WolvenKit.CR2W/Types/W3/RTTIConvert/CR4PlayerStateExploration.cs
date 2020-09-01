@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PlayerStateExploration : CR4PlayerStateExtendedMovable
 	{
-		[Ordinal(0)] [RED("wantsToSheatheWeapon")] 		public CBool WantsToSheatheWeapon { get; set;}
+		[Ordinal(1)] [RED("wantsToSheatheWeapon")] 		public CBool WantsToSheatheWeapon { get; set;}
 
-		[Ordinal(0)] [RED("m_lastUsedPCInput")] 		public CBool M_lastUsedPCInput { get; set;}
+		[Ordinal(2)] [RED("m_lastUsedPCInput")] 		public CBool M_lastUsedPCInput { get; set;}
 
-		[Ordinal(0)] [RED("cachedPos")] 		public Vector CachedPos { get; set;}
+		[Ordinal(3)] [RED("cachedPos")] 		public Vector CachedPos { get; set;}
 
-		[Ordinal(0)] [RED("constDamper")] 		public CHandle<ConstDamper> ConstDamper { get; set;}
+		[Ordinal(4)] [RED("constDamper")] 		public CHandle<ConstDamper> ConstDamper { get; set;}
 
 		public CR4PlayerStateExploration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

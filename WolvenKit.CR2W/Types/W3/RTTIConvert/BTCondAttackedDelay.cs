@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondAttackedDelay : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("delay")] 		public CFloat Delay { get; set;}
+		[Ordinal(1)] [RED("("delay")] 		public CFloat Delay { get; set;}
 
-		[Ordinal(0)] [RED("("wasHit")] 		public CBool WasHit { get; set;}
+		[Ordinal(2)] [RED("("wasHit")] 		public CBool WasHit { get; set;}
 
-		[Ordinal(0)] [RED("("completeIfAttacked")] 		public CBool CompleteIfAttacked { get; set;}
+		[Ordinal(3)] [RED("("completeIfAttacked")] 		public CBool CompleteIfAttacked { get; set;}
 
 		public BTCondAttackedDelay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

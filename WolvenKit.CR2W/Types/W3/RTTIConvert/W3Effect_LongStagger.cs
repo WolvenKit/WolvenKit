@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_LongStagger : W3Effect_Stagger
 	{
-		[Ordinal(0)] [RED("("owner")] 		public CHandle<CEntity> Owner { get; set;}
+		[Ordinal(1)] [RED("("owner")] 		public CHandle<CEntity> Owner { get; set;}
 
 		public W3Effect_LongStagger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

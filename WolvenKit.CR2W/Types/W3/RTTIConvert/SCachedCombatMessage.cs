@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCachedCombatMessage : CVariable
 	{
-		[Ordinal(0)] [RED("("finalIncomingDamage")] 		public CFloat FinalIncomingDamage { get; set;}
+		[Ordinal(1)] [RED("("finalIncomingDamage")] 		public CFloat FinalIncomingDamage { get; set;}
 
-		[Ordinal(0)] [RED("("resistPoints")] 		public CFloat ResistPoints { get; set;}
+		[Ordinal(2)] [RED("("resistPoints")] 		public CFloat ResistPoints { get; set;}
 
-		[Ordinal(0)] [RED("("resistPercents")] 		public CFloat ResistPercents { get; set;}
+		[Ordinal(3)] [RED("("resistPercents")] 		public CFloat ResistPercents { get; set;}
 
-		[Ordinal(0)] [RED("("finalDamage")] 		public CFloat FinalDamage { get; set;}
+		[Ordinal(4)] [RED("("finalDamage")] 		public CFloat FinalDamage { get; set;}
 
-		[Ordinal(0)] [RED("("attacker")] 		public CHandle<CGameplayEntity> Attacker { get; set;}
+		[Ordinal(5)] [RED("("attacker")] 		public CHandle<CGameplayEntity> Attacker { get; set;}
 
-		[Ordinal(0)] [RED("("victim")] 		public CHandle<CGameplayEntity> Victim { get; set;}
+		[Ordinal(6)] [RED("("victim")] 		public CHandle<CGameplayEntity> Victim { get; set;}
 
 		public SCachedCombatMessage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

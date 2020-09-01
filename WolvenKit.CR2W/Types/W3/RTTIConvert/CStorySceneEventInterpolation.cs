@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventInterpolation : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("keyGuids", 2,0)] 		public CArray<CGUID> KeyGuids { get; set;}
+		[Ordinal(1)] [RED("keyGuids", 2,0)] 		public CArray<CGUID> KeyGuids { get; set;}
 
-		[Ordinal(0)] [RED("interpolationMethod")] 		public CEnum<EInterpolationMethod> InterpolationMethod { get; set;}
+		[Ordinal(2)] [RED("interpolationMethod")] 		public CEnum<EInterpolationMethod> InterpolationMethod { get; set;}
 
-		[Ordinal(0)] [RED("easeInStyle")] 		public CEnum<EInterpolationEasingStyle> EaseInStyle { get; set;}
+		[Ordinal(3)] [RED("easeInStyle")] 		public CEnum<EInterpolationEasingStyle> EaseInStyle { get; set;}
 
-		[Ordinal(0)] [RED("easeInParameter")] 		public CFloat EaseInParameter { get; set;}
+		[Ordinal(4)] [RED("easeInParameter")] 		public CFloat EaseInParameter { get; set;}
 
-		[Ordinal(0)] [RED("easeOutStyle")] 		public CEnum<EInterpolationEasingStyle> EaseOutStyle { get; set;}
+		[Ordinal(5)] [RED("easeOutStyle")] 		public CEnum<EInterpolationEasingStyle> EaseOutStyle { get; set;}
 
-		[Ordinal(0)] [RED("easeOutParameter")] 		public CFloat EaseOutParameter { get; set;}
+		[Ordinal(6)] [RED("easeOutParameter")] 		public CFloat EaseOutParameter { get; set;}
 
 		public CStorySceneEventInterpolation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

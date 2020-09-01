@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SItemDamageCurve : CVariable
 	{
-		[Ordinal(0)] [RED("("term1")] 		public CFloat Term1 { get; set;}
+		[Ordinal(1)] [RED("("term1")] 		public CFloat Term1 { get; set;}
 
-		[Ordinal(0)] [RED("("term2")] 		public CFloat Term2 { get; set;}
+		[Ordinal(2)] [RED("("term2")] 		public CFloat Term2 { get; set;}
 
-		[Ordinal(0)] [RED("("term3")] 		public CFloat Term3 { get; set;}
+		[Ordinal(3)] [RED("("term3")] 		public CFloat Term3 { get; set;}
 
 		public SItemDamageCurve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

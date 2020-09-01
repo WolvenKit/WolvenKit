@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCameraRotationControllerJump : ICustomCameraScriptedPivotRotationController
 	{
-		[Ordinal(0)] [RED("("pitchTotal")] 		public CFloat PitchTotal { get; set;}
+		[Ordinal(1)] [RED("("pitchTotal")] 		public CFloat PitchTotal { get; set;}
 
-		[Ordinal(0)] [RED("("pitchBase")] 		public CFloat PitchBase { get; set;}
+		[Ordinal(2)] [RED("("pitchBase")] 		public CFloat PitchBase { get; set;}
 
-		[Ordinal(0)] [RED("("yawAcceleration")] 		public CFloat YawAcceleration { get; set;}
+		[Ordinal(3)] [RED("("yawAcceleration")] 		public CFloat YawAcceleration { get; set;}
 
-		[Ordinal(0)] [RED("("yawMaxSpeed")] 		public CFloat YawMaxSpeed { get; set;}
+		[Ordinal(4)] [RED("("yawMaxSpeed")] 		public CFloat YawMaxSpeed { get; set;}
 
-		[Ordinal(0)] [RED("("timeCur")] 		public CFloat TimeCur { get; set;}
+		[Ordinal(5)] [RED("("timeCur")] 		public CFloat TimeCur { get; set;}
 
-		[Ordinal(0)] [RED("("timeStart")] 		public CFloat TimeStart { get; set;}
+		[Ordinal(6)] [RED("("timeStart")] 		public CFloat TimeStart { get; set;}
 
-		[Ordinal(0)] [RED("("timeComplete")] 		public CFloat TimeComplete { get; set;}
+		[Ordinal(7)] [RED("("timeComplete")] 		public CFloat TimeComplete { get; set;}
 
-		[Ordinal(0)] [RED("("blendSpeed")] 		public CFloat BlendSpeed { get; set;}
+		[Ordinal(8)] [RED("("blendSpeed")] 		public CFloat BlendSpeed { get; set;}
 
-		[Ordinal(0)] [RED("("pitchCurve")] 		public CHandle<CCurve> PitchCurve { get; set;}
+		[Ordinal(9)] [RED("("pitchCurve")] 		public CHandle<CCurve> PitchCurve { get; set;}
 
 		public CCameraRotationControllerJump(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

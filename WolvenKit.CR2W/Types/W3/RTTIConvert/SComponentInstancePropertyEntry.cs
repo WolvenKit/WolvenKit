@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SComponentInstancePropertyEntry : CVariable
 	{
-		[Ordinal(0)] [RED("("component")] 		public CName Component { get; set;}
+		[Ordinal(1)] [RED("("component")] 		public CName Component { get; set;}
 
-		[Ordinal(0)] [RED("("property")] 		public CName Property { get; set;}
+		[Ordinal(2)] [RED("("property")] 		public CName Property { get; set;}
 
 		public SComponentInstancePropertyEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

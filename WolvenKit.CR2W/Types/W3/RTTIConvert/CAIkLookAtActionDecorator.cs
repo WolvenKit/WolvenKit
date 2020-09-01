@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIkLookAtActionDecorator : IActionDecorator
 	{
-		[Ordinal(0)] [RED("lookAtNodeTag")] 		public CName LookAtNodeTag { get; set;}
+		[Ordinal(1)] [RED("lookAtNodeTag")] 		public CName LookAtNodeTag { get; set;}
 
 		public CAIkLookAtActionDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

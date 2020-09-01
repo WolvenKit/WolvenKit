@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurClumping : CVariable
 	{
-		[Ordinal(0)] [RED("("clumpScale")] 		public CFloat ClumpScale { get; set;}
+		[Ordinal(1)] [RED("("clumpScale")] 		public CFloat ClumpScale { get; set;}
 
-		[Ordinal(0)] [RED("("clumpScaleTex")] 		public CHandle<CBitmapTexture> ClumpScaleTex { get; set;}
+		[Ordinal(2)] [RED("("clumpScaleTex")] 		public CHandle<CBitmapTexture> ClumpScaleTex { get; set;}
 
-		[Ordinal(0)] [RED("("clumpScaleTexChannel")] 		public CEnum<EHairTextureChannel> ClumpScaleTexChannel { get; set;}
+		[Ordinal(3)] [RED("("clumpScaleTexChannel")] 		public CEnum<EHairTextureChannel> ClumpScaleTexChannel { get; set;}
 
-		[Ordinal(0)] [RED("("clumpRoundness")] 		public CFloat ClumpRoundness { get; set;}
+		[Ordinal(4)] [RED("("clumpRoundness")] 		public CFloat ClumpRoundness { get; set;}
 
-		[Ordinal(0)] [RED("("clumpRoundnessTex")] 		public CHandle<CBitmapTexture> ClumpRoundnessTex { get; set;}
+		[Ordinal(5)] [RED("("clumpRoundnessTex")] 		public CHandle<CBitmapTexture> ClumpRoundnessTex { get; set;}
 
-		[Ordinal(0)] [RED("("clumpRoundnessTexChannel")] 		public CEnum<EHairTextureChannel> ClumpRoundnessTexChannel { get; set;}
+		[Ordinal(6)] [RED("("clumpRoundnessTexChannel")] 		public CEnum<EHairTextureChannel> ClumpRoundnessTexChannel { get; set;}
 
-		[Ordinal(0)] [RED("("clumpNoise")] 		public CFloat ClumpNoise { get; set;}
+		[Ordinal(7)] [RED("("clumpNoise")] 		public CFloat ClumpNoise { get; set;}
 
-		[Ordinal(0)] [RED("("clumpNoiseTex")] 		public CHandle<CBitmapTexture> ClumpNoiseTex { get; set;}
+		[Ordinal(8)] [RED("("clumpNoiseTex")] 		public CHandle<CBitmapTexture> ClumpNoiseTex { get; set;}
 
-		[Ordinal(0)] [RED("("clumpNoiseTexChannel")] 		public CEnum<EHairTextureChannel> ClumpNoiseTexChannel { get; set;}
+		[Ordinal(9)] [RED("("clumpNoiseTexChannel")] 		public CEnum<EHairTextureChannel> ClumpNoiseTexChannel { get; set;}
 
-		[Ordinal(0)] [RED("("clumpNumSubclumps")] 		public CUInt32 ClumpNumSubclumps { get; set;}
+		[Ordinal(10)] [RED("("clumpNumSubclumps")] 		public CUInt32 ClumpNumSubclumps { get; set;}
 
 		public SFurClumping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

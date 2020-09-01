@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateForcedAlchemy : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[Ordinal(0)] [RED("("ALCHEMY_GO_TO")] 		public CName ALCHEMY_GO_TO { get; set;}
+		[Ordinal(1)] [RED("("ALCHEMY_GO_TO")] 		public CName ALCHEMY_GO_TO { get; set;}
 
-		[Ordinal(0)] [RED("("OPEN_MENU")] 		public CName OPEN_MENU { get; set;}
+		[Ordinal(2)] [RED("("OPEN_MENU")] 		public CName OPEN_MENU { get; set;}
 
 		public W3TutorialManagerUIHandlerStateForcedAlchemy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

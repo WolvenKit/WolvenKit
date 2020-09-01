@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3StoneProjectile : W3AdvancedProjectile
 	{
-		[Ordinal(0)] [RED("("initFxName")] 		public CName InitFxName { get; set;}
+		[Ordinal(1)] [RED("("initFxName")] 		public CName InitFxName { get; set;}
 
-		[Ordinal(0)] [RED("("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
+		[Ordinal(2)] [RED("("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
 
-		[Ordinal(0)] [RED("("stoneTemplate")] 		public CHandle<CEntityTemplate> StoneTemplate { get; set;}
+		[Ordinal(3)] [RED("("stoneTemplate")] 		public CHandle<CEntityTemplate> StoneTemplate { get; set;}
 
-		[Ordinal(0)] [RED("("action")] 		public CHandle<W3DamageAction> Action { get; set;}
+		[Ordinal(4)] [RED("("action")] 		public CHandle<W3DamageAction> Action { get; set;}
 
-		[Ordinal(0)] [RED("("comp")] 		public CHandle<CMeshComponent> Comp { get; set;}
+		[Ordinal(5)] [RED("("comp")] 		public CHandle<CMeshComponent> Comp { get; set;}
 
 		public W3StoneProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

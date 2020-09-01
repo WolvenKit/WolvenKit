@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IAIExplorationTree : IAITree
 	{
-		[Ordinal(0)] [RED("interactionPoint")] 		public Vector3 InteractionPoint { get; set;}
+		[Ordinal(1)] [RED("interactionPoint")] 		public Vector3 InteractionPoint { get; set;}
 
-		[Ordinal(0)] [RED("destinationPoint")] 		public Vector3 DestinationPoint { get; set;}
+		[Ordinal(2)] [RED("destinationPoint")] 		public Vector3 DestinationPoint { get; set;}
 
-		[Ordinal(0)] [RED("metalinkComponent")] 		public CHandle<CComponent> MetalinkComponent { get; set;}
+		[Ordinal(3)] [RED("metalinkComponent")] 		public CHandle<CComponent> MetalinkComponent { get; set;}
 
 		public IAIExplorationTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

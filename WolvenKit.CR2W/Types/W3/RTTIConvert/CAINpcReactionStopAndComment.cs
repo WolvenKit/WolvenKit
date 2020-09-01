@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcReactionStopAndComment : CAINpcReaction
 	{
-		[Ordinal(0)] [RED("stopDuration")] 		public CFloat StopDuration { get; set;}
+		[Ordinal(1)] [RED("stopDuration")] 		public CFloat StopDuration { get; set;}
 
-		[Ordinal(0)] [RED("activationChance")] 		public CInt32 ActivationChance { get; set;}
+		[Ordinal(2)] [RED("activationChance")] 		public CInt32 ActivationChance { get; set;}
 
-		[Ordinal(0)] [RED("distanceToInterrupt")] 		public CInt32 DistanceToInterrupt { get; set;}
+		[Ordinal(3)] [RED("distanceToInterrupt")] 		public CInt32 DistanceToInterrupt { get; set;}
 
 		public CAINpcReactionStopAndComment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

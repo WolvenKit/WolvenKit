@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPlayerStateApproachTheVehicle : CPlayerStateBase
 	{
-		[Ordinal(0)] [RED("("vehicle")] 		public CHandle<CVehicleComponent> Vehicle { get; set;}
+		[Ordinal(1)] [RED("("vehicle")] 		public CHandle<CVehicleComponent> Vehicle { get; set;}
 
-		[Ordinal(0)] [RED("("slotNumber")] 		public CInt32 SlotNumber { get; set;}
+		[Ordinal(2)] [RED("("slotNumber")] 		public CInt32 SlotNumber { get; set;}
 
 		public CPlayerStateApproachTheVehicle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

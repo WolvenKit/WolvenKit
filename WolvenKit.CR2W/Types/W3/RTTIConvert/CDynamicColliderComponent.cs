@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDynamicColliderComponent : CComponent
 	{
-		[Ordinal(0)] [RED("("useInWaterNormal")] 		public CBool UseInWaterNormal { get; set;}
+		[Ordinal(1)] [RED("("useInWaterNormal")] 		public CBool UseInWaterNormal { get; set;}
 
-		[Ordinal(0)] [RED("("useInWaterDisplacement")] 		public CBool UseInWaterDisplacement { get; set;}
+		[Ordinal(2)] [RED("("useInWaterDisplacement")] 		public CBool UseInWaterDisplacement { get; set;}
 
-		[Ordinal(0)] [RED("("useInGrassDisplacement")] 		public CBool UseInGrassDisplacement { get; set;}
+		[Ordinal(3)] [RED("("useInGrassDisplacement")] 		public CBool UseInGrassDisplacement { get; set;}
 
-		[Ordinal(0)] [RED("("useHideFactor")] 		public CBool UseHideFactor { get; set;}
+		[Ordinal(4)] [RED("("useHideFactor")] 		public CBool UseHideFactor { get; set;}
 
 		public CDynamicColliderComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

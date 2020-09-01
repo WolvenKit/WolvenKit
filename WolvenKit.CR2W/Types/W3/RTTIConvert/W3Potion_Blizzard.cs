@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Potion_Blizzard : CBaseGameplayEffect
 	{
-		[Ordinal(0)] [RED("("slowdownCauserIds", 2,0)] 		public CArray<CInt32> SlowdownCauserIds { get; set;}
+		[Ordinal(1)] [RED("("slowdownCauserIds", 2,0)] 		public CArray<CInt32> SlowdownCauserIds { get; set;}
 
-		[Ordinal(0)] [RED("("slowdownFactor")] 		public CFloat SlowdownFactor { get; set;}
+		[Ordinal(2)] [RED("("slowdownFactor")] 		public CFloat SlowdownFactor { get; set;}
 
-		[Ordinal(0)] [RED("("currentSlowMoDuration")] 		public CFloat CurrentSlowMoDuration { get; set;}
+		[Ordinal(3)] [RED("("currentSlowMoDuration")] 		public CFloat CurrentSlowMoDuration { get; set;}
 
-		[Ordinal(0)] [RED("("SLOW_MO_DURATION")] 		public CFloat SLOW_MO_DURATION { get; set;}
+		[Ordinal(4)] [RED("("SLOW_MO_DURATION")] 		public CFloat SLOW_MO_DURATION { get; set;}
 
 		public W3Potion_Blizzard(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

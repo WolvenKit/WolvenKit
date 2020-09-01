@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_IsEffectActive : CQuestScriptedCondition
 	{
-		[Ordinal(0)] [RED("("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(1)] [RED("("effectName")] 		public CName EffectName { get; set;}
 
-		[Ordinal(0)] [RED("("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(2)] [RED("("entityTag")] 		public CName EntityTag { get; set;}
 
-		[Ordinal(0)] [RED("("inverted")] 		public CBool Inverted { get; set;}
+		[Ordinal(3)] [RED("("inverted")] 		public CBool Inverted { get; set;}
 
-		[Ordinal(0)] [RED("("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(4)] [RED("("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
-		[Ordinal(0)] [RED("("listener")] 		public CHandle<W3QuestCond_IsEffectActive_Listener> Listener { get; set;}
+		[Ordinal(5)] [RED("("listener")] 		public CHandle<W3QuestCond_IsEffectActive_Listener> Listener { get; set;}
 
 		public W3QuestCond_IsEffectActive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

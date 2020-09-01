@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3EffectItem : CItemEntity
 	{
-		[Ordinal(0)] [RED("("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(1)] [RED("("effectName")] 		public CName EffectName { get; set;}
 
 		public W3EffectItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

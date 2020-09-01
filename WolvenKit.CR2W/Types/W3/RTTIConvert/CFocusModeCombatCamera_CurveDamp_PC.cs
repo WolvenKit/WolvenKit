@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFocusModeCombatCamera_CurveDamp_PC : CObject
 	{
-		[Ordinal(0)] [RED("("pivotCurveName")] 		public CName PivotCurveName { get; set;}
+		[Ordinal(1)] [RED("("pivotCurveName")] 		public CName PivotCurveName { get; set;}
 
-		[Ordinal(0)] [RED("("autoTimeUpdate")] 		public CBool AutoTimeUpdate { get; set;}
+		[Ordinal(2)] [RED("("autoTimeUpdate")] 		public CBool AutoTimeUpdate { get; set;}
 
-		[Ordinal(0)] [RED("("pivotDamper")] 		public CHandle<CurveDamper3d> PivotDamper { get; set;}
+		[Ordinal(3)] [RED("("pivotDamper")] 		public CHandle<CurveDamper3d> PivotDamper { get; set;}
 
-		[Ordinal(0)] [RED("("timeScale")] 		public CFloat TimeScale { get; set;}
+		[Ordinal(4)] [RED("("timeScale")] 		public CFloat TimeScale { get; set;}
 
 		public CFocusModeCombatCamera_CurveDamp_PC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_IsItemUsed : CQuestScriptedCondition
 	{
-		[Ordinal(0)] [RED("("itemName")] 		public CName ItemName { get; set;}
+		[Ordinal(1)] [RED("("itemName")] 		public CName ItemName { get; set;}
 
-		[Ordinal(0)] [RED("("factName")] 		public CString FactName { get; set;}
+		[Ordinal(2)] [RED("("factName")] 		public CString FactName { get; set;}
 
-		[Ordinal(0)] [RED("("isFulfilled")] 		public CBool IsFulfilled { get; set;}
+		[Ordinal(3)] [RED("("isFulfilled")] 		public CBool IsFulfilled { get; set;}
 
-		[Ordinal(0)] [RED("("listener")] 		public CHandle<W3QuestCond_IsItemUsed_Listener> Listener { get; set;}
+		[Ordinal(4)] [RED("("listener")] 		public CHandle<W3QuestCond_IsItemUsed_Listener> Listener { get; set;}
 
 		public W3QuestCond_IsItemUsed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

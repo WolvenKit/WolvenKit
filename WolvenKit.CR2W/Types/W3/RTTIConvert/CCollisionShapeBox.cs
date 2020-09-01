@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCollisionShapeBox : ICollisionShape
 	{
-		[Ordinal(0)] [RED("physicalMaterialName")] 		public CName PhysicalMaterialName { get; set;}
+		[Ordinal(1)] [RED("physicalMaterialName")] 		public CName PhysicalMaterialName { get; set;}
 
-		[Ordinal(0)] [RED("halfExtendsX")] 		public CFloat HalfExtendsX { get; set;}
+		[Ordinal(2)] [RED("halfExtendsX")] 		public CFloat HalfExtendsX { get; set;}
 
-		[Ordinal(0)] [RED("halfExtendsY")] 		public CFloat HalfExtendsY { get; set;}
+		[Ordinal(3)] [RED("halfExtendsY")] 		public CFloat HalfExtendsY { get; set;}
 
-		[Ordinal(0)] [RED("halfExtendsZ")] 		public CFloat HalfExtendsZ { get; set;}
+		[Ordinal(4)] [RED("halfExtendsZ")] 		public CFloat HalfExtendsZ { get; set;}
 
 		public CCollisionShapeBox(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEventGeneratorCameraParams : CVariable
 	{
-		[Ordinal(0)] [RED("("cameraPlane")] 		public CEnum<ECameraPlane> CameraPlane { get; set;}
+		[Ordinal(1)] [RED("("cameraPlane")] 		public CEnum<ECameraPlane> CameraPlane { get; set;}
 
-		[Ordinal(0)] [RED("("tags")] 		public TagList Tags { get; set;}
+		[Ordinal(2)] [RED("("tags")] 		public TagList Tags { get; set;}
 
-		[Ordinal(0)] [RED("("targetSlot")] 		public CInt32 TargetSlot { get; set;}
+		[Ordinal(3)] [RED("("targetSlot")] 		public CInt32 TargetSlot { get; set;}
 
-		[Ordinal(0)] [RED("("sourceSlot")] 		public CInt32 SourceSlot { get; set;}
+		[Ordinal(4)] [RED("("sourceSlot")] 		public CInt32 SourceSlot { get; set;}
 
-		[Ordinal(0)] [RED("("usableForGenerator")] 		public CBool UsableForGenerator { get; set;}
+		[Ordinal(5)] [RED("("usableForGenerator")] 		public CBool UsableForGenerator { get; set;}
 
 		public CEventGeneratorCameraParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

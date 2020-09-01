@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBloodTrailEffect : CGameplayEntityParam
 	{
-		[Ordinal(0)] [RED("effect")] 		public CName Effect { get; set;}
+		[Ordinal(1)] [RED("effect")] 		public CName Effect { get; set;}
 
 		public CBloodTrailEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

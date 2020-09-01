@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSwarmLairEntity : IBoidLairEntity
 	{
-		[Ordinal(0)] [RED("defeatedStateFact")] 		public CString DefeatedStateFact { get; set;}
+		[Ordinal(1)] [RED("defeatedStateFact")] 		public CString DefeatedStateFact { get; set;}
 
-		[Ordinal(0)] [RED("defeatedStateFactValue")] 		public CInt32 DefeatedStateFactValue { get; set;}
+		[Ordinal(2)] [RED("defeatedStateFactValue")] 		public CInt32 DefeatedStateFactValue { get; set;}
 
-		[Ordinal(0)] [RED("lairDisabledAtStartup")] 		public CBool LairDisabledAtStartup { get; set;}
+		[Ordinal(3)] [RED("lairDisabledAtStartup")] 		public CBool LairDisabledAtStartup { get; set;}
 
 		public CSwarmLairEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

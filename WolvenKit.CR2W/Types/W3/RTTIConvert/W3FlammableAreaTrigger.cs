@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FlammableAreaTrigger : W3EffectAreaTrigger
 	{
-		[Ordinal(0)] [RED("("activeFor")] 		public CFloat ActiveFor { get; set;}
+		[Ordinal(1)] [RED("("activeFor")] 		public CFloat ActiveFor { get; set;}
 
-		[Ordinal(0)] [RED("("fxOnExplosion")] 		public CName FxOnExplosion { get; set;}
+		[Ordinal(2)] [RED("("fxOnExplosion")] 		public CName FxOnExplosion { get; set;}
 
-		[Ordinal(0)] [RED("("fxOnSustain")] 		public CName FxOnSustain { get; set;}
+		[Ordinal(3)] [RED("("fxOnSustain")] 		public CName FxOnSustain { get; set;}
 
-		[Ordinal(0)] [RED("("explosionRange")] 		public CFloat ExplosionRange { get; set;}
+		[Ordinal(4)] [RED("("explosionRange")] 		public CFloat ExplosionRange { get; set;}
 
-		[Ordinal(0)] [RED("("explosionDamage")] 		public SAbilityAttributeValue ExplosionDamage { get; set;}
+		[Ordinal(5)] [RED("("explosionDamage")] 		public SAbilityAttributeValue ExplosionDamage { get; set;}
 
-		[Ordinal(0)] [RED("("igniteFlammableAreasAfter")] 		public CFloat IgniteFlammableAreasAfter { get; set;}
+		[Ordinal(6)] [RED("("igniteFlammableAreasAfter")] 		public CFloat IgniteFlammableAreasAfter { get; set;}
 
-		[Ordinal(0)] [RED("("isActive")] 		public CBool IsActive { get; set;}
+		[Ordinal(7)] [RED("("isActive")] 		public CBool IsActive { get; set;}
 
-		[Ordinal(0)] [RED("("area")] 		public CHandle<CTriggerAreaComponent> Area { get; set;}
+		[Ordinal(8)] [RED("("area")] 		public CHandle<CTriggerAreaComponent> Area { get; set;}
 
 		public W3FlammableAreaTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBgNpcTriggerActionLookAt : IBgNpcTriggerAction
 	{
-		[Ordinal(0)] [RED("type")] 		public CEnum<EReactionLookAtType> Type { get; set;}
+		[Ordinal(1)] [RED("type")] 		public CEnum<EReactionLookAtType> Type { get; set;}
 
-		[Ordinal(0)] [RED("onlyPlayer")] 		public CBool OnlyPlayer { get; set;}
+		[Ordinal(2)] [RED("onlyPlayer")] 		public CBool OnlyPlayer { get; set;}
 
-		[Ordinal(0)] [RED("maxDelay")] 		public CFloat MaxDelay { get; set;}
+		[Ordinal(3)] [RED("maxDelay")] 		public CFloat MaxDelay { get; set;}
 
 		public CBgNpcTriggerActionLookAt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphScaleBoneNode : CBehaviorGraphBaseNode
 	{
-		[Ordinal(0)] [RED("boneName")] 		public CString BoneName { get; set;}
+		[Ordinal(1)] [RED("boneName")] 		public CString BoneName { get; set;}
 
-		[Ordinal(0)] [RED("scale")] 		public Vector Scale { get; set;}
+		[Ordinal(2)] [RED("scale")] 		public Vector Scale { get; set;}
 
-		[Ordinal(0)] [RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedControlVariableNode { get; set;}
+		[Ordinal(3)] [RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedControlVariableNode { get; set;}
 
 		public CBehaviorGraphScaleBoneNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

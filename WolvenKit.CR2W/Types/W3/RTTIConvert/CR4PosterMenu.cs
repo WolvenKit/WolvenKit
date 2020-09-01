@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PosterMenu : CR4MenuBase
 	{
-		[Ordinal(0)] [RED("m_posterEntity")] 		public CHandle<W3Poster> M_posterEntity { get; set;}
+		[Ordinal(1)] [RED("m_posterEntity")] 		public CHandle<W3Poster> M_posterEntity { get; set;}
 
-		[Ordinal(0)] [RED("m_fxSetDescriptionSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetDescriptionSFF { get; set;}
+		[Ordinal(2)] [RED("m_fxSetDescriptionSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetDescriptionSFF { get; set;}
 
-		[Ordinal(0)] [RED("m_fxSetSubtitlesHackSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetSubtitlesHackSFF { get; set;}
+		[Ordinal(3)] [RED("m_fxSetSubtitlesHackSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetSubtitlesHackSFF { get; set;}
 
 		public CR4PosterMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCCOpItemsFromVirtualContainer : CCCOpVirtualContainerOp
 	{
-		[Ordinal(0)] [RED("("applyMounts")] 		public CBool ApplyMounts { get; set;}
+		[Ordinal(1)] [RED("("applyMounts")] 		public CBool ApplyMounts { get; set;}
 
 		public CCCOpItemsFromVirtualContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

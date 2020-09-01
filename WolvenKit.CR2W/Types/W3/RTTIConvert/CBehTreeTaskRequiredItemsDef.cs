@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTaskRequiredItemsDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("LeftItemType")] 		public CBehTreeValCName LeftItemType { get; set;}
+		[Ordinal(1)] [RED("LeftItemType")] 		public CBehTreeValCName LeftItemType { get; set;}
 
-		[Ordinal(0)] [RED("RightItemType")] 		public CBehTreeValCName RightItemType { get; set;}
+		[Ordinal(2)] [RED("RightItemType")] 		public CBehTreeValCName RightItemType { get; set;}
 
-		[Ordinal(0)] [RED("chooseSilverIfPossible")] 		public CBehTreeValBool ChooseSilverIfPossible { get; set;}
+		[Ordinal(3)] [RED("chooseSilverIfPossible")] 		public CBehTreeValBool ChooseSilverIfPossible { get; set;}
 
-		[Ordinal(0)] [RED("destroyProjectileOnDeactivate")] 		public CBool DestroyProjectileOnDeactivate { get; set;}
+		[Ordinal(4)] [RED("destroyProjectileOnDeactivate")] 		public CBool DestroyProjectileOnDeactivate { get; set;}
 
 		public CBehTreeTaskRequiredItemsDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

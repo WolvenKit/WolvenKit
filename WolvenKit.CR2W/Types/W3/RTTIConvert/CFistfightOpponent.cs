@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFistfightOpponent : CVariable
 	{
-		[Ordinal(0)] [RED("("npcTag")] 		public CName NpcTag { get; set;}
+		[Ordinal(1)] [RED("("npcTag")] 		public CName NpcTag { get; set;}
 
-		[Ordinal(0)] [RED("("startingPosTag")] 		public CName StartingPosTag { get; set;}
+		[Ordinal(2)] [RED("("startingPosTag")] 		public CName StartingPosTag { get; set;}
 
 		public CFistfightOpponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskTeleportDecorator : CBTTaskTeleport
 	{
-		[Ordinal(0)] [RED("("finished")] 		public CBool Finished { get; set;}
+		[Ordinal(1)] [RED("("finished")] 		public CBool Finished { get; set;}
 
-		[Ordinal(0)] [RED("("completeWhenTeleported")] 		public CBool CompleteWhenTeleported { get; set;}
+		[Ordinal(2)] [RED("("completeWhenTeleported")] 		public CBool CompleteWhenTeleported { get; set;}
 
 		public CBTTaskTeleportDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class OrientedBox : CVariable
 	{
-		[Ordinal(0)] [RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(1)] [RED("position")] 		public Vector Position { get; set;}
 
-		[Ordinal(0)] [RED("edge 1")] 		public Vector Edge_1 { get; set;}
+		[Ordinal(2)] [RED("edge 1")] 		public Vector Edge_1 { get; set;}
 
-		[Ordinal(0)] [RED("edge 2")] 		public Vector Edge_2 { get; set;}
+		[Ordinal(3)] [RED("edge 2")] 		public Vector Edge_2 { get; set;}
 
 		public OrientedBox(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

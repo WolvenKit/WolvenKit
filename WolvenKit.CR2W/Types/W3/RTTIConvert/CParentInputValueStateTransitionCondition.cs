@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParentInputValueStateTransitionCondition : IBehaviorStateTransitionCondition
 	{
-		[Ordinal(0)] [RED("parentValueName")] 		public CName ParentValueName { get; set;}
+		[Ordinal(1)] [RED("parentValueName")] 		public CName ParentValueName { get; set;}
 
-		[Ordinal(0)] [RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
+		[Ordinal(2)] [RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
 
-		[Ordinal(0)] [RED("compareParentInputName")] 		public CName CompareParentInputName { get; set;}
+		[Ordinal(3)] [RED("compareParentInputName")] 		public CName CompareParentInputName { get; set;}
 
-		[Ordinal(0)] [RED("socketName")] 		public CName SocketName { get; set;}
+		[Ordinal(4)] [RED("socketName")] 		public CName SocketName { get; set;}
 
-		[Ordinal(0)] [RED("compareValue")] 		public CFloat CompareValue { get; set;}
+		[Ordinal(5)] [RED("compareValue")] 		public CFloat CompareValue { get; set;}
 
-		[Ordinal(0)] [RED("useAbsoluteValue")] 		public CBool UseAbsoluteValue { get; set;}
+		[Ordinal(6)] [RED("useAbsoluteValue")] 		public CBool UseAbsoluteValue { get; set;}
 
-		[Ordinal(0)] [RED("epsilon")] 		public CFloat Epsilon { get; set;}
+		[Ordinal(7)] [RED("epsilon")] 		public CFloat Epsilon { get; set;}
 
-		[Ordinal(0)] [RED("cachedParentInput")] 		public CPtr<CBehaviorGraphValueNode> CachedParentInput { get; set;}
+		[Ordinal(8)] [RED("cachedParentInput")] 		public CPtr<CBehaviorGraphValueNode> CachedParentInput { get; set;}
 
-		[Ordinal(0)] [RED("cachedCompareParentInput")] 		public CPtr<CBehaviorGraphValueNode> CachedCompareParentInput { get; set;}
+		[Ordinal(9)] [RED("cachedCompareParentInput")] 		public CPtr<CBehaviorGraphValueNode> CachedCompareParentInput { get; set;}
 
-		[Ordinal(0)] [RED("cachedTestedValue")] 		public CPtr<CBehaviorGraphValueNode> CachedTestedValue { get; set;}
+		[Ordinal(10)] [RED("cachedTestedValue")] 		public CPtr<CBehaviorGraphValueNode> CachedTestedValue { get; set;}
 
 		public CParentInputValueStateTransitionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

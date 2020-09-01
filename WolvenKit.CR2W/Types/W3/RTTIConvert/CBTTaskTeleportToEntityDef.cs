@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskTeleportToEntityDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("entityTag")] 		public CBehTreeValCName EntityTag { get; set;}
+		[Ordinal(1)] [RED("("entityTag")] 		public CBehTreeValCName EntityTag { get; set;}
 
 		public CBTTaskTeleportToEntityDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

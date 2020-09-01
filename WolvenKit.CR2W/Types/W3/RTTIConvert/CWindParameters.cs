@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWindParameters : CVariable
 	{
-		[Ordinal(0)] [RED("speedTreeEnabled")] 		public CBool SpeedTreeEnabled { get; set;}
+		[Ordinal(1)] [RED("speedTreeEnabled")] 		public CBool SpeedTreeEnabled { get; set;}
 
 		public CWindParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

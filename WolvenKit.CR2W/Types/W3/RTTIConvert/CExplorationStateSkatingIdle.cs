@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateSkatingIdle : CExplorationStateAbstract
 	{
-		[Ordinal(0)] [RED("("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
+		[Ordinal(1)] [RED("("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
 
-		[Ordinal(0)] [RED("("turnSpeed")] 		public CFloat TurnSpeed { get; set;}
+		[Ordinal(2)] [RED("("turnSpeed")] 		public CFloat TurnSpeed { get; set;}
 
-		[Ordinal(0)] [RED("("turnStartTolerance")] 		public CFloat TurnStartTolerance { get; set;}
+		[Ordinal(3)] [RED("("turnStartTolerance")] 		public CFloat TurnStartTolerance { get; set;}
 
-		[Ordinal(0)] [RED("("hackCiri")] 		public CBool HackCiri { get; set;}
+		[Ordinal(4)] [RED("("hackCiri")] 		public CBool HackCiri { get; set;}
 
-		[Ordinal(0)] [RED("("behEventStart")] 		public CName BehEventStart { get; set;}
+		[Ordinal(5)] [RED("("behEventStart")] 		public CName BehEventStart { get; set;}
 
-		[Ordinal(0)] [RED("("behEventEnd")] 		public CName BehEventEnd { get; set;}
+		[Ordinal(6)] [RED("("behEventEnd")] 		public CName BehEventEnd { get; set;}
 
 		public CExplorationStateSkatingIdle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

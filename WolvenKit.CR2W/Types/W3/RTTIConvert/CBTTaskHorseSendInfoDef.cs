@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHorseSendInfoDef : IBehTreeHorseTaskDefinition
 	{
-		[Ordinal(0)] [RED("onIsAvailable")] 		public CBool OnIsAvailable { get; set;}
+		[Ordinal(1)] [RED("onIsAvailable")] 		public CBool OnIsAvailable { get; set;}
 
-		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(2)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[Ordinal(0)] [RED("onDectivate")] 		public CBool OnDectivate { get; set;}
+		[Ordinal(3)] [RED("onDectivate")] 		public CBool OnDectivate { get; set;}
 
-		[Ordinal(0)] [RED("infoType")] 		public CEnum<EActionInfoType> InfoType { get; set;}
+		[Ordinal(4)] [RED("infoType")] 		public CEnum<EActionInfoType> InfoType { get; set;}
 
-		[Ordinal(0)] [RED("notifyPlayerInsteadOfCombatTarget")] 		public CBool NotifyPlayerInsteadOfCombatTarget { get; set;}
+		[Ordinal(5)] [RED("notifyPlayerInsteadOfCombatTarget")] 		public CBool NotifyPlayerInsteadOfCombatTarget { get; set;}
 
 		public CBTTaskHorseSendInfoDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

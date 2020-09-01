@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalResource : CResource
 	{
-		[Ordinal(0)] [RED("entry")] 		public CPtr<CJournalBase> Entry { get; set;}
+		[Ordinal(1)] [RED("entry")] 		public CPtr<CJournalBase> Entry { get; set;}
 
 		public CJournalResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

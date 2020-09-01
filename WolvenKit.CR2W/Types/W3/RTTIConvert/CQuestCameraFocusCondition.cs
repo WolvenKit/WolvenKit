@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestCameraFocusCondition : IQuestCondition
 	{
-		[Ordinal(0)] [RED("nodeTag")] 		public CName NodeTag { get; set;}
+		[Ordinal(1)] [RED("nodeTag")] 		public CName NodeTag { get; set;}
 
-		[Ordinal(0)] [RED("angleTolerance")] 		public CFloat AngleTolerance { get; set;}
+		[Ordinal(2)] [RED("angleTolerance")] 		public CFloat AngleTolerance { get; set;}
 
-		[Ordinal(0)] [RED("isLookingAtNode")] 		public CBool IsLookingAtNode { get; set;}
+		[Ordinal(3)] [RED("isLookingAtNode")] 		public CBool IsLookingAtNode { get; set;}
 
-		[Ordinal(0)] [RED("testLineOfSight")] 		public CBool TestLineOfSight { get; set;}
+		[Ordinal(4)] [RED("testLineOfSight")] 		public CBool TestLineOfSight { get; set;}
 
-		[Ordinal(0)] [RED("lineOfSightSource")] 		public CEnum<ECameraFocusConditionLineOfSightSource> LineOfSightSource { get; set;}
+		[Ordinal(5)] [RED("lineOfSightSource")] 		public CEnum<ECameraFocusConditionLineOfSightSource> LineOfSightSource { get; set;}
 
 		public CQuestCameraFocusCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModSbListViewWorkMode : CModStoryBoardWorkMode
 	{
-		[Ordinal(0)] [RED("("view")] 		public CHandle<CModSbWorkModeUiListCallback> View { get; set;}
+		[Ordinal(1)] [RED("("view")] 		public CHandle<CModSbWorkModeUiListCallback> View { get; set;}
 
-		[Ordinal(0)] [RED("("confirmPopup")] 		public CHandle<CModUiActionConfirmation> ConfirmPopup { get; set;}
+		[Ordinal(2)] [RED("("confirmPopup")] 		public CHandle<CModUiActionConfirmation> ConfirmPopup { get; set;}
 
-		[Ordinal(0)] [RED("("popupCallback")] 		public CHandle<CModSbWorkModePopupCallback> PopupCallback { get; set;}
+		[Ordinal(3)] [RED("("popupCallback")] 		public CHandle<CModSbWorkModePopupCallback> PopupCallback { get; set;}
 
 		public CModSbListViewWorkMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

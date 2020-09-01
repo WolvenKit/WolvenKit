@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_IsItemQuantityMet_GlobalListener : IGlobalEventScriptedListener
 	{
-		[Ordinal(0)] [RED("("condition")] 		public CHandle<W3QuestCond_IsItemQuantityMet> Condition { get; set;}
+		[Ordinal(1)] [RED("("condition")] 		public CHandle<W3QuestCond_IsItemQuantityMet> Condition { get; set;}
 
 		public W3QuestCond_IsItemQuantityMet_GlobalListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphConstraintNodeCameraFocus : CBehaviorGraphConstraintNode
 	{
-		[Ordinal(0)] [RED("("bone")] 		public CString Bone { get; set;}
+		[Ordinal(1)] [RED("("bone")] 		public CString Bone { get; set;}
 
-		[Ordinal(0)] [RED("("bone2")] 		public CString Bone2 { get; set;}
+		[Ordinal(2)] [RED("("bone2")] 		public CString Bone2 { get; set;}
 
 		public CBehaviorGraphConstraintNodeCameraFocus(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

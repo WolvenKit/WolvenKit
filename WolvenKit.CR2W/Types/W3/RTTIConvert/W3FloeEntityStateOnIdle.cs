@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FloeEntityStateOnIdle : W3DestroyableTerrainStateOnIdle
 	{
-		[Ordinal(0)] [RED("("entryTime")] 		public CFloat EntryTime { get; set;}
+		[Ordinal(1)] [RED("("entryTime")] 		public CFloat EntryTime { get; set;}
 
-		[Ordinal(0)] [RED("("timerInterval")] 		public CFloat TimerInterval { get; set;}
+		[Ordinal(2)] [RED("("timerInterval")] 		public CFloat TimerInterval { get; set;}
 
 		public W3FloeEntityStateOnIdle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CInterestPointInstance : CObject
 	{
-		[Ordinal(0)] [RED("parentNode")] 		public CHandle<CNode> ParentNode { get; set;}
+		[Ordinal(1)] [RED("parentNode")] 		public CHandle<CNode> ParentNode { get; set;}
 
-		[Ordinal(0)] [RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(2)] [RED("position")] 		public Vector Position { get; set;}
 
 		public CInterestPointInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

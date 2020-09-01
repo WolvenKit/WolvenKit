@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFlashStepDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("minDistance")] 		public CFloat MinDistance { get; set;}
+		[Ordinal(1)] [RED("("minDistance")] 		public CFloat MinDistance { get; set;}
 
-		[Ordinal(0)] [RED("("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(2)] [RED("("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[Ordinal(0)] [RED("("cooldown")] 		public CFloat Cooldown { get; set;}
+		[Ordinal(3)] [RED("("cooldown")] 		public CFloat Cooldown { get; set;}
 
-		[Ordinal(0)] [RED("("teleportEventName")] 		public CName TeleportEventName { get; set;}
+		[Ordinal(4)] [RED("("teleportEventName")] 		public CName TeleportEventName { get; set;}
 
-		[Ordinal(0)] [RED("("disallowInPlayerFOV")] 		public CBool DisallowInPlayerFOV { get; set;}
+		[Ordinal(5)] [RED("("disallowInPlayerFOV")] 		public CBool DisallowInPlayerFOV { get; set;}
 
-		[Ordinal(0)] [RED("("teleportOutsidePlayerFOV")] 		public CBool TeleportOutsidePlayerFOV { get; set;}
+		[Ordinal(6)] [RED("("teleportOutsidePlayerFOV")] 		public CBool TeleportOutsidePlayerFOV { get; set;}
 
-		[Ordinal(0)] [RED("("teleportType")] 		public CEnum<ETeleportType> TeleportType { get; set;}
+		[Ordinal(7)] [RED("("teleportType")] 		public CEnum<ETeleportType> TeleportType { get; set;}
 
-		[Ordinal(0)] [RED("("disappearfxName")] 		public CName DisappearfxName { get; set;}
+		[Ordinal(8)] [RED("("disappearfxName")] 		public CName DisappearfxName { get; set;}
 
-		[Ordinal(0)] [RED("("appearFXName")] 		public CName AppearFXName { get; set;}
+		[Ordinal(9)] [RED("("appearFXName")] 		public CName AppearFXName { get; set;}
 
 		public CBTTaskFlashStepDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

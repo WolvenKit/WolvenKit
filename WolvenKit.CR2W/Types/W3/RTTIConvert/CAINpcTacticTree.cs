@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcTacticTree : CAISubTree
 	{
-		[Ordinal(0)] [RED("params")] 		public CHandle<CAINpcTacticTreeParams> Params { get; set;}
+		[Ordinal(1)] [RED("params")] 		public CHandle<CAINpcTacticTreeParams> Params { get; set;}
 
 		public CAINpcTacticTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

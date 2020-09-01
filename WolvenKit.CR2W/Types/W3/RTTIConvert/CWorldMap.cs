@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWorldMap : CResource
 	{
-		[Ordinal(0)] [RED("guid")] 		public CGUID Guid { get; set;}
+		[Ordinal(1)] [RED("guid")] 		public CGUID Guid { get; set;}
 
-		[Ordinal(0)] [RED("displayTitle")] 		public LocalizedString DisplayTitle { get; set;}
+		[Ordinal(2)] [RED("displayTitle")] 		public LocalizedString DisplayTitle { get; set;}
 
-		[Ordinal(0)] [RED("imageInfo")] 		public SWorldMapImageInfo ImageInfo { get; set;}
+		[Ordinal(3)] [RED("imageInfo")] 		public SWorldMapImageInfo ImageInfo { get; set;}
 
-		[Ordinal(0)] [RED("staticMapPins", 2,0)] 		public CArray<SStaticMapPin> StaticMapPins { get; set;}
+		[Ordinal(4)] [RED("staticMapPins", 2,0)] 		public CArray<SStaticMapPin> StaticMapPins { get; set;}
 
 		public CWorldMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

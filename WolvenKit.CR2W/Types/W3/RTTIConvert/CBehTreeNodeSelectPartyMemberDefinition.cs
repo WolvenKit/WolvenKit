@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeSelectPartyMemberDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[Ordinal(0)] [RED("partyMemberName")] 		public CBehTreeValCName PartyMemberName { get; set;}
+		[Ordinal(1)] [RED("partyMemberName")] 		public CBehTreeValCName PartyMemberName { get; set;}
 
 		public CBehTreeNodeSelectPartyMemberDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSetActionTargetFromGameplayEvent : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("sender")] 		public CHandle<CActor> Sender { get; set;}
+		[Ordinal(1)] [RED("("sender")] 		public CHandle<CActor> Sender { get; set;}
 
 		public CBTTaskSetActionTargetFromGameplayEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

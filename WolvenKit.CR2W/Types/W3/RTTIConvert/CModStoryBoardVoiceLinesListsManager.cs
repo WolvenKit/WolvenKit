@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardVoiceLinesListsManager : CObject
 	{
-		[Ordinal(0)] [RED("voiceLines")] 		public CHandle<CModSbUiVoiceLinesList> VoiceLines { get; set;}
+		[Ordinal(1)] [RED("voiceLines")] 		public CHandle<CModSbUiVoiceLinesList> VoiceLines { get; set;}
 
-		[Ordinal(0)] [RED("dataLoaded")] 		public CBool DataLoaded { get; set;}
+		[Ordinal(2)] [RED("dataLoaded")] 		public CBool DataLoaded { get; set;}
 
 		public CModStoryBoardVoiceLinesListsManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

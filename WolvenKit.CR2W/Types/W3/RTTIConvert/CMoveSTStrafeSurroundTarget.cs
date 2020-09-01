@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTStrafeSurroundTarget : IMoveTargetSteeringTask
 	{
-		[Ordinal(0)] [RED("importance")] 		public CFloat Importance { get; set;}
+		[Ordinal(1)] [RED("importance")] 		public CFloat Importance { get; set;}
 
-		[Ordinal(0)] [RED("acceleration")] 		public CFloat Acceleration { get; set;}
+		[Ordinal(2)] [RED("acceleration")] 		public CFloat Acceleration { get; set;}
 
-		[Ordinal(0)] [RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
+		[Ordinal(3)] [RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 
-		[Ordinal(0)] [RED("desiredSeparationAngle")] 		public CFloat DesiredSeparationAngle { get; set;}
+		[Ordinal(4)] [RED("desiredSeparationAngle")] 		public CFloat DesiredSeparationAngle { get; set;}
 
-		[Ordinal(0)] [RED("toleranceAngle")] 		public CFloat ToleranceAngle { get; set;}
+		[Ordinal(5)] [RED("toleranceAngle")] 		public CFloat ToleranceAngle { get; set;}
 
-		[Ordinal(0)] [RED("smoothAngle")] 		public CFloat SmoothAngle { get; set;}
+		[Ordinal(6)] [RED("smoothAngle")] 		public CFloat SmoothAngle { get; set;}
 
-		[Ordinal(0)] [RED("strafingRing")] 		public CInt32 StrafingRing { get; set;}
+		[Ordinal(7)] [RED("strafingRing")] 		public CInt32 StrafingRing { get; set;}
 
-		[Ordinal(0)] [RED("gravityToSeparationAngle")] 		public CBool GravityToSeparationAngle { get; set;}
+		[Ordinal(8)] [RED("gravityToSeparationAngle")] 		public CBool GravityToSeparationAngle { get; set;}
 
 		public CMoveSTStrafeSurroundTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

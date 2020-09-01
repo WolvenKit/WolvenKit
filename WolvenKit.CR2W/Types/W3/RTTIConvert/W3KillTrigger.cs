@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3KillTrigger : CEntity
 	{
-		[Ordinal(0)] [RED("("postponedTillOnGroundMPAC", 2,0)] 		public CArray<CHandle<CMovingPhysicalAgentComponent>> PostponedTillOnGroundMPAC { get; set;}
+		[Ordinal(1)] [RED("("postponedTillOnGroundMPAC", 2,0)] 		public CArray<CHandle<CMovingPhysicalAgentComponent>> PostponedTillOnGroundMPAC { get; set;}
 
-		[Ordinal(0)] [RED("("postponeTillOnGround")] 		public CBool PostponeTillOnGround { get; set;}
+		[Ordinal(2)] [RED("("postponeTillOnGround")] 		public CBool PostponeTillOnGround { get; set;}
 
-		[Ordinal(0)] [RED("("postponeTillStoppedFalling")] 		public CBool PostponeTillStoppedFalling { get; set;}
+		[Ordinal(3)] [RED("("postponeTillStoppedFalling")] 		public CBool PostponeTillStoppedFalling { get; set;}
 
-		[Ordinal(0)] [RED("("postponeTillinWater")] 		public CBool PostponeTillinWater { get; set;}
+		[Ordinal(4)] [RED("("postponeTillinWater")] 		public CBool PostponeTillinWater { get; set;}
 
 		public W3KillTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

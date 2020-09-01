@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CGameWorld : CWorld
 	{
-		[Ordinal(0)] [RED("cookedExplorations")] 		public CHandle<CCookedExplorations> CookedExplorations { get; set;}
+		[Ordinal(1)] [RED("cookedExplorations")] 		public CHandle<CCookedExplorations> CookedExplorations { get; set;}
 
-		[Ordinal(0)] [RED("cookedWaypoints")] 		public CHandle<CWayPointsCollectionsSet> CookedWaypoints { get; set;}
+		[Ordinal(2)] [RED("cookedWaypoints")] 		public CHandle<CWayPointsCollectionsSet> CookedWaypoints { get; set;}
 
 		public CGameWorld(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

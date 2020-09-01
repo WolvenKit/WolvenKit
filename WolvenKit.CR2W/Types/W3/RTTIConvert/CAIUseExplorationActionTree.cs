@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIUseExplorationActionTree : IAIExplorationTree
 	{
-		[Ordinal(0)] [RED("explorationType")] 		public CEnum<EExplorationType> ExplorationType { get; set;}
+		[Ordinal(1)] [RED("explorationType")] 		public CEnum<EExplorationType> ExplorationType { get; set;}
 
-		[Ordinal(0)] [RED("skipTeleportation")] 		public CBool SkipTeleportation { get; set;}
+		[Ordinal(2)] [RED("skipTeleportation")] 		public CBool SkipTeleportation { get; set;}
 
 		public CAIUseExplorationActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

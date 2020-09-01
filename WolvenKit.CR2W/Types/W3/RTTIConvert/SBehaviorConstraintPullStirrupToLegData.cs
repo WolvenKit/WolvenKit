@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorConstraintPullStirrupToLegData : CVariable
 	{
-		[Ordinal(0)] [RED("("stirrupBoneName")] 		public CName StirrupBoneName { get; set;}
+		[Ordinal(1)] [RED("("stirrupBoneName")] 		public CName StirrupBoneName { get; set;}
 
-		[Ordinal(0)] [RED("("stirrupContactPoint")] 		public Vector StirrupContactPoint { get; set;}
+		[Ordinal(2)] [RED("("stirrupContactPoint")] 		public Vector StirrupContactPoint { get; set;}
 
-		[Ordinal(0)] [RED("("footBoneName")] 		public CName FootBoneName { get; set;}
+		[Ordinal(3)] [RED("("footBoneName")] 		public CName FootBoneName { get; set;}
 
-		[Ordinal(0)] [RED("("footContactPoint")] 		public Vector FootContactPoint { get; set;}
+		[Ordinal(4)] [RED("("footContactPoint")] 		public Vector FootContactPoint { get; set;}
 
-		[Ordinal(0)] [RED("("toeBoneName")] 		public CName ToeBoneName { get; set;}
+		[Ordinal(5)] [RED("("toeBoneName")] 		public CName ToeBoneName { get; set;}
 
-		[Ordinal(0)] [RED("("toeAlignStirrupSideDir")] 		public Vector ToeAlignStirrupSideDir { get; set;}
+		[Ordinal(6)] [RED("("toeAlignStirrupSideDir")] 		public Vector ToeAlignStirrupSideDir { get; set;}
 
-		[Ordinal(0)] [RED("("toeAlignStirrupRotationAxisDir")] 		public Vector ToeAlignStirrupRotationAxisDir { get; set;}
+		[Ordinal(7)] [RED("("toeAlignStirrupRotationAxisDir")] 		public Vector ToeAlignStirrupRotationAxisDir { get; set;}
 
 		public SBehaviorConstraintPullStirrupToLegData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

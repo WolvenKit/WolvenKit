@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeSelectTargetByTagDecoratorDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[Ordinal(0)] [RED("tag")] 		public CBehTreeValCName Tag { get; set;}
+		[Ordinal(1)] [RED("tag")] 		public CBehTreeValCName Tag { get; set;}
 
-		[Ordinal(0)] [RED("allowActivationWhenNoTarget")] 		public CBool AllowActivationWhenNoTarget { get; set;}
+		[Ordinal(2)] [RED("allowActivationWhenNoTarget")] 		public CBool AllowActivationWhenNoTarget { get; set;}
 
 		public CBehTreeNodeSelectTargetByTagDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

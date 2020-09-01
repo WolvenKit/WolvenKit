@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCTargetsCount : IMoveSteeringCondition
 	{
-		[Ordinal(0)] [RED("count")] 		public CUInt32 Count { get; set;}
+		[Ordinal(1)] [RED("count")] 		public CUInt32 Count { get; set;}
 
 		public CMoveSCTargetsCount(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

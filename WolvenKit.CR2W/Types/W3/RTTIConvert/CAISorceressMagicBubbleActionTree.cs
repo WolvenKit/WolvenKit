@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAISorceressMagicBubbleActionTree : IAICustomActionTree
 	{
-		[Ordinal(0)] [RED("magicBubbleResourceName")] 		public CName MagicBubbleResourceName { get; set;}
+		[Ordinal(1)] [RED("magicBubbleResourceName")] 		public CName MagicBubbleResourceName { get; set;}
 
-		[Ordinal(0)] [RED("deactivate")] 		public CBool Deactivate { get; set;}
+		[Ordinal(2)] [RED("deactivate")] 		public CBool Deactivate { get; set;}
 
-		[Ordinal(0)] [RED("playAnim")] 		public CBool PlayAnim { get; set;}
+		[Ordinal(3)] [RED("playAnim")] 		public CBool PlayAnim { get; set;}
 
 		public CAISorceressMagicBubbleActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

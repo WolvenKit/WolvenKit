@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3VirtualSwitch : W3Switch
 	{
-		[Ordinal(0)] [RED("("requiredSwitches", 2,0)] 		public CArray<SRequiredSwitch> RequiredSwitches { get; set;}
+		[Ordinal(1)] [RED("("requiredSwitches", 2,0)] 		public CArray<SRequiredSwitch> RequiredSwitches { get; set;}
 
 		public W3VirtualSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

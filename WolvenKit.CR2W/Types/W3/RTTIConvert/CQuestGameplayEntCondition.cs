@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestGameplayEntCondition : IQuestCondition
 	{
-		[Ordinal(0)] [RED("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(1)] [RED("entityTag")] 		public CName EntityTag { get; set;}
 
-		[Ordinal(0)] [RED("checkType")] 		public CPtr<IGameplayEntConditionType> CheckType { get; set;}
+		[Ordinal(2)] [RED("checkType")] 		public CPtr<IGameplayEntConditionType> CheckType { get; set;}
 
 		public CQuestGameplayEntCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

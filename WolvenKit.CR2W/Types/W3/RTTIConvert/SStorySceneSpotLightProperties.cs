@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStorySceneSpotLightProperties : CVariable
 	{
-		[Ordinal(0)] [RED("("innerAngle")] 		public CFloat InnerAngle { get; set;}
+		[Ordinal(1)] [RED("("innerAngle")] 		public CFloat InnerAngle { get; set;}
 
-		[Ordinal(0)] [RED("("outerAngle")] 		public CFloat OuterAngle { get; set;}
+		[Ordinal(2)] [RED("("outerAngle")] 		public CFloat OuterAngle { get; set;}
 
-		[Ordinal(0)] [RED("("softness")] 		public CFloat Softness { get; set;}
+		[Ordinal(3)] [RED("("softness")] 		public CFloat Softness { get; set;}
 
 		public SStorySceneSpotLightProperties(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

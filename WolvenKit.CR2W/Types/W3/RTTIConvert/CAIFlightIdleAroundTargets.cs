@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFlightIdleAroundTargets : IAIFlightIdleTree
 	{
-		[Ordinal(0)] [RED("flightTargetTag")] 		public CName FlightTargetTag { get; set;}
+		[Ordinal(1)] [RED("flightTargetTag")] 		public CName FlightTargetTag { get; set;}
 
-		[Ordinal(0)] [RED("flightAroundClosest")] 		public CBool FlightAroundClosest { get; set;}
+		[Ordinal(2)] [RED("flightAroundClosest")] 		public CBool FlightAroundClosest { get; set;}
 
-		[Ordinal(0)] [RED("flightAroundReselect")] 		public CBool FlightAroundReselect { get; set;}
+		[Ordinal(3)] [RED("flightAroundReselect")] 		public CBool FlightAroundReselect { get; set;}
 
-		[Ordinal(0)] [RED("flyAroundReselectDurationMin")] 		public CFloat FlyAroundReselectDurationMin { get; set;}
+		[Ordinal(4)] [RED("flyAroundReselectDurationMin")] 		public CFloat FlyAroundReselectDurationMin { get; set;}
 
-		[Ordinal(0)] [RED("flyAroundReselectDurationMax")] 		public CFloat FlyAroundReselectDurationMax { get; set;}
+		[Ordinal(5)] [RED("flyAroundReselectDurationMax")] 		public CFloat FlyAroundReselectDurationMax { get; set;}
 
-		[Ordinal(0)] [RED("idleFlightRadiusMin")] 		public CFloat IdleFlightRadiusMin { get; set;}
+		[Ordinal(6)] [RED("idleFlightRadiusMin")] 		public CFloat IdleFlightRadiusMin { get; set;}
 
-		[Ordinal(0)] [RED("idleFlightRadiusMax")] 		public CFloat IdleFlightRadiusMax { get; set;}
+		[Ordinal(7)] [RED("idleFlightRadiusMax")] 		public CFloat IdleFlightRadiusMax { get; set;}
 
-		[Ordinal(0)] [RED("idleFlightHeightMin")] 		public CFloat IdleFlightHeightMin { get; set;}
+		[Ordinal(8)] [RED("idleFlightHeightMin")] 		public CFloat IdleFlightHeightMin { get; set;}
 
-		[Ordinal(0)] [RED("idleFlightHeightMax")] 		public CFloat IdleFlightHeightMax { get; set;}
+		[Ordinal(9)] [RED("idleFlightHeightMax")] 		public CFloat IdleFlightHeightMax { get; set;}
 
 		public CAIFlightIdleAroundTargets(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvironmentDefinition : CResource
 	{
-		[Ordinal(0)] [RED("envParams")] 		public CAreaEnvironmentParams EnvParams { get; set;}
+		[Ordinal(1)] [RED("envParams")] 		public CAreaEnvironmentParams EnvParams { get; set;}
 
 		public CEnvironmentDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSteeringBehavior : CResource
 	{
-		[Ordinal(0)] [RED("root")] 		public CPtr<IMoveSteeringNode> Root { get; set;}
+		[Ordinal(1)] [RED("root")] 		public CPtr<IMoveSteeringNode> Root { get; set;}
 
 		public CMoveSteeringBehavior(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneFlowSwitch : CStorySceneControlPart
 	{
-		[Ordinal(0)] [RED("cases", 2,0)] 		public CArray<CPtr<CStorySceneFlowSwitchCase>> Cases { get; set;}
+		[Ordinal(1)] [RED("cases", 2,0)] 		public CArray<CPtr<CStorySceneFlowSwitchCase>> Cases { get; set;}
 
-		[Ordinal(0)] [RED("defaultLink")] 		public CPtr<CStorySceneLinkElement> DefaultLink { get; set;}
+		[Ordinal(2)] [RED("defaultLink")] 		public CPtr<CStorySceneLinkElement> DefaultLink { get; set;}
 
 		public CStorySceneFlowSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

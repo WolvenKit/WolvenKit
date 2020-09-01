@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCustomCameraSimplePositionController : ICustomCameraPositionController
 	{
-		[Ordinal(0)] [RED("("collisionController")] 		public CPtr<ICustomCameraCollisionController> CollisionController { get; set;}
+		[Ordinal(1)] [RED("("collisionController")] 		public CPtr<ICustomCameraCollisionController> CollisionController { get; set;}
 
-		[Ordinal(0)] [RED("("collisionController2")] 		public CPtr<ICustomCameraCollisionController> CollisionController2 { get; set;}
+		[Ordinal(2)] [RED("("collisionController2")] 		public CPtr<ICustomCameraCollisionController> CollisionController2 { get; set;}
 
 		public CCustomCameraSimplePositionController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

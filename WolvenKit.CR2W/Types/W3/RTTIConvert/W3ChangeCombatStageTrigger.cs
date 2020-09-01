@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ChangeCombatStageTrigger : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(1)] [RED("("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
 		public W3ChangeCombatStageTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

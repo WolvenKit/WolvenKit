@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_HorseStableBuff : CBaseGameplayEffect
 	{
-		[Ordinal(0)] [RED("("m_ownerHorse")] 		public CHandle<CNewNPC> M_ownerHorse { get; set;}
+		[Ordinal(1)] [RED("("m_ownerHorse")] 		public CHandle<CNewNPC> M_ownerHorse { get; set;}
 
 		public W3Effect_HorseStableBuff(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

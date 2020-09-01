@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModUiActionConfirmation : ConfirmationPopupData
 	{
-		[Ordinal(0)] [RED("callerRef")] 		public CHandle<IModUiConfirmPopupCallback> CallerRef { get; set;}
+		[Ordinal(1)] [RED("callerRef")] 		public CHandle<IModUiConfirmPopupCallback> CallerRef { get; set;}
 
-		[Ordinal(0)] [RED("actionId")] 		public CString ActionId { get; set;}
+		[Ordinal(2)] [RED("actionId")] 		public CString ActionId { get; set;}
 
 		public CModUiActionConfirmation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

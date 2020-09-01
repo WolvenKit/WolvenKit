@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_ItemAmmo : CQuestScriptedCondition
 	{
-		[Ordinal(0)] [RED("("itemName")] 		public CName ItemName { get; set;}
+		[Ordinal(1)] [RED("("itemName")] 		public CName ItemName { get; set;}
 
-		[Ordinal(0)] [RED("("ammoQuantity")] 		public CInt32 AmmoQuantity { get; set;}
+		[Ordinal(2)] [RED("("ammoQuantity")] 		public CInt32 AmmoQuantity { get; set;}
 
-		[Ordinal(0)] [RED("("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
+		[Ordinal(3)] [RED("("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
 
-		[Ordinal(0)] [RED("("isFulfilled")] 		public CBool IsFulfilled { get; set;}
+		[Ordinal(4)] [RED("("isFulfilled")] 		public CBool IsFulfilled { get; set;}
 
-		[Ordinal(0)] [RED("("ammoListener")] 		public CHandle<W3QuestCond_ItemAmmo_AmmoListener> AmmoListener { get; set;}
+		[Ordinal(5)] [RED("("ammoListener")] 		public CHandle<W3QuestCond_ItemAmmo_AmmoListener> AmmoListener { get; set;}
 
-		[Ordinal(0)] [RED("("inventoryListener")] 		public CHandle<W3QuestCond_ItemAmmo_InventoryListener> InventoryListener { get; set;}
+		[Ordinal(6)] [RED("("inventoryListener")] 		public CHandle<W3QuestCond_ItemAmmo_InventoryListener> InventoryListener { get; set;}
 
 		public W3QuestCond_ItemAmmo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

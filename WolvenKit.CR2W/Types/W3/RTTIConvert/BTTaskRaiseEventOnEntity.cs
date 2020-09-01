@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskRaiseEventOnEntity : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(1)] [RED("entityTag")] 		public CName EntityTag { get; set;}
 
-		[Ordinal(0)] [RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(2)] [RED("eventName")] 		public CName EventName { get; set;}
 
-		[Ordinal(0)] [RED("forceEvent")] 		public CBool ForceEvent { get; set;}
+		[Ordinal(3)] [RED("forceEvent")] 		public CBool ForceEvent { get; set;}
 
-		[Ordinal(0)] [RED("maxDistFromNpc")] 		public CFloat MaxDistFromNpc { get; set;}
+		[Ordinal(4)] [RED("maxDistFromNpc")] 		public CFloat MaxDistFromNpc { get; set;}
 
-		[Ordinal(0)] [RED("raiseSameEventOnOwner")] 		public CBool RaiseSameEventOnOwner { get; set;}
+		[Ordinal(5)] [RED("raiseSameEventOnOwner")] 		public CBool RaiseSameEventOnOwner { get; set;}
 
 		public BTTaskRaiseEventOnEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestFastForwardCommunitiesBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("manageBlackscreen")] 		public CBool ManageBlackscreen { get; set;}
+		[Ordinal(1)] [RED("manageBlackscreen")] 		public CBool ManageBlackscreen { get; set;}
 
-		[Ordinal(0)] [RED("respawnEveryone")] 		public CBool RespawnEveryone { get; set;}
+		[Ordinal(2)] [RED("respawnEveryone")] 		public CBool RespawnEveryone { get; set;}
 
-		[Ordinal(0)] [RED("dontSpawnHostilesClose")] 		public CBool DontSpawnHostilesClose { get; set;}
+		[Ordinal(3)] [RED("dontSpawnHostilesClose")] 		public CBool DontSpawnHostilesClose { get; set;}
 
-		[Ordinal(0)] [RED("timeLimit")] 		public CFloat TimeLimit { get; set;}
+		[Ordinal(4)] [RED("timeLimit")] 		public CFloat TimeLimit { get; set;}
 
 		public CQuestFastForwardCommunitiesBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FireSource : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("glComponent")] 		public CHandle<CGameplayLightComponent> GlComponent { get; set;}
+		[Ordinal(1)] [RED("("glComponent")] 		public CHandle<CGameplayLightComponent> GlComponent { get; set;}
 
 		public W3FireSource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

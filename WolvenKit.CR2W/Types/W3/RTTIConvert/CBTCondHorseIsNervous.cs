@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondHorseIsNervous : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("isNervous")] 		public CBool IsNervous { get; set;}
+		[Ordinal(1)] [RED("isNervous")] 		public CBool IsNervous { get; set;}
 
-		[Ordinal(0)] [RED("waitForAxiiCalmDownEnd")] 		public CBool WaitForAxiiCalmDownEnd { get; set;}
+		[Ordinal(2)] [RED("waitForAxiiCalmDownEnd")] 		public CBool WaitForAxiiCalmDownEnd { get; set;}
 
 		public CBTCondHorseIsNervous(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

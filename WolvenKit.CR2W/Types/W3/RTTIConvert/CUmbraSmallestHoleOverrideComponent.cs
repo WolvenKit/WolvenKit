@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CUmbraSmallestHoleOverrideComponent : CBoundedComponent
 	{
-		[Ordinal(0)] [RED("smallestHoleOverride")] 		public CFloat SmallestHoleOverride { get; set;}
+		[Ordinal(1)] [RED("smallestHoleOverride")] 		public CFloat SmallestHoleOverride { get; set;}
 
 		public CUmbraSmallestHoleOverrideComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTNeverBackDown : IMoveTargetPositionSteeringTask
 	{
-		[Ordinal(0)] [RED("maxAngleFromTarget")] 		public CFloat MaxAngleFromTarget { get; set;}
+		[Ordinal(1)] [RED("maxAngleFromTarget")] 		public CFloat MaxAngleFromTarget { get; set;}
 
 		public CMoveSTNeverBackDown(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeScriptedActionsListReaderDefinition : IBehTreeMetanodeDefinition
 	{
-		[Ordinal(0)] [RED("actionListVar")] 		public CName ActionListVar { get; set;}
+		[Ordinal(1)] [RED("actionListVar")] 		public CName ActionListVar { get; set;}
 
 		public CBehTreeNodeScriptedActionsListReaderDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

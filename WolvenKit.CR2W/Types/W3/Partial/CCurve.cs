@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CCurve : CObject
 	{
-		[Ordinal(0)] [RED("color")] 		public CColor Color { get; set;}
+		[Ordinal(1)] [RED("color")] 		public CColor Color { get; set;}
 
-		[Ordinal(0)] [RED("dataBaseType")] 		public CEnum<ECurveBaseType> DataBaseType { get; set;}
+		[Ordinal(2)] [RED("dataBaseType")] 		public CEnum<ECurveBaseType> DataBaseType { get; set;}
 
-		[Ordinal(0)] [RED("data.m_loop")] 		public CBool Data_m_loop { get; set;}
+		[Ordinal(3)] [RED("data.m_loop")] 		public CBool Data_m_loop { get; set;}
 
 		public CCurve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

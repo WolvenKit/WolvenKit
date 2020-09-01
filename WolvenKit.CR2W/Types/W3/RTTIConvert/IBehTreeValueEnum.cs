@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeValueEnum : IScriptable
 	{
-		[Ordinal(0)] [RED("varName")] 		public CName VarName { get; set;}
+		[Ordinal(1)] [RED("varName")] 		public CName VarName { get; set;}
 
 		public IBehTreeValueEnum(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

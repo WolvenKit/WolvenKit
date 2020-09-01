@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGameplayEntityParam : CEntityTemplateParam
 	{
-		[Ordinal(0)] [RED("("name")] 		public CString Name { get; set;}
+		[Ordinal(1)] [RED("("name")] 		public CString Name { get; set;}
 
-		[Ordinal(0)] [RED("("overrideInherited")] 		public CBool OverrideInherited { get; set;}
+		[Ordinal(2)] [RED("("overrideInherited")] 		public CBool OverrideInherited { get; set;}
 
 		public CGameplayEntityParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

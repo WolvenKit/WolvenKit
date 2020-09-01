@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMemoryNode : CBehaviorGraphValueBaseNode
 	{
-		[Ordinal(0)] [RED("("resetOnActivation")] 		public CBool ResetOnActivation { get; set;}
+		[Ordinal(1)] [RED("("resetOnActivation")] 		public CBool ResetOnActivation { get; set;}
 
 		public CBehaviorGraphMemoryNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

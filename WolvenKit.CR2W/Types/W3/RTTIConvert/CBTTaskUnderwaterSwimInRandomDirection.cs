@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskUnderwaterSwimInRandomDirection : CBTTaskVolumetricMove
 	{
-		[Ordinal(0)] [RED("stayInGuardArea")] 		public CBool StayInGuardArea { get; set;}
+		[Ordinal(1)] [RED("stayInGuardArea")] 		public CBool StayInGuardArea { get; set;}
 
-		[Ordinal(0)] [RED("maxProximityToSurface")] 		public CFloat MaxProximityToSurface { get; set;}
+		[Ordinal(2)] [RED("maxProximityToSurface")] 		public CFloat MaxProximityToSurface { get; set;}
 
-		[Ordinal(0)] [RED("minimumWaterDepth")] 		public CFloat MinimumWaterDepth { get; set;}
+		[Ordinal(3)] [RED("minimumWaterDepth")] 		public CFloat MinimumWaterDepth { get; set;}
 
-		[Ordinal(0)] [RED("randomizeDirectionDelay")] 		public SRangeF RandomizeDirectionDelay { get; set;}
+		[Ordinal(4)] [RED("randomizeDirectionDelay")] 		public SRangeF RandomizeDirectionDelay { get; set;}
 
-		[Ordinal(0)] [RED("m_destinationDistance")] 		public CFloat M_destinationDistance { get; set;}
+		[Ordinal(5)] [RED("m_destinationDistance")] 		public CFloat M_destinationDistance { get; set;}
 
 		public CBTTaskUnderwaterSwimInRandomDirection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

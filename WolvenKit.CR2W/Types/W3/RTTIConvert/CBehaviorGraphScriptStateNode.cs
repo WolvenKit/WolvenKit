@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphScriptStateNode : CBehaviorGraphStateNode
 	{
-		[Ordinal(0)] [RED("nameAsName")] 		public CName NameAsName { get; set;}
+		[Ordinal(1)] [RED("nameAsName")] 		public CName NameAsName { get; set;}
 
-		[Ordinal(0)] [RED("activationScriptEvent")] 		public CName ActivationScriptEvent { get; set;}
+		[Ordinal(2)] [RED("activationScriptEvent")] 		public CName ActivationScriptEvent { get; set;}
 
-		[Ordinal(0)] [RED("deactivationScriptEvent")] 		public CName DeactivationScriptEvent { get; set;}
+		[Ordinal(3)] [RED("deactivationScriptEvent")] 		public CName DeactivationScriptEvent { get; set;}
 
-		[Ordinal(0)] [RED("becomesCurrentStateScriptEvent")] 		public CName BecomesCurrentStateScriptEvent { get; set;}
+		[Ordinal(4)] [RED("becomesCurrentStateScriptEvent")] 		public CName BecomesCurrentStateScriptEvent { get; set;}
 
-		[Ordinal(0)] [RED("noLongerCurrentStateScriptEvent")] 		public CName NoLongerCurrentStateScriptEvent { get; set;}
+		[Ordinal(5)] [RED("noLongerCurrentStateScriptEvent")] 		public CName NoLongerCurrentStateScriptEvent { get; set;}
 
-		[Ordinal(0)] [RED("fullyBlendedInScriptEvent")] 		public CName FullyBlendedInScriptEvent { get; set;}
+		[Ordinal(6)] [RED("fullyBlendedInScriptEvent")] 		public CName FullyBlendedInScriptEvent { get; set;}
 
 		public CBehaviorGraphScriptStateNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

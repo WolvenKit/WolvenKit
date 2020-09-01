@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphFlowConnectionNode : CBehaviorGraphStateNode
 	{
-		[Ordinal(0)] [RED("("stateID")] 		public CName StateID { get; set;}
+		[Ordinal(1)] [RED("("stateID")] 		public CName StateID { get; set;}
 
-		[Ordinal(0)] [RED("("animNode")] 		public CPtr<CBehaviorGraphAnimationNode> AnimNode { get; set;}
+		[Ordinal(2)] [RED("("animNode")] 		public CPtr<CBehaviorGraphAnimationNode> AnimNode { get; set;}
 
 		public CBehaviorGraphFlowConnectionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

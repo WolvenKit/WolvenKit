@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSwfFontDesc : CVariable
 	{
-		[Ordinal(0)] [RED("("fontName")] 		public CString FontName { get; set;}
+		[Ordinal(1)] [RED("("fontName")] 		public CString FontName { get; set;}
 
-		[Ordinal(0)] [RED("("numGlyphs")] 		public CUInt32 NumGlyphs { get; set;}
+		[Ordinal(2)] [RED("("numGlyphs")] 		public CUInt32 NumGlyphs { get; set;}
 
-		[Ordinal(0)] [RED("("italic")] 		public CBool Italic { get; set;}
+		[Ordinal(3)] [RED("("italic")] 		public CBool Italic { get; set;}
 
-		[Ordinal(0)] [RED("("bold")] 		public CBool Bold { get; set;}
+		[Ordinal(4)] [RED("("bold")] 		public CBool Bold { get; set;}
 
 		public SSwfFontDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

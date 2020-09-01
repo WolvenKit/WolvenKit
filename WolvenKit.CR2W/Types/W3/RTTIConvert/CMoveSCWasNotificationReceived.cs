@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCWasNotificationReceived : IMoveSteeringCondition
 	{
-		[Ordinal(0)] [RED("notificationName")] 		public CName NotificationName { get; set;}
+		[Ordinal(1)] [RED("notificationName")] 		public CName NotificationName { get; set;}
 
 		public CMoveSCWasNotificationReceived(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

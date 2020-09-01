@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimationBufferUncompressed : IAnimationBuffer
 	{
-		[Ordinal(0)] [RED("numFrames")] 		public CUInt32 NumFrames { get; set;}
+		[Ordinal(1)] [RED("numFrames")] 		public CUInt32 NumFrames { get; set;}
 
-		[Ordinal(0)] [RED("numBones")] 		public CUInt32 NumBones { get; set;}
+		[Ordinal(2)] [RED("numBones")] 		public CUInt32 NumBones { get; set;}
 
-		[Ordinal(0)] [RED("numTracks")] 		public CUInt32 NumTracks { get; set;}
+		[Ordinal(3)] [RED("numTracks")] 		public CUInt32 NumTracks { get; set;}
 
-		[Ordinal(0)] [RED("numDynamicTracks")] 		public CUInt32 NumDynamicTracks { get; set;}
+		[Ordinal(4)] [RED("numDynamicTracks")] 		public CUInt32 NumDynamicTracks { get; set;}
 
-		[Ordinal(0)] [RED("hasRefIKBones")] 		public CBool HasRefIKBones { get; set;}
+		[Ordinal(5)] [RED("hasRefIKBones")] 		public CBool HasRefIKBones { get; set;}
 
 		public CAnimationBufferUncompressed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

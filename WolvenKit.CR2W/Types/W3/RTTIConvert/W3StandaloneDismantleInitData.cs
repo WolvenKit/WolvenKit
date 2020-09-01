@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3StandaloneDismantleInitData : W3SingleMenuInitData
 	{
-		[Ordinal(0)] [RED("("m_ingredientsForMissingDecoctions", 2,0)] 		public CArray<CName> M_ingredientsForMissingDecoctions { get; set;}
+		[Ordinal(1)] [RED("("m_ingredientsForMissingDecoctions", 2,0)] 		public CArray<CName> M_ingredientsForMissingDecoctions { get; set;}
 
 		public W3StandaloneDismantleInitData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

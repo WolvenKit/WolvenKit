@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_PlayAnimationOnEntity : W3SwitchEvent
 	{
-		[Ordinal(0)] [RED("("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(1)] [RED("("entityTag")] 		public CName EntityTag { get; set;}
 
-		[Ordinal(0)] [RED("("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(2)] [RED("("animationName")] 		public CName AnimationName { get; set;}
 
-		[Ordinal(0)] [RED("("operation")] 		public CEnum<EPropertyAnimationOperation> Operation { get; set;}
+		[Ordinal(3)] [RED("("operation")] 		public CEnum<EPropertyAnimationOperation> Operation { get; set;}
 
-		[Ordinal(0)] [RED("("playCount")] 		public CInt32 PlayCount { get; set;}
+		[Ordinal(4)] [RED("("playCount")] 		public CInt32 PlayCount { get; set;}
 
-		[Ordinal(0)] [RED("("playLengthScale")] 		public CFloat PlayLengthScale { get; set;}
+		[Ordinal(5)] [RED("("playLengthScale")] 		public CFloat PlayLengthScale { get; set;}
 
-		[Ordinal(0)] [RED("("playMode")] 		public CEnum<EPropertyCurveMode> PlayMode { get; set;}
+		[Ordinal(6)] [RED("("playMode")] 		public CEnum<EPropertyCurveMode> PlayMode { get; set;}
 
-		[Ordinal(0)] [RED("("rewindTime")] 		public CFloat RewindTime { get; set;}
+		[Ordinal(7)] [RED("("rewindTime")] 		public CFloat RewindTime { get; set;}
 
 		public W3SE_PlayAnimationOnEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

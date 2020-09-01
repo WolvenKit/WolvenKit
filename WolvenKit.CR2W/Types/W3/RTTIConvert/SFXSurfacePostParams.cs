@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFXSurfacePostParams : CVariable
 	{
-		[Ordinal(0)] [RED("("fxFadeInTime")] 		public CFloat FxFadeInTime { get; set;}
+		[Ordinal(1)] [RED("("fxFadeInTime")] 		public CFloat FxFadeInTime { get; set;}
 
-		[Ordinal(0)] [RED("("fxLastingTime")] 		public CFloat FxLastingTime { get; set;}
+		[Ordinal(2)] [RED("("fxLastingTime")] 		public CFloat FxLastingTime { get; set;}
 
-		[Ordinal(0)] [RED("("fxFadeOutTime")] 		public CFloat FxFadeOutTime { get; set;}
+		[Ordinal(3)] [RED("("fxFadeOutTime")] 		public CFloat FxFadeOutTime { get; set;}
 
-		[Ordinal(0)] [RED("("fxRadius")] 		public CFloat FxRadius { get; set;}
+		[Ordinal(4)] [RED("("fxRadius")] 		public CFloat FxRadius { get; set;}
 
-		[Ordinal(0)] [RED("("fxType")] 		public CInt32 FxType { get; set;}
+		[Ordinal(5)] [RED("("fxType")] 		public CInt32 FxType { get; set;}
 
 		public SFXSurfacePostParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

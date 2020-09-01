@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardLookAtModeStateSbUi_ActorLookAt : CScriptableState
 	{
-		[Ordinal(0)] [RED("("rotateStepSize")] 		public CFloat RotateStepSize { get; set;}
+		[Ordinal(1)] [RED("("rotateStepSize")] 		public CFloat RotateStepSize { get; set;}
 
-		[Ordinal(0)] [RED("("newLookAt")] 		public SStoryBoardLookAtSettings NewLookAt { get; set;}
+		[Ordinal(2)] [RED("("newLookAt")] 		public SStoryBoardLookAtSettings NewLookAt { get; set;}
 
-		[Ordinal(0)] [RED("("actor")] 		public CHandle<CModStoryBoardActor> Actor { get; set;}
+		[Ordinal(3)] [RED("("actor")] 		public CHandle<CModStoryBoardActor> Actor { get; set;}
 
-		[Ordinal(0)] [RED("("lastLookedAtAssetId")] 		public CString LastLookedAtAssetId { get; set;}
+		[Ordinal(4)] [RED("("lastLookedAtAssetId")] 		public CString LastLookedAtAssetId { get; set;}
 
-		[Ordinal(0)] [RED("("theController")] 		public CHandle<CModStoryBoardInteractiveLookAt> TheController { get; set;}
+		[Ordinal(5)] [RED("("theController")] 		public CHandle<CModStoryBoardInteractiveLookAt> TheController { get; set;}
 
 		public CModStoryBoardLookAtModeStateSbUi_ActorLookAt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

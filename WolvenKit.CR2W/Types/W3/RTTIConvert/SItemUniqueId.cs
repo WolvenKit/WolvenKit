@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SItemUniqueId : CVariable
 	{
-		[Ordinal(0)] [RED("("value")] 		public CUInt32 Value { get; set;}
+		[Ordinal(1)] [RED("("value")] 		public CUInt32 Value { get; set;}
 
 		public SItemUniqueId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

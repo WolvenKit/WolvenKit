@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateRunes : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[Ordinal(0)] [RED("("SELECT")] 		public CName SELECT { get; set;}
+		[Ordinal(1)] [RED("("SELECT")] 		public CName SELECT { get; set;}
 
-		[Ordinal(0)] [RED("("RUNE")] 		public CName RUNE { get; set;}
+		[Ordinal(2)] [RED("("RUNE")] 		public CName RUNE { get; set;}
 
-		[Ordinal(0)] [RED("("SWORD")] 		public CName SWORD { get; set;}
+		[Ordinal(3)] [RED("("SWORD")] 		public CName SWORD { get; set;}
 
 		public W3TutorialManagerUIHandlerStateRunes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorComboAnim : CVariable
 	{
-		[Ordinal(0)] [RED("("animationAttack")] 		public CName AnimationAttack { get; set;}
+		[Ordinal(1)] [RED("("animationAttack")] 		public CName AnimationAttack { get; set;}
 
-		[Ordinal(0)] [RED("("animationParry")] 		public CName AnimationParry { get; set;}
+		[Ordinal(2)] [RED("("animationParry")] 		public CName AnimationParry { get; set;}
 
-		[Ordinal(0)] [RED("("id")] 		public CInt32 Id { get; set;}
+		[Ordinal(3)] [RED("("id")] 		public CInt32 Id { get; set;}
 
 		public SBehaviorComboAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

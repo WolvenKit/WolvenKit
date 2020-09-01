@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4MessagePopup : CR4PopupBase
 	{
-		[Ordinal(0)] [RED("("m_messagesQueue", 2,0)] 		public CArray<CHandle<W3MessagePopupData>> M_messagesQueue { get; set;}
+		[Ordinal(1)] [RED("("m_messagesQueue", 2,0)] 		public CArray<CHandle<W3MessagePopupData>> M_messagesQueue { get; set;}
 
-		[Ordinal(0)] [RED("("m_isMessageShown")] 		public CBool M_isMessageShown { get; set;}
+		[Ordinal(2)] [RED("("m_isMessageShown")] 		public CBool M_isMessageShown { get; set;}
 
-		[Ordinal(0)] [RED("("m_fxHideMessage")] 		public CHandle<CScriptedFlashFunction> M_fxHideMessage { get; set;}
+		[Ordinal(3)] [RED("("m_fxHideMessage")] 		public CHandle<CScriptedFlashFunction> M_fxHideMessage { get; set;}
 
-		[Ordinal(0)] [RED("("m_fxPrepareMessageShow")] 		public CHandle<CScriptedFlashFunction> M_fxPrepareMessageShow { get; set;}
+		[Ordinal(4)] [RED("("m_fxPrepareMessageShow")] 		public CHandle<CScriptedFlashFunction> M_fxPrepareMessageShow { get; set;}
 
-		[Ordinal(0)] [RED("("m_fxDisplayProgressBar")] 		public CHandle<CScriptedFlashFunction> M_fxDisplayProgressBar { get; set;}
+		[Ordinal(5)] [RED("("m_fxDisplayProgressBar")] 		public CHandle<CScriptedFlashFunction> M_fxDisplayProgressBar { get; set;}
 
 		public CR4MessagePopup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

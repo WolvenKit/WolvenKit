@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateOpenWorldMap : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[Ordinal(0)] [RED("("OPEN_FAST_MENU")] 		public CName OPEN_FAST_MENU { get; set;}
+		[Ordinal(1)] [RED("("OPEN_FAST_MENU")] 		public CName OPEN_FAST_MENU { get; set;}
 
-		[Ordinal(0)] [RED("("OPEN_MAP")] 		public CName OPEN_MAP { get; set;}
+		[Ordinal(2)] [RED("("OPEN_MAP")] 		public CName OPEN_MAP { get; set;}
 
 		public W3TutorialManagerUIHandlerStateOpenWorldMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

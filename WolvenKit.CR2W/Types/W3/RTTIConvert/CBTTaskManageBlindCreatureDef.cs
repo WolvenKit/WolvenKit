@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskManageBlindCreatureDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("resourceName")] 		public CName ResourceName { get; set;}
+		[Ordinal(1)] [RED("("resourceName")] 		public CName ResourceName { get; set;}
 
-		[Ordinal(0)] [RED("("forgetTargetIfNPCSpeedLowerThan")] 		public CFloat ForgetTargetIfNPCSpeedLowerThan { get; set;}
+		[Ordinal(2)] [RED("("forgetTargetIfNPCSpeedLowerThan")] 		public CFloat ForgetTargetIfNPCSpeedLowerThan { get; set;}
 
-		[Ordinal(0)] [RED("("remberTargetIfCloserThan")] 		public CFloat RemberTargetIfCloserThan { get; set;}
+		[Ordinal(3)] [RED("("remberTargetIfCloserThan")] 		public CFloat RemberTargetIfCloserThan { get; set;}
 
-		[Ordinal(0)] [RED("("ignoreNoiseLowerThanWhenSprinting")] 		public CFloat IgnoreNoiseLowerThanWhenSprinting { get; set;}
+		[Ordinal(4)] [RED("("ignoreNoiseLowerThanWhenSprinting")] 		public CFloat IgnoreNoiseLowerThanWhenSprinting { get; set;}
 
-		[Ordinal(0)] [RED("("prioritizePlayerAsTarget")] 		public CBehTreeValBool PrioritizePlayerAsTarget { get; set;}
+		[Ordinal(5)] [RED("("prioritizePlayerAsTarget")] 		public CBehTreeValBool PrioritizePlayerAsTarget { get; set;}
 
 		public CBTTaskManageBlindCreatureDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

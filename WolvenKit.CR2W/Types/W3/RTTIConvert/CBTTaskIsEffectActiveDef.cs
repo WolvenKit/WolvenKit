@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskIsEffectActiveDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("target")] 		public CHandle<CNewNPC> Target { get; set;}
+		[Ordinal(1)] [RED("target")] 		public CHandle<CNewNPC> Target { get; set;}
 
-		[Ordinal(0)] [RED("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(2)] [RED("effectName")] 		public CName EffectName { get; set;}
 
 		public CBTTaskIsEffectActiveDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

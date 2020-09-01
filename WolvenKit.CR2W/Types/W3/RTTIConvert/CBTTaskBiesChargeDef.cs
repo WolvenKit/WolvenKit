@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskBiesChargeDef : CBTTask3StateAttackDef
 	{
-		[Ordinal(0)] [RED("endStuck")] 		public CEnum<EAttackType> EndStuck { get; set;}
+		[Ordinal(1)] [RED("endStuck")] 		public CEnum<EAttackType> EndStuck { get; set;}
 
-		[Ordinal(0)] [RED("endHit")] 		public CEnum<EAttackType> EndHit { get; set;}
+		[Ordinal(2)] [RED("endHit")] 		public CEnum<EAttackType> EndHit { get; set;}
 
-		[Ordinal(0)] [RED("stuckTime")] 		public CFloat StuckTime { get; set;}
+		[Ordinal(3)] [RED("stuckTime")] 		public CFloat StuckTime { get; set;}
 
 		public CBTTaskBiesChargeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

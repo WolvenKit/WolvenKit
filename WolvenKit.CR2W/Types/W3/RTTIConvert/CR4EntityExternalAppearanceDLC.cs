@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4EntityExternalAppearanceDLC : CObject
 	{
-		[Ordinal(0)] [RED("("appearanceToRepleace")] 		public CName AppearanceToRepleace { get; set;}
+		[Ordinal(1)] [RED("("appearanceToRepleace")] 		public CName AppearanceToRepleace { get; set;}
 
-		[Ordinal(0)] [RED("("entityExternalAppearance")] 		public CHandle<CEntityExternalAppearance> EntityExternalAppearance { get; set;}
+		[Ordinal(2)] [RED("("entityExternalAppearance")] 		public CHandle<CEntityExternalAppearance> EntityExternalAppearance { get; set;}
 
 		public CR4EntityExternalAppearanceDLC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

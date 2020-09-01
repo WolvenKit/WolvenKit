@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestMonsterCombatManagerBlock : IQuestCombatManagerBaseBlock
 	{
-		[Ordinal(0)] [RED("combatLogic")] 		public CHandle<CAIMonsterCombatLogic> CombatLogic { get; set;}
+		[Ordinal(1)] [RED("combatLogic")] 		public CHandle<CAIMonsterCombatLogic> CombatLogic { get; set;}
 
 		public CQuestMonsterCombatManagerBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

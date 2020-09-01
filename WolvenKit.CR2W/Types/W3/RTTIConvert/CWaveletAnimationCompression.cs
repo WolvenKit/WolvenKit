@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWaveletAnimationCompression : IAnimationCompression
 	{
-		[Ordinal(0)] [RED("quantizationBits")] 		public CUInt8 QuantizationBits { get; set;}
+		[Ordinal(1)] [RED("quantizationBits")] 		public CUInt8 QuantizationBits { get; set;}
 
-		[Ordinal(0)] [RED("positionTolerance")] 		public CFloat PositionTolerance { get; set;}
+		[Ordinal(2)] [RED("positionTolerance")] 		public CFloat PositionTolerance { get; set;}
 
-		[Ordinal(0)] [RED("rotationTolerance")] 		public CFloat RotationTolerance { get; set;}
+		[Ordinal(3)] [RED("rotationTolerance")] 		public CFloat RotationTolerance { get; set;}
 
-		[Ordinal(0)] [RED("scaleTolerance")] 		public CFloat ScaleTolerance { get; set;}
+		[Ordinal(4)] [RED("scaleTolerance")] 		public CFloat ScaleTolerance { get; set;}
 
 		public CWaveletAnimationCompression(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

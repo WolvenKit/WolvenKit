@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTask3StateAddEffectAttackDef : CBTTask3StateAttackDef
 	{
-		[Ordinal(0)] [RED("("applyEffectInRange")] 		public CFloat ApplyEffectInRange { get; set;}
+		[Ordinal(1)] [RED("("applyEffectInRange")] 		public CFloat ApplyEffectInRange { get; set;}
 
-		[Ordinal(0)] [RED("("applyEffectInCone")] 		public CFloat ApplyEffectInCone { get; set;}
+		[Ordinal(2)] [RED("("applyEffectInCone")] 		public CFloat ApplyEffectInCone { get; set;}
 
-		[Ordinal(0)] [RED("("applyEffectInterval")] 		public CFloat ApplyEffectInterval { get; set;}
+		[Ordinal(3)] [RED("("applyEffectInterval")] 		public CFloat ApplyEffectInterval { get; set;}
 
-		[Ordinal(0)] [RED("("effectType")] 		public CEnum<EEffectType> EffectType { get; set;}
+		[Ordinal(4)] [RED("("effectType")] 		public CEnum<EEffectType> EffectType { get; set;}
 
-		[Ordinal(0)] [RED("("effectDuration")] 		public CFloat EffectDuration { get; set;}
+		[Ordinal(5)] [RED("("effectDuration")] 		public CFloat EffectDuration { get; set;}
 
-		[Ordinal(0)] [RED("("effectValue")] 		public CFloat EffectValue { get; set;}
+		[Ordinal(6)] [RED("("effectValue")] 		public CFloat EffectValue { get; set;}
 
-		[Ordinal(0)] [RED("("effectPercentValue")] 		public CFloat EffectPercentValue { get; set;}
+		[Ordinal(7)] [RED("("effectPercentValue")] 		public CFloat EffectPercentValue { get; set;}
 
 		public CBTTask3StateAddEffectAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

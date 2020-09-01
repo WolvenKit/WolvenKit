@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCameraEffectTrigger : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("isPlayingEffect")] 		public CBool IsPlayingEffect { get; set;}
+		[Ordinal(1)] [RED("("isPlayingEffect")] 		public CBool IsPlayingEffect { get; set;}
 
-		[Ordinal(0)] [RED("("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(2)] [RED("("effectName")] 		public CName EffectName { get; set;}
 
-		[Ordinal(0)] [RED("("useSharedEffects")] 		public CBool UseSharedEffects { get; set;}
+		[Ordinal(3)] [RED("("useSharedEffects")] 		public CBool UseSharedEffects { get; set;}
 
-		[Ordinal(0)] [RED("("effectEntityPosition")] 		public CEnum<EEffectEntityPosition> EffectEntityPosition { get; set;}
+		[Ordinal(4)] [RED("("effectEntityPosition")] 		public CEnum<EEffectEntityPosition> EffectEntityPosition { get; set;}
 
-		[Ordinal(0)] [RED("("effectEntityRotation")] 		public CEnum<EEffectEntityRotation> EffectEntityRotation { get; set;}
+		[Ordinal(5)] [RED("("effectEntityRotation")] 		public CEnum<EEffectEntityRotation> EffectEntityRotation { get; set;}
 
-		[Ordinal(0)] [RED("("effectEntityOffset")] 		public Vector3 EffectEntityOffset { get; set;}
+		[Ordinal(6)] [RED("("effectEntityOffset")] 		public Vector3 EffectEntityOffset { get; set;}
 
-		[Ordinal(0)] [RED("("playFrom")] 		public GameTime PlayFrom { get; set;}
+		[Ordinal(7)] [RED("("playFrom")] 		public GameTime PlayFrom { get; set;}
 
-		[Ordinal(0)] [RED("("playTo")] 		public GameTime PlayTo { get; set;}
+		[Ordinal(8)] [RED("("playTo")] 		public GameTime PlayTo { get; set;}
 
 		public CCameraEffectTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

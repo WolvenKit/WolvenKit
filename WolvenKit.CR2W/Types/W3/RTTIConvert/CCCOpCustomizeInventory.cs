@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCCOpCustomizeInventory : ICharacterCustomizationOperation
 	{
-		[Ordinal(0)] [RED("("template")] 		public CHandle<CEntityTemplate> Template { get; set;}
+		[Ordinal(1)] [RED("("template")] 		public CHandle<CEntityTemplate> Template { get; set;}
 
-		[Ordinal(0)] [RED("("applyMounts")] 		public CBool ApplyMounts { get; set;}
+		[Ordinal(2)] [RED("("applyMounts")] 		public CBool ApplyMounts { get; set;}
 
 		public CCCOpCustomizeInventory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

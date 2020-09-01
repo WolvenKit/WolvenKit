@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateIdleJump : CExplorationStateTransitionAbstract
 	{
-		[Ordinal(0)] [RED("behEnded")] 		public CName BehEnded { get; set;}
+		[Ordinal(1)] [RED("behEnded")] 		public CName BehEnded { get; set;}
 
-		[Ordinal(0)] [RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(2)] [RED("enabled")] 		public CBool Enabled { get; set;}
 
 		public CExplorationStateIdleJump(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3RaisePowerStatEffect : CBaseGameplayEffect
 	{
-		[Ordinal(0)] [RED("("stat")] 		public CEnum<ECharacterPowerStats> Stat { get; set;}
+		[Ordinal(1)] [RED("("stat")] 		public CEnum<ECharacterPowerStats> Stat { get; set;}
 
 		public W3RaisePowerStatEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

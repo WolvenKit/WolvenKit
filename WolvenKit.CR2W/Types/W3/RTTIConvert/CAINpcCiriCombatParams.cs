@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcCiriCombatParams : CAINpcCombatParams
 	{
-		[Ordinal(0)] [RED("i")] 		public CInt32 I { get; set;}
+		[Ordinal(1)] [RED("i")] 		public CInt32 I { get; set;}
 
 		public CAINpcCiriCombatParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

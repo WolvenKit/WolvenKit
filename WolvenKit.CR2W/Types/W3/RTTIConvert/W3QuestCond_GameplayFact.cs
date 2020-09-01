@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_GameplayFact : CQuestScriptedCondition
 	{
-		[Ordinal(0)] [RED("("gameplayFactId")] 		public CString GameplayFactId { get; set;}
+		[Ordinal(1)] [RED("("gameplayFactId")] 		public CString GameplayFactId { get; set;}
 
-		[Ordinal(0)] [RED("("value")] 		public CInt32 Value { get; set;}
+		[Ordinal(2)] [RED("("value")] 		public CInt32 Value { get; set;}
 
-		[Ordinal(0)] [RED("("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
+		[Ordinal(3)] [RED("("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
 
-		[Ordinal(0)] [RED("("isFulfilled")] 		public CBool IsFulfilled { get; set;}
+		[Ordinal(4)] [RED("("isFulfilled")] 		public CBool IsFulfilled { get; set;}
 
-		[Ordinal(0)] [RED("("listener")] 		public CHandle<W3QuestCond_GameplayFact_Listener> Listener { get; set;}
+		[Ordinal(5)] [RED("("listener")] 		public CHandle<W3QuestCond_GameplayFact_Listener> Listener { get; set;}
 
 		public W3QuestCond_GameplayFact(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

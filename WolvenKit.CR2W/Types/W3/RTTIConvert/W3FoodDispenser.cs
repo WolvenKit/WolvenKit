@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FoodDispenser : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("foodEntity")] 		public CHandle<CEntityTemplate> FoodEntity { get; set;}
+		[Ordinal(1)] [RED("("foodEntity")] 		public CHandle<CEntityTemplate> FoodEntity { get; set;}
 
-		[Ordinal(0)] [RED("("maxSpawnedFood")] 		public CInt32 MaxSpawnedFood { get; set;}
+		[Ordinal(2)] [RED("("maxSpawnedFood")] 		public CInt32 MaxSpawnedFood { get; set;}
 
-		[Ordinal(0)] [RED("("spawnedFood", 2,0)] 		public CArray<CHandle<CEntity>> SpawnedFood { get; set;}
+		[Ordinal(3)] [RED("("spawnedFood", 2,0)] 		public CArray<CHandle<CEntity>> SpawnedFood { get; set;}
 
 		public W3FoodDispenser(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

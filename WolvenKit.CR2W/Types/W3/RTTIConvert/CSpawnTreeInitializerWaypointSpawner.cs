@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeInitializerWaypointSpawner : ISpawnTreeSpawnerInitializer
 	{
-		[Ordinal(0)] [RED("("spawner")] 		public CSpawnTreeWaypointSpawner Spawner { get; set;}
+		[Ordinal(1)] [RED("("spawner")] 		public CSpawnTreeWaypointSpawner Spawner { get; set;}
 
 		public CSpawnTreeInitializerWaypointSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIWalkToTargetWaitingForActorAction : IAIActionTree
 	{
-		[Ordinal(0)] [RED("tag")] 		public CName Tag { get; set;}
+		[Ordinal(1)] [RED("tag")] 		public CName Tag { get; set;}
 
-		[Ordinal(0)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(2)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[Ordinal(0)] [RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
+		[Ordinal(3)] [RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 
-		[Ordinal(0)] [RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(4)] [RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[Ordinal(0)] [RED("waitForTag")] 		public CName WaitForTag { get; set;}
+		[Ordinal(5)] [RED("waitForTag")] 		public CName WaitForTag { get; set;}
 
-		[Ordinal(0)] [RED("timeout")] 		public CFloat Timeout { get; set;}
+		[Ordinal(6)] [RED("timeout")] 		public CFloat Timeout { get; set;}
 
-		[Ordinal(0)] [RED("testDistance")] 		public CFloat TestDistance { get; set;}
+		[Ordinal(7)] [RED("testDistance")] 		public CFloat TestDistance { get; set;}
 
 		public CAIWalkToTargetWaitingForActorAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

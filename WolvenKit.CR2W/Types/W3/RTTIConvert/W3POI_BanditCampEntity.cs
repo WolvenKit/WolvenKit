@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3POI_BanditCampEntity : CR4MapPinEntity
 	{
-		[Ordinal(0)] [RED("("regionType")] 		public CEnum<EEP2PoiType> RegionType { get; set;}
+		[Ordinal(1)] [RED("("regionType")] 		public CEnum<EEP2PoiType> RegionType { get; set;}
 
 		public W3POI_BanditCampEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

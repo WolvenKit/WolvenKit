@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MutagenBuffCustomParams : W3PotionParams
 	{
-		[Ordinal(0)] [RED("("toxicityOffset")] 		public CFloat ToxicityOffset { get; set;}
+		[Ordinal(1)] [RED("("toxicityOffset")] 		public CFloat ToxicityOffset { get; set;}
 
 		public W3MutagenBuffCustomParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

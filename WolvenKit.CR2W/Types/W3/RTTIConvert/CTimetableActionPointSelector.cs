@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTimetableActionPointSelector : CActionPointSelector
 	{
-		[Ordinal(0)] [RED("timetable", 2,0)] 		public CArray<CSStoryPhaseTimetableACategoriesTimetableEntry> Timetable { get; set;}
+		[Ordinal(1)] [RED("timetable", 2,0)] 		public CArray<CSStoryPhaseTimetableACategoriesTimetableEntry> Timetable { get; set;}
 
 		public CTimetableActionPointSelector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

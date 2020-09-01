@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4JournalPlaceEntity : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("placeEntry")] 		public CHandle<CJournalPath> PlaceEntry { get; set;}
+		[Ordinal(1)] [RED("("placeEntry")] 		public CHandle<CJournalPath> PlaceEntry { get; set;}
 
 		public CR4JournalPlaceEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

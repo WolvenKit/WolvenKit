@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionHasVoicesetDefintion : IBehTreeNodeConditionSpeechDefinition
 	{
-		[Ordinal(0)] [RED("("voiceSet")] 		public CBehTreeValString VoiceSet { get; set;}
+		[Ordinal(1)] [RED("("voiceSet")] 		public CBehTreeValString VoiceSet { get; set;}
 
 		public CBehTreeNodeConditionHasVoicesetDefintion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAnimationSlotWithCurveNode : CBehaviorGraphAnimationSlotNode
 	{
-		[Ordinal(0)] [RED("("curve")] 		public CPtr<CCurve> Curve { get; set;}
+		[Ordinal(1)] [RED("("curve")] 		public CPtr<CCurve> Curve { get; set;}
 
 		public CBehaviorGraphAnimationSlotWithCurveNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

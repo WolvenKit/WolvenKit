@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ClueWaypoint : CObject
 	{
-		[Ordinal(0)] [RED("("waypointTag")] 		public CName WaypointTag { get; set;}
+		[Ordinal(1)] [RED("("waypointTag")] 		public CName WaypointTag { get; set;}
 
-		[Ordinal(0)] [RED("("clueStateInWaypoint")] 		public CEnum<EBoidClueState> ClueStateInWaypoint { get; set;}
+		[Ordinal(2)] [RED("("clueStateInWaypoint")] 		public CEnum<EBoidClueState> ClueStateInWaypoint { get; set;}
 
-		[Ordinal(0)] [RED("("conditionsLogicalOperator")] 		public CEnum<ELogicalOperator> ConditionsLogicalOperator { get; set;}
+		[Ordinal(3)] [RED("("conditionsLogicalOperator")] 		public CEnum<ELogicalOperator> ConditionsLogicalOperator { get; set;}
 
-		[Ordinal(0)] [RED("("waypointReachedConditions", 2,0)] 		public CArray<CHandle<W3ClueCondition>> WaypointReachedConditions { get; set;}
+		[Ordinal(4)] [RED("("waypointReachedConditions", 2,0)] 		public CArray<CHandle<W3ClueCondition>> WaypointReachedConditions { get; set;}
 
 		public W3ClueWaypoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

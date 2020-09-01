@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskDropLoot : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(1)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[Ordinal(0)] [RED("delay")] 		public CFloat Delay { get; set;}
+		[Ordinal(2)] [RED("delay")] 		public CFloat Delay { get; set;}
 
-		[Ordinal(0)] [RED("lootDropped")] 		public CBool LootDropped { get; set;}
+		[Ordinal(3)] [RED("lootDropped")] 		public CBool LootDropped { get; set;}
 
-		[Ordinal(0)] [RED("attacker")] 		public CHandle<CGameplayEntity> Attacker { get; set;}
+		[Ordinal(4)] [RED("attacker")] 		public CHandle<CGameplayEntity> Attacker { get; set;}
 
-		[Ordinal(0)] [RED("causer")] 		public CHandle<IScriptable> Causer { get; set;}
+		[Ordinal(5)] [RED("causer")] 		public CHandle<IScriptable> Causer { get; set;}
 
-		[Ordinal(0)] [RED("saveLockID")] 		public CInt32 SaveLockID { get; set;}
+		[Ordinal(6)] [RED("saveLockID")] 		public CInt32 SaveLockID { get; set;}
 
 		public CBTTaskDropLoot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

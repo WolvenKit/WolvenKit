@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphComparatorNode : CBehaviorGraphValueNode
 	{
-		[Ordinal(0)] [RED("("operation")] 		public CEnum<ECompareFunc> Operation { get; set;}
+		[Ordinal(1)] [RED("("operation")] 		public CEnum<ECompareFunc> Operation { get; set;}
 
-		[Ordinal(0)] [RED("("firstValue")] 		public CFloat FirstValue { get; set;}
+		[Ordinal(2)] [RED("("firstValue")] 		public CFloat FirstValue { get; set;}
 
-		[Ordinal(0)] [RED("("secondValue")] 		public CFloat SecondValue { get; set;}
+		[Ordinal(3)] [RED("("secondValue")] 		public CFloat SecondValue { get; set;}
 
-		[Ordinal(0)] [RED("("trueValue")] 		public CFloat TrueValue { get; set;}
+		[Ordinal(4)] [RED("("trueValue")] 		public CFloat TrueValue { get; set;}
 
-		[Ordinal(0)] [RED("("falseValue")] 		public CFloat FalseValue { get; set;}
+		[Ordinal(5)] [RED("("falseValue")] 		public CFloat FalseValue { get; set;}
 
-		[Ordinal(0)] [RED("("cachedFirstInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedFirstInputNode { get; set;}
+		[Ordinal(6)] [RED("("cachedFirstInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedFirstInputNode { get; set;}
 
-		[Ordinal(0)] [RED("("cachedSecondInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedSecondInputNode { get; set;}
+		[Ordinal(7)] [RED("("cachedSecondInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedSecondInputNode { get; set;}
 
-		[Ordinal(0)] [RED("("cachedTrueInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedTrueInputNode { get; set;}
+		[Ordinal(8)] [RED("("cachedTrueInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedTrueInputNode { get; set;}
 
-		[Ordinal(0)] [RED("("cachedFalseInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedFalseInputNode { get; set;}
+		[Ordinal(9)] [RED("("cachedFalseInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedFalseInputNode { get; set;}
 
 		public CBehaviorGraphComparatorNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

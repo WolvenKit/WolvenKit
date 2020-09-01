@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStoryBoardAnimationSettings : CVariable
 	{
-		[Ordinal(0)] [RED("("animId")] 		public CInt32 AnimId { get; set;}
+		[Ordinal(1)] [RED("("animId")] 		public CInt32 AnimId { get; set;}
 
-		[Ordinal(0)] [RED("("animName")] 		public CName AnimName { get; set;}
+		[Ordinal(2)] [RED("("animName")] 		public CName AnimName { get; set;}
 
 		public SStoryBoardAnimationSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

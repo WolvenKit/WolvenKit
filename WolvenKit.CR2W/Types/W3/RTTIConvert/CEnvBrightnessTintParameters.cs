@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvBrightnessTintParameters : CVariable
 	{
-		[Ordinal(0)] [RED("("tint")] 		public Vector Tint { get; set;}
+		[Ordinal(1)] [RED("("tint")] 		public Vector Tint { get; set;}
 
-		[Ordinal(0)] [RED("("brightness")] 		public CFloat Brightness { get; set;}
+		[Ordinal(2)] [RED("("brightness")] 		public CFloat Brightness { get; set;}
 
 		public CEnvBrightnessTintParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

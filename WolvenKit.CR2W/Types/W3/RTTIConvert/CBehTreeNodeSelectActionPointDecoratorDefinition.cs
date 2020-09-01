@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeSelectActionPointDecoratorDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[Ordinal(0)] [RED("delayOnFailure")] 		public CBehTreeValFloat DelayOnFailure { get; set;}
+		[Ordinal(1)] [RED("delayOnFailure")] 		public CBehTreeValFloat DelayOnFailure { get; set;}
 
-		[Ordinal(0)] [RED("delayOnSuccess")] 		public CBehTreeValFloat DelayOnSuccess { get; set;}
+		[Ordinal(2)] [RED("delayOnSuccess")] 		public CBehTreeValFloat DelayOnSuccess { get; set;}
 
-		[Ordinal(0)] [RED("delayOnInterruption")] 		public CBehTreeValFloat DelayOnInterruption { get; set;}
+		[Ordinal(3)] [RED("delayOnInterruption")] 		public CBehTreeValFloat DelayOnInterruption { get; set;}
 
 		public CBehTreeNodeSelectActionPointDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAimingWithIKNode : CBehaviorGraphNode
 	{
-		[Ordinal(0)] [RED("aimingBaseBoneName")] 		public CName AimingBaseBoneName { get; set;}
+		[Ordinal(1)] [RED("aimingBaseBoneName")] 		public CName AimingBaseBoneName { get; set;}
 
-		[Ordinal(0)] [RED("ik")] 		public STwoBonesIKSolverData Ik { get; set;}
+		[Ordinal(2)] [RED("ik")] 		public STwoBonesIKSolverData Ik { get; set;}
 
-		[Ordinal(0)] [RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
+		[Ordinal(3)] [RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
 
-		[Ordinal(0)] [RED("cachedBaseInputNode")] 		public CPtr<CBehaviorGraphNode> CachedBaseInputNode { get; set;}
+		[Ordinal(4)] [RED("cachedBaseInputNode")] 		public CPtr<CBehaviorGraphNode> CachedBaseInputNode { get; set;}
 
-		[Ordinal(0)] [RED("cachedLookAtTargetDirMSInputNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedLookAtTargetDirMSInputNode { get; set;}
+		[Ordinal(5)] [RED("cachedLookAtTargetDirMSInputNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedLookAtTargetDirMSInputNode { get; set;}
 
 		public CBehaviorGraphAimingWithIKNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

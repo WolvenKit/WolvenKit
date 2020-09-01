@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeMonsterBehaviorGraphDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("graphName")] 		public CName GraphName { get; set;}
+		[Ordinal(1)] [RED("graphName")] 		public CName GraphName { get; set;}
 
 		public CBehTreeMonsterBehaviorGraphDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

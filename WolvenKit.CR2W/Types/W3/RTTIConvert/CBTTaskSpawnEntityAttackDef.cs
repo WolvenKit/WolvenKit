@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSpawnEntityAttackDef : CBTTaskAttackDef
 	{
-		[Ordinal(0)] [RED("ressourceName")] 		public CBehTreeValCName RessourceName { get; set;}
+		[Ordinal(1)] [RED("ressourceName")] 		public CBehTreeValCName RessourceName { get; set;}
 
-		[Ordinal(0)] [RED("spawnAnimEventName")] 		public CName SpawnAnimEventName { get; set;}
+		[Ordinal(2)] [RED("spawnAnimEventName")] 		public CName SpawnAnimEventName { get; set;}
 
-		[Ordinal(0)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(3)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[Ordinal(0)] [RED("offsetVector")] 		public Vector OffsetVector { get; set;}
+		[Ordinal(4)] [RED("offsetVector")] 		public Vector OffsetVector { get; set;}
 
-		[Ordinal(0)] [RED("completeAfterSpawn")] 		public CBool CompleteAfterSpawn { get; set;}
+		[Ordinal(5)] [RED("completeAfterSpawn")] 		public CBool CompleteAfterSpawn { get; set;}
 
 		public CBTTaskSpawnEntityAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

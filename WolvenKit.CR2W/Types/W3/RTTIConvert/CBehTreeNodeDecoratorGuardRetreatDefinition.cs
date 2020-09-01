@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDecoratorGuardRetreatDefinition : IBehTreeNodeSetupCustomMoveDataDefinition
 	{
-		[Ordinal(0)] [RED("isAvailableWhenInPursuitRange")] 		public CBool IsAvailableWhenInPursuitRange { get; set;}
+		[Ordinal(1)] [RED("isAvailableWhenInPursuitRange")] 		public CBool IsAvailableWhenInPursuitRange { get; set;}
 
 		public CBehTreeNodeDecoratorGuardRetreatDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

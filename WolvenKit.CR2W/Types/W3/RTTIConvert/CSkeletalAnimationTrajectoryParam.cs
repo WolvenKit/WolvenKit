@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSkeletalAnimationTrajectoryParam : ISkeletalAnimationSetEntryParam
 	{
-		[Ordinal(0)] [RED("tagId")] 		public CName TagId { get; set;}
+		[Ordinal(1)] [RED("tagId")] 		public CName TagId { get; set;}
 
 		public CSkeletalAnimationTrajectoryParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

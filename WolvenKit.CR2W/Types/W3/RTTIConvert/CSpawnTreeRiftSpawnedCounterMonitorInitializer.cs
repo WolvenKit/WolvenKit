@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeRiftSpawnedCounterMonitorInitializer : ISpawnTreeSpawnMonitorInitializer
 	{
-		[Ordinal(0)] [RED("("riftTag")] 		public CName RiftTag { get; set;}
+		[Ordinal(1)] [RED("("riftTag")] 		public CName RiftTag { get; set;}
 
-		[Ordinal(0)] [RED("("spawnLimit")] 		public CInt32 SpawnLimit { get; set;}
+		[Ordinal(2)] [RED("("spawnLimit")] 		public CInt32 SpawnLimit { get; set;}
 
 		public CSpawnTreeRiftSpawnedCounterMonitorInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

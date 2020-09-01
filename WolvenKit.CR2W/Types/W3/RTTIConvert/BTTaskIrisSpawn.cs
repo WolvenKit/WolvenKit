@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskIrisSpawn : BTTaskIrisTask
 	{
-		[Ordinal(0)] [RED("m_Painting")] 		public CHandle<CEntity> M_Painting { get; set;}
+		[Ordinal(1)] [RED("m_Painting")] 		public CHandle<CEntity> M_Painting { get; set;}
 
 		public BTTaskIrisSpawn(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

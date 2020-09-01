@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SnowstormCustomParams : W3BuffCustomParams
 	{
-		[Ordinal(0)] [RED("("showCamEffect")] 		public CBool ShowCamEffect { get; set;}
+		[Ordinal(1)] [RED("("showCamEffect")] 		public CBool ShowCamEffect { get; set;}
 
 		public W3SnowstormCustomParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

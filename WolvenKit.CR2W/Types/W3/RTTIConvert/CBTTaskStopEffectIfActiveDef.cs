@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskStopEffectIfActiveDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(1)] [RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
-		[Ordinal(0)] [RED("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(2)] [RED("effectName")] 		public CName EffectName { get; set;}
 
-		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(3)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(4)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[Ordinal(0)] [RED("allEffects")] 		public CBool AllEffects { get; set;}
+		[Ordinal(5)] [RED("allEffects")] 		public CBool AllEffects { get; set;}
 
-		[Ordinal(0)] [RED("findActorByTag")] 		public CBool FindActorByTag { get; set;}
+		[Ordinal(6)] [RED("findActorByTag")] 		public CBool FindActorByTag { get; set;}
 
-		[Ordinal(0)] [RED("tagToFind")] 		public CName TagToFind { get; set;}
+		[Ordinal(7)] [RED("tagToFind")] 		public CName TagToFind { get; set;}
 
 		public CBTTaskStopEffectIfActiveDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

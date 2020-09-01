@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvWaterParameters : CVariable
 	{
-		[Ordinal(0)] [RED("("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(1)] [RED("("activated")] 		public CBool Activated { get; set;}
 
-		[Ordinal(0)] [RED("("waterFlowIntensity")] 		public SSimpleCurve WaterFlowIntensity { get; set;}
+		[Ordinal(2)] [RED("("waterFlowIntensity")] 		public SSimpleCurve WaterFlowIntensity { get; set;}
 
-		[Ordinal(0)] [RED("("underwaterBrightness")] 		public SSimpleCurve UnderwaterBrightness { get; set;}
+		[Ordinal(3)] [RED("("underwaterBrightness")] 		public SSimpleCurve UnderwaterBrightness { get; set;}
 
-		[Ordinal(0)] [RED("("underWaterFogIntensity")] 		public SSimpleCurve UnderWaterFogIntensity { get; set;}
+		[Ordinal(4)] [RED("("underWaterFogIntensity")] 		public SSimpleCurve UnderWaterFogIntensity { get; set;}
 
-		[Ordinal(0)] [RED("("waterColor")] 		public SSimpleCurve WaterColor { get; set;}
+		[Ordinal(5)] [RED("("waterColor")] 		public SSimpleCurve WaterColor { get; set;}
 
-		[Ordinal(0)] [RED("("underWaterColor")] 		public SSimpleCurve UnderWaterColor { get; set;}
+		[Ordinal(6)] [RED("("underWaterColor")] 		public SSimpleCurve UnderWaterColor { get; set;}
 
-		[Ordinal(0)] [RED("("waterFresnel")] 		public SSimpleCurve WaterFresnel { get; set;}
+		[Ordinal(7)] [RED("("waterFresnel")] 		public SSimpleCurve WaterFresnel { get; set;}
 
-		[Ordinal(0)] [RED("("waterCaustics")] 		public SSimpleCurve WaterCaustics { get; set;}
+		[Ordinal(8)] [RED("("waterCaustics")] 		public SSimpleCurve WaterCaustics { get; set;}
 
-		[Ordinal(0)] [RED("("waterFoamIntensity")] 		public SSimpleCurve WaterFoamIntensity { get; set;}
+		[Ordinal(9)] [RED("("waterFoamIntensity")] 		public SSimpleCurve WaterFoamIntensity { get; set;}
 
-		[Ordinal(0)] [RED("("waterAmbientScale")] 		public SSimpleCurve WaterAmbientScale { get; set;}
+		[Ordinal(10)] [RED("("waterAmbientScale")] 		public SSimpleCurve WaterAmbientScale { get; set;}
 
-		[Ordinal(0)] [RED("("waterDiffuseScale")] 		public SSimpleCurve WaterDiffuseScale { get; set;}
+		[Ordinal(11)] [RED("("waterDiffuseScale")] 		public SSimpleCurve WaterDiffuseScale { get; set;}
 
 		public CEnvWaterParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

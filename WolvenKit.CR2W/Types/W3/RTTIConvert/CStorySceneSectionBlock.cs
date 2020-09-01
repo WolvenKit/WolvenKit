@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneSectionBlock : CStorySceneGraphBlock
 	{
-		[Ordinal(0)] [RED("section")] 		public CPtr<CStorySceneSection> Section { get; set;}
+		[Ordinal(1)] [RED("section")] 		public CPtr<CStorySceneSection> Section { get; set;}
 
 		public CStorySceneSectionBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStoryScenePlayer : CEntity
 	{
-		[Ordinal(0)] [RED("storyScene")] 		public CHandle<CStoryScene> StoryScene { get; set;}
+		[Ordinal(1)] [RED("storyScene")] 		public CHandle<CStoryScene> StoryScene { get; set;}
 
-		[Ordinal(0)] [RED("injectedScenes", 2,0)] 		public CArray<CHandle<CStoryScene>> InjectedScenes { get; set;}
+		[Ordinal(2)] [RED("injectedScenes", 2,0)] 		public CArray<CHandle<CStoryScene>> InjectedScenes { get; set;}
 
-		[Ordinal(0)] [RED("isPaused")] 		public CUInt16 IsPaused { get; set;}
+		[Ordinal(3)] [RED("isPaused")] 		public CUInt16 IsPaused { get; set;}
 
-		[Ordinal(0)] [RED("isGameplay")] 		public CBool IsGameplay { get; set;}
+		[Ordinal(4)] [RED("isGameplay")] 		public CBool IsGameplay { get; set;}
 
-		[Ordinal(0)] [RED("m_isFinalboard")] 		public CBool M_isFinalboard { get; set;}
+		[Ordinal(5)] [RED("m_isFinalboard")] 		public CBool M_isFinalboard { get; set;}
 
 		public CStoryScenePlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

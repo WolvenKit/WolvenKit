@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTSetupRotationChange : IMoveSteeringTask
 	{
-		[Ordinal(0)] [RED("maxDirectionChange")] 		public CFloat MaxDirectionChange { get; set;}
+		[Ordinal(1)] [RED("maxDirectionChange")] 		public CFloat MaxDirectionChange { get; set;}
 
-		[Ordinal(0)] [RED("maxRotationChange")] 		public CFloat MaxRotationChange { get; set;}
+		[Ordinal(2)] [RED("maxRotationChange")] 		public CFloat MaxRotationChange { get; set;}
 
 		public CMoveSTSetupRotationChange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

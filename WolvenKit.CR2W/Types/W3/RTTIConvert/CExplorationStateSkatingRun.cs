@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateSkatingRun : CExplorationStateAbstract
 	{
-		[Ordinal(0)] [RED("("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
+		[Ordinal(1)] [RED("("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
 
-		[Ordinal(0)] [RED("("m_Sprinting")] 		public CBool M_Sprinting { get; set;}
+		[Ordinal(2)] [RED("("m_Sprinting")] 		public CBool M_Sprinting { get; set;}
 
 		public CExplorationStateSkatingRun(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

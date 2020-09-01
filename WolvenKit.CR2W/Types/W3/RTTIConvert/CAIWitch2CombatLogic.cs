@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIWitch2CombatLogic : CAIMonsterCombatLogic
 	{
-		[Ordinal(0)] [RED("Phase1")] 		public CBool Phase1 { get; set;}
+		[Ordinal(1)] [RED("Phase1")] 		public CBool Phase1 { get; set;}
 
-		[Ordinal(0)] [RED("Phase2")] 		public CBool Phase2 { get; set;}
+		[Ordinal(2)] [RED("Phase2")] 		public CBool Phase2 { get; set;}
 
-		[Ordinal(0)] [RED("PhaseReset")] 		public CBool PhaseReset { get; set;}
+		[Ordinal(3)] [RED("PhaseReset")] 		public CBool PhaseReset { get; set;}
 
-		[Ordinal(0)] [RED("bileAttack")] 		public CBool BileAttack { get; set;}
+		[Ordinal(4)] [RED("bileAttack")] 		public CBool BileAttack { get; set;}
 
-		[Ordinal(0)] [RED("prePursueTaunt")] 		public CBool PrePursueTaunt { get; set;}
+		[Ordinal(5)] [RED("prePursueTaunt")] 		public CBool PrePursueTaunt { get; set;}
 
 		public CAIWitch2CombatLogic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

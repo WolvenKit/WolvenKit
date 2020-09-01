@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventPropPlacementInterpolationKey : CVariable
 	{
-		[Ordinal(0)] [RED("bezierHandles", 6)] 		public CArrayFixedSize<Bezier2dHandle> BezierHandles { get; set;}
+		[Ordinal(1)] [RED("bezierHandles", 6)] 		public CArrayFixedSize<Bezier2dHandle> BezierHandles { get; set;}
 
-		[Ordinal(0)] [RED("interpolationTypes", 6)] 		public CArrayFixedSize<CUInt32> InterpolationTypes { get; set;}
+		[Ordinal(2)] [RED("interpolationTypes", 6)] 		public CArrayFixedSize<CUInt32> InterpolationTypes { get; set;}
 
-		[Ordinal(0)] [RED("volatile")] 		public CBool Volatile { get; set;}
+		[Ordinal(3)] [RED("volatile")] 		public CBool Volatile { get; set;}
 
 		public CStorySceneEventPropPlacementInterpolationKey(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionCounterDefinition : CBehTreeNodeConditionDefinition
 	{
-		[Ordinal(0)] [RED("("counterName")] 		public CBehTreeValCName CounterName { get; set;}
+		[Ordinal(1)] [RED("("counterName")] 		public CBehTreeValCName CounterName { get; set;}
 
-		[Ordinal(0)] [RED("("counterLowerBound")] 		public CBehTreeValInt CounterLowerBound { get; set;}
+		[Ordinal(2)] [RED("("counterLowerBound")] 		public CBehTreeValInt CounterLowerBound { get; set;}
 
-		[Ordinal(0)] [RED("("counterUpperBound")] 		public CBehTreeValInt CounterUpperBound { get; set;}
+		[Ordinal(3)] [RED("("counterUpperBound")] 		public CBehTreeValInt CounterUpperBound { get; set;}
 
 		public CBehTreeNodeConditionCounterDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

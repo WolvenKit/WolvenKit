@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSearchForThrowable : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("range")] 		public CFloat Range { get; set;}
+		[Ordinal(1)] [RED("("range")] 		public CFloat Range { get; set;}
 
-		[Ordinal(0)] [RED("("tag")] 		public CName Tag { get; set;}
+		[Ordinal(2)] [RED("("tag")] 		public CName Tag { get; set;}
 
-		[Ordinal(0)] [RED("("selectedObject")] 		public CHandle<CNode> SelectedObject { get; set;}
+		[Ordinal(3)] [RED("("selectedObject")] 		public CHandle<CNode> SelectedObject { get; set;}
 
-		[Ordinal(0)] [RED("("physicalComponent")] 		public CHandle<CComponent> PhysicalComponent { get; set;}
+		[Ordinal(4)] [RED("("physicalComponent")] 		public CHandle<CComponent> PhysicalComponent { get; set;}
 
-		[Ordinal(0)] [RED("("activate")] 		public CBool Activate { get; set;}
+		[Ordinal(5)] [RED("("activate")] 		public CBool Activate { get; set;}
 
-		[Ordinal(0)] [RED("("findTime")] 		public CFloat FindTime { get; set;}
+		[Ordinal(6)] [RED("("findTime")] 		public CFloat FindTime { get; set;}
 
 		public CBTTaskSearchForThrowable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

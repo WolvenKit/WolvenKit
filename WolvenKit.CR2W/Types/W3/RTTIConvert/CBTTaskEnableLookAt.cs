@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskEnableLookAt : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(1)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		[Ordinal(0)] [RED("owner")] 		public CHandle<CActor> Owner { get; set;}
+		[Ordinal(2)] [RED("owner")] 		public CHandle<CActor> Owner { get; set;}
 
-		[Ordinal(0)] [RED("useReactionTarget")] 		public CBool UseReactionTarget { get; set;}
+		[Ordinal(3)] [RED("useReactionTarget")] 		public CBool UseReactionTarget { get; set;}
 
-		[Ordinal(0)] [RED("useActionTarget")] 		public CBool UseActionTarget { get; set;}
+		[Ordinal(4)] [RED("useActionTarget")] 		public CBool UseActionTarget { get; set;}
 
-		[Ordinal(0)] [RED("useAsDecorator")] 		public CBool UseAsDecorator { get; set;}
+		[Ordinal(5)] [RED("useAsDecorator")] 		public CBool UseAsDecorator { get; set;}
 
 		public CBTTaskEnableLookAt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

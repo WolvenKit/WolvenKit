@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphCurveDampValueNode : CBehaviorGraphValueBaseNode
 	{
-		[Ordinal(0)] [RED("("curve")] 		public CPtr<CCurve> Curve { get; set;}
+		[Ordinal(1)] [RED("("curve")] 		public CPtr<CCurve> Curve { get; set;}
 
-		[Ordinal(0)] [RED("("abscissaAxisScale")] 		public CFloat AbscissaAxisScale { get; set;}
+		[Ordinal(2)] [RED("("abscissaAxisScale")] 		public CFloat AbscissaAxisScale { get; set;}
 
-		[Ordinal(0)] [RED("("cachedDurationValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedDurationValueNode { get; set;}
+		[Ordinal(3)] [RED("("cachedDurationValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedDurationValueNode { get; set;}
 
 		public CBehaviorGraphCurveDampValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

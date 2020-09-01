@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestLoadingScreenCondition : IQuestCondition
 	{
-		[Ordinal(0)] [RED("isShown")] 		public CBool IsShown { get; set;}
+		[Ordinal(1)] [RED("isShown")] 		public CBool IsShown { get; set;}
 
 		public CQuestLoadingScreenCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

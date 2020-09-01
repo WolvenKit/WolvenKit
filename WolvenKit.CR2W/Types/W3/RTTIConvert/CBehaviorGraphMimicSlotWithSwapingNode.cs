@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMimicSlotWithSwapingNode : CBehaviorGraphMimicSlotNode
 	{
-		[Ordinal(0)] [RED("("from")] 		public CUInt32 From { get; set;}
+		[Ordinal(1)] [RED("("from")] 		public CUInt32 From { get; set;}
 
-		[Ordinal(0)] [RED("("to")] 		public CUInt32 To { get; set;}
+		[Ordinal(2)] [RED("("to")] 		public CUInt32 To { get; set;}
 
 		public CBehaviorGraphMimicSlotWithSwapingNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCommunity : CResource
 	{
-		[Ordinal(0)] [RED("communityTable", 2,0)] 		public CArray<CSTableEntry> CommunityTable { get; set;}
+		[Ordinal(1)] [RED("communityTable", 2,0)] 		public CArray<CSTableEntry> CommunityTable { get; set;}
 
-		[Ordinal(0)] [RED("storyPhaseTimetable", 2,0)] 		public CArray<CSStoryPhaseTimetableEntry> StoryPhaseTimetable { get; set;}
+		[Ordinal(2)] [RED("storyPhaseTimetable", 2,0)] 		public CArray<CSStoryPhaseTimetableEntry> StoryPhaseTimetable { get; set;}
 
-		[Ordinal(0)] [RED("spawnsetType")] 		public CEnum<ECommunitySpawnsetType> SpawnsetType { get; set;}
+		[Ordinal(3)] [RED("spawnsetType")] 		public CEnum<ECommunitySpawnsetType> SpawnsetType { get; set;}
 
 		public CCommunity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

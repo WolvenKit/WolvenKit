@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphStateTransitionNode : CBehaviorGraphNode
 	{
-		[Ordinal(0)] [RED("transitionPriority")] 		public CFloat TransitionPriority { get; set;}
+		[Ordinal(1)] [RED("transitionPriority")] 		public CFloat TransitionPriority { get; set;}
 
-		[Ordinal(0)] [RED("isEnabled")] 		public CBool IsEnabled { get; set;}
+		[Ordinal(2)] [RED("isEnabled")] 		public CBool IsEnabled { get; set;}
 
-		[Ordinal(0)] [RED("transitionCondition")] 		public CPtr<IBehaviorStateTransitionCondition> TransitionCondition { get; set;}
+		[Ordinal(3)] [RED("transitionCondition")] 		public CPtr<IBehaviorStateTransitionCondition> TransitionCondition { get; set;}
 
-		[Ordinal(0)] [RED("setInternalVariables", 2,0)] 		public CArray<SBehaviorGraphTransitionSetInternalVariable> SetInternalVariables { get; set;}
+		[Ordinal(4)] [RED("setInternalVariables", 2,0)] 		public CArray<SBehaviorGraphTransitionSetInternalVariable> SetInternalVariables { get; set;}
 
-		[Ordinal(0)] [RED("cachedStartStateNode")] 		public CPtr<CBehaviorGraphStateNode> CachedStartStateNode { get; set;}
+		[Ordinal(5)] [RED("cachedStartStateNode")] 		public CPtr<CBehaviorGraphStateNode> CachedStartStateNode { get; set;}
 
-		[Ordinal(0)] [RED("cachedEndStateNode")] 		public CPtr<CBehaviorGraphStateNode> CachedEndStateNode { get; set;}
+		[Ordinal(6)] [RED("cachedEndStateNode")] 		public CPtr<CBehaviorGraphStateNode> CachedEndStateNode { get; set;}
 
 		public CBehaviorGraphStateTransitionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

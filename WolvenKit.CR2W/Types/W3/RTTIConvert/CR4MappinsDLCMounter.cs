@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4MappinsDLCMounter : IGameplayDLCMounter
 	{
-		[Ordinal(0)] [RED("("worldFilePath")] 		public CSoft<CWorld> WorldFilePath { get; set;}
+		[Ordinal(1)] [RED("("worldFilePath")] 		public CSoft<CWorld> WorldFilePath { get; set;}
 
-		[Ordinal(0)] [RED("("mappinsFilePath")] 		public CSoft<CEntityMapPinsResource> MappinsFilePath { get; set;}
+		[Ordinal(2)] [RED("("mappinsFilePath")] 		public CSoft<CEntityMapPinsResource> MappinsFilePath { get; set;}
 
-		[Ordinal(0)] [RED("("questMappinsFilePath")] 		public CSoft<CQuestMapPinsResource> QuestMappinsFilePath { get; set;}
+		[Ordinal(3)] [RED("("questMappinsFilePath")] 		public CSoft<CQuestMapPinsResource> QuestMappinsFilePath { get; set;}
 
 		public CR4MappinsDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

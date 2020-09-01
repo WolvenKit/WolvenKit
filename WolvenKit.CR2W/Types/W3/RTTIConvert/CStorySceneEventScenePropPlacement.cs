@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventScenePropPlacement : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("propId")] 		public CName PropId { get; set;}
+		[Ordinal(1)] [RED("propId")] 		public CName PropId { get; set;}
 
-		[Ordinal(0)] [RED("placement")] 		public EngineTransform Placement { get; set;}
+		[Ordinal(2)] [RED("placement")] 		public EngineTransform Placement { get; set;}
 
-		[Ordinal(0)] [RED("showHide")] 		public CBool ShowHide { get; set;}
+		[Ordinal(3)] [RED("showHide")] 		public CBool ShowHide { get; set;}
 
-		[Ordinal(0)] [RED("rotationCyclesPitch")] 		public CUInt32 RotationCyclesPitch { get; set;}
+		[Ordinal(4)] [RED("rotationCyclesPitch")] 		public CUInt32 RotationCyclesPitch { get; set;}
 
-		[Ordinal(0)] [RED("rotationCyclesRoll")] 		public CUInt32 RotationCyclesRoll { get; set;}
+		[Ordinal(5)] [RED("rotationCyclesRoll")] 		public CUInt32 RotationCyclesRoll { get; set;}
 
-		[Ordinal(0)] [RED("rotationCyclesYaw")] 		public CUInt32 RotationCyclesYaw { get; set;}
+		[Ordinal(6)] [RED("rotationCyclesYaw")] 		public CUInt32 RotationCyclesYaw { get; set;}
 
 		public CStorySceneEventScenePropPlacement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

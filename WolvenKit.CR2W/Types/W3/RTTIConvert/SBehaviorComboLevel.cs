@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorComboLevel : CVariable
 	{
-		[Ordinal(0)] [RED("("dirFront")] 		public SBehaviorComboDirection DirFront { get; set;}
+		[Ordinal(1)] [RED("("dirFront")] 		public SBehaviorComboDirection DirFront { get; set;}
 
-		[Ordinal(0)] [RED("("dirBack")] 		public SBehaviorComboDirection DirBack { get; set;}
+		[Ordinal(2)] [RED("("dirBack")] 		public SBehaviorComboDirection DirBack { get; set;}
 
-		[Ordinal(0)] [RED("("dirLeft")] 		public SBehaviorComboDirection DirLeft { get; set;}
+		[Ordinal(3)] [RED("("dirLeft")] 		public SBehaviorComboDirection DirLeft { get; set;}
 
-		[Ordinal(0)] [RED("("dirRight")] 		public SBehaviorComboDirection DirRight { get; set;}
+		[Ordinal(4)] [RED("("dirRight")] 		public SBehaviorComboDirection DirRight { get; set;}
 
-		[Ordinal(0)] [RED("("abilityRequired")] 		public CName AbilityRequired { get; set;}
+		[Ordinal(5)] [RED("("abilityRequired")] 		public CName AbilityRequired { get; set;}
 
 		public SBehaviorComboLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

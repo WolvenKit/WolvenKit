@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeScriptTicketAlgorithmDefinition : IBehTreeTicketAlgorithmDefinition
 	{
-		[Ordinal(0)] [RED("scriptDef")] 		public CHandle<ITicketAlgorithmScriptDefinition> ScriptDef { get; set;}
+		[Ordinal(1)] [RED("scriptDef")] 		public CHandle<ITicketAlgorithmScriptDefinition> ScriptDef { get; set;}
 
-		[Ordinal(0)] [RED("importanceMultiplier")] 		public CBehTreeValFloat ImportanceMultiplier { get; set;}
+		[Ordinal(2)] [RED("importanceMultiplier")] 		public CBehTreeValFloat ImportanceMultiplier { get; set;}
 
 		public CBehTreeScriptTicketAlgorithmDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

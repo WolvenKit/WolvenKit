@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskBombardmentAttack : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(1)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[Ordinal(0)] [RED("performBombardment")] 		public CBool PerformBombardment { get; set;}
+		[Ordinal(2)] [RED("performBombardment")] 		public CBool PerformBombardment { get; set;}
 
-		[Ordinal(0)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(3)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[Ordinal(0)] [RED("resourceName")] 		public CString ResourceName { get; set;}
+		[Ordinal(4)] [RED("resourceName")] 		public CString ResourceName { get; set;}
 
-		[Ordinal(0)] [RED("afterSpawnDelay")] 		public CFloat AfterSpawnDelay { get; set;}
+		[Ordinal(5)] [RED("afterSpawnDelay")] 		public CFloat AfterSpawnDelay { get; set;}
 
-		[Ordinal(0)] [RED("initialDelay")] 		public CFloat InitialDelay { get; set;}
+		[Ordinal(6)] [RED("initialDelay")] 		public CFloat InitialDelay { get; set;}
 
-		[Ordinal(0)] [RED("yOffset")] 		public CFloat YOffset { get; set;}
+		[Ordinal(7)] [RED("yOffset")] 		public CFloat YOffset { get; set;}
 
-		[Ordinal(0)] [RED("fxName")] 		public CName FxName { get; set;}
+		[Ordinal(8)] [RED("fxName")] 		public CName FxName { get; set;}
 
 		public CBTTaskBombardmentAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCheckFlyingActorsDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("minFlyingActors")] 		public CInt32 MinFlyingActors { get; set;}
+		[Ordinal(1)] [RED("("minFlyingActors")] 		public CInt32 MinFlyingActors { get; set;}
 
-		[Ordinal(0)] [RED("("maxFlyingActors")] 		public CInt32 MaxFlyingActors { get; set;}
+		[Ordinal(2)] [RED("("maxFlyingActors")] 		public CInt32 MaxFlyingActors { get; set;}
 
-		[Ordinal(0)] [RED("("flyingCheckType")] 		public CEnum<EFlyingCheck> FlyingCheckType { get; set;}
+		[Ordinal(3)] [RED("("flyingCheckType")] 		public CEnum<EFlyingCheck> FlyingCheckType { get; set;}
 
-		[Ordinal(0)] [RED("("ifNot")] 		public CBool IfNot { get; set;}
+		[Ordinal(4)] [RED("("ifNot")] 		public CBool IfNot { get; set;}
 
 		public CBTTaskCheckFlyingActorsDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

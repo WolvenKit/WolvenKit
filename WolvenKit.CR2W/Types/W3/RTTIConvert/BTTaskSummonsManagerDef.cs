@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskSummonsManagerDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("summonedEntitiesTag")] 		public CName SummonedEntitiesTag { get; set;}
+		[Ordinal(1)] [RED("summonedEntitiesTag")] 		public CName SummonedEntitiesTag { get; set;}
 
-		[Ordinal(0)] [RED("killEntitiesOnDistance")] 		public CBool KillEntitiesOnDistance { get; set;}
+		[Ordinal(2)] [RED("killEntitiesOnDistance")] 		public CBool KillEntitiesOnDistance { get; set;}
 
-		[Ordinal(0)] [RED("killDistance")] 		public CFloat KillDistance { get; set;}
+		[Ordinal(3)] [RED("killDistance")] 		public CFloat KillDistance { get; set;}
 
 		public BTTaskSummonsManagerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

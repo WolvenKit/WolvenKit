@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCustomCameraAutoAvoidanceCollisionController : ICustomCameraCollisionController
 	{
-		[Ordinal(0)] [RED("("catchUpCurve")] 		public CPtr<CCurve> CatchUpCurve { get; set;}
+		[Ordinal(1)] [RED("("catchUpCurve")] 		public CPtr<CCurve> CatchUpCurve { get; set;}
 
 		public CCustomCameraAutoAvoidanceCollisionController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

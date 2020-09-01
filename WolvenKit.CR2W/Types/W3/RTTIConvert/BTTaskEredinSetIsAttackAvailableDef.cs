@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskEredinSetIsAttackAvailableDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("attack")] 		public CEnum<EBossSpecialAttacks> Attack { get; set;}
+		[Ordinal(1)] [RED("attack")] 		public CEnum<EBossSpecialAttacks> Attack { get; set;}
 
-		[Ordinal(0)] [RED("val")] 		public CBool Val { get; set;}
+		[Ordinal(2)] [RED("val")] 		public CBool Val { get; set;}
 
-		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(3)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
 		public BTTaskEredinSetIsAttackAvailableDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTriggerAreaEnvironmentVisibilityComponent : CTriggerAreaComponent
 	{
-		[Ordinal(0)] [RED("hideTerrain")] 		public CBool HideTerrain { get; set;}
+		[Ordinal(1)] [RED("hideTerrain")] 		public CBool HideTerrain { get; set;}
 
-		[Ordinal(0)] [RED("hideFoliage")] 		public CBool HideFoliage { get; set;}
+		[Ordinal(2)] [RED("hideFoliage")] 		public CBool HideFoliage { get; set;}
 
-		[Ordinal(0)] [RED("hideWater")] 		public CBool HideWater { get; set;}
+		[Ordinal(3)] [RED("hideWater")] 		public CBool HideWater { get; set;}
 
 		public CTriggerAreaEnvironmentVisibilityComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

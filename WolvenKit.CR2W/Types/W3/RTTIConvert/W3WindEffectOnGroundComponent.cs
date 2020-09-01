@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3WindEffectOnGroundComponent : CSelfUpdatingComponent
 	{
-		[Ordinal(0)] [RED("("maxDistanceFromGround")] 		public CFloat MaxDistanceFromGround { get; set;}
+		[Ordinal(1)] [RED("("maxDistanceFromGround")] 		public CFloat MaxDistanceFromGround { get; set;}
 
-		[Ordinal(0)] [RED("("activeAtStart")] 		public CBool ActiveAtStart { get; set;}
+		[Ordinal(2)] [RED("("activeAtStart")] 		public CBool ActiveAtStart { get; set;}
 
-		[Ordinal(0)] [RED("("playOnAnimEvent")] 		public CBool PlayOnAnimEvent { get; set;}
+		[Ordinal(3)] [RED("("playOnAnimEvent")] 		public CBool PlayOnAnimEvent { get; set;}
 
-		[Ordinal(0)] [RED("("activateOnAnimEvent")] 		public CBool ActivateOnAnimEvent { get; set;}
+		[Ordinal(4)] [RED("("activateOnAnimEvent")] 		public CBool ActivateOnAnimEvent { get; set;}
 
-		[Ordinal(0)] [RED("("animEvent")] 		public CName AnimEvent { get; set;}
+		[Ordinal(5)] [RED("("animEvent")] 		public CName AnimEvent { get; set;}
 
-		[Ordinal(0)] [RED("("deactivateAnimEvent")] 		public CName DeactivateAnimEvent { get; set;}
+		[Ordinal(6)] [RED("("deactivateAnimEvent")] 		public CName DeactivateAnimEvent { get; set;}
 
-		[Ordinal(0)] [RED("("delayBetweenEffects")] 		public CFloat DelayBetweenEffects { get; set;}
+		[Ordinal(7)] [RED("("delayBetweenEffects")] 		public CFloat DelayBetweenEffects { get; set;}
 
-		[Ordinal(0)] [RED("("effectTemplate")] 		public CHandle<CEntityTemplate> EffectTemplate { get; set;}
+		[Ordinal(8)] [RED("("effectTemplate")] 		public CHandle<CEntityTemplate> EffectTemplate { get; set;}
 
-		[Ordinal(0)] [RED("("m_isActive")] 		public CBool M_isActive { get; set;}
+		[Ordinal(9)] [RED("("m_isActive")] 		public CBool M_isActive { get; set;}
 
-		[Ordinal(0)] [RED("("m_effectEntity")] 		public CHandle<CEntity> M_effectEntity { get; set;}
+		[Ordinal(10)] [RED("("m_effectEntity")] 		public CHandle<CEntity> M_effectEntity { get; set;}
 
-		[Ordinal(0)] [RED("("m_collisionGroupNames", 2,0)] 		public CArray<CName> M_collisionGroupNames { get; set;}
+		[Ordinal(11)] [RED("("m_collisionGroupNames", 2,0)] 		public CArray<CName> M_collisionGroupNames { get; set;}
 
-		[Ordinal(0)] [RED("("m_delayUntilNextEffect")] 		public CFloat M_delayUntilNextEffect { get; set;}
+		[Ordinal(12)] [RED("("m_delayUntilNextEffect")] 		public CFloat M_delayUntilNextEffect { get; set;}
 
 		public W3WindEffectOnGroundComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

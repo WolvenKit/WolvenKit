@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSearchForObjectDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("range")] 		public CFloat Range { get; set;}
+		[Ordinal(1)] [RED("("range")] 		public CFloat Range { get; set;}
 
-		[Ordinal(0)] [RED("("tag")] 		public CBehTreeValCName Tag { get; set;}
+		[Ordinal(2)] [RED("("tag")] 		public CBehTreeValCName Tag { get; set;}
 
-		[Ordinal(0)] [RED("("selectRandomObject")] 		public CBool SelectRandomObject { get; set;}
+		[Ordinal(3)] [RED("("selectRandomObject")] 		public CBool SelectRandomObject { get; set;}
 
-		[Ordinal(0)] [RED("("avoidSelectingPreviousOne")] 		public CBool AvoidSelectingPreviousOne { get; set;}
+		[Ordinal(4)] [RED("("avoidSelectingPreviousOne")] 		public CBool AvoidSelectingPreviousOne { get; set;}
 
-		[Ordinal(0)] [RED("("dontSelectClosestOneIfPossible")] 		public CBool DontSelectClosestOneIfPossible { get; set;}
+		[Ordinal(5)] [RED("("dontSelectClosestOneIfPossible")] 		public CBool DontSelectClosestOneIfPossible { get; set;}
 
-		[Ordinal(0)] [RED("("addFactOnLastObject")] 		public CBool AddFactOnLastObject { get; set;}
+		[Ordinal(6)] [RED("("addFactOnLastObject")] 		public CBool AddFactOnLastObject { get; set;}
 
-		[Ordinal(0)] [RED("("setActionTargetOnIsAvailable")] 		public CBool SetActionTargetOnIsAvailable { get; set;}
+		[Ordinal(7)] [RED("("setActionTargetOnIsAvailable")] 		public CBool SetActionTargetOnIsAvailable { get; set;}
 
-		[Ordinal(0)] [RED("("cooldown")] 		public CFloat Cooldown { get; set;}
+		[Ordinal(8)] [RED("("cooldown")] 		public CFloat Cooldown { get; set;}
 
 		public CBTTaskSearchForObjectDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3IllusionaryAppearance : W3IllusionaryObstacle
 	{
-		[Ordinal(0)] [RED("("realAppearance")] 		public CString RealAppearance { get; set;}
+		[Ordinal(1)] [RED("("realAppearance")] 		public CString RealAppearance { get; set;}
 
 		public W3IllusionaryAppearance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

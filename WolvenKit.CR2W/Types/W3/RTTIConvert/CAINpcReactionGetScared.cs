@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcReactionGetScared : CAINpcReaction
 	{
-		[Ordinal(0)] [RED("scaredTime")] 		public CFloat ScaredTime { get; set;}
+		[Ordinal(1)] [RED("scaredTime")] 		public CFloat ScaredTime { get; set;}
 
-		[Ordinal(0)] [RED("scaredTimeMax")] 		public CFloat ScaredTimeMax { get; set;}
+		[Ordinal(2)] [RED("scaredTimeMax")] 		public CFloat ScaredTimeMax { get; set;}
 
-		[Ordinal(0)] [RED("checkLineOfSight")] 		public CBool CheckLineOfSight { get; set;}
+		[Ordinal(3)] [RED("checkLineOfSight")] 		public CBool CheckLineOfSight { get; set;}
 
-		[Ordinal(0)] [RED("tryToBeHostileFirst")] 		public CBool TryToBeHostileFirst { get; set;}
+		[Ordinal(4)] [RED("tryToBeHostileFirst")] 		public CBool TryToBeHostileFirst { get; set;}
 
 		public CAINpcReactionGetScared(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMeteoriteStormEntity : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("resourceName")] 		public CName ResourceName { get; set;}
+		[Ordinal(1)] [RED("resourceName")] 		public CName ResourceName { get; set;}
 
-		[Ordinal(0)] [RED("timeBetweenSpawn")] 		public CFloat TimeBetweenSpawn { get; set;}
+		[Ordinal(2)] [RED("timeBetweenSpawn")] 		public CFloat TimeBetweenSpawn { get; set;}
 
-		[Ordinal(0)] [RED("minDistFromTarget")] 		public CFloat MinDistFromTarget { get; set;}
+		[Ordinal(3)] [RED("minDistFromTarget")] 		public CFloat MinDistFromTarget { get; set;}
 
-		[Ordinal(0)] [RED("maxDistFromTarget")] 		public CFloat MaxDistFromTarget { get; set;}
+		[Ordinal(4)] [RED("maxDistFromTarget")] 		public CFloat MaxDistFromTarget { get; set;}
 
-		[Ordinal(0)] [RED("minDistFromEachOther")] 		public CFloat MinDistFromEachOther { get; set;}
+		[Ordinal(5)] [RED("minDistFromEachOther")] 		public CFloat MinDistFromEachOther { get; set;}
 
-		[Ordinal(0)] [RED("victim")] 		public CHandle<CActor> Victim { get; set;}
+		[Ordinal(6)] [RED("victim")] 		public CHandle<CActor> Victim { get; set;}
 
-		[Ordinal(0)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(7)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
 		public CMeteoriteStormEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

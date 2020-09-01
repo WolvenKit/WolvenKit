@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneDanglesShakeEvent : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("("actor")] 		public CName Actor { get; set;}
+		[Ordinal(1)] [RED("("actor")] 		public CName Actor { get; set;}
 
-		[Ordinal(0)] [RED("("factor")] 		public CFloat Factor { get; set;}
+		[Ordinal(2)] [RED("("factor")] 		public CFloat Factor { get; set;}
 
 		public CStorySceneDanglesShakeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

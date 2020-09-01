@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphRecentlyUsedAnimsStateNode : CBehaviorGraphStateNode
 	{
-		[Ordinal(0)] [RED("poseBlendOutTime")] 		public CFloat PoseBlendOutTime { get; set;}
+		[Ordinal(1)] [RED("poseBlendOutTime")] 		public CFloat PoseBlendOutTime { get; set;}
 
-		[Ordinal(0)] [RED("applyMotion")] 		public CBool ApplyMotion { get; set;}
+		[Ordinal(2)] [RED("applyMotion")] 		public CBool ApplyMotion { get; set;}
 
 		public CBehaviorGraphRecentlyUsedAnimsStateNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

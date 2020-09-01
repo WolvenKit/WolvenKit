@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleInitializerSize3D : IParticleInitializer
 	{
-		[Ordinal(0)] [RED("("size")] 		public CPtr<IEvaluatorVector> Size { get; set;}
+		[Ordinal(1)] [RED("("size")] 		public CPtr<IEvaluatorVector> Size { get; set;}
 
 		public CParticleInitializerSize3D(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

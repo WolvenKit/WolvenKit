@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventFade : CStorySceneEventDuration
 	{
-		[Ordinal(0)] [RED("("in")] 		public CBool In { get; set;}
+		[Ordinal(1)] [RED("("in")] 		public CBool In { get; set;}
 
-		[Ordinal(0)] [RED("("color")] 		public CColor Color { get; set;}
+		[Ordinal(2)] [RED("("color")] 		public CColor Color { get; set;}
 
 		public CStorySceneEventFade(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

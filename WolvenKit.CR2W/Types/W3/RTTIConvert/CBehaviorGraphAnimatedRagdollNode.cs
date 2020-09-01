@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAnimatedRagdollNode : CBehaviorGraphValueNode
 	{
-		[Ordinal(0)] [RED("chanceToGoToRagdoll")] 		public CFloat ChanceToGoToRagdoll { get; set;}
+		[Ordinal(1)] [RED("chanceToGoToRagdoll")] 		public CFloat ChanceToGoToRagdoll { get; set;}
 
-		[Ordinal(0)] [RED("stateBlendTime")] 		public CFloat StateBlendTime { get; set;}
+		[Ordinal(2)] [RED("stateBlendTime")] 		public CFloat StateBlendTime { get; set;}
 
-		[Ordinal(0)] [RED("maxFlightTime")] 		public Vector2 MaxFlightTime { get; set;}
+		[Ordinal(3)] [RED("maxFlightTime")] 		public Vector2 MaxFlightTime { get; set;}
 
-		[Ordinal(0)] [RED("initialVelocityBoostZ")] 		public Vector2 InitialVelocityBoostZ { get; set;}
+		[Ordinal(4)] [RED("initialVelocityBoostZ")] 		public Vector2 InitialVelocityBoostZ { get; set;}
 
-		[Ordinal(0)] [RED("gravity")] 		public CFloat Gravity { get; set;}
+		[Ordinal(5)] [RED("gravity")] 		public CFloat Gravity { get; set;}
 
-		[Ordinal(0)] [RED("topVerticalVelocity")] 		public CFloat TopVerticalVelocity { get; set;}
+		[Ordinal(6)] [RED("topVerticalVelocity")] 		public CFloat TopVerticalVelocity { get; set;}
 
-		[Ordinal(0)] [RED("switchAnimatedRagdollToRagdollEvent")] 		public CName SwitchAnimatedRagdollToRagdollEvent { get; set;}
+		[Ordinal(7)] [RED("switchAnimatedRagdollToRagdollEvent")] 		public CName SwitchAnimatedRagdollToRagdollEvent { get; set;}
 
-		[Ordinal(0)] [RED("poseRotateIK")] 		public SApplyRotationIKSolverData PoseRotateIK { get; set;}
+		[Ordinal(8)] [RED("poseRotateIK")] 		public SApplyRotationIKSolverData PoseRotateIK { get; set;}
 
-		[Ordinal(0)] [RED("dirIndices", 2,0)] 		public CArray<SBehaviorGraphAnimatedRagdollDirDefinition> DirIndices { get; set;}
+		[Ordinal(9)] [RED("dirIndices", 2,0)] 		public CArray<SBehaviorGraphAnimatedRagdollDirDefinition> DirIndices { get; set;}
 
-		[Ordinal(0)] [RED("cachedNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphNode>> CachedNodes { get; set;}
+		[Ordinal(10)] [RED("cachedNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphNode>> CachedNodes { get; set;}
 
 		public CBehaviorGraphAnimatedRagdollNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestGraphMinigameBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("minigame")] 		public CPtr<CMinigame> Minigame { get; set;}
+		[Ordinal(1)] [RED("minigame")] 		public CPtr<CMinigame> Minigame { get; set;}
 
 		public CQuestGraphMinigameBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

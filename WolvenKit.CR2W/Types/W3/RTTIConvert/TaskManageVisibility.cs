@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class TaskManageVisibility : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("visible")] 		public CBool Visible { get; set;}
+		[Ordinal(1)] [RED("("visible")] 		public CBool Visible { get; set;}
 
-		[Ordinal(0)] [RED("("changeMeshVisibility")] 		public CBool ChangeMeshVisibility { get; set;}
+		[Ordinal(2)] [RED("("changeMeshVisibility")] 		public CBool ChangeMeshVisibility { get; set;}
 
-		[Ordinal(0)] [RED("("changeGameplayVisibility")] 		public CBool ChangeGameplayVisibility { get; set;}
+		[Ordinal(3)] [RED("("changeGameplayVisibility")] 		public CBool ChangeGameplayVisibility { get; set;}
 
-		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(4)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[Ordinal(0)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(5)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[Ordinal(0)] [RED("("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
+		[Ordinal(6)] [RED("("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
 
-		[Ordinal(0)] [RED("("onAnimEventName")] 		public CName OnAnimEventName { get; set;}
+		[Ordinal(7)] [RED("("onAnimEventName")] 		public CName OnAnimEventName { get; set;}
 
 		public TaskManageVisibility(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

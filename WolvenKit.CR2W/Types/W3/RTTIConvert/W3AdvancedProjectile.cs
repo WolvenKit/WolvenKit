@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3AdvancedProjectile : CThrowable
 	{
-		[Ordinal(0)] [RED("("projSpeed")] 		public CFloat ProjSpeed { get; set;}
+		[Ordinal(1)] [RED("("projSpeed")] 		public CFloat ProjSpeed { get; set;}
 
-		[Ordinal(0)] [RED("("projAngle")] 		public CFloat ProjAngle { get; set;}
+		[Ordinal(2)] [RED("("projAngle")] 		public CFloat ProjAngle { get; set;}
 
-		[Ordinal(0)] [RED("("projDMG")] 		public CFloat ProjDMG { get; set;}
+		[Ordinal(3)] [RED("("projDMG")] 		public CFloat ProjDMG { get; set;}
 
-		[Ordinal(0)] [RED("("projSilverDMG")] 		public CFloat ProjSilverDMG { get; set;}
+		[Ordinal(4)] [RED("("projSilverDMG")] 		public CFloat ProjSilverDMG { get; set;}
 
-		[Ordinal(0)] [RED("("ignoreArmor")] 		public CBool IgnoreArmor { get; set;}
+		[Ordinal(5)] [RED("("ignoreArmor")] 		public CBool IgnoreArmor { get; set;}
 
-		[Ordinal(0)] [RED("("projEfect")] 		public CEnum<EEffectType> ProjEfect { get; set;}
+		[Ordinal(6)] [RED("("projEfect")] 		public CEnum<EEffectType> ProjEfect { get; set;}
 
-		[Ordinal(0)] [RED("("persistFxAfterCollision")] 		public CBool PersistFxAfterCollision { get; set;}
+		[Ordinal(7)] [RED("("persistFxAfterCollision")] 		public CBool PersistFxAfterCollision { get; set;}
 
-		[Ordinal(0)] [RED("("dealDamageEvenIfDodging")] 		public CBool DealDamageEvenIfDodging { get; set;}
+		[Ordinal(8)] [RED("("dealDamageEvenIfDodging")] 		public CBool DealDamageEvenIfDodging { get; set;}
 
-		[Ordinal(0)] [RED("("ignore")] 		public CBool Ignore { get; set;}
+		[Ordinal(9)] [RED("("ignore")] 		public CBool Ignore { get; set;}
 
-		[Ordinal(0)] [RED("("isActive")] 		public CBool IsActive { get; set;}
+		[Ordinal(10)] [RED("("isActive")] 		public CBool IsActive { get; set;}
 
-		[Ordinal(0)] [RED("("collidedEntities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> CollidedEntities { get; set;}
+		[Ordinal(11)] [RED("("collidedEntities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> CollidedEntities { get; set;}
 
-		[Ordinal(0)] [RED("("lifeSpan")] 		public CFloat LifeSpan { get; set;}
+		[Ordinal(12)] [RED("("lifeSpan")] 		public CFloat LifeSpan { get; set;}
 
 		public W3AdvancedProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

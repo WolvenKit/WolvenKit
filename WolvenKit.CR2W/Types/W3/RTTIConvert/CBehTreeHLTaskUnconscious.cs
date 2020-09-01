@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeHLTaskUnconscious : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("syncInstance")] 		public CHandle<CAnimationManualSlotSyncInstance> SyncInstance { get; set;}
+		[Ordinal(1)] [RED("syncInstance")] 		public CHandle<CAnimationManualSlotSyncInstance> SyncInstance { get; set;}
 
-		[Ordinal(0)] [RED("finisherEnabled")] 		public CBool FinisherEnabled { get; set;}
+		[Ordinal(2)] [RED("finisherEnabled")] 		public CBool FinisherEnabled { get; set;}
 
 		public CBehTreeHLTaskUnconscious(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

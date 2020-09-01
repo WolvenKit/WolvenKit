@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardPlacementMode : CModStoryBoardAssetSelectionBasedWorkMode
 	{
-		[Ordinal(0)] [RED("thePlacementDirector")] 		public CHandle<CModStoryBoardPlacementDirector> ThePlacementDirector { get; set;}
+		[Ordinal(1)] [RED("thePlacementDirector")] 		public CHandle<CModStoryBoardPlacementDirector> ThePlacementDirector { get; set;}
 
-		[Ordinal(0)] [RED("theController")] 		public CHandle<CModStoryBoardInteractivePlacement> TheController { get; set;}
+		[Ordinal(2)] [RED("theController")] 		public CHandle<CModStoryBoardInteractivePlacement> TheController { get; set;}
 
 		public CModStoryBoardPlacementMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskTackleDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("dealDamage")] 		public CBool DealDamage { get; set;}
+		[Ordinal(1)] [RED("("dealDamage")] 		public CBool DealDamage { get; set;}
 
-		[Ordinal(0)] [RED("("activeOnAnimEvent")] 		public CBool ActiveOnAnimEvent { get; set;}
+		[Ordinal(2)] [RED("("activeOnAnimEvent")] 		public CBool ActiveOnAnimEvent { get; set;}
 
 		public CBTTaskTackleDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

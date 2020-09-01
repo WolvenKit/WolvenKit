@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_StaminaDrain : CBaseGameplayEffect
 	{
-		[Ordinal(0)] [RED("("effectValueDrain")] 		public SAbilityAttributeValue EffectValueDrain { get; set;}
+		[Ordinal(1)] [RED("("effectValueDrain")] 		public SAbilityAttributeValue EffectValueDrain { get; set;}
 
 		public W3Effect_StaminaDrain(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

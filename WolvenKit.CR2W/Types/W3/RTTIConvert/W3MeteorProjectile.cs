@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MeteorProjectile : W3FireballProjectile
 	{
-		[Ordinal(0)] [RED("("explosionRadius")] 		public CFloat ExplosionRadius { get; set;}
+		[Ordinal(1)] [RED("("explosionRadius")] 		public CFloat ExplosionRadius { get; set;}
 
-		[Ordinal(0)] [RED("("markerEntityTemplate")] 		public CHandle<CEntityTemplate> MarkerEntityTemplate { get; set;}
+		[Ordinal(2)] [RED("("markerEntityTemplate")] 		public CHandle<CEntityTemplate> MarkerEntityTemplate { get; set;}
 
-		[Ordinal(0)] [RED("("destroyMarkerAfter")] 		public CFloat DestroyMarkerAfter { get; set;}
+		[Ordinal(3)] [RED("("destroyMarkerAfter")] 		public CFloat DestroyMarkerAfter { get; set;}
 
-		[Ordinal(0)] [RED("("markerEntity")] 		public CHandle<CEntity> MarkerEntity { get; set;}
+		[Ordinal(4)] [RED("("markerEntity")] 		public CHandle<CEntity> MarkerEntity { get; set;}
 
 		public W3MeteorProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

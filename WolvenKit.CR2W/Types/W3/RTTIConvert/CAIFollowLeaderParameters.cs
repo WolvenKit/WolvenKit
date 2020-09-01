@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFollowLeaderParameters : CAIIdleParameters
 	{
-		[Ordinal(0)] [RED("leaderName")] 		public CName LeaderName { get; set;}
+		[Ordinal(1)] [RED("leaderName")] 		public CName LeaderName { get; set;}
 
-		[Ordinal(0)] [RED("formation")] 		public CHandle<CFormation> Formation { get; set;}
+		[Ordinal(2)] [RED("formation")] 		public CHandle<CFormation> Formation { get; set;}
 
 		public CAIFollowLeaderParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

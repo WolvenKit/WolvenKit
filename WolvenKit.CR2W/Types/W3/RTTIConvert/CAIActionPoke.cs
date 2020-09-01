@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIActionPoke : IAIActionTree
 	{
-		[Ordinal(0)] [RED("pokeEvent")] 		public CName PokeEvent { get; set;}
+		[Ordinal(1)] [RED("pokeEvent")] 		public CName PokeEvent { get; set;}
 
-		[Ordinal(0)] [RED("pokableScriptedAction")] 		public CHandle<IAIActionTree> PokableScriptedAction { get; set;}
+		[Ordinal(2)] [RED("pokableScriptedAction")] 		public CHandle<IAIActionTree> PokableScriptedAction { get; set;}
 
 		public CAIActionPoke(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

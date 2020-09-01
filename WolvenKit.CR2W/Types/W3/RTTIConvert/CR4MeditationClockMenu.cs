@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4MeditationClockMenu : CR4MenuBase
 	{
-		[Ordinal(0)] [RED("("m_fxSetBlockMeditation")] 		public CHandle<CScriptedFlashFunction> M_fxSetBlockMeditation { get; set;}
+		[Ordinal(1)] [RED("("m_fxSetBlockMeditation")] 		public CHandle<CScriptedFlashFunction> M_fxSetBlockMeditation { get; set;}
 
-		[Ordinal(0)] [RED("("m_fxSetCanMeditate")] 		public CHandle<CScriptedFlashFunction> M_fxSetCanMeditate { get; set;}
+		[Ordinal(2)] [RED("("m_fxSetCanMeditate")] 		public CHandle<CScriptedFlashFunction> M_fxSetCanMeditate { get; set;}
 
-		[Ordinal(0)] [RED("("m_fxSetBonusMeditationTime")] 		public CHandle<CScriptedFlashFunction> M_fxSetBonusMeditationTime { get; set;}
+		[Ordinal(3)] [RED("("m_fxSetBonusMeditationTime")] 		public CHandle<CScriptedFlashFunction> M_fxSetBonusMeditationTime { get; set;}
 
-		[Ordinal(0)] [RED("("m_fxSetGeraltBackgroundVisible")] 		public CHandle<CScriptedFlashFunction> M_fxSetGeraltBackgroundVisible { get; set;}
+		[Ordinal(4)] [RED("("m_fxSetGeraltBackgroundVisible")] 		public CHandle<CScriptedFlashFunction> M_fxSetGeraltBackgroundVisible { get; set;}
 
-		[Ordinal(0)] [RED("("m_fxSet24HRFormat")] 		public CHandle<CScriptedFlashFunction> M_fxSet24HRFormat { get; set;}
+		[Ordinal(5)] [RED("("m_fxSet24HRFormat")] 		public CHandle<CScriptedFlashFunction> M_fxSet24HRFormat { get; set;}
 
-		[Ordinal(0)] [RED("("canMeditateWait")] 		public CBool CanMeditateWait { get; set;}
+		[Ordinal(6)] [RED("("canMeditateWait")] 		public CBool CanMeditateWait { get; set;}
 
-		[Ordinal(0)] [RED("("isGameTimePaused")] 		public CBool IsGameTimePaused { get; set;}
+		[Ordinal(7)] [RED("("isGameTimePaused")] 		public CBool IsGameTimePaused { get; set;}
 
-		[Ordinal(0)] [RED("("BONUS_MEDITATION_TIME")] 		public CInt32 BONUS_MEDITATION_TIME { get; set;}
+		[Ordinal(8)] [RED("("BONUS_MEDITATION_TIME")] 		public CInt32 BONUS_MEDITATION_TIME { get; set;}
 
 		public CR4MeditationClockMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

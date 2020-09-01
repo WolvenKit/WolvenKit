@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSetAttitudeDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("towardsActionTarget")] 		public CBool TowardsActionTarget { get; set;}
+		[Ordinal(1)] [RED("("towardsActionTarget")] 		public CBool TowardsActionTarget { get; set;}
 
-		[Ordinal(0)] [RED("("gameplayEventName")] 		public CBehTreeValCName GameplayEventName { get; set;}
+		[Ordinal(2)] [RED("("gameplayEventName")] 		public CBehTreeValCName GameplayEventName { get; set;}
 
-		[Ordinal(0)] [RED("("attitude")] 		public CEnum<EAIAttitude> Attitude { get; set;}
+		[Ordinal(3)] [RED("("attitude")] 		public CEnum<EAIAttitude> Attitude { get; set;}
 
 		public CBTTaskSetAttitudeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

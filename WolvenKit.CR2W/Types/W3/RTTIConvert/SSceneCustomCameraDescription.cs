@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSceneCustomCameraDescription : CVariable
 	{
-		[Ordinal(0)] [RED("("cameraName")] 		public CName CameraName { get; set;}
+		[Ordinal(1)] [RED("("cameraName")] 		public CName CameraName { get; set;}
 
-		[Ordinal(0)] [RED("("fov")] 		public CFloat Fov { get; set;}
+		[Ordinal(2)] [RED("("fov")] 		public CFloat Fov { get; set;}
 
-		[Ordinal(0)] [RED("("cameraTransform")] 		public EngineTransform CameraTransform { get; set;}
+		[Ordinal(3)] [RED("("cameraTransform")] 		public EngineTransform CameraTransform { get; set;}
 
 		public SSceneCustomCameraDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

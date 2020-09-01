@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondIsInImportantAnim : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("combatDataStorage")] 		public CHandle<CBaseAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(1)] [RED("combatDataStorage")] 		public CHandle<CBaseAICombatStorage> CombatDataStorage { get; set;}
 
 		public BTCondIsInImportantAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleBoatHealth : CR4HudModuleBase
 	{
-		[Ordinal(0)] [RED("("m_fxSetVolumeHealth")] 		public CHandle<CScriptedFlashFunction> M_fxSetVolumeHealth { get; set;}
+		[Ordinal(1)] [RED("("m_fxSetVolumeHealth")] 		public CHandle<CScriptedFlashFunction> M_fxSetVolumeHealth { get; set;}
 
-		[Ordinal(0)] [RED("("m_wasInBoat")] 		public CBool M_wasInBoat { get; set;}
+		[Ordinal(2)] [RED("("m_wasInBoat")] 		public CBool M_wasInBoat { get; set;}
 
 		public CR4HudModuleBoatHealth(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

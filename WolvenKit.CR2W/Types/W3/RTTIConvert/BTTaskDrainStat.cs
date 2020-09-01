@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskDrainStat : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("stat")] 		public CEnum<EBaseCharacterStats> Stat { get; set;}
+		[Ordinal(1)] [RED("stat")] 		public CEnum<EBaseCharacterStats> Stat { get; set;}
 
-		[Ordinal(0)] [RED("val")] 		public CFloat Val { get; set;}
+		[Ordinal(2)] [RED("val")] 		public CFloat Val { get; set;}
 
-		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(3)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
 		public BTTaskDrainStat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

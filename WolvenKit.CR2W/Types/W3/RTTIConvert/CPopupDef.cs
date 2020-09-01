@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPopupDef : CObject
 	{
-		[Ordinal(0)] [RED("timeParam")] 		public CPtr<IPopupTimeParam> TimeParam { get; set;}
+		[Ordinal(1)] [RED("timeParam")] 		public CPtr<IPopupTimeParam> TimeParam { get; set;}
 
 		public CPopupDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

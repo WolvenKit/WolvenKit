@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskEredinSummonMeteoriteStormDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("resourceName")] 		public CName ResourceName { get; set;}
+		[Ordinal(1)] [RED("resourceName")] 		public CName ResourceName { get; set;}
 
-		[Ordinal(0)] [RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(2)] [RED("eventName")] 		public CName EventName { get; set;}
 
 		public BTTaskEredinSummonMeteoriteStormDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

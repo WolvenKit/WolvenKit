@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CConeAttackRange : CAIAttackRange
 	{
-		[Ordinal(0)] [RED("("rangeAngle")] 		public CFloat RangeAngle { get; set;}
+		[Ordinal(1)] [RED("("rangeAngle")] 		public CFloat RangeAngle { get; set;}
 
 		public CConeAttackRange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

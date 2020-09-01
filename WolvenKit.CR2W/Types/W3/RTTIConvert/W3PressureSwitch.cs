@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PressureSwitch : W3PhysicalSwitch
 	{
-		[Ordinal(0)] [RED("("autoSwitchOnLeave")] 		public CBool AutoSwitchOnLeave { get; set;}
+		[Ordinal(1)] [RED("("autoSwitchOnLeave")] 		public CBool AutoSwitchOnLeave { get; set;}
 
-		[Ordinal(0)] [RED("("entities", 2,0)] 		public CArray<CHandle<CEntity>> Entities { get; set;}
+		[Ordinal(2)] [RED("("entities", 2,0)] 		public CArray<CHandle<CEntity>> Entities { get; set;}
 
-		[Ordinal(0)] [RED("("delayedTurnOffEntity")] 		public CHandle<CEntity> DelayedTurnOffEntity { get; set;}
+		[Ordinal(3)] [RED("("delayedTurnOffEntity")] 		public CHandle<CEntity> DelayedTurnOffEntity { get; set;}
 
-		[Ordinal(0)] [RED("("delayedTurnOnEntity")] 		public CHandle<CEntity> DelayedTurnOnEntity { get; set;}
+		[Ordinal(4)] [RED("("delayedTurnOnEntity")] 		public CHandle<CEntity> DelayedTurnOnEntity { get; set;}
 
 		public W3PressureSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

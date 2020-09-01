@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGameplayAdditiveLevel : CVariable
 	{
-		[Ordinal(0)] [RED("("useLevel")] 		public CBool UseLevel { get; set;}
+		[Ordinal(1)] [RED("("useLevel")] 		public CBool UseLevel { get; set;}
 
-		[Ordinal(0)] [RED("("synchronize")] 		public CBool Synchronize { get; set;}
+		[Ordinal(2)] [RED("("synchronize")] 		public CBool Synchronize { get; set;}
 
-		[Ordinal(0)] [RED("("animations", 2,0)] 		public CArray<SGameplayAdditiveAnimation> Animations { get; set;}
+		[Ordinal(3)] [RED("("animations", 2,0)] 		public CArray<SGameplayAdditiveAnimation> Animations { get; set;}
 
 		public SGameplayAdditiveLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

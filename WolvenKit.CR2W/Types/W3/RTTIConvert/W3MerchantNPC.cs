@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MerchantNPC : CNewNPC
 	{
-		[Ordinal(0)] [RED("("embeddedScenes", 2,0)] 		public CArray<MerchantNPCEmbeddedScenes> EmbeddedScenes { get; set;}
+		[Ordinal(1)] [RED("("embeddedScenes", 2,0)] 		public CArray<MerchantNPCEmbeddedScenes> EmbeddedScenes { get; set;}
 
-		[Ordinal(0)] [RED("("lastDayOfInteraction")] 		public CInt32 LastDayOfInteraction { get; set;}
+		[Ordinal(2)] [RED("("lastDayOfInteraction")] 		public CInt32 LastDayOfInteraction { get; set;}
 
-		[Ordinal(0)] [RED("("questBonus")] 		public CBool QuestBonus { get; set;}
+		[Ordinal(3)] [RED("("questBonus")] 		public CBool QuestBonus { get; set;}
 
-		[Ordinal(0)] [RED("("cacheMerchantMappin")] 		public CBool CacheMerchantMappin { get; set;}
+		[Ordinal(4)] [RED("("cacheMerchantMappin")] 		public CBool CacheMerchantMappin { get; set;}
 
-		[Ordinal(0)] [RED("("craftingDisabled")] 		public CBool CraftingDisabled { get; set;}
+		[Ordinal(5)] [RED("("craftingDisabled")] 		public CBool CraftingDisabled { get; set;}
 
-		[Ordinal(0)] [RED("("invComp")] 		public CHandle<CInventoryComponent> InvComp { get; set;}
+		[Ordinal(6)] [RED("("invComp")] 		public CHandle<CInventoryComponent> InvComp { get; set;}
 
 		public W3MerchantNPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

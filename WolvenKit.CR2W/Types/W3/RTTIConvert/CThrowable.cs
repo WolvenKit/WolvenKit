@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CThrowable : CProjectileTrajectory
 	{
-		[Ordinal(0)] [RED("("ownerHandle")] 		public EntityHandle OwnerHandle { get; set;}
+		[Ordinal(1)] [RED("("ownerHandle")] 		public EntityHandle OwnerHandle { get; set;}
 
-		[Ordinal(0)] [RED("("wasThrown")] 		public CBool WasThrown { get; set;}
+		[Ordinal(2)] [RED("("wasThrown")] 		public CBool WasThrown { get; set;}
 
-		[Ordinal(0)] [RED("("itemId")] 		public SItemUniqueId ItemId { get; set;}
+		[Ordinal(3)] [RED("("itemId")] 		public SItemUniqueId ItemId { get; set;}
 
-		[Ordinal(0)] [RED("("isFromAimThrow")] 		public CBool IsFromAimThrow { get; set;}
+		[Ordinal(4)] [RED("("isFromAimThrow")] 		public CBool IsFromAimThrow { get; set;}
 
 		public CThrowable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

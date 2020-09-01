@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodePickItemDefinition : CBehTreeNodeCarryingItemBaseDefinition
 	{
-		[Ordinal(0)] [RED("rBoneToAttachItem")] 		public CBehTreeValCName RBoneToAttachItem { get; set;}
+		[Ordinal(1)] [RED("rBoneToAttachItem")] 		public CBehTreeValCName RBoneToAttachItem { get; set;}
 
-		[Ordinal(0)] [RED("lBoneToAttachItem")] 		public CBehTreeValCName LBoneToAttachItem { get; set;}
+		[Ordinal(2)] [RED("lBoneToAttachItem")] 		public CBehTreeValCName LBoneToAttachItem { get; set;}
 
 		public CBehTreeNodePickItemDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

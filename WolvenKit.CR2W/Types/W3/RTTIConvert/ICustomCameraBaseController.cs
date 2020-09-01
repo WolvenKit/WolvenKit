@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ICustomCameraBaseController : CObject
 	{
-		[Ordinal(0)] [RED("controllerName")] 		public CName ControllerName { get; set;}
+		[Ordinal(1)] [RED("controllerName")] 		public CName ControllerName { get; set;}
 
 		public ICustomCameraBaseController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

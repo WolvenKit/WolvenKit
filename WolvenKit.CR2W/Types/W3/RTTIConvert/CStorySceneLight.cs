@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneLight : IStorySceneItem
 	{
-		[Ordinal(0)] [RED("id")] 		public CName Id { get; set;}
+		[Ordinal(1)] [RED("id")] 		public CName Id { get; set;}
 
-		[Ordinal(0)] [RED("type")] 		public CEnum<ELightType> Type { get; set;}
+		[Ordinal(2)] [RED("type")] 		public CEnum<ELightType> Type { get; set;}
 
-		[Ordinal(0)] [RED("innerAngle")] 		public CFloat InnerAngle { get; set;}
+		[Ordinal(3)] [RED("innerAngle")] 		public CFloat InnerAngle { get; set;}
 
-		[Ordinal(0)] [RED("outerAngle")] 		public CFloat OuterAngle { get; set;}
+		[Ordinal(4)] [RED("outerAngle")] 		public CFloat OuterAngle { get; set;}
 
-		[Ordinal(0)] [RED("softness")] 		public CFloat Softness { get; set;}
+		[Ordinal(5)] [RED("softness")] 		public CFloat Softness { get; set;}
 
-		[Ordinal(0)] [RED("shadowCastingMode")] 		public CEnum<ELightShadowCastingMode> ShadowCastingMode { get; set;}
+		[Ordinal(6)] [RED("shadowCastingMode")] 		public CEnum<ELightShadowCastingMode> ShadowCastingMode { get; set;}
 
-		[Ordinal(0)] [RED("shadowFadeDistance")] 		public CFloat ShadowFadeDistance { get; set;}
+		[Ordinal(7)] [RED("shadowFadeDistance")] 		public CFloat ShadowFadeDistance { get; set;}
 
-		[Ordinal(0)] [RED("shadowFadeRange")] 		public CFloat ShadowFadeRange { get; set;}
+		[Ordinal(8)] [RED("shadowFadeRange")] 		public CFloat ShadowFadeRange { get; set;}
 
-		[Ordinal(0)] [RED("dimmerType")] 		public CEnum<EDimmerType> DimmerType { get; set;}
+		[Ordinal(9)] [RED("dimmerType")] 		public CEnum<EDimmerType> DimmerType { get; set;}
 
-		[Ordinal(0)] [RED("dimmerAreaMarker")] 		public CBool DimmerAreaMarker { get; set;}
+		[Ordinal(10)] [RED("dimmerAreaMarker")] 		public CBool DimmerAreaMarker { get; set;}
 
 		public CStorySceneLight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

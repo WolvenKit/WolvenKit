@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskSaveTargetPosAsCustomTargetDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("useActionTarget")] 		public CBool UseActionTarget { get; set;}
+		[Ordinal(1)] [RED("useActionTarget")] 		public CBool UseActionTarget { get; set;}
 
-		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(2)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[Ordinal(0)] [RED("snapToGround")] 		public CBool SnapToGround { get; set;}
+		[Ordinal(3)] [RED("snapToGround")] 		public CBool SnapToGround { get; set;}
 
 		public BTTaskSaveTargetPosAsCustomTargetDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

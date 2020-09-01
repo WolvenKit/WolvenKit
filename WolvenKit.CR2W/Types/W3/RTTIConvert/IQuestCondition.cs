@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IQuestCondition : CObject
 	{
-		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
+		[Ordinal(1)] [RED("("name")] 		public CName Name { get; set;}
 
-		[Ordinal(0)] [RED("("active")] 		public CBool Active { get; set;}
+		[Ordinal(2)] [RED("("active")] 		public CBool Active { get; set;}
 
 		public IQuestCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

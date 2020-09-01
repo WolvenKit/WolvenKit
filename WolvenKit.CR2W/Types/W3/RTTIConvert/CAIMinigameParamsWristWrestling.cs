@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMinigameParamsWristWrestling : CObject
 	{
-		[Ordinal(0)] [RED("hotSpotMinWidth")] 		public CInt32 HotSpotMinWidth { get; set;}
+		[Ordinal(1)] [RED("hotSpotMinWidth")] 		public CInt32 HotSpotMinWidth { get; set;}
 
-		[Ordinal(0)] [RED("hotSpotMaxWidth")] 		public CInt32 HotSpotMaxWidth { get; set;}
+		[Ordinal(2)] [RED("hotSpotMaxWidth")] 		public CInt32 HotSpotMaxWidth { get; set;}
 
-		[Ordinal(0)] [RED("gameDifficulty")] 		public CEnum<EAIMinigameDifficulty> GameDifficulty { get; set;}
+		[Ordinal(3)] [RED("gameDifficulty")] 		public CEnum<EAIMinigameDifficulty> GameDifficulty { get; set;}
 
 		public CAIMinigameParamsWristWrestling(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

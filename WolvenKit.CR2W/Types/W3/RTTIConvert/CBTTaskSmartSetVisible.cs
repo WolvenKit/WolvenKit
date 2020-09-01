@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSmartSetVisible : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("makeVisbleOnDeactivate")] 		public CBool MakeVisbleOnDeactivate { get; set;}
+		[Ordinal(1)] [RED("("makeVisbleOnDeactivate")] 		public CBool MakeVisbleOnDeactivate { get; set;}
 
 		public CBTTaskSmartSetVisible(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

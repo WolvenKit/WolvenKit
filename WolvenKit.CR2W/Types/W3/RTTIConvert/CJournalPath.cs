@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalPath : ISerializable
 	{
-		[Ordinal(0)] [RED("("guid")] 		public CGUID Guid { get; set;}
+		[Ordinal(1)] [RED("("guid")] 		public CGUID Guid { get; set;}
 
-		[Ordinal(0)] [RED("("resource")] 		public CSoft<CResource> Resource { get; set;}
+		[Ordinal(2)] [RED("("resource")] 		public CSoft<CResource> Resource { get; set;}
 
-		[Ordinal(0)] [RED("("child")] 		public CHandle<CJournalPath> Child { get; set;}
+		[Ordinal(3)] [RED("("child")] 		public CHandle<CJournalPath> Child { get; set;}
 
 		public CJournalPath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

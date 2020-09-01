@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTaskFlyingMonsterDeath : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("wasFlying")] 		public CBool WasFlying { get; set;}
+		[Ordinal(1)] [RED("wasFlying")] 		public CBool WasFlying { get; set;}
 
-		[Ordinal(0)] [RED("forceDeath")] 		public CBool ForceDeath { get; set;}
+		[Ordinal(2)] [RED("forceDeath")] 		public CBool ForceDeath { get; set;}
 
-		[Ordinal(0)] [RED("onGround")] 		public CBool OnGround { get; set;}
+		[Ordinal(3)] [RED("onGround")] 		public CBool OnGround { get; set;}
 
 		public CBehTreeTaskFlyingMonsterDeath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestManageFastTravelBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("operation")] 		public CEnum<EQuestManageFastTravelOperation> Operation { get; set;}
+		[Ordinal(1)] [RED("operation")] 		public CEnum<EQuestManageFastTravelOperation> Operation { get; set;}
 
-		[Ordinal(0)] [RED("enable")] 		public CBool Enable { get; set;}
+		[Ordinal(2)] [RED("enable")] 		public CBool Enable { get; set;}
 
-		[Ordinal(0)] [RED("show")] 		public CBool Show { get; set;}
+		[Ordinal(3)] [RED("show")] 		public CBool Show { get; set;}
 
-		[Ordinal(0)] [RED("affectedAreas", 2,0)] 		public CArray<CInt32> AffectedAreas { get; set;}
+		[Ordinal(4)] [RED("affectedAreas", 2,0)] 		public CArray<CInt32> AffectedAreas { get; set;}
 
-		[Ordinal(0)] [RED("affectedFastTravelPoints", 2,0)] 		public CArray<CName> AffectedFastTravelPoints { get; set;}
+		[Ordinal(5)] [RED("affectedFastTravelPoints", 2,0)] 		public CArray<CName> AffectedFastTravelPoints { get; set;}
 
 		public CQuestManageFastTravelBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IActionDecorator : IAIActionTree
 	{
-		[Ordinal(0)] [RED("scriptedAction")] 		public CHandle<IAIActionTree> ScriptedAction { get; set;}
+		[Ordinal(1)] [RED("scriptedAction")] 		public CHandle<IAIActionTree> ScriptedAction { get; set;}
 
 		public IActionDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

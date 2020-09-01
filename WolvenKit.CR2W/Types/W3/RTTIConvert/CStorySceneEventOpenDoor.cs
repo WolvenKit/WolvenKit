@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventOpenDoor : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("doorTag")] 		public CName DoorTag { get; set;}
+		[Ordinal(1)] [RED("doorTag")] 		public CName DoorTag { get; set;}
 
-		[Ordinal(0)] [RED("instant")] 		public CBool Instant { get; set;}
+		[Ordinal(2)] [RED("instant")] 		public CBool Instant { get; set;}
 
-		[Ordinal(0)] [RED("openClose")] 		public CBool OpenClose { get; set;}
+		[Ordinal(3)] [RED("openClose")] 		public CBool OpenClose { get; set;}
 
-		[Ordinal(0)] [RED("flipDirection")] 		public CBool FlipDirection { get; set;}
+		[Ordinal(4)] [RED("flipDirection")] 		public CBool FlipDirection { get; set;}
 
 		public CStorySceneEventOpenDoor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

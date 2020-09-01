@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBrushComponent : CDrawableComponent
 	{
-		[Ordinal(0)] [RED("brushIndex")] 		public CInt32 BrushIndex { get; set;}
+		[Ordinal(1)] [RED("brushIndex")] 		public CInt32 BrushIndex { get; set;}
 
-		[Ordinal(0)] [RED("csgType")] 		public CEnum<EBrushCSGType> CsgType { get; set;}
+		[Ordinal(2)] [RED("csgType")] 		public CEnum<EBrushCSGType> CsgType { get; set;}
 
-		[Ordinal(0)] [RED("faces", 2,0)] 		public CArray<CPtr<CBrushFace>> Faces { get; set;}
+		[Ordinal(3)] [RED("faces", 2,0)] 		public CArray<CPtr<CBrushFace>> Faces { get; set;}
 
 		public CBrushComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_CustomScript : W3SwitchEvent
 	{
-		[Ordinal(0)] [RED("("scriptID")] 		public CString ScriptID { get; set;}
+		[Ordinal(1)] [RED("("scriptID")] 		public CString ScriptID { get; set;}
 
 		public W3SE_CustomScript(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

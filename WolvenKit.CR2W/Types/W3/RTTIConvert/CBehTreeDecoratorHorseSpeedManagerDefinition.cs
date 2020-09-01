@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeDecoratorHorseSpeedManagerDefinition : IBehTreeNodeDecoratorSteeringTargeterDefinition
 	{
-		[Ordinal(0)] [RED("moveType")] 		public CBehTreeValEHorseMoveType MoveType { get; set;}
+		[Ordinal(1)] [RED("moveType")] 		public CBehTreeValEHorseMoveType MoveType { get; set;}
 
 		public CBehTreeDecoratorHorseSpeedManagerDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

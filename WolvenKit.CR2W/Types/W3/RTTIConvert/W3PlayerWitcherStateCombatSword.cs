@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PlayerWitcherStateCombatSword : CR4PlayerStateCombat
 	{
-		[Ordinal(0)] [RED("("bIsInPirouette")] 		public CBool BIsInPirouette { get; set;}
+		[Ordinal(1)] [RED("("bIsInPirouette")] 		public CBool BIsInPirouette { get; set;}
 
-		[Ordinal(0)] [RED("("swordId")] 		public SItemUniqueId SwordId { get; set;}
+		[Ordinal(2)] [RED("("swordId")] 		public SItemUniqueId SwordId { get; set;}
 
 		public W3PlayerWitcherStateCombatSword(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

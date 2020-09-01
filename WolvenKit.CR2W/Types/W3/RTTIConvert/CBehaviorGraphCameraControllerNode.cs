@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphCameraControllerNode : CBehaviorGraphBaseNode
 	{
-		[Ordinal(0)] [RED("("boneName")] 		public CString BoneName { get; set;}
+		[Ordinal(1)] [RED("("boneName")] 		public CString BoneName { get; set;}
 
-		[Ordinal(0)] [RED("("valueScale")] 		public CFloat ValueScale { get; set;}
+		[Ordinal(2)] [RED("("valueScale")] 		public CFloat ValueScale { get; set;}
 
-		[Ordinal(0)] [RED("("axis")] 		public CEnum<EAxis> Axis { get; set;}
+		[Ordinal(3)] [RED("("axis")] 		public CEnum<EAxis> Axis { get; set;}
 
-		[Ordinal(0)] [RED("("clamp")] 		public CBool Clamp { get; set;}
+		[Ordinal(4)] [RED("("clamp")] 		public CBool Clamp { get; set;}
 
-		[Ordinal(0)] [RED("("angleMin")] 		public CFloat AngleMin { get; set;}
+		[Ordinal(5)] [RED("("angleMin")] 		public CFloat AngleMin { get; set;}
 
-		[Ordinal(0)] [RED("("angleMax")] 		public CFloat AngleMax { get; set;}
+		[Ordinal(6)] [RED("("angleMax")] 		public CFloat AngleMax { get; set;}
 
-		[Ordinal(0)] [RED("("cachedControlInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlInputNode { get; set;}
+		[Ordinal(7)] [RED("("cachedControlInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlInputNode { get; set;}
 
-		[Ordinal(0)] [RED("("cachedWeightInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightInputNode { get; set;}
+		[Ordinal(8)] [RED("("cachedWeightInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightInputNode { get; set;}
 
-		[Ordinal(0)] [RED("("cachedControlAngleInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlAngleInputNode { get; set;}
+		[Ordinal(9)] [RED("("cachedControlAngleInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlAngleInputNode { get; set;}
 
 		public CBehaviorGraphCameraControllerNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

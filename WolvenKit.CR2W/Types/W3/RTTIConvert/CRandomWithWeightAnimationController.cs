@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CRandomWithWeightAnimationController : CSequentialAnimationController
 	{
-		[Ordinal(0)] [RED("("weights", 2,0)] 		public CArray<CFloat> Weights { get; set;}
+		[Ordinal(1)] [RED("("weights", 2,0)] 		public CArray<CFloat> Weights { get; set;}
 
 		public CRandomWithWeightAnimationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

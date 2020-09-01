@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Potion_Fact_Params : W3PotionParams
 	{
-		[Ordinal(0)] [RED("("factName")] 		public CName FactName { get; set;}
+		[Ordinal(1)] [RED("("factName")] 		public CName FactName { get; set;}
 
 		public W3Potion_Fact_Params(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleComponent : CDrawableComponent
 	{
-		[Ordinal(0)] [RED("particleSystem")] 		public CHandle<CParticleSystem> ParticleSystem { get; set;}
+		[Ordinal(1)] [RED("particleSystem")] 		public CHandle<CParticleSystem> ParticleSystem { get; set;}
 
-		[Ordinal(0)] [RED("transparencySortGroup")] 		public CEnum<ETransparencySortGroup> TransparencySortGroup { get; set;}
+		[Ordinal(2)] [RED("transparencySortGroup")] 		public CEnum<ETransparencySortGroup> TransparencySortGroup { get; set;}
 
-		[Ordinal(0)] [RED("envAutoHideGroup")] 		public CEnum<EEnvAutoHideGroup> EnvAutoHideGroup { get; set;}
+		[Ordinal(3)] [RED("envAutoHideGroup")] 		public CEnum<EEnvAutoHideGroup> EnvAutoHideGroup { get; set;}
 
 		public CParticleComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ClueCorpse : W3MonsterClue
 	{
-		[Ordinal(0)] [RED("("woundName")] 		public CName WoundName { get; set;}
+		[Ordinal(1)] [RED("("woundName")] 		public CName WoundName { get; set;}
 
 		public W3ClueCorpse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

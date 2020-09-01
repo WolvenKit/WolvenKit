@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPreCombatWarning : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("combatDataStorage")] 		public CHandle<CBaseAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(1)] [RED("("combatDataStorage")] 		public CHandle<CBaseAICombatStorage> CombatDataStorage { get; set;}
 
-		[Ordinal(0)] [RED("("setFlagOnActivate")] 		public CBool SetFlagOnActivate { get; set;}
+		[Ordinal(2)] [RED("("setFlagOnActivate")] 		public CBool SetFlagOnActivate { get; set;}
 
-		[Ordinal(0)] [RED("("setFlagOnDectivate")] 		public CBool SetFlagOnDectivate { get; set;}
+		[Ordinal(3)] [RED("("setFlagOnDectivate")] 		public CBool SetFlagOnDectivate { get; set;}
 
-		[Ordinal(0)] [RED("("flag")] 		public CBool Flag { get; set;}
+		[Ordinal(4)] [RED("("flag")] 		public CBool Flag { get; set;}
 
 		public CBTTaskPreCombatWarning(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

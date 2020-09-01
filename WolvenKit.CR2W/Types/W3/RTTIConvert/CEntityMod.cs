@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEntityMod : CMod
 	{
-		[Ordinal(0)] [RED("("template")] 		public CString Template { get; set;}
+		[Ordinal(1)] [RED("("template")] 		public CString Template { get; set;}
 
-		[Ordinal(0)] [RED("("modEntity")] 		public CHandle<CEntity> ModEntity { get; set;}
+		[Ordinal(2)] [RED("("modEntity")] 		public CHandle<CEntity> ModEntity { get; set;}
 
 		public CEntityMod(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

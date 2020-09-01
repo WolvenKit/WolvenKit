@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskProjectileAttackWithPrepareDef : CBTTaskProjectileAttackDef
 	{
-		[Ordinal(0)] [RED("boneName")] 		public CName BoneName { get; set;}
+		[Ordinal(1)] [RED("boneName")] 		public CName BoneName { get; set;}
 
-		[Ordinal(0)] [RED("shootInFront")] 		public CBool ShootInFront { get; set;}
+		[Ordinal(2)] [RED("shootInFront")] 		public CBool ShootInFront { get; set;}
 
-		[Ordinal(0)] [RED("shootInFrontOffset")] 		public CFloat ShootInFrontOffset { get; set;}
+		[Ordinal(3)] [RED("shootInFrontOffset")] 		public CFloat ShootInFrontOffset { get; set;}
 
-		[Ordinal(0)] [RED("rawTarget")] 		public CBool RawTarget { get; set;}
+		[Ordinal(4)] [RED("rawTarget")] 		public CBool RawTarget { get; set;}
 
-		[Ordinal(0)] [RED("useLookAtBone")] 		public CBool UseLookAtBone { get; set;}
+		[Ordinal(5)] [RED("useLookAtBone")] 		public CBool UseLookAtBone { get; set;}
 
-		[Ordinal(0)] [RED("lookAtBone")] 		public CName LookAtBone { get; set;}
+		[Ordinal(6)] [RED("lookAtBone")] 		public CName LookAtBone { get; set;}
 
 		public CBTTaskProjectileAttackWithPrepareDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

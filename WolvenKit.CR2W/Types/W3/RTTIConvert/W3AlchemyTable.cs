@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3AlchemyTable : CR4MapPinEntity
 	{
-		[Ordinal(0)] [RED("("m_tableState")] 		public CEnum<W3TableState> M_tableState { get; set;}
+		[Ordinal(1)] [RED("("m_tableState")] 		public CEnum<W3TableState> M_tableState { get; set;}
 
 		public W3AlchemyTable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

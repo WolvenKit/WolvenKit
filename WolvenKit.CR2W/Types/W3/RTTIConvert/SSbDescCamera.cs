@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSbDescCamera : CVariable
 	{
-		[Ordinal(0)] [RED("("uId")] 		public CString UId { get; set;}
+		[Ordinal(1)] [RED("("uId")] 		public CString UId { get; set;}
 
-		[Ordinal(0)] [RED("("repoCamId")] 		public CString RepoCamId { get; set;}
+		[Ordinal(2)] [RED("("repoCamId")] 		public CString RepoCamId { get; set;}
 
-		[Ordinal(0)] [RED("("pos")] 		public Vector Pos { get; set;}
+		[Ordinal(3)] [RED("("pos")] 		public Vector Pos { get; set;}
 
-		[Ordinal(0)] [RED("("rot")] 		public EulerAngles Rot { get; set;}
+		[Ordinal(4)] [RED("("rot")] 		public EulerAngles Rot { get; set;}
 
-		[Ordinal(0)] [RED("("fov")] 		public CFloat Fov { get; set;}
+		[Ordinal(5)] [RED("("fov")] 		public CFloat Fov { get; set;}
 
-		[Ordinal(0)] [RED("("dof")] 		public SStoryBoardCameraDofSettings Dof { get; set;}
+		[Ordinal(6)] [RED("("dof")] 		public SStoryBoardCameraDofSettings Dof { get; set;}
 
 		public SSbDescCamera(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SActorLODConfig : CVariable
 	{
-		[Ordinal(0)] [RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(1)] [RED("distance")] 		public CFloat Distance { get; set;}
 
-		[Ordinal(0)] [RED("deadZone")] 		public CFloat DeadZone { get; set;}
+		[Ordinal(2)] [RED("deadZone")] 		public CFloat DeadZone { get; set;}
 
-		[Ordinal(0)] [RED("hide")] 		public CBool Hide { get; set;}
+		[Ordinal(3)] [RED("hide")] 		public CBool Hide { get; set;}
 
-		[Ordinal(0)] [RED("enableIK")] 		public CBool EnableIK { get; set;}
+		[Ordinal(4)] [RED("enableIK")] 		public CBool EnableIK { get; set;}
 
-		[Ordinal(0)] [RED("enableDandles")] 		public CBool EnableDandles { get; set;}
+		[Ordinal(5)] [RED("enableDandles")] 		public CBool EnableDandles { get; set;}
 
-		[Ordinal(0)] [RED("mimicsQuality")] 		public CUInt32 MimicsQuality { get; set;}
+		[Ordinal(6)] [RED("mimicsQuality")] 		public CUInt32 MimicsQuality { get; set;}
 
-		[Ordinal(0)] [RED("behaviorLOD")] 		public CEnum<EBehaviorLod> BehaviorLOD { get; set;}
+		[Ordinal(7)] [RED("behaviorLOD")] 		public CEnum<EBehaviorLod> BehaviorLOD { get; set;}
 
-		[Ordinal(0)] [RED("animatedComponentUpdateFrameSkip")] 		public CUInt32 AnimatedComponentUpdateFrameSkip { get; set;}
+		[Ordinal(8)] [RED("animatedComponentUpdateFrameSkip")] 		public CUInt32 AnimatedComponentUpdateFrameSkip { get; set;}
 
-		[Ordinal(0)] [RED("suppressAnimatedComponent")] 		public CBool SuppressAnimatedComponent { get; set;}
+		[Ordinal(9)] [RED("suppressAnimatedComponent")] 		public CBool SuppressAnimatedComponent { get; set;}
 
-		[Ordinal(0)] [RED("budgetAnimatedComponentTick")] 		public CBool BudgetAnimatedComponentTick { get; set;}
+		[Ordinal(10)] [RED("budgetAnimatedComponentTick")] 		public CBool BudgetAnimatedComponentTick { get; set;}
 
-		[Ordinal(0)] [RED("suppressAnimatedComponentIfNotVisible")] 		public CBool SuppressAnimatedComponentIfNotVisible { get; set;}
+		[Ordinal(11)] [RED("suppressAnimatedComponentIfNotVisible")] 		public CBool SuppressAnimatedComponentIfNotVisible { get; set;}
 
-		[Ordinal(0)] [RED("budgetAnimatedComponentTickIfNotVisible")] 		public CBool BudgetAnimatedComponentTickIfNotVisible { get; set;}
+		[Ordinal(12)] [RED("budgetAnimatedComponentTickIfNotVisible")] 		public CBool BudgetAnimatedComponentTickIfNotVisible { get; set;}
 
 		public SActorLODConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

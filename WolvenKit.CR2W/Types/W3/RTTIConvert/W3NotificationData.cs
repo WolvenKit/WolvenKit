@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3NotificationData : CObject
 	{
-		[Ordinal(0)] [RED("("messageText")] 		public CString MessageText { get; set;}
+		[Ordinal(1)] [RED("("messageText")] 		public CString MessageText { get; set;}
 
-		[Ordinal(0)] [RED("("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(2)] [RED("("duration")] 		public CFloat Duration { get; set;}
 
-		[Ordinal(0)] [RED("("queue")] 		public CBool Queue { get; set;}
+		[Ordinal(3)] [RED("("queue")] 		public CBool Queue { get; set;}
 
 		public W3NotificationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

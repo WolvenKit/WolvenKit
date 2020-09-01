@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CComboAspect : CObject
 	{
-		[Ordinal(0)] [RED("name")] 		public CName Name { get; set;}
+		[Ordinal(1)] [RED("name")] 		public CName Name { get; set;}
 
-		[Ordinal(0)] [RED("strings", 2,0)] 		public CArray<CPtr<CComboString>> Strings { get; set;}
+		[Ordinal(2)] [RED("strings", 2,0)] 		public CArray<CPtr<CComboString>> Strings { get; set;}
 
 		public CComboAspect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

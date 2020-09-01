@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockMathDot3 : CMaterialBlock
 	{
-		[Ordinal(0)] [RED("dot4")] 		public CBool Dot4 { get; set;}
+		[Ordinal(1)] [RED("dot4")] 		public CBool Dot4 { get; set;}
 
 		public CMaterialBlockMathDot3(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

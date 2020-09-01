@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestEntityMotionBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(1)] [RED("entityTag")] 		public CName EntityTag { get; set;}
 
-		[Ordinal(0)] [RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(2)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		[Ordinal(0)] [RED("targetTransform")] 		public EngineTransform TargetTransform { get; set;}
+		[Ordinal(3)] [RED("targetTransform")] 		public EngineTransform TargetTransform { get; set;}
 
-		[Ordinal(0)] [RED("positionDelta")] 		public Vector PositionDelta { get; set;}
+		[Ordinal(4)] [RED("positionDelta")] 		public Vector PositionDelta { get; set;}
 
-		[Ordinal(0)] [RED("rotationDelta")] 		public EulerAngles RotationDelta { get; set;}
+		[Ordinal(5)] [RED("rotationDelta")] 		public EulerAngles RotationDelta { get; set;}
 
-		[Ordinal(0)] [RED("scaleDelta")] 		public Vector ScaleDelta { get; set;}
+		[Ordinal(6)] [RED("scaleDelta")] 		public Vector ScaleDelta { get; set;}
 
-		[Ordinal(0)] [RED("animationCurve")] 		public SSimpleCurve AnimationCurve { get; set;}
+		[Ordinal(7)] [RED("animationCurve")] 		public SSimpleCurve AnimationCurve { get; set;}
 
 		public CQuestEntityMotionBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

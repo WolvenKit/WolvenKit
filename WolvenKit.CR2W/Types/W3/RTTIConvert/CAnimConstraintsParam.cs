@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimConstraintsParam : CEntityTemplateParam
 	{
-		[Ordinal(0)] [RED("graph")] 		public CHandle<CBehaviorGraph> Graph { get; set;}
+		[Ordinal(1)] [RED("graph")] 		public CHandle<CBehaviorGraph> Graph { get; set;}
 
 		public CAnimConstraintsParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

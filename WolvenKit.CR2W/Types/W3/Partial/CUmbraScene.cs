@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CUmbraScene : CResource
 	{
-		[Ordinal(0)] [RED("distanceMultiplier")] 		public CFloat DistanceMultiplier { get; set;}
+		[Ordinal(1)] [RED("distanceMultiplier")] 		public CFloat DistanceMultiplier { get; set;}
 
-		[Ordinal(0)] [RED("localUmbraOccThresholdMul")] 		public CHandle<CResourceSimplexTree> LocalUmbraOccThresholdMul { get; set;}
+		[Ordinal(2)] [RED("localUmbraOccThresholdMul")] 		public CHandle<CResourceSimplexTree> LocalUmbraOccThresholdMul { get; set;}
 
 		public CUmbraScene(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

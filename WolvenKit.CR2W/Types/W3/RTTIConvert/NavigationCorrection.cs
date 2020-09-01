@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class NavigationCorrection : CObject
 	{
-		[Ordinal(0)] [RED("corrected")] 		public CBool Corrected { get; set;}
+		[Ordinal(1)] [RED("corrected")] 		public CBool Corrected { get; set;}
 
-		[Ordinal(0)] [RED("direction")] 		public Vector Direction { get; set;}
+		[Ordinal(2)] [RED("direction")] 		public Vector Direction { get; set;}
 
-		[Ordinal(0)] [RED("angle")] 		public CFloat Angle { get; set;}
+		[Ordinal(3)] [RED("angle")] 		public CFloat Angle { get; set;}
 
-		[Ordinal(0)] [RED("type")] 		public CEnum<EMovementCorrectionType> Type { get; set;}
+		[Ordinal(4)] [RED("type")] 		public CEnum<EMovementCorrectionType> Type { get; set;}
 
-		[Ordinal(0)] [RED("color")] 		public CColor Color { get; set;}
+		[Ordinal(5)] [RED("color")] 		public CColor Color { get; set;}
 
 		public NavigationCorrection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

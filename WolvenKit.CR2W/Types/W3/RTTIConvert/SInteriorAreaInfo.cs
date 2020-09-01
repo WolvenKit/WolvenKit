@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SInteriorAreaInfo : CVariable
 	{
-		[Ordinal(0)] [RED("("areaName")] 		public CString AreaName { get; set;}
+		[Ordinal(1)] [RED("("areaName")] 		public CString AreaName { get; set;}
 
-		[Ordinal(0)] [RED("("isSmallInterior")] 		public CBool IsSmallInterior { get; set;}
+		[Ordinal(2)] [RED("("isSmallInterior")] 		public CBool IsSmallInterior { get; set;}
 
-		[Ordinal(0)] [RED("("modifyPlayerSpeed")] 		public CBool ModifyPlayerSpeed { get; set;}
+		[Ordinal(3)] [RED("("modifyPlayerSpeed")] 		public CBool ModifyPlayerSpeed { get; set;}
 
 		public SInteriorAreaInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

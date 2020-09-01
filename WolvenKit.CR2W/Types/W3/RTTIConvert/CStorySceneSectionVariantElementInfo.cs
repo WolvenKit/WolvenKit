@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneSectionVariantElementInfo : CVariable
 	{
-		[Ordinal(0)] [RED("elementId")] 		public CString ElementId { get; set;}
+		[Ordinal(1)] [RED("elementId")] 		public CString ElementId { get; set;}
 
-		[Ordinal(0)] [RED("approvedDuration")] 		public CFloat ApprovedDuration { get; set;}
+		[Ordinal(2)] [RED("approvedDuration")] 		public CFloat ApprovedDuration { get; set;}
 
 		public CStorySceneSectionVariantElementInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

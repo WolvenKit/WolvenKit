@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskIsPlayerReachable : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("playerPos")] 		public Vector PlayerPos { get; set;}
+		[Ordinal(1)] [RED("playerPos")] 		public Vector PlayerPos { get; set;}
 
 		public BTTaskIsPlayerReachable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

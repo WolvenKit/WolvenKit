@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventInfo : CVariable
 	{
-		[Ordinal(0)] [RED("eventGuid")] 		public CGUID EventGuid { get; set;}
+		[Ordinal(1)] [RED("eventGuid")] 		public CGUID EventGuid { get; set;}
 
-		[Ordinal(0)] [RED("sectionVariantId")] 		public CUInt32 SectionVariantId { get; set;}
+		[Ordinal(2)] [RED("sectionVariantId")] 		public CUInt32 SectionVariantId { get; set;}
 
 		public CStorySceneEventInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3HorseManager : CPeristentEntity
 	{
-		[Ordinal(0)] [RED("("inv")] 		public CHandle<CInventoryComponent> Inv { get; set;}
+		[Ordinal(1)] [RED("("inv")] 		public CHandle<CInventoryComponent> Inv { get; set;}
 
-		[Ordinal(0)] [RED("("horseAbilities", 2,0)] 		public CArray<CName> HorseAbilities { get; set;}
+		[Ordinal(2)] [RED("("horseAbilities", 2,0)] 		public CArray<CName> HorseAbilities { get; set;}
 
-		[Ordinal(0)] [RED("("itemSlots", 2,0)] 		public CArray<SItemUniqueId> ItemSlots { get; set;}
+		[Ordinal(3)] [RED("("itemSlots", 2,0)] 		public CArray<SItemUniqueId> ItemSlots { get; set;}
 
-		[Ordinal(0)] [RED("("wasSpawned")] 		public CBool WasSpawned { get; set;}
+		[Ordinal(4)] [RED("("wasSpawned")] 		public CBool WasSpawned { get; set;}
 
-		[Ordinal(0)] [RED("("horseMode")] 		public CEnum<EHorseMode> HorseMode { get; set;}
+		[Ordinal(5)] [RED("("horseMode")] 		public CEnum<EHorseMode> HorseMode { get; set;}
 
 		public W3HorseManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

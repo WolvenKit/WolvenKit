@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIKickActionTree : IAICustomActionTree
 	{
-		[Ordinal(0)] [RED("targetTag")] 		public CName TargetTag { get; set;}
+		[Ordinal(1)] [RED("targetTag")] 		public CName TargetTag { get; set;}
 
-		[Ordinal(0)] [RED("distanceToForceStopAciton")] 		public CFloat DistanceToForceStopAciton { get; set;}
+		[Ordinal(2)] [RED("distanceToForceStopAciton")] 		public CFloat DistanceToForceStopAciton { get; set;}
 
 		public CAIKickActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

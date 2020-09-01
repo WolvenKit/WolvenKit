@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3BirdQuest : W3Bird
 	{
-		[Ordinal(0)] [RED("("m_focusSoundEffect")] 		public CEnum<EFocusModeSoundEffectType> M_focusSoundEffect { get; set;}
+		[Ordinal(1)] [RED("("m_focusSoundEffect")] 		public CEnum<EFocusModeSoundEffectType> M_focusSoundEffect { get; set;}
 
 		public W3BirdQuest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

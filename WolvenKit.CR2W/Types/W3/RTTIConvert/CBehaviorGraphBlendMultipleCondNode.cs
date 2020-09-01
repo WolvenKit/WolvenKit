@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphBlendMultipleCondNode : CBehaviorGraphNode
 	{
-		[Ordinal(0)] [RED("("inputValues", 2,0)] 		public CArray<CFloat> InputValues { get; set;}
+		[Ordinal(1)] [RED("("inputValues", 2,0)] 		public CArray<CFloat> InputValues { get; set;}
 
-		[Ordinal(0)] [RED("("synchronizeAnimations")] 		public CBool SynchronizeAnimations { get; set;}
+		[Ordinal(2)] [RED("("synchronizeAnimations")] 		public CBool SynchronizeAnimations { get; set;}
 
-		[Ordinal(0)] [RED("("syncMethodAnimation")] 		public CPtr<IBehaviorSyncMethod> SyncMethodAnimation { get; set;}
+		[Ordinal(3)] [RED("("syncMethodAnimation")] 		public CPtr<IBehaviorSyncMethod> SyncMethodAnimation { get; set;}
 
-		[Ordinal(0)] [RED("("useTransitions")] 		public CBool UseTransitions { get; set;}
+		[Ordinal(4)] [RED("("useTransitions")] 		public CBool UseTransitions { get; set;}
 
-		[Ordinal(0)] [RED("("transitions", 2,0)] 		public CArray<CPtr<CBehaviorGraphBlendMultipleCondNode_Transition>> Transitions { get; set;}
+		[Ordinal(5)] [RED("("transitions", 2,0)] 		public CArray<CPtr<CBehaviorGraphBlendMultipleCondNode_Transition>> Transitions { get; set;}
 
-		[Ordinal(0)] [RED("("useWeightDamp")] 		public CBool UseWeightDamp { get; set;}
+		[Ordinal(6)] [RED("("useWeightDamp")] 		public CBool UseWeightDamp { get; set;}
 
-		[Ordinal(0)] [RED("("weightDampMethod")] 		public CPtr<IBehaviorGraphBlendMultipleCondNode_DampMethod> WeightDampMethod { get; set;}
+		[Ordinal(7)] [RED("("weightDampMethod")] 		public CPtr<IBehaviorGraphBlendMultipleCondNode_DampMethod> WeightDampMethod { get; set;}
 
-		[Ordinal(0)] [RED("("useControlValueDamp")] 		public CBool UseControlValueDamp { get; set;}
+		[Ordinal(8)] [RED("("useControlValueDamp")] 		public CBool UseControlValueDamp { get; set;}
 
-		[Ordinal(0)] [RED("("controlValueDampMethod")] 		public CPtr<IBehaviorGraphBlendMultipleCondNode_DampMethod> ControlValueDampMethod { get; set;}
+		[Ordinal(9)] [RED("("controlValueDampMethod")] 		public CPtr<IBehaviorGraphBlendMultipleCondNode_DampMethod> ControlValueDampMethod { get; set;}
 
-		[Ordinal(0)] [RED("("radialBlending")] 		public CBool RadialBlending { get; set;}
+		[Ordinal(10)] [RED("("radialBlending")] 		public CBool RadialBlending { get; set;}
 
-		[Ordinal(0)] [RED("("cachedInputNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphNode>> CachedInputNodes { get; set;}
+		[Ordinal(11)] [RED("("cachedInputNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphNode>> CachedInputNodes { get; set;}
 
-		[Ordinal(0)] [RED("("cachedControlValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlValueNode { get; set;}
+		[Ordinal(12)] [RED("("cachedControlValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlValueNode { get; set;}
 
 		public CBehaviorGraphBlendMultipleCondNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

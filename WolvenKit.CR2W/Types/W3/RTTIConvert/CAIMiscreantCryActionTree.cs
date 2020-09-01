@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMiscreantCryActionTree : IAICustomActionTree
 	{
-		[Ordinal(0)] [RED("miscreantName")] 		public CName MiscreantName { get; set;}
+		[Ordinal(1)] [RED("miscreantName")] 		public CName MiscreantName { get; set;}
 
 		public CAIMiscreantCryActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

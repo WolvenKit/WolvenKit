@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SR4PlayerTargetingConsts : CVariable
 	{
-		[Ordinal(0)] [RED("("softLockDistance")] 		public CFloat SoftLockDistance { get; set;}
+		[Ordinal(1)] [RED("("softLockDistance")] 		public CFloat SoftLockDistance { get; set;}
 
-		[Ordinal(0)] [RED("("softLockFrameSize")] 		public CFloat SoftLockFrameSize { get; set;}
+		[Ordinal(2)] [RED("("softLockFrameSize")] 		public CFloat SoftLockFrameSize { get; set;}
 
 		public SR4PlayerTargetingConsts(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskSetThreatLevelDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("threatLevel")] 		public CInt32 ThreatLevel { get; set;}
+		[Ordinal(1)] [RED("threatLevel")] 		public CInt32 ThreatLevel { get; set;}
 
-		[Ordinal(0)] [RED("addToCurrent")] 		public CBool AddToCurrent { get; set;}
+		[Ordinal(2)] [RED("addToCurrent")] 		public CBool AddToCurrent { get; set;}
 
 		public BTTaskSetThreatLevelDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

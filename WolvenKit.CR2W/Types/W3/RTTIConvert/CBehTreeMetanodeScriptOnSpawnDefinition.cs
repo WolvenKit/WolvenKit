@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeMetanodeScriptOnSpawnDefinition : IBehTreeMetanodeOnSpawnDefinition
 	{
-		[Ordinal(0)] [RED("scriptOnSpawn")] 		public CHandle<IBehTreeOnSpawnEffector> ScriptOnSpawn { get; set;}
+		[Ordinal(1)] [RED("scriptOnSpawn")] 		public CHandle<IBehTreeOnSpawnEffector> ScriptOnSpawn { get; set;}
 
 		public CBehTreeMetanodeScriptOnSpawnDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

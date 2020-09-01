@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFocusSoundParam : CGameplayEntityParam
 	{
-		[Ordinal(0)] [RED("("eventStart")] 		public CName EventStart { get; set;}
+		[Ordinal(1)] [RED("("eventStart")] 		public CName EventStart { get; set;}
 
-		[Ordinal(0)] [RED("("eventStop")] 		public CName EventStop { get; set;}
+		[Ordinal(2)] [RED("("eventStop")] 		public CName EventStop { get; set;}
 
-		[Ordinal(0)] [RED("("hearingAngle")] 		public CFloat HearingAngle { get; set;}
+		[Ordinal(3)] [RED("("hearingAngle")] 		public CFloat HearingAngle { get; set;}
 
-		[Ordinal(0)] [RED("("visualEffectBoneName")] 		public CName VisualEffectBoneName { get; set;}
+		[Ordinal(4)] [RED("("visualEffectBoneName")] 		public CName VisualEffectBoneName { get; set;}
 
 		public CFocusSoundParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSbDescActor : CVariable
 	{
-		[Ordinal(0)] [RED("("uId")] 		public CString UId { get; set;}
+		[Ordinal(1)] [RED("("uId")] 		public CString UId { get; set;}
 
-		[Ordinal(0)] [RED("("repoActorId")] 		public CString RepoActorId { get; set;}
+		[Ordinal(2)] [RED("("repoActorId")] 		public CString RepoActorId { get; set;}
 
-		[Ordinal(0)] [RED("("template")] 		public CString Template { get; set;}
+		[Ordinal(3)] [RED("("template")] 		public CString Template { get; set;}
 
-		[Ordinal(0)] [RED("("appearance")] 		public CString Appearance { get; set;}
+		[Ordinal(4)] [RED("("appearance")] 		public CString Appearance { get; set;}
 
-		[Ordinal(0)] [RED("("isPlayer")] 		public CBool IsPlayer { get; set;}
+		[Ordinal(5)] [RED("("isPlayer")] 		public CBool IsPlayer { get; set;}
 
 		public SSbDescActor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

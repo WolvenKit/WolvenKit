@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAppearanceAttachments : CVariable
 	{
-		[Ordinal(0)] [RED("appearance")] 		public CName Appearance { get; set;}
+		[Ordinal(1)] [RED("appearance")] 		public CName Appearance { get; set;}
 
-		[Ordinal(0)] [RED("attachments", 2,0)] 		public CArray<SAppearanceAttachment> Attachments { get; set;}
+		[Ordinal(2)] [RED("attachments", 2,0)] 		public CArray<SAppearanceAttachment> Attachments { get; set;}
 
 		public SAppearanceAttachments(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

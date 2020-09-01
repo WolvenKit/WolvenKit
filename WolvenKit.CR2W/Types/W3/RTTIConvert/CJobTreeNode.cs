@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJobTreeNode : CObject
 	{
-		[Ordinal(0)] [RED("onEnterAction")] 		public CPtr<CJobAction> OnEnterAction { get; set;}
+		[Ordinal(1)] [RED("onEnterAction")] 		public CPtr<CJobAction> OnEnterAction { get; set;}
 
-		[Ordinal(0)] [RED("onLeaveAction")] 		public CPtr<CJobAction> OnLeaveAction { get; set;}
+		[Ordinal(2)] [RED("onLeaveAction")] 		public CPtr<CJobAction> OnLeaveAction { get; set;}
 
-		[Ordinal(0)] [RED("onFastLeaveAction")] 		public CPtr<CJobForceOutAction> OnFastLeaveAction { get; set;}
+		[Ordinal(3)] [RED("onFastLeaveAction")] 		public CPtr<CJobForceOutAction> OnFastLeaveAction { get; set;}
 
-		[Ordinal(0)] [RED("childNodes", 2,0)] 		public CArray<CPtr<CJobTreeNode>> ChildNodes { get; set;}
+		[Ordinal(4)] [RED("childNodes", 2,0)] 		public CArray<CPtr<CJobTreeNode>> ChildNodes { get; set;}
 
-		[Ordinal(0)] [RED("validCategories", 2,0)] 		public CArray<CName> ValidCategories { get; set;}
+		[Ordinal(5)] [RED("validCategories", 2,0)] 		public CArray<CName> ValidCategories { get; set;}
 
-		[Ordinal(0)] [RED("selectionMode")] 		public CEnum<EJobTreeNodeSelectionMode> SelectionMode { get; set;}
+		[Ordinal(6)] [RED("selectionMode")] 		public CEnum<EJobTreeNodeSelectionMode> SelectionMode { get; set;}
 
-		[Ordinal(0)] [RED("iterations")] 		public CUInt32 Iterations { get; set;}
+		[Ordinal(7)] [RED("iterations")] 		public CUInt32 Iterations { get; set;}
 
-		[Ordinal(0)] [RED("leftItem")] 		public CName LeftItem { get; set;}
+		[Ordinal(8)] [RED("leftItem")] 		public CName LeftItem { get; set;}
 
-		[Ordinal(0)] [RED("rightItem")] 		public CName RightItem { get; set;}
+		[Ordinal(9)] [RED("rightItem")] 		public CName RightItem { get; set;}
 
-		[Ordinal(0)] [RED("looped")] 		public CBool Looped { get; set;}
+		[Ordinal(10)] [RED("looped")] 		public CBool Looped { get; set;}
 
 		public CJobTreeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

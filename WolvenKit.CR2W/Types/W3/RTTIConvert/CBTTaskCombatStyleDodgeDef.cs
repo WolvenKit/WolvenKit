@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCombatStyleDodgeDef : CBTTaskDodgeDef
 	{
-		[Ordinal(0)] [RED("("parentCombatStyle")] 		public CHandle<CBTEnumBehaviorGraph> ParentCombatStyle { get; set;}
+		[Ordinal(1)] [RED("("parentCombatStyle")] 		public CHandle<CBTEnumBehaviorGraph> ParentCombatStyle { get; set;}
 
 		public CBTTaskCombatStyleDodgeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

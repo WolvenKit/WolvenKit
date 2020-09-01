@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalQuestHuntingBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("("questHuntingTag")] 		public CHandle<CJournalPath> QuestHuntingTag { get; set;}
+		[Ordinal(1)] [RED("("questHuntingTag")] 		public CHandle<CJournalPath> QuestHuntingTag { get; set;}
 
-		[Ordinal(0)] [RED("("creatureHuntingClue")] 		public CHandle<CJournalPath> CreatureHuntingClue { get; set;}
+		[Ordinal(2)] [RED("("creatureHuntingClue")] 		public CHandle<CJournalPath> CreatureHuntingClue { get; set;}
 
 		public CJournalQuestHuntingBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

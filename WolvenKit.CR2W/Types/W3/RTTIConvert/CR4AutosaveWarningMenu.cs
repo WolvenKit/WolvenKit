@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4AutosaveWarningMenu : CR4MenuBase
 	{
-		[Ordinal(0)] [RED("m_fxSetDuration")] 		public CHandle<CScriptedFlashFunction> M_fxSetDuration { get; set;}
+		[Ordinal(1)] [RED("m_fxSetDuration")] 		public CHandle<CScriptedFlashFunction> M_fxSetDuration { get; set;}
 
-		[Ordinal(0)] [RED("m_fxSetAutosaveMessage")] 		public CHandle<CScriptedFlashFunction> M_fxSetAutosaveMessage { get; set;}
+		[Ordinal(2)] [RED("m_fxSetAutosaveMessage")] 		public CHandle<CScriptedFlashFunction> M_fxSetAutosaveMessage { get; set;}
 
 		public CR4AutosaveWarningMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeAtomicPlayAnimationManualMotionExtractionDefinition : CBehTreeNodeAtomicActionDefinition
 	{
-		[Ordinal(0)] [RED("slotName")] 		public CName SlotName { get; set;}
+		[Ordinal(1)] [RED("slotName")] 		public CName SlotName { get; set;}
 
-		[Ordinal(0)] [RED("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(2)] [RED("animationName")] 		public CName AnimationName { get; set;}
 
-		[Ordinal(0)] [RED("loopIterations")] 		public CUInt32 LoopIterations { get; set;}
+		[Ordinal(3)] [RED("loopIterations")] 		public CUInt32 LoopIterations { get; set;}
 
-		[Ordinal(0)] [RED("isTransitionAnimation")] 		public CBool IsTransitionAnimation { get; set;}
+		[Ordinal(4)] [RED("isTransitionAnimation")] 		public CBool IsTransitionAnimation { get; set;}
 
 		public CBehTreeNodeAtomicPlayAnimationManualMotionExtractionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

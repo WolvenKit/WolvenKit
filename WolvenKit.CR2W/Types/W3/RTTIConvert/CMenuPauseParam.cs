@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMenuPauseParam : IMenuTimeParam
 	{
-		[Ordinal(0)] [RED("pauseType")] 		public CEnum<EMenuPauseType> PauseType { get; set;}
+		[Ordinal(1)] [RED("pauseType")] 		public CEnum<EMenuPauseType> PauseType { get; set;}
 
 		public CMenuPauseParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

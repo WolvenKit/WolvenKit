@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCommunityAreaTypeDefault : CCommunityAreaType
 	{
-		[Ordinal(0)] [RED("areaSpawnRadius")] 		public CFloat AreaSpawnRadius { get; set;}
+		[Ordinal(1)] [RED("areaSpawnRadius")] 		public CFloat AreaSpawnRadius { get; set;}
 
-		[Ordinal(0)] [RED("areaDespawnRadius")] 		public CFloat AreaDespawnRadius { get; set;}
+		[Ordinal(2)] [RED("areaDespawnRadius")] 		public CFloat AreaDespawnRadius { get; set;}
 
-		[Ordinal(0)] [RED("spawnRadius")] 		public CFloat SpawnRadius { get; set;}
+		[Ordinal(3)] [RED("spawnRadius")] 		public CFloat SpawnRadius { get; set;}
 
-		[Ordinal(0)] [RED("despawnRadius")] 		public CFloat DespawnRadius { get; set;}
+		[Ordinal(4)] [RED("despawnRadius")] 		public CFloat DespawnRadius { get; set;}
 
-		[Ordinal(0)] [RED("dontRestore")] 		public CBool DontRestore { get; set;}
+		[Ordinal(5)] [RED("dontRestore")] 		public CBool DontRestore { get; set;}
 
 		public CCommunityAreaTypeDefault(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

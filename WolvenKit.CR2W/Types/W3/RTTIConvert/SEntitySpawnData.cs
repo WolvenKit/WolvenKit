@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SEntitySpawnData : CVariable
 	{
-		[Ordinal(0)] [RED("("restored")] 		public CBool Restored { get; set;}
+		[Ordinal(1)] [RED("("restored")] 		public CBool Restored { get; set;}
 
 		public SEntitySpawnData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

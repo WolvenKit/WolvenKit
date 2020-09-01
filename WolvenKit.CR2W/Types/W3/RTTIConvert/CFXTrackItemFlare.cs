@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrackItemFlare : CFXTrackItem
 	{
-		[Ordinal(0)] [RED("material")] 		public CHandle<CMaterialInstance> Material { get; set;}
+		[Ordinal(1)] [RED("material")] 		public CHandle<CMaterialInstance> Material { get; set;}
 
-		[Ordinal(0)] [RED("parameters")] 		public SFlareParameters Parameters { get; set;}
+		[Ordinal(2)] [RED("parameters")] 		public SFlareParameters Parameters { get; set;}
 
-		[Ordinal(0)] [RED("spawner")] 		public CPtr<IFXSpawner> Spawner { get; set;}
+		[Ordinal(3)] [RED("spawner")] 		public CPtr<IFXSpawner> Spawner { get; set;}
 
 		public CFXTrackItemFlare(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

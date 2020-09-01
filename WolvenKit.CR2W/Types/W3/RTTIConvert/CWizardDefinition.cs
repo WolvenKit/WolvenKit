@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWizardDefinition : CResource
 	{
-		[Ordinal(0)] [RED("nodes", 2,0)] 		public CArray<CPtr<CWizardQuestionNode>> Nodes { get; set;}
+		[Ordinal(1)] [RED("nodes", 2,0)] 		public CArray<CPtr<CWizardQuestionNode>> Nodes { get; set;}
 
 		public CWizardDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

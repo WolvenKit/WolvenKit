@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3EyeOfLoki : W3QuestUsableItem
 	{
-		[Ordinal(0)] [RED("("environment")] 		public CName Environment { get; set;}
+		[Ordinal(1)] [RED("("environment")] 		public CName Environment { get; set;}
 
-		[Ordinal(0)] [RED("("effect")] 		public CName Effect { get; set;}
+		[Ordinal(2)] [RED("("effect")] 		public CName Effect { get; set;}
 
-		[Ordinal(0)] [RED("("activeWhenFact")] 		public CName ActiveWhenFact { get; set;}
+		[Ordinal(3)] [RED("("activeWhenFact")] 		public CName ActiveWhenFact { get; set;}
 
-		[Ordinal(0)] [RED("("soundOnStart")] 		public CName SoundOnStart { get; set;}
+		[Ordinal(4)] [RED("("soundOnStart")] 		public CName SoundOnStart { get; set;}
 
-		[Ordinal(0)] [RED("("soundOnStop")] 		public CName SoundOnStop { get; set;}
+		[Ordinal(5)] [RED("("soundOnStop")] 		public CName SoundOnStop { get; set;}
 
-		[Ordinal(0)] [RED("("envID")] 		public CInt32 EnvID { get; set;}
+		[Ordinal(6)] [RED("("envID")] 		public CInt32 EnvID { get; set;}
 
-		[Ordinal(0)] [RED("("active")] 		public CBool Active { get; set;}
+		[Ordinal(7)] [RED("("active")] 		public CBool Active { get; set;}
 
 		public W3EyeOfLoki(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

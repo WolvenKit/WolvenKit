@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrackItemForceFeedback : CFXTrackItem
 	{
-		[Ordinal(0)] [RED("highFrequencyMotorSpeed")] 		public CFloat HighFrequencyMotorSpeed { get; set;}
+		[Ordinal(1)] [RED("highFrequencyMotorSpeed")] 		public CFloat HighFrequencyMotorSpeed { get; set;}
 
-		[Ordinal(0)] [RED("lowFrequencyMotorSpeed")] 		public CFloat LowFrequencyMotorSpeed { get; set;}
+		[Ordinal(2)] [RED("lowFrequencyMotorSpeed")] 		public CFloat LowFrequencyMotorSpeed { get; set;}
 
 		public CFXTrackItemForceFeedback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

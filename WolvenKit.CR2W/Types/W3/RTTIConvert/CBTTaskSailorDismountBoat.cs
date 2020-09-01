@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSailorDismountBoat : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
+		[Ordinal(1)] [RED("("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
 
 		public CBTTaskSailorDismountBoat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

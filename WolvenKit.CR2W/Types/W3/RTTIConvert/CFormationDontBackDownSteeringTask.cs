@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFormationDontBackDownSteeringTask : IFormationSteeringTask
 	{
-		[Ordinal(0)] [RED("("maxAngleDifference")] 		public CFloat MaxAngleDifference { get; set;}
+		[Ordinal(1)] [RED("("maxAngleDifference")] 		public CFloat MaxAngleDifference { get; set;}
 
 		public CFormationDontBackDownSteeringTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

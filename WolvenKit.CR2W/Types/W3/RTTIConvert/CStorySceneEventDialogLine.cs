@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventDialogLine : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("("line")] 		public CPtr<CStorySceneLine> Line { get; set;}
+		[Ordinal(1)] [RED("("line")] 		public CPtr<CStorySceneLine> Line { get; set;}
 
 		public CStorySceneEventDialogLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

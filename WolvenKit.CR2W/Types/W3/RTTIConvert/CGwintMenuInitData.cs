@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGwintMenuInitData : CObject
 	{
-		[Ordinal(0)] [RED("deckName")] 		public CName DeckName { get; set;}
+		[Ordinal(1)] [RED("deckName")] 		public CName DeckName { get; set;}
 
-		[Ordinal(0)] [RED("difficulty")] 		public CEnum<EGwintDifficultyMode> Difficulty { get; set;}
+		[Ordinal(2)] [RED("difficulty")] 		public CEnum<EGwintDifficultyMode> Difficulty { get; set;}
 
-		[Ordinal(0)] [RED("aggression")] 		public CEnum<EGwintAggressionMode> Aggression { get; set;}
+		[Ordinal(3)] [RED("aggression")] 		public CEnum<EGwintAggressionMode> Aggression { get; set;}
 
-		[Ordinal(0)] [RED("allowMultipleMatches")] 		public CBool AllowMultipleMatches { get; set;}
+		[Ordinal(4)] [RED("allowMultipleMatches")] 		public CBool AllowMultipleMatches { get; set;}
 
-		[Ordinal(0)] [RED("forceFaction")] 		public CEnum<eGwintFaction> ForceFaction { get; set;}
+		[Ordinal(5)] [RED("forceFaction")] 		public CEnum<eGwintFaction> ForceFaction { get; set;}
 
 		public CGwintMenuInitData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXSpawnerComponent : IFXSpawner
 	{
-		[Ordinal(0)] [RED("componentName")] 		public CName ComponentName { get; set;}
+		[Ordinal(1)] [RED("componentName")] 		public CName ComponentName { get; set;}
 
-		[Ordinal(0)] [RED("copyRotation")] 		public CBool CopyRotation { get; set;}
+		[Ordinal(2)] [RED("copyRotation")] 		public CBool CopyRotation { get; set;}
 
-		[Ordinal(0)] [RED("attach")] 		public CBool Attach { get; set;}
+		[Ordinal(3)] [RED("attach")] 		public CBool Attach { get; set;}
 
-		[Ordinal(0)] [RED("relativeRotation")] 		public EulerAngles RelativeRotation { get; set;}
+		[Ordinal(4)] [RED("relativeRotation")] 		public EulerAngles RelativeRotation { get; set;}
 
-		[Ordinal(0)] [RED("relativePosition")] 		public Vector RelativePosition { get; set;}
+		[Ordinal(5)] [RED("relativePosition")] 		public Vector RelativePosition { get; set;}
 
-		[Ordinal(0)] [RED("parentSlotName")] 		public CName ParentSlotName { get; set;}
+		[Ordinal(6)] [RED("parentSlotName")] 		public CName ParentSlotName { get; set;}
 
-		[Ordinal(0)] [RED("freePositionAxisX")] 		public CBool FreePositionAxisX { get; set;}
+		[Ordinal(7)] [RED("freePositionAxisX")] 		public CBool FreePositionAxisX { get; set;}
 
-		[Ordinal(0)] [RED("freePositionAxisY")] 		public CBool FreePositionAxisY { get; set;}
+		[Ordinal(8)] [RED("freePositionAxisY")] 		public CBool FreePositionAxisY { get; set;}
 
-		[Ordinal(0)] [RED("freePositionAxisZ")] 		public CBool FreePositionAxisZ { get; set;}
+		[Ordinal(9)] [RED("freePositionAxisZ")] 		public CBool FreePositionAxisZ { get; set;}
 
-		[Ordinal(0)] [RED("freeRotation")] 		public CBool FreeRotation { get; set;}
+		[Ordinal(10)] [RED("freeRotation")] 		public CBool FreeRotation { get; set;}
 
-		[Ordinal(0)] [RED("percentage")] 		public CFloat Percentage { get; set;}
+		[Ordinal(11)] [RED("percentage")] 		public CFloat Percentage { get; set;}
 
 		public CFXSpawnerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

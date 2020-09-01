@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalBase : CObject
 	{
-		[Ordinal(0)] [RED("guid")] 		public CGUID Guid { get; set;}
+		[Ordinal(1)] [RED("guid")] 		public CGUID Guid { get; set;}
 
-		[Ordinal(0)] [RED("baseName")] 		public CString BaseName { get; set;}
+		[Ordinal(2)] [RED("baseName")] 		public CString BaseName { get; set;}
 
-		[Ordinal(0)] [RED("order")] 		public CUInt32 Order { get; set;}
+		[Ordinal(3)] [RED("order")] 		public CUInt32 Order { get; set;}
 
-		[Ordinal(0)] [RED("uniqueScriptIdentifier")] 		public CName UniqueScriptIdentifier { get; set;}
+		[Ordinal(4)] [RED("uniqueScriptIdentifier")] 		public CName UniqueScriptIdentifier { get; set;}
 
 		public CJournalBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

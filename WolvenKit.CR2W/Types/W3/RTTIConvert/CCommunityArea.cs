@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCommunityArea : CEntity
 	{
-		[Ordinal(0)] [RED("communityAreaType")] 		public CPtr<CCommunityAreaType> CommunityAreaType { get; set;}
+		[Ordinal(1)] [RED("communityAreaType")] 		public CPtr<CCommunityAreaType> CommunityAreaType { get; set;}
 
 		public CCommunityArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

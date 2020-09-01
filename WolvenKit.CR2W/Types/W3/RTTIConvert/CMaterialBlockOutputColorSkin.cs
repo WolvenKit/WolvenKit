@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockOutputColorSkin : CMaterialRootBlock
 	{
-		[Ordinal(0)] [RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
+		[Ordinal(1)] [RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
 
-		[Ordinal(0)] [RED("isMimicMaterial")] 		public CBool IsMimicMaterial { get; set;}
+		[Ordinal(2)] [RED("isMimicMaterial")] 		public CBool IsMimicMaterial { get; set;}
 
 		public CMaterialBlockOutputColorSkin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

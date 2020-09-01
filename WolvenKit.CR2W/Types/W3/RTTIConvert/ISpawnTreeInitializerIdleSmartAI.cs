@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ISpawnTreeInitializerIdleSmartAI : CSpawnTreeInitializerIdleAI
 	{
-		[Ordinal(0)] [RED("subInitializer")] 		public CHandle<ISpawnTreeInitializer> SubInitializer { get; set;}
+		[Ordinal(1)] [RED("subInitializer")] 		public CHandle<ISpawnTreeInitializer> SubInitializer { get; set;}
 
 		public ISpawnTreeInitializerIdleSmartAI(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXExplosionImplosionPhysicalForce : IFXPhysicalForce
 	{
-		[Ordinal(0)] [RED("forceScale")] 		public CFloat ForceScale { get; set;}
+		[Ordinal(1)] [RED("forceScale")] 		public CFloat ForceScale { get; set;}
 
-		[Ordinal(0)] [RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(2)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		[Ordinal(0)] [RED("applyFractureDamage")] 		public CFloat ApplyFractureDamage { get; set;}
+		[Ordinal(3)] [RED("applyFractureDamage")] 		public CFloat ApplyFractureDamage { get; set;}
 
 		public CFXExplosionImplosionPhysicalForce(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

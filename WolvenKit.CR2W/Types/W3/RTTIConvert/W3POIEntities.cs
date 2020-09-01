@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3POIEntities : CVariable
 	{
-		[Ordinal(0)] [RED("("poiEntityTemplate")] 		public CHandle<CEntityTemplate> PoiEntityTemplate { get; set;}
+		[Ordinal(1)] [RED("("poiEntityTemplate")] 		public CHandle<CEntityTemplate> PoiEntityTemplate { get; set;}
 
-		[Ordinal(0)] [RED("("maxSpawnedEntities")] 		public CInt32 MaxSpawnedEntities { get; set;}
+		[Ordinal(2)] [RED("("maxSpawnedEntities")] 		public CInt32 MaxSpawnedEntities { get; set;}
 
 		public W3POIEntities(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

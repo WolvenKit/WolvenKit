@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrackItemGlobalSpacePhysicalForce : CFXTrackItem
 	{
-		[Ordinal(0)] [RED("forceObject")] 		public CPtr<IFXPhysicalForce> ForceObject { get; set;}
+		[Ordinal(1)] [RED("forceObject")] 		public CPtr<IFXPhysicalForce> ForceObject { get; set;}
 
 		public CFXTrackItemGlobalSpacePhysicalForce(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

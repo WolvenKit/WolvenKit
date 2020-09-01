@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventLodOverride : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(1)] [RED("actor")] 		public CName Actor { get; set;}
 
-		[Ordinal(0)] [RED("actorsByTag")] 		public TagList ActorsByTag { get; set;}
+		[Ordinal(2)] [RED("actorsByTag")] 		public TagList ActorsByTag { get; set;}
 
-		[Ordinal(0)] [RED("forceHighestLod")] 		public CBool ForceHighestLod { get; set;}
+		[Ordinal(3)] [RED("forceHighestLod")] 		public CBool ForceHighestLod { get; set;}
 
-		[Ordinal(0)] [RED("disableAutoHide")] 		public CBool DisableAutoHide { get; set;}
+		[Ordinal(4)] [RED("disableAutoHide")] 		public CBool DisableAutoHide { get; set;}
 
 		public CStorySceneEventLodOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

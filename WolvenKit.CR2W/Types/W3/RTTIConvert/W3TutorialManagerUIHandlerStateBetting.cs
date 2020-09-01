@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateBetting : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[Ordinal(0)] [RED("("DESCRIPTION")] 		public CName DESCRIPTION { get; set;}
+		[Ordinal(1)] [RED("("DESCRIPTION")] 		public CName DESCRIPTION { get; set;}
 
-		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(2)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateBetting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

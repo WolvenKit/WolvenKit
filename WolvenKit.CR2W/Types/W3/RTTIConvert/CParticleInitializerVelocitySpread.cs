@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleInitializerVelocitySpread : IParticleInitializer
 	{
-		[Ordinal(0)] [RED("("scale")] 		public CPtr<IEvaluatorFloat> Scale { get; set;}
+		[Ordinal(1)] [RED("("scale")] 		public CPtr<IEvaluatorFloat> Scale { get; set;}
 
-		[Ordinal(0)] [RED("("conserveMomentum")] 		public CBool ConserveMomentum { get; set;}
+		[Ordinal(2)] [RED("("conserveMomentum")] 		public CBool ConserveMomentum { get; set;}
 
 		public CParticleInitializerVelocitySpread(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

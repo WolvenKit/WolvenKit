@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFollowPartyMemberSideBySideTree : CAIFollowPartyMemeberTree
 	{
-		[Ordinal(0)] [RED("useCustomSteeringGraph")] 		public CBool UseCustomSteeringGraph { get; set;}
+		[Ordinal(1)] [RED("useCustomSteeringGraph")] 		public CBool UseCustomSteeringGraph { get; set;}
 
-		[Ordinal(0)] [RED("customSteeringGraph")] 		public CHandle<CMoveSteeringBehavior> CustomSteeringGraph { get; set;}
+		[Ordinal(2)] [RED("customSteeringGraph")] 		public CHandle<CMoveSteeringBehavior> CustomSteeringGraph { get; set;}
 
 		public CAIFollowPartyMemberSideBySideTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

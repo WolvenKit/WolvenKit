@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskNPCNotInFrontOfPLayerDef : IBehTreeConditionalTaskDefinition
 	{
-		[Ordinal(0)] [RED("coneAngle")] 		public CFloat ConeAngle { get; set;}
+		[Ordinal(1)] [RED("coneAngle")] 		public CFloat ConeAngle { get; set;}
 
-		[Ordinal(0)] [RED("angleOffset")] 		public CFloat AngleOffset { get; set;}
+		[Ordinal(2)] [RED("angleOffset")] 		public CFloat AngleOffset { get; set;}
 
-		[Ordinal(0)] [RED("coneRange")] 		public CFloat ConeRange { get; set;}
+		[Ordinal(3)] [RED("coneRange")] 		public CFloat ConeRange { get; set;}
 
 		public CBTTaskNPCNotInFrontOfPLayerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

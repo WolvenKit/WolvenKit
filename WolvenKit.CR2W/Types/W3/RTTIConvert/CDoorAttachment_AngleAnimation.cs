@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDoorAttachment_AngleAnimation : IDoorAttachment
 	{
-		[Ordinal(0)] [RED("("openTime")] 		public CFloat OpenTime { get; set;}
+		[Ordinal(1)] [RED("("openTime")] 		public CFloat OpenTime { get; set;}
 
-		[Ordinal(0)] [RED("("originalAngle")] 		public CFloat OriginalAngle { get; set;}
+		[Ordinal(2)] [RED("("originalAngle")] 		public CFloat OriginalAngle { get; set;}
 
 		public CDoorAttachment_AngleAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

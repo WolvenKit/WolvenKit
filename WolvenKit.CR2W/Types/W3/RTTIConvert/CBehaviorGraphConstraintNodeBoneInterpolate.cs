@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphConstraintNodeBoneInterpolate : CBehaviorGraphBaseNode
 	{
-		[Ordinal(0)] [RED("("boneInputA")] 		public CString BoneInputA { get; set;}
+		[Ordinal(1)] [RED("("boneInputA")] 		public CString BoneInputA { get; set;}
 
-		[Ordinal(0)] [RED("("boneInputB")] 		public CString BoneInputB { get; set;}
+		[Ordinal(2)] [RED("("boneInputB")] 		public CString BoneInputB { get; set;}
 
-		[Ordinal(0)] [RED("("boneOutput")] 		public CString BoneOutput { get; set;}
+		[Ordinal(3)] [RED("("boneOutput")] 		public CString BoneOutput { get; set;}
 
-		[Ordinal(0)] [RED("("cachedControlValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlValueNode { get; set;}
+		[Ordinal(4)] [RED("("cachedControlValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlValueNode { get; set;}
 
 		public CBehaviorGraphConstraintNodeBoneInterpolate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

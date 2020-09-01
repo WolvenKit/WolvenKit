@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrackItemPlayItemEffect : CFXTrackItem
 	{
-		[Ordinal(0)] [RED("("category")] 		public CName Category { get; set;}
+		[Ordinal(1)] [RED("("category")] 		public CName Category { get; set;}
 
-		[Ordinal(0)] [RED("("itemName_optional")] 		public CName ItemName_optional { get; set;}
+		[Ordinal(2)] [RED("("itemName_optional")] 		public CName ItemName_optional { get; set;}
 
-		[Ordinal(0)] [RED("("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(3)] [RED("("effectName")] 		public CName EffectName { get; set;}
 
 		public CFXTrackItemPlayItemEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

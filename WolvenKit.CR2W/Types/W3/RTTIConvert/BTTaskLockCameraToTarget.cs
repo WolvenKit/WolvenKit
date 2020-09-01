@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskLockCameraToTarget : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("lock")] 		public CBool Lock { get; set;}
+		[Ordinal(1)] [RED("lock")] 		public CBool Lock { get; set;}
 
-		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(2)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
 		public BTTaskLockCameraToTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

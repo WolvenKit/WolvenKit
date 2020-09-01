@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SWeatherBonus : CVariable
 	{
-		[Ordinal(0)] [RED("("dayPart")] 		public CEnum<EDayPart> DayPart { get; set;}
+		[Ordinal(1)] [RED("("dayPart")] 		public CEnum<EDayPart> DayPart { get; set;}
 
-		[Ordinal(0)] [RED("("weather")] 		public CEnum<EWeatherEffect> Weather { get; set;}
+		[Ordinal(2)] [RED("("weather")] 		public CEnum<EWeatherEffect> Weather { get; set;}
 
-		[Ordinal(0)] [RED("("moonState")] 		public CEnum<EMoonState> MoonState { get; set;}
+		[Ordinal(3)] [RED("("moonState")] 		public CEnum<EMoonState> MoonState { get; set;}
 
-		[Ordinal(0)] [RED("("ability")] 		public CName Ability { get; set;}
+		[Ordinal(4)] [RED("("ability")] 		public CName Ability { get; set;}
 
 		public SWeatherBonus(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

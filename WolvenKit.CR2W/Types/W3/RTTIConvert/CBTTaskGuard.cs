@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskGuard : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("guardArea")] 		public CHandle<CAreaComponent> GuardArea { get; set;}
+		[Ordinal(1)] [RED("("guardArea")] 		public CHandle<CAreaComponent> GuardArea { get; set;}
 
-		[Ordinal(0)] [RED("("pursuitArea")] 		public CHandle<CAreaComponent> PursuitArea { get; set;}
+		[Ordinal(2)] [RED("("pursuitArea")] 		public CHandle<CAreaComponent> PursuitArea { get; set;}
 
-		[Ordinal(0)] [RED("("pursuitRange")] 		public CFloat PursuitRange { get; set;}
+		[Ordinal(3)] [RED("("pursuitRange")] 		public CFloat PursuitRange { get; set;}
 
-		[Ordinal(0)] [RED("("retreatType")] 		public CEnum<EMoveType> RetreatType { get; set;}
+		[Ordinal(4)] [RED("("retreatType")] 		public CEnum<EMoveType> RetreatType { get; set;}
 
-		[Ordinal(0)] [RED("("retreatSpeed")] 		public CFloat RetreatSpeed { get; set;}
+		[Ordinal(5)] [RED("("retreatSpeed")] 		public CFloat RetreatSpeed { get; set;}
 
-		[Ordinal(0)] [RED("("intruderTestFrequency")] 		public CFloat IntruderTestFrequency { get; set;}
+		[Ordinal(6)] [RED("("intruderTestFrequency")] 		public CFloat IntruderTestFrequency { get; set;}
 
-		[Ordinal(0)] [RED("("intruderTestTimeout")] 		public CFloat IntruderTestTimeout { get; set;}
+		[Ordinal(7)] [RED("("intruderTestTimeout")] 		public CFloat IntruderTestTimeout { get; set;}
 
-		[Ordinal(0)] [RED("("guardState")] 		public CEnum<EGuardState> GuardState { get; set;}
+		[Ordinal(8)] [RED("("guardState")] 		public CEnum<EGuardState> GuardState { get; set;}
 
-		[Ordinal(0)] [RED("("intruders", 2,0)] 		public CArray<CHandle<CGameplayEntity>> Intruders { get; set;}
+		[Ordinal(9)] [RED("("intruders", 2,0)] 		public CArray<CHandle<CGameplayEntity>> Intruders { get; set;}
 
-		[Ordinal(0)] [RED("("target")] 		public CHandle<CActor> Target { get; set;}
+		[Ordinal(10)] [RED("("target")] 		public CHandle<CActor> Target { get; set;}
 
 		public CBTTaskGuard(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

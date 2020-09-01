@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ItemInfoPopupData : TextPopupData
 	{
-		[Ordinal(0)] [RED("invRef")] 		public CHandle<CInventoryComponent> InvRef { get; set;}
+		[Ordinal(1)] [RED("invRef")] 		public CHandle<CInventoryComponent> InvRef { get; set;}
 
-		[Ordinal(0)] [RED("itemId")] 		public SItemUniqueId ItemId { get; set;}
+		[Ordinal(2)] [RED("itemId")] 		public SItemUniqueId ItemId { get; set;}
 
-		[Ordinal(0)] [RED("inventoryRef")] 		public CHandle<CR4InventoryMenu> InventoryRef { get; set;}
+		[Ordinal(3)] [RED("inventoryRef")] 		public CHandle<CR4InventoryMenu> InventoryRef { get; set;}
 
-		[Ordinal(0)] [RED("invComponent")] 		public CHandle<CInventoryComponent> InvComponent { get; set;}
+		[Ordinal(4)] [RED("invComponent")] 		public CHandle<CInventoryComponent> InvComponent { get; set;}
 
 		public ItemInfoPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

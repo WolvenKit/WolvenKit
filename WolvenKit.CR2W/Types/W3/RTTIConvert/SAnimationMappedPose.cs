@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAnimationMappedPose : CVariable
 	{
-		[Ordinal(0)] [RED("bones", 133,0)] 		public CArray<EngineQsTransform> Bones { get; set;}
+		[Ordinal(1)] [RED("bones", 133,0)] 		public CArray<EngineQsTransform> Bones { get; set;}
 
-		[Ordinal(0)] [RED("tracks", 2,0)] 		public CArray<CFloat> Tracks { get; set;}
+		[Ordinal(2)] [RED("tracks", 2,0)] 		public CArray<CFloat> Tracks { get; set;}
 
-		[Ordinal(0)] [RED("bonesMapping", 2,0)] 		public CArray<CInt32> BonesMapping { get; set;}
+		[Ordinal(3)] [RED("bonesMapping", 2,0)] 		public CArray<CInt32> BonesMapping { get; set;}
 
-		[Ordinal(0)] [RED("tracksMapping", 2,0)] 		public CArray<CInt32> TracksMapping { get; set;}
+		[Ordinal(4)] [RED("tracksMapping", 2,0)] 		public CArray<CInt32> TracksMapping { get; set;}
 
-		[Ordinal(0)] [RED("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(5)] [RED("weight")] 		public CFloat Weight { get; set;}
 
-		[Ordinal(0)] [RED("mode")] 		public CEnum<ESAnimationMappedPoseMode> Mode { get; set;}
+		[Ordinal(6)] [RED("mode")] 		public CEnum<ESAnimationMappedPoseMode> Mode { get; set;}
 
-		[Ordinal(0)] [RED("correctionID")] 		public CGUID CorrectionID { get; set;}
+		[Ordinal(7)] [RED("correctionID")] 		public CGUID CorrectionID { get; set;}
 
-		[Ordinal(0)] [RED("correctionIdleID")] 		public CName CorrectionIdleID { get; set;}
+		[Ordinal(8)] [RED("correctionIdleID")] 		public CName CorrectionIdleID { get; set;}
 
 		public SAnimationMappedPose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

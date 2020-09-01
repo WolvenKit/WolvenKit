@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorGraphAnimatedRagdollDirReplacement : CVariable
 	{
-		[Ordinal(0)] [RED("("probability")] 		public CFloat Probability { get; set;}
+		[Ordinal(1)] [RED("("probability")] 		public CFloat Probability { get; set;}
 
-		[Ordinal(0)] [RED("("index")] 		public CUInt32 Index { get; set;}
+		[Ordinal(2)] [RED("("index")] 		public CUInt32 Index { get; set;}
 
 		public SBehaviorGraphAnimatedRagdollDirReplacement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

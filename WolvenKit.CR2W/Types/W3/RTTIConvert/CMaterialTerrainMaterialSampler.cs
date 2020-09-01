@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialTerrainMaterialSampler : CMaterialBlock
 	{
-		[Ordinal(0)] [RED("normalScale")] 		public Vector NormalScale { get; set;}
+		[Ordinal(1)] [RED("normalScale")] 		public Vector NormalScale { get; set;}
 
 		public CMaterialTerrainMaterialSampler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeMetanodeOnSpawnDefinition : IBehTreeMetanodeDefinition
 	{
-		[Ordinal(0)] [RED("childNode")] 		public CPtr<IBehTreeNodeDefinition> ChildNode { get; set;}
+		[Ordinal(1)] [RED("childNode")] 		public CPtr<IBehTreeNodeDefinition> ChildNode { get; set;}
 
-		[Ordinal(0)] [RED("runWhenReattachedFromPool")] 		public CBool RunWhenReattachedFromPool { get; set;}
+		[Ordinal(2)] [RED("runWhenReattachedFromPool")] 		public CBool RunWhenReattachedFromPool { get; set;}
 
 		public IBehTreeMetanodeOnSpawnDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

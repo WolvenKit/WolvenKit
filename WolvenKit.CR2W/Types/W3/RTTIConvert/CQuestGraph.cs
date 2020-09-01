@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestGraph : CObject
 	{
-		[Ordinal(0)] [RED("graphBlocks", 2,0)] 		public CArray<CPtr<CGraphBlock>> GraphBlocks { get; set;}
+		[Ordinal(1)] [RED("graphBlocks", 2,0)] 		public CArray<CPtr<CGraphBlock>> GraphBlocks { get; set;}
 
-		[Ordinal(0)] [RED("sourceDataRemoved")] 		public CBool SourceDataRemoved { get; set;}
+		[Ordinal(2)] [RED("sourceDataRemoved")] 		public CBool SourceDataRemoved { get; set;}
 
-		[Ordinal(0)] [RED("isTest")] 		public CBool IsTest { get; set;}
+		[Ordinal(3)] [RED("isTest")] 		public CBool IsTest { get; set;}
 
 		public CQuestGraph(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

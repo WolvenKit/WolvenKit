@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondMonsterTacticIsUsedDef : IBehTreeConditionalTaskDefinition
 	{
-		[Ordinal(0)] [RED("tactic")] 		public CEnum<EMonsterTactic> Tactic { get; set;}
+		[Ordinal(1)] [RED("tactic")] 		public CEnum<EMonsterTactic> Tactic { get; set;}
 
-		[Ordinal(0)] [RED("distanceToCheck")] 		public CFloat DistanceToCheck { get; set;}
+		[Ordinal(2)] [RED("distanceToCheck")] 		public CFloat DistanceToCheck { get; set;}
 
-		[Ordinal(0)] [RED("ignoreMyself")] 		public CBool IgnoreMyself { get; set;}
+		[Ordinal(3)] [RED("ignoreMyself")] 		public CBool IgnoreMyself { get; set;}
 
 		public BTCondMonsterTacticIsUsedDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

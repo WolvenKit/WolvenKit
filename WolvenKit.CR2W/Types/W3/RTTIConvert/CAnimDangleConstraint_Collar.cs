@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimDangleConstraint_Collar : CAnimSkeletalDangleConstraint
 	{
-		[Ordinal(0)] [RED("offset")] 		public Vector Offset { get; set;}
+		[Ordinal(1)] [RED("offset")] 		public Vector Offset { get; set;}
 
-		[Ordinal(0)] [RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(2)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		[Ordinal(0)] [RED("offset2")] 		public Vector Offset2 { get; set;}
+		[Ordinal(3)] [RED("offset2")] 		public Vector Offset2 { get; set;}
 
-		[Ordinal(0)] [RED("radius2")] 		public CFloat Radius2 { get; set;}
+		[Ordinal(4)] [RED("radius2")] 		public CFloat Radius2 { get; set;}
 
 		public CAnimDangleConstraint_Collar(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

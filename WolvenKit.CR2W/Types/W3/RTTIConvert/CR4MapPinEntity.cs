@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4MapPinEntity : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("entityName")] 		public CName EntityName { get; set;}
+		[Ordinal(1)] [RED("("entityName")] 		public CName EntityName { get; set;}
 
-		[Ordinal(0)] [RED("("customName")] 		public LocalizedString CustomName { get; set;}
+		[Ordinal(2)] [RED("("customName")] 		public LocalizedString CustomName { get; set;}
 
-		[Ordinal(0)] [RED("("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(3)] [RED("("radius")] 		public CFloat Radius { get; set;}
 
-		[Ordinal(0)] [RED("("ignoreWhenExportingMapPins")] 		public CBool IgnoreWhenExportingMapPins { get; set;}
+		[Ordinal(4)] [RED("("ignoreWhenExportingMapPins")] 		public CBool IgnoreWhenExportingMapPins { get; set;}
 
 		public CR4MapPinEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

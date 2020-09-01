@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CreaturesGroupDef : CVariable
 	{
-		[Ordinal(0)] [RED("groupName")] 		public CName GroupName { get; set;}
+		[Ordinal(1)] [RED("groupName")] 		public CName GroupName { get; set;}
 
-		[Ordinal(0)] [RED("disabledBySources")] 		public CInt32 DisabledBySources { get; set;}
+		[Ordinal(2)] [RED("disabledBySources")] 		public CInt32 DisabledBySources { get; set;}
 
-		[Ordinal(0)] [RED("sourcesNames", 2,0)] 		public CArray<CName> SourcesNames { get; set;}
+		[Ordinal(3)] [RED("sourcesNames", 2,0)] 		public CArray<CName> SourcesNames { get; set;}
 
 		public CreaturesGroupDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

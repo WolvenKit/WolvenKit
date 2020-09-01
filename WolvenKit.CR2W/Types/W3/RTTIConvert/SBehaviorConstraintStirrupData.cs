@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorConstraintStirrupData : CVariable
 	{
-		[Ordinal(0)] [RED("("stirrupBoneName")] 		public CName StirrupBoneName { get; set;}
+		[Ordinal(1)] [RED("("stirrupBoneName")] 		public CName StirrupBoneName { get; set;}
 
 		public SBehaviorConstraintStirrupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

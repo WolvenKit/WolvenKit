@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ArmorStand : W3HouseDecorationBase
 	{
-		[Ordinal(0)] [RED("("m_mountAllItems")] 		public CBool M_mountAllItems { get; set;}
+		[Ordinal(1)] [RED("("m_mountAllItems")] 		public CBool M_mountAllItems { get; set;}
 
 		public W3ArmorStand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

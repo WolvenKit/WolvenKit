@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeReactionSceneDefinitionDecorator : CBehTreeNodeConditionReactionEventDefinition
 	{
-		[Ordinal(0)] [RED("roles", 2,0)] 		public CArray<CName> Roles { get; set;}
+		[Ordinal(1)] [RED("roles", 2,0)] 		public CArray<CName> Roles { get; set;}
 
-		[Ordinal(0)] [RED("inInWorkBranch")] 		public CBehTreeValBool InInWorkBranch { get; set;}
+		[Ordinal(2)] [RED("inInWorkBranch")] 		public CBehTreeValBool InInWorkBranch { get; set;}
 
 		public CBehTreeNodeReactionSceneDefinitionDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

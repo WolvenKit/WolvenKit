@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCWaitingForNotification : IMoveSteeringCondition
 	{
-		[Ordinal(0)] [RED("notificationName")] 		public CName NotificationName { get; set;}
+		[Ordinal(1)] [RED("notificationName")] 		public CName NotificationName { get; set;}
 
 		public CMoveSCWaitingForNotification(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

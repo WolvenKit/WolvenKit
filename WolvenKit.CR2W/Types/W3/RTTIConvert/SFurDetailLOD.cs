@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurDetailLOD : CVariable
 	{
-		[Ordinal(0)] [RED("("enableDetailLOD")] 		public CBool EnableDetailLOD { get; set;}
+		[Ordinal(1)] [RED("("enableDetailLOD")] 		public CBool EnableDetailLOD { get; set;}
 
-		[Ordinal(0)] [RED("("detailLODStart")] 		public CFloat DetailLODStart { get; set;}
+		[Ordinal(2)] [RED("("detailLODStart")] 		public CFloat DetailLODStart { get; set;}
 
-		[Ordinal(0)] [RED("("detailLODEnd")] 		public CFloat DetailLODEnd { get; set;}
+		[Ordinal(3)] [RED("("detailLODEnd")] 		public CFloat DetailLODEnd { get; set;}
 
-		[Ordinal(0)] [RED("("detailLODWidth")] 		public CFloat DetailLODWidth { get; set;}
+		[Ordinal(4)] [RED("("detailLODWidth")] 		public CFloat DetailLODWidth { get; set;}
 
-		[Ordinal(0)] [RED("("detailLODDensity")] 		public CFloat DetailLODDensity { get; set;}
+		[Ordinal(5)] [RED("("detailLODDensity")] 		public CFloat DetailLODDensity { get; set;}
 
 		public SFurDetailLOD(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

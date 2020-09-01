@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTSetAcceleration : IMoveSteeringTask
 	{
-		[Ordinal(0)] [RED("acceleration")] 		public CFloat Acceleration { get; set;}
+		[Ordinal(1)] [RED("acceleration")] 		public CFloat Acceleration { get; set;}
 
-		[Ordinal(0)] [RED("deceleration")] 		public CFloat Deceleration { get; set;}
+		[Ordinal(2)] [RED("deceleration")] 		public CFloat Deceleration { get; set;}
 
 		public CMoveSTSetAcceleration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

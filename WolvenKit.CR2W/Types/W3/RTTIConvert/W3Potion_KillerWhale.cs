@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Potion_KillerWhale : W3ChangeMaxStatEffect
 	{
-		[Ordinal(0)] [RED("("visionStrength")] 		public CFloat VisionStrength { get; set;}
+		[Ordinal(1)] [RED("("visionStrength")] 		public CFloat VisionStrength { get; set;}
 
 		public W3Potion_KillerWhale(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

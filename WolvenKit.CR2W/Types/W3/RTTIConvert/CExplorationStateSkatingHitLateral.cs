@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateSkatingHitLateral : CExplorationStateAbstract
 	{
-		[Ordinal(0)] [RED("("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
+		[Ordinal(1)] [RED("("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
 
-		[Ordinal(0)] [RED("("behAnimEnd")] 		public CName BehAnimEnd { get; set;}
+		[Ordinal(2)] [RED("("behAnimEnd")] 		public CName BehAnimEnd { get; set;}
 
-		[Ordinal(0)] [RED("("timeMax")] 		public CFloat TimeMax { get; set;}
+		[Ordinal(3)] [RED("("timeMax")] 		public CFloat TimeMax { get; set;}
 
-		[Ordinal(0)] [RED("("speedMinToEnter")] 		public CFloat SpeedMinToEnter { get; set;}
+		[Ordinal(4)] [RED("("speedMinToEnter")] 		public CFloat SpeedMinToEnter { get; set;}
 
-		[Ordinal(0)] [RED("("speedReductionPerc")] 		public CFloat SpeedReductionPerc { get; set;}
+		[Ordinal(5)] [RED("("speedReductionPerc")] 		public CFloat SpeedReductionPerc { get; set;}
 
-		[Ordinal(0)] [RED("("extraAngle")] 		public CFloat ExtraAngle { get; set;}
+		[Ordinal(6)] [RED("("extraAngle")] 		public CFloat ExtraAngle { get; set;}
 
 		public CExplorationStateSkatingHitLateral(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

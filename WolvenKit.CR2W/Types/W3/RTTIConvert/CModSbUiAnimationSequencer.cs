@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModSbUiAnimationSequencer : CObject
 	{
-		[Ordinal(0)] [RED("("seqInstances", 2,0)] 		public CArray<CHandle<CModSbUiAnimSequence>> SeqInstances { get; set;}
+		[Ordinal(1)] [RED("("seqInstances", 2,0)] 		public CArray<CHandle<CModSbUiAnimSequence>> SeqInstances { get; set;}
 
-		[Ordinal(0)] [RED("("masterEntity")] 		public CHandle<CGameplayEntity> MasterEntity { get; set;}
+		[Ordinal(2)] [RED("("masterEntity")] 		public CHandle<CGameplayEntity> MasterEntity { get; set;}
 
-		[Ordinal(0)] [RED("("animDirector")] 		public CHandle<CModStoryBoardAnimationDirector> AnimDirector { get; set;}
+		[Ordinal(3)] [RED("("animDirector")] 		public CHandle<CModStoryBoardAnimationDirector> AnimDirector { get; set;}
 
 		public CModSbUiAnimationSequencer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

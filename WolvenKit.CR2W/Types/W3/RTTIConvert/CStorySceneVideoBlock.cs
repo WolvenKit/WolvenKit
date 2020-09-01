@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneVideoBlock : CStorySceneGraphBlock
 	{
-		[Ordinal(0)] [RED("sceneVideo")] 		public CPtr<CStorySceneVideoSection> SceneVideo { get; set;}
+		[Ordinal(1)] [RED("sceneVideo")] 		public CPtr<CStorySceneVideoSection> SceneVideo { get; set;}
 
 		public CStorySceneVideoBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

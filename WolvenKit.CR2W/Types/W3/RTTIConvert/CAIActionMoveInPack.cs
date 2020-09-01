@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIActionMoveInPack : CAIMonsterActionSubtree
 	{
-		[Ordinal(0)] [RED("chanceToFollowPack")] 		public CFloat ChanceToFollowPack { get; set;}
+		[Ordinal(1)] [RED("chanceToFollowPack")] 		public CFloat ChanceToFollowPack { get; set;}
 
 		public CAIActionMoveInPack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

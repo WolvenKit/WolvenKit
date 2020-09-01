@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorConstraintNodeFloorIKCommonData : CVariable
 	{
-		[Ordinal(0)] [RED("("gravityCentreBone")] 		public CName GravityCentreBone { get; set;}
+		[Ordinal(1)] [RED("("gravityCentreBone")] 		public CName GravityCentreBone { get; set;}
 
-		[Ordinal(0)] [RED("("rootRotationBlendTime")] 		public CFloat RootRotationBlendTime { get; set;}
+		[Ordinal(2)] [RED("("rootRotationBlendTime")] 		public CFloat RootRotationBlendTime { get; set;}
 
-		[Ordinal(0)] [RED("("verticalVelocityOffsetUpBlendTime")] 		public CFloat VerticalVelocityOffsetUpBlendTime { get; set;}
+		[Ordinal(3)] [RED("("verticalVelocityOffsetUpBlendTime")] 		public CFloat VerticalVelocityOffsetUpBlendTime { get; set;}
 
-		[Ordinal(0)] [RED("("verticalVelocityOffsetDownBlendTime")] 		public CFloat VerticalVelocityOffsetDownBlendTime { get; set;}
+		[Ordinal(4)] [RED("("verticalVelocityOffsetDownBlendTime")] 		public CFloat VerticalVelocityOffsetDownBlendTime { get; set;}
 
-		[Ordinal(0)] [RED("("slidingOnSlopeBlendTime")] 		public CFloat SlidingOnSlopeBlendTime { get; set;}
+		[Ordinal(5)] [RED("("slidingOnSlopeBlendTime")] 		public CFloat SlidingOnSlopeBlendTime { get; set;}
 
 		public SBehaviorConstraintNodeFloorIKCommonData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

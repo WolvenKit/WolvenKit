@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBoxComponent : CBoundedComponent
 	{
-		[Ordinal(0)] [RED("width")] 		public CFloat Width { get; set;}
+		[Ordinal(1)] [RED("width")] 		public CFloat Width { get; set;}
 
-		[Ordinal(0)] [RED("height")] 		public CFloat Height { get; set;}
+		[Ordinal(2)] [RED("height")] 		public CFloat Height { get; set;}
 
-		[Ordinal(0)] [RED("depth")] 		public CFloat Depth { get; set;}
+		[Ordinal(3)] [RED("depth")] 		public CFloat Depth { get; set;}
 
-		[Ordinal(0)] [RED("drawingColor")] 		public CColor DrawingColor { get; set;}
+		[Ordinal(4)] [RED("drawingColor")] 		public CColor DrawingColor { get; set;}
 
 		public CBoxComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

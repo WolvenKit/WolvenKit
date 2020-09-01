@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPoseCompressionDefaultWithExtraBones : CPoseCompressionDefault
 	{
-		[Ordinal(0)] [RED("extraRotBones", 2,0)] 		public CArray<CInt32> ExtraRotBones { get; set;}
+		[Ordinal(1)] [RED("extraRotBones", 2,0)] 		public CArray<CInt32> ExtraRotBones { get; set;}
 
-		[Ordinal(0)] [RED("extraTransBones", 2,0)] 		public CArray<CInt32> ExtraTransBones { get; set;}
+		[Ordinal(2)] [RED("extraTransBones", 2,0)] 		public CArray<CInt32> ExtraTransBones { get; set;}
 
 		public CPoseCompressionDefaultWithExtraBones(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

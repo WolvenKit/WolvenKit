@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondActorInIdleTrigger : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("inIdleTrigger")] 		public CBool InIdleTrigger { get; set;}
+		[Ordinal(1)] [RED("inIdleTrigger")] 		public CBool InIdleTrigger { get; set;}
 
 		public CBTCondActorInIdleTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

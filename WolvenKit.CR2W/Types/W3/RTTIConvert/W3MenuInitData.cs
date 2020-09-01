@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MenuInitData : CObject
 	{
-		[Ordinal(0)] [RED("("ignoreSaveSystem")] 		public CBool IgnoreSaveSystem { get; set;}
+		[Ordinal(1)] [RED("("ignoreSaveSystem")] 		public CBool IgnoreSaveSystem { get; set;}
 
-		[Ordinal(0)] [RED("("m_defaultState")] 		public CName M_defaultState { get; set;}
+		[Ordinal(2)] [RED("("m_defaultState")] 		public CName M_defaultState { get; set;}
 
 		public W3MenuInitData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

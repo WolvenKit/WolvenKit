@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalCreatureGameplayHint : CJournalContainerEntry
 	{
-		[Ordinal(0)] [RED("description")] 		public LocalizedString Description { get; set;}
+		[Ordinal(1)] [RED("description")] 		public LocalizedString Description { get; set;}
 
 		public CJournalCreatureGameplayHint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

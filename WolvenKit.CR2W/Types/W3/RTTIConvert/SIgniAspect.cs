@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SIgniAspect : CVariable
 	{
-		[Ordinal(0)] [RED("("projTemplate")] 		public CHandle<CEntityTemplate> ProjTemplate { get; set;}
+		[Ordinal(1)] [RED("("projTemplate")] 		public CHandle<CEntityTemplate> ProjTemplate { get; set;}
 
-		[Ordinal(0)] [RED("("cone")] 		public CFloat Cone { get; set;}
+		[Ordinal(2)] [RED("("cone")] 		public CFloat Cone { get; set;}
 
-		[Ordinal(0)] [RED("("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(3)] [RED("("distance")] 		public CFloat Distance { get; set;}
 
-		[Ordinal(0)] [RED("("upgradedDistance")] 		public CFloat UpgradedDistance { get; set;}
+		[Ordinal(4)] [RED("("upgradedDistance")] 		public CFloat UpgradedDistance { get; set;}
 
 		public SIgniAspect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

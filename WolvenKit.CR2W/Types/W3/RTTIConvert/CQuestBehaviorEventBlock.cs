@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestBehaviorEventBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("events", 2,0)] 		public CArray<CPtr<SQuestBehaviorEvent>> Events { get; set;}
+		[Ordinal(1)] [RED("events", 2,0)] 		public CArray<CPtr<SQuestBehaviorEvent>> Events { get; set;}
 
-		[Ordinal(0)] [RED("timeout")] 		public CFloat Timeout { get; set;}
+		[Ordinal(2)] [RED("timeout")] 		public CFloat Timeout { get; set;}
 
 		public CQuestBehaviorEventBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

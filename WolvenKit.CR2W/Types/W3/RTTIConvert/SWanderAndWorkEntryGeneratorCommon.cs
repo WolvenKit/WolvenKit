@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SWanderAndWorkEntryGeneratorCommon : CVariable
 	{
-		[Ordinal(0)] [RED("("wanderParams")] 		public CHandle<CAINpcHistoryWanderParams> WanderParams { get; set;}
+		[Ordinal(1)] [RED("("wanderParams")] 		public CHandle<CAINpcHistoryWanderParams> WanderParams { get; set;}
 
-		[Ordinal(0)] [RED("("spawnToWork")] 		public CBool SpawnToWork { get; set;}
+		[Ordinal(2)] [RED("("spawnToWork")] 		public CBool SpawnToWork { get; set;}
 
-		[Ordinal(0)] [RED("("delay")] 		public CFloat Delay { get; set;}
+		[Ordinal(3)] [RED("("delay")] 		public CFloat Delay { get; set;}
 
 		public SWanderAndWorkEntryGeneratorCommon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

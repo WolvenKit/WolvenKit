@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeSelectRandomNode : ISpawnTreeCompositeNode
 	{
-		[Ordinal(0)] [RED("("rerollDelay")] 		public GameTime RerollDelay { get; set;}
+		[Ordinal(1)] [RED("("rerollDelay")] 		public GameTime RerollDelay { get; set;}
 
 		public CSpawnTreeSelectRandomNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

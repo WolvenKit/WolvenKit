@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestTagsPresenceCondition : IQuestCondition
 	{
-		[Ordinal(0)] [RED("tags")] 		public TagList Tags { get; set;}
+		[Ordinal(1)] [RED("tags")] 		public TagList Tags { get; set;}
 
-		[Ordinal(0)] [RED("all")] 		public CBool All { get; set;}
+		[Ordinal(2)] [RED("all")] 		public CBool All { get; set;}
 
-		[Ordinal(0)] [RED("howMany")] 		public CUInt32 HowMany { get; set;}
+		[Ordinal(3)] [RED("howMany")] 		public CUInt32 HowMany { get; set;}
 
-		[Ordinal(0)] [RED("includeStubs")] 		public CBool IncludeStubs { get; set;}
+		[Ordinal(4)] [RED("includeStubs")] 		public CBool IncludeStubs { get; set;}
 
 		public CQuestTagsPresenceCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

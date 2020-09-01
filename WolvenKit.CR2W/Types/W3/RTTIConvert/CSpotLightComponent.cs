@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpotLightComponent : CLightComponent
 	{
-		[Ordinal(0)] [RED("("innerAngle")] 		public CFloat InnerAngle { get; set;}
+		[Ordinal(1)] [RED("("innerAngle")] 		public CFloat InnerAngle { get; set;}
 
-		[Ordinal(0)] [RED("("outerAngle")] 		public CFloat OuterAngle { get; set;}
+		[Ordinal(2)] [RED("("outerAngle")] 		public CFloat OuterAngle { get; set;}
 
-		[Ordinal(0)] [RED("("softness")] 		public CFloat Softness { get; set;}
+		[Ordinal(3)] [RED("("softness")] 		public CFloat Softness { get; set;}
 
-		[Ordinal(0)] [RED("("projectionTexture")] 		public CHandle<CBitmapTexture> ProjectionTexture { get; set;}
+		[Ordinal(4)] [RED("("projectionTexture")] 		public CHandle<CBitmapTexture> ProjectionTexture { get; set;}
 
-		[Ordinal(0)] [RED("("projectionTextureAngle")] 		public CFloat ProjectionTextureAngle { get; set;}
+		[Ordinal(5)] [RED("("projectionTextureAngle")] 		public CFloat ProjectionTextureAngle { get; set;}
 
-		[Ordinal(0)] [RED("("projectionTexureUBias")] 		public CFloat ProjectionTexureUBias { get; set;}
+		[Ordinal(6)] [RED("("projectionTexureUBias")] 		public CFloat ProjectionTexureUBias { get; set;}
 
-		[Ordinal(0)] [RED("("projectionTexureVBias")] 		public CFloat ProjectionTexureVBias { get; set;}
+		[Ordinal(7)] [RED("("projectionTexureVBias")] 		public CFloat ProjectionTexureVBias { get; set;}
 
 		public CSpotLightComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

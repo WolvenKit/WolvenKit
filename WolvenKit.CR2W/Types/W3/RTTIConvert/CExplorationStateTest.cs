@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateTest : CExplorationStateAbstract
 	{
-		[Ordinal(0)] [RED("("m_TesMovementParamsS")] 		public SPlaneMovementParameters M_TesMovementParamsS { get; set;}
+		[Ordinal(1)] [RED("("m_TesMovementParamsS")] 		public SPlaneMovementParameters M_TesMovementParamsS { get; set;}
 
 		public CExplorationStateTest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

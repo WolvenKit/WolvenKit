@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SRewardMultiplier : CVariable
 	{
-		[Ordinal(0)] [RED("("rewardName")] 		public CName RewardName { get; set;}
+		[Ordinal(1)] [RED("("rewardName")] 		public CName RewardName { get; set;}
 
-		[Ordinal(0)] [RED("("rewardMultiplier")] 		public CFloat RewardMultiplier { get; set;}
+		[Ordinal(2)] [RED("("rewardMultiplier")] 		public CFloat RewardMultiplier { get; set;}
 
-		[Ordinal(0)] [RED("("isItemMultiplier")] 		public CBool IsItemMultiplier { get; set;}
+		[Ordinal(3)] [RED("("isItemMultiplier")] 		public CBool IsItemMultiplier { get; set;}
 
 		public SRewardMultiplier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

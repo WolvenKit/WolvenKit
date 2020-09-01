@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SDeckDefinition : CVariable
 	{
-		[Ordinal(0)] [RED("("cardIndices", 2,0)] 		public CArray<CInt32> CardIndices { get; set;}
+		[Ordinal(1)] [RED("("cardIndices", 2,0)] 		public CArray<CInt32> CardIndices { get; set;}
 
-		[Ordinal(0)] [RED("("leaderIndex")] 		public CInt32 LeaderIndex { get; set;}
+		[Ordinal(2)] [RED("("leaderIndex")] 		public CInt32 LeaderIndex { get; set;}
 
-		[Ordinal(0)] [RED("("unlocked")] 		public CBool Unlocked { get; set;}
+		[Ordinal(3)] [RED("("unlocked")] 		public CBool Unlocked { get; set;}
 
-		[Ordinal(0)] [RED("("specialCard")] 		public CInt32 SpecialCard { get; set;}
+		[Ordinal(4)] [RED("("specialCard")] 		public CInt32 SpecialCard { get; set;}
 
-		[Ordinal(0)] [RED("("dynamicCardRequirements", 2,0)] 		public CArray<CInt32> DynamicCardRequirements { get; set;}
+		[Ordinal(5)] [RED("("dynamicCardRequirements", 2,0)] 		public CArray<CInt32> DynamicCardRequirements { get; set;}
 
-		[Ordinal(0)] [RED("("dynamicCards", 2,0)] 		public CArray<CInt32> DynamicCards { get; set;}
+		[Ordinal(6)] [RED("("dynamicCards", 2,0)] 		public CArray<CInt32> DynamicCards { get; set;}
 
 		public SDeckDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

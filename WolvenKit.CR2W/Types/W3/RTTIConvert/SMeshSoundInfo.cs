@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMeshSoundInfo : CVariable
 	{
-		[Ordinal(0)] [RED("("soundTypeIdentification")] 		public CName SoundTypeIdentification { get; set;}
+		[Ordinal(1)] [RED("("soundTypeIdentification")] 		public CName SoundTypeIdentification { get; set;}
 
-		[Ordinal(0)] [RED("("soundSizeIdentification")] 		public CName SoundSizeIdentification { get; set;}
+		[Ordinal(2)] [RED("("soundSizeIdentification")] 		public CName SoundSizeIdentification { get; set;}
 
-		[Ordinal(0)] [RED("("soundBoneMappingInfo")] 		public CName SoundBoneMappingInfo { get; set;}
+		[Ordinal(3)] [RED("("soundBoneMappingInfo")] 		public CName SoundBoneMappingInfo { get; set;}
 
 		public SMeshSoundInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

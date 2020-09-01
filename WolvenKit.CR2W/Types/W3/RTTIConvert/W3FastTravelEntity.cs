@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FastTravelEntity : CR4FastTravelEntity
 	{
-		[Ordinal(0)] [RED("("onAreaExit")] 		public CBool OnAreaExit { get; set;}
+		[Ordinal(1)] [RED("("onAreaExit")] 		public CBool OnAreaExit { get; set;}
 
-		[Ordinal(0)] [RED("("warningTextStringKeyOverride")] 		public CString WarningTextStringKeyOverride { get; set;}
+		[Ordinal(2)] [RED("("warningTextStringKeyOverride")] 		public CString WarningTextStringKeyOverride { get; set;}
 
-		[Ordinal(0)] [RED("("onelinerSceneOverride")] 		public CHandle<CStoryScene> OnelinerSceneOverride { get; set;}
+		[Ordinal(3)] [RED("("onelinerSceneOverride")] 		public CHandle<CStoryScene> OnelinerSceneOverride { get; set;}
 
-		[Ordinal(0)] [RED("("overrideSceneInput")] 		public CName OverrideSceneInput { get; set;}
+		[Ordinal(4)] [RED("("overrideSceneInput")] 		public CName OverrideSceneInput { get; set;}
 
 		public W3FastTravelEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

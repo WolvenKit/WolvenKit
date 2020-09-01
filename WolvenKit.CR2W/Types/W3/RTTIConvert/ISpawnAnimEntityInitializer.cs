@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ISpawnAnimEntityInitializer : ISpawnTreeScriptedInitializer
 	{
-		[Ordinal(0)] [RED("("forceSpawnAnim")] 		public CInt32 ForceSpawnAnim { get; set;}
+		[Ordinal(1)] [RED("("forceSpawnAnim")] 		public CInt32 ForceSpawnAnim { get; set;}
 
 		public ISpawnAnimEntityInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

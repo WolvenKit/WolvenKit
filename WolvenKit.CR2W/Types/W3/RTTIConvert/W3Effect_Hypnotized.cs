@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Hypnotized : W3CriticalEffect
 	{
-		[Ordinal(0)] [RED("("customCameraStackIndex")] 		public CInt32 CustomCameraStackIndex { get; set;}
+		[Ordinal(1)] [RED("("customCameraStackIndex")] 		public CInt32 CustomCameraStackIndex { get; set;}
 
-		[Ordinal(0)] [RED("("envID")] 		public CInt32 EnvID { get; set;}
+		[Ordinal(2)] [RED("("envID")] 		public CInt32 EnvID { get; set;}
 
-		[Ordinal(0)] [RED("("fxEntity")] 		public CHandle<CEntity> FxEntity { get; set;}
+		[Ordinal(3)] [RED("("fxEntity")] 		public CHandle<CEntity> FxEntity { get; set;}
 
-		[Ordinal(0)] [RED("("gameplayVisibilityFlag")] 		public CBool GameplayVisibilityFlag { get; set;}
+		[Ordinal(4)] [RED("("gameplayVisibilityFlag")] 		public CBool GameplayVisibilityFlag { get; set;}
 
 		public W3Effect_Hypnotized(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

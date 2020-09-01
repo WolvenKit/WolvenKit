@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondIsInGuardAreaDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("position")] 		public CEnum<ETargetName> Position { get; set;}
+		[Ordinal(1)] [RED("position")] 		public CEnum<ETargetName> Position { get; set;}
 
-		[Ordinal(0)] [RED("namedTarget")] 		public CName NamedTarget { get; set;}
+		[Ordinal(2)] [RED("namedTarget")] 		public CName NamedTarget { get; set;}
 
-		[Ordinal(0)] [RED("valueToReturnIfNoGA")] 		public CBool ValueToReturnIfNoGA { get; set;}
+		[Ordinal(3)] [RED("valueToReturnIfNoGA")] 		public CBool ValueToReturnIfNoGA { get; set;}
 
 		public BTCondIsInGuardAreaDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

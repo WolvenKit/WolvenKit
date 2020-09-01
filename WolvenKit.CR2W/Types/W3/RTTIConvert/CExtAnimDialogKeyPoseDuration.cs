@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimDialogKeyPoseDuration : CExtAnimDurationEvent
 	{
-		[Ordinal(0)] [RED("("transition")] 		public CBool Transition { get; set;}
+		[Ordinal(1)] [RED("("transition")] 		public CBool Transition { get; set;}
 
-		[Ordinal(0)] [RED("("keyPose")] 		public CBool KeyPose { get; set;}
+		[Ordinal(2)] [RED("("keyPose")] 		public CBool KeyPose { get; set;}
 
 		public CExtAnimDialogKeyPoseDuration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

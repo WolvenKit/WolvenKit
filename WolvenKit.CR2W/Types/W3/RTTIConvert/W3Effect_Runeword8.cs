@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Runeword8 : CBaseGameplayEffect
 	{
-		[Ordinal(0)] [RED("("focusDrainPerSec")] 		public CFloat FocusDrainPerSec { get; set;}
+		[Ordinal(1)] [RED("("focusDrainPerSec")] 		public CFloat FocusDrainPerSec { get; set;}
 
 		public W3Effect_Runeword8(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class QuantityPopupData : SliderPopupData
 	{
-		[Ordinal(0)] [RED("itemId")] 		public SItemUniqueId ItemId { get; set;}
+		[Ordinal(1)] [RED("itemId")] 		public SItemUniqueId ItemId { get; set;}
 
-		[Ordinal(0)] [RED("itemCost")] 		public CFloat ItemCost { get; set;}
+		[Ordinal(2)] [RED("itemCost")] 		public CFloat ItemCost { get; set;}
 
-		[Ordinal(0)] [RED("showPrice")] 		public CBool ShowPrice { get; set;}
+		[Ordinal(3)] [RED("showPrice")] 		public CBool ShowPrice { get; set;}
 
-		[Ordinal(0)] [RED("actionType")] 		public CEnum<EQuantityTransferFunction> ActionType { get; set;}
+		[Ordinal(4)] [RED("actionType")] 		public CEnum<EQuantityTransferFunction> ActionType { get; set;}
 
-		[Ordinal(0)] [RED("inventoryRef")] 		public CHandle<CR4InventoryMenu> InventoryRef { get; set;}
+		[Ordinal(5)] [RED("inventoryRef")] 		public CHandle<CR4InventoryMenu> InventoryRef { get; set;}
 
-		[Ordinal(0)] [RED("blacksmithRef")] 		public CHandle<CR4BlacksmithMenu> BlacksmithRef { get; set;}
+		[Ordinal(6)] [RED("blacksmithRef")] 		public CHandle<CR4BlacksmithMenu> BlacksmithRef { get; set;}
 
-		[Ordinal(0)] [RED("craftingRef")] 		public CHandle<CR4CraftingMenu> CraftingRef { get; set;}
+		[Ordinal(7)] [RED("craftingRef")] 		public CHandle<CR4CraftingMenu> CraftingRef { get; set;}
 
 		public QuantityPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

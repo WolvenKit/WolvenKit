@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTManageIsPlayerFollowerDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("targetTagCondition")] 		public CName TargetTagCondition { get; set;}
+		[Ordinal(1)] [RED("("targetTagCondition")] 		public CName TargetTagCondition { get; set;}
 
-		[Ordinal(0)] [RED("("overrideForThisTask")] 		public CBool OverrideForThisTask { get; set;}
+		[Ordinal(2)] [RED("("overrideForThisTask")] 		public CBool OverrideForThisTask { get; set;}
 
-		[Ordinal(0)] [RED("("disable")] 		public CBool Disable { get; set;}
+		[Ordinal(3)] [RED("("disable")] 		public CBool Disable { get; set;}
 
-		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(4)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[Ordinal(0)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(5)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[Ordinal(0)] [RED("("params1")] 		public CHandle<CAIFollowParams> Params1 { get; set;}
+		[Ordinal(6)] [RED("("params1")] 		public CHandle<CAIFollowParams> Params1 { get; set;}
 
-		[Ordinal(0)] [RED("("params2")] 		public CHandle<CAIMoveAlongPathWithCompanionParams> Params2 { get; set;}
+		[Ordinal(7)] [RED("("params2")] 		public CHandle<CAIMoveAlongPathWithCompanionParams> Params2 { get; set;}
 
 		public CBTManageIsPlayerFollowerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

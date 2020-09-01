@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvMotionBlurParameters : CVariable
 	{
-		[Ordinal(0)] [RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(1)] [RED("activated")] 		public CBool Activated { get; set;}
 
-		[Ordinal(0)] [RED("strength")] 		public SSimpleCurve Strength { get; set;}
+		[Ordinal(2)] [RED("strength")] 		public SSimpleCurve Strength { get; set;}
 
 		public CEnvMotionBlurParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

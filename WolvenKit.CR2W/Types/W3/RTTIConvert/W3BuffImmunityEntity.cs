@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3BuffImmunityEntity : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("immunities", 2,0)] 		public CArray<CEnum<EEffectType>> Immunities { get; set;}
+		[Ordinal(1)] [RED("("immunities", 2,0)] 		public CArray<CEnum<EEffectType>> Immunities { get; set;}
 
-		[Ordinal(0)] [RED("("range")] 		public CFloat Range { get; set;}
+		[Ordinal(2)] [RED("("range")] 		public CFloat Range { get; set;}
 
-		[Ordinal(0)] [RED("("isActive")] 		public CBool IsActive { get; set;}
+		[Ordinal(3)] [RED("("isActive")] 		public CBool IsActive { get; set;}
 
-		[Ordinal(0)] [RED("("actorsInRange", 2,0)] 		public CArray<CHandle<CActor>> ActorsInRange { get; set;}
+		[Ordinal(4)] [RED("("actorsInRange", 2,0)] 		public CArray<CHandle<CActor>> ActorsInRange { get; set;}
 
 		public W3BuffImmunityEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeVitalSpotActiveDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[Ordinal(0)] [RED("activateVitalSpot")] 		public CBool ActivateVitalSpot { get; set;}
+		[Ordinal(1)] [RED("activateVitalSpot")] 		public CBool ActivateVitalSpot { get; set;}
 
-		[Ordinal(0)] [RED("VSActivatorNodeName")] 		public CName VSActivatorNodeName { get; set;}
+		[Ordinal(2)] [RED("VSActivatorNodeName")] 		public CName VSActivatorNodeName { get; set;}
 
 		public CBehTreeNodeVitalSpotActiveDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

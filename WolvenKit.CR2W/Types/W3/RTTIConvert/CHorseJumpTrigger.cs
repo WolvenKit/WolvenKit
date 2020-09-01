@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CHorseJumpTrigger : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("lastActivation")] 		public CFloat LastActivation { get; set;}
+		[Ordinal(1)] [RED("("lastActivation")] 		public CFloat LastActivation { get; set;}
 
-		[Ordinal(0)] [RED("("triggerHeading")] 		public CFloat TriggerHeading { get; set;}
+		[Ordinal(2)] [RED("("triggerHeading")] 		public CFloat TriggerHeading { get; set;}
 
-		[Ordinal(0)] [RED("("playerHeading")] 		public CFloat PlayerHeading { get; set;}
+		[Ordinal(3)] [RED("("playerHeading")] 		public CFloat PlayerHeading { get; set;}
 
-		[Ordinal(0)] [RED("("angleDist")] 		public CFloat AngleDist { get; set;}
+		[Ordinal(4)] [RED("("angleDist")] 		public CFloat AngleDist { get; set;}
 
-		[Ordinal(0)] [RED("("horse")] 		public CHandle<CGameplayEntity> Horse { get; set;}
+		[Ordinal(5)] [RED("("horse")] 		public CHandle<CGameplayEntity> Horse { get; set;}
 
-		[Ordinal(0)] [RED("("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
+		[Ordinal(6)] [RED("("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
 
-		[Ordinal(0)] [RED("("lastArea")] 		public CHandle<CTriggerAreaComponent> LastArea { get; set;}
+		[Ordinal(7)] [RED("("lastArea")] 		public CHandle<CTriggerAreaComponent> LastArea { get; set;}
 
 		public CHorseJumpTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

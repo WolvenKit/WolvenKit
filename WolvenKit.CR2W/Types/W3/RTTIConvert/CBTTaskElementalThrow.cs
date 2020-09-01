@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskElementalThrow : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("physicalComponent")] 		public CHandle<CMeshComponent> PhysicalComponent { get; set;}
+		[Ordinal(1)] [RED("physicalComponent")] 		public CHandle<CMeshComponent> PhysicalComponent { get; set;}
 
-		[Ordinal(0)] [RED("objectEntity")] 		public CHandle<CEntityTemplate> ObjectEntity { get; set;}
+		[Ordinal(2)] [RED("objectEntity")] 		public CHandle<CEntityTemplate> ObjectEntity { get; set;}
 
-		[Ordinal(0)] [RED("object")] 		public CHandle<CEntity> Object { get; set;}
+		[Ordinal(3)] [RED("object")] 		public CHandle<CEntity> Object { get; set;}
 
 		public CBTTaskElementalThrow(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

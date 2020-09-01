@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondCleanShot : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("doStaticTraceOnNavTestFailure")] 		public CBool DoStaticTraceOnNavTestFailure { get; set;}
+		[Ordinal(1)] [RED("doStaticTraceOnNavTestFailure")] 		public CBool DoStaticTraceOnNavTestFailure { get; set;}
 
-		[Ordinal(0)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(2)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
-		[Ordinal(0)] [RED("owner")] 		public CHandle<CActor> Owner { get; set;}
+		[Ordinal(3)] [RED("owner")] 		public CHandle<CActor> Owner { get; set;}
 
-		[Ordinal(0)] [RED("target")] 		public CHandle<CNode> Target { get; set;}
+		[Ordinal(4)] [RED("target")] 		public CHandle<CNode> Target { get; set;}
 
-		[Ordinal(0)] [RED("ownerPos")] 		public Vector OwnerPos { get; set;}
+		[Ordinal(5)] [RED("ownerPos")] 		public Vector OwnerPos { get; set;}
 
-		[Ordinal(0)] [RED("targetPos")] 		public Vector TargetPos { get; set;}
+		[Ordinal(6)] [RED("targetPos")] 		public Vector TargetPos { get; set;}
 
-		[Ordinal(0)] [RED("res")] 		public CBool Res { get; set;}
+		[Ordinal(7)] [RED("res")] 		public CBool Res { get; set;}
 
 		public CBTCondCleanShot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

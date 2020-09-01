@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockOutputColor : CMaterialRootBlock
 	{
-		[Ordinal(0)] [RED("isTwoSided")] 		public CBool IsTwoSided { get; set;}
+		[Ordinal(1)] [RED("isTwoSided")] 		public CBool IsTwoSided { get; set;}
 
-		[Ordinal(0)] [RED("noDepthWrite")] 		public CBool NoDepthWrite { get; set;}
+		[Ordinal(2)] [RED("noDepthWrite")] 		public CBool NoDepthWrite { get; set;}
 
-		[Ordinal(0)] [RED("inputColorLinear")] 		public CBool InputColorLinear { get; set;}
+		[Ordinal(3)] [RED("inputColorLinear")] 		public CBool InputColorLinear { get; set;}
 
-		[Ordinal(0)] [RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
+		[Ordinal(4)] [RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
 
-		[Ordinal(0)] [RED("blendMode")] 		public CEnum<ERenderingBlendMode> BlendMode { get; set;}
+		[Ordinal(5)] [RED("blendMode")] 		public CEnum<ERenderingBlendMode> BlendMode { get; set;}
 
-		[Ordinal(0)] [RED("checkRefractionDepth")] 		public CBool CheckRefractionDepth { get; set;}
+		[Ordinal(6)] [RED("checkRefractionDepth")] 		public CBool CheckRefractionDepth { get; set;}
 
-		[Ordinal(0)] [RED("implicitTransparencyColor")] 		public CBool ImplicitTransparencyColor { get; set;}
+		[Ordinal(7)] [RED("implicitTransparencyColor")] 		public CBool ImplicitTransparencyColor { get; set;}
 
-		[Ordinal(0)] [RED("implicitTransparencyAlpha")] 		public CBool ImplicitTransparencyAlpha { get; set;}
+		[Ordinal(8)] [RED("implicitTransparencyAlpha")] 		public CBool ImplicitTransparencyAlpha { get; set;}
 
-		[Ordinal(0)] [RED("implicitGlobalFogVertexBased")] 		public CBool ImplicitGlobalFogVertexBased { get; set;}
+		[Ordinal(9)] [RED("implicitGlobalFogVertexBased")] 		public CBool ImplicitGlobalFogVertexBased { get; set;}
 
-		[Ordinal(0)] [RED("implicitGlobalFog")] 		public CBool ImplicitGlobalFog { get; set;}
+		[Ordinal(10)] [RED("implicitGlobalFog")] 		public CBool ImplicitGlobalFog { get; set;}
 
 		public CMaterialBlockOutputColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

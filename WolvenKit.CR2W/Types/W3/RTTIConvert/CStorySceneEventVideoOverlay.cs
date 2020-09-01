@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventVideoOverlay : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("fileName")] 		public CString FileName { get; set;}
+		[Ordinal(1)] [RED("fileName")] 		public CString FileName { get; set;}
 
 		public CStorySceneEventVideoOverlay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

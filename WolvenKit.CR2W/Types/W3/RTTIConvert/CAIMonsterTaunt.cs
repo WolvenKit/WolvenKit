@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterTaunt : CAITauntTree
 	{
-		[Ordinal(0)] [RED("canBury")] 		public CBool CanBury { get; set;}
+		[Ordinal(1)] [RED("canBury")] 		public CBool CanBury { get; set;}
 
-		[Ordinal(0)] [RED("params")] 		public CHandle<CAIMonsterTauntParams> Params { get; set;}
+		[Ordinal(2)] [RED("params")] 		public CHandle<CAIMonsterTauntParams> Params { get; set;}
 
 		public CAIMonsterTaunt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

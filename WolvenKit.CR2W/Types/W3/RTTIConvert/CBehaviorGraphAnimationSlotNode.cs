@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAnimationSlotNode : CBehaviorGraphAnimationBaseSlotNode
 	{
-		[Ordinal(0)] [RED("cachedBaseInputNode")] 		public CPtr<CBehaviorGraphNode> CachedBaseInputNode { get; set;}
+		[Ordinal(1)] [RED("cachedBaseInputNode")] 		public CPtr<CBehaviorGraphNode> CachedBaseInputNode { get; set;}
 
-		[Ordinal(0)] [RED("startEvtName")] 		public CName StartEvtName { get; set;}
+		[Ordinal(2)] [RED("startEvtName")] 		public CName StartEvtName { get; set;}
 
-		[Ordinal(0)] [RED("stopEvtName")] 		public CName StopEvtName { get; set;}
+		[Ordinal(3)] [RED("stopEvtName")] 		public CName StopEvtName { get; set;}
 
 		public CBehaviorGraphAnimationSlotNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

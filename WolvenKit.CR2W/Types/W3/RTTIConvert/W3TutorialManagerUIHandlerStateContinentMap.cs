@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateContinentMap : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[Ordinal(0)] [RED("("TO_CONTINENT")] 		public CName TO_CONTINENT { get; set;}
+		[Ordinal(1)] [RED("("TO_CONTINENT")] 		public CName TO_CONTINENT { get; set;}
 
-		[Ordinal(0)] [RED("("BACK_TO_HUB")] 		public CName BACK_TO_HUB { get; set;}
+		[Ordinal(2)] [RED("("BACK_TO_HUB")] 		public CName BACK_TO_HUB { get; set;}
 
-		[Ordinal(0)] [RED("("TO_ANY_HUB")] 		public CName TO_ANY_HUB { get; set;}
+		[Ordinal(3)] [RED("("TO_ANY_HUB")] 		public CName TO_ANY_HUB { get; set;}
 
-		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(4)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateContinentMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ICustomCameraScriptedCurveSetPivotRotationController : ICustomCameraScriptedPivotRotationController
 	{
-		[Ordinal(0)] [RED("curveSet", 2,0)] 		public CArray<CPtr<CCurve>> CurveSet { get; set;}
+		[Ordinal(1)] [RED("curveSet", 2,0)] 		public CArray<CPtr<CCurve>> CurveSet { get; set;}
 
-		[Ordinal(0)] [RED("curveNames", 2,0)] 		public CArray<CName> CurveNames { get; set;}
+		[Ordinal(2)] [RED("curveNames", 2,0)] 		public CArray<CName> CurveNames { get; set;}
 
 		public ICustomCameraScriptedCurveSetPivotRotationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

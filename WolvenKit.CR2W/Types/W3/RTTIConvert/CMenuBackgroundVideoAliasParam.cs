@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMenuBackgroundVideoAliasParam : IMenuBackgroundVideoParam
 	{
-		[Ordinal(0)] [RED("videoAlias")] 		public CName VideoAlias { get; set;}
+		[Ordinal(1)] [RED("videoAlias")] 		public CName VideoAlias { get; set;}
 
 		public CMenuBackgroundVideoAliasParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvWindParameters : CVariable
 	{
-		[Ordinal(0)] [RED("("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(1)] [RED("("activated")] 		public CBool Activated { get; set;}
 
-		[Ordinal(0)] [RED("("windStrengthOverride")] 		public SSimpleCurve WindStrengthOverride { get; set;}
+		[Ordinal(2)] [RED("("windStrengthOverride")] 		public SSimpleCurve WindStrengthOverride { get; set;}
 
-		[Ordinal(0)] [RED("("cloudsVelocityOverride")] 		public SSimpleCurve CloudsVelocityOverride { get; set;}
+		[Ordinal(3)] [RED("("cloudsVelocityOverride")] 		public SSimpleCurve CloudsVelocityOverride { get; set;}
 
 		public CEnvWindParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

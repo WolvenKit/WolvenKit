@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventRotate : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(1)] [RED("actor")] 		public CName Actor { get; set;}
 
-		[Ordinal(0)] [RED("angle")] 		public CFloat Angle { get; set;}
+		[Ordinal(2)] [RED("angle")] 		public CFloat Angle { get; set;}
 
-		[Ordinal(0)] [RED("absoluteAngle")] 		public CBool AbsoluteAngle { get; set;}
+		[Ordinal(3)] [RED("absoluteAngle")] 		public CBool AbsoluteAngle { get; set;}
 
-		[Ordinal(0)] [RED("toCamera")] 		public CBool ToCamera { get; set;}
+		[Ordinal(4)] [RED("toCamera")] 		public CBool ToCamera { get; set;}
 
-		[Ordinal(0)] [RED("instant")] 		public CBool Instant { get; set;}
+		[Ordinal(5)] [RED("instant")] 		public CBool Instant { get; set;}
 
 		public CStorySceneEventRotate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

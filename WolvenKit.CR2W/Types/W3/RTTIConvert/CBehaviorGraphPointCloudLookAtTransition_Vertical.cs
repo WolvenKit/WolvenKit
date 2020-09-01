@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphPointCloudLookAtTransition_Vertical : IBehaviorGraphPointCloudLookAtTransition_Vector
 	{
-		[Ordinal(0)] [RED("("maxAngleDiffDeg")] 		public CFloat MaxAngleDiffDeg { get; set;}
+		[Ordinal(1)] [RED("("maxAngleDiffDeg")] 		public CFloat MaxAngleDiffDeg { get; set;}
 
-		[Ordinal(0)] [RED("("scale")] 		public CFloat Scale { get; set;}
+		[Ordinal(2)] [RED("("scale")] 		public CFloat Scale { get; set;}
 
-		[Ordinal(0)] [RED("("minAngle")] 		public CFloat MinAngle { get; set;}
+		[Ordinal(3)] [RED("("minAngle")] 		public CFloat MinAngle { get; set;}
 
-		[Ordinal(0)] [RED("("maxAngle")] 		public CFloat MaxAngle { get; set;}
+		[Ordinal(4)] [RED("("maxAngle")] 		public CFloat MaxAngle { get; set;}
 
-		[Ordinal(0)] [RED("("curve")] 		public CPtr<CCurve> Curve { get; set;}
+		[Ordinal(5)] [RED("("curve")] 		public CPtr<CCurve> Curve { get; set;}
 
 		public CBehaviorGraphPointCloudLookAtTransition_Vertical(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

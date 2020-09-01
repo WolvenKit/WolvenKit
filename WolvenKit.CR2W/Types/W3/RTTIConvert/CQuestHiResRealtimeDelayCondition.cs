@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestHiResRealtimeDelayCondition : IQuestCondition
 	{
-		[Ordinal(0)] [RED("hours")] 		public CUInt32 Hours { get; set;}
+		[Ordinal(1)] [RED("hours")] 		public CUInt32 Hours { get; set;}
 
-		[Ordinal(0)] [RED("minutes")] 		public CUInt32 Minutes { get; set;}
+		[Ordinal(2)] [RED("minutes")] 		public CUInt32 Minutes { get; set;}
 
-		[Ordinal(0)] [RED("seconds")] 		public CUInt32 Seconds { get; set;}
+		[Ordinal(3)] [RED("seconds")] 		public CUInt32 Seconds { get; set;}
 
-		[Ordinal(0)] [RED("miliseconds")] 		public CUInt32 Miliseconds { get; set;}
+		[Ordinal(4)] [RED("miliseconds")] 		public CUInt32 Miliseconds { get; set;}
 
 		public CQuestHiResRealtimeDelayCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

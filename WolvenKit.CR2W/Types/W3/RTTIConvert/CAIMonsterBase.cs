@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterBase : CAIBaseTree
 	{
-		[Ordinal(0)] [RED("params")] 		public CHandle<CAIBaseMonsterDefaults> Params { get; set;}
+		[Ordinal(1)] [RED("params")] 		public CHandle<CAIBaseMonsterDefaults> Params { get; set;}
 
 		public CAIMonsterBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWyvernTakeOffEffectDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
-		[Ordinal(0)] [RED("("effectRange")] 		public CFloat EffectRange { get; set;}
+		[Ordinal(1)] [RED("("effectRange")] 		public CFloat EffectRange { get; set;}
 
-		[Ordinal(0)] [RED("("effectAngle")] 		public CFloat EffectAngle { get; set;}
+		[Ordinal(2)] [RED("("effectAngle")] 		public CFloat EffectAngle { get; set;}
 
 		public CBTTaskWyvernTakeOffEffectDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

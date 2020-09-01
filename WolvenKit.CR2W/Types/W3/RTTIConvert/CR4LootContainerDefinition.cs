@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4LootContainerDefinition : CR4LootDefinitionBase
 	{
-		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
+		[Ordinal(1)] [RED("("name")] 		public CName Name { get; set;}
 
-		[Ordinal(0)] [RED("("respawnTime")] 		public CUInt32 RespawnTime { get; set;}
+		[Ordinal(2)] [RED("("respawnTime")] 		public CUInt32 RespawnTime { get; set;}
 
-		[Ordinal(0)] [RED("("items", 2,0)] 		public CArray<CR4LootItemDefinition> Items { get; set;}
+		[Ordinal(3)] [RED("("items", 2,0)] 		public CArray<CR4LootItemDefinition> Items { get; set;}
 
 		public CR4LootContainerDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

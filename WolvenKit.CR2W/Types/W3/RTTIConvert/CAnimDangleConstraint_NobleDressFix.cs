@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimDangleConstraint_NobleDressFix : IAnimDangleConstraint
 	{
-		[Ordinal(0)] [RED("boneNameA")] 		public CString BoneNameA { get; set;}
+		[Ordinal(1)] [RED("boneNameA")] 		public CString BoneNameA { get; set;}
 
-		[Ordinal(0)] [RED("boneNameB")] 		public CString BoneNameB { get; set;}
+		[Ordinal(2)] [RED("boneNameB")] 		public CString BoneNameB { get; set;}
 
-		[Ordinal(0)] [RED("boneAxisA")] 		public CEnum<EAxis> BoneAxisA { get; set;}
+		[Ordinal(3)] [RED("boneAxisA")] 		public CEnum<EAxis> BoneAxisA { get; set;}
 
-		[Ordinal(0)] [RED("boneAxisB")] 		public CEnum<EAxis> BoneAxisB { get; set;}
+		[Ordinal(4)] [RED("boneAxisB")] 		public CEnum<EAxis> BoneAxisB { get; set;}
 
-		[Ordinal(0)] [RED("boneValueA")] 		public CFloat BoneValueA { get; set;}
+		[Ordinal(5)] [RED("boneValueA")] 		public CFloat BoneValueA { get; set;}
 
-		[Ordinal(0)] [RED("boneValueB")] 		public CFloat BoneValueB { get; set;}
+		[Ordinal(6)] [RED("boneValueB")] 		public CFloat BoneValueB { get; set;}
 
 		public CAnimDangleConstraint_NobleDressFix(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

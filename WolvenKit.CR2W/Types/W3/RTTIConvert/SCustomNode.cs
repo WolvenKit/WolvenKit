@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCustomNode : CVariable
 	{
-		[Ordinal(0)] [RED("("nodeName")] 		public CName NodeName { get; set;}
+		[Ordinal(1)] [RED("("nodeName")] 		public CName NodeName { get; set;}
 
-		[Ordinal(0)] [RED("("attributes", 2,0)] 		public CArray<SCustomNodeAttribute> Attributes { get; set;}
+		[Ordinal(2)] [RED("("attributes", 2,0)] 		public CArray<SCustomNodeAttribute> Attributes { get; set;}
 
-		[Ordinal(0)] [RED("("values", 2,0)] 		public CArray<CName> Values { get; set;}
+		[Ordinal(3)] [RED("("values", 2,0)] 		public CArray<CName> Values { get; set;}
 
-		[Ordinal(0)] [RED("("subNodes", 2,0)] 		public CArray<SCustomNode> SubNodes { get; set;}
+		[Ordinal(4)] [RED("("subNodes", 2,0)] 		public CArray<SCustomNode> SubNodes { get; set;}
 
 		public SCustomNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

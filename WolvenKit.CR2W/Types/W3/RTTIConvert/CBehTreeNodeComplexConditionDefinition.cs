@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeComplexConditionDefinition : CBehTreeNodeConditionDefinition
 	{
-		[Ordinal(0)] [RED("condition")] 		public CPtr<IBehTreeAtomicCondition> Condition { get; set;}
+		[Ordinal(1)] [RED("condition")] 		public CPtr<IBehTreeAtomicCondition> Condition { get; set;}
 
 		public CBehTreeNodeComplexConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

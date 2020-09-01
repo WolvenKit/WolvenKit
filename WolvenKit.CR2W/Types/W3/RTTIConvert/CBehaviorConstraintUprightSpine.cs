@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorConstraintUprightSpine : CBehaviorGraphPoseConstraintNode
 	{
-		[Ordinal(0)] [RED("bones")] 		public SBehaviorConstraintUprightSpineBonesData Bones { get; set;}
+		[Ordinal(1)] [RED("bones")] 		public SBehaviorConstraintUprightSpineBonesData Bones { get; set;}
 
-		[Ordinal(0)] [RED("leftHandIK")] 		public STwoBonesIKSolverData LeftHandIK { get; set;}
+		[Ordinal(2)] [RED("leftHandIK")] 		public STwoBonesIKSolverData LeftHandIK { get; set;}
 
-		[Ordinal(0)] [RED("rightHandIK")] 		public STwoBonesIKSolverData RightHandIK { get; set;}
+		[Ordinal(3)] [RED("rightHandIK")] 		public STwoBonesIKSolverData RightHandIK { get; set;}
 
-		[Ordinal(0)] [RED("matchEntityFullSpeed")] 		public CFloat MatchEntityFullSpeed { get; set;}
+		[Ordinal(4)] [RED("matchEntityFullSpeed")] 		public CFloat MatchEntityFullSpeed { get; set;}
 
 		public CBehaviorConstraintUprightSpine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

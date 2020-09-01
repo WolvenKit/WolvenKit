@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskActivateMagicBubbleDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("resourceName")] 		public CBehTreeValCName ResourceName { get; set;}
+		[Ordinal(1)] [RED("("resourceName")] 		public CBehTreeValCName ResourceName { get; set;}
 
-		[Ordinal(0)] [RED("("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
+		[Ordinal(2)] [RED("("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
 
-		[Ordinal(0)] [RED("("animEventName")] 		public CName AnimEventName { get; set;}
+		[Ordinal(3)] [RED("("animEventName")] 		public CName AnimEventName { get; set;}
 
 		public CBTTaskActivateMagicBubbleDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

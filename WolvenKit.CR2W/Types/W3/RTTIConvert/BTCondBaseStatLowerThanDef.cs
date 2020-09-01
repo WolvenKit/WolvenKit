@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondBaseStatLowerThanDef : IBehTreeConditionalTaskDefinition
 	{
-		[Ordinal(0)] [RED("checkedActor")] 		public CEnum<EStatOwner> CheckedActor { get; set;}
+		[Ordinal(1)] [RED("checkedActor")] 		public CEnum<EStatOwner> CheckedActor { get; set;}
 
 		[Ordinal(1)] [RED("baseStatType")] 		public CEnum<EBaseCharacterStats> BaseStatType { get; set;}
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQCIsOpenedMenu : IUIConditionType
 	{
-		[Ordinal(0)] [RED("menuToBeOpened")] 		public CName MenuToBeOpened { get; set;}
+		[Ordinal(1)] [RED("menuToBeOpened")] 		public CName MenuToBeOpened { get; set;}
 
 		public CQCIsOpenedMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

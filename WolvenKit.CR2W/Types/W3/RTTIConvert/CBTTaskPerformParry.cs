@@ -10,33 +10,33 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPerformParry : CBTTaskPlayAnimationEventDecorator
 	{
-		[Ordinal(0)] [RED("activationTimeLimitBonusHeavy")] 		public CFloat ActivationTimeLimitBonusHeavy { get; set;}
+		[Ordinal(1)] [RED("activationTimeLimitBonusHeavy")] 		public CFloat ActivationTimeLimitBonusHeavy { get; set;}
 
-		[Ordinal(0)] [RED("activationTimeLimitBonusLight")] 		public CFloat ActivationTimeLimitBonusLight { get; set;}
+		[Ordinal(2)] [RED("activationTimeLimitBonusLight")] 		public CFloat ActivationTimeLimitBonusLight { get; set;}
 
-		[Ordinal(0)] [RED("checkParryChance")] 		public CBool CheckParryChance { get; set;}
+		[Ordinal(3)] [RED("checkParryChance")] 		public CBool CheckParryChance { get; set;}
 
-		[Ordinal(0)] [RED("interruptTaskToExecuteCounter")] 		public CBool InterruptTaskToExecuteCounter { get; set;}
+		[Ordinal(4)] [RED("interruptTaskToExecuteCounter")] 		public CBool InterruptTaskToExecuteCounter { get; set;}
 
-		[Ordinal(0)] [RED("allowParryOverlap")] 		public CBool AllowParryOverlap { get; set;}
+		[Ordinal(5)] [RED("allowParryOverlap")] 		public CBool AllowParryOverlap { get; set;}
 
-		[Ordinal(0)] [RED("activationTimeLimit")] 		public CFloat ActivationTimeLimit { get; set;}
+		[Ordinal(6)] [RED("activationTimeLimit")] 		public CFloat ActivationTimeLimit { get; set;}
 
-		[Ordinal(0)] [RED("action")] 		public CName Action { get; set;}
+		[Ordinal(7)] [RED("action")] 		public CName Action { get; set;}
 
-		[Ordinal(0)] [RED("runMain")] 		public CBool RunMain { get; set;}
+		[Ordinal(8)] [RED("runMain")] 		public CBool RunMain { get; set;}
 
-		[Ordinal(0)] [RED("parryChance")] 		public CFloat ParryChance { get; set;}
+		[Ordinal(9)] [RED("parryChance")] 		public CFloat ParryChance { get; set;}
 
-		[Ordinal(0)] [RED("counterChance")] 		public CFloat CounterChance { get; set;}
+		[Ordinal(10)] [RED("counterChance")] 		public CFloat CounterChance { get; set;}
 
-		[Ordinal(0)] [RED("counterMultiplier")] 		public CFloat CounterMultiplier { get; set;}
+		[Ordinal(11)] [RED("counterMultiplier")] 		public CFloat CounterMultiplier { get; set;}
 
-		[Ordinal(0)] [RED("hitsToCounter")] 		public CInt32 HitsToCounter { get; set;}
+		[Ordinal(12)] [RED("hitsToCounter")] 		public CInt32 HitsToCounter { get; set;}
 
-		[Ordinal(0)] [RED("swingType")] 		public CInt32 SwingType { get; set;}
+		[Ordinal(13)] [RED("swingType")] 		public CInt32 SwingType { get; set;}
 
-		[Ordinal(0)] [RED("swingDir")] 		public CInt32 SwingDir { get; set;}
+		[Ordinal(14)] [RED("swingDir")] 		public CInt32 SwingDir { get; set;}
 
 		public CBTTaskPerformParry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTSnapToMinimalVelocity : IMoveSteeringTask
 	{
-		[Ordinal(0)] [RED("minVelocity")] 		public CFloat MinVelocity { get; set;}
+		[Ordinal(1)] [RED("minVelocity")] 		public CFloat MinVelocity { get; set;}
 
 		public CMoveSTSnapToMinimalVelocity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

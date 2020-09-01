@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneVoicetagMapping : CVariable
 	{
-		[Ordinal(0)] [RED("voicetag")] 		public CName Voicetag { get; set;}
+		[Ordinal(1)] [RED("voicetag")] 		public CName Voicetag { get; set;}
 
-		[Ordinal(0)] [RED("mustUseContextActor")] 		public CBool MustUseContextActor { get; set;}
+		[Ordinal(2)] [RED("mustUseContextActor")] 		public CBool MustUseContextActor { get; set;}
 
-		[Ordinal(0)] [RED("invulnerable")] 		public CBool Invulnerable { get; set;}
+		[Ordinal(3)] [RED("invulnerable")] 		public CBool Invulnerable { get; set;}
 
-		[Ordinal(0)] [RED("actorOptional")] 		public CBool ActorOptional { get; set;}
+		[Ordinal(4)] [RED("actorOptional")] 		public CBool ActorOptional { get; set;}
 
 		public CStorySceneVoicetagMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

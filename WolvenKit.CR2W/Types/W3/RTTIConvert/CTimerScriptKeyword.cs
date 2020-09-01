@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTimerScriptKeyword : CObject
 	{
-		[Ordinal(0)] [RED("timeDelta")] 		public CFloat TimeDelta { get; set;}
+		[Ordinal(1)] [RED("timeDelta")] 		public CFloat TimeDelta { get; set;}
 
-		[Ordinal(0)] [RED("timeDeltaUnscaled")] 		public CFloat TimeDeltaUnscaled { get; set;}
+		[Ordinal(2)] [RED("timeDeltaUnscaled")] 		public CFloat TimeDeltaUnscaled { get; set;}
 
 		public CTimerScriptKeyword(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

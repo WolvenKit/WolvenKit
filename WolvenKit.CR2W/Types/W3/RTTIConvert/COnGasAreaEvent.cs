@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class COnGasAreaEvent : CHudEvent
 	{
-		[Ordinal(0)] [RED("entered")] 		public CBool Entered { get; set;}
+		[Ordinal(1)] [RED("entered")] 		public CBool Entered { get; set;}
 
 		public COnGasAreaEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

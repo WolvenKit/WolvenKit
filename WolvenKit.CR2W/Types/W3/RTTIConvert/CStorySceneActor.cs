@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneActor : IStorySceneItem
 	{
-		[Ordinal(0)] [RED("("id")] 		public CName Id { get; set;}
+		[Ordinal(1)] [RED("("id")] 		public CName Id { get; set;}
 
-		[Ordinal(0)] [RED("("actorTags")] 		public TagList ActorTags { get; set;}
+		[Ordinal(2)] [RED("("actorTags")] 		public TagList ActorTags { get; set;}
 
-		[Ordinal(0)] [RED("("entityTemplate")] 		public CSoft<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(3)] [RED("("entityTemplate")] 		public CSoft<CEntityTemplate> EntityTemplate { get; set;}
 
-		[Ordinal(0)] [RED("("appearanceFilter", 2,0)] 		public CArray<CName> AppearanceFilter { get; set;}
+		[Ordinal(4)] [RED("("appearanceFilter", 2,0)] 		public CArray<CName> AppearanceFilter { get; set;}
 
-		[Ordinal(0)] [RED("("dontSearchByVoicetag")] 		public CBool DontSearchByVoicetag { get; set;}
+		[Ordinal(5)] [RED("("dontSearchByVoicetag")] 		public CBool DontSearchByVoicetag { get; set;}
 
-		[Ordinal(0)] [RED("("useHiresShadows")] 		public CBool UseHiresShadows { get; set;}
+		[Ordinal(6)] [RED("("useHiresShadows")] 		public CBool UseHiresShadows { get; set;}
 
-		[Ordinal(0)] [RED("("forceSpawn")] 		public CBool ForceSpawn { get; set;}
+		[Ordinal(7)] [RED("("forceSpawn")] 		public CBool ForceSpawn { get; set;}
 
-		[Ordinal(0)] [RED("("useMimic")] 		public CBool UseMimic { get; set;}
+		[Ordinal(8)] [RED("("useMimic")] 		public CBool UseMimic { get; set;}
 
-		[Ordinal(0)] [RED("("alias")] 		public CString Alias { get; set;}
+		[Ordinal(9)] [RED("("alias")] 		public CString Alias { get; set;}
 
 		public CStorySceneActor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

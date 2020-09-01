@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestDeletionMarkerBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("guids", 2,0)] 		public CArray<CGUID> Guids { get; set;}
+		[Ordinal(1)] [RED("guids", 2,0)] 		public CArray<CGUID> Guids { get; set;}
 
 		public CQuestDeletionMarkerBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

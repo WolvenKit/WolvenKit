@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SettlementTrigger : CR4JournalPlaceEntity
 	{
-		[Ordinal(0)] [RED("("bDisplaySettlementInfo")] 		public CBool BDisplaySettlementInfo { get; set;}
+		[Ordinal(1)] [RED("("bDisplaySettlementInfo")] 		public CBool BDisplaySettlementInfo { get; set;}
 
-		[Ordinal(0)] [RED("("settlementName")] 		public CName SettlementName { get; set;}
+		[Ordinal(2)] [RED("("settlementName")] 		public CName SettlementName { get; set;}
 
-		[Ordinal(0)] [RED("("hubNameOverride")] 		public CName HubNameOverride { get; set;}
+		[Ordinal(3)] [RED("("hubNameOverride")] 		public CName HubNameOverride { get; set;}
 
-		[Ordinal(0)] [RED("("lockReenterDisplayTime")] 		public CFloat LockReenterDisplayTime { get; set;}
+		[Ordinal(4)] [RED("("lockReenterDisplayTime")] 		public CFloat LockReenterDisplayTime { get; set;}
 
-		[Ordinal(0)] [RED("("blockHorseTopSpeed")] 		public CBool BlockHorseTopSpeed { get; set;}
+		[Ordinal(5)] [RED("("blockHorseTopSpeed")] 		public CBool BlockHorseTopSpeed { get; set;}
 
 		public W3SettlementTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

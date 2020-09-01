@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4SceneAnimationsDLCMounter : IGameplayDLCMounter
 	{
-		[Ordinal(0)] [RED("sceneAnimationsBodyFilePath")] 		public CString SceneAnimationsBodyFilePath { get; set;}
+		[Ordinal(1)] [RED("sceneAnimationsBodyFilePath")] 		public CString SceneAnimationsBodyFilePath { get; set;}
 
-		[Ordinal(0)] [RED("sceneAnimationsMimicsFilePath")] 		public CString SceneAnimationsMimicsFilePath { get; set;}
+		[Ordinal(2)] [RED("sceneAnimationsMimicsFilePath")] 		public CString SceneAnimationsMimicsFilePath { get; set;}
 
-		[Ordinal(0)] [RED("sceneAnimationsMimicsEmoStatesFilePath")] 		public CString SceneAnimationsMimicsEmoStatesFilePath { get; set;}
+		[Ordinal(3)] [RED("sceneAnimationsMimicsEmoStatesFilePath")] 		public CString SceneAnimationsMimicsEmoStatesFilePath { get; set;}
 
 		public CR4SceneAnimationsDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

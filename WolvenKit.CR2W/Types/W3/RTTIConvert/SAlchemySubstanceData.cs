@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAlchemySubstanceData : CVariable
 	{
-		[Ordinal(0)] [RED("type")] 		public CName Type { get; set;}
+		[Ordinal(1)] [RED("type")] 		public CName Type { get; set;}
 
-		[Ordinal(0)] [RED("level")] 		public CInt32 Level { get; set;}
+		[Ordinal(2)] [RED("level")] 		public CInt32 Level { get; set;}
 
-		[Ordinal(0)] [RED("isPermanent")] 		public CBool IsPermanent { get; set;}
+		[Ordinal(3)] [RED("isPermanent")] 		public CBool IsPermanent { get; set;}
 
 		public SAlchemySubstanceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

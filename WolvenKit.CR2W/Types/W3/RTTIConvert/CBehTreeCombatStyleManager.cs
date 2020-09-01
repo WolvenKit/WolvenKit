@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeCombatStyleManager : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("combatDataStorage")] 		public CHandle<CHumanAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(1)] [RED("combatDataStorage")] 		public CHandle<CHumanAICombatStorage> CombatDataStorage { get; set;}
 
-		[Ordinal(0)] [RED("preferedCombatStyle")] 		public CEnum<EBehaviorGraph> PreferedCombatStyle { get; set;}
+		[Ordinal(2)] [RED("preferedCombatStyle")] 		public CEnum<EBehaviorGraph> PreferedCombatStyle { get; set;}
 
-		[Ordinal(0)] [RED("isRanged")] 		public CBool IsRanged { get; set;}
+		[Ordinal(3)] [RED("isRanged")] 		public CBool IsRanged { get; set;}
 
-		[Ordinal(0)] [RED("rangedWeaponType")] 		public CName RangedWeaponType { get; set;}
+		[Ordinal(4)] [RED("rangedWeaponType")] 		public CName RangedWeaponType { get; set;}
 
 		public CBehTreeCombatStyleManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

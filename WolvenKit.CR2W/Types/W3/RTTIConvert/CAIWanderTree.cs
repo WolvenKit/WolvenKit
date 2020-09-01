@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIWanderTree : CAIIdleTree
 	{
-		[Ordinal(0)] [RED("wanderMoveSpeed")] 		public CFloat WanderMoveSpeed { get; set;}
+		[Ordinal(1)] [RED("wanderMoveSpeed")] 		public CFloat WanderMoveSpeed { get; set;}
 
-		[Ordinal(0)] [RED("wanderMoveType")] 		public CEnum<EMoveType> WanderMoveType { get; set;}
+		[Ordinal(2)] [RED("wanderMoveType")] 		public CEnum<EMoveType> WanderMoveType { get; set;}
 
-		[Ordinal(0)] [RED("wanderMaxDistance")] 		public CFloat WanderMaxDistance { get; set;}
+		[Ordinal(3)] [RED("wanderMaxDistance")] 		public CFloat WanderMaxDistance { get; set;}
 
 		public CAIWanderTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

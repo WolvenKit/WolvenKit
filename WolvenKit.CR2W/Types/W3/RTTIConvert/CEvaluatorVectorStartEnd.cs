@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEvaluatorVectorStartEnd : IEvaluatorVector
 	{
-		[Ordinal(0)] [RED("("start")] 		public Vector Start { get; set;}
+		[Ordinal(1)] [RED("("start")] 		public Vector Start { get; set;}
 
-		[Ordinal(0)] [RED("("end")] 		public Vector End { get; set;}
+		[Ordinal(2)] [RED("("end")] 		public Vector End { get; set;}
 
 		public CEvaluatorVectorStartEnd(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

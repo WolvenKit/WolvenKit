@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SLevelDefinition : CVariable
 	{
-		[Ordinal(0)] [RED("("number")] 		public CInt32 Number { get; set;}
+		[Ordinal(1)] [RED("("number")] 		public CInt32 Number { get; set;}
 
-		[Ordinal(0)] [RED("("requiredTotalExp")] 		public CInt32 RequiredTotalExp { get; set;}
+		[Ordinal(2)] [RED("("requiredTotalExp")] 		public CInt32 RequiredTotalExp { get; set;}
 
-		[Ordinal(0)] [RED("("addedSkillPoints")] 		public CInt32 AddedSkillPoints { get; set;}
+		[Ordinal(3)] [RED("("addedSkillPoints")] 		public CInt32 AddedSkillPoints { get; set;}
 
-		[Ordinal(0)] [RED("("requiredExp")] 		public CInt32 RequiredExp { get; set;}
+		[Ordinal(4)] [RED("("requiredExp")] 		public CInt32 RequiredExp { get; set;}
 
 		public SLevelDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

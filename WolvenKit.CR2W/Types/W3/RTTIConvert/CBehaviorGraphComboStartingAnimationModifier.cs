@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphComboStartingAnimationModifier : IBehaviorGraphComboModifier
 	{
-		[Ordinal(0)] [RED("("animationAttack")] 		public CName AnimationAttack { get; set;}
+		[Ordinal(1)] [RED("("animationAttack")] 		public CName AnimationAttack { get; set;}
 
-		[Ordinal(0)] [RED("("animationParry")] 		public CName AnimationParry { get; set;}
+		[Ordinal(2)] [RED("("animationParry")] 		public CName AnimationParry { get; set;}
 
 		public CBehaviorGraphComboStartingAnimationModifier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

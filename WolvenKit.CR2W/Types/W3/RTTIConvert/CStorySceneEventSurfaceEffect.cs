@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventSurfaceEffect : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("type")] 		public CEnum<ESceneEventSurfacePostFXType> Type { get; set;}
+		[Ordinal(1)] [RED("type")] 		public CEnum<ESceneEventSurfacePostFXType> Type { get; set;}
 
-		[Ordinal(0)] [RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(2)] [RED("position")] 		public Vector Position { get; set;}
 
-		[Ordinal(0)] [RED("fadeInTime")] 		public CFloat FadeInTime { get; set;}
+		[Ordinal(3)] [RED("fadeInTime")] 		public CFloat FadeInTime { get; set;}
 
-		[Ordinal(0)] [RED("fadeOutTime")] 		public CFloat FadeOutTime { get; set;}
+		[Ordinal(4)] [RED("fadeOutTime")] 		public CFloat FadeOutTime { get; set;}
 
-		[Ordinal(0)] [RED("durationTime")] 		public CFloat DurationTime { get; set;}
+		[Ordinal(5)] [RED("durationTime")] 		public CFloat DurationTime { get; set;}
 
-		[Ordinal(0)] [RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(6)] [RED("radius")] 		public CFloat Radius { get; set;}
 
 		public CStorySceneEventSurfaceEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

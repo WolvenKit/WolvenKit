@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialParameterEngineValue : CMaterialBlock
 	{
-		[Ordinal(0)] [RED("valueType")] 		public CEnum<EMaterialEngineValueType> ValueType { get; set;}
+		[Ordinal(1)] [RED("valueType")] 		public CEnum<EMaterialEngineValueType> ValueType { get; set;}
 
 		public CMaterialParameterEngineValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

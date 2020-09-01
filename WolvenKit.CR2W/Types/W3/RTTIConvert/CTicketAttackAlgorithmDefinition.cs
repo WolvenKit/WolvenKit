@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTicketAttackAlgorithmDefinition : CTicketBaseAlgorithmDefinition
 	{
-		[Ordinal(0)] [RED("overrideDefaultTicketCount")] 		public CBehTreeValBool OverrideDefaultTicketCount { get; set;}
+		[Ordinal(1)] [RED("overrideDefaultTicketCount")] 		public CBehTreeValBool OverrideDefaultTicketCount { get; set;}
 
-		[Ordinal(0)] [RED("overridenValueWhenInFront")] 		public CBehTreeValInt OverridenValueWhenInFront { get; set;}
+		[Ordinal(2)] [RED("overridenValueWhenInFront")] 		public CBehTreeValInt OverridenValueWhenInFront { get; set;}
 
-		[Ordinal(0)] [RED("overridenValueWhenInBack")] 		public CBehTreeValInt OverridenValueWhenInBack { get; set;}
+		[Ordinal(3)] [RED("overridenValueWhenInBack")] 		public CBehTreeValInt OverridenValueWhenInBack { get; set;}
 
-		[Ordinal(0)] [RED("invertDistanceImportance")] 		public CBool InvertDistanceImportance { get; set;}
+		[Ordinal(4)] [RED("invertDistanceImportance")] 		public CBool InvertDistanceImportance { get; set;}
 
-		[Ordinal(0)] [RED("denyTicketWhenNotInFrame")] 		public CBool DenyTicketWhenNotInFrame { get; set;}
+		[Ordinal(5)] [RED("denyTicketWhenNotInFrame")] 		public CBool DenyTicketWhenNotInFrame { get; set;}
 
 		public CTicketAttackAlgorithmDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskManageRepulseProjectileEvents : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("performRepulseProjectileDelay")] 		public CFloat PerformRepulseProjectileDelay { get; set;}
+		[Ordinal(1)] [RED("("performRepulseProjectileDelay")] 		public CFloat PerformRepulseProjectileDelay { get; set;}
 
-		[Ordinal(0)] [RED("("ownerPosition")] 		public Vector OwnerPosition { get; set;}
+		[Ordinal(2)] [RED("("ownerPosition")] 		public Vector OwnerPosition { get; set;}
 
 		public CBTTaskManageRepulseProjectileEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

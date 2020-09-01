@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSlidingMaterialPresetParams : CVariable
 	{
-		[Ordinal(0)] [RED("("presetName")] 		public CName PresetName { get; set;}
+		[Ordinal(1)] [RED("("presetName")] 		public CName PresetName { get; set;}
 
-		[Ordinal(0)] [RED("("angleMin")] 		public CFloat AngleMin { get; set;}
+		[Ordinal(2)] [RED("("angleMin")] 		public CFloat AngleMin { get; set;}
 
-		[Ordinal(0)] [RED("("angleMinRain")] 		public CFloat AngleMinRain { get; set;}
+		[Ordinal(3)] [RED("("angleMinRain")] 		public CFloat AngleMinRain { get; set;}
 
-		[Ordinal(0)] [RED("("frictionMultiplier")] 		public CFloat FrictionMultiplier { get; set;}
+		[Ordinal(4)] [RED("("frictionMultiplier")] 		public CFloat FrictionMultiplier { get; set;}
 
-		[Ordinal(0)] [RED("("frictionMultiplierRain")] 		public CFloat FrictionMultiplierRain { get; set;}
+		[Ordinal(5)] [RED("("frictionMultiplierRain")] 		public CFloat FrictionMultiplierRain { get; set;}
 
 		public SSlidingMaterialPresetParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

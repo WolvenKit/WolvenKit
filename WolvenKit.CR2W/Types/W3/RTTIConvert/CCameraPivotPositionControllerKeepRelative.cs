@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCameraPivotPositionControllerKeepRelative : ICustomCameraScriptedPivotPositionController
 	{
-		[Ordinal(0)] [RED("("offset")] 		public Vector Offset { get; set;}
+		[Ordinal(1)] [RED("("offset")] 		public Vector Offset { get; set;}
 
-		[Ordinal(0)] [RED("("isSet")] 		public CBool IsSet { get; set;}
+		[Ordinal(2)] [RED("("isSet")] 		public CBool IsSet { get; set;}
 
 		public CCameraPivotPositionControllerKeepRelative(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

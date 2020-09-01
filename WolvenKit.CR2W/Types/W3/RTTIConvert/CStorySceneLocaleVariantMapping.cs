@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneLocaleVariantMapping : CVariable
 	{
-		[Ordinal(0)] [RED("localeId")] 		public CUInt32 LocaleId { get; set;}
+		[Ordinal(1)] [RED("localeId")] 		public CUInt32 LocaleId { get; set;}
 
-		[Ordinal(0)] [RED("variantId")] 		public CUInt32 VariantId { get; set;}
+		[Ordinal(2)] [RED("variantId")] 		public CUInt32 VariantId { get; set;}
 
 		public CStorySceneLocaleVariantMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskDettlaffDash : CBTTaskAttack
 	{
-		[Ordinal(0)] [RED("OpenForAard")] 		public CBool OpenForAard { get; set;}
+		[Ordinal(1)] [RED("OpenForAard")] 		public CBool OpenForAard { get; set;}
 
-		[Ordinal(0)] [RED("action")] 		public CHandle<W3DamageAction> Action { get; set;}
+		[Ordinal(2)] [RED("action")] 		public CHandle<W3DamageAction> Action { get; set;}
 
-		[Ordinal(0)] [RED("shouldCheckVisibility")] 		public CBool ShouldCheckVisibility { get; set;}
+		[Ordinal(3)] [RED("shouldCheckVisibility")] 		public CBool ShouldCheckVisibility { get; set;}
 
-		[Ordinal(0)] [RED("shouldSignalGameplayEvent")] 		public CBool ShouldSignalGameplayEvent { get; set;}
+		[Ordinal(4)] [RED("shouldSignalGameplayEvent")] 		public CBool ShouldSignalGameplayEvent { get; set;}
 
-		[Ordinal(0)] [RED("actor")] 		public CHandle<CActor> Actor { get; set;}
+		[Ordinal(5)] [RED("actor")] 		public CHandle<CActor> Actor { get; set;}
 
 		public CBTTaskDettlaffDash(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

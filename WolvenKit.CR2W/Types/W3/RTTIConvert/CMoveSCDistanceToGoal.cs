@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCDistanceToGoal : IMoveSteeringCondition
 	{
-		[Ordinal(0)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(1)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
 		public CMoveSCDistanceToGoal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

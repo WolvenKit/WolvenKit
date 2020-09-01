@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskShootDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
-		[Ordinal(0)] [RED("("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(1)] [RED("("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
-		[Ordinal(0)] [RED("("attackRange")] 		public CBehTreeValFloat AttackRange { get; set;}
+		[Ordinal(2)] [RED("("attackRange")] 		public CBehTreeValFloat AttackRange { get; set;}
 
-		[Ordinal(0)] [RED("("dodgeable")] 		public CBool Dodgeable { get; set;}
+		[Ordinal(3)] [RED("("dodgeable")] 		public CBool Dodgeable { get; set;}
 
-		[Ordinal(0)] [RED("("setArrowOnFire")] 		public CBehTreeValBool SetArrowOnFire { get; set;}
+		[Ordinal(4)] [RED("("setArrowOnFire")] 		public CBehTreeValBool SetArrowOnFire { get; set;}
 
 		public CBTTaskShootDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

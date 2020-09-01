@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IPresetActorLatentAction : IActorLatentAction
 	{
-		[Ordinal(0)] [RED("("res")] 		public CHandle<CBehTree> Res { get; set;}
+		[Ordinal(1)] [RED("("res")] 		public CHandle<CBehTree> Res { get; set;}
 
-		[Ordinal(0)] [RED("("def")] 		public CPtr<CBehTreeNodeTemplateDefinition> Def { get; set;}
+		[Ordinal(2)] [RED("("def")] 		public CPtr<CBehTreeNodeTemplateDefinition> Def { get; set;}
 
-		[Ordinal(0)] [RED("("resName")] 		public CString ResName { get; set;}
+		[Ordinal(3)] [RED("("resName")] 		public CString ResName { get; set;}
 
 		public IPresetActorLatentAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

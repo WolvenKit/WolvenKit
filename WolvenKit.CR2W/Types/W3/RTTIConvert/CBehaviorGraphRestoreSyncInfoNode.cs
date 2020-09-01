@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphRestoreSyncInfoNode : CBehaviorGraphBaseNode
 	{
-		[Ordinal(0)] [RED("storeName")] 		public CName StoreName { get; set;}
+		[Ordinal(1)] [RED("storeName")] 		public CName StoreName { get; set;}
 
-		[Ordinal(0)] [RED("syncMethod")] 		public CPtr<IBehaviorSyncMethod> SyncMethod { get; set;}
+		[Ordinal(2)] [RED("syncMethod")] 		public CPtr<IBehaviorSyncMethod> SyncMethod { get; set;}
 
-		[Ordinal(0)] [RED("restoreOnActivation")] 		public CBool RestoreOnActivation { get; set;}
+		[Ordinal(3)] [RED("restoreOnActivation")] 		public CBool RestoreOnActivation { get; set;}
 
-		[Ordinal(0)] [RED("restoreEveryFrame")] 		public CBool RestoreEveryFrame { get; set;}
+		[Ordinal(4)] [RED("restoreEveryFrame")] 		public CBool RestoreEveryFrame { get; set;}
 
-		[Ordinal(0)] [RED("restoreOnEvent")] 		public CName RestoreOnEvent { get; set;}
+		[Ordinal(5)] [RED("restoreOnEvent")] 		public CName RestoreOnEvent { get; set;}
 
 		public CBehaviorGraphRestoreSyncInfoNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

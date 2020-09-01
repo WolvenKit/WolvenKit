@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneComponent : CSpriteComponent
 	{
-		[Ordinal(0)] [RED("("storyScene")] 		public CSoft<CStoryScene> StoryScene { get; set;}
+		[Ordinal(1)] [RED("("storyScene")] 		public CSoft<CStoryScene> StoryScene { get; set;}
 
 		public CStorySceneComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

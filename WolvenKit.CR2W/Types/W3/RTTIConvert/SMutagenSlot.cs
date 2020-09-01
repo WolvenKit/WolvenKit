@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMutagenSlot : CVariable
 	{
-		[Ordinal(0)] [RED("("item")] 		public SItemUniqueId Item { get; set;}
+		[Ordinal(1)] [RED("("item")] 		public SItemUniqueId Item { get; set;}
 
-		[Ordinal(0)] [RED("("unlockedAtLevel")] 		public CInt32 UnlockedAtLevel { get; set;}
+		[Ordinal(2)] [RED("("unlockedAtLevel")] 		public CInt32 UnlockedAtLevel { get; set;}
 
-		[Ordinal(0)] [RED("("skillGroupID")] 		public CInt32 SkillGroupID { get; set;}
+		[Ordinal(3)] [RED("("skillGroupID")] 		public CInt32 SkillGroupID { get; set;}
 
-		[Ordinal(0)] [RED("("equipmentSlot")] 		public CEnum<EEquipmentSlots> EquipmentSlot { get; set;}
+		[Ordinal(4)] [RED("("equipmentSlot")] 		public CEnum<EEquipmentSlots> EquipmentSlot { get; set;}
 
 		public SMutagenSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

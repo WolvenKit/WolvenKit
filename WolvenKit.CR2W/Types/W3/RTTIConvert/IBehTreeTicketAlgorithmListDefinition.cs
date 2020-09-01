@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeTicketAlgorithmListDefinition : IBehTreeTicketAlgorithmDefinition
 	{
-		[Ordinal(0)] [RED("list", 2,0)] 		public CArray<CPtr<IBehTreeTicketAlgorithmDefinition>> List { get; set;}
+		[Ordinal(1)] [RED("list", 2,0)] 		public CArray<CPtr<IBehTreeTicketAlgorithmDefinition>> List { get; set;}
 
 		public IBehTreeTicketAlgorithmListDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

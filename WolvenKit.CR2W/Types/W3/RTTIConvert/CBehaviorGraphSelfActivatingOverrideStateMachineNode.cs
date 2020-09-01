@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphSelfActivatingOverrideStateMachineNode : CBehaviorGraphSelfActivatingStateMachineNode
 	{
-		[Ordinal(0)] [RED("bones", 2,0)] 		public CArray<SBehaviorGraphBoneInfo> Bones { get; set;}
+		[Ordinal(1)] [RED("bones", 2,0)] 		public CArray<SBehaviorGraphBoneInfo> Bones { get; set;}
 
-		[Ordinal(0)] [RED("overrideFloatTracks")] 		public CBool OverrideFloatTracks { get; set;}
+		[Ordinal(2)] [RED("overrideFloatTracks")] 		public CBool OverrideFloatTracks { get; set;}
 
-		[Ordinal(0)] [RED("overrideCustomTracks")] 		public CBool OverrideCustomTracks { get; set;}
+		[Ordinal(3)] [RED("overrideCustomTracks")] 		public CBool OverrideCustomTracks { get; set;}
 
-		[Ordinal(0)] [RED("mergeEvents")] 		public CBool MergeEvents { get; set;}
+		[Ordinal(4)] [RED("mergeEvents")] 		public CBool MergeEvents { get; set;}
 
-		[Ordinal(0)] [RED("overrideDeltaMotion")] 		public CBool OverrideDeltaMotion { get; set;}
+		[Ordinal(5)] [RED("overrideDeltaMotion")] 		public CBool OverrideDeltaMotion { get; set;}
 
 		public CBehaviorGraphSelfActivatingOverrideStateMachineNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

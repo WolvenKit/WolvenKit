@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateCrafting : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[Ordinal(0)] [RED("("SCHEMATICS")] 		public CName SCHEMATICS { get; set;}
+		[Ordinal(1)] [RED("("SCHEMATICS")] 		public CName SCHEMATICS { get; set;}
 
-		[Ordinal(0)] [RED("("ITEM_DESCRIPTION")] 		public CName ITEM_DESCRIPTION { get; set;}
+		[Ordinal(2)] [RED("("ITEM_DESCRIPTION")] 		public CName ITEM_DESCRIPTION { get; set;}
 
-		[Ordinal(0)] [RED("("COMPONENTS")] 		public CName COMPONENTS { get; set;}
+		[Ordinal(3)] [RED("("COMPONENTS")] 		public CName COMPONENTS { get; set;}
 
-		[Ordinal(0)] [RED("("PRICE")] 		public CName PRICE { get; set;}
+		[Ordinal(4)] [RED("("PRICE")] 		public CName PRICE { get; set;}
 
-		[Ordinal(0)] [RED("("CRAFTSMEN")] 		public CName CRAFTSMEN { get; set;}
+		[Ordinal(5)] [RED("("CRAFTSMEN")] 		public CName CRAFTSMEN { get; set;}
 
-		[Ordinal(0)] [RED("("DISMANTLING")] 		public CName DISMANTLING { get; set;}
+		[Ordinal(6)] [RED("("DISMANTLING")] 		public CName DISMANTLING { get; set;}
 
-		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(7)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateCrafting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

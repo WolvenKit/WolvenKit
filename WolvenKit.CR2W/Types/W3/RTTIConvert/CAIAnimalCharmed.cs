@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIAnimalCharmed : CAIIdleTree
 	{
-		[Ordinal(0)] [RED("charmedGotoDistance")] 		public CFloat CharmedGotoDistance { get; set;}
+		[Ordinal(1)] [RED("charmedGotoDistance")] 		public CFloat CharmedGotoDistance { get; set;}
 
 		public CAIAnimalCharmed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

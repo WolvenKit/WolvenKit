@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHorseRequiredItemsForRiderDef : IBehTreeHorseTaskDefinition
 	{
-		[Ordinal(0)] [RED("RightItemType")] 		public CName RightItemType { get; set;}
+		[Ordinal(1)] [RED("RightItemType")] 		public CName RightItemType { get; set;}
 
 		public CBTTaskHorseRequiredItemsForRiderDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

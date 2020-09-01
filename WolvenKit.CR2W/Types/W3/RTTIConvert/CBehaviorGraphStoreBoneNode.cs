@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphStoreBoneNode : CBehaviorGraphBaseNode
 	{
-		[Ordinal(0)] [RED("boneName")] 		public CString BoneName { get; set;}
+		[Ordinal(1)] [RED("boneName")] 		public CString BoneName { get; set;}
 
-		[Ordinal(0)] [RED("storeName")] 		public CName StoreName { get; set;}
+		[Ordinal(2)] [RED("storeName")] 		public CName StoreName { get; set;}
 
 		public CBehaviorGraphStoreBoneNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

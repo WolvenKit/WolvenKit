@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSendTutorialEventDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("onActivation")] 		public CBool OnActivation { get; set;}
+		[Ordinal(1)] [RED("("onActivation")] 		public CBool OnActivation { get; set;}
 
-		[Ordinal(0)] [RED("("onDeactivation")] 		public CBool OnDeactivation { get; set;}
+		[Ordinal(2)] [RED("("onDeactivation")] 		public CBool OnDeactivation { get; set;}
 
-		[Ordinal(0)] [RED("("guardSwordWarning")] 		public CBool GuardSwordWarning { get; set;}
+		[Ordinal(3)] [RED("("guardSwordWarning")] 		public CBool GuardSwordWarning { get; set;}
 
-		[Ordinal(0)] [RED("("guardGeneralWarning")] 		public CBool GuardGeneralWarning { get; set;}
+		[Ordinal(4)] [RED("("guardGeneralWarning")] 		public CBool GuardGeneralWarning { get; set;}
 
-		[Ordinal(0)] [RED("("guardLootingWarning")] 		public CBool GuardLootingWarning { get; set;}
+		[Ordinal(5)] [RED("("guardLootingWarning")] 		public CBool GuardLootingWarning { get; set;}
 
 		public CBTTaskSendTutorialEventDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

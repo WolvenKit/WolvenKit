@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIPlayerActionDecorator : IPlayerActionDecorator
 	{
-		[Ordinal(0)] [RED("interruptOnInput")] 		public CBool InterruptOnInput { get; set;}
+		[Ordinal(1)] [RED("interruptOnInput")] 		public CBool InterruptOnInput { get; set;}
 
 		public CAIPlayerActionDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneFlowSwitchCase : CObject
 	{
-		[Ordinal(0)] [RED("whenCondition")] 		public CPtr<IQuestCondition> WhenCondition { get; set;}
+		[Ordinal(1)] [RED("whenCondition")] 		public CPtr<IQuestCondition> WhenCondition { get; set;}
 
-		[Ordinal(0)] [RED("thenLink")] 		public CPtr<CStorySceneLinkElement> ThenLink { get; set;}
+		[Ordinal(2)] [RED("thenLink")] 		public CPtr<CStorySceneLinkElement> ThenLink { get; set;}
 
 		public CStorySceneFlowSwitchCase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

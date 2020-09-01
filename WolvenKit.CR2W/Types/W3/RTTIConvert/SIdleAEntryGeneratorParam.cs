@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SIdleAEntryGeneratorParam : CVariable
 	{
-		[Ordinal(0)] [RED("("creatureEntry")] 		public SCreatureEntryEntryGeneratorNodeParam CreatureEntry { get; set;}
+		[Ordinal(1)] [RED("("creatureEntry")] 		public SCreatureEntryEntryGeneratorNodeParam CreatureEntry { get; set;}
 
-		[Ordinal(0)] [RED("("idleTree")] 		public CHandle<CAIIdleTree> IdleTree { get; set;}
+		[Ordinal(2)] [RED("("idleTree")] 		public CHandle<CAIIdleTree> IdleTree { get; set;}
 
-		[Ordinal(0)] [RED("("guartArea")] 		public SGuardAreaEntryGeneratorNodeParam GuartArea { get; set;}
+		[Ordinal(3)] [RED("("guartArea")] 		public SGuardAreaEntryGeneratorNodeParam GuartArea { get; set;}
 
 		public SIdleAEntryGeneratorParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

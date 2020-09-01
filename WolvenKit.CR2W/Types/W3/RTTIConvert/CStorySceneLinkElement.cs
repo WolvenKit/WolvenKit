@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneLinkElement : CObject
 	{
-		[Ordinal(0)] [RED("linkedElements", 2,0)] 		public CArray<CPtr<CStorySceneLinkElement>> LinkedElements { get; set;}
+		[Ordinal(1)] [RED("linkedElements", 2,0)] 		public CArray<CPtr<CStorySceneLinkElement>> LinkedElements { get; set;}
 
-		[Ordinal(0)] [RED("nextLinkElement")] 		public CPtr<CStorySceneLinkElement> NextLinkElement { get; set;}
+		[Ordinal(2)] [RED("nextLinkElement")] 		public CPtr<CStorySceneLinkElement> NextLinkElement { get; set;}
 
 		public CStorySceneLinkElement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

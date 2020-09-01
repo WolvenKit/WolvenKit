@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionalNodeDefinition : IBehTreeNodeConditionalBaseNodeDefinition
 	{
-		[Ordinal(0)] [RED("val")] 		public CBehTreeValBool Val { get; set;}
+		[Ordinal(1)] [RED("val")] 		public CBehTreeValBool Val { get; set;}
 
 		public CBehTreeNodeConditionalNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

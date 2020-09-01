@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSkeletalAnimatedComponent : CComponent
 	{
-		[Ordinal(0)] [RED("skeleton")] 		public CHandle<CSkeleton> Skeleton { get; set;}
+		[Ordinal(1)] [RED("skeleton")] 		public CHandle<CSkeleton> Skeleton { get; set;}
 
-		[Ordinal(0)] [RED("animset")] 		public CHandle<CSkeletalAnimationSet> Animset { get; set;}
+		[Ordinal(2)] [RED("animset")] 		public CHandle<CSkeletalAnimationSet> Animset { get; set;}
 
-		[Ordinal(0)] [RED("controller")] 		public CPtr<IAnimationController> Controller { get; set;}
+		[Ordinal(3)] [RED("controller")] 		public CPtr<IAnimationController> Controller { get; set;}
 
-		[Ordinal(0)] [RED("processEvents")] 		public CBool ProcessEvents { get; set;}
+		[Ordinal(4)] [RED("processEvents")] 		public CBool ProcessEvents { get; set;}
 
 		public CSkeletalAnimatedComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

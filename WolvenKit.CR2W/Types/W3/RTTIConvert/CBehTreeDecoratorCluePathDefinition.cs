@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeDecoratorCluePathDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[Ordinal(0)] [RED("clueTemplate")] 		public CHandle<CEntityTemplate> ClueTemplate { get; set;}
+		[Ordinal(1)] [RED("clueTemplate")] 		public CHandle<CEntityTemplate> ClueTemplate { get; set;}
 
-		[Ordinal(0)] [RED("clueTemplate_var")] 		public CName ClueTemplate_var { get; set;}
+		[Ordinal(2)] [RED("clueTemplate_var")] 		public CName ClueTemplate_var { get; set;}
 
-		[Ordinal(0)] [RED("maxClues")] 		public CBehTreeValInt MaxClues { get; set;}
+		[Ordinal(3)] [RED("maxClues")] 		public CBehTreeValInt MaxClues { get; set;}
 
-		[Ordinal(0)] [RED("cluesOffset")] 		public CBehTreeValFloat CluesOffset { get; set;}
+		[Ordinal(4)] [RED("cluesOffset")] 		public CBehTreeValFloat CluesOffset { get; set;}
 
 		public CBehTreeDecoratorCluePathDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

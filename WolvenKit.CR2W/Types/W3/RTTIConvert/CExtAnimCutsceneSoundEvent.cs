@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimCutsceneSoundEvent : CExtAnimEvent
 	{
-		[Ordinal(0)] [RED("("soundEventName")] 		public StringAnsi SoundEventName { get; set;}
+		[Ordinal(1)] [RED("("soundEventName")] 		public StringAnsi SoundEventName { get; set;}
 
-		[Ordinal(0)] [RED("("bone")] 		public CName Bone { get; set;}
+		[Ordinal(2)] [RED("("bone")] 		public CName Bone { get; set;}
 
-		[Ordinal(0)] [RED("("useMaterialInfo")] 		public CBool UseMaterialInfo { get; set;}
+		[Ordinal(3)] [RED("("useMaterialInfo")] 		public CBool UseMaterialInfo { get; set;}
 
 		public CExtAnimCutsceneSoundEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

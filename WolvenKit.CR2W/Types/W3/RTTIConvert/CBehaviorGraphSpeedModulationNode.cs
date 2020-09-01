@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphSpeedModulationNode : CBehaviorGraphValueBaseNode
 	{
-		[Ordinal(0)] [RED("speedThreshold")] 		public CFloat SpeedThreshold { get; set;}
+		[Ordinal(1)] [RED("speedThreshold")] 		public CFloat SpeedThreshold { get; set;}
 
-		[Ordinal(0)] [RED("halfAngle")] 		public CFloat HalfAngle { get; set;}
+		[Ordinal(2)] [RED("halfAngle")] 		public CFloat HalfAngle { get; set;}
 
-		[Ordinal(0)] [RED("cachedSpeedNode")] 		public CPtr<CBehaviorGraphValueNode> CachedSpeedNode { get; set;}
+		[Ordinal(3)] [RED("cachedSpeedNode")] 		public CPtr<CBehaviorGraphValueNode> CachedSpeedNode { get; set;}
 
-		[Ordinal(0)] [RED("cachedDirectionNode")] 		public CPtr<CBehaviorGraphValueNode> CachedDirectionNode { get; set;}
+		[Ordinal(4)] [RED("cachedDirectionNode")] 		public CPtr<CBehaviorGraphValueNode> CachedDirectionNode { get; set;}
 
-		[Ordinal(0)] [RED("cachedThresholdNode")] 		public CPtr<CBehaviorGraphValueNode> CachedThresholdNode { get; set;}
+		[Ordinal(5)] [RED("cachedThresholdNode")] 		public CPtr<CBehaviorGraphValueNode> CachedThresholdNode { get; set;}
 
 		public CBehaviorGraphSpeedModulationNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

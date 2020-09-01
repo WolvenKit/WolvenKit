@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodePredefinedPathDefinition : CBehTreeNodeCustomSteeringDefinition
 	{
-		[Ordinal(0)] [RED("pathName")] 		public CBehTreeValCName PathName { get; set;}
+		[Ordinal(1)] [RED("pathName")] 		public CBehTreeValCName PathName { get; set;}
 
-		[Ordinal(0)] [RED("upThePath")] 		public CBehTreeValBool UpThePath { get; set;}
+		[Ordinal(2)] [RED("upThePath")] 		public CBehTreeValBool UpThePath { get; set;}
 
-		[Ordinal(0)] [RED("pathMargin")] 		public CBehTreeValFloat PathMargin { get; set;}
+		[Ordinal(3)] [RED("pathMargin")] 		public CBehTreeValFloat PathMargin { get; set;}
 
-		[Ordinal(0)] [RED("tolerance")] 		public CBehTreeValFloat Tolerance { get; set;}
+		[Ordinal(4)] [RED("tolerance")] 		public CBehTreeValFloat Tolerance { get; set;}
 
-		[Ordinal(0)] [RED("arrivalDistance")] 		public CBehTreeValFloat ArrivalDistance { get; set;}
+		[Ordinal(5)] [RED("arrivalDistance")] 		public CBehTreeValFloat ArrivalDistance { get; set;}
 
-		[Ordinal(0)] [RED("useExplorations")] 		public CBehTreeValBool UseExplorations { get; set;}
+		[Ordinal(6)] [RED("useExplorations")] 		public CBehTreeValBool UseExplorations { get; set;}
 
 		public CBehTreeNodePredefinedPathDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

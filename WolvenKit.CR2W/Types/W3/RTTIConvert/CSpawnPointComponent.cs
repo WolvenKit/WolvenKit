@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnPointComponent : CWayPointComponent
 	{
-		[Ordinal(0)] [RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(1)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		[Ordinal(0)] [RED("notUsedByCommunity")] 		public CBool NotUsedByCommunity { get; set;}
+		[Ordinal(2)] [RED("notUsedByCommunity")] 		public CBool NotUsedByCommunity { get; set;}
 
 		public CSpawnPointComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskForceSetStat : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(1)] [RED("("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[Ordinal(0)] [RED("("percent")] 		public CInt32 Percent { get; set;}
+		[Ordinal(2)] [RED("("percent")] 		public CInt32 Percent { get; set;}
 
-		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(3)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[Ordinal(0)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(4)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
 		public CBTTaskForceSetStat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

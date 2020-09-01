@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorConstraintNodeFloorIKSixLegs : CBehaviorConstraintNodeFloorIKBase
 	{
-		[Ordinal(0)] [RED("usePerpendicularUprightWS")] 		public CFloat UsePerpendicularUprightWS { get; set;}
+		[Ordinal(1)] [RED("usePerpendicularUprightWS")] 		public CFloat UsePerpendicularUprightWS { get; set;}
 
-		[Ordinal(0)] [RED("upDirAdditionalWS")] 		public Vector UpDirAdditionalWS { get; set;}
+		[Ordinal(2)] [RED("upDirAdditionalWS")] 		public Vector UpDirAdditionalWS { get; set;}
 
-		[Ordinal(0)] [RED("upDirUseFromLegsHitLocs")] 		public CFloat UpDirUseFromLegsHitLocs { get; set;}
+		[Ordinal(3)] [RED("upDirUseFromLegsHitLocs")] 		public CFloat UpDirUseFromLegsHitLocs { get; set;}
 
-		[Ordinal(0)] [RED("pelvis")] 		public SBehaviorConstraintNodeFloorIKVerticalBoneData Pelvis { get; set;}
+		[Ordinal(4)] [RED("pelvis")] 		public SBehaviorConstraintNodeFloorIKVerticalBoneData Pelvis { get; set;}
 
-		[Ordinal(0)] [RED("legs")] 		public SBehaviorConstraintNodeFloorIKLegsData Legs { get; set;}
+		[Ordinal(5)] [RED("legs")] 		public SBehaviorConstraintNodeFloorIKLegsData Legs { get; set;}
 
-		[Ordinal(0)] [RED("leftBackLegIK")] 		public STwoBonesIKSolverData LeftBackLegIK { get; set;}
+		[Ordinal(6)] [RED("leftBackLegIK")] 		public STwoBonesIKSolverData LeftBackLegIK { get; set;}
 
-		[Ordinal(0)] [RED("rightBackLegIK")] 		public STwoBonesIKSolverData RightBackLegIK { get; set;}
+		[Ordinal(7)] [RED("rightBackLegIK")] 		public STwoBonesIKSolverData RightBackLegIK { get; set;}
 
-		[Ordinal(0)] [RED("leftMiddleLegIK")] 		public STwoBonesIKSolverData LeftMiddleLegIK { get; set;}
+		[Ordinal(8)] [RED("leftMiddleLegIK")] 		public STwoBonesIKSolverData LeftMiddleLegIK { get; set;}
 
-		[Ordinal(0)] [RED("rightMiddleLegIK")] 		public STwoBonesIKSolverData RightMiddleLegIK { get; set;}
+		[Ordinal(9)] [RED("rightMiddleLegIK")] 		public STwoBonesIKSolverData RightMiddleLegIK { get; set;}
 
-		[Ordinal(0)] [RED("leftFrontLegIK")] 		public STwoBonesIKSolverData LeftFrontLegIK { get; set;}
+		[Ordinal(10)] [RED("leftFrontLegIK")] 		public STwoBonesIKSolverData LeftFrontLegIK { get; set;}
 
-		[Ordinal(0)] [RED("rightFrontLegIK")] 		public STwoBonesIKSolverData RightFrontLegIK { get; set;}
+		[Ordinal(11)] [RED("rightFrontLegIK")] 		public STwoBonesIKSolverData RightFrontLegIK { get; set;}
 
 		public CBehaviorConstraintNodeFloorIKSixLegs(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

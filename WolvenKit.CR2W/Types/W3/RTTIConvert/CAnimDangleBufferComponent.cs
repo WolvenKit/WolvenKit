@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimDangleBufferComponent : CComponent
 	{
-		[Ordinal(0)] [RED("skeleton")] 		public CHandle<CSkeleton> Skeleton { get; set;}
+		[Ordinal(1)] [RED("skeleton")] 		public CHandle<CSkeleton> Skeleton { get; set;}
 
-		[Ordinal(0)] [RED("debugRender")] 		public CBool DebugRender { get; set;}
+		[Ordinal(2)] [RED("debugRender")] 		public CBool DebugRender { get; set;}
 
 		public CAnimDangleBufferComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

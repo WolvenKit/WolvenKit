@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalCreatureHuntingClue : CJournalContainerEntry
 	{
-		[Ordinal(0)] [RED("category")] 		public CName Category { get; set;}
+		[Ordinal(1)] [RED("category")] 		public CName Category { get; set;}
 
-		[Ordinal(0)] [RED("clue")] 		public CInt32 Clue { get; set;}
+		[Ordinal(2)] [RED("clue")] 		public CInt32 Clue { get; set;}
 
-		[Ordinal(0)] [RED("active")] 		public CBool Active { get; set;}
+		[Ordinal(3)] [RED("active")] 		public CBool Active { get; set;}
 
 		public CJournalCreatureHuntingClue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

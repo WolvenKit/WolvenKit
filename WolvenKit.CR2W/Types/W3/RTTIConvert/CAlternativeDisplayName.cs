@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAlternativeDisplayName : CGameplayEntityParam
 	{
-		[Ordinal(0)] [RED("altName")] 		public LocalizedString AltName { get; set;}
+		[Ordinal(1)] [RED("altName")] 		public LocalizedString AltName { get; set;}
 
-		[Ordinal(0)] [RED("factID")] 		public CString FactID { get; set;}
+		[Ordinal(2)] [RED("factID")] 		public CString FactID { get; set;}
 
 		public CAlternativeDisplayName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

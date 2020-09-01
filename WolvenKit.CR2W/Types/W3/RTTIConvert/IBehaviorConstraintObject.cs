@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehaviorConstraintObject : CObject
 	{
-		[Ordinal(0)] [RED("localPositionOffset")] 		public Vector LocalPositionOffset { get; set;}
+		[Ordinal(1)] [RED("localPositionOffset")] 		public Vector LocalPositionOffset { get; set;}
 
-		[Ordinal(0)] [RED("localRotationOffset")] 		public EulerAngles LocalRotationOffset { get; set;}
+		[Ordinal(2)] [RED("localRotationOffset")] 		public EulerAngles LocalRotationOffset { get; set;}
 
 		public IBehaviorConstraintObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

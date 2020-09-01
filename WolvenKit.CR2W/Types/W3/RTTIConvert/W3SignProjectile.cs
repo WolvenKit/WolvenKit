@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SignProjectile : CProjectileTrajectory
 	{
-		[Ordinal(0)] [RED("("projData")] 		public SSignProjectile ProjData { get; set;}
+		[Ordinal(1)] [RED("("projData")] 		public SSignProjectile ProjData { get; set;}
 
-		[Ordinal(0)] [RED("("owner")] 		public CHandle<W3SignOwner> Owner { get; set;}
+		[Ordinal(2)] [RED("("owner")] 		public CHandle<W3SignOwner> Owner { get; set;}
 
-		[Ordinal(0)] [RED("("action")] 		public CHandle<W3DamageAction> Action { get; set;}
+		[Ordinal(3)] [RED("("action")] 		public CHandle<W3DamageAction> Action { get; set;}
 
-		[Ordinal(0)] [RED("("signSkill")] 		public CEnum<ESkill> SignSkill { get; set;}
+		[Ordinal(4)] [RED("("signSkill")] 		public CEnum<ESkill> SignSkill { get; set;}
 
-		[Ordinal(0)] [RED("("wantedTarget")] 		public CHandle<CGameplayEntity> WantedTarget { get; set;}
+		[Ordinal(5)] [RED("("wantedTarget")] 		public CHandle<CGameplayEntity> WantedTarget { get; set;}
 
-		[Ordinal(0)] [RED("("signEntity")] 		public CHandle<W3SignEntity> SignEntity { get; set;}
+		[Ordinal(6)] [RED("("signEntity")] 		public CHandle<W3SignEntity> SignEntity { get; set;}
 
-		[Ordinal(0)] [RED("("hitEntities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> HitEntities { get; set;}
+		[Ordinal(7)] [RED("("hitEntities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> HitEntities { get; set;}
 
-		[Ordinal(0)] [RED("("attackRange")] 		public CHandle<CAIAttackRange> AttackRange { get; set;}
+		[Ordinal(8)] [RED("("attackRange")] 		public CHandle<CAIAttackRange> AttackRange { get; set;}
 
-		[Ordinal(0)] [RED("("isReusable")] 		public CBool IsReusable { get; set;}
+		[Ordinal(9)] [RED("("isReusable")] 		public CBool IsReusable { get; set;}
 
 		public W3SignProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

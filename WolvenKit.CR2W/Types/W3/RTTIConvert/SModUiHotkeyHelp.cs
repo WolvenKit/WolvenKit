@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SModUiHotkeyHelp : CVariable
 	{
-		[Ordinal(0)] [RED("("action")] 		public CName Action { get; set;}
+		[Ordinal(1)] [RED("("action")] 		public CName Action { get; set;}
 
-		[Ordinal(0)] [RED("("help")] 		public CString Help { get; set;}
+		[Ordinal(2)] [RED("("help")] 		public CString Help { get; set;}
 
 		public SModUiHotkeyHelp(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

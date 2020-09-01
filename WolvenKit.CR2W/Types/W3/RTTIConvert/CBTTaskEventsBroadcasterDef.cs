@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskEventsBroadcasterDef : IBehTreeReactionTaskDefinition
 	{
-		[Ordinal(0)] [RED("("broadcastedEvents", 2,0)] 		public CArray<SReactionEventData> BroadcastedEvents { get; set;}
+		[Ordinal(1)] [RED("("broadcastedEvents", 2,0)] 		public CArray<SReactionEventData> BroadcastedEvents { get; set;}
 
-		[Ordinal(0)] [RED("("rescanInterval")] 		public CFloat RescanInterval { get; set;}
+		[Ordinal(2)] [RED("("rescanInterval")] 		public CFloat RescanInterval { get; set;}
 
-		[Ordinal(0)] [RED("("minIntervalBetweenScenes")] 		public CFloat MinIntervalBetweenScenes { get; set;}
+		[Ordinal(3)] [RED("("minIntervalBetweenScenes")] 		public CFloat MinIntervalBetweenScenes { get; set;}
 
 		public CBTTaskEventsBroadcasterDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

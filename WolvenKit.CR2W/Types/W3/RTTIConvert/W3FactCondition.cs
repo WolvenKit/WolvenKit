@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FactCondition : ISpawnScriptCondition
 	{
-		[Ordinal(0)] [RED("("fact")] 		public CString Fact { get; set;}
+		[Ordinal(1)] [RED("("fact")] 		public CString Fact { get; set;}
 
-		[Ordinal(0)] [RED("("factValue")] 		public CInt32 FactValue { get; set;}
+		[Ordinal(2)] [RED("("factValue")] 		public CInt32 FactValue { get; set;}
 
-		[Ordinal(0)] [RED("("operator")] 		public CEnum<EOperator> Operator { get; set;}
+		[Ordinal(3)] [RED("("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
-		[Ordinal(0)] [RED("("queryFactVal")] 		public CInt32 QueryFactVal { get; set;}
+		[Ordinal(4)] [RED("("queryFactVal")] 		public CInt32 QueryFactVal { get; set;}
 
 		public W3FactCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

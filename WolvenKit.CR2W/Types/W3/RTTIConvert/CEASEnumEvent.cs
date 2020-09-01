@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEASEnumEvent : CExtAnimScriptDurationEvent
 	{
-		[Ordinal(0)] [RED("("enumVariant")] 		public SEnumVariant EnumVariant { get; set;}
+		[Ordinal(1)] [RED("("enumVariant")] 		public SEnumVariant EnumVariant { get; set;}
 
 		public CEASEnumEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

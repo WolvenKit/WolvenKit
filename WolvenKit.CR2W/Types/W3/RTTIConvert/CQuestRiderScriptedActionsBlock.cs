@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestRiderScriptedActionsBlock : CBaseQuestScriptedActionsBlock
 	{
-		[Ordinal(0)] [RED("ai")] 		public CHandle<IRiderActionTree> Ai { get; set;}
+		[Ordinal(1)] [RED("ai")] 		public CHandle<IRiderActionTree> Ai { get; set;}
 
 		public CQuestRiderScriptedActionsBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

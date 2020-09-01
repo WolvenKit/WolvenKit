@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestReactionCondition : IQuestCondition
 	{
-		[Ordinal(0)] [RED("fieldName")] 		public CName FieldName { get; set;}
+		[Ordinal(1)] [RED("fieldName")] 		public CName FieldName { get; set;}
 
-		[Ordinal(0)] [RED("actorsTags")] 		public TagList ActorsTags { get; set;}
+		[Ordinal(2)] [RED("actorsTags")] 		public TagList ActorsTags { get; set;}
 
 		public CQuestReactionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskJumpBack : CBTTaskPlayAnimationEventDecorator
 	{
-		[Ordinal(0)] [RED("chance")] 		public CInt32 Chance { get; set;}
+		[Ordinal(1)] [RED("chance")] 		public CInt32 Chance { get; set;}
 
-		[Ordinal(0)] [RED("checkRotation")] 		public CBool CheckRotation { get; set;}
+		[Ordinal(2)] [RED("checkRotation")] 		public CBool CheckRotation { get; set;}
 
-		[Ordinal(0)] [RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(3)] [RED("distance")] 		public CFloat Distance { get; set;}
 
 		public CBTTaskJumpBack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

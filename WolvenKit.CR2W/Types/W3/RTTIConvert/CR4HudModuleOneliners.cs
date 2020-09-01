@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleOneliners : CR4HudModuleBase
 	{
-		[Ordinal(0)] [RED("("m_hud")] 		public CHandle<CR4ScriptedHud> M_hud { get; set;}
+		[Ordinal(1)] [RED("("m_hud")] 		public CHandle<CR4ScriptedHud> M_hud { get; set;}
 
-		[Ordinal(0)] [RED("("m_fxCreateOnelinerSFF")] 		public CHandle<CScriptedFlashFunction> M_fxCreateOnelinerSFF { get; set;}
+		[Ordinal(2)] [RED("("m_fxCreateOnelinerSFF")] 		public CHandle<CScriptedFlashFunction> M_fxCreateOnelinerSFF { get; set;}
 
-		[Ordinal(0)] [RED("("m_fxRemoveOnelinerSFF")] 		public CHandle<CScriptedFlashFunction> M_fxRemoveOnelinerSFF { get; set;}
+		[Ordinal(3)] [RED("("m_fxRemoveOnelinerSFF")] 		public CHandle<CScriptedFlashFunction> M_fxRemoveOnelinerSFF { get; set;}
 
-		[Ordinal(0)] [RED("("m_flashModule")] 		public CHandle<CScriptedFlashSprite> M_flashModule { get; set;}
+		[Ordinal(4)] [RED("("m_flashModule")] 		public CHandle<CScriptedFlashSprite> M_flashModule { get; set;}
 
-		[Ordinal(0)] [RED("("m_oneliners", 2,0)] 		public CArray<OnelinerDefinition> M_oneliners { get; set;}
+		[Ordinal(5)] [RED("("m_oneliners", 2,0)] 		public CArray<OnelinerDefinition> M_oneliners { get; set;}
 
-		[Ordinal(0)] [RED("("VISIBILITY_DISTANCE_SQUARED")] 		public CFloat VISIBILITY_DISTANCE_SQUARED { get; set;}
+		[Ordinal(6)] [RED("("VISIBILITY_DISTANCE_SQUARED")] 		public CFloat VISIBILITY_DISTANCE_SQUARED { get; set;}
 
 		public CR4HudModuleOneliners(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

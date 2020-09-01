@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventWeatherChange : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("weatherName")] 		public CName WeatherName { get; set;}
+		[Ordinal(1)] [RED("weatherName")] 		public CName WeatherName { get; set;}
 
-		[Ordinal(0)] [RED("blendTime")] 		public CFloat BlendTime { get; set;}
+		[Ordinal(2)] [RED("blendTime")] 		public CFloat BlendTime { get; set;}
 
 		public CStorySceneEventWeatherChange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

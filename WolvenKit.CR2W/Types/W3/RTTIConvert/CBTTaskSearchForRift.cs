@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSearchForRift : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("selectedObject")] 		public CHandle<CNode> SelectedObject { get; set;}
+		[Ordinal(1)] [RED("("selectedObject")] 		public CHandle<CNode> SelectedObject { get; set;}
 
-		[Ordinal(0)] [RED("("range")] 		public CFloat Range { get; set;}
+		[Ordinal(2)] [RED("("range")] 		public CFloat Range { get; set;}
 
-		[Ordinal(0)] [RED("("searchOnlyForActiveRifts")] 		public CBool SearchOnlyForActiveRifts { get; set;}
+		[Ordinal(3)] [RED("("searchOnlyForActiveRifts")] 		public CBool SearchOnlyForActiveRifts { get; set;}
 
 		public CBTTaskSearchForRift(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

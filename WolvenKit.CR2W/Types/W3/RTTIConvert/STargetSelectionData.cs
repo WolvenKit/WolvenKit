@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class STargetSelectionData : CVariable
 	{
-		[Ordinal(0)] [RED("("sourcePosition")] 		public Vector SourcePosition { get; set;}
+		[Ordinal(1)] [RED("("sourcePosition")] 		public Vector SourcePosition { get; set;}
 
-		[Ordinal(0)] [RED("("headingVector")] 		public Vector HeadingVector { get; set;}
+		[Ordinal(2)] [RED("("headingVector")] 		public Vector HeadingVector { get; set;}
 
-		[Ordinal(0)] [RED("("closeDistance")] 		public CFloat CloseDistance { get; set;}
+		[Ordinal(3)] [RED("("closeDistance")] 		public CFloat CloseDistance { get; set;}
 
-		[Ordinal(0)] [RED("("softLockDistance")] 		public CFloat SoftLockDistance { get; set;}
+		[Ordinal(4)] [RED("("softLockDistance")] 		public CFloat SoftLockDistance { get; set;}
 
 		public STargetSelectionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

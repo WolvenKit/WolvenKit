@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SummonedEntityComponent : CScriptedComponent
 	{
-		[Ordinal(0)] [RED("("m_Summoner")] 		public CHandle<CActor> M_Summoner { get; set;}
+		[Ordinal(1)] [RED("("m_Summoner")] 		public CHandle<CActor> M_Summoner { get; set;}
 
-		[Ordinal(0)] [RED("("m_SummonedTime")] 		public CFloat M_SummonedTime { get; set;}
+		[Ordinal(2)] [RED("("m_SummonedTime")] 		public CFloat M_SummonedTime { get; set;}
 
-		[Ordinal(0)] [RED("("shouldUseSummonerGuardArea")] 		public CBool ShouldUseSummonerGuardArea { get; set;}
+		[Ordinal(3)] [RED("("shouldUseSummonerGuardArea")] 		public CBool ShouldUseSummonerGuardArea { get; set;}
 
-		[Ordinal(0)] [RED("("killOnSummonersDeath")] 		public CBool KillOnSummonersDeath { get; set;}
+		[Ordinal(4)] [RED("("killOnSummonersDeath")] 		public CBool KillOnSummonersDeath { get; set;}
 
 		public W3SummonedEntityComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class STutorialSavedSkill : CVariable
 	{
-		[Ordinal(0)] [RED("("skillSlotID")] 		public CInt32 SkillSlotID { get; set;}
+		[Ordinal(1)] [RED("("skillSlotID")] 		public CInt32 SkillSlotID { get; set;}
 
-		[Ordinal(0)] [RED("("skillType")] 		public CEnum<ESkill> SkillType { get; set;}
+		[Ordinal(2)] [RED("("skillType")] 		public CEnum<ESkill> SkillType { get; set;}
 
 		public STutorialSavedSkill(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

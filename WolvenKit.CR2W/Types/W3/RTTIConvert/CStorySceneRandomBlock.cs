@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneRandomBlock : CStorySceneGraphBlock
 	{
-		[Ordinal(0)] [RED("controlPart")] 		public CPtr<CStorySceneRandomizer> ControlPart { get; set;}
+		[Ordinal(1)] [RED("controlPart")] 		public CPtr<CStorySceneRandomizer> ControlPart { get; set;}
 
 		public CStorySceneRandomBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

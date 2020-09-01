@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphConvertSyncInfoIntoCyclesNode : CBehaviorGraphBaseNode
 	{
-		[Ordinal(0)] [RED("("numCycles")] 		public CInt32 NumCycles { get; set;}
+		[Ordinal(1)] [RED("("numCycles")] 		public CInt32 NumCycles { get; set;}
 
 		public CBehaviorGraphConvertSyncInfoIntoCyclesNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMenuButtonDef : CVariable
 	{
-		[Ordinal(0)] [RED("("NavigationCode")] 		public CString NavigationCode { get; set;}
+		[Ordinal(1)] [RED("("NavigationCode")] 		public CString NavigationCode { get; set;}
 
-		[Ordinal(0)] [RED("("LocalisationKey")] 		public CString LocalisationKey { get; set;}
+		[Ordinal(2)] [RED("("LocalisationKey")] 		public CString LocalisationKey { get; set;}
 
-		[Ordinal(0)] [RED("("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(3)] [RED("("enabled")] 		public CBool Enabled { get; set;}
 
 		public SMenuButtonDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

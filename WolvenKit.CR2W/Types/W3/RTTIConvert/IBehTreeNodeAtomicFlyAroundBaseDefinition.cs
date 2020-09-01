@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeNodeAtomicFlyAroundBaseDefinition : IBehTreeNodeAtomicFlightDefinition
 	{
-		[Ordinal(0)] [RED("stayInGuardArea")] 		public CBool StayInGuardArea { get; set;}
+		[Ordinal(1)] [RED("stayInGuardArea")] 		public CBool StayInGuardArea { get; set;}
 
-		[Ordinal(0)] [RED("distance")] 		public CBehTreeValFloat Distance { get; set;}
+		[Ordinal(2)] [RED("distance")] 		public CBehTreeValFloat Distance { get; set;}
 
-		[Ordinal(0)] [RED("distanceMax")] 		public CBehTreeValFloat DistanceMax { get; set;}
+		[Ordinal(3)] [RED("distanceMax")] 		public CBehTreeValFloat DistanceMax { get; set;}
 
-		[Ordinal(0)] [RED("height")] 		public CBehTreeValFloat Height { get; set;}
+		[Ordinal(4)] [RED("height")] 		public CBehTreeValFloat Height { get; set;}
 
-		[Ordinal(0)] [RED("heightMax")] 		public CBehTreeValFloat HeightMax { get; set;}
+		[Ordinal(5)] [RED("heightMax")] 		public CBehTreeValFloat HeightMax { get; set;}
 
-		[Ordinal(0)] [RED("randomizationDelay")] 		public CBehTreeValFloat RandomizationDelay { get; set;}
+		[Ordinal(6)] [RED("randomizationDelay")] 		public CBehTreeValFloat RandomizationDelay { get; set;}
 
-		[Ordinal(0)] [RED("pickTargetDistance")] 		public CBehTreeValFloat PickTargetDistance { get; set;}
+		[Ordinal(7)] [RED("pickTargetDistance")] 		public CBehTreeValFloat PickTargetDistance { get; set;}
 
 		public IBehTreeNodeAtomicFlyAroundBaseDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

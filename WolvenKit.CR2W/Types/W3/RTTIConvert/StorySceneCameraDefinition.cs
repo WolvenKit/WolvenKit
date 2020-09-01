@@ -10,41 +10,41 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class StorySceneCameraDefinition : CVariable
 	{
-		[Ordinal(0)] [RED("("cameraName")] 		public CName CameraName { get; set;}
+		[Ordinal(1)] [RED("("cameraName")] 		public CName CameraName { get; set;}
 
-		[Ordinal(0)] [RED("("cameraTransform")] 		public EngineTransform CameraTransform { get; set;}
+		[Ordinal(2)] [RED("("cameraTransform")] 		public EngineTransform CameraTransform { get; set;}
 
-		[Ordinal(0)] [RED("("cameraZoom")] 		public CFloat CameraZoom { get; set;}
+		[Ordinal(3)] [RED("("cameraZoom")] 		public CFloat CameraZoom { get; set;}
 
-		[Ordinal(0)] [RED("("cameraFov")] 		public CFloat CameraFov { get; set;}
+		[Ordinal(4)] [RED("("cameraFov")] 		public CFloat CameraFov { get; set;}
 
-		[Ordinal(0)] [RED("("enableCameraNoise")] 		public CBool EnableCameraNoise { get; set;}
+		[Ordinal(5)] [RED("("enableCameraNoise")] 		public CBool EnableCameraNoise { get; set;}
 
-		[Ordinal(0)] [RED("("dofFocusDistFar")] 		public CFloat DofFocusDistFar { get; set;}
+		[Ordinal(6)] [RED("("dofFocusDistFar")] 		public CFloat DofFocusDistFar { get; set;}
 
-		[Ordinal(0)] [RED("("dofBlurDistFar")] 		public CFloat DofBlurDistFar { get; set;}
+		[Ordinal(7)] [RED("("dofBlurDistFar")] 		public CFloat DofBlurDistFar { get; set;}
 
-		[Ordinal(0)] [RED("("dofIntensity")] 		public CFloat DofIntensity { get; set;}
+		[Ordinal(8)] [RED("("dofIntensity")] 		public CFloat DofIntensity { get; set;}
 
-		[Ordinal(0)] [RED("("dofFocusDistNear")] 		public CFloat DofFocusDistNear { get; set;}
+		[Ordinal(9)] [RED("("dofFocusDistNear")] 		public CFloat DofFocusDistNear { get; set;}
 
-		[Ordinal(0)] [RED("("dofBlurDistNear")] 		public CFloat DofBlurDistNear { get; set;}
+		[Ordinal(10)] [RED("("dofBlurDistNear")] 		public CFloat DofBlurDistNear { get; set;}
 
-		[Ordinal(0)] [RED("("sourceSlotName")] 		public CName SourceSlotName { get; set;}
+		[Ordinal(11)] [RED("("sourceSlotName")] 		public CName SourceSlotName { get; set;}
 
-		[Ordinal(0)] [RED("("targetSlotName")] 		public CName TargetSlotName { get; set;}
+		[Ordinal(12)] [RED("("targetSlotName")] 		public CName TargetSlotName { get; set;}
 
-		[Ordinal(0)] [RED("("sourceEyesHeigth")] 		public CFloat SourceEyesHeigth { get; set;}
+		[Ordinal(13)] [RED("("sourceEyesHeigth")] 		public CFloat SourceEyesHeigth { get; set;}
 
-		[Ordinal(0)] [RED("("targetEyesLS")] 		public Vector TargetEyesLS { get; set;}
+		[Ordinal(14)] [RED("("targetEyesLS")] 		public Vector TargetEyesLS { get; set;}
 
-		[Ordinal(0)] [RED("("dof")] 		public ApertureDofParams Dof { get; set;}
+		[Ordinal(15)] [RED("("dof")] 		public ApertureDofParams Dof { get; set;}
 
-		[Ordinal(0)] [RED("("bokehDofParams")] 		public SBokehDofParams BokehDofParams { get; set;}
+		[Ordinal(16)] [RED("("bokehDofParams")] 		public SBokehDofParams BokehDofParams { get; set;}
 
-		[Ordinal(0)] [RED("("genParam")] 		public CEventGeneratorCameraParams GenParam { get; set;}
+		[Ordinal(17)] [RED("("genParam")] 		public CEventGeneratorCameraParams GenParam { get; set;}
 
-		[Ordinal(0)] [RED("("cameraAdjustVersion")] 		public CUInt8 CameraAdjustVersion { get; set;}
+		[Ordinal(18)] [RED("("cameraAdjustVersion")] 		public CUInt8 CameraAdjustVersion { get; set;}
 
 		public StorySceneCameraDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

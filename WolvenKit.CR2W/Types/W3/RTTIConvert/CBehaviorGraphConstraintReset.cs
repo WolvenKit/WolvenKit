@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphConstraintReset : CBehaviorGraphBaseNode
 	{
-		[Ordinal(0)] [RED("("bone")] 		public CString Bone { get; set;}
+		[Ordinal(1)] [RED("("bone")] 		public CString Bone { get; set;}
 
-		[Ordinal(0)] [RED("("translation")] 		public CBool Translation { get; set;}
+		[Ordinal(2)] [RED("("translation")] 		public CBool Translation { get; set;}
 
-		[Ordinal(0)] [RED("("rotation")] 		public CBool Rotation { get; set;}
+		[Ordinal(3)] [RED("("rotation")] 		public CBool Rotation { get; set;}
 
-		[Ordinal(0)] [RED("("scale")] 		public CBool Scale { get; set;}
+		[Ordinal(4)] [RED("("scale")] 		public CBool Scale { get; set;}
 
-		[Ordinal(0)] [RED("("cachedControlValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlValueNode { get; set;}
+		[Ordinal(5)] [RED("("cachedControlValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlValueNode { get; set;}
 
 		public CBehaviorGraphConstraintReset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

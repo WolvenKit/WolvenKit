@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeReactionManager : CObject
 	{
-		[Ordinal(0)] [RED("reactionScens", 2,0)] 		public CArray<CHandle<CReactionScene>> ReactionScens { get; set;}
+		[Ordinal(1)] [RED("reactionScens", 2,0)] 		public CArray<CHandle<CReactionScene>> ReactionScens { get; set;}
 
-		[Ordinal(0)] [RED("reactionEvents", 2,0)] 		public CArray<CPtr<CBehTreeReactionEventData>> ReactionEvents { get; set;}
+		[Ordinal(2)] [RED("reactionEvents", 2,0)] 		public CArray<CPtr<CBehTreeReactionEventData>> ReactionEvents { get; set;}
 
 		public CBehTreeReactionManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

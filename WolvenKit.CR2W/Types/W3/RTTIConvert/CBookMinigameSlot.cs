@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBookMinigameSlot : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("bookMinigameManagerTag")] 		public CName BookMinigameManagerTag { get; set;}
+		[Ordinal(1)] [RED("bookMinigameManagerTag")] 		public CName BookMinigameManagerTag { get; set;}
 
-		[Ordinal(0)] [RED("correctBookId")] 		public CInt32 CorrectBookId { get; set;}
+		[Ordinal(2)] [RED("correctBookId")] 		public CInt32 CorrectBookId { get; set;}
 
-		[Ordinal(0)] [RED("currentBook")] 		public CHandle<CBookMinigameBook> CurrentBook { get; set;}
+		[Ordinal(3)] [RED("currentBook")] 		public CHandle<CBookMinigameBook> CurrentBook { get; set;}
 
-		[Ordinal(0)] [RED("bookMinigameManager")] 		public CHandle<CBooksMinigameManager> BookMinigameManager { get; set;}
+		[Ordinal(4)] [RED("bookMinigameManager")] 		public CHandle<CBooksMinigameManager> BookMinigameManager { get; set;}
 
 		public CBookMinigameSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneActorPosition : CVariable
 	{
-		[Ordinal(0)] [RED("("position")] 		public TagList Position { get; set;}
+		[Ordinal(1)] [RED("("position")] 		public TagList Position { get; set;}
 
-		[Ordinal(0)] [RED("("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(2)] [RED("("distance")] 		public CFloat Distance { get; set;}
 
-		[Ordinal(0)] [RED("("useRotation")] 		public CBool UseRotation { get; set;}
+		[Ordinal(3)] [RED("("useRotation")] 		public CBool UseRotation { get; set;}
 
-		[Ordinal(0)] [RED("("performAction")] 		public CEnum<EStoryScenePerformActionMode> PerformAction { get; set;}
+		[Ordinal(4)] [RED("("performAction")] 		public CEnum<EStoryScenePerformActionMode> PerformAction { get; set;}
 
 		public CStorySceneActorPosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

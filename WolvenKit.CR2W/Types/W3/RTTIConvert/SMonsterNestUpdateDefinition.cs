@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMonsterNestUpdateDefinition : CVariable
 	{
-		[Ordinal(0)] [RED("("isRebuilding")] 		public CBool IsRebuilding { get; set;}
+		[Ordinal(1)] [RED("("isRebuilding")] 		public CBool IsRebuilding { get; set;}
 
-		[Ordinal(0)] [RED("("defaultPhaseToActivate")] 		public CName DefaultPhaseToActivate { get; set;}
+		[Ordinal(2)] [RED("("defaultPhaseToActivate")] 		public CName DefaultPhaseToActivate { get; set;}
 
-		[Ordinal(0)] [RED("("bossPhaseToActivate")] 		public CName BossPhaseToActivate { get; set;}
+		[Ordinal(3)] [RED("("bossPhaseToActivate")] 		public CName BossPhaseToActivate { get; set;}
 
-		[Ordinal(0)] [RED("("hasBoss")] 		public CBool HasBoss { get; set;}
+		[Ordinal(4)] [RED("("hasBoss")] 		public CBool HasBoss { get; set;}
 
-		[Ordinal(0)] [RED("("bossSpawnDelay")] 		public CFloat BossSpawnDelay { get; set;}
+		[Ordinal(5)] [RED("("bossSpawnDelay")] 		public CFloat BossSpawnDelay { get; set;}
 
-		[Ordinal(0)] [RED("("nestRebuildSchedule")] 		public GameTimeWrapper NestRebuildSchedule { get; set;}
+		[Ordinal(6)] [RED("("nestRebuildSchedule")] 		public GameTimeWrapper NestRebuildSchedule { get; set;}
 
 		public SMonsterNestUpdateDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

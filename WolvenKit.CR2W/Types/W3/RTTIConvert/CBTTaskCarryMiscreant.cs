@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCarryMiscreant : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("attachmentBone")] 		public CName AttachmentBone { get; set;}
+		[Ordinal(1)] [RED("attachmentBone")] 		public CName AttachmentBone { get; set;}
 
-		[Ordinal(0)] [RED("miscreantName")] 		public CName MiscreantName { get; set;}
+		[Ordinal(2)] [RED("miscreantName")] 		public CName MiscreantName { get; set;}
 
-		[Ordinal(0)] [RED("miscreant")] 		public CHandle<CActor> Miscreant { get; set;}
+		[Ordinal(3)] [RED("miscreant")] 		public CHandle<CActor> Miscreant { get; set;}
 
 		public CBTTaskCarryMiscreant(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

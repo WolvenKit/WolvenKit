@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModConverter : CUnknownResource
 	{
-		[Ordinal(0)] [RED("("u8", 2,0)] 		public CByteArray U8 { get; set;}
+		[Ordinal(1)] [RED("("u8", 2,0)] 		public CByteArray U8 { get; set;}
 
 		public CModConverter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

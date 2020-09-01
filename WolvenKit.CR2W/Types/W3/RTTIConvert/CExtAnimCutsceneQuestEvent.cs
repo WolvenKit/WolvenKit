@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimCutsceneQuestEvent : CExtAnimEvent
 	{
-		[Ordinal(0)] [RED("("cutsceneName")] 		public CString CutsceneName { get; set;}
+		[Ordinal(1)] [RED("("cutsceneName")] 		public CString CutsceneName { get; set;}
 
 		public CExtAnimCutsceneQuestEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

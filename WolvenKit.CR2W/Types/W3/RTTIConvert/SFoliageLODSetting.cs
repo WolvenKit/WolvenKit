@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFoliageLODSetting : CVariable
 	{
-		[Ordinal(0)] [RED("("minTreeExtentPerLod", 7)] 		public CArrayFixedSize<CFloat> MinTreeExtentPerLod { get; set;}
+		[Ordinal(1)] [RED("("minTreeExtentPerLod", 7)] 		public CArrayFixedSize<CFloat> MinTreeExtentPerLod { get; set;}
 
 		public SFoliageLODSetting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

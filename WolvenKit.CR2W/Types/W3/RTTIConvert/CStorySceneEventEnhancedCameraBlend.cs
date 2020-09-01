@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventEnhancedCameraBlend : CStorySceneEventCurveBlend
 	{
-		[Ordinal(0)] [RED("("baseCameraDefinition")] 		public StorySceneCameraDefinition BaseCameraDefinition { get; set;}
+		[Ordinal(1)] [RED("("baseCameraDefinition")] 		public StorySceneCameraDefinition BaseCameraDefinition { get; set;}
 
 		public CStorySceneEventEnhancedCameraBlend(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

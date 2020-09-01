@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CollisionTrajectoryPart : CPhantomComponent
 	{
-		[Ordinal(0)] [RED("triggeredCollisions")] 		public CInt32 TriggeredCollisions { get; set;}
+		[Ordinal(1)] [RED("triggeredCollisions")] 		public CInt32 TriggeredCollisions { get; set;}
 
-		[Ordinal(0)] [RED("waterCollisions")] 		public CInt32 WaterCollisions { get; set;}
+		[Ordinal(2)] [RED("waterCollisions")] 		public CInt32 WaterCollisions { get; set;}
 
-		[Ordinal(0)] [RED("ownerTrajectory")] 		public CHandle<CollisionTrajectory> OwnerTrajectory { get; set;}
+		[Ordinal(3)] [RED("ownerTrajectory")] 		public CHandle<CollisionTrajectory> OwnerTrajectory { get; set;}
 
-		[Ordinal(0)] [RED("part")] 		public CEnum<ECollisionTrajectoryPart> Part { get; set;}
+		[Ordinal(4)] [RED("part")] 		public CEnum<ECollisionTrajectoryPart> Part { get; set;}
 
-		[Ordinal(0)] [RED("waterUpPosCheckSlotName")] 		public CName WaterUpPosCheckSlotName { get; set;}
+		[Ordinal(5)] [RED("waterUpPosCheckSlotName")] 		public CName WaterUpPosCheckSlotName { get; set;}
 
-		[Ordinal(0)] [RED("waterDownPosCheckSlotName")] 		public CName WaterDownPosCheckSlotName { get; set;}
+		[Ordinal(6)] [RED("waterDownPosCheckSlotName")] 		public CName WaterDownPosCheckSlotName { get; set;}
 
 		public CollisionTrajectoryPart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

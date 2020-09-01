@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMeshCookedData : CVariable
 	{
-		[Ordinal(0)] [RED("("collisionInitPositionOffset")] 		public Vector CollisionInitPositionOffset { get; set;}
+		[Ordinal(1)] [RED("("collisionInitPositionOffset")] 		public Vector CollisionInitPositionOffset { get; set;}
 
-		[Ordinal(0)] [RED("("dropOffset")] 		public Vector DropOffset { get; set;}
+		[Ordinal(2)] [RED("("dropOffset")] 		public Vector DropOffset { get; set;}
 
-		[Ordinal(0)] [RED("("bonePositions", 46,0)] 		public CArray<Vector> BonePositions { get; set;}
+		[Ordinal(3)] [RED("("bonePositions", 46,0)] 		public CArray<Vector> BonePositions { get; set;}
 
-		[Ordinal(0)] [RED("("renderLODs", 46,0)] 		public CArray<CFloat> RenderLODs { get; set;}
+		[Ordinal(4)] [RED("("renderLODs", 46,0)] 		public CArray<CFloat> RenderLODs { get; set;}
 
-		[Ordinal(0)] [RED("("renderChunks", 46,0)] 		public CByteArray RenderChunks { get; set;}
+		[Ordinal(5)] [RED("("renderChunks", 46,0)] 		public CByteArray RenderChunks { get; set;}
 
-		[Ordinal(0)] [RED("("renderBuffer")] 		public DeferredDataBuffer RenderBuffer { get; set;}
+		[Ordinal(6)] [RED("("renderBuffer")] 		public DeferredDataBuffer RenderBuffer { get; set;}
 
-		[Ordinal(0)] [RED("("quantizationScale")] 		public Vector QuantizationScale { get; set;}
+		[Ordinal(7)] [RED("("quantizationScale")] 		public Vector QuantizationScale { get; set;}
 
-		[Ordinal(0)] [RED("("quantizationOffset")] 		public Vector QuantizationOffset { get; set;}
+		[Ordinal(8)] [RED("("quantizationOffset")] 		public Vector QuantizationOffset { get; set;}
 
-		[Ordinal(0)] [RED("("vertexBufferSize")] 		public CUInt32 VertexBufferSize { get; set;}
+		[Ordinal(9)] [RED("("vertexBufferSize")] 		public CUInt32 VertexBufferSize { get; set;}
 
-		[Ordinal(0)] [RED("("indexBufferSize")] 		public CUInt32 IndexBufferSize { get; set;}
+		[Ordinal(10)] [RED("("indexBufferSize")] 		public CUInt32 IndexBufferSize { get; set;}
 
-		[Ordinal(0)] [RED("("indexBufferOffset")] 		public CUInt32 IndexBufferOffset { get; set;}
+		[Ordinal(11)] [RED("("indexBufferOffset")] 		public CUInt32 IndexBufferOffset { get; set;}
 
 		public SMeshCookedData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

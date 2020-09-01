@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSkeletalAnimationTrajectoryTrackParam : ISkeletalAnimationSetEntryParam
 	{
-		[Ordinal(0)] [RED("editorOnly")] 		public CBool EditorOnly { get; set;}
+		[Ordinal(1)] [RED("editorOnly")] 		public CBool EditorOnly { get; set;}
 
-		[Ordinal(0)] [RED("names", 2,0)] 		public CArray<CName> Names { get; set;}
+		[Ordinal(2)] [RED("names", 2,0)] 		public CArray<CName> Names { get; set;}
 
-		[Ordinal(0)] [RED("datas", 2,0)] 		public CArray<CArray<Vector>> Datas { get; set;}
+		[Ordinal(3)] [RED("datas", 2,0)] 		public CArray<CArray<Vector>> Datas { get; set;}
 
 		public CSkeletalAnimationTrajectoryTrackParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

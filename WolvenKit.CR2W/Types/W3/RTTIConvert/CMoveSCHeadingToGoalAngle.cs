@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCHeadingToGoalAngle : IMoveSteeringCondition
 	{
-		[Ordinal(0)] [RED("acceptableDiff")] 		public CFloat AcceptableDiff { get; set;}
+		[Ordinal(1)] [RED("acceptableDiff")] 		public CFloat AcceptableDiff { get; set;}
 
 		public CMoveSCHeadingToGoalAngle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

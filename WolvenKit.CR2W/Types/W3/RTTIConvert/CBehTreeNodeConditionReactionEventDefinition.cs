@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionReactionEventDefinition : CBehTreeNodeConditionDefinition
 	{
-		[Ordinal(0)] [RED("eventName")] 		public CBehTreeValCName EventName { get; set;}
+		[Ordinal(1)] [RED("eventName")] 		public CBehTreeValCName EventName { get; set;}
 
-		[Ordinal(0)] [RED("cooldownDistance")] 		public CBehTreeValFloat CooldownDistance { get; set;}
+		[Ordinal(2)] [RED("cooldownDistance")] 		public CBehTreeValFloat CooldownDistance { get; set;}
 
-		[Ordinal(0)] [RED("cooldownTimeout")] 		public CBehTreeValFloat CooldownTimeout { get; set;}
+		[Ordinal(3)] [RED("cooldownTimeout")] 		public CBehTreeValFloat CooldownTimeout { get; set;}
 
-		[Ordinal(0)] [RED("dontSetActionTargetEdit")] 		public CBehTreeValBool DontSetActionTargetEdit { get; set;}
+		[Ordinal(4)] [RED("dontSetActionTargetEdit")] 		public CBehTreeValBool DontSetActionTargetEdit { get; set;}
 
 		public CBehTreeNodeConditionReactionEventDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

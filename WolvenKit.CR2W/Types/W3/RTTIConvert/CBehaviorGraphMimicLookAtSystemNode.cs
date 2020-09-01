@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMimicLookAtSystemNode : CBehaviorGraphBaseMimicNode
 	{
-		[Ordinal(0)] [RED("("cachedTargetNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetNode { get; set;}
+		[Ordinal(1)] [RED("("cachedTargetNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetNode { get; set;}
 
-		[Ordinal(0)] [RED("("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
+		[Ordinal(2)] [RED("("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
 
-		[Ordinal(0)] [RED("("cachedLevelVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedLevelVariableNode { get; set;}
+		[Ordinal(3)] [RED("("cachedLevelVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedLevelVariableNode { get; set;}
 
-		[Ordinal(0)] [RED("("eyeHorLeftTrack")] 		public CString EyeHorLeftTrack { get; set;}
+		[Ordinal(4)] [RED("("eyeHorLeftTrack")] 		public CString EyeHorLeftTrack { get; set;}
 
-		[Ordinal(0)] [RED("("eyeVerLeftTrack")] 		public CString EyeVerLeftTrack { get; set;}
+		[Ordinal(5)] [RED("("eyeVerLeftTrack")] 		public CString EyeVerLeftTrack { get; set;}
 
-		[Ordinal(0)] [RED("("eyeHorRightTrack")] 		public CString EyeHorRightTrack { get; set;}
+		[Ordinal(6)] [RED("("eyeHorRightTrack")] 		public CString EyeHorRightTrack { get; set;}
 
-		[Ordinal(0)] [RED("("eyeVerRightTrack")] 		public CString EyeVerRightTrack { get; set;}
+		[Ordinal(7)] [RED("("eyeVerRightTrack")] 		public CString EyeVerRightTrack { get; set;}
 
-		[Ordinal(0)] [RED("("eyeLeftPlacerBone")] 		public CString EyeLeftPlacerBone { get; set;}
+		[Ordinal(8)] [RED("("eyeLeftPlacerBone")] 		public CString EyeLeftPlacerBone { get; set;}
 
-		[Ordinal(0)] [RED("("eyeRightPlacerBone")] 		public CString EyeRightPlacerBone { get; set;}
+		[Ordinal(9)] [RED("("eyeRightPlacerBone")] 		public CString EyeRightPlacerBone { get; set;}
 
-		[Ordinal(0)] [RED("("eyeHorMax")] 		public CFloat EyeHorMax { get; set;}
+		[Ordinal(10)] [RED("("eyeHorMax")] 		public CFloat EyeHorMax { get; set;}
 
-		[Ordinal(0)] [RED("("eyeVerMax")] 		public CFloat EyeVerMax { get; set;}
+		[Ordinal(11)] [RED("("eyeVerMax")] 		public CFloat EyeVerMax { get; set;}
 
-		[Ordinal(0)] [RED("("dampTime")] 		public CFloat DampTime { get; set;}
+		[Ordinal(12)] [RED("("dampTime")] 		public CFloat DampTime { get; set;}
 
-		[Ordinal(0)] [RED("("dampCurve")] 		public CPtr<CCurve> DampCurve { get; set;}
+		[Ordinal(13)] [RED("("dampCurve")] 		public CPtr<CCurve> DampCurve { get; set;}
 
 		public CBehaviorGraphMimicLookAtSystemNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CNotifyPlayerEnteredInteriorEvent : CHudEvent
 	{
-		[Ordinal(0)] [RED("areaPos")] 		public Vector AreaPos { get; set;}
+		[Ordinal(1)] [RED("areaPos")] 		public Vector AreaPos { get; set;}
 
-		[Ordinal(0)] [RED("areaYaw")] 		public CFloat AreaYaw { get; set;}
+		[Ordinal(2)] [RED("areaYaw")] 		public CFloat AreaYaw { get; set;}
 
-		[Ordinal(0)] [RED("texture")] 		public CString Texture { get; set;}
+		[Ordinal(3)] [RED("texture")] 		public CString Texture { get; set;}
 
 		public CNotifyPlayerEnteredInteriorEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

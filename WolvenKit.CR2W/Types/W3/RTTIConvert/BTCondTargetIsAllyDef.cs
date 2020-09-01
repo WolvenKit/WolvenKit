@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondTargetIsAllyDef : IBehTreeConditionalTaskDefinition
 	{
-		[Ordinal(0)] [RED("useNamedTarget")] 		public CBehTreeValCName UseNamedTarget { get; set;}
+		[Ordinal(1)] [RED("useNamedTarget")] 		public CBehTreeValCName UseNamedTarget { get; set;}
 
-		[Ordinal(0)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(2)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
-		[Ordinal(0)] [RED("saveTargetOnGameplayEvents", 2,0)] 		public CArray<CName> SaveTargetOnGameplayEvents { get; set;}
+		[Ordinal(3)] [RED("saveTargetOnGameplayEvents", 2,0)] 		public CArray<CName> SaveTargetOnGameplayEvents { get; set;}
 
 		public BTCondTargetIsAllyDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

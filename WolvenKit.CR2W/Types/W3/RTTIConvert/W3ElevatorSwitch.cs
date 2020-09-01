@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ElevatorSwitch : W3InteractionSwitch
 	{
-		[Ordinal(0)] [RED("("elevator")] 		public EntityHandle Elevator { get; set;}
+		[Ordinal(1)] [RED("("elevator")] 		public EntityHandle Elevator { get; set;}
 
-		[Ordinal(0)] [RED("("switchType")] 		public CEnum<EElevatorSwitchType> SwitchType { get; set;}
+		[Ordinal(2)] [RED("("switchType")] 		public CEnum<EElevatorSwitchType> SwitchType { get; set;}
 
-		[Ordinal(0)] [RED("("interactionComponent")] 		public CHandle<CInteractionComponent> InteractionComponent { get; set;}
+		[Ordinal(3)] [RED("("interactionComponent")] 		public CHandle<CInteractionComponent> InteractionComponent { get; set;}
 
-		[Ordinal(0)] [RED("("switchRegistered")] 		public CBool SwitchRegistered { get; set;}
+		[Ordinal(4)] [RED("("switchRegistered")] 		public CBool SwitchRegistered { get; set;}
 
 		public W3ElevatorSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

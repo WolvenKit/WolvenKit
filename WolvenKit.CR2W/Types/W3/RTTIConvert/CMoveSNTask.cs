@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSNTask : IMoveSteeringNode
 	{
-		[Ordinal(0)] [RED("task")] 		public CPtr<IMoveSteeringTask> Task { get; set;}
+		[Ordinal(1)] [RED("task")] 		public CPtr<IMoveSteeringTask> Task { get; set;}
 
 		public CMoveSNTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

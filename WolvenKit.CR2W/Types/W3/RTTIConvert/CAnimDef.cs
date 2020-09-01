@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimDef : CObject
 	{
-		[Ordinal(0)] [RED("animName")] 		public CName AnimName { get; set;}
+		[Ordinal(1)] [RED("animName")] 		public CName AnimName { get; set;}
 
-		[Ordinal(0)] [RED("parent")] 		public CPtr<CAnimDef> Parent { get; set;}
+		[Ordinal(2)] [RED("parent")] 		public CPtr<CAnimDef> Parent { get; set;}
 
-		[Ordinal(0)] [RED("shifts", 2,0)] 		public CArray<SAnimShift> Shifts { get; set;}
+		[Ordinal(3)] [RED("shifts", 2,0)] 		public CArray<SAnimShift> Shifts { get; set;}
 
-		[Ordinal(0)] [RED("totalTransform")] 		public CMatrix TotalTransform { get; set;}
+		[Ordinal(4)] [RED("totalTransform")] 		public CMatrix TotalTransform { get; set;}
 
-		[Ordinal(0)] [RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(5)] [RED("duration")] 		public CFloat Duration { get; set;}
 
 		public CAnimDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

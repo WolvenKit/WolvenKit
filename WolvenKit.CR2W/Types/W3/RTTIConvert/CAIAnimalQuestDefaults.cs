@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIAnimalQuestDefaults : CAIDefaults
 	{
-		[Ordinal(0)] [RED("combatTree")] 		public CHandle<CAICombatTree> CombatTree { get; set;}
+		[Ordinal(1)] [RED("combatTree")] 		public CHandle<CAICombatTree> CombatTree { get; set;}
 
-		[Ordinal(0)] [RED("idleTree")] 		public CHandle<CAIIdleTree> IdleTree { get; set;}
+		[Ordinal(2)] [RED("idleTree")] 		public CHandle<CAIIdleTree> IdleTree { get; set;}
 
-		[Ordinal(0)] [RED("deathTree")] 		public CHandle<CAIDeathTree> DeathTree { get; set;}
+		[Ordinal(3)] [RED("deathTree")] 		public CHandle<CAIDeathTree> DeathTree { get; set;}
 
 		public CAIAnimalQuestDefaults(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

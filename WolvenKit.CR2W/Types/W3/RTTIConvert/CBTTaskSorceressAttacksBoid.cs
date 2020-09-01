@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSorceressAttacksBoid : CBTTaskMagicMeleeAttack
 	{
-		[Ordinal(0)] [RED("("attackAngle")] 		public CFloat AttackAngle { get; set;}
+		[Ordinal(1)] [RED("("attackAngle")] 		public CFloat AttackAngle { get; set;}
 
-		[Ordinal(0)] [RED("("attackDist")] 		public CFloat AttackDist { get; set;}
+		[Ordinal(2)] [RED("("attackDist")] 		public CFloat AttackDist { get; set;}
 
 		public CBTTaskSorceressAttacksBoid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

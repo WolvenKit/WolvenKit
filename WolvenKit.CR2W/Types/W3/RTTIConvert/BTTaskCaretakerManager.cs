@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskCaretakerManager : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("drainTemplate")] 		public CHandle<CEntityTemplate> DrainTemplate { get; set;}
+		[Ordinal(1)] [RED("drainTemplate")] 		public CHandle<CEntityTemplate> DrainTemplate { get; set;}
 
-		[Ordinal(0)] [RED("recoverPercPerHit")] 		public CFloat RecoverPercPerHit { get; set;}
+		[Ordinal(2)] [RED("recoverPercPerHit")] 		public CFloat RecoverPercPerHit { get; set;}
 
-		[Ordinal(0)] [RED("shadesModifier")] 		public CFloat ShadesModifier { get; set;}
+		[Ordinal(3)] [RED("shadesModifier")] 		public CFloat ShadesModifier { get; set;}
 
-		[Ordinal(0)] [RED("m_Npc")] 		public CHandle<CNewNPC> M_Npc { get; set;}
+		[Ordinal(4)] [RED("m_Npc")] 		public CHandle<CNewNPC> M_Npc { get; set;}
 
-		[Ordinal(0)] [RED("m_HealthObjective")] 		public CFloat M_HealthObjective { get; set;}
+		[Ordinal(5)] [RED("m_HealthObjective")] 		public CFloat M_HealthObjective { get; set;}
 
-		[Ordinal(0)] [RED("m_DrainEffectEntity")] 		public CHandle<CEntity> M_DrainEffectEntity { get; set;}
+		[Ordinal(6)] [RED("m_DrainEffectEntity")] 		public CHandle<CEntity> M_DrainEffectEntity { get; set;}
 
-		[Ordinal(0)] [RED("m_SummonerComponent")] 		public CHandle<W3SummonerComponent> M_SummonerComponent { get; set;}
+		[Ordinal(7)] [RED("m_SummonerComponent")] 		public CHandle<W3SummonerComponent> M_SummonerComponent { get; set;}
 
-		[Ordinal(0)] [RED("m_RefreshTargetDelay")] 		public CFloat M_RefreshTargetDelay { get; set;}
+		[Ordinal(8)] [RED("m_RefreshTargetDelay")] 		public CFloat M_RefreshTargetDelay { get; set;}
 
 		public BTTaskCaretakerManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

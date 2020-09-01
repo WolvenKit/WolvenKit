@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskUpdateBehGraphVariablesDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("updateOnlyOnActivate")] 		public CBool UpdateOnlyOnActivate { get; set;}
+		[Ordinal(1)] [RED("updateOnlyOnActivate")] 		public CBool UpdateOnlyOnActivate { get; set;}
 
-		[Ordinal(0)] [RED("DistanceToTarget")] 		public CBool DistanceToTarget { get; set;}
+		[Ordinal(2)] [RED("DistanceToTarget")] 		public CBool DistanceToTarget { get; set;}
 
-		[Ordinal(0)] [RED("AngleToTarget")] 		public CBool AngleToTarget { get; set;}
+		[Ordinal(3)] [RED("AngleToTarget")] 		public CBool AngleToTarget { get; set;}
 
-		[Ordinal(0)] [RED("TargetIsOnGround")] 		public CBool TargetIsOnGround { get; set;}
+		[Ordinal(4)] [RED("TargetIsOnGround")] 		public CBool TargetIsOnGround { get; set;}
 
-		[Ordinal(0)] [RED("predictionDelay")] 		public CFloat PredictionDelay { get; set;}
+		[Ordinal(5)] [RED("predictionDelay")] 		public CFloat PredictionDelay { get; set;}
 
-		[Ordinal(0)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(6)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
 		public CBTTaskUpdateBehGraphVariablesDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

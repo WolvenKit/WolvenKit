@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3HasItemByCategoryCondition : ISpawnScriptCondition
 	{
-		[Ordinal(0)] [RED("("itemCategory")] 		public CName ItemCategory { get; set;}
+		[Ordinal(1)] [RED("("itemCategory")] 		public CName ItemCategory { get; set;}
 
-		[Ordinal(0)] [RED("("actorTag")] 		public CName ActorTag { get; set;}
+		[Ordinal(2)] [RED("("actorTag")] 		public CName ActorTag { get; set;}
 
 		public W3HasItemByCategoryCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

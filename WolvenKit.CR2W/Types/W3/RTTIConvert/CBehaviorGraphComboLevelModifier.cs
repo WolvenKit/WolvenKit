@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphComboLevelModifier : IBehaviorGraphComboModifier
 	{
-		[Ordinal(0)] [RED("("level")] 		public CUInt32 Level { get; set;}
+		[Ordinal(1)] [RED("("level")] 		public CUInt32 Level { get; set;}
 
 		public CBehaviorGraphComboLevelModifier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

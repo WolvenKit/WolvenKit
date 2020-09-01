@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimSkeletalDangleConstraint : IAnimDangleConstraint
 	{
-		[Ordinal(0)] [RED("skeleton")] 		public CHandle<CSkeleton> Skeleton { get; set;}
+		[Ordinal(1)] [RED("skeleton")] 		public CHandle<CSkeleton> Skeleton { get; set;}
 
-		[Ordinal(0)] [RED("dispSkeleton")] 		public CBool DispSkeleton { get; set;}
+		[Ordinal(2)] [RED("dispSkeleton")] 		public CBool DispSkeleton { get; set;}
 
-		[Ordinal(0)] [RED("dispBoneNames")] 		public CBool DispBoneNames { get; set;}
+		[Ordinal(3)] [RED("dispBoneNames")] 		public CBool DispBoneNames { get; set;}
 
-		[Ordinal(0)] [RED("dispBoneAxis")] 		public CBool DispBoneAxis { get; set;}
+		[Ordinal(4)] [RED("dispBoneAxis")] 		public CBool DispBoneAxis { get; set;}
 
 		public CAnimSkeletalDangleConstraint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestsSystem : IGameSystem
 	{
-		[Ordinal(0)] [RED("("runningQuests", 2,0)] 		public CArray<CHandle<CQuest>> RunningQuests { get; set;}
+		[Ordinal(1)] [RED("("runningQuests", 2,0)] 		public CArray<CHandle<CQuest>> RunningQuests { get; set;}
 
 		public CQuestsSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

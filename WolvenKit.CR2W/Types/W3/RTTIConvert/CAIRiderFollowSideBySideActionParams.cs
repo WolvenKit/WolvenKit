@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIRiderFollowSideBySideActionParams : CAIRiderFollowActionParams
 	{
-		[Ordinal(0)] [RED("useCustomSteering")] 		public CBool UseCustomSteering { get; set;}
+		[Ordinal(1)] [RED("useCustomSteering")] 		public CBool UseCustomSteering { get; set;}
 
-		[Ordinal(0)] [RED("customSteeringGraph")] 		public CHandle<CMoveSteeringBehavior> CustomSteeringGraph { get; set;}
+		[Ordinal(2)] [RED("customSteeringGraph")] 		public CHandle<CMoveSteeringBehavior> CustomSteeringGraph { get; set;}
 
-		[Ordinal(0)] [RED("horseCustomSteeringGraph")] 		public CHandle<CMoveSteeringBehavior> HorseCustomSteeringGraph { get; set;}
+		[Ordinal(3)] [RED("horseCustomSteeringGraph")] 		public CHandle<CMoveSteeringBehavior> HorseCustomSteeringGraph { get; set;}
 
 		public CAIRiderFollowSideBySideActionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

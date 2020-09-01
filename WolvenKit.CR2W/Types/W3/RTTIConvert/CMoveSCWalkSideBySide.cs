@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCWalkSideBySide : IMoveSteeringCondition
 	{
-		[Ordinal(0)] [RED("sideBySideDistance")] 		public CFloat SideBySideDistance { get; set;}
+		[Ordinal(1)] [RED("sideBySideDistance")] 		public CFloat SideBySideDistance { get; set;}
 
-		[Ordinal(0)] [RED("distanceLimit")] 		public CFloat DistanceLimit { get; set;}
+		[Ordinal(2)] [RED("distanceLimit")] 		public CFloat DistanceLimit { get; set;}
 
 		public CMoveSCWalkSideBySide(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

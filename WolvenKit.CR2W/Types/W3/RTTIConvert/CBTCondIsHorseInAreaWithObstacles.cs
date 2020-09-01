@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondIsHorseInAreaWithObstacles : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("testRadius")] 		public CFloat TestRadius { get; set;}
+		[Ordinal(1)] [RED("("testRadius")] 		public CFloat TestRadius { get; set;}
 
-		[Ordinal(0)] [RED("("testFreq")] 		public CFloat TestFreq { get; set;}
+		[Ordinal(2)] [RED("("testFreq")] 		public CFloat TestFreq { get; set;}
 
-		[Ordinal(0)] [RED("("lastTestTime")] 		public CFloat LastTestTime { get; set;}
+		[Ordinal(3)] [RED("("lastTestTime")] 		public CFloat LastTestTime { get; set;}
 
-		[Ordinal(0)] [RED("("lastResult")] 		public CBool LastResult { get; set;}
+		[Ordinal(4)] [RED("("lastResult")] 		public CBool LastResult { get; set;}
 
 		public CBTCondIsHorseInAreaWithObstacles(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

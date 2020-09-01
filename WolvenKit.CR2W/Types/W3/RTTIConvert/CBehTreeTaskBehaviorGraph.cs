@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTaskBehaviorGraph : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("graph")] 		public CEnum<EBehaviorGraph> Graph { get; set;}
+		[Ordinal(1)] [RED("graph")] 		public CEnum<EBehaviorGraph> Graph { get; set;}
 
-		[Ordinal(0)] [RED("forceHighPriority")] 		public CBool ForceHighPriority { get; set;}
+		[Ordinal(2)] [RED("forceHighPriority")] 		public CBool ForceHighPriority { get; set;}
 
-		[Ordinal(0)] [RED("res")] 		public CBool Res { get; set;}
+		[Ordinal(3)] [RED("res")] 		public CBool Res { get; set;}
 
-		[Ordinal(0)] [RED("graphName")] 		public CName GraphName { get; set;}
+		[Ordinal(4)] [RED("graphName")] 		public CName GraphName { get; set;}
 
-		[Ordinal(0)] [RED("combatDataStorage")] 		public CHandle<CHumanAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(5)] [RED("combatDataStorage")] 		public CHandle<CHumanAICombatStorage> CombatDataStorage { get; set;}
 
 		public CBehTreeTaskBehaviorGraph(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

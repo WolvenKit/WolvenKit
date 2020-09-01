@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEntityTemplateCookedEffect : CVariable
 	{
-		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
+		[Ordinal(1)] [RED("("name")] 		public CName Name { get; set;}
 
-		[Ordinal(0)] [RED("("animName")] 		public CName AnimName { get; set;}
+		[Ordinal(2)] [RED("("animName")] 		public CName AnimName { get; set;}
 
-		[Ordinal(0)] [RED("("buffer")] 		public SharedDataBuffer Buffer { get; set;}
+		[Ordinal(3)] [RED("("buffer")] 		public SharedDataBuffer Buffer { get; set;}
 
 		public CEntityTemplateCookedEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

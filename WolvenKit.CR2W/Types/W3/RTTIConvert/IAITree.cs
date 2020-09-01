@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IAITree : IAIParameters
 	{
-		[Ordinal(0)] [RED("aiTreeName")] 		public CString AiTreeName { get; set;}
+		[Ordinal(1)] [RED("aiTreeName")] 		public CString AiTreeName { get; set;}
 
-		[Ordinal(0)] [RED("tree")] 		public CHandle<CBehTree> Tree { get; set;}
+		[Ordinal(2)] [RED("tree")] 		public CHandle<CBehTree> Tree { get; set;}
 
 		public IAITree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

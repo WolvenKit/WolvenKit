@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQCHasAbility : IActorConditionType
 	{
-		[Ordinal(0)] [RED("ability")] 		public CName Ability { get; set;}
+		[Ordinal(1)] [RED("ability")] 		public CName Ability { get; set;}
 
 		public CQCHasAbility(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

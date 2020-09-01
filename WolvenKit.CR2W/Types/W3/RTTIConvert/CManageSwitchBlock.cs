@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CManageSwitchBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("switchTag")] 		public CName SwitchTag { get; set;}
+		[Ordinal(1)] [RED("switchTag")] 		public CName SwitchTag { get; set;}
 
-		[Ordinal(0)] [RED("operations", 2,0)] 		public CArray<CEnum<ESwitchOperation>> Operations { get; set;}
+		[Ordinal(2)] [RED("operations", 2,0)] 		public CArray<CEnum<ESwitchOperation>> Operations { get; set;}
 
-		[Ordinal(0)] [RED("force")] 		public CBool Force { get; set;}
+		[Ordinal(3)] [RED("force")] 		public CBool Force { get; set;}
 
-		[Ordinal(0)] [RED("skipEvents")] 		public CBool SkipEvents { get; set;}
+		[Ordinal(4)] [RED("skipEvents")] 		public CBool SkipEvents { get; set;}
 
 		public CManageSwitchBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

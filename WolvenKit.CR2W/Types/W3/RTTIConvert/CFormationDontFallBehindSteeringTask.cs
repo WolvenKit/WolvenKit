@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFormationDontFallBehindSteeringTask : IFormationSteeringTask
 	{
-		[Ordinal(0)] [RED("("speedImportance")] 		public CFloat SpeedImportance { get; set;}
+		[Ordinal(1)] [RED("("speedImportance")] 		public CFloat SpeedImportance { get; set;}
 
-		[Ordinal(0)] [RED("("minFallBehindDistance")] 		public CFloat MinFallBehindDistance { get; set;}
+		[Ordinal(2)] [RED("("minFallBehindDistance")] 		public CFloat MinFallBehindDistance { get; set;}
 
-		[Ordinal(0)] [RED("("maxFallBehindDistance")] 		public CFloat MaxFallBehindDistance { get; set;}
+		[Ordinal(3)] [RED("("maxFallBehindDistance")] 		public CFloat MaxFallBehindDistance { get; set;}
 
 		public CFormationDontFallBehindSteeringTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

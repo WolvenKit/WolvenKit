@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskBroadcastEvent : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("owner")] 		public CHandle<CNewNPC> Owner { get; set;}
+		[Ordinal(1)] [RED("owner")] 		public CHandle<CNewNPC> Owner { get; set;}
 
-		[Ordinal(0)] [RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(2)] [RED("eventName")] 		public CName EventName { get; set;}
 
-		[Ordinal(0)] [RED("lifetime")] 		public CFloat Lifetime { get; set;}
+		[Ordinal(3)] [RED("lifetime")] 		public CFloat Lifetime { get; set;}
 
-		[Ordinal(0)] [RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(4)] [RED("distance")] 		public CFloat Distance { get; set;}
 
-		[Ordinal(0)] [RED("broadcastInterval")] 		public CFloat BroadcastInterval { get; set;}
+		[Ordinal(5)] [RED("broadcastInterval")] 		public CFloat BroadcastInterval { get; set;}
 
-		[Ordinal(0)] [RED("recipientCount")] 		public CInt32 RecipientCount { get; set;}
+		[Ordinal(6)] [RED("recipientCount")] 		public CInt32 RecipientCount { get; set;}
 
-		[Ordinal(0)] [RED("broadcastScene")] 		public CBool BroadcastScene { get; set;}
+		[Ordinal(7)] [RED("broadcastScene")] 		public CBool BroadcastScene { get; set;}
 
-		[Ordinal(0)] [RED("skipInvoker")] 		public CBool SkipInvoker { get; set;}
+		[Ordinal(8)] [RED("skipInvoker")] 		public CBool SkipInvoker { get; set;}
 
 		public CBTTaskBroadcastEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

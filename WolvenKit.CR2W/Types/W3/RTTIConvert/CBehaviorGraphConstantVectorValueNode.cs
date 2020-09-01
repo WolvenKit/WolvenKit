@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphConstantVectorValueNode : CBehaviorGraphVectorValueNode
 	{
-		[Ordinal(0)] [RED("("value")] 		public Vector Value { get; set;}
+		[Ordinal(1)] [RED("("value")] 		public Vector Value { get; set;}
 
 		public CBehaviorGraphConstantVectorValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

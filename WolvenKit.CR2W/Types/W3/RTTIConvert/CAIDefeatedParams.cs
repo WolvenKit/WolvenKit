@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIDefeatedParams : CAIDeathParameters
 	{
-		[Ordinal(0)] [RED("localDeathTree")] 		public CHandle<CAIDeathTree> LocalDeathTree { get; set;}
+		[Ordinal(1)] [RED("localDeathTree")] 		public CHandle<CAIDeathTree> LocalDeathTree { get; set;}
 
-		[Ordinal(0)] [RED("unconsciousTree")] 		public CHandle<CAINpcUnconsciousTree> UnconsciousTree { get; set;}
+		[Ordinal(2)] [RED("unconsciousTree")] 		public CHandle<CAINpcUnconsciousTree> UnconsciousTree { get; set;}
 
 		public CAIDefeatedParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

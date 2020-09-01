@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_StaminaDrainSwimming : CBaseGameplayEffect
 	{
-		[Ordinal(0)] [RED("("effectValueMovement")] 		public SAbilityAttributeValue EffectValueMovement { get; set;}
+		[Ordinal(1)] [RED("("effectValueMovement")] 		public SAbilityAttributeValue EffectValueMovement { get; set;}
 
-		[Ordinal(0)] [RED("("effectValueSprinting")] 		public SAbilityAttributeValue EffectValueSprinting { get; set;}
+		[Ordinal(2)] [RED("("effectValueSprinting")] 		public SAbilityAttributeValue EffectValueSprinting { get; set;}
 
-		[Ordinal(0)] [RED("("effectValueColdWater")] 		public SAbilityAttributeValue EffectValueColdWater { get; set;}
+		[Ordinal(3)] [RED("("effectValueColdWater")] 		public SAbilityAttributeValue EffectValueColdWater { get; set;}
 
 		public W3Effect_StaminaDrainSwimming(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

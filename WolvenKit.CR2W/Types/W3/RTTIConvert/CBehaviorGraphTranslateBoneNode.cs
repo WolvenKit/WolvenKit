@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphTranslateBoneNode : CBehaviorGraphBaseNode
 	{
-		[Ordinal(0)] [RED("boneName")] 		public CString BoneName { get; set;}
+		[Ordinal(1)] [RED("boneName")] 		public CString BoneName { get; set;}
 
-		[Ordinal(0)] [RED("axis")] 		public Vector Axis { get; set;}
+		[Ordinal(2)] [RED("axis")] 		public Vector Axis { get; set;}
 
-		[Ordinal(0)] [RED("scale")] 		public CFloat Scale { get; set;}
+		[Ordinal(3)] [RED("scale")] 		public CFloat Scale { get; set;}
 
-		[Ordinal(0)] [RED("biasValue")] 		public CFloat BiasValue { get; set;}
+		[Ordinal(4)] [RED("biasValue")] 		public CFloat BiasValue { get; set;}
 
-		[Ordinal(0)] [RED("minValue")] 		public CFloat MinValue { get; set;}
+		[Ordinal(5)] [RED("minValue")] 		public CFloat MinValue { get; set;}
 
-		[Ordinal(0)] [RED("maxValue")] 		public CFloat MaxValue { get; set;}
+		[Ordinal(6)] [RED("maxValue")] 		public CFloat MaxValue { get; set;}
 
-		[Ordinal(0)] [RED("clampValue")] 		public CBool ClampValue { get; set;}
+		[Ordinal(7)] [RED("clampValue")] 		public CBool ClampValue { get; set;}
 
-		[Ordinal(0)] [RED("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
+		[Ordinal(8)] [RED("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
 
 		public CBehaviorGraphTranslateBoneNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

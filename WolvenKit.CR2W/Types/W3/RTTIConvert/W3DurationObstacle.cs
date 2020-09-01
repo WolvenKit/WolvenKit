@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DurationObstacle : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("lifeTimeDuration")] 		public SRangeF LifeTimeDuration { get; set;}
+		[Ordinal(1)] [RED("("lifeTimeDuration")] 		public SRangeF LifeTimeDuration { get; set;}
 
-		[Ordinal(0)] [RED("("disappearanceEffectDuration")] 		public CFloat DisappearanceEffectDuration { get; set;}
+		[Ordinal(2)] [RED("("disappearanceEffectDuration")] 		public CFloat DisappearanceEffectDuration { get; set;}
 
-		[Ordinal(0)] [RED("("disappearEffectName")] 		public CName DisappearEffectName { get; set;}
+		[Ordinal(3)] [RED("("disappearEffectName")] 		public CName DisappearEffectName { get; set;}
 
-		[Ordinal(0)] [RED("("simplyStopEffect")] 		public CBool SimplyStopEffect { get; set;}
+		[Ordinal(4)] [RED("("simplyStopEffect")] 		public CBool SimplyStopEffect { get; set;}
 
 		public W3DurationObstacle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

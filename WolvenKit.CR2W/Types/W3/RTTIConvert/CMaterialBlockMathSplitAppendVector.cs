@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockMathSplitAppendVector : CMaterialBlock
 	{
-		[Ordinal(0)] [RED("splitVector")] 		public CBool SplitVector { get; set;}
+		[Ordinal(1)] [RED("splitVector")] 		public CBool SplitVector { get; set;}
 
 		public CMaterialBlockMathSplitAppendVector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SPopupDescription : CVariable
 	{
-		[Ordinal(0)] [RED("("popupName")] 		public CName PopupName { get; set;}
+		[Ordinal(1)] [RED("("popupName")] 		public CName PopupName { get; set;}
 
-		[Ordinal(0)] [RED("("popupResource")] 		public CSoft<CPopupResource> PopupResource { get; set;}
+		[Ordinal(2)] [RED("("popupResource")] 		public CSoft<CPopupResource> PopupResource { get; set;}
 
 		public SPopupDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

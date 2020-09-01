@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSpawnMultipleEntities3StateAttack : CBTTaskSpawnMultipleEntitiesAttack
 	{
-		[Ordinal(0)] [RED("delayActivationTime")] 		public CFloat DelayActivationTime { get; set;}
+		[Ordinal(1)] [RED("delayActivationTime")] 		public CFloat DelayActivationTime { get; set;}
 
-		[Ordinal(0)] [RED("loopTime")] 		public CFloat LoopTime { get; set;}
+		[Ordinal(2)] [RED("loopTime")] 		public CFloat LoopTime { get; set;}
 
-		[Ordinal(0)] [RED("endTime")] 		public CFloat EndTime { get; set;}
+		[Ordinal(3)] [RED("endTime")] 		public CFloat EndTime { get; set;}
 
-		[Ordinal(0)] [RED("localTime")] 		public CFloat LocalTime { get; set;}
+		[Ordinal(4)] [RED("localTime")] 		public CFloat LocalTime { get; set;}
 
-		[Ordinal(0)] [RED("spawnInterval")] 		public CFloat SpawnInterval { get; set;}
+		[Ordinal(5)] [RED("spawnInterval")] 		public CFloat SpawnInterval { get; set;}
 
-		[Ordinal(0)] [RED("decreaseLoopTimePerFailedCreateEntity")] 		public CFloat DecreaseLoopTimePerFailedCreateEntity { get; set;}
+		[Ordinal(6)] [RED("decreaseLoopTimePerFailedCreateEntity")] 		public CFloat DecreaseLoopTimePerFailedCreateEntity { get; set;}
 
-		[Ordinal(0)] [RED("spawnAdditionalEntityOnTargetPos")] 		public CBool SpawnAdditionalEntityOnTargetPos { get; set;}
+		[Ordinal(7)] [RED("spawnAdditionalEntityOnTargetPos")] 		public CBool SpawnAdditionalEntityOnTargetPos { get; set;}
 
 		public CBTTaskSpawnMultipleEntities3StateAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

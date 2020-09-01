@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSetAppearanceDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("appearanceName")] 		public CName AppearanceName { get; set;}
+		[Ordinal(1)] [RED("("appearanceName")] 		public CName AppearanceName { get; set;}
 
-		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(2)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[Ordinal(0)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(3)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[Ordinal(0)] [RED("("onSuccess")] 		public CBool OnSuccess { get; set;}
+		[Ordinal(4)] [RED("("onSuccess")] 		public CBool OnSuccess { get; set;}
 
-		[Ordinal(0)] [RED("("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
+		[Ordinal(5)] [RED("("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
 
-		[Ordinal(0)] [RED("("overrideForTask")] 		public CBool OverrideForTask { get; set;}
+		[Ordinal(6)] [RED("("overrideForTask")] 		public CBool OverrideForTask { get; set;}
 
-		[Ordinal(0)] [RED("("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(7)] [RED("("eventName")] 		public CName EventName { get; set;}
 
 		public CBTTaskSetAppearanceDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

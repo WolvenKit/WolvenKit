@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SItemExt : CVariable
 	{
-		[Ordinal(0)] [RED("("itemName")] 		public SItemNameProperty ItemName { get; set;}
+		[Ordinal(1)] [RED("("itemName")] 		public SItemNameProperty ItemName { get; set;}
 
-		[Ordinal(0)] [RED("("quantity")] 		public CInt32 Quantity { get; set;}
+		[Ordinal(2)] [RED("("quantity")] 		public CInt32 Quantity { get; set;}
 
 		public SItemExt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

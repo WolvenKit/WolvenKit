@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIWitcherCastOffensiveSignActionTree : IAICustomActionTree
 	{
-		[Ordinal(0)] [RED("targetTag")] 		public CName TargetTag { get; set;}
+		[Ordinal(1)] [RED("targetTag")] 		public CName TargetTag { get; set;}
 
-		[Ordinal(0)] [RED("castIgniInsteadOfAard")] 		public CBool CastIgniInsteadOfAard { get; set;}
+		[Ordinal(2)] [RED("castIgniInsteadOfAard")] 		public CBool CastIgniInsteadOfAard { get; set;}
 
 		public CAIWitcherCastOffensiveSignActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

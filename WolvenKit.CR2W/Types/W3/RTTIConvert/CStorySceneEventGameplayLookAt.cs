@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventGameplayLookAt : CStorySceneEventDuration
 	{
-		[Ordinal(0)] [RED("("actor")] 		public CName Actor { get; set;}
+		[Ordinal(1)] [RED("("actor")] 		public CName Actor { get; set;}
 
-		[Ordinal(0)] [RED("("target")] 		public CName Target { get; set;}
+		[Ordinal(2)] [RED("("target")] 		public CName Target { get; set;}
 
-		[Ordinal(0)] [RED("("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(3)] [RED("("enabled")] 		public CBool Enabled { get; set;}
 
-		[Ordinal(0)] [RED("("instant")] 		public CBool Instant { get; set;}
+		[Ordinal(4)] [RED("("instant")] 		public CBool Instant { get; set;}
 
-		[Ordinal(0)] [RED("("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(5)] [RED("("weight")] 		public CFloat Weight { get; set;}
 
-		[Ordinal(0)] [RED("("staticPoint")] 		public Vector StaticPoint { get; set;}
+		[Ordinal(6)] [RED("("staticPoint")] 		public Vector StaticPoint { get; set;}
 
-		[Ordinal(0)] [RED("("type")] 		public CEnum<EDialogLookAtType> Type { get; set;}
+		[Ordinal(7)] [RED("("type")] 		public CEnum<EDialogLookAtType> Type { get; set;}
 
-		[Ordinal(0)] [RED("("useWeightCurve")] 		public CBool UseWeightCurve { get; set;}
+		[Ordinal(8)] [RED("("useWeightCurve")] 		public CBool UseWeightCurve { get; set;}
 
-		[Ordinal(0)] [RED("("weightCurve")] 		public SCurveData WeightCurve { get; set;}
+		[Ordinal(9)] [RED("("weightCurve")] 		public SCurveData WeightCurve { get; set;}
 
-		[Ordinal(0)] [RED("("behaviorVarWeight")] 		public CName BehaviorVarWeight { get; set;}
+		[Ordinal(10)] [RED("("behaviorVarWeight")] 		public CName BehaviorVarWeight { get; set;}
 
-		[Ordinal(0)] [RED("("behaviorVarTarget")] 		public CName BehaviorVarTarget { get; set;}
+		[Ordinal(11)] [RED("("behaviorVarTarget")] 		public CName BehaviorVarTarget { get; set;}
 
 		public CStorySceneEventGameplayLookAt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

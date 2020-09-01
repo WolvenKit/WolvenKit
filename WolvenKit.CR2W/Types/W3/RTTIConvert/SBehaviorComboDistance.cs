@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorComboDistance : CVariable
 	{
-		[Ordinal(0)] [RED("("animations", 2,0)] 		public CArray<SBehaviorComboAnimation> Animations { get; set;}
+		[Ordinal(1)] [RED("("animations", 2,0)] 		public CArray<SBehaviorComboAnimation> Animations { get; set;}
 
 		public SBehaviorComboDistance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

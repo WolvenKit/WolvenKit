@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimAnimsetsParam : CEntityTemplateParam
 	{
-		[Ordinal(0)] [RED("name")] 		public CString Name { get; set;}
+		[Ordinal(1)] [RED("name")] 		public CString Name { get; set;}
 
-		[Ordinal(0)] [RED("componentName")] 		public CString ComponentName { get; set;}
+		[Ordinal(2)] [RED("componentName")] 		public CString ComponentName { get; set;}
 
-		[Ordinal(0)] [RED("animationSets", 2,0)] 		public CArray<CHandle<CSkeletalAnimationSet>> AnimationSets { get; set;}
+		[Ordinal(3)] [RED("animationSets", 2,0)] 		public CArray<CHandle<CSkeletalAnimationSet>> AnimationSets { get; set;}
 
 		public CAnimAnimsetsParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

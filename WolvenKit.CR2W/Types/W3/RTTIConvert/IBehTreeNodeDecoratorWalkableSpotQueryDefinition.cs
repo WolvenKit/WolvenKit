@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeNodeDecoratorWalkableSpotQueryDefinition : IBehTreeNodeDecoratorAsyncQueryDefinition
 	{
-		[Ordinal(0)] [RED("useCombatTargetAsReference")] 		public CBool UseCombatTargetAsReference { get; set;}
+		[Ordinal(1)] [RED("useCombatTargetAsReference")] 		public CBool UseCombatTargetAsReference { get; set;}
 
-		[Ordinal(0)] [RED("useTargetAsSourceSpot")] 		public CBool UseTargetAsSourceSpot { get; set;}
+		[Ordinal(2)] [RED("useTargetAsSourceSpot")] 		public CBool UseTargetAsSourceSpot { get; set;}
 
-		[Ordinal(0)] [RED("stayInGuardArea")] 		public CBool StayInGuardArea { get; set;}
+		[Ordinal(3)] [RED("stayInGuardArea")] 		public CBool StayInGuardArea { get; set;}
 
 		public IBehTreeNodeDecoratorWalkableSpotQueryDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

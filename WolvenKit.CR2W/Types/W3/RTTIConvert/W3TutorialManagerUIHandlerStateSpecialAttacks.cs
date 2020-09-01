@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateSpecialAttacks : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[Ordinal(0)] [RED("("SPECIALS")] 		public CName SPECIALS { get; set;}
+		[Ordinal(1)] [RED("("SPECIALS")] 		public CName SPECIALS { get; set;}
 
-		[Ordinal(0)] [RED("("ALTERNATES")] 		public CName ALTERNATES { get; set;}
+		[Ordinal(2)] [RED("("ALTERNATES")] 		public CName ALTERNATES { get; set;}
 
 		public W3TutorialManagerUIHandlerStateSpecialAttacks(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMotionExFilterNode : CBehaviorGraphBaseNode
 	{
-		[Ordinal(0)] [RED("("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
+		[Ordinal(1)] [RED("("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
 
 		public CBehaviorGraphMotionExFilterNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class RepairAllPopupData : ConfirmationPopupData
 	{
-		[Ordinal(0)] [RED("m_Price")] 		public CFloat M_Price { get; set;}
+		[Ordinal(1)] [RED("m_Price")] 		public CFloat M_Price { get; set;}
 
-		[Ordinal(0)] [RED("menuRef")] 		public CHandle<CR4BlacksmithMenu> MenuRef { get; set;}
+		[Ordinal(2)] [RED("menuRef")] 		public CHandle<CR4BlacksmithMenu> MenuRef { get; set;}
 
 		public RepairAllPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

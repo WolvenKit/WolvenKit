@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeAtomicPlayAnimationDefinition : CBehTreeNodeAtomicActionDefinition
 	{
-		[Ordinal(0)] [RED("animationName")] 		public CBehTreeValCName AnimationName { get; set;}
+		[Ordinal(1)] [RED("animationName")] 		public CBehTreeValCName AnimationName { get; set;}
 
-		[Ordinal(0)] [RED("slotName")] 		public CBehTreeValCName SlotName { get; set;}
+		[Ordinal(2)] [RED("slotName")] 		public CBehTreeValCName SlotName { get; set;}
 
-		[Ordinal(0)] [RED("blendInTime")] 		public CBehTreeValFloat BlendInTime { get; set;}
+		[Ordinal(3)] [RED("blendInTime")] 		public CBehTreeValFloat BlendInTime { get; set;}
 
-		[Ordinal(0)] [RED("blendOutTime")] 		public CBehTreeValFloat BlendOutTime { get; set;}
+		[Ordinal(4)] [RED("blendOutTime")] 		public CBehTreeValFloat BlendOutTime { get; set;}
 
 		public CBehTreeNodeAtomicPlayAnimationDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

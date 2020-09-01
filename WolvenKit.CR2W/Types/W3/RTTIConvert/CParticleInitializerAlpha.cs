@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleInitializerAlpha : IParticleInitializer
 	{
-		[Ordinal(0)] [RED("alpha")] 		public CPtr<IEvaluatorFloat> Alpha { get; set;}
+		[Ordinal(1)] [RED("alpha")] 		public CPtr<IEvaluatorFloat> Alpha { get; set;}
 
 		public CParticleInitializerAlpha(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

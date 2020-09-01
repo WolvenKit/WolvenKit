@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalQuestTrackBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("questEntry")] 		public CHandle<CJournalPath> QuestEntry { get; set;}
+		[Ordinal(1)] [RED("questEntry")] 		public CHandle<CJournalPath> QuestEntry { get; set;}
 
-		[Ordinal(0)] [RED("objectiveEntry")] 		public CHandle<CJournalPath> ObjectiveEntry { get; set;}
+		[Ordinal(2)] [RED("objectiveEntry")] 		public CHandle<CJournalPath> ObjectiveEntry { get; set;}
 
 		public CJournalQuestTrackBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

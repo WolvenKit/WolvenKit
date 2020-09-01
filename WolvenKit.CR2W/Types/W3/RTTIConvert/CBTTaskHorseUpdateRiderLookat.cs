@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHorseUpdateRiderLookat : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("rider")] 		public CHandle<CActor> Rider { get; set;}
+		[Ordinal(1)] [RED("rider")] 		public CHandle<CActor> Rider { get; set;}
 
-		[Ordinal(0)] [RED("boneName")] 		public CName BoneName { get; set;}
+		[Ordinal(2)] [RED("boneName")] 		public CName BoneName { get; set;}
 
-		[Ordinal(0)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(3)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
-		[Ordinal(0)] [RED("useCustomTarget")] 		public CBool UseCustomTarget { get; set;}
+		[Ordinal(4)] [RED("useCustomTarget")] 		public CBool UseCustomTarget { get; set;}
 
 		public CBTTaskHorseUpdateRiderLookat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

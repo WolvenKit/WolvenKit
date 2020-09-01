@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4LoadingMenu : CR4MenuBase
 	{
-		[Ordinal(0)] [RED("("guiManager")] 		public CHandle<CR4GuiManager> GuiManager { get; set;}
+		[Ordinal(1)] [RED("("guiManager")] 		public CHandle<CR4GuiManager> GuiManager { get; set;}
 
 		public CR4LoadingMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

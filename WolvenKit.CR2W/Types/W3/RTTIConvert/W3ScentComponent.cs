@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ScentComponent : CR4Component
 	{
-		[Ordinal(0)] [RED("("foodGroup")] 		public CEnum<EFoodGroup> FoodGroup { get; set;}
+		[Ordinal(1)] [RED("("foodGroup")] 		public CEnum<EFoodGroup> FoodGroup { get; set;}
 
-		[Ordinal(0)] [RED("("attractionRange")] 		public CFloat AttractionRange { get; set;}
+		[Ordinal(2)] [RED("("attractionRange")] 		public CFloat AttractionRange { get; set;}
 
-		[Ordinal(0)] [RED("("deadAttractionRange")] 		public CFloat DeadAttractionRange { get; set;}
+		[Ordinal(3)] [RED("("deadAttractionRange")] 		public CFloat DeadAttractionRange { get; set;}
 
-		[Ordinal(0)] [RED("("bleedingAttractionRange")] 		public CFloat BleedingAttractionRange { get; set;}
+		[Ordinal(4)] [RED("("bleedingAttractionRange")] 		public CFloat BleedingAttractionRange { get; set;}
 
 		public W3ScentComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

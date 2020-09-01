@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphComboTransitionInterface : CObject
 	{
-		[Ordinal(0)] [RED("("modifiers", 2,0)] 		public CArray<CPtr<IBehaviorGraphComboModifier>> Modifiers { get; set;}
+		[Ordinal(1)] [RED("("modifiers", 2,0)] 		public CArray<CPtr<IBehaviorGraphComboModifier>> Modifiers { get; set;}
 
 		public CBehaviorGraphComboTransitionInterface(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

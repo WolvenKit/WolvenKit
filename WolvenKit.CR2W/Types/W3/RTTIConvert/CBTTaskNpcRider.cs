@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskNpcRider : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("activate")] 		public CBool Activate { get; set;}
+		[Ordinal(1)] [RED("activate")] 		public CBool Activate { get; set;}
 
-		[Ordinal(0)] [RED("horseComponent")] 		public CHandle<W3HorseComponent> HorseComponent { get; set;}
+		[Ordinal(2)] [RED("horseComponent")] 		public CHandle<W3HorseComponent> HorseComponent { get; set;}
 
-		[Ordinal(0)] [RED("riderEntity")] 		public CHandle<CActor> RiderEntity { get; set;}
+		[Ordinal(3)] [RED("riderEntity")] 		public CHandle<CActor> RiderEntity { get; set;}
 
 		public CBTTaskNpcRider(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

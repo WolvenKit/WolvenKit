@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSwarm : CBTTaskAttack
 	{
-		[Ordinal(0)] [RED("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
+		[Ordinal(1)] [RED("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
 
-		[Ordinal(0)] [RED("entities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> Entities { get; set;}
+		[Ordinal(2)] [RED("entities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> Entities { get; set;}
 
-		[Ordinal(0)] [RED("i")] 		public CInt32 I { get; set;}
+		[Ordinal(3)] [RED("i")] 		public CInt32 I { get; set;}
 
 		public CBTTaskSwarm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

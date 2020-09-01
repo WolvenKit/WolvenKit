@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrackItemCameraShake : CFXTrackItem
 	{
-		[Ordinal(0)] [RED("effectFullForceRadius")] 		public CFloat EffectFullForceRadius { get; set;}
+		[Ordinal(1)] [RED("effectFullForceRadius")] 		public CFloat EffectFullForceRadius { get; set;}
 
-		[Ordinal(0)] [RED("effectMaxRadius")] 		public CFloat EffectMaxRadius { get; set;}
+		[Ordinal(2)] [RED("effectMaxRadius")] 		public CFloat EffectMaxRadius { get; set;}
 
-		[Ordinal(0)] [RED("shakeType")] 		public CName ShakeType { get; set;}
+		[Ordinal(3)] [RED("shakeType")] 		public CName ShakeType { get; set;}
 
 		public CFXTrackItemCameraShake(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestInteractionCondition : IQuestCondition
 	{
-		[Ordinal(0)] [RED("interactionName")] 		public CString InteractionName { get; set;}
+		[Ordinal(1)] [RED("interactionName")] 		public CString InteractionName { get; set;}
 
-		[Ordinal(0)] [RED("ownerTags")] 		public TagList OwnerTags { get; set;}
+		[Ordinal(2)] [RED("ownerTags")] 		public TagList OwnerTags { get; set;}
 
 		public CQuestInteractionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

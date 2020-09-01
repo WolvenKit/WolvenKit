@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTaskConditionalSheathWeapons : CBehTreeTaskSheathWeapons
 	{
-		[Ordinal(0)] [RED("reactionDataStorage")] 		public CHandle<CAIStorageReactionData> ReactionDataStorage { get; set;}
+		[Ordinal(1)] [RED("reactionDataStorage")] 		public CHandle<CAIStorageReactionData> ReactionDataStorage { get; set;}
 
 		public CBehTreeTaskConditionalSheathWeapons(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFlightIdleFreeRoam : IAIFlightIdleTree
 	{
-		[Ordinal(0)] [RED("flightHeight")] 		public CFloat FlightHeight { get; set;}
+		[Ordinal(1)] [RED("flightHeight")] 		public CFloat FlightHeight { get; set;}
 
-		[Ordinal(0)] [RED("flyAround")] 		public CBool FlyAround { get; set;}
+		[Ordinal(2)] [RED("flyAround")] 		public CBool FlyAround { get; set;}
 
-		[Ordinal(0)] [RED("flyAroundDurationMin")] 		public CFloat FlyAroundDurationMin { get; set;}
+		[Ordinal(3)] [RED("flyAroundDurationMin")] 		public CFloat FlyAroundDurationMin { get; set;}
 
-		[Ordinal(0)] [RED("flyAroundDurationMax")] 		public CFloat FlyAroundDurationMax { get; set;}
+		[Ordinal(4)] [RED("flyAroundDurationMax")] 		public CFloat FlyAroundDurationMax { get; set;}
 
-		[Ordinal(0)] [RED("flightAreaSelection")] 		public CEnum<EAIAreaSelectionMode> FlightAreaSelection { get; set;}
+		[Ordinal(5)] [RED("flightAreaSelection")] 		public CEnum<EAIAreaSelectionMode> FlightAreaSelection { get; set;}
 
-		[Ordinal(0)] [RED("flightAreaOptionalTag")] 		public CName FlightAreaOptionalTag { get; set;}
+		[Ordinal(6)] [RED("flightAreaOptionalTag")] 		public CName FlightAreaOptionalTag { get; set;}
 
 		public CAIFlightIdleFreeRoam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

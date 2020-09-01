@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PlayerStateExtendedMovable : CPlayerStateMovable
 	{
-		[Ordinal(0)] [RED("parentMAC")] 		public CHandle<CMovingPhysicalAgentComponent> ParentMAC { get; set;}
+		[Ordinal(1)] [RED("parentMAC")] 		public CHandle<CMovingPhysicalAgentComponent> ParentMAC { get; set;}
 
-		[Ordinal(0)] [RED("currentStateName")] 		public CName CurrentStateName { get; set;}
+		[Ordinal(2)] [RED("currentStateName")] 		public CName CurrentStateName { get; set;}
 
-		[Ordinal(0)] [RED("cameraChanneledSignEnabled")] 		public CBool CameraChanneledSignEnabled { get; set;}
+		[Ordinal(3)] [RED("cameraChanneledSignEnabled")] 		public CBool CameraChanneledSignEnabled { get; set;}
 
-		[Ordinal(0)] [RED("m_shouldEnableAutoRotation")] 		public CBool M_shouldEnableAutoRotation { get; set;}
+		[Ordinal(4)] [RED("m_shouldEnableAutoRotation")] 		public CBool M_shouldEnableAutoRotation { get; set;}
 
-		[Ordinal(0)] [RED("interiorCameraDesiredPositionMult")] 		public CFloat InteriorCameraDesiredPositionMult { get; set;}
+		[Ordinal(5)] [RED("interiorCameraDesiredPositionMult")] 		public CFloat InteriorCameraDesiredPositionMult { get; set;}
 
 		public CR4PlayerStateExtendedMovable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

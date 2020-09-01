@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphEngineValueNode : CBehaviorGraphVariableNode
 	{
-		[Ordinal(0)] [RED("("engineValueType")] 		public CEnum<EBehaviorEngineValueType> EngineValueType { get; set;}
+		[Ordinal(1)] [RED("("engineValueType")] 		public CEnum<EBehaviorEngineValueType> EngineValueType { get; set;}
 
-		[Ordinal(0)] [RED("("manualControl")] 		public CBool ManualControl { get; set;}
+		[Ordinal(2)] [RED("("manualControl")] 		public CBool ManualControl { get; set;}
 
 		public CBehaviorGraphEngineValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

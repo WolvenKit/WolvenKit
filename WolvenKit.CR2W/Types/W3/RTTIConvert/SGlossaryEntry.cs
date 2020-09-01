@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGlossaryEntry : CVariable
 	{
-		[Ordinal(0)] [RED("("panelName")] 		public CName PanelName { get; set;}
+		[Ordinal(1)] [RED("("panelName")] 		public CName PanelName { get; set;}
 
-		[Ordinal(0)] [RED("("newEntry")] 		public CHandle<CJournalBase> NewEntry { get; set;}
+		[Ordinal(2)] [RED("("newEntry")] 		public CHandle<CJournalBase> NewEntry { get; set;}
 
-		[Ordinal(0)] [RED("("tag")] 		public CName Tag { get; set;}
+		[Ordinal(3)] [RED("("tag")] 		public CName Tag { get; set;}
 
 		public SGlossaryEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

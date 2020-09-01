@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDecoratorSetSteeringCustomPositionDefinition : IBehTreeNodeDecoratorSteeringTargeterDefinition
 	{
-		[Ordinal(0)] [RED("steeringParameterName")] 		public CName SteeringParameterName { get; set;}
+		[Ordinal(1)] [RED("steeringParameterName")] 		public CName SteeringParameterName { get; set;}
 
 		public CBehTreeNodeDecoratorSetSteeringCustomPositionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

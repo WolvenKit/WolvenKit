@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskEnterDrinkingMinigame : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("Event")] 		public CName Event { get; set;}
+		[Ordinal(1)] [RED("Event")] 		public CName Event { get; set;}
 
-		[Ordinal(0)] [RED("OffEvent")] 		public CName OffEvent { get; set;}
+		[Ordinal(2)] [RED("OffEvent")] 		public CName OffEvent { get; set;}
 
-		[Ordinal(0)] [RED("available")] 		public CBool Available { get; set;}
+		[Ordinal(3)] [RED("available")] 		public CBool Available { get; set;}
 
 		public CBTTaskEnterDrinkingMinigame(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

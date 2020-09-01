@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class InterpCurve : CObject
 	{
-		[Ordinal(0)] [RED("("interpMethod")] 		public CEnum<EInterpMethodType> InterpMethod { get; set;}
+		[Ordinal(1)] [RED("("interpMethod")] 		public CEnum<EInterpMethodType> InterpMethod { get; set;}
 
 		public InterpCurve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

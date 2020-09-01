@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFistAttackActionTree : CAIAttackActionTree
 	{
-		[Ordinal(0)] [RED("easyVersion")] 		public CBool EasyVersion { get; set;}
+		[Ordinal(1)] [RED("easyVersion")] 		public CBool EasyVersion { get; set;}
 
 		public CAIFistAttackActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPickUpAndThrowDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("projectileTemplate")] 		public CHandle<CEntityTemplate> ProjectileTemplate { get; set;}
+		[Ordinal(1)] [RED("projectileTemplate")] 		public CHandle<CEntityTemplate> ProjectileTemplate { get; set;}
 
-		[Ordinal(0)] [RED("dodgeable")] 		public CBool Dodgeable { get; set;}
+		[Ordinal(2)] [RED("dodgeable")] 		public CBool Dodgeable { get; set;}
 
 		public CBTTaskPickUpAndThrowDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

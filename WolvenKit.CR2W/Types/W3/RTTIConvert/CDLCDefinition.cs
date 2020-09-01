@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDLCDefinition : CResource
 	{
-		[Ordinal(0)] [RED("("id")] 		public CName Id { get; set;}
+		[Ordinal(1)] [RED("("id")] 		public CName Id { get; set;}
 
-		[Ordinal(0)] [RED("("localizedNameKey")] 		public CString LocalizedNameKey { get; set;}
+		[Ordinal(2)] [RED("("localizedNameKey")] 		public CString LocalizedNameKey { get; set;}
 
-		[Ordinal(0)] [RED("("localizedDescriptionKey")] 		public CString LocalizedDescriptionKey { get; set;}
+		[Ordinal(3)] [RED("("localizedDescriptionKey")] 		public CString LocalizedDescriptionKey { get; set;}
 
-		[Ordinal(0)] [RED("("mounters", 2,0)] 		public CArray<CPtr<IGameplayDLCMounter>> Mounters { get; set;}
+		[Ordinal(4)] [RED("("mounters", 2,0)] 		public CArray<CPtr<IGameplayDLCMounter>> Mounters { get; set;}
 
-		[Ordinal(0)] [RED("("languagePacks", 2,0)] 		public CArray<SDLCLanguagePack> LanguagePacks { get; set;}
+		[Ordinal(5)] [RED("("languagePacks", 2,0)] 		public CArray<SDLCLanguagePack> LanguagePacks { get; set;}
 
-		[Ordinal(0)] [RED("("initiallyEnabled")] 		public CBool InitiallyEnabled { get; set;}
+		[Ordinal(6)] [RED("("initiallyEnabled")] 		public CBool InitiallyEnabled { get; set;}
 
-		[Ordinal(0)] [RED("("visibleInDLCMenu")] 		public CBool VisibleInDLCMenu { get; set;}
+		[Ordinal(7)] [RED("("visibleInDLCMenu")] 		public CBool VisibleInDLCMenu { get; set;}
 
-		[Ordinal(0)] [RED("("requiredByGameSave")] 		public CBool RequiredByGameSave { get; set;}
+		[Ordinal(8)] [RED("("requiredByGameSave")] 		public CBool RequiredByGameSave { get; set;}
 
 		public CDLCDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

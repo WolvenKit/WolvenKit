@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CExtAnimEventsFile : CResource
 	{
-		[Ordinal(0)] [RED("requiredSfxTag")] 		public CName RequiredSfxTag { get; set;}
+		[Ordinal(1)] [RED("requiredSfxTag")] 		public CName RequiredSfxTag { get; set;}
 
 		public CExtAnimEventsFile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

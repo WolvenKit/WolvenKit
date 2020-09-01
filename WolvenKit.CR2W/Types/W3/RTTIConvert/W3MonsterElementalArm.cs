@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MonsterElementalArm : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("physcialComponent")] 		public CHandle<CComponent> PhyscialComponent { get; set;}
+		[Ordinal(1)] [RED("("physcialComponent")] 		public CHandle<CComponent> PhyscialComponent { get; set;}
 
-		[Ordinal(0)] [RED("("victims", 2,0)] 		public CArray<CHandle<CActor>> Victims { get; set;}
+		[Ordinal(2)] [RED("("victims", 2,0)] 		public CArray<CHandle<CActor>> Victims { get; set;}
 
-		[Ordinal(0)] [RED("("victim")] 		public CHandle<CActor> Victim { get; set;}
+		[Ordinal(3)] [RED("("victim")] 		public CHandle<CActor> Victim { get; set;}
 
-		[Ordinal(0)] [RED("("isActive")] 		public CBool IsActive { get; set;}
+		[Ordinal(4)] [RED("("isActive")] 		public CBool IsActive { get; set;}
 
-		[Ordinal(0)] [RED("("action")] 		public CHandle<W3DamageAction> Action { get; set;}
+		[Ordinal(5)] [RED("("action")] 		public CHandle<W3DamageAction> Action { get; set;}
 
-		[Ordinal(0)] [RED("("owner")] 		public CHandle<CActor> Owner { get; set;}
+		[Ordinal(6)] [RED("("owner")] 		public CHandle<CActor> Owner { get; set;}
 
-		[Ordinal(0)] [RED("("component")] 		public CHandle<CMeshComponent> Component { get; set;}
+		[Ordinal(7)] [RED("("component")] 		public CHandle<CMeshComponent> Component { get; set;}
 
 		public W3MonsterElementalArm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

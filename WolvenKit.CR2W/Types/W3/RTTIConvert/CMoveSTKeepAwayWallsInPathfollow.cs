@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTKeepAwayWallsInPathfollow : IMoveSteeringTask
 	{
-		[Ordinal(0)] [RED("wallDetectionDistance")] 		public CFloat WallDetectionDistance { get; set;}
+		[Ordinal(1)] [RED("wallDetectionDistance")] 		public CFloat WallDetectionDistance { get; set;}
 
-		[Ordinal(0)] [RED("headingImportance")] 		public CFloat HeadingImportance { get; set;}
+		[Ordinal(2)] [RED("headingImportance")] 		public CFloat HeadingImportance { get; set;}
 
 		public CMoveSTKeepAwayWallsInPathfollow(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

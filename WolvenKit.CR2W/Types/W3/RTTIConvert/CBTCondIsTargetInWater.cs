@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondIsTargetInWater : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("boatCounts")] 		public CBool BoatCounts { get; set;}
+		[Ordinal(1)] [RED("("boatCounts")] 		public CBool BoatCounts { get; set;}
 
 		public CBTCondIsTargetInWater(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBoneIndiceMapping : CVariable
 	{
-		[Ordinal(0)] [RED("("startingIndex")] 		public CUInt32 StartingIndex { get; set;}
+		[Ordinal(1)] [RED("("startingIndex")] 		public CUInt32 StartingIndex { get; set;}
 
-		[Ordinal(0)] [RED("("endingIndex")] 		public CUInt32 EndingIndex { get; set;}
+		[Ordinal(2)] [RED("("endingIndex")] 		public CUInt32 EndingIndex { get; set;}
 
-		[Ordinal(0)] [RED("("chunkIndex")] 		public CUInt32 ChunkIndex { get; set;}
+		[Ordinal(3)] [RED("("chunkIndex")] 		public CUInt32 ChunkIndex { get; set;}
 
-		[Ordinal(0)] [RED("("boneIndex")] 		public CUInt32 BoneIndex { get; set;}
+		[Ordinal(4)] [RED("("boneIndex")] 		public CUInt32 BoneIndex { get; set;}
 
 		public SBoneIndiceMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CNode : CObject
 	{
-		[Ordinal(0)] [RED("tags")] 		public TagList Tags { get; set;}
+		[Ordinal(1)] [RED("tags")] 		public TagList Tags { get; set;}
 
-		[Ordinal(0)] [RED("transform")] 		public EngineTransform Transform { get; set;}
+		[Ordinal(2)] [RED("transform")] 		public EngineTransform Transform { get; set;}
 
-		[Ordinal(0)] [RED("transformParent")] 		public CPtr<CHardAttachment> TransformParent { get; set;}
+		[Ordinal(3)] [RED("transformParent")] 		public CPtr<CHardAttachment> TransformParent { get; set;}
 
-		[Ordinal(0)] [RED("guid")] 		public CGUID Guid { get; set;}
+		[Ordinal(4)] [RED("guid")] 		public CGUID Guid { get; set;}
 
 		public CNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

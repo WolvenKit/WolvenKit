@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCheckActorSpeed : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("checkedActor")] 		public CEnum<EStatOwner> CheckedActor { get; set;}
+		[Ordinal(1)] [RED("("checkedActor")] 		public CEnum<EStatOwner> CheckedActor { get; set;}
 
-		[Ordinal(0)] [RED("("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(2)] [RED("("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[Ordinal(0)] [RED("("operator")] 		public CEnum<EOperator> Operator { get; set;}
+		[Ordinal(3)] [RED("("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
-		[Ordinal(0)] [RED("("customSpeed")] 		public CBool CustomSpeed { get; set;}
+		[Ordinal(4)] [RED("("customSpeed")] 		public CBool CustomSpeed { get; set;}
 
-		[Ordinal(0)] [RED("("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
+		[Ordinal(5)] [RED("("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 
-		[Ordinal(0)] [RED("("currentSpeed")] 		public CFloat CurrentSpeed { get; set;}
+		[Ordinal(6)] [RED("("currentSpeed")] 		public CFloat CurrentSpeed { get; set;}
 
 		public CBTTaskCheckActorSpeed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

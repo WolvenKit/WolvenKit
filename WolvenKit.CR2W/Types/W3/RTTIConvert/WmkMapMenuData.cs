@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class WmkMapMenuData : CObject
 	{
-		[Ordinal(0)] [RED("("merchantPins", 2,0)] 		public CArray<WmkMerchantMapPin> MerchantPins { get; set;}
+		[Ordinal(1)] [RED("("merchantPins", 2,0)] 		public CArray<WmkMerchantMapPin> MerchantPins { get; set;}
 
-		[Ordinal(0)] [RED("("removedMerchantPins", 2,0)] 		public CArray<WmkMerchantMapPin> RemovedMerchantPins { get; set;}
+		[Ordinal(2)] [RED("("removedMerchantPins", 2,0)] 		public CArray<WmkMerchantMapPin> RemovedMerchantPins { get; set;}
 
-		[Ordinal(0)] [RED("("replacedMerchantPins", 2,0)] 		public CArray<WmkMerchantMapPin> ReplacedMerchantPins { get; set;}
+		[Ordinal(3)] [RED("("replacedMerchantPins", 2,0)] 		public CArray<WmkMerchantMapPin> ReplacedMerchantPins { get; set;}
 
-		[Ordinal(0)] [RED("("deletedMerchantPins", 2,0)] 		public CArray<WmkMerchantMapPin> DeletedMerchantPins { get; set;}
+		[Ordinal(4)] [RED("("deletedMerchantPins", 2,0)] 		public CArray<WmkMerchantMapPin> DeletedMerchantPins { get; set;}
 
-		[Ordinal(0)] [RED("("removedSameUniqueTagMerchantPins", 2,0)] 		public CArray<WmkMerchantMapPin> RemovedSameUniqueTagMerchantPins { get; set;}
+		[Ordinal(5)] [RED("("removedSameUniqueTagMerchantPins", 2,0)] 		public CArray<WmkMerchantMapPin> RemovedSameUniqueTagMerchantPins { get; set;}
 
-		[Ordinal(0)] [RED("("replacedSameTypePosMerchantPins", 2,0)] 		public CArray<WmkMerchantMapPin> ReplacedSameTypePosMerchantPins { get; set;}
+		[Ordinal(6)] [RED("("replacedSameTypePosMerchantPins", 2,0)] 		public CArray<WmkMerchantMapPin> ReplacedSameTypePosMerchantPins { get; set;}
 
 		public WmkMapMenuData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

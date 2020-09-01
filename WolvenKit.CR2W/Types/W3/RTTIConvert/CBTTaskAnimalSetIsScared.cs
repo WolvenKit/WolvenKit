@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskAnimalSetIsScared : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("value")] 		public CBool Value { get; set;}
+		[Ordinal(1)] [RED("("value")] 		public CBool Value { get; set;}
 
-		[Ordinal(0)] [RED("("setOnDeactivate")] 		public CBool SetOnDeactivate { get; set;}
+		[Ordinal(2)] [RED("("setOnDeactivate")] 		public CBool SetOnDeactivate { get; set;}
 
-		[Ordinal(0)] [RED("("animalData")] 		public CHandle<CAIStorageAnimalData> AnimalData { get; set;}
+		[Ordinal(3)] [RED("("animalData")] 		public CHandle<CAIStorageAnimalData> AnimalData { get; set;}
 
 		public CBTTaskAnimalSetIsScared(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

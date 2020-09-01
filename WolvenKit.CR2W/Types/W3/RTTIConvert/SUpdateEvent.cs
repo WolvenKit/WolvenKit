@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SUpdateEvent : CVariable
 	{
-		[Ordinal(0)] [RED("("eventType")] 		public CEnum<EUpdateEventType> EventType { get; set;}
+		[Ordinal(1)] [RED("("eventType")] 		public CEnum<EUpdateEventType> EventType { get; set;}
 
-		[Ordinal(0)] [RED("("delay")] 		public CInt32 Delay { get; set;}
+		[Ordinal(2)] [RED("("delay")] 		public CInt32 Delay { get; set;}
 
-		[Ordinal(0)] [RED("("journalBase")] 		public CHandle<CJournalBase> JournalBase { get; set;}
+		[Ordinal(3)] [RED("("journalBase")] 		public CHandle<CJournalBase> JournalBase { get; set;}
 
-		[Ordinal(0)] [RED("("index")] 		public CInt32 Index { get; set;}
+		[Ordinal(4)] [RED("("index")] 		public CInt32 Index { get; set;}
 
 		public SUpdateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

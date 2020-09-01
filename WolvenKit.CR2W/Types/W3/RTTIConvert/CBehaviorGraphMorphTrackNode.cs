@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMorphTrackNode : CBehaviorGraphBaseNode
 	{
-		[Ordinal(0)] [RED("("trackIndex")] 		public CUInt32 TrackIndex { get; set;}
+		[Ordinal(1)] [RED("("trackIndex")] 		public CUInt32 TrackIndex { get; set;}
 
 		public CBehaviorGraphMorphTrackNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

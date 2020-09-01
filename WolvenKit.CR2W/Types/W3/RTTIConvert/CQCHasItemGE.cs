@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQCHasItemGE : IGameplayEntConditionType
 	{
-		[Ordinal(0)] [RED("item")] 		public CName Item { get; set;}
+		[Ordinal(1)] [RED("item")] 		public CName Item { get; set;}
 
-		[Ordinal(0)] [RED("itemCategory")] 		public CName ItemCategory { get; set;}
+		[Ordinal(2)] [RED("itemCategory")] 		public CName ItemCategory { get; set;}
 
-		[Ordinal(0)] [RED("itemTag")] 		public CName ItemTag { get; set;}
+		[Ordinal(3)] [RED("itemTag")] 		public CName ItemTag { get; set;}
 
-		[Ordinal(0)] [RED("quantity")] 		public CUInt32 Quantity { get; set;}
+		[Ordinal(4)] [RED("quantity")] 		public CUInt32 Quantity { get; set;}
 
-		[Ordinal(0)] [RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
+		[Ordinal(5)] [RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
 
 		public CQCHasItemGE(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

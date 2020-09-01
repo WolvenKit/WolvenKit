@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCircularDodge : CBTTaskDodge
 	{
-		[Ordinal(0)] [RED("("angle")] 		public CFloat Angle { get; set;}
+		[Ordinal(1)] [RED("("angle")] 		public CFloat Angle { get; set;}
 
 		public CBTTaskCircularDodge(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

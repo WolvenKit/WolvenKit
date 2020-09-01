@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SDLCLanguagePack : CVariable
 	{
-		[Ordinal(0)] [RED("("textLanguages", 2,0)] 		public CArray<CString> TextLanguages { get; set;}
+		[Ordinal(1)] [RED("("textLanguages", 2,0)] 		public CArray<CString> TextLanguages { get; set;}
 
-		[Ordinal(0)] [RED("("speechLanguages", 2,0)] 		public CArray<CString> SpeechLanguages { get; set;}
+		[Ordinal(2)] [RED("("speechLanguages", 2,0)] 		public CArray<CString> SpeechLanguages { get; set;}
 
 		public SDLCLanguagePack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

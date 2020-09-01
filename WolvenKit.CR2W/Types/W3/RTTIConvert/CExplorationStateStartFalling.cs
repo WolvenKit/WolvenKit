@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateStartFalling : CExplorationStateAbstract
 	{
-		[Ordinal(0)] [RED("("timeToJump")] 		public CFloat TimeToJump { get; set;}
+		[Ordinal(1)] [RED("("timeToJump")] 		public CFloat TimeToJump { get; set;}
 
-		[Ordinal(0)] [RED("("fallCancelled")] 		public CBool FallCancelled { get; set;}
+		[Ordinal(2)] [RED("("fallCancelled")] 		public CBool FallCancelled { get; set;}
 
-		[Ordinal(0)] [RED("("fallType")] 		public CEnum<EFallType> FallType { get; set;}
+		[Ordinal(3)] [RED("("fallType")] 		public CEnum<EFallType> FallType { get; set;}
 
-		[Ordinal(0)] [RED("("behFallType")] 		public CName BehFallType { get; set;}
+		[Ordinal(4)] [RED("("behFallType")] 		public CName BehFallType { get; set;}
 
-		[Ordinal(0)] [RED("("cameraFallIsSet")] 		public CBool CameraFallIsSet { get; set;}
+		[Ordinal(5)] [RED("("cameraFallIsSet")] 		public CBool CameraFallIsSet { get; set;}
 
-		[Ordinal(0)] [RED("("q704_gravit_shift")] 		public CBool Q704_gravit_shift { get; set;}
+		[Ordinal(6)] [RED("("q704_gravit_shift")] 		public CBool Q704_gravit_shift { get; set;}
 
 		public CExplorationStateStartFalling(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskDestroyEntity : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(1)] [RED("entityTag")] 		public CName EntityTag { get; set;}
 
-		[Ordinal(0)] [RED("playEffectName")] 		public CName PlayEffectName { get; set;}
+		[Ordinal(2)] [RED("playEffectName")] 		public CName PlayEffectName { get; set;}
 
-		[Ordinal(0)] [RED("stopEffectName")] 		public CName StopEffectName { get; set;}
+		[Ordinal(3)] [RED("stopEffectName")] 		public CName StopEffectName { get; set;}
 
-		[Ordinal(0)] [RED("eventToRaise")] 		public CName EventToRaise { get; set;}
+		[Ordinal(4)] [RED("eventToRaise")] 		public CName EventToRaise { get; set;}
 
-		[Ordinal(0)] [RED("playEffect")] 		public CBool PlayEffect { get; set;}
+		[Ordinal(5)] [RED("playEffect")] 		public CBool PlayEffect { get; set;}
 
-		[Ordinal(0)] [RED("stopEffect")] 		public CBool StopEffect { get; set;}
+		[Ordinal(6)] [RED("stopEffect")] 		public CBool StopEffect { get; set;}
 
-		[Ordinal(0)] [RED("destroyAfter")] 		public CFloat DestroyAfter { get; set;}
+		[Ordinal(7)] [RED("destroyAfter")] 		public CFloat DestroyAfter { get; set;}
 
-		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(8)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(9)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
 		public CBTTaskDestroyEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

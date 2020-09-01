@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class STemporarilyPausedEffect : CVariable
 	{
-		[Ordinal(0)] [RED("("buff")] 		public CHandle<CBaseGameplayEffect> Buff { get; set;}
+		[Ordinal(1)] [RED("("buff")] 		public CHandle<CBaseGameplayEffect> Buff { get; set;}
 
-		[Ordinal(0)] [RED("("timeLeft")] 		public CFloat TimeLeft { get; set;}
+		[Ordinal(2)] [RED("("timeLeft")] 		public CFloat TimeLeft { get; set;}
 
-		[Ordinal(0)] [RED("("source")] 		public CName Source { get; set;}
+		[Ordinal(3)] [RED("("source")] 		public CName Source { get; set;}
 
-		[Ordinal(0)] [RED("("singleLock")] 		public CBool SingleLock { get; set;}
+		[Ordinal(4)] [RED("("singleLock")] 		public CBool SingleLock { get; set;}
 
-		[Ordinal(0)] [RED("("useMaxDuration")] 		public CBool UseMaxDuration { get; set;}
+		[Ordinal(5)] [RED("("useMaxDuration")] 		public CBool UseMaxDuration { get; set;}
 
-		[Ordinal(0)] [RED("("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(6)] [RED("("duration")] 		public CFloat Duration { get; set;}
 
 		public STemporarilyPausedEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialOverrideAttachmentSelectByChunk : CMaterialOverrideAttachment
 	{
-		[Ordinal(0)] [RED("chunkIndices", 2,0)] 		public CArray<CUInt32> ChunkIndices { get; set;}
+		[Ordinal(1)] [RED("chunkIndices", 2,0)] 		public CArray<CUInt32> ChunkIndices { get; set;}
 
 		public CMaterialOverrideAttachmentSelectByChunk(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

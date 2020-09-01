@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIReaction : CObject
 	{
-		[Ordinal(0)] [RED("fieldName")] 		public CName FieldName { get; set;}
+		[Ordinal(1)] [RED("fieldName")] 		public CName FieldName { get; set;}
 
-		[Ordinal(0)] [RED("cooldownTime")] 		public CFloat CooldownTime { get; set;}
+		[Ordinal(2)] [RED("cooldownTime")] 		public CFloat CooldownTime { get; set;}
 
-		[Ordinal(0)] [RED("visibilityTest")] 		public CEnum<EVisibilityTest> VisibilityTest { get; set;}
+		[Ordinal(3)] [RED("visibilityTest")] 		public CEnum<EVisibilityTest> VisibilityTest { get; set;}
 
-		[Ordinal(0)] [RED("range")] 		public SAIReactionRange Range { get; set;}
+		[Ordinal(4)] [RED("range")] 		public SAIReactionRange Range { get; set;}
 
-		[Ordinal(0)] [RED("factTest")] 		public SAIReactionFactTest FactTest { get; set;}
+		[Ordinal(5)] [RED("factTest")] 		public SAIReactionFactTest FactTest { get; set;}
 
-		[Ordinal(0)] [RED("condition")] 		public CPtr<IReactionCondition> Condition { get; set;}
+		[Ordinal(6)] [RED("condition")] 		public CPtr<IReactionCondition> Condition { get; set;}
 
-		[Ordinal(0)] [RED("action")] 		public CPtr<IReactionAction> Action { get; set;}
+		[Ordinal(7)] [RED("action")] 		public CPtr<IReactionAction> Action { get; set;}
 
 		public CAIReaction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMapPinConfig : CVariable
 	{
-		[Ordinal(0)] [RED("("pinTypes", 2,0)] 		public CArray<SMapPinType> PinTypes { get; set;}
+		[Ordinal(1)] [RED("("pinTypes", 2,0)] 		public CArray<SMapPinType> PinTypes { get; set;}
 
-		[Ordinal(0)] [RED("("alwaysTrackedPins", 2,0)] 		public CArray<CName> AlwaysTrackedPins { get; set;}
+		[Ordinal(2)] [RED("("alwaysTrackedPins", 2,0)] 		public CArray<CName> AlwaysTrackedPins { get; set;}
 
-		[Ordinal(0)] [RED("("distantUpdateTime")] 		public CFloat DistantUpdateTime { get; set;}
+		[Ordinal(3)] [RED("("distantUpdateTime")] 		public CFloat DistantUpdateTime { get; set;}
 
-		[Ordinal(0)] [RED("("nearbyRadius")] 		public CFloat NearbyRadius { get; set;}
+		[Ordinal(4)] [RED("("nearbyRadius")] 		public CFloat NearbyRadius { get; set;}
 
 		public SMapPinConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

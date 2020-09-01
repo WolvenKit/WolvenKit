@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimEvent : CVariable
 	{
-		[Ordinal(0)] [RED("("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(1)] [RED("("eventName")] 		public CName EventName { get; set;}
 
-		[Ordinal(0)] [RED("("startTime")] 		public CFloat StartTime { get; set;}
+		[Ordinal(2)] [RED("("startTime")] 		public CFloat StartTime { get; set;}
 
-		[Ordinal(0)] [RED("("reportToScript")] 		public CBool ReportToScript { get; set;}
+		[Ordinal(3)] [RED("("reportToScript")] 		public CBool ReportToScript { get; set;}
 
-		[Ordinal(0)] [RED("("reportToScriptMinWeight")] 		public CFloat ReportToScriptMinWeight { get; set;}
+		[Ordinal(4)] [RED("("reportToScriptMinWeight")] 		public CFloat ReportToScriptMinWeight { get; set;}
 
-		[Ordinal(0)] [RED("("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(5)] [RED("("animationName")] 		public CName AnimationName { get; set;}
 
-		[Ordinal(0)] [RED("("trackName")] 		public CString TrackName { get; set;}
+		[Ordinal(6)] [RED("("trackName")] 		public CString TrackName { get; set;}
 
 		public CExtAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

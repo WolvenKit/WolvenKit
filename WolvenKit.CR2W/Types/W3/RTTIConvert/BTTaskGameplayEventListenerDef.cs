@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskGameplayEventListenerDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("gameplayEventName")] 		public CBehTreeValCName GameplayEventName { get; set;}
+		[Ordinal(1)] [RED("gameplayEventName")] 		public CBehTreeValCName GameplayEventName { get; set;}
 
-		[Ordinal(0)] [RED("validFor")] 		public CFloat ValidFor { get; set;}
+		[Ordinal(2)] [RED("validFor")] 		public CFloat ValidFor { get; set;}
 
-		[Ordinal(0)] [RED("activeFor")] 		public CFloat ActiveFor { get; set;}
+		[Ordinal(3)] [RED("activeFor")] 		public CFloat ActiveFor { get; set;}
 
-		[Ordinal(0)] [RED("clearOnEvent")] 		public CName ClearOnEvent { get; set;}
+		[Ordinal(4)] [RED("clearOnEvent")] 		public CName ClearOnEvent { get; set;}
 
 		public BTTaskGameplayEventListenerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

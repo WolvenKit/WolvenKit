@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskElementalDaoStoneSmash : CBTTaskAttack
 	{
-		[Ordinal(0)] [RED("stoneEntityTemplate")] 		public CHandle<CEntityTemplate> StoneEntityTemplate { get; set;}
+		[Ordinal(1)] [RED("stoneEntityTemplate")] 		public CHandle<CEntityTemplate> StoneEntityTemplate { get; set;}
 
-		[Ordinal(0)] [RED("Stone1")] 		public CHandle<CEntity> Stone1 { get; set;}
+		[Ordinal(2)] [RED("Stone1")] 		public CHandle<CEntity> Stone1 { get; set;}
 
-		[Ordinal(0)] [RED("Stone2")] 		public CHandle<CEntity> Stone2 { get; set;}
+		[Ordinal(3)] [RED("Stone2")] 		public CHandle<CEntity> Stone2 { get; set;}
 
-		[Ordinal(0)] [RED("execute")] 		public CBool Execute { get; set;}
+		[Ordinal(4)] [RED("execute")] 		public CBool Execute { get; set;}
 
-		[Ordinal(0)] [RED("spawnDist")] 		public CFloat SpawnDist { get; set;}
+		[Ordinal(5)] [RED("spawnDist")] 		public CFloat SpawnDist { get; set;}
 
-		[Ordinal(0)] [RED("dodgeable")] 		public CBool Dodgeable { get; set;}
+		[Ordinal(6)] [RED("dodgeable")] 		public CBool Dodgeable { get; set;}
 
-		[Ordinal(0)] [RED("targetPos")] 		public Vector TargetPos { get; set;}
+		[Ordinal(7)] [RED("targetPos")] 		public Vector TargetPos { get; set;}
 
 		public CBTTaskElementalDaoStoneSmash(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventCurveAnimation : CStorySceneEventDuration
 	{
-		[Ordinal(0)] [RED("("curve")] 		public SMultiCurve Curve { get; set;}
+		[Ordinal(1)] [RED("("curve")] 		public SMultiCurve Curve { get; set;}
 
 		public CStorySceneEventCurveAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

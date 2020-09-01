@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_OverEncumbered : CBaseGameplayEffect
 	{
-		[Ordinal(0)] [RED("("timeSinceLastMessage")] 		public CFloat TimeSinceLastMessage { get; set;}
+		[Ordinal(1)] [RED("("timeSinceLastMessage")] 		public CFloat TimeSinceLastMessage { get; set;}
 
-		[Ordinal(0)] [RED("("OVERWEIGHT_MESSAGE_DELAY")] 		public CFloat OVERWEIGHT_MESSAGE_DELAY { get; set;}
+		[Ordinal(2)] [RED("("OVERWEIGHT_MESSAGE_DELAY")] 		public CFloat OVERWEIGHT_MESSAGE_DELAY { get; set;}
 
 		public W3Effect_OverEncumbered(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

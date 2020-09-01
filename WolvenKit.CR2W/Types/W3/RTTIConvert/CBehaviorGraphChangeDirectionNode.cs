@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphChangeDirectionNode : CBehaviorGraphValueNode
 	{
-		[Ordinal(0)] [RED("("anyDirection")] 		public CBool AnyDirection { get; set;}
+		[Ordinal(1)] [RED("("anyDirection")] 		public CBool AnyDirection { get; set;}
 
-		[Ordinal(0)] [RED("("angles", 2,0)] 		public CArray<CFloat> Angles { get; set;}
+		[Ordinal(2)] [RED("("angles", 2,0)] 		public CArray<CFloat> Angles { get; set;}
 
-		[Ordinal(0)] [RED("("updateOnlyOnActivation")] 		public CBool UpdateOnlyOnActivation { get; set;}
+		[Ordinal(3)] [RED("("updateOnlyOnActivation")] 		public CBool UpdateOnlyOnActivation { get; set;}
 
-		[Ordinal(0)] [RED("("dirBlendTime")] 		public CFloat DirBlendTime { get; set;}
+		[Ordinal(4)] [RED("("dirBlendTime")] 		public CFloat DirBlendTime { get; set;}
 
-		[Ordinal(0)] [RED("("dirMaxBlendSpeed")] 		public CFloat DirMaxBlendSpeed { get; set;}
+		[Ordinal(5)] [RED("("dirMaxBlendSpeed")] 		public CFloat DirMaxBlendSpeed { get; set;}
 
-		[Ordinal(0)] [RED("("overshootAngle")] 		public CFloat OvershootAngle { get; set;}
+		[Ordinal(6)] [RED("("overshootAngle")] 		public CFloat OvershootAngle { get; set;}
 
-		[Ordinal(0)] [RED("("requestedFacingDirectionWSVariableName")] 		public CName RequestedFacingDirectionWSVariableName { get; set;}
+		[Ordinal(7)] [RED("("requestedFacingDirectionWSVariableName")] 		public CName RequestedFacingDirectionWSVariableName { get; set;}
 
-		[Ordinal(0)] [RED("("cachedRequestedFacingDirectionWSValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedRequestedFacingDirectionWSValueNode { get; set;}
+		[Ordinal(8)] [RED("("cachedRequestedFacingDirectionWSValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedRequestedFacingDirectionWSValueNode { get; set;}
 
 		public CBehaviorGraphChangeDirectionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

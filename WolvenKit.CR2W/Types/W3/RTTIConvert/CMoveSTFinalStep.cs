@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTFinalStep : CMoveSTMove
 	{
-		[Ordinal(0)] [RED("ignoreGoalToleranceForFinalLocation")] 		public CBool IgnoreGoalToleranceForFinalLocation { get; set;}
+		[Ordinal(1)] [RED("ignoreGoalToleranceForFinalLocation")] 		public CBool IgnoreGoalToleranceForFinalLocation { get; set;}
 
-		[Ordinal(0)] [RED("finalStepPositionVar")] 		public CName FinalStepPositionVar { get; set;}
+		[Ordinal(2)] [RED("finalStepPositionVar")] 		public CName FinalStepPositionVar { get; set;}
 
-		[Ordinal(0)] [RED("finalStepDistanceVar")] 		public CName FinalStepDistanceVar { get; set;}
+		[Ordinal(3)] [RED("finalStepDistanceVar")] 		public CName FinalStepDistanceVar { get; set;}
 
-		[Ordinal(0)] [RED("finalStepActiveVar")] 		public CName FinalStepActiveVar { get; set;}
+		[Ordinal(4)] [RED("finalStepActiveVar")] 		public CName FinalStepActiveVar { get; set;}
 
-		[Ordinal(0)] [RED("finalStepEvent")] 		public CName FinalStepEvent { get; set;}
+		[Ordinal(5)] [RED("finalStepEvent")] 		public CName FinalStepEvent { get; set;}
 
-		[Ordinal(0)] [RED("finalStepActivationNotification")] 		public CName FinalStepActivationNotification { get; set;}
+		[Ordinal(6)] [RED("finalStepActivationNotification")] 		public CName FinalStepActivationNotification { get; set;}
 
-		[Ordinal(0)] [RED("finalStepDeactivationNotification")] 		public CName FinalStepDeactivationNotification { get; set;}
+		[Ordinal(7)] [RED("finalStepDeactivationNotification")] 		public CName FinalStepDeactivationNotification { get; set;}
 
-		[Ordinal(0)] [RED("finalStepDeactivationNotificationTimeOut")] 		public CFloat FinalStepDeactivationNotificationTimeOut { get; set;}
+		[Ordinal(8)] [RED("finalStepDeactivationNotificationTimeOut")] 		public CFloat FinalStepDeactivationNotificationTimeOut { get; set;}
 
-		[Ordinal(0)] [RED("finalStepDistanceLimit")] 		public CFloat FinalStepDistanceLimit { get; set;}
+		[Ordinal(9)] [RED("finalStepDistanceLimit")] 		public CFloat FinalStepDistanceLimit { get; set;}
 
 		public CMoveSTFinalStep(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

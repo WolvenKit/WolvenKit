@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPlayerStatePlayerDialogScene : CPlayerStateBase
 	{
-		[Ordinal(0)] [RED("cachedPrevStateName")] 		public CName CachedPrevStateName { get; set;}
+		[Ordinal(1)] [RED("cachedPrevStateName")] 		public CName CachedPrevStateName { get; set;}
 
 		public CPlayerStatePlayerDialogScene(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

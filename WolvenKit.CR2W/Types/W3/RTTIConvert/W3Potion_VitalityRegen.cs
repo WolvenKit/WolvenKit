@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Potion_VitalityRegen : W3RegenEffect
 	{
-		[Ordinal(0)] [RED("("combatRegen")] 		public SAbilityAttributeValue CombatRegen { get; set;}
+		[Ordinal(1)] [RED("("combatRegen")] 		public SAbilityAttributeValue CombatRegen { get; set;}
 
-		[Ordinal(0)] [RED("("nonCombatRegen")] 		public SAbilityAttributeValue NonCombatRegen { get; set;}
+		[Ordinal(2)] [RED("("nonCombatRegen")] 		public SAbilityAttributeValue NonCombatRegen { get; set;}
 
-		[Ordinal(0)] [RED("("playerTarget")] 		public CHandle<CR4Player> PlayerTarget { get; set;}
+		[Ordinal(3)] [RED("("playerTarget")] 		public CHandle<CR4Player> PlayerTarget { get; set;}
 
 		public W3Potion_VitalityRegen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSwitchableFoliageResource : CResource
 	{
-		[Ordinal(0)] [RED("entries", 2,0)] 		public CArray<SSwitchableFoliageEntry> Entries { get; set;}
+		[Ordinal(1)] [RED("entries", 2,0)] 		public CArray<SSwitchableFoliageEntry> Entries { get; set;}
 
 		public CSwitchableFoliageResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

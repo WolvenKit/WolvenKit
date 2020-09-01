@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SJournalUpdate : CVariable
 	{
-		[Ordinal(0)] [RED("("text")] 		public CString Text { get; set;}
+		[Ordinal(1)] [RED("("text")] 		public CString Text { get; set;}
 
-		[Ordinal(0)] [RED("("title")] 		public CString Title { get; set;}
+		[Ordinal(2)] [RED("("title")] 		public CString Title { get; set;}
 
-		[Ordinal(0)] [RED("("status")] 		public CEnum<EJournalStatus> Status { get; set;}
+		[Ordinal(3)] [RED("("status")] 		public CEnum<EJournalStatus> Status { get; set;}
 
-		[Ordinal(0)] [RED("("journalEntry")] 		public CHandle<CJournalBase> JournalEntry { get; set;}
+		[Ordinal(4)] [RED("("journalEntry")] 		public CHandle<CJournalBase> JournalEntry { get; set;}
 
-		[Ordinal(0)] [RED("("iconPath")] 		public CString IconPath { get; set;}
+		[Ordinal(5)] [RED("("iconPath")] 		public CString IconPath { get; set;}
 
-		[Ordinal(0)] [RED("("panelName")] 		public CName PanelName { get; set;}
+		[Ordinal(6)] [RED("("panelName")] 		public CName PanelName { get; set;}
 
-		[Ordinal(0)] [RED("("entryTag")] 		public CName EntryTag { get; set;}
+		[Ordinal(7)] [RED("("entryTag")] 		public CName EntryTag { get; set;}
 
-		[Ordinal(0)] [RED("("soundEvent")] 		public CString SoundEvent { get; set;}
+		[Ordinal(8)] [RED("("soundEvent")] 		public CString SoundEvent { get; set;}
 
-		[Ordinal(0)] [RED("("isQuestUpdate")] 		public CBool IsQuestUpdate { get; set;}
+		[Ordinal(9)] [RED("("isQuestUpdate")] 		public CBool IsQuestUpdate { get; set;}
 
-		[Ordinal(0)] [RED("("displayTime")] 		public CFloat DisplayTime { get; set;}
+		[Ordinal(10)] [RED("("displayTime")] 		public CFloat DisplayTime { get; set;}
 
-		[Ordinal(0)] [RED("("itemId")] 		public SItemUniqueId ItemId { get; set;}
+		[Ordinal(11)] [RED("("itemId")] 		public SItemUniqueId ItemId { get; set;}
 
-		[Ordinal(0)] [RED("("isItemUpdate")] 		public CBool IsItemUpdate { get; set;}
+		[Ordinal(12)] [RED("("isItemUpdate")] 		public CBool IsItemUpdate { get; set;}
 
 		public SJournalUpdate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

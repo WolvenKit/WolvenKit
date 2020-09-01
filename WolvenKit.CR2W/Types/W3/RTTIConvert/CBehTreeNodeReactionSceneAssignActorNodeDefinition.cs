@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeReactionSceneAssignActorNodeDefinition : IBehTreeNodeDefinition
 	{
-		[Ordinal(0)] [RED("roleName")] 		public CName RoleName { get; set;}
+		[Ordinal(1)] [RED("roleName")] 		public CName RoleName { get; set;}
 
 		public CBehTreeNodeReactionSceneAssignActorNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

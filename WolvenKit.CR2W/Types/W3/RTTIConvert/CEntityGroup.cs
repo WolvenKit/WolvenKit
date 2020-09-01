@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEntityGroup : CEntity
 	{
-		[Ordinal(0)] [RED("("entities", 2,0)] 		public CArray<CPtr<CEntity>> Entities { get; set;}
+		[Ordinal(1)] [RED("("entities", 2,0)] 		public CArray<CPtr<CEntity>> Entities { get; set;}
 
-		[Ordinal(0)] [RED("("locked")] 		public CBool Locked { get; set;}
+		[Ordinal(2)] [RED("("locked")] 		public CBool Locked { get; set;}
 
 		public CEntityGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

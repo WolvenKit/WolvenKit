@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PhysicalDamageMechanism : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("dmgValue")] 		public CFloat DmgValue { get; set;}
+		[Ordinal(1)] [RED("("dmgValue")] 		public CFloat DmgValue { get; set;}
 
-		[Ordinal(0)] [RED("("hitReactionType")] 		public CEnum<EHitReactionType> HitReactionType { get; set;}
+		[Ordinal(2)] [RED("("hitReactionType")] 		public CEnum<EHitReactionType> HitReactionType { get; set;}
 
-		[Ordinal(0)] [RED("("reactivationTimer")] 		public CFloat ReactivationTimer { get; set;}
+		[Ordinal(3)] [RED("("reactivationTimer")] 		public CFloat ReactivationTimer { get; set;}
 
-		[Ordinal(0)] [RED("("animName")] 		public CName AnimName { get; set;}
+		[Ordinal(4)] [RED("("animName")] 		public CName AnimName { get; set;}
 
-		[Ordinal(0)] [RED("("shouldRewind")] 		public CBool ShouldRewind { get; set;}
+		[Ordinal(5)] [RED("("shouldRewind")] 		public CBool ShouldRewind { get; set;}
 
-		[Ordinal(0)] [RED("("isActive")] 		public CBool IsActive { get; set;}
+		[Ordinal(6)] [RED("("isActive")] 		public CBool IsActive { get; set;}
 
-		[Ordinal(0)] [RED("("isMoving")] 		public CBool IsMoving { get; set;}
+		[Ordinal(7)] [RED("("isMoving")] 		public CBool IsMoving { get; set;}
 
 		public W3PhysicalDamageMechanism(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

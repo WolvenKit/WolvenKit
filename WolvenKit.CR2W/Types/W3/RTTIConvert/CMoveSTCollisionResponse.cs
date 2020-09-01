@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTCollisionResponse : IMoveSteeringTask
 	{
-		[Ordinal(0)] [RED("headingImportanceMin")] 		public CFloat HeadingImportanceMin { get; set;}
+		[Ordinal(1)] [RED("headingImportanceMin")] 		public CFloat HeadingImportanceMin { get; set;}
 
-		[Ordinal(0)] [RED("headingImportanceMax")] 		public CFloat HeadingImportanceMax { get; set;}
+		[Ordinal(2)] [RED("headingImportanceMax")] 		public CFloat HeadingImportanceMax { get; set;}
 
-		[Ordinal(0)] [RED("radiusMult")] 		public CFloat RadiusMult { get; set;}
+		[Ordinal(3)] [RED("radiusMult")] 		public CFloat RadiusMult { get; set;}
 
 		public CMoveSTCollisionResponse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

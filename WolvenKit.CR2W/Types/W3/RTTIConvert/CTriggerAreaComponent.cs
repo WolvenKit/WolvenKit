@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTriggerAreaComponent : CAreaComponent
 	{
-		[Ordinal(0)] [RED("isEnabled")] 		public CBool IsEnabled { get; set;}
+		[Ordinal(1)] [RED("isEnabled")] 		public CBool IsEnabled { get; set;}
 
-		[Ordinal(0)] [RED("includedChannels")] 		public ETriggerChannel IncludedChannels { get; set;}
+		[Ordinal(2)] [RED("includedChannels")] 		public ETriggerChannel IncludedChannels { get; set;}
 
-		[Ordinal(0)] [RED("excludedChannels")] 		public ETriggerChannel ExcludedChannels { get; set;}
+		[Ordinal(3)] [RED("excludedChannels")] 		public ETriggerChannel ExcludedChannels { get; set;}
 
-		[Ordinal(0)] [RED("triggerPriority")] 		public CUInt32 TriggerPriority { get; set;}
+		[Ordinal(4)] [RED("triggerPriority")] 		public CUInt32 TriggerPriority { get; set;}
 
-		[Ordinal(0)] [RED("enableCCD")] 		public CBool EnableCCD { get; set;}
+		[Ordinal(5)] [RED("enableCCD")] 		public CBool EnableCCD { get; set;}
 
 		public CTriggerAreaComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWetnessComponent : CComponent
 	{
-		[Ordinal(0)] [RED("blendInFromOcean")] 		public CFloat BlendInFromOcean { get; set;}
+		[Ordinal(1)] [RED("blendInFromOcean")] 		public CFloat BlendInFromOcean { get; set;}
 
-		[Ordinal(0)] [RED("blendInFromRain")] 		public CFloat BlendInFromRain { get; set;}
+		[Ordinal(2)] [RED("blendInFromRain")] 		public CFloat BlendInFromRain { get; set;}
 
-		[Ordinal(0)] [RED("blendOutFromOcean")] 		public CFloat BlendOutFromOcean { get; set;}
+		[Ordinal(3)] [RED("blendOutFromOcean")] 		public CFloat BlendOutFromOcean { get; set;}
 
-		[Ordinal(0)] [RED("blendOutFromRain")] 		public CFloat BlendOutFromRain { get; set;}
+		[Ordinal(4)] [RED("blendOutFromRain")] 		public CFloat BlendOutFromRain { get; set;}
 
 		public CWetnessComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

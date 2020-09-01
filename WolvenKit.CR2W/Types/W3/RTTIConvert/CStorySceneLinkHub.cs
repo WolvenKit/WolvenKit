@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneLinkHub : CStorySceneControlPart
 	{
-		[Ordinal(0)] [RED("numSockets")] 		public CUInt32 NumSockets { get; set;}
+		[Ordinal(1)] [RED("numSockets")] 		public CUInt32 NumSockets { get; set;}
 
 		public CStorySceneLinkHub(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

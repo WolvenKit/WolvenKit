@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPhantomComponent : CComponent
 	{
-		[Ordinal(0)] [RED("("collisionGroupName")] 		public CName CollisionGroupName { get; set;}
+		[Ordinal(1)] [RED("("collisionGroupName")] 		public CName CollisionGroupName { get; set;}
 
-		[Ordinal(0)] [RED("("triggeringCollisionGroupNames", 2,0)] 		public CArray<CName> TriggeringCollisionGroupNames { get; set;}
+		[Ordinal(2)] [RED("("triggeringCollisionGroupNames", 2,0)] 		public CArray<CName> TriggeringCollisionGroupNames { get; set;}
 
-		[Ordinal(0)] [RED("("shapeType")] 		public CEnum<EPhantomShape> ShapeType { get; set;}
+		[Ordinal(3)] [RED("("shapeType")] 		public CEnum<EPhantomShape> ShapeType { get; set;}
 
-		[Ordinal(0)] [RED("("shapeDimensions")] 		public Vector ShapeDimensions { get; set;}
+		[Ordinal(4)] [RED("("shapeDimensions")] 		public Vector ShapeDimensions { get; set;}
 
-		[Ordinal(0)] [RED("("onTriggerEnteredScriptEvent")] 		public CName OnTriggerEnteredScriptEvent { get; set;}
+		[Ordinal(5)] [RED("("onTriggerEnteredScriptEvent")] 		public CName OnTriggerEnteredScriptEvent { get; set;}
 
-		[Ordinal(0)] [RED("("onTriggerExitedScriptEvent")] 		public CName OnTriggerExitedScriptEvent { get; set;}
+		[Ordinal(6)] [RED("("onTriggerExitedScriptEvent")] 		public CName OnTriggerExitedScriptEvent { get; set;}
 
-		[Ordinal(0)] [RED("("eventsCalledOnComponent")] 		public CBool EventsCalledOnComponent { get; set;}
+		[Ordinal(7)] [RED("("eventsCalledOnComponent")] 		public CBool EventsCalledOnComponent { get; set;}
 
-		[Ordinal(0)] [RED("("useInQueries")] 		public CBool UseInQueries { get; set;}
+		[Ordinal(8)] [RED("("useInQueries")] 		public CBool UseInQueries { get; set;}
 
-		[Ordinal(0)] [RED("("meshCollision")] 		public CHandle<CMesh> MeshCollision { get; set;}
+		[Ordinal(9)] [RED("("meshCollision")] 		public CHandle<CMesh> MeshCollision { get; set;}
 
 		public CPhantomComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3IgniProjectile : W3SignProjectile
 	{
-		[Ordinal(0)] [RED("("channelCollided")] 		public CBool ChannelCollided { get; set;}
+		[Ordinal(1)] [RED("("channelCollided")] 		public CBool ChannelCollided { get; set;}
 
-		[Ordinal(0)] [RED("("dt")] 		public CFloat Dt { get; set;}
+		[Ordinal(2)] [RED("("dt")] 		public CFloat Dt { get; set;}
 
-		[Ordinal(0)] [RED("("isUsed")] 		public CBool IsUsed { get; set;}
+		[Ordinal(3)] [RED("("isUsed")] 		public CBool IsUsed { get; set;}
 
 		public W3IgniProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

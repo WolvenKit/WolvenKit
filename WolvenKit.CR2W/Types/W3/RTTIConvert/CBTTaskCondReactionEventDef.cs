@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCondReactionEventDef : IBehTreeReactionTaskDefinition
 	{
-		[Ordinal(0)] [RED("("reactionEventName")] 		public CName ReactionEventName { get; set;}
+		[Ordinal(1)] [RED("("reactionEventName")] 		public CName ReactionEventName { get; set;}
 
 		public CBTTaskCondReactionEventDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

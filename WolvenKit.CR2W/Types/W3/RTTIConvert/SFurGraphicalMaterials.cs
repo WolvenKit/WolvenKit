@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurGraphicalMaterials : CVariable
 	{
-		[Ordinal(0)] [RED("("color")] 		public SFurColor Color { get; set;}
+		[Ordinal(1)] [RED("("color")] 		public SFurColor Color { get; set;}
 
-		[Ordinal(0)] [RED("("diffuse")] 		public SFurDiffuse Diffuse { get; set;}
+		[Ordinal(2)] [RED("("diffuse")] 		public SFurDiffuse Diffuse { get; set;}
 
-		[Ordinal(0)] [RED("("specular")] 		public SFurSpecular Specular { get; set;}
+		[Ordinal(3)] [RED("("specular")] 		public SFurSpecular Specular { get; set;}
 
-		[Ordinal(0)] [RED("("glint")] 		public SFurGlint Glint { get; set;}
+		[Ordinal(4)] [RED("("glint")] 		public SFurGlint Glint { get; set;}
 
-		[Ordinal(0)] [RED("("shadow")] 		public SFurShadow Shadow { get; set;}
+		[Ordinal(5)] [RED("("shadow")] 		public SFurShadow Shadow { get; set;}
 
 		public SFurGraphicalMaterials(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

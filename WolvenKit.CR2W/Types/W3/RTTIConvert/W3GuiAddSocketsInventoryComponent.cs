@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3GuiAddSocketsInventoryComponent : W3GuiPlayerInventoryComponent
 	{
-		[Ordinal(0)] [RED("("merchantInv")] 		public CHandle<CInventoryComponent> MerchantInv { get; set;}
+		[Ordinal(1)] [RED("("merchantInv")] 		public CHandle<CInventoryComponent> MerchantInv { get; set;}
 
-		[Ordinal(0)] [RED("("maxUpgradedItems", 2,0)] 		public CArray<SItemUniqueId> MaxUpgradedItems { get; set;}
+		[Ordinal(2)] [RED("("maxUpgradedItems", 2,0)] 		public CArray<SItemUniqueId> MaxUpgradedItems { get; set;}
 
 		public W3GuiAddSocketsInventoryComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

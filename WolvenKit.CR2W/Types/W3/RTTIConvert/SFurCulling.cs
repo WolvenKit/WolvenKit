@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurCulling : CVariable
 	{
-		[Ordinal(0)] [RED("("useViewfrustrumCulling")] 		public CBool UseViewfrustrumCulling { get; set;}
+		[Ordinal(1)] [RED("("useViewfrustrumCulling")] 		public CBool UseViewfrustrumCulling { get; set;}
 
-		[Ordinal(0)] [RED("("useBackfaceCulling")] 		public CBool UseBackfaceCulling { get; set;}
+		[Ordinal(2)] [RED("("useBackfaceCulling")] 		public CBool UseBackfaceCulling { get; set;}
 
-		[Ordinal(0)] [RED("("backfaceCullingThreshold")] 		public CFloat BackfaceCullingThreshold { get; set;}
+		[Ordinal(3)] [RED("("backfaceCullingThreshold")] 		public CFloat BackfaceCullingThreshold { get; set;}
 
 		public SFurCulling(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEASSlideToTargetEvent : CExtAnimScriptDurationEvent
 	{
-		[Ordinal(0)] [RED("("properties")] 		public SSlideToTargetEventProps Properties { get; set;}
+		[Ordinal(1)] [RED("("properties")] 		public SSlideToTargetEventProps Properties { get; set;}
 
 		public CEASSlideToTargetEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

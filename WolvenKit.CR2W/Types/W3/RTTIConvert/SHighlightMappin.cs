@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SHighlightMappin : CVariable
 	{
-		[Ordinal(0)] [RED("("MappinName")] 		public CName MappinName { get; set;}
+		[Ordinal(1)] [RED("("MappinName")] 		public CName MappinName { get; set;}
 
-		[Ordinal(0)] [RED("("MappinState")] 		public CBool MappinState { get; set;}
+		[Ordinal(2)] [RED("("MappinState")] 		public CBool MappinState { get; set;}
 
 		public SHighlightMappin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

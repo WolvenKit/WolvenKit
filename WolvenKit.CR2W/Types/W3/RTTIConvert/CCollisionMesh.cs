@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCollisionMesh : CResource
 	{
-		[Ordinal(0)] [RED("shapes", 2,0)] 		public CArray<CPtr<ICollisionShape>> Shapes { get; set;}
+		[Ordinal(1)] [RED("shapes", 2,0)] 		public CArray<CPtr<ICollisionShape>> Shapes { get; set;}
 
-		[Ordinal(0)] [RED("occlusionAttenuation")] 		public CFloat OcclusionAttenuation { get; set;}
+		[Ordinal(2)] [RED("occlusionAttenuation")] 		public CFloat OcclusionAttenuation { get; set;}
 
-		[Ordinal(0)] [RED("occlusionDiagonalLimit")] 		public CFloat OcclusionDiagonalLimit { get; set;}
+		[Ordinal(3)] [RED("occlusionDiagonalLimit")] 		public CFloat OcclusionDiagonalLimit { get; set;}
 
-		[Ordinal(0)] [RED("swimmingRotationAxis")] 		public CInt32 SwimmingRotationAxis { get; set;}
+		[Ordinal(4)] [RED("swimmingRotationAxis")] 		public CInt32 SwimmingRotationAxis { get; set;}
 
 		public CCollisionMesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

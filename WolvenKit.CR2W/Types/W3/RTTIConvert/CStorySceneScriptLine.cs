@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneScriptLine : CStorySceneElement
 	{
-		[Ordinal(0)] [RED("script")] 		public CString Script { get; set;}
+		[Ordinal(1)] [RED("script")] 		public CString Script { get; set;}
 
-		[Ordinal(0)] [RED("sceneScript")] 		public CPtr<CStorySceneScript> SceneScript { get; set;}
+		[Ordinal(2)] [RED("sceneScript")] 		public CPtr<CStorySceneScript> SceneScript { get; set;}
 
 		public CStorySceneScriptLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

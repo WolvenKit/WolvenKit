@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4ItemSelectionPopup : CR4PopupBase
 	{
-		[Ordinal(0)] [RED("("m_DataObject")] 		public CHandle<W3ItemSelectionPopupData> M_DataObject { get; set;}
+		[Ordinal(1)] [RED("("m_DataObject")] 		public CHandle<W3ItemSelectionPopupData> M_DataObject { get; set;}
 
-		[Ordinal(0)] [RED("("m_playerInv")] 		public CHandle<W3GuiSelectItemComponent> M_playerInv { get; set;}
+		[Ordinal(2)] [RED("("m_playerInv")] 		public CHandle<W3GuiSelectItemComponent> M_playerInv { get; set;}
 
-		[Ordinal(0)] [RED("("m_containerInv")] 		public CHandle<W3GuiContainerInventoryComponent> M_containerInv { get; set;}
+		[Ordinal(3)] [RED("("m_containerInv")] 		public CHandle<W3GuiContainerInventoryComponent> M_containerInv { get; set;}
 
-		[Ordinal(0)] [RED("("m_containerOwner")] 		public CHandle<CGameplayEntity> M_containerOwner { get; set;}
+		[Ordinal(4)] [RED("("m_containerOwner")] 		public CHandle<CGameplayEntity> M_containerOwner { get; set;}
 
-		[Ordinal(0)] [RED("("m_selectedItemCategory")] 		public CInt32 M_selectedItemCategory { get; set;}
+		[Ordinal(5)] [RED("("m_selectedItemCategory")] 		public CInt32 M_selectedItemCategory { get; set;}
 
 		public CR4ItemSelectionPopup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

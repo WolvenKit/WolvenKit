@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondHeightFromTargetDef : IBehTreeConditionalTaskDefinition
 	{
-		[Ordinal(0)] [RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(1)] [RED("value")] 		public CFloat Value { get; set;}
 
-		[Ordinal(0)] [RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
+		[Ordinal(2)] [RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
 		public BTCondHeightFromTargetDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

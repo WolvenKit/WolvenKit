@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneQuestChoiceLine : CStorySceneComment
 	{
-		[Ordinal(0)] [RED("emphasisLine")] 		public CBool EmphasisLine { get; set;}
+		[Ordinal(1)] [RED("emphasisLine")] 		public CBool EmphasisLine { get; set;}
 
-		[Ordinal(0)] [RED("returnToChoice")] 		public CBool ReturnToChoice { get; set;}
+		[Ordinal(2)] [RED("returnToChoice")] 		public CBool ReturnToChoice { get; set;}
 
-		[Ordinal(0)] [RED("action")] 		public CPtr<IStorySceneChoiceLineAction> Action { get; set;}
+		[Ordinal(3)] [RED("action")] 		public CPtr<IStorySceneChoiceLineAction> Action { get; set;}
 
 		public CStorySceneQuestChoiceLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

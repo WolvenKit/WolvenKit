@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFlyingSwarmTeleportDef : CBTTaskTeleportDef
 	{
-		[Ordinal(0)] [RED("("useAnimations")] 		public CBool UseAnimations { get; set;}
+		[Ordinal(1)] [RED("("useAnimations")] 		public CBool UseAnimations { get; set;}
 
-		[Ordinal(0)] [RED("("spawnedBirdCount")] 		public CInt32 SpawnedBirdCount { get; set;}
+		[Ordinal(2)] [RED("("spawnedBirdCount")] 		public CInt32 SpawnedBirdCount { get; set;}
 
-		[Ordinal(0)] [RED("("delayVanish")] 		public CFloat DelayVanish { get; set;}
+		[Ordinal(3)] [RED("("delayVanish")] 		public CFloat DelayVanish { get; set;}
 
-		[Ordinal(0)] [RED("("forcedDespawnTime")] 		public CFloat ForcedDespawnTime { get; set;}
+		[Ordinal(4)] [RED("("forcedDespawnTime")] 		public CFloat ForcedDespawnTime { get; set;}
 
-		[Ordinal(0)] [RED("("appearFXLoopInterval")] 		public CFloat AppearFXLoopInterval { get; set;}
+		[Ordinal(5)] [RED("("appearFXLoopInterval")] 		public CFloat AppearFXLoopInterval { get; set;}
 
-		[Ordinal(0)] [RED("("disableBoidPOIComponents")] 		public CBool DisableBoidPOIComponents { get; set;}
+		[Ordinal(6)] [RED("("disableBoidPOIComponents")] 		public CBool DisableBoidPOIComponents { get; set;}
 
 		public CBTTaskFlyingSwarmTeleportDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

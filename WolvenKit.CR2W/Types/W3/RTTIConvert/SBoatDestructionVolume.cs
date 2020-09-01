@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBoatDestructionVolume : CVariable
 	{
-		[Ordinal(0)] [RED("("areaHealth")] 		public CFloat AreaHealth { get; set;}
+		[Ordinal(1)] [RED("("areaHealth")] 		public CFloat AreaHealth { get; set;}
 
-		[Ordinal(0)] [RED("("volumeCorners")] 		public Vector VolumeCorners { get; set;}
+		[Ordinal(2)] [RED("("volumeCorners")] 		public Vector VolumeCorners { get; set;}
 
-		[Ordinal(0)] [RED("("volumeLocalPosition")] 		public Vector VolumeLocalPosition { get; set;}
+		[Ordinal(3)] [RED("("volumeLocalPosition")] 		public Vector VolumeLocalPosition { get; set;}
 
 		public SBoatDestructionVolume(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

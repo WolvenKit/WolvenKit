@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestThread : CObject
 	{
-		[Ordinal(0)] [RED("suspendedScopesData", 2,0)] 		public CArray<SQuestThreadSuspensionData> SuspendedScopesData { get; set;}
+		[Ordinal(1)] [RED("suspendedScopesData", 2,0)] 		public CArray<SQuestThreadSuspensionData> SuspendedScopesData { get; set;}
 
 		public CQuestThread(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

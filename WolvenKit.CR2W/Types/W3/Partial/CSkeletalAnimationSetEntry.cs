@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CSkeletalAnimationSetEntry : ISerializable
 	{
-		[Ordinal(0)] [RED("animation")] 		public CPtr<CSkeletalAnimation> Animation { get; set;}
+		[Ordinal(1)] [RED("animation")] 		public CPtr<CSkeletalAnimation> Animation { get; set;}
 
-		[Ordinal(0)] [RED("compressedPoseBlend")] 		public CEnum<ECompressedPoseBlend> CompressedPoseBlend { get; set;}
+		[Ordinal(2)] [RED("compressedPoseBlend")] 		public CEnum<ECompressedPoseBlend> CompressedPoseBlend { get; set;}
 
-		[Ordinal(0)] [RED("params", 2,0)] 		public CArray<CPtr<ISkeletalAnimationSetEntryParam>> Params { get; set;}
+		[Ordinal(3)] [RED("params", 2,0)] 		public CArray<CPtr<ISkeletalAnimationSetEntryParam>> Params { get; set;}
 
-		[Ordinal(0)] [RED("eventsGroupsRanges", 2,0)] 		public CArray<SEventGroupsRanges> EventsGroupsRanges { get; set;}
+		[Ordinal(4)] [RED("eventsGroupsRanges", 2,0)] 		public CArray<SEventGroupsRanges> EventsGroupsRanges { get; set;}
 
 		public CSkeletalAnimationSetEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

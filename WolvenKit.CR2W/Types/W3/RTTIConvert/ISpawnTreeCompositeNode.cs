@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ISpawnTreeCompositeNode : ISpawnTreeBranch
 	{
-		[Ordinal(0)] [RED("("childNodes", 2,0)] 		public CArray<CPtr<ISpawnTreeBaseNode>> ChildNodes { get; set;}
+		[Ordinal(1)] [RED("("childNodes", 2,0)] 		public CArray<CPtr<ISpawnTreeBaseNode>> ChildNodes { get; set;}
 
 		public ISpawnTreeCompositeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

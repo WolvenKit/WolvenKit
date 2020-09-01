@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_EnableTreasureHuntMappin : W3SwitchEvent
 	{
-		[Ordinal(0)] [RED("("mappinEntityTag")] 		public CName MappinEntityTag { get; set;}
+		[Ordinal(1)] [RED("("mappinEntityTag")] 		public CName MappinEntityTag { get; set;}
 
-		[Ordinal(0)] [RED("("enable")] 		public CBool Enable { get; set;}
+		[Ordinal(2)] [RED("("enable")] 		public CBool Enable { get; set;}
 
-		[Ordinal(0)] [RED("("mappinEntity")] 		public CHandle<W3TreasureHuntMappinEntity> MappinEntity { get; set;}
+		[Ordinal(3)] [RED("("mappinEntity")] 		public CHandle<W3TreasureHuntMappinEntity> MappinEntity { get; set;}
 
-		[Ordinal(0)] [RED("("commonMapManager")] 		public CHandle<CCommonMapManager> CommonMapManager { get; set;}
+		[Ordinal(4)] [RED("("commonMapManager")] 		public CHandle<CCommonMapManager> CommonMapManager { get; set;}
 
 		public W3SE_EnableTreasureHuntMappin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

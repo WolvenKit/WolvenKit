@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFormationFollowActionTree : IAIFormationActionTree
 	{
-		[Ordinal(0)] [RED("leaderTag")] 		public CName LeaderTag { get; set;}
+		[Ordinal(1)] [RED("leaderTag")] 		public CName LeaderTag { get; set;}
 
 		public CAIFormationFollowActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockWorldTangentRecalculation : CMaterialBlock
 	{
-		[Ordinal(0)] [RED("worldToTangent")] 		public CBool WorldToTangent { get; set;}
+		[Ordinal(1)] [RED("worldToTangent")] 		public CBool WorldToTangent { get; set;}
 
 		public CMaterialBlockWorldTangentRecalculation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

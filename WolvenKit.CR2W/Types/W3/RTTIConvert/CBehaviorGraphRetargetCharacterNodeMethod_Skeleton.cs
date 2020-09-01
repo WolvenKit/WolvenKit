@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphRetargetCharacterNodeMethod_Skeleton : IBehaviorGraphRetargetCharacterNodeMethod
 	{
-		[Ordinal(0)] [RED("skeleton")] 		public CHandle<CSkeleton> Skeleton { get; set;}
+		[Ordinal(1)] [RED("skeleton")] 		public CHandle<CSkeleton> Skeleton { get; set;}
 
-		[Ordinal(0)] [RED("Bones with only scale", 2,0)] 		public CArray<SBehaviorGraphBoneInfo> Bones_with_only_scale { get; set;}
+		[Ordinal(2)] [RED("Bones with only scale", 2,0)] 		public CArray<SBehaviorGraphBoneInfo> Bones_with_only_scale { get; set;}
 
 		public CBehaviorGraphRetargetCharacterNodeMethod_Skeleton(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

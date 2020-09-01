@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSignProjectile : CVariable
 	{
-		[Ordinal(0)] [RED("("speed")] 		public CFloat Speed { get; set;}
+		[Ordinal(1)] [RED("("speed")] 		public CFloat Speed { get; set;}
 
-		[Ordinal(0)] [RED("("flyEffect")] 		public CName FlyEffect { get; set;}
+		[Ordinal(2)] [RED("("flyEffect")] 		public CName FlyEffect { get; set;}
 
-		[Ordinal(0)] [RED("("hitEffect")] 		public CName HitEffect { get; set;}
+		[Ordinal(3)] [RED("("hitEffect")] 		public CName HitEffect { get; set;}
 
-		[Ordinal(0)] [RED("("targetHitEffect")] 		public CName TargetHitEffect { get; set;}
+		[Ordinal(4)] [RED("("targetHitEffect")] 		public CName TargetHitEffect { get; set;}
 
-		[Ordinal(0)] [RED("("lastingTime")] 		public CFloat LastingTime { get; set;}
+		[Ordinal(5)] [RED("("lastingTime")] 		public CFloat LastingTime { get; set;}
 
 		public SSignProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

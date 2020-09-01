@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSbDescEventIdlePose : CVariable
 	{
-		[Ordinal(0)] [RED("("prodPoseId")] 		public CString ProdPoseId { get; set;}
+		[Ordinal(1)] [RED("("prodPoseId")] 		public CString ProdPoseId { get; set;}
 
-		[Ordinal(0)] [RED("("_prodActorId")] 		public CString _prodActorId { get; set;}
+		[Ordinal(2)] [RED("("_prodActorId")] 		public CString _prodActorId { get; set;}
 
 		public SSbDescEventIdlePose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

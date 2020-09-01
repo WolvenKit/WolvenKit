@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CUsableEntity : CInteractiveEntity
 	{
-		[Ordinal(0)] [RED("bCanBeUsed")] 		public CBool BCanBeUsed { get; set;}
+		[Ordinal(1)] [RED("bCanBeUsed")] 		public CBool BCanBeUsed { get; set;}
 
 		public CUsableEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

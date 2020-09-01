@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSbDescAnimation : CVariable
 	{
-		[Ordinal(0)] [RED("("uId")] 		public CInt32 UId { get; set;}
+		[Ordinal(1)] [RED("("uId")] 		public CInt32 UId { get; set;}
 
-		[Ordinal(0)] [RED("("repoAnimId")] 		public CString RepoAnimId { get; set;}
+		[Ordinal(2)] [RED("("repoAnimId")] 		public CString RepoAnimId { get; set;}
 
-		[Ordinal(0)] [RED("("animName")] 		public CString AnimName { get; set;}
+		[Ordinal(3)] [RED("("animName")] 		public CString AnimName { get; set;}
 
-		[Ordinal(0)] [RED("("frames")] 		public CInt32 Frames { get; set;}
+		[Ordinal(4)] [RED("("frames")] 		public CInt32 Frames { get; set;}
 
 		public SSbDescAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

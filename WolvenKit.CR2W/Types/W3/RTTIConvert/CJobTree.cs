@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJobTree : CResource
 	{
-		[Ordinal(0)] [RED("jobTreeRootNode")] 		public CPtr<CJobTreeNode> JobTreeRootNode { get; set;}
+		[Ordinal(1)] [RED("jobTreeRootNode")] 		public CPtr<CJobTreeNode> JobTreeRootNode { get; set;}
 
-		[Ordinal(0)] [RED("movementMode")] 		public CEnum<EJobMovementMode> MovementMode { get; set;}
+		[Ordinal(2)] [RED("movementMode")] 		public CEnum<EJobMovementMode> MovementMode { get; set;}
 
-		[Ordinal(0)] [RED("customMovementSpeed")] 		public CFloat CustomMovementSpeed { get; set;}
+		[Ordinal(3)] [RED("customMovementSpeed")] 		public CFloat CustomMovementSpeed { get; set;}
 
-		[Ordinal(0)] [RED("settings")] 		public SJobTreeSettings Settings { get; set;}
+		[Ordinal(4)] [RED("settings")] 		public SJobTreeSettings Settings { get; set;}
 
 		public CJobTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSetBehVarDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("("behVarName")] 		public CBehTreeValCName BehVarName { get; set;}
+		[Ordinal(1)] [RED("("behVarName")] 		public CBehTreeValCName BehVarName { get; set;}
 
-		[Ordinal(0)] [RED("("behVarValue")] 		public CBehTreeValFloat BehVarValue { get; set;}
+		[Ordinal(2)] [RED("("behVarValue")] 		public CBehTreeValFloat BehVarValue { get; set;}
 
-		[Ordinal(0)] [RED("("inAllBehGraphs")] 		public CBool InAllBehGraphs { get; set;}
+		[Ordinal(3)] [RED("("inAllBehGraphs")] 		public CBool InAllBehGraphs { get; set;}
 
-		[Ordinal(0)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(4)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[Ordinal(0)] [RED("("onSuccess")] 		public CBool OnSuccess { get; set;}
+		[Ordinal(5)] [RED("("onSuccess")] 		public CBool OnSuccess { get; set;}
 
 		public CBTTaskSetBehVarDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

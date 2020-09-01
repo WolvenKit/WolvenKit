@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockOutputColorDeferred : CMaterialRootBlock
 	{
-		[Ordinal(0)] [RED("isTwoSided")] 		public CBool IsTwoSided { get; set;}
+		[Ordinal(1)] [RED("isTwoSided")] 		public CBool IsTwoSided { get; set;}
 
-		[Ordinal(0)] [RED("rawOutput")] 		public CBool RawOutput { get; set;}
+		[Ordinal(2)] [RED("rawOutput")] 		public CBool RawOutput { get; set;}
 
-		[Ordinal(0)] [RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
+		[Ordinal(3)] [RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
 
-		[Ordinal(0)] [RED("terrain")] 		public CBool Terrain { get; set;}
+		[Ordinal(4)] [RED("terrain")] 		public CBool Terrain { get; set;}
 
 		public CMaterialBlockOutputColorDeferred(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrackItemEnvironmentModifier : CFXTrackItem
 	{
-		[Ordinal(0)] [RED("lightDirection")] 		public Vector LightDirection { get; set;}
+		[Ordinal(1)] [RED("lightDirection")] 		public Vector LightDirection { get; set;}
 
-		[Ordinal(0)] [RED("sunLightDiffuse")] 		public CColor SunLightDiffuse { get; set;}
+		[Ordinal(2)] [RED("sunLightDiffuse")] 		public CColor SunLightDiffuse { get; set;}
 
-		[Ordinal(0)] [RED("sunLightBrightness")] 		public CFloat SunLightBrightness { get; set;}
+		[Ordinal(3)] [RED("sunLightBrightness")] 		public CFloat SunLightBrightness { get; set;}
 
-		[Ordinal(0)] [RED("ambientOverride")] 		public CColor AmbientOverride { get; set;}
+		[Ordinal(4)] [RED("ambientOverride")] 		public CColor AmbientOverride { get; set;}
 
-		[Ordinal(0)] [RED("ambientOverrideBrightness")] 		public CFloat AmbientOverrideBrightness { get; set;}
+		[Ordinal(5)] [RED("ambientOverrideBrightness")] 		public CFloat AmbientOverrideBrightness { get; set;}
 
-		[Ordinal(0)] [RED("overrideBalancing")] 		public CBool OverrideBalancing { get; set;}
+		[Ordinal(6)] [RED("overrideBalancing")] 		public CBool OverrideBalancing { get; set;}
 
-		[Ordinal(0)] [RED("parametricBalanceLow")] 		public CColor ParametricBalanceLow { get; set;}
+		[Ordinal(7)] [RED("parametricBalanceLow")] 		public CColor ParametricBalanceLow { get; set;}
 
-		[Ordinal(0)] [RED("parametricBalanceLowScale")] 		public CFloat ParametricBalanceLowScale { get; set;}
+		[Ordinal(8)] [RED("parametricBalanceLowScale")] 		public CFloat ParametricBalanceLowScale { get; set;}
 
-		[Ordinal(0)] [RED("parametricBalanceMid")] 		public CColor ParametricBalanceMid { get; set;}
+		[Ordinal(9)] [RED("parametricBalanceMid")] 		public CColor ParametricBalanceMid { get; set;}
 
-		[Ordinal(0)] [RED("parametricBalanceMidScale")] 		public CFloat ParametricBalanceMidScale { get; set;}
+		[Ordinal(10)] [RED("parametricBalanceMidScale")] 		public CFloat ParametricBalanceMidScale { get; set;}
 
-		[Ordinal(0)] [RED("parametricBalanceHigh")] 		public CColor ParametricBalanceHigh { get; set;}
+		[Ordinal(11)] [RED("parametricBalanceHigh")] 		public CColor ParametricBalanceHigh { get; set;}
 
-		[Ordinal(0)] [RED("parametricBalanceHighScale")] 		public CFloat ParametricBalanceHighScale { get; set;}
+		[Ordinal(12)] [RED("parametricBalanceHighScale")] 		public CFloat ParametricBalanceHighScale { get; set;}
 
 		public CFXTrackItemEnvironmentModifier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

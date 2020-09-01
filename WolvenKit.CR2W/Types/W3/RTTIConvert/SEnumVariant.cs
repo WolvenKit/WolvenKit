@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SEnumVariant : CVariable
 	{
-		[Ordinal(0)] [RED("("enumType")] 		public CName EnumType { get; set;}
+		[Ordinal(1)] [RED("("enumType")] 		public CName EnumType { get; set;}
 
-		[Ordinal(0)] [RED("("enumValue")] 		public CInt32 EnumValue { get; set;}
+		[Ordinal(2)] [RED("("enumValue")] 		public CInt32 EnumValue { get; set;}
 
 		public SEnumVariant(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

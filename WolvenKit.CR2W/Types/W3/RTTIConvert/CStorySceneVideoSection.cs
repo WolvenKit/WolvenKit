@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneVideoSection : CStorySceneSection
 	{
-		[Ordinal(0)] [RED("videoFileName")] 		public CString VideoFileName { get; set;}
+		[Ordinal(1)] [RED("videoFileName")] 		public CString VideoFileName { get; set;}
 
-		[Ordinal(0)] [RED("eventDescription")] 		public CString EventDescription { get; set;}
+		[Ordinal(2)] [RED("eventDescription")] 		public CString EventDescription { get; set;}
 
-		[Ordinal(0)] [RED("suppressRendering")] 		public CBool SuppressRendering { get; set;}
+		[Ordinal(3)] [RED("suppressRendering")] 		public CBool SuppressRendering { get; set;}
 
-		[Ordinal(0)] [RED("extraVideoFileNames", 2,0)] 		public CArray<CString> ExtraVideoFileNames { get; set;}
+		[Ordinal(4)] [RED("extraVideoFileNames", 2,0)] 		public CArray<CString> ExtraVideoFileNames { get; set;}
 
 		public CStorySceneVideoSection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

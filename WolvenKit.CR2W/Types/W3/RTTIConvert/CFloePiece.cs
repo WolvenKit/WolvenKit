@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFloePiece : CScriptedDestroyableComponent
 	{
-		[Ordinal(0)] [RED("("totalTime")] 		public CFloat TotalTime { get; set;}
+		[Ordinal(1)] [RED("("totalTime")] 		public CFloat TotalTime { get; set;}
 
-		[Ordinal(0)] [RED("("currPosition")] 		public Vector CurrPosition { get; set;}
+		[Ordinal(2)] [RED("("currPosition")] 		public Vector CurrPosition { get; set;}
 
 		public CFloePiece(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

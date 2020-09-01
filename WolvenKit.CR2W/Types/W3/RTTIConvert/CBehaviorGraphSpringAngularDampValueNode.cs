@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphSpringAngularDampValueNode : CBehaviorGraphSpringDampValueNode
 	{
-		[Ordinal(0)] [RED("isDegree")] 		public CBool IsDegree { get; set;}
+		[Ordinal(1)] [RED("isDegree")] 		public CBool IsDegree { get; set;}
 
 		public CBehaviorGraphSpringAngularDampValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

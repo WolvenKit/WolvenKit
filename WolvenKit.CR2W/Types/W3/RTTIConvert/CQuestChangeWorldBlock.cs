@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestChangeWorldBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("worldFilePath")] 		public CString WorldFilePath { get; set;}
+		[Ordinal(1)] [RED("worldFilePath")] 		public CString WorldFilePath { get; set;}
 
-		[Ordinal(0)] [RED("newWorld")] 		public CInt32 NewWorld { get; set;}
+		[Ordinal(2)] [RED("newWorld")] 		public CInt32 NewWorld { get; set;}
 
-		[Ordinal(0)] [RED("loadingMovieName")] 		public CString LoadingMovieName { get; set;}
+		[Ordinal(3)] [RED("loadingMovieName")] 		public CString LoadingMovieName { get; set;}
 
-		[Ordinal(0)] [RED("targetTag")] 		public TagList TargetTag { get; set;}
+		[Ordinal(4)] [RED("targetTag")] 		public TagList TargetTag { get; set;}
 
 		public CQuestChangeWorldBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

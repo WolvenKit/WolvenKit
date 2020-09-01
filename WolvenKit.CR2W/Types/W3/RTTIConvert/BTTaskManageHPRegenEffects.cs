@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskManageHPRegenEffects : BTTaskIrisTask
 	{
-		[Ordinal(0)] [RED("ResumeEffect")] 		public CBool ResumeEffect { get; set;}
+		[Ordinal(1)] [RED("ResumeEffect")] 		public CBool ResumeEffect { get; set;}
 
-		[Ordinal(0)] [RED("OnDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(2)] [RED("OnDeactivate")] 		public CBool OnDeactivate { get; set;}
 
 		public BTTaskManageHPRegenEffects(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

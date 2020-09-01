@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskElementalDaoStoneSmashDef : CBTTaskAttackDef
 	{
-		[Ordinal(0)] [RED("stoneEntityTemplate")] 		public CHandle<CEntityTemplate> StoneEntityTemplate { get; set;}
+		[Ordinal(1)] [RED("stoneEntityTemplate")] 		public CHandle<CEntityTemplate> StoneEntityTemplate { get; set;}
 
-		[Ordinal(0)] [RED("dodgeable")] 		public CBool Dodgeable { get; set;}
+		[Ordinal(2)] [RED("dodgeable")] 		public CBool Dodgeable { get; set;}
 
 		public CBTTaskElementalDaoStoneSmashDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

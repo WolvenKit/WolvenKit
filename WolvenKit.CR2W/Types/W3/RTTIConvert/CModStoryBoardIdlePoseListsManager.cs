@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardIdlePoseListsManager : CObject
 	{
-		[Ordinal(0)] [RED("("compatiblePosesCount")] 		public CInt32 CompatiblePosesCount { get; set;}
+		[Ordinal(1)] [RED("("compatiblePosesCount")] 		public CInt32 CompatiblePosesCount { get; set;}
 
-		[Ordinal(0)] [RED("("dataLoaded")] 		public CBool DataLoaded { get; set;}
+		[Ordinal(2)] [RED("("dataLoaded")] 		public CBool DataLoaded { get; set;}
 
-		[Ordinal(0)] [RED("("idlePoseMeta")] 		public CHandle<CStoryBoardIdlePoseMetaInfo> IdlePoseMeta { get; set;}
+		[Ordinal(3)] [RED("("idlePoseMeta")] 		public CHandle<CStoryBoardIdlePoseMetaInfo> IdlePoseMeta { get; set;}
 
 		public CModStoryBoardIdlePoseListsManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

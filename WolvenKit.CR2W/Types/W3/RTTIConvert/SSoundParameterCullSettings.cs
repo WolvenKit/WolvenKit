@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSoundParameterCullSettings : CVariable
 	{
-		[Ordinal(0)] [RED("("gameParameterName")] 		public StringAnsi GameParameterName { get; set;}
+		[Ordinal(1)] [RED("("gameParameterName")] 		public StringAnsi GameParameterName { get; set;}
 
-		[Ordinal(0)] [RED("("gameParameterCullValue")] 		public CFloat GameParameterCullValue { get; set;}
+		[Ordinal(2)] [RED("("gameParameterCullValue")] 		public CFloat GameParameterCullValue { get; set;}
 
-		[Ordinal(0)] [RED("("invertCullCheck")] 		public CBool InvertCullCheck { get; set;}
+		[Ordinal(3)] [RED("("invertCullCheck")] 		public CBool InvertCullCheck { get; set;}
 
 		public SSoundParameterCullSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

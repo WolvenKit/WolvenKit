@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeMachine : CObject
 	{
-		[Ordinal(0)] [RED("instance")] 		public CPtr<CBehTreeInstance> Instance { get; set;}
+		[Ordinal(1)] [RED("instance")] 		public CPtr<CBehTreeInstance> Instance { get; set;}
 
-		[Ordinal(0)] [RED("aiRes")] 		public CHandle<CBehTree> AiRes { get; set;}
+		[Ordinal(2)] [RED("aiRes")] 		public CHandle<CBehTree> AiRes { get; set;}
 
-		[Ordinal(0)] [RED("aiParameters", 2,0)] 		public CArray<CHandle<IAIParameters>> AiParameters { get; set;}
+		[Ordinal(3)] [RED("aiParameters", 2,0)] 		public CArray<CHandle<IAIParameters>> AiParameters { get; set;}
 
 		public CBehTreeMachine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

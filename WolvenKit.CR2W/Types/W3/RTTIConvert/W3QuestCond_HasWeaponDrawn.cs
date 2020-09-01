@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_HasWeaponDrawn : CQCActorScriptedCondition
 	{
-		[Ordinal(0)] [RED("("treatFistsAsWeapon")] 		public CBool TreatFistsAsWeapon { get; set;}
+		[Ordinal(1)] [RED("("treatFistsAsWeapon")] 		public CBool TreatFistsAsWeapon { get; set;}
 
-		[Ordinal(0)] [RED("("ofSpecificCategory")] 		public CName OfSpecificCategory { get; set;}
+		[Ordinal(2)] [RED("("ofSpecificCategory")] 		public CName OfSpecificCategory { get; set;}
 
-		[Ordinal(0)] [RED("("ofSpecificName")] 		public CName OfSpecificName { get; set;}
+		[Ordinal(3)] [RED("("ofSpecificName")] 		public CName OfSpecificName { get; set;}
 
 		public W3QuestCond_HasWeaponDrawn(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

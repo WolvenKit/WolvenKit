@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSceneCameraShotDescription : CVariable
 	{
-		[Ordinal(0)] [RED("("shotName")] 		public CName ShotName { get; set;}
+		[Ordinal(1)] [RED("("shotName")] 		public CName ShotName { get; set;}
 
-		[Ordinal(0)] [RED("("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(2)] [RED("("animationName")] 		public CName AnimationName { get; set;}
 
-		[Ordinal(0)] [RED("("overrideDof")] 		public CBool OverrideDof { get; set;}
+		[Ordinal(3)] [RED("("overrideDof")] 		public CBool OverrideDof { get; set;}
 
-		[Ordinal(0)] [RED("("dofIntensity")] 		public CFloat DofIntensity { get; set;}
+		[Ordinal(4)] [RED("("dofIntensity")] 		public CFloat DofIntensity { get; set;}
 
-		[Ordinal(0)] [RED("("dofBlurDistNear")] 		public CFloat DofBlurDistNear { get; set;}
+		[Ordinal(5)] [RED("("dofBlurDistNear")] 		public CFloat DofBlurDistNear { get; set;}
 
-		[Ordinal(0)] [RED("("dofFocusDistNear")] 		public CFloat DofFocusDistNear { get; set;}
+		[Ordinal(6)] [RED("("dofFocusDistNear")] 		public CFloat DofFocusDistNear { get; set;}
 
-		[Ordinal(0)] [RED("("dofFocusDistFar")] 		public CFloat DofFocusDistFar { get; set;}
+		[Ordinal(7)] [RED("("dofFocusDistFar")] 		public CFloat DofFocusDistFar { get; set;}
 
-		[Ordinal(0)] [RED("("dofBlurDistFar")] 		public CFloat DofBlurDistFar { get; set;}
+		[Ordinal(8)] [RED("("dofBlurDistFar")] 		public CFloat DofBlurDistFar { get; set;}
 
 		public SSceneCameraShotDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class InterpCurvePoint : CObject
 	{
-		[Ordinal(0)] [RED("("inVal")] 		public CFloat InVal { get; set;}
+		[Ordinal(1)] [RED("("inVal")] 		public CFloat InVal { get; set;}
 
-		[Ordinal(0)] [RED("("interpMode")] 		public CEnum<EInterpCurveMode> InterpMode { get; set;}
+		[Ordinal(2)] [RED("("interpMode")] 		public CEnum<EInterpCurveMode> InterpMode { get; set;}
 
 		public InterpCurvePoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

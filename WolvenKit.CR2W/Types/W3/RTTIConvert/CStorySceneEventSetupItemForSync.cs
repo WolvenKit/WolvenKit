@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventSetupItemForSync : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("itemName")] 		public CName ItemName { get; set;}
+		[Ordinal(1)] [RED("itemName")] 		public CName ItemName { get; set;}
 
-		[Ordinal(0)] [RED("activate")] 		public CBool Activate { get; set;}
+		[Ordinal(2)] [RED("activate")] 		public CBool Activate { get; set;}
 
-		[Ordinal(0)] [RED("actorToSyncTo")] 		public CName ActorToSyncTo { get; set;}
+		[Ordinal(3)] [RED("actorToSyncTo")] 		public CName ActorToSyncTo { get; set;}
 
 		public CStorySceneEventSetupItemForSync(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

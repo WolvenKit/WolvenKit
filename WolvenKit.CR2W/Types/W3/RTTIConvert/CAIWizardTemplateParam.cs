@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIWizardTemplateParam : CGameplayEntityParam
 	{
-		[Ordinal(0)] [RED("aiWizardResource")] 		public CHandle<CResource> AiWizardResource { get; set;}
+		[Ordinal(1)] [RED("aiWizardResource")] 		public CHandle<CResource> AiWizardResource { get; set;}
 
 		public CAIWizardTemplateParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

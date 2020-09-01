@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCharacterWindParams : CVariable
 	{
-		[Ordinal(0)] [RED("("primaryDensity")] 		public CFloat PrimaryDensity { get; set;}
+		[Ordinal(1)] [RED("("primaryDensity")] 		public CFloat PrimaryDensity { get; set;}
 
-		[Ordinal(0)] [RED("("secondaryDensity")] 		public CFloat SecondaryDensity { get; set;}
+		[Ordinal(2)] [RED("("secondaryDensity")] 		public CFloat SecondaryDensity { get; set;}
 
-		[Ordinal(0)] [RED("("primaryOscilationFrequency")] 		public CFloat PrimaryOscilationFrequency { get; set;}
+		[Ordinal(3)] [RED("("primaryOscilationFrequency")] 		public CFloat PrimaryOscilationFrequency { get; set;}
 
-		[Ordinal(0)] [RED("("secondaryOscilationFrequency")] 		public CFloat SecondaryOscilationFrequency { get; set;}
+		[Ordinal(4)] [RED("("secondaryOscilationFrequency")] 		public CFloat SecondaryOscilationFrequency { get; set;}
 
-		[Ordinal(0)] [RED("("primaryDistance")] 		public CFloat PrimaryDistance { get; set;}
+		[Ordinal(5)] [RED("("primaryDistance")] 		public CFloat PrimaryDistance { get; set;}
 
-		[Ordinal(0)] [RED("("secondaryDistance")] 		public CFloat SecondaryDistance { get; set;}
+		[Ordinal(6)] [RED("("secondaryDistance")] 		public CFloat SecondaryDistance { get; set;}
 
-		[Ordinal(0)] [RED("("gustFrequency")] 		public CFloat GustFrequency { get; set;}
+		[Ordinal(7)] [RED("("gustFrequency")] 		public CFloat GustFrequency { get; set;}
 
-		[Ordinal(0)] [RED("("gustDistance")] 		public CFloat GustDistance { get; set;}
+		[Ordinal(8)] [RED("("gustDistance")] 		public CFloat GustDistance { get; set;}
 
 		public SCharacterWindParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

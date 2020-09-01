@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondMyHorseIsMounted : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("waitForMountEnd")] 		public CBool WaitForMountEnd { get; set;}
+		[Ordinal(1)] [RED("("waitForMountEnd")] 		public CBool WaitForMountEnd { get; set;}
 
-		[Ordinal(0)] [RED("("waitForDismountEnd")] 		public CBool WaitForDismountEnd { get; set;}
+		[Ordinal(2)] [RED("("waitForDismountEnd")] 		public CBool WaitForDismountEnd { get; set;}
 
-		[Ordinal(0)] [RED("("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
+		[Ordinal(3)] [RED("("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
 
-		[Ordinal(0)] [RED("("returnTrueWhenNoHorse")] 		public CBool ReturnTrueWhenNoHorse { get; set;}
+		[Ordinal(4)] [RED("("returnTrueWhenNoHorse")] 		public CBool ReturnTrueWhenNoHorse { get; set;}
 
 		public CBTCondMyHorseIsMounted(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

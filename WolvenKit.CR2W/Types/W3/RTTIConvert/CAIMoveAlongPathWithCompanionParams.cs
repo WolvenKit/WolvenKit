@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMoveAlongPathWithCompanionParams : CAIMoveAlongPathParams
 	{
-		[Ordinal(0)] [RED("companionTag")] 		public CName CompanionTag { get; set;}
+		[Ordinal(1)] [RED("companionTag")] 		public CName CompanionTag { get; set;}
 
-		[Ordinal(0)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(2)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[Ordinal(0)] [RED("minDistance")] 		public CFloat MinDistance { get; set;}
+		[Ordinal(3)] [RED("minDistance")] 		public CFloat MinDistance { get; set;}
 
-		[Ordinal(0)] [RED("companionOffset")] 		public CFloat CompanionOffset { get; set;}
+		[Ordinal(4)] [RED("companionOffset")] 		public CFloat CompanionOffset { get; set;}
 
-		[Ordinal(0)] [RED("progressWhenCompanionIsAhead")] 		public CBool ProgressWhenCompanionIsAhead { get; set;}
+		[Ordinal(5)] [RED("progressWhenCompanionIsAhead")] 		public CBool ProgressWhenCompanionIsAhead { get; set;}
 
-		[Ordinal(0)] [RED("progressOnlyWhenCompanionIsAhead")] 		public CBool ProgressOnlyWhenCompanionIsAhead { get; set;}
+		[Ordinal(6)] [RED("progressOnlyWhenCompanionIsAhead")] 		public CBool ProgressOnlyWhenCompanionIsAhead { get; set;}
 
-		[Ordinal(0)] [RED("matchCompanionSpeed")] 		public CBool MatchCompanionSpeed { get; set;}
+		[Ordinal(7)] [RED("matchCompanionSpeed")] 		public CBool MatchCompanionSpeed { get; set;}
 
-		[Ordinal(0)] [RED("allowLeaderToRideOff")] 		public CBool AllowLeaderToRideOff { get; set;}
+		[Ordinal(8)] [RED("allowLeaderToRideOff")] 		public CBool AllowLeaderToRideOff { get; set;}
 
-		[Ordinal(0)] [RED("moveTypeAfterMaxDistance")] 		public CEnum<EMoveType> MoveTypeAfterMaxDistance { get; set;}
+		[Ordinal(9)] [RED("moveTypeAfterMaxDistance")] 		public CEnum<EMoveType> MoveTypeAfterMaxDistance { get; set;}
 
 		public CAIMoveAlongPathWithCompanionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

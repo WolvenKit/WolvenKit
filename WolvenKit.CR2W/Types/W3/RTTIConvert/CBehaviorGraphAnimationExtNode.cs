@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAnimationExtNode : CBehaviorGraphAnimationNode
 	{
-		[Ordinal(0)] [RED("animStartOffset")] 		public CFloat AnimStartOffset { get; set;}
+		[Ordinal(1)] [RED("animStartOffset")] 		public CFloat AnimStartOffset { get; set;}
 
-		[Ordinal(0)] [RED("fireLoopEventBackOffset")] 		public CFloat FireLoopEventBackOffset { get; set;}
+		[Ordinal(2)] [RED("fireLoopEventBackOffset")] 		public CFloat FireLoopEventBackOffset { get; set;}
 
 		public CBehaviorGraphAnimationExtNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

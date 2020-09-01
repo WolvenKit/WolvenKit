@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardVoiceLinesMode : CModStoryBoardAssetSelectionBasedWorkMode
 	{
-		[Ordinal(0)] [RED("voiceLinesListsManager")] 		public CHandle<CModStoryBoardVoiceLinesListsManager> VoiceLinesListsManager { get; set;}
+		[Ordinal(1)] [RED("voiceLinesListsManager")] 		public CHandle<CModStoryBoardVoiceLinesListsManager> VoiceLinesListsManager { get; set;}
 
-		[Ordinal(0)] [RED("theAudioDirector")] 		public CHandle<CModStoryBoardAudioDirector> TheAudioDirector { get; set;}
+		[Ordinal(2)] [RED("theAudioDirector")] 		public CHandle<CModStoryBoardAudioDirector> TheAudioDirector { get; set;}
 
 		public CModStoryBoardVoiceLinesMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

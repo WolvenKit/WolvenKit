@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorMimiLipsyncCorrectionConstraint : IBehaviorMimicConstraint
 	{
-		[Ordinal(0)] [RED("controlTrack")] 		public CInt32 ControlTrack { get; set;}
+		[Ordinal(1)] [RED("controlTrack")] 		public CInt32 ControlTrack { get; set;}
 
-		[Ordinal(0)] [RED("trackBegin")] 		public CInt32 TrackBegin { get; set;}
+		[Ordinal(2)] [RED("trackBegin")] 		public CInt32 TrackBegin { get; set;}
 
-		[Ordinal(0)] [RED("trackEnd")] 		public CInt32 TrackEnd { get; set;}
+		[Ordinal(3)] [RED("trackEnd")] 		public CInt32 TrackEnd { get; set;}
 
 		public CBehaviorMimiLipsyncCorrectionConstraint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

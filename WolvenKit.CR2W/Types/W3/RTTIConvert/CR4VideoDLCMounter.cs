@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4VideoDLCMounter : IGameplayDLCMounter
 	{
-		[Ordinal(0)] [RED("("videoDirectoryPath")] 		public CString VideoDirectoryPath { get; set;}
+		[Ordinal(1)] [RED("("videoDirectoryPath")] 		public CString VideoDirectoryPath { get; set;}
 
 		public CR4VideoDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

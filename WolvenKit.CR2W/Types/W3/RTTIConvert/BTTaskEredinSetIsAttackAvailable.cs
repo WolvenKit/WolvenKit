@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskEredinSetIsAttackAvailable : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("combatDataStorage")] 		public CHandle<CBossAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(1)] [RED("combatDataStorage")] 		public CHandle<CBossAICombatStorage> CombatDataStorage { get; set;}
 
-		[Ordinal(0)] [RED("attack")] 		public CEnum<EBossSpecialAttacks> Attack { get; set;}
+		[Ordinal(2)] [RED("attack")] 		public CEnum<EBossSpecialAttacks> Attack { get; set;}
 
-		[Ordinal(0)] [RED("val")] 		public CBool Val { get; set;}
+		[Ordinal(3)] [RED("val")] 		public CBool Val { get; set;}
 
-		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(4)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
 		public BTTaskEredinSetIsAttackAvailable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SModUiFilteredListCatItem : CVariable
 	{
-		[Ordinal(0)] [RED("("id")] 		public CString Id { get; set;}
+		[Ordinal(1)] [RED("("id")] 		public CString Id { get; set;}
 
-		[Ordinal(0)] [RED("("item")] 		public SModUiListItem Item { get; set;}
+		[Ordinal(2)] [RED("("item")] 		public SModUiListItem Item { get; set;}
 
-		[Ordinal(0)] [RED("("count")] 		public CInt32 Count { get; set;}
+		[Ordinal(3)] [RED("("count")] 		public CInt32 Count { get; set;}
 
-		[Ordinal(0)] [RED("("total")] 		public CInt32 Total { get; set;}
+		[Ordinal(4)] [RED("("total")] 		public CInt32 Total { get; set;}
 
-		[Ordinal(0)] [RED("("isOpen")] 		public CBool IsOpen { get; set;}
+		[Ordinal(5)] [RED("("isOpen")] 		public CBool IsOpen { get; set;}
 
-		[Ordinal(0)] [RED("("entryPos")] 		public CInt32 EntryPos { get; set;}
+		[Ordinal(6)] [RED("("entryPos")] 		public CInt32 EntryPos { get; set;}
 
 		public SModUiFilteredListCatItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

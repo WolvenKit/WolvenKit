@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateSkatingHitFrontal : CExplorationInterceptorStateAbstract
 	{
-		[Ordinal(0)] [RED("("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
+		[Ordinal(1)] [RED("("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
 
-		[Ordinal(0)] [RED("("behAnimEnd")] 		public CName BehAnimEnd { get; set;}
+		[Ordinal(2)] [RED("("behAnimEnd")] 		public CName BehAnimEnd { get; set;}
 
-		[Ordinal(0)] [RED("("timeMax")] 		public CFloat TimeMax { get; set;}
+		[Ordinal(3)] [RED("("timeMax")] 		public CFloat TimeMax { get; set;}
 
-		[Ordinal(0)] [RED("("dotCollToEnter")] 		public CFloat DotCollToEnter { get; set;}
+		[Ordinal(4)] [RED("("dotCollToEnter")] 		public CFloat DotCollToEnter { get; set;}
 
 		public CExplorationStateSkatingHitFrontal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

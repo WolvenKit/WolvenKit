@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PlayerModeTrigger : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("isEnabled")] 		public CBool IsEnabled { get; set;}
+		[Ordinal(1)] [RED("("isEnabled")] 		public CBool IsEnabled { get; set;}
 
-		[Ordinal(0)] [RED("("isActive")] 		public CBool IsActive { get; set;}
+		[Ordinal(2)] [RED("("isActive")] 		public CBool IsActive { get; set;}
 
-		[Ordinal(0)] [RED("("isPlayerInside")] 		public CBool IsPlayerInside { get; set;}
+		[Ordinal(3)] [RED("("isPlayerInside")] 		public CBool IsPlayerInside { get; set;}
 
-		[Ordinal(0)] [RED("("playerMode")] 		public CEnum<EPlayerMode> PlayerMode { get; set;}
+		[Ordinal(4)] [RED("("playerMode")] 		public CEnum<EPlayerMode> PlayerMode { get; set;}
 
 		public W3PlayerModeTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

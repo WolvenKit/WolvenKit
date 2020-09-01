@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphChooseRecoverFromRagdollAnimNode : CBehaviorGraphNode
 	{
-		[Ordinal(0)] [RED("("mode")] 		public CEnum<EBehaviorGraphChooseRecoverFromRagdollAnimMode> Mode { get; set;}
+		[Ordinal(1)] [RED("("mode")] 		public CEnum<EBehaviorGraphChooseRecoverFromRagdollAnimMode> Mode { get; set;}
 
-		[Ordinal(0)] [RED("("additionalOneFrameRotationYaw")] 		public CFloat AdditionalOneFrameRotationYaw { get; set;}
+		[Ordinal(2)] [RED("("additionalOneFrameRotationYaw")] 		public CFloat AdditionalOneFrameRotationYaw { get; set;}
 
-		[Ordinal(0)] [RED("("pelvisBone")] 		public CName PelvisBone { get; set;}
+		[Ordinal(3)] [RED("("pelvisBone")] 		public CName PelvisBone { get; set;}
 
-		[Ordinal(0)] [RED("("pelvisBoneFrontAxis")] 		public CEnum<EAxis> PelvisBoneFrontAxis { get; set;}
+		[Ordinal(4)] [RED("("pelvisBoneFrontAxis")] 		public CEnum<EAxis> PelvisBoneFrontAxis { get; set;}
 
-		[Ordinal(0)] [RED("("pelvisBoneFrontAxisInverted")] 		public CBool PelvisBoneFrontAxisInverted { get; set;}
+		[Ordinal(5)] [RED("("pelvisBoneFrontAxisInverted")] 		public CBool PelvisBoneFrontAxisInverted { get; set;}
 
-		[Ordinal(0)] [RED("("pelvisBoneWeight")] 		public CFloat PelvisBoneWeight { get; set;}
+		[Ordinal(6)] [RED("("pelvisBoneWeight")] 		public CFloat PelvisBoneWeight { get; set;}
 
-		[Ordinal(0)] [RED("("shoulderBone")] 		public CName ShoulderBone { get; set;}
+		[Ordinal(7)] [RED("("shoulderBone")] 		public CName ShoulderBone { get; set;}
 
-		[Ordinal(0)] [RED("("shoulderBoneFrontAxis")] 		public CEnum<EAxis> ShoulderBoneFrontAxis { get; set;}
+		[Ordinal(8)] [RED("("shoulderBoneFrontAxis")] 		public CEnum<EAxis> ShoulderBoneFrontAxis { get; set;}
 
-		[Ordinal(0)] [RED("("shoulderBoneFrontAxisInverted")] 		public CBool ShoulderBoneFrontAxisInverted { get; set;}
+		[Ordinal(9)] [RED("("shoulderBoneFrontAxisInverted")] 		public CBool ShoulderBoneFrontAxisInverted { get; set;}
 
-		[Ordinal(0)] [RED("("shoulderBoneWeight")] 		public CFloat ShoulderBoneWeight { get; set;}
+		[Ordinal(10)] [RED("("shoulderBoneWeight")] 		public CFloat ShoulderBoneWeight { get; set;}
 
-		[Ordinal(0)] [RED("("cachedInputNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphNode>> CachedInputNodes { get; set;}
+		[Ordinal(11)] [RED("("cachedInputNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphNode>> CachedInputNodes { get; set;}
 
 		public CBehaviorGraphChooseRecoverFromRagdollAnimNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

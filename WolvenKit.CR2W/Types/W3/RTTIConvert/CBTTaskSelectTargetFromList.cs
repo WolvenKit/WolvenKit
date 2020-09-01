@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSelectTargetFromList : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("targetList", 2,0)] 		public CArray<CName> TargetList { get; set;}
+		[Ordinal(1)] [RED("("targetList", 2,0)] 		public CArray<CName> TargetList { get; set;}
 
-		[Ordinal(0)] [RED("("currentTargetIndex")] 		public CInt32 CurrentTargetIndex { get; set;}
+		[Ordinal(2)] [RED("("currentTargetIndex")] 		public CInt32 CurrentTargetIndex { get; set;}
 
-		[Ordinal(0)] [RED("("currentTarget")] 		public CHandle<CNode> CurrentTarget { get; set;}
+		[Ordinal(3)] [RED("("currentTarget")] 		public CHandle<CNode> CurrentTarget { get; set;}
 
-		[Ordinal(0)] [RED("("targetToSelect")] 		public CHandle<CNode> TargetToSelect { get; set;}
+		[Ordinal(4)] [RED("("targetToSelect")] 		public CHandle<CNode> TargetToSelect { get; set;}
 
 		public CBTTaskSelectTargetFromList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

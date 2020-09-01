@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFinishable : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("finisherAnimName")] 		public CName FinisherAnimName { get; set;}
+		[Ordinal(1)] [RED("("finisherAnimName")] 		public CName FinisherAnimName { get; set;}
 
 		public CBTTaskFinishable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

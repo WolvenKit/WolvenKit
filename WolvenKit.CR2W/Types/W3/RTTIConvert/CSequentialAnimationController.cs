@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSequentialAnimationController : IAnimationController
 	{
-		[Ordinal(0)] [RED("("animations", 2,0)] 		public CArray<CName> Animations { get; set;}
+		[Ordinal(1)] [RED("("animations", 2,0)] 		public CArray<CName> Animations { get; set;}
 
-		[Ordinal(0)] [RED("("speeds", 2,0)] 		public CArray<CFloat> Speeds { get; set;}
+		[Ordinal(2)] [RED("("speeds", 2,0)] 		public CArray<CFloat> Speeds { get; set;}
 
-		[Ordinal(0)] [RED("("startingOffsetRange")] 		public CFloat StartingOffsetRange { get; set;}
+		[Ordinal(3)] [RED("("startingOffsetRange")] 		public CFloat StartingOffsetRange { get; set;}
 
-		[Ordinal(0)] [RED("("startingOffsetBias")] 		public CFloat StartingOffsetBias { get; set;}
+		[Ordinal(4)] [RED("("startingOffsetBias")] 		public CFloat StartingOffsetBias { get; set;}
 
 		public CSequentialAnimationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

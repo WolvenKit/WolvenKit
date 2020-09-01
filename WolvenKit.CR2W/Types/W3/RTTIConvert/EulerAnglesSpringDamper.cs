@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class EulerAnglesSpringDamper : CObject
 	{
-		[Ordinal(0)] [RED("destValue")] 		public EulerAngles DestValue { get; set;}
+		[Ordinal(1)] [RED("destValue")] 		public EulerAngles DestValue { get; set;}
 
-		[Ordinal(0)] [RED("currValue")] 		public EulerAngles CurrValue { get; set;}
+		[Ordinal(2)] [RED("currValue")] 		public EulerAngles CurrValue { get; set;}
 
-		[Ordinal(0)] [RED("velValue")] 		public EulerAngles VelValue { get; set;}
+		[Ordinal(3)] [RED("velValue")] 		public EulerAngles VelValue { get; set;}
 
-		[Ordinal(0)] [RED("smoothTime")] 		public CFloat SmoothTime { get; set;}
+		[Ordinal(4)] [RED("smoothTime")] 		public CFloat SmoothTime { get; set;}
 
 		public EulerAnglesSpringDamper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

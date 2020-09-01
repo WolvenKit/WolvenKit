@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTaskDeathIdleDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("setAppearanceTo")] 		public CBehTreeValCName SetAppearanceTo { get; set;}
+		[Ordinal(1)] [RED("setAppearanceTo")] 		public CBehTreeValCName SetAppearanceTo { get; set;}
 
-		[Ordinal(0)] [RED("changeAppearanceAfter")] 		public CBehTreeValFloat ChangeAppearanceAfter { get; set;}
+		[Ordinal(2)] [RED("changeAppearanceAfter")] 		public CBehTreeValFloat ChangeAppearanceAfter { get; set;}
 
-		[Ordinal(0)] [RED("disableCollision")] 		public CBehTreeValBool DisableCollision { get; set;}
+		[Ordinal(3)] [RED("disableCollision")] 		public CBehTreeValBool DisableCollision { get; set;}
 
-		[Ordinal(0)] [RED("disableCollisionDelay")] 		public CBehTreeValFloat DisableCollisionDelay { get; set;}
+		[Ordinal(4)] [RED("disableCollisionDelay")] 		public CBehTreeValFloat DisableCollisionDelay { get; set;}
 
-		[Ordinal(0)] [RED("disableRagdollAfter")] 		public CBehTreeValFloat DisableRagdollAfter { get; set;}
+		[Ordinal(5)] [RED("disableRagdollAfter")] 		public CBehTreeValFloat DisableRagdollAfter { get; set;}
 
 		public CBehTreeTaskDeathIdleDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

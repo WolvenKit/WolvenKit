@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphDampValueNode : CBehaviorGraphValueBaseNode
 	{
-		[Ordinal(0)] [RED("("increaseSpeed")] 		public CFloat IncreaseSpeed { get; set;}
+		[Ordinal(1)] [RED("("increaseSpeed")] 		public CFloat IncreaseSpeed { get; set;}
 
-		[Ordinal(0)] [RED("("decreaseSpeed")] 		public CFloat DecreaseSpeed { get; set;}
+		[Ordinal(2)] [RED("("decreaseSpeed")] 		public CFloat DecreaseSpeed { get; set;}
 
-		[Ordinal(0)] [RED("("absolute")] 		public CBool Absolute { get; set;}
+		[Ordinal(3)] [RED("("absolute")] 		public CBool Absolute { get; set;}
 
-		[Ordinal(0)] [RED("("startFromDefault")] 		public CBool StartFromDefault { get; set;}
+		[Ordinal(4)] [RED("("startFromDefault")] 		public CBool StartFromDefault { get; set;}
 
-		[Ordinal(0)] [RED("("defaultValue")] 		public CFloat DefaultValue { get; set;}
+		[Ordinal(5)] [RED("("defaultValue")] 		public CFloat DefaultValue { get; set;}
 
-		[Ordinal(0)] [RED("("cachedDefaultValNode")] 		public CPtr<CBehaviorGraphValueNode> CachedDefaultValNode { get; set;}
+		[Ordinal(6)] [RED("("cachedDefaultValNode")] 		public CPtr<CBehaviorGraphValueNode> CachedDefaultValNode { get; set;}
 
-		[Ordinal(0)] [RED("("cachedIncSpeedNode")] 		public CPtr<CBehaviorGraphValueNode> CachedIncSpeedNode { get; set;}
+		[Ordinal(7)] [RED("("cachedIncSpeedNode")] 		public CPtr<CBehaviorGraphValueNode> CachedIncSpeedNode { get; set;}
 
-		[Ordinal(0)] [RED("("cachedDecSpeedNode")] 		public CPtr<CBehaviorGraphValueNode> CachedDecSpeedNode { get; set;}
+		[Ordinal(8)] [RED("("cachedDecSpeedNode")] 		public CPtr<CBehaviorGraphValueNode> CachedDecSpeedNode { get; set;}
 
 		public CBehaviorGraphDampValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

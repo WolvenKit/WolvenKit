@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTaskReactionStorageCleanup : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("reactionDataStorage")] 		public CHandle<CAIStorageReactionData> ReactionDataStorage { get; set;}
+		[Ordinal(1)] [RED("reactionDataStorage")] 		public CHandle<CAIStorageReactionData> ReactionDataStorage { get; set;}
 
 		public CBehTreeTaskReactionStorageCleanup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

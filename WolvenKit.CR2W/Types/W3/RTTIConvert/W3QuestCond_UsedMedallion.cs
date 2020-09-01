@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_UsedMedallion : CQuestScriptedCondition
 	{
-		[Ordinal(0)] [RED("("medallion")] 		public CHandle<W3MedallionController> Medallion { get; set;}
+		[Ordinal(1)] [RED("("medallion")] 		public CHandle<W3MedallionController> Medallion { get; set;}
 
 		public W3QuestCond_UsedMedallion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

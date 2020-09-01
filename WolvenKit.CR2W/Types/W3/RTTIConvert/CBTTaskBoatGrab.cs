@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskBoatGrab : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("m_Collided")] 		public CBool M_Collided { get; set;}
+		[Ordinal(1)] [RED("m_Collided")] 		public CBool M_Collided { get; set;}
 
-		[Ordinal(0)] [RED("m_TargetBoat")] 		public CHandle<CEntity> M_TargetBoat { get; set;}
+		[Ordinal(2)] [RED("m_TargetBoat")] 		public CHandle<CEntity> M_TargetBoat { get; set;}
 
-		[Ordinal(0)] [RED("m_ClosestSlot")] 		public CName M_ClosestSlot { get; set;}
+		[Ordinal(3)] [RED("m_ClosestSlot")] 		public CName M_ClosestSlot { get; set;}
 
 		public CBTTaskBoatGrab(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

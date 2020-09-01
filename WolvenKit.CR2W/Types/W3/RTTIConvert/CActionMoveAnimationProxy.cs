@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CActionMoveAnimationProxy : CObject
 	{
-		[Ordinal(0)] [RED("isInitialized")] 		public CBool IsInitialized { get; set;}
+		[Ordinal(1)] [RED("isInitialized")] 		public CBool IsInitialized { get; set;}
 
-		[Ordinal(0)] [RED("isValid")] 		public CBool IsValid { get; set;}
+		[Ordinal(2)] [RED("isValid")] 		public CBool IsValid { get; set;}
 
-		[Ordinal(0)] [RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(3)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		[Ordinal(0)] [RED("prevTime")] 		public CFloat PrevTime { get; set;}
+		[Ordinal(4)] [RED("prevTime")] 		public CFloat PrevTime { get; set;}
 
-		[Ordinal(0)] [RED("currTime")] 		public CFloat CurrTime { get; set;}
+		[Ordinal(5)] [RED("currTime")] 		public CFloat CurrTime { get; set;}
 
-		[Ordinal(0)] [RED("finished")] 		public CBool Finished { get; set;}
+		[Ordinal(6)] [RED("finished")] 		public CBool Finished { get; set;}
 
 		public CActionMoveAnimationProxy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

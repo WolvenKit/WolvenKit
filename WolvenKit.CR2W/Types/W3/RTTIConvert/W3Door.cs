@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Door : W3LockableEntity
 	{
-		[Ordinal(0)] [RED("("rotDir")] 		public CInt32 RotDir { get; set;}
+		[Ordinal(1)] [RED("("rotDir")] 		public CInt32 RotDir { get; set;}
 
-		[Ordinal(0)] [RED("("initiallyOpened")] 		public CBool InitiallyOpened { get; set;}
+		[Ordinal(2)] [RED("("initiallyOpened")] 		public CBool InitiallyOpened { get; set;}
 
-		[Ordinal(0)] [RED("("factOnPlayerDoorOpen")] 		public CName FactOnPlayerDoorOpen { get; set;}
+		[Ordinal(3)] [RED("("factOnPlayerDoorOpen")] 		public CName FactOnPlayerDoorOpen { get; set;}
 
-		[Ordinal(0)] [RED("("isOpened")] 		public CBool IsOpened { get; set;}
+		[Ordinal(4)] [RED("("isOpened")] 		public CBool IsOpened { get; set;}
 
-		[Ordinal(0)] [RED("("openInteractionComponent")] 		public CHandle<CInteractionComponent> OpenInteractionComponent { get; set;}
+		[Ordinal(5)] [RED("("openInteractionComponent")] 		public CHandle<CInteractionComponent> OpenInteractionComponent { get; set;}
 
-		[Ordinal(0)] [RED("("closeInteractionComponent")] 		public CHandle<CInteractionComponent> CloseInteractionComponent { get; set;}
+		[Ordinal(6)] [RED("("closeInteractionComponent")] 		public CHandle<CInteractionComponent> CloseInteractionComponent { get; set;}
 
 		public W3Door(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

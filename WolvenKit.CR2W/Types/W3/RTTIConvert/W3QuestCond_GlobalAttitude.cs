@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_GlobalAttitude : CQuestScriptedCondition
 	{
-		[Ordinal(0)] [RED("("srcGroup")] 		public CName SrcGroup { get; set;}
+		[Ordinal(1)] [RED("("srcGroup")] 		public CName SrcGroup { get; set;}
 
-		[Ordinal(0)] [RED("("dstGroup")] 		public CName DstGroup { get; set;}
+		[Ordinal(2)] [RED("("dstGroup")] 		public CName DstGroup { get; set;}
 
-		[Ordinal(0)] [RED("("attitude")] 		public CEnum<EAIAttitude> Attitude { get; set;}
+		[Ordinal(3)] [RED("("attitude")] 		public CEnum<EAIAttitude> Attitude { get; set;}
 
 		public W3QuestCond_GlobalAttitude(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

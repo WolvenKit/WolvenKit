@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvSunAndMoonParameters : CVariable
 	{
-		[Ordinal(0)] [RED("("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(1)] [RED("("activated")] 		public CBool Activated { get; set;}
 
-		[Ordinal(0)] [RED("("sunSize")] 		public SSimpleCurve SunSize { get; set;}
+		[Ordinal(2)] [RED("("sunSize")] 		public SSimpleCurve SunSize { get; set;}
 
-		[Ordinal(0)] [RED("("sunColor")] 		public SSimpleCurve SunColor { get; set;}
+		[Ordinal(3)] [RED("("sunColor")] 		public SSimpleCurve SunColor { get; set;}
 
-		[Ordinal(0)] [RED("("sunFlareSize")] 		public SSimpleCurve SunFlareSize { get; set;}
+		[Ordinal(4)] [RED("("sunFlareSize")] 		public SSimpleCurve SunFlareSize { get; set;}
 
-		[Ordinal(0)] [RED("("sunFlareColor")] 		public CEnvFlareColorParameters SunFlareColor { get; set;}
+		[Ordinal(5)] [RED("("sunFlareColor")] 		public CEnvFlareColorParameters SunFlareColor { get; set;}
 
-		[Ordinal(0)] [RED("("moonSize")] 		public SSimpleCurve MoonSize { get; set;}
+		[Ordinal(6)] [RED("("moonSize")] 		public SSimpleCurve MoonSize { get; set;}
 
-		[Ordinal(0)] [RED("("moonColor")] 		public SSimpleCurve MoonColor { get; set;}
+		[Ordinal(7)] [RED("("moonColor")] 		public SSimpleCurve MoonColor { get; set;}
 
-		[Ordinal(0)] [RED("("moonFlareSize")] 		public SSimpleCurve MoonFlareSize { get; set;}
+		[Ordinal(8)] [RED("("moonFlareSize")] 		public SSimpleCurve MoonFlareSize { get; set;}
 
-		[Ordinal(0)] [RED("("moonFlareColor")] 		public CEnvFlareColorParameters MoonFlareColor { get; set;}
+		[Ordinal(9)] [RED("("moonFlareColor")] 		public CEnvFlareColorParameters MoonFlareColor { get; set;}
 
 		public CEnvSunAndMoonParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

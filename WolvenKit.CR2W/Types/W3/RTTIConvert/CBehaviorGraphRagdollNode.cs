@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphRagdollNode : CBehaviorGraphBaseNode
 	{
-		[Ordinal(0)] [RED("allowToProvidePreRagdollPose")] 		public CBool AllowToProvidePreRagdollPose { get; set;}
+		[Ordinal(1)] [RED("allowToProvidePreRagdollPose")] 		public CBool AllowToProvidePreRagdollPose { get; set;}
 
-		[Ordinal(0)] [RED("updateAndSampleInputIfPreRagdollWeightIsNonZero")] 		public CBool UpdateAndSampleInputIfPreRagdollWeightIsNonZero { get; set;}
+		[Ordinal(2)] [RED("updateAndSampleInputIfPreRagdollWeightIsNonZero")] 		public CBool UpdateAndSampleInputIfPreRagdollWeightIsNonZero { get; set;}
 
-		[Ordinal(0)] [RED("keepInFrozenRagdollPose")] 		public CBool KeepInFrozenRagdollPose { get; set;}
+		[Ordinal(3)] [RED("keepInFrozenRagdollPose")] 		public CBool KeepInFrozenRagdollPose { get; set;}
 
-		[Ordinal(0)] [RED("switchToSwimming")] 		public CBool SwitchToSwimming { get; set;}
+		[Ordinal(4)] [RED("switchToSwimming")] 		public CBool SwitchToSwimming { get; set;}
 
-		[Ordinal(0)] [RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
+		[Ordinal(5)] [RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
 
-		[Ordinal(0)] [RED("cachedRootBoneImpulseVariable")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedRootBoneImpulseVariable { get; set;}
+		[Ordinal(6)] [RED("cachedRootBoneImpulseVariable")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedRootBoneImpulseVariable { get; set;}
 
 		public CBehaviorGraphRagdollNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

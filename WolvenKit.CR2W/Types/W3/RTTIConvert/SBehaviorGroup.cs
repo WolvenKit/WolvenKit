@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorGroup : CObject
 	{
-		[Ordinal(0)] [RED("("behavior")] 		public CSoft<CBehaviorGraph> Behavior { get; set;}
+		[Ordinal(1)] [RED("("behavior")] 		public CSoft<CBehaviorGraph> Behavior { get; set;}
 
-		[Ordinal(0)] [RED("("affectedNPCs")] 		public TagList AffectedNPCs { get; set;}
+		[Ordinal(2)] [RED("("affectedNPCs")] 		public TagList AffectedNPCs { get; set;}
 
-		[Ordinal(0)] [RED("("expectedCount")] 		public CUInt32 ExpectedCount { get; set;}
+		[Ordinal(3)] [RED("("expectedCount")] 		public CUInt32 ExpectedCount { get; set;}
 
 		public SBehaviorGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

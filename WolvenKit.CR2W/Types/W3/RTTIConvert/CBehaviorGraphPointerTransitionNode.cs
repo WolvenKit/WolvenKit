@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphPointerTransitionNode : CBehaviorGraphStateTransitionBlendNode
 	{
-		[Ordinal(0)] [RED("("pointerState")] 		public CPtr<CBehaviorGraphPointerStateNode> PointerState { get; set;}
+		[Ordinal(1)] [RED("("pointerState")] 		public CPtr<CBehaviorGraphPointerStateNode> PointerState { get; set;}
 
 		public CBehaviorGraphPointerTransitionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

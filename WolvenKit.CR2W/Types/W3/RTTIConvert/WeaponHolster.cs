@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class WeaponHolster : CObject
 	{
-		[Ordinal(0)] [RED("("currentMeleeWeapon")] 		public CEnum<EPlayerWeapon> CurrentMeleeWeapon { get; set;}
+		[Ordinal(1)] [RED("("currentMeleeWeapon")] 		public CEnum<EPlayerWeapon> CurrentMeleeWeapon { get; set;}
 
-		[Ordinal(0)] [RED("("queuedMeleeWeapon")] 		public CEnum<EPlayerWeapon> QueuedMeleeWeapon { get; set;}
+		[Ordinal(2)] [RED("("queuedMeleeWeapon")] 		public CEnum<EPlayerWeapon> QueuedMeleeWeapon { get; set;}
 
-		[Ordinal(0)] [RED("("isQueuedMeleeWeapon")] 		public CBool IsQueuedMeleeWeapon { get; set;}
+		[Ordinal(3)] [RED("("isQueuedMeleeWeapon")] 		public CBool IsQueuedMeleeWeapon { get; set;}
 
-		[Ordinal(0)] [RED("("ownerHandle")] 		public EntityHandle OwnerHandle { get; set;}
+		[Ordinal(4)] [RED("("ownerHandle")] 		public EntityHandle OwnerHandle { get; set;}
 
-		[Ordinal(0)] [RED("("automaticUnholster")] 		public CBool AutomaticUnholster { get; set;}
+		[Ordinal(5)] [RED("("automaticUnholster")] 		public CBool AutomaticUnholster { get; set;}
 
-		[Ordinal(0)] [RED("("isMeleeWeaponReady")] 		public CBool IsMeleeWeaponReady { get; set;}
+		[Ordinal(6)] [RED("("isMeleeWeaponReady")] 		public CBool IsMeleeWeaponReady { get; set;}
 
 		public WeaponHolster(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

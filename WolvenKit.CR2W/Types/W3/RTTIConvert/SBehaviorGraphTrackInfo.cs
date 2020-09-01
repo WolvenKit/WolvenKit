@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorGraphTrackInfo : CVariable
 	{
-		[Ordinal(0)] [RED("("trackName")] 		public CString TrackName { get; set;}
+		[Ordinal(1)] [RED("("trackName")] 		public CString TrackName { get; set;}
 
-		[Ordinal(0)] [RED("("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(2)] [RED("("weight")] 		public CFloat Weight { get; set;}
 
 		public SBehaviorGraphTrackInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

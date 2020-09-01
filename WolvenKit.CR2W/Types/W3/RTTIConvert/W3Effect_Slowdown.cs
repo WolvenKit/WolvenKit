@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Slowdown : CBaseGameplayEffect
 	{
-		[Ordinal(0)] [RED("("slowdownCauserId")] 		public CInt32 SlowdownCauserId { get; set;}
+		[Ordinal(1)] [RED("("slowdownCauserId")] 		public CInt32 SlowdownCauserId { get; set;}
 
-		[Ordinal(0)] [RED("("decayPerSec")] 		public CFloat DecayPerSec { get; set;}
+		[Ordinal(2)] [RED("("decayPerSec")] 		public CFloat DecayPerSec { get; set;}
 
-		[Ordinal(0)] [RED("("decayDelay")] 		public CFloat DecayDelay { get; set;}
+		[Ordinal(3)] [RED("("decayDelay")] 		public CFloat DecayDelay { get; set;}
 
-		[Ordinal(0)] [RED("("delayTimer")] 		public CFloat DelayTimer { get; set;}
+		[Ordinal(4)] [RED("("delayTimer")] 		public CFloat DelayTimer { get; set;}
 
-		[Ordinal(0)] [RED("("slowdown")] 		public CFloat Slowdown { get; set;}
+		[Ordinal(5)] [RED("("slowdown")] 		public CFloat Slowdown { get; set;}
 
 		public W3Effect_Slowdown(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

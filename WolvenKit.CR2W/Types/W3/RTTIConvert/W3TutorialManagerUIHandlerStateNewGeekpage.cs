@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateNewGeekpage : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[Ordinal(0)] [RED("("STATS")] 		public CName STATS { get; set;}
+		[Ordinal(1)] [RED("("STATS")] 		public CName STATS { get; set;}
 
-		[Ordinal(0)] [RED("("SUBSTATS")] 		public CName SUBSTATS { get; set;}
+		[Ordinal(2)] [RED("("SUBSTATS")] 		public CName SUBSTATS { get; set;}
 
-		[Ordinal(0)] [RED("("CONTROLS")] 		public CName CONTROLS { get; set;}
+		[Ordinal(3)] [RED("("CONTROLS")] 		public CName CONTROLS { get; set;}
 
-		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(4)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateNewGeekpage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

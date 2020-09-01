@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardInteractivePlacement : CEntity
 	{
-		[Ordinal(0)] [RED("("placement")] 		public SStoryBoardPlacementSettings Placement { get; set;}
+		[Ordinal(1)] [RED("("placement")] 		public SStoryBoardPlacementSettings Placement { get; set;}
 
-		[Ordinal(0)] [RED("("asset")] 		public CHandle<CModStoryBoardAsset> Asset { get; set;}
+		[Ordinal(2)] [RED("("asset")] 		public CHandle<CModStoryBoardAsset> Asset { get; set;}
 
-		[Ordinal(0)] [RED("("isInteractiveMode")] 		public CBool IsInteractiveMode { get; set;}
+		[Ordinal(3)] [RED("("isInteractiveMode")] 		public CBool IsInteractiveMode { get; set;}
 
-		[Ordinal(0)] [RED("("snapToGround")] 		public CBool SnapToGround { get; set;}
+		[Ordinal(4)] [RED("("snapToGround")] 		public CBool SnapToGround { get; set;}
 
-		[Ordinal(0)] [RED("("isRotationMode")] 		public CBool IsRotationMode { get; set;}
+		[Ordinal(5)] [RED("("isRotationMode")] 		public CBool IsRotationMode { get; set;}
 
-		[Ordinal(0)] [RED("("stepMoveSize")] 		public CFloat StepMoveSize { get; set;}
+		[Ordinal(6)] [RED("("stepMoveSize")] 		public CFloat StepMoveSize { get; set;}
 
-		[Ordinal(0)] [RED("("stepRotSize")] 		public CFloat StepRotSize { get; set;}
+		[Ordinal(7)] [RED("("stepRotSize")] 		public CFloat StepRotSize { get; set;}
 
-		[Ordinal(0)] [RED("("camHeading")] 		public CFloat CamHeading { get; set;}
+		[Ordinal(8)] [RED("("camHeading")] 		public CFloat CamHeading { get; set;}
 
-		[Ordinal(0)] [RED("("theWorld")] 		public CHandle<CWorld> TheWorld { get; set;}
+		[Ordinal(9)] [RED("("theWorld")] 		public CHandle<CWorld> TheWorld { get; set;}
 
 		public CModStoryBoardInteractivePlacement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

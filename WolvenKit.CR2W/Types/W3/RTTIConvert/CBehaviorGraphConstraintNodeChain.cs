@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphConstraintNodeChain : CBehaviorGraphConstraintNode
 	{
-		[Ordinal(0)] [RED("("startBone")] 		public CString StartBone { get; set;}
+		[Ordinal(1)] [RED("("startBone")] 		public CString StartBone { get; set;}
 
-		[Ordinal(0)] [RED("("endBone")] 		public CString EndBone { get; set;}
+		[Ordinal(2)] [RED("("endBone")] 		public CString EndBone { get; set;}
 
-		[Ordinal(0)] [RED("("solverSteps")] 		public CInt32 SolverSteps { get; set;}
+		[Ordinal(3)] [RED("("solverSteps")] 		public CInt32 SolverSteps { get; set;}
 
-		[Ordinal(0)] [RED("("forwardEndBoneDir")] 		public CEnum<EAxis> ForwardEndBoneDir { get; set;}
+		[Ordinal(4)] [RED("("forwardEndBoneDir")] 		public CEnum<EAxis> ForwardEndBoneDir { get; set;}
 
 		public CBehaviorGraphConstraintNodeChain(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

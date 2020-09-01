@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FlammableDamageEntity : CInteractiveEntity
 	{
-		[Ordinal(0)] [RED("("explosionEntity")] 		public CHandle<CEntityTemplate> ExplosionEntity { get; set;}
+		[Ordinal(1)] [RED("("explosionEntity")] 		public CHandle<CEntityTemplate> ExplosionEntity { get; set;}
 
-		[Ordinal(0)] [RED("("spawnedExplosion")] 		public CHandle<CDamageAreaEntity> SpawnedExplosion { get; set;}
+		[Ordinal(2)] [RED("("spawnedExplosion")] 		public CHandle<CDamageAreaEntity> SpawnedExplosion { get; set;}
 
-		[Ordinal(0)] [RED("("victim")] 		public CHandle<CActor> Victim { get; set;}
+		[Ordinal(3)] [RED("("victim")] 		public CHandle<CActor> Victim { get; set;}
 
-		[Ordinal(0)] [RED("("pos")] 		public Vector Pos { get; set;}
+		[Ordinal(4)] [RED("("pos")] 		public Vector Pos { get; set;}
 
 		public W3FlammableDamageEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

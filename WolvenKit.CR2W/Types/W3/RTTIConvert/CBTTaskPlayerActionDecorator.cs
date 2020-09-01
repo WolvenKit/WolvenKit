@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPlayerActionDecorator : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("completeOnInput")] 		public CBool CompleteOnInput { get; set;}
+		[Ordinal(1)] [RED("completeOnInput")] 		public CBool CompleteOnInput { get; set;}
 
-		[Ordinal(0)] [RED("prevContext")] 		public CName PrevContext { get; set;}
+		[Ordinal(2)] [RED("prevContext")] 		public CName PrevContext { get; set;}
 
 		public CBTTaskPlayerActionDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

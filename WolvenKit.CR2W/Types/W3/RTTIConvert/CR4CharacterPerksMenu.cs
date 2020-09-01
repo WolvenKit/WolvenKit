@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4CharacterPerksMenu : CR4MenuBase
 	{
-		[Ordinal(0)] [RED("moduleId")] 		public CInt32 ModuleId { get; set;}
+		[Ordinal(1)] [RED("moduleId")] 		public CInt32 ModuleId { get; set;}
 
 		public CR4CharacterPerksMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphInternalVectorVariableNode : CBehaviorGraphVectorVariableBaseNode
 	{
-		[Ordinal(0)] [RED("("internalVariableName")] 		public CName InternalVariableName { get; set;}
+		[Ordinal(1)] [RED("("internalVariableName")] 		public CName InternalVariableName { get; set;}
 
 		public CBehaviorGraphInternalVectorVariableNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondIsTargetGuardedDef : IBehTreeConditionalTaskDefinition
 	{
-		[Ordinal(0)] [RED("longerThan")] 		public CFloat LongerThan { get; set;}
+		[Ordinal(1)] [RED("longerThan")] 		public CFloat LongerThan { get; set;}
 
 		public BTCondIsTargetGuardedDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

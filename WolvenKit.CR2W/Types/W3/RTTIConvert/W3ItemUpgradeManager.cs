@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ItemUpgradeManager : CObject
 	{
-		[Ordinal(0)] [RED("("upgrades", 2,0)] 		public CArray<SItemUpgradeListElement> Upgrades { get; set;}
+		[Ordinal(1)] [RED("("upgrades", 2,0)] 		public CArray<SItemUpgradeListElement> Upgrades { get; set;}
 
 		public W3ItemUpgradeManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

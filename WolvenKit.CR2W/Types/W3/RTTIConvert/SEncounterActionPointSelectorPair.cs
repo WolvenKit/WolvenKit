@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SEncounterActionPointSelectorPair : CVariable
 	{
-		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
+		[Ordinal(1)] [RED("("name")] 		public CName Name { get; set;}
 
-		[Ordinal(0)] [RED("("chance")] 		public CFloat Chance { get; set;}
+		[Ordinal(2)] [RED("("chance")] 		public CFloat Chance { get; set;}
 
 		public SEncounterActionPointSelectorPair(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMoveToActionAwareOfTail : IAIBaseAction
 	{
-		[Ordinal(0)] [RED("params")] 		public CHandle<CAIMoveToActionAwareOfTailParams> Params { get; set;}
+		[Ordinal(1)] [RED("params")] 		public CHandle<CAIMoveToActionAwareOfTailParams> Params { get; set;}
 
 		public CAIMoveToActionAwareOfTail(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

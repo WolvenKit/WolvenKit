@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMimicAnimationEnumSwitchNode : CBehaviorGraphAnimationEnumSwitchNode
 	{
-		[Ordinal(0)] [RED("("useCurve")] 		public CBool UseCurve { get; set;}
+		[Ordinal(1)] [RED("("useCurve")] 		public CBool UseCurve { get; set;}
 
-		[Ordinal(0)] [RED("("curve")] 		public CPtr<CCurve> Curve { get; set;}
+		[Ordinal(2)] [RED("("curve")] 		public CPtr<CCurve> Curve { get; set;}
 
 		public CBehaviorGraphMimicAnimationEnumSwitchNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

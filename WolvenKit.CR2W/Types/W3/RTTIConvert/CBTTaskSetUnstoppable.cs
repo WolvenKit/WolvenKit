@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSetUnstoppable : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(1)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[Ordinal(0)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(2)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[Ordinal(0)] [RED("("onSuccess")] 		public CBool OnSuccess { get; set;}
+		[Ordinal(3)] [RED("("onSuccess")] 		public CBool OnSuccess { get; set;}
 
-		[Ordinal(0)] [RED("("overrideForThisTask")] 		public CBool OverrideForThisTask { get; set;}
+		[Ordinal(4)] [RED("("overrideForThisTask")] 		public CBool OverrideForThisTask { get; set;}
 
-		[Ordinal(0)] [RED("("makeUnpushable")] 		public CBool MakeUnpushable { get; set;}
+		[Ordinal(5)] [RED("("makeUnpushable")] 		public CBool MakeUnpushable { get; set;}
 
-		[Ordinal(0)] [RED("("enable")] 		public CBool Enable { get; set;}
+		[Ordinal(6)] [RED("("enable")] 		public CBool Enable { get; set;}
 
-		[Ordinal(0)] [RED("("m_savedPriority")] 		public CEnum<EInteractionPriority> M_savedPriority { get; set;}
+		[Ordinal(7)] [RED("("m_savedPriority")] 		public CEnum<EInteractionPriority> M_savedPriority { get; set;}
 
 		public CBTTaskSetUnstoppable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

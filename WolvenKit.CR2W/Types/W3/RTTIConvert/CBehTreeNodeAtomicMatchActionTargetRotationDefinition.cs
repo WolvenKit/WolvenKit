@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeAtomicMatchActionTargetRotationDefinition : CBehTreeNodeAtomicActionDefinition
 	{
-		[Ordinal(0)] [RED("completeOnTargetReached")] 		public CBool CompleteOnTargetReached { get; set;}
+		[Ordinal(1)] [RED("completeOnTargetReached")] 		public CBool CompleteOnTargetReached { get; set;}
 
 		public CBehTreeNodeAtomicMatchActionTargetRotationDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

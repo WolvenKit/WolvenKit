@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CUmbraTile : CResource
 	{
-		[Ordinal(0)] [RED("dataStatus")] 		public CEnum<EUmbraTileDataStatus> DataStatus { get; set;}
+		[Ordinal(1)] [RED("dataStatus")] 		public CEnum<EUmbraTileDataStatus> DataStatus { get; set;}
 
-		[Ordinal(0)] [RED("data")] 		public DeferredDataBuffer Data { get; set;}
+		[Ordinal(2)] [RED("data")] 		public DeferredDataBuffer Data { get; set;}
 
 		public CUmbraTile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIBearProtectiveDefaults : CAIBearDefaults
 	{
-		[Ordinal(0)] [RED("canTaunt")] 		public CBool CanTaunt { get; set;}
+		[Ordinal(1)] [RED("canTaunt")] 		public CBool CanTaunt { get; set;}
 
-		[Ordinal(0)] [RED("berserk")] 		public CBool Berserk { get; set;}
+		[Ordinal(2)] [RED("berserk")] 		public CBool Berserk { get; set;}
 
 		public CAIBearProtectiveDefaults(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

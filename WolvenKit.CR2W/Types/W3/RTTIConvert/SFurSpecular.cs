@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurSpecular : CVariable
 	{
-		[Ordinal(0)] [RED("("specularColor")] 		public CColor SpecularColor { get; set;}
+		[Ordinal(1)] [RED("("specularColor")] 		public CColor SpecularColor { get; set;}
 
-		[Ordinal(0)] [RED("("specularTex")] 		public CHandle<CBitmapTexture> SpecularTex { get; set;}
+		[Ordinal(2)] [RED("("specularTex")] 		public CHandle<CBitmapTexture> SpecularTex { get; set;}
 
-		[Ordinal(0)] [RED("("specularPrimary")] 		public CFloat SpecularPrimary { get; set;}
+		[Ordinal(3)] [RED("("specularPrimary")] 		public CFloat SpecularPrimary { get; set;}
 
-		[Ordinal(0)] [RED("("specularPowerPrimary")] 		public CFloat SpecularPowerPrimary { get; set;}
+		[Ordinal(4)] [RED("("specularPowerPrimary")] 		public CFloat SpecularPowerPrimary { get; set;}
 
-		[Ordinal(0)] [RED("("specularPrimaryBreakup")] 		public CFloat SpecularPrimaryBreakup { get; set;}
+		[Ordinal(5)] [RED("("specularPrimaryBreakup")] 		public CFloat SpecularPrimaryBreakup { get; set;}
 
-		[Ordinal(0)] [RED("("specularSecondary")] 		public CFloat SpecularSecondary { get; set;}
+		[Ordinal(6)] [RED("("specularSecondary")] 		public CFloat SpecularSecondary { get; set;}
 
-		[Ordinal(0)] [RED("("specularPowerSecondary")] 		public CFloat SpecularPowerSecondary { get; set;}
+		[Ordinal(7)] [RED("("specularPowerSecondary")] 		public CFloat SpecularPowerSecondary { get; set;}
 
-		[Ordinal(0)] [RED("("specularSecondaryOffset")] 		public CFloat SpecularSecondaryOffset { get; set;}
+		[Ordinal(8)] [RED("("specularSecondaryOffset")] 		public CFloat SpecularSecondaryOffset { get; set;}
 
-		[Ordinal(0)] [RED("("specularNoiseScale")] 		public CFloat SpecularNoiseScale { get; set;}
+		[Ordinal(9)] [RED("("specularNoiseScale")] 		public CFloat SpecularNoiseScale { get; set;}
 
-		[Ordinal(0)] [RED("("specularEnvScale")] 		public CFloat SpecularEnvScale { get; set;}
+		[Ordinal(10)] [RED("("specularEnvScale")] 		public CFloat SpecularEnvScale { get; set;}
 
 		public SFurSpecular(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGameplayLightComponent : CInteractionComponent
 	{
-		[Ordinal(0)] [RED("("isLightOn")] 		public CBool IsLightOn { get; set;}
+		[Ordinal(1)] [RED("("isLightOn")] 		public CBool IsLightOn { get; set;}
 
-		[Ordinal(0)] [RED("("isCityLight")] 		public CBool IsCityLight { get; set;}
+		[Ordinal(2)] [RED("("isCityLight")] 		public CBool IsCityLight { get; set;}
 
-		[Ordinal(0)] [RED("("isInteractive")] 		public CBool IsInteractive { get; set;}
+		[Ordinal(3)] [RED("("isInteractive")] 		public CBool IsInteractive { get; set;}
 
-		[Ordinal(0)] [RED("("isAffectedByWeather")] 		public CBool IsAffectedByWeather { get; set;}
+		[Ordinal(4)] [RED("("isAffectedByWeather")] 		public CBool IsAffectedByWeather { get; set;}
 
-		[Ordinal(0)] [RED("("factOnIgnite")] 		public CName FactOnIgnite { get; set;}
+		[Ordinal(5)] [RED("("factOnIgnite")] 		public CName FactOnIgnite { get; set;}
 
-		[Ordinal(0)] [RED("("actionBlockingExceptions", 2,0)] 		public CArray<CEnum<EInputActionBlock>> ActionBlockingExceptions { get; set;}
+		[Ordinal(6)] [RED("("actionBlockingExceptions", 2,0)] 		public CArray<CEnum<EInputActionBlock>> ActionBlockingExceptions { get; set;}
 
-		[Ordinal(0)] [RED("("restoreItemLAtEnd")] 		public CBool RestoreItemLAtEnd { get; set;}
+		[Ordinal(7)] [RED("("restoreItemLAtEnd")] 		public CBool RestoreItemLAtEnd { get; set;}
 
 		public CGameplayLightComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

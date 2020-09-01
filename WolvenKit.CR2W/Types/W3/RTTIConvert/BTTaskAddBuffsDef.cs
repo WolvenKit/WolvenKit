@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskAddBuffsDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(1)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[Ordinal(0)] [RED("buffs", 2,0)] 		public CArray<CEnum<EEffectType>> Buffs { get; set;}
+		[Ordinal(2)] [RED("buffs", 2,0)] 		public CArray<CEnum<EEffectType>> Buffs { get; set;}
 
-		[Ordinal(0)] [RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(3)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		[Ordinal(0)] [RED("customValue")] 		public SAbilityAttributeValue CustomValue { get; set;}
+		[Ordinal(4)] [RED("customValue")] 		public SAbilityAttributeValue CustomValue { get; set;}
 
 		public BTTaskAddBuffsDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

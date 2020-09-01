@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeNodeSetupCustomMoveDataDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[Ordinal(0)] [RED("setTargetForEvaluation")] 		public CBool SetTargetForEvaluation { get; set;}
+		[Ordinal(1)] [RED("setTargetForEvaluation")] 		public CBool SetTargetForEvaluation { get; set;}
 
 		public IBehTreeNodeSetupCustomMoveDataDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

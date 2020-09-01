@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SpawnMarker : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("spawnDelay")] 		public CFloat SpawnDelay { get; set;}
+		[Ordinal(1)] [RED("("spawnDelay")] 		public CFloat SpawnDelay { get; set;}
 
-		[Ordinal(0)] [RED("("destroyDelay")] 		public CFloat DestroyDelay { get; set;}
+		[Ordinal(2)] [RED("("destroyDelay")] 		public CFloat DestroyDelay { get; set;}
 
-		[Ordinal(0)] [RED("("entitiesToSpawn", 2,0)] 		public CArray<CHandle<CEntityTemplate>> EntitiesToSpawn { get; set;}
+		[Ordinal(3)] [RED("("entitiesToSpawn", 2,0)] 		public CArray<CHandle<CEntityTemplate>> EntitiesToSpawn { get; set;}
 
-		[Ordinal(0)] [RED("("spawnOnGround")] 		public CBool SpawnOnGround { get; set;}
+		[Ordinal(4)] [RED("("spawnOnGround")] 		public CBool SpawnOnGround { get; set;}
 
-		[Ordinal(0)] [RED("("m_summonedEntityCmp")] 		public CHandle<W3SummonedEntityComponent> M_summonedEntityCmp { get; set;}
+		[Ordinal(5)] [RED("("m_summonedEntityCmp")] 		public CHandle<W3SummonedEntityComponent> M_summonedEntityCmp { get; set;}
 
 		public W3SpawnMarker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

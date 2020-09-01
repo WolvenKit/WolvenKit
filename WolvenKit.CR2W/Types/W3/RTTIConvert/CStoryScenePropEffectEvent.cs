@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStoryScenePropEffectEvent : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("propID")] 		public CName PropID { get; set;}
+		[Ordinal(1)] [RED("propID")] 		public CName PropID { get; set;}
 
-		[Ordinal(0)] [RED("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(2)] [RED("effectName")] 		public CName EffectName { get; set;}
 
-		[Ordinal(0)] [RED("startOrStop")] 		public CBool StartOrStop { get; set;}
+		[Ordinal(3)] [RED("startOrStop")] 		public CBool StartOrStop { get; set;}
 
 		public CStoryScenePropEffectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

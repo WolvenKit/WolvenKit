@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDecoratorLeadFormationDefinition : CBehTreeDecoratorSteeringGraphDefinition
 	{
-		[Ordinal(0)] [RED("formation")] 		public CBehTreeValFormation Formation { get; set;}
+		[Ordinal(1)] [RED("formation")] 		public CBehTreeValFormation Formation { get; set;}
 
-		[Ordinal(0)] [RED("reshapeOnMoveAction")] 		public CBehTreeValBool ReshapeOnMoveAction { get; set;}
+		[Ordinal(2)] [RED("reshapeOnMoveAction")] 		public CBehTreeValBool ReshapeOnMoveAction { get; set;}
 
 		public CBehTreeNodeDecoratorLeadFormationDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondDistanceToTarget : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("minDistance")] 		public CFloat MinDistance { get; set;}
+		[Ordinal(1)] [RED("minDistance")] 		public CFloat MinDistance { get; set;}
 
-		[Ordinal(0)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(2)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[Ordinal(0)] [RED("attackRange")] 		public CBool AttackRange { get; set;}
+		[Ordinal(3)] [RED("attackRange")] 		public CBool AttackRange { get; set;}
 
-		[Ordinal(0)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(4)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
-		[Ordinal(0)] [RED("predictionTime")] 		public CFloat PredictionTime { get; set;}
+		[Ordinal(5)] [RED("predictionTime")] 		public CFloat PredictionTime { get; set;}
 
 		public BTCondDistanceToTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

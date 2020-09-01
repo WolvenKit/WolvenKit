@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCurrentBuffFX : CVariable
 	{
-		[Ordinal(0)] [RED("("fx")] 		public CName Fx { get; set;}
+		[Ordinal(1)] [RED("("fx")] 		public CName Fx { get; set;}
 
-		[Ordinal(0)] [RED("("sources", 2,0)] 		public CArray<CString> Sources { get; set;}
+		[Ordinal(2)] [RED("("sources", 2,0)] 		public CArray<CString> Sources { get; set;}
 
 		public SCurrentBuffFX(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

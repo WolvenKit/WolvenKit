@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCameraMovementData : CVariable
 	{
-		[Ordinal(0)] [RED("("camera")] 		public CHandle<CCustomCamera> Camera { get; set;}
+		[Ordinal(1)] [RED("("camera")] 		public CHandle<CCustomCamera> Camera { get; set;}
 
-		[Ordinal(0)] [RED("("pivotPositionController")] 		public CHandle<ICustomCameraPivotPositionController> PivotPositionController { get; set;}
+		[Ordinal(2)] [RED("("pivotPositionController")] 		public CHandle<ICustomCameraPivotPositionController> PivotPositionController { get; set;}
 
-		[Ordinal(0)] [RED("("pivotRotationController")] 		public CHandle<ICustomCameraPivotRotationController> PivotRotationController { get; set;}
+		[Ordinal(3)] [RED("("pivotRotationController")] 		public CHandle<ICustomCameraPivotRotationController> PivotRotationController { get; set;}
 
-		[Ordinal(0)] [RED("("pivotDistanceController")] 		public CHandle<ICustomCameraPivotDistanceController> PivotDistanceController { get; set;}
+		[Ordinal(4)] [RED("("pivotDistanceController")] 		public CHandle<ICustomCameraPivotDistanceController> PivotDistanceController { get; set;}
 
-		[Ordinal(0)] [RED("("pivotPositionValue")] 		public Vector PivotPositionValue { get; set;}
+		[Ordinal(5)] [RED("("pivotPositionValue")] 		public Vector PivotPositionValue { get; set;}
 
-		[Ordinal(0)] [RED("("pivotPositionVelocity")] 		public Vector PivotPositionVelocity { get; set;}
+		[Ordinal(6)] [RED("("pivotPositionVelocity")] 		public Vector PivotPositionVelocity { get; set;}
 
-		[Ordinal(0)] [RED("("pivotRotationValue")] 		public EulerAngles PivotRotationValue { get; set;}
+		[Ordinal(7)] [RED("("pivotRotationValue")] 		public EulerAngles PivotRotationValue { get; set;}
 
-		[Ordinal(0)] [RED("("pivotRotationVelocity")] 		public EulerAngles PivotRotationVelocity { get; set;}
+		[Ordinal(8)] [RED("("pivotRotationVelocity")] 		public EulerAngles PivotRotationVelocity { get; set;}
 
-		[Ordinal(0)] [RED("("pivotDistanceValue")] 		public CFloat PivotDistanceValue { get; set;}
+		[Ordinal(9)] [RED("("pivotDistanceValue")] 		public CFloat PivotDistanceValue { get; set;}
 
-		[Ordinal(0)] [RED("("pivotDistanceVelocity")] 		public CFloat PivotDistanceVelocity { get; set;}
+		[Ordinal(10)] [RED("("pivotDistanceVelocity")] 		public CFloat PivotDistanceVelocity { get; set;}
 
-		[Ordinal(0)] [RED("("cameraLocalSpaceOffset")] 		public Vector CameraLocalSpaceOffset { get; set;}
+		[Ordinal(11)] [RED("("cameraLocalSpaceOffset")] 		public Vector CameraLocalSpaceOffset { get; set;}
 
-		[Ordinal(0)] [RED("("cameraLocalSpaceOffsetVel")] 		public Vector CameraLocalSpaceOffsetVel { get; set;}
+		[Ordinal(12)] [RED("("cameraLocalSpaceOffsetVel")] 		public Vector CameraLocalSpaceOffsetVel { get; set;}
 
-		[Ordinal(0)] [RED("("cameraOffset")] 		public Vector CameraOffset { get; set;}
+		[Ordinal(13)] [RED("("cameraOffset")] 		public Vector CameraOffset { get; set;}
 
 		public SCameraMovementData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

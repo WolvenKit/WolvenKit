@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphOffensiveComboStateNode : CBehaviorGraphComboStateNode
 	{
-		[Ordinal(0)] [RED("("allowAttackEvent")] 		public CName AllowAttackEvent { get; set;}
+		[Ordinal(1)] [RED("("allowAttackEvent")] 		public CName AllowAttackEvent { get; set;}
 
 		public CBehaviorGraphOffensiveComboStateNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

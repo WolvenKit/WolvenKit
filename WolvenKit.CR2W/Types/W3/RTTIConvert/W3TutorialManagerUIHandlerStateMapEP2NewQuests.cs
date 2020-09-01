@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateMapEP2NewQuests : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[Ordinal(0)] [RED("("DESCRIPTION")] 		public CName DESCRIPTION { get; set;}
+		[Ordinal(1)] [RED("("DESCRIPTION")] 		public CName DESCRIPTION { get; set;}
 
 		public W3TutorialManagerUIHandlerStateMapEP2NewQuests(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

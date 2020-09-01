@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWraithSummonDoppelgangerDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
-		[Ordinal(0)] [RED("("entityToSummonName")] 		public CName EntityToSummonName { get; set;}
+		[Ordinal(1)] [RED("("entityToSummonName")] 		public CName EntityToSummonName { get; set;}
 
-		[Ordinal(0)] [RED("("entityToSummon")] 		public CName EntityToSummon { get; set;}
+		[Ordinal(2)] [RED("("entityToSummon")] 		public CName EntityToSummon { get; set;}
 
-		[Ordinal(0)] [RED("("splitEffectEntityTemplate")] 		public CHandle<CEntityTemplate> SplitEffectEntityTemplate { get; set;}
+		[Ordinal(3)] [RED("("splitEffectEntityTemplate")] 		public CHandle<CEntityTemplate> SplitEffectEntityTemplate { get; set;}
 
-		[Ordinal(0)] [RED("("summonOnAnimEvent")] 		public CName SummonOnAnimEvent { get; set;}
+		[Ordinal(4)] [RED("("summonOnAnimEvent")] 		public CName SummonOnAnimEvent { get; set;}
 
-		[Ordinal(0)] [RED("("numberToSummon")] 		public CInt32 NumberToSummon { get; set;}
+		[Ordinal(5)] [RED("("numberToSummon")] 		public CInt32 NumberToSummon { get; set;}
 
-		[Ordinal(0)] [RED("("summonPositionPattern")] 		public CEnum<ESpawnPositionPattern> SummonPositionPattern { get; set;}
+		[Ordinal(6)] [RED("("summonPositionPattern")] 		public CEnum<ESpawnPositionPattern> SummonPositionPattern { get; set;}
 
-		[Ordinal(0)] [RED("("summonMaxDistance")] 		public CFloat SummonMaxDistance { get; set;}
+		[Ordinal(7)] [RED("("summonMaxDistance")] 		public CFloat SummonMaxDistance { get; set;}
 
-		[Ordinal(0)] [RED("("summonMinDistance")] 		public CFloat SummonMinDistance { get; set;}
+		[Ordinal(8)] [RED("("summonMinDistance")] 		public CFloat SummonMinDistance { get; set;}
 
-		[Ordinal(0)] [RED("("applyBlindnessRange")] 		public CFloat ApplyBlindnessRange { get; set;}
+		[Ordinal(9)] [RED("("applyBlindnessRange")] 		public CFloat ApplyBlindnessRange { get; set;}
 
 		public CBTTaskWraithSummonDoppelgangerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

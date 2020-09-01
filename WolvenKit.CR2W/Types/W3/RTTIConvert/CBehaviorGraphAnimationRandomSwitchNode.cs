@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAnimationRandomSwitchNode : CBehaviorGraphAnimationManualSwitchNode
 	{
-		[Ordinal(0)] [RED("randOnlyOnce")] 		public CBool RandOnlyOnce { get; set;}
+		[Ordinal(1)] [RED("randOnlyOnce")] 		public CBool RandOnlyOnce { get; set;}
 
 		public CBehaviorGraphAnimationRandomSwitchNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

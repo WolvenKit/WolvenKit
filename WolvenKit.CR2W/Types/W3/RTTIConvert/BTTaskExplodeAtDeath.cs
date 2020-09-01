@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskExplodeAtDeath : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("requiredAbility")] 		public CName RequiredAbility { get; set;}
+		[Ordinal(1)] [RED("requiredAbility")] 		public CName RequiredAbility { get; set;}
 
-		[Ordinal(0)] [RED("damageRadius")] 		public CFloat DamageRadius { get; set;}
+		[Ordinal(2)] [RED("damageRadius")] 		public CFloat DamageRadius { get; set;}
 
-		[Ordinal(0)] [RED("damageValue")] 		public CFloat DamageValue { get; set;}
+		[Ordinal(3)] [RED("damageValue")] 		public CFloat DamageValue { get; set;}
 
-		[Ordinal(0)] [RED("weaponSlot")] 		public CName WeaponSlot { get; set;}
+		[Ordinal(4)] [RED("weaponSlot")] 		public CName WeaponSlot { get; set;}
 
-		[Ordinal(0)] [RED("m_hasExploded")] 		public CBool M_hasExploded { get; set;}
+		[Ordinal(5)] [RED("m_hasExploded")] 		public CBool M_hasExploded { get; set;}
 
 		public BTTaskExplodeAtDeath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

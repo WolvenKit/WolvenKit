@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Snowstorm : W3CriticalDOTEffect
 	{
-		[Ordinal(0)] [RED("("usesCam")] 		public CBool UsesCam { get; set;}
+		[Ordinal(1)] [RED("("usesCam")] 		public CBool UsesCam { get; set;}
 
 		public W3Effect_Snowstorm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

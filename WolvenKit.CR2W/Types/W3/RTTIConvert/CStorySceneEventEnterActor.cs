@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventEnterActor : CStorySceneEventAnimClip
 	{
-		[Ordinal(0)] [RED("("behEvent")] 		public CName BehEvent { get; set;}
+		[Ordinal(1)] [RED("("behEvent")] 		public CName BehEvent { get; set;}
 
 		public CStorySceneEventEnterActor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

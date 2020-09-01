@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CHeartMiniboss : CNewNPC
 	{
-		[Ordinal(0)] [RED("phasesCount")] 		public CInt32 PhasesCount { get; set;}
+		[Ordinal(1)] [RED("phasesCount")] 		public CInt32 PhasesCount { get; set;}
 
-		[Ordinal(0)] [RED("currentPhase")] 		public CInt32 CurrentPhase { get; set;}
+		[Ordinal(2)] [RED("currentPhase")] 		public CInt32 CurrentPhase { get; set;}
 
-		[Ordinal(0)] [RED("essenceChunks")] 		public CInt32 EssenceChunks { get; set;}
+		[Ordinal(3)] [RED("essenceChunks")] 		public CInt32 EssenceChunks { get; set;}
 
-		[Ordinal(0)] [RED("essenceChunkValue")] 		public CFloat EssenceChunkValue { get; set;}
+		[Ordinal(4)] [RED("essenceChunkValue")] 		public CFloat EssenceChunkValue { get; set;}
 
-		[Ordinal(0)] [RED("canHit")] 		public CBool CanHit { get; set;}
+		[Ordinal(5)] [RED("canHit")] 		public CBool CanHit { get; set;}
 
-		[Ordinal(0)] [RED("valuesInitialised")] 		public CBool ValuesInitialised { get; set;}
+		[Ordinal(6)] [RED("valuesInitialised")] 		public CBool ValuesInitialised { get; set;}
 
-		[Ordinal(0)] [RED("factSetAfterDeath")] 		public CString FactSetAfterDeath { get; set;}
+		[Ordinal(7)] [RED("factSetAfterDeath")] 		public CString FactSetAfterDeath { get; set;}
 
-		[Ordinal(0)] [RED("factSetInOpenedPhase")] 		public CString FactSetInOpenedPhase { get; set;}
+		[Ordinal(8)] [RED("factSetInOpenedPhase")] 		public CString FactSetInOpenedPhase { get; set;}
 
-		[Ordinal(0)] [RED("factSetInArmoredPhase")] 		public CString FactSetInArmoredPhase { get; set;}
+		[Ordinal(9)] [RED("factSetInArmoredPhase")] 		public CString FactSetInArmoredPhase { get; set;}
 
 		public CHeartMiniboss(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

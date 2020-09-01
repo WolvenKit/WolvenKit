@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ActorLatentActionFollowPlayer : IPresetActorLatentAction
 	{
-		[Ordinal(0)] [RED("("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(1)] [RED("("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[Ordinal(0)] [RED("("keepDistance")] 		public CBool KeepDistance { get; set;}
+		[Ordinal(2)] [RED("("keepDistance")] 		public CBool KeepDistance { get; set;}
 
-		[Ordinal(0)] [RED("("followDistance")] 		public CFloat FollowDistance { get; set;}
+		[Ordinal(3)] [RED("("followDistance")] 		public CFloat FollowDistance { get; set;}
 
-		[Ordinal(0)] [RED("("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
+		[Ordinal(4)] [RED("("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 
-		[Ordinal(0)] [RED("("teleportToCatchup")] 		public CBool TeleportToCatchup { get; set;}
+		[Ordinal(5)] [RED("("teleportToCatchup")] 		public CBool TeleportToCatchup { get; set;}
 
-		[Ordinal(0)] [RED("("cachupDistance")] 		public CFloat CachupDistance { get; set;}
+		[Ordinal(6)] [RED("("cachupDistance")] 		public CFloat CachupDistance { get; set;}
 
 		public W3ActorLatentActionFollowPlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

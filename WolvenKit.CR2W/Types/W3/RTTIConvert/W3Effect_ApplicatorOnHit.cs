@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_ApplicatorOnHit : W3ApplicatorEffect
 	{
-		[Ordinal(0)] [RED("("fromSilverSword")] 		public CBool FromSilverSword { get; set;}
+		[Ordinal(1)] [RED("("fromSilverSword")] 		public CBool FromSilverSword { get; set;}
 
-		[Ordinal(0)] [RED("("fromSteelSword")] 		public CBool FromSteelSword { get; set;}
+		[Ordinal(2)] [RED("("fromSteelSword")] 		public CBool FromSteelSword { get; set;}
 
-		[Ordinal(0)] [RED("("fromSign")] 		public CBool FromSign { get; set;}
+		[Ordinal(3)] [RED("("fromSign")] 		public CBool FromSign { get; set;}
 
-		[Ordinal(0)] [RED("("fromAll")] 		public CBool FromAll { get; set;}
+		[Ordinal(4)] [RED("("fromAll")] 		public CBool FromAll { get; set;}
 
 		public W3Effect_ApplicatorOnHit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

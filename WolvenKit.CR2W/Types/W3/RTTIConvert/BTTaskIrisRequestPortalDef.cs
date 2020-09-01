@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskIrisRequestPortalDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(1)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[Ordinal(0)] [RED("onAnimEvent")] 		public CName OnAnimEvent { get; set;}
+		[Ordinal(2)] [RED("onAnimEvent")] 		public CName OnAnimEvent { get; set;}
 
 		public BTTaskIrisRequestPortalDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

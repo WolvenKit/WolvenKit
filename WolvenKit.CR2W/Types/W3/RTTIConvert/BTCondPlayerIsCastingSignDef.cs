@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondPlayerIsCastingSignDef : IBehTreeConditionalTaskDefinition
 	{
-		[Ordinal(0)] [RED("sign")] 		public CEnum<ESignType> Sign { get; set;}
+		[Ordinal(1)] [RED("sign")] 		public CEnum<ESignType> Sign { get; set;}
 
 		public BTCondPlayerIsCastingSignDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

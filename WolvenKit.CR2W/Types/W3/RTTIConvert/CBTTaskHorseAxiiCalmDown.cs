@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHorseAxiiCalmDown : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("inProgress")] 		public CBool InProgress { get; set;}
+		[Ordinal(1)] [RED("("inProgress")] 		public CBool InProgress { get; set;}
 
-		[Ordinal(0)] [RED("("horseMounted")] 		public CBool HorseMounted { get; set;}
+		[Ordinal(2)] [RED("("horseMounted")] 		public CBool HorseMounted { get; set;}
 
 		public CBTTaskHorseAxiiCalmDown(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

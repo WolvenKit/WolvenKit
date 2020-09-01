@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAICommunityRedefinitionParameters : CAIIdleRedefinitionParameters
 	{
-		[Ordinal(0)] [RED("useDefaultIdleBehaviors")] 		public CBool UseDefaultIdleBehaviors { get; set;}
+		[Ordinal(1)] [RED("useDefaultIdleBehaviors")] 		public CBool UseDefaultIdleBehaviors { get; set;}
 
-		[Ordinal(0)] [RED("canFlyInIdle")] 		public CBool CanFlyInIdle { get; set;}
+		[Ordinal(2)] [RED("canFlyInIdle")] 		public CBool CanFlyInIdle { get; set;}
 
 		public CAICommunityRedefinitionParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

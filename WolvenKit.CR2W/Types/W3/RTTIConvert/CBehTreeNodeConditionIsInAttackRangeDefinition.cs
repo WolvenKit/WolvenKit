@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionIsInAttackRangeDefinition : CBehTreeNodeConditionDefinition
 	{
-		[Ordinal(0)] [RED("attackRangeName")] 		public CBehTreeValCName AttackRangeName { get; set;}
+		[Ordinal(1)] [RED("attackRangeName")] 		public CBehTreeValCName AttackRangeName { get; set;}
 
-		[Ordinal(0)] [RED("predictPositionInTime")] 		public CBehTreeValFloat PredictPositionInTime { get; set;}
+		[Ordinal(2)] [RED("predictPositionInTime")] 		public CBehTreeValFloat PredictPositionInTime { get; set;}
 
 		public CBehTreeNodeConditionIsInAttackRangeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

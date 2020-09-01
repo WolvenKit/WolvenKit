@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SPartyWaypointData : CVariable
 	{
-		[Ordinal(0)] [RED("("position")] 		public Vector3 Position { get; set;}
+		[Ordinal(1)] [RED("("position")] 		public Vector3 Position { get; set;}
 
-		[Ordinal(0)] [RED("("rotation")] 		public CFloat Rotation { get; set;}
+		[Ordinal(2)] [RED("("rotation")] 		public CFloat Rotation { get; set;}
 
-		[Ordinal(0)] [RED("("memberName")] 		public CName MemberName { get; set;}
+		[Ordinal(3)] [RED("("memberName")] 		public CName MemberName { get; set;}
 
 		public SPartyWaypointData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

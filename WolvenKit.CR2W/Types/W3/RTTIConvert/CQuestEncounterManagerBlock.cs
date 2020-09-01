@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestEncounterManagerBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("encounterTag")] 		public CName EncounterTag { get; set;}
+		[Ordinal(1)] [RED("encounterTag")] 		public CName EncounterTag { get; set;}
 
-		[Ordinal(0)] [RED("enableEncounter")] 		public CBool EnableEncounter { get; set;}
+		[Ordinal(2)] [RED("enableEncounter")] 		public CBool EnableEncounter { get; set;}
 
-		[Ordinal(0)] [RED("forceDespawnDetached")] 		public CBool ForceDespawnDetached { get; set;}
+		[Ordinal(3)] [RED("forceDespawnDetached")] 		public CBool ForceDespawnDetached { get; set;}
 
-		[Ordinal(0)] [RED("encounterSpawnPhase")] 		public CName EncounterSpawnPhase { get; set;}
+		[Ordinal(4)] [RED("encounterSpawnPhase")] 		public CName EncounterSpawnPhase { get; set;}
 
 		public CQuestEncounterManagerBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskSoundSwitch : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("swichGroupName")] 		public CName SwichGroupName { get; set;}
+		[Ordinal(1)] [RED("swichGroupName")] 		public CName SwichGroupName { get; set;}
 
-		[Ordinal(0)] [RED("stateName")] 		public CString StateName { get; set;}
+		[Ordinal(2)] [RED("stateName")] 		public CString StateName { get; set;}
 
-		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(3)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(4)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
 		public BTTaskSoundSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

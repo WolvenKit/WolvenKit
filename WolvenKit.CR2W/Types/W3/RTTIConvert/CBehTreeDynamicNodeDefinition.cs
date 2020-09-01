@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeDynamicNodeDefinition : IBehTreeDynamicNodeBaseDefinition
 	{
-		[Ordinal(0)] [RED("dynamicEventName")] 		public CName DynamicEventName { get; set;}
+		[Ordinal(1)] [RED("dynamicEventName")] 		public CName DynamicEventName { get; set;}
 
-		[Ordinal(0)] [RED("baseTreeVar")] 		public CName BaseTreeVar { get; set;}
+		[Ordinal(2)] [RED("baseTreeVar")] 		public CName BaseTreeVar { get; set;}
 
-		[Ordinal(0)] [RED("baseTree")] 		public CHandle<CAITree> BaseTree { get; set;}
+		[Ordinal(3)] [RED("baseTree")] 		public CHandle<CAITree> BaseTree { get; set;}
 
 		public CBehTreeDynamicNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

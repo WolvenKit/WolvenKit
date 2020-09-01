@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCombatParams : CVariable
 	{
-		[Ordinal(0)] [RED("goalId")] 		public CInt32 GoalId { get; set;}
+		[Ordinal(1)] [RED("goalId")] 		public CInt32 GoalId { get; set;}
 
 		public SCombatParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

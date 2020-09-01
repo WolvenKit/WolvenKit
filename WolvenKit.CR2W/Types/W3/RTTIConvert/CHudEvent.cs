@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CHudEvent : CObject
 	{
-		[Ordinal(0)] [RED("("moduleName")] 		public CString ModuleName { get; set;}
+		[Ordinal(1)] [RED("("moduleName")] 		public CString ModuleName { get; set;}
 
-		[Ordinal(0)] [RED("("eventName")] 		public CString EventName { get; set;}
+		[Ordinal(2)] [RED("("eventName")] 		public CString EventName { get; set;}
 
 		public CHudEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

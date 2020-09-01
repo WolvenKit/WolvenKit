@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class MerchantNPCEmbeddedScenes : CVariable
 	{
-		[Ordinal(0)] [RED("voiceTag")] 		public CName VoiceTag { get; set;}
+		[Ordinal(1)] [RED("voiceTag")] 		public CName VoiceTag { get; set;}
 
-		[Ordinal(0)] [RED("storyScene")] 		public CHandle<CStoryScene> StoryScene { get; set;}
+		[Ordinal(2)] [RED("storyScene")] 		public CHandle<CStoryScene> StoryScene { get; set;}
 
-		[Ordinal(0)] [RED("input")] 		public CName Input { get; set;}
+		[Ordinal(3)] [RED("input")] 		public CName Input { get; set;}
 
-		[Ordinal(0)] [RED("conditions", 2,0)] 		public CArray<MerchantNPCEmbeddedScenesConditions> Conditions { get; set;}
+		[Ordinal(4)] [RED("conditions", 2,0)] 		public CArray<MerchantNPCEmbeddedScenesConditions> Conditions { get; set;}
 
 		public MerchantNPCEmbeddedScenes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

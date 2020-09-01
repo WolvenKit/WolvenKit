@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDeactivateSpawnset : IQuestSpawnsetAction
 	{
-		[Ordinal(0)] [RED("("spawnset")] 		public CHandle<CCommunity> Spawnset { get; set;}
+		[Ordinal(1)] [RED("("spawnset")] 		public CHandle<CCommunity> Spawnset { get; set;}
 
 		public CDeactivateSpawnset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

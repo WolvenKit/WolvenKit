@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TrapTripwire : W3Trap
 	{
-		[Ordinal(0)] [RED("("eventOnTripped", 2,0)] 		public CArray<CHandle<IPerformableAction>> EventOnTripped { get; set;}
+		[Ordinal(1)] [RED("("eventOnTripped", 2,0)] 		public CArray<CHandle<IPerformableAction>> EventOnTripped { get; set;}
 
-		[Ordinal(0)] [RED("("maxUseCount")] 		public CInt32 MaxUseCount { get; set;}
+		[Ordinal(2)] [RED("("maxUseCount")] 		public CInt32 MaxUseCount { get; set;}
 
-		[Ordinal(0)] [RED("("excludedActorsTags", 2,0)] 		public CArray<CName> ExcludedActorsTags { get; set;}
+		[Ordinal(3)] [RED("("excludedActorsTags", 2,0)] 		public CArray<CName> ExcludedActorsTags { get; set;}
 
 		public W3TrapTripwire(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

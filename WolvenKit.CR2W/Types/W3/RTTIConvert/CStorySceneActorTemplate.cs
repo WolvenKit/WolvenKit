@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneActorTemplate : CVariable
 	{
-		[Ordinal(0)] [RED("("template")] 		public CHandle<CEntityTemplate> Template { get; set;}
+		[Ordinal(1)] [RED("("template")] 		public CHandle<CEntityTemplate> Template { get; set;}
 
-		[Ordinal(0)] [RED("("appearances", 2,0)] 		public CArray<CName> Appearances { get; set;}
+		[Ordinal(2)] [RED("("appearances", 2,0)] 		public CArray<CName> Appearances { get; set;}
 
-		[Ordinal(0)] [RED("("tags")] 		public TagList Tags { get; set;}
+		[Ordinal(3)] [RED("("tags")] 		public TagList Tags { get; set;}
 
 		public CStorySceneActorTemplate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

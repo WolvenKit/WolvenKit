@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphRandomSelectNode : CBehaviorGraphNode
 	{
-		[Ordinal(0)] [RED("avoidSelectingPrevious")] 		public CBool AvoidSelectingPrevious { get; set;}
+		[Ordinal(1)] [RED("avoidSelectingPrevious")] 		public CBool AvoidSelectingPrevious { get; set;}
 
-		[Ordinal(0)] [RED("cachedInputNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphNode>> CachedInputNodes { get; set;}
+		[Ordinal(2)] [RED("cachedInputNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphNode>> CachedInputNodes { get; set;}
 
 		public CBehaviorGraphRandomSelectNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

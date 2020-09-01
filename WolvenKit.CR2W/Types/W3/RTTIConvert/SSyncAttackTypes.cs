@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSyncAttackTypes : CVariable
 	{
-		[Ordinal(0)] [RED("("leftStanceFrontAttack")] 		public CEnum<EAttackType> LeftStanceFrontAttack { get; set;}
+		[Ordinal(1)] [RED("("leftStanceFrontAttack")] 		public CEnum<EAttackType> LeftStanceFrontAttack { get; set;}
 
-		[Ordinal(0)] [RED("("rightStanceFrontAttack")] 		public CEnum<EAttackType> RightStanceFrontAttack { get; set;}
+		[Ordinal(2)] [RED("("rightStanceFrontAttack")] 		public CEnum<EAttackType> RightStanceFrontAttack { get; set;}
 
-		[Ordinal(0)] [RED("("leftStanceBackAttack")] 		public CEnum<EAttackType> LeftStanceBackAttack { get; set;}
+		[Ordinal(3)] [RED("("leftStanceBackAttack")] 		public CEnum<EAttackType> LeftStanceBackAttack { get; set;}
 
-		[Ordinal(0)] [RED("("rightStanceBackAttack")] 		public CEnum<EAttackType> RightStanceBackAttack { get; set;}
+		[Ordinal(4)] [RED("("rightStanceBackAttack")] 		public CEnum<EAttackType> RightStanceBackAttack { get; set;}
 
 		public SSyncAttackTypes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

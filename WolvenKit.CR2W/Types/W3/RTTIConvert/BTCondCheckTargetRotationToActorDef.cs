@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondCheckTargetRotationToActorDef : IBehTreeConditionalTaskDefinition
 	{
-		[Ordinal(0)] [RED("toleranceAngle")] 		public CFloat ToleranceAngle { get; set;}
+		[Ordinal(1)] [RED("toleranceAngle")] 		public CFloat ToleranceAngle { get; set;}
 
 		public BTCondCheckTargetRotationToActorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

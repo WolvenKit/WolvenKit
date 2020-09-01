@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcReactionObserveFight : CAINpcReaction
 	{
-		[Ordinal(0)] [RED("doNotCheckLineOfSight")] 		public CBool DoNotCheckLineOfSight { get; set;}
+		[Ordinal(1)] [RED("doNotCheckLineOfSight")] 		public CBool DoNotCheckLineOfSight { get; set;}
 
 		public CAINpcReactionObserveFight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphEventWatchdogNode : CBehaviorGraphValueNode
 	{
-		[Ordinal(0)] [RED("("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(1)] [RED("("eventName")] 		public CName EventName { get; set;}
 
-		[Ordinal(0)] [RED("("trueValue")] 		public CFloat TrueValue { get; set;}
+		[Ordinal(2)] [RED("("trueValue")] 		public CFloat TrueValue { get; set;}
 
-		[Ordinal(0)] [RED("("falseValue")] 		public CFloat FalseValue { get; set;}
+		[Ordinal(3)] [RED("("falseValue")] 		public CFloat FalseValue { get; set;}
 
-		[Ordinal(0)] [RED("("maxTime")] 		public CFloat MaxTime { get; set;}
+		[Ordinal(4)] [RED("("maxTime")] 		public CFloat MaxTime { get; set;}
 
-		[Ordinal(0)] [RED("("timeOut")] 		public CFloat TimeOut { get; set;}
+		[Ordinal(5)] [RED("("timeOut")] 		public CFloat TimeOut { get; set;}
 
-		[Ordinal(0)] [RED("("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
+		[Ordinal(6)] [RED("("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
 
 		public CBehaviorGraphEventWatchdogNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

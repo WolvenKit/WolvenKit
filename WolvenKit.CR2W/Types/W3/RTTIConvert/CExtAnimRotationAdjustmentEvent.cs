@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimRotationAdjustmentEvent : CExtAnimDurationEvent
 	{
-		[Ordinal(0)] [RED("("rotationAdjustmentVar")] 		public CName RotationAdjustmentVar { get; set;}
+		[Ordinal(1)] [RED("("rotationAdjustmentVar")] 		public CName RotationAdjustmentVar { get; set;}
 
 		public CExtAnimRotationAdjustmentEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

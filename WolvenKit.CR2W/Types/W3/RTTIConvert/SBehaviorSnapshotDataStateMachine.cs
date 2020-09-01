@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorSnapshotDataStateMachine : CVariable
 	{
-		[Ordinal(0)] [RED("("stateMachineId")] 		public CUInt32 StateMachineId { get; set;}
+		[Ordinal(1)] [RED("("stateMachineId")] 		public CUInt32 StateMachineId { get; set;}
 
-		[Ordinal(0)] [RED("("currentStateId")] 		public CUInt32 CurrentStateId { get; set;}
+		[Ordinal(2)] [RED("("currentStateId")] 		public CUInt32 CurrentStateId { get; set;}
 
-		[Ordinal(0)] [RED("("currentStateTime")] 		public CFloat CurrentStateTime { get; set;}
+		[Ordinal(3)] [RED("("currentStateTime")] 		public CFloat CurrentStateTime { get; set;}
 
 		public SBehaviorSnapshotDataStateMachine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

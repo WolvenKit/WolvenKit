@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CHorseRiderSharedParams : IScriptable
 	{
-		[Ordinal(0)] [RED("("rider")] 		public CHandle<CActor> Rider { get; set;}
+		[Ordinal(1)] [RED("("rider")] 		public CHandle<CActor> Rider { get; set;}
 
-		[Ordinal(0)] [RED("("horse")] 		public CHandle<CActor> Horse { get; set;}
+		[Ordinal(2)] [RED("("horse")] 		public CHandle<CActor> Horse { get; set;}
 
-		[Ordinal(0)] [RED("("mountStatus")] 		public CEnum<EVehicleMountStatus> MountStatus { get; set;}
+		[Ordinal(3)] [RED("("mountStatus")] 		public CEnum<EVehicleMountStatus> MountStatus { get; set;}
 
-		[Ordinal(0)] [RED("("boat")] 		public EntityHandle Boat { get; set;}
+		[Ordinal(4)] [RED("("boat")] 		public EntityHandle Boat { get; set;}
 
-		[Ordinal(0)] [RED("("vehicleSlot")] 		public CEnum<EVehicleSlot> VehicleSlot { get; set;}
+		[Ordinal(5)] [RED("("vehicleSlot")] 		public CEnum<EVehicleSlot> VehicleSlot { get; set;}
 
-		[Ordinal(0)] [RED("("hasFallenFromHorse")] 		public CBool HasFallenFromHorse { get; set;}
+		[Ordinal(6)] [RED("("hasFallenFromHorse")] 		public CBool HasFallenFromHorse { get; set;}
 
-		[Ordinal(0)] [RED("("scriptedActionPending")] 		public CBool ScriptedActionPending { get; set;}
+		[Ordinal(7)] [RED("("scriptedActionPending")] 		public CBool ScriptedActionPending { get; set;}
 
-		[Ordinal(0)] [RED("("isPlayingAnimWithRider")] 		public CBool IsPlayingAnimWithRider { get; set;}
+		[Ordinal(8)] [RED("("isPlayingAnimWithRider")] 		public CBool IsPlayingAnimWithRider { get; set;}
 
-		[Ordinal(0)] [RED("("combatTarget")] 		public CHandle<CActor> CombatTarget { get; set;}
+		[Ordinal(9)] [RED("("combatTarget")] 		public CHandle<CActor> CombatTarget { get; set;}
 
 		public CHorseRiderSharedParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

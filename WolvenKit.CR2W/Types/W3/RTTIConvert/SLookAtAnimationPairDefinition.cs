@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SLookAtAnimationPairDefinition : CVariable
 	{
-		[Ordinal(0)] [RED("("Animation name")] 		public CName Animation_name { get; set;}
+		[Ordinal(1)] [RED("("Animation name")] 		public CName Animation_name { get; set;}
 
-		[Ordinal(0)] [RED("("Horizontal anim (additive)")] 		public CName Horizontal_anim__additive_ { get; set;}
+		[Ordinal(2)] [RED("("Horizontal anim (additive)")] 		public CName Horizontal_anim__additive_ { get; set;}
 
-		[Ordinal(0)] [RED("("Vertical anim (additive)")] 		public CName Vertical_anim__additive_ { get; set;}
+		[Ordinal(3)] [RED("("Vertical anim (additive)")] 		public CName Vertical_anim__additive_ { get; set;}
 
 		public SLookAtAnimationPairDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTask3StageIdle : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("minTime")] 		public CFloat MinTime { get; set;}
+		[Ordinal(1)] [RED("("minTime")] 		public CFloat MinTime { get; set;}
 
-		[Ordinal(0)] [RED("("maxTime")] 		public CFloat MaxTime { get; set;}
+		[Ordinal(2)] [RED("("maxTime")] 		public CFloat MaxTime { get; set;}
 
-		[Ordinal(0)] [RED("("loopTime")] 		public CFloat LoopTime { get; set;}
+		[Ordinal(3)] [RED("("loopTime")] 		public CFloat LoopTime { get; set;}
 
 		public CBTTask3StageIdle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

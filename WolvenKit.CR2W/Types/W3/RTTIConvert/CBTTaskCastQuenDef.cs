@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCastQuenDef : CBTTaskCastSignDef
 	{
-		[Ordinal(0)] [RED("completeAfterHit")] 		public CBool CompleteAfterHit { get; set;}
+		[Ordinal(1)] [RED("completeAfterHit")] 		public CBool CompleteAfterHit { get; set;}
 
-		[Ordinal(0)] [RED("alternateFireMode")] 		public CBool AlternateFireMode { get; set;}
+		[Ordinal(2)] [RED("alternateFireMode")] 		public CBool AlternateFireMode { get; set;}
 
-		[Ordinal(0)] [RED("processQuenOnCounterActivation")] 		public CBool ProcessQuenOnCounterActivation { get; set;}
+		[Ordinal(3)] [RED("processQuenOnCounterActivation")] 		public CBool ProcessQuenOnCounterActivation { get; set;}
 
 		public CBTTaskCastQuenDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

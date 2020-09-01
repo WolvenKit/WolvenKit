@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3RootsEntrance : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("isOpened")] 		public CBool IsOpened { get; set;}
+		[Ordinal(1)] [RED("("isOpened")] 		public CBool IsOpened { get; set;}
 
 		public W3RootsEntrance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

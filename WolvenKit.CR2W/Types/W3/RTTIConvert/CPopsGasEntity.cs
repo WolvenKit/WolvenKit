@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPopsGasEntity : CInteractiveEntity
 	{
-		[Ordinal(0)] [RED("restorationTime")] 		public CFloat RestorationTime { get; set;}
+		[Ordinal(1)] [RED("restorationTime")] 		public CFloat RestorationTime { get; set;}
 
-		[Ordinal(0)] [RED("settlingTime")] 		public CFloat SettlingTime { get; set;}
+		[Ordinal(2)] [RED("settlingTime")] 		public CFloat SettlingTime { get; set;}
 
-		[Ordinal(0)] [RED("fxOnSpawn")] 		public CName FxOnSpawn { get; set;}
+		[Ordinal(3)] [RED("fxOnSpawn")] 		public CName FxOnSpawn { get; set;}
 
-		[Ordinal(0)] [RED("immunityFact")] 		public CString ImmunityFact { get; set;}
+		[Ordinal(4)] [RED("immunityFact")] 		public CString ImmunityFact { get; set;}
 
-		[Ordinal(0)] [RED("i")] 		public CInt32 I { get; set;}
+		[Ordinal(5)] [RED("i")] 		public CInt32 I { get; set;}
 
-		[Ordinal(0)] [RED("settled")] 		public CBool Settled { get; set;}
+		[Ordinal(6)] [RED("settled")] 		public CBool Settled { get; set;}
 
-		[Ordinal(0)] [RED("victim")] 		public CHandle<CActor> Victim { get; set;}
+		[Ordinal(7)] [RED("victim")] 		public CHandle<CActor> Victim { get; set;}
 
-		[Ordinal(0)] [RED("victims", 2,0)] 		public CArray<CHandle<CActor>> Victims { get; set;}
+		[Ordinal(8)] [RED("victims", 2,0)] 		public CArray<CHandle<CActor>> Victims { get; set;}
 
-		[Ordinal(0)] [RED("poisonArea")] 		public CHandle<CTriggerAreaComponent> PoisonArea { get; set;}
+		[Ordinal(9)] [RED("poisonArea")] 		public CHandle<CTriggerAreaComponent> PoisonArea { get; set;}
 
-		[Ordinal(0)] [RED("buffParams")] 		public SCustomEffectParams BuffParams { get; set;}
+		[Ordinal(10)] [RED("buffParams")] 		public SCustomEffectParams BuffParams { get; set;}
 
 		public CPopsGasEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

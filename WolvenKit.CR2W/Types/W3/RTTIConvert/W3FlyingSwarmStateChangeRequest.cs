@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FlyingSwarmStateChangeRequest : CObject
 	{
-		[Ordinal(0)] [RED("("groupId")] 		public CFlyingGroupId GroupId { get; set;}
+		[Ordinal(1)] [RED("("groupId")] 		public CFlyingGroupId GroupId { get; set;}
 
-		[Ordinal(0)] [RED("("stateName")] 		public CName StateName { get; set;}
+		[Ordinal(2)] [RED("("stateName")] 		public CName StateName { get; set;}
 
 		public W3FlyingSwarmStateChangeRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

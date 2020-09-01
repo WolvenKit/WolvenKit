@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondHorseScriptedActionPending : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("scriptedActionPending")] 		public CBool ScriptedActionPending { get; set;}
+		[Ordinal(1)] [RED("("scriptedActionPending")] 		public CBool ScriptedActionPending { get; set;}
 
 		public CBTCondHorseScriptedActionPending(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

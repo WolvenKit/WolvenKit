@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SEncounterGroupLimit : CVariable
 	{
-		[Ordinal(0)] [RED("("groupName")] 		public CName GroupName { get; set;}
+		[Ordinal(1)] [RED("("groupName")] 		public CName GroupName { get; set;}
 
-		[Ordinal(0)] [RED("("limit")] 		public CUInt32 Limit { get; set;}
+		[Ordinal(2)] [RED("("limit")] 		public CUInt32 Limit { get; set;}
 
 		public SEncounterGroupLimit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

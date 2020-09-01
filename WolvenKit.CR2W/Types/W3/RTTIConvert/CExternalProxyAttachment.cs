@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExternalProxyAttachment : IAttachment
 	{
-		[Ordinal(0)] [RED("("originalAttachment")] 		public CPtr<IAttachment> OriginalAttachment { get; set;}
+		[Ordinal(1)] [RED("("originalAttachment")] 		public CPtr<IAttachment> OriginalAttachment { get; set;}
 
 		public CExternalProxyAttachment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

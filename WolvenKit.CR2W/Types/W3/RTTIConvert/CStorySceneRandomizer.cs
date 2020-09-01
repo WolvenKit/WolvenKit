@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneRandomizer : CStorySceneControlPart
 	{
-		[Ordinal(0)] [RED("outputs", 2,0)] 		public CArray<CPtr<CStorySceneLinkElement>> Outputs { get; set;}
+		[Ordinal(1)] [RED("outputs", 2,0)] 		public CArray<CPtr<CStorySceneLinkElement>> Outputs { get; set;}
 
 		public CStorySceneRandomizer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

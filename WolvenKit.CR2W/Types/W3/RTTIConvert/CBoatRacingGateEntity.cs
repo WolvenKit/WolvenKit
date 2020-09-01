@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBoatRacingGateEntity : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("nextGate")] 		public EntityHandle NextGate { get; set;}
+		[Ordinal(1)] [RED("nextGate")] 		public EntityHandle NextGate { get; set;}
 
-		[Ordinal(0)] [RED("factOnReaching")] 		public CString FactOnReaching { get; set;}
+		[Ordinal(2)] [RED("factOnReaching")] 		public CString FactOnReaching { get; set;}
 
-		[Ordinal(0)] [RED("nextGateEntity")] 		public CHandle<CBoatRacingGateEntity> NextGateEntity { get; set;}
+		[Ordinal(3)] [RED("nextGateEntity")] 		public CHandle<CBoatRacingGateEntity> NextGateEntity { get; set;}
 
-		[Ordinal(0)] [RED("isActive")] 		public CBool IsActive { get; set;}
+		[Ordinal(4)] [RED("isActive")] 		public CBool IsActive { get; set;}
 
-		[Ordinal(0)] [RED("isReached")] 		public CBool IsReached { get; set;}
+		[Ordinal(5)] [RED("isReached")] 		public CBool IsReached { get; set;}
 
 		public CBoatRacingGateEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSpawnTreeAIDespawnConfiguration : CVariable
 	{
-		[Ordinal(0)] [RED("("canDespawnOnSight")] 		public CBool CanDespawnOnSight { get; set;}
+		[Ordinal(1)] [RED("("canDespawnOnSight")] 		public CBool CanDespawnOnSight { get; set;}
 
-		[Ordinal(0)] [RED("("minDespawnRange")] 		public CFloat MinDespawnRange { get; set;}
+		[Ordinal(2)] [RED("("minDespawnRange")] 		public CFloat MinDespawnRange { get; set;}
 
-		[Ordinal(0)] [RED("("maxDespawnRange")] 		public CFloat MaxDespawnRange { get; set;}
+		[Ordinal(3)] [RED("("maxDespawnRange")] 		public CFloat MaxDespawnRange { get; set;}
 
-		[Ordinal(0)] [RED("("forceDespawnRange")] 		public CFloat ForceDespawnRange { get; set;}
+		[Ordinal(4)] [RED("("forceDespawnRange")] 		public CFloat ForceDespawnRange { get; set;}
 
-		[Ordinal(0)] [RED("("despawnDelayMin")] 		public CFloat DespawnDelayMin { get; set;}
+		[Ordinal(5)] [RED("("despawnDelayMin")] 		public CFloat DespawnDelayMin { get; set;}
 
-		[Ordinal(0)] [RED("("despawnDelayMax")] 		public CFloat DespawnDelayMax { get; set;}
+		[Ordinal(6)] [RED("("despawnDelayMax")] 		public CFloat DespawnDelayMax { get; set;}
 
-		[Ordinal(0)] [RED("("despawnTime")] 		public CFloat DespawnTime { get; set;}
+		[Ordinal(7)] [RED("("despawnTime")] 		public CFloat DespawnTime { get; set;}
 
 		public SSpawnTreeAIDespawnConfiguration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

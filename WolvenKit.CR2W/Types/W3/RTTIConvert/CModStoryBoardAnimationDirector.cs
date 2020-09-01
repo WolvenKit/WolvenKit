@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardAnimationDirector : CObject
 	{
-		[Ordinal(0)] [RED("("actors", 2,0)] 		public CArray<CHandle<CModStoryBoardActor>> Actors { get; set;}
+		[Ordinal(1)] [RED("("actors", 2,0)] 		public CArray<CHandle<CModStoryBoardActor>> Actors { get; set;}
 
-		[Ordinal(0)] [RED("("thePlacementDirector")] 		public CHandle<CModStoryBoardPlacementDirector> ThePlacementDirector { get; set;}
+		[Ordinal(2)] [RED("("thePlacementDirector")] 		public CHandle<CModStoryBoardPlacementDirector> ThePlacementDirector { get; set;}
 
-		[Ordinal(0)] [RED("("animSequencer")] 		public CHandle<CModSbUiAnimationSequencer> AnimSequencer { get; set;}
+		[Ordinal(3)] [RED("("animSequencer")] 		public CHandle<CModSbUiAnimationSequencer> AnimSequencer { get; set;}
 
-		[Ordinal(0)] [RED("("idleLoops")] 		public CInt32 IdleLoops { get; set;}
+		[Ordinal(4)] [RED("("idleLoops")] 		public CInt32 IdleLoops { get; set;}
 
-		[Ordinal(0)] [RED("("animStateCallback")] 		public CHandle<IModSbUiAnimStateCallback> AnimStateCallback { get; set;}
+		[Ordinal(5)] [RED("("animStateCallback")] 		public CHandle<IModSbUiAnimStateCallback> AnimStateCallback { get; set;}
 
 		public CModStoryBoardAnimationDirector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskMagicMeleeAttackDef : CBTTaskMagicAttackDef
 	{
-		[Ordinal(0)] [RED("("resourceName")] 		public CBehTreeValCName ResourceName { get; set;}
+		[Ordinal(1)] [RED("("resourceName")] 		public CBehTreeValCName ResourceName { get; set;}
 
-		[Ordinal(0)] [RED("("fxOnAnimEvent", 2,0)] 		public CArray<SFxOnAnimEvent> FxOnAnimEvent { get; set;}
+		[Ordinal(2)] [RED("("fxOnAnimEvent", 2,0)] 		public CArray<SFxOnAnimEvent> FxOnAnimEvent { get; set;}
 
 		public CBTTaskMagicMeleeAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

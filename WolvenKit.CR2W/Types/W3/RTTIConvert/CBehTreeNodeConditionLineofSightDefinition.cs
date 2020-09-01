@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionLineofSightDefinition : CBehTreeNodeConditionDefinition
 	{
-		[Ordinal(0)] [RED("useCombatTarget")] 		public CBehTreeValBool UseCombatTarget { get; set;}
+		[Ordinal(1)] [RED("useCombatTarget")] 		public CBehTreeValBool UseCombatTarget { get; set;}
 
 		public CBehTreeNodeConditionLineofSightDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

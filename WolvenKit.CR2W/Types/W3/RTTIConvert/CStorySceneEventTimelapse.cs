@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventTimelapse : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("enable")] 		public CBool Enable { get; set;}
+		[Ordinal(1)] [RED("enable")] 		public CBool Enable { get; set;}
 
 		public CStorySceneEventTimelapse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

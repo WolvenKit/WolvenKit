@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeInitializerIdleAI : ISpawnTreeInitializerAI
 	{
-		[Ordinal(0)] [RED("("ai")] 		public CHandle<CAIIdleRedefinitionParameters> Ai { get; set;}
+		[Ordinal(1)] [RED("("ai")] 		public CHandle<CAIIdleRedefinitionParameters> Ai { get; set;}
 
 		public CSpawnTreeInitializerIdleAI(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

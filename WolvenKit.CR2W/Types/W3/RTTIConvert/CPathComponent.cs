@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPathComponent : CComponent
 	{
-		[Ordinal(0)] [RED("("curve")] 		public SMultiCurve Curve { get; set;}
+		[Ordinal(1)] [RED("("curve")] 		public SMultiCurve Curve { get; set;}
 
-		[Ordinal(0)] [RED("("speedCurve")] 		public SSimpleCurve SpeedCurve { get; set;}
+		[Ordinal(2)] [RED("("speedCurve")] 		public SSimpleCurve SpeedCurve { get; set;}
 
 		public CPathComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterIdleActionParams : CAISubTreeParameters
 	{
-		[Ordinal(0)] [RED("cooldown")] 		public CFloat Cooldown { get; set;}
+		[Ordinal(1)] [RED("cooldown")] 		public CFloat Cooldown { get; set;}
 
-		[Ordinal(0)] [RED("loopTime")] 		public CFloat LoopTime { get; set;}
+		[Ordinal(2)] [RED("loopTime")] 		public CFloat LoopTime { get; set;}
 
-		[Ordinal(0)] [RED("actionName")] 		public CName ActionName { get; set;}
+		[Ordinal(3)] [RED("actionName")] 		public CName ActionName { get; set;}
 
-		[Ordinal(0)] [RED("onlyOnGround")] 		public CBool OnlyOnGround { get; set;}
+		[Ordinal(4)] [RED("onlyOnGround")] 		public CBool OnlyOnGround { get; set;}
 
 		public CAIMonsterIdleActionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

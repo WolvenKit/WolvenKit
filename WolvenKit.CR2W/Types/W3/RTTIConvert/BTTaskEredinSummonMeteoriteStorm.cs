@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskEredinSummonMeteoriteStorm : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("resourceName")] 		public CName ResourceName { get; set;}
+		[Ordinal(1)] [RED("resourceName")] 		public CName ResourceName { get; set;}
 
-		[Ordinal(0)] [RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(2)] [RED("eventName")] 		public CName EventName { get; set;}
 
-		[Ordinal(0)] [RED("shouldSpawn")] 		public CBool ShouldSpawn { get; set;}
+		[Ordinal(3)] [RED("shouldSpawn")] 		public CBool ShouldSpawn { get; set;}
 
-		[Ordinal(0)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(4)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
 		public BTTaskEredinSummonMeteoriteStorm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeCombatTargetSelectionTask : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("maxTargetDistance")] 		public CFloat MaxTargetDistance { get; set;}
+		[Ordinal(1)] [RED("maxTargetDistance")] 		public CFloat MaxTargetDistance { get; set;}
 
-		[Ordinal(0)] [RED("testMaxFrequency")] 		public CFloat TestMaxFrequency { get; set;}
+		[Ordinal(2)] [RED("testMaxFrequency")] 		public CFloat TestMaxFrequency { get; set;}
 
-		[Ordinal(0)] [RED("nextTestDelay")] 		public CFloat NextTestDelay { get; set;}
+		[Ordinal(3)] [RED("nextTestDelay")] 		public CFloat NextTestDelay { get; set;}
 
-		[Ordinal(0)] [RED("nextTarget")] 		public CHandle<CActor> NextTarget { get; set;}
+		[Ordinal(4)] [RED("nextTarget")] 		public CHandle<CActor> NextTarget { get; set;}
 
-		[Ordinal(0)] [RED("playerPriority")] 		public CInt32 PlayerPriority { get; set;}
+		[Ordinal(5)] [RED("playerPriority")] 		public CInt32 PlayerPriority { get; set;}
 
-		[Ordinal(0)] [RED("targetOnlyPlayer")] 		public CBool TargetOnlyPlayer { get; set;}
+		[Ordinal(6)] [RED("targetOnlyPlayer")] 		public CBool TargetOnlyPlayer { get; set;}
 
-		[Ordinal(0)] [RED("ForceTarget")] 		public CHandle<CActor> ForceTarget { get; set;}
+		[Ordinal(7)] [RED("ForceTarget")] 		public CHandle<CActor> ForceTarget { get; set;}
 
 		public CBehTreeCombatTargetSelectionTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

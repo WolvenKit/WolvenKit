@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CHardAttachment : IAttachment
 	{
-		[Ordinal(0)] [RED("relativeTransform")] 		public EngineTransform RelativeTransform { get; set;}
+		[Ordinal(1)] [RED("relativeTransform")] 		public EngineTransform RelativeTransform { get; set;}
 
-		[Ordinal(0)] [RED("parentSlotName")] 		public CName ParentSlotName { get; set;}
+		[Ordinal(2)] [RED("parentSlotName")] 		public CName ParentSlotName { get; set;}
 
-		[Ordinal(0)] [RED("attachmentFlags")] 		public CEnum<EHardAttachmentFlags> AttachmentFlags { get; set;}
+		[Ordinal(3)] [RED("attachmentFlags")] 		public CEnum<EHardAttachmentFlags> AttachmentFlags { get; set;}
 
-		[Ordinal(0)] [RED("parentSlot")] 		public CPtr<ISlot> ParentSlot { get; set;}
+		[Ordinal(4)] [RED("parentSlot")] 		public CPtr<ISlot> ParentSlot { get; set;}
 
 		public CHardAttachment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

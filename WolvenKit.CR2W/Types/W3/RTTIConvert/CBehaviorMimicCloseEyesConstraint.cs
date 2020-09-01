@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorMimicCloseEyesConstraint : IBehaviorMimicConstraint
 	{
-		[Ordinal(0)] [RED("eyeClosedTrack_Left")] 		public CInt32 EyeClosedTrack_Left { get; set;}
+		[Ordinal(1)] [RED("eyeClosedTrack_Left")] 		public CInt32 EyeClosedTrack_Left { get; set;}
 
-		[Ordinal(0)] [RED("eyeClosedTrack_Right")] 		public CInt32 EyeClosedTrack_Right { get; set;}
+		[Ordinal(2)] [RED("eyeClosedTrack_Right")] 		public CInt32 EyeClosedTrack_Right { get; set;}
 
-		[Ordinal(0)] [RED("bonesToOverride_Left", 2,0)] 		public CArray<CString> BonesToOverride_Left { get; set;}
+		[Ordinal(3)] [RED("bonesToOverride_Left", 2,0)] 		public CArray<CString> BonesToOverride_Left { get; set;}
 
-		[Ordinal(0)] [RED("bonesToOverride_Right", 2,0)] 		public CArray<CString> BonesToOverride_Right { get; set;}
+		[Ordinal(4)] [RED("bonesToOverride_Right", 2,0)] 		public CArray<CString> BonesToOverride_Right { get; set;}
 
 		public CBehaviorMimicCloseEyesConstraint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class Box : CVariable
 	{
-		[Ordinal(0)] [RED("Min")] 		public Vector Min { get; set;}
+		[Ordinal(1)] [RED("Min")] 		public Vector Min { get; set;}
 
-		[Ordinal(0)] [RED("Max")] 		public Vector Max { get; set;}
+		[Ordinal(2)] [RED("Max")] 		public Vector Max { get; set;}
 
 		public Box(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneFlowConditionBlock : CStorySceneGraphBlock
 	{
-		[Ordinal(0)] [RED("description")] 		public CString Description { get; set;}
+		[Ordinal(1)] [RED("description")] 		public CString Description { get; set;}
 
-		[Ordinal(0)] [RED("condition")] 		public CPtr<CStorySceneFlowCondition> Condition { get; set;}
+		[Ordinal(2)] [RED("condition")] 		public CPtr<CStorySceneFlowCondition> Condition { get; set;}
 
 		public CStorySceneFlowConditionBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

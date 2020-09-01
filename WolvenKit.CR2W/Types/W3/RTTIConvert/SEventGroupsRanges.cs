@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SEventGroupsRanges : CVariable
 	{
-		[Ordinal(0)] [RED("("tag")] 		public CName Tag { get; set;}
+		[Ordinal(1)] [RED("("tag")] 		public CName Tag { get; set;}
 
-		[Ordinal(0)] [RED("("beginIndex")] 		public CUInt32 BeginIndex { get; set;}
+		[Ordinal(2)] [RED("("beginIndex")] 		public CUInt32 BeginIndex { get; set;}
 
-		[Ordinal(0)] [RED("("endIndex")] 		public CUInt32 EndIndex { get; set;}
+		[Ordinal(3)] [RED("("endIndex")] 		public CUInt32 EndIndex { get; set;}
 
 		public SEventGroupsRanges(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

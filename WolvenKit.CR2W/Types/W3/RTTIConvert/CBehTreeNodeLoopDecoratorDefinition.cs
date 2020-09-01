@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeLoopDecoratorDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[Ordinal(0)] [RED("onCompleted")] 		public CEnum<EBTLoopMode> OnCompleted { get; set;}
+		[Ordinal(1)] [RED("onCompleted")] 		public CEnum<EBTLoopMode> OnCompleted { get; set;}
 
-		[Ordinal(0)] [RED("onFailed")] 		public CEnum<EBTLoopMode> OnFailed { get; set;}
+		[Ordinal(2)] [RED("onFailed")] 		public CEnum<EBTLoopMode> OnFailed { get; set;}
 
-		[Ordinal(0)] [RED("maxIterations")] 		public CBehTreeValInt MaxIterations { get; set;}
+		[Ordinal(3)] [RED("maxIterations")] 		public CBehTreeValInt MaxIterations { get; set;}
 
-		[Ordinal(0)] [RED("reactivationDelay")] 		public CFloat ReactivationDelay { get; set;}
+		[Ordinal(4)] [RED("reactivationDelay")] 		public CFloat ReactivationDelay { get; set;}
 
 		public CBehTreeNodeLoopDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestBehaviorNotificationBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("notifications", 2,0)] 		public CArray<CPtr<SQuestBehaviorNotification>> Notifications { get; set;}
+		[Ordinal(1)] [RED("notifications", 2,0)] 		public CArray<CPtr<SQuestBehaviorNotification>> Notifications { get; set;}
 
 		public CQuestBehaviorNotificationBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

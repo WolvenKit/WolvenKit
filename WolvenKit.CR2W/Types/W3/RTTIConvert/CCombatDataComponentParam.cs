@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCombatDataComponentParam : CGameplayEntityParam
 	{
-		[Ordinal(0)] [RED("attackersPoolMaxSize")] 		public CUInt32 AttackersPoolMaxSize { get; set;}
+		[Ordinal(1)] [RED("attackersPoolMaxSize")] 		public CUInt32 AttackersPoolMaxSize { get; set;}
 
 		public CCombatDataComponentParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

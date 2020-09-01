@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcStylePhilippaParams : CAINpcCombatStyleParams
 	{
-		[Ordinal(0)] [RED("magicAttackResourceName")] 		public CName MagicAttackResourceName { get; set;}
+		[Ordinal(1)] [RED("magicAttackResourceName")] 		public CName MagicAttackResourceName { get; set;}
 
 		public CAINpcStylePhilippaParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

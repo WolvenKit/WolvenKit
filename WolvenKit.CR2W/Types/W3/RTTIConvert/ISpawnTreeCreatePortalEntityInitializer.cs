@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ISpawnTreeCreatePortalEntityInitializer : ISpawnTreeScriptedInitializer
 	{
-		[Ordinal(0)] [RED("("entityToCreate")] 		public CHandle<CEntityTemplate> EntityToCreate { get; set;}
+		[Ordinal(1)] [RED("("entityToCreate")] 		public CHandle<CEntityTemplate> EntityToCreate { get; set;}
 
-		[Ordinal(0)] [RED("("spawnOffset")] 		public Vector SpawnOffset { get; set;}
+		[Ordinal(2)] [RED("("spawnOffset")] 		public Vector SpawnOffset { get; set;}
 
 		public ISpawnTreeCreatePortalEntityInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

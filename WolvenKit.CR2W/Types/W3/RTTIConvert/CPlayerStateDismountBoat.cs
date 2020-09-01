@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPlayerStateDismountBoat : CPlayerStateDismountTheVehicle
 	{
-		[Ordinal(0)] [RED("boatComp")] 		public CHandle<CBoatComponent> BoatComp { get; set;}
+		[Ordinal(1)] [RED("boatComp")] 		public CHandle<CBoatComponent> BoatComp { get; set;}
 
-		[Ordinal(0)] [RED("remainingSlideDuration")] 		public CFloat RemainingSlideDuration { get; set;}
+		[Ordinal(2)] [RED("remainingSlideDuration")] 		public CFloat RemainingSlideDuration { get; set;}
 
-		[Ordinal(0)] [RED("fromPassenger")] 		public CBool FromPassenger { get; set;}
+		[Ordinal(3)] [RED("fromPassenger")] 		public CBool FromPassenger { get; set;}
 
 		public CPlayerStateDismountBoat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

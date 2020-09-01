@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeProbabilitySelectorDefinition : IBehTreeNodeCompositeDefinition
 	{
-		[Ordinal(0)] [RED("testAvailability")] 		public CBool TestAvailability { get; set;}
+		[Ordinal(1)] [RED("testAvailability")] 		public CBool TestAvailability { get; set;}
 
-		[Ordinal(0)] [RED("probability0")] 		public CUInt8 Probability0 { get; set;}
+		[Ordinal(2)] [RED("probability0")] 		public CUInt8 Probability0 { get; set;}
 
-		[Ordinal(0)] [RED("probability1")] 		public CUInt8 Probability1 { get; set;}
+		[Ordinal(3)] [RED("probability1")] 		public CUInt8 Probability1 { get; set;}
 
-		[Ordinal(0)] [RED("probability2")] 		public CUInt8 Probability2 { get; set;}
+		[Ordinal(4)] [RED("probability2")] 		public CUInt8 Probability2 { get; set;}
 
-		[Ordinal(0)] [RED("probability3")] 		public CUInt8 Probability3 { get; set;}
+		[Ordinal(5)] [RED("probability3")] 		public CUInt8 Probability3 { get; set;}
 
-		[Ordinal(0)] [RED("probability4")] 		public CUInt8 Probability4 { get; set;}
+		[Ordinal(6)] [RED("probability4")] 		public CUInt8 Probability4 { get; set;}
 
-		[Ordinal(0)] [RED("probability5")] 		public CUInt8 Probability5 { get; set;}
+		[Ordinal(7)] [RED("probability5")] 		public CUInt8 Probability5 { get; set;}
 
 		public CBehTreeNodeProbabilitySelectorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

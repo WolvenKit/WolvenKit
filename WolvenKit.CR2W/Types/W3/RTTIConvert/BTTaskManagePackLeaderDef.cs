@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskManagePackLeaderDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("packName")] 		public CBehTreeValCName PackName { get; set;}
+		[Ordinal(1)] [RED("packName")] 		public CBehTreeValCName PackName { get; set;}
 
-		[Ordinal(0)] [RED("leadingRadius")] 		public CFloat LeadingRadius { get; set;}
+		[Ordinal(2)] [RED("leadingRadius")] 		public CFloat LeadingRadius { get; set;}
 
-		[Ordinal(0)] [RED("forceMeAsLeader")] 		public CBool ForceMeAsLeader { get; set;}
+		[Ordinal(3)] [RED("forceMeAsLeader")] 		public CBool ForceMeAsLeader { get; set;}
 
 		public BTTaskManagePackLeaderDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

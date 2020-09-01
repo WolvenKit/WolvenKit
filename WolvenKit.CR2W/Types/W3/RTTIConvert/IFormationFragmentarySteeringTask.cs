@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IFormationFragmentarySteeringTask : IFormationSteeringTask
 	{
-		[Ordinal(0)] [RED("importance")] 		public CFloat Importance { get; set;}
+		[Ordinal(1)] [RED("importance")] 		public CFloat Importance { get; set;}
 
 		public IFormationFragmentarySteeringTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

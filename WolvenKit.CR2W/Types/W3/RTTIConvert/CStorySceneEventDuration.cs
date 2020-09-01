@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventDuration : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(1)] [RED("("duration")] 		public CFloat Duration { get; set;}
 
 		public CStorySceneEventDuration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

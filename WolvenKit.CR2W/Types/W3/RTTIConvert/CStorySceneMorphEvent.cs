@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneMorphEvent : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(1)] [RED("actor")] 		public CName Actor { get; set;}
 
-		[Ordinal(0)] [RED("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(2)] [RED("weight")] 		public CFloat Weight { get; set;}
 
-		[Ordinal(0)] [RED("morphComponentId")] 		public CName MorphComponentId { get; set;}
+		[Ordinal(3)] [RED("morphComponentId")] 		public CName MorphComponentId { get; set;}
 
 		public CStorySceneMorphEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

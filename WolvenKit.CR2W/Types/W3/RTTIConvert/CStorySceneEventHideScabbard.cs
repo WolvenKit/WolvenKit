@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventHideScabbard : CStorySceneEvent
 	{
-		[Ordinal(0)] [RED("("setVisible")] 		public CBool SetVisible { get; set;}
+		[Ordinal(1)] [RED("("setVisible")] 		public CBool SetVisible { get; set;}
 
-		[Ordinal(0)] [RED("("actorId")] 		public CName ActorId { get; set;}
+		[Ordinal(2)] [RED("("actorId")] 		public CName ActorId { get; set;}
 
 		public CStorySceneEventHideScabbard(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

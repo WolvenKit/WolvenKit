@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateRagdoll : CExplorationStateAbstract
 	{
-		[Ordinal(0)] [RED("lastPos")] 		public Vector LastPos { get; set;}
+		[Ordinal(1)] [RED("lastPos")] 		public Vector LastPos { get; set;}
 
 		public CExplorationStateRagdoll(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

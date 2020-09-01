@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMenuTimeScaleParam : IMenuTimeParam
 	{
-		[Ordinal(0)] [RED("timeScale")] 		public CFloat TimeScale { get; set;}
+		[Ordinal(1)] [RED("timeScale")] 		public CFloat TimeScale { get; set;}
 
-		[Ordinal(0)] [RED("multiplicative")] 		public CBool Multiplicative { get; set;}
+		[Ordinal(2)] [RED("multiplicative")] 		public CBool Multiplicative { get; set;}
 
 		public CMenuTimeScaleParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

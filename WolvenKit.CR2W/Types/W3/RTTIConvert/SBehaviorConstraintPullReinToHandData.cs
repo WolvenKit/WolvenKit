@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorConstraintPullReinToHandData : CVariable
 	{
-		[Ordinal(0)] [RED("("reinBoneName")] 		public CName ReinBoneName { get; set;}
+		[Ordinal(1)] [RED("("reinBoneName")] 		public CName ReinBoneName { get; set;}
 
-		[Ordinal(0)] [RED("("reinContactPoint")] 		public Vector ReinContactPoint { get; set;}
+		[Ordinal(2)] [RED("("reinContactPoint")] 		public Vector ReinContactPoint { get; set;}
 
-		[Ordinal(0)] [RED("("handBoneName")] 		public CName HandBoneName { get; set;}
+		[Ordinal(3)] [RED("("handBoneName")] 		public CName HandBoneName { get; set;}
 
-		[Ordinal(0)] [RED("("handContactPoint")] 		public Vector HandContactPoint { get; set;}
+		[Ordinal(4)] [RED("("handContactPoint")] 		public Vector HandContactPoint { get; set;}
 
 		public SBehaviorConstraintPullReinToHandData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

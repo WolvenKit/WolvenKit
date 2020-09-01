@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAlignToGroundNode : CBehaviorGraphBaseNode
 	{
-		[Ordinal(0)] [RED("groundNormalBlendTime")] 		public CFloat GroundNormalBlendTime { get; set;}
+		[Ordinal(1)] [RED("groundNormalBlendTime")] 		public CFloat GroundNormalBlendTime { get; set;}
 
-		[Ordinal(0)] [RED("additionalOffset")] 		public CFloat AdditionalOffset { get; set;}
+		[Ordinal(2)] [RED("additionalOffset")] 		public CFloat AdditionalOffset { get; set;}
 
-		[Ordinal(0)] [RED("eatEvent")] 		public CBool EatEvent { get; set;}
+		[Ordinal(3)] [RED("eatEvent")] 		public CBool EatEvent { get; set;}
 
 		public CBehaviorGraphAlignToGroundNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

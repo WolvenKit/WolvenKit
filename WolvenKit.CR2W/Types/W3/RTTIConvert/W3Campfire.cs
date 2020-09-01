@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Campfire : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("dontCheckForNPCs")] 		public CBool DontCheckForNPCs { get; set;}
+		[Ordinal(1)] [RED("("dontCheckForNPCs")] 		public CBool DontCheckForNPCs { get; set;}
 
 		public W3Campfire(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

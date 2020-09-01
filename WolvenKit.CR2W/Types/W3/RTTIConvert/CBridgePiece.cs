@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBridgePiece : CScriptedDestroyableComponent
 	{
-		[Ordinal(0)] [RED("entityPos")] 		public Vector EntityPos { get; set;}
+		[Ordinal(1)] [RED("entityPos")] 		public Vector EntityPos { get; set;}
 
-		[Ordinal(0)] [RED("compPos")] 		public Vector CompPos { get; set;}
+		[Ordinal(2)] [RED("compPos")] 		public Vector CompPos { get; set;}
 
-		[Ordinal(0)] [RED("totalTime")] 		public CFloat TotalTime { get; set;}
+		[Ordinal(3)] [RED("totalTime")] 		public CFloat TotalTime { get; set;}
 
-		[Ordinal(0)] [RED("z")] 		public CHandle<CEntity> Z { get; set;}
+		[Ordinal(4)] [RED("z")] 		public CHandle<CEntity> Z { get; set;}
 
 		public CBridgePiece(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

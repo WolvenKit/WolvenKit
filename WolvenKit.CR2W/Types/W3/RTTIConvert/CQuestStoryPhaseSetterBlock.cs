@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestStoryPhaseSetterBlock : CQuestGraphBlock
 	{
-		[Ordinal(0)] [RED("spawnsets", 2,0)] 		public CArray<CPtr<IQuestSpawnsetAction>> Spawnsets { get; set;}
+		[Ordinal(1)] [RED("spawnsets", 2,0)] 		public CArray<CPtr<IQuestSpawnsetAction>> Spawnsets { get; set;}
 
 		public CQuestStoryPhaseSetterBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

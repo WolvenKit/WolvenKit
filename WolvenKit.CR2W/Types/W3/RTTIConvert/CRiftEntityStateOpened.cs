@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CRiftEntityStateOpened : CScriptableState
 	{
-		[Ordinal(0)] [RED("enableEncounterOnStart")] 		public CBool EnableEncounterOnStart { get; set;}
+		[Ordinal(1)] [RED("enableEncounterOnStart")] 		public CBool EnableEncounterOnStart { get; set;}
 
 		public CRiftEntityStateOpened(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MedallionController : CObject
 	{
-		[Ordinal(0)] [RED("("deactivateTimer")] 		public CFloat DeactivateTimer { get; set;}
+		[Ordinal(1)] [RED("("deactivateTimer")] 		public CFloat DeactivateTimer { get; set;}
 
-		[Ordinal(0)] [RED("("instantIntensity")] 		public CFloat InstantIntensity { get; set;}
+		[Ordinal(2)] [RED("("instantIntensity")] 		public CFloat InstantIntensity { get; set;}
 
-		[Ordinal(0)] [RED("("isBlocked")] 		public CBool IsBlocked { get; set;}
+		[Ordinal(3)] [RED("("isBlocked")] 		public CBool IsBlocked { get; set;}
 
-		[Ordinal(0)] [RED("("focusModeFactor")] 		public CFloat FocusModeFactor { get; set;}
+		[Ordinal(4)] [RED("("focusModeFactor")] 		public CFloat FocusModeFactor { get; set;}
 
-		[Ordinal(0)] [RED("("defaultDuration")] 		public CFloat DefaultDuration { get; set;}
+		[Ordinal(5)] [RED("("defaultDuration")] 		public CFloat DefaultDuration { get; set;}
 
-		[Ordinal(0)] [RED("("defaultTreshold")] 		public CFloat DefaultTreshold { get; set;}
+		[Ordinal(6)] [RED("("defaultTreshold")] 		public CFloat DefaultTreshold { get; set;}
 
-		[Ordinal(0)] [RED("("maxTreshold")] 		public CFloat MaxTreshold { get; set;}
+		[Ordinal(7)] [RED("("maxTreshold")] 		public CFloat MaxTreshold { get; set;}
 
 		public W3MedallionController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

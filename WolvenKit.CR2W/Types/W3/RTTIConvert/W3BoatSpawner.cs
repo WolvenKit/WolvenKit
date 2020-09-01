@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3BoatSpawner : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("spawnedBoat")] 		public EntityHandle SpawnedBoat { get; set;}
+		[Ordinal(1)] [RED("("spawnedBoat")] 		public EntityHandle SpawnedBoat { get; set;}
 
-		[Ordinal(0)] [RED("("respawnDistance")] 		public CFloat RespawnDistance { get; set;}
+		[Ordinal(2)] [RED("("respawnDistance")] 		public CFloat RespawnDistance { get; set;}
 
-		[Ordinal(0)] [RED("("isAttemptingBoatSpawn")] 		public CBool IsAttemptingBoatSpawn { get; set;}
+		[Ordinal(3)] [RED("("isAttemptingBoatSpawn")] 		public CBool IsAttemptingBoatSpawn { get; set;}
 
 		public W3BoatSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3WeatherShrine : CGameplayEntity
 	{
-		[Ordinal(0)] [RED("("weatherBlendTime")] 		public CFloat WeatherBlendTime { get; set;}
+		[Ordinal(1)] [RED("("weatherBlendTime")] 		public CFloat WeatherBlendTime { get; set;}
 
-		[Ordinal(0)] [RED("("cooldown")] 		public CFloat Cooldown { get; set;}
+		[Ordinal(2)] [RED("("cooldown")] 		public CFloat Cooldown { get; set;}
 
-		[Ordinal(0)] [RED("("prayerForSunAcceptedFX")] 		public CName PrayerForSunAcceptedFX { get; set;}
+		[Ordinal(3)] [RED("("prayerForSunAcceptedFX")] 		public CName PrayerForSunAcceptedFX { get; set;}
 
-		[Ordinal(0)] [RED("("prayerForStormAcceptedFX")] 		public CName PrayerForStormAcceptedFX { get; set;}
+		[Ordinal(4)] [RED("("prayerForStormAcceptedFX")] 		public CName PrayerForStormAcceptedFX { get; set;}
 
-		[Ordinal(0)] [RED("("price")] 		public CInt32 Price { get; set;}
+		[Ordinal(5)] [RED("("price")] 		public CInt32 Price { get; set;}
 
 		public W3WeatherShrine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

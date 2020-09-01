@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSpawnDettlaffColumns : IBehTreeTask
 	{
-		[Ordinal(0)] [RED("("owner")] 		public CHandle<CNewNPC> Owner { get; set;}
+		[Ordinal(1)] [RED("("owner")] 		public CHandle<CNewNPC> Owner { get; set;}
 
-		[Ordinal(0)] [RED("("tempActor")] 		public CHandle<CActor> TempActor { get; set;}
+		[Ordinal(2)] [RED("("tempActor")] 		public CHandle<CActor> TempActor { get; set;}
 
-		[Ordinal(0)] [RED("("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(3)] [RED("("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
-		[Ordinal(0)] [RED("("amountToSpawn")] 		public CInt32 AmountToSpawn { get; set;}
+		[Ordinal(4)] [RED("("amountToSpawn")] 		public CInt32 AmountToSpawn { get; set;}
 
-		[Ordinal(0)] [RED("("minDistanceFromTarget")] 		public CFloat MinDistanceFromTarget { get; set;}
+		[Ordinal(5)] [RED("("minDistanceFromTarget")] 		public CFloat MinDistanceFromTarget { get; set;}
 
-		[Ordinal(0)] [RED("("maxDistanceFromTarget")] 		public CFloat MaxDistanceFromTarget { get; set;}
+		[Ordinal(6)] [RED("("maxDistanceFromTarget")] 		public CFloat MaxDistanceFromTarget { get; set;}
 
-		[Ordinal(0)] [RED("("minDistFromEachOther")] 		public CFloat MinDistFromEachOther { get; set;}
+		[Ordinal(7)] [RED("("minDistFromEachOther")] 		public CFloat MinDistFromEachOther { get; set;}
 
-		[Ordinal(0)] [RED("("tagToFind")] 		public CName TagToFind { get; set;}
+		[Ordinal(8)] [RED("("tagToFind")] 		public CName TagToFind { get; set;}
 
-		[Ordinal(0)] [RED("("entityToFind")] 		public CHandle<CEntity> EntityToFind { get; set;}
+		[Ordinal(9)] [RED("("entityToFind")] 		public CHandle<CEntity> EntityToFind { get; set;}
 
-		[Ordinal(0)] [RED("("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(10)] [RED("("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[Ordinal(0)] [RED("("shouldComplete")] 		public CBool ShouldComplete { get; set;}
+		[Ordinal(11)] [RED("("shouldComplete")] 		public CBool ShouldComplete { get; set;}
 
-		[Ordinal(0)] [RED("("summonerComponent")] 		public CHandle<W3SummonerComponent> SummonerComponent { get; set;}
+		[Ordinal(12)] [RED("("summonerComponent")] 		public CHandle<W3SummonerComponent> SummonerComponent { get; set;}
 
-		[Ordinal(0)] [RED("("usedPos", 2,0)] 		public CArray<Vector> UsedPos { get; set;}
+		[Ordinal(13)] [RED("("usedPos", 2,0)] 		public CArray<Vector> UsedPos { get; set;}
 
 		public CBTTaskSpawnDettlaffColumns(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SaveGameConfirmation : ConfirmationPopupData
 	{
-		[Ordinal(0)] [RED("("menuRef")] 		public CHandle<CR4IngameMenu> MenuRef { get; set;}
+		[Ordinal(1)] [RED("("menuRef")] 		public CHandle<CR4IngameMenu> MenuRef { get; set;}
 
-		[Ordinal(0)] [RED("("type")] 		public CEnum<ESaveGameType> Type { get; set;}
+		[Ordinal(2)] [RED("("type")] 		public CEnum<ESaveGameType> Type { get; set;}
 
-		[Ordinal(0)] [RED("("slot")] 		public CInt32 Slot { get; set;}
+		[Ordinal(3)] [RED("("slot")] 		public CInt32 Slot { get; set;}
 
 		public W3SaveGameConfirmation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

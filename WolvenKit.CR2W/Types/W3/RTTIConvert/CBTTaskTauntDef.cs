@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskTauntDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
-		[Ordinal(0)] [RED("("tauntType")] 		public CEnum<ETauntType> TauntType { get; set;}
+		[Ordinal(1)] [RED("("tauntType")] 		public CEnum<ETauntType> TauntType { get; set;}
 
-		[Ordinal(0)] [RED("("tauntDelay")] 		public CFloat TauntDelay { get; set;}
+		[Ordinal(2)] [RED("("tauntDelay")] 		public CFloat TauntDelay { get; set;}
 
-		[Ordinal(0)] [RED("("useXMLTauntChance")] 		public CBool UseXMLTauntChance { get; set;}
+		[Ordinal(3)] [RED("("useXMLTauntChance")] 		public CBool UseXMLTauntChance { get; set;}
 
 		public CBTTaskTauntDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

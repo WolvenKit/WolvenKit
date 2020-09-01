@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SPartySpawner : CVariable
 	{
-		[Ordinal(0)] [RED("("firstIndex")] 		public CUInt32 FirstIndex { get; set;}
+		[Ordinal(1)] [RED("("firstIndex")] 		public CUInt32 FirstIndex { get; set;}
 
-		[Ordinal(0)] [RED("("waypointsCount")] 		public CUInt32 WaypointsCount { get; set;}
+		[Ordinal(2)] [RED("("waypointsCount")] 		public CUInt32 WaypointsCount { get; set;}
 
-		[Ordinal(0)] [RED("("mappingIndex")] 		public CUInt32 MappingIndex { get; set;}
+		[Ordinal(3)] [RED("("mappingIndex")] 		public CUInt32 MappingIndex { get; set;}
 
 		public SPartySpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

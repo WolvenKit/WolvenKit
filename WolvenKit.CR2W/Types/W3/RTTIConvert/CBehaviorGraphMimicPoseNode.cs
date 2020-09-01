@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMimicPoseNode : CBehaviorGraphBaseMimicNode
 	{
-		[Ordinal(0)] [RED("("poseType")] 		public CEnum<EMimicNodePoseType> PoseType { get; set;}
+		[Ordinal(1)] [RED("("poseType")] 		public CEnum<EMimicNodePoseType> PoseType { get; set;}
 
-		[Ordinal(0)] [RED("("poseName")] 		public CName PoseName { get; set;}
+		[Ordinal(2)] [RED("("poseName")] 		public CName PoseName { get; set;}
 
-		[Ordinal(0)] [RED("("cachedPoseValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedPoseValueNode { get; set;}
+		[Ordinal(3)] [RED("("cachedPoseValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedPoseValueNode { get; set;}
 
-		[Ordinal(0)] [RED("("cachedPoseWeightNode")] 		public CPtr<CBehaviorGraphValueNode> CachedPoseWeightNode { get; set;}
+		[Ordinal(4)] [RED("("cachedPoseWeightNode")] 		public CPtr<CBehaviorGraphValueNode> CachedPoseWeightNode { get; set;}
 
 		public CBehaviorGraphMimicPoseNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

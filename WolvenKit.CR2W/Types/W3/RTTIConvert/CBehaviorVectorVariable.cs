@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorVectorVariable : CBaseBehaviorVariable
 	{
-		[Ordinal(0)] [RED("value")] 		public Vector Value { get; set;}
+		[Ordinal(1)] [RED("value")] 		public Vector Value { get; set;}
 
-		[Ordinal(0)] [RED("defaultValue")] 		public Vector DefaultValue { get; set;}
+		[Ordinal(2)] [RED("defaultValue")] 		public Vector DefaultValue { get; set;}
 
-		[Ordinal(0)] [RED("minValue")] 		public Vector MinValue { get; set;}
+		[Ordinal(3)] [RED("minValue")] 		public Vector MinValue { get; set;}
 
-		[Ordinal(0)] [RED("maxValue")] 		public Vector MaxValue { get; set;}
+		[Ordinal(4)] [RED("maxValue")] 		public Vector MaxValue { get; set;}
 
-		[Ordinal(0)] [RED("space")] 		public CEnum<EVariableSpace> Space { get; set;}
+		[Ordinal(5)] [RED("space")] 		public CEnum<EVariableSpace> Space { get; set;}
 
-		[Ordinal(0)] [RED("type")] 		public CEnum<EVectorVariableType> Type { get; set;}
+		[Ordinal(6)] [RED("type")] 		public CEnum<EVectorVariableType> Type { get; set;}
 
-		[Ordinal(0)] [RED("shouldBeSyncedBetweenGraphs")] 		public CBool ShouldBeSyncedBetweenGraphs { get; set;}
+		[Ordinal(7)] [RED("shouldBeSyncedBetweenGraphs")] 		public CBool ShouldBeSyncedBetweenGraphs { get; set;}
 
 		public CBehaviorVectorVariable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

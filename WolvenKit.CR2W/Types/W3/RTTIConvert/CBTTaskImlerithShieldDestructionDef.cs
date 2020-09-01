@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskImlerithShieldDestructionDef : IBehTreeTaskDefinition
 	{
-		[Ordinal(0)] [RED("firstTreshold")] 		public CFloat FirstTreshold { get; set;}
+		[Ordinal(1)] [RED("firstTreshold")] 		public CFloat FirstTreshold { get; set;}
 
-		[Ordinal(0)] [RED("secondTreshold")] 		public CFloat SecondTreshold { get; set;}
+		[Ordinal(2)] [RED("secondTreshold")] 		public CFloat SecondTreshold { get; set;}
 
-		[Ordinal(0)] [RED("thirdTreshold")] 		public CFloat ThirdTreshold { get; set;}
+		[Ordinal(3)] [RED("thirdTreshold")] 		public CFloat ThirdTreshold { get; set;}
 
-		[Ordinal(0)] [RED("finalTreshold")] 		public CFloat FinalTreshold { get; set;}
+		[Ordinal(4)] [RED("finalTreshold")] 		public CFloat FinalTreshold { get; set;}
 
-		[Ordinal(0)] [RED("dropShield")] 		public CBool DropShield { get; set;}
+		[Ordinal(5)] [RED("dropShield")] 		public CBool DropShield { get; set;}
 
 		public CBTTaskImlerithShieldDestructionDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSpawnStrategyRange : CVariable
 	{
-		[Ordinal(0)] [RED("("spawnRange")] 		public CFloat SpawnRange { get; set;}
+		[Ordinal(1)] [RED("("spawnRange")] 		public CFloat SpawnRange { get; set;}
 
-		[Ordinal(0)] [RED("("poolRange")] 		public CFloat PoolRange { get; set;}
+		[Ordinal(2)] [RED("("poolRange")] 		public CFloat PoolRange { get; set;}
 
-		[Ordinal(0)] [RED("("offset")] 		public Vector2 Offset { get; set;}
+		[Ordinal(3)] [RED("("offset")] 		public Vector2 Offset { get; set;}
 
 		public SSpawnStrategyRange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

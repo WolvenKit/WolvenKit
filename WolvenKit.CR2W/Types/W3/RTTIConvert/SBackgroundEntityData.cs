@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBackgroundEntityData : CVariable
 	{
-		[Ordinal(0)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(1)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[Ordinal(0)] [RED("spawnSlotName")] 		public CName SpawnSlotName { get; set;}
+		[Ordinal(2)] [RED("spawnSlotName")] 		public CName SpawnSlotName { get; set;}
 
-		[Ordinal(0)] [RED("workAnimationEvent")] 		public CEnum<EBackgroundNPCWork_Single> WorkAnimationEvent { get; set;}
+		[Ordinal(3)] [RED("workAnimationEvent")] 		public CEnum<EBackgroundNPCWork_Single> WorkAnimationEvent { get; set;}
 
-		[Ordinal(0)] [RED("appearanceName")] 		public CName AppearanceName { get; set;}
+		[Ordinal(4)] [RED("appearanceName")] 		public CName AppearanceName { get; set;}
 
 		public SBackgroundEntityData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

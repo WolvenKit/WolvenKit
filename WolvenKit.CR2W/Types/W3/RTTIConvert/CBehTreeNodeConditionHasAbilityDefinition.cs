@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionHasAbilityDefinition : CBehTreeNodeConditionDefinition
 	{
-		[Ordinal(0)] [RED("("abilityName")] 		public CName AbilityName { get; set;}
+		[Ordinal(1)] [RED("("abilityName")] 		public CName AbilityName { get; set;}
 
 		public CBehTreeNodeConditionHasAbilityDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

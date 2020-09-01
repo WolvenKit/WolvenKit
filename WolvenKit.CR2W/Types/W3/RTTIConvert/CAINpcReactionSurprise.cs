@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcReactionSurprise : CAINpcReaction
 	{
-		[Ordinal(0)] [RED("rotateToActionTargetsTarget")] 		public CBool RotateToActionTargetsTarget { get; set;}
+		[Ordinal(1)] [RED("rotateToActionTargetsTarget")] 		public CBool RotateToActionTargetsTarget { get; set;}
 
 		public CAINpcReactionSurprise(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SDoTDamage : CVariable
 	{
-		[Ordinal(0)] [RED("("damageTypeName")] 		public CName DamageTypeName { get; set;}
+		[Ordinal(1)] [RED("("damageTypeName")] 		public CName DamageTypeName { get; set;}
 
-		[Ordinal(0)] [RED("("hitsVitality")] 		public CBool HitsVitality { get; set;}
+		[Ordinal(2)] [RED("("hitsVitality")] 		public CBool HitsVitality { get; set;}
 
-		[Ordinal(0)] [RED("("hitsEssence")] 		public CBool HitsEssence { get; set;}
+		[Ordinal(3)] [RED("("hitsEssence")] 		public CBool HitsEssence { get; set;}
 
-		[Ordinal(0)] [RED("("resistance")] 		public CEnum<ECharacterDefenseStats> Resistance { get; set;}
+		[Ordinal(4)] [RED("("resistance")] 		public CEnum<ECharacterDefenseStats> Resistance { get; set;}
 
 		public SDoTDamage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

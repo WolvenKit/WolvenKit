@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimCutsceneLightEvent : CExtAnimEvent
 	{
-		[Ordinal(0)] [RED("("tag")] 		public TagList Tag { get; set;}
+		[Ordinal(1)] [RED("("tag")] 		public TagList Tag { get; set;}
 
-		[Ordinal(0)] [RED("("isEnabled")] 		public CBool IsEnabled { get; set;}
+		[Ordinal(2)] [RED("("isEnabled")] 		public CBool IsEnabled { get; set;}
 
-		[Ordinal(0)] [RED("("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(3)] [RED("("radius")] 		public CFloat Radius { get; set;}
 
-		[Ordinal(0)] [RED("("brightness")] 		public CFloat Brightness { get; set;}
+		[Ordinal(4)] [RED("("brightness")] 		public CFloat Brightness { get; set;}
 
-		[Ordinal(0)] [RED("("color")] 		public CColor Color { get; set;}
+		[Ordinal(5)] [RED("("color")] 		public CColor Color { get; set;}
 
-		[Ordinal(0)] [RED("("lightFlickering")] 		public SLightFlickering LightFlickering { get; set;}
+		[Ordinal(6)] [RED("("lightFlickering")] 		public SLightFlickering LightFlickering { get; set;}
 
 		public CExtAnimCutsceneLightEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

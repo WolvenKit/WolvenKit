@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_CheckLightState : CQuestScriptedCondition
 	{
-		[Ordinal(0)] [RED("("lightSourceTag")] 		public CName LightSourceTag { get; set;}
+		[Ordinal(1)] [RED("("lightSourceTag")] 		public CName LightSourceTag { get; set;}
 
-		[Ordinal(0)] [RED("("targetState")] 		public CBool TargetState { get; set;}
+		[Ordinal(2)] [RED("("targetState")] 		public CBool TargetState { get; set;}
 
-		[Ordinal(0)] [RED("("lightEntity")] 		public CHandle<CEntity> LightEntity { get; set;}
+		[Ordinal(3)] [RED("("lightEntity")] 		public CHandle<CEntity> LightEntity { get; set;}
 
-		[Ordinal(0)] [RED("("component")] 		public CHandle<CGameplayLightComponent> Component { get; set;}
+		[Ordinal(4)] [RED("("component")] 		public CHandle<CGameplayLightComponent> Component { get; set;}
 
-		[Ordinal(0)] [RED("("listener")] 		public CHandle<W3QuestCond_CheckLightState_Listener> Listener { get; set;}
+		[Ordinal(5)] [RED("("listener")] 		public CHandle<W3QuestCond_CheckLightState_Listener> Listener { get; set;}
 
 		public W3QuestCond_CheckLightState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

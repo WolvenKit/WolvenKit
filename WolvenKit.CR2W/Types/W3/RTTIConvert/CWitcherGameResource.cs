@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWitcherGameResource : CCommonGameResource
 	{
-		[Ordinal(0)] [RED("mapPinConfig")] 		public SMapPinConfig MapPinConfig { get; set;}
+		[Ordinal(1)] [RED("mapPinConfig")] 		public SMapPinConfig MapPinConfig { get; set;}
 
-		[Ordinal(0)] [RED("huntingClueCategoryResource")] 		public CSoft<C2dArray> HuntingClueCategoryResource { get; set;}
+		[Ordinal(2)] [RED("huntingClueCategoryResource")] 		public CSoft<C2dArray> HuntingClueCategoryResource { get; set;}
 
-		[Ordinal(0)] [RED("journalRootDirectory")] 		public CString JournalRootDirectory { get; set;}
+		[Ordinal(3)] [RED("journalRootDirectory")] 		public CString JournalRootDirectory { get; set;}
 
 		public CWitcherGameResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

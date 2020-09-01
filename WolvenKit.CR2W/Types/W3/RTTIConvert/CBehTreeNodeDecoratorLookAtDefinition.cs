@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDecoratorLookAtDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[Ordinal(0)] [RED("durationPostDeactivation")] 		public CFloat DurationPostDeactivation { get; set;}
+		[Ordinal(1)] [RED("durationPostDeactivation")] 		public CFloat DurationPostDeactivation { get; set;}
 
-		[Ordinal(0)] [RED("player")] 		public CBool Player { get; set;}
+		[Ordinal(2)] [RED("player")] 		public CBool Player { get; set;}
 
-		[Ordinal(0)] [RED("actionTarget")] 		public CBool ActionTarget { get; set;}
+		[Ordinal(3)] [RED("actionTarget")] 		public CBool ActionTarget { get; set;}
 
-		[Ordinal(0)] [RED("combatTarget")] 		public CBool CombatTarget { get; set;}
+		[Ordinal(4)] [RED("combatTarget")] 		public CBool CombatTarget { get; set;}
 
-		[Ordinal(0)] [RED("reactionTarget")] 		public CBool ReactionTarget { get; set;}
+		[Ordinal(5)] [RED("reactionTarget")] 		public CBool ReactionTarget { get; set;}
 
-		[Ordinal(0)] [RED("namedTarget")] 		public CName NamedTarget { get; set;}
+		[Ordinal(6)] [RED("namedTarget")] 		public CName NamedTarget { get; set;}
 
 		public CBehTreeNodeDecoratorLookAtDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

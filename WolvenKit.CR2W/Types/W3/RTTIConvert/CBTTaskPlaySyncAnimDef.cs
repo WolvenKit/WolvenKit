@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPlaySyncAnimDef : IBehTreeConditionalTaskDefinition
 	{
-		[Ordinal(0)] [RED("("useSetupSimpleSyncAnim2")] 		public CBool UseSetupSimpleSyncAnim2 { get; set;}
+		[Ordinal(1)] [RED("("useSetupSimpleSyncAnim2")] 		public CBool UseSetupSimpleSyncAnim2 { get; set;}
 
-		[Ordinal(0)] [RED("("syncAnimNameLeftStance")] 		public CName SyncAnimNameLeftStance { get; set;}
+		[Ordinal(2)] [RED("("syncAnimNameLeftStance")] 		public CName SyncAnimNameLeftStance { get; set;}
 
-		[Ordinal(0)] [RED("("syncAnimNameRightStance")] 		public CName SyncAnimNameRightStance { get; set;}
+		[Ordinal(3)] [RED("("syncAnimNameRightStance")] 		public CName SyncAnimNameRightStance { get; set;}
 
-		[Ordinal(0)] [RED("("raiseForceIdle")] 		public CBool RaiseForceIdle { get; set;}
+		[Ordinal(4)] [RED("("raiseForceIdle")] 		public CBool RaiseForceIdle { get; set;}
 
-		[Ordinal(0)] [RED("("denyWhenTargetIsDodging")] 		public CBool DenyWhenTargetIsDodging { get; set;}
+		[Ordinal(5)] [RED("("denyWhenTargetIsDodging")] 		public CBool DenyWhenTargetIsDodging { get; set;}
 
-		[Ordinal(0)] [RED("("denyIfTargetNotPlayer")] 		public CBool DenyIfTargetNotPlayer { get; set;}
+		[Ordinal(6)] [RED("("denyIfTargetNotPlayer")] 		public CBool DenyIfTargetNotPlayer { get; set;}
 
-		[Ordinal(0)] [RED("("onAnimEvent")] 		public CName OnAnimEvent { get; set;}
+		[Ordinal(7)] [RED("("onAnimEvent")] 		public CName OnAnimEvent { get; set;}
 
-		[Ordinal(0)] [RED("("onGameplayEvent")] 		public CName OnGameplayEvent { get; set;}
+		[Ordinal(8)] [RED("("onGameplayEvent")] 		public CName OnGameplayEvent { get; set;}
 
-		[Ordinal(0)] [RED("("shouldComplete")] 		public CBool ShouldComplete { get; set;}
+		[Ordinal(9)] [RED("("shouldComplete")] 		public CBool ShouldComplete { get; set;}
 
 		public CBTTaskPlaySyncAnimDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
