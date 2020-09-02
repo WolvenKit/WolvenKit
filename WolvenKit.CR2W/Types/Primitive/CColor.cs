@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -13,13 +14,13 @@ namespace WolvenKit.CR2W.Types
     public class CColor : CVariable
     {
         [Browsable(false)]
-        [RED] public CUInt8 Red { get; set; }
+        [Ordinal(1)] [RED] public CUInt8 Red { get; set; }
         [Browsable(false)]
-        [RED] public CUInt8 Green { get; set; }
+        [Ordinal(2)][RED] public CUInt8 Green { get; set; }
         [Browsable(false)]
-        [RED] public CUInt8 Blue { get; set; }
+        [Ordinal(3)][RED] public CUInt8 Blue { get; set; }
         [Browsable(false)]
-        [RED] public CUInt8 Alpha { get; set; }
+        [Ordinal(4)][RED] public CUInt8 Alpha { get; set; }
 
 
         public CColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)

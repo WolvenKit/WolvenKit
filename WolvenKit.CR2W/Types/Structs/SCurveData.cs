@@ -1,4 +1,4 @@
-﻿
+﻿using FastMember;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
     [REDMeta]
     public class SCurveData : CVariable
     {
-        [RED("Curve Values", 142, 0)] public CArray<SCurveDataEntry> Curve_Values { get; set; }
+        [Ordinal(1)] [RED("Curve Values", 142, 0)] public CArray<SCurveDataEntry> Curve_Values { get; set; }
 
-        [RED("value type")] public CEnum<ECurveValueType> Value_type { get; set; }
+        [Ordinal(2)] [RED("value type")] public CEnum<ECurveValueType> Value_type { get; set; }
 
-        [RED("type")] public CEnum<ECurveBaseType> Type { get; set; }
+        [Ordinal(3)] [RED("type")] public CEnum<ECurveBaseType> Type { get; set; }
 
-        [RED("is looped")] public CBool Is_looped { get; set; }
+        [Ordinal(4)] [RED("is looped")] public CBool Is_looped { get; set; }
 
 
         public SCurveData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

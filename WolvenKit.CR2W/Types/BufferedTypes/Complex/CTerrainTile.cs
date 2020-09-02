@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -15,7 +16,7 @@ namespace WolvenKit.CR2W.Types
 
 
 
-        [REDBuffer] public CArray<STerrainTileData> Groups { get; set; }
+        [Ordinal(1000)] [REDBuffer] public CArray<STerrainTileData> Groups { get; set; }
 
 
         public CTerrainTile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)

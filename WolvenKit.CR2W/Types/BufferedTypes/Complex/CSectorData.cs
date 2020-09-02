@@ -5,20 +5,20 @@ using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
-
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
     public partial class CSectorData : ISerializable
     {
 
-        [REDBuffer] public CUInt64 Unknown1 { get; set; }
+        [Ordinal(1000)] [REDBuffer] public CUInt64 Unknown1 { get; set; }
 
-        [REDBuffer] public CBufferVLQ<CSectorDataResource> Resources { get; set; }
-        [REDBuffer] public CBufferVLQ<CSectorDataObject> Objects { get; set; }
+        [Ordinal(1001)] [REDBuffer] public CBufferVLQ<CSectorDataResource> Resources { get; set; }
+        [Ordinal(1002)] [REDBuffer] public CBufferVLQ<CSectorDataObject> Objects { get; set; }
 
-        [REDBuffer(true)] public CVLQInt32 blocksize { get; set; }
-        [REDBuffer(true)] public CCompressedBuffer<SBlockData> BlockData { get; set; }
+        [Ordinal(1003)] [REDBuffer(true)] public CVLQInt32 blocksize { get; set; }
+        [Ordinal(1004)] [REDBuffer(true)] public CCompressedBuffer<SBlockData> BlockData { get; set; }
 
         public CSectorData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

@@ -383,7 +383,7 @@ namespace WolvenKit.CR2W
             };
 
             data.IsSerialized = true;
-            data.Flags = Export.objectFlags;
+            data.REDFlags = Export.objectFlags;
         }
 
         public CR2WExportWrapper CopyChunk(CR2WCopyAction context)

@@ -356,16 +356,16 @@ namespace WolvenKit
         }
         private void treeListView_CellClick(object sender, CellClickEventArgs e)
         {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject && e.Item != null)
-            {
-                var node = (FileSystemInfo)e.Item.RowObject;
+            //if (treeListView.SelectedObject is FileSystemInfo selectedobject && e.Item != null)
+            //{
+            //    var node = (FileSystemInfo)e.Item.RowObject;
 
-                if (e.ClickCount == 1)
-                {
-                    if (!selectedobject.IsDirectory())
-                        RequestFileOpen?.Invoke(this, new RequestFileArgs { File = node.FullName, Inspect = true });
-                }
-            }
+            //    if (e.ClickCount == 1)
+            //    {
+            //        if (!selectedobject.IsDirectory())
+            //            RequestFileOpen?.Invoke(this, new RequestFileArgs { File = node.FullName, Inspect = true });
+            //    }
+            //}
         }
 
         private void treeListView_ItemActivate(object sender, EventArgs e)

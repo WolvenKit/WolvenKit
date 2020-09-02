@@ -16,7 +16,7 @@ namespace WolvenKit.Cache
     /// <summary>
     /// The soud archives of Witcher 3. Contains .wem and .bnk sound files.
     /// </summary>
-    public class SoundCache : IWitcherArchiveType
+    public class SoundCache : IWitcherArchive
     {
         public const long BIT_LENGTH_32 = 1;
         public const long BIT_LENGTH_64 = 2;

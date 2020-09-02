@@ -7,15 +7,16 @@ using System.Linq;
 using System.Globalization;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SSkeletonRigData : CVariable
     {
-        [RED] public SVector4D Position { get; set; }
-        [RED] public SVector4D Rotation { get; set; }
-        [RED] public SVector4D Scale { get; set; }
+        [Ordinal(0)] [RED] public SVector4D Position { get; set; }
+        [Ordinal(1)] [RED] public SVector4D Rotation { get; set; }
+        [Ordinal(2)] [RED] public SVector4D Scale { get; set; }
 
         public SSkeletonRigData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

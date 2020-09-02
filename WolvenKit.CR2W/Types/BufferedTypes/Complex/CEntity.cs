@@ -7,15 +7,15 @@ using WolvenKit.CR2W.Types.Utils;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
-
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
     public partial class CEntity : CNode
     {
 
-        [REDBuffer(true)] public CCompressedBuffer<SEntityBufferType1> buffer_v1 { get; set; }
-        [REDBuffer(true)] public CBufferUInt32<SEntityBufferType2> buffer_v2 { get; set; }
+        [Ordinal(1000)] [REDBuffer(true)] public CCompressedBuffer<SEntityBufferType1> buffer_v1 { get; set; }
+        [Ordinal(1001)] [REDBuffer(true)] public CBufferUInt32<SEntityBufferType2> buffer_v2 { get; set; }
 
         private bool isCreatedFromTemplate;
             

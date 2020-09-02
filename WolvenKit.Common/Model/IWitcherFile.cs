@@ -17,7 +17,7 @@ namespace WolvenKit.Common
     /// </summary>
     public interface IWitcherFile
     {
-        IWitcherArchiveType Bundle { get; set; }
+        IWitcherArchive Bundle { get; set; }
         string Name { get; set; }
         long Size { get; set; }
         uint ZSize { get; set; }

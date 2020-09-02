@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -13,14 +14,14 @@ namespace WolvenKit.CR2W.Types
     public class SBlockData : CVariable
     {
 
-        [RED] public CMatrix3x3 rotationMatrix { get; set; }
-        [RED] public SVector3D position { get; set; }
-        [RED] public CUInt16 streamingRadius { get; set; }
-        [RED] public CUInt16 flags { get; set; }
-        [RED] public CUInt32 occlusionSystemID { get; set; }
-        [RED] public CUInt32 resourceIndex { get; set; }
+        [Ordinal(0)] [RED] public CMatrix3x3 rotationMatrix { get; set; }
+        [Ordinal(1)] [RED] public SVector3D position { get; set; }
+        [Ordinal(2)] [RED] public CUInt16 streamingRadius { get; set; }
+        [Ordinal(3)] [RED] public CUInt16 flags { get; set; }
+        [Ordinal(4)] [RED] public CUInt32 occlusionSystemID { get; set; }
+        [Ordinal(5)] [RED] public CUInt32 resourceIndex { get; set; }
 
-        [REDBuffer(true)] public CBytes tail { get; set; }
+        [Ordinal(1000)] [REDBuffer(true)] public CBytes tail { get; set; }
 
         public SBlockData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

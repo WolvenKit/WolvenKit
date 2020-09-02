@@ -950,7 +950,7 @@ namespace WolvenKit
                 }
 
                 WitcherListViewItem item = Details.SelectedPaths[i];
-                IWitcherArchive manager = Details.Managers.First(_ => _.TypeName == item.BundleType);
+                IWitcherArchiveManager manager = Details.Managers.First(_ => _.TypeName == item.BundleType);
 
                 skipping = AddToMod(item.RelativePath, manager, skipping, Details.AddAsDLC, Details.Uncook, Details.Export);
 
@@ -2210,7 +2210,7 @@ namespace WolvenKit
         /// <param name="uncook"></param>
         /// <param name="export"></param>
         /// <returns></returns>
-        private bool AddToMod(string relativePath, IWitcherArchive manager, bool skipping, bool addAsDLC, bool uncook = false, bool export = false)
+        private bool AddToMod(string relativePath, IWitcherArchiveManager manager, bool skipping, bool addAsDLC, bool uncook = false, bool export = false)
         {
             bool skip = skipping;
             string extension = Path.GetExtension(relativePath);
@@ -2509,8 +2509,29 @@ namespace WolvenKit
             {
                 var frmwelcome = new frmWelcome(this);
                 frmwelcome.ShowDialog();
+                switch (frmwelcome.DialogResult)
+                {
+                    case DialogResult.None:
+                        break;
+                    case DialogResult.OK:
+                        break;
+                    case DialogResult.Cancel:
+                        break;
+                    case DialogResult.Abort:
+                        break;
+                    case DialogResult.Retry:
+                        break;
+                    case DialogResult.Ignore:
+                        break;
+                    case DialogResult.Yes:
+                        break;
+                    case DialogResult.No:
+                        break;
+                    default:
+                        break;
+                }
             }
-
+            
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)

@@ -69,7 +69,7 @@ namespace WolvenKit.CR2W.Types
         /// a different layout in the uncooked and cooked state, e.g. CBitmapTexture)
         /// Is set on file read and should not be modified
         /// </summary>
-        public ushort Flags { get; set; }
+        public ushort REDFlags { get; set; }
 
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace WolvenKit.CR2W.Types
                     return;
                 }
 
-                //fields.AddRange(ReadAllRedVariables<REDAttribute>(file));
+                // parse all RED variables (normal + buffers)
                 ReadAllRedVariables<REDAttribute>(file);
             }
             // CVectors
@@ -283,7 +283,7 @@ namespace WolvenKit.CR2W.Types
                 }
                 #endregion
 
-                // parse buffers
+                // parse only buffers
                 ReadAllRedVariables<REDBufferAttribute>(file);
 
                 // checks
@@ -313,9 +313,12 @@ namespace WolvenKit.CR2W.Types
         private List<CVariable> ReadAllRedVariables<T>(BinaryReader br) where T : REDAttribute
         {
             var parsedvars = new List<CVariable>();
-            var redproperties = this.accessor.GetMembers()
-                .OrderBy(p => p.Ordinal)
-                .Where(_ => _.GetMemberAttribute<T>() != null);
+            IEnumerable<Member> redproperties;
+            if (typeof(T) == typeof(REDBufferAttribute))
+                redproperties = this.GetREDBuffers();
+            else
+                redproperties = this.GetREDMembers(false);
+
             foreach (Member item in redproperties)
             {
                 var att = item.GetMemberAttribute<T>();
@@ -499,7 +502,7 @@ namespace WolvenKit.CR2W.Types
         {
             // creates a new instance of the CVariable
             CVariable copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent, false);
-            copy.Flags = this.Flags;
+            copy.REDFlags = this.REDFlags;
 
             // copy all REDProperties and REDBuffers
             foreach (IEditableVariable item in GetEditableVariables())

@@ -5,14 +5,15 @@ using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SVector2D : CVariable
     {
-        [RED] public CFloat x { get; set; }
-        [RED] public CFloat y { get; set; }
+        [Ordinal(0)] [RED] public CFloat x { get; set; }
+        [Ordinal(1)] [RED] public CFloat y { get; set; }
 
         public SVector2D(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -15,7 +16,7 @@ namespace WolvenKit.CR2W.Types
     class CIndexed2dArray : CVariable
     {
         [DataMember]
-        [RED("Serialized Data")] public CByteArray SerializedData { get; set; }
+        [Ordinal(1)] [RED("Serialized Data")] public CByteArray SerializedData { get; set; }
 
         public CIndexed2dArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

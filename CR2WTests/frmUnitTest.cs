@@ -302,7 +302,7 @@ namespace CR2WTests
                     }
                     else
                     {
-                        throw new InvalidBundleException("Generated dictionary not equal actual dictionary.");
+                        throw new InvalidBundleException(" Generated dictionary not equal actual dictionary.");
                     }
                 }
                 #endregion
@@ -324,7 +324,7 @@ namespace CR2WTests
 
                 if (!Enumerable.SequenceEqual(buffer_testB_original, buffer_testB))
                 {
-                    throw new InvalidBundleException("Generated cr2w file not equal to original file.");
+                    throw new InvalidBundleException(" Generated cr2w file not equal to original file.");
                 }
 
                 #endregion

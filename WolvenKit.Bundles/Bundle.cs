@@ -10,7 +10,7 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Bundles
 {
-    public class Bundle : IWitcherArchiveType
+    public class Bundle : IWitcherArchive
     {
         private static readonly byte[] IDString =
         {

@@ -111,9 +111,9 @@ namespace WolvenKit.App
 
         //public Dictionary<string, MemoryMappedFile> mmfs = new Dictionary<string, MemoryMappedFile>();
 
-        public List<IWitcherArchive> GetManagers(bool loadmods)
+        public List<IWitcherArchiveManager> GetManagers(bool loadmods)
         {
-            var managers = new List<IWitcherArchive>();
+            var managers = new List<IWitcherArchiveManager>();
             var exeDir = Path.GetDirectoryName(Configuration.ExecutablePath);
 
             if (loadmods)
@@ -502,7 +502,7 @@ namespace WolvenKit.App
         /// <param name="name">The name of the file.</param>
         /// <param name="archive">The manager to search for the file in.</param>
         /// <returns></returns>
-        public static List<byte[]> ImportFile(string name,IWitcherArchive archive)
+        public static List<byte[]> ImportFile(string name,IWitcherArchiveManager archive)
         {
             List<byte[]> ret = new List<byte[]>();
             archive.FileList.ToList().Where(x => x.Name.Contains(name)).ToList().ForEach(x =>

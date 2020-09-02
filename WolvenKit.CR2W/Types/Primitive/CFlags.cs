@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
