@@ -159,7 +159,7 @@ namespace CR2WTests
                     {
                         unparsedfiles.Add(f.Name);
                         //throw ex;
-                        Console.WriteLine($"{f.Name}:{ex.Message}\r\n");
+                        Console.WriteLine($"{f.Name}:{ex.Message}");
                         UpdateRichTextBox2($"{f.Name}:{ex.Message}\r\n");
                     }
                 }

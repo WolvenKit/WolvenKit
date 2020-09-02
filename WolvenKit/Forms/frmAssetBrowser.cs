@@ -719,7 +719,6 @@ namespace WolvenKit
             if (((ComboBox)sender).SelectedItem is EBundleType type)
             {
                 fileExtensionsCB.Items.Clear();
-                SearchBox.AutoCompleteCustomSource.Clear();
 
                 var specificManagers = Managers;
                 if (type != EBundleType.ANY)
@@ -728,11 +727,6 @@ namespace WolvenKit
                 foreach (var manager in specificManagers)
                 {
                     FillFileExtensionCB(manager);
-
-                    for (int i = 0; i < manager.AutocompleteSource.Count; i++)
-                    {
-                        SearchBox.AutoCompleteCustomSource.Add(manager.AutocompleteSource[i]);
-                    }
                 }
             }
         }

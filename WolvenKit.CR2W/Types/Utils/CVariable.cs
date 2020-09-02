@@ -317,7 +317,7 @@ namespace WolvenKit.CR2W.Types
             if (typeof(T) == typeof(REDBufferAttribute))
                 redproperties = this.GetREDBuffers();
             else
-                redproperties = this.GetREDMembers(false);
+                redproperties = this.GetREDMembers(true);
 
             foreach (Member item in redproperties)
             {

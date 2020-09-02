@@ -37,13 +37,13 @@ namespace WolvenKit.CR2W.Types
     public class SCurveBufferData : CVariable
     {
 
-        [REDBuffer] public CFloat time { get; set; }
-        [REDBuffer] public SVector4D controlPoint1 { get; set; }
-        [REDBuffer] public SVector4D controlPoint2 { get; set; }
-        [REDBuffer] public CFloat value { get; set; }
-        [REDBuffer] public CUInt16 curveTypeL { get; set; }
-        [REDBuffer] public CUInt16 curveTypeR { get; set; }
-        [REDBuffer] public CUInt32 unk1 { get; set; }
+        [Ordinal(1)] [REDBuffer] public CFloat time { get; set; }
+        [Ordinal(2)] [REDBuffer] public SVector4D controlPoint1 { get; set; }
+        [Ordinal(3)] [REDBuffer] public SVector4D controlPoint2 { get; set; }
+        [Ordinal(4)] [REDBuffer] public CFloat value { get; set; }
+        [Ordinal(5)] [REDBuffer] public CUInt16 curveTypeL { get; set; }
+        [Ordinal(6)] [REDBuffer] public CUInt16 curveTypeR { get; set; }
+        [Ordinal(7)] [REDBuffer] public CUInt32 unk1 { get; set; }
 
 
         public SCurveBufferData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
