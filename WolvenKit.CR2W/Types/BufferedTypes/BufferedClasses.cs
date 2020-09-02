@@ -58,7 +58,7 @@ namespace WolvenKit.CR2W.Types
 
     public partial class CAnimPointCloudLookAtParam : ISkeletalAnimationSetEntryParam
     {
-        [Ordinal(1000)] [REDBuffer] public CBufferVLQ<SAnimPointCloudLookAtParamData> Buffer { get; set; }
+        [Ordinal(1000)] [REDBuffer] public CBufferVLQInt32<SAnimPointCloudLookAtParamData> Buffer { get; set; }
     }
 
     public partial class CAreaComponent : CBoundedComponent
@@ -71,7 +71,7 @@ namespace WolvenKit.CR2W.Types
         [Ordinal(1001)] [REDBuffer] public CUInt32 Unk2 { get; set; }
         [Ordinal(1002)] [REDBuffer] public CArray<IdHandle> Variables1 { get; set; }
         [Ordinal(1003)] [REDBuffer] public CUInt32 Unk3 { get; set; }
-        [Ordinal(1004)] [REDBuffer] public CBufferVLQ<CHandle<CBehaviorVariable>> Descriptions { get; set; } //FIXME
+        [Ordinal(1004)] [REDBuffer] public CBufferVLQInt32<CHandle<CBehaviorVariable>> Descriptions { get; set; } //FIXME
         [Ordinal(1005)] [REDBuffer] public CUInt32 Unk4 { get; set; }
         [Ordinal(1006)] [REDBuffer] public CArray<IdHandle> Vectorvariables1 { get; set; }
         [Ordinal(1007)] [REDBuffer] public CUInt32 Unk5 { get; set; }
@@ -82,20 +82,20 @@ namespace WolvenKit.CR2W.Types
     }
     public partial class CBehaviorGraphBlendMultipleNode : CBehaviorGraphNode
     {
-        [Ordinal(1000)] [REDBuffer] public CBufferVLQ<ShBlendMultipleNodeData> Bufferinputvalues { get; set; }
+        [Ordinal(1000)] [REDBuffer] public CBufferVLQInt32<ShBlendMultipleNodeData> Bufferinputvalues { get; set; }
 
     }
     public partial class CBehaviorGraphContainerNode : CBehaviorGraphNode
     {
-        [Ordinal(1000)] [REDBuffer] public CBufferVLQ<CHandle<CBehaviorVariable>> Inputnodes { get; set; }
-        [Ordinal(1001)] [REDBuffer] public CBufferVLQ<CName> Unk1 { get; set; }
-        [Ordinal(1002)] [REDBuffer] public CBufferVLQ<CName> Unk2 { get; set; }
+        [Ordinal(1000)] [REDBuffer] public CBufferVLQInt32<CHandle<CBehaviorVariable>> Inputnodes { get; set; }
+        [Ordinal(1001)] [REDBuffer] public CBufferVLQInt32<CName> Unk1 { get; set; }
+        [Ordinal(1002)] [REDBuffer] public CBufferVLQInt32<CName> Unk2 { get; set; }
         //[Ordinal(1003)] [REDBuffer] public CHandle<CBehaviorVariable> Outputnode { get; set; }
     }
     public partial class CBehaviorGraphStateMachineNode : CBehaviorGraphContainerNode
     {
-        [Ordinal(1000)] [REDBuffer] public CBufferVLQ<CHandle<CBehaviorVariable>> Unk3 { get; set; }
-        [Ordinal(1001)] [REDBuffer] public CBufferVLQ<CHandle<CBehaviorVariable>> Unk4 { get; set; }
+        [Ordinal(1000)] [REDBuffer] public CBufferVLQInt32<CHandle<CBehaviorVariable>> Unk3 { get; set; }
+        [Ordinal(1001)] [REDBuffer] public CBufferVLQInt32<CHandle<CBehaviorVariable>> Unk4 { get; set; }
         [Ordinal(1002)] [REDBuffer] public CHandle<CBehaviorVariable> Handle1 { get; set; }
         [Ordinal(1003)] [REDBuffer] public CHandle<CBehaviorVariable> Outputnode { get; set; }
     }
@@ -132,10 +132,6 @@ namespace WolvenKit.CR2W.Types
     {
         [Ordinal(1000)] [REDBuffer] public CurveInfo CurveInfo { get; set; }
     }
-    public partial class CExtAnimEventsFile : CResource
-    {
-        //[Ordinal(1000)] [REDBuffer] public CUInt32 Unk1 { get; set; }
-    }
     public partial class CFoliageResource : CResource
     {
         [Ordinal(1000)] [REDBuffer] public CBufferVLQInt32<SFoliageResourceData> Trees { get; set; }
@@ -150,14 +146,14 @@ namespace WolvenKit.CR2W.Types
     {
         [Ordinal(1000)] [REDBuffer] public CHandle<CGameWorld> Worldhandle { get; set; }
         [Ordinal(1001)] [REDBuffer] public CHandle<CLayerGroup> Layergrouphandle { get; set; }
-        [Ordinal(1002)] [REDBuffer] public CBufferVLQ<CHandle<CLayerGroup>> ChildrenGroups { get; set; }
-        [Ordinal(1003)] [REDBuffer] public CBufferVLQ<CHandle<CLayerInfo>> ChildrenInfos { get; set; }
+        [Ordinal(1002)] [REDBuffer] public CBufferVLQInt32<CHandle<CLayerGroup>> ChildrenGroups { get; set; }
+        [Ordinal(1003)] [REDBuffer] public CBufferVLQInt32<CHandle<CLayerInfo>> ChildrenInfos { get; set; }
     }
 
     public partial class CMaterialGraph : IMaterialDefinition
     {
-        [Ordinal(1000)] [REDBuffer] public CBufferVLQ<SMaterialGraphParameter> PixelParameters { get; set; }
-        [Ordinal(1001)] [REDBuffer] public CBufferVLQ<SMaterialGraphParameter> VertexParameters { get; set; }
+        [Ordinal(1000)] [REDBuffer] public CBufferVLQInt32<SMaterialGraphParameter> PixelParameters { get; set; }
+        [Ordinal(1001)] [REDBuffer] public CBufferVLQInt32<SMaterialGraphParameter> VertexParameters { get; set; }
         [Ordinal(1002)] [REDBuffer] public CUInt32 Unk1 { get; set; }
     }
 
@@ -170,12 +166,12 @@ namespace WolvenKit.CR2W.Types
     {
         // ATTENTION: don't read and write like a normal VLQ array
         // this one is padded by 4 bytes after each inner list
-        [Ordinal(1000)] [REDBuffer] public CBufferVLQ<CPaddedBuffer<CUInt16>> ChunkgroupIndeces { get; set; }
+        [Ordinal(1000)] [REDBuffer] public CBufferVLQInt32<CPaddedBuffer<CUInt16>> ChunkgroupIndeces { get; set; }
 
-        [Ordinal(1001)] [REDBuffer] public CBufferVLQ<CName> BoneNames { get; set; }
-        [Ordinal(1002)] [REDBuffer] public CBufferVLQ<CMatrix4x4> Bonematrices { get; set; }
-        [Ordinal(1003)] [REDBuffer] public CBufferVLQ<CFloat> Block3 { get; set; }
-        [Ordinal(1004)] [REDBuffer] public CBufferVLQ<CUInt32> BoneIndecesMappingBoneIndex { get; set; }
+        [Ordinal(1001)] [REDBuffer] public CBufferVLQInt32<CName> BoneNames { get; set; }
+        [Ordinal(1002)] [REDBuffer] public CBufferVLQInt32<CMatrix4x4> Bonematrices { get; set; }
+        [Ordinal(1003)] [REDBuffer] public CBufferVLQInt32<CFloat> Block3 { get; set; }
+        [Ordinal(1004)] [REDBuffer] public CBufferVLQInt32<CUInt32> BoneIndecesMappingBoneIndex { get; set; }
     }
 
     public partial class CNode : CObject
@@ -207,7 +203,10 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
     }
-
+    public partial class CExtAnimEventsFile : CResource
+    {
+        //[Ordinal(1000)] [REDBuffer] public CUInt32 Unk1 { get; set; }
+    }
     public partial class CSkeletalAnimationSet : CExtAnimEventsFile
     {
         //[Ordinal(1000)] [REDBuffer] public CUInt32 Unk1 { get; set; }

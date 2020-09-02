@@ -11,9 +11,9 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta()]
-    public class CBufferVLQ<T> : CBufferBase<T> where T : CVariable
+    public class CBufferBit6<T> : CBufferBase<T> where T : CVariable
     {
-        public CBufferVLQ(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CBufferBit6(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -30,8 +30,5 @@ namespace WolvenKit.CR2W.Types
 
             base.Write(file);
         }
-
-
-        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBufferVLQ<T>(cr2w, parent, name);
     }
 }

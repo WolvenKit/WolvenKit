@@ -486,6 +486,11 @@ namespace WolvenKit
                         s = s.Substring("Mod\\Uncooked".Length);
                         s = $"Mod\\Bundle{s}";
                     }
+                    if (s.StartsWith("Mod\\Cooked"))
+                    {
+                        s = s.Substring("Mod\\Cooked".Length);
+                        s = $"Mod\\Bundle{s}";
+                    }
 
                     var r = string
                         .Join(Path.DirectorySeparatorChar.ToString(), new[] { "Root" }

@@ -10,10 +10,10 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class TagList : CVariable
     {
-        [RED] public CBufferVLQ<CName> tags { get; set; }
+        [RED] public CBufferVLQInt32<CName> tags { get; set; }
 
         public TagList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {
-            tags = new CBufferVLQ<CName>(cr2w, this, nameof(tags));
+            tags = new CBufferVLQInt32<CName>(cr2w, this, nameof(tags));
         }
 
         public override void Read(BinaryReader file, uint size)

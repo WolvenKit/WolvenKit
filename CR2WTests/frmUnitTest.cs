@@ -228,10 +228,14 @@ namespace CR2WTests
                 var newdictvalues = dict.Values.ToList();
                 var dictvalues = crw.StringDictionary.Values.ToList();
                 var diffDictList = dictvalues.Except(newdictvalues).ToList();
+
+                bool isclassicalinconsistentw2anims = true;
+                bool isclassicalinconsistentw2ent = true;
+                bool isclassicalinconsistentw2phase = true;
+
                 if (diffDictList.Count != 0)
                 {
                     //w2anims inconsistencies
-                    bool isclassicalinconsistentw2anims=true;
                     foreach (string str in diffDictList)
                     {
                         if (str == "extAnimEvents" ||
@@ -249,7 +253,6 @@ namespace CR2WTests
                         }
                     }
                     //w2ent detlaff inconsistencies
-                    bool isclassicalinconsistentw2ent = true;
                     foreach (string str in diffDictList)
                     {
                         if (str == "IF_Positive" ||
@@ -268,7 +271,6 @@ namespace CR2WTests
                         }
                     }
                     //w2phase inconsistencies
-                    bool isclassicalinconsistentw2phase = true;
                     foreach (string str in diffDictList)
                     {
                         if (str == "@SItem" ||
@@ -299,6 +301,8 @@ namespace CR2WTests
                     {
                         //throw new InvalidBundleException("Inconsistent .w2phase - " +
                         //    "secret e3 files");
+                        // skip test B
+
                     }
                     else
                     {
@@ -308,25 +312,27 @@ namespace CR2WTests
                 #endregion
 
                 #region Writing Test B
-                byte[] buffer_testB;
-                byte[] buffer_testB_original;
-
-                using (var ms_testB = new MemoryStream())
-                using (var bw_testB = new BinaryWriter(ms_testB))
+                if (!isclassicalinconsistentw2phase)
                 {
-                    crw.Write(bw_testB);
-                    buffer_testB = ms_testB.ToArray();
+                    byte[] buffer_testB;
+                    byte[] buffer_testB_original;
+
+                    using (var ms_testB = new MemoryStream())
+                    using (var bw_testB = new BinaryWriter(ms_testB))
+                    {
+                        crw.Write(bw_testB);
+                        buffer_testB = ms_testB.ToArray();
+                    }
+
+                    // compare
+                    ms.Seek(0, SeekOrigin.Begin);
+                    buffer_testB_original = ms.ToArray();
+
+                    if (!Enumerable.SequenceEqual(buffer_testB_original, buffer_testB))
+                    {
+                        throw new InvalidBundleException(" Generated cr2w file not equal to original file.");
+                    }
                 }
-
-                // compare
-                ms.Seek(0, SeekOrigin.Begin);
-                buffer_testB_original = ms.ToArray();
-
-                if (!Enumerable.SequenceEqual(buffer_testB_original, buffer_testB))
-                {
-                    throw new InvalidBundleException(" Generated cr2w file not equal to original file.");
-                }
-
                 #endregion
 
             }

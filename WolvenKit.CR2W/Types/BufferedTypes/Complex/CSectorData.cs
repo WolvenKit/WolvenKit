@@ -14,8 +14,8 @@ namespace WolvenKit.CR2W.Types
 
         [Ordinal(1000)] [REDBuffer] public CUInt64 Unknown1 { get; set; }
 
-        [Ordinal(1001)] [REDBuffer] public CBufferVLQ<CSectorDataResource> Resources { get; set; }
-        [Ordinal(1002)] [REDBuffer] public CBufferVLQ<CSectorDataObject> Objects { get; set; }
+        [Ordinal(1001)] [REDBuffer] public CBufferVLQInt32<CSectorDataResource> Resources { get; set; }
+        [Ordinal(1002)] [REDBuffer] public CBufferVLQInt32<CSectorDataObject> Objects { get; set; }
 
         [Ordinal(1003)] [REDBuffer(true)] public CVLQInt32 blocksize { get; set; }
         [Ordinal(1004)] [REDBuffer(true)] public CCompressedBuffer<SBlockData> BlockData { get; set; }

@@ -6783,7 +6783,7 @@
     <None Include="Types\Utils\CQuaternion.cs.deprecated" />
     <Compile Include="Types\BufferedTypes\Complex\CSkeleton.cs" />
     <Compile Include="Types\Generic\Arrays\CPaddedBuffer.cs" />
-    <Compile Include="Types\Generic\Arrays\CBufferVLQ.cs" />
+    <Compile Include="Types\Generic\Arrays\CBufferBit6.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CCubeTexture.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SMeshBlock5.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CWayPointsCollection.cs" />

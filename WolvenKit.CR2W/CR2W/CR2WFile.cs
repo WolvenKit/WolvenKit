@@ -1087,7 +1087,7 @@ namespace WolvenKit.CR2W
                     return;
 
                 // these CVariables have special requirements, for all others:  switch StringtableMod
-                if (!(var is CBufferVLQ<CName> ||
+                if (!(var is CBufferVLQInt32<CName> ||
                     var is IdHandle ||
                     var is SEntityBufferType1 ||
                     var is SUmbraSceneData)
@@ -1172,9 +1172,9 @@ namespace WolvenKit.CR2W
                     }
                     
                 }
-                else if (var is CBufferVLQ<CName>)
+                else if (var is CBufferVLQInt32<CName>)
                 {
-                    foreach (var element in (var as CBufferVLQ<CName>).elements)
+                    foreach (var element in (var as CBufferVLQInt32<CName>).elements)
                     {
                         if (element is CName )
                         {

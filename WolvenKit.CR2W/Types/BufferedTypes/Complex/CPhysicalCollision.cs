@@ -12,14 +12,14 @@ namespace WolvenKit.CR2W.Types
     public class CPhysicalCollision : CVariable
     {
         [Ordinal(1000)] [REDBuffer(true)] public CUInt32 Unk1 { get; set; }
-        [Ordinal(1001)] [REDBuffer(true)] public CBufferVLQ<CName> Collisiontypes { get; set; }
+        [Ordinal(1001)] [REDBuffer(true)] public CBufferVLQInt32<CName> Collisiontypes { get; set; }
         [Ordinal(1002)] [REDBuffer(true)] public CBytes Data { get; set; }
 
         public CPhysicalCollision(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) 
         {
             Unk1 = new CUInt32(cr2w, this, nameof(Unk1) );
             Data = new CBytes(cr2w, this, nameof(Data) );
-            Collisiontypes = new CBufferVLQ<CName>(cr2w, this, nameof(Collisiontypes));
+            Collisiontypes = new CBufferVLQInt32<CName>(cr2w, this, nameof(Collisiontypes));
         }
 
         public override void Read(BinaryReader file, uint size)

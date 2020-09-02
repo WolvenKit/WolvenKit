@@ -217,11 +217,6 @@ namespace WolvenKit.CR2W.Types
                                     CVariable innerobject = Create(match.Groups[2].Value, "", cr2w, null);
                                     return MakeGenericType(typeof(CBufferUInt32<>), innerobject);
                                 }
-                            case "CBufferVLQ":
-                                {
-                                    CVariable innerobject = Create(match.Groups[2].Value, "", cr2w, null);
-                                    return MakeGenericType(typeof(CBufferVLQ<>), innerobject);
-                                }
                             case "CBufferVLQInt32":
                                 {
                                     CVariable innerobject = Create(match.Groups[2].Value, "", cr2w, null);

@@ -14,11 +14,11 @@ namespace WolvenKit.CR2W.Types
     public partial class SAppearanceAttachment : CVariable
     {
 
-        [Ordinal(1000)] [REDBuffer(true)] public CBufferVLQ<CVariable> Data { get; set; }
+        [Ordinal(1000)] [REDBuffer(true)] public CBufferVLQInt32<CVariable> Data { get; set; }
 
         public SAppearanceAttachment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            Data = new CBufferVLQ<CVariable>(cr2w, this, nameof(Data));
+            Data = new CBufferVLQInt32<CVariable>(cr2w, this, nameof(Data));
         }
 
         public override void Read(BinaryReader file, uint size)
