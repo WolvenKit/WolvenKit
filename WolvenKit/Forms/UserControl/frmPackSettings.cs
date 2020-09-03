@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.IO;
 using WolvenKit.App;
+using System.Drawing;
 
 namespace WolvenKit
 {
@@ -59,6 +60,9 @@ namespace WolvenKit
                 modCOL.Checked = true;
             if (Directory.GetFiles(activemod.DlcUncookedDirectory, "*", SearchOption.AllDirectories).Any())
                 dlcCOL.Checked = true;
+
+            this.Icon = new Icon(@"Resources\Icons\GUI\Wkit_dark_16x.ico", new Size(16, 16));
+
         }
 
         private void button1_Click(object sender, EventArgs e)

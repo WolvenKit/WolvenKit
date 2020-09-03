@@ -50,6 +50,9 @@ namespace WolvenKit.Forms
             {   // Add the list of excluded file extensions to info box so user knows what files will never be opened.
                 rtfDescription.AppendText(ext + " ");
             }
+
+            this.Icon = new Icon(@"Resources\Icons\GUI\Wkit_dark_16x.ico", new Size(16, 16));
+
         }
         private void InitDataGrid()
         {

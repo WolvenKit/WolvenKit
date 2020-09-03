@@ -59,6 +59,7 @@ namespace WolvenKit.CR2W.Types
                     len = (ulong)blocksize.val - curoffset;
                 }
                 var blockdata = new SBlockData(cr2w, BlockData, "");
+                blockdata.packedObjectType = ((Enums.BlockDataObjectType)(Objects.elements[i] as CSectorDataObject).type.val);
                 blockdata.Read(file, (uint)len);
                 BlockData.AddVariable(blockdata);
             }

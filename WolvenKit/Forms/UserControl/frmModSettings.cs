@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 using WolvenKit.Common;
+using System.Drawing;
 
 namespace WolvenKit
 {
@@ -12,6 +13,9 @@ namespace WolvenKit
         public frmModSettings()
         {
             InitializeComponent();
+
+            this.Icon = new Icon(@"Resources\Icons\GUI\Wkit_dark_16x.ico", new Size(16, 16));
+
         }
 
         public W3Mod Mod

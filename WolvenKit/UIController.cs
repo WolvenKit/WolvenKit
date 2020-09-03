@@ -113,7 +113,7 @@ namespace WolvenKit
         /// <param name="form">The form to initialize.</param>
         public static void InitForm(Form form)
         {
-            Bitmap bmp = WolvenKit.Properties.Resources.Logo_wkit;
+            Bitmap bmp = WolvenKit.Properties.Resources.Wkit_logo_500x;
             form.Icon = Icon.FromHandle(bmp.GetHicon());
         }
 
