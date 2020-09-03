@@ -321,6 +321,7 @@ namespace WolvenKit.Forms
 
         private void exitBtn_Click(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.Abort;
             this.Close();
         }
     }
