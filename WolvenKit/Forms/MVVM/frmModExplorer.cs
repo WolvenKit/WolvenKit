@@ -632,7 +632,7 @@ namespace WolvenKit
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
                 var settings = new frmAnims(selectedobject.FullName,
-                                        ActiveMod.FileDirectory + "\\" + "Mod\\Bundle\\characters\\base_entities\\woman_base\\woman_base.w2rig");
+                                        Path.Combine(ActiveMod.ModCookedDirectory, "characters\\base_entities\\woman_base\\woman_base.w2rig"));
                 settings.ShowDialog();
             }
         }
@@ -641,7 +641,7 @@ namespace WolvenKit
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
                 var settings = new frmAnims(selectedobject.FullName,
-                                        ActiveMod.FileDirectory + "\\" + "Mod\\Bundle\\characters\\base_entities\\woman_base\\woman_base.w2rig");
+                                        Path.Combine(ActiveMod.ModCookedDirectory, "characters\\base_entities\\woman_base\\woman_base.w2rig"));
                 settings.ShowDialog();
             }
         }

@@ -96,12 +96,12 @@ namespace WolvenKit.Render
                     {
                         SMeshInfos meshInfo = new SMeshInfos();
 
-                        meshInfo.numVertices = meshChunk.NumVertices.val;
-                        meshInfo.numIndices = meshChunk.NumIndices.val;
-                        meshInfo.numBonesPerVertex = meshChunk.NumBonesPerVertex.val;
-                        meshInfo.firstVertex = meshChunk.FirstVertex.val;
-                        meshInfo.firstIndex = meshChunk.FirstIndex.val;
-                        meshInfo.materialID = meshChunk.MaterialID.val;
+                        meshInfo.numVertices = meshChunk.NumVertices == null ? 0 : meshChunk.NumVertices.val;
+                        meshInfo.numIndices = meshChunk.NumIndices == null ? 0 : meshChunk.NumIndices.val;
+                        meshInfo.numBonesPerVertex = meshChunk.NumBonesPerVertex == null ? (uint)0 : meshChunk.NumBonesPerVertex.val;
+                        meshInfo.firstVertex = meshChunk.FirstVertex == null ? 0 : meshChunk.FirstVertex.val;
+                        meshInfo.firstIndex = meshChunk.FirstIndex == null ? 0 : meshChunk.FirstIndex.val;
+                        meshInfo.materialID = meshChunk.MaterialID == null ? 0 : meshChunk.MaterialID.val;
 
                         if (meshChunk.VertexType.WrappedEnum == Enums.EMeshVertexType.MVT_StaticMesh)
                             meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_STATIC;

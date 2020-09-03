@@ -173,10 +173,7 @@ namespace WolvenKit.App.ViewModels
 
 
         protected bool CanAddAllImports() => SelectedItems != null;
-        protected async void AddAllImports()
-        {
-            await MainVM.AddAllImportsToProject(SelectedItems.First().FullName, true);
-        }
+        protected async void AddAllImports() => await MainVM.AddAllImportsToProject(SelectedItems.First().FullName);
 
 
         #endregion

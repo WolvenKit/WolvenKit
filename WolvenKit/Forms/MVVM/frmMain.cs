@@ -641,7 +641,7 @@ namespace WolvenKit
                                 try
                                 {
                                     // add all dependencies
-                                    vm.AddAllImportsToProject(filename, true);
+                                    vm.AddAllImportsToProject(filename);
 
                                     doc.RenderViewer = new Render.frmRender
                                     {

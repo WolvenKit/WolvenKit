@@ -361,10 +361,10 @@ namespace WolvenKit.Render
         /// </summary>
         private Texture GetTexture(VideoDriver driver, string handleFilename)
         {
-            string modPath = renderHelper.getW3Mod().ModDirectory;
-            string texturePath = Path.ChangeExtension(Path.GetFullPath(modPath + "\\Bundle\\" + handleFilename)
-                .Replace("Mod\\Bundle", "Raw\\Mod")
-                .Replace("DLC\\Bundle", "Raw\\DLC"), null);
+            string modPath = renderHelper.getW3Mod().ModCookedDirectory;
+            string texturePath = Path.ChangeExtension(Path.Combine(modPath, handleFilename)
+                .Replace("Mod\\Cooked", "Raw\\Mod")
+                .Replace("DLC\\Cooked", "Raw\\DLC"), null);
 
             string[] textureFileExtensions = { ".dds", ".bmp", ".tga", ".jpg", ".jpeg", ".png", ".xbm" };
             Texture texture = null;
@@ -380,10 +380,10 @@ namespace WolvenKit.Render
             }
 
 
-            string dlcPath = renderHelper.getW3Mod().DlcDirectory;
-            string texturePath1 = Path.ChangeExtension(Path.GetFullPath(dlcPath + "\\Bundle\\" + handleFilename)
-                .Replace("Mod\\Bundle", "Raw\\Mod")
-                .Replace("DLC\\Bundle", "Raw\\DLC"), null);
+            string dlcPath = renderHelper.getW3Mod().DlcCookedDirectory;
+            string texturePath1 = Path.ChangeExtension(Path.Combine(dlcPath, handleFilename)
+                .Replace("Mod\\Cooked", "Raw\\Mod")
+                .Replace("DLC\\Cooked", "Raw\\DLC"), null);
                         
             texture = null;
             foreach (var textureFileExtension in textureFileExtensions)
