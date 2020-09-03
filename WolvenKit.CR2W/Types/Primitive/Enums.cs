@@ -659,7 +659,22 @@ namespace WolvenKit.CR2W.Types
             EDM_HorseRaceTarget,
             EDM_HorseRaceDummy,
         }
-        
+
+        public enum BlockDataObjectType
+        {
+            Invalid = 0x1,
+            Mesh = 0x2,
+            Collision = 0x3,
+            Decal = 0x4,
+            Dimmer = 0x5,
+            PointLight = 0x6,
+            SpotLight = 0x7,
+            RigidBody = 0x8,
+            Cloth = 0x9,
+            Destruction = 0xA,
+            Particles = 0xB,
+        };
+
         public enum EFactValueChangeMethod
         {
             FVCM_Add,
