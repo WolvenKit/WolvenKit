@@ -169,7 +169,11 @@
     <Compile Include="Reflection\REDReflection.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockDataObjects\SBlockDataCollisionObject.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockDataObjects\SBlockDataDecal.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockDataObjects\SBlockDataDimmer.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockDataObjects\SBlockDataLight.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockDataObjects\SBlockDataMeshObject.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockDataObjects\SBlockDataParticles.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SVector4D.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\SUmbraTileData.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CQuestScriptBlock.cs" />

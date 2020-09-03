@@ -35,12 +35,6 @@ namespace WolvenKit.CR2W.Types
             switch (packedObjectType)
             {
                 //TODO: Read the different objects
-                case Enums.BlockDataObjectType.Invalid:
-                    {
-                        packedObject = null;
-                        //This is empty
-                        break;
-                    }
                 case Enums.BlockDataObjectType.Mesh:
                     {
                         packedObject = new SBlockDataMeshObject(cr2w, this, nameof(SBlockDataMeshObject));
@@ -52,13 +46,30 @@ namespace WolvenKit.CR2W.Types
                         break;
                     }
                 case Enums.BlockDataObjectType.Decal:
+                    {                        
+                        packedObject = new SBlockDataDecal(cr2w, this, nameof(SBlockDataDecal));
+                        break;
+                    }
                 case Enums.BlockDataObjectType.Dimmer:
+                    {
+                        packedObject = new SBlockDataDimmer(cr2w, this, nameof(SBlockDataDimmer));
+                        break;
+                    }
                 case Enums.BlockDataObjectType.PointLight:
                 case Enums.BlockDataObjectType.SpotLight:
+                    {
+                        packedObject = new SBlockDataLight(cr2w, this, nameof(SBlockDataLight));
+                        break;
+                    }
+                case Enums.BlockDataObjectType.Particles:
+                    {
+                        packedObject = new SBlockDataParticles(cr2w, this, nameof(SBlockDataLight));
+                        break;
+                    }
                 case Enums.BlockDataObjectType.RigidBody:
                 case Enums.BlockDataObjectType.Cloth:
                 case Enums.BlockDataObjectType.Destruction:
-                case Enums.BlockDataObjectType.Particles:
+                case Enums.BlockDataObjectType.Invalid:
                 default:
                     {
                         // For unit testing!
@@ -68,7 +79,7 @@ namespace WolvenKit.CR2W.Types
                         break;
                     }
             }
-
+            
             packedObject.Read(file, size - 58);
         }
 
@@ -110,13 +121,29 @@ namespace WolvenKit.CR2W.Types
                             break;
                         }
                     case Enums.BlockDataObjectType.Decal:
+                        {
+                            copy.packedObject = packedObject.Copy(context) as SBlockDataDecal;
+                            break;
+                        }                        
                     case Enums.BlockDataObjectType.Dimmer:
+                        {
+                            copy.packedObject = packedObject.Copy(context) as SBlockDataDimmer;
+                            break;
+                        }
                     case Enums.BlockDataObjectType.PointLight:
                     case Enums.BlockDataObjectType.SpotLight:
+                        {
+                            copy.packedObject = packedObject.Copy(context) as SBlockDataLight;
+                            break;
+                        }
+                    case Enums.BlockDataObjectType.Particles:
+                        {
+                            copy.packedObject = packedObject.Copy(context) as SBlockDataParticles;
+                            break;
+                        }
                     case Enums.BlockDataObjectType.RigidBody:
                     case Enums.BlockDataObjectType.Cloth:
                     case Enums.BlockDataObjectType.Destruction:
-                    case Enums.BlockDataObjectType.Particles:
                     default:
                         {
                             copy.packedObject = packedObject.Copy(context) as CBytes;
@@ -155,13 +182,29 @@ namespace WolvenKit.CR2W.Types
                             break;
                         }
                     case Enums.BlockDataObjectType.Decal:
+                        {
+                            baseobj.Add((SBlockDataDecal)packedObject);
+                            break;
+                        }
                     case Enums.BlockDataObjectType.Dimmer:
+                        {
+                            baseobj.Add((SBlockDataDimmer)packedObject);
+                            break;
+                        }
                     case Enums.BlockDataObjectType.PointLight:
                     case Enums.BlockDataObjectType.SpotLight:
+                        {
+                            baseobj.Add((SBlockDataLight)packedObject);
+                            break;
+                        }
+                    case Enums.BlockDataObjectType.Particles:
+                        {
+                            baseobj.Add((SBlockDataParticles)packedObject);
+                            break;
+                        }
                     case Enums.BlockDataObjectType.RigidBody:
                     case Enums.BlockDataObjectType.Cloth:
                     case Enums.BlockDataObjectType.Destruction:
-                    case Enums.BlockDataObjectType.Particles:
                     default:
                         {
                             baseobj.Add((CBytes)packedObject);
