@@ -2532,9 +2532,9 @@ namespace WolvenKit
                     case DialogResult.OK:
                         break;
                     case DialogResult.Cancel:
-                        Close();
                         break;
                     case DialogResult.Abort:
+                        Close();
                         break;
                     case DialogResult.Retry:
                         break;
