@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static System.ConsoleColor;
 
 /// <summary>
 /// Well, you know, command-line interface (CLI)
@@ -25,8 +26,13 @@ namespace WolvenKit.Console
     using System.Text.RegularExpressions;
     using System.IO.MemoryMappedFiles;
     using WolvenKit.Common.Extensions;
+    using System.Collections.Concurrent;
+    using Konsole;
+    using Npgsql;
+    using System.Security.AccessControl;
+    using System.Security.Principal;
 
-    public class WolvenKitConsole
+    public partial class WolvenKitConsole
     {
 
         [STAThread]
@@ -58,7 +64,8 @@ namespace WolvenKit.Console
                 DumpDDSOptions,
                 DumpCollisionOptions,
                 DumpArchivedFileInfosOptions,
-                DumpMetadataStoreOptions>(_args)
+                DumpMetadataStoreOptions,
+                CR2WToPostgresOptions>(_args)
                         .MapResult(
                           async (CacheOptions opts) => await DumpCache(opts),
                           async (BundleOptions opts) => await RunBundle(opts),
@@ -68,6 +75,7 @@ namespace WolvenKit.Console
                           async (DumpArchivedFileInfosOptions opts) => await DumpArchivedFileInfos(opts),
                           async (DumpMetadataStoreOptions opts) => await DumpMetadataStore(opts),
                           async (DumpCollisionOptions opts) => await DumpCollision(opts),
+                          async (CR2WToPostgresOptions opts) => await CR2WToPostgres(opts),
                           //errs => 1,
                           _ => Task.FromResult(1));
         }
@@ -117,7 +125,7 @@ namespace WolvenKit.Console
                     .GroupBy(p => p.Name)
                     .Select(g => g.First())
                     .ToList();
-                using (var pb = new ProgressBar())
+                using (var pb = new ConsoleProgressBar.ProgressBar())
                 using (var p1 = pb.Progress.Fork())
                 {
                     int progress = 0;
@@ -216,7 +224,7 @@ namespace WolvenKit.Console
                     .GroupBy(p => p.Name)
                     .Select(g => g.First())
                     .ToList();
-                using (var pb = new ProgressBar())
+                using (var pb = new ConsoleProgressBar.ProgressBar())
                 using (var p1 = pb.Progress.Fork())
                 {
                     int progress = 0;
@@ -299,7 +307,7 @@ namespace WolvenKit.Console
             string idx = RED.CRC32.Crc32Algorithm.Compute(Encoding.ASCII.GetBytes($"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}{dt.Minute}{dt.Second}")).ToString();
             var outDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DDSTest", $"ExtractedFiles_{idx}");
 
-            using (var pb = new ProgressBar())
+            using (var pb = new ConsoleProgressBar.ProgressBar())
             {
                 if (!Directory.Exists(outDir))
                     Directory.CreateDirectory(outDir);

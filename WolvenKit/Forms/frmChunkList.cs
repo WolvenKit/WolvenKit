@@ -52,14 +52,13 @@ namespace WolvenKit
 
             if (File != null)
             {
-                var parentIds = File.chunks.Select(_ => new Tuple<int,int>((int)_.ParentChunkId - 1,(int)_.ChunkIndex)).ToList();
+                var parentIds = File.chunks.Select(_ => new Tuple<int,int>(_.VirtualParentChunkIndex, _.ChunkIndex)).ToList();
 
-                for (int i = 0; i < File.chunks.Count; i++)
+                foreach (var chunk in File.chunks)
                 {
-                    var chunk = File.chunks[i];
                     var childIdxList = parentIds.Where(_ => _.Item1.Equals(chunk.ChunkIndex)).Select(_ => _.Item2).ToList();
                     var children = File.chunks.Where(_ => childIdxList.Contains(_.ChunkIndex)).ToList();
-                    chunkHelperList.Add(new Tuple<int, List<CR2WExportWrapper>>((int)chunk.ParentChunkId, children));
+                    chunkHelperList.Add(new Tuple<int, List<CR2WExportWrapper>>(chunk.ChunkIndex, children));
                 }
             }
         }
@@ -86,7 +85,7 @@ namespace WolvenKit
             if (listview)
                 treeListView.Roots = File.chunks;
             else
-                treeListView.Roots = File.chunks.Where(_ => _.GetParent() == null).ToList();
+                treeListView.Roots = File.chunks.Where(_ => _.GetVirtualParentChunk() == null).ToList();
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -130,7 +129,7 @@ namespace WolvenKit
                     var chunk = File.CreateChunk(dlg.ChunkType);
                     if (selectedchunk != null)
                     {
-                        chunk.SetParent(selectedchunk);
+                        chunk.SetParentChunk(selectedchunk);
                     }
                     
                     UpdateList();

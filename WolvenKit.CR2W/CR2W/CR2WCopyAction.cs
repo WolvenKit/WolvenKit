@@ -132,9 +132,9 @@ namespace WolvenKit.CR2W
             // reparent chunks
             foreach (var chunk in chunks)
             {
-                if (chunkTranslation.ContainsKey((int) chunk.ParentChunkId - 1))
+                if (chunkTranslation.ContainsKey(chunk.ParentChunkIndex))
                 {
-                    chunk.SetParentChunkId((uint) chunkTranslation[(int) chunk.ParentChunkId - 1] + 1);
+                    chunk.ParentChunkIndex = chunkTranslation[chunk.ParentChunkIndex];
                 }
                 else if (SourceFile == DestinationFile)
                 {
@@ -143,7 +143,7 @@ namespace WolvenKit.CR2W
                 else
                 {
                     // this chunk's parent was not copied, use the first chunk as parent
-                    chunk.SetParentChunkId(1);
+                    chunk.ParentChunkIndex = 0;
                 }
             }
 

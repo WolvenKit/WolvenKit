@@ -36,7 +36,6 @@ namespace WolvenKit
     {
         private static UIController mainController;
         public UIConfiguration Configuration { get; private set; }
-
         public frmMain Window { get; private set; }
 
         public const string ManagerCacheDir = "ManagerCache";
@@ -187,7 +186,7 @@ namespace WolvenKit
                 bytes = ((IByteSource)editvar).Bytes;
             }
 
-            dlg.Filter = string.Join("|", ImportExportUtility.GetPossibleExtensions(bytes, (CVariable)editvar.Parent));
+            dlg.Filter = string.Join("|", ImportExportUtility.GetPossibleExtensions(bytes, (CVariable)editvar.ParentVar));
             dlg.InitialDirectory = MainController.Get().Configuration.InitialExportDirectory;
 
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -198,7 +197,7 @@ namespace WolvenKit
                 {
                     using (var writer = new BinaryWriter(fs))
                     {
-                        bytes = ImportExportUtility.GetExportBytes(bytes, Path.GetExtension(dlg.FileName), (CVariable)editvar.Parent);
+                        bytes = ImportExportUtility.GetExportBytes(bytes, Path.GetExtension(dlg.FileName), (CVariable)editvar.ParentVar);
                         writer.Write(bytes);
                     }
                 }
