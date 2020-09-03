@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
     {
         [Ordinal(0)] [RED] public CUInt16 diffuseTexture { get; set; }
         [Ordinal(1)] [RED] public CUInt16 padding { get; set; }
-        [Ordinal(2)] [RED] public CColor specularColor { get; set; }
+        [Ordinal(2)] [RED] public CUInt32 specularColor { get; set; }
         [Ordinal(3)] [RED] public CFloat normalTreshold { get; set; }
         [Ordinal(4)] [RED] public CFloat specularity { get; set; }
         [Ordinal(5)] [RED] public CFloat fadeTime { get; set; }

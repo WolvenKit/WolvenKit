@@ -11,9 +11,9 @@ using FastMember;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta(EREDMetaInfo.REDStruct)]
-    class SBlockDataLight : CVariable
+    class SBlockDataSpotLight : CVariable
     {
-        [Ordinal(0)] [RED] public CUInt32 color { get; set; }
+        [Ordinal(0)] [RED] public CUInt32 color { get; set; } //TODO: Check why this works an CColor doesn't?
         [Ordinal(1)] [RED] public CFloat radius { get; set; }
         [Ordinal(2)] [RED] public CFloat brightness { get; set; }
         [Ordinal(3)] [RED] public CFloat attenuation { get; set; }
@@ -27,7 +27,15 @@ namespace WolvenKit.CR2W.Types
         [Ordinal(11)] [RED] public CUInt8 envColorGroup { get; set; }
         [Ordinal(12)] [RED] public CUInt8 padding { get; set; }
         [Ordinal(13)] [RED] public CUInt32 lightUsageMask { get; set; }
+        [Ordinal(14)] [RED] public CFloat innerAngle { get; set; }
+        [Ordinal(15)] [RED] public CFloat outerAngle { get; set; }
+        [Ordinal(16)] [RED] public CFloat softness { get; set; }
+        [Ordinal(17)] [RED] public CFloat projectionTextureAngle { get; set; }
+        [Ordinal(18)] [RED] public CFloat projectionTexureUBias { get; set; }
+        [Ordinal(19)] [RED] public CFloat projectionTexureVBias { get; set; }
+        [Ordinal(19)] [RED] public CUInt16 projectionTexture { get; set; }
+        [Ordinal(19)] [RED] public CUInt16 padding2 { get; set; }
 
-        public SBlockDataLight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public SBlockDataSpotLight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

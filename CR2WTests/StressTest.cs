@@ -58,7 +58,7 @@ namespace CR2WTests
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            var exedir = Path.GetDirectoryName(LookUpW3exe());
+            var exedir = @"D:\SteamLibrary\steamapps\common\TW3\bin\x64";
 
             memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
             bm = new BundleManager();
