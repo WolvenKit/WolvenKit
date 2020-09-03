@@ -11,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDrawableComponent : CBoundedComponent
 	{
-		[Ordinal(1)] [RED("drawableFlags")] 		public EDrawableFlags DrawableFlags { get; set;}
+		[Ordinal(1)] [RED("drawableFlags")] 		public CEnum<EDrawableFlags> DrawableFlags { get; set;}
 
-		[Ordinal(2)] [RED("lightChannels")] 		public ELightChannel LightChannels { get; set;}
+		[Ordinal(2)] [RED("lightChannels")] 		public CEnum<ELightChannel> LightChannels { get; set;}
 
 		[Ordinal(3)] [RED("renderingPlane")] 		public CEnum<ERenderingPlane> RenderingPlane { get; set;}
 

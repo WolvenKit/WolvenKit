@@ -230,7 +230,6 @@ namespace CR2WTests
                 var diffDictList = dictvalues.Except(newdictvalues).ToList();
 
                 bool isclassicalinconsistentw2anims = true;
-                bool isclassicalinconsistentw2ent = true;
                 bool isclassicalinconsistentw2phase = true;
 
                 if (diffDictList.Count != 0)
@@ -249,24 +248,6 @@ namespace CR2WTests
                         else
                         {
                             isclassicalinconsistentw2anims = false;
-                            break;
-                        }
-                    }
-                    //w2ent detlaff inconsistencies
-                    foreach (string str in diffDictList)
-                    {
-                        if (str == "IF_Positive" ||
-                            str == "IF_Negative" ||
-                            str == "IF_Neutral" ||
-                            str == "IF_Immobilize" ||
-                            str == "IF_Confuse" ||
-                            str == "IF_Damage")
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            isclassicalinconsistentw2ent = false;
                             break;
                         }
                     }
@@ -291,11 +272,6 @@ namespace CR2WTests
                     {
                         //throw new InvalidBundleException("Classical inconsistent .w2anims - " +
                         //    ".w2animev sound handles left behind in string lists, but actual data is empty");
-                    }
-                    else if (isclassicalinconsistentw2ent)
-                    {
-                        //throw new InvalidBundleException("Inconsistent .w2ent - " +
-                        //    "some Detlaff stuff");
                     }
                     else if (isclassicalinconsistentw2phase)
                     {

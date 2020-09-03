@@ -97,13 +97,13 @@ namespace WolvenKit.CR2W.Types
             {
                 Enum e = (Enum)Activator.CreateInstance(typeof(Enums).GetNestedTypes().FirstOrDefault(_ => _.Name == typename));
 
-                if (e.GetType().IsDefined(typeof(FlagsAttribute), false))
-                {
-                    typename = REDReflection.GetWKitTypeFromREDType(typename);
-                    var etype = Type.GetType($"WolvenKit.CR2W.Types.{typename}");
-                    object einstance = Activator.CreateInstance(etype, cr2w, parentVariable, varname);
-                    return einstance as CVariable;
-                }
+                //if (e.GetType().IsDefined(typeof(FlagsAttribute), false))
+                //{
+                //    typename = REDReflection.GetWKitTypeFromREDType(typename);
+                //    var etype = Type.GetType($"WolvenKit.CR2W.Types.{typename}");
+                //    object einstance = Activator.CreateInstance(etype, cr2w, parentVariable, varname);
+                //    return einstance as CVariable;
+                //}
 
                 var cenum = MakeGenericEnumType(typeof(CEnum<>), e);
                 return cenum;
@@ -111,8 +111,8 @@ namespace WolvenKit.CR2W.Types
             // finally, check for generic type
             else if (typename.Contains(':'))
             {
-                try
-                {
+                //try
+                //{
                     #region GENERIC TYPES
                     // match pattern e.g. 
                     // (handle):(CGenericGrassMask) or 
@@ -251,11 +251,11 @@ namespace WolvenKit.CR2W.Types
                     else
                         throw new NotImplementedException();
                     #endregion
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    throw ex;
+                //}
 
             }
             else
@@ -363,11 +363,6 @@ namespace WolvenKit.CR2W.Types
         private static Enum CreateEnum(string value)
         {
             Enum e = (Enum)Activator.CreateInstance(typeof(Enums).GetNestedTypes().FirstOrDefault(_ => _.Name == value));
-
-            if (e.GetType().IsDefined(typeof(FlagsAttribute), false))
-            {
-                throw new NotImplementedException(); 
-            }
 
             return e;
         }

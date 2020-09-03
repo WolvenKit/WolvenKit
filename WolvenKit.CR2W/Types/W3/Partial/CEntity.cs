@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[Ordinal(4)] [RED("streamingDistance")] 		public CUInt8 StreamingDistance { get; set;}
 
-		[Ordinal(5)] [RED("entityStaticFlags")] 		public EEntityStaticFlags EntityStaticFlags { get; set;}
+		[Ordinal(5)] [RED("entityStaticFlags")] 		public CEnum<EEntityStaticFlags> EntityStaticFlags { get; set;}
 
 		[Ordinal(6)] [RED("autoPlayEffectName")] 		public CName AutoPlayEffectName { get; set;}
 

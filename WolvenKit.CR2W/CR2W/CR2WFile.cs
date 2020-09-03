@@ -1110,13 +1110,13 @@ namespace WolvenKit.CR2W
                         }
                     }
                 }
-                else if (var is CFlags)
-                {
-                    foreach (var flag in (var as CFlags).flags)
-                    {
-                        AddUniqueToTable(flag.Value);
-                    }
-                }
+                //else if (var is CFlags)
+                //{
+                //    foreach (var flag in (var as CFlags).flags)
+                //    {
+                //        AddUniqueToTable(flag.Value);
+                //    }
+                //}
                 else if (var is TagList)
                 {
                     foreach (var tag in (var as TagList).tags)
@@ -1217,7 +1217,10 @@ namespace WolvenKit.CR2W
                 }
                 else if (var is IEnumAccessor enumAccessor)
                 {
-                    AddUniqueToTable(enumAccessor.Value);
+                    foreach (var enumstring in enumAccessor.Value)
+                    {
+                        AddUniqueToTable(enumstring);
+                    }
                 }
                 else
                 {

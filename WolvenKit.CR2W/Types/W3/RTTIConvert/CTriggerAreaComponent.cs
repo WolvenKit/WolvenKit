@@ -13,9 +13,9 @@ namespace WolvenKit.CR2W.Types
 	{
 		[Ordinal(1)] [RED("isEnabled")] 		public CBool IsEnabled { get; set;}
 
-		[Ordinal(2)] [RED("includedChannels")] 		public ETriggerChannel IncludedChannels { get; set;}
+		[Ordinal(2)] [RED("includedChannels")] 		public CEnum<ETriggerChannels> IncludedChannels { get; set;}
 
-		[Ordinal(3)] [RED("excludedChannels")] 		public ETriggerChannel ExcludedChannels { get; set;}
+		[Ordinal(3)] [RED("excludedChannels")] 		public CEnum<ETriggerChannels> ExcludedChannels { get; set;}
 
 		[Ordinal(4)] [RED("triggerPriority")] 		public CUInt32 TriggerPriority { get; set;}
 

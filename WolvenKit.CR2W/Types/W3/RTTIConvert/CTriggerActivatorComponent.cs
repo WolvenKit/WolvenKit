@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[Ordinal(2)] [RED("height")] 		public CFloat Height { get; set;}
 
-		[Ordinal(3)] [RED("channels")] 		public ETriggerChannel Channels { get; set;}
+		[Ordinal(3)] [RED("channels")] 		public CEnum<ETriggerChannels> Channels { get; set;}
 
 		[Ordinal(4)] [RED("enableCCD")] 		public CBool EnableCCD { get; set;}
 

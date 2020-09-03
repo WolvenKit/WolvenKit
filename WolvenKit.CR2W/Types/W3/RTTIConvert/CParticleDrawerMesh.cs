@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[Ordinal(2)] [RED("orientationMode")] 		public CEnum<EMeshParticleOrientationMode> OrientationMode { get; set;}
 
-		[Ordinal(3)] [RED("lightChannels")] 		public ELightChannel LightChannels { get; set;}
+		[Ordinal(3)] [RED("lightChannels")] 		public CEnum<ELightChannel> LightChannels { get; set;}
 
 		public CParticleDrawerMesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

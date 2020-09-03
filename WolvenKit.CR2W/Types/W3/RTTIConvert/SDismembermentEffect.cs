@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[Ordinal(1)] [RED("name")] 		public CName Name { get; set;}
 
-		[Ordinal(2)] [RED("typeMask")] 		public EDismembermentEffectTypeFlag TypeMask { get; set;}
+		[Ordinal(2)] [RED("typeMask")] 		public CEnum<EDismembermentEffectTypeFlag> TypeMask { get; set;}
 
 		public SDismembermentEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

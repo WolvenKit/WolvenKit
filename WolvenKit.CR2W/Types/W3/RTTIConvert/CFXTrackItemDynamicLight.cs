@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[Ordinal(5)] [RED("specularScale")] 		public CFloat SpecularScale { get; set;}
 
-		[Ordinal(6)] [RED("lightChannels")] 		public ELightChannel LightChannels { get; set;}
+		[Ordinal(6)] [RED("lightChannels")] 		public CEnum<ELightChannel> LightChannels { get; set;}
 
 		[Ordinal(7)] [RED("isCastingShadows")] 		public CBool IsCastingShadows { get; set;}
 

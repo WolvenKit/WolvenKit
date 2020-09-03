@@ -63,7 +63,13 @@ namespace WolvenKit
                 if (!this.treeListView.SmallImageList.Images.ContainsKey(extension))
                 {
                     Image smallImage = this.GetSmallIconForFileType(extension);
-                    this.treeListView.SmallImageList.Images.Add(extension, smallImage);
+                    try
+                    {
+                        this.treeListView.SmallImageList.Images.Add(extension, smallImage);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
                 }
                 return extension;
             };

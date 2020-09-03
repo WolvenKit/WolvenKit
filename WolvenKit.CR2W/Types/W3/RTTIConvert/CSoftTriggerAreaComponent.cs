@@ -13,9 +13,9 @@ namespace WolvenKit.CR2W.Types
 	{
 		[Ordinal(1)] [RED("outerClippingAreaTags")] 		public TagList OuterClippingAreaTags { get; set;}
 
-		[Ordinal(2)] [RED("outerIncludedChannels")] 		public ETriggerChannel OuterIncludedChannels { get; set;}
+		[Ordinal(2)] [RED("outerIncludedChannels")] 		public CEnum<ETriggerChannels> OuterIncludedChannels { get; set;}
 
-		[Ordinal(3)] [RED("outerExcludedChannels")] 		public ETriggerChannel OuterExcludedChannels { get; set;}
+		[Ordinal(3)] [RED("outerExcludedChannels")] 		public CEnum<ETriggerChannels> OuterExcludedChannels { get; set;}
 
 		[Ordinal(4)] [RED("invertPenetrationFraction")] 		public CBool InvertPenetrationFraction { get; set;}
 

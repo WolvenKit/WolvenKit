@@ -307,7 +307,7 @@ namespace WolvenKit.CR2W.Types
     public partial class CUmbraTile : CResource
     {
 
-        //[Ordinal(1000)] [REDBuffer] public CBufferUInt32<CHandle<>> Tiles { get; set; }
+        [Ordinal(1000)] [REDBuffer] public CBufferUInt32<SUmbraTileData> Tiles { get; set; }
 
 
     }

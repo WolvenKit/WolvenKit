@@ -169,6 +169,7 @@
     <Compile Include="Reflection\REDReflection.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SVector4D.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\SUmbraTileData.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CQuestScriptBlock.cs" />
     <Compile Include="Types\Generic\Arrays\CStatic.cs" />
     <Compile Include="Types\Generic\Arrays\CBufferBase.cs" />
@@ -188,7 +189,7 @@
     <Compile Include="Types\Structs\SCurveData.cs" />
     <Compile Include="Types\Generic\Arrays\CBufferUInt16.cs" />
     <Compile Include="Types\Utils\CR2WTypeManager.cs" />
-    <Compile Include="Types\Primitive\Flags.cs" />
+    <None Include="Types\Primitive\Flags.cs.deprecated" />
     <Compile Include="Types\BufferedTypes\BufferStructs\CTerrainTileData.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\SWayPointsCollectionsSetData.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CPhysicalCollision.cs" />
@@ -6780,7 +6781,6 @@
     <Compile Include="Types\BufferedTypes\BufferStructs\SSkeletonRigData.cs" />
     <Compile Include="Types\Generic\Arrays\CBufferUInt32.cs" />
     <Compile Include="Types\Generic\Arrays\CCompressedBuffer.cs" />
-    <None Include="Types\Utils\CQuaternion.cs.deprecated" />
     <Compile Include="Types\BufferedTypes\Complex\CSkeleton.cs" />
     <Compile Include="Types\Generic\Arrays\CPaddedBuffer.cs" />
     <Compile Include="Types\Generic\Arrays\CBufferBit6.cs" />
@@ -6812,7 +6812,7 @@
     <Compile Include="Types\Structs\Complex\EngineQsTranform.cs" />
     <Compile Include="Types\Structs\Complex\EngineTransform.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CEntity.cs" />
-    <Compile Include="Types\Primitive\CFlags.cs" />
+    <None Include="Types\Primitive\CFlags.cs.deprecated" />
     <Compile Include="Types\Primitive\NetPrimitive\CFloat.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\SFoliageInstanceData.cs" />
     <Compile Include="Types\Primitive\NetPrimitive\CGUID.cs" />
@@ -6821,14 +6821,12 @@
     <Compile Include="Types\Primitive\CName.cs" />
     <Compile Include="Types\Generic\CPtr.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CStorySceneScript.cs" />
-    <None Include="Types\Utils\CR2WTypeManager.cs.deprecated" />
     <Compile Include="Types\Generic\CSoft.cs" />
     <Compile Include="Types\Primitive\NetPrimitive\CString.cs" />
     <Compile Include="Types\Primitive\NetPrimitive\StringAnsi.cs" />
     <Compile Include="Types\Structs\Complex\TagList.cs" />
     <Compile Include="Types\Utils\CVariable.cs" />
     <Compile Include="Types\Primitive\CVariant.cs" />
-    <None Include="Types\Primitive\CVector.cs.deprecated" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SVector3D.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\CXml.cs" />
     <Compile Include="Types\Primitive\Enums.cs" />
