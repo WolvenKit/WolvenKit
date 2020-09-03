@@ -258,6 +258,7 @@
     <Compile Include="Model\WKPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\RadishConfiguration.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\BulkEditViewModel.cs" />
     <Compile Include="ViewModels\CloseableViewModel.cs" />
     <Compile Include="ViewModels\ModExplorerViewModel.cs" />

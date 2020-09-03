@@ -79,24 +79,20 @@ namespace WolvenKit.Forms
             var helplinks = new List<LinkObject>();
             helplinks.Add(new LinkObject("GitHub repository", "https://github.com/Traderain/Wolven-kit"));
             helplinks.Add(new LinkObject("WolvenKit wiki", "https://github.com/Traderain/Wolven-kit/wiki"));
+        }
 
-            //populate tutorial links
-            var bgcolor = UIController.GetPalette().ToolWindowTabSelectedInactive.Background;
-            var bgcolorhtml = bgcolor.ToHTML();
-
-//            webBrowser1.DocumentText = $@"
-//<html>
-//    <body {"style = \" background:" } {bgcolorhtml} {"\""} >
-//        <li><a href = ${"\"https://github.com/Traderain/Wolven-kit/wiki\""}> WolvenKit Wiki </a></li>
-//        <li><a href = ${"\"https://github.com/Traderain/Wolven-kit\""}> GitHub Repository </a></li>
-//    </body>
-//</html>
-//          ";
-
-
-            helpWebBrowser.DocumentText = $@"
+        private string DocumentText => $@"
 <html>
-    <body {"style = \" background:" } {bgcolorhtml} {"\""} >
+    <head>
+        <style>
+            body {{ 
+                font-family: Calibri, sans-serif; 
+                background: { UIController.GetBackColor().ToHTML() }; 
+            }} 
+            
+        </style> 
+    </head>
+    <body>
         <li><a href = ${"\"https://github.com/Traderain/Wolven-kit/wiki\""}> WolvenKit Wiki </a></li>
         <li><a href = ${"\"https://github.com/Traderain/Wolven-kit\""}> GitHub Repository </a></li>
         <li><a href = ${"\"https://www.youtube.com/watch?v=jUoamicYtjk\""}> Package creation </a></li>
@@ -104,7 +100,7 @@ namespace WolvenKit.Forms
     </body>
 </html>
           ";
-        }
+
 
         protected void ApplyCustomTheme()
         {
@@ -138,6 +134,7 @@ namespace WolvenKit.Forms
 
             wolvenKitLbl.ForeColor = UIController.GetForeColor();
 
+            helpWebBrowser.DocumentText = DocumentText;
         }
 
         public const int WM_NCLBUTTONDOWN = 0xA1;
@@ -226,6 +223,9 @@ namespace WolvenKit.Forms
         private void preferencesBtn_Click(object sender, EventArgs e)
         {
             var settings = new frmSettings();
+            settings.RequestApplyTheme += ApplyCustomTheme;
+
+
             settings.ShowDialog();
         }
 

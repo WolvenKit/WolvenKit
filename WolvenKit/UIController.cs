@@ -36,6 +36,7 @@ namespace WolvenKit
     {
         private static UIController mainController;
         public UIConfiguration Configuration { get; private set; }
+
         public frmMain Window { get; private set; }
 
         public const string ManagerCacheDir = "ManagerCache";

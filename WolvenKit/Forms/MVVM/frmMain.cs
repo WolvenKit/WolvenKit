@@ -215,29 +215,42 @@ namespace WolvenKit
         {
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"));
 
-            switch (MessageBox.Show(
+            if (vm.OpenDocuments.Count == 0)
+            {
+                ApplyThemes();
+            }
+            else
+            {
+                switch (MessageBox.Show(
                         "This will close all windows. You will loose any unsaved progress in open files. " +
                         "Would you like to continue without saving?",
                         "Apply Theme",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-            {
-                default:
-                    return;
-                case DialogResult.Yes:
-                    {
-                        CloseWindows();
-
-                        this.ApplyCustomTheme();
-
-                        dockPanel.LoadFromXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"), m_deserializeDockContent);
-
-                        ReopenWindows();
-                        break;
-                    }
-                case DialogResult.No:
-                    {
+                {
+                    default:
                         return;
-                    }
+                    case DialogResult.Yes:
+                        {
+                            ApplyThemes();
+                            break;
+                        }
+                    case DialogResult.No:
+                        {
+                            return;
+                        }
+                }
+            }
+            
+
+            void ApplyThemes()
+            {
+                CloseWindows();
+
+                this.ApplyCustomTheme();
+
+                dockPanel.LoadFromXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"), m_deserializeDockContent);
+
+                ReopenWindows();
             }
 
         }
@@ -2519,6 +2532,7 @@ namespace WolvenKit
                     case DialogResult.OK:
                         break;
                     case DialogResult.Cancel:
+                        Close();
                         break;
                     case DialogResult.Abort:
                         break;
@@ -3225,6 +3239,7 @@ _col - for simple stuff like boxes and spheres", "Information about importing mo
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var settings = new frmSettings();
+            //settings.RequestApplyTheme += GlobalApplyTheme;
             settings.ShowDialog();
         }
 

@@ -12,12 +12,15 @@ using IniParserLTK;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using WolvenKit.App;
+using WolvenKit.App.ViewModels;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit
 {
     public partial class frmSettings : Form
     {
+        private readonly SettingsViewModel viewModel;
+
         public string witcherexe = "";
         public string wccLiteexe = "";
 
@@ -25,10 +28,16 @@ namespace WolvenKit
         public const string wcc_sha256_patched = "275faa214c6263287deea47ddbcd7afcf6c2503a76ff57f2799bc158f5af7c5d";
         public const string wcc_sha256_patched2 = "104f50142fde883337d332d319d205701e8a302197360f5237e6bb426984212a";
 
+
+
         public frmSettings()
         {
+
+
+
             InitializeComponent();
             var config = MainController.Get().Configuration;
+            
             txExecutablePath.Text = config.ExecutablePath;
             txTextLanguage.Text = config.TextLanguage;
             txVoiceLanguage.Text = config.VoiceLanguage;
@@ -56,7 +65,9 @@ namespace WolvenKit
 
         }
 
-        
+
+        public event Action RequestApplyTheme;
+
 
         private void btSave_Click(object sender, EventArgs e)
         {
@@ -116,6 +127,7 @@ namespace WolvenKit
             if (applyTheme)
             {
                 UIController.Get().Window.GlobalApplyTheme();
+                RequestApplyTheme?.Invoke();
             }
                 
             /// debug console enabling
