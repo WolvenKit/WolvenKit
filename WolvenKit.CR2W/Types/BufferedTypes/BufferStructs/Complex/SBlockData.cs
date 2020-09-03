@@ -30,24 +30,16 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
+            var startp = file.BaseStream.Position;
+
             base.Read(file, size);
 
             switch (packedObjectType)
             {
                 //TODO: Read the different objects
-                case Enums.BlockDataObjectType.Mesh:
-                    {
-                        packedObject = new SBlockDataMeshObject(cr2w, this, nameof(SBlockDataMeshObject));
-                        break;
-                    }
                 case Enums.BlockDataObjectType.Collision:
                     {
                         packedObject = new SBlockDataCollisionObject(cr2w, this, nameof(SBlockDataCollisionObject));
-                        break;
-                    }
-                case Enums.BlockDataObjectType.Decal:
-                    {                        
-                        packedObject = new SBlockDataDecal(cr2w, this, nameof(SBlockDataDecal));
                         break;
                     }
                 case Enums.BlockDataObjectType.Dimmer:
@@ -75,6 +67,16 @@ namespace WolvenKit.CR2W.Types
                         packedObject = new SBlockDataRigidBody(cr2w, this, nameof(SBlockDataRigidBody));
                         break;
                     }
+                case Enums.BlockDataObjectType.Mesh:
+                    {
+                        packedObject = new SBlockDataMeshObject(cr2w, this, nameof(SBlockDataMeshObject));
+                        break;
+                    }
+                case Enums.BlockDataObjectType.Decal:
+                    //{
+                    //    packedObject = new SBlockDataDecal(cr2w, this, nameof(SBlockDataDecal));
+                    //    break;
+                    //}
                 case Enums.BlockDataObjectType.Cloth: //TODO: Implement CClothComponent here
                 case Enums.BlockDataObjectType.Destruction: //TODO: Implement CDestructionComponent here
                 case Enums.BlockDataObjectType.Invalid: //TODO: Check why this breaks sometimes?
@@ -89,6 +91,16 @@ namespace WolvenKit.CR2W.Types
             }
             
             packedObject.Read(file, size - 56);
+
+            var endp = file.BaseStream.Position;
+            var read = endp - startp;
+            if (read < size)
+            {
+            }
+            else if (read > size)
+            {
+                throw new InvalidParsingException("read too far");
+            }
         }
 
         public override void Write(BinaryWriter file)
@@ -187,21 +199,13 @@ namespace WolvenKit.CR2W.Types
                             break;
                         }
                     //TODO: Add here the differnt copy methods
-                    case Enums.BlockDataObjectType.Mesh:
-                        {
-                            baseobj.Add((SBlockDataMeshObject)packedObject);
-                            break;
-                        }
+                    
                     case Enums.BlockDataObjectType.Collision:
                         {
                             baseobj.Add((SBlockDataCollisionObject)packedObject);
                             break;
                         }
-                    case Enums.BlockDataObjectType.Decal:
-                        {
-                            baseobj.Add((SBlockDataDecal)packedObject);
-                            break;
-                        }
+                    
                     case Enums.BlockDataObjectType.Dimmer:
                         {
                             baseobj.Add((SBlockDataDimmer)packedObject);
@@ -227,6 +231,16 @@ namespace WolvenKit.CR2W.Types
                             baseobj.Add((SBlockDataRigidBody)packedObject);
                             break;
                         }
+                    case Enums.BlockDataObjectType.Mesh:
+                        {
+                            baseobj.Add((SBlockDataMeshObject)packedObject);
+                            break;
+                        }
+                    case Enums.BlockDataObjectType.Decal:
+                        //{
+                        //    baseobj.Add((SBlockDataDecal)packedObject);
+                        //    break;
+                        //}
                     case Enums.BlockDataObjectType.Cloth:
                     case Enums.BlockDataObjectType.Destruction:
                     default:
