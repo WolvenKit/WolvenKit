@@ -63,7 +63,7 @@ namespace WolvenKit.CR2W.Types
         #endregion
 
         #region Flags
-        [Flags] // not found
+        //[Flags] // not found
         public enum EFoodGroup
         {
             FG_Corpse = 1,
@@ -124,7 +124,7 @@ namespace WolvenKit.CR2W.Types
             MM_MoveSliding = 2
         }
         [Flags] //done
-        public enum ETriggerChannels
+        public enum ETriggerChannel
         {
             TC_Default = 1,
             TC_Player = 2,

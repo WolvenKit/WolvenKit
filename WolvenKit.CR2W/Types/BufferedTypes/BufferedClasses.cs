@@ -114,11 +114,7 @@ namespace WolvenKit.CR2W.Types
     }
 
     
-    public partial class CCutsceneTemplate : CSkeletalAnimationSet
-    {
-        [Ordinal(1000)] [REDBuffer] public CUInt32 Unk11 { get; set; }
-        [Ordinal(1000)] [REDBuffer] public CBufferUInt32<CVariantSizeType> Animevents { get; set; }
-    }
+
     public partial class CEntityTemplate : CResource
     {
         [Ordinal(1000)] [REDBuffer] public CUInt32 Unk1 { get; set; }
@@ -210,6 +206,11 @@ namespace WolvenKit.CR2W.Types
     public partial class CSkeletalAnimationSet : CExtAnimEventsFile
     {
         //[Ordinal(1000)] [REDBuffer] public CUInt32 Unk1 { get; set; }
+    }
+    public partial class CCutsceneTemplate : CSkeletalAnimationSet
+    {
+        [Ordinal(1000)] [REDBuffer] public CUInt32 Unk11 { get; set; }
+        [Ordinal(1001)] [REDBuffer] public CBufferUInt32<CVariantSizeType> Animevents { get; set; }
     }
 
     public partial class CSkeletalAnimation: ISerializable

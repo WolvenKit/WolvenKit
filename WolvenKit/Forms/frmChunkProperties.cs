@@ -411,7 +411,7 @@ namespace WolvenKit
             if (model != null && model.IsSerialized)
             {
                 if (!showOnlySerialized)
-                    e.Item.ForeColor = Color.Green;
+                    e.Item.ForeColor = UIController.GetPalette().OverflowButtonPressed.Border; //Color.Green;
             }
             else
             {

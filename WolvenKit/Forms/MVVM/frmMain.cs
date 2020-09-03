@@ -1289,15 +1289,17 @@ namespace WolvenKit
                 GetModExplorer();
                 ModExplorer.Show(dockPanel, DockState.DockLeft);
 
-                ModExplorer.RequestAssetBrowser += ModExplorer_RequestAssetBrowser;
-
-
-                ModExplorer.RequestFileOpen += ModExplorer_RequestFileOpen;
-                ModExplorer.RequestFileRename += ModExplorer_RequestFileRename;
-
-                ModExplorer.RequestFastRender += ModExplorer_RequestFastRender;
             }
             ModExplorer.Activate();
+
+
+            ModExplorer.RequestAssetBrowser += ModExplorer_RequestAssetBrowser;
+
+
+            ModExplorer.RequestFileOpen += ModExplorer_RequestFileOpen;
+            ModExplorer.RequestFileRename += ModExplorer_RequestFileRename;
+
+            ModExplorer.RequestFastRender += ModExplorer_RequestFastRender;
         }
         private IDockContent GetOutput()
         {
@@ -1445,6 +1447,7 @@ namespace WolvenKit
                 {
                     t.SaveFile();
                     t.Close();
+                    vm.OpenDocuments.Remove(t);
                 }
             }
             ModExplorer?.Close();

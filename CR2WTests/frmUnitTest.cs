@@ -288,7 +288,12 @@ namespace CR2WTests
                 #endregion
 
                 #region Writing Test B
-                if (!isclassicalinconsistentw2phase)
+                if (isclassicalinconsistentw2phase || isclassicalinconsistentw2anims)
+                {
+                    // skip test
+                    // add additional fail-safe test?
+                }
+                else
                 {
                     byte[] buffer_testB;
                     byte[] buffer_testB_original;

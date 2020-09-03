@@ -29,7 +29,7 @@ namespace WolvenKit.CR2W.Types
 
 		[Ordinal(9)] [RED("triggerActivatorHeight")] 		public CFloat TriggerActivatorHeight { get; set;}
 
-		[Ordinal(10)] [RED("triggerChannels")] 		public CEnum<ETriggerChannels> TriggerChannels { get; set;}
+		[Ordinal(10)] [RED("triggerChannels")] 		public CEnum<ETriggerChannel> TriggerChannels { get; set;}
 
 		[Ordinal(11)] [RED("triggerEnableCCD")] 		public CBool TriggerEnableCCD { get; set;}
 
