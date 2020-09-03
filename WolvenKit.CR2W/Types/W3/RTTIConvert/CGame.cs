@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGame : CObject
 	{
-		[RED("activeWorld")] 		public CHandle<CWorld> ActiveWorld { get; set;}
+		[Ordinal(1)] [RED("activeWorld")] 		public CHandle<CWorld> ActiveWorld { get; set;}
 
-		[RED("visualDebug")] 		public CPtr<CVisualDebug> VisualDebug { get; set;}
+		[Ordinal(2)] [RED("visualDebug")] 		public CPtr<CVisualDebug> VisualDebug { get; set;}
 
-		[RED("inputManager")] 		public CPtr<CInputManager> InputManager { get; set;}
+		[Ordinal(3)] [RED("inputManager")] 		public CPtr<CInputManager> InputManager { get; set;}
 
-		[RED("timerScriptKeyword")] 		public CPtr<CTimerScriptKeyword> TimerScriptKeyword { get; set;}
+		[Ordinal(4)] [RED("timerScriptKeyword")] 		public CPtr<CTimerScriptKeyword> TimerScriptKeyword { get; set;}
 
-		[RED("gameResource")] 		public CHandle<CGameResource> GameResource { get; set;}
+		[Ordinal(5)] [RED("gameResource")] 		public CHandle<CGameResource> GameResource { get; set;}
 
 		public CGame(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

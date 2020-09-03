@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,23 +11,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskSetMorphDef : IBehTreeTaskDefinition
 	{
-		[RED("morphOnAnimEvent")] 		public CBool MorphOnAnimEvent { get; set;}
+		[Ordinal(1)] [RED("morphOnAnimEvent")] 		public CBool MorphOnAnimEvent { get; set;}
 
-		[RED("time")] 		public CFloat Time { get; set;}
+		[Ordinal(2)] [RED("time")] 		public CFloat Time { get; set;}
 
-		[RED("ratio")] 		public CFloat Ratio { get; set;}
+		[Ordinal(3)] [RED("ratio")] 		public CFloat Ratio { get; set;}
 
-		[RED("morphOnActivate")] 		public CBool MorphOnActivate { get; set;}
+		[Ordinal(4)] [RED("morphOnActivate")] 		public CBool MorphOnActivate { get; set;}
 
-		[RED("ratioOnActivate")] 		public CFloat RatioOnActivate { get; set;}
+		[Ordinal(5)] [RED("ratioOnActivate")] 		public CFloat RatioOnActivate { get; set;}
 
-		[RED("timeOnActivate")] 		public CFloat TimeOnActivate { get; set;}
+		[Ordinal(6)] [RED("timeOnActivate")] 		public CFloat TimeOnActivate { get; set;}
 
-		[RED("morphOnDeactivate")] 		public CBool MorphOnDeactivate { get; set;}
+		[Ordinal(7)] [RED("morphOnDeactivate")] 		public CBool MorphOnDeactivate { get; set;}
 
-		[RED("ratioOnDeactivate")] 		public CFloat RatioOnDeactivate { get; set;}
+		[Ordinal(8)] [RED("ratioOnDeactivate")] 		public CFloat RatioOnDeactivate { get; set;}
 
-		[RED("timeOnDeactivate")] 		public CFloat TimeOnDeactivate { get; set;}
+		[Ordinal(9)] [RED("timeOnDeactivate")] 		public CFloat TimeOnDeactivate { get; set;}
 
 		public BTTaskSetMorphDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

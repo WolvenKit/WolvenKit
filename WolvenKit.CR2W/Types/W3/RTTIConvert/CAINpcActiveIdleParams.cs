@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcActiveIdleParams : CAIIdleParameters
 	{
-		[RED("wanderTree")] 		public CHandle<CAIWanderTree> WanderTree { get; set;}
+		[Ordinal(1)] [RED("wanderTree")] 		public CHandle<CAIWanderTree> WanderTree { get; set;}
 
-		[RED("workTree")] 		public CHandle<CAINpcWork> WorkTree { get; set;}
+		[Ordinal(2)] [RED("workTree")] 		public CHandle<CAINpcWork> WorkTree { get; set;}
 
 		public CAINpcActiveIdleParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

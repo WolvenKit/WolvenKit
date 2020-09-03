@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,35 +11,35 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventLightProperties : CStorySceneEvent
 	{
-		[RED("lightId")] 		public CName LightId { get; set;}
+		[Ordinal(1)] [RED("lightId")] 		public CName LightId { get; set;}
 
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(2)] [RED("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("additiveChanges")] 		public CBool AdditiveChanges { get; set;}
+		[Ordinal(3)] [RED("additiveChanges")] 		public CBool AdditiveChanges { get; set;}
 
-		[RED("color")] 		public CColor Color { get; set;}
+		[Ordinal(4)] [RED("color")] 		public CColor Color { get; set;}
 
-		[RED("lightColorSource")] 		public CEnum<ESceneEventLightColorSource> LightColorSource { get; set;}
+		[Ordinal(5)] [RED("lightColorSource")] 		public CEnum<ESceneEventLightColorSource> LightColorSource { get; set;}
 
-		[RED("radius")] 		public SSimpleCurve Radius { get; set;}
+		[Ordinal(6)] [RED("radius")] 		public SSimpleCurve Radius { get; set;}
 
-		[RED("brightness")] 		public SSimpleCurve Brightness { get; set;}
+		[Ordinal(7)] [RED("brightness")] 		public SSimpleCurve Brightness { get; set;}
 
-		[RED("attenuation")] 		public SSimpleCurve Attenuation { get; set;}
+		[Ordinal(8)] [RED("attenuation")] 		public SSimpleCurve Attenuation { get; set;}
 
-		[RED("placement")] 		public EngineTransform Placement { get; set;}
+		[Ordinal(9)] [RED("placement")] 		public EngineTransform Placement { get; set;}
 
-		[RED("flickering")] 		public SLightFlickering Flickering { get; set;}
+		[Ordinal(10)] [RED("flickering")] 		public SLightFlickering Flickering { get; set;}
 
-		[RED("useGlobalCoords")] 		public CBool UseGlobalCoords { get; set;}
+		[Ordinal(11)] [RED("useGlobalCoords")] 		public CBool UseGlobalCoords { get; set;}
 
-		[RED("spotLightProperties")] 		public SStorySceneSpotLightProperties SpotLightProperties { get; set;}
+		[Ordinal(12)] [RED("spotLightProperties")] 		public SStorySceneSpotLightProperties SpotLightProperties { get; set;}
 
-		[RED("dimmerProperties")] 		public SStorySceneLightDimmerProperties DimmerProperties { get; set;}
+		[Ordinal(13)] [RED("dimmerProperties")] 		public SStorySceneLightDimmerProperties DimmerProperties { get; set;}
 
-		[RED("attachment")] 		public SStorySceneAttachmentInfo Attachment { get; set;}
+		[Ordinal(14)] [RED("attachment")] 		public SStorySceneAttachmentInfo Attachment { get; set;}
 
-		[RED("lightTracker")] 		public SStorySceneLightTrackingInfo LightTracker { get; set;}
+		[Ordinal(15)] [RED("lightTracker")] 		public SStorySceneLightTrackingInfo LightTracker { get; set;}
 
 		public CStorySceneEventLightProperties(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

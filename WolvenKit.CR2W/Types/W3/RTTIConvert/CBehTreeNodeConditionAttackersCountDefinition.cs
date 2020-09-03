@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionAttackersCountDefinition : CBehTreeNodeConditionDefinition
 	{
-		[RED("compare")] 		public CEnum<ECompareFunc> Compare { get; set;}
+		[Ordinal(1)] [RED("compare")] 		public CEnum<ECompareFunc> Compare { get; set;}
 
-		[RED("count")] 		public CBehTreeValInt Count { get; set;}
+		[Ordinal(2)] [RED("count")] 		public CBehTreeValInt Count { get; set;}
 
 		public CBehTreeNodeConditionAttackersCountDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

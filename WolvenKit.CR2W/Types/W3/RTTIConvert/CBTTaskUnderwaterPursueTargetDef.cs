@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskUnderwaterPursueTargetDef : IBehTreeTaskDefinition
 	{
-		[RED("useCustom")] 		public CBool UseCustom { get; set;}
+		[Ordinal(1)] [RED("useCustom")] 		public CBool UseCustom { get; set;}
 
-		[RED("distanceFromTarget")] 		public CFloat DistanceFromTarget { get; set;}
+		[Ordinal(2)] [RED("distanceFromTarget")] 		public CFloat DistanceFromTarget { get; set;}
 
-		[RED("heightFromTarget")] 		public CFloat HeightFromTarget { get; set;}
+		[Ordinal(3)] [RED("heightFromTarget")] 		public CFloat HeightFromTarget { get; set;}
 
-		[RED("distanceTolerance")] 		public CFloat DistanceTolerance { get; set;}
+		[Ordinal(4)] [RED("distanceTolerance")] 		public CFloat DistanceTolerance { get; set;}
 
-		[RED("randomHeight")] 		public CInt32 RandomHeight { get; set;}
+		[Ordinal(5)] [RED("randomHeight")] 		public CInt32 RandomHeight { get; set;}
 
 		public CBTTaskUnderwaterPursueTargetDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

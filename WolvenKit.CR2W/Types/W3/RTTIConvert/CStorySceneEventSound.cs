@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventSound : CStorySceneEvent
 	{
-		[RED("soundEventName")] 		public StringAnsi SoundEventName { get; set;}
+		[Ordinal(1)] [RED("soundEventName")] 		public StringAnsi SoundEventName { get; set;}
 
-		[RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(2)] [RED("actor")] 		public CName Actor { get; set;}
 
-		[RED("bone")] 		public CName Bone { get; set;}
+		[Ordinal(3)] [RED("bone")] 		public CName Bone { get; set;}
 
-		[RED("dbVolume")] 		public CFloat DbVolume { get; set;}
+		[Ordinal(4)] [RED("dbVolume")] 		public CFloat DbVolume { get; set;}
 
 		public CStorySceneEventSound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

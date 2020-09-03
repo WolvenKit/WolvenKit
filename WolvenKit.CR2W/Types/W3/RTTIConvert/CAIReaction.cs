@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIReaction : CObject
 	{
-		[RED("fieldName")] 		public CName FieldName { get; set;}
+		[Ordinal(1)] [RED("fieldName")] 		public CName FieldName { get; set;}
 
-		[RED("cooldownTime")] 		public CFloat CooldownTime { get; set;}
+		[Ordinal(2)] [RED("cooldownTime")] 		public CFloat CooldownTime { get; set;}
 
-		[RED("visibilityTest")] 		public CEnum<EVisibilityTest> VisibilityTest { get; set;}
+		[Ordinal(3)] [RED("visibilityTest")] 		public CEnum<EVisibilityTest> VisibilityTest { get; set;}
 
-		[RED("range")] 		public SAIReactionRange Range { get; set;}
+		[Ordinal(4)] [RED("range")] 		public SAIReactionRange Range { get; set;}
 
-		[RED("factTest")] 		public SAIReactionFactTest FactTest { get; set;}
+		[Ordinal(5)] [RED("factTest")] 		public SAIReactionFactTest FactTest { get; set;}
 
-		[RED("condition")] 		public CPtr<IReactionCondition> Condition { get; set;}
+		[Ordinal(6)] [RED("condition")] 		public CPtr<IReactionCondition> Condition { get; set;}
 
-		[RED("action")] 		public CPtr<IReactionAction> Action { get; set;}
+		[Ordinal(7)] [RED("action")] 		public CPtr<IReactionAction> Action { get; set;}
 
 		public CAIReaction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class VirtualAnimationPoseFK : CVariable
 	{
-		[RED("time")] 		public CFloat Time { get; set;}
+		[Ordinal(1)] [RED("time")] 		public CFloat Time { get; set;}
 
-		[RED("controlPoints")] 		public Vector ControlPoints { get; set;}
+		[Ordinal(2)] [RED("controlPoints")] 		public Vector ControlPoints { get; set;}
 
-		[RED("indices", 2,0)] 		public CArray<CInt32> Indices { get; set;}
+		[Ordinal(3)] [RED("indices", 2,0)] 		public CArray<CInt32> Indices { get; set;}
 
-		[RED("transforms", 133,0)] 		public CArray<EngineQsTransform> Transforms { get; set;}
+		[Ordinal(4)] [RED("transforms", 133,0)] 		public CArray<EngineQsTransform> Transforms { get; set;}
 
 		public VirtualAnimationPoseFK(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

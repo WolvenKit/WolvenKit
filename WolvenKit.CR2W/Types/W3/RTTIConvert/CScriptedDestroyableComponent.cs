@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,21 +11,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CScriptedDestroyableComponent : CRigidMeshComponent
 	{
-		[RED("destroyWay")] 		public CEnum<EDestroyWay> DestroyWay { get; set;}
+		[Ordinal(1)] [RED("destroyWay")] 		public CEnum<EDestroyWay> DestroyWay { get; set;}
 
-		[RED("distanceValue")] 		public CFloat DistanceValue { get; set;}
+		[Ordinal(2)] [RED("distanceValue")] 		public CFloat DistanceValue { get; set;}
 
-		[RED("destroyTimeDuration")] 		public CFloat DestroyTimeDuration { get; set;}
+		[Ordinal(3)] [RED("destroyTimeDuration")] 		public CFloat DestroyTimeDuration { get; set;}
 
-		[RED("contactDestroyDelay")] 		public CFloat ContactDestroyDelay { get; set;}
+		[Ordinal(4)] [RED("contactDestroyDelay")] 		public CFloat ContactDestroyDelay { get; set;}
 
-		[RED("destroyAtTime")] 		public CFloat DestroyAtTime { get; set;}
+		[Ordinal(5)] [RED("destroyAtTime")] 		public CFloat DestroyAtTime { get; set;}
 
-		[RED("m_state")] 		public CEnum<EScriptedDetroyableComponentState> M_state { get; set;}
+		[Ordinal(6)] [RED("m_state")] 		public CEnum<EScriptedDetroyableComponentState> M_state { get; set;}
 
-		[RED("entryTime")] 		public CFloat EntryTime { get; set;}
+		[Ordinal(7)] [RED("entryTime")] 		public CFloat EntryTime { get; set;}
 
-		[RED("timerInterval")] 		public CFloat TimerInterval { get; set;}
+		[Ordinal(8)] [RED("timerInterval")] 		public CFloat TimerInterval { get; set;}
 
 		public CScriptedDestroyableComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

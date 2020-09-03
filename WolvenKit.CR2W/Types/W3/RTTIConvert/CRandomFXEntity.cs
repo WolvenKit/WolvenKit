@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,23 +11,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CRandomFXEntity : CEntity
 	{
-		[RED("fxName", 2,0)] 		public CArray<CName> FxName { get; set;}
+		[Ordinal(1)] [RED("fxName", 2,0)] 		public CArray<CName> FxName { get; set;}
 
-		[RED("intervalMin")] 		public CFloat IntervalMin { get; set;}
+		[Ordinal(2)] [RED("intervalMin")] 		public CFloat IntervalMin { get; set;}
 
-		[RED("intervalMax")] 		public CFloat IntervalMax { get; set;}
+		[Ordinal(3)] [RED("intervalMax")] 		public CFloat IntervalMax { get; set;}
 
-		[RED("fxTwiceInARow")] 		public CBool FxTwiceInARow { get; set;}
+		[Ordinal(4)] [RED("fxTwiceInARow")] 		public CBool FxTwiceInARow { get; set;}
 
-		[RED("soundEvent")] 		public CString SoundEvent { get; set;}
+		[Ordinal(5)] [RED("soundEvent")] 		public CString SoundEvent { get; set;}
 
-		[RED("soundDelay")] 		public CFloat SoundDelay { get; set;}
+		[Ordinal(6)] [RED("soundDelay")] 		public CFloat SoundDelay { get; set;}
 
-		[RED("fxIndex")] 		public CInt32 FxIndex { get; set;}
+		[Ordinal(7)] [RED("fxIndex")] 		public CInt32 FxIndex { get; set;}
 
-		[RED("size")] 		public CInt32 Size { get; set;}
+		[Ordinal(8)] [RED("size")] 		public CInt32 Size { get; set;}
 
-		[RED("interval")] 		public CFloat Interval { get; set;}
+		[Ordinal(9)] [RED("interval")] 		public CFloat Interval { get; set;}
 
 		public CRandomFXEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

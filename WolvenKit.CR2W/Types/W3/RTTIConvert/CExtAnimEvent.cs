@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimEvent : CVariable
 	{
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(1)] [RED("eventName")] 		public CName EventName { get; set;}
 
-		[RED("startTime")] 		public CFloat StartTime { get; set;}
+		[Ordinal(2)] [RED("startTime")] 		public CFloat StartTime { get; set;}
 
-		[RED("reportToScript")] 		public CBool ReportToScript { get; set;}
+		[Ordinal(3)] [RED("reportToScript")] 		public CBool ReportToScript { get; set;}
 
-		[RED("reportToScriptMinWeight")] 		public CFloat ReportToScriptMinWeight { get; set;}
+		[Ordinal(4)] [RED("reportToScriptMinWeight")] 		public CFloat ReportToScriptMinWeight { get; set;}
 
-		[RED("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(5)] [RED("animationName")] 		public CName AnimationName { get; set;}
 
-		[RED("trackName")] 		public CString TrackName { get; set;}
+		[Ordinal(6)] [RED("trackName")] 		public CString TrackName { get; set;}
 
 		public CExtAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

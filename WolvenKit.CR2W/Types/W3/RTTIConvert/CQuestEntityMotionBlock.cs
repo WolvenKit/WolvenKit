@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestEntityMotionBlock : CQuestGraphBlock
 	{
-		[RED("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(1)] [RED("entityTag")] 		public CName EntityTag { get; set;}
 
-		[RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(2)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		[RED("targetTransform")] 		public EngineTransform TargetTransform { get; set;}
+		[Ordinal(3)] [RED("targetTransform")] 		public EngineTransform TargetTransform { get; set;}
 
-		[RED("positionDelta")] 		public Vector PositionDelta { get; set;}
+		[Ordinal(4)] [RED("positionDelta")] 		public Vector PositionDelta { get; set;}
 
-		[RED("rotationDelta")] 		public EulerAngles RotationDelta { get; set;}
+		[Ordinal(5)] [RED("rotationDelta")] 		public EulerAngles RotationDelta { get; set;}
 
-		[RED("scaleDelta")] 		public Vector ScaleDelta { get; set;}
+		[Ordinal(6)] [RED("scaleDelta")] 		public Vector ScaleDelta { get; set;}
 
-		[RED("animationCurve")] 		public SSimpleCurve AnimationCurve { get; set;}
+		[Ordinal(7)] [RED("animationCurve")] 		public SSimpleCurve AnimationCurve { get; set;}
 
 		public CQuestEntityMotionBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

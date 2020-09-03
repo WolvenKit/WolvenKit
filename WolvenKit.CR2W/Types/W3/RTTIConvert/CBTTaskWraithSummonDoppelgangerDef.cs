@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,23 +11,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWraithSummonDoppelgangerDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
-		[RED("entityToSummonName")] 		public CName EntityToSummonName { get; set;}
+		[Ordinal(1)] [RED("entityToSummonName")] 		public CName EntityToSummonName { get; set;}
 
-		[RED("entityToSummon")] 		public CName EntityToSummon { get; set;}
+		[Ordinal(2)] [RED("entityToSummon")] 		public CName EntityToSummon { get; set;}
 
-		[RED("splitEffectEntityTemplate")] 		public CHandle<CEntityTemplate> SplitEffectEntityTemplate { get; set;}
+		[Ordinal(3)] [RED("splitEffectEntityTemplate")] 		public CHandle<CEntityTemplate> SplitEffectEntityTemplate { get; set;}
 
-		[RED("summonOnAnimEvent")] 		public CName SummonOnAnimEvent { get; set;}
+		[Ordinal(4)] [RED("summonOnAnimEvent")] 		public CName SummonOnAnimEvent { get; set;}
 
-		[RED("numberToSummon")] 		public CInt32 NumberToSummon { get; set;}
+		[Ordinal(5)] [RED("numberToSummon")] 		public CInt32 NumberToSummon { get; set;}
 
-		[RED("summonPositionPattern")] 		public CEnum<ESpawnPositionPattern> SummonPositionPattern { get; set;}
+		[Ordinal(6)] [RED("summonPositionPattern")] 		public CEnum<ESpawnPositionPattern> SummonPositionPattern { get; set;}
 
-		[RED("summonMaxDistance")] 		public CFloat SummonMaxDistance { get; set;}
+		[Ordinal(7)] [RED("summonMaxDistance")] 		public CFloat SummonMaxDistance { get; set;}
 
-		[RED("summonMinDistance")] 		public CFloat SummonMinDistance { get; set;}
+		[Ordinal(8)] [RED("summonMinDistance")] 		public CFloat SummonMinDistance { get; set;}
 
-		[RED("applyBlindnessRange")] 		public CFloat ApplyBlindnessRange { get; set;}
+		[Ordinal(9)] [RED("applyBlindnessRange")] 		public CFloat ApplyBlindnessRange { get; set;}
 
 		public CBTTaskWraithSummonDoppelgangerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

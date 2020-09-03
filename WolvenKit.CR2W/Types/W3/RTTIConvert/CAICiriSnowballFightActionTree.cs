@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAICiriSnowballFightActionTree : IAICustomActionTree
 	{
-		[RED("minDistFromTargetToPerformTeleport")] 		public CFloat MinDistFromTargetToPerformTeleport { get; set;}
+		[Ordinal(1)] [RED("minDistFromTargetToPerformTeleport")] 		public CFloat MinDistFromTargetToPerformTeleport { get; set;}
 
-		[RED("delayBetweenThrows")] 		public CFloat DelayBetweenThrows { get; set;}
+		[Ordinal(2)] [RED("delayBetweenThrows")] 		public CFloat DelayBetweenThrows { get; set;}
 
-		[RED("teleportPointTag")] 		public CName TeleportPointTag { get; set;}
+		[Ordinal(3)] [RED("teleportPointTag")] 		public CName TeleportPointTag { get; set;}
 
 		public CAICiriSnowballFightActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

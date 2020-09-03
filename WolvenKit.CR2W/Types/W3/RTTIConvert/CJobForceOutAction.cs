@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJobForceOutAction : CJobActionBase
 	{
-		[RED("itemDropMode")] 		public CEnum<EJobForceOutDropMode> ItemDropMode { get; set;}
+		[Ordinal(1)] [RED("itemDropMode")] 		public CEnum<EJobForceOutDropMode> ItemDropMode { get; set;}
 
-		[RED("speedMul")] 		public CFloat SpeedMul { get; set;}
+		[Ordinal(2)] [RED("speedMul")] 		public CFloat SpeedMul { get; set;}
 
 		public CJobForceOutAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

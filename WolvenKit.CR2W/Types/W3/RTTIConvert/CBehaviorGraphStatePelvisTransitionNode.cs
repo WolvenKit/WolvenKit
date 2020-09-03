@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphStatePelvisTransitionNode : CBehaviorGraphStateTransitionBlendNode
 	{
-		[RED("pelvisBoneName")] 		public CString PelvisBoneName { get; set;}
+		[Ordinal(1)] [RED("pelvisBoneName")] 		public CString PelvisBoneName { get; set;}
 
-		[RED("pelvisDirectionFwdLS")] 		public CEnum<EAxis> PelvisDirectionFwdLS { get; set;}
+		[Ordinal(2)] [RED("pelvisDirectionFwdLS")] 		public CEnum<EAxis> PelvisDirectionFwdLS { get; set;}
 
-		[RED("usePelvisBlendMethod")] 		public CBool UsePelvisBlendMethod { get; set;}
+		[Ordinal(3)] [RED("usePelvisBlendMethod")] 		public CBool UsePelvisBlendMethod { get; set;}
 
 		public CBehaviorGraphStatePelvisTransitionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

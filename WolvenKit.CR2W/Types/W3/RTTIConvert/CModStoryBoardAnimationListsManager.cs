@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardAnimationListsManager : CObject
 	{
-		[RED("compatibleAnimationCount")] 		public CInt32 CompatibleAnimationCount { get; set;}
+		[Ordinal(1)] [RED("compatibleAnimationCount")] 		public CInt32 CompatibleAnimationCount { get; set;}
 
-		[RED("dataLoaded")] 		public CBool DataLoaded { get; set;}
+		[Ordinal(2)] [RED("dataLoaded")] 		public CBool DataLoaded { get; set;}
 
-		[RED("animMeta")] 		public CHandle<CStoryBoardAnimationMetaInfo> AnimMeta { get; set;}
+		[Ordinal(3)] [RED("animMeta")] 		public CHandle<CStoryBoardAnimationMetaInfo> AnimMeta { get; set;}
 
 		public CModStoryBoardAnimationListsManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

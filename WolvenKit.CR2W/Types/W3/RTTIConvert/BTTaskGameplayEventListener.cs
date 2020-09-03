@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskGameplayEventListener : IBehTreeTask
 	{
-		[RED("validFor")] 		public CFloat ValidFor { get; set;}
+		[Ordinal(1)] [RED("validFor")] 		public CFloat ValidFor { get; set;}
 
-		[RED("activeFor")] 		public CFloat ActiveFor { get; set;}
+		[Ordinal(2)] [RED("activeFor")] 		public CFloat ActiveFor { get; set;}
 
-		[RED("activate")] 		public CBool Activate { get; set;}
+		[Ordinal(3)] [RED("activate")] 		public CBool Activate { get; set;}
 
-		[RED("eventTime")] 		public CFloat EventTime { get; set;}
+		[Ordinal(4)] [RED("eventTime")] 		public CFloat EventTime { get; set;}
 
-		[RED("eventNam")] 		public CName EventNam { get; set;}
+		[Ordinal(5)] [RED("eventNam")] 		public CName EventNam { get; set;}
 
-		[RED("activationTime")] 		public CFloat ActivationTime { get; set;}
+		[Ordinal(6)] [RED("activationTime")] 		public CFloat ActivationTime { get; set;}
 
-		[RED("clearOnEvent")] 		public CName ClearOnEvent { get; set;}
+		[Ordinal(7)] [RED("clearOnEvent")] 		public CName ClearOnEvent { get; set;}
 
 		public BTTaskGameplayEventListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

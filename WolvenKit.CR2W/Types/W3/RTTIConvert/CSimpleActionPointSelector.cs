@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSimpleActionPointSelector : CActionPointSelector
 	{
-		[RED("categories", 2,0)] 		public CArray<CName> Categories { get; set;}
+		[Ordinal(1)] [RED("categories", 2,0)] 		public CArray<CName> Categories { get; set;}
 
-		[RED("apTags")] 		public TagList ApTags { get; set;}
+		[Ordinal(2)] [RED("apTags")] 		public TagList ApTags { get; set;}
 
-		[RED("areaTags")] 		public TagList AreaTags { get; set;}
+		[Ordinal(3)] [RED("areaTags")] 		public TagList AreaTags { get; set;}
 
-		[RED("apAreaTag")] 		public CName ApAreaTag { get; set;}
+		[Ordinal(4)] [RED("apAreaTag")] 		public CName ApAreaTag { get; set;}
 
-		[RED("keepActionPointOnceSelected")] 		public CBool KeepActionPointOnceSelected { get; set;}
+		[Ordinal(5)] [RED("keepActionPointOnceSelected")] 		public CBool KeepActionPointOnceSelected { get; set;}
 
-		[RED("useNearestMatchingAP")] 		public CBool UseNearestMatchingAP { get; set;}
+		[Ordinal(6)] [RED("useNearestMatchingAP")] 		public CBool UseNearestMatchingAP { get; set;}
 
 		public CSimpleActionPointSelector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

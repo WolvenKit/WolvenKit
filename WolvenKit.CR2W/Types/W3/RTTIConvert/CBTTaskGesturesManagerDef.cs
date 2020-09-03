@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,25 +11,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskGesturesManagerDef : IBehTreeTaskDefinition
 	{
-		[RED("disableGestures")] 		public CBehTreeValBool DisableGestures { get; set;}
+		[Ordinal(1)] [RED("disableGestures")] 		public CBehTreeValBool DisableGestures { get; set;}
 
-		[RED("removePlayedAnimationFromPool")] 		public CBehTreeValBool RemovePlayedAnimationFromPool { get; set;}
+		[Ordinal(2)] [RED("removePlayedAnimationFromPool")] 		public CBehTreeValBool RemovePlayedAnimationFromPool { get; set;}
 
-		[RED("gossipGesturesOnly")] 		public CBehTreeValBool GossipGesturesOnly { get; set;}
+		[Ordinal(3)] [RED("gossipGesturesOnly")] 		public CBehTreeValBool GossipGesturesOnly { get; set;}
 
-		[RED("cooldownBetweenGesture")] 		public CBehTreeValFloat CooldownBetweenGesture { get; set;}
+		[Ordinal(4)] [RED("cooldownBetweenGesture")] 		public CBehTreeValFloat CooldownBetweenGesture { get; set;}
 
-		[RED("chanceToPlayGesture")] 		public CBehTreeValFloat ChanceToPlayGesture { get; set;}
+		[Ordinal(5)] [RED("chanceToPlayGesture")] 		public CBehTreeValFloat ChanceToPlayGesture { get; set;}
 
-		[RED("dontActivateGestureWhenNotTalking")] 		public CBehTreeValBool DontActivateGestureWhenNotTalking { get; set;}
+		[Ordinal(6)] [RED("dontActivateGestureWhenNotTalking")] 		public CBehTreeValBool DontActivateGestureWhenNotTalking { get; set;}
 
-		[RED("onlyOneActorGesticulatingAtATime")] 		public CBehTreeValBool OnlyOneActorGesticulatingAtATime { get; set;}
+		[Ordinal(7)] [RED("onlyOneActorGesticulatingAtATime")] 		public CBehTreeValBool OnlyOneActorGesticulatingAtATime { get; set;}
 
-		[RED("stopGestureOnDeactivate")] 		public CBehTreeValBool StopGestureOnDeactivate { get; set;}
+		[Ordinal(8)] [RED("stopGestureOnDeactivate")] 		public CBehTreeValBool StopGestureOnDeactivate { get; set;}
 
-		[RED("dontOverrideRightHand")] 		public CBehTreeValBool DontOverrideRightHand { get; set;}
+		[Ordinal(9)] [RED("dontOverrideRightHand")] 		public CBehTreeValBool DontOverrideRightHand { get; set;}
 
-		[RED("dontOverrideLeftHand")] 		public CBehTreeValBool DontOverrideLeftHand { get; set;}
+		[Ordinal(10)] [RED("dontOverrideLeftHand")] 		public CBehTreeValBool DontOverrideLeftHand { get; set;}
 
 		public CBTTaskGesturesManagerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

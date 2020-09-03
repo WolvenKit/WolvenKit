@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_ApplicatorOnHit : W3ApplicatorEffect
 	{
-		[RED("fromSilverSword")] 		public CBool FromSilverSword { get; set;}
+		[Ordinal(1)] [RED("fromSilverSword")] 		public CBool FromSilverSword { get; set;}
 
-		[RED("fromSteelSword")] 		public CBool FromSteelSword { get; set;}
+		[Ordinal(2)] [RED("fromSteelSword")] 		public CBool FromSteelSword { get; set;}
 
-		[RED("fromSign")] 		public CBool FromSign { get; set;}
+		[Ordinal(3)] [RED("fromSign")] 		public CBool FromSign { get; set;}
 
-		[RED("fromAll")] 		public CBool FromAll { get; set;}
+		[Ordinal(4)] [RED("fromAll")] 		public CBool FromAll { get; set;}
 
 		public W3Effect_ApplicatorOnHit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

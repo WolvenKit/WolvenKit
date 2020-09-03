@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,31 +11,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTaskDeathAnimDecorator : IBehTreeTask
 	{
-		[RED("disableThisBranch")] 		public CBool DisableThisBranch { get; set;}
+		[Ordinal(1)] [RED("disableThisBranch")] 		public CBool DisableThisBranch { get; set;}
 
-		[RED("enabledRagdoll")] 		public CBool EnabledRagdoll { get; set;}
+		[Ordinal(2)] [RED("enabledRagdoll")] 		public CBool EnabledRagdoll { get; set;}
 
-		[RED("disableCollisionOnAnim")] 		public CBool DisableCollisionOnAnim { get; set;}
+		[Ordinal(3)] [RED("disableCollisionOnAnim")] 		public CBool DisableCollisionOnAnim { get; set;}
 
-		[RED("ignoreForceFinisher")] 		public CBool IgnoreForceFinisher { get; set;}
+		[Ordinal(4)] [RED("ignoreForceFinisher")] 		public CBool IgnoreForceFinisher { get; set;}
 
-		[RED("disableCollisionOnAnimDelay")] 		public CFloat DisableCollisionOnAnimDelay { get; set;}
+		[Ordinal(5)] [RED("disableCollisionOnAnimDelay")] 		public CFloat DisableCollisionOnAnimDelay { get; set;}
 
-		[RED("completeTimer")] 		public CFloat CompleteTimer { get; set;}
+		[Ordinal(6)] [RED("completeTimer")] 		public CFloat CompleteTimer { get; set;}
 
-		[RED("playFXOnActivate")] 		public CName PlayFXOnActivate { get; set;}
+		[Ordinal(7)] [RED("playFXOnActivate")] 		public CName PlayFXOnActivate { get; set;}
 
-		[RED("playFXOnDeactivate")] 		public CName PlayFXOnDeactivate { get; set;}
+		[Ordinal(8)] [RED("playFXOnDeactivate")] 		public CName PlayFXOnDeactivate { get; set;}
 
-		[RED("stopFXOnActivate")] 		public CName StopFXOnActivate { get; set;}
+		[Ordinal(9)] [RED("stopFXOnActivate")] 		public CName StopFXOnActivate { get; set;}
 
-		[RED("stopFXOnDeactivate")] 		public CName StopFXOnDeactivate { get; set;}
+		[Ordinal(10)] [RED("stopFXOnDeactivate")] 		public CName StopFXOnDeactivate { get; set;}
 
-		[RED("playSFXOnActivate")] 		public CName PlaySFXOnActivate { get; set;}
+		[Ordinal(11)] [RED("playSFXOnActivate")] 		public CName PlaySFXOnActivate { get; set;}
 
-		[RED("syncInstance")] 		public CHandle<CAnimationManualSlotSyncInstance> SyncInstance { get; set;}
+		[Ordinal(12)] [RED("syncInstance")] 		public CHandle<CAnimationManualSlotSyncInstance> SyncInstance { get; set;}
 
-		[RED("finisherEnabled")] 		public CBool FinisherEnabled { get; set;}
+		[Ordinal(13)] [RED("finisherEnabled")] 		public CBool FinisherEnabled { get; set;}
 
 		public CBehTreeTaskDeathAnimDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

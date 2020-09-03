@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ItemSelectMenuInitData : CObject
 	{
-		[RED("onlyEquipped")] 		public CBool OnlyEquipped { get; set;}
+		[Ordinal(1)] [RED("onlyEquipped")] 		public CBool OnlyEquipped { get; set;}
 
-		[RED("onlyUnequipped")] 		public CBool OnlyUnequipped { get; set;}
+		[Ordinal(2)] [RED("onlyUnequipped")] 		public CBool OnlyUnequipped { get; set;}
 
-		[RED("containTags", 2,0)] 		public CArray<CName> ContainTags { get; set;}
+		[Ordinal(3)] [RED("containTags", 2,0)] 		public CArray<CName> ContainTags { get; set;}
 
 		public W3ItemSelectMenuInitData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

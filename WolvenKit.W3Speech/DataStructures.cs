@@ -45,7 +45,7 @@ namespace WolvenKit.W3Speech
 
         }
 
-        public SpeechEntry(IWitcherArchiveType bundle, LanguageSpecificID id, UInt32 id_high, UInt32 wem_offs, UInt32 wem_size, UInt32 cr2w_offs, UInt32 cr2w_size, Single duration)
+        public SpeechEntry(IWitcherArchive bundle, LanguageSpecificID id, UInt32 id_high, UInt32 wem_offs, UInt32 wem_size, UInt32 cr2w_offs, UInt32 cr2w_size, Single duration)
         {
             this.Bundle = bundle;
             this.id = id;
@@ -61,7 +61,7 @@ namespace WolvenKit.W3Speech
             this.PageOffset = cr2w_offs;
         }
 
-        public IWitcherArchiveType Bundle { get; set; }
+        public IWitcherArchive Bundle { get; set; }
         public string Name { get; set; }
         public long Size { get; set; }
         public uint ZSize { get; set; }
@@ -102,7 +102,7 @@ namespace WolvenKit.W3Speech
     /// <summary>
     /// Describes the w3speech format.
     /// </summary>
-    public class W3Speech : IWitcherArchiveType
+    public class W3Speech : IWitcherArchive
     {
         /// <summary>
         /// Usually CPSW.

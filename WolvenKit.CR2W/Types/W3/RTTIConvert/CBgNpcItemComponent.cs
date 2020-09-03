@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBgNpcItemComponent : CBgMeshComponent
 	{
-		[RED("itemName")] 		public CName ItemName { get; set;}
+		[Ordinal(1)] [RED("itemName")] 		public CName ItemName { get; set;}
 
-		[RED("itemCategory")] 		public CName ItemCategory { get; set;}
+		[Ordinal(2)] [RED("itemCategory")] 		public CName ItemCategory { get; set;}
 
-		[RED("defaultState")] 		public CEnum<EItemState> DefaultState { get; set;}
+		[Ordinal(3)] [RED("defaultState")] 		public CEnum<EItemState> DefaultState { get; set;}
 
-		[RED("equipSlot")] 		public CName EquipSlot { get; set;}
+		[Ordinal(4)] [RED("equipSlot")] 		public CName EquipSlot { get; set;}
 
-		[RED("holdSlot")] 		public CName HoldSlot { get; set;}
+		[Ordinal(5)] [RED("holdSlot")] 		public CName HoldSlot { get; set;}
 
 		public CBgNpcItemComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

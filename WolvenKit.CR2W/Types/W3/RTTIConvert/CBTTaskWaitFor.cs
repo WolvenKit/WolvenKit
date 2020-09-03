@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWaitFor : IBehTreeTask
 	{
-		[RED("waitForTag")] 		public CName WaitForTag { get; set;}
+		[Ordinal(1)] [RED("waitForTag")] 		public CName WaitForTag { get; set;}
 
-		[RED("timeout")] 		public CFloat Timeout { get; set;}
+		[Ordinal(2)] [RED("timeout")] 		public CFloat Timeout { get; set;}
 
-		[RED("testDistance")] 		public CFloat TestDistance { get; set;}
+		[Ordinal(3)] [RED("testDistance")] 		public CFloat TestDistance { get; set;}
 
-		[RED("timeoutCounter")] 		public CFloat TimeoutCounter { get; set;}
+		[Ordinal(4)] [RED("timeoutCounter")] 		public CFloat TimeoutCounter { get; set;}
 
 		public CBTTaskWaitFor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

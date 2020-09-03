@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IAttachment : CObject
 	{
-		[RED("parent")] 		public CPtr<CNode> Parent { get; set;}
+		[Ordinal(1)] [RED("parent")] 		public CPtr<CNode> Parent { get; set;}
 
-		[RED("child")] 		public CPtr<CNode> Child { get; set;}
+		[Ordinal(2)] [RED("child")] 		public CPtr<CNode> Child { get; set;}
 
-		[RED("isBroken")] 		public CBool IsBroken { get; set;}
+		[Ordinal(3)] [RED("isBroken")] 		public CBool IsBroken { get; set;}
 
 		public IAttachment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CActionPoint : CGameplayEntity
 	{
-		[RED("events", 2,0)] 		public CArray<SEntityActionsRouterEntry> Events { get; set;}
+		[Ordinal(1)] [RED("events", 2,0)] 		public CArray<SEntityActionsRouterEntry> Events { get; set;}
 
-		[RED("actionBreakable")] 		public CBool ActionBreakable { get; set;}
+		[Ordinal(2)] [RED("actionBreakable")] 		public CBool ActionBreakable { get; set;}
 
-		[RED("overrideActionBreakableInComponent")] 		public CBool OverrideActionBreakableInComponent { get; set;}
+		[Ordinal(3)] [RED("overrideActionBreakableInComponent")] 		public CBool OverrideActionBreakableInComponent { get; set;}
 
 		public CActionPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

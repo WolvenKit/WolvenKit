@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class STimeScaleSource : CVariable
 	{
-		[RED("timeScale")] 		public CFloat TimeScale { get; set;}
+		[Ordinal(1)] [RED("timeScale")] 		public CFloat TimeScale { get; set;}
 
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(2)] [RED("name")] 		public CName Name { get; set;}
 
-		[RED("affectCamera")] 		public CBool AffectCamera { get; set;}
+		[Ordinal(3)] [RED("affectCamera")] 		public CBool AffectCamera { get; set;}
 
-		[RED("dontSave")] 		public CBool DontSave { get; set;}
+		[Ordinal(4)] [RED("dontSave")] 		public CBool DontSave { get; set;}
 
-		[RED("priorityIndex")] 		public CUInt32 PriorityIndex { get; set;}
+		[Ordinal(5)] [RED("priorityIndex")] 		public CUInt32 PriorityIndex { get; set;}
 
 		public STimeScaleSource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

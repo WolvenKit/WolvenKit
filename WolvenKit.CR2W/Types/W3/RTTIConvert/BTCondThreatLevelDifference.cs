@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondThreatLevelDifference : IBehTreeTask
 	{
-		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
+		[Ordinal(1)] [RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
-		[RED("value")] 		public CInt32 Value { get; set;}
+		[Ordinal(2)] [RED("value")] 		public CInt32 Value { get; set;}
 
-		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(3)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
-		[RED("useNamedTarget")] 		public CName UseNamedTarget { get; set;}
+		[Ordinal(4)] [RED("useNamedTarget")] 		public CName UseNamedTarget { get; set;}
 
-		[RED("saveTargetOnGameplayEvent")] 		public CName SaveTargetOnGameplayEvent { get; set;}
+		[Ordinal(5)] [RED("saveTargetOnGameplayEvent")] 		public CName SaveTargetOnGameplayEvent { get; set;}
 
-		[RED("m_Target")] 		public CHandle<CNode> M_Target { get; set;}
+		[Ordinal(6)] [RED("m_Target")] 		public CHandle<CNode> M_Target { get; set;}
 
 		public BTCondThreatLevelDifference(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

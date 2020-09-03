@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeTaskProcessProjectile : IBehTreeTask
 	{
-		[RED("destroyProjectileOnDeactivate")] 		public CBool DestroyProjectileOnDeactivate { get; set;}
+		[Ordinal(1)] [RED("destroyProjectileOnDeactivate")] 		public CBool DestroyProjectileOnDeactivate { get; set;}
 
-		[RED("combatDataStorage")] 		public CHandle<CHumanAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(2)] [RED("combatDataStorage")] 		public CHandle<CHumanAICombatStorage> CombatDataStorage { get; set;}
 
-		[RED("takeProjectile")] 		public CBool TakeProjectile { get; set;}
+		[Ordinal(3)] [RED("takeProjectile")] 		public CBool TakeProjectile { get; set;}
 
-		[RED("projTemplate")] 		public CHandle<CEntityTemplate> ProjTemplate { get; set;}
+		[Ordinal(4)] [RED("projTemplate")] 		public CHandle<CEntityTemplate> ProjTemplate { get; set;}
 
 		public IBehTreeTaskProcessProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

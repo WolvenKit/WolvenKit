@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PlayerStateExploration : CR4PlayerStateExtendedMovable
 	{
-		[RED("wantsToSheatheWeapon")] 		public CBool WantsToSheatheWeapon { get; set;}
+		[Ordinal(1)] [RED("wantsToSheatheWeapon")] 		public CBool WantsToSheatheWeapon { get; set;}
 
-		[RED("m_lastUsedPCInput")] 		public CBool M_lastUsedPCInput { get; set;}
+		[Ordinal(2)] [RED("m_lastUsedPCInput")] 		public CBool M_lastUsedPCInput { get; set;}
 
-		[RED("cachedPos")] 		public Vector CachedPos { get; set;}
+		[Ordinal(3)] [RED("cachedPos")] 		public Vector CachedPos { get; set;}
 
-		[RED("constDamper")] 		public CHandle<ConstDamper> ConstDamper { get; set;}
+		[Ordinal(4)] [RED("constDamper")] 		public CHandle<ConstDamper> ConstDamper { get; set;}
 
 		public CR4PlayerStateExploration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSlotComponent : CComponent
 	{
-		[RED("slots", 2,0)] 		public CArray<SSlotInfo> Slots { get; set;}
+		[Ordinal(1)] [RED("slots", 2,0)] 		public CArray<SSlotInfo> Slots { get; set;}
 
-		[RED("sourceSkeleton")] 		public CSoft<CSkeleton> SourceSkeleton { get; set;}
+		[Ordinal(2)] [RED("sourceSkeleton")] 		public CSoft<CSkeleton> SourceSkeleton { get; set;}
 
 		public CSlotComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

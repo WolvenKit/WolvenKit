@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskLockCameraToTargetDef : IBehTreeTaskDefinition
 	{
-		[RED("lock")] 		public CBool Lock { get; set;}
+		[Ordinal(1)] [RED("lock")] 		public CBool Lock { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(2)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
 		public BTTaskLockCameraToTargetDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

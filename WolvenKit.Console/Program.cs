@@ -698,7 +698,7 @@ namespace WolvenKit.Console
             var sm = new SoundManager();
             sm.LoadAll("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
 
-            var managers = new List<IWitcherArchive>() { bm, tm, cm, em, sm };
+            var managers = new List<IWitcherArchiveManager>() { bm, tm, cm, em, sm };
 
             using (StreamWriter writer = File.CreateText("C:\\Users\\Maxim\\Desktop\\wk\\cons_wk_unbundled_file_namesv2.txt"))
             {

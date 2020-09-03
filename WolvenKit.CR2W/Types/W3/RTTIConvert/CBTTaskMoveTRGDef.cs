@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskMoveTRGDef : IBehTreeTaskDefinition
 	{
-		[RED("fleeDistance")] 		public CFloat FleeDistance { get; set;}
+		[Ordinal(1)] [RED("fleeDistance")] 		public CFloat FleeDistance { get; set;}
 
-		[RED("activationDistance")] 		public CFloat ActivationDistance { get; set;}
+		[Ordinal(2)] [RED("activationDistance")] 		public CFloat ActivationDistance { get; set;}
 
-		[RED("ignoreEntityWithTag")] 		public CName IgnoreEntityWithTag { get; set;}
+		[Ordinal(3)] [RED("ignoreEntityWithTag")] 		public CName IgnoreEntityWithTag { get; set;}
 
-		[RED("flee")] 		public CBool Flee { get; set;}
+		[Ordinal(4)] [RED("flee")] 		public CBool Flee { get; set;}
 
 		public CBTTaskMoveTRGDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

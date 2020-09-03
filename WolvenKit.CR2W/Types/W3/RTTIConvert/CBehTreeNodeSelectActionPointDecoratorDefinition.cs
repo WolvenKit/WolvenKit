@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeSelectActionPointDecoratorDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("delayOnFailure")] 		public CBehTreeValFloat DelayOnFailure { get; set;}
+		[Ordinal(1)] [RED("delayOnFailure")] 		public CBehTreeValFloat DelayOnFailure { get; set;}
 
-		[RED("delayOnSuccess")] 		public CBehTreeValFloat DelayOnSuccess { get; set;}
+		[Ordinal(2)] [RED("delayOnSuccess")] 		public CBehTreeValFloat DelayOnSuccess { get; set;}
 
-		[RED("delayOnInterruption")] 		public CBehTreeValFloat DelayOnInterruption { get; set;}
+		[Ordinal(3)] [RED("delayOnInterruption")] 		public CBehTreeValFloat DelayOnInterruption { get; set;}
 
 		public CBehTreeNodeSelectActionPointDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

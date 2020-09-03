@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskManageFliesDef : IBehTreeTaskDefinition
 	{
-		[RED("entityToSummon")] 		public CHandle<CEntityTemplate> EntityToSummon { get; set;}
+		[Ordinal(1)] [RED("entityToSummon")] 		public CHandle<CEntityTemplate> EntityToSummon { get; set;}
 
-		[RED("maxFliesAlive")] 		public CInt32 MaxFliesAlive { get; set;}
+		[Ordinal(2)] [RED("maxFliesAlive")] 		public CInt32 MaxFliesAlive { get; set;}
 
-		[RED("delayBetweenSpawns")] 		public SRangeF DelayBetweenSpawns { get; set;}
+		[Ordinal(3)] [RED("delayBetweenSpawns")] 		public SRangeF DelayBetweenSpawns { get; set;}
 
-		[RED("delayToRespawn")] 		public SRangeF DelayToRespawn { get; set;}
+		[Ordinal(4)] [RED("delayToRespawn")] 		public SRangeF DelayToRespawn { get; set;}
 
 		public BTTaskManageFliesDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class RepairAllPopupData : ConfirmationPopupData
 	{
-		[RED("m_Price")] 		public CFloat M_Price { get; set;}
+		[Ordinal(1)] [RED("m_Price")] 		public CFloat M_Price { get; set;}
 
-		[RED("menuRef")] 		public CHandle<CR4BlacksmithMenu> MenuRef { get; set;}
+		[Ordinal(2)] [RED("menuRef")] 		public CHandle<CR4BlacksmithMenu> MenuRef { get; set;}
 
 		public RepairAllPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphValueAccNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("resetOnActivation")] 		public CBool ResetOnActivation { get; set;}
+		[Ordinal(1)] [RED("resetOnActivation")] 		public CBool ResetOnActivation { get; set;}
 
-		[RED("initValue")] 		public CFloat InitValue { get; set;}
+		[Ordinal(2)] [RED("initValue")] 		public CFloat InitValue { get; set;}
 
-		[RED("wrapValue")] 		public CBool WrapValue { get; set;}
+		[Ordinal(3)] [RED("wrapValue")] 		public CBool WrapValue { get; set;}
 
-		[RED("wrapValueThrMax")] 		public CFloat WrapValueThrMax { get; set;}
+		[Ordinal(4)] [RED("wrapValueThrMax")] 		public CFloat WrapValueThrMax { get; set;}
 
-		[RED("wrapValueThrMin")] 		public CFloat WrapValueThrMin { get; set;}
+		[Ordinal(5)] [RED("wrapValueThrMin")] 		public CFloat WrapValueThrMin { get; set;}
 
 		public CBehaviorGraphValueAccNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

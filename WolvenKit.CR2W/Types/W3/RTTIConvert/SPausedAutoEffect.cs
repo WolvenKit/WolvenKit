@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SPausedAutoEffect : CVariable
 	{
-		[RED("effectType")] 		public CEnum<EEffectType> EffectType { get; set;}
+		[Ordinal(1)] [RED("effectType")] 		public CEnum<EEffectType> EffectType { get; set;}
 
-		[RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(2)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		[RED("sourceName")] 		public CName SourceName { get; set;}
+		[Ordinal(3)] [RED("sourceName")] 		public CName SourceName { get; set;}
 
-		[RED("singleLock")] 		public CBool SingleLock { get; set;}
+		[Ordinal(4)] [RED("singleLock")] 		public CBool SingleLock { get; set;}
 
-		[RED("useMaxDuration")] 		public CBool UseMaxDuration { get; set;}
+		[Ordinal(5)] [RED("useMaxDuration")] 		public CBool UseMaxDuration { get; set;}
 
-		[RED("timeLeft")] 		public CFloat TimeLeft { get; set;}
+		[Ordinal(6)] [RED("timeLeft")] 		public CFloat TimeLeft { get; set;}
 
 		public SPausedAutoEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

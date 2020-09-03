@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardInteractiveLookAt : CEntity
 	{
-		[RED("lookAtDirector")] 		public CHandle<CModStoryBoardLookAtDirector> LookAtDirector { get; set;}
+		[Ordinal(1)] [RED("lookAtDirector")] 		public CHandle<CModStoryBoardLookAtDirector> LookAtDirector { get; set;}
 
-		[RED("actor")] 		public CHandle<CModStoryBoardActor> Actor { get; set;}
+		[Ordinal(2)] [RED("actor")] 		public CHandle<CModStoryBoardActor> Actor { get; set;}
 
-		[RED("lookAt")] 		public SStoryBoardLookAtSettings LookAt { get; set;}
+		[Ordinal(3)] [RED("lookAt")] 		public SStoryBoardLookAtSettings LookAt { get; set;}
 
-		[RED("isInteractiveMode")] 		public CBool IsInteractiveMode { get; set;}
+		[Ordinal(4)] [RED("isInteractiveMode")] 		public CBool IsInteractiveMode { get; set;}
 
-		[RED("stepRotSize")] 		public CFloat StepRotSize { get; set;}
+		[Ordinal(5)] [RED("stepRotSize")] 		public CFloat StepRotSize { get; set;}
 
 		public CModStoryBoardInteractiveLookAt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

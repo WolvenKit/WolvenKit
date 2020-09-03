@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeScriptDecoratorDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("forwardAvailability")] 		public CBool ForwardAvailability { get; set;}
+		[Ordinal(1)] [RED("forwardAvailability")] 		public CBool ForwardAvailability { get; set;}
 
-		[RED("forwardTestIfNotAvailable")] 		public CBool ForwardTestIfNotAvailable { get; set;}
+		[Ordinal(2)] [RED("forwardTestIfNotAvailable")] 		public CBool ForwardTestIfNotAvailable { get; set;}
 
-		[RED("invertAvailability")] 		public CBool InvertAvailability { get; set;}
+		[Ordinal(3)] [RED("invertAvailability")] 		public CBool InvertAvailability { get; set;}
 
-		[RED("skipIfActive")] 		public CBool SkipIfActive { get; set;}
+		[Ordinal(4)] [RED("skipIfActive")] 		public CBool SkipIfActive { get; set;}
 
-		[RED("runMainOnActivation")] 		public CBool RunMainOnActivation { get; set;}
+		[Ordinal(5)] [RED("runMainOnActivation")] 		public CBool RunMainOnActivation { get; set;}
 
-		[RED("taskOrigin")] 		public CHandle<IBehTreeTaskDefinition> TaskOrigin { get; set;}
+		[Ordinal(6)] [RED("taskOrigin")] 		public CHandle<IBehTreeTaskDefinition> TaskOrigin { get; set;}
 
 		public CBehTreeNodeScriptDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

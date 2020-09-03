@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEncounterCreatureDefinition : CObject
 	{
-		[RED("definitionName")] 		public CName DefinitionName { get; set;}
+		[Ordinal(1)] [RED("definitionName")] 		public CName DefinitionName { get; set;}
 
-		[RED("entityTemplate")] 		public CSoft<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(2)] [RED("entityTemplate")] 		public CSoft<CEntityTemplate> EntityTemplate { get; set;}
 
-		[RED("totalSpawnLimit")] 		public CUInt16 TotalSpawnLimit { get; set;}
+		[Ordinal(3)] [RED("totalSpawnLimit")] 		public CUInt16 TotalSpawnLimit { get; set;}
 
-		[RED("maxSpawnedAtOnce")] 		public CUInt16 MaxSpawnedAtOnce { get; set;}
+		[Ordinal(4)] [RED("maxSpawnedAtOnce")] 		public CUInt16 MaxSpawnedAtOnce { get; set;}
 
-		[RED("override")] 		public CBool Override { get; set;}
+		[Ordinal(5)] [RED("override")] 		public CBool Override { get; set;}
 
-		[RED("forcedAppearance")] 		public CName ForcedAppearance { get; set;}
+		[Ordinal(6)] [RED("forcedAppearance")] 		public CName ForcedAppearance { get; set;}
 
-		[RED("tags")] 		public TagList Tags { get; set;}
+		[Ordinal(7)] [RED("tags")] 		public TagList Tags { get; set;}
 
 		public CEncounterCreatureDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

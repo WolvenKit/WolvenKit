@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTMoveWithOffset : CMoveSTRotate
 	{
-		[RED("headingImportance")] 		public CFloat HeadingImportance { get; set;}
+		[Ordinal(1)] [RED("headingImportance")] 		public CFloat HeadingImportance { get; set;}
 
-		[RED("speedImportance")] 		public CFloat SpeedImportance { get; set;}
+		[Ordinal(2)] [RED("speedImportance")] 		public CFloat SpeedImportance { get; set;}
 
-		[RED("offset")] 		public CFloat Offset { get; set;}
+		[Ordinal(3)] [RED("offset")] 		public CFloat Offset { get; set;}
 
 		public CMoveSTMoveWithOffset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

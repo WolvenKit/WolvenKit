@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SingleMenuInitData : W3MenuInitData
 	{
-		[RED("fixedMenuName")] 		public CName FixedMenuName { get; set;}
+		[Ordinal(1)] [RED("fixedMenuName")] 		public CName FixedMenuName { get; set;}
 
-		[RED("ignoreMeditationCheck")] 		public CBool IgnoreMeditationCheck { get; set;}
+		[Ordinal(2)] [RED("ignoreMeditationCheck")] 		public CBool IgnoreMeditationCheck { get; set;}
 
-		[RED("isBonusMeditationAvailable")] 		public CBool IsBonusMeditationAvailable { get; set;}
+		[Ordinal(3)] [RED("isBonusMeditationAvailable")] 		public CBool IsBonusMeditationAvailable { get; set;}
 
-		[RED("unlockCraftingMenu")] 		public CBool UnlockCraftingMenu { get; set;}
+		[Ordinal(4)] [RED("unlockCraftingMenu")] 		public CBool UnlockCraftingMenu { get; set;}
 
-		[RED("m_blockOtherPanels")] 		public CBool M_blockOtherPanels { get; set;}
+		[Ordinal(5)] [RED("m_blockOtherPanels")] 		public CBool M_blockOtherPanels { get; set;}
 
 		public W3SingleMenuInitData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

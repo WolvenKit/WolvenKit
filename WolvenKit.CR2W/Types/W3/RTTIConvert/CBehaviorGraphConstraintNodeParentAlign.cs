@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphConstraintNodeParentAlign : CBehaviorGraphBaseNode
 	{
-		[RED("bone")] 		public CString Bone { get; set;}
+		[Ordinal(1)] [RED("bone")] 		public CString Bone { get; set;}
 
-		[RED("parentBone")] 		public CString ParentBone { get; set;}
+		[Ordinal(2)] [RED("parentBone")] 		public CString ParentBone { get; set;}
 
-		[RED("cachedControlValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlValueNode { get; set;}
+		[Ordinal(3)] [RED("cachedControlValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlValueNode { get; set;}
 
-		[RED("localSpace")] 		public CBool LocalSpace { get; set;}
+		[Ordinal(4)] [RED("localSpace")] 		public CBool LocalSpace { get; set;}
 
 		public CBehaviorGraphConstraintNodeParentAlign(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

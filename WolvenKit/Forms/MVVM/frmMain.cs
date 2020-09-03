@@ -185,6 +185,8 @@ namespace WolvenKit
                 return GetOutput();
             else if (persistString == typeof(frmWelcome).ToString())
                 return GetWelcome();
+            if (persistString == typeof(frmImportUtility).ToString())
+                return GetImportUtility();
             //else
             //{
             //    // DummyDoc overrides GetPersistString to add extra information into persistString.
@@ -948,7 +950,7 @@ namespace WolvenKit
                 }
 
                 WitcherListViewItem item = Details.SelectedPaths[i];
-                IWitcherArchive manager = Details.Managers.First(_ => _.TypeName == item.BundleType);
+                IWitcherArchiveManager manager = Details.Managers.First(_ => _.TypeName == item.BundleType);
 
                 skipping = AddToMod(item.RelativePath, manager, skipping, Details.AddAsDLC, Details.Uncook, Details.Export);
 
@@ -1277,7 +1279,7 @@ namespace WolvenKit
         private IDockContent GetModExplorer()
         {
             if (ModExplorer == null || ModExplorer.IsDisposed)
-                ModExplorer = new frmModExplorer(Logger);
+                ModExplorer = new frmModExplorer();
             return ModExplorer;
         }
         private void ShowModExplorer()
@@ -1287,15 +1289,17 @@ namespace WolvenKit
                 GetModExplorer();
                 ModExplorer.Show(dockPanel, DockState.DockLeft);
 
-                ModExplorer.RequestAssetBrowser += ModExplorer_RequestAssetBrowser;
-
-
-                ModExplorer.RequestFileOpen += ModExplorer_RequestFileOpen;
-                ModExplorer.RequestFileRename += ModExplorer_RequestFileRename;
-
-                ModExplorer.RequestFastRender += ModExplorer_RequestFastRender;
             }
             ModExplorer.Activate();
+
+
+            ModExplorer.RequestAssetBrowser += ModExplorer_RequestAssetBrowser;
+
+
+            ModExplorer.RequestFileOpen += ModExplorer_RequestFileOpen;
+            ModExplorer.RequestFileRename += ModExplorer_RequestFileRename;
+
+            ModExplorer.RequestFastRender += ModExplorer_RequestFastRender;
         }
         private IDockContent GetOutput()
         {
@@ -1355,16 +1359,14 @@ namespace WolvenKit
 
             FormModKit.Activate();
         }
+        private IDockContent GetImportUtility()
+        {
+            if (ImportUtility == null || ImportUtility.IsDisposed)
+                ImportUtility = new frmImportUtility();
+            return ImportUtility;
+        }
         private void ShowImportUtility()
         {
-            if (ActiveMod == null)
-            {
-                MessageBox.Show(@"Please create a new mod project."
-                    , "Missing Mod Project"
-                    , MessageBoxButtons.OK
-                    , MessageBoxIcon.Information);
-                return;
-            }
             if (ImportUtility == null || ImportUtility.IsDisposed)
             {
                 ImportUtility = new frmImportUtility();
@@ -1429,6 +1431,8 @@ namespace WolvenKit
             ShowModExplorer();
             ShowConsole();
             ShowOutput();
+            ShowImportUtility();
+
             ClearOutput();
         }
 
@@ -1443,6 +1447,7 @@ namespace WolvenKit
                 {
                     t.SaveFile();
                     t.Close();
+                    vm.OpenDocuments.Remove(t);
                 }
             }
             ModExplorer?.Close();
@@ -1500,6 +1505,7 @@ namespace WolvenKit
                 }
             }
             ShowModExplorer();
+            ShowImportUtility();
             ShowConsole();
             ShowOutput();
 
@@ -2207,7 +2213,7 @@ namespace WolvenKit
         /// <param name="uncook"></param>
         /// <param name="export"></param>
         /// <returns></returns>
-        private bool AddToMod(string relativePath, IWitcherArchive manager, bool skipping, bool addAsDLC, bool uncook = false, bool export = false)
+        private bool AddToMod(string relativePath, IWitcherArchiveManager manager, bool skipping, bool addAsDLC, bool uncook = false, bool export = false)
         {
             bool skip = skipping;
             string extension = Path.GetExtension(relativePath);
@@ -2506,8 +2512,29 @@ namespace WolvenKit
             {
                 var frmwelcome = new frmWelcome(this);
                 frmwelcome.ShowDialog();
+                switch (frmwelcome.DialogResult)
+                {
+                    case DialogResult.None:
+                        break;
+                    case DialogResult.OK:
+                        break;
+                    case DialogResult.Cancel:
+                        break;
+                    case DialogResult.Abort:
+                        break;
+                    case DialogResult.Retry:
+                        break;
+                    case DialogResult.Ignore:
+                        break;
+                    case DialogResult.Yes:
+                        break;
+                    case DialogResult.No:
+                        break;
+                    default:
+                        break;
+                }
             }
-
+            
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -2725,7 +2752,7 @@ namespace WolvenKit
         private void viewToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
             radishUtilitytoolStripMenuItem.Enabled = ActiveMod != null;
-            importUtilityToolStripMenuItem.Enabled = ActiveMod != null;
+            //importUtilityToolStripMenuItem.Enabled = ActiveMod != null;
         }
 
         private void gameToolStripMenuItem_DropDownOpening(object sender, EventArgs e)

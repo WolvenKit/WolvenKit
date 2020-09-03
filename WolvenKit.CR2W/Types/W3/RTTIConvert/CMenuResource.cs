@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMenuResource : IGuiResource
 	{
-		[RED("menuClass")] 		public CName MenuClass { get; set;}
+		[Ordinal(1)] [RED("menuClass")] 		public CName MenuClass { get; set;}
 
-		[RED("menuFlashSwf")] 		public CSoft<CSwfResource> MenuFlashSwf { get; set;}
+		[Ordinal(2)] [RED("menuFlashSwf")] 		public CSoft<CSwfResource> MenuFlashSwf { get; set;}
 
-		[RED("layer")] 		public CUInt32 Layer { get; set;}
+		[Ordinal(3)] [RED("layer")] 		public CUInt32 Layer { get; set;}
 
-		[RED("menuDef")] 		public CPtr<CMenuDef> MenuDef { get; set;}
+		[Ordinal(4)] [RED("menuDef")] 		public CPtr<CMenuDef> MenuDef { get; set;}
 
 		public CMenuResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

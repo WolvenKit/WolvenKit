@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTStep : IMoveSteeringTask
 	{
-		[RED("stepDistanceVar")] 		public CName StepDistanceVar { get; set;}
+		[Ordinal(1)] [RED("stepDistanceVar")] 		public CName StepDistanceVar { get; set;}
 
-		[RED("stepHeadingVar")] 		public CName StepHeadingVar { get; set;}
+		[Ordinal(2)] [RED("stepHeadingVar")] 		public CName StepHeadingVar { get; set;}
 
-		[RED("stepEvent")] 		public CName StepEvent { get; set;}
+		[Ordinal(3)] [RED("stepEvent")] 		public CName StepEvent { get; set;}
 
-		[RED("stepNotification")] 		public CName StepNotification { get; set;}
+		[Ordinal(4)] [RED("stepNotification")] 		public CName StepNotification { get; set;}
 
 		public CMoveSTStep(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

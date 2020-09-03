@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ISpawnTreeSpawnAroundNodeInitializer : ISpawnTreeScriptedInitializer
 	{
-		[RED("spawnRadiousMin")] 		public CFloat SpawnRadiousMin { get; set;}
+		[Ordinal(1)] [RED("spawnRadiousMin")] 		public CFloat SpawnRadiousMin { get; set;}
 
-		[RED("spawnRadiousMAx")] 		public CFloat SpawnRadiousMAx { get; set;}
+		[Ordinal(2)] [RED("spawnRadiousMAx")] 		public CFloat SpawnRadiousMAx { get; set;}
 
-		[RED("spawnNodeTag")] 		public CName SpawnNodeTag { get; set;}
+		[Ordinal(3)] [RED("spawnNodeTag")] 		public CName SpawnNodeTag { get; set;}
 
-		[RED("spawnNode")] 		public CHandle<CNode> SpawnNode { get; set;}
+		[Ordinal(4)] [RED("spawnNode")] 		public CHandle<CNode> SpawnNode { get; set;}
 
 		public ISpawnTreeSpawnAroundNodeInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

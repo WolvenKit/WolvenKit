@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMonsterParam : CGameplayEntityParam
 	{
-		[RED("isTeleporting")] 		public CBool IsTeleporting { get; set;}
+		[Ordinal(1)] [RED("isTeleporting")] 		public CBool IsTeleporting { get; set;}
 
-		[RED("canBeTargeted")] 		public CBool CanBeTargeted { get; set;}
+		[Ordinal(2)] [RED("canBeTargeted")] 		public CBool CanBeTargeted { get; set;}
 
-		[RED("canBeHitByFists")] 		public CBool CanBeHitByFists { get; set;}
+		[Ordinal(3)] [RED("canBeHitByFists")] 		public CBool CanBeHitByFists { get; set;}
 
-		[RED("canBeStrafed")] 		public CBool CanBeStrafed { get; set;}
+		[Ordinal(4)] [RED("canBeStrafed")] 		public CBool CanBeStrafed { get; set;}
 
-		[RED("monsterCategory")] 		public CInt32 MonsterCategory { get; set;}
+		[Ordinal(5)] [RED("monsterCategory")] 		public CInt32 MonsterCategory { get; set;}
 
-		[RED("soundMonsterName")] 		public CName SoundMonsterName { get; set;}
+		[Ordinal(6)] [RED("soundMonsterName")] 		public CName SoundMonsterName { get; set;}
 
 		public CMonsterParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

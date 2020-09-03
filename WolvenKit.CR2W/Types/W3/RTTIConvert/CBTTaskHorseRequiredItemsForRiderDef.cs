@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHorseRequiredItemsForRiderDef : IBehTreeHorseTaskDefinition
 	{
-		[RED("RightItemType")] 		public CName RightItemType { get; set;}
+		[Ordinal(1)] [RED("RightItemType")] 		public CName RightItemType { get; set;}
 
 		public CBTTaskHorseRequiredItemsForRiderDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

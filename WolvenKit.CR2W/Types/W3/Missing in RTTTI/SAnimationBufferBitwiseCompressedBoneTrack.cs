@@ -1,5 +1,7 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -9,14 +11,14 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAnimationBufferBitwiseCompressedBoneTrack : CVariable
 	{
-		[RED("position")] 		public SAnimationBufferBitwiseCompressedData Position { get; set;}
+		[Ordinal(0)] [RED("position")] 		public SAnimationBufferBitwiseCompressedData Position { get; set;}
 
-		[RED("orientation")] 		public SAnimationBufferBitwiseCompressedData Orientation { get; set;}
+		[Ordinal(1)] [RED("orientation")] 		public SAnimationBufferBitwiseCompressedData Orientation { get; set;}
 
 		/// <summary>
 		///  Missing in RTTI
 		/// </summary>
-		[RED("scale")] public SAnimationBufferBitwiseCompressedData Scale { get; set; }
+		[Ordinal(2)] [RED("scale")] public SAnimationBufferBitwiseCompressedData Scale { get; set; }
 
 
 		public SAnimationBufferBitwiseCompressedBoneTrack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSSceneTableEntry : CVariable
 	{
-		[RED("storyPhaseName")] 		public CSStoryPhaseNames StoryPhaseName { get; set;}
+		[Ordinal(1)] [RED("storyPhaseName")] 		public CSStoryPhaseNames StoryPhaseName { get; set;}
 
-		[RED("cooldownTime")] 		public CFloat CooldownTime { get; set;}
+		[Ordinal(2)] [RED("cooldownTime")] 		public CFloat CooldownTime { get; set;}
 
-		[RED("timetable", 2,0)] 		public CArray<CSSceneTimetableEntry> Timetable { get; set;}
+		[Ordinal(3)] [RED("timetable", 2,0)] 		public CArray<CSSceneTimetableEntry> Timetable { get; set;}
 
 		public CSSceneTableEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

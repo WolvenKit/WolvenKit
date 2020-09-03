@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTriggerActivatorComponent : CComponent
 	{
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(1)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		[RED("height")] 		public CFloat Height { get; set;}
+		[Ordinal(2)] [RED("height")] 		public CFloat Height { get; set;}
 
-		[RED("channels")] 		public ETriggerChannel Channels { get; set;}
+		[Ordinal(3)] [RED("channels")] 		public CEnum<ETriggerChannel> Channels { get; set;}
 
-		[RED("enableCCD")] 		public CBool EnableCCD { get; set;}
+		[Ordinal(4)] [RED("enableCCD")] 		public CBool EnableCCD { get; set;}
 
-		[RED("maxContinousDistance")] 		public CFloat MaxContinousDistance { get; set;}
+		[Ordinal(5)] [RED("maxContinousDistance")] 		public CFloat MaxContinousDistance { get; set;}
 
 		public CTriggerActivatorComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,29 +11,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCheckAttitudes : IBehTreeTask
 	{
-		[RED("onlyHelpActorsFromTheSameAttidueGroup")] 		public CBool OnlyHelpActorsFromTheSameAttidueGroup { get; set;}
+		[Ordinal(1)] [RED("onlyHelpActorsFromTheSameAttidueGroup")] 		public CBool OnlyHelpActorsFromTheSameAttidueGroup { get; set;}
 
-		[RED("useReactionTarget")] 		public CBool UseReactionTarget { get; set;}
+		[Ordinal(2)] [RED("useReactionTarget")] 		public CBool UseReactionTarget { get; set;}
 
-		[RED("owner")] 		public CHandle<CActor> Owner { get; set;}
+		[Ordinal(3)] [RED("owner")] 		public CHandle<CActor> Owner { get; set;}
 
-		[RED("sender")] 		public CHandle<CActor> Sender { get; set;}
+		[Ordinal(4)] [RED("sender")] 		public CHandle<CActor> Sender { get; set;}
 
-		[RED("sendersTarget")] 		public CHandle<CActor> SendersTarget { get; set;}
+		[Ordinal(5)] [RED("sendersTarget")] 		public CHandle<CActor> SendersTarget { get; set;}
 
-		[RED("attitudeToSender")] 		public CEnum<EAIAttitude> AttitudeToSender { get; set;}
+		[Ordinal(6)] [RED("attitudeToSender")] 		public CEnum<EAIAttitude> AttitudeToSender { get; set;}
 
-		[RED("attitudeToSendersTarget")] 		public CEnum<EAIAttitude> AttitudeToSendersTarget { get; set;}
+		[Ordinal(7)] [RED("attitudeToSendersTarget")] 		public CEnum<EAIAttitude> AttitudeToSendersTarget { get; set;}
 
-		[RED("senderAttitudeGroup")] 		public CName SenderAttitudeGroup { get; set;}
+		[Ordinal(8)] [RED("senderAttitudeGroup")] 		public CName SenderAttitudeGroup { get; set;}
 
-		[RED("sendersTargetAttitudeGroup")] 		public CName SendersTargetAttitudeGroup { get; set;}
+		[Ordinal(9)] [RED("sendersTargetAttitudeGroup")] 		public CName SendersTargetAttitudeGroup { get; set;}
 
-		[RED("ownerAttitudeGroup")] 		public CName OwnerAttitudeGroup { get; set;}
+		[Ordinal(10)] [RED("ownerAttitudeGroup")] 		public CName OwnerAttitudeGroup { get; set;}
 
-		[RED("actorToChangeAttitude")] 		public CHandle<CActor> ActorToChangeAttitude { get; set;}
+		[Ordinal(11)] [RED("actorToChangeAttitude")] 		public CHandle<CActor> ActorToChangeAttitude { get; set;}
 
-		[RED("reactionDataStorage")] 		public CHandle<CAIStorageReactionData> ReactionDataStorage { get; set;}
+		[Ordinal(12)] [RED("reactionDataStorage")] 		public CHandle<CAIStorageReactionData> ReactionDataStorage { get; set;}
 
 		public CBTTaskCheckAttitudes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

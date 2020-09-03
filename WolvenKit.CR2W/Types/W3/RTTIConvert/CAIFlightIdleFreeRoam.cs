@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFlightIdleFreeRoam : IAIFlightIdleTree
 	{
-		[RED("flightHeight")] 		public CFloat FlightHeight { get; set;}
+		[Ordinal(1)] [RED("flightHeight")] 		public CFloat FlightHeight { get; set;}
 
-		[RED("flyAround")] 		public CBool FlyAround { get; set;}
+		[Ordinal(2)] [RED("flyAround")] 		public CBool FlyAround { get; set;}
 
-		[RED("flyAroundDurationMin")] 		public CFloat FlyAroundDurationMin { get; set;}
+		[Ordinal(3)] [RED("flyAroundDurationMin")] 		public CFloat FlyAroundDurationMin { get; set;}
 
-		[RED("flyAroundDurationMax")] 		public CFloat FlyAroundDurationMax { get; set;}
+		[Ordinal(4)] [RED("flyAroundDurationMax")] 		public CFloat FlyAroundDurationMax { get; set;}
 
-		[RED("flightAreaSelection")] 		public CEnum<EAIAreaSelectionMode> FlightAreaSelection { get; set;}
+		[Ordinal(5)] [RED("flightAreaSelection")] 		public CEnum<EAIAreaSelectionMode> FlightAreaSelection { get; set;}
 
-		[RED("flightAreaOptionalTag")] 		public CName FlightAreaOptionalTag { get; set;}
+		[Ordinal(6)] [RED("flightAreaOptionalTag")] 		public CName FlightAreaOptionalTag { get; set;}
 
 		public CAIFlightIdleFreeRoam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

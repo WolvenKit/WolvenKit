@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRotateNPCbyMovementAdjustorDef : IBehTreeTaskDefinition
 	{
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(1)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[RED("target")] 		public CHandle<CActor> Target { get; set;}
+		[Ordinal(2)] [RED("target")] 		public CHandle<CActor> Target { get; set;}
 
-		[RED("active")] 		public CBool Active { get; set;}
+		[Ordinal(3)] [RED("active")] 		public CBool Active { get; set;}
 
-		[RED("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
+		[Ordinal(4)] [RED("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
 
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(5)] [RED("eventName")] 		public CName EventName { get; set;}
 
-		[RED("finishTaskOnAllowBlend")] 		public CBool FinishTaskOnAllowBlend { get; set;}
+		[Ordinal(6)] [RED("finishTaskOnAllowBlend")] 		public CBool FinishTaskOnAllowBlend { get; set;}
 
 		public CBTTaskRotateNPCbyMovementAdjustorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

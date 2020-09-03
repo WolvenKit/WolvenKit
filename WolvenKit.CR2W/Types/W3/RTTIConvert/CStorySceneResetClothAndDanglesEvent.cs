@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneResetClothAndDanglesEvent : CStorySceneEvent
 	{
-		[RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(1)] [RED("actor")] 		public CName Actor { get; set;}
 
-		[RED("forceRelaxedState")] 		public CBool ForceRelaxedState { get; set;}
+		[Ordinal(2)] [RED("forceRelaxedState")] 		public CBool ForceRelaxedState { get; set;}
 
 		public CStorySceneResetClothAndDanglesEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

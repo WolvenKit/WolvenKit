@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAttributeTooltip : CVariable
 	{
-		[RED("originName")] 		public CName OriginName { get; set;}
+		[Ordinal(1)] [RED("originName")] 		public CName OriginName { get; set;}
 
-		[RED("attributeName")] 		public CString AttributeName { get; set;}
+		[Ordinal(2)] [RED("attributeName")] 		public CString AttributeName { get; set;}
 
-		[RED("attributeColor")] 		public CString AttributeColor { get; set;}
+		[Ordinal(3)] [RED("attributeColor")] 		public CString AttributeColor { get; set;}
 
-		[RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(4)] [RED("value")] 		public CFloat Value { get; set;}
 
-		[RED("percentageValue")] 		public CBool PercentageValue { get; set;}
+		[Ordinal(5)] [RED("percentageValue")] 		public CBool PercentageValue { get; set;}
 
-		[RED("primaryStat")] 		public CBool PrimaryStat { get; set;}
+		[Ordinal(6)] [RED("primaryStat")] 		public CBool PrimaryStat { get; set;}
 
 		public SAttributeTooltip(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

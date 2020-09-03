@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_AutoStaminaRegen : W3AutoRegenEffect
 	{
-		[RED("regenModeIsCombat")] 		public CBool RegenModeIsCombat { get; set;}
+		[Ordinal(1)] [RED("regenModeIsCombat")] 		public CBool RegenModeIsCombat { get; set;}
 
-		[RED("cachedPlayer")] 		public CHandle<CR4Player> CachedPlayer { get; set;}
+		[Ordinal(2)] [RED("cachedPlayer")] 		public CHandle<CR4Player> CachedPlayer { get; set;}
 
 		public W3Effect_AutoStaminaRegen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

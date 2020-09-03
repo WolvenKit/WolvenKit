@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMergedWorldGeometryEntity : CEntity
 	{
-		[RED("sourceDataHash")] 		public CUInt64 SourceDataHash { get; set;}
+		[Ordinal(1)] [RED("sourceDataHash")] 		public CUInt64 SourceDataHash { get; set;}
 
-		[RED("worldBounds")] 		public Box WorldBounds { get; set;}
+		[Ordinal(2)] [RED("worldBounds")] 		public Box WorldBounds { get; set;}
 
-		[RED("gridCoordinates")] 		public CMergedWorldGeometryGridCoordinates GridCoordinates { get; set;}
+		[Ordinal(3)] [RED("gridCoordinates")] 		public CMergedWorldGeometryGridCoordinates GridCoordinates { get; set;}
 
-		[RED("statsDataSize")] 		public CUInt32 StatsDataSize { get; set;}
+		[Ordinal(4)] [RED("statsDataSize")] 		public CUInt32 StatsDataSize { get; set;}
 
-		[RED("statsNumTriangles")] 		public CUInt32 StatsNumTriangles { get; set;}
+		[Ordinal(5)] [RED("statsNumTriangles")] 		public CUInt32 StatsNumTriangles { get; set;}
 
-		[RED("statsNumVertices")] 		public CUInt32 StatsNumVertices { get; set;}
+		[Ordinal(6)] [RED("statsNumVertices")] 		public CUInt32 StatsNumVertices { get; set;}
 
 		public CMergedWorldGeometryEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

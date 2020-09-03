@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGrassCellMask : CVariable
 	{
-		[RED("srtFileName")] 		public CString SrtFileName { get; set;}
+		[Ordinal(1)] [RED("srtFileName")] 		public CString SrtFileName { get; set;}
 
-		[RED("firstRow")] 		public CInt32 FirstRow { get; set;}
+		[Ordinal(2)] [RED("firstRow")] 		public CInt32 FirstRow { get; set;}
 
-		[RED("lastRow")] 		public CInt32 LastRow { get; set;}
+		[Ordinal(3)] [RED("lastRow")] 		public CInt32 LastRow { get; set;}
 
-		[RED("firstCol")] 		public CInt32 FirstCol { get; set;}
+		[Ordinal(4)] [RED("firstCol")] 		public CInt32 FirstCol { get; set;}
 
-		[RED("lastCol")] 		public CInt32 LastCol { get; set;}
+		[Ordinal(5)] [RED("lastCol")] 		public CInt32 LastCol { get; set;}
 
-		[RED("cellSize")] 		public CFloat CellSize { get; set;}
+		[Ordinal(6)] [RED("cellSize")] 		public CFloat CellSize { get; set;}
 
-		[RED("bitmap")] 		public LongBitField Bitmap { get; set;}
+		[Ordinal(7)] [RED("bitmap")] 		public LongBitField Bitmap { get; set;}
 
 		public CGrassCellMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

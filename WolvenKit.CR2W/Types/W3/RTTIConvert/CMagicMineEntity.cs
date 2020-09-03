@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMagicMineEntity : CInteractiveEntity
 	{
-		[RED("tellTime")] 		public CFloat TellTime { get; set;}
+		[Ordinal(1)] [RED("tellTime")] 		public CFloat TellTime { get; set;}
 
-		[RED("damageVal")] 		public CFloat DamageVal { get; set;}
+		[Ordinal(2)] [RED("damageVal")] 		public CFloat DamageVal { get; set;}
 
-		[RED("boatDamageVal")] 		public CFloat BoatDamageVal { get; set;}
+		[Ordinal(3)] [RED("boatDamageVal")] 		public CFloat BoatDamageVal { get; set;}
 
-		[RED("damageRadius")] 		public CFloat DamageRadius { get; set;}
+		[Ordinal(4)] [RED("damageRadius")] 		public CFloat DamageRadius { get; set;}
 
-		[RED("mineTrigger")] 		public CHandle<CTriggerAreaComponent> MineTrigger { get; set;}
+		[Ordinal(5)] [RED("mineTrigger")] 		public CHandle<CTriggerAreaComponent> MineTrigger { get; set;}
 
 		public CMagicMineEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

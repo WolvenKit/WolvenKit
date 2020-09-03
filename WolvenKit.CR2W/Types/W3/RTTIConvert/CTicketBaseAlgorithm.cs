@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTicketBaseAlgorithm : ITicketAlgorithmScript
 	{
-		[RED("resetImportanceOnSpecialCombatAction")] 		public CBool ResetImportanceOnSpecialCombatAction { get; set;}
+		[Ordinal(1)] [RED("resetImportanceOnSpecialCombatAction")] 		public CBool ResetImportanceOnSpecialCombatAction { get; set;}
 
-		[RED("threatLevelBonus")] 		public CFloat ThreatLevelBonus { get; set;}
+		[Ordinal(2)] [RED("threatLevelBonus")] 		public CFloat ThreatLevelBonus { get; set;}
 
-		[RED("activationBonus")] 		public CFloat ActivationBonus { get; set;}
+		[Ordinal(3)] [RED("activationBonus")] 		public CFloat ActivationBonus { get; set;}
 
 		public CTicketBaseAlgorithm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

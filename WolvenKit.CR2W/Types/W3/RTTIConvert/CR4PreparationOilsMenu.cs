@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PreparationOilsMenu : CR4MenuBase
 	{
-		[RED("_gridInv")] 		public CHandle<W3GuiPreparationOilsInventoryComponent> _gridInv { get; set;}
+		[Ordinal(1)] [RED("_gridInv")] 		public CHandle<W3GuiPreparationOilsInventoryComponent> _gridInv { get; set;}
 
-		[RED("_currentInv")] 		public CHandle<W3GuiBaseInventoryComponent> _currentInv { get; set;}
+		[Ordinal(2)] [RED("_currentInv")] 		public CHandle<W3GuiBaseInventoryComponent> _currentInv { get; set;}
 
-		[RED("_inv")] 		public CHandle<CInventoryComponent> _inv { get; set;}
+		[Ordinal(3)] [RED("_inv")] 		public CHandle<CInventoryComponent> _inv { get; set;}
 
-		[RED("optionsItemActions", 2,0)] 		public CArray<CEnum<EInventoryActionType>> OptionsItemActions { get; set;}
+		[Ordinal(4)] [RED("optionsItemActions", 2,0)] 		public CArray<CEnum<EInventoryActionType>> OptionsItemActions { get; set;}
 
-		[RED("_currentQuickSlot")] 		public CEnum<EEquipmentSlots> _currentQuickSlot { get; set;}
+		[Ordinal(5)] [RED("_currentQuickSlot")] 		public CEnum<EEquipmentSlots> _currentQuickSlot { get; set;}
 
-		[RED("ITEMS_SIZE")] 		public CInt32 ITEMS_SIZE { get; set;}
+		[Ordinal(6)] [RED("ITEMS_SIZE")] 		public CInt32 ITEMS_SIZE { get; set;}
 
 		public CR4PreparationOilsMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

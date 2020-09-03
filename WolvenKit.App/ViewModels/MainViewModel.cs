@@ -393,7 +393,7 @@ namespace WolvenKit.App.ViewModels
         {
             string extension = Path.GetExtension(relativePath);
             string filename = Path.GetFileName(relativePath);
-            IWitcherArchive manager = MainController.Get().GetManagers(loadmods).FirstOrDefault(_ => _.TypeName == bundleType);
+            IWitcherArchiveManager manager = MainController.Get().GetManagers(loadmods).FirstOrDefault(_ => _.TypeName == bundleType);
 
             if (manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath)))
             {

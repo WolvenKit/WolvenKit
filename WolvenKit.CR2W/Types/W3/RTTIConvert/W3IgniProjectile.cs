@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3IgniProjectile : W3SignProjectile
 	{
-		[RED("channelCollided")] 		public CBool ChannelCollided { get; set;}
+		[Ordinal(1)] [RED("channelCollided")] 		public CBool ChannelCollided { get; set;}
 
-		[RED("dt")] 		public CFloat Dt { get; set;}
+		[Ordinal(2)] [RED("dt")] 		public CFloat Dt { get; set;}
 
-		[RED("isUsed")] 		public CBool IsUsed { get; set;}
+		[Ordinal(3)] [RED("isUsed")] 		public CBool IsUsed { get; set;}
 
 		public W3IgniProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

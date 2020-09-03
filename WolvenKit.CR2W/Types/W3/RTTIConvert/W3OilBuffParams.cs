@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,21 +11,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3OilBuffParams : W3BuffCustomParams
 	{
-		[RED("iconPath")] 		public CString IconPath { get; set;}
+		[Ordinal(1)] [RED("iconPath")] 		public CString IconPath { get; set;}
 
-		[RED("localizedName")] 		public CString LocalizedName { get; set;}
+		[Ordinal(2)] [RED("localizedName")] 		public CString LocalizedName { get; set;}
 
-		[RED("localizedDescription")] 		public CString LocalizedDescription { get; set;}
+		[Ordinal(3)] [RED("localizedDescription")] 		public CString LocalizedDescription { get; set;}
 
-		[RED("currCount")] 		public CInt32 CurrCount { get; set;}
+		[Ordinal(4)] [RED("currCount")] 		public CInt32 CurrCount { get; set;}
 
-		[RED("maxCount")] 		public CInt32 MaxCount { get; set;}
+		[Ordinal(5)] [RED("maxCount")] 		public CInt32 MaxCount { get; set;}
 
-		[RED("sword")] 		public SItemUniqueId Sword { get; set;}
+		[Ordinal(6)] [RED("sword")] 		public SItemUniqueId Sword { get; set;}
 
-		[RED("oilAbilityName")] 		public CName OilAbilityName { get; set;}
+		[Ordinal(7)] [RED("oilAbilityName")] 		public CName OilAbilityName { get; set;}
 
-		[RED("oilItemName")] 		public CName OilItemName { get; set;}
+		[Ordinal(8)] [RED("oilItemName")] 		public CName OilItemName { get; set;}
 
 		public W3OilBuffParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

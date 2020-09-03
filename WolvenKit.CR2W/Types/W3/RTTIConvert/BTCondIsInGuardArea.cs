@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondIsInGuardArea : IBehTreeTask
 	{
-		[RED("position")] 		public CEnum<ETargetName> Position { get; set;}
+		[Ordinal(1)] [RED("position")] 		public CEnum<ETargetName> Position { get; set;}
 
-		[RED("namedTarget")] 		public CName NamedTarget { get; set;}
+		[Ordinal(2)] [RED("namedTarget")] 		public CName NamedTarget { get; set;}
 
-		[RED("valueToReturnIfNoGA")] 		public CBool ValueToReturnIfNoGA { get; set;}
+		[Ordinal(3)] [RED("valueToReturnIfNoGA")] 		public CBool ValueToReturnIfNoGA { get; set;}
 
 		public BTCondIsInGuardArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

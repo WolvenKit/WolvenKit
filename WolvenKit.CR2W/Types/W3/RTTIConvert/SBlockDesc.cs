@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBlockDesc : CVariable
 	{
-		[RED("ock")] 		public CPtr<CQuestGraphBlock> Ock { get; set;}
+		[Ordinal(1)] [RED("ock")] 		public CPtr<CQuestGraphBlock> Ock { get; set;}
 
-		[RED("putName")] 		public CName PutName { get; set;}
+		[Ordinal(2)] [RED("putName")] 		public CName PutName { get; set;}
 
 		public SBlockDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

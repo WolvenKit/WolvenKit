@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventMimicsAnim : CStorySceneEventAnimClip
 	{
-		[RED("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(1)] [RED("animationName")] 		public CName AnimationName { get; set;}
 
-		[RED("fullEyesWeight")] 		public CBool FullEyesWeight { get; set;}
+		[Ordinal(2)] [RED("fullEyesWeight")] 		public CBool FullEyesWeight { get; set;}
 
-		[RED("filterOption")] 		public CName FilterOption { get; set;}
+		[Ordinal(3)] [RED("filterOption")] 		public CName FilterOption { get; set;}
 
-		[RED("friendlyName")] 		public CString FriendlyName { get; set;}
+		[Ordinal(4)] [RED("friendlyName")] 		public CString FriendlyName { get; set;}
 
 		public CStorySceneEventMimicsAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSoftTriggerAreaComponent : CTriggerAreaComponent
 	{
-		[RED("outerClippingAreaTags")] 		public TagList OuterClippingAreaTags { get; set;}
+		[Ordinal(1)] [RED("outerClippingAreaTags")] 		public TagList OuterClippingAreaTags { get; set;}
 
-		[RED("outerIncludedChannels")] 		public ETriggerChannel OuterIncludedChannels { get; set;}
+		[Ordinal(2)] [RED("outerIncludedChannels")] 		public CEnum<ETriggerChannel> OuterIncludedChannels { get; set;}
 
-		[RED("outerExcludedChannels")] 		public ETriggerChannel OuterExcludedChannels { get; set;}
+		[Ordinal(3)] [RED("outerExcludedChannels")] 		public CEnum<ETriggerChannel> OuterExcludedChannels { get; set;}
 
-		[RED("invertPenetrationFraction")] 		public CBool InvertPenetrationFraction { get; set;}
+		[Ordinal(4)] [RED("invertPenetrationFraction")] 		public CBool InvertPenetrationFraction { get; set;}
 
 		public CSoftTriggerAreaComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

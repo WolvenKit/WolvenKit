@@ -7,15 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types.Utils
 {
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SEntityBufferType1 : CVariable
     {
-        [RED] public CName ComponentName { get; set; }
-        [RED] public CGUID Guid { get; set; }
-        [RED] public CByteArray2 Buffer { get; set; }
+        [Ordinal(0)] [RED] public CName ComponentName { get; set; }
+        [Ordinal(1)] [RED] public CGUID Guid { get; set; }
+        [Ordinal(2)] [RED] public CByteArray2 Buffer { get; set; }
 
         public SEntityBufferType1(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCommentGraphBlock : CGraphHelperBlock
 	{
-		[RED("size")] 		public Vector Size { get; set;}
+		[Ordinal(1)] [RED("size")] 		public Vector Size { get; set;}
 
-		[RED("commentGraphBlockText")] 		public CString CommentGraphBlockText { get; set;}
+		[Ordinal(2)] [RED("commentGraphBlockText")] 		public CString CommentGraphBlockText { get; set;}
 
-		[RED("titleColor")] 		public CColor TitleColor { get; set;}
+		[Ordinal(3)] [RED("titleColor")] 		public CColor TitleColor { get; set;}
 
 		public CCommentGraphBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

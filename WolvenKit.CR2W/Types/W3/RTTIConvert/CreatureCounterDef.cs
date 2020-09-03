@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CreatureCounterDef : CVariable
 	{
-		[RED("entryName")] 		public CName EntryName { get; set;}
+		[Ordinal(1)] [RED("entryName")] 		public CName EntryName { get; set;}
 
-		[RED("creatureAmount")] 		public CInt32 CreatureAmount { get; set;}
+		[Ordinal(2)] [RED("creatureAmount")] 		public CInt32 CreatureAmount { get; set;}
 
 		public CreatureCounterDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

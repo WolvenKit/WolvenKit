@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDecoratorGlideDefinition : IBehTreeNodeFlightDecoratorDefinition
 	{
-		[RED("minChangeDelay")] 		public CFloat MinChangeDelay { get; set;}
+		[Ordinal(1)] [RED("minChangeDelay")] 		public CFloat MinChangeDelay { get; set;}
 
-		[RED("glideChance")] 		public CFloat GlideChance { get; set;}
+		[Ordinal(2)] [RED("glideChance")] 		public CFloat GlideChance { get; set;}
 
-		[RED("stopGlideChance")] 		public CFloat StopGlideChance { get; set;}
+		[Ordinal(3)] [RED("stopGlideChance")] 		public CFloat StopGlideChance { get; set;}
 
 		public CBehTreeNodeDecoratorGlideDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

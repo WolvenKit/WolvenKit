@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ISpawnTreeInitializer : CObject
 	{
-		[RED("graphPosX")] 		public CInt32 GraphPosX { get; set;}
+		[Ordinal(1)] [RED("graphPosX")] 		public CInt32 GraphPosX { get; set;}
 
-		[RED("graphPosY")] 		public CInt32 GraphPosY { get; set;}
+		[Ordinal(2)] [RED("graphPosY")] 		public CInt32 GraphPosY { get; set;}
 
-		[RED("comment")] 		public CString Comment { get; set;}
+		[Ordinal(3)] [RED("comment")] 		public CString Comment { get; set;}
 
-		[RED("id")] 		public CUInt64 Id { get; set;}
+		[Ordinal(4)] [RED("id")] 		public CUInt64 Id { get; set;}
 
-		[RED("overrideDeepInitializers")] 		public CBool OverrideDeepInitializers { get; set;}
+		[Ordinal(5)] [RED("overrideDeepInitializers")] 		public CBool OverrideDeepInitializers { get; set;}
 
 		public ISpawnTreeInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

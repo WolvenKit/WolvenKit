@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,25 +11,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimDangleConstraint_Hinge : CAnimSkeletalDangleConstraint
 	{
-		[RED("name")] 		public CString Name { get; set;}
+		[Ordinal(1)] [RED("name")] 		public CString Name { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(2)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		[RED("limit")] 		public CFloat Limit { get; set;}
+		[Ordinal(3)] [RED("limit")] 		public CFloat Limit { get; set;}
 
-		[RED("bounce")] 		public CFloat Bounce { get; set;}
+		[Ordinal(4)] [RED("bounce")] 		public CFloat Bounce { get; set;}
 
-		[RED("damp")] 		public CFloat Damp { get; set;}
+		[Ordinal(5)] [RED("damp")] 		public CFloat Damp { get; set;}
 
-		[RED("min")] 		public CFloat Min { get; set;}
+		[Ordinal(6)] [RED("min")] 		public CFloat Min { get; set;}
 
-		[RED("max")] 		public CFloat Max { get; set;}
+		[Ordinal(7)] [RED("max")] 		public CFloat Max { get; set;}
 
-		[RED("inertia")] 		public CFloat Inertia { get; set;}
+		[Ordinal(8)] [RED("inertia")] 		public CFloat Inertia { get; set;}
 
-		[RED("gravity")] 		public CFloat Gravity { get; set;}
+		[Ordinal(9)] [RED("gravity")] 		public CFloat Gravity { get; set;}
 
-		[RED("spring")] 		public CFloat Spring { get; set;}
+		[Ordinal(10)] [RED("spring")] 		public CFloat Spring { get; set;}
 
 		public CAnimDangleConstraint_Hinge(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

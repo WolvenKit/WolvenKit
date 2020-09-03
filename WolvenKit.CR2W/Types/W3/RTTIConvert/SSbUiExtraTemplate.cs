@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSbUiExtraTemplate : CVariable
 	{
-		[RED("templatePath")] 		public CString TemplatePath { get; set;}
+		[Ordinal(1)] [RED("templatePath")] 		public CString TemplatePath { get; set;}
 
-		[RED("caption")] 		public CString Caption { get; set;}
+		[Ordinal(2)] [RED("caption")] 		public CString Caption { get; set;}
 
-		[RED("subCategory1")] 		public CString SubCategory1 { get; set;}
+		[Ordinal(3)] [RED("subCategory1")] 		public CString SubCategory1 { get; set;}
 
-		[RED("subCategory2")] 		public CString SubCategory2 { get; set;}
+		[Ordinal(4)] [RED("subCategory2")] 		public CString SubCategory2 { get; set;}
 
 		public SSbUiExtraTemplate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

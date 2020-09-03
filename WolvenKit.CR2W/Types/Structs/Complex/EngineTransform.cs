@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -13,15 +14,15 @@ namespace WolvenKit.CR2W.Types
         public byte flags;
         public string type;
 
-        [RED] public CFloat Pitch { get; set; }
-        [RED] public CFloat Yaw { get; set; }
-        [RED] public CFloat Roll { get; set; }
-        [RED] public CFloat Scale_x { get; set; }
-        [RED] public CFloat Scale_y { get; set; }
-        [RED] public CFloat Scale_z { get; set; }
-        [RED] public CFloat X { get; set; }
-        [RED] public CFloat Y { get; set; }
-        [RED] public CFloat Z { get; set; }
+        [Ordinal(1)] [RED] public CFloat Pitch { get; set; }
+        [Ordinal(2)] [RED] public CFloat Yaw { get; set; }
+        [Ordinal(3)] [RED] public CFloat Roll { get; set; }
+        [Ordinal(4)] [RED] public CFloat Scale_x { get; set; }
+        [Ordinal(5)] [RED] public CFloat Scale_y { get; set; }
+        [Ordinal(6)] [RED] public CFloat Scale_z { get; set; }
+        [Ordinal(7)] [RED] public CFloat X { get; set; }
+        [Ordinal(8)] [RED] public CFloat Y { get; set; }
+        [Ordinal(9)] [RED] public CFloat Z { get; set; }
 
         public EngineTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

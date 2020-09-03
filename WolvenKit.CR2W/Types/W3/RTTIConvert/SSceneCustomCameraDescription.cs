@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSceneCustomCameraDescription : CVariable
 	{
-		[RED("cameraName")] 		public CName CameraName { get; set;}
+		[Ordinal(1)] [RED("cameraName")] 		public CName CameraName { get; set;}
 
-		[RED("fov")] 		public CFloat Fov { get; set;}
+		[Ordinal(2)] [RED("fov")] 		public CFloat Fov { get; set;}
 
-		[RED("cameraTransform")] 		public EngineTransform CameraTransform { get; set;}
+		[Ordinal(3)] [RED("cameraTransform")] 		public EngineTransform CameraTransform { get; set;}
 
 		public SSceneCustomCameraDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

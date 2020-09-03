@@ -1,5 +1,7 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -9,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CQuestScriptBlock : CQuestGraphBlock
 	{
-		[RED("functionName")] 		public CName FunctionName { get; set;}
+		[Ordinal(1)] [RED("functionName")] 		public CName FunctionName { get; set;}
 
-		[RED("saveMode")] 		public CEnum<EQuestScriptSaveMode> SaveMode { get; set;}
+		[Ordinal(2)] [RED("saveMode")] 		public CEnum<EQuestScriptSaveMode> SaveMode { get; set;}
 
-		[RED("parameters", 2,0)] 		public CArray<QuestScriptParam> Parameters { get; set;}
+		[Ordinal(3)] [RED("parameters", 2,0)] 		public CArray<QuestScriptParam> Parameters { get; set;}
 
-		[RED("choiceOutput")] 		public CBool ChoiceOutput { get; set;}
+		[Ordinal(4)] [RED("choiceOutput")] 		public CBool ChoiceOutput { get; set;}
 
-		[RED("caption")] 		public CString Caption { get; set;}
+		[Ordinal(5)] [RED("caption")] 		public CString Caption { get; set;}
 
 		//public CQuestScriptBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

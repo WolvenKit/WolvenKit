@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskLeshyGrabAttackDef : IBehTreeTaskDefinition
 	{
-		[RED("attackType")] 		public CEnum<EAttackType> AttackType { get; set;}
+		[Ordinal(1)] [RED("attackType")] 		public CEnum<EAttackType> AttackType { get; set;}
 
-		[RED("stopTaskAfterDealingDmg")] 		public CBool StopTaskAfterDealingDmg { get; set;}
+		[Ordinal(2)] [RED("stopTaskAfterDealingDmg")] 		public CBool StopTaskAfterDealingDmg { get; set;}
 
-		[RED("useDirectionalAttacks")] 		public CBool UseDirectionalAttacks { get; set;}
+		[Ordinal(3)] [RED("useDirectionalAttacks")] 		public CBool UseDirectionalAttacks { get; set;}
 
-		[RED("fxOnDamageInstigated")] 		public CName FxOnDamageInstigated { get; set;}
+		[Ordinal(4)] [RED("fxOnDamageInstigated")] 		public CName FxOnDamageInstigated { get; set;}
 
 		public CBTTaskLeshyGrabAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -11,11 +12,11 @@ namespace WolvenKit.CR2W.Types
     [REDMeta()]
     public class CColorShift : CVariable
     {
-        [RED("hue")] public CUInt16 Hue { get; set; }
+        [Ordinal(1)] [RED("hue")] public CUInt16 Hue { get; set; }
 
-        [RED("saturation")] public CInt8 Saturation { get; set; }
+        [Ordinal(2)] [RED("saturation")] public CInt8 Saturation { get; set; }
 
-        [RED("luminance")] public CInt8 Luminance { get; set; }
+        [Ordinal(3)] [RED("luminance")] public CInt8 Luminance { get; set; }
 
 
 

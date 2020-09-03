@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SEnchantmentFilters : CVariable
 	{
-		[RED("showHasIngredients")] 		public CBool ShowHasIngredients { get; set;}
+		[Ordinal(1)] [RED("showHasIngredients")] 		public CBool ShowHasIngredients { get; set;}
 
-		[RED("showMissingIngredients")] 		public CBool ShowMissingIngredients { get; set;}
+		[Ordinal(2)] [RED("showMissingIngredients")] 		public CBool ShowMissingIngredients { get; set;}
 
-		[RED("showLevel1")] 		public CBool ShowLevel1 { get; set;}
+		[Ordinal(3)] [RED("showLevel1")] 		public CBool ShowLevel1 { get; set;}
 
-		[RED("showLevel2")] 		public CBool ShowLevel2 { get; set;}
+		[Ordinal(4)] [RED("showLevel2")] 		public CBool ShowLevel2 { get; set;}
 
-		[RED("showLevel3")] 		public CBool ShowLevel3 { get; set;}
+		[Ordinal(5)] [RED("showLevel3")] 		public CBool ShowLevel3 { get; set;}
 
 		public SEnchantmentFilters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

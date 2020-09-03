@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PlayerStateSailingPassive : CR4PlayerStateUseGenericVehicle
 	{
-		[RED("boatLogic")] 		public CHandle<CBoatComponent> BoatLogic { get; set;}
+		[Ordinal(1)] [RED("boatLogic")] 		public CHandle<CBoatComponent> BoatLogic { get; set;}
 
-		[RED("dismountRequest")] 		public CBool DismountRequest { get; set;}
+		[Ordinal(2)] [RED("dismountRequest")] 		public CBool DismountRequest { get; set;}
 
-		[RED("vehicleCombatMgr")] 		public CHandle<W3VehicleCombatManager> VehicleCombatMgr { get; set;}
+		[Ordinal(3)] [RED("vehicleCombatMgr")] 		public CHandle<W3VehicleCombatManager> VehicleCombatMgr { get; set;}
 
-		[RED("rudderDamper")] 		public CFloat RudderDamper { get; set;}
+		[Ordinal(4)] [RED("rudderDamper")] 		public CFloat RudderDamper { get; set;}
 
 		public CR4PlayerStateSailingPassive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

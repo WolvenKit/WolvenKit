@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,31 +11,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CApexDestructionResource : CApexResource
 	{
-		[RED("maxDepth")] 		public CUInt32 MaxDepth { get; set;}
+		[Ordinal(1)] [RED("maxDepth")] 		public CUInt32 MaxDepth { get; set;}
 
-		[RED("originalMaxDepth")] 		public CUInt32 OriginalMaxDepth { get; set;}
+		[Ordinal(2)] [RED("originalMaxDepth")] 		public CUInt32 OriginalMaxDepth { get; set;}
 
-		[RED("supportDepth")] 		public CUInt32 SupportDepth { get; set;}
+		[Ordinal(3)] [RED("supportDepth")] 		public CUInt32 SupportDepth { get; set;}
 
-		[RED("neighborPadding")] 		public CFloat NeighborPadding { get; set;}
+		[Ordinal(4)] [RED("neighborPadding")] 		public CFloat NeighborPadding { get; set;}
 
-		[RED("initialAllowance")] 		public CUInt32 InitialAllowance { get; set;}
+		[Ordinal(5)] [RED("initialAllowance")] 		public CUInt32 InitialAllowance { get; set;}
 
-		[RED("formExtendedStructures")] 		public CBool FormExtendedStructures { get; set;}
+		[Ordinal(6)] [RED("formExtendedStructures")] 		public CBool FormExtendedStructures { get; set;}
 
-		[RED("useAssetSupport")] 		public CBool UseAssetSupport { get; set;}
+		[Ordinal(7)] [RED("useAssetSupport")] 		public CBool UseAssetSupport { get; set;}
 
-		[RED("useWorldSupport")] 		public CBool UseWorldSupport { get; set;}
+		[Ordinal(8)] [RED("useWorldSupport")] 		public CBool UseWorldSupport { get; set;}
 
-		[RED("chunkDepthMaterials", 2,0)] 		public CArray<CName> ChunkDepthMaterials { get; set;}
+		[Ordinal(9)] [RED("chunkDepthMaterials", 2,0)] 		public CArray<CName> ChunkDepthMaterials { get; set;}
 
-		[RED("unfracturedDensityScaler")] 		public CFloat UnfracturedDensityScaler { get; set;}
+		[Ordinal(10)] [RED("unfracturedDensityScaler")] 		public CFloat UnfracturedDensityScaler { get; set;}
 
-		[RED("fracturedDensityScaler")] 		public CFloat FracturedDensityScaler { get; set;}
+		[Ordinal(11)] [RED("fracturedDensityScaler")] 		public CFloat FracturedDensityScaler { get; set;}
 
-		[RED("fractureSoundEvent")] 		public StringAnsi FractureSoundEvent { get; set;}
+		[Ordinal(12)] [RED("fractureSoundEvent")] 		public StringAnsi FractureSoundEvent { get; set;}
 
-		[RED("fxName")] 		public CName FxName { get; set;}
+		[Ordinal(13)] [RED("fxName")] 		public CName FxName { get; set;}
 
 		public CApexDestructionResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

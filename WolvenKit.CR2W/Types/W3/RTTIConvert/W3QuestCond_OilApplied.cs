@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_OilApplied : CQuestScriptedCondition
 	{
-		[RED("swordType")] 		public CEnum<EQuestSword> SwordType { get; set;}
+		[Ordinal(1)] [RED("swordType")] 		public CEnum<EQuestSword> SwordType { get; set;}
 
-		[RED("oilName")] 		public CName OilName { get; set;}
+		[Ordinal(2)] [RED("oilName")] 		public CName OilName { get; set;}
 
-		[RED("isFulfilled")] 		public CBool IsFulfilled { get; set;}
+		[Ordinal(3)] [RED("isFulfilled")] 		public CBool IsFulfilled { get; set;}
 
-		[RED("listener")] 		public CHandle<W3QuestCond_OilApplied_Listener> Listener { get; set;}
+		[Ordinal(4)] [RED("listener")] 		public CHandle<W3QuestCond_OilApplied_Listener> Listener { get; set;}
 
 		public W3QuestCond_OilApplied(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

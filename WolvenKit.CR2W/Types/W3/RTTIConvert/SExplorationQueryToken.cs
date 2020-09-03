@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SExplorationQueryToken : CVariable
 	{
-		[RED("valid")] 		public CBool Valid { get; set;}
+		[Ordinal(1)] [RED("valid")] 		public CBool Valid { get; set;}
 
-		[RED("type")] 		public CEnum<EExplorationType> Type { get; set;}
+		[Ordinal(2)] [RED("type")] 		public CEnum<EExplorationType> Type { get; set;}
 
-		[RED("pointOnEdge")] 		public Vector PointOnEdge { get; set;}
+		[Ordinal(3)] [RED("pointOnEdge")] 		public Vector PointOnEdge { get; set;}
 
-		[RED("normal")] 		public Vector Normal { get; set;}
+		[Ordinal(4)] [RED("normal")] 		public Vector Normal { get; set;}
 
-		[RED("usesHands")] 		public CBool UsesHands { get; set;}
+		[Ordinal(5)] [RED("usesHands")] 		public CBool UsesHands { get; set;}
 
 		public SExplorationQueryToken(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPlayerStateDismountBoat : CPlayerStateDismountTheVehicle
 	{
-		[RED("boatComp")] 		public CHandle<CBoatComponent> BoatComp { get; set;}
+		[Ordinal(1)] [RED("boatComp")] 		public CHandle<CBoatComponent> BoatComp { get; set;}
 
-		[RED("remainingSlideDuration")] 		public CFloat RemainingSlideDuration { get; set;}
+		[Ordinal(2)] [RED("remainingSlideDuration")] 		public CFloat RemainingSlideDuration { get; set;}
 
-		[RED("fromPassenger")] 		public CBool FromPassenger { get; set;}
+		[Ordinal(3)] [RED("fromPassenger")] 		public CBool FromPassenger { get; set;}
 
 		public CPlayerStateDismountBoat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

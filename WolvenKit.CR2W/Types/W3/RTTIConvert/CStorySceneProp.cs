@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneProp : IStorySceneItem
 	{
-		[RED("id")] 		public CName Id { get; set;}
+		[Ordinal(1)] [RED("id")] 		public CName Id { get; set;}
 
-		[RED("entityTemplate")] 		public CSoft<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(2)] [RED("entityTemplate")] 		public CSoft<CEntityTemplate> EntityTemplate { get; set;}
 
-		[RED("forceBehaviorGraph")] 		public CName ForceBehaviorGraph { get; set;}
+		[Ordinal(3)] [RED("forceBehaviorGraph")] 		public CName ForceBehaviorGraph { get; set;}
 
-		[RED("resetBehaviorGraph")] 		public CBool ResetBehaviorGraph { get; set;}
+		[Ordinal(4)] [RED("resetBehaviorGraph")] 		public CBool ResetBehaviorGraph { get; set;}
 
-		[RED("useMimics")] 		public CBool UseMimics { get; set;}
+		[Ordinal(5)] [RED("useMimics")] 		public CBool UseMimics { get; set;}
 
 		public CStorySceneProp(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

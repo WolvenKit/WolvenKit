@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_PlayerSkillPoints : CQuestScriptedCondition
 	{
-		[RED("freeSkillPoints")] 		public CInt32 FreeSkillPoints { get; set;}
+		[Ordinal(1)] [RED("freeSkillPoints")] 		public CInt32 FreeSkillPoints { get; set;}
 
-		[RED("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
+		[Ordinal(2)] [RED("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
 
 		public W3QuestCond_PlayerSkillPoints(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

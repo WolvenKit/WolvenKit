@@ -1,4 +1,5 @@
-﻿using FastMember;
+﻿using DotNetHelper.FastMember.Extension.Extension;
+using FastMember;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -68,7 +69,7 @@ namespace WolvenKit.CR2W.Types
         /// a different layout in the uncooked and cooked state, e.g. CBitmapTexture)
         /// Is set on file read and should not be modified
         /// </summary>
-        public ushort Flags { get; set; }
+        public ushort REDFlags { get; set; }
 
 
         /// <summary>
@@ -159,36 +160,24 @@ namespace WolvenKit.CR2W.Types
         public virtual List<IEditableVariable> GetEditableVariables()
         {
             List<IEditableVariable> redvariables = new List<IEditableVariable>();
-            List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType()).ToList();
-            foreach (PropertyInfo pi in redprops)
+
+            foreach (Member item in this.GetREDMembers(true))
             {
-                // gets instantiated variables
-                if (pi.GetValue(this) is CVariable cvar)
-                {
+                object o = accessor[this, item.Name];
+                if (o is CVariable cvar)
                     redvariables.Add(cvar);
-                }
-                else
+                else // is null
                 {
-                    // what if they're null? 
-                    var cv = pi.GetValue(this);
-                    if (cv is null)
+                    REDAttribute att = item.GetMemberAttribute<REDAttribute>();
+                    // instantiate
+                    string vartype = REDReflection.GetREDTypeString(item.Type, att.Flags);
+                    string varname = REDReflection.GetREDNameString(item);
+
+                    var newvar = CR2WTypeManager.Create(vartype, varname, this.cr2w, this);     // create new variable and parent to this 
+                    if (newvar != null)
                     {
-                        // instantiate
-                        var redname = REDReflection.GetREDNameString(pi);                           // get redname from attribute
-                        var redtype = REDReflection.GetREDTypeString(pi.PropertyType);              // get redtype from type
-
-                        
-
-                        var newvar = CR2WTypeManager.Create(redtype, redname, this.cr2w, this);     // create new variable and parent to this 
-
-                        if (newvar != null)
-                            pi.SetValue(this, newvar);  // set value
-                        else
-                            throw new NotImplementedException();
-                    }
-                    else
-                    {
-                        throw new NotImplementedException();
+                        accessor[this, item.Name] = newvar;
+                        redvariables.Add(newvar);
                     }
                 }
             }
@@ -196,30 +185,24 @@ namespace WolvenKit.CR2W.Types
             return redvariables;
         }
 
-        public List<IEditableVariable> GetExistingVariables(bool includeBuffers = true, bool includeInherited = true)
+        public List<IEditableVariable> GetExistingVariables(bool includeBuffers = true)
         {
             List<IEditableVariable> redvariables = new List<IEditableVariable>();
-            var bindingFlags = BindingFlags.Public | BindingFlags.Instance;
-            if (!includeInherited)
-                bindingFlags |= BindingFlags.DeclaredOnly;
 
-
-            /// From msdn:
-            /// The GetProperties method does not return properties in a particular order, such as alphabetical or declaration order. 
-            /// Your code must not depend on the order in which properties are returned, because that order varies.
-            /// solutions: an order attribute, or built-in into REDAttribute
-            List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType(), bindingFlags).ToList();
-
-            foreach (PropertyInfo pi in redprops)
+            foreach (Member item in this.GetREDMembers(true))
             {
-                if (pi.GetCustomAttribute<REDAttribute>() is REDBufferAttribute && !includeBuffers )
+                if (!includeBuffers && item.GetMemberAttribute<REDBufferAttribute>() != null)
                     continue;
 
-                // gets instantiated variables
-                if (pi.GetValue(this) is CVariable cvar)
+                object o = accessor[this, item.Name];
+                if (o is CVariable cvar)
                 {
                     if (cvar.IsSerialized)
                         redvariables.Add(cvar);
+                }
+                else // is null
+                {
+                    // do nothing
                 }
             }
 
@@ -249,7 +232,7 @@ namespace WolvenKit.CR2W.Types
                     return;
                 }
 
-                //fields.AddRange(ReadAllRedVariables<REDAttribute>(file));
+                // parse all RED variables (normal + buffers)
                 ReadAllRedVariables<REDAttribute>(file);
             }
             // CVectors
@@ -300,7 +283,7 @@ namespace WolvenKit.CR2W.Types
                 }
                 #endregion
 
-                // parse buffers
+                // parse only buffers
                 ReadAllRedVariables<REDBufferAttribute>(file);
 
                 // checks
@@ -330,26 +313,28 @@ namespace WolvenKit.CR2W.Types
         private List<CVariable> ReadAllRedVariables<T>(BinaryReader br) where T : REDAttribute
         {
             var parsedvars = new List<CVariable>();
+            IEnumerable<Member> redproperties;
+            if (typeof(T) == typeof(REDBufferAttribute))
+                redproperties = this.GetREDBuffers();
+            else
+                redproperties = this.GetREDMembers(true);
 
-            List<PropertyInfo> redprops = REDReflection.GetREDProperties<T>(this.GetType()).ToList();
-            foreach (var pi in redprops)
+            foreach (Member item in redproperties)
             {
-                if (pi.GetCustomAttribute<REDAttribute>() is REDBufferAttribute bufferAttribute
+                var att = item.GetMemberAttribute<T>();
+                if (att is REDBufferAttribute bufferAttribute
                     && bufferAttribute.IsIgnored)
                 {
                     // add IsSerialized?
                     continue;
                 }
 
-                // Get
-                // get redname from attribute
-                var redname = REDReflection.GetREDNameString(pi);
-                // get redtype from type
-                var redtype = REDReflection.GetREDTypeString(pi.PropertyType);
+                string vartype = REDReflection.GetREDTypeString(item.Type, att.Flags);
+                string varname = REDReflection.GetREDNameString(item);
 
-                var parsedvar = CR2WTypeManager.Create(redtype, redname, this.cr2w, this);
+                var parsedvar = CR2WTypeManager.Create(vartype, varname, this.cr2w, this);     // create new variable and parent to this 
                 if (parsedvar == null)
-                    throw new InvalidParsingException($"Variable {redtype}:{redname} was not read in class {this.GetType().Name}");
+                    throw new InvalidParsingException($"Variable {vartype}:{varname} was not read in class {this.GetType().Name}");
 
                 // Read
                 parsedvar.Read(br, 0); //FIXME size?
@@ -358,9 +343,7 @@ namespace WolvenKit.CR2W.Types
                 // add in class
                 TryAddVariable(parsedvar);
 
-                //parsedvars.Add(parsedvar);
             }
-
             return parsedvars;
         }
 
@@ -426,23 +409,24 @@ namespace WolvenKit.CR2W.Types
             if (tags.Contains(EREDMetaInfo.REDStruct))
             {
                 // write all CVariables
-                List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType()).ToList();
-                foreach (PropertyInfo pi in redprops)
+                foreach (Member item in this.GetREDMembers(true))
                 {
+                    var att = item.GetMemberAttribute<REDAttribute>();
                     // don't write ignored buffers, they get written in the class
-                    if (pi.GetCustomAttribute<REDAttribute>() is REDBufferAttribute bufferAttribute
-                        && bufferAttribute.IsIgnored)
+                    if (att is REDBufferAttribute bufferAttribute && bufferAttribute.IsIgnored)
                     {
                         // add IsSerialized?
                         continue;
                     }
 
-
                     // just write the RedBuffer without variable id
-                    if (pi?.GetValue(this) is CVariable cbuf)
-                    {
-                        cbuf.Write(file);
-                    }
+                    if (this.accessor[this, item.Name] is CVariable av)
+                        av.Write(file);
+
+                    //if (pi?.GetValue(this) is CVariable cbuf)
+                    //{
+                    //    cbuf.Write(file);
+                    //}
                 }
             }
             // CVectors
@@ -451,23 +435,21 @@ namespace WolvenKit.CR2W.Types
                 // write leading null byte
                 file.Write((byte)0);
 
-                // write all initialized CVariables
-                List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType())
-                    .Where(_ => !(_.GetCustomAttribute<REDAttribute>() is REDBufferAttribute)).ToList();
-                foreach (PropertyInfo pi in redprops)
+                // write all initialized CVariables (no buffers!)
+                foreach (Member item in this.GetREDMembers(false))
                 {
-                    // try get value
-                    if (pi?.GetValue(this) is CVariable cvar)
+                    var att = item.GetMemberAttribute<REDAttribute>();
+                    if (this.accessor[this, item.Name] is CVariable av)
                     {
-                        if (cvar != null)
+                        if (av != null)
                         {
                             // only write values that are instantiated AND edited
-                            if (cvar.IsSerialized)
+                            if (av.IsSerialized)
                             {
                                 // check if healthy? don't know how
 
                                 // finally: write to stream
-                                CR2WFile.WriteVariable(file, cvar);
+                                CR2WFile.WriteVariable(file, av);
                             }
                             else
                             {
@@ -476,12 +458,12 @@ namespace WolvenKit.CR2W.Types
                         }
                         else
                             throw new SerializationException();
-
                     }
                     // proper enums
-                    else if (pi?.GetValue(this) is Enum @enum)
+                    // never happens
+                    else if (this.accessor[this, item.Name] is Enum @enum)
                     {
-
+                        throw new NotImplementedException();
                     }
                 }
 
@@ -489,25 +471,22 @@ namespace WolvenKit.CR2W.Types
                 file.Write((ushort)0);
 
                 // write all Buffers
-                List<PropertyInfo> redbuffers = REDReflection.GetREDProperties<REDBufferAttribute>(this.GetType()).ToList();
-                foreach (PropertyInfo pi in redbuffers)
+                foreach (Member item in this.GetREDBuffers())
                 {
-                    // ignore some RedBuffers (formerly unknown bytes)
-                    if (pi.GetCustomAttribute<REDAttribute>() is REDBufferAttribute bufferAttribute)
-                    {
-                        if (bufferAttribute.IsIgnored)
-                            continue;
-                        else
-                        {
-                            // just write the RedBuffer without variable id
-                            if (pi?.GetValue(this) is CVariable cbuf)
-                            {
-                                cbuf.Write(file);
-                            }
+                    var att = item.GetMemberAttribute<REDBufferAttribute>();
 
-                            continue;
-                            //throw new NotImplementedException();
+                    // ignore some RedBuffers (formerly unknown bytes)
+                    if (att.IsIgnored)
+                        continue;
+                    else
+                    {
+                        if (this.accessor[this, item.Name] is CVariable cbuf)
+                        {
+                            cbuf.Write(file);
                         }
+
+                        continue;
+                        //throw new NotImplementedException();
                     }
                 }
             }
@@ -523,7 +502,7 @@ namespace WolvenKit.CR2W.Types
         {
             // creates a new instance of the CVariable
             CVariable copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent, false);
-            copy.Flags = this.Flags;
+            copy.REDFlags = this.REDFlags;
 
             // copy all REDProperties and REDBuffers
             foreach (IEditableVariable item in GetEditableVariables())
@@ -589,28 +568,6 @@ namespace WolvenKit.CR2W.Types
         {
             return $"<{REDType}>{REDName}";
         }
-
-        //public override int GetHashCode()
-        //{
-        //    unchecked
-        //    {
-        //        int hash = 17;
-        //        hash = REDType == null ? hash : hash * 29 + REDType.GetHashCode();
-        //        hash = REDName == null ? hash : hash * 29 + REDName.GetHashCode();
-        //        hash = GetFullName() == null ? hash : hash * 29 + GetFullName().GetHashCode();
-        //        var tos = ToString();
-        //        hash = hash * 29 + tos.GetHashCode();
-        //        var evars = GetEditableVariables();
-        //        if (evars != null)
-        //        {
-        //            foreach (var item in evars)
-        //            {
-        //                hash = hash * 29 + item.GetHashCode();
-        //            }
-        //        }
-        //        return hash;
-        //    }
-        //}
 
         #endregion
 

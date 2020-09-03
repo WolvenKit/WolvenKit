@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskForceHitReactionDef : IBehTreeTaskDefinition
 	{
-		[RED("hitReactionType")] 		public CHandle<CBTEnumHitReactionType> HitReactionType { get; set;}
+		[Ordinal(1)] [RED("hitReactionType")] 		public CHandle<CBTEnumHitReactionType> HitReactionType { get; set;}
 
-		[RED("hitReactionSide")] 		public CHandle<CBTEnumHitReactionSide> HitReactionSide { get; set;}
+		[Ordinal(2)] [RED("hitReactionSide")] 		public CHandle<CBTEnumHitReactionSide> HitReactionSide { get; set;}
 
-		[RED("hitReactionDirection")] 		public CHandle<CBTEnumHitReactionDirection> HitReactionDirection { get; set;}
+		[Ordinal(3)] [RED("hitReactionDirection")] 		public CHandle<CBTEnumHitReactionDirection> HitReactionDirection { get; set;}
 
-		[RED("hitSwingType")] 		public CHandle<CBTEnumAttackSwingType> HitSwingType { get; set;}
+		[Ordinal(4)] [RED("hitSwingType")] 		public CHandle<CBTEnumAttackSwingType> HitSwingType { get; set;}
 
-		[RED("hitSwingDirection")] 		public CHandle<CBTEnumAttackSwingDriection> HitSwingDirection { get; set;}
+		[Ordinal(5)] [RED("hitSwingDirection")] 		public CHandle<CBTEnumAttackSwingDriection> HitSwingDirection { get; set;}
 
 		public BTTaskForceHitReactionDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

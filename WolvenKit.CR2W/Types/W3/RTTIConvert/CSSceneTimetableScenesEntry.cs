@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSSceneTimetableScenesEntry : CVariable
 	{
-		[RED("storyScene")] 		public CHandle<CStoryScene> StoryScene { get; set;}
+		[Ordinal(1)] [RED("storyScene")] 		public CHandle<CStoryScene> StoryScene { get; set;}
 
-		[RED("sceneInputSection")] 		public CString SceneInputSection { get; set;}
+		[Ordinal(2)] [RED("sceneInputSection")] 		public CString SceneInputSection { get; set;}
 
-		[RED("cooldownTime")] 		public CFloat CooldownTime { get; set;}
+		[Ordinal(3)] [RED("cooldownTime")] 		public CFloat CooldownTime { get; set;}
 
-		[RED("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(4)] [RED("weight")] 		public CFloat Weight { get; set;}
 
-		[RED("priority")] 		public CEnum<EArbitratorPriorities> Priority { get; set;}
+		[Ordinal(5)] [RED("priority")] 		public CEnum<EArbitratorPriorities> Priority { get; set;}
 
-		[RED("forceMode")] 		public CEnum<EStorySceneForcingMode> ForceMode { get; set;}
+		[Ordinal(6)] [RED("forceMode")] 		public CEnum<EStorySceneForcingMode> ForceMode { get; set;}
 
 		public CSSceneTimetableScenesEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

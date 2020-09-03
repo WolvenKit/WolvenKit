@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDecoratorSetSteeringNamedTargetNodeDefinition : IBehTreeNodeDecoratorSteeringTargeterDefinition
 	{
-		[RED("targetName")] 		public CName TargetName { get; set;}
+		[Ordinal(1)] [RED("targetName")] 		public CName TargetName { get; set;}
 
-		[RED("combatTarget")] 		public CBool CombatTarget { get; set;}
+		[Ordinal(2)] [RED("combatTarget")] 		public CBool CombatTarget { get; set;}
 
 		public CBehTreeNodeDecoratorSetSteeringNamedTargetNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

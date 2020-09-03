@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleAnchors : CR4HudModuleBase
 	{
-		[RED("m_fxUpdateAnchorsPositions")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateAnchorsPositions { get; set;}
+		[Ordinal(1)] [RED("m_fxUpdateAnchorsPositions")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateAnchorsPositions { get; set;}
 
-		[RED("m_fxUpdateAnchorsAspectRatio")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateAnchorsAspectRatio { get; set;}
+		[Ordinal(2)] [RED("m_fxUpdateAnchorsAspectRatio")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateAnchorsAspectRatio { get; set;}
 
 		public CR4HudModuleAnchors(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

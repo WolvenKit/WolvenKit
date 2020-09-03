@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalChildBase : CJournalBase
 	{
-		[RED("parentGuid")] 		public CGUID ParentGuid { get; set;}
+		[Ordinal(1)] [RED("parentGuid")] 		public CGUID ParentGuid { get; set;}
 
-		[RED("linkedParentGuid")] 		public CGUID LinkedParentGuid { get; set;}
+		[Ordinal(2)] [RED("linkedParentGuid")] 		public CGUID LinkedParentGuid { get; set;}
 
 		public CJournalChildBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBaseDamage : CObject
 	{
-		[RED("hitLocation")] 		public Vector HitLocation { get; set;}
+		[Ordinal(1)] [RED("hitLocation")] 		public Vector HitLocation { get; set;}
 
-		[RED("momentum")] 		public Vector Momentum { get; set;}
+		[Ordinal(2)] [RED("momentum")] 		public Vector Momentum { get; set;}
 
-		[RED("causer")] 		public CHandle<IScriptable> Causer { get; set;}
+		[Ordinal(3)] [RED("causer")] 		public CHandle<IScriptable> Causer { get; set;}
 
-		[RED("attacker")] 		public CHandle<CGameplayEntity> Attacker { get; set;}
+		[Ordinal(4)] [RED("attacker")] 		public CHandle<CGameplayEntity> Attacker { get; set;}
 
-		[RED("victim")] 		public CHandle<CGameplayEntity> Victim { get; set;}
+		[Ordinal(5)] [RED("victim")] 		public CHandle<CGameplayEntity> Victim { get; set;}
 
-		[RED("hitReactionAnimRequested")] 		public CBool HitReactionAnimRequested { get; set;}
+		[Ordinal(6)] [RED("hitReactionAnimRequested")] 		public CBool HitReactionAnimRequested { get; set;}
 
 		public CBaseDamage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

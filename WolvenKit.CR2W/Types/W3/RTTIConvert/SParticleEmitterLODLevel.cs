@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SParticleEmitterLODLevel : CVariable
 	{
-		[RED("emitterDurationSettings")] 		public EmitterDurationSettings EmitterDurationSettings { get; set;}
+		[Ordinal(1)] [RED("emitterDurationSettings")] 		public EmitterDurationSettings EmitterDurationSettings { get; set;}
 
-		[RED("emitterDelaySettings")] 		public EmitterDelaySettings EmitterDelaySettings { get; set;}
+		[Ordinal(2)] [RED("emitterDelaySettings")] 		public EmitterDelaySettings EmitterDelaySettings { get; set;}
 
-		[RED("burstList", 2,0)] 		public CArray<ParticleBurst> BurstList { get; set;}
+		[Ordinal(3)] [RED("burstList", 2,0)] 		public CArray<ParticleBurst> BurstList { get; set;}
 
-		[RED("birthRate")] 		public CPtr<IEvaluatorFloat> BirthRate { get; set;}
+		[Ordinal(4)] [RED("birthRate")] 		public CPtr<IEvaluatorFloat> BirthRate { get; set;}
 
-		[RED("sortBackToFront")] 		public CBool SortBackToFront { get; set;}
+		[Ordinal(5)] [RED("sortBackToFront")] 		public CBool SortBackToFront { get; set;}
 
-		[RED("isEnabled")] 		public CBool IsEnabled { get; set;}
+		[Ordinal(6)] [RED("isEnabled")] 		public CBool IsEnabled { get; set;}
 
 		public SParticleEmitterLODLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

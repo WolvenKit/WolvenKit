@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSoundAmbientEmitter : CEntity
 	{
-		[RED("soundEvents")] 		public StringAnsi SoundEvents { get; set;}
+		[Ordinal(1)] [RED("soundEvents")] 		public StringAnsi SoundEvents { get; set;}
 
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(2)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("occlusionEnabled")] 		public CBool OcclusionEnabled { get; set;}
+		[Ordinal(3)] [RED("occlusionEnabled")] 		public CBool OcclusionEnabled { get; set;}
 
 		public CSoundAmbientEmitter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

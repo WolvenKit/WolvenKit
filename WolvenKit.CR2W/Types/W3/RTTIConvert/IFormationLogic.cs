@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IFormationLogic : CObject
 	{
-		[RED("recomputionDelay")] 		public CFloat RecomputionDelay { get; set;}
+		[Ordinal(1)] [RED("recomputionDelay")] 		public CFloat RecomputionDelay { get; set;}
 
-		[RED("minCatchupDistance")] 		public CFloat MinCatchupDistance { get; set;}
+		[Ordinal(2)] [RED("minCatchupDistance")] 		public CFloat MinCatchupDistance { get; set;}
 
 		public IFormationLogic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

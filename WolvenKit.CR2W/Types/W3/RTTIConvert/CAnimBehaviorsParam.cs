@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimBehaviorsParam : CEntityTemplateParam
 	{
-		[RED("name")] 		public CString Name { get; set;}
+		[Ordinal(1)] [RED("name")] 		public CString Name { get; set;}
 
-		[RED("componentName")] 		public CString ComponentName { get; set;}
+		[Ordinal(2)] [RED("componentName")] 		public CString ComponentName { get; set;}
 
-		[RED("slots", 2,0)] 		public CArray<SBehaviorGraphInstanceSlot> Slots { get; set;}
+		[Ordinal(3)] [RED("slots", 2,0)] 		public CArray<SBehaviorGraphInstanceSlot> Slots { get; set;}
 
 		public CAnimBehaviorsParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

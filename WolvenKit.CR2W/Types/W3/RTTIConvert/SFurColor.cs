@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,29 +11,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurColor : CVariable
 	{
-		[RED("rootAlphaFalloff")] 		public CFloat RootAlphaFalloff { get; set;}
+		[Ordinal(1)] [RED("rootAlphaFalloff")] 		public CFloat RootAlphaFalloff { get; set;}
 
-		[RED("rootColor")] 		public CColor RootColor { get; set;}
+		[Ordinal(2)] [RED("rootColor")] 		public CColor RootColor { get; set;}
 
-		[RED("rootColorTex")] 		public CHandle<CBitmapTexture> RootColorTex { get; set;}
+		[Ordinal(3)] [RED("rootColorTex")] 		public CHandle<CBitmapTexture> RootColorTex { get; set;}
 
-		[RED("tipColor")] 		public CColor TipColor { get; set;}
+		[Ordinal(4)] [RED("tipColor")] 		public CColor TipColor { get; set;}
 
-		[RED("tipColorTex")] 		public CHandle<CBitmapTexture> TipColorTex { get; set;}
+		[Ordinal(5)] [RED("tipColorTex")] 		public CHandle<CBitmapTexture> TipColorTex { get; set;}
 
-		[RED("rootTipColorWeight")] 		public CFloat RootTipColorWeight { get; set;}
+		[Ordinal(6)] [RED("rootTipColorWeight")] 		public CFloat RootTipColorWeight { get; set;}
 
-		[RED("rootTipColorFalloff")] 		public CFloat RootTipColorFalloff { get; set;}
+		[Ordinal(7)] [RED("rootTipColorFalloff")] 		public CFloat RootTipColorFalloff { get; set;}
 
-		[RED("strandTex")] 		public CHandle<CBitmapTexture> StrandTex { get; set;}
+		[Ordinal(8)] [RED("strandTex")] 		public CHandle<CBitmapTexture> StrandTex { get; set;}
 
-		[RED("strandBlendMode")] 		public CEnum<EHairStrandBlendModeType> StrandBlendMode { get; set;}
+		[Ordinal(9)] [RED("strandBlendMode")] 		public CEnum<EHairStrandBlendModeType> StrandBlendMode { get; set;}
 
-		[RED("strandBlendScale")] 		public CFloat StrandBlendScale { get; set;}
+		[Ordinal(10)] [RED("strandBlendScale")] 		public CFloat StrandBlendScale { get; set;}
 
-		[RED("textureBrightness")] 		public CFloat TextureBrightness { get; set;}
+		[Ordinal(11)] [RED("textureBrightness")] 		public CFloat TextureBrightness { get; set;}
 
-		[RED("ambientEnvScale")] 		public CFloat AmbientEnvScale { get; set;}
+		[Ordinal(12)] [RED("ambientEnvScale")] 		public CFloat AmbientEnvScale { get; set;}
 
 		public SFurColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

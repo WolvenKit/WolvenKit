@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorGraphMapToDiscreteMapper : CVariable
 	{
-		[RED("Min input value")] 		public CFloat Min_input_value { get; set;}
+		[Ordinal(1)] [RED("Min input value")] 		public CFloat Min_input_value { get; set;}
 
-		[RED("Max input value")] 		public CFloat Max_input_value { get; set;}
+		[Ordinal(2)] [RED("Max input value")] 		public CFloat Max_input_value { get; set;}
 
-		[RED("outValue")] 		public CFloat OutValue { get; set;}
+		[Ordinal(3)] [RED("outValue")] 		public CFloat OutValue { get; set;}
 
 		public SBehaviorGraphMapToDiscreteMapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

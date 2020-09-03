@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskEredinCanPerformAction : IBehTreeTask
 	{
-		[RED("combatDataStorage")] 		public CHandle<CBossAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(1)] [RED("combatDataStorage")] 		public CHandle<CBossAICombatStorage> CombatDataStorage { get; set;}
 
-		[RED("action")] 		public CEnum<EBossAction> Action { get; set;}
+		[Ordinal(2)] [RED("action")] 		public CEnum<EBossAction> Action { get; set;}
 
 		public BTTaskEredinCanPerformAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

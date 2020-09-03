@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MicroQuestActivator : CGameplayEntity
 	{
-		[RED("microQuestEntries", 2,0)] 		public CArray<EncounterEntryDetails> MicroQuestEntries { get; set;}
+		[Ordinal(1)] [RED("microQuestEntries", 2,0)] 		public CArray<EncounterEntryDetails> MicroQuestEntries { get; set;}
 
-		[RED("selectedEntriesList", 2,0)] 		public CArray<EncounterEntryDetails> SelectedEntriesList { get; set;}
+		[Ordinal(2)] [RED("selectedEntriesList", 2,0)] 		public CArray<EncounterEntryDetails> SelectedEntriesList { get; set;}
 
-		[RED("chosenMicroQuestTag")] 		public CName ChosenMicroQuestTag { get; set;}
+		[Ordinal(3)] [RED("chosenMicroQuestTag")] 		public CName ChosenMicroQuestTag { get; set;}
 
-		[RED("isPlayerInArea")] 		public CBool IsPlayerInArea { get; set;}
+		[Ordinal(4)] [RED("isPlayerInArea")] 		public CBool IsPlayerInArea { get; set;}
 
 		public W3MicroQuestActivator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

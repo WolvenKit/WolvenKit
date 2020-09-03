@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodePlayVoicesetOnDeactivationDecoratorDefinition : IBehTreeNodeSpeechDecoratorDefinition
 	{
-		[RED("voiceSet")] 		public CBehTreeValString VoiceSet { get; set;}
+		[Ordinal(1)] [RED("voiceSet")] 		public CBehTreeValString VoiceSet { get; set;}
 
-		[RED("voicePriority")] 		public CBehTreeValInt VoicePriority { get; set;}
+		[Ordinal(2)] [RED("voicePriority")] 		public CBehTreeValInt VoicePriority { get; set;}
 
-		[RED("playAfterXTimes")] 		public CUInt16 PlayAfterXTimes { get; set;}
+		[Ordinal(3)] [RED("playAfterXTimes")] 		public CUInt16 PlayAfterXTimes { get; set;}
 
-		[RED("chanceToPlay")] 		public CFloat ChanceToPlay { get; set;}
+		[Ordinal(4)] [RED("chanceToPlay")] 		public CFloat ChanceToPlay { get; set;}
 
 		public CBehTreeNodePlayVoicesetOnDeactivationDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

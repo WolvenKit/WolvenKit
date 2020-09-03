@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskToadYrdenDef : IBehTreeTaskDefinition
 	{
-		[RED("npc")] 		public CHandle<CActor> Npc { get; set;}
+		[Ordinal(1)] [RED("npc")] 		public CHandle<CActor> Npc { get; set;}
 
-		[RED("leftYrden")] 		public CBool LeftYrden { get; set;}
+		[Ordinal(2)] [RED("leftYrden")] 		public CBool LeftYrden { get; set;}
 
-		[RED("leaveAfter")] 		public CFloat LeaveAfter { get; set;}
+		[Ordinal(3)] [RED("leaveAfter")] 		public CFloat LeaveAfter { get; set;}
 
-		[RED("enterTimestamp")] 		public CFloat EnterTimestamp { get; set;}
+		[Ordinal(4)] [RED("enterTimestamp")] 		public CFloat EnterTimestamp { get; set;}
 
-		[RED("l_effect")] 		public CBool L_effect { get; set;}
+		[Ordinal(5)] [RED("l_effect")] 		public CBool L_effect { get; set;}
 
 		public CBTTaskToadYrdenDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

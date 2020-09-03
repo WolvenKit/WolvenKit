@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskDiveCheck : IBehTreeTask
 	{
-		[RED("frontOffset")] 		public CFloat FrontOffset { get; set;}
+		[Ordinal(1)] [RED("frontOffset")] 		public CFloat FrontOffset { get; set;}
 
-		[RED("minWaterDepth")] 		public CFloat MinWaterDepth { get; set;}
+		[Ordinal(2)] [RED("minWaterDepth")] 		public CFloat MinWaterDepth { get; set;}
 
-		[RED("maxWaterDistance")] 		public CFloat MaxWaterDistance { get; set;}
+		[Ordinal(3)] [RED("maxWaterDistance")] 		public CFloat MaxWaterDistance { get; set;}
 
 		public CBTTaskDiveCheck(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,21 +11,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskManageFact : IBehTreeTask
 	{
-		[RED("fact")] 		public CString Fact { get; set;}
+		[Ordinal(1)] [RED("fact")] 		public CString Fact { get; set;}
 
-		[RED("value")] 		public CInt32 Value { get; set;}
+		[Ordinal(2)] [RED("value")] 		public CInt32 Value { get; set;}
 
-		[RED("validFor")] 		public CInt32 ValidFor { get; set;}
+		[Ordinal(3)] [RED("validFor")] 		public CInt32 ValidFor { get; set;}
 
-		[RED("add")] 		public CBool Add { get; set;}
+		[Ordinal(4)] [RED("add")] 		public CBool Add { get; set;}
 
-		[RED("doNotCompleteAfter")] 		public CBool DoNotCompleteAfter { get; set;}
+		[Ordinal(5)] [RED("doNotCompleteAfter")] 		public CBool DoNotCompleteAfter { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(6)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
+		[Ordinal(7)] [RED("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
 
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(8)] [RED("eventName")] 		public CName EventName { get; set;}
 
 		public CBTTaskManageFact(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

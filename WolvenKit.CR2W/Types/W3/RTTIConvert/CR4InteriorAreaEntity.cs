@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4InteriorAreaEntity : CEntity
 	{
-		[RED("entranceTag")] 		public CName EntranceTag { get; set;}
+		[Ordinal(1)] [RED("entranceTag")] 		public CName EntranceTag { get; set;}
 
-		[RED("texture")] 		public CString Texture { get; set;}
+		[Ordinal(2)] [RED("texture")] 		public CString Texture { get; set;}
 
 		public CR4InteriorAreaEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorComboLevel : CVariable
 	{
-		[RED("dirFront")] 		public SBehaviorComboDirection DirFront { get; set;}
+		[Ordinal(1)] [RED("dirFront")] 		public SBehaviorComboDirection DirFront { get; set;}
 
-		[RED("dirBack")] 		public SBehaviorComboDirection DirBack { get; set;}
+		[Ordinal(2)] [RED("dirBack")] 		public SBehaviorComboDirection DirBack { get; set;}
 
-		[RED("dirLeft")] 		public SBehaviorComboDirection DirLeft { get; set;}
+		[Ordinal(3)] [RED("dirLeft")] 		public SBehaviorComboDirection DirLeft { get; set;}
 
-		[RED("dirRight")] 		public SBehaviorComboDirection DirRight { get; set;}
+		[Ordinal(4)] [RED("dirRight")] 		public SBehaviorComboDirection DirRight { get; set;}
 
-		[RED("abilityRequired")] 		public CName AbilityRequired { get; set;}
+		[Ordinal(5)] [RED("abilityRequired")] 		public CName AbilityRequired { get; set;}
 
 		public SBehaviorComboLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

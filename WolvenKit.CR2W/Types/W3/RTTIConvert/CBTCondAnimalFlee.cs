@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondAnimalFlee : IBehTreeTask
 	{
-		[RED("chanceOfBeingScared")] 		public CFloat ChanceOfBeingScared { get; set;}
+		[Ordinal(1)] [RED("chanceOfBeingScared")] 		public CFloat ChanceOfBeingScared { get; set;}
 
-		[RED("chanceOfBeingScaredRerollTime")] 		public CFloat ChanceOfBeingScaredRerollTime { get; set;}
+		[Ordinal(2)] [RED("chanceOfBeingScaredRerollTime")] 		public CFloat ChanceOfBeingScaredRerollTime { get; set;}
 
-		[RED("scaredIfTargetRuns")] 		public CBool ScaredIfTargetRuns { get; set;}
+		[Ordinal(3)] [RED("scaredIfTargetRuns")] 		public CBool ScaredIfTargetRuns { get; set;}
 
-		[RED("maxTolerableTargetDistance")] 		public CFloat MaxTolerableTargetDistance { get; set;}
+		[Ordinal(4)] [RED("maxTolerableTargetDistance")] 		public CFloat MaxTolerableTargetDistance { get; set;}
 
-		[RED("rollSaysScared")] 		public CBool RollSaysScared { get; set;}
+		[Ordinal(5)] [RED("rollSaysScared")] 		public CBool RollSaysScared { get; set;}
 
-		[RED("rerollChanceTime")] 		public CFloat RerollChanceTime { get; set;}
+		[Ordinal(6)] [RED("rerollChanceTime")] 		public CFloat RerollChanceTime { get; set;}
 
 		public CBTCondAnimalFlee(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

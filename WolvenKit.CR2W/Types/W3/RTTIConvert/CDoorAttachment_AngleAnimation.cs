@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDoorAttachment_AngleAnimation : IDoorAttachment
 	{
-		[RED("openTime")] 		public CFloat OpenTime { get; set;}
+		[Ordinal(1)] [RED("openTime")] 		public CFloat OpenTime { get; set;}
 
-		[RED("originalAngle")] 		public CFloat OriginalAngle { get; set;}
+		[Ordinal(2)] [RED("originalAngle")] 		public CFloat OriginalAngle { get; set;}
 
 		public CDoorAttachment_AngleAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -36,7 +36,7 @@ namespace WolvenKit
         private readonly ModExplorerViewModel vm;
         private bool usecachedNodeList;
 
-        public frmModExplorer(ILoggerService logger)
+        public frmModExplorer()
         {
             // initialize Viewmodel
             vm = MockKernel.Get().GetModExplorerModel();
@@ -63,7 +63,13 @@ namespace WolvenKit
                 if (!this.treeListView.SmallImageList.Images.ContainsKey(extension))
                 {
                     Image smallImage = this.GetSmallIconForFileType(extension);
-                    this.treeListView.SmallImageList.Images.Add(extension, smallImage);
+                    try
+                    {
+                        this.treeListView.SmallImageList.Images.Add(extension, smallImage);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
                 }
                 return extension;
             };
@@ -358,16 +364,16 @@ namespace WolvenKit
         }
         private void treeListView_CellClick(object sender, CellClickEventArgs e)
         {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject && e.Item != null)
-            {
-                var node = (FileSystemInfo)e.Item.RowObject;
+            //if (treeListView.SelectedObject is FileSystemInfo selectedobject && e.Item != null)
+            //{
+            //    var node = (FileSystemInfo)e.Item.RowObject;
 
-                if (e.ClickCount == 1)
-                {
-                    if (!selectedobject.IsDirectory())
-                        RequestFileOpen?.Invoke(this, new RequestFileArgs { File = node.FullName, Inspect = true });
-                }
-            }
+            //    if (e.ClickCount == 1)
+            //    {
+            //        if (!selectedobject.IsDirectory())
+            //            RequestFileOpen?.Invoke(this, new RequestFileArgs { File = node.FullName, Inspect = true });
+            //    }
+            //}
         }
 
         private void treeListView_ItemActivate(object sender, EventArgs e)
@@ -486,6 +492,11 @@ namespace WolvenKit
                     if (s.StartsWith("Mod\\Uncooked"))
                     {
                         s = s.Substring("Mod\\Uncooked".Length);
+                        s = $"Mod\\Bundle{s}";
+                    }
+                    if (s.StartsWith("Mod\\Cooked"))
+                    {
+                        s = s.Substring("Mod\\Cooked".Length);
                         s = $"Mod\\Bundle{s}";
                     }
 

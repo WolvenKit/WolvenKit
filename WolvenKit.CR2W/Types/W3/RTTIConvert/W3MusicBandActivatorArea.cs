@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,25 +11,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MusicBandActivatorArea : CEntity
 	{
-		[RED("musiciansTag")] 		public CName MusiciansTag { get; set;}
+		[Ordinal(1)] [RED("musiciansTag")] 		public CName MusiciansTag { get; set;}
 
-		[RED("interiorSoundEmitter")] 		public CHandle<CEntityTemplate> InteriorSoundEmitter { get; set;}
+		[Ordinal(2)] [RED("interiorSoundEmitter")] 		public CHandle<CEntityTemplate> InteriorSoundEmitter { get; set;}
 
-		[RED("exteriorSoundEmitter")] 		public CHandle<CEntityTemplate> ExteriorSoundEmitter { get; set;}
+		[Ordinal(3)] [RED("exteriorSoundEmitter")] 		public CHandle<CEntityTemplate> ExteriorSoundEmitter { get; set;}
 
-		[RED("exterior")] 		public CBool Exterior { get; set;}
+		[Ordinal(4)] [RED("exterior")] 		public CBool Exterior { get; set;}
 
-		[RED("minimalNumberOfMusicions")] 		public CInt32 MinimalNumberOfMusicions { get; set;}
+		[Ordinal(5)] [RED("minimalNumberOfMusicions")] 		public CInt32 MinimalNumberOfMusicions { get; set;}
 
-		[RED("activeSoundEmitter")] 		public CHandle<CEntity> ActiveSoundEmitter { get; set;}
+		[Ordinal(6)] [RED("activeSoundEmitter")] 		public CHandle<CEntity> ActiveSoundEmitter { get; set;}
 
-		[RED("activeMusician")] 		public CHandle<CEntity> ActiveMusician { get; set;}
+		[Ordinal(7)] [RED("activeMusician")] 		public CHandle<CEntity> ActiveMusician { get; set;}
 
-		[RED("activeMusicians", 2,0)] 		public CArray<CHandle<CEntity>> ActiveMusicians { get; set;}
+		[Ordinal(8)] [RED("activeMusicians", 2,0)] 		public CArray<CHandle<CEntity>> ActiveMusicians { get; set;}
 
-		[RED("activeArea")] 		public CHandle<CTriggerAreaComponent> ActiveArea { get; set;}
+		[Ordinal(9)] [RED("activeArea")] 		public CHandle<CTriggerAreaComponent> ActiveArea { get; set;}
 
-		[RED("jobTreeType")] 		public CEnum<EJobTreeType> JobTreeType { get; set;}
+		[Ordinal(10)] [RED("jobTreeType")] 		public CEnum<EJobTreeType> JobTreeType { get; set;}
 
 		public W3MusicBandActivatorArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

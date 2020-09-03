@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4EntityTemplateParamDLCMounter : IGameplayDLCMounter
 	{
-		[RED("entityTemplatePaths", 2,0)] 		public CArray<CString> EntityTemplatePaths { get; set;}
+		[Ordinal(1)] [RED("entityTemplatePaths", 2,0)] 		public CArray<CString> EntityTemplatePaths { get; set;}
 
-		[RED("entityTemplateParams", 2,0)] 		public CArray<CPtr<CEntityTemplateParam>> EntityTemplateParams { get; set;}
+		[Ordinal(2)] [RED("entityTemplateParams", 2,0)] 		public CArray<CPtr<CEntityTemplateParam>> EntityTemplateParams { get; set;}
 
 		public CR4EntityTemplateParamDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

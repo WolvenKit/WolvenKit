@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTSaveNamedTargetOnEventDef : IBehTreeTaskDefinition
 	{
-		[RED("namedTargetToSave")] 		public CName NamedTargetToSave { get; set;}
+		[Ordinal(1)] [RED("namedTargetToSave")] 		public CName NamedTargetToSave { get; set;}
 
-		[RED("saveUnder")] 		public CBehTreeValCName SaveUnder { get; set;}
+		[Ordinal(2)] [RED("saveUnder")] 		public CBehTreeValCName SaveUnder { get; set;}
 
-		[RED("gameplayEventToSaveOn")] 		public CBehTreeValCName GameplayEventToSaveOn { get; set;}
+		[Ordinal(3)] [RED("gameplayEventToSaveOn")] 		public CBehTreeValCName GameplayEventToSaveOn { get; set;}
 
 		public BTSaveNamedTargetOnEventDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

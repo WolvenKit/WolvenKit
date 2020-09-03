@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,73 +11,73 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvGlobalFogParameters : CVariable
 	{
-		[RED("fogActivated")] 		public CBool FogActivated { get; set;}
+		[Ordinal(1)] [RED("fogActivated")] 		public CBool FogActivated { get; set;}
 
-		[RED("fogAppearDistance")] 		public SSimpleCurve FogAppearDistance { get; set;}
+		[Ordinal(2)] [RED("fogAppearDistance")] 		public SSimpleCurve FogAppearDistance { get; set;}
 
-		[RED("fogAppearRange")] 		public SSimpleCurve FogAppearRange { get; set;}
+		[Ordinal(3)] [RED("fogAppearRange")] 		public SSimpleCurve FogAppearRange { get; set;}
 
-		[RED("fogColorFront")] 		public SSimpleCurve FogColorFront { get; set;}
+		[Ordinal(4)] [RED("fogColorFront")] 		public SSimpleCurve FogColorFront { get; set;}
 
-		[RED("fogColorMiddle")] 		public SSimpleCurve FogColorMiddle { get; set;}
+		[Ordinal(5)] [RED("fogColorMiddle")] 		public SSimpleCurve FogColorMiddle { get; set;}
 
-		[RED("fogColorBack")] 		public SSimpleCurve FogColorBack { get; set;}
+		[Ordinal(6)] [RED("fogColorBack")] 		public SSimpleCurve FogColorBack { get; set;}
 
-		[RED("fogDensity")] 		public SSimpleCurve FogDensity { get; set;}
+		[Ordinal(7)] [RED("fogDensity")] 		public SSimpleCurve FogDensity { get; set;}
 
-		[RED("fogFinalExp")] 		public SSimpleCurve FogFinalExp { get; set;}
+		[Ordinal(8)] [RED("fogFinalExp")] 		public SSimpleCurve FogFinalExp { get; set;}
 
-		[RED("fogDistClamp")] 		public SSimpleCurve FogDistClamp { get; set;}
+		[Ordinal(9)] [RED("fogDistClamp")] 		public SSimpleCurve FogDistClamp { get; set;}
 
-		[RED("fogVertOffset")] 		public SSimpleCurve FogVertOffset { get; set;}
+		[Ordinal(10)] [RED("fogVertOffset")] 		public SSimpleCurve FogVertOffset { get; set;}
 
-		[RED("fogVertDensity")] 		public SSimpleCurve FogVertDensity { get; set;}
+		[Ordinal(11)] [RED("fogVertDensity")] 		public SSimpleCurve FogVertDensity { get; set;}
 
-		[RED("fogVertDensityLightFront")] 		public SSimpleCurve FogVertDensityLightFront { get; set;}
+		[Ordinal(12)] [RED("fogVertDensityLightFront")] 		public SSimpleCurve FogVertDensityLightFront { get; set;}
 
-		[RED("fogVertDensityLightBack")] 		public SSimpleCurve FogVertDensityLightBack { get; set;}
+		[Ordinal(13)] [RED("fogVertDensityLightBack")] 		public SSimpleCurve FogVertDensityLightBack { get; set;}
 
-		[RED("fogSkyDensityScale")] 		public SSimpleCurve FogSkyDensityScale { get; set;}
+		[Ordinal(14)] [RED("fogSkyDensityScale")] 		public SSimpleCurve FogSkyDensityScale { get; set;}
 
-		[RED("fogCloudsDensityScale")] 		public SSimpleCurve FogCloudsDensityScale { get; set;}
+		[Ordinal(15)] [RED("fogCloudsDensityScale")] 		public SSimpleCurve FogCloudsDensityScale { get; set;}
 
-		[RED("fogSkyVertDensityLightFrontScale")] 		public SSimpleCurve FogSkyVertDensityLightFrontScale { get; set;}
+		[Ordinal(16)] [RED("fogSkyVertDensityLightFrontScale")] 		public SSimpleCurve FogSkyVertDensityLightFrontScale { get; set;}
 
-		[RED("fogSkyVertDensityLightBackScale")] 		public SSimpleCurve FogSkyVertDensityLightBackScale { get; set;}
+		[Ordinal(17)] [RED("fogSkyVertDensityLightBackScale")] 		public SSimpleCurve FogSkyVertDensityLightBackScale { get; set;}
 
-		[RED("fogVertDensityRimRange")] 		public SSimpleCurve FogVertDensityRimRange { get; set;}
+		[Ordinal(18)] [RED("fogVertDensityRimRange")] 		public SSimpleCurve FogVertDensityRimRange { get; set;}
 
-		[RED("fogCustomColor")] 		public SSimpleCurve FogCustomColor { get; set;}
+		[Ordinal(19)] [RED("fogCustomColor")] 		public SSimpleCurve FogCustomColor { get; set;}
 
-		[RED("fogCustomColorStart")] 		public SSimpleCurve FogCustomColorStart { get; set;}
+		[Ordinal(20)] [RED("fogCustomColorStart")] 		public SSimpleCurve FogCustomColorStart { get; set;}
 
-		[RED("fogCustomColorRange")] 		public SSimpleCurve FogCustomColorRange { get; set;}
+		[Ordinal(21)] [RED("fogCustomColorRange")] 		public SSimpleCurve FogCustomColorRange { get; set;}
 
-		[RED("fogCustomAmountScale")] 		public SSimpleCurve FogCustomAmountScale { get; set;}
+		[Ordinal(22)] [RED("fogCustomAmountScale")] 		public SSimpleCurve FogCustomAmountScale { get; set;}
 
-		[RED("fogCustomAmountScaleStart")] 		public SSimpleCurve FogCustomAmountScaleStart { get; set;}
+		[Ordinal(23)] [RED("fogCustomAmountScaleStart")] 		public SSimpleCurve FogCustomAmountScaleStart { get; set;}
 
-		[RED("fogCustomAmountScaleRange")] 		public SSimpleCurve FogCustomAmountScaleRange { get; set;}
+		[Ordinal(24)] [RED("fogCustomAmountScaleRange")] 		public SSimpleCurve FogCustomAmountScaleRange { get; set;}
 
-		[RED("aerialColorFront")] 		public SSimpleCurve AerialColorFront { get; set;}
+		[Ordinal(25)] [RED("aerialColorFront")] 		public SSimpleCurve AerialColorFront { get; set;}
 
-		[RED("aerialColorMiddle")] 		public SSimpleCurve AerialColorMiddle { get; set;}
+		[Ordinal(26)] [RED("aerialColorMiddle")] 		public SSimpleCurve AerialColorMiddle { get; set;}
 
-		[RED("aerialColorBack")] 		public SSimpleCurve AerialColorBack { get; set;}
+		[Ordinal(27)] [RED("aerialColorBack")] 		public SSimpleCurve AerialColorBack { get; set;}
 
-		[RED("aerialFinalExp")] 		public SSimpleCurve AerialFinalExp { get; set;}
+		[Ordinal(28)] [RED("aerialFinalExp")] 		public SSimpleCurve AerialFinalExp { get; set;}
 
-		[RED("ssaoImpactClamp")] 		public SSimpleCurve SsaoImpactClamp { get; set;}
+		[Ordinal(29)] [RED("ssaoImpactClamp")] 		public SSimpleCurve SsaoImpactClamp { get; set;}
 
-		[RED("ssaoImpactNearValue")] 		public SSimpleCurve SsaoImpactNearValue { get; set;}
+		[Ordinal(30)] [RED("ssaoImpactNearValue")] 		public SSimpleCurve SsaoImpactNearValue { get; set;}
 
-		[RED("ssaoImpactFarValue")] 		public SSimpleCurve SsaoImpactFarValue { get; set;}
+		[Ordinal(31)] [RED("ssaoImpactFarValue")] 		public SSimpleCurve SsaoImpactFarValue { get; set;}
 
-		[RED("ssaoImpactNearDistance")] 		public SSimpleCurve SsaoImpactNearDistance { get; set;}
+		[Ordinal(32)] [RED("ssaoImpactNearDistance")] 		public SSimpleCurve SsaoImpactNearDistance { get; set;}
 
-		[RED("ssaoImpactFarDistance")] 		public SSimpleCurve SsaoImpactFarDistance { get; set;}
+		[Ordinal(33)] [RED("ssaoImpactFarDistance")] 		public SSimpleCurve SsaoImpactFarDistance { get; set;}
 
-		[RED("distantLightsIntensityScale")] 		public SSimpleCurve DistantLightsIntensityScale { get; set;}
+		[Ordinal(34)] [RED("distantLightsIntensityScale")] 		public SSimpleCurve DistantLightsIntensityScale { get; set;}
 
 		public CEnvGlobalFogParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

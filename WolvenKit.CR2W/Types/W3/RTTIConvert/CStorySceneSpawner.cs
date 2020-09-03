@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneSpawner : CGameplayEntity
 	{
-		[RED("storyScene")] 		public CHandle<CStoryScene> StoryScene { get; set;}
+		[Ordinal(1)] [RED("storyScene")] 		public CHandle<CStoryScene> StoryScene { get; set;}
 
-		[RED("inputName")] 		public CString InputName { get; set;}
+		[Ordinal(2)] [RED("inputName")] 		public CString InputName { get; set;}
 
-		[RED("useSpawnerLocation")] 		public CBool UseSpawnerLocation { get; set;}
+		[Ordinal(3)] [RED("useSpawnerLocation")] 		public CBool UseSpawnerLocation { get; set;}
 
 		public CStorySceneSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

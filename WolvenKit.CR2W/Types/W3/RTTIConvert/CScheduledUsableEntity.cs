@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CScheduledUsableEntity : CUsableEntity
 	{
-		[RED("bUseSwitchingSchedule")] 		public CBool BUseSwitchingSchedule { get; set;}
+		[Ordinal(1)] [RED("bUseSwitchingSchedule")] 		public CBool BUseSwitchingSchedule { get; set;}
 
-		[RED("switchOnHour")] 		public CInt32 SwitchOnHour { get; set;}
+		[Ordinal(2)] [RED("switchOnHour")] 		public CInt32 SwitchOnHour { get; set;}
 
-		[RED("switchOffHour")] 		public CInt32 SwitchOffHour { get; set;}
+		[Ordinal(3)] [RED("switchOffHour")] 		public CInt32 SwitchOffHour { get; set;}
 
 		public CScheduledUsableEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

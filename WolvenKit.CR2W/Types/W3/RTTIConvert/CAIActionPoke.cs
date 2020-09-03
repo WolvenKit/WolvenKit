@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIActionPoke : IAIActionTree
 	{
-		[RED("pokeEvent")] 		public CName PokeEvent { get; set;}
+		[Ordinal(1)] [RED("pokeEvent")] 		public CName PokeEvent { get; set;}
 
-		[RED("pokableScriptedAction")] 		public CHandle<IAIActionTree> PokableScriptedAction { get; set;}
+		[Ordinal(2)] [RED("pokableScriptedAction")] 		public CHandle<IAIActionTree> PokableScriptedAction { get; set;}
 
 		public CAIActionPoke(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

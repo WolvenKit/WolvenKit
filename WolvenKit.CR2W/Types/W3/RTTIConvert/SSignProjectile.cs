@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSignProjectile : CVariable
 	{
-		[RED("speed")] 		public CFloat Speed { get; set;}
+		[Ordinal(1)] [RED("speed")] 		public CFloat Speed { get; set;}
 
-		[RED("flyEffect")] 		public CName FlyEffect { get; set;}
+		[Ordinal(2)] [RED("flyEffect")] 		public CName FlyEffect { get; set;}
 
-		[RED("hitEffect")] 		public CName HitEffect { get; set;}
+		[Ordinal(3)] [RED("hitEffect")] 		public CName HitEffect { get; set;}
 
-		[RED("targetHitEffect")] 		public CName TargetHitEffect { get; set;}
+		[Ordinal(4)] [RED("targetHitEffect")] 		public CName TargetHitEffect { get; set;}
 
-		[RED("lastingTime")] 		public CFloat LastingTime { get; set;}
+		[Ordinal(5)] [RED("lastingTime")] 		public CFloat LastingTime { get; set;}
 
 		public SSignProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

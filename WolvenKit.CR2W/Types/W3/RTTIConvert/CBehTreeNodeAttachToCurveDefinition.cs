@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeAttachToCurveDefinition : CBehTreeNodeAtomicActionDefinition
 	{
-		[RED("animationName")] 		public CBehTreeValCName AnimationName { get; set;}
+		[Ordinal(1)] [RED("animationName")] 		public CBehTreeValCName AnimationName { get; set;}
 
-		[RED("componentName")] 		public CBehTreeValString ComponentName { get; set;}
+		[Ordinal(2)] [RED("componentName")] 		public CBehTreeValString ComponentName { get; set;}
 
-		[RED("blendInTime")] 		public CBehTreeValFloat BlendInTime { get; set;}
+		[Ordinal(3)] [RED("blendInTime")] 		public CBehTreeValFloat BlendInTime { get; set;}
 
 		public CBehTreeNodeAttachToCurveDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

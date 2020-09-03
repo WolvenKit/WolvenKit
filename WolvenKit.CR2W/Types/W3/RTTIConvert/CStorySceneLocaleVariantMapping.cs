@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneLocaleVariantMapping : CVariable
 	{
-		[RED("localeId")] 		public CUInt32 LocaleId { get; set;}
+		[Ordinal(1)] [RED("localeId")] 		public CUInt32 LocaleId { get; set;}
 
-		[RED("variantId")] 		public CUInt32 VariantId { get; set;}
+		[Ordinal(2)] [RED("variantId")] 		public CUInt32 VariantId { get; set;}
 
 		public CStorySceneLocaleVariantMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

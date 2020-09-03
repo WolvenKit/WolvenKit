@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEncounterGlobalSettings : CObject
 	{
-		[RED("defaultSpawnStrategy")] 		public CPtr<ISpawnTreeSpawnStrategy> DefaultSpawnStrategy { get; set;}
+		[Ordinal(1)] [RED("defaultSpawnStrategy")] 		public CPtr<ISpawnTreeSpawnStrategy> DefaultSpawnStrategy { get; set;}
 
-		[RED("groupLimits", 2,0)] 		public CArray<SEncounterGroupLimit> GroupLimits { get; set;}
+		[Ordinal(2)] [RED("groupLimits", 2,0)] 		public CArray<SEncounterGroupLimit> GroupLimits { get; set;}
 
 		public CEncounterGlobalSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

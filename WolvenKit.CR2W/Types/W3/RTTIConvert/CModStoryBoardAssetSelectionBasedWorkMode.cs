@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardAssetSelectionBasedWorkMode : CModSbListViewWorkMode
 	{
-		[RED("defaultState")] 		public CName DefaultState { get; set;}
+		[Ordinal(1)] [RED("defaultState")] 		public CName DefaultState { get; set;}
 
-		[RED("storyboard")] 		public CHandle<CModStoryBoard> Storyboard { get; set;}
+		[Ordinal(2)] [RED("storyboard")] 		public CHandle<CModStoryBoard> Storyboard { get; set;}
 
-		[RED("shotViewer")] 		public CHandle<CModStoryBoardShotViewer> ShotViewer { get; set;}
+		[Ordinal(3)] [RED("shotViewer")] 		public CHandle<CModStoryBoardShotViewer> ShotViewer { get; set;}
 
-		[RED("assetManager")] 		public CHandle<CModStoryBoardAssetManager> AssetManager { get; set;}
+		[Ordinal(4)] [RED("assetManager")] 		public CHandle<CModStoryBoardAssetManager> AssetManager { get; set;}
 
-		[RED("isSpecialCamInUse")] 		public CBool IsSpecialCamInUse { get; set;}
+		[Ordinal(5)] [RED("isSpecialCamInUse")] 		public CBool IsSpecialCamInUse { get; set;}
 
 		public CModStoryBoardAssetSelectionBasedWorkMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

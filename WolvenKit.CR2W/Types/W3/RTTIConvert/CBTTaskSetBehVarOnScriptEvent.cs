@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSetBehVarOnScriptEvent : IBehTreeTask
 	{
-		[RED("activationEventName")] 		public CName ActivationEventName { get; set;}
+		[Ordinal(1)] [RED("activationEventName")] 		public CName ActivationEventName { get; set;}
 
-		[RED("behVarName")] 		public CName BehVarName { get; set;}
+		[Ordinal(2)] [RED("behVarName")] 		public CName BehVarName { get; set;}
 
-		[RED("behVarValue")] 		public CFloat BehVarValue { get; set;}
+		[Ordinal(3)] [RED("behVarValue")] 		public CFloat BehVarValue { get; set;}
 
-		[RED("prevBehVarValue")] 		public CFloat PrevBehVarValue { get; set;}
+		[Ordinal(4)] [RED("prevBehVarValue")] 		public CFloat PrevBehVarValue { get; set;}
 
-		[RED("delay")] 		public CFloat Delay { get; set;}
+		[Ordinal(5)] [RED("delay")] 		public CFloat Delay { get; set;}
 
-		[RED("activationEventReceived")] 		public CBool ActivationEventReceived { get; set;}
+		[Ordinal(6)] [RED("activationEventReceived")] 		public CBool ActivationEventReceived { get; set;}
 
-		[RED("previousValueOnDurationEnd")] 		public CBool PreviousValueOnDurationEnd { get; set;}
+		[Ordinal(7)] [RED("previousValueOnDurationEnd")] 		public CBool PreviousValueOnDurationEnd { get; set;}
 
 		public CBTTaskSetBehVarOnScriptEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

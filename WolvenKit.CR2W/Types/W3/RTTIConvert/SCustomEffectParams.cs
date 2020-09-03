@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,29 +11,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCustomEffectParams : CVariable
 	{
-		[RED("effectType")] 		public CEnum<EEffectType> EffectType { get; set;}
+		[Ordinal(1)] [RED("effectType")] 		public CEnum<EEffectType> EffectType { get; set;}
 
-		[RED("creator")] 		public CHandle<CGameplayEntity> Creator { get; set;}
+		[Ordinal(2)] [RED("creator")] 		public CHandle<CGameplayEntity> Creator { get; set;}
 
-		[RED("sourceName")] 		public CString SourceName { get; set;}
+		[Ordinal(3)] [RED("sourceName")] 		public CString SourceName { get; set;}
 
-		[RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(4)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		[RED("effectValue")] 		public SAbilityAttributeValue EffectValue { get; set;}
+		[Ordinal(5)] [RED("effectValue")] 		public SAbilityAttributeValue EffectValue { get; set;}
 
-		[RED("customAbilityName")] 		public CName CustomAbilityName { get; set;}
+		[Ordinal(6)] [RED("customAbilityName")] 		public CName CustomAbilityName { get; set;}
 
-		[RED("customFXName")] 		public CName CustomFXName { get; set;}
+		[Ordinal(7)] [RED("customFXName")] 		public CName CustomFXName { get; set;}
 
-		[RED("isSignEffect")] 		public CBool IsSignEffect { get; set;}
+		[Ordinal(8)] [RED("isSignEffect")] 		public CBool IsSignEffect { get; set;}
 
-		[RED("customPowerStatValue")] 		public SAbilityAttributeValue CustomPowerStatValue { get; set;}
+		[Ordinal(9)] [RED("customPowerStatValue")] 		public SAbilityAttributeValue CustomPowerStatValue { get; set;}
 
-		[RED("buffSpecificParams")] 		public CHandle<W3BuffCustomParams> BuffSpecificParams { get; set;}
+		[Ordinal(10)] [RED("buffSpecificParams")] 		public CHandle<W3BuffCustomParams> BuffSpecificParams { get; set;}
 
-		[RED("vibratePadLowFreq")] 		public CFloat VibratePadLowFreq { get; set;}
+		[Ordinal(11)] [RED("vibratePadLowFreq")] 		public CFloat VibratePadLowFreq { get; set;}
 
-		[RED("vibratePadHighFreq")] 		public CFloat VibratePadHighFreq { get; set;}
+		[Ordinal(12)] [RED("vibratePadHighFreq")] 		public CFloat VibratePadHighFreq { get; set;}
 
 		public SCustomEffectParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

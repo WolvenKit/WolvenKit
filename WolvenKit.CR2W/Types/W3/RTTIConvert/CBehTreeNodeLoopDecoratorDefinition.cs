@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeLoopDecoratorDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("onCompleted")] 		public CEnum<EBTLoopMode> OnCompleted { get; set;}
+		[Ordinal(1)] [RED("onCompleted")] 		public CEnum<EBTLoopMode> OnCompleted { get; set;}
 
-		[RED("onFailed")] 		public CEnum<EBTLoopMode> OnFailed { get; set;}
+		[Ordinal(2)] [RED("onFailed")] 		public CEnum<EBTLoopMode> OnFailed { get; set;}
 
-		[RED("maxIterations")] 		public CBehTreeValInt MaxIterations { get; set;}
+		[Ordinal(3)] [RED("maxIterations")] 		public CBehTreeValInt MaxIterations { get; set;}
 
-		[RED("reactivationDelay")] 		public CFloat ReactivationDelay { get; set;}
+		[Ordinal(4)] [RED("reactivationDelay")] 		public CFloat ReactivationDelay { get; set;}
 
 		public CBehTreeNodeLoopDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

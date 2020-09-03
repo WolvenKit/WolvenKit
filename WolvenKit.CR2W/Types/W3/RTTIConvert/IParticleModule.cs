@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IParticleModule : CObject
 	{
-		[RED("editorName")] 		public CString EditorName { get; set;}
+		[Ordinal(1)] [RED("editorName")] 		public CString EditorName { get; set;}
 
-		[RED("editorColor")] 		public CColor EditorColor { get; set;}
+		[Ordinal(2)] [RED("editorColor")] 		public CColor EditorColor { get; set;}
 
-		[RED("editorGroup")] 		public CString EditorGroup { get; set;}
+		[Ordinal(3)] [RED("editorGroup")] 		public CString EditorGroup { get; set;}
 
-		[RED("isEnabled")] 		public CBool IsEnabled { get; set;}
+		[Ordinal(4)] [RED("isEnabled")] 		public CBool IsEnabled { get; set;}
 
-		[RED("isShowing")] 		public CBool IsShowing { get; set;}
+		[Ordinal(5)] [RED("isShowing")] 		public CBool IsShowing { get; set;}
 
-		[RED("isSelected")] 		public CBool IsSelected { get; set;}
+		[Ordinal(6)] [RED("isSelected")] 		public CBool IsSelected { get; set;}
 
 		public IParticleModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

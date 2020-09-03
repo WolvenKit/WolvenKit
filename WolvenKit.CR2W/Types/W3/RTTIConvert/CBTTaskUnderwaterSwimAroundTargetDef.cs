@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskUnderwaterSwimAroundTargetDef : IBehTreeTaskDefinition
 	{
-		[RED("distance")] 		public CBehTreeValFloat Distance { get; set;}
+		[Ordinal(1)] [RED("distance")] 		public CBehTreeValFloat Distance { get; set;}
 
-		[RED("frontalHeadingOffset")] 		public CBehTreeValInt FrontalHeadingOffset { get; set;}
+		[Ordinal(2)] [RED("frontalHeadingOffset")] 		public CBehTreeValInt FrontalHeadingOffset { get; set;}
 
-		[RED("randomFactor")] 		public CBehTreeValInt RandomFactor { get; set;}
+		[Ordinal(3)] [RED("randomFactor")] 		public CBehTreeValInt RandomFactor { get; set;}
 
-		[RED("randomHeightAmplitude")] 		public CBehTreeValFloat RandomHeightAmplitude { get; set;}
+		[Ordinal(4)] [RED("randomHeightAmplitude")] 		public CBehTreeValFloat RandomHeightAmplitude { get; set;}
 
-		[RED("minimumWaterDepth")] 		public CBehTreeValFloat MinimumWaterDepth { get; set;}
+		[Ordinal(5)] [RED("minimumWaterDepth")] 		public CBehTreeValFloat MinimumWaterDepth { get; set;}
 
-		[RED("useActionTarget")] 		public CBehTreeValBool UseActionTarget { get; set;}
+		[Ordinal(6)] [RED("useActionTarget")] 		public CBehTreeValBool UseActionTarget { get; set;}
 
-		[RED("maxProximityToSurface")] 		public CFloat MaxProximityToSurface { get; set;}
+		[Ordinal(7)] [RED("maxProximityToSurface")] 		public CFloat MaxProximityToSurface { get; set;}
 
 		public CBTTaskUnderwaterSwimAroundTargetDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

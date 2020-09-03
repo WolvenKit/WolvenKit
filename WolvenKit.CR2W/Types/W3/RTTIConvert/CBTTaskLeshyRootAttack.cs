@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskLeshyRootAttack : CBTTaskAttack
 	{
-		[RED("loopTime")] 		public CFloat LoopTime { get; set;}
+		[Ordinal(1)] [RED("loopTime")] 		public CFloat LoopTime { get; set;}
 
-		[RED("attackRange")] 		public CFloat AttackRange { get; set;}
+		[Ordinal(2)] [RED("attackRange")] 		public CFloat AttackRange { get; set;}
 
-		[RED("dodgeable")] 		public CFloat Dodgeable { get; set;}
+		[Ordinal(3)] [RED("dodgeable")] 		public CFloat Dodgeable { get; set;}
 
-		[RED("projEntity")] 		public CHandle<CEntityTemplate> ProjEntity { get; set;}
+		[Ordinal(4)] [RED("projEntity")] 		public CHandle<CEntityTemplate> ProjEntity { get; set;}
 
-		[RED("collisionGroups", 2,0)] 		public CArray<CName> CollisionGroups { get; set;}
+		[Ordinal(5)] [RED("collisionGroups", 2,0)] 		public CArray<CName> CollisionGroups { get; set;}
 
 		public CBTTaskLeshyRootAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ContextManager : CObject
 	{
-		[RED("m_currentContext")] 		public CHandle<W3UIContext> M_currentContext { get; set;}
+		[Ordinal(1)] [RED("m_currentContext")] 		public CHandle<W3UIContext> M_currentContext { get; set;}
 
-		[RED("m_commonMenuRef")] 		public CHandle<CR4CommonMenu> M_commonMenuRef { get; set;}
+		[Ordinal(2)] [RED("m_commonMenuRef")] 		public CHandle<CR4CommonMenu> M_commonMenuRef { get; set;}
 
 		public W3ContextManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

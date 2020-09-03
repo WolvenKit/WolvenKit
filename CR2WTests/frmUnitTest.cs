@@ -159,7 +159,7 @@ namespace CR2WTests
                     {
                         unparsedfiles.Add(f.Name);
                         //throw ex;
-                        Console.WriteLine($"{f.Name}:{ex.Message}\r\n");
+                        Console.WriteLine($"{f.Name}:{ex.Message}");
                         UpdateRichTextBox2($"{f.Name}:{ex.Message}\r\n");
                     }
                 }
@@ -228,10 +228,13 @@ namespace CR2WTests
                 var newdictvalues = dict.Values.ToList();
                 var dictvalues = crw.StringDictionary.Values.ToList();
                 var diffDictList = dictvalues.Except(newdictvalues).ToList();
+
+                bool isclassicalinconsistentw2anims = true;
+                bool isclassicalinconsistentw2phase = true;
+
                 if (diffDictList.Count != 0)
                 {
                     //w2anims inconsistencies
-                    bool isclassicalinconsistentw2anims=true;
                     foreach (string str in diffDictList)
                     {
                         if (str == "extAnimEvents" ||
@@ -248,27 +251,7 @@ namespace CR2WTests
                             break;
                         }
                     }
-                    //w2ent detlaff inconsistencies
-                    bool isclassicalinconsistentw2ent = true;
-                    foreach (string str in diffDictList)
-                    {
-                        if (str == "IF_Positive" ||
-                            str == "IF_Negative" ||
-                            str == "IF_Neutral" ||
-                            str == "IF_Immobilize" ||
-                            str == "IF_Confuse" ||
-                            str == "IF_Damage")
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            isclassicalinconsistentw2ent = false;
-                            break;
-                        }
-                    }
                     //w2phase inconsistencies
-                    bool isclassicalinconsistentw2phase = true;
                     foreach (string str in diffDictList)
                     {
                         if (str == "@SItem" ||
@@ -290,43 +273,47 @@ namespace CR2WTests
                         //throw new InvalidBundleException("Classical inconsistent .w2anims - " +
                         //    ".w2animev sound handles left behind in string lists, but actual data is empty");
                     }
-                    else if (isclassicalinconsistentw2ent)
-                    {
-                        //throw new InvalidBundleException("Inconsistent .w2ent - " +
-                        //    "some Detlaff stuff");
-                    }
                     else if (isclassicalinconsistentw2phase)
                     {
                         //throw new InvalidBundleException("Inconsistent .w2phase - " +
                         //    "secret e3 files");
+                        // skip test B
+
                     }
                     else
                     {
-                        throw new InvalidBundleException("Generated dictionary not equal actual dictionary.");
+                        throw new InvalidBundleException(" Generated dictionary not equal actual dictionary.");
                     }
                 }
                 #endregion
 
                 #region Writing Test B
-                byte[] buffer_testB;
-                byte[] buffer_testB_original;
-
-                using (var ms_testB = new MemoryStream())
-                using (var bw_testB = new BinaryWriter(ms_testB))
+                if (isclassicalinconsistentw2phase || isclassicalinconsistentw2anims)
                 {
-                    crw.Write(bw_testB);
-                    buffer_testB = ms_testB.ToArray();
+                    // skip test
+                    // add additional fail-safe test?
                 }
-
-                // compare
-                ms.Seek(0, SeekOrigin.Begin);
-                buffer_testB_original = ms.ToArray();
-
-                if (!Enumerable.SequenceEqual(buffer_testB_original, buffer_testB))
+                else
                 {
-                    throw new InvalidBundleException("Generated cr2w file not equal to original file.");
-                }
+                    byte[] buffer_testB;
+                    byte[] buffer_testB_original;
 
+                    using (var ms_testB = new MemoryStream())
+                    using (var bw_testB = new BinaryWriter(ms_testB))
+                    {
+                        crw.Write(bw_testB);
+                        buffer_testB = ms_testB.ToArray();
+                    }
+
+                    // compare
+                    ms.Seek(0, SeekOrigin.Begin);
+                    buffer_testB_original = ms.ToArray();
+
+                    if (!Enumerable.SequenceEqual(buffer_testB_original, buffer_testB))
+                    {
+                        throw new InvalidBundleException(" Generated cr2w file not equal to original file.");
+                    }
+                }
                 #endregion
 
             }

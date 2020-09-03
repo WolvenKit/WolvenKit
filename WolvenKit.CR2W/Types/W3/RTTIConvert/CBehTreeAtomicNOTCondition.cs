@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeAtomicNOTCondition : IBehTreeAtomicCondition
 	{
-		[RED("child")] 		public CPtr<IBehTreeAtomicCondition> Child { get; set;}
+		[Ordinal(1)] [RED("child")] 		public CPtr<IBehTreeAtomicCondition> Child { get; set;}
 
 		public CBehTreeAtomicNOTCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSpawnMultipleProjectilesAttackDef : CBTTaskSpawnMultipleEntitiesAttackDef
 	{
-		[RED("projectileAngle")] 		public CFloat ProjectileAngle { get; set;}
+		[Ordinal(1)] [RED("projectileAngle")] 		public CFloat ProjectileAngle { get; set;}
 
-		[RED("projectileAngleRandomness")] 		public CFloat ProjectileAngleRandomness { get; set;}
+		[Ordinal(2)] [RED("projectileAngleRandomness")] 		public CFloat ProjectileAngleRandomness { get; set;}
 
-		[RED("projectileSpeed")] 		public CFloat ProjectileSpeed { get; set;}
+		[Ordinal(3)] [RED("projectileSpeed")] 		public CFloat ProjectileSpeed { get; set;}
 
-		[RED("projectileSpeedRandomness")] 		public CFloat ProjectileSpeedRandomness { get; set;}
+		[Ordinal(4)] [RED("projectileSpeedRandomness")] 		public CFloat ProjectileSpeedRandomness { get; set;}
 
-		[RED("dodgeable")] 		public CBool Dodgeable { get; set;}
+		[Ordinal(5)] [RED("dodgeable")] 		public CBool Dodgeable { get; set;}
 
 		public CBTTaskSpawnMultipleProjectilesAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

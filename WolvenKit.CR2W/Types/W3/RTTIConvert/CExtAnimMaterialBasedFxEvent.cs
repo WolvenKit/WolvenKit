@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimMaterialBasedFxEvent : CExtAnimEvent
 	{
-		[RED("bone")] 		public CName Bone { get; set;}
+		[Ordinal(1)] [RED("bone")] 		public CName Bone { get; set;}
 
-		[RED("vfxKickup")] 		public CBool VfxKickup { get; set;}
+		[Ordinal(2)] [RED("vfxKickup")] 		public CBool VfxKickup { get; set;}
 
-		[RED("vfxFootstep")] 		public CBool VfxFootstep { get; set;}
+		[Ordinal(3)] [RED("vfxFootstep")] 		public CBool VfxFootstep { get; set;}
 
 		public CExtAnimMaterialBasedFxEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

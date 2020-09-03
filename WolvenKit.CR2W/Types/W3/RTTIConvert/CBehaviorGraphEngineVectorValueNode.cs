@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphEngineVectorValueNode : CBehaviorGraphVectorVariableNode
 	{
-		[RED("engineValueType")] 		public CEnum<EBehaviorEngineVectorValueType> EngineValueType { get; set;}
+		[Ordinal(1)] [RED("engineValueType")] 		public CEnum<EBehaviorEngineVectorValueType> EngineValueType { get; set;}
 
-		[RED("manualControl")] 		public CBool ManualControl { get; set;}
+		[Ordinal(2)] [RED("manualControl")] 		public CBool ManualControl { get; set;}
 
-		[RED("cachedVectorVariable")] 		public CPtr<CBehaviorVectorVariable> CachedVectorVariable { get; set;}
+		[Ordinal(3)] [RED("cachedVectorVariable")] 		public CPtr<CBehaviorVectorVariable> CachedVectorVariable { get; set;}
 
 		public CBehaviorGraphEngineVectorValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

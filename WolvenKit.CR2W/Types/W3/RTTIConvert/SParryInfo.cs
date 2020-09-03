@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,23 +11,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SParryInfo : CVariable
 	{
-		[RED("attacker")] 		public CHandle<CActor> Attacker { get; set;}
+		[Ordinal(1)] [RED("attacker")] 		public CHandle<CActor> Attacker { get; set;}
 
-		[RED("target")] 		public CHandle<CActor> Target { get; set;}
+		[Ordinal(2)] [RED("target")] 		public CHandle<CActor> Target { get; set;}
 
-		[RED("targetToAttackerAngleAbs")] 		public CFloat TargetToAttackerAngleAbs { get; set;}
+		[Ordinal(3)] [RED("targetToAttackerAngleAbs")] 		public CFloat TargetToAttackerAngleAbs { get; set;}
 
-		[RED("targetToAttackerDist")] 		public CFloat TargetToAttackerDist { get; set;}
+		[Ordinal(4)] [RED("targetToAttackerDist")] 		public CFloat TargetToAttackerDist { get; set;}
 
-		[RED("attackSwingType")] 		public CEnum<EAttackSwingType> AttackSwingType { get; set;}
+		[Ordinal(5)] [RED("attackSwingType")] 		public CEnum<EAttackSwingType> AttackSwingType { get; set;}
 
-		[RED("attackSwingDir")] 		public CEnum<EAttackSwingDirection> AttackSwingDir { get; set;}
+		[Ordinal(6)] [RED("attackSwingDir")] 		public CEnum<EAttackSwingDirection> AttackSwingDir { get; set;}
 
-		[RED("attackActionName")] 		public CName AttackActionName { get; set;}
+		[Ordinal(7)] [RED("attackActionName")] 		public CName AttackActionName { get; set;}
 
-		[RED("attackerWeaponId")] 		public SItemUniqueId AttackerWeaponId { get; set;}
+		[Ordinal(8)] [RED("attackerWeaponId")] 		public SItemUniqueId AttackerWeaponId { get; set;}
 
-		[RED("canBeParried")] 		public CBool CanBeParried { get; set;}
+		[Ordinal(9)] [RED("canBeParried")] 		public CBool CanBeParried { get; set;}
 
 		public SParryInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

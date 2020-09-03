@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBridgePiece : CScriptedDestroyableComponent
 	{
-		[RED("entityPos")] 		public Vector EntityPos { get; set;}
+		[Ordinal(1)] [RED("entityPos")] 		public Vector EntityPos { get; set;}
 
-		[RED("compPos")] 		public Vector CompPos { get; set;}
+		[Ordinal(2)] [RED("compPos")] 		public Vector CompPos { get; set;}
 
-		[RED("totalTime")] 		public CFloat TotalTime { get; set;}
+		[Ordinal(3)] [RED("totalTime")] 		public CFloat TotalTime { get; set;}
 
-		[RED("z")] 		public CHandle<CEntity> Z { get; set;}
+		[Ordinal(4)] [RED("z")] 		public CHandle<CEntity> Z { get; set;}
 
 		public CBridgePiece(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

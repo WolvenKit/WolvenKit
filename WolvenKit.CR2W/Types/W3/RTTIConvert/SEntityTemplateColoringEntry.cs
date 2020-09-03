@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SEntityTemplateColoringEntry : CVariable
 	{
-		[RED("appearance")] 		public CName Appearance { get; set;}
+		[Ordinal(1)] [RED("appearance")] 		public CName Appearance { get; set;}
 
-		[RED("componentName")] 		public CName ComponentName { get; set;}
+		[Ordinal(2)] [RED("componentName")] 		public CName ComponentName { get; set;}
 
-		[RED("colorShift1")] 		public CColorShift ColorShift1 { get; set;}
+		[Ordinal(3)] [RED("colorShift1")] 		public CColorShift ColorShift1 { get; set;}
 
-		[RED("colorShift2")] 		public CColorShift ColorShift2 { get; set;}
+		[Ordinal(4)] [RED("colorShift2")] 		public CColorShift ColorShift2 { get; set;}
 
 		public SEntityTemplateColoringEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

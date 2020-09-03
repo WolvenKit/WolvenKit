@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCommunityAreaTypeDefault : CCommunityAreaType
 	{
-		[RED("areaSpawnRadius")] 		public CFloat AreaSpawnRadius { get; set;}
+		[Ordinal(1)] [RED("areaSpawnRadius")] 		public CFloat AreaSpawnRadius { get; set;}
 
-		[RED("areaDespawnRadius")] 		public CFloat AreaDespawnRadius { get; set;}
+		[Ordinal(2)] [RED("areaDespawnRadius")] 		public CFloat AreaDespawnRadius { get; set;}
 
-		[RED("spawnRadius")] 		public CFloat SpawnRadius { get; set;}
+		[Ordinal(3)] [RED("spawnRadius")] 		public CFloat SpawnRadius { get; set;}
 
-		[RED("despawnRadius")] 		public CFloat DespawnRadius { get; set;}
+		[Ordinal(4)] [RED("despawnRadius")] 		public CFloat DespawnRadius { get; set;}
 
-		[RED("dontRestore")] 		public CBool DontRestore { get; set;}
+		[Ordinal(5)] [RED("dontRestore")] 		public CBool DontRestore { get; set;}
 
 		public CCommunityAreaTypeDefault(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

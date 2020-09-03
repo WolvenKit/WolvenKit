@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskCompleteOnAnimEvent : IBehTreeTask
 	{
-		[RED("animEvent")] 		public CName AnimEvent { get; set;}
+		[Ordinal(1)] [RED("animEvent")] 		public CName AnimEvent { get; set;}
 
-		[RED("sucess")] 		public CBool Sucess { get; set;}
+		[Ordinal(2)] [RED("sucess")] 		public CBool Sucess { get; set;}
 
 		public BTTaskCompleteOnAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

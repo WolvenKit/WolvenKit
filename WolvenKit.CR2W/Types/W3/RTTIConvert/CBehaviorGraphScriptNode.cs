@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphScriptNode : CBehaviorGraphBaseNode
 	{
-		[RED("script")] 		public CPtr<IBehaviorScript> Script { get; set;}
+		[Ordinal(1)] [RED("script")] 		public CPtr<IBehaviorScript> Script { get; set;}
 
-		[RED("cachedFloatNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphValueNode>> CachedFloatNodes { get; set;}
+		[Ordinal(2)] [RED("cachedFloatNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphValueNode>> CachedFloatNodes { get; set;}
 
-		[RED("cachedVectorNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphVectorValueNode>> CachedVectorNodes { get; set;}
+		[Ordinal(3)] [RED("cachedVectorNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphVectorValueNode>> CachedVectorNodes { get; set;}
 
 		public CBehaviorGraphScriptNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

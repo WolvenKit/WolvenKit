@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPoseCompressionCharacter : CPoseCompressionDefault
 	{
-		[RED("leftWeaponName")] 		public CString LeftWeaponName { get; set;}
+		[Ordinal(1)] [RED("leftWeaponName")] 		public CString LeftWeaponName { get; set;}
 
-		[RED("rightWeaponName")] 		public CString RightWeaponName { get; set;}
+		[Ordinal(2)] [RED("rightWeaponName")] 		public CString RightWeaponName { get; set;}
 
-		[RED("leftWeapon")] 		public CInt32 LeftWeapon { get; set;}
+		[Ordinal(3)] [RED("leftWeapon")] 		public CInt32 LeftWeapon { get; set;}
 
-		[RED("rightWeapon")] 		public CInt32 RightWeapon { get; set;}
+		[Ordinal(4)] [RED("rightWeapon")] 		public CInt32 RightWeapon { get; set;}
 
 		public CPoseCompressionCharacter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

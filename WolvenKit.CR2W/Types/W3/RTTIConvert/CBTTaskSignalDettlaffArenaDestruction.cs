@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSignalDettlaffArenaDestruction : IBehTreeTask
 	{
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(1)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(2)] [RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
-		[RED("destroyTime")] 		public CFloat DestroyTime { get; set;}
+		[Ordinal(3)] [RED("destroyTime")] 		public CFloat DestroyTime { get; set;}
 
 		public CBTTaskSignalDettlaffArenaDestruction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

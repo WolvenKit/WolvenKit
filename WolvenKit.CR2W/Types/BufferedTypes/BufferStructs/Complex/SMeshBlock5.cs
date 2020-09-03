@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -14,8 +15,8 @@ namespace WolvenKit.CR2W.Types
     {
         private const int fixedbuffersize = 46;
 
-        [RED] public CUInt16 bytesize { get; set; }
-        [RED] public CBytes unk1 { get; set; }
+        [Ordinal(0)] [RED] public CUInt16 bytesize { get; set; }
+        [Ordinal(1)] [RED] public CBytes unk1 { get; set; }
 
         public SMeshBlock5(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskChangeAltitudeDef : IBehTreeTaskDefinition
 	{
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(1)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(2)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("onMain")] 		public CBool OnMain { get; set;}
+		[Ordinal(3)] [RED("onMain")] 		public CBool OnMain { get; set;}
 
-		[RED("HighFlightChance")] 		public CFloat HighFlightChance { get; set;}
+		[Ordinal(4)] [RED("HighFlightChance")] 		public CFloat HighFlightChance { get; set;}
 
-		[RED("LowFlightChance")] 		public CFloat LowFlightChance { get; set;}
+		[Ordinal(5)] [RED("LowFlightChance")] 		public CFloat LowFlightChance { get; set;}
 
-		[RED("LandChance")] 		public CFloat LandChance { get; set;}
+		[Ordinal(6)] [RED("LandChance")] 		public CFloat LandChance { get; set;}
 
-		[RED("frequency")] 		public CFloat Frequency { get; set;}
+		[Ordinal(7)] [RED("frequency")] 		public CFloat Frequency { get; set;}
 
 		public CBTTaskChangeAltitudeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

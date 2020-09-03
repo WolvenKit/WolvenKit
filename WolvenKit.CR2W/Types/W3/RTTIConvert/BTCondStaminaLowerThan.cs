@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondStaminaLowerThan : IBehTreeTask
 	{
-		[RED("baseStatType")] 		public CEnum<EBaseCharacterStats> BaseStatType { get; set;}
+		[Ordinal(1)] [RED("baseStatType")] 		public CEnum<EBaseCharacterStats> BaseStatType { get; set;}
 
-		[RED("statName")] 		public CName StatName { get; set;}
+		[Ordinal(2)] [RED("statName")] 		public CName StatName { get; set;}
 
-		[RED("getStat")] 		public CBool GetStat { get; set;}
+		[Ordinal(3)] [RED("getStat")] 		public CBool GetStat { get; set;}
 
-		[RED("statValue")] 		public CFloat StatValue { get; set;}
+		[Ordinal(4)] [RED("statValue")] 		public CFloat StatValue { get; set;}
 
 		public BTCondStaminaLowerThan(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

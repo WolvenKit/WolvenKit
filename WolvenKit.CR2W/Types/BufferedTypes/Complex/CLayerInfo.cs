@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
-
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -14,7 +14,7 @@ namespace WolvenKit.CR2W.Types
     {
        
 
-        [REDBuffer(true)] public CHandle<CLayerGroup> ParentGroup { get; set; }
+        [Ordinal(1000)] [REDBuffer(true)] public CHandle<CLayerGroup> ParentGroup { get; set; }
 
         public CLayerInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

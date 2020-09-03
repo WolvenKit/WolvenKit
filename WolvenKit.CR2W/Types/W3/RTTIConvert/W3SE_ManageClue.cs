@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_ManageClue : W3SwitchEvent
 	{
-		[RED("clueHandle", 2,0)] 		public CArray<EntityHandle> ClueHandle { get; set;}
+		[Ordinal(1)] [RED("clueHandle", 2,0)] 		public CArray<EntityHandle> ClueHandle { get; set;}
 
-		[RED("clueTag")] 		public CName ClueTag { get; set;}
+		[Ordinal(2)] [RED("clueTag")] 		public CName ClueTag { get; set;}
 
-		[RED("operations", 2,0)] 		public CArray<CEnum<EClueOperation>> Operations { get; set;}
+		[Ordinal(3)] [RED("operations", 2,0)] 		public CArray<CEnum<EClueOperation>> Operations { get; set;}
 
-		[RED("myTags", 2,0)] 		public CArray<CName> MyTags { get; set;}
+		[Ordinal(4)] [RED("myTags", 2,0)] 		public CArray<CName> MyTags { get; set;}
 
 		public W3SE_ManageClue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

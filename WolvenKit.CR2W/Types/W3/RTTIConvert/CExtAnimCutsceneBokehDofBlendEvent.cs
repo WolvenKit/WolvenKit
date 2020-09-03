@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimCutsceneBokehDofBlendEvent : CExtAnimDurationEvent
 	{
-		[RED("bokehDofParamsStart")] 		public SBokehDofParams BokehDofParamsStart { get; set;}
+		[Ordinal(1)] [RED("bokehDofParamsStart")] 		public SBokehDofParams BokehDofParamsStart { get; set;}
 
-		[RED("bokehDofParamsEnd")] 		public SBokehDofParams BokehDofParamsEnd { get; set;}
+		[Ordinal(2)] [RED("bokehDofParamsEnd")] 		public SBokehDofParams BokehDofParamsEnd { get; set;}
 
 		public CExtAnimCutsceneBokehDofBlendEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CApexResource : CMeshTypeResource
 	{
-		[RED("apexBinaryAsset", 95,0)] 		public CByteArray ApexBinaryAsset { get; set;}
+		[Ordinal(1)] [RED("apexBinaryAsset", 95,0)] 		public CByteArray ApexBinaryAsset { get; set;}
 
-		[RED("apexMaterialNames", 2,0)] 		public CArray<CString> ApexMaterialNames { get; set;}
+		[Ordinal(2)] [RED("apexMaterialNames", 2,0)] 		public CArray<CString> ApexMaterialNames { get; set;}
 
-		[RED("shadowDistance")] 		public CFloat ShadowDistance { get; set;}
+		[Ordinal(3)] [RED("shadowDistance")] 		public CFloat ShadowDistance { get; set;}
 
 		public CApexResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

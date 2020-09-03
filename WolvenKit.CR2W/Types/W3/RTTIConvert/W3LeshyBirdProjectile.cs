@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3LeshyBirdProjectile : CProjectileTrajectory
 	{
-		[RED("fxEntityTemplate")] 		public CHandle<CEntityTemplate> FxEntityTemplate { get; set;}
+		[Ordinal(1)] [RED("fxEntityTemplate")] 		public CHandle<CEntityTemplate> FxEntityTemplate { get; set;}
 
-		[RED("fxEntity")] 		public CHandle<CEntity> FxEntity { get; set;}
+		[Ordinal(2)] [RED("fxEntity")] 		public CHandle<CEntity> FxEntity { get; set;}
 
-		[RED("action")] 		public CHandle<W3DamageAction> Action { get; set;}
+		[Ordinal(3)] [RED("action")] 		public CHandle<W3DamageAction> Action { get; set;}
 
-		[RED("owner")] 		public CHandle<CActor> Owner { get; set;}
+		[Ordinal(4)] [RED("owner")] 		public CHandle<CActor> Owner { get; set;}
 
-		[RED("projPos")] 		public Vector ProjPos { get; set;}
+		[Ordinal(5)] [RED("projPos")] 		public Vector ProjPos { get; set;}
 
-		[RED("projRot")] 		public EulerAngles ProjRot { get; set;}
+		[Ordinal(6)] [RED("projRot")] 		public EulerAngles ProjRot { get; set;}
 
-		[RED("projExpired")] 		public CBool ProjExpired { get; set;}
+		[Ordinal(7)] [RED("projExpired")] 		public CBool ProjExpired { get; set;}
 
 		public W3LeshyBirdProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

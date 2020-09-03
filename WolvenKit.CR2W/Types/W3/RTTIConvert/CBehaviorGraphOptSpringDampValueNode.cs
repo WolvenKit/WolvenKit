@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,21 +11,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphOptSpringDampValueNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("cachedSmoothTimeNode")] 		public CPtr<CBehaviorGraphValueNode> CachedSmoothTimeNode { get; set;}
+		[Ordinal(1)] [RED("cachedSmoothTimeNode")] 		public CPtr<CBehaviorGraphValueNode> CachedSmoothTimeNode { get; set;}
 
-		[RED("smoothTime")] 		public CFloat SmoothTime { get; set;}
+		[Ordinal(2)] [RED("smoothTime")] 		public CFloat SmoothTime { get; set;}
 
-		[RED("scale")] 		public CFloat Scale { get; set;}
+		[Ordinal(3)] [RED("scale")] 		public CFloat Scale { get; set;}
 
-		[RED("maxSpeed")] 		public CFloat MaxSpeed { get; set;}
+		[Ordinal(4)] [RED("maxSpeed")] 		public CFloat MaxSpeed { get; set;}
 
-		[RED("maxDiff")] 		public CFloat MaxDiff { get; set;}
+		[Ordinal(5)] [RED("maxDiff")] 		public CFloat MaxDiff { get; set;}
 
-		[RED("defaultValue")] 		public CFloat DefaultValue { get; set;}
+		[Ordinal(6)] [RED("defaultValue")] 		public CFloat DefaultValue { get; set;}
 
-		[RED("forceInputValueOnActivate")] 		public CBool ForceInputValueOnActivate { get; set;}
+		[Ordinal(7)] [RED("forceInputValueOnActivate")] 		public CBool ForceInputValueOnActivate { get; set;}
 
-		[RED("forceDefaultValueOnActivate")] 		public CBool ForceDefaultValueOnActivate { get; set;}
+		[Ordinal(8)] [RED("forceDefaultValueOnActivate")] 		public CBool ForceDefaultValueOnActivate { get; set;}
 
 		public CBehaviorGraphOptSpringDampValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

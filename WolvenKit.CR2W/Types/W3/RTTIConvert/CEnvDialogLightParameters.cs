@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvDialogLightParameters : CVariable
 	{
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(1)] [RED("activated")] 		public CBool Activated { get; set;}
 
-		[RED("lightColor")] 		public SSimpleCurve LightColor { get; set;}
+		[Ordinal(2)] [RED("lightColor")] 		public SSimpleCurve LightColor { get; set;}
 
-		[RED("lightColor2")] 		public SSimpleCurve LightColor2 { get; set;}
+		[Ordinal(3)] [RED("lightColor2")] 		public SSimpleCurve LightColor2 { get; set;}
 
-		[RED("lightColor3")] 		public SSimpleCurve LightColor3 { get; set;}
+		[Ordinal(4)] [RED("lightColor3")] 		public SSimpleCurve LightColor3 { get; set;}
 
 		public CEnvDialogLightParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

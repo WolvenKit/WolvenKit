@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTicketSourceConfiguration : CVariable
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(1)] [RED("name")] 		public CName Name { get; set;}
 
-		[RED("ticketsPoolSize")] 		public CUInt16 TicketsPoolSize { get; set;}
+		[Ordinal(2)] [RED("ticketsPoolSize")] 		public CUInt16 TicketsPoolSize { get; set;}
 
-		[RED("minimalImportance")] 		public CFloat MinimalImportance { get; set;}
+		[Ordinal(3)] [RED("minimalImportance")] 		public CFloat MinimalImportance { get; set;}
 
 		public CTicketSourceConfiguration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

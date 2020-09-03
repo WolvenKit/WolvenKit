@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWraithDrainDance : CBTTaskPlayAnimationEventDecorator
 	{
-		[RED("drainDistance")] 		public CFloat DrainDistance { get; set;}
+		[Ordinal(1)] [RED("drainDistance")] 		public CFloat DrainDistance { get; set;}
 
-		[RED("drainTemplate")] 		public CHandle<CEntityTemplate> DrainTemplate { get; set;}
+		[Ordinal(2)] [RED("drainTemplate")] 		public CHandle<CEntityTemplate> DrainTemplate { get; set;}
 
-		[RED("m_isDraining")] 		public CBool M_isDraining { get; set;}
+		[Ordinal(3)] [RED("m_isDraining")] 		public CBool M_isDraining { get; set;}
 
-		[RED("m_DrainEffectEntity")] 		public CHandle<CEntity> M_DrainEffectEntity { get; set;}
+		[Ordinal(4)] [RED("m_DrainEffectEntity")] 		public CHandle<CEntity> M_DrainEffectEntity { get; set;}
 
-		[RED("m_Disappeared")] 		public CBool M_Disappeared { get; set;}
+		[Ordinal(5)] [RED("m_Disappeared")] 		public CBool M_Disappeared { get; set;}
 
 		public CBTTaskWraithDrainDance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

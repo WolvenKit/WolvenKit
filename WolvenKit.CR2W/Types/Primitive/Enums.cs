@@ -63,7 +63,7 @@ namespace WolvenKit.CR2W.Types
         #endregion
 
         #region Flags
-        //[Flags]
+        //[Flags] // not found
         public enum EFoodGroup
         {
             FG_Corpse = 1,
@@ -72,77 +72,140 @@ namespace WolvenKit.CR2W.Types
             FG_Water = 8,
             FG_Monster = 16
         }
-        //[Flags]
-        //public enum EMeshChunkRenderMask
-        //{
-        //    MCR_Scene,
-        //    MCR_Cascade1,
-        //    MCR_Cascade2,
-        //    MCR_Cascade3,
-        //    MCR_Cascade4,
-        //    MCR_LocalShadows
-        //}
-
-        //[Flags]
-        //public enum ELightChannel
-        //{
-        //    LC_Characters,
-        //    LC_Interactive,
-        //    LC_Custom0,
-        //    LC_FoliageOutline,
-        //    LC_VisibleThroughtWalls
-        //}
-        //[Flags]
-        //public enum EDismembermentEffectTypeFlag
-        //{
-        //    DETF_Base = 1,
-        //    DETF_Igni = 2,
-        //    DETF_Aaard = 4,
-        //    DETF_Yrden = 8,
-        //    DETF_Quen = 16,
-        //    DETF_Mutation6 = 32,
-        //}
-        //[Flags]
-        //public enum ELightUsageMask
-        //{
-        //    LUM_Custom0,
-        //    LUM_Custom1,
-        //    LUM_Custom2,
-        //    LUM_Custom3,
-        //    LUM_Custom4,
-        //    LUM_Custom5,
-        //    LUM_Custom6,
-        //    LUM_Custom7,
-        //    LUM_RenderToEnvProbe,
-        //    LUM_ExcludeFromSceneRender,
-        //    LUM_IsInteriorOnly,
-        //    LUM_IsExteriorOnly,
-        //}
+        [Flags] // done
+        public enum EMeshChunkRenderMask
+        {
+            MCR_Scene = 1,
+            MCR_Cascade1 = 2,
+            MCR_Cascade2 = 4,
+            MCR_Cascade3 = 8,
+            MCR_Cascade4 = 0x10,
+            MCR_LocalShadows = 0x20
+        }
+        [Flags] //done
+        public enum ELightChannel
+        {
+            LC_Characters = 2,
+            LC_Interactive = 4,
+            LC_Custom0 = 8,
+            LC_FoliageOutline = 0x10,
+            LC_VisibleThroughtWalls = 0x20
+        }
+        [Flags] //done
+        public enum EDismembermentEffectTypeFlag
+        {
+            DETF_Base = 1,
+            DETF_Igni = 2,
+            DETF_Aaard = 4,
+            DETF_Yrden = 8,
+            DETF_Quen = 0x10,
+            DETF_Mutation6 = 0x20,
+        }
+        [Flags] //done
+        public enum ELightUsageMask
+        {
+            LUM_Custom0 = 1,
+            LUM_Custom1 = 2,
+            LUM_Custom2 = 4,
+            LUM_Custom3 = 8,
+            LUM_Custom4 = 0x10,
+            LUM_Custom5 = 0x20,
+            LUM_Custom6 = 0x40,
+            LUM_Custom7 = 0x80,
+            LUM_RenderToEnvProbe = 0x100,
+            LUM_ExcludeFromSceneRender = 0x200,
+            LUM_IsInteriorOnly = 0x400,
+            LUM_IsExteriorOnly = 0x800,
+        }
+        [Flags] //done
         public enum EMovementFlags
         {
-            MM_CombatMode,
-            MM_MoveSliding
+            MM_CombatMode = 1,
+            MM_MoveSliding = 2
         }
+        [Flags] //done
+        public enum ETriggerChannel
+        {
+            TC_Default = 1,
+            TC_Player = 2,
+            TC_Camera = 4,
+            TC_NPC = 8,
+            TC_SoundReverbArea = 0x10,
+            TC_SoundAmbientArea = 0x20,
+            TC_Quest = 0x40,
+            TC_Projectiles = 0x80,
+            TC_Horse = 0x100,
+            TC_Custom1 = 0x20000,
+            TC_Custom2 = 0x40000,
+            TC_Custom3 = 0x80000,
+            TC_Custom4 = 0x100000,
+            TC_Custom5 = 0x200000,
+            TC_Custom6 = 0x400000,
+            TC_Custom7 = 0x800000,
+            TC_Custom8 = 0x1000000,
+            TC_Custom9 = 0x2000000,
+            TC_Custom10 = 0x4000000,
+            TC_Custom11 = 0x8000000,
+            TC_Custom12 = 0x10000000,
+            TC_Custom13 = 0x20000000,
+            TC_Custom14 = 0x40000000
+        }
+        [Flags] //done
         public enum EImmunityFlags
         {
-            IF_Potion,
-            IF_Positive,
-            IF_Negative,
-            IF_Neutral,
-            IF_Immobilize,
-            IF_Confuse,
-            IF_Damage,
+            IF_Potion = 1,
+            IF_Positive = 2,
+            IF_Negative = 4,
+            IF_Neutral = 8,
+            IF_Immobilize = 0x10,
+            IF_Confuse = 0x20,
+            IF_Damage = 0x40
         }
+        [Flags] //done
+        public enum EEntityStaticFlags
+        {
+            ESF_Streamed = 1,
+            ESF_NoVisibilityQuery = 2,
+            ESF_NoCompExtract = 4,
+            ESF_NoCompMerge = 8
+        }
+        [Flags] //done
+        public enum EDrawableFlags
+        {
+            DF_IsVisible = 1,
+            DF_CastShadows = 2,
+            DF_NoLighting = 4,
+            DF_LocalWindSimulation = 8,
+            DF_UseInAllApperances = 0x10,
+            DF_NoColoring = 0x20,
+            DF_NoDissolves = 0x40,
+            DF_CameraTransformRotate = 0x80,
+            DF_CameraTransformOnlyPosition = 0x100,
+            DF_CastShadowsWhenNotVisible = 0x200,
+            DF_CastShadowsFromLocalLightsOnly = 0x400,
+            DF_ForceNoAutohide = 0x800,
+            DF_DynamicGeometry = 0x4000,
+            DF_ForceTwoSided = 0x10000,
+            DF_ForceHighestLOD = 0x20000,
+            DF_MissedUpdateTransform = 0x40000,
+            DF_Collapsed = 0x80000,
+            DF_ClimbBlock = 0x100000,
+            DF_ClimbabUnlock = 0x200000,
+            DF_IsCharacterShadowFallback = 0x800000,
+            DF_UseWithSimplygonOnly = 0x1000000
+        }
+        [Flags] //done
         public enum EHardAttachmentFlags
         {
-            HAF_FreePositionAxisX,
-            HAF_FreePositionAxisY,
-            HAF_FreePositionAxisZ,
-            HAF_FreeRotation
+            HAF_FreePositionAxisX = 1,
+            HAF_FreePositionAxisY = 2,
+            HAF_FreePositionAxisZ = 4,
+            HAF_FreeRotation = 8,
         }
+        [Flags] //done
         public enum ESkeletonBoneFlags
         {
-            SBF_LockTranslation
+            SBF_LockTranslation = 1
         }
         #endregion
 
@@ -596,7 +659,22 @@ namespace WolvenKit.CR2W.Types
             EDM_HorseRaceTarget,
             EDM_HorseRaceDummy,
         }
-        
+
+        public enum BlockDataObjectType
+        {
+            Invalid = 0x1,
+            Mesh = 0x2,
+            Collision = 0x3,
+            Decal = 0x4,
+            Dimmer = 0x5,
+            PointLight = 0x6,
+            SpotLight = 0x7,
+            RigidBody = 0x8,
+            Cloth = 0x9,
+            Destruction = 0xA,
+            Particles = 0xB,
+        };
+
         public enum EFactValueChangeMethod
         {
             FVCM_Add,
@@ -4840,14 +4918,6 @@ namespace WolvenKit.CR2W.Types
             CSM_4,
             CSM_5
         }
-        //public enum ETriggerChannels
-        //{
-        //    TC_Default,
-        //    TC_Player,
-        //    TC_Camera,
-        //    TC_NPC,
-        //    TC_SoundReverbArea
-        //}
         public enum EGameplayMimicMode
         {
             GMM_Default,

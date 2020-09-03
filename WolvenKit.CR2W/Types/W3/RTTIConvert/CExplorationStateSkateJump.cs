@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateSkateJump : CExplorationStateJump
 	{
-		[RED("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
+		[Ordinal(1)] [RED("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
 
-		[RED("attacked")] 		public CBool Attacked { get; set;}
+		[Ordinal(2)] [RED("attacked")] 		public CBool Attacked { get; set;}
 
-		[RED("attacktimeMin")] 		public CFloat AttacktimeMin { get; set;}
+		[Ordinal(3)] [RED("attacktimeMin")] 		public CFloat AttacktimeMin { get; set;}
 
-		[RED("attackVertSpeedMin")] 		public CFloat AttackVertSpeedMin { get; set;}
+		[Ordinal(4)] [RED("attackVertSpeedMin")] 		public CFloat AttackVertSpeedMin { get; set;}
 
-		[RED("attackVertSpeedImpulse")] 		public CFloat AttackVertSpeedImpulse { get; set;}
+		[Ordinal(5)] [RED("attackVertSpeedImpulse")] 		public CFloat AttackVertSpeedImpulse { get; set;}
 
 		public CExplorationStateSkateJump(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

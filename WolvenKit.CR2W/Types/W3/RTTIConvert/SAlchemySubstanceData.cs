@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAlchemySubstanceData : CVariable
 	{
-		[RED("type")] 		public CName Type { get; set;}
+		[Ordinal(1)] [RED("type")] 		public CName Type { get; set;}
 
-		[RED("level")] 		public CInt32 Level { get; set;}
+		[Ordinal(2)] [RED("level")] 		public CInt32 Level { get; set;}
 
-		[RED("isPermanent")] 		public CBool IsPermanent { get; set;}
+		[Ordinal(3)] [RED("isPermanent")] 		public CBool IsPermanent { get; set;}
 
 		public SAlchemySubstanceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

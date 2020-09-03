@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,25 +11,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAnimationMixerSlotNode : CBehaviorGraphBaseNode
 	{
-		[RED("bodyOrMimicMode")] 		public CBool BodyOrMimicMode { get; set;}
+		[Ordinal(1)] [RED("bodyOrMimicMode")] 		public CBool BodyOrMimicMode { get; set;}
 
-		[RED("canUseIdles")] 		public CBool CanUseIdles { get; set;}
+		[Ordinal(2)] [RED("canUseIdles")] 		public CBool CanUseIdles { get; set;}
 
-		[RED("postIdleAdditiveType")] 		public CEnum<EAdditiveType> PostIdleAdditiveType { get; set;}
+		[Ordinal(3)] [RED("postIdleAdditiveType")] 		public CEnum<EAdditiveType> PostIdleAdditiveType { get; set;}
 
-		[RED("postAllAdditiveType")] 		public CEnum<EAdditiveType> PostAllAdditiveType { get; set;}
+		[Ordinal(4)] [RED("postAllAdditiveType")] 		public CEnum<EAdditiveType> PostAllAdditiveType { get; set;}
 
-		[RED("fullEyesWeightMimicsTracks", 2,0)] 		public CArray<CName> FullEyesWeightMimicsTracks { get; set;}
+		[Ordinal(5)] [RED("fullEyesWeightMimicsTracks", 2,0)] 		public CArray<CName> FullEyesWeightMimicsTracks { get; set;}
 
-		[RED("cachedPostIdleNodeA")] 		public CPtr<CBehaviorGraphNode> CachedPostIdleNodeA { get; set;}
+		[Ordinal(6)] [RED("cachedPostIdleNodeA")] 		public CPtr<CBehaviorGraphNode> CachedPostIdleNodeA { get; set;}
 
-		[RED("cachedPostIdleNodeB")] 		public CPtr<CBehaviorGraphNode> CachedPostIdleNodeB { get; set;}
+		[Ordinal(7)] [RED("cachedPostIdleNodeB")] 		public CPtr<CBehaviorGraphNode> CachedPostIdleNodeB { get; set;}
 
-		[RED("cachedPostAllNodeA")] 		public CPtr<CBehaviorGraphNode> CachedPostAllNodeA { get; set;}
+		[Ordinal(8)] [RED("cachedPostAllNodeA")] 		public CPtr<CBehaviorGraphNode> CachedPostAllNodeA { get; set;}
 
-		[RED("cachedPostAllNodeB")] 		public CPtr<CBehaviorGraphNode> CachedPostAllNodeB { get; set;}
+		[Ordinal(9)] [RED("cachedPostAllNodeB")] 		public CPtr<CBehaviorGraphNode> CachedPostAllNodeB { get; set;}
 
-		[RED("debugOverride")] 		public CBool DebugOverride { get; set;}
+		[Ordinal(10)] [RED("debugOverride")] 		public CBool DebugOverride { get; set;}
 
 		public CBehaviorGraphAnimationMixerSlotNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

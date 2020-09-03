@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_ManageNewDoor : W3SwitchEvent
 	{
-		[RED("doorTag")] 		public CName DoorTag { get; set;}
+		[Ordinal(1)] [RED("doorTag")] 		public CName DoorTag { get; set;}
 
-		[RED("operations", 2,0)] 		public CArray<CEnum<ENewDoorOperation>> Operations { get; set;}
+		[Ordinal(2)] [RED("operations", 2,0)] 		public CArray<CEnum<ENewDoorOperation>> Operations { get; set;}
 
-		[RED("force")] 		public CBool Force { get; set;}
+		[Ordinal(3)] [RED("force")] 		public CBool Force { get; set;}
 
 		public W3SE_ManageNewDoor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

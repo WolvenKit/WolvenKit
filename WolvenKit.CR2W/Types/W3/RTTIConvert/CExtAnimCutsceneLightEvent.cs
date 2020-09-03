@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimCutsceneLightEvent : CExtAnimEvent
 	{
-		[RED("tag")] 		public TagList Tag { get; set;}
+		[Ordinal(1)] [RED("tag")] 		public TagList Tag { get; set;}
 
-		[RED("isEnabled")] 		public CBool IsEnabled { get; set;}
+		[Ordinal(2)] [RED("isEnabled")] 		public CBool IsEnabled { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(3)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		[RED("brightness")] 		public CFloat Brightness { get; set;}
+		[Ordinal(4)] [RED("brightness")] 		public CFloat Brightness { get; set;}
 
-		[RED("color")] 		public CColor Color { get; set;}
+		[Ordinal(5)] [RED("color")] 		public CColor Color { get; set;}
 
-		[RED("lightFlickering")] 		public SLightFlickering LightFlickering { get; set;}
+		[Ordinal(6)] [RED("lightFlickering")] 		public SLightFlickering LightFlickering { get; set;}
 
 		public CExtAnimCutsceneLightEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

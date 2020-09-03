@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeCombatTicketReleaseDefinition : IBehTreeNodeCombatTicketDecoratorBaseDefinition
 	{
-		[RED("releaseOnActivation")] 		public CBool ReleaseOnActivation { get; set;}
+		[Ordinal(1)] [RED("releaseOnActivation")] 		public CBool ReleaseOnActivation { get; set;}
 
-		[RED("releaseOnDeactivation")] 		public CBool ReleaseOnDeactivation { get; set;}
+		[Ordinal(2)] [RED("releaseOnDeactivation")] 		public CBool ReleaseOnDeactivation { get; set;}
 
-		[RED("releaseOnCompletion")] 		public CBool ReleaseOnCompletion { get; set;}
+		[Ordinal(3)] [RED("releaseOnCompletion")] 		public CBool ReleaseOnCompletion { get; set;}
 
 		public CBehTreeNodeCombatTicketReleaseDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

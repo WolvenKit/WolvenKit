@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskStopEffectIfActive : IBehTreeTask
 	{
-		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(1)] [RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
-		[RED("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(2)] [RED("effectName")] 		public CName EffectName { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(3)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(4)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("allEffects")] 		public CBool AllEffects { get; set;}
+		[Ordinal(5)] [RED("allEffects")] 		public CBool AllEffects { get; set;}
 
-		[RED("findActorByTag")] 		public CBool FindActorByTag { get; set;}
+		[Ordinal(6)] [RED("findActorByTag")] 		public CBool FindActorByTag { get; set;}
 
-		[RED("tagToFind")] 		public CName TagToFind { get; set;}
+		[Ordinal(7)] [RED("tagToFind")] 		public CName TagToFind { get; set;}
 
 		public CBTTaskStopEffectIfActive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

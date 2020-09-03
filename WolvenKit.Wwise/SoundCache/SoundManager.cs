@@ -13,7 +13,7 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Cache
 {
-    public class SoundManager : IWitcherArchive
+    public class SoundManager : IWitcherArchiveManager
     {
         public SoundManager()
         {

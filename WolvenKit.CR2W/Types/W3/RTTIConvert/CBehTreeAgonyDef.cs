@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeAgonyDef : IBehTreeTaskDefinition
 	{
-		[RED("disableAgony")] 		public CBehTreeValBool DisableAgony { get; set;}
+		[Ordinal(1)] [RED("disableAgony")] 		public CBehTreeValBool DisableAgony { get; set;}
 
-		[RED("agonyTime")] 		public CInt32 AgonyTime { get; set;}
+		[Ordinal(2)] [RED("agonyTime")] 		public CInt32 AgonyTime { get; set;}
 
-		[RED("chance")] 		public CInt32 Chance { get; set;}
+		[Ordinal(3)] [RED("chance")] 		public CInt32 Chance { get; set;}
 
 		public CBehTreeAgonyDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

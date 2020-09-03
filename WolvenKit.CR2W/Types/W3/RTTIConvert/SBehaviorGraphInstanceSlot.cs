@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorGraphInstanceSlot : CVariable
 	{
-		[RED("instanceName")] 		public CName InstanceName { get; set;}
+		[Ordinal(1)] [RED("instanceName")] 		public CName InstanceName { get; set;}
 
-		[RED("graph")] 		public CHandle<CBehaviorGraph> Graph { get; set;}
+		[Ordinal(2)] [RED("graph")] 		public CHandle<CBehaviorGraph> Graph { get; set;}
 
-		[RED("alwaysOnTopOfStack")] 		public CBool AlwaysOnTopOfStack { get; set;}
+		[Ordinal(3)] [RED("alwaysOnTopOfStack")] 		public CBool AlwaysOnTopOfStack { get; set;}
 
 		public SBehaviorGraphInstanceSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

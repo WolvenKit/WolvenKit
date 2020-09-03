@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskManageSplashEffect : IBehTreeTask
 	{
-		[RED("m_SplashEntityTemplate")] 		public CHandle<CEntityTemplate> M_SplashEntityTemplate { get; set;}
+		[Ordinal(1)] [RED("m_SplashEntityTemplate")] 		public CHandle<CEntityTemplate> M_SplashEntityTemplate { get; set;}
 
-		[RED("m_PreviousDistanceFromSurface")] 		public CFloat M_PreviousDistanceFromSurface { get; set;}
+		[Ordinal(2)] [RED("m_PreviousDistanceFromSurface")] 		public CFloat M_PreviousDistanceFromSurface { get; set;}
 
-		[RED("m_CrossedOnce")] 		public CBool M_CrossedOnce { get; set;}
+		[Ordinal(3)] [RED("m_CrossedOnce")] 		public CBool M_CrossedOnce { get; set;}
 
-		[RED("couldntLoadResource")] 		public CBool CouldntLoadResource { get; set;}
+		[Ordinal(4)] [RED("couldntLoadResource")] 		public CBool CouldntLoadResource { get; set;}
 
 		public BTTaskManageSplashEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

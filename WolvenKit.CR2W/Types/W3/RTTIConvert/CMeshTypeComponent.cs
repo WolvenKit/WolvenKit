@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMeshTypeComponent : CDrawableComponent
 	{
-		[RED("forceLODLevel")] 		public CInt32 ForceLODLevel { get; set;}
+		[Ordinal(1)] [RED("forceLODLevel")] 		public CInt32 ForceLODLevel { get; set;}
 
-		[RED("forceAutoHideDistance")] 		public CUInt16 ForceAutoHideDistance { get; set;}
+		[Ordinal(2)] [RED("forceAutoHideDistance")] 		public CUInt16 ForceAutoHideDistance { get; set;}
 
-		[RED("shadowImportanceBias")] 		public CEnum<EMeshShadowImportanceBias> ShadowImportanceBias { get; set;}
+		[Ordinal(3)] [RED("shadowImportanceBias")] 		public CEnum<EMeshShadowImportanceBias> ShadowImportanceBias { get; set;}
 
-		[RED("defaultEffectParams")] 		public Vector DefaultEffectParams { get; set;}
+		[Ordinal(4)] [RED("defaultEffectParams")] 		public Vector DefaultEffectParams { get; set;}
 
-		[RED("defaultEffectColor")] 		public CColor DefaultEffectColor { get; set;}
+		[Ordinal(5)] [RED("defaultEffectColor")] 		public CColor DefaultEffectColor { get; set;}
 
 		public CMeshTypeComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

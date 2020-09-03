@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventReward : CStorySceneEvent
 	{
-		[RED("npcTag")] 		public CName NpcTag { get; set;}
+		[Ordinal(1)] [RED("npcTag")] 		public CName NpcTag { get; set;}
 
-		[RED("itemName")] 		public CName ItemName { get; set;}
+		[Ordinal(2)] [RED("itemName")] 		public CName ItemName { get; set;}
 
-		[RED("rewardName")] 		public CName RewardName { get; set;}
+		[Ordinal(3)] [RED("rewardName")] 		public CName RewardName { get; set;}
 
-		[RED("quantity")] 		public CInt32 Quantity { get; set;}
+		[Ordinal(4)] [RED("quantity")] 		public CInt32 Quantity { get; set;}
 
-		[RED("dontInformGui")] 		public CBool DontInformGui { get; set;}
+		[Ordinal(5)] [RED("dontInformGui")] 		public CBool DontInformGui { get; set;}
 
 		public CStorySceneEventReward(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

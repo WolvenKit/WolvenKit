@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskBiesChargeDef : CBTTask3StateAttackDef
 	{
-		[RED("endStuck")] 		public CEnum<EAttackType> EndStuck { get; set;}
+		[Ordinal(1)] [RED("endStuck")] 		public CEnum<EAttackType> EndStuck { get; set;}
 
-		[RED("endHit")] 		public CEnum<EAttackType> EndHit { get; set;}
+		[Ordinal(2)] [RED("endHit")] 		public CEnum<EAttackType> EndHit { get; set;}
 
-		[RED("stuckTime")] 		public CFloat StuckTime { get; set;}
+		[Ordinal(3)] [RED("stuckTime")] 		public CFloat StuckTime { get; set;}
 
 		public CBTTaskBiesChargeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

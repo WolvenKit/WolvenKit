@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class TutorialBlockerData : TextPopupData
 	{
-		[RED("m_title")] 		public CString M_title { get; set;}
+		[Ordinal(1)] [RED("m_title")] 		public CString M_title { get; set;}
 
-		[RED("m_description")] 		public CString M_description { get; set;}
+		[Ordinal(2)] [RED("m_description")] 		public CString M_description { get; set;}
 
-		[RED("m_imagepath")] 		public CString M_imagepath { get; set;}
+		[Ordinal(3)] [RED("m_imagepath")] 		public CString M_imagepath { get; set;}
 
-		[RED("scriptTag")] 		public CName ScriptTag { get; set;}
+		[Ordinal(4)] [RED("scriptTag")] 		public CName ScriptTag { get; set;}
 
-		[RED("managerRef")] 		public CHandle<CR4TutorialSystem> ManagerRef { get; set;}
+		[Ordinal(5)] [RED("managerRef")] 		public CHandle<CR4TutorialSystem> ManagerRef { get; set;}
 
 		public TutorialBlockerData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

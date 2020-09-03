@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PlayerStateMountHorse : CR4PlayerStateMountTheVehicle
 	{
-		[RED("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
+		[Ordinal(1)] [RED("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
 
-		[RED("mountAnimStarted")] 		public CBool MountAnimStarted { get; set;}
+		[Ordinal(2)] [RED("mountAnimStarted")] 		public CBool MountAnimStarted { get; set;}
 
-		[RED("MOUNT_TIMEOUT")] 		public CFloat MOUNT_TIMEOUT { get; set;}
+		[Ordinal(3)] [RED("MOUNT_TIMEOUT")] 		public CFloat MOUNT_TIMEOUT { get; set;}
 
 		public CR4PlayerStateMountHorse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IMoveSteeringNode : CObject
 	{
-		[RED("comment")] 		public CString Comment { get; set;}
+		[Ordinal(1)] [RED("comment")] 		public CString Comment { get; set;}
 
-		[RED("graphPosX")] 		public CInt32 GraphPosX { get; set;}
+		[Ordinal(2)] [RED("graphPosX")] 		public CInt32 GraphPosX { get; set;}
 
-		[RED("graphPosY")] 		public CInt32 GraphPosY { get; set;}
+		[Ordinal(3)] [RED("graphPosY")] 		public CInt32 GraphPosY { get; set;}
 
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(4)] [RED("enabled")] 		public CBool Enabled { get; set;}
 
 		public IMoveSteeringNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

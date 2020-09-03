@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_ActorRotationToNode : CQCActorScriptedCondition
 	{
-		[RED("condition")] 		public CEnum<ECompareOp> Condition { get; set;}
+		[Ordinal(1)] [RED("condition")] 		public CEnum<ECompareOp> Condition { get; set;}
 
-		[RED("degrees")] 		public CFloat Degrees { get; set;}
+		[Ordinal(2)] [RED("degrees")] 		public CFloat Degrees { get; set;}
 
-		[RED("targetTag")] 		public CName TargetTag { get; set;}
+		[Ordinal(3)] [RED("targetTag")] 		public CName TargetTag { get; set;}
 
-		[RED("targetNode")] 		public CHandle<CNode> TargetNode { get; set;}
+		[Ordinal(4)] [RED("targetNode")] 		public CHandle<CNode> TargetNode { get; set;}
 
-		[RED("listener")] 		public CHandle<W3QuestCond_ActorRotationToNode_Listener> Listener { get; set;}
+		[Ordinal(5)] [RED("listener")] 		public CHandle<W3QuestCond_ActorRotationToNode_Listener> Listener { get; set;}
 
 		public W3QuestCond_ActorRotationToNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestChangeWorldBlock : CQuestGraphBlock
 	{
-		[RED("worldFilePath")] 		public CString WorldFilePath { get; set;}
+		[Ordinal(1)] [RED("worldFilePath")] 		public CString WorldFilePath { get; set;}
 
-		[RED("newWorld")] 		public CInt32 NewWorld { get; set;}
+		[Ordinal(2)] [RED("newWorld")] 		public CInt32 NewWorld { get; set;}
 
-		[RED("loadingMovieName")] 		public CString LoadingMovieName { get; set;}
+		[Ordinal(3)] [RED("loadingMovieName")] 		public CString LoadingMovieName { get; set;}
 
-		[RED("targetTag")] 		public TagList TargetTag { get; set;}
+		[Ordinal(4)] [RED("targetTag")] 		public TagList TargetTag { get; set;}
 
 		public CQuestChangeWorldBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

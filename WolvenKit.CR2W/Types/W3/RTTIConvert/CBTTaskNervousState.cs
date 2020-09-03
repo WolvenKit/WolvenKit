@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskNervousState : IBehTreeTask
 	{
-		[RED("dangerRadius")] 		public CFloat DangerRadius { get; set;}
+		[Ordinal(1)] [RED("dangerRadius")] 		public CFloat DangerRadius { get; set;}
 
-		[RED("rearingChance")] 		public CFloat RearingChance { get; set;}
+		[Ordinal(2)] [RED("rearingChance")] 		public CFloat RearingChance { get; set;}
 
-		[RED("kickChance")] 		public CFloat KickChance { get; set;}
+		[Ordinal(3)] [RED("kickChance")] 		public CFloat KickChance { get; set;}
 
-		[RED("callFromQuestOnly")] 		public CBool CallFromQuestOnly { get; set;}
+		[Ordinal(4)] [RED("callFromQuestOnly")] 		public CBool CallFromQuestOnly { get; set;}
 
-		[RED("force")] 		public CBool Force { get; set;}
+		[Ordinal(5)] [RED("force")] 		public CBool Force { get; set;}
 
-		[RED("called")] 		public CBool Called { get; set;}
+		[Ordinal(6)] [RED("called")] 		public CBool Called { get; set;}
 
-		[RED("dangerNode")] 		public CHandle<CNode> DangerNode { get; set;}
+		[Ordinal(7)] [RED("dangerNode")] 		public CHandle<CNode> DangerNode { get; set;}
 
 		public CBTTaskNervousState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

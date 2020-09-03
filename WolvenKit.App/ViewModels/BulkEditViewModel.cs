@@ -341,7 +341,7 @@ namespace WolvenKit.App.ViewModels
                             if (includedvalues.Count != 0 && !includedvalues.Contains(x))
                                 return;
 
-                            // access the val property of the CVariable baecause there's typecopnverters from string available
+                            // access the val property of the CVariable baecause there's typeconverters from string available
                             var value = proptoedit.accessor.GetMembers().First(_ => _.Name == "val");
                             var converter = TypeDescriptor.GetConverter(value.Type);
                             var result = converter.ConvertFrom(opts.Value);

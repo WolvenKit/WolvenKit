@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAICombatModeActionDecorator : IActionDecorator
 	{
-		[RED("drawWeaponOnStart")] 		public CBool DrawWeaponOnStart { get; set;}
+		[Ordinal(1)] [RED("drawWeaponOnStart")] 		public CBool DrawWeaponOnStart { get; set;}
 
-		[RED("LeftItemType")] 		public CName LeftItemType { get; set;}
+		[Ordinal(2)] [RED("LeftItemType")] 		public CName LeftItemType { get; set;}
 
-		[RED("RightItemType")] 		public CName RightItemType { get; set;}
+		[Ordinal(3)] [RED("RightItemType")] 		public CName RightItemType { get; set;}
 
-		[RED("changeBehaviorGraphOnStart")] 		public CBool ChangeBehaviorGraphOnStart { get; set;}
+		[Ordinal(4)] [RED("changeBehaviorGraphOnStart")] 		public CBool ChangeBehaviorGraphOnStart { get; set;}
 
-		[RED("behGraph")] 		public CEnum<EBehaviorGraph> BehGraph { get; set;}
+		[Ordinal(5)] [RED("behGraph")] 		public CEnum<EBehaviorGraph> BehGraph { get; set;}
 
-		[RED("changeBahviorGraphToExplorationOnDeacitvate")] 		public CBool ChangeBahviorGraphToExplorationOnDeacitvate { get; set;}
+		[Ordinal(6)] [RED("changeBahviorGraphToExplorationOnDeacitvate")] 		public CBool ChangeBahviorGraphToExplorationOnDeacitvate { get; set;}
 
-		[RED("forceCombatModeOnPLAYER")] 		public CBool ForceCombatModeOnPLAYER { get; set;}
+		[Ordinal(7)] [RED("forceCombatModeOnPLAYER")] 		public CBool ForceCombatModeOnPLAYER { get; set;}
 
 		public CAICombatModeActionDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

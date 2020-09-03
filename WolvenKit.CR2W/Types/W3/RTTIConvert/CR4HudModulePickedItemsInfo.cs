@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModulePickedItemsInfo : CR4HudModuleBase
 	{
-		[RED("_RecentlyAddedItemListSize")] 		public CInt32 _RecentlyAddedItemListSize { get; set;}
+		[Ordinal(1)] [RED("_RecentlyAddedItemListSize")] 		public CInt32 _RecentlyAddedItemListSize { get; set;}
 
-		[RED("bCurrentShowState")] 		public CBool BCurrentShowState { get; set;}
+		[Ordinal(2)] [RED("bCurrentShowState")] 		public CBool BCurrentShowState { get; set;}
 
-		[RED("bShouldShowElement")] 		public CBool BShouldShowElement { get; set;}
+		[Ordinal(3)] [RED("bShouldShowElement")] 		public CBool BShouldShowElement { get; set;}
 
-		[RED("_PickedItemListSize")] 		public CInt32 _PickedItemListSize { get; set;}
+		[Ordinal(4)] [RED("_PickedItemListSize")] 		public CInt32 _PickedItemListSize { get; set;}
 
 		public CR4HudModulePickedItemsInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

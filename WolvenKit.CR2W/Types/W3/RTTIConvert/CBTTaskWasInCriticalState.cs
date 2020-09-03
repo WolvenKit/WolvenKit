@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWasInCriticalState : IBehTreeTask
 	{
-		[RED("timeDifference")] 		public CFloat TimeDifference { get; set;}
+		[Ordinal(1)] [RED("timeDifference")] 		public CFloat TimeDifference { get; set;}
 
-		[RED("maxTimeDifference")] 		public CFloat MaxTimeDifference { get; set;}
+		[Ordinal(2)] [RED("maxTimeDifference")] 		public CFloat MaxTimeDifference { get; set;}
 
-		[RED("criticalState")] 		public CEnum<ECriticalStateType> CriticalState { get; set;}
+		[Ordinal(3)] [RED("criticalState")] 		public CEnum<ECriticalStateType> CriticalState { get; set;}
 
-		[RED("timeOfLastCSDeactivation")] 		public CFloat TimeOfLastCSDeactivation { get; set;}
+		[Ordinal(4)] [RED("timeOfLastCSDeactivation")] 		public CFloat TimeOfLastCSDeactivation { get; set;}
 
-		[RED("combatDataStorage")] 		public CHandle<CBaseAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(5)] [RED("combatDataStorage")] 		public CHandle<CBaseAICombatStorage> CombatDataStorage { get; set;}
 
 		public CBTTaskWasInCriticalState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

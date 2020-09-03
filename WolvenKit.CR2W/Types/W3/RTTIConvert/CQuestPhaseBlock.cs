@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestPhaseBlock : CQuestScopeBlock
 	{
-		[RED("layersToLoad", 2,0)] 		public CArray<CString> LayersToLoad { get; set;}
+		[Ordinal(1)] [RED("layersToLoad", 2,0)] 		public CArray<CString> LayersToLoad { get; set;}
 
-		[RED("isBlackscreenPhase")] 		public CBool IsBlackscreenPhase { get; set;}
+		[Ordinal(2)] [RED("isBlackscreenPhase")] 		public CBool IsBlackscreenPhase { get; set;}
 
-		[RED("blackscreenFadeDuration")] 		public CFloat BlackscreenFadeDuration { get; set;}
+		[Ordinal(3)] [RED("blackscreenFadeDuration")] 		public CFloat BlackscreenFadeDuration { get; set;}
 
-		[RED("saveMode")] 		public CEnum<EQuestPhaseSaveMode> SaveMode { get; set;}
+		[Ordinal(4)] [RED("saveMode")] 		public CEnum<EQuestPhaseSaveMode> SaveMode { get; set;}
 
-		[RED("soundBanksDependency", 2,0)] 		public CArray<CName> SoundBanksDependency { get; set;}
+		[Ordinal(5)] [RED("soundBanksDependency", 2,0)] 		public CArray<CName> SoundBanksDependency { get; set;}
 
-		[RED("playGoChunk")] 		public CName PlayGoChunk { get; set;}
+		[Ordinal(6)] [RED("playGoChunk")] 		public CName PlayGoChunk { get; set;}
 
-		[RED("purgeSavedData")] 		public CBool PurgeSavedData { get; set;}
+		[Ordinal(7)] [RED("purgeSavedData")] 		public CBool PurgeSavedData { get; set;}
 
 		public CQuestPhaseBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
@@ -29,16 +30,17 @@ namespace WolvenKit.FlowTreeEditors
                 {
                     lblCondition.Click += delegate { FireSelectEvent(questCondition.Reference); };
 
-                    //var factIdObj = (questCondition.PtrTarget.data as IQuestCondition).factId;
+                    // put something in the tex field:
                     dynamic IQuestCondition = questCondition.Reference.data; //FIXME dynamic 
-                    var factIdObj = IQuestCondition.FactId;
-
-
-                    if (factIdObj != null && factIdObj is string)
+                    try
                     {
-                        lblCondition.Text = ((CString)factIdObj).val;
+                        var factIdObj = IQuestCondition.FactId;
+                        if (factIdObj != null && factIdObj is CString)
+                        {
+                            lblCondition.Text = ((CString)factIdObj).val;
+                        }
                     }
-                    else
+                    catch (Exception)
                     {
                         lblCondition.Text = questCondition.Reference.REDName;
                     }

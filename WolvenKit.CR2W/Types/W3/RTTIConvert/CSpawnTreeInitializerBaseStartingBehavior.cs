@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeInitializerBaseStartingBehavior : ISpawnTreeInitializerAI
 	{
-		[RED("runBehaviorOnSpawn")] 		public CBool RunBehaviorOnSpawn { get; set;}
+		[Ordinal(1)] [RED("runBehaviorOnSpawn")] 		public CBool RunBehaviorOnSpawn { get; set;}
 
-		[RED("runBehaviorOnActivation")] 		public CBool RunBehaviorOnActivation { get; set;}
+		[Ordinal(2)] [RED("runBehaviorOnActivation")] 		public CBool RunBehaviorOnActivation { get; set;}
 
-		[RED("runBehaviorOnLoading")] 		public CBool RunBehaviorOnLoading { get; set;}
+		[Ordinal(3)] [RED("runBehaviorOnLoading")] 		public CBool RunBehaviorOnLoading { get; set;}
 
-		[RED("actionPriority")] 		public CEnum<ETopLevelAIPriorities> ActionPriority { get; set;}
+		[Ordinal(4)] [RED("actionPriority")] 		public CEnum<ETopLevelAIPriorities> ActionPriority { get; set;}
 
 		public CSpawnTreeInitializerBaseStartingBehavior(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

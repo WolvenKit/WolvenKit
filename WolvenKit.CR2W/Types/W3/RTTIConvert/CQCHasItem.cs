@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQCHasItem : CQCActorInventory
 	{
-		[RED("item")] 		public CName Item { get; set;}
+		[Ordinal(1)] [RED("item")] 		public CName Item { get; set;}
 
-		[RED("itemCategory")] 		public CName ItemCategory { get; set;}
+		[Ordinal(2)] [RED("itemCategory")] 		public CName ItemCategory { get; set;}
 
-		[RED("itemTag")] 		public CName ItemTag { get; set;}
+		[Ordinal(3)] [RED("itemTag")] 		public CName ItemTag { get; set;}
 
-		[RED("quantity")] 		public CUInt32 Quantity { get; set;}
+		[Ordinal(4)] [RED("quantity")] 		public CUInt32 Quantity { get; set;}
 
-		[RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
+		[Ordinal(5)] [RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
 
 		public CQCHasItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFairytaleWitchActions : IBehTreeTask
 	{
-		[RED("action")] 		public CEnum<EFairytaleWitchAction> Action { get; set;}
+		[Ordinal(1)] [RED("action")] 		public CEnum<EFairytaleWitchAction> Action { get; set;}
 
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(2)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
 		public CBTTaskFairytaleWitchActions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

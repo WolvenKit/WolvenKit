@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskManageSwimming : IBehTreeTask
 	{
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(1)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("isSwimmingValue")] 		public CBool IsSwimmingValue { get; set;}
+		[Ordinal(2)] [RED("isSwimmingValue")] 		public CBool IsSwimmingValue { get; set;}
 
-		[RED("m_isInWater")] 		public CBool M_isInWater { get; set;}
+		[Ordinal(3)] [RED("m_isInWater")] 		public CBool M_isInWater { get; set;}
 
-		[RED("m_isWaitingForWater")] 		public CBool M_isWaitingForWater { get; set;}
+		[Ordinal(4)] [RED("m_isWaitingForWater")] 		public CBool M_isWaitingForWater { get; set;}
 
 		public CBTTaskManageSwimming(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

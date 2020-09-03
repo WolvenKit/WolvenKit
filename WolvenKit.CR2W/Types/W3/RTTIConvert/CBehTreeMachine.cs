@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeMachine : CObject
 	{
-		[RED("instance")] 		public CPtr<CBehTreeInstance> Instance { get; set;}
+		[Ordinal(1)] [RED("instance")] 		public CPtr<CBehTreeInstance> Instance { get; set;}
 
-		[RED("aiRes")] 		public CHandle<CBehTree> AiRes { get; set;}
+		[Ordinal(2)] [RED("aiRes")] 		public CHandle<CBehTree> AiRes { get; set;}
 
-		[RED("aiParameters", 2,0)] 		public CArray<CHandle<IAIParameters>> AiParameters { get; set;}
+		[Ordinal(3)] [RED("aiParameters", 2,0)] 		public CArray<CHandle<IAIParameters>> AiParameters { get; set;}
 
 		public CBehTreeMachine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

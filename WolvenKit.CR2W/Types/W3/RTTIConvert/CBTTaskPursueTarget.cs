@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPursueTarget : IBehTreeTask
 	{
-		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(1)] [RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[RED("minDistance")] 		public CFloat MinDistance { get; set;}
+		[Ordinal(2)] [RED("minDistance")] 		public CFloat MinDistance { get; set;}
 
-		[RED("keepDistance")] 		public CBool KeepDistance { get; set;}
+		[Ordinal(3)] [RED("keepDistance")] 		public CBool KeepDistance { get; set;}
 
-		[RED("isMoving")] 		public CBool IsMoving { get; set;}
+		[Ordinal(4)] [RED("isMoving")] 		public CBool IsMoving { get; set;}
 
 		public CBTTaskPursueTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
