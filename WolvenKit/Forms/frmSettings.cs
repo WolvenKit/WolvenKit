@@ -34,7 +34,6 @@ namespace WolvenKit
             txVoiceLanguage.Text = config.VoiceLanguage;
             txWCC_Lite.Text = config.WccLite;
 
-
             checkBoxDisableWelcomeForm.Checked = config.IsWelcomeFormDisabled;
             
             comboBoxTheme.Items.AddRange(Enum.GetValues(typeof(EColorThemes)).Cast<object>().ToArray());

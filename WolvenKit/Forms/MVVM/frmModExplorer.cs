@@ -188,6 +188,8 @@ namespace WolvenKit
             treeListView.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
 
             this.searchBox.BackColor = UIController.GetPalette().ToolWindowCaptionButtonInactiveHovered.Background;
+            this.searchBox.ForeColor = UIController.GetForeColor();
+
         }
 
         private void UpdateTreeView(params string[] nodesToUpdate)

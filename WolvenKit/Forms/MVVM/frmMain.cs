@@ -2714,16 +2714,12 @@ namespace WolvenKit
         private void toolsToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
             packageInstallerToolStripMenuItem.Enabled = ActiveMod != null;
-            saveExplorerToolStripMenuItem.Enabled = ActiveMod != null;
             stringsEncoderGUIToolStripMenuItem.Enabled = ActiveMod != null;
             menuCreatorToolStripMenuItem.Enabled = ActiveMod != null;
             bulkEditorToolStripMenuItem.Enabled = ActiveMod != null;
-            renderW2meshToolStripMenuItem.Enabled = ActiveMod != null;
-
-            //advancedToolStripMenuItem.Enabled = ActiveMod != null;
-            experimentalToolStripMenuItem.Enabled = ActiveMod != null;
             cR2WToTextToolStripMenuItem.Enabled = ActiveMod != null;
-            GameDebuggerToolStripMenuItem.Enabled = ActiveMod != null;
+            experimentalToolStripMenuItem.Enabled = ActiveMod != null;
+            launchModkitToolStripMenuItem.Enabled = ActiveMod != null;
         }
 
         private void viewToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
@@ -2731,6 +2727,13 @@ namespace WolvenKit
             radishUtilitytoolStripMenuItem.Enabled = ActiveMod != null;
             importUtilityToolStripMenuItem.Enabled = ActiveMod != null;
         }
+
+        private void gameToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            GameDebuggerToolStripMenuItem.Enabled = ActiveMod != null;
+            saveExplorerToolStripMenuItem.Enabled = ActiveMod != null;
+        }
+
         #endregion
 
         #region File
@@ -3640,8 +3643,8 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             vm.executeGame();
         }
 
-        #endregion
 
+        #endregion
 
     }
 }

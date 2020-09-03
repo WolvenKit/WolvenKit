@@ -286,22 +286,24 @@ namespace WolvenKit
             this.resetfilesButton});
             this.searchstrip.Location = new System.Drawing.Point(0, 0);
             this.searchstrip.Name = "searchstrip";
-            this.searchstrip.Size = new System.Drawing.Size(333, 38);
+            this.searchstrip.Padding = new System.Windows.Forms.Padding(4);
+            this.searchstrip.Size = new System.Drawing.Size(358, 37);
             this.searchstrip.TabIndex = 1;
             this.searchstrip.Text = "toolStrip1";
             // 
             // toolStripLabel1
             // 
+            this.toolStripLabel1.Image = global::WolvenKit.Properties.Resources.Filter_16x;
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(59, 33);
-            this.toolStripLabel1.Text = "Filter: ";
+            this.toolStripLabel1.Padding = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.toolStripLabel1.Size = new System.Drawing.Size(28, 24);
             // 
             // searchBox
             // 
             this.searchBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.searchBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.searchBox.Name = "searchBox";
-            this.searchBox.Size = new System.Drawing.Size(54, 38);
+            this.searchBox.Size = new System.Drawing.Size(180, 29);
             this.searchBox.TextChanged += new System.EventHandler(this.searchBox_TextChanged);
             // 
             // showhideButton
@@ -311,7 +313,7 @@ namespace WolvenKit
             this.showhideButton.Image = global::WolvenKit.Properties.Resources.LayerGroupVisibled;
             this.showhideButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.showhideButton.Name = "showhideButton";
-            this.showhideButton.Size = new System.Drawing.Size(34, 33);
+            this.showhideButton.Size = new System.Drawing.Size(34, 24);
             this.showhideButton.Text = "Show/Hide folders";
             this.showhideButton.ToolTipText = "Show/Hide folders";
             this.showhideButton.Click += new System.EventHandler(this.showhideButton_Click);
@@ -323,7 +325,7 @@ namespace WolvenKit
             this.ExpandBTN.Image = ((System.Drawing.Image)(resources.GetObject("ExpandBTN.Image")));
             this.ExpandBTN.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ExpandBTN.Name = "ExpandBTN";
-            this.ExpandBTN.Size = new System.Drawing.Size(34, 33);
+            this.ExpandBTN.Size = new System.Drawing.Size(34, 24);
             this.ExpandBTN.Text = "Expand all";
             this.ExpandBTN.Click += new System.EventHandler(this.ExpandBTN_Click);
             // 
@@ -334,7 +336,7 @@ namespace WolvenKit
             this.CollapseBTN.Image = ((System.Drawing.Image)(resources.GetObject("CollapseBTN.Image")));
             this.CollapseBTN.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CollapseBTN.Name = "CollapseBTN";
-            this.CollapseBTN.Size = new System.Drawing.Size(34, 33);
+            this.CollapseBTN.Size = new System.Drawing.Size(34, 24);
             this.CollapseBTN.Text = "Collapse all";
             this.CollapseBTN.ToolTipText = "Collapse all";
             this.CollapseBTN.Click += new System.EventHandler(this.CollapseBTN_Click);
@@ -345,7 +347,7 @@ namespace WolvenKit
             this.resetfilesButton.Image = global::WolvenKit.Properties.Resources.ExitIcon;
             this.resetfilesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.resetfilesButton.Name = "resetfilesButton";
-            this.resetfilesButton.Size = new System.Drawing.Size(34, 33);
+            this.resetfilesButton.Size = new System.Drawing.Size(34, 24);
             this.resetfilesButton.Text = "Reset filelist";
             this.resetfilesButton.Click += new System.EventHandler(this.UpdatefilelistButtonClick);
             // 
@@ -359,10 +361,10 @@ namespace WolvenKit
             this.treeListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeListView.HideSelection = false;
             this.treeListView.IsSimpleDragSource = true;
-            this.treeListView.Location = new System.Drawing.Point(0, 38);
+            this.treeListView.Location = new System.Drawing.Point(0, 37);
             this.treeListView.Name = "treeListView";
             this.treeListView.ShowGroups = false;
-            this.treeListView.Size = new System.Drawing.Size(333, 334);
+            this.treeListView.Size = new System.Drawing.Size(358, 335);
             this.treeListView.TabIndex = 2;
             this.treeListView.UseCompatibleStateImageBehavior = false;
             this.treeListView.UseFiltering = true;
@@ -392,7 +394,7 @@ namespace WolvenKit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(333, 372);
+            this.ClientSize = new System.Drawing.Size(358, 372);
             this.Controls.Add(this.treeListView);
             this.Controls.Add(this.searchstrip);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
