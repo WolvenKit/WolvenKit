@@ -17,9 +17,37 @@ namespace WolvenKit.CR2W.Types
         [Ordinal(1)] [RED] public CUInt16 padding { get; set; }
         [Ordinal(2)] [RED] public CUInt32 specularColor { get; set; }
         [Ordinal(3)] [RED] public CFloat normalTreshold { get; set; }
-        [Ordinal(4)] [RED] public CFloat specularity { get; set; }
-        [Ordinal(5)] [RED] public CFloat fadeTime { get; set; }
+        //[Ordinal(4)] [RED] public CFloat specularity { get; set; }
+        //[Ordinal(5)] [RED] public CFloat fadeTime { get; set; }
 
-        public SBlockDataDecal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        [Ordinal(999)] [REDBuffer(true)] public CBytes unk1 { get; set; }
+
+
+        public SBlockDataDecal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        {
+            unk1 = new CBytes(cr2w, parent, nameof(unk1));
+
+        }
+
+        public override void Read(BinaryReader file, uint size)
+        {
+            var startp = file.BaseStream.Position;
+            base.Read(file, size);
+
+
+            var endp = file.BaseStream.Position;
+            var read = endp - startp;
+            if (read < size)
+            {
+                unk1.Read(file, size - (uint)read);
+            }
+            else if (read > size)
+            {
+                throw new InvalidParsingException("read too far");
+            }
+        }
+
+
+        
     }
 }

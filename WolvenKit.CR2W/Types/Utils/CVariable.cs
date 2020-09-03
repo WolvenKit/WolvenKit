@@ -355,24 +355,20 @@ namespace WolvenKit.CR2W.Types
         {
             string varname = value.REDName.FirstCharToUpper();
             varname = NormalizeName(varname);
-            
-            try
+
+            var map = this.accessor.GetMembers().Select(_ => _.Name);
+            if (map.Contains(varname))
             {
                 accessor[this, varname] = value;
             }
-            catch (Exception)
+            else if (map.Contains(varname.FirstCharToLower()))
             {
-                try
-                {
-                    varname = varname.FirstCharToLower();
-                    accessor[this, varname] = value;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"({value.REDType}){varname} not found in ({this.REDType}){this.REDName}");
-                    throw ex;
-                    return false;
-                }
+                accessor[this, varname.FirstCharToLower()] = value;
+            }
+            else
+            {
+                Debug.WriteLine($"({value.REDType}){varname} not found in ({this.REDType}){this.REDName}");
+                return false;
             }
 
             return true;
