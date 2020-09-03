@@ -19,6 +19,9 @@ namespace WolvenKit
             Savegames = new List<SavegameModel>();
             UpdateSaves();
             UpdateSaveTree(Savegames);
+
+            this.Icon = new Icon(@"Resources\Icons\GUI\Wkit_dark_16x.ico", new Size(16, 16));
+
         }
 
         public static List<SavegameModel> Savegames { get; set; }

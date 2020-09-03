@@ -35,22 +35,22 @@ namespace WolvenKit.Forms
 
             //Random rnd = new Random();
             //int i = rnd.Next(0, splashscreens.Count);
-            int i = 1;  // fix splashscreen to 1 in 0.6.2
+//            int i = 1;  // fix splashscreen to 1 in 0.6.2
 
-            this.BackgroundImage = splashscreens[i];
-
-            if (i == 0)
-            {
-                this.labelTitle.Visible = false;
-                this.labelVersion.Visible = false;
-                this.labelLoading.Visible = false;
-                this.labelLoadingJato.Visible = true;
-                this.labelVersionJato.Visible = true;
-            }
+//            this.BackgroundImage = splashscreens[i];
+//
+//           if (i == 0)
+//            {
+//                this.labelTitle.Visible = false;
+//                this.labelVersion.Visible = false;
+//                this.labelLoading.Visible = false;
+//                this.labelLoadingJato.Visible = true;
+//                this.labelVersionJato.Visible = true;
+//            }
 
             this.labelVersion.Text = "Version " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
             this.labelGit.Text = "https://github.com/Traderain/Wolven-kit";
-            this.labelVersionJato.Text = "Version " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+//            this.labelVersionJato.Text = "Version " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
 
         }
 
@@ -109,7 +109,7 @@ namespace WolvenKit.Forms
         private void SetStatusLabelText(string text)
         {
             labelLoading.Text = text;
-            labelLoadingJato.Text = text;
+//            labelLoadingJato.Text = text;
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

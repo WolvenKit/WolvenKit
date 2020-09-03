@@ -55,6 +55,8 @@ namespace WolvenKit
             comboBoxLanguagesMode.SelectedIndex = 0;
             CreateDataTable();
 
+            this.Icon = new Icon(@"Resources\Icons\GUI\Wkit_dark_16x.ico", new Size(16, 16));
+
             if (activeMod != null)
             {
                 var csvDir = (activeMod.ProjectDirectory + "\\strings\\CSV");

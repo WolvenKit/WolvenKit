@@ -45,7 +45,6 @@ namespace WolvenKit.Forms
             public string Link { get; set; }
         }
 
-
         frmMain main;
         public frmWelcome(frmMain mainref)
         {
@@ -72,6 +71,7 @@ namespace WolvenKit.Forms
                     recentfiles.Add( new RecentFileObject(fullpath));
                 }
             }
+ 
             objectListView1.SetObjects(recentfiles);
             objectListView1.RefreshObjects(recentfiles);
 
@@ -84,19 +84,21 @@ namespace WolvenKit.Forms
             var bgcolor = UIController.GetPalette().ToolWindowTabSelectedInactive.Background;
             var bgcolorhtml = bgcolor.ToHTML();
 
-            webBrowser1.DocumentText = $@"
+//            webBrowser1.DocumentText = $@"
+//<html>
+//    <body {"style = \" background:" } {bgcolorhtml} {"\""} >
+//        <li><a href = ${"\"https://github.com/Traderain/Wolven-kit/wiki\""}> WolvenKit Wiki </a></li>
+//        <li><a href = ${"\"https://github.com/Traderain/Wolven-kit\""}> GitHub Repository </a></li>
+//    </body>
+//</html>
+//          ";
+
+
+            helpWebBrowser.DocumentText = $@"
 <html>
     <body {"style = \" background:" } {bgcolorhtml} {"\""} >
         <li><a href = ${"\"https://github.com/Traderain/Wolven-kit/wiki\""}> WolvenKit Wiki </a></li>
         <li><a href = ${"\"https://github.com/Traderain/Wolven-kit\""}> GitHub Repository </a></li>
-    </body>
-</html>
-          ";
-
-
-            webBrowser2.DocumentText = $@"
-<html>
-    <body {"style = \" background:" } {bgcolorhtml} {"\""} >
         <li><a href = ${"\"https://www.youtube.com/watch?v=jUoamicYtjk\""}> Package creation </a></li>
         <li><a href = ${"\"https://www.youtube.com/watch?v=jUoamicYtjk\""}> Sound modding </a></li>
     </body>
@@ -107,14 +109,34 @@ namespace WolvenKit.Forms
         protected void ApplyCustomTheme()
         {
             this.BackColor = UIController.GetBackColor();
+            this.mainMenuStrip.BackColor = UIController.GetBackColor();
 
             // recent file list
-            this.objectListView1.BackColor = UIController.GetPalette().ToolWindowTabSelectedInactive.Background;
+            this.objectListView1.BackColor = UIController.GetBackColor();
             this.objectListView1.ForeColor = UIController.GetForeColor();
-            objectListView1.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
+//            objectListView1.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
 
-            checkBoxDisable.BackColor = UIController.GetPalette().ToolWindowTabSelectedInactive.Background;
+            checkBoxDisable.BackColor = UIController.GetBackColor();
             checkBoxDisable.ForeColor = UIController.GetForeColor();
+
+            newProjectBtn.BackColor = UIController.GetPalette().ToolWindowTabUnselected.Background;
+//            newProjectBtn.BackColor.Pressed = UIController.GetPalette().CommandBarMenuDefault.Background;
+            newProjectBtn.ForeColor = UIController.GetPalette().TabUnselected.Text;
+            newProjectBtn.FlatAppearance.BorderColor = UIController.GetBackColor();
+
+            openProjectBtn.BackColor = UIController.GetPalette().ToolWindowTabUnselected.Background;
+//            openProjectBtn.BackColor.Pressed = UIController.GetPalette().CommandBarMenuDefault.Background;
+            openProjectBtn.ForeColor = UIController.GetPalette().TabUnselected.Text;
+            openProjectBtn.FlatAppearance.BorderColor = UIController.GetBackColor();
+
+            preferencesBtn.BackColor = UIController.GetPalette().ToolWindowTabUnselected.Background;
+//            preferencesBtn.BackColor.Pressed = UIController.GetPalette().CommandBarMenuDefault.Background;
+            preferencesBtn.ForeColor = UIController.GetPalette().TabUnselected.Text;
+            preferencesBtn.FlatAppearance.BorderColor = UIController.GetBackColor();
+
+            continueWithoutProjectBtn.ForeColor = UIController.GetPalette().TabButtonSelectedInactivePressed.Glyph;
+
+            wolvenKitLbl.ForeColor = UIController.GetForeColor();
 
         }
 
@@ -125,8 +147,37 @@ namespace WolvenKit.Forms
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
+      
+        // UI Events //
+        
+        private void mainMenuStrip_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+        private void wolvenKitLbl_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
 
         private void Form1_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+        private void communityToolsLbl_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -146,6 +197,63 @@ namespace WolvenKit.Forms
             this.Close();
         }
 
+        private void newProjectBtn_MouseEnter(object sender, EventArgs e)
+        {
+            newProjectBtn.BackColor = UIController.GetPalette().ToolWindowTabUnselectedHovered.Background;
+        }
+
+        private void newProjectBtn_MouseLeave(object sender, EventArgs e)
+        {
+            newProjectBtn.BackColor = UIController.GetPalette().ToolWindowTabUnselected.Background;
+        }
+
+        private void openProjectBtn_Click(object sender, EventArgs e)
+        {
+            main.OpenMod();
+            this.Close();
+        }
+
+        private void openProjectBtn_MouseEnter(object sender, EventArgs e)
+        {
+            openProjectBtn.BackColor = UIController.GetPalette().ToolWindowTabUnselectedHovered.Background;
+        }
+
+        private void openProjectBtn_MouseLeave(object sender, EventArgs e)
+        {
+            openProjectBtn.BackColor = UIController.GetPalette().ToolWindowTabUnselected.Background;
+        }
+
+        private void preferencesBtn_Click(object sender, EventArgs e)
+        {
+            var settings = new frmSettings();
+            settings.ShowDialog();
+        }
+
+        private void preferencesBtn_MouseEnter(object sender, EventArgs e)
+        {
+            preferencesBtn.BackColor = UIController.GetPalette().ToolWindowTabUnselectedHovered.Background;
+        }
+
+        private void preferencesBtn_MouseLeave(object sender, EventArgs e)
+        {
+            preferencesBtn.BackColor = UIController.GetPalette().ToolWindowTabUnselected.Background;
+        }
+
+        private void continueWithoutProjectBtn_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void continueWithoutProjectBtn_Enter(object sender, EventArgs e)
+        {
+            continueWithoutProjectBtn.ForeColor = UIController.GetPalette().MainWindowStatusBarDefault.Background;
+        }
+
+        private void continueWithoutProjectBtn_Leave(object sender, EventArgs e)
+        {
+            continueWithoutProjectBtn.ForeColor = UIController.GetPalette().TabButtonSelectedInactivePressed.Glyph;
+        }
+
         private void webBrowser1_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             if(e.Url.AbsoluteUri.ToString().Length > 0 && !e.Url.AbsoluteUri.ToString().StartsWith("about:blank"))
@@ -161,18 +269,6 @@ namespace WolvenKit.Forms
             // save disable option
             MainController.Get().Configuration.IsWelcomeFormDisabled = checkBoxDisable.Checked;
             MainController.Get().Configuration.Save();
-        }
-
-        private void OpenProjectButton_Click(object sender, EventArgs e)
-        {
-            main.OpenMod();
-            this.Close();
-        }
-
-        private void visualButton1_Click_1(object sender, EventArgs e)
-        {
-            var settings = new frmSettings();
-            settings.ShowDialog();
         }
 
         private void objectListView1_FormatCell(object sender, FormatCellEventArgs e)
@@ -210,6 +306,22 @@ namespace WolvenKit.Forms
         {
             if (e.ColumnIndex == this.olvColumn1.Index)
                 Cursor.Current = Cursors.Hand;
+        }
+
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void exitBtn_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

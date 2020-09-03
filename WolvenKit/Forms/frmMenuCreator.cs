@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using System.Drawing;
 
 namespace WolvenKit
 {
@@ -23,6 +24,9 @@ namespace WolvenKit
             InitializeComponent();
             MenuObject = new WitcherMenu();
             MenuEditor.SelectedObject = MenuObject;
+
+            this.Icon = new Icon(@"Resources\Icons\GUI\Wkit_dark_16x.ico", new Size(16, 16));
+
         }
 
         private void PaintMenuTree()

@@ -1001,13 +1001,36 @@
     <Content Include="Resources\Icons\GUI\Asset_Browser_16x.png" />
     <Content Include="Resources\Icons\GUI\Asset_Browser_Other_Mod_16x.png" />
     <Content Include="Resources\Icons\GUI\Discord_32x.png" />
+    <Content Include="Resources\Icons\GUI\New_Project_dark_64x.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Icons\GUI\New_Project_light_64x.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Icons\GUI\Open_Project_dark_64x.png" />
+    <Content Include="Resources\Icons\GUI\Open_Project_light_64x.png" />
+    <Content Include="Resources\Icons\GUI\Preferences_dark_64x.png" />
+    <Content Include="Resources\Icons\GUI\Preferences_light_64x.png" />
+    <Content Include="Resources\Icons\GUI\Strings_Encoder_16x.png" />
+    <Content Include="Resources\Icons\GUI\WCC_32x.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Icons\GUI\WCC_32x.png" />
     <Content Include="Resources\Icons\GUI\window_close_24x.png" />
     <Content Include="Resources\Icons\GUI\window_maximize_24x.png" />
     <Content Include="Resources\Icons\GUI\window_minimize_24x.png" />
+    <Content Include="Resources\Icons\GUI\Wkit_dark_16x.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Icons\GUI\Wkit_light_16x.ico" />
+    <Content Include="Resources\Icons\Wkit_logo_500x.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Pictures\wkit_splash.png" />
     <Content Include="Resources\Pictures\wkit_splash2.png" />
     <Content Include="Resources\Pictures\WK_Logo2_32.png" />
     <Content Include="Resources\VisualStudio\Compliant_16x.png" />
+    <Content Include="Resources\VisualStudio\Filter_16x.png" />
     <Content Include="Resources\VisualStudio\FindInFile_16x.png" />
     <Content Include="Resources\VisualStudio\MailOpen_16x.png" />
     <Content Include="Resources\VisualStudio\StatusHelp_16x.png" />
