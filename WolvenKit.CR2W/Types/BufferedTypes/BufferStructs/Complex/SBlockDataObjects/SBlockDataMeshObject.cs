@@ -13,11 +13,12 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     class SBlockDataMeshObject : CVariable
     {
-        [Ordinal(0)] [RED] public CUInt16 forceAutoHide { get; set; }
-        [Ordinal(1)] [RED] public CUInt8 lightChanels { get; set; }
-        [Ordinal(2)] [RED] public CUInt8 forcedLodLevel { get; set; }
-        [Ordinal(3)] [RED] public CUInt8 shadowBias { get; set; }
-        [Ordinal(4)] [RED] public CUInt8 renderingPlane { get; set; }
+        [Ordinal(1)] [RED] public CUInt16 meshIndex { get; set; }
+        [Ordinal(2)] [RED] public CUInt16 forceAutoHide { get; set; }
+        [Ordinal(3)] [RED] public CUInt8 lightChanels { get; set; }
+        [Ordinal(4)] [RED] public CUInt8 forcedLodLevel { get; set; }
+        [Ordinal(5)] [RED] public CUInt8 shadowBias { get; set; }
+        [Ordinal(6)] [RED] public CUInt8 renderingPlane { get; set; }
 
         public SBlockDataMeshObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }

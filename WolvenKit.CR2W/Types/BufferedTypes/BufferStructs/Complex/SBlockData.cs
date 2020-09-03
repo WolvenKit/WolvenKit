@@ -19,7 +19,6 @@ namespace WolvenKit.CR2W.Types
         [Ordinal(2)] [RED] public CUInt16 streamingRadius { get; set; }
         [Ordinal(3)] [RED] public CUInt16 flags { get; set; }
         [Ordinal(4)] [RED] public CUInt32 occlusionSystemID { get; set; }
-        [Ordinal(5)] [RED] public CUInt16 resourceIndex { get; set; }
 
         public Enums.BlockDataObjectType packedObjectType;
 
@@ -36,12 +35,22 @@ namespace WolvenKit.CR2W.Types
             switch (packedObjectType)
             {
                 //TODO: Read the different objects
+                case Enums.BlockDataObjectType.Invalid:
+                    {
+                        packedObject = null;
+                        //This is empty
+                        break;
+                    }
                 case Enums.BlockDataObjectType.Mesh:
                     {
                         packedObject = new SBlockDataMeshObject(cr2w, this, nameof(SBlockDataMeshObject));
                         break;
                     }
                 case Enums.BlockDataObjectType.Collision:
+                    {
+                        packedObject = new SBlockDataCollisionObject(cr2w, this, nameof(SBlockDataCollisionObject));
+                        break;
+                    }
                 case Enums.BlockDataObjectType.Decal:
                 case Enums.BlockDataObjectType.Dimmer:
                 case Enums.BlockDataObjectType.PointLight:
@@ -50,12 +59,14 @@ namespace WolvenKit.CR2W.Types
                 case Enums.BlockDataObjectType.Cloth:
                 case Enums.BlockDataObjectType.Destruction:
                 case Enums.BlockDataObjectType.Particles:
-                case Enums.BlockDataObjectType.Invalid:
                 default:
                     {
+                        // For unit testing!
+                        //if((int)packedObjectType != 1)
+                        //    throw new Exception("Unknown type [" + (int)packedObjectType  + "] object!");
                         packedObject = new CBytes(cr2w, this, "UnknownPackedObjectBytes");
+                        break;
                     }
-                    break;
             }
 
             packedObject.Read(file, size - 58);
@@ -67,11 +78,6 @@ namespace WolvenKit.CR2W.Types
 
             if(packedObject != null)
                 packedObject.Write(file);
-        }
-
-        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new SBlockData(cr2w, parent, name);
         }
 
         public override string ToString()
@@ -88,12 +94,21 @@ namespace WolvenKit.CR2W.Types
                 switch (packedObjectType)
                 {
                     //TODO: Add here the differnt copy methods
+                    case Enums.BlockDataObjectType.Invalid:
+                        {
+                            //Empty
+                            break;
+                        }
                     case Enums.BlockDataObjectType.Mesh:
                         {
                             copy.packedObject = packedObject.Copy(context) as SBlockDataMeshObject;
                             break;
                         }
                     case Enums.BlockDataObjectType.Collision:
+                        {
+                            copy.packedObject = packedObject.Copy(context) as SBlockDataCollisionObject;
+                            break;
+                        }
                     case Enums.BlockDataObjectType.Decal:
                     case Enums.BlockDataObjectType.Dimmer:
                     case Enums.BlockDataObjectType.PointLight:
@@ -102,7 +117,6 @@ namespace WolvenKit.CR2W.Types
                     case Enums.BlockDataObjectType.Cloth:
                     case Enums.BlockDataObjectType.Destruction:
                     case Enums.BlockDataObjectType.Particles:
-                    case Enums.BlockDataObjectType.Invalid:
                     default:
                         {
                             copy.packedObject = packedObject.Copy(context) as CBytes;
@@ -124,6 +138,11 @@ namespace WolvenKit.CR2W.Types
                 var baseobj = base.GetEditableVariables();
                 switch (packedObjectType)
                 {
+                    case Enums.BlockDataObjectType.Invalid:
+                        {
+                            //Empty
+                            break;
+                        }
                     //TODO: Add here the differnt copy methods
                     case Enums.BlockDataObjectType.Mesh:
                         {
@@ -131,6 +150,10 @@ namespace WolvenKit.CR2W.Types
                             break;
                         }
                     case Enums.BlockDataObjectType.Collision:
+                        {
+                            baseobj.Add((SBlockDataCollisionObject)packedObject);
+                            break;
+                        }
                     case Enums.BlockDataObjectType.Decal:
                     case Enums.BlockDataObjectType.Dimmer:
                     case Enums.BlockDataObjectType.PointLight:
@@ -139,7 +162,6 @@ namespace WolvenKit.CR2W.Types
                     case Enums.BlockDataObjectType.Cloth:
                     case Enums.BlockDataObjectType.Destruction:
                     case Enums.BlockDataObjectType.Particles:
-                    case Enums.BlockDataObjectType.Invalid:
                     default:
                         {
                             baseobj.Add((CBytes)packedObject);
