@@ -16,6 +16,32 @@ namespace WolvenKit
 {
     public partial class frmChunkProperties : DockContent, IThemedContent
     {
+        internal class VariableListNode
+        {
+            public string Name
+            {
+                get
+                {
+                    if (Variable.REDName != null)
+                        return Variable.REDName;
+                    else
+                        return Parent?.Children.IndexOf(this).ToString() ?? "";
+                }
+            }
+
+            public string Value => Variable.REDValue;
+            public string Type => Variable.REDType;
+            public bool IsSerialized => Variable.IsSerialized;
+
+            public int ChildCount => Children.Count;
+
+            public List<VariableListNode> Children { get; set; }
+            public VariableListNode Parent { get; set; }
+            public IEditableVariable Variable { get; set; }
+        }
+
+
+
         private CR2WExportWrapper chunk;
         private bool showOnlySerialized;
 
@@ -142,135 +168,70 @@ namespace WolvenKit
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
-            var sNodes = treeView.SelectedObjects.Cast<VariableListNode>().Where(item => item?.Variable != null).ToList();
-            if (sNodes.ToArray().Length <= 0)
+            var selectedNodes = treeView.SelectedObjects.Cast<VariableListNode>().Where(item => item?.Variable != null).ToList();
+            if (selectedNodes.ToArray().Length <= 0)
             {
                 e.Cancel = true;
                 return;
             }
 
-            addVariableToolStripMenuItem.Enabled = sNodes.All(x => x.Variable.CanAddVariable(null));
-            removeVariableToolStripMenuItem.Enabled = sNodes.All(x => x.Parent != null && x.Parent.Variable.CanRemoveVariable(x.Variable));
+            // for carrays
+            addVariableToolStripMenuItem.Enabled = selectedNodes.All(x => x.Variable.CanAddVariable(null));
+            removeVariableToolStripMenuItem.Enabled = selectedNodes.All(x => x.Parent != null && x.Parent.Variable.CanRemoveVariable(x.Variable));
 
+            //  paste variable is active if any one variable has been copied and if the one selected variable is of the same type
+            pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null
+                && CopyController.VariableTargets.Count == 1 && CopyController.VariableTargets.First() is CVariable ccopy
+                && selectedNodes.Count == 1 && selectedNodes.First().Variable is CVariable csel
+                && csel.GetType() == ccopy.GetType();
 
-            pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null 
-                && sNodes.All(x => x.Variable != null 
-                && CopyController.VariableTargets.Any(z => x.Variable.CanAddVariable(z)));
-            ptrPropertiesToolStripMenuItem.Visible = sNodes.All(x => x.Variable is IPtrAccessor) && sNodes.Count == 1;
+            ptrPropertiesToolStripMenuItem.Visible = selectedNodes.All(x => x.Variable is IPtrAccessor) && selectedNodes.Count == 1;
         }
 
         public void CopyVariable()
         {
             var tocopynodes = (from VariableListNode item in treeView.SelectedObjects where item?.Variable != null select item.Variable).ToList();
             if (tocopynodes.Count > 0)
-            {
                 CopyController.VariableTargets = tocopynodes;
-            }
         }
 
         public void PasteVariable()
         {
-            var node = (VariableListNode) treeView.SelectedObject;
-            if (CopyController.VariableTargets == null || node?.Variable == null || !node.Variable.CanAddVariable(null))
-            {
+            var node = (VariableListNode)treeView.SelectedObject;
+            if (CopyController.VariableTargets == null || node?.Variable == null)
                 return;
-            }
 
-            // replace node with new node
             if (CopyController.VariableTargets.Count == 1
                 && CopyController.VariableTargets.First() is CVariable cvar
                 && cvar.REDType == node.Variable.REDType
                 && node.Variable is CVariable targetvar
                 )
             {
-                var context = new CR2WCopyAction();
-                targetvar.SetValue(cvar.Copy(context));
+                var context = new CR2WCopyAction()
+                {
+                    DestinationFile = targetvar.cr2w,
+                    Parent = targetvar.Parent as CVariable
+                };
+                var copy = cvar.Copy(context);
+                targetvar.SetValue(copy);
+                targetvar.IsSerialized = true;
 
                 UpdateTreeListView();
 
-                //var newnode = AddListViewItems(targetvar, node.Parent);
-                //node = newnode;
-
-                //treeView.RefreshObject(node);
-                //foreach (var item in node.Children)
-                //{
-                //    treeView.RefreshObject(item);
-                //}
-                //var root = AddListViewItems(EditObject);
-
-                //treeView.Roots = root.Children;
-                //treeView.RefreshObjects(root.Children);
-                //treeView.RebuildAll(true);
-
                 return;
             }
-
-            // deprecated
-            // you can't paste new variables anymore because all are exposed and immutable
-
-            // add subitems
-            //if (CopyController.VariableTargets.All(x => x is CVariable))
-            //{
-            //    foreach (var newvar in from v in CopyController.VariableTargets.Select(x => (CVariable) x) let context = new CR2WCopyAction
-            //    {
-            //        SourceFile = v.cr2w,
-            //        DestinationFile = node.Variable.cr2w,
-            //        MaxIterationDepth = 0
-            //    } select v.Copy(context))
-            //    {
-            //        node.Variable.AddVariable(newvar);
-
-            //        var subnode = AddListViewItems(newvar, node);
-            //        node.Children.Add(subnode);
-
-            //        treeView.RefreshObject(node);
-            //        treeView.RefreshObject(subnode);
-            //    }
-            //}
         }
 
         private void addVariableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var node = (VariableListNode) treeView.SelectedObject;
-            if (node?.Variable == null || !node.Variable.CanAddVariable(null))
-            {
+            if (node?.Variable == null || !node.Variable.CanAddVariable(null) || !(node.Variable is IArrayAccessor parentarray))
                 return;
-            }
 
-            CVariable newvar = null;
-
-            if (node.Variable is IArrayAccessor array)
-            {
-                newvar = CR2WTypeManager.Create(array.Elementtype, "", Chunk.cr2w, node.Variable as CVariable, false);
-                if (newvar == null)
-                    return;
-            }
-
-            // deprecated 
-            // adding new vars is no longer possible for non-array types
-
-            //else
-            //{
-            //    var frm = new frmAddVariable();
-            //    if (frm.ShowDialog() != DialogResult.OK)
-            //    {
-            //        return;
-            //    }
-
-            //    newvar = CR2WTypeManager.Create(frm.VariableType, frm.VariableName, Chunk.cr2w, node.Variable as CVariable, false);
-            //    if (newvar == null)
-            //        return;
-            //}
-
-            //if (newvar is IHandleAccessor h)
-            //{
-            //    var result = MessageBox.Show("Add as chunk handle? (Yes for chunk handle, No for normal handle)",
-            //        "Adding handle.", MessageBoxButtons.YesNoCancel);
-            //    if (result == DialogResult.Cancel)
-            //        return;
-
-            //    h.ChunkHandle = result == DialogResult.Yes;
-            //}
+            // instantiate all child Cvars??
+            CVariable newvar = CR2WTypeManager.Create(parentarray.Elementtype, "", Chunk.cr2w, node.Variable as CVariable, false);
+            if (newvar == null)
+                return;
 
             node.Variable.AddVariable(newvar);
 
@@ -297,10 +258,6 @@ namespace WolvenKit
                     catch { } //TODO: Do this better, works now but it shouldn't be done like this. :p
                 }
             }
-
-            // TODO
-            // if parent.elements.Count == 0
-            // parent.isserialized = false
         }
 
         private void clearVariableToolStripMenuItem_Click(object sender, EventArgs e)
@@ -312,15 +269,12 @@ namespace WolvenKit
             }
             else
             {
-                node.Variable = null;
+                throw new NotImplementedException();
             }
 
         }
 
-        private void expandAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            treeView.ExpandAll();
-        }
+        private void expandAllToolStripMenuItem_Click(object sender, EventArgs e) => treeView.ExpandAll();
 
         private void expandAllChildrenToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -335,10 +289,7 @@ namespace WolvenKit
             }
         }
 
-        private void collapseAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            treeView.CollapseAll();
-        }
+        private void collapseAllToolStripMenuItem_Click(object sender, EventArgs e) => treeView.CollapseAll();
 
         private void collapseAllChildrenToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -352,15 +303,9 @@ namespace WolvenKit
             }
         }
 
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CopyVariable();
-        }
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e) => CopyVariable();
 
-        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PasteVariable();
-        }
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e) => PasteVariable();
 
         private void treeView_CellClick(object sender, CellClickEventArgs e)
         {
@@ -402,35 +347,10 @@ namespace WolvenKit
             }
         }
 
-        internal class VariableListNode
-        {
-            public string Name
-            {
-                get
-                {
-                    if (Variable.REDName != null)
-                        return Variable.REDName;
-                    else
-                        return Parent?.Children.IndexOf(this).ToString() ?? "";
-                }
-            }
-
-            public string Value => Variable.REDValue;
-            public string Type => Variable.REDType;
-            public bool IsSerialized => Variable.IsSerialized;
-
-            public int ChildCount => Children.Count;
-
-            public List<VariableListNode> Children { get; set; }
-            public VariableListNode Parent { get; set; }
-            public IEditableVariable Variable { get; set; }
-        }
+        
 
         public event EventHandler OnItemsChanged;
-        private void treeView_ItemsChanged(object sender, ItemsChangedEventArgs e)
-        {
-            MainController.Get().ProjectUnsaved = true;
-        }
+        private void treeView_ItemsChanged(object sender, ItemsChangedEventArgs e) => MainController.Get().ProjectUnsaved = true;
 
         private void treeView_CellEditStarting(object sender, CellEditEventArgs e)
         {
@@ -491,7 +411,7 @@ namespace WolvenKit
             if (model != null && model.IsSerialized)
             {
                 if (!showOnlySerialized)
-                    e.Item.ForeColor = Color.Green;
+                    e.Item.ForeColor = UIController.GetPalette().OverflowButtonPressed.Border; //Color.Green;
             }
             else
             {

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAISailorMoveAlongPathActionParams : ISailorActionParameters
 	{
-		[RED("boatTag")] 		public CName BoatTag { get; set;}
+		[Ordinal(1)] [RED("boatTag")] 		public CName BoatTag { get; set;}
 
-		[RED("pathTag")] 		public CName PathTag { get; set;}
+		[Ordinal(2)] [RED("pathTag")] 		public CName PathTag { get; set;}
 
-		[RED("upThePath")] 		public CBool UpThePath { get; set;}
+		[Ordinal(3)] [RED("upThePath")] 		public CBool UpThePath { get; set;}
 
-		[RED("startFromBeginning")] 		public CBool StartFromBeginning { get; set;}
+		[Ordinal(4)] [RED("startFromBeginning")] 		public CBool StartFromBeginning { get; set;}
 
 		public CAISailorMoveAlongPathActionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

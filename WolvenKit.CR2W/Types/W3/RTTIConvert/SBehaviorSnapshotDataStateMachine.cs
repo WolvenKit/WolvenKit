@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorSnapshotDataStateMachine : CVariable
 	{
-		[RED("stateMachineId")] 		public CUInt32 StateMachineId { get; set;}
+		[Ordinal(1)] [RED("stateMachineId")] 		public CUInt32 StateMachineId { get; set;}
 
-		[RED("currentStateId")] 		public CUInt32 CurrentStateId { get; set;}
+		[Ordinal(2)] [RED("currentStateId")] 		public CUInt32 CurrentStateId { get; set;}
 
-		[RED("currentStateTime")] 		public CFloat CurrentStateTime { get; set;}
+		[Ordinal(3)] [RED("currentStateTime")] 		public CFloat CurrentStateTime { get; set;}
 
 		public SBehaviorSnapshotDataStateMachine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

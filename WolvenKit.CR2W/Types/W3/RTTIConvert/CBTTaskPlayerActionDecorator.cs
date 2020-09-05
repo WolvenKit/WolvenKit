@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPlayerActionDecorator : IBehTreeTask
 	{
-		[RED("completeOnInput")] 		public CBool CompleteOnInput { get; set;}
+		[Ordinal(1)] [RED("completeOnInput")] 		public CBool CompleteOnInput { get; set;}
 
-		[RED("prevContext")] 		public CName PrevContext { get; set;}
+		[Ordinal(2)] [RED("prevContext")] 		public CName PrevContext { get; set;}
 
 		public CBTTaskPlayerActionDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

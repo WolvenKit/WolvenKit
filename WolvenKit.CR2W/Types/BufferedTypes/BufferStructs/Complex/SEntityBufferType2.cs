@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -16,9 +17,9 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SEntityBufferType2 : CVariable
     {
-        [RED] public CName componentName { get; set; }
-        [RED] public CUInt32 sizeofdata { get; set; }
-        [RED] public CBufferUInt32<CVariantSizeTypeName> variables { get; set; }
+        [Ordinal(0)] [RED] public CName componentName { get; set; }
+        [Ordinal(1)] [RED] public CUInt32 sizeofdata { get; set; }
+        [Ordinal(2)] [RED] public CBufferUInt32<CVariantSizeTypeName> variables { get; set; }
 
 
         public SEntityBufferType2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)

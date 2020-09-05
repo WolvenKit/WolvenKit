@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterSpawnParams : CAISubTreeParameters
 	{
-		[RED("fxName")] 		public CName FxName { get; set;}
+		[Ordinal(1)] [RED("fxName")] 		public CName FxName { get; set;}
 
-		[RED("animEventNameActivator")] 		public CName AnimEventNameActivator { get; set;}
+		[Ordinal(2)] [RED("animEventNameActivator")] 		public CName AnimEventNameActivator { get; set;}
 
-		[RED("playFXOnAnimEvent")] 		public CBool PlayFXOnAnimEvent { get; set;}
+		[Ordinal(3)] [RED("playFXOnAnimEvent")] 		public CBool PlayFXOnAnimEvent { get; set;}
 
-		[RED("monitorGroundContact")] 		public CBool MonitorGroundContact { get; set;}
+		[Ordinal(4)] [RED("monitorGroundContact")] 		public CBool MonitorGroundContact { get; set;}
 
-		[RED("dealDamageOnAnimEvent")] 		public CName DealDamageOnAnimEvent { get; set;}
+		[Ordinal(5)] [RED("dealDamageOnAnimEvent")] 		public CName DealDamageOnAnimEvent { get; set;}
 
-		[RED("becomeVisibleOnAnimEvent")] 		public CName BecomeVisibleOnAnimEvent { get; set;}
+		[Ordinal(6)] [RED("becomeVisibleOnAnimEvent")] 		public CName BecomeVisibleOnAnimEvent { get; set;}
 
 		public CAIMonsterSpawnParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

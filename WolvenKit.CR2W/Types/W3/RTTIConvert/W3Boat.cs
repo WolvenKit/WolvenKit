@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Boat : CGameplayEntity
 	{
-		[RED("teleportedFromOtherHUB")] 		public CBool TeleportedFromOtherHUB { get; set;}
+		[Ordinal(1)] [RED("teleportedFromOtherHUB")] 		public CBool TeleportedFromOtherHUB { get; set;}
 
-		[RED("boatComp")] 		public CHandle<CBoatComponent> BoatComp { get; set;}
+		[Ordinal(2)] [RED("boatComp")] 		public CHandle<CBoatComponent> BoatComp { get; set;}
 
-		[RED("mountInteractionComp")] 		public CHandle<CInteractionComponent> MountInteractionComp { get; set;}
+		[Ordinal(3)] [RED("mountInteractionComp")] 		public CHandle<CInteractionComponent> MountInteractionComp { get; set;}
 
-		[RED("mountInteractionCompPassenger")] 		public CHandle<CInteractionComponent> MountInteractionCompPassenger { get; set;}
+		[Ordinal(4)] [RED("mountInteractionCompPassenger")] 		public CHandle<CInteractionComponent> MountInteractionCompPassenger { get; set;}
 
-		[RED("canBeDestroyed")] 		public CBool CanBeDestroyed { get; set;}
+		[Ordinal(5)] [RED("canBeDestroyed")] 		public CBool CanBeDestroyed { get; set;}
 
-		[RED("needEnableInteractions")] 		public CBool NeedEnableInteractions { get; set;}
+		[Ordinal(6)] [RED("needEnableInteractions")] 		public CBool NeedEnableInteractions { get; set;}
 
 		public W3Boat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

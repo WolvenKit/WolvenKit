@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeAtomicPlayAnimationManualMotionExtractionDefinition : CBehTreeNodeAtomicActionDefinition
 	{
-		[RED("slotName")] 		public CName SlotName { get; set;}
+		[Ordinal(1)] [RED("slotName")] 		public CName SlotName { get; set;}
 
-		[RED("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(2)] [RED("animationName")] 		public CName AnimationName { get; set;}
 
-		[RED("loopIterations")] 		public CUInt32 LoopIterations { get; set;}
+		[Ordinal(3)] [RED("loopIterations")] 		public CUInt32 LoopIterations { get; set;}
 
-		[RED("isTransitionAnimation")] 		public CBool IsTransitionAnimation { get; set;}
+		[Ordinal(4)] [RED("isTransitionAnimation")] 		public CBool IsTransitionAnimation { get; set;}
 
 		public CBehTreeNodeAtomicPlayAnimationManualMotionExtractionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

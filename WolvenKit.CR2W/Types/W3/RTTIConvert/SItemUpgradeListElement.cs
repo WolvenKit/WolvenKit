@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SItemUpgradeListElement : CVariable
 	{
-		[RED("itemId")] 		public SItemUniqueId ItemId { get; set;}
+		[Ordinal(1)] [RED("itemId")] 		public SItemUniqueId ItemId { get; set;}
 
-		[RED("upgrade")] 		public SItemUpgrade Upgrade { get; set;}
+		[Ordinal(2)] [RED("upgrade")] 		public SItemUpgrade Upgrade { get; set;}
 
 		public SItemUpgradeListElement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

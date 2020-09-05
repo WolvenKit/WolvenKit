@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGwintMinigame : CMinigame
 	{
-		[RED("deckName")] 		public CName DeckName { get; set;}
+		[Ordinal(1)] [RED("deckName")] 		public CName DeckName { get; set;}
 
-		[RED("difficulty")] 		public CEnum<EGwintDifficultyMode> Difficulty { get; set;}
+		[Ordinal(2)] [RED("difficulty")] 		public CEnum<EGwintDifficultyMode> Difficulty { get; set;}
 
-		[RED("aggression")] 		public CEnum<EGwintAggressionMode> Aggression { get; set;}
+		[Ordinal(3)] [RED("aggression")] 		public CEnum<EGwintAggressionMode> Aggression { get; set;}
 
-		[RED("allowMultipleMatches")] 		public CBool AllowMultipleMatches { get; set;}
+		[Ordinal(4)] [RED("allowMultipleMatches")] 		public CBool AllowMultipleMatches { get; set;}
 
-		[RED("forceFaction")] 		public CEnum<eGwintFaction> ForceFaction { get; set;}
+		[Ordinal(5)] [RED("forceFaction")] 		public CEnum<eGwintFaction> ForceFaction { get; set;}
 
 		public CGwintMinigame(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

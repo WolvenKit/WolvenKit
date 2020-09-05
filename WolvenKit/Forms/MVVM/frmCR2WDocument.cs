@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.IO.MemoryMappedFiles;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -92,47 +93,13 @@ namespace WolvenKit
             }
         }
 
-        //private CR2WFile file;
-        //public CR2WFile File
-        //{
-        //    get { return file; }
-        //    set
-        //    {
-        //        file = value;
-
-        //        if (chunkList != null && !chunkList.IsDisposed)
-        //        {
-        //            chunkList.File = file;
-        //        }
-
-        //        if (flowDiagram != null && !flowDiagram.IsDisposed)
-        //        {
-        //            flowDiagram.File = file;
-        //        }
-
-        //        if (JournalEditor != null && !JournalEditor.IsDisposed)
-        //        {
-        //            JournalEditor.File = file;
-        //        }
-
-        //        if (ImageViewer != null && !ImageViewer.IsDisposed)
-        //        {
-        //        }
-
-        //        if (RenderViewer != null && !RenderViewer.IsDisposed)
-        //        {
-        //            RenderViewer.MeshFile = file;
-        //        }
-
-
-        //        if (embeddedFiles != null && !embeddedFiles.IsDisposed)
-        //        {
-        //            embeddedFiles.File = file;
-
         public DocumentViewModel GetViewModel() => vm;
 
         public void frmCR2WDocument_FormClosed(object sender, FormClosedEventArgs e)
         {
+            // close all float windows
+
+
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath),
                 "cr2wdocument_layout.xml"));
 
@@ -171,6 +138,13 @@ namespace WolvenKit
 
         public void ApplyCustomTheme()
         {
+            // check for float windows
+            foreach (var window in dockPanel.FloatWindows.ToList())
+            {
+                window.Dispose();
+                window.Close();
+            }
+
             this.dockPanel.Theme = UIController.GetTheme();
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath),
                 "cr2wdocument_layout.xml"));

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskVolumetricFlyAroundTarget : CBTTaskVolumetricMove
 	{
-		[RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(1)] [RED("distance")] 		public CFloat Distance { get; set;}
 
-		[RED("height")] 		public CFloat Height { get; set;}
+		[Ordinal(2)] [RED("height")] 		public CFloat Height { get; set;}
 
-		[RED("flightMaxDuration")] 		public CFloat FlightMaxDuration { get; set;}
+		[Ordinal(3)] [RED("flightMaxDuration")] 		public CFloat FlightMaxDuration { get; set;}
 
-		[RED("npcToDestDistance")] 		public CFloat NpcToDestDistance { get; set;}
+		[Ordinal(4)] [RED("npcToDestDistance")] 		public CFloat NpcToDestDistance { get; set;}
 
-		[RED("flightStartTime")] 		public CFloat FlightStartTime { get; set;}
+		[Ordinal(5)] [RED("flightStartTime")] 		public CFloat FlightStartTime { get; set;}
 
-		[RED("flightDuration")] 		public CFloat FlightDuration { get; set;}
+		[Ordinal(6)] [RED("flightDuration")] 		public CFloat FlightDuration { get; set;}
 
 		public CBTTaskVolumetricFlyAroundTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W
@@ -94,6 +95,69 @@ namespace WolvenKit.CR2W
                     b |= 0x80;
                 }
                 bw.Write(b);
+            }
+
+            
+        }
+
+
+        /// <summary>
+        /// Read a single string from the current stream, where the first bytes indicate the length.
+        /// </summary>
+        /// <returns>string value read</returns>
+        public static void WriteStringDefaultSingle(this BinaryWriter bw, string value)
+        {
+            int len = value.Length;
+            bool utf = RequiresUTF(value);
+
+            // mask the value
+            byte b = (byte)(len & 0x3F);
+            // check for continuation
+            bool cont = len >> 6 != 0;
+
+            // set the two last bits
+            // reserved utf bit 7
+            if (!utf)
+            {
+                b |= 0x80;
+            }
+            else
+                throw new NotImplementedException();
+            // continuation bit 6
+            if (cont)
+            {
+                b |= 0x40;
+            }
+            bw.Write(b);
+
+            // continue 
+            while (cont)
+            {
+                b = (byte)(len & 0x7F);
+                len >>= 7;
+                cont = len != 0;
+                if (cont)
+                {
+                    b |= 0x80;
+                }
+                bw.Write(b);
+            }
+
+            
+
+            if (utf)
+                bw.Write(Encoding.Unicode.GetBytes(value));
+            else
+                bw.Write(Encoding.ASCII.GetBytes(value));
+
+            bool RequiresUTF(string val)
+            {
+                foreach (var c in val)
+                {
+                    if (c > 255)
+                        return true;
+                }
+                return false;
             }
         }
 

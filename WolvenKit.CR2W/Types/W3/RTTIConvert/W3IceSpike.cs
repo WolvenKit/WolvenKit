@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3IceSpike : W3DurationObstacle
 	{
-		[RED("damageValue")] 		public CFloat DamageValue { get; set;}
+		[Ordinal(1)] [RED("damageValue")] 		public CFloat DamageValue { get; set;}
 
-		[RED("weaponSlot")] 		public CName WeaponSlot { get; set;}
+		[Ordinal(2)] [RED("weaponSlot")] 		public CName WeaponSlot { get; set;}
 
-		[RED("canBeDestroyed")] 		public CBool CanBeDestroyed { get; set;}
+		[Ordinal(3)] [RED("canBeDestroyed")] 		public CBool CanBeDestroyed { get; set;}
 
-		[RED("destroyAfterTime")] 		public CFloat DestroyAfterTime { get; set;}
+		[Ordinal(4)] [RED("destroyAfterTime")] 		public CFloat DestroyAfterTime { get; set;}
 
-		[RED("delayToDealDamage")] 		public CFloat DelayToDealDamage { get; set;}
+		[Ordinal(5)] [RED("delayToDealDamage")] 		public CFloat DelayToDealDamage { get; set;}
 
 		public W3IceSpike(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFlyingSwarmTeleportDef : CBTTaskTeleportDef
 	{
-		[RED("useAnimations")] 		public CBool UseAnimations { get; set;}
+		[Ordinal(1)] [RED("useAnimations")] 		public CBool UseAnimations { get; set;}
 
-		[RED("spawnedBirdCount")] 		public CInt32 SpawnedBirdCount { get; set;}
+		[Ordinal(2)] [RED("spawnedBirdCount")] 		public CInt32 SpawnedBirdCount { get; set;}
 
-		[RED("delayVanish")] 		public CFloat DelayVanish { get; set;}
+		[Ordinal(3)] [RED("delayVanish")] 		public CFloat DelayVanish { get; set;}
 
-		[RED("forcedDespawnTime")] 		public CFloat ForcedDespawnTime { get; set;}
+		[Ordinal(4)] [RED("forcedDespawnTime")] 		public CFloat ForcedDespawnTime { get; set;}
 
-		[RED("appearFXLoopInterval")] 		public CFloat AppearFXLoopInterval { get; set;}
+		[Ordinal(5)] [RED("appearFXLoopInterval")] 		public CFloat AppearFXLoopInterval { get; set;}
 
-		[RED("disableBoidPOIComponents")] 		public CBool DisableBoidPOIComponents { get; set;}
+		[Ordinal(6)] [RED("disableBoidPOIComponents")] 		public CBool DisableBoidPOIComponents { get; set;}
 
 		public CBTTaskFlyingSwarmTeleportDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvInteriorFallbackParameters : CVariable
 	{
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(1)] [RED("activated")] 		public CBool Activated { get; set;}
 
-		[RED("colorAmbientMul")] 		public SSimpleCurve ColorAmbientMul { get; set;}
+		[Ordinal(2)] [RED("colorAmbientMul")] 		public SSimpleCurve ColorAmbientMul { get; set;}
 
-		[RED("colorReflectionLow")] 		public SSimpleCurve ColorReflectionLow { get; set;}
+		[Ordinal(3)] [RED("colorReflectionLow")] 		public SSimpleCurve ColorReflectionLow { get; set;}
 
-		[RED("colorReflectionMiddle")] 		public SSimpleCurve ColorReflectionMiddle { get; set;}
+		[Ordinal(4)] [RED("colorReflectionMiddle")] 		public SSimpleCurve ColorReflectionMiddle { get; set;}
 
-		[RED("colorReflectionHigh")] 		public SSimpleCurve ColorReflectionHigh { get; set;}
+		[Ordinal(5)] [RED("colorReflectionHigh")] 		public SSimpleCurve ColorReflectionHigh { get; set;}
 
 		public CEnvInteriorFallbackParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

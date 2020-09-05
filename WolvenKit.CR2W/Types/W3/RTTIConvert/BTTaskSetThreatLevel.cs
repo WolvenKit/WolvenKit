@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskSetThreatLevel : IBehTreeTask
 	{
-		[RED("threatLevel")] 		public CInt32 ThreatLevel { get; set;}
+		[Ordinal(1)] [RED("threatLevel")] 		public CInt32 ThreatLevel { get; set;}
 
-		[RED("addToCurrent")] 		public CBool AddToCurrent { get; set;}
+		[Ordinal(2)] [RED("addToCurrent")] 		public CBool AddToCurrent { get; set;}
 
 		public BTTaskSetThreatLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

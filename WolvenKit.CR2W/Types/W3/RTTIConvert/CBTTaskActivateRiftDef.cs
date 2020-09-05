@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskActivateRiftDef : CBTTaskAttackDef
 	{
-		[RED("resourceNameRift")] 		public CName ResourceNameRift { get; set;}
+		[Ordinal(1)] [RED("resourceNameRift")] 		public CName ResourceNameRift { get; set;}
 
-		[RED("resourceNameGround")] 		public CName ResourceNameGround { get; set;}
+		[Ordinal(2)] [RED("resourceNameGround")] 		public CName ResourceNameGround { get; set;}
 
 		public CBTTaskActivateRiftDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

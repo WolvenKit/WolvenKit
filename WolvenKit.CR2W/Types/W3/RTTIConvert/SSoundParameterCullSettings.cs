@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSoundParameterCullSettings : CVariable
 	{
-		[RED("gameParameterName")] 		public StringAnsi GameParameterName { get; set;}
+		[Ordinal(1)] [RED("gameParameterName")] 		public StringAnsi GameParameterName { get; set;}
 
-		[RED("gameParameterCullValue")] 		public CFloat GameParameterCullValue { get; set;}
+		[Ordinal(2)] [RED("gameParameterCullValue")] 		public CFloat GameParameterCullValue { get; set;}
 
-		[RED("invertCullCheck")] 		public CBool InvertCullCheck { get; set;}
+		[Ordinal(3)] [RED("invertCullCheck")] 		public CBool InvertCullCheck { get; set;}
 
 		public SSoundParameterCullSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

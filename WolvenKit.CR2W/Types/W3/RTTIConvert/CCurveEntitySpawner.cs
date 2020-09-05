@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCurveEntitySpawner : CObject
 	{
-		[RED("density")] 		public CUInt32 Density { get; set;}
+		[Ordinal(1)] [RED("density")] 		public CUInt32 Density { get; set;}
 
-		[RED("variation")] 		public CFloat Variation { get; set;}
+		[Ordinal(2)] [RED("variation")] 		public CFloat Variation { get; set;}
 
-		[RED("templateWeights", 2,0)] 		public CArray<SEntityWeight> TemplateWeights { get; set;}
+		[Ordinal(3)] [RED("templateWeights", 2,0)] 		public CArray<SEntityWeight> TemplateWeights { get; set;}
 
 		public CCurveEntitySpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

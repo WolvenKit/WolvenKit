@@ -8,15 +8,90 @@ using System.Threading.Tasks;
 using Ionic.Zlib;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
+using WolvenKit.CR2W;
 
 namespace WolvenKit.Cache
 {
+
+    public class CollisionCacheItemHeader
+    {
+        public uint Unk1 { get; set; }
+        public uint Unk2 { get; set; }
+        public uint Unk3 { get; set; }
+
+        public List<CollisionCacheItemHeaderItem> Items { get; set; } = new List<CollisionCacheItemHeaderItem>();
+
+        public void Read(BinaryReader br)
+        {
+            Unk1 = br.ReadUInt32();
+            Unk2 = br.ReadUInt32();
+            Unk3 = br.ReadUInt32();
+
+            uint _count = br.ReadUInt32();
+            for (int i = 0; i < _count; i++)
+            {
+                // read item
+                var item = new CollisionCacheItemHeaderItem
+                {
+                    Name = br.ReadStringDefaultSingle()
+                };
+
+                var _count2 = br.ReadVLQInt32();
+                for (int j = 0; j < _count2; j++)
+                {
+                    item.Strings.Add(br.ReadStringDefaultSingle());                        
+                }
+
+                item.Unk4 = br.ReadBytes(70).ToList();
+                item.FileSize = br.ReadUInt32();
+                item.Flag = br.ReadSByte();
+
+                
+                Items.Add(item);
+            }
+        }
+        public void Write(BinaryWriter bw)
+        {
+            bw.Write(Unk1);
+            bw.Write(Unk2);
+            bw.Write(Unk3);
+
+            int _count = Items.Count;
+            bw.Write(_count);
+            for (int i = 0; i < _count; i++)
+            {
+                var item = Items[i];
+
+                bw.WriteStringDefaultSingle(item.Name);
+
+                bw.WriteVLQInt32(item.Strings.Count);
+                foreach (var s in item.Strings)
+                {
+                    bw.WriteStringDefaultSingle(s);
+                }
+
+                bw.Write(item.Unk4.ToArray());
+                bw.Write(item.FileSize);
+                bw.Write(item.Flag);
+            }
+        }
+    }
+
+    public class CollisionCacheItemHeaderItem
+    {
+        public string Name { get; set; }
+        public List<string> Strings { get; set; } = new List<string>();
+        public List<byte> Unk4 { get; set; } = new List<byte>();
+        public uint FileSize { get; set; }
+        public sbyte Flag { get; set; }
+    }
+
     /// <summary>
     /// Files packed into Collision.cache. Zlib compressed nxb/p3d file.
     /// </summary>
     public class CollisionCacheItem : IWitcherFile
     {
-        public IWitcherArchiveType Bundle { get; set; }
+        public IWitcherArchive Bundle { get; set; }
         public string Name { get; set; }
         public long Size { get; set; }
         public uint ZSize { get; set; }
@@ -26,23 +101,12 @@ namespace WolvenKit.Cache
         public uint Unk1; //?
         public ulong Unk2; //Null
         public uint Unk3; 
-        public byte[] guid;
-        public byte[] guid2;
-        public ulong Comtype; //TODO: Investigate this. 2 = mesh, 3 = redcloth, 4 = redapex, 5 = reddest
+        public byte[] unk4;
+        public byte[] unk5;
+        public ulong Comtype; // 1 = w2ter, 2 = mesh, 3 = redcloth, 4 = redapex, 5 = reddest
         public byte[] Tail;
 
-        List<byte> REDheader = new List<byte>();
-        /*
-         * RedEngine header in front of the compressed collision cache files with CSound Materials?
-         * Uint32 unk1;
-         * Uint32 unk2;
-         * Uint32 unk3; //NULL
-         * Uint32 itemcount;
-         * ... dynamic number of items
-         * 
-         * Uint32 FileSize; // not always :(
-         * byte unk9 ?
-         */
+        public CollisionCacheItemHeader REDheader;
 
         public void Extract(Stream output)
         {
@@ -51,57 +115,25 @@ namespace WolvenKit.Cache
             {
                 var zlib = new ZlibStream(viewstream, CompressionMode.Decompress);
 
-                // get magic bytes
-                var MAGIC = new byte[4];
-                switch (Comtype)
-                {
-                    case 2:     // w2mesh: NXS mesh
-                    case 5:     // reddest: NXS mesh
-                        MAGIC = new byte[] { 0x4e, 0x58, 0x53 };
-                        break;
-                    case 3:     // redcloth: apb
-                    case 4:     // redapex: apb
-                        MAGIC = new byte[] { 0x5a, 0x5b, 0x5c, 0x5d };
-                        break;
-                    default:
-                        break;
-                }
-
                 // seek magic bytes
-                if (!(Comtype > 4 || Comtype == 1))
+                if (!(Comtype == 5 || Comtype == 1))
                 {
-                    Queue<byte> qBuffer = new Queue<byte>();
-
-                    // auxiliary stream since zlibstreams don't support seeking.
                     using (MemoryStream ms = new MemoryStream())
+                    using (var br = new BinaryReader(ms))
                     {
                         zlib.CopyTo(ms);
 
                         var p = zlib.Position;
                         ms.Seek(0, SeekOrigin.Begin);
-                        var testnumberofbytes = Math.Min(4096, ms.Length); // test only first max 4096 bytes
 
-                        do
+                        REDheader = new CollisionCacheItemHeader();
+                        REDheader.Read(br);
+
+                        foreach (var item in REDheader.Items)
                         {
-                            qBuffer.Enqueue(Convert.ToByte(ms.ReadByte()));
-                            if (qBuffer.Count > MAGIC.Length)
-                                qBuffer.Dequeue();
-                            testnumberofbytes--;
-
-                        } while (!Enumerable.SequenceEqual(qBuffer.ToArray(), MAGIC) && testnumberofbytes > 0);
-
-                        // reposition stream
-                        var fileBegin = 0;
-                        if (testnumberofbytes > 0)
-                            fileBegin = Math.Max(0, (int)ms.Position - MAGIC.Length);
-                        ms.Seek(0, SeekOrigin.Begin);
-
-                        // save header
-                        var buffer = new byte[fileBegin];
-                        ms.Read(buffer, 0, fileBegin);
-                        REDheader.AddRange(buffer);
-
-                        ms.CopyTo(output);
+                            var buffer = br.ReadBytes((int)item.FileSize);
+                            new MemoryStream(buffer).CopyTo(output);
+                        }
                     }
                 }
                 else
@@ -116,6 +148,9 @@ namespace WolvenKit.Cache
             var filename = e.FileName;
             switch (Comtype)
             {
+                case 1:
+                    filename = Path.ChangeExtension(filename, "bin");
+                    break;
                 case 2:
                 case 5:
                     filename = Path.ChangeExtension(filename, "nxs"); 

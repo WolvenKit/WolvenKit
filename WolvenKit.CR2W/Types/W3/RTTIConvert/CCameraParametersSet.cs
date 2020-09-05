@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,25 +11,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCameraParametersSet : CObject
 	{
-		[RED("pivotPositionControllerName")] 		public CName PivotPositionControllerName { get; set;}
+		[Ordinal(1)] [RED("pivotPositionControllerName")] 		public CName PivotPositionControllerName { get; set;}
 
-		[RED("pivotPositionControllerBlend")] 		public CFloat PivotPositionControllerBlend { get; set;}
+		[Ordinal(2)] [RED("pivotPositionControllerBlend")] 		public CFloat PivotPositionControllerBlend { get; set;}
 
-		[RED("pivotPosForcedBlendOnNext")] 		public CFloat PivotPosForcedBlendOnNext { get; set;}
+		[Ordinal(3)] [RED("pivotPosForcedBlendOnNext")] 		public CFloat PivotPosForcedBlendOnNext { get; set;}
 
-		[RED("pivotPositionBlendFromPos")] 		public CBool PivotPositionBlendFromPos { get; set;}
+		[Ordinal(4)] [RED("pivotPositionBlendFromPos")] 		public CBool PivotPositionBlendFromPos { get; set;}
 
-		[RED("forceBlendFromPosOnNextCam")] 		public CBool ForceBlendFromPosOnNextCam { get; set;}
+		[Ordinal(5)] [RED("forceBlendFromPosOnNextCam")] 		public CBool ForceBlendFromPosOnNextCam { get; set;}
 
-		[RED("pivotRotationController")] 		public CName PivotRotationController { get; set;}
+		[Ordinal(6)] [RED("pivotRotationController")] 		public CName PivotRotationController { get; set;}
 
-		[RED("pivotDistanceController")] 		public CName PivotDistanceController { get; set;}
+		[Ordinal(7)] [RED("pivotDistanceController")] 		public CName PivotDistanceController { get; set;}
 
-		[RED("launchAnimation")] 		public CBool LaunchAnimation { get; set;}
+		[Ordinal(8)] [RED("launchAnimation")] 		public CBool LaunchAnimation { get; set;}
 
-		[RED("animationData")] 		public SCameraAnimationData AnimationData { get; set;}
+		[Ordinal(9)] [RED("animationData")] 		public SCameraAnimationData AnimationData { get; set;}
 
-		[RED("collisionOffset")] 		public Vector CollisionOffset { get; set;}
+		[Ordinal(10)] [RED("collisionOffset")] 		public Vector CollisionOffset { get; set;}
 
 		public CCameraParametersSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

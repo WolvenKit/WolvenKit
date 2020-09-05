@@ -12,7 +12,7 @@ using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Cache
 {
-    public class TextureCache : IWitcherArchiveType
+    public class TextureCache : IWitcherArchive
     {
         //The images packed into this Texture cache file
         public List<TextureCacheItem> Files;

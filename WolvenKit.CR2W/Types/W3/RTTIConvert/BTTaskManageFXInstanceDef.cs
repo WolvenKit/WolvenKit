@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskManageFXInstanceDef : IBehTreeTaskDefinition
 	{
-		[RED("hasAbilityCondition")] 		public CName HasAbilityCondition { get; set;}
+		[Ordinal(1)] [RED("hasAbilityCondition")] 		public CName HasAbilityCondition { get; set;}
 
-		[RED("fxName")] 		public CName FxName { get; set;}
+		[Ordinal(2)] [RED("fxName")] 		public CName FxName { get; set;}
 
-		[RED("fxTickets")] 		public CInt32 FxTickets { get; set;}
+		[Ordinal(3)] [RED("fxTickets")] 		public CInt32 FxTickets { get; set;}
 
-		[RED("distanceToAnotherFx")] 		public CFloat DistanceToAnotherFx { get; set;}
+		[Ordinal(4)] [RED("distanceToAnotherFx")] 		public CFloat DistanceToAnotherFx { get; set;}
 
-		[RED("fxInstanceCheckInterval")] 		public CFloat FxInstanceCheckInterval { get; set;}
+		[Ordinal(5)] [RED("fxInstanceCheckInterval")] 		public CFloat FxInstanceCheckInterval { get; set;}
 
-		[RED("stopFxAfterDeath")] 		public CBool StopFxAfterDeath { get; set;}
+		[Ordinal(6)] [RED("stopFxAfterDeath")] 		public CBool StopFxAfterDeath { get; set;}
 
 		public BTTaskManageFXInstanceDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

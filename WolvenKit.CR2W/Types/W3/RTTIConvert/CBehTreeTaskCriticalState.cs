@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTaskCriticalState : IBehTreeTask
 	{
-		[RED("activate")] 		public CBool Activate { get; set;}
+		[Ordinal(1)] [RED("activate")] 		public CBool Activate { get; set;}
 
-		[RED("activateTimeStamp")] 		public CFloat ActivateTimeStamp { get; set;}
+		[Ordinal(2)] [RED("activateTimeStamp")] 		public CFloat ActivateTimeStamp { get; set;}
 
-		[RED("forceActivate")] 		public CBool ForceActivate { get; set;}
+		[Ordinal(3)] [RED("forceActivate")] 		public CBool ForceActivate { get; set;}
 
-		[RED("currentCS")] 		public CEnum<ECriticalStateType> CurrentCS { get; set;}
+		[Ordinal(4)] [RED("currentCS")] 		public CEnum<ECriticalStateType> CurrentCS { get; set;}
 
 		public CBehTreeTaskCriticalState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

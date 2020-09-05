@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRiderSetCanBeFollowed : IBehTreeTask
 	{
-		[RED("setCanBeFollowed")] 		public CBool SetCanBeFollowed { get; set;}
+		[Ordinal(1)] [RED("setCanBeFollowed")] 		public CBool SetCanBeFollowed { get; set;}
 
-		[RED("horse")] 		public CHandle<CNewNPC> Horse { get; set;}
+		[Ordinal(2)] [RED("horse")] 		public CHandle<CNewNPC> Horse { get; set;}
 
 		public CBTTaskRiderSetCanBeFollowed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

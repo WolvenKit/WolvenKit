@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGateEntity : W3LockableEntity
 	{
-		[RED("currState")] 		public CName CurrState { get; set;}
+		[Ordinal(1)] [RED("currState")] 		public CName CurrState { get; set;}
 
-		[RED("speedModifier")] 		public CFloat SpeedModifier { get; set;}
+		[Ordinal(2)] [RED("speedModifier")] 		public CFloat SpeedModifier { get; set;}
 
-		[RED("initiallyOpened")] 		public CBool InitiallyOpened { get; set;}
+		[Ordinal(3)] [RED("initiallyOpened")] 		public CBool InitiallyOpened { get; set;}
 
-		[RED("startSound")] 		public CName StartSound { get; set;}
+		[Ordinal(4)] [RED("startSound")] 		public CName StartSound { get; set;}
 
-		[RED("stopSound")] 		public CName StopSound { get; set;}
+		[Ordinal(5)] [RED("stopSound")] 		public CName StopSound { get; set;}
 
-		[RED("runTime")] 		public CFloat RunTime { get; set;}
+		[Ordinal(6)] [RED("runTime")] 		public CFloat RunTime { get; set;}
 
 		public CGateEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -12,7 +12,7 @@ namespace WolvenKit.Bundles
 {
     public class BundleItem : IWitcherFile
     {
-        public IWitcherArchiveType Bundle { get; set; }
+        public IWitcherArchive Bundle { get; set; }
         public string Name { get; set; }
         public byte[] Hash { get; set; }
         public uint Empty { get; set; }
@@ -163,6 +163,11 @@ namespace WolvenKit.Bundles
 
         public string Extract(BundleFileExtractArgs e)
         {
+            // create new directory and delete existing file
+            Directory.CreateDirectory(Path.GetDirectoryName(e.FileName) ?? "");
+            if (File.Exists(e.FileName))
+                File.Delete(e.FileName);
+
             using (var output = new FileStream(e.FileName, FileMode.Create, FileAccess.Write))
             {
                 Extract(output);

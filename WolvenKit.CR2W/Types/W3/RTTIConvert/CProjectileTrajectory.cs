@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,31 +11,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CProjectileTrajectory : CGameplayEntity
 	{
-		[RED("projectileName")] 		public CName ProjectileName { get; set;}
+		[Ordinal(1)] [RED("projectileName")] 		public CName ProjectileName { get; set;}
 
-		[RED("animatedOffset")] 		public Vector AnimatedOffset { get; set;}
+		[Ordinal(2)] [RED("animatedOffset")] 		public Vector AnimatedOffset { get; set;}
 
-		[RED("animatedTimeMultiplier")] 		public CFloat AnimatedTimeMultiplier { get; set;}
+		[Ordinal(3)] [RED("animatedTimeMultiplier")] 		public CFloat AnimatedTimeMultiplier { get; set;}
 
-		[RED("bounceOfVelocityPreserve")] 		public CFloat BounceOfVelocityPreserve { get; set;}
+		[Ordinal(4)] [RED("bounceOfVelocityPreserve")] 		public CFloat BounceOfVelocityPreserve { get; set;}
 
-		[RED("overlapAccuracy")] 		public CFloat OverlapAccuracy { get; set;}
+		[Ordinal(5)] [RED("overlapAccuracy")] 		public CFloat OverlapAccuracy { get; set;}
 
-		[RED("doWaterLevelTest")] 		public CBool DoWaterLevelTest { get; set;}
+		[Ordinal(6)] [RED("doWaterLevelTest")] 		public CBool DoWaterLevelTest { get; set;}
 
-		[RED("waterTestAccuracy")] 		public CFloat WaterTestAccuracy { get; set;}
+		[Ordinal(7)] [RED("waterTestAccuracy")] 		public CFloat WaterTestAccuracy { get; set;}
 
-		[RED("caster")] 		public CHandle<CEntity> Caster { get; set;}
+		[Ordinal(8)] [RED("caster")] 		public CHandle<CEntity> Caster { get; set;}
 
-		[RED("realCaster")] 		public CHandle<CEntity> RealCaster { get; set;}
+		[Ordinal(9)] [RED("realCaster")] 		public CHandle<CEntity> RealCaster { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(10)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		[RED("alarmRadius")] 		public CFloat AlarmRadius { get; set;}
+		[Ordinal(11)] [RED("alarmRadius")] 		public CFloat AlarmRadius { get; set;}
 
-		[RED("victim")] 		public CHandle<CGameplayEntity> Victim { get; set;}
+		[Ordinal(12)] [RED("victim")] 		public CHandle<CGameplayEntity> Victim { get; set;}
 
-		[RED("yrdenAlternate")] 		public CHandle<W3YrdenEntity> YrdenAlternate { get; set;}
+		[Ordinal(13)] [RED("yrdenAlternate")] 		public CHandle<W3YrdenEntity> YrdenAlternate { get; set;}
 
 		public CProjectileTrajectory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

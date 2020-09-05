@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,35 +11,35 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvSpeedTreeParameters : CVariable
 	{
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(1)] [RED("activated")] 		public CBool Activated { get; set;}
 
-		[RED("diffuse")] 		public SSimpleCurve Diffuse { get; set;}
+		[Ordinal(2)] [RED("diffuse")] 		public SSimpleCurve Diffuse { get; set;}
 
-		[RED("specularScale")] 		public SSimpleCurve SpecularScale { get; set;}
+		[Ordinal(3)] [RED("specularScale")] 		public SSimpleCurve SpecularScale { get; set;}
 
-		[RED("translucencyScale")] 		public SSimpleCurve TranslucencyScale { get; set;}
+		[Ordinal(4)] [RED("translucencyScale")] 		public SSimpleCurve TranslucencyScale { get; set;}
 
-		[RED("ambientOcclusionScale")] 		public SSimpleCurve AmbientOcclusionScale { get; set;}
+		[Ordinal(5)] [RED("ambientOcclusionScale")] 		public SSimpleCurve AmbientOcclusionScale { get; set;}
 
-		[RED("billboardsColor")] 		public SSimpleCurve BillboardsColor { get; set;}
+		[Ordinal(6)] [RED("billboardsColor")] 		public SSimpleCurve BillboardsColor { get; set;}
 
-		[RED("billboardsTranslucency")] 		public SSimpleCurve BillboardsTranslucency { get; set;}
+		[Ordinal(7)] [RED("billboardsTranslucency")] 		public SSimpleCurve BillboardsTranslucency { get; set;}
 
-		[RED("randomColorsTrees")] 		public CEnvSpeedTreeRandomColorParameters RandomColorsTrees { get; set;}
+		[Ordinal(8)] [RED("randomColorsTrees")] 		public CEnvSpeedTreeRandomColorParameters RandomColorsTrees { get; set;}
 
-		[RED("randomColorsBranches")] 		public CEnvSpeedTreeRandomColorParameters RandomColorsBranches { get; set;}
+		[Ordinal(9)] [RED("randomColorsBranches")] 		public CEnvSpeedTreeRandomColorParameters RandomColorsBranches { get; set;}
 
-		[RED("randomColorsGrass")] 		public CEnvSpeedTreeRandomColorParameters RandomColorsGrass { get; set;}
+		[Ordinal(10)] [RED("randomColorsGrass")] 		public CEnvSpeedTreeRandomColorParameters RandomColorsGrass { get; set;}
 
-		[RED("randomColorsFallback")] 		public SSimpleCurve RandomColorsFallback { get; set;}
+		[Ordinal(11)] [RED("randomColorsFallback")] 		public SSimpleCurve RandomColorsFallback { get; set;}
 
-		[RED("pigmentBrightness")] 		public SSimpleCurve PigmentBrightness { get; set;}
+		[Ordinal(12)] [RED("pigmentBrightness")] 		public SSimpleCurve PigmentBrightness { get; set;}
 
-		[RED("pigmentFloodStartDist")] 		public SSimpleCurve PigmentFloodStartDist { get; set;}
+		[Ordinal(13)] [RED("pigmentFloodStartDist")] 		public SSimpleCurve PigmentFloodStartDist { get; set;}
 
-		[RED("pigmentFloodRange")] 		public SSimpleCurve PigmentFloodRange { get; set;}
+		[Ordinal(14)] [RED("pigmentFloodRange")] 		public SSimpleCurve PigmentFloodRange { get; set;}
 
-		[RED("billboardsLightBleed")] 		public SSimpleCurve BillboardsLightBleed { get; set;}
+		[Ordinal(15)] [RED("billboardsLightBleed")] 		public SSimpleCurve BillboardsLightBleed { get; set;}
 
 		public CEnvSpeedTreeParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

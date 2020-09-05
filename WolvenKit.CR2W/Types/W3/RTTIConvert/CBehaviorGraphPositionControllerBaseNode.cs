@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphPositionControllerBaseNode : CBehaviorGraphBaseNode
 	{
-		[RED("useHeading")] 		public CBool UseHeading { get; set;}
+		[Ordinal(1)] [RED("useHeading")] 		public CBool UseHeading { get; set;}
 
-		[RED("cachedWeightVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightVariableNode { get; set;}
+		[Ordinal(2)] [RED("cachedWeightVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightVariableNode { get; set;}
 
-		[RED("cachedShiftVariableNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedShiftVariableNode { get; set;}
+		[Ordinal(3)] [RED("cachedShiftVariableNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedShiftVariableNode { get; set;}
 
 		public CBehaviorGraphPositionControllerBaseNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

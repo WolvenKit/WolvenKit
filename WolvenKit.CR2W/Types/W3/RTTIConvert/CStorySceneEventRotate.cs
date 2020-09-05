@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventRotate : CStorySceneEvent
 	{
-		[RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(1)] [RED("actor")] 		public CName Actor { get; set;}
 
-		[RED("angle")] 		public CFloat Angle { get; set;}
+		[Ordinal(2)] [RED("angle")] 		public CFloat Angle { get; set;}
 
-		[RED("absoluteAngle")] 		public CBool AbsoluteAngle { get; set;}
+		[Ordinal(3)] [RED("absoluteAngle")] 		public CBool AbsoluteAngle { get; set;}
 
-		[RED("toCamera")] 		public CBool ToCamera { get; set;}
+		[Ordinal(4)] [RED("toCamera")] 		public CBool ToCamera { get; set;}
 
-		[RED("instant")] 		public CBool Instant { get; set;}
+		[Ordinal(5)] [RED("instant")] 		public CBool Instant { get; set;}
 
 		public CStorySceneEventRotate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

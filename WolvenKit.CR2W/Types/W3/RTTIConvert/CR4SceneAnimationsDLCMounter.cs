@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4SceneAnimationsDLCMounter : IGameplayDLCMounter
 	{
-		[RED("sceneAnimationsBodyFilePath")] 		public CString SceneAnimationsBodyFilePath { get; set;}
+		[Ordinal(1)] [RED("sceneAnimationsBodyFilePath")] 		public CString SceneAnimationsBodyFilePath { get; set;}
 
-		[RED("sceneAnimationsMimicsFilePath")] 		public CString SceneAnimationsMimicsFilePath { get; set;}
+		[Ordinal(2)] [RED("sceneAnimationsMimicsFilePath")] 		public CString SceneAnimationsMimicsFilePath { get; set;}
 
-		[RED("sceneAnimationsMimicsEmoStatesFilePath")] 		public CString SceneAnimationsMimicsEmoStatesFilePath { get; set;}
+		[Ordinal(3)] [RED("sceneAnimationsMimicsEmoStatesFilePath")] 		public CString SceneAnimationsMimicsEmoStatesFilePath { get; set;}
 
 		public CR4SceneAnimationsDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

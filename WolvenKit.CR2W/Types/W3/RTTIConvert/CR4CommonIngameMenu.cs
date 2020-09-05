@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4CommonIngameMenu : CR4MenuBase
 	{
-		[RED("m_menuData", 2,0)] 		public CArray<SMenuTab> M_menuData { get; set;}
+		[Ordinal(1)] [RED("m_menuData", 2,0)] 		public CArray<SMenuTab> M_menuData { get; set;}
 
-		[RED("currentMenuName")] 		public CName CurrentMenuName { get; set;}
+		[Ordinal(2)] [RED("currentMenuName")] 		public CName CurrentMenuName { get; set;}
 
-		[RED("reopenRequested")] 		public CBool ReopenRequested { get; set;}
+		[Ordinal(3)] [RED("reopenRequested")] 		public CBool ReopenRequested { get; set;}
 
 		public CR4CommonIngameMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

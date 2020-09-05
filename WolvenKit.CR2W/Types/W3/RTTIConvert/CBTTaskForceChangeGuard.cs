@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskForceChangeGuard : IBehTreeTask
 	{
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(1)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDectivate")] 		public CBool OnDectivate { get; set;}
+		[Ordinal(2)] [RED("onDectivate")] 		public CBool OnDectivate { get; set;}
 
-		[RED("raiseGuard")] 		public CBool RaiseGuard { get; set;}
+		[Ordinal(3)] [RED("raiseGuard")] 		public CBool RaiseGuard { get; set;}
 
-		[RED("lowerGuard")] 		public CBool LowerGuard { get; set;}
+		[Ordinal(4)] [RED("lowerGuard")] 		public CBool LowerGuard { get; set;}
 
 		public CBTTaskForceChangeGuard(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

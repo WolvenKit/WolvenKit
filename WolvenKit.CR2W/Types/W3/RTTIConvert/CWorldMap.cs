@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWorldMap : CResource
 	{
-		[RED("guid")] 		public CGUID Guid { get; set;}
+		[Ordinal(1)] [RED("guid")] 		public CGUID Guid { get; set;}
 
-		[RED("displayTitle")] 		public LocalizedString DisplayTitle { get; set;}
+		[Ordinal(2)] [RED("displayTitle")] 		public LocalizedString DisplayTitle { get; set;}
 
-		[RED("imageInfo")] 		public SWorldMapImageInfo ImageInfo { get; set;}
+		[Ordinal(3)] [RED("imageInfo")] 		public SWorldMapImageInfo ImageInfo { get; set;}
 
-		[RED("staticMapPins", 2,0)] 		public CArray<SStaticMapPin> StaticMapPins { get; set;}
+		[Ordinal(4)] [RED("staticMapPins", 2,0)] 		public CArray<SStaticMapPin> StaticMapPins { get; set;}
 
 		public CWorldMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

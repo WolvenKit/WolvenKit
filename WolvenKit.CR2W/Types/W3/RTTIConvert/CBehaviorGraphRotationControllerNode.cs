@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphRotationControllerNode : CBehaviorGraphBaseNode
 	{
-		[RED("eventAllowRot")] 		public CName EventAllowRot { get; set;}
+		[Ordinal(1)] [RED("eventAllowRot")] 		public CName EventAllowRot { get; set;}
 
-		[RED("continueUpdate")] 		public CBool ContinueUpdate { get; set;}
+		[Ordinal(2)] [RED("continueUpdate")] 		public CBool ContinueUpdate { get; set;}
 
-		[RED("cachedAngleVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedAngleVariableNode { get; set;}
+		[Ordinal(3)] [RED("cachedAngleVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedAngleVariableNode { get; set;}
 
-		[RED("cachedWeightVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightVariableNode { get; set;}
+		[Ordinal(4)] [RED("cachedWeightVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightVariableNode { get; set;}
 
 		public CBehaviorGraphRotationControllerNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

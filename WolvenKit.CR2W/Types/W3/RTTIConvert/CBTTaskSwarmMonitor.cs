@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSwarmMonitor : IBehTreeTask
 	{
-		[RED("monitorShieldSwarm")] 		public CBool MonitorShieldSwarm { get; set;}
+		[Ordinal(1)] [RED("monitorShieldSwarm")] 		public CBool MonitorShieldSwarm { get; set;}
 
-		[RED("respawnShieldBirds")] 		public CBool RespawnShieldBirds { get; set;}
+		[Ordinal(2)] [RED("respawnShieldBirds")] 		public CBool RespawnShieldBirds { get; set;}
 
-		[RED("respawnThreshold")] 		public CFloat RespawnThreshold { get; set;}
+		[Ordinal(3)] [RED("respawnThreshold")] 		public CFloat RespawnThreshold { get; set;}
 
-		[RED("respawnCooldown")] 		public CFloat RespawnCooldown { get; set;}
+		[Ordinal(4)] [RED("respawnCooldown")] 		public CFloat RespawnCooldown { get; set;}
 
-		[RED("disableBoidPOIComponents")] 		public CBool DisableBoidPOIComponents { get; set;}
+		[Ordinal(5)] [RED("disableBoidPOIComponents")] 		public CBool DisableBoidPOIComponents { get; set;}
 
-		[RED("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
+		[Ordinal(6)] [RED("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
 
-		[RED("boidPOIComponents", 2,0)] 		public CArray<CHandle<CComponent>> BoidPOIComponents { get; set;}
+		[Ordinal(7)] [RED("boidPOIComponents", 2,0)] 		public CArray<CHandle<CComponent>> BoidPOIComponents { get; set;}
 
 		public CBTTaskSwarmMonitor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

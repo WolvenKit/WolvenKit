@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ConditionalTrigger : CEntity
 	{
-		[RED("conditionClass")] 		public CHandle<W3Condition> ConditionClass { get; set;}
+		[Ordinal(1)] [RED("conditionClass")] 		public CHandle<W3Condition> ConditionClass { get; set;}
 
-		[RED("effectorClasses", 2,0)] 		public CArray<CHandle<IPerformableAction>> EffectorClasses { get; set;}
+		[Ordinal(2)] [RED("effectorClasses", 2,0)] 		public CArray<CHandle<IPerformableAction>> EffectorClasses { get; set;}
 
-		[RED("affectsPlayer")] 		public CBool AffectsPlayer { get; set;}
+		[Ordinal(3)] [RED("affectsPlayer")] 		public CBool AffectsPlayer { get; set;}
 
 		public W3ConditionalTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

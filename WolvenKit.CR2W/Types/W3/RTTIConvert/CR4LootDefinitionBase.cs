@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4LootDefinitionBase : CLootDefinitionBase
 	{
-		[RED("quantityMin")] 		public CUInt32 QuantityMin { get; set;}
+		[Ordinal(1)] [RED("quantityMin")] 		public CUInt32 QuantityMin { get; set;}
 
-		[RED("quantityMax")] 		public CUInt32 QuantityMax { get; set;}
+		[Ordinal(2)] [RED("quantityMax")] 		public CUInt32 QuantityMax { get; set;}
 
-		[RED("playerLevelMin")] 		public CUInt32 PlayerLevelMin { get; set;}
+		[Ordinal(3)] [RED("playerLevelMin")] 		public CUInt32 PlayerLevelMin { get; set;}
 
-		[RED("playerLevelMax")] 		public CUInt32 PlayerLevelMax { get; set;}
+		[Ordinal(4)] [RED("playerLevelMax")] 		public CUInt32 PlayerLevelMax { get; set;}
 
-		[RED("crafterLevelMin")] 		public CUInt32 CrafterLevelMin { get; set;}
+		[Ordinal(5)] [RED("crafterLevelMin")] 		public CUInt32 CrafterLevelMin { get; set;}
 
-		[RED("crafterLevelMax")] 		public CUInt32 CrafterLevelMax { get; set;}
+		[Ordinal(6)] [RED("crafterLevelMax")] 		public CUInt32 CrafterLevelMax { get; set;}
 
 		public CR4LootDefinitionBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

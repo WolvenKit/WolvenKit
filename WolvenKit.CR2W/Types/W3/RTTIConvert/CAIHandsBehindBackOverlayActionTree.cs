@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIHandsBehindBackOverlayActionTree : IActionDecorator
 	{
-		[RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(1)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		[RED("interruptScriptedActionOnDurationEnd")] 		public CBool InterruptScriptedActionOnDurationEnd { get; set;}
+		[Ordinal(2)] [RED("interruptScriptedActionOnDurationEnd")] 		public CBool InterruptScriptedActionOnDurationEnd { get; set;}
 
 		public CAIHandsBehindBackOverlayActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

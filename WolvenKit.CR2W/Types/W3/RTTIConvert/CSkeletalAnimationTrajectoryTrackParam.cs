@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSkeletalAnimationTrajectoryTrackParam : ISkeletalAnimationSetEntryParam
 	{
-		[RED("editorOnly")] 		public CBool EditorOnly { get; set;}
+		[Ordinal(1)] [RED("editorOnly")] 		public CBool EditorOnly { get; set;}
 
-		[RED("names", 2,0)] 		public CArray<CName> Names { get; set;}
+		[Ordinal(2)] [RED("names", 2,0)] 		public CArray<CName> Names { get; set;}
 
-		[RED("datas", 2,0)] 		public CArray<CArray<Vector>> Datas { get; set;}
+		[Ordinal(3)] [RED("datas", 2,0)] 		public CArray<CArray<Vector>> Datas { get; set;}
 
 		public CSkeletalAnimationTrajectoryTrackParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

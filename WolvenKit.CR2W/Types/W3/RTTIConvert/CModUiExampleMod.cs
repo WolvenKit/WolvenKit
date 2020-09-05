@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModUiExampleMod : CMod
 	{
-		[RED("view")] 		public CHandle<CModUiExampleListCallback> View { get; set;}
+		[Ordinal(1)] [RED("view")] 		public CHandle<CModUiExampleListCallback> View { get; set;}
 
-		[RED("listProvider")] 		public CHandle<CModUiExampleList> ListProvider { get; set;}
+		[Ordinal(2)] [RED("listProvider")] 		public CHandle<CModUiExampleList> ListProvider { get; set;}
 
 		public CModUiExampleMod(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

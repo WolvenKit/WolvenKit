@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeChoiceDefinition : IBehTreeNodeCompositeDefinition
 	{
-		[RED("useScoring")] 		public CBool UseScoring { get; set;}
+		[Ordinal(1)] [RED("useScoring")] 		public CBool UseScoring { get; set;}
 
-		[RED("selectRandom")] 		public CBool SelectRandom { get; set;}
+		[Ordinal(2)] [RED("selectRandom")] 		public CBool SelectRandom { get; set;}
 
-		[RED("forwardChildrenCompletness")] 		public CBool ForwardChildrenCompletness { get; set;}
+		[Ordinal(3)] [RED("forwardChildrenCompletness")] 		public CBool ForwardChildrenCompletness { get; set;}
 
 		public CBehTreeNodeChoiceDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

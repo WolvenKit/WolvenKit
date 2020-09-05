@@ -105,25 +105,13 @@ namespace WolvenKit.Common
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string ModTextureCacheDirectory
-        {
-            get
-            {
-                if (!Directory.Exists(Path.Combine(ModDirectory, EBundleType.TextureCache.ToString())))
-                    Directory.CreateDirectory(Path.Combine(ModDirectory, EBundleType.TextureCache.ToString()));
-                return Path.Combine(ModDirectory, EBundleType.TextureCache.ToString());
-            }
-        }
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string ModUncookedDirectory
         {
             get
             {
-                if (!Directory.Exists(Path.Combine(ModDirectory, EBundleType.CollisionCache.ToString())))
-                    Directory.CreateDirectory(Path.Combine(ModDirectory, EBundleType.CollisionCache.ToString()));
-                return Path.Combine(ModDirectory, EBundleType.CollisionCache.ToString());
+                if (!Directory.Exists(Path.Combine(ModDirectory, EProjectFolders.Uncooked.ToString())))
+                    Directory.CreateDirectory(Path.Combine(ModDirectory, EProjectFolders.Uncooked.ToString()));
+                return Path.Combine(ModDirectory, EProjectFolders.Uncooked.ToString());
             }
         }
         [XmlIgnore]
@@ -133,9 +121,9 @@ namespace WolvenKit.Common
         {
             get
             {
-                if (!Directory.Exists(Path.Combine(ModDirectory, EBundleType.Bundle.ToString())))
-                    Directory.CreateDirectory(Path.Combine(ModDirectory, EBundleType.Bundle.ToString()));
-                return Path.Combine(ModDirectory, EBundleType.Bundle.ToString());
+                if (!Directory.Exists(Path.Combine(ModDirectory, EProjectFolders.Cooked.ToString())))
+                    Directory.CreateDirectory(Path.Combine(ModDirectory, EProjectFolders.Cooked.ToString()));
+                return Path.Combine(ModDirectory, EProjectFolders.Cooked.ToString());
             }
         }
         #endregion
@@ -144,25 +132,13 @@ namespace WolvenKit.Common
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string DlcTextureCacheDirectory
-        {
-            get
-            {
-                if (!Directory.Exists(Path.Combine(DlcDirectory, EBundleType.TextureCache.ToString())))
-                    Directory.CreateDirectory(Path.Combine(DlcDirectory, EBundleType.TextureCache.ToString()));
-                return Path.Combine(DlcDirectory, EBundleType.TextureCache.ToString());
-            }
-        }
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string DlcUncookedDirectory
         {
             get
             {
-                if (!Directory.Exists(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString())))
-                    Directory.CreateDirectory(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString()));
-                return Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString());
+                if (!Directory.Exists(Path.Combine(DlcDirectory, EProjectFolders.Uncooked.ToString())))
+                    Directory.CreateDirectory(Path.Combine(DlcDirectory, EProjectFolders.Uncooked.ToString()));
+                return Path.Combine(DlcDirectory, EProjectFolders.Uncooked.ToString());
             }
         }
         [XmlIgnore]
@@ -172,9 +148,9 @@ namespace WolvenKit.Common
         {
             get
             {
-                if (!Directory.Exists(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString())))
-                    Directory.CreateDirectory(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString()));
-                return Path.Combine(DlcDirectory, EBundleType.Bundle.ToString());
+                if (!Directory.Exists(Path.Combine(DlcDirectory, EProjectFolders.Cooked.ToString())))
+                    Directory.CreateDirectory(Path.Combine(DlcDirectory, EProjectFolders.Cooked.ToString()));
+                return Path.Combine(DlcDirectory, EProjectFolders.Cooked.ToString());
             }
         }
         #endregion
@@ -335,14 +311,14 @@ namespace WolvenKit.Common
         public string Name { get; set; }
         [Category("About")]
         [Description("The version of your mod. It's a string so 0.1-ALPHA and such is possible.")]
-        public string version { get; set; }
+        public string Version { get; set; } = "0.62";
 
         public object Clone()
         {
             var clone = new W3Mod();
             clone.Name = Name;
             clone.FileName = FileName;
-            clone.version = version;
+            //clone.Version = Version;
             clone.LastOpenedFiles = LastOpenedFiles;
             return clone;
         }
@@ -358,12 +334,12 @@ namespace WolvenKit.Common
             _ = RadishDirectory;
 
             // create mod-level directories
-            _ = ModTextureCacheDirectory;
+            //_ = ModTextureCacheDirectory;
             _ = ModUncookedDirectory;
             _ = ModCookedDirectory;
 
             // create dlc-level directories
-            _ = DlcTextureCacheDirectory;
+            //_ = DlcTextureCacheDirectory;
             _ = DlcUncookedDirectory;
             _ = DlcCookedDirectory;
         }
@@ -379,22 +355,16 @@ namespace WolvenKit.Common
             string dlcname = "";
             try
             {
-                if (Directory.Exists(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString(), "dlc")))
+                if (Directory.Exists(Path.Combine(DlcCookedDirectory, "dlc")))
                 {
-                    if (Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString(), "dlc")).Any())
-                    {
-                        return (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString(), "dlc")).First())).Name;
-
-                    }
+                    if (Directory.GetDirectories(Path.Combine(DlcCookedDirectory, "dlc")).Any())
+                        return (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcCookedDirectory, "dlc")).First())).Name;
 
                 }
-                else if (Directory.Exists(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString(), "dlc")))
+                else if (Directory.Exists(Path.Combine(DlcUncookedDirectory, "dlc")))
                 {
-                    if (Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString(), "dlc")).Any())
-                    {
-                        return (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString(), "dlc")).First())).Name;
-                    }
-
+                    if (Directory.GetDirectories(Path.Combine(DlcUncookedDirectory, "dlc")).Any())
+                        return (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcUncookedDirectory, "dlc")).First())).Name;
                 }
             }
             catch (Exception)
@@ -413,22 +383,21 @@ namespace WolvenKit.Common
             string relpath = "";
             try
             {
-                if (Directory.Exists(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString(), "dlc")))
+                if (Directory.Exists(Path.Combine(DlcCookedDirectory, "dlc")))
                 {
-                    if (Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString(), "dlc")).Any())
+                    if (Directory.GetDirectories(Path.Combine(DlcCookedDirectory, "dlc")).Any())
                     {
-                        relpath = (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString(), "dlc")).First())).FullName;
-                        return relpath.Substring(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString()).Length + 1);
-
+                        relpath = (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcCookedDirectory, "dlc")).First())).FullName;
+                        return relpath.Substring(DlcCookedDirectory.Length + 1);
                     }
 
                 }
-                else if (Directory.Exists(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString(), "dlc")))
+                else if (Directory.Exists(Path.Combine(DlcUncookedDirectory, "dlc")))
                 {
-                    if (Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString(), "dlc")).Any())
+                    if (Directory.GetDirectories(Path.Combine(DlcUncookedDirectory, "dlc")).Any())
                     {
-                        relpath = (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString(), "dlc")).First())).FullName;
-                        return relpath.Substring(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString()).Length + 1);
+                        relpath = (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcUncookedDirectory, "dlc")).First())).FullName;
+                        return relpath.Substring(DlcUncookedDirectory.Length + 1);
                     }
 
                 }

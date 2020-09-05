@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAILeadPackWander : CAIDynamicWander
 	{
-		[RED("leaderRegroupEvent")] 		public CName LeaderRegroupEvent { get; set;}
+		[Ordinal(1)] [RED("leaderRegroupEvent")] 		public CName LeaderRegroupEvent { get; set;}
 
-		[RED("followers")] 		public CInt32 Followers { get; set;}
+		[Ordinal(2)] [RED("followers")] 		public CInt32 Followers { get; set;}
 
-		[RED("canWanderRun")] 		public CBool CanWanderRun { get; set;}
+		[Ordinal(3)] [RED("canWanderRun")] 		public CBool CanWanderRun { get; set;}
 
-		[RED("chanceToRun")] 		public CFloat ChanceToRun { get; set;}
+		[Ordinal(4)] [RED("chanceToRun")] 		public CFloat ChanceToRun { get; set;}
 
 		public CAILeadPackWander(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

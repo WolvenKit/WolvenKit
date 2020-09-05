@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskCaretakerManagerDef : IBehTreeTaskDefinition
 	{
-		[RED("drainTemplate")] 		public CHandle<CEntityTemplate> DrainTemplate { get; set;}
+		[Ordinal(1)] [RED("drainTemplate")] 		public CHandle<CEntityTemplate> DrainTemplate { get; set;}
 
-		[RED("recoverPercPerHit")] 		public CFloat RecoverPercPerHit { get; set;}
+		[Ordinal(2)] [RED("recoverPercPerHit")] 		public CFloat RecoverPercPerHit { get; set;}
 
-		[RED("shadesModifier")] 		public CFloat ShadesModifier { get; set;}
+		[Ordinal(3)] [RED("shadesModifier")] 		public CFloat ShadesModifier { get; set;}
 
 		public BTTaskCaretakerManagerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

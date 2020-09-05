@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAimingWithIKNode : CBehaviorGraphNode
 	{
-		[RED("aimingBaseBoneName")] 		public CName AimingBaseBoneName { get; set;}
+		[Ordinal(1)] [RED("aimingBaseBoneName")] 		public CName AimingBaseBoneName { get; set;}
 
-		[RED("ik")] 		public STwoBonesIKSolverData Ik { get; set;}
+		[Ordinal(2)] [RED("ik")] 		public STwoBonesIKSolverData Ik { get; set;}
 
-		[RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
+		[Ordinal(3)] [RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
 
-		[RED("cachedBaseInputNode")] 		public CPtr<CBehaviorGraphNode> CachedBaseInputNode { get; set;}
+		[Ordinal(4)] [RED("cachedBaseInputNode")] 		public CPtr<CBehaviorGraphNode> CachedBaseInputNode { get; set;}
 
-		[RED("cachedLookAtTargetDirMSInputNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedLookAtTargetDirMSInputNode { get; set;}
+		[Ordinal(5)] [RED("cachedLookAtTargetDirMSInputNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedLookAtTargetDirMSInputNode { get; set;}
 
 		public CBehaviorGraphAimingWithIKNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

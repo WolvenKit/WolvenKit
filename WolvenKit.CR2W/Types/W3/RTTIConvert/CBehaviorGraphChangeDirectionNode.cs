@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,21 +11,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphChangeDirectionNode : CBehaviorGraphValueNode
 	{
-		[RED("anyDirection")] 		public CBool AnyDirection { get; set;}
+		[Ordinal(1)] [RED("anyDirection")] 		public CBool AnyDirection { get; set;}
 
-		[RED("angles", 2,0)] 		public CArray<CFloat> Angles { get; set;}
+		[Ordinal(2)] [RED("angles", 2,0)] 		public CArray<CFloat> Angles { get; set;}
 
-		[RED("updateOnlyOnActivation")] 		public CBool UpdateOnlyOnActivation { get; set;}
+		[Ordinal(3)] [RED("updateOnlyOnActivation")] 		public CBool UpdateOnlyOnActivation { get; set;}
 
-		[RED("dirBlendTime")] 		public CFloat DirBlendTime { get; set;}
+		[Ordinal(4)] [RED("dirBlendTime")] 		public CFloat DirBlendTime { get; set;}
 
-		[RED("dirMaxBlendSpeed")] 		public CFloat DirMaxBlendSpeed { get; set;}
+		[Ordinal(5)] [RED("dirMaxBlendSpeed")] 		public CFloat DirMaxBlendSpeed { get; set;}
 
-		[RED("overshootAngle")] 		public CFloat OvershootAngle { get; set;}
+		[Ordinal(6)] [RED("overshootAngle")] 		public CFloat OvershootAngle { get; set;}
 
-		[RED("requestedFacingDirectionWSVariableName")] 		public CName RequestedFacingDirectionWSVariableName { get; set;}
+		[Ordinal(7)] [RED("requestedFacingDirectionWSVariableName")] 		public CName RequestedFacingDirectionWSVariableName { get; set;}
 
-		[RED("cachedRequestedFacingDirectionWSValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedRequestedFacingDirectionWSValueNode { get; set;}
+		[Ordinal(8)] [RED("cachedRequestedFacingDirectionWSValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedRequestedFacingDirectionWSValueNode { get; set;}
 
 		public CBehaviorGraphChangeDirectionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

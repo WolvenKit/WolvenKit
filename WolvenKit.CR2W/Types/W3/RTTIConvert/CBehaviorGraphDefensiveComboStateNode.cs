@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphDefensiveComboStateNode : CBehaviorGraphComboStateNode
 	{
-		[RED("varHitTime")] 		public CName VarHitTime { get; set;}
+		[Ordinal(1)] [RED("varHitTime")] 		public CName VarHitTime { get; set;}
 
-		[RED("varLevel")] 		public CName VarLevel { get; set;}
+		[Ordinal(2)] [RED("varLevel")] 		public CName VarLevel { get; set;}
 
-		[RED("varParry")] 		public CName VarParry { get; set;}
+		[Ordinal(3)] [RED("varParry")] 		public CName VarParry { get; set;}
 
-		[RED("defaultHits", 2,0)] 		public CArray<CName> DefaultHits { get; set;}
+		[Ordinal(4)] [RED("defaultHits", 2,0)] 		public CArray<CName> DefaultHits { get; set;}
 
 		public CBehaviorGraphDefensiveComboStateNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

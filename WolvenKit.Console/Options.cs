@@ -41,6 +41,13 @@ namespace WolvenKit.Console
 
     }
 
+    [Verb("dumpCOL", HelpText = "Dumps collision cache info from collision caches.")]
+    class DumpCollisionOptions
+    {
+        [Option(HelpText = "Specify the game path.", Required = true)]
+        public string path { get; set; }
+    }
+
     [Verb("dumpFileNames1", HelpText = "Dumps all file names found in the archives.")]
     class DumpArchivedFileInfosOptions
     {

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBlockedAbility : CVariable
 	{
-		[RED("abilityName")] 		public CName AbilityName { get; set;}
+		[Ordinal(1)] [RED("abilityName")] 		public CName AbilityName { get; set;}
 
-		[RED("timeWhenEnabledd")] 		public CFloat TimeWhenEnabledd { get; set;}
+		[Ordinal(2)] [RED("timeWhenEnabledd")] 		public CFloat TimeWhenEnabledd { get; set;}
 
-		[RED("count")] 		public CInt32 Count { get; set;}
+		[Ordinal(3)] [RED("count")] 		public CInt32 Count { get; set;}
 
 		public SBlockedAbility(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

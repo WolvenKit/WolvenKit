@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondIsInTheWay : IBehTreeTask
 	{
-		[RED("origin")] 		public CEnum<ETargetName> Origin { get; set;}
+		[Ordinal(1)] [RED("origin")] 		public CEnum<ETargetName> Origin { get; set;}
 
-		[RED("obstacle")] 		public CEnum<ETargetName> Obstacle { get; set;}
+		[Ordinal(2)] [RED("obstacle")] 		public CEnum<ETargetName> Obstacle { get; set;}
 
-		[RED("destination")] 		public CEnum<ETargetName> Destination { get; set;}
+		[Ordinal(3)] [RED("destination")] 		public CEnum<ETargetName> Destination { get; set;}
 
-		[RED("returnIfInvalid")] 		public CBool ReturnIfInvalid { get; set;}
+		[Ordinal(4)] [RED("returnIfInvalid")] 		public CBool ReturnIfInvalid { get; set;}
 
-		[RED("requiredDistanceFromLine")] 		public CFloat RequiredDistanceFromLine { get; set;}
+		[Ordinal(5)] [RED("requiredDistanceFromLine")] 		public CFloat RequiredDistanceFromLine { get; set;}
 
 		public BTCondIsInTheWay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

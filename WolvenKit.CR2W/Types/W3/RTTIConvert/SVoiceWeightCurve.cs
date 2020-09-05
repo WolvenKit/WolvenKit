@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SVoiceWeightCurve : CVariable
 	{
-		[RED("useCurve")] 		public CBool UseCurve { get; set;}
+		[Ordinal(1)] [RED("useCurve")] 		public CBool UseCurve { get; set;}
 
-		[RED("curve")] 		public SCurveData Curve { get; set;}
+		[Ordinal(2)] [RED("curve")] 		public SCurveData Curve { get; set;}
 
-		[RED("timeOffset")] 		public CFloat TimeOffset { get; set;}
+		[Ordinal(3)] [RED("timeOffset")] 		public CFloat TimeOffset { get; set;}
 
-		[RED("valueMulPre")] 		public CFloat ValueMulPre { get; set;}
+		[Ordinal(4)] [RED("valueMulPre")] 		public CFloat ValueMulPre { get; set;}
 
-		[RED("valueOffset")] 		public CFloat ValueOffset { get; set;}
+		[Ordinal(5)] [RED("valueOffset")] 		public CFloat ValueOffset { get; set;}
 
-		[RED("valueMulPost")] 		public CFloat ValueMulPost { get; set;}
+		[Ordinal(6)] [RED("valueMulPost")] 		public CFloat ValueMulPost { get; set;}
 
 		public SVoiceWeightCurve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskChanceDef : IBehTreeTaskDefinition
 	{
-		[RED("chance")] 		public CBehTreeValInt Chance { get; set;}
+		[Ordinal(1)] [RED("chance")] 		public CBehTreeValInt Chance { get; set;}
 
-		[RED("frequency")] 		public CFloat Frequency { get; set;}
+		[Ordinal(2)] [RED("frequency")] 		public CFloat Frequency { get; set;}
 
-		[RED("scaleWithNumberOfOpponents")] 		public CBool ScaleWithNumberOfOpponents { get; set;}
+		[Ordinal(3)] [RED("scaleWithNumberOfOpponents")] 		public CBool ScaleWithNumberOfOpponents { get; set;}
 
-		[RED("chancePerOpponent")] 		public CInt32 ChancePerOpponent { get; set;}
+		[Ordinal(4)] [RED("chancePerOpponent")] 		public CInt32 ChancePerOpponent { get; set;}
 
 		public CBTTaskChanceDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

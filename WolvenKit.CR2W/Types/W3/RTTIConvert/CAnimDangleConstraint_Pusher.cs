@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimDangleConstraint_Pusher : CAnimSkeletalDangleConstraint
 	{
-		[RED("boneName")] 		public CString BoneName { get; set;}
+		[Ordinal(1)] [RED("boneName")] 		public CString BoneName { get; set;}
 
-		[RED("collisionName")] 		public CString CollisionName { get; set;}
+		[Ordinal(2)] [RED("collisionName")] 		public CString CollisionName { get; set;}
 
-		[RED("offset")] 		public Vector Offset { get; set;}
+		[Ordinal(3)] [RED("offset")] 		public Vector Offset { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(4)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		[RED("maxAngle")] 		public CFloat MaxAngle { get; set;}
+		[Ordinal(5)] [RED("maxAngle")] 		public CFloat MaxAngle { get; set;}
 
 		public CAnimDangleConstraint_Pusher(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

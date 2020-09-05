@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCustomCameraRopePPC : ICustomCameraPivotPositionController
 	{
-		[RED("dampFactor")] 		public CFloat DampFactor { get; set;}
+		[Ordinal(1)] [RED("dampFactor")] 		public CFloat DampFactor { get; set;}
 
-		[RED("smoothZ")] 		public CFloat SmoothZ { get; set;}
+		[Ordinal(2)] [RED("smoothZ")] 		public CFloat SmoothZ { get; set;}
 
-		[RED("ropeLength")] 		public CFloat RopeLength { get; set;}
+		[Ordinal(3)] [RED("ropeLength")] 		public CFloat RopeLength { get; set;}
 
 		public CCustomCameraRopePPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

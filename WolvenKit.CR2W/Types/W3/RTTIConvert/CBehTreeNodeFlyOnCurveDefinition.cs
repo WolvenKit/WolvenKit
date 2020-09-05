@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeFlyOnCurveDefinition : CBehTreeNodeAttachToCurveDefinition
 	{
-		[RED("animValPitch")] 		public CBehTreeValCName AnimValPitch { get; set;}
+		[Ordinal(1)] [RED("animValPitch")] 		public CBehTreeValCName AnimValPitch { get; set;}
 
-		[RED("animValYaw")] 		public CBehTreeValCName AnimValYaw { get; set;}
+		[Ordinal(2)] [RED("animValYaw")] 		public CBehTreeValCName AnimValYaw { get; set;}
 
-		[RED("maxPitchInput")] 		public CBehTreeValFloat MaxPitchInput { get; set;}
+		[Ordinal(3)] [RED("maxPitchInput")] 		public CBehTreeValFloat MaxPitchInput { get; set;}
 
-		[RED("maxPitchOutput")] 		public CBehTreeValFloat MaxPitchOutput { get; set;}
+		[Ordinal(4)] [RED("maxPitchOutput")] 		public CBehTreeValFloat MaxPitchOutput { get; set;}
 
-		[RED("maxYawInput")] 		public CBehTreeValFloat MaxYawInput { get; set;}
+		[Ordinal(5)] [RED("maxYawInput")] 		public CBehTreeValFloat MaxYawInput { get; set;}
 
-		[RED("maxYawOutput")] 		public CBehTreeValFloat MaxYawOutput { get; set;}
+		[Ordinal(6)] [RED("maxYawOutput")] 		public CBehTreeValFloat MaxYawOutput { get; set;}
 
 		public CBehTreeNodeFlyOnCurveDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

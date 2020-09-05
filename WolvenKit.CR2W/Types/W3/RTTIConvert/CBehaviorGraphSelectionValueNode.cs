@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphSelectionValueNode : CBehaviorGraphValueNode
 	{
-		[RED("threshold")] 		public CFloat Threshold { get; set;}
+		[Ordinal(1)] [RED("threshold")] 		public CFloat Threshold { get; set;}
 
-		[RED("cachedSelNode")] 		public CPtr<CBehaviorGraphValueNode> CachedSelNode { get; set;}
+		[Ordinal(2)] [RED("cachedSelNode")] 		public CPtr<CBehaviorGraphValueNode> CachedSelNode { get; set;}
 
-		[RED("cachedOneNode")] 		public CPtr<CBehaviorGraphValueNode> CachedOneNode { get; set;}
+		[Ordinal(3)] [RED("cachedOneNode")] 		public CPtr<CBehaviorGraphValueNode> CachedOneNode { get; set;}
 
-		[RED("cachedTwoNode")] 		public CPtr<CBehaviorGraphValueNode> CachedTwoNode { get; set;}
+		[Ordinal(4)] [RED("cachedTwoNode")] 		public CPtr<CBehaviorGraphValueNode> CachedTwoNode { get; set;}
 
 		public CBehaviorGraphSelectionValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

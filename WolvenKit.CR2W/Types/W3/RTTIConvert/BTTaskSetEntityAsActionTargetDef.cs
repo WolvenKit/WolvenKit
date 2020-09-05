@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskSetEntityAsActionTargetDef : IBehTreeTaskDefinition
 	{
-		[RED("targetTag")] 		public CBehTreeValCName TargetTag { get; set;}
+		[Ordinal(1)] [RED("targetTag")] 		public CBehTreeValCName TargetTag { get; set;}
 
-		[RED("multipleTargetsObjectName")] 		public CName MultipleTargetsObjectName { get; set;}
+		[Ordinal(2)] [RED("multipleTargetsObjectName")] 		public CName MultipleTargetsObjectName { get; set;}
 
-		[RED("completeImmediately")] 		public CBool CompleteImmediately { get; set;}
+		[Ordinal(3)] [RED("completeImmediately")] 		public CBool CompleteImmediately { get; set;}
 
 		public BTTaskSetEntityAsActionTargetDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

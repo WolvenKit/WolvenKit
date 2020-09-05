@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleModificatorTarget : IParticleModificator
 	{
-		[RED("position")] 		public CPtr<IEvaluatorVector> Position { get; set;}
+		[Ordinal(1)] [RED("position")] 		public CPtr<IEvaluatorVector> Position { get; set;}
 
-		[RED("forceScale")] 		public CPtr<IEvaluatorFloat> ForceScale { get; set;}
+		[Ordinal(2)] [RED("forceScale")] 		public CPtr<IEvaluatorFloat> ForceScale { get; set;}
 
-		[RED("killRadius")] 		public CPtr<IEvaluatorFloat> KillRadius { get; set;}
+		[Ordinal(3)] [RED("killRadius")] 		public CPtr<IEvaluatorFloat> KillRadius { get; set;}
 
-		[RED("maxForce")] 		public CFloat MaxForce { get; set;}
+		[Ordinal(4)] [RED("maxForce")] 		public CFloat MaxForce { get; set;}
 
 		public CParticleModificatorTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

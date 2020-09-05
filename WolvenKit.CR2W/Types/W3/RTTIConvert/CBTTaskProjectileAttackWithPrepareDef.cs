@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskProjectileAttackWithPrepareDef : CBTTaskProjectileAttackDef
 	{
-		[RED("boneName")] 		public CName BoneName { get; set;}
+		[Ordinal(1)] [RED("boneName")] 		public CName BoneName { get; set;}
 
-		[RED("shootInFront")] 		public CBool ShootInFront { get; set;}
+		[Ordinal(2)] [RED("shootInFront")] 		public CBool ShootInFront { get; set;}
 
-		[RED("shootInFrontOffset")] 		public CFloat ShootInFrontOffset { get; set;}
+		[Ordinal(3)] [RED("shootInFrontOffset")] 		public CFloat ShootInFrontOffset { get; set;}
 
-		[RED("rawTarget")] 		public CBool RawTarget { get; set;}
+		[Ordinal(4)] [RED("rawTarget")] 		public CBool RawTarget { get; set;}
 
-		[RED("useLookAtBone")] 		public CBool UseLookAtBone { get; set;}
+		[Ordinal(5)] [RED("useLookAtBone")] 		public CBool UseLookAtBone { get; set;}
 
-		[RED("lookAtBone")] 		public CName LookAtBone { get; set;}
+		[Ordinal(6)] [RED("lookAtBone")] 		public CName LookAtBone { get; set;}
 
 		public CBTTaskProjectileAttackWithPrepareDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFXSurfacePostParams : CVariable
 	{
-		[RED("fxFadeInTime")] 		public CFloat FxFadeInTime { get; set;}
+		[Ordinal(1)] [RED("fxFadeInTime")] 		public CFloat FxFadeInTime { get; set;}
 
-		[RED("fxLastingTime")] 		public CFloat FxLastingTime { get; set;}
+		[Ordinal(2)] [RED("fxLastingTime")] 		public CFloat FxLastingTime { get; set;}
 
-		[RED("fxFadeOutTime")] 		public CFloat FxFadeOutTime { get; set;}
+		[Ordinal(3)] [RED("fxFadeOutTime")] 		public CFloat FxFadeOutTime { get; set;}
 
-		[RED("fxRadius")] 		public CFloat FxRadius { get; set;}
+		[Ordinal(4)] [RED("fxRadius")] 		public CFloat FxRadius { get; set;}
 
-		[RED("fxType")] 		public CInt32 FxType { get; set;}
+		[Ordinal(5)] [RED("fxType")] 		public CInt32 FxType { get; set;}
 
 		public SFXSurfacePostParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventWorldEntityEffect : CStorySceneEvent
 	{
-		[RED("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(1)] [RED("entityTag")] 		public CName EntityTag { get; set;}
 
-		[RED("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(2)] [RED("effectName")] 		public CName EffectName { get; set;}
 
-		[RED("startStop")] 		public CBool StartStop { get; set;}
+		[Ordinal(3)] [RED("startStop")] 		public CBool StartStop { get; set;}
 
 		public CStorySceneEventWorldEntityEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

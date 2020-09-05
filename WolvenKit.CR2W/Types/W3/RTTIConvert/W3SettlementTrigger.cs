@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SettlementTrigger : CR4JournalPlaceEntity
 	{
-		[RED("bDisplaySettlementInfo")] 		public CBool BDisplaySettlementInfo { get; set;}
+		[Ordinal(1)] [RED("bDisplaySettlementInfo")] 		public CBool BDisplaySettlementInfo { get; set;}
 
-		[RED("settlementName")] 		public CName SettlementName { get; set;}
+		[Ordinal(2)] [RED("settlementName")] 		public CName SettlementName { get; set;}
 
-		[RED("hubNameOverride")] 		public CName HubNameOverride { get; set;}
+		[Ordinal(3)] [RED("hubNameOverride")] 		public CName HubNameOverride { get; set;}
 
-		[RED("lockReenterDisplayTime")] 		public CFloat LockReenterDisplayTime { get; set;}
+		[Ordinal(4)] [RED("lockReenterDisplayTime")] 		public CFloat LockReenterDisplayTime { get; set;}
 
-		[RED("blockHorseTopSpeed")] 		public CBool BlockHorseTopSpeed { get; set;}
+		[Ordinal(5)] [RED("blockHorseTopSpeed")] 		public CBool BlockHorseTopSpeed { get; set;}
 
 		public W3SettlementTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

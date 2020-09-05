@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCollisionShapeBox : ICollisionShape
 	{
-		[RED("physicalMaterialName")] 		public CName PhysicalMaterialName { get; set;}
+		[Ordinal(1)] [RED("physicalMaterialName")] 		public CName PhysicalMaterialName { get; set;}
 
-		[RED("halfExtendsX")] 		public CFloat HalfExtendsX { get; set;}
+		[Ordinal(2)] [RED("halfExtendsX")] 		public CFloat HalfExtendsX { get; set;}
 
-		[RED("halfExtendsY")] 		public CFloat HalfExtendsY { get; set;}
+		[Ordinal(3)] [RED("halfExtendsY")] 		public CFloat HalfExtendsY { get; set;}
 
-		[RED("halfExtendsZ")] 		public CFloat HalfExtendsZ { get; set;}
+		[Ordinal(4)] [RED("halfExtendsZ")] 		public CFloat HalfExtendsZ { get; set;}
 
 		public CCollisionShapeBox(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

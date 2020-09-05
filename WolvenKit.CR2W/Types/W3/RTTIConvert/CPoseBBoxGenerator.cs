@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPoseBBoxGenerator : CObject
 	{
-		[RED("boneNames", 2,0)] 		public CArray<CString> BoneNames { get; set;}
+		[Ordinal(1)] [RED("boneNames", 2,0)] 		public CArray<CString> BoneNames { get; set;}
 
-		[RED("boneIndex", 2,0)] 		public CArray<CInt32> BoneIndex { get; set;}
+		[Ordinal(2)] [RED("boneIndex", 2,0)] 		public CArray<CInt32> BoneIndex { get; set;}
 
 		public CPoseBBoxGenerator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

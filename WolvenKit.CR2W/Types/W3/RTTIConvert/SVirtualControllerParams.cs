@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,35 +11,35 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SVirtualControllerParams : CVariable
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(1)] [RED("name")] 		public CName Name { get; set;}
 
-		[RED("boneName")] 		public CName BoneName { get; set;}
+		[Ordinal(2)] [RED("boneName")] 		public CName BoneName { get; set;}
 
-		[RED("localOffset")] 		public Vector LocalOffset { get; set;}
+		[Ordinal(3)] [RED("localOffset")] 		public Vector LocalOffset { get; set;}
 
-		[RED("localOffsetInModelSpace")] 		public CBool LocalOffsetInModelSpace { get; set;}
+		[Ordinal(4)] [RED("localOffsetInModelSpace")] 		public CBool LocalOffsetInModelSpace { get; set;}
 
-		[RED("height")] 		public CFloat Height { get; set;}
+		[Ordinal(5)] [RED("height")] 		public CFloat Height { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(6)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(7)] [RED("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("targetable")] 		public CBool Targetable { get; set;}
+		[Ordinal(8)] [RED("targetable")] 		public CBool Targetable { get; set;}
 
-		[RED("collisions")] 		public CBool Collisions { get; set;}
+		[Ordinal(9)] [RED("collisions")] 		public CBool Collisions { get; set;}
 
-		[RED("collisionResponse")] 		public CBool CollisionResponse { get; set;}
+		[Ordinal(10)] [RED("collisionResponse")] 		public CBool CollisionResponse { get; set;}
 
-		[RED("collisionGrabber")] 		public CBool CollisionGrabber { get; set;}
+		[Ordinal(11)] [RED("collisionGrabber")] 		public CBool CollisionGrabber { get; set;}
 
-		[RED("collisionGrabberGroupNames", 2,0)] 		public CArray<CName> CollisionGrabberGroupNames { get; set;}
+		[Ordinal(12)] [RED("collisionGrabberGroupNames", 2,0)] 		public CArray<CName> CollisionGrabberGroupNames { get; set;}
 
-		[RED("onCollisionEventName")] 		public CName OnCollisionEventName { get; set;}
+		[Ordinal(13)] [RED("onCollisionEventName")] 		public CName OnCollisionEventName { get; set;}
 
-		[RED("additionalRaycastCheck")] 		public Vector AdditionalRaycastCheck { get; set;}
+		[Ordinal(14)] [RED("additionalRaycastCheck")] 		public Vector AdditionalRaycastCheck { get; set;}
 
-		[RED("additionalRaycastCheckEventName")] 		public CName AdditionalRaycastCheckEventName { get; set;}
+		[Ordinal(15)] [RED("additionalRaycastCheckEventName")] 		public CName AdditionalRaycastCheckEventName { get; set;}
 
 		public SVirtualControllerParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

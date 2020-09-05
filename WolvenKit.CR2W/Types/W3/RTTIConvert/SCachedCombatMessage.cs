@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCachedCombatMessage : CVariable
 	{
-		[RED("finalIncomingDamage")] 		public CFloat FinalIncomingDamage { get; set;}
+		[Ordinal(1)] [RED("finalIncomingDamage")] 		public CFloat FinalIncomingDamage { get; set;}
 
-		[RED("resistPoints")] 		public CFloat ResistPoints { get; set;}
+		[Ordinal(2)] [RED("resistPoints")] 		public CFloat ResistPoints { get; set;}
 
-		[RED("resistPercents")] 		public CFloat ResistPercents { get; set;}
+		[Ordinal(3)] [RED("resistPercents")] 		public CFloat ResistPercents { get; set;}
 
-		[RED("finalDamage")] 		public CFloat FinalDamage { get; set;}
+		[Ordinal(4)] [RED("finalDamage")] 		public CFloat FinalDamage { get; set;}
 
-		[RED("attacker")] 		public CHandle<CGameplayEntity> Attacker { get; set;}
+		[Ordinal(5)] [RED("attacker")] 		public CHandle<CGameplayEntity> Attacker { get; set;}
 
-		[RED("victim")] 		public CHandle<CGameplayEntity> Victim { get; set;}
+		[Ordinal(6)] [RED("victim")] 		public CHandle<CGameplayEntity> Victim { get; set;}
 
 		public SCachedCombatMessage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

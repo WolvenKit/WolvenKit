@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3CollectiblePlaces : CGameplayEntity
 	{
-		[RED("xpPoints")] 		public CInt32 XpPoints { get; set;}
+		[Ordinal(1)] [RED("xpPoints")] 		public CInt32 XpPoints { get; set;}
 
-		[RED("wasDiscovered")] 		public CBool WasDiscovered { get; set;}
+		[Ordinal(2)] [RED("wasDiscovered")] 		public CBool WasDiscovered { get; set;}
 
-		[RED("allTags", 2,0)] 		public CArray<CName> AllTags { get; set;}
+		[Ordinal(3)] [RED("allTags", 2,0)] 		public CArray<CName> AllTags { get; set;}
 
 		public W3CollectiblePlaces(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

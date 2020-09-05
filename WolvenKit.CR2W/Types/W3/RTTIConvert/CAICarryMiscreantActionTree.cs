@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAICarryMiscreantActionTree : IAICustomActionTree
 	{
-		[RED("attachmentBone")] 		public CName AttachmentBone { get; set;}
+		[Ordinal(1)] [RED("attachmentBone")] 		public CName AttachmentBone { get; set;}
 
-		[RED("miscreantName")] 		public CName MiscreantName { get; set;}
+		[Ordinal(2)] [RED("miscreantName")] 		public CName MiscreantName { get; set;}
 
-		[RED("behaviorGraph")] 		public CName BehaviorGraph { get; set;}
+		[Ordinal(3)] [RED("behaviorGraph")] 		public CName BehaviorGraph { get; set;}
 
-		[RED("cryStartEventName")] 		public CName CryStartEventName { get; set;}
+		[Ordinal(4)] [RED("cryStartEventName")] 		public CName CryStartEventName { get; set;}
 
-		[RED("cryStopEventName")] 		public CName CryStopEventName { get; set;}
+		[Ordinal(5)] [RED("cryStopEventName")] 		public CName CryStopEventName { get; set;}
 
-		[RED("carrySubAction")] 		public CHandle<IAIActionTree> CarrySubAction { get; set;}
+		[Ordinal(6)] [RED("carrySubAction")] 		public CHandle<IAIActionTree> CarrySubAction { get; set;}
 
 		public CAICarryMiscreantActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,57 +11,57 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPlayEffect : IBehTreeTask
 	{
-		[RED("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(1)] [RED("effectName")] 		public CName EffectName { get; set;}
 
-		[RED("sfxInsteadOfVfx")] 		public CBool SfxInsteadOfVfx { get; set;}
+		[Ordinal(2)] [RED("sfxInsteadOfVfx")] 		public CBool SfxInsteadOfVfx { get; set;}
 
-		[RED("owner")] 		public CHandle<CNewNPC> Owner { get; set;}
+		[Ordinal(3)] [RED("owner")] 		public CHandle<CNewNPC> Owner { get; set;}
 
-		[RED("onTarget")] 		public CBool OnTarget { get; set;}
+		[Ordinal(4)] [RED("onTarget")] 		public CBool OnTarget { get; set;}
 
-		[RED("onActionTarget")] 		public CBool OnActionTarget { get; set;}
+		[Ordinal(5)] [RED("onActionTarget")] 		public CBool OnActionTarget { get; set;}
 
-		[RED("onWeaponItem")] 		public CBool OnWeaponItem { get; set;}
+		[Ordinal(6)] [RED("onWeaponItem")] 		public CBool OnWeaponItem { get; set;}
 
-		[RED("turnOff")] 		public CBool TurnOff { get; set;}
+		[Ordinal(7)] [RED("turnOff")] 		public CBool TurnOff { get; set;}
 
-		[RED("connectEffectWithTarget")] 		public CBool ConnectEffectWithTarget { get; set;}
+		[Ordinal(8)] [RED("connectEffectWithTarget")] 		public CBool ConnectEffectWithTarget { get; set;}
 
-		[RED("connectWithActionTarget")] 		public CBool ConnectWithActionTarget { get; set;}
+		[Ordinal(9)] [RED("connectWithActionTarget")] 		public CBool ConnectWithActionTarget { get; set;}
 
-		[RED("playEffectOnComponent")] 		public CBool PlayEffectOnComponent { get; set;}
+		[Ordinal(10)] [RED("playEffectOnComponent")] 		public CBool PlayEffectOnComponent { get; set;}
 
-		[RED("componentName")] 		public CName ComponentName { get; set;}
+		[Ordinal(11)] [RED("componentName")] 		public CName ComponentName { get; set;}
 
-		[RED("onAnimEvent")] 		public CName OnAnimEvent { get; set;}
+		[Ordinal(12)] [RED("onAnimEvent")] 		public CName OnAnimEvent { get; set;}
 
-		[RED("onGameplayEvent")] 		public CName OnGameplayEvent { get; set;}
+		[Ordinal(13)] [RED("onGameplayEvent")] 		public CName OnGameplayEvent { get; set;}
 
-		[RED("bothGameplayAndAnimEvent")] 		public CBool BothGameplayAndAnimEvent { get; set;}
+		[Ordinal(14)] [RED("bothGameplayAndAnimEvent")] 		public CBool BothGameplayAndAnimEvent { get; set;}
 
-		[RED("onInitialize")] 		public CBool OnInitialize { get; set;}
+		[Ordinal(15)] [RED("onInitialize")] 		public CBool OnInitialize { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(16)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(17)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("onSuccess")] 		public CBool OnSuccess { get; set;}
+		[Ordinal(18)] [RED("onSuccess")] 		public CBool OnSuccess { get; set;}
 
-		[RED("onFailure")] 		public CBool OnFailure { get; set;}
+		[Ordinal(19)] [RED("onFailure")] 		public CBool OnFailure { get; set;}
 
-		[RED("delayEffect")] 		public CFloat DelayEffect { get; set;}
+		[Ordinal(20)] [RED("delayEffect")] 		public CFloat DelayEffect { get; set;}
 
-		[RED("checkIfEffectIsPlaying")] 		public CBool CheckIfEffectIsPlaying { get; set;}
+		[Ordinal(21)] [RED("checkIfEffectIsPlaying")] 		public CBool CheckIfEffectIsPlaying { get; set;}
 
-		[RED("cameraShakeStrength")] 		public CFloat CameraShakeStrength { get; set;}
+		[Ordinal(22)] [RED("cameraShakeStrength")] 		public CFloat CameraShakeStrength { get; set;}
 
-		[RED("onTaggedEntity")] 		public CBool OnTaggedEntity { get; set;}
+		[Ordinal(23)] [RED("onTaggedEntity")] 		public CBool OnTaggedEntity { get; set;}
 
-		[RED("tagToFind")] 		public CName TagToFind { get; set;}
+		[Ordinal(24)] [RED("tagToFind")] 		public CName TagToFind { get; set;}
 
-		[RED("animEventReceived")] 		public CBool AnimEventReceived { get; set;}
+		[Ordinal(25)] [RED("animEventReceived")] 		public CBool AnimEventReceived { get; set;}
 
-		[RED("gameplayEventReceived")] 		public CBool GameplayEventReceived { get; set;}
+		[Ordinal(26)] [RED("gameplayEventReceived")] 		public CBool GameplayEventReceived { get; set;}
 
 		public CBTTaskPlayEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

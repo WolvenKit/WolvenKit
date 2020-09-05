@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMotionExtractionLineCompression2 : IMotionExtractionCompression
 	{
-		[RED("eps")] 		public CFloat Eps { get; set;}
+		[Ordinal(1)] [RED("eps")] 		public CFloat Eps { get; set;}
 
-		[RED("minKnots")] 		public CUInt32 MinKnots { get; set;}
+		[Ordinal(2)] [RED("minKnots")] 		public CUInt32 MinKnots { get; set;}
 
-		[RED("maxKnotsDistance")] 		public CInt32 MaxKnotsDistance { get; set;}
+		[Ordinal(3)] [RED("maxKnotsDistance")] 		public CInt32 MaxKnotsDistance { get; set;}
 
 		public CMotionExtractionLineCompression2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

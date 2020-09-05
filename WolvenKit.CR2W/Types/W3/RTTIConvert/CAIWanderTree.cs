@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIWanderTree : CAIIdleTree
 	{
-		[RED("wanderMoveSpeed")] 		public CFloat WanderMoveSpeed { get; set;}
+		[Ordinal(1)] [RED("wanderMoveSpeed")] 		public CFloat WanderMoveSpeed { get; set;}
 
-		[RED("wanderMoveType")] 		public CEnum<EMoveType> WanderMoveType { get; set;}
+		[Ordinal(2)] [RED("wanderMoveType")] 		public CEnum<EMoveType> WanderMoveType { get; set;}
 
-		[RED("wanderMaxDistance")] 		public CFloat WanderMaxDistance { get; set;}
+		[Ordinal(3)] [RED("wanderMaxDistance")] 		public CFloat WanderMaxDistance { get; set;}
 
 		public CAIWanderTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

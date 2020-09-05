@@ -82,42 +82,56 @@
             this.olvColumnSelected.CheckBoxes = true;
             this.olvColumnSelected.Groupable = false;
             this.olvColumnSelected.HeaderCheckBox = true;
-            this.olvColumnSelected.Text = "Import";
+            this.olvColumnSelected.MaximumWidth = 28;
+            this.olvColumnSelected.MinimumWidth = 28;
+            this.olvColumnSelected.Text = "";
+            this.olvColumnSelected.Width = 28;
             // 
             // olvColumnName
             // 
             this.olvColumnName.AspectName = "Name";
+            this.olvColumnName.FillsFreeSpace = true;
             this.olvColumnName.Groupable = false;
             this.olvColumnName.IsEditable = false;
             this.olvColumnName.Text = "Name";
-            this.olvColumnName.Width = 300;
+            this.olvColumnName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.olvColumnName.Width = 38;
             // 
             // olvColumnImportType
             // 
             this.olvColumnImportType.AspectName = "ImportType";
+            this.olvColumnImportType.FillsFreeSpace = true;
             this.olvColumnImportType.Groupable = false;
-            this.olvColumnImportType.Text = "Import as";
+            this.olvColumnImportType.MaximumWidth = 90;
+            this.olvColumnImportType.Sortable = false;
+            this.olvColumnImportType.Text = "File Type";
+            this.olvColumnImportType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.olvColumnImportType.Width = 38;
             // 
             // olvColumnTexturegroup
             // 
             this.olvColumnTexturegroup.AspectName = "TextureGroup";
             this.olvColumnTexturegroup.FillsFreeSpace = true;
             this.olvColumnTexturegroup.Groupable = false;
+            this.olvColumnTexturegroup.MaximumWidth = 180;
             this.olvColumnTexturegroup.Text = "Texturegroup";
-            this.olvColumnTexturegroup.Width = 150;
+            this.olvColumnTexturegroup.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.olvColumnTexturegroup.Width = 38;
             // 
             // toolStrip
             // 
+            this.toolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonLocalResources,
-            this.toolStripButtonOpenFolder,
-            this.toolStripSeparator2,
-            this.toolStripButtonRefresh,
+            this.toolStripButtonImport,
             this.toolStripSeparator1,
-            this.toolStripButtonImport});
+            this.toolStripButtonRefresh,
+            this.toolStripSeparator2,
+            this.toolStripButtonLocalResources,
+            this.toolStripButtonOpenFolder});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(800, 25);
+            this.toolStrip.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStrip.Size = new System.Drawing.Size(800, 31);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -126,8 +140,8 @@
             this.toolStripButtonLocalResources.Image = global::WolvenKit.Properties.Resources.RemoteServer_16x;
             this.toolStripButtonLocalResources.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonLocalResources.Name = "toolStripButtonLocalResources";
-            this.toolStripButtonLocalResources.Size = new System.Drawing.Size(98, 22);
-            this.toolStripButtonLocalResources.Text = "Use mod files";
+            this.toolStripButtonLocalResources.Size = new System.Drawing.Size(108, 28);
+            this.toolStripButtonLocalResources.Text = "Use Mod Files";
             this.toolStripButtonLocalResources.Click += new System.EventHandler(this.toolStripButtonLocalResources_Click);
             // 
             // toolStripButtonOpenFolder
@@ -135,35 +149,35 @@
             this.toolStripButtonOpenFolder.Image = global::WolvenKit.Properties.Resources.OpenFolder_16x;
             this.toolStripButtonOpenFolder.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonOpenFolder.Name = "toolStripButtonOpenFolder";
-            this.toolStripButtonOpenFolder.Size = new System.Drawing.Size(90, 22);
-            this.toolStripButtonOpenFolder.Text = "Open folder";
+            this.toolStripButtonOpenFolder.Size = new System.Drawing.Size(100, 28);
+            this.toolStripButtonOpenFolder.Text = "Open Folder";
             this.toolStripButtonOpenFolder.Click += new System.EventHandler(this.toolStripButtonOpenFolder_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 31);
             // 
             // toolStripButtonRefresh
             // 
             this.toolStripButtonRefresh.Image = global::WolvenKit.Properties.Resources.Refresh_16x;
             this.toolStripButtonRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRefresh.Name = "toolStripButtonRefresh";
-            this.toolStripButtonRefresh.Size = new System.Drawing.Size(148, 22);
-            this.toolStripButtonRefresh.Text = "Auto-fill texturegroups";
+            this.toolStripButtonRefresh.Size = new System.Drawing.Size(159, 28);
+            this.toolStripButtonRefresh.Text = "Auto-Fill Texturegroups";
             this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefresh_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
             // 
             // toolStripButtonImport
             // 
             this.toolStripButtonImport.Image = global::WolvenKit.Properties.Resources.ImportPackage_16x;
             this.toolStripButtonImport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImport.Name = "toolStripButtonImport";
-            this.toolStripButtonImport.Size = new System.Drawing.Size(63, 22);
+            this.toolStripButtonImport.Size = new System.Drawing.Size(71, 28);
             this.toolStripButtonImport.Text = "Import";
             this.toolStripButtonImport.Click += new System.EventHandler(this.toolStripButtonImport_Click);
             // 

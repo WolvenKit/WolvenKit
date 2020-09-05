@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestSpawnNotStreamedBoatBlock : CQuestGraphBlock
 	{
-		[RED("spawnPointTag")] 		public CName SpawnPointTag { get; set;}
+		[Ordinal(1)] [RED("spawnPointTag")] 		public CName SpawnPointTag { get; set;}
 
-		[RED("tagsToSet", 2,0)] 		public CArray<CName> TagsToSet { get; set;}
+		[Ordinal(2)] [RED("tagsToSet", 2,0)] 		public CArray<CName> TagsToSet { get; set;}
 
-		[RED("spawnLayerTag")] 		public CName SpawnLayerTag { get; set;}
+		[Ordinal(3)] [RED("spawnLayerTag")] 		public CName SpawnLayerTag { get; set;}
 
-		[RED("forceNonStreamed")] 		public CBool ForceNonStreamed { get; set;}
+		[Ordinal(4)] [RED("forceNonStreamed")] 		public CBool ForceNonStreamed { get; set;}
 
 		public CQuestSpawnNotStreamedBoatBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

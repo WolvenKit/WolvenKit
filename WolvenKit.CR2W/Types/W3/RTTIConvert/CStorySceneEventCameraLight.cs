@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventCameraLight : CStorySceneEvent
 	{
-		[RED("cameralightType")] 		public CEnum<ECameraLightModType> CameralightType { get; set;}
+		[Ordinal(1)] [RED("cameralightType")] 		public CEnum<ECameraLightModType> CameralightType { get; set;}
 
-		[RED("lightMod1")] 		public SStorySceneCameraLightMod LightMod1 { get; set;}
+		[Ordinal(2)] [RED("lightMod1")] 		public SStorySceneCameraLightMod LightMod1 { get; set;}
 
-		[RED("lightMod2")] 		public SStorySceneCameraLightMod LightMod2 { get; set;}
+		[Ordinal(3)] [RED("lightMod2")] 		public SStorySceneCameraLightMod LightMod2 { get; set;}
 
 		public CStorySceneEventCameraLight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

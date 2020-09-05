@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class PoisonProjectile : W3AdvancedProjectile
 	{
-		[RED("initFxName")] 		public CName InitFxName { get; set;}
+		[Ordinal(1)] [RED("initFxName")] 		public CName InitFxName { get; set;}
 
-		[RED("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
+		[Ordinal(2)] [RED("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
 
-		[RED("spawnEntityOnGround")] 		public CBool SpawnEntityOnGround { get; set;}
+		[Ordinal(3)] [RED("spawnEntityOnGround")] 		public CBool SpawnEntityOnGround { get; set;}
 
-		[RED("spawnEntityTemplate")] 		public CHandle<CEntityTemplate> SpawnEntityTemplate { get; set;}
+		[Ordinal(4)] [RED("spawnEntityTemplate")] 		public CHandle<CEntityTemplate> SpawnEntityTemplate { get; set;}
 
-		[RED("projectileHitGround")] 		public CBool ProjectileHitGround { get; set;}
+		[Ordinal(5)] [RED("projectileHitGround")] 		public CBool ProjectileHitGround { get; set;}
 
 		public PoisonProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

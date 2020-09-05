@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBokehDofParams : CVariable
 	{
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(1)] [RED("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("hexToCircleScale")] 		public CFloat HexToCircleScale { get; set;}
+		[Ordinal(2)] [RED("hexToCircleScale")] 		public CFloat HexToCircleScale { get; set;}
 
-		[RED("usePhysicalSetup")] 		public CBool UsePhysicalSetup { get; set;}
+		[Ordinal(3)] [RED("usePhysicalSetup")] 		public CBool UsePhysicalSetup { get; set;}
 
-		[RED("planeInFocus")] 		public CFloat PlaneInFocus { get; set;}
+		[Ordinal(4)] [RED("planeInFocus")] 		public CFloat PlaneInFocus { get; set;}
 
-		[RED("fStops")] 		public CEnum<EApertureValue> FStops { get; set;}
+		[Ordinal(5)] [RED("fStops")] 		public CEnum<EApertureValue> FStops { get; set;}
 
-		[RED("bokehSizeMuliplier")] 		public CFloat BokehSizeMuliplier { get; set;}
+		[Ordinal(6)] [RED("bokehSizeMuliplier")] 		public CFloat BokehSizeMuliplier { get; set;}
 
 		public SBokehDofParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,31 +11,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_IsItemQuantityMet : CQuestScriptedCondition
 	{
-		[RED("itemName")] 		public CName ItemName { get; set;}
+		[Ordinal(1)] [RED("itemName")] 		public CName ItemName { get; set;}
 
-		[RED("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(2)] [RED("entityTag")] 		public CName EntityTag { get; set;}
 
-		[RED("itemTag")] 		public CName ItemTag { get; set;}
+		[Ordinal(3)] [RED("itemTag")] 		public CName ItemTag { get; set;}
 
-		[RED("itemCategory")] 		public CName ItemCategory { get; set;}
+		[Ordinal(4)] [RED("itemCategory")] 		public CName ItemCategory { get; set;}
 
-		[RED("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
+		[Ordinal(5)] [RED("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
 
-		[RED("count")] 		public CInt32 Count { get; set;}
+		[Ordinal(6)] [RED("count")] 		public CInt32 Count { get; set;}
 
-		[RED("includeHorseInventory")] 		public CBool IncludeHorseInventory { get; set;}
+		[Ordinal(7)] [RED("includeHorseInventory")] 		public CBool IncludeHorseInventory { get; set;}
 
-		[RED("ignoreTags", 2,0)] 		public CArray<CName> IgnoreTags { get; set;}
+		[Ordinal(8)] [RED("ignoreTags", 2,0)] 		public CArray<CName> IgnoreTags { get; set;}
 
-		[RED("inventory")] 		public CHandle<CInventoryComponent> Inventory { get; set;}
+		[Ordinal(9)] [RED("inventory")] 		public CHandle<CInventoryComponent> Inventory { get; set;}
 
-		[RED("isFulfilled")] 		public CBool IsFulfilled { get; set;}
+		[Ordinal(10)] [RED("isFulfilled")] 		public CBool IsFulfilled { get; set;}
 
-		[RED("isTrophy")] 		public CBool IsTrophy { get; set;}
+		[Ordinal(11)] [RED("isTrophy")] 		public CBool IsTrophy { get; set;}
 
-		[RED("globalListener")] 		public CHandle<W3QuestCond_IsItemQuantityMet_GlobalListener> GlobalListener { get; set;}
+		[Ordinal(12)] [RED("globalListener")] 		public CHandle<W3QuestCond_IsItemQuantityMet_GlobalListener> GlobalListener { get; set;}
 
-		[RED("inventoryListener")] 		public CHandle<W3QuestCond_IsItemQuantityMet_InventoryListener> InventoryListener { get; set;}
+		[Ordinal(13)] [RED("inventoryListener")] 		public CHandle<W3QuestCond_IsItemQuantityMet_InventoryListener> InventoryListener { get; set;}
 
 		public W3QuestCond_IsItemQuantityMet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

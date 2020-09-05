@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,25 +11,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockOutputColor : CMaterialRootBlock
 	{
-		[RED("isTwoSided")] 		public CBool IsTwoSided { get; set;}
+		[Ordinal(1)] [RED("isTwoSided")] 		public CBool IsTwoSided { get; set;}
 
-		[RED("noDepthWrite")] 		public CBool NoDepthWrite { get; set;}
+		[Ordinal(2)] [RED("noDepthWrite")] 		public CBool NoDepthWrite { get; set;}
 
-		[RED("inputColorLinear")] 		public CBool InputColorLinear { get; set;}
+		[Ordinal(3)] [RED("inputColorLinear")] 		public CBool InputColorLinear { get; set;}
 
-		[RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
+		[Ordinal(4)] [RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
 
-		[RED("blendMode")] 		public CEnum<ERenderingBlendMode> BlendMode { get; set;}
+		[Ordinal(5)] [RED("blendMode")] 		public CEnum<ERenderingBlendMode> BlendMode { get; set;}
 
-		[RED("checkRefractionDepth")] 		public CBool CheckRefractionDepth { get; set;}
+		[Ordinal(6)] [RED("checkRefractionDepth")] 		public CBool CheckRefractionDepth { get; set;}
 
-		[RED("implicitTransparencyColor")] 		public CBool ImplicitTransparencyColor { get; set;}
+		[Ordinal(7)] [RED("implicitTransparencyColor")] 		public CBool ImplicitTransparencyColor { get; set;}
 
-		[RED("implicitTransparencyAlpha")] 		public CBool ImplicitTransparencyAlpha { get; set;}
+		[Ordinal(8)] [RED("implicitTransparencyAlpha")] 		public CBool ImplicitTransparencyAlpha { get; set;}
 
-		[RED("implicitGlobalFogVertexBased")] 		public CBool ImplicitGlobalFogVertexBased { get; set;}
+		[Ordinal(9)] [RED("implicitGlobalFogVertexBased")] 		public CBool ImplicitGlobalFogVertexBased { get; set;}
 
-		[RED("implicitGlobalFog")] 		public CBool ImplicitGlobalFog { get; set;}
+		[Ordinal(10)] [RED("implicitGlobalFog")] 		public CBool ImplicitGlobalFog { get; set;}
 
 		public CMaterialBlockOutputColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvGameplayEffectsParameters : CVariable
 	{
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(1)] [RED("activated")] 		public CBool Activated { get; set;}
 
-		[RED("catEffectBrightnessMultiply")] 		public SSimpleCurve CatEffectBrightnessMultiply { get; set;}
+		[Ordinal(2)] [RED("catEffectBrightnessMultiply")] 		public SSimpleCurve CatEffectBrightnessMultiply { get; set;}
 
-		[RED("behaviorAnimationMultiplier")] 		public SSimpleCurve BehaviorAnimationMultiplier { get; set;}
+		[Ordinal(3)] [RED("behaviorAnimationMultiplier")] 		public SSimpleCurve BehaviorAnimationMultiplier { get; set;}
 
-		[RED("specularityMultiplier")] 		public SSimpleCurve SpecularityMultiplier { get; set;}
+		[Ordinal(4)] [RED("specularityMultiplier")] 		public SSimpleCurve SpecularityMultiplier { get; set;}
 
-		[RED("glossinessMultiplier")] 		public SSimpleCurve GlossinessMultiplier { get; set;}
+		[Ordinal(5)] [RED("glossinessMultiplier")] 		public SSimpleCurve GlossinessMultiplier { get; set;}
 
 		public CEnvGameplayEffectsParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

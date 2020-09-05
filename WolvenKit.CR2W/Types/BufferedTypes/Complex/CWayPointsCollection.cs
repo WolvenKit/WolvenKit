@@ -8,17 +8,17 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
-
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
     public partial class CWayPointsCollection : CResource
     {
 
-        [REDBuffer(true)] public CCompressedBuffer<SBufferWaypoints> Waypoints { get; set; }
-        [REDBuffer(true)] public CCompressedBuffer<SBufferComponentsMappings> ComponentsMappings { get; set; }
-        [REDBuffer(true)] public CCompressedBuffer<SBufferwaypointsGroup> WaypointsGroups { get; set; }
-        [REDBuffer(true)] public CCompressedBuffer<CUInt16> Indexes { get; set; }
+        [Ordinal(1000)] [REDBuffer(true)] public CCompressedBuffer<SBufferWaypoints> Waypoints { get; set; }
+        [Ordinal(1001)] [REDBuffer(true)] public CCompressedBuffer<SBufferComponentsMappings> ComponentsMappings { get; set; }
+        [Ordinal(1002)] [REDBuffer(true)] public CCompressedBuffer<SBufferwaypointsGroup> WaypointsGroups { get; set; }
+        [Ordinal(1003)] [REDBuffer(true)] public CCompressedBuffer<CUInt16> Indexes { get; set; }
 
         public CWayPointsCollection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -98,8 +98,8 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SBufferWaypoints : CVariable
     {
-        [RED] public CGUID guid { get; set; }
-        [RED] public CInt32 componentsMapping { get; set; }
+        [Ordinal(1)] [RED] public CGUID guid { get; set; }
+        [Ordinal(2)][RED] public CInt32 componentsMapping { get; set; }
 
 
         public SBufferWaypoints(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -112,8 +112,8 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SBufferComponentsMappings : CVariable
     {
-        [RED] public CGUID guid { get; set; }
-        [RED] public CGUID guid2 { get; set; }
+        [Ordinal(1)] [RED] public CGUID guid { get; set; }
+        [Ordinal(2)] [RED] public CGUID guid2 { get; set; }
 
 
         public SBufferComponentsMappings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -126,10 +126,10 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SBufferwaypointsGroup : CVariable
     {
-        [RED] public CUInt32 offset { get; set; }
-        [RED] public CUInt32 count { get; set; }
-        [RED] public CUInt16 nullbytes { get; set; }
-        [RED] public CUInt16 groupIdx { get; set; }
+        [Ordinal(1)] [RED] public CUInt32 offset { get; set; }
+        [Ordinal(2)] [RED] public CUInt32 count { get; set; }
+        [Ordinal(3)] [RED] public CUInt16 nullbytes { get; set; }
+        [Ordinal(4)] [RED] public CUInt16 groupIdx { get; set; }
 
 
         public SBufferwaypointsGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

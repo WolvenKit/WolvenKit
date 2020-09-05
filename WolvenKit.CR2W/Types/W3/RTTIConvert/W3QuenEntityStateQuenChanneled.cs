@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuenEntityStateQuenChanneled : W3SignEntityStateChanneling
 	{
-		[RED("HEALING_FACTOR")] 		public CFloat HEALING_FACTOR { get; set;}
+		[Ordinal(1)] [RED("HEALING_FACTOR")] 		public CFloat HEALING_FACTOR { get; set;}
 
-		[RED("HAXXOR_LeavingState")] 		public CBool HAXXOR_LeavingState { get; set;}
+		[Ordinal(2)] [RED("HAXXOR_LeavingState")] 		public CBool HAXXOR_LeavingState { get; set;}
 
 		public W3QuenEntityStateQuenChanneled(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockSamplerNormalDetail : CMaterialBlockSampler
 	{
-		[RED("scale")] 		public Vector Scale { get; set;}
+		[Ordinal(1)] [RED("scale")] 		public Vector Scale { get; set;}
 
-		[RED("sampleTangentSpace")] 		public CBool SampleTangentSpace { get; set;}
+		[Ordinal(2)] [RED("sampleTangentSpace")] 		public CBool SampleTangentSpace { get; set;}
 
-		[RED("BlendStartDistance")] 		public CFloat BlendStartDistance { get; set;}
+		[Ordinal(3)] [RED("BlendStartDistance")] 		public CFloat BlendStartDistance { get; set;}
 
-		[RED("BlendEndDistance")] 		public CFloat BlendEndDistance { get; set;}
+		[Ordinal(4)] [RED("BlendEndDistance")] 		public CFloat BlendEndDistance { get; set;}
 
 		public CMaterialBlockSamplerNormalDetail(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

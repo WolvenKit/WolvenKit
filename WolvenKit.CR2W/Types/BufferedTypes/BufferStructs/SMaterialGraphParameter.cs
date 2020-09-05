@@ -4,15 +4,16 @@ using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SMaterialGraphParameter : CVariable
     {
-        [RED] public CUInt8 Type { get; set; }
-        [RED] public CUInt8 Offset { get; set; }
-        [RED] public CName Name { get; set; }
+        [Ordinal(0)] [RED] public CUInt8 Type { get; set; }
+        [Ordinal(1)] [RED] public CUInt8 Offset { get; set; }
+        [Ordinal(2)] [RED] public CName Name { get; set; }
 
 
         public SMaterialGraphParameter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

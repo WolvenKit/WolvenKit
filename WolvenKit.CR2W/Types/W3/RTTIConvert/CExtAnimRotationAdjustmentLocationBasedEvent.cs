@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimRotationAdjustmentLocationBasedEvent : CExtAnimDurationEvent
 	{
-		[RED("locationAdjustmentVar")] 		public CName LocationAdjustmentVar { get; set;}
+		[Ordinal(1)] [RED("locationAdjustmentVar")] 		public CName LocationAdjustmentVar { get; set;}
 
-		[RED("targetLocationVar")] 		public CName TargetLocationVar { get; set;}
+		[Ordinal(2)] [RED("targetLocationVar")] 		public CName TargetLocationVar { get; set;}
 
-		[RED("adjustmentActiveVar")] 		public CName AdjustmentActiveVar { get; set;}
+		[Ordinal(3)] [RED("adjustmentActiveVar")] 		public CName AdjustmentActiveVar { get; set;}
 
 		public CExtAnimRotationAdjustmentLocationBasedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

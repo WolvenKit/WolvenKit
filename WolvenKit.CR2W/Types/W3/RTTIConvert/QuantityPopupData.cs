@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class QuantityPopupData : SliderPopupData
 	{
-		[RED("itemId")] 		public SItemUniqueId ItemId { get; set;}
+		[Ordinal(1)] [RED("itemId")] 		public SItemUniqueId ItemId { get; set;}
 
-		[RED("itemCost")] 		public CFloat ItemCost { get; set;}
+		[Ordinal(2)] [RED("itemCost")] 		public CFloat ItemCost { get; set;}
 
-		[RED("showPrice")] 		public CBool ShowPrice { get; set;}
+		[Ordinal(3)] [RED("showPrice")] 		public CBool ShowPrice { get; set;}
 
-		[RED("actionType")] 		public CEnum<EQuantityTransferFunction> ActionType { get; set;}
+		[Ordinal(4)] [RED("actionType")] 		public CEnum<EQuantityTransferFunction> ActionType { get; set;}
 
-		[RED("inventoryRef")] 		public CHandle<CR4InventoryMenu> InventoryRef { get; set;}
+		[Ordinal(5)] [RED("inventoryRef")] 		public CHandle<CR4InventoryMenu> InventoryRef { get; set;}
 
-		[RED("blacksmithRef")] 		public CHandle<CR4BlacksmithMenu> BlacksmithRef { get; set;}
+		[Ordinal(6)] [RED("blacksmithRef")] 		public CHandle<CR4BlacksmithMenu> BlacksmithRef { get; set;}
 
-		[RED("craftingRef")] 		public CHandle<CR4CraftingMenu> CraftingRef { get; set;}
+		[Ordinal(7)] [RED("craftingRef")] 		public CHandle<CR4CraftingMenu> CraftingRef { get; set;}
 
 		public QuantityPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

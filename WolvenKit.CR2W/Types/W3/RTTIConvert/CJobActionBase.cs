@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,21 +11,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJobActionBase : CObject
 	{
-		[RED("categoryName")] 		public CString CategoryName { get; set;}
+		[Ordinal(1)] [RED("categoryName")] 		public CString CategoryName { get; set;}
 
-		[RED("animName")] 		public CName AnimName { get; set;}
+		[Ordinal(2)] [RED("animName")] 		public CName AnimName { get; set;}
 
-		[RED("animBlendIn")] 		public CFloat AnimBlendIn { get; set;}
+		[Ordinal(3)] [RED("animBlendIn")] 		public CFloat AnimBlendIn { get; set;}
 
-		[RED("animBlendOut")] 		public CFloat AnimBlendOut { get; set;}
+		[Ordinal(4)] [RED("animBlendOut")] 		public CFloat AnimBlendOut { get; set;}
 
-		[RED("fireBlendedEvents")] 		public CBool FireBlendedEvents { get; set;}
+		[Ordinal(5)] [RED("fireBlendedEvents")] 		public CBool FireBlendedEvents { get; set;}
 
-		[RED("allowedLookAtLevel")] 		public CEnum<ELookAtLevel> AllowedLookAtLevel { get; set;}
+		[Ordinal(6)] [RED("allowedLookAtLevel")] 		public CEnum<ELookAtLevel> AllowedLookAtLevel { get; set;}
 
-		[RED("ignoreIfItemMounted")] 		public CName IgnoreIfItemMounted { get; set;}
+		[Ordinal(7)] [RED("ignoreIfItemMounted")] 		public CName IgnoreIfItemMounted { get; set;}
 
-		[RED("isSkippable")] 		public CBool IsSkippable { get; set;}
+		[Ordinal(8)] [RED("isSkippable")] 		public CBool IsSkippable { get; set;}
 
 		public CJobActionBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

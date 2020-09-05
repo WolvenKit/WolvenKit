@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ParticleEffectNames : CVariable
 	{
-		[RED("rightSplash")] 		public CName RightSplash { get; set;}
+		[Ordinal(1)] [RED("rightSplash")] 		public CName RightSplash { get; set;}
 
-		[RED("leftSplash")] 		public CName LeftSplash { get; set;}
+		[Ordinal(2)] [RED("leftSplash")] 		public CName LeftSplash { get; set;}
 
-		[RED("backSplash")] 		public CName BackSplash { get; set;}
+		[Ordinal(3)] [RED("backSplash")] 		public CName BackSplash { get; set;}
 
 		public ParticleEffectNames(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

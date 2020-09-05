@@ -11,7 +11,7 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Cache
 {
-    public class CollisionManager : IWitcherArchive
+    public class CollisionManager : IWitcherArchiveManager
     {
         public CollisionManager()
         {

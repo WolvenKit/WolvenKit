@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSbDescDialogShot : CVariable
 	{
-		[RED("shotId")] 		public CString ShotId { get; set;}
+		[Ordinal(1)] [RED("shotId")] 		public CString ShotId { get; set;}
 
-		[RED("infoShotname")] 		public CString InfoShotname { get; set;}
+		[Ordinal(2)] [RED("infoShotname")] 		public CString InfoShotname { get; set;}
 
-		[RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(3)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		[RED("lines", 2,0)] 		public CArray<SSbDescDialogLine> Lines { get; set;}
+		[Ordinal(4)] [RED("lines", 2,0)] 		public CArray<SSbDescDialogLine> Lines { get; set;}
 
-		[RED("infoAnimId")] 		public CString InfoAnimId { get; set;}
+		[Ordinal(5)] [RED("infoAnimId")] 		public CString InfoAnimId { get; set;}
 
 		public SSbDescDialogShot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

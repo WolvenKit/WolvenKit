@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondAnimalFleeDef : IBehTreeHorseConditionalTaskDefinition
 	{
-		[RED("chanceOfBeingScared")] 		public CBehTreeValFloat ChanceOfBeingScared { get; set;}
+		[Ordinal(1)] [RED("chanceOfBeingScared")] 		public CBehTreeValFloat ChanceOfBeingScared { get; set;}
 
-		[RED("chanceOfBeingScaredRerollTime")] 		public CBehTreeValFloat ChanceOfBeingScaredRerollTime { get; set;}
+		[Ordinal(2)] [RED("chanceOfBeingScaredRerollTime")] 		public CBehTreeValFloat ChanceOfBeingScaredRerollTime { get; set;}
 
-		[RED("scaredIfTargetRuns")] 		public CBehTreeValBool ScaredIfTargetRuns { get; set;}
+		[Ordinal(3)] [RED("scaredIfTargetRuns")] 		public CBehTreeValBool ScaredIfTargetRuns { get; set;}
 
-		[RED("maxTolerableTargetDistance")] 		public CBehTreeValFloat MaxTolerableTargetDistance { get; set;}
+		[Ordinal(4)] [RED("maxTolerableTargetDistance")] 		public CBehTreeValFloat MaxTolerableTargetDistance { get; set;}
 
 		public CBTCondAnimalFleeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

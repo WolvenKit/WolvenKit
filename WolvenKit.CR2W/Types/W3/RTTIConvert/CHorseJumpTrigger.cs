@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CHorseJumpTrigger : CGameplayEntity
 	{
-		[RED("lastActivation")] 		public CFloat LastActivation { get; set;}
+		[Ordinal(1)] [RED("lastActivation")] 		public CFloat LastActivation { get; set;}
 
-		[RED("triggerHeading")] 		public CFloat TriggerHeading { get; set;}
+		[Ordinal(2)] [RED("triggerHeading")] 		public CFloat TriggerHeading { get; set;}
 
-		[RED("playerHeading")] 		public CFloat PlayerHeading { get; set;}
+		[Ordinal(3)] [RED("playerHeading")] 		public CFloat PlayerHeading { get; set;}
 
-		[RED("angleDist")] 		public CFloat AngleDist { get; set;}
+		[Ordinal(4)] [RED("angleDist")] 		public CFloat AngleDist { get; set;}
 
-		[RED("horse")] 		public CHandle<CGameplayEntity> Horse { get; set;}
+		[Ordinal(5)] [RED("horse")] 		public CHandle<CGameplayEntity> Horse { get; set;}
 
-		[RED("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
+		[Ordinal(6)] [RED("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
 
-		[RED("lastArea")] 		public CHandle<CTriggerAreaComponent> LastArea { get; set;}
+		[Ordinal(7)] [RED("lastArea")] 		public CHandle<CTriggerAreaComponent> LastArea { get; set;}
 
 		public CHorseJumpTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

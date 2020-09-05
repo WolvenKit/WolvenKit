@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CreditsSection : CVariable
 	{
-		[RED("sectionName")] 		public CString SectionName { get; set;}
+		[Ordinal(1)] [RED("sectionName")] 		public CString SectionName { get; set;}
 
-		[RED("positionNames", 2,0)] 		public CArray<CString> PositionNames { get; set;}
+		[Ordinal(2)] [RED("positionNames", 2,0)] 		public CArray<CString> PositionNames { get; set;}
 
-		[RED("crewNames", 2,0)] 		public CArray<CString> CrewNames { get; set;}
+		[Ordinal(3)] [RED("crewNames", 2,0)] 		public CArray<CString> CrewNames { get; set;}
 
-		[RED("displayTime")] 		public CFloat DisplayTime { get; set;}
+		[Ordinal(4)] [RED("displayTime")] 		public CFloat DisplayTime { get; set;}
 
-		[RED("positionX")] 		public CInt32 PositionX { get; set;}
+		[Ordinal(5)] [RED("positionX")] 		public CInt32 PositionX { get; set;}
 
-		[RED("positionY")] 		public CInt32 PositionY { get; set;}
+		[Ordinal(6)] [RED("positionY")] 		public CInt32 PositionY { get; set;}
 
-		[RED("delay")] 		public CFloat Delay { get; set;}
+		[Ordinal(7)] [RED("delay")] 		public CFloat Delay { get; set;}
 
 		public CreditsSection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

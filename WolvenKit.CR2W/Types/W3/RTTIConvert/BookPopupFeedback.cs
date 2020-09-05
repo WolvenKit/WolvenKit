@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BookPopupFeedback : TextPopupData
 	{
-		[RED("bookItemId")] 		public SItemUniqueId BookItemId { get; set;}
+		[Ordinal(1)] [RED("bookItemId")] 		public SItemUniqueId BookItemId { get; set;}
 
-		[RED("inventoryRef")] 		public CHandle<CR4InventoryMenu> InventoryRef { get; set;}
+		[Ordinal(2)] [RED("inventoryRef")] 		public CHandle<CR4InventoryMenu> InventoryRef { get; set;}
 
-		[RED("singleBookMode")] 		public CBool SingleBookMode { get; set;}
+		[Ordinal(3)] [RED("singleBookMode")] 		public CBool SingleBookMode { get; set;}
 
-		[RED("curInventory")] 		public CHandle<CInventoryComponent> CurInventory { get; set;}
+		[Ordinal(4)] [RED("curInventory")] 		public CHandle<CInventoryComponent> CurInventory { get; set;}
 
 		public BookPopupFeedback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

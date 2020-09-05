@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWitcherGameResource : CCommonGameResource
 	{
-		[RED("mapPinConfig")] 		public SMapPinConfig MapPinConfig { get; set;}
+		[Ordinal(1)] [RED("mapPinConfig")] 		public SMapPinConfig MapPinConfig { get; set;}
 
-		[RED("huntingClueCategoryResource")] 		public CSoft<C2dArray> HuntingClueCategoryResource { get; set;}
+		[Ordinal(2)] [RED("huntingClueCategoryResource")] 		public CSoft<C2dArray> HuntingClueCategoryResource { get; set;}
 
-		[RED("journalRootDirectory")] 		public CString JournalRootDirectory { get; set;}
+		[Ordinal(3)] [RED("journalRootDirectory")] 		public CString JournalRootDirectory { get; set;}
 
 		public CWitcherGameResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

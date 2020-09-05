@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorVariable : CBaseBehaviorVariable
 	{
-		[RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(1)] [RED("value")] 		public CFloat Value { get; set;}
 
-		[RED("defaultValue")] 		public CFloat DefaultValue { get; set;}
+		[Ordinal(2)] [RED("defaultValue")] 		public CFloat DefaultValue { get; set;}
 
-		[RED("minValue")] 		public CFloat MinValue { get; set;}
+		[Ordinal(3)] [RED("minValue")] 		public CFloat MinValue { get; set;}
 
-		[RED("maxValue")] 		public CFloat MaxValue { get; set;}
+		[Ordinal(4)] [RED("maxValue")] 		public CFloat MaxValue { get; set;}
 
-		[RED("isModifiableByEffect")] 		public CBool IsModifiableByEffect { get; set;}
+		[Ordinal(5)] [RED("isModifiableByEffect")] 		public CBool IsModifiableByEffect { get; set;}
 
-		[RED("shouldBeSyncedBetweenGraphs")] 		public CBool ShouldBeSyncedBetweenGraphs { get; set;}
+		[Ordinal(6)] [RED("shouldBeSyncedBetweenGraphs")] 		public CBool ShouldBeSyncedBetweenGraphs { get; set;}
 
 		public CBehaviorVariable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

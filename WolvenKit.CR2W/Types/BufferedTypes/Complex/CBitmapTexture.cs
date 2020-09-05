@@ -5,23 +5,23 @@ using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
-
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
     public partial class CBitmapTexture : ITexture
     {
 
-        [REDBuffer] public CUInt32 unk { get; set; }
-        [REDBuffer(true)] public CUInt32 MipsCount { get; set; }
+        [Ordinal(1000)] [REDBuffer] public CUInt32 unk { get; set; }
+        [Ordinal(1001)] [REDBuffer(true)] public CUInt32 MipsCount { get; set; }
 
-        [REDBuffer(true)] public CCompressedBuffer<SMipData> Mipdata { get; set; }
-        [REDBuffer(true)] public CUInt32 unk2 { get; set; }
+        [Ordinal(1002)] [REDBuffer(true)] public CCompressedBuffer<SMipData> Mipdata { get; set; }
+        [Ordinal(1003)] [REDBuffer(true)] public CUInt32 unk2 { get; set; }
         // Uncooked Textures
-        [REDBuffer(true)] public CCompressedBuffer<CByteArray> Mips { get; set; }
+        [Ordinal(1004)] [REDBuffer(true)] public CCompressedBuffer<CByteArray> Mips { get; set; }
         // Cooked Textures
-        [REDBuffer(true)] public CUInt32 ResidentmipSize { get; set; }
-        [REDBuffer(true)] public CBytes Residentmip { get; set; }
+        [Ordinal(1005)] [REDBuffer(true)] public CUInt32 ResidentmipSize { get; set; }
+        [Ordinal(1006)] [REDBuffer(true)] public CBytes Residentmip { get; set; }
 
 
         public CBitmapTexture(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
@@ -46,7 +46,7 @@ namespace WolvenKit.CR2W.Types
             // Uncooked xbms can be identified by their Sourcedata being null
             // and the residentmipindex being not null
 
-            var isCooked =  Flags == 0 ;
+            var isCooked =  REDFlags == 0 ;
             if (isCooked)
             {
                 if (SourceData == null && ResidentMipIndex == null)
@@ -82,7 +82,7 @@ namespace WolvenKit.CR2W.Types
         {
             base.Write(file);
 
-            var isCooked = Flags == 0;
+            var isCooked = REDFlags == 0;
             if (isCooked)
             {
                 MipsCount.val = (uint)Mips.Count;

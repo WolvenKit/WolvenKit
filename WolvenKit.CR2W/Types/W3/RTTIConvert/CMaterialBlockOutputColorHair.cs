@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,23 +11,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockOutputColorHair : CMaterialRootBlock
 	{
-		[RED("isTwoSided")] 		public CBool IsTwoSided { get; set;}
+		[Ordinal(1)] [RED("isTwoSided")] 		public CBool IsTwoSided { get; set;}
 
-		[RED("rawOutput")] 		public CBool RawOutput { get; set;}
+		[Ordinal(2)] [RED("rawOutput")] 		public CBool RawOutput { get; set;}
 
-		[RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
+		[Ordinal(3)] [RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
 
-		[RED("implicitGlobalFogVertexBased")] 		public CBool ImplicitGlobalFogVertexBased { get; set;}
+		[Ordinal(4)] [RED("implicitGlobalFogVertexBased")] 		public CBool ImplicitGlobalFogVertexBased { get; set;}
 
-		[RED("shadowingSolidVertexBased")] 		public CBool ShadowingSolidVertexBased { get; set;}
+		[Ordinal(5)] [RED("shadowingSolidVertexBased")] 		public CBool ShadowingSolidVertexBased { get; set;}
 
-		[RED("shadowingTransparentVertexBased")] 		public CBool ShadowingTransparentVertexBased { get; set;}
+		[Ordinal(6)] [RED("shadowingTransparentVertexBased")] 		public CBool ShadowingTransparentVertexBased { get; set;}
 
-		[RED("shadowingCascadesVertexBased")] 		public CBool ShadowingCascadesVertexBased { get; set;}
+		[Ordinal(7)] [RED("shadowingCascadesVertexBased")] 		public CBool ShadowingCascadesVertexBased { get; set;}
 
-		[RED("envProbesSolidVertexBased")] 		public CBool EnvProbesSolidVertexBased { get; set;}
+		[Ordinal(8)] [RED("envProbesSolidVertexBased")] 		public CBool EnvProbesSolidVertexBased { get; set;}
 
-		[RED("envProbesTransparentVertexBased")] 		public CBool EnvProbesTransparentVertexBased { get; set;}
+		[Ordinal(9)] [RED("envProbesTransparentVertexBased")] 		public CBool EnvProbesTransparentVertexBased { get; set;}
 
 		public CMaterialBlockOutputColorHair(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

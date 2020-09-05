@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHorseUpdateRiderLookatDef : IBehTreeHorseTaskDefinition
 	{
-		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(1)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
-		[RED("useCustomTarget")] 		public CBool UseCustomTarget { get; set;}
+		[Ordinal(2)] [RED("useCustomTarget")] 		public CBool UseCustomTarget { get; set;}
 
-		[RED("boneName")] 		public CName BoneName { get; set;}
+		[Ordinal(3)] [RED("boneName")] 		public CName BoneName { get; set;}
 
 		public CBTTaskHorseUpdateRiderLookatDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

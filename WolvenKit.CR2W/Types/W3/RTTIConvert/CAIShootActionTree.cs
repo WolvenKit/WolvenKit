@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIShootActionTree : IAICustomActionTree
 	{
-		[RED("targetTag")] 		public CName TargetTag { get; set;}
+		[Ordinal(1)] [RED("targetTag")] 		public CName TargetTag { get; set;}
 
-		[RED("multipleTargetsTags")] 		public CHandle<W3BehTreeValNameArray> MultipleTargetsTags { get; set;}
+		[Ordinal(2)] [RED("multipleTargetsTags")] 		public CHandle<W3BehTreeValNameArray> MultipleTargetsTags { get; set;}
 
-		[RED("numberOfActions")] 		public CInt32 NumberOfActions { get; set;}
+		[Ordinal(3)] [RED("numberOfActions")] 		public CInt32 NumberOfActions { get; set;}
 
-		[RED("setProjectileOnFire")] 		public CBool SetProjectileOnFire { get; set;}
+		[Ordinal(4)] [RED("setProjectileOnFire")] 		public CBool SetProjectileOnFire { get; set;}
 
-		[RED("afterActionIdleDuration")] 		public CFloat AfterActionIdleDuration { get; set;}
+		[Ordinal(5)] [RED("afterActionIdleDuration")] 		public CFloat AfterActionIdleDuration { get; set;}
 
-		[RED("afterActionIdleDurationChance")] 		public CFloat AfterActionIdleDurationChance { get; set;}
+		[Ordinal(6)] [RED("afterActionIdleDurationChance")] 		public CFloat AfterActionIdleDurationChance { get; set;}
 
-		[RED("useRayCastBeforeShooting")] 		public CBool UseRayCastBeforeShooting { get; set;}
+		[Ordinal(7)] [RED("useRayCastBeforeShooting")] 		public CBool UseRayCastBeforeShooting { get; set;}
 
 		public CAIShootActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

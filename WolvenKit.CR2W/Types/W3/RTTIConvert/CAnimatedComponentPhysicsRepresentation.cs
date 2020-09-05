@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimatedComponentPhysicsRepresentation : CObject
 	{
-		[RED("ragdoll")] 		public CHandle<CRagdoll> Ragdoll { get; set;}
+		[Ordinal(1)] [RED("ragdoll")] 		public CHandle<CRagdoll> Ragdoll { get; set;}
 
-		[RED("ragdollCollisionType")] 		public CPhysicalCollision RagdollCollisionType { get; set;}
+		[Ordinal(2)] [RED("ragdollCollisionType")] 		public CPhysicalCollision RagdollCollisionType { get; set;}
 
-		[RED("ragdollAlwaysEnabled")] 		public CBool RagdollAlwaysEnabled { get; set;}
+		[Ordinal(3)] [RED("ragdollAlwaysEnabled")] 		public CBool RagdollAlwaysEnabled { get; set;}
 
-		[RED("allowRagdollInCutscene")] 		public CBool AllowRagdollInCutscene { get; set;}
+		[Ordinal(4)] [RED("allowRagdollInCutscene")] 		public CBool AllowRagdollInCutscene { get; set;}
 
 		public CAnimatedComponentPhysicsRepresentation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

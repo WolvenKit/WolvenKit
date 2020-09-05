@@ -4,21 +4,22 @@ using WolvenKit.CR2W.Editors;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta]
     public class CPhysicalCollision : CVariable
     {
-        [REDBuffer(true)] public CUInt32 Unk1 { get; set; }
-        [REDBuffer(true)] public CBufferVLQ<CName> Collisiontypes { get; set; }
-        [REDBuffer(true)] public CBytes Data { get; set; }
+        [Ordinal(1000)] [REDBuffer(true)] public CUInt32 Unk1 { get; set; }
+        [Ordinal(1001)] [REDBuffer(true)] public CBufferVLQInt32<CName> Collisiontypes { get; set; }
+        [Ordinal(1002)] [REDBuffer(true)] public CBytes Data { get; set; }
 
         public CPhysicalCollision(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) 
         {
             Unk1 = new CUInt32(cr2w, this, nameof(Unk1) );
             Data = new CBytes(cr2w, this, nameof(Data) );
-            Collisiontypes = new CBufferVLQ<CName>(cr2w, this, nameof(Collisiontypes));
+            Collisiontypes = new CBufferVLQInt32<CName>(cr2w, this, nameof(Collisiontypes));
         }
 
         public override void Read(BinaryReader file, uint size)

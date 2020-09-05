@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorConstraintNodeFloorIKHandsOnly : CBehaviorConstraintNodeFloorIKBase
 	{
-		[RED("hands")] 		public SBehaviorConstraintNodeFloorIKLegsData Hands { get; set;}
+		[Ordinal(1)] [RED("hands")] 		public SBehaviorConstraintNodeFloorIKLegsData Hands { get; set;}
 
-		[RED("leftHandIK")] 		public STwoBonesIKSolverData LeftHandIK { get; set;}
+		[Ordinal(2)] [RED("leftHandIK")] 		public STwoBonesIKSolverData LeftHandIK { get; set;}
 
-		[RED("rightHandIK")] 		public STwoBonesIKSolverData RightHandIK { get; set;}
+		[Ordinal(3)] [RED("rightHandIK")] 		public STwoBonesIKSolverData RightHandIK { get; set;}
 
 		public CBehaviorConstraintNodeFloorIKHandsOnly(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

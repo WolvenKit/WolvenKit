@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCNavigationClearLine : IMoveSteeringCondition
 	{
-		[RED("destinationForward")] 		public CFloat DestinationForward { get; set;}
+		[Ordinal(1)] [RED("destinationForward")] 		public CFloat DestinationForward { get; set;}
 
-		[RED("destinationLeft")] 		public CFloat DestinationLeft { get; set;}
+		[Ordinal(2)] [RED("destinationLeft")] 		public CFloat DestinationLeft { get; set;}
 
-		[RED("testRadius")] 		public CFloat TestRadius { get; set;}
+		[Ordinal(3)] [RED("testRadius")] 		public CFloat TestRadius { get; set;}
 
-		[RED("useCharacterOrientation")] 		public CBool UseCharacterOrientation { get; set;}
+		[Ordinal(4)] [RED("useCharacterOrientation")] 		public CBool UseCharacterOrientation { get; set;}
 
-		[RED("useSteeringOutput")] 		public CBool UseSteeringOutput { get; set;}
+		[Ordinal(5)] [RED("useSteeringOutput")] 		public CBool UseSteeringOutput { get; set;}
 
-		[RED("useGoalDirection")] 		public CBool UseGoalDirection { get; set;}
+		[Ordinal(6)] [RED("useGoalDirection")] 		public CBool UseGoalDirection { get; set;}
 
 		public CMoveSCNavigationClearLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

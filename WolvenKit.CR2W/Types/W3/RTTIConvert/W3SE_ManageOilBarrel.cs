@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_ManageOilBarrel : W3SwitchEvent
 	{
-		[RED("oilBarrelTag")] 		public CName OilBarrelTag { get; set;}
+		[Ordinal(1)] [RED("oilBarrelTag")] 		public CName OilBarrelTag { get; set;}
 
-		[RED("operations", 2,0)] 		public CArray<CEnum<EOilBarrelOperation>> Operations { get; set;}
+		[Ordinal(2)] [RED("operations", 2,0)] 		public CArray<CEnum<EOilBarrelOperation>> Operations { get; set;}
 
 		public W3SE_ManageOilBarrel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

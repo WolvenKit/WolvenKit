@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphPointCloudLookAtSecMotion : CObject
 	{
-		[RED("isEnabled")] 		public CBool IsEnabled { get; set;}
+		[Ordinal(1)] [RED("isEnabled")] 		public CBool IsEnabled { get; set;}
 
-		[RED("masterBones", 2,0)] 		public CArray<CInt32> MasterBones { get; set;}
+		[Ordinal(2)] [RED("masterBones", 2,0)] 		public CArray<CInt32> MasterBones { get; set;}
 
-		[RED("masterBoneAxis")] 		public CEnum<EAxis> MasterBoneAxis { get; set;}
+		[Ordinal(3)] [RED("masterBoneAxis")] 		public CEnum<EAxis> MasterBoneAxis { get; set;}
 
-		[RED("maxMasterMotionAngleDeg")] 		public CFloat MaxMasterMotionAngleDeg { get; set;}
+		[Ordinal(4)] [RED("maxMasterMotionAngleDeg")] 		public CFloat MaxMasterMotionAngleDeg { get; set;}
 
-		[RED("defaultAnimation")] 		public CName DefaultAnimation { get; set;}
+		[Ordinal(5)] [RED("defaultAnimation")] 		public CName DefaultAnimation { get; set;}
 
 		public CBehaviorGraphPointCloudLookAtSecMotion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

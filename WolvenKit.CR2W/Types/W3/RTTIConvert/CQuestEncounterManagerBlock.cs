@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestEncounterManagerBlock : CQuestGraphBlock
 	{
-		[RED("encounterTag")] 		public CName EncounterTag { get; set;}
+		[Ordinal(1)] [RED("encounterTag")] 		public CName EncounterTag { get; set;}
 
-		[RED("enableEncounter")] 		public CBool EnableEncounter { get; set;}
+		[Ordinal(2)] [RED("enableEncounter")] 		public CBool EnableEncounter { get; set;}
 
-		[RED("forceDespawnDetached")] 		public CBool ForceDespawnDetached { get; set;}
+		[Ordinal(3)] [RED("forceDespawnDetached")] 		public CBool ForceDespawnDetached { get; set;}
 
-		[RED("encounterSpawnPhase")] 		public CName EncounterSpawnPhase { get; set;}
+		[Ordinal(4)] [RED("encounterSpawnPhase")] 		public CName EncounterSpawnPhase { get; set;}
 
 		public CQuestEncounterManagerBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

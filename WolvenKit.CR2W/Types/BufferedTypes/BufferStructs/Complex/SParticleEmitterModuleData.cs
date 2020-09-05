@@ -15,13 +15,13 @@ namespace WolvenKit.CR2W.Types
     {
         private CVariable[] fields { get; set; }
 
-        public CBufferVLQ<CFloat> alpha, lifeTime, rotation, rotationRate, spawnInnerRadius, spawnOuterRadius, velocity_inherit_scale, velocity_spread_scale, texture_animation_initial_frame,
+        public CBufferVLQInt32<CFloat> alpha, lifeTime, rotation, rotationRate, spawnInnerRadius, spawnOuterRadius, velocity_inherit_scale, velocity_spread_scale, texture_animation_initial_frame,
             accelerationScale, rotationOverLife, rotationRateOverLife, alphaOverLife, textureAnimationSpeed,
             velocityTurbulizeTimelifeLimit, targetForceScale, targetKillRadius, unk;
-        public CBufferVLQ<SVector3D> color, position, rotation3d, rotationRate3d, size_3d, spawnExtents, velocity, velocityOverLife,
+        public CBufferVLQInt32<SVector3D> color, position, rotation3d, rotationRate3d, size_3d, spawnExtents, velocity, velocityOverLife,
             accelerationDirection, rotation3dOverLife, rotationRate3dOverLife, colorOverLife, velocityTurbulizeScale,
            targetPosition, sizeOverLifeOrientation;
-        public CBufferVLQ<SVector2D> size, sizeOverLife;
+        public CBufferVLQInt32<SVector2D> size, sizeOverLife;
         public CFloat velocityTurbulizeNoiseInterval, velocityTurbulizeDuration, targetMaxForce, collision_radius, collision_dynamic_friction, collision_static_friction, collision_restitution, collision_velocity_dampening, collision_spawn_probability;
         public CFloat alphaByDistanceFar, alphaByDistanceNear, position_offset;
         public CUInt32 p140, p144, p148, p238, p23C, p240, p244, p24C, collision_spawn_parent_emitter_index;
@@ -36,86 +36,86 @@ namespace WolvenKit.CR2W.Types
         {
             fields = new CVariable[] {
                 // CParticleInitializerAlpha
-                alpha = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
+                alpha = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(alpha)),
                 //CParticleInitializerColor
-                color = new CBufferVLQ<SVector3D>(cr2w, this, nameof(color)),
+                color = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(color)),
                 //CParticleInitializerLifeTime
-                lifeTime = new CBufferVLQ<CFloat>(cr2w, this, nameof(lifeTime)),
+                lifeTime = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(lifeTime)),
                 //CParticleInitializerPosition
-                position = new CBufferVLQ<SVector3D>(cr2w, this, nameof(position)),
+                position = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(position)),
                 position_offset = new CFloat(cr2w, this, nameof(position_offset)),
                 //CParticleInitializerRotation
-                rotation = new CBufferVLQ<CFloat>(cr2w, this, nameof(rotation)),
+                rotation = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(rotation)),
                 //CParticleInitializerRotation3D
-                rotation3d = new CBufferVLQ<SVector3D>(cr2w, this, nameof(rotation3d)),
+                rotation3d = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(rotation3d)),
                 //CParticleInitializerRotationRate
-                rotationRate = new CBufferVLQ<CFloat>(cr2w, this, nameof(rotationRate)),
+                rotationRate = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(rotationRate)),
                 //CParticleInitializerRotationRate3D
-                rotationRate3d = new CBufferVLQ<SVector3D>(cr2w, this, nameof(rotationRate3d)),
+                rotationRate3d = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(rotationRate3d)),
                 //CParticleInitializerSize
-                size = new CBufferVLQ<SVector2D>(cr2w, this, nameof(size)),
+                size = new CBufferVLQInt32<SVector2D>(cr2w, this, nameof(size)),
                 //CParticleInitializerSize3d
-                size_3d = new CBufferVLQ<SVector3D>(cr2w, this, nameof(size_3d)),
+                size_3d = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(size_3d)),
                 sizeKeepRatio = new CBool(cr2w, this, nameof(sizeKeepRatio)),
                 //CParticleInitializerSpawnBox
-                spawnExtents = new CBufferVLQ<SVector3D>(cr2w, this, nameof(spawnExtents)),
+                spawnExtents = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(spawnExtents)),
                 //CParticleInitializerSpawnCircle
-                spawnInnerRadius = new CBufferVLQ<CFloat>(cr2w, this, nameof(spawnInnerRadius)),
-                spawnOuterRadius = new CBufferVLQ<CFloat>(cr2w, this, nameof(spawnOuterRadius)),
+                spawnInnerRadius = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(spawnInnerRadius)),
+                spawnOuterRadius = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(spawnOuterRadius)),
                 spawnWorldSpace = new CBool(cr2w, this, nameof(spawnWorldSpace)),
                 spawnSurfaceOnly = new CBool(cr2w, this, nameof(spawnSurfaceOnly)),
                 p0A8 = new SVector3D(cr2w, this, nameof(p0A8)),
                 spawnToLocalMatrix = new CMatrix4x4(cr2w, this, nameof(spawnToLocalMatrix)),
 
                 //CParticleInitializerVelocity
-                velocity = new CBufferVLQ<SVector3D>(cr2w, this, nameof(velocity)),
+                velocity = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(velocity)),
                 velocity_world_space = new CBool(cr2w, this, nameof(velocity_world_space)),
                 //CParticleInitializerVelocityInherit
-                velocity_inherit_scale = new CBufferVLQ<CFloat>(cr2w, this, nameof(velocity_inherit_scale)),
+                velocity_inherit_scale = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(velocity_inherit_scale)),
                 //CParticleInitializerVelocitySpread
-                velocity_spread_scale = new CBufferVLQ<CFloat>(cr2w, this, nameof(velocity_spread_scale)),
+                velocity_spread_scale = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(velocity_spread_scale)),
                 velocity_spread_conserve_momentum = new CBool(cr2w, this, nameof(velocity_spread_conserve_momentum)),
                 //CParticleModificatorTextureAnimation
-                texture_animation_initial_frame = new CBufferVLQ<CFloat>(cr2w, this, nameof(texture_animation_initial_frame)),
+                texture_animation_initial_frame = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(texture_animation_initial_frame)),
                 p140 = new CUInt32(cr2w, this, nameof(p140)),
                 p144 = new CUInt32(cr2w, this, nameof(p144)),
                 p148 = new CUInt32(cr2w, this, nameof(p148)),
 
                 //CParticleModificatorVelocityOverLife
-                velocityOverLife = new CBufferVLQ<SVector3D>(cr2w, this, nameof(velocityOverLife)),
+                velocityOverLife = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(velocityOverLife)),
                 //CParticleModificatorAcceleration
-                accelerationDirection = new CBufferVLQ<SVector3D>(cr2w, this, nameof(accelerationDirection)),
-                accelerationScale = new CBufferVLQ<CFloat>(cr2w, this, nameof(accelerationScale)),
+                accelerationDirection = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(accelerationDirection)),
+                accelerationScale = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(accelerationScale)),
                 //CParticleModificatorRotationOverLife
-                rotationOverLife = new CBufferVLQ<CFloat>(cr2w, this, nameof(rotationOverLife)),
+                rotationOverLife = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(rotationOverLife)),
                 //CParticleModificatorRotationRateOverLife
-                rotationRateOverLife = new CBufferVLQ<CFloat>(cr2w, this, nameof(rotationRateOverLife)),
+                rotationRateOverLife = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(rotationRateOverLife)),
                 //CParticleModificatorRotation3DOverLife
-                rotation3dOverLife = new CBufferVLQ<SVector3D>(cr2w, this, nameof(rotation3dOverLife)),
+                rotation3dOverLife = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(rotation3dOverLife)),
                 //CParticleModificatorRotationRate3DOverLife
-                rotationRate3dOverLife = new CBufferVLQ<SVector3D>(cr2w, this, nameof(rotationRate3dOverLife)),
+                rotationRate3dOverLife = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(rotationRate3dOverLife)),
                 //CParticleModificatorColorOverLife
-                colorOverLife = new CBufferVLQ<SVector3D>(cr2w, this, nameof(colorOverLife)),
+                colorOverLife = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(colorOverLife)),
                 //CParticleModificatorAlphaOverLife
-                alphaOverLife = new CBufferVLQ<CFloat>(cr2w, this, nameof(alphaOverLife)),
+                alphaOverLife = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(alphaOverLife)),
                 //CParticleModificatorSizeOverLife
-                sizeOverLife = new CBufferVLQ<SVector2D>(cr2w, this, nameof(sizeOverLife)),
+                sizeOverLife = new CBufferVLQInt32<SVector2D>(cr2w, this, nameof(sizeOverLife)),
                 //?
-                sizeOverLifeOrientation = new CBufferVLQ<SVector3D>(cr2w, this, nameof(sizeOverLifeOrientation)),
+                sizeOverLifeOrientation = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(sizeOverLifeOrientation)),
                 //CParticleModificatorTextureAnimation (initial frame is... missing? animation mode is defined by flags)
-                textureAnimationSpeed = new CBufferVLQ<CFloat>(cr2w, this, nameof(textureAnimationSpeed)),
+                textureAnimationSpeed = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(textureAnimationSpeed)),
 
                 //CParticleModificatorVelocityTurbulize
-                velocityTurbulizeScale = new CBufferVLQ<SVector3D>(cr2w, this, nameof(velocityTurbulizeScale)),
-                velocityTurbulizeTimelifeLimit = new CBufferVLQ<CFloat>(cr2w, this, nameof(velocityTurbulizeTimelifeLimit)),
+                velocityTurbulizeScale = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(velocityTurbulizeScale)),
+                velocityTurbulizeTimelifeLimit = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(velocityTurbulizeTimelifeLimit)),
                 velocityTurbulizeNoiseInterval = new CFloat(cr2w, this, nameof(velocityTurbulizeNoiseInterval)),
                 velocityTurbulizeDuration = new CFloat(cr2w, this, nameof(velocityTurbulizeDuration)),
 
                 //CParticleModificatorTarget
-                targetForceScale = new CBufferVLQ<CFloat>(cr2w, this, nameof(targetForceScale)),
-                targetKillRadius = new CBufferVLQ<CFloat>(cr2w, this, nameof(targetKillRadius)),
+                targetForceScale = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(targetForceScale)),
+                targetKillRadius = new CBufferVLQInt32<CFloat>(cr2w, this, nameof(targetKillRadius)),
                 targetMaxForce = new CFloat(cr2w, this, nameof(targetMaxForce)),
-                targetPosition = new CBufferVLQ<SVector3D>(cr2w, this, nameof(targetPosition)),
+                targetPosition = new CBufferVLQInt32<SVector3D>(cr2w, this, nameof(targetPosition)),
 
                 //CParticleInitializerSpawnSphere
                 spawn_positive_x = new CBool(cr2w, this, nameof(spawn_positive_x)),

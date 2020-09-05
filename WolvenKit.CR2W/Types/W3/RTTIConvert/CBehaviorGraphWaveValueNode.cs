@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphWaveValueNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("type")] 		public CEnum<EBehaviorWaveValueType> Type { get; set;}
+		[Ordinal(1)] [RED("type")] 		public CEnum<EBehaviorWaveValueType> Type { get; set;}
 
-		[RED("freq")] 		public CFloat Freq { get; set;}
+		[Ordinal(2)] [RED("freq")] 		public CFloat Freq { get; set;}
 
-		[RED("amp")] 		public CFloat Amp { get; set;}
+		[Ordinal(3)] [RED("amp")] 		public CFloat Amp { get; set;}
 
 		public CBehaviorGraphWaveValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

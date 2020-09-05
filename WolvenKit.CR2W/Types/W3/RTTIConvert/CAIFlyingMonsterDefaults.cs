@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFlyingMonsterDefaults : CAIBaseMonsterDefaults
 	{
-		[RED("combatTree")] 		public CHandle<CAIFlyingMonsterCombat> CombatTree { get; set;}
+		[Ordinal(1)] [RED("combatTree")] 		public CHandle<CAIFlyingMonsterCombat> CombatTree { get; set;}
 
-		[RED("deathTree")] 		public CHandle<CAIFlyingMonsterDeath> DeathTree { get; set;}
+		[Ordinal(2)] [RED("deathTree")] 		public CHandle<CAIFlyingMonsterDeath> DeathTree { get; set;}
 
-		[RED("flyingWander")] 		public CHandle<CAISubTree> FlyingWander { get; set;}
+		[Ordinal(3)] [RED("flyingWander")] 		public CHandle<CAISubTree> FlyingWander { get; set;}
 
-		[RED("freeFlight")] 		public CHandle<IAIFlightIdleTree> FreeFlight { get; set;}
+		[Ordinal(4)] [RED("freeFlight")] 		public CHandle<IAIFlightIdleTree> FreeFlight { get; set;}
 
-		[RED("canFly")] 		public CBool CanFly { get; set;}
+		[Ordinal(5)] [RED("canFly")] 		public CBool CanFly { get; set;}
 
 		public CAIFlyingMonsterDefaults(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

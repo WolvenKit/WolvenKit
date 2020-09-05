@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
-
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -16,7 +16,7 @@ namespace WolvenKit.CR2W.Types
     public partial class CGenericGrassMask : CResource
     {
 
-        [REDBuffer(true)] public CBytes grassmask { get; set; }
+        [Ordinal(1000)] [REDBuffer(true)] public CBytes grassmask { get; set; }
 
         public CGenericGrassMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraph2DMultiVariablesNode : CBehaviorGraph2DVariableNode
 	{
-		[RED("variableName1")] 		public CName VariableName1 { get; set;}
+		[Ordinal(1)] [RED("variableName1")] 		public CName VariableName1 { get; set;}
 
-		[RED("variableName2")] 		public CName VariableName2 { get; set;}
+		[Ordinal(2)] [RED("variableName2")] 		public CName VariableName2 { get; set;}
 
 		public CBehaviorGraph2DMultiVariablesNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBookMinigameSlot : CGameplayEntity
 	{
-		[RED("bookMinigameManagerTag")] 		public CName BookMinigameManagerTag { get; set;}
+		[Ordinal(1)] [RED("bookMinigameManagerTag")] 		public CName BookMinigameManagerTag { get; set;}
 
-		[RED("correctBookId")] 		public CInt32 CorrectBookId { get; set;}
+		[Ordinal(2)] [RED("correctBookId")] 		public CInt32 CorrectBookId { get; set;}
 
-		[RED("currentBook")] 		public CHandle<CBookMinigameBook> CurrentBook { get; set;}
+		[Ordinal(3)] [RED("currentBook")] 		public CHandle<CBookMinigameBook> CurrentBook { get; set;}
 
-		[RED("bookMinigameManager")] 		public CHandle<CBooksMinigameManager> BookMinigameManager { get; set;}
+		[Ordinal(4)] [RED("bookMinigameManager")] 		public CHandle<CBooksMinigameManager> BookMinigameManager { get; set;}
 
 		public CBookMinigameSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

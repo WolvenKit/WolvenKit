@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,21 +11,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIAttackRange : CObject
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(1)] [RED("name")] 		public CName Name { get; set;}
 
-		[RED("rangeMax")] 		public CFloat RangeMax { get; set;}
+		[Ordinal(2)] [RED("rangeMax")] 		public CFloat RangeMax { get; set;}
 
-		[RED("height")] 		public CFloat Height { get; set;}
+		[Ordinal(3)] [RED("height")] 		public CFloat Height { get; set;}
 
-		[RED("angleOffset")] 		public CFloat AngleOffset { get; set;}
+		[Ordinal(4)] [RED("angleOffset")] 		public CFloat AngleOffset { get; set;}
 
-		[RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(5)] [RED("position")] 		public Vector Position { get; set;}
 
-		[RED("checkLineOfSight")] 		public CBool CheckLineOfSight { get; set;}
+		[Ordinal(6)] [RED("checkLineOfSight")] 		public CBool CheckLineOfSight { get; set;}
 
-		[RED("lineOfSightHeight")] 		public CFloat LineOfSightHeight { get; set;}
+		[Ordinal(7)] [RED("lineOfSightHeight")] 		public CFloat LineOfSightHeight { get; set;}
 
-		[RED("useHeadOrientation")] 		public CBool UseHeadOrientation { get; set;}
+		[Ordinal(8)] [RED("useHeadOrientation")] 		public CBool UseHeadOrientation { get; set;}
 
 		public CAIAttackRange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

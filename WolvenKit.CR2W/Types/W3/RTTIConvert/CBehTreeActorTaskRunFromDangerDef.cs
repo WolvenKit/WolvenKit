@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeActorTaskRunFromDangerDef : IBehTreeTaskDefinition
 	{
-		[RED("dangerRadius")] 		public CFloat DangerRadius { get; set;}
+		[Ordinal(1)] [RED("dangerRadius")] 		public CFloat DangerRadius { get; set;}
 
-		[RED("fleeDistance")] 		public CFloat FleeDistance { get; set;}
+		[Ordinal(2)] [RED("fleeDistance")] 		public CFloat FleeDistance { get; set;}
 
-		[RED("pursue")] 		public CBool Pursue { get; set;}
+		[Ordinal(3)] [RED("pursue")] 		public CBool Pursue { get; set;}
 
 		public CBehTreeActorTaskRunFromDangerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

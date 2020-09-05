@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphRandomNode : CBehaviorGraphNode
 	{
-		[RED("weights", 2,0)] 		public CArray<CFloat> Weights { get; set;}
+		[Ordinal(1)] [RED("weights", 2,0)] 		public CArray<CFloat> Weights { get; set;}
 
-		[RED("cooldowns", 2,0)] 		public CArray<CFloat> Cooldowns { get; set;}
+		[Ordinal(2)] [RED("cooldowns", 2,0)] 		public CArray<CFloat> Cooldowns { get; set;}
 
-		[RED("maxStartAnimTime", 2,0)] 		public CArray<CFloat> MaxStartAnimTime { get; set;}
+		[Ordinal(3)] [RED("maxStartAnimTime", 2,0)] 		public CArray<CFloat> MaxStartAnimTime { get; set;}
 
-		[RED("cachedInputNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphNode>> CachedInputNodes { get; set;}
+		[Ordinal(4)] [RED("cachedInputNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphNode>> CachedInputNodes { get; set;}
 
 		public CBehaviorGraphRandomNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

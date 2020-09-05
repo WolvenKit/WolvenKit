@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,21 +11,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SRiddleNodePositionDef : CVariable
 	{
-		[RED("animName")] 		public CName AnimName { get; set;}
+		[Ordinal(1)] [RED("animName")] 		public CName AnimName { get; set;}
 
-		[RED("changePosTime")] 		public CFloat ChangePosTime { get; set;}
+		[Ordinal(2)] [RED("changePosTime")] 		public CFloat ChangePosTime { get; set;}
 
-		[RED("fxName")] 		public CName FxName { get; set;}
+		[Ordinal(3)] [RED("fxName")] 		public CName FxName { get; set;}
 
-		[RED("pairedRiddleNodes", 2,0)] 		public CArray<SPairedRiddleNodeDef> PairedRiddleNodes { get; set;}
+		[Ordinal(4)] [RED("pairedRiddleNodes", 2,0)] 		public CArray<SPairedRiddleNodeDef> PairedRiddleNodes { get; set;}
 
-		[RED("isPositionValid")] 		public CBool IsPositionValid { get; set;}
+		[Ordinal(5)] [RED("isPositionValid")] 		public CBool IsPositionValid { get; set;}
 
-		[RED("externalRiddleFx")] 		public SExternalRiddleEffectEntityDef ExternalRiddleFx { get; set;}
+		[Ordinal(6)] [RED("externalRiddleFx")] 		public SExternalRiddleEffectEntityDef ExternalRiddleFx { get; set;}
 
-		[RED("igni")] 		public CBool Igni { get; set;}
+		[Ordinal(7)] [RED("igni")] 		public CBool Igni { get; set;}
 
-		[RED("aard")] 		public CBool Aard { get; set;}
+		[Ordinal(8)] [RED("aard")] 		public CBool Aard { get; set;}
 
 		public SRiddleNodePositionDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CLayer : CResource
 	{
-		[RED("entities", 32,0)] 		public CArray<CPtr<CEntity>> Entities { get; set;}
+		[Ordinal(1)] [RED("entities", 32,0)] 		public CArray<CPtr<CEntity>> Entities { get; set;}
 
-		[RED("sectorData")] 		public CHandle<CSectorData> SectorData { get; set;}
+		[Ordinal(2)] [RED("sectorData")] 		public CHandle<CSectorData> SectorData { get; set;}
 
-		[RED("nameCount")] 		public CUInt32 NameCount { get; set;}
+		[Ordinal(3)] [RED("nameCount")] 		public CUInt32 NameCount { get; set;}
 
 		public CLayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

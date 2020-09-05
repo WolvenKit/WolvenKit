@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIProfile : CEntityTemplateParam
 	{
-		[RED("reactions", 2,0)] 		public CArray<CHandle<CAIReaction>> Reactions { get; set;}
+		[Ordinal(1)] [RED("reactions", 2,0)] 		public CArray<CHandle<CAIReaction>> Reactions { get; set;}
 
-		[RED("senseVisionParams")] 		public CPtr<CAISenseParams> SenseVisionParams { get; set;}
+		[Ordinal(2)] [RED("senseVisionParams")] 		public CPtr<CAISenseParams> SenseVisionParams { get; set;}
 
-		[RED("senseAbsoluteParams")] 		public CPtr<CAISenseParams> SenseAbsoluteParams { get; set;}
+		[Ordinal(3)] [RED("senseAbsoluteParams")] 		public CPtr<CAISenseParams> SenseAbsoluteParams { get; set;}
 
-		[RED("attitudeGroup")] 		public CName AttitudeGroup { get; set;}
+		[Ordinal(4)] [RED("attitudeGroup")] 		public CName AttitudeGroup { get; set;}
 
-		[RED("minigameParams")] 		public SAIMinigameParams MinigameParams { get; set;}
+		[Ordinal(5)] [RED("minigameParams")] 		public SAIMinigameParams MinigameParams { get; set;}
 
-		[RED("aiWizardRes")] 		public CHandle<CResource> AiWizardRes { get; set;}
+		[Ordinal(6)] [RED("aiWizardRes")] 		public CHandle<CResource> AiWizardRes { get; set;}
 
 		public CAIProfile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

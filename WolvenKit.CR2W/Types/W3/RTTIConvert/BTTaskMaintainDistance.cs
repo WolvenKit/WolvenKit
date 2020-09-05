@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskMaintainDistance : IBehTreeTask
 	{
-		[RED("minDistance")] 		public CFloat MinDistance { get; set;}
+		[Ordinal(1)] [RED("minDistance")] 		public CFloat MinDistance { get; set;}
 
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(2)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("faceTarget")] 		public CBool FaceTarget { get; set;}
+		[Ordinal(3)] [RED("faceTarget")] 		public CBool FaceTarget { get; set;}
 
-		[RED("fromOutsideDuration")] 		public CFloat FromOutsideDuration { get; set;}
+		[Ordinal(4)] [RED("fromOutsideDuration")] 		public CFloat FromOutsideDuration { get; set;}
 
-		[RED("forceTarget")] 		public CName ForceTarget { get; set;}
+		[Ordinal(5)] [RED("forceTarget")] 		public CName ForceTarget { get; set;}
 
-		[RED("m_Npc")] 		public CHandle<CNewNPC> M_Npc { get; set;}
+		[Ordinal(6)] [RED("m_Npc")] 		public CHandle<CNewNPC> M_Npc { get; set;}
 
 		public BTTaskMaintainDistance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BrightIdeasSoftware;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -17,7 +18,7 @@ namespace WolvenKit
     {
         public List<string> Autocompletelist;
         public List<IWitcherFile> FileList = new List<IWitcherFile>();
-        public List<IWitcherArchive> Managers;
+        public IEnumerable<IWitcherArchiveManager> Managers;
 
         public List<string> Files { get; set; }
         public WitcherTreeNode ActiveNode { get; set; }
@@ -36,35 +37,44 @@ namespace WolvenKit
 
         public event EventHandler<AddFileArgs> RequestFileAdd;
 
-        public frmAssetBrowser(List<IWitcherArchive> archives)
+        public frmAssetBrowser(List<IWitcherArchiveManager> managers)
         {
             InitializeComponent();
 
-            this.Icon = new Icon(@"Resources\Icons\wolven_kit_icon.ico");
+            this.Icon = new Icon(@"Resources\Icons\GUI\WCC_32x.ico", new Size(16, 16));
 
             pathlistview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             pathlistview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-            Managers = archives;
+            Managers = managers;
             RootNode = new WitcherTreeNode();
             RootNode.Name = "Root";
-            foreach (var arch in archives)
+            foreach (var manager in managers)
             {
-                if (arch == null)
+                if (manager == null)
                     continue;
-                FileList.AddRange(arch.FileList);
-                RootNode.Directories[arch.RootNode.Name] = arch.RootNode;
-                arch.RootNode.Parent = RootNode;
-                extensionCB.Items.Add(arch.TypeName);
-                extensionCB.SelectedIndex = 0;
-                var extensions = arch.Extensions;
-                extensions.Sort();
-                filetypeCB.Items.AddRange(extensions.ToArray());
-                filetypeCB.SelectedIndex = 0;
-                for (int i = 0; i < arch.AutocompleteSource.Count; i++)
+                FileList.AddRange(manager.FileList);
+                RootNode.Directories[manager.RootNode.Name] = manager.RootNode;
+                manager.RootNode.Parent = RootNode;
+
+                bundleExtensionCB.Items.Add(manager.TypeName);
+                bundleExtensionCB.SelectedIndex = 0;
+
+                for (int i = 0; i < manager.AutocompleteSource.Count; i++)
                 {
-                    SearchBox.AutoCompleteCustomSource.Add(arch.AutocompleteSource[i]);
+                    SearchBox.AutoCompleteCustomSource.Add(manager.AutocompleteSource[i]);
                 }
+
+                // fill in all file extensions
+                FillFileExtensionCB(manager);
             }
+        }
+
+        private void FillFileExtensionCB(IWitcherArchiveManager manager)
+        {
+            var fileExtensions = manager.Extensions;
+            fileExtensions.Sort();
+            fileExtensionsCB.Items.AddRange(fileExtensions.ToArray());
+            fileExtensionsCB.SelectedIndex = 0;
         }
 
         private void frmBundleExplorer_Load(object sender, EventArgs e)
@@ -309,10 +319,10 @@ namespace WolvenKit
         {
             var extension = "";
             string bundletype = "";
-            if (filetypeCB.SelectedIndex != -1)
-                extension = filetypeCB.Items[fileTypeIdx].ToString();
-            if (extensionCB.SelectedIndex != -1)
-                bundletype = extensionCB.Items[bundleTypeIdx].ToString();
+            if (fileExtensionsCB.SelectedIndex != -1)
+                extension = fileExtensionsCB.Items[fileTypeIdx].ToString();
+            if (bundleExtensionCB.SelectedIndex != -1)
+                bundletype = bundleExtensionCB.Items[bundleTypeIdx].ToString();
             var found = SearchFiles(FileList.ToArray(), s, bundletype, extension);
             if (limitCheckBox.Checked)
             {
@@ -463,7 +473,7 @@ namespace WolvenKit
 
         private void SearchButton_Click(object sender, EventArgs e)
         {
-            Search(SearchBox.Text, extensionCB.SelectedIndex, filetypeCB.SelectedIndex);
+            Search(SearchBox.Text, bundleExtensionCB.SelectedIndex, fileExtensionsCB.SelectedIndex);
         }
 
         private void Clear_Click(object sender, EventArgs e)
@@ -508,7 +518,7 @@ namespace WolvenKit
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Search(SearchBox.Text, extensionCB.SelectedIndex, filetypeCB.SelectedIndex);
+                Search(SearchBox.Text, bundleExtensionCB.SelectedIndex, fileExtensionsCB.SelectedIndex);
             }
         }
 
@@ -644,6 +654,7 @@ namespace WolvenKit
 
         private void clearSearch_Click(object sender, EventArgs e)
         {
+            SearchBox.Clear();
             OpenNode(RootNode,true);
         }
 
@@ -701,6 +712,23 @@ namespace WolvenKit
         {
             if (checkBoxExport.Checked)
                 checkBoxUncook.Checked = true;
+        }
+
+        private void bundleExtensionCB_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (((ComboBox)sender).SelectedItem is EBundleType type)
+            {
+                fileExtensionsCB.Items.Clear();
+
+                var specificManagers = Managers;
+                if (type != EBundleType.ANY)
+                    specificManagers = Managers.Where(_ => _.TypeName == type);
+
+                foreach (var manager in specificManagers)
+                {
+                    FillFileExtensionCB(manager);
+                }
+            }
         }
     }
 }

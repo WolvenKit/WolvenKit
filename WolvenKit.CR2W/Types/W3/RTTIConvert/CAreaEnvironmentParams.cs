@@ -1,6 +1,8 @@
+using FastMember;
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,57 +12,55 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAreaEnvironmentParams : CVariable
 	{
-		[RED("m_finalColorBalance")] 		public CEnvFinalColorBalanceParameters M_finalColorBalance { get; set;}
+		[Ordinal(1)] [RED("m_finalColorBalance")] 		public CEnvFinalColorBalanceParameters M_finalColorBalance { get; set;}
 
-		[RED("m_sharpen")] 		public CEnvSharpenParameters M_sharpen { get; set;}
+		[Ordinal(2)] [RED("m_sharpen")] 		public CEnvSharpenParameters M_sharpen { get; set;}
 
-		[RED("m_paintEffect")] 		public CEnvPaintEffectParameters M_paintEffect { get; set;}
+		[Ordinal(3)] [RED("m_paintEffect")] 		public CEnvPaintEffectParameters M_paintEffect { get; set;}
 
-		[RED("m_ssaoNV")] 		public CEnvNVSSAOParameters M_ssaoNV { get; set;}
+		[Ordinal(4)] [RED("m_ssaoNV")] 		public CEnvNVSSAOParameters M_ssaoNV { get; set;}
 
-		[RED("m_ssaoMS")] 		public CEnvMSSSAOParameters M_ssaoMS { get; set;}
+		[Ordinal(5)] [RED("m_ssaoMS")] 		public CEnvMSSSAOParameters M_ssaoMS { get; set;}
 
-		[RED("m_globalLight")] 		public CEnvGlobalLightParameters M_globalLight { get; set;}
+		[Ordinal(6)] [RED("m_globalLight")] 		public CEnvGlobalLightParameters M_globalLight { get; set;}
 
-		[RED("m_interiorFallback")] 		public CEnvInteriorFallbackParameters M_interiorFallback { get; set;}
+		[Ordinal(7)] [RED("m_interiorFallback")] 		public CEnvInteriorFallbackParameters M_interiorFallback { get; set;}
 
-		[RED("m_speedTree")] 		public CEnvSpeedTreeParameters M_speedTree { get; set;}
+		[Ordinal(8)] [RED("m_speedTree")] 		public CEnvSpeedTreeParameters M_speedTree { get; set;}
 
-		[RED("m_toneMapping")] 		public CEnvToneMappingParameters M_toneMapping { get; set;}
+		[Ordinal(9)] [RED("m_toneMapping")] 		public CEnvToneMappingParameters M_toneMapping { get; set;}
 
-		[RED("m_bloomNew")] 		public CEnvBloomNewParameters M_bloomNew { get; set;}
+		[Ordinal(10)] [RED("m_bloomNew")] 		public CEnvBloomNewParameters M_bloomNew { get; set;}
 
-		[RED("m_globalFog")] 		public CEnvGlobalFogParameters M_globalFog { get; set;}
+		[Ordinal(11)] [RED("m_globalFog")] 		public CEnvGlobalFogParameters M_globalFog { get; set;}
 
-		[RED("m_sky")] 		public CEnvGlobalSkyParameters M_sky { get; set;}
+		[Ordinal(12)] [RED("m_sky")] 		public CEnvGlobalSkyParameters M_sky { get; set;}
 
-		[RED("m_depthOfField")] 		public CEnvDepthOfFieldParameters M_depthOfField { get; set;}
+		[Ordinal(13)] [RED("m_depthOfField")] 		public CEnvDepthOfFieldParameters M_depthOfField { get; set;}
 
-		[RED("m_colorModTransparency")] 		public CEnvColorModTransparencyParameters M_colorModTransparency { get; set;}
+		[Ordinal(14)] [RED("m_colorModTransparency")] 		public CEnvColorModTransparencyParameters M_colorModTransparency { get; set;}
 
-		[RED("m_shadows")] 		public CEnvShadowsParameters M_shadows { get; set;}
+		[Ordinal(15)] [RED("m_shadows")] 		public CEnvShadowsParameters M_shadows { get; set;}
 
-		[RED("m_water")] 		public CEnvWaterParameters M_water { get; set;}
+		[Ordinal(16)] [RED("m_water")] 		public CEnvWaterParameters M_water { get; set;}
 
-		[RED("m_colorGroups")] 		public CEnvColorGroupsParameters M_colorGroups { get; set;}
+		[Ordinal(17)] [RED("m_colorGroups")] 		public CEnvColorGroupsParameters M_colorGroups { get; set;}
 
-		[RED("m_flareColorGroups")] 		public CEnvFlareColorGroupsParameters M_flareColorGroups { get; set;}
+		[Ordinal(18)] [RED("m_flareColorGroups")] 		public CEnvFlareColorGroupsParameters M_flareColorGroups { get; set;}
 
-		[RED("m_sunAndMoonParams")] 		public CEnvSunAndMoonParameters M_sunAndMoonParams { get; set;}
+		[Ordinal(19)] [RED("m_sunAndMoonParams")] 		public CEnvSunAndMoonParameters M_sunAndMoonParams { get; set;}
 
-		[RED("m_windParams")] 		public CEnvWindParameters M_windParams { get; set;}
+		[Ordinal(20)] [RED("m_windParams")] 		public CEnvWindParameters M_windParams { get; set;}
 
-		[RED("m_gameplayEffects")] 		public CEnvGameplayEffectsParameters M_gameplayEffects { get; set;}
+		[Ordinal(21)] [RED("m_gameplayEffects")] 		public CEnvGameplayEffectsParameters M_gameplayEffects { get; set;}
 
-		[RED("m_motionBlur")] 		public CEnvMotionBlurParameters M_motionBlur { get; set;}
+		[Ordinal(22)] [RED("m_motionBlur")] 		public CEnvMotionBlurParameters M_motionBlur { get; set;}
 
-		[RED("m_cameraLightsSetup")] 		public CEnvCameraLightsSetupParameters M_cameraLightsSetup { get; set;}
+		[Ordinal(23)] [RED("m_cameraLightsSetup")] 		public CEnvCameraLightsSetupParameters M_cameraLightsSetup { get; set;}
 
-		[RED("m_dialogLightParams")] 		public CEnvDialogLightParameters M_dialogLightParams { get; set;}
+		[Ordinal(24)] [RED("m_dialogLightParams")] 		public CEnvDialogLightParameters M_dialogLightParams { get; set;}
 
 		public CAreaEnvironmentParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
-
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAreaEnvironmentParams(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

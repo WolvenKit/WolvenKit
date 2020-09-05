@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,27 +11,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMetalinkComponent : CWayPointComponent
 	{
-		[RED("aiAction")] 		public CHandle<IAIExplorationTree> AiAction { get; set;}
+		[Ordinal(1)] [RED("aiAction")] 		public CHandle<IAIExplorationTree> AiAction { get; set;}
 
-		[RED("pathfindingCostMultiplier")] 		public CFloat PathfindingCostMultiplier { get; set;}
+		[Ordinal(2)] [RED("pathfindingCostMultiplier")] 		public CFloat PathfindingCostMultiplier { get; set;}
 
-		[RED("destinationEntityTag")] 		public CName DestinationEntityTag { get; set;}
+		[Ordinal(3)] [RED("destinationEntityTag")] 		public CName DestinationEntityTag { get; set;}
 
-		[RED("destinationWaypointComponent")] 		public CString DestinationWaypointComponent { get; set;}
+		[Ordinal(4)] [RED("destinationWaypointComponent")] 		public CString DestinationWaypointComponent { get; set;}
 
-		[RED("internalObstacleEntity")] 		public EntityHandle InternalObstacleEntity { get; set;}
+		[Ordinal(5)] [RED("internalObstacleEntity")] 		public EntityHandle InternalObstacleEntity { get; set;}
 
-		[RED("internalObstacleComponent")] 		public CString InternalObstacleComponent { get; set;}
+		[Ordinal(6)] [RED("internalObstacleComponent")] 		public CString InternalObstacleComponent { get; set;}
 
-		[RED("useInternalObstacle")] 		public CBool UseInternalObstacle { get; set;}
+		[Ordinal(7)] [RED("useInternalObstacle")] 		public CBool UseInternalObstacle { get; set;}
 
-		[RED("enabledByDefault")] 		public CBool EnabledByDefault { get; set;}
+		[Ordinal(8)] [RED("enabledByDefault")] 		public CBool EnabledByDefault { get; set;}
 
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(9)] [RED("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("isGhostLink")] 		public CBool IsGhostLink { get; set;}
+		[Ordinal(10)] [RED("isGhostLink")] 		public CBool IsGhostLink { get; set;}
 
-		[RED("questTrackingPortal")] 		public CBool QuestTrackingPortal { get; set;}
+		[Ordinal(11)] [RED("questTrackingPortal")] 		public CBool QuestTrackingPortal { get; set;}
 
 		public CMetalinkComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

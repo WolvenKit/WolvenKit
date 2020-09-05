@@ -36,6 +36,7 @@ namespace WolvenKit
     {
         private static UIController mainController;
         public UIConfiguration Configuration { get; private set; }
+
         public frmMain Window { get; private set; }
 
         public const string ManagerCacheDir = "ManagerCache";
@@ -46,7 +47,11 @@ namespace WolvenKit
         // Color Themes
         public VisualStudioToolStripExtender ToolStripExtender { get; set; }
         private readonly List<ThemeBase> _themesList = new List<ThemeBase>() { new VS2015LightTheme(), new VS2015DarkTheme(), new VS2015BlueTheme() };
-        public static ThemeBase GetTheme() => Get()._themesList[(int)Get().Configuration.ColorTheme];
+        public static ThemeBase GetTheme()
+        {
+            return Get()._themesList[(int)Get().Configuration.ColorTheme];
+        }
+
         public static DockPanelColorPalette GetPalette() => GetTheme().ColorPalette;
 
         /// <summary>
@@ -109,7 +114,7 @@ namespace WolvenKit
         /// <param name="form">The form to initialize.</param>
         public static void InitForm(Form form)
         {
-            Bitmap bmp = WolvenKit.Properties.Resources.Logo_wkit;
+            Bitmap bmp = WolvenKit.Properties.Resources.Wkit_logo_500x;
             form.Icon = Icon.FromHandle(bmp.GetHicon());
         }
 

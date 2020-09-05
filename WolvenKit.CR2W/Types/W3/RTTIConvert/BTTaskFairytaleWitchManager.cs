@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,29 +11,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskFairytaleWitchManager : IBehTreeTask
 	{
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(1)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[RED("spawnedNpc")] 		public CHandle<CNewNPC> SpawnedNpc { get; set;}
+		[Ordinal(2)] [RED("spawnedNpc")] 		public CHandle<CNewNPC> SpawnedNpc { get; set;}
 
-		[RED("spawnedSecondNpc")] 		public CHandle<CNewNPC> SpawnedSecondNpc { get; set;}
+		[Ordinal(3)] [RED("spawnedSecondNpc")] 		public CHandle<CNewNPC> SpawnedSecondNpc { get; set;}
 
-		[RED("nodeTags", 2,0)] 		public CArray<CName> NodeTags { get; set;}
+		[Ordinal(4)] [RED("nodeTags", 2,0)] 		public CArray<CName> NodeTags { get; set;}
 
-		[RED("resourceName", 2,0)] 		public CArray<CName> ResourceName { get; set;}
+		[Ordinal(5)] [RED("resourceName", 2,0)] 		public CArray<CName> ResourceName { get; set;}
 
-		[RED("initialSleepTime")] 		public CFloat InitialSleepTime { get; set;}
+		[Ordinal(6)] [RED("initialSleepTime")] 		public CFloat InitialSleepTime { get; set;}
 
-		[RED("firstNodeTag")] 		public CName FirstNodeTag { get; set;}
+		[Ordinal(7)] [RED("firstNodeTag")] 		public CName FirstNodeTag { get; set;}
 
-		[RED("secondNodeTag")] 		public CName SecondNodeTag { get; set;}
+		[Ordinal(8)] [RED("secondNodeTag")] 		public CName SecondNodeTag { get; set;}
 
-		[RED("thirdNodeTag")] 		public CName ThirdNodeTag { get; set;}
+		[Ordinal(9)] [RED("thirdNodeTag")] 		public CName ThirdNodeTag { get; set;}
 
-		[RED("finalNodeTag")] 		public CName FinalNodeTag { get; set;}
+		[Ordinal(10)] [RED("finalNodeTag")] 		public CName FinalNodeTag { get; set;}
 
-		[RED("archesporResource")] 		public CName ArchesporResource { get; set;}
+		[Ordinal(11)] [RED("archesporResource")] 		public CName ArchesporResource { get; set;}
 
-		[RED("pantherResource")] 		public CName PantherResource { get; set;}
+		[Ordinal(12)] [RED("pantherResource")] 		public CName PantherResource { get; set;}
 
 		public BTTaskFairytaleWitchManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

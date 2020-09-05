@@ -11,7 +11,7 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.W3Speech
 {
-    public class SpeechManager : IWitcherArchive
+    public class SpeechManager : IWitcherArchiveManager
     {
 
         public SpeechManager()

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CInterestPointInstance : CObject
 	{
-		[RED("parentNode")] 		public CHandle<CNode> ParentNode { get; set;}
+		[Ordinal(1)] [RED("parentNode")] 		public CHandle<CNode> ParentNode { get; set;}
 
-		[RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(2)] [RED("position")] 		public Vector Position { get; set;}
 
 		public CInterestPointInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBoneIndiceMapping : CVariable
 	{
-		[RED("startingIndex")] 		public CUInt32 StartingIndex { get; set;}
+		[Ordinal(1)] [RED("startingIndex")] 		public CUInt32 StartingIndex { get; set;}
 
-		[RED("endingIndex")] 		public CUInt32 EndingIndex { get; set;}
+		[Ordinal(2)] [RED("endingIndex")] 		public CUInt32 EndingIndex { get; set;}
 
-		[RED("chunkIndex")] 		public CUInt32 ChunkIndex { get; set;}
+		[Ordinal(3)] [RED("chunkIndex")] 		public CUInt32 ChunkIndex { get; set;}
 
-		[RED("boneIndex")] 		public CUInt32 BoneIndex { get; set;}
+		[Ordinal(4)] [RED("boneIndex")] 		public CUInt32 BoneIndex { get; set;}
 
 		public SBoneIndiceMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

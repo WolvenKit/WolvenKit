@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SYrdenEffects : CVariable
 	{
-		[RED("castEffect")] 		public CName CastEffect { get; set;}
+		[Ordinal(1)] [RED("castEffect")] 		public CName CastEffect { get; set;}
 
-		[RED("placeEffect")] 		public CName PlaceEffect { get; set;}
+		[Ordinal(2)] [RED("placeEffect")] 		public CName PlaceEffect { get; set;}
 
-		[RED("shootEffect")] 		public CName ShootEffect { get; set;}
+		[Ordinal(3)] [RED("shootEffect")] 		public CName ShootEffect { get; set;}
 
-		[RED("activateEffect")] 		public CName ActivateEffect { get; set;}
+		[Ordinal(4)] [RED("activateEffect")] 		public CName ActivateEffect { get; set;}
 
 		public SYrdenEffects(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

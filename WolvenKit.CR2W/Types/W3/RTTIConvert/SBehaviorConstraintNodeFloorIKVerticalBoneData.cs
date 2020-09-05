@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorConstraintNodeFloorIKVerticalBoneData : CVariable
 	{
-		[RED("bone")] 		public CName Bone { get; set;}
+		[Ordinal(1)] [RED("bone")] 		public CName Bone { get; set;}
 
-		[RED("Min offset")] 		public CFloat Min_offset { get; set;}
+		[Ordinal(2)] [RED("Min offset")] 		public CFloat Min_offset { get; set;}
 
-		[RED("Max offset")] 		public CFloat Max_offset { get; set;}
+		[Ordinal(3)] [RED("Max offset")] 		public CFloat Max_offset { get; set;}
 
-		[RED("offsetToDesiredBlendTime")] 		public CFloat OffsetToDesiredBlendTime { get; set;}
+		[Ordinal(4)] [RED("offsetToDesiredBlendTime")] 		public CFloat OffsetToDesiredBlendTime { get; set;}
 
-		[RED("verticalOffsetBlendTime")] 		public CFloat VerticalOffsetBlendTime { get; set;}
+		[Ordinal(5)] [RED("verticalOffsetBlendTime")] 		public CFloat VerticalOffsetBlendTime { get; set;}
 
-		[RED("stiffness")] 		public CFloat Stiffness { get; set;}
+		[Ordinal(6)] [RED("stiffness")] 		public CFloat Stiffness { get; set;}
 
 		public SBehaviorConstraintNodeFloorIKVerticalBoneData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorMimiLipsyncCorrectionConstraint : IBehaviorMimicConstraint
 	{
-		[RED("controlTrack")] 		public CInt32 ControlTrack { get; set;}
+		[Ordinal(1)] [RED("controlTrack")] 		public CInt32 ControlTrack { get; set;}
 
-		[RED("trackBegin")] 		public CInt32 TrackBegin { get; set;}
+		[Ordinal(2)] [RED("trackBegin")] 		public CInt32 TrackBegin { get; set;}
 
-		[RED("trackEnd")] 		public CInt32 TrackEnd { get; set;}
+		[Ordinal(3)] [RED("trackEnd")] 		public CInt32 TrackEnd { get; set;}
 
 		public CBehaviorMimiLipsyncCorrectionConstraint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

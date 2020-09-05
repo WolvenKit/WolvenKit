@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurDistanceLOD : CVariable
 	{
-		[RED("enableDistanceLOD")] 		public CBool EnableDistanceLOD { get; set;}
+		[Ordinal(1)] [RED("enableDistanceLOD")] 		public CBool EnableDistanceLOD { get; set;}
 
-		[RED("distanceLODStart")] 		public CFloat DistanceLODStart { get; set;}
+		[Ordinal(2)] [RED("distanceLODStart")] 		public CFloat DistanceLODStart { get; set;}
 
-		[RED("distanceLODEnd")] 		public CFloat DistanceLODEnd { get; set;}
+		[Ordinal(3)] [RED("distanceLODEnd")] 		public CFloat DistanceLODEnd { get; set;}
 
-		[RED("distanceLODFadeStart")] 		public CFloat DistanceLODFadeStart { get; set;}
+		[Ordinal(4)] [RED("distanceLODFadeStart")] 		public CFloat DistanceLODFadeStart { get; set;}
 
-		[RED("distanceLODWidth")] 		public CFloat DistanceLODWidth { get; set;}
+		[Ordinal(5)] [RED("distanceLODWidth")] 		public CFloat DistanceLODWidth { get; set;}
 
-		[RED("distanceLODDensity")] 		public CFloat DistanceLODDensity { get; set;}
+		[Ordinal(6)] [RED("distanceLODDensity")] 		public CFloat DistanceLODDensity { get; set;}
 
 		public SFurDistanceLOD(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

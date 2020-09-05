@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Runtime.InteropServices;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -13,8 +14,8 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SWayPointsCollectionsSetData : CVariable
     {
-        [RED] public CGUID Guid { get; set; }
-        [RED] public CHandle<CWayPointsCollection> Handle { get; set; }
+        [Ordinal(0)] [RED] public CGUID Guid { get; set; }
+        [Ordinal(1)] [RED] public CHandle<CWayPointsCollection> Handle { get; set; }
 
         public SWayPointsCollectionsSetData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

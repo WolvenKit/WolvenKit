@@ -204,82 +204,70 @@ namespace WolvenKit.App.Model
         /// <returns></returns>
         private static DDSMetadata GetDDSMetadata(CBitmapTexture xbm)
         {
-            try
-            {
-                int residentMipIndex = xbm.ResidentMipIndex == null ? 0 : xbm.ResidentMipIndex.val;
+            int residentMipIndex = xbm.ResidentMipIndex == null ? 0 : xbm.ResidentMipIndex.val;
                 
-                int mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
+            int mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
 
-                uint width = xbm.Mipdata.elements[residentMipIndex].Width.val;
-                uint height = xbm.Mipdata.elements[residentMipIndex].Height.val;
+            uint width = xbm.Mipdata.elements[residentMipIndex].Width.val;
+            uint height = xbm.Mipdata.elements[residentMipIndex].Height.val;
 
-                ETextureCompression compression = xbm.Compression.WrappedEnum;
+            ETextureCompression compression = xbm.Compression.WrappedEnum;
 
-                var ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
-                switch (compression)
-                {
+            var ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
+            switch (compression)
+            {
                     
-                    case ETextureCompression.TCM_DXTNoAlpha:
-                        ddsformat = ETextureFormat.TEXFMT_BC1;
-                        break;
-                    case ETextureCompression.TCM_DXTAlpha:
-                        ddsformat = ETextureFormat.TEXFMT_BC3;
-                        break;
-                    case ETextureCompression.TCM_Normals:
-                        ddsformat = ETextureFormat.TEXFMT_BC1;
-                        break;
-                    case ETextureCompression.TCM_NormalsHigh:
-                        ddsformat = ETextureFormat.TEXFMT_BC3;
-                        break;
-                    case ETextureCompression.TCM_NormalsGloss:
-                        ddsformat = ETextureFormat.TEXFMT_BC3;
-                        break;
-                    case ETextureCompression.TCM_QualityR:
-                        ddsformat = ETextureFormat.TEXFMT_BC4;
-                        break;
-                    case ETextureCompression.TCM_QualityRG:
-                        ddsformat = ETextureFormat.TEXFMT_BC5;
-                        break;
-                    case ETextureCompression.TCM_QualityColor:
-                        ddsformat = ETextureFormat.TEXFMT_BC3;
-                        break;
-                    case ETextureCompression.TCM_DXTAlphaLinear:
-                    case ETextureCompression.TCM_RGBE:
-                    case ETextureCompression.TCM_None:
+                case ETextureCompression.TCM_DXTNoAlpha:
+                    ddsformat = ETextureFormat.TEXFMT_BC1;
+                    break;
+                case ETextureCompression.TCM_DXTAlpha:
+                    ddsformat = ETextureFormat.TEXFMT_BC3;
+                    break;
+                case ETextureCompression.TCM_Normals:
+                    ddsformat = ETextureFormat.TEXFMT_BC1;
+                    break;
+                case ETextureCompression.TCM_NormalsHigh:
+                    ddsformat = ETextureFormat.TEXFMT_BC3;
+                    break;
+                case ETextureCompression.TCM_NormalsGloss:
+                    ddsformat = ETextureFormat.TEXFMT_BC3;
+                    break;
+                case ETextureCompression.TCM_QualityR:
+                    ddsformat = ETextureFormat.TEXFMT_BC4;
+                    break;
+                case ETextureCompression.TCM_QualityRG:
+                    ddsformat = ETextureFormat.TEXFMT_BC5;
+                    break;
+                case ETextureCompression.TCM_QualityColor:
+                    ddsformat = ETextureFormat.TEXFMT_BC3;
+                    break;
+                case ETextureCompression.TCM_DXTAlphaLinear:
+                case ETextureCompression.TCM_RGBE:
+                case ETextureCompression.TCM_None:
+                    {
+                        ETextureRawFormat format = xbm.Format.WrappedEnum;
+                        switch (format)
                         {
-                            ETextureRawFormat format = xbm.Format.WrappedEnum;
-                            switch (format)
-                            {
-                                case ETextureRawFormat.TRF_TrueColor:
-                                    ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
-                                    break;
-                                case ETextureRawFormat.TRF_Grayscale:
-                                    break;
-                                case ETextureRawFormat.TRF_HDR:
-                                case ETextureRawFormat.TRF_AlphaGrayscale:
-                                case ETextureRawFormat.TRF_HDRGrayscale:
-                                default:
-                                    throw new Exception("Invalid compression type! [" + compression + "]");
-                            }
-                            break;
+                            case ETextureRawFormat.TRF_TrueColor:
+                                ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
+                                break;
+                            case ETextureRawFormat.TRF_Grayscale:
+                                break;
+                            case ETextureRawFormat.TRF_HDR:
+                            case ETextureRawFormat.TRF_AlphaGrayscale:
+                            case ETextureRawFormat.TRF_HDRGrayscale:
+                            default:
+                                ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
+                                //throw new Exception("Invalid texture format type! [" + format + "]");
+                                break;
                         }
-                    default:
-                        throw new Exception("Invalid compression type! [" + compression + "]");
-                }
-
-                return new DDSMetadata(width, height, (uint)mipcount, ddsformat);
-
-                
+                        break;
+                    }
+                default:
+                    throw new Exception("Invalid texture compression type! [" + compression + "]");
             }
-            catch(Exception e)
-            {
-                //string message = e.Message;
-                //string caption = "Error!";
-                //MessageBoxButtons buttons = MessageBoxButtons.OK;
-                //MessageBox.Show(message, caption, buttons);
-                throw e;
-            }
-            
+
+            return new DDSMetadata(width, height, (uint)mipcount, ddsformat);
         }
 
         /// <summary>

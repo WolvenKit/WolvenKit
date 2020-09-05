@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,27 +11,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class GotoRequest : CObject
 	{
-		[RED("groupId")] 		public CFlyingGroupId GroupId { get; set;}
+		[Ordinal(1)] [RED("groupId")] 		public CFlyingGroupId GroupId { get; set;}
 
-		[RED("groupState")] 		public CName GroupState { get; set;}
+		[Ordinal(2)] [RED("groupState")] 		public CName GroupState { get; set;}
 
-		[RED("groupStateSetOnArrival")] 		public CName GroupStateSetOnArrival { get; set;}
+		[Ordinal(3)] [RED("groupStateSetOnArrival")] 		public CName GroupStateSetOnArrival { get; set;}
 
-		[RED("targetPoiComponent")] 		public CHandle<CBoidPointOfInterestComponent> TargetPoiComponent { get; set;}
+		[Ordinal(4)] [RED("targetPoiComponent")] 		public CHandle<CBoidPointOfInterestComponent> TargetPoiComponent { get; set;}
 
-		[RED("targetNode")] 		public CHandle<CNode> TargetNode { get; set;}
+		[Ordinal(5)] [RED("targetNode")] 		public CHandle<CNode> TargetNode { get; set;}
 
-		[RED("delay")] 		public CFloat Delay { get; set;}
+		[Ordinal(6)] [RED("delay")] 		public CFloat Delay { get; set;}
 
-		[RED("delayTimer")] 		public CFloat DelayTimer { get; set;}
+		[Ordinal(7)] [RED("delayTimer")] 		public CFloat DelayTimer { get; set;}
 
-		[RED("factID")] 		public CString FactID { get; set;}
+		[Ordinal(8)] [RED("factID")] 		public CString FactID { get; set;}
 
-		[RED("factValue")] 		public CInt32 FactValue { get; set;}
+		[Ordinal(9)] [RED("factValue")] 		public CInt32 FactValue { get; set;}
 
-		[RED("groupCenterWhenStart")] 		public Vector GroupCenterWhenStart { get; set;}
+		[Ordinal(10)] [RED("groupCenterWhenStart")] 		public Vector GroupCenterWhenStart { get; set;}
 
-		[RED("init")] 		public CBool Init { get; set;}
+		[Ordinal(11)] [RED("init")] 		public CBool Init { get; set;}
 
 		public GotoRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

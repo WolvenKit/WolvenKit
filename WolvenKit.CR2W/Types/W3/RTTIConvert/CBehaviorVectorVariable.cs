@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorVectorVariable : CBaseBehaviorVariable
 	{
-		[RED("value")] 		public Vector Value { get; set;}
+		[Ordinal(1)] [RED("value")] 		public Vector Value { get; set;}
 
-		[RED("defaultValue")] 		public Vector DefaultValue { get; set;}
+		[Ordinal(2)] [RED("defaultValue")] 		public Vector DefaultValue { get; set;}
 
-		[RED("minValue")] 		public Vector MinValue { get; set;}
+		[Ordinal(3)] [RED("minValue")] 		public Vector MinValue { get; set;}
 
-		[RED("maxValue")] 		public Vector MaxValue { get; set;}
+		[Ordinal(4)] [RED("maxValue")] 		public Vector MaxValue { get; set;}
 
-		[RED("space")] 		public CEnum<EVariableSpace> Space { get; set;}
+		[Ordinal(5)] [RED("space")] 		public CEnum<EVariableSpace> Space { get; set;}
 
-		[RED("type")] 		public CEnum<EVectorVariableType> Type { get; set;}
+		[Ordinal(6)] [RED("type")] 		public CEnum<EVectorVariableType> Type { get; set;}
 
-		[RED("shouldBeSyncedBetweenGraphs")] 		public CBool ShouldBeSyncedBetweenGraphs { get; set;}
+		[Ordinal(7)] [RED("shouldBeSyncedBetweenGraphs")] 		public CBool ShouldBeSyncedBetweenGraphs { get; set;}
 
 		public CBehaviorVectorVariable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

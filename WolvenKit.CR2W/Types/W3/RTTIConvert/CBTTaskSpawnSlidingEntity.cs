@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,21 +11,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSpawnSlidingEntity : CBTTaskSpawnEntityOffset
 	{
-		[RED("component")] 		public CHandle<CComponent> Component { get; set;}
+		[Ordinal(1)] [RED("component")] 		public CHandle<CComponent> Component { get; set;}
 
-		[RED("slideComponent")] 		public CHandle<W3SlideToTargetComponent> SlideComponent { get; set;}
+		[Ordinal(2)] [RED("slideComponent")] 		public CHandle<W3SlideToTargetComponent> SlideComponent { get; set;}
 
-		[RED("targetNode")] 		public CHandle<CNode> TargetNode { get; set;}
+		[Ordinal(3)] [RED("targetNode")] 		public CHandle<CNode> TargetNode { get; set;}
 
-		[RED("timeToFollow")] 		public CInt32 TimeToFollow { get; set;}
+		[Ordinal(4)] [RED("timeToFollow")] 		public CInt32 TimeToFollow { get; set;}
 
-		[RED("timeStamp")] 		public CFloat TimeStamp { get; set;}
+		[Ordinal(5)] [RED("timeStamp")] 		public CFloat TimeStamp { get; set;}
 
-		[RED("destroyAfter")] 		public CFloat DestroyAfter { get; set;}
+		[Ordinal(6)] [RED("destroyAfter")] 		public CFloat DestroyAfter { get; set;}
 
-		[RED("destroyAfterTimerEnds")] 		public CBool DestroyAfterTimerEnds { get; set;}
+		[Ordinal(7)] [RED("destroyAfterTimerEnds")] 		public CBool DestroyAfterTimerEnds { get; set;}
 
-		[RED("destroyOnDeactivate")] 		public CBool DestroyOnDeactivate { get; set;}
+		[Ordinal(8)] [RED("destroyOnDeactivate")] 		public CBool DestroyOnDeactivate { get; set;}
 
 		public CBTTaskSpawnSlidingEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

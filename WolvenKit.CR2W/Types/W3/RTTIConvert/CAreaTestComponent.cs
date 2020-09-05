@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAreaTestComponent : CComponent
 	{
-		[RED("traceDistance")] 		public CFloat TraceDistance { get; set;}
+		[Ordinal(1)] [RED("traceDistance")] 		public CFloat TraceDistance { get; set;}
 
-		[RED("extents")] 		public Vector Extents { get; set;}
+		[Ordinal(2)] [RED("extents")] 		public Vector Extents { get; set;}
 
-		[RED("searchRadius")] 		public CFloat SearchRadius { get; set;}
+		[Ordinal(3)] [RED("searchRadius")] 		public CFloat SearchRadius { get; set;}
 
 		public CAreaTestComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

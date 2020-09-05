@@ -36,7 +36,7 @@ namespace WolvenKit
         private readonly ModExplorerViewModel vm;
         private bool usecachedNodeList;
 
-        public frmModExplorer(ILoggerService logger)
+        public frmModExplorer()
         {
             // initialize Viewmodel
             vm = MockKernel.Get().GetModExplorerModel();
@@ -63,7 +63,13 @@ namespace WolvenKit
                 if (!this.treeListView.SmallImageList.Images.ContainsKey(extension))
                 {
                     Image smallImage = this.GetSmallIconForFileType(extension);
-                    this.treeListView.SmallImageList.Images.Add(extension, smallImage);
+                    try
+                    {
+                        this.treeListView.SmallImageList.Images.Add(extension, smallImage);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
                 }
                 return extension;
             };
@@ -188,6 +194,8 @@ namespace WolvenKit
             treeListView.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
 
             this.searchBox.BackColor = UIController.GetPalette().ToolWindowCaptionButtonInactiveHovered.Background;
+            this.searchBox.ForeColor = UIController.GetForeColor();
+
         }
 
         private void UpdateTreeView(params string[] nodesToUpdate)
@@ -304,6 +312,17 @@ namespace WolvenKit
                 case "w2cube": return WolvenKit.Properties.Resources.w2cube;
                 case "w2cutscene": return WolvenKit.Properties.Resources.w2cutscene;
 
+                case "xbm": return WolvenKit.Properties.Resources.xbm;
+
+                case "fbx": return WolvenKit.Properties.Resources.fbx;
+                case "tga": return WolvenKit.Properties.Resources.image;
+                case "png": return WolvenKit.Properties.Resources.image;
+                case "dds": return WolvenKit.Properties.Resources.image;
+                case "jpg": return WolvenKit.Properties.Resources.image;
+                case "jpeg": return WolvenKit.Properties.Resources.image;
+                case "xml": return WolvenKit.Properties.Resources.xml;
+                case "apb": return WolvenKit.Properties.Resources.apb;
+
                 case closedDirImageKey: return WolvenKit.Properties.Resources.FolderClosed_16x;
                 case openDirImageKey: return WolvenKit.Properties.Resources.FolderOpened_16x;
                 default: return WolvenKit.Properties.Resources.BlankFile_16x;
@@ -345,16 +364,16 @@ namespace WolvenKit
         }
         private void treeListView_CellClick(object sender, CellClickEventArgs e)
         {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject && e.Item != null)
-            {
-                var node = (FileSystemInfo)e.Item.RowObject;
+            //if (treeListView.SelectedObject is FileSystemInfo selectedobject && e.Item != null)
+            //{
+            //    var node = (FileSystemInfo)e.Item.RowObject;
 
-                if (e.ClickCount == 1)
-                {
-                    if (!selectedobject.IsDirectory())
-                        RequestFileOpen?.Invoke(this, new RequestFileArgs { File = node.FullName, Inspect = true });
-                }
-            }
+            //    if (e.ClickCount == 1)
+            //    {
+            //        if (!selectedobject.IsDirectory())
+            //            RequestFileOpen?.Invoke(this, new RequestFileArgs { File = node.FullName, Inspect = true });
+            //    }
+            //}
         }
 
         private void treeListView_ItemActivate(object sender, EventArgs e)
@@ -388,12 +407,12 @@ namespace WolvenKit
                         || selectedobject.FullName == ActiveMod.DlcDirectory
                         || selectedobject.FullName == ActiveMod.RawDirectory
                         || selectedobject.FullName == ActiveMod.RadishDirectory
-                        || selectedobject.FullName == ActiveMod.ModTextureCacheDirectory
+                        //|| selectedobject.FullName == ActiveMod.ModTextureCacheDirectory
                         || selectedobject.FullName == ActiveMod.ModUncookedDirectory
                         || selectedobject.FullName == ActiveMod.ModCookedDirectory
                         || selectedobject.FullName == ActiveMod.DlcCookedDirectory
                         || selectedobject.FullName == ActiveMod.DlcUncookedDirectory
-                        || selectedobject.FullName == ActiveMod.DlcTextureCacheDirectory
+                        //|| selectedobject.FullName == ActiveMod.DlcTextureCacheDirectory
                         ;
 
                 createW2animsToolStripMenuItem.Enabled = !isToplevelDir;
@@ -473,6 +492,11 @@ namespace WolvenKit
                     if (s.StartsWith("Mod\\Uncooked"))
                     {
                         s = s.Substring("Mod\\Uncooked".Length);
+                        s = $"Mod\\Bundle{s}";
+                    }
+                    if (s.StartsWith("Mod\\Cooked"))
+                    {
+                        s = s.Substring("Mod\\Cooked".Length);
                         s = $"Mod\\Bundle{s}";
                     }
 
@@ -610,7 +634,7 @@ namespace WolvenKit
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
                 var settings = new frmAnims(selectedobject.FullName,
-                                        ActiveMod.FileDirectory + "\\" + "Mod\\Bundle\\characters\\base_entities\\woman_base\\woman_base.w2rig");
+                                        Path.Combine(ActiveMod.ModCookedDirectory, "characters\\base_entities\\woman_base\\woman_base.w2rig"));
                 settings.ShowDialog();
             }
         }
@@ -619,7 +643,7 @@ namespace WolvenKit
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
                 var settings = new frmAnims(selectedobject.FullName,
-                                        ActiveMod.FileDirectory + "\\" + "Mod\\Bundle\\characters\\base_entities\\woman_base\\woman_base.w2rig");
+                                        Path.Combine(ActiveMod.ModCookedDirectory, "characters\\base_entities\\woman_base\\woman_base.w2rig"));
                 settings.ShowDialog();
             }
         }
@@ -669,11 +693,6 @@ namespace WolvenKit
             }
         }
         private async void exportW2meshToFbxToolStripMenuItem_Click(object sender, EventArgs e) => vm.ExportMeshCommand.SafeExecute();
-        
-        private async void dumpWccliteXMLToolStripMenuItem_Click(object sender, EventArgs e) => vm.DumpWccliteXMLCommand.SafeExecute();
-
-        private async void dumpWkitXMLToolStripMenuItem_Click(object sender, EventArgs e) => vm.DumpWkitXMLCommand.SafeExecute();
-
 
         private void fastRenderToolStripMenuItem_Click(object sender, EventArgs e)
         {

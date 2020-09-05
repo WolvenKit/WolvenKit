@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphDampVectorValueNode : CBehaviorGraphVectorValueNode
 	{
-		[RED("increaseSpeed")] 		public Vector IncreaseSpeed { get; set;}
+		[Ordinal(1)] [RED("increaseSpeed")] 		public Vector IncreaseSpeed { get; set;}
 
-		[RED("decreaseSpeed")] 		public Vector DecreaseSpeed { get; set;}
+		[Ordinal(2)] [RED("decreaseSpeed")] 		public Vector DecreaseSpeed { get; set;}
 
-		[RED("absolute")] 		public CBool Absolute { get; set;}
+		[Ordinal(3)] [RED("absolute")] 		public CBool Absolute { get; set;}
 
-		[RED("cachedInputNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedInputNode { get; set;}
+		[Ordinal(4)] [RED("cachedInputNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedInputNode { get; set;}
 
-		[RED("cachedIncSpeedNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedIncSpeedNode { get; set;}
+		[Ordinal(5)] [RED("cachedIncSpeedNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedIncSpeedNode { get; set;}
 
-		[RED("cachedDecSpeedNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedDecSpeedNode { get; set;}
+		[Ordinal(6)] [RED("cachedDecSpeedNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedDecSpeedNode { get; set;}
 
 		public CBehaviorGraphDampVectorValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

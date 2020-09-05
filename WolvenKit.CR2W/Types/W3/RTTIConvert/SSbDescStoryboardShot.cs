@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,27 +11,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSbDescStoryboardShot : CVariable
 	{
-		[RED("shotId")] 		public CString ShotId { get; set;}
+		[Ordinal(1)] [RED("shotId")] 		public CString ShotId { get; set;}
 
-		[RED("infoShotname")] 		public CString InfoShotname { get; set;}
+		[Ordinal(2)] [RED("infoShotname")] 		public CString InfoShotname { get; set;}
 
-		[RED("camIdChange")] 		public CString CamIdChange { get; set;}
+		[Ordinal(3)] [RED("camIdChange")] 		public CString CamIdChange { get; set;}
 
-		[RED("actorPose", 2,0)] 		public CArray<SSbDescEventIdlePose> ActorPose { get; set;}
+		[Ordinal(4)] [RED("actorPose", 2,0)] 		public CArray<SSbDescEventIdlePose> ActorPose { get; set;}
 
-		[RED("actorAnim", 2,0)] 		public CArray<SSbDescEventAnim> ActorAnim { get; set;}
+		[Ordinal(5)] [RED("actorAnim", 2,0)] 		public CArray<SSbDescEventAnim> ActorAnim { get; set;}
 
-		[RED("actorMimic", 2,0)] 		public CArray<SSbDescEventAnim> ActorMimic { get; set;}
+		[Ordinal(6)] [RED("actorMimic", 2,0)] 		public CArray<SSbDescEventAnim> ActorMimic { get; set;}
 
-		[RED("actorLookAt", 2,0)] 		public CArray<SSbDescEventLookAt> ActorLookAt { get; set;}
+		[Ordinal(7)] [RED("actorLookAt", 2,0)] 		public CArray<SSbDescEventLookAt> ActorLookAt { get; set;}
 
-		[RED("actorPlacement", 2,0)] 		public CArray<SSbDescEventPlacement> ActorPlacement { get; set;}
+		[Ordinal(8)] [RED("actorPlacement", 2,0)] 		public CArray<SSbDescEventPlacement> ActorPlacement { get; set;}
 
-		[RED("actorVisibility", 2,0)] 		public CArray<SSbDescEventVisibility> ActorVisibility { get; set;}
+		[Ordinal(9)] [RED("actorVisibility", 2,0)] 		public CArray<SSbDescEventVisibility> ActorVisibility { get; set;}
 
-		[RED("itemPlacement", 2,0)] 		public CArray<SSbDescEventPlacement> ItemPlacement { get; set;}
+		[Ordinal(10)] [RED("itemPlacement", 2,0)] 		public CArray<SSbDescEventPlacement> ItemPlacement { get; set;}
 
-		[RED("itemVisibility", 2,0)] 		public CArray<SSbDescEventVisibility> ItemVisibility { get; set;}
+		[Ordinal(11)] [RED("itemVisibility", 2,0)] 		public CArray<SSbDescEventVisibility> ItemVisibility { get; set;}
 
 		public SSbDescStoryboardShot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

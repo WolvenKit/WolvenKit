@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneSystem : IGameSystem
 	{
-		[RED("activeScenes", 2,0)] 		public CArray<CHandle<CStoryScenePlayer>> ActiveScenes { get; set;}
+		[Ordinal(1)] [RED("activeScenes", 2,0)] 		public CArray<CHandle<CStoryScenePlayer>> ActiveScenes { get; set;}
 
-		[RED("actorMap")] 		public CPtr<CStorySceneActorMap> ActorMap { get; set;}
+		[Ordinal(2)] [RED("actorMap")] 		public CPtr<CStorySceneActorMap> ActorMap { get; set;}
 
 		public CStorySceneSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

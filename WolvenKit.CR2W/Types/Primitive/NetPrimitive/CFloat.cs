@@ -30,6 +30,10 @@ namespace WolvenKit.CR2W.Types
             {
                 this.val = (float) val;
             }
+            else if (val is CFloat cvar)
+            {
+                this.val = cvar.val;
+            }
 
             return this;
         }

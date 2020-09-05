@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorConstraintVectorObject : IBehaviorConstraintObject
 	{
-		[RED("cachedTargetPositionNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetPositionNode { get; set;}
+		[Ordinal(1)] [RED("cachedTargetPositionNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetPositionNode { get; set;}
 
-		[RED("cachedTargetRotationNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetRotationNode { get; set;}
+		[Ordinal(2)] [RED("cachedTargetRotationNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetRotationNode { get; set;}
 
 		public CBehaviorConstraintVectorObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMimicGainNode : CBehaviorGraphBaseMimicNode
 	{
-		[RED("gain")] 		public CFloat Gain { get; set;}
+		[Ordinal(1)] [RED("gain")] 		public CFloat Gain { get; set;}
 
-		[RED("min")] 		public CFloat Min { get; set;}
+		[Ordinal(2)] [RED("min")] 		public CFloat Min { get; set;}
 
-		[RED("max")] 		public CFloat Max { get; set;}
+		[Ordinal(3)] [RED("max")] 		public CFloat Max { get; set;}
 
-		[RED("cachedGainValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedGainValueNode { get; set;}
+		[Ordinal(4)] [RED("cachedGainValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedGainValueNode { get; set;}
 
 		public CBehaviorGraphMimicGainNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

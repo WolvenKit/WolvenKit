@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestLayersHiderBlock : CQuestGraphBlock
 	{
-		[RED("world")] 		public CString World { get; set;}
+		[Ordinal(1)] [RED("world")] 		public CString World { get; set;}
 
-		[RED("layersToShow", 2,0)] 		public CArray<CString> LayersToShow { get; set;}
+		[Ordinal(2)] [RED("layersToShow", 2,0)] 		public CArray<CString> LayersToShow { get; set;}
 
-		[RED("layersToHide", 2,0)] 		public CArray<CString> LayersToHide { get; set;}
+		[Ordinal(3)] [RED("layersToHide", 2,0)] 		public CArray<CString> LayersToHide { get; set;}
 
-		[RED("syncOperation")] 		public CBool SyncOperation { get; set;}
+		[Ordinal(4)] [RED("syncOperation")] 		public CBool SyncOperation { get; set;}
 
-		[RED("purgeSavedData")] 		public CBool PurgeSavedData { get; set;}
+		[Ordinal(5)] [RED("purgeSavedData")] 		public CBool PurgeSavedData { get; set;}
 
 		public CQuestLayersHiderBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,27 +11,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3AbilityManager : IScriptable
 	{
-		[RED("statPoints", 2,0)] 		public CArray<SBaseStat> StatPoints { get; set;}
+		[Ordinal(1)] [RED("statPoints", 2,0)] 		public CArray<SBaseStat> StatPoints { get; set;}
 
-		[RED("resistStats", 2,0)] 		public CArray<SResistanceValue> ResistStats { get; set;}
+		[Ordinal(2)] [RED("resistStats", 2,0)] 		public CArray<SResistanceValue> ResistStats { get; set;}
 
-		[RED("blockedAbilities", 2,0)] 		public CArray<SBlockedAbility> BlockedAbilities { get; set;}
+		[Ordinal(3)] [RED("blockedAbilities", 2,0)] 		public CArray<SBlockedAbility> BlockedAbilities { get; set;}
 
-		[RED("owner")] 		public CHandle<CActor> Owner { get; set;}
+		[Ordinal(4)] [RED("owner")] 		public CHandle<CActor> Owner { get; set;}
 
-		[RED("charStats")] 		public CHandle<CCharacterStats> CharStats { get; set;}
+		[Ordinal(5)] [RED("charStats")] 		public CHandle<CCharacterStats> CharStats { get; set;}
 
-		[RED("usedDifficultyMode")] 		public CEnum<EDifficultyMode> UsedDifficultyMode { get; set;}
+		[Ordinal(6)] [RED("usedDifficultyMode")] 		public CEnum<EDifficultyMode> UsedDifficultyMode { get; set;}
 
-		[RED("usedHealthType")] 		public CEnum<EBaseCharacterStats> UsedHealthType { get; set;}
+		[Ordinal(7)] [RED("usedHealthType")] 		public CEnum<EBaseCharacterStats> UsedHealthType { get; set;}
 
-		[RED("difficultyAbilities", 2,0)] 		public CArray<CArray<CName>> DifficultyAbilities { get; set;}
+		[Ordinal(8)] [RED("difficultyAbilities", 2,0)] 		public CArray<CArray<CName>> DifficultyAbilities { get; set;}
 
-		[RED("ignoresDifficultySettings")] 		public CBool IgnoresDifficultySettings { get; set;}
+		[Ordinal(9)] [RED("ignoresDifficultySettings")] 		public CBool IgnoresDifficultySettings { get; set;}
 
-		[RED("overhealBonus")] 		public CFloat OverhealBonus { get; set;}
+		[Ordinal(10)] [RED("overhealBonus")] 		public CFloat OverhealBonus { get; set;}
 
-		[RED("isInitialized")] 		public CBool IsInitialized { get; set;}
+		[Ordinal(11)] [RED("isInitialized")] 		public CBool IsInitialized { get; set;}
 
 		public W3AbilityManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

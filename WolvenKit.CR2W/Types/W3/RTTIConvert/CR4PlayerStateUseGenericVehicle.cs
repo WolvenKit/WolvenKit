@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PlayerStateUseGenericVehicle : CPlayerStateUseVehicle
 	{
-		[RED("vehicle")] 		public CHandle<CVehicleComponent> Vehicle { get; set;}
+		[Ordinal(1)] [RED("vehicle")] 		public CHandle<CVehicleComponent> Vehicle { get; set;}
 
-		[RED("camera")] 		public CHandle<CCustomCamera> Camera { get; set;}
+		[Ordinal(2)] [RED("camera")] 		public CHandle<CCustomCamera> Camera { get; set;}
 
-		[RED("signSlotNames", 2,0)] 		public CArray<CName> SignSlotNames { get; set;}
+		[Ordinal(3)] [RED("signSlotNames", 2,0)] 		public CArray<CName> SignSlotNames { get; set;}
 
-		[RED("fovVel")] 		public CFloat FovVel { get; set;}
+		[Ordinal(4)] [RED("fovVel")] 		public CFloat FovVel { get; set;}
 
 		public CR4PlayerStateUseGenericVehicle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

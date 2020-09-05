@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,23 +11,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFlightIdleAroundTargets : IAIFlightIdleTree
 	{
-		[RED("flightTargetTag")] 		public CName FlightTargetTag { get; set;}
+		[Ordinal(1)] [RED("flightTargetTag")] 		public CName FlightTargetTag { get; set;}
 
-		[RED("flightAroundClosest")] 		public CBool FlightAroundClosest { get; set;}
+		[Ordinal(2)] [RED("flightAroundClosest")] 		public CBool FlightAroundClosest { get; set;}
 
-		[RED("flightAroundReselect")] 		public CBool FlightAroundReselect { get; set;}
+		[Ordinal(3)] [RED("flightAroundReselect")] 		public CBool FlightAroundReselect { get; set;}
 
-		[RED("flyAroundReselectDurationMin")] 		public CFloat FlyAroundReselectDurationMin { get; set;}
+		[Ordinal(4)] [RED("flyAroundReselectDurationMin")] 		public CFloat FlyAroundReselectDurationMin { get; set;}
 
-		[RED("flyAroundReselectDurationMax")] 		public CFloat FlyAroundReselectDurationMax { get; set;}
+		[Ordinal(5)] [RED("flyAroundReselectDurationMax")] 		public CFloat FlyAroundReselectDurationMax { get; set;}
 
-		[RED("idleFlightRadiusMin")] 		public CFloat IdleFlightRadiusMin { get; set;}
+		[Ordinal(6)] [RED("idleFlightRadiusMin")] 		public CFloat IdleFlightRadiusMin { get; set;}
 
-		[RED("idleFlightRadiusMax")] 		public CFloat IdleFlightRadiusMax { get; set;}
+		[Ordinal(7)] [RED("idleFlightRadiusMax")] 		public CFloat IdleFlightRadiusMax { get; set;}
 
-		[RED("idleFlightHeightMin")] 		public CFloat IdleFlightHeightMin { get; set;}
+		[Ordinal(8)] [RED("idleFlightHeightMin")] 		public CFloat IdleFlightHeightMin { get; set;}
 
-		[RED("idleFlightHeightMax")] 		public CFloat IdleFlightHeightMax { get; set;}
+		[Ordinal(9)] [RED("idleFlightHeightMax")] 		public CFloat IdleFlightHeightMax { get; set;}
 
 		public CAIFlightIdleAroundTargets(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

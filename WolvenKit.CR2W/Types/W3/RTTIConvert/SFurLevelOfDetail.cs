@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurLevelOfDetail : CVariable
 	{
-		[RED("enableLOD")] 		public CBool EnableLOD { get; set;}
+		[Ordinal(1)] [RED("enableLOD")] 		public CBool EnableLOD { get; set;}
 
-		[RED("culling")] 		public SFurCulling Culling { get; set;}
+		[Ordinal(2)] [RED("culling")] 		public SFurCulling Culling { get; set;}
 
-		[RED("distanceLOD")] 		public SFurDistanceLOD DistanceLOD { get; set;}
+		[Ordinal(3)] [RED("distanceLOD")] 		public SFurDistanceLOD DistanceLOD { get; set;}
 
-		[RED("detailLOD")] 		public SFurDetailLOD DetailLOD { get; set;}
+		[Ordinal(4)] [RED("detailLOD")] 		public SFurDetailLOD DetailLOD { get; set;}
 
-		[RED("priority")] 		public CUInt32 Priority { get; set;}
+		[Ordinal(5)] [RED("priority")] 		public CUInt32 Priority { get; set;}
 
 		public SFurLevelOfDetail(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

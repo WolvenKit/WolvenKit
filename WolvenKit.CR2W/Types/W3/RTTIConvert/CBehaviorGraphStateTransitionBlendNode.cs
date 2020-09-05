@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphStateTransitionBlendNode : CBehaviorGraphStateTransitionNode
 	{
-		[RED("transitionTime")] 		public CFloat TransitionTime { get; set;}
+		[Ordinal(1)] [RED("transitionTime")] 		public CFloat TransitionTime { get; set;}
 
-		[RED("synchronize")] 		public CBool Synchronize { get; set;}
+		[Ordinal(2)] [RED("synchronize")] 		public CBool Synchronize { get; set;}
 
-		[RED("syncMethod")] 		public CPtr<IBehaviorSyncMethod> SyncMethod { get; set;}
+		[Ordinal(3)] [RED("syncMethod")] 		public CPtr<IBehaviorSyncMethod> SyncMethod { get; set;}
 
-		[RED("motionBlendType")] 		public CEnum<EBehaviorTransitionBlendMotion> MotionBlendType { get; set;}
+		[Ordinal(4)] [RED("motionBlendType")] 		public CEnum<EBehaviorTransitionBlendMotion> MotionBlendType { get; set;}
 
 		public CBehaviorGraphStateTransitionBlendNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

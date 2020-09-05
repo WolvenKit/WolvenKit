@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskForceFinisher : IBehTreeTask
 	{
-		[RED("belowHealthPercent")] 		public CFloat BelowHealthPercent { get; set;}
+		[Ordinal(1)] [RED("belowHealthPercent")] 		public CFloat BelowHealthPercent { get; set;}
 
-		[RED("whenAlone")] 		public CBool WhenAlone { get; set;}
+		[Ordinal(2)] [RED("whenAlone")] 		public CBool WhenAlone { get; set;}
 
-		[RED("leftStanceFinisherAnimName")] 		public CName LeftStanceFinisherAnimName { get; set;}
+		[Ordinal(3)] [RED("leftStanceFinisherAnimName")] 		public CName LeftStanceFinisherAnimName { get; set;}
 
-		[RED("rightStanceFinisherAnimName")] 		public CName RightStanceFinisherAnimName { get; set;}
+		[Ordinal(4)] [RED("rightStanceFinisherAnimName")] 		public CName RightStanceFinisherAnimName { get; set;}
 
-		[RED("hasFinisherDLC")] 		public CBool HasFinisherDLC { get; set;}
+		[Ordinal(5)] [RED("hasFinisherDLC")] 		public CBool HasFinisherDLC { get; set;}
 
-		[RED("shouldCheckForFinisherDLC")] 		public CBool ShouldCheckForFinisherDLC { get; set;}
+		[Ordinal(6)] [RED("shouldCheckForFinisherDLC")] 		public CBool ShouldCheckForFinisherDLC { get; set;}
 
-		[RED("m_Npc")] 		public CHandle<CNewNPC> M_Npc { get; set;}
+		[Ordinal(7)] [RED("m_Npc")] 		public CHandle<CNewNPC> M_Npc { get; set;}
 
 		public BTTaskForceFinisher(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

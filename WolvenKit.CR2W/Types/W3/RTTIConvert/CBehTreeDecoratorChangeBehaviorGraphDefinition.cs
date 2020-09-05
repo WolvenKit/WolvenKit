@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeDecoratorChangeBehaviorGraphDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("behGraphNameActivate")] 		public CBehTreeValCName BehGraphNameActivate { get; set;}
+		[Ordinal(1)] [RED("behGraphNameActivate")] 		public CBehTreeValCName BehGraphNameActivate { get; set;}
 
-		[RED("behGraphNameDeactivate")] 		public CBehTreeValCName BehGraphNameDeactivate { get; set;}
+		[Ordinal(2)] [RED("behGraphNameDeactivate")] 		public CBehTreeValCName BehGraphNameDeactivate { get; set;}
 
-		[RED("activateIfBehaviorUnavailable")] 		public CBool ActivateIfBehaviorUnavailable { get; set;}
+		[Ordinal(3)] [RED("activateIfBehaviorUnavailable")] 		public CBool ActivateIfBehaviorUnavailable { get; set;}
 
 		public CBehTreeDecoratorChangeBehaviorGraphDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

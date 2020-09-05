@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFocusSoundParam : CGameplayEntityParam
 	{
-		[RED("eventStart")] 		public CName EventStart { get; set;}
+		[Ordinal(1)] [RED("eventStart")] 		public CName EventStart { get; set;}
 
-		[RED("eventStop")] 		public CName EventStop { get; set;}
+		[Ordinal(2)] [RED("eventStop")] 		public CName EventStop { get; set;}
 
-		[RED("hearingAngle")] 		public CFloat HearingAngle { get; set;}
+		[Ordinal(3)] [RED("hearingAngle")] 		public CFloat HearingAngle { get; set;}
 
-		[RED("visualEffectBoneName")] 		public CName VisualEffectBoneName { get; set;}
+		[Ordinal(4)] [RED("visualEffectBoneName")] 		public CName VisualEffectBoneName { get; set;}
 
 		public CFocusSoundParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

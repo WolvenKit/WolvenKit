@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStoryBoardInteractiveCamera : CStoryBoardShotCamera
 	{
-		[RED("isInteractiveMode")] 		public CBool IsInteractiveMode { get; set;}
+		[Ordinal(1)] [RED("isInteractiveMode")] 		public CBool IsInteractiveMode { get; set;}
 
-		[RED("stepMoveSize")] 		public CFloat StepMoveSize { get; set;}
+		[Ordinal(2)] [RED("stepMoveSize")] 		public CFloat StepMoveSize { get; set;}
 
-		[RED("stepRotSize")] 		public CFloat StepRotSize { get; set;}
+		[Ordinal(3)] [RED("stepRotSize")] 		public CFloat StepRotSize { get; set;}
 
-		[RED("defaultDofCenterRadius")] 		public CFloat DefaultDofCenterRadius { get; set;}
+		[Ordinal(4)] [RED("defaultDofCenterRadius")] 		public CFloat DefaultDofCenterRadius { get; set;}
 
 		public CStoryBoardInteractiveCamera(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

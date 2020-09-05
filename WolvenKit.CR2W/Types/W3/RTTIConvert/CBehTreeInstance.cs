@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeInstance : CObject
 	{
-		[RED("dependentObjects", 2,0)] 		public CArray<CHandle<IScriptable>> DependentObjects { get; set;}
+		[Ordinal(1)] [RED("dependentObjects", 2,0)] 		public CArray<CHandle<IScriptable>> DependentObjects { get; set;}
 
-		[RED("onReattachCallback", 2,0)] 		public CArray<CHandle<IBehTreeMetanodeOnSpawnDefinition>> OnReattachCallback { get; set;}
+		[Ordinal(2)] [RED("onReattachCallback", 2,0)] 		public CArray<CHandle<IBehTreeMetanodeOnSpawnDefinition>> OnReattachCallback { get; set;}
 
 		public CBehTreeInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

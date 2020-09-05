@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,21 +11,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SReactionEventData : CVariable
 	{
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(1)] [RED("eventName")] 		public CName EventName { get; set;}
 
-		[RED("lifetime")] 		public CFloat Lifetime { get; set;}
+		[Ordinal(2)] [RED("lifetime")] 		public CFloat Lifetime { get; set;}
 
-		[RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(3)] [RED("distance")] 		public CFloat Distance { get; set;}
 
-		[RED("broadcastInterval")] 		public CFloat BroadcastInterval { get; set;}
+		[Ordinal(4)] [RED("broadcastInterval")] 		public CFloat BroadcastInterval { get; set;}
 
-		[RED("recipientCount")] 		public CInt32 RecipientCount { get; set;}
+		[Ordinal(5)] [RED("recipientCount")] 		public CInt32 RecipientCount { get; set;}
 
-		[RED("cooldown")] 		public CFloat Cooldown { get; set;}
+		[Ordinal(6)] [RED("cooldown")] 		public CFloat Cooldown { get; set;}
 
-		[RED("chanceOfSucceeding")] 		public CFloat ChanceOfSucceeding { get; set;}
+		[Ordinal(7)] [RED("chanceOfSucceeding")] 		public CFloat ChanceOfSucceeding { get; set;}
 
-		[RED("lastBroadcastTime")] 		public CFloat LastBroadcastTime { get; set;}
+		[Ordinal(8)] [RED("lastBroadcastTime")] 		public CFloat LastBroadcastTime { get; set;}
 
 		public SReactionEventData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

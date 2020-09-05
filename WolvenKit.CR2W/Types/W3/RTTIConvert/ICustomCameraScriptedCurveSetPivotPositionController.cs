@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ICustomCameraScriptedCurveSetPivotPositionController : ICustomCameraScriptedPivotPositionController
 	{
-		[RED("curveSet", 2,0)] 		public CArray<CPtr<CCurve>> CurveSet { get; set;}
+		[Ordinal(1)] [RED("curveSet", 2,0)] 		public CArray<CPtr<CCurve>> CurveSet { get; set;}
 
-		[RED("curveNames", 2,0)] 		public CArray<CName> CurveNames { get; set;}
+		[Ordinal(2)] [RED("curveNames", 2,0)] 		public CArray<CName> CurveNames { get; set;}
 
 		public ICustomCameraScriptedCurveSetPivotPositionController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

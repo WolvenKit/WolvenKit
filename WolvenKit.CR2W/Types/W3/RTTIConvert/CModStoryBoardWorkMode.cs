@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardWorkMode : CObject
 	{
-		[RED("workMode")] 		public CName WorkMode { get; set;}
+		[Ordinal(1)] [RED("workMode")] 		public CName WorkMode { get; set;}
 
-		[RED("workContext")] 		public CName WorkContext { get; set;}
+		[Ordinal(2)] [RED("workContext")] 		public CName WorkContext { get; set;}
 
-		[RED("generalHelpKey")] 		public CString GeneralHelpKey { get; set;}
+		[Ordinal(3)] [RED("generalHelpKey")] 		public CString GeneralHelpKey { get; set;}
 
-		[RED("shot")] 		public CHandle<CModStoryBoardShot> Shot { get; set;}
+		[Ordinal(4)] [RED("shot")] 		public CHandle<CModStoryBoardShot> Shot { get; set;}
 
-		[RED("log")] 		public CHandle<CModLogger> Log { get; set;}
+		[Ordinal(5)] [RED("log")] 		public CHandle<CModLogger> Log { get; set;}
 
-		[RED("parentCallback")] 		public CHandle<CModSbUiParentCallback> ParentCallback { get; set;}
+		[Ordinal(6)] [RED("parentCallback")] 		public CHandle<CModSbUiParentCallback> ParentCallback { get; set;}
 
 		public CModStoryBoardWorkMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

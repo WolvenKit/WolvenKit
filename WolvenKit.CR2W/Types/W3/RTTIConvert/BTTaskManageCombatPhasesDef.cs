@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskManageCombatPhasesDef : IBehTreeTaskDefinition
 	{
-		[RED("rangedCombatPhaseParameters")] 		public SCombatPhaseParameters RangedCombatPhaseParameters { get; set;}
+		[Ordinal(1)] [RED("rangedCombatPhaseParameters")] 		public SCombatPhaseParameters RangedCombatPhaseParameters { get; set;}
 
-		[RED("closeCombatPhaseParameters")] 		public SCombatPhaseParameters CloseCombatPhaseParameters { get; set;}
+		[Ordinal(2)] [RED("closeCombatPhaseParameters")] 		public SCombatPhaseParameters CloseCombatPhaseParameters { get; set;}
 
-		[RED("nonCombatPhaseParameters")] 		public SCombatPhaseParameters NonCombatPhaseParameters { get; set;}
+		[Ordinal(3)] [RED("nonCombatPhaseParameters")] 		public SCombatPhaseParameters NonCombatPhaseParameters { get; set;}
 
-		[RED("setBehVariableName")] 		public CName SetBehVariableName { get; set;}
+		[Ordinal(4)] [RED("setBehVariableName")] 		public CName SetBehVariableName { get; set;}
 
 		public BTTaskManageCombatPhasesDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

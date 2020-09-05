@@ -940,7 +940,7 @@ namespace WolvenKit.CR2W
                     }
 
                     // add all normal REDProperties
-                    returnedVariables.AddRange(cvar.GetExistingVariables(false, true)
+                    returnedVariables.AddRange(cvar.GetExistingVariables(false)
                         .Select(_ => new SNameArg(EStringTableMod.None, _)));
 
                     // for all buffers
@@ -1087,7 +1087,7 @@ namespace WolvenKit.CR2W
                     return;
 
                 // these CVariables have special requirements, for all others:  switch StringtableMod
-                if (!(var is CBufferVLQ<CName> ||
+                if (!(var is CBufferVLQInt32<CName> ||
                     var is IdHandle ||
                     var is SEntityBufferType1 ||
                     var is SUmbraSceneData)
@@ -1110,13 +1110,13 @@ namespace WolvenKit.CR2W
                         }
                     }
                 }
-                else if (var is CFlags)
-                {
-                    foreach (var flag in (var as CFlags).flags)
-                    {
-                        AddUniqueToTable(flag.Value);
-                    }
-                }
+                //else if (var is CFlags)
+                //{
+                //    foreach (var flag in (var as CFlags).flags)
+                //    {
+                //        AddUniqueToTable(flag.Value);
+                //    }
+                //}
                 else if (var is TagList)
                 {
                     foreach (var tag in (var as TagList).tags)
@@ -1172,9 +1172,9 @@ namespace WolvenKit.CR2W
                     }
                     
                 }
-                else if (var is CBufferVLQ<CName>)
+                else if (var is CBufferVLQInt32<CName>)
                 {
-                    foreach (var element in (var as CBufferVLQ<CName>).elements)
+                    foreach (var element in (var as CBufferVLQInt32<CName>).elements)
                     {
                         if (element is CName )
                         {
@@ -1217,7 +1217,10 @@ namespace WolvenKit.CR2W
                 }
                 else if (var is IEnumAccessor enumAccessor)
                 {
-                    AddUniqueToTable(enumAccessor.Value);
+                    foreach (var enumstring in enumAccessor.Value)
+                    {
+                        AddUniqueToTable(enumstring);
+                    }
                 }
                 else
                 {

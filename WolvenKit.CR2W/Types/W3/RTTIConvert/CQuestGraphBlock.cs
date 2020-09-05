@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestGraphBlock : CGraphBlock
 	{
-		[RED("name")] 		public CString Name { get; set;}
+		[Ordinal(1)] [RED("name")] 		public CString Name { get; set;}
 
-		[RED("comment")] 		public CString Comment { get; set;}
+		[Ordinal(2)] [RED("comment")] 		public CString Comment { get; set;}
 
-		[RED("forceKeepLoadingScreen")] 		public CBool ForceKeepLoadingScreen { get; set;}
+		[Ordinal(3)] [RED("forceKeepLoadingScreen")] 		public CBool ForceKeepLoadingScreen { get; set;}
 
-		[RED("guid")] 		public CGUID Guid { get; set;}
+		[Ordinal(4)] [RED("guid")] 		public CGUID Guid { get; set;}
 
-		[RED("cachedConnections", 2,0)] 		public CArray<SCachedConnections> CachedConnections { get; set;}
+		[Ordinal(5)] [RED("cachedConnections", 2,0)] 		public CArray<SCachedConnections> CachedConnections { get; set;}
 
-		[RED("hasPatchOutput")] 		public CBool HasPatchOutput { get; set;}
+		[Ordinal(6)] [RED("hasPatchOutput")] 		public CBool HasPatchOutput { get; set;}
 
-		[RED("hasTerminationInput")] 		public CBool HasTerminationInput { get; set;}
+		[Ordinal(7)] [RED("hasTerminationInput")] 		public CBool HasTerminationInput { get; set;}
 
 		public CQuestGraphBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

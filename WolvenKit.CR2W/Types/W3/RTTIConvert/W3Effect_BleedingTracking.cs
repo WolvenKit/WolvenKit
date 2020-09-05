@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_BleedingTracking : W3DamageOverTimeEffect
 	{
-		[RED("bloodTemplate")] 		public CHandle<CEntityTemplate> BloodTemplate { get; set;}
+		[Ordinal(1)] [RED("bloodTemplate")] 		public CHandle<CEntityTemplate> BloodTemplate { get; set;}
 
-		[RED("bloodSpawnTimer")] 		public CFloat BloodSpawnTimer { get; set;}
+		[Ordinal(2)] [RED("bloodSpawnTimer")] 		public CFloat BloodSpawnTimer { get; set;}
 
-		[RED("BLOOD_SPAWN_DELAY_MIN")] 		public CInt32 BLOOD_SPAWN_DELAY_MIN { get; set;}
+		[Ordinal(3)] [RED("BLOOD_SPAWN_DELAY_MIN")] 		public CInt32 BLOOD_SPAWN_DELAY_MIN { get; set;}
 
-		[RED("BLOOD_SPAWN_DELAY_MAX")] 		public CInt32 BLOOD_SPAWN_DELAY_MAX { get; set;}
+		[Ordinal(4)] [RED("BLOOD_SPAWN_DELAY_MAX")] 		public CInt32 BLOOD_SPAWN_DELAY_MAX { get; set;}
 
 		public W3Effect_BleedingTracking(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

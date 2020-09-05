@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCollisionShapeTriMesh : ICollisionShape
 	{
-		[RED("physicalMaterialNames", 94,0)] 		public CArray<CName> PhysicalMaterialNames { get; set;}
+		[Ordinal(1)] [RED("physicalMaterialNames", 94,0)] 		public CArray<CName> PhysicalMaterialNames { get; set;}
 
-		[RED("vertices", 94,0)] 		public CArray<Vector> Vertices { get; set;}
+		[Ordinal(2)] [RED("vertices", 94,0)] 		public CArray<Vector> Vertices { get; set;}
 
-		[RED("triangles", 94,0)] 		public CArray<CUInt16> Triangles { get; set;}
+		[Ordinal(3)] [RED("triangles", 94,0)] 		public CArray<CUInt16> Triangles { get; set;}
 
-		[RED("physicalMaterialIndexes", 94,0)] 		public CArray<CUInt16> PhysicalMaterialIndexes { get; set;}
+		[Ordinal(4)] [RED("physicalMaterialIndexes", 94,0)] 		public CArray<CUInt16> PhysicalMaterialIndexes { get; set;}
 
 		public CCollisionShapeTriMesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

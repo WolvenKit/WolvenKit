@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRiderNotifyHorseAboutMounting : IBehTreeTask
 	{
-		[RED("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
+		[Ordinal(1)] [RED("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
 
-		[RED("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
+		[Ordinal(2)] [RED("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
 
 		public CBTTaskRiderNotifyHorseAboutMounting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

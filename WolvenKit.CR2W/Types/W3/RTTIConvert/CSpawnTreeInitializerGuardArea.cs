@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeInitializerGuardArea : ISpawnTreeInitializerGuardAreaBase
 	{
-		[RED("guardAreaTag")] 		public CName GuardAreaTag { get; set;}
+		[Ordinal(1)] [RED("guardAreaTag")] 		public CName GuardAreaTag { get; set;}
 
-		[RED("pursuitAreaTag")] 		public CName PursuitAreaTag { get; set;}
+		[Ordinal(2)] [RED("pursuitAreaTag")] 		public CName PursuitAreaTag { get; set;}
 
-		[RED("findAreasInEncounter")] 		public CBool FindAreasInEncounter { get; set;}
+		[Ordinal(3)] [RED("findAreasInEncounter")] 		public CBool FindAreasInEncounter { get; set;}
 
 		public CSpawnTreeInitializerGuardArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

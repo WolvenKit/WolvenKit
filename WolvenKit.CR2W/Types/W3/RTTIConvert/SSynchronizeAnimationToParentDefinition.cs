@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSynchronizeAnimationToParentDefinition : CVariable
 	{
-		[RED("Parent animation")] 		public CName Parent_animation { get; set;}
+		[Ordinal(1)] [RED("Parent animation")] 		public CName Parent_animation { get; set;}
 
-		[RED("Play animation")] 		public CName Play_animation { get; set;}
+		[Ordinal(2)] [RED("Play animation")] 		public CName Play_animation { get; set;}
 
 		public SSynchronizeAnimationToParentDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

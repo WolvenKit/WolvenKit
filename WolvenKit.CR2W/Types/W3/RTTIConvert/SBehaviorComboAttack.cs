@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,53 +11,53 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorComboAttack : CVariable
 	{
-		[RED("level")] 		public CInt32 Level { get; set;}
+		[Ordinal(1)] [RED("level")] 		public CInt32 Level { get; set;}
 
-		[RED("type")] 		public CInt32 Type { get; set;}
+		[Ordinal(2)] [RED("type")] 		public CInt32 Type { get; set;}
 
-		[RED("direction")] 		public CEnum<EAttackDirection> Direction { get; set;}
+		[Ordinal(3)] [RED("direction")] 		public CEnum<EAttackDirection> Direction { get; set;}
 
-		[RED("distance")] 		public CEnum<EAttackDistance> Distance { get; set;}
+		[Ordinal(4)] [RED("distance")] 		public CEnum<EAttackDistance> Distance { get; set;}
 
-		[RED("attackTime")] 		public CFloat AttackTime { get; set;}
+		[Ordinal(5)] [RED("attackTime")] 		public CFloat AttackTime { get; set;}
 
-		[RED("parryTime")] 		public CFloat ParryTime { get; set;}
+		[Ordinal(6)] [RED("parryTime")] 		public CFloat ParryTime { get; set;}
 
-		[RED("attackAnimation")] 		public CName AttackAnimation { get; set;}
+		[Ordinal(7)] [RED("attackAnimation")] 		public CName AttackAnimation { get; set;}
 
-		[RED("parryAnimation")] 		public CName ParryAnimation { get; set;}
+		[Ordinal(8)] [RED("parryAnimation")] 		public CName ParryAnimation { get; set;}
 
-		[RED("attackHitTime")] 		public CFloat AttackHitTime { get; set;}
+		[Ordinal(9)] [RED("attackHitTime")] 		public CFloat AttackHitTime { get; set;}
 
-		[RED("parryHitTime")] 		public CFloat ParryHitTime { get; set;}
+		[Ordinal(10)] [RED("parryHitTime")] 		public CFloat ParryHitTime { get; set;}
 
-		[RED("attackHitLevel")] 		public CFloat AttackHitLevel { get; set;}
+		[Ordinal(11)] [RED("attackHitLevel")] 		public CFloat AttackHitLevel { get; set;}
 
-		[RED("parryHitLevel")] 		public CFloat ParryHitLevel { get; set;}
+		[Ordinal(12)] [RED("parryHitLevel")] 		public CFloat ParryHitLevel { get; set;}
 
-		[RED("attackHitTime1")] 		public CFloat AttackHitTime1 { get; set;}
+		[Ordinal(13)] [RED("attackHitTime1")] 		public CFloat AttackHitTime1 { get; set;}
 
-		[RED("parryHitTime1")] 		public CFloat ParryHitTime1 { get; set;}
+		[Ordinal(14)] [RED("parryHitTime1")] 		public CFloat ParryHitTime1 { get; set;}
 
-		[RED("attackHitLevel1")] 		public CFloat AttackHitLevel1 { get; set;}
+		[Ordinal(15)] [RED("attackHitLevel1")] 		public CFloat AttackHitLevel1 { get; set;}
 
-		[RED("parryHitLevel1")] 		public CFloat ParryHitLevel1 { get; set;}
+		[Ordinal(16)] [RED("parryHitLevel1")] 		public CFloat ParryHitLevel1 { get; set;}
 
-		[RED("attackHitTime2")] 		public CFloat AttackHitTime2 { get; set;}
+		[Ordinal(17)] [RED("attackHitTime2")] 		public CFloat AttackHitTime2 { get; set;}
 
-		[RED("parryHitTime2")] 		public CFloat ParryHitTime2 { get; set;}
+		[Ordinal(18)] [RED("parryHitTime2")] 		public CFloat ParryHitTime2 { get; set;}
 
-		[RED("attackHitLevel2")] 		public CFloat AttackHitLevel2 { get; set;}
+		[Ordinal(19)] [RED("attackHitLevel2")] 		public CFloat AttackHitLevel2 { get; set;}
 
-		[RED("parryHitLevel2")] 		public CFloat ParryHitLevel2 { get; set;}
+		[Ordinal(20)] [RED("parryHitLevel2")] 		public CFloat ParryHitLevel2 { get; set;}
 
-		[RED("attackHitTime3")] 		public CFloat AttackHitTime3 { get; set;}
+		[Ordinal(21)] [RED("attackHitTime3")] 		public CFloat AttackHitTime3 { get; set;}
 
-		[RED("parryHitTime3")] 		public CFloat ParryHitTime3 { get; set;}
+		[Ordinal(22)] [RED("parryHitTime3")] 		public CFloat ParryHitTime3 { get; set;}
 
-		[RED("attackHitLevel3")] 		public CFloat AttackHitLevel3 { get; set;}
+		[Ordinal(23)] [RED("attackHitLevel3")] 		public CFloat AttackHitLevel3 { get; set;}
 
-		[RED("parryHitLevel3")] 		public CFloat ParryHitLevel3 { get; set;}
+		[Ordinal(24)] [RED("parryHitLevel3")] 		public CFloat ParryHitLevel3 { get; set;}
 
 		public SBehaviorComboAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

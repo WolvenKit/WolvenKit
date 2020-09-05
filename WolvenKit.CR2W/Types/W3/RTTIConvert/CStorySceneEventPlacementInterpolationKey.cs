@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventPlacementInterpolationKey : CVariable
 	{
-		[RED("bezierHandles", 6)] 		public CArrayFixedSize<Bezier2dHandle> BezierHandles { get; set;}
+		[Ordinal(1)] [RED("bezierHandles", 6)] 		public CArrayFixedSize<Bezier2dHandle> BezierHandles { get; set;}
 
-		[RED("interpolationTypes", 6)] 		public CArrayFixedSize<CUInt32> InterpolationTypes { get; set;}
+		[Ordinal(2)] [RED("interpolationTypes", 6)] 		public CArrayFixedSize<CUInt32> InterpolationTypes { get; set;}
 
-		[RED("volatile")] 		public CBool Volatile { get; set;}
+		[Ordinal(3)] [RED("volatile")] 		public CBool Volatile { get; set;}
 
 		public CStorySceneEventPlacementInterpolationKey(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

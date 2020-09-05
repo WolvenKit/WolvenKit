@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class STargetSelectionData : CVariable
 	{
-		[RED("sourcePosition")] 		public Vector SourcePosition { get; set;}
+		[Ordinal(1)] [RED("sourcePosition")] 		public Vector SourcePosition { get; set;}
 
-		[RED("headingVector")] 		public Vector HeadingVector { get; set;}
+		[Ordinal(2)] [RED("headingVector")] 		public Vector HeadingVector { get; set;}
 
-		[RED("closeDistance")] 		public CFloat CloseDistance { get; set;}
+		[Ordinal(3)] [RED("closeDistance")] 		public CFloat CloseDistance { get; set;}
 
-		[RED("softLockDistance")] 		public CFloat SoftLockDistance { get; set;}
+		[Ordinal(4)] [RED("softLockDistance")] 		public CFloat SoftLockDistance { get; set;}
 
 		public STargetSelectionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

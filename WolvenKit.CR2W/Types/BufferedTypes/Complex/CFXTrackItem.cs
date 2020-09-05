@@ -5,17 +5,17 @@ using System.Diagnostics;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
-
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
     public partial class CFXTrackItem : CFXBase
     {
 
-        [REDBuffer(true)] public CName buffername { get; set; }
-        [REDBuffer(true)] public CDynamicInt count { get; set; }
-        [REDBuffer(true)] public CUInt8 unk { get; set; }
-        [REDBuffer(true)] public CCompressedBuffer<CBufferUInt16<CFloat>> buffer { get; set; }
+        [Ordinal(1000)] [REDBuffer(true)] public CName buffername { get; set; }
+        [Ordinal(1001)] [REDBuffer(true)] public CDynamicInt count { get; set; }
+        [Ordinal(1002)] [REDBuffer(true)] public CUInt8 unk { get; set; }
+        [Ordinal(1003)] [REDBuffer(true)] public CCompressedBuffer<CBufferUInt16<CFloat>> buffer { get; set; }
 
         public CFXTrackItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

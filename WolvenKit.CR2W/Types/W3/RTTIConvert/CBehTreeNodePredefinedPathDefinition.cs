@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodePredefinedPathDefinition : CBehTreeNodeCustomSteeringDefinition
 	{
-		[RED("pathName")] 		public CBehTreeValCName PathName { get; set;}
+		[Ordinal(1)] [RED("pathName")] 		public CBehTreeValCName PathName { get; set;}
 
-		[RED("upThePath")] 		public CBehTreeValBool UpThePath { get; set;}
+		[Ordinal(2)] [RED("upThePath")] 		public CBehTreeValBool UpThePath { get; set;}
 
-		[RED("pathMargin")] 		public CBehTreeValFloat PathMargin { get; set;}
+		[Ordinal(3)] [RED("pathMargin")] 		public CBehTreeValFloat PathMargin { get; set;}
 
-		[RED("tolerance")] 		public CBehTreeValFloat Tolerance { get; set;}
+		[Ordinal(4)] [RED("tolerance")] 		public CBehTreeValFloat Tolerance { get; set;}
 
-		[RED("arrivalDistance")] 		public CBehTreeValFloat ArrivalDistance { get; set;}
+		[Ordinal(5)] [RED("arrivalDistance")] 		public CBehTreeValFloat ArrivalDistance { get; set;}
 
-		[RED("useExplorations")] 		public CBehTreeValBool UseExplorations { get; set;}
+		[Ordinal(6)] [RED("useExplorations")] 		public CBehTreeValBool UseExplorations { get; set;}
 
 		public CBehTreeNodePredefinedPathDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

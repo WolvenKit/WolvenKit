@@ -78,6 +78,10 @@ namespace WolvenKit.CR2W.Types
             {
                 this.val = (string) val;
             }
+            else if (val is StringAnsi cvar)
+            {
+                this.val = cvar.val;
+            }
             return this;
         }
 

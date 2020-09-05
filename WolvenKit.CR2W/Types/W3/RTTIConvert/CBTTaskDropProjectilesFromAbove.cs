@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,37 +11,37 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskDropProjectilesFromAbove : IBehTreeTask
 	{
-		[RED("resourceName")] 		public CName ResourceName { get; set;}
+		[Ordinal(1)] [RED("resourceName")] 		public CName ResourceName { get; set;}
 
-		[RED("activeOnAnimEvent")] 		public CName ActiveOnAnimEvent { get; set;}
+		[Ordinal(2)] [RED("activeOnAnimEvent")] 		public CName ActiveOnAnimEvent { get; set;}
 
-		[RED("chanceToGuaranteePlayerHit")] 		public CFloat ChanceToGuaranteePlayerHit { get; set;}
+		[Ordinal(3)] [RED("chanceToGuaranteePlayerHit")] 		public CFloat ChanceToGuaranteePlayerHit { get; set;}
 
-		[RED("timeBetweenSpawn")] 		public CFloat TimeBetweenSpawn { get; set;}
+		[Ordinal(4)] [RED("timeBetweenSpawn")] 		public CFloat TimeBetweenSpawn { get; set;}
 
-		[RED("timeBetweenSpawnRandomizationPerc")] 		public CFloat TimeBetweenSpawnRandomizationPerc { get; set;}
+		[Ordinal(5)] [RED("timeBetweenSpawnRandomizationPerc")] 		public CFloat TimeBetweenSpawnRandomizationPerc { get; set;}
 
-		[RED("minDistFromTarget")] 		public CFloat MinDistFromTarget { get; set;}
+		[Ordinal(6)] [RED("minDistFromTarget")] 		public CFloat MinDistFromTarget { get; set;}
 
-		[RED("maxDistFromTarget")] 		public CFloat MaxDistFromTarget { get; set;}
+		[Ordinal(7)] [RED("maxDistFromTarget")] 		public CFloat MaxDistFromTarget { get; set;}
 
-		[RED("minDistFromEachOther")] 		public CFloat MinDistFromEachOther { get; set;}
+		[Ordinal(8)] [RED("minDistFromEachOther")] 		public CFloat MinDistFromEachOther { get; set;}
 
-		[RED("minYOffset")] 		public CFloat MinYOffset { get; set;}
+		[Ordinal(9)] [RED("minYOffset")] 		public CFloat MinYOffset { get; set;}
 
-		[RED("maxYOffset")] 		public CFloat MaxYOffset { get; set;}
+		[Ordinal(10)] [RED("maxYOffset")] 		public CFloat MaxYOffset { get; set;}
 
-		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(11)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
-		[RED("useOwnerAsTarget")] 		public CBool UseOwnerAsTarget { get; set;}
+		[Ordinal(12)] [RED("useOwnerAsTarget")] 		public CBool UseOwnerAsTarget { get; set;}
 
-		[RED("target")] 		public CHandle<CActor> Target { get; set;}
+		[Ordinal(13)] [RED("target")] 		public CHandle<CActor> Target { get; set;}
 
-		[RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(14)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[RED("usedPos", 2,0)] 		public CArray<Vector> UsedPos { get; set;}
+		[Ordinal(15)] [RED("usedPos", 2,0)] 		public CArray<Vector> UsedPos { get; set;}
 
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(16)] [RED("activated")] 		public CBool Activated { get; set;}
 
 		public CBTTaskDropProjectilesFromAbove(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskChangeStanceDef : IBehTreeTaskDefinition
 	{
-		[RED("newStance")] 		public CEnum<ENpcStance> NewStance { get; set;}
+		[Ordinal(1)] [RED("newStance")] 		public CEnum<ENpcStance> NewStance { get; set;}
 
-		[RED("setPrevStanceOnDeactivation")] 		public CBool SetPrevStanceOnDeactivation { get; set;}
+		[Ordinal(2)] [RED("setPrevStanceOnDeactivation")] 		public CBool SetPrevStanceOnDeactivation { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(3)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("changeToFlyOnlyIfAboveGround")] 		public CBool ChangeToFlyOnlyIfAboveGround { get; set;}
+		[Ordinal(4)] [RED("changeToFlyOnlyIfAboveGround")] 		public CBool ChangeToFlyOnlyIfAboveGround { get; set;}
 
 		public CBTTaskChangeStanceDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

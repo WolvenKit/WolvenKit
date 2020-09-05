@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionalChooseBranchDefinition : IBehTreeMetanodeDefinition
 	{
-		[RED("child1")] 		public CPtr<IBehTreeNodeDefinition> Child1 { get; set;}
+		[Ordinal(1)] [RED("child1")] 		public CPtr<IBehTreeNodeDefinition> Child1 { get; set;}
 
-		[RED("child2")] 		public CPtr<IBehTreeNodeDefinition> Child2 { get; set;}
+		[Ordinal(2)] [RED("child2")] 		public CPtr<IBehTreeNodeDefinition> Child2 { get; set;}
 
-		[RED("val")] 		public CBehTreeValBool Val { get; set;}
+		[Ordinal(3)] [RED("val")] 		public CBehTreeValBool Val { get; set;}
 
 		public CBehTreeNodeConditionalChooseBranchDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

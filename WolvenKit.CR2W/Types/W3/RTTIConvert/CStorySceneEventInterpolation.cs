@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventInterpolation : CStorySceneEvent
 	{
-		[RED("keyGuids", 2,0)] 		public CArray<CGUID> KeyGuids { get; set;}
+		[Ordinal(1)] [RED("keyGuids", 2,0)] 		public CArray<CGUID> KeyGuids { get; set;}
 
-		[RED("interpolationMethod")] 		public CEnum<EInterpolationMethod> InterpolationMethod { get; set;}
+		[Ordinal(2)] [RED("interpolationMethod")] 		public CEnum<EInterpolationMethod> InterpolationMethod { get; set;}
 
-		[RED("easeInStyle")] 		public CEnum<EInterpolationEasingStyle> EaseInStyle { get; set;}
+		[Ordinal(3)] [RED("easeInStyle")] 		public CEnum<EInterpolationEasingStyle> EaseInStyle { get; set;}
 
-		[RED("easeInParameter")] 		public CFloat EaseInParameter { get; set;}
+		[Ordinal(4)] [RED("easeInParameter")] 		public CFloat EaseInParameter { get; set;}
 
-		[RED("easeOutStyle")] 		public CEnum<EInterpolationEasingStyle> EaseOutStyle { get; set;}
+		[Ordinal(5)] [RED("easeOutStyle")] 		public CEnum<EInterpolationEasingStyle> EaseOutStyle { get; set;}
 
-		[RED("easeOutParameter")] 		public CFloat EaseOutParameter { get; set;}
+		[Ordinal(6)] [RED("easeOutParameter")] 		public CFloat EaseOutParameter { get; set;}
 
 		public CStorySceneEventInterpolation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWetnessComponent : CComponent
 	{
-		[RED("blendInFromOcean")] 		public CFloat BlendInFromOcean { get; set;}
+		[Ordinal(1)] [RED("blendInFromOcean")] 		public CFloat BlendInFromOcean { get; set;}
 
-		[RED("blendInFromRain")] 		public CFloat BlendInFromRain { get; set;}
+		[Ordinal(2)] [RED("blendInFromRain")] 		public CFloat BlendInFromRain { get; set;}
 
-		[RED("blendOutFromOcean")] 		public CFloat BlendOutFromOcean { get; set;}
+		[Ordinal(3)] [RED("blendOutFromOcean")] 		public CFloat BlendOutFromOcean { get; set;}
 
-		[RED("blendOutFromRain")] 		public CFloat BlendOutFromRain { get; set;}
+		[Ordinal(4)] [RED("blendOutFromRain")] 		public CFloat BlendOutFromRain { get; set;}
 
 		public CWetnessComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

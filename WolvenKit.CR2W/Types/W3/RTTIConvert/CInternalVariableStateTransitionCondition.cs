@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CInternalVariableStateTransitionCondition : IBehaviorStateTransitionCondition
 	{
-		[RED("variableName")] 		public CName VariableName { get; set;}
+		[Ordinal(1)] [RED("variableName")] 		public CName VariableName { get; set;}
 
-		[RED("compareValue")] 		public CFloat CompareValue { get; set;}
+		[Ordinal(2)] [RED("compareValue")] 		public CFloat CompareValue { get; set;}
 
-		[RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
+		[Ordinal(3)] [RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
 
 		public CInternalVariableStateTransitionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

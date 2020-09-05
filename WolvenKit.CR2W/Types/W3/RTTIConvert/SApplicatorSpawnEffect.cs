@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SApplicatorSpawnEffect : CVariable
 	{
-		[RED("spawnAbilityName")] 		public CName SpawnAbilityName { get; set;}
+		[Ordinal(1)] [RED("spawnAbilityName")] 		public CName SpawnAbilityName { get; set;}
 
-		[RED("spawnType")] 		public CEnum<EEffectType> SpawnType { get; set;}
+		[Ordinal(2)] [RED("spawnType")] 		public CEnum<EEffectType> SpawnType { get; set;}
 
-		[RED("spawnFlagsHostile")] 		public CBool SpawnFlagsHostile { get; set;}
+		[Ordinal(3)] [RED("spawnFlagsHostile")] 		public CBool SpawnFlagsHostile { get; set;}
 
-		[RED("spawnFlagsNeutral")] 		public CBool SpawnFlagsNeutral { get; set;}
+		[Ordinal(4)] [RED("spawnFlagsNeutral")] 		public CBool SpawnFlagsNeutral { get; set;}
 
-		[RED("spawnFlagsFriendly")] 		public CBool SpawnFlagsFriendly { get; set;}
+		[Ordinal(5)] [RED("spawnFlagsFriendly")] 		public CBool SpawnFlagsFriendly { get; set;}
 
-		[RED("spawnSourceName")] 		public CString SpawnSourceName { get; set;}
+		[Ordinal(6)] [RED("spawnSourceName")] 		public CString SpawnSourceName { get; set;}
 
 		public SApplicatorSpawnEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFoliageInstanceStatistics : CVariable
 	{
-		[RED("baseTree")] 		public CHandle<CSRTBaseTree> BaseTree { get; set;}
+		[Ordinal(1)] [RED("baseTree")] 		public CHandle<CSRTBaseTree> BaseTree { get; set;}
 
-		[RED("instanceCount")] 		public CUInt32 InstanceCount { get; set;}
+		[Ordinal(2)] [RED("instanceCount")] 		public CUInt32 InstanceCount { get; set;}
 
 		public SFoliageInstanceStatistics(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

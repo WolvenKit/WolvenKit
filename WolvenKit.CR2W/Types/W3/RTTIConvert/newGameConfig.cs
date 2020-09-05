@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class newGameConfig : CVariable
 	{
-		[RED("tutorialsOn")] 		public CBool TutorialsOn { get; set;}
+		[Ordinal(1)] [RED("tutorialsOn")] 		public CBool TutorialsOn { get; set;}
 
-		[RED("difficulty")] 		public CInt32 Difficulty { get; set;}
+		[Ordinal(2)] [RED("difficulty")] 		public CInt32 Difficulty { get; set;}
 
-		[RED("simulate_import")] 		public CBool Simulate_import { get; set;}
+		[Ordinal(3)] [RED("simulate_import")] 		public CBool Simulate_import { get; set;}
 
-		[RED("import_save_index")] 		public CInt32 Import_save_index { get; set;}
+		[Ordinal(4)] [RED("import_save_index")] 		public CInt32 Import_save_index { get; set;}
 
 		public newGameConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

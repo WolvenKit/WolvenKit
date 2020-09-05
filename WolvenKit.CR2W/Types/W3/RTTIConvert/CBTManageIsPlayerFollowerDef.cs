@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTManageIsPlayerFollowerDef : IBehTreeTaskDefinition
 	{
-		[RED("targetTagCondition")] 		public CName TargetTagCondition { get; set;}
+		[Ordinal(1)] [RED("targetTagCondition")] 		public CName TargetTagCondition { get; set;}
 
-		[RED("overrideForThisTask")] 		public CBool OverrideForThisTask { get; set;}
+		[Ordinal(2)] [RED("overrideForThisTask")] 		public CBool OverrideForThisTask { get; set;}
 
-		[RED("disable")] 		public CBool Disable { get; set;}
+		[Ordinal(3)] [RED("disable")] 		public CBool Disable { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(4)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(5)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("params1")] 		public CHandle<CAIFollowParams> Params1 { get; set;}
+		[Ordinal(6)] [RED("params1")] 		public CHandle<CAIFollowParams> Params1 { get; set;}
 
-		[RED("params2")] 		public CHandle<CAIMoveAlongPathWithCompanionParams> Params2 { get; set;}
+		[Ordinal(7)] [RED("params2")] 		public CHandle<CAIMoveAlongPathWithCompanionParams> Params2 { get; set;}
 
 		public CBTManageIsPlayerFollowerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

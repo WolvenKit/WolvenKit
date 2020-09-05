@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
-
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
     public partial class CFont : CResource
     {
-        [REDBuffer(true)] public CArray<CUInt16> Unicodemapping { get; set; }
-        [REDBuffer(true)] public CInt32 Linedist { get; set; }
-        [REDBuffer(true)] public CInt32 Maxglyphheight { get; set; }
-        [REDBuffer(true)] public CBool Kerning { get; set; }
-        [REDBuffer(true)] public CArray<CArray<CFloat>> Glyphs { get; set; }
+        [Ordinal(1000)] [REDBuffer(true)] public CArray<CUInt16> Unicodemapping { get; set; }
+        [Ordinal(1001)] [REDBuffer(true)] public CInt32 Linedist { get; set; }
+        [Ordinal(1002)] [REDBuffer(true)] public CInt32 Maxglyphheight { get; set; }
+        [Ordinal(1003)] [REDBuffer(true)] public CBool Kerning { get; set; }
+        [Ordinal(1004)] [REDBuffer(true)] public CArray<CArray<CFloat>> Glyphs { get; set; }
 
 
 

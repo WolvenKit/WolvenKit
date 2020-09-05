@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAttachmentReplacement : CVariable
 	{
-		[RED("oldName")] 		public CName OldName { get; set;}
+		[Ordinal(1)] [RED("oldName")] 		public CName OldName { get; set;}
 
-		[RED("oldClass")] 		public CName OldClass { get; set;}
+		[Ordinal(2)] [RED("oldClass")] 		public CName OldClass { get; set;}
 
-		[RED("newName")] 		public CName NewName { get; set;}
+		[Ordinal(3)] [RED("newName")] 		public CName NewName { get; set;}
 
-		[RED("newClass")] 		public CName NewClass { get; set;}
+		[Ordinal(4)] [RED("newClass")] 		public CName NewClass { get; set;}
 
 		public SAttachmentReplacement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskNPCNotInFrontOfPLayerDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("coneAngle")] 		public CFloat ConeAngle { get; set;}
+		[Ordinal(1)] [RED("coneAngle")] 		public CFloat ConeAngle { get; set;}
 
-		[RED("angleOffset")] 		public CFloat AngleOffset { get; set;}
+		[Ordinal(2)] [RED("angleOffset")] 		public CFloat AngleOffset { get; set;}
 
-		[RED("coneRange")] 		public CFloat ConeRange { get; set;}
+		[Ordinal(3)] [RED("coneRange")] 		public CFloat ConeRange { get; set;}
 
 		public CBTTaskNPCNotInFrontOfPLayerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskManagePackLeaderDef : IBehTreeTaskDefinition
 	{
-		[RED("packName")] 		public CBehTreeValCName PackName { get; set;}
+		[Ordinal(1)] [RED("packName")] 		public CBehTreeValCName PackName { get; set;}
 
-		[RED("leadingRadius")] 		public CFloat LeadingRadius { get; set;}
+		[Ordinal(2)] [RED("leadingRadius")] 		public CFloat LeadingRadius { get; set;}
 
-		[RED("forceMeAsLeader")] 		public CBool ForceMeAsLeader { get; set;}
+		[Ordinal(3)] [RED("forceMeAsLeader")] 		public CBool ForceMeAsLeader { get; set;}
 
 		public BTTaskManagePackLeaderDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

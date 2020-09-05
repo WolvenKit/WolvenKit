@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskElementalThrow : IBehTreeTask
 	{
-		[RED("physicalComponent")] 		public CHandle<CMeshComponent> PhysicalComponent { get; set;}
+		[Ordinal(1)] [RED("physicalComponent")] 		public CHandle<CMeshComponent> PhysicalComponent { get; set;}
 
-		[RED("objectEntity")] 		public CHandle<CEntityTemplate> ObjectEntity { get; set;}
+		[Ordinal(2)] [RED("objectEntity")] 		public CHandle<CEntityTemplate> ObjectEntity { get; set;}
 
-		[RED("object")] 		public CHandle<CEntity> Object { get; set;}
+		[Ordinal(3)] [RED("object")] 		public CHandle<CEntity> Object { get; set;}
 
 		public CBTTaskElementalThrow(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

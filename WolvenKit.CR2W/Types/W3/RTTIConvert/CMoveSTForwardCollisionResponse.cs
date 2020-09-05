@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTForwardCollisionResponse : CMoveSTCollisionResponse
 	{
-		[RED("probeDistanceInTime")] 		public CFloat ProbeDistanceInTime { get; set;}
+		[Ordinal(1)] [RED("probeDistanceInTime")] 		public CFloat ProbeDistanceInTime { get; set;}
 
-		[RED("crowdThroughVar")] 		public CName CrowdThroughVar { get; set;}
+		[Ordinal(2)] [RED("crowdThroughVar")] 		public CName CrowdThroughVar { get; set;}
 
 		public CMoveSTForwardCollisionResponse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

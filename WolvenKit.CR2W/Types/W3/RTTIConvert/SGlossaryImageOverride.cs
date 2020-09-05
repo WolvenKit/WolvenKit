@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGlossaryImageOverride : CVariable
 	{
-		[RED("uniqueTag")] 		public CName UniqueTag { get; set;}
+		[Ordinal(1)] [RED("uniqueTag")] 		public CName UniqueTag { get; set;}
 
-		[RED("imageFileName")] 		public CString ImageFileName { get; set;}
+		[Ordinal(2)] [RED("imageFileName")] 		public CString ImageFileName { get; set;}
 
 		public SGlossaryImageOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -80,6 +80,9 @@
     <Reference Include="Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\Cyotek.Windows.Forms.ColorPicker.1.7.2\lib\net35\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetHelper.FastMember.Extension, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetHelper.FastMember.Extension.2.0.0\lib\net452\DotNetHelper.FastMember.Extension.dll</HintPath>
+    </Reference>
     <Reference Include="FastMember, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FastMember.1.5.0\lib\net461\FastMember.dll</HintPath>
     </Reference>
@@ -95,6 +98,9 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -162,7 +168,16 @@
     <Compile Include="Reflection\REDAttribute.cs" />
     <Compile Include="Reflection\REDReflection.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockDataObjects\SBlockDataCollisionObject.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockDataObjects\SBlockDataDecal.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockDataObjects\SBlockDataDimmer.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockDataObjects\SBlockDataLight.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockDataObjects\SBlockDataMeshObject.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockDataObjects\SBlockDataParticles.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockDataObjects\SBlockDataRigidBody.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockDataObjects\SBlockDataSpotLight.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SVector4D.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\SUmbraTileData.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CQuestScriptBlock.cs" />
     <Compile Include="Types\Generic\Arrays\CStatic.cs" />
     <Compile Include="Types\Generic\Arrays\CBufferBase.cs" />
@@ -182,7 +197,7 @@
     <Compile Include="Types\Structs\SCurveData.cs" />
     <Compile Include="Types\Generic\Arrays\CBufferUInt16.cs" />
     <Compile Include="Types\Utils\CR2WTypeManager.cs" />
-    <Compile Include="Types\Primitive\Flags.cs" />
+    <None Include="Types\Primitive\Flags.cs.deprecated" />
     <Compile Include="Types\BufferedTypes\BufferStructs\CTerrainTileData.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\SWayPointsCollectionsSetData.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CPhysicalCollision.cs" />
@@ -6774,10 +6789,9 @@
     <Compile Include="Types\BufferedTypes\BufferStructs\SSkeletonRigData.cs" />
     <Compile Include="Types\Generic\Arrays\CBufferUInt32.cs" />
     <Compile Include="Types\Generic\Arrays\CCompressedBuffer.cs" />
-    <None Include="Types\Utils\CQuaternion.cs.deprecated" />
     <Compile Include="Types\BufferedTypes\Complex\CSkeleton.cs" />
     <Compile Include="Types\Generic\Arrays\CPaddedBuffer.cs" />
-    <Compile Include="Types\Generic\Arrays\CBufferVLQ.cs" />
+    <Compile Include="Types\Generic\Arrays\CBufferBit6.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CCubeTexture.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SMeshBlock5.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CWayPointsCollection.cs" />
@@ -6806,7 +6820,7 @@
     <Compile Include="Types\Structs\Complex\EngineQsTranform.cs" />
     <Compile Include="Types\Structs\Complex\EngineTransform.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CEntity.cs" />
-    <Compile Include="Types\Primitive\CFlags.cs" />
+    <None Include="Types\Primitive\CFlags.cs.deprecated" />
     <Compile Include="Types\Primitive\NetPrimitive\CFloat.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\SFoliageInstanceData.cs" />
     <Compile Include="Types\Primitive\NetPrimitive\CGUID.cs" />
@@ -6815,14 +6829,12 @@
     <Compile Include="Types\Primitive\CName.cs" />
     <Compile Include="Types\Generic\CPtr.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CStorySceneScript.cs" />
-    <None Include="Types\Utils\CR2WTypeManager.cs.deprecated" />
     <Compile Include="Types\Generic\CSoft.cs" />
     <Compile Include="Types\Primitive\NetPrimitive\CString.cs" />
     <Compile Include="Types\Primitive\NetPrimitive\StringAnsi.cs" />
     <Compile Include="Types\Structs\Complex\TagList.cs" />
     <Compile Include="Types\Utils\CVariable.cs" />
     <Compile Include="Types\Primitive\CVariant.cs" />
-    <None Include="Types\Primitive\CVector.cs.deprecated" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SVector3D.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\CXml.cs" />
     <Compile Include="Types\Primitive\Enums.cs" />

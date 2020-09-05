@@ -7,7 +7,7 @@ namespace WolvenKit.Wwise.SoundCache
 {
     public class SoundCacheItem : IWitcherFile
     {
-        public IWitcherArchiveType Bundle { get; set; }
+        public IWitcherArchive Bundle { get; set; }
         /// <summary>
         /// Name of the bundled item in the archive.
         /// </summary>
@@ -23,7 +23,7 @@ namespace WolvenKit.Wwise.SoundCache
         public long Size { get; set; }
         public uint ZSize { get; set; }
 
-        public SoundCacheItem(IWitcherArchiveType Parent)
+        public SoundCacheItem(IWitcherArchive Parent)
         {
             this.Bundle = Parent;
         }
@@ -43,6 +43,11 @@ namespace WolvenKit.Wwise.SoundCache
 
         public string Extract(BundleFileExtractArgs e)
         {
+            // create new directory and delete existing file
+            Directory.CreateDirectory(Path.GetDirectoryName(e.FileName) ?? "");
+            if (File.Exists(e.FileName))
+                File.Delete(e.FileName);
+
             using (var output = new FileStream(e.FileName, FileMode.Create, FileAccess.Write))
             {
                 Extract(output);

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Whale : CGameplayEntity
 	{
-		[RED("whaleArea")] 		public CHandle<W3WhaleArea> WhaleArea { get; set;}
+		[Ordinal(1)] [RED("whaleArea")] 		public CHandle<W3WhaleArea> WhaleArea { get; set;}
 
-		[RED("destroyTime")] 		public CFloat DestroyTime { get; set;}
+		[Ordinal(2)] [RED("destroyTime")] 		public CFloat DestroyTime { get; set;}
 
-		[RED("alwaysSpawned")] 		public CBool AlwaysSpawned { get; set;}
+		[Ordinal(3)] [RED("alwaysSpawned")] 		public CBool AlwaysSpawned { get; set;}
 
-		[RED("canBeDestroyed")] 		public CBool CanBeDestroyed { get; set;}
+		[Ordinal(4)] [RED("canBeDestroyed")] 		public CBool CanBeDestroyed { get; set;}
 
-		[RED("spawnPosition")] 		public Vector SpawnPosition { get; set;}
+		[Ordinal(5)] [RED("spawnPosition")] 		public Vector SpawnPosition { get; set;}
 
-		[RED("spawnRotation")] 		public EulerAngles SpawnRotation { get; set;}
+		[Ordinal(6)] [RED("spawnRotation")] 		public EulerAngles SpawnRotation { get; set;}
 
 		public W3Whale(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

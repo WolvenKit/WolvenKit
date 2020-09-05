@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorGraphBoneInfo : CVariable
 	{
-		[RED("m_boneName")] 		public CString M_boneName { get; set;}
+		[Ordinal(1)] [RED("m_boneName")] 		public CString M_boneName { get; set;}
 
-		[RED("m_weight")] 		public CFloat M_weight { get; set;}
+		[Ordinal(2)] [RED("m_weight")] 		public CFloat M_weight { get; set;}
 
-		[RED("num")] 		public CInt32 Num { get; set;}
+		[Ordinal(3)] [RED("num")] 		public CInt32 Num { get; set;}
 
 		public SBehaviorGraphBoneInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

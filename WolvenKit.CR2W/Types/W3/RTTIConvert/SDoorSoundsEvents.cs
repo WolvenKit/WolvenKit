@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,21 +11,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SDoorSoundsEvents : CVariable
 	{
-		[RED("open")] 		public CString Open { get; set;}
+		[Ordinal(1)] [RED("open")] 		public CString Open { get; set;}
 
-		[RED("openFully")] 		public CString OpenFully { get; set;}
+		[Ordinal(2)] [RED("openFully")] 		public CString OpenFully { get; set;}
 
-		[RED("openingStart")] 		public CString OpeningStart { get; set;}
+		[Ordinal(3)] [RED("openingStart")] 		public CString OpeningStart { get; set;}
 
-		[RED("openingStop")] 		public CString OpeningStop { get; set;}
+		[Ordinal(4)] [RED("openingStop")] 		public CString OpeningStop { get; set;}
 
-		[RED("close")] 		public CString Close { get; set;}
+		[Ordinal(5)] [RED("close")] 		public CString Close { get; set;}
 
-		[RED("closeFully")] 		public CString CloseFully { get; set;}
+		[Ordinal(6)] [RED("closeFully")] 		public CString CloseFully { get; set;}
 
-		[RED("closingStart")] 		public CString ClosingStart { get; set;}
+		[Ordinal(7)] [RED("closingStart")] 		public CString ClosingStart { get; set;}
 
-		[RED("closingStop")] 		public CString ClosingStop { get; set;}
+		[Ordinal(8)] [RED("closingStop")] 		public CString ClosingStop { get; set;}
 
 		public SDoorSoundsEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

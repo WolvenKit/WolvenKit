@@ -5,17 +5,17 @@ using System.Diagnostics;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
-
+using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class CurveInfo : CVariable
     {
-        [RED] public CName someName { get; set; }
-        [RED] public CUInt8 someByte { get; set; }
+        [Ordinal(1)] [RED] public CName someName { get; set; }
+        [Ordinal(2)] [RED] public CUInt8 someByte { get; set; }
 
-        [RED] public CCompressedBuffer<CurvePiece> pieces { get; set; } // MAX LIMIT 4
+        [Ordinal(3)] [RED] public CCompressedBuffer<CurvePiece> pieces { get; set; } // MAX LIMIT 4
 
         public CurveInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

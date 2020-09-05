@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,23 +11,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskLeshyBirdAttack : CBTTaskSwarm
 	{
-		[RED("loopTime")] 		public CFloat LoopTime { get; set;}
+		[Ordinal(1)] [RED("loopTime")] 		public CFloat LoopTime { get; set;}
 
-		[RED("attackRange")] 		public CFloat AttackRange { get; set;}
+		[Ordinal(2)] [RED("attackRange")] 		public CFloat AttackRange { get; set;}
 
-		[RED("time")] 		public CFloat Time { get; set;}
+		[Ordinal(3)] [RED("time")] 		public CFloat Time { get; set;}
 
-		[RED("startingTime")] 		public CFloat StartingTime { get; set;}
+		[Ordinal(4)] [RED("startingTime")] 		public CFloat StartingTime { get; set;}
 
-		[RED("attackGroupID")] 		public CFlyingGroupId AttackGroupID { get; set;}
+		[Ordinal(5)] [RED("attackGroupID")] 		public CFlyingGroupId AttackGroupID { get; set;}
 
-		[RED("activeSwarm")] 		public CBool ActiveSwarm { get; set;}
+		[Ordinal(6)] [RED("activeSwarm")] 		public CBool ActiveSwarm { get; set;}
 
-		[RED("projEntity")] 		public CHandle<CEntityTemplate> ProjEntity { get; set;}
+		[Ordinal(7)] [RED("projEntity")] 		public CHandle<CEntityTemplate> ProjEntity { get; set;}
 
-		[RED("raiseEventName")] 		public CName RaiseEventName { get; set;}
+		[Ordinal(8)] [RED("raiseEventName")] 		public CName RaiseEventName { get; set;}
 
-		[RED("dodgeable")] 		public CBool Dodgeable { get; set;}
+		[Ordinal(9)] [RED("dodgeable")] 		public CBool Dodgeable { get; set;}
 
 		public CBTTaskLeshyBirdAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

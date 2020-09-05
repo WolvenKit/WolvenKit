@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimGlobalParam : CEntityTemplateParam
 	{
-		[RED("skeletonType")] 		public CEnum<ESkeletonType> SkeletonType { get; set;}
+		[Ordinal(1)] [RED("skeletonType")] 		public CEnum<ESkeletonType> SkeletonType { get; set;}
 
-		[RED("defaultAnimationName")] 		public CName DefaultAnimationName { get; set;}
+		[Ordinal(2)] [RED("defaultAnimationName")] 		public CName DefaultAnimationName { get; set;}
 
-		[RED("customMimicsFilter_Full")] 		public CName CustomMimicsFilter_Full { get; set;}
+		[Ordinal(3)] [RED("customMimicsFilter_Full")] 		public CName CustomMimicsFilter_Full { get; set;}
 
-		[RED("customMimicsFilter_Lipsync")] 		public CName CustomMimicsFilter_Lipsync { get; set;}
+		[Ordinal(4)] [RED("customMimicsFilter_Lipsync")] 		public CName CustomMimicsFilter_Lipsync { get; set;}
 
-		[RED("animTag")] 		public CName AnimTag { get; set;}
+		[Ordinal(5)] [RED("animTag")] 		public CName AnimTag { get; set;}
 
-		[RED("sfxTag")] 		public CName SfxTag { get; set;}
+		[Ordinal(6)] [RED("sfxTag")] 		public CName SfxTag { get; set;}
 
 		public CAnimGlobalParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterDefeated : CAIMonsterDeath
 	{
-		[RED("localDeathTree")] 		public CHandle<CAIMonsterDeath> LocalDeathTree { get; set;}
+		[Ordinal(1)] [RED("localDeathTree")] 		public CHandle<CAIMonsterDeath> LocalDeathTree { get; set;}
 
-		[RED("unconsciousTree")] 		public CHandle<CAINpcUnconsciousTree> UnconsciousTree { get; set;}
+		[Ordinal(2)] [RED("unconsciousTree")] 		public CHandle<CAINpcUnconsciousTree> UnconsciousTree { get; set;}
 
 		public CAIMonsterDefeated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

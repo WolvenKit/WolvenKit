@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAnimatedComponentSyncSettings : CVariable
 	{
-		[RED("instanceName")] 		public CName InstanceName { get; set;}
+		[Ordinal(1)] [RED("instanceName")] 		public CName InstanceName { get; set;}
 
-		[RED("syncAllInstances")] 		public CBool SyncAllInstances { get; set;}
+		[Ordinal(2)] [RED("syncAllInstances")] 		public CBool SyncAllInstances { get; set;}
 
-		[RED("syncEngineValueSpeed")] 		public CBool SyncEngineValueSpeed { get; set;}
+		[Ordinal(3)] [RED("syncEngineValueSpeed")] 		public CBool SyncEngineValueSpeed { get; set;}
 
 		public SAnimatedComponentSyncSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

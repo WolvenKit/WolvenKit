@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DotNetHelper.FastMember.Extension.Extension;
+using FastMember;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -16,63 +18,16 @@ namespace WolvenKit.CR2W.Reflection
     /// </summary>
     public static class REDReflection
     {
-        //public static ulong ComputeFieldInfoHash(FieldInfo info)
-        //{
-        //    var fieldName     = GetREDNameString(info);
-        //    var declaringName = info.DeclaringType.Name;
-
-        //    var fnv = new FNV1A64HashAlgorithm();
-
-        //    fnv.AppendString(declaringName, true);
-        //    fnv.AppendString(fieldName, true);
-
-        //    return fnv.HashUInt64;
-        //}
-
-        //public static (string name, string type) GetREDNameTypePair(FieldInfo field)
-        //{
-        //    var attribute = field.GetCustomAttribute<REDAttribute>();
-        //    if(attribute is null)
-        //    {
-        //        return (null, null);
-        //    }
-        //    var flags = attribute.Flags.AsEnumerable().GetEnumerator();
-        //    if (String.IsNullOrWhiteSpace(attribute.Name))
-        //    {
-        //        return (field.Name, GetREDTypeString(field.FieldType, flags));
-        //    }
-        //    return (attribute.Name, GetREDTypeString(field.FieldType, flags));
-        //}
-
-        //public static string GetREDNameString(FieldInfo field)
-        //{
-        //    var attribute = field.GetCustomAttribute<REDAttribute>();
-        //    if (attribute is null || String.IsNullOrWhiteSpace(attribute.Name))
-        //    {
-        //        return field.Name;
-        //    }
-        //    return attribute.Name;
-        //}
-        public static string GetREDNameString(PropertyInfo prop)
+        public static string GetREDNameString(Member item)
         {
-            var attribute = prop.GetCustomAttribute<REDAttribute>();
+            var attribute = item.GetMemberAttribute<REDAttribute>();
             if (attribute is null || String.IsNullOrWhiteSpace(attribute.Name))
             {
-                return prop.Name;
+                return item.Name;
             }
             return attribute.Name;
         }
 
-        //public static string GetREDTypeString(FieldInfo field)
-        //{
-        //    var attribute = field.GetCustomAttribute<REDAttribute>();
-        //    if(attribute is null)
-        //    {
-        //        return null;
-        //    }
-        //    var flags = attribute.Flags.AsEnumerable().GetEnumerator();
-        //    return GetREDTypeString(field.FieldType, flags);
-        //}
         public static string GetREDTypeString(Type type, params int[] flags)
         {
             return GetREDTypeString(type, flags.AsEnumerable().GetEnumerator());
@@ -196,61 +151,31 @@ namespace WolvenKit.CR2W.Reflection
             }
         }
 
-        #region Property
-        #endregion
-        //public static IEnumerable<PropertyInfo> GetREDProperties(Type type)
-        //{
-        //    var allprops = type.GetProperties( BindingFlags.Instance | BindingFlags.Public);
-        //    return allprops.Where(prop => prop.IsDefined(typeof(REDAttribute))).ToList();
-        //}
-        //public static IEnumerable<PropertyInfo> GetREDProperties(Type type, BindingFlags flags)
-        //{
-        //    var allprops = type.GetProperties(flags);
-        //    return allprops.Where(prop => prop.IsDefined(typeof(REDAttribute))).ToList();
-        //}
-
-        //public static PropertyInfo GetREDProperty(Type classType, string name, string type)
-        //{
-        //    foreach (var p in GetREDProperties(classType))
-        //    {
-        //        var attribute = p.GetCustomAttribute<REDAttribute>();
-        //        var flags = attribute.Flags.AsEnumerable().GetEnumerator();
-        //        var n = attribute.Name;
-        //        if (String.IsNullOrWhiteSpace(n))
-        //        {
-        //            n = p.Name;
-        //        }
-        //        if (n == name && GetREDTypeString(p.PropertyType, flags) == type)
-        //            return p;
-        //    }
-        //    return null;
-        //}
-
-        //public static PropertyInfo GetREDProperty(Type classType, string type)
-        //{
-        //    foreach (var prop in GetREDProperties(classType))
-        //    {
-        //        var attribute = prop.GetCustomAttribute<REDAttribute>();
-        //        var flags = attribute.Flags.AsEnumerable().GetEnumerator();
-
-        //        if (GetREDTypeString(prop.PropertyType, flags) == type)
-        //            return prop;
-        //    }
-        //    return null;
-        //}
-
-
-
-        private static IEnumerable<PropertyInfo> GetREDPropertiesinternal<T>(Type type, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public) where T : Attribute
-        {
-            return type
-                .GetProperties(bindingFlags)
-                .Where(prop => prop.IsDefined(typeof(T))).ToList();
-        }
 
         /// https://stackoverflow.com/questions/14734374/c-sharp-reflection-property-order
-        private static IEnumerable<PropertyInfo> GetOrderedREDProperties<T>(Type type, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance) where T : Attribute
+        public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool getBuffers)
         {
+            Type type = cvar.GetType();
+            Dictionary<Type, int> lookup = new Dictionary<Type, int>();
+
+            // get hierarchical list of types
+            int count = 0;
+            lookup[type] = count++;
+            Type parent = type.BaseType;
+            while (parent != null)
+            {
+                lookup[parent] = count;
+                count++;
+                parent = parent.BaseType;
+            }
+
+            return cvar.GetREDMembersInternal(getBuffers)
+                .OrderByDescending(prop => lookup[prop.GetMemberInfo().DeclaringType]);
+        }
+
+        public static IEnumerable<Member> GetREDBuffers(this CVariable cvar)
+        {
+            Type type = cvar.GetType();
             Dictionary<Type, int> lookup = new Dictionary<Type, int>();
 
             int count = 0;
@@ -263,20 +188,39 @@ namespace WolvenKit.CR2W.Reflection
                 parent = parent.BaseType;
             }
 
-            return REDReflection.GetREDPropertiesinternal<T>(type, bindingFlags)
-                .OrderByDescending(prop => lookup[prop.DeclaringType]);
+            return cvar.GetREDBuffersInternal()
+                .OrderByDescending(prop => lookup[prop.GetMemberInfo().DeclaringType]);
         }
 
-        public static IEnumerable<PropertyInfo> GetREDProperties<T>(Type type, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public) where T : Attribute
+
+        private static IEnumerable<Member> GetREDBuffersInternal(this CVariable cvar)
         {
-            return GetOrderedREDProperties<T>(type, bindingFlags).ToList();
+            // get only REDBuffers
+            var redproperties = cvar.accessor.GetMembers()
+                    .OrderBy(p => p.Ordinal)
+                    .Where(_ => _.GetMemberAttribute<REDBufferAttribute>() != null);
+
+            return redproperties;
         }
 
-        //public static PropertyInfo GetREDProperty<T>(Type classType, string name, string type) where T : Attribute
-        //{
-        //    return GetREDProperties<T>(classType)
-        //        .Where(prop => prop.Name == name && GetREDTypeString(prop.PropertyType) == type)
-        //        .FirstOrDefault();
-        //}
+        private static IEnumerable<Member> GetREDMembersInternal(this CVariable cvar, bool getBuffers)
+        {
+            var a = cvar.accessor.GetMembers().OrderBy(p => p.Ordinal);
+
+            var redproperties = cvar.accessor.GetMembers()
+                    .OrderBy(p => p.Ordinal)
+                    .Where(_ => _.GetMemberAttribute<REDAttribute>() != null);
+
+            // get RED and REDBuffers
+            if (getBuffers)
+            {
+                return redproperties;
+            }
+            // get only RED
+            else
+            {
+                return redproperties.Where(z => !(z.GetMemberAttribute<REDAttribute>() is REDBufferAttribute)); ;
+            }
+        }
     }
 }

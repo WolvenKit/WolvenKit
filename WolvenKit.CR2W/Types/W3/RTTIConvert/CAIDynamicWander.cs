@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,21 +11,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIDynamicWander : CAIWanderTree
 	{
-		[RED("params")] 		public CHandle<CAIDynamicWanderParams> Params { get; set;}
+		[Ordinal(1)] [RED("params")] 		public CHandle<CAIDynamicWanderParams> Params { get; set;}
 
-		[RED("dynamicWanderArea")] 		public EntityHandle DynamicWanderArea { get; set;}
+		[Ordinal(2)] [RED("dynamicWanderArea")] 		public EntityHandle DynamicWanderArea { get; set;}
 
-		[RED("dynamicWanderUseGuardArea")] 		public CBool DynamicWanderUseGuardArea { get; set;}
+		[Ordinal(3)] [RED("dynamicWanderUseGuardArea")] 		public CBool DynamicWanderUseGuardArea { get; set;}
 
-		[RED("dynamicWanderIdleDuration")] 		public CFloat DynamicWanderIdleDuration { get; set;}
+		[Ordinal(4)] [RED("dynamicWanderIdleDuration")] 		public CFloat DynamicWanderIdleDuration { get; set;}
 
-		[RED("dynamicWanderIdleChance")] 		public CFloat DynamicWanderIdleChance { get; set;}
+		[Ordinal(5)] [RED("dynamicWanderIdleChance")] 		public CFloat DynamicWanderIdleChance { get; set;}
 
-		[RED("dynamicWanderMoveDuration")] 		public CFloat DynamicWanderMoveDuration { get; set;}
+		[Ordinal(6)] [RED("dynamicWanderMoveDuration")] 		public CFloat DynamicWanderMoveDuration { get; set;}
 
-		[RED("dynamicWanderMoveChance")] 		public CFloat DynamicWanderMoveChance { get; set;}
+		[Ordinal(7)] [RED("dynamicWanderMoveChance")] 		public CFloat DynamicWanderMoveChance { get; set;}
 
-		[RED("dynamicWanderMinimalDistance")] 		public CFloat DynamicWanderMinimalDistance { get; set;}
+		[Ordinal(8)] [RED("dynamicWanderMinimalDistance")] 		public CFloat DynamicWanderMinimalDistance { get; set;}
 
 		public CAIDynamicWander(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

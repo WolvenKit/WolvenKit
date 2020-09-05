@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimMorphEvent : CExtAnimDurationEvent
 	{
-		[RED("morphComponentId")] 		public CName MorphComponentId { get; set;}
+		[Ordinal(1)] [RED("morphComponentId")] 		public CName MorphComponentId { get; set;}
 
-		[RED("invertWeight")] 		public CBool InvertWeight { get; set;}
+		[Ordinal(2)] [RED("invertWeight")] 		public CBool InvertWeight { get; set;}
 
-		[RED("useCurve")] 		public CBool UseCurve { get; set;}
+		[Ordinal(3)] [RED("useCurve")] 		public CBool UseCurve { get; set;}
 
-		[RED("curve")] 		public SCurveData Curve { get; set;}
+		[Ordinal(4)] [RED("curve")] 		public SCurveData Curve { get; set;}
 
 		public CExtAnimMorphEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

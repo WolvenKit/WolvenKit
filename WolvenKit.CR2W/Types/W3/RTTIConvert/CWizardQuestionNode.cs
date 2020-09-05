@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWizardQuestionNode : CWizardBaseNode
 	{
-		[RED("uniqueName")] 		public CName UniqueName { get; set;}
+		[Ordinal(1)] [RED("uniqueName")] 		public CName UniqueName { get; set;}
 
-		[RED("layoutTemplate")] 		public CString LayoutTemplate { get; set;}
+		[Ordinal(2)] [RED("layoutTemplate")] 		public CString LayoutTemplate { get; set;}
 
-		[RED("text")] 		public CString Text { get; set;}
+		[Ordinal(3)] [RED("text")] 		public CString Text { get; set;}
 
-		[RED("optional")] 		public CBool Optional { get; set;}
+		[Ordinal(4)] [RED("optional")] 		public CBool Optional { get; set;}
 
-		[RED("endNode")] 		public CBool EndNode { get; set;}
+		[Ordinal(5)] [RED("endNode")] 		public CBool EndNode { get; set;}
 
 		public CWizardQuestionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

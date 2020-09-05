@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTKeepNavdata : IMoveSteeringTask
 	{
-		[RED("slidingRate")] 		public CFloat SlidingRate { get; set;}
+		[Ordinal(1)] [RED("slidingRate")] 		public CFloat SlidingRate { get; set;}
 
-		[RED("maxSlidingRange")] 		public CFloat MaxSlidingRange { get; set;}
+		[Ordinal(2)] [RED("maxSlidingRange")] 		public CFloat MaxSlidingRange { get; set;}
 
-		[RED("maxTeleportationRange")] 		public CFloat MaxTeleportationRange { get; set;}
+		[Ordinal(3)] [RED("maxTeleportationRange")] 		public CFloat MaxTeleportationRange { get; set;}
 
-		[RED("applyStandardConditions")] 		public CBool ApplyStandardConditions { get; set;}
+		[Ordinal(4)] [RED("applyStandardConditions")] 		public CBool ApplyStandardConditions { get; set;}
 
 		public CMoveSTKeepNavdata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRiderSetRaceAlongPathActionOnHorse : IBehTreeTask
 	{
-		[RED("horseRaceAlongPathAction")] 		public CHandle<CAIRaceAlongPathAction> HorseRaceAlongPathAction { get; set;}
+		[Ordinal(1)] [RED("horseRaceAlongPathAction")] 		public CHandle<CAIRaceAlongPathAction> HorseRaceAlongPathAction { get; set;}
 
-		[RED("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
+		[Ordinal(2)] [RED("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
 
 		public CBTTaskRiderSetRaceAlongPathActionOnHorse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

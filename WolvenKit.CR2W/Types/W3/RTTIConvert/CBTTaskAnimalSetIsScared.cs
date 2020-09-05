@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskAnimalSetIsScared : IBehTreeTask
 	{
-		[RED("value")] 		public CBool Value { get; set;}
+		[Ordinal(1)] [RED("value")] 		public CBool Value { get; set;}
 
-		[RED("setOnDeactivate")] 		public CBool SetOnDeactivate { get; set;}
+		[Ordinal(2)] [RED("setOnDeactivate")] 		public CBool SetOnDeactivate { get; set;}
 
-		[RED("animalData")] 		public CHandle<CAIStorageAnimalData> AnimalData { get; set;}
+		[Ordinal(3)] [RED("animalData")] 		public CHandle<CAIStorageAnimalData> AnimalData { get; set;}
 
 		public CBTTaskAnimalSetIsScared(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

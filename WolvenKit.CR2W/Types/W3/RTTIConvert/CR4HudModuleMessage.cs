@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleMessage : CR4HudModuleBase
 	{
-		[RED("_bDuringDisplay")] 		public CBool _bDuringDisplay { get; set;}
+		[Ordinal(1)] [RED("_bDuringDisplay")] 		public CBool _bDuringDisplay { get; set;}
 
-		[RED("_flashValueStorage")] 		public CHandle<CScriptedFlashValueStorage> _flashValueStorage { get; set;}
+		[Ordinal(2)] [RED("_flashValueStorage")] 		public CHandle<CScriptedFlashValueStorage> _flashValueStorage { get; set;}
 
 		public CR4HudModuleMessage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

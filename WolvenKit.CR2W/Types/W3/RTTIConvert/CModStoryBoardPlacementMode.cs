@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardPlacementMode : CModStoryBoardAssetSelectionBasedWorkMode
 	{
-		[RED("thePlacementDirector")] 		public CHandle<CModStoryBoardPlacementDirector> ThePlacementDirector { get; set;}
+		[Ordinal(1)] [RED("thePlacementDirector")] 		public CHandle<CModStoryBoardPlacementDirector> ThePlacementDirector { get; set;}
 
-		[RED("theController")] 		public CHandle<CModStoryBoardInteractivePlacement> TheController { get; set;}
+		[Ordinal(2)] [RED("theController")] 		public CHandle<CModStoryBoardInteractivePlacement> TheController { get; set;}
 
 		public CModStoryBoardPlacementMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

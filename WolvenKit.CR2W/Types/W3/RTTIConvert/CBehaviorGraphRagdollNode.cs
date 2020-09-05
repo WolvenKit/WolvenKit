@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphRagdollNode : CBehaviorGraphBaseNode
 	{
-		[RED("allowToProvidePreRagdollPose")] 		public CBool AllowToProvidePreRagdollPose { get; set;}
+		[Ordinal(1)] [RED("allowToProvidePreRagdollPose")] 		public CBool AllowToProvidePreRagdollPose { get; set;}
 
-		[RED("updateAndSampleInputIfPreRagdollWeightIsNonZero")] 		public CBool UpdateAndSampleInputIfPreRagdollWeightIsNonZero { get; set;}
+		[Ordinal(2)] [RED("updateAndSampleInputIfPreRagdollWeightIsNonZero")] 		public CBool UpdateAndSampleInputIfPreRagdollWeightIsNonZero { get; set;}
 
-		[RED("keepInFrozenRagdollPose")] 		public CBool KeepInFrozenRagdollPose { get; set;}
+		[Ordinal(3)] [RED("keepInFrozenRagdollPose")] 		public CBool KeepInFrozenRagdollPose { get; set;}
 
-		[RED("switchToSwimming")] 		public CBool SwitchToSwimming { get; set;}
+		[Ordinal(4)] [RED("switchToSwimming")] 		public CBool SwitchToSwimming { get; set;}
 
-		[RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
+		[Ordinal(5)] [RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
 
-		[RED("cachedRootBoneImpulseVariable")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedRootBoneImpulseVariable { get; set;}
+		[Ordinal(6)] [RED("cachedRootBoneImpulseVariable")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedRootBoneImpulseVariable { get; set;}
 
 		public CBehaviorGraphRagdollNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

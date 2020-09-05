@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,41 +11,41 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSpawnMultipleEntitiesAttack : CBTTaskSpawnEntityAttack
 	{
-		[RED("numberToSpawn")] 		public CInt32 NumberToSpawn { get; set;}
+		[Ordinal(1)] [RED("numberToSpawn")] 		public CInt32 NumberToSpawn { get; set;}
 
-		[RED("numberOfCircles")] 		public CInt32 NumberOfCircles { get; set;}
+		[Ordinal(2)] [RED("numberOfCircles")] 		public CInt32 NumberOfCircles { get; set;}
 
-		[RED("randomnessInCircles")] 		public CFloat RandomnessInCircles { get; set;}
+		[Ordinal(3)] [RED("randomnessInCircles")] 		public CFloat RandomnessInCircles { get; set;}
 
-		[RED("useRandomSpaceBetweenSpawns")] 		public CBool UseRandomSpaceBetweenSpawns { get; set;}
+		[Ordinal(4)] [RED("useRandomSpaceBetweenSpawns")] 		public CBool UseRandomSpaceBetweenSpawns { get; set;}
 
-		[RED("spawnRadiusMin")] 		public CFloat SpawnRadiusMin { get; set;}
+		[Ordinal(5)] [RED("spawnRadiusMin")] 		public CFloat SpawnRadiusMin { get; set;}
 
-		[RED("spawnRadiusMax")] 		public CFloat SpawnRadiusMax { get; set;}
+		[Ordinal(6)] [RED("spawnRadiusMax")] 		public CFloat SpawnRadiusMax { get; set;}
 
-		[RED("spawnEntityRadius")] 		public CFloat SpawnEntityRadius { get; set;}
+		[Ordinal(7)] [RED("spawnEntityRadius")] 		public CFloat SpawnEntityRadius { get; set;}
 
-		[RED("spawnPositionPattern")] 		public CEnum<ESpawnPositionPattern> SpawnPositionPattern { get; set;}
+		[Ordinal(8)] [RED("spawnPositionPattern")] 		public CEnum<ESpawnPositionPattern> SpawnPositionPattern { get; set;}
 
-		[RED("spawnRotation")] 		public CEnum<ESpawnRotation> SpawnRotation { get; set;}
+		[Ordinal(9)] [RED("spawnRotation")] 		public CEnum<ESpawnRotation> SpawnRotation { get; set;}
 
-		[RED("leaveOpenSpaceForDodge")] 		public CBool LeaveOpenSpaceForDodge { get; set;}
+		[Ordinal(10)] [RED("leaveOpenSpaceForDodge")] 		public CBool LeaveOpenSpaceForDodge { get; set;}
 
-		[RED("spawnInRandomOrder")] 		public CBool SpawnInRandomOrder { get; set;}
+		[Ordinal(11)] [RED("spawnInRandomOrder")] 		public CBool SpawnInRandomOrder { get; set;}
 
-		[RED("delayBetweenSpawn")] 		public CFloat DelayBetweenSpawn { get; set;}
+		[Ordinal(12)] [RED("delayBetweenSpawn")] 		public CFloat DelayBetweenSpawn { get; set;}
 
-		[RED("spawnOnGround")] 		public CBool SpawnOnGround { get; set;}
+		[Ordinal(13)] [RED("spawnOnGround")] 		public CBool SpawnOnGround { get; set;}
 
-		[RED("m_dodgeDistance")] 		public CFloat M_dodgeDistance { get; set;}
+		[Ordinal(14)] [RED("m_dodgeDistance")] 		public CFloat M_dodgeDistance { get; set;}
 
-		[RED("m_dodgeSafeAreaRadius")] 		public CFloat M_dodgeSafeAreaRadius { get; set;}
+		[Ordinal(15)] [RED("m_dodgeSafeAreaRadius")] 		public CFloat M_dodgeSafeAreaRadius { get; set;}
 
-		[RED("m_shouldSpawn")] 		public CBool M_shouldSpawn { get; set;}
+		[Ordinal(16)] [RED("m_shouldSpawn")] 		public CBool M_shouldSpawn { get; set;}
 
-		[RED("m_entitiesSpawned")] 		public CInt32 M_entitiesSpawned { get; set;}
+		[Ordinal(17)] [RED("m_entitiesSpawned")] 		public CInt32 M_entitiesSpawned { get; set;}
 
-		[RED("m_canComplete")] 		public CBool M_canComplete { get; set;}
+		[Ordinal(18)] [RED("m_canComplete")] 		public CBool M_canComplete { get; set;}
 
 		public CBTTaskSpawnMultipleEntitiesAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

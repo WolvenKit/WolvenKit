@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SLevelDefinition : CVariable
 	{
-		[RED("number")] 		public CInt32 Number { get; set;}
+		[Ordinal(1)] [RED("number")] 		public CInt32 Number { get; set;}
 
-		[RED("requiredTotalExp")] 		public CInt32 RequiredTotalExp { get; set;}
+		[Ordinal(2)] [RED("requiredTotalExp")] 		public CInt32 RequiredTotalExp { get; set;}
 
-		[RED("addedSkillPoints")] 		public CInt32 AddedSkillPoints { get; set;}
+		[Ordinal(3)] [RED("addedSkillPoints")] 		public CInt32 AddedSkillPoints { get; set;}
 
-		[RED("requiredExp")] 		public CInt32 RequiredExp { get; set;}
+		[Ordinal(4)] [RED("requiredExp")] 		public CInt32 RequiredExp { get; set;}
 
 		public SLevelDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

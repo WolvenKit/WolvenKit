@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FastMember;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -37,6 +38,15 @@ namespace WolvenKit.App.ViewModels
             CString
         }
 
+        public enum AvailableOperations
+        {
+            Replace,
+            Multiply,
+            Divide,
+            Add,
+            Subtract
+        }
+
         // Required
         [Description("Specify the variable name. \n\r" +
             "Example: autohidedistance")]
@@ -61,16 +71,11 @@ namespace WolvenKit.App.ViewModels
             "Example: w2mesh,w2l,xbm")]
         public string Extension { get; set; }
 
-        [Description("Specify the variable type. \n\r" +
-            "Available types are Bool, Uint64, Int64, Uint32, Int32, Uint16, Int16, Uint8, Int8")]
+        [Description("Specify the variable type.")]
         public AvailableTypes Type { get; set; }
 
-        //[Option('o', HelpText = "Specify the option type. Default is replace. This option requires a valid type to be set with -t !!\n\r" +
-        //   "Available types are Multiplication (*), Division (/), Addition (+), Subtraction (-),\n\r" +
-        //    "Example: -o + -t Uint16\n\r" +
-        //    "Example: -o / -t Int32"
-        //   , Required = false)]
-        //public string option { get; set; }
+        [Description("Specify the option type. Default is replace.")]
+        public AvailableOperations Operation { get; set; }
 
         // Optional lists
         [Description("Exclude the following values.\n\r" +
@@ -220,6 +225,11 @@ namespace WolvenKit.App.ViewModels
         #region Methods
         public async Task<int> RunBulkEditInternal(BulkEditOptions opts)
         {
+            if (!(opts.Name != null && opts.Value != null && opts.ChunkName != null))
+            {
+                Logger.LogString("Please fill in all required variables.", Logtype.Error);
+                return 0;
+            }
             if (Logger == null)
                 Logger = MainController.Get().Logger;
 
@@ -277,6 +287,9 @@ namespace WolvenKit.App.ViewModels
 
             // get chunks that match chunkname
             List<CR2WExportWrapper> chunks = opts.ChunkName != null ? file.chunks.Where(_ => _.data.GetType().Name == opts.ChunkName).ToList() : file.chunks;
+            
+            var splits = opts.Name.Split('.');
+
 
             foreach (var chunk in chunks.Select(_ => _.data))
             {
@@ -313,42 +326,108 @@ namespace WolvenKit.App.ViewModels
 
             void TrySetValue(CVariable cvar)
             {
+                var propname = splits.Last();
+
                 var propnameslist = cvar.accessor.GetMembers().Select(_ => _.Name).ToList();
-                if (propnameslist.Contains(opts.Name))
+                if (propnameslist.Contains(propname))
                 {
                     try
                     {
                         // check if type is supported
-                        var proptoedit = cvar.GetEditableVariables().First(_ => _.REDName == opts.Name) as CVariable;
+                        var proptoedit = cvar.GetEditableVariables().First(_ => _.REDName == propname) as CVariable;
                         if (Enum.GetValues(typeof(BulkEditOptions.AvailableTypes))
                                 .Cast<BulkEditOptions.AvailableTypes>()
                                 .Select(_ => _.ToString())
                                 .Contains(proptoedit.GetType().Name))
                         {
+                            // check if the user specified a file type
                             if (opts.Type != BulkEditOptions.AvailableTypes.ANY)
                                 if ( proptoedit.GetType().Name != opts.Type.ToString())
                                 return;
+
+                            // check if the user specified a parent
+                            if (splits.Length > 1)
+                            {
+                                var parent = proptoedit.Parent;
+                                for (int i = splits.Length; i > 0 ; i--)
+                                {
+                                    if (parent.REDName != splits[i])
+                                        return;
+
+                                    parent = parent.Parent;
+                                }
+                            }
 
                             // check the value 
                             dynamic dyn = proptoedit;
                             if (!(dyn.val is string x))
                                 x = dyn.val.ToString();
 
-                            if (x == opts.Value)
-                                return;
                             if (excludedvalues.Count != 0 && excludedvalues.Contains(x))
                                 return;
                             if (includedvalues.Count != 0 && !includedvalues.Contains(x))
                                 return;
 
-                            // access the val property of the CVariable baecause there's typecopnverters from string available
-                            var value = proptoedit.accessor.GetMembers().First(_ => _.Name == "val");
-                            var converter = TypeDescriptor.GetConverter(value.Type);
-                            var result = converter.ConvertFrom(opts.Value);
+                            // access the val property of the CVariable because there's typeconverters from string available
+                            Member member = proptoedit.accessor.GetMembers().First(_ => _.Name == "val");
+                            var converter = TypeDescriptor.GetConverter(member.Type);
+                            var convertedRequestedValue = converter.ConvertFrom(opts.Value);      // convert the requested balue to the type of the cvariable
 
-                            // set via reflection
-                            proptoedit.accessor[proptoedit, "val"] = result;
-                            Logger.LogString($"Succesfully edited a variable in {cvar.REDName}: {path}.\r\n", Logtype.Normal);
+                            // if a replace operation is requested
+                            if (opts.Operation == BulkEditOptions.AvailableOperations.Replace)
+                            {
+                                // value is already set to the desired value
+                                if (x == opts.Value)
+                                    return;
+
+
+                                
+
+                                // set via reflection
+                                proptoedit.accessor[proptoedit, "val"] = convertedRequestedValue;
+                                Logger.LogString($"Succesfully edited a variable in {cvar.REDName}: {x} ===> {convertedRequestedValue}.\r\n", Logtype.Normal);
+                            }
+                            // if a multiply etc operation is requested
+                            else
+                            {
+                                if (opts.Type != BulkEditOptions.AvailableTypes.CBool && opts.Type != BulkEditOptions.AvailableTypes.CString)
+                                {
+                                    dynamic dresult = proptoedit.accessor[proptoedit, "val"];
+                                    string original = dresult.ToString();
+                                    dynamic dconvertedRequestedValue = convertedRequestedValue;
+                                    switch (opts.Operation)
+                                    {
+                                        case BulkEditOptions.AvailableOperations.Multiply:
+                                            dresult *= dconvertedRequestedValue;
+                                            break;
+                                        case BulkEditOptions.AvailableOperations.Divide:
+                                            dresult /= dconvertedRequestedValue;
+                                            break;
+                                        case BulkEditOptions.AvailableOperations.Add:
+                                            dresult += dconvertedRequestedValue;
+                                            break;
+                                        case BulkEditOptions.AvailableOperations.Subtract:
+                                            dresult -= dconvertedRequestedValue;
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    // set via reflection
+                                    var obj = (object)dresult;
+
+                                    var xconverter = TypeDescriptor.GetConverter(obj.GetType());
+                                    if (xconverter.CanConvertTo(member.Type))
+                                    {
+                                        var convertedresult = xconverter.ConvertTo(obj, member.Type);
+                                        proptoedit.accessor[proptoedit, "val"] = convertedresult;
+
+                                        Logger.LogString($"Succesfully edited a variable in {cvar.REDName}: {original} ===> {convertedresult}.\r\n", Logtype.Normal);
+                                    }
+                                }
+                            }
+                            
+
+                            
                         }
                         else
                             Logger.LogString($"{proptoedit.GetType()} not supported in {cvar.REDName}: {path}.\r\n", Logtype.Normal);

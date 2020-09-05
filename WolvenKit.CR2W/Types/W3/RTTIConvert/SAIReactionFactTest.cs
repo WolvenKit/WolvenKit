@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAIReactionFactTest : CVariable
 	{
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(1)] [RED("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("factId")] 		public CString FactId { get; set;}
+		[Ordinal(2)] [RED("factId")] 		public CString FactId { get; set;}
 
-		[RED("queryFact")] 		public CEnum<EQueryFact> QueryFact { get; set;}
+		[Ordinal(3)] [RED("queryFact")] 		public CEnum<EQueryFact> QueryFact { get; set;}
 
-		[RED("value")] 		public CInt32 Value { get; set;}
+		[Ordinal(4)] [RED("value")] 		public CInt32 Value { get; set;}
 
-		[RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
+		[Ordinal(5)] [RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
 
 		public SAIReactionFactTest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

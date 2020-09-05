@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SPartyWaypointHandle : CVariable
 	{
-		[RED("partyMemberName")] 		public CName PartyMemberName { get; set;}
+		[Ordinal(1)] [RED("partyMemberName")] 		public CName PartyMemberName { get; set;}
 
-		[RED("entityHandle")] 		public EntityHandle EntityHandle { get; set;}
+		[Ordinal(2)] [RED("entityHandle")] 		public EntityHandle EntityHandle { get; set;}
 
-		[RED("componentName")] 		public CString ComponentName { get; set;}
+		[Ordinal(3)] [RED("componentName")] 		public CString ComponentName { get; set;}
 
 		public SPartyWaypointHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
