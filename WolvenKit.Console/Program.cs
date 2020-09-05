@@ -94,6 +94,10 @@ namespace WolvenKit.Console
             var bm = new BundleManager();
             bm.LoadAll(options.path);
 
+            //Bundle pa1 = bm.Bundles.First(_ => _.Key.Contains("patch1")).Value;
+            //var actualsize = pa1.Items.Select(_ => _.Value).Select(_ => _.Size).Sum(_ => _);
+            //var actualzsize = pa1.Items.Select(_ => _.Value).Select(_ => _.ZSize).Sum(_ => _); ;
+
             //Load MemoryMapped Bundles
             foreach (var b in bm.Bundles.Values)
             {

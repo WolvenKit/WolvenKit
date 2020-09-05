@@ -24,12 +24,14 @@ namespace WolvenKit.Forms
 
         public frmBulkEditor()
         {
+            InitializeComponent();
+
+
             // initialize Viewmodel
             viewModel = MockKernel.Get().GetBulkEditorViewModel();
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
             viewModel.PerformStep += (sender, e) => this.PerformStep();
 
-            InitializeComponent();
 
             ApplyCustomTheme();
 
@@ -40,13 +42,21 @@ namespace WolvenKit.Forms
         {
             if (e.PropertyName == nameof(viewModel.ProgressReport))
             {
-                Invoke(new intDelegate(SetMinProgressInternal), viewModel.ProgressReport.Min);
-                Invoke(new intDelegate(SetMaxProgressInternal), viewModel.ProgressReport.Max);
-                Invoke(new intDelegate(SetValProgressInternal), viewModel.ProgressReport.Value);
+                if (/*this.IsHandleCreated || */this.progressBar1.IsHandleCreated)
+                {
+                    Invoke(new intDelegate(SetMinProgressInternal), viewModel.ProgressReport.Min);
+                    Invoke(new intDelegate(SetMaxProgressInternal), viewModel.ProgressReport.Max);
+                    Invoke(new intDelegate(SetValProgressInternal), viewModel.ProgressReport.Value);
+                }
             }
         }
-        private void PerformStep() => Invoke(new voidDelegate(PerformStepInternal));
-
+        private void PerformStep()
+        {
+            if (/*this.IsHandleCreated || */this.progressBar1.IsHandleCreated)
+            {
+                Invoke(new voidDelegate(PerformStepInternal));
+            }
+        }
 
         public void ApplyCustomTheme()
         {

@@ -45,5 +45,13 @@ namespace WolvenKit.CR2W.Types
                 throw new InvalidParsingException("read too far");
             }
         }
+
+        public override void Write(BinaryWriter file)
+        {
+            base.Write(file);
+
+            if (unk1.Bytes != null && unk1.Bytes.Length > 0)
+                unk1.Write(file);
+        }
     }
 }

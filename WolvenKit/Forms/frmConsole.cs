@@ -17,6 +17,7 @@ using CommandLine;
 using WolvenKit.App;
 using System.ComponentModel;
 using WolvenKit.App.ViewModels;
+using WolvenKit.App.Commands;
 
 namespace WolvenKit
 {
@@ -159,9 +160,15 @@ namespace WolvenKit
             else if (opts.type == "String")
                 type = BulkEditOptions.AvailableTypes.CString;
 
-
-            
-
+            var operation = BulkEditOptions.AvailableOperations.Replace;
+            if (opts.option == "*")
+                operation = BulkEditOptions.AvailableOperations.Multiply;
+            if (opts.option == "/")
+                operation = BulkEditOptions.AvailableOperations.Divide;
+            if (opts.option == "+")
+                operation = BulkEditOptions.AvailableOperations.Add;
+            if (opts.option == "-")
+                operation = BulkEditOptions.AvailableOperations.Subtract;
 
             var _opts = new BulkEditOptions()
             {
@@ -170,6 +177,7 @@ namespace WolvenKit
                 ChunkName = opts.chunk,
                 Type = type,
                 Extension = opts.ext,
+                Operation = operation
             };
             if (opts.exc.Count() != 0)
                 _opts.Exclude = string.Join(",", opts.exc.ToArray());
@@ -211,12 +219,12 @@ namespace WolvenKit
             , Required = false)]
         public string type { get; set; }
 
-        //[Option('o', HelpText = "Specify the option type. Default is replace. This option requires a valid type to be set with -t !!\n\r" +
-        //   "Available types are Multiplication (*), Division (/), Addition (+), Subtraction (-),\n\r" +
-        //    "Example: -o + -t Uint16\n\r" +
-        //    "Example: -o / -t Int32"
-        //   , Required = false)]
-        //public string option { get; set; }
+        [Option('o', HelpText = "Specify the option type. Default is replace.\n\r" +
+           "Available types are Multiplication (*), Division (/), Addition (+), Subtraction (-),\n\r" +
+            "Example: -o + \n\r" +
+            "Example: -o / "
+           , Required = false)]
+        public string option { get; set; }
 
 
         // Optional lists
