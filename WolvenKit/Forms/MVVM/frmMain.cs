@@ -3374,7 +3374,7 @@ _col - for simple stuff like boxes and spheres", "Information about importing mo
 
             var memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
             var bm = new BundleManager();
-            bm.LoadAll(MainController.Get().Configuration.ExecutablePath);
+            bm.LoadAll(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath));
 
             //Load MemoryMapped Bundles
             foreach (var b in bm.Bundles.Values)
