@@ -93,7 +93,11 @@ namespace WolvenKit.Bundles
         /// <param name="exedir">Path to executable directory</param>
         public void LoadAll(string exedir)
         {
-            var content = Path.Combine(new FileInfo(exedir).Directory.Parent.Parent.FullName, "content");
+            var di = new DirectoryInfo(exedir);
+            if (!di.Exists)
+                return;
+
+            var content = Path.Combine(di.Parent.Parent.FullName, "content");
 
             var contentdirs = new List<string>(Directory.GetDirectories(content, "content*"));
             contentdirs.Sort(new AlphanumComparator<string>());
@@ -109,7 +113,7 @@ namespace WolvenKit.Bundles
                 LoadBundle(file, true);
             }
 
-            var dlc = Path.Combine(new FileInfo(exedir).Directory.Parent.Parent.FullName, "DLC");
+            var dlc = Path.Combine(di.Parent.Parent.FullName, "DLC");
             if (Directory.Exists(dlc))
             {
                 var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
