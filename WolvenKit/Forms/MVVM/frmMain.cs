@@ -554,7 +554,7 @@ namespace WolvenKit
 
                 vm.OpenDocuments.Remove(doc);
                 //doc.Dispose();
-                throw ex;
+                //throw ex;
                 return null;
             }
 
@@ -1257,11 +1257,6 @@ namespace WolvenKit
                 t.Activate();
                 return null;
             }
-
-            // check and register custom classes
-            // we do it here because people might edit the .ws files at any time
-            // todo: what do I do if the .ws file has been edited while the cr2w file is open?
-            //vm.ScanAndRegisterCustomClasses();
 
             var doc = new DocumentViewModel();
             vm.OpenDocuments.Add(doc);
@@ -2151,6 +2146,10 @@ namespace WolvenKit
                     .Select(_ => _.Substring(_.IndexOf(Path.DirectorySeparatorChar) + 1))
                     .ToList();
                 Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
+
+                // register all custom classes
+                CR2WManager.Init(ActiveMod.FileDirectory, MainController.Get().Logger);
+
 
                 // Update the recent files.
                 var files = new List<string>();

@@ -110,6 +110,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CR2WManager.cs" />
     <Compile Include="CR2W\CR2WBuffer.cs" />
     <Compile Include="CR2W\CR2WCopyAction.cs" />
     <Compile Include="CR2W\CR2WEmbedded.cs" />
@@ -196,7 +197,7 @@
     <Compile Include="Types\Primitive\NetPrimitive\CEnum.cs" />
     <Compile Include="Types\Structs\SCurveData.cs" />
     <Compile Include="Types\Generic\Arrays\CBufferUInt16.cs" />
-    <Compile Include="Types\Utils\CR2WTypeManager.cs" />
+    <Compile Include="CR2WTypeManager.cs" />
     <None Include="Types\Primitive\Flags.cs.deprecated" />
     <Compile Include="Types\BufferedTypes\BufferStructs\CTerrainTileData.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\SWayPointsCollectionsSetData.cs" />

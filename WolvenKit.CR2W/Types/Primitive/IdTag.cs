@@ -99,7 +99,15 @@ namespace WolvenKit.CR2W.Types
 
         public override string ToString()
         {
-            return $"[ {_type} ] {new Guid(_guid).ToString()}";
+            if (_guid == null)
+            {
+                var buffer = new byte[16];
+                return $"[ {_type} ] {new Guid(buffer)}";
+            }
+            else
+            {
+                return $"[ {_type} ] {new Guid(_guid)}";
+            }
         }
     }
 }

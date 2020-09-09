@@ -112,6 +112,7 @@
     <Compile Include="Model\IWolvenkitFile.cs" />
     <Compile Include="Tools\AlphanumComparator.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Tools\CSharpCompilerTools.cs" />
     <Compile Include="Tools\DDSUtils.cs" />
     <Compile Include="Tools\DDS\DDS_ENUMS.cs" />
     <Compile Include="Tools\DDS\DDS_HEADER.cs" />
