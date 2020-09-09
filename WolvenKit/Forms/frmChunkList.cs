@@ -66,7 +66,7 @@ namespace WolvenKit
         
         public event EventHandler<SelectChunkArgs> OnSelectChunk;
 
-        public void UpdateList(string keyword = "")
+        public void UpdateList()
         {
             if (File == null)
                 return;
@@ -77,32 +77,13 @@ namespace WolvenKit
 
             if (!isLargefile)
                 UpdateHelperList();
-            var limit = -1;
-            //if(limitCB.Checked)
-            //{
-            //    int.TryParse(limitTB.Text,out limit);
-            //}
 
             if (listview)
                 treeListView.Roots = File.chunks;
             else
                 treeListView.Roots = File.chunks.Where(_ => _.GetParent() == null).ToList();
 
-            if (!string.IsNullOrEmpty(keyword))
-            {
-                if (limit != -1)
-                {
-                    //treeListView.Objects = File.chunks.Where(x => x.Name.ToUpper().Contains(toolStripSearchBox.Text.ToUpper())).Take(limit);
-                }
-                else
-                {
-                    this.treeListView.ModelFilter = TextMatchFilter.Contains(treeListView, toolStripSearchBox.Text.ToUpper());
-                }
-            }
-            else
-            {
-                treeListView.ModelFilter = null;
-            }
+            
         }
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
@@ -206,13 +187,21 @@ namespace WolvenKit
 
         private void searchBTN_Click(object sender, EventArgs e)
         {
-            UpdateList(toolStripSearchBox.Text);
+            //UpdateList(toolStripSearchBox.Text);
+            if (!string.IsNullOrEmpty(toolStripSearchBox.Text))
+            {
+                this.treeListView.ModelFilter = TextMatchFilter.Contains(treeListView, toolStripSearchBox.Text.ToUpper());
+            }
+            else
+            {
+                treeListView.ModelFilter = null;
+            }
         }
 
         private void resetBTN_Click(object sender, EventArgs e)
         {
             toolStripSearchBox.Clear();
-            UpdateList();
+            treeListView.ModelFilter = null;
         }
 
         private void limitCB_CheckStateChanged(object sender, EventArgs e)
@@ -222,8 +211,14 @@ namespace WolvenKit
 
         private void searchTB_KeyUp(object sender, KeyEventArgs e)
         {
-            //if(e.KeyValue == (int)Keys.Enter)
-                UpdateList(toolStripSearchBox.Text);
+            if (!string.IsNullOrEmpty(toolStripSearchBox.Text))
+            {
+                this.treeListView.ModelFilter = TextMatchFilter.Contains(treeListView, toolStripSearchBox.Text.ToUpper());
+            }
+            else
+            {
+                treeListView.ModelFilter = null;
+            }
         }
 
         private void listView_ItemsChanged(object sender, BrightIdeasSoftware.ItemsChangedEventArgs e)
@@ -246,7 +241,7 @@ namespace WolvenKit
         private void showTreetoolStripButton_Click(object sender, EventArgs e)
         {
             listview = !listview;
-            UpdateList(toolStripSearchBox.Text);
+            UpdateList();
         }
 
         private void expandAllToolStripMenuItem_Click(object sender, EventArgs e)

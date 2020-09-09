@@ -81,6 +81,9 @@ namespace WolvenKit.CR2W.Types
             {
                 this.Reference = (CR2WExportWrapper) val;
             }
+            if (val is IPtrAccessor cval)
+                this.Reference = cval.Reference;
+
             return this;
         }
 
@@ -91,13 +94,13 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var copy = (CPtr<CVariable>) base.Copy(context);
+            var copy = (IPtrAccessor)base.Copy(context);
             
             context.ptrs.Add(copy);
 
             copy.Reference = this.Reference ?? this.Reference.CopyChunk(context);
 
-            return copy;
+            return copy as CVariable;
         }
 
         public override Control GetEditor()

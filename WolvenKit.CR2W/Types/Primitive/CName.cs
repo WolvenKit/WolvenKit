@@ -49,6 +49,8 @@ namespace WolvenKit.CR2W.Types
             {
                 Value = (string)val;
             }
+            else if (val is CName cval)
+                Value = cval.Value;
 
             return this;
         }

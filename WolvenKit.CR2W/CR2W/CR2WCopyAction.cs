@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W
     {
         internal List<CR2WExportWrapper> chunks;
         internal Dictionary<int, int> chunkTranslation;
-        internal List<CPtr<CVariable>> ptrs;
+        internal List<IPtrAccessor> ptrs;
 
         public CR2WCopyAction()
         {
-            ptrs = new List<CPtr<CVariable>>();
+            ptrs = new List<IPtrAccessor>();
             chunks = new List<CR2WExportWrapper>();
             chunkTranslation = new Dictionary<int, int>();
         }

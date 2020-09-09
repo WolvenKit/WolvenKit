@@ -16,42 +16,30 @@ namespace WolvenKit
 {
     public partial class frmChunkProperties : DockContent, IThemedContent
     {
-        internal class VariableListNode
-        {
-            public string Name
-            {
-                get
-                {
-                    if (Variable.REDName != null)
-                        return Variable.REDName;
-                    else
-                        return Parent?.Children.IndexOf(this).ToString() ?? "";
-                }
-            }
-
-            public string Value => Variable.REDValue;
-            public string Type => Variable.REDType;
-            public bool IsSerialized => Variable.IsSerialized;
-
-            public int ChildCount => Children.Count;
-
-            public List<VariableListNode> Children { get; set; }
-            public VariableListNode Parent { get; set; }
-            public IEditableVariable Variable { get; set; }
-        }
-
-
-
         private CR2WExportWrapper chunk;
         private bool showOnlySerialized;
+
+        
 
         public frmChunkProperties()
         {
             InitializeComponent();
             ApplyCustomTheme();
 
-            treeView.CanExpandGetter = x => ((VariableListNode) x).ChildCount > 0;
-            treeView.ChildrenGetter = x => ((VariableListNode) x).Children;
+            treeView.CanExpandGetter = x =>
+            {
+                var root = showOnlySerialized
+                    ? ((IEditableVariable)x).GetEditableVariables().Where(_ => _.IsSerialized)
+                    : ((IEditableVariable)x).GetEditableVariables();
+                return root.Count() > 0;
+            };
+            treeView.ChildrenGetter = x =>
+            {
+                var root = showOnlySerialized
+                    ? ((IEditableVariable)x).GetEditableVariables().Where(_ => _.IsSerialized)
+                    : ((IEditableVariable)x).GetEditableVariables();
+                return root;
+            };
 
             toolStripButtonShowSerialized.Text = showOnlySerialized
                 ? "Show all variables"
@@ -78,12 +66,11 @@ namespace WolvenKit
                 return;
             }
 
-            var root = AddListViewItems(chunk, showOnlySerialized);
+            var root = showOnlySerialized 
+                ? chunk.GetEditableVariables().Where(_ => _.IsSerialized) 
+                : chunk.GetEditableVariables();
 
-            treeView.Roots = root.Children;
-            //treeView.RefreshObjects(root.Children);
-
-
+            treeView.Roots = root;
 
             // filter
             if (!string.IsNullOrEmpty(toolStripSearchBox.Text.ToUpper()))
@@ -93,68 +80,9 @@ namespace WolvenKit
             else
             {
                 this.treeView.ModelFilter = null;
-                
             }
 
-            for (var depth = 0; ExpandOneLevel(depth, root.Children); depth++)
-            {
-            }
-
-        }
-
-        private bool ExpandOneLevel(int depth, List<VariableListNode> children, int currentLevel = 0)
-        {
-            var expandedSomething = false;
-
-            foreach (var c in children)
-            {
-                if (currentLevel == depth)
-                {
-                    treeView.Expand(c);
-
-                    if ((NativeMethods.GetWindowLong(treeView.Handle, NativeMethods.GWL_STYLE) & NativeMethods.WS_VSCROLL) == NativeMethods.WS_VSCROLL)
-                    {
-                        treeView.Collapse(c);
-                        return false;
-                    }
-
-                    expandedSomething = true;
-                }
-                else
-                {
-                    if (ExpandOneLevel(depth, c.Children, currentLevel + 1))
-                        expandedSomething = true;
-                }
-            }
-
-            return expandedSomething;
-        }
-
-        internal static VariableListNode AddListViewItems(IEditableVariable v
-            , bool showOnlySerialized = false
-            , VariableListNode parent = null
-            , int arrayindex = 0
-            )
-        {
-            var node = new VariableListNode()
-            {
-                Variable = v,
-                Children = new List<VariableListNode>(),
-                Parent = parent
-            };
-            List<IEditableVariable> vars = showOnlySerialized 
-                ? v.GetEditableVariables().Where(_ => _.IsSerialized).ToList() 
-                : v.GetEditableVariables();
-
-            if (vars != null)
-            {
-                for (var i = 0; i < vars.Count; i++)
-                {
-                    node.Children.Add(AddListViewItems(vars[i], showOnlySerialized, node, i));
-                }
-            }
-
-            return node;
+            treeView.ExpandAll();
         }
 
 
@@ -168,7 +96,7 @@ namespace WolvenKit
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
-            var selectedNodes = treeView.SelectedObjects.Cast<VariableListNode>().Where(item => item?.Variable != null).ToList();
+            var selectedNodes = treeView.SelectedObjects.Cast<IEditableVariable>().ToList();
             if (selectedNodes.ToArray().Length <= 0)
             {
                 e.Cancel = true;
@@ -176,35 +104,35 @@ namespace WolvenKit
             }
 
             // for carrays
-            addVariableToolStripMenuItem.Enabled = selectedNodes.All(x => x.Variable.CanAddVariable(null));
-            removeVariableToolStripMenuItem.Enabled = selectedNodes.All(x => x.Parent != null && x.Parent.Variable.CanRemoveVariable(x.Variable));
+            addVariableToolStripMenuItem.Enabled = selectedNodes.All(x => x.CanAddVariable(null));
+            removeVariableToolStripMenuItem.Enabled = selectedNodes.All(x => x.Parent != null && x.Parent.CanRemoveVariable(x));
 
             //  paste variable is active if any one variable has been copied and if the one selected variable is of the same type
             pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null
                 && CopyController.VariableTargets.Count == 1 && CopyController.VariableTargets.First() is CVariable ccopy
-                && selectedNodes.Count == 1 && selectedNodes.First().Variable is CVariable csel
+                && selectedNodes.Count == 1 && selectedNodes.First() is CVariable csel
                 && csel.GetType() == ccopy.GetType();
 
-            ptrPropertiesToolStripMenuItem.Visible = selectedNodes.All(x => x.Variable is IPtrAccessor) && selectedNodes.Count == 1;
+            ptrPropertiesToolStripMenuItem.Visible = selectedNodes.All(x => x is IPtrAccessor) && selectedNodes.Count == 1;
         }
 
         public void CopyVariable()
         {
-            var tocopynodes = (from VariableListNode item in treeView.SelectedObjects where item?.Variable != null select item.Variable).ToList();
+            var tocopynodes = (from IEditableVariable item in treeView.SelectedObjects where item != null select item).ToList();
             if (tocopynodes.Count > 0)
                 CopyController.VariableTargets = tocopynodes;
         }
 
         public void PasteVariable()
         {
-            var node = (VariableListNode)treeView.SelectedObject;
-            if (CopyController.VariableTargets == null || node?.Variable == null)
+            var node = (IEditableVariable)treeView.SelectedObject;
+            if (CopyController.VariableTargets == null || node == null)
                 return;
 
             if (CopyController.VariableTargets.Count == 1
                 && CopyController.VariableTargets.First() is CVariable cvar
-                && cvar.REDType == node.Variable.REDType
-                && node.Variable is CVariable targetvar
+                && cvar.REDType == node.REDType
+                && node is CVariable targetvar
                 )
             {
                 var context = new CR2WCopyAction()
@@ -224,46 +152,36 @@ namespace WolvenKit
 
         private void addVariableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (VariableListNode) treeView.SelectedObject;
-            if (node?.Variable == null || !node.Variable.CanAddVariable(null) || !(node.Variable is IArrayAccessor parentarray))
+            var node = (IEditableVariable) treeView.SelectedObject;
+            if (node == null || !node.CanAddVariable(null) || !(node is IArrayAccessor parentarray))
                 return;
 
             // instantiate all child Cvars??
-            CVariable newvar = CR2WTypeManager.Create(parentarray.Elementtype, "", Chunk.cr2w, node.Variable as CVariable, false);
+            CVariable newvar = CR2WTypeManager.Create(parentarray.Elementtype, "", Chunk.cr2w, node as CVariable, false);
             if (newvar == null)
                 return;
 
-            node.Variable.AddVariable(newvar);
-
-            var subnode = AddListViewItems(newvar, showOnlySerialized, node);
-            node.Children.Add(subnode);
-
+            node.AddVariable(newvar);
             treeView.RefreshObject(node);
-            treeView.RefreshObject(subnode);
         }
 
         private void removeVariableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // removing variables from arrays
-            foreach (VariableListNode node in treeView.SelectedObjects)
+            foreach (IEditableVariable node in treeView.SelectedObjects)
             {
-                if (node?.Parent != null && node.Parent.Variable.CanRemoveVariable(node.Variable))
+                if (node?.Parent != null && node.Parent.CanRemoveVariable(node))
                 {
-                    node.Parent.Variable.RemoveVariable(node.Variable);
-                    node.Parent.Children.Remove(node);
-                    try
-                    {
-                        treeView.RefreshObject(node.Parent);
-                    }
-                    catch { } //TODO: Do this better, works now but it shouldn't be done like this. :p
+                    node.Parent.RemoveVariable(node);
+                    treeView.RefreshObject(node.Parent);
                 }
             }
         }
 
         private void clearVariableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (VariableListNode)treeView.SelectedObject;
-            if (node?.Variable == null)
+            var node = (IEditableVariable)treeView.SelectedObject;
+            if (node == null)
             {
                 return;
             }
@@ -278,14 +196,10 @@ namespace WolvenKit
 
         private void expandAllChildrenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (VariableListNode) treeView.SelectedObject;
+            var node = (IEditableVariable) treeView.SelectedObject;
             if (node != null)
             {
                 treeView.Expand(node);
-                foreach (var c in node.Children)
-                {
-                    treeView.Expand(c);
-                }
             }
         }
 
@@ -293,13 +207,10 @@ namespace WolvenKit
 
         private void collapseAllChildrenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (VariableListNode) treeView.SelectedObject;
+            var node = (IEditableVariable) treeView.SelectedObject;
             if (node != null)
             {
-                foreach (var c in node.Children)
-                {
-                    treeView.Collapse(c);
-                }
+                treeView.Collapse(node);
             }
         }
 
@@ -317,7 +228,7 @@ namespace WolvenKit
             //    treeView.StartCellEdit(e.Item, 0);
             //}
             //else 
-            if (e.Column.AspectName == nameof(VariableListNode.Value))
+            if (e.Column.AspectName == nameof(IEditableVariable.REDValue))
             {
                 treeView.StartCellEdit(e.Item, olvColumn4.Index);
             }
@@ -325,24 +236,24 @@ namespace WolvenKit
 
         private void ptrPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (VariableListNode) treeView.SelectedObject;
-            if ((node?.Variable as IPtrAccessor)?.Reference == null)
+            var node = (IEditableVariable) treeView.SelectedObject;
+            if ((node as IPtrAccessor)?.Reference == null)
                 return;
 
-            Chunk = ((IPtrAccessor) node.Variable).Reference;
+            Chunk = ((IPtrAccessor) node).Reference;
         }
 
         private void copyTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (VariableListNode) treeView.SelectedObject;
-            if (node?.Parent == null || !node.Parent.Variable.CanRemoveVariable(node.Variable))
+            var node = (IEditableVariable) treeView.SelectedObject;
+            if (node?.Parent == null || !node.Parent.CanRemoveVariable(node))
                 return;
-            if (node.Value != null)
+            if (node.REDValue != null)
             {
-                if(node.Value == "")
-                    Clipboard.SetText(node.Type + ":??");
+                if(node.REDValue == "")
+                    Clipboard.SetText(node.REDType + ":??");
                 else
-                    Clipboard.SetText(node.Value);
+                    Clipboard.SetText(node.REDValue);
 
             }
         }
@@ -355,9 +266,9 @@ namespace WolvenKit
         private void treeView_CellEditStarting(object sender, CellEditEventArgs e)
         {
             //var variable = (e.RowObject as VariableListNode).Variable;
-            if (e.Column.AspectName == "Value")
+            if (e.Column.AspectName == "REDValue")
             {
-                e.Control = ((VariableListNode)e.RowObject).Variable.GetEditor();
+                e.Control = ((IEditableVariable)e.RowObject).GetEditor();
                 if (e.Control != null)
                 {
                     e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
@@ -366,7 +277,7 @@ namespace WolvenKit
                 }
                 e.Cancel = e.Control == null;
             }
-            else if (e.Column.AspectName == "Name")
+            else if (e.Column.AspectName == "REDName")
             {
                 //Normal textbox is good for this.
             }
@@ -385,8 +296,8 @@ namespace WolvenKit
 
             // change the model's isserialized property to true when the user edits it,
             // this is to make sure only user-edited properties will get serialized
-            var model = e.ListViewItem.RowObject as VariableListNode;
-            if (model.Variable is CVariable cvar)
+            var model = e.ListViewItem.RowObject as IEditableVariable;
+            if (model is CVariable cvar)
                 cvar.SetIsSerialized();
 
         }
@@ -407,15 +318,19 @@ namespace WolvenKit
 
         private void treeView_FormatRow(object sender, FormatRowEventArgs e)
         {
-            VariableListNode model = (VariableListNode)e.Model;
+            IEditableVariable model = (IEditableVariable)e.Model;
             if (model != null && model.IsSerialized)
             {
-                if (!showOnlySerialized)
-                    e.Item.ForeColor = UIController.GetPalette().OverflowButtonPressed.Border; //Color.Green;
+                //if (!showOnlySerialized)
+                {
+                    int themeID = (int)UIController.Get().Configuration.ColorTheme;
+                    Color forecolor = Color.FromArgb(UIController.Get().Configuration.CustomHighlightColor[themeID]);
+                    e.Item.ForeColor = forecolor;
+                }
             }
             else
             {
-
+                
             }
         }
 
@@ -442,6 +357,25 @@ namespace WolvenKit
             UpdateTreeListView();
         }
 
-        
+        private void toolStripButtonColorPicker_Click(object sender, EventArgs e)
+        {
+            int themeID = (int)UIController.Get().Configuration.ColorTheme;
+            Color forecolor = Color.FromArgb(UIController.Get().Configuration.CustomHighlightColor[themeID]);
+
+
+            ColorDialog MyDialog = new ColorDialog
+            {
+                AllowFullOpen = true,
+                ShowHelp = true,
+                Color = forecolor
+            };
+
+            // Update the text box color if the user clicks OK 
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+            {
+                UIController.Get().Configuration.CustomHighlightColor[themeID] = MyDialog.Color.ToArgb();
+                UIController.Get().Configuration.Save();
+            }
+        }
     }
 }

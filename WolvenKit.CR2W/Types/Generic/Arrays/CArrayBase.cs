@@ -77,7 +77,10 @@ namespace WolvenKit.CR2W.Types
                 // solution? not sure: pass 0 and disable checks?
                 element.Read(file, (uint)0);
                 if (element is T te)
+                {
+                    te.IsSerialized = true;
                     Elements.Add(te);
+                }
             }
         }
 

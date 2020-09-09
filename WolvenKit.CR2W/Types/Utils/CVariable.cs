@@ -505,15 +505,33 @@ namespace WolvenKit.CR2W.Types
             {
                 if (item is CVariable cvar)
                 {
-                    var innercontext = new CR2WCopyAction();
+                    var innercontext = new CR2WCopyAction()
+                    {
+                        DestinationFile = context.DestinationFile,
+                        Parent = item.Parent as CVariable
+                    };
                     copy.TryAddVariable(cvar.Copy(innercontext));
                 }
             }
 
+            copy.IsSerialized = this.IsSerialized;
             return copy;
         }
 
+        public virtual CVariable SetValue(object val)
+        {
+            if (val is CVariable cvar)
+            {
+                // set all REDProperties and REDBuffers
+                foreach (IEditableVariable item in cvar.GetEditableVariables())
+                {
+                    if (item is CVariable citem)
+                        this.TryAddVariable(citem);
+                }
+            }
 
+            return this;
+        }
 
         public virtual void AddVariable(CVariable var)
         {
@@ -537,10 +555,7 @@ namespace WolvenKit.CR2W.Types
 
 
 
-        public virtual CVariable SetValue(object val)
-        {
-            return this;
-        }
+
 
         public virtual Control GetEditor()
         {
