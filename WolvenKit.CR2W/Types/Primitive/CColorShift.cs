@@ -35,6 +35,8 @@ namespace WolvenKit.CR2W.Types
             {
                 Color = HslColor.FromRgb((Color)val);
             }
+            else if (val is CColorShift cvar)
+                Color = cvar.Color;
             return this;
         }
 

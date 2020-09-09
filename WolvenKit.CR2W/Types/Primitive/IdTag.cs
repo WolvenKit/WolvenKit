@@ -88,6 +88,12 @@ namespace WolvenKit.CR2W.Types
             {
                 _type = (byte)val;
             }
+            else if (val is IdTag cvar)
+            {
+                _guid = cvar._guid;
+                _type = cvar._type;
+            }
+
             return this;
         }
 

@@ -65,7 +65,16 @@ namespace WolvenKit.CR2W.Types
         {
             if (val is CVariable)
             {
-                Variant = (CVariable) val;
+                Variant = (CVariable)val;
+            }
+            else if (val is CVariant cvar)
+            {
+                var context = new CR2WCopyAction()
+                {
+                    DestinationFile = this.cr2w,
+                    Parent = this.Parent as CVariable
+                };
+                this.Variant = cvar.Variant.Copy(context);
             }
 
             return this;

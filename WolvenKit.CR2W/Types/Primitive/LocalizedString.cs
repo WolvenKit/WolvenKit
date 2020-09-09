@@ -47,12 +47,17 @@ namespace WolvenKit.CR2W.Types
         {
             if (val is uint)
             {
-                this.val = (uint) val;
+                this.val = (uint)val;
             }
             else if (val is int)
             {
-                this.val = (uint) (int) val;
+                this.val = (uint)(int)val;
             }
+            else if (val is LocalizedString cvar)
+            {
+                this.val = cvar.val;
+            }
+
             return this;
         }
 
