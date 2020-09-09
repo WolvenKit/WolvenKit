@@ -1825,9 +1825,12 @@ namespace WolvenKit
                         {
                             if(bnk.IncludedFullFiles.Any(x => x.Id == id) || bnk.IncludedPrefetchFiles.Any(x => x.Id == id))
                             {
-                                var bytes = MainController.ImportFile(bnk.Path, MainController.Get().SoundManager);
-                                File.WriteAllBytes(Path.Combine(soundmoddir, bnk.Path), bytes[0].ToArray());
-                                MainController.Get().Logger.LogString("Imported " + bnk.Path + " for rebuilding with the modded wem files!");
+                                if(!File.Exists(Path.Combine(soundmoddir, bnk.Path)))
+                                {
+                                    var bytes = MainController.ImportFile(bnk.Path, MainController.Get().SoundManager);
+                                    File.WriteAllBytes(Path.Combine(soundmoddir, bnk.Path), bytes[0].ToArray());
+                                    MainController.Get().Logger.LogString("Imported " + bnk.Path + " for rebuilding with the modded wem files!");
+                                }
                                 break;
                             }
                         }
