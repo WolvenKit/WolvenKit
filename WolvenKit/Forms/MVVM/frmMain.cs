@@ -1816,6 +1816,28 @@ namespace WolvenKit
                     {
                         var soundmoddir = Path.Combine(ActiveMod.ModDirectory, EBundleType.SoundCache.ToString());
 
+                        // We need to have the original soundcache's so we can rebuild them when packing the mod
+                        foreach (var wem in Directory.GetFiles(soundmoddir, "*.wem", SearchOption.AllDirectories))
+                        {
+                            // Get the file id so we can search for the parent soundcache
+                            var id = Path.GetFileNameWithoutExtension(SoundCache.GetIDFromPath(wem));
+
+                            // Find the parent bank
+                            foreach (var bnk in SoundCache.info.Banks)
+                            {
+                                if (bnk.IncludedFullFiles.Any(x => x.Id == id) || bnk.IncludedPrefetchFiles.Any(x => x.Id == id))
+                                {
+                                    if (!File.Exists(Path.Combine(soundmoddir, bnk.Path)))
+                                    {
+                                        var bytes = MainController.ImportFile(bnk.Path, MainController.Get().SoundManager);
+                                        File.WriteAllBytes(Path.Combine(soundmoddir, bnk.Path), bytes[0].ToArray());
+                                        MainController.Get().Logger.LogString("Imported " + bnk.Path + " for rebuilding with the modded wem files!");
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+
                         foreach (var bnk in Directory.GetFiles(soundmoddir, "*.bnk", SearchOption.AllDirectories))
                         {
                             Soundbank bank = new Soundbank(bnk);
