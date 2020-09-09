@@ -246,12 +246,12 @@
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.Highlight;
             this.label3.Location = new System.Drawing.Point(510, 129);
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(107, 24);
             this.label3.TabIndex = 16;
@@ -338,6 +338,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Welcome";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmWelcome_FormClosing);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.objectListView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

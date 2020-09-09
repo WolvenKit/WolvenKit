@@ -1,0 +1,182 @@
+<html>
+<head>
+<title>Irrlicht Engine Tutorial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699" width="10"><b><a href="http://irrlicht.sourceforge.net" target="_blank"><img src="../../media/irrlichtlogo.jpg" width="88" height="31" border="0"></a></b></td>
+    <td bgcolor="#666699" width="100%">
+<div align="center">
+        <div align="left"><b><font color="#FFFFFF">Tutorial 9. Mesh Viewer</font></b></div>
+      </div>
+      </td>
+  </tr>
+  <tr bgcolor="#eeeeff"> 
+    <td height="90" colspan="2"> 
+      <div align="left"> 
+        <p> This tutorial shows how to create a more complex application with 
+          the engine. We construct a simple mesh viewer using the user interface 
+          API and the scenemanagement of Irrlicht.<br>
+          The tutorial shows how to create and use Buttons, Windows, Toolbars, 
+          Menus, ComboBoxes, Tabcontrols, Editboxes, Images, MessageBoxes, SkyBoxes, 
+          and how to parse XML files with the integrated XML reader of the engine.</p>
+        <p>The program which is described here will look like this:</p>
+        <p align="center"><img src="../../media/009shot.jpg" width="260" height="203"><br>
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699"> <b><font color="#FFFFFF">Lets start!</font></b></td>
+  </tr>
+  <tr> 
+    <td height="90" bgcolor="#eeeeff" valign="top"> <div align="left"> 
+        <div align="left"> 
+          <p>We start like in most other tutorials: Include all nesessary header 
+            files, add a comment to let the engine be linked with the right .lib 
+            file in Visual Studio, and deklare some global variables. We also 
+            add two 'using namespece' statements, so we do not need to write the 
+            whole names of all classes. In this tutorial, we use a lot stuff from 
+            the gui namespace.</p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td> <pre>#include &lt;irrlicht.h&gt;<br>#include &lt;iostream&gt;<br><br>using namespace irr;<br>using namespace gui;<br><br>#pragma comment(lib, &quot;Irrlicht.lib&quot;)<br><br>IrrlichtDevice *Device = 0;<br>core::stringc StartUpModelFile;<br>core::stringw MessageText;<br>core::stringw Caption;<br>scene::IAnimatedMeshSceneNode* Model = 0;<br>scene::ISceneNode* SkyBox = 0;<br></pre></td>
+            </tr>
+          </table>
+          <p> The three following functions do several stuff used by the mesh 
+            viewer. The first function showAboutText() simply displays a messagebox 
+            with a caption and a message text. The texts will be stored in the 
+            MessageText and Caption variables at startup.</p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td> <pre>void showAboutText()<br>{<br><font color="#006600">	// create modal message box with the text<br>	// loaded from the xml file</font><font color="#00CC00">.</font><br>	Device-&gt;getGUIEnvironment()-&gt;addMessageBox(<br>		Caption.c_str(), MessageText.c_str());<br>}</pre></td>
+            </tr>
+          </table>
+          <p> The second function loadModel() loads a model and displays it using 
+            an addAnimatedMeshSceneNode and the scene manager. Nothing difficult. 
+            It also displays a short message box, if the model could not be loaded. 
+          </p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td> <pre>void loadModel(const c8* filename)<br>{<br>	<font color="#006600">// load a model into the engine</font><br>	if (Model)<br>		Model-&gt;remove();<br>	Model = 0;<br><br>	scene::IAnimatedMesh* m = Device-&gt;getSceneManager()-&gt;getMesh(filename);<br>	if (!m) <br>	{<br>		<font color="#006600">// model could not be loaded</font><br>		if (StartUpModelFile != filename)<br>			Device-&gt;getGUIEnvironment()-&gt;addMessageBox(<br>			Caption.c_str(), L&quot;The model could not be loaded. &quot; \<br>			L&quot;Maybe it is not a supported file format.&quot;);<br>		return;<br>	}<br><br><font color="#006600">	// set default material properties</font><br>	Model = Device-&gt;getSceneManager()-&gt;addAnimatedMeshSceneNode(m);<br>	Model-&gt;setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);<br>	Model-&gt;setMaterialFlag(video::EMF_LIGHTING, false);<br>	Model-&gt;setDebugDataVisible(true);<br>}</pre></td>
+            </tr>
+          </table>
+          <p> Finally, the third function creates a toolbox window. In this simple 
+            mesh viewer, this toolbox only contains a tab control with three edit 
+            boxes for changing the scale of the displayed model.</p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td> <pre>void createToolBox()<br>{<br>	<font color="#006600">// remove tool box if already there</font><br>	IGUIEnvironment* env = Device-&gt;getGUIEnvironment();<br>	IGUIElement* root = env-&gt;getRootGUIElement();<br>	IGUIElement* e = root-&gt;getElementFromId(5000, true);<br>	if (e) e-&gt;remove();<br><br>	<font color="#006600">// create the toolbox window</font><br>	IGUIWindow* wnd = env-&gt;addWindow(core::rect&lt;s32&gt;(450,25,640,480),<br>		false, L&quot;Toolset&quot;, 0, 5000);<br><br>	<font color="#006600">// create tab control and tabs</font><br>	IGUITabControl* tab = env-&gt;addTabControl(<br>		core::rect&lt;s32&gt;(2,20,640-452,480-7), wnd, true, true);<br>	IGUITab* t1 = tab-&gt;addTab(L&quot;Scale&quot;);<br>	IGUITab* t2 = tab-&gt;addTab(L&quot;Empty Tab&quot;);<br><br>	<font color="#006600">// add some edit boxes and a button to tab one</font><br>	env-&gt;addEditBox(L&quot;1.0&quot;, core::rect&lt;s32&gt;(40,50,130,70), true, t1, 901);<br>	env-&gt;addEditBox(L&quot;1.0&quot;, core::rect&lt;s32&gt;(40,80,130,100), true, t1, 902);<br>	env-&gt;addEditBox(L&quot;1.0&quot;, core::rect&lt;s32&gt;(40,110,130,130), true, t1, 903);<br>	env-&gt;addButton(core::rect&lt;s32&gt;(10,150,100,190), t1, 1101, L&quot;set&quot;);<br><br>	// bring irrlicht engine logo to front, because it<br>	// now may be below the newly created toolbox<br>	root-&gt;bringToFront(root-&gt;getElementFromId(666, true));<br>}</pre></td>
+            </tr>
+          </table>
+          <p> To get all the events sent by the GUI Elements, we need to create 
+            an event receiver. This one is really simple. If an event occurs, 
+            it checks the id of the caller and the event type, and starts an action 
+            based on these values. For example, if a menu item with id 100 was 
+            selected, if opens a file-open-dialog. </p>
+          </div>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre><font size="2">class MyEventReceiver : public IEventReceiver<br>{<br>public:<br>	virtual bool OnEvent(const SEvent&amp; event)<br>	{<br>		if (event.EventType == EET_GUI_EVENT)<br>		{<br>			s32 id = event.GUIEvent.Caller-&gt;getID();<br>			IGUIEnvironment* env = Device-&gt;getGUIEnvironment();<br>			switch(event.GUIEvent.EventType)<br>			{<br>			case EGET_MENU_ITEM_SELECTED:<br>				{<br>				<font color="#006600">	// a menu item was clicked</font><br>					IGUIContextMenu* menu = (IGUIContextMenu*)event.GUIEvent.Caller;<br>					s32 id = menu-&gt;getItemCommandId(menu-&gt;getSelectedItem());<br>					<br>					switch(id)<br>					{<br>					case 100<font color="#006600">: // File -&gt; Open Mode</font>l<br>						env-&gt;addFileOpenDialog(L&quot;Please select a model file to open&quot;);<br>						break;<br>					case 200<font color="#006600">: // File -&gt; Quit</font><br>						Device-&gt;closeDevice();<br>						break;<br>					case 300<font color="#006600">: // View -&gt; Skybox</font><br>						SkyBox-&gt;setVisible(!SkyBox-&gt;isVisible());<br>						break;<br>					case 400<font color="#006600">: // View -&gt; Debug Informatio</font>n<br>						if (Model)<br>							Model-&gt;setDebugDataVisible(!Model-&gt;isDebugDataVisible());<br>						break;<br>					case 500<font color="#006600">: // Help-&gt;About</font><br>						showAboutText();<br>						break;<br>					case 610<font color="#006600">: // View -&gt; Material -&gt; Soli</font>d<br>						if (Model)<br>							Model-&gt;setMaterialType(video::EMT_SOLID);<br>						break;<br>					case 620<font color="#006600">: // View -&gt; Material -&gt; Transparen</font>t<br>						if (Model)<br>							Model-&gt;setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);<br>						break;<br>					case 630<font color="#006600">: // View -&gt; Material -&gt; Reflectio</font>n<br>						if (Model)<br>							Model-&gt;setMaterialType(video::EMT_SPHERE_MAP);<br>						break;<br>					}<br>					break;<br>				}<br>			case EGET_FILE_SELECTED:<br>				{<br>				<font color="#006600">	// load the model file, selected in the file open dialo</font>g<br>					IGUIFileOpenDialog* dialog = <br>						(IGUIFileOpenDialog*)event.GUIEvent.Caller;<br>					loadModel(core::stringc(dialog-&gt;getFilename()).c_str());<br>				}<br>			case EGET_BUTTON_CLICKED:<br>				switch(id)<br>				{<br>				case 1101:<br>					{<br>					<font color="#006600">	// set scal</font>e<br>						gui::IGUIElement* root = env-&gt;getRootGUIElement();<br>						core::vector3df scale;<br>						core::stringc s;<br>						s = root-&gt;getElementFromId(901, true)-&gt;getText();<br>						scale.X = (f32)atof(s.c_str());<br>						s = root-&gt;getElementFromId(902, true)-&gt;getText();<br>						scale.Y = (f32)atof(s.c_str());<br>						s = root-&gt;getElementFromId(903, true)-&gt;getText();<br>						scale.Z = (f32)atof(s.c_str());<br>						if (Model)<br>							Model-&gt;setScale(scale);<br>					}<br>					break;<br>				case 1102:<br>					env-&gt;addFileOpenDialog(L&quot;Please select a model file to open&quot;);<br>					break;<br>				case 1103:<br>					showAboutText();<br>					break;<br>				case 1104:<br>					createToolBox();<br>					break;<br>				}<br>				break;<br>			}<br>		}<br>		return false;<br>	}<br>};</font></pre></td>
+          </tr>
+        </table>
+        <p> Most of the hard work is done. We only need to create the Irrlicht 
+          Engine device and all the buttons, menus and toolbars. We start up the 
+          engine as usual, using createDevice(). To make our application catch 
+          events, we set our eventreceiver as parameter. The #ifdef WIN32 preprocessor 
+          commands are not necesarry, but I included them to make the tutorial 
+          use DirectX on Windows and OpenGL on all other platforms like Linux. 
+          As you can see, there is also a unusual call to IrrlichtDevice::setResizeAble(). 
+          This makes the render window resizeable, which is quite useful for a 
+          mesh viewer. </p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre>int main()<br>{<br> // ask user for driver
+<br>	video::E_DRIVER_TYPE driverType;
+<br>	printf(&quot;Please select the driver you want for this example:\n&quot;\<br>		&quot; (a) Direct3D 9.0c\n (b) Direct3D 8.1\n (c) OpenGL 1.5\n&quot;\<br>		&quot; (d) Software Renderer\n (e) Apfelbaum Software Renderer\n&quot;\<br>		&quot; (f) NullDevice\n (otherKey) exit\n\n&quot;);<br><br>	char key;<br>	std::cin &gt;&gt; key;<br><br>	switch(key)<br>	{<br>		case 'a': driverType = video::EDT_DIRECT3D9;break;<br>		case 'b': driverType = video::EDT_DIRECT3D8;break;<br>		case 'c': driverType = video::EDT_OPENGL;   break;<br>		case 'd': driverType = video::EDT_SOFTWARE; break;<br>		case 'e': driverType = video::EDT_BURNINGSVIDEO;break;<br>		case 'f': driverType = video::EDT_NULL;     break;<br>		default: return 1;<br>	}	
+<br>	// create device and exit if creation failed
+<br>	MyEventReceiver receiver;<br>	Device = createDevice(driverType, core::dimension2d&lt;s32&gt;(640, 480),<br>		16, false, false, false, &amp;receiver);
+<br>	if (Device == 0)<br>		return 1;  // could not create selected driver.<br><br>	Device-&gt;setResizable(true);<br>	Device-&gt;setWindowCaption(L&quot;Irrlicht Engine - Loading...&quot;);<br><br>	video::IVideoDriver* driver = Device-&gt;getVideoDriver();<br>	IGUIEnvironment* env = Device-&gt;getGUIEnvironment();<br>	scene::ISceneManager* smgr = Device-&gt;getSceneManager();<br></pre></td>
+          </tr>
+        </table>
+        <p> The next step is to read the configuration file. It is stored in the 
+          xml format and looks a little bit like this:<br>
+          <br>
+          <font face="Courier New, Courier, mono">&lt;?xml version=&quot;1.0&quot;?&gt;<br>
+          &lt;config&gt;<br>
+          &lt;startUpModel file=&quot;some filename&quot; /&gt;<br>
+          &lt;messageText caption=&quot;Irrlicht Engine Mesh Viewer&quot;&gt;<br>
+          Hello!<br>
+          &lt;/messageText&gt;<br>
+          &lt;/config&gt;</font><br>
+          <br>
+          We need the data stored in there to be written into the global variables 
+          StartUpModelFile, MessageText and Caption. This is now done using the 
+          Irrlicht Engine integrated XML parser: </p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre>	<font color="#006600">// read configuration from xml file</font><br>	io::IXMLReader* xml =<br>		Device-&gt;getFileSystem()-&gt;createXMLReader(&quot;../../media/config.xml&quot;);<br>	while(xml &amp;&amp; xml-&gt;read())<br>	{<br>		switch(xml-&gt;getNodeType())<br>		{<br>		case io::EXN_TEXT:<br>			<font color="#006600">// in this xml file, the only text which occurs is the messageText</font><br>			MessageText = xml-&gt;getNodeData();<br>			break;<br>		case io::EXN_ELEMENT:<br>			{<br>				if (core::stringw(&quot;startUpModel&quot;) == xml-&gt;getNodeName())<br>					StartUpModelFile = xml-&gt;getAttributeValue(L&quot;file&quot;);<br>				else<br>				if (core::stringw(&quot;messageText&quot;) == xml-&gt;getNodeName())<br>					Caption = xml-&gt;getAttributeValue(L&quot;caption&quot;);<br>			}<br>			break;<br>		}<br>	}<br>	if (xml)<br>		xml-&gt;drop(); <font color="#006600">// don't forget to delete the xml reader </font><br>
+</pre></td>
+          </tr>
+        </table>
+        <p> That wasn't difficult. Now we'll set a nicer font and create the Menu. 
+          It is possible to create submenus for every menu item. The call menu-&gt;addItem(L&quot;File&quot;, 
+          -1, true, true); for example adds a new menu Item with the name &quot;File&quot; 
+          and the id -1. The following parameter says that the menu item should 
+          be enabled, and the last one says, that there should be a submenu. The 
+          submenu can now be accessed with menu-&gt;getSubMenu(0), because the 
+          &quot;File&quot; entry is the menu item with index 0. </p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre>	<font color="#006600">// set a nicer font</font><br>	IGUISkin* skin = env-&gt;getSkin();<br>	IGUIFont* font = env-&gt;getFont(&quot;../../media/fonthaettenschweiler.bmp&quot;);<br>	if (font)<br>		skin-&gt;setFont(font);<br><br><font color="#006600">	// create menu</font><br>	gui::IGUIContextMenu* menu = env-&gt;addMenu();<br>	menu-&gt;addItem(L&quot;File&quot;, -1, true, true);<br>	menu-&gt;addItem(L&quot;View&quot;, -1, true, true);<br>	menu-&gt;addItem(L&quot;Help&quot;, -1, true, true);<br><br>	gui::IGUIContextMenu* submenu;<br>	submenu = menu-&gt;getSubMenu(0);<br>	submenu-&gt;addItem(L&quot;Open Model File...&quot;, 100);<br>	submenu-&gt;addSeparator();<br>	submenu-&gt;addItem(L&quot;Quit&quot;, 200);<br><br>	submenu = menu-&gt;getSubMenu(1);<br>	submenu-&gt;addItem(L&quot;toggle sky box visibility&quot;, 300);<br>	submenu-&gt;addItem(L&quot;toggle model debug information&quot;, 400);<br>	submenu-&gt;addItem(L&quot;model material&quot;, -1, true, true );<br><br>	submenu = submenu-&gt;getSubMenu(2);<br>	submenu-&gt;addItem(L&quot;Solid&quot;, 610);<br>	submenu-&gt;addItem(L&quot;Transparent&quot;, 620);<br>	submenu-&gt;addItem(L&quot;Reflection&quot;, 630);<br><br>	submenu = menu-&gt;getSubMenu(2);<br>	submenu-&gt;addItem(L&quot;About&quot;, 500);
+</pre></td>
+          </tr>
+        </table>
+        <br>
+        We want a toolbar, onto which we can place colored buttons and important 
+        looking stuff like a senseless combobox.<br>
+        <br>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre><font color="#006600">	// create toolbar</font><br>	gui::IGUIToolBar* bar = env-&gt;addToolBar();<br>	bar-&gt;addButton(1102, 0, driver-&gt;getTexture(&quot;../../media/open.bmp&quot;));<br>	bar-&gt;addButton(1103, 0, driver-&gt;getTexture(&quot;../../media/help.bmp&quot;));<br>	bar-&gt;addButton(1104, 0, driver-&gt;getTexture(&quot;../../media/tools.bmp&quot;));<br><br><font color="#006600">	// create a combobox with some senseless texts</font><br>	gui::IGUIComboBox* box = env-&gt;addComboBox(core::rect&lt;s32&gt;(100,5,200,25), bar);<br>	box-&gt;addItem(L&quot;Bilinear&quot;);<br>	box-&gt;addItem(L&quot;Trilinear&quot;);<br>	box-&gt;addItem(L&quot;Anisotropic&quot;);<br>	box-&gt;addItem(L&quot;Isotropic&quot;);<br>	box-&gt;addItem(L&quot;Psychedelic&quot;);<br>	box-&gt;addItem(L&quot;No filtering&quot;);</pre></td>
+          </tr>
+        </table>
+        <br>
+        To make the editor look a little bit better, we disable transparent gui 
+        elements, and add a Irrlicht Engine logo. In addition, a text, which will 
+        show the current frame per second value is created, and the window caption 
+        changed.<br>
+        <br>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre>	<font color="#006600">// disable alpha</font><br>	for (s32 i=0; i&lt;gui::EGDC_COUNT ; ++i)<br>	{<br>		video::SColor col = env-&gt;getSkin()-&gt;getColor((gui::EGUI_DEFAULT_COLOR)i);<br>		col.setAlpha(255);<br>		env-&gt;getSkin()-&gt;setColor((gui::EGUI_DEFAULT_COLOR)i, col);<br>	}<br><br><font color="#006600">	// add a tabcontrol</font><br>	createToolBox();<br><br>	<font color="#006600">// add the irrlicht engine logo</font><br>	IGUIImage* img = env-&gt;addImage(core::rect&lt;s32&gt;(22,429,108,460), 0, 666);<br>	img-&gt;setImage(driver-&gt;getTexture(&quot;../../media/irrlichtlogoaligned.jpg&quot;));<br><br>	<font color="#006600">// create fps text </font><br>	IGUIStaticText* fpstext =<br>		env-&gt;addStaticText(L&quot;&quot;, core::rect&lt;s32&gt;(210,26,270,41), true);<br><br>	<font color="#006600">// set window caption</font><br>	Caption += &quot; - [&quot;;<br>	Caption += driver-&gt;getName();<br>	Caption += &quot;]&quot;;<br>	Device-&gt;setWindowCaption(Caption.c_str());</pre></td>
+          </tr>
+        </table>
+        <br>
+        That's nearly the whole application. We simply show the about message 
+        box at start up, and load the first model. To make everything look better, 
+        a skybox is created and a user controled camera, to make the application 
+        a little bit more interactive. Finally, everything is drawed in a standard 
+        drawing loop.<br>
+        <br>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre>	<font color="#006600">// show about message box and load default model</font><br>	showAboutText();<br>	loadModel(StartUpModelFile.c_str());<br><font color="#006600"><br>	// add skybox</font> <br>	SkyBox = smgr-&gt;addSkyBoxSceneNode(<br>		driver-&gt;getTexture(&quot;../../media/irrlicht2_up.bmp&quot;),<br>		driver-&gt;getTexture(&quot;../../media/irrlicht2_dn.bmp&quot;),<br>		driver-&gt;getTexture(&quot;../../media/irrlicht2_lf.bmp&quot;),<br>		driver-&gt;getTexture(&quot;../../media/irrlicht2_rt.bmp&quot;),<br>		driver-&gt;getTexture(&quot;../../media/irrlicht2_ft.bmp&quot;),<br>		driver-&gt;getTexture(&quot;../../media/irrlicht2_bk.bmp&quot;));<br><br><font color="#006600">	// add a camera scene node </font><br>	smgr-&gt;addCameraSceneNodeMaya();<br>	<br>	<font color="#006600">// draw everything</font><br>	while(Device-&gt;run() &amp;&amp; driver)<br>		if (Device-&gt;isWindowActive())<br>		{<br>			driver-&gt;beginScene(true, true, video::SColor(150,50,50,50));<br>			smgr-&gt;drawAll();<br>			env-&gt;drawAll();<br>		<br>			driver-&gt;endScene();<br><br>			core::stringw str = L&quot;FPS: &quot;;<br>			str += driver-&gt;getFPS();<br>			fpstext-&gt;setText(str.c_str());<br>		}<br>	Device-&gt;drop();<br>	return 0;<br>}<br></pre></td>
+          </tr>
+        </table>
+        <br>
+        Compile and run this, and you have a fully functional 3d Mesh viewer.<br>
+      </div>
+      </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+      </body>
+</html>

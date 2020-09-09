@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:01.HelloWorld/HelloWorld.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:02.Quake3Map/Quake3Map.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:03.CustomSceneNode/CustomSceneNode.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:04.Movement/Movement.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:05.UserInterface/UserInterface.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:06.2DGraphics/2DGraphics.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:07.Collision/Collision.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:08.SpecialFX/SpecialFX.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:09.Meshviewer/Meshviewer.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:10.Shaders/Shaders.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:11.PerPixelLighting/PerPixelLighting.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:12.TerrainRendering/TerrainRendering.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:13.RenderToTexture/RenderToTexture.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:15.LoadIrrFile/LoadIrrFile.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:16.Quake3MapShader/Quake3MapShader.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:18.SplitScreen/SplitScreen.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:19.MouseAndJoystick/MouseAndJoystick.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:20.ManagedLights/ManagedLights.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:21.Quake3Explorer/Quake3Explorer.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:22.MaterialViewer/MaterialViewer.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:23.SMeshHandling/SMeshHandling.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:24.CursorControl/CursorControl.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:25.XmlHandling/XmlHandling.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:26.OcclusionQuery/OcclusionQuery.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:30.Profiling/Profiling.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Demo/Demo.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:../source/Irrlicht/Irrlicht.xcodeproj">
+   </FileRef>
+</Workspace>

@@ -1,0 +1,129 @@
+<html>
+<head>
+<title>Irrlicht Engine Tutorial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699" width="10"><b><a href="http://irrlicht.sourceforge.net" target="_blank"><img src="../../media/irrlichtlogo.jpg" width="88" height="31" border="0"></a></b></td>
+    <td bgcolor="#666699" width="100%"> <div align="center"><b><font color="#FFFFFF"></font></b></div>
+      <b><font color="#FFFFFF">Tutorial 15. Load .irr File</font></b></td>
+  </tr>
+  <tr bgcolor="#eeeeff"> 
+    <td height="90" colspan="2"> <div align="left"> 
+        <p>Since version 1.1, Irrlicht is able to save and load the full scene 
+          graph into an .irr file, an xml based format. There is also an editor 
+          available to edit those files, named irrEdit on <a href="http://www.ambiera.com/irredit" target="_blank">http://www.ambiera.com/irredit</a>, 
+          which can also be used as world and particle editor. This tutorial shows 
+          how to use .irr files.</p>
+        <p align="center"><img src="../../media/015shot.jpg" width="256" height="200"><br>
+        </p>
+      </div></td>
+  </tr>
+</table>
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699"> <div align="center"><b><font color="#000000"></font></b></div>
+      <font color="#FFFFFF"><b>Lets start!</b></font></td>
+  </tr>
+  <tr> 
+    <td height="90" bgcolor="#eeeeff" valign="top"> <div align="left"> 
+        <p>Lets start: Create an Irrlicht device and setup the window.</p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>#include <irrlicht.h>
+#include <iostream>
+using namespace irr;
+
+#pragma comment(lib, "Irrlicht.lib")
+
+int main()
+{
+	// ask user for driver
+
+	video::E_DRIVER_TYPE driverType;
+
+	printf("Please select the driver you want for this example:\n"\
+		" (a) Direct3D 9.0c\n (b) Direct3D 8.1\n (c) OpenGL 1.5\n"\
+		" (d) Software Renderer\n (e) Apfelbaum Software Renderer\n"\
+		" (f) NullDevice\n (otherKey) exit\n\n");
+
+	char i;
+	std::cin >> i;
+
+	switch(i)
+	{
+		case 'a': driverType = video::EDT_DIRECT3D9;break;
+		case 'b': driverType = video::EDT_DIRECT3D8;break;
+		case 'c': driverType = video::EDT_OPENGL;   break;
+		case 'd': driverType = video::EDT_SOFTWARE; break;
+		case 'e': driverType = video::EDT_BURNINGSVIDEO;break;
+		case 'f': driverType = video::EDT_NULL;     break;
+		default: return 1;
+	}	
+
+	// create device and exit if creation failed
+
+	IrrlichtDevice* device =
+		createDevice(driverType, core::dimension2d<s32>(640, 480));
+
+	if (device == 0)
+		return 1; // could not create selected driver.
+
+	device->setWindowCaption(L"Load .irr file example");
+
+	video::IVideoDriver* driver = device->getVideoDriver();
+	scene::ISceneManager* smgr = device->getSceneManager();
+</pre></td>
+          </tr>
+        </table>
+        <p>Now load our .irr file. .irr files can store the whole scene graph 
+          including animators, materials and particle systems. And there is also 
+          the possibility to store arbitrary user data for every scene node in 
+          that file. To keep this example simple, we are simply loading the scene 
+          here. See the documentation at ISceneManager::loadScene and ISceneManager::saveScene 
+          for more information. So to load and display a complicated huge scene, 
+          we only need a single call to loadScene().</p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre>// load the scene<br>smgr-&gt;loadScene(&quot;../../media/example.irr&quot;); </pre></td>
+          </tr>
+        </table>
+        <p>That was it already. Now add a camera and draw the scene.</p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>	// add a user controlled camera
+
+	smgr->addCameraSceneNodeFPS();
+
+	// and draw everything.
+	
+	while(device->run())
+	if (device->isWindowActive())
+	{
+		driver->beginScene(true, true, video::SColor(0,200,200,200));
+		smgr->drawAll();
+		driver->endScene();
+	}
+
+	device->drop();
+	
+	return 0;
+}
+</pre> </td>
+          </tr>
+        </table>
+        
+      </div>
+      <p>&nbsp;</p>
+      </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</body>
+</html>

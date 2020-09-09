@@ -1,0 +1,188 @@
+<html>
+<head>
+<title>Irrlicht Engine Tutorial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699" width="10"><b><a href="http://irrlicht.sourceforge.net" target="_blank"><img src="../../media/irrlichtlogo.jpg" width="88" height="31" border="0"></a></b></td>
+    <td bgcolor="#666699" width="100%">
+<div align="center">
+<div align="center"></div>
+        <div align="left"><b><font color="#FFFFFF">Tutorial 4.Movement</font></b></div>
+      </div>
+      </td>
+  </tr>
+  <tr bgcolor="#eeeeff"> 
+    <td height="90" colspan="2"> 
+      <div align="left"> 
+        <p>This Tutorial shows how to move and animate SceneNodes. The basic concept 
+          of SceneNodeAnimators is shown as well as manual movement of nodes using 
+          the keyboard.</p>
+        <p>The program which is described here will look like this:</p>
+        <p align="center"><img src="../../media/004shot.jpg" width="259" height="204"><br>
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699"> <div align="center"><b><font color="#FFFFFF"></font></b></div>
+      <b><font color="#FFFFFF">Lets start!</font></b></td>
+  </tr>
+  <tr> 
+    <td height="90" bgcolor="#eeeeff" valign="top"> <div align="left"> 
+        <p>As always, I include the header files, use the irr namespace, and tell 
+          the linker to link with the .lib file. </p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>#include &lt;stdio.h&gt;<br>#include &lt;wchar.h&gt;<br>#include &lt;irrlicht.h&gt;</pre> 
+              <pre>using namespace irr;</pre>
+              <pre>#pragma comment(lib, &quot;Irrlicht.lib&quot;)</pre></td>
+          </tr>
+        </table>
+        <p>In this tutorial, one of our goals is to move a scene node using some 
+          keys on the keyboard. We store a pointer to the scene node we want to 
+          move with the keys here.<br>
+          The other pointer is a pointer to the Irrlicht Device, which we need 
+          int the EventReceiver to manipulate the scene node and to get the active 
+          camera.</p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>scene::ISceneNode* node = 0;<br>IrrlichtDevice* device = 0; </pre></td>
+          </tr>
+        </table>
+        <p>To get events like mouse and keyboard input, or GUI events like &quot;the 
+          OK button has been clicked&quot;, we need an object wich is derived 
+          from the IEventReceiver object. There is only one method to override: 
+          OnEvent. This method will be called by the engine when an event happened. 
+          We will use this input to move the scene node with the keys W and S.</p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>class MyEventReceiver : public IEventReceiver<br>{<br>public:<br>	virtual bool OnEvent(const SEvent&amp; event)<br>	{ </pre></td>
+          </tr>
+        </table>
+        <p>If the key 'W' or 'S' was left up, we get the position of the scene 
+          node, and modify the Y coordinate a little bit. So if you press 'W', 
+          the node moves up, and if you press 'S' it moves down.</p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>if (node != 0 &amp;&amp; event.EventType == irr::EET_KEY_INPUT_EVENT&amp;&amp;<br>			!event.KeyInput.PressedDown)<br>{<br>		switch(event.KeyInput.Key)<br>		{<br>		case KEY_KEY_W:<br>		case KEY_KEY_S:<br>			{<br>				core::vector3df v = node-&gt;getPosition();<br>				v.Y += event.KeyInput.Key == KEY_KEY_W ? 2.0f : -2.0f;<br>				node-&gt;setPosition(v);<br>			}<br>			return true;<br>		}<br>} return false; <br> } <br> };</pre></td>
+          </tr>
+        </table>
+        
+      </div>
+      <p>The event receiver for moving a scene node is ready. So lets just create 
+        an Irrlicht Device and the scene node we want to move. We also create 
+        some other additional scene nodes, to show that there are also some different 
+        possibilities to move and animate scene nodes.</p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td><pre>int main()<br>{<br>   MyEventReceiver receiver;
+   
+  device = createDevice(video::EDT_OPENGL, core::dimension2d&lt;s32&gt;(640, 480),
+       16, false, false, false, &amp;receiver);</pre>
+            <pre>   video::IVideoDriver* driver = device-&gt;getVideoDriver();
+   scene::ISceneManager* smgr = device-&gt;getSceneManager();</pre>
+            </td>
+        </tr>
+      </table>
+      <p> Create the node for moving it with the 'W' and 'S' key. We create a 
+        sphere node, which is a built in geometric primitive scene node.
+        We place the node at (0,0,30) and assign a texture to it to let it look 
+        a little bit more interesting.</p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td><pre>node = smgr-&gt;addSphereSceneNode();
+node-&gt;setPosition(core::vector3df(0,0,30));
+node-&gt;setMaterialFlag(video::EMF_LIGHTING, false);
+node-&gt;setMaterialTexture(0, driver-&gt;getTexture(&quot;../../media/wall.bmp&quot;));</pre></td>
+        </tr>
+      </table>
+      <p>Now we create another node, moving using a scene node animator. Scene 
+        node animators modify scene nodes and can be attached to any scene node 
+        like<br>
+        mesh scene nodes, billboards, lights and even camera scene nodes. Scene 
+        node animators are not only able to modify the position of a scene node, 
+        they can<br>
+        also animate the textures of an object for example. We create a test scene 
+        node again an attach a 'fly circle' scene node to it, letting this node 
+        fly around our first test scene node.</p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td><pre>scene::ISceneNode* n = smgr-&gt;addCubeSceneNode();
+n-&gt;setMaterialTexture(0, driver-&gt;getTexture(&quot;../../media/t351sml.jpg&quot;));
+n-&gt;setMaterialFlag(video::EMF_LIGHTING, false);
+scene::ISceneNodeAnimator* anim = 
+	smgr-&gt;createFlyCircleAnimator(core::vector3df(0,0,30), 20.0f);
+n-&gt;addAnimator(anim);
+anim-&gt;drop();</pre></td>
+        </tr>
+      </table>
+      <p>The last scene node we add to show possibilities of scene node animators 
+        is a md2 model, which uses a 'fly straight' animator to run between to 
+        points.</p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td> <pre>scene::IAnimatedMeshSceneNode* anms = smgr-&gt;addAnimatedMeshSceneNode(<br>		smgr-&gt;getMesh(&quot;../../media/sydney.md2&quot;));
+
+if (n)<br>	{<br>		anim = smgr-&gt;createFlyStraightAnimator(core::vector3df(100,0,60), <br>			core::vector3df(-100,0,60), 10000, true);<br>		anms-&gt;addAnimator(anim);<br>		anim-&gt;drop();</pre>
+            </td>
+        </tr>
+      </table>
+      <p>To make to model look right we set the frames between which 
+        the animation should loop, rotate the model around 180 degrees, and adjust 
+        the animation speed and the texture.<br>
+        To set the right animation (frames and speed), we would also be able to 
+        just call &quot;anms-&gt;setMD2Animation(scene::EMAT_RUN)&quot; for the 
+        'run' animation instead of &quot;setFrameLoop&quot; and &quot;setAnimationSpeed&quot;, 
+        but this only works with MD2 animations, and so you know how to start 
+        other animations.</p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td> <pre>   anms-&gt;setMaterialFlag(video::EMF_LIGHTING, false);<br>   anms-&gt;setFrameLoop(320, 360);
+   anms-&gt;setAnimationSpeed(30);<br>   anms-&gt;setRotation(core::vector3df(0,180.0f,0));<br>   anms-&gt;setMaterialTexture(0, driver-&gt;getTexture(&quot;../../media/sydney.bmp&quot;));<br>}<br></pre></td>
+        </tr>
+      </table>
+      <p>To be able to look at and move around in this scene, we create a first 
+        person shooter style camera and make the mouse cursor invisible.</p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td> <pre>smgr-&gt;addCameraSceneNodeFPS(0, 100.0f, 100.0f);<br>device-&gt;getCursorControl()-&gt;setVisible(false); </pre></td>
+        </tr>
+      </table>
+      <p>We have done everything, so lets draw it. We also write the current frames 
+        per second and the name of the driver to the caption of the window.</p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td> <pre>int lastFPS = -1;</pre>
+            <pre>while(device-&gt;run())
+{
+     driver-&gt;beginScene(true, true, video::SColor(255,90,90,156));
+     smgr-&gt;drawAll();
+     driver-&gt;endScene();</pre>
+            <pre>     int fps = driver-&gt;getFPS();</pre>
+            <pre>     if (lastFPS != fps)
+     {
+        wchar_t tmp[1024];
+        swprintf(tmp, 1024, L&quot;Movement Example - Irrlicht Engine (%ls)(fps:%d)&quot;,<br>        driver-&gt;getName(), fps);</pre>
+            <pre>       device-&gt;setWindowCaption(tmp);
+       lastFPS = fps;
+     }
+}
+
+device-&gt;drop();<br>return 0;<br>}</pre></td>
+        </tr>
+      </table>
+      <p>That's it. Compile and play around with the program. </p>
+      <p>&nbsp;</p></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+      </body>
+</html>

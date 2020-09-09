@@ -1,0 +1,247 @@
+<html>
+<head>
+<title>Irrlicht Engine Tutorial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699" width="10"><b><a href="http://irrlicht.sourceforge.net" target="_blank"><img src="../../media/irrlichtlogo.jpg" width="88" height="31" border="0"></a></b></td>
+    <td bgcolor="#666699" width="100%">
+<div align="center">
+        <div align="left"><b><font color="#FFFFFF">Tutorial 14. Win32 Window</font></b></div>
+      </div>
+      </td>
+  </tr>
+  <tr bgcolor="#eeeeff"> 
+    <td height="90" colspan="2"> 
+      <div align="left"> 
+        <p> This example only runs in Windows and demonstrates that Irrlicht can 
+          run inside a win32 window. MFC and .NET Windows.Forms windows are possible 
+          too. </p>
+        <p>The program which is described here will look like this:</p>
+        <p align="center"><img src="../../media/014shot.jpg" width="256" height="200"><br>
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699"> <b><font color="#FFFFFF">Lets start!</font></b></td>
+  </tr>
+  <tr> 
+    <td height="90" bgcolor="#eeeeff" valign="top"> <div align="left"> 
+        <div align="left"> 
+          <p> In the begining, we create a windows window using the windows API. 
+            I'm not going to explain this code, because it is windows specific. 
+            See the MSDN or a windows book for details.</p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td><pre>#include &lt;irrlicht.h&gt;
+#include &lt;windows.h&gt; <font color="#006600">// this example only runs with windows</font>
+
+using namespace irr;
+
+#pragma comment(lib, "irrlicht.lib")
+
+HWND hOKButton;
+HWND hWnd;
+
+static LRESULT CALLBACK CustomWndProc(HWND hWnd, UINT message,
+    WPARAM wParam, LPARAM lParam)
+{
+	switch (message) 
+	{
+	case WM_COMMAND:
+		{
+			HWND hwndCtl = (HWND)lParam;
+			int code = HIWORD(wParam);
+
+			if (hwndCtl == hOKButton)
+			{
+				DestroyWindow(hWnd);
+				PostQuitMessage(0);
+				return 0;
+			}		
+		}
+		break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+
+	}
+
+	return DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+int main()
+<font color="#006600">//int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hpre, LPSTR cmd, int cc)</font>
+{
+	HINSTANCE hInstance = 0;
+<font color="#006600">	// create dialog</font>
+
+	const char* Win32ClassName = "CIrrlichtWindowsTestDialog";
+
+	WNDCLASSEX wcex;
+	wcex.cbSize			= sizeof(WNDCLASSEX); 
+	wcex.style			= CS_HREDRAW | CS_VREDRAW;
+	wcex.lpfnWndProc	= (WNDPROC)CustomWndProc;
+	wcex.cbClsExtra		= 0;
+	wcex.cbWndExtra		= DLGWINDOWEXTRA; 
+	wcex.hInstance		= hInstance;
+	wcex.hIcon			= NULL;
+	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
+	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW);
+	wcex.lpszMenuName	= 0;
+	wcex.lpszClassName	= Win32ClassName;
+	wcex.hIconSm		= 0;
+
+	RegisterClassEx(&wcex);
+
+	DWORD style = WS_SYSMENU | WS_BORDER | WS_CAPTION | 
+		WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_MAXIMIZEBOX
+		| WS_MINIMIZEBOX | WS_SIZEBOX;
+
+	int windowWidth = 440;
+	int windowHeight = 380;
+
+	hWnd = CreateWindow( Win32ClassName, "Irrlicht Win32 window example",
+		style, 100, 100, windowWidth, windowHeight,
+		NULL, NULL, hInstance, NULL);
+
+	RECT clientRect;
+	GetClientRect(hWnd, &clientRect);
+	windowWidth = clientRect.right;
+	windowHeight = clientRect.bottom;
+
+<font color="#006600">	// create ok butt</font>on
+
+	hOKButton = CreateWindow(
+	    "BUTTON", "OK - Close", WS_CHILD | WS_VISIBLE | BS_TEXT, 
+		windowWidth - 160, windowHeight - 40, 150, 30, hWnd, NULL, 
+		hInstance, NULL);
+
+<font color="#006600">	// create some text</font>
+	
+	CreateWindow("STATIC", 
+        "This is Irrlicht running inside a standard Win32 window.\n"\
+		"Also mixing with MFC and .NET Windows.Forms is possible.",
+		WS_CHILD | WS_VISIBLE, 20, 20, 400, 40, hWnd, NULL, hInstance, NULL);
+
+<font color="#006600">	// create window to put irrlicht in</font>
+
+	HWND hIrrlichtWindow =<br />    CreateWindow("BUTTON", "", WS_CHILD | WS_VISIBLE | BS_OWNERDRAW, 
+			50, 80, 320, 220, hWnd, NULL, hInstance, NULL);
+
+</pre></td>
+            </tr>
+          </table>
+          <p>So now that we have some window, we can create an Irrlicht device 
+            inside of it. We use Irrlicht createEx() function for this. We only 
+            need the handle (HWND) to that window, set it as windowsID parameter 
+            and start up the engine as usual. That's it.</p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td><pre><font color="#006600">	// create irrlicht device in the button window</font>
+
+	irr::SIrrlichtCreationParameters param;
+	param.WindowId = reinterpret_cast<s32>(hIrrlichtWindow); // hColorButton
+	param.DriverType = video::EDT_OPENGL;
+
+	irr::IrrlichtDevice* device = irr::createDeviceEx(param);
+	
+<font color="#006600">	// setup a simple 3d scene</font>
+
+	irr::scene::ISceneManager* smgr = device->getSceneManager();
+	video::IVideoDriver* driver = device->getVideoDriver();
+
+	scene::ICameraSceneNode* cam = smgr->addCameraSceneNode();
+	cam->setTarget(core::vector3df(0,0,0));
+
+	scene::ISceneNodeAnimator* anim =
+	   smgr->createFlyCircleAnimator(core::vector3df(0,10,0), 30.0f);
+	cam->addAnimator(anim);
+	anim->drop();
+
+	scene::ISceneNode* cube = smgr->addCubeSceneNode(25);
+	cube->setMaterialFlag(video::EMF_LIGHTING, false);
+	
+	cube->setMaterialTexture(0, driver->getTexture("../../media/rockwall.bmp"));
+
+	smgr->addSkyBoxSceneNode(
+	driver->getTexture("../../media/irrlicht2_up.jpg"),
+	driver->getTexture("../../media/irrlicht2_dn.jpg"),
+	driver->getTexture("../../media/irrlicht2_lf.jpg"),
+	driver->getTexture("../../media/irrlicht2_rt.jpg"),
+	driver->getTexture("../../media/irrlicht2_ft.jpg"),
+	driver->getTexture("../../media/irrlicht2_bk.jpg"));
+
+<font color="#006600">	// show and execute dialog</font>
+
+	ShowWindow(hWnd , SW_SHOW);
+	UpdateWindow(hWnd);
+</pre></td>
+            </tr>
+          </table>
+          <p>Now the only thing missing is the drawing loop using IrrlichtDevice::run(). 
+            We do this as usual. But instead of this, there is another possibility: 
+            You can also simply use your own message loop using GetMessage, DispatchMessage 
+            and whatever. Calling<br />
+            Device-&gt;run() will cause Irrlicht to dispatch messages internally 
+            too. You need not call Device-&gt;run() if you want to do your own 
+            message dispatching loop, but Irrlicht will not be able to fetch user 
+            input then and you have to do it on your own using the window messages, 
+            DirectInput, or whatever.</p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td><pre>	while (device->run())
+	{
+		driver->beginScene(true, true, 0);
+		smgr->drawAll();
+		driver->endScene();
+	}
+
+<font color="#006600">	// the alternative, own message dispatching loop without Device->run() would
+	// look like this:</font>
+
+	<font color="#006600">/*MSG msg;
+	while (true)
+	{
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+
+			if (msg.message == WM_QUIT)
+				break;
+		}
+		
+		// advance virtual time
+		device->getTimer()->tick();
+
+		// draw engine picture
+		driver->beginScene(true, true, 0);
+		smgr->drawAll();
+		driver->endScene();
+	}*/</font>
+
+	device->closeDevice();
+	device->drop();
+
+	return 0;
+}</pre></td>
+            </tr>
+          </table>
+          <p> That's it, Irrlicht now runs in your own windows window.</p>
+        </div>
+      </div>
+      </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+      </body>
+</html>

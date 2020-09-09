@@ -1,0 +1,7 @@
+If you are searching for executeables of the examples and the demo,
+you'll find some for Windows in the directory
+/bin/win32-VisualStudio.
+
+For Linux, just go into the directory of the example you want and 
+execute a simple 'make' after you made the engine from source/Irrlicht.
+

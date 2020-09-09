@@ -1,0 +1,222 @@
+<html>
+<head>
+<title>Irrlicht Engine Tutorial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699" width="10"><b><a href="http://irrlicht.sourceforge.net" target="_blank"><img src="../../media/irrlichtlogo.jpg" width="88" height="31" border="0"></a></b></td>
+    <td bgcolor="#666699" width="100%">
+<div align="center">
+<div align="center"></div>
+        <div align="left"><b><font color="#FFFFFF">Tutorial 3.CustomSceneNode</font></b></div>
+      </div>
+      </td>
+  </tr>
+  <tr bgcolor="#eeeeff"> 
+    <td height="90" colspan="2"> 
+      <div align="left"> 
+        <p>This Tutorial is a tutorial for more advanced developers. If you are 
+          currently just playing around with the Irrlicht engine, please look 
+          at other examples first. This tutorial shows how to create a custom 
+          scene node and how to use it in the engine. A custom scene node is needed, 
+          if you want to implement a render technique, the Irrlicht Engine is 
+          currently not supporting. For example you can write a indoor portal 
+          based renderer or a advanced terrain scene node with it. With creating 
+          custom scene nodes, you can easily extend the Irrlicht Engine and adapt 
+          it to your needs.</p>
+        <p>I will keep the tutorial simple: Keep everything very short, everything 
+          in one .cpp file, and I'll use the engine here as in all other tutorials. 
+          At the end of the tutorial, the result will look like the image below. 
+          This looks not very exciting, but it is a complete customized scene 
+          node and a good point to start from creating you own scene nodes.</p>
+        <p align="center"><img src="../../media/003shot.jpg" width="259" height="204"><br>
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699"> <div align="center"><b><font color="#FFFFFF"></font></b></div>
+      <b><font color="#FFFFFF">Lets start!</font></b></td>
+  </tr>
+  <tr> 
+    <td height="90" bgcolor="#eeeeff" valign="top"> <div align="left"> 
+        <p>To start, I include the header files, use the irr namespace, and tell 
+          the linker to link with the .lib file. </p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>#include &lt;irrlicht.h&gt;</pre> <pre>using namespace irr;</pre> <pre>#pragma comment(lib, &quot;Irrlicht.lib&quot;)</pre></td>
+          </tr>
+        </table>
+        <p>Here comes the most sophisticated part of this tutorial: The class 
+          of our very own custom scene node. To keep it simple,<br>
+          our scene node will not be an indoor portal renderer nor a terrain scene 
+          node, but a simple tetraeder, a 3d object consiting of 4 connected vertices, 
+          which only draws itself and does nothing more.</p>
+        <p>To let our scene node be able to be inserted into the Irrlicht Engine 
+          scene, the class we create needs only be derived from the ISceneNode 
+          class and has to override some methods.</p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>class CSampleSceneNode : public scene::ISceneNode<br>{</pre> </td>
+          </tr>
+        </table>
+        <p>First, we declare some member variables, to hold data for our tetraeder: 
+          The bounding box, 4 vertices, and<br>
+          the material of the tetraeder.</p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>core::aabbox3d&lt;f32&gt; Box;<br>video::S3DVertex Vertices[4];<br>video::SMaterial Material;</pre> </td>
+          </tr>
+        </table>
+        <p>The parameters of the constructor specify the parent of the scene node, 
+          a pointer to the scene manager, and an id of the scene node. In the 
+          constructor itself, we call the parent classes constructor, set some 
+          properties of the material we use to draw the scene node and create 
+          the 4 vertices of the tetraeder we will draw later. </p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>public:</pre> <pre>CSampleSceneNode(scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id)
+ : scene::ISceneNode(parent, mgr, id)
+{ 
+  Material.Wireframe = false;
+  Material.Lighting = false;</pre> 
+              <pre>  Vertices[0] = video::S3DVertex(0,0,10, 1,1,0,video::SColor(255,0,255,255),0,1);
+  Vertices[1] = video::S3DVertex(10,0,-10, 1,0,0,video::SColor(255,255,0,255),1,1); 
+  Vertices[2] = video::S3DVertex(0,20,0, 0,1,1,video::SColor(255,255,255,0),1,0);
+  Vertices[3] = video::S3DVertex(-10,0,-10, 0,0,1,video::SColor(255,0,255,0),0,0);
+</pre></td>
+          </tr>
+        </table>
+        <br>
+        The Irrlicht Engine needs to know the bounding box of your scene node. 
+        It will use it for doing automatic culling and other things. Hence we 
+        need to create a bounding box from the 4 vertices we use. If you do not 
+        want the engine to use the box for automatic culling, and/or don't want 
+        to create the box, you could also write<br>
+        <font face="Courier New, Courier, mono">AutomaticCullingEnabled = false;</font>.<br>
+        <br>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>  Box.reset(Vertices[0].Pos);<br> 		for (s32 i=1; i&lt;4; ++i)<br> 			Box.addInternalPoint(Vertices[i].Pos);
+}</pre> </td>
+          </tr>
+        </table>
+        <br>
+        <p>Before it is drawn, the OnPreRender() method of every scene node in 
+          the scene is called by the scene manager. If the scene node wishes to 
+          draw itself, it may register itself in the scene manager to be drawn. 
+          This is necessary to tell the scene manager when it should call the 
+          ::render method. For example normal scene nodes render their content 
+          one after another, while stencil buffer shadows would like to be drawn 
+          after all other scene nodes. And camera or light scene nodes need to 
+          be rendered before all other scene nodes (if at all). <br>
+          So here we simply register the scene node to get rendered normally. 
+          If we would like to let it be rendered like cameras or light, we would 
+          have to call SceneManager-&gt;registerNodeForRendering(this, SNRT_LIGHT_AND_CAMERA); 
+          <br>
+          After this, we call the OnPreRender-method of the base class ISceneNode, 
+          which simply lets also all the child scene nodes of this node register 
+          themselves. </p>
+      </div>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td> <pre>virtual void OnPreRender()<br>{<br>  if (IsVisible)<br>    SceneManager-&gt;registerNodeForRendering(this);
+
+  ISceneNode::OnPreRender();
+}</pre> </td>
+        </tr>
+      </table>
+      <p>In the render() method most of the interresting stuff happenes: The Scene 
+        node renders itself. We override this method and draw the tetraeder.</p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td> <pre>virtual void render()<br>{<br>  u16 indices[] = { 0,2,3, 2,1,3, 1,0,3, 2,0,1 };
+  video::IVideoDriver* driver = SceneManager-&gt;getVideoDriver();</pre> 
+            <pre>  driver-&gt;setMaterial(Material);
+  driver-&gt;setTransform(video::ETS_WORLD, AbsoluteTransformation);
+  driver-&gt;drawIndexedTriangleList(&amp;Vertices[0], 4, &amp;indices[0], 4);
+}</pre> </td>
+        </tr>
+      </table>
+      <p> At least, we create three small additional methods. GetBoundingBox() 
+        returns the bounding box of this scene node, <br>
+        GetMaterialCount() returns the amount of materials in this scene node 
+        (our tetraeder only has one material), and getMaterial() returns the material 
+        at an index. Because we have only one material here, we can return the 
+        only one material, assuming that no one ever calls getMaterial() with 
+        an index greater than 0. </p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td><pre>  virtual const core::aabbox3d&lt;f32&gt;&amp; getBoundingBox() const<br>  {<br>    return Box;<br>  }</pre> <pre>  virtual u32 getMaterialCount()
+  {
+    return 1;
+  }</pre> <pre>  virtual video::SMaterial&amp; getMaterial(u32 i)
+  {
+    return Material;
+  } 
+};</pre></td>
+        </tr>
+      </table>
+      <p>That's it. The Scene node is done. Now we simply have to start the engine, 
+        create the scene node and a camera, and look at the result.</p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td> <pre>int main()<br>{
+  IrrlichtDevice *device =
+       createDevice(video::EDT_OPENGL, core::dimension2d&lt;s32&gt;(640, 480), 16, false);</pre> <pre>  device-&gt;setWindowCaption(L&quot;Custom Scene Node - Irrlicht Engine Demo&quot;);</pre> <pre>  video::IVideoDriver* driver = device-&gt;getVideoDriver();
+           scene::ISceneManager* smgr = device-&gt;getSceneManager();</pre> 
+            <pre>  smgr-&gt;addCameraSceneNode(0, core::vector3df(0,-40,0), core::vector3df(0,0,0));
+                   </pre></td>
+        </tr>
+      </table>
+      <p>Create our scene node. Note that it is dropped (-&gt;drop()) instantly 
+        after we create it. This is possible because the scene manager now takes 
+        care of it. This is not nessecary, it would also be possible to drop it 
+        at the end of the program.</p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td> <pre>CSampleSceneNode *myNode = <br>  new CSampleSceneNode(smgr-&gt;getRootSceneNode(), smgr, 666);
+
+myNode-&gt;drop();</pre> </td>
+        </tr>
+      </table>
+      <p>To animate something in this boring scene consisting only of one tetraeder, 
+        and to show, that you now can use your scene node like any other scene 
+        node in the engine, we add an animator to the scene node, which rotates 
+        the node a little bit. </p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td> <pre>scene::ISceneNodeAnimator* anim = <br>   smgr-&gt;createRotationAnimator(core::vector3df(0.8f, 0, 0.8f));
+
+myNode-&gt;addAnimator(anim);
+anim-&gt;drop();</pre> </td>
+        </tr>
+      </table>
+      <p>Now draw everything and finish.</p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td> <pre>  while(device-&gt;run())<br>  {<br>    driver-&gt;beginScene(true, true, video::SColor(0,100,100,100));
+
+    smgr-&gt;drawAll();
+
+    driver-&gt;endScene();
+  }
+
+device-&gt;drop();
+return 0;
+}</pre> </td>
+        </tr>
+      </table>
+      <p>That's it. Compile and play around with the program. </p></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+      </body>
+</html>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Irrlicht Example 23 SMeshHandling" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Windows">
+				<Option platforms="Windows;" />
+				<Option output="../../bin/Win32-gcc/SMeshHandling" prefix_auto="0" extension_auto="1" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Linker>
+					<Add directory="../../lib/Win32-gcc" />
+				</Linker>
+			</Target>
+			<Target title="Linux">
+				<Option platforms="Unix;" />
+				<Option output="../../bin/Linux/SMeshHandling" prefix_auto="0" extension_auto="0" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Linker>
+					<Add library="Xxf86vm" />
+					<Add library="X11" />
+					<Add library="GL" />
+					<Add directory="../../lib/Linux" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add directory="../../include" />
+		</Compiler>
+		<Linker>
+			<Add library="Irrlicht" />
+		</Linker>
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

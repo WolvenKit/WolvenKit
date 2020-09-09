@@ -487,4 +487,13 @@
   <data name="FolderClosed_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\folderclosed_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="wkit_splash" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\pictures\wkit_splash.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wkit_splash2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\pictures\wkit_splash2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WK_Logo2_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\pictures\wk_logo2_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

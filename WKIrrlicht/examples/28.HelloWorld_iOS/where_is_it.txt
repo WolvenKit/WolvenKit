@@ -1,0 +1,2 @@
+This example is currently only available in Irrlicht svn branch for ogl-es: https://sourceforge.net/p/irrlicht/code/HEAD/tree/branches/ogl-es
+It will be merged with the svn trunk at some point in the future.

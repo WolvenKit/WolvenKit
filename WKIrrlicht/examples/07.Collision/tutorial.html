@@ -1,0 +1,308 @@
+<html>
+<head>
+<title>Irrlicht Engine Tutorial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699" width="10"><b><a href="http://irrlicht.sourceforge.net" target="_blank"><img src="../../media/irrlichtlogo.jpg" width="88" height="31" border="0"></a></b></td>
+    <td bgcolor="#666699" width="100%">
+<div align="center">
+<div align="center"></div>
+        <div align="left"><b><font color="#FFFFFF">Tutorial 7. Collision detection 
+          and response</font></b></div>
+      </div>
+      </td>
+  </tr>
+  <tr bgcolor="#eeeeff"> 
+    <td height="90" colspan="2"> 
+      <div align="left"> 
+        <p>In this tutorial, I will show how to collision detection with the Irrlicht 
+          Engine. I will describe 3 methods: Automatic collision detection for 
+          moving through 3d worlds with stair climbing and sliding, manual triangle 
+          picking and manual scene node picking.</p>
+        <p>The program which is described here will look like this:</p>
+        <p align="center"><img src="../../media/007shot.jpg" width="259" height="204"><br>
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699"> <div align="center"><b><font color="#FFFFFF"></font></b></div>
+      <b><font color="#FFFFFF">Lets start!</font></b></td>
+  </tr>
+  <tr> 
+    <td height="90" bgcolor="#eeeeff" valign="top"> <div align="left"> 
+        <div align="left">
+          <p>To start, we take the program from tutorial 2, which loaded and displayed 
+            a quake 3 level. We will use the level to walk in it and to pick triangles 
+            from it. In addition we'll place 3 animated models into it for scene 
+            node picking. The following code starts up the engine and loads a 
+            quake 3 level. I will not explain it, because it should already be 
+            known from tutorial 2.</p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td> <pre><font size="2"><font color="#008000">#include &lt;irrlicht.h&gt;
+#include &lt;iostream&gt;<br>
+</font><b>using namespace </b>irr;
+
+<font color="#008000">#pragma comment(lib, &quot;Irrlicht.lib&quot;)
+
+</font><b>int </b>main()
+{
+<font color="#008000">  // let user select driver type</font>
+<br>  video::E_DRIVER_TYPE driverType;<br><br>  printf(&quot;Please select the driver you want for this example:\n&quot;\<br>    &quot; (a) Direct3D 9.0c\n (b) Direct3D 8.1\n (c) OpenGL 1.5\n&quot;\<br>    &quot; (d) Software Renderer\n (e) Apfelbaum Software Renderer\n&quot;\<br>    &quot; (f) NullDevice\n (otherKey) exit\n\n&quot;);<br><br>  char i;<br>  std::cin &gt;&gt; i;<br><br>  switch(i)<br>  {<br>  case 'a': driverType = video::EDT_DIRECT3D9;break;<br>  case 'b': driverType = video::EDT_DIRECT3D8;break;<br>  case 'c': driverType = video::EDT_OPENGL;   break;<br>  case 'd': driverType = video::EDT_SOFTWARE; break;<br>  case 'e': driverType = video::EDT_BURNINGSVIDEO;break;  <br>  case 'f': driverType = video::EDT_NULL;     break;<br>  default: return 0;<br>  }	<br>
+<font color="#008000">  // create device</font></font></pre> 
+                <pre>  IrrlichtDevice *device = createDevice(driverType,
+     core::dimension2d&lt;s32&gt;(640, 480), 16, false);<br>
+  if (device == 0)<br>    return 1; // could not create selected driver.<br><br>  video::IVideoDriver* driver = device-&gt;getVideoDriver();<br>  scene::ISceneManager* smgr = device-&gt;getSceneManager();<br><br>  <font size="2">device-&gt;getFileSystem()-&gt;addZipFileArchive<br>      (<font color="#FF0000">&quot;../../media/map-20kdm2.pk3&quot;</font>);
+
+	
+	scene::IAnimatedMesh* q3levelmesh = smgr-&gt;getMesh(<font color="#FF0000">&quot;20kdm2.bsp&quot;</font>);
+	scene::ISceneNode* q3node = <font color="#800080">0</font>;
+	
+	<b>if </b>(q3levelmesh)
+		q3node = smgr-&gt;addOctTreeSceneNode(q3levelmesh-&gt;getMesh(<font color="#800080">0</font>));
+</font></pre> 
+              </td>
+            </tr>
+          </table>
+          <p> So far so good, we've loaded the quake 3 level like in tutorial 
+            2. Now, here comes something different: We create a triangle selector. 
+            A triangle selector is a class which can fetch the triangles from 
+            scene nodes for doing different things with them, for example collision 
+            detection. There are different triangle selectors, and all can be 
+            created with the ISceneManager. In this example, we create an OctTreeTriangleSelector, 
+            which optimizes the triangle output a little bit by reducing it like 
+            an octree. This is very useful for huge meshes like quake 3 levels.<br>
+            Afte we created the triangle selector, we attach it to the q3node. 
+            This is not necessary, but in this way, we do not need to care for 
+            the selector, for example dropping it after we do not need it anymore.</p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td> <pre><font size="2">scene::ITriangleSelector* selector = <font color="#800080">0</font>;
+	
+	<b>if </b>(q3node)
+	{		
+		q3node-&gt;setPosition(core::vector3df(-<font color="#800080">1370</font>,-<font color="#800080">130</font>,-<font color="#800080">1400</font>));
+
+		selector = smgr-&gt;createOctTreeTriangleSelector(
+            q3levelmesh-&gt;getMesh(<font color="#800080">0</font>), q3node, <font color="#800080">128</font>);
+		q3node-&gt;setTriangleSelector(selector);
+	}</font></pre></td>
+            </tr>
+          </table>
+          <p> We add a first person shooter camera to the scene for being able 
+            to move in the quake 3 level like in tutorial 2. But this, time, we 
+            add a special animator to the camera: A Collision Response animator. 
+            This thing modifies the scene node to which it is attached to in that 
+            way, that it may no more move through walls and is affected by gravity. 
+            The only thing we have to tell the animator is how the world looks 
+            like, how big the scene node is, how gravity and so on. After the 
+            collision response animator is attached to the camera, we do not have 
+            to do anything more for collision detection, anything is done automaticly, 
+            all other collision detection code below is for picking. And please 
+            note another cool feature: The collsion response animator can be attached 
+            also to all other scene nodes, not only to cameras. And it can be 
+            mixed with other scene node animators. In this way, collision detection 
+            and response in the Irrlicht<br>
+            engine is really, really easy.<br>
+            Now we'll take a closer look on the parameters of createCollisionResponseAnimator(). 
+            The first parameter is the TriangleSelector, which specifies how the 
+            world, against collision detection is done looks like. The second 
+            parameter is the scene node, which is the object, which is affected 
+            by collision detection, in our case it is the camera. The third defines 
+            how big the object is, it is the radius of an ellipsoid. Try it out 
+            and change the radius to smaller values, the camera will be able to 
+            move closer to walls after this. The next parameter is the direction 
+            and speed of gravity. You could set it to (0,0,0) to disable gravity. 
+            And the last value is just a translation: Without this, the ellipsoid 
+            with which collision detection is done would be around the camera, 
+            and the camera would be in the middle of the ellipsoid. But as human 
+            beings, we are used to have our eyes on top of the body, with which 
+            we collide with our world, not in the middle of it. So we place the 
+            scene node 50 units over the center of the ellipsoid with this parameter. 
+            And that's it, collision detection works now. <br>
+          </p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td> <pre><font size="2">	scene::ICameraSceneNode* camera = 	<br>		camera = smgr-&gt;addCameraSceneNodeFPS(<font color="#800080">0</font>,<font color="#800080">100.0f</font>,<font color="#800080">300.0f</font>);
+	camera-&gt;setPosition(core::vector3df(-10<font color="#800080">0</font>,<font color="#800080">50</font>,-15<font color="#800080">0</font>));
+
+	scene::ISceneNodeAnimator* anim =<br>    smgr-&gt;createCollisionResponseAnimator(
+		selector, camera, core::vector3df(<font color="#800080">30</font>,<font color="#800080">50</font>,<font color="#800080">30</font>),
+		core::vector3df(<font color="#800080">0</font>,<font color="#800080">-3</font>,<font color="#800080">0</font>),
+		core::vector3df(<font color="#800080">0</font>,<font color="#800080">50</font>,<font color="#800080">0</font>));<br>
+		selector-&gt;drop();<br>
+	camera-&gt;addAnimator(anim);
+	anim-&gt;drop();</font></pre></td>
+            </tr>
+          </table>
+          <p> Because collision detection is no big deal in irrlicht, I'll describe 
+            how to do two different types of picking in the next section. But 
+            before this, I'll prepare the scene a little. I need three animated 
+            characters which we <br>
+            could pick later, a dynamic light for lighting them, a billboard for 
+            drawing where we found an intersection, and, yes, I need to get rid 
+            of this mouse cursor. :)</p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td> <pre><font size="2">	<font color="#0A246A"><i>// disable mouse cursor
+
+</i></font>	device-&gt;getCursorControl()-&gt;setVisible(<b>false</b>);
+
+	<font color="#0A246A"><i>// add billboard
+
+</i></font>	scene::IBillboardSceneNode * bill = smgr-&gt;addBillboardSceneNode();
+	bill-&gt;setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR );
+	bill-&gt;setMaterialTexture(<font color="#800080">0</font>, driver-&gt;getTexture(<br>         <font color="#FF0000">&quot;../../media/particle.bmp&quot;</font>));
+	bill-&gt;setMaterialFlag(video::EMF_LIGHTING, <b>false</b>);
+	bill-&gt;setSize(core::dimension2d&lt;f32&gt;(<font color="#800080">20.0f</font>, <font color="#800080">20.0f</font>));
+
+	<font color="#0A246A"><i>// add 3 animated faeries.
+
+</i></font>	video::SMaterial material;
+	material.Texture1 = driver-&gt;getTexture(<font color="#FF0000"><br>         &quot;../../media/faerie2.bmp&quot;</font>);
+	material.Lighting = <b>true</b>;
+
+	scene::IAnimatedMeshSceneNode* node = <font color="#800080">0</font>;
+	scene::IAnimatedMesh* faerie = smgr-&gt;getMesh(<br>        <font color="#FF0000">&quot;../../media/faerie.md2&quot;</font>);
+
+	<b>if </b>(faerie)
+	{
+		node = smgr-&gt;addAnimatedMeshSceneNode(faerie);
+		node-&gt;setPosition(core::vector3df(-<font color="#800080">70</font>,<font color="#800080">0</font>,-<font color="#800080">90</font>));
+		node-&gt;setMD2Animation(scene::EMAT_RUN);
+		node-&gt;getMaterial(<font color="#800080">0</font>) = material;
+
+		node = smgr-&gt;addAnimatedMeshSceneNode(faerie);
+		node-&gt;setPosition(core::vector3df(-<font color="#800080">70</font>,<font color="#800080">0</font>,-<font color="#800080">30</font>));
+		node-&gt;setMD2Animation(scene::EMAT_SALUTE);
+		node-&gt;getMaterial(<font color="#800080">0</font>) = material;
+
+		node = smgr-&gt;addAnimatedMeshSceneNode(faerie);
+		node-&gt;setPosition(core::vector3df(-<font color="#800080">70</font>,<font color="#800080">0</font>,-<font color="#800080">60</font>));
+		node-&gt;setMD2Animation(scene::EMAT_JUMP);
+		node-&gt;getMaterial(<font color="#800080">0</font>) = material;
+	}
+
+	material.Texture1 = <font color="#800080">0</font>;
+	material.Lighting = <b>false</b>;
+
+	<font color="#0A246A"><i>// Add a light
+
+</i></font>	smgr-&gt;addLightSceneNode(<font color="#800080">0</font>, core::vector3df(-<font color="#800080">60</font>,<font color="#800080">100</font>,<font color="#800080">400</font>),
+		video::SColorf(<font color="#800080">1.0f</font>,<font color="#800080">1.0f</font>,<font color="#800080">1.0f</font>,<font color="#800080">1.0f</font>),
+		<font color="#800080">600.0f</font>);</font></pre></td>
+            </tr>
+          </table>
+          <p>For not making it to complicated, I'm doing picking inside the drawing 
+            loop. We take two pointers for storing the current and the last selected 
+            scene node and start the loop.</p>
+        </div>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre><font size="2">	scene::ISceneNode* selectedSceneNode = <font color="#800080">0</font>;
+	scene::ISceneNode* lastSelectedSceneNode = <font color="#800080">0</font>;
+
+	
+	<b>int </b>lastFPS = -<font color="#800080">1</font>;
+
+	<b>while</b>(device-&gt;run())<br>  <strong>if</strong> (device-&gt;isWindowActive())
+	{
+		driver-&gt;beginScene(<b>true</b>, <b>true</b>, <font color="#800080">0</font>);
+
+		smgr-&gt;drawAll();</font></pre></td>
+          </tr>
+        </table>
+        <p> After we've drawn the whole scene whit smgr-&gt;drawAll(), we'll do 
+          the first picking: We want to know which triangle of the world we are 
+          looking at. In addition, we want the exact point of the quake 3 level 
+          we are looking at. For this, we create a 3d line starting at the position 
+          of the camera and going through the lookAt-target of it. Then we ask 
+          the collision manager if this line collides with a triangle of the world 
+          stored in the triangle selector. If yes, we draw the 3d triangle and 
+          set the position of the billboard to the intersection point. </p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre><font size="2">		core::line3d&lt;f32&gt; line;
+		line.start = camera-&gt;getPosition();
+		line.end = line.start +
+         (camera-&gt;getTarget() - line.start).normalize() * <font color="#800080">1000.0f</font>;
+
+		core::vector3df intersection;
+		core::triangle3df tri;
+
+		<b>if </b>(smgr-&gt;getSceneCollisionManager()-&gt;getCollisionPoint(
+			line, selector, intersection, tri))
+		{
+			bill-&gt;setPosition(intersection);
+				
+			driver-&gt;setTransform(video::ETS_WORLD, core::matrix4());
+			driver-&gt;setMaterial(material);
+			driver-&gt;draw3DTriangle(tri, video::SColor(<font color="#800080">0</font>,<font color="#800080">255</font>,<font color="#800080">0</font>,<font color="#800080">0</font>));
+		}</font></pre></td>
+          </tr>
+        </table>
+        <p> Another type of picking supported by the Irrlicht Engine is scene 
+          node picking based on bouding boxes. Every scene node has got a bounding 
+          box, and because of that, it's very fast for example to get the scene 
+          node which the camera looks<br>
+          at. Again, we ask the collision manager for this, and if we've got a 
+          scene node, we highlight it by disabling Lighting in its material, if 
+          it is not the billboard or the quake 3 level. </p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre><font size="2">		selectedSceneNode = smgr-&gt;getSceneCollisionManager()-&gt;
+          getSceneNodeFromCameraBB(camera);
+
+		<b>if </b>(lastSelectedSceneNode)
+			lastSelectedSceneNode-&gt;setMaterialFlag(
+                video::EMF_LIGHTING, <b>true</b>);
+
+		<b>if </b>(selectedSceneNode == q3node ||
+           selectedSceneNode == bill)
+			selectedSceneNode = <font color="#800080">0</font>;
+
+		<b>if </b>(selectedSceneNode)
+			selectedSceneNode-&gt;setMaterialFlag(
+               video::EMF_LIGHTING, <b>false</b>);
+
+		lastSelectedSceneNode = selectedSceneNode;</font></pre></td>
+          </tr>
+        </table>
+        <p> That's it, we just have to finish drawing.</p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre><font size="2">		driver-&gt;endScene();
+
+		<b>int </b>fps = driver-&gt;getFPS();
+
+		<b>if </b>(lastFPS != fps)
+		{
+		  core::stringw str = L&quot;Collision detection example - Irrlicht Engine [&quot;;<br>		  str += driver-&gt;getName();<br>		  str += &quot;] FPS:&quot;;<br>		  str += fps;<br><br>		  device-&gt;setWindowCaption(str.c_str());<br>		  lastFPS = fps;<br>		}
+	}
+
+	device-&gt;drop();
+	
+	<b>return </b><font color="#800080">0</font>;
+}
+
+</font></pre></td>
+          </tr>
+        </table>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        </div>
+      </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+      </body>
+</html>

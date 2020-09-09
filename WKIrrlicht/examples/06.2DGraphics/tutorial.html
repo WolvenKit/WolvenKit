@@ -1,0 +1,163 @@
+<html>
+<head>
+<title>Irrlicht Engine Tutorial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699" width="10"><b><a href="http://irrlicht.sourceforge.net" target="_blank"><img src="../../media/irrlichtlogo.jpg" width="88" height="31" border="0"></a></b></td>
+    <td bgcolor="#666699" width="100%">
+<div align="center">
+<div align="center"></div>
+        <div align="left"><b><font color="#FFFFFF">Tutorial 6. 2D Graphics</font></b></div>
+      </div>
+      </td>
+  </tr>
+  <tr bgcolor="#eeeeff"> 
+    <td height="90" colspan="2"> 
+      <div align="left"> 
+        <p>This Tutorial shows how to do 2d graphics with the Irrlicht Engine. 
+          It shows how to draw images, keycolor based sprites, transparent rectangles 
+          and different fonts. You will may consider this useful if you want to 
+          make a 2d game with the engine, or if you want to draw a cool interface 
+          or head up display for your 3d game.</p>
+        <p>The program which is described here will look like this:</p>
+        <p align="center"><img src="../../media/006shot.jpg" width="259" height="204"><br>
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699"> <div align="center"><b><font color="#FFFFFF"></font></b></div>
+      <b><font color="#FFFFFF">Lets start!</font></b></td>
+  </tr>
+  <tr> 
+    <td height="90" bgcolor="#eeeeff" valign="top"> <div align="left"> 
+        <p>As always, I include the header files, use the irr namespace, and tell 
+          the linker to link with the .lib file. </p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>#include &lt;irrlicht.h&gt;<br>#include &lt;iostream&gt;<br><br>using namespace irr;</pre>
+              <pre>#pragma comment(lib, &quot;Irrlicht.lib&quot;)
+               </pre></td>
+          </tr>
+        </table>
+        <p>At first, we let the user select the driver type, then start up the 
+          engine, set a caption, and get a pointer to the video driver.</p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>int main()<br>{<br>  // let user select driver type<br>  video::E_DRIVER_TYPE driverType;<br><br>  printf(&quot;Please select the driver you want for this example:\n&quot;\<br>		&quot; (a) Direct3D 9.0c\n (b) Direct3D 8.1\n (c) OpenGL 1.5\n&quot;\<br>		&quot; (d) Software Renderer\n (e) Apfelbaum Software Renderer\n&quot;\<br>		&quot; (f) NullDevice\n (otherKey) exit\n\n&quot;);<br><br>   char i;<br>   std::cin &gt;&gt; i;<br><br>   switch(i)<br>   {<br>      case 'a': driverType = video::EDT_DIRECT3D9;break;<br>      case 'b': driverType = video::EDT_DIRECT3D8;break;<br>      case 'c': driverType = video::EDT_OPENGL;   break;<br>      case 'd': driverType = video::EDT_SOFTWARE; break;<br>      case 'e': driverType = video::EDT_BURNINGSVIDEO;break;<br>      case 'f': driverType = video::EDT_NULL;     break;<br>      default: return 0;<br>   }	<br><br>   // create device</pre> 
+              <pre>  IrrlichtDevice *device = createDevice(driverType,
+         core::dimension2d&lt;s32&gt;(512, 384));</pre>
+              <pre>  if (device == 0)
+      return 1;
+ <br>  device-&gt;setWindowCaption(L&quot;Irrlicht Engine - 2D Graphics Demo&quot;);</pre>
+              <pre>  video::IVideoDriver* driver = device-&gt;getVideoDriver();</pre></td>
+          </tr>
+        </table>
+        <p> All 2d graphics in this example are put together into one texture, 
+          2ddemo.bmp. Because we want to draw colorkey based sprites, we need 
+          to load this texture and tell the engine, which part of it should be 
+          transparent based on a colorkey. In this example, we don't tell it the 
+          color directly, we just say &quot;Hey Irrlicht Engine, you'll find the 
+          color I want at position (0,0) on the texture.&quot;. Instead, it would 
+          be also possible to call <font face="Courier New, Courier, mono">driver-&gt;makeColorKeyTexture(images, 
+          video::SColor(0,0,0,0))</font>, to make e.g. all black pixels transparent. 
+          Please note, that makeColorKeyTexture just creates an alpha channel 
+          based on the color. </p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>video::ITexture* images = driver-&gt;getTexture(&quot;../../media/2ddemo.bmp&quot;);<br>driver-&gt;makeColorKeyTexture(images, core::position2d&lt;s32&gt;(0,0));</pre></td>
+          </tr>
+        </table>
+        <p>To be able to draw some text with two different fonts, we load them. 
+          Ok, we load just one, as first font we just use the default font which 
+          is built into the engine.<br>
+          Also, we define two rectangles, which specify the position of the images 
+          of the red imps (little flying creatures) in the texture.</p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>gui::IGUIFont* font = device-&gt;getGUIEnvironment()-&gt;getBuiltInFont();<br>gui::IGUIFont* font2 = device-&gt;getGUIEnvironment()-&gt;getFont(
+  &quot;../../media/fonthaettenschweiler.bmp&quot;);</pre>
+              <pre>core::rect&lt;s32&gt; imp1(349,15,385,78);
+core::rect&lt;s32&gt; imp2(387,15,423,78);</pre></td>
+          </tr>
+        </table>
+        <p>Everything is prepared, now we can draw everything in the draw loop, 
+          between the begin scene and end scene calls. In this example, we are 
+          just doing 2d graphics, but it would be no problem to mix them with 
+          3d graphics. Just try it out, and draw some 3d vertices or set up a 
+          scene with the scene manager and draw it.</p>
+      </div>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td> <pre>while(device-&gt;run() &amp;&amp; driver)<br>{<br>	if (device-&gt;isWindowActive())<br>	{<br>		u32 time = device-&gt;getTimer()-&gt;getTime();<br>		driver-&gt;beginScene(true, true, video::SColor(0,120,102,136));
+</pre></td>
+        </tr>
+      </table>
+      <p> First, we draw 3 sprites, using the alpha channel we created with makeColorKeyTexture. 
+        The last parameter specifiys that the drawing method should use thiw alpha 
+        channel. The parameter before the last one specifies a color, with wich 
+        the sprite should be colored. (255,255,255,255) is full white, so the 
+        sprite will look like the original. The third sprite is drawed colored 
+        based on the time. </p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td><pre>// draw fire &amp; dragons background world<br>driver-&gt;draw2DImage(images, core::position2d&lt;s32&gt;(50,50),<br>	core::rect&lt;s32&gt;(0,0,342,224), 0, <br>	video::SColor(255,255,255,255), true);</pre>
+            <pre>// draw flying imp 
+driver-&gt;draw2DImage(images, core::position2d&lt;s32&gt;(164,125),
+  (time/500 % 2) ? imp1 : imp2, 0, 
+   video::SColor(255,255,255,255), true);</pre>
+            <pre>// draw second flying imp with colorcylce
+driver-&gt;draw2DImage(images, core::position2d&lt;s32&gt;(270,105),
+  (time/500 % 2) ? imp1 : imp2, 0, 
+  video::SColor(255,(time) % 255,255,255), true);</pre></td>
+        </tr>
+      </table>
+      <p> Drawing text is really simple. The code should be self explanatory.</p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td><pre>// draw some text<br>if (font)<br>	font-&gt;draw(L&quot;This is some text.&quot;,<br>		core::rect&lt;s32&gt;(130,10,300,50),<br>		video::SColor(255,255,255,255));</pre>
+            <pre>// draw some other text
+if (font2)
+   font2-&gt;draw(L&quot;This is some other text.&quot;, 
+       core::rect&lt;s32&gt;(130,20,300,60),
+       video::SColor(255,time % 255,time % 255,255));</pre></td>
+        </tr>
+      </table>
+      <p>At last, we draw the Irrlicht Engine logo (without using a color or an 
+        alpha channel) and a transparent 2d Rectangle at the position of the mouse 
+        cursor.</p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td> <pre>    // draw logo<br>    driver-&gt;draw2DImage(images, core::position2d&lt;s32&gt;(10,10),<br>				core::rect&lt;s32&gt;(354,87,442,118));</pre>
+            <pre>    // draw transparent rect under cursor
+    core::position2d&lt;s32&gt; m = device-&gt;getCursorControl()-&gt;getPosition();
+    driver-&gt;draw2DRectangle(video::SColor(100,255,255,255),
+          core::rect&lt;s32&gt;(m.X-20, m.Y-20, m.X+20, m.Y+20));</pre>
+            <pre>    driver-&gt;endScene();
+  }
+}</pre></td>
+        </tr>
+      </table>
+      <p>That's all, it was not really difficult, I hope.</p>
+      <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+        <tr> 
+          <td> <pre>   device-&gt;drop();
+   return 0;
+}</pre>
+            </td>
+        </tr>
+      </table>
+      <p>&nbsp;</p></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+      </body>
+</html>

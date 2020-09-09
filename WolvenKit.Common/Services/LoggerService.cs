@@ -197,6 +197,12 @@ namespace WolvenKit.Common.Services
                 string message = value?.Substring(1);
                 data.Value = message;
 
+                // whitelist errors and downgrade to warnings
+                if (message.Contains("wintab32.dll") && data.Flag == WccLogFlag.WLF_Error)
+                    data.Flag = WccLogFlag.WLF_Warning;
+                // downgrade some warnings to info
+                if (message.Contains("Failed to load existing cooking data base from") && data.Flag == WccLogFlag.WLF_Warning)
+                    data.Flag = WccLogFlag.WLF_Info;
             }
             catch (Exception)
             {

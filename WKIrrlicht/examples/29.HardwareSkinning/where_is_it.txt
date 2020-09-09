@@ -1,0 +1,2 @@
+This example is currently only available in Irrlicht svn branch for the shader-pipeline: https://sourceforge.net/p/irrlicht/code/HEAD/tree/branches/shader-pipeline
+It will be merged with the svn trunk at some point in the future.

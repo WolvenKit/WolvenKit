@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Build all examples">
+		<Project filename="../source/Irrlicht/Irrlicht-gcc.cbp" />
+		<Project filename="01.HelloWorld/HelloWorld.cbp" />
+		<Project filename="02.Quake3Map/Quake3Map.cbp" />
+		<Project filename="03.CustomSceneNode/CustomSceneNode.cbp" />
+		<Project filename="04.Movement/Movement.cbp" active="1" />
+		<Project filename="05.UserInterface/UserInterface.cbp" />
+		<Project filename="06.2DGraphics/2DGraphics.cbp" />
+		<Project filename="07.Collision/Collision.cbp" />
+		<Project filename="08.SpecialFX/SpecialFX.cbp" />
+		<Project filename="09.Meshviewer/Meshviewer.cbp" />
+		<Project filename="10.Shaders/Shaders.cbp" />
+		<Project filename="11.PerPixelLighting/PerPixelLighting.cbp" />
+		<Project filename="12.TerrainRendering/TerrainRendering.cbp" />
+		<Project filename="13.RenderToTexture/RenderToTexture.cbp" />
+		<Project filename="14.Win32Window/Win32Window.cbp" />
+		<Project filename="15.LoadIrrFile/LoadIrrFile.cbp" />
+		<Project filename="16.Quake3MapShader/Quake3MapShader.cbp" />
+		<Project filename="18.SplitScreen/SplitScreen.cbp" />
+		<Project filename="19.MouseAndJoystick/MouseAndJoystick.cbp" />
+		<Project filename="20.ManagedLights/ManagedLights.cbp" />
+		<Project filename="21.Quake3Explorer/Quake3Explorer.cbp" />
+		<Project filename="22.MaterialViewer/MaterialViewer.cbp" />
+		<Project filename="23.SMeshHandling/SMeshHandling.cbp" />
+		<Project filename="24.CursorControl/CursorControl.cbp" />
+		<Project filename="25.XmlHandling/XmlHandling.cbp" />
+		<Project filename="26.OcclusionQuery/OcclusionQuery.cbp" />
+		<Project filename="30.Profiling/Profiling.cbp" />
+		<Project filename="Demo/demo.cbp" />
+		<Project filename="../tools/GUIEditor/GUIEditor_gcc.cbp" />
+		<Project filename="../tools/MeshConverter/MeshConverter.cbp" />
+		<Project filename="../tools/FileToHeader/FileToHeader.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>

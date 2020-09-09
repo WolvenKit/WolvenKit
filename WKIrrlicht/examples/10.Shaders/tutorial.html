@@ -1,0 +1,566 @@
+<html>
+<head>
+<title>Irrlicht Engine Tutorial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699" width="10"><b><a href="http://irrlicht.sourceforge.net" target="_blank"><img src="../../media/irrlichtlogo.jpg" width="88" height="31" border="0"></a></b></td>
+    <td bgcolor="#666699" width="100%">
+<div align="center">
+        <div align="left"><b><font color="#FFFFFF">Tutorial 10. Shaders</font></b></div>
+      </div>
+      </td>
+  </tr>
+  <tr bgcolor="#eeeeff"> 
+    <td height="90" colspan="2"> 
+      <div align="left"> 
+        <p> This tutorial shows how to use shaders for D3D8, D3D9 and OpenGL with 
+          the engine and how to create new material types with them. It also shows 
+          how to disable the generation of mipmaps at texture loading, and how 
+          to use text scene nodes.</p>
+        <p>This tutorial does not explain how shaders work. I would recommend 
+          to read the D3D or OpenGL documentation, to search a tutorial, or to 
+          read a book about this.</p>
+        <p>The program which is described here will look like this:</p>
+        <p align="center"><img src="../../media/010shot.jpg" width="260" height="203"><br>
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699"> <b><font color="#FFFFFF">Lets start!</font></b></td>
+  </tr>
+  <tr> 
+    <td height="90" bgcolor="#eeeeff" valign="top"> <div align="left"> 
+        <div align="left"> 
+          <p>At first, we need to include all headers and do the stuff we always 
+            do, like in nearly all other tutorials:</p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td> <pre>#include &lt;irrlicht.h&gt;<br>#include &lt;iostream&gt;<br><br>using namespace irr;<br><br>#pragma comment(lib, &quot;Irrlicht.lib&quot;)<br></pre></td>
+            </tr>
+          </table>
+          <p>Because we want to use some interesting shaders in this tutorials, 
+            we need to set some data for them to make them able to compute nice 
+            colors. In this example, we'll use a simple vertex shader which will 
+            calculate the color of the vertex based on the position of the camera. 
+            For this, the shader needs the following data: The inverted world 
+            matrix for transforming the normal, the clip matrix for transforming 
+            the position, the camera position and the world position of the object 
+            for the calculation of the angle of light, and the color of the light. 
+            To be able to tell the shader all this data every frame, we have to 
+            derive a class from the IShaderConstantSetCallBack interface and override 
+            its only method, namely OnSetConstants(). This method will be called 
+            every time the material is set. <br>
+            The method setVertexShaderConstant() of the IMaterialRendererServices 
+            interface is used to set the data the shader needs. If the user chose 
+            to use a High Level shader language like HLSL instead of Assembler 
+            in this example, you have to set the variable name as parameter instead 
+            of the register index.</p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td> <pre>IrrlichtDevice* device = 0;<br>bool UseHighLevelShaders = false;<br><br>class MyShaderCallBack : public video::IShaderConstantSetCallBack<br>{<br>public:
+<br>  virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData)<br>  {<br>    video::IVideoDriver* driver = services-&gt;getVideoDriver();<br><br>    <font color="#006600">// set inverted world matrix<br>    // if we are using highlevel shaders (the user can select this when<br>    // starting the program), we must set the constants by name.</font><br>    core::matrix4 invWorld = driver-&gt;getTransform(video::ETS_WORLD);<br>    invWorld.makeInverse();<br><br>    if (UseHighLevelShaders)<br>       services-&gt;setVertexShaderConstant(&quot;mInvWorld&quot;, &amp;invWorld.M[0], 16);<br>    else<br>       services-&gt;setVertexShaderConstant(&amp;invWorld.M[0], 0, 4);<br><font color="#006600"><br>    // set clip matrix<br></font>    core::matrix4 worldViewProj;<br>    worldViewProj = driver-&gt;getTransform(video::ETS_PROJECTION);			<br>    worldViewProj *= driver-&gt;getTransform(video::ETS_VIEW);<br>    worldViewProj *= driver-&gt;getTransform(video::ETS_WORLD);<br><br>    if (UseHighLevelShaders)<br>       services-&gt;setVertexShaderConstant(&quot;mWorldViewProj&quot;, &amp;worldViewProj.M[0], 16);<br>    else<br>       services-&gt;setVertexShaderConstant(&amp;worldViewProj.M[0], 4, 4);<br>		<br><font color="#006600">    </font><font color="#006600">// set camera position<br></font>    core::vector3df pos = device-&gt;getSceneManager()-&gt;<br>    getActiveCamera()-&gt;getAbsolutePosition();<br><br>    if (UseHighLevelShaders)<br>      services-&gt;setVertexShaderConstant(&quot;mLightPos&quot;, reinterpret_cast&lt;f32*&gt;(&amp;pos), 3);<br>    else<br>      services-&gt;setVertexShaderConstant(reinterpret_cast&lt;f32*&gt;(&amp;pos), 8, 1);<br><br><font color="#006600">    </font><font color="#006600">// set light color <br></font>    video::SColorf col(0.0f,1.0f,1.0f,0.0f);<br><br>    if (UseHighLevelShaders)<br>      services-&gt;setVertexShaderConstant(&quot;mLightColor&quot;, reinterpret_cast&lt;f32*&gt;(&amp;col), 4);<br>    else<br>      services-&gt;setVertexShaderConstant(reinterpret_cast&lt;f32*&gt;(&amp;col), 9, 1);<br><br><font color="#006600">    </font><font color="#006600">// set transposed world matrix<br></font>    core::matrix4 world = driver-&gt;getTransform(video::ETS_WORLD);<br>    world = world.getTransposed();<br><br>    if (UseHighLevelShaders)<br>      services-&gt;setVertexShaderConstant(&quot;mTransWorld&quot;, &amp;world.M[0], 16);<br>    else<br>      services-&gt;setVertexShaderConstant(&amp;world.M[0], 10, 4);<br>	}<br>};</pre></td>
+            </tr>
+          </table>
+          <p> The next few lines start up the engine. Just like in most other 
+            tutorials before. But in addition, we ask the user if he wants this 
+            example to use high level shaders if he selected a driver which is 
+            capable of doing so.</p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td> <pre>int main()<br>{<br><font color="#006600">	// let user select driver type</font><br><br>	video::E_DRIVER_TYPE driverType = video::EDT_DIRECTX9;<br><br>	printf(&quot;Please select the driver you want for this example:\n&quot;\<br>		&quot; (a) Direct3D 9.0c\n (b) Direct3D 8.1\n (c) OpenGL 1.5\n&quot;\<br>		&quot; (d) Software Renderer\n (e) Apfelbaum Software Renderer\n&quot;\<br>		&quot; (f) NullDevice\n (otherKey) exit\n\n&quot;);<br><br>	char i;<br>	std::cin &gt;&gt; i;<br><br>	switch(i)<br>	{<br>		case 'a': driverType = video::EDT_DIRECT3D9;break;<br>		case 'b': driverType = video::EDT_DIRECT3D8;break;<br>		case 'c': driverType = video::EDT_OPENGL;   break;<br>		case 'd': driverType = video::EDT_SOFTWARE; break;<br>		case 'e': driverType = video::EDT_BURNINGSVIDEO;break;<br>		case 'f': driverType = video::EDT_NULL;     break;<br>		default: return 1;<br>	}	<br><br><font color="#006600"> </font> <font color="#006600">// ask the user if we should use high level shaders for this example<br> </font> if (driverType == video::EDT_DIRECT3D9 ||<br> 		 driverType == video::EDT_OPENGL)
+  {<br>      printf(&quot;<font color="#CC0000">Please press 'y' if you want to use high level shaders.\n</font>&quot;);<br>      std::cin &gt;&gt; i;<br>      if (i == 'y')<br>         UseHighLevelShaders = true;<br>	}<br><br><font color="#006600">	// create devic</font>e<br><br>	device = createDevice(driverType, core::dimension2d&lt;s32&gt;(640, 480));<br><br>	if (device == 0)<br>	{<br>		printf(<font color="#CC0000">&quot;\nWas not able to create driver.\n&quot;\<br>			&quot;Please restart and select another driver.\n&quot;</font>);<br>		getch();<br>		return 1;<br>	}	<br><br>	video::IVideoDriver* driver = device-&gt;getVideoDriver();<br>	scene::ISceneManager* smgr = device-&gt;getSceneManager();<br>	gui::IGUIEnvironment* gui = device-&gt;getGUIEnvironment();</pre></td>
+            </tr>
+          </table>
+          <p> Now for the more interesting parts. If we are using Direct3D, we 
+            want to load vertex and pixel shader programs, if we have<br>
+            OpenGL, we want to use ARB fragment and vertex programs. I wrote the 
+            corresponding programs down into the files d3d8.ps, d3d8.vs, d3d9.ps, 
+            d3d9.vs, opengl.ps and opengl.vs. We only need the right filenames 
+            now. This is done in the following switch. Note, that it is not necessary 
+            to write the shaders into text files, like in this example. You can 
+            even write the shaders directly as strings into the cpp source file, 
+            and use later addShaderMaterial() instead of addShaderMaterialFromFiles().</p>
+          <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td> <pre>	c8* vsFileName = 0<font color="#006600">; // filename for the vertex shader</font><br>	c8* psFileName = 0<font color="#006600">; // filename for the pixel shader</font><br><br>	switch(driverType)<br>	{<br>	case video::EDT_DIRECT3D8:<br>		psFileName = &quot;../../media/d3d8.psh&quot;;<br>		vsFileName = &quot;../../media/d3d8.vsh&quot;;<br>		break;<br>	case video::EDT_DIRECT3D9:<br>		if (UseHighLevelShaders)<br>		{<br>			psFileName = &quot;../../media/d3d9.hlsl&quot;;<br>			vsFileName = psFileName; <font color="#006600">// both shaders are in the same file</font><br>		}<br>		else<br>		{<br>			psFileName = &quot;../../media/d3d9.psh&quot;;<br>			vsFileName = &quot;../../media/d3d9.vsh&quot;;<br>		}<br>		break;<br>	case video::EDT_OPENGL:<br>		if (UseHighLevelShaders)<br>		{<br>			psFileName = &quot;../../media/opengl.frag&quot;;<br>			vsFileName = &quot;../../media/opengl.vert&quot;;<br>		}<br>		else<br>		{<br>			psFileName = &quot;../../media/opengl.psh&quot;;<br>			vsFileName = &quot;../../media/opengl.vsh&quot;;<br>		}<br>		break;<br>	}<br></pre> 
+              </td>
+            </tr>
+          </table>
+          <p> In addition, we check if the hardware and the selected renderer 
+            is capable of executing the shaders we want. If not, we simply set 
+            the filename string to 0. This is not necessary, but useful in this 
+            example: For example, if the hardware is able to execute vertex shaders 
+            but not pixel shaders, we create a new material which only uses the 
+            vertex shader, and no pixel shader. Otherwise, if we would tell the 
+            engine to create this material and the engine sees that the hardware 
+            wouldn't be able to fullfill the request completely,<br>
+            it would not create any new material at all. So in this example you 
+            would see at least the vertex shader in action, without the pixel 
+            shader.</p>
+          </div>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td> <pre>	if (!driver-&gt;queryFeature(video::EVDF_PIXEL_SHADER_1_1) &amp;&amp;<br>		!driver-&gt;queryFeature(video::EVDF_ARB_FRAGMENT_PROGRAM_1))<br>	{<br>		device-&gt;getLogger()-&gt;log(&quot;WARNING: Pixel shaders disabled &quot;\<br>			&quot;because of missing driver/hardware support.&quot;);<br>		psFileName = 0;<br>	}<br>	<br>	if (!driver-&gt;queryFeature(video::EVDF_VERTEX_SHADER_1_1) &amp;&amp;<br>		!driver-&gt;queryFeature(video::EVDF_ARB_VERTEX_PROGRAM_1))<br>	{<br>		device-&gt;getLogger()-&gt;log(&quot;WARNING: Vertex shaders disabled &quot;\<br>			&quot;because of missing driver/hardware support.&quot;);<br>		vsFileName = 0;<br>	}</pre></td>
+          </tr>
+        </table>
+        <p> Now lets create the new materials.<br>
+          As you maybe know from previous examples, a material type in the Irrlicht 
+          engine is set by simply changing the MaterialType value in the SMaterial 
+          struct. And this value is just a simple 32 bit value, like video::EMT_SOLID. 
+          So we only need the engine to create a new value for us which we can 
+          set there. To do this, we get a pointer to the IGPUProgrammingServices 
+          and call addShaderMaterialFromFiles(), which returns such a new 32 bit 
+          value. That's all.<br>
+          The parameters to this method are the following: First, the names of 
+          the files containing the code of the vertex and the pixel shader.<br>
+          If you would use addShaderMaterial() instead, you would not need file 
+          names, then you could write the code of the shader directly as string. 
+          The following parameter is a pointer to the IShaderConstantSetCallBack 
+          class we wrote at the beginning of this tutorial. If you don't want 
+          to set constants, set this to 0. The last paramter tells the engine 
+          which material it should use as base material. <br>
+          To demonstrate this, we create two materials with a different base material, 
+          one with EMT_SOLID and one with EMT_TRANSPARENT_ADD_COLOR.</p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre>	<font color="#006600">// create materials</font><br><br>	video::IGPUProgrammingServices* gpu = driver-&gt;getGPUProgrammingServices();<br><br>	s32 newMaterialType1 = 0;<br>	s32 newMaterialType2 = 0;<br><br>	if (gpu)<br>	{<br>		MyShaderCallBack* mc = new MyShaderCallBack();<br>	<font color="#006600">
+		// create the shaders depending on if the user wanted high level<br>		// or low level shaders:</font><br><br>		if (UseHighLevelShaders)<br>		{<br><font color="#006600">			// create material from high level shaders (hlsl or glsl)<br><br></font>			newMaterialType1 = gpu-&gt;addHighLevelShaderMaterialFromFiles(<br>				vsFileName,	&quot;vertexMain&quot;, video::EVST_VS_1_1,<br>				psFileName, &quot;pixelMain&quot;, video::EPST_PS_1_1,<br>				mc, video::EMT_SOLID);<br><br>			newMaterialType2 = gpu-&gt;addHighLevelShaderMaterialFromFiles(<br>				vsFileName,	&quot;vertexMain&quot;, video::EVST_VS_1_1,<br>				psFileName, &quot;pixelMain&quot;, video::EPST_PS_1_1,<br>				mc, video::EMT_TRANSPARENT_ADD_COLOR);<br>		}<br>		else<br>		{<br><font color="#009900">			// create material from low level shaders (asm or arb_asm)<br></font><br>			newMaterialType1 = gpu-&gt;addShaderMaterialFromFiles(vsFileName,<br>				psFileName, mc, video::EMT_SOLID);<br><br>			newMaterialType2 = gpu-&gt;addShaderMaterialFromFiles(vsFileName,<br>				psFileName, mc, video::EMT_TRANSPARENT_ADD_COLOR);<br>		}<br><br>		mc-&gt;drop();<br>	}<br></pre></td>
+          </tr>
+        </table>
+        <p> Now its time for testing out the materials. We create a test cube 
+          and set the material we created. In addition, we add a text scene node 
+          to the cube and a rotatation animator, to make it look more interesting 
+          and important. </p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre><font color="#006600">
+	// create test scene node 1, with the new created material type 1</font>
+
+	scene::ISceneNode* node = smgr-&gt;addCubeSceneNode(50);
+	node-&gt;setPosition(core::vector3df(0,0,0));
+	node-&gt;setMaterialTexture(0, driver-&gt;getTexture(&quot;../../media/wall.bmp&quot;));
+	node-&gt;setMaterialFlag(video::EMF_LIGHTING, false);
+	node-&gt;setMaterialType((video::E_MATERIAL_TYPE)newMaterialType1);
+
+	smgr-&gt;addTextSceneNode(gui-&gt;getBuiltInFont(),
+			L&quot;PS &amp; VS &amp; EMT_SOLID&quot;,
+			video::SColor(255,255,255,255),	node);
+
+	scene::ISceneNodeAnimator* anim = smgr-&gt;createRotationAnimator(
+			core::vector3df(0,0.3f,0));
+	node-&gt;addAnimator(anim);
+	anim-&gt;drop();</pre></td>
+          </tr>
+        </table>
+        <p> Same for the second cube, but with the second material we created.</p>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre>	<font color="#006600">// create test scene node 2, with the new created material type 2</font>
+
+	node = smgr-&gt;addCubeSceneNode(50);
+	node-&gt;setPosition(core::vector3df(0,-10,50));
+	node-&gt;setMaterialTexture(0, driver-&gt;getTexture(&quot;../../media/wall.bmp&quot;));
+	node-&gt;setMaterialFlag(video::EMF_LIGHTING, false);
+	node-&gt;setMaterialType((video::E_MATERIAL_TYPE)newMaterialType2);
+
+	smgr-&gt;addTextSceneNode(gui-&gt;getBuiltInFont(),
+			L&quot;PS &amp; VS &amp; EMT_TRANSPARENT&quot;,
+			video::SColor(255,255,255,255),	node);
+
+	anim = smgr-&gt;createRotationAnimator(core::vector3df(0,0.3f,0));
+	node-&gt;addAnimator(anim);
+	anim-&gt;drop();</pre></td>
+          </tr>
+        </table>
+        <br>
+        Then we add a third cube without a shader on it, to be able to compare 
+        the cubes.<br>
+        <br>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre>	<font color="#006600">// add a scene node with no shader </font>
+
+	node = smgr-&gt;addCubeSceneNode(50);
+	node-&gt;setPosition(core::vector3df(0,50,25));
+	node-&gt;setMaterialTexture(0, driver-&gt;getTexture(&quot;../../media/wall.bmp&quot;));
+	node-&gt;setMaterialFlag(video::EMF_LIGHTING, false);
+	smgr-&gt;addTextSceneNode(gui-&gt;getBuiltInFont(), L&quot;NO SHADER&quot;,
+		video::SColor(255,255,255,255), node);
+            </pre></td>
+          </tr>
+        </table>
+        <br>
+        And last, we add a skybox and a user controlled camera to the scene. For 
+        the skybox textures, we disable mipmap generation, because we don't need 
+        mipmaps on it.<br>
+        <br>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre>	<font color="#006600">// add a nice skybox</font><br><br>	driver-&gt;setTextureCreationFlag(video::ETCF_CREATE_MIP_MAPS, false);<br><br>	smgr-&gt;addSkyBoxSceneNode(<br>		driver-&gt;getTexture(&quot;../../media/irrlicht2_up.jpg&quot;),<br>		driver-&gt;getTexture(&quot;../../media/irrlicht2_dn.jpg&quot;),<br>		driver-&gt;getTexture(&quot;../../media/irrlicht2_lf.jpg&quot;),<br>		driver-&gt;getTexture(&quot;../../media/irrlicht2_rt.jpg&quot;),<br>		driver-&gt;getTexture(&quot;../../media/irrlicht2_ft.jpg&quot;),<br>		driver-&gt;getTexture(&quot;../../media/irrlicht2_bk.jpg&quot;));<br><br>	driver-&gt;setTextureCreationFlag(video::ETCF_CREATE_MIP_MAPS, true);<br><br><font color="#006600">	// add a camera and disable the mouse curso</font>r<br><br>	scene::ICameraSceneNode* cam = smgr-&gt;addCameraSceneNodeFPS(0, 100.0f, 100.0f);<br>	cam-&gt;setPosition(core::vector3df(-100,50,100));<br>	cam-&gt;setTarget(core::vector3df(0,0,0));<br>	device-&gt;getCursorControl()-&gt;setVisible(false);</pre></td>
+          </tr>
+        </table>
+        <br>
+        Now draw everything. That's all.<br>
+        <br>
+        <table width="95%" border="0" cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="center">
+          <tr> 
+            <td><pre>	int lastFPS = -1;<br><br>	while(device-&gt;run())<br>		if (device-&gt;isWindowActive())<br>	{<br>		driver-&gt;beginScene(true, true, video::SColor(255,0,0,0));<br>		smgr-&gt;drawAll();<br>		driver-&gt;endScene();<br><br>		int fps = driver-&gt;getFPS();<br><br>		if (lastFPS != fps)<br>		{<br>		  core::stringw str = L&quot;Irrlicht Engine - Vertex and pixel shader example [&quot;;<br>		  str += driver-&gt;getName();<br>		  str += &quot;] FPS:&quot;;<br>		  str += fps;<br>		  device-&gt;setWindowCaption(str.c_str());<br>		  lastFPS = fps;<br>		}<br>	}<br><br>	device-&gt;drop();<br>	<br>	return 0;<br></pre></td>
+          </tr>
+        </table>
+        <br>
+        Compile and run this, and I hope you have fun with your new little shader 
+        writing tool :).<br>
+      </div>
+      </td>
+  </tr>
+</table>
+<br>
+<table width="95%" border="0" cellspacing="0" cellpadding="2" align="center">
+  <tr> 
+    <td bgcolor="#666699"> <b><font color="#FFFFFF">Shader files</font></b></td>
+  </tr>
+  <tr> 
+    <td height="90" bgcolor="#eeeeff" valign="top"> <div align="left"> 
+        <div align="left"> 
+          <p>The files containing the shaders can be found in the media directory 
+            of the SDK. However, they look like this:</p>
+          <table width="95%" border="0" cellspacing="4" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td><strong>D3D9.HLSL</strong></td>
+            </tr>
+            <tr> 
+              <td>
+<pre>
+// part of the Irrlicht Engine Shader example.
+// These simple Direct3D9 pixel and vertex shaders will be loaded by the shaders
+// example. Please note that these example shaders don't do anything really useful. 
+// They only demonstrate that shaders can be used in Irrlicht.
+
+//-----------------------------------------------------------------------------
+// Global variables
+//-----------------------------------------------------------------------------
+float4x4 mWorldViewProj;  // World * View * Projection transformation
+float4x4 mInvWorld;       // Inverted world matrix
+float4x4 mTransWorld;     // Transposed world matrix
+float3 mLightPos;         // Light position
+float4 mLightColor;       // Light color
+
+
+// Vertex shader output structure
+struct VS_OUTPUT
+{
+	float4 Position   : POSITION;   // vertex position 
+	float4 Diffuse    : COLOR0;     // vertex diffuse color
+	float2 TexCoord   : TEXCOORD0;  // tex coords
+};
+
+
+VS_OUTPUT vertexMain( in float4 vPosition : POSITION,
+                      in float3 vNormal   : NORMAL,
+                      float2 texCoord     : TEXCOORD0 )
+{
+	VS_OUTPUT Output;
+
+	// transform position to clip space 
+	Output.Position = mul(vPosition, mWorldViewProj);
+	
+	// transform normal 
+	float3 normal = mul(vNormal, mInvWorld);
+	
+	// renormalize normal 
+	normal = normalize(normal);
+	
+	// position in world coodinates
+	float3 worldpos = mul(mTransWorld, vPosition);
+	
+	// calculate light vector, vtxpos - lightpos
+	float3 lightVector = worldpos - mLightPos;
+	
+	// normalize light vector 
+	lightVector = normalize(lightVector);
+	
+	// calculate light color 
+	float3 tmp = dot(-lightVector, normal);
+	tmp = lit(tmp.x, tmp.y, 1.0);
+	
+	tmp = mLightColor * tmp.y;
+	Output.Diffuse = float4(tmp.x, tmp.y, tmp.z, 0);
+	Output.TexCoord = texCoord;
+	
+	return Output;
+}
+
+
+
+// Pixel shader output structure
+struct PS_OUTPUT
+{
+    float4 RGBColor : COLOR0;  // Pixel color    
+};
+
+
+sampler2D tex0;
+	
+PS_OUTPUT pixelMain( float2 TexCoord : TEXCOORD0,
+                     float4 Position : POSITION,
+                     float4 Diffuse  : COLOR0 ) 
+{ 
+	PS_OUTPUT Output;
+
+	float4 col = tex2D( tex0, TexCoord );  // sample color map
+	
+	// multiply with diffuse and do other senseless operations
+	Output.RGBColor = Diffuse * col;
+	Output.RGBColor *= 4.0;
+
+	return Output;
+}</pre></td>
+            </tr>
+          </table>
+          <br>
+          <table width="95%" border="0" cellspacing="4" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td><strong>D3D9.VSH</strong></td>
+            </tr>
+            <tr> 
+              <td> <pre>
+; part of the Irrlicht Engine Shader example.
+; This Direct3D9 vertex shader will be loaded by the engine.
+; Please note that these example shaders don't do anything really useful. 
+; They only demonstrate that shaders can be used in Irrlicht.<br>
+vs.1.1
+
+dcl_position v0;    ; declare position
+dcl_normal v1;      ; declare normal
+dcl_color v2;       ; declare color
+dcl_texcoord0 v3;   ; declare texture coordinate<br>
+; transpose and transform position to clip space 
+mul r0, v0.x, c4      
+mad r0, v0.y, c5, r0   
+mad r0, v0.z, c6, r0   
+add oPos, c7, r0       
+
+; transform normal 
+dp3 r1.x, v1, c0  
+dp3 r1.y, v1, c1  
+dp3 r1.z, v1, c2  
+
+; renormalize normal 
+dp3 r1.w, r1, r1  
+rsq r1.w, r1.w    
+mul r1, r1, r1.w  
+
+; calculate light vector 
+m4x4 r6, v0, c10      ; vertex into world position
+add r2, c8, -r6       ; vtxpos - lightpos
+
+; normalize light vector 
+dp3 r2.w, r2, r2  
+rsq r2.w, r2.w    
+mul r2, r2, r2.w  
+
+; calculate light color 
+dp3 r3, r1, r2       ; dp3 with negative light vector 
+lit r5, r3           ; clamp to zero if r3 < 0, r5 has diffuce component in r5.y
+mul oD0, r5.y, c9    ; ouput diffuse color 
+mov oT0, v3          ; store texture coordinates     </pre> </td>
+            </tr>
+          </table>
+          <br>
+          <table width="95%" border="0" cellspacing="4" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td><strong>D3D9.PSH</strong></td>
+            </tr>
+            <tr> 
+              <td> <pre>
+; part of the Irrlicht Engine Shader example.
+; This simple Direct3D9 pixel shader will be loaded by the engine.
+; Please note that these example shaders don't do anything really useful. 
+; They only demonstrate that shaders can be used in Irrlicht.<br>
+ps.1.1
+
+tex t0          ; sample color map
+add r0, v0, v0  ; mulitply with color
+mul t0, t0, r0  ; mulitply with color
+add r0, t0, t0  ; make it brighter and store result              
+              </pre> </td>
+            </tr>
+          </table>
+          <br>
+          <table width="95%" border="0" cellspacing="4" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td><strong>D3D8.VSH</strong></td>
+            </tr>
+            <tr> 
+              <td> <pre>
+; part of the Irrlicht Engine Shader example.
+; This Direct3D9 vertex shader will be loaded by the engine.
+; Please note that these example shaders don't do anything really useful. 
+; They only demonstrate that shaders can be used in Irrlicht.<br>
+vs.1.1
+
+; transpose and transform position to clip space 
+mul r0, v0.x, c4      
+mad r0, v0.y, c5, r0   
+mad r0, v0.z, c6, r0   
+add oPos, c7, r0       
+
+; transform normal 
+dp3 r1.x, v1, c0  
+dp3 r1.y, v1, c1  
+dp3 r1.z, v1, c2  
+
+; renormalize normal 
+dp3 r1.w, r1, r1  
+rsq r1.w, r1.w    
+mul r1, r1, r1.w  
+
+; calculate light vector 
+m4x4 r6, v0, c10      ; vertex into world position
+add r2, c8, -r6       ; vtxpos - lightpos
+
+; normalize light vector 
+dp3 r2.w, r2, r2  
+rsq r2.w, r2.w    
+mul r2, r2, r2.w  
+
+; calculate light color 
+dp3 r3, r1, r2       ; dp3 with negative light vector 
+lit r5, r3           ; clamp to zero if r3 < 0, r5 has diffuce component in r5.y
+mul oD0, r5.y, c9    ; ouput diffuse color 
+mov oT0, v3          ; store texture coordinates             </pre> </td>
+            </tr>
+          </table>
+          <br>
+          <table width="95%" border="0" cellspacing="4" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td><strong>D3D8.PSH</strong></td>
+            </tr>
+            <tr> 
+              <td> <pre>
+; part of the Irrlicht Engine Shader example.
+; This simple Direct3D9 pixel shader will be loaded by the engine.
+; Please note that these example shaders don't do anything really useful. 
+; They only demonstrate that shaders can be used in Irrlicht.<br>
+ps.1.1
+
+tex t0             ; sample color map
+mul_x2 t0, t0, v0  ; mulitply with color
+add r0, t0, t0     ; make it brighter and store result      </pre> </td>
+            </tr>
+          </table>
+          <br>
+          <table width="95%" border="0" cellspacing="4" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td><strong>OPENGL.VSH</strong></td>
+            </tr>
+            <tr> 
+              <td> <pre>
+!!ARBvp1.0
+# part of the Irrlicht Engine Shader example.
+# Please note that these example shaders don't do anything really useful. 
+# They only demonstrate that shaders can be used in Irrlicht.<br>
+#input
+ATTRIB InPos = vertex.position;
+ATTRIB InColor = vertex.color;
+ATTRIB InNormal = vertex.normal;
+ATTRIB InTexCoord = vertex.texcoord;
+
+#output
+OUTPUT OutPos = result.position;
+OUTPUT OutColor = result.color;
+OUTPUT OutTexCoord = result.texcoord;
+
+PARAM MVP[4] = { state.matrix.mvp }; # modelViewProjection matrix.
+TEMP Temp;
+TEMP TempColor;
+TEMP TempNormal;
+TEMP TempPos;
+
+#transform position to clip space 
+DP4 Temp.x, MVP[0], InPos;
+DP4 Temp.y, MVP[1], InPos;
+DP4 Temp.z, MVP[2], InPos;
+DP4 Temp.w, MVP[3], InPos;
+
+#transform normal
+DP3 TempNormal.x, InNormal.x, program.local[0];
+DP3 TempNormal.y, InNormal.y, program.local[1]; 
+DP3 TempNormal.z, InNormal.z, program.local[2];
+
+#renormalize normal
+DP3 TempNormal.w, TempNormal, TempNormal;  
+RSQ TempNormal.w, TempNormal.w;    
+MUL TempNormal, TempNormal, TempNormal.w;
+
+# calculate light vector 
+DP4 TempPos.x, InPos, program.local[10];   # vertex into world position
+DP4 TempPos.y, InPos, program.local[11];
+DP4 TempPos.z, InPos, program.local[12];
+DP4 TempPos.w, InPos, program.local[13];
+
+ADD TempPos, program.local[8], -TempPos;    # vtxpos - lightpos
+
+# normalize light vector
+DP3 TempPos.w, TempPos, TempPos;  
+RSQ TempPos.w, TempPos.w;    
+MUL TempPos, TempPos, TempPos.w;
+
+# calculate light color
+DP3 TempColor, TempNormal, TempPos;    # dp3 with negative light vector 
+LIT OutColor, TempColor;  # clamp to zero if r3 < 0, r5 has diffuce component in r5.y
+MUL OutColor, TempColor.y, program.local[9]; # ouput diffuse color 
+MOV OutColor.w, 1.0;          # we want alpha to be always 1
+MOV OutTexCoord, InTexCoord; # store texture coordinate
+MOV OutPos, Temp;
+
+END</pre> </td>
+            </tr>
+          </table>
+          <br>
+          <table width="95%" border="0" cellspacing="4" cellpadding="0" bgcolor="#CCCCCC" align="center">
+            <tr> 
+              <td><strong>OPENGL.PSH</strong></td>
+            </tr>
+            <tr> 
+              <td> <pre>
+!!ARBfp1.0
+# part of the Irrlicht Engine Shader example.
+# Please note that these example shaders don't do anything really useful. 
+# They only demonstrate that shaders can be used in Irrlicht.<br>
+#Input
+ATTRIB inTexCoord = fragment.texcoord;      # texture coordinates
+ATTRIB inColor = fragment.color.primary; # interpolated diffuse color
+
+#Output
+OUTPUT outColor = result.color;
+
+TEMP texelColor;
+TEMP tmp;
+TXP texelColor, inTexCoord, texture, 2D; 
+
+ADD tmp, inColor, inColor; # mulitply with color
+MUL texelColor, texelColor, tmp;  # mulitply with color   
+ADD outColor, texelColor, texelColor;  # make it brighter and store result
+
+END          </pre> </td>
+            </tr>
+          </table>
+          <p>&nbsp; </p>
+        </div>
+      </div></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+      </body>
+</html>
