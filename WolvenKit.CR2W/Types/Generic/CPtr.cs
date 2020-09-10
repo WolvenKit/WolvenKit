@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
@@ -67,6 +68,8 @@ namespace WolvenKit.CR2W.Types
             // Try reparenting on virtual mountpoint
             if (Reference != null)
             {
+                Reference.Referrers.Add(this as CVariable); //Populate the reverse-lookup
+
                 if (!Reference.IsVirtuallyMounted)
                 {
                     Reference.VirtualParentChunkIndex = GetVarChunkIndex();

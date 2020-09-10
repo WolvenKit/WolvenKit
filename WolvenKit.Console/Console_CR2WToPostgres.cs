@@ -247,7 +247,6 @@ namespace WolvenKit.Console
                 var bundleitemssortedbysize = bundle.Items.Values.ToList().OrderByDescending(o => o.Size).ToArray();
                 var bundleitempart = Partitioner.Create(bundleitemssortedbysize, EnumerablePartitionerOptions.NoBuffering);
                 Parallel.ForEach(bundleitempart, new ParallelOptions { MaxDegreeOfParallelism = 15 }, f =>
-                //Parallel.For(0, bundleitemssortedbysize.Count, new ParallelOptions { MaxDegreeOfParallelism = 15 }, i =>
                 {
                     //BundleItem f = bundleitemssortedbysize[i];
 
@@ -276,14 +275,6 @@ namespace WolvenKit.Console
                     // Getting cr2w database specific file id (lod1x2, cr2w) - lod1x2dict - lod1_id + lod2_id --> cr2w_file_id
                     int cr2w_file_id = lod1x2dict[Tuple.Create(lod2_file_id, lod1_file_id)];
 
-                    //System.Console.WriteLine("yo");
-
-                    /*                    if (f.Name.Split('.').Last() == "buffer")
-                                        {
-                                            notcr2wfiles.Push(Tuple.Create(lod2_file_id, lod1_file_id, f.Name)); // lod2 lod1 lod1-name
-                                                return;
-                                        }*/
-                    //System.Console.WriteLine("ya");
                     var crw = new CR2WFile();
 
 
@@ -525,8 +516,7 @@ namespace WolvenKit.Console
                     oneconn.Close();
                 });
                 mmf.Dispose();
-                //ms0.Dispose();
-                //break;
+                //break; // to debug
                 bundlepb.Refresh(bundlepb.Max, "");
                 #endregion //bundleloop
             }//);

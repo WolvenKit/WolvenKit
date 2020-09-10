@@ -1,5 +1,6 @@
 ﻿using RED.CRC32;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -97,6 +98,7 @@ namespace WolvenKit.CR2W
         private bool m_hasInternalBuffer;
         //private Stream m_stream; //handle this better?
         // private string m_filePath;
+
         #endregion
 
         #region Properties
@@ -270,9 +272,9 @@ namespace WolvenKit.CR2W
         {
             //m_stream = file.BaseStream;
 
-/*            Stopwatch stopwatch1 = new Stopwatch();
+            Stopwatch stopwatch1 = new Stopwatch();
             stopwatch1.Start();
-*/
+
             #region Read Headers
             if (Logger != null) Logger.LogProgress(1, "Reading headers...");
             // read file header
@@ -345,9 +347,9 @@ namespace WolvenKit.CR2W
             }
             #endregion
 
-/*            if (Logger != null) Logger.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n");
-            stopwatch1.Stop();
-*/
+            if (Logger != null) Logger.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n");
+                stopwatch1.Stop();
+
             //m_stream = null;
             return 0;
         }

@@ -71,8 +71,8 @@ namespace WolvenKit.CR2W
             {
                 objectFlags = 8192,
             };
-            //VirtualParentChunkId = 0; //no parent
             IsVirtuallyMounted = false;
+            Referrers = new List<CVariable>();
         }
         public CR2WExportWrapper(CR2WExport export, CR2WFile file)
         {
@@ -80,8 +80,8 @@ namespace WolvenKit.CR2W
             _export = export;
 
             REDType = cr2w.names[export.className].Str;
-            //VirtualParentChunkId = 0; //no parent
             IsVirtuallyMounted = false;
+            Referrers = new List<CVariable>();
         }
         #endregion
 
@@ -128,6 +128,13 @@ namespace WolvenKit.CR2W
                 IsVirtuallyMounted = true;
             }
         }
+
+        /// <summary>
+        /// Reverse lookup : CVariables, being CPtr or CHandle, which reference this chunk.
+        /// Beware, in case of multithreading, this needs locking!
+        /// </summary>
+        public List<CVariable> Referrers;
+
 
         private string _type;
         public string REDType
