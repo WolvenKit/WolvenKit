@@ -97,11 +97,8 @@ namespace WolvenKit.CR2W
         private CPtr<CVariable> _parentPtr;
         public CPtr<CVariable> ParentPtr
         {
-            get
-            {
-                return _parentPtr;
-            }
-            set
+            get => _parentPtr;
+            private set
             {
                 _parentPtr = value;
 
@@ -116,25 +113,11 @@ namespace WolvenKit.CR2W
         }
         public uint ParentChunkId => this.Export.parentID;
 
-        private string _type;
-        public string REDType
-        {
-            get { return _type; }
-            set
-            {
-                _type = value;
-
-                //_export.className = (ushort)cr2w.GetStringIndex(_type);
-            }
-        }
+        public string REDType { get; set; }
 
 
         [DataMember]
-        public string REDName
-        {
-            get { return REDType + " #" + (ChunkIndex); }
-            set { }
-        }
+        public string REDName => REDType + " #" + (ChunkIndex);
 
 
         public int ChunkIndex => cr2w.chunks.IndexOf(this);
@@ -142,28 +125,26 @@ namespace WolvenKit.CR2W
         {
             get
             {
-                if (data is CVariable)
-                {
-                    var vars = data.GetEditableVariables();
-                    var firstString = vars
+                if (!(data is CVariable)) return "";
+                var vars = data.GetEditableVariables();
+                var firstString = vars
                         .Where(_ => (_ is CString && _ != null))
                         .Cast<CString>()
                         .FirstOrDefault(_ => _.val != null)
-                        ;
-                    if (firstString != null)
-                    {
-                        return ((CString)firstString).val;
-                    }
+                    ;
+                if (firstString != null)
+                {
+                    return ((CString)firstString).val;
+                }
 
-                    var firstName = vars
+                var firstName = vars
                         .Where(_ => (_ is CName && _ != null))
                         .Cast<CName>()
                         .FirstOrDefault(_ => _.Value != null)
-                        ;
-                    if (firstName != null)
-                    {
-                        return ((CName)firstName).Value;
-                    }
+                    ;
+                if (firstName != null)
+                {
+                    return ((CName)firstName).Value;
                 }
 
                 return "";

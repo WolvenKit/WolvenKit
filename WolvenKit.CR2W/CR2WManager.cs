@@ -63,7 +63,7 @@ namespace WolvenKit.CR2W
         {
             if (m_projectinfo != null && m_projectinfo.Exists)
             {
-                m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(InterpretScriptClasses());
+                m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(InterpretScriptClasses(), m_assembly);
                 if (m_assembly != null)
                 {
                     m_logger.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}", Logtype.Success);

@@ -20,12 +20,12 @@ namespace WolvenKit.Common.Tools
         /// </summary>
         /// <param name="sourceString"></param>
         /// <returns></returns>
-        public static Assembly CompileAssemblyFromStrings(string sourceString)
+        public static Assembly CompileAssemblyFromStrings(string sourceString, Assembly currentCustomAssembly)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(sourceString);
             string assemblyName = Guid.NewGuid().ToString();
             
-            var references = GetAssemblyReferences();
+            var references = GetAssemblyReferences(currentCustomAssembly);
 
             var compilation = CSharpCompilation.Create(
                 assemblyName,
@@ -45,12 +45,14 @@ namespace WolvenKit.Common.Tools
             return assembly;
         }
 
-        private static IEnumerable<MetadataReference> GetAssemblyReferences()
+        private static IEnumerable<MetadataReference> GetAssemblyReferences(Assembly currentCustomAssembly)
         {
             var assemblies = AppDomain.CurrentDomain
                 .GetAssemblies()
                 .Where(a => !a.IsDynamic)
+                .Where(a => !string.IsNullOrEmpty(a.Location))
                 .Select(a => MetadataReference.CreateFromFile(a.Location));
+
             return assemblies;
         }
 

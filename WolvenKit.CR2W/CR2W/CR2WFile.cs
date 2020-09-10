@@ -1528,10 +1528,8 @@ namespace WolvenKit.CR2W
             return null;
         }
 
-        public bool RemoveChunk(CR2WExportWrapper chunk)
-        {
-            return chunks.Remove(chunk);
-        }
+        public bool RemoveChunk(CR2WExportWrapper chunk) => chunks.Remove(chunk);
+
         #endregion
     }
 }
