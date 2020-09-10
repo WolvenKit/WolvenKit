@@ -28,6 +28,32 @@ namespace WolvenKit.CR2W
         private static Assembly m_assembly;
         private static LoggerService m_logger;
         private static DirectoryInfo m_projectinfo;
+        private static Dictionary<String, Type> m_types;
+
+
+        public static Type GetTypeByName(string typeName)
+        {
+            m_types.TryGetValue(typeName, out Type type);
+            return type;
+        }
+
+        public static bool TypeExists(string typeName) => m_types.ContainsKey(typeName);
+
+        private static void LoadTypes()
+        {
+            m_types = new Dictionary<string, Type>();
+
+            foreach (Type type in m_assembly.GetTypes())
+            {
+                if (!type.IsPublic)
+                    continue;
+
+                if (m_types.ContainsKey(type.Name))
+                    continue;
+
+                m_types.Add(type.Name, type);
+            }
+        }
 
         /// <summary>
         /// Completely reloads a custom assembly
@@ -39,7 +65,10 @@ namespace WolvenKit.CR2W
             {
                 m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(InterpretScriptClasses());
                 if (m_assembly != null)
+                {
                     m_logger.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}", Logtype.Success);
+                    LoadTypes();
+                }
                 else
                     m_logger.LogString($"Custom class assembly could not be compiled. An error occured", Logtype.Error);
             }

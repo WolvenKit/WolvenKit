@@ -1,23 +1,25 @@
-﻿using BrightIdeasSoftware;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using BrightIdeasSoftware;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
 using WolvenKit.App.Model;
 using WolvenKit.CR2W;
 using WolvenKit.Services;
 
-namespace WolvenKit
+namespace WolvenKit.Forms
 {
     public partial class frmChunkList : DockContent, IThemedContent
     {
         private bool listview = false;
         private bool isLargefile = false;
         private CR2WFile file;
-        private List<Tuple<int,List<CR2WExportWrapper>>> chunkHelperList { get; set; } = new List<Tuple<int, List<CR2WExportWrapper>>>();
+
+        private readonly Dictionary<int, int> childrencountDict = new Dictionary<int, int>();
+        private readonly Dictionary<int, List<CR2WExportWrapper>> childrenDict = new Dictionary<int, List<CR2WExportWrapper>>();
             
         public frmChunkList()
         {
@@ -28,17 +30,17 @@ namespace WolvenKit
 
             treeListView.CanExpandGetter = delegate (object x) {
                 var idx = ((CR2WExportWrapper)x).ChunkIndex;
-                return !listview && chunkHelperList[idx].Item2.Any();
+                return !listview && childrencountDict[idx] > 0;
             };
             treeListView.ChildrenGetter = delegate (object x) {
                 var idx = ((CR2WExportWrapper)x).ChunkIndex;
-                return !listview ? chunkHelperList[idx].Item2 : new List<CR2WExportWrapper>();
+                return !listview ? childrenDict[idx] : new List<CR2WExportWrapper>();
             };
         }
 
         public CR2WFile File
         {
-            get { return file; }
+            get => file;
             set
             {
                 file = value;
@@ -48,18 +50,33 @@ namespace WolvenKit
 
         private void UpdateHelperList()
         {
-            chunkHelperList.Clear();
+            childrenDict.Clear();
+            childrencountDict.Clear();
 
             if (File != null)
             {
-                var parentIds = File.chunks.Select(_ => new Tuple<int,int>((int)_.ParentChunkId - 1,(int)_.ChunkIndex)).ToList();
+                File.GenerateChunksDict();
 
-                for (int i = 0; i < File.chunks.Count; i++)
+                Dictionary<int, int> dParentids = File.chunks.ToDictionary(_ => _.ChunkIndex, _ => (int)_.ParentChunkId -1);
+                foreach (var chunk in File.chunks)
                 {
-                    var chunk = File.chunks[i];
-                    var childIdxList = parentIds.Where(_ => _.Item1.Equals(chunk.ChunkIndex)).Select(_ => _.Item2).ToList();
-                    var children = File.chunks.Where(_ => childIdxList.Contains(_.ChunkIndex)).ToList();
-                    chunkHelperList.Add(new Tuple<int, List<CR2WExportWrapper>>((int)chunk.ParentChunkId, children));
+                    var childrenidxlist = dParentids.Where(_ => _.Value == chunk.ChunkIndex).Select(_ => _.Key);
+
+                    IEnumerable<int> enumerable = childrenidxlist as int[] ?? childrenidxlist.ToArray();
+                    if (enumerable.Any())
+                    {
+                        List<CR2WExportWrapper> children = enumerable.Select(childid => File.chunksdict[childid]).ToList();
+                        childrenDict.Add(chunk.ChunkIndex, children);
+
+                        var c = children.Count;
+                        childrencountDict.Add(chunk.ChunkIndex, c);
+                    }
+                    else
+                    {
+                        childrenDict.Add(chunk.ChunkIndex, new List<CR2WExportWrapper>());
+                        childrencountDict.Add(chunk.ChunkIndex, 0);
+
+                    }
                 }
             }
         }
@@ -75,15 +92,13 @@ namespace WolvenKit
             if (isLargefile)
                 listview = true;
 
-            if (!isLargefile)
-                UpdateHelperList();
-
             if (listview)
                 treeListView.Roots = File.chunks;
             else
+            {
+                UpdateHelperList();
                 treeListView.Roots = File.chunks.Where(_ => _.GetParent() == null).ToList();
-
-            
+            }
         }
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
@@ -221,7 +236,7 @@ namespace WolvenKit
             }
         }
 
-        private void listView_ItemsChanged(object sender, BrightIdeasSoftware.ItemsChangedEventArgs e)
+        private void listView_ItemsChanged(object sender, ItemsChangedEventArgs e)
         {
             MainController.Get().ProjectUnsaved = true;
         }

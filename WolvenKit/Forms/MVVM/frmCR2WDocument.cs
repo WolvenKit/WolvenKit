@@ -16,6 +16,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.SRT;
 using WolvenKit.CR2W.Types;
+using WolvenKit.Forms;
 using WolvenKit.Services;
 
 namespace WolvenKit

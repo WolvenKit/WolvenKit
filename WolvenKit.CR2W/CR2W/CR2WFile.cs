@@ -112,6 +112,8 @@ namespace WolvenKit.CR2W
         public List<CR2WBufferWrapper> buffers { get; set; }
         public List<CR2WEmbeddedWrapper> embedded { get; set; }
 
+        public void GenerateChunksDict() => chunksdict = chunks.ToDictionary(_ => _.ChunkIndex, _ => _);
+        public Dictionary<int, CR2WExportWrapper> chunksdict { get; set; }
 
         public List<LocalizedString> LocalizedStrings = new List<LocalizedString>();
         public List<string> UnknownTypes = new List<string>();

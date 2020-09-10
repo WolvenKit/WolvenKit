@@ -11,18 +11,6 @@ using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    public class CR2WTypeDefinition
-    {
-        public string name;
-        public CVariable var;
-
-        public CR2WTypeDefinition(string name, CVariable var)
-        {
-            this.name = name;
-            this.var = var;
-        }
-    }
-
     /// <summary>
     /// The reflection magic happens mostly here, with System.Activator.
     /// A class is instantiated from its type and the properties are deserialized from 
@@ -31,46 +19,20 @@ namespace WolvenKit.CR2W.Types
     public static class CR2WTypeManager
     {
 
-        public static IEnumerable<string> AvailableTypes
-        {
-            get
-            {
-                return AvailableVanillaTypes.Concat(AvailableCustomTypes);
-            }
-        }
+        public static IEnumerable<string> AvailableTypes => AvailableVanillaTypes;
 
         public static IEnumerable<string> AvailableVanillaTypes
         {
             get
             {
-                string nspace = "WolvenKit.CR2W.Types";
+                const string nspace = "WolvenKit.CR2W.Types";
 
-                Assembly cr2wassembly = Assembly.GetExecutingAssembly();
+                var cr2wassembly = Assembly.GetExecutingAssembly();
                 var vanillaclassNames = cr2wassembly.GetTypes()
                     .Where(_ => _.IsClass && _.Namespace == nspace)
                     .Select(_ => _.Name);
 
                 return vanillaclassNames;
-            }
-        }
-
-        public static IEnumerable<string> AvailableCustomTypes
-        {
-            get
-            {
-                List<string> customclassNames = new List<string>();
-                string nspace = "WolvenKit.CR2W.Types";
-                var di = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
-                var path = Path.Combine(di.FullName, "CustomCr2w.dll");
-                if (File.Exists(path))
-                {
-                    Assembly customassembly = Assembly.LoadFrom(path);
-                    customclassNames = customassembly.GetTypes()
-                         .Where(_ => _.IsClass && _.Namespace == nspace)
-                         .Select(_ => _.Name).ToList();
-                }
-
-                return customclassNames;
             }
         }
 
@@ -87,9 +49,9 @@ namespace WolvenKit.CR2W.Types
         public static CVariable Create(string typename, string varname, CR2WFile cr2w, CVariable parentVariable, bool readUnknownAsBytes = true)
         {
             typename = REDReflection.GetWKitTypeFromREDType(typename);
+            var fullname = typename;
 
-            // first try to create instance of type
-            #region W3 TYPES 
+            // check for normal type
             if (AssemblyDictionary.TypeExists(typename))
             {
                 var type = AssemblyDictionary.GetTypeByName(typename);
@@ -99,121 +61,123 @@ namespace WolvenKit.CR2W.Types
                     return instance as CVariable;
                 }
             }
-            else if (AvailableCustomTypes.Contains(typename))
+
+            // check for enum types
+            if (AssemblyDictionary.EnumExists(typename))
             {
-                var di = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
-                Assembly customassembly = Assembly.LoadFrom(Path.Combine(di.FullName, "CustomCr2w.dll"));
-                var type = customassembly.GetTypes().First(_ => _.Name == typename);
-                // if succesful return as CVariable
-                if (type != null)
-                {
-                    //var instance = type.GetMethod("Create").Invoke(type, new object[]{ cr2w, parentVariable, varname });
-
-                    object instance = Activator.CreateInstance(type, cr2w, parentVariable, varname);
-                    return instance as CVariable;
-                }
-                //}
-            }
-            else
-            {
-
-            }
-
-            #endregion
-
-            var fullname = typename;
-            // check for enum
-            if (typeof(Enums).GetNestedTypes().Select(_ => _.Name).Contains(typename))
-            {
-                Enum e = (Enum)Activator.CreateInstance(typeof(Enums).GetNestedTypes().FirstOrDefault(_ => _.Name == typename));
-
-                //if (e.GetType().IsDefined(typeof(FlagsAttribute), false))
-                //{
-                //    typename = REDReflection.GetWKitTypeFromREDType(typename);
-                //    var etype = Type.GetType($"WolvenKit.CR2W.Types.{typename}");
-                //    object einstance = Activator.CreateInstance(etype, cr2w, parentVariable, varname);
-                //    return einstance as CVariable;
-                //}
-
+                Enum e = (Enum)Activator.CreateInstance(AssemblyDictionary.GetEnumByName(typename));
                 var cenum = MakeGenericEnumType(typeof(CEnum<>), e);
                 return cenum;
             }
-            // finally, check for generic type
+            // check for generic type
             else if (typename.Contains(':'))
             {
                 #region GENERIC TYPES
                 string[] splits = typename.Split(':');
-                string firstsplit = splits.First();
-                string secondsplit = string.Join(":", splits.Skip(1));
-
-                switch (firstsplit)
+                string generictype = splits.First();
+                string innertype = string.Join(":", splits.Skip(1));
+                // e.g. handle:CEntityTemplate
+                switch (generictype)
                 {
                     case "CHandle":
                     case "handle":
                         {
-                            CVariable innerobject = Create(secondsplit, "", cr2w, null);
+                            CVariable innerobject = Create(innertype, "", cr2w, null);
                             return MakeGenericType(typeof(CHandle<>), innerobject);
                         }
                     case "CPtr":
                     case "ptr":
                         {
-                            CVariable innerobject = Create(secondsplit, "", cr2w, null);
+                            CVariable innerobject = Create(innertype, "", cr2w, null);
                             return MakeGenericType(typeof(CPtr<>), innerobject);
                         }
                     case "CSoft":
                     case "soft":
                         {
-                            CVariable innerobject = Create(secondsplit, "", cr2w, null);
+                            CVariable innerobject = Create(innertype, "", cr2w, null);
                             return MakeGenericType(typeof(CSoft<>), innerobject);
                         }
                     case "array":
                         {
-                            typename = firstsplit;
-
                             // match pattern e.g. 
                             // array:            Array: (2),(0),(handle:CBitmapTexture)
                             // array:            Array: (2),(0),(Int32)
                             // array of array:   Array: (2),(0),(Array:133,0,EngineQsTransform)
-                            var regArrayType = new Regex(@"(\d+),(\d+),(.+)");
-                            var matchArrayType = regArrayType.Match(fullname);
-                            if (matchArrayType.Success)
+
+                            string[] arraysplits = innertype.Split(',');
+                            string flag1 = arraysplits[0];
+                            string flag2 = arraysplits[1];
+                            string body = string.Join(",", arraysplits.Skip(2));
+                            if (arraysplits.Length >= 3)
                             {
                                 //byte arrays, these can be huge, using ordinary arrays is just too slow.
-                                if (matchArrayType.Groups[3].Value == "Uint8" || matchArrayType.Groups[3].Value == "Int8")
+                                if (body == "Uint8" || body == "Int8")
                                 {
                                     var bytearray = new CByteArray(cr2w, parentVariable, varname);
-                                    bytearray.InternalType = fullname;
+                                    bytearray.InternalType = innertype;
                                     return bytearray;
                                 }
 
-                                        
-
-                                CVariable innerobject = Create(matchArrayType.Groups[3].Value, "", cr2w, null);
+                                // all other arrays
+                                CVariable innerobject = Create(body, "", cr2w, null);
                                 IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
-                                arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value), int.Parse(matchArrayType.Groups[2].Value) };
+                                arrayacc.Flags = new List<int>() { int.Parse(flag1), int.Parse(flag2) };
                                 if (innerobject is IArrayAccessor accessor && accessor.Flags != null)
                                 {
                                     arrayacc.Flags.AddRange(accessor.Flags);
                                 }
-
-
-                                arrayacc.Elementtype = matchArrayType.Groups[3].Value;
-
+                                arrayacc.Elementtype = body;
                                 return arrayacc as CVariable;
                             }
-                            // for CArrays of other types
                             else
                             {
-                                //throw new InvalidParsingException($"Invalid array type format: typename: {typename}.");
-                                CVariable innerobject = Create(secondsplit, "", cr2w, null);
+                                CVariable innerobject = Create(innertype, "", cr2w, null);
                                 IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
-                                arrayacc.Elementtype = matchArrayType.Groups[3].Value;
+                                arrayacc.Elementtype = body;
                                 return arrayacc as CVariable;
                             }
+                            
+
+                            //var regArrayType = new Regex(@"(\d+),(\d+),(.+)");
+                            //var matchArrayType = regArrayType.Match(fullname);
+                            //if (matchArrayType.Success)
+                            //{
+                            //    //byte arrays, these can be huge, using ordinary arrays is just too slow.
+                            //    if (matchArrayType.Groups[3].Value == "Uint8" || matchArrayType.Groups[3].Value == "Int8")
+                            //    {
+                            //        var bytearray = new CByteArray(cr2w, parentVariable, varname);
+                            //        bytearray.InternalType = fullname;
+                            //        return bytearray;
+                            //    }
+
+                                        
+
+                            //    CVariable innerobject = Create(matchArrayType.Groups[3].Value, "", cr2w, null);
+                            //    IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
+                            //    arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value), int.Parse(matchArrayType.Groups[2].Value) };
+                            //    if (innerobject is IArrayAccessor accessor && accessor.Flags != null)
+                            //    {
+                            //        arrayacc.Flags.AddRange(accessor.Flags);
+                            //    }
+
+
+                            //    arrayacc.Elementtype = matchArrayType.Groups[3].Value;
+
+                            //    return arrayacc as CVariable;
+                            //}
+                            // for CArrays of other types
+                            //else
+                            //{
+                            //    //throw new InvalidParsingException($"Invalid array type format: typename: {typename}.");
+                            //    CVariable innerobject = Create(secondsplit, "", cr2w, null);
+                            //    IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
+                            //    arrayacc.Elementtype = matchArrayType.Groups[3].Value;
+                            //    return arrayacc as CVariable;
+                            //}
                         }
                     case "static":
                         {
-                            typename = firstsplit;
+                            typename = generictype;
 
                             // match pattern e.g. 
                             // static:  (4),(Uint32)
@@ -234,41 +198,37 @@ namespace WolvenKit.CR2W.Types
                         }
                     case "CBufferUInt16":
                         {
-                            CVariable innerobject = Create(secondsplit, "", cr2w, null);
+                            CVariable innerobject = Create(innertype, "", cr2w, null);
                             return MakeGenericType(typeof(CBufferUInt16<>), innerobject);
                         }
                     case "CBufferUInt32":
                         {
-                            CVariable innerobject = Create(secondsplit, "", cr2w, null);
+                            CVariable innerobject = Create(innertype, "", cr2w, null);
                             return MakeGenericType(typeof(CBufferUInt32<>), innerobject);
                         }
                     case "CBufferVLQInt32":
                         {
-                            CVariable innerobject = Create(secondsplit, "", cr2w, null);
+                            CVariable innerobject = Create(innertype, "", cr2w, null);
                             return MakeGenericType(typeof(CBufferVLQInt32<>), innerobject);
                         }
                     case "CCompressedBuffer":
                         {
-                            CVariable innerobject = Create(secondsplit, "", cr2w, null);
+                            CVariable innerobject = Create(innertype, "", cr2w, null);
                             return MakeGenericType(typeof(CCompressedBuffer<>), innerobject);
                         }
                     case "CPaddedBuffer":
                         {
-                            CVariable innerobject = Create(secondsplit, "", cr2w, null);
+                            CVariable innerobject = Create(innertype, "", cr2w, null);
                             return MakeGenericType(typeof(CPaddedBuffer<>), innerobject);
                         }
                     case "CEnum":
                         {
-                            Enum innerobject = CreateEnum(secondsplit);
+                            Enum innerobject = CreateEnum(innertype);
                             return MakeGenericEnumType(typeof(CEnum<>), innerobject);
                         }
                     default:
                         {
-                            typename = firstsplit;
-
                             throw new NotImplementedException();
-
-                            break;
                         }
                 }
                 #endregion
@@ -304,7 +264,13 @@ namespace WolvenKit.CR2W.Types
                 }
                 else
                 {
-                    
+                    // check if custom type
+                    if (CR2WManager.TypeExists(typename))
+                    {
+                        var type = CR2WManager.GetTypeByName(typename);
+                        object instance = Activator.CreateInstance(type, cr2w, parentVariable, varname);
+                        return instance as CVariable;
+                    }
 
 
                     // this should never happen
@@ -328,7 +294,7 @@ namespace WolvenKit.CR2W.Types
 
             IArrayAccessor MakeArray(Type arraytype, Type generictype)
             {
-                Type elementType = typeof(CArray<>);
+                Type elementType;
 
                 if (arraytype == typeof(CStatic<>))
                     elementType = typeof(CStatic<>).MakeGenericType(generictype);
@@ -380,7 +346,8 @@ namespace WolvenKit.CR2W.Types
 
         private static Enum CreateEnum(string value)
         {
-            Enum e = (Enum)Activator.CreateInstance(typeof(Enums).GetNestedTypes().FirstOrDefault(_ => _.Name == value));
+            var type = AssemblyDictionary.GetEnumByName(value);
+            Enum e = (Enum)Activator.CreateInstance(type);
 
             return e;
         }
