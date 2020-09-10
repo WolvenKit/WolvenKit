@@ -19,7 +19,13 @@ namespace WolvenKit.Common
     {
         IWitcherArchive Bundle { get; set; }
         string Name { get; set; }
+        /// <summary>
+        /// Uncompressed asset size in bytes
+        /// </summary>
         long Size { get; set; }
+        /// <summary>
+        /// Compressed asset asize in bytes
+        /// </summary>
         uint ZSize { get; set; }
         long PageOffset { get; set; }
         string CompressionType { get; }

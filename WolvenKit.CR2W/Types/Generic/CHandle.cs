@@ -73,6 +73,15 @@ namespace WolvenKit.CR2W.Types
                     Reference = null;
                 else
                     Reference = cr2w.chunks[val - 1];
+
+                if (Reference != null && !Reference.IsVirtuallyMounted)
+                {
+                    Reference.VirtualParentChunkIndex = GetVarChunkIndex();
+                }
+                else
+                {
+                    var bozza = "bozza";
+                }
             }
             else
             {

@@ -78,7 +78,9 @@ namespace WolvenKit.CR2W.Types
                 element.Read(file, (uint)0);
                 if (element is T te)
                     Elements.Add(te);
-            }
+/*                if (element.REDType.ToLower().Contains("ptr"))
+                    System.Console.WriteLine("gfdfg");
+*/            }
         }
 
         public override void Write(BinaryWriter file)

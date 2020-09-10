@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.MemoryMappedFiles;
 using Doboz;
 using Ionic.Zlib;
@@ -54,11 +55,12 @@ namespace WolvenKit.Bundles
         /// decompress with the proper algorithm.
         /// </summary>
         /// <param name="output"></param>
-        public void ExtractExistingMMF(Stream output)
+        public void ExtractExistingMMF(Stream output, MemoryMappedFile memorymappedbundle = null)
         {
-            var hash = Bundle.FileName.GetHashMD5();
-            using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(hash, MemoryMappedFileRights.Read))
-            using (var viewstream = mmf.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
+/*                var hash = *//*@"Global\" + *//*Bundle.FileName.GetHashMD5();
+            System.Console.WriteLine(hash);
+            using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(hash, MemoryMappedFileRights.Read, HandleInheritability.Inheritable))
+*/                using (var viewstream = memorymappedbundle.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
             {
                 switch (CompressionType)
                 {
