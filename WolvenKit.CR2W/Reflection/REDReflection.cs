@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
+using RED.Reflection;
 using WolvenKit.Common;
 using WolvenKit.CR2W.Types;
 
@@ -129,7 +130,10 @@ namespace WolvenKit.CR2W.Reflection
                 case "Color": return "CColor";
                 case "Matrix": return "CMatrix";
                 default:
+                {
                     return typename;
+                }
+                    
             }
         }
 

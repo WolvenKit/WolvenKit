@@ -2160,33 +2160,31 @@ namespace WolvenKit
                     xs.Serialize(mf, ActiveMod);
                     mf.Close();
                 }
-
-
-
-                // Hash all filepaths
-                var relativepaths = ActiveMod.ModFiles
-                    .Select(_ => _.Substring(_.IndexOf(Path.DirectorySeparatorChar) + 1))
-                    .ToList();
-                Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
-
-                // register all custom classes
-                CR2WManager.Init(ActiveMod.FileDirectory, MainController.Get().Logger);
-
-
-                // Update the recent files.
-                var files = new List<string>();
-                if (File.Exists("recent_files.xml"))
-                {
-                    var doc = XDocument.Load("recent_files.xml");
-                    files.AddRange(doc.Descendants("recentfile").Take(4).Select(x => x.Value));
-                }
-                files.Add(file);
-                new XDocument(new XElement("RecentFiles", files.Distinct().Select(x => new XElement("recentfile", x)))).Save("recent_files.xml");
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Failed to upgrade the project!\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            // Hash all filepaths
+            var relativepaths = ActiveMod.ModFiles
+                .Select(_ => _.Substring(_.IndexOf(Path.DirectorySeparatorChar) + 1))
+                .ToList();
+            Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
+
+            // register all custom classes
+            CR2WManager.Init(ActiveMod.FileDirectory, MainController.Get().Logger);
+
+            // Update the recent files.
+            var files = new List<string>();
+            if (File.Exists("recent_files.xml"))
+            {
+                var doc = XDocument.Load("recent_files.xml");
+                files.AddRange(doc.Descendants("recentfile").Take(4).Select(x => x.Value));
+            }
+            files.Add(file);
+            new XDocument(new XElement("RecentFiles", files.Distinct().Select(x => new XElement("recentfile", x)))).Save("recent_files.xml");
+
 
             if (ActiveMod?.LastOpenedFiles != null)
             {

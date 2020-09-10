@@ -79,7 +79,7 @@ namespace WolvenKit.CR2W
 using System.IO;
 using FastMember;
 using WolvenKit.CR2W.Reflection;
-//using static WolvenKit.CR2W.Types.Enums;
+using static WolvenKit.CR2W.Types.Enums;
 
 
 namespace WolvenKit.CR2W.Types
@@ -200,19 +200,30 @@ namespace WolvenKit.CR2W.Types
         {
             string csline = "";
 
-            // check if class
-            var regvar = new Regex(@"(?:.*)var\s+(\w+)\s*:\s*(\w+)\s*;");
+            var regvar = new Regex(@"(?:.*)var\s+(?<VARNAME>.+?)\s*:\s*(?<VARTYPE>[^=]*).*;");
             var matchIsVar = regvar.Match(input);
             if (matchIsVar.Success)
             {
-                string varname = matchIsVar.Groups[1].Value;
-                string redtype = matchIsVar.Groups[2].Value;
-                string vartype = REDReflection.GetWKitTypeFromREDType(redtype);
-
-                // array types
+                string redtype = matchIsVar.Groups["VARTYPE"].Value;
+                // support generic types (e.g. array<string>)
+                string vartype = GetCsTypeRecursive(redtype);
 
 
-                csline += $"\t\t[Ordinal({counter})] [RED]\tpublic {vartype} {varname} {{get; set;}}\r\n";
+                string varname = matchIsVar.Groups["VARNAME"].Value;
+                // support multiple var declarations in one line (e.g. var i, j, size : int;)
+                if (varname.Contains(","))
+                {
+                    var splits = varname.Split(',');
+                    foreach (var split in splits)
+                    {
+                        var tsplit = split.Trim(' ');
+                        csline += $"\t\t[Ordinal({counter})] [RED]\tpublic {vartype} {tsplit} {{get; set;}}\r\n";
+                    }
+                }
+                else
+                {
+                    csline += $"\t\t[Ordinal({counter})] [RED]\tpublic {vartype} {varname} {{get; set;}}\r\n";
+                }
             }
             else
             {
@@ -220,6 +231,36 @@ namespace WolvenKit.CR2W.Types
             }
 
             return csline;
+        }
+
+        private static string GetCsTypeRecursive(string input)
+        {
+            if (input.Contains("array")) // TODO: support for more generics?
+            {
+                string returntype = input;
+
+                // array types
+                // [Ordinal(18)] [RED("editorCachedIkEffectorsID", 2, 0)] public CArray<CInt32> EditorCachedIkEffectorsID { get; set; }
+                var regarray = new Regex(@"(?:.*)array\s*<\s*(?<TYPE>\w+)\s*>.*");
+                var matchIsArray = regarray.Match(input);
+                if (matchIsArray.Success)
+                {
+                    var typename = matchIsArray.Groups["TYPE"].Value;
+                    returntype = $"CArray<{GetCsTypeRecursive(typename)}>";
+                }
+                else
+                {
+                    
+                }
+                return returntype;
+            }
+            else
+            {
+                input = input.Trim(' ');
+                if (AssemblyDictionary.EnumExists(input))
+                    input = $"CEnum<{input}>";
+                return REDReflection.GetWKitTypeFromREDType(input);
+            }
         }
 
         private static string InterpretClassLine(string input, ref string classname)
