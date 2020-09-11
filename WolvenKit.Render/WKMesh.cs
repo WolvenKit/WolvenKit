@@ -170,7 +170,7 @@ namespace WolvenKit.Render
                 // Load only best LOD
                 if (vBufferInf.lod == 1)
                 {
-                    using (BinaryReader br = new BinaryReader(File.Open(meshFile.FileName + ".1.buffer", FileMode.Open)))
+                    using (BinaryReader br = new BinaryReader(File.Open(meshFile.Cr2wFileName + ".1.buffer", FileMode.Open)))
                     {
                         uint vertexSize = 8;
                         if (meshInfo.vertexType == SMeshInfos.EMeshVertexType.EMVT_SKINNED)

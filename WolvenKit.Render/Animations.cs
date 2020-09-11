@@ -68,9 +68,9 @@ namespace WolvenKit.Render
                         if (deferredData != null && deferredData.Bufferdata.val != 0)
                             if (streamingOption != null && streamingOption.ToString() == "ABSO_PartiallyStreamable")
                                 data = ConvertAnimation.Combine(buffer.Data.Bytes,
-                                File.ReadAllBytes(animFile.FileName + "." + deferredData.Bufferdata.val + ".buffer"));
+                                File.ReadAllBytes(animFile.Cr2wFileName + "." + deferredData.Bufferdata.val + ".buffer"));
                             else
-                                data = File.ReadAllBytes(animFile.FileName + "." + deferredData.Bufferdata.val + ".buffer");
+                                data = File.ReadAllBytes(animFile.Cr2wFileName + "." + deferredData.Bufferdata.val + ".buffer");
                         else
                             data = buffer.Data.Bytes;
                         using (MemoryStream ms = new MemoryStream(data))

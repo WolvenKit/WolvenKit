@@ -734,7 +734,7 @@ namespace WolvenKit.Console
         public static void IntenseTest(List<string> Files2Test)
         {
             var xdoc = new XDocument(new XElement("CollisionCacheTest",
-                Files2Test.Select(x => new XElement("Result", new XAttribute("FileName", x),
+                Files2Test.Select(x => new XElement("Result", new XAttribute("Cr2wFileName", x),
                                                    new XElement("OldFileHash", GetHash(x)),
                                                    new XElement("NewFileHash", CloneCollisionCache(x))))));
             xdoc.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\result.xml");
