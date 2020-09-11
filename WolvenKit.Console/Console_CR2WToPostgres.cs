@@ -347,7 +347,7 @@ namespace WolvenKit.Console
                             filewriter.Write((long)crwfileheader.bufferSize, NpgsqlDbType.Bigint);
                             filewriter.Write((long)crwfileheader.crc32, NpgsqlDbType.Bigint);
                             filewriter.Write((int)crwfileheader.numChunks, NpgsqlDbType.Integer);
-                            filewriter.Write(acrw.FileName, NpgsqlDbType.Text);
+                            filewriter.Write(acrw.Cr2wFileName, NpgsqlDbType.Text);
                             filewriter.Complete();
                         }
                         #endregion //dump_fileheader
@@ -469,7 +469,7 @@ namespace WolvenKit.Console
                             var buffers = acrw.buffers;
 
                             if (acrw != crwwithembedded.First() && acrw.embedded.Count() > 0)
-                                System.Console.WriteLine($"Double embbeded found at ${crwwithembedded.First().FileName} !");
+                                System.Console.WriteLine($"Double embbeded found at ${crwwithembedded.First().Cr2wFileName} !");
 
                             for (int j = 0; j < buffers.Count(); j++)
                             {
@@ -495,7 +495,7 @@ namespace WolvenKit.Console
                             var embedded = acrw.embedded;
 
                             if (acrw != crwwithembedded.First() && acrw.embedded.Count() > 0)
-                                System.Console.WriteLine($"Double embbeded found at ${crwwithembedded.First().FileName} !");
+                                System.Console.WriteLine($"Double embbeded found at ${crwwithembedded.First().Cr2wFileName} !");
 
                             for (int j = 0; j < embedded.Count(); j++)
                             {

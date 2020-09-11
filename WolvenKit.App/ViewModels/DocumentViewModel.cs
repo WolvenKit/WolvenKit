@@ -27,22 +27,22 @@ namespace WolvenKit.App.ViewModels
         #region Properties
         public object SaveTarget { get; set; }
         #region File
-        private IWolvenkitFile _file;
-        public IWolvenkitFile File
+        private IWolvenkitFile _cr2wfile;
+        public IWolvenkitFile Cr2wFile
         {
-            get => _file;
+            get => _cr2wfile;
             set
             {
-                if (_file != value)
+                if (_cr2wfile != value)
                 {
-                    _file = value;
+                    _cr2wfile = value;
                     OnPropertyChanged();
                 }
             }
         }
         #endregion
         #region FileName
-        public virtual string FileName => File.FileName;
+        public virtual string Cr2wFileName => Cr2wFile.Cr2wFileName;
         #endregion
         #region FormText
         private string _formText;
@@ -59,7 +59,7 @@ namespace WolvenKit.App.ViewModels
             }
         }
         #endregion
-        public string Title => Path.GetFileName(FileName);
+        public string Title => Path.GetFileName(Cr2wFileName);
 
         #endregion
 
@@ -93,11 +93,11 @@ namespace WolvenKit.App.ViewModels
             {
                 using (var writer = new BinaryWriter(mem))
                 {
-                    File.Write(writer);
+                    Cr2wFile.Write(writer);
 
                     if (OnFileSaved != null)
                     {
-                        OnFileSaved(this, new FileSavedEventArgs { FileName = FileName, Stream = mem, File = File });
+                        OnFileSaved(this, new FileSavedEventArgs { FileName = Cr2wFileName, Stream = mem, File = Cr2wFile });
                     }
                 }
             }
@@ -110,14 +110,14 @@ namespace WolvenKit.App.ViewModels
             using (var mem = new MemoryStream())
             using (var writer = new BinaryWriter(mem))
             {
-                File.Write(writer);
+                Cr2wFile.Write(writer);
                 mem.Seek(0, SeekOrigin.Begin);
 
-                using (var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write))
+                using (var fs = new FileStream(Cr2wFileName, FileMode.Create, FileAccess.Write))
                 {
                     mem.WriteTo(fs);
 
-                    OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = fs, File = File });
+                    OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = Cr2wFileName, Stream = fs, File = Cr2wFile });
                     fs.Close();
                 }
             }
@@ -151,17 +151,17 @@ namespace WolvenKit.App.ViewModels
                 // switch between cr2wfiles and others (e.g. srt)
                 if (Path.GetExtension(filename) == ".srt")
                 {
-                    File = new Srtfile()
+                    Cr2wFile = new Srtfile()
                     {
-                        FileName = filename
+                        Cr2wFileName = filename
                     };
-                    File.Read(reader);
+                    Cr2wFile.Read(reader);
                 }
                 else
                 {
-                    File = new CR2WFile(reader, MainController.Get().Logger)
+                    Cr2wFile = new CR2WFile(reader, MainController.Get().Logger)
                     {
-                        FileName = filename,
+                        Cr2wFileName = filename,
                         EditorController = variableEditor/*UIController.Get()*/,
                         LocalizedStringSource = MainController.Get()
                     };

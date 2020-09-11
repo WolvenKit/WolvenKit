@@ -35,8 +35,8 @@ namespace WolvenKit
         
 
         public DockPanel FormPanel => dockPanel;
-        public CR2WFile File => (CR2WFile)vm.File;
-        public string FileName => vm.FileName;
+        public CR2WFile File => (CR2WFile)vm.Cr2wFile;
+        public string Cr2wFileName => vm.Cr2wFileName;
 
         public frmCR2WDocument(DocumentViewModel documentViewModel)
         {
@@ -58,7 +58,7 @@ namespace WolvenKit
 
             chunkList = new frmChunkList
             {
-                File = (CR2WFile)vm.File,
+                File = (CR2WFile)vm.Cr2wFile,
                 DockAreas = DockAreas.Document
             };
             chunkList.Show(dockPanel, DockState.Document);

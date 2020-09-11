@@ -7,10 +7,13 @@ using WolvenKit.App.ViewModels;
 
 namespace WolvenKit.Common.Model
 {
+    /// <summary>
+    /// A CR2W document
+    /// </summary>
     public interface IWolvenkitDocument
     {
 
-        string FileName { get; }
+        string Cr2wFileName { get; }
         //object SaveTarget { get; set; }
 
 

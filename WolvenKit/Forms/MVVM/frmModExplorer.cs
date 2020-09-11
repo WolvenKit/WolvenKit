@@ -522,7 +522,7 @@ namespace WolvenKit
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
-                if (MockKernel.Get().GetMainViewModel().OpenDocuments.Any(_ => _.FileName == selectedobject.FullName))
+                if (MockKernel.Get().GetMainViewModel().OpenDocuments.Any(_ => _.Cr2wFileName == selectedobject.FullName))
                 {
                     MainController.LogString("Please close the file in WolvenKit before renaming.", Logtype.Error);
                     return;
@@ -536,7 +536,7 @@ namespace WolvenKit
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
                 var vm = MockKernel.Get().GetMainViewModel();
-                if (vm.OpenDocuments.Any(_ => _.FileName == selectedobject.FullName))
+                if (vm.OpenDocuments.Any(_ => _.Cr2wFileName == selectedobject.FullName))
                 {
                     MainController.LogString("Please close the file in WolvenKit before deleting.", Logtype.Error);
                     return;
