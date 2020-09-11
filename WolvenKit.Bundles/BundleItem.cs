@@ -57,10 +57,17 @@ namespace WolvenKit.Bundles
         /// <param name="output"></param>
         public void ExtractExistingMMF(Stream output, MemoryMappedFile memorymappedbundle = null)
         {
-/*                var hash = *//*@"Global\" + *//*Bundle.FileName.GetHashMD5();
-            System.Console.WriteLine(hash);
-            using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(hash, MemoryMappedFileRights.Read, HandleInheritability.Inheritable))
-*/                using (var viewstream = memorymappedbundle.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
+            // old deprecated way of loading mmfs still used in unit test
+            //var hash = Bundle.FileName.GetHashMD5();
+            //using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(hash, MemoryMappedFileRights.Read))
+            //using (var viewstream = mmf.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
+
+
+            /*                var hash = *//*@"Global\" + *//*Bundle.FileName.GetHashMD5();
+                        System.Console.WriteLine(hash);
+                        using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(hash, MemoryMappedFileRights.Read, HandleInheritability.Inheritable))
+            */
+            using (var viewstream = memorymappedbundle.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
             {
                 switch (CompressionType)
                 {

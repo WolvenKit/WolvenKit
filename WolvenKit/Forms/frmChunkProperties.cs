@@ -82,7 +82,7 @@ namespace WolvenKit
                 this.treeView.ModelFilter = null;
             }
 
-            treeView.ExpandAll();
+            //treeView.ExpandAll();
         }
 
 
