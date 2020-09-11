@@ -39,11 +39,8 @@ namespace WolvenKit.Forms
             this.collapseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseAllChildrenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.addChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pasteChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treeListView = new BrightIdeasSoftware.TreeListView();
+            this.olvcolIdx = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvcolName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvcolPreview = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -51,7 +48,6 @@ namespace WolvenKit.Forms
             this.toolStripSearchBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripClearButton = new System.Windows.Forms.ToolStripButton();
             this.showTreetoolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.olvcolIdx = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.treeListView)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -65,13 +61,9 @@ namespace WolvenKit.Forms
             this.expandAllChildrenToolStripMenuItem,
             this.collapseAllToolStripMenuItem,
             this.collapseAllChildrenToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.addChunkToolStripMenuItem,
-            this.deleteChunkToolStripMenuItem,
-            this.copyChunkToolStripMenuItem,
-            this.pasteChunkToolStripMenuItem});
+            this.toolStripSeparator1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(185, 186);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(185, 120);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // expandAllToolStripMenuItem
@@ -107,34 +99,6 @@ namespace WolvenKit.Forms
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
             // 
-            // addChunkToolStripMenuItem
-            // 
-            this.addChunkToolStripMenuItem.Name = "addChunkToolStripMenuItem";
-            this.addChunkToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.addChunkToolStripMenuItem.Text = "Add Chunk";
-            this.addChunkToolStripMenuItem.Click += new System.EventHandler(this.addChunkToolStripMenuItem_Click);
-            // 
-            // deleteChunkToolStripMenuItem
-            // 
-            this.deleteChunkToolStripMenuItem.Name = "deleteChunkToolStripMenuItem";
-            this.deleteChunkToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.deleteChunkToolStripMenuItem.Text = "Delete Chunk";
-            this.deleteChunkToolStripMenuItem.Click += new System.EventHandler(this.deleteChunkToolStripMenuItem_Click);
-            // 
-            // copyChunkToolStripMenuItem
-            // 
-            this.copyChunkToolStripMenuItem.Name = "copyChunkToolStripMenuItem";
-            this.copyChunkToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.copyChunkToolStripMenuItem.Text = "Copy Chunk";
-            this.copyChunkToolStripMenuItem.Click += new System.EventHandler(this.copyChunkToolStripMenuItem_Click);
-            // 
-            // pasteChunkToolStripMenuItem
-            // 
-            this.pasteChunkToolStripMenuItem.Name = "pasteChunkToolStripMenuItem";
-            this.pasteChunkToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.pasteChunkToolStripMenuItem.Text = "Paste Chunk";
-            this.pasteChunkToolStripMenuItem.Click += new System.EventHandler(this.pasteChunkToolStripMenuItem_Click);
-            // 
             // treeListView
             // 
             this.treeListView.AllColumns.Add(this.olvcolIdx);
@@ -162,6 +126,11 @@ namespace WolvenKit.Forms
             this.treeListView.View = System.Windows.Forms.View.Details;
             this.treeListView.VirtualMode = true;
             this.treeListView.ItemsChanged += new System.EventHandler<BrightIdeasSoftware.ItemsChangedEventArgs>(this.listView_ItemsChanged);
+            // 
+            // olvcolIdx
+            // 
+            this.olvcolIdx.AspectName = "ChunkIndex";
+            this.olvcolIdx.Text = "#";
             // 
             // olvcolName
             // 
@@ -224,11 +193,6 @@ namespace WolvenKit.Forms
             this.showTreetoolStripButton.Text = "Show/Hide Tree";
             this.showTreetoolStripButton.Click += new System.EventHandler(this.showTreetoolStripButton_Click);
             // 
-            // olvcolIdx
-            // 
-            this.olvcolIdx.AspectName = "ChunkIndex";
-            this.olvcolIdx.Text = "#";
-            // 
             // frmChunkList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -256,10 +220,6 @@ namespace WolvenKit.Forms
         #endregion
 
         private ContextMenuStrip contextMenuStrip1;
-        private ToolStripMenuItem addChunkToolStripMenuItem;
-        private ToolStripMenuItem deleteChunkToolStripMenuItem;
-        private ToolStripMenuItem copyChunkToolStripMenuItem;
-        private ToolStripMenuItem pasteChunkToolStripMenuItem;
         private TreeListView treeListView;
         private OLVColumn olvcolName;
         private OLVColumn olvcolPreview;

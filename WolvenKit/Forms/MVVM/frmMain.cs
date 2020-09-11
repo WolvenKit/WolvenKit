@@ -792,12 +792,7 @@ namespace WolvenKit
             {
                 if (ActiveDocument is frmCR2WDocument cr2wdoc)
                 {
-                    if (cr2wdoc.chunkList.IsActivated)
-                    {
-                        cr2wdoc.chunkList.CopyChunks();
-                        Logger.LogString("Selected chunk(s) copied!\n");
-                    }
-                    else if (cr2wdoc.propertyWindow.IsActivated)
+                    if (cr2wdoc.propertyWindow.IsActivated)
                     {
                         cr2wdoc.propertyWindow.CopyVariable();
                         Logger.LogString("Selected propertie(s) copied!\n");
@@ -811,12 +806,7 @@ namespace WolvenKit
             {
                 if (ActiveDocument is frmCR2WDocument cr2wdoc)
                 {
-                    if (cr2wdoc.chunkList.IsActivated)
-                    {
-                        cr2wdoc.chunkList.PasteChunks();
-                        Logger.LogString("Copied chunk(s) pasted!\n");
-                    }
-                    else if (cr2wdoc.propertyWindow.IsActivated)
+                    if (cr2wdoc.propertyWindow.IsActivated)
                     {
                         cr2wdoc.propertyWindow.PasteVariable();
                         Logger.LogString("Copied propertie(s) pasted!\n");

@@ -14,8 +14,8 @@ namespace WolvenKit.Forms
 {
     public partial class frmChunkList : DockContent, IThemedContent
     {
-        private bool listview = false;
-        private bool isLargefile = false;
+        private bool listview;
+        private bool isLargefile;
         private CR2WFile file;
 
         private readonly Dictionary<int, int> childrencountDict = new Dictionary<int, int>();
@@ -103,7 +103,7 @@ namespace WolvenKit.Forms
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
-            pasteChunkToolStripMenuItem.Enabled = CopyController.ChunkList != null && CopyController.ChunkList.Count > 0;
+
         }
 
         private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -114,114 +114,10 @@ namespace WolvenKit.Forms
             }
         }
 
-        private void addChunkToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var dlg = new frmAddChunk();
-            var selectedchunk = treeListView.SelectedObjects.Cast<CR2WExportWrapper>().FirstOrDefault();
-
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    var chunk = File.CreateChunk(dlg.ChunkType);
-                    if (selectedchunk != null)
-                    {
-                        chunk.SetParentChunk(selectedchunk);
-                    }
-                    
-                    UpdateList();
-
-                    if (OnSelectChunk != null && chunk != null)
-                    {
-                        OnSelectChunk(this, new SelectChunkArgs {Chunk = chunk});
-                    }
-                }
-                catch (InvalidChunkTypeException ex)
-                {
-                    MessageBox.Show(ex.Message, "Error adding chunk.");
-                }
-            }
-        }
-
-        private void deleteChunkToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (treeListView.SelectedObjects.Count == 0)
-                return;
-
-            if (MessageBox.Show("Are you sure you want to delete the selected chunk(s)? \n\n NOTE: Any pointers or handles to these chunks will NOT be deleted.","Confirmation", MessageBoxButtons.OKCancel) == DialogResult.OK)
-            {
-                var selected = treeListView.SelectedObjects;
-                foreach (var obj in selected)
-                {
-                    File.RemoveChunk((CR2WExportWrapper) obj);
-                }
-
-                UpdateList();
-            }
-        }
-
-        private void copyChunkToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CopyChunks();
-        }
-
-        public void CopyChunks()
-        {
-            Clipboard.Clear();
-            var chunks = treeListView.SelectedObjects.Cast<CR2WExportWrapper>().ToList();
-            CopyController.ChunkList = chunks;
-            pasteChunkToolStripMenuItem.Enabled = true;
-        }
-
-        private void pasteChunkToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PasteChunks();
-        }
-
-        public void PasteChunks()
-        {
-            var copiedchunks = CopyController.ChunkList;
-            if (copiedchunks != null && copiedchunks.Count > 0)
-            {
-                foreach (var chunk in copiedchunks)
-                {
-                    try
-                    {
-                        var pastedchunk = CR2WCopyAction.CopyChunk(chunk, chunk.cr2w);
-                        OnSelectChunk?.Invoke(this, new SelectChunkArgs { Chunk = pastedchunk });
-                        MainController.Get().ProjectStatus = "Chunk copied";
-                        UpdateList();
-                    }
-                    catch (InvalidChunkTypeException ex)
-                    {
-                        MessageBox.Show(ex.Message, @"Error adding chunk.");
-                    }
-                }
-            }
-        }
-
-        private void searchBTN_Click(object sender, EventArgs e)
-        {
-            //UpdateList(toolStripSearchBox.Text);
-            if (!string.IsNullOrEmpty(toolStripSearchBox.Text))
-            {
-                this.treeListView.ModelFilter = TextMatchFilter.Contains(treeListView, toolStripSearchBox.Text.ToUpper());
-            }
-            else
-            {
-                treeListView.ModelFilter = null;
-            }
-        }
-
         private void resetBTN_Click(object sender, EventArgs e)
         {
             toolStripSearchBox.Clear();
             treeListView.ModelFilter = null;
-        }
-
-        private void limitCB_CheckStateChanged(object sender, EventArgs e)
-        {
-            //limitTB.Enabled = limitCB.Checked;
         }
 
         private void searchTB_KeyUp(object sender, KeyEventArgs e)
