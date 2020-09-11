@@ -31,7 +31,7 @@ namespace WolvenKit.Bundles
 
         public Bundle(string filename)
         {
-            FileName = filename;
+            ArchiveAbsolutePath = filename;
             Read();
         }
 
@@ -41,7 +41,7 @@ namespace WolvenKit.Bundles
         }
 
         public EBundleType TypeName { get { return EBundleType.Bundle; } }
-        public string FileName { get; set; }
+        public string ArchiveAbsolutePath { get; set; }
         public Dictionary<string, BundleItem> Items { get; set; }
         
         /// <summary>
@@ -51,7 +51,7 @@ namespace WolvenKit.Bundles
         {
             Items = new Dictionary<string, BundleItem>();
 
-            using (var reader = new BinaryReader(new FileStream(FileName, FileMode.Open, FileAccess.Read)))
+            using (var reader = new BinaryReader(new FileStream(ArchiveAbsolutePath, FileMode.Open, FileAccess.Read)))
             {
                 var idstring = reader.ReadBytes(IDString.Length);
 
@@ -104,7 +104,7 @@ namespace WolvenKit.Bundles
                     }
                     else
                     {
-                        Console.WriteLine("Warning: Bundle '" + FileName + "' could not be fully loaded as resource '" + item.Name + "' is defined more than once. Thus, only the first definition was loaded.");
+                        Console.WriteLine("Warning: Bundle '" + ArchiveAbsolutePath + "' could not be fully loaded as resource '" + item.Name + "' is defined more than once. Thus, only the first definition was loaded.");
                     }
                 }
 

@@ -18,7 +18,7 @@ namespace WolvenKit.Cache
         public List<TextureCacheItem> Files;
 
         public EBundleType TypeName => EBundleType.TextureCache;
-        public string FileName { get; set; }
+        public string ArchiveAbsolutePath { get; set; }
         public List<uint> Chunkoffsets;
         public UInt64 Crc;
         public UInt32 UsedPages;
@@ -46,7 +46,7 @@ namespace WolvenKit.Cache
         {
             try
             {
-                FileName = filepath;
+                ArchiveAbsolutePath = filepath;
                 Chunkoffsets = new List<uint>();
                 using (var br = new BinaryReader(new FileStream(filepath, FileMode.Open)))
                 {
@@ -81,7 +81,7 @@ namespace WolvenKit.Cache
                         var ti = new TextureCacheItem(this)
                         {
                             Name = Names[i],
-                            ParentFile = FileName,
+                            ParentFile = ArchiveAbsolutePath,
                             Hash = br.ReadUInt32(),
                             /*-------------TextureCacheEntryBase---------------*/
                             PathStringIndex = br.ReadInt32(),
