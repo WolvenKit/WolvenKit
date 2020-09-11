@@ -35,7 +35,7 @@ namespace WolvenKit.Forms
 
             // kinda stupid because the viewmodel lives before the form exists derp
             UpdateFormText(vm.FormText);
-            UpdatePropertyGrid(vm.File);
+            UpdatePropertyGrid(vm.Cr2wFile);
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -44,9 +44,9 @@ namespace WolvenKit.Forms
             {
                 Invoke(new strDelegate(UpdateFormText), (vm.FormText));
             }
-            else if (e.PropertyName == nameof(vm.File))
+            else if (e.PropertyName == nameof(vm.Cr2wFile))
             {
-                Invoke(new wolvenkitFileDelegate(UpdatePropertyGrid), (vm.File));
+                Invoke(new wolvenkitFileDelegate(UpdatePropertyGrid), (vm.Cr2wFile));
             }
         }
         private delegate void strDelegate(string t);
@@ -55,7 +55,7 @@ namespace WolvenKit.Forms
         private delegate void wolvenkitFileDelegate(IWolvenkitFile f);
         protected void UpdatePropertyGrid(IWolvenkitFile val) => this.propertyGrid.SelectedObject = val;
 
-        public string FileName => vm.FileName;
+        public string Cr2wFileName => vm.Cr2wFileName;
 
         public event EventHandler<FileSavedEventArgs> OnFileSaved;
         public event PropertyChangedEventHandler PropertyChanged;

@@ -121,7 +121,7 @@ namespace WolvenKit.CR2W
         public List<string> UnknownTypes = new List<string>();
         //public byte[] bufferdata { get; set; }
         [DataMember(Order = 0)]
-        public string FileName { get; set; }
+        public string Cr2wFileName { get; set; }
 
        
         /// <summary>
@@ -349,7 +349,7 @@ namespace WolvenKit.CR2W
             }
             #endregion
 
-            if (Logger != null) Logger.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n");
+            if (Logger != null) Logger.LogString($"File {Cr2wFileName} loaded in: {stopwatch1.Elapsed}\n");
                 stopwatch1.Stop();
 
             //m_stream = null;

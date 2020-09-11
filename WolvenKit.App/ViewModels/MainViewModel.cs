@@ -531,7 +531,7 @@ namespace WolvenKit.App.ViewModels
             if (ActiveMod != null)
             {
                 if (ActiveMod.LastOpenedFiles != null)
-                    ActiveMod.LastOpenedFiles = OpenDocuments.Select(x => x.FileName).ToList();
+                    ActiveMod.LastOpenedFiles = OpenDocuments.Select(x => x.Cr2wFileName).ToList();
                 var ser = new XmlSerializer(typeof(W3Mod));
                 var modfile = new FileStream(ActiveMod.FileName, FileMode.Create, FileAccess.Write);
                 ser.Serialize(modfile, ActiveMod);
@@ -1036,7 +1036,7 @@ namespace WolvenKit.App.ViewModels
         public void SaveFile(DocumentViewModel d)
         {
             d.SaveFile();
-            Logger.LogString(d.FileName + " saved!\n", Logtype.Success);
+            Logger.LogString(d.Cr2wFileName + " saved!\n", Logtype.Success);
             MainController.Get().ProjectStatus = "Saved";
         }
         #endregion

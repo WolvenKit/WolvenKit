@@ -697,7 +697,7 @@ namespace WolvenKit
                     ShowConsole();
                     ShowOutput();
 
-                    output.Append(doc.FileName + ": contains " + doc.File.UnknownTypes.Count + " unknown type(s):\n");
+                    output.Append(doc.Cr2wFileName + ": contains " + doc.File.UnknownTypes.Count + " unknown type(s):\n");
                     foreach (var unk in doc.File.UnknownTypes)
                     {
                         output.Append("\"" + unk + "\", \n");
@@ -717,7 +717,7 @@ namespace WolvenKit
                 if (hasUnknownBytes)
                     output.Append("-------\n\n");
 
-                output.Append($"File {filename} loaded in: {stopwatch.Elapsed}\n\n");
+                output.Append($"CR2WFile {filename} loaded in: {stopwatch.Elapsed}\n\n");
                 stopwatch.Stop();
 
                 AddOutput(output.ToString(), Logtype.Important);
@@ -727,8 +727,8 @@ namespace WolvenKit
 
             CR2WFile LoadDocumentAndGetFile(string path)
             {
-                foreach (var t in vm.OpenDocuments.Where(_ => _.File is CR2WFile).Where(t => t.FileName == path))
-                    return t.File as CR2WFile;
+                foreach (var t in vm.OpenDocuments.Where(_ => _.Cr2wFile is CR2WFile).Where(t => t.Cr2wFileName == path))
+                    return t.Cr2wFile as CR2WFile;
 
                 //var activedoc = vm.OpenDocuments.FirstOrDefault(d => d.IsActivated);
                 var doc2 = LoadDocument(path) as frmCR2WDocument;
@@ -759,7 +759,7 @@ namespace WolvenKit
         {
             if (ActiveDocument != null)
             {
-                _lastClosedTab.Enqueue(ActiveDocument.FileName);
+                _lastClosedTab.Enqueue(ActiveDocument.Cr2wFileName);
                 ActiveDocument.Close();
             }
         }
@@ -1172,7 +1172,7 @@ namespace WolvenKit
 
             if (ActiveDocument != null)
             {
-                Text += Path.GetFileName(ActiveDocument.FileName);
+                Text += Path.GetFileName(ActiveDocument.Cr2wFileName);
             }
         }
 
@@ -1242,7 +1242,7 @@ namespace WolvenKit
             if (memoryStream == null && !File.Exists(filename))
                 return null;
 
-            foreach (var t in vm.OpenDocuments.Where(t => t.FileName == filename))
+            foreach (var t in vm.OpenDocuments.Where(t => t.Cr2wFileName == filename))
             {
                 t.Activate();
                 return null;
@@ -2713,7 +2713,7 @@ namespace WolvenKit
 
         private void doc_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _lastClosedTab.Enqueue(((IWolvenkitDocument)sender).FileName);
+            _lastClosedTab.Enqueue(((IWolvenkitDocument)sender).Cr2wFileName);
             var doc = (IWolvenkitDocument)sender;
             vm.OpenDocuments.Remove(doc.GetViewModel());
 

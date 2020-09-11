@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 
 namespace WolvenKit.Common.Model
 {
+    /// <summary>
+    /// Normally the interface for CR2W files
+    /// </summary>
     public interface IWolvenkitFile
     {
-        string FileName { get; set; }
+        string Cr2wFileName { get; set; }
 
 
         int Read(BinaryReader file);
