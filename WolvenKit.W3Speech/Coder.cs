@@ -77,7 +77,7 @@ namespace WolvenKit.W3Speech
                     })
                     .ToList()
                     .AsReadOnly();
-            return new W3Speech(parent.FileName, str, version, key, item_infos);
+            return new W3Speech(parent.ArchiveAbsolutePath, str, version, key, item_infos);
         }
 
         /// <summary>

@@ -10,6 +10,6 @@ namespace WolvenKit.Common
     public interface IWitcherArchive
     {
         EBundleType TypeName { get; }
-        string FileName { get; set; }
+        string ArchiveAbsolutePath { get; set; }
     }
 }

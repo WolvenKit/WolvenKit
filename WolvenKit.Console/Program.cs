@@ -110,9 +110,9 @@ namespace WolvenKit.Console
             //Load MemoryMapped Bundles
             foreach (var b in bm.Bundles.Values)
             {
-                var e = b.FileName.GetHashMD5();
+                var e = b.ArchiveAbsolutePath.GetHashMD5();
 
-                memorymappedbundles.Add(e, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, e, 0, MemoryMappedFileAccess.Read));
+                memorymappedbundles.Add(e, MemoryMappedFile.CreateFromFile(b.ArchiveAbsolutePath, FileMode.Open, e, 0, MemoryMappedFileAccess.Read));
 
             }
 
@@ -241,10 +241,10 @@ namespace WolvenKit.Console
                         if (f is CollisionCacheItem x)
                         {
                             
-                            var bundlename = new DirectoryInfo(x.Bundle.FileName).Parent.Name;
+                            var bundlename = new DirectoryInfo(x.Bundle.ArchiveAbsolutePath).Parent.Name;
                             if (bundlename == "content")
                             {
-                                var par2 = new DirectoryInfo(x.Bundle.FileName).Parent.Parent.Name;
+                                var par2 = new DirectoryInfo(x.Bundle.ArchiveAbsolutePath).Parent.Parent.Name;
                                 bundlename = par2;
                             }
 
@@ -719,7 +719,7 @@ namespace WolvenKit.Console
                 {
                     foreach (var file in manager.FileList)
                     {
-                        writer.WriteLine(cnt++ + ";" + file.Bundle.FileName + ";" + file.Name + ";" +
+                        writer.WriteLine(cnt++ + ";" + file.Bundle.ArchiveAbsolutePath + ";" + file.Name + ";" +
                             file.Bundle.TypeName + ";" + file.Size + ";" + file.CompressionType
                              + ";" + file.ZSize + ";" + file.PageOffset);
                     }

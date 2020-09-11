@@ -53,7 +53,7 @@ namespace WolvenKit.Bundles
         public void ExtractExistingMMF(Stream output)
         {
             // old deprecated way of loading mmfs still used in unit test
-            var hash = Bundle.FileName.GetHashMD5();
+            var hash = Bundle.ArchiveAbsolutePath.GetHashMD5();
             using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(hash, MemoryMappedFileRights.Read))
                 //using (var viewstream = mmf.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
                 ExtractExistingMMF(output, mmf);
@@ -123,7 +123,7 @@ namespace WolvenKit.Bundles
 
         public void Extract(Stream output)
         {
-            using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
+            using (var file = MemoryMappedFile.CreateFromFile(Bundle.ArchiveAbsolutePath, FileMode.Open))
             using (var viewstream = file.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
             {
                 switch (CompressionType)

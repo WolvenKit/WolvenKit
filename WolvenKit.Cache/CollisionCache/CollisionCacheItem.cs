@@ -110,7 +110,7 @@ namespace WolvenKit.Cache
 
         public void Extract(Stream output)
         {
-            using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
+            using (var file = MemoryMappedFile.CreateFromFile(Bundle.ArchiveAbsolutePath, FileMode.Open))
             using (var viewstream = file.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
             {
                 var zlib = new ZlibStream(viewstream, CompressionMode.Decompress);

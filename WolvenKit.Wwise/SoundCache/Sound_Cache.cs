@@ -36,7 +36,7 @@ namespace WolvenKit.Cache
         public long checksum;
 
         public EBundleType TypeName => EBundleType.SoundCache;
-        public string FileName { get; set; }
+        public string ArchiveAbsolutePath { get; set; }
 
         public static SoundBanksInfoXML info = new SoundBanksInfoXML("SoundCache\\soundbanksinfo.xml");
 
@@ -51,7 +51,7 @@ namespace WolvenKit.Cache
         /// <param name="fileName"></param>
         public SoundCache(string fileName)
         {
-            FileName = fileName;
+            ArchiveAbsolutePath = fileName;
             using (var br = new BinaryReader(new FileStream(fileName, FileMode.Open)))
                 Read(br);
         }
@@ -203,7 +203,7 @@ namespace WolvenKit.Cache
                 {
                     f.Name = info.StreamedFiles.First(x => x.Id == (f.Name.Split('.')[0])).Path;
                 }
-                f.ParentFile = this.FileName;
+                f.ParentFile = this.ArchiveAbsolutePath;
             }
         }
 
