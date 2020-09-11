@@ -317,7 +317,7 @@ namespace WolvenKit.App.ViewModels
             foreach (var filename in e.Files)
             {
                 // Close open documents
-                foreach (var t in MainVM.OpenDocuments.Where(t => t.FileName == filename))
+                foreach (var t in MainVM.OpenDocuments.Where(t => t.Cr2wFileName == filename))
                 {
                     t.Close();
                     break;

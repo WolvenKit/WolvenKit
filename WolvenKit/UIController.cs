@@ -228,7 +228,7 @@ namespace WolvenKit
 
             if (bytes != null)
             {
-                var doc = LoadDocument(editvar.cr2w.FileName + ":" + editvar.GetFullName(), new MemoryStream(bytes), true);
+                var doc = LoadDocument(editvar.cr2w.Cr2wFileName + ":" + editvar.GetFullName(), new MemoryStream(bytes), true);
                 if (doc != null)
                 {
                     var vm = doc.GetViewModel();
