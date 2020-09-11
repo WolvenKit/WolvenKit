@@ -524,7 +524,7 @@ namespace WolvenKit.CR2W.Types
                     var innercontext = new CR2WCopyAction()
                     {
                         DestinationFile = context.DestinationFile,
-                        Parent = item.Parent as CVariable
+                        Parent = item.ParentVar as CVariable
                     };
                     copy.TrySettingFastMemberAccessor(cvar.Copy(innercontext));
                 }
@@ -542,7 +542,7 @@ namespace WolvenKit.CR2W.Types
                 foreach (IEditableVariable item in cvar.GetEditableVariables())
                 {
                     if (item is CVariable citem)
-                        this.TryAddVariable(citem);
+                        this.TrySettingFastMemberAccessor(citem);
                 }
             }
 

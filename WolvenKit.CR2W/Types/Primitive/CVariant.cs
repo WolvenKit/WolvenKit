@@ -72,7 +72,7 @@ namespace WolvenKit.CR2W.Types
                 var context = new CR2WCopyAction()
                 {
                     DestinationFile = this.cr2w,
-                    Parent = this.Parent as CVariable
+                    Parent = this.ParentVar as CVariable
                 };
                 this.Variant = cvar.Variant.Copy(context);
             }

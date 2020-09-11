@@ -48,7 +48,7 @@ namespace WolvenKit.CR2W.Types
         /// <returns></returns>
         public static CVariable Create(string typename, string varname, CR2WFile cr2w, CVariable parentVariable, bool readUnknownAsBytes = true)
         {
-            typename = REDReflection.GetWKitTypeFromREDType(typename);
+            typename = REDReflection.GetWKitBaseTypeFromREDBaseType(typename);
             var fullname = typename;
 
             // check for normal type

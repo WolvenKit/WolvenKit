@@ -259,7 +259,7 @@ namespace WolvenKit.CR2W.Types
                 input = input.Trim(' ');
                 if (AssemblyDictionary.EnumExists(input))
                     input = $"CEnum<{input}>";
-                return REDReflection.GetWKitTypeFromREDType(input);
+                return REDReflection.GetWKitBaseTypeFromREDBaseType(input);
             }
         }
 

@@ -95,23 +95,9 @@ namespace WolvenKit.Forms
             if (listview)
                 treeListView.Roots = File.chunks;
             else
-                treeListView.Roots = File.chunks.Where(_ => _.GetVirtualParentChunk() == null).ToList();
-
-            if (!string.IsNullOrEmpty(keyword))
-            {
-                if (limit != -1)
-                {
-                    //treeListView.Objects = File.chunks.Where(x => x.Name.ToUpper().Contains(toolStripSearchBox.Text.ToUpper())).Take(limit);
-                }
-                else
-                {
-                    this.treeListView.ModelFilter = TextMatchFilter.Contains(treeListView, toolStripSearchBox.Text.ToUpper());
-                }
-            }
-            else
             {
                 UpdateHelperList();
-                treeListView.Roots = File.chunks.Where(_ => _.GetParent() == null).ToList();
+                treeListView.Roots = File.chunks.Where(_ => _.GetVirtualParentChunk() == null).ToList();
             }
         }
 

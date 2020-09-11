@@ -105,7 +105,7 @@ namespace WolvenKit
 
             // for carrays
             addVariableToolStripMenuItem.Enabled = selectedNodes.All(x => x.CanAddVariable(null));
-            removeVariableToolStripMenuItem.Enabled = selectedNodes.All(x => x.Parent != null && x.Parent.CanRemoveVariable(x));
+            removeVariableToolStripMenuItem.Enabled = selectedNodes.All(x => x.ParentVar != null && x.ParentVar.CanRemoveVariable(x));
 
             //  paste variable is active if any one variable has been copied and if the one selected variable is of the same type
             pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null
@@ -170,10 +170,10 @@ namespace WolvenKit
             // removing variables from arrays
             foreach (IEditableVariable node in treeView.SelectedObjects)
             {
-                if (node?.Parent != null && node.Parent.CanRemoveVariable(node))
+                if (node?.ParentVar != null && node.ParentVar.CanRemoveVariable(node))
                 {
-                    node.Parent.RemoveVariable(node);
-                    treeView.RefreshObject(node.Parent);
+                    node.ParentVar.RemoveVariable(node);
+                    treeView.RefreshObject(node.ParentVar);
                 }
             }
         }
@@ -246,7 +246,7 @@ namespace WolvenKit
         private void copyTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var node = (IEditableVariable) treeView.SelectedObject;
-            if (node?.Parent == null || !node.Parent.CanRemoveVariable(node))
+            if (node?.ParentVar == null || !node.ParentVar.CanRemoveVariable(node))
                 return;
             if (node.REDValue != null)
             {
