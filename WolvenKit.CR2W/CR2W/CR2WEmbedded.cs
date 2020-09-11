@@ -2,9 +2,6 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Linq;
-using System;
-using System.IO.MemoryMappedFiles;
-using System.Threading.Tasks;
 
 namespace WolvenKit.CR2W
 {
@@ -45,7 +42,7 @@ namespace WolvenKit.CR2W
         public string ImportClass { get; set; } = "<failed to get import class>";
 
         public string Handle { get; set; }
-        public List<byte> Data { get; set; } = new List<byte>();
+        public byte[] Data;
         public CR2WFile ParentFile { get; internal set; }
 
         public CR2WEmbeddedWrapper()
@@ -56,7 +53,6 @@ namespace WolvenKit.CR2W
         public CR2WEmbeddedWrapper(CR2WEmbedded embedded)
         {
             _embedded = embedded;
-
         }
 
         public void SetOffset(uint offset) => _embedded.dataOffset = offset;
@@ -67,9 +63,9 @@ namespace WolvenKit.CR2W
         public void ReadData(BinaryReader file)
         {
             file.BaseStream.Seek(_embedded.dataOffset, SeekOrigin.Begin);
-            Data = file.ReadBytes((int) _embedded.dataSize).ToList();
+            Data = file.ReadBytes((int) _embedded.dataSize);
 
-            parsedFile = new CR2WFile(Data.ToArray(), ParentFile.Logger);
+            parsedFile = new CR2WFile(Data, ParentFile.Logger);
             if (parsedFile != null)
             {
                 if (parsedFile.chunks != null && parsedFile.chunks.Any())
@@ -87,58 +83,22 @@ namespace WolvenKit.CR2W
             }
         }
 
-        public /*async Task*/ void ReadData(MemoryMappedFile mmf)
-        {
-            //await Task.Run(() =>
-            //{
-                using (MemoryMappedViewStream vs = mmf.CreateViewStream(_embedded.dataOffset, _embedded.dataSize, MemoryMappedFileAccess.Read))
-                using (BinaryReader br = new BinaryReader(vs))
-                {
-                    Data = br.ReadBytes((int)_embedded.dataSize).ToList();
-
-                    try
-                    {
-                        parsedFile = new CR2WFile(Data.ToArray(), ParentFile.Logger);
-                        if (parsedFile != null)
-                        {
-                            if (parsedFile.chunks != null && parsedFile.chunks.Any())
-                                ClassName = parsedFile.chunks.FirstOrDefault().REDType;
-                        }
-
-                        if (ParentImports != null && ParentImports.Any())
-                        {
-                            if (ParentImports.Count > (int)Embedded.importIndex - 1)
-                            {
-                                var import = ParentImports[(int)Embedded.importIndex - 1];
-                                ImportClass = import.ClassNameStr;
-                                ImportPath = import.DepotPathStr;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // FIXME handle exceptions
-                        throw ex;
-                    }
-
-                }
-            //}
-            //);
-        }
-
         public void WriteData(BinaryWriter file)
         {
             _embedded.dataOffset = (uint) file.BaseStream.Position;
             if (Data != null)
             {
-                file.Write(Data.ToArray());
+                file.Write(Data);
             }
-            _embedded.dataSize = (uint) Data.Count;
+            _embedded.dataSize = (uint)Data.Length;
         }
 
         public override string ToString()
         {
             return Handle;
         }
+
+        public CR2WFile GetParsedFile() => parsedFile;
+        public byte[] GetRawEmbeddedData() => Data;
     }
 }

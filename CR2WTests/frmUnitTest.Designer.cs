@@ -92,6 +92,7 @@
             this.Controls.Add(this.progressBar1);
             this.Name = "frmUnitTest";
             this.Text = "frmUnitTest";
+            this.Shown += new System.EventHandler(this.frmUnitTest_Shown);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();

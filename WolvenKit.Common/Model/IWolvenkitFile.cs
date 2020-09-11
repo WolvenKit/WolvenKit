@@ -12,7 +12,7 @@ namespace WolvenKit.Common.Model
         string FileName { get; set; }
 
 
-        void Read(BinaryReader file);
+        int Read(BinaryReader file);
         void Write(BinaryWriter writer);
 
         void SerializeToXml(Stream writer);

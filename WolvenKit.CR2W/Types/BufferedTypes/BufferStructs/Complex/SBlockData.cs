@@ -52,11 +52,6 @@ namespace WolvenKit.CR2W.Types
                         packedObject = new SBlockDataLight(cr2w, this, nameof(SBlockDataLight));
                         break;
                     }
-                case Enums.BlockDataObjectType.SpotLight:
-                    {
-                        packedObject = new SBlockDataSpotLight(cr2w, this, nameof(SBlockDataSpotLight));
-                        break;
-                    }
                 case Enums.BlockDataObjectType.Particles:
                     {
                         packedObject = new SBlockDataParticles(cr2w, this, nameof(SBlockDataLight));
@@ -72,6 +67,11 @@ namespace WolvenKit.CR2W.Types
                         packedObject = new SBlockDataMeshObject(cr2w, this, nameof(SBlockDataMeshObject));
                         break;
                     }
+                case Enums.BlockDataObjectType.SpotLight:
+                    //{
+                    //    packedObject = new SBlockDataSpotLight(cr2w, this, nameof(SBlockDataSpotLight));
+                    //    break;
+                    //}
                 case Enums.BlockDataObjectType.Decal:
                     //{
                     //    packedObject = new SBlockDataDecal(cr2w, this, nameof(SBlockDataDecal));
@@ -211,11 +211,6 @@ namespace WolvenKit.CR2W.Types
                             baseobj.Add((SBlockDataDimmer)packedObject);
                             break;
                         }
-                    case Enums.BlockDataObjectType.SpotLight:
-                        {
-                            baseobj.Add((SBlockDataSpotLight)packedObject);
-                            break;
-                        }
                     case Enums.BlockDataObjectType.PointLight:
                         {
                             baseobj.Add((SBlockDataLight)packedObject);
@@ -236,6 +231,11 @@ namespace WolvenKit.CR2W.Types
                             baseobj.Add((SBlockDataMeshObject)packedObject);
                             break;
                         }
+                    case Enums.BlockDataObjectType.SpotLight:
+                        //{
+                        //    baseobj.Add((SBlockDataSpotLight)packedObject);
+                        //    break;
+                        //}
                     case Enums.BlockDataObjectType.Decal:
                         //{
                         //    baseobj.Add((SBlockDataDecal)packedObject);

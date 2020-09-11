@@ -7,6 +7,7 @@ using WolvenKit.CR2W.Editors;
 using System.Linq;
 using WolvenKit.CR2W.Reflection;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -15,7 +16,7 @@ namespace WolvenKit.CR2W.Types
         bool ChunkHandle { get; set; }
         string DepotPath { get; set; }
         string ClassName { get; set; }
-        //string REDName { get; }
+        ushort Flags { get; set; }
 
         CR2WExportWrapper Reference { get; set; }
     }
@@ -72,7 +73,19 @@ namespace WolvenKit.CR2W.Types
                 if (val == 0)
                     Reference = null;
                 else
+                {
                     Reference = cr2w.chunks[val - 1];
+                    Reference.Referrers.Add(this as CVariable); //Populate the reverse-lookup
+                }
+
+                if (Reference != null && !Reference.IsVirtuallyMounted)
+                {
+                    Reference.VirtualParentChunkIndex = GetVarChunkIndex();
+                }
+                else
+                {
+                    var bozza = "bozza";
+                }
             }
             else
             {
@@ -99,14 +112,8 @@ namespace WolvenKit.CR2W.Types
             }
             else
             {
-                //try
-                //{
-                    var import = cr2w.imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName);
-                    val = - cr2w.imports.IndexOf(import) - 1;
-                //}
-                //catch (Exception)
-                //{
-                //}
+                var import = cr2w.imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName);
+                val = -cr2w.imports.IndexOf(import) - 1;
             }
             file.Write(val);
         }
@@ -116,6 +123,15 @@ namespace WolvenKit.CR2W.Types
             if (val is int)
             {
                 SetValueInternal((int)val);
+            }
+            else if (val is IHandleAccessor cvar)
+            {
+                this.ChunkHandle = cvar.ChunkHandle;
+                this.DepotPath = cvar.DepotPath;
+                this.ClassName = cvar.ClassName;
+                this.Flags = cvar.Flags;
+
+                this.Reference = cvar.Reference;
             }
 
             return this;

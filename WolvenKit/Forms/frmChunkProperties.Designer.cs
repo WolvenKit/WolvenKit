@@ -43,6 +43,8 @@ namespace WolvenKit
             this.expandAllChildrenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseAllChildrenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.clearVariableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.addVariableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeVariableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,8 +59,7 @@ namespace WolvenKit
             this.toolStripSearchBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripClearButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonShowSerialized = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.clearVariableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButtonColorPicker = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.treeView)).BeginInit();
             this.contextMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -100,21 +101,21 @@ namespace WolvenKit
             // 
             // olvColumn1
             // 
-            this.olvColumn1.AspectName = "Name";
+            this.olvColumn1.AspectName = "REDName";
             this.olvColumn1.IsEditable = false;
             this.olvColumn1.Text = "Name";
             this.olvColumn1.Width = 200;
             // 
             // olvColumn2
             // 
-            this.olvColumn2.AspectName = "Type";
+            this.olvColumn2.AspectName = "REDType";
             this.olvColumn2.IsEditable = false;
             this.olvColumn2.Text = "Type";
             this.olvColumn2.Width = 100;
             // 
             // olvColumn4
             // 
-            this.olvColumn4.AspectName = "Value";
+            this.olvColumn4.AspectName = "REDValue";
             this.olvColumn4.FillsFreeSpace = true;
             this.olvColumn4.Text = "Value";
             this.olvColumn4.Width = 200;
@@ -138,7 +139,7 @@ namespace WolvenKit
             this.toolSplitPtr,
             this.ptrPropertiesToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(185, 292);
+            this.contextMenu.Size = new System.Drawing.Size(185, 270);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // expandAllToolStripMenuItem
@@ -168,6 +169,18 @@ namespace WolvenKit
             this.collapseAllChildrenToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.collapseAllChildrenToolStripMenuItem.Text = "Collapse All Children";
             this.collapseAllChildrenToolStripMenuItem.Click += new System.EventHandler(this.collapseAllChildrenToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
+            // 
+            // clearVariableToolStripMenuItem
+            // 
+            this.clearVariableToolStripMenuItem.Name = "clearVariableToolStripMenuItem";
+            this.clearVariableToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.clearVariableToolStripMenuItem.Text = "Clear Variable";
+            this.clearVariableToolStripMenuItem.Click += new System.EventHandler(this.clearVariableToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -233,7 +246,8 @@ namespace WolvenKit
             this.toolStripLabel1,
             this.toolStripSearchBox,
             this.toolStripClearButton,
-            this.toolStripButtonShowSerialized});
+            this.toolStripButtonShowSerialized,
+            this.toolStripButtonColorPicker});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(813, 31);
@@ -273,17 +287,14 @@ namespace WolvenKit
             this.toolStripButtonShowSerialized.Text = "Show all editable variables";
             this.toolStripButtonShowSerialized.Click += new System.EventHandler(this.toolStripButtonShowSerialized_Click);
             // 
-            // toolStripSeparator1
+            // toolStripButtonColorPicker
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
-            // 
-            // clearVariableToolStripMenuItem
-            // 
-            this.clearVariableToolStripMenuItem.Name = "clearVariableToolStripMenuItem";
-            this.clearVariableToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.clearVariableToolStripMenuItem.Text = "Clear Variable";
-            this.clearVariableToolStripMenuItem.Click += new System.EventHandler(this.clearVariableToolStripMenuItem_Click);
+            this.toolStripButtonColorPicker.Image = global::WolvenKit.Properties.Resources.Preferences_dark_64x;
+            this.toolStripButtonColorPicker.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonColorPicker.Name = "toolStripButtonColorPicker";
+            this.toolStripButtonColorPicker.Size = new System.Drawing.Size(212, 28);
+            this.toolStripButtonColorPicker.Text = "Choose your own highlight color!";
+            this.toolStripButtonColorPicker.Click += new System.EventHandler(this.toolStripButtonColorPicker_Click);
             // 
             // frmChunkProperties
             // 
@@ -336,5 +347,6 @@ namespace WolvenKit
         private ToolStripButton toolStripButtonShowSerialized;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem clearVariableToolStripMenuItem;
+        private ToolStripButton toolStripButtonColorPicker;
     }
 }

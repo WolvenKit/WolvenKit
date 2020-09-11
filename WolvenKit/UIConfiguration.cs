@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.CR2W.Types;
 
 namespace WolvenKit
 {
@@ -31,6 +33,8 @@ namespace WolvenKit
         public FormWindowState MainState { get; set; }
         public EColorThemes ColorTheme { get; set; }
 
+        public List<int> CustomHighlightColor { get; set; }
+
         ~UIConfiguration()
         {
             Save();
@@ -52,6 +56,11 @@ namespace WolvenKit
                 var stream = new FileStream(ConfigurationPath, FileMode.Open, FileAccess.Read);
                 var config = (UIConfiguration) ser.Deserialize(stream);
                 stream.Close();
+
+                // hack for new vars
+                if (config.CustomHighlightColor == null || config.CustomHighlightColor.Count < 3)
+                    config.CustomHighlightColor = new List<int> { Color.BlueViolet.ToArgb(), SystemColors.MenuHighlight.ToArgb(), Color.BlueViolet.ToArgb() };
+
                 return config;
             }
 
@@ -59,6 +68,7 @@ namespace WolvenKit
             return new UIConfiguration
             {
                 ColorTheme = EColorThemes.VS2015Light,
+                CustomHighlightColor = new List<int> { Color.BlueViolet.ToArgb(), Color.LightSeaGreen.ToArgb(), Color.BlueViolet.ToArgb() }
             };
         }
     }

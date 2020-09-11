@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace WolvenKit.App
@@ -15,10 +13,10 @@ namespace WolvenKit.App
     using Common.Services;
     using CR2W;
     using System.IO.Compression;
-    using System.Security.Cryptography;
     using W3Strings;
     using WolvenKit.Common.Model;
     using WolvenKit.Common.Wcc;
+    using WolvenKit.CR2W.Types;
     using WolvenKit.W3Speech;
 
     /// <summary>
@@ -479,9 +477,7 @@ namespace WolvenKit.App
                     Cr2wResourceManager.Get().WriteVanilla();
                 }
 
-                #endregion
-
-
+                #endregion                
 
                 loadStatus = "Loaded";
 
@@ -496,6 +492,11 @@ namespace WolvenKit.App
                 System.Console.WriteLine(e.Message);
             }
         }
+
+        
+
+
+
         /// <summary>
         /// Useful function for blindly importing a file.
         /// </summary>

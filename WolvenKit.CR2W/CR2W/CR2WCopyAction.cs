@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W
     {
         internal List<CR2WExportWrapper> chunks;
         internal Dictionary<int, int> chunkTranslation;
-        internal List<CPtr<CVariable>> ptrs;
+        internal List<IPtrAccessor> ptrs;
 
         public CR2WCopyAction()
         {
-            ptrs = new List<CPtr<CVariable>>();
+            ptrs = new List<IPtrAccessor>();
             chunks = new List<CR2WExportWrapper>();
             chunkTranslation = new Dictionary<int, int>();
         }
@@ -132,9 +132,9 @@ namespace WolvenKit.CR2W
             // reparent chunks
             foreach (var chunk in chunks)
             {
-                if (chunkTranslation.ContainsKey((int) chunk.ParentChunkId - 1))
+                if (chunkTranslation.ContainsKey(chunk.ParentChunkIndex))
                 {
-                    chunk.SetParentChunkId((uint) chunkTranslation[(int) chunk.ParentChunkId - 1] + 1);
+                    chunk.ParentChunkIndex = chunkTranslation[chunk.ParentChunkIndex];
                 }
                 else if (SourceFile == DestinationFile)
                 {
@@ -143,7 +143,7 @@ namespace WolvenKit.CR2W
                 else
                 {
                     // this chunk's parent was not copied, use the first chunk as parent
-                    chunk.SetParentChunkId(1);
+                    chunk.ParentChunkIndex = 0;
                 }
             }
 

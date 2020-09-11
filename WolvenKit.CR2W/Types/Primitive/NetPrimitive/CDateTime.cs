@@ -33,7 +33,7 @@ namespace WolvenKit.CR2W.Types
     /// Represents a REDEngine compatible datetime value.
     /// </summary>
     [REDMeta()]
-    public sealed class CDateTime : CVariable, IEquatable<CDateTime>
+    public sealed class CDateTime : CVariable/*, IEquatable<CDateTime>*/
     {
         /// <summary>
         /// The CDateTime value as a .NET <see cref="System.DateTime"/> object.
@@ -44,7 +44,7 @@ namespace WolvenKit.CR2W.Types
         /// Get the underlying .NET value from this CDateTime instance.
         /// </summary>
         /// <exception cref="InvalidOperationException">When the underlying value is null</exception>
-        public DateTime Value => m_value;
+        public DateTime DValue => m_value;
 
         // <summary>
         /// Initialise a new instance of the CDateTime.
@@ -153,13 +153,13 @@ namespace WolvenKit.CR2W.Types
         /// </summary>
         /// <param name="other">A <see cref="CDateTime"/> to compare to this instance.</param>
         /// <returns>true if other is equal to this instance, otherwise false.</returns>
-        public bool Equals(CDateTime other)
-        {
-            if (other is null)
-                return false;
+        //public bool Equals(CDateTime other)
+        //{
+        //    if (other is null)
+        //        return false;
 
-            return m_value.Equals(this);
-        }
+        //    return m_value.Equals(this);
+        //}
 
         /// <summary>
         /// Returns a string representation of this instance.
@@ -177,18 +177,18 @@ namespace WolvenKit.CR2W.Types
         /// </summary>
         /// <param name="obj">A <see cref="object"/> to compare to this instance.</param>
         /// <returns>true if other is a CDateTime inmstance and equal to this instance, otherwise false.</returns>
-        public override bool Equals(object obj)
-        {
-            if (obj is CDateTime dt)
-                return this.Equals(dt);
+        //public override bool Equals(object obj)
+        //{
+        //    if (obj is CDateTime dt)
+        //        return this.Equals(dt);
 
-            return false;
-        }
+        //    return false;
+        //}
 
-        public override int GetHashCode()
-        {
-            return RuntimeHelpers.GetHashCode(this);
-        }
+        //public override int GetHashCode()
+        //{
+        //    return RuntimeHelpers.GetHashCode(this);
+        //}
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -200,43 +200,43 @@ namespace WolvenKit.CR2W.Types
             file.Write(this.ToUInt64());
         }
 
-        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CDateTime(cr2w, parent, name);
-        }
+        //public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        //{
+        //    return new CDateTime(cr2w, parent, name);
+        //}
 
-        public static bool operator ==(CDateTime left, CDateTime right)
-        {
-            if (ReferenceEquals(left, right))
-                return true;
+        //public static bool operator ==(CDateTime left, CDateTime right)
+        //{
+        //    if (ReferenceEquals(left, right))
+        //        return true;
 
-            if (left is null)
-                return false;
+        //    if (left is null)
+        //        return false;
 
-            return left.Equals(right);
-        }
+        //    return left.Equals(right);
+        //}
 
-        public static bool operator !=(CDateTime left, CDateTime right)
-        {
-            if (ReferenceEquals(left, right))
-                return false;
+        //public static bool operator !=(CDateTime left, CDateTime right)
+        //{
+        //    if (ReferenceEquals(left, right))
+        //        return false;
 
-            if (left is null)
-                return true;
+        //    if (left is null)
+        //        return true;
 
-            return !left.Equals(right);
-        }
+        //    return !left.Equals(right);
+        //}
 
-        public override void SerializeToXml(XmlWriter xw)
-        {
-            DataContractSerializer ser = new DataContractSerializer(this.GetType());
-            using (var ms = new MemoryStream())
-            {
-                ser.WriteStartObject(xw, this);
-                ser.WriteObjectContent(xw, this);
-                xw.WriteElementString("DateTimeString", this.ToString());
-                ser.WriteEndObject(xw);
-            }
-        }
+        //public override void SerializeToXml(XmlWriter xw)
+        //{
+        //    DataContractSerializer ser = new DataContractSerializer(this.GetType());
+        //    using (var ms = new MemoryStream())
+        //    {
+        //        ser.WriteStartObject(xw, this);
+        //        ser.WriteObjectContent(xw, this);
+        //        xw.WriteElementString("DateTimeString", this.ToString());
+        //        ser.WriteEndObject(xw);
+        //    }
+        //}
     }
 }

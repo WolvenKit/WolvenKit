@@ -67,7 +67,7 @@ namespace WolvenKit.CR2W.Types
         {
             
             
-            typename = REDReflection.GetWKitTypeFromREDType(typename);
+            typename = REDReflection.GetWKitBaseTypeFromREDBaseType(typename);
 
             // first try to create instance of type
             #region W3 TYPES 
@@ -75,7 +75,7 @@ namespace WolvenKit.CR2W.Types
             {
 
 
-                var type = Type.GetType($"WolvenKit.CR2W.Types.{typename}", false);
+                var type = Type.GetType($"WolvenKit.CR2W.Types.{typename}", false, false);
                 // if succesful return as CVariable
                 if (type != null)
                 {

@@ -6,6 +6,9 @@ using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
+using WolvenKit.CR2W;
+using System.Linq;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Forms
 {
@@ -187,10 +190,11 @@ namespace WolvenKit.Forms
             //{
             //    streamWriter.Write(scintillaControl.Text);
             //}
-            MainController.LogString(FilePath + " saved!", Common.Services.Logtype.Normal);
+            MainController.LogString(FilePath + " saved!", Logtype.Normal);
 
             // register all new classes
-            //MockKernel.Get().GetMainViewModel().ScanAndRegisterCustomClasses();
+            CR2WManager.ReloadAssembly();
+
 
             IsUnsaved = false;
             this.Text = Path.GetFileName(FilePath);

@@ -59,6 +59,8 @@ namespace WolvenKit.CR2W.Types
             {
                 Color = (Color)val;
             }
+            else if (val is CColor cvar)
+                Color = cvar.Color;
 
             return this;
         }

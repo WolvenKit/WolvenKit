@@ -6,7 +6,7 @@ namespace WolvenKit.CR2W.Reflection
     /// Marks a field as serializable for redengine files.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    internal class REDAttribute : Attribute
+    public class REDAttribute : Attribute
     {
         public string Name { get; private set; }
         public int[] Flags { get; private set; }
@@ -47,7 +47,7 @@ namespace WolvenKit.CR2W.Reflection
     /// Marks a field as a compressed buffer for cr2w IO.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    internal class REDBufferAttribute : REDAttribute
+    public sealed class REDBufferAttribute : REDAttribute
     {
         public bool IsIgnored { get; private set; }
 
@@ -70,7 +70,7 @@ namespace WolvenKit.CR2W.Reflection
     /// Marks a class as serializable for redengine files.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    internal class REDMetaAttribute : Attribute
+    public sealed class REDMetaAttribute : Attribute
     {
         public EREDMetaInfo[] Keywords { get; private set; }
 
