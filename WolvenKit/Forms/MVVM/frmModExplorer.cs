@@ -134,6 +134,8 @@ namespace WolvenKit
                 modexplorerSlave.EnableRaisingEvents = true;
                 usecachedNodeList = true;
                 UpdateTreeView();
+
+                //CR2WManager.ReloadAssembly();
             }
         }
         public void StopMonitoringDirectory()
@@ -154,6 +156,9 @@ namespace WolvenKit
                 default:
                     throw new NotImplementedException();
             }
+
+            if (Path.GetExtension(e.FullPath) == ".ws")
+                CR2WManager.ReloadAssembly();
         }
         private void FileChanges_Detected(object sender, FileSystemEventArgs e)
         {
@@ -179,6 +184,9 @@ namespace WolvenKit
                 default:
                     throw new NotImplementedException();
             }
+
+            if (Path.GetExtension(e.FullPath) == ".ws")
+                CR2WManager.ReloadAssembly();
         }
         #endregion
 

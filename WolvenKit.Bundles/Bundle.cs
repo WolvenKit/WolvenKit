@@ -164,6 +164,8 @@ namespace WolvenKit.Bundles
             MessageBox.Show("Done writing file!");
         }
 
+        public uint GetSize => this.bundlesize;
+
         public static int WriteCompressedData(BinaryWriter bw, byte[] Data,int ComType)
         {
             int writePosition = (int)bw.BaseStream.Position;

@@ -554,7 +554,7 @@ namespace WolvenKit
 
                 vm.OpenDocuments.Remove(doc);
                 //doc.Dispose();
-                throw ex;
+                //throw ex;
                 return null;
             }
 
@@ -792,12 +792,7 @@ namespace WolvenKit
             {
                 if (ActiveDocument is frmCR2WDocument cr2wdoc)
                 {
-                    if (cr2wdoc.chunkList.IsActivated)
-                    {
-                        cr2wdoc.chunkList.CopyChunks();
-                        Logger.LogString("Selected chunk(s) copied!\n");
-                    }
-                    else if (cr2wdoc.propertyWindow.IsActivated)
+                    if (cr2wdoc.propertyWindow.IsActivated)
                     {
                         cr2wdoc.propertyWindow.CopyVariable();
                         Logger.LogString("Selected propertie(s) copied!\n");
@@ -811,12 +806,7 @@ namespace WolvenKit
             {
                 if (ActiveDocument is frmCR2WDocument cr2wdoc)
                 {
-                    if (cr2wdoc.chunkList.IsActivated)
-                    {
-                        cr2wdoc.chunkList.PasteChunks();
-                        Logger.LogString("Copied chunk(s) pasted!\n");
-                    }
-                    else if (cr2wdoc.propertyWindow.IsActivated)
+                    if (cr2wdoc.propertyWindow.IsActivated)
                     {
                         cr2wdoc.propertyWindow.PasteVariable();
                         Logger.LogString("Copied propertie(s) pasted!\n");
@@ -1257,11 +1247,6 @@ namespace WolvenKit
                 t.Activate();
                 return null;
             }
-
-            // check and register custom classes
-            // we do it here because people might edit the .ws files at any time
-            // todo: what do I do if the .ws file has been edited while the cr2w file is open?
-            //vm.ScanAndRegisterCustomClasses();
 
             var doc = new DocumentViewModel();
             vm.OpenDocuments.Add(doc);
@@ -2165,29 +2150,31 @@ namespace WolvenKit
                     xs.Serialize(mf, ActiveMod);
                     mf.Close();
                 }
-
-
-
-                // Hash all filepaths
-                var relativepaths = ActiveMod.ModFiles
-                    .Select(_ => _.Substring(_.IndexOf(Path.DirectorySeparatorChar) + 1))
-                    .ToList();
-                Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
-
-                // Update the recent files.
-                var files = new List<string>();
-                if (File.Exists("recent_files.xml"))
-                {
-                    var doc = XDocument.Load("recent_files.xml");
-                    files.AddRange(doc.Descendants("recentfile").Take(4).Select(x => x.Value));
-                }
-                files.Add(file);
-                new XDocument(new XElement("RecentFiles", files.Distinct().Select(x => new XElement("recentfile", x)))).Save("recent_files.xml");
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Failed to upgrade the project!\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            // Hash all filepaths
+            var relativepaths = ActiveMod.ModFiles
+                .Select(_ => _.Substring(_.IndexOf(Path.DirectorySeparatorChar) + 1))
+                .ToList();
+            Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
+
+            // register all custom classes
+            CR2WManager.Init(ActiveMod.FileDirectory, MainController.Get().Logger);
+
+            // Update the recent files.
+            var files = new List<string>();
+            if (File.Exists("recent_files.xml"))
+            {
+                var doc = XDocument.Load("recent_files.xml");
+                files.AddRange(doc.Descendants("recentfile").Take(4).Select(x => x.Value));
+            }
+            files.Add(file);
+            new XDocument(new XElement("RecentFiles", files.Distinct().Select(x => new XElement("recentfile", x)))).Save("recent_files.xml");
+
 
             if (ActiveMod?.LastOpenedFiles != null)
             {

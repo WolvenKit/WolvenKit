@@ -13,28 +13,22 @@ namespace RED.Reflection
     public static class AssemblyDictionary
     {
         private static Dictionary<String, Type> m_types;
+        private static Dictionary<String, Type> m_enums;
 
         static AssemblyDictionary()
         {
             LoadTypes();
+            LoadEnums();
         }
 
+        #region Types
         public static Type GetTypeByName(string typeName)
         {
             m_types.TryGetValue(typeName, out Type type);
             return type;
         }
 
-        public static Type GetTypeByName(CName typeName)
-        {
-            m_types.TryGetValue(typeName.ToString(), out Type type);
-            return type;
-        }
-
-        public static bool TypeExists(string typeName)
-        {
-            return m_types.ContainsKey(typeName);
-        }
+        public static bool TypeExists(string typeName) => m_types.ContainsKey(typeName);
 
         private static void LoadTypes()
         {
@@ -67,11 +61,41 @@ namespace RED.Reflection
                 m_types.Add(type.Name, type);
             }
         }
+        #endregion
+
+        #region Enums
+        private static void LoadEnums()
+        {
+            m_enums = new Dictionary<string, Type>();
+
+            foreach (Type type in typeof(Enums).GetNestedTypes())
+            {
+                if (!type.IsEnum)
+                    continue;
+
+                if (m_enums.ContainsKey(type.Name))
+                    continue;
+
+                m_enums.Add(type.Name, type);
+            }
+        }
+
+        public static Type GetEnumByName(string typeName)
+        {
+            m_enums.TryGetValue(typeName, out Type type);
+            return type;
+        }
+
+        public static bool EnumExists(string typeName) => m_enums.ContainsKey(typeName);
+        #endregion
+
 
         public static void Reload()
         {
             m_types.Clear();
+            m_enums.Clear();
             LoadTypes();
+            LoadEnums();
         }
     }
 }

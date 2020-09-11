@@ -55,8 +55,11 @@ namespace WolvenKit.CR2W.Types
         {
             if (val is XDocument)
             {
-                Data = (XDocument) val;
+                Data = (XDocument)val;
             }
+            else if (val is CXml cvar)
+                this.Data = cvar.Data;
+
             return this;
         }
 

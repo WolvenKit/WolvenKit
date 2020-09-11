@@ -13,6 +13,8 @@ namespace WolvenKit.CR2W.Types
     {
         string DepotPath { get; set; }
         string ClassName { get; set; }
+        ushort Flags { get; set; }
+
         string REDName { get; }
         string REDType { get; }
     }
@@ -81,7 +83,13 @@ namespace WolvenKit.CR2W.Types
         {
             if (val is ushort)
             {
-                this.SetValueInternal((ushort) val);
+                this.SetValueInternal((ushort)val);
+            }
+            else if (val is ISoftAccessor cvar)
+            {
+                this.DepotPath = cvar.DepotPath;
+                this.ClassName = cvar.ClassName;
+                this.Flags = cvar.Flags;
             }
             return this;
         }

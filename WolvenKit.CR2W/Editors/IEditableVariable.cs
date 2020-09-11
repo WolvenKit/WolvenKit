@@ -15,9 +15,9 @@ namespace WolvenKit.CR2W.Editors
         string REDValue { get; }
 
         Guid InternalGuid { get; set; }
-        IEditableVariable Parent { get; }
+        IEditableVariable ParentVar { get; }
         bool IsSerialized { get; set; }
-
+        int VarChunkIndex { get; set; }
         CR2WFile cr2w { get; set; }
 
 
@@ -25,6 +25,7 @@ namespace WolvenKit.CR2W.Editors
 
         Control GetEditor();
         List<IEditableVariable> GetEditableVariables();
+        List<IEditableVariable> GetExistingVariables(bool includebuffers);
 
         bool CanRemoveVariable(IEditableVariable child);
         bool CanAddVariable(IEditableVariable newvar);

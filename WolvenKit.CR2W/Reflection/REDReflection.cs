@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
+using RED.Reflection;
 using WolvenKit.Common;
 using WolvenKit.CR2W.Types;
 
@@ -107,7 +108,7 @@ namespace WolvenKit.CR2W.Reflection
             }
         }
 
-        public static string GetWKitTypeFromREDType(string typename)
+        public static string GetWKitBaseTypeFromREDBaseType(string typename)
         {
             switch (typename)
             {
@@ -116,16 +117,23 @@ namespace WolvenKit.CR2W.Reflection
                 case "Uint16": return "CUInt16";
                 case "Int16": return "CInt16";
                 case "Uint32": return "CUInt32";
+                case "int": return "CInt32";
                 case "Int32": return "CInt32";
                 case "Uint64": return "CUInt64";
                 case "Int64": return "CInt64";
                 case "Bool": return "CBool";
+                case "bool": return "CBool";
                 case "Float": return "CFloat";
+                case "float": return "CFloat";
                 case "String": return "CString";
+                case "string": return "CString";
                 case "Color": return "CColor";
                 case "Matrix": return "CMatrix";
                 default:
+                {
                     return typename;
+                }
+                    
             }
         }
 

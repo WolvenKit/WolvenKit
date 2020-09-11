@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -156,7 +155,7 @@ namespace WolvenKit
                 using (var fs = new FileStream(txWCC_Lite.Text, FileMode.Open))
                 using (var bw = new BinaryWriter(fs))
                 {
-                    var shawcc = SHA256.Create().ComputeHash(fs).Aggregate("", (c, n) => c += n.ToString("x2"));
+                    var shawcc = System.Security.Cryptography.SHA256.Create().ComputeHash(fs).Aggregate("", (c, n) => c += n.ToString("x2"));
                     switch (shawcc)
                     {
                         case wcc_sha256:
@@ -174,7 +173,7 @@ namespace WolvenKit
 
                                 //Recompute hash
                                 fs.Seek(0, SeekOrigin.Begin);
-                                shawcc = SHA256.Create().ComputeHash(fs).Aggregate("", (c, n) => c += n.ToString("x2"));
+                                shawcc = System.Security.Cryptography.SHA256.Create().ComputeHash(fs).Aggregate("", (c, n) => c += n.ToString("x2"));
                                 if (shawcc == wcc_sha256_patched)
                                 {
                                     MessageBox.Show("Succesfully patched!", "Patch completed", MessageBoxButtons.OK,

@@ -38,12 +38,12 @@ namespace CR2WTests
             bundletag = _bundletag;
             bm = _mc;
 
+
             Setup();
 
-            Run();
+            Task.Run(() => Run());
 
             this.Text = ext;
-
         }
 
         private void UpdateRichTextBox1(string val)
@@ -104,7 +104,7 @@ namespace CR2WTests
                 antecedent =>
                 {
                     res = antecedent.Result;
-                    Thread.Sleep(10000);
+                    Thread.Sleep(1000);
                     try
                     {
                         this.Close();
@@ -348,6 +348,11 @@ namespace CR2WTests
         {
 
             return res;
+        }
+
+        private async void frmUnitTest_Shown(object sender, EventArgs e)
+        {
+            
         }
     }
 }

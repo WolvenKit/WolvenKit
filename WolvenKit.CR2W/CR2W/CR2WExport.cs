@@ -34,7 +34,13 @@ namespace WolvenKit.CR2W
 
         [DataMember]
         [FieldOffset(4)]
-        public uint parentID;           //0 means no parent, 1 is chunkID 0 
+        // 0 means no parent, 1 is chunkID 0
+        // CDPR had the horrendous idea to put an uint here.
+        // So parentID really is [1;n], with 0 to denote a null parent...
+        // ... when it could have been the usual int [0;n], with -1 for null parent.
+        // We will thus touch this stupidity as little as possible, and rather interact with the wrapper
+        // CR2WExportWrapper.ParentChunkIndex.
+        public uint parentID;
 
         [DataMember]
         [FieldOffset(8)]
@@ -54,7 +60,7 @@ namespace WolvenKit.CR2W
     }
 
     [DataContract(Namespace = "")]
-    public class CR2WExportWrapper : IEditableVariable
+    public class CR2WExportWrapper
     {
 
         #region  Constructors
@@ -65,6 +71,8 @@ namespace WolvenKit.CR2W
             {
                 objectFlags = 8192,
             };
+            IsVirtuallyMounted = false;
+            Referrers = new List<CVariable>();
         }
         public CR2WExportWrapper(CR2WExport export, CR2WFile file)
         {
@@ -72,6 +80,8 @@ namespace WolvenKit.CR2W
             _export = export;
 
             REDType = cr2w.names[export.className].Str;
+            IsVirtuallyMounted = false;
+            Referrers = new List<CVariable>();
         }
         #endregion
 
@@ -93,40 +103,40 @@ namespace WolvenKit.CR2W
 
         public CVariable data { get; set; }
 
-        // editable variables
-        private CPtr<CVariable> _parentPtr;
-        public CPtr<CVariable> ParentPtr
+        /// <summary>
+        /// Main CR2WExport.parentId wrapper
+        /// </summary>
+        public int ParentChunkIndex
+        {
+            get => (int)_export.parentID - 1;
+            set => _export.parentID = (uint)(value + 1);
+        }
+
+        public bool IsVirtuallyMounted { get; set; }
+        private int _virtualParentChunkIndex;
+        public int VirtualParentChunkIndex
         {
             get
             {
-                return _parentPtr;
+                if (IsVirtuallyMounted) return _virtualParentChunkIndex;
+                return ParentChunkIndex;
             }
             set
             {
-                _parentPtr = value;
-
-                // this is unneccessary, handled in frmChunkProperties:treeView_CellEditFinished
-                if (_parentPtr.Reference == null)
-                {
-                    _export.parentID = (uint)0;
-                }
-                else
-                    _export.parentID = (uint)_parentPtr.Reference.ChunkIndex + 1;
+                if (IsVirtuallyMounted) return;
+                _virtualParentChunkIndex = value;
+                IsVirtuallyMounted = true;
             }
         }
-        public uint ParentChunkId => this.Export.parentID;
 
-        private string _type;
-        public string REDType
-        {
-            get { return _type; }
-            set
-            {
-                _type = value;
+        /// <summary>
+        /// Reverse lookup : CVariables, being CPtr or CHandle, which reference this chunk.
+        /// Beware, in case of multithreading, this needs locking!
+        /// </summary>
+        public List<CVariable> Referrers;
 
-                //_export.className = (ushort)cr2w.GetStringIndex(_type);
-            }
-        }
+
+        public string REDType { get; set; }
 
 
         [DataMember]
@@ -136,34 +146,33 @@ namespace WolvenKit.CR2W
             set { }
         }
 
-
         public int ChunkIndex => cr2w.chunks.IndexOf(this);
+        public CR2WExportWrapper ParentChunk => ParentChunkIndex==-1 ? null : cr2w.chunks[ParentChunkIndex];
+        public CR2WExportWrapper VirtualParentChunk => VirtualParentChunkIndex==-1 ? null : cr2w.chunks[VirtualParentChunkIndex];
         public string Preview
         {
             get
             {
-                if (data is CVariable)
-                {
-                    var vars = data.GetEditableVariables();
-                    var firstString = vars
+                if (!(data is CVariable)) return "";
+                var vars = data.GetEditableVariables();
+                var firstString = vars
                         .Where(_ => (_ is CString && _ != null))
                         .Cast<CString>()
                         .FirstOrDefault(_ => _.val != null)
-                        ;
-                    if (firstString != null)
-                    {
-                        return ((CString)firstString).val;
-                    }
+                    ;
+                if (firstString != null)
+                {
+                    return ((CString)firstString).val;
+                }
 
-                    var firstName = vars
+                var firstName = vars
                         .Where(_ => (_ is CName && _ != null))
                         .Cast<CName>()
                         .FirstOrDefault(_ => _.Value != null)
-                        ;
-                    if (firstName != null)
-                    {
-                        return ((CName)firstName).Value;
-                    }
+                    ;
+                if (firstName != null)
+                {
+                    return ((CName)firstName).Value;
                 }
 
                 return "";
@@ -179,24 +188,34 @@ namespace WolvenKit.CR2W
 
         #region Methods
         public void SetType(ushort val) => _export.className = val;
-        public void SetParentChunkId(uint val) => _export.parentID = val;
-        public void SetParent(CR2WExportWrapper parent)
+        public void SetParentChunk(CR2WExportWrapper parent)
         {
-            ParentPtr.Reference = parent;
-            SetParentChunkId((uint)ParentPtr.Reference.ChunkIndex + 1);
+            //ParentPtr.Reference = parent;
+            ParentChunkIndex = cr2w.chunks.IndexOf(parent);
+            IsVirtuallyMounted = false;
+            VirtualParentChunkIndex = ParentChunkIndex;
         }
         public void SetOffset(uint offset) => _export.dataOffset = offset;
 
-        public CR2WExportWrapper GetParent()
+        public CR2WExportWrapper GetParentChunk()
         {
-            if ((int)ParentChunkId > 0)
+            if (ParentChunkIndex >= 0)
             {
-                return cr2w.chunks[(int)ParentChunkId - 1];
+                return cr2w.chunks[ParentChunkIndex];
             }
             else
             {
                 return null;
             }
+        }
+
+        public CR2WExportWrapper GetVirtualParentChunk()
+        {
+            if (IsVirtuallyMounted && VirtualParentChunkIndex != -1)
+            {
+                return cr2w.chunks[VirtualParentChunkIndex];
+            }
+            else return GetParentChunk();
         }
         
         public virtual Control GetEditor()
@@ -208,7 +227,7 @@ namespace WolvenKit.CR2W
         {
             var vars = new List<IEditableVariable>
             {
-                ParentPtr,
+                //ParentPtr,
                 data
             };
             if (unknownBytes != null && unknownBytes.Bytes != null && unknownBytes.Bytes.Length != 0)
@@ -242,6 +261,16 @@ namespace WolvenKit.CR2W
             file.BaseStream.Seek(_export.dataOffset, SeekOrigin.Begin);
 
             CreateDefaultData();
+            if(data.REDType== "CBTTaskTeleportDecoratorDef" ||
+                data.REDType == "CBTTaskTeleportDef")
+            {
+                //System.Console.WriteLine("Not bothering with buggy vars yoo");
+                return;
+            }
+
+            //TODO explain next two lines
+            data.VarChunkIndex = ChunkIndex;
+            VirtualParentChunkIndex = ParentChunkIndex;
 
             data.Read(file, _export.dataSize);
 
@@ -312,6 +341,10 @@ namespace WolvenKit.CR2W
             {
                 CreateDefaultData();
 
+                //TODO explain next two lines
+                data.VarChunkIndex = ChunkIndex;
+                VirtualParentChunkIndex = ParentChunkIndex;
+
                 data.Read(br, _export.dataSize);
 
                 // Unknown bytes
@@ -371,16 +404,11 @@ namespace WolvenKit.CR2W
 
         public void CreateDefaultData()
         {
-            data = CR2WTypeManager.Create(REDType, REDType, cr2w, GetParent()?.data);
+            data = CR2WTypeManager.Create(REDType, REDType, cr2w, GetParentChunk()?.data);
             if (data == null)
             {
                 throw new NotImplementedException();
             }
-
-            ParentPtr = new CPtr<CVariable>(cr2w, data, "Parent")
-            {
-                Reference = GetParent()
-            };
 
             data.IsSerialized = true;
             data.REDFlags = Export.objectFlags;
@@ -403,9 +431,7 @@ namespace WolvenKit.CR2W
             copy._export.crc32 = _export.crc32;
 
             // requires updating from context.chunkTranslation once all chunks are copied.
-            //copy.ParentChunkId = ParentChunkId;
-            copy._export.parentID = _export.parentID;
-
+            copy.SetParentChunk(this.ParentChunk);
             if (data != null)
             {
                 copy.data = data.Copy(context);
@@ -448,7 +474,6 @@ namespace WolvenKit.CR2W
         }
 
         public Guid InternalGuid { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        IEditableVariable IEditableVariable.Parent { get => throw new NotImplementedException(); }
 
         public CVariable Copy(CR2WCopyAction context)
         {

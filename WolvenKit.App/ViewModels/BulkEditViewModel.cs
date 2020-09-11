@@ -348,13 +348,13 @@ namespace WolvenKit.App.ViewModels
                             // check if the user specified a parent
                             if (splits.Length > 1)
                             {
-                                var parent = proptoedit.Parent;
+                                var parent = proptoedit.ParentVar;
                                 for (int i = splits.Length; i > 0 ; i--)
                                 {
                                     if (parent.REDName != splits[i])
                                         return;
 
-                                    parent = parent.Parent;
+                                    parent = parent.ParentVar;
                                 }
                             }
 

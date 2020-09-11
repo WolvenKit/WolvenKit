@@ -88,12 +88,26 @@ namespace WolvenKit.CR2W.Types
             {
                 _type = (byte)val;
             }
+            else if (val is IdTag cvar)
+            {
+                _guid = cvar._guid;
+                _type = cvar._type;
+            }
+
             return this;
         }
 
         public override string ToString()
         {
-            return $"[ {_type} ] {new Guid(_guid).ToString()}";
+            if (_guid == null)
+            {
+                var buffer = new byte[16];
+                return $"[ {_type} ] {new Guid(buffer)}";
+            }
+            else
+            {
+                return $"[ {_type} ] {new Guid(_guid)}";
+            }
         }
     }
 }

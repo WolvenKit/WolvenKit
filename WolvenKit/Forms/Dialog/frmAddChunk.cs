@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using WolvenKit.CR2W.Types;
 
@@ -20,7 +21,7 @@ namespace WolvenKit
             {
 
                 var types = CR2WTypeManager.AvailableTypes;
-                types.Sort();
+                types.ToList().Sort();
 
                 txType.Items.AddRange(types.ToArray());
             }

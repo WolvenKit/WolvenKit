@@ -58,12 +58,26 @@ namespace CR2WTests
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            var exedir = LookUpW3exe();
-            //var exedir = @"D:\SteamLibrary\steamapps\common\TW3\bin\x64";
+            var tw3Finaldir = "";
+            // check for W3_DIR environment variable
+            var W3_DIR = System.Environment.GetEnvironmentVariable("W3_DIR", EnvironmentVariableTarget.User);
+            if (!string.IsNullOrEmpty(W3_DIR))
+                tw3Finaldir = W3_DIR;
+            // else lookup w3 exe
+            else
+            {
+                var exedir = new FileInfo(LookUpW3exe()).Directory.FullName;
+                if (Directory.Exists(exedir))
+                    tw3Finaldir = exedir;
+                // else close
+                else
+                    Assert.IsFalse(true, "Aborting test. No valid Wicther 3 directory found.");
+            }
 
+            
             memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
             bm = new BundleManager();
-            bm.LoadAll(exedir);
+            bm.LoadAll(tw3Finaldir);
 
             //Load MemoryMapped Bundles
             foreach (var b in bm.Bundles.Values)
