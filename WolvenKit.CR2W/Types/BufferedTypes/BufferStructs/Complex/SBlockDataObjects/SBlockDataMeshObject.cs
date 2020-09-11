@@ -22,7 +22,6 @@ namespace WolvenKit.CR2W.Types
         
         [Ordinal(999)] [REDBuffer(true)] public CBytes unk1 { get; set; }
 
-
         public SBlockDataMeshObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {
             unk1 = new CBytes(cr2w, parent, nameof(unk1));
 

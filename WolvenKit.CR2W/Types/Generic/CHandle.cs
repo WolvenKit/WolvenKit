@@ -7,6 +7,7 @@ using WolvenKit.CR2W.Editors;
 using System.Linq;
 using WolvenKit.CR2W.Reflection;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -72,7 +73,19 @@ namespace WolvenKit.CR2W.Types
                 if (val == 0)
                     Reference = null;
                 else
+                {
                     Reference = cr2w.chunks[val - 1];
+                    Reference.Referrers.Add(this as CVariable); //Populate the reverse-lookup
+                }
+
+                if (Reference != null && !Reference.IsVirtuallyMounted)
+                {
+                    Reference.VirtualParentChunkIndex = GetVarChunkIndex();
+                }
+                else
+                {
+                    var bozza = "bozza";
+                }
             }
             else
             {

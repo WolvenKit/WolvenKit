@@ -27,8 +27,9 @@ namespace WolvenKit.CR2W.Types
         public CVariable(CR2WFile cr2w, CVariable parent, string name)
         {
             this.cr2w = cr2w;
-            this.Parent = parent;
+            this.ParentVar = parent;
             this.REDName = name;
+            this.VarChunkIndex = -1;
 
             InternalGuid = Guid.NewGuid();
             accessor = TypeAccessor.Create(this.GetType());
@@ -58,8 +59,8 @@ namespace WolvenKit.CR2W.Types
         {
             IsSerialized = true;
 
-            if (Parent != null)
-                if (Parent is CVariable cparent)
+            if (ParentVar != null)
+                if (ParentVar is CVariable cparent)
                     cparent.SetIsSerialized();
         }
 
@@ -85,9 +86,12 @@ namespace WolvenKit.CR2W.Types
         /// otherwise must be set manually
         /// Consider moving this to the constructor
         /// </summary>
-        public IEditableVariable Parent { get; private set; }
+        public IEditableVariable ParentVar { get; private set; }
 
-
+        /// <summary>
+        /// -1 for children CVars, actual chunk index for root cvar aka cr2wexportwrapper.data
+        /// </summary>
+        public int VarChunkIndex { get; set; }
 
 
         private string name;
@@ -140,15 +144,27 @@ namespace WolvenKit.CR2W.Types
         public string GetFullName()
         {
             var name = REDName;
-            var c = Parent;
+            var c = ParentVar;
             while (c != null)
             {
                 name = c.REDName + "/" + name;
-                c = c.Parent;
+                c = c.ParentVar;
             }
             return name;
         }
 
+        public int GetVarChunkIndex()
+        {
+            var currentcvar = this as IEditableVariable;
+            while (currentcvar.VarChunkIndex == -1)
+            {
+                currentcvar = currentcvar.ParentVar;
+            }
+            return currentcvar.VarChunkIndex;
+        }
+#if DEBUG
+        public int GottenVarChunkIndex => GetVarChunkIndex();
+#endif
 
         #region Virtual
 
@@ -189,10 +205,11 @@ namespace WolvenKit.CR2W.Types
         {
             List<IEditableVariable> redvariables = new List<IEditableVariable>();
 
-            foreach (Member item in this.GetREDMembers(true))
+            foreach (Member item in this.GetREDMembers(includeBuffers))
             {
-                if (!includeBuffers && item.GetMemberAttribute<REDBufferAttribute>() != null)
-                    continue;
+                // ??
+                //if (includeBuffers && item.GetMemberAttribute<REDBufferAttribute>()==null)
+                //    continue;
 
                 object o = accessor[this, item.Name];
                 if (o is CVariable cvar)
@@ -274,12 +291,11 @@ namespace WolvenKit.CR2W.Types
 
                     cvar.IsSerialized = true;
 
-                    // dbg
 #if DEBUG
                     dbg_varnames.Add($"[{cvar.REDType}] {cvar.REDName}");
 #endif
 
-                    TryAddVariable(cvar);
+                    TrySettingFastMemberAccessor(cvar);
                 }
                 #endregion
 
@@ -341,7 +357,7 @@ namespace WolvenKit.CR2W.Types
                 parsedvar.IsSerialized = true;
 
                 // add in class
-                TryAddVariable(parsedvar);
+                TrySettingFastMemberAccessor(parsedvar);
 
             }
             return parsedvars;
@@ -351,27 +367,27 @@ namespace WolvenKit.CR2W.Types
         /// Tries to set a Cvariable in the class
         /// </summary>
         /// <param name="value"></param>
-        private bool TryAddVariable(CVariable value)
+        private bool TrySettingFastMemberAccessor(CVariable value)
         {
             string varname = value.REDName.FirstCharToUpper();
             varname = NormalizeName(varname);
-
-            var map = this.accessor.GetMembers().Select(_ => _.Name);
-            if (map.Contains(varname))
+            foreach (var member in this.accessor.GetMembers())
             {
-                accessor[this, varname] = value;
+                if (member.Name == varname)
+                {
+                    if (this.cr2w.FileName == "characters\\npc_entities\\monsters\\vampire_katakan_lvl1.w2ent" && this.REDType == "CBTTaskTeleportDecoratorDef")
+                        System.Console.WriteLine(this.ParentVar);
+                    accessor[this, varname] = value;
+                    return true;
+                }
+                else if (member.Name == varname.FirstCharToLower())
+                {
+                    accessor[this, varname.FirstCharToLower()] = value;
+                    return true;
+                }
             }
-            else if (map.Contains(varname.FirstCharToLower()))
-            {
-                accessor[this, varname.FirstCharToLower()] = value;
-            }
-            else
-            {
-                Debug.WriteLine($"({value.REDType}){varname} not found in ({this.REDType}){this.REDName}");
-                return false;
-            }
-
-            return true;
+            Debug.WriteLine($"({value.REDType}){varname} not found in ({this.REDType}){this.REDName}");
+            return false;
 
             string NormalizeName(string name)
             {
@@ -510,7 +526,7 @@ namespace WolvenKit.CR2W.Types
                         DestinationFile = context.DestinationFile,
                         Parent = item.Parent as CVariable
                     };
-                    copy.TryAddVariable(cvar.Copy(innercontext));
+                    copy.TrySettingFastMemberAccessor(cvar.Copy(innercontext));
                 }
             }
 

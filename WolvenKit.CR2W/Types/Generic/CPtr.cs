@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
@@ -63,6 +64,30 @@ namespace WolvenKit.CR2W.Types
             catch (Exception ex)
             {
                 throw new InvalidPtrException(ex.Message);
+            }
+            // Try reparenting on virtual mountpoint
+            if (Reference != null)
+            {
+                Reference.Referrers.Add(this as CVariable); //Populate the reverse-lookup
+
+                if (!Reference.IsVirtuallyMounted)
+                {
+                    Reference.VirtualParentChunkIndex = GetVarChunkIndex();
+                }
+                else if (REDName == "parent" && cr2w.chunks[GetVarChunkIndex()].IsVirtuallyMounted == false)
+                {
+                    cr2w.chunks[GetVarChunkIndex()].VirtualParentChunkIndex = Reference.ChunkIndex;
+                }
+                else if (REDName == "child" && Reference.IsVirtuallyMounted == true)
+                {
+                    //remount, needed for chardattachment
+                    Reference.IsVirtuallyMounted = false;
+                    Reference.VirtualParentChunkIndex = GetVarChunkIndex();
+                }
+                else
+                {
+                    var bozzo = "bozzo";
+                }
             }
         }
 

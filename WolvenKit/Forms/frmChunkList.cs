@@ -57,7 +57,7 @@ namespace WolvenKit.Forms
             {
                 File.GenerateChunksDict();
 
-                Dictionary<int, int> dParentids = File.chunks.ToDictionary(_ => _.ChunkIndex, _ => (int)_.ParentChunkId -1);
+                Dictionary<int, int> dParentids = File.chunks.ToDictionary(_ => _.ChunkIndex, _ => _.VirtualParentChunkIndex);
                 foreach (var chunk in File.chunks)
                 {
                     var childrenidxlist = dParentids.Where(_ => _.Value == chunk.ChunkIndex).Select(_ => _.Key);
@@ -95,6 +95,20 @@ namespace WolvenKit.Forms
             if (listview)
                 treeListView.Roots = File.chunks;
             else
+                treeListView.Roots = File.chunks.Where(_ => _.GetVirtualParentChunk() == null).ToList();
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                if (limit != -1)
+                {
+                    //treeListView.Objects = File.chunks.Where(x => x.Name.ToUpper().Contains(toolStripSearchBox.Text.ToUpper())).Take(limit);
+                }
+                else
+                {
+                    this.treeListView.ModelFilter = TextMatchFilter.Contains(treeListView, toolStripSearchBox.Text.ToUpper());
+                }
+            }
+            else
             {
                 UpdateHelperList();
                 treeListView.Roots = File.chunks.Where(_ => _.GetParent() == null).ToList();
@@ -126,7 +140,7 @@ namespace WolvenKit.Forms
                     var chunk = File.CreateChunk(dlg.ChunkType);
                     if (selectedchunk != null)
                     {
-                        chunk.SetParent(selectedchunk);
+                        chunk.SetParentChunk(selectedchunk);
                     }
                     
                     UpdateList();

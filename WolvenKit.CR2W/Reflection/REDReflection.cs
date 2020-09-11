@@ -108,7 +108,7 @@ namespace WolvenKit.CR2W.Reflection
             }
         }
 
-        public static string GetWKitTypeFromREDType(string typename)
+        public static string GetWKitBaseTypeFromREDBaseType(string typename)
         {
             switch (typename)
             {

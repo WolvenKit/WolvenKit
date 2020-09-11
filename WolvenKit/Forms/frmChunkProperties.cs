@@ -138,7 +138,7 @@ namespace WolvenKit
                 var context = new CR2WCopyAction()
                 {
                     DestinationFile = targetvar.cr2w,
-                    Parent = targetvar.Parent as CVariable
+                    Parent = targetvar.ParentVar as CVariable
                 };
                 var copy = cvar.Copy(context);
                 targetvar.SetValue(copy);
@@ -290,8 +290,8 @@ namespace WolvenKit
 
         private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
         {
-            if (chunk.ParentPtr.Reference != null)
-                chunk.SetParentChunkId((uint)chunk.ParentPtr.Reference.ChunkIndex + 1);
+/*            if (chunk.ParentPtr.Reference != null)
+                chunk.SetParentChunkId(chunk.ParentPtr.Reference.ChunkIndex + 1);*/
             OnItemsChanged(sender, e);
 
             // change the model's isserialized property to true when the user edits it,

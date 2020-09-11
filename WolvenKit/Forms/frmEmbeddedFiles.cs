@@ -46,7 +46,7 @@ namespace WolvenKit
 
             if (e.ClickCount == 2)
             {
-                var mem = new MemoryStream(((CR2WEmbeddedWrapper) e.Model).Data.ToArray());
+                var mem = new MemoryStream(((CR2WEmbeddedWrapper) e.Model).Data);
 
                 var doc = UIController.Get().LoadDocument("Embedded file", mem);
                 if (doc != null)
@@ -62,7 +62,7 @@ namespace WolvenKit
         {
             var vm = (DocumentViewModel) sender;
             var editvar = (CR2WEmbeddedWrapper) vm.SaveTarget;
-            editvar.Data = ((MemoryStream) e.Stream).ToArray().ToList();
+            editvar.Data = ((MemoryStream) e.Stream).ToArray();
         }
 
         public void ApplyCustomTheme()
