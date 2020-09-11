@@ -2308,7 +2308,7 @@ namespace WolvenKit
             {
                 var archives = manager.FileList
                     .Where(x => x.Name == relativePath)
-                    .Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
+                    .Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.ArchiveAbsolutePath, y));
                 string newpath = "";
 
 
@@ -3388,8 +3388,8 @@ _col - for simple stuff like boxes and spheres", "Information about importing mo
             //Load MemoryMapped Bundles
             foreach (var b in bm.Bundles.Values)
             {
-                var hash = b.FileName.GetHashMD5();
-                memorymappedbundles.Add(hash, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, hash, 0, MemoryMappedFileAccess.Read));
+                var hash = b.ArchiveAbsolutePath.GetHashMD5();
+                memorymappedbundles.Add(hash, MemoryMappedFile.CreateFromFile(b.ArchiveAbsolutePath, FileMode.Open, hash, 0, MemoryMappedFileAccess.Read));
             }
 
             var files = bm.FileList

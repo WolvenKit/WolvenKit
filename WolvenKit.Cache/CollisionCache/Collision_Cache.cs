@@ -36,11 +36,11 @@ namespace WolvenKit.Cache
         public List<CollisionCacheItem> Files = new List<CollisionCacheItem>(); 
 
         public EBundleType TypeName => EBundleType.CollisionCache;
-        public string FileName { get; set; }
+        public string ArchiveAbsolutePath { get; set; }
 
         public CollisionCache(string filename)
         {
-            this.FileName = filename;
+            this.ArchiveAbsolutePath = filename;
             using (var br = new BinaryReader(new FileStream(filename, FileMode.Open)))
                 this.Read(br);
         }

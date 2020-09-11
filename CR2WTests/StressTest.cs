@@ -82,9 +82,9 @@ namespace CR2WTests
             //Load MemoryMapped Bundles
             foreach (var b in bm.Bundles.Values)
             {
-                var e = b.FileName.GetHashMD5();
+                var e = b.ArchiveAbsolutePath.GetHashMD5();
             
-                memorymappedbundles.Add(e, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, e, 0, MemoryMappedFileAccess.Read));
+                memorymappedbundles.Add(e, MemoryMappedFile.CreateFromFile(b.ArchiveAbsolutePath, FileMode.Open, e, 0, MemoryMappedFileAccess.Read));
 
             }
         }
