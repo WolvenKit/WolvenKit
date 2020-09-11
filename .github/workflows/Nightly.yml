@@ -11,6 +11,14 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - name: Check Nightly
+      uses: Maxzor/check-nightly@v1.0.3
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        release_id: 11743470
+        asset_name: WolvenKit-Nightly-$$.zip
+        asset_content_type: application/zip
     - uses: actions/checkout@v1
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
@@ -22,12 +30,8 @@ jobs:
       run: msbuild  WolvenKit.sln -p:Configuration=Release
     - name: Zip Release
       run: |
-        choco install 7zip --y
-        cd $Env:GITHUB_WORKSPACE\\WolvenKit
-        cd bin
-        7z a WolvenKit.zip ./Release/
-        cd
-        dir
+        cd $Env:GITHUB_WORKSPACE\\WolvenKit\bin
+        Compress-Archive -Path ./Release/ -DestinationPath WolvenKit.zip
     - name: Deploy Nightly
       uses: Maxzor/deploy-nightly@v1.0.4
       env:
