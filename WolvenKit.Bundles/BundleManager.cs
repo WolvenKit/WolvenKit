@@ -75,7 +75,7 @@ namespace WolvenKit.Bundles
                 {
                     // if file is already in content0 remove file.
                     List<IWitcherFile> filesInBundles = Items[item.Key];
-                    if (filesInBundles.First().Bundle.FileName.Contains("content0"))
+                    if (filesInBundles.First().Bundle.ArchiveAbsolutePath.Contains("content0"))
                     {
                         bundle.Patchedfiles.Add(filesInBundles.First());
                         filesInBundles.RemoveAt(0);

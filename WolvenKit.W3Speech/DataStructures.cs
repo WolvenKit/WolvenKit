@@ -72,7 +72,7 @@ namespace WolvenKit.W3Speech
 
         public void Extract(Stream output)
         {
-            using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
+            using (var file = MemoryMappedFile.CreateFromFile(Bundle.ArchiveAbsolutePath, FileMode.Open))
             {
                 using (var viewstream = file.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
                 {
@@ -128,12 +128,12 @@ namespace WolvenKit.W3Speech
 
         public W3Speech(string name)
         {
-            FileName = name;
+            ArchiveAbsolutePath = name;
         }
 
         public W3Speech(String filename, String id, UInt32 version, W3LanguageKey language_key, IEnumerable<SpeechEntry> item_infos)
         {
-            this.FileName = filename;
+            this.ArchiveAbsolutePath = filename;
             this.id = id;
             this.version = version;
             this.language_key = language_key;
@@ -142,7 +142,7 @@ namespace WolvenKit.W3Speech
 
         public EBundleType TypeName => EBundleType.Speech;
 
-        public string FileName { get; set; }
+        public string ArchiveAbsolutePath { get; set; }
 
         public override string ToString()
         {

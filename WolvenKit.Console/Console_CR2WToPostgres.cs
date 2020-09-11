@@ -200,7 +200,7 @@ namespace WolvenKit.Console
                 #region bundleloop
                 lock (pg)
                 {
-                    pb.Refresh(++pg.pgr, bundle.FileName);
+                    pb.Refresh(++pg.pgr, bundle.ArchiveAbsolutePath);
                 }
 
 /*                if (bundle == bundles[21])
@@ -210,24 +210,24 @@ namespace WolvenKit.Console
 */
 
 
-                if (bundle.FileName.Contains("buffers") ||
-                        bundle.FileName.Contains("xml"))
+                if (bundle.ArchiveAbsolutePath.Contains("buffers") ||
+                        bundle.ArchiveAbsolutePath.Contains("xml"))
                     continue;//return;
 
 
                 bundlepb.Max = (int)bundle.Items.Count();
                 var bundlepg = new Progress(0);
                 //Cannot use bundle.GetSize, it is broken on patch1 bundle
-                var filerealsize = new FileInfo(bundle.FileName).Length;
+                var filerealsize = new FileInfo(bundle.ArchiveAbsolutePath).Length;
 
-                var e = bundle.FileName.GetHashMD5();
+                var e = bundle.ArchiveAbsolutePath.GetHashMD5();
                 var mmf = MemoryMappedFile.CreateNew(e, /*bundle.GetSize*/filerealsize, MemoryMappedFileAccess.ReadWrite);
 
                 //We try to create a non-persisted memory-mapped file from RAM, or if we can't a persisted mmf from disk.
                 // no memory stream on > 2GB files, win32 api.
                 if(filerealsize<1900000000)
                 {
-                    using (MemoryStream ms0 = new MemoryStream(File.ReadAllBytes(bundle.FileName), 0, (int)filerealsize, false, true))
+                    using (MemoryStream ms0 = new MemoryStream(File.ReadAllBytes(bundle.ArchiveAbsolutePath), 0, (int)filerealsize, false, true))
                     using (MemoryMappedViewStream mmvs = mmf.CreateViewStream())
                     {
                         ms0.CopyTo(mmvs);
@@ -235,7 +235,7 @@ namespace WolvenKit.Console
                 }
                 else
                 {
-                    using (FileStream fs = File.OpenRead(bundle.FileName))
+                    using (FileStream fs = File.OpenRead(bundle.ArchiveAbsolutePath))
                     //using (MemoryStream ms0 = new MemoryStream(File.ReadAllBytes(bundle.FileName), 0, (int)filerealsize, false, true))
                     using (MemoryMappedViewStream mmvs = mmf.CreateViewStream())
                     {
@@ -267,7 +267,7 @@ namespace WolvenKit.Console
                     }
 
                     // Getting bundle database file id - lod2dict - lod2 absolute_path --> lod2_file_id
-                    var lod_2_file_name = f.Bundle.FileName.Replace("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\", "").Replace("\\", "/");
+                    var lod_2_file_name = f.Bundle.ArchiveAbsolutePath.Replace("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\", "").Replace("\\", "/");
                     int lod2_file_id = lod2dict[lod_2_file_name];
 
                     // Getting cr2w database general file id (lod1) - lod1dict - lod2_id + absolute_virtual_path --> lod1_file_id
