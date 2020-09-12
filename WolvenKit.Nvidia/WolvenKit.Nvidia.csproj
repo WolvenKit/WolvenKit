@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Wolvekit.Nvidia</RootNamespace>
-    <AssemblyName>Wolvekit.Nvidia</AssemblyName>
+    <RootNamespace>WolvenKit.Nvidia</RootNamespace>
+    <AssemblyName>WolvenKit.Nvidia</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

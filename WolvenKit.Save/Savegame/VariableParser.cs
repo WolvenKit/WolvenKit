@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using W3SavegameEditor.Core.Savegame.VariableParsers;
-using W3SavegameEditor.Core.Savegame.Variables;
+using WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Variables;
 
-namespace W3SavegameEditor.Core.Savegame
+namespace WolvenKit.W3SavegameEditor.Core.Savegame
 {
     public class VariableParser
     {

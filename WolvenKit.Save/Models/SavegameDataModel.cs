@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace W3SavegameEditor.Models
+namespace WolvenKit.W3SavegameEditor.Models
 {
     public class SavegameDataModel
     {

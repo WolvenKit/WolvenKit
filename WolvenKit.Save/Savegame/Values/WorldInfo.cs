@@ -1,7 +1,7 @@
 ﻿using System;
-using W3SavegameEditor.Core.Savegame.Attributes;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Attributes;
 
-namespace W3SavegameEditor.Core.Savegame.Values
+namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
 {
     [CName("worldInfo")]
     public class WorldInfo

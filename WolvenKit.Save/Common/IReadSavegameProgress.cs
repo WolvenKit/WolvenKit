@@ -1,4 +1,4 @@
-namespace W3SavegameEditor.Core.Common
+namespace WolvenKit.W3SavegameEditor.Core.Common
 {
     public interface IReadSavegameProgress
     {

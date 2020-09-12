@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace W3SavegameEditor.Core.Savegame
+namespace WolvenKit.W3SavegameEditor.Core.Savegame
 {
     public class VariableTypeMap
     {

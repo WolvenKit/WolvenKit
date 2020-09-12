@@ -1,4 +1,4 @@
-﻿namespace W3SavegameEditor.Core.Savegame.Variables
+﻿namespace WolvenKit.W3SavegameEditor.Core.Savegame.Variables
 {
     public abstract class Variable
     {

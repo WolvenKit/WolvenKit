@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace W3SavegameEditor.Core.ChunkedLz4
+namespace WolvenKit.W3SavegameEditor.Core.ChunkedLz4
 {
     public static class ChunkedLz4File
     {

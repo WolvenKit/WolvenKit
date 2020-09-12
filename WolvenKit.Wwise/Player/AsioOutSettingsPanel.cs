@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using NAudio.Wave;
 
-namespace Wolvenkit.Wwise.Player
+namespace WolvenKit.Wwise.Player
 {
     public partial class AsioOutSettingsPanel : UserControl
     {

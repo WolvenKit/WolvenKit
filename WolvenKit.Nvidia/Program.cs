@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml.Linq;
-using Wolvekit.Nvidia.HairWorks;
-using WolvenKit;
+using WolvenKit.Nvidia.HairWorks;
 using WolvenKit.CR2W;
 
-namespace WolvenKit
+namespace WolvenKit.Nvidia
 {
     class Program
     {

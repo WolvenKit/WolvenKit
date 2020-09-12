@@ -1,4 +1,4 @@
-﻿namespace W3SavegameEditor.Core.Savegame.Values
+﻿namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
 {
     public class W3Enum
     {

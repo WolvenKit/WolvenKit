@@ -1,4 +1,4 @@
-﻿namespace W3SavegameEditor.Core.Savegame.Values.Engine
+﻿namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values.Engine
 {
     public class Handle<T>
     {

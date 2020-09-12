@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using W3SavegameEditor.Core.Savegame.Variables;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Variables;
 
-namespace W3SavegameEditor.Core.Savegame.VariableParsers
+namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
 {
     /// <summary>
     /// A set of variables

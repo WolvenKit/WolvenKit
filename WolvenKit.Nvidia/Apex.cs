@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using Wolvekit.Nvidia.HairWorks;
+using WolvenKit.Nvidia.HairWorks;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 

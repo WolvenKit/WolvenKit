@@ -1,6 +1,6 @@
-﻿using W3SavegameEditor.Core.Savegame.Attributes;
+﻿using WolvenKit.W3SavegameEditor.Core.Savegame.Attributes;
 
-namespace W3SavegameEditor.Core.Savegame.Values.Engine
+namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values.Engine
 {
     [CSerializable("gameTime")]
     public class GameTime

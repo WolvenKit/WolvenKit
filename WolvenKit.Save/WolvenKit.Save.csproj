@@ -7,8 +7,8 @@
     <ProjectGuid>{9C026DA7-481D-43C6-8C18-635D69FDB423}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>W3SavegameEditor.Core</RootNamespace>
-    <AssemblyName>W3SavegameEditor.Core</AssemblyName>
+    <RootNamespace>WolvenKit.W3SavegameEditor.Core</RootNamespace>
+    <AssemblyName>WolvenKit.W3SavegameEditor.Core</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

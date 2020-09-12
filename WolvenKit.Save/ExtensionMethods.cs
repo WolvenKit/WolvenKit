@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace W3SavegameEditor.Core
+namespace WolvenKit.W3SavegameEditor.Core
 {
     internal static class ExtensionMethods
     {
