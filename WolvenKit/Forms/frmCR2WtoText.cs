@@ -415,7 +415,9 @@ namespace WolvenKit.Forms
     {
         internal LoggerWriterSeparate(List<string> files, LoggerWriterData writerData, LoggerCR2WOptions cr2wOptions)
             : base(files, writerData, cr2wOptions) { }
+#pragma warning disable CS1998
         public override async Task StartDump()
+#pragma warning restore CS1998
         {
             var parOptions = new ParallelOptions()
             {
@@ -534,7 +536,9 @@ namespace WolvenKit.Forms
             }
             OnExceptionFile?.Invoke(fileName, msg);
         }
+#pragma warning disable CS1998
         protected async Task Dump(StreamWriter streamDestination, string fileName)
+#pragma warning restore CS1998
         {
             LoggerOutputFileTxt outputFile = new LoggerOutputFileTxt(streamDestination, WriterData.PrefixFileName,
                 Path.GetFileName(fileName));

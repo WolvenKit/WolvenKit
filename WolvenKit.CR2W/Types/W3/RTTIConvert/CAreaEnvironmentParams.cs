@@ -2,13 +2,11 @@ using FastMember;
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
-using FastMember;
-using static WolvenKit.CR2W.Types.Enums;
 
 
 namespace WolvenKit.CR2W.Types
 {
-	[DataContract(Namespace = "")]
+    [DataContract(Namespace = "")]
 	[REDMeta]
 	public class CAreaEnvironmentParams : CVariable
 	{

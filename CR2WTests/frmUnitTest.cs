@@ -100,7 +100,7 @@ namespace CR2WTests
 
         public async Task<Tuple<long, int>> Run()
         {
-            await Task.Run(() => StressTestExtAsync()).ContinueWith(
+            await Task.Run(() => StressTestExt()).ContinueWith(
                 antecedent =>
                 {
                     res = antecedent.Result;
@@ -120,7 +120,7 @@ namespace CR2WTests
             return null;
         }
 
-        public async Task<Tuple<long, int>> StressTestExtAsync()
+        public Tuple<long, int> StressTestExt()
         {
             long unknownbytes = 0;
             long totalbytes = 0;
@@ -350,9 +350,11 @@ namespace CR2WTests
             return res;
         }
 
+#pragma warning disable CS1998
         private async void frmUnitTest_Shown(object sender, EventArgs e)
+#pragma warning restore CS1998
         {
-            
+
         }
     }
 }

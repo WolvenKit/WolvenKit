@@ -21,6 +21,7 @@ namespace SharpPresence
 
         //--------------------------------------------------------------------------------
 
+#pragma warning disable CS0649 // unused variables
         public struct RichPresence
         {
             public string state;
@@ -48,6 +49,7 @@ namespace SharpPresence
             public string username;
             public string avatar;
         }
+#pragma warning restore CS0649 // unused variables
 
         //--------------------------------------------------------------------------------
 

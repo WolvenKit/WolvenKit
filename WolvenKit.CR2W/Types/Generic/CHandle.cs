@@ -84,7 +84,7 @@ namespace WolvenKit.CR2W.Types
                 }
                 else
                 {
-                    var bozza = "bozza";
+                    //var bozza = "bozza";
                 }
             }
             else
@@ -137,7 +137,7 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new CHandle<T>(cr2w, parent, name);
         }
