@@ -40,7 +40,7 @@ namespace WolvenKit.Common.Tools
             }
             catch (Exception ex)
             {
-                throw ex;
+                ex.ToString();
             }
 
             return assembly;
@@ -111,7 +111,7 @@ namespace WolvenKit.Common.Tools
                 catch (Exception ex)
                 {
                     //return null;
-                    throw ex;
+                    ex.ToString();
                 }
             }
 
