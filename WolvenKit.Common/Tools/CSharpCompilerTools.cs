@@ -38,8 +38,9 @@ namespace WolvenKit.Common.Tools
             {
                 assembly = CompileAndLoadAssembly(compilation);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                throw ex;
             }
 
             return assembly;
@@ -109,12 +110,13 @@ namespace WolvenKit.Common.Tools
                 }
                 catch (Exception ex)
                 {
-                    return null;
+                    //return null;
+                    throw ex;
                 }
             }
 
 
-            bool compileOk = false;
+            //bool compileOk = false;
             var provider = new Microsoft.CSharp.CSharpCodeProvider();
             CompilerParameters cp = new CompilerParameters
             {
@@ -153,12 +155,12 @@ namespace WolvenKit.Common.Tools
             // Return the results of the compilation.
             if (cr.Errors.Count > 0)
             {
-                compileOk = false;
+                //compileOk = false;
                 return null;
             }
             else
             {
-                compileOk = true;
+                //compileOk = true;
                 return cr.CompiledAssembly;
             }
         }

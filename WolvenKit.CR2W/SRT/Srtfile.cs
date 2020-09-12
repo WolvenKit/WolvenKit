@@ -873,8 +873,10 @@ namespace WolvenKit.CR2W.SRT
             for (int j = 0; j < StringTable.Length; j++)
             {
                 if (StringTable[j] == Geometry.StrShaderPath)
+                {
                     id = j;
-                break;
+                    break;
+                }
             }
             file.Write(id);
             for (int i = 0; i < Geometry.NNum3dRenderStates; i++)
@@ -911,8 +913,10 @@ namespace WolvenKit.CR2W.SRT
                 for (int j = 0; j < StringTable.Length; j++)
                 {
                     if (StringTable[j] == PUserStrings[i])
+                    {
                         id = j;
-                    break;
+                        break;
+                    }
                 }
                 file.Write(id);
             }

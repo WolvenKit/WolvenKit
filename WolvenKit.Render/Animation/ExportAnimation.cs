@@ -89,7 +89,7 @@ namespace WolvenKit.Render
                             throw new NotImplementedException();
 
                             //readBuffer(a_buffer.data as CAnimationBufferMultipart, selectedAnimIdx, animFile);
-                            break;
+                            //break;
                         }
                         break;
                     }

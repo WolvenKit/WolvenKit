@@ -61,7 +61,7 @@ namespace WolvenKit.CR2W.Types
             return panel;
         }
 
-        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new CColorShift(cr2w, parent, name);
         }

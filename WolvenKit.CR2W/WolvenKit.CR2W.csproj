@@ -262,7 +262,7 @@
     <Compile Include="Types\W3\Partial\EmitterDurationSettings.cs" />
     <Compile Include="Types\Structs\Matrix.cs" />
     <Compile Include="Types\W3\Partial\SAppearanceAttachment.cs" />
-    <Compile Include="Types\W3\Missing in RTTTI\SBoneIndiceMapping.cs" />
+    <Compile Include="Types\W3\Missing in RTTI\SBoneIndiceMapping.cs" />
     <Compile Include="Types\W3\Partial\SDynamicDecalMaterialInfo.cs" />
     <Compile Include="Types\W3\RTTIConvert\AACylinder.cs" />
     <Compile Include="Types\W3\RTTIConvert\actorNameType.cs" />
@@ -3156,8 +3156,8 @@
     <Compile Include="Types\W3\RTTIConvert\CBTTaskTauntDef.cs" />
     <Compile Include="Types\W3\RTTIConvert\CBTTaskTeleport.cs" />
     <Compile Include="Types\W3\RTTIConvert\CBTTaskTeleportDecorator.cs" />
-    <Compile Include="Types\W3\Missing in RTTTI\CBTTaskTeleportDecoratorDef.cs" />
-    <Compile Include="Types\W3\Missing in RTTTI\CBTTaskTeleportDef.cs" />
+    <Compile Include="Types\W3\Missing in RTTI\CBTTaskTeleportDecoratorDef.cs" />
+    <Compile Include="Types\W3\Missing in RTTI\CBTTaskTeleportDef.cs" />
     <Compile Include="Types\W3\RTTIConvert\CBTTaskTeleportPlayerToNode.cs" />
     <Compile Include="Types\W3\RTTIConvert\CBTTaskTeleportPlayerToNodeDef.cs" />
     <Compile Include="Types\W3\RTTIConvert\CBTTaskTeleportToEntity.cs" />
@@ -3249,13 +3249,13 @@
     <Compile Include="Types\W3\RTTIConvert\CCharacterControllerParam.cs" />
     <Compile Include="Types\W3\RTTIConvert\CCharacterEntityTemplate.cs" />
     <Compile Include="Types\W3\RTTIConvert\CCharacterResource.cs" />
-    <Compile Include="Types\W3\Missing in RTTTI\CCharacterStats.cs" />
+    <Compile Include="Types\W3\Missing in RTTI\CCharacterStats.cs" />
     <Compile Include="Types\W3\RTTIConvert\CCharacterStatsParam.cs" />
     <Compile Include="Types\W3\RTTIConvert\CCircularPotentialField.cs" />
     <Compile Include="Types\W3\RTTIConvert\CCityLightManager.cs" />
     <Compile Include="Types\W3\RTTIConvert\CClimbProbe.cs" />
     <Compile Include="Types\W3\RTTIConvert\CClimbType.cs" />
-    <Compile Include="Types\W3\Missing in RTTTI\CClipMapCookedData.cs" />
+    <Compile Include="Types\W3\Missing in RTTI\CClipMapCookedData.cs" />
     <Compile Include="Types\W3\RTTIConvert\CClothAttachment.cs" />
     <Compile Include="Types\W3\RTTIConvert\CClothComponent.cs" />
     <Compile Include="Types\W3\RTTIConvert\CCollisionMesh.cs" />
@@ -4547,7 +4547,7 @@
     <Compile Include="Types\W3\RTTIConvert\CR4UIRescaleMenu.cs" />
     <Compile Include="Types\W3\RTTIConvert\CR4VideoDLCMounter.cs" />
     <Compile Include="Types\W3\RTTIConvert\CR4VoicetagDLCMounter.cs" />
-    <Compile Include="Types\W3\Missing in RTTTI\CR4WorldDescriptionDLC.cs" />
+    <Compile Include="Types\W3\Missing in RTTI\CR4WorldDescriptionDLC.cs" />
     <Compile Include="Types\W3\RTTIConvert\CR4WorldDLCExtender.cs" />
     <Compile Include="Types\W3\RTTIConvert\CR4WorldDLCMounter.cs" />
     <Compile Include="Types\W3\RTTIConvert\CRainActionPointSelector.cs" />
@@ -4781,7 +4781,7 @@
     <Compile Include="Types\W3\RTTIConvert\CStorySceneDisablePhysicsClothEvent.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEffect.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneElement.cs" />
-    <Compile Include="Types\W3\Missing in RTTTI\CStorySceneEvent.cs" />
+    <Compile Include="Types\W3\Missing in RTTI\CStorySceneEvent.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventAdditiveAnimation.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventAnimation.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventAnimClip.cs" />
@@ -4831,7 +4831,7 @@
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventLookAtDuration.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventMimicLod.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventMimics.cs" />
-    <Compile Include="Types\W3\Missing in RTTTI\CStorySceneEventMimicsAnim.cs" />
+    <Compile Include="Types\W3\Missing in RTTI\CStorySceneEventMimicsAnim.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventMimicsFilter.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventMimicsPose.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventModifyEnv.cs" />
@@ -4843,7 +4843,7 @@
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventOverridePlacementDuration.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventPlacementInterpolation.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventPlacementInterpolationKey.cs" />
-    <Compile Include="Types\W3\Missing in RTTTI\CStorySceneEventPoseKey.cs" />
+    <Compile Include="Types\W3\Missing in RTTI\CStorySceneEventPoseKey.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventPropPlacementInterpolation.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventPropPlacementInterpolationKey.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventPropVisibility.cs" />
@@ -5325,7 +5325,7 @@
     <Compile Include="Types\W3\RTTIConvert\SAnimatedComponentSlotAnimationSettings.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimatedComponentSyncSettings.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimatedSlideSettings.cs" />
-    <Compile Include="Types\W3\Missing in RTTTI\SAnimationBufferBitwiseCompressedBoneTrack.cs" />
+    <Compile Include="Types\W3\Missing in RTTI\SAnimationBufferBitwiseCompressedBoneTrack.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimationBufferBitwiseCompressedData.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimationBufferBitwiseCompressionSettings.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimationEventAnimInfo.cs" />

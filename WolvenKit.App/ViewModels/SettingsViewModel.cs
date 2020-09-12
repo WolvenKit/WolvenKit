@@ -61,7 +61,7 @@ namespace WolvenKit.App.ViewModels
             return true;
         }
 
-        protected async void Run()
+        protected /*async*/ void Run()
         {
 
         }

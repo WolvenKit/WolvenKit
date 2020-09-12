@@ -333,10 +333,11 @@ namespace WolvenKit.Wwise.Wwise
                     {
                         throw new Exception("Not supported!");
 
-                        if (Array.IndexOf(new uint[] {0x28, 0x18, 0x12}, fmt_size) > -1)
+/*                        if (Array.IndexOf(new uint[] {0x28, 0x18, 0x12}, fmt_size) > -1)
                         {
                             throw new Exception("Bad fmt size!");
                         }
+*/
                     }
                 }
 
