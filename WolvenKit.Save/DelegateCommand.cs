@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace W3SavegameEditor
+namespace WolvenKit.WolvenKit.W3SavegameEditor
 {
     public class DelegateCommand : ICommand
     {

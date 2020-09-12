@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace W3SavegameEditor.Core.Exceptions
+namespace WolvenKit.W3SavegameEditor.Core.Exceptions
 {
 
     [Serializable]

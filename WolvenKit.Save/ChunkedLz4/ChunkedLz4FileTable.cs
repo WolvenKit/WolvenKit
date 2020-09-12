@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace W3SavegameEditor.Core.ChunkedLz4
+namespace WolvenKit.W3SavegameEditor.Core.ChunkedLz4
 {
     public class ChunkedLz4FileTable
     {

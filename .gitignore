@@ -262,7 +262,7 @@ W3Edit.Render/Models/**
 packages/**
 
 #Ignore doxygen doc
-docs/html/*
+docs/doxygen_doc_html/*
 docs/doxygen.warnings
 
 #Local git wiki repository - preferred to not delve into git submodules/subtree horrors

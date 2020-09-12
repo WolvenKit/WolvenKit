@@ -5,14 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using W3SavegameEditor.Core.ChunkedLz4;
-using W3SavegameEditor.Core.Common;
-using W3SavegameEditor.Core.Exceptions;
-using W3SavegameEditor.Core.Savegame.Values;
-using W3SavegameEditor.Core.Savegame.VariableParsers;
-using W3SavegameEditor.Core.Savegame.Variables;
+using WolvenKit.W3SavegameEditor.Core.ChunkedLz4;
+using WolvenKit.W3SavegameEditor.Core.Common;
+using WolvenKit.W3SavegameEditor.Core.Exceptions;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Values;
+using WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Variables;
 
-namespace W3SavegameEditor.Core.Savegame
+namespace WolvenKit.W3SavegameEditor.Core.Savegame
 {
 
     public class SavegameFile

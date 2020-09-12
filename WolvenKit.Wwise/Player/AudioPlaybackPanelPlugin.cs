@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Wolvenkit.Wwise.Player
+namespace WolvenKit.Wwise.Player
 {
     public class AudioPlaybackPanelPlugin
     {
