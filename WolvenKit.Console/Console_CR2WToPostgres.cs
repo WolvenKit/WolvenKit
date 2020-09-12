@@ -39,7 +39,7 @@ namespace WolvenKit.Console
             }
         }
 
-        private static async Task<int> CR2WToPostgres(CR2WToPostgresOptions options)
+        private static int CR2WToPostgres(CR2WToPostgresOptions options)
         {
             // NB : There are two main ways to send data to a database : batch inserts and bulky copy.
             // Bulk copy avoids most checks from the db (referential integrity, triggers...) and is much faster.
@@ -140,7 +140,7 @@ namespace WolvenKit.Console
             reader.Close();
             cmd.Dispose();
             System.Console.WriteLine("\t... " + propcnt + "\tproperties read :\tproperty dictionary complete.");
-            conn.CloseAsync();
+            conn.Close();
             #endregion //dbmappings
 
             // 3) Load MemoryMapped Bundles
@@ -186,7 +186,8 @@ namespace WolvenKit.Console
             var bundlepb = new ProgressBar((IConsole)bundleprogressbarwindow, (PbStyle)PbStyle.DoubleLine, 100, (int)70);
 
 
-            bool flagpass = true;
+            //bool flagpass = true;
+
             /*            var bundlesarray = bundles.ToArray();
                         var part = Partitioner.Create(bundlesarray, EnumerablePartitionerOptions.NoBuffering);
             */

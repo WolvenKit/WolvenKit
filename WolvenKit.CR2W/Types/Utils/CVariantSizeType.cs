@@ -78,7 +78,7 @@ namespace WolvenKit.CR2W.Types
             };
             return list;
         }
-        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new CVariantSizeType(cr2w, parent, name);
         }

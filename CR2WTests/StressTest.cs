@@ -562,7 +562,7 @@ namespace CR2WTests
         #endregion
 
         // Actually do the test
-        public async Task StressTestExt(string ext)
+        public void StressTestExt(string ext)
         {
 
             using (var frm = new frmUnitTest(ext, bundletag, bm))

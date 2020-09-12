@@ -119,7 +119,9 @@ namespace WolvenKit
             }
         }
 
+#pragma warning disable CS1998
         internal async Task /*void*/ Parse(string[] _args)
+#pragma warning restore CS1998
         {
             using (var sw = new StringWriter())
             {

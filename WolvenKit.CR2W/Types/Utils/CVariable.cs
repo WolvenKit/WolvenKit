@@ -108,7 +108,7 @@ namespace WolvenKit.CR2W.Types
                 if (string.IsNullOrEmpty(name))
                 {
                     throw new NotImplementedException();
-                    return "<NO NAME SET>";
+                    //return "<NO NAME SET>";
                 }
                 else
                     return  name;

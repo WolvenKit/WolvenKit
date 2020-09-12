@@ -1367,7 +1367,7 @@ namespace WolvenKit.CR2W
             }
 
             throw new NotImplementedException();
-            return -1;
+            //return -1;
         }
 
         public CR2WExportWrapper GetChunkByType(string type)

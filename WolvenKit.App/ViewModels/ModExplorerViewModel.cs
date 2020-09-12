@@ -305,7 +305,13 @@ namespace WolvenKit.App.ViewModels
                 };
                 await Task.Run(() => MainController.Get().WccHelper.RunCommand(cook));
             }
+#pragma warning disable CS0169 // ~~~[[maybe_unused]] c++ compiler attribute
+#pragma warning disable CS0168
+#pragma warning disable IDE0051
             catch (Exception ex)
+#pragma warning restore CS0169 // ~~~[[maybe_unused]] c++ compiler attribute
+#pragma warning disable CS0168
+#pragma warning restore IDE0051
             {
                 MainController.LogString("Error cooking files.", Logtype.Error);
             }

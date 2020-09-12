@@ -33,13 +33,17 @@ namespace WolvenKit.CR2W.Types
 
         public override string REDType => WrappedEnum.GetType().Name;
 
+#pragma warning disable CS0693 // T same name
         private static void SetFlag<T>(ref T value, T flag) where T : Enum
+#pragma warning restore CS0693
         {
             ulong numericValue = Convert.ToUInt64(value);
             numericValue |= Convert.ToUInt64(flag);
             value = (T)Enum.ToObject(typeof(T), numericValue);
         }
+#pragma warning disable CS0693
         private static void ClearFlag<T>(ref T value, T flag) where T : Enum
+#pragma warning restore CS0693
         {
             ulong numericValue = Convert.ToUInt64(value);
             numericValue &= ~Convert.ToUInt64(flag);

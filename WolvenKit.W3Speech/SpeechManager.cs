@@ -78,7 +78,13 @@ namespace WolvenKit.W3Speech
 
                 Speeches.Add(filename, speech);
             }
-            catch (Exception e)
+#pragma warning disable CS0169 // ~~~[[maybe_unused]] c++ compiler attribute
+#pragma warning disable CS0168
+#pragma warning disable IDE0051
+            catch (Exception ex)
+#pragma warning restore CS0169 // ~~~[[maybe_unused]] c++ compiler attribute
+#pragma warning disable CS0168
+#pragma warning restore IDE0051
             {
                 //TODO: Log                
             }

@@ -830,21 +830,25 @@ namespace WolvenKit.CR2W.SRT
 		VERTEX_PROPERTY_COUNT,
 		VERTEX_PROPERTY_PAD = VERTEX_PROPERTY_COUNT
 	};
-	//typedef Enumeration<EVertexPropertyUntyped, st_int8> EVertexProperty;
+    //typedef Enumeration<EVertexPropertyUntyped, st_int8> EVertexProperty;
 
 
-	///////////////////////////////////////////////////////////////////////  
-	//  Structure SVertexPropertyDesc
-	//
-	//	Holds details about each vertex property as returned by
-	//	CCore::GetVertexPropertyDesc().
+    ///////////////////////////////////////////////////////////////////////  
+    //  Structure SVertexPropertyDesc
+    //
+    //	Holds details about each vertex property as returned by
+    //	CCore::GetVertexPropertyDesc().
 
-	public struct SVertexPropertyDesc
+#pragma warning disable CS0169 // ~~~[[maybe_unused]] c++ compiler attribute
+#pragma warning disable IDE0051
+    public struct SVertexPropertyDesc
 	{
 		int m_nNumComponents;
 		string m_pFullName;
 		string m_pShortName;
 	};
+#pragma warning disable CS0169 // ~~~[[maybe_unused]] c++ compiler attribute
+#pragma warning disable IDE0051
 
 
     ///////////////////////////////////////////////////////////////////////  
@@ -891,19 +895,22 @@ namespace WolvenKit.CR2W.SRT
 	};
 
 
-	///////////////////////////////////////////////////////////////////////  
-	//  Structure SPixelPropertyDesc
-	//
-	//	Holds details about each pixel property as returned by
-	//	CCore::GetPixelPropertyDesc().
+    ///////////////////////////////////////////////////////////////////////  
+    //  Structure SPixelPropertyDesc
+    //
+    //	Holds details about each pixel property as returned by
+    //	CCore::GetPixelPropertyDesc().
 
-	struct SPixelPropertyDesc
+#pragma warning disable CS0169 // ~~~[[maybe_unused]] c++ compiler attribute
+#pragma warning disable IDE0051
+    struct SPixelPropertyDesc
 	{
 		int m_nNumComponents;
 		string m_pFullName;
 		string m_pShortName;
 	};
-
+#pragma warning restore CS0169 // ~~~[[maybe_unused]] c++ compiler attribute
+#pragma warning restore IDE0051
 
     ///////////////////////////////////////////////////////////////////////  
     //  Enumeration EVertexAttribute
