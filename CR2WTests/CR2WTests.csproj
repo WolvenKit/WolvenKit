@@ -91,7 +91,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Wolvekit.Nvidia\WolvenKit.Nvidia.csproj">
+    <ProjectReference Include="..\WolvenKit.Nvidia\WolvenKit.Nvidia.csproj">
       <Project>{761c5a00-52e7-49d5-9f4f-7be7faf30ac6}</Project>
       <Name>WolvenKit.Nvidia</Name>
     </ProjectReference>

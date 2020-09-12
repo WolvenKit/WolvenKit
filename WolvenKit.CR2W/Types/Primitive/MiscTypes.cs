@@ -12,7 +12,7 @@ namespace WolvenKit.CR2W.Types
     {
         [REDBuffer] public CByteArray Bufferdata { get; set; }
         public DataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new DataBuffer(cr2w, parent, name);
+        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new DataBuffer(cr2w, parent, name);
     }
 
     [REDMeta(EREDMetaInfo.REDStruct)]
@@ -20,7 +20,7 @@ namespace WolvenKit.CR2W.Types
     {
         [REDBuffer] public CByteArray Bufferdata { get; set; }
         public SharedDataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SharedDataBuffer(cr2w, parent, name);
+        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SharedDataBuffer(cr2w, parent, name);
     }
 
     [REDMeta(EREDMetaInfo.REDStruct)]
@@ -28,7 +28,7 @@ namespace WolvenKit.CR2W.Types
     {
         [REDBuffer] public CInt16 Bufferdata { get; set; }
         public DeferredDataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {  }
-        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new DeferredDataBuffer(cr2w, parent, name);
+        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new DeferredDataBuffer(cr2w, parent, name);
     }
 
     //FIXME is that an ID?
@@ -36,7 +36,7 @@ namespace WolvenKit.CR2W.Types
     public class GlobalVisID : CVariable
     {
         public GlobalVisID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new GlobalVisID(cr2w, parent, name);
+        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new GlobalVisID(cr2w, parent, name);
     }
 
     [REDMeta(EREDMetaInfo.REDStruct)]
@@ -44,6 +44,6 @@ namespace WolvenKit.CR2W.Types
     {
         [REDBuffer] public CFloat ResourceLODLevel { get; set; }
         public SMeshTypeResourceLODLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SMeshTypeResourceLODLevel(cr2w, parent, name);
+        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SMeshTypeResourceLODLevel(cr2w, parent, name);
     }
 }

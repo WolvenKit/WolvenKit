@@ -14,10 +14,12 @@ namespace Wolvekit.Nvidia.HairWorks
 {
     class NvHairAssetHeaderInfo
     {
+#pragma warning disable CS0414  // ~~~[[maybe_unused]] c++ compiler attribute
         private string fileVersion = "1.0";
-        private string toolVersion = "WolvenKit " + 
-                        FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
         private string authorName = "WolvenKit";
+#pragma warning restore CS0414
+        private string toolVersion = "WolvenKit " +
+                        FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
 
         private string checksum = "0xd225a2e5, 0x1295b170, 0x7b7dfeef, 0x07230aea";
 

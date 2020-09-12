@@ -20,9 +20,11 @@ namespace WolvenKit.Render
         {
             public string name;
             public List<Bone> bones;
-            public float duration;
             public uint numFrames;
+#pragma warning disable CS0649
+            public float duration;
             public float dt;
+#pragma warning restore CS0649
         }
         AnimExportData exportData = new AnimExportData();
         

@@ -56,7 +56,7 @@ namespace WolvenKit.App.Model
                     default:
                         var msg = $"{image.Format} is not recognized for Bitmap on Windows Forms. " +
                                    "You'd need to write a conversion function to convert the data to known format";
-                        var caption = "Unrecognized format";
+                        //var caption = "Unrecognized format";
                         //MessageBox.Show(msg, caption, MessageBoxButtons.OK);
                         throw new NotImplementedException(msg);
                 }
@@ -129,7 +129,7 @@ namespace WolvenKit.App.Model
                     default:
                         var msg = $"{image.Format} is not recognized for Bitmap on Windows Forms. " +
                                    "You'd need to write a conversion function to convert the data to known format";
-                        var caption = "Unrecognized format";
+                        //var caption = "Unrecognized format";
                         //MessageBox.Show(msg, caption, MessageBoxButtons.OK);
                         throw new NotImplementedException(msg);
                 }

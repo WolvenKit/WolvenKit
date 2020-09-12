@@ -190,7 +190,7 @@ namespace WolvenKit.App
         /// Initializes the archive managers in an async thread
         /// </summary>
         /// <returns></returns>
-        public async Task Initialize()
+        public int Initialize()
         {
             try
             {
@@ -486,11 +486,13 @@ namespace WolvenKit.App
 
                 mainController.Loaded = true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 mainController.Loaded = false;
-                System.Console.WriteLine(e.Message);
+                System.Console.WriteLine(ex.Message);
+                return 1;
             }
+            return 0;
         }
 
         

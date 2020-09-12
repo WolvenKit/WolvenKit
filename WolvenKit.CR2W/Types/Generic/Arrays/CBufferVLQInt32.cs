@@ -38,7 +38,7 @@ namespace WolvenKit.CR2W.Types
             base.Write(file);
         }
 
-        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBufferVLQInt32<T>(cr2w, parent, name);
+        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBufferVLQInt32<T>(cr2w, parent, name);
     }
 
     

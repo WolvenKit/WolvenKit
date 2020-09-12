@@ -20,7 +20,7 @@ namespace WolvenKit.CR2W.Types
             padding = new CFloat(cr2w, this, "padding" );
         }
 
-        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPaddedBuffer<T>(cr2w, parent, name);
+        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPaddedBuffer<T>(cr2w, parent, name);
 
         public override void Read(BinaryReader file, uint size)
         {
