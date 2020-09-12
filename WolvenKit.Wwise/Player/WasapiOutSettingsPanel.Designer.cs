@@ -1,4 +1,4 @@
-﻿namespace Wolvenkit.Wwise.Player
+﻿namespace WolvenKit.Wwise.Player
 {
     partial class WasapiOutSettingsPanel
     {

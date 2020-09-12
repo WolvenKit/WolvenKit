@@ -3,7 +3,7 @@ using System.Linq;
 using NAudio.Wave;
 using System.Windows.Forms;
 
-namespace Wolvenkit.Wwise.Player
+namespace WolvenKit.Wwise.Player
 {
     class DirectSoundOutPlugin : IOutputDevicePlugin
     {

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using W3SavegameEditor.Core.Savegame.Attributes;
-using W3SavegameEditor.Core.Savegame.Variables;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Attributes;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Variables;
 
-namespace W3SavegameEditor.Core.Savegame
+namespace WolvenKit.W3SavegameEditor.Core.Savegame
 {
     public class VariableValueParser
     {

@@ -2,12 +2,12 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using W3SavegameEditor.Core.Exceptions;
-using W3SavegameEditor.Core.Savegame.Values;
-using W3SavegameEditor.Core.Savegame.Values.Engine;
-using W3SavegameEditor.Core.Savegame.Variables;
+using WolvenKit.W3SavegameEditor.Core.Exceptions;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Values;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Values.Engine;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Variables;
 
-namespace W3SavegameEditor.Core.Savegame.VariableParsers
+namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
 {
     public abstract class VariableParserBase
     {

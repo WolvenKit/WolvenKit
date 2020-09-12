@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
-using Wolvenkit.Wwise.Player;
+using WolvenKit.Wwise.Player;
 
 namespace NAudioDemo.AudioPlaybackDemo
 {

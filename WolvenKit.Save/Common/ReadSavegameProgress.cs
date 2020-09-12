@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace W3SavegameEditor.Core.Common
+namespace WolvenKit.W3SavegameEditor.Core.Common
 {
     public class ReadSavegameProgress : IReadSavegameProgress, INotifyPropertyChanged
     {

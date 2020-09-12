@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using WolvenKit.CR2W;
+﻿using System.Xml.Linq;
 using WolvenKit.CR2W.Types;
 
-namespace Wolvekit.Nvidia.HairWorks
+namespace WolvenKit.Nvidia.HairWorks
 {
     class HairSceneDescriptor
     {

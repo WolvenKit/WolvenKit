@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Xml.Linq;
 using WolvenKit;
-using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 
-namespace Wolvekit.Nvidia.HairWorks
+namespace WolvenKit.Nvidia.HairWorks
 {
     class NvHairAssetDescriptor
     {
