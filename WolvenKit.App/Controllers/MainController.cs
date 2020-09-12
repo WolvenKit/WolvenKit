@@ -190,7 +190,7 @@ namespace WolvenKit.App
         /// Initializes the archive managers in an async thread
         /// </summary>
         /// <returns></returns>
-        public int Initialize()
+        public async Task Initialize()
         {
             try
             {
@@ -490,9 +490,7 @@ namespace WolvenKit.App
             {
                 mainController.Loaded = false;
                 System.Console.WriteLine(ex.Message);
-                return 1;
             }
-            return 0;
         }
 
         
