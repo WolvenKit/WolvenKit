@@ -5,9 +5,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using W3SavegameEditor.Core.Savegame;
-using W3SavegameEditor.Core.Savegame.Variables;
-using W3SavegameEditor.Core.SaveModels;
+using WolvenKit.W3SavegameEditor.Core.Savegame;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Variables;
+using WolvenKit.W3SavegameEditor.Core.SaveModels;
 
 namespace WolvenKit
 {

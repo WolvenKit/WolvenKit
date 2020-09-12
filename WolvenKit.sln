@@ -32,14 +32,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Wwise", "WolvenKi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Common", "WolvenKit.Common\WolvenKit.Common.csproj", "{4D1019F1-F099-450F-85B8-697E0332A94F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Nvidia", "Wolvekit.Nvidia\WolvenKit.Nvidia.csproj", "{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Nvidia", "WolvenKit.Nvidia\WolvenKit.Nvidia.csproj", "{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F3129E02-31AD-4327-A9EF-7C52D777C71F} = {F3129E02-31AD-4327-A9EF-7C52D777C71F}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameFormats", "GameFormats", "{B437E733-AAAD-437E-9923-FD0BA00AE6C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Radish", "Wolvenkit.Radish\WolvenKit.Radish.csproj", "{D4D390BB-C14D-423A-861A-470BED6D40A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Radish", "WolvenKit.Radish\WolvenKit.Radish.csproj", "{D4D390BB-C14D-423A-861A-470BED6D40A9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{327FE2E2-83A6-46F9-BFC2-DFCD066B4263}"
 EndProject

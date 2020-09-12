@@ -1,11 +1,9 @@
-﻿using RED;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using WolvenKit.CR2W.Types;
 
-namespace RED.Reflection
+namespace WolvenKit.CR2W.Reflection
 {
     /// <summary>
     /// Provides methods to get runtime types withtin the current assembly by name.

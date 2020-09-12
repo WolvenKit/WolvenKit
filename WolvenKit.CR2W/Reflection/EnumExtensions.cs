@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using WolvenKit.CR2W.Types;
 
-namespace RED.Reflection
+namespace WolvenKit.CR2W.Reflection
 {
     public static class EnumExtensions
     {

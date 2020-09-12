@@ -1,7 +1,7 @@
-﻿using W3SavegameEditor.Core.Savegame.Attributes;
-using W3SavegameEditor.Core.Savegame.Values.Engine;
+﻿using WolvenKit.W3SavegameEditor.Core.Savegame.Attributes;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Values.Engine;
 
-namespace W3SavegameEditor.Core.Savegame.Values
+namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
 {
     public class Universe
     {

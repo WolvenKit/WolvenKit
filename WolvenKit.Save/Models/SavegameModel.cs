@@ -1,4 +1,4 @@
-﻿namespace W3SavegameEditor.Models
+﻿namespace WolvenKit.W3SavegameEditor.Models
 {
     public class SavegameModel
     {

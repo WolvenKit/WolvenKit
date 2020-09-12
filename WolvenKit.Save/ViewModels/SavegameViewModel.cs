@@ -5,12 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using W3SavegameEditor.Core.Common;
-using W3SavegameEditor.Core.Savegame;
-using W3SavegameEditor.Core.Savegame.Variables;
-using W3SavegameEditor.Models;
+using WolvenKit.W3SavegameEditor.Core.Common;
+using WolvenKit.W3SavegameEditor.Core.Savegame;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Variables;
+using WolvenKit.W3SavegameEditor.Models;
 
-namespace W3SavegameEditor.ViewModels
+namespace WolvenKit.W3SavegameEditor.ViewModels
 {
     public class SavegameViewModel : INotifyPropertyChanged
     {

@@ -2,7 +2,7 @@
 using System.IO;
 using LZ4PCL;
 
-namespace W3SavegameEditor.Core.ChunkedLz4
+namespace WolvenKit.W3SavegameEditor.Core.ChunkedLz4
 {
     public class Lz4Chunk
     {

@@ -1,6 +1,6 @@
-﻿using W3SavegameEditor.Core.Savegame.Attributes;
+﻿using WolvenKit.W3SavegameEditor.Core.Savegame.Attributes;
 
-namespace W3SavegameEditor.Core.Savegame.Values.Gwint
+namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values.Gwint
 {
     public class SelectedDeckIndex  
     {
