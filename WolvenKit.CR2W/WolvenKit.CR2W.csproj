@@ -205,7 +205,7 @@
     <Compile Include="Types\BufferedTypes\BufferStructs\ShBlendMultipleNodeData.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CFXTrackItem.cs" />
     <Compile Include="Types\BufferedTypes\BufferedClasses.cs" />
-    <Compile Include="Types\BufferedTypes\BufferStructs\CurveInfo.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\CurveInfo.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CFont.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CTextureArray.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CTerrainTile.cs" />
@@ -6797,7 +6797,7 @@
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SMeshBlock5.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CWayPointsCollection.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\SFoliageResourceData.cs" />
-    <Compile Include="Types\BufferedTypes\BufferStructs\CurvePiece.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\CurvePiece.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CGenericGrassMask.cs" />
     <Compile Include="Types\Structs\Complex\CIndexed2dArray.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CLayerInfo.cs" />

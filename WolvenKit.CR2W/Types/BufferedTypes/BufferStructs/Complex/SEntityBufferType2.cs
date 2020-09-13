@@ -24,9 +24,9 @@ namespace WolvenKit.CR2W.Types
 
         public SEntityBufferType2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            componentName = new CName(cr2w, this, nameof(componentName));
-            sizeofdata = new CUInt32(cr2w, this, nameof(sizeofdata));
-            variables = new CBufferUInt32<CVariantSizeTypeName>(cr2w, this, nameof(variables));
+            componentName = new CName(cr2w, this, nameof(componentName)) {IsSerialized = true};
+            sizeofdata = new CUInt32(cr2w, this, nameof(sizeofdata)) { IsSerialized = true };
+            variables = new CBufferUInt32<CVariantSizeTypeName>(cr2w, this, nameof(variables)) { IsSerialized = true };
 
         }
 

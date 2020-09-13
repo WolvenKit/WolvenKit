@@ -20,9 +20,9 @@ namespace WolvenKit.CR2W.Types.Utils
 
         public SEntityBufferType1(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            ComponentName = new CName(cr2w, this, nameof(ComponentName));
-            Guid = new CGUID(cr2w, this, nameof(Guid));
-            Buffer = new CByteArray2(cr2w, this, nameof(Buffer));
+            ComponentName = new CName(cr2w, this, nameof(ComponentName)) { IsSerialized = true };
+            Guid = new CGUID(cr2w, this, nameof(Guid)) { IsSerialized = true };
+            Buffer = new CByteArray2(cr2w, this, nameof(Buffer)) { IsSerialized = true };
         }
 
         public bool CanRead(BinaryReader file)
