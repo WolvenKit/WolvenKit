@@ -334,10 +334,12 @@ namespace WolvenKit.App.ViewModels
         /// and adds it to the depot, optionally copying to the project
         /// </summary>
         /// <param name="relativePath"></param>
+        /// <param name="isDLC"></param>
+        /// <param name="projectFolder"></param>
+        /// <param name="alternateOutDirectory"></param>
         /// <param name="loadmods"></param>
-        /// <param name="copyToMod"></param>
         /// <returns></returns>
-        public int UnbundleFileToProject(string relativePath, bool isDLC, EProjectFolders projectFolder, bool loadmods = false)
+        private string UnbundleFile(string relativePath, bool isDLC, EProjectFolders projectFolder, string alternateOutDirectory = "", bool loadmods = false, bool silent = false)
         {
             string extension = Path.GetExtension(relativePath);
             string filename = Path.GetFileName(relativePath);
@@ -358,46 +360,49 @@ namespace WolvenKit.App.ViewModels
                     var archive = archives.Last().Value;
 
                     string newpath = "";
-
-                    switch (projectFolder)
+                    if (string.IsNullOrWhiteSpace(alternateOutDirectory))
                     {
-                        case EProjectFolders.Cooked:
-                            newpath = Path.Combine(isDLC
-                            ? ActiveMod.DlcCookedDirectory
-                            : ActiveMod.ModCookedDirectory, relativePath);
-                            break;
-                        case EProjectFolders.Uncooked:
-                            newpath = Path.Combine(isDLC
-                            ? ActiveMod.DlcUncookedDirectory
-                            : ActiveMod.ModUncookedDirectory, relativePath);
-                            break;
-                        case EProjectFolders.Raw:
-                        default:
-                            break;
-                            newpath = Path.Combine(isDLC
-                            ? ActiveMod.DlcCookedDirectory
-                            : ActiveMod.ModCookedDirectory, relativePath);
+                        switch (projectFolder)
+                        {
+                            case EProjectFolders.Cooked:
+                                newpath = Path.Combine(isDLC
+                                    ? ActiveMod.DlcCookedDirectory
+                                    : ActiveMod.ModCookedDirectory, relativePath);
+                                break;
+                            case EProjectFolders.Uncooked:
+                                newpath = Path.Combine(isDLC
+                                    ? ActiveMod.DlcUncookedDirectory
+                                    : ActiveMod.ModUncookedDirectory, relativePath);
+                                break;
+                            case EProjectFolders.Raw:
+                            default:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        newpath = Path.Combine(alternateOutDirectory, relativePath);
                     }
 
+                    if (string.IsNullOrWhiteSpace(newpath)) return "";
                     
                     if (!File.Exists(newpath))
                     {
                         string extractedfile = archive.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
-                        Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
+                        if (!silent) Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
                     }
                     else
-                        Logger.LogString($"File already exists in mod project: {filename}.", Logtype.Success);
-                    return 1;
+                        if (!silent) Logger.LogString($"File already exists in mod project: {filename}.", Logtype.Success);
+                    return newpath;
                 }
                 catch (Exception ex)
                 {
                     Logger.LogString(ex.ToString(), Logtype.Error);
-
-                    return 0;
+                    return "";
                 }
             }
 
-            return 0;
+            return "";
         }
 
         /// <summary>
@@ -429,19 +434,25 @@ namespace WolvenKit.App.ViewModels
 
             // get relative path
             (string relativePath, bool isDLC, EProjectFolders projectFolder) = fullpath.GetModRelativePath(ActiveMod.FileDirectory);
-
-
-            var exportpath = isDLC ? Path.Combine(ActiveMod.RawDirectory, "DLC", relativePath) : Path.Combine(ActiveMod.RawDirectory, "Mod", relativePath);
+            var exportpath = isDLC 
+                ? Path.Combine(ActiveMod.RawDirectory, "DLC", relativePath) 
+                : Path.Combine(ActiveMod.RawDirectory, "Mod", relativePath);
             exportpath = Path.ChangeExtension(exportpath, exportedExtension.ToString());
 
-            // check imports
-            AddAllImportsToProject(fullpath);
+            // add all imports to 
+            string workDir = Path.GetFullPath($"{MainController.WorkDir}_export");
+            if (!Directory.Exists(workDir))
+                Directory.CreateDirectory(workDir);
+            //string workDir = "";                                            // add to mod
+            //string workDir = MainController.Get().Configuration.DepotPath;  // r4depot
+            AddAllImports(fullpath, true, true, workDir);
 
-            // copy the w2mesh and all imports to the depot if it doesn't already exist
-            var depotInfo = new FileInfo(Path.Combine(MainController.Get().Configuration.DepotPath, relativePath));
+            // copy the w2mesh and all imports to the depot
+            var depotInfo = new FileInfo(Path.Combine(workDir, relativePath));
             var uncookedInfo = new FileInfo(fullpath);
-
             uncookedInfo.CopyToAndCreate(depotInfo.FullName, true);
+
+
 
             // export with wcc_lite
             if (!string.IsNullOrEmpty(relativePath) && !string.IsNullOrEmpty(exportpath))
@@ -451,7 +462,7 @@ namespace WolvenKit.App.ViewModels
                 {
                     File = relativePath,
                     Out = exportpath,
-                    Depot = MainController.Get().Configuration.DepotPath
+                    Depot = workDir
                 };
                 await Task.Run(() => MainController.Get().WccHelper.RunCommand(export));
 
@@ -465,20 +476,29 @@ namespace WolvenKit.App.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="fullpath"></param>
+        /// <param name="importfilepath"></param>
         /// <param name="copyToMod"></param>
         /// <returns></returns>
-        public async Task AddAllImportsToProject(string fullpath)
+        public async Task AddAllImports(string importfilepath, bool recursive = false, bool silent = false, string alternateOutDirectory = "")
         {
-            if (!File.Exists(fullpath))
+            if (!File.Exists(importfilepath))
                 return;
 
-            (string relativepath, bool isDLC, EProjectFolders projectFolder) = fullpath.GetModRelativePath(ActiveMod.FileDirectory);
+            string relativepath = "";
+            bool isDLC = false;
+            EProjectFolders projectFolder = EProjectFolders.Uncooked;
+            if (string.IsNullOrWhiteSpace(alternateOutDirectory))
+                (relativepath, isDLC, projectFolder) = importfilepath.GetModRelativePath(ActiveMod.FileDirectory);
+            else
+            {
+                relativepath = importfilepath.Substring(alternateOutDirectory.Length + 1);
+            }
+
             List<CR2WImportWrapper> importslist = new List<CR2WImportWrapper>();
             List<CR2WBufferWrapper> bufferlist = new List<CR2WBufferWrapper>();
             bool hasinternalBuffer;
 
-            using (var fs = new FileStream(fullpath, FileMode.Open, FileAccess.Read))
+            using (var fs = new FileStream(importfilepath, FileMode.Open, FileAccess.Read))
             using (var reader = new BinaryReader(fs))
             {
                 var cr2w = new CR2WFile();
@@ -491,15 +511,21 @@ namespace WolvenKit.App.ViewModels
             {
                 var filename = Path.GetFileName(import.DepotPathStr);
 
-                success &= UnbundleFileToProject(import.DepotPathStr, isDLC, projectFolder, false) > 0;
-                if (!success)
+                var path = UnbundleFile(import.DepotPathStr, isDLC, projectFolder, alternateOutDirectory, false, silent);
+                if (string.IsNullOrWhiteSpace(path))
                     Logger.LogString($"Did not unbundle {filename}, import is missing.", Logtype.Error);
+                else
+                {
+                    // recursively add all 1st order dependencies :Gp:
+                    if (recursive)
+                        AddAllImports(path, true, silent, alternateOutDirectory);
+                }
             }
 
             // add buffers
             if (hasinternalBuffer)
             {
-                Logger.LogString($"{Path.GetFileName(fullpath)} has internal buffers. Unbundle external buffers manually.", Logtype.Error);
+                Logger.LogString($"{Path.GetFileName(importfilepath)} has internal buffers. If you need external buffers, unbundle them manually.", Logtype.Important);
             }
             else
             {
@@ -510,8 +536,8 @@ namespace WolvenKit.App.ViewModels
                     string bufferpath = $"{relativepath}.{index}.buffer";
                     var bufferName = $"{Path.GetFileName(relativepath)}.{index}.buffer";
 
-                    success &= UnbundleFileToProject(bufferpath, isDLC, projectFolder, false) > 0;
-                    if (!success)
+                    var path = UnbundleFile(bufferpath, isDLC, projectFolder, alternateOutDirectory, false, silent);
+                    if (string.IsNullOrWhiteSpace(path))
                         Logger.LogString($"Did not unbundle {bufferName}, import is missing.", Logtype.Error);
                 }
             }

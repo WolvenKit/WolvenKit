@@ -880,7 +880,7 @@ namespace WolvenKit
                                 try
                                 {
                                     // add all dependencies
-                                    vm.AddAllImportsToProject(filename);
+                                    vm.AddAllImports(filename, true, true);
 
                                     doc.RenderViewer = new Render.frmRender
                                     {
@@ -2236,10 +2236,9 @@ namespace WolvenKit
                 if (fi.Exists)
                 {
                     // copy to uncooked folder in mod project
-                    if (addAsDLC)
-                        newpath = Path.Combine(ActiveMod.DlcUncookedDirectory, $"dlc{ActiveMod.Name}", relativePath);
-                    else
-                        newpath = Path.Combine(ActiveMod.ModUncookedDirectory, relativePath);
+                    newpath = addAsDLC 
+                        ? Path.Combine(ActiveMod.DlcUncookedDirectory, $"dlc{ActiveMod.Name}", relativePath) 
+                        : Path.Combine(ActiveMod.ModUncookedDirectory, relativePath);
 
                     fi.CopyToAndCreate(newpath, true);
                     Logger.LogString($"Added {filename} from depot.", Logtype.Success);
