@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CEntity : CNode
 	{
-		[Ordinal(1)] [RED("components", 2,0)] 		public CArray<CPtr<CComponent>> Components { get; set;}
+		//[Ordinal(1)] [RED("components", 2,0)] 		public CArray<CPtr<CComponent>> Components { get; set;}
 
 		[Ordinal(2)] [RED("template")] 		public CHandle<CEntityTemplate> Template { get; set;}
 

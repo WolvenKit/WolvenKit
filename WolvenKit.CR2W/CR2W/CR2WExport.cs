@@ -277,7 +277,7 @@ namespace WolvenKit.CR2W
                 data.REDType == "CBTTaskTeleportDef")
             {
                 //System.Console.WriteLine("Not bothering with buggy vars yoo");
-                return;
+                //return;
             }
 
             //TODO explain next two lines

@@ -38,6 +38,7 @@ namespace WolvenKit.CR2W.Types
                 var typename = cr2w.names[typeId].Str;
 
                 parsedvar = CR2WTypeManager.Create(typename, nameof(Variant), cr2w, this);
+                parsedvar.IsSerialized = true;
                 parsedvar.Read(br, size);
             }
 

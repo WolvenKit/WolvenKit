@@ -60,7 +60,7 @@ namespace WolvenKit.Render
             {
                 var SkeletalAnimationSet = w2AnimFile.chunks[0];
                 CSkeletalAnimationSet set = w2AnimFile.chunks[0].data as CSkeletalAnimationSet;
-                set.Animations = new CArray<CPtr<CSkeletalAnimationSetEntry>>(set.cr2w, set, "animations");
+                set.Animations = new CArray<CPtr<CSkeletalAnimationSetEntry>>(set.cr2w, set, "animations") {Elementtype = "ptr:CSkeletalAnimationSetEntry" };
                 set.Animations.AddVariable(new CPtr<CSkeletalAnimationSetEntry>(set.cr2w, set.Animations, "")
                 {
                     Reference = SkeletalAnimationSet.cr2w.chunks[startIndex + 2],

@@ -876,9 +876,9 @@ namespace WolvenKit.CR2W
                             {
                                 foreach (CPtr<CComponent> component in e.Components)
                                     returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, component));
-                                foreach (SEntityBufferType1 buffer in e.buffer_v1)
+                                foreach (SEntityBufferType1 buffer in e.BufferV1)
                                     returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, buffer));
-                                foreach (SEntityBufferType2 item in e.buffer_v2.elements)
+                                foreach (SEntityBufferType2 item in e.BufferV2.elements)
                                 {
                                     returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item.componentName));
                                     foreach (CVariantSizeTypeName el in item.variables.elements)
@@ -1324,9 +1324,7 @@ namespace WolvenKit.CR2W
                 xw.Close();
             }
         }
-        #endregion
 
-        #region Create
         public CR2WExportWrapper CreateChunk(string type, CR2WExportWrapper parent = null)
         {
             var chunk = new CR2WExportWrapper(this, type, parent);
@@ -1334,6 +1332,16 @@ namespace WolvenKit.CR2W
             chunks.Add(chunk);
 
             return chunk;
+        }
+
+        public bool RemoveChunk(CR2WExportWrapper chunk)
+        {
+            var r = chunk.Referrers;
+            // find all pointers that point here
+            // can there be more than one?
+
+            return chunks.Remove(chunk);
+
         }
 
         public int GetStringIndex(string name, bool addnew = false)
@@ -1359,7 +1367,7 @@ namespace WolvenKit.CR2W
             return null;
         }
 
-        public bool RemoveChunk(CR2WExportWrapper chunk) => chunks.Remove(chunk);
+
 
         #endregion
     }

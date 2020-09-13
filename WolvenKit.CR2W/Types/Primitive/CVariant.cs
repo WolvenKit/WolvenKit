@@ -31,6 +31,7 @@ namespace WolvenKit.CR2W.Types
             {
                 Variant = CR2WTypeManager.Create(typename, nameof(Variant), cr2w, this);
                 Variant.Read(file, varsize);
+                Variant.IsSerialized = true;
             }
             else
             {

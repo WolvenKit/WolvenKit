@@ -91,6 +91,7 @@ namespace WolvenKit.Forms
             this.treeView.TabIndex = 1;
             this.treeView.UseAlternatingBackColors = true;
             this.treeView.UseCompatibleStateImageBehavior = false;
+            this.treeView.UseFiltering = true;
             this.treeView.View = System.Windows.Forms.View.Details;
             this.treeView.VirtualMode = true;
             this.treeView.CellEditFinished += new BrightIdeasSoftware.CellEditEventHandler(this.treeView_CellEditFinished);

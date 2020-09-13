@@ -67,6 +67,7 @@ namespace WolvenKit
             propertyWindow = new frmChunkProperties();
             propertyWindow.Show(dockPanel, DockState.DockBottom);
             propertyWindow.OnItemsChanged += PropertyWindow_OnItemsChanged;
+            propertyWindow.OnChunkRequest += PropertyWindow_OnRequestChunk;
 
             chunkList.Activate();
 
@@ -94,6 +95,11 @@ namespace WolvenKit
             //        chunkList.UpdateList();
             //}
             chunkList.UpdateList();
+        }
+
+        private void PropertyWindow_OnRequestChunk(object sender, SelectChunkArgs e)
+        {
+            chunkList.SelectChunk(e.Chunk);
         }
 
         public DocumentViewModel GetViewModel() => vm;

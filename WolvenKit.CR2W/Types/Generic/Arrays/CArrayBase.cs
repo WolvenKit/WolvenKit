@@ -11,7 +11,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.CodeDom;
-using RED.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {

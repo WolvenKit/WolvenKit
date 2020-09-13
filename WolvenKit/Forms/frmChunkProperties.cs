@@ -5,11 +5,13 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
-using RED.Reflection;
+using Dfust.Hotkeys;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
+using WolvenKit.App.Model;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
+using WolvenKit.CR2W.Reflection;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Services;
 
@@ -19,8 +21,8 @@ namespace WolvenKit.Forms
     {
         private CR2WExportWrapper chunk;
         private bool showOnlySerialized = true;
+        private HotkeyCollection hotkeys;
 
-        
 
         public frmChunkProperties()
         {
@@ -45,6 +47,8 @@ namespace WolvenKit.Forms
             toolStripButtonShowSerialized.Text = showOnlySerialized
                 ? "Show all variables"
                 : "Show edited variables";
+
+            hotkeys = new HotkeyCollection(Dfust.Hotkeys.Enums.Scope.Application);
         }
 
         public CR2WExportWrapper Chunk
@@ -78,7 +82,12 @@ namespace WolvenKit.Forms
                 ? TextMatchFilter.Contains(treeView, toolStripSearchBox.Text.ToUpper()) 
                 : null;
 
-            //treeView.ExpandAll();
+            foreach (var treeViewObject in treeView.Objects)
+            {
+                treeView.Expand(treeViewObject);
+                treeView.RefreshObject(treeViewObject);
+            }
+
         }
 
 
@@ -191,12 +200,20 @@ namespace WolvenKit.Forms
             // removing variables from arrays
             foreach (IEditableVariable node in treeView.SelectedObjects)
             {
-                if (node?.ParentVar != null && node.ParentVar.CanRemoveVariable(node))
+                if (node?.ParentVar == null || !node.ParentVar.CanRemoveVariable(node)) continue;
+
+                // if ptrs are removed, delete chunk as well
+                if (node is IPtrAccessor ptr)
                 {
-                    node.ParentVar.RemoveVariable(node);
-                    treeView.RefreshObject(node.ParentVar);
+                    node.cr2w.RemoveChunk(ptr.Reference);
+
+
                 }
+
+                node.ParentVar.RemoveVariable(node);
+                treeView.RefreshObject(node.ParentVar);
             }
+            OnItemsChanged?.Invoke(sender, e);
         }
 
         private void clearVariableToolStripMenuItem_Click(object sender, EventArgs e)
@@ -243,6 +260,15 @@ namespace WolvenKit.Forms
             if (e.Column == null || e.Item == null)
                 return;
 
+            if (e.ModifierKeys == Keys.Control)
+            {
+                if (e.Model is IPtrAccessor ptr)
+                {
+                    OnChunkRequest?.Invoke(this, new SelectChunkArgs() {Chunk = ptr.Reference } );
+                    return;
+                }
+            }
+
             //if (e.ClickCount == 2 && e.Column.AspectName == nameof(VariableListNode.Name))
             //{
             //    treeView.StartCellEdit(e.Item, 0);
@@ -252,6 +278,8 @@ namespace WolvenKit.Forms
             {
                 treeView.StartCellEdit(e.Item, olvColumn4.Index);
             }
+
+            
         }
 
         private void ptrPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -281,6 +309,8 @@ namespace WolvenKit.Forms
         
 
         public event EventHandler OnItemsChanged;
+        public event EventHandler<SelectChunkArgs> OnChunkRequest;
+
         private void treeView_ItemsChanged(object sender, ItemsChangedEventArgs e) => MainController.Get().ProjectUnsaved = true;
 
         private void treeView_CellEditStarting(object sender, CellEditEventArgs e)
@@ -357,12 +387,14 @@ namespace WolvenKit.Forms
         private void toolStripClearButton_Click(object sender, EventArgs e)
         {
             toolStripSearchBox.Clear();
-            UpdateTreeListView();
+            treeView.ModelFilter = null;
         }
 
         private void toolStripSearchBox_KeyUp(object sender, KeyEventArgs e)
         {
-            UpdateTreeListView();
+            treeView.ModelFilter = !string.IsNullOrEmpty(toolStripSearchBox.Text) 
+                ? TextMatchFilter.Contains(treeView, toolStripSearchBox.Text.ToUpper()) 
+                : null;
         }
 
         private void toolStripButtonShowSerialized_Click(object sender, EventArgs e)
