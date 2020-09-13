@@ -22,8 +22,8 @@ jobs:
       run: msbuild  WolvenKit.sln -p:Configuration=Release
     - name: Zip Release
       run: |
-        cd $Env:GITHUB_WORKSPACE\\WolvenKit\bin\x64
-        Compress-Archive -Path ./Release/ -DestinationPath WolvenKit.zip
+        cd $Env:GITHUB_WORKSPACE\\WolvenKit\bin
+        Compress-Archive -Path ./x64/Release/ -DestinationPath WolvenKit.zip
     - name: Deploy Nightly
       uses: Maxzor/deploy-nightly@v1.0.4
       env:
