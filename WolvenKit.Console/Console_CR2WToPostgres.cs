@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.Common.Model;
 using static System.ConsoleColor;
 
 namespace WolvenKit.Console
@@ -287,7 +288,7 @@ namespace WolvenKit.Console
 
                         try
                         {
-                            if (crw.Read(br) == 1)
+                            if (crw.Read(br) == EFileReadErrorCodes.NoCr2w)
                             {
                                 notcr2wfiles.Push(Tuple.Create(lod2_file_id, lod1_file_id, f.Name)); // lod2 lod1 lod1-name
                                 return;

@@ -294,7 +294,8 @@ namespace WolvenKit.Render
             using (MemoryStream ms = new MemoryStream(data))
             using (BinaryReader br = new BinaryReader(ms))
             {
-                W2AnimFile = new CR2WFile(br);
+                W2AnimFile = new CR2WFile();
+                W2AnimFile.Read(br);
                 createAnimationSet();
                 for (int i = 0; i < files.Count(); i++)
                 {

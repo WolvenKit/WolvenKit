@@ -23,8 +23,8 @@ namespace WolvenKit.CR2W.Types
         public CSectorData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
-            blocksize = new CVLQInt32(cr2w, this, nameof(blocksize));
-            BlockData = new CCompressedBuffer<SBlockData>(cr2w, this, nameof(BlockData));
+            blocksize = new CVLQInt32(cr2w, this, nameof(blocksize)) { IsSerialized = true };
+            BlockData = new CCompressedBuffer<SBlockData>(cr2w, this, nameof(BlockData)) { IsSerialized = true };
         }
 
 

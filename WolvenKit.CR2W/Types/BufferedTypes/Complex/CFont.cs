@@ -24,11 +24,11 @@ namespace WolvenKit.CR2W.Types
 
         public CFont(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            Unicodemapping = new CArray<CUInt16>(cr2w, this, nameof(Unicodemapping));
-            Linedist = new CInt32(cr2w, this, nameof(Linedist));
-            Maxglyphheight = new CInt32(cr2w, this, nameof(Maxglyphheight));
-            Kerning = new CBool(cr2w, this, nameof(Kerning));
-            Glyphs = new CArray<CArray<CFloat>>(cr2w, this, nameof(Glyphs));
+            Unicodemapping = new CArray<CUInt16>(cr2w, this, nameof(Unicodemapping)) { IsSerialized = true };
+            Linedist = new CInt32(cr2w, this, nameof(Linedist)) { IsSerialized = true };
+            Maxglyphheight = new CInt32(cr2w, this, nameof(Maxglyphheight)) { IsSerialized = true };
+            Kerning = new CBool(cr2w, this, nameof(Kerning)) { IsSerialized = true };
+            Glyphs = new CArray<CArray<CFloat>>(cr2w, this, nameof(Glyphs)) { IsSerialized = true };
         }
 
         public override void Read(BinaryReader file, uint size)

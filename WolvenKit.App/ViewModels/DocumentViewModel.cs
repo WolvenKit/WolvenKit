@@ -127,44 +127,49 @@ namespace WolvenKit.App.ViewModels
             //    MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
             //}
         }
-        public void LoadFile(string filename, IVariableEditor variableEditor)
+        public EFileReadErrorCodes LoadFile(string filename, IVariableEditor variableEditor, Stream stream = null)
         {
-            using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
+
+            if (stream != null)
             {
-                loadFile(fs, filename, variableEditor);
-
-                fs.Close();
+                return loadFile(stream, filename, variableEditor);
             }
+            else
+            {
+                using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                {
+                    return loadFile(fs, filename, variableEditor);
+                }
+            }
+            
         }
 
-        public void LoadFile(string filename, Stream stream, IVariableEditor variableEditor)
-        {
-            loadFile(stream, filename, variableEditor);
-        }
-
-        private void loadFile(Stream stream, string filename, IVariableEditor variableEditor)
+        private EFileReadErrorCodes loadFile(Stream stream, string filename, IVariableEditor variableEditor)
         {
             FormText = Path.GetFileName(filename) + " [" + filename + "]";
 
             using (var reader = new BinaryReader(stream))
             {
                 // switch between cr2wfiles and others (e.g. srt)
-                if (Path.GetExtension(filename) == ".srt")
-                {
-                    Cr2wFile = new Srtfile()
-                    {
-                        Cr2wFileName = filename
-                    };
-                    Cr2wFile.Read(reader);
-                }
-                else
-                {
-                    Cr2wFile = new CR2WFile(reader, MainController.Get().Logger)
-                    {
-                        Cr2wFileName = filename,
-                        EditorController = variableEditor/*UIController.Get()*/,
-                        LocalizedStringSource = MainController.Get()
-                    };
+                if (Path.GetExtension(filename) == ".srt")
+                {
+                    Cr2wFile = new Srtfile()
+                    {
+                        Cr2wFileName = filename
+                    };
+                    return Cr2wFile.Read(reader);
+                }
+                else
+                {
+                    Cr2wFile = new CR2WFile(MainController.Get().Logger)
+                    {
+                        Cr2wFileName = filename,
+
+                        EditorController = variableEditor/*UIController.Get()*/,
+
+                        LocalizedStringSource = MainController.Get()
+                    };
+                    return Cr2wFile.Read(reader);
                 }
             }
         }

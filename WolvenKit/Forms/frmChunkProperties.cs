@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
+using RED.Reflection;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
 using WolvenKit.CR2W;
@@ -12,12 +13,12 @@ using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Services;
 
-namespace WolvenKit
+namespace WolvenKit.Forms
 {
     public partial class frmChunkProperties : DockContent, IThemedContent
     {
         private CR2WExportWrapper chunk;
-        private bool showOnlySerialized;
+        private bool showOnlySerialized = true;
 
         
 
@@ -31,7 +32,7 @@ namespace WolvenKit
                 var root = showOnlySerialized
                     ? ((IEditableVariable)x).GetEditableVariables().Where(_ => _.IsSerialized)
                     : ((IEditableVariable)x).GetEditableVariables();
-                return root.Count() > 0;
+                return root.Any();
             };
             treeView.ChildrenGetter = x =>
             {
@@ -48,7 +49,7 @@ namespace WolvenKit
 
         public CR2WExportWrapper Chunk
         {
-            get { return chunk; }
+            get => chunk;
             set
             {
                 chunk = value;
@@ -58,7 +59,7 @@ namespace WolvenKit
 
         public object Source { get; set; }
 
-        public void UpdateTreeListView()
+        private void UpdateTreeListView()
         {
             if (chunk == null)
             {
@@ -73,14 +74,9 @@ namespace WolvenKit
             treeView.Roots = root;
 
             // filter
-            if (!string.IsNullOrEmpty(toolStripSearchBox.Text.ToUpper()))
-            {
-                this.treeView.ModelFilter = TextMatchFilter.Contains(treeView, toolStripSearchBox.Text.ToUpper());
-            }
-            else
-            {
-                this.treeView.ModelFilter = null;
-            }
+            this.treeView.ModelFilter = !string.IsNullOrEmpty(toolStripSearchBox.Text.ToUpper()) 
+                ? TextMatchFilter.Contains(treeView, toolStripSearchBox.Text.ToUpper()) 
+                : null;
 
             //treeView.ExpandAll();
         }
@@ -145,24 +141,49 @@ namespace WolvenKit
                 targetvar.IsSerialized = true;
 
                 UpdateTreeListView();
-
-                return;
             }
         }
 
         private void addVariableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (IEditableVariable) treeView.SelectedObject;
-            if (node == null || !node.CanAddVariable(null) || !(node is IArrayAccessor parentarray))
+            var carray = (IEditableVariable) treeView.SelectedObject;
+            if (carray == null || !carray.CanAddVariable(null) || !(carray is IArrayAccessor parentarray))
                 return;
 
-            // instantiate all child Cvars??
-            CVariable newvar = CR2WTypeManager.Create(parentarray.Elementtype, "", Chunk.cr2w, node as CVariable, false);
+            // Create new CVariable
+            CVariable newvar = CR2WTypeManager.Create(parentarray.Elementtype, "", Chunk.cr2w, carray as CVariable, false);
             if (newvar == null)
                 return;
 
-            node.AddVariable(newvar);
-            treeView.RefreshObject(node);
+            // if a new ptr is created, auto-add new chunks
+            if (newvar is IPtrAccessor ptr)
+            {
+                string newChunktype = "";
+                string innerParentType = parentarray.Elementtype.Substring("ptr:".Length);
+                if (!AssemblyDictionary.TypeExists(innerParentType))
+                    throw new NotImplementedException();
+
+                List<string> availableTypes = AssemblyDictionary
+                    .GetSubClassesOf(AssemblyDictionary.GetTypeByName(innerParentType)).Select(_ => _.Name).ToList();
+                using (var form = new frmAddChunk(availableTypes))
+                {
+                    var result = form.ShowDialog();
+                    if (result == DialogResult.OK)
+                    {
+                        newChunktype = form.ChunkType;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(newChunktype))
+                    return;
+
+                ptr.IsSerialized = true;
+                ptr.Reference = newvar.cr2w.CreateChunk(newChunktype, Chunk);
+            }
+
+            parentarray.AddVariable(newvar);
+            treeView.RefreshObject(carray);
+            OnItemsChanged?.Invoke(sender, e);
         }
 
         private void removeVariableToolStripMenuItem_Click(object sender, EventArgs e)
@@ -183,7 +204,6 @@ namespace WolvenKit
             var node = (IEditableVariable)treeView.SelectedObject;
             if (node == null)
             {
-                return;
             }
             else
             {
@@ -290,9 +310,9 @@ namespace WolvenKit
 
         private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
         {
-/*            if (chunk.ParentPtr.Reference != null)
-                chunk.SetParentChunkId(chunk.ParentPtr.Reference.ChunkIndex + 1);*/
-            OnItemsChanged(sender, e);
+            /*            if (chunk.ParentPtr.Reference != null)
+                            chunk.SetParentChunkId(chunk.ParentPtr.Reference.ChunkIndex + 1);*/
+            //OnItemsChanged?.Invoke(sender, e);
 
             // change the model's isserialized property to true when the user edits it,
             // this is to make sure only user-edited properties will get serialized
@@ -319,7 +339,7 @@ namespace WolvenKit
         private void treeView_FormatRow(object sender, FormatRowEventArgs e)
         {
             IEditableVariable model = (IEditableVariable)e.Model;
-            if (model != null && model.IsSerialized)
+            if (model != null && (model.IsSerialized))
             {
                 //if (!showOnlySerialized)
                 {
@@ -363,7 +383,7 @@ namespace WolvenKit
             Color forecolor = Color.FromArgb(UIController.Get().Configuration.CustomHighlightColor[themeID]);
 
 
-            ColorDialog MyDialog = new ColorDialog
+            ColorDialog myDialog = new ColorDialog
             {
                 AllowFullOpen = true,
                 ShowHelp = true,
@@ -371,9 +391,9 @@ namespace WolvenKit
             };
 
             // Update the text box color if the user clicks OK 
-            if (MyDialog.ShowDialog() == DialogResult.OK)
+            if (myDialog.ShowDialog() == DialogResult.OK)
             {
-                UIController.Get().Configuration.CustomHighlightColor[themeID] = MyDialog.Color.ToArgb();
+                UIController.Get().Configuration.CustomHighlightColor[themeID] = myDialog.Color.ToArgb();
                 UIController.Get().Configuration.Save();
             }
         }

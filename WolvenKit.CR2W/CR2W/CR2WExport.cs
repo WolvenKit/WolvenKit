@@ -64,7 +64,13 @@ namespace WolvenKit.CR2W
     {
 
         #region  Constructors
-        public CR2WExportWrapper(CR2WFile file)
+        /// <summary>
+        /// This constructor should be used when manually creating chunks
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="redtype"></param>
+        /// <param name="parentchunk"></param>
+        public CR2WExportWrapper(CR2WFile file, string redtype, CR2WExportWrapper parentchunk)
         {
             this.cr2w = file;
             _export = new CR2WExport
@@ -73,7 +79,18 @@ namespace WolvenKit.CR2W
             };
             IsVirtuallyMounted = false;
             Referrers = new List<CVariable>();
+
+            this.REDType = redtype;
+            SetParentChunk(parentchunk);
+
+            CreateDefaultData();
         }
+
+        /// <summary>
+        /// This constructor is only used in cr2w parsing
+        /// </summary>
+        /// <param name="export"></param>
+        /// <param name="file"></param>
         public CR2WExportWrapper(CR2WExport export, CR2WFile file)
         {
             this.cr2w = file;
@@ -87,10 +104,7 @@ namespace WolvenKit.CR2W
 
         private CR2WExport _export;
         [DataMember()]
-        public CR2WExport Export
-        {
-            get => _export;
-        }
+        public CR2WExport Export => _export;
 
         #region Fields
 
@@ -99,9 +113,9 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Properties
-        public CR2WFile cr2w { get; set; }
+        public CR2WFile cr2w { get; }
 
-        public CVariable data { get; set; }
+        public CVariable data { get; private set; }
 
         /// <summary>
         /// Main CR2WExport.parentId wrapper
@@ -109,7 +123,14 @@ namespace WolvenKit.CR2W
         public int ParentChunkIndex
         {
             get => (int)_export.parentID - 1;
-            set => _export.parentID = (uint)(value + 1);
+            private set => _export.parentID = (uint)(value + 1);
+        }
+        private void SetParentChunk(CR2WExportWrapper parent)
+        {
+            //ParentPtr.Reference = parent;
+            ParentChunkIndex = cr2w.chunks.IndexOf(parent);
+            IsVirtuallyMounted = false;
+            VirtualParentChunkIndex = ParentChunkIndex;
         }
 
         public bool IsVirtuallyMounted { get; set; }
@@ -140,15 +161,16 @@ namespace WolvenKit.CR2W
 
 
         [DataMember]
-        public string REDName
-        {
-            get { return REDType + " #" + (ChunkIndex); }
-            set { }
-        }
+        public string REDName => REDType + " #" + (ChunkIndex);
 
         public int ChunkIndex => cr2w.chunks.IndexOf(this);
         public CR2WExportWrapper ParentChunk => ParentChunkIndex==-1 ? null : cr2w.chunks[ParentChunkIndex];
         public CR2WExportWrapper VirtualParentChunk => VirtualParentChunkIndex==-1 ? null : cr2w.chunks[VirtualParentChunkIndex];
+
+        /// <summary>
+        /// This property is used as BindingProperty in frmChunkProperties
+        /// Do not delete!
+        /// </summary>
         public string Preview
         {
             get
@@ -179,35 +201,25 @@ namespace WolvenKit.CR2W
             }
         }
 
-        
 
+        /// <summary>
+        /// This property is used as BindingProperty in frmChunkProperties
+        /// Do not delete!
+        /// </summary>
         public string REDValue => this.ToString();
 
-        public bool IsSerialized { get => true; set => throw new NotImplementedException(); }
+
+        public bool IsSerialized => true;
+
         #endregion
 
         #region Methods
         public void SetType(ushort val) => _export.className = val;
-        public void SetParentChunk(CR2WExportWrapper parent)
-        {
-            //ParentPtr.Reference = parent;
-            ParentChunkIndex = cr2w.chunks.IndexOf(parent);
-            IsVirtuallyMounted = false;
-            VirtualParentChunkIndex = ParentChunkIndex;
-        }
+
+        
         public void SetOffset(uint offset) => _export.dataOffset = offset;
 
-        public CR2WExportWrapper GetParentChunk()
-        {
-            if (ParentChunkIndex >= 0)
-            {
-                return cr2w.chunks[ParentChunkIndex];
-            }
-            else
-            {
-                return null;
-            }
-        }
+        private CR2WExportWrapper GetParentChunk() => ParentChunkIndex >= 0 ? cr2w.chunks[ParentChunkIndex] : null;
 
         public CR2WExportWrapper GetVirtualParentChunk()
         {
@@ -402,8 +414,14 @@ namespace WolvenKit.CR2W
             }
         }
 
-        public void CreateDefaultData()
+        /// <summary>
+        /// Needs the parentChunk idx to be set!
+        /// </summary>
+        private void CreateDefaultData()
         {
+            //if (Export.className != 1 && GetParentChunk() == null)
+            //    throw new InvalidChunkTypeException("No parent chunk set!");
+
             data = CR2WTypeManager.Create(REDType, REDType, cr2w, GetParentChunk()?.data);
             if (data == null)
             {

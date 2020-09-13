@@ -28,7 +28,8 @@ namespace WolvenKit.CR2W.Reflection
         {
             return GetREDTypeString(type, flags.AsEnumerable().GetEnumerator());
         }
-        public static string GetREDTypeString(Type type, IEnumerator<int> flags)
+
+        private static string GetREDTypeString(Type type, IEnumerator<int> flags)
         {
             // FIXME wkit doesn't support .NET types right now
 

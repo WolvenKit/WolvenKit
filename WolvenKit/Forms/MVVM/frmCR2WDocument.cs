@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BrightIdeasSoftware;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
 using WolvenKit.App.Model;
@@ -86,12 +87,13 @@ namespace WolvenKit
 
         private void PropertyWindow_OnItemsChanged(object sender, EventArgs e)
         {
-            var args = (e as BrightIdeasSoftware.CellEditEventArgs);
-            if (args != null)
-            {
-                if (args.ListViewItem.Text == "Parent")
-                    chunkList.UpdateList();
-            }
+            // no longer used
+            //if (e is CellEditEventArgs args)
+            //{
+            //    if (args.ListViewItem.Text == "Parent")
+            //        chunkList.UpdateList();
+            //}
+            chunkList.UpdateList();
         }
 
         public DocumentViewModel GetViewModel() => vm;

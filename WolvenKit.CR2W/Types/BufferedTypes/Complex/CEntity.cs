@@ -21,8 +21,8 @@ namespace WolvenKit.CR2W.Types
             
         public CEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            buffer_v1 = new CCompressedBuffer<SEntityBufferType1>(cr2w, this, nameof(buffer_v1));
-            buffer_v2 = new CBufferUInt32<SEntityBufferType2>(cr2w, this, nameof(buffer_v1));
+            buffer_v1 = new CCompressedBuffer<SEntityBufferType1>(cr2w, this, nameof(buffer_v1)) { IsSerialized = true };
+            buffer_v2 = new CBufferUInt32<SEntityBufferType2>(cr2w, this, nameof(buffer_v1)) { IsSerialized = true };
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -36,8 +36,10 @@ namespace WolvenKit.CR2W.Types
 
             // Read Component Array (should only be present if NOT created from template)
             #region Componentsarray
+
             if (Components == null)
-                Components = new CArray<CPtr<CComponent>>(cr2w, this, nameof(Components));
+                Components = CR2WTypeManager.Create("array:2,0,ptr:CComponent", "Components", cr2w, this) as CArray<CPtr<CComponent>>;
+                
 
             var endPos = file.BaseStream.Position;
             var bytesleft = size - (endPos - startPos);
@@ -45,12 +47,18 @@ namespace WolvenKit.CR2W.Types
             {
                 if (bytesleft > 0)
                 {
+                    Components.IsSerialized = true;
                     var elementcount = file.ReadBit6();
                     for (var i = 0; i < elementcount; i++)
                     {
-                        var ptr = new CPtr<CComponent>(cr2w, Components, i.ToString());
-                        ptr.Read(file, 0);
-                        Components.AddVariable(ptr);
+                        var ptr = CR2WTypeManager.Create("ptr:CComponent", i.ToString(), cr2w, Components);
+                        if (ptr is IPtrAccessor iptr)
+                        {
+                            ptr.IsSerialized = true;
+                            ptr.Read(file, 0);
+                            Components.AddVariable(ptr);
+                        }
+                        
                     }
                 }
                 else
@@ -71,7 +79,7 @@ namespace WolvenKit.CR2W.Types
                 bool canRead;
                 do
                 {
-                    var t_buffer = new SEntityBufferType1(cr2w, buffer_v1, idx.ToString());
+                    var t_buffer = new SEntityBufferType1(cr2w, buffer_v1, idx.ToString()) { IsSerialized = true };
                     canRead = t_buffer.CanRead(file);
                     if (canRead)
                         t_buffer.Read(file, 0);

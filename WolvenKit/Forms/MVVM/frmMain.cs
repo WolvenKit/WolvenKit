@@ -523,40 +523,19 @@ namespace WolvenKit
             var filename = Args.Filename;
             var suppressErrors = Args.SuppressErrors;
 
-            try
-            {
-                if (Args.Stream != null)
-                    doc.LoadFile(filename, Args.Stream, UIController.Get());
-                else
-                    doc.LoadFile(filename, UIController.Get());
-            }
-            catch (InvalidFileTypeException ex)
-            {
-                if (!suppressErrors)
-                    MessageBox.Show(this, ex.Message, @"Error opening file.");
 
-                vm.OpenDocuments.Remove(doc);
-                //doc.Dispose();
-                return null;
-            }
-            catch (MissingTypeException ex)
+            switch (doc.LoadFile(filename, UIController.Get(), Args.Stream))
             {
-                if (!suppressErrors)
-                    MessageBox.Show(this, ex.Message, @"Error opening file.");
-
-                vm.OpenDocuments.Remove(doc);
-                //doc.Dispose();
-                return null;
-            }
-            catch (FormatException ex)
-            {
-                if (!suppressErrors)
-                    MessageBox.Show(this, ex.Message, @"Error opening file.");
-
-                vm.OpenDocuments.Remove(doc);
-                //doc.Dispose();
-                //throw ex;
-                return null;
+                case EFileReadErrorCodes.NoError:
+                    break;
+                case EFileReadErrorCodes.NoCr2w:
+                case EFileReadErrorCodes.UnsupportedVersion:
+                {
+                    vm.OpenDocuments.Remove(doc);
+                    return null;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             workerCompletedAction = WorkerLoadFileCompleted;
@@ -1050,22 +1029,6 @@ namespace WolvenKit
                                 ImagePreview.SetImage(fullpath);
                             }
                             break;
-                            //if (OpenImages.Any(_ => _.Text == Path.GetFileName(fullpath)))
-                            //{
-                            //    OpenImages.First(_ => _.Text == Path.GetFileName(fullpath)).Activate();
-                            //}
-                            //else
-                            //{
-                            //    if (ImagePreview.Text == Path.GetFileName(fullpath))
-                            //    {
-                            //        ImagePreview.Close();
-                            //    }
-                            //    var dockedImage = new frmImagePreview();
-                            //    dockedImage.Show(dockPanel, DockState.Document);
-                            //    dockedImage.SetImage(fullpath);
-                            //    OpenImages.Add(dockedImage);
-                            //}
-                            //break;
                         }
                     default:
                         break;
@@ -1127,8 +1090,20 @@ namespace WolvenKit
 
             void ShellExecute(string path)
             {
-                var proc = new ProcessStartInfo(path) { UseShellExecute = true };
-                Process.Start(proc);
+                try
+                {
+                    var proc = new ProcessStartInfo(path) {UseShellExecute = true};
+                    Process.Start(proc);
+                }
+                catch (Win32Exception winex)
+                {
+                    // eat this: no default app set for filetype
+                    Logger.LogString($"No default prgram set in Windows to open file extension {Path.GetExtension(path)}", Logtype.Error);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
 
             void PolymorphExecute(string path, string extension)

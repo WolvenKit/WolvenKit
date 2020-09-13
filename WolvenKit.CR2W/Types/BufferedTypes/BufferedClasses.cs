@@ -245,15 +245,15 @@ namespace WolvenKit.CR2W.Types
 
         public CSwarmCellMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            Data = new CBytes(cr2w, this, nameof(Data));
-            CornerPositionX = new CFloat(cr2w, this, nameof(CornerPositionX));
-            CornerPositionY = new CFloat(cr2w, this, nameof(CornerPositionY));
-            CornerPositionZ = new CFloat(cr2w, this, nameof(CornerPositionZ));
-            DataSizeX = new CInt32(cr2w, this, nameof(DataSizeX));
-            DataSizeY = new CInt32(cr2w, this, nameof(DataSizeY));
-            DataSizeZ = new CInt32(cr2w, this, nameof(DataSizeZ));
-            DataSizeBits = new CInt32(cr2w, this, nameof(DataSizeBits));
-            SizeInKbytes = new CFloat(cr2w, this, nameof(SizeInKbytes));
+            Data = new CBytes(cr2w, this, nameof(Data)) {IsSerialized = true};
+            CornerPositionX = new CFloat(cr2w, this, nameof(CornerPositionX)) { IsSerialized = true };
+            CornerPositionY = new CFloat(cr2w, this, nameof(CornerPositionY)) { IsSerialized = true };
+            CornerPositionZ = new CFloat(cr2w, this, nameof(CornerPositionZ)) { IsSerialized = true };
+            DataSizeX = new CInt32(cr2w, this, nameof(DataSizeX)) { IsSerialized = true };
+            DataSizeY = new CInt32(cr2w, this, nameof(DataSizeY)) { IsSerialized = true };
+            DataSizeZ = new CInt32(cr2w, this, nameof(DataSizeZ)) { IsSerialized = true };
+            DataSizeBits = new CInt32(cr2w, this, nameof(DataSizeBits)) { IsSerialized = true };
+            SizeInKbytes = new CFloat(cr2w, this, nameof(SizeInKbytes)) { IsSerialized = true };
         }
 
         public override void Read(BinaryReader file, uint size)

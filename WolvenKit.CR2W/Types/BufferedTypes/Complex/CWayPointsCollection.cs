@@ -22,10 +22,10 @@ namespace WolvenKit.CR2W.Types
 
         public CWayPointsCollection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            Waypoints = new CCompressedBuffer<SBufferWaypoints>(cr2w, this, nameof(Waypoints));
-            ComponentsMappings = new CCompressedBuffer<SBufferComponentsMappings>(cr2w, this, nameof(ComponentsMappings));
-            WaypointsGroups = new CCompressedBuffer<SBufferwaypointsGroup>(cr2w, this, nameof(WaypointsGroups));
-            Indexes = new CCompressedBuffer<CUInt16>(cr2w, this, nameof(Indexes));
+            Waypoints = new CCompressedBuffer<SBufferWaypoints>(cr2w, this, nameof(Waypoints)) { IsSerialized = true };
+            ComponentsMappings = new CCompressedBuffer<SBufferComponentsMappings>(cr2w, this, nameof(ComponentsMappings)) { IsSerialized = true };
+            WaypointsGroups = new CCompressedBuffer<SBufferwaypointsGroup>(cr2w, this, nameof(WaypointsGroups)) { IsSerialized = true };
+            Indexes = new CCompressedBuffer<CUInt16>(cr2w, this, nameof(Indexes)) { IsSerialized = true };
         }
 
         public override void Read(BinaryReader file, uint size)

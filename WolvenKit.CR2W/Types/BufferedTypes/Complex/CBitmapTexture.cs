@@ -28,12 +28,12 @@ namespace WolvenKit.CR2W.Types
         {
 
 
-            MipsCount = new CUInt32(cr2w, this, nameof(MipsCount));
-            Mipdata = new CCompressedBuffer<SMipData>(cr2w, this, nameof(Mipdata));
-            unk2 = new CUInt32(cr2w, this, nameof(unk2));
-            Mips = new CCompressedBuffer<CByteArray>(cr2w, this, nameof(Mips));
-            ResidentmipSize = new CUInt32(cr2w, this, nameof(ResidentmipSize));
-            Residentmip = new CBytes(cr2w, this, nameof(Residentmip));
+            MipsCount = new CUInt32(cr2w, this, nameof(MipsCount)) { IsSerialized = true };
+            Mipdata = new CCompressedBuffer<SMipData>(cr2w, this, nameof(Mipdata)) { IsSerialized = true };
+            unk2 = new CUInt32(cr2w, this, nameof(unk2)) { IsSerialized = true };
+            Mips = new CCompressedBuffer<CByteArray>(cr2w, this, nameof(Mips)) { IsSerialized = true };
+            ResidentmipSize = new CUInt32(cr2w, this, nameof(ResidentmipSize)) { IsSerialized = true };
+            Residentmip = new CBytes(cr2w, this, nameof(Residentmip)) { IsSerialized = true };
         }
 
         public override void Read(BinaryReader file, uint size)

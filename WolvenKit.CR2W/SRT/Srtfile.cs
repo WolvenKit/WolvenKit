@@ -69,7 +69,7 @@ namespace WolvenKit.CR2W.SRT
         #endregion
 
         #region Read
-        public int Read(BinaryReader br)
+        public EFileReadErrorCodes Read(BinaryReader br)
         {
             m_stream = br.BaseStream;
 
@@ -96,7 +96,7 @@ namespace WolvenKit.CR2W.SRT
                 }
             }
 
-            return 0;
+            return EFileReadErrorCodes.NoError;
         }
 
         private long GetRemainingLength() => m_stream.Length - m_stream.Position;

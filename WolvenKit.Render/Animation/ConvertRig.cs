@@ -39,7 +39,8 @@ namespace WolvenKit.Render
                 using (MemoryStream ms = new MemoryStream(data))
                 using (BinaryReader br = new BinaryReader(ms))
                 {
-                    W2RigFile = new CR2WFile(br);
+                    W2RigFile = new CR2WFile();
+                    w2rigFile.Read(br);
                     CSkeleton skel = W2RigFile.chunks[0].data as CSkeleton;
 
                     CArray<SSkeletonBone> bonesorig = skel.Bones;

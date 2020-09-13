@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using VisualPlus.Extensibility;
 using WolvenKit.App;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
-using static WolvenKit.frmChunkProperties;
+using static WolvenKit.Forms.frmChunkProperties;
 
 namespace WolvenKit.Forms
 {
@@ -656,8 +657,13 @@ namespace WolvenKit.Forms
         private static CR2WFile LoadCR2W(string fileName)
         {
             using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-                using (var reader = new BinaryReader(fs))
-                    return new CR2WFile(reader);
+            using (var reader = new BinaryReader(fs))
+            {
+                var cr2wfile = new CR2WFile();
+                cr2wfile.Read(reader);
+                return cr2wfile;
+            }
+                     
         }
         internal LoggerCR2W(string fileName, LoggerOutputFile writer, LoggerCR2WOptions options)
             : this(LoadCR2W(fileName), writer, options) {}
@@ -735,9 +741,20 @@ namespace WolvenKit.Forms
                     try
                     {
                         var ls = new LoggerService();
-                        CR2WFile embedcr2w = new CR2WFile( ((IByteSource)node).Bytes, ls );
-                        var lc = new LoggerCR2W(embedcr2w, Writer, Options);
-                        lc.processCR2W(level);
+                        CR2WFile embedcr2w = new CR2WFile(ls);
+                        switch (embedcr2w.Read(((IByteSource)node).Bytes))
+                        {
+                            case EFileReadErrorCodes.NoError:
+                                var lc = new LoggerCR2W(embedcr2w, Writer, Options);
+                                lc.processCR2W(level);
+                                break;
+                            case EFileReadErrorCodes.NoCr2w:
+                                break;
+                            case EFileReadErrorCodes.UnsupportedVersion:
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
                     }
                     catch (FormatException)
                     {

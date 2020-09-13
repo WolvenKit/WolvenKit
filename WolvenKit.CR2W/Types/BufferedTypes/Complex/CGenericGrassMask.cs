@@ -23,6 +23,7 @@ namespace WolvenKit.CR2W.Types
             grassmask = new CBytes(cr2w, this, nameof(grassmask))
             {
                 Bytes = new byte[0],
+                IsSerialized = true
             };
         }
 

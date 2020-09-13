@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.CodeDom;
+using RED.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -73,7 +74,7 @@ namespace WolvenKit.CR2W.Types
                 CVariable element = CR2WTypeManager.Create(Elementtype, i.ToString(), cr2w, this);
 
                 // no actual way to find out the elementsize of an array element
-                // bacause cdpr classes are serialized sequentially
+                // bacause cdpr serialized classes have no fixed size
                 // solution? not sure: pass 0 and disable checks?
                 element.Read(file, (uint)0);
                 if (element is T te)

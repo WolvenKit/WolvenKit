@@ -63,13 +63,7 @@ namespace WolvenKit
                 if (!this.treeListView.SmallImageList.Images.ContainsKey(extension))
                 {
                     Image smallImage = this.GetSmallIconForFileType(extension);
-                    try
-                    {
-                        this.treeListView.SmallImageList.Images.Add(extension, smallImage);
-                    }
-                    catch (Exception ex)
-                    {
-                    }
+                    this.treeListView.SmallImageList.Images.Add(extension, smallImage);
                 }
                 return extension;
             };
@@ -370,26 +364,47 @@ namespace WolvenKit
                 RequestFileRename?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
             }
         }
-        private void treeListView_CellClick(object sender, CellClickEventArgs e)
+
+        private bool _singleclickflag;
+
+        private async void treeListView_CellClick(object sender, CellClickEventArgs e)
         {
-            //if (treeListView.SelectedObject is FileSystemInfo selectedobject && e.Item != null)
-            //{
-            //    var node = (FileSystemInfo)e.Item.RowObject;
+            if (treeListView.SelectedObject is FileSystemInfo selectedobject && e.Item != null)
+            {
+                var node = (FileSystemInfo) e.Item.RowObject;
 
-            //    if (e.ClickCount == 1)
-            //    {
-            //        if (!selectedobject.IsDirectory())
-            //            RequestFileOpen?.Invoke(this, new RequestFileArgs { File = node.FullName, Inspect = true });
-            //    }
-            //}
+                if (e.ClickCount == 1)
+                {
+                    _singleclickflag = true;
+                    await Task.Delay(200);
+                    
+                    if (_singleclickflag)
+                    {
+                        if (!selectedobject.IsDirectory())
+                            RequestFileOpen?.Invoke(this, new RequestFileArgs { File = node.FullName, Inspect = true });
+
+                    }
+                    else
+                    {
+
+                    }
+                    _singleclickflag = false;
+                }
+                else
+                {
+
+                }
+            }
         }
-
         private void treeListView_ItemActivate(object sender, EventArgs e)
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
                 if (!selectedobject.IsDirectory())
+                {
                     RequestFileOpen?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
+                    _singleclickflag = false;
+                }
                 else
                     treeListView.ToggleExpansion(selectedobject);
             }
@@ -628,7 +643,8 @@ namespace WolvenKit
                         using (MemoryStream ms = new MemoryStream(data))
                         using (BinaryReader br = new BinaryReader(ms))
                         {
-                            CR2WFile rigFile = new CR2WFile(br);
+                            CR2WFile rigFile = new CR2WFile();
+                            rigFile.Read(br);
                             exportRig.LoadData(rigFile);
                             exportRig.SaveRig(sf.FileName);
                         }

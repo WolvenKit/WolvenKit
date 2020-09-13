@@ -18,7 +18,7 @@ namespace WolvenKit.CR2W.Types
 
         public SAppearanceAttachment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            Data = new CBufferVLQInt32<CVariable>(cr2w, this, nameof(Data));
+            Data = new CBufferVLQInt32<CVariable>(cr2w, this, nameof(Data)) { IsSerialized = true };
         }
 
         public override void Read(BinaryReader file, uint size)
