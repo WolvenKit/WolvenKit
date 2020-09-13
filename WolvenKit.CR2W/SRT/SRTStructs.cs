@@ -847,8 +847,8 @@ namespace WolvenKit.CR2W.SRT
 		string m_pFullName;
 		string m_pShortName;
 	};
-#pragma warning disable CS0169 // ~~~[[maybe_unused]] c++ compiler attribute
-#pragma warning disable IDE0051
+#pragma warning restore CS0169 // ~~~[[maybe_unused]] c++ compiler attribute
+#pragma warning restore IDE0051
 
 
     ///////////////////////////////////////////////////////////////////////  
