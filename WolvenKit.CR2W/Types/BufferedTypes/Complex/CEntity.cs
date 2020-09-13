@@ -119,7 +119,7 @@ namespace WolvenKit.CR2W.Types
             base.Write(file);
 
             // check if created from template
-            isCreatedFromTemplate = this.Template != null && this.Template.Reference != null;
+            isCreatedFromTemplate = this.Template != null && (this.Template.Reference != null || !string.IsNullOrEmpty(this.Template.DepotPath));
 
             // Write componentsarray (if not created from template)
             if (!isCreatedFromTemplate)

@@ -58,8 +58,7 @@ namespace WolvenKit
             };
             treeListView.SmallImageList = new ImageList();
             this.olvColumnName.ImageGetter = delegate (object row) {
-                FileSystemInfo file = (FileSystemInfo)row;
-                string extension = this.GetFileExtension(file);
+                string extension = this.GetFileExtension(row);
                 if (!this.treeListView.SmallImageList.Images.ContainsKey(extension))
                 {
                     Image smallImage = this.GetSmallIconForFileType(extension);
@@ -331,17 +330,15 @@ namespace WolvenKit
 
             }
         }
-        private string GetFileExtension(FileSystemInfo node)
+        private string GetFileExtension(object obj)
         {
+            if (!(obj is FileSystemInfo node)) return openDirImageKey;
             if (node.IsDirectory())
             {
-                if (treeListView.IsExpanded(node))
-                    return openDirImageKey;
-                else
-                    return closedDirImageKey;
+                return treeListView.IsExpanded(node) ? openDirImageKey : closedDirImageKey;
             }
             else
-                return (node as FileInfo).Extension;
+                return (node as FileInfo)?.Extension;
         }
 
         #endregion

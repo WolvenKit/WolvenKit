@@ -137,11 +137,7 @@ namespace WolvenKit.CR2W
         private int _virtualParentChunkIndex;
         public int VirtualParentChunkIndex
         {
-            get
-            {
-                if (IsVirtuallyMounted) return _virtualParentChunkIndex;
-                return ParentChunkIndex;
-            }
+            get => IsVirtuallyMounted ? _virtualParentChunkIndex : ParentChunkIndex;
             set
             {
                 if (IsVirtuallyMounted) return;
@@ -154,7 +150,7 @@ namespace WolvenKit.CR2W
         /// Reverse lookup : CVariables, being CPtr or CHandle, which reference this chunk.
         /// Beware, in case of multithreading, this needs locking!
         /// </summary>
-        public List<CVariable> Referrers;
+        public readonly List<CVariable> Referrers;
 
 
         public string REDType { get; set; }
@@ -164,7 +160,7 @@ namespace WolvenKit.CR2W
         public string REDName => REDType + " #" + (ChunkIndex);
 
         public int ChunkIndex => cr2w.chunks.IndexOf(this);
-        public CR2WExportWrapper ParentChunk => ParentChunkIndex==-1 ? null : cr2w.chunks[ParentChunkIndex];
+        private CR2WExportWrapper ParentChunk => ParentChunkIndex==-1 ? null : cr2w.chunks[ParentChunkIndex];
         public CR2WExportWrapper VirtualParentChunk => VirtualParentChunkIndex==-1 ? null : cr2w.chunks[VirtualParentChunkIndex];
 
         /// <summary>
@@ -175,29 +171,23 @@ namespace WolvenKit.CR2W
         {
             get
             {
-                if (!(data is CVariable)) return "";
                 var vars = data.GetEditableVariables();
                 var firstString = vars
-                        .Where(_ => (_ is CString && _ != null))
+                        .Where(_ => _ is CString)
                         .Cast<CString>()
                         .FirstOrDefault(_ => _.val != null)
                     ;
                 if (firstString != null)
                 {
-                    return ((CString)firstString).val;
+                    return firstString.val;
                 }
 
                 var firstName = vars
-                        .Where(_ => (_ is CName && _ != null))
+                        .Where(_ => (_ is CName))
                         .Cast<CName>()
                         .FirstOrDefault(_ => _.Value != null)
                     ;
-                if (firstName != null)
-                {
-                    return ((CName)firstName).Value;
-                }
-
-                return "";
+                return firstName != null ? firstName.Value : "";
             }
         }
 
@@ -332,7 +322,7 @@ namespace WolvenKit.CR2W
 
                     if (cr2w.Logger!= null)
                     {
-                        float percentprogress = (float)((float)1 / (float)cr2w.chunks.Count * 100.0);
+                        float percentprogress = (float)(1 / (float)cr2w.chunks.Count * 100.0);
                         cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
                     }
                     
@@ -378,7 +368,7 @@ namespace WolvenKit.CR2W
                 stopwatch.Stop();
                 if (cr2w.Logger != null)
                 {
-                    float percentprogress = (float)((float)1 / (float)cr2w.chunks.Count * 100.0);
+                    float percentprogress = (float)(1 / (float)cr2w.chunks.Count * 100.0);
                     cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
                     //cr2w.Logger.LogString($"{stopwatch.Elapsed} CHUNK {REDName}\n");
                 }
@@ -408,10 +398,7 @@ namespace WolvenKit.CR2W
             }
 
             var newsize = (uint) (file.BaseStream.Position - posstart);
-            if (_export.dataSize != newsize)
-            {
-                _export.dataSize = newsize;
-            }
+            _export.dataSize = newsize;
         }
 
         /// <summary>
@@ -438,7 +425,6 @@ namespace WolvenKit.CR2W
             if (context.chunkTranslation.ContainsKey(ChunkIndex))
                 return null;
 
-
             var copy = context.DestinationFile.CreateChunk(REDType);
 
             context.chunks.Add(copy);
@@ -460,15 +446,6 @@ namespace WolvenKit.CR2W
             }
 
             return copy;
-        }
-
-        public void SerializeToXml(XmlWriter xw)
-        {
-            XmlSerializer.SerializeStartObject<CR2WExportWrapper>(xw, this);
-            XmlSerializer.SerializeObjectContent<CR2WExportWrapper>(xw, this);
-            data.SerializeToXml(xw);
-            unknownBytes.SerializeToXml(xw);
-            XmlSerializer.SerializeEndObject<CR2WExportWrapper>(xw);
         }
 
         public override string ToString()

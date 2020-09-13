@@ -192,12 +192,16 @@ namespace WolvenKit.Forms
 
             parentarray.AddVariable(newvar);
             treeView.RefreshObject(carray);
-            OnItemsChanged?.Invoke(sender, e);
+            OnRequestUpdate?.Invoke(sender, e);
         }
 
         private void removeVariableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // removing variables from arrays
+            if (treeView.SelectedObjects.Count <= 0)
+                return;
+            
+            var parentmodel = treeView.SelectedObjects.Cast<IEditableVariable>().FirstOrDefault()?.ParentVar;
             foreach (IEditableVariable node in treeView.SelectedObjects)
             {
                 if (node?.ParentVar == null || !node.ParentVar.CanRemoveVariable(node)) continue;
@@ -206,14 +210,14 @@ namespace WolvenKit.Forms
                 if (node is IPtrAccessor ptr)
                 {
                     node.cr2w.RemoveChunk(ptr.Reference);
-
-
                 }
 
                 node.ParentVar.RemoveVariable(node);
-                treeView.RefreshObject(node.ParentVar);
+                //treeView.RefreshObject(node.ParentVar);
+                
             }
-            OnItemsChanged?.Invoke(sender, e);
+            treeView.RefreshObject(parentmodel);
+            OnRequestUpdate?.Invoke(sender, e);
         }
 
         private void clearVariableToolStripMenuItem_Click(object sender, EventArgs e)
@@ -308,7 +312,7 @@ namespace WolvenKit.Forms
 
         
 
-        public event EventHandler OnItemsChanged;
+        public event EventHandler OnRequestUpdate;
         public event EventHandler<SelectChunkArgs> OnChunkRequest;
 
         private void treeView_ItemsChanged(object sender, ItemsChangedEventArgs e) => MainController.Get().ProjectUnsaved = true;
@@ -342,7 +346,7 @@ namespace WolvenKit.Forms
         {
             /*            if (chunk.ParentPtr.Reference != null)
                             chunk.SetParentChunkId(chunk.ParentPtr.Reference.ChunkIndex + 1);*/
-            //OnItemsChanged?.Invoke(sender, e);
+            //OnRequestUpdate?.Invoke(sender, e);
 
             // change the model's isserialized property to true when the user edits it,
             // this is to make sure only user-edited properties will get serialized

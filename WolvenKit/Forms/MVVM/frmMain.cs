@@ -53,12 +53,13 @@ namespace WolvenKit
         #region Forms
         //private List<IWolvenkitDocument> OpenDocuments { get; set; } = new List<IWolvenkitDocument>();
         private frmModExplorer ModExplorer { get; set; }
-        private frmStringsGui stringsGui { get; set; }
         private frmOutput Output { get; set; }
         private frmConsole Console { get; set; }
-        private frmWelcome Welcome { get; set; }
-
         private frmImportUtility ImportUtility { get; set; }
+
+
+        private frmStringsGui stringsGui { get; set; }
+        private frmWelcome Welcome { get; set; }
         private frmRadish RadishUtility { get; set; }
         private frmProgress m_frmProgress { get; set; }
         private frmWcc FormModKit { get; set; }
@@ -122,12 +123,6 @@ namespace WolvenKit
 
             InitializeComponent();
 
-
-            this.dockPanel.Theme.Extender.FloatWindowFactory = new CustomFloatWindowFactory();
-            visualStudioToolStripExtender1.DefaultRenderer = toolStripRenderer;
-            UIController.Get().ToolStripExtender = visualStudioToolStripExtender1;
-            ApplyCustomTheme();
-
             UpdateTitle();
             MainController.Get().PropertyChanged += MainControllerUpdated;
 
@@ -167,15 +162,281 @@ namespace WolvenKit
             MainBackgroundWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
             MainBackgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
 
+
             ToolStripManager.LoadSettings(this);
             m_deserializeDockContent = new DeserializeDockContent(GetContentFromPersistString);
             this.FormBorderStyle = FormBorderStyle.None;
             menuStrip1.Show();
+
+            visualStudioToolStripExtender1.DefaultRenderer = toolStripRenderer;
+            UIController.Get().ToolStripExtender = visualStudioToolStripExtender1;
+
         }
 
         #endregion
 
         #region UI Methods
+        #region Show Forms
+        private IDockContent GetModExplorer()
+        {
+            if (ModExplorer == null || ModExplorer.IsDisposed)
+                ModExplorer = new frmModExplorer();
+
+            ModExplorer.RequestAssetBrowser += ModExplorer_RequestAssetBrowser;
+            ModExplorer.RequestFileOpen += ModExplorer_RequestFileOpen;
+            ModExplorer.RequestFileRename += ModExplorer_RequestFileRename;
+            ModExplorer.RequestFastRender += ModExplorer_RequestFastRender;
+
+            return ModExplorer;
+        }
+        private void ShowModExplorer()
+        {
+            if (ModExplorer == null || ModExplorer.IsDisposed)
+            {
+                GetModExplorer();
+                ModExplorer.Show(dockPanel, DockState.DockLeft);
+
+            }
+            ModExplorer.Activate();
+
+        }
+        private IDockContent GetOutput()
+        {
+            if (Output == null || Output.IsDisposed)
+                Output = new frmOutput();
+            return Output;
+        }
+        private void ShowOutput()
+        {
+            if (Output == null || Output.IsDisposed)
+            {
+                GetOutput();
+                Output.Show(dockPanel, DockState.DockBottom);
+            }
+
+            Output.Activate();
+        }
+        private IDockContent GetConsole()
+        {
+            if (Console == null || Console.IsDisposed)
+                Console = new frmConsole();
+            return Console;
+        }
+        private void ShowConsole()
+        {
+            if (Console == null || Console.IsDisposed)
+            {
+                GetConsole();
+                Console.Show(dockPanel, DockState.DockBottom);
+            }
+
+            Console.Activate();
+        }
+        private IDockContent GetWelcome()
+        {
+            if (Welcome == null || Welcome.IsDisposed)
+                Welcome = new frmWelcome(this);
+            return Welcome;
+        }
+        private void ShowWelcome()
+        {
+            if (Welcome == null || Welcome.IsDisposed)
+            {
+                GetWelcome();
+                Welcome.Show(dockPanel, DockState.Document);
+            }
+
+            Welcome.Activate();
+        }
+        private void ShowModKit()
+        {
+            if (FormModKit == null || FormModKit.IsDisposed)
+            {
+                FormModKit = new frmWcc();
+                FormModKit.Show(dockPanel, DockState.Document);
+            }
+
+            FormModKit.Activate();
+        }
+        private IDockContent GetImportUtility()
+        {
+            if (ImportUtility == null || ImportUtility.IsDisposed)
+                ImportUtility = new frmImportUtility();
+            return ImportUtility;
+        }
+        private void ShowImportUtility()
+        {
+            if (ImportUtility == null || ImportUtility.IsDisposed)
+            {
+                ImportUtility = new frmImportUtility();
+                ImportUtility.Show(dockPanel, DockState.DockRight);
+            }
+
+            ImportUtility.Activate();
+        }
+        private void ShowRadishUtility()
+        {
+            if (ActiveMod == null)
+            {
+                MessageBox.Show(@"Please create a new mod project."
+                    , "Missing Mod Project"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Information);
+                return;
+            }
+            var filedir = new DirectoryInfo(MainController.Get().ActiveMod.FileDirectory);
+            var radishdir = filedir.GetFiles("*.bat", SearchOption.AllDirectories)?.FirstOrDefault(_ => _.Name == "_settings_.bat")?.Directory;
+            if (radishdir == null)
+            {
+                Logger.LogString("ERROR! No radish mod directory found.\r\n", Logtype.Error);
+                return;
+            }
+
+            if (RadishUtility == null || RadishUtility.IsDisposed)
+            {
+                RadishUtility = new frmRadish();
+                RadishUtility.Show(dockPanel, DockState.Document);
+            }
+
+            RadishUtility.Activate();
+        }
+        private void ShowImagePreview()
+        {
+            if (ImagePreview == null || ImagePreview.IsDisposed)
+            {
+                ImagePreview = new frmImagePreview();
+                ImagePreview.Show(dockPanel, DockState.Document);
+            }
+            ImagePreview.Activate();
+        }
+        private void ShowScriptPreview()
+        {
+            if (ScriptPreview == null || ScriptPreview.IsDisposed)
+            {
+                ScriptPreview = new frmScriptEditor();
+                ScriptPreview.Show(dockPanel, DockState.Document);
+            }
+
+            ScriptPreview.Activate();
+        }
+
+        /// <summary>
+        /// Initializes all dockwindows
+        /// </summary>
+        private void InitWindows()
+        {
+            GetModExplorer();
+            GetConsole();
+            GetOutput();
+            GetImportUtility();
+        }
+
+
+        /// <summary>
+        /// Closes all the "file documents", resets modexplorer and clears the output.
+        /// </summary>
+        private void ResetWindows()
+        {
+            if (isDockPanelInitialized)
+                SaveDockPanelLayout();
+
+            CloseWindows();
+
+            InitDockPanel();
+
+            //ClearOutput();
+        }
+
+        /// <summary>
+        /// Closes and saves all the "file documents", resets modexplorer.
+        /// </summary>
+        private void CloseWindows()
+        {
+            if (ActiveMod != null)
+            {
+                foreach (var t in vm.OpenDocuments.ToList())
+                {
+                    t.SaveFile();
+                    t.Close();
+                    vm.OpenDocuments.Remove(t);
+                }
+            }
+            ModExplorer?.Close();
+            ModExplorer = null;
+            Output?.Close();
+            Output = null;
+            Console?.Close();
+            Console = null;
+            if (Welcome != null)
+            {
+                Welcome?.Close();
+                Welcome = new frmWelcome(this);
+            }
+            ImportUtility?.Close();
+            ImportUtility = null;
+            RadishUtility?.Close();
+            RadishUtility = null;
+            ScriptPreview?.Close();
+            ScriptPreview = null;
+            ImagePreview?.Close();
+            ImagePreview = null;
+            FormModKit?.Close();
+            FormModKit = null;
+
+            foreach (var t in OpenScripts.ToList())
+            {
+                t.SaveFile();
+                t.Close();
+            }
+            foreach (var t in OpenImages.ToList())
+            {
+                t.Close();
+            }
+
+            foreach (var window in dockPanel.FloatWindows.ToList())
+            {
+                window.Dispose();
+                window.Close();
+            }
+        }
+
+        #endregion
+        private void SaveDockPanelLayout() => dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"));
+        private bool isDockPanelInitialized;
+        private void InitDockPanel()
+        {
+            ApplyCustomTheme();
+            string config = Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml");
+            if (System.IO.File.Exists(config))
+            {
+                try
+                {
+                    dockPanel.LoadFromXml(config, m_deserializeDockContent);
+                    dockPanel.Theme.Extender.FloatWindowFactory = new CustomFloatWindowFactory();
+                }
+                catch (Exception exception)
+                {
+                    ShowWindows();
+                    System.Console.WriteLine(exception);
+                }
+            }
+            else
+            {
+                ShowWindows();
+                SaveDockPanelLayout();
+            }
+
+            isDockPanelInitialized = true;
+
+            void ShowWindows()
+            {
+                ShowModExplorer();
+                ShowConsole();
+                ShowOutput();
+                ShowImportUtility();
+            }
+        }
+
         private IDockContent GetContentFromPersistString(string persistString)
         {
             if (persistString == typeof(frmModExplorer).ToString())
@@ -184,8 +445,8 @@ namespace WolvenKit
                 return GetConsole();
             else if (persistString == typeof(frmOutput).ToString())
                 return GetOutput();
-            else if (persistString == typeof(frmWelcome).ToString())
-                return GetWelcome();
+            //else if (persistString == typeof(frmWelcome).ToString())
+            //    return GetWelcome();
             if (persistString == typeof(frmImportUtility).ToString())
                 return GetImportUtility();
             //else
@@ -214,11 +475,9 @@ namespace WolvenKit
 
         public void GlobalApplyTheme()
         {
-            dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"));
-
             if (vm.OpenDocuments.Count == 0)
             {
-                ApplyThemes();
+                ResetWindows();
             }
             else
             {
@@ -232,7 +491,7 @@ namespace WolvenKit
                         return;
                     case DialogResult.Yes:
                         {
-                            ApplyThemes();
+                            ResetWindows();
                             break;
                         }
                     case DialogResult.No:
@@ -241,19 +500,6 @@ namespace WolvenKit
                         }
                 }
             }
-            
-
-            void ApplyThemes()
-            {
-                CloseWindows();
-
-                this.ApplyCustomTheme();
-
-                dockPanel.LoadFromXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"), m_deserializeDockContent);
-
-                ReopenWindows();
-            }
-
         }
         private void ApplyCustomTheme()
         {
@@ -1246,248 +1492,6 @@ namespace WolvenKit
             return ret;
         }
 
-
-
-
-        #region Show Forms
-        private IDockContent GetModExplorer()
-        {
-            if (ModExplorer == null || ModExplorer.IsDisposed)
-                ModExplorer = new frmModExplorer();
-            return ModExplorer;
-        }
-        private void ShowModExplorer()
-        {
-            if (ModExplorer == null || ModExplorer.IsDisposed)
-            {
-                GetModExplorer();
-                ModExplorer.Show(dockPanel, DockState.DockLeft);
-
-            }
-            ModExplorer.Activate();
-
-
-            ModExplorer.RequestAssetBrowser += ModExplorer_RequestAssetBrowser;
-
-
-            ModExplorer.RequestFileOpen += ModExplorer_RequestFileOpen;
-            ModExplorer.RequestFileRename += ModExplorer_RequestFileRename;
-
-            ModExplorer.RequestFastRender += ModExplorer_RequestFastRender;
-        }
-        private IDockContent GetOutput()
-        {
-            if (Output == null || Output.IsDisposed)
-                Output = new frmOutput();
-            return Output;
-        }
-        private void ShowOutput()
-        {
-            if (Output == null || Output.IsDisposed)
-            {
-                GetOutput();
-                Output.Show(dockPanel, DockState.DockBottom);
-            }
-
-            Output.Activate();
-        }
-        private IDockContent GetConsole()
-        {
-            if (Console == null || Console.IsDisposed)
-                Console = new frmConsole();
-            return Console;
-        }
-        private void ShowConsole()
-        {
-            if (Console == null || Console.IsDisposed)
-            {
-                GetConsole();
-                Console.Show(dockPanel, DockState.DockBottom);
-            }
-
-            Console.Activate();
-        }
-        private IDockContent GetWelcome()
-        {
-            if (Welcome == null || Welcome.IsDisposed)
-                Welcome = new frmWelcome(this);
-            return Welcome;
-        }
-        private void ShowWelcome()
-        {
-            if (Welcome == null || Welcome.IsDisposed)
-            {
-                GetWelcome();
-                Welcome.Show(dockPanel, DockState.Document);
-            }
-
-            Welcome.Activate();
-        }
-        private void ShowModKit()
-        {
-            if (FormModKit == null || FormModKit.IsDisposed)
-            {
-                FormModKit = new frmWcc();
-                FormModKit.Show(dockPanel, DockState.Document);
-            }
-
-            FormModKit.Activate();
-        }
-        private IDockContent GetImportUtility()
-        {
-            if (ImportUtility == null || ImportUtility.IsDisposed)
-                ImportUtility = new frmImportUtility();
-            return ImportUtility;
-        }
-        private void ShowImportUtility()
-        {
-            if (ImportUtility == null || ImportUtility.IsDisposed)
-            {
-                ImportUtility = new frmImportUtility();
-                ImportUtility.Show(dockPanel, DockState.DockRight);
-            }
-
-            ImportUtility.Activate();
-        }
-        private void ShowRadishUtility()
-        {
-            if (ActiveMod == null)
-            {
-                MessageBox.Show(@"Please create a new mod project."
-                    , "Missing Mod Project"
-                    , MessageBoxButtons.OK
-                    , MessageBoxIcon.Information);
-                return;
-            }
-            var filedir = new DirectoryInfo(MainController.Get().ActiveMod.FileDirectory);
-            var radishdir = filedir.GetFiles("*.bat", SearchOption.AllDirectories)?.FirstOrDefault(_ => _.Name == "_settings_.bat")?.Directory;
-            if (radishdir == null)
-            {
-                Logger.LogString("ERROR! No radish mod directory found.\r\n", Logtype.Error);
-                return;
-            }
-
-            if (RadishUtility == null || RadishUtility.IsDisposed)
-            {
-                RadishUtility = new frmRadish();
-                RadishUtility.Show(dockPanel, DockState.Document);
-            }
-
-            RadishUtility.Activate();
-        }
-        private void ShowImagePreview()
-        {
-            if (ImagePreview == null || ImagePreview.IsDisposed)
-            {
-                ImagePreview = new frmImagePreview();
-                ImagePreview.Show(dockPanel, DockState.Document);
-            }
-            ImagePreview.Activate();
-        }
-        private void ShowScriptPreview()
-        {
-            if (ScriptPreview == null || ScriptPreview.IsDisposed)
-            {
-                ScriptPreview = new frmScriptEditor();
-                ScriptPreview.Show(dockPanel, DockState.Document);
-            }
-
-            ScriptPreview.Activate();
-        }
-
-        /// <summary>
-        /// Closes all the "file documents", resets modexplorer and clears the output.
-        /// </summary>
-        private void ResetWindows()
-        {
-            CloseWindows();
-
-            ShowModExplorer();
-            ShowConsole();
-            ShowOutput();
-            ShowImportUtility();
-
-            ClearOutput();
-        }
-
-        /// <summary>
-        /// Closes and saves all the "file documents", resets modexplorer.
-        /// </summary>
-        private void CloseWindows()
-        {
-            if (ActiveMod != null)
-            {
-                foreach (var t in vm.OpenDocuments.ToList())
-                {
-                    t.SaveFile();
-                    t.Close();
-                    vm.OpenDocuments.Remove(t);
-                }
-            }
-            ModExplorer?.Close();
-            ModExplorer = null;
-            Output?.Close();
-            Output = null;
-            Console?.Close();
-            Console = null;
-            if (Welcome != null)
-            {
-                Welcome?.Close();
-                Welcome = new frmWelcome(this);
-            }
-            ImportUtility?.Close();
-            ImportUtility = null;
-            RadishUtility?.Close();
-            RadishUtility = null;
-            ScriptPreview?.Close();
-            ScriptPreview = null;
-            ImagePreview?.Close();
-            ImagePreview = null;
-            FormModKit?.Close();
-            FormModKit = null;
-
-            foreach (var t in OpenScripts.ToList())
-            {
-                t.SaveFile();
-                t.Close();
-            }
-            foreach (var t in OpenImages.ToList())
-            {
-                t.Close();
-            }
-
-            foreach (var window in dockPanel.FloatWindows.ToList())
-            {
-                window.Dispose();
-                window.Close();
-            }
-        }
-
-        /// <summary>
-        /// Closes and saves all the "file documents", resets modexplorer.
-        /// </summary>
-        private void ReopenWindows()
-        {
-            if (ActiveMod?.LastOpenedFiles != null)
-            {
-                foreach (var doc in ActiveMod.LastOpenedFiles)
-                {
-                    if (File.Exists(doc))
-                    {
-                        LoadDocument(doc);
-                    }
-                }
-            }
-            ShowModExplorer();
-            ShowImportUtility();
-            ShowConsole();
-            ShowOutput();
-
-            if (Welcome != null)
-                Welcome.Show(dockPanel, DockState.Document);
-        }
-        #endregion
-
         #region Mod Utility
         public void PackProject()
         {
@@ -2158,7 +2162,7 @@ namespace WolvenKit
                 {
                     if (File.Exists(doc))
                     {
-                        LoadDocument(doc);
+                        //LoadDocument(doc);
                     }
                 }
             }
@@ -2473,34 +2477,39 @@ namespace WolvenKit
         private void frmMain_Load(object sender, EventArgs e)
         {
             //Load/Setup the config
-            var Exit = false;
+            var exit = false;
             while (!File.Exists(MainController.Get().Configuration.ExecutablePath))
             {
                 var sets = new frmSettings();
                 if (sets.ShowDialog() != DialogResult.OK)
                 {
-                    Exit = true;
+                    exit = true;
                     break;
                 }
                 else
                     MainController.Get().ProjectStatus = "Ready";
             }
 
-            if (Exit)
+            if (exit)
             {
                 Visible = false;
                 Close();
             }
 
             //Start loading if everything is set up.
-
-
-            var frmload = new frmLoading();
-            frmload.ShowDialog();
+            using (var frmload = new frmLoading())
+            {
+                var result = frmload.ShowDialog();
+            }
+                
 
             WccHelper = MainController.Get().WccHelper;
             Logger = MainController.Get().Logger;
             Logger.PropertyChanged += LoggerUpdated;
+
+
+            // Initialize DockPanel
+            InitWindows();
 
             //Update check should be after we are all set up. It goes on in the background.
             AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
@@ -2508,32 +2517,19 @@ namespace WolvenKit
 
             if (!MainController.Get().Configuration.IsWelcomeFormDisabled)
             {
-                var frmwelcome = new frmWelcome(this);
-                frmwelcome.ShowDialog();
-                switch (frmwelcome.DialogResult)
+                using (var frmwelcome = new frmWelcome(this))
                 {
-                    case DialogResult.None:
-                        break;
-                    case DialogResult.OK:
-                        break;
-                    case DialogResult.Cancel:
-                        break;
-                    case DialogResult.Abort:
-                        Close();
-                        break;
-                    case DialogResult.Retry:
-                        break;
-                    case DialogResult.Ignore:
-                        break;
-                    case DialogResult.Yes:
-                        break;
-                    case DialogResult.No:
-                        break;
-                    default:
-                        break;
+                    var result = frmwelcome.ShowDialog();
+                    switch (result)
+                    {
+                        case DialogResult.Abort:
+                            Close();
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
-            
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -2571,28 +2567,16 @@ namespace WolvenKit
             config.MainSize = Size;
             config.MainLocation = Location;
 
-            dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"));
+            SaveDockPanelLayout();
             ToolStripManager.SaveSettings(this);
         }
 
         private void frmMain_Shown(object sender, EventArgs e)
         {
-            ResetWindows();     //remove this when dockpanel deserialisation works
             var config = UIController.Get().Configuration;
             Size = config.MainSize;
             Location = config.MainLocation;
             WindowState = config.MainState;
-
-            try
-            {
-                dockPanel.LoadFromXml(
-                    Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"),
-                    m_deserializeDockContent);
-            }
-            catch
-            {
-                // ignored
-            }
 
             if (!string.IsNullOrEmpty(MainController.Get().InitialModProject))
                 OpenMod(MainController.Get().InitialModProject);

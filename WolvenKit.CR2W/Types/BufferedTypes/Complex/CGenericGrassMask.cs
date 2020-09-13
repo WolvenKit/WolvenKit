@@ -30,11 +30,10 @@ namespace WolvenKit.CR2W.Types
         public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
-            if ((cr2w.GetChunkByType("CGenericGrassMask").data as CGenericGrassMask).MaskRes != null)
-            {
-                var res = (cr2w.GetChunkByType("CGenericGrassMask").data as CGenericGrassMask).MaskRes.val;
-                grassmask.Bytes = file.ReadBytes((int)(res * res >> 3));
-            }
+
+            if (MaskRes == null) return;
+            var res = MaskRes.val;
+            grassmask.Bytes = file.ReadBytes((int)(res * res >> 3));
         }
 
         public override void Write(BinaryWriter file)

@@ -71,6 +71,7 @@ namespace WolvenKit.CR2W.Types
                 CVariable element = CR2WTypeManager.Create(redtype, i.ToString(), cr2w, this);
 
                 element.Read(file, 0);
+                element.IsSerialized = true;
                 if (element is T te)
                     elements.Add(te);
             }

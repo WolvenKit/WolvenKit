@@ -30,11 +30,6 @@ namespace WolvenKit.CR2W.Types
 
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new SEntityBufferType2(cr2w, parent, name);
-        }
-
         public override void Read(BinaryReader file, uint size)
         {
             sizeofdata.Read(file, 4);
@@ -68,5 +63,9 @@ namespace WolvenKit.CR2W.Types
             return componentName.Value;
         }
 
+        public override List<IEditableVariable> GetEditableVariables()
+        {
+            return base.GetEditableVariables();
+        }
     }
 }
