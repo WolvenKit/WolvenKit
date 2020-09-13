@@ -254,7 +254,8 @@ namespace WolvenKit.App.ViewModels
                 using (var fs = new FileStream(fullpath, FileMode.Open, FileAccess.Read))
                 using (var reader = new BinaryReader(fs))
                 {
-                    cr2w = new CR2WFile(reader);
+                    cr2w = new CR2WFile();
+                    cr2w.Read(reader);
                     fs.Close();
                 }
 

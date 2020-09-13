@@ -15,22 +15,19 @@ namespace WolvenKit
             {
                 var types = list;
                 types.Sort();
-                txType.Items.AddRange(types.ToArray());
+                txType.Items.AddRange(types.ToArray<object>());
             }
             else
             {
 
                 var types = CR2WTypeManager.AvailableTypes;
-                types.ToList().Sort();
+                var enumerable = types as string[] ?? types.ToArray();
+                enumerable.ToList().Sort();
 
-                txType.Items.AddRange(types.ToArray());
+                txType.Items.AddRange(enumerable.ToArray<object>());
             }
         }
 
-        public string ChunkType
-        {
-            get { return txType.Text; }
-            set { txType.Text = value; }
-        }
+        public string ChunkType => txType.Text;
     }
 }

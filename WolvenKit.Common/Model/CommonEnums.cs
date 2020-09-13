@@ -40,4 +40,14 @@ namespace WolvenKit.Common.Model
         Uncooked,
         Raw
     }
+
+    public enum EFileReadErrorCodes
+    {
+        NoError,
+        NoCr2w,
+        UnsupportedVersion,
+
+    }
 }
+
+

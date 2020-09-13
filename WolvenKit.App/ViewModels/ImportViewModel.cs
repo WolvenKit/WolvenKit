@@ -95,6 +95,8 @@ namespace WolvenKit.App.ViewModels
 
             }
             AddObjects(importablefiles, MainController.Get().ActiveMod.FileDirectory);
+
+            TryGetTextureGroupsCommand.SafeExecute();
         }
 
         protected bool CanOpenFolder() => MainController.Get().ActiveMod != null;

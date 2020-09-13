@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Linq;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.CR2W
 {
@@ -65,21 +67,27 @@ namespace WolvenKit.CR2W
             file.BaseStream.Seek(_embedded.dataOffset, SeekOrigin.Begin);
             Data = file.ReadBytes((int) _embedded.dataSize);
 
-            parsedFile = new CR2WFile(Data, ParentFile.Logger);
-            if (parsedFile != null)
+            parsedFile = new CR2WFile(ParentFile.Logger);
+            switch (parsedFile.Read(Data))
             {
-                if (parsedFile.chunks != null && parsedFile.chunks.Any())
-                    ClassName = parsedFile.chunks.FirstOrDefault().REDType;
+                case EFileReadErrorCodes.NoError:
+                    break;
+                case EFileReadErrorCodes.NoCr2w:
+                case EFileReadErrorCodes.UnsupportedVersion:
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
-            if (ParentImports != null && ParentImports.Any())
+
+            if (parsedFile.chunks != null && parsedFile.chunks.Any())
+                ClassName = parsedFile.chunks.FirstOrDefault()?.REDType;
+
+            if (ParentImports != null && ParentImports.Any() && ParentImports.Count > (int)Embedded.importIndex - 1)
             {
-                if (ParentImports.Count > (int)Embedded.importIndex - 1)
-                {
-                    var import = ParentImports[(int)Embedded.importIndex - 1];
-                    ImportClass = import.ClassNameStr;
-                    ImportPath = import.DepotPathStr;
-                }
+                var import = ParentImports[(int)Embedded.importIndex - 1];
+                ImportClass = import.ClassNameStr;
+                ImportPath = import.DepotPathStr;
             }
         }
 

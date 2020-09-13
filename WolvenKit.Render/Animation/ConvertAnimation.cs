@@ -60,7 +60,7 @@ namespace WolvenKit.Render
             {
                 var SkeletalAnimationSet = w2AnimFile.chunks[0];
                 CSkeletalAnimationSet set = w2AnimFile.chunks[0].data as CSkeletalAnimationSet;
-                set.Animations = new CArray<CPtr<CSkeletalAnimationSetEntry>>(set.cr2w, set, "animations");
+                set.Animations = new CArray<CPtr<CSkeletalAnimationSetEntry>>(set.cr2w, set, "animations") {Elementtype = "ptr:CSkeletalAnimationSetEntry" };
                 set.Animations.AddVariable(new CPtr<CSkeletalAnimationSetEntry>(set.cr2w, set.Animations, "")
                 {
                     Reference = SkeletalAnimationSet.cr2w.chunks[startIndex + 2],
@@ -294,7 +294,8 @@ namespace WolvenKit.Render
             using (MemoryStream ms = new MemoryStream(data))
             using (BinaryReader br = new BinaryReader(ms))
             {
-                W2AnimFile = new CR2WFile(br);
+                W2AnimFile = new CR2WFile();
+                W2AnimFile.Read(br);
                 createAnimationSet();
                 for (int i = 0; i < files.Count(); i++)
                 {

@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
         public CStorySceneScript(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            BufferParameters = new CCompressedBuffer<CVariant>(cr2w, this, nameof(BufferParameters));
+            BufferParameters = new CCompressedBuffer<CVariant>(cr2w, this, nameof(BufferParameters)) { IsSerialized = true };
         }
 
         public override void Read(BinaryReader file, uint size)

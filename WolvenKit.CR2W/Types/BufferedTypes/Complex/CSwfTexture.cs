@@ -22,7 +22,7 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            var pos = file.BaseStream.Position;
+           // var pos = file.BaseStream.Position;
 
             base.Read(file, size);
 

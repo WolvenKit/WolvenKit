@@ -48,6 +48,12 @@ namespace WolvenKit.Forms
             }
         }
 
+        public void SelectChunk(CR2WExportWrapper chunk)
+        {
+            // expand until :facepalm:
+            treeListView.SelectedObject = chunk;
+        }
+
         private void UpdateHelperList()
         {
             childrenDict.Clear();
@@ -123,13 +129,9 @@ namespace WolvenKit.Forms
         private void searchTB_KeyUp(object sender, KeyEventArgs e)
         {
             if (!string.IsNullOrEmpty(toolStripSearchBox.Text))
-            {
                 this.treeListView.ModelFilter = TextMatchFilter.Contains(treeListView, toolStripSearchBox.Text.ToUpper());
-            }
             else
-            {
                 treeListView.ModelFilter = null;
-            }
         }
 
         private void listView_ItemsChanged(object sender, ItemsChangedEventArgs e)

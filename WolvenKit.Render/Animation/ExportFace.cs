@@ -49,7 +49,8 @@ namespace WolvenKit.Render
             using (MemoryStream ms = new MemoryStream(data))
             using (BinaryReader br = new BinaryReader(ms))
             {
-                W3FaceFile = new CR2WFile(br);
+                W3FaceFile = new CR2WFile();
+                w3FaceFile.Read(br);
                 //int count = Read(br, 0);
                 CMimicFace chunkMimicFace = W3FaceFile.chunks[0].data as CMimicFace;
                 CSkeleton mimicSkeleton = W3FaceFile.chunks[1].data as CSkeleton;

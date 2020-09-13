@@ -40,7 +40,6 @@ namespace WolvenKit.Forms
             this.collapseAllChildrenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.treeListView = new BrightIdeasSoftware.TreeListView();
-            this.olvcolIdx = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvcolName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvcolPreview = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -63,7 +62,7 @@ namespace WolvenKit.Forms
             this.collapseAllChildrenToolStripMenuItem,
             this.toolStripSeparator1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(185, 120);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(185, 98);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // expandAllToolStripMenuItem
@@ -101,14 +100,12 @@ namespace WolvenKit.Forms
             // 
             // treeListView
             // 
-            this.treeListView.AllColumns.Add(this.olvcolIdx);
             this.treeListView.AllColumns.Add(this.olvcolName);
             this.treeListView.AllColumns.Add(this.olvcolPreview);
             this.treeListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treeListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvcolIdx,
             this.olvcolName,
             this.olvcolPreview});
             this.treeListView.ContextMenuStrip = this.contextMenuStrip1;
@@ -126,11 +123,6 @@ namespace WolvenKit.Forms
             this.treeListView.View = System.Windows.Forms.View.Details;
             this.treeListView.VirtualMode = true;
             this.treeListView.ItemsChanged += new System.EventHandler<BrightIdeasSoftware.ItemsChangedEventArgs>(this.listView_ItemsChanged);
-            // 
-            // olvcolIdx
-            // 
-            this.olvcolIdx.AspectName = "ChunkIndex";
-            this.olvcolIdx.Text = "#";
             // 
             // olvcolName
             // 
@@ -233,6 +225,5 @@ namespace WolvenKit.Forms
         private ToolStripMenuItem expandAllChildrenToolStripMenuItem;
         private ToolStripMenuItem collapseAllToolStripMenuItem;
         private ToolStripMenuItem collapseAllChildrenToolStripMenuItem;
-        private OLVColumn olvcolIdx;
     }
 }

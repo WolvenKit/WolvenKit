@@ -50,10 +50,11 @@ namespace WolvenKit
                     using (MemoryStream ms = new MemoryStream(animsData))
                     using (BinaryReader br = new BinaryReader(ms))
                     {
-                        animsFile = new CR2WFile(br)
+                        animsFile = new CR2WFile()
                         {
                             Cr2wFileName = w2animsFilePath
                         };
+                        animsFile.Read(br);
                         exportFac.LoadData(animsFile);
                     }
                     comboBoxAnim.Items.Clear();
@@ -110,7 +111,8 @@ namespace WolvenKit
                     using (MemoryStream ms = new MemoryStream(data))
                     using (BinaryReader br = new BinaryReader(ms))
                     {
-                        CR2WFile rigFile = new CR2WFile(br);
+                        CR2WFile rigFile = new CR2WFile();
+                        rigFile.Read(br);
                         exportRig.LoadData(rigFile);
                     }
                     //exportFac.Apply(exportRig);

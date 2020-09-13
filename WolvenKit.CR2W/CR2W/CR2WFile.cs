@@ -34,7 +34,7 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Constructor
-        public CR2WFile()
+        public CR2WFile(LoggerService logger = null)
         {
             names = new List<CR2WNameWrapper>();            //block 2
             imports = new List<CR2WImportWrapper>();        //block 3
@@ -47,36 +47,10 @@ namespace WolvenKit.CR2W
                 version = 162,
             };
 
-            Logger = new LoggerService();       //dummy that can't log to UI, not really needed bc we check later anyway. but hey
+            Logger = logger ?? new LoggerService();
         }
 
-        public CR2WFile(BinaryReader file, LoggerService logger = null)
-        {
-            if (logger == null)
-                Logger = new LoggerService();   //dummy that can't log to UI, not really needed bc we check later anyway. but hey
-            else
-                Logger = logger;
-
-            Read(file);
-        }
-        public CR2WFile(MemoryMappedFile file, LoggerService logger = null)
-        {
-            if (logger == null)
-                Logger = new LoggerService();   //dummy that can't log to UI, not really needed bc we check later anyway. but hey
-            else
-                Logger = logger;
-
-            //await Read(file);
-        }
-        public CR2WFile(byte[] data, LoggerService logger)
-        {
-            Logger = logger;
-            using (var ms = new MemoryStream(data))
-            using (var br = new BinaryReader(ms))
-            {
-                Read(br);
-            }
-        }
+        
         #endregion
 
         #region Fields
@@ -135,7 +109,7 @@ namespace WolvenKit.CR2W
         public IVariableEditor EditorController { get; set; }
         #endregion
 
-
+        #region Supporting Functions
         public string GetLocalizedString(uint val)
         {
             if (LocalizedStringSource != null)
@@ -183,14 +157,14 @@ namespace WolvenKit.CR2W
 
             var parsedvar = CR2WTypeManager.Create(typename, varname, this, parent);
             // The "size" variable read is something a bit strange : it takes itself into account.
-            try
-            {
+            //try
+            //{
                 parsedvar.Read(file, size - 4);
-            }
-            catch
-            {
-                System.Console.WriteLine("hohoho");
-            }
+            //}
+            //catch
+            //{
+            //    System.Console.WriteLine("hohoho");
+            //}
 
             var afterVarPos = file.BaseStream.Position;
 
@@ -230,6 +204,7 @@ namespace WolvenKit.CR2W
             else
                 throw new SerializationException();
         }
+        #endregion
 
         #region Read
         public (List<CR2WImportWrapper>, bool, List<CR2WBufferWrapper>) ReadImportsAndBuffers(BinaryReader file)
@@ -270,7 +245,16 @@ namespace WolvenKit.CR2W
             return (imports, m_hasInternalBuffer, buffers);
         }
 
-        public int Read(BinaryReader file)
+        public EFileReadErrorCodes Read(byte[] data)
+        {
+            using (var ms = new MemoryStream(data))
+            using (var br = new BinaryReader(ms))
+            {
+                return Read(br);
+            }
+        }
+
+        public EFileReadErrorCodes Read(BinaryReader file)
         {
             //m_stream = file.BaseStream;
 
@@ -278,16 +262,19 @@ namespace WolvenKit.CR2W
             stopwatch1.Start();
 
             #region Read Headers
-            if (Logger != null) Logger.LogProgress(1, "Reading headers...");
+
+            Logger?.LogProgress(1, "Reading headers...");
+
             // read file header
             var id = file.BaseStream.ReadStruct<uint>();
             if (id != MAGIC)
-                return 1;
-                //throw new FormatException($"Not a CR2W file, Magic read as 0x{id:X8}");
+                return EFileReadErrorCodes.NoCr2w;
+            //throw new FormatException($"Not a CR2W file, Magic read as 0x{id:X8}");
 
             m_fileheader = file.BaseStream.ReadStruct<CR2WFileHeader>();
             if (m_fileheader.version > 163 || m_fileheader.version < 159)
-                throw new FormatException($"Unknown Version {m_fileheader.version}. Supported versions: 159 - 163.");
+                return EFileReadErrorCodes.UnsupportedVersion;
+            //throw new FormatException($"Unknown Version {m_fileheader.version}. Supported versions: 159 - 163.");
 
             var dt = new CDateTime(m_fileheader.timeStamp, null, "");
 
@@ -831,7 +818,7 @@ namespace WolvenKit.CR2W
                                 returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, iparam));
                             break;
                         case CMesh cm:
-                            returnedVariables.Add(new SNameArg(EStringTableMod.None, (cvar as CMesh).BoneNames));
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, cm.BoneNames));
                             break;
                         case CBehaviorGraphContainerNode bgcn:
                             foreach (var item in bgcn.Inputnodes)
@@ -889,9 +876,9 @@ namespace WolvenKit.CR2W
                             {
                                 foreach (CPtr<CComponent> component in e.Components)
                                     returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, component));
-                                foreach (SEntityBufferType1 buffer in e.buffer_v1)
+                                foreach (SEntityBufferType1 buffer in e.BufferV1)
                                     returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, buffer));
-                                foreach (SEntityBufferType2 item in e.buffer_v2.elements)
+                                foreach (SEntityBufferType2 item in e.BufferV2.elements)
                                 {
                                     returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item.componentName));
                                     foreach (CVariantSizeTypeName el in item.variables.elements)
@@ -1337,25 +1324,24 @@ namespace WolvenKit.CR2W
                 xw.Close();
             }
         }
-        #endregion
 
-        #region Create
         public CR2WExportWrapper CreateChunk(string type, CR2WExportWrapper parent = null)
         {
-            
-            var chunk = new CR2WExportWrapper(this)
-            {
-                REDType = type
-            };
-
-            chunk.CreateDefaultData();
-            if (parent != null)
-            {
-                chunk.ParentChunkIndex = chunks.IndexOf(parent);
-            }
+            var chunk = new CR2WExportWrapper(this, type, parent);
 
             chunks.Add(chunk);
+
             return chunk;
+        }
+
+        public bool RemoveChunk(CR2WExportWrapper chunk)
+        {
+            var r = chunk.Referrers;
+            // find all pointers that point here
+            // can there be more than one?
+
+            return chunks.Remove(chunk);
+
         }
 
         public int GetStringIndex(string name, bool addnew = false)
@@ -1381,7 +1367,7 @@ namespace WolvenKit.CR2W
             return null;
         }
 
-        public bool RemoveChunk(CR2WExportWrapper chunk) => chunks.Remove(chunk);
+
 
         #endregion
     }

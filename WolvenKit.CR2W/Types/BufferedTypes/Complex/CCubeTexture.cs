@@ -30,15 +30,15 @@ namespace WolvenKit.CR2W.Types
 
         public CCubeTexture(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            
-            
+            Rawfile = new CBytes(cr2w, this, "Image") {IsSerialized = true};
+
         }
 
         public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
 
-            Rawfile = new CBytes(cr2w, this, "Image" );
+            
             Rawfile.Read(file, Filesize.val);
         }
 

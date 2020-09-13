@@ -15,7 +15,7 @@ namespace WolvenKit.Common.Model
         string Cr2wFileName { get; set; }
 
 
-        int Read(BinaryReader file);
+        EFileReadErrorCodes Read(BinaryReader file);
         void Write(BinaryWriter writer);
 
         void SerializeToXml(Stream writer);

@@ -17,9 +17,9 @@ namespace WolvenKit.CR2W.Types
 
         public CPhysicalCollision(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) 
         {
-            Unk1 = new CUInt32(cr2w, this, nameof(Unk1) );
-            Data = new CBytes(cr2w, this, nameof(Data) );
-            Collisiontypes = new CBufferVLQInt32<CName>(cr2w, this, nameof(Collisiontypes));
+            Unk1 = new CUInt32(cr2w, this, nameof(Unk1) ) { IsSerialized = true };
+            Data = new CBytes(cr2w, this, nameof(Data) ) { IsSerialized = true };
+            Collisiontypes = new CBufferVLQInt32<CName>(cr2w, this, nameof(Collisiontypes)) { IsSerialized = true };
         }
 
         public override void Read(BinaryReader file, uint size)

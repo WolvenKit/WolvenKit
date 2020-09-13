@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using WolvenKit.CR2W.Types;
 
@@ -25,6 +26,8 @@ namespace WolvenKit.CR2W.Reflection
             m_types.TryGetValue(typeName, out Type type);
             return type;
         }
+
+        public static List<Type> GetSubClassesOf(Type type) => m_types.Values.Where(_ => _.IsSubclassOf(type)).ToList();
 
         public static bool TypeExists(string typeName) => m_types.ContainsKey(typeName);
 

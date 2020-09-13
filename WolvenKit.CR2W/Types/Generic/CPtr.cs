@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
@@ -11,6 +12,8 @@ namespace WolvenKit.CR2W.Types
     public interface IPtrAccessor
     {
         CR2WExportWrapper Reference { get; set; }
+        string ReferenceType { get; }
+        bool IsSerialized { get; set; }
     }
 
     /// <summary>
@@ -19,13 +22,16 @@ namespace WolvenKit.CR2W.Types
     [REDMeta()]
     public class CPtr<T> : CVariable, IPtrAccessor where T : CVariable
     {
+       
 
         public CPtr(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
         #region Properties
+
         public CR2WExportWrapper Reference { get; set; }
+        public string ReferenceType => REDType.Split(':').Last();
         #endregion
 
         #region Methods
@@ -52,14 +58,14 @@ namespace WolvenKit.CR2W.Types
         /// <param name="size"></param>
         public override void Read(BinaryReader file, uint size)
         {
-            var val = file.ReadInt32();
+            SetValueInternal(file.ReadInt32());
+        }
 
+        public void SetValueInternal(int val)
+        {
             try
             {
-                if (val == 0)
-                    Reference = null;
-                else
-                    Reference = cr2w.chunks[val - 1];
+                Reference = val == 0 ? null : cr2w.chunks[val - 1];
             }
             catch (Exception ex)
             {
@@ -74,11 +80,11 @@ namespace WolvenKit.CR2W.Types
                 {
                     Reference.VirtualParentChunkIndex = GetVarChunkIndex();
                 }
-                else if (REDName == "parent" && cr2w.chunks[GetVarChunkIndex()].IsVirtuallyMounted == false)
+                else if (REDName == "parent" && !cr2w.chunks[GetVarChunkIndex()].IsVirtuallyMounted)
                 {
                     cr2w.chunks[GetVarChunkIndex()].VirtualParentChunkIndex = Reference.ChunkIndex;
                 }
-                else if (REDName == "child" && Reference.IsVirtuallyMounted == true)
+                else if (REDName == "child" && Reference.IsVirtuallyMounted)
                 {
                     //remount, needed for chardattachment
                     Reference.IsVirtuallyMounted = false;

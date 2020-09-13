@@ -12,7 +12,8 @@ namespace WolvenKit.Nvidia
         static void Main(string[] args)
         {
             var br = new BinaryReader(new FileStream("C:\\Users\\bence.hambalko\\Documents\\Apex\\hw.redfur",FileMode.Open));
-            var redfur = new CR2WFile(br);
+            var redfur = new CR2WFile();
+            redfur.Read(br);
             Apex.HairWorks.ConvertToApexXml(redfur).Save("C:\\Users\\bence.hambalko\\Documents\\Apex\\out.apx");
             NvidiaXML.BreakXmlHeader("C:\\Users\\bence.hambalko\\Documents\\Apex\\out.apx");
         }

@@ -199,9 +199,33 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
     }
+
+    /// <summary>
+    /// CExtAnimEventsFile are weird, if they are used as resource they get an additional 4 bytes
+    /// but if used in w2ls or as chunk they don't
+    /// so, uhm... make a stupid check if classname == 1?
+    /// </summary>
     public partial class CExtAnimEventsFile : CResource
     {
-        //[Ordinal(1000)] [REDBuffer] public CUInt32 Unk1 { get; set; }
+        [Ordinal(1000)] [REDBuffer(true)] public CUInt32 Unk1 { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
+        {
+            base.Read(file, size);
+
+            // lazy check if Cvariable is first chunk (= resource)
+            if (ParentVar != null) return;
+            Unk1 = new CUInt32(cr2w, this, nameof(Unk1)) {IsSerialized = true};
+            Unk1.Read(file, size);
+        }
+
+        public override void Write(BinaryWriter file)
+        {
+            base.Write(file);
+
+            if (Unk1 == null) return;
+            Unk1.Write(file);
+        }
     }
     public partial class CSkeletalAnimationSet : CExtAnimEventsFile
     {
@@ -245,15 +269,15 @@ namespace WolvenKit.CR2W.Types
 
         public CSwarmCellMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            Data = new CBytes(cr2w, this, nameof(Data));
-            CornerPositionX = new CFloat(cr2w, this, nameof(CornerPositionX));
-            CornerPositionY = new CFloat(cr2w, this, nameof(CornerPositionY));
-            CornerPositionZ = new CFloat(cr2w, this, nameof(CornerPositionZ));
-            DataSizeX = new CInt32(cr2w, this, nameof(DataSizeX));
-            DataSizeY = new CInt32(cr2w, this, nameof(DataSizeY));
-            DataSizeZ = new CInt32(cr2w, this, nameof(DataSizeZ));
-            DataSizeBits = new CInt32(cr2w, this, nameof(DataSizeBits));
-            SizeInKbytes = new CFloat(cr2w, this, nameof(SizeInKbytes));
+            Data = new CBytes(cr2w, this, nameof(Data)) {IsSerialized = true};
+            CornerPositionX = new CFloat(cr2w, this, nameof(CornerPositionX)) { IsSerialized = true };
+            CornerPositionY = new CFloat(cr2w, this, nameof(CornerPositionY)) { IsSerialized = true };
+            CornerPositionZ = new CFloat(cr2w, this, nameof(CornerPositionZ)) { IsSerialized = true };
+            DataSizeX = new CInt32(cr2w, this, nameof(DataSizeX)) { IsSerialized = true };
+            DataSizeY = new CInt32(cr2w, this, nameof(DataSizeY)) { IsSerialized = true };
+            DataSizeZ = new CInt32(cr2w, this, nameof(DataSizeZ)) { IsSerialized = true };
+            DataSizeBits = new CInt32(cr2w, this, nameof(DataSizeBits)) { IsSerialized = true };
+            SizeInKbytes = new CFloat(cr2w, this, nameof(SizeInKbytes)) { IsSerialized = true };
         }
 
         public override void Read(BinaryReader file, uint size)

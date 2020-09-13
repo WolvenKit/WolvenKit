@@ -19,10 +19,10 @@ namespace WolvenKit.CR2W.Types
 
         public CFXTrackItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            buffername = new CName(cr2w, this, nameof(buffername));
-            count = new CDynamicInt(cr2w, this, nameof(count));
-            unk = new CUInt8(cr2w, this, nameof(unk));
-            buffer = new CCompressedBuffer<CBufferUInt16<CFloat>>(cr2w, this, nameof(buffer));
+            buffername = new CName(cr2w, this, nameof(buffername)) { IsSerialized = true };
+            count = new CDynamicInt(cr2w, this, nameof(count)) { IsSerialized = true };
+            unk = new CUInt8(cr2w, this, nameof(unk)) { IsSerialized = true };
+            buffer = new CCompressedBuffer<CBufferUInt16<CFloat>>(cr2w, this, nameof(buffer)) { IsSerialized = true };
 
         }
 

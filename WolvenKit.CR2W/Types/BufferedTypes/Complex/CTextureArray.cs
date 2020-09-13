@@ -33,8 +33,8 @@ namespace WolvenKit.CR2W.Types
         public CTextureArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
-            rawfile = new CBytes(cr2w, this, nameof(rawfile));
-            
+            rawfile = new CBytes(cr2w, this, nameof(rawfile)) { IsSerialized = true };
+
         }
 
         public override void Read(BinaryReader file, uint size)

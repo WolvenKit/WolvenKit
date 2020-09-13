@@ -18,7 +18,7 @@ namespace WolvenKit.CR2W.Types
 
         public CLayerInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            ParentGroup = new CHandle<CLayerGroup>(cr2w, this, nameof(ParentGroup));
+            ParentGroup = new CHandle<CLayerGroup>(cr2w, this, nameof(ParentGroup)) { IsSerialized = true };
         }
 
         public override void Read(BinaryReader file, uint size)

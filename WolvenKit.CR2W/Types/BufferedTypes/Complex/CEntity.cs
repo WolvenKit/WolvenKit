@@ -13,16 +13,17 @@ namespace WolvenKit.CR2W.Types
 {
     public partial class CEntity : CNode
     {
-
-        [Ordinal(1000)] [REDBuffer(true)] public CCompressedBuffer<SEntityBufferType1> buffer_v1 { get; set; }
-        [Ordinal(1001)] [REDBuffer(true)] public CBufferUInt32<SEntityBufferType2> buffer_v2 { get; set; }
+        [Ordinal(1000)] [REDBuffer(true)] public CArray<CPtr<CComponent>> Components { get; set; }
+        [Ordinal(1001)] [REDBuffer(true)] public CCompressedBuffer<SEntityBufferType1> BufferV1 { get; set; }
+        [Ordinal(1002)] [REDBuffer(true)] public CBufferUInt32<SEntityBufferType2> BufferV2 { get; set; }
 
         private bool isCreatedFromTemplate;
             
         public CEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            buffer_v1 = new CCompressedBuffer<SEntityBufferType1>(cr2w, this, nameof(buffer_v1));
-            buffer_v2 = new CBufferUInt32<SEntityBufferType2>(cr2w, this, nameof(buffer_v1));
+            Components = new CArray<CPtr<CComponent>>(cr2w, this, nameof(Components)) {IsSerialized = true, Elementtype = "ptr:CComponent"};
+            BufferV1 = new CCompressedBuffer<SEntityBufferType1>(cr2w, this, nameof(BufferV1)) { IsSerialized = true };
+            BufferV2 = new CBufferUInt32<SEntityBufferType2>(cr2w, this, nameof(BufferV2)) { IsSerialized = true };
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -36,8 +37,10 @@ namespace WolvenKit.CR2W.Types
 
             // Read Component Array (should only be present if NOT created from template)
             #region Componentsarray
-            if (Components == null)
-                Components = new CArray<CPtr<CComponent>>(cr2w, this, nameof(Components));
+
+            //if (Components == null)
+            //    Components = CR2WTypeManager.Create("array:2,0,ptr:CComponent", "Components", cr2w, this) as CArray<CPtr<CComponent>>;
+                
 
             var endPos = file.BaseStream.Position;
             var bytesleft = size - (endPos - startPos);
@@ -45,12 +48,18 @@ namespace WolvenKit.CR2W.Types
             {
                 if (bytesleft > 0)
                 {
+                    Components.IsSerialized = true;
                     var elementcount = file.ReadBit6();
                     for (var i = 0; i < elementcount; i++)
                     {
-                        var ptr = new CPtr<CComponent>(cr2w, Components, i.ToString());
-                        ptr.Read(file, 0);
-                        Components.AddVariable(ptr);
+                        var ptr = CR2WTypeManager.Create("ptr:CComponent", i.ToString(), cr2w, Components);
+                        if (ptr is IPtrAccessor iptr)
+                        {
+                            ptr.IsSerialized = true;
+                            ptr.Read(file, 0);
+                            Components.AddVariable(ptr);
+                        }
+                        
                     }
                 }
                 else
@@ -71,12 +80,12 @@ namespace WolvenKit.CR2W.Types
                 bool canRead;
                 do
                 {
-                    var t_buffer = new SEntityBufferType1(cr2w, buffer_v1, idx.ToString());
+                    var t_buffer = new SEntityBufferType1(cr2w, BufferV1, idx.ToString()) { IsSerialized = true };
                     canRead = t_buffer.CanRead(file);
                     if (canRead)
                         t_buffer.Read(file, 0);
                     
-                    buffer_v1.AddVariable(t_buffer);
+                    BufferV1.AddVariable(t_buffer);
                     idx++;
                 } while (canRead);
             }
@@ -94,7 +103,7 @@ namespace WolvenKit.CR2W.Types
             {
                 if (bytesleft > 0)
                 {
-                    buffer_v2.Read(file, 0);
+                    BufferV2.Read(file, 0);
                 }
                 else
                 {
@@ -123,9 +132,9 @@ namespace WolvenKit.CR2W.Types
             }
 
             // Write Buffer 1 (always)
-            if (buffer_v1.Count > 0)
+            if (BufferV1.Count > 0)
             {
-                foreach (var buf in buffer_v1)
+                foreach (var buf in BufferV1)
                 {
                     buf.Write(file);
                 }
@@ -137,7 +146,7 @@ namespace WolvenKit.CR2W.Types
 
             // Write Buffer 2 (if created from template)
             if (isCreatedFromTemplate)
-                buffer_v2.Write(file);
+                BufferV2.Write(file);
 
         }
     }

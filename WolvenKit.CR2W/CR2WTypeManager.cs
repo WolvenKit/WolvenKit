@@ -110,7 +110,8 @@ namespace WolvenKit.CR2W.Types
                                 if (body == "Uint8" || body == "Int8")
                                 {
                                     var bytearray = new CByteArray(cr2w, parentVariable, varname);
-                                    bytearray.InternalType = innertype;
+                                    // save the actual redengine type for serialization: e.g. array:2,0,Uint8
+                                    bytearray.InternalType = typename;
                                     return bytearray;
                                 }
 
@@ -132,44 +133,6 @@ namespace WolvenKit.CR2W.Types
                                 arrayacc.Elementtype = body;
                                 return arrayacc as CVariable;
                             }
-                            
-
-                            //var regArrayType = new Regex(@"(\d+),(\d+),(.+)");
-                            //var matchArrayType = regArrayType.Match(fullname);
-                            //if (matchArrayType.Success)
-                            //{
-                            //    //byte arrays, these can be huge, using ordinary arrays is just too slow.
-                            //    if (matchArrayType.Groups[3].Value == "Uint8" || matchArrayType.Groups[3].Value == "Int8")
-                            //    {
-                            //        var bytearray = new CByteArray(cr2w, parentVariable, varname);
-                            //        bytearray.InternalType = fullname;
-                            //        return bytearray;
-                            //    }
-
-                                        
-
-                            //    CVariable innerobject = Create(matchArrayType.Groups[3].Value, "", cr2w, null);
-                            //    IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
-                            //    arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value), int.Parse(matchArrayType.Groups[2].Value) };
-                            //    if (innerobject is IArrayAccessor accessor && accessor.Flags != null)
-                            //    {
-                            //        arrayacc.Flags.AddRange(accessor.Flags);
-                            //    }
-
-
-                            //    arrayacc.Elementtype = matchArrayType.Groups[3].Value;
-
-                            //    return arrayacc as CVariable;
-                            //}
-                            // for CArrays of other types
-                            //else
-                            //{
-                            //    //throw new InvalidParsingException($"Invalid array type format: typename: {typename}.");
-                            //    CVariable innerobject = Create(secondsplit, "", cr2w, null);
-                            //    IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
-                            //    arrayacc.Elementtype = matchArrayType.Groups[3].Value;
-                            //    return arrayacc as CVariable;
-                            //}
                         }
                     case "static":
                         {

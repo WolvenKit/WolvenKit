@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BrightIdeasSoftware;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
 using WolvenKit.App.Model;
@@ -66,6 +67,7 @@ namespace WolvenKit
             propertyWindow = new frmChunkProperties();
             propertyWindow.Show(dockPanel, DockState.DockBottom);
             propertyWindow.OnItemsChanged += PropertyWindow_OnItemsChanged;
+            propertyWindow.OnChunkRequest += PropertyWindow_OnRequestChunk;
 
             chunkList.Activate();
 
@@ -86,12 +88,18 @@ namespace WolvenKit
 
         private void PropertyWindow_OnItemsChanged(object sender, EventArgs e)
         {
-            var args = (e as BrightIdeasSoftware.CellEditEventArgs);
-            if (args != null)
-            {
-                if (args.ListViewItem.Text == "Parent")
-                    chunkList.UpdateList();
-            }
+            // no longer used
+            //if (e is CellEditEventArgs args)
+            //{
+            //    if (args.ListViewItem.Text == "Parent")
+            //        chunkList.UpdateList();
+            //}
+            chunkList.UpdateList();
+        }
+
+        private void PropertyWindow_OnRequestChunk(object sender, SelectChunkArgs e)
+        {
+            chunkList.SelectChunk(e.Chunk);
         }
 
         public DocumentViewModel GetViewModel() => vm;

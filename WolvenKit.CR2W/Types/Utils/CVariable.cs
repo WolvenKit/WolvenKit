@@ -23,8 +23,7 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public abstract class CVariable : ObservableObject, IEditableVariable
     {
-
-        public CVariable(CR2WFile cr2w, CVariable parent, string name)
+        protected CVariable(CR2WFile cr2w, CVariable parent, string name)
         {
             this.cr2w = cr2w;
             this.ParentVar = parent;
@@ -143,17 +142,17 @@ namespace WolvenKit.CR2W.Types
 
         public string GetFullName()
         {
-            var name = REDName;
+            var _nam = REDName;
             var c = ParentVar;
             while (c != null)
             {
-                name = c.REDName + "/" + name;
+                _nam = c.REDName + "/" + _nam;
                 c = c.ParentVar;
             }
-            return name;
+            return _nam;
         }
 
-        public int GetVarChunkIndex()
+        protected int GetVarChunkIndex()
         {
             var currentcvar = this as IEditableVariable;
             while (currentcvar.VarChunkIndex == -1)
@@ -329,11 +328,9 @@ namespace WolvenKit.CR2W.Types
         private List<CVariable> ReadAllRedVariables<T>(BinaryReader br) where T : REDAttribute
         {
             var parsedvars = new List<CVariable>();
-            IEnumerable<Member> redproperties;
-            if (typeof(T) == typeof(REDBufferAttribute))
-                redproperties = this.GetREDBuffers();
-            else
-                redproperties = this.GetREDMembers(true);
+            var redproperties = typeof(T) == typeof(REDBufferAttribute) 
+                ? this.GetREDBuffers() 
+                : this.GetREDMembers(true);
 
             foreach (Member item in redproperties)
             {
@@ -367,7 +364,7 @@ namespace WolvenKit.CR2W.Types
         /// Tries to set a Cvariable in the class
         /// </summary>
         /// <param name="value"></param>
-        private bool TrySettingFastMemberAccessor(CVariable value)
+        private bool TrySettingFastMemberAccessor(IEditableVariable value)
         {
             string varname = value.REDName.FirstCharToUpper();
             varname = NormalizeName(varname);
@@ -418,7 +415,7 @@ namespace WolvenKit.CR2W.Types
             EREDMetaInfo[] tags = meta?.Keywords;
 
             // fixed class/struct (no leading null byte), write all properties in order
-            if (tags.Contains(EREDMetaInfo.REDStruct))
+            if ((tags ?? throw new InvalidOperationException()).Contains(EREDMetaInfo.REDStruct))
             {
                 // write all CVariables
                 foreach (Member item in this.GetREDMembers(true))
@@ -591,12 +588,10 @@ namespace WolvenKit.CR2W.Types
         #endregion
 
         #region Override
-        public override string ToString()
-        {
-            return $"<{REDType}>{REDName}";
-        }
+        public override string ToString() => $"<{REDType}>{REDName}";
 
         #endregion
+
 
         #endregion
 
