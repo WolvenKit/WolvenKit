@@ -31,12 +31,12 @@ namespace WolvenKit.App.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class MainViewModel : ViewModel
+    public sealed class MainViewModel : ViewModel
     {
         #region Properties
         #region Title
         private string _title;
-        public virtual string Title
+        public string Title
         {
             get => _title;
             set
@@ -157,8 +157,42 @@ namespace WolvenKit.App.ViewModels
         }
         #endregion
 
-        #region WCC TASKS
-        public async Task DumpFile(string folder, string outfolder, string file = "")
+        #region Wcc Tasks
+        /// <summary>
+        /// Deprecated, Use the Modkit instead
+        /// Kept for a neat hack tricking wcc_lite into dumping individual files
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void RequestWccliteFileDumpfile(object sender, RequestFileOpenArgs e)
+        {
+            var filename = e.File;
+            if (!File.Exists(filename) && !Directory.Exists(filename))
+                return;
+            // We dump an individual file with wcclite dumpfile
+            if (File.Exists(filename))
+            {
+                // '\\?\' is a neutral win32 path prefix. It hacks wcc_lite into dumping individual files.
+                // This string will get input again, further down the line, in wcc_command.GetVariables
+                // Windows paths and string management... This one is more than stupid, it is an horror. \\FIXME if you can.
+                await DumpFile("", @"\\?\", filename);
+            }
+            //Wcclite recursively dumps CR2Ws in a directory.
+            else if (Directory.Exists(filename))
+            {
+                string dir = filename;
+                await DumpFile(dir, dir);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="outfolder"></param>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        private async Task DumpFile(string folder, string outfolder, string file = "")
         {
             WCC_Command cmd = null;
             try
@@ -190,73 +224,13 @@ namespace WolvenKit.App.ViewModels
 
         }
 
-        private async void RequestWccliteFileDumpfile(object sender, RequestFileArgs e)
-        {
-            var filename = e.File;
-            if (!File.Exists(filename) && !Directory.Exists(filename))
-                return;
-            // We dump an individual file with wcclite dumpfile
-            if (File.Exists(filename))
-            {
-                // '\\?\' is a neutral win32 path prefix. It hacks wcc_lite into dumping individual files.
-                // This string will get input again, further down the line, in wcc_command.GetVariables
-                // Windows paths and string management... This one is more than stupid, it is an horror. \\FIXME if you can.
-                await DumpFile("", @"\\?\", filename);
-            }
-            //Wcclite recursively dumps CR2Ws in a directory.
-            else if (Directory.Exists(filename))
-            {
-                string dir = filename;
-                await DumpFile(dir, dir);
-            }
-        }
 
         /// <summary>
-        /// Deprecated. Use ImportUtility instead.
-        /// Imports a given file (w2mesh or redcloth to the mod project.
-        /// </summary>
-        /// <param name="infile"></param>
-        /// <param name="outfile"></param>
-        /// <returns></returns>
-        public async Task ImportFile(string infile, string outfile)
-        {
-            try
-            {
-                var importwdir = Path.GetFullPath(MainController.WorkDir);
-                if (Directory.Exists(importwdir))
-                    Directory.Delete(importwdir, true);
-                Directory.CreateDirectory(importwdir);
-
-                File.Copy(infile, Path.Combine(importwdir, Path.GetFileName(infile)));
-
-                MainController.Get().ProjectStatus = "Importing file";
-                if (!Directory.Exists(Path.GetDirectoryName(outfile)))
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(outfile));
-                }
-
-                var import = new Wcc_lite.import()
-                {
-                    Depot = MainController.Get().Configuration.DepotPath,
-                    File = Path.Combine(importwdir, Path.GetFileName(infile)),
-                    Out = outfile
-                };
-                await Task.Run(() => MainController.Get().WccHelper.RunCommand(import));
-            }
-            catch (Exception ex)
-            {
-                Logger.LogString(ex.ToString() + "\n", Logtype.Error);
-            }
-
-            MainController.Get().ProjectStatus = "File imported succesfully!";
-
-        }
-
-        /// <summary>
-        /// 
+        /// Uncooks a single file to a temp directory
         /// </summary>
         /// <param name="relativePath"></param>
         /// <param name="newpath"></param>
+        /// <param name="indir"></param>
         /// <returns></returns>
         public async Task<int> UncookFileToMod(string relativePath, string newpath, string indir)
         {
@@ -338,6 +312,7 @@ namespace WolvenKit.App.ViewModels
         /// <param name="projectFolder"></param>
         /// <param name="alternateOutDirectory"></param>
         /// <param name="loadmods"></param>
+        /// <param name="silent"></param>
         /// <returns></returns>
         private string UnbundleFile(string relativePath, bool isDLC, EProjectFolders projectFolder, string alternateOutDirectory = "", bool loadmods = false, bool silent = false)
         {
@@ -473,12 +448,15 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="importfilepath"></param>
-        /// <param name="copyToMod"></param>
-        /// <returns></returns>
+       /// <summary>
+       /// Adds all file dependencies (cr2w imports) to a specified folder
+       /// retaining relative paths
+       /// </summary>
+       /// <param name="importfilepath"></param>
+       /// <param name="recursive"></param>
+       /// <param name="silent"></param>
+       /// <param name="alternateOutDirectory"></param>
+       /// <returns></returns>
         public async Task AddAllImports(string importfilepath, bool recursive = false, bool silent = false, string alternateOutDirectory = "")
         {
             if (!File.Exists(importfilepath))
@@ -548,22 +526,21 @@ namespace WolvenKit.App.ViewModels
 
         #endregion
 
-        #region Mod
+        #region Mod Tasks
         /// <summary>
         /// Saves a W3ModProject
         /// </summary>
         public void SaveMod()
         {
-            if (ActiveMod != null)
-            {
-                if (ActiveMod.LastOpenedFiles != null)
-                    ActiveMod.LastOpenedFiles = OpenDocuments.Select(x => x.Cr2wFileName).ToList();
-                var ser = new XmlSerializer(typeof(W3Mod));
-                var modfile = new FileStream(ActiveMod.FileName, FileMode.Create, FileAccess.Write);
-                ser.Serialize(modfile, ActiveMod);
-                modfile.Close();
-            }
+            if (ActiveMod == null) return;
+            if (ActiveMod.LastOpenedFiles != null)
+                ActiveMod.LastOpenedFiles = OpenDocuments.Select(x => x.Cr2wFileName).ToList();
+            var ser = new XmlSerializer(typeof(W3Mod));
+            var modfile = new FileStream(ActiveMod.FileName, FileMode.Create, FileAccess.Write);
+            ser.Serialize(modfile, ActiveMod);
+            modfile.Close();
         }
+
         /// <summary>
         /// Installs the project from the packed folder of the project to the game
         /// </summary>
@@ -630,8 +607,6 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
-
-
         /// <summary>
         /// Always call this first to clean the directories.
         /// </summary>
@@ -689,7 +664,6 @@ namespace WolvenKit.App.ViewModels
         /// <summary>
         /// Cooks Files in the ModProject's folders (Bunde, TextureCache etc...)
         /// </summary>
-        /// <param name="cachetype"></param>
         /// <returns></returns>
         public async Task<int> Cook()
         {
@@ -791,6 +765,9 @@ namespace WolvenKit.App.ViewModels
         /// <summary>
         /// Packs the bundles for the DLC and the Mod. 
         /// </summary>
+        /// <param name="packmod"></param>
+        /// <param name="packdlc"></param>
+        /// <returns></returns>
         public async Task<int> Pack(bool packmod, bool packdlc)
         {
 
@@ -836,9 +813,10 @@ namespace WolvenKit.App.ViewModels
         }
 
         /// <summary>
-        /// Create Metadata
-        /// IN: packed\\Mods\\mod, OUT: same dir
+        /// Create metadata.store file
         /// </summary>
+        /// <param name="packmod"></param>
+        /// <param name="dlcmod"></param>
         /// <returns></returns>
         public async Task<int> CreateMetaData(bool packmod, bool dlcmod)
         {
@@ -892,6 +870,8 @@ namespace WolvenKit.App.ViewModels
         /// IN: \\CollisionCache, cooked\\Mods\\mod\\cook.db, OUT: packed\\Mods\\mod
         /// </summary>
         /// <param name="cachetype"></param>
+        /// <param name="packmod"></param>
+        /// <param name="packdlc"></param>
         /// <returns></returns>
         public async Task<int> GenerateCache(EBundleType cachetype, bool packmod, bool packdlc)
         {
@@ -970,7 +950,7 @@ namespace WolvenKit.App.ViewModels
         }
 
         /// <summary>
-        /// 
+        /// Manually creates a seedfile for cooking
         /// </summary>
         /// <param name="seedfile"></param>
         public void CreateFallBackSeedFile(string seedfile)

@@ -28,7 +28,7 @@ namespace WolvenKit.App.ViewModels
 
 
             CookCommand = new RelayCommand(Cook, CanCook);
-            DeleteFilesCommand = new RelayCommand(DeleteFiles, CanDeleteFiles);
+            //DeleteFilesCommand = new RelayCommand(DeleteFiles, CanDeleteFiles);
             CopyFileCommand = new RelayCommand(CopyFile, CanCopyFile);
             PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
 
@@ -97,7 +97,7 @@ namespace WolvenKit.App.ViewModels
 
         #region Commands
         public ICommand CookCommand { get; }
-        public ICommand DeleteFilesCommand { get; }
+        //public ICommand DeleteFilesCommand { get; }
         public ICommand ExportMeshCommand { get; }
         public ICommand CopyFileCommand { get; }
         public ICommand PasteFileCommand { get; }
@@ -109,36 +109,9 @@ namespace WolvenKit.App.ViewModels
         protected bool CanCook() => SelectedItems != null;
         protected void Cook()
         {
-            RequestFileCook(this, new RequestFileArgs { File = SelectedItems.First().FullName });
+            RequestFileCook(this, new RequestFileOpenArgs { File = SelectedItems.First().FullName });
         }
 
-        protected bool CanDeleteFiles()
-        {
-            return SelectedItems != null;
-        }
-
-        protected void DeleteFiles()
-        {
-            var deletablefiles = new List<string>();
-            foreach (var item in SelectedItems)
-            {
-                if (!(item.FullName == ActiveMod.ModDirectory
-                    || item.FullName == ActiveMod.DlcDirectory
-                    || item.FullName == ActiveMod.RawDirectory
-                    || item.FullName == ActiveMod.RadishDirectory
-                    || item.FullName == ActiveMod.ModCookedDirectory
-                    || item.FullName == ActiveMod.ModUncookedDirectory
-                    ))
-                {
-                    deletablefiles.Add(item.FullName);
-                }
-            }
-
-            RequestFileDelete(this, new RequestFileDeleteArgs
-            {
-                Files = deletablefiles,
-            });
-        }
 
         protected bool CanExportMesh() => SelectedItems != null;
         protected async void ExportMesh()
@@ -182,12 +155,12 @@ namespace WolvenKit.App.ViewModels
 
         #region Methods
         public event EventHandler<UpdateMonitoringEventArgs> UpdateMonitoringRequest;
-        public void PauseMonitoring() => OnUpdateMonitoringRequest(false);
-        public void ResumeMonitoring() => OnUpdateMonitoringRequest(true);
-        protected void OnUpdateMonitoringRequest(bool monitor)
-        {
-            this.UpdateMonitoringRequest?.Invoke(this, new UpdateMonitoringEventArgs(monitor));
-        }
+        //public void PauseMonitoring() => OnUpdateMonitoringRequest(false);
+        //public void ResumeMonitoring() => OnUpdateMonitoringRequest(true);
+        //protected void OnUpdateMonitoringRequest(bool monitor)
+        //{
+        //    this.UpdateMonitoringRequest?.Invoke(this, new UpdateMonitoringEventArgs(monitor));
+        //}
         
         public void RepopulateTreeView()
         {
@@ -233,7 +206,7 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
-        private async void RequestFileCook(object sender, RequestFileArgs e)
+        private async void RequestFileCook(object sender, RequestFileOpenArgs e)
         {
             var filename = e.File;
             var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
@@ -316,42 +289,7 @@ namespace WolvenKit.App.ViewModels
                 MainController.LogString("Error cooking files.", Logtype.Error);
             }
         }
-        private void RequestFileDelete(object sender, RequestFileDeleteArgs e)
-        {
-            PauseMonitoring();
-
-            foreach (var filename in e.Files)
-            {
-                // Close open documents
-                foreach (var t in MainVM.OpenDocuments.Where(t => t.Cr2wFileName == filename))
-                {
-                    t.Close();
-                    break;
-                }
-
-                // Delete from file structure
-                var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
-                try
-                {
-                    if (File.Exists(fullpath))
-                    {
-                        File.Delete(fullpath);
-                    }
-                    else
-                    {
-                        Directory.Delete(fullpath, true);
-                    }
-                }
-                catch (Exception)
-                {
-                    MainController.LogString("Failed to delete " + fullpath + "!\r\n", Logtype.Error);
-                }
-            }
-
-
-            ResumeMonitoring();
-            MainVM.SaveMod();
-        }
+        
         #endregion
     }
 }

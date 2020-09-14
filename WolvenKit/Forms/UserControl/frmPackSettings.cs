@@ -23,6 +23,19 @@ namespace WolvenKit
 
             InitializeComponent();
 
+            // Bundles + Metadata
+            if (Directory.GetFiles(activemod.ModCookedDirectory, "*.*", SearchOption.AllDirectories).Any())
+            {
+                modBDL.Checked = true;
+                modMD.Checked = true;
+            }
+
+            if (Directory.GetFiles(activemod.DlcCookedDirectory, "*.*", SearchOption.AllDirectories).Any())
+            {
+                dlcBDL.Checked = true;
+                dlcMD.Checked = true;
+            }
+
             // Textures
             if (Directory.GetFiles(activemod.ModUncookedDirectory, "*.xbm", SearchOption.AllDirectories).Any())
                 modTEX.Checked = true;
@@ -33,21 +46,18 @@ namespace WolvenKit
             var allowedExtensions = new[] { ".wem", ".bnk" };
             if (Directory
                 .GetFiles(activemod.ModDirectory)
-                .Where(file => allowedExtensions.Any(file.ToLower().EndsWith))
-                .Any())
+                .Any(file => allowedExtensions.Any(file.ToLower().EndsWith)))
                 modSND.Checked = true;
             if (Directory
                 .GetFiles(activemod.DlcDirectory)
-                .Where(file => allowedExtensions.Any(file.ToLower().EndsWith))
-                .Any())
-                dlcSPEECH.Checked = true;
+                .Any(file => allowedExtensions.Any(file.ToLower().EndsWith)))
+                dlcSND.Checked = true;
 
             // Scripts  
-            // if (activemod.Files.Any(x => x.EndsWith(".ws")))
             if (Directory.GetFiles(activemod.ModDirectory, "*.ws", SearchOption.AllDirectories).Any())
                 modSCR.Checked = true;
-            //if (Directory.GetFiles(activemod.DlcDirectory, "*.ws", SearchOption.AllDirectories).Any())
-            //    dlcSTR.Checked = true;
+            if (Directory.GetFiles(activemod.DlcDirectory, "*.ws", SearchOption.AllDirectories).Any())
+                dlcSCR.Checked = true;
 
             // Strings
             if (Directory.Exists(UIController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")
@@ -65,12 +75,21 @@ namespace WolvenKit
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonOK_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.OK;
+            if (modBDL.Checked | modMD.Checked | dlcBDL.Checked | dlcMD.Checked 
+            | modTEX.Checked | dlcTEX.Checked | modSND.Checked | dlcSND.Checked
+            | modSCR.Checked | dlcSCR.Checked | modSTR.Checked | modCOL.Checked | dlcCOL.Checked)
+            {
+                DialogResult = DialogResult.OK;
+            }
+            else
+            {
+                DialogResult = DialogResult.Cancel;
+            }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void buttonCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
         }

@@ -231,7 +231,9 @@ namespace WolvenKit.Common
                 {
                     Directory.CreateDirectory(FileDirectory);
                 }
-                return Directory.EnumerateFiles(FileDirectory, "*", SearchOption.AllDirectories).Select(file => file.Substring(FileDirectory.Length + 1)).ToList();
+                return Directory.EnumerateFiles(FileDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file.Substring(FileDirectory.Length + 1))
+                    .ToList();
             }
         }
 
@@ -246,7 +248,9 @@ namespace WolvenKit.Common
                 {
                     Directory.CreateDirectory(ModDirectory);
                 }
-                return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories).Select(file => file.Substring(ModDirectory.Length + 1)).ToList();
+                return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file.Substring(ModDirectory.Length + 1))
+                    .ToList();
             }
         }
 

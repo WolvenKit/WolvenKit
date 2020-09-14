@@ -40,12 +40,12 @@ namespace WolvenKit.Common.Wcc
         /// <returns>string commandline arguments</returns>
         private string ConstructArgs()
         {
-            var str_variables = GetVariables();
+            var strVariables = GetVariables();
             string procArgs = ToString() + " ";
 
-            foreach (KeyValuePair<string, string> str in str_variables)
+            foreach (KeyValuePair<string, string> str in strVariables)
             {
-                if (str.Key.Equals("HIDDEN") || String.IsNullOrEmpty(str.Key))
+                if (str.Key.Equals("HIDDEN") || string.IsNullOrEmpty(str.Key))
                 {
                     procArgs += $"{str.Value} ";
                 }
@@ -62,7 +62,7 @@ namespace WolvenKit.Common.Wcc
         /// returns all variables as dictionary.
         /// </summary>
         /// <returns> Dictionary<string,string> </returns>
-        private Dictionary<string, string> GetVariables() //TODO: CLeanup
+        private Dictionary<string, string> GetVariables() //TODO: Cleanup
         {
             var bindingFlags = BindingFlags.Instance | BindingFlags.Public;
             var dict = new Dictionary<string, string>();
@@ -74,13 +74,13 @@ namespace WolvenKit.Common.Wcc
                 // initial check
                 //check RADName attribute
                 REDName REDatt = (REDName)Attribute.GetCustomAttribute(pi, typeof(REDName));
-                if (REDatt == null || String.IsNullOrEmpty(REDatt.name))
+                if (REDatt == null || string.IsNullOrEmpty(REDatt.name))
                 {
                     continue;
                 }
                 //check values
                 var val = Convert.ToString(pi.GetValue(this));
-                if (String.IsNullOrEmpty(val) || (pi.PropertyType == typeof(bool) && !Boolean.Parse((string)val)))
+                if (string.IsNullOrEmpty(val) || (pi.PropertyType == typeof(bool) && !bool.Parse((string)val)))
                 {
                     continue;
                 }
@@ -93,7 +93,7 @@ namespace WolvenKit.Common.Wcc
                     REDTags tag = (REDTags)Attribute.GetCustomAttribute(pi, typeof(REDTags));
 
                     // Paths
-                    if (Attribute.GetCustomAttributes(pi).Where(x => (x is REDTags)).Any()
+                    if (Attribute.GetCustomAttributes(pi).Any(x => (x is REDTags))
                         && tag.tag.Contains("Path")
                         && val.First() != '"') //check for alrady declared paths
                     {
@@ -155,7 +155,7 @@ namespace WolvenKit.Common.Wcc
             foreach (PropertyInfo prop in this.GetType().GetProperties(bindingFlags).Where(x => x.Name.Equals("outfile")))
             {
                 var val = Convert.ToString(prop.GetValue(this));
-                if (prop.PropertyType == typeof(string) && !String.IsNullOrEmpty(val))
+                if (prop.PropertyType == typeof(string) && !string.IsNullOrEmpty(val))
                     ret = val;
             }
             return ret;
