@@ -33,13 +33,13 @@ namespace WolvenKit.Cache
                 // read item
                 var item = new CollisionCacheItemHeaderItem
                 {
-                    Name = br.ReadStringDefaultSingle()
+                    Name = W3ReaderExtensions.ReadLengthPrefixedString(br)
                 };
 
                 var _count2 = br.ReadVLQInt32();
                 for (int j = 0; j < _count2; j++)
                 {
-                    item.Strings.Add(br.ReadStringDefaultSingle());                        
+                    item.Strings.Add(W3ReaderExtensions.ReadLengthPrefixedString(br));                        
                 }
 
                 item.Unk4 = br.ReadBytes(70).ToList();
@@ -62,12 +62,12 @@ namespace WolvenKit.Cache
             {
                 var item = Items[i];
 
-                bw.WriteStringDefaultSingle(item.Name);
+                bw.WriteLengthPrefixedString(item.Name);
 
                 bw.WriteVLQInt32(item.Strings.Count);
                 foreach (var s in item.Strings)
                 {
-                    bw.WriteStringDefaultSingle(s);
+                    bw.WriteLengthPrefixedString(s);
                 }
 
                 bw.Write(item.Unk4.ToArray());

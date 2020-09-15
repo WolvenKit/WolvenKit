@@ -277,15 +277,38 @@ namespace WolvenKit
                 }
                 else if (e.KeyCode == Keys.Back)
                 {
-                    RequestFileDelete?.Invoke(this, new RequestFileDeleteArgs(selectedobject.FullName ));
+                    RequestDelete();
                 }
 
             }
             
         }
 
-        private bool singleclickflag;
+        private void RequestDelete()
+        {
+            var selectedItems = vm.SelectedItems.Select(_ => _.FullName).ToList();
+            List<string> itemstoDelete = new List<string>();
+            foreach (var path in selectedItems)
+            {
+                if (MockKernel.Get().GetMainViewModel().OpenDocuments.Any(_ => _.Cr2wFileName == path))
+                {
+                    MainController.LogString($"Please close the file in WolvenKit before deleting: {path}", Logtype.Error);
+                }
+                else
+                {
+                    itemstoDelete.Add(path);
+                }
+            }
 
+            if (MessageBox.Show(
+                "Are you sure you want to permanently delete this?", "Confirmation", MessageBoxButtons.OKCancel
+            ) == DialogResult.OK)
+            {
+                RequestFileDelete?.Invoke(this, new RequestFileDeleteArgs(itemstoDelete));
+            }
+        }
+
+        private bool singleclickflag;
         private async void treeListView_CellClick(object sender, CellClickEventArgs e)
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject && e.Item != null)
@@ -465,27 +488,11 @@ namespace WolvenKit
 
         private void removeFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var selectedItems = vm.SelectedItems.Select(_ => _.FullName).ToList();
-            List<string> itemstoDelete = new List<string>();
-            foreach (var path in selectedItems)
-            {
-                if (MockKernel.Get().GetMainViewModel().OpenDocuments.Any(_ => _.Cr2wFileName == path))
-                {
-                    MainController.LogString($"Please close the file in WolvenKit before deleting: {path}", Logtype.Error);
-                }
-                else
-                {
-                    itemstoDelete.Add(path);
-                }
-            }
-
-            if (MessageBox.Show(
-                "Are you sure you want to permanently delete this?", "Confirmation", MessageBoxButtons.OKCancel
-            ) == DialogResult.OK)
-            {
-                RequestFileDelete?.Invoke(this, new RequestFileDeleteArgs(itemstoDelete));
-            }
+            RequestDelete();
         }
+
+        
+
 
         private void addAllDependenciesToolStripMenuItem_Click(object sender, EventArgs e) => vm.AddAllImportsCommand.SafeExecute();
 

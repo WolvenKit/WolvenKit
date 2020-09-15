@@ -112,7 +112,7 @@ namespace WolvenKit.CR2W.SRT
             if (GetRemainingLength() >= c_nSrtHeaderLength)
             {
                 // 16 bytes reserved
-                string cHeader = Encoding.Default.GetString(br.ReadBytes(16));
+                string cHeader = Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(16));
                 if (cHeader.TrimEnd((char)0x00) == c_pSrtHeader)
                 {
                     bSuccess = true;
@@ -330,7 +330,7 @@ namespace WolvenKit.CR2W.SRT
                     var strings = new string[m_nNumStringsInTable];
                     for (int i = 0; i < m_nNumStringsInTable; i++)
                     {
-                        strings[i] = Encoding.Default.GetString(br.ReadBytes(stringlengths[i])).TrimEnd((char)0x00);
+                        strings[i] = Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(stringlengths[i])).TrimEnd((char)0x00);
                     }
                     StringTable = new string[strings.Length];
                     StringTable = strings;
@@ -996,7 +996,7 @@ namespace WolvenKit.CR2W.SRT
             for (int i = 0; i < StringTable.Length; i++)
             {
                 file.Write((int)0);
-                var len2 = Encoding.Default.GetBytes(StringTable[i]).Length + 1;
+                var len2 = Encoding.GetEncoding("ISO-8859-1").GetBytes(StringTable[i]).Length + 1;
                 var pad = 4 - len2 % 4;
                 if (pad < 4)
                     len2 += pad;
@@ -1004,7 +1004,7 @@ namespace WolvenKit.CR2W.SRT
             }
             for (int i = 0; i < StringTable.Length; i++)
             {
-                file.Write(Encoding.Default.GetBytes(StringTable[i]));
+                file.Write(Encoding.GetEncoding("ISO-8859-1").GetBytes(StringTable[i]));
                 file.Write((byte)0x00);
                 file.WriteUntilAligned();
             }

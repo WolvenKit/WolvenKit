@@ -73,7 +73,7 @@ namespace WolvenKit.Bundles
                         Bundle = this
                     };
 
-                    var strname = Encoding.Default.GetString(reader.ReadBytes(0x100));
+                    var strname = Encoding.GetEncoding("ISO-8859-1").GetString(reader.ReadBytes(0x100));
 
                     item.Name = strname.Substring(0, strname.IndexOf('\0'));
                     item.Hash = reader.ReadBytes(16);
@@ -137,7 +137,7 @@ namespace WolvenKit.Bundles
                 foreach (var f in Directory.EnumerateFiles(rootfolder,"*",SearchOption.AllDirectories))
                 {
                     Offset += 164;
-                    var name = Encoding.Default.GetBytes(GetRelativePath(f,rootfolder)).ToArray();
+                    var name = Encoding.GetEncoding("ISO-8859-1").GetBytes(GetRelativePath(f,rootfolder)).ToArray();
                     if (name.Length > 0x100)
                         name = name.Take(0x100).ToArray();
                     if(name.Length < 0x100)

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta()]
     public class StringAnsi : CVariable
     {
-        public bool isUTF;
+       
 
         public StringAnsi(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -20,56 +20,12 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            var len = (int) file.ReadByte();
-
-            if (len >= 128)
-            {
-                len = len - 128;
-                isUTF = true;
-                len = len*2;
-            }
-
-            if (isUTF)
-            {
-                val = Encoding.Unicode.GetString(file.ReadBytes(len));
-            }
-            else
-            {
-                val = Encoding.Default.GetString(file.ReadBytes(len));
-            }
-        }
-
-        public bool RequiresUTF()
-        {
-            foreach (var c in val)
-            {
-                if (c > 255)
-                    return true;
-            }
-            return false;
+            val = file.ReadLengthPrefixedStringNullTerminated();
         }
 
         public override void Write(BinaryWriter file)
         {
-            isUTF = RequiresUTF();
-
-            var len = val.Length;
-
-            if (isUTF || string.IsNullOrEmpty(val))
-            {
-                len = len + 128;
-            }
-
-            file.Write((byte) len);
-
-            if (isUTF)
-            {
-                file.Write(Encoding.Unicode.GetBytes(val));
-            }
-            else
-            {
-                file.Write(Encoding.Default.GetBytes(val));
-            }
+            file.WriteLengthPrefixedStringNullTerminated(val);
         }
 
         public override CVariable SetValue(object val)
@@ -94,7 +50,6 @@ namespace WolvenKit.CR2W.Types
         {
             var var = (StringAnsi) base.Copy(context);
             var.val = val;
-            var.isUTF = isUTF;
             return var;
         }
 

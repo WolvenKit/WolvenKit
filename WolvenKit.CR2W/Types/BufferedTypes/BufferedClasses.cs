@@ -214,7 +214,8 @@ namespace WolvenKit.CR2W.Types
             base.Read(file, size);
 
             // lazy check if Cvariable is first chunk (= resource)
-            if (ParentVar == null) return;
+            if (ParentVar != null || this is CStorySceneDialogset)
+                return;
             Unk1 = new CUInt32(cr2w, this, nameof(Unk1)) {IsSerialized = true};
             Unk1.Read(file, size);
         }
@@ -223,7 +224,8 @@ namespace WolvenKit.CR2W.Types
         {
             base.Write(file);
 
-            if (ParentVar == null) return;
+            if (ParentVar != null || this is CStorySceneDialogset)
+                return;
             Unk1.Write(file);
         }
     }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using WolvenKit.CR2W.Types;
@@ -102,27 +103,43 @@ namespace WolvenKit.CR2W
 
 
         /// <summary>
-        /// Read a single string from the current stream, where the first bytes indicate the length.
+        /// Writes a string to a BinaryWriter Stream
+        /// First byte indicates length, where the first 2 bits are reserved
+        /// bit1: 0 if widecharacterset is needed, 1 otherwise
+        /// bit2: 1 if continuation byte is needed, 0 otherwise
         /// </summary>
-        /// <returns>string value read</returns>
-        public static void WriteStringDefaultSingle(this BinaryWriter bw, string value)
+        /// <param name="bw"></param>
+        /// <param name="value"></param>
+        public static void WriteLengthPrefixedString(this BinaryWriter bw, string value)
         {
+            if (string.IsNullOrEmpty(value))
+            {
+                bw.Write((byte)0x80);
+                return;
+            }
+
             int len = value.Length;
-            bool utf = RequiresUTF(value);
+            bool requiresWideChar = value.Any(c => c > 255);
+
+            var div = Math.DivRem(len, 0x40, out var mod);
+            len -= (div * 0x40);
 
             // mask the value
-            byte b = (byte)(len & 0x3F);
+            byte b = (byte)(len & 0x3F); // 00xxxxxx
             // check for continuation
-            bool cont = len >> 6 != 0;
+            //bool cont = len >> 6 != 0;
+            bool cont = div != 0;
 
             // set the two last bits
             // reserved utf bit 7
-            if (!utf)
+            if (requiresWideChar)
+            {
+                // do nothing
+            }
+            else
             {
                 b |= 0x80;
             }
-            else
-                throw new NotImplementedException();
             // continuation bit 6
             if (cont)
             {
@@ -131,36 +148,83 @@ namespace WolvenKit.CR2W
             bw.Write(b);
 
             // continue 
-            while (cont)
-            {
-                b = (byte)(len & 0x7F);
-                len >>= 7;
-                cont = len != 0;
-                if (cont)
-                {
-                    b |= 0x80;
-                }
-                bw.Write(b);
-            }
+            if (cont)
+                bw.Write((byte)div);
+            //while (cont)
+            //{
+            //    b = (byte)(len & 0x7F);
+            //    len >>= 7;
+            //    cont = len != 0;
+            //    if (cont)
+            //    {
+            //        b |= 0x80;
+            //    }
+            //    bw.Write(b);
+            //}
 
-            
-
-            if (utf)
+            if (requiresWideChar)
                 bw.Write(Encoding.Unicode.GetBytes(value));
             else
-                bw.Write(Encoding.ASCII.GetBytes(value));
-
-            bool RequiresUTF(string val)
-            {
-                foreach (var c in val)
-                {
-                    if (c > 255)
-                        return true;
-                }
-                return false;
-            }
+                bw.Write(Encoding.GetEncoding("ISO-8859-1").GetBytes(value));
         }
 
+        /// <summary>
+        /// Writes a string to a BinaryWriter Stream
+        /// First byte indicates length, where the first 2 bits are reserved
+        /// bit1: 0 if widecharacterset is needed, 1 otherwise
+        /// bit2: 1 if continuation byte is needed, 0 otherwise
+        /// </summary>
+        /// <param name="bw"></param>
+        /// <param name="value"></param>
+        public static void WriteLengthPrefixedStringNullTerminated(this BinaryWriter bw, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                bw.Write((byte)0x80);
+                return;
+            }
+
+            int len = value.Length + 1; // null terminated
+            bool requiresWideChar = value.Any(c => c > 255);
+
+            var div = Math.DivRem(len, 0x40, out var mod);
+            len -= (div * 0x40);
+
+            // mask the value
+            byte b = (byte)(len & 0x3F); // 00xxxxxx
+            // check for continuation
+            //bool cont = len >> 6 != 0;
+            bool cont = div != 0;
+
+            // set the two last bits
+            // reserved utf bit 7
+            if (requiresWideChar)
+                throw new NotImplementedException();
+            else
+            {
+                // do nothing
+                //b |= 0x80;
+            }
+
+            // continuation bit 6
+            if (cont)
+            {
+                b |= 0x40;
+            }
+            bw.Write(b);
+
+            // continue 
+            if (cont)
+                bw.Write((byte)div);
+
+            if (requiresWideChar)
+                bw.Write(Encoding.Unicode.GetBytes(value));
+            else
+                bw.Write(Encoding.GetEncoding("ISO-8859-1").GetBytes(value));
+
+            // null terminated
+            bw.Write((byte)0x00);
+        }
     }
 
 }
