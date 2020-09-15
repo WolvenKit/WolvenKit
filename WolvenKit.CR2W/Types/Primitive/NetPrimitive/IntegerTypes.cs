@@ -43,11 +43,6 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CUInt64(cr2w, parent, name);
-        }
-
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CUInt64)base.Copy(context);
@@ -99,11 +94,6 @@ namespace WolvenKit.CR2W.Types
                 this.val = v.val;
 
             return this;
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CUInt32(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -160,11 +150,6 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CUInt16(cr2w, parent, name);
-        }
-
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CUInt16)base.Copy(context);
@@ -218,11 +203,6 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CUInt8(cr2w, parent, name);
-        }
-
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CUInt8) base.Copy(context);
@@ -274,11 +254,6 @@ namespace WolvenKit.CR2W.Types
                 this.val = v.val;
 
             return this;
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CInt64(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -336,11 +311,6 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CInt32(cr2w, parent, name);
-        }
-
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CInt32) base.Copy(context);
@@ -394,11 +364,6 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CInt16(cr2w, parent, name);
-        }
-
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CInt16) base.Copy(context);
@@ -442,19 +407,20 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object newval)
         {
-            if (newval is sbyte)
-                this.val = (sbyte) newval;
-            else if (newval is string)
-                this.val = sbyte.Parse(newval as string);
-            else if (newval is CInt8 v)
-                this.val = v.val;
+            switch (newval)
+            {
+                case sbyte o:
+                    this.val = o;
+                    break;
+                case string s:
+                    this.val = sbyte.Parse(s);
+                    break;
+                case CInt8 v:
+                    this.val = v.val;
+                    break;
+            }
 
             return this;
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CInt8(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -500,19 +466,20 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is sbyte)
-                this.val = (sbyte) val;
-            else if (val is string)
-                this.val = sbyte.Parse(val as string);
-            else if (val is CDynamicInt v)
-                this.val = v.val;
+            switch (val)
+            {
+                case sbyte o:
+                    this.val = o;
+                    break;
+                case string s:
+                    this.val = sbyte.Parse(s);
+                    break;
+                case CDynamicInt v:
+                    this.val = v.val;
+                    break;
+            }
 
             return this;
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CInt8(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -565,19 +532,20 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is sbyte)
-                this.val = (sbyte)val;
-            else if (val is string)
-                this.val = sbyte.Parse(val as string);
-            else if (val is CVLQInt32 v)
-                this.val = v.val;
+            switch (val)
+            {
+                case sbyte o:
+                    this.val = o;
+                    break;
+                case string s:
+                    this.val = sbyte.Parse(s);
+                    break;
+                case CVLQInt32 v:
+                    this.val = v.val;
+                    break;
+            }
 
             return this;
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CInt8(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -610,40 +578,48 @@ namespace WolvenKit.CR2W.Types
         {
         }
 
+        private byte backingField;
+
         [DataMember]
-        public bool val { get; set; }
+        public bool val
+        {
+            get => backingField != 0;
+            private set => backingField = value ? (byte)1 : (byte)0;
+        }
 
         public override void Read(BinaryReader file, uint size)
         {
-            val = file.ReadByte() != 0;
+            backingField = file.ReadByte();
         }
 
         public override void Write(BinaryWriter file)
         {
-            file.Write(val ? (byte) 1 : (byte) 0);
+            file.Write(backingField);
+            //file.Write(val ? (byte) 1 : (byte) 0);
         }
 
         public override CVariable SetValue(object val)
         {
-            if (val is bool)
-                this.val = (bool) val;
-            else if (val is string)
-                this.val = bool.Parse(val as string);
-            else if (val is CBool v)
-                this.val = v.val;
+            switch (val)
+            {
+                case bool b:
+                    this.val = b;
+                    break;
+                case string s:
+                    this.val = bool.Parse(s);
+                    break;
+                case CBool v:
+                    this.val = v.val;
+                    break;
+            }
 
             return this;
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CBool(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CBool) base.Copy(context);
-            var.val = val;
+            var.backingField = backingField;
             return var;
         }
 

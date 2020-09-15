@@ -154,14 +154,7 @@ namespace WolvenKit.App.ViewModels
 
 
         #region Methods
-        public event EventHandler<UpdateMonitoringEventArgs> UpdateMonitoringRequest;
-        //public void PauseMonitoring() => OnUpdateMonitoringRequest(false);
-        //public void ResumeMonitoring() => OnUpdateMonitoringRequest(true);
-        //protected void OnUpdateMonitoringRequest(bool monitor)
-        //{
-        //    this.UpdateMonitoringRequest?.Invoke(this, new UpdateMonitoringEventArgs(monitor));
-        //}
-        
+
         public void RepopulateTreeView()
         {
             if (MainController.Get().ActiveMod == null)

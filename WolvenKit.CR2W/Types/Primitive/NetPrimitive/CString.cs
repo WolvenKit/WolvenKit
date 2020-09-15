@@ -10,13 +10,26 @@ namespace WolvenKit.CR2W.Types
     public class CString : CVariable
     {
         private bool isUTF;
+        
 
         public CString(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
+        private byte[] backingfield;
         [DataMember]
-        public string val { get; set; }
+        public string val
+        {
+            get
+            {
+                if (backingfield == null || (backingfield != null && backingfield.Length <= 0)) return "";
+                return isUTF ? Encoding.Unicode.GetString(backingfield) : Encoding.Default.GetString(backingfield);
+            }
+            set
+            {
+                backingfield = RequiresUTF() ? Encoding.Unicode.GetBytes(value) : Encoding.Default.GetBytes(value);
+            }
+        }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -31,7 +44,7 @@ namespace WolvenKit.CR2W.Types
                     len = file.ReadByte()*64 + len;
                 }
 
-                val = Encoding.Default.GetString(file.ReadBytes(len));
+                backingfield = file.ReadBytes(len);
             }
             else
             {
@@ -43,7 +56,8 @@ namespace WolvenKit.CR2W.Types
                     len = file.ReadByte()*64 + len;
                 }
                 len = len*2;
-                val = Encoding.Unicode.GetString(file.ReadBytes(len));
+
+                backingfield = file.ReadBytes(len);
             }
         }
 
@@ -77,38 +91,35 @@ namespace WolvenKit.CR2W.Types
 
             if (isUTF)
             {
-                var bytearray = Encoding.Unicode.GetBytes(val);
-                file.Write(bytearray);
+                //var bytearray = Encoding.Unicode.GetBytes(val);
+                file.Write(backingfield);
             }
             else
             {
-                var bytearray = Encoding.Default.GetBytes(val);
-                file.Write(bytearray);
+                //var bytearray = Encoding.Default.GetBytes(val);
+                file.Write(backingfield);
             }
         }
 
         public override CVariable SetValue(object val)
         {
-            if (val is string)
+            switch (val)
             {
-                this.val = (string) val;
+                case string s:
+                    this.val = s;
+                    break;
+                case CString cvar:
+                    this.val = cvar.val;
+                    break;
             }
-            else if (val is CString cvar)
-            {
-                this.val = cvar.val;
-            }
-            return this;
-        }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CString(cr2w, parent, name);
+            return this;
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CString) base.Copy(context);
-            var.val = val;
+            var.backingfield = backingfield;
             var.isUTF = isUTF;
             return var;
         }

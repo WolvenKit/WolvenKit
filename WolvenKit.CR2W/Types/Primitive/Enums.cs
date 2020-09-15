@@ -73,6 +73,14 @@ namespace WolvenKit.CR2W.Types
             FG_Water = 8,
             FG_Monster = 16
         }
+        [Flags]
+        public enum ECameraLightBitfield
+        {
+            //Unknown,
+            ECLB_AbsoluteBrightness = 1,
+            ECLB_AbsoluteRadius = 2,
+            ECLB_AbsoluteOffset = 4
+        }
         [Flags] // done
         public enum EMeshChunkRenderMask
         {
@@ -736,13 +744,6 @@ namespace WolvenKit.CR2W.Types
         {
             FBHTAddMissingBones,
             FBHTRemoveDisconnectedBones
-        }
-        public enum ECameraLightBitfield
-        {
-            Unknown,
-            ECLB_AbsoluteBrightness,
-            ECLB_AbsoluteRadius,
-            ECLB_AbsoluteOffset
         }
         public enum EBehaviorVarContext
         {

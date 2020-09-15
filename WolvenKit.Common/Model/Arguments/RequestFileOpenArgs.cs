@@ -39,15 +39,7 @@ namespace WolvenKit.Common.Model
         }
     }
 
-    public class UpdateMonitoringEventArgs : EventArgs
-    {
-        public bool Monitor { get; }
-
-        public UpdateMonitoringEventArgs(bool monitor)
-        {
-            Monitor = monitor;
-        }
-    }
+    
     
 
 

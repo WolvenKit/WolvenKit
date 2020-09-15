@@ -17,9 +17,9 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SEntityBufferType2 : CVariable
     {
-        [Ordinal(0)] [RED] public CName componentName { get; set; }
-        [Ordinal(1)] [RED] public CUInt32 sizeofdata { get; set; }
-        [Ordinal(2)] [RED] public CBufferUInt32<CVariantSizeTypeName> variables { get; set; }
+        [Ordinal(0)] [REDBuffer] public CName componentName { get; set; }
+        [Ordinal(1)] [REDBuffer] public CUInt32 sizeofdata { get; set; }
+        [Ordinal(2)] [REDBuffer] public CBufferUInt32<CVariantSizeTypeName> variables { get; set; }
 
 
         public SEntityBufferType2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)

@@ -20,58 +20,52 @@ namespace WolvenKit.CR2W.Types
         {
         }
 
-        public XDocument Data { get; set; }
+        private byte[] backingfield;
+        public XDocument Data
+        {
+            get
+            {
+                if (backingfield == null || (backingfield != null && backingfield.Length <= 0)) return new XDocument();
+                using (var ms = new MemoryStream(backingfield))
+                {
+                    return new XDocument(XDocument.Load(ms));
+                }
+            }
+            set => backingfield = Encoding.ASCII.GetBytes(value.ToString());
+        }
 
-        private byte[] dbg_original_data;
 
         public override void Read(BinaryReader file, uint size)
         {
             var len = file.ReadInt32();
-            var byteso = file.ReadBytes(len);
-
-
-            using (var ms = new MemoryStream(byteso))
-            {
-                Data = new XDocument(XDocument.Load(ms));
-            }
-
-            dbg_original_data = byteso;
-
-            var dbg_written_data1 = Encoding.ASCII.GetBytes(Data.ToString());
-            var dbg_written_data2 = Encoding.Default.GetBytes(Data.ToString());
-            var dbg_written_data3 = Encoding.UTF8.GetBytes(Data.ToString());
-            var dbg_written_data4 = Encoding.Unicode.GetBytes(Data.ToString());
+            backingfield = file.ReadBytes(len);
         }
 
         public override void Write(BinaryWriter file)
         {
-
-
-            file.Write(Data.ToString().Length);
-            file.Write(Encoding.ASCII.GetBytes(Data.ToString()));
+            file.Write(backingfield.Length);
+            file.Write(backingfield);
         }
 
         public override CVariable SetValue(object val)
         {
-            if (val is XDocument)
+            switch (val)
             {
-                Data = (XDocument)val;
+                case XDocument document:
+                    Data = document;
+                    break;
+                case CXml cvar:
+                    this.Data = cvar.Data;
+                    break;
             }
-            else if (val is CXml cvar)
-                this.Data = cvar.Data;
 
             return this;
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CXml(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CXml) base.Copy(context);
-            var.Data = new XDocument(Data);
+            var.backingfield = backingfield;
             return var;
         }
 

@@ -254,12 +254,7 @@ namespace WolvenKit.App.ViewModels
                 {
 
                 }
-
-                //filestoAdd.Add(importableobj);
             }
-
-            //Importableobjects = filestoAdd;
-
         }
         #endregion
 

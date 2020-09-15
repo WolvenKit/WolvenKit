@@ -15,13 +15,13 @@ namespace WolvenKit.CR2W.Types
     {
         public CUInt16 id;
         public CGUID guid;
-        //public CBytes unk1;
+        public CBytes unk1;
 
         public EntityHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             id = new CUInt16(cr2w, this, nameof(id));
             guid = new CGUID(cr2w, this, nameof(guid));
-            //unk1 = new CBytes(cr2w, this, nameof(unk1))
+            unk1 = new CBytes(cr2w, this, nameof(unk1));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -30,18 +30,18 @@ namespace WolvenKit.CR2W.Types
             guid.Read(file, 16);
 
 
-            //if (size - 18 > 0)
-            //{
-            //    unk1.Read(file, size - 18);
-            //}
-                
+            if (size!= 0 && size - 18 > 0)
+            {
+                unk1.Read(file, size - 18);
+            }
+
         }
 
         public override void Write(BinaryWriter file)
         {
             id.Write(file);
             guid.Write(file);
-            //unk1.Write(file);
+            unk1.Write(file);
         }
 
         public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
@@ -52,6 +52,11 @@ namespace WolvenKit.CR2W.Types
         public override string ToString()
         {
             return $"[{id.ToString()}]:{guid.ToString()}";
+        }
+
+        public override List<IEditableVariable> GetEditableVariables()
+        {
+            return new List<IEditableVariable>() { id, guid, unk1};
         }
     }
 }

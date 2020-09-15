@@ -35,7 +35,7 @@ namespace WolvenKit.CR2W
         }
 
 
-        private CR2WFile parsedFile;
+        //private CR2WFile parsedFile;
         
         public List<CR2WImportWrapper> ParentImports { get; set; }
 
@@ -44,7 +44,7 @@ namespace WolvenKit.CR2W
         public string ImportClass { get; set; } = "<failed to get import class>";
 
         public string Handle { get; set; }
-        public byte[] Data;
+        private byte[] Data;
         public CR2WFile ParentFile { get; internal set; }
 
         public CR2WEmbeddedWrapper()
@@ -67,21 +67,7 @@ namespace WolvenKit.CR2W
             file.BaseStream.Seek(_embedded.dataOffset, SeekOrigin.Begin);
             Data = file.ReadBytes((int) _embedded.dataSize);
 
-            parsedFile = new CR2WFile(ParentFile.Logger);
-            switch (parsedFile.Read(Data))
-            {
-                case EFileReadErrorCodes.NoError:
-                    break;
-                case EFileReadErrorCodes.NoCr2w:
-                case EFileReadErrorCodes.UnsupportedVersion:
-                    return;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-
-            if (parsedFile.chunks != null && parsedFile.chunks.Any())
-                ClassName = parsedFile.chunks.FirstOrDefault()?.REDType;
+            
 
             if (ParentImports != null && ParentImports.Any() && ParentImports.Count > (int)Embedded.importIndex - 1)
             {
@@ -106,7 +92,28 @@ namespace WolvenKit.CR2W
             return Handle;
         }
 
-        public CR2WFile GetParsedFile() => parsedFile;
+        public CR2WFile GetParsedFile()
+        {
+            var parsedFile = new CR2WFile(ParentFile.Logger);
+            switch (parsedFile.Read(Data))
+            {
+                case EFileReadErrorCodes.NoError:
+                    break;
+                case EFileReadErrorCodes.NoCr2w:
+                case EFileReadErrorCodes.UnsupportedVersion:
+                    return null;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+
+            if (parsedFile.chunks != null && parsedFile.chunks.Any())
+                ClassName = parsedFile.chunks.FirstOrDefault()?.REDType;
+
+            return parsedFile;
+        }
+
         public byte[] GetRawEmbeddedData() => Data;
+        public void SetRawEmbeddedData(byte[] data) => Data = data;
     }
 }

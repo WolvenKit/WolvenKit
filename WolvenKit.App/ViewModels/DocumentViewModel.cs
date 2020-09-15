@@ -3,9 +3,9 @@ using System.IO;
 using System.Windows.Input;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
-using WolvenKit.Common.Model;
+using WolvenKit.Common.Model;
 using WolvenKit.CR2W;
-using WolvenKit.CR2W.SRT;
+using WolvenKit.CR2W.SRT;
 using WolvenKit.Radish.Model;
 
 namespace WolvenKit.App.ViewModels
@@ -31,7 +31,7 @@ namespace WolvenKit.App.ViewModels
         public IWolvenkitFile Cr2wFile
         {
             get => _cr2wfile;
-            set
+            private set
             {
                 if (_cr2wfile != value)
                 {
@@ -127,6 +127,8 @@ namespace WolvenKit.App.ViewModels
             //    MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
             //}
         }
+
+
         public EFileReadErrorCodes LoadFile(string filename, IVariableEditor variableEditor, Stream stream = null)
         {
 

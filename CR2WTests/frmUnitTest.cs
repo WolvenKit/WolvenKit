@@ -229,8 +229,8 @@ namespace CR2WTests
                 var dictvalues = crw.StringDictionary.Values.ToList();
                 var diffDictList = dictvalues.Except(newdictvalues).ToList();
 
-                bool isclassicalinconsistentw2anims = true;
-                bool isclassicalinconsistentw2phase = true;
+                bool isclassicalinconsistentw2anims = false;
+                bool isclassicalinconsistentw2phase = false;
 
                 if (diffDictList.Count != 0)
                 {
@@ -243,12 +243,12 @@ namespace CR2WTests
                             str.Contains("sounds\\") ||
                             str.Contains("sound\\"))
                         {
-                            continue;
+                            isclassicalinconsistentw2anims = true;
+                            break;
                         }
                         else
                         {
-                            isclassicalinconsistentw2anims = false;
-                            break;
+                            continue;
                         }
                     }
                     //w2phase inconsistencies
@@ -259,12 +259,12 @@ namespace CR2WTests
                             str == "#CEnvironmentDefinition" ||
                             str == "CEnvironmentDefinition")
                         {
-                            continue;
+                            isclassicalinconsistentw2phase = true;
+                            break;
                         }
                         else
                         {
-                            isclassicalinconsistentw2phase = false;
-                            break;
+                            continue;
                         }
                     }
 

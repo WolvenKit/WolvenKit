@@ -73,6 +73,8 @@ namespace WolvenKit.CR2W
         //private Stream m_stream; //handle this better?
         // private string m_filePath;
 
+        public CR2WFile AdditionalCr2WFile;
+        public byte[] AdditionalCr2WFileBytes;
         #endregion
 
         #region Properties
@@ -287,18 +289,17 @@ namespace WolvenKit.CR2W
 
             #region Read Headers
 
+            var startpos = file.BaseStream.Position;
             Logger?.LogProgress(1, "Reading headers...");
 
             // read file header
             var id = file.BaseStream.ReadStruct<uint>();
             if (id != MAGIC)
                 return EFileReadErrorCodes.NoCr2w;
-            //throw new FormatException($"Not a CR2W file, Magic read as 0x{id:X8}");
 
             m_fileheader = file.BaseStream.ReadStruct<CR2WFileHeader>();
             if (m_fileheader.version > 163 || m_fileheader.version < 159)
                 return EFileReadErrorCodes.UnsupportedVersion;
-            //throw new FormatException($"Unknown Version {m_fileheader.version}. Supported versions: 159 - 163.");
 
             var dt = new CDateTime(m_fileheader.timeStamp, null, "");
 
@@ -360,11 +361,37 @@ namespace WolvenKit.CR2W
             }
             #endregion
 
-            if (Logger != null) Logger.LogString($"File {Cr2wFileName} loaded in: {stopwatch1.Elapsed}\n");
-                stopwatch1.Stop();
 
+
+            // some w2ls have additional CLayerInfo packed behind the file
+            var endpos = file.BaseStream.Position;
+            var readbytes = endpos - startpos;
+            if (readbytes != file.BaseStream.Length)
+            {
+                var bytesleft = file.BaseStream.Length - readbytes;
+                AdditionalCr2WFileBytes = file.ReadBytes((int) bytesleft);
+
+
+            }
+
+
+
+            if (Logger != null) Logger.LogString($"File {Cr2wFileName} loaded in: {stopwatch1.Elapsed}\n");
+            stopwatch1.Stop();
             //m_stream = null;
             return 0;
+        }
+
+        public CR2WFile GetAdditionalCr2wFile()
+        {
+            if (AdditionalCr2WFileBytes == null) return null;
+            using (var ms2 = new MemoryStream(AdditionalCr2WFileBytes))
+            using (var br2 = new BinaryReader(ms2))
+            {
+                AdditionalCr2WFile = new CR2WFile();
+                AdditionalCr2WFile.Read(br2);
+                return AdditionalCr2WFile;
+            }
         }
 
         private T[] ReadTable<T>(Stream stream, int index) where T : struct
@@ -552,6 +579,23 @@ namespace WolvenKit.CR2W
             WriteHeader(file);
             m_fileheader.crc32 = CalculateHeaderCRC32();
             WriteFileHeader(file);
+
+
+
+
+            if (AdditionalCr2WFileBytes != null)
+            {
+                file.BaseStream.Seek(0, SeekOrigin.End);
+                file.Write(AdditionalCr2WFileBytes);
+            }
+
+
+
+
+
+
+
+
 
             //m_stream = null;
 

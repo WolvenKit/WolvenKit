@@ -7,12 +7,16 @@ using System.Linq;
 using WolvenKit.App.Model;
 using System.Windows.Controls;
 using WolvenKit.App.ViewModels;
+using System;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit
 {
     public partial class frmEmbeddedFiles : DockContent, IThemedContent
     {
         private CR2WFile file;
+
+        public event EventHandler<RequestEmbeddedFileOpenArgs> RequestFileOpen;
 
         public frmEmbeddedFiles()
         {
@@ -46,24 +50,15 @@ namespace WolvenKit
 
             if (e.ClickCount == 2)
             {
-                var mem = new MemoryStream(((CR2WEmbeddedWrapper) e.Model).Data);
-
-                var doc = UIController.Get().LoadDocument("Embedded file", mem);
-                if (doc != null)
+                if (e.Model is CR2WEmbeddedWrapper embedded)
                 {
-                    var vm = doc.GetViewModel();
-                    vm.OnFileSaved += OnFileSaved;
-                    vm.SaveTarget = (CR2WEmbeddedWrapper) e.Model;
+                    RequestFileOpen?.Invoke(this, new RequestEmbeddedFileOpenArgs(embedded));
                 }
+                
             }
         }
 
-        private void OnFileSaved(object sender, FileSavedEventArgs e)
-        {
-            var vm = (DocumentViewModel) sender;
-            var editvar = (CR2WEmbeddedWrapper) vm.SaveTarget;
-            editvar.Data = ((MemoryStream) e.Stream).ToArray();
-        }
+        
 
         public void ApplyCustomTheme()
         {

@@ -64,11 +64,11 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is CVariable)
-            {
-                Variant = (CVariable)val;
-            }
-            else if (val is CVariant cvar)
+            //if (val is CVariable)
+            //{
+            //    Variant = (CVariable)val;
+            //}
+            /*else*/ if (val is CVariant cvar)
             {
                 var context = new CR2WCopyAction()
                 {
@@ -81,11 +81,6 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CVariant(cr2w, parent, name);
-        }
-
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CVariant) base.Copy(context);
@@ -95,26 +90,23 @@ namespace WolvenKit.CR2W.Types
 
         public override List<IEditableVariable> GetEditableVariables()
         {
-            var list = new List<IEditableVariable>();
-            if (Variant != null)
-            {
-                list.Add(Variant);
-            };
-            return list;
+            //var list = new List<IEditableVariable>();
+            //if (Variant != null)
+            //{
+            //    list.Add(Variant);
+            //};
+            //return list;
+            return Variant?.GetEditableVariables();
         }
 
         public override Control GetEditor()
         {
-            if (Variant != null)
-                return Variant.GetEditor();
-            return null;
+            return Variant?.GetEditor();
         }
 
         public override string ToString()
         {
-            if (Variant != null)
-                return Variant.ToString();
-            return "";
+            return Variant != null ? Variant.ToString() : "";
         }
 
         public override bool CanAddVariable(IEditableVariable newvar)
