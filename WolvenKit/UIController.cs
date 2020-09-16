@@ -244,11 +244,11 @@ namespace WolvenKit
 
         private void OnVariableEditorSave(object sender, FileSavedEventArgs args)
         {
-            if (args.Stream is MemoryStream)
+            if (args.Stream is MemoryStream stream)
             {
                 var vm = (DocumentViewModel)sender;
                 var editvar = (CVariable)vm.SaveTarget;
-                editvar.SetValue(((MemoryStream)args.Stream).ToArray());
+                editvar.SetValue(stream.ToArray());
             }
         }
 

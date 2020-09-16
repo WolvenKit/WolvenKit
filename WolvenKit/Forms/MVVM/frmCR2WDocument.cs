@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
+using IrrlichtLime;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
 using WolvenKit.App.Model;
@@ -45,12 +46,12 @@ namespace WolvenKit
         public Render.frmRender RenderViewer;
         
 
-        public CR2WFile File => (CR2WFile)vm.Cr2wFile;
+        public CR2WFile File => (CR2WFile)vm.File;
         public string Cr2wFileName => vm.Cr2wFileName;
         public DocumentViewModel GetViewModel() => vm;
 
         private frmProgress ProgressForm { get; set; }
-
+        private LoggerService docLoggerService;
         #endregion
 
 
@@ -66,9 +67,8 @@ namespace WolvenKit
             InitializeComponent();
             ApplyCustomTheme();
 
-            chunkList = new frmChunkList
+            chunkList = new frmChunkList(vm)
             {
-                File = File,
                 DockAreas = DockAreas.Document
             };
             propertyWindow = new frmChunkProperties();
@@ -80,6 +80,9 @@ namespace WolvenKit
             backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
 
             m_deserializeDockContent = new DeserializeDockContent(GetContentFromPersistString);
+
+            docLoggerService = new LoggerService();
+            docLoggerService.PropertyChanged += LoggerUpdated;
         }
 
         #region Backgroundworker
@@ -115,6 +118,35 @@ namespace WolvenKit
             }
 
             ProgressForm.Close();
+            docLoggerService.PropertyChanged -= LoggerUpdated;
+        }
+
+        private delegate void StrDelegate(string t);
+        private delegate void LogDelegate(string t, Logtype type);
+        /// <summary>
+        /// Deprecated. Use MainController.QueueLog 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LoggerUpdated(object sender, PropertyChangedEventArgs e)
+        {
+            var Logger = (LoggerService) sender;
+
+            switch (e.PropertyName)
+            {
+                case "Progress":
+                {
+                    if (backgroundWorker1 != null)
+                    {
+                        if (string.IsNullOrEmpty(Logger.Progress.Item2))
+                            backgroundWorker1.ReportProgress((int)Logger.Progress.Item1);
+                        else
+                            backgroundWorker1.ReportProgress((int)Logger.Progress.Item1, Logger.Progress.Item2);
+                    }
+
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -124,6 +156,8 @@ namespace WolvenKit
         public void WorkerLoadFileSetup(LoadFileArgs args)
         {
             MainController.Get().ProjectStatus = "Busy";
+
+            this.Text = Path.GetFileName(args.Filename) + " [" + args.Filename + "]";
 
             if (!backgroundWorker1.IsBusy)
             {
@@ -160,7 +194,7 @@ namespace WolvenKit
             if (arg is LoadFileArgs args)
             {
 
-                switch (vm.LoadFile(args.Filename, UIController.Get(), args.Stream))
+                switch (vm.LoadFile(args.Filename, UIController.Get(), docLoggerService, args.Stream))
                 {
                     case EFileReadErrorCodes.NoError:
                         break;
@@ -186,13 +220,6 @@ namespace WolvenKit
 
         #region UI Methods
         public bool GetIsDisposed() => this.IsDisposed;
-
-        private void UpdateFormText(string val) => this.Text = val;
-
-        public IDockContent DeserializeDockContent(string persistString)
-        {
-            return null;
-        }
 
         public void ApplyCustomTheme()
         {
@@ -240,12 +267,13 @@ namespace WolvenKit
         #endregion
 
         #region Events
-        private delegate void strDelegate(string t);
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(vm.FormText))
+            switch (e.PropertyName)
             {
-                Invoke(new strDelegate(UpdateFormText), (vm.FormText));
+                case nameof(vm.File):
+                    chunkList.UpdateList();
+                    break;
             }
         }
 
@@ -257,40 +285,54 @@ namespace WolvenKit
         private void EmbeddedWindow_OnRequestOpen(object sender, RequestEmbeddedFileOpenArgs e)
         {
             var embeddedwrapper = e.Embeddedfile;
+            var relativePath = embeddedwrapper.Handle;
 
-            frmCR2WDocument doc = new frmCR2WDocument(new DocumentViewModel());
+            // check if already open
+            var opendocs = FormPanel.Documents
+                .Where( _ => _.GetType() == typeof(frmCR2WDocument))
+                .Cast<frmCR2WDocument>()
+                .Where(_ => _.Cr2wFileName == relativePath)
+                .ToList();
+
+            if (opendocs.Count > 0)
+            {
+                opendocs.FirstOrDefault()?.Activate();
+                return;
+            }
+
+            // else: open and dock new form
+            var doc = new frmCR2WDocument(new DocumentViewModel())
+            {
+                Text = Path.GetFileName(relativePath) + " [" + relativePath + "]"
+            };
             using (var ms = new MemoryStream(embeddedwrapper.GetRawEmbeddedData()))
             {
-                doc.vm.LoadFile(embeddedwrapper.Handle, UIController.Get(), ms);
-            }
-            PostLoadFile(embeddedwrapper.Handle);
-
-
-            if (doc != null)
-            {
-
-
-
-                var vm = doc.GetViewModel();
-                vm.OnFileSaved += OnFileSaved;
-                vm.SaveTarget = (CR2WEmbeddedWrapper)e.Embeddedfile;
+                switch (doc.vm.LoadFile(relativePath, UIController.Get(), docLoggerService, ms))
+                {
+                    case EFileReadErrorCodes.NoError:
+                        break;
+                    case EFileReadErrorCodes.NoCr2w:
+                    case EFileReadErrorCodes.UnsupportedVersion:
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
 
-            
+            PostLoadFile(relativePath);
 
-        }
+            doc.Show(FormPanel, DockState.Document);
+            doc.vm.SaveTarget = embeddedwrapper;
+            //doc.FormClosed += vm.RemoveEmbedded;
+            doc.FormClosed += (sender2, e2) => vm.RemoveEmbedded(sender2, e2, doc.vm);
 
-        private void OnFileSaved(object sender, FileSavedEventArgs e)
-        {
-            var vm = (DocumentViewModel)sender;
-            var editvar = (CR2WEmbeddedWrapper)vm.SaveTarget;
-            editvar.SetRawEmbeddedData(((MemoryStream)e.Stream).ToArray());
+            if (vm.OpenEmbedded.ContainsKey(relativePath))
+                throw new NullReferenceException();
+            vm.OpenEmbedded.Add(relativePath, doc.vm);
         }
 
         private void frmCR2WDocument_FormClosed(object sender, FormClosedEventArgs e)
         {
             // close all float windows
-
 
             FormPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "cr2wdocument_layout.xml"));
 
@@ -298,15 +340,18 @@ namespace WolvenKit
             {
                 propertyWindow.Close();
             }
+
+            // needed?
+            vm.PropertyChanged -= ViewModel_PropertyChanged;
         }
 
 
-        public void frmCR2WDocument_OnSelectChunk(object sender, SelectChunkArgs e)
+        private void frmCR2WDocument_OnSelectChunk(object sender, SelectChunkArgs e)
         {
             if (propertyWindow == null || propertyWindow.IsDisposed)
             {
                 propertyWindow = new frmChunkProperties();
-                propertyWindow.Show(FormPanel, DockState.DockBottom);
+                propertyWindow.Show(FormPanel, DockState.DockRight);
             }
 
             propertyWindow.Chunk = e.Chunk;
@@ -343,7 +388,7 @@ namespace WolvenKit
                 catch (Exception exception)
                 {
                     chunkList.Show(FormPanel, DockState.Document);
-                    propertyWindow.Show(FormPanel, DockState.DockBottom);
+                    propertyWindow.Show(FormPanel, DockState.DockRight);
                     
 
                     Console.WriteLine(exception);
@@ -352,7 +397,7 @@ namespace WolvenKit
             else
             {
                 chunkList.Show(FormPanel, DockState.Document);
-                propertyWindow.Show(FormPanel, DockState.DockBottom);
+                propertyWindow.Show(FormPanel, DockState.DockRight);
             }
 
 
@@ -362,17 +407,14 @@ namespace WolvenKit
 
             chunkList.Activate();
 
-            // kinda stupid because the viewmodel lives before the form exists derp
-            UpdateFormText(vm.FormText);
-
             if (File.embedded.Count > 0)
             {
                 embeddedFiles = new frmEmbeddedFiles
                 {
                     File = File,
-                    DockAreas = DockAreas.Document
+                    DockAreas = DockAreas.DockLeft
                 };
-                embeddedFiles.Show(FormPanel, DockState.Document);
+                embeddedFiles.Show(FormPanel, DockState.DockLeftAutoHide);
 
                 embeddedFiles.RequestFileOpen += EmbeddedWindow_OnRequestOpen;
             }
@@ -508,8 +550,8 @@ namespace WolvenKit
             CR2WFile LoadDocumentAndGetFile(string path)
             {
                 throw new NotImplementedException();
-                //foreach (var t in MockKernel.Get().GetMainViewModel().OpenDocuments.Where(_ => _.Cr2wFile is CR2WFile).Where(t => t.Cr2wFileName == path))
-                //    return t.Cr2wFile as CR2WFile;
+                //foreach (var t in MockKernel.Get().GetMainViewModel().OpenDocuments.Where(_ => _.File is CR2WFile).Where(t => t.Cr2wFileName == path))
+                //    return t.File as CR2WFile;
 
                 ////var activedoc = vm.OpenDocuments.FirstOrDefault(d => d.IsActivated);
                 //var doc2 = LoadDocument(path) as frmCR2WDocument;

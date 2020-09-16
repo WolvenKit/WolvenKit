@@ -11,6 +11,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
@@ -22,7 +23,7 @@ using WolvenKit.Utils;
 namespace WolvenKit.CR2W
 {
     [ DataContract(Namespace = "") ]
-    public partial class CR2WFile : IWolvenkitFile
+    public partial class CR2WFile : ObservableObject, IWolvenkitFile
     {
         #region Constants
         private const long MAGIC_SIZE = 4;

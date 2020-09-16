@@ -1028,23 +1028,18 @@ namespace WolvenKit.App.ViewModels
         {
             foreach (var d in OpenDocuments.Where(d => d.SaveTarget != null))
             {
-                SaveFile(d);
+                d.SaveFile();
             }
 
             foreach (var d in OpenDocuments.Where(d => d.SaveTarget == null))
             {
-                SaveFile(d);
+                d.SaveFile();
             }
             Logger.LogString("All files saved!\n", Logtype.Success);
             MainController.Get().ProjectStatus = "Item(s) Saved";
             MainController.Get().ProjectUnsaved = false;
         }
-        public void SaveFile(DocumentViewModel d)
-        {
-            d.SaveFile();
-            Logger.LogString(d.Cr2wFileName + " saved!\n", Logtype.Success);
-            MainController.Get().ProjectStatus = "Saved";
-        }
+        
         #endregion
     }
 }

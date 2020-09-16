@@ -827,8 +827,7 @@ namespace WolvenKit
         }
         private void HKSave(HotKeyEventArgs e)
         {
-            if (ActiveDocument != null)
-                vm.SaveFile(ActiveDocument.GetViewModel());
+            ActiveDocument?.GetViewModel().SaveFile();
         }
         private void HKSaveAll(HotKeyEventArgs e)
         {
@@ -880,6 +879,7 @@ namespace WolvenKit
 
         }
 
+        private bool shouldlogProgress;
         /// <summary>
         /// Deprecated. Use MainController.QueueLog 
         /// </summary>
@@ -887,18 +887,22 @@ namespace WolvenKit
         /// <param name="e"></param>
         private void LoggerUpdated(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Log")
+            switch (e.PropertyName)
             {
-                Invoke(new LogDelegate(AddOutput), ((LoggerService)sender).Log + "\n", ((LoggerService)sender).Logtype);
-            }
-            if (e.PropertyName == "Progress")
-            {
-                if (MainBackgroundWorker != null)
+                case "Log":
+                    Invoke(new LogDelegate(AddOutput), ((LoggerService)sender).Log + "\n", ((LoggerService)sender).Logtype);
+                    break;
+                case "Progress":
                 {
-                    if (string.IsNullOrEmpty(Logger.Progress.Item2))
-                        MainBackgroundWorker.ReportProgress((int)Logger.Progress.Item1);
-                    else
-                        MainBackgroundWorker.ReportProgress((int)Logger.Progress.Item1, Logger.Progress.Item2);
+                    if (MainBackgroundWorker != null)
+                    {
+                        if (string.IsNullOrEmpty(Logger.Progress.Item2))
+                            MainBackgroundWorker.ReportProgress((int)Logger.Progress.Item1);
+                        else
+                            MainBackgroundWorker.ReportProgress((int)Logger.Progress.Item1, Logger.Progress.Item2);
+                    }
+
+                    break;
                 }
             }
         }
@@ -1321,7 +1325,10 @@ namespace WolvenKit
             }
             if (ActiveDocument != null && !ActiveDocument.GetIsDisposed())
             {
-                vm.SaveFile(ActiveDocument.GetViewModel());
+                // 
+
+
+                ActiveDocument.GetViewModel().SaveFile();
                 Logger.LogString("Saved!\n", Logtype.Success);
             }
 
