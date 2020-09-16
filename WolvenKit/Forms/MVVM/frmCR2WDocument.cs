@@ -43,12 +43,13 @@ namespace WolvenKit
         public frmJournalEditor JournalEditor;
         public frmImagePreview ImageViewer;
         public Render.frmRender RenderViewer;
-        public DockPanel FormPanel { get; private set; }
         
 
         public CR2WFile File => (CR2WFile)vm.Cr2wFile;
         public string Cr2wFileName => vm.Cr2wFileName;
         public DocumentViewModel GetViewModel() => vm;
+
+        private frmProgress ProgressForm { get; set; }
 
         #endregion
 
@@ -72,10 +73,115 @@ namespace WolvenKit
             };
             propertyWindow = new frmChunkProperties();
 
-            
+            backgroundWorker1.WorkerReportsProgress = true;
+            backgroundWorker1.WorkerSupportsCancellation = true;
+            backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
+            backgroundWorker1.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
+            backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
 
             m_deserializeDockContent = new DeserializeDockContent(GetContentFromPersistString);
         }
+
+        #region Backgroundworker
+        Func<object, DoWorkEventArgs, object> workerAction;
+        //Func<object, object> workerCompletedAction;
+        void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker bwAsync = sender as BackgroundWorker;
+            e.Result = workerAction(sender, e);
+
+            // add a result
+            //e.Result
+        }
+        void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            ProgressForm?.SetProgressBarValue(e.ProgressPercentage, e.UserState);
+        }
+        //IWolvenkitDocument HACK_bwform = null;
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            // has errors
+            if (e.Error != null)
+            {
+                // do not continue to the completed action
+            }
+            else // has completed successfully
+            {
+                //if (workerCompletedAction != null)
+                //{
+                //    HACK_bwform = (IWolvenkitDocument)workerCompletedAction(e.Result);
+                //}
+                //workerCompletedAction = null;
+            }
+
+            ProgressForm.Close();
+        }
+
+        /// <summary>
+        /// Setup the backgroundworker and progress forms (Main thread)
+        /// </summary>
+        /// <param name="args"></param>
+        public void WorkerLoadFileSetup(LoadFileArgs args)
+        {
+            MainController.Get().ProjectStatus = "Busy";
+
+            if (!backgroundWorker1.IsBusy)
+            {
+
+                ProgressForm = new frmProgress()
+                {
+                    Text = "Loading File...",
+                    StartPosition = FormStartPosition.CenterScreen,
+                    FormBorderStyle = FormBorderStyle.None
+                };
+
+                workerAction = WorkerLoadFile;
+                backgroundWorker1.RunWorkerAsync(args);
+                var dr = ProgressForm.ShowDialog(this);
+
+
+            }
+            else
+                MainController.LogString("The background worker is currently busy.\r\n", Logtype.Error);
+
+            MainController.Get().ProjectStatus = "Ready";
+        }
+
+        /// <summary>
+        /// This runs on a worker thread in the background and 
+        /// returns the LoadFileArgs it reveived if succesfull, null otherwise.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private object WorkerLoadFile(object sender, DoWorkEventArgs e)
+        {
+            var arg = e.Argument;
+            if (arg is LoadFileArgs args)
+            {
+
+                switch (vm.LoadFile(args.Filename, UIController.Get(), args.Stream))
+                {
+                    case EFileReadErrorCodes.NoError:
+                        break;
+                    case EFileReadErrorCodes.NoCr2w:
+                    case EFileReadErrorCodes.UnsupportedVersion:
+                    {
+                        this.Close();
+                        //OpenDocuments.Remove(documentViewModel);
+                        return null;
+                    }
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                //workerCompletedAction = WorkerLoadFileCompleted;
+                return args;
+            }
+
+            throw new NotImplementedException();
+        }
+        #endregion
 
 
         #region UI Methods
@@ -217,7 +323,6 @@ namespace WolvenKit
             }
         }
 
-        #endregion
 
         private void frmCR2WDocument_Shown(object sender, EventArgs e)
         {
@@ -272,6 +377,9 @@ namespace WolvenKit
                 embeddedFiles.RequestFileOpen += EmbeddedWindow_OnRequestOpen;
             }
         }
+
+        #endregion
+
 
         /// <summary>
         /// 

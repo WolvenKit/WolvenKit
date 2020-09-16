@@ -35,6 +35,7 @@ namespace WolvenKit
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCR2WDocument));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.FormPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.SuspendLayout();
             // 
@@ -44,16 +45,16 @@ namespace WolvenKit
             this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // dockPanel
+            // FormPanel
             // 
             this.FormPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FormPanel.DockBackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.FormPanel.DockBottomPortion = 150D;
-            this.FormPanel.DockLeftPortion = 200D;
-            this.FormPanel.DockRightPortion = 200D;
-            this.FormPanel.DockTopPortion = 150D;
+            this.FormPanel.DockBottomPortion = 0.15D;
+            this.FormPanel.DockLeftPortion = 0.2D;
+            this.FormPanel.DockRightPortion = 0.2D;
+            this.FormPanel.DockTopPortion = 0.15D;
             this.FormPanel.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
-            this.FormPanel.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World, ((byte)(0)));
+            this.FormPanel.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormPanel.Location = new System.Drawing.Point(0, 0);
             this.FormPanel.Name = "FormPanel";
             this.FormPanel.RightToLeftLayout = true;
@@ -82,5 +83,7 @@ namespace WolvenKit
         #endregion
 
         private ImageList imageList1;
+        private BackgroundWorker backgroundWorker1;
+        private DockPanel FormPanel;
     }
 }

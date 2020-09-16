@@ -686,7 +686,7 @@ namespace WolvenKit
 
         #region BackGroundWorker
         Func<object, DoWorkEventArgs, object> workerAction;
-        Func<object, object> workerCompletedAction;
+        //Func<object, object> workerCompletedAction;
         void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker bwAsync = sender as BackgroundWorker;
@@ -699,7 +699,7 @@ namespace WolvenKit
         {
             ProgressForm?.SetProgressBarValue(e.ProgressPercentage, e.UserState);
         }
-        IWolvenkitDocument HACK_bwform = null;
+        //IWolvenkitDocument HACK_bwform = null;
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // has errors
@@ -709,126 +709,16 @@ namespace WolvenKit
             }
             else // has completed successfully
             {
-                if (workerCompletedAction != null)
-                {
-                    HACK_bwform = (IWolvenkitDocument)workerCompletedAction(e.Result);
-                }
-                workerCompletedAction = null;
+                //if (workerCompletedAction != null)
+                //{
+                //    HACK_bwform = (IWolvenkitDocument)workerCompletedAction(e.Result);
+                //}
+                //workerCompletedAction = null;
             }
 
             ProgressForm.Close();
         }
 
-        /// <summary>
-        /// Setup the backgroundworker and progress forms (Main thread)
-        /// </summary>
-        /// <param name="args"></param>
-        private void WorkerLoadFileSetup(LoadFileArgs args)
-        {
-            MainController.Get().ProjectStatus = "Busy";
-
-            // Backgroundworker
-            if (!MainBackgroundWorker.IsBusy)
-            {
-
-                ProgressForm = new frmProgress()
-                {
-                    Text = "Loading File...",
-                    StartPosition = FormStartPosition.CenterParent,
-                    FormBorderStyle = FormBorderStyle.None
-                };
-
-                workerAction = WorkerLoadFile;
-                MainBackgroundWorker.RunWorkerAsync(args);
-                DialogResult dr = ProgressForm.ShowDialog(this);
-
-
-            }
-            else
-                Logger.LogString("The background worker is currently busy.\r\n", Logtype.Error);
-
-            MainController.Get().ProjectStatus = "Ready";
-        }
-
-        /// <summary>
-        /// This runs on a worker thread in the background and 
-        /// returns the LoadFileArgs it reveived if succesfull, null otherwise.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        protected private object WorkerLoadFile(object sender, DoWorkEventArgs e)
-        {
-            object arg = e.Argument;
-            if (!(arg is LoadFileArgs))
-                throw new NotImplementedException();
-            var args = (LoadFileArgs)arg;
-
-            var documentViewModel = args.ViewModel;
-            var filename = args.Filename;
-            var suppressErrors = args.SuppressErrors;
-
-
-            switch (documentViewModel.LoadFile(filename, UIController.Get(), args.Stream))
-            {
-                case EFileReadErrorCodes.NoError:
-                    break;
-                case EFileReadErrorCodes.NoCr2w:
-                case EFileReadErrorCodes.UnsupportedVersion:
-                {
-                    vm.OpenDocuments.Remove(documentViewModel);
-                    return null;
-                }
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            workerCompletedAction = WorkerLoadFileCompleted;
-            return args;
-        }
-
-        /// <summary>
-        /// This is called if the backgroundworker has completed sucessfully. 
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private object WorkerLoadFileCompleted(object arg)
-        {
-            if (!(arg is LoadFileArgs))
-                throw new NotImplementedException();
-            var Args = (LoadFileArgs)arg;
-
-            // switch between cr2w files and non-cr2w files (e.g. srt)
-            var filename = Args.Filename;
-
-            //switch extension
-            if (Path.GetExtension(filename) == ".srt")
-            {
-                var doc = new frmOtherDocument(Args.ViewModel);
-
-
-
-                doc.Activated += doc_Activated;
-                doc.Show(dockPanel, DockState.Document);
-                doc.FormClosed += doc_FormClosed;
-
-                return doc;
-            }
-            else
-            {
-                //var doc = Args.Doc;
-                frmCR2WDocument doc = new frmCR2WDocument(Args.ViewModel);
-                doc.PostLoadFile(filename, bool.Parse(renderW2meshToolStripMenuItem.Tag.ToString()));
-
-                doc.Activated += doc_Activated;
-                doc.Show(dockPanel, DockState.Document);
-                doc.FormClosed += doc_FormClosed;
-
-                return doc;
-            }
-
-            
-        }
         #endregion
 
         #region FileSystemWatcher
@@ -1473,26 +1363,55 @@ namespace WolvenKit
                 return null;
             }
 
-            var doc = new DocumentViewModel();
-            vm.OpenDocuments.Add(doc);
+            var docvm = new DocumentViewModel();
+            vm.OpenDocuments.Add(docvm);
 
-            WorkerLoadFileSetup(new LoadFileArgs(filename, doc, memoryStream, suppressErrors));
-
-            // wait for the backgroundworker to finish
-            // this is not good practice since I am blocking
-            // but there are some functions (the renderer etc) that rely on a return document
-            // also I am blocking with the progress form regardless so it's already bad
-            if (MainBackgroundWorker.IsBusy)
+            // switch between cr2w files and non-cr2w files (e.g. srt)
+            if (Path.GetExtension(filename) == ".srt")
             {
-                throw new NotImplementedException();
+                var doc = new frmOtherDocument(docvm);
+
+                doc.Activated += doc_Activated;
+                doc.Show(dockPanel, DockState.Document);
+                doc.FormClosed += doc_FormClosed;
+
+                return doc;
             }
             else
             {
 
+
+                //var doc = Args.Doc;
+                frmCR2WDocument doc = new frmCR2WDocument(docvm);
+                doc.WorkerLoadFileSetup(new LoadFileArgs(filename, memoryStream));
+
+                doc.PostLoadFile(filename, bool.Parse(renderW2meshToolStripMenuItem.Tag.ToString()));
+
+                doc.Activated += doc_Activated;
+                doc.Show(dockPanel, DockState.Document);
+                doc.FormClosed += doc_FormClosed;
+
+                return doc;
             }
-            var ret = HACK_bwform;
-            HACK_bwform = null;
-            return ret;
+
+
+            //WorkerLoadFileSetup(new LoadFileArgs(filename, doc, memoryStream, suppressErrors));
+
+            //// wait for the backgroundworker to finish
+            //// this is not good practice since I am blocking
+            //// but there are some functions (the renderer etc) that rely on a return document
+            //// also I am blocking with the progress form regardless so it's already bad
+            //if (MainBackgroundWorker.IsBusy)
+            //{
+            //    throw new NotImplementedException();
+            //}
+            //else
+            //{
+
+            //}
+            //var ret = HACK_bwform;
+            //HACK_bwform = null;
+            //return ret;
         }
 
         #region Mod Utility

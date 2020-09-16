@@ -357,23 +357,24 @@ namespace WolvenKit.Common
         public string GetDLCName()
         {
             string dlcname = "";
-            try
-            {
-                if (Directory.Exists(Path.Combine(DlcCookedDirectory, "dlc")))
-                {
-                    if (Directory.GetDirectories(Path.Combine(DlcCookedDirectory, "dlc")).Any())
-                        return (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcCookedDirectory, "dlc")).First())).Name;
+            dlcname = $"dlc{Name}";
+            //try
+            //{
+            //    if (Directory.Exists(Path.Combine(DlcCookedDirectory, "dlc")))
+            //    {
+            //        if (Directory.GetDirectories(Path.Combine(DlcCookedDirectory, "dlc")).Any())
+            //            return (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcCookedDirectory, "dlc")).First())).Name;
 
-                }
-                else if (Directory.Exists(Path.Combine(DlcUncookedDirectory, "dlc")))
-                {
-                    if (Directory.GetDirectories(Path.Combine(DlcUncookedDirectory, "dlc")).Any())
-                        return (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcUncookedDirectory, "dlc")).First())).Name;
-                }
-            }
-            catch (Exception)
-            {
-            }
+            //    }
+            //    else if (Directory.Exists(Path.Combine(DlcUncookedDirectory, "dlc")))
+            //    {
+            //        if (Directory.GetDirectories(Path.Combine(DlcUncookedDirectory, "dlc")).Any())
+            //            return (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcUncookedDirectory, "dlc")).First())).Name;
+            //    }
+            //}
+            //catch (Exception)
+            //{
+            //}
             return dlcname;
         }
 
