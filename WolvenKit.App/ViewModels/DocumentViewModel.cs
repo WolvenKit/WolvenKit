@@ -3,9 +3,9 @@ using System.IO;
 using System.Windows.Input;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
-using WolvenKit.Common.Model;
+using WolvenKit.Common.Model;
 using WolvenKit.CR2W;
-using WolvenKit.CR2W.SRT;
+using WolvenKit.CR2W.SRT;
 using WolvenKit.Radish.Model;
 
 namespace WolvenKit.App.ViewModels
