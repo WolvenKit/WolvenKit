@@ -1,47 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
-using WolvenKit.Bundles;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
+using WolvenKit.Properties;
 using WolvenKit.Services;
 
 namespace WolvenKit
 {
     using BrightIdeasSoftware;
     using Common;
-    using IrrlichtLime;
     using System.Collections;
-    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Drawing;
     using System.Threading.Tasks;
-    using UsefulThings;
-    using WolvenKit.App;
-    using WolvenKit.App.Commands;
-    using WolvenKit.App.ViewModels;
-    using WolvenKit.Common.Extensions;
-    using WolvenKit.Common.Model;
-    using WolvenKit.CR2W;
-    using WolvenKit.Extensions;
-    using WolvenKit.Render;
+    using App;
+    using App.Commands;
+    using App.ViewModels;
+    using Common.Extensions;
+    using Common.Model;
+    using CR2W;
+    using Render;
 
     public partial class frmModExplorer : DockContent, IThemedContent
     {
         private readonly ModExplorerViewModel vm;
-        private bool usecachedNodeList;
 
         public frmModExplorer()
         {
             // initialize Viewmodel
             vm = MockKernel.Get().GetModExplorerModel();
             vm.PropertyChanged += ViewModel_PropertyChanged;
-            vm.UpdateMonitoringRequest += (sender, e) => this.ViewModel_UpdateMonitoringRequest(e);
+            //vm.UpdateMonitoringRequest += (sender, e) => this.ViewModel_UpdateMonitoringRequest(e);
 
             InitializeComponent();
             ApplyCustomTheme();
@@ -58,11 +51,10 @@ namespace WolvenKit
             };
             treeListView.SmallImageList = new ImageList();
             this.olvColumnName.ImageGetter = delegate (object row) {
-                FileSystemInfo file = (FileSystemInfo)row;
-                string extension = this.GetFileExtension(file);
+                string extension = this.GetFileExtension(row);
                 if (!this.treeListView.SmallImageList.Images.ContainsKey(extension))
                 {
-                    Image smallImage = this.GetSmallIconForFileType(extension);
+                    Image smallImage = GetSmallIconForFileType(extension);
                     this.treeListView.SmallImageList.Images.Add(extension, smallImage);
                 }
                 return extension;
@@ -74,14 +66,6 @@ namespace WolvenKit
             treeListView.ExpandAll();
         }
 
-        private void ViewModel_UpdateMonitoringRequest(UpdateMonitoringEventArgs e)
-        {
-            if (e.Monitor)
-                ResumeMonitoring();
-            else
-                PauseMonitoring();
-        }
-
         #region Properties
         public W3Mod ActiveMod
         {
@@ -89,100 +73,27 @@ namespace WolvenKit
             set => MainController.Get().ActiveMod = value;
         }
 
-        public event EventHandler<RequestFileArgs> RequestAssetBrowser;
-
-
-        public event EventHandler<RequestFileArgs> RequestFileOpen;
-        public event EventHandler<RequestFileArgs> RequestFileRename;
-
-        public event EventHandler<RequestFileArgs> RequestFastRender;
+        public event EventHandler<RequestFileOpenArgs> RequestAssetBrowser;
+        public event EventHandler<RequestFileOpenArgs> RequestFileOpen;
+        public event EventHandler<RequestFileOpenArgs> RequestFileRename;
+        public event EventHandler<RequestFileOpenArgs> RequestFastRender;
+        public event EventHandler<RequestFileDeleteArgs> RequestFileDelete;
         #endregion
 
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(vm.treenodes))
-            {
-                this.treeListView.SetObjects(vm.treenodes);
-                UpdateTreeView();
-            }
+            if (e.PropertyName != nameof(vm.treenodes)) return;
+            this.treeListView.SetObjects(vm.treenodes);
+            UpdateTreeView(true);
         }
 
         private void frmModExplorer_Shown(object sender, EventArgs e)
         {
-            if (ActiveMod != null)
-                modexplorerSlave.Path = ActiveMod.FileDirectory;
+            
         }
 
-        #region FileSystemWatcher
-        public void PauseMonitoring()
-        {
-            modexplorerSlave.EnableRaisingEvents = false;
-        }
-
-        public void ResumeMonitoring()
-        {
-            if (ActiveMod != null)
-            {
-                modexplorerSlave.Path = ActiveMod.FileDirectory;
-                modexplorerSlave.EnableRaisingEvents = true;
-                usecachedNodeList = true;
-                UpdateTreeView();
-
-                //CR2WManager.ReloadAssembly();
-            }
-        }
-        public void StopMonitoringDirectory()
-        {
-            modexplorerSlave.Dispose();
-        }
-        private void FileChanges_Detected(object sender, RenamedEventArgs e)
-        {
-            switch (e.ChangeType)
-            {
-                case WatcherChangeTypes.Renamed:
-                    {
-                        UpdateTreeView((e as RenamedEventArgs).OldFullPath);
-                        break;
-                    }
-                case WatcherChangeTypes.Changed:
-                case WatcherChangeTypes.All:
-                default:
-                    throw new NotImplementedException();
-            }
-
-            if (Path.GetExtension(e.FullPath) == ".ws")
-                CR2WManager.ReloadAssembly();
-        }
-        private void FileChanges_Detected(object sender, FileSystemEventArgs e)
-        {
-            switch (e.ChangeType)
-            {
-                case WatcherChangeTypes.Created:
-                    {
-                        UpdateTreeView(e.FullPath);
-                        break;
-                    }
-                case WatcherChangeTypes.Deleted:
-                    {
-                        UpdateTreeView(e.FullPath);
-                        break;
-                    }
-                case WatcherChangeTypes.Renamed:
-                    {
-                        UpdateTreeView((e as RenamedEventArgs).OldFullPath);
-                        break;
-                    }
-                case WatcherChangeTypes.Changed:
-                case WatcherChangeTypes.All:
-                default:
-                    throw new NotImplementedException();
-            }
-
-            if (Path.GetExtension(e.FullPath) == ".ws")
-                CR2WManager.ReloadAssembly();
-        }
-        #endregion
+        
 
         #region Methods
         public void ApplyCustomTheme()
@@ -200,7 +111,7 @@ namespace WolvenKit
 
         }
 
-        private void UpdateTreeView(params string[] nodesToUpdate)
+        public void UpdateTreeView(bool usecachedNodeList, params string[] nodesToUpdate)
         {
             if (MainController.Get().ActiveMod == null)
                 return;
@@ -230,11 +141,11 @@ namespace WolvenKit
                 if (rootNode == null)
                     return;
                 // log expanded state
-                if (usecachedNodeList)
-                {
-                    usecachedNodeList = false;
-                }   
-                else
+                //if (usecachedNodeList)
+                //{
+                //    usecachedNodeList = false;
+                //}   
+                //else
                 {
                     var branch = treeListView.TreeModel.GetBranch(rootNode);
                     var fbr = branch.Flatten();
@@ -254,94 +165,93 @@ namespace WolvenKit
                 treeListView.RefreshObject(rootNode);
 
                 // rebuild branch
-                foreach (string fullpath in vm.ExpandedNodesDict[rootNode.Name])
-                {
-                    var count = treeListView.TreeModel.GetObjectCount();
-                    for (int i = 0; i < count; i++)
+                if (vm.ExpandedNodesDict != null && vm.ExpandedNodesDict.Count > 0)
+                    foreach (string fullpath in vm.ExpandedNodesDict[rootNode.Name])
                     {
-                        var nthobj = treeListView.TreeModel.GetNthObject(i);
-                        if ((nthobj as FileSystemInfo).FullName == fullpath)
+                        var count = treeListView.TreeModel.GetObjectCount();
+                        for (int i = 0; i < count; i++)
                         {
-                            treeListView.Expand(nthobj);
-                            break;
+                            var nthobj = treeListView.TreeModel.GetNthObject(i);
+                            if ((nthobj as FileSystemInfo)?.FullName == fullpath)
+                            {
+                                treeListView.Expand(nthobj);
+                                break;
+                            }
                         }
                     }
-                }
             }
         }
 
-        private const string openDirImageKey = "<ODIR>";
-        private const string closedDirImageKey = "<CDIR>";
-        private Image GetSmallIconForFileType(string extension)
+        private const string OpenDirImageKey = "<ODIR>";
+        private const string ClosedDirImageKey = "<CDIR>";
+        private static Image GetSmallIconForFileType(string extension)
         {
             extension = extension.TrimStart('.');
             switch (extension)
             {
-                case "w2ent": return WolvenKit.Properties.Resources.w2ent;
-                case "w2faces": return WolvenKit.Properties.Resources.w2faces;
-                case "w2fnt": return WolvenKit.Properties.Resources.w2fnt;
-                case "w2je": return WolvenKit.Properties.Resources.w2je;
-                case "w2job": return WolvenKit.Properties.Resources.w2job;
-                case "w2l": return WolvenKit.Properties.Resources.w2l;
-                case "w2mesh": return WolvenKit.Properties.Resources.w2mesh;
-                case "w2mg": return WolvenKit.Properties.Resources.w2mg;
-                case "w2mi": return WolvenKit.Properties.Resources.w2mi;
-                case "w2p": return WolvenKit.Properties.Resources.w2p;
-                case "w2phase": return WolvenKit.Properties.Resources.w2phase;
-                case "w2quest": return WolvenKit.Properties.Resources.w2quest;
-                case "w2rag": return WolvenKit.Properties.Resources.w2rag;
-                case "w2ragdoll": return WolvenKit.Properties.Resources.w2ragdoll;
-                case "w2rig": return WolvenKit.Properties.Resources.w2rig;
-                case "w2scene": return WolvenKit.Properties.Resources.w2scene;
-                case "w2steer": return WolvenKit.Properties.Resources.w2steer;
-                case "w2w": return WolvenKit.Properties.Resources.w2w;
-                case "csv": return WolvenKit.Properties.Resources.csv;
-                case "env": return WolvenKit.Properties.Resources.env;
-                case "journal": return WolvenKit.Properties.Resources.journal;
-                case "redgame": return WolvenKit.Properties.Resources.redgame;
-                case "redswf": return WolvenKit.Properties.Resources.redswf;
-                case "spawntree": return WolvenKit.Properties.Resources.spawntree;
-                case "swf": return WolvenKit.Properties.Resources.swf;
-                case "vbrush": return WolvenKit.Properties.Resources.vbrush;
-                case "w2anim": return WolvenKit.Properties.Resources.w2anim;
-                case "w2animev": return WolvenKit.Properties.Resources.w2animev;
-                case "w2anims": return WolvenKit.Properties.Resources.w2anims;
-                case "w2beh": return WolvenKit.Properties.Resources.w2beh;
-                case "w2behtree": return WolvenKit.Properties.Resources.w2behtree;
-                case "w2cent": return WolvenKit.Properties.Resources.w2cent;
-                case "w2comm": return WolvenKit.Properties.Resources.w2comm;
-                case "w2conv": return WolvenKit.Properties.Resources.w2conv;
-                case "w2cube": return WolvenKit.Properties.Resources.w2cube;
-                case "w2cutscene": return WolvenKit.Properties.Resources.w2cutscene;
+                case "w2ent": return Resources.w2ent;
+                case "w2faces": return Resources.w2faces;
+                case "w2fnt": return Resources.w2fnt;
+                case "w2je": return Resources.w2je;
+                case "w2job": return Resources.w2job;
+                case "w2l": return Resources.w2l;
+                case "w2mesh": return Resources.w2mesh;
+                case "w2mg": return Resources.w2mg;
+                case "w2mi": return Resources.w2mi;
+                case "w2p": return Resources.w2p;
+                case "w2phase": return Resources.w2phase;
+                case "w2quest": return Resources.w2quest;
+                case "w2rag": return Resources.w2rag;
+                case "w2ragdoll": return Resources.w2ragdoll;
+                case "w2rig": return Resources.w2rig;
+                case "w2scene": return Resources.w2scene;
+                case "w2steer": return Resources.w2steer;
+                case "w2w": return Resources.w2w;
+                case "csv": return Resources.csv;
+                case "env": return Resources.env;
+                case "journal": return Resources.journal;
+                case "redgame": return Resources.redgame;
+                case "redswf": return Resources.redswf;
+                case "spawntree": return Resources.spawntree;
+                case "swf": return Resources.swf;
+                case "vbrush": return Resources.vbrush;
+                case "w2anim": return Resources.w2anim;
+                case "w2animev": return Resources.w2animev;
+                case "w2anims": return Resources.w2anims;
+                case "w2beh": return Resources.w2beh;
+                case "w2behtree": return Resources.w2behtree;
+                case "w2cent": return Resources.w2cent;
+                case "w2comm": return Resources.w2comm;
+                case "w2conv": return Resources.w2conv;
+                case "w2cube": return Resources.w2cube;
+                case "w2cutscene": return Resources.w2cutscene;
 
-                case "xbm": return WolvenKit.Properties.Resources.xbm;
+                case "xbm": return Resources.xbm;
 
-                case "fbx": return WolvenKit.Properties.Resources.fbx;
-                case "tga": return WolvenKit.Properties.Resources.image;
-                case "png": return WolvenKit.Properties.Resources.image;
-                case "dds": return WolvenKit.Properties.Resources.image;
-                case "jpg": return WolvenKit.Properties.Resources.image;
-                case "jpeg": return WolvenKit.Properties.Resources.image;
-                case "xml": return WolvenKit.Properties.Resources.xml;
-                case "apb": return WolvenKit.Properties.Resources.apb;
+                case "fbx": return Resources.fbx;
+                case "tga": return Resources.image;
+                case "png": return Resources.image;
+                case "dds": return Resources.image;
+                case "jpg": return Resources.image;
+                case "jpeg": return Resources.image;
+                case "xml": return Resources.xml;
+                case "apb": return Resources.apb;
 
-                case closedDirImageKey: return WolvenKit.Properties.Resources.FolderClosed_16x;
-                case openDirImageKey: return WolvenKit.Properties.Resources.FolderOpened_16x;
-                default: return WolvenKit.Properties.Resources.BlankFile_16x;
+                case ClosedDirImageKey: return Resources.FolderClosed_16x;
+                case OpenDirImageKey: return Resources.FolderOpened_16x;
+                default: return Resources.BlankFile_16x;
 
             }
         }
-        private string GetFileExtension(FileSystemInfo node)
+        private string GetFileExtension(object obj)
         {
+            if (!(obj is FileSystemInfo node)) return OpenDirImageKey;
             if (node.IsDirectory())
             {
-                if (treeListView.IsExpanded(node))
-                    return openDirImageKey;
-                else
-                    return closedDirImageKey;
+                return treeListView.IsExpanded(node) ? OpenDirImageKey : ClosedDirImageKey;
             }
             else
-                return (node as FileInfo).Extension;
+                return (node as FileInfo)?.Extension;
         }
 
         #endregion
@@ -359,14 +269,46 @@ namespace WolvenKit
         }
         private void modFileList_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.F2 && treeListView.SelectedObject is FileSystemInfo selectedobject)
+            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
-                RequestFileRename?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
+                if (e.KeyCode == Keys.F2)
+                {
+                    RequestFileRename?.Invoke(this, new RequestFileOpenArgs { File = selectedobject.FullName });
+                }
+                else if (e.KeyCode == Keys.Back)
+                {
+                    RequestDelete();
+                }
+
+            }
+            
+        }
+
+        private void RequestDelete()
+        {
+            var selectedItems = vm.SelectedItems.Select(_ => _.FullName).ToList();
+            List<string> itemstoDelete = new List<string>();
+            foreach (var path in selectedItems)
+            {
+                if (MockKernel.Get().GetMainViewModel().OpenDocuments.Any(_ => _.Cr2wFileName == path))
+                {
+                    MainController.LogString($"Please close the file in WolvenKit before deleting: {path}", Logtype.Error);
+                }
+                else
+                {
+                    itemstoDelete.Add(path);
+                }
+            }
+
+            if (MessageBox.Show(
+                "Are you sure you want to permanently delete this?", "Confirmation", MessageBoxButtons.OKCancel
+            ) == DialogResult.OK)
+            {
+                RequestFileDelete?.Invoke(this, new RequestFileDeleteArgs(itemstoDelete));
             }
         }
 
-        private bool _singleclickflag;
-
+        private bool singleclickflag;
         private async void treeListView_CellClick(object sender, CellClickEventArgs e)
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject && e.Item != null)
@@ -375,20 +317,20 @@ namespace WolvenKit
 
                 if (e.ClickCount == 1)
                 {
-                    _singleclickflag = true;
+                    singleclickflag = true;
                     await Task.Delay(200);
                     
-                    if (_singleclickflag)
+                    if (singleclickflag)
                     {
                         if (!selectedobject.IsDirectory())
-                            RequestFileOpen?.Invoke(this, new RequestFileArgs { File = node.FullName, Inspect = true });
+                            RequestFileOpen?.Invoke(this, new RequestFileOpenArgs { File = node.FullName, Inspect = true });
 
                     }
                     else
                     {
 
                     }
-                    _singleclickflag = false;
+                    singleclickflag = false;
                 }
                 else
                 {
@@ -402,8 +344,8 @@ namespace WolvenKit
             {
                 if (!selectedobject.IsDirectory())
                 {
-                    RequestFileOpen?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
-                    _singleclickflag = false;
+                    RequestFileOpen?.Invoke(this, new RequestFileOpenArgs { File = selectedobject.FullName });
+                    singleclickflag = false;
                 }
                 else
                     treeListView.ToggleExpansion(selectedobject);
@@ -416,12 +358,10 @@ namespace WolvenKit
 
         private void contextMenu_Opened(object sender, EventArgs e)
         {
-            string ext = "";
-
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
                 var fi = new FileInfo(selectedobject.FullName);
-                ext = fi.Extension.TrimStart('.');
+                var ext = fi.Extension.TrimStart('.');
                 bool isbundle = Path.Combine(ActiveMod.FileDirectory, fi.ToString())
                     .Contains(Path.Combine(ActiveMod.ModDirectory, EBundleType.Bundle.ToString()));
                 bool israw = Path.Combine(ActiveMod.FileDirectory, fi.ToString())
@@ -465,7 +405,7 @@ namespace WolvenKit
 
         }
 
-        private void contextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
@@ -503,7 +443,7 @@ namespace WolvenKit
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
-                RequestAssetBrowser(this, new RequestFileArgs { File = GetExplorerString(selectedobject.FullName ?? "") });
+                RequestAssetBrowser?.Invoke(this, new RequestFileOpenArgs { File = GetExplorerString(selectedobject.FullName) });
             }
 
             string GetExplorerString(string s)
@@ -542,29 +482,17 @@ namespace WolvenKit
                     MainController.LogString("Please close the file in WolvenKit before renaming.", Logtype.Error);
                     return;
                 }
-                RequestFileRename?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
+                RequestFileRename?.Invoke(this, new RequestFileOpenArgs { File = selectedobject.FullName });
             }
         }
 
         private void removeFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
-            {
-                var vm = MockKernel.Get().GetMainViewModel();
-                if (vm.OpenDocuments.Any(_ => _.Cr2wFileName == selectedobject.FullName))
-                {
-                    MainController.LogString("Please close the file in WolvenKit before deleting.", Logtype.Error);
-                    return;
-                }
-            }
-
-            if (MessageBox.Show(
-                     "Are you sure you want to permanently delete this?", "Confirmation", MessageBoxButtons.OKCancel
-                 ) == DialogResult.OK)
-            {
-                vm.DeleteFilesCommand.SafeExecute();
-            }
+            RequestDelete();
         }
+
+        
+
 
         private void addAllDependenciesToolStripMenuItem_Click(object sender, EventArgs e) => vm.AddAllImportsCommand.SafeExecute();
 
@@ -601,26 +529,26 @@ namespace WolvenKit
 
         private void markAsModDlcFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
-            {
-                var filename = selectedobject.FullName;
-                var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
-                if (!File.Exists(fullpath))
-                    return;
-                var newfullpath = Path.Combine(new[] { ActiveMod.FileDirectory, filename.Split('\\')[0] == "DLC" ? "Mod" : "DLC" }.Concat(filename.Split('\\').Skip(1).ToArray()).ToArray());
+            if (!(treeListView.SelectedObject is FileSystemInfo selectedobject)) return;
+            var filename = selectedobject.FullName;
+            var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
+            if (!File.Exists(fullpath))
+                return;
+            var newfullpath = Path.Combine(new[] { ActiveMod.FileDirectory, filename.Split('\\')[0] == "DLC" ? "Mod" : "DLC" }.Concat(filename.Split('\\').Skip(1).ToArray()).ToArray());
 
-                if (File.Exists(newfullpath))
-                    return;
-                try
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
-                }
-                catch
-                {
-                }
-                File.Move(fullpath, newfullpath);
-                MainController.Get().ProjectStatus = "File moved";
+            if (File.Exists(newfullpath))
+                return;
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(newfullpath) ?? throw new InvalidOperationException());
             }
+            catch
+            {
+                // ignored
+            }
+
+            File.Move(fullpath, newfullpath);
+            MainController.Get().ProjectStatus = "File moved";
         }
 
 
@@ -629,7 +557,7 @@ namespace WolvenKit
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
                 Console.WriteLine(selectedobject.FullName);
-                string w2rigFilePath = selectedobject.FullName;
+                string w2RigFilePath = selectedobject.FullName;
                 using (var sf = new SaveFileDialog())
                 {
                     sf.Filter = "W3 json | *.json";
@@ -639,7 +567,7 @@ namespace WolvenKit
                         CommonData cdata = new CommonData();
                         Rig exportRig = new Rig(cdata);
                         byte[] data;
-                        data = File.ReadAllBytes(w2rigFilePath);
+                        data = File.ReadAllBytes(w2RigFilePath);
                         using (MemoryStream ms = new MemoryStream(data))
                         using (BinaryReader br = new BinaryReader(ms))
                         {
@@ -688,11 +616,10 @@ namespace WolvenKit
                 if (!File.Exists(fullpath) && !Directory.Exists(fullpath))
                     return;
                 string dir;
-                if (File.Exists(fullpath))
-                    dir = Path.GetDirectoryName(fullpath);
-                else
-                    dir = fullpath;
-                var files = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories).ToList();
+                dir = File.Exists(fullpath) 
+                    ? Path.GetDirectoryName(fullpath) 
+                    : fullpath;
+                var files = Directory.GetFiles(dir ?? throw new InvalidOperationException(), "*.*", SearchOption.AllDirectories).ToList();
                 var folderName = Path.GetFileName(fullpath);
                 ConvertAnimation anim = new ConvertAnimation();
                 if (File.Exists(fullpath + ".w2anims"))
@@ -716,14 +643,14 @@ namespace WolvenKit
                 }
             }
         }
-        private async void exportW2meshToFbxToolStripMenuItem_Click(object sender, EventArgs e) => vm.ExportMeshCommand.SafeExecute();
+        private void exportW2meshToFbxToolStripMenuItem_Click(object sender, EventArgs e) => vm.ExportMeshCommand.SafeExecute();
 
         private void fastRenderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
                 vm.AddAllImportsCommand.SafeExecute();
-                RequestFastRender?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
+                RequestFastRender?.Invoke(this, new RequestFileOpenArgs { File = selectedobject.FullName });
             }
         }
 

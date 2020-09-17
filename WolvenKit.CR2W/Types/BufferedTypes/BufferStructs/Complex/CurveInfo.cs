@@ -19,9 +19,9 @@ namespace WolvenKit.CR2W.Types
 
         public CurveInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            someName = new CName(cr2w, this, nameof(someName));
-            someByte = new CUInt8(cr2w, this, nameof(someByte));
-            pieces = new CCompressedBuffer<CurvePiece>(cr2w, this, nameof(pieces));
+            someName = new CName(cr2w, this, nameof(someName)) { IsSerialized = true };
+            someByte = new CUInt8(cr2w, this, nameof(someByte)) { IsSerialized = true };
+            pieces = new CCompressedBuffer<CurvePiece>(cr2w, this, nameof(pieces)) { IsSerialized = true };
         }
 
         public override CVariable Copy(CR2WCopyAction context)

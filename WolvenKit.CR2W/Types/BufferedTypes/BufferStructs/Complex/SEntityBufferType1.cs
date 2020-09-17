@@ -14,15 +14,15 @@ namespace WolvenKit.CR2W.Types.Utils
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SEntityBufferType1 : CVariable
     {
-        [Ordinal(0)] [RED] public CName ComponentName { get; set; }
-        [Ordinal(1)] [RED] public CGUID Guid { get; set; }
-        [Ordinal(2)] [RED] public CByteArray2 Buffer { get; set; }
+        [Ordinal(0)] [REDBuffer] public CName ComponentName { get; set; }
+        [Ordinal(1)] [REDBuffer] public CGUID Guid { get; set; }
+        [Ordinal(2)] [REDBuffer] public CByteArray2 Buffer { get; set; }
 
         public SEntityBufferType1(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            ComponentName = new CName(cr2w, this, nameof(ComponentName));
-            Guid = new CGUID(cr2w, this, nameof(Guid));
-            Buffer = new CByteArray2(cr2w, this, nameof(Buffer));
+            ComponentName = new CName(cr2w, this, nameof(ComponentName)) { IsSerialized = true };
+            Guid = new CGUID(cr2w, this, nameof(Guid)) { IsSerialized = true };
+            Buffer = new CByteArray2(cr2w, this, nameof(Buffer)) { IsSerialized = true };
         }
 
         public bool CanRead(BinaryReader file)

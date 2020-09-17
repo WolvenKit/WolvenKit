@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Input;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
-using WolvenKit.Common.Model;
+using WolvenKit.Common.Model;using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
-using WolvenKit.CR2W.SRT;
+using WolvenKit.CR2W.SRT;
 using WolvenKit.Radish.Model;
 
 namespace WolvenKit.App.ViewModels
@@ -17,6 +18,7 @@ namespace WolvenKit.App.ViewModels
         {
             cmd1 = new RelayCommand(cm1, canrm1);
 
+            _openEmbedded =new Dictionary<string,DocumentViewModel>();
         }
 
         #region Fields
@@ -27,36 +29,44 @@ namespace WolvenKit.App.ViewModels
         #region Properties
         public object SaveTarget { get; set; }
         #region File
-        private IWolvenkitFile _cr2wfile;
-        public IWolvenkitFile Cr2wFile
+        private IWolvenkitFile _file;
+        public IWolvenkitFile File
         {
-            get => _cr2wfile;
-            set
+            get => _file;
+            private set
             {
-                if (_cr2wfile != value)
+                if (_file != value)
                 {
-                    _cr2wfile = value;
+                    _file = value;
                     OnPropertyChanged();
                 }
             }
         }
         #endregion
         #region FileName
-        public virtual string Cr2wFileName => Cr2wFile.Cr2wFileName;
+        public virtual string Cr2wFileName => File.Cr2wFileName;
         #endregion
-        #region FormText
-        private string _formText;
-        public string FormText
+        #region OpenEmbedded
+        private Dictionary<string,DocumentViewModel> _openEmbedded;
+        public Dictionary<string,DocumentViewModel> OpenEmbedded
         {
-            get => _formText;
+            get => _openEmbedded;
             set
             {
-                if (_formText != value)
+                if (_openEmbedded != value)
                 {
-                    _formText = value;
+                    _openEmbedded = value;
                     OnPropertyChanged();
                 }
             }
+        }
+
+        public void RemoveEmbedded(object sender, EventArgs e, DocumentViewModel embVM)
+        {
+            string embkey = embVM.Cr2wFileName;
+            if (!OpenEmbedded.ContainsKey(embkey))
+                throw new NullReferenceException();
+            OpenEmbedded.Remove(embkey);
         }
         #endregion
         public string Title => Path.GetFileName(Cr2wFileName);
@@ -78,6 +88,16 @@ namespace WolvenKit.App.ViewModels
         #region Methods
         public void SaveFile()
         {
+            // save all open embedded files
+            foreach (DocumentViewModel model in OpenEmbedded.Values)
+            {
+                var editvar = model.SaveTarget as CR2WEmbeddedWrapper;
+
+                // get bytes from model
+                editvar?.SetRawEmbeddedData(model.GetRawBytes());
+            }
+
+            // save File
             if (SaveTarget == null)
             {
                 saveToFileName();
@@ -86,20 +106,30 @@ namespace WolvenKit.App.ViewModels
             {
                 saveToMemoryStream();
             }
+
+            // Logging
+            MainController.LogString(Cr2wFileName + " saved!\n", Logtype.Success);
+            MainController.Get().ProjectStatus = "Saved";
         }
+
+        private byte[] GetRawBytes()
+        {
+            using (var mem = new MemoryStream())
+            using (var writer = new BinaryWriter(mem))
+            {
+                File.Write(writer);
+                return mem.ToArray();
+            }
+        }
+
         private void saveToMemoryStream()
         {
             using (var mem = new MemoryStream())
+            using (var writer = new BinaryWriter(mem))
             {
-                using (var writer = new BinaryWriter(mem))
-                {
-                    Cr2wFile.Write(writer);
+                File.Write(writer);
 
-                    if (OnFileSaved != null)
-                    {
-                        OnFileSaved(this, new FileSavedEventArgs { FileName = Cr2wFileName, Stream = mem, File = Cr2wFile });
-                    }
-                }
+                OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = Cr2wFileName, Stream = mem, File = File });
             }
         }
 
@@ -110,14 +140,14 @@ namespace WolvenKit.App.ViewModels
             using (var mem = new MemoryStream())
             using (var writer = new BinaryWriter(mem))
             {
-                Cr2wFile.Write(writer);
+                File.Write(writer);
                 mem.Seek(0, SeekOrigin.Begin);
 
                 using (var fs = new FileStream(Cr2wFileName, FileMode.Create, FileAccess.Write))
                 {
                     mem.WriteTo(fs);
 
-                    OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = Cr2wFileName, Stream = fs, File = Cr2wFile });
+                    OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = Cr2wFileName, Stream = fs, File = File });
                     fs.Close();
                 }
             }
@@ -127,41 +157,44 @@ namespace WolvenKit.App.ViewModels
             //    MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
             //}
         }
-        public EFileReadErrorCodes LoadFile(string filename, IVariableEditor variableEditor, Stream stream = null)
+
+
+        public EFileReadErrorCodes LoadFile(string filename, IVariableEditor variableEditor, LoggerService logger, Stream stream = null)
         {
 
             if (stream != null)
             {
-                return loadFile(stream, filename, variableEditor);
+                return loadFile(stream, filename, variableEditor, logger);
             }
             else
             {
                 using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
                 {
-                    return loadFile(fs, filename, variableEditor);
+                    return loadFile(fs, filename, variableEditor, logger);
                 }
             }
             
         }
 
-        private EFileReadErrorCodes loadFile(Stream stream, string filename, IVariableEditor variableEditor)
+        private EFileReadErrorCodes loadFile(Stream stream, string filename, IVariableEditor variableEditor, LoggerService logger)
         {
-            FormText = Path.GetFileName(filename) + " [" + filename + "]";
+            EFileReadErrorCodes errorcode;
 
             using (var reader = new BinaryReader(stream))
             {
                 // switch between cr2wfiles and others (e.g. srt)
                 if (Path.GetExtension(filename) == ".srt")
                 {
-                    Cr2wFile = new Srtfile()
+                    File = new Srtfile()
                     {
                         Cr2wFileName = filename
                     };
-                    return Cr2wFile.Read(reader);
+                    errorcode = File.Read(reader);
+                    OnPropertyChanged(nameof(File));
                 }
                 else
                 {
-                    Cr2wFile = new CR2WFile(MainController.Get().Logger)
+                    File = new CR2WFile(logger)
                     {
                         Cr2wFileName = filename,
 
@@ -169,9 +202,12 @@ namespace WolvenKit.App.ViewModels
 
                         LocalizedStringSource = MainController.Get()
                     };
-                    return Cr2wFile.Read(reader);
+                    errorcode = File.Read(reader);
+                    OnPropertyChanged(nameof(File));
                 }
             }
+
+            return errorcode;
         }
         #endregion
 

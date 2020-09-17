@@ -169,11 +169,22 @@ namespace WolvenKit.App
         /// Use this for threadsafe logging.
         /// </summary>
         /// <param name="value"></param>
-        public static void LogString(string value, Logtype logtype)
+        public static void LogString(string value, Logtype logtype = Logtype.Normal)
         {
             if (Get().Logger != null)
                 Get().Logger.LogString(value, logtype);
         }
+
+        /// <summary>
+        /// Use this for delegate logging. ???
+        /// </summary>
+        /// <param name="value"></param>
+        public static void LogString(object sender, string value)
+        {
+            if (Get().Logger != null)
+                Get().Logger.LogString(value, Logtype.Normal);
+        }
+
         /// <summary>
         /// Use this for threadsafe progress updates.
         /// </summary>
@@ -262,7 +273,7 @@ namespace WolvenKit.App
                             }));
                         }
                     }
-                    catch (System.Exception)
+                    catch (System.Exception ex)
                     {
                         if (File.Exists(Path.Combine(ManagerCacheDir, "bundle_cache.json")))
                             File.Delete(Path.Combine(ManagerCacheDir, "bundle_cache.json"));

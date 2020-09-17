@@ -454,7 +454,7 @@ namespace WolvenKit
             ExaminePosition();
         }
 
-        internal class HexListNode
+        private class HexListNode
         {
             private readonly byte[] bytes;
             private readonly byte[] readable;

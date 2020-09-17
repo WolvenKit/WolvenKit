@@ -17,22 +17,17 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SEntityBufferType2 : CVariable
     {
-        [Ordinal(0)] [RED] public CName componentName { get; set; }
-        [Ordinal(1)] [RED] public CUInt32 sizeofdata { get; set; }
-        [Ordinal(2)] [RED] public CBufferUInt32<CVariantSizeTypeName> variables { get; set; }
+        [Ordinal(0)] [REDBuffer] public CName componentName { get; set; }
+        [Ordinal(1)] [REDBuffer] public CUInt32 sizeofdata { get; set; }
+        [Ordinal(2)] [REDBuffer] public CBufferUInt32<CVariantSizeTypeName> variables { get; set; }
 
 
         public SEntityBufferType2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            componentName = new CName(cr2w, this, nameof(componentName));
-            sizeofdata = new CUInt32(cr2w, this, nameof(sizeofdata));
-            variables = new CBufferUInt32<CVariantSizeTypeName>(cr2w, this, nameof(variables));
+            componentName = new CName(cr2w, this, nameof(componentName)) {IsSerialized = true};
+            sizeofdata = new CUInt32(cr2w, this, nameof(sizeofdata)) { IsSerialized = true };
+            variables = new CBufferUInt32<CVariantSizeTypeName>(cr2w, this, nameof(variables)) { IsSerialized = true };
 
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new SEntityBufferType2(cr2w, parent, name);
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -68,5 +63,9 @@ namespace WolvenKit.CR2W.Types
             return componentName.Value;
         }
 
+        public override List<IEditableVariable> GetEditableVariables()
+        {
+            return base.GetEditableVariables();
+        }
     }
 }

@@ -45,7 +45,7 @@ namespace WolvenKit.Common.Wcc
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public int RunCommand(string cmdName, string args)
+        private int RunCommand(string cmdName, string args)
         {
             string wccPath = _wccPath;
             EWccStatus status = EWccStatus.NotRun;

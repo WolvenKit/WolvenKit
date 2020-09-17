@@ -33,6 +33,7 @@ namespace WolvenKit.CR2W.Types
                 var varname = cr2w.names[nameId].Str;
                 CVariant cVariant = new CVariant(cr2w, BufferParameters, varname);
                 cVariant.Read(file, 0);
+                cVariant.IsSerialized = true;
 
                 BufferParameters.AddVariableWithName(cVariant);
             }

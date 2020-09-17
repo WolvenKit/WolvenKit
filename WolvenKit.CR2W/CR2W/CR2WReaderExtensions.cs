@@ -20,7 +20,7 @@ namespace WolvenKit.CR2W
             string str = null;
             if (len > 0)
             {
-                str = Encoding.Default.GetString(file.ReadBytes(len));
+                str = Encoding.GetEncoding("ISO-8859-1").GetString(file.ReadBytes(len));
             }
             else
             {
@@ -41,7 +41,7 @@ namespace WolvenKit.CR2W
         {
             if (str != null)
             {
-                file.Write(Encoding.Default.GetBytes(str));
+                file.Write(Encoding.GetEncoding("ISO-8859-1").GetBytes(str));
             }
             file.Write((byte)0);
         }

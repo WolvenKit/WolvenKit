@@ -48,7 +48,7 @@ namespace WolvenKit.Bundles
             string str = null;
             if (len > 0)
             {
-                str = Encoding.Default.GetString(br.ReadBytes(len));
+                str = Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(len));
             }
             else
             {

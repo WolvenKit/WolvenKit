@@ -60,7 +60,10 @@ namespace WolvenKit.CR2W
         {
             if (m_projectinfo != null && m_projectinfo.Exists)
             {
-                m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(InterpretScriptClasses(), m_assembly);
+
+                var (count, csharpstring) = InterpretScriptClasses();
+                if (count <= 0) return;
+                m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly);
                 if (m_assembly != null)
                 {
                     m_logger.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}", Logtype.Success);
@@ -99,7 +102,7 @@ namespace WolvenKit.CR2W.Types
 
         private static readonly Func<string, string> funcCtor = (x) => $"\t\tpublic {x}(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)\r\n\t\t{{\r\n\t\t}}\r\n";
 
-        private static string InterpretScriptClasses()
+        private static (int, string) InterpretScriptClasses()
         {
             List<string> importedClases = new List<string>();
             string output = "";
@@ -189,7 +192,7 @@ namespace WolvenKit.CR2W.Types
             if (importedClases.Count > 0)
                 if (m_logger != null) m_logger.LogString($"Sucessfully parsed {importedClases.Count} custom classes: " +
                 $"{string.Join(", ", importedClases)}", Logtype.Success);
-            return output;
+            return (importedClases.Count, output);
         }
 
 
@@ -298,8 +301,6 @@ namespace WolvenKit.CR2W.Types
 
             return csline;
         }
-
-
 
         public static void Init(string projectpath, LoggerService logger)
         {

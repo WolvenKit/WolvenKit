@@ -127,7 +127,7 @@
   <data name="ExpandBTN.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAABtSURBVDhPzY1RCoAwDEN7tl3B63lH9ae/SrGBOhsrA8HA
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABtSURBVDhPzY1RCoAwDEN7tl3B63lH9ae/SrGBOhsrA8HA
         gzGaF/ksqrpX+GkeO2itUaggLjBKQb8WoQL7qCgFWMl4LViX7caQQKZ5XGBlkAmAV89EASR49wKvXNML
         Io/LCAQMWkTiAsNPfxWRA+5CveJSfjhGAAAAAElFTkSuQmCC
 </value>
@@ -135,14 +135,11 @@
   <data name="CollapseBTN.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAABoSURBVDhPzY3BDYBACASpjRZszx7VD1/NRTAcx4b7aNxk
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABoSURBVDhPzY3BDYBACASpjRZszx7VD1/NRTAcx4b7aNxk
         PoSdpdciImeFvuZpD8wMgQK/gCgFcc0DBe1QUQpsJWNasG/HwPcCWtaHTGBo9Y4XRKJAK31mBIZW+pgA
         AYsWv4DQ11+F6AI7+8GkpcSaUAAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="modexplorerSlave.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>363, 17</value>
-  </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAsAEBAAAAEAIABoBAAAtgAAABQUAAABACAAuAYAAB4FAAAYGAAAAQAgAIgJAADWCwAAGhoAAAEA

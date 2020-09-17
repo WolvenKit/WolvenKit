@@ -33,8 +33,6 @@ namespace WolvenKit.App.ViewModels
 
             // on start use mod files
             UseLocalResourcesCommand.SafeExecute();
-            // and auto-gen texture groups
-            TryGetTextureGroupsCommand.SafeExecute();
         }
 
         #region Fields
@@ -72,8 +70,10 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         #region Commands Implementation
-        protected bool CanUseLocalResources() => MainController.Get().ActiveMod != null;
-        protected void UseLocalResources()
+
+        private bool CanUseLocalResources() => MainController.Get().ActiveMod != null;
+
+        private void UseLocalResources()
         {
             var importablefiles = new List<string>();
             foreach (var file in MainController.Get().ActiveMod.Files)
@@ -99,14 +99,16 @@ namespace WolvenKit.App.ViewModels
             TryGetTextureGroupsCommand.SafeExecute();
         }
 
-        protected bool CanOpenFolder() => MainController.Get().ActiveMod != null;
-        protected void OpenFolder()
+        private bool CanOpenFolder() => MainController.Get().ActiveMod != null;
+
+        private void OpenFolder()
         {
             
         }
 
-        protected bool CanTryGetTextureGroups() => Importableobjects != null;
-        protected void TryGetTextureGroups()
+        private bool CanTryGetTextureGroups() => Importableobjects != null;
+
+        private void TryGetTextureGroups()
         {
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MainController.XBMDumpPath);
             using (var fr = new FileStream(path, FileMode.Open, FileAccess.Read))
@@ -154,8 +156,9 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
-        protected bool CanImport() => Importableobjects != null;
-        protected async void Import()
+        private bool CanImport() => Importableobjects != null;
+
+        private async void Import()
         {
             var filesToImport = Importableobjects.Where(_ => _.IsSelected).ToList();
             var ActiveMod = MainController.Get().ActiveMod;
@@ -223,7 +226,7 @@ namespace WolvenKit.App.ViewModels
         {
             Importableobjects.Clear();
             importdepot = new DirectoryInfo(dirpath);
-
+            //List<ImportableFile> filestoAdd = new List<ImportableFile>();
             foreach (var f in importablefiles)
             {
                 string ext = Path.GetExtension(f);
@@ -245,12 +248,13 @@ namespace WolvenKit.App.ViewModels
                     importableobj.IsSelected = true;
                 }
 
-                Importableobjects.Add(importableobj);
+                if (!Importableobjects.Contains(importableobj))
+                    Importableobjects.Add(importableobj);
+                else
+                {
+
+                }
             }
-
-            //objectListView.SetObjects(Importableobjects);
-
-
         }
         #endregion
 

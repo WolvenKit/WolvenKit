@@ -41,7 +41,10 @@ namespace WolvenKit.Forms
 
                 }
                 else
+                {
                     this.objectListView.SetObjects(viewModel.Importableobjects);
+                    
+                }
             }
         }
 

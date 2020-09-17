@@ -28,10 +28,10 @@ namespace WolvenKit.CR2W.Types
         {
             // This has a fixed size in memory, but for some reason file format is allowed to not provide all,
             // leaving the rest to zero values. Possibly has individual fields instead of an array.
-            values = new CCompressedBuffer<CFloat>(cr2w, this, nameof(values));
-            valueCount = new CUInt16(cr2w, this, "count") { val = 16 };
+            values = new CCompressedBuffer<CFloat>(cr2w, this, nameof(values)) { IsSerialized = true };
+            valueCount = new CUInt16(cr2w, this, "count") { val = 16, IsSerialized = true};
 
-            
+
         }
 
         public override CVariable Copy(CR2WCopyAction context)

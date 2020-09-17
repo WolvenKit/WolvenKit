@@ -223,6 +223,7 @@
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\RadishController.cs" />
     <Compile Include="MockKernel.cs" />
+    <Compile Include="Model\Arguments\RequestEmbeddedFileOpenArgs.cs" />
     <Compile Include="Model\Arguments\FileSavedEventArgs.cs" />
     <Compile Include="Model\Arguments\SelectChunkArgs.cs" />
     <Compile Include="Model\Commonfunctions.cs" />

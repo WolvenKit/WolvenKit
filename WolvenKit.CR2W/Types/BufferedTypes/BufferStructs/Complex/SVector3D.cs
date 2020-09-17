@@ -18,9 +18,9 @@ namespace WolvenKit.CR2W.Types
 
         public SVector3D(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            X = new CFloat(cr2w, this, nameof(X));
-            Y = new CFloat(cr2w, this, nameof(Y));
-            Z = new CFloat(cr2w, this, nameof(Z));
+            X = new CFloat(cr2w, this, nameof(X)) { IsSerialized = true };
+            Y = new CFloat(cr2w, this, nameof(Y)) { IsSerialized = true };
+            Z = new CFloat(cr2w, this, nameof(Z)) { IsSerialized = true };
         }
 
         public void Read(BinaryReader file, int compression)

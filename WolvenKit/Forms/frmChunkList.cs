@@ -7,6 +7,7 @@ using BrightIdeasSoftware;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
 using WolvenKit.App.Model;
+using WolvenKit.App.ViewModels;
 using WolvenKit.CR2W;
 using WolvenKit.Services;
 
@@ -21,7 +22,7 @@ namespace WolvenKit.Forms
         private readonly Dictionary<int, int> childrencountDict = new Dictionary<int, int>();
         private readonly Dictionary<int, List<CR2WExportWrapper>> childrenDict = new Dictionary<int, List<CR2WExportWrapper>>();
             
-        public frmChunkList()
+        public frmChunkList(DocumentViewModel _viewmodel)
         {
             InitializeComponent();
             ApplyCustomTheme();
@@ -36,21 +37,19 @@ namespace WolvenKit.Forms
                 var idx = ((CR2WExportWrapper)x).ChunkIndex;
                 return !listview ? childrenDict[idx] : new List<CR2WExportWrapper>();
             };
+
+            viewModel = _viewmodel;
         }
 
-        public CR2WFile File
-        {
-            get => file;
-            set
-            {
-                file = value;
-                UpdateList();
-            }
-        }
+        private readonly DocumentViewModel viewModel;
+
+        private CR2WFile File => viewModel.File as CR2WFile;
 
         public void SelectChunk(CR2WExportWrapper chunk)
         {
             // expand until :facepalm:
+            // TODO: can't select chunks that are not expanded...
+
             treeListView.SelectedObject = chunk;
         }
 
@@ -103,8 +102,14 @@ namespace WolvenKit.Forms
             else
             {
                 UpdateHelperList();
-                treeListView.Roots = File.chunks.Where(_ => _.GetVirtualParentChunk() == null).ToList();
+                var model = File.chunks.Where(_ => _.GetVirtualParentChunk() == null).ToList();
+                treeListView.Roots = model;
+
+                treeListView.ExpandAll();
             }
+
+            // select the first item
+            //treeListView.SelectedIndex = 0; // TODO: doesn't work? why?
         }
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)

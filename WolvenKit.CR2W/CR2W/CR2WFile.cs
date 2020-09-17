@@ -11,6 +11,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
@@ -22,7 +23,7 @@ using WolvenKit.Utils;
 namespace WolvenKit.CR2W
 {
     [ DataContract(Namespace = "") ]
-    public partial class CR2WFile : IWolvenkitFile
+    public partial class CR2WFile : ObservableObject, IWolvenkitFile
     {
         #region Constants
         private const long MAGIC_SIZE = 4;
@@ -73,6 +74,8 @@ namespace WolvenKit.CR2W
         //private Stream m_stream; //handle this better?
         // private string m_filePath;
 
+        public CR2WFile AdditionalCr2WFile;
+        public byte[] AdditionalCr2WFileBytes;
         #endregion
 
         #region Properties
@@ -110,6 +113,36 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Supporting Functions
+        public CR2WExportWrapper CreateChunk(string type, CR2WExportWrapper parent = null)
+        {
+            var chunk = new CR2WExportWrapper(this, type, parent);
+
+            chunks.Add(chunk);
+
+            return chunk;
+        }
+
+        public bool RemoveChunk(CR2WExportWrapper chunk)
+        {
+            var r = chunk.Referrers;
+            // find all pointers that point here
+            // can there be more than one?
+
+            return chunks.Remove(chunk);
+        }
+
+        public int GetStringIndex(string name, bool addnew = false)
+        {
+            for (var i = 0; i < names.Count; i++)
+            {
+                if (names[i].Str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(names[i].Str)))
+                    return i;
+            }
+
+            throw new NotImplementedException();
+            //return -1;
+        }
+
         public string GetLocalizedString(uint val)
         {
             if (LocalizedStringSource != null)
@@ -121,13 +154,7 @@ namespace WolvenKit.CR2W
         public CR2WFileHeader GetFileHeader() => m_fileheader;
         public CR2WTable[] GetTableHeaders() => m_tableheaders;
 
-        public void CreateVariableEditor(CVariable editvar, EVariableEditorAction action)
-        {
-            if (EditorController != null)
-            {
-                EditorController.CreateVariableEditor(editvar, action);
-            }
-        }
+        public void CreateVariableEditor(CVariable editvar, EVariableEditorAction action) => EditorController?.CreateVariableEditor(editvar, action);
 
         public CVariable ReadVariable(BinaryReader file, CVariable parent)
         {
@@ -263,18 +290,17 @@ namespace WolvenKit.CR2W
 
             #region Read Headers
 
+            var startpos = file.BaseStream.Position;
             Logger?.LogProgress(1, "Reading headers...");
 
             // read file header
             var id = file.BaseStream.ReadStruct<uint>();
             if (id != MAGIC)
                 return EFileReadErrorCodes.NoCr2w;
-            //throw new FormatException($"Not a CR2W file, Magic read as 0x{id:X8}");
 
             m_fileheader = file.BaseStream.ReadStruct<CR2WFileHeader>();
             if (m_fileheader.version > 163 || m_fileheader.version < 159)
                 return EFileReadErrorCodes.UnsupportedVersion;
-            //throw new FormatException($"Unknown Version {m_fileheader.version}. Supported versions: 159 - 163.");
 
             var dt = new CDateTime(m_fileheader.timeStamp, null, "");
 
@@ -336,13 +362,78 @@ namespace WolvenKit.CR2W
             }
             #endregion
 
-            if (Logger != null) Logger.LogString($"File {Cr2wFileName} loaded in: {stopwatch1.Elapsed}\n");
-                stopwatch1.Stop();
 
+
+            // some w2ls have additional CLayerInfo packed behind the file
+            var endpos = file.BaseStream.Position;
+            var readbytes = endpos - startpos;
+            if (readbytes != file.BaseStream.Length)
+            {
+                var bytesleft = file.BaseStream.Length - readbytes;
+                AdditionalCr2WFileBytes = file.ReadBytes((int) bytesleft);
+
+
+            }
+
+
+
+            if (Logger != null) Logger.LogString($"File {Cr2wFileName} loaded in: {stopwatch1.Elapsed}\n");
+            stopwatch1.Stop();
             //m_stream = null;
             return 0;
         }
 
+        public CR2WFile GetAdditionalCr2wFile()
+        {
+            if (AdditionalCr2WFileBytes == null) return null;
+            using (var ms2 = new MemoryStream(AdditionalCr2WFileBytes))
+            using (var br2 = new BinaryReader(ms2))
+            {
+                AdditionalCr2WFile = new CR2WFile();
+                AdditionalCr2WFile.Read(br2);
+                return AdditionalCr2WFile;
+            }
+        }
+
+        private T[] ReadTable<T>(Stream stream, int index) where T : struct
+        {
+            //stream.Seek(m_tableheaders[index].offset, SeekOrigin.Begin);
+
+            var hash = new Crc32Algorithm(false);
+            var table = stream.ReadStructs<T>(m_tableheaders[index].itemCount, hash);
+
+            return table;
+        }
+        private byte[] ReadStringsBuffer(Stream stream)
+        {
+            var start = m_tableheaders[0].offset;
+            var m_strings_size = m_tableheaders[0].itemCount;
+            var crc = m_tableheaders[0].crc32;
+
+            var m_temp = new byte[m_strings_size];
+            stream.Read(m_temp, 0, m_temp.Length);
+
+            StringDictionary = new Dictionary<uint, string>();
+            uint offset = 0;
+            var tempstring = new List<byte>();
+            for (uint i = 0; i < m_strings_size; i++)
+            {
+                byte b = m_temp[i];
+                if (b == 0)
+                {
+                    var text = Encoding.GetEncoding("iso-8859-1").GetString(tempstring.ToArray());
+                    StringDictionary.Add(offset, text);
+                    tempstring.Clear();
+                    offset = i + 1;
+                }
+                else
+                {
+                    tempstring.Add(b);
+                }
+            }
+
+            return m_temp;
+        }
         #endregion
 
         #region Write
@@ -489,6 +580,23 @@ namespace WolvenKit.CR2W
             WriteHeader(file);
             m_fileheader.crc32 = CalculateHeaderCRC32();
             WriteFileHeader(file);
+
+
+
+
+            if (AdditionalCr2WFileBytes != null)
+            {
+                file.BaseStream.Seek(0, SeekOrigin.End);
+                file.Write(AdditionalCr2WFileBytes);
+            }
+
+
+
+
+
+
+
+
 
             //m_stream = null;
 
@@ -977,7 +1085,13 @@ namespace WolvenKit.CR2W
                         AddUniqueToTable(h.ClassName);
                         var flags = EImportFlags.Default;
                         if (h.REDName == "template" && h.ClassName == "CEntityTemplate")
-                            flags = EImportFlags.Template;
+                        {
+                            // this is needed because CDPR made one class (SWitcherSign)
+                            // which also has a template handle:CEntityTemplate property lol
+                            if (h.ParentVar is CEntity)
+                                flags = EImportFlags.Template;
+                        }
+                            
                         if (var.cr2w.embedded.Any(_ => _.ImportPath == h.DepotPath && _.ImportClass == h.ClassName))
                             flags = EImportFlags.Inplace;
 
@@ -1206,42 +1320,8 @@ namespace WolvenKit.CR2W
             {
                 embedded[i].WriteData(bw);
             }
-
-            
         }
-        #endregion
 
-        #region Supporting Functions
-        private byte[] ReadStringsBuffer(Stream stream)
-        {
-            var start = m_tableheaders[0].offset;
-            var m_strings_size = m_tableheaders[0].itemCount;
-            var crc = m_tableheaders[0].crc32;
-
-            var m_temp = new byte[m_strings_size];
-            stream.Read(m_temp, 0, m_temp.Length);
-
-            StringDictionary = new Dictionary<uint, string>();
-            uint offset = 0;
-            var tempstring = new List<byte>();
-            for (uint i = 0; i < m_strings_size; i++)
-            {
-                byte b = m_temp[i];
-                if (b == 0)
-                {
-                    var text = Encoding.GetEncoding("iso-8859-1").GetString(tempstring.ToArray());
-                    StringDictionary.Add(offset, text);
-                    tempstring.Clear();
-                    offset = i + 1;
-                }
-                else
-                {
-                    tempstring.Add(b);
-                }
-            }
-
-            return m_temp;
-        }
 
         private void WriteStringBuffer(Stream stream)
         {
@@ -1249,15 +1329,7 @@ namespace WolvenKit.CR2W
             stream.Write(m_strings, 0, m_strings.Length);
         }
 
-        private T[] ReadTable<T>(Stream stream, int index) where T : struct
-        {
-            //stream.Seek(m_tableheaders[index].offset, SeekOrigin.Begin);
 
-            var hash = new Crc32Algorithm(false);
-            var table = stream.ReadStructs<T>(m_tableheaders[index].itemCount, hash);
-
-            return table;
-        }
         private void WriteTable<T>(Stream stream, T[] array, int index) where T : struct
         {
             if (array.Length == 0)
@@ -1266,105 +1338,6 @@ namespace WolvenKit.CR2W
             var crc = new Crc32Algorithm(false);
             stream.WriteStructs<T>(array, crc);
             m_tableheaders[index].crc32 = crc.HashUInt32;
-        }
-
-        public void SerializeToXml(Stream writer)
-        {
-            var settings = new XmlWriterSettings()
-            {
-                Indent = true,
-                IndentChars = "\t",
-                NewLineOnAttributes = true
-            };
-            using (XmlWriter xw = XmlWriter.Create(writer, settings))
-            {
-                XmlSerializer.SerializeStartObject<CR2WFile>(xw, this);
-
-                XmlSerializer.SerializeObject<CR2WFileHeader>(xw, m_fileheader);
-                XmlSerializer.SerializeObject<CR2WTable[]>(xw, m_tableheaders);
-
-                XmlSerializer.SerializeObject(xw, names.Select(_ => new Tuple<int, string>(names.IndexOf(_), _.Str)).ToArray());
-                XmlSerializer.SerializeObject<CR2WName[]>(xw, names.Select(_ => _.Name).ToArray());
-                XmlSerializer.SerializeObject<CR2WImport[]>(xw, imports.Select(_ => _.Import).ToArray());
-                XmlSerializer.SerializeObject<CR2WProperty[]>(xw, properties.Select(_ => _.Property).ToArray());
-                XmlSerializer.SerializeObject<CR2WExport[]>(xw, chunks.Select(_ => _.Export).ToArray());
-                XmlSerializer.SerializeObject<CR2WBuffer[]>(xw, buffers.Select(_ => _.Buffer).ToArray());
-                XmlSerializer.SerializeObject<CR2WEmbedded[]>(xw, embedded.Select(_ => _.Embedded).ToArray());
-
-                XmlSerializer.SerializeEndObject<CR2WFile>(xw);
-
-
-                xw.Flush();
-                xw.Close();
-            }
-        }
-
-        public void SerializeChunksToXml(Stream writer)
-        {
-            var settings = new XmlWriterSettings()
-            {
-                Indent = true,
-                IndentChars = "\t",
-                NewLineOnAttributes = true
-            };
-            using (XmlWriter xw = XmlWriter.Create(writer, settings))
-            {
-                XmlSerializer.SerializeStartObject<CR2WFile>(xw, this);
-                XmlSerializer.SerializeObjectContent<CR2WFile>(xw, this);
-                xw.WriteStartElement("chunks");
-                foreach(var ew in chunks)
-                {
-                    ew.SerializeToXml(xw);
-                }
-                xw.WriteEndElement();
-                XmlSerializer.SerializeEndObject<CR2WFile>(xw);
-                
-
-                xw.Flush();
-                xw.Close();
-            }
-        }
-
-        public CR2WExportWrapper CreateChunk(string type, CR2WExportWrapper parent = null)
-        {
-            var chunk = new CR2WExportWrapper(this, type, parent);
-
-            chunks.Add(chunk);
-
-            return chunk;
-        }
-
-        public bool RemoveChunk(CR2WExportWrapper chunk)
-        {
-            var r = chunk.Referrers;
-            // find all pointers that point here
-            // can there be more than one?
-
-            return chunks.Remove(chunk);
-
-        }
-
-        public int GetStringIndex(string name, bool addnew = false)
-        {
-            for (var i = 0; i < names.Count; i++)
-            {
-                if (names[i].Str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(names[i].Str)))
-                    return i;
-            }
-
-            throw new NotImplementedException();
-            //return -1;
-        }
-
-        public CR2WExportWrapper GetChunkByType(string type)
-        {
-            for (var i = 0; i < chunks.Count; i++)
-            {
-                if (chunks[i].REDType == type)
-                    return chunks[i];
-            }
-
-            return null;
         }
 
 

@@ -151,10 +151,10 @@ namespace WolvenKit
         //    return Window.LoadDocument(filename, null, suppressErrors);
         //}
 
-        public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream, bool suppressErrors = false)
-        {
-            return Window.LoadDocument(filename, memoryStream, suppressErrors) as frmCR2WDocument;
-        }
+        //public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream, bool suppressErrors = false)
+        //{
+        //    return Window.LoadDocument(filename, memoryStream, suppressErrors) as frmCR2WDocument;
+        //}
 
 
         private void ImportBytes(CVariable editvar)
@@ -228,7 +228,7 @@ namespace WolvenKit
 
             if (bytes != null)
             {
-                var doc = LoadDocument(editvar.cr2w.Cr2wFileName + ":" + editvar.GetFullName(), new MemoryStream(bytes), true);
+                var doc = Window.LoadDocument(editvar.cr2w.Cr2wFileName + ":" + editvar.GetFullName(), new MemoryStream(bytes), true);
                 if (doc != null)
                 {
                     var vm = doc.GetViewModel();
@@ -244,11 +244,11 @@ namespace WolvenKit
 
         private void OnVariableEditorSave(object sender, FileSavedEventArgs args)
         {
-            if (args.Stream is MemoryStream)
+            if (args.Stream is MemoryStream stream)
             {
                 var vm = (DocumentViewModel)sender;
                 var editvar = (CVariable)vm.SaveTarget;
-                editvar.SetValue(((MemoryStream)args.Stream).ToArray());
+                editvar.SetValue(stream.ToArray());
             }
         }
 

@@ -213,9 +213,10 @@ namespace WolvenKit.CR2W.Types
         {
             base.Read(file, size);
 
-            // lazy check if Cvariable is first chunk (= resource)
-            if (ParentVar != null) return;
-            Unk1 = new CUInt32(cr2w, this, nameof(Unk1)) {IsSerialized = true};
+            //lazy check if Cvariable is first chunk (= resource) or derived
+            if (ParentVar != null || this is CSkeletalAnimationSet)
+                return;
+            Unk1 = new CUInt32(cr2w, this, nameof(Unk1)) { IsSerialized = true };
             Unk1.Read(file, size);
         }
 
@@ -223,7 +224,8 @@ namespace WolvenKit.CR2W.Types
         {
             base.Write(file);
 
-            if (Unk1 == null) return;
+            if (ParentVar != null || this is CSkeletalAnimationSet)
+                return;
             Unk1.Write(file);
         }
     }

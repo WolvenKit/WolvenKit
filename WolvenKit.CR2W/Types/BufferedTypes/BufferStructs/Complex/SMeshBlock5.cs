@@ -20,8 +20,8 @@ namespace WolvenKit.CR2W.Types
 
         public SMeshBlock5(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            bytesize = new CUInt16(cr2w, this, nameof(bytesize));
-            unk1 = new CBytes(cr2w, this, nameof(unk1));
+            bytesize = new CUInt16(cr2w, this, nameof(bytesize)) { IsSerialized = true };
+            unk1 = new CBytes(cr2w, this, nameof(unk1)) { IsSerialized = true };
         }
 
         public override void Read(BinaryReader file, uint size)

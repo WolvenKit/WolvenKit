@@ -18,6 +18,5 @@ namespace WolvenKit.Common.Model
         EFileReadErrorCodes Read(BinaryReader file);
         void Write(BinaryWriter writer);
 
-        void SerializeToXml(Stream writer);
     }
 }

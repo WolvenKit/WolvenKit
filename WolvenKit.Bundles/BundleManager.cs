@@ -21,14 +21,14 @@ namespace WolvenKit.Bundles
         }
 
         public Dictionary<string, List<IWitcherFile>> Items { get; set; }
-        public Dictionary<string, Bundle> Bundles { get; set; }
+        public Dictionary<string, Bundle> Bundles { get; private set; }
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
         public EBundleType TypeName => EBundleType.Bundle;
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
-        private string[] vanillaDLClist = new string[] { "DLC1", "DLC2", "DLC3", "DLC4", "DLC5", "DLC6", "DLC7", "DLC8", "DLC9", "DLC10", "DLC11", "DLC12", "DLC13", "DLC14", "DLC15", "DLC16", "bob", "ep1" };
+        private readonly string[] vanillaDLClist = new string[] { "DLC1", "DLC2", "DLC3", "DLC4", "DLC5", "DLC6", "DLC7", "DLC8", "DLC9", "DLC10", "DLC11", "DLC12", "DLC13", "DLC14", "DLC15", "DLC16", "bob", "ep1" };
 
         /// <summary>
         ///     Load a single mod bundle
@@ -36,7 +36,7 @@ namespace WolvenKit.Bundles
         /// <param name="filename">
         ///     file to process
         /// </param>
-        public void LoadModBundle(string filename)
+        private void LoadModBundle(string filename)
         {
             if (Bundles.ContainsKey(filename))
                 return;
@@ -58,7 +58,7 @@ namespace WolvenKit.Bundles
         ///     Load a single bundle
         /// </summary>
         /// <param name="filename"></param>
-        public void LoadBundle(string filename, bool ispatch = false)
+        private void LoadBundle(string filename, bool ispatch = false)
         {
             if (Bundles.ContainsKey(filename))
                 return;
@@ -73,12 +73,18 @@ namespace WolvenKit.Bundles
                 // if file is already in another bundle
                 if (ispatch && Items[item.Key].Count > 0)
                 {
-                    // if file is already in content0 remove file.
+                    // check if file is already in contentN directory (content0, content1 etc) 
                     List<IWitcherFile> filesInBundles = Items[item.Key];
-                    if (filesInBundles.First().Bundle.ArchiveAbsolutePath.Contains("content0"))
+                    var splits = filesInBundles.First().Bundle.ArchiveAbsolutePath.Split(Path.DirectorySeparatorChar);
+                    var contentdir = splits[splits.Length - 3];
+                    if (contentdir.Contains("content"))
                     {
-                        bundle.Patchedfiles.Add(filesInBundles.First());
-                        filesInBundles.RemoveAt(0);
+                        // then remove all other existing files
+                        for (var i = 0; i < filesInBundles.Count; i++)
+                        {
+                            bundle.Patchedfiles.Add(filesInBundles[i]);
+                            filesInBundles.RemoveAt(0);
+                        }
                     }
                 }
                 Items[item.Key].Add(item.Value);
@@ -165,7 +171,7 @@ namespace WolvenKit.Bundles
             RebuildRootNode();
         }
 
-        public static string GetModFolder(string path)
+        private static string GetModFolder(string path)
         {
             if (path.Split('\\').Length > 3 && path.Split('\\').Contains("content"))
             {
@@ -177,7 +183,7 @@ namespace WolvenKit.Bundles
         /// <summary>
         ///     Rebuilds the bundle tree structure also rebuilds NOTE: Filelist,autocomplete,extensions
         /// </summary>
-        public void RebuildRootNode()
+        private void RebuildRootNode()
         {
             RootNode = new WitcherTreeNode(EBundleType.Bundle)
             {
@@ -216,7 +222,7 @@ namespace WolvenKit.Bundles
         /// <summary>
         /// Calls GetFiles on the rootnode
         /// </summary>
-        public void RebuildFileList()
+        private void RebuildFileList()
         {
             FileList = GetFiles(RootNode);
         }
@@ -224,7 +230,7 @@ namespace WolvenKit.Bundles
         /// <summary>
         /// Gets the avaliable extensions in the files
         /// </summary>
-        public void RebuildExtensions()
+        private void RebuildExtensions()
         {
             foreach (var file in FileList.Where(file => !Extensions.Contains(file.Name.Split('.').Last())))
             {
@@ -236,7 +242,7 @@ namespace WolvenKit.Bundles
         /// <summary>
         /// Gets the distinct filenames from the loaded bundles so they can be used for autocomplete
         /// </summary>
-        public void RebuildAutoCompleteSource()
+        private void RebuildAutoCompleteSource()
         {
             AutocompleteSource.AddRange(FileList.Select(x => GetFileName(x.Name)).Distinct().ToArray());
         }
@@ -246,7 +252,7 @@ namespace WolvenKit.Bundles
         /// </summary>
         /// <param name="mainnode">The rootnode to get the files from</param>
         /// <returns></returns>
-        public List<IWitcherFile> GetFiles(WitcherTreeNode mainnode)
+        private List<IWitcherFile> GetFiles(WitcherTreeNode mainnode)
         {
             var bundfiles = new List<IWitcherFile>();
             if (mainnode?.Files != null)
@@ -265,7 +271,7 @@ namespace WolvenKit.Bundles
         /// </summary>
         /// <param name="s">Path/Name of the file</param>
         /// <returns></returns>
-        public string GetFileName(string s)
+        private string GetFileName(string s)
         {
             return s.Contains('\\') ? s.Split('\\').Last() : s;
         }
