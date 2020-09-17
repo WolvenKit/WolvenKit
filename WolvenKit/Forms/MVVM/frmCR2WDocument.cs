@@ -119,6 +119,7 @@ namespace WolvenKit
 
             ProgressForm.Close();
             docLoggerService.PropertyChanged -= LoggerUpdated;
+            
         }
 
         private delegate void StrDelegate(string t);
