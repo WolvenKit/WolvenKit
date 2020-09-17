@@ -1085,7 +1085,13 @@ namespace WolvenKit.CR2W
                         AddUniqueToTable(h.ClassName);
                         var flags = EImportFlags.Default;
                         if (h.REDName == "template" && h.ClassName == "CEntityTemplate")
-                            flags = EImportFlags.Template;
+                        {
+                            // this is needed because CDPR made one class (SWitcherSign)
+                            // which also has a template handle:CEntityTemplate property lol
+                            if (h.ParentVar is CEntity)
+                                flags = EImportFlags.Template;
+                        }
+                            
                         if (var.cr2w.embedded.Any(_ => _.ImportPath == h.DepotPath && _.ImportClass == h.ClassName))
                             flags = EImportFlags.Inplace;
 

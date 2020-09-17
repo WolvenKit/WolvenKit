@@ -273,7 +273,7 @@ namespace WolvenKit.App
                             }));
                         }
                     }
-                    catch (System.Exception)
+                    catch (System.Exception ex)
                     {
                         if (File.Exists(Path.Combine(ManagerCacheDir, "bundle_cache.json")))
                             File.Delete(Path.Combine(ManagerCacheDir, "bundle_cache.json"));

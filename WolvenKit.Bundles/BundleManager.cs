@@ -73,15 +73,18 @@ namespace WolvenKit.Bundles
                 // if file is already in another bundle
                 if (ispatch && Items[item.Key].Count > 0)
                 {
-                    // if file is already in content0 remove file.
+                    // check if file is already in contentN directory (content0, content1 etc) 
                     List<IWitcherFile> filesInBundles = Items[item.Key];
-                    if (filesInBundles.First().Bundle.ArchiveAbsolutePath
-                        .Split(Path.DirectorySeparatorChar)
-                        .Last()
-                        .Contains("content"))
+                    var splits = filesInBundles.First().Bundle.ArchiveAbsolutePath.Split(Path.DirectorySeparatorChar);
+                    var contentdir = splits[splits.Length - 3];
+                    if (contentdir.Contains("content"))
                     {
-                        bundle.Patchedfiles.Add(filesInBundles.First());
-                        filesInBundles.RemoveAt(0);
+                        // then remove all other existing files
+                        for (var i = 0; i < filesInBundles.Count; i++)
+                        {
+                            bundle.Patchedfiles.Add(filesInBundles[i]);
+                            filesInBundles.RemoveAt(0);
+                        }
                     }
                 }
                 Items[item.Key].Add(item.Value);
