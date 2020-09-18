@@ -15,11 +15,16 @@ namespace WolvenKit.Common.Model
     public class Cr2wResourceManager
     {
         private static Cr2wResourceManager resourceManager;
-        public Dictionary<string, ulong> HashdumpDict { get; set; }
-        public Dictionary<string, ulong> CHashdumpDict { get; set; }
+        public Dictionary<string, ulong> HashdumpDict { get; }
+        public Dictionary<string, ulong> CHashdumpDict { get; }
 
-        public const string pathashespath = "ManagerCache\\pathhashes.csv";
-        public const string custompathashespath = "ManagerCache\\custompathhashes.csv";
+        public static readonly string pathashespath =
+            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ManagerCache",
+                "pathhashes.csv");
+
+        private static readonly string custompathashespath =
+            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ManagerCache",
+                "custompathhashes.csv");
 
 
         public static Cr2wResourceManager Get()

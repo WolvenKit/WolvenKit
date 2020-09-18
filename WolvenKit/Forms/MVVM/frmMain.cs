@@ -2396,19 +2396,23 @@ namespace WolvenKit
             AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
             richpresenceworker.RunWorkerAsync();
 
-            if (!MainController.Get().Configuration.IsWelcomeFormDisabled)
+            if (MainController.Get().Configuration.IsWelcomeFormDisabled) return;
+            if (!string.IsNullOrEmpty(MainController.Get().InitialFilePath))
             {
-                using (var frmwelcome = new frmWelcome(this))
+                ResetWindows();
+                return;
+            }
+
+            using (var frmwelcome = new frmWelcome(this))
+            {
+                var result = frmwelcome.ShowDialog();
+                switch (result)
                 {
-                    var result = frmwelcome.ShowDialog();
-                    switch (result)
-                    {
-                        case DialogResult.Abort:
-                            Close();
-                            break;
-                        default:
-                            break;
-                    }
+                    case DialogResult.Abort:
+                        Close();
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -2460,20 +2464,17 @@ namespace WolvenKit
             WindowState = config.MainState;
 
             if (!string.IsNullOrEmpty(MainController.Get().InitialModProject))
+            {
                 OpenMod(MainController.Get().InitialModProject);
+            }
             else if (!string.IsNullOrEmpty(MainController.Get().InitialWKP))
             {
                 using (var pi = new frmInstallPackage(MainController.Get().InitialWKP))
                     pi.ShowDialog();
             }
-            else
+            else if (!string.IsNullOrEmpty(MainController.Get().InitialFilePath))
             {
-                //if (!MainController.Get().Configuration.IsWelcomeFormDisabled)
-                //{
-                //    Welcome = new frmWelcome(this);
-                //    Welcome.Show(dockPanel, DockState.Document);
-                //    Welcome.FormClosed += Welcome_FormClosed;
-                //}
+                OpenCr2wFile(MainController.Get().InitialFilePath);
             }
         }
 
@@ -2645,9 +2646,14 @@ namespace WolvenKit
             dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                MainController.Get().Configuration.InitialFileDirectory = Path.GetDirectoryName(dlg.FileName);
-                LoadDocument(dlg.FileName);
+                OpenCr2wFile(dlg.FileName);
             }
+        }
+
+        private void OpenCr2wFile(string path)
+        {
+            MainController.Get().Configuration.InitialFileDirectory = Path.GetDirectoryName(path);
+            LoadDocument(path);
         }
 
         private void RecentFile_click(object sender, EventArgs e)
@@ -3464,8 +3470,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
         private void tbtOpen_Click(object sender, EventArgs e)
         {
-            var dlg = new OpenFileDialog() { Title = "Open CR2W File" };
-            dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
+            var dlg = new OpenFileDialog
+            {
+                Title = "Open CR2W File", InitialDirectory = MainController.Get().Configuration.InitialFileDirectory
+            };
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 MainController.Get().Configuration.InitialFileDirectory = Path.GetDirectoryName(dlg.FileName);

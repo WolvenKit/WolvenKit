@@ -34,6 +34,11 @@ namespace WolvenKit
                             MainController.Get().InitialWKP = args[0];
                             break;
                         }
+                        case ".w2ent":
+                        {
+                            MainController.Get().InitialFilePath = args[0];
+                            break;
+                        }
                     }
                 }
             }
