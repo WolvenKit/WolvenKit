@@ -10,6 +10,7 @@ using WolvenKit.Common;
 using WolvenKit.Cache;
 using WolvenKit.Wwise;
 using WolvenKit.Common.Model;
+using System.Reflection;
 
 namespace WolvenKit.Cache
 {
@@ -22,7 +23,7 @@ namespace WolvenKit.Cache
             FileList = new List<IWitcherFile>();
             Extensions = new List<string>();
             AutocompleteSource = new AutoCompleteStringCollection();
-            soundBanksInfo = new SoundBanksInfoXML("SoundCache\\soundbanksinfo.xml");
+            soundBanksInfo = new SoundBanksInfoXML(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "SoundCache","soundbanksinfo.xml"));
         }
 
         public Dictionary<string, List<IWitcherFile>> Items { get; set; }

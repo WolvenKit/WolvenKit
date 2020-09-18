@@ -13,6 +13,7 @@ namespace WolvenKit.App
     using Common.Services;
     using CR2W;
     using System.IO.Compression;
+    using System.Reflection;
     using W3Strings;
     using WolvenKit.Common.Model;
     using WolvenKit.Common.Wcc;
@@ -26,7 +27,9 @@ namespace WolvenKit.App
     {
         private static MainController mainController;
 
-        private MainController() { }
+        private MainController()
+        {
+        }
 
         public static MainController Get()
         {
@@ -38,16 +41,22 @@ namespace WolvenKit.App
                     Logger = new LoggerService()
                 };
             }
+
             return mainController;
         }
 
         #region Fields
-        public const string ManagerCacheDir = "ManagerCache";
-        public const string WorkDir = "tmp_workdir";
-        public const string DepotZipPath = "ManagerCache\\Depot.zip";
-        public const string XBMDumpPath = "ManagerCache\\__xbmdump_3768555366.csv";
-        public string InitialModProject = "";
-        public string InitialWKP = "";
+
+        private static string ManagerCacheDir => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ManagerCache");
+
+        public static string WorkDir => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "tmp_workdir");
+
+        private static string DepotZipPath => Path.Combine(ManagerCacheDir, "Depot.zip");
+        public static string XBMDumpPath => Path.Combine(ManagerCacheDir, "__xbmdump_3768555366.csv");
+
+        public string InitialModProject { get; set; } = "";
+        public string InitialWKP { get; set; } = "";
+        public string InitialFilePath { get; set; } = "";
         #endregion
 
         #region Properties
@@ -416,7 +425,7 @@ namespace WolvenKit.App
                             }));
                         }
                     }
-                    catch (System.Exception)
+                    catch (System.Exception ex)
                     {
                         if (File.Exists(Path.Combine(ManagerCacheDir, "sound_cache.json")))
                             File.Delete(Path.Combine(ManagerCacheDir, "sound_cache.json"));

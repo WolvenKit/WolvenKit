@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 using WolvenKit.Common;
@@ -38,7 +39,8 @@ namespace WolvenKit.Cache
         public EBundleType TypeName => EBundleType.SoundCache;
         public string ArchiveAbsolutePath { get; set; }
 
-        public static SoundBanksInfoXML info = new SoundBanksInfoXML("SoundCache\\soundbanksinfo.xml");
+        public static SoundBanksInfoXML info = new SoundBanksInfoXML(Path.Combine(
+            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "SoundCache", "soundbanksinfo.xml"));
 
         /// <summary>
         /// The files packed into the original soundcache.
