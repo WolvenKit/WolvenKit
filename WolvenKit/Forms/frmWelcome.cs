@@ -241,6 +241,7 @@ namespace WolvenKit.Forms
 
         private void continueWithoutProjectBtn_Click(object sender, EventArgs e)
         {
+            main.ResetWindows();
             Close();
         }
 

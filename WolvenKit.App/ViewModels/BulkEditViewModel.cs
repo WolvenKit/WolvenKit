@@ -202,7 +202,7 @@ namespace WolvenKit.App.ViewModels
         #region Commands Implementation
         protected bool CanRun()
         {
-            if (WolvenKit.App.MockKernel.Get().GetMainViewModel().OpenDocuments.Any())
+            if (WolvenKit.App.MockKernel.Get().GetMainViewModel().GetOpenDocuments().Any())
             {
                 Logger.LogString("Please close all open documents before running the bulk editor.", Logtype.Error);
                 return false;

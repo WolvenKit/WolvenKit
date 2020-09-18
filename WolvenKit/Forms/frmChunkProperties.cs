@@ -49,8 +49,15 @@ namespace WolvenKit.Forms
                 : "Show edited variables";
 
             hotkeys = new HotkeyCollection(Dfust.Hotkeys.Enums.Scope.Application);
+            hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
+            hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
         }
 
+        #region Properties
+
+        
+
+        #endregion
         public CR2WExportWrapper Chunk
         {
             get => chunk;
@@ -61,8 +68,27 @@ namespace WolvenKit.Forms
             }
         }
 
-        public object Source { get; set; }
+        #region Hotkeys
+        private void HKCopy(HotKeyEventArgs e)
+        {
+            CopyVariable();
+            MainController.LogString("Selected propertie(s) copied!\n");
+        }
+        private void HKPaste(HotKeyEventArgs e)
+        {
+            PasteVariable();
+            MainController.LogString("Copied propertie(s) pasted!\n");
+        }
 
+
+        #endregion
+
+
+        #region UI Methods
+
+
+
+        #endregion
         private void UpdateTreeListView()
         {
             if (chunk == null)
@@ -90,7 +116,11 @@ namespace WolvenKit.Forms
 
         }
 
+        #region Events
 
+        
+
+        #endregion
         private void frmChunkProperties_Resize(object sender, EventArgs e)
         {
         }
@@ -121,14 +151,14 @@ namespace WolvenKit.Forms
             ptrPropertiesToolStripMenuItem.Visible = selectedNodes.All(x => x is IPtrAccessor) && selectedNodes.Count == 1;
         }
 
-        public void CopyVariable()
+        private void CopyVariable()
         {
-            var tocopynodes = (from IEditableVariable item in treeView.SelectedObjects where item != null select item).ToList();
-            if (tocopynodes.Count > 0)
-                CopyController.VariableTargets = tocopynodes;
+            var propertiestocopy = (from IEditableVariable item in treeView.SelectedObjects where item != null select item).ToList();
+            if (propertiestocopy.Count > 0)
+                CopyController.VariableTargets = propertiestocopy;
         }
 
-        public void PasteVariable()
+        private void PasteVariable()
         {
             var node = (IEditableVariable)treeView.SelectedObject;
             if (CopyController.VariableTargets == null || node == null)

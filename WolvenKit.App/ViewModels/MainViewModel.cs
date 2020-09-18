@@ -51,36 +51,43 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         #region Open Documents
-        private ObservableCollection<DocumentViewModel> _openDocuments;
-        public ObservableCollection<DocumentViewModel> OpenDocuments
+
+        private readonly Dictionary<string, DocumentViewModel> _openDocuments;
+        public Dictionary<string, DocumentViewModel> GetOpenDocuments() => _openDocuments;
+
+        public void AddOpenDocument(DocumentViewModel document)
         {
-            get => _openDocuments;
+            if (_openDocuments.ContainsKey(document.Cr2wFileName))
+                throw new NullReferenceException();
+            _openDocuments.Add(document.Cr2wFileName, document);
+        }
+        public void RemoveOpenDocument(string key)
+        {
+            if (!_openDocuments.ContainsKey(key))
+                throw new NullReferenceException();
+            _openDocuments.Remove(key);
+            // update Active Document
+            if (ActiveDocument.Cr2wFileName == key)
+                ActiveDocument = null;
+        }
+
+        #endregion
+
+        #region Active Document
+        private DocumentViewModel _activeDocument;
+        public DocumentViewModel ActiveDocument
+        {
+            get => _activeDocument;
             set
             {
-                if (_openDocuments != value)
+                if (_activeDocument != value)
                 {
-                    _openDocuments = value;
+                    _activeDocument = value;
                     OnPropertyChanged();
                 }
             }
         }
         #endregion
-
-        //#region Active Document
-        //private DocumentViewModel _activeDocument;
-        //public DocumentViewModel ActiveDocument
-        //{
-        //    get => _activeDocument;
-        //    set
-        //    {
-        //        if (_activeDocument != value)
-        //        {
-        //            _activeDocument = value;
-        //            OnPropertyChanged();
-        //        }
-        //    }
-        //}
-        //#endregion
 
         #endregion
 
@@ -99,7 +106,7 @@ namespace WolvenKit.App.ViewModels
             Title = "WolvenKit";
 
             Logger = MainController.Get().Logger;
-            OpenDocuments = new ObservableCollection<DocumentViewModel>();
+            _openDocuments = new Dictionary<string, DocumentViewModel>();
         }
 
         #region Helper Methods
@@ -533,8 +540,10 @@ namespace WolvenKit.App.ViewModels
         public void SaveMod()
         {
             if (ActiveMod == null) return;
+
             if (ActiveMod.LastOpenedFiles != null)
-                ActiveMod.LastOpenedFiles = OpenDocuments.Select(x => x.Cr2wFileName).ToList();
+                ActiveMod.LastOpenedFiles = GetOpenDocuments().Keys.ToList();
+
             var ser = new XmlSerializer(typeof(W3Mod));
             var modfile = new FileStream(ActiveMod.FileName, FileMode.Create, FileAccess.Write);
             ser.Serialize(modfile, ActiveMod);
@@ -1026,13 +1035,16 @@ namespace WolvenKit.App.ViewModels
         #region Documents
         public void SaveAllFiles()
         {
-            foreach (var d in OpenDocuments.Where(d => d.SaveTarget != null))
+            if (GetOpenDocuments().Count <= 0) return;
+
+            foreach (var d in GetOpenDocuments().Values.Where(d => d.SaveTarget != null))
             {
                 d.SaveFile();
             }
 
-            foreach (var d in OpenDocuments.Where(d => d.SaveTarget == null))
+            foreach (var d in GetOpenDocuments().Values.Where(d => d.SaveTarget == null))
             {
+                throw  new NotImplementedException();
                 d.SaveFile();
             }
             Logger.LogString("All files saved!\n", Logtype.Success);

@@ -82,35 +82,34 @@ namespace WolvenKit
 
         private readonly Queue<string> lastClosedTab = new Queue<string>();
         private DeserializeDockContent m_deserializeDockContent;
+        private LoggerService Logger { get; set; }
+        private static string Version => FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+
         #endregion
 
         #region Properties
 
         public EventHandler errored;
-
-        public LoggerService Logger { get; set; }
-
-        private IWolvenkitDocument _activedocument;
-        public IWolvenkitDocument ActiveDocument
-        {
-            get => _activedocument;
-            set
-            {
-                _activedocument = value;
-                UpdateTitle();
-            }
-        }
+        //private IWolvenkitDocument _activedocument;
+        //public IWolvenkitDocument ActiveDocument
+        //{
+        //    get => _activedocument;
+        //    set
+        //    {
+        //        _activedocument = value;
+        //        UpdateTitle();
+        //    }
+        //}
         public W3Mod ActiveMod
         {
             get => MainController.Get().ActiveMod;
-            set
+            private set
             {
                 MainController.Get().ActiveMod = value ?? throw new ArgumentNullException(nameof(value));
                 UpdateTitle();
-                
             }
         }
-        public string Version => FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+
         #endregion
 
         #region Constructor
@@ -144,8 +143,7 @@ namespace WolvenKit
             hotkeys.RegisterHotkey(Keys.Control | Keys.S, HKSave, "Save");
             hotkeys.RegisterHotkey(Keys.Control | Keys.Shift | Keys.S, HKSaveAll, "SaveAll");
             hotkeys.RegisterHotkey(Keys.F1, HKHelp, "Help");
-            hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
-            hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
+            
 
             hotkeys.RegisterHotkey(Keys.F5, HKRun, "Run");
             hotkeys.RegisterHotkey(Keys.Control | Keys.F5, HKRunAndLaunch, "RunAndLaunch");
@@ -334,32 +332,79 @@ namespace WolvenKit
         /// <summary>
         /// Closes all the "file documents", resets modexplorer and clears the output.
         /// </summary>
-        private void ResetWindows()
+        public void ResetWindows()
         {
             if (isDockPanelInitialized)
                 SaveDockPanelLayout();
 
-            CloseWindows();
+            if (!CloseWindows()) return;
 
             InitDockPanel();
 
             //ClearOutput();
         }
 
+        private bool CloseAllDocuments()
+        {
+            //if (ActiveMod == null) return false;
+            if (vm.GetOpenDocuments().Count <= 0) return true;
+
+            bool saveall;
+            switch (MessageBox.Show(
+                "This will close all open documents. You will loose any unsaved progress in open files. " +
+                "Press Yes to save all open documents or No to continue without saving.",
+                "Save Open Documents",
+                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+            {
+                default:
+                    return false;
+                case DialogResult.Yes:
+                {
+                    saveall = true;
+                    break;
+                }
+                case DialogResult.No:
+                {
+                    saveall = false;
+                    break;
+                }
+                case DialogResult.Cancel:
+                {
+                    return false;
+                }
+            }
+
+            // close ViewModels and let the event close the Views
+            foreach (var t in vm.GetOpenDocuments().Values.ToList())
+            {
+                if (saveall)
+                    t.SaveFile();
+                t.Close();
+            }
+
+            // close the Views directly
+            //var opendocs = dockPanel.Documents
+            //    .Where(_ => _.GetType() == typeof(frmCR2WDocument))
+            //    .Cast<frmCR2WDocument>()
+            //    .ToList();
+
+            //foreach (var frmCr2WDocument in opendocs)
+            //{
+            //    if (saveall)
+            //        frmCr2WDocument.GetViewModel().SaveFile();
+            //    frmCr2WDocument.Close();
+            //}
+
+            return true;
+        }
+
         /// <summary>
         /// Closes and saves all the "file documents", resets modexplorer.
         /// </summary>
-        private void CloseWindows()
+        private bool CloseWindows()
         {
-            if (ActiveMod != null)
-            {
-                foreach (var t in vm.OpenDocuments.ToList())
-                {
-                    t.SaveFile();
-                    t.Close();
-                    vm.OpenDocuments.Remove(t);
-                }
-            }
+            if (!CloseAllDocuments()) return false;
+
             ModExplorer?.Close();
             ModExplorer = null;
             Output?.Close();
@@ -397,6 +442,8 @@ namespace WolvenKit
                 window.Dispose();
                 window.Close();
             }
+
+            return true;
         }
 
         #endregion
@@ -474,31 +521,7 @@ namespace WolvenKit
 
         public void GlobalApplyTheme()
         {
-            if (vm.OpenDocuments.Count == 0)
-            {
-                ResetWindows();
-            }
-            else
-            {
-                switch (MessageBox.Show(
-                        "This will close all windows. You will loose any unsaved progress in open files. " +
-                        "Would you like to continue without saving?",
-                        "Apply Theme",
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-                {
-                    default:
-                        return;
-                    case DialogResult.Yes:
-                        {
-                            ResetWindows();
-                            break;
-                        }
-                    case DialogResult.No:
-                        {
-                            return;
-                        }
-                }
-            }
+            ResetWindows();
         }
         private void ApplyCustomTheme()
         {
@@ -810,11 +833,16 @@ namespace WolvenKit
         }
         private void HKCloseTab(HotKeyEventArgs e)
         {
-            if (ActiveDocument != null)
+            if (vm.ActiveDocument != null)
             {
-                lastClosedTab.Enqueue(ActiveDocument.Cr2wFileName);
-                ActiveDocument.Close();
+                lastClosedTab.Enqueue(vm.ActiveDocument.Cr2wFileName);
+                vm.ActiveDocument.Close();
             }
+            //if (ActiveDocument != null)
+            //{
+            //    lastClosedTab.Enqueue(ActiveDocument.Cr2wFileName);
+            //    ActiveDocument.Close();
+            //}
         }
         private void HKReopenTab(HotKeyEventArgs e)
         {
@@ -825,47 +853,12 @@ namespace WolvenKit
                     LoadDocument(filetoopen);
             }
         }
-        private void HKSave(HotKeyEventArgs e)
-        {
-            ActiveDocument?.GetViewModel().SaveFile();
-        }
-        private void HKSaveAll(HotKeyEventArgs e)
-        {
-            if (vm.OpenDocuments != null && vm.OpenDocuments.Count > 0)
-                vm.SaveAllFiles();
-        }
-        private void HKHelp(HotKeyEventArgs e)
-        {
-            Process.Start("https://github.com/Traderain/Wolven-kit/wiki");
-        }
-        private void HKCopy(HotKeyEventArgs e)
-        {
-            if (ActiveDocument != null)
-            {
-                if (ActiveDocument is frmCR2WDocument cr2wdoc)
-                {
-                    if (cr2wdoc.propertyWindow.IsActivated)
-                    {
-                        cr2wdoc.propertyWindow.CopyVariable();
-                        Logger.LogString("Selected propertie(s) copied!\n");
-                    }
-                }
-            }
-        }
-        private void HKPaste(HotKeyEventArgs e)
-        {
-            if (ActiveDocument != null)
-            {
-                if (ActiveDocument is frmCR2WDocument cr2wdoc)
-                {
-                    if (cr2wdoc.propertyWindow.IsActivated)
-                    {
-                        cr2wdoc.propertyWindow.PasteVariable();
-                        Logger.LogString("Copied propertie(s) pasted!\n");
-                    }
-                }
-            }
-        }
+        private void HKSave(HotKeyEventArgs e) => saveActiveFile();
+
+        private void HKSaveAll(HotKeyEventArgs e) => vm.SaveAllFiles();
+
+        private static void HKHelp(HotKeyEventArgs e) => Process.Start("https://github.com/Traderain/Wolven-kit/wiki");
+
         #endregion
 
         #region Events
@@ -1049,6 +1042,8 @@ namespace WolvenKit
                       || item == ActiveMod.RadishDirectory
                       || item == ActiveMod.ModCookedDirectory
                       || item == ActiveMod.ModUncookedDirectory
+                      || item == ActiveMod.DlcCookedDirectory
+                      || item == ActiveMod.DlcUncookedDirectory
                     ))
                 {
                     deletablefiles.Add(item);
@@ -1059,7 +1054,7 @@ namespace WolvenKit
             foreach (var filename in deletablefiles)
             {
                 // Close open documents
-                foreach (var t in vm.OpenDocuments.Where(t => t.Cr2wFileName == filename))
+                foreach (var t in vm.GetOpenDocuments().Values.Where(t => t.Cr2wFileName == filename))
                 {
                     t.Close();
                     break;
@@ -1289,9 +1284,9 @@ namespace WolvenKit
                 Text += " [" + ActiveMod.Name + "] ";
             }
 
-            if (ActiveDocument != null)
+            if (vm.ActiveDocument != null)
             {
-                Text += Path.GetFileName(ActiveDocument.Cr2wFileName);
+                Text += Path.GetFileName(vm.ActiveDocument.Cr2wFileName);
             }
         }
 
@@ -1317,22 +1312,7 @@ namespace WolvenKit
 
         private void OnOutput(object sender, string output) => AddOutput(output);
 
-        private void saveActiveFile()
-        {
-            if (ActiveMod == null)
-            {
-                return;
-            }
-            if (ActiveDocument != null && !ActiveDocument.GetIsDisposed())
-            {
-                // 
-
-
-                ActiveDocument.GetViewModel().SaveFile();
-                Logger.LogString("Saved!\n", Logtype.Success);
-            }
-
-        }
+        private void saveActiveFile() => vm.ActiveDocument.SaveFile();
 
         public void AddToOpenScripts(frmScriptEditor frmScriptEditor)
         {
@@ -1364,14 +1344,27 @@ namespace WolvenKit
             if (memoryStream == null && !File.Exists(filename))
                 return null;
 
-            foreach (var t in vm.OpenDocuments.Where(t => t.Cr2wFileName == filename))
+            // check if already open
+            var opendocs = dockPanel.Documents
+                .Where(_ => _.GetType() == typeof(frmCR2WDocument))
+                .Cast<frmCR2WDocument>()
+                .Where(_ => _.Cr2wFileName == filename)
+                .ToList();
+
+            if (opendocs.Count > 0)
             {
-                t.Activate();
-                return null;
+                opendocs.FirstOrDefault()?.Activate();
+                return opendocs.FirstOrDefault();
             }
 
+            // check on the viewmodel
+            //foreach (var t in vm.OpenDocuments.Where(t => t.Cr2wFileName == filename))
+            //{
+            //    t.Activate();
+            //    return null;
+            //}
+
             var docvm = new DocumentViewModel();
-            vm.OpenDocuments.Add(docvm);
 
             // switch between cr2w files and non-cr2w files (e.g. srt)
             if (Path.GetExtension(filename) == ".srt")
@@ -1398,31 +1391,15 @@ namespace WolvenKit
                 doc.Show(dockPanel, DockState.Document);
                 doc.FormClosed += doc_FormClosed;
 
+                vm.AddOpenDocument(doc.GetViewModel());
+
                 return doc;
             }
-
-
-            //WorkerLoadFileSetup(new LoadFileArgs(filename, doc, memoryStream, suppressErrors));
-
-            //// wait for the backgroundworker to finish
-            //// this is not good practice since I am blocking
-            //// but there are some functions (the renderer etc) that rely on a return document
-            //// also I am blocking with the progress form regardless so it's already bad
-            //if (MainBackgroundWorker.IsBusy)
-            //{
-            //    throw new NotImplementedException();
-            //}
-            //else
-            //{
-
-            //}
-            //var ret = HACK_bwform;
-            //HACK_bwform = null;
-            //return ret;
         }
 
         #region Mod Utility
-        public void PackProject()
+
+        private void PackProject()
         {
             if (ActiveMod == null)
             {
@@ -1860,6 +1837,8 @@ namespace WolvenKit
         /// <returns></returns>
         public W3Mod CreateNewMod()
         {
+            if (!CloseAllDocuments()) return null;
+
             var dlg = new SaveFileDialog
             {
                 Title = @"Create Witcher 3 Mod Project",
@@ -1951,6 +1930,9 @@ namespace WolvenKit
         /// <param name="file"></param>
         public void OpenMod(string file = "")
         {
+            //Close all docs
+            if (!CloseAllDocuments()) return;
+
             //Opening the file from a dialog
             if (string.IsNullOrEmpty(file))
             {
@@ -2021,8 +2003,8 @@ namespace WolvenKit
             }
             #endregion
 
-            //Close all docs
-            vm.OpenDocuments.ToList().ForEach(x => x.Close());
+            
+            
             MainController.Get().Configuration.InitialModDirectory = Path.GetDirectoryName(file);
 
             // Loading the project
@@ -2567,18 +2549,18 @@ namespace WolvenKit
 
         private void doc_Activated(object sender, EventArgs e)
         {
-            ActiveDocument = (IWolvenkitDocument)sender;
+            if (sender is IWolvenkitDocument doc)
+            {
+                vm.ActiveDocument = doc.GetViewModel();
+            }
         }
 
         private void doc_FormClosed(object sender, FormClosedEventArgs e)
         {
-            lastClosedTab.Enqueue(((IWolvenkitDocument)sender).Cr2wFileName);
-            var doc = (IWolvenkitDocument)sender;
-            vm.OpenDocuments.Remove(doc.GetViewModel());
-
-            if (doc == ActiveDocument)
+            if (sender is IWolvenkitDocument doc)
             {
-                ActiveDocument = null;
+                lastClosedTab.Enqueue(doc.Cr2wFileName);
+                vm.RemoveOpenDocument(doc.Cr2wFileName);
             }
         }
 
@@ -2610,14 +2592,14 @@ namespace WolvenKit
             addFileFromOtherModToolStripMenuItem.Enabled = ActiveMod != null;
             addFileToolStripMenuItem.Enabled = ActiveMod != null;
 
-            saveToolStripMenuItem.Enabled = ActiveMod != null;
-            saveAllToolStripMenuItem.Enabled = ActiveMod != null;
+            saveToolStripMenuItem.Enabled = vm.ActiveDocument != null;
+            saveAllToolStripMenuItem.Enabled = vm.GetOpenDocuments().Count > 0;
         }
 
         private void editToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
-            verifyFileToolStripMenuItem.Enabled = ActiveMod != null;
-            renderW2meshToolStripMenuItem.Enabled = ActiveMod != null;
+            //verifyFileToolStripMenuItem.Enabled = ActiveMod != null;
+            //renderW2meshToolStripMenuItem.Enabled = ActiveMod != null;
         }
 
         private void toolsToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
@@ -2628,7 +2610,8 @@ namespace WolvenKit
             bulkEditorToolStripMenuItem.Enabled = ActiveMod != null;
             cR2WToTextToolStripMenuItem.Enabled = ActiveMod != null;
             experimentalToolStripMenuItem.Enabled = ActiveMod != null;
-            launchModkitToolStripMenuItem.Enabled = ActiveMod != null;
+            
+            //launchModkitToolStripMenuItem.Enabled = ActiveMod != null;
         }
 
         private void viewToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
@@ -2933,8 +2916,10 @@ namespace WolvenKit
 
         private void modSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ActiveMod == null)
-                return;
+            if (ActiveMod == null) return;
+            //Close all docs so they won't cause problems
+            if (!CloseAllDocuments()) return;
+
             //With this cloned it won't get modified when we change it in dlg
             var oldmod = (W3Mod)ActiveMod.Clone();
             using (var dlg = new frmModSettings())
@@ -2948,8 +2933,7 @@ namespace WolvenKit
                         try
                         {
                             PauseMonitoring();
-                            //Close all docs so they won't cause problems
-                            vm.OpenDocuments.ToList().ForEach(x => x.Close());
+                            
                             //Move the files directory
                             Directory.Move(oldmod.ProjectDirectory, Path.Combine(Path.GetDirectoryName(oldmod.ProjectDirectory), dlg.Mod.Name));
                             //Delete the old directory
@@ -3390,11 +3374,6 @@ namespace WolvenKit
                     Skiperrors = true,
                     Dumpswf = true
                 };
-                //var cmd = new Wcc_lite.unbundle()
-                //{
-                //    InputDirectory = inputpath,
-                //    OutputDirectory = depot,
-                //};
                 await Task.Run(() => MainController.Get().WccHelper.RunCommand(cmd));
             }
 
