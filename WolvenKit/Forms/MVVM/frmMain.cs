@@ -3124,8 +3124,19 @@ namespace WolvenKit
             DriveInfo drive = new DriveInfo(new DirectoryInfo(MainController.Get().Configuration.DepotPath).Root.FullName);
             if (!drive.IsReady)
                 return;
+
+            // check path length
+            if (MainController.Get().Configuration.DepotPath.Length > 38)
+            {
+                MainController.LogString("Wcc probably does not support path lengths > 255. " +
+                                         "Please move your wcc_lite Modkit directory closer to root, e.g. C:\\Modkit\\.", Logtype.Error);
+                return;
+            }
+
+            // check free space
             var freespace = drive.AvailableFreeSpace / (1024 * 1024 * 1024);
             var totalsize = drive.TotalSize / (1024 * 1024 * 1024);
+            bool overwrite;
             switch (MessageBox.Show(
                         $"Unbundling the game will take about {30}GB of space, available space: {freespace}GB on drive {drive.Name}.\n" +
                         $"Depot directory: {MainController.Get().Configuration.DepotPath}\n\n" +
@@ -3137,6 +3148,26 @@ namespace WolvenKit
                     return;
                 case DialogResult.Yes:
                     {
+                        switch (MessageBox.Show(
+                            $"Would you like to overwrite existing files in the depot directory?",
+                            "Overwrite Files",
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                        {
+                            default:
+                                return;
+                            case DialogResult.Yes:
+                            {
+                                overwrite = true;
+                                break;
+                            }
+                            case DialogResult.No:
+                            {
+                                overwrite = false;
+                                break;
+                            }
+                        }
+
+
                         break;
                     }
                 case DialogResult.No:
@@ -3158,7 +3189,7 @@ namespace WolvenKit
 
                 // background worker action
                 workerAction = UnbundleGame;
-                MainBackgroundWorker.RunWorkerAsync();
+                MainBackgroundWorker.RunWorkerAsync(new UnbundleGameArgs(overwrite));
 
                 // cancellation dialog
                 DialogResult dr = ProgressForm.ShowDialog(this);
@@ -3188,9 +3219,18 @@ namespace WolvenKit
                 Logger.LogString("The background worker is currently busy.\r\n", Logtype.Error);
         }
 
-        protected object UnbundleGame(object sender, DoWorkEventArgs e)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private object UnbundleGame(object sender, DoWorkEventArgs e)
         {
             object arg = e.Argument;
+            if (!(arg is UnbundleGameArgs))
+                throw new NotImplementedException();
+            var Details = (UnbundleGameArgs)arg;
 
             BackgroundWorker bwAsync = sender as BackgroundWorker;
 
@@ -3209,6 +3249,9 @@ namespace WolvenKit
                     .GroupBy(p => p.Name)
                     .Select(g => g.Last())
                     .ToList();
+
+            var orderedList = files.OrderBy(_ => _.Name.Length).ToList();
+
             var count = files.Count;
             int finished = 0;
             Parallel.For(0, count, new ParallelOptions { MaxDegreeOfParallelism = (int)(Environment.ProcessorCount * 0.8) + 1 }, i =>
@@ -3220,29 +3263,54 @@ namespace WolvenKit
                     //return false;
                 }
 
-                IWitcherFile f = files[i];
+                IWitcherFile f = orderedList[i];
                 if (f is BundleItem bi)
                 {
                     var newpath = Path.Combine(MainController.Get().Configuration.DepotPath, bi.Name);
 
+
                     // overwrite existing files
                     if (File.Exists(newpath))
-                        File.Delete(newpath);
+                    {
+                        if (Details.Overwrite)
+                        {
+                            File.Delete(newpath);
+
+                            var fi = new FileInfo(newpath);
+                            var newdir = Path.GetDirectoryName(newpath);
+                            Directory.CreateDirectory(newdir);
+
+                            using (var ms = new MemoryStream())
+                            using (FileStream file = new FileStream(newpath, FileMode.Create, System.IO.FileAccess.Write))
+                            {
+                                bi.ExtractExistingMMF(ms);
+                                ms.Seek(0, SeekOrigin.Begin);
+
+                                ms.CopyTo(file);
+                            }
+                        }
+                        else
+                        {
+                            // do nothing
+                        }
+                    }
                     else
                     {
                         var fi = new FileInfo(newpath);
                         var newdir = Path.GetDirectoryName(newpath);
                         Directory.CreateDirectory(newdir);
+
+                        using (var ms = new MemoryStream())
+                        using (FileStream file = new FileStream(fi.FullName, FileMode.Create, System.IO.FileAccess.Write))
+                        {
+                            bi.ExtractExistingMMF(ms);
+                            ms.Seek(0, SeekOrigin.Begin);
+
+                            ms.CopyTo(file);
+                        }
                     }
 
-                    using (var ms = new MemoryStream())
-                    using (FileStream file = new FileStream(newpath, FileMode.Create, System.IO.FileAccess.Write))
-                    {
-                        bi.ExtractExistingMMF(ms);
-                        ms.Seek(0, SeekOrigin.Begin);
 
-                        ms.CopyTo(file);
-                    }
 
                     finished += 1;
                     int percentprogress = (int)((float)finished / (float)count * 100.0);
