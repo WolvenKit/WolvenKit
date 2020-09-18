@@ -3237,6 +3237,7 @@ namespace WolvenKit
 
             var orderedList = files.OrderBy(_ => _.Name.Length).ToList();
 
+            int finishedcount = 0;
             var count = files.Count;
             int finished = 0;
             Parallel.For(0, count, new ParallelOptions { MaxDegreeOfParallelism = (int)(Environment.ProcessorCount * 0.8) + 1 }, i =>
@@ -3282,7 +3283,7 @@ namespace WolvenKit
                                 ms.Seek(0, SeekOrigin.Begin);
 
                                 ms.CopyTo(file);
-                                finishedCount++;
+                                finishedcount++;
                             }
                         }
                         else
@@ -3305,7 +3306,7 @@ namespace WolvenKit
 
                             ms.CopyTo(file);
                         }
-                        finishedCount++;
+                        finishedcount++;
                     }
 
 
@@ -3321,7 +3322,7 @@ namespace WolvenKit
                 val.Dispose();
             }
 
-            MainController.LogString($"Sucessfully unbundled {finishedCount} files to {MainController.Get().Configuration.DepotPath}", Logtype.Success);
+            MainController.LogString($"Sucessfully unbundled {finishedcount} files to {MainController.Get().Configuration.DepotPath}", Logtype.Success);
             return true;
 
         }
