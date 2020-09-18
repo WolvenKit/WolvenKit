@@ -67,11 +67,8 @@ namespace WolvenKit
         }
 
         #region Properties
-        public W3Mod ActiveMod
-        {
-            get => MainController.Get().ActiveMod;
-            set => MainController.Get().ActiveMod = value;
-        }
+
+        private static W3Mod ActiveMod => MainController.Get().ActiveMod;
 
         public event EventHandler<RequestFileOpenArgs> RequestAssetBrowser;
         public event EventHandler<RequestFileOpenArgs> RequestFileOpen;
@@ -290,7 +287,7 @@ namespace WolvenKit
             List<string> itemstoDelete = new List<string>();
             foreach (var path in selectedItems)
             {
-                if (MockKernel.Get().GetMainViewModel().OpenDocuments.Any(_ => _.Cr2wFileName == path))
+                if (MockKernel.Get().GetMainViewModel().GetOpenDocuments().Values.Any(_ => _.Cr2wFileName == path))
                 {
                     MainController.LogString($"Please close the file in WolvenKit before deleting: {path}", Logtype.Error);
                 }
@@ -407,6 +404,8 @@ namespace WolvenKit
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
+            if (ActiveMod == null) e.Cancel = true;
+
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
                 exportw2rigjsonToolStripMenuItem.Visible = Path.GetExtension(selectedobject.Name) == ".w2rig";
@@ -477,7 +476,7 @@ namespace WolvenKit
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
-                if (MockKernel.Get().GetMainViewModel().OpenDocuments.Any(_ => _.Cr2wFileName == selectedobject.FullName))
+                if (MockKernel.Get().GetMainViewModel().GetOpenDocuments().Values.Any(_ => _.Cr2wFileName == selectedobject.FullName))
                 {
                     MainController.LogString("Please close the file in WolvenKit before renaming.", Logtype.Error);
                     return;

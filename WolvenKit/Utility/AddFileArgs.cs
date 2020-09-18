@@ -7,11 +7,11 @@ namespace WolvenKit
 {
     public class AddFileArgs
     {
-        public IEnumerable<IWitcherArchiveManager> Managers { get; set; }
-        public List<WitcherListViewItem> SelectedPaths { get; set; }
-        public bool AddAsDLC { get; set; }
-        public bool Uncook { get; set; }
-        public bool Export { get; set; }
+        public IEnumerable<IWitcherArchiveManager> Managers { get; }
+        public List<WitcherListViewItem> SelectedPaths { get; }
+        public bool AddAsDLC { get; }
+        public bool Uncook { get; }
+        public bool Export { get; }
 
         public AddFileArgs(IEnumerable<IWitcherArchiveManager> managers, List<WitcherListViewItem> selectedPaths, bool addAsDLC, bool uncook, bool export)
         {
