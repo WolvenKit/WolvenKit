@@ -3218,11 +3218,10 @@ namespace WolvenKit
 
             BackgroundWorker bwAsync = sender as BackgroundWorker;
 
+            //Load MemoryMapped Bundles
             var memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
             var bm = new BundleManager();
             bm.LoadAll(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath));
-
-            //Load MemoryMapped Bundles
             foreach (var b in bm.Bundles.Values)
             {
                 var hash = b.ArchiveAbsolutePath.GetHashMD5();
@@ -3236,15 +3235,16 @@ namespace WolvenKit
 
             var orderedList = files.OrderBy(_ => _.Name.Length).ToList();
 
+            var finishedCount = 0;
             var count = files.Count;
             int finished = 0;
             Parallel.For(0, count, new ParallelOptions { MaxDegreeOfParallelism = (int)(Environment.ProcessorCount * 0.8) + 1 }, i =>
             {
                 if (bwAsync.CancellationPending || ProgressForm.Cancel)
                 {
-                    Logger.LogString("Background worker cancelled.\r\n", Logtype.Error);
+                    MainController.LogString("Background worker cancelled.\r\n", Logtype.Error);
                     e.Cancel = true;
-                    //return false;
+                    return;
                 }
 
                 IWitcherFile f = orderedList[i];
@@ -3281,10 +3281,12 @@ namespace WolvenKit
                                 ms.Seek(0, SeekOrigin.Begin);
 
                                 ms.CopyTo(file);
+                                finishedCount++;
                             }
                         }
                         else
                         {
+                            MainController.LogString("tabernak");
                             // do nothing
                         }
                     }
@@ -3302,6 +3304,8 @@ namespace WolvenKit
 
                             ms.CopyTo(file);
                         }
+
+                        finishedCount++;
                     }
 
 
@@ -3312,6 +3316,7 @@ namespace WolvenKit
                 }
             });
 
+            MainController.LogString($"Sucessfully unbundled {finishedCount} files to {MainController.Get().Configuration.DepotPath}", Logtype.Success);
             return true;
 
         }
