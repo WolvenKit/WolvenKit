@@ -3274,8 +3274,8 @@ namespace WolvenKit
                                 catch (Exception ex)
                                 {
                                     foreach (var val in memorymappedbundles.Values)
-                                        Logger.LogString(val.GetHashCode().ToString());
-                                    Logger.LogString(ex.Message);
+                                        MainController.LogString(val.GetHashCode().ToString());
+                                    MainController.LogString(ex.Message);
                                 }
 
                                 ms.Seek(0, SeekOrigin.Begin);
@@ -3312,6 +3312,10 @@ namespace WolvenKit
                 }
             });
 
+            foreach(var val in memorymappedbundles.Values)
+            {
+                val.Dispose();
+            }
             return true;
 
         }
