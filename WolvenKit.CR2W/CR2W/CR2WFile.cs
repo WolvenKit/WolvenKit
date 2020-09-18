@@ -119,9 +119,18 @@ namespace WolvenKit.CR2W
 
             chunks.Add(chunk);
 
+            // 
+
             return chunk;
         }
 
+        public bool RemoveChunk(CR2WExportWrapper chunk)
+        {
+            var r = chunk.Referrers;
+
+            
+            return chunks.Remove(chunk);
+        }
 
         /// <summary>
         /// Tries to look up a chunk reference in a cr2w file by a number of checks
@@ -159,17 +168,6 @@ namespace WolvenKit.CR2W
                 Logger?.LogString($"No chunk target found, please set pointer target manually in {vardepstring}", Logtype.Error);
                 return null;
             }
-        }
-
-        public bool RemoveChunk(CR2WExportWrapper chunk)
-        {
-            var r = chunk.Referrers;
-            
-            // TODO:find all pointers that point here
-            // can there be more than one?
-            throw new NotImplementedException();
-
-            return chunks.Remove(chunk);
         }
 
         public int GetStringIndex(string name, bool addnew = false)

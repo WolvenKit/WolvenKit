@@ -310,8 +310,6 @@ namespace WolvenKit.Forms
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmChunkProperties";
             this.Text = "Properties";
-            this.Shown += new System.EventHandler(this.frmChunkProperties_Shown);
-            this.Resize += new System.EventHandler(this.frmChunkProperties_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.treeView)).EndInit();
             this.contextMenu.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);

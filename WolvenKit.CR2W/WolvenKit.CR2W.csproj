@@ -143,7 +143,7 @@
     <Compile Include="Editors\IdTagEditor.Designer.cs">
       <DependentUpon>IdTagEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Editors\IEditableVariable.cs" />
+    <Compile Include="IEditableVariable.cs" />
     <Compile Include="Editors\PtrEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>

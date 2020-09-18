@@ -49,6 +49,9 @@ namespace WolvenKit
         #region Properties
         public string Cr2wFileName => vm.Cr2wFileName;
         public DocumentViewModel GetViewModel() => vm;
+
+
+
         #endregion
 
 
@@ -68,7 +71,7 @@ namespace WolvenKit
             {
                 DockAreas = DockAreas.Document
             };
-            propertyWindow = new frmChunkProperties();
+            propertyWindow = new frmChunkProperties(vm);
 
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
@@ -279,7 +282,7 @@ namespace WolvenKit
 
         private void PropertyWindow_OnRequestUpdate(object sender, EventArgs e) => chunkList.UpdateList();
 
-        private void PropertyWindow_OnRequestChunk(object sender, SelectChunkArgs e) => chunkList.SelectChunk(e.Chunk);
+        //private void PropertyWindow_OnRequestChunk(object sender, SelectChunkArgs e) => chunkList.SelectChunk(e.Chunk);
 
         private void EmbeddedWindow_OnRequestOpen(object sender, RequestEmbeddedFileOpenArgs e)
         {
@@ -349,11 +352,12 @@ namespace WolvenKit
         {
             if (propertyWindow == null || propertyWindow.IsDisposed)
             {
-                propertyWindow = new frmChunkProperties();
+                propertyWindow = new frmChunkProperties(vm);
                 propertyWindow.Show(FormPanel, DockState.DockRight);
             }
 
-            propertyWindow.Chunk = e.Chunk;
+            // Update Selected Chunk in the ViewModel
+            vm.SelectedChunk = e.Chunk;
 
             if (e.Chunk.data is CBitmapTexture xbm)
             {
@@ -400,9 +404,9 @@ namespace WolvenKit
             }
 
 
-            chunkList.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
+            //chunkList.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
             propertyWindow.OnRequestUpdate += PropertyWindow_OnRequestUpdate;
-            propertyWindow.OnChunkRequest += PropertyWindow_OnRequestChunk;
+            //propertyWindow.OnChunkRequest += PropertyWindow_OnRequestChunk;
 
             chunkList.Activate();
 

@@ -6,7 +6,7 @@ using System.Xml;
 using WolvenKit.Common;
 using WolvenKit.CR2W.Types;
 
-namespace WolvenKit.CR2W.Editors
+namespace WolvenKit.CR2W
 {
     public interface IEditableVariable
     {

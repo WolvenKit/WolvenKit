@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using BrightIdeasSoftware;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
+using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
 using WolvenKit.App.ViewModels;
 using WolvenKit.CR2W;
@@ -15,13 +16,25 @@ namespace WolvenKit.Forms
 {
     public partial class frmChunkList : DockContent, IThemedContent
     {
+        #region Fields
         private bool listview;
         private bool isLargefile;
         private CR2WFile file;
 
         private readonly Dictionary<int, int> childrencountDict = new Dictionary<int, int>();
         private readonly Dictionary<int, List<CR2WExportWrapper>> childrenDict = new Dictionary<int, List<CR2WExportWrapper>>();
-            
+        private readonly DocumentViewModel viewModel;
+
+        #endregion
+
+        #region Properties
+        //public event EventHandler<SelectChunkArgs> OnSelectChunk;
+
+        private CR2WFile File => viewModel.File as CR2WFile;
+
+
+        #endregion
+
         public frmChunkList(DocumentViewModel _viewmodel)
         {
             InitializeComponent();
@@ -39,11 +52,15 @@ namespace WolvenKit.Forms
             };
 
             viewModel = _viewmodel;
+            viewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
-        private readonly DocumentViewModel viewModel;
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            
+        }
 
-        private CR2WFile File => viewModel.File as CR2WFile;
+        
 
         public void SelectChunk(CR2WExportWrapper chunk)
         {
@@ -52,6 +69,8 @@ namespace WolvenKit.Forms
 
             treeListView.SelectedObject = chunk;
         }
+
+        #region UI Methods
 
         private void UpdateHelperList()
         {
@@ -86,7 +105,6 @@ namespace WolvenKit.Forms
             }
         }
         
-        public event EventHandler<SelectChunkArgs> OnSelectChunk;
 
         public void UpdateList()
         {
@@ -112,6 +130,20 @@ namespace WolvenKit.Forms
             //treeListView.SelectedIndex = 0; // TODO: doesn't work? why?
         }
 
+        public void ApplyCustomTheme()
+        {
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
+            toolStripSearchBox.BackColor = UIController.GetPalette().ToolWindowCaptionButtonInactiveHovered.Background;
+
+            this.treeListView.BackColor = UIController.GetBackColor();
+            this.treeListView.ForeColor = UIController.GetForeColor();
+
+            this.treeListView.HeaderFormatStyle = UIController.GetHeaderFormatStyle();
+            treeListView.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
+        }
+        #endregion
+
+        #region Events
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
 
@@ -119,10 +151,11 @@ namespace WolvenKit.Forms
 
         private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            if (OnSelectChunk != null && (CR2WExportWrapper)treeListView.SelectedObject != null)
-            {
-                OnSelectChunk(this, new SelectChunkArgs { Chunk = (CR2WExportWrapper)treeListView.SelectedObject });
-            }
+            viewModel.SelectedChunk = (CR2WExportWrapper) treeListView.SelectedObject;
+            //if (OnSelectChunk != null && (CR2WExportWrapper)treeListView.SelectedObject != null)
+            //{
+            //    OnSelectChunk(this, new SelectChunkArgs { Chunk = (CR2WExportWrapper)treeListView.SelectedObject });
+            //}
         }
 
         private void resetBTN_Click(object sender, EventArgs e)
@@ -142,18 +175,6 @@ namespace WolvenKit.Forms
         private void listView_ItemsChanged(object sender, ItemsChangedEventArgs e)
         {
             MainController.Get().ProjectUnsaved = true;
-        }
-        
-        public void ApplyCustomTheme()
-        {
-            UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
-            toolStripSearchBox.BackColor = UIController.GetPalette().ToolWindowCaptionButtonInactiveHovered.Background;
-
-            this.treeListView.BackColor = UIController.GetBackColor();
-            this.treeListView.ForeColor = UIController.GetForeColor();
-            
-            this.treeListView.HeaderFormatStyle = UIController.GetHeaderFormatStyle();
-            treeListView.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
         }
 
         private void showTreetoolStripButton_Click(object sender, EventArgs e)
@@ -197,6 +218,21 @@ namespace WolvenKit.Forms
                 }
             }
         }
+
+        private void copyChunkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CopyController.Source = viewModel.SelectedChunk.data;
+            //viewModel.CopyVariableCommand.SafeExecute();
+        }
+
+        private void pasteChunkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CopyController.Target = viewModel.SelectedChunk.data;
+            viewModel.PasteVariableCommand.SafeExecute();
+        }
+
+        #endregion
+
     }
 }
  

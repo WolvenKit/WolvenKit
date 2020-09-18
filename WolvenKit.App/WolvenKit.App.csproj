@@ -227,6 +227,7 @@
     <Compile Include="Model\Arguments\FileSavedEventArgs.cs" />
     <Compile Include="Model\Arguments\SelectChunkArgs.cs" />
     <Compile Include="Model\Commonfunctions.cs" />
+    <Compile Include="Model\CopyController.cs" />
     <Compile Include="Model\ImageUtility.cs" />
     <Compile Include="Model\ImportModel.cs" />
     <Compile Include="Model\IWolvenkitDocument.cs" />

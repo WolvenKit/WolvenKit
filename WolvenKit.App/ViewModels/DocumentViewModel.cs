@@ -7,7 +7,9 @@ using WolvenKit.App.Model;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
+using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.SRT;
+using WolvenKit.CR2W.Types;
 using WolvenKit.Radish.Model;
 
 namespace WolvenKit.App.ViewModels
@@ -17,7 +19,8 @@ namespace WolvenKit.App.ViewModels
 
         public DocumentViewModel()
         {
-            cmd1 = new RelayCommand(cm1, canrm1);
+            CopyVariableCommand = new RelayCommand(CopyVariable, CanCopyVariable);
+            PasteVariableCommand = new RelayCommand(PasteVariable, CanPasteVariable);
 
             _openEmbedded =new Dictionary<string,DocumentViewModel>();
         }
@@ -29,6 +32,8 @@ namespace WolvenKit.App.ViewModels
 
         #region Properties
         public object SaveTarget { get; set; }
+        public string Title => Path.GetFileName(Cr2wFileName);
+
         #region File
         private IWolvenkitFile _file;
         public IWolvenkitFile File
@@ -70,20 +75,56 @@ namespace WolvenKit.App.ViewModels
             OpenEmbedded.Remove(embkey);
         }
         #endregion
-        public string Title => Path.GetFileName(Cr2wFileName);
-
+        #region SelectedChunk
+        private CR2WExportWrapper _selectedChunk;
+        public CR2WExportWrapper SelectedChunk
+        {
+            get => _selectedChunk;
+            set
+            {
+                _selectedChunk = value;
+                OnPropertyChanged();
+                
+            }
+        }
+        #endregion
         #endregion
 
         #region Commands
-        public ICommand cmd1 { get; }
+        public ICommand CopyVariableCommand { get; }
+        public ICommand PasteVariableCommand { get; }
 
         #endregion
 
         #region Commands Implementation
-        protected bool canrm1() => RadishController.Get().IsHealthy();
-        protected void cm1() { }
+        protected bool CanCopyVariable() => true;
 
+        protected bool CanPasteVariable() => CopyController.Source != null && CopyController.Target != null &&
+                                             CopyController.Source.REDType == CopyController.Target.REDType;
 
+        private void CopyVariable()
+        {
+            
+
+        }
+
+        private void PasteVariable()
+        {
+            if (CopyController.Source is CVariable csource && CopyController.Target is CVariable ctarget)
+            {
+                var context = new CR2WCopyAction()
+                {
+                    DestinationFile = ctarget.cr2w,
+                    Parent = ctarget.ParentVar as CVariable
+                };
+
+                var copy = csource.Copy(context);
+                ctarget.SetValue(copy);
+                ctarget.IsSerialized = true;
+
+                OnPropertyChanged(nameof(SelectedChunk));
+            }
+        }
         #endregion
 
         #region Methods

@@ -564,7 +564,6 @@
     <Compile Include="Forms\UserControl\frmAbout.Designer.cs">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utility\CopyController.cs" />
     <Compile Include="Forms\frmDebug.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -127,7 +127,6 @@ namespace WolvenKit.CR2W
         }
         private void SetParentChunk(CR2WExportWrapper parent)
         {
-            //ParentPtr.Reference = parent;
             ParentChunkIndex = cr2w.chunks.IndexOf(parent);
             IsVirtuallyMounted = false;
             VirtualParentChunkIndex = ParentChunkIndex;
@@ -153,7 +152,7 @@ namespace WolvenKit.CR2W
         public readonly List<CVariable> Referrers;
 
 
-        public string REDType { get; set; }
+        public string REDType { get; private set; }
 
 
         [DataMember]
@@ -223,7 +222,6 @@ namespace WolvenKit.CR2W
 
         public void SetType(ushort val) => _export.className = val;
 
-        
         public void SetOffset(uint offset) => _export.dataOffset = offset;
 
         private CR2WExportWrapper GetParentChunk() => ParentChunkIndex >= 0 ? cr2w.chunks[ParentChunkIndex] : null;
@@ -256,24 +254,7 @@ namespace WolvenKit.CR2W
             return vars;
         }
 
-        public virtual bool CanRemoveVariable(IEditableVariable child)
-        {
-            return false;
-        }
 
-        public virtual bool CanAddVariable(IEditableVariable newvar)
-        {
-            return false;
-        }
-
-        public virtual void AddVariable(CVariable var)
-        {
-        }
-
-        public virtual bool RemoveVariable(IEditableVariable child)
-        {
-            return false;
-        }
 
         public void ReadData(BinaryReader file)
         {
@@ -436,38 +417,25 @@ namespace WolvenKit.CR2W
             data.REDFlags = Export.objectFlags;
         }
 
-        //public CR2WExportWrapper CopyChunk(CR2WCopyAction context)
-        //{
-        //    // this one was already copied
-        //    if (context.chunkTranslation.ContainsKey(ChunkIndex))
-        //        return null;
+        public override string ToString() => REDName;
 
-        //    var copy = context.DestinationFile.CreateChunk(REDType);
-
-        //    context.chunks.Add(copy);
-        //    context.chunkTranslation.Add(ChunkIndex, copy.ChunkIndex);
-
-        //    copy.REDType = REDType;
-        //    copy._export.template = _export.template;
-        //    copy._export.crc32 = _export.crc32;
-
-        //    // requires updating from context.chunkTranslation once all chunks are copied.
-        //    copy.SetParentChunk(this.ParentChunk);
-        //    if (data != null)
-        //    {
-        //        copy.data = data.Copy(context);
-        //    }
-        //    if (unknownBytes != null)
-        //    {
-        //        copy.unknownBytes = (CBytes) unknownBytes.Copy(context);
-        //    }
-
-        //    return copy;
-        //}
-
-        public override string ToString()
+        public virtual bool CanRemoveVariable(IEditableVariable child)
         {
-            return REDName;
+            return false;
+        }
+
+        public virtual bool CanAddVariable(IEditableVariable newvar)
+        {
+            return false;
+        }
+
+        public virtual void AddVariable(CVariable var)
+        {
+        }
+
+        public virtual bool RemoveVariable(IEditableVariable child)
+        {
+            return false;
         }
 
         public void SetREDName(string val)

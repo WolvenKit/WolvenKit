@@ -47,6 +47,8 @@ namespace WolvenKit.Forms
             this.toolStripSearchBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripClearButton = new System.Windows.Forms.ToolStripButton();
             this.showTreetoolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.copyChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.treeListView)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -60,9 +62,11 @@ namespace WolvenKit.Forms
             this.expandAllChildrenToolStripMenuItem,
             this.collapseAllToolStripMenuItem,
             this.collapseAllChildrenToolStripMenuItem,
-            this.toolStripSeparator1});
+            this.toolStripSeparator1,
+            this.copyChunkToolStripMenuItem,
+            this.pasteChunkToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(185, 98);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(185, 164);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // expandAllToolStripMenuItem
@@ -185,6 +189,20 @@ namespace WolvenKit.Forms
             this.showTreetoolStripButton.Text = "Show/Hide Tree";
             this.showTreetoolStripButton.Click += new System.EventHandler(this.showTreetoolStripButton_Click);
             // 
+            // copyChunkToolStripMenuItem
+            // 
+            this.copyChunkToolStripMenuItem.Name = "copyChunkToolStripMenuItem";
+            this.copyChunkToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.copyChunkToolStripMenuItem.Text = "Copy Chunk";
+            this.copyChunkToolStripMenuItem.Click += new System.EventHandler(this.copyChunkToolStripMenuItem_Click);
+            // 
+            // pasteChunkToolStripMenuItem
+            // 
+            this.pasteChunkToolStripMenuItem.Name = "pasteChunkToolStripMenuItem";
+            this.pasteChunkToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.pasteChunkToolStripMenuItem.Text = "Paste Chunk";
+            this.pasteChunkToolStripMenuItem.Click += new System.EventHandler(this.pasteChunkToolStripMenuItem_Click);
+            // 
             // frmChunkList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -225,5 +243,7 @@ namespace WolvenKit.Forms
         private ToolStripMenuItem expandAllChildrenToolStripMenuItem;
         private ToolStripMenuItem collapseAllToolStripMenuItem;
         private ToolStripMenuItem collapseAllChildrenToolStripMenuItem;
+        private ToolStripMenuItem copyChunkToolStripMenuItem;
+        private ToolStripMenuItem pasteChunkToolStripMenuItem;
     }
 }
