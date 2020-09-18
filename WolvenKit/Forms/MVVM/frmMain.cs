@@ -3267,7 +3267,17 @@ namespace WolvenKit
                             using (var ms = new MemoryStream())
                             using (FileStream file = new FileStream(newpath, FileMode.Create, System.IO.FileAccess.Write))
                             {
-                                bi.ExtractExistingMMF(ms);
+                                try
+                                {
+                                    bi.ExtractExistingMMF(ms);
+                                }
+                                catch (Exception ex)
+                                {
+                                    foreach (var val in memorymappedbundles.Values)
+                                        Logger.LogString(val.GetHashCode().ToString());
+                                    Logger.LogString(ex.Message);
+                                }
+
                                 ms.Seek(0, SeekOrigin.Begin);
 
                                 ms.CopyTo(file);
