@@ -629,10 +629,10 @@ namespace WolvenKit.App.ViewModels
 
 
             // delete existing cook dbs
-            string dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "dlc.files.cook.db");
-            string dlc_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "dlc.textures.cook.db");
-            string mod_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "mod.files.cook.db");
-            string mod_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "mod.textures.cook.db");
+            string dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "db_dlcfiles");
+            string dlc_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "db_dlctextures");
+            string mod_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "db_modfiles");
+            string mod_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "db_modtextures");
             if (Directory.Exists(dlc_files_db))
                 Directory.Delete(dlc_files_db, true);
             Directory.CreateDirectory(dlc_files_db);

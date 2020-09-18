@@ -32,7 +32,7 @@ namespace WolvenKit.CR2W.Editors
         void AddVariable(CVariable var);
         bool RemoveVariable(IEditableVariable child);
 
-        void SerializeToXml(XmlWriter xw);
+        //void SerializeToXml(XmlWriter xw);
 
         void Read(BinaryReader file, uint size);
         void Write(BinaryWriter file);

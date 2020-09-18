@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using WolvenKit.CR2W.Types;
 
@@ -20,7 +21,7 @@ namespace WolvenKit.CR2W.Editors
 
         public IByteSource Variable
         {
-            get { return bytes; }
+            get => bytes;
             set
             {
                 bytes = value;

@@ -33,25 +33,22 @@ namespace WolvenKit
         private readonly DocumentViewModel vm;
         private DeserializeDockContent m_deserializeDockContent;
 
+        private frmChunkProperties propertyWindow;
+        private frmEmbeddedFiles embeddedFiles;
+        private frmChunkFlowDiagram flowDiagram;
+        private frmJournalEditor JournalEditor;
+        private frmImagePreview ImageViewer;
+        private Render.frmRender RenderViewer;
 
+        private CR2WFile File => (CR2WFile)vm.File;
+
+        private frmProgress ProgressForm;
+        private readonly LoggerService docLoggerService;
         #endregion
 
         #region Properties
-
-        public frmChunkProperties propertyWindow;
-        public frmEmbeddedFiles embeddedFiles;
-        public frmChunkFlowDiagram flowDiagram;
-        public frmJournalEditor JournalEditor;
-        public frmImagePreview ImageViewer;
-        public Render.frmRender RenderViewer;
-        
-
-        public CR2WFile File => (CR2WFile)vm.File;
         public string Cr2wFileName => vm.Cr2wFileName;
         public DocumentViewModel GetViewModel() => vm;
-
-        private frmProgress ProgressForm { get; set; }
-        private LoggerService docLoggerService;
         #endregion
 
 
@@ -83,6 +80,7 @@ namespace WolvenKit
 
             docLoggerService = new LoggerService();
             docLoggerService.PropertyChanged += LoggerUpdated;
+            docLoggerService.OnStringLogged += (sender, e) => MainController.LogString(e.Message, e.Logtype);
         }
 
         #region Backgroundworker
@@ -131,18 +129,18 @@ namespace WolvenKit
         /// <param name="e"></param>
         private void LoggerUpdated(object sender, PropertyChangedEventArgs e)
         {
-            var Logger = (LoggerService) sender;
+            var logger = (LoggerService) sender;
 
             switch (e.PropertyName)
             {
-                case "Progress":
+                case nameof(logger.Progress):
                 {
                     if (backgroundWorker1 != null)
                     {
-                        if (string.IsNullOrEmpty(Logger.Progress.Item2))
-                            backgroundWorker1.ReportProgress((int)Logger.Progress.Item1);
+                        if (string.IsNullOrEmpty(logger.Progress.Item2))
+                            backgroundWorker1.ReportProgress((int)logger.Progress.Item1);
                         else
-                            backgroundWorker1.ReportProgress((int)Logger.Progress.Item1, Logger.Progress.Item2);
+                            backgroundWorker1.ReportProgress((int)logger.Progress.Item1, logger.Progress.Item2);
                     }
 
                     break;
@@ -542,7 +540,7 @@ namespace WolvenKit
             if (hasUnknownBytes)
                 output.Append("-------\n\n");
 
-            output.Append($"CR2WFile {filename} loaded in: {stopwatch.Elapsed}\n\n");
+            //output.Append($"CR2WFile {filename} loaded in: {stopwatch.Elapsed}\n\n");
             stopwatch.Stop();
 
             MainController.LogString(output.ToString(), Logtype.Important);

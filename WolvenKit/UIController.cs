@@ -183,7 +183,7 @@ namespace WolvenKit
 
             if (editvar is IByteSource)
             {
-                bytes = ((IByteSource)editvar).Bytes;
+                bytes = ((IByteSource)editvar).Bytes.ToArray();
             }
 
             dlg.Filter = string.Join("|", ImportExportUtility.GetPossibleExtensions(bytes, (CVariable)editvar.ParentVar));

@@ -17,6 +17,17 @@ namespace WolvenKit.Common.Services
         Wcc
     }
 
+    public class LogStringEventArgs
+    {
+        public LogStringEventArgs(string message, Logtype logtype)
+        {
+            Message = message;
+            Logtype = logtype;
+        }
+        public string Message { get; private set; }
+        public Logtype Logtype { get; private set; }
+    }
+
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class LoggerService : ObservableObject, ILoggerService
     {
@@ -25,11 +36,11 @@ namespace WolvenKit.Common.Services
             ErrorLog = new ObservableCollection<InterpretedLogMessage>();
         }
 
-        
+        private const int LOGLENGTH = 16384;
 
         #region Properties
         public ObservableCollection<InterpretedLogMessage> ErrorLog { get; set; }
-        #region modname
+        #region Log
         private string _log;
         public string Log
         {
@@ -40,6 +51,10 @@ namespace WolvenKit.Common.Services
                 {
                     _log = value;
                     OnPropertyChanged();
+
+                    // clean old log
+                    if (_log.Length > LOGLENGTH)
+                        _log = "";
                 }
             }
         }
@@ -60,7 +75,7 @@ namespace WolvenKit.Common.Services
         }
         #endregion
 
-        public Logtype Logtype { get; set; } = Logtype.Normal;
+        public Logtype Logtype { get; private set; } = Logtype.Normal;
         #endregion
 
         #region Overrides
@@ -68,6 +83,7 @@ namespace WolvenKit.Common.Services
         #endregion
 
         #region Methods
+        public event EventHandler<LogStringEventArgs> OnStringLogged;
         /// <summary>
         /// Log string
         /// </summary>
@@ -76,6 +92,7 @@ namespace WolvenKit.Common.Services
         {
             Logtype = type;
             Log = value;// + "\r\n";
+            OnStringLogged?.Invoke(this, new LogStringEventArgs(value, type));
         }
         /// <summary>
         /// Log progress value

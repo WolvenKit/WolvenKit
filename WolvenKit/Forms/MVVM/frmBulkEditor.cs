@@ -29,13 +29,13 @@ namespace WolvenKit.Forms
 
             // initialize Viewmodel
             viewModel = MockKernel.Get().GetBulkEditorViewModel();
-            viewModel.PropertyChanged += ViewModel_PropertyChanged;
-            viewModel.PerformStep += (sender, e) => this.PerformStep();
-
-
+            
             ApplyCustomTheme();
 
             propertyGrid.SelectedObject = viewModel.Options;
+
+            viewModel.PerformStep += (sender, e) => this.PerformStep();
+            viewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)

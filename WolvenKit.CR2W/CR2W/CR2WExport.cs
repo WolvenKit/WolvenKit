@@ -204,6 +204,23 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Methods
+        /// <summary>
+        /// We can use something like this for hashing
+        /// </summary>
+        /// <returns></returns>
+        public string GetFullChunkDependencyStringName()
+        {
+            var depstr = this.REDName;
+            var par = this.GetVirtualParentChunk();
+            while (par != null)
+            {
+                depstr = $"{par.REDName}.{depstr}";
+                par = par.GetVirtualParentChunk();
+            }
+
+            return depstr;
+        }
+
         public void SetType(ushort val) => _export.className = val;
 
         
@@ -419,34 +436,34 @@ namespace WolvenKit.CR2W
             data.REDFlags = Export.objectFlags;
         }
 
-        public CR2WExportWrapper CopyChunk(CR2WCopyAction context)
-        {
-            // this one was already copied
-            if (context.chunkTranslation.ContainsKey(ChunkIndex))
-                return null;
+        //public CR2WExportWrapper CopyChunk(CR2WCopyAction context)
+        //{
+        //    // this one was already copied
+        //    if (context.chunkTranslation.ContainsKey(ChunkIndex))
+        //        return null;
 
-            var copy = context.DestinationFile.CreateChunk(REDType);
+        //    var copy = context.DestinationFile.CreateChunk(REDType);
 
-            context.chunks.Add(copy);
-            context.chunkTranslation.Add(ChunkIndex, copy.ChunkIndex);
+        //    context.chunks.Add(copy);
+        //    context.chunkTranslation.Add(ChunkIndex, copy.ChunkIndex);
 
-            copy.REDType = REDType;
-            copy._export.template = _export.template;
-            copy._export.crc32 = _export.crc32;
+        //    copy.REDType = REDType;
+        //    copy._export.template = _export.template;
+        //    copy._export.crc32 = _export.crc32;
 
-            // requires updating from context.chunkTranslation once all chunks are copied.
-            copy.SetParentChunk(this.ParentChunk);
-            if (data != null)
-            {
-                copy.data = data.Copy(context);
-            }
-            if (unknownBytes != null)
-            {
-                copy.unknownBytes = (CBytes) unknownBytes.Copy(context);
-            }
+        //    // requires updating from context.chunkTranslation once all chunks are copied.
+        //    copy.SetParentChunk(this.ParentChunk);
+        //    if (data != null)
+        //    {
+        //        copy.data = data.Copy(context);
+        //    }
+        //    if (unknownBytes != null)
+        //    {
+        //        copy.unknownBytes = (CBytes) unknownBytes.Copy(context);
+        //    }
 
-            return copy;
-        }
+        //    return copy;
+        //}
 
         public override string ToString()
         {

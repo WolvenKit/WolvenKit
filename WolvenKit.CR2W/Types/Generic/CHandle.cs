@@ -23,8 +23,8 @@ namespace WolvenKit.CR2W.Types
 
     /// <summary>
     /// Handles are Int32 that store 
-    /// if > 0: a reference to a chunk inside the cr2w file
-    /// if < 0: a reference to a string in the imports table
+    /// if > 0: a reference to a chunk inside the cr2w file (aka Soft)
+    /// if < 0: a reference to a string in the imports table (aka Pointer)
     /// Exposed are 
     /// if ChunkHandle: 
     /// if ImportHandle: A string Handle, string Filetype and ushort Flags
@@ -41,7 +41,7 @@ namespace WolvenKit.CR2W.Types
         [DataMember(EmitDefaultValue = false)]
         public bool ChunkHandle { get; set; }
 
-        // Resource
+        // Soft
         [DataMember(EmitDefaultValue = false)]
         public string DepotPath { get; set; }
 
@@ -51,9 +51,11 @@ namespace WolvenKit.CR2W.Types
         [DataMember(EmitDefaultValue = false)]
         public ushort Flags { get; set; }
 
-        // Reference
+        // Pointer
         [DataMember(EmitDefaultValue = false)]
         public CR2WExportWrapper Reference { get; set; }
+
+        public string ReferenceType => REDType.Split(':').Last();
         #endregion
 
         #region Methods
@@ -120,38 +122,43 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is int)
+            switch (val)
             {
-                SetValueInternal((int)val);
-            }
-            else if (val is IHandleAccessor cvar)
-            {
-                this.ChunkHandle = cvar.ChunkHandle;
-                this.DepotPath = cvar.DepotPath;
-                this.ClassName = cvar.ClassName;
-                this.Flags = cvar.Flags;
+                case int o:
+                    SetValueInternal(o);
+                    break;
+                case IHandleAccessor cvar:
+                    this.ChunkHandle = cvar.ChunkHandle;
+                    this.DepotPath = cvar.DepotPath;
+                    this.ClassName = cvar.ClassName;
+                    this.Flags = cvar.Flags;
 
-                this.Reference = cvar.Reference;
+                    this.Reference = cvar.Reference;
+                    break;
             }
 
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CHandle<T>(cr2w, parent, name);
-        }
-
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CHandle<T>)base.Copy(context);
+            var copy = (CHandle<T>)base.Copy(context);
+            copy.ChunkHandle = ChunkHandle;
 
-            var.DepotPath = DepotPath;
-            var.ClassName = ClassName;
-            var.Flags = Flags;
-            var.ChunkHandle = ChunkHandle;
-            var.Reference = Reference;
-            return var;
+            // Soft
+            copy.DepotPath = DepotPath;
+            copy.ClassName = ClassName;
+            copy.Flags = Flags;
+
+            // Ptr
+            if (ChunkHandle && Reference != null)
+            {
+                CR2WExportWrapper newref = context.DestinationFile.TryLookupReference(copy, Reference);
+                if (newref != null)
+                    copy.Reference = newref;
+            }
+            
+            return copy;
         }
 
         public override string ToString()
@@ -161,7 +168,7 @@ namespace WolvenKit.CR2W.Types
                 if (Reference == null)
                     return "NULL";
                 else
-                    return Reference.REDType + " #" + (Reference.ChunkIndex);
+                    return $"{Reference.REDType} #{Reference.ChunkIndex}";
             }
 
             return ClassName + ": " + DepotPath;
@@ -174,7 +181,8 @@ namespace WolvenKit.CR2W.Types
                 var editor = new ComboBox();
                 editor.Items.Add(new PtrComboItem { Text = "", Value = null });
 
-                foreach (var chunk in cr2w.chunks)
+                var availableChunks = CR2WManager.GetAvailableTypes(this.ReferenceType);
+                foreach (var chunk in cr2w.chunks.Where(_ => availableChunks.Contains(_.REDType)))
                 {
                     editor.Items.Add(new PtrComboItem
                     {
@@ -193,9 +201,21 @@ namespace WolvenKit.CR2W.Types
                     }
                 };
 
-                var selIndex = Reference == null ? 0 : Reference.ChunkIndex + 1;
-                if (selIndex < editor.Items.Count && selIndex >= 0)
+                // select item
+                if (Reference == null)
+                    editor.SelectedIndex = 0;
+                else
                 {
+                    int selIndex = 0;
+                    for (int i = 0; i < editor.Items.Count; i++)
+                    {
+                        if (editor.Items[i].ToString() == $"{Reference.REDType} #{Reference.ChunkIndex}")
+                        {
+                            selIndex = i;
+                            break;
+                        }
+                    }
+
                     editor.SelectedIndex = selIndex;
                 }
                 return editor;
@@ -205,21 +225,10 @@ namespace WolvenKit.CR2W.Types
                 var editor = new PtrEditor();
                 editor.HandlePath.DataBindings.Add("Text", this, nameof(DepotPath), true, DataSourceUpdateMode.OnPropertyChanged);
                 editor.FileType.DataBindings.Add("Text", this, nameof(ClassName), true, DataSourceUpdateMode.OnPropertyChanged);
-                editor.Flags.DataBindings.Add("Text", this, nameof(Flags), true, DataSourceUpdateMode.OnPropertyChanged);
+                //editor.Flags.DataBindings.Add("Text", this, nameof(Flags), true, DataSourceUpdateMode.OnPropertyChanged);
                 return editor;
             }
         }
         #endregion
-
-        internal class HandleComboItem
-        {
-            public int Value { get; set; }
-            public string Text { get; set; }
-
-            public override string ToString()
-            {
-                return Text;
-            }
-        }
     }
 }

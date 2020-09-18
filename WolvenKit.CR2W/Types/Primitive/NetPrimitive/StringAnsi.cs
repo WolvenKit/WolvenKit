@@ -64,16 +64,16 @@ namespace WolvenKit.CR2W.Types
         {
             return val;
         }
-        public override void SerializeToXml(XmlWriter xw)
-        {
-            DataContractSerializer ser = new DataContractSerializer(this.GetType());
-            using (var ms = new MemoryStream())
-            {
-                ser.WriteStartObject(xw, this);
-                ser.WriteObjectContent(xw, this);
-                xw.WriteElementString("val", this.val.Replace("\x00", ""));
-                ser.WriteEndObject(xw);
-            }
-        }
+        //public override void SerializeToXml(XmlWriter xw)
+        //{
+        //    DataContractSerializer ser = new DataContractSerializer(this.GetType());
+        //    using (var ms = new MemoryStream())
+        //    {
+        //        ser.WriteStartObject(xw, this);
+        //        ser.WriteObjectContent(xw, this);
+        //        xw.WriteElementString("val", this.val.Replace("\x00", ""));
+        //        ser.WriteEndObject(xw);
+        //    }
+        //}
     }
 }

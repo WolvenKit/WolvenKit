@@ -136,6 +136,23 @@ namespace WolvenKit.CR2W.Types
         #endregion
 
         #region Methods
+        /// <summary>
+        /// We can use something like this for hashing
+        /// </summary>
+        /// <returns></returns>
+        public string GetFullDependencyStringName()
+        {
+            var depstr = this.REDName;
+            var par = this.ParentVar;
+            while (par != null)
+            {
+                depstr = $"{par.REDName}.{depstr}";
+                par = par.ParentVar;
+            }
+
+            return depstr;
+        }
+
         public ushort GettypeId() => (ushort)cr2w.GetStringIndex(REDType, true);
 
         public ushort GetnameId() => (ushort)cr2w.GetStringIndex(REDName, true);
@@ -510,24 +527,27 @@ namespace WolvenKit.CR2W.Types
         public virtual CVariable Copy(CR2WCopyAction context)
         {
             // creates a new instance of the CVariable
-            CVariable copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent, false);
+            // with a new destination cr2wFile and a new parent CVariable if needed
+            var copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent, false);
             copy.REDFlags = this.REDFlags;
+            copy.IsSerialized = this.IsSerialized;
+
+            // don't try to set children with reflection, it aint gonna work
+            if (this is IArrayAccessor)
+                return copy;
 
             // copy all REDProperties and REDBuffers
-            foreach (IEditableVariable item in GetEditableVariables())
+            foreach (var item in GetEditableVariables())
             {
-                if (item is CVariable cvar)
+                if (!(item is CVariable cvar)) continue;
+                var innercontext = new CR2WCopyAction()
                 {
-                    var innercontext = new CR2WCopyAction()
-                    {
-                        DestinationFile = context.DestinationFile,
-                        Parent = item.ParentVar as CVariable
-                    };
-                    copy.TrySettingFastMemberAccessor(cvar.Copy(innercontext));
-                }
+                    DestinationFile = copy.cr2w,
+                    Parent = copy
+                };
+                copy.TrySettingFastMemberAccessor(cvar.Copy(innercontext));
             }
 
-            copy.IsSerialized = this.IsSerialized;
             return copy;
         }
 
@@ -613,25 +633,25 @@ namespace WolvenKit.CR2W.Types
         }
         */
 
-        public virtual void SerializeToXml(XmlWriter xw)
-        {
-            DataContractSerializer ser = new DataContractSerializer(this.GetType());
-            using (var ms = new MemoryStream())
-            {
-                ser.WriteStartObject(xw, this);
-                ser.WriteObjectContent(xw, this);
+        //public virtual void SerializeToXml(XmlWriter xw)
+        //{
+        //    DataContractSerializer ser = new DataContractSerializer(this.GetType());
+        //    using (var ms = new MemoryStream())
+        //    {
+        //        ser.WriteStartObject(xw, this);
+        //        ser.WriteObjectContent(xw, this);
 
 
-                if (GetEditableVariables() != null)
-                {
-                    foreach (var v in GetEditableVariables())
-                    {
-                        v.SerializeToXml(xw);
-                    }
-                }
-                ser.WriteEndObject(xw);
-            }
-        }
+        //        if (GetEditableVariables() != null)
+        //        {
+        //            foreach (var v in GetEditableVariables())
+        //            {
+        //                v.SerializeToXml(xw);
+        //            }
+        //        }
+        //        ser.WriteEndObject(xw);
+        //    }
+        //}
         /// <summary>
         /// Transfers bytes array to hex string like 0x00AADD..., TODO: build reverse function
         /// </summary>

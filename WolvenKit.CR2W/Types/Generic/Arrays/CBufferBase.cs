@@ -158,7 +158,7 @@ namespace WolvenKit.CR2W.Types
 
             foreach (var element in elements)
             {
-                var ccopy = element.Copy(context);
+                var ccopy = element.Copy(new CR2WCopyAction() { DestinationFile = context.DestinationFile, Parent = copy });
                 if (ccopy is T copye)
                     copy.elements.Add(copye);
             }

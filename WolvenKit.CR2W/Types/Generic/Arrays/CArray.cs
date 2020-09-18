@@ -18,6 +18,8 @@ namespace WolvenKit.CR2W.Types
         List<int> Flags { get; set; }
 
         string Elementtype { get; set; }
+
+        int Count { get; }
     }
 
     public interface IArrayAccessor<T> : IArrayAccessor

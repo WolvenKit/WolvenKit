@@ -25,8 +25,38 @@ namespace WolvenKit.CR2W
         private static Assembly m_assembly;
         private static LoggerService m_logger;
         private static DirectoryInfo m_projectinfo;
-        private static Dictionary<String, Type> m_types;
+        private static Dictionary<string, Type> m_types;
 
+        public static List<string> GetAvailableTypes(string innerParentType)
+        {
+            List<string> availableTypes = new List<string>();
+
+            if (AssemblyDictionary.TypeExists(innerParentType))
+            {
+                availableTypes.AddRange(AssemblyDictionary
+                    .GetSubClassesOf(AssemblyDictionary.GetTypeByName(innerParentType)).Select(_ => _.Name));
+            }
+            else
+            {
+                if (CR2WManager.TypeExists(innerParentType))
+                {
+                    availableTypes.AddRange(CR2WManager
+                        .GetSubClassesOf(AssemblyDictionary.GetTypeByName(innerParentType)).Select(_ => _.Name)
+                        .ToList());
+                }
+                else
+                {
+                    //MainController.LogString(
+                    //    "No such type exists. Make sure you have all custom types in a .ws file inside the modproject.",
+                    //    Logtype.Error);
+                    return null;
+                }
+            }
+
+            return availableTypes;
+        }
+
+        public static List<Type> GetSubClassesOf(Type type) => m_types.Values.Where(_ => _.IsSubclassOf(type)).ToList();
 
         public static Type GetTypeByName(string typeName)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -9,6 +10,7 @@ using Dfust.Hotkeys;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
 using WolvenKit.App.Model;
+using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
@@ -51,6 +53,10 @@ namespace WolvenKit.Forms
             hotkeys = new HotkeyCollection(Dfust.Hotkeys.Enums.Scope.Application);
             hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
             hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
+            hotkeys.RegisterHotkey(Keys.Oemplus, AddListElement, "Add Element");
+            hotkeys.RegisterHotkey(Keys.Add, AddListElement, "Add Element");
+            hotkeys.RegisterHotkey(Keys.OemMinus, RemoveListElement, "Add Element");
+            hotkeys.RegisterHotkey(Keys.Subtract, RemoveListElement, "Add Element");
         }
 
         #region Properties
@@ -185,52 +191,123 @@ namespace WolvenKit.Forms
 
         private void addVariableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var carray = (IEditableVariable) treeView.SelectedObject;
+            AddListElement(null);
+        }
+
+        private void AddListElement(HotKeyEventArgs e)
+        {
+            var carray = (IEditableVariable)treeView.SelectedObject;
             if (carray == null || !carray.CanAddVariable(null) || !(carray is IArrayAccessor parentarray))
                 return;
 
             // Create new CVariable
             CVariable newvar = CR2WTypeManager.Create(parentarray.Elementtype, "", Chunk.cr2w, carray as CVariable, false);
-            if (newvar == null)
-                return;
-
-            // if a new ptr is created, auto-add new chunks
-            if (newvar is IPtrAccessor ptr)
+            switch (newvar)
             {
-                string newChunktype = "";
-                string innerParentType = parentarray.Elementtype.Substring("ptr:".Length);
-                if (!AssemblyDictionary.TypeExists(innerParentType))
-                    throw new NotImplementedException();
-
-                List<string> availableTypes = AssemblyDictionary
-                    .GetSubClassesOf(AssemblyDictionary.GetTypeByName(innerParentType)).Select(_ => _.Name).ToList();
-                using (var form = new frmAddChunk(availableTypes))
-                {
-                    var result = form.ShowDialog();
-                    if (result == DialogResult.OK)
-                    {
-                        newChunktype = form.ChunkType;
-                    }
-                }
-
-                if (string.IsNullOrEmpty(newChunktype))
+                case null:
                     return;
+                // if a new ptr is created, auto-add new chunks
+                case IPtrAccessor ptr:
+                {
+                    string newChunktype = "";
+                    string innerParentType = parentarray.Elementtype.Substring("ptr:".Length);
 
-                ptr.IsSerialized = true;
-                ptr.Reference = newvar.cr2w.CreateChunk(newChunktype, Chunk);
+                    List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType);
+                    if (availableTypes.Count <= 0)
+                        return;
+                
+                    using (var form = new frmAddChunk(availableTypes))
+                    {
+                        var result = form.ShowDialog();
+                        if (result == DialogResult.OK)
+                        {
+                            newChunktype = form.ChunkType;
+                        }
+                    }
+
+                    if (string.IsNullOrEmpty(newChunktype))
+                        return;
+
+                    ptr.Reference = newvar.cr2w.CreateChunk(newChunktype, Chunk);
+                    break;
+                }
+                case IHandleAccessor handle:
+                {
+                    bool isChunkHandle = true;
+                    // check if handle is supposed to be a chunkhandle
+                    if (parentarray.Count > 0)
+                    {
+                        if (parentarray is IList il && il[0] is IHandleAccessor ih)
+                        {
+                            isChunkHandle = ih.ChunkHandle;
+                        }
+                    }
+                    else
+                    {
+                        // ask the user?
+                        switch (MessageBox.Show(
+                            "Please select Yes if this a CHandle to an existing chunk, or No if it is a CHandle to an external source.",
+                            "New CHandle",
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                        {
+                            case DialogResult.No:
+                            {
+                                isChunkHandle = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    // it is a chunk handle, so create a new chunk
+                    if (isChunkHandle)
+                    {
+                        string newhandletype = "";
+                        string innerParentType = parentarray.Elementtype.Substring("handle:".Length);
+
+                        List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType);
+                        if (availableTypes.Count <= 0)
+                            return;
+
+                        using (var form = new frmAddChunk(availableTypes))
+                        {
+                            var result = form.ShowDialog();
+                            if (result == DialogResult.OK)
+                            {
+                                newhandletype = form.ChunkType;
+                            }
+                        }
+
+                        if (string.IsNullOrEmpty(newhandletype))
+                            return;
+
+                        handle.ChunkHandle = true;
+                        handle.Reference = newvar.cr2w.CreateChunk(newhandletype, Chunk);
+                    }
+                    
+                    break;
+                }
             }
+
+            newvar.IsSerialized = true;
 
             parentarray.AddVariable(newvar);
             treeView.RefreshObject(carray);
-            OnRequestUpdate?.Invoke(sender, e);
+            OnRequestUpdate?.Invoke(null, null);
         }
 
+        
+
         private void removeVariableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RemoveListElement(null);
+        }
+
+        private void RemoveListElement(HotKeyEventArgs e)
         {
             // removing variables from arrays
             if (treeView.SelectedObjects.Count <= 0)
                 return;
-            
+
             var parentmodel = treeView.SelectedObjects.Cast<IEditableVariable>().FirstOrDefault()?.ParentVar;
             foreach (IEditableVariable node in treeView.SelectedObjects)
             {
@@ -244,10 +321,10 @@ namespace WolvenKit.Forms
 
                 node.ParentVar.RemoveVariable(node);
                 //treeView.RefreshObject(node.ParentVar);
-                
+
             }
             treeView.RefreshObject(parentmodel);
-            OnRequestUpdate?.Invoke(sender, e);
+            OnRequestUpdate?.Invoke(null, null);
         }
 
         private void clearVariableToolStripMenuItem_Click(object sender, EventArgs e)
@@ -408,13 +485,21 @@ namespace WolvenKit.Forms
                 //if (!showOnlySerialized)
                 {
                     int themeID = (int)UIController.Get().Configuration.ColorTheme;
-                    Color forecolor = Color.FromArgb(UIController.Get().Configuration.CustomHighlightColor[themeID]);
+                    var forecolor = Color.FromArgb(UIController.Get().Configuration.CustomHighlightColor[themeID]);
                     e.Item.ForeColor = forecolor;
                 }
             }
             else
             {
                 
+            }
+
+            // check for errors
+            // do this here until we have a proper error log 
+            if ((model is IPtrAccessor ptr && ptr.Reference == null) 
+                || (model is IHandleAccessor handle && handle.ChunkHandle && handle.Reference == null))
+            {
+                e.Item.ForeColor = Color.Red;
             }
         }
 

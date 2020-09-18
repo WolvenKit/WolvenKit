@@ -24,19 +24,28 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            file.Write((uint) Bytes.Length + 4);
-            file.Write(Bytes);
+            if (Bytes != null && Bytes.Length != 0)
+            {
+                file.Write((uint)Bytes.Length + 4);
+                file.Write(Bytes);
+            }
+            else
+            {
+
+            }
+            
         }
 
         public override CVariable SetValue(object val)
         {
-            if (val is byte[])
+            switch (val)
             {
-                Bytes = (byte[]) val;
-            }
-            else if (val is CByteArray2 cvar)
-            {
-                this.Bytes = cvar.Bytes;
+                case byte[] bytes:
+                    Bytes = bytes;
+                    break;
+                case CByteArray2 cvar:
+                    this.Bytes = cvar.Bytes;
+                    break;
             }
 
             return this;
@@ -49,11 +58,15 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CByteArray2) base.Copy(context);
+            var copy = (CByteArray2) base.Copy(context);
+
+            if (Bytes == null) return copy;
+
             var newbytes = new byte[Bytes.Length];
             Bytes.CopyTo(newbytes, 0);
-            var.Bytes = newbytes;
-            return var;
+            copy.Bytes = newbytes;
+
+            return copy;
         }
 
         public override Control GetEditor()
@@ -67,21 +80,21 @@ namespace WolvenKit.CR2W.Types
         {
             return Bytes.Length + " bytes";
         }
-        public override void SerializeToXml(XmlWriter xw)
-        {
-            DataContractSerializer ser = new DataContractSerializer(this.GetType());
-            using (var ms = new MemoryStream())
-            {
-                ser.WriteStartObject(xw, this);
-                ser.WriteObjectContent(xw, this);
-                xw.WriteElementString("Length", Bytes.Length.ToString());
-                if (Bytes.Length > 0)
-                {
-                    xw.WriteElementString("Bytes", HexStr(Bytes));
-                }
-                ser.WriteEndObject(xw);
-            }
-        }
+        //public override void SerializeToXml(XmlWriter xw)
+        //{
+        //    DataContractSerializer ser = new DataContractSerializer(this.GetType());
+        //    using (var ms = new MemoryStream())
+        //    {
+        //        ser.WriteStartObject(xw, this);
+        //        ser.WriteObjectContent(xw, this);
+        //        xw.WriteElementString("Length", Bytes.Length.ToString());
+        //        if (Bytes.Length > 0)
+        //        {
+        //            xw.WriteElementString("Bytes", HexStr(Bytes));
+        //        }
+        //        ser.WriteEndObject(xw);
+        //    }
+        //}
 
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -19,7 +18,7 @@ namespace WolvenKit.CR2W.Types
     /// <summary>
     /// A pointer to a chunk within the same cr2w file.
     /// </summary>
-    [REDMeta()]
+    [REDMeta]
     public class CPtr<T> : CVariable, IPtrAccessor where T : CVariable
     {
        
@@ -37,17 +36,17 @@ namespace WolvenKit.CR2W.Types
         #region Methods
         public string GetPtrTargetType()
         {
-            try
-            {
-                if (Reference == null)
-                    return "NULL";
-                else
-                    return Reference.REDType;
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidPtrException(ex.Message);
-            }
+            return ReferenceType;
+            //try
+            //{
+            //    if (Reference == null)
+            //        return "NULL";
+            //    return Reference.REDType;
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new InvalidPtrException(ex.Message);
+            //}
         }
 
         /// <summary>
@@ -61,7 +60,7 @@ namespace WolvenKit.CR2W.Types
             SetValueInternal(file.ReadInt32());
         }
 
-        public void SetValueInternal(int val)
+        private void SetValueInternal(int val)
         {
             try
             {
@@ -71,28 +70,26 @@ namespace WolvenKit.CR2W.Types
             {
                 throw new InvalidPtrException(ex.Message);
             }
+
             // Try reparenting on virtual mountpoint
             if (Reference != null)
             {
-                Reference.Referrers.Add(this as CVariable); //Populate the reverse-lookup
+                Reference.Referrers.Add(this); //Populate the reverse-lookup
 
                 if (!Reference.IsVirtuallyMounted)
                 {
                     Reference.VirtualParentChunkIndex = GetVarChunkIndex();
                 }
-                else if (REDName == "parent" && !cr2w.chunks[GetVarChunkIndex()].IsVirtuallyMounted)
+                else switch (REDName)
                 {
-                    cr2w.chunks[GetVarChunkIndex()].VirtualParentChunkIndex = Reference.ChunkIndex;
-                }
-                else if (REDName == "child" && Reference.IsVirtuallyMounted)
-                {
-                    //remount, needed for chardattachment
-                    Reference.IsVirtuallyMounted = false;
-                    Reference.VirtualParentChunkIndex = GetVarChunkIndex();
-                }
-                else
-                {
-                    //var bozzo = "bozzo";
+                    case "parent" when !cr2w.chunks[GetVarChunkIndex()].IsVirtuallyMounted:
+                        cr2w.chunks[GetVarChunkIndex()].VirtualParentChunkIndex = Reference.ChunkIndex;
+                        break;
+                    case "child" when Reference.IsVirtuallyMounted:
+                        //remount, needed for chardattachment
+                        Reference.IsVirtuallyMounted = false;
+                        Reference.VirtualParentChunkIndex = GetVarChunkIndex();
+                        break;
                 }
             }
         }
@@ -108,30 +105,32 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is CR2WExportWrapper)
+            switch (val)
             {
-                this.Reference = (CR2WExportWrapper) val;
+                case CR2WExportWrapper wrapper:
+                    Reference = wrapper;
+                    break;
+                case IPtrAccessor cval:
+                    Reference = cval.Reference;
+                    break;
             }
-            if (val is IPtrAccessor cval)
-                this.Reference = cval.Reference;
 
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CPtr<T>(cr2w, parent, name);
-        }
-
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var copy = (IPtrAccessor)base.Copy(context);
+            var copy = (CPtr<T>)base.Copy(context);
+
+            if (Reference != null)
+            {
+                CR2WExportWrapper newref = context.DestinationFile.TryLookupReference(copy, Reference);
+                if (newref != null)
+                    copy.SetValue(newref);
+            }
             
-            context.ptrs.Add(copy);
 
-            copy.Reference = this.Reference ?? this.Reference.CopyChunk(context);
-
-            return copy as CVariable;
+            return copy;
         }
 
         public override Control GetEditor()
@@ -139,12 +138,14 @@ namespace WolvenKit.CR2W.Types
             var editor = new ComboBox();
             editor.Items.Add(new PtrComboItem {Text = "", Value = null});
 
-            foreach (var chunk in cr2w.chunks)
+            var availableChunks = CR2WManager.GetAvailableTypes(this.ReferenceType);
+            foreach (var chunk in cr2w.chunks.Where(_ => availableChunks.Contains(_.REDType)))
             {
                 editor.Items.Add(new PtrComboItem
                 {
                     Text = $"{chunk.REDType} #{chunk.ChunkIndex}", //real index
                     Value = chunk
+
                 }
                 );
             }
@@ -158,11 +159,24 @@ namespace WolvenKit.CR2W.Types
                 }
             };
 
-            var selIndex = Reference == null ? 0 : Reference.ChunkIndex + 1;
-            if (selIndex < editor.Items.Count && selIndex >= 0)
+            // select item
+            if (Reference == null)
+                editor.SelectedIndex = 0;
+            else
             {
+                int selIndex = 0;
+                for (int i = 0; i < editor.Items.Count; i++)
+                {
+                    if (editor.Items[i].ToString() == $"{Reference.REDType} #{Reference.ChunkIndex}")
+                    {
+                        selIndex = i;
+                        break;
+                    }
+                }
+
                 editor.SelectedIndex = selIndex;
             }
+            
             return editor;
         }
 
@@ -170,22 +184,21 @@ namespace WolvenKit.CR2W.Types
         {
             if (Reference == null)
                 return "NULL";
-            else
-                return Reference.REDType + " #" + (Reference.ChunkIndex);
+            return $"{Reference.REDType} #{Reference.ChunkIndex}";
         }
 
-        public override void SerializeToXml(XmlWriter xw)
-        {
-            DataContractSerializer ser = new DataContractSerializer(this.GetType());
-            using (var ms = new MemoryStream())
-            {
-                ser.WriteStartObject(xw, this);
-                ser.WriteObjectContent(xw, this);
-                xw.WriteElementString("PtrTargetType", this.GetPtrTargetType());
-                xw.WriteElementString("Target", this.ToString());
-                ser.WriteEndObject(xw);
-            }
-        }
+        //public override void SerializeToXml(XmlWriter xw)
+        //{
+        //    DataContractSerializer ser = new DataContractSerializer(GetType());
+        //    using (var ms = new MemoryStream())
+        //    {
+        //        ser.WriteStartObject(xw, this);
+        //        ser.WriteObjectContent(xw, this);
+        //        xw.WriteElementString("PtrTargetType", GetPtrTargetType());
+        //        xw.WriteElementString("Target", ToString());
+        //        ser.WriteEndObject(xw);
+        //    }
+        //}
         #endregion
     }
 

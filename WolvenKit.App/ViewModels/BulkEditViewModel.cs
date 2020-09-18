@@ -344,7 +344,7 @@ namespace WolvenKit.App.ViewModels
                             // check if the user specified a file type
                             if (opts.Type != BulkEditOptions.AvailableTypes.ANY)
                                 if ( proptoedit.GetType().Name != opts.Type.ToString())
-                                return;
+                                    return;
 
                             // check if the user specified a parent
                             if (splits.Length > 1)

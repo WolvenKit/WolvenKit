@@ -35,13 +35,14 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is byte[])
+            switch (val)
             {
-                Bytes = (byte[]) val;
-            }
-            else if (val is CBytes cvar)
-            {
-                this.Bytes = cvar.Bytes;
+                case byte[] bytes:
+                    Bytes = bytes;
+                    break;
+                case CBytes cvar:
+                    this.Bytes = cvar.Bytes;
+                    break;
             }
 
             return this;
@@ -54,11 +55,15 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CBytes) base.Copy(context);
+            var copy = (CBytes) base.Copy(context);
+
+            if (Bytes == null) return copy;
+
             var newbytes = new byte[Bytes.Length];
             Bytes.CopyTo(newbytes, 0);
-            var.Bytes = newbytes;
-            return var;
+            copy.Bytes = newbytes;
+
+            return copy;
         }
 
         public override string ToString()
@@ -71,8 +76,7 @@ namespace WolvenKit.CR2W.Types
 
         public override Control GetEditor()
         {
-            var editor = new ByteArrayEditor();
-            editor.Variable = this;
+            var editor = new ByteArrayEditor {Variable = this};
             return editor;
         }
 
@@ -93,29 +97,31 @@ namespace WolvenKit.CR2W.Types
 
         public override void AddVariable(CVariable var)
         {
-            if (var is CBytes)
+            switch (var)
             {
-                var b = (CBytes) var;
-
-                Bytes = new byte[b.Bytes.Length];
-                Buffer.BlockCopy(b.Bytes, 0, Bytes, 0, b.Bytes.Length);
-            }
-        }
-
-        public override void SerializeToXml(XmlWriter xw)
-        {
-            DataContractSerializer ser = new DataContractSerializer(this.GetType());
-            using (var ms = new MemoryStream())
-            {
-                ser.WriteStartObject(xw, this);
-                ser.WriteObjectContent(xw, this);
-                xw.WriteElementString("Length", Bytes.Length.ToString());
-                if (Bytes.Length > 0)
+                case CBytes b:
                 {
-                    xw.WriteElementString("Bytes", HexStr(Bytes));
+                    Bytes = new byte[b.Bytes.Length];
+                    Buffer.BlockCopy(b.Bytes, 0, Bytes, 0, b.Bytes.Length);
+                    break;
                 }
-                ser.WriteEndObject(xw);
             }
         }
+
+        //public override void SerializeToXml(XmlWriter xw)
+        //{
+        //    DataContractSerializer ser = new DataContractSerializer(this.GetType());
+        //    using (var ms = new MemoryStream())
+        //    {
+        //        ser.WriteStartObject(xw, this);
+        //        ser.WriteObjectContent(xw, this);
+        //        xw.WriteElementString("Length", Bytes.Length.ToString());
+        //        if (Bytes.Length > 0)
+        //        {
+        //            xw.WriteElementString("Bytes", HexStr(Bytes));
+        //        }
+        //        ser.WriteEndObject(xw);
+        //    }
+        //}
     }
 }

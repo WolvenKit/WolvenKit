@@ -8,16 +8,16 @@ namespace WolvenKit.CR2W
 {
     public class CR2WCopyAction
     {
-        internal List<CR2WExportWrapper> chunks;
-        internal Dictionary<int, int> chunkTranslation;
-        internal List<IPtrAccessor> ptrs;
+        //internal List<CR2WExportWrapper> chunks;
+        //internal readonly Dictionary<int, int> chunkTranslation;
+        //internal List<IPtrAccessor> ptrs;
 
-        public CR2WCopyAction()
-        {
-            ptrs = new List<IPtrAccessor>();
-            chunks = new List<CR2WExportWrapper>();
-            chunkTranslation = new Dictionary<int, int>();
-        }
+        //public CR2WCopyAction()
+        //{
+        //    //ptrs = new List<IPtrAccessor>();
+        //    //chunks = new List<CR2WExportWrapper>();
+        //    //chunkTranslation = new Dictionary<int, int>();
+        //}
 
         public CR2WFile DestinationFile { get; set; }
         public CVariable Parent { get; set; }

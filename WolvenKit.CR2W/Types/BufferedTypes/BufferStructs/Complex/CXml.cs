@@ -115,19 +115,19 @@ namespace WolvenKit.CR2W.Types
             return Data.ToString().Length + " chars";
         }
 
-        public override void SerializeToXml(XmlWriter xw)
-        {
-            DataContractSerializer ser = new DataContractSerializer(this.GetType());
-            using (var ms = new MemoryStream())
-            {
-                ser.WriteStartObject(xw, this);
-                ser.WriteObjectContent(xw, this);
-                xw.WriteStartElement("XMLData");
-                Data.Save(xw);
-                xw.WriteEndElement();
-                ser.WriteEndObject(xw);
-            }
+        //public override void SerializeToXml(XmlWriter xw)
+        //{
+        //    DataContractSerializer ser = new DataContractSerializer(this.GetType());
+        //    using (var ms = new MemoryStream())
+        //    {
+        //        ser.WriteStartObject(xw, this);
+        //        ser.WriteObjectContent(xw, this);
+        //        xw.WriteStartElement("XMLData");
+        //        Data.Save(xw);
+        //        xw.WriteEndElement();
+        //        ser.WriteEndObject(xw);
+        //    }
 
-        }
+        //}
     }
 }
