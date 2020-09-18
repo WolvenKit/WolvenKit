@@ -3218,11 +3218,12 @@ namespace WolvenKit
 
             BackgroundWorker bwAsync = sender as BackgroundWorker;
 
+            //Load MemoryMapped Bundles
             var memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
             var bm = new BundleManager();
             bm.LoadAll(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath));
 
-            //Load MemoryMapped Bundles
+ 
             foreach (var b in bm.Bundles.Values)
             {
                 var hash = b.ArchiveAbsolutePath.GetHashMD5();
@@ -3242,9 +3243,9 @@ namespace WolvenKit
             {
                 if (bwAsync.CancellationPending || ProgressForm.Cancel)
                 {
-                    Logger.LogString("Background worker cancelled.\r\n", Logtype.Error);
+                    MainController.LogString("Background worker cancelled.\r\n", Logtype.Error);
                     e.Cancel = true;
-                    //return false;
+                    return;
                 }
 
                 IWitcherFile f = orderedList[i];
@@ -3281,10 +3282,12 @@ namespace WolvenKit
                                 ms.Seek(0, SeekOrigin.Begin);
 
                                 ms.CopyTo(file);
+                                finishedCount++;
                             }
                         }
                         else
                         {
+                            MainController.LogString("tabernak");
                             // do nothing
                         }
                     }
@@ -3302,23 +3305,23 @@ namespace WolvenKit
 
                             ms.CopyTo(file);
                         }
+                        finishedCount++;
                     }
 
-                    foreach (var val in memorymappedbundles.Values)
-                    {
-                        val.Dispose();
-                    }
+
 
                     finished += 1;
                     int percentprogress = (int)((float)finished / (float)count * 100.0);
                     MainBackgroundWorker.ReportProgress(percentprogress, bi.Name);
                 }
             });
-
+            
             foreach(var val in memorymappedbundles.Values)
             {
                 val.Dispose();
             }
+
+            MainController.LogString($"Sucessfully unbundled {finishedCount} files to {MainController.Get().Configuration.DepotPath}", Logtype.Success);
             return true;
 
         }
