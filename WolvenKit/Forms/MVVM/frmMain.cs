@@ -3239,7 +3239,6 @@ namespace WolvenKit
 
             int finishedcount = 0;
             var count = files.Count;
-            int finished = 0;
             Parallel.For(0, count, new ParallelOptions { MaxDegreeOfParallelism = (int)(Environment.ProcessorCount * 0.8) + 1 }, i =>
             {
                 if (bwAsync.CancellationPending || ProgressForm.Cancel)
@@ -3283,7 +3282,7 @@ namespace WolvenKit
                                 ms.Seek(0, SeekOrigin.Begin);
 
                                 ms.CopyTo(file);
-                                finishedcount++;
+                                Interlocked.Increment(ref finishedcount);
                             }
                         }
                         else
@@ -3306,13 +3305,12 @@ namespace WolvenKit
 
                             ms.CopyTo(file);
                         }
-                        finishedcount++;
+                        Interlocked.Increment(ref finishedcount);
                     }
 
 
 
-                    finished += 1;
-                    int percentprogress = (int)((float)finished / (float)count * 100.0);
+                    int percentprogress = (int)((float)finishedcount / (float)count * 100.0);
                     MainBackgroundWorker.ReportProgress(percentprogress, bi.Name);
                 }
             });
