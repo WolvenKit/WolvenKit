@@ -183,7 +183,7 @@ namespace WolvenKit.Forms
             // clearVariableToolStripMenuItem
             // 
             this.clearVariableToolStripMenuItem.Name = "clearVariableToolStripMenuItem";
-            this.clearVariableToolStripMenuItem.ShortcutKeyDisplayString = "Del";
+            this.clearVariableToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             this.clearVariableToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.clearVariableToolStripMenuItem.Text = "Clear Variable";
             this.clearVariableToolStripMenuItem.Click += new System.EventHandler(this.clearVariableToolStripMenuItem_Click);
@@ -197,7 +197,6 @@ namespace WolvenKit.Forms
             // 
             this.addVariableToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Add_16x;
             this.addVariableToolStripMenuItem.Name = "addVariableToolStripMenuItem";
-            this.addVariableToolStripMenuItem.ShortcutKeyDisplayString = "+";
             this.addVariableToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.addVariableToolStripMenuItem.Text = "Add List Element";
             this.addVariableToolStripMenuItem.Click += new System.EventHandler(this.addVariableToolStripMenuItem_Click);
@@ -206,7 +205,6 @@ namespace WolvenKit.Forms
             // 
             this.removeVariableToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Remove_color_16x;
             this.removeVariableToolStripMenuItem.Name = "removeVariableToolStripMenuItem";
-            this.removeVariableToolStripMenuItem.ShortcutKeyDisplayString = "-";
             this.removeVariableToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.removeVariableToolStripMenuItem.Text = "Remove List Element";
             this.removeVariableToolStripMenuItem.Click += new System.EventHandler(this.removeVariableToolStripMenuItem_Click);

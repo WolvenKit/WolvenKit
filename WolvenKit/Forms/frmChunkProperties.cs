@@ -52,15 +52,12 @@ namespace WolvenKit.Forms
                 : "Show edited variables";
 
             hotkeys = new HotkeyCollection(Dfust.Hotkeys.Enums.Scope.Application);
-            //hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
-            //hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
 
             hotkeys.RegisterHotkey(Keys.Oemplus, AddListElement, "Add Element");
             hotkeys.RegisterHotkey(Keys.Add, AddListElement, "Add Element");
 
             hotkeys.RegisterHotkey(Keys.OemMinus, RemoveListElement, "Add Element");
             hotkeys.RegisterHotkey(Keys.Subtract, RemoveListElement, "Add Element");
-            //hotkeys.RegisterHotkey(Keys.Delete, RemoveListElement, "Add Element");
 
             viewModel = _viewmodel;
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -301,10 +298,12 @@ namespace WolvenKit.Forms
                 switch (node)
                 {
                     case IPtrAccessor ptr:
-                        node.cr2w.RemoveChunk(ptr.Reference);
+                        if (ptr.Reference != null)
+                            node.cr2w.RemoveChunk(ptr.Reference);
                         break;
                     case IHandleAccessor hdl when hdl.ChunkHandle:
-                        node.cr2w.RemoveChunk(hdl.Reference);
+                        if (hdl.Reference != null)
+                            node.cr2w.RemoveChunk(hdl.Reference);
                         break;
                 }
 
