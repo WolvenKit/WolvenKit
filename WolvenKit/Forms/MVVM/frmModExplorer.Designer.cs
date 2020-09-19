@@ -93,14 +93,14 @@ namespace WolvenKit
             this.toolStripSeparator4,
             this.showFileInExplorerToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(197, 314);
+            this.contextMenu.Size = new System.Drawing.Size(249, 336);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             this.contextMenu.Opened += new System.EventHandler(this.contextMenu_Opened);
             // 
             // createW2animsToolStripMenuItem
             // 
             this.createW2animsToolStripMenuItem.Name = "createW2animsToolStripMenuItem";
-            this.createW2animsToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.createW2animsToolStripMenuItem.Size = new System.Drawing.Size(248, 26);
             this.createW2animsToolStripMenuItem.Text = "Create w2anims";
             this.createW2animsToolStripMenuItem.Click += new System.EventHandler(this.createW2animsToolStripMenuItem_Click);
             // 
@@ -114,7 +114,7 @@ namespace WolvenKit
             this.exportW3facposejsonToolStripMenuItem,
             this.exportWithWccToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(248, 26);
             this.exportToolStripMenuItem.Text = "Export";
             // 
             // exportW2cutscenejsonToolStripMenuItem
@@ -164,7 +164,7 @@ namespace WolvenKit
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(193, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(245, 6);
             // 
             // dumpFileToolStripMenuItem
             // 
@@ -173,7 +173,7 @@ namespace WolvenKit
             this.fastRenderToolStripMenuItem,
             this.cookToolStripMenuItem});
             this.dumpFileToolStripMenuItem.Name = "dumpFileToolStripMenuItem";
-            this.dumpFileToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.dumpFileToolStripMenuItem.Size = new System.Drawing.Size(248, 26);
             this.dumpFileToolStripMenuItem.Text = "File Actions";
             // 
             // addAllDependenciesToolStripMenuItem
@@ -201,40 +201,51 @@ namespace WolvenKit
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(193, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(245, 6);
             // 
             // removeFileToolStripMenuItem
             // 
+            this.removeFileToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Close_red_16x;
             this.removeFileToolStripMenuItem.Name = "removeFileToolStripMenuItem";
-            this.removeFileToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.removeFileToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.removeFileToolStripMenuItem.Size = new System.Drawing.Size(248, 26);
             this.removeFileToolStripMenuItem.Text = "Delete";
             this.removeFileToolStripMenuItem.Click += new System.EventHandler(this.removeFileToolStripMenuItem_Click);
             // 
             // renameToolStripMenuItem
             // 
+            this.renameToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Rename_16x;
             this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
-            this.renameToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.renameToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
+            this.renameToolStripMenuItem.Size = new System.Drawing.Size(248, 26);
             this.renameToolStripMenuItem.Text = "Rename";
             this.renameToolStripMenuItem.Click += new System.EventHandler(this.renameToolStripMenuItem_Click);
             // 
             // copyToolStripMenuItem
             // 
+            this.copyToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Copy_16x;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.copyToolStripMenuItem.ShortcutKeyDisplayString = "";
+            this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(248, 26);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // pasteToolStripMenuItem
             // 
+            this.pasteToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Paste_16x;
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(248, 26);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
             // copyRelativePathToolStripMenuItem
             // 
             this.copyRelativePathToolStripMenuItem.Name = "copyRelativePathToolStripMenuItem";
-            this.copyRelativePathToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.copyRelativePathToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.C)));
+            this.copyRelativePathToolStripMenuItem.Size = new System.Drawing.Size(248, 26);
             this.copyRelativePathToolStripMenuItem.Text = "Copy relative path";
             this.copyRelativePathToolStripMenuItem.Click += new System.EventHandler(this.copyRelativePathToolStripMenuItem_Click);
             // 
@@ -242,32 +253,35 @@ namespace WolvenKit
             // 
             this.markAsModDlcFileToolStripMenuItem.Enabled = false;
             this.markAsModDlcFileToolStripMenuItem.Name = "markAsModDlcFileToolStripMenuItem";
-            this.markAsModDlcFileToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.markAsModDlcFileToolStripMenuItem.Size = new System.Drawing.Size(248, 26);
             this.markAsModDlcFileToolStripMenuItem.Text = "Mark as [Mod/Dlc] file";
             this.markAsModDlcFileToolStripMenuItem.Click += new System.EventHandler(this.markAsModDlcFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(193, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(245, 6);
             // 
             // assetBrowserToolStripMenuItem
             // 
             this.assetBrowserToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.AddNodefromFile_354;
             this.assetBrowserToolStripMenuItem.Name = "assetBrowserToolStripMenuItem";
-            this.assetBrowserToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.assetBrowserToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11;
+            this.assetBrowserToolStripMenuItem.Size = new System.Drawing.Size(248, 26);
             this.assetBrowserToolStripMenuItem.Text = "Asset Browser here";
             this.assetBrowserToolStripMenuItem.Click += new System.EventHandler(this.openAssetBrowserToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(193, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(245, 6);
             // 
             // showFileInExplorerToolStripMenuItem
             // 
+            this.showFileInExplorerToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Open_16x;
             this.showFileInExplorerToolStripMenuItem.Name = "showFileInExplorerToolStripMenuItem";
-            this.showFileInExplorerToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.showFileInExplorerToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
+            this.showFileInExplorerToolStripMenuItem.Size = new System.Drawing.Size(248, 26);
             this.showFileInExplorerToolStripMenuItem.Text = "Show file in explorer";
             this.showFileInExplorerToolStripMenuItem.Click += new System.EventHandler(this.showFileInExplorerToolStripMenuItem_Click);
             // 
@@ -285,7 +299,7 @@ namespace WolvenKit
             this.searchstrip.Location = new System.Drawing.Point(0, 0);
             this.searchstrip.Name = "searchstrip";
             this.searchstrip.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.searchstrip.Size = new System.Drawing.Size(215, 33);
+            this.searchstrip.Size = new System.Drawing.Size(373, 33);
             this.searchstrip.TabIndex = 1;
             this.searchstrip.Text = "toolStrip1";
             // 
@@ -342,7 +356,7 @@ namespace WolvenKit
             // resetfilesButton
             // 
             this.resetfilesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.resetfilesButton.Image = global::WolvenKit.Properties.Resources.ExitIcon;
+            this.resetfilesButton.Image = global::WolvenKit.Properties.Resources.Close_red_16x;
             this.resetfilesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.resetfilesButton.Name = "resetfilesButton";
             this.resetfilesButton.Size = new System.Drawing.Size(24, 24);
@@ -363,7 +377,7 @@ namespace WolvenKit
             this.treeListView.Margin = new System.Windows.Forms.Padding(2);
             this.treeListView.Name = "treeListView";
             this.treeListView.ShowGroups = false;
-            this.treeListView.Size = new System.Drawing.Size(215, 209);
+            this.treeListView.Size = new System.Drawing.Size(373, 527);
             this.treeListView.TabIndex = 2;
             this.treeListView.UseCompatibleStateImageBehavior = false;
             this.treeListView.UseFiltering = true;
@@ -384,7 +398,7 @@ namespace WolvenKit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(215, 242);
+            this.ClientSize = new System.Drawing.Size(373, 560);
             this.Controls.Add(this.treeListView);
             this.Controls.Add(this.searchstrip);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 

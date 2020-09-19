@@ -128,8 +128,12 @@ namespace WolvenKit.CR2W
         {
             var r = chunk.Referrers;
 
-            
-            return chunks.Remove(chunk);
+            int idx = chunks.IndexOf(chunk);
+            chunks.RemoveAt(idx);
+
+            OnPropertyChanged(nameof(chunks));
+
+            return true;
         }
 
         /// <summary>

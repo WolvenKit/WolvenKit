@@ -233,6 +233,9 @@ namespace WolvenKit.Forms
 
         #endregion
 
+        private void ExpandBTN_Click(object sender, EventArgs e) => treeListView.ExpandAll();
+
+        private void CollapseBTN_Click(object sender, EventArgs e) => treeListView.CollapseAll();
     }
 }
  

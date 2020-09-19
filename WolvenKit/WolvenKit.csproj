@@ -1010,10 +1010,17 @@
     <Content Include="Resources\Pictures\wkit_splash.png" />
     <Content Include="Resources\Pictures\wkit_splash2.png" />
     <Content Include="Resources\Pictures\WK_Logo2_32.png" />
+    <Content Include="Resources\VisualStudio\Add_16x.png" />
+    <Content Include="Resources\VisualStudio\Close_red_16x.png" />
     <Content Include="Resources\VisualStudio\Compliant_16x.png" />
+    <Content Include="Resources\VisualStudio\Copy_16x.png" />
     <Content Include="Resources\VisualStudio\Filter_16x.png" />
     <Content Include="Resources\VisualStudio\FindInFile_16x.png" />
     <Content Include="Resources\VisualStudio\MailOpen_16x.png" />
+    <Content Include="Resources\VisualStudio\Open_16x.png" />
+    <Content Include="Resources\VisualStudio\Paste_16x.png" />
+    <Content Include="Resources\VisualStudio\Remove_color_16x.png" />
+    <Content Include="Resources\VisualStudio\Rename_16x.png" />
     <Content Include="Resources\VisualStudio\StatusHelp_16x.png" />
     <Content Include="Resources\VisualStudio\StatusHelp_grey_disabled_16x.png" />
     <Content Include="Resources\VisualStudio\StatusInformation_exp_16x.png" />

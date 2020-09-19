@@ -24,6 +24,7 @@ namespace WolvenKit
     using Common.Model;
     using CR2W;
     using Render;
+    using Dfust.Hotkeys;
 
     public partial class frmModExplorer : DockContent, IThemedContent
     {
@@ -78,6 +79,7 @@ namespace WolvenKit
         #endregion
 
 
+
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(vm.treenodes)) return;
@@ -90,7 +92,7 @@ namespace WolvenKit
             
         }
 
-        
+
 
         #region Methods
         public void ApplyCustomTheme()
@@ -266,18 +268,17 @@ namespace WolvenKit
         }
         private void modFileList_KeyDown(object sender, KeyEventArgs e)
         {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
-            {
-                if (e.KeyCode == Keys.F2)
-                {
-                    RequestFileRename?.Invoke(this, new RequestFileOpenArgs { File = selectedobject.FullName });
-                }
-                else if (e.KeyCode == Keys.Back)
-                {
-                    RequestDelete();
-                }
-
-            }
+            //if (treeListView.SelectedObject is FileSystemInfo selectedobject)
+            //{
+            //    if (e.KeyCode == Keys.F2)
+            //    {
+            //        RequestFileRename?.Invoke(this, new RequestFileOpenArgs { File = selectedobject.FullName });
+            //    }
+            //    else if (e.KeyCode == Keys.Delete)
+            //    {
+            //        RequestDelete();
+            //    }
+            //}
             
         }
 
@@ -367,12 +368,10 @@ namespace WolvenKit
                         || selectedobject.FullName == ActiveMod.DlcDirectory
                         || selectedobject.FullName == ActiveMod.RawDirectory
                         || selectedobject.FullName == ActiveMod.RadishDirectory
-                        //|| selectedobject.FullName == ActiveMod.ModTextureCacheDirectory
                         || selectedobject.FullName == ActiveMod.ModUncookedDirectory
                         || selectedobject.FullName == ActiveMod.ModCookedDirectory
                         || selectedobject.FullName == ActiveMod.DlcCookedDirectory
                         || selectedobject.FullName == ActiveMod.DlcUncookedDirectory
-                        //|| selectedobject.FullName == ActiveMod.DlcTextureCacheDirectory
                         ;
 
                 createW2animsToolStripMenuItem.Enabled = !isToplevelDir;

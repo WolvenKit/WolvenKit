@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Windows.Input;
 using WolvenKit.App.Commands;
@@ -89,6 +90,19 @@ namespace WolvenKit.App.ViewModels
         }
         #endregion
         #endregion
+
+        // Propagate changed event from cr2wfile
+        private void File_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (File is CR2WFile cr2w)
+            {
+                if (e.PropertyName == nameof(cr2w.chunks))
+                {
+                    OnPropertyChanged(nameof(File));
+                }
+            }
+            
+        }
 
         #region Commands
         public ICommand CopyVariableCommand { get; }
@@ -246,11 +260,15 @@ namespace WolvenKit.App.ViewModels
                     };
                     errorcode = File.Read(reader);
                     OnPropertyChanged(nameof(File));
+
+                    File.PropertyChanged += File_PropertyChanged;
                 }
             }
 
             return errorcode;
         }
+
+        
         #endregion
 
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace WolvenKit.Common.Model
     /// <summary>
     /// Normally the interface for CR2W files
     /// </summary>
-    public interface IWolvenkitFile
+    public interface IWolvenkitFile : INotifyPropertyChanged
     {
         string Cr2wFileName { get; set; }
 

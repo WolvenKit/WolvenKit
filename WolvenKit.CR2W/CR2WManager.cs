@@ -33,6 +33,7 @@ namespace WolvenKit.CR2W
 
             if (AssemblyDictionary.TypeExists(innerParentType))
             {
+                availableTypes.Add(innerParentType);
                 availableTypes.AddRange(AssemblyDictionary
                     .GetSubClassesOf(AssemblyDictionary.GetTypeByName(innerParentType)).Select(_ => _.Name));
             }
@@ -40,6 +41,7 @@ namespace WolvenKit.CR2W
             {
                 if (CR2WManager.TypeExists(innerParentType))
                 {
+                    availableTypes.Add(innerParentType);
                     availableTypes.AddRange(CR2WManager
                         .GetSubClassesOf(AssemblyDictionary.GetTypeByName(innerParentType)).Select(_ => _.Name)
                         .ToList());

@@ -52,12 +52,15 @@ namespace WolvenKit.Forms
                 : "Show edited variables";
 
             hotkeys = new HotkeyCollection(Dfust.Hotkeys.Enums.Scope.Application);
-            hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
-            hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
+            //hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
+            //hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
+
             hotkeys.RegisterHotkey(Keys.Oemplus, AddListElement, "Add Element");
             hotkeys.RegisterHotkey(Keys.Add, AddListElement, "Add Element");
+
             hotkeys.RegisterHotkey(Keys.OemMinus, RemoveListElement, "Add Element");
             hotkeys.RegisterHotkey(Keys.Subtract, RemoveListElement, "Add Element");
+            //hotkeys.RegisterHotkey(Keys.Delete, RemoveListElement, "Add Element");
 
             viewModel = _viewmodel;
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -77,19 +80,19 @@ namespace WolvenKit.Forms
 
         #region Hotkeys
 
-        private void HKCopy(HotKeyEventArgs e)
-        {
-            if (GetSelectedObjects().Count > 0)
-                CopyController.Source = GetSelectedObjects().First();
-            //viewModel.CopyVariableCommand.SafeExecute();
-        }
+        //private void HKCopy(HotKeyEventArgs e)
+        //{
+        //    if (GetSelectedObjects().Count > 0)
+        //        CopyController.Source = GetSelectedObjects().First();
+        //    //viewModel.CopyVariableCommand.SafeExecute();
+        //}
 
-        private void HKPaste(HotKeyEventArgs e)
-        {
-            if (GetSelectedObjects().Count > 0)
-                CopyController.Target = GetSelectedObjects().First();
-            viewModel.PasteVariableCommand.SafeExecute();
-        }
+        //private void HKPaste(HotKeyEventArgs e)
+        //{
+        //    if (GetSelectedObjects().Count > 0)
+        //        CopyController.Target = GetSelectedObjects().First();
+        //    viewModel.PasteVariableCommand.SafeExecute();
+        //}
 
         #endregion
 
@@ -295,10 +298,14 @@ namespace WolvenKit.Forms
             {
                 if (node?.ParentVar == null || !node.ParentVar.CanRemoveVariable(node)) continue;
 
-                // if ptrs are removed, delete chunk as well
-                if (node is IPtrAccessor ptr)
+                switch (node)
                 {
-                    node.cr2w.RemoveChunk(ptr.Reference);
+                    case IPtrAccessor ptr:
+                        node.cr2w.RemoveChunk(ptr.Reference);
+                        break;
+                    case IHandleAccessor hdl when hdl.ChunkHandle:
+                        node.cr2w.RemoveChunk(hdl.Reference);
+                        break;
                 }
 
                 node.ParentVar.RemoveVariable(node);
@@ -306,7 +313,7 @@ namespace WolvenKit.Forms
 
             }
             treeView.RefreshObject(parentmodel);
-            OnRequestUpdate?.Invoke(null, null);
+            //OnRequestUpdate?.Invoke(null, null);
         }
 
 
@@ -521,5 +528,8 @@ namespace WolvenKit.Forms
 
         #endregion
 
+        private void ExpandBTN_Click(object sender, EventArgs e) => treeView.ExpandAll();
+
+        private void CollapseBTN_Click(object sender, EventArgs e) => treeView.CollapseAll();
     }
 }
