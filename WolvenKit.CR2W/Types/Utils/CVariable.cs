@@ -9,12 +9,10 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Schema;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
 using WolvenKit.Utils;
 
@@ -37,6 +35,7 @@ namespace WolvenKit.CR2W.Types
 
         #region Fields
         public TypeAccessor accessor;
+        public event EventHandler<FileSavedEventArgs> OnNewChunkRequested;
         #endregion
 
         #region Properties
@@ -584,15 +583,6 @@ namespace WolvenKit.CR2W.Types
         public virtual bool RemoveVariable(IEditableVariable child)
         {
             return false;
-        }
-
-
-
-
-
-        public virtual Control GetEditor()
-        {
-            return null;
         }
         #endregion
 

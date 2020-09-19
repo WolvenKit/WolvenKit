@@ -141,7 +141,9 @@
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\FileSystemInfoExtensions.cs" />
     <Compile Include="Model\Arguments\BundleFileExtractArgs.cs" />
+    <Compile Include="Model\Arguments\FileSavedEventArgs.cs" />
     <Compile Include="Model\Arguments\RequestFileOpenArgs.cs" />
+    <Compile Include="Model\IByteSource.cs" />
     <Compile Include="Model\IWolvenkitFile.cs" />
     <Compile Include="Tools\AlphanumComparator.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />

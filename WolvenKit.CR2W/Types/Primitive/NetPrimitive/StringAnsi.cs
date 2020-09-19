@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Windows.Forms;
 using System.Xml;
 using WolvenKit.CR2W.Reflection;
 
@@ -53,12 +52,7 @@ namespace WolvenKit.CR2W.Types
             return var;
         }
 
-        public override Control GetEditor()
-        {
-            var editor = new TextBox();
-            editor.DataBindings.Add("Text", this, "val");
-            return editor;
-        }
+        
 
         public override string ToString()
         {

@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
-using WolvenKit.CR2W.Editors;
 using System.Linq;
 using WolvenKit.CR2W.Reflection;
 using System.Runtime.InteropServices;
@@ -11,16 +9,6 @@ using System.Collections.Generic;
 
 namespace WolvenKit.CR2W.Types
 {
-    public interface IHandleAccessor : IEditableVariable
-    {
-        bool ChunkHandle { get; set; }
-        string DepotPath { get; set; }
-        string ClassName { get; set; }
-        ushort Flags { get; set; }
-
-        CR2WExportWrapper Reference { get; set; }
-    }
-
     /// <summary>
     /// Handles are Int32 that store 
     /// if > 0: a reference to a chunk inside the cr2w file (aka Soft)
@@ -174,61 +162,6 @@ namespace WolvenKit.CR2W.Types
             return ClassName + ": " + DepotPath;
         }
 
-        public override Control GetEditor()
-        {
-            if (ChunkHandle)
-            {
-                var editor = new ComboBox();
-                editor.Items.Add(new PtrComboItem { Text = "", Value = null });
-
-                var availableChunks = CR2WManager.GetAvailableTypes(this.ReferenceType);
-                foreach (var chunk in cr2w.chunks.Where(_ => availableChunks.Contains(_.REDType)))
-                {
-                    editor.Items.Add(new PtrComboItem
-                    {
-                        Text = $"{chunk.REDType} #{chunk.ChunkIndex}", //real index
-                        Value = chunk
-                    }
-                    );
-                }
-
-                editor.SelectedIndexChanged += delegate (object sender, EventArgs e)
-                {
-                    var ptrcomboitem = (PtrComboItem)((ComboBox)sender).SelectedItem;
-                    if (ptrcomboitem != null)
-                    {
-                        Reference = ptrcomboitem.Value;
-                    }
-                };
-
-                // select item
-                if (Reference == null)
-                    editor.SelectedIndex = 0;
-                else
-                {
-                    int selIndex = 0;
-                    for (int i = 0; i < editor.Items.Count; i++)
-                    {
-                        if (editor.Items[i].ToString() == $"{Reference.REDType} #{Reference.ChunkIndex}")
-                        {
-                            selIndex = i;
-                            break;
-                        }
-                    }
-
-                    editor.SelectedIndex = selIndex;
-                }
-                return editor;
-            }
-            else
-            {
-                var editor = new PtrEditor();
-                editor.HandlePath.DataBindings.Add("Text", this, nameof(DepotPath), true, DataSourceUpdateMode.OnPropertyChanged);
-                editor.FileType.DataBindings.Add("Text", this, nameof(ClassName), true, DataSourceUpdateMode.OnPropertyChanged);
-                //editor.Flags.DataBindings.Add("Text", this, nameof(Flags), true, DataSourceUpdateMode.OnPropertyChanged);
-                return editor;
-            }
-        }
         #endregion
     }
 }

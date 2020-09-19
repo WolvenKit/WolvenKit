@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using WolvenKit.CR2W.Editors;
+
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using static WolvenKit.CR2W.Types.Enums;

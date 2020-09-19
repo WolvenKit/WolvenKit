@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W

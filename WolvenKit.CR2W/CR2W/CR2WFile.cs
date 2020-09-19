@@ -15,7 +15,6 @@ using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
-using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
 using WolvenKit.CR2W.Types.Utils;
 using WolvenKit.Utils;
@@ -110,6 +109,8 @@ namespace WolvenKit.CR2W
         ///     EditorController
         /// </summary>
         public IVariableEditor EditorController { get; set; }
+        public void CreateVariableEditor(CVariable editvar, EVariableEditorAction action) => EditorController?.CreateVariableEditor(editvar, action);
+
         #endregion
 
         #region Supporting Functions
@@ -196,8 +197,6 @@ namespace WolvenKit.CR2W
 
         public CR2WFileHeader GetFileHeader() => m_fileheader;
         public CR2WTable[] GetTableHeaders() => m_tableheaders;
-
-        public void CreateVariableEditor(CVariable editvar, EVariableEditorAction action) => EditorController?.CreateVariableEditor(editvar, action);
 
         public CVariable ReadVariable(BinaryReader file, CVariable parent)
         {

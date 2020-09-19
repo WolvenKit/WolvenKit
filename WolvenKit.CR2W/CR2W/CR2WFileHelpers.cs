@@ -13,7 +13,6 @@ using System.Xml;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
-using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
 using WolvenKit.CR2W.Types.Utils;
 using WolvenKit.Utils;

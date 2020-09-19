@@ -395,6 +395,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ComboBoxExtensions.cs" />
+    <Compile Include="Forms\Editors\ByteArrayEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\ByteArrayEditor.Designer.cs">
+      <DependentUpon>ByteArrayEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\IdTagEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\IdTagEditor.Designer.cs">
+      <DependentUpon>IdTagEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\PtrEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\PtrEditor.Designer.cs">
+      <DependentUpon>PtrEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MVVM\frmBulkEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -407,7 +426,6 @@
     <Compile Include="Forms\MVVM\frmOtherDocument.Designer.cs">
       <DependentUpon>frmOtherDocument.cs</DependentUpon>
     </Compile>
-    <None Include="Utility\DDSUtility.cs.deprecated" />
     <Compile Include="discord.cs" />
     <Compile Include="Extensions\CustomFloatWindow.cs">
       <SubType>Form</SubType>
@@ -553,6 +571,7 @@
     <Compile Include="Services\IThemedContent.cs" />
     <Compile Include="UIConfiguration.cs" />
     <Compile Include="UIController.cs" />
+    <Compile Include="Utility\EditorHandler.cs" />
     <Compile Include="Utility\UnbundleGameArgs.cs" />
     <Compile Include="Utility\AddFileArgs.cs" />
     <Compile Include="Utility\LoadFileArgs.cs" />
@@ -736,6 +755,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FlowTreeEditors\Scene\SceneLinkEditor.resx">
       <DependentUpon>SceneLinkEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\ByteArrayEditor.resx">
+      <DependentUpon>ByteArrayEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\IdTagEditor.resx">
+      <DependentUpon>IdTagEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\PtrEditor.resx">
+      <DependentUpon>PtrEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MVVM\frmWcc.resx">
       <DependentUpon>frmWcc.cs</DependentUpon>

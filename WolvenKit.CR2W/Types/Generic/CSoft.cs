@@ -2,23 +2,11 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
-using WolvenKit.CR2W.Editors;
 using System.Linq;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    public interface ISoftAccessor
-    {
-        string DepotPath { get; set; }
-        string ClassName { get; set; }
-        ushort Flags { get; set; }
-
-        string REDName { get; }
-        string REDType { get; }
-    }
-
     /// <summary>
     /// CSofts are Uint16 references to the imports table of a cr2w file
     /// Imports are paths to a file in the tw3 filesystem
@@ -114,14 +102,7 @@ namespace WolvenKit.CR2W.Types
 
         public override string ToString() => ClassName + ": " + DepotPath;
 
-        public override Control GetEditor()
-        {
-            var editor = new PtrEditor();
-            editor.HandlePath.DataBindings.Add("Text", this, nameof(DepotPath), true, DataSourceUpdateMode.OnPropertyChanged);
-            editor.FileType.DataBindings.Add("Text", this, nameof(ClassName), true, DataSourceUpdateMode.OnPropertyChanged);
-            //editor.Flags.DataBindings.Add("Text", this, nameof(Flags), true, DataSourceUpdateMode.OnPropertyChanged);
-            return editor;
-        }
+        
         #endregion
 
     }

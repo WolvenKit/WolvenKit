@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.CR2W.Editors
+﻿namespace WolvenKit.Forms.Editors
 {
     partial class PtrEditor
     {

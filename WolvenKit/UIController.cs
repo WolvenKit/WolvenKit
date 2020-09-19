@@ -16,7 +16,6 @@ namespace WolvenKit
     using Bundles;
     using Cache;
     using CR2W;
-    using CR2W.Editors;
     using CR2W.Types;
     using W3Strings;
     using Common;
@@ -24,6 +23,8 @@ namespace WolvenKit
     using WolvenKit.App.Model;
     using WolvenKit.App.ViewModels;
     using BrightIdeasSoftware;
+    using WolvenKit.Forms.Editors;
+    using WolvenKit.Common.Model;
 
     public enum EColorThemes
     {

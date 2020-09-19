@@ -1,8 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using System.Xml;
-using WolvenKit.CR2W.Editors;
+using WolvenKit.Common.Model;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
@@ -51,11 +50,6 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CByteArray2(cr2w, parent, name);
-        }
-
         public override CVariable Copy(CR2WCopyAction context)
         {
             var copy = (CByteArray2) base.Copy(context);
@@ -67,13 +61,6 @@ namespace WolvenKit.CR2W.Types
             copy.Bytes = newbytes;
 
             return copy;
-        }
-
-        public override Control GetEditor()
-        {
-            var editor = new ByteArrayEditor();
-            editor.Variable = this;
-            return editor;
         }
 
         public override string ToString()

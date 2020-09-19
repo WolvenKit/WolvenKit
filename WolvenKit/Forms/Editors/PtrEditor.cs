@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace WolvenKit.CR2W.Editors
+namespace WolvenKit.Forms.Editors
 {
     public partial class PtrEditor : UserControl
     {

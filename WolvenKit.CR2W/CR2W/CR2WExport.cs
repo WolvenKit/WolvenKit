@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
-using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
 using System.Runtime.InteropServices;
 //using System.Linq;
@@ -233,11 +231,6 @@ namespace WolvenKit.CR2W
                 return cr2w.chunks[VirtualParentChunkIndex];
             }
             else return GetParentChunk();
-        }
-        
-        public virtual Control GetEditor()
-        {
-            return null;
         }
 
         public virtual List<IEditableVariable> GetEditableVariables()

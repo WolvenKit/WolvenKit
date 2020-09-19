@@ -14,10 +14,11 @@ using WolvenKit.App.Model;
 using WolvenKit.App.ViewModels;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
-using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
 using WolvenKit.CR2W.Types;
+using WolvenKit.Extensions;
 using WolvenKit.Services;
+using WolvenKit.Utility;
 
 namespace WolvenKit.Forms
 {
@@ -64,33 +65,13 @@ namespace WolvenKit.Forms
         }
 
         #region Properties
-        public event EventHandler OnRequestUpdate;
-        //public event EventHandler<SelectChunkArgs> OnChunkRequest;
+        public event EventHandler RequestChunkViewUpdate;
         private CR2WExportWrapper Chunk => viewModel.SelectedChunk;
 
         private List<IEditableVariable> GetSelectedObjects()
         {
             return (from IEditableVariable item in treeView.SelectedObjects where item != null select item).ToList();
         }
-        #endregion
-
-
-        #region Hotkeys
-
-        //private void HKCopy(HotKeyEventArgs e)
-        //{
-        //    if (GetSelectedObjects().Count > 0)
-        //        CopyController.Source = GetSelectedObjects().First();
-        //    //viewModel.CopyVariableCommand.SafeExecute();
-        //}
-
-        //private void HKPaste(HotKeyEventArgs e)
-        //{
-        //    if (GetSelectedObjects().Count > 0)
-        //        CopyController.Target = GetSelectedObjects().First();
-        //    viewModel.PasteVariableCommand.SafeExecute();
-        //}
-
         #endregion
 
 
@@ -123,35 +104,60 @@ namespace WolvenKit.Forms
         }
         private void treeView_CellEditStarting(object sender, CellEditEventArgs e)
         {
-            //var variable = (e.RowObject as VariableListNode).Variable;
-            if (e.Column.AspectName == "REDValue")
+            if (!(e.RowObject is IEditableVariable ivar)) return;
+            switch (e.Column.AspectName)
             {
-                e.Control = ((IEditableVariable)e.RowObject).GetEditor();
-                if (e.Control != null)
+                //var variable = (e.RowObject as VariableListNode).Variable;
+                case "REDValue":
                 {
-                    e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
-                    e.Control.Width = e.CellBounds.Width;
-                    //e.Control.ForeColor = Control.Tex
+                    e.Control = EditorHandler.GetEditor(ivar);
+                    if (e.Control != null)
+                    {
+                        e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
+                        e.Control.Width = e.CellBounds.Width;
+
+                        if (ivar is IChunkPtrAccessor iptr && e.Control is ComboBox editor)
+                        {
+                            editor.SelectedIndexChanged += delegate(object o, EventArgs _e)
+                            {
+                                var ptrcomboitem = (PtrComboItem) ((ComboBox) o).SelectedItem;
+                                if (ptrcomboitem != null)
+                                {
+                                    if (ptrcomboitem.Text == $"<Add new chunk ...>")
+                                    {
+                                        // raise event
+                                        AddNewChunkFor(ivar as CVariable);
+
+                                        // select item
+                                        editor.UpdateComboBoxWith(iptr);
+
+                                    }
+                                    else
+                                    {
+                                        iptr.Reference = ptrcomboitem.Value;
+                                    }
+                                }
+                            };
+                        }
+
+
+                    }
+
+                    e.Cancel = e.Control == null;
+                    break;
                 }
-                e.Cancel = e.Control == null;
-            }
-            else if (e.Column.AspectName == "REDName")
-            {
-                //Normal textbox is good for this.
-            }
-            else
-            {
-                e.Cancel = true;
+                case "REDName":
+                    //Normal textbox is good for this.
+                    break;
+                default:
+                    e.Cancel = true;
+                    break;
             }
         }
 
 
         private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
         {
-            /*            if (chunk.ParentPtr.Reference != null)
-                            chunk.SetParentChunkId(chunk.ParentPtr.Reference.ChunkIndex + 1);*/
-            //OnRequestUpdate?.Invoke(sender, e);
-
             // change the model's isserialized property to true when the user edits it,
             // this is to make sure only user-edited properties will get serialized
             var model = e.ListViewItem.RowObject as IEditableVariable;
@@ -191,67 +197,25 @@ namespace WolvenKit.Forms
 
             // Create new CVariable
             CVariable newvar = CR2WTypeManager.Create(parentarray.Elementtype, "", Chunk.cr2w, carray as CVariable, false);
+            if (newvar == null) return;
+            
+            AddNewChunkFor(newvar);
+
+            newvar.IsSerialized = true;
+
+            parentarray.AddVariable(newvar);
+            treeView.RefreshObject(carray);
+            //RequestChunkViewUpdate?.Invoke(null, null);
+        }
+
+        private void AddNewChunkFor(CVariable newvar)
+        {
             switch (newvar)
             {
-                case null:
-                    return;
-                // if a new ptr is created, auto-add new chunks
                 case IPtrAccessor ptr:
-                {
-                    string newChunktype = "";
-                    string innerParentType = parentarray.Elementtype.Substring("ptr:".Length);
-
-                    List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType);
-                    if (availableTypes.Count <= 0)
-                        return;
-                
-                    using (var form = new frmAddChunk(availableTypes))
                     {
-                        var result = form.ShowDialog();
-                        if (result == DialogResult.OK)
-                        {
-                            newChunktype = form.ChunkType;
-                        }
-                    }
-
-                    if (string.IsNullOrEmpty(newChunktype))
-                        return;
-
-                    ptr.Reference = newvar.cr2w.CreateChunk(newChunktype, Chunk);
-                    break;
-                }
-                case IHandleAccessor handle:
-                {
-                    bool isChunkHandle = true;
-                    // check if handle is supposed to be a chunkhandle
-                    if (parentarray.Count > 0)
-                    {
-                        if (parentarray is IList il && il[0] is IHandleAccessor ih)
-                        {
-                            isChunkHandle = ih.ChunkHandle;
-                        }
-                    }
-                    else
-                    {
-                        // ask the user?
-                        switch (MessageBox.Show(
-                            "Please select Yes if this a CHandle to an existing chunk, or No if it is a CHandle to an external source.",
-                            "New CHandle",
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-                        {
-                            case DialogResult.No:
-                            {
-                                isChunkHandle = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    // it is a chunk handle, so create a new chunk
-                    if (isChunkHandle)
-                    {
-                        string newhandletype = "";
-                        string innerParentType = parentarray.Elementtype.Substring("handle:".Length);
+                        string newChunktype = "";
+                        string innerParentType = ptr.ReferenceType /*parentarray.Elementtype.Substring("ptr:".Length)*/;
 
                         List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType);
                         if (availableTypes.Count <= 0)
@@ -262,26 +226,72 @@ namespace WolvenKit.Forms
                             var result = form.ShowDialog();
                             if (result == DialogResult.OK)
                             {
-                                newhandletype = form.ChunkType;
+                                newChunktype = form.ChunkType;
                             }
                         }
 
-                        if (string.IsNullOrEmpty(newhandletype))
+                        if (string.IsNullOrEmpty(newChunktype))
                             return;
 
-                        handle.ChunkHandle = true;
-                        handle.Reference = newvar.cr2w.CreateChunk(newhandletype, Chunk);
+                        ptr.Reference = newvar.cr2w.CreateChunk(newChunktype, Chunk);
+                        break;
                     }
-                    
-                    break;
-                }
+                case IHandleAccessor handle:
+                    {
+                        bool isChunkHandle = true;
+
+                        // check parent if the handle is a chunkhandle
+                        if (newvar.ParentVar is IArrayAccessor parentarray && parentarray.Count > 0 
+                                                                           && parentarray is IList il && il[0] is IHandleAccessor ih)
+                        {
+                            isChunkHandle = ih.ChunkHandle;
+                        }
+                        else
+                        {
+                            // ask the user?
+                            switch (MessageBox.Show(
+                                "Please select Yes if this a CHandle to an existing chunk, or No if it is a CHandle to an external source.",
+                                "New CHandle",
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                            {
+                                case DialogResult.No:
+                                {
+                                    isChunkHandle = false;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // it is a chunk handle, so create a new chunk
+                        if (isChunkHandle)
+                        {
+                            string newhandletype = "";
+                            string innerParentType = handle.ReferenceType /*parentarray.Elementtype.Substring("handle:".Length)*/;
+
+                            List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType);
+                            if (availableTypes.Count <= 0)
+                                return;
+
+                            using (var form = new frmAddChunk(availableTypes))
+                            {
+                                var result = form.ShowDialog();
+                                if (result == DialogResult.OK)
+                                {
+                                    newhandletype = form.ChunkType;
+                                }
+                            }
+
+                            if (string.IsNullOrEmpty(newhandletype))
+                                return;
+
+                            handle.ChunkHandle = true;
+                            handle.Reference = newvar.cr2w.CreateChunk(newhandletype, Chunk);
+                        }
+
+                        break;
+                    }
             }
-
-            newvar.IsSerialized = true;
-
-            parentarray.AddVariable(newvar);
-            treeView.RefreshObject(carray);
-            OnRequestUpdate?.Invoke(null, null);
+            RequestChunkViewUpdate?.Invoke(null, null);
         }
 
         private void RemoveListElement(HotKeyEventArgs e)
@@ -312,7 +322,7 @@ namespace WolvenKit.Forms
 
             }
             treeView.RefreshObject(parentmodel);
-            //OnRequestUpdate?.Invoke(null, null);
+            //RequestChunkViewUpdate?.Invoke(null, null);
         }
 
 

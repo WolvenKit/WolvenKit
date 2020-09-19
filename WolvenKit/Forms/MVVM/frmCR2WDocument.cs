@@ -280,7 +280,7 @@ namespace WolvenKit
         }
 
 
-        private void PropertyWindow_OnRequestUpdate(object sender, EventArgs e) => chunkList.UpdateList();
+        private void ChunkWindowRequestChunkViewUpdate(object sender, EventArgs e) => chunkList.UpdateList();
 
         //private void PropertyWindow_OnRequestChunk(object sender, SelectChunkArgs e) => chunkList.SelectChunk(e.Chunk);
 
@@ -405,7 +405,7 @@ namespace WolvenKit
 
 
             //chunkList.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
-            propertyWindow.OnRequestUpdate += PropertyWindow_OnRequestUpdate;
+            propertyWindow.RequestChunkViewUpdate += ChunkWindowRequestChunkViewUpdate;
             //propertyWindow.OnChunkRequest += PropertyWindow_OnRequestChunk;
 
             chunkList.Activate();

@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using WolvenKit.Common.Model;
+using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 
-namespace WolvenKit.CR2W.Editors
+namespace WolvenKit.Forms.Editors
 {
-    public interface IByteSource
-    {
-        byte[] Bytes { get; set; }
-    }
-
     public partial class ByteArrayEditor : UserControl
     {
         private IByteSource bytes;

@@ -1,20 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using System.Xml;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    public interface IPtrAccessor
-    {
-        CR2WExportWrapper Reference { get; set; }
-        string ReferenceType { get; }
-        bool IsSerialized { get; set; }
-    }
-
     /// <summary>
     /// A pointer to a chunk within the same cr2w file.
     /// </summary>
@@ -133,52 +126,7 @@ namespace WolvenKit.CR2W.Types
             return copy;
         }
 
-        public override Control GetEditor()
-        {
-            var editor = new ComboBox();
-            editor.Items.Add(new PtrComboItem {Text = "", Value = null});
-
-            var availableChunks = CR2WManager.GetAvailableTypes(this.ReferenceType);
-            foreach (var chunk in cr2w.chunks.Where(_ => availableChunks.Contains(_.REDType)))
-            {
-                editor.Items.Add(new PtrComboItem
-                {
-                    Text = $"{chunk.REDType} #{chunk.ChunkIndex}", //real index
-                    Value = chunk
-
-                }
-                );
-            }
-
-            editor.SelectedIndexChanged += delegate(object sender, EventArgs e)
-            {
-                var ptrcomboitem = (PtrComboItem) ((ComboBox) sender).SelectedItem;
-                if (ptrcomboitem != null)
-                {
-                    Reference = ptrcomboitem.Value;
-                }
-            };
-
-            // select item
-            if (Reference == null)
-                editor.SelectedIndex = 0;
-            else
-            {
-                int selIndex = 0;
-                for (int i = 0; i < editor.Items.Count; i++)
-                {
-                    if (editor.Items[i].ToString() == $"{Reference.REDType} #{Reference.ChunkIndex}")
-                    {
-                        selIndex = i;
-                        break;
-                    }
-                }
-
-                editor.SelectedIndex = selIndex;
-            }
-            
-            return editor;
-        }
+        
 
         public override string ToString()
         {
@@ -202,11 +150,5 @@ namespace WolvenKit.CR2W.Types
         #endregion
     }
 
-    public class PtrComboItem
-    {
-        public CR2WExportWrapper Value { get; set; }
-        public string Text { get; set; }
-
-        public override string ToString() => Text;
-    }
+    
 }

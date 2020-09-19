@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization;
-using WolvenKit.CR2W.Editors;
+
 using WolvenKit.CR2W.Reflection;
 using FastMember;
 

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 using System.Xml;
-using WolvenKit.Common;
+using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W
@@ -23,7 +22,7 @@ namespace WolvenKit.CR2W
 
         void SetREDName(string val);
 
-        Control GetEditor();
+        //Control GetEditor();
         List<IEditableVariable> GetEditableVariables();
         List<IEditableVariable> GetExistingVariables(bool includebuffers);
 

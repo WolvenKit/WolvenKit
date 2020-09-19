@@ -7,7 +7,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W.SRT

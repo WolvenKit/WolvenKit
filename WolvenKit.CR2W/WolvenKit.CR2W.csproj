@@ -102,7 +102,6 @@
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -129,30 +128,11 @@
     <Compile Include="CRC32\MismatchCRC32Exception.cs" />
     <Compile Include="CRC32\SafeProxy.cs" />
     <Compile Include="CRC32\SafeProxyC.cs" />
-    <Compile Include="Editors\ByteArrayEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Editors\ByteArrayEditor.Designer.cs">
-      <DependentUpon>ByteArrayEditor.cs</DependentUpon>
-    </Compile>
-    <None Include="Editors\EditableList.cs.deprecated" />
-    <None Include="Editors\EditableObject.cs.deprecated" />
-    <Compile Include="Editors\IdTagEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Editors\IdTagEditor.Designer.cs">
-      <DependentUpon>IdTagEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="IEditableVariable.cs" />
-    <Compile Include="Editors\PtrEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Editors\PtrEditor.Designer.cs">
-      <DependentUpon>PtrEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Exceptions\InvalidParsingException.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Extensions\W3WriterExtensions.cs" />
+    <Compile Include="IEditableVariable.cs" />
+    <Compile Include="IVariableEditor.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -185,6 +165,7 @@
     <Compile Include="Types\Generic\Arrays\CArrayBase.cs" />
     <Compile Include="Types\Generic\Arrays\CArrayFixedSize.cs" />
     <Compile Include="Types\Generic\Arrays\CBufferVLQInt32.cs" />
+    <Compile Include="Types\Interfaces.cs" />
     <Compile Include="Types\Utils\CVariantSizeTypeName.cs" />
     <Compile Include="Types\Utils\CVariantSizeNameType.cs" />
     <Compile Include="Types\Utils\CVariantSizeType.cs" />
@@ -198,7 +179,6 @@
     <Compile Include="Types\Structs\SCurveData.cs" />
     <Compile Include="Types\Generic\Arrays\CBufferUInt16.cs" />
     <Compile Include="CR2WTypeManager.cs" />
-    <None Include="Types\Primitive\Flags.cs.deprecated" />
     <Compile Include="Types\BufferedTypes\BufferStructs\CTerrainTileData.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\SWayPointsCollectionsSetData.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CPhysicalCollision.cs" />
@@ -6806,7 +6786,6 @@
     <Compile Include="Types\BufferedTypes\Complex\CSwfTexture.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\SVector2D.cs" />
     <Compile Include="HslColor.cs" />
-    <Compile Include="Editors\IVariableEditor.cs" />
     <Compile Include="ILocalizedStringSource.cs" />
     <Compile Include="Exceptions\InvalidChunkTypeException.cs" />
     <Compile Include="Exceptions\InvalidFileTypeException.cs" />
@@ -6821,7 +6800,6 @@
     <Compile Include="Types\Structs\Complex\EngineQsTranform.cs" />
     <Compile Include="Types\Structs\Complex\EngineTransform.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CEntity.cs" />
-    <None Include="Types\Primitive\CFlags.cs.deprecated" />
     <Compile Include="Types\Primitive\NetPrimitive\CFloat.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\SFoliageInstanceData.cs" />
     <Compile Include="Types\Primitive\NetPrimitive\CGUID.cs" />
@@ -6850,15 +6828,6 @@
     <Compile Include="XmlSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Editors\ByteArrayEditor.resx">
-      <DependentUpon>ByteArrayEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editors\IdTagEditor.resx">
-      <DependentUpon>IdTagEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editors\PtrEditor.resx">
-      <DependentUpon>PtrEditor.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

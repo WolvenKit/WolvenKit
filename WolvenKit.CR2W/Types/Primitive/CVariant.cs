@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
-using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
@@ -97,11 +95,6 @@ namespace WolvenKit.CR2W.Types
             //};
             //return list;
             return Variant?.GetEditableVariables();
-        }
-
-        public override Control GetEditor()
-        {
-            return Variant?.GetEditor();
         }
 
         public override string ToString()

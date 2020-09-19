@@ -5,10 +5,10 @@ using System.IO;
 using System.Windows.Input;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
+using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
-using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.SRT;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Radish.Model;
@@ -142,6 +142,12 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         #region Methods
+
+        public void CreateNewChunk()
+        {
+
+        }
+
         public void SaveFile()
         {
             // save all open embedded files
