@@ -747,13 +747,13 @@ namespace WolvenKit
         #region FileSystemWatcher
         private List<string> cachedFileSystemInfos;
 
-        private void PauseMonitoring()
+        public void PauseMonitoring()
         {
             cachedFileSystemInfos = ActiveMod.Files;
             modexplorerSlave.EnableRaisingEvents = false;
         }
 
-        private void ResumeMonitoring()
+        public void ResumeMonitoring()
         {
             if (ActiveMod != null)
             {

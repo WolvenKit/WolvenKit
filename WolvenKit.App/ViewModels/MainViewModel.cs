@@ -16,6 +16,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using WolvenKit.App;
 using WolvenKit.App.Commands;
+using WolvenKit.App.Model;
 using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -404,7 +405,7 @@ namespace WolvenKit.App.ViewModels
 
                     if (string.IsNullOrWhiteSpace(newpath)) return "";
                     
-                    if (!File.Exists(newpath))
+                    if (!(extension == ".xbm" && bundleType == EBundleType.Bundle) || !File.Exists(newpath))
                     {
                         string extractedfile = archive.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
                         if (!silent) Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
@@ -466,6 +467,7 @@ namespace WolvenKit.App.ViewModels
             
             //string workDir = "";                                            // add to mod
             //string workDir = MainController.Get().Configuration.DepotPath;  // r4depot
+
             AddAllImports(fullpath, true, true, workDir);
 
             // copy the w2mesh and all imports to the depot
