@@ -359,6 +359,7 @@ namespace WolvenKit
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
                 var fi = new FileInfo(selectedobject.FullName);
+
                 var ext = fi.Extension.TrimStart('.');
                 bool isbundle = Path.Combine(ActiveMod.FileDirectory, fi.ToString())
                     .Contains(Path.Combine(ActiveMod.ModDirectory, EBundleType.Bundle.ToString()));
@@ -394,6 +395,9 @@ namespace WolvenKit
                 markAsModDlcFileToolStripMenuItem.Enabled = isbundle && !isToplevelDir;
 
                 showFileInExplorerToolStripMenuItem.Text = selectedobject.IsDirectory() ? "Open Folder in Explorer" : "Open File in Explorer";
+                FileActionsToolStripMenuItem.Enabled = !israw;
+
+
             }
 
             showFileInExplorerToolStripMenuItem.Enabled = treeListView.SelectedObject != null;
@@ -493,6 +497,10 @@ namespace WolvenKit
 
 
         private void addAllDependenciesToolStripMenuItem_Click(object sender, EventArgs e) => vm.AddAllImportsCommand.SafeExecute();
+        private void listAllDependenciesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            vm.DBG_logdependencies();
+        }
 
         private void cookToolStripMenuItem_Click(object sender, EventArgs e) => vm.CookCommand.SafeExecute();
 
@@ -651,6 +659,7 @@ namespace WolvenKit
                 RequestFastRender?.Invoke(this, new RequestFileOpenArgs { File = selectedobject.FullName });
             }
         }
+
 
 
 

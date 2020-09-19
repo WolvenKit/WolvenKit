@@ -2172,7 +2172,7 @@ namespace WolvenKit
                 var archives = manager.FileList
                     .Where(x => x.Name == relativePath)
                     .Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.ArchiveAbsolutePath, y));
-                string newpath = "";
+                //string newpath = "";
 
 
                 #region Uncooking
@@ -2180,15 +2180,7 @@ namespace WolvenKit
                 if (uncook)
                 {
                     // copy to uncooked folder in mod project
-                    if (addAsDLC)
-                        newpath = Path.Combine(ActiveMod.DlcUncookedDirectory, $"dlc{ActiveMod.Name}", relativePath);
-                    else
-                        newpath = Path.Combine(ActiveMod.ModUncookedDirectory, relativePath);
-                    
-
-                    var indir = Path.GetFullPath(MainController.Get().Configuration.GameRootDir);
-
-                    var uncookTask = Task.Run(() => vm.UncookFileToMod(relativePath, newpath, indir));
+                    var uncookTask = Task.Run(() => vm.UncookFileToPath(relativePath, addAsDLC));
 
                     Task.WaitAll(uncookTask);
 
@@ -2198,9 +2190,12 @@ namespace WolvenKit
                     if (uncookedFilesCount > 0)
                     {
                         // Optionally Export 
-                        if (export && File.Exists(newpath))
+                        string _newpath = addAsDLC
+                            ? Path.Combine(ActiveMod.DlcUncookedDirectory, $"dlc{ActiveMod.Name}", relativePath)
+                            : Path.Combine(ActiveMod.ModUncookedDirectory, relativePath);
+                        if (export && File.Exists(_newpath))
                         {
-                            var exportTask = Task.Run(() => vm.ExportFileToMod(newpath));
+                            var exportTask = Task.Run(() => vm.ExportFileToMod(_newpath));
                             Task.WaitAll(exportTask);
                         }
 
@@ -2213,7 +2208,7 @@ namespace WolvenKit
 
                 #region Unbundling
                 var bundletype = archives.First().Value.Bundle.TypeName;
-
+                string newpath = "";
                 switch (bundletype)
                 {
                     // extract files from bundle to Cooked

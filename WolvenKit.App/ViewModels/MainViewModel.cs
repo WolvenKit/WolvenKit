@@ -239,8 +239,9 @@ namespace WolvenKit.App.ViewModels
         /// <param name="newpath"></param>
         /// <param name="indir"></param>
         /// <returns></returns>
-        public async Task<int> UncookFileToMod(string relativePath, string newpath, string indir)
+        public async Task<int> UncookFileToPath(string relativePath, bool isDLC, string alternateOutDirectory = "")
         {
+            #region Unbundle relative file directory to temp dir
             // create temporary uncooked directory
             string outdir = Path.GetFullPath(MainController.WorkDir);
             if (Directory.Exists(outdir))
@@ -262,6 +263,11 @@ namespace WolvenKit.App.ViewModels
             string relativeParentDir = Path.GetDirectoryName(relativePath);
 
             // uncook the folder with wcc
+            
+            // TODO: this will run over mods :(
+            var indir = Path.GetFullPath(MainController.Get().Configuration.GameRootDir);
+
+
             var wccuncook = new Wcc_lite.uncook()
             {
                 InputDirectory = indir,
@@ -271,33 +277,51 @@ namespace WolvenKit.App.ViewModels
                 //UncookExtensions = Path.GetExtension(newpath).TrimStart('.'),
             };
             await Task.Run(() => MainController.Get().WccHelper.RunCommand(wccuncook));
+            #endregion
 
+            #region Move file to outdir
             // move uncooked file to mod project
+            string newpath = "";
+            // if an alternative dir is set, move there
+            // otherwise move to mod
+            if (string.IsNullOrWhiteSpace(alternateOutDirectory))
+            {
+                newpath = isDLC 
+                    ? Path.Combine(ActiveMod.DlcUncookedDirectory, $"dlc{ActiveMod.Name}", relativePath) 
+                    : Path.Combine(ActiveMod.ModUncookedDirectory, relativePath);
+            }
+            else
+            {
+                newpath = Path.Combine(alternateOutDirectory, relativePath);
+            }
+
+            if (string.IsNullOrWhiteSpace(newpath)) return 0;
+
             int uncookedFilesCount = 0;
             int addedFilesCount = 0;
             var fis = di.GetFiles("*", SearchOption.AllDirectories);
             foreach (var f in fis)
             {
-                if (f.Name.Contains(Path.GetFileName(relativePath)))
+                if (!f.Name.Contains(Path.GetFileName(relativePath))) continue;
+
+                try
                 {
-
-                    try
+                    if (File.Exists(newpath))
                     {
-                        if (File.Exists(newpath))
-                        {
-                            File.Delete(newpath);
-                        }
-
-                        f.CopyToAndCreate(newpath);
-
-                        uncookedFilesCount++;
+                        File.Delete(newpath);
                     }
-                    catch (Exception ex)
-                    {
-                        Logger.LogString($"Unable to move uncooked file to ModProject, perhaps a file of that name is cuurrently open in Wkit.", Logtype.Error);
-                    }
+
+                    f.CopyToAndCreate(newpath);
+
+                    uncookedFilesCount++;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogString($"Unable to move uncooked file to ModProject, perhaps a file of that name is cuurrently open in Wkit.", Logtype.Error);
                 }
             }
+            #endregion
+
 
             // Logging
             Logger.LogString($"Moved {addedFilesCount} files to project.", Logtype.Important);
@@ -317,15 +341,27 @@ namespace WolvenKit.App.ViewModels
         /// <param name="relativePath"></param>
         /// <param name="isDLC"></param>
         /// <param name="projectFolder"></param>
+        /// <param name="bundleType"></param>
         /// <param name="alternateOutDirectory"></param>
         /// <param name="loadmods"></param>
         /// <param name="silent"></param>
         /// <returns></returns>
-        private string UnbundleFile(string relativePath, bool isDLC, EProjectFolders projectFolder, string alternateOutDirectory = "", bool loadmods = false, bool silent = false)
+        private string UnbundleFile(string relativePath, bool isDLC, EProjectFolders projectFolder, EBundleType bundleType = EBundleType.Bundle, string alternateOutDirectory = "", bool loadmods = false, bool silent = false)
         {
             string extension = Path.GetExtension(relativePath);
             string filename = Path.GetFileName(relativePath);
-            IWitcherArchiveManager manager = MainController.Get().GetManagers(loadmods).FirstOrDefault(_ => _.TypeName == EBundleType.Bundle);
+
+            // Jato said not to add textures to an fbx 
+            // so I am keeping meshes violet :)
+            //if (extension == ".xbm" && bundleType == EBundleType.Bundle)
+            //{
+            //    //var uncookTask = Task.Run(() => UncookFileToPath(relativePath, isDLC, alternateOutDirectory));
+            //    //Task.WaitAll(uncookTask);
+            //    //return relativePath;
+            //    UnbundleFile(relativePath, isDLC, projectFolder, EBundleType.TextureCache, alternateOutDirectory,
+            //        loadmods, silent);
+            //}
+            IWitcherArchiveManager manager = MainController.Get().GetManagers(loadmods).FirstOrDefault(_ => _.TypeName == bundleType);
 
             if (manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath)))
             {
@@ -394,6 +430,11 @@ namespace WolvenKit.App.ViewModels
         /// <returns></returns>
         public async Task ExportFileToMod(string fullpath)
         {
+            string workDir = Path.GetFullPath($"{MainController.WorkDir}_export");
+            if (!Directory.Exists(workDir))
+                Directory.CreateDirectory(workDir);
+            Directory.Delete(workDir, true);
+
             // check if physical file exists
             if (!File.Exists(fullpath))
             {
@@ -422,9 +463,7 @@ namespace WolvenKit.App.ViewModels
             exportpath = Path.ChangeExtension(exportpath, exportedExtension.ToString());
 
             // add all imports to 
-            string workDir = Path.GetFullPath($"{MainController.WorkDir}_export");
-            if (!Directory.Exists(workDir))
-                Directory.CreateDirectory(workDir);
+            
             //string workDir = "";                                            // add to mod
             //string workDir = MainController.Get().Configuration.DepotPath;  // r4depot
             AddAllImports(fullpath, true, true, workDir);
@@ -464,7 +503,7 @@ namespace WolvenKit.App.ViewModels
        /// <param name="silent"></param>
        /// <param name="alternateOutDirectory"></param>
        /// <returns></returns>
-        public async Task AddAllImports(string importfilepath, bool recursive = false, bool silent = false, string alternateOutDirectory = "")
+        public async Task AddAllImports(string importfilepath, bool recursive = false, bool silent = false, string alternateOutDirectory = "", bool logonly = false)
         {
             if (!File.Exists(importfilepath))
                 return;
@@ -495,15 +534,16 @@ namespace WolvenKit.App.ViewModels
             foreach (CR2WImportWrapper import in importslist)
             {
                 var filename = Path.GetFileName(import.DepotPathStr);
+                if (logonly) MainController.LogString(filename, Logtype.Important);
 
-                var path = UnbundleFile(import.DepotPathStr, isDLC, projectFolder, alternateOutDirectory, false, silent);
+                var path = UnbundleFile(import.DepotPathStr, isDLC, projectFolder, EBundleType.Bundle, alternateOutDirectory, false, silent);
                 if (string.IsNullOrWhiteSpace(path))
                     Logger.LogString($"Did not unbundle {filename}, import is missing.", Logtype.Error);
                 else
                 {
                     // recursively add all 1st order dependencies :Gp:
                     if (recursive)
-                        AddAllImports(path, true, silent, alternateOutDirectory);
+                        AddAllImports(path, true, silent, alternateOutDirectory, logonly);
                 }
             }
 
@@ -521,13 +561,13 @@ namespace WolvenKit.App.ViewModels
                     string bufferpath = $"{relativepath}.{index}.buffer";
                     var bufferName = $"{Path.GetFileName(relativepath)}.{index}.buffer";
 
-                    var path = UnbundleFile(bufferpath, isDLC, projectFolder, alternateOutDirectory, false, silent);
+                    var path = UnbundleFile(bufferpath, isDLC, projectFolder, EBundleType.Bundle, alternateOutDirectory, false, silent);
                     if (string.IsNullOrWhiteSpace(path))
                         Logger.LogString($"Did not unbundle {bufferName}, import is missing.", Logtype.Error);
                 }
             }
 
-            if (success)
+            if (success && !silent)
                 Logger.LogString($"Succesfully imported all dependencies.", Logtype.Success);
         }
 
