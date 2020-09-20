@@ -10,11 +10,6 @@ using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    public interface IVariantAccessor
-    {
-        CVariable Variant { get; set; }
-    }
-
 
     /// <summary>
     /// A generic wrapper class for a single CVariable
@@ -82,14 +77,15 @@ namespace WolvenKit.CR2W.Types
             return Variant.ToString();
         }
 
-        public override List<IEditableVariable> GetEditableVariables()
+        public override CVariable Copy(CR2WCopyAction context)
         {
-            var list = new List<IEditableVariable>
-            {
-                Variant
-            };
-            return list;
+            var copy = (CVariantSizeNameType)base.Copy(context);
+            if (Variant != null)
+                copy.Variant = Variant.Copy(context);
+            return copy;
         }
+
+        public override List<IEditableVariable> GetEditableVariables() => Variant?.GetEditableVariables();
         public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CVariantSizeNameType(cr2w, parent, name);
     }
 }

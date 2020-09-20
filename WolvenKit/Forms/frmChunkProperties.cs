@@ -102,6 +102,7 @@ namespace WolvenKit.Forms
             }
 
         }
+
         private void treeView_CellEditStarting(object sender, CellEditEventArgs e)
         {
             if (!(e.RowObject is IEditableVariable ivar)) return;
@@ -155,7 +156,6 @@ namespace WolvenKit.Forms
             }
         }
 
-
         private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
         {
             // change the model's isserialized property to true when the user edits it,
@@ -165,6 +165,7 @@ namespace WolvenKit.Forms
                 cvar.SetIsSerialized();
 
         }
+
         public void ApplyCustomTheme()
         {
             UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
@@ -187,7 +188,6 @@ namespace WolvenKit.Forms
                 UpdateTreeListView();
             }
         }
-
 
         private void AddListElement(HotKeyEventArgs e)
         {
@@ -356,20 +356,9 @@ namespace WolvenKit.Forms
                                              && selectedNodes.Count == 1 && selectedNodes.First() is CVariable csel
                                              && csel.GetType() == ccopy.GetType();
 
-            ptrPropertiesToolStripMenuItem.Visible = selectedNodes.All(x => x is IPtrAccessor) && selectedNodes.Count == 1;
-        }
 
-        private void clearVariableToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var node = (IEditableVariable)treeView.SelectedObject;
-            if (node == null)
-            {
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-
+            goToChunkToolStripMenuItem.Visible = selectedNodes.Count == 1 && selectedNodes.All(x => x is IChunkPtrAccessor);
+            deleteChunkToolStripMenuItem.Visible = selectedNodes.Count == 1 && selectedNodes.All(x => x is IChunkPtrAccessor);
         }
 
         private void expandAllToolStripMenuItem_Click(object sender, EventArgs e) => treeView.ExpandAll();
@@ -436,14 +425,22 @@ namespace WolvenKit.Forms
             
         }
 
-        private void ptrPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void GotoChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var node = (IEditableVariable) treeView.SelectedObject;
-            if ((node as IPtrAccessor)?.Reference == null)
-                return;
+            if (node is IChunkPtrAccessor iptr && iptr.Reference != null)
+            {
+                viewModel.SelectedChunk = iptr.Reference;
+            }
+        }
 
-            // TODO: with events?
-            viewModel.SelectedChunk = ((IPtrAccessor) node).Reference;
+        private void DeleteChunkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var node = (IEditableVariable)treeView.SelectedObject;
+            if (node is IChunkPtrAccessor iptr && iptr.Reference != null)
+            {
+                node.cr2w.RemoveChunk(iptr.Reference);
+            }
         }
 
         private void copyTextToolStripMenuItem_Click(object sender, EventArgs e)
@@ -485,7 +482,8 @@ namespace WolvenKit.Forms
             if ((model is IPtrAccessor ptr && ptr.Reference == null) 
                 || (model is IHandleAccessor handle && handle.ChunkHandle && handle.Reference == null))
             {
-                e.Item.ForeColor = Color.Red;
+                if (model.IsSerialized)
+                    e.Item.ForeColor = Color.Red;
             }
         }
 

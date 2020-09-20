@@ -35,4 +35,8 @@ namespace WolvenKit.CR2W.Types
         string REDType { get; }
     }
 
+    public interface IVariantAccessor
+    {
+        CVariable Variant { get; set; }
+    }
 }

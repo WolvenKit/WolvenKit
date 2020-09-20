@@ -81,21 +81,13 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CVariant) base.Copy(context);
-            var.Variant = var.Copy(context);
-            return var;
+            var copy = (CVariant) base.Copy(context);
+            if (Variant != null)
+                copy.Variant = Variant.Copy(context);
+            return copy;
         }
 
-        public override List<IEditableVariable> GetEditableVariables()
-        {
-            //var list = new List<IEditableVariable>();
-            //if (Variant != null)
-            //{
-            //    list.Add(Variant);
-            //};
-            //return list;
-            return Variant?.GetEditableVariables();
-        }
+        public override List<IEditableVariable> GetEditableVariables() => Variant?.GetEditableVariables();
 
         public override string ToString()
         {

@@ -10,6 +10,7 @@ using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
 using WolvenKit.App.ViewModels;
 using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
 using WolvenKit.Services;
 
 namespace WolvenKit.Forms
@@ -57,50 +58,46 @@ namespace WolvenKit.Forms
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            
-        }
-
-        
-
-        public void SelectChunk(CR2WExportWrapper chunk)
-        {
-            // expand until :facepalm:
-            // TODO: can't select chunks that are not expanded...
-
-            treeListView.SelectedObject = chunk;
+            switch (e.PropertyName)
+            {
+                case nameof(viewModel.SelectedChunk):
+                {
+                    if (treeListView.SelectedObject != viewModel.SelectedChunk)
+                        treeListView.SelectedObject = viewModel.SelectedChunk;
+                    break;
+                }
+            }
         }
 
         #region UI Methods
-
         private void UpdateHelperList()
         {
             childrenDict.Clear();
             childrencountDict.Clear();
 
-            if (File != null)
+            if (File == null) return;
+
+            File.GenerateChunksDict();
+
+            Dictionary<int, int> dParentids = File.chunks.ToDictionary(_ => _.ChunkIndex, _ => _.VirtualParentChunkIndex);
+            foreach (var chunk in File.chunks)
             {
-                File.GenerateChunksDict();
+                var childrenidxlist = dParentids.Where(_ => _.Value == chunk.ChunkIndex).Select(_ => _.Key);
 
-                Dictionary<int, int> dParentids = File.chunks.ToDictionary(_ => _.ChunkIndex, _ => _.VirtualParentChunkIndex);
-                foreach (var chunk in File.chunks)
+                IEnumerable<int> enumerable = childrenidxlist as int[] ?? childrenidxlist.ToArray();
+                if (enumerable.Any())
                 {
-                    var childrenidxlist = dParentids.Where(_ => _.Value == chunk.ChunkIndex).Select(_ => _.Key);
+                    List<CR2WExportWrapper> children = enumerable.Select(childid => File.chunksdict[childid]).ToList();
+                    childrenDict.Add(chunk.ChunkIndex, children);
 
-                    IEnumerable<int> enumerable = childrenidxlist as int[] ?? childrenidxlist.ToArray();
-                    if (enumerable.Any())
-                    {
-                        List<CR2WExportWrapper> children = enumerable.Select(childid => File.chunksdict[childid]).ToList();
-                        childrenDict.Add(chunk.ChunkIndex, children);
+                    var c = children.Count;
+                    childrencountDict.Add(chunk.ChunkIndex, c);
+                }
+                else
+                {
+                    childrenDict.Add(chunk.ChunkIndex, new List<CR2WExportWrapper>());
+                    childrencountDict.Add(chunk.ChunkIndex, 0);
 
-                        var c = children.Count;
-                        childrencountDict.Add(chunk.ChunkIndex, c);
-                    }
-                    else
-                    {
-                        childrenDict.Add(chunk.ChunkIndex, new List<CR2WExportWrapper>());
-                        childrencountDict.Add(chunk.ChunkIndex, 0);
-
-                    }
                 }
             }
         }
@@ -146,16 +143,22 @@ namespace WolvenKit.Forms
         #region Events
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
+            var selectedNodes = treeListView.SelectedObjects.Cast<CR2WExportWrapper>().ToList();
+            if (selectedNodes.ToArray().Length <= 0)
+            {
+                e.Cancel = true;
+                return;
+            }
 
+            pasteChunkToolStripMenuItem.Enabled = CopyController.Source != null
+                                                  && CopyController.Source is CVariable ccopy
+                                                  && selectedNodes.Count == 1 && selectedNodes.First().data is CVariable csel
+                                                  && csel.GetType() == ccopy.GetType();
         }
 
         private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             viewModel.SelectedChunk = (CR2WExportWrapper) treeListView.SelectedObject;
-            //if (OnSelectChunk != null && (CR2WExportWrapper)treeListView.SelectedObject != null)
-            //{
-            //    OnSelectChunk(this, new SelectChunkArgs { Chunk = (CR2WExportWrapper)treeListView.SelectedObject });
-            //}
         }
 
         private void resetBTN_Click(object sender, EventArgs e)
@@ -222,7 +225,6 @@ namespace WolvenKit.Forms
         private void copyChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CopyController.Source = viewModel.SelectedChunk.data;
-            //viewModel.CopyVariableCommand.SafeExecute();
         }
 
         private void pasteChunkToolStripMenuItem_Click(object sender, EventArgs e)

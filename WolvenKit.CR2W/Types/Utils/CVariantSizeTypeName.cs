@@ -77,14 +77,15 @@ namespace WolvenKit.CR2W.Types
             return Variant.ToString();
         }
 
-        public override List<IEditableVariable> GetEditableVariables()
+        public override CVariable Copy(CR2WCopyAction context)
         {
-            var list = new List<IEditableVariable>
-            {
-                Variant
-            };
-            return list;
+            var copy = (CVariantSizeTypeName)base.Copy(context);
+            if (Variant != null)
+                copy.Variant = Variant.Copy(context);
+            return copy;
         }
+
+        public override List<IEditableVariable> GetEditableVariables() => Variant?.GetEditableVariables();
         public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CVariantSizeTypeName(cr2w, parent, name);
     }
 }

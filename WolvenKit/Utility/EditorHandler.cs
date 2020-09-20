@@ -28,6 +28,8 @@ namespace WolvenKit.Utility
                     return o.GetEditor();
                 case IHandleAccessor o:
                     return o.GetEditor();
+                case IVariantAccessor o:
+                    return o.GetEditor();
                 case StringAnsi _:
                 case CBool _:
                 case CVLQInt32 _:
@@ -54,8 +56,6 @@ namespace WolvenKit.Utility
                 case CFloat o:
                     return o.GetEditor();
                 case IdTag o:
-                    return o.GetEditor();
-                case CVariant o:
                     return o.GetEditor();
                 case CName o:
                     return o.GetEditor();
@@ -189,7 +189,7 @@ namespace WolvenKit.Utility
             editor.IdGuid.DataBindings.Add("Text", @this, "GuidString", true, DataSourceUpdateMode.OnPropertyChanged);
             return editor;
         }
-        private static Control GetEditor(this CVariant @this)
+        private static Control GetEditor(this IVariantAccessor @this)
         {
             return EditorHandler.GetEditor(@this.Variant);
         }
