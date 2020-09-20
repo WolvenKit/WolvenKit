@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.Common;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit.CR2W.SRT
@@ -17,7 +18,7 @@ namespace WolvenKit.CR2W.SRT
     /// otherwise design a new form *sigh*
     /// better: have an IWitcherFile interface 
     /// </summary>
-    public class Srtfile : IWolvenkitFile
+    public class Srtfile : ObservableObject, IWolvenkitFile
     {
         public Srtfile()
         {

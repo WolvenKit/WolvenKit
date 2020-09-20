@@ -2,24 +2,18 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
-using WolvenKit.CR2W.Editors;
 using System.Linq;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    public interface ISoftAccessor
-    {
-        string DepotPath { get; set; }
-        string ClassName { get; set; }
-        ushort Flags { get; set; }
-
-        string REDName { get; }
-        string REDType { get; }
-    }
-
-
+    /// <summary>
+    /// CSofts are Uint16 references to the imports table of a cr2w file
+    /// Imports are paths to a file in the tw3 filesystem
+    /// and can be set manually by DepotPath and Classname
+    /// Imports have flags which are set on write
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     [REDMeta()]
     public class CSoft<T> : CVariable, ISoftAccessor where T : CVariable
     {
@@ -81,47 +75,34 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is ushort)
+            switch (val)
             {
-                this.SetValueInternal((ushort)val);
+                case ushort o:
+                    this.SetValueInternal(o);
+                    break;
+                case ISoftAccessor cvar:
+                    this.DepotPath = cvar.DepotPath;
+                    this.ClassName = cvar.ClassName;
+                    this.Flags = cvar.Flags;
+                    break;
             }
-            else if (val is ISoftAccessor cvar)
-            {
-                this.DepotPath = cvar.DepotPath;
-                this.ClassName = cvar.ClassName;
-                this.Flags = cvar.Flags;
-            }
-            return this;
-        }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CSoft<T>(cr2w, parent, name);
+            return this;
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CSoft<T>) base.Copy(context);
+            var copy = (CSoft<T>) base.Copy(context);
 
-            var.ClassName = ClassName;
-            var.Flags = Flags;
-            var.DepotPath = DepotPath;
-            return var;
+            copy.ClassName = ClassName;
+            copy.Flags = Flags;
+            copy.DepotPath = DepotPath;
+            return copy;
         }
 
-        public override string ToString()
-        {
-            return ClassName + ": " + DepotPath;
-        }
+        public override string ToString() => ClassName + ": " + DepotPath;
 
-        public override Control GetEditor()
-        {
-            var editor = new PtrEditor();
-            editor.HandlePath.DataBindings.Add("Text", this, nameof(DepotPath), true, DataSourceUpdateMode.OnPropertyChanged);
-            editor.FileType.DataBindings.Add("Text", this, nameof(ClassName), true, DataSourceUpdateMode.OnPropertyChanged);
-            editor.Flags.DataBindings.Add("Text", this, nameof(Flags), true, DataSourceUpdateMode.OnPropertyChanged);
-            return editor;
-        }
+        
         #endregion
 
     }

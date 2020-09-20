@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 using System.Xml;
-using WolvenKit.Common;
+using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 
-namespace WolvenKit.CR2W.Editors
+namespace WolvenKit.CR2W
 {
     public interface IEditableVariable
     {
@@ -23,7 +22,7 @@ namespace WolvenKit.CR2W.Editors
 
         void SetREDName(string val);
 
-        Control GetEditor();
+        //Control GetEditor();
         List<IEditableVariable> GetEditableVariables();
         List<IEditableVariable> GetExistingVariables(bool includebuffers);
 
@@ -32,7 +31,7 @@ namespace WolvenKit.CR2W.Editors
         void AddVariable(CVariable var);
         bool RemoveVariable(IEditableVariable child);
 
-        void SerializeToXml(XmlWriter xw);
+        //void SerializeToXml(XmlWriter xw);
 
         void Read(BinaryReader file, uint size);
         void Write(BinaryWriter file);

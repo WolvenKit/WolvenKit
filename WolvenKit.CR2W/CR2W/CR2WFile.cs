@@ -15,7 +15,6 @@ using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
-using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
 using WolvenKit.CR2W.Types.Utils;
 using WolvenKit.Utils;
@@ -79,20 +78,20 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Properties
-        public LoggerService Logger { get; set; }
+        public LoggerService Logger { get; }
 
         // Tables
-        public List<CR2WNameWrapper> names { get; set; }
-        public List<CR2WImportWrapper> imports { get; set; }
-        public List<CR2WPropertyWrapper> properties { get; set; }
+        public List<CR2WNameWrapper> names { get; private set; }
+        public List<CR2WImportWrapper> imports { get; private set; }
+        public List<CR2WPropertyWrapper> properties { get; private set; }
 
         //[DataMember(Order = 2)]
-        public List<CR2WExportWrapper> chunks { get; set; }
-        public List<CR2WBufferWrapper> buffers { get; set; }
-        public List<CR2WEmbeddedWrapper> embedded { get; set; }
+        public List<CR2WExportWrapper> chunks { get; private set; }
+        public List<CR2WBufferWrapper> buffers { get; private set; }
+        public List<CR2WEmbeddedWrapper> embedded { get; private set; }
 
         public void GenerateChunksDict() => chunksdict = chunks.ToDictionary(_ => _.ChunkIndex, _ => _);
-        public Dictionary<int, CR2WExportWrapper> chunksdict { get; set; }
+        public Dictionary<int, CR2WExportWrapper> chunksdict { get; private set; }
 
         public List<LocalizedString> LocalizedStrings = new List<LocalizedString>();
         public List<string> UnknownTypes = new List<string>();
@@ -110,6 +109,8 @@ namespace WolvenKit.CR2W
         ///     EditorController
         /// </summary>
         public IVariableEditor EditorController { get; set; }
+        public void CreateVariableEditor(CVariable editvar, EVariableEditorAction action) => EditorController?.CreateVariableEditor(editvar, action);
+
         #endregion
 
         #region Supporting Functions
@@ -119,16 +120,59 @@ namespace WolvenKit.CR2W
 
             chunks.Add(chunk);
 
+            // 
+
             return chunk;
         }
 
         public bool RemoveChunk(CR2WExportWrapper chunk)
         {
             var r = chunk.Referrers;
-            // find all pointers that point here
-            // can there be more than one?
 
-            return chunks.Remove(chunk);
+            int idx = chunks.IndexOf(chunk);
+            chunks.RemoveAt(idx);
+
+            OnPropertyChanged(nameof(chunks));
+
+            return true;
+        }
+
+        /// <summary>
+        /// Tries to look up a chunk reference in a cr2w file by a number of checks
+        /// This method is only called on Pointer/Soft copy
+        /// This is unsafe! A chunk could fit all criteria but still not be the intended pointer/soft reference *for the user*!
+        /// It is deterministically impossible to get this right, so the user will always have to double check.
+        /// </summary>
+        /// <param name="targetVariable"></param>
+        /// <param name="oldExportWrapper"></param>
+        /// <returns></returns>
+        internal CR2WExportWrapper TryLookupReference(CVariable targetVariable, CR2WExportWrapper oldExportWrapper)
+        {
+            // this needs to be somewhat fast, because there are fils with thousands of chunks
+            // checks: chunkindex, chunktype, 
+
+            var vardepstring = targetVariable.GetFullDependencyStringName();
+            var chunkdepstring = oldExportWrapper.GetFullChunkDependencyStringName();
+
+            var targetchunk = chunks.Where(_ =>
+                _.GetFullChunkDependencyStringName() == chunkdepstring)
+                .ToList();
+
+            if (targetchunk.Count == 1)
+            {
+                //Logger?.LogString($"Found exactly one chunk target. Please double check pointer targets in {vardepstring}", Logtype.Success);
+                return targetchunk.FirstOrDefault();
+            }
+            else if (targetchunk.Count > 1)
+            {
+                Logger?.LogString($"More than one chunk target found, please set pointer target manually in {vardepstring}", Logtype.Error);
+                return null;
+            }
+            else
+            {
+                Logger?.LogString($"No chunk target found, please set pointer target manually in {vardepstring}", Logtype.Error);
+                return null;
+            }
         }
 
         public int GetStringIndex(string name, bool addnew = false)
@@ -153,8 +197,6 @@ namespace WolvenKit.CR2W
 
         public CR2WFileHeader GetFileHeader() => m_fileheader;
         public CR2WTable[] GetTableHeaders() => m_tableheaders;
-
-        public void CreateVariableEditor(CVariable editvar, EVariableEditorAction action) => EditorController?.CreateVariableEditor(editvar, action);
 
         public CVariable ReadVariable(BinaryReader file, CVariable parent)
         {
@@ -324,11 +366,12 @@ namespace WolvenKit.CR2W
                 Handle = StringDictionary[_.path],
             }).ToList(); // block 7
 
-            if (Logger != null) Logger.LogProgress(100);
+            Logger?.LogProgress(100);
             #endregion
 
             #region Read Data
-            if (Logger != null) Logger.LogProgress(1, "Reading chunks...");
+
+            Logger?.LogProgress(1, "Reading chunks...");
             // Read object data //block 5
             for (int i = 0; i < chunks.Count; i++)
             {
@@ -337,7 +380,7 @@ namespace WolvenKit.CR2W
                 chunk.ReadData(file);
 
                 int percentprogress = (int)((float)i / (float)chunks.Count * 100.0);
-                if (Logger != null) Logger.LogProgress(percentprogress, $"Reading chunk {chunk.REDName}...");
+                Logger?.LogProgress(percentprogress, $"Reading chunk {chunk.REDName}...");
             }
             // Read buffer data //block 6
             if (m_hasInternalBuffer)
@@ -348,7 +391,7 @@ namespace WolvenKit.CR2W
                     buffer.ReadData(file);
 
                     int percentprogress = (int)((float)i / (float)buffers.Count * 100.0);
-                    if (Logger != null) Logger.LogProgress(percentprogress);
+                    Logger?.LogProgress(percentprogress);
                 }
             }
             // Read embedded files //block 7
@@ -358,7 +401,7 @@ namespace WolvenKit.CR2W
                 emb.ReadData(file);
 
                 int percentprogress = (int)((float)i / (float)embedded.Count * 100.0);
-                if (Logger != null) Logger.LogProgress(percentprogress, $"Reading embedded file {emb.ClassName}...");
+                Logger?.LogProgress(percentprogress, $"Reading embedded file {emb.ClassName}...");
             }
             #endregion
 
@@ -376,8 +419,7 @@ namespace WolvenKit.CR2W
             }
 
 
-
-            if (Logger != null) Logger.LogString($"File {Cr2wFileName} loaded in: {stopwatch1.Elapsed}\n");
+            Logger?.LogString($"File {Cr2wFileName} loaded in: {stopwatch1.Elapsed}\n");
             stopwatch1.Stop();
             //m_stream = null;
             return 0;
@@ -685,9 +727,9 @@ namespace WolvenKit.CR2W
         // Got lazy and did not rewrite elements in code, hence ItemN attributes. //FIXME unimportant
         public struct SImportEntry
         {
-            public string Item1;
-            public string Item2;
-            public EImportFlags Item3;
+            public readonly string Item1;
+            public readonly string Item2;
+            public readonly EImportFlags Item3;
 
             public SImportEntry(string i1, string i2, EImportFlags i3)
             {

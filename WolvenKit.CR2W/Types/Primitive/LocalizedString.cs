@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using System.Xml;
 using WolvenKit.CR2W.Reflection;
 
@@ -61,23 +60,11 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new LocalizedString(cr2w, parent, name);
-        }
-
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (LocalizedString) base.Copy(context);
             var.val = val;
             return var;
-        }
-
-        public override Control GetEditor()
-        {
-            var editor = new TextBox();
-            editor.DataBindings.Add("Text", this, "val");
-            return editor;
         }
 
         public override string ToString()

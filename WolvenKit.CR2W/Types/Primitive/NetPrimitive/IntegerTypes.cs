@@ -2,7 +2,6 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
@@ -33,12 +32,18 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is ulong)
-                this.val = (ulong)val;
-            else if (val is string)
-                this.val = ulong.Parse(val as string);
-            else if (val is CUInt64 v)
-                this.val = v.val;
+            switch (val)
+            {
+                case ulong o:
+                    this.val = o;
+                    break;
+                case string s:
+                    this.val = ulong.Parse(s);
+                    break;
+                case CUInt64 v:
+                    this.val = v.val;
+                    break;
+            }
 
             return this;
         }
@@ -48,13 +53,6 @@ namespace WolvenKit.CR2W.Types
             var var = (CUInt64)base.Copy(context);
             var.val = val;
             return var;
-        }
-
-        public override Control GetEditor()
-        {
-            var editor = new TextBox();
-            editor.DataBindings.Add("Text", this, "val");
-            return editor;
         }
 
         public override string ToString()
@@ -86,12 +84,18 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is uint)
-                this.val = (uint) val;
-            else if (val is string)
-                this.val = uint.Parse(val as string);
-            else if (val is CUInt32 v)
-                this.val = v.val;
+            switch (val)
+            {
+                case uint o:
+                    this.val = o;
+                    break;
+                case string s:
+                    this.val = uint.Parse(s);
+                    break;
+                case CUInt32 v:
+                    this.val = v.val;
+                    break;
+            }
 
             return this;
         }
@@ -101,13 +105,6 @@ namespace WolvenKit.CR2W.Types
             var var = (CUInt32) base.Copy(context);
             var.val = val;
             return var;
-        }
-
-        public override Control GetEditor()
-        {
-            var editor = new TextBox();
-            editor.DataBindings.Add(nameof(editor.Text), this, nameof(val));
-            return editor;
         }
 
         public override string ToString()
@@ -140,12 +137,18 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is ushort)
-                this.val = (ushort)val;
-            else if (val is string)
-                this.val = ushort.Parse(val as string);
-            else if (val is CUInt16 v)
-                this.val = v.val;
+            switch (val)
+            {
+                case ushort o:
+                    this.val = o;
+                    break;
+                case string s:
+                    this.val = ushort.Parse(s);
+                    break;
+                case CUInt16 v:
+                    this.val = v.val;
+                    break;
+            }
 
             return this;
         }
@@ -155,13 +158,6 @@ namespace WolvenKit.CR2W.Types
             var var = (CUInt16)base.Copy(context);
             var.val = val;
             return var;
-        }
-
-        public override Control GetEditor()
-        {
-            var editor = new TextBox();
-            editor.DataBindings.Add("Text", this, "val");
-            return editor;
         }
 
         public override string ToString()
@@ -193,12 +189,18 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is byte)
-                this.val = (byte) val;
-            else if (val is string)
-                this.val = byte.Parse(val as string);
-            else if (val is CUInt8 v)
-                this.val = v.val;
+            switch (val)
+            {
+                case byte o:
+                    this.val = o;
+                    break;
+                case string s:
+                    this.val = byte.Parse(s);
+                    break;
+                case CUInt8 v:
+                    this.val = v.val;
+                    break;
+            }
 
             return this;
         }
@@ -208,13 +210,6 @@ namespace WolvenKit.CR2W.Types
             var var = (CUInt8) base.Copy(context);
             var.val = val;
             return var;
-        }
-
-        public override Control GetEditor()
-        {
-            var editor = new TextBox();
-            editor.DataBindings.Add("Text", this, "val");
-            return editor;
         }
 
         public override string ToString()
@@ -246,12 +241,18 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is long)
-                this.val = (long) val;
-            else if (val is string)
-                this.val = long.Parse(val as string);
-            else if (val is CInt64 v)
-                this.val = v.val;
+            switch (val)
+            {
+                case long o:
+                    this.val = o;
+                    break;
+                case string s:
+                    this.val = long.Parse(s);
+                    break;
+                case CInt64 v:
+                    this.val = v.val;
+                    break;
+            }
 
             return this;
         }
@@ -261,13 +262,6 @@ namespace WolvenKit.CR2W.Types
             var var = (CInt64) base.Copy(context);
             var.val = val;
             return var;
-        }
-
-        public override Control GetEditor()
-        {
-            var editor = new TextBox();
-            editor.DataBindings.Add("Text", this, "val");
-            return editor;
         }
 
         public override string ToString()
@@ -301,12 +295,18 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is int)
-                this.val = (int) val;
-            else if (val is string)
-                this.val = int.Parse(val as string);
-            else if (val is CInt32 v)
-                this.val = v.val;
+            switch (val)
+            {
+                case int o:
+                    this.val = o;
+                    break;
+                case string s:
+                    this.val = int.Parse(s);
+                    break;
+                case CInt32 v:
+                    this.val = v.val;
+                    break;
+            }
 
             return this;
         }
@@ -316,13 +316,6 @@ namespace WolvenKit.CR2W.Types
             var var = (CInt32) base.Copy(context);
             var.val = val;
             return var;
-        }
-
-        public override Control GetEditor()
-        {
-            var editor = new TextBox();
-            editor.DataBindings.Add("Text", this, "val");
-            return editor;
         }
 
         public override string ToString()
@@ -354,12 +347,18 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is short)
-                this.val = (short) val;
-            else if (val is string)
-                this.val = short.Parse(val as string);
-            else if (val is CInt16 v)
-                this.val = v.val;
+            switch (val)
+            {
+                case short o:
+                    this.val = o;
+                    break;
+                case string s:
+                    this.val = short.Parse(s);
+                    break;
+                case CInt16 v:
+                    this.val = v.val;
+                    break;
+            }
 
             return this;
         }
@@ -369,13 +368,6 @@ namespace WolvenKit.CR2W.Types
             var var = (CInt16) base.Copy(context);
             var.val = val;
             return var;
-        }
-
-        public override Control GetEditor()
-        {
-            var editor = new TextBox();
-            editor.DataBindings.Add("Text", this, "val");
-            return editor;
         }
 
         public override string ToString()
@@ -430,13 +422,6 @@ namespace WolvenKit.CR2W.Types
             return var;
         }
 
-        public override Control GetEditor()
-        {
-            var editor = new TextBox();
-            editor.DataBindings.Add("Text", this, "val");
-            return editor;
-        }
-
         public override string ToString()
         {
             return val.ToString();
@@ -487,13 +472,6 @@ namespace WolvenKit.CR2W.Types
             var var = (CDynamicInt) base.Copy(context);
             var.val = val;
             return var;
-        }
-
-        public override Control GetEditor()
-        {
-            var editor = new TextBox();
-            editor.DataBindings.Add("Text", this, "val");
-            return editor;
         }
 
         public override string ToString()
@@ -555,13 +533,6 @@ namespace WolvenKit.CR2W.Types
             return var;
         }
 
-        public override Control GetEditor()
-        {
-            var editor = new TextBox();
-            editor.DataBindings.Add("Text", this, "val");
-            return editor;
-        }
-
         public override string ToString()
         {
             return val.ToString();
@@ -621,13 +592,6 @@ namespace WolvenKit.CR2W.Types
             var var = (CBool) base.Copy(context);
             var.backingField = backingField;
             return var;
-        }
-
-        public override Control GetEditor()
-        {
-            var editor = new CheckBox();
-            editor.DataBindings.Add("Checked", this, "val");
-            return editor;
         }
 
         public override string ToString()

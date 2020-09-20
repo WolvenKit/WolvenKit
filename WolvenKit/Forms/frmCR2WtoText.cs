@@ -12,7 +12,6 @@ using WolvenKit.App;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
-using WolvenKit.CR2W.Editors;
 using static WolvenKit.Forms.frmChunkProperties;
 
 namespace WolvenKit.Forms

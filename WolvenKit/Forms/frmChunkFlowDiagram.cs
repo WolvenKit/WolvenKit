@@ -561,7 +561,7 @@ namespace WolvenKit
 
             copyToolStripMenuItem.Enabled = selectedEditors.Count > 0 || EditorUnderCursor != null;
             copyDisplayTextToolStripMenuItem.Enabled = selectedEditors.Count > 0 || EditorUnderCursor != null;
-            pasteToolStripMenuItem.Enabled = CopyController.ChunkList != null;
+            //pasteToolStripMenuItem.Enabled = ;
         }
 
         private void copyDisplayTextToolStripMenuItem_Click(object sender, EventArgs e)

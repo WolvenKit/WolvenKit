@@ -41,8 +41,8 @@ namespace WolvenKit.FlowTreeEditors
             return chunk.REDName;
         }
 
-        public event EventHandler<SelectChunkArgs> OnSelectChunk;
-        public event EventHandler<MoveEditorArgs> OnManualMove;
+        public event EventHandler<SelectChunkArgs> OnSelectChunk = delegate { };
+        public event EventHandler<MoveEditorArgs> OnManualMove = delegate { };
 
         private void lblTitle_MouseDown(object sender, MouseEventArgs e)
         {

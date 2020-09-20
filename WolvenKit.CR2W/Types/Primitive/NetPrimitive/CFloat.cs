@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using WolvenKit.CR2W.Reflection;
 
 
@@ -26,13 +25,14 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is float)
+            switch (val)
             {
-                this.val = (float) val;
-            }
-            else if (val is CFloat cvar)
-            {
-                this.val = cvar.val;
+                case float o:
+                    this.val = o;
+                    break;
+                case CFloat cvar:
+                    this.val = cvar.val;
+                    break;
             }
 
             return this;
@@ -48,18 +48,6 @@ namespace WolvenKit.CR2W.Types
             var var = (CFloat) base.Copy(context);
             var.val = val;
             return var;
-        }
-
-        public override Control GetEditor()
-        {
-            var editor = new TextBox
-            {
-                Margin = new Padding(3, 3, 3, 0)
-            };
-            editor.DataBindings.Add("Text", this, "val");
-            //editor.Dock = System.Windows.Forms.DockStyle.Fill;
-            //editor.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            return editor;
         }
 
         public override string ToString()

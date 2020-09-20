@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
@@ -12,6 +11,12 @@ namespace WolvenKit.CR2W.Types
     public interface IEnumAccessor
     {
         List<string> Value { get; set; }
+        bool IsFlag { get; }
+
+        string EnumToString();
+        CVariable SetValue(object val);
+        Type GetEnumType();
+
     }
 
 
@@ -29,7 +34,8 @@ namespace WolvenKit.CR2W.Types
 
         public CEnum(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-
+        public Type GetEnumType() => WrappedEnum.GetType();
+        public string EnumToString() => WrappedEnum.ToString();
 
         public override string REDType => WrappedEnum.GetType().Name;
 
@@ -104,61 +110,6 @@ namespace WolvenKit.CR2W.Types
             var.WrappedEnum = WrappedEnum;
             return var;
         }
-
-        public override Control GetEditor()
-        {
-            if (WrappedEnum.GetType().IsDefined(typeof(FlagsAttribute), false))
-            {
-                // add all values to 
-                CheckedListBox clb = new CheckedListBox();
-                clb.Items.AddRange(WrappedEnum.GetType().GetEnumNames());
-                //clb.Height = clb.Items.Count * clb.ItemHeight;
-
-                for (int i = 0; i < WrappedEnum.GetType().GetEnumNames().Count(); i++)
-                {
-                    string s = WrappedEnum.GetType().GetEnumNames()[i];
-                    if (Value.Contains(s))
-                        clb.SetItemChecked(i, true);
-                }
-                clb.SelectedValueChanged += HandleEnumPick;
-                return clb;
-            }
-            else
-            {
-                ComboBox cb = new ComboBox();
-                cb.Items.AddRange(WrappedEnum.GetType().GetEnumNames());
-
-                cb.SelectedValue = WrappedEnum.ToString();
-                cb.SelectedValueChanged += HandleEnumPick;
-                return cb;
-            }
-        }
-
-        private void HandleEnumPick(object sender, EventArgs e)
-        {
-            if (IsFlag)
-            {
-                List<string> enumstrings = new List<string>();
-                foreach (var item in (sender as CheckedListBox).CheckedItems)
-                {
-                    if (item is string enumstring)
-                    {
-                        enumstrings.Add(enumstring);
-                    }
-                }
-                SetValue(enumstrings);
-            }
-            else
-            {
-                if ((sender as ComboBox).SelectedItem is string enumstring)
-                {
-                    SetValue(new List<string>() { enumstring });
-                }
-            }
-        }
-
-
-
 
         public override CVariable SetValue(object val)
         {

@@ -5,8 +5,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
@@ -45,11 +43,6 @@ namespace WolvenKit.CR2W.Types
 
         public IdTag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new IdTag(cr2w, parent, name);
-        }
-
         public override void Read(BinaryReader file, uint size)
         {
             _type = file.ReadByte();
@@ -68,14 +61,6 @@ namespace WolvenKit.CR2W.Types
             var._type = _type;
             var._guid = _guid;
             return var;
-        }
-
-        public override Control GetEditor()
-        {
-            var editor = new IdTagEditor();
-            editor.IdType.DataBindings.Add("Text", this, "TypeString", true, DataSourceUpdateMode.OnPropertyChanged);
-            editor.IdGuid.DataBindings.Add("Text", this, "GuidString", true, DataSourceUpdateMode.OnPropertyChanged);
-            return editor;
         }
 
         public override CVariable SetValue(object val)

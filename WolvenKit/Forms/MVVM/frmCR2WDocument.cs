@@ -33,25 +33,25 @@ namespace WolvenKit
         private readonly DocumentViewModel vm;
         private DeserializeDockContent m_deserializeDockContent;
 
+        private frmChunkProperties propertyWindow;
+        private frmEmbeddedFiles embeddedFiles;
+        private frmChunkFlowDiagram flowDiagram;
+        private frmJournalEditor JournalEditor;
+        private frmImagePreview ImageViewer;
+        private Render.frmRender RenderViewer;
 
+        private CR2WFile File => (CR2WFile)vm.File;
+
+        private frmProgress ProgressForm;
+        private readonly LoggerService docLoggerService;
         #endregion
 
         #region Properties
-
-        public frmChunkProperties propertyWindow;
-        public frmEmbeddedFiles embeddedFiles;
-        public frmChunkFlowDiagram flowDiagram;
-        public frmJournalEditor JournalEditor;
-        public frmImagePreview ImageViewer;
-        public Render.frmRender RenderViewer;
-        
-
-        public CR2WFile File => (CR2WFile)vm.File;
         public string Cr2wFileName => vm.Cr2wFileName;
         public DocumentViewModel GetViewModel() => vm;
 
-        private frmProgress ProgressForm { get; set; }
-        private LoggerService docLoggerService;
+
+
         #endregion
 
 
@@ -71,7 +71,7 @@ namespace WolvenKit
             {
                 DockAreas = DockAreas.Document
             };
-            propertyWindow = new frmChunkProperties();
+            propertyWindow = new frmChunkProperties(vm);
 
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
@@ -83,6 +83,7 @@ namespace WolvenKit
 
             docLoggerService = new LoggerService();
             docLoggerService.PropertyChanged += LoggerUpdated;
+            docLoggerService.OnStringLogged += (sender, e) => MainController.LogString(e.Message, e.Logtype);
         }
 
         #region Backgroundworker
@@ -131,18 +132,18 @@ namespace WolvenKit
         /// <param name="e"></param>
         private void LoggerUpdated(object sender, PropertyChangedEventArgs e)
         {
-            var Logger = (LoggerService) sender;
+            var logger = (LoggerService) sender;
 
             switch (e.PropertyName)
             {
-                case "Progress":
+                case nameof(logger.Progress):
                 {
                     if (backgroundWorker1 != null)
                     {
-                        if (string.IsNullOrEmpty(Logger.Progress.Item2))
-                            backgroundWorker1.ReportProgress((int)Logger.Progress.Item1);
+                        if (string.IsNullOrEmpty(logger.Progress.Item2))
+                            backgroundWorker1.ReportProgress((int)logger.Progress.Item1);
                         else
-                            backgroundWorker1.ReportProgress((int)Logger.Progress.Item1, Logger.Progress.Item2);
+                            backgroundWorker1.ReportProgress((int)logger.Progress.Item1, logger.Progress.Item2);
                     }
 
                     break;
@@ -279,9 +280,9 @@ namespace WolvenKit
         }
 
 
-        private void PropertyWindow_OnRequestUpdate(object sender, EventArgs e) => chunkList.UpdateList();
+        private void ChunkWindowRequestChunkViewUpdate(object sender, EventArgs e) => chunkList.UpdateList();
 
-        private void PropertyWindow_OnRequestChunk(object sender, SelectChunkArgs e) => chunkList.SelectChunk(e.Chunk);
+        //private void PropertyWindow_OnRequestChunk(object sender, SelectChunkArgs e) => chunkList.SelectChunk(e.Chunk);
 
         private void EmbeddedWindow_OnRequestOpen(object sender, RequestEmbeddedFileOpenArgs e)
         {
@@ -351,11 +352,12 @@ namespace WolvenKit
         {
             if (propertyWindow == null || propertyWindow.IsDisposed)
             {
-                propertyWindow = new frmChunkProperties();
+                propertyWindow = new frmChunkProperties(vm);
                 propertyWindow.Show(FormPanel, DockState.DockRight);
             }
 
-            propertyWindow.Chunk = e.Chunk;
+            // Update Selected Chunk in the ViewModel
+            vm.SelectedChunk = e.Chunk;
 
             if (e.Chunk.data is CBitmapTexture xbm)
             {
@@ -402,9 +404,9 @@ namespace WolvenKit
             }
 
 
-            chunkList.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
-            propertyWindow.OnRequestUpdate += PropertyWindow_OnRequestUpdate;
-            propertyWindow.OnChunkRequest += PropertyWindow_OnRequestChunk;
+            //chunkList.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
+            propertyWindow.RequestChunkViewUpdate += ChunkWindowRequestChunkViewUpdate;
+            //propertyWindow.OnChunkRequest += PropertyWindow_OnRequestChunk;
 
             chunkList.Activate();
 
@@ -490,7 +492,10 @@ namespace WolvenKit
                             try
                             {
                                 // add all dependencies
-                                MockKernel.Get().GetMainViewModel().AddAllImports(filename, true, true);
+
+                                UIController.Get().Window.PauseMonitoring();
+                                MockKernel.Get().GetMainViewModel().AddAllImports(filename, true, false);
+                                UIController.Get().Window.ResumeMonitoring();
 
                                 this.RenderViewer = new Render.frmRender
                                 {
@@ -542,7 +547,7 @@ namespace WolvenKit
             if (hasUnknownBytes)
                 output.Append("-------\n\n");
 
-            output.Append($"CR2WFile {filename} loaded in: {stopwatch.Elapsed}\n\n");
+            //output.Append($"CR2WFile {filename} loaded in: {stopwatch.Elapsed}\n\n");
             stopwatch.Stop();
 
             MainController.LogString(output.ToString(), Logtype.Important);

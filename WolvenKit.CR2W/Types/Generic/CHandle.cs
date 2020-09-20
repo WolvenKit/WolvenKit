@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
-using WolvenKit.CR2W.Editors;
 using System.Linq;
 using WolvenKit.CR2W.Reflection;
 using System.Runtime.InteropServices;
@@ -11,20 +9,10 @@ using System.Collections.Generic;
 
 namespace WolvenKit.CR2W.Types
 {
-    public interface IHandleAccessor : IEditableVariable
-    {
-        bool ChunkHandle { get; set; }
-        string DepotPath { get; set; }
-        string ClassName { get; set; }
-        ushort Flags { get; set; }
-
-        CR2WExportWrapper Reference { get; set; }
-    }
-
     /// <summary>
     /// Handles are Int32 that store 
-    /// if > 0: a reference to a chunk inside the cr2w file
-    /// if < 0: a reference to a string in the imports table
+    /// if > 0: a reference to a chunk inside the cr2w file (aka Soft)
+    /// if < 0: a reference to a string in the imports table (aka Pointer)
     /// Exposed are 
     /// if ChunkHandle: 
     /// if ImportHandle: A string Handle, string Filetype and ushort Flags
@@ -41,7 +29,7 @@ namespace WolvenKit.CR2W.Types
         [DataMember(EmitDefaultValue = false)]
         public bool ChunkHandle { get; set; }
 
-        // Resource
+        // Soft
         [DataMember(EmitDefaultValue = false)]
         public string DepotPath { get; set; }
 
@@ -51,9 +39,11 @@ namespace WolvenKit.CR2W.Types
         [DataMember(EmitDefaultValue = false)]
         public ushort Flags { get; set; }
 
-        // Reference
+        // Pointer
         [DataMember(EmitDefaultValue = false)]
         public CR2WExportWrapper Reference { get; set; }
+
+        public string ReferenceType => REDType.Split(':').Last();
         #endregion
 
         #region Methods
@@ -120,38 +110,43 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is int)
+            switch (val)
             {
-                SetValueInternal((int)val);
-            }
-            else if (val is IHandleAccessor cvar)
-            {
-                this.ChunkHandle = cvar.ChunkHandle;
-                this.DepotPath = cvar.DepotPath;
-                this.ClassName = cvar.ClassName;
-                this.Flags = cvar.Flags;
+                case int o:
+                    SetValueInternal(o);
+                    break;
+                case IHandleAccessor cvar:
+                    this.ChunkHandle = cvar.ChunkHandle;
+                    this.DepotPath = cvar.DepotPath;
+                    this.ClassName = cvar.ClassName;
+                    this.Flags = cvar.Flags;
 
-                this.Reference = cvar.Reference;
+                    this.Reference = cvar.Reference;
+                    break;
             }
 
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CHandle<T>(cr2w, parent, name);
-        }
-
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CHandle<T>)base.Copy(context);
+            var copy = (CHandle<T>)base.Copy(context);
+            copy.ChunkHandle = ChunkHandle;
 
-            var.DepotPath = DepotPath;
-            var.ClassName = ClassName;
-            var.Flags = Flags;
-            var.ChunkHandle = ChunkHandle;
-            var.Reference = Reference;
-            return var;
+            // Soft
+            copy.DepotPath = DepotPath;
+            copy.ClassName = ClassName;
+            copy.Flags = Flags;
+
+            // Ptr
+            if (ChunkHandle && Reference != null)
+            {
+                CR2WExportWrapper newref = context.DestinationFile.TryLookupReference(copy, Reference);
+                if (newref != null)
+                    copy.Reference = newref;
+            }
+            
+            return copy;
         }
 
         public override string ToString()
@@ -161,65 +156,12 @@ namespace WolvenKit.CR2W.Types
                 if (Reference == null)
                     return "NULL";
                 else
-                    return Reference.REDType + " #" + (Reference.ChunkIndex);
+                    return $"{Reference.REDType} #{Reference.ChunkIndex}";
             }
 
             return ClassName + ": " + DepotPath;
         }
 
-        public override Control GetEditor()
-        {
-            if (ChunkHandle)
-            {
-                var editor = new ComboBox();
-                editor.Items.Add(new PtrComboItem { Text = "", Value = null });
-
-                foreach (var chunk in cr2w.chunks)
-                {
-                    editor.Items.Add(new PtrComboItem
-                    {
-                        Text = $"{chunk.REDType} #{chunk.ChunkIndex}", //real index
-                        Value = chunk
-                    }
-                    );
-                }
-
-                editor.SelectedIndexChanged += delegate (object sender, EventArgs e)
-                {
-                    var ptrcomboitem = (PtrComboItem)((ComboBox)sender).SelectedItem;
-                    if (ptrcomboitem != null)
-                    {
-                        Reference = ptrcomboitem.Value;
-                    }
-                };
-
-                var selIndex = Reference == null ? 0 : Reference.ChunkIndex + 1;
-                if (selIndex < editor.Items.Count && selIndex >= 0)
-                {
-                    editor.SelectedIndex = selIndex;
-                }
-                return editor;
-            }
-            else
-            {
-                var editor = new PtrEditor();
-                editor.HandlePath.DataBindings.Add("Text", this, nameof(DepotPath), true, DataSourceUpdateMode.OnPropertyChanged);
-                editor.FileType.DataBindings.Add("Text", this, nameof(ClassName), true, DataSourceUpdateMode.OnPropertyChanged);
-                editor.Flags.DataBindings.Add("Text", this, nameof(Flags), true, DataSourceUpdateMode.OnPropertyChanged);
-                return editor;
-            }
-        }
         #endregion
-
-        internal class HandleComboItem
-        {
-            public int Value { get; set; }
-            public string Text { get; set; }
-
-            public override string ToString()
-            {
-                return Text;
-            }
-        }
     }
 }

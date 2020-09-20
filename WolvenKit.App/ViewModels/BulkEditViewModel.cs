@@ -164,9 +164,9 @@ namespace WolvenKit.App.ViewModels
             ProgressReport = new ProgressReport();
         }
 
-        public event EventHandler PerformStep;
+        public event EventHandler PerformStep = delegate { };
         protected void OnPerformStepRequest() => this.PerformStep?.Invoke(this, new EventArgs());
-        public event EventHandler Reset;
+        public event EventHandler Reset = delegate { };
         protected void OnResetRequest() => this.PerformStep?.Invoke(this, new EventArgs());
 
         #region Fields
@@ -344,7 +344,7 @@ namespace WolvenKit.App.ViewModels
                             // check if the user specified a file type
                             if (opts.Type != BulkEditOptions.AvailableTypes.ANY)
                                 if ( proptoedit.GetType().Name != opts.Type.ToString())
-                                return;
+                                    return;
 
                             // check if the user specified a parent
                             if (splits.Length > 1)

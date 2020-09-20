@@ -45,11 +45,11 @@ namespace WolvenKit
             // Sound
             var allowedExtensions = new[] { ".wem", ".bnk" };
             if (Directory
-                .GetFiles(activemod.ModDirectory)
+                .GetFiles(activemod.ModDirectory, "*", SearchOption.AllDirectories)
                 .Any(file => allowedExtensions.Any(file.ToLower().EndsWith)))
                 modSND.Checked = true;
             if (Directory
-                .GetFiles(activemod.DlcDirectory)
+                .GetFiles(activemod.ModDirectory, "*", SearchOption.AllDirectories)
                 .Any(file => allowedExtensions.Any(file.ToLower().EndsWith)))
                 dlcSND.Checked = true;
 

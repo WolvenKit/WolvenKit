@@ -159,8 +159,7 @@ namespace WolvenKit.Common.Wcc
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("relativepath - Local(depot) path for the file to export.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
-            [REDTags("Path", "In")]
+            [REDTags("In")]
             [REDName("file")]
             public string File { get; set; }
 

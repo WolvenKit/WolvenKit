@@ -24,6 +24,7 @@ namespace WolvenKit
     using Common.Model;
     using CR2W;
     using Render;
+    using Dfust.Hotkeys;
 
     public partial class frmModExplorer : DockContent, IThemedContent
     {
@@ -78,6 +79,7 @@ namespace WolvenKit
         #endregion
 
 
+
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(vm.treenodes)) return;
@@ -90,7 +92,7 @@ namespace WolvenKit
             
         }
 
-        
+
 
         #region Methods
         public void ApplyCustomTheme()
@@ -266,18 +268,17 @@ namespace WolvenKit
         }
         private void modFileList_KeyDown(object sender, KeyEventArgs e)
         {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
-            {
-                if (e.KeyCode == Keys.F2)
-                {
-                    RequestFileRename?.Invoke(this, new RequestFileOpenArgs { File = selectedobject.FullName });
-                }
-                else if (e.KeyCode == Keys.Back)
-                {
-                    RequestDelete();
-                }
-
-            }
+            //if (treeListView.SelectedObject is FileSystemInfo selectedobject)
+            //{
+            //    if (e.KeyCode == Keys.F2)
+            //    {
+            //        RequestFileRename?.Invoke(this, new RequestFileOpenArgs { File = selectedobject.FullName });
+            //    }
+            //    else if (e.KeyCode == Keys.Delete)
+            //    {
+            //        RequestDelete();
+            //    }
+            //}
             
         }
 
@@ -358,6 +359,7 @@ namespace WolvenKit
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
                 var fi = new FileInfo(selectedobject.FullName);
+
                 var ext = fi.Extension.TrimStart('.');
                 bool isbundle = Path.Combine(ActiveMod.FileDirectory, fi.ToString())
                     .Contains(Path.Combine(ActiveMod.ModDirectory, EBundleType.Bundle.ToString()));
@@ -367,12 +369,10 @@ namespace WolvenKit
                         || selectedobject.FullName == ActiveMod.DlcDirectory
                         || selectedobject.FullName == ActiveMod.RawDirectory
                         || selectedobject.FullName == ActiveMod.RadishDirectory
-                        //|| selectedobject.FullName == ActiveMod.ModTextureCacheDirectory
                         || selectedobject.FullName == ActiveMod.ModUncookedDirectory
                         || selectedobject.FullName == ActiveMod.ModCookedDirectory
                         || selectedobject.FullName == ActiveMod.DlcCookedDirectory
                         || selectedobject.FullName == ActiveMod.DlcUncookedDirectory
-                        //|| selectedobject.FullName == ActiveMod.DlcTextureCacheDirectory
                         ;
 
                 createW2animsToolStripMenuItem.Enabled = !isToplevelDir;
@@ -395,6 +395,9 @@ namespace WolvenKit
                 markAsModDlcFileToolStripMenuItem.Enabled = isbundle && !isToplevelDir;
 
                 showFileInExplorerToolStripMenuItem.Text = selectedobject.IsDirectory() ? "Open Folder in Explorer" : "Open File in Explorer";
+                FileActionsToolStripMenuItem.Enabled = !israw;
+
+
             }
 
             showFileInExplorerToolStripMenuItem.Enabled = treeListView.SelectedObject != null;
@@ -493,7 +496,17 @@ namespace WolvenKit
         
 
 
-        private void addAllDependenciesToolStripMenuItem_Click(object sender, EventArgs e) => vm.AddAllImportsCommand.SafeExecute();
+        private void addAllDependenciesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UIController.Get().Window.PauseMonitoring();
+            vm.AddAllImportsCommand.SafeExecute();
+            UIController.Get().Window.ResumeMonitoring();
+        }
+
+        private void listAllDependenciesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            vm.DBG_logdependencies();
+        }
 
         private void cookToolStripMenuItem_Click(object sender, EventArgs e) => vm.CookCommand.SafeExecute();
 
@@ -642,16 +655,24 @@ namespace WolvenKit
                 }
             }
         }
-        private void exportW2meshToFbxToolStripMenuItem_Click(object sender, EventArgs e) => vm.ExportMeshCommand.SafeExecute();
+        private void exportW2meshToFbxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UIController.Get().Window.PauseMonitoring();
+            vm.ExportMeshCommand.SafeExecute();
+            UIController.Get().Window.ResumeMonitoring();
+        }
 
         private void fastRenderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
+                UIController.Get().Window.PauseMonitoring();
                 vm.AddAllImportsCommand.SafeExecute();
                 RequestFastRender?.Invoke(this, new RequestFileOpenArgs { File = selectedobject.FullName });
+                UIController.Get().Window.ResumeMonitoring();
             }
         }
+
 
 
 

@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using WolvenKit.CR2W.Reflection;
 using FastMember;
 
@@ -64,31 +63,5 @@ namespace WolvenKit.CR2W.Types
 
             return this;
         }
-
-        public override Control GetEditor()
-        {
-            var panel = new Panel();
-            panel.BackColor = Color.FromArgb(Red.val, Green.val, Blue.val);
-            panel.Click += panel_Click;
-            panel.Height = 18;
-            return panel;
-        }
-
-        private void panel_Click(object sender, EventArgs e)
-        {
-            var dlg = new ColorDialog();
-            dlg.Color = Color;
-
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                Red.val = dlg.Color.R;
-                Green.val = dlg.Color.G;
-                Blue.val = dlg.Color.B;
-
-                ((Panel)sender).BackColor = dlg.Color;
-            }
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CColor(cr2w, parent, name);
     }
 }

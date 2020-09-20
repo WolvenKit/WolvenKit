@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.CR2W.Editors
+﻿namespace WolvenKit.Forms.Editors
 {
     partial class PtrEditor
     {
@@ -32,8 +32,6 @@
             this.FileType = new System.Windows.Forms.TextBox();
             this.HandlePath = new System.Windows.Forms.TextBox();
             this.lblHandle = new System.Windows.Forms.Label();
-            this.Flags = new System.Windows.Forms.TextBox();
-            this.lblFlags = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblType
@@ -70,30 +68,10 @@
             this.lblHandle.TabIndex = 2;
             this.lblHandle.Text = "Handle";
             // 
-            // txFlags
-            // 
-            this.Flags.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Flags.Location = new System.Drawing.Point(418, 0);
-            this.Flags.Name = "Flags";
-            this.Flags.Size = new System.Drawing.Size(52, 20);
-            this.Flags.TabIndex = 5;
-            // 
-            // lblFlags
-            // 
-            this.lblFlags.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblFlags.AutoSize = true;
-            this.lblFlags.Location = new System.Drawing.Point(380, 3);
-            this.lblFlags.Name = "lblFlags";
-            this.lblFlags.Size = new System.Drawing.Size(32, 13);
-            this.lblFlags.TabIndex = 4;
-            this.lblFlags.Text = "Flags";
-            // 
             // PtrEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.Flags);
-            this.Controls.Add(this.lblFlags);
             this.Controls.Add(this.HandlePath);
             this.Controls.Add(this.lblHandle);
             this.Controls.Add(this.FileType);
@@ -109,6 +87,5 @@
 
         private System.Windows.Forms.Label lblType;
         private System.Windows.Forms.Label lblHandle;
-        private System.Windows.Forms.Label lblFlags;
     }
 }

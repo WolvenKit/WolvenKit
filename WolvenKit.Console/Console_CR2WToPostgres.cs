@@ -11,7 +11,6 @@ namespace WolvenKit.Console
     using Bundles;
     using Common;
     using CR2W;
-    using CR2W.Editors;
     using Konsole;
     using Npgsql;
     using NpgsqlTypes;

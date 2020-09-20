@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -8,23 +9,26 @@ using BrightIdeasSoftware;
 using Dfust.Hotkeys;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
+using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
+using WolvenKit.App.ViewModels;
+using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
-using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
 using WolvenKit.CR2W.Types;
+using WolvenKit.Extensions;
 using WolvenKit.Services;
+using WolvenKit.Utility;
 
 namespace WolvenKit.Forms
 {
     public partial class frmChunkProperties : DockContent, IThemedContent
     {
-        private CR2WExportWrapper chunk;
         private bool showOnlySerialized = true;
         private HotkeyCollection hotkeys;
+        private readonly DocumentViewModel viewModel;
 
-
-        public frmChunkProperties()
+        public frmChunkProperties(DocumentViewModel _viewmodel)
         {
             InitializeComponent();
             ApplyCustomTheme();
@@ -49,57 +53,40 @@ namespace WolvenKit.Forms
                 : "Show edited variables";
 
             hotkeys = new HotkeyCollection(Dfust.Hotkeys.Enums.Scope.Application);
-            hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
-            hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
+
+            hotkeys.RegisterHotkey(Keys.Oemplus, AddListElement, "Add Element");
+            hotkeys.RegisterHotkey(Keys.Add, AddListElement, "Add Element");
+
+            hotkeys.RegisterHotkey(Keys.OemMinus, RemoveListElement, "Add Element");
+            hotkeys.RegisterHotkey(Keys.Subtract, RemoveListElement, "Add Element");
+
+            viewModel = _viewmodel;
+            viewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
         #region Properties
+        public event EventHandler RequestChunkViewUpdate;
+        private CR2WExportWrapper Chunk => viewModel.SelectedChunk;
 
-        
-
-        #endregion
-        public CR2WExportWrapper Chunk
+        private List<IEditableVariable> GetSelectedObjects()
         {
-            get => chunk;
-            set
-            {
-                chunk = value;
-                UpdateTreeListView();
-            }
+            return (from IEditableVariable item in treeView.SelectedObjects where item != null select item).ToList();
         }
-
-        #region Hotkeys
-        private void HKCopy(HotKeyEventArgs e)
-        {
-            CopyVariable();
-            MainController.LogString("Selected propertie(s) copied!\n");
-        }
-        private void HKPaste(HotKeyEventArgs e)
-        {
-            PasteVariable();
-            MainController.LogString("Copied propertie(s) pasted!\n");
-        }
-
-
         #endregion
 
 
         #region UI Methods
-
-
-
-        #endregion
         private void UpdateTreeListView()
         {
-            if (chunk == null)
+            if (Chunk == null)
             {
                 treeView.Roots = null;
                 return;
             }
 
             var root = showOnlySerialized 
-                ? chunk.GetEditableVariables().Where(_ => _.IsSerialized) 
-                : chunk.GetEditableVariables();
+                ? Chunk.GetEditableVariables().Where(_ => _.IsSerialized) 
+                : Chunk.GetEditableVariables();
 
             treeView.Roots = root;
 
@@ -116,17 +103,238 @@ namespace WolvenKit.Forms
 
         }
 
-        #region Events
-
-        
-
-        #endregion
-        private void frmChunkProperties_Resize(object sender, EventArgs e)
+        private void treeView_CellEditStarting(object sender, CellEditEventArgs e)
         {
+            if (!(e.RowObject is IEditableVariable ivar)) return;
+            switch (e.Column.AspectName)
+            {
+                //var variable = (e.RowObject as VariableListNode).Variable;
+                case "REDValue":
+                {
+                    e.Control = EditorHandler.GetEditor(ivar);
+                    if (e.Control != null)
+                    {
+                        e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
+                        e.Control.Width = e.CellBounds.Width;
+
+                        if (ivar is IChunkPtrAccessor iptr && e.Control is ComboBox editor)
+                        {
+                            editor.SelectedIndexChanged += delegate(object o, EventArgs _e)
+                            {
+                                var ptrcomboitem = (PtrComboItem) ((ComboBox) o).SelectedItem;
+                                if (ptrcomboitem != null)
+                                {
+                                    if (ptrcomboitem.Text == $"<Add new chunk ...>")
+                                    {
+                                        // raise event
+                                        AddNewChunkFor(ivar as CVariable);
+
+                                        // select item
+                                        editor.UpdateComboBoxWith(iptr);
+
+                                    }
+                                    else
+                                    {
+                                        iptr.Reference = ptrcomboitem.Value;
+                                    }
+                                }
+                            };
+                        }
+
+
+                    }
+
+                    e.Cancel = e.Control == null;
+                    break;
+                }
+                case "REDName":
+                    //Normal textbox is good for this.
+                    break;
+                default:
+                    e.Cancel = true;
+                    break;
+            }
         }
 
-        private void frmChunkProperties_Shown(object sender, EventArgs e)
+        private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
         {
+            // change the model's isserialized property to true when the user edits it,
+            // this is to make sure only user-edited properties will get serialized
+            var model = e.ListViewItem.RowObject as IEditableVariable;
+            if (model is CVariable cvar)
+                cvar.SetIsSerialized();
+
+        }
+
+        public void ApplyCustomTheme()
+        {
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
+            toolStripSearchBox.BackColor = UIController.GetPalette().ToolWindowCaptionButtonInactiveHovered.Background;
+
+            this.treeView.BackColor = UIController.GetBackColor();
+            this.treeView.AlternateRowBackColor = UIController.GetPalette().OverflowButtonHovered.Background;
+
+            this.treeView.ForeColor = UIController.GetForeColor();
+
+            this.treeView.HeaderFormatStyle = UIController.GetHeaderFormatStyle();
+            treeView.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
+        }
+        #endregion
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(viewModel.SelectedChunk))
+            {
+                UpdateTreeListView();
+            }
+        }
+
+        private void AddListElement(HotKeyEventArgs e)
+        {
+            var carray = (IEditableVariable)treeView.SelectedObject;
+            if (carray == null || !carray.CanAddVariable(null) || !(carray is IArrayAccessor parentarray))
+                return;
+
+            // Create new CVariable
+            CVariable newvar = CR2WTypeManager.Create(parentarray.Elementtype, "", Chunk.cr2w, carray as CVariable, false);
+            if (newvar == null) return;
+            
+            AddNewChunkFor(newvar);
+
+            newvar.IsSerialized = true;
+
+            parentarray.AddVariable(newvar);
+            treeView.RefreshObject(carray);
+            //RequestChunkViewUpdate?.Invoke(null, null);
+        }
+
+        private void AddNewChunkFor(CVariable newvar)
+        {
+            switch (newvar)
+            {
+                case IPtrAccessor ptr:
+                    {
+                        string newChunktype = "";
+                        string innerParentType = ptr.ReferenceType /*parentarray.Elementtype.Substring("ptr:".Length)*/;
+
+                        List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType);
+                        if (availableTypes.Count <= 0)
+                            return;
+
+                        using (var form = new frmAddChunk(availableTypes))
+                        {
+                            var result = form.ShowDialog();
+                            if (result == DialogResult.OK)
+                            {
+                                newChunktype = form.ChunkType;
+                            }
+                        }
+
+                        if (string.IsNullOrEmpty(newChunktype))
+                            return;
+
+                        ptr.Reference = newvar.cr2w.CreateChunk(newChunktype, Chunk);
+                        break;
+                    }
+                case IHandleAccessor handle:
+                    {
+                        bool isChunkHandle = true;
+
+                        // check parent if the handle is a chunkhandle
+                        if (newvar.ParentVar is IArrayAccessor parentarray && parentarray.Count > 0 
+                                                                           && parentarray is IList il && il[0] is IHandleAccessor ih)
+                        {
+                            isChunkHandle = ih.ChunkHandle;
+                        }
+                        else
+                        {
+                            // ask the user?
+                            switch (MessageBox.Show(
+                                "Please select Yes if this a CHandle to an existing chunk, or No if it is a CHandle to an external source.",
+                                "New CHandle",
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                            {
+                                case DialogResult.No:
+                                {
+                                    isChunkHandle = false;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // it is a chunk handle, so create a new chunk
+                        if (isChunkHandle)
+                        {
+                            string newhandletype = "";
+                            string innerParentType = handle.ReferenceType /*parentarray.Elementtype.Substring("handle:".Length)*/;
+
+                            List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType);
+                            if (availableTypes.Count <= 0)
+                                return;
+
+                            using (var form = new frmAddChunk(availableTypes))
+                            {
+                                var result = form.ShowDialog();
+                                if (result == DialogResult.OK)
+                                {
+                                    newhandletype = form.ChunkType;
+                                }
+                            }
+
+                            if (string.IsNullOrEmpty(newhandletype))
+                                return;
+
+                            handle.ChunkHandle = true;
+                            handle.Reference = newvar.cr2w.CreateChunk(newhandletype, Chunk);
+                        }
+
+                        break;
+                    }
+            }
+            RequestChunkViewUpdate?.Invoke(null, null);
+        }
+
+        private void RemoveListElement(HotKeyEventArgs e)
+        {
+            // removing variables from arrays
+            if (treeView.SelectedObjects.Count <= 0)
+                return;
+
+            var parentmodel = treeView.SelectedObjects.Cast<IEditableVariable>().FirstOrDefault()?.ParentVar;
+            foreach (IEditableVariable node in treeView.SelectedObjects)
+            {
+                if (node?.ParentVar == null || !node.ParentVar.CanRemoveVariable(node)) continue;
+
+                switch (node)
+                {
+                    case IPtrAccessor ptr:
+                        if (ptr.Reference != null)
+                            node.cr2w.RemoveChunk(ptr.Reference);
+                        break;
+                    case IHandleAccessor hdl when hdl.ChunkHandle:
+                        if (hdl.Reference != null)
+                            node.cr2w.RemoveChunk(hdl.Reference);
+                        break;
+                }
+
+                node.ParentVar.RemoveVariable(node);
+                //treeView.RefreshObject(node.ParentVar);
+
+            }
+            treeView.RefreshObject(parentmodel);
+            //RequestChunkViewUpdate?.Invoke(null, null);
+        }
+
+
+        #region Events
+        private void addVariableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddListElement(null);
+        }
+
+        private void removeVariableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RemoveListElement(null);
         }
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
@@ -143,124 +351,14 @@ namespace WolvenKit.Forms
             removeVariableToolStripMenuItem.Enabled = selectedNodes.All(x => x.ParentVar != null && x.ParentVar.CanRemoveVariable(x));
 
             //  paste variable is active if any one variable has been copied and if the one selected variable is of the same type
-            pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null
-                && CopyController.VariableTargets.Count == 1 && CopyController.VariableTargets.First() is CVariable ccopy
-                && selectedNodes.Count == 1 && selectedNodes.First() is CVariable csel
-                && csel.GetType() == ccopy.GetType();
+            pasteToolStripMenuItem.Enabled = CopyController.Source != null
+                                             && CopyController.Source is CVariable ccopy
+                                             && selectedNodes.Count == 1 && selectedNodes.First() is CVariable csel
+                                             && csel.GetType() == ccopy.GetType();
 
-            ptrPropertiesToolStripMenuItem.Visible = selectedNodes.All(x => x is IPtrAccessor) && selectedNodes.Count == 1;
-        }
 
-        private void CopyVariable()
-        {
-            var propertiestocopy = (from IEditableVariable item in treeView.SelectedObjects where item != null select item).ToList();
-            if (propertiestocopy.Count > 0)
-                CopyController.VariableTargets = propertiestocopy;
-        }
-
-        private void PasteVariable()
-        {
-            var node = (IEditableVariable)treeView.SelectedObject;
-            if (CopyController.VariableTargets == null || node == null)
-                return;
-
-            if (CopyController.VariableTargets.Count == 1
-                && CopyController.VariableTargets.First() is CVariable cvar
-                && cvar.REDType == node.REDType
-                && node is CVariable targetvar
-                )
-            {
-                var context = new CR2WCopyAction()
-                {
-                    DestinationFile = targetvar.cr2w,
-                    Parent = targetvar.ParentVar as CVariable
-                };
-                var copy = cvar.Copy(context);
-                targetvar.SetValue(copy);
-                targetvar.IsSerialized = true;
-
-                UpdateTreeListView();
-            }
-        }
-
-        private void addVariableToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var carray = (IEditableVariable) treeView.SelectedObject;
-            if (carray == null || !carray.CanAddVariable(null) || !(carray is IArrayAccessor parentarray))
-                return;
-
-            // Create new CVariable
-            CVariable newvar = CR2WTypeManager.Create(parentarray.Elementtype, "", Chunk.cr2w, carray as CVariable, false);
-            if (newvar == null)
-                return;
-
-            // if a new ptr is created, auto-add new chunks
-            if (newvar is IPtrAccessor ptr)
-            {
-                string newChunktype = "";
-                string innerParentType = parentarray.Elementtype.Substring("ptr:".Length);
-                if (!AssemblyDictionary.TypeExists(innerParentType))
-                    throw new NotImplementedException();
-
-                List<string> availableTypes = AssemblyDictionary
-                    .GetSubClassesOf(AssemblyDictionary.GetTypeByName(innerParentType)).Select(_ => _.Name).ToList();
-                using (var form = new frmAddChunk(availableTypes))
-                {
-                    var result = form.ShowDialog();
-                    if (result == DialogResult.OK)
-                    {
-                        newChunktype = form.ChunkType;
-                    }
-                }
-
-                if (string.IsNullOrEmpty(newChunktype))
-                    return;
-
-                ptr.IsSerialized = true;
-                ptr.Reference = newvar.cr2w.CreateChunk(newChunktype, Chunk);
-            }
-
-            parentarray.AddVariable(newvar);
-            treeView.RefreshObject(carray);
-            OnRequestUpdate?.Invoke(sender, e);
-        }
-
-        private void removeVariableToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // removing variables from arrays
-            if (treeView.SelectedObjects.Count <= 0)
-                return;
-            
-            var parentmodel = treeView.SelectedObjects.Cast<IEditableVariable>().FirstOrDefault()?.ParentVar;
-            foreach (IEditableVariable node in treeView.SelectedObjects)
-            {
-                if (node?.ParentVar == null || !node.ParentVar.CanRemoveVariable(node)) continue;
-
-                // if ptrs are removed, delete chunk as well
-                if (node is IPtrAccessor ptr)
-                {
-                    node.cr2w.RemoveChunk(ptr.Reference);
-                }
-
-                node.ParentVar.RemoveVariable(node);
-                //treeView.RefreshObject(node.ParentVar);
-                
-            }
-            treeView.RefreshObject(parentmodel);
-            OnRequestUpdate?.Invoke(sender, e);
-        }
-
-        private void clearVariableToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var node = (IEditableVariable)treeView.SelectedObject;
-            if (node == null)
-            {
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-
+            goToChunkToolStripMenuItem.Visible = selectedNodes.Count == 1 && selectedNodes.All(x => x is IChunkPtrAccessor);
+            deleteChunkToolStripMenuItem.Visible = selectedNodes.Count == 1 && selectedNodes.All(x => x is IChunkPtrAccessor);
         }
 
         private void expandAllToolStripMenuItem_Click(object sender, EventArgs e) => treeView.ExpandAll();
@@ -285,9 +383,19 @@ namespace WolvenKit.Forms
             }
         }
 
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e) => CopyVariable();
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (GetSelectedObjects().Count > 0)
+                CopyController.Source = GetSelectedObjects().First();
+            //viewModel.CopyVariableCommand.SafeExecute();
+        }
 
-        private void pasteToolStripMenuItem_Click(object sender, EventArgs e) => PasteVariable();
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (GetSelectedObjects().Count > 0)
+                CopyController.Target = GetSelectedObjects().First();
+            viewModel.PasteVariableCommand.SafeExecute();
+        }
 
         private void treeView_CellClick(object sender, CellClickEventArgs e)
         {
@@ -298,7 +406,8 @@ namespace WolvenKit.Forms
             {
                 if (e.Model is IPtrAccessor ptr)
                 {
-                    OnChunkRequest?.Invoke(this, new SelectChunkArgs() {Chunk = ptr.Reference } );
+                    viewModel.SelectedChunk = ptr.Reference;
+                    //OnChunkRequest?.Invoke(this, new SelectChunkArgs() {Chunk =  } );
                     return;
                 }
             }
@@ -316,13 +425,22 @@ namespace WolvenKit.Forms
             
         }
 
-        private void ptrPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void GotoChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var node = (IEditableVariable) treeView.SelectedObject;
-            if ((node as IPtrAccessor)?.Reference == null)
-                return;
+            if (node is IChunkPtrAccessor iptr && iptr.Reference != null)
+            {
+                viewModel.SelectedChunk = iptr.Reference;
+            }
+        }
 
-            Chunk = ((IPtrAccessor) node).Reference;
+        private void DeleteChunkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var node = (IEditableVariable)treeView.SelectedObject;
+            if (node is IChunkPtrAccessor iptr && iptr.Reference != null)
+            {
+                node.cr2w.RemoveChunk(iptr.Reference);
+            }
         }
 
         private void copyTextToolStripMenuItem_Click(object sender, EventArgs e)
@@ -340,65 +458,7 @@ namespace WolvenKit.Forms
             }
         }
 
-        
-
-        public event EventHandler OnRequestUpdate;
-        public event EventHandler<SelectChunkArgs> OnChunkRequest;
-
         private void treeView_ItemsChanged(object sender, ItemsChangedEventArgs e) => MainController.Get().ProjectUnsaved = true;
-
-        private void treeView_CellEditStarting(object sender, CellEditEventArgs e)
-        {
-            //var variable = (e.RowObject as VariableListNode).Variable;
-            if (e.Column.AspectName == "REDValue")
-            {
-                e.Control = ((IEditableVariable)e.RowObject).GetEditor();
-                if (e.Control != null)
-                {
-                    e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
-                    e.Control.Width = e.CellBounds.Width;
-                    //e.Control.ForeColor = Control.Tex
-                }
-                e.Cancel = e.Control == null;
-            }
-            else if (e.Column.AspectName == "REDName")
-            {
-                //Normal textbox is good for this.
-            }
-            else
-            {
-                e.Cancel = true;
-            }
-        }
-
-
-        private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
-        {
-            /*            if (chunk.ParentPtr.Reference != null)
-                            chunk.SetParentChunkId(chunk.ParentPtr.Reference.ChunkIndex + 1);*/
-            //OnRequestUpdate?.Invoke(sender, e);
-
-            // change the model's isserialized property to true when the user edits it,
-            // this is to make sure only user-edited properties will get serialized
-            var model = e.ListViewItem.RowObject as IEditableVariable;
-            if (model is CVariable cvar)
-                cvar.SetIsSerialized();
-
-        }
-
-        public void ApplyCustomTheme()
-        {
-            UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
-            toolStripSearchBox.BackColor = UIController.GetPalette().ToolWindowCaptionButtonInactiveHovered.Background;
-
-            this.treeView.BackColor = UIController.GetBackColor();
-            this.treeView.AlternateRowBackColor = UIController.GetPalette().OverflowButtonHovered.Background;
-
-            this.treeView.ForeColor = UIController.GetForeColor();
-            
-            this.treeView.HeaderFormatStyle = UIController.GetHeaderFormatStyle();
-            treeView.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
-        }
 
         private void treeView_FormatRow(object sender, FormatRowEventArgs e)
         {
@@ -408,13 +468,22 @@ namespace WolvenKit.Forms
                 //if (!showOnlySerialized)
                 {
                     int themeID = (int)UIController.Get().Configuration.ColorTheme;
-                    Color forecolor = Color.FromArgb(UIController.Get().Configuration.CustomHighlightColor[themeID]);
+                    var forecolor = Color.FromArgb(UIController.Get().Configuration.CustomHighlightColor[themeID]);
                     e.Item.ForeColor = forecolor;
                 }
             }
             else
             {
                 
+            }
+
+            // check for errors
+            // do this here until we have a proper error log 
+            if ((model is IPtrAccessor ptr && ptr.Reference == null) 
+                || (model is IHandleAccessor handle && handle.ChunkHandle && handle.Reference == null))
+            {
+                if (model.IsSerialized)
+                    e.Item.ForeColor = Color.Red;
             }
         }
 
@@ -463,5 +532,11 @@ namespace WolvenKit.Forms
                 UIController.Get().Configuration.Save();
             }
         }
+
+        #endregion
+
+        private void ExpandBTN_Click(object sender, EventArgs e) => treeView.ExpandAll();
+
+        private void CollapseBTN_Click(object sender, EventArgs e) => treeView.CollapseAll();
     }
 }

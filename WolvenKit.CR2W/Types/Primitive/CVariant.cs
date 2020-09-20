@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
-using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
@@ -83,26 +81,13 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CVariant) base.Copy(context);
-            var.Variant = var.Copy(context);
-            return var;
+            var copy = (CVariant) base.Copy(context);
+            if (Variant != null)
+                copy.Variant = Variant.Copy(context);
+            return copy;
         }
 
-        public override List<IEditableVariable> GetEditableVariables()
-        {
-            //var list = new List<IEditableVariable>();
-            //if (Variant != null)
-            //{
-            //    list.Add(Variant);
-            //};
-            //return list;
-            return Variant?.GetEditableVariables();
-        }
-
-        public override Control GetEditor()
-        {
-            return Variant?.GetEditor();
-        }
+        public override List<IEditableVariable> GetEditableVariables() => Variant?.GetEditableVariables();
 
         public override string ToString()
         {

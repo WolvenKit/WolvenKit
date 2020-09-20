@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using WolvenKit.CR2W.Editors;
+
 using System.Linq;
 using WolvenKit.CR2W.Types.Utils;
 using System.Runtime.Serialization;

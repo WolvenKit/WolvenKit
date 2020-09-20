@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
-using WolvenKit.CR2W.Editors;
+
 using System.Linq;
 using WolvenKit.CR2W.Reflection;
 using System.ComponentModel;
@@ -158,7 +158,7 @@ namespace WolvenKit.CR2W.Types
 
             foreach (var element in Elements)
             {
-                var ccopy = element.Copy(context);
+                var ccopy = element.Copy(new CR2WCopyAction() { DestinationFile = context.DestinationFile, Parent = copy });
                 if (ccopy is T copye)
                     copy.Elements.Add(copye);
             }

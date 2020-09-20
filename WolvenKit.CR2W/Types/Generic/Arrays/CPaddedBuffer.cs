@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using WolvenKit.CR2W.Editors;
+
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
@@ -57,10 +57,12 @@ namespace WolvenKit.CR2W.Types
         {
             var copy = base.Copy(context) as CPaddedBuffer<T>;
 
-            foreach (var element in elements)
-            {
-                copy.elements.Add(element.Copy(context) as T);
-            }
+            //foreach (var element in elements)
+            //{
+            //    var ccopy = element.Copy(new CR2WCopyAction() { DestinationFile = context.DestinationFile, Parent = copy });
+            //    if (ccopy is T copye)
+            //        copy.elements.Add(copye);
+            //}
 
             copy.padding = (CFloat)padding.Copy(context);
 

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
@@ -45,21 +44,17 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is byte[])
+            switch (val)
             {
-                guid = (byte[]) val;
-            }
-            else if (val is CGUID cvar)
-            {
-                this.guid = cvar.guid;
+                case byte[] o:
+                    guid = o;
+                    break;
+                case CGUID cvar:
+                    this.guid = cvar.guid;
+                    break;
             }
 
             return this;
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CGUID(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -67,14 +62,6 @@ namespace WolvenKit.CR2W.Types
             var var = (CGUID) base.Copy(context);
             var.guid = guid;
             return var;
-        }
-
-        public override Control GetEditor()
-        {
-            var editor = new TextBox();
-            editor.Margin = new Padding(3, 3, 3, 0);
-            editor.DataBindings.Add("Text", this, "GuidString");
-            return editor;
         }
 
         public override string ToString()

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
-using WolvenKit.CR2W.Editors;
 using System.Linq;
 using WolvenKit.CR2W.Reflection;
 using System.ComponentModel;
@@ -18,6 +17,8 @@ namespace WolvenKit.CR2W.Types
         List<int> Flags { get; set; }
 
         string Elementtype { get; set; }
+
+        int Count { get; }
     }
 
     public interface IArrayAccessor<T> : IArrayAccessor

@@ -146,7 +146,8 @@ namespace WolvenKit.App.ViewModels
 
 
         protected bool CanAddAllImports() => SelectedItems != null;
-        protected async void AddAllImports() => await MainVM.AddAllImports(SelectedItems.First().FullName);
+        protected async void AddAllImports() => await MainVM
+            .AddAllImports(SelectedItems.First().FullName);
 
 
         #endregion
@@ -284,5 +285,15 @@ namespace WolvenKit.App.ViewModels
         }
         
         #endregion
+
+
+        // debug
+        public async void DBG_logdependencies()
+        {
+            string workDir = Path.GetFullPath($"{MainController.WorkDir}_export");
+            await MainVM
+                .AddAllImports(SelectedItems.First().FullName, true, true, workDir, true);
+        }
+
     }
 }
