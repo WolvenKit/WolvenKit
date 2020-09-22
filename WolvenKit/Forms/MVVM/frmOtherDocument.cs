@@ -17,11 +17,11 @@ using WolvenKit.Services;
 
 namespace WolvenKit.Forms
 {
-    public partial class frmOtherDocument : DockContent, IThemedContent, INotifyPropertyChanged, IWolvenkitDocument
+    public partial class frmOtherDocument : DockContent, IThemedContent, INotifyPropertyChanged, IWolvenkitView
     {
-        private readonly DocumentViewModel vm;
+        private readonly CommonDocumentViewModel vm;
 
-        public frmOtherDocument(DocumentViewModel documentViewModel)
+        public frmOtherDocument(CommonDocumentViewModel documentViewModel)
         {
             vm = documentViewModel;
 
@@ -52,15 +52,15 @@ namespace WolvenKit.Forms
         private delegate void wolvenkitFileDelegate(IWolvenkitFile f);
         protected void UpdatePropertyGrid(IWolvenkitFile val) => this.propertyGrid.SelectedObject = val;
 
-        public string Cr2wFileName => vm.Cr2wFileName;
+        public string FileName => vm.FileName;
 
         public event EventHandler<FileSavedEventArgs> OnFileSaved;
         public event PropertyChangedEventHandler PropertyChanged;
 
 
-        public bool GetIsDisposed() => this.IsDisposed;
+        //public bool GetIsDisposed() => this.IsDisposed;
 
-        public DocumentViewModel GetViewModel() => vm;
+        public IDocumentViewModel GetViewModel() => vm;
 
         public void ApplyCustomTheme()
         {

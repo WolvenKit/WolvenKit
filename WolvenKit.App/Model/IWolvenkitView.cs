@@ -8,20 +8,15 @@ using WolvenKit.App.ViewModels;
 namespace WolvenKit.Common.Model
 {
     /// <summary>
-    /// A CR2W document
+    /// A CR2W Form
     /// </summary>
-    public interface IWolvenkitDocument
+    public interface IWolvenkitView
     {
+        string FileName { get; }
 
-        string Cr2wFileName { get; }
-        //object SaveTarget { get; set; }
+        IDocumentViewModel GetViewModel();
 
-
-        //void SaveFile();
         void Close();
-
-        bool GetIsDisposed();
-
-        DocumentViewModel GetViewModel();
+        void Activate();
     }
 }

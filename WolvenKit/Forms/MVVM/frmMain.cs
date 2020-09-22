@@ -51,7 +51,7 @@ namespace WolvenKit
         #region Fields
 
         #region Forms
-        //private List<IWolvenkitDocument> OpenDocuments { get; set; } = new List<IWolvenkitDocument>();
+        //private List<IWolvenkitView> OpenDocuments { get; set; } = new List<IWolvenkitView>();
         private frmModExplorer ModExplorer { get; set; }
         private frmOutput Output { get; set; }
         private frmConsole Console { get; set; }
@@ -66,7 +66,7 @@ namespace WolvenKit
 
 
         private frmScriptEditor ScriptPreview { get; set; }
-        private List<frmScriptEditor> OpenScripts { get; set; } = new List<frmScriptEditor>();
+        //private List<frmScriptEditor> OpenScripts { get; set; } = new List<frmScriptEditor>();
         private frmImagePreview ImagePreview { get; set; }
         private List<frmImagePreview> OpenImages { get; set; } = new List<frmImagePreview>();
 
@@ -90,8 +90,8 @@ namespace WolvenKit
         #region Properties
 
         public EventHandler errored;
-        //private IWolvenkitDocument _activedocument;
-        //public IWolvenkitDocument ActiveDocument
+        //private IWolvenkitView _activedocument;
+        //public IWolvenkitView ActiveDocument
         //{
         //    get => _activedocument;
         //    set
@@ -310,7 +310,7 @@ namespace WolvenKit
         {
             if (ScriptPreview == null || ScriptPreview.IsDisposed)
             {
-                ScriptPreview = new frmScriptEditor();
+                ScriptPreview = new frmScriptEditor(new ScriptDocumentViewModel());
                 ScriptPreview.Show(dockPanel, DockState.Document);
             }
 
@@ -427,11 +427,6 @@ namespace WolvenKit
             FormModKit?.Close();
             FormModKit = null;
 
-            foreach (var t in OpenScripts.ToList())
-            {
-                t.SaveFile();
-                t.Close();
-            }
             foreach (var t in OpenImages.ToList())
             {
                 t.Close();
@@ -722,7 +717,7 @@ namespace WolvenKit
         {
             ProgressForm?.SetProgressBarValue(e.ProgressPercentage, e.UserState);
         }
-        //IWolvenkitDocument HACK_bwform = null;
+        //IWolvenkitView HACK_bwform = null;
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // has errors
@@ -734,7 +729,7 @@ namespace WolvenKit
             {
                 //if (workerCompletedAction != null)
                 //{
-                //    HACK_bwform = (IWolvenkitDocument)workerCompletedAction(e.Result);
+                //    HACK_bwform = (IWolvenkitView)workerCompletedAction(e.Result);
                 //}
                 //workerCompletedAction = null;
             }
@@ -835,12 +830,12 @@ namespace WolvenKit
         {
             if (vm.ActiveDocument != null)
             {
-                lastClosedTab.Enqueue(vm.ActiveDocument.Cr2wFileName);
+                lastClosedTab.Enqueue(vm.ActiveDocument.FileName);
                 vm.ActiveDocument.Close();
             }
             //if (ActiveDocument != null)
             //{
-            //    lastClosedTab.Enqueue(ActiveDocument.Cr2wFileName);
+            //    lastClosedTab.Enqueue(ActiveDocument.FileName);
             //    ActiveDocument.Close();
             //}
         }
@@ -872,7 +867,6 @@ namespace WolvenKit
 
         }
 
-        private bool shouldlogProgress;
         /// <summary>
         /// Deprecated. Use MainController.QueueLog 
         /// </summary>
@@ -1054,7 +1048,7 @@ namespace WolvenKit
             foreach (var filename in deletablefiles)
             {
                 // Close open documents
-                foreach (var t in vm.GetOpenDocuments().Values.Where(t => t.Cr2wFileName == filename))
+                foreach (var t in vm.GetOpenDocuments().Values.Where(t => t.FileName == filename))
                 {
                     t.Close();
                     break;
@@ -1139,11 +1133,8 @@ namespace WolvenKit
                     case ".LOG":
                     case ".INI":
                         {
-                            if (OpenScripts.Any(_ => _.FileName == Path.GetFileName(fullpath)))
-                            {
-                                OpenScripts.First(_ => _.FileName == Path.GetFileName(fullpath)).Activate();
-                            }
-                            else
+                            var existing = TryOpenExisting(fullpath);
+                            if (existing == null)
                             {
                                 ShowScriptPreview();
                                 ScriptPreview.LoadFile(fullpath);
@@ -1286,7 +1277,7 @@ namespace WolvenKit
 
             if (vm.ActiveDocument != null)
             {
-                Text += Path.GetFileName(vm.ActiveDocument.Cr2wFileName);
+                Text += Path.GetFileName(vm.ActiveDocument.FileName);
             }
         }
 
@@ -1312,25 +1303,35 @@ namespace WolvenKit
 
         private void OnOutput(object sender, string output) => AddOutput(output);
 
-        private void saveActiveFile() => vm.ActiveDocument.SaveFile();
-
-        public void AddToOpenScripts(frmScriptEditor frmScriptEditor)
+        private void saveActiveFile()
         {
-            if (!OpenScripts.Any(_ => _.Text == frmScriptEditor.Text))
-            {
-                frmScriptEditor.Show(dockPanel, DockState.Document);
-                OpenScripts.Add(frmScriptEditor);
-                //ScriptPreview.Close();
-                ScriptPreview = null;
-            }
+            vm.ActiveDocument?.SaveFile();
+
         }
 
-        public void RemoveFromOpenScrips(frmScriptEditor frmScriptEditor)
+        private IWolvenkitView TryOpenExisting(string key)
         {
-            if (OpenScripts.Any(_ => _.Text == frmScriptEditor.Text))
+            // check if already open
+            var opendocs2 = dockPanel.Documents
+                .Where(_ => _ is IWolvenkitView);
+
+            foreach (var dockContent in opendocs2)
             {
-                OpenScripts.Remove(frmScriptEditor);
+                if (dockContent is IWolvenkitView iview && iview.FileName == key)
+                {
+                    iview?.Activate();
+                    return iview;
+                }
             }
+
+            // check on the viewmodel
+            //foreach (var t in vm.GetOpenDocuments().Values.Where(_ => _.FileName == key))
+            //{
+            //    t.Activate();
+            //    return true;
+            //}
+
+            return null;
         }
 
         /// <summary>
@@ -1339,37 +1340,19 @@ namespace WolvenKit
         /// <param name="filename"></param>
         /// <param name="memoryStream"></param>
         /// <param name="suppressErrors"></param>
-        public IWolvenkitDocument LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
+        public IWolvenkitView LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
         {
             if (memoryStream == null && !File.Exists(filename))
                 return null;
 
-            // check if already open
-            var opendocs = dockPanel.Documents
-                .Where(_ => _.GetType() == typeof(frmCR2WDocument))
-                .Cast<frmCR2WDocument>()
-                .Where(_ => _.Cr2wFileName == filename)
-                .ToList();
+            var existing = TryOpenExisting(filename);
+            if (existing != null) return existing;
 
-            if (opendocs.Count > 0)
-            {
-                opendocs.FirstOrDefault()?.Activate();
-                return opendocs.FirstOrDefault();
-            }
-
-            // check on the viewmodel
-            //foreach (var t in vm.OpenDocuments.Where(t => t.Cr2wFileName == filename))
-            //{
-            //    t.Activate();
-            //    return null;
-            //}
-
-            var docvm = new DocumentViewModel();
 
             // switch between cr2w files and non-cr2w files (e.g. srt)
             if (Path.GetExtension(filename) == ".srt")
             {
-                var doc = new frmOtherDocument(docvm);
+                var doc = new frmOtherDocument(new CommonDocumentViewModel());
 
                 doc.Activated += doc_Activated;
                 doc.Show(dockPanel, DockState.Document);
@@ -1382,7 +1365,7 @@ namespace WolvenKit
 
 
                 //var doc = Args.Doc;
-                frmCR2WDocument doc = new frmCR2WDocument(docvm);
+                frmCR2WDocument doc = new frmCR2WDocument(new CR2WDocumentViewModel());
                 doc.WorkerLoadFileSetup(new LoadFileArgs(filename, memoryStream));
 
                 doc.PostLoadFile(filename, bool.Parse(renderW2meshToolStripMenuItem.Tag.ToString()));
@@ -2475,7 +2458,7 @@ namespace WolvenKit
 
         private void frmMain_MdiChildActivate(object sender, EventArgs e)
         {
-            if (sender is IWolvenkitDocument)
+            if (sender is IWolvenkitView)
             {
                 doc_Activated(sender, e);
             }
@@ -2483,7 +2466,7 @@ namespace WolvenKit
 
         private void dockPanel_ActiveDocumentChanged(object sender, EventArgs e)
         {
-            if (dockPanel.ActiveDocument is IWolvenkitDocument)
+            if (dockPanel.ActiveDocument is IWolvenkitView)
             {
                 doc_Activated(dockPanel.ActiveDocument, e);
             }
@@ -2545,7 +2528,7 @@ namespace WolvenKit
 
         private void doc_Activated(object sender, EventArgs e)
         {
-            if (sender is IWolvenkitDocument doc)
+            if (sender is IWolvenkitView doc)
             {
                 vm.ActiveDocument = doc.GetViewModel();
             }
@@ -2553,10 +2536,10 @@ namespace WolvenKit
 
         private void doc_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (sender is IWolvenkitDocument doc)
+            if (sender is IWolvenkitView doc)
             {
-                lastClosedTab.Enqueue(doc.Cr2wFileName);
-                vm.RemoveOpenDocument(doc.Cr2wFileName);
+                lastClosedTab.Enqueue(doc.FileName);
+                vm.RemoveOpenDocument(doc.FileName);
             }
         }
 

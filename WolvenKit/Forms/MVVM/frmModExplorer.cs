@@ -288,7 +288,7 @@ namespace WolvenKit
             List<string> itemstoDelete = new List<string>();
             foreach (var path in selectedItems)
             {
-                if (MockKernel.Get().GetMainViewModel().GetOpenDocuments().Values.Any(_ => _.Cr2wFileName == path))
+                if (MockKernel.Get().GetMainViewModel().GetOpenDocuments().Values.Any(_ => _.FileName == path))
                 {
                     MainController.LogString($"Please close the file in WolvenKit before deleting: {path}", Logtype.Error);
                 }
@@ -479,7 +479,7 @@ namespace WolvenKit
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
-                if (MockKernel.Get().GetMainViewModel().GetOpenDocuments().Values.Any(_ => _.Cr2wFileName == selectedobject.FullName))
+                if (MockKernel.Get().GetMainViewModel().GetOpenDocuments().Values.Any(_ => _.FileName == selectedobject.FullName))
                 {
                     MainController.LogString("Please close the file in WolvenKit before renaming.", Logtype.Error);
                     return;

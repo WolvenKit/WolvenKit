@@ -52,7 +52,7 @@ namespace WolvenKit
                     {
                         animsFile = new CR2WFile()
                         {
-                            Cr2wFileName = w2animsFilePath
+                            FileName = w2animsFilePath
                         };
                         animsFile.Read(br);
                         exportFac.LoadData(animsFile);

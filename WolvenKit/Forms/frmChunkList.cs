@@ -24,7 +24,7 @@ namespace WolvenKit.Forms
 
         private readonly Dictionary<int, int> childrencountDict = new Dictionary<int, int>();
         private readonly Dictionary<int, List<CR2WExportWrapper>> childrenDict = new Dictionary<int, List<CR2WExportWrapper>>();
-        private readonly DocumentViewModel viewModel;
+        private readonly CR2WDocumentViewModel viewModel;
 
         #endregion
 
@@ -36,7 +36,7 @@ namespace WolvenKit.Forms
 
         #endregion
 
-        public frmChunkList(DocumentViewModel _viewmodel)
+        public frmChunkList(CR2WDocumentViewModel _viewmodel)
         {
             InitializeComponent();
             ApplyCustomTheme();
@@ -151,8 +151,10 @@ namespace WolvenKit.Forms
             }
 
             pasteChunkToolStripMenuItem.Enabled = CopyController.Source != null
-                                                  && CopyController.Source is CVariable ccopy
-                                                  && selectedNodes.Count == 1 && selectedNodes.First().data is CVariable csel
+                                                  && CopyController.Source.Count == 1
+                                                  && CopyController.Source.First() is CVariable ccopy
+                                                  && selectedNodes.Count == 1 
+                                                  && selectedNodes.First().data is CVariable csel
                                                   && csel.GetType() == ccopy.GetType();
         }
 
@@ -224,7 +226,7 @@ namespace WolvenKit.Forms
 
         private void copyChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CopyController.Source = viewModel.SelectedChunk.data;
+            CopyController.Source = new List<IEditableVariable>() {viewModel.SelectedChunk.data};
         }
 
         private void pasteChunkToolStripMenuItem_Click(object sender, EventArgs e)

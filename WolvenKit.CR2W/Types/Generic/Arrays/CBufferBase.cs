@@ -13,9 +13,9 @@ using System.CodeDom;
 
 namespace WolvenKit.CR2W.Types
 {
-    public interface IBufferAccessor : IEditableVariable
+    public interface IBufferAccessor : IArrayAccessor
     {
-        string GetElementType();
+        
     }
 
 
@@ -32,7 +32,11 @@ namespace WolvenKit.CR2W.Types
         public List<int> Flags { get; set; }
         #endregion
 
-        public string GetElementType() => REDReflection.GetREDTypeString(typeof(T));
+        public string Elementtype
+        {
+            get => REDReflection.GetREDTypeString(typeof(T));
+            set => throw new NotImplementedException();
+        }
 
 
         [Browsable(false)]

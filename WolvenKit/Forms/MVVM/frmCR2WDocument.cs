@@ -26,11 +26,11 @@ using WolvenKit.Services;
 
 namespace WolvenKit
 {
-    public partial class frmCR2WDocument : DockContent, IThemedContent, IWolvenkitDocument
+    public partial class frmCR2WDocument : DockContent, IThemedContent, IWolvenkitView
     {
         #region Fields
         private frmChunkList chunkList;
-        private readonly DocumentViewModel vm;
+        private readonly CR2WDocumentViewModel vm;
         private DeserializeDockContent m_deserializeDockContent;
 
         private frmChunkProperties propertyWindow;
@@ -47,8 +47,8 @@ namespace WolvenKit
         #endregion
 
         #region Properties
-        public string Cr2wFileName => vm.Cr2wFileName;
-        public DocumentViewModel GetViewModel() => vm;
+        public string FileName => vm.FileName;
+        public IDocumentViewModel GetViewModel() => vm;
 
 
 
@@ -57,7 +57,7 @@ namespace WolvenKit
 
 
 
-        public frmCR2WDocument(DocumentViewModel documentViewModel)
+        public frmCR2WDocument(CR2WDocumentViewModel documentViewModel)
         {
             vm = documentViewModel;
             vm.ClosingRequest += (sender, e) => this.Close();
@@ -101,7 +101,7 @@ namespace WolvenKit
         {
             ProgressForm?.SetProgressBarValue(e.ProgressPercentage, e.UserState);
         }
-        //IWolvenkitDocument HACK_bwform = null;
+        //IWolvenkitView HACK_bwform = null;
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // has errors
@@ -113,7 +113,7 @@ namespace WolvenKit
             {
                 //if (workerCompletedAction != null)
                 //{
-                //    HACK_bwform = (IWolvenkitDocument)workerCompletedAction(e.Result);
+                //    HACK_bwform = (IWolvenkitView)workerCompletedAction(e.Result);
                 //}
                 //workerCompletedAction = null;
             }
@@ -221,8 +221,6 @@ namespace WolvenKit
 
 
         #region UI Methods
-        public bool GetIsDisposed() => this.IsDisposed;
-
         public void ApplyCustomTheme()
         {
             // check for float windows
@@ -293,7 +291,7 @@ namespace WolvenKit
             var opendocs = FormPanel.Documents
                 .Where( _ => _.GetType() == typeof(frmCR2WDocument))
                 .Cast<frmCR2WDocument>()
-                .Where(_ => _.Cr2wFileName == relativePath)
+                .Where(_ => _.FileName == relativePath)
                 .ToList();
 
             if (opendocs.Count > 0)
@@ -303,7 +301,7 @@ namespace WolvenKit
             }
 
             // else: open and dock new form
-            var doc = new frmCR2WDocument(new DocumentViewModel())
+            var doc = new frmCR2WDocument(new CR2WDocumentViewModel())
             {
                 Text = Path.GetFileName(relativePath) + " [" + relativePath + "]"
             };
@@ -527,7 +525,7 @@ namespace WolvenKit
                 //ShowConsole();
                 //ShowOutput();
 
-                output.Append(this.Cr2wFileName + ": contains " + this.File.UnknownTypes.Count + " unknown type(s):\n");
+                output.Append(this.FileName + ": contains " + this.File.UnknownTypes.Count + " unknown type(s):\n");
                 foreach (var unk in this.File.UnknownTypes)
                 {
                     output.Append("\"" + unk + "\", \n");
@@ -556,7 +554,7 @@ namespace WolvenKit
             CR2WFile LoadDocumentAndGetFile(string path)
             {
                 throw new NotImplementedException();
-                //foreach (var t in MockKernel.Get().GetMainViewModel().OpenDocuments.Where(_ => _.File is CR2WFile).Where(t => t.Cr2wFileName == path))
+                //foreach (var t in MockKernel.Get().GetMainViewModel().OpenDocuments.Where(_ => _.File is CR2WFile).Where(t => t.FileName == path))
                 //    return t.File as CR2WFile;
 
                 ////var activedoc = vm.OpenDocuments.FirstOrDefault(d => d.IsActivated);

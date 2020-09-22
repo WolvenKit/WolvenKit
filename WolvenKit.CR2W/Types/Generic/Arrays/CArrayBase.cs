@@ -65,7 +65,7 @@ namespace WolvenKit.CR2W.Types
             throw new NotImplementedException();
         }
 
-        public void Read(BinaryReader file, uint size, int elementcount)
+        protected void Read(BinaryReader file, uint size, int elementcount)
         {
 
             for (int i = 0; i < elementcount; i++)
@@ -90,6 +90,16 @@ namespace WolvenKit.CR2W.Types
             {
                 element.Write(file);
             }
+        }
+
+        public override CVariable SetValue(object val)
+        {
+            if (val is CArrayBase<T> cvar)
+            {
+                this.Elements = cvar.Elements;
+            }
+
+            return this;
         }
 
         public override bool CanAddVariable(IEditableVariable newvar)

@@ -140,7 +140,7 @@ namespace WolvenKit.Forms
             this.deleteChunkToolStripMenuItem,
             this.goToChunkToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(202, 264);
+            this.contextMenu.Size = new System.Drawing.Size(202, 286);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // expandAllToolStripMenuItem
@@ -205,7 +205,7 @@ namespace WolvenKit.Forms
             // 
             this.copyToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Copy_16x;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.copyToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+C";
             this.copyToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.copyToolStripMenuItem.Text = "Copy Variable";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
@@ -214,7 +214,7 @@ namespace WolvenKit.Forms
             // 
             this.pasteToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Paste_16x;
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.pasteToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+V";
             this.pasteToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.pasteToolStripMenuItem.Text = "Paste Variable";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);

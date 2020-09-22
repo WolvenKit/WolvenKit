@@ -54,7 +54,7 @@ namespace WolvenKit.CR2W.SRT
 
 
         [Browsable(false)]
-        public string Cr2wFileName { get; set; }
+        public string FileName { get; set; }
         #endregion
 
 

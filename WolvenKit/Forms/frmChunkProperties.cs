@@ -26,9 +26,9 @@ namespace WolvenKit.Forms
     {
         private bool showOnlySerialized = true;
         private HotkeyCollection hotkeys;
-        private readonly DocumentViewModel viewModel;
+        private readonly CR2WDocumentViewModel viewModel;
 
-        public frmChunkProperties(DocumentViewModel _viewmodel)
+        public frmChunkProperties(CR2WDocumentViewModel _viewmodel)
         {
             InitializeComponent();
             ApplyCustomTheme();
@@ -54,11 +54,7 @@ namespace WolvenKit.Forms
 
             hotkeys = new HotkeyCollection(Dfust.Hotkeys.Enums.Scope.Application);
 
-            hotkeys.RegisterHotkey(Keys.Oemplus, AddListElement, "Add Element");
-            hotkeys.RegisterHotkey(Keys.Add, AddListElement, "Add Element");
-
-            hotkeys.RegisterHotkey(Keys.OemMinus, RemoveListElement, "Add Element");
-            hotkeys.RegisterHotkey(Keys.Subtract, RemoveListElement, "Add Element");
+            RegisterHotkeys();
 
             viewModel = _viewmodel;
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -76,6 +72,45 @@ namespace WolvenKit.Forms
 
 
         #region UI Methods
+
+        private void RegisterHotkeys()
+        {
+            hotkeys.RegisterHotkey(Keys.Oemplus, AddListElement, "Add Element");
+            hotkeys.RegisterHotkey(Keys.Add, AddListElement, "Add Element");
+
+            hotkeys.RegisterHotkey(Keys.OemMinus, RemoveListElement, "Add Element");
+            hotkeys.RegisterHotkey(Keys.Subtract, RemoveListElement, "Add Element");
+
+            hotkeys.RegisterHotkey(Keys.Control | Keys.C, CopyVariable, "Copy Element");
+            hotkeys.RegisterHotkey(Keys.Control | Keys.V, PasteVariable, "Paste Element");
+        }
+
+        private void UnregisterHotkeys()
+        {
+            hotkeys.UnregisterHotkey(Keys.Oemplus,  "Add Element");
+            hotkeys.UnregisterHotkey(Keys.Add,  "Add Element");
+
+            hotkeys.UnregisterHotkey(Keys.OemMinus,  "Add Element");
+            hotkeys.UnregisterHotkey(Keys.Subtract,  "Add Element");
+
+            hotkeys.UnregisterHotkey(Keys.Control | Keys.C, "Copy Element");
+            hotkeys.UnregisterHotkey(Keys.Control | Keys.V, "Paste Element");
+        }
+
+        private void CopyVariable(HotKeyEventArgs e)
+        {
+            if (GetSelectedObjects().Count > 0)
+                CopyController.Source = GetSelectedObjects();
+            //viewModel.CopyVariableCommand.SafeExecute();
+        }
+
+        private void PasteVariable(HotKeyEventArgs e)
+        {
+            if (GetSelectedObjects().Count > 0)
+                CopyController.Target = GetSelectedObjects().First();
+            viewModel.PasteVariableCommand.SafeExecute();
+        }
+
         private void UpdateTreeListView()
         {
             if (Chunk == null)
@@ -111,6 +146,9 @@ namespace WolvenKit.Forms
                 //var variable = (e.RowObject as VariableListNode).Variable;
                 case "REDValue":
                 {
+                    // unregister hotkeys
+                    UnregisterHotkeys();
+
                     e.Control = EditorHandler.GetEditor(ivar);
                     if (e.Control != null)
                     {
@@ -164,6 +202,8 @@ namespace WolvenKit.Forms
             if (model is CVariable cvar)
                 cvar.SetIsSerialized();
 
+            // unregister hotkeys
+            RegisterHotkeys();
         }
 
         public void ApplyCustomTheme()
@@ -351,14 +391,38 @@ namespace WolvenKit.Forms
             removeVariableToolStripMenuItem.Enabled = selectedNodes.All(x => x.ParentVar != null && x.ParentVar.CanRemoveVariable(x));
 
             //  paste variable is active if any one variable has been copied and if the one selected variable is of the same type
-            pasteToolStripMenuItem.Enabled = CopyController.Source != null
-                                             && CopyController.Source is CVariable ccopy
-                                             && selectedNodes.Count == 1 && selectedNodes.First() is CVariable csel
-                                             && csel.GetType() == ccopy.GetType();
+            pasteToolStripMenuItem.Enabled = IsPastingAllowed();
 
 
             goToChunkToolStripMenuItem.Visible = selectedNodes.Count == 1 && selectedNodes.All(x => x is IChunkPtrAccessor);
             deleteChunkToolStripMenuItem.Visible = selectedNodes.Count == 1 && selectedNodes.All(x => x is IChunkPtrAccessor);
+
+            bool IsPastingAllowed()
+            {
+                if (CopyController.Source == null) return false;
+                if (CopyController.Source.Count <= 0) return false;
+
+                var firstcopy = CopyController.Source.FirstOrDefault();
+                var areOfTheSameType = (firstcopy != null) && CopyController.Source.All(_ => _ is CVariable) 
+                                              && CopyController.Source.All(p => p.REDType == firstcopy.REDType);
+                // all copied files are CVariables
+                if (areOfTheSameType && selectedNodes.Count == 1 && selectedNodes.First() is CVariable ctarget)
+                {
+                    // if only one variable was copied and that one variable is of the same type as the selected variable
+                    if (CopyController.Source.Count == 1 && CopyController.Source.First() is CVariable ccopy && ctarget.GetType() == ccopy.GetType())
+                    {
+                        return true;
+                    }
+
+                    // check if the target is an array and the elementtype is of the same type as the selected nodes
+                    if (ctarget is IArrayAccessor targetarray && targetarray.Elementtype == firstcopy.REDType && !(firstcopy is IChunkPtrAccessor))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
         }
 
         private void expandAllToolStripMenuItem_Click(object sender, EventArgs e) => treeView.ExpandAll();
@@ -383,19 +447,9 @@ namespace WolvenKit.Forms
             }
         }
 
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (GetSelectedObjects().Count > 0)
-                CopyController.Source = GetSelectedObjects().First();
-            //viewModel.CopyVariableCommand.SafeExecute();
-        }
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e) => CopyVariable(null);
 
-        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (GetSelectedObjects().Count > 0)
-                CopyController.Target = GetSelectedObjects().First();
-            viewModel.PasteVariableCommand.SafeExecute();
-        }
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e) => PasteVariable(null);
 
         private void treeView_CellClick(object sender, CellClickEventArgs e)
         {

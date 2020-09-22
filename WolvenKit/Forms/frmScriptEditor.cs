@@ -9,20 +9,36 @@ using WolvenKit.App;
 using WolvenKit.CR2W;
 using System.Linq;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.Model;
+using System.ComponentModel;
+using WolvenKit.App.ViewModels;
 
 namespace WolvenKit.Forms
 {
-    public partial class frmScriptEditor : DockContent
+    public partial class frmScriptEditor : DockContent, IWolvenkitView
     {
         private const bool CodeFoldingCircular = true;
         private readonly FindReplace ScintillaFindReplace;
+        private readonly ScriptDocumentViewModel vm;
 
-        public string autocompletelist = "array< PushBack string int integer bool float name range event function abstract const final private protected public theGame theInput thePlayer theSound enum struct state array false NULL true out inlined autobind editable entry exec hint import latent optional out quest saved statemachine timer break case continue else for if return switch while";
-        public bool IsUnsaved { get; set; }
+        public string autocompletelist = "array< PushBack string int integer bool float name range event function abstract " +
+                                         "const final private protected public theGame theInput thePlayer " +
+                                         "theSound enum struct state array false NULL true out inlined autobind editable " +
+                                         "entry exec hint import latent optional out quest saved statemachine timer break case" +
+                                         " continue else for if return switch while";
+        
 
+        public string FileName => vm.FileName;
 
-        public frmScriptEditor()
+        public IDocumentViewModel GetViewModel() => vm;
+
+        public frmScriptEditor(ScriptDocumentViewModel documentViewModel)
         {
+            vm = documentViewModel;
+            vm.ClosingRequest += (sender, e) => this.Close();
+            vm.ActivateRequest += (sender, e) => this.Activate();
+            vm.PropertyChanged += ViewModel_PropertyChanged;
+
             InitializeComponent();
             ApplyCustomTheme();
 
@@ -36,16 +52,26 @@ namespace WolvenKit.Forms
             scintillaControl.KeyDown += ScintillaControlOnKeyDown;
         }
 
-        private string FilePath;
-        public string FileName => Path.GetFileName(FilePath);
-        public void LoadFile(string filePath)
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            this.Text = /*"Witcherscript editor - " + */Path.GetFileName(filePath);
-            
-            FilePath = filePath;
-            scintillaControl.Text = File.ReadAllText(FilePath);
+            switch (e.PropertyName)
+            {
+                case nameof(vm.FormTitle):
+                    break;
+            }
         }
 
+        public void LoadFile(string path)
+        {
+            this.Text = Path.GetFileName(path);
+            
+            vm.FilePath = path;
+            scintillaControl.Text = File.ReadAllText(vm.FilePath);
+
+            vm.Text = scintillaControl.Text;
+        }
+
+        #region Scintilla
         private void ConfigureScintilla()
         {
             //Initialize colors
@@ -72,11 +98,11 @@ namespace WolvenKit.Forms
             }
 
             // notify unsaved
-            IsUnsaved = true;
-            this.Text = $"{Path.GetFileName(FilePath)}*";
-            UIController.Get().Window.AddToOpenScripts(this);
-        }
+            vm.IsUnsaved = true;
+            this.Text = $"{vm.FileName}*";
 
+            
+        }
 
         private void SetupSyntaxHighlighting()
         {
@@ -133,6 +159,7 @@ namespace WolvenKit.Forms
             numbers.Sensitive = true;
             numbers.Mask = 0;
         }
+
         private void SetupCodeFolding()
         {
             //Styles code folding
@@ -171,33 +198,13 @@ namespace WolvenKit.Forms
             // Enable automatic folding
             scintillaControl.AutomaticFold = AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change;
         }
+
         private void ClearUsedHotKeys()
         {
             //Clear hot keys that conflict with the ones that have just been assigned.
             scintillaControl.ClearCmdKey(Keys.Control | Keys.F);
             scintillaControl.ClearCmdKey(Keys.Control | Keys.H);
             scintillaControl.ClearCmdKey(Keys.Control | Keys.S);
-        }
-
-        public void SaveFile()
-        {
-            // encode in UTF-16LE
-            Encoding enc = Encoding.Unicode;
-
-            File.WriteAllText(FilePath, scintillaControl.Text, enc);
-
-            //using (var streamWriter = File.AppendText(FilePath))
-            //{
-            //    streamWriter.Write(scintillaControl.Text);
-            //}
-            MainController.LogString(FilePath + " saved!", Logtype.Normal);
-
-            // register all new classes
-            CR2WManager.ReloadAssembly();
-
-
-            IsUnsaved = false;
-            this.Text = Path.GetFileName(FilePath);
         }
 
         private Color IntToColor(int rgbValue)
@@ -215,7 +222,7 @@ namespace WolvenKit.Forms
         {
             if (e.Control && e.KeyCode == Keys.S)
             {
-                SaveFile();
+                //vm.SaveFile(); // handled in mainform
                 e.SuppressKeyPress = true;
             }
             else if (e.Shift && e.KeyCode == Keys.F3)
@@ -252,44 +259,39 @@ namespace WolvenKit.Forms
             {
                 scintilla_CharAdded(this, new CharAddedEventArgs(0));
             }
+
+            vm.Text = scintillaControl.Text;
         }
 
         private void ScintillaFindReplaceOnKeyPressed(object sender, KeyEventArgs e)
         {
             ScintillaControlOnKeyDown(sender, e);
         }
+        #endregion
 
         private void frmScriptEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (IsUnsaved)
+            if (!vm.IsUnsaved) return;
+
+            var res = MessageBox.Show($"{FileName} has been modified, save changes?", "Save Changes?",
+                MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Warning);
+            switch (res)
             {
-                var res = MessageBox.Show($"{FileName} has been modified, save changes?", "Save Changes?",
-                    MessageBoxButtons.YesNoCancel,
-                    MessageBoxIcon.Warning);
-                if (res == DialogResult.Yes)
-                {
-                    SaveFile();
-                    UIController.Get().Window.RemoveFromOpenScrips(this);
-                }
-                else if (res == DialogResult.Cancel)
-                {
+                case DialogResult.Yes:
+                    vm.SaveFile();
+                    break;
+                case DialogResult.Cancel:
                     e.Cancel = true;
-                }
-                else
-                {
-                    UIController.Get().Window.RemoveFromOpenScrips(this);
-                }
+                    break;
             }
-            
+
 
         }
 
-        private void toolStripButtonSave_Click(object sender, System.EventArgs e)
-        {
-            SaveFile();
-        }
+        private void toolStripButtonSave_Click(object sender, System.EventArgs e) => vm.SaveFile();
 
-        public void ApplyCustomTheme()
+        private void ApplyCustomTheme()
         {
             UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
         }
