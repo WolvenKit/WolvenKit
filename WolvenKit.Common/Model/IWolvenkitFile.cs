@@ -9,14 +9,15 @@ using System.Threading.Tasks;
 namespace WolvenKit.Common.Model
 {
     /// <summary>
-    /// Normally the interface for CR2W files
+    /// Interface for all Files openable in Wkit
+    /// Cr2w files, Srt files
     /// </summary>
     public interface IWolvenkitFile : INotifyPropertyChanged
     {
-        string Cr2wFileName { get; set; }
-
+        string FileName { get; set; }
 
         EFileReadErrorCodes Read(BinaryReader file);
+
         void Write(BinaryWriter writer);
 
     }

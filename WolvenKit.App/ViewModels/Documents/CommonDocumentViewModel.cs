@@ -15,25 +15,20 @@ using WolvenKit.Radish.Model;
 
 namespace WolvenKit.App.ViewModels
 {
-    public class DocumentViewModel : CloseableViewModel
+    public class CommonDocumentViewModel : CloseableViewModel, IDocumentViewModel
     {
-
-        public DocumentViewModel()
+        public CommonDocumentViewModel()
         {
-            CopyVariableCommand = new RelayCommand(CopyVariable, CanCopyVariable);
-            PasteVariableCommand = new RelayCommand(PasteVariable, CanPasteVariable);
-
-            _openEmbedded =new Dictionary<string,DocumentViewModel>();
+            
         }
 
         #region Fields
         public event EventHandler<FileSavedEventArgs> OnFileSaved;
-
         #endregion
 
         #region Properties
         public object SaveTarget { get; set; }
-        public string Title => Path.GetFileName(Cr2wFileName);
+        public string Title => Path.GetFileName(FileName);
 
         #region File
         private IWolvenkitFile _file;
@@ -51,44 +46,10 @@ namespace WolvenKit.App.ViewModels
         }
         #endregion
         #region FileName
-        public virtual string Cr2wFileName => File.Cr2wFileName;
+        public string FileName => File.FileName;
         #endregion
-        #region OpenEmbedded
-        private Dictionary<string,DocumentViewModel> _openEmbedded;
-        public Dictionary<string,DocumentViewModel> OpenEmbedded
-        {
-            get => _openEmbedded;
-            set
-            {
-                if (_openEmbedded != value)
-                {
-                    _openEmbedded = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
-        public void RemoveEmbedded(object sender, EventArgs e, DocumentViewModel embVM)
-        {
-            string embkey = embVM.Cr2wFileName;
-            if (!OpenEmbedded.ContainsKey(embkey))
-                throw new NullReferenceException();
-            OpenEmbedded.Remove(embkey);
-        }
-        #endregion
-        #region SelectedChunk
-        private CR2WExportWrapper _selectedChunk;
-        public CR2WExportWrapper SelectedChunk
-        {
-            get => _selectedChunk;
-            set
-            {
-                _selectedChunk = value;
-                OnPropertyChanged();
-                
-            }
-        }
-        #endregion
+
         #endregion
 
         // Propagate changed event from cr2wfile
@@ -101,44 +62,15 @@ namespace WolvenKit.App.ViewModels
                     OnPropertyChanged(nameof(File));
                 }
             }
-            
+
         }
 
         #region Commands
-        public ICommand CopyVariableCommand { get; }
-        public ICommand PasteVariableCommand { get; }
 
         #endregion
 
         #region Commands Implementation
-        protected bool CanCopyVariable() => true;
 
-        protected bool CanPasteVariable() => CopyController.Source != null && CopyController.Target != null &&
-                                             CopyController.Source.REDType == CopyController.Target.REDType;
-
-        private void CopyVariable()
-        {
-            
-
-        }
-
-        private void PasteVariable()
-        {
-            if (CopyController.Source is CVariable csource && CopyController.Target is CVariable ctarget)
-            {
-                var context = new CR2WCopyAction()
-                {
-                    DestinationFile = ctarget.cr2w,
-                    Parent = ctarget.ParentVar as CVariable
-                };
-
-                var copy = csource.Copy(context);
-                ctarget.SetValue(copy);
-                ctarget.IsSerialized = true;
-
-                OnPropertyChanged(nameof(SelectedChunk));
-            }
-        }
         #endregion
 
         #region Methods
@@ -148,16 +80,9 @@ namespace WolvenKit.App.ViewModels
 
         }
 
-        public void SaveFile()
+        public virtual void SaveFile()
         {
-            // save all open embedded files
-            foreach (DocumentViewModel model in OpenEmbedded.Values)
-            {
-                var editvar = model.SaveTarget as CR2WEmbeddedWrapper;
-
-                // get bytes from model
-                editvar?.SetRawEmbeddedData(model.GetRawBytes());
-            }
+            
 
             // save File
             if (SaveTarget == null)
@@ -170,11 +95,11 @@ namespace WolvenKit.App.ViewModels
             }
 
             // Logging
-            MainController.LogString(Cr2wFileName + " saved!\n", Logtype.Success);
+            MainController.LogString(FileName + " saved!\n", Logtype.Success);
             MainController.Get().ProjectStatus = "Saved";
         }
 
-        private byte[] GetRawBytes()
+        protected byte[] GetRawBytes()
         {
             using (var mem = new MemoryStream())
             using (var writer = new BinaryWriter(mem))
@@ -191,7 +116,7 @@ namespace WolvenKit.App.ViewModels
             {
                 File.Write(writer);
 
-                OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = Cr2wFileName, Stream = mem, File = File });
+                OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = mem, File = File });
             }
         }
 
@@ -205,11 +130,11 @@ namespace WolvenKit.App.ViewModels
                 File.Write(writer);
                 mem.Seek(0, SeekOrigin.Begin);
 
-                using (var fs = new FileStream(Cr2wFileName, FileMode.Create, FileAccess.Write))
+                using (var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write))
                 {
                     mem.WriteTo(fs);
 
-                    OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = Cr2wFileName, Stream = fs, File = File });
+                    OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = fs, File = File });
                     fs.Close();
                 }
             }
@@ -235,7 +160,7 @@ namespace WolvenKit.App.ViewModels
                     return loadFile(fs, filename, variableEditor, logger);
                 }
             }
-            
+
         }
 
         private EFileReadErrorCodes loadFile(Stream stream, string filename, IVariableEditor variableEditor, LoggerService logger)
@@ -249,7 +174,7 @@ namespace WolvenKit.App.ViewModels
                 {
                     File = new Srtfile()
                     {
-                        Cr2wFileName = filename
+                        FileName = filename
                     };
                     errorcode = File.Read(reader);
                     OnPropertyChanged(nameof(File));
@@ -258,7 +183,7 @@ namespace WolvenKit.App.ViewModels
                 {
                     File = new CR2WFile(logger)
                     {
-                        Cr2wFileName = filename,
+                        FileName = filename,
 
                         EditorController = variableEditor/*UIController.Get()*/,
 
@@ -274,8 +199,7 @@ namespace WolvenKit.App.ViewModels
             return errorcode;
         }
 
-        
-        #endregion
 
+        #endregion
     }
 }

@@ -97,7 +97,7 @@ namespace WolvenKit.CR2W
         public List<string> UnknownTypes = new List<string>();
         //public byte[] bufferdata { get; set; }
         [DataMember(Order = 0)]
-        public string Cr2wFileName { get; set; }
+        public string FileName { get; set; }
 
        
         /// <summary>
@@ -419,7 +419,7 @@ namespace WolvenKit.CR2W
             }
 
 
-            Logger?.LogString($"File {Cr2wFileName} loaded in: {stopwatch1.Elapsed}\n");
+            Logger?.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n");
             stopwatch1.Stop();
             //m_stream = null;
             return 0;
@@ -1163,16 +1163,40 @@ namespace WolvenKit.CR2W
                 }
                 else if (var is IArrayAccessor a)
                 {
-                    CheckVarNameAndTypes();
-
-                    if (var is CArray<CName> aa)
+                    if (var is IBufferAccessor buffer)
                     {
-                        foreach (var element in aa)
+                        foreach (IEditableVariable ivar in buffer.GetEditableVariables())
                         {
-                            AddUniqueToTable(element.Value);
+                            if (ivar is IHandleAccessor ha)
+                            {
+                                if (!ha.ChunkHandle)
+                                {
+                                    AddUniqueToTable(ha.ClassName);
+                                    var flags = EImportFlags.Default;
+                                    if (ha.REDName == "template")
+                                        flags = EImportFlags.Template;
+                                    var importtuple = new SImportEntry(ha.ClassName, ha.DepotPath, flags);
+                                    if (!newimportslist.Contains(importtuple))
+                                    {
+                                        newimportslist.Add(importtuple);
+                                    }
+                                }
+                            }
+
                         }
                     }
-                    
+                    else
+                    {
+                        CheckVarNameAndTypes();
+
+                        if (var is CArray<CName> aa)
+                        {
+                            foreach (var element in aa)
+                            {
+                                AddUniqueToTable(element.Value);
+                            }
+                        }
+                    }
                 }
                 else if (var is CBufferVLQInt32<CName>)
                 {
@@ -1182,28 +1206,6 @@ namespace WolvenKit.CR2W
                         {
                             AddUniqueToTable((element as CName).Value);
                         }
-                    }
-                }
-                else if (var is IBufferAccessor buffer)
-                {
-                    foreach (IEditableVariable ivar in buffer.GetEditableVariables())
-                    {
-                        if (ivar is IHandleAccessor ha)
-                        {
-                            if (!ha.ChunkHandle)
-                            {
-                                AddUniqueToTable(ha.ClassName);
-                                var flags = EImportFlags.Default;
-                                if (ha.REDName == "template")
-                                    flags = EImportFlags.Template;
-                                var importtuple = new SImportEntry(ha.ClassName, ha.DepotPath, flags);
-                                if (!newimportslist.Contains(importtuple))
-                                {
-                                    newimportslist.Add(importtuple);
-                                }
-                            }
-                        }
-                        
                     }
                 }
                 else if (var is IPtrAccessor)

@@ -229,7 +229,7 @@ namespace WolvenKit
 
             if (bytes != null)
             {
-                var doc = Window.LoadDocument(editvar.cr2w.Cr2wFileName + ":" + editvar.GetFullName(), new MemoryStream(bytes), true);
+                var doc = Window.LoadDocument(editvar.cr2w.FileName + ":" + editvar.GetFullName(), new MemoryStream(bytes), true);
                 if (doc != null)
                 {
                     var vm = doc.GetViewModel();
@@ -247,7 +247,7 @@ namespace WolvenKit
         {
             if (args.Stream is MemoryStream stream)
             {
-                var vm = (DocumentViewModel)sender;
+                var vm = (IDocumentViewModel)sender;
                 var editvar = (CVariable)vm.SaveTarget;
                 editvar.SetValue(stream.ToArray());
             }

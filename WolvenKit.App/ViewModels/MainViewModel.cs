@@ -53,14 +53,14 @@ namespace WolvenKit.App.ViewModels
 
         #region Open Documents
 
-        private readonly Dictionary<string, DocumentViewModel> _openDocuments;
-        public Dictionary<string, DocumentViewModel> GetOpenDocuments() => _openDocuments;
+        private readonly Dictionary<string, IDocumentViewModel> _openDocuments;
+        public Dictionary<string, IDocumentViewModel> GetOpenDocuments() => _openDocuments;
 
-        public void AddOpenDocument(DocumentViewModel document)
+        public void AddOpenDocument(IDocumentViewModel document)
         {
-            if (_openDocuments.ContainsKey(document.Cr2wFileName))
+            if (_openDocuments.ContainsKey(document.FileName))
                 throw new NullReferenceException();
-            _openDocuments.Add(document.Cr2wFileName, document);
+            _openDocuments.Add(document.FileName, document);
         }
         public void RemoveOpenDocument(string key)
         {
@@ -68,15 +68,15 @@ namespace WolvenKit.App.ViewModels
                 throw new NullReferenceException();
             _openDocuments.Remove(key);
             // update Active Document
-            if (ActiveDocument.Cr2wFileName == key)
+            if (ActiveDocument.FileName == key)
                 ActiveDocument = null;
         }
 
         #endregion
 
         #region Active Document
-        private DocumentViewModel _activeDocument;
-        public DocumentViewModel ActiveDocument
+        private IDocumentViewModel _activeDocument;
+        public IDocumentViewModel ActiveDocument
         {
             get => _activeDocument;
             set
@@ -107,7 +107,7 @@ namespace WolvenKit.App.ViewModels
             Title = "WolvenKit";
 
             Logger = MainController.Get().Logger;
-            _openDocuments = new Dictionary<string, DocumentViewModel>();
+            _openDocuments = new Dictionary<string, IDocumentViewModel>();
         }
 
         #region Helper Methods

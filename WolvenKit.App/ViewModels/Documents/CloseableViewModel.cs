@@ -14,21 +14,9 @@ namespace WolvenKit.App.ViewModels
         public event EventHandler ClosingRequest;
         public event EventHandler ActivateRequest;
 
-        protected void OnClosingRequest()
-        {
-            if (this.ClosingRequest != null)
-            {
-                this.ClosingRequest(this, EventArgs.Empty);
-            }
-        }
+        protected void OnClosingRequest() => ClosingRequest?.Invoke(this, EventArgs.Empty);
 
-        protected void OnActivateRequest()
-        {
-            if (this.ActivateRequest != null)
-            {
-                this.ActivateRequest(this, EventArgs.Empty);
-            }
-        }
+        protected void OnActivateRequest() => ActivateRequest?.Invoke(this, EventArgs.Empty);
 
         public void Close() => OnClosingRequest();
         public void Activate() => OnActivateRequest();
