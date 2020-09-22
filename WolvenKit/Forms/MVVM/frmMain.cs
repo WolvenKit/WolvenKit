@@ -1312,16 +1312,16 @@ namespace WolvenKit
         private IWolvenkitView TryOpenExisting(string key)
         {
             // check if already open
-            var opendocs = dockPanel.Documents
-                .Where(_ => _.GetType() == typeof(IWolvenkitView))
-                .Cast<IWolvenkitView>()
-                .Where(_ => _.FileName == key)
-                .ToList();
+            var opendocs2 = dockPanel.Documents
+                .Where(_ => _ is IWolvenkitView);
 
-            if (opendocs.Count > 0)
+            foreach (var dockContent in opendocs2)
             {
-                opendocs.FirstOrDefault()?.Activate();
-                return opendocs.FirstOrDefault();
+                if (dockContent is IWolvenkitView iview && iview.FileName == key)
+                {
+                    iview?.Activate();
+                    return iview;
+                }
             }
 
             // check on the viewmodel
