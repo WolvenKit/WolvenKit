@@ -17,14 +17,14 @@ namespace WolvenKit
     public partial class frmAssetBrowser : DockContent
     {
         public List<string> Autocompletelist;
-        public List<IWitcherFile> FileList = new List<IWitcherFile>();
-        public IEnumerable<IWitcherArchiveManager> Managers;
+        private readonly List<IWitcherFile> FileList = new List<IWitcherFile>();
+        private readonly IEnumerable<IWitcherArchiveManager> Managers;
 
         public List<string> Files { get; set; }
-        public WitcherTreeNode ActiveNode { get; set; }
-        public WitcherTreeNode RootNode { get; set; }
+        private WitcherTreeNode ActiveNode { get; set; }
+        private WitcherTreeNode RootNode { get; set; }
 
-        public List<WitcherListViewItem> SelectedPaths
+        private List<WitcherListViewItem> SelectedPaths
         {
             get
             {
@@ -81,56 +81,54 @@ namespace WolvenKit
         {
         }
 
-        public void OpenNode(WitcherTreeNode node,bool reset = false)
+        private void OpenNode(WitcherTreeNode node,bool reset = false)
         {
-            if (ActiveNode != node || reset)
+            if (ActiveNode == node && !reset) return;
+
+            ActiveNode = node;
+
+            UpdatePathPanel();
+
+            fileListView.Items.Clear();
+            List<WitcherListViewItem> res = new List<WitcherListViewItem>();
+            if (node.Parent != null)
             {
-                ActiveNode = node;
-
-                UpdatePathPanel();
-
-                fileListView.Items.Clear();
-                List<WitcherListViewItem> res = new List<WitcherListViewItem>();
-                if (node.Parent != null)
+                res.Add(new WitcherListViewItem
                 {
-                    res.Add(new WitcherListViewItem
-                    {
-                        Node = node.Parent,
-                        Text = "..",
-                        IsDirectory = true,
-                        ImageKey = "FolderOpened"
-                    });
-                }
-
-                res.AddRange(node.Directories.OrderBy(x => x.Key).Select(item => new WitcherListViewItem
-                {
-                    Node = item.Value,
-                    Text = item.Key,
+                    Node = node.Parent,
+                    Text = "..",
                     IsDirectory = true,
                     ImageKey = "FolderOpened"
-                }));
-
-
-                foreach (var item in node.Files.OrderBy(x => x.Key))
-                {
-                    var lastItem = item.Value[item.Value.Count - 1];
-                    var listItem = new WitcherListViewItem
-                    {
-                        Node = node,
-                        RelativePath = lastItem.Name,
-                        Text = item.Key,
-                        IsDirectory = false,
-                        ImageKey = GetImageKey(item.Key)
-                    };
-                    listItem.SubItems.Add(lastItem.Size.ToString());
-                    listItem.SubItems.Add(string.Format("{0}%",
-                        (100 - (int)(lastItem.ZSize / (float)lastItem.Size * 100.0f))));
-                    listItem.SubItems.Add(lastItem.CompressionType);
-                    listItem.SubItems.Add(lastItem.Bundle.TypeName.ToString());
-                    res.Add(listItem);
-                }
-                fileListView.Items.AddRange(res.ToArray());
+                });
             }
+
+            res.AddRange(node.Directories.OrderBy(x => x.Key).Select(item => new WitcherListViewItem
+            {
+                Node = item.Value,
+                Text = item.Key,
+                IsDirectory = true,
+                ImageKey = "FolderOpened"
+            }));
+
+
+            foreach (var item in node.Files.OrderBy(x => x.Key))
+            {
+                var lastItem = item.Value[item.Value.Count - 1];
+                var listItem = new WitcherListViewItem
+                {
+                    Node = node,
+                    RelativePath = lastItem.Name,
+                    Text = item.Key,
+                    IsDirectory = false,
+                    ImageKey = GetImageKey(item.Key)
+                };
+                listItem.SubItems.Add(lastItem.Size.ToString());
+                listItem.SubItems.Add($"{(100 - (int) (lastItem.ZSize / (float) lastItem.Size * 100.0f))}%");
+                listItem.SubItems.Add(lastItem.CompressionType);
+                listItem.SubItems.Add(lastItem.Bundle.TypeName.ToString());
+                res.Add(listItem);
+            }
+            fileListView.Items.AddRange(res.ToArray());
         }
 
         private void UpdatePathPanel()
@@ -315,7 +313,7 @@ namespace WolvenKit
             }
         }
 
-        public void Search(string s, int bundleTypeIdx, int fileTypeIdx)
+        private void Search(string s, int bundleTypeIdx, int fileTypeIdx)
         {
             var extension = "";
             string bundletype = "";
@@ -344,21 +342,21 @@ namespace WolvenKit
             fileListView.Items.AddRange(results.ToArray());
         }
 
-        public List<IWitcherFile> GetFiles(WitcherTreeNode mainnode)
-        {
-            var bundfiles = new List<IWitcherFile>();
-            if (mainnode?.Files != null)
-            {
-                foreach (var wfile in mainnode.Files)
-                {
-                    bundfiles.AddRange(wfile.Value);
-                }
-                bundfiles.AddRange(mainnode.Directories.Values.SelectMany(GetFiles));
-            }
-            return bundfiles;
-        }
+        //public List<IWitcherFile> GetFiles(WitcherTreeNode mainnode)
+        //{
+        //    var bundfiles = new List<IWitcherFile>();
+        //    if (mainnode?.Files != null)
+        //    {
+        //        foreach (var wfile in mainnode.Files)
+        //        {
+        //            bundfiles.AddRange(wfile.Value);
+        //        }
+        //        bundfiles.AddRange(mainnode.Directories.Values.SelectMany(GetFiles));
+        //    }
+        //    return bundfiles;
+        //}
 
-        public Tuple<WitcherListViewItem,IWitcherFile>[] SearchFiles(IWitcherFile[] files, string searchkeyword, string bundletypestr, string extension)
+        private Tuple<WitcherListViewItem,IWitcherFile>[] SearchFiles(IWitcherFile[] files, string searchkeyword, string bundletypestr, string extension)
         {
             if(bundletypestr=="Any") bundletypestr="ANY";
             EBundleType bundletype = (EBundleType)Enum.Parse(typeof(EBundleType), bundletypestr);
@@ -409,7 +407,7 @@ namespace WolvenKit
         /// </summary>
         /// <param name="root">Root node.</param>
         /// <returns>Array of collected files.</returns>
-        public WitcherListViewItem[] CollectFiles(WitcherTreeNode root)
+        private WitcherListViewItem[] CollectFiles(WitcherTreeNode root)
         {
             var collectedFilesList = new List<WitcherListViewItem>();
 
@@ -429,15 +427,15 @@ namespace WolvenKit
             return collectedFilesList.ToArray();
         }
 
-        public string[] GetExtensions(params string[] filename)
-        {
-            var extensions = new List<string>();
-            foreach (var file in filename.Where(file => !extensions.Contains(file.Split('.').Last())))
-            {
-                extensions.Add(file.Split('.').Last());
-            }
-            return extensions.ToArray();
-        }
+        //public string[] GetExtensions(params string[] filename)
+        //{
+        //    var extensions = new List<string>();
+        //    foreach (var file in filename.Where(file => !extensions.Contains(file.Split('.').Last())))
+        //    {
+        //        extensions.Add(file.Split('.').Last());
+        //    }
+        //    return extensions.ToArray();
+        //}
 
         private void MarkSelected_Click(object sender, EventArgs e)
         {
@@ -555,7 +553,7 @@ namespace WolvenKit
                     }
                 }
             }
-            RequestFileAdd.Invoke(this, new AddFileArgs(Managers, SelectedPaths, false, checkBoxUncook.Checked, checkBoxExport.Checked));
+            RequestFileAdd?.Invoke(this, new AddFileArgs(Managers, SelectedPaths, false, checkBoxUncook.Checked, checkBoxExport.Checked));
             pathlistview.Items.Clear();
         }
 
@@ -592,7 +590,7 @@ namespace WolvenKit
                     }
                 }
             }
-            RequestFileAdd.Invoke(this, new AddFileArgs(Managers, SelectedPaths, true, checkBoxUncook.Checked, checkBoxExport.Checked));
+            RequestFileAdd?.Invoke(this, new AddFileArgs(Managers, SelectedPaths, true, checkBoxUncook.Checked, checkBoxExport.Checked));
             pathlistview.Items.Clear();
         }
 

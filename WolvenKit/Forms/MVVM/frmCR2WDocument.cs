@@ -75,9 +75,9 @@ namespace WolvenKit
 
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
-            backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
-            backgroundWorker1.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
-            backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
+            backgroundWorker1.DoWork += backgroundWorker1_DoWork;
+            backgroundWorker1.ProgressChanged += backgroundWorker1_ProgressChanged;
+            backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;
 
             m_deserializeDockContent = new DeserializeDockContent(GetContentFromPersistString);
 
@@ -282,16 +282,46 @@ namespace WolvenKit
 
         //private void PropertyWindow_OnRequestChunk(object sender, SelectChunkArgs e) => chunkList.SelectChunk(e.Chunk);
 
+
+        private void PropertyWindowOnRequestBytesOpen(object sender, RequestByteArrayFileOpenArgs e)
+        {
+            byte[] bytes = null;
+
+            if (e.Variable is IByteSource source)
+            {
+                bytes = source.Bytes;
+            }
+            if (bytes == null) return;
+
+
+            // peek if cr2wfile
+            byte[] Magic = { (byte)'C', (byte)'R', (byte)'2', (byte)'W' };
+            var isCr2wFile = bytes.Take(4).SequenceEqual(Magic);
+            if (isCr2wFile)
+            {
+                OpenEmbeddedFile(e.Variable.GetFullDependencyStringName(), bytes, e.Variable);
+            }
+            else
+            {
+                UIController.OpenHexEditorFor(e.Variable);
+            }
+        }
+
         private void EmbeddedWindow_OnRequestOpen(object sender, RequestEmbeddedFileOpenArgs e)
         {
             var embeddedwrapper = e.Embeddedfile;
             var relativePath = embeddedwrapper.Handle;
 
+            OpenEmbeddedFile(relativePath, embeddedwrapper.GetRawEmbeddedData(), embeddedwrapper);
+        }
+
+        private void OpenEmbeddedFile(string key, byte[] bytesource, object saveTarget)
+        {
             // check if already open
             var opendocs = FormPanel.Documents
-                .Where( _ => _.GetType() == typeof(frmCR2WDocument))
+                .Where(_ => _.GetType() == typeof(frmCR2WDocument))
                 .Cast<frmCR2WDocument>()
-                .Where(_ => _.FileName == relativePath)
+                .Where(_ => _.FileName == key)
                 .ToList();
 
             if (opendocs.Count > 0)
@@ -303,11 +333,11 @@ namespace WolvenKit
             // else: open and dock new form
             var doc = new frmCR2WDocument(new CR2WDocumentViewModel())
             {
-                Text = Path.GetFileName(relativePath) + " [" + relativePath + "]"
+                Text = Path.GetFileName(key) + " [" + key + "]"
             };
-            using (var ms = new MemoryStream(embeddedwrapper.GetRawEmbeddedData()))
+            using (var ms = new MemoryStream(bytesource))
             {
-                switch (doc.vm.LoadFile(relativePath, UIController.Get(), docLoggerService, ms))
+                switch (doc.vm.LoadFile(key, UIController.Get(), docLoggerService, ms))
                 {
                     case EFileReadErrorCodes.NoError:
                         break;
@@ -318,17 +348,19 @@ namespace WolvenKit
                 }
             }
 
-            PostLoadFile(relativePath);
+            PostLoadFile(key);
 
             doc.Show(FormPanel, DockState.Document);
-            doc.vm.SaveTarget = embeddedwrapper;
+            doc.vm.SaveTarget = saveTarget;
             //doc.FormClosed += vm.RemoveEmbedded;
             doc.FormClosed += (sender2, e2) => vm.RemoveEmbedded(sender2, e2, doc.vm);
 
-            if (vm.OpenEmbedded.ContainsKey(relativePath))
+            if (vm.OpenEmbedded.ContainsKey(key))
                 throw new NullReferenceException();
-            vm.OpenEmbedded.Add(relativePath, doc.vm);
+            vm.OpenEmbedded.Add(key, doc.vm);
         }
+
+
 
         private void frmCR2WDocument_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -401,10 +433,10 @@ namespace WolvenKit
                 propertyWindow.Show(FormPanel, DockState.DockRight);
             }
 
-
-            //chunkList.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
             propertyWindow.RequestChunkViewUpdate += ChunkWindowRequestChunkViewUpdate;
-            //propertyWindow.OnChunkRequest += PropertyWindow_OnRequestChunk;
+            propertyWindow.RequestBytesOpen += PropertyWindowOnRequestBytesOpen;
+
+
 
             chunkList.Activate();
 
@@ -420,6 +452,8 @@ namespace WolvenKit
                 embeddedFiles.RequestFileOpen += EmbeddedWindow_OnRequestOpen;
             }
         }
+
+       
 
         #endregion
 

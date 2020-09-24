@@ -1086,7 +1086,6 @@ namespace WolvenKit.App.ViewModels
 
             foreach (var d in GetOpenDocuments().Values.Where(d => d.SaveTarget == null))
             {
-                throw  new NotImplementedException();
                 d.SaveFile();
             }
             Logger.LogString("All files saved!\n", Logtype.Success);

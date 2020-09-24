@@ -147,16 +147,32 @@ namespace WolvenKit.App.ViewModels
         public override void SaveFile()
         {
             // save all open embedded files
+            // TODO: save them inside their viewmodels?
             foreach (CR2WDocumentViewModel model in OpenEmbedded.Values)
             {
-                var editvar = model.SaveTarget as CR2WEmbeddedWrapper;
+                if (model.SaveTarget is CR2WEmbeddedWrapper embedded)
+                {
+                    embedded?.SetRawEmbeddedData(model.GetRawBytes());
+                }
+                else if (model.SaveTarget is CVariable bytearray)
+                {
+                    using (var mem = new MemoryStream())
+                    using (var writer = new BinaryWriter(mem))
+                    {
+                        model.File.Write(writer);
 
-                // get bytes from model
-                editvar?.SetRawEmbeddedData(model.GetRawBytes());
+                        //OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = mem, File = File });
+                        bytearray.SetValue(mem.ToArray());
+                    }
+                    
+                    //model.SaveFile();
+                }
             }
 
             base.SaveFile();
         }
 
+
+        
     }
 }

@@ -17,6 +17,7 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.Reflection;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Extensions;
+using WolvenKit.Forms.Editors;
 using WolvenKit.Services;
 using WolvenKit.Utility;
 
@@ -62,6 +63,8 @@ namespace WolvenKit.Forms
 
         #region Properties
         public event EventHandler RequestChunkViewUpdate;
+        public event EventHandler<RequestByteArrayFileOpenArgs> RequestBytesOpen;
+
         private CR2WExportWrapper Chunk => viewModel.SelectedChunk;
 
         private List<IEditableVariable> GetSelectedObjects()
@@ -179,7 +182,11 @@ namespace WolvenKit.Forms
                             };
                         }
 
-
+                        if (e.Control is ByteArrayEditor byteArrayEditor)
+                        {
+                            byteArrayEditor.RequestBytesOpen += ByteArrayEditor_RequestBytesOpen;
+                        }
+                        
                     }
 
                     e.Cancel = e.Control == null;
@@ -194,6 +201,8 @@ namespace WolvenKit.Forms
             }
         }
 
+        
+
         private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
         {
             // change the model's isserialized property to true when the user edits it,
@@ -202,9 +211,17 @@ namespace WolvenKit.Forms
             if (model is CVariable cvar)
                 cvar.SetIsSerialized();
 
+            if (e.Control is ByteArrayEditor byteArrayEditor)
+            {
+                byteArrayEditor.RequestBytesOpen -= ByteArrayEditor_RequestBytesOpen;
+            }
+
             // unregister hotkeys
             RegisterHotkeys();
         }
+
+        private void ByteArrayEditor_RequestBytesOpen(object sender, RequestByteArrayFileOpenArgs e) =>
+            RequestBytesOpen?.Invoke(this, e);
 
         public void ApplyCustomTheme()
         {
