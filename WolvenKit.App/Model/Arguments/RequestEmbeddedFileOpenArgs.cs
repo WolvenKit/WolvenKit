@@ -2,6 +2,7 @@
 using System.IO;
 using WolvenKit.Common.Model;
 using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.App.Model
 {
@@ -12,6 +13,16 @@ namespace WolvenKit.App.Model
         public RequestEmbeddedFileOpenArgs(CR2WEmbeddedWrapper embeddedfile)
         {
             Embeddedfile = embeddedfile;
+        }
+    }
+
+    public class RequestByteArrayFileOpenArgs : EventArgs
+    {
+        public CVariable Variable { get; }
+
+        public RequestByteArrayFileOpenArgs(CVariable var)
+        {
+            Variable = var;
         }
     }
 }

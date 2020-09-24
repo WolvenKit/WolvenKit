@@ -50,7 +50,7 @@ namespace WolvenKit.Utility
                 case CBytes _:
                 case CByteArray2 _:
                 case CByteArray _:
-                    return new ByteArrayEditor { Variable = obj as IByteSource };
+                    return new ByteArrayEditor { Variable = (IByteSource) obj };
                 case CGUID o:
                     return o.GetEditor();
                 case CFloat o:

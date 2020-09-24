@@ -128,9 +128,9 @@ namespace WolvenKit
                 case EVariableEditorAction.Import:
                     ImportBytes(editvar);
                     break;
-                case EVariableEditorAction.Open:
-                    OpenEditorFor(editvar);
-                    break;
+                //case EVariableEditorAction.Open:
+                //    OpenEditorFor(editvar);
+                //    break;
             }
         }
 
@@ -144,18 +144,6 @@ namespace WolvenKit
             }
             return mainController;
         }
-
-        
-
-        //public frmCR2WDocument LoadDocument(string filename, bool suppressErrors = false)
-        //{
-        //    return Window.LoadDocument(filename, null, suppressErrors);
-        //}
-
-        //public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream, bool suppressErrors = false)
-        //{
-        //    return Window.LoadDocument(filename, memoryStream, suppressErrors) as frmCR2WDocument;
-        //}
 
 
         private void ImportBytes(CVariable editvar)
@@ -177,14 +165,14 @@ namespace WolvenKit
             }
         }
 
-        private void ExportBytes(CVariable editvar)
+        private void ExportBytes(IEditableVariable editvar)
         {
             var dlg = new SaveFileDialog();
             byte[] bytes = null;
 
-            if (editvar is IByteSource)
+            if (editvar is IByteSource source)
             {
-                bytes = ((IByteSource)editvar).Bytes.ToArray();
+                bytes = source.Bytes.ToArray();
             }
 
             dlg.Filter = string.Join("|", ImportExportUtility.GetPossibleExtensions(bytes, (CVariable)editvar.ParentVar));
@@ -205,65 +193,17 @@ namespace WolvenKit
             }
         }
 
-        private void OpenHexEditorFor(CVariable editvar)
+        public static void OpenHexEditorFor(CVariable editvar)
         {
             var editor = new frmHexEditorView() { File = editvar.cr2w };
 
-            if (editvar is IByteSource)
+            if (editvar is IByteSource source)
             {
-                editor.Bytes = ((IByteSource)editvar).Bytes;
+                editor.Bytes = source.Bytes;
             }
 
             editor.Text = "Hex Viewer [" + editvar.GetFullName() + "]";
             editor.Show();
-        }
-
-        private void OpenEditorFor(CVariable editvar)
-        {
-            byte[] bytes = null;
-
-            if (editvar is IByteSource)
-            {
-                bytes = ((IByteSource)editvar).Bytes;
-            }
-
-            if (bytes != null)
-            {
-                var doc = Window.LoadDocument(editvar.cr2w.FileName + ":" + editvar.GetFullName(), new MemoryStream(bytes), true);
-                if (doc != null)
-                {
-                    var vm = doc.GetViewModel();
-                    vm.OnFileSaved += OnVariableEditorSave;
-                    vm.SaveTarget = editvar;
-                }
-                else
-                {
-                    OpenHexEditorFor(editvar);
-                }
-            }
-        }
-
-        private void OnVariableEditorSave(object sender, FileSavedEventArgs args)
-        {
-            if (args.Stream is MemoryStream stream)
-            {
-                var vm = (IDocumentViewModel)sender;
-                var editvar = (CVariable)vm.SaveTarget;
-                editvar.SetValue(stream.ToArray());
-            }
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected bool SetField<T>(ref T field, T value, string propertyName)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
         }
     }
 }
