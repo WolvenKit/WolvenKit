@@ -109,7 +109,6 @@ namespace WolvenKit.CR2W
         ///     EditorController
         /// </summary>
         public IVariableEditor EditorController { get; set; }
-        public void CreateVariableEditor(CVariable editvar, EVariableEditorAction action) => EditorController?.CreateVariableEditor(editvar, action);
 
         #endregion
 

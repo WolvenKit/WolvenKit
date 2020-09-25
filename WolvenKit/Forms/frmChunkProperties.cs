@@ -149,12 +149,12 @@ namespace WolvenKit.Forms
                 //var variable = (e.RowObject as VariableListNode).Variable;
                 case "REDValue":
                 {
-                    // unregister hotkeys
-                    UnregisterHotkeys();
-
                     e.Control = EditorHandler.GetEditor(ivar);
                     if (e.Control != null)
                     {
+                        // unregister hotkeys
+                        UnregisterHotkeys();
+
                         e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
                         e.Control.Width = e.CellBounds.Width;
 

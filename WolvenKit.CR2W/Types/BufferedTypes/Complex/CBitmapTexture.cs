@@ -6,10 +6,12 @@ using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 using FastMember;
+using WolvenKit.Common.Model;
+using System.Linq;
 
 namespace WolvenKit.CR2W.Types
 {
-    public partial class CBitmapTexture : ITexture
+    public partial class CBitmapTexture : ITexture, IByteSource
     {
 
         [Ordinal(1000)] [REDBuffer] public CUInt32 unk { get; set; }
@@ -36,6 +38,25 @@ namespace WolvenKit.CR2W.Types
             Residentmip = new CBytes(cr2w, this, nameof(Residentmip)) { IsSerialized = true };
         }
 
+        public byte[] GetBytes()
+        {
+            var isUncooked = this.REDFlags == 0;
+            byte[] bytesource;
+            if (isUncooked)
+            {
+                bytesource = this.Mips.First().Bytes;
+                for (var index = 1; index < this.Mips.Count; index++)
+                {
+                    var byteArray = this.Mips[index];
+                    bytesource = bytesource.Concat(byteArray.Bytes).ToArray();
+                }
+            }
+            else
+                bytesource = this.Residentmip.Bytes;
+
+            return bytesource;
+        }
+
         public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
@@ -46,24 +67,17 @@ namespace WolvenKit.CR2W.Types
             // Uncooked xbms can be identified by their Sourcedata being null
             // and the residentmipindex being not null
 
-            var isCooked =  REDFlags == 0 ;
-            if (isCooked)
-            {
-                if (SourceData == null && ResidentMipIndex == null)
-                {
+            var isUncooked =  REDFlags == 0 ;
 
-                }
-            }
-
-            if (isCooked)
+            if (isUncooked)
             {
                 for (int i = 0; i < MipsCount.val; i++)
                 {
-                    var mipdata = new SMipData(cr2w, Mipdata, "");
+                    var mipdata = new SMipData(cr2w, Mipdata, "") {IsSerialized = true};
                     mipdata.Read(file, 16);
                     Mipdata.AddVariable(mipdata);
 
-                    var img = new CByteArray(cr2w, Mips, "");
+                    var img = new CByteArray(cr2w, Mips, "") { IsSerialized = true };
                     img.Read(file, 0);
                     Mips.AddVariable(img);
                 }

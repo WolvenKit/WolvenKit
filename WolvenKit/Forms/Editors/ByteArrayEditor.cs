@@ -24,27 +24,15 @@ namespace WolvenKit.Forms.Editors
             set
             {
                 bytes = value;
-                lblSize.Text = value.Bytes.Length + " bytes";
+                lblSize.Text = value.GetBytes().Length + " bytes";
             }
         }
 
-        private void btOpen_Click(object sender, EventArgs e)
-        {
-            RequestBytesOpen?.Invoke(this, new RequestByteArrayFileOpenArgs((CVariable)Variable));
-        }
+        private void btOpen_Click(object sender, EventArgs e) =>
+            RequestBytesOpen?.Invoke(this, new RequestByteArrayFileOpenArgs((CVariable) Variable));
 
-        private void btImport_Click(object sender, EventArgs e)
-        {
-            ((CVariable) Variable).cr2w.CreateVariableEditor(((CVariable) Variable), EVariableEditorAction.Import);
-        }
+        private void btImport_Click(object sender, EventArgs e) => UIController.Get().ImportBytes((CVariable)Variable);
 
-        private void btExport_Click(object sender, EventArgs e)
-        {
-            ((CVariable) Variable).cr2w.CreateVariableEditor(((CVariable) Variable), EVariableEditorAction.Export);
-        }
-
-
-
-
+        private void btExport_Click(object sender, EventArgs e) => UIController.Get().ExportBytes(Variable);
     }
 }

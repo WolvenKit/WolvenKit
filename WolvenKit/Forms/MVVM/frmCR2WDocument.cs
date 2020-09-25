@@ -290,7 +290,7 @@ namespace WolvenKit
         {
             if (e.Variable is IByteSource source)
             {
-                var bytes = source.Bytes;
+                var bytes = source.GetBytes();
                 if (bytes == null) return;
 
                 byte[] Magic = { (byte)'C', (byte)'R', (byte)'2', (byte)'W' };
@@ -301,16 +301,14 @@ namespace WolvenKit
                 }
                 else
                 {
+                    //TODO: Handle xbms here?
                     UIController.OpenHexEditorFor(e.Variable);
                 }
             }
             else if (e.Variable is IArrayAccessor iarray)
             {
                 Type InnerType = iarray.GetType().GetGenericArguments().Single();
-                if (InnerType.GetInterface(nameof(IREDPrimitive)) == null)
-                {
-                    return;
-                }
+                if (InnerType.GetInterface(nameof(IREDPrimitive)) == null) return;
 
                 // check if open
                 if (csvEditor == null || csvEditor.IsDisposed)

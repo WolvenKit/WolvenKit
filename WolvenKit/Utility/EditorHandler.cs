@@ -21,7 +21,11 @@ namespace WolvenKit.Utility
             switch (obj)
             {
                 case IArrayAccessor iarray:
-                    return new ArrayEditor { WrappedArray = iarray };
+                {
+                    return iarray.InnerType.GetInterface(nameof(IREDPrimitive)) == null 
+                        ? null 
+                        : new ArrayEditor { WrappedArray = iarray };
+                }
                 case IPtrAccessor o:
                     return o.GetEditor();
                 case IEnumAccessor o:
@@ -49,10 +53,8 @@ namespace WolvenKit.Utility
                     var editor = new TextBox();
                     editor.DataBindings.Add("Text", obj, "val");
                     return editor;
-                case CBytes _:
-                case CByteArray2 _:
-                case CByteArray _:
-                    return new ByteArrayEditor { Variable = (IByteSource) obj };
+                case IByteSource o:
+                    return new ByteArrayEditor { Variable = o };
                 case CGUID o:
                     return o.GetEditor();
                 case CFloat o:

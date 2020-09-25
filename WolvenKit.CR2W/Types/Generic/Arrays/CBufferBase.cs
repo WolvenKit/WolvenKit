@@ -92,6 +92,7 @@ namespace WolvenKit.CR2W.Types
             if (variable is T tvar)
             {
                 variable.SetREDName(elements.Count.ToString());
+                tvar.IsSerialized = true;
                 elements.Add(tvar);
             }
         }
@@ -99,6 +100,7 @@ namespace WolvenKit.CR2W.Types
         {
             if (variable is T tvar)
             {
+                tvar.IsSerialized = true;
                 elements.Add(tvar);
             }
         }

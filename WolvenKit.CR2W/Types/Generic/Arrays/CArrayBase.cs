@@ -113,6 +113,7 @@ namespace WolvenKit.CR2W.Types
             if (variable is T tvar)
             {
                 variable.SetREDName(Elements.Count.ToString());
+                tvar.IsSerialized = true;
                 Elements.Add(tvar);
             }
         }
