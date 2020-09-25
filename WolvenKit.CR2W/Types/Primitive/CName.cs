@@ -8,9 +8,13 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta()]
-    public class CName : CVariable
+    public class CName : CVariable, IREDPrimitive
     {
-        
+        public CName()
+        {
+
+        }
+
         public CName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }

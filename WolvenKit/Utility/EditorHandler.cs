@@ -20,6 +20,8 @@ namespace WolvenKit.Utility
         {
             switch (obj)
             {
+                case IArrayAccessor iarray:
+                    return new ArrayEditor { WrappedArray = iarray };
                 case IPtrAccessor o:
                     return o.GetEditor();
                 case IEnumAccessor o:
@@ -155,17 +157,6 @@ namespace WolvenKit.Utility
                 }
             }
         }
-        //private static Control GetEditor(this StringAnsi @this)
-        //{
-        //    var editor = new TextBox();
-        //    editor.DataBindings.Add("Text", @this, "val");
-        //    return editor;
-        //}
-        //private static Control GetEditor(this CBytes @this)
-        //{
-        //    var editor = new ByteArrayEditor { Variable = @this };
-        //    return editor;
-        //}
         private static Control GetEditor(this CGUID @this)
         {
             var editor = new TextBox();
@@ -189,10 +180,7 @@ namespace WolvenKit.Utility
             editor.IdGuid.DataBindings.Add("Text", @this, "GuidString", true, DataSourceUpdateMode.OnPropertyChanged);
             return editor;
         }
-        private static Control GetEditor(this IVariantAccessor @this)
-        {
-            return EditorHandler.GetEditor(@this.Variant);
-        }
+        private static Control GetEditor(this IVariantAccessor @this) => EditorHandler.GetEditor(@this.Variant);
         private static Control GetEditor(this CName @this)
         {
             var editor = new TextBox();

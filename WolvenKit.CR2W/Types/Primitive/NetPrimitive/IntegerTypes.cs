@@ -7,9 +7,12 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta()]
-    public class CUInt64 : CVariable
+    public class CUInt64 : CVariable, IREDPrimitive
     {
-        
+        public CUInt64()
+        {
+            
+        }
 
         public CUInt64(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -62,8 +65,13 @@ namespace WolvenKit.CR2W.Types
     }
 
     [DataContract(Namespace = "")]
-    public class CUInt32 : CVariable
+    public class CUInt32 : CVariable, IREDPrimitive
     {
+        public CUInt32()
+        {
+            
+        }
+
         public CUInt32(CR2WFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
@@ -114,8 +122,13 @@ namespace WolvenKit.CR2W.Types
     }
 
     [DataContract(Namespace = "")]
-    public class CUInt16 : CVariable
+    public class CUInt16 : CVariable, IREDPrimitive
     {
+        public CUInt16()
+        {
+            
+        }
+
         public CUInt16(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
@@ -167,8 +180,12 @@ namespace WolvenKit.CR2W.Types
     }
 
     [DataContract(Namespace = "")]
-    public class CUInt8 : CVariable
+    public class CUInt8 : CVariable, IREDPrimitive
     {
+        public CUInt8()
+        {
+            
+        }
         public CUInt8(CR2WFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
@@ -219,8 +236,12 @@ namespace WolvenKit.CR2W.Types
     }
 
     [DataContract(Namespace = "")]
-    public class CInt64 : CVariable
+    public class CInt64 : CVariable, IREDPrimitive
     {
+        public CInt64()
+        {
+            
+        }
         public CInt64(CR2WFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
@@ -271,8 +292,12 @@ namespace WolvenKit.CR2W.Types
     }
 
     [DataContract(Namespace = "")]
-    public class CInt32 : CVariable
+    public class CInt32 : CVariable, IREDPrimitive
     {
+        public CInt32()
+        {
+            
+        }
         public CInt32(CR2WFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
@@ -325,8 +350,12 @@ namespace WolvenKit.CR2W.Types
     }
 
     [DataContract(Namespace = "")]
-    public class CInt16 : CVariable
+    public class CInt16 : CVariable, IREDPrimitive
     {
+        public CInt16()
+        {
+            
+        }
         public CInt16(CR2WFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
@@ -377,8 +406,12 @@ namespace WolvenKit.CR2W.Types
     }
 
     [DataContract(Namespace = "")]
-    public class CInt8 : CVariable
+    public class CInt8 : CVariable, IREDPrimitive
     {
+        public CInt8()
+        {
+            
+        }
         public CInt8(CR2WFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
@@ -429,8 +462,12 @@ namespace WolvenKit.CR2W.Types
     }
 
     [DataContract(Namespace = "")]
-    public class CDynamicInt : CVariable
+    public class CDynamicInt : CVariable, IREDPrimitive
     {
+        public CDynamicInt()
+        {
+            
+        }
         public CDynamicInt(CR2WFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
@@ -488,8 +525,12 @@ namespace WolvenKit.CR2W.Types
     }
 
     [DataContract(Namespace = "")]
-    public class CVLQInt32 : CVariable
+    public class CVLQInt32 : CVariable, IREDPrimitive
     {
+        public CVLQInt32()
+        {
+            
+        }
         public CVLQInt32(CR2WFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
@@ -542,8 +583,12 @@ namespace WolvenKit.CR2W.Types
     }
 
     [DataContract(Namespace = "")]
-    public class CBool : CVariable
+    public class CBool : CVariable, IREDPrimitive
     {
+        public CBool()
+        {
+            
+        }
         public CBool(CR2WFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {

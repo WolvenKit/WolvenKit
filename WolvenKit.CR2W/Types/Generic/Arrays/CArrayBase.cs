@@ -16,7 +16,7 @@ namespace WolvenKit.CR2W.Types
 {
 
     [REDMeta()]
-    public abstract class CArrayBase<T> : CVariable, IList<T>, IList where T : IEditableVariable
+    public abstract class CArrayBase<T> : CVariable, IArrayAccessor<T>, IList<T> where T : IEditableVariable
     {
         public CArrayBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
@@ -27,6 +27,7 @@ namespace WolvenKit.CR2W.Types
         [Browsable(false)]
         public List<int> Flags { get; set; }
         public string Elementtype { get; set; }
+        public Type InnerType => this.GetType().GetGenericArguments().Single();
         #endregion
 
 

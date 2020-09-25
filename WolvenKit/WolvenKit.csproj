@@ -396,11 +396,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ComboBoxExtensions.cs" />
+    <Compile Include="Forms\Editors\ArrayEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\ArrayEditor.Designer.cs">
+      <DependentUpon>ArrayEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\ByteArrayEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\Editors\ByteArrayEditor.Designer.cs">
       <DependentUpon>ByteArrayEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\frmCsvEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\frmCsvEditor.Designer.cs">
+      <DependentUpon>frmCsvEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Editors\IdTagEditor.cs">
       <SubType>UserControl</SubType>
@@ -756,8 +768,14 @@
     <EmbeddedResource Include="FlowTreeEditors\Scene\SceneLinkEditor.resx">
       <DependentUpon>SceneLinkEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\ArrayEditor.resx">
+      <DependentUpon>ArrayEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\ByteArrayEditor.resx">
       <DependentUpon>ByteArrayEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\frmCsvEditor.resx">
+      <DependentUpon>frmCsvEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\IdTagEditor.resx">
       <DependentUpon>IdTagEditor.cs</DependentUpon>
@@ -1042,8 +1060,11 @@
     <Content Include="Resources\VisualStudio\Close_red_16x.png" />
     <Content Include="Resources\VisualStudio\Compliant_16x.png" />
     <Content Include="Resources\VisualStudio\Copy_16x.png" />
+    <Content Include="Resources\VisualStudio\ExportToExcel_16x.png" />
+    <Content Include="Resources\VisualStudio\Export_16x.png" />
     <Content Include="Resources\VisualStudio\Filter_16x.png" />
     <Content Include="Resources\VisualStudio\FindInFile_16x.png" />
+    <Content Include="Resources\VisualStudio\Import_16x.png" />
     <Content Include="Resources\VisualStudio\MailOpen_16x.png" />
     <Content Include="Resources\VisualStudio\Open_16x.png" />
     <Content Include="Resources\VisualStudio\Paste_16x.png" />

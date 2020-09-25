@@ -7,11 +7,14 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta()]
-    public class CString : CVariable
+    public class CString : CVariable, IREDPrimitive
     {
         private bool isWideChar;
-        
 
+        public CString()
+        {
+            
+        }
         public CString(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }

@@ -51,7 +51,7 @@ namespace WolvenKit.App
 
         public static string WorkDir => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "tmp_workdir");
 
-        private static string DepotZipPath => Path.Combine(ManagerCacheDir, "Depot.zip");
+        //private static string DepotZipPath => Path.Combine(ManagerCacheDir, "Depot.zip");
         public static string XBMDumpPath => Path.Combine(ManagerCacheDir, "__xbmdump_3768555366.csv");
 
         public string InitialModProject { get; set; } = "";
@@ -460,34 +460,15 @@ namespace WolvenKit.App
                     Configuration.Save();
                 }
 
-                var fi = new FileInfo(DepotZipPath);
-                if (!fi.Exists)
-                    throw new Exception("Shipped Depot not found: Depot.zip");
+                // undbundle some engine files?
 
-                // check if any new files are in the shipped zip that aren't in the r4depot
-                // and extract if yes
-                List<ZipArchiveEntry> entries = ZipFile.OpenRead(DepotZipPath).Entries.ToList();
-                foreach (ZipArchiveEntry entry in entries)
-                {
-                    var filepath = Path.Combine(Configuration.DepotPath, entry.FullName);
-                    // if directory
-                    if (string.IsNullOrEmpty(entry.Name))
-                    {
-                        if (!Directory.Exists(filepath))
-                            Directory.CreateDirectory(filepath);
-                    }
-                    else
-                    {
-                        if (!File.Exists(filepath))
-                            entry.ExtractToFile(filepath);
-                    }
-                }
+                
                 #endregion
 
                 loadStatus = "Loading path hashes!";
                 #region PathHasManager
                 // create pathhashes if they don't already exist
-                fi = new FileInfo(Cr2wResourceManager.pathashespath);
+                var fi = new FileInfo(Cr2wResourceManager.pathashespath);
                 if (!fi.Exists)
                 {
                     foreach (string item in BundleManager.FileList.Select(_ => _.Name).Distinct())

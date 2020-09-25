@@ -227,6 +227,8 @@
     <Compile Include="Model\Arguments\SelectChunkArgs.cs" />
     <Compile Include="Model\Commonfunctions.cs" />
     <Compile Include="Model\CopyController.cs" />
+    <Compile Include="Model\CsvCommonFunctions.cs" />
+    <Compile Include="Model\CsvMaps.cs" />
     <Compile Include="Model\ImageUtility.cs" />
     <Compile Include="Model\ImportModel.cs" />
     <Compile Include="Model\IWolvenkitView.cs" />
@@ -286,9 +288,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <Content Include="ManagerCache\__xbmdump_3768555366.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ManagerCache\Depot.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />

@@ -183,10 +183,13 @@ namespace WolvenKit.Forms
                         }
 
                         if (e.Control is ByteArrayEditor byteArrayEditor)
-                        {
                             byteArrayEditor.RequestBytesOpen += ByteArrayEditor_RequestBytesOpen;
+
+                        if (e.Control is ArrayEditor arrayEditor)
+                        {
+                            arrayEditor.parentref = this;
+                            arrayEditor.RequestBytesOpen += ByteArrayEditor_RequestBytesOpen;
                         }
-                        
                     }
 
                     e.Cancel = e.Control == null;
@@ -212,9 +215,9 @@ namespace WolvenKit.Forms
                 cvar.SetIsSerialized();
 
             if (e.Control is ByteArrayEditor byteArrayEditor)
-            {
                 byteArrayEditor.RequestBytesOpen -= ByteArrayEditor_RequestBytesOpen;
-            }
+            if (e.Control is ArrayEditor arrayEditor)
+                arrayEditor.RequestBytesOpen -= ByteArrayEditor_RequestBytesOpen;
 
             // unregister hotkeys
             RegisterHotkeys();
@@ -441,6 +444,8 @@ namespace WolvenKit.Forms
                 return false;
             }
         }
+
+        internal void RefreshObject(IEditableVariable model) => treeView.RefreshObject(model);
 
         private void expandAllToolStripMenuItem_Click(object sender, EventArgs e) => treeView.ExpandAll();
 

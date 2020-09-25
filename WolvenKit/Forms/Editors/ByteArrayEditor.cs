@@ -31,7 +31,6 @@ namespace WolvenKit.Forms.Editors
         private void btOpen_Click(object sender, EventArgs e)
         {
             RequestBytesOpen?.Invoke(this, new RequestByteArrayFileOpenArgs((CVariable)Variable));
-            //((CVariable) Variable).cr2w.CreateVariableEditor(((CVariable) Variable), EVariableEditorAction.Open);
         }
 
         private void btImport_Click(object sender, EventArgs e)
