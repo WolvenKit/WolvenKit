@@ -36,8 +36,11 @@ namespace WolvenKit.Utility
                     return o.GetEditor();
                 case IVariantAccessor o:
                     return o.GetEditor();
+                case CBool o:
+                    var booleditor = new CheckBox();
+                    booleditor.DataBindings.Add("Checked", obj, "val");
+                    return booleditor;
                 case StringAnsi _:
-                case CBool _:
                 case CVLQInt32 _:
                 case CDynamicInt _:
                 case CInt8 _:

@@ -600,7 +600,7 @@ namespace WolvenKit.CR2W.Types
         public bool val
         {
             get => backingField != 0;
-            private set => backingField = value ? (byte)1 : (byte)0;
+            set => backingField = value ? (byte)1 : (byte)0;
         }
 
         public override void Read(BinaryReader file, uint size)
