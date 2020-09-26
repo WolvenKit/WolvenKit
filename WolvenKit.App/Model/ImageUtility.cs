@@ -93,7 +93,7 @@ namespace WolvenKit.App.Model
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public static Bitmap FromStream(Stream stream)
+        private static Bitmap FromStream(Stream stream)
         {
             using (var image = Pfim.Pfim.FromStream(stream))
             {
