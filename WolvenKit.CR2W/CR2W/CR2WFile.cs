@@ -48,6 +48,9 @@ namespace WolvenKit.CR2W
             };
 
             Logger = logger ?? new LoggerService();
+
+            StringDictionary = new Dictionary<uint, string>();
+            m_tableheaders = new CR2WTable[10];
         }
 
         
@@ -116,11 +119,23 @@ namespace WolvenKit.CR2W
         public CR2WExportWrapper CreateChunk(string type, CR2WExportWrapper parent = null)
         {
             var chunk = new CR2WExportWrapper(this, type, parent);
+            chunk.CreateDefaultData();
+
 
             chunks.Add(chunk);
+            return chunk;
+        }
 
-            // 
+        public CR2WExportWrapper CreateChunk(CVariable cvar, CR2WExportWrapper parent = null)
+        {
+            // checks to see if the variable from which the chunk is built is properly constructed
+            if (cvar == null || cvar.REDName != cvar.REDType || cvar.ParentVar != null)
+                throw new NotImplementedException();
 
+            var chunk = new CR2WExportWrapper(this, cvar.REDType, parent);
+            chunk.CreateDefaultData(cvar);
+
+            chunks.Add(chunk);
             return chunk;
         }
 
@@ -454,7 +469,7 @@ namespace WolvenKit.CR2W
             var m_temp = new byte[m_strings_size];
             stream.Read(m_temp, 0, m_temp.Length);
 
-            StringDictionary = new Dictionary<uint, string>();
+            
             uint offset = 0;
             var tempstring = new List<byte>();
             for (uint i = 0; i < m_strings_size; i++)
@@ -493,9 +508,9 @@ namespace WolvenKit.CR2W
             StringDictionary.Clear();
 
 
-            List<byte> newstrings = new List<byte>();
-            List<string> nameslist = new List<string>();
-            List<SImportEntry> importslist = new List<SImportEntry>();
+            List<byte> newstrings;
+            List<string> nameslist;
+            List<SImportEntry> importslist;
             (StringDictionary, newstrings, nameslist, importslist) = GenerateStringtable();
 
             uint stringbuffer_offset = 160; // always 160

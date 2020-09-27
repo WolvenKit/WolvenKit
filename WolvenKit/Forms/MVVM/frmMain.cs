@@ -1368,11 +1368,12 @@ namespace WolvenKit
                 frmCR2WDocument doc = new frmCR2WDocument(new CR2WDocumentViewModel());
                 doc.WorkerLoadFileSetup(new LoadFileArgs(filename, memoryStream));
 
-                doc.PostLoadFile(filename, bool.Parse(renderW2meshToolStripMenuItem.Tag.ToString()));
 
                 doc.Activated += doc_Activated;
                 doc.Show(dockPanel, DockState.Document);
                 doc.FormClosed += doc_FormClosed;
+
+                doc.PostLoadFile(filename, bool.Parse(renderW2meshToolStripMenuItem.Tag.ToString()));
 
                 vm.AddOpenDocument(doc.GetViewModel());
 

@@ -9,7 +9,20 @@ namespace WolvenKit.CR2W.Types
 {
     public static class Enums
     {
-        
+        public enum ETextureCompression
+        {
+            TCM_None,
+            TCM_DXTNoAlpha,
+            TCM_DXTAlpha,
+            TCM_RGBE,   //unused
+            TCM_Normals,
+            TCM_NormalsHigh,
+            TCM_NormalsGloss,
+            TCM_DXTAlphaLinear, //unused
+            TCM_QualityR,
+            TCM_QualityRG,
+            TCM_QualityColor
+        }
 
         #region Not found in Ghidra
         public enum ELinkedSocketPlacement
@@ -2091,20 +2104,7 @@ namespace WolvenKit.CR2W.Types
             ESPCT_ReciprocalOfSineCurve,
             ESPCT_Exp3
         }
-        public enum ETextureCompression
-        {
-            TCM_None,
-            TCM_DXTNoAlpha,
-            TCM_DXTAlpha,
-            TCM_RGBE,   //unused
-            TCM_Normals,
-            TCM_NormalsHigh,
-            TCM_NormalsGloss,
-            TCM_DXTAlphaLinear, //unused
-            TCM_QualityR,
-            TCM_QualityRG,
-            TCM_QualityColor
-        }
+        
         public enum ETextureCategory
         {
             Generic,

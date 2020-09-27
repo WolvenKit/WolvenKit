@@ -1,16 +1,25 @@
 ﻿using CsvHelper;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
+using WolvenKit.Common;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.Tools;
 using WolvenKit.Common.Wcc;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
+using WolvenKit.DDS;
+using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -60,6 +69,9 @@ namespace WolvenKit.App.ViewModels
             }
         }
         #endregion
+
+        public bool UseWolvenKitImport { get; set; }
+
         #endregion
 
         #region Commands
@@ -172,26 +184,80 @@ namespace WolvenKit.App.ViewModels
                 if (!File.Exists(fullpath))
                     return;
 
-                try
+                string importext = $".{file.ImportType:G}";
+                if (UseWolvenKitImport && importext == ".xbm")
                 {
-                    await StartImport(file);
+                    // experimental: import with wkit
+                    var cr2w = CreateCr2wXbmFromImagePath(file);
+                    if (cr2w != null)
+                    {
+                        var exNewpath = $"{GetNewPath(file)}";
+                        // create directory
+                        EnsureFolderExists(exNewpath);
+                        using (var fs = new FileStream(exNewpath, FileMode.Create, FileAccess.ReadWrite))
+                        using (var writer = new BinaryWriter(fs))
+                        {
+                            cr2w.Write(writer);
+                            MainController.LogString($"Succesfully imported file {fullpath}.", Logtype.Success);
+                        }
+                    }
+                    else
+                        MainController.LogString($"Could not import file {fullpath}.", Logtype.Error);
                 }
-                catch (Exception ex)
+                else
                 {
-                    throw ex;
+                    // import with wcc_lite
+                    try
+                    {
+                        await StartImport(file);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+               
+
+                
+
+                // https://stackoverflow.com/a/3695190
+                void EnsureFolderExists(string path)
+                {
+                    string directoryName = Path.GetDirectoryName(path);
+                    // If path is a file name only, directory name will be an empty string
+                    if (!string.IsNullOrWhiteSpace(directoryName))
+                    {
+                        // Create all directories on the path that don't already exist
+                        Directory.CreateDirectory(directoryName);
+                    }
                 }
             }
 
             async Task StartImport(ImportableFile file)
             {
                 var relPath = file.GetRelativePath();
+                var newpath = GetNewPath(file);
+                var filepath = Path.Combine(importdepot.FullName, relPath);
+
+                var import = new Wcc_lite.import()
+                {
+                    File = filepath,
+                    Out = newpath,
+                    Depot = MainController.Get().Configuration.DepotPath,
+                    texturegroup = file.TextureGroup
+                };
+                await Task.Run(() => MainController.Get().WccHelper.RunCommand(import));
+            }
+
+            string GetNewPath(ImportableFile file)
+            {
+                var relPath = file.GetRelativePath();
                 string importext = $".{file.ImportType:G}";
                 string rawext = $".{file.GetImportableType():G}";
-                var filepath = Path.Combine(importdepot.FullName, relPath);
 
                 // make new path
                 // first, trim Raw from the path
-                if (relPath.Substring(0, 3) == "Raw" )
+                if (relPath.Substring(0, 3) == "Raw")
                     relPath = relPath.Substring(4);
                 // then, trim Mod or dlc from the path
                 bool isDLC = false;
@@ -209,17 +275,142 @@ namespace WolvenKit.App.ViewModels
                 relPath = Path.ChangeExtension(relPath, importext);
                 var newpath = isDLC ? Path.Combine(ActiveMod.DlcUncookedDirectory, relPath) : Path.Combine(ActiveMod.ModUncookedDirectory, relPath);
 
-                var import = new Wcc_lite.import()
-                {
-                    File = filepath,
-                    Out = newpath,
-                    Depot = MainController.Get().Configuration.DepotPath,
-                    texturegroup = file.TextureGroup
-                };
-                await Task.Run(() => MainController.Get().WccHelper.RunCommand(import));
+                return newpath;
             }
         }
         #endregion
+
+        private CR2WFile CreateCr2wXbmFromImagePath(ImportableFile file)
+        {
+            var fullpath = Path.Combine(importdepot.FullName, file.GetRelativePath());
+
+            // experimental: create uncooked xbm
+            var compression = ImageUtility.GetTextureCompressionFromTextureGroup(file.TextureGroup);
+            var tg = file.TextureGroup.ToString();
+
+            // create mipmaps with texconv?
+            // create a temporary dds
+            var tempdir = MainController.WorkDir;
+            var textureformat = ImageUtility.GetTextureFormatFromCompression(compression);
+            var texconvformat = CommonImageTools.GetTexconvFormatFromTextureFormat(textureformat);
+            var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, texconvformat);
+
+            if (!File.Exists(ddsfile)) throw new NotImplementedException();
+            var metadata = DDSUtils.ReadHeader(ddsfile);
+            var width = metadata.Width;
+            var height = metadata.Height;
+
+            // create cr2wfile
+            var cr2w = new CR2WFile();
+            var xbm = new CBitmapTexture(cr2w, null, "CBitmapTexture");
+            xbm.Width = new CUInt32(cr2w, xbm, "width") { val = width, IsSerialized = true };
+            xbm.Height = new CUInt32(cr2w, xbm, "height") { val = height, IsSerialized = true };
+            xbm.Compression = new CEnum<ETextureCompression>(cr2w, xbm, "compression")
+                { WrappedEnum = compression, IsSerialized = true };
+            xbm.TextureGroup = new CName(cr2w, xbm, "textureGroup") { Value = tg, IsSerialized = true };
+            xbm.unk = new CUInt32(cr2w, xbm, "unk") { val = 0, IsSerialized = true };
+            xbm.unk1 = new CUInt16(cr2w, xbm, "unk1") { val = 512, IsSerialized = true }; //TODO: find out what that is
+            xbm.unk2 = new CUInt16(cr2w, xbm, "unk2") { val = 768, IsSerialized = true }; //TODO: find out what that is
+
+            // read the mips
+            // check if not a power of 2
+            if (height % 2 != 0)
+            {
+                MainController.LogString("Height is not a power of 2. Please resize your image.", Logtype.Error);
+                return null;
+            }
+
+            // funkiest way to calculate log2, the length of the bit array is also the number of mipmaps
+            // height = 1024 = 2^10 = 11 mipmaps
+            string b = Convert.ToString(Math.Max(height, width), 2);
+            int mipcount = b.Length;
+
+            xbm.Mipdata = new CCompressedBuffer<SMipData>(cr2w, xbm, "Mipdata") { IsSerialized = true };
+            using (var fs = new FileStream(ddsfile, FileMode.Open, FileAccess.Read))
+            using (var reader = new BinaryReader(fs))
+            {
+                // skip dds header
+                fs.Seek(128, SeekOrigin.Begin);
+
+                var mipsizeH = height;
+                var mipsizeW = width;
+                // read data here
+                for (int i = 0; i < mipcount; i++)
+                {
+                    
+                    var buffer = reader.ReadBytes((int)GetMipMapSize(mipsizeW, mipsizeH, textureformat));
+
+                    var mipdata = new SMipData(cr2w, xbm.Mipdata, $"{i}") { IsSerialized = true };
+                    mipdata.Height = new CUInt32(cr2w, mipdata, $"Height") { IsSerialized = true, val = mipsizeH};
+                    mipdata.Width = new CUInt32(cr2w, mipdata, $"Width") { IsSerialized = true, val = mipsizeW };
+                    mipdata.Blocksize = new CUInt32(cr2w, mipdata, $"Blocksize") { IsSerialized = true, val = GetBlockSize(mipsizeW, textureformat) };
+                    mipdata.Mip = new CByteArray(cr2w, mipdata, $"Mip") { IsSerialized = true, Bytes = buffer };
+
+                    xbm.Mipdata.AddVariable(mipdata);
+
+                    mipsizeH = Math.Max(4, mipsizeH / 2);
+                    mipsizeW = Math.Max(4, mipsizeW / 2);
+                }
+
+            }
+
+            // residentmips
+
+
+            cr2w.FromCResource(xbm);
+
+            return cr2w;
+
+            uint GetMipMapSize(uint _width, uint _height, ETextureFormat _textureformat)
+            {
+                switch (_textureformat)
+                {
+                    case ETextureFormat.TEXFMT_BC1:
+                    case ETextureFormat.TEXFMT_BC4:
+                    {
+                        return Math.Max(1, (_height / 4)) * Math.Max(1, (_width / 4)) * 8;
+                    }
+                    case ETextureFormat.TEXFMT_BC2:
+                    case ETextureFormat.TEXFMT_BC3:
+                    case ETextureFormat.TEXFMT_BC5:
+                    {
+                        return Math.Max(1, (_height / 4)) * Math.Max(1, (_width / 4)) * 16;
+                    }
+                    //case ETextureFormat.TEXFMT_BC6H:
+                    case ETextureFormat.TEXFMT_BC7:
+                    case ETextureFormat.TEXFMT_R8G8B8A8:
+                    default:
+                    {
+                        throw new MissingFormatException($"Missing Format: {_textureformat}");
+                    }
+                }
+            }
+
+            uint GetBlockSize(uint _width, ETextureFormat _textureformat)
+            {
+                switch (_textureformat)
+                {
+                    case ETextureFormat.TEXFMT_BC1:
+                    case ETextureFormat.TEXFMT_BC4:
+                    {
+                        return Math.Max(1, (_width / 4)) * 8;
+                    }
+                    case ETextureFormat.TEXFMT_BC2:
+                    case ETextureFormat.TEXFMT_BC3:
+                    case ETextureFormat.TEXFMT_BC5:
+                    {
+                        return Math.Max(1, (_width / 4)) * 16;
+                    }
+                    //case ETextureFormat.TEXFMT_BC6H:
+                    case ETextureFormat.TEXFMT_BC7:
+                    case ETextureFormat.TEXFMT_R8G8B8A8:
+                    default:
+                    {
+                        throw new MissingFormatException($"Missing Format: {_textureformat}");
+                    }
+                }
+            }
+        }
 
         #region Methods
         public void AddObjects(List<string> importablefiles, string dirpath)

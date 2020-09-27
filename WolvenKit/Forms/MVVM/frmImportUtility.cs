@@ -30,6 +30,8 @@ namespace WolvenKit.Forms
 
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
             this.objectListView.SetObjects(viewModel.Importableobjects);
+
+            this.toolStripComboBox1.SelectedIndex = 0;
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -119,5 +121,9 @@ namespace WolvenKit.Forms
         }
         #endregion
 
+        private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            viewModel.UseWolvenKitImport = toolStripComboBox1.Text == "WolvenKit";
+        }
     }
 }

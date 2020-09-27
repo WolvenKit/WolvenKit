@@ -28,7 +28,7 @@ namespace WolvenKit.CR2W
 
         [DataMember]
         [FieldOffset(2)]
-        public ushort objectFlags;      // can be 0, TODO
+        public ushort objectFlags;      // 0 means uncooked, 8192 is cooked //TODO
 
         [DataMember]
         [FieldOffset(4)]
@@ -68,20 +68,19 @@ namespace WolvenKit.CR2W
         /// <param name="file"></param>
         /// <param name="redtype"></param>
         /// <param name="parentchunk"></param>
-        public CR2WExportWrapper(CR2WFile file, string redtype, CR2WExportWrapper parentchunk)
+        /// <param name="cooked"></param>
+        public CR2WExportWrapper(CR2WFile file, string redtype, CR2WExportWrapper parentchunk, bool cooked = false)
         {
-            this.cr2w = file;
             _export = new CR2WExport
             {
-                objectFlags = 8192,
+                objectFlags = (ushort)(cooked ? 8192 : 0),
             };
             IsVirtuallyMounted = false;
             Referrers = new List<CVariable>();
 
+            this.cr2w = file;
             this.REDType = redtype;
             SetParentChunk(parentchunk);
-
-            CreateDefaultData();
         }
 
         /// <summary>
@@ -125,7 +124,7 @@ namespace WolvenKit.CR2W
         }
         private void SetParentChunk(CR2WExportWrapper parent)
         {
-            ParentChunkIndex = cr2w.chunks.IndexOf(parent);
+            ParentChunkIndex = parent == null ? -1 : cr2w.chunks.IndexOf(parent);
             IsVirtuallyMounted = false;
             VirtualParentChunkIndex = ParentChunkIndex;
         }
@@ -395,19 +394,27 @@ namespace WolvenKit.CR2W
         /// <summary>
         /// Needs the parentChunk idx to be set!
         /// </summary>
-        private void CreateDefaultData()
+        public void CreateDefaultData(CVariable cvar = null)
         {
             //if (Export.className != 1 && GetParentChunk() == null)
             //    throw new InvalidChunkTypeException("No parent chunk set!");
 
-            data = CR2WTypeManager.Create(REDType, REDType, cr2w, GetParentChunk()?.data);
+            if (cvar == null)
+            {
+                data = CR2WTypeManager.Create(REDType, REDType, cr2w, GetParentChunk()?.data);
+            }
+            else
+            {
+                data = cvar;
+            }
+
             if (data == null)
             {
                 throw new NotImplementedException();
             }
 
             data.IsSerialized = true;
-            data.REDFlags = Export.objectFlags;
+            data.SetREDFlags(Export.objectFlags);
         }
 
         public override string ToString() => REDName;

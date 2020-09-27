@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
-
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.CR2W.Types
 {
