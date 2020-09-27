@@ -62,7 +62,7 @@ namespace WolvenKit.Cache
             using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
             {
                 // generate header
-                ETextureFormat format = CommonImageTools.GetTextureFormatFromREDEngineByte(Type1);
+                TexconvWrapper.EFormat format = CommonImageTools.GetEFormatFromREDEngineByte(Type1);
                 var metadata = new DDSMetadata(
                     BaseWidth,
                     BaseHeight,

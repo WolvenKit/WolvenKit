@@ -15,145 +15,42 @@ namespace WolvenKit.Common.Tools
     {
         /// <summary>
         /// Gets the texture compression method from some weird enum used in xbms
-        /// TODO: TEST THIS!!!
+        /// Used when extracting from texture cache
         /// </summary>
         /// <param name="redbyte"></param>
         /// <returns></returns>
-        public static ETextureFormat GetTextureFormatFromREDEngineByte(short redbyte)
+        public static EFormat GetEFormatFromREDEngineByte(short redbyte)
         {
             switch (redbyte)
             {
-                case 0x0:
-                    return ETextureFormat.TEXFMT_R8G8B8A8;
-                case 0xFD:
-                    return ETextureFormat.TEXFMT_R8G8B8A8;
-                case 0x07:
-                    return ETextureFormat.TEXFMT_BC1;
-                case 0x08:
-                    return ETextureFormat.TEXFMT_BC3;
-                case 0x09:
-                    return ETextureFormat.TEXFMT_BC6H;
-                case 0x0A:
-                    return ETextureFormat.TEXFMT_BC7;
-                case 0x0B:
-                    return ETextureFormat.TEXFMT_Float_R16G16B16A16;
-                case 0x0C:
-                    return ETextureFormat.TEXFMT_Float_R32G32B32A32;
-                case 0x0D:
-                    return ETextureFormat.TEXFMT_BC2;
-                case 0x0E:
-                    return ETextureFormat.TEXFMT_BC4;
-                case 0x0F:
-                    return ETextureFormat.TEXFMT_BC5;
+                case 0x0:                                          // None
+                case 0xFD: return EFormat.R8G8B8A8_UNORM;          // UNKNOWN FORMAT
+                case 0x07: return EFormat.BC1_UNORM;               //TCM_DXTNoAlpha, TCM_Normals
+                case 0x08: return EFormat.BC3_UNORM;               //TCM_DXTAlpha, TCM_NormalsHigh, TCM_NormalsGloss
+                //case 0x09: return EFormat.BC6H_UF16;               // unused
+                case 0x0A: return EFormat.BC7_UNORM;               //TCM_QualityColor
+                //case 0x0B: return EFormat.R16G16B16A16_FLOAT;      // unused
+                //case 0x0C: return EFormat.R32G32B32A32_FLOAT;      // unused
+                case 0x0D: return EFormat.BC2_UNORM;               // ???
+                case 0x0E: return EFormat.BC4_UNORM;               //TCM_QualityR
+                case 0x0F: return EFormat.BC5_UNORM;               //TCM_QualityRG
                 default:
                     throw new NotImplementedException();
-                    break;
             }
         }
 
-        /// <summary>
-        /// Translates REDEngine textureformats to DXGI textureformat used in texconv
-        /// TODO: TEST THIS!!!
-        /// </summary>
-        /// <param name="format"></param>
-        /// <returns></returns>
-        public static EFormat GetTexconvFormatFromTextureFormat(ETextureFormat format)
+        public enum ERedTextureFormat
         {
-            switch (format)
-            {
-                case ETextureFormat.TEXFMT_BC1:
-                    return EFormat.BC1_UNORM;
-                case ETextureFormat.TEXFMT_BC2:
-                    return EFormat.BC2_UNORM;
-                case ETextureFormat.TEXFMT_BC3:
-                    return EFormat.BC3_UNORM;
-                case ETextureFormat.TEXFMT_BC4:
-                    return EFormat.BC4_UNORM;
-                case ETextureFormat.TEXFMT_BC5:
-                    return EFormat.BC5_UNORM;
-                case ETextureFormat.TEXFMT_BC7:
-                    return EFormat.BC7_UNORM;
-                case ETextureFormat.TEXFMT_R8G8B8A8:
-                    return EFormat.R8G8B8A8_UNORM;
-                case ETextureFormat.TEXFMT_NULL:
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(format), format, null);
-            }
-        }
+            BC1_UNORM = 7,
+            BC3_UNORM = 8,
 
-        
-
-
-        public static void ConvertDDSTo(Stream stream)
-        {
-            using (var image = new MagickImage(stream))
-            {
-                
-
-
-
-            }
-
-
-
-        }
-
-        public static void ReadImageMetaData(Stream stream)
-        {
-            var info = new MagickImageInfo(stream);
-
-            stream.Seek(0, SeekOrigin.Begin);
-            using (var image = new MagickImage(stream))
-            {
-
-
-
-
-            }
-
+            BC7_UNORM = 10,
             
+            BC2_UNORM = 13,
+            BC4_UNORM = 14,
+            BC5_UNORM = 15,
 
+            R8G8B8A8_UNORM = 253 // unknown?
         }
-
-        
-
-        public static (int height, int width) ReadImageMetaData(string filepath)
-        {
-            var info = new MagickImageInfo(filepath);
-
-            //using (var image = Pfim.Pfim.FromFile(filepath))
-            //{
-
-
-            //}
-
-
-
-
-            // expretimental wkit import
-            //CommonImageTools.ReadImageMetaData(fullpath);
-
-            // read metadata
-            // width, height: can be gotten from ImageMagick
-            int height = info.Height;
-            int width = info.Width;
-            // compression: look up in texturegroups.xml
-            // texturegroup: gotten from here
-
-            // unk1, unk2: ???
-            // Mipdata: create mips?
-
-
-            // create xbm
-
-
-            // create cr2wfile
-
-            return (height, width);
-        }
-
-
-
-
     }
 }

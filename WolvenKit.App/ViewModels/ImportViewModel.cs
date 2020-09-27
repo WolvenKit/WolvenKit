@@ -20,6 +20,7 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using WolvenKit.DDS;
 using static WolvenKit.CR2W.Types.Enums;
+using static WolvenKit.DDS.TexconvWrapper;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -291,9 +292,8 @@ namespace WolvenKit.App.ViewModels
             // create mipmaps with texconv?
             // create a temporary dds
             var tempdir = MainController.WorkDir;
-            var textureformat = ImageUtility.GetTextureFormatFromCompression(compression);
-            var texconvformat = CommonImageTools.GetTexconvFormatFromTextureFormat(textureformat);
-            var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, texconvformat);
+            var textureformat = ImageUtility.GetEFormatFromCompression(compression);
+            var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, textureformat);
 
             if (!File.Exists(ddsfile)) throw new NotImplementedException();
             var metadata = DDSUtils.ReadHeader(ddsfile);
@@ -322,7 +322,7 @@ namespace WolvenKit.App.ViewModels
 
             // funkiest way to calculate log2, the length of the bit array is also the number of mipmaps
             // height = 1024 = 2^10 = 11 mipmaps
-            string b = Convert.ToString(Math.Max(height, width), 2);
+            string b = System.Convert.ToString(Math.Max(height, width), 2);
             int mipcount = b.Length;
 
             xbm.Mipdata = new CCompressedBuffer<SMipData>(cr2w, xbm, "Mipdata") { IsSerialized = true };
@@ -361,53 +361,45 @@ namespace WolvenKit.App.ViewModels
 
             return cr2w;
 
-            uint GetMipMapSize(uint _width, uint _height, ETextureFormat _textureformat)
+            uint GetMipMapSize(uint _width, uint _height, EFormat _textureformat)
             {
                 switch (_textureformat)
                 {
-                    case ETextureFormat.TEXFMT_BC1:
-                    case ETextureFormat.TEXFMT_BC4:
-                    {
+                    case EFormat.BC1_UNORM:
+                    case EFormat.BC4_UNORM:
                         return Math.Max(1, (_height / 4)) * Math.Max(1, (_width / 4)) * 8;
-                    }
-                    case ETextureFormat.TEXFMT_BC2:
-                    case ETextureFormat.TEXFMT_BC3:
-                    case ETextureFormat.TEXFMT_BC5:
-                    {
+                    case EFormat.BC2_UNORM:
+                    case EFormat.BC3_UNORM:
+                    case EFormat.BC5_UNORM:
                         return Math.Max(1, (_height / 4)) * Math.Max(1, (_width / 4)) * 16;
-                    }
-                    //case ETextureFormat.TEXFMT_BC6H:
-                    case ETextureFormat.TEXFMT_BC7:
-                    case ETextureFormat.TEXFMT_R8G8B8A8:
+                    //case EFormat.R32G32B32A32_FLOAT:
+                    //case EFormat.R16G16B16A16_FLOAT:
+                    //case EFormat.BC6H_UF16:
+                    case EFormat.R8G8B8A8_UNORM:
+                    case EFormat.BC7_UNORM:
                     default:
-                    {
-                        throw new MissingFormatException($"Missing Format: {_textureformat}");
-                    }
+                        throw new ArgumentOutOfRangeException(nameof(_textureformat), _textureformat, null);
                 }
             }
 
-            uint GetBlockSize(uint _width, ETextureFormat _textureformat)
+            uint GetBlockSize(uint _width, EFormat _textureformat)
             {
                 switch (_textureformat)
                 {
-                    case ETextureFormat.TEXFMT_BC1:
-                    case ETextureFormat.TEXFMT_BC4:
-                    {
+                    case EFormat.BC1_UNORM:
+                    case EFormat.BC4_UNORM:
                         return Math.Max(1, (_width / 4)) * 8;
-                    }
-                    case ETextureFormat.TEXFMT_BC2:
-                    case ETextureFormat.TEXFMT_BC3:
-                    case ETextureFormat.TEXFMT_BC5:
-                    {
+                    case EFormat.BC2_UNORM:
+                    case EFormat.BC3_UNORM:
+                    case EFormat.BC5_UNORM:
                         return Math.Max(1, (_width / 4)) * 16;
-                    }
-                    //case ETextureFormat.TEXFMT_BC6H:
-                    case ETextureFormat.TEXFMT_BC7:
-                    case ETextureFormat.TEXFMT_R8G8B8A8:
+                    //case EFormat.R32G32B32A32_FLOAT:
+                    //case EFormat.R16G16B16A16_FLOAT:
+                    //case EFormat.BC6H_UF16:
+                    case EFormat.R8G8B8A8_UNORM:
+                    case EFormat.BC7_UNORM:
                     default:
-                    {
                         throw new MissingFormatException($"Missing Format: {_textureformat}");
-                    }
                 }
             }
         }

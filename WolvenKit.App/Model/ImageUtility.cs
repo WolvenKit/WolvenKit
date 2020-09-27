@@ -17,80 +17,57 @@ namespace WolvenKit.App.Model
     using WolvenKit.Common.Wcc;
     using ImageFormat = Pfim.ImageFormat;
 
-    // xbm files have a texture group
-    // each texturegroup is assigned a compression method, or nothing (?)
-    // 
-
-
-    //private readonly Dictionary<short, ETextureFormat> formats = new Dictionary<short, ETextureFormat>()
-    //{
-           
-            
-    //// 0 only used for env probes, 
-    //{0x0, ETextureFormat.TEXFMT_R8G8B8A8},              //          0x09  
-    ////  253 used for pngs, w2cube, env probes, 
-    //{0xFD, ETextureFormat.TEXFMT_R8G8B8A8},            //0x4   4    0x01               //None
-    ////  7   1
-    //{0x07, ETextureFormat.TEXFMT_BC1},                 //0x17  23   0x32   "DXT1"    
-    ////  8
-    //{0x08, ETextureFormat.TEXFMT_BC3},                 //0x19  25   0x34   "DXT5"    
-    //////  9
-    ////{0x09, ETextureFormat.TEXFMT_BC6H},                //0x1C  28  
-    ////  10 clouds, fx
-    //{0x0A, ETextureFormat.TEXFMT_BC7},                 //0x1D  29   0x35            //QualityColor
-    ////// 11
-    ////{0x0B, ETextureFormat.TEXFMT_Float_R16G16B16A16},  //DDS_FOURCC 	113
-    ////// 12
-    ////{0x0C, ETextureFormat.TEXFMT_Float_R32G32B32A32},  //DDS_FOURCC 	116
-    ////  13 icons
-    //{0x0D, ETextureFormat.TEXFMT_BC2},                 //0x18  24   0x33   "DXT3"    //empty
-    ////  14 dlc fx
-    //{0x0E, ETextureFormat.TEXFMT_BC4},                 //0x1A  26         "BC4U"    //QualityR
-    ////  15 dlc fx
-    //{0x0F, ETextureFormat.TEXFMT_BC5},                 //0x1B  27         "BC5U"    //QualityRG
-            
-            
-    //};
-
-
-
-
     public static class ImageUtility
     {
-
         /// <summary>
         /// Gets the redengine texture format from the compression method
+        /// Used when creating a dds from an xbm
         /// TODO: TEST THIS!!!
         /// </summary>
         /// <param name="compression"></param>
         /// <returns></returns>
-        public static ETextureFormat GetTextureFormatFromCompression(ETextureCompression compression)
+        public static EFormat GetEFormatFromCompression(ETextureCompression compression)
         {
             switch (compression)
             {
+                // missing:  0xFD
+                // missing:  0x0    //EFormat.R8G8B8A8_UNORM
+                case ETextureCompression.TCM_None:
+                    return EFormat.R8G8B8A8_UNORM;
+                
+
+                //0x07 // exception: characters\models\animals\goose\model\t_01__goose_d01.xbm has 0x07 but TCM_DXTAlpha
                 case ETextureCompression.TCM_DXTNoAlpha:
                 case ETextureCompression.TCM_Normals:
-                    return ETextureFormat.TEXFMT_BC1;
+                    return EFormat.BC1_UNORM;
+
+                //0x08 // exception: characters\models\animals\goose\model\t_01__goose_d01.xbm has 0x07 but TCM_DXTAlpha
                 case ETextureCompression.TCM_DXTAlpha:
                 case ETextureCompression.TCM_NormalsHigh:
                 case ETextureCompression.TCM_NormalsGloss:
+                    return EFormat.BC3_UNORM; 
+
+
                 case ETextureCompression.TCM_QualityColor:
-                    return ETextureFormat.TEXFMT_BC3;
+                    return EFormat.BC7_UNORM; //0x0A
+
+                // missing:  0x0D   //EFormat.BC2_UNORM // used for not imported dds files in texturecache therefore will never come up here
+
                 case ETextureCompression.TCM_QualityR:
-                    return ETextureFormat.TEXFMT_BC4;
+                    return EFormat.BC4_UNORM; //0x0E
+
                 case ETextureCompression.TCM_QualityRG:
-                    return ETextureFormat.TEXFMT_BC5;
-                case ETextureCompression.TCM_DXTAlphaLinear:
-                case ETextureCompression.TCM_RGBE:
-                case ETextureCompression.TCM_None:
+                    return EFormat.BC5_UNORM; //0x0F
+
+                case ETextureCompression.TCM_DXTAlphaLinear:    // unused
+                case ETextureCompression.TCM_RGBE:              // unused
                 default:
-                    return ETextureFormat.TEXFMT_R8G8B8A8;
                     throw new NotImplementedException();
             }
         }
 
         /// <summary>
-        /// Taken from Game files /engine/textures/texturegroups.xml
+        /// Taken from game files /engine/textures/texturegroups.xml
         /// </summary>
         /// <param name="textureGroup"></param>
         /// <returns></returns>
@@ -107,7 +84,7 @@ namespace WolvenKit.App.Model
                 case ETextureGroup.Particles:
                 case ETextureGroup.WorldSpecular:
                 case ETextureGroup.BillboardAtlas:
-                //case ETextureGroup.TerrainDiffuseAtlas:
+                //case ETextureGroup.TerrainDiffuseAtlas: // found in engine.xml but not in wcc enum /shrug
                 case ETextureGroup.GUIWithAlpha:
                 case ETextureGroup.CharacterDiffuseWithAlpha:
                 case ETextureGroup.HeadDiffuseWithAlpha:
@@ -125,7 +102,7 @@ namespace WolvenKit.App.Model
                 case ETextureGroup.DiffuseNoMips:
                     return ETextureCompression.TCM_DXTNoAlpha;
 
-                //case ETextureGroup.TerrainNormalAtlas:
+                //case ETextureGroup.TerrainNormalAtlas: // found in engine.xml but not in wcc enum /shrug
                 case ETextureGroup.DetailNormalMap:
                 case ETextureGroup.WorldNormalHQ:
                 case ETextureGroup.SpecialQuestNormal:
@@ -158,7 +135,7 @@ namespace WolvenKit.App.Model
                 case ETextureGroup.Flares:
                 case ETextureGroup.WorldNormal:
                 case ETextureGroup.PostFxMap:
-                //case ETextureGroup.TerrainSpecial:
+                //case ETextureGroup.TerrainSpecial: // found in engine.xml but not in wcc enum /shrug
                 default:
                     throw new NotImplementedException();
             }
@@ -357,22 +334,24 @@ namespace WolvenKit.App.Model
 
             ETextureCompression compression = xbm.Compression.WrappedEnum;
 
-            var ddsformat = ImageUtility.GetTextureFormatFromCompression(compression);
-            if (ddsformat == ETextureFormat.TEXFMT_R8G8B8A8)
+            var ddsformat = ImageUtility.GetEFormatFromCompression(compression);
+
+
+            // TODO: TEST THIS
+            if (ddsformat == EFormat.R8G8B8A8_UNORM)
             {
                 ETextureRawFormat format = xbm.Format.WrappedEnum;
                 switch (format)
                 {
-                    case ETextureRawFormat.TRF_TrueColor:
-                        ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
+                    
+                    case ETextureRawFormat.TRF_Grayscale:   // only this is ever used
                         break;
-                    case ETextureRawFormat.TRF_Grayscale:
-                        break;
+                    case ETextureRawFormat.TRF_TrueColor:   // this is set if format is NULL
                     case ETextureRawFormat.TRF_HDR:
                     case ETextureRawFormat.TRF_AlphaGrayscale:
                     case ETextureRawFormat.TRF_HDRGrayscale:
                     default:
-                        ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
+                        ddsformat = EFormat.R8G8B8A8_UNORM;
                         //throw new Exception("Invalid texture format type! [" + format + "]");
                         break;
                 }
