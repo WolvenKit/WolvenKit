@@ -9,7 +9,7 @@ using WolvenKit.Common.Wcc;
 
 namespace WolvenKit.App.Model
 {
-    public class XBMDump
+    public class XBMDumpRecord
     {
         public string RedName { get; set; }
         public string Width { get; set; }
@@ -45,8 +45,6 @@ namespace WolvenKit.App.Model
         }
         #endregion
 
-        public string Name => Path.GetFileName(GetRelativePath());
-
         #region Texturegroup
         private ETextureGroup _textureGroup;
         public ETextureGroup TextureGroup
@@ -69,13 +67,44 @@ namespace WolvenKit.App.Model
 
         #endregion
 
-
+        /// <summary>
+        /// PropertyBound in the listView
+        /// </summary>
+        public string Name => Path.GetFileName(GetRelativePath());
         private readonly string _relativePath;
         
         private readonly EImportable _type;
         private EObjectState _state;
 
         public string GetRelativePath() => _relativePath;
+
+        public (string, bool) GetREDRelativePath()
+        {
+            var relPath = this.GetRelativePath();
+
+            // make new path
+            // first, trim Raw from the path
+            if (relPath.Substring(0, 3) == "Raw")
+                relPath = relPath.Substring(4);
+            // then, trim Mod or dlc from the path
+            bool isDLC = false;
+            if (relPath.Substring(0, 3) == "Mod")
+            {
+                relPath = relPath.Substring(4);
+            }
+            if (relPath.Substring(0, 3) == "DLC")
+            {
+                isDLC = true;
+                relPath = relPath.Substring(4);
+            }
+
+            // new path with new extension
+            string importext = $".{this.ImportType:G}";
+            relPath = Path.ChangeExtension(relPath, importext);
+
+            return (relPath, isDLC);
+        }
+
         public EImportable GetImportableType() => _type;
         public EObjectState GetState() => _state;
         public void SetState(EObjectState value)

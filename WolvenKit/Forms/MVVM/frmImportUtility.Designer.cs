@@ -40,8 +40,6 @@
             this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonLocalResources = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonOpenFolder = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.objectListView)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -95,7 +93,6 @@
             this.olvColumnName.Groupable = false;
             this.olvColumnName.IsEditable = false;
             this.olvColumnName.Text = "Name";
-            this.olvColumnName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumnName.Width = 38;
             // 
             // olvColumnImportType
@@ -127,9 +124,7 @@
             this.toolStripSeparator1,
             this.toolStripButtonRefresh,
             this.toolStripComboBox1,
-            this.toolStripSeparator2,
-            this.toolStripButtonLocalResources,
-            this.toolStripButtonOpenFolder});
+            this.toolStripSeparator2});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
@@ -174,24 +169,6 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 31);
             // 
-            // toolStripButtonLocalResources
-            // 
-            this.toolStripButtonLocalResources.Image = global::WolvenKit.Properties.Resources.RemoteServer_16x;
-            this.toolStripButtonLocalResources.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonLocalResources.Name = "toolStripButtonLocalResources";
-            this.toolStripButtonLocalResources.Size = new System.Drawing.Size(108, 28);
-            this.toolStripButtonLocalResources.Text = "Use Mod Files";
-            this.toolStripButtonLocalResources.Click += new System.EventHandler(this.toolStripButtonLocalResources_Click);
-            // 
-            // toolStripButtonOpenFolder
-            // 
-            this.toolStripButtonOpenFolder.Image = global::WolvenKit.Properties.Resources.OpenFolder_16x;
-            this.toolStripButtonOpenFolder.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonOpenFolder.Name = "toolStripButtonOpenFolder";
-            this.toolStripButtonOpenFolder.Size = new System.Drawing.Size(100, 28);
-            this.toolStripButtonOpenFolder.Text = "Open Folder";
-            this.toolStripButtonOpenFolder.Click += new System.EventHandler(this.toolStripButtonOpenFolder_Click);
-            // 
             // frmImportUtility
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -215,11 +192,9 @@
         private BrightIdeasSoftware.ObjectListView objectListView;
         private BrightIdeasSoftware.OLVColumn olvColumnName;
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton toolStripButtonOpenFolder;
         private System.Windows.Forms.ToolStripButton toolStripButtonRefresh;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton toolStripButtonImport;
-        private System.Windows.Forms.ToolStripButton toolStripButtonLocalResources;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private BrightIdeasSoftware.OLVColumn olvColumnImportType;
         private BrightIdeasSoftware.OLVColumn olvColumnTexturegroup;

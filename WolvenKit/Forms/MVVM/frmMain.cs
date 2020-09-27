@@ -1463,7 +1463,7 @@ namespace WolvenKit
                 // analyze files in dlc
                 int statusanalyzedlc = -1;
 
-                var seedfile = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed.dlc{ActiveMod.Name}.files");
+                var seedfile = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed_dlc{ActiveMod.Name}_files");
 
                 if (initialDlcCheck)
                 {
@@ -2199,7 +2199,7 @@ namespace WolvenKit
                     case EBundleType.Bundle:
                         {
                             newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), "dlc", ActiveMod.Name, relativePath)
+                                ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}", relativePath)
                                 : Path.Combine( "Mod", EProjectFolders.Cooked.ToString(), relativePath));
                         }
                         break;
@@ -2211,13 +2211,13 @@ namespace WolvenKit
                             if (extension == ".png" || extension == ".jpg" || extension == ".dds")
                             {
                                 newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                    ? Path.Combine("DLC", EProjectFolders.Uncooked.ToString(), "dlc", ActiveMod.Name, relativePath)
+                                    ? Path.Combine("DLC", EProjectFolders.Uncooked.ToString(), $"dlc{ActiveMod.Name}", relativePath)
                                     : Path.Combine("Mod", EProjectFolders.Uncooked.ToString(), relativePath));
                             }
                             // all other textures and collision stuff goes into Raw (since they have to be imported first)
                             else
                                 newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
-                                    ? Path.Combine("DLC", "dlc", ActiveMod.Name, relativePath)
+                                    ? Path.Combine("DLC", $"dlc{ActiveMod.Name}", relativePath)
                                     : Path.Combine("Mod", relativePath));
                         }
                         break;
@@ -2227,7 +2227,7 @@ namespace WolvenKit
                     case EBundleType.Shader:
                         {
                             newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, relativePath)
+                                ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), $"dlc{ActiveMod.Name}", relativePath)
                                 : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), relativePath));
                         }
                         break;

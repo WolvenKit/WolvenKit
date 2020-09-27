@@ -533,13 +533,16 @@ namespace WolvenKit
                     }
                 case ".redswf":
                     {
-                        this.ImageViewer = new frmImagePreview
-                        {
-                            DockAreas = DockAreas.Document
-                        };
-                        this.ImageViewer.Show(this.FormPanel, DockState.Document);
                         CR2WExportWrapper imagechunk = this.File?.chunks?.FirstOrDefault(_ => _.data is CBitmapTexture);
-                        this.ImageViewer.SetImage(imagechunk);
+                        if (imagechunk != null)
+                        {
+                            this.ImageViewer = new frmImagePreview
+                            {
+                                DockAreas = DockAreas.Document
+                            };
+                            this.ImageViewer.Show(this.FormPanel, DockState.Document);
+                            this.ImageViewer.SetImage(imagechunk);
+                        }
                         break;
                     }
                 case ".w2mesh":
