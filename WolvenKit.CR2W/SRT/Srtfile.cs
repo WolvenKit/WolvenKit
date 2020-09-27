@@ -234,7 +234,7 @@ namespace WolvenKit.CR2W.SRT
                 try
                 {
                     // parse wind params
-                    CWind.SParams p = ReadStruct<CWind.SParams>();
+                    CWind.SParams p = br.BaseStream.ReadStruct<CWind.SParams>();
                     Wind.Params = p;
 
                     if (br.BaseStream.Position - startpos != Marshal.SizeOf<CWind.SParams>())
@@ -368,7 +368,7 @@ namespace WolvenKit.CR2W.SRT
                     CollisionObjects = new SCollisionObject[m_nNumCollisionObjects];
                     for (int i = 0; i < m_nNumCollisionObjects; i++)
                     {
-                        CollisionObjects[i] = ReadStruct<SCollisionObject>();
+                        CollisionObjects[i] = br.BaseStream.ReadStruct<SCollisionObject>();
                     }
 
                     bSuccess = true;
@@ -471,7 +471,7 @@ namespace WolvenKit.CR2W.SRT
                 sbb.AvPositions = new Vec3[4];
                 for (int i = 0; i < 4; i++)
                 {
-                    Vec3 vec = ReadStruct<Vec3>();
+                    Vec3 vec = br.BaseStream.ReadStruct<Vec3>();
                     sbb.AvPositions[i] = vec;
                 }
                 HorizontalBillboard = sbb;
@@ -708,7 +708,7 @@ namespace WolvenKit.CR2W.SRT
                                     plod.PBones = new SBone[plod.NNumBones];
                                     for (int k = 0; k < plod.NNumBones; i++)
                                     {
-                                        plod.PBones[k] = ReadStruct<SBone>();
+                                        plod.PBones[k] = br.BaseStream.ReadStruct<SBone>();
                                     }
                                 }
                             }
@@ -857,7 +857,7 @@ namespace WolvenKit.CR2W.SRT
                 {
                     for (int k = 0; k < Geometry.PLods[i].NNumBones; i++)
                     {
-                        WriteStruct<SBone>(Geometry.PLods[i].PBones[k], file.BaseStream);
+                        file.BaseStream.WriteStruct<SBone>(Geometry.PLods[i].PBones[k]);
                     }
                 }
             }
@@ -967,7 +967,7 @@ namespace WolvenKit.CR2W.SRT
             // positions
             for (int i = 0; i < 4; i++)
             {
-                WriteStruct<Vec3>(HorizontalBillboard.AvPositions[i], file.BaseStream);
+                file.BaseStream.WriteStruct<Vec3>(HorizontalBillboard.AvPositions[i]);
             }
 
             return true;
@@ -983,7 +983,7 @@ namespace WolvenKit.CR2W.SRT
             file.Write(CollisionObjects.Length);
             for (int i = 0; i < CollisionObjects.Length; i++)
             {
-                WriteStruct<SCollisionObject>(CollisionObjects[i], file.BaseStream);
+                file.BaseStream.WriteStruct<SCollisionObject>(CollisionObjects[i]);
             }
 
             return true;
@@ -1016,7 +1016,7 @@ namespace WolvenKit.CR2W.SRT
         {
             if (Wind == null)
                 return true;
-            WriteStruct<CWind.SParams>(Wind.Params, file.BaseStream);
+            file.BaseStream.WriteStruct<CWind.SParams>(Wind.Params);
 
             for (int i = 0; i < Wind.m_abOptions.Length; i++)
             {
@@ -1095,31 +1095,6 @@ namespace WolvenKit.CR2W.SRT
             int uiPadSize = 4 - (int)m_stream.Position % 4;
             if (uiPadSize < 4)
                 br.ReadBytes(uiPadSize);
-        }
-        private T ReadStruct<T>() where T : struct
-        {
-            var size = Marshal.SizeOf<T>();
-
-            var m_temp = new byte[size];
-            m_stream.Read(m_temp, 0, size);
-
-            var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
-            var item = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
-
-            handle.Free();
-
-            return item;
-        }
-
-        private void WriteStruct<T>(T value, Stream stream) where T : struct
-        {
-            var m_temp = new byte[Marshal.SizeOf<T>()];
-            var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
-
-            Marshal.StructureToPtr(value, handle.AddrOfPinnedObject(), true);
-            stream.Write(m_temp, 0, m_temp.Length);
-
-            handle.Free();
         }
 
         public void SerializeToXml(Stream writer)

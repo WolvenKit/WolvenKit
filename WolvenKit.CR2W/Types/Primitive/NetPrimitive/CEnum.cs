@@ -24,36 +24,56 @@ namespace WolvenKit.CR2W.Types
     [REDMeta()]
     public class CEnum<T> : CVariable, IEnumAccessor where T : Enum
     {
+        public CEnum(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+
         private T wrappedEnum;
-        public T WrappedEnum { get => wrappedEnum; set => wrappedEnum = value; }
+        public T WrappedEnum
+        {
+            get => wrappedEnum;
+            set
+            {
+                wrappedEnum = value;
+                UpdateStringList();
+            }
+        }
 
         [DataMember]
         public List<string> Value { get; set; } = new List<string>();
 
         public bool IsFlag => WrappedEnum.GetType().IsDefined(typeof(FlagsAttribute), false);
 
-        public CEnum(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        private void UpdateStringList()
+        {
+            var strings = new List<string>();
+            if (IsFlag)
+            {
+                // TODO: not implemented
+            }
+            else
+            {
+                strings.Add(WrappedEnum.ToString());
+            }
+
+            Value = strings;
+        }
 
         public Type GetEnumType() => WrappedEnum.GetType();
         public string EnumToString() => WrappedEnum.ToString();
 
         public override string REDType => WrappedEnum.GetType().Name;
 
-#pragma warning disable CS0693 // T same name
-        private static void SetFlag<T>(ref T value, T flag) where T : Enum
-#pragma warning restore CS0693
+        private static void SetFlag<T1>(ref T1 value, T1 flag) where T1 : Enum
         {
             ulong numericValue = Convert.ToUInt64(value);
             numericValue |= Convert.ToUInt64(flag);
-            value = (T)Enum.ToObject(typeof(T), numericValue);
+            value = (T1)Enum.ToObject(typeof(T1), numericValue);
         }
-#pragma warning disable CS0693
-        private static void ClearFlag<T>(ref T value, T flag) where T : Enum
-#pragma warning restore CS0693
+        private static void ClearFlag<T1>(ref T1 value, T1 flag) where T1 : Enum
         {
             ulong numericValue = Convert.ToUInt64(value);
             numericValue &= ~Convert.ToUInt64(flag);
-            value = (T)Enum.ToObject(typeof(T), numericValue);
+            value = (T1)Enum.ToObject(typeof(T1), numericValue);
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -113,43 +133,42 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is List<string> l)
+            if (!(val is List<string> l)) return this;
+
+            Value = l;
+
+            if (IsFlag)
             {
-                Value = l;
-
-                if (IsFlag)
+                foreach (var item in WrappedEnum.GetType().GetEnumNames())
                 {
-                    foreach (var item in WrappedEnum.GetType().GetEnumNames())
-                    {
-                        //handle EnumValues with Spaces in them. facepalm.
-                        string finalvalue = item.Replace(" ", string.Empty);
-                        finalvalue = finalvalue.Replace("'", string.Empty);
-                        finalvalue = finalvalue.Replace("/", string.Empty);
-                        finalvalue = finalvalue.Replace(".", string.Empty);
-                        T en = (T)Enum.Parse(WrappedEnum.GetType(), finalvalue);
-
-                        // flag is set
-                        if (Value.Contains(item))
-                            SetFlag<T>(ref wrappedEnum, en);
-                        // flag is not set
-                        else
-                            ClearFlag<T>(ref wrappedEnum, en);
-                    }
-                }
-                else
-                {
-                    var s = Value.Last();
-
                     //handle EnumValues with Spaces in them. facepalm.
-                    string finalvalue = s.Replace(" ", string.Empty);
+                    string finalvalue = item.Replace(" ", string.Empty);
                     finalvalue = finalvalue.Replace("'", string.Empty);
                     finalvalue = finalvalue.Replace("/", string.Empty);
                     finalvalue = finalvalue.Replace(".", string.Empty);
+                    var en = (T)Enum.Parse(WrappedEnum.GetType(), finalvalue);
 
-                    // set enum
-                    T en = (T)Enum.Parse(WrappedEnum.GetType(), finalvalue);
-                    WrappedEnum = en;
+                    // flag is set
+                    if (Value.Contains(item))
+                        SetFlag<T>(ref wrappedEnum, en);
+                    // flag is not set
+                    else
+                        ClearFlag<T>(ref wrappedEnum, en);
                 }
+            }
+            else
+            {
+                var s = Value.Last();
+
+                //handle EnumValues with Spaces in them. facepalm.
+                string finalvalue = s.Replace(" ", string.Empty);
+                finalvalue = finalvalue.Replace("'", string.Empty);
+                finalvalue = finalvalue.Replace("/", string.Empty);
+                finalvalue = finalvalue.Replace(".", string.Empty);
+
+                // set enum
+                T en = (T)Enum.Parse(WrappedEnum.GetType(), finalvalue);
+                WrappedEnum = en;
             }
 
             return this;

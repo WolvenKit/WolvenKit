@@ -39,7 +39,7 @@ namespace WolvenKit.Console
             }
         }
 
-        private static int CR2WToPostgres(CR2WToPostgresOptions options)
+        public static async Task<int> CR2WToPostgres(CR2WToPostgresOptions options)
         {
             // NB : There are two main ways to send data to a database : batch inserts and bulky copy.
             // Bulk copy avoids most checks from the db (referential integrity, triggers...) and is much faster.

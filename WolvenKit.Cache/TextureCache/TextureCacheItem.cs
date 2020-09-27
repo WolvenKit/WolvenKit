@@ -12,6 +12,7 @@ using WolvenKit.CR2W.Types;
 namespace WolvenKit.Cache
 {
     using WolvenKit.Common.Model;
+    using WolvenKit.Common.Tools;
     using WolvenKit.DDS;
     using static WolvenKit.CR2W.Types.Enums;
 
@@ -49,35 +50,7 @@ namespace WolvenKit.Cache
 
         public List<Tuple<uint, uint>> MipMapInfo = new List<Tuple<uint, uint>>();
 
-        public Dictionary<short, ETextureFormat> formats = new Dictionary<short, ETextureFormat>()
-        {
-           
-            
-            // 0 only used for env probes, 
-            {0x0, ETextureFormat.TEXFMT_R8G8B8A8},              //          0x09  
-            //  253 used for pngs, w2cube, env probes, 
-            {0xFD, ETextureFormat.TEXFMT_R8G8B8A8},            //0x4   4    0x01               //None
-            //  7   1
-            {0x07, ETextureFormat.TEXFMT_BC1},                 //0x17  23   0x32   "DXT1"    
-            //  8
-            {0x08, ETextureFormat.TEXFMT_BC3},                 //0x19  25   0x34   "DXT5"    
-            ////  9
-            //{0x09, ETextureFormat.TEXFMT_BC6H},                //0x1C  28  
-            //  10 clouds, fx
-            {0x0A, ETextureFormat.TEXFMT_BC7},                 //0x1D  29   0x35            //QualityColor
-            //// 11
-            //{0x0B, ETextureFormat.TEXFMT_Float_R16G16B16A16},  //DDS_FOURCC 	113
-            //// 12
-            //{0x0C, ETextureFormat.TEXFMT_Float_R32G32B32A32},  //DDS_FOURCC 	116
-            //  13 icons
-            {0x0D, ETextureFormat.TEXFMT_BC2},                 //0x18  24   0x33   "DXT3"    //empty
-            //  14 dlc fx
-            {0x0E, ETextureFormat.TEXFMT_BC4},                 //0x1A  26         "BC4U"    //QualityR
-            //  15 dlc fx
-            {0x0F, ETextureFormat.TEXFMT_BC5},                 //0x1B  27         "BC5U"    //QualityRG
-            
-            
-        };
+        
 
         public TextureCacheItem(IWitcherArchive parent)
         {
@@ -89,7 +62,7 @@ namespace WolvenKit.Cache
             using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
             {
                 // generate header
-                ETextureFormat format = formats[Type1];
+                ETextureFormat format = CommonImageTools.GetTextureFormatFromREDEngineByte(Type1);
                 var metadata = new DDSMetadata(
                     BaseWidth,
                     BaseHeight,
@@ -205,19 +178,13 @@ namespace WolvenKit.Cache
                 var fi = new FileInfo(newpath);
                 if (fi.Exists)
                 {
-                    Texconv.Convert(Path.GetDirectoryName(newpath), newpath, extractext);
+                    TexconvWrapper.Convert(Path.GetDirectoryName(newpath), newpath, extractext);
                 }
 
                 // delete old DDS
                 fi.Delete();
 
-                // lowercase new extension
-                newpath = Path.ChangeExtension(fi.FullName, extractext.ToString());
-                fi = new FileInfo(newpath);
-                if (fi.Exists)
-                {
-                    File.Move(newpath, Path.ChangeExtension(newpath, extractext.ToString()));
-                }
+                
             }
 
             return newpath;

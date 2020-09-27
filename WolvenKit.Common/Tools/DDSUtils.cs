@@ -5,48 +5,12 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.Common.Model;
 using WolvenKit.DDS;
 
 namespace WolvenKit.Common
 {
-    public enum ETextureFormat
-    {
-        // x = 1 or param1
-        TEXFMT_A8 = 0x0,  // ret 0
-        TEXFMT_A8_Scaleform = 0x1, //ret 0
-        TEXFMT_L8 = 0x2,    // ret 0
-        TEXFMT_R8G8B8X8 = 0x3,  //ret x4
-        TEXFMT_R8G8B8A8 = 0x4,  //ret x4
-        TEXFMT_A8L8 = 0x5,  //ret x2
-        TEXFMT_Uint_16_norm = 0x6,  //ret x2
-        TEXFMT_Uint_16 = 0x7,  //ret x2
-        TEXFMT_Uint_32 = 0x8,
-        TEXFMT_R32G32_Uint = 0x9,  //ret x8
-        TEXFMT_R16G16_Uint = 0xA,    //ret << 4
-        TEXFMT_Float_R10G10B10A2 = 0xB,  //ret x4
-        TEXFMT_Float_R16G16B16A16 = 0xC,  //ret x8
-        TEXFMT_Float_R11G11B10 = 0xD,  //ret x4
-        TEXFMT_Float_R16G16 = 0xE,  //ret x4
-        TEXFMT_Float_R32G32 = 0xF,  //ret x8
-        TEXFMT_Float_R32G32B32A32 = 0x10,  //ret x4
-        TEXFMT_Float_R32 = 0x11,  //ret x4
-        TEXFMT_Float_R16 = 0x12,  //ret x2
-        TEXFMT_D24S8 = 0x13,  //ret x4
-        TEXFMT_D24FS8 = 0x14,
-        TEXFMT_D32F = 0x15,
-        TEXFMT_D16U = 0x16,
-        TEXFMT_BC1 = 0x17,  //ret (7 < x*2) ? x*2 : 8
-        TEXFMT_BC2 = 0x18,  //ret (0xf < x*4) ? x*4 : 0x10
-        TEXFMT_BC3 = 0x19,  //ret (0xf < x*4) ? x*4 : 0x10
-        TEXFMT_BC4 = 0x1A,  //ret (7 < x*2) ? x2 : 8
-        TEXFMT_BC5 = 0x1B,  //ret (0xf < x*4) ? x*4 : 0x10
-        TEXFMT_BC6H = 0x1C,  //ret (0xf < x*4) ? x*4 : 0x10
-        TEXFMT_BC7 = 0x1D,  //ret (0xf < x*4) ? x*4 : 0x10
-        TEXFMT_R8_Uint = 0x1E,  // ret 0
-        TEXFMT_NULL = 0x1F,
-        //TEXFMT_Max = 0x20,
-    };
-
+    
 
     public class MissingFormatException : Exception
     {
@@ -86,14 +50,14 @@ namespace WolvenKit.Common
         const uint DDSCAPS_TEXTURE = 0x00001000;
 
         // dwCaps2
-        const uint DDSCAPS2_CUBEMAP = 0x00000200;
+        public const uint DDSCAPS2_CUBEMAP = 0x00000200;
         const uint DDS_CUBEMAP_POSITIVEX = 0x00000600; // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_POSITIVEX
         const uint DDS_CUBEMAP_NEGATIVEX = 0x00000a00; // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_NEGATIVEX
         const uint DDS_CUBEMAP_POSITIVEY = 0x00001200; // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_POSITIVEY
         const uint DDS_CUBEMAP_NEGATIVEY = 0x00002200; // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_NEGATIVEY
         const uint DDS_CUBEMAP_POSITIVEZ = 0x00004200; // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_POSITIVEZ
         const uint DDS_CUBEMAP_NEGATIVEZ = 0x00008200;// DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_NEGATIVEZ
-        const uint DDSCAPS2_CUBEMAP_ALL_FACES = DDS_CUBEMAP_POSITIVEX | DDS_CUBEMAP_NEGATIVEX |
+        public const uint DDSCAPS2_CUBEMAP_ALL_FACES = DDS_CUBEMAP_POSITIVEX | DDS_CUBEMAP_NEGATIVEX |
                                                 DDS_CUBEMAP_POSITIVEY | DDS_CUBEMAP_NEGATIVEY |
                                                 DDS_CUBEMAP_POSITIVEZ | DDS_CUBEMAP_NEGATIVEZ;
         const uint DDSCAPS2_VOLUME = 0x00200000;
@@ -129,8 +93,14 @@ namespace WolvenKit.Common
         static uint[] DDSPF_R8G8B8() => new uint[5] { 24, 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000 };
         #endregion
 
+        public static void GenerateAndWriteHeader(Stream stream, DDSMetadata metadata)
+        {
+            var (header, dxt10header) = GenerateHeader(metadata);
+            WriteHeader(stream, header, dxt10header);
+        }
 
         private static uint MAKEFOURCC(char ch0, char ch1, char ch2, char ch3) => (uint)(ch0 | ch1 << 8 | ch2 << 16 | ch3 << 24);
+
         private static void SetPixelmask(Func<uint[]> pfmtfactory, ref DDS_PIXELFORMAT pfmt)
         {
             uint[] masks = pfmtfactory.Invoke();
@@ -141,7 +111,7 @@ namespace WolvenKit.Common
             pfmt.dwABitMask = masks[4];
         }
 
-        public static (DDS_HEADER, DDS_HEADER_DXT10) GenerateHeader(DDSMetadata metadata)
+        private static (DDS_HEADER, DDS_HEADER_DXT10) GenerateHeader(DDSMetadata metadata)
         {
             var height = metadata.Height;
             var width = metadata.Width;
@@ -339,31 +309,31 @@ namespace WolvenKit.Common
             return (header, dxt10header);
         }
 
-        public static void GenerateAndWriteHeader(Stream stream, DDSMetadata metadata)
-        {
-            (var header, var dxt10header) = GenerateHeader(metadata);
-            WriteHeader(stream, header, dxt10header);
-        }
-
-        public static void WriteHeader(Stream stream, DDS_HEADER header, DDS_HEADER_DXT10 dxt10header)
+        private static void WriteHeader(Stream stream, DDS_HEADER header, DDS_HEADER_DXT10 dxt10header)
         {
             stream.Write(BitConverter.GetBytes(DDS_MAGIC), 0, 4);
-            WriteStruct(header, stream);
+            stream.WriteStruct(header);
             if (header.ddspf.dwFourCC == MAKEFOURCC('D', 'X', '1', '0'))
-                WriteStruct(dxt10header, stream);
+                stream.WriteStruct(dxt10header);
         }
 
-
-        private static void WriteStruct<T>(T value, Stream stream) where T : struct
+        public static DDSMetadata ReadHeader(string ddsfile)
         {
-            var temp = new byte[Marshal.SizeOf<T>()];
-            var handle = GCHandle.Alloc(temp, GCHandleType.Pinned);
+            var metadata = new DDSMetadata();
+            using (var fs = new FileStream(ddsfile, FileMode.Open, FileAccess.Read))
+            using (var reader = new BinaryReader(fs))
+            {
+                if (fs.Length < 128) return metadata;
 
-            Marshal.StructureToPtr(value, handle.AddrOfPinnedObject(), true);
-            stream.Write(temp, 0, temp.Length);
+                // check if DDS file
+                var buffer = reader.ReadBytes(4);
+                if (!buffer.SequenceEqual(BitConverter.GetBytes(DDS_MAGIC))) return metadata;
 
-            handle.Free();
+                var id = reader.BaseStream.ReadStruct<DDS_HEADER>();
+                metadata = new DDSMetadata(id);
+
+                return metadata;
+            }
         }
-
     }
 }

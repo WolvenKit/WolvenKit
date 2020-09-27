@@ -45,7 +45,7 @@ namespace WolvenKit.App.Model
         }
         #endregion
 
-        public string Name { get => Path.GetFileName(GetRelativePath()); }
+        public string Name => Path.GetFileName(GetRelativePath());
 
         #region Texturegroup
         private ETextureGroup _textureGroup;
@@ -63,20 +63,10 @@ namespace WolvenKit.App.Model
         }
         #endregion
 
-        #region Texturegroup
-        private Enum _importType;
-        public Enum ImportType
-        {
-            get => _importType;
-            set
-            {
-                if (_importType != value)
-                {
-                    _importType = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        #region ImportType
+
+        public Enum ImportType { get; }
+
         #endregion
 
 
@@ -101,7 +91,7 @@ namespace WolvenKit.App.Model
         {
             _relativePath = path;
             _type = type;
-            _importType = importtype;
+            ImportType = importtype;
         }
 
         

@@ -2,16 +2,19 @@
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit.DDS
 {
-    public static class Texconv
+    public static class TexconvWrapper
     {
         #region enums
-        
 
+        /// <summary>
+        /// Texconv format: DXGI format without the DXGI_FORMAT_ prefix
+        /// </summary>
         public enum EFormat
         {
             R32G32B32A32_FLOAT,
@@ -103,29 +106,22 @@ namespace WolvenKit.DDS
         }
         #endregion
 
-
-        private const string textconvpath = @"Tools/DDS/texconv.exe";
-
-
-        public static int Convert(string outDir,
+        public static string Convert(string outDir,
             string filepath,
-            EUncookExtension convertFt,
-            EFormat convertF = EFormat.R8G8B8A8_UNORM,
-            bool overwrite = true
+            EUncookExtension filetype,
+            EFormat format = EFormat.R8G8B8A8_UNORM,
+            int mipmaps = 0
             )
         {
+            string textconvpath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Tools/DDS/texconv.exe");
 
-            var fi = new FileInfo(textconvpath);
-            if (!fi.Exists)
-            {
-
-            }
-            var argsss = $" -o '{outDir}' -y -f {convertF}  -ft {convertFt} '{filepath}'";
+            
+            var argsss = $" -o '{outDir}' -y -f {format}  -ft {filetype} '{filepath}'";
 
             var proc = new ProcessStartInfo(textconvpath)
             {
                 WorkingDirectory = Path.GetDirectoryName(textconvpath),
-                Arguments = $" -o \"{outDir}\" -y -f {convertF}  -ft {convertFt} \"{filepath}\"",
+                Arguments = $" -o \"{outDir}\" -y -f {format} -m {mipmaps} -l -ft {filetype} \"{filepath}\"",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 CreateNoWindow = true,
@@ -137,8 +133,15 @@ namespace WolvenKit.DDS
                 p.WaitForExit();
             }
 
-            return 1;
+            var fi = new FileInfo(Path.Combine(outDir, $"{Path.GetFileNameWithoutExtension(filepath)}.{filetype}"));
+            if (!fi.Exists)
+            {
+                throw new NotImplementedException();
+            }
+
+            return fi.FullName;
         }
+
 
         
     }

@@ -149,6 +149,7 @@
   <ItemGroup>
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\FileSystemInfoExtensions.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Model\Arguments\BundleFileExtractArgs.cs" />
     <Compile Include="Model\Arguments\FileSavedEventArgs.cs" />
     <Compile Include="Model\Arguments\RequestFileOpenArgs.cs" />
@@ -164,7 +165,7 @@
     <Compile Include="Tools\DDS\DDS_HEADER_DXT10.cs" />
     <Compile Include="Tools\DDS\DDS_Metadata.cs" />
     <Compile Include="Tools\DDS\DDS_PIXELFORMAT.cs" />
-    <Compile Include="Tools\DDS\Texconv.cs" />
+    <Compile Include="Tools\DDS\TexconvWrapper.cs" />
     <Compile Include="Tools\FNV1A\FNV1A32HashAlgorithm.cs" />
     <Compile Include="Tools\FNV1A\FNV1A64HashAlgorithm.cs" />
     <Compile Include="Model\IWitcherArchiveManager.cs" />

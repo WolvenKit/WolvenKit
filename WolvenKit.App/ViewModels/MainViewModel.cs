@@ -933,8 +933,13 @@ namespace WolvenKit.App.ViewModels
         /// <returns></returns>
         public async Task<int> GenerateCache(EBundleType cachetype, bool packmod, bool packdlc)
         {
-            string dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "dlc.files.cook.db");
-            string mod_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "mod.files.cook.db");
+            //const string db_dlcfiles = "db_dlcfiles";
+            //const string db_dlctextures = "db_dlctextures";
+            //const string db_modfiles = "db_modfiles";
+            //const string db_modtextures = "db_modtextures";
+
+            string dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "db_dlcfiles");
+            string mod_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "db_modfiles");
             string moddbfile = Path.Combine(mod_files_db, "cook.db");
             string dlcdbfile = Path.Combine(dlc_files_db, "cook.db");
             string modbasedir = ActiveMod.ModUncookedDirectory;

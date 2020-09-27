@@ -35,12 +35,13 @@
             this.olvColumnImportType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnTexturegroup = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonImport = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
+            this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonLocalResources = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonOpenFolder = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonImport = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.objectListView)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -125,6 +126,7 @@
             this.toolStripButtonImport,
             this.toolStripSeparator1,
             this.toolStripButtonRefresh,
+            this.toolStripComboBox1,
             this.toolStripSeparator2,
             this.toolStripButtonLocalResources,
             this.toolStripButtonOpenFolder});
@@ -134,6 +136,43 @@
             this.toolStrip.Size = new System.Drawing.Size(800, 31);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
+            // 
+            // toolStripButtonImport
+            // 
+            this.toolStripButtonImport.Image = global::WolvenKit.Properties.Resources.ImportPackage_16x;
+            this.toolStripButtonImport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonImport.Name = "toolStripButtonImport";
+            this.toolStripButtonImport.Size = new System.Drawing.Size(71, 28);
+            this.toolStripButtonImport.Text = "Import";
+            this.toolStripButtonImport.Click += new System.EventHandler(this.toolStripButtonImport_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
+            // 
+            // toolStripButtonRefresh
+            // 
+            this.toolStripButtonRefresh.Image = global::WolvenKit.Properties.Resources.Refresh_16x;
+            this.toolStripButtonRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRefresh.Name = "toolStripButtonRefresh";
+            this.toolStripButtonRefresh.Size = new System.Drawing.Size(159, 28);
+            this.toolStripButtonRefresh.Text = "Auto-Fill Texturegroups";
+            this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefresh_Click);
+            // 
+            // toolStripComboBox1
+            // 
+            this.toolStripComboBox1.Items.AddRange(new object[] {
+            "Wcc_lite",
+            "WolvenKit"});
+            this.toolStripComboBox1.Name = "toolStripComboBox1";
+            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 31);
+            this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 31);
             // 
             // toolStripButtonLocalResources
             // 
@@ -152,34 +191,6 @@
             this.toolStripButtonOpenFolder.Size = new System.Drawing.Size(100, 28);
             this.toolStripButtonOpenFolder.Text = "Open Folder";
             this.toolStripButtonOpenFolder.Click += new System.EventHandler(this.toolStripButtonOpenFolder_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 31);
-            // 
-            // toolStripButtonRefresh
-            // 
-            this.toolStripButtonRefresh.Image = global::WolvenKit.Properties.Resources.Refresh_16x;
-            this.toolStripButtonRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonRefresh.Name = "toolStripButtonRefresh";
-            this.toolStripButtonRefresh.Size = new System.Drawing.Size(159, 28);
-            this.toolStripButtonRefresh.Text = "Auto-Fill Texturegroups";
-            this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefresh_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
-            // 
-            // toolStripButtonImport
-            // 
-            this.toolStripButtonImport.Image = global::WolvenKit.Properties.Resources.ImportPackage_16x;
-            this.toolStripButtonImport.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonImport.Name = "toolStripButtonImport";
-            this.toolStripButtonImport.Size = new System.Drawing.Size(71, 28);
-            this.toolStripButtonImport.Text = "Import";
-            this.toolStripButtonImport.Click += new System.EventHandler(this.toolStripButtonImport_Click);
             // 
             // frmImportUtility
             // 
@@ -213,5 +224,6 @@
         private BrightIdeasSoftware.OLVColumn olvColumnImportType;
         private BrightIdeasSoftware.OLVColumn olvColumnTexturegroup;
         private BrightIdeasSoftware.OLVColumn olvColumnSelected;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
     }
 }

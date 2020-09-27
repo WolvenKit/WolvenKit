@@ -41,10 +41,13 @@ namespace WolvenKit.CR2W.Types
 
 
         #region Fields
+
         public readonly TypeAccessor accessor;
+
         #endregion
 
         #region Properties
+
         /// <summary>
         /// Stores the parent cr2w file.
         /// used a lot
@@ -59,6 +62,7 @@ namespace WolvenKit.CR2W.Types
         /// Must also be set when a variable is edited in the editor
         /// </summary>
         public bool IsSerialized { get; set; }
+
         public void SetIsSerialized()
         {
             IsSerialized = true;
@@ -68,14 +72,16 @@ namespace WolvenKit.CR2W.Types
                     cparent.SetIsSerialized();
         }
 
+        private ushort _redFlags;
         /// <summary>
         /// Flags inherited from cr2w export (aka chunk)
         /// 0 means chunk is uncooked (useful for some file types that have 
         /// a different layout in the uncooked and cooked state, e.g. CBitmapTexture)
         /// Is set on file read and should not be modified
         /// </summary>
-        public ushort REDFlags { get; set; }
+        public ushort REDFlags => ParentVar?.REDFlags ?? _redFlags;
 
+        public void SetREDFlags(ushort flag) => _redFlags = flag;
 
         /// <summary>
         /// an internal guid that is used to track cvariables 
@@ -99,6 +105,8 @@ namespace WolvenKit.CR2W.Types
 
 
         private string name;
+        
+
         /// <summary>
         /// AspectName in frmChunkProperties
         /// Name of the Variable, is set upon read
@@ -534,7 +542,7 @@ namespace WolvenKit.CR2W.Types
             // creates a new instance of the CVariable
             // with a new destination cr2wFile and a new parent CVariable if needed
             var copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent, false);
-            copy.REDFlags = this.REDFlags;
+            //copy.REDFlags = this.REDFlags;
             copy.IsSerialized = this.IsSerialized;
 
             // don't try to set children with reflection, it aint gonna work

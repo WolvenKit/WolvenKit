@@ -12,6 +12,7 @@ namespace WolvenKit.CR2W
         string REDName { get; }
         string REDType { get; }
         string REDValue { get; }
+        ushort REDFlags { get; }
 
         Guid InternalGuid { get; set; }
         IEditableVariable ParentVar { get; }
