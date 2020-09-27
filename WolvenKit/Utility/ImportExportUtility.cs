@@ -42,6 +42,11 @@ namespace WolvenKit
                 list.Add("DirectDraw Surface image|*.dds");
                 list.Add("Unknown file|*.*");
             }
+            else
+            {
+                list.Add("Raw binary file|*.bin");
+                list.Add("Unknown file|*.*");
+            }
 
             return list;
         }
@@ -125,11 +130,9 @@ namespace WolvenKit
 
                 // TODO: edit CBitMapTexture class to reflect the imported image
                 // width, height, compression etc - to reflect the dds header
-                //throw new NotImplementedException();
+
 
                 return reader.ReadBytes((int)reader.BaseStream.Length - 128);
-
-
             }
 
             reader.BaseStream.Seek(0, SeekOrigin.Begin);

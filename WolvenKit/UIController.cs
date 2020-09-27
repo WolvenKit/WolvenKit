@@ -118,22 +118,6 @@ namespace WolvenKit
             form.Icon = Icon.FromHandle(bmp.GetHicon());
         }
 
-        public void CreateVariableEditor(CVariable editvar, EVariableEditorAction action)
-        {
-            switch (action)
-            {
-                case EVariableEditorAction.Export:
-                    ExportBytes(editvar);
-                    break;
-                case EVariableEditorAction.Import:
-                    ImportBytes(editvar);
-                    break;
-                //case EVariableEditorAction.Open:
-                //    OpenEditorFor(editvar);
-                //    break;
-            }
-        }
-
         public static UIController Get()
         {
             if (mainController == null)
@@ -146,7 +130,7 @@ namespace WolvenKit
         }
 
 
-        private void ImportBytes(CVariable editvar)
+        public void ImportBytes(CVariable editvar)
         {
             var dlg = new OpenFileDialog() { InitialDirectory = MainController.Get().Configuration.InitialExportDirectory };
 
@@ -160,22 +144,21 @@ namespace WolvenKit
                     {
                         var bytes = ImportExportUtility.GetImportBytes(reader);
                         editvar.SetValue(bytes);
+
+                        MainController.LogString(
+                            $"{((CVariable) editvar).GetFullDependencyStringName()} succesfully imported from {dlg.FileName}",
+                            Logtype.Success);
                     }
                 }
             }
         }
 
-        private void ExportBytes(IEditableVariable editvar)
+        public void ExportBytes(IByteSource editvar)
         {
             var dlg = new SaveFileDialog();
-            byte[] bytes = null;
+            var bytes = editvar.GetBytes();
 
-            if (editvar is IByteSource source)
-            {
-                bytes = source.Bytes.ToArray();
-            }
-
-            dlg.Filter = string.Join("|", ImportExportUtility.GetPossibleExtensions(bytes, (CVariable)editvar.ParentVar));
+            dlg.Filter = string.Join("|", ImportExportUtility.GetPossibleExtensions(bytes, (CVariable)editvar));
             dlg.InitialDirectory = MainController.Get().Configuration.InitialExportDirectory;
 
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -183,12 +166,14 @@ namespace WolvenKit
                 MainController.Get().Configuration.InitialExportDirectory = Path.GetDirectoryName(dlg.FileName);
 
                 using (var fs = new FileStream(dlg.FileName, FileMode.Create, FileAccess.Write))
+                using (var writer = new BinaryWriter(fs))
                 {
-                    using (var writer = new BinaryWriter(fs))
-                    {
-                        bytes = ImportExportUtility.GetExportBytes(bytes, Path.GetExtension(dlg.FileName), (CVariable)editvar.ParentVar);
-                        writer.Write(bytes);
-                    }
+                    bytes = ImportExportUtility.GetExportBytes(bytes, Path.GetExtension(dlg.FileName), (CVariable)editvar);
+                    writer.Write(bytes);
+
+                    MainController.LogString(
+                        $"{((CVariable) editvar).GetFullDependencyStringName()} succesfully exported to {dlg.FileName}",
+                        Logtype.Success);
                 }
             }
         }
@@ -199,7 +184,7 @@ namespace WolvenKit
 
             if (editvar is IByteSource source)
             {
-                editor.Bytes = source.Bytes;
+                editor.Bytes = source.GetBytes();
             }
 
             editor.Text = "Hex Viewer [" + editvar.GetFullName() + "]";

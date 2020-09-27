@@ -93,7 +93,7 @@ namespace WolvenKit.App.Model
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public static Bitmap FromStream(Stream stream)
+        private static Bitmap FromStream(Stream stream)
         {
             using (var image = Pfim.Pfim.FromStream(stream))
             {
@@ -174,22 +174,14 @@ namespace WolvenKit.App.Model
             if (xbm == null)
                 return null;
 
-            byte[] bytesource;
-            if (xbm.Residentmip != null && xbm.Residentmip.Bytes != null)
-            {
-                bytesource = xbm.Residentmip.Bytes;
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
+            
 
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
             {
                 DDSUtils.GenerateAndWriteHeader(bw.BaseStream, GetDDSMetadata(xbm));
 
-                bw.Write(bytesource);
+                bw.Write(xbm.GetBytes());
 
                 ms.Flush();
 
@@ -204,7 +196,7 @@ namespace WolvenKit.App.Model
         /// <returns></returns>
         private static DDSMetadata GetDDSMetadata(CBitmapTexture xbm)
         {
-            int residentMipIndex = xbm.ResidentMipIndex == null ? 0 : xbm.ResidentMipIndex.val;
+            int residentMipIndex = xbm.ResidentMipIndex?.val ?? 0;
                 
             int mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
 

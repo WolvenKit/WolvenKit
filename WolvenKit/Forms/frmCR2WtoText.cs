@@ -741,7 +741,7 @@ namespace WolvenKit.Forms
                     {
                         var ls = new LoggerService();
                         CR2WFile embedcr2w = new CR2WFile(ls);
-                        switch (embedcr2w.Read(((IByteSource)node).Bytes))
+                        switch (embedcr2w.Read(((IByteSource)node).GetBytes()))
                         {
                             case EFileReadErrorCodes.NoError:
                                 var lc = new LoggerCR2W(embedcr2w, Writer, Options);

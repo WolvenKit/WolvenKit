@@ -12,22 +12,8 @@ using System.Text.RegularExpressions;
 
 namespace WolvenKit.CR2W.Types
 {
-    public interface IArrayAccessor : IEditableVariable
-    {
-        List<int> Flags { get; set; }
-
-        string Elementtype { get; set; }
-
-        int Count { get; }
-    }
-
-    public interface IArrayAccessor<T> : IArrayAccessor
-    {
-        List<T> Elements { get; set; }
-    }
-
     [REDMeta()]
-    public class CArray<T> : CArrayBase<T>, IArrayAccessor<T> where T : CVariable
+    public class CArray<T> : CArrayBase<T> where T : CVariable
     {
 
         public CArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)

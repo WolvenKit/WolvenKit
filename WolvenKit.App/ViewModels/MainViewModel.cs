@@ -658,6 +658,11 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
+        const string db_dlcfiles = "db_dlcfiles";
+        const string db_dlctextures = "db_dlctextures";
+        const string db_modfiles = "db_modfiles";
+        const string db_modtextures = "db_modtextures";
+
         /// <summary>
         /// Always call this first to clean the directories.
         /// </summary>
@@ -670,11 +675,13 @@ namespace WolvenKit.App.ViewModels
             CleanupInner(Path.Combine(ActiveMod.ProjectDirectory, "cooked"));
 
 
+            
+
             // delete existing cook dbs
-            string dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "db_dlcfiles");
-            string dlc_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "db_dlctextures");
-            string mod_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "db_modfiles");
-            string mod_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "db_modtextures");
+            string dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_dlcfiles);
+            string dlc_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_dlctextures);
+            string mod_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_modfiles);
+            string mod_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_modtextures);
             if (Directory.Exists(dlc_files_db))
                 Directory.Delete(dlc_files_db, true);
             Directory.CreateDirectory(dlc_files_db);
@@ -719,10 +726,10 @@ namespace WolvenKit.App.ViewModels
         public async Task<int> Cook()
         {
             var cfg = MainController.Get().Configuration;
-            string dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "dlc.files.cook.db");
-            string dlc_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "dlc.textures.cook.db");
-            string mod_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "mod.files.cook.db");
-            string mod_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "mod.textures.cook.db");
+            string dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_dlcfiles);
+            string dlc_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_dlctextures);
+            string mod_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_modfiles);
+            string mod_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_modtextures);
 
             int finished = 1;
 

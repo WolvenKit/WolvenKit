@@ -21,21 +21,27 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public abstract class CVariable : ObservableObject, IEditableVariable
     {
+        protected CVariable()
+        {
+            this.VarChunkIndex = -1;
+            InternalGuid = Guid.NewGuid();
+            accessor = TypeAccessor.Create(this.GetType());
+        }
+
         protected CVariable(CR2WFile cr2w, CVariable parent, string name)
         {
             this.cr2w = cr2w;
             this.ParentVar = parent;
             this.REDName = name;
-            this.VarChunkIndex = -1;
 
+            this.VarChunkIndex = -1;
             InternalGuid = Guid.NewGuid();
             accessor = TypeAccessor.Create(this.GetType());
         }
 
 
         #region Fields
-        public TypeAccessor accessor;
-        public event EventHandler<FileSavedEventArgs> OnNewChunkRequested;
+        public readonly TypeAccessor accessor;
         #endregion
 
         #region Properties
@@ -84,7 +90,7 @@ namespace WolvenKit.CR2W.Types
         /// otherwise must be set manually
         /// Consider moving this to the constructor
         /// </summary>
-        public IEditableVariable ParentVar { get; private set; }
+        public IEditableVariable ParentVar { get; set; }
 
         /// <summary>
         /// -1 for children CVars, actual chunk index for root cvar aka cr2wexportwrapper.data

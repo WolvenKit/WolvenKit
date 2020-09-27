@@ -6,8 +6,12 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta()]
-    public class CFloat : CVariable
+    public class CFloat : CVariable, IREDPrimitive
     {
+        public CFloat()
+        {
+            
+        }
         public CFloat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         [DataMember]

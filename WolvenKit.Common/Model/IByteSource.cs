@@ -8,6 +8,6 @@ namespace WolvenKit.Common.Model
 {
     public interface IByteSource
     {
-        byte[] Bytes { get; set; }
+        byte[] GetBytes();
     }
 }

@@ -15,6 +15,7 @@ namespace WolvenKit.CR2W.Types
         public CByteArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public byte[] Bytes { get; set; }
+        public byte[] GetBytes() => Bytes;
 
         public override void Read(BinaryReader file, uint size)
         {

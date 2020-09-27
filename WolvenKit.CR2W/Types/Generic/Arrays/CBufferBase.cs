@@ -13,12 +13,6 @@ using System.CodeDom;
 
 namespace WolvenKit.CR2W.Types
 {
-    public interface IBufferAccessor : IArrayAccessor
-    {
-        
-    }
-
-
     [REDMeta()]
     public abstract class CBufferBase<T> : CVariable, IList<T>, IList, IBufferAccessor where T : CVariable
     {
@@ -37,7 +31,7 @@ namespace WolvenKit.CR2W.Types
             get => REDReflection.GetREDTypeString(typeof(T));
             set => throw new NotImplementedException();
         }
-
+        public Type InnerType => this.GetType().GetGenericArguments().Single();
 
         [Browsable(false)]
         public override string REDType
@@ -98,6 +92,7 @@ namespace WolvenKit.CR2W.Types
             if (variable is T tvar)
             {
                 variable.SetREDName(elements.Count.ToString());
+                tvar.IsSerialized = true;
                 elements.Add(tvar);
             }
         }
@@ -105,6 +100,7 @@ namespace WolvenKit.CR2W.Types
         {
             if (variable is T tvar)
             {
+                tvar.IsSerialized = true;
                 elements.Add(tvar);
             }
         }

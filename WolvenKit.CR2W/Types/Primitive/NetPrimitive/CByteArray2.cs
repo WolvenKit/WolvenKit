@@ -13,7 +13,8 @@ namespace WolvenKit.CR2W.Types
         {
         }
 
-        public byte[] Bytes { get; set; }
+        private byte[] Bytes { get; set; }
+        public byte[] GetBytes() => Bytes;
 
         public override void Read(BinaryReader file, uint size)
         {

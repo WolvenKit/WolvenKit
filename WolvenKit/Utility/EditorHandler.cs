@@ -20,6 +20,12 @@ namespace WolvenKit.Utility
         {
             switch (obj)
             {
+                case IArrayAccessor iarray:
+                {
+                    return iarray.InnerType.GetInterface(nameof(IREDPrimitive)) == null 
+                        ? null 
+                        : new ArrayEditor { WrappedArray = iarray };
+                }
                 case IPtrAccessor o:
                     return o.GetEditor();
                 case IEnumAccessor o:
@@ -30,8 +36,11 @@ namespace WolvenKit.Utility
                     return o.GetEditor();
                 case IVariantAccessor o:
                     return o.GetEditor();
+                case CBool o:
+                    var booleditor = new CheckBox();
+                    booleditor.DataBindings.Add("Checked", obj, "val");
+                    return booleditor;
                 case StringAnsi _:
-                case CBool _:
                 case CVLQInt32 _:
                 case CDynamicInt _:
                 case CInt8 _:
@@ -47,10 +56,8 @@ namespace WolvenKit.Utility
                     var editor = new TextBox();
                     editor.DataBindings.Add("Text", obj, "val");
                     return editor;
-                case CBytes _:
-                case CByteArray2 _:
-                case CByteArray _:
-                    return new ByteArrayEditor { Variable = (IByteSource) obj };
+                case IByteSource o:
+                    return new ByteArrayEditor { Variable = o };
                 case CGUID o:
                     return o.GetEditor();
                 case CFloat o:
@@ -155,17 +162,6 @@ namespace WolvenKit.Utility
                 }
             }
         }
-        //private static Control GetEditor(this StringAnsi @this)
-        //{
-        //    var editor = new TextBox();
-        //    editor.DataBindings.Add("Text", @this, "val");
-        //    return editor;
-        //}
-        //private static Control GetEditor(this CBytes @this)
-        //{
-        //    var editor = new ByteArrayEditor { Variable = @this };
-        //    return editor;
-        //}
         private static Control GetEditor(this CGUID @this)
         {
             var editor = new TextBox();
@@ -189,10 +185,7 @@ namespace WolvenKit.Utility
             editor.IdGuid.DataBindings.Add("Text", @this, "GuidString", true, DataSourceUpdateMode.OnPropertyChanged);
             return editor;
         }
-        private static Control GetEditor(this IVariantAccessor @this)
-        {
-            return EditorHandler.GetEditor(@this.Variant);
-        }
+        private static Control GetEditor(this IVariantAccessor @this) => EditorHandler.GetEditor(@this.Variant);
         private static Control GetEditor(this CName @this)
         {
             var editor = new TextBox();

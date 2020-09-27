@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -22,6 +23,7 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.SRT;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Forms;
+using WolvenKit.Forms.Editors;
 using WolvenKit.Services;
 
 namespace WolvenKit
@@ -35,6 +37,7 @@ namespace WolvenKit
 
         private frmChunkProperties propertyWindow;
         private frmEmbeddedFiles embeddedFiles;
+        private frmCsvEditor csvEditor;
         private frmChunkFlowDiagram flowDiagram;
         private frmJournalEditor JournalEditor;
         private frmImagePreview ImageViewer;
@@ -285,25 +288,46 @@ namespace WolvenKit
 
         private void PropertyWindowOnRequestBytesOpen(object sender, RequestByteArrayFileOpenArgs e)
         {
-            byte[] bytes = null;
-
             if (e.Variable is IByteSource source)
             {
-                bytes = source.Bytes;
-            }
-            if (bytes == null) return;
+                var bytes = source.GetBytes();
+                if (bytes == null) return;
 
-
-            // peek if cr2wfile
-            byte[] Magic = { (byte)'C', (byte)'R', (byte)'2', (byte)'W' };
-            var isCr2wFile = bytes.Take(4).SequenceEqual(Magic);
-            if (isCr2wFile)
-            {
-                OpenEmbeddedFile(e.Variable.GetFullDependencyStringName(), bytes, e.Variable);
+                byte[] Magic = { (byte)'C', (byte)'R', (byte)'2', (byte)'W' };
+                var isCr2wFile = bytes.Take(4).SequenceEqual(Magic);
+                if (isCr2wFile)
+                {
+                    OpenEmbeddedFile(e.Variable.GetFullDependencyStringName(), bytes, e.Variable);
+                }
+                else
+                {
+                    //TODO: Handle xbms here?
+                    UIController.OpenHexEditorFor(e.Variable);
+                }
             }
-            else
+            else if (e.Variable is IArrayAccessor iarray)
             {
-                UIController.OpenHexEditorFor(e.Variable);
+                Type InnerType = iarray.GetType().GetGenericArguments().Single();
+                if (InnerType.GetInterface(nameof(IREDPrimitive)) == null) return;
+
+                // check if open
+                if (csvEditor == null || csvEditor.IsDisposed)
+                {
+                    csvEditor = new frmCsvEditor()
+                    {
+                        parentref = this,
+                        WrappedArray = iarray,
+                        DockAreas = DockAreas.Document
+                    };
+                    csvEditor.Show(FormPanel, DockState.Document);
+                }
+                else
+                {
+                    csvEditor.WrappedArray = iarray;
+                    csvEditor.Activate();
+                }
+
+                
             }
         }
 
@@ -457,6 +481,7 @@ namespace WolvenKit
 
         #endregion
 
+        public void RefreshObject(IEditableVariable model) => propertyWindow.RefreshObject(model);
 
         /// <summary>
         /// 
