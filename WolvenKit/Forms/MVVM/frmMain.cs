@@ -123,22 +123,7 @@ namespace WolvenKit
             UpdateTitle();
             MainController.Get().PropertyChanged += MainControllerUpdated;
 
-            #region Load recent files into toolstrip
-            recentFilesToolStripMenuItem.DropDownItems.Clear();
-            if (File.Exists("recent_files.xml"))
-            {
-                var doc = XDocument.Load("recent_files.xml");
-                recentFilesToolStripMenuItem.Enabled = doc.Descendants("recentfile").Any();
-                foreach (var f in doc.Descendants("recentfile"))
-                {
-                    recentFilesToolStripMenuItem.DropDownItems.Add(new ToolStripMenuItem(f.Value, null, RecentFile_click));
-                }
-            }
-            else
-            {
-                recentFilesToolStripMenuItem.Enabled = false;
-            }
-            #endregion
+            
             hotkeys = new HotkeyCollection(Enums.Scope.Application);
             hotkeys.RegisterHotkey(Keys.Control | Keys.S, HKSave, "Save");
             hotkeys.RegisterHotkey(Keys.Control | Keys.Shift | Keys.S, HKSaveAll, "SaveAll");
@@ -2056,15 +2041,7 @@ namespace WolvenKit
             // update import
             MockKernel.Get().GetImportViewModel().UseLocalResourcesCommand.SafeExecute();
 
-            // Update the recent files.
-            var files = new List<string>();
-            if (File.Exists("recent_files.xml"))
-            {
-                var doc = XDocument.Load("recent_files.xml");
-                files.AddRange(doc.Descendants("recentfile").Take(4).Select(x => x.Value));
-            }
-            files.Add(file);
-            new XDocument(new XElement("RecentFiles", files.Distinct().Select(x => new XElement("recentfile", x)))).Save("recent_files.xml");
+            RepopulateRecentFiles(file);
 
             void MoveFiles(EBundleType oldtype, EProjectFolders newtype, bool isDlc = false)
             {
@@ -2574,7 +2551,44 @@ namespace WolvenKit
 
             saveToolStripMenuItem.Enabled = vm.ActiveDocument != null;
             saveAllToolStripMenuItem.Enabled = vm.GetOpenDocuments().Count > 0;
+
+            RepopulateRecentFiles();
         }
+
+        private void RepopulateRecentFiles(string file = "")
+        {
+            #region Load recent files into toolstrip
+
+            // Update the recent files.
+            recentFilesToolStripMenuItem.DropDownItems.Clear();
+            var files = new List<string>();
+            if (File.Exists("recent_files.xml"))
+            {
+                var doc = XDocument.Load("recent_files.xml");
+                int maxRecentFiles = 10;
+
+                if (!string.IsNullOrWhiteSpace(file))
+                    files.Add(file);
+                foreach (var f in doc.Descendants("recentfile"))
+                {
+                    maxRecentFiles--;
+                    if (maxRecentFiles <= 0) break;
+                    if (File.Exists(f.Value))
+                    {
+                        files.Add(f.Value);
+                        recentFilesToolStripMenuItem.DropDownItems.Add(new ToolStripMenuItem(f.Value, null, RecentFile_click));
+                    }
+                }
+                recentFilesToolStripMenuItem.Enabled = files.Any();
+            }
+            else
+            {
+                recentFilesToolStripMenuItem.Enabled = false;
+            }
+            new XDocument(new XElement("RecentFiles", files.Distinct().Select(x => new XElement("recentfile", x)))).Save("recent_files.xml");
+            #endregion
+        }
+
 
         private void editToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
@@ -2637,7 +2651,8 @@ namespace WolvenKit
 
         private void RecentFile_click(object sender, EventArgs e)
         {
-            OpenMod(sender.ToString());
+            if (File.Exists(sender.ToString()))
+                OpenMod(sender.ToString());
         }
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
