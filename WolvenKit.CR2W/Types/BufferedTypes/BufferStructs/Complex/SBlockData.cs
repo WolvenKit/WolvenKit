@@ -54,10 +54,10 @@ namespace WolvenKit.CR2W.Types
                     //    break;
                     //}
                 case Enums.BlockDataObjectType.Mesh:
-                    //{
-                    //    packedObject = new SBlockDataMeshObject(cr2w, this, nameof(SBlockDataMeshObject));
-                    //    break;
-                    //}
+                    {
+                        packedObject = new SBlockDataMeshObject(cr2w, this, nameof(SBlockDataMeshObject));
+                        break;
+                    }
                 case Enums.BlockDataObjectType.Dimmer:
                 //{
                 //    packedObject = new SBlockDataDimmer(cr2w, this, nameof(SBlockDataDimmer));

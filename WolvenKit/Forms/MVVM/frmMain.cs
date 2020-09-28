@@ -3563,5 +3563,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
         #endregion
 
+        private void bulkExportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var be = new frmBulkExporter();
+            be.ShowDialog();
+        }
     }
 }

@@ -144,6 +144,7 @@ namespace WolvenKit
             this.MainBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.visualStudioToolStripExtender2 = new WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender(this.components);
             this.modexplorerSlave = new System.IO.FileSystemWatcher();
+            this.bulkExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolbarToolStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.statusToolStrip.SuspendLayout();
@@ -758,7 +759,8 @@ namespace WolvenKit
             // 
             this.experimentalToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.terrainViewerToolStripMenuItem,
-            this.bulkEditorToolStripMenuItem});
+            this.bulkEditorToolStripMenuItem,
+            this.bulkExportToolStripMenuItem});
             this.experimentalToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Test_16x;
             this.experimentalToolStripMenuItem.Name = "experimentalToolStripMenuItem";
             this.experimentalToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
@@ -1135,6 +1137,13 @@ namespace WolvenKit
             this.modexplorerSlave.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
             this.modexplorerSlave.Renamed += new System.IO.RenamedEventHandler(this.FileRenames_Detected);
             // 
+            // bulkExportToolStripMenuItem
+            // 
+            this.bulkExportToolStripMenuItem.Name = "bulkExportToolStripMenuItem";
+            this.bulkExportToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bulkExportToolStripMenuItem.Text = "Bulk Export";
+            this.bulkExportToolStripMenuItem.Click += new System.EventHandler(this.bulkExportToolStripMenuItem_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1282,5 +1291,6 @@ namespace WolvenKit
         private ToolStripLabel modNameToolStripLabel;
         private ToolStripLabel wkitVersionToolStripLabel;
         private System.IO.FileSystemWatcher modexplorerSlave;
+        private ToolStripMenuItem bulkExportToolStripMenuItem;
     }
 }
