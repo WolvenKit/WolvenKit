@@ -42,14 +42,15 @@ namespace WolvenKit.App.ViewModels
             // on start use mod files
             UseLocalResourcesCommand.SafeExecute();
 
-            xbmdict = new Dictionary<ulong, XBMDumpRecord>();
+            xbmdict = new Dictionary<string, XBMDumpRecord>();
             RegisterXBMDump();
         }
 
         #region Fields
         private readonly List<string> importableexts = Enum.GetNames(typeof(EImportable)).Select(_ => $".{_}".ToLower()).ToList();
 
-        private readonly Dictionary<ulong, XBMDumpRecord> xbmdict;
+        //private readonly Dictionary<ulong, XBMDumpRecord> xbmdict;
+        private readonly Dictionary<string, XBMDumpRecord> xbmdict;
         private DirectoryInfo importdepot;
         #endregion
 
@@ -143,17 +144,26 @@ namespace WolvenKit.App.ViewModels
                 return;
 
             // try getting texture group from vanilla files
-            var hash = FNV1A64HashAlgorithm.HashString(importable.GetREDRelativePath().Item1);
-
+            //var hash = FNV1A64HashAlgorithm.HashString();
+            var hash = Path.GetFileName(importable.GetREDRelativePath().Item1);
             if (xbmdict.ContainsKey(hash))
             {
                 var record = xbmdict[hash];
                 string stxtgroup = record.TextureGroup;
-                ETextureGroup etxtgroup = (ETextureGroup)Enum.Parse(typeof(ETextureGroup), stxtgroup);
-                importable.TextureGroup = etxtgroup;
+                if (string.IsNullOrEmpty(stxtgroup))
+                {
+                    //importable.TextureGroup = ETextureGroup.None;
+                    importable.SetState(ImportableFile.EObjectState.NoTextureGroup);
+                }
+                else
+                {
+                    ETextureGroup etxtgroup = (ETextureGroup)Enum.Parse(typeof(ETextureGroup), stxtgroup);
+                    importable.TextureGroup = etxtgroup;
 
-                importable.SetState(ImportableFile.EObjectState.Ready);
-                importable.IsSelected = true;
+                    importable.SetState(ImportableFile.EObjectState.Ready);
+                    importable.IsSelected = true;
+                }
+                
             }
             else
                 importable.SetState(ImportableFile.EObjectState.NoTextureGroup);
@@ -384,7 +394,8 @@ namespace WolvenKit.App.ViewModels
                 var records = csv.GetRecords<XBMDumpRecord>();
                 foreach (var record in records)
                 {
-                    var hash = FNV1A64HashAlgorithm.HashString(record.RedName);
+                    //var hash = FNV1A64HashAlgorithm.HashString(record.RedName);
+                    var hash = Path.GetFileName(record.RedName);
                     if (!xbmdict.ContainsKey(hash))
                         xbmdict.Add(hash, record);
                 }

@@ -152,6 +152,9 @@ namespace WolvenKit
             visualStudioToolStripExtender1.DefaultRenderer = toolStripRenderer;
             UIController.Get().ToolStripExtender = visualStudioToolStripExtender1;
 
+            watcher.Error += Watcher_Error;
+            filePaths = new List<string>();
+            rwlock = new ReaderWriterLockSlim();
         }
 
         #endregion
@@ -722,76 +725,6 @@ namespace WolvenKit
             ProgressForm.Close();
         }
 
-        #endregion
-
-        #region FileSystemWatcher
-        private List<string> cachedFileSystemInfos;
-
-        public void PauseMonitoring()
-        {
-            cachedFileSystemInfos = ActiveMod.Files;
-            modexplorerSlave.EnableRaisingEvents = false;
-        }
-
-        public void ResumeMonitoring()
-        {
-            if (ActiveMod != null)
-            {
-                modexplorerSlave.Path = ActiveMod.FileDirectory;
-                modexplorerSlave.SynchronizingObject = this;
-                modexplorerSlave.EnableRaisingEvents = true;
-                ModExplorer?.UpdateTreeView(true);
-
-                var n_cachedFileSystemInfos = ActiveMod.Files;
-                var addedfiles = n_cachedFileSystemInfos.Except(cachedFileSystemInfos);
-                var removedfiles = cachedFileSystemInfos.Except(n_cachedFileSystemInfos);
-
-                OnFileChange(this, new RequestFilesChangeArgs(addedfiles.Concat(removedfiles).Distinct().ToList()));
-            }
-        }
-        private void FileRenames_Detected(object sender, RenamedEventArgs e)
-        {
-            switch (e.ChangeType)
-            {
-                case WatcherChangeTypes.Renamed:
-                    {
-                        ModExplorer?.UpdateTreeView(true, e.OldFullPath);
-                        break;
-                    }
-                default:
-                    throw new NotImplementedException();
-            }
-
-            OnFileChange(this, new RequestFilesChangeArgs(e.FullPath));
-        }
-
-
-        private void FileChanges_Detected(object sender, FileSystemEventArgs e)
-        {
-            switch (e.ChangeType)
-            {
-                case WatcherChangeTypes.Created:
-                    {
-                        ModExplorer?.UpdateTreeView(true, e.FullPath);
-                        break;
-                    }
-                case WatcherChangeTypes.Deleted:
-                    {
-                        ModExplorer?.UpdateTreeView(true, e.FullPath);
-                        break;
-                    }
-                case WatcherChangeTypes.Renamed:
-                    {
-                        if (e is RenamedEventArgs re)
-                            ModExplorer?.UpdateTreeView(true, re.OldFullPath);
-                        break;
-                    }
-                default:
-                    throw new NotImplementedException();
-            }
-
-            OnFileChange(this, new RequestFilesChangeArgs(e.FullPath));
-        }
         #endregion
 
         #region HotKeys
@@ -1847,7 +1780,7 @@ namespace WolvenKit
                 };
                 // create default directories
                 ActiveMod.CreateDefaultDirectories();
-                modexplorerSlave.Path = ActiveMod.FileDirectory;
+                watcher.Path = ActiveMod.FileDirectory;
                 ResetWindows();
 
                 // detect if radish-mod
@@ -1983,7 +1916,7 @@ namespace WolvenKit
                 ActiveMod = (W3Mod)ser.Deserialize(modfile);
                 ActiveMod.FileName = file;
                 ActiveMod.CreateDefaultDirectories();
-                modexplorerSlave.Path = ActiveMod.FileDirectory;
+                watcher.Path = ActiveMod.FileDirectory;
             }
 
             ResetWindows();

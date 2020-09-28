@@ -432,6 +432,9 @@
     <Compile Include="Forms\MVVM\frmBulkEditor.Designer.cs">
       <DependentUpon>frmBulkEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MVVM\frmMain_FileSystemWatcher.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\MVVM\frmOtherDocument.cs">
       <SubType>Form</SubType>
     </Compile>
