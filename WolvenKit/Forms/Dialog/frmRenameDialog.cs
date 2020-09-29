@@ -13,8 +13,8 @@ namespace WolvenKit
 
         public string FileName
         {
-            get { return txFileName.Text; }
-            set { txFileName.Text = value; }
+            get => txFileName.Text;
+            set => txFileName.Text = value;
         }
 
         private void txFileName_Enter(object sender, EventArgs e)

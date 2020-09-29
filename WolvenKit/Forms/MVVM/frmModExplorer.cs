@@ -82,9 +82,11 @@ namespace WolvenKit
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != nameof(vm.treenodes)) return;
-            this.treeListView.SetObjects(vm.treenodes);
-            UpdateTreeView(true);
+            if (e.PropertyName == nameof(vm.treenodes))
+            {
+                this.treeListView.SetObjects(vm.treenodes);
+                UpdateTreeView(true);
+            }
         }
 
         private void frmModExplorer_Shown(object sender, EventArgs e)
@@ -115,6 +117,9 @@ namespace WolvenKit
             if (MainController.Get().ActiveMod == null)
                 return;
 
+            bool reapplyfilter = (treeListView.ModelFilter != null);
+            treeListView.ModelFilter = null;
+
             // get branches to update
             var rootNodesToUpdate = new List<FileSystemInfo>();
             // if nodes are specified, update only these branches
@@ -139,27 +144,19 @@ namespace WolvenKit
             {
                 if (rootNode == null)
                     return;
-                // log expanded state
-                //if (usecachedNodeList)
-                //{
-                //    usecachedNodeList = false;
-                //}   
-                //else
-                {
-                    var branch = treeListView.TreeModel.GetBranch(rootNode);
-                    var fbr = branch.Flatten();
-                    var expandedNodes = fbr.OfType<FileSystemInfo>()
-                        .Select(_ => _.GetParent().FullName)
-                        .Where(_ => _ != rootNode.FullName)
-                        .Distinct()
-                        .ToList();
 
-                    if (vm.ExpandedNodesDict.ContainsKey(rootNode.Name))
-                        vm.ExpandedNodesDict[rootNode.Name] = expandedNodes;
-                    else
-                        vm.ExpandedNodesDict.Add(rootNode.Name, expandedNodes);
-                }
-                
+                var branch = treeListView.TreeModel.GetBranch(rootNode);
+                var fbr = branch.Flatten();
+                var expandedNodes = fbr.OfType<FileSystemInfo>()
+                    .Select(_ => _.GetParent().FullName)
+                    .Where(_ => _ != rootNode.FullName)
+                    .Distinct()
+                    .ToList();
+
+                if (vm.ExpandedNodesDict.ContainsKey(rootNode.Name))
+                    vm.ExpandedNodesDict[rootNode.Name] = expandedNodes;
+                else
+                    vm.ExpandedNodesDict.Add(rootNode.Name, expandedNodes);
 
                 treeListView.RefreshObject(rootNode);
 
@@ -179,6 +176,9 @@ namespace WolvenKit
                         }
                     }
             }
+
+            if (reapplyfilter)
+                treeListView.ModelFilter = TextMatchFilter.Contains(treeListView, searchBox.Text.ToUpper());
         }
 
         private const string OpenDirImageKey = "<ODIR>";

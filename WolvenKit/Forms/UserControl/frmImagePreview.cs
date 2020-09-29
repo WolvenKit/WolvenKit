@@ -43,7 +43,7 @@ namespace WolvenKit
         public void SetImage(CR2WExportWrapper chunk)
         {
             if (chunk == null) return;
-            if (chunk.data is CBitmapTexture xbm)
+            if (chunk.data is CBitmapTexture xbm && xbm.GetBytes() != null)
                 ImagePreviewControl.Image = ImageUtility.Xbm2Bmp(xbm) ?? SystemIcons.Warning.ToBitmap();
         }
 

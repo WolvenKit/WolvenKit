@@ -43,6 +43,7 @@ namespace WolvenKit
     using Wwise.Player;
     using Wwise.Wwise;
     using Enums = Enums;
+    using WolvenKit.CR2W.Reflection;
 
     public partial class frmMain : Form
     {
@@ -2500,7 +2501,7 @@ namespace WolvenKit
                 var doc = XDocument.Load("recent_files.xml");
                 int maxRecentFiles = 10;
 
-                if (!string.IsNullOrWhiteSpace(file))
+                if (!string.IsNullOrEmpty(file))
                     files.Add(file);
                 foreach (var f in doc.Descendants("recentfile"))
                 {
@@ -3510,6 +3511,76 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
 
         #endregion
+
+        private void ModchunkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateCustomCr2wFile(false);
+        }
+
+        private void DLCChunkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateCustomCr2wFile(true);
+        }
+
+        private CR2WFile CreateCustomCr2wFile(bool isDlc)
+        {
+            // ask user for type
+            List<string> availableTypes = CR2WManager.GetAvailableTypes("CResource").Select(_ => _.Name).ToList();
+            if (availableTypes.Count <= 0) return null;
+            // remove abstract classes
+
+            availableTypes = availableTypes
+                .Select(_ => $"{REDReflection.GetREDExtensionFromREDType(_)} ({_})")
+                .Where(_ => _.Split(' ').First() != "")
+                .ToList();
+
+            string newChunktypename = "";
+            var redextension = "";
+            using (var form = new frmAddChunk(availableTypes))
+            {
+                var result = form.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    newChunktypename = form.ChunkType.Split(' ').Last().TrimStart("(").TrimEnd(')');
+                    redextension = form.ChunkType.Split(' ').First();
+                }
+            }
+
+            if (string.IsNullOrEmpty(redextension)) return null;
+
+            // create cr2wfile
+            var cr2w = new CR2WFile();
+            var obj = CR2WTypeManager.Create(newChunktypename, newChunktypename, cr2w, null);
+            if (!(obj is CResource resource)) return null;
+            cr2w.FromCResource(resource);
+
+            // write cr2wfile
+            var initialDir = isDlc
+                ? ActiveMod.DlcUncookedDirectory
+                : ActiveMod.ModUncookedDirectory;
+            
+            if (string.IsNullOrEmpty(redextension)) return null;
+
+            var filepath = Path.Combine(initialDir, $"{newChunktypename}.{redextension}");
+            var newfilepath = filepath;
+            var dlg = new frmRenameDialog() { FileName = filepath };
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                newfilepath = dlg.FileName;
+            }
+
+
+            // create directory
+            newfilepath.EnsureFolderExists();
+            using (var fs = new FileStream(newfilepath, FileMode.Create, FileAccess.ReadWrite))
+            using (var writer = new BinaryWriter(fs))
+            {
+                cr2w.Write(writer);
+                MainController.LogString($"Succesfully created file {newfilepath}.", Logtype.Success);
+            }
+
+            return cr2w;
+        }
 
     }
 }

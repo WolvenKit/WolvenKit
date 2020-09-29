@@ -12,6 +12,7 @@ using System.Windows.Input;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
@@ -194,7 +195,7 @@ namespace WolvenKit.App.ViewModels
                     {
                         var exNewpath = $"{GetNewPath(file)}";
                         // create directory
-                        EnsureFolderExists(exNewpath);
+                        exNewpath.EnsureFolderExists();
                         using (var fs = new FileStream(exNewpath, FileMode.Create, FileAccess.ReadWrite))
                         using (var writer = new BinaryWriter(fs))
                         {
@@ -221,17 +222,7 @@ namespace WolvenKit.App.ViewModels
 
                 
 
-                // https://stackoverflow.com/a/3695190
-                void EnsureFolderExists(string path)
-                {
-                    string directoryName = Path.GetDirectoryName(path);
-                    // If path is a file name only, directory name will be an empty string
-                    if (!string.IsNullOrWhiteSpace(directoryName))
-                    {
-                        // Create all directories on the path that don't already exist
-                        Directory.CreateDirectory(directoryName);
-                    }
-                }
+                
             }
 
             async Task StartImport(ImportableFile file)

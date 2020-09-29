@@ -484,7 +484,7 @@ namespace WolvenKit
             this.newFileToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.FileGroup_10135_16x;
             this.newFileToolStripMenuItem.Name = "newFileToolStripMenuItem";
             this.newFileToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.newFileToolStripMenuItem.Text = "New FIle";
+            this.newFileToolStripMenuItem.Text = "New File";
             // 
             // modToolStripMenuItem1
             // 
@@ -512,10 +512,10 @@ namespace WolvenKit
             // 
             // ModchunkToolStripMenuItem
             // 
-            this.ModchunkToolStripMenuItem.Enabled = false;
             this.ModchunkToolStripMenuItem.Name = "ModchunkToolStripMenuItem";
             this.ModchunkToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.ModchunkToolStripMenuItem.Text = "Chunk file";
+            this.ModchunkToolStripMenuItem.Click += new System.EventHandler(this.ModchunkToolStripMenuItem_Click);
             // 
             // dLCToolStripMenuItem
             // 
@@ -535,10 +535,10 @@ namespace WolvenKit
             // 
             // DLCChunkToolStripMenuItem
             // 
-            this.DLCChunkToolStripMenuItem.Enabled = false;
             this.DLCChunkToolStripMenuItem.Name = "DLCChunkToolStripMenuItem";
             this.DLCChunkToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.DLCChunkToolStripMenuItem.Text = "Chunk file";
+            this.DLCChunkToolStripMenuItem.Click += new System.EventHandler(this.DLCChunkToolStripMenuItem_Click);
             // 
             // addFileFromBundleToolStripMenuItem
             // 
@@ -1038,7 +1038,7 @@ namespace WolvenKit
             // 
             // statusToolStrip
             // 
-            this.statusToolStrip.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.statusToolStrip.BackColor = System.Drawing.SystemColors.HotTrack;
             this.statusToolStrip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.statusToolStrip.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.statusToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;

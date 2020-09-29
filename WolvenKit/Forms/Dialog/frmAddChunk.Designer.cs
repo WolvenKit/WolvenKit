@@ -84,7 +84,7 @@ namespace WolvenKit
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(273, 68);
+            this.ClientSize = new System.Drawing.Size(273, 63);
             this.Controls.Add(this.txType);
             this.Controls.Add(this.btCancel);
             this.Controls.Add(this.btOK);
@@ -94,7 +94,7 @@ namespace WolvenKit
             this.MinimumSize = new System.Drawing.Size(199, 102);
             this.Name = "frmAddChunk";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Add Chunk";
+            this.Text = "Select Class Name";
             this.ResumeLayout(false);
             this.PerformLayout();
 

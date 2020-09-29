@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,6 +11,18 @@ namespace WolvenKit.Common.Extensions
 {
     public static class StringExtensions
     {
+        // https://stackoverflow.com/a/3695190
+        public static void EnsureFolderExists(this string path)
+        {
+            string directoryName = Path.GetDirectoryName(path);
+            // If path is a file name only, directory name will be an empty string
+            if (!string.IsNullOrEmpty(directoryName))
+            {
+                // Create all directories on the path that don't already exist
+                Directory.CreateDirectory(directoryName);
+            }
+        }
+
         public static string FirstCharToUpper(this string input)
         {
             switch (input)
