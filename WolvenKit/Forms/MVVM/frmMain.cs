@@ -1382,7 +1382,7 @@ namespace WolvenKit
                 // analyze files in dlc
                 int statusanalyzedlc = -1;
 
-                var seedfile = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed_dlc{ActiveMod.Name}_files");
+                var seedfile = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed_dlc{ActiveMod.Name}.files");
 
                 if (initialDlcCheck)
                 {
