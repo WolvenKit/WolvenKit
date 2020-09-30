@@ -264,6 +264,8 @@ namespace WolvenKit.Forms
             newvar.IsSerialized = true;
 
             parentarray.AddVariable(newvar);
+            parentarray.IsSerialized = true;
+
             treeView.RefreshObject(carray);
             //RequestChunkViewUpdate?.Invoke(null, null);
         }
@@ -277,7 +279,7 @@ namespace WolvenKit.Forms
                         string newChunktype = "";
                         string innerParentType = ptr.ReferenceType /*parentarray.Elementtype.Substring("ptr:".Length)*/;
 
-                        List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType);
+                        List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType).Select(_ => _.Name).ToList();
                         if (availableTypes.Count <= 0)
                             return;
 
@@ -328,7 +330,7 @@ namespace WolvenKit.Forms
                             string newhandletype = "";
                             string innerParentType = handle.ReferenceType /*parentarray.Elementtype.Substring("handle:".Length)*/;
 
-                            List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType);
+                            List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType).Select(_ => _.Name).ToList();
                             if (availableTypes.Count <= 0)
                                 return;
 

@@ -83,7 +83,7 @@
             this.objectListView1.HideSelection = false;
             this.objectListView1.Location = new System.Drawing.Point(40, 149);
             this.objectListView1.Name = "objectListView1";
-            this.objectListView1.Size = new System.Drawing.Size(400, 325);
+            this.objectListView1.Size = new System.Drawing.Size(400, 446);
             this.objectListView1.TabIndex = 13;
             this.objectListView1.TileSize = new System.Drawing.Size(400, 40);
             this.objectListView1.UseCellFormatEvents = true;
@@ -92,6 +92,7 @@
             this.objectListView1.CellClick += new System.EventHandler<BrightIdeasSoftware.CellClickEventArgs>(this.objectListView1_CellClick);
             this.objectListView1.CellOver += new System.EventHandler<BrightIdeasSoftware.CellOverEventArgs>(this.objectListView1_CellOver);
             this.objectListView1.CellToolTipShowing += new System.EventHandler<BrightIdeasSoftware.ToolTipShowingEventArgs>(this.objectListView1_CellToolTipShowing);
+            this.objectListView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.objectListView1.MouseLeave += new System.EventHandler(this.objectListView1_MouseLeave);
             // 
             // olvColumn1

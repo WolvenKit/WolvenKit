@@ -32,7 +32,7 @@ namespace WolvenKit.CR2W.Types
             }
             else
             {
-
+                file.Write(0x00);
             }
         }
 
@@ -71,21 +71,5 @@ namespace WolvenKit.CR2W.Types
             else
                 return  Bytes.Length + " bytes";
         }
-
-        //public override void SerializeToXml(XmlWriter xw)
-        //{
-        //    DataContractSerializer ser = new DataContractSerializer(this.GetType());
-        //    using (var ms = new MemoryStream())
-        //    {
-        //        ser.WriteStartObject(xw, this);
-        //        ser.WriteObjectContent(xw, this);
-        //        xw.WriteElementString("Length", Bytes.Length.ToString());
-        //        if (Bytes.Length > 0)
-        //        {
-        //            xw.WriteElementString("Bytes", HexStr(Bytes));
-        //        }
-        //        ser.WriteEndObject(xw);
-        //    }
-        //}
     }
 }

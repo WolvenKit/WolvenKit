@@ -11,7 +11,8 @@ namespace WolvenKit
         public frmWCCLicense()
         {
             InitializeComponent();
-            browserwcclicense.DocumentText = Rtf.ToHtml(new RtfSource(new StreamReader(Resources.wcc_eula)));
+
+            richTextBox1.Rtf = Resources.wcc_eula;
         }
     }
 }

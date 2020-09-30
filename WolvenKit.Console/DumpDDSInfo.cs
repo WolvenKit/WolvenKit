@@ -19,7 +19,7 @@ namespace WolvenKit.Console
     {
         internal class XBMBundleInfo
         {
-            public string Name { get; set; }
+            //public string Name { get; set; }
             //public string Width { get; set; }
             //public string Height { get; set; }
             public string Format { get; set; }
@@ -91,7 +91,7 @@ namespace WolvenKit.Console
                                         {
                                             bundlexbmDict.Add(x.TextureCacheKey.val, new XBMBundleInfo()
                                                 {
-                                                    Name = f.Name,
+                                                    //Name = f.Name,
                                                     //Width = x.Width == null ? "NULL" : x.Width.val.ToString(),
                                                     //Height = x.Height == null ? "NULL" : x.Height.val.ToString(),
                                                     Format = x.Format == null ? "NULL" : x.Format.WrappedEnum.ToString(),
@@ -138,6 +138,7 @@ namespace WolvenKit.Console
                     "Cube\t" +
                     "Unk1\t" +
                     "Hash\t" +
+                    "Ext\t" +
                     "Name\t";
                 head += "XBMFormat\t" +
                     "XBMCompression\t" +
@@ -171,6 +172,7 @@ namespace WolvenKit.Console
                                       $"{x.IsCube:X2}\t" +
                                       $"{x.Unk1}/{x.Unk1:X2}\t" +
                                       $"{x.Hash}\t" +
+                                      $"{Path.GetExtension(x.Name)}\t" +
                                       $"{x.Name}\t"
                             ;
 

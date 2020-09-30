@@ -50,7 +50,7 @@ namespace WolvenKit
             this.FormPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FormPanel.DockBackColor = System.Drawing.SystemColors.AppWorkspace;
             this.FormPanel.DockLeftPortion = 0.2D;
-            this.FormPanel.DockRightPortion = 0.2D;
+            this.FormPanel.DockRightPortion = 0.3D;
             this.FormPanel.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
             this.FormPanel.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormPanel.Location = new System.Drawing.Point(0, 0);
