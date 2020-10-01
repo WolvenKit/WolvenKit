@@ -60,7 +60,7 @@ namespace WolvenKit.Render.FastRender
 
 		private AnimatedMesh mesh = null;
 		private AnimatedMeshSceneNode node = null;
-		private MeshLoaderHelper helper = null;
+		//private MeshLoaderHelper helper = null;
 		private SkinnedMesh meshToAnimate = null;	// mesh with rig loaded as base for animation
 
 		private bool meshLoaded = false;
@@ -150,6 +150,7 @@ namespace WolvenKit.Render.FastRender
 			smgr.MeshManipulator.RecalculateNormals(mesh);
 			meshLoaded = true;
 
+            /*
 			float scaleMul = 1.0f;
 			node = smgr.AddAnimatedMeshSceneNode(mesh);
 			helper = smgr.GetMeshLoader(smgr.MeshLoaderCount - 1).getMeshLoaderHelper(); // hacked to gat witcher3 loader
@@ -188,7 +189,7 @@ namespace WolvenKit.Render.FastRender
 
 				setMaterialsSettings(node);
 			}
-
+            */
 			var camera = smgr.AddCameraSceneNode(	null,
 													new Vector3Df(node.BoundingBox.Radius * 8, node.BoundingBox.Radius, 0),
 													new Vector3Df(0, node.BoundingBox.Radius, 0)	);
@@ -390,6 +391,7 @@ namespace WolvenKit.Render.FastRender
 		{
 			node.DebugDataVisible = DebugSceneType.Off;
 
+            /*
 			SkinnedMesh sm = helper.applyAnimation(e.ClickedItem.Text, meshToAnimate);
 			if (sm != null)
 			{
@@ -400,6 +402,7 @@ namespace WolvenKit.Render.FastRender
 				setMaterialsSettings(node);
 				activeAnim = e.ClickedItem.Text;
 			}
+            */
 		}
 
 		private void decreaseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -506,6 +509,7 @@ namespace WolvenKit.Render.FastRender
 				sf.Filter = "Irrlicht mesh | *.irrm | Collada mesh | *.coll | STL Mesh | *.stl | OBJ Mesh | *.obj | PLY Mesh | *.ply | B3D Mesh | *.b3d | FBX Mesh | *.fbx";
 				if (sf.ShowDialog() == DialogResult.OK)
 				{
+                    /*
 					MeshWriterType mwt = 0;
 					switch (Path.GetExtension(sf.FileName).Trim())
 					{
@@ -563,6 +567,7 @@ namespace WolvenKit.Render.FastRender
 						mw.Drop();
 					if (s != null)
 						s.Drop();
+                    */
 				}
 			}
 		}

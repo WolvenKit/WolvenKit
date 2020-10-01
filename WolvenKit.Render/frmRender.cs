@@ -55,7 +55,7 @@ namespace WolvenKit.Render
                 {
                     meshFile = value;
                     mesh = new WKMesh(cdata);
-                    mesh.LoadData(meshFile);
+                    mesh.LoadData(meshFile, device);
                 }
                 catch (Exception ex)
                 {

@@ -200,6 +200,7 @@ namespace WolvenKit.Render
         /// </summary>
         public void Apply(SkinnedMesh skinnedMesh)
         {
+            /*
             skinnedMesh.AnimationSpeed = animationSpeed;
             for (int i = 0; i < orientations.Count; i++)
             {
@@ -225,6 +226,7 @@ namespace WolvenKit.Render
                     scalekey.Frame = scalesKeyframes[i][j];
                 }
             }
+            */
         }
     }
 }

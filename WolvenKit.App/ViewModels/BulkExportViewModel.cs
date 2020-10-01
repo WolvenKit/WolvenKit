@@ -18,6 +18,7 @@ using IrrlichtLime.Video;
 using IrrlichtLime.Core;
 using WolvenKit.Common.Wcc;
 using WolvenKit.App.Model;
+using IrrlichtLime;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -271,8 +272,9 @@ namespace WolvenKit.App.ViewModels
                         writer.Write("map_Kd ");
                         IrrlichtLime.Core.Matrix m = mat[i].GetTextureMatrix(0);
 
-                        float tx, ty;
-                        m.GetTextureTranslate(out tx, out ty);
+                        float tx = m.GetElement(8);
+                        float ty = m.GetElement(9);
+                        //m.GetTextureTranslate(out tx, out ty);
 
                         if (tx != 0 || ty != 0)
                         {
@@ -283,8 +285,10 @@ namespace WolvenKit.App.ViewModels
                             writer.Write(" ");
                         }
 
-                        float sx, sy;
-                        m.GetTextureScale(out sx, out sy);
+                        float sx = m.GetElement(0);
+                        float sy = m.GetElement(5);
+                        //m.GetTextureScale(out sx, out sy);
+
                         if (sx != 1.0f || sy != 1.0f)
                         {
                             writer.Write("-s ");
@@ -440,8 +444,9 @@ namespace WolvenKit.App.ViewModels
                         writer.Write("map_Kd ");
                         IrrlichtLime.Core.Matrix m = mat[i].GetTextureMatrix(0);
 
-                        float tx, ty;
-                        m.GetTextureTranslate(out tx, out ty);
+                        float tx = m.GetElement(8);
+                        float ty = m.GetElement(9);
+                        //m.GetTextureTranslate(out tx, out ty);
 
                         if (tx != 0 || ty != 0)
                         {
@@ -452,8 +457,10 @@ namespace WolvenKit.App.ViewModels
                             writer.Write(" ");
                         }
 
-                        float sx, sy;
-                        m.GetTextureScale(out sx, out sy);
+                        float sx = m.GetElement(0);
+                        float sy = m.GetElement(5);
+                        //m.GetTextureScale(out sx, out sy);
+
                         if (sx != 1.0f || sy != 1.0f)
                         {
                             writer.Write("-s ");
@@ -552,6 +559,14 @@ namespace WolvenKit.App.ViewModels
 
             float RADIANS_TO_DEGREES = (float)(180 / Math.PI);
 
+            IrrlichtCreationParameters irrparam = new IrrlichtCreationParameters();
+            irrparam.DriverType = DriverType.Null;
+            irrparam.BitsPerPixel = 8;
+            irrparam.WindowSize.Height = 8;
+            irrparam.WindowSize.Width = 8;
+            irrparam.Fullscreen = false;
+            IrrlichtDevice device = IrrlichtDevice.CreateDevice(irrparam);
+
             foreach (var chunk in file.chunks)
             {
                 if(chunk.REDType == "CSectorData")
@@ -607,7 +622,7 @@ namespace WolvenKit.App.ViewModels
 
                             CommonData cdata = new CommonData();
                             WKMesh renderMesh = new WKMesh(cdata);
-                            renderMesh.LoadData(meshAssetFile);                            
+                            renderMesh.LoadData(meshAssetFile, device);                            
 
                             var meshNameOnly = Path.GetFileNameWithoutExtension(meshPath);
                             meshNameOnly += "_" + blockInstanceIndex.ToString();
@@ -804,6 +819,10 @@ namespace WolvenKit.App.ViewModels
                     // TODO
                 }
             }
+
+            device.Close();
+            device.Drop();
+            device.Dispose();
         }
 
         #endregion        

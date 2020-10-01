@@ -6,40 +6,175 @@ using System.IO;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using IrrlichtLime;
+using IrrlichtLime.IO;
+using WolvenKit.Common;
+using WolvenKit.DDS;
+using static WolvenKit.CR2W.Types.Enums;
+using WolvenKit.Common.Model;
+using System.Linq;
 
 namespace WolvenKit.Render
 {
+
     public class WKMesh // renamed to not mess with Irrlicht Mesh
     {
         public CommonData CData { get; set; }
 
         private List<Vector3Df> bonePositions = new List<Vector3Df>();
-        private IrrlichtLime.Video.Image dudImage;
+        //private IrrlichtLime.Video.Image dudImage;
 
         public WKMesh(CommonData cdata)
         {
             CData = cdata;
         }
 
+        /// <summary>
+        /// Create a System.Drawing.Bitmap from a Redengine CBitmapTexture with Wkit DDS Utility
+        /// </summary>
+        /// <param name="xbm"></param>
+        /// <returns></returns>
+        public static byte[] Xbm2Bmp(CBitmapTexture xbm)
+        {
+            if (xbm == null)
+                return null;
+
+            using (var ms = new MemoryStream(Xbm2DdsBytes(xbm)))
+            {
+                return ms.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Create a byte array from a Redengine CBitmapTexture with Wkit DDS Utility
+        /// </summary>
+        /// <param name="xbm"></param>
+        /// <returns></returns>
+        public static byte[] Xbm2DdsBytes(CBitmapTexture xbm)
+        {
+            if (xbm == null)
+                return null;
+
+            using (var ms = new MemoryStream())
+            using (var bw = new BinaryWriter(ms))
+            {
+                DDSUtils.GenerateAndWriteHeader(bw.BaseStream, GetDDSMetadata(xbm));
+
+                bw.Write(xbm.GetBytes());
+
+                ms.Flush();
+
+                return ms.ToArray();
+            }
+        }
+
+        public static ETextureFormat GetTextureFormatFromCompression(ETextureCompression compression)
+        {
+            switch (compression)
+            {
+                case ETextureCompression.TCM_DXTNoAlpha:
+                case ETextureCompression.TCM_Normals:
+                    return ETextureFormat.TEXFMT_BC1;
+                case ETextureCompression.TCM_DXTAlpha:
+                case ETextureCompression.TCM_NormalsHigh:
+                case ETextureCompression.TCM_NormalsGloss:
+                case ETextureCompression.TCM_QualityColor:
+                    return ETextureFormat.TEXFMT_BC3;
+                case ETextureCompression.TCM_QualityR:
+                    return ETextureFormat.TEXFMT_BC4;
+                case ETextureCompression.TCM_QualityRG:
+                    return ETextureFormat.TEXFMT_BC5;
+                case ETextureCompression.TCM_DXTAlphaLinear:
+                case ETextureCompression.TCM_RGBE:
+                case ETextureCompression.TCM_None:
+                default:
+                    return ETextureFormat.TEXFMT_R8G8B8A8;
+            }
+        }
+        /// <summary>
+        /// Generate DDSMetadata from a Redengine CBitmapTexture
+        /// </summary>
+        /// <param name="xbm"></param>
+        /// <returns></returns>
+        private static DDSMetadata GetDDSMetadata(CBitmapTexture xbm)
+        {
+            int residentMipIndex = xbm.ResidentMipIndex?.val ?? 0;
+
+            int mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
+
+            uint width = xbm.Mipdata.elements[residentMipIndex].Width.val;
+            uint height = xbm.Mipdata.elements[residentMipIndex].Height.val;
+
+            ETextureCompression compression = xbm.Compression.WrappedEnum;
+
+            var ddsformat = GetTextureFormatFromCompression(compression);
+            if (ddsformat == ETextureFormat.TEXFMT_R8G8B8A8)
+            {
+                ETextureRawFormat format = xbm.Format.WrappedEnum;
+                switch (format)
+                {
+                    case ETextureRawFormat.TRF_TrueColor:
+                        ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
+                        break;
+                    case ETextureRawFormat.TRF_Grayscale:
+                        break;
+                    case ETextureRawFormat.TRF_HDR:
+                    case ETextureRawFormat.TRF_AlphaGrayscale:
+                    case ETextureRawFormat.TRF_HDRGrayscale:
+                    default:
+                        ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
+                        //throw new Exception("Invalid texture format type! [" + format + "]");
+                        break;
+                }
+            }
+
+            return new DDSMetadata(width, height, (uint)mipcount, ddsformat);
+        }
+
+        /// <summary>
+        /// Gets the image bytes from a dds byte array, trims the first 128 bytes
+        /// </summary>
+        /// <param name="ddsImage"></param>
+        /// <returns></returns>
+        public static byte[] Dds2Bytes(byte[] ddsImage)
+        {
+            return ddsImage.Length > 128 ? ddsImage.Skip(128).ToArray() : new byte[0];
+        }
+
         private void HandleMaterial(ref Material mat, string path, IrrlichtDevice dev, string texType)
         {
-            Texture tex = dev.VideoDriver.AddTexture(path, dudImage);
-            tex.Grab();
-
-            mat.Type = IrrlichtLime.Video.MaterialType.NormalMapSolid;
-
-            switch (texType)
+            // make it from the xbm
+            CR2WFile imgAssetFile;
+            using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (var reader = new BinaryReader(fs))
             {
-                case "Diffuse":
-                    mat.SetTexture(0, tex);
-                    break;
-                case "Normal":
-                    mat.SetTexture(1, tex);
-                    break;
-                default:
-                    break;
+                imgAssetFile = new CR2WFile();
+                imgAssetFile.Read(reader);
+                fs.Close();
+
+                CBitmapTexture xbm = ((CBitmapTexture)imgAssetFile.chunks[0].data);
+
+                ReadFile file = dev.FileSystem.CreateMemoryReadFile("temp", Xbm2Bmp(xbm));
+
+                Image img = dev.VideoDriver.CreateImage(file);
+                Texture tex = dev.VideoDriver.AddTexture(path, img);
+                tex.Grab();
+
+                mat.Type = IrrlichtLime.Video.MaterialType.NormalMapSolid;
+                //mat.Type = IrrlichtLime.Video.MaterialType.Solid;
+
+                switch (texType)
+                {
+                    case "Diffuse":
+                        mat.SetTexture(0, tex);
+                        break;
+                    case "Normal":
+                        mat.SetTexture(1, tex);
+                        break;
+                    default:
+                        break;
+                }
+                img.Drop();
             }
-            tex.Drop();
         }
 
         private void HandleW2MIMaterial(ref Material mat, string basePath, string root, IrrlichtDevice dev)
@@ -107,7 +242,7 @@ namespace WolvenKit.Render
         /// Read mesh chunk and buffer infos.
         /// </summary>
 
-        public void LoadData(CR2WFile meshFile)
+        public void LoadData(CR2WFile meshFile, IrrlichtDevice dev)
         {
             // IMPLEMENTED FROM jlouis' witcherconverter
             // http://jlouisb.users.sourceforge.net/
@@ -115,16 +250,6 @@ namespace WolvenKit.Render
 
             string root = Path.GetDirectoryName(meshFile.FileName);
             root = root.Substring(0, root.IndexOf("r4data") + 7);
-
-            IrrlichtCreationParameters irrparam = new IrrlichtCreationParameters();
-            irrparam.DriverType = DriverType.Null;
-            irrparam.BitsPerPixel = 8;
-            irrparam.WindowSize.Height = 8;
-            irrparam.WindowSize.Width = 8;
-            irrparam.Fullscreen = false;
-            IrrlichtDevice dev = IrrlichtDevice.CreateDevice(irrparam);
-
-            dudImage = dev.VideoDriver.CreateImage(ColorFormat.A8R8G8B8, new Dimension2Di(4,4));
 
             SBufferInfos bufferInfos = new SBufferInfos();
 
@@ -234,7 +359,7 @@ namespace WolvenKit.Render
                     for (int i=0; i < cmesh.Materials.Count; ++i)
                     {
                         string path = cmesh.Materials[i].DepotPath;
-                        if(path == null)
+                        if(path == null || cmesh.Materials[i].ClassName == "CMaterialGraph")
                         {
                             path = "local";
                             CMaterialInstance mi = new CMaterialInstance(null, null, path);
@@ -417,9 +542,7 @@ namespace WolvenKit.Render
                         MeshBuffer meshBuff = MeshBuffer.Create(VertexType.Standard, IndexType._16Bit);
                         meshBuff.Append(vertex3DCoords.ToArray(), indices.ToArray());
                         meshBuff.RecalculateBoundingBox();
-
-                        dev.SceneManager.MeshManipulator.RecalculateNormals(meshBuff);
-
+                        
                         CMaterialInstance mi = CData.materialInstances[(int)meshInfo.materialID];
                        
                         Material mat = new Material();
@@ -459,15 +582,27 @@ namespace WolvenKit.Render
                         meshBuff.SetMaterial(mat);
 
                         CData.staticMesh.AddMeshBuffer(meshBuff);
+                        CData.staticMesh = dev.SceneManager.MeshManipulator.CreateMeshWithTangents(CData.staticMesh, true);
                         meshBuff.Drop();
                     }
                 }
 
             }
+        }
 
-            dev.Close();
-            dev.Dispose();
-            dev.Drop();
+        public Mesh GetMesh()
+        {
+            Mesh m = Mesh.Create();
+
+            for (int i = 0; i < CData.staticMesh.MeshBufferCount; ++i)
+            {
+                MeshBuffer wmb = CData.staticMesh.GetMeshBuffer(i);
+                m.AddMeshBuffer(wmb);
+                m.RecalculateBoundingBox();
+                wmb.Drop(); // let ownership be transferred to the caller
+            }
+
+            return m;
         }
     }
 }

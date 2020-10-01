@@ -8,8 +8,8 @@ namespace WolvenKit.Render
 {
     public class CommonData
     {
-        //public string modelPath = "";
-        public StaticMesh staticMesh = StaticMesh.Create();
+        //public StaticMesh staticMesh = StaticMesh.Create();
+        public Mesh staticMesh = Mesh.Create();
         public List<CMaterialInstance> materialInstances = new List<CMaterialInstance>();
         public List<SMeshInfos> meshInfos = new List<SMeshInfos>();
         public BoneData boneData = new BoneData();

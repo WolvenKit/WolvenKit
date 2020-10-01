@@ -94,6 +94,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libs\IrrlichtLime.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack">
+      <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell">
+      <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -132,7 +138,14 @@
     <Compile Include="Animation\ExportAnimation.cs" />
     <Compile Include="Animation\ExportFace.cs" />
     <Compile Include="Animation\IgnorableSerializerContractResolver.cs" />
+    <Compile Include="RenderTreeNode.cs" />
     <Compile Include="CommonData.cs" />
+    <Compile Include="frmLevelScene.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLevelScene.Designer.cs">
+      <DependentUpon>frmLevelScene.cs</DependentUpon>
+    </Compile>
     <Compile Include="RenderSkeleton.cs" />
     <Compile Include="FastRender\frmFastRender.cs">
       <SubType>Form</SubType>
@@ -166,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmRender.resx">
       <DependentUpon>frmRender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLevelScene.resx">
+      <DependentUpon>frmLevelScene.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmTerrain.resx">
       <DependentUpon>frmTerrain.cs</DependentUpon>
@@ -231,6 +247,7 @@
       <Link>Irrlicht.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\FindInFile_16x.png" />
     <Content Include="Terrain\basemap.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

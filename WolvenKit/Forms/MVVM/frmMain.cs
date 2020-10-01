@@ -43,6 +43,7 @@ namespace WolvenKit
     using Wwise.Player;
     using Wwise.Wwise;
     using Enums = Enums;
+    using Microsoft.WindowsAPICodePack.Dialogs;
 
     public partial class frmMain : Form
     {
@@ -3567,6 +3568,20 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         {
             var be = new frmBulkExporter();
             be.ShowDialog();
+        }
+
+        private void sceneViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var dlg = new CommonOpenFileDialog() { Title = "Select file" };
+            dlg.Multiselect = false;
+            dlg.Filters.Add(new CommonFileDialogFilter("Files", ".w2w,.w2l"));
+            dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
+            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                // parse the w2w and provide information to the scene
+                Render.frmLevelScene sceneView = new Render.frmLevelScene(dlg.FileName, MainController.Get().Configuration.DepotPath);
+                sceneView.Show(this.dockPanel, DockState.Document);
+            }
         }
     }
 }
