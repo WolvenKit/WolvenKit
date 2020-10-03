@@ -19,7 +19,6 @@ namespace WolvenKit.Render
         /// <summary>
         /// Try to get real parent.
         /// </summary>
-        /*
         public static SJoint GetRealParent(SkinnedMesh mesh, SJoint joint)
         {
             List<SJoint> allJoints = mesh.GetAllJoints();
@@ -89,6 +88,5 @@ namespace WolvenKit.Render
 
             return mesh.GetAllJoints()[jointID];
         }
-        */
     };
 }

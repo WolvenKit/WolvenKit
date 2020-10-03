@@ -110,7 +110,6 @@ namespace WolvenKit.Render
         /// </summary>
         public void Apply(SkinnedMesh skinnedMesh)
         {
-            /*
             // Create the bones
             for (int i = 0; i < meshSkeleton.nbBones; i++)
             {
@@ -227,7 +226,6 @@ namespace WolvenKit.Render
                 weight.VertexId = entry.vertexId;
                 weight.Strength = entry.strength;
             }
-            */
 
             // Add weights
             /*for (int i = 0; i < w3_DataCache.vertices.Count; i++)

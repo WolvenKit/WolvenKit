@@ -17,8 +17,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.Common;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
+using WolvenKit.DDS;
+using static WolvenKit.CR2W.Types.Enums;
+using static WolvenKit.DDS.TexconvWrapper;
 
 namespace WolvenKit.Render
 {
@@ -104,7 +108,7 @@ namespace WolvenKit.Render
         public frmLevelScene(string filename, string depotPath)
         {
             this.inputFilename = filename;
-            this.depot = depotPath;
+            this.depot = depotPath + "\\";
             this.meshId = 1;
             this.doAddNodes = false;
             InitializeComponent();
@@ -159,8 +163,11 @@ namespace WolvenKit.Render
                             {
                                 continue;
                             }
-                            string meshPath = depot + "\\" + meshName;
+                            string meshPath = depot + meshName;
 
+
+                            // hacky way
+                            /*
                             CR2WFile meshAssetFile;
                             using (var fs = new FileStream(meshPath, FileMode.Open, FileAccess.Read))
                             using (var reader = new BinaryReader(fs))
@@ -176,7 +183,11 @@ namespace WolvenKit.Render
                             renderMesh.LoadData(meshAssetFile, device);
 
                             Mesh m = renderMesh.GetMesh();
-                            device.SceneManager.MeshManipulator.CreateMeshWithTangents(m);
+                            */
+
+                            //WKIrrlicht version... textures not quite right still
+                            Mesh m = smgr.GetMesh(meshPath);
+                            m = device.SceneManager.MeshManipulator.CreateMeshWithTangents(m, true);
 
                             RenderTreeNode meshNode = new RenderTreeNode(meshName, meshId++, m, translation, rotation);
 
@@ -213,7 +224,7 @@ namespace WolvenKit.Render
                     if (worldChunk.REDType == "CLayerInfo")
                     {
                         CLayerInfo info = (CLayerInfo)worldChunk.data;
-                        string layerFileName = depot + "\\" + info.DepotFilePath;
+                        string layerFileName = depot + info.DepotFilePath;
 
                         AddLayer(layerFileName, info.DepotFilePath.ToString(), ref meshId);
                     }
@@ -270,6 +281,7 @@ namespace WolvenKit.Render
                 smgr = device.SceneManager;
                 gui = device.GUIEnvironment;
 
+                smgr.Attributes.SetValue("TW_TW3_TEX_PATH", depot);
                 driver.SetTextureCreationFlag(TextureCreationFlag.Always32Bit, true);
 
                 lightNode = smgr.AddLightSceneNode(null, new Vector3Df(0, 0, 0), new Colorf(1.0f, 1.0f, 1.0f), 2000);
@@ -278,8 +290,30 @@ namespace WolvenKit.Render
                 worldNode.Rotation = new Vector3Df(-90, 0, 0);
                 worldNode.Visible = true;
 
-                ParseScene();
+                /*
+                // test image loader
+                string texName = "D:/Tools/ModTools/r4data/items/work/bag_human/textures/remains_human_01.xbm";
 
+                IrrlichtLime.Video.Image t1 = smgr.VideoDriver.CreateImage(texName);
+                IrrlichtLime.Video.Image t2;
+                {
+                    CR2WFile imgAssetFile;
+                    using (var fs = new FileStream(texName, FileMode.Open, FileAccess.Read))
+                    using (var reader = new BinaryReader(fs))
+                    {
+                        imgAssetFile = new CR2WFile();
+                        imgAssetFile.Read(reader);
+                        fs.Close();
+
+                        CBitmapTexture xbm = ((CBitmapTexture)imgAssetFile.chunks[0].data);
+
+                        ReadFile file = device.FileSystem.CreateMemoryReadFile("temp", WKMesh.Xbm2Bmp(xbm));
+                        t2 = device.VideoDriver.CreateImage(file);
+                    }
+                }
+                */
+
+                ParseScene();
                 smgr.AddCameraSceneNodeMaya();
 
                 toolStrip.Invoke((MethodInvoker)delegate
@@ -420,14 +454,22 @@ namespace WolvenKit.Render
                 meshNode.SetMaterialFlag(MaterialFlag.Lighting, false);
                 meshNode.SetMaterialFlag(MaterialFlag.GouraudShading, true);
 
+                /*
                 foreach (MeshBuffer mb in node.Mesh.MeshBuffers)
                 {
-                    driver.RemoveTexture(mb.Material.GetTexture(0));
-                    driver.RemoveTexture(mb.Material.GetTexture(1));
+                    if (mb.Material.GetTexture(0) != null)
+                    {
+                        //driver.RemoveTexture(mb.Material.GetTexture(0));
+                        meshNode.SetMaterialTexture(0, mb.Material.GetTexture(0));
+                    }
 
-                    meshNode.SetMaterialTexture(0, mb.Material.GetTexture(0));
-                    meshNode.SetMaterialTexture(1, mb.Material.GetTexture(1));
+                    if (mb.Material.GetTexture(1) != null)
+                    {
+                        //driver.RemoveTexture(mb.Material.GetTexture(1));
+                        meshNode.SetMaterialTexture(1, mb.Material.GetTexture(1));
+                    }
                 }
+                */
                 node.MeshNode = meshNode;
             }
             node.MeshNode.Visible = true;

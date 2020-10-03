@@ -55,30 +55,45 @@ namespace WolvenKit.Forms
             checkBoxDisable.Checked = MainController.Get().Configuration.IsWelcomeFormDisabled;
 
             //populate recent files
-            var recentfiles = new List<RecentFileObject>();
-            if (File.Exists("recent_files.xml"))
-            {
-                var doc = XDocument.Load("recent_files.xml");
-                foreach (var f in doc.Descendants("recentfile"))
-                {
-                    var fullpath = f.Value;
-                    var it = new ListViewItem()
-                    {
-                        Text = Path.GetFileName(fullpath),
-                        Tag = fullpath,
-                        ToolTipText = fullpath
-                    };
-                    recentfiles.Add( new RecentFileObject(fullpath));
-                }
-            }
- 
-            objectListView1.SetObjects(recentfiles);
-            objectListView1.RefreshObjects(recentfiles);
+            PopulateRecentFileList();
+            
 
             //populate help links
             var helplinks = new List<LinkObject>();
             helplinks.Add(new LinkObject("GitHub repository", "https://github.com/Traderain/Wolven-kit"));
             helplinks.Add(new LinkObject("WolvenKit wiki", "https://github.com/Traderain/Wolven-kit/wiki"));
+        }
+
+        private void PopulateRecentFileList()
+        {
+            var recentfiles = new List<RecentFileObject>();
+            var files = new List<string>();
+            if (File.Exists("recent_files.xml"))
+            {
+                var doc = XDocument.Load("recent_files.xml");
+                int maxRecentFiles = 10;
+                foreach (var f in doc.Descendants("recentfile"))
+                {
+                    maxRecentFiles--;
+                    if (maxRecentFiles <= 0) break;
+
+                    var fullpath = f.Value;
+                    if (File.Exists(fullpath))
+                    {
+                        files.Add(fullpath);
+                        var it = new ListViewItem()
+                        {
+                            Text = Path.GetFileName(fullpath),
+                            Tag = fullpath,
+                            ToolTipText = fullpath
+                        };
+                        recentfiles.Add(new RecentFileObject(fullpath));
+                    }
+                }
+            }
+            new XDocument(new XElement("RecentFiles", files.Distinct().Select(x => new XElement("recentfile", x)))).Save("recent_files.xml");
+            objectListView1.SetObjects(recentfiles);
+            objectListView1.RefreshObjects(recentfiles);
         }
 
         private string DocumentText => $@"
@@ -283,10 +298,18 @@ namespace WolvenKit.Forms
 
         private void objectListView1_CellClick(object sender, CellClickEventArgs e)
         {
-            if (((BrightIdeasSoftware.ObjectListView)sender).SelectedObject != null)
+            if (((ObjectListView)sender).SelectedObject != null && ((ObjectListView) sender).SelectedObject is RecentFileObject selectedobject)
             {
-                main.OpenMod((((BrightIdeasSoftware.ObjectListView)sender).SelectedObject as RecentFileObject).Fullpath);
-                this.Close();
+                if (File.Exists(selectedobject.Fullpath))
+                {
+                    main.OpenMod(selectedobject.Fullpath);
+                    this.Close();
+                }
+                else
+                {
+                    PopulateRecentFileList();
+                    // dont' open and remove
+                }
             }
         }
 

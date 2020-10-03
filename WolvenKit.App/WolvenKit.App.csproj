@@ -62,10 +62,6 @@
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.2.0.246, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.1.2.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="IrrlichtLime, Version=1.6.1.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libs\IrrlichtLime.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.1\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -272,6 +268,10 @@
     <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj">
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
       <Name>WolvenKit.CR2W</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WolvenKit.IrrlichtLime\IrrlichtLime.vcxproj">
+      <Project>{4f6ef8e3-f26f-49db-867d-fd10fb083b0d}</Project>
+      <Name>IrrlichtLime</Name>
     </ProjectReference>
     <ProjectReference Include="..\Wolvenkit.Radish\WolvenKit.Radish.csproj">
       <Project>{D4D390BB-C14D-423A-861A-470BED6D40A9}</Project>

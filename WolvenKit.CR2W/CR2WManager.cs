@@ -27,24 +27,42 @@ namespace WolvenKit.CR2W
         private static DirectoryInfo m_projectinfo;
         private static Dictionary<string, Type> m_types;
 
-        public static List<string> GetAvailableTypes(string innerParentType)
+        /// <summary>
+        /// Gets all available types, custom and vanilla for a given typename
+        /// </summary>
+        /// <param name="typename"></param>
+        /// <returns></returns>
+        public static IEnumerable<Type> GetAvailableTypes(string typename)
         {
-            List<string> availableTypes = new List<string>();
+            var availableTypes = new List<Type>();
 
-            if (AssemblyDictionary.TypeExists(innerParentType))
+            if (AssemblyDictionary.TypeExists(typename))
             {
-                availableTypes.Add(innerParentType);
-                availableTypes.AddRange(AssemblyDictionary
-                    .GetSubClassesOf(AssemblyDictionary.GetTypeByName(innerParentType)).Select(_ => _.Name));
+                availableTypes.Add(AssemblyDictionary.GetTypeByName(typename));
+                var subclasses = AssemblyDictionary.GetSubClassesOf(AssemblyDictionary.GetTypeByName(typename));
+                // recursive
+                foreach (var subclass in subclasses)
+                {
+                    var ss = GetAvailableTypes(subclass.Name);
+                    availableTypes.AddRange(ss);
+                }
+                availableTypes.AddRange(subclasses);
+                
             }
             else
             {
-                if (CR2WManager.TypeExists(innerParentType))
+                if (CR2WManager.TypeExists(typename))
                 {
-                    availableTypes.Add(innerParentType);
-                    availableTypes.AddRange(CR2WManager
-                        .GetSubClassesOf(AssemblyDictionary.GetTypeByName(innerParentType)).Select(_ => _.Name)
-                        .ToList());
+                    availableTypes.Add(CR2WManager.GetTypeByName(typename));
+                    var subclasses = CR2WManager.GetSubClassesOf(AssemblyDictionary.GetTypeByName(typename));
+                    // recursive
+                    foreach (var subclass in subclasses)
+                    {
+                        var ss = GetAvailableTypes(subclass.Name);
+                        availableTypes.AddRange(ss);
+                    }
+                    availableTypes.AddRange(subclasses);
+
                 }
                 else
                 {
@@ -55,10 +73,10 @@ namespace WolvenKit.CR2W
                 }
             }
 
-            return availableTypes;
+            return availableTypes.Distinct();
         }
 
-        public static List<Type> GetSubClassesOf(Type type) => m_types.Values.Where(_ => _.IsSubclassOf(type)).ToList();
+        private static List<Type> GetSubClassesOf(Type type) => m_types.Values.Where(_ => _.IsSubclassOf(type)).ToList();
 
         public static Type GetTypeByName(string typeName)
         {

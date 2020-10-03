@@ -234,7 +234,6 @@ namespace WolvenKit
             }
 
             this.FormPanel.Theme = UIController.GetTheme();
-            //FormPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "cr2wdocument_layout.xml"));
         }
 
         private IDockContent GetContentFromPersistString(string persistString)
@@ -441,6 +440,12 @@ namespace WolvenKit
                 try
                 {
                     FormPanel.LoadFromXml(config, m_deserializeDockContent);
+                    // if anything went wrong
+                    if (FormPanel.DockWindows.Count < 2)
+                    {
+                        chunkList.Show(FormPanel, DockState.Document);
+                        propertyWindow.Show(FormPanel, DockState.DockRight);
+                    }
                 }
                 catch (Exception exception)
                 {
@@ -533,13 +538,16 @@ namespace WolvenKit
                     }
                 case ".redswf":
                     {
-                        this.ImageViewer = new frmImagePreview
-                        {
-                            DockAreas = DockAreas.Document
-                        };
-                        this.ImageViewer.Show(this.FormPanel, DockState.Document);
                         CR2WExportWrapper imagechunk = this.File?.chunks?.FirstOrDefault(_ => _.data is CBitmapTexture);
-                        this.ImageViewer.SetImage(imagechunk);
+                        if (imagechunk != null)
+                        {
+                            this.ImageViewer = new frmImagePreview
+                            {
+                                DockAreas = DockAreas.Document
+                            };
+                            this.ImageViewer.Show(this.FormPanel, DockState.Document);
+                            this.ImageViewer.SetImage(imagechunk);
+                        }
                         break;
                     }
                 case ".w2mesh":

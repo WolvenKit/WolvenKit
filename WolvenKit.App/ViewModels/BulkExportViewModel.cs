@@ -1,10 +1,5 @@
-﻿using FastMember;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -13,11 +8,10 @@ using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Render;
-using IrrlichtLime.Scene;
+using WolvenKit.App.Model;
 using IrrlichtLime.Video;
 using IrrlichtLime.Core;
-using WolvenKit.Common.Wcc;
-using WolvenKit.App.Model;
+using IrrlichtLime.Scene;
 using IrrlichtLime;
 
 namespace WolvenKit.App.ViewModels

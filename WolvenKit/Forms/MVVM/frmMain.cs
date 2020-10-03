@@ -43,6 +43,7 @@ namespace WolvenKit
     using Wwise.Player;
     using Wwise.Wwise;
     using Enums = Enums;
+    using WolvenKit.CR2W.Reflection;
     using Microsoft.WindowsAPICodePack.Dialogs;
 
     public partial class frmMain : Form
@@ -124,22 +125,7 @@ namespace WolvenKit
             UpdateTitle();
             MainController.Get().PropertyChanged += MainControllerUpdated;
 
-            #region Load recent files into toolstrip
-            recentFilesToolStripMenuItem.DropDownItems.Clear();
-            if (File.Exists("recent_files.xml"))
-            {
-                var doc = XDocument.Load("recent_files.xml");
-                recentFilesToolStripMenuItem.Enabled = doc.Descendants("recentfile").Any();
-                foreach (var f in doc.Descendants("recentfile"))
-                {
-                    recentFilesToolStripMenuItem.DropDownItems.Add(new ToolStripMenuItem(f.Value, null, RecentFile_click));
-                }
-            }
-            else
-            {
-                recentFilesToolStripMenuItem.Enabled = false;
-            }
-            #endregion
+            
             hotkeys = new HotkeyCollection(Enums.Scope.Application);
             hotkeys.RegisterHotkey(Keys.Control | Keys.S, HKSave, "Save");
             hotkeys.RegisterHotkey(Keys.Control | Keys.Shift | Keys.S, HKSaveAll, "SaveAll");
@@ -168,6 +154,9 @@ namespace WolvenKit
             visualStudioToolStripExtender1.DefaultRenderer = toolStripRenderer;
             UIController.Get().ToolStripExtender = visualStudioToolStripExtender1;
 
+            watcher.Error += Watcher_Error;
+            filePaths = new List<string>();
+            rwlock = new ReaderWriterLockSlim();
         }
 
         #endregion
@@ -738,76 +727,6 @@ namespace WolvenKit
             ProgressForm.Close();
         }
 
-        #endregion
-
-        #region FileSystemWatcher
-        private List<string> cachedFileSystemInfos;
-
-        public void PauseMonitoring()
-        {
-            cachedFileSystemInfos = ActiveMod.Files;
-            modexplorerSlave.EnableRaisingEvents = false;
-        }
-
-        public void ResumeMonitoring()
-        {
-            if (ActiveMod != null)
-            {
-                modexplorerSlave.Path = ActiveMod.FileDirectory;
-                modexplorerSlave.SynchronizingObject = this;
-                modexplorerSlave.EnableRaisingEvents = true;
-                ModExplorer?.UpdateTreeView(true);
-
-                var n_cachedFileSystemInfos = ActiveMod.Files;
-                var addedfiles = n_cachedFileSystemInfos.Except(cachedFileSystemInfos);
-                var removedfiles = cachedFileSystemInfos.Except(n_cachedFileSystemInfos);
-
-                OnFileChange(this, new RequestFilesChangeArgs(addedfiles.Concat(removedfiles).Distinct().ToList()));
-            }
-        }
-        private void FileRenames_Detected(object sender, RenamedEventArgs e)
-        {
-            switch (e.ChangeType)
-            {
-                case WatcherChangeTypes.Renamed:
-                    {
-                        ModExplorer?.UpdateTreeView(true, e.OldFullPath);
-                        break;
-                    }
-                default:
-                    throw new NotImplementedException();
-            }
-
-            OnFileChange(this, new RequestFilesChangeArgs(e.FullPath));
-        }
-
-
-        private void FileChanges_Detected(object sender, FileSystemEventArgs e)
-        {
-            switch (e.ChangeType)
-            {
-                case WatcherChangeTypes.Created:
-                    {
-                        ModExplorer?.UpdateTreeView(true, e.FullPath);
-                        break;
-                    }
-                case WatcherChangeTypes.Deleted:
-                    {
-                        ModExplorer?.UpdateTreeView(true, e.FullPath);
-                        break;
-                    }
-                case WatcherChangeTypes.Renamed:
-                    {
-                        if (e is RenamedEventArgs re)
-                            ModExplorer?.UpdateTreeView(true, re.OldFullPath);
-                        break;
-                    }
-                default:
-                    throw new NotImplementedException();
-            }
-
-            OnFileChange(this, new RequestFilesChangeArgs(e.FullPath));
-        }
         #endregion
 
         #region HotKeys
@@ -1464,7 +1383,7 @@ namespace WolvenKit
                 // analyze files in dlc
                 int statusanalyzedlc = -1;
 
-                var seedfile = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed.dlc{ActiveMod.Name}.files");
+                var seedfile = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed_dlc{ActiveMod.Name}.files");
 
                 if (initialDlcCheck)
                 {
@@ -1863,7 +1782,7 @@ namespace WolvenKit
                 };
                 // create default directories
                 ActiveMod.CreateDefaultDirectories();
-                modexplorerSlave.Path = ActiveMod.FileDirectory;
+                watcher.Path = ActiveMod.FileDirectory;
                 ResetWindows();
 
                 // detect if radish-mod
@@ -1999,7 +1918,7 @@ namespace WolvenKit
                 ActiveMod = (W3Mod)ser.Deserialize(modfile);
                 ActiveMod.FileName = file;
                 ActiveMod.CreateDefaultDirectories();
-                modexplorerSlave.Path = ActiveMod.FileDirectory;
+                watcher.Path = ActiveMod.FileDirectory;
             }
 
             ResetWindows();
@@ -2057,15 +1976,7 @@ namespace WolvenKit
             // update import
             MockKernel.Get().GetImportViewModel().UseLocalResourcesCommand.SafeExecute();
 
-            // Update the recent files.
-            var files = new List<string>();
-            if (File.Exists("recent_files.xml"))
-            {
-                var doc = XDocument.Load("recent_files.xml");
-                files.AddRange(doc.Descendants("recentfile").Take(4).Select(x => x.Value));
-            }
-            files.Add(file);
-            new XDocument(new XElement("RecentFiles", files.Distinct().Select(x => new XElement("recentfile", x)))).Save("recent_files.xml");
+            RepopulateRecentFiles(file);
 
             void MoveFiles(EBundleType oldtype, EProjectFolders newtype, bool isDlc = false)
             {
@@ -2200,7 +2111,7 @@ namespace WolvenKit
                     case EBundleType.Bundle:
                         {
                             newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), "dlc", ActiveMod.Name, relativePath)
+                                ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}", relativePath)
                                 : Path.Combine( "Mod", EProjectFolders.Cooked.ToString(), relativePath));
                         }
                         break;
@@ -2212,13 +2123,13 @@ namespace WolvenKit
                             if (extension == ".png" || extension == ".jpg" || extension == ".dds")
                             {
                                 newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                    ? Path.Combine("DLC", EProjectFolders.Uncooked.ToString(), "dlc", ActiveMod.Name, relativePath)
+                                    ? Path.Combine("DLC", EProjectFolders.Uncooked.ToString(), $"dlc{ActiveMod.Name}", relativePath)
                                     : Path.Combine("Mod", EProjectFolders.Uncooked.ToString(), relativePath));
                             }
                             // all other textures and collision stuff goes into Raw (since they have to be imported first)
                             else
                                 newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
-                                    ? Path.Combine("DLC", "dlc", ActiveMod.Name, relativePath)
+                                    ? Path.Combine("DLC", $"dlc{ActiveMod.Name}", relativePath)
                                     : Path.Combine("Mod", relativePath));
                         }
                         break;
@@ -2228,7 +2139,7 @@ namespace WolvenKit
                     case EBundleType.Shader:
                         {
                             newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, relativePath)
+                                ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), $"dlc{ActiveMod.Name}", relativePath)
                                 : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), relativePath));
                         }
                         break;
@@ -2575,7 +2486,44 @@ namespace WolvenKit
 
             saveToolStripMenuItem.Enabled = vm.ActiveDocument != null;
             saveAllToolStripMenuItem.Enabled = vm.GetOpenDocuments().Count > 0;
+
+            RepopulateRecentFiles();
         }
+
+        private void RepopulateRecentFiles(string file = "")
+        {
+            #region Load recent files into toolstrip
+
+            // Update the recent files.
+            recentFilesToolStripMenuItem.DropDownItems.Clear();
+            var files = new List<string>();
+            if (File.Exists("recent_files.xml"))
+            {
+                var doc = XDocument.Load("recent_files.xml");
+                int maxRecentFiles = 10;
+
+                if (!string.IsNullOrEmpty(file))
+                    files.Add(file);
+                foreach (var f in doc.Descendants("recentfile"))
+                {
+                    maxRecentFiles--;
+                    if (maxRecentFiles <= 0) break;
+                    if (File.Exists(f.Value))
+                    {
+                        files.Add(f.Value);
+                        recentFilesToolStripMenuItem.DropDownItems.Add(new ToolStripMenuItem(f.Value, null, RecentFile_click));
+                    }
+                }
+                recentFilesToolStripMenuItem.Enabled = files.Any();
+            }
+            else
+            {
+                recentFilesToolStripMenuItem.Enabled = false;
+            }
+            new XDocument(new XElement("RecentFiles", files.Distinct().Select(x => new XElement("recentfile", x)))).Save("recent_files.xml");
+            #endregion
+        }
+
 
         private void editToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
@@ -2638,7 +2586,8 @@ namespace WolvenKit
 
         private void RecentFile_click(object sender, EventArgs e)
         {
-            OpenMod(sender.ToString());
+            if (File.Exists(sender.ToString()))
+                OpenMod(sender.ToString());
         }
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3563,6 +3512,75 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
 
         #endregion
+        private void ModchunkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateCustomCr2wFile(false);
+        }
+
+        private void DLCChunkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateCustomCr2wFile(true);
+        }
+
+        private CR2WFile CreateCustomCr2wFile(bool isDlc)
+        {
+            // ask user for type
+            List<string> availableTypes = CR2WManager.GetAvailableTypes("CResource").Select(_ => _.Name).ToList();
+            if (availableTypes.Count <= 0) return null;
+            // remove abstract classes
+
+            availableTypes = availableTypes
+                .Select(_ => $"{REDReflection.GetREDExtensionFromREDType(_)} ({_})")
+                .Where(_ => _.Split(' ').First() != "")
+                .ToList();
+
+            string newChunktypename = "";
+            var redextension = "";
+            using (var form = new frmAddChunk(availableTypes))
+            {
+                var result = form.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    newChunktypename = form.ChunkType.Split(' ').Last().TrimStart("(").TrimEnd(')');
+                    redextension = form.ChunkType.Split(' ').First();
+                }
+            }
+
+            if (string.IsNullOrEmpty(redextension)) return null;
+
+            // create cr2wfile
+            var cr2w = new CR2WFile();
+            var obj = CR2WTypeManager.Create(newChunktypename, newChunktypename, cr2w, null);
+            if (!(obj is CResource resource)) return null;
+            cr2w.FromCResource(resource);
+
+            // write cr2wfile
+            var initialDir = isDlc
+                ? ActiveMod.DlcUncookedDirectory
+                : ActiveMod.ModUncookedDirectory;
+            
+            if (string.IsNullOrEmpty(redextension)) return null;
+
+            var filepath = Path.Combine(initialDir, $"{newChunktypename}.{redextension}");
+            var newfilepath = filepath;
+            var dlg = new frmRenameDialog() { FileName = filepath };
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                newfilepath = dlg.FileName;
+            }
+
+
+            // create directory
+            newfilepath.EnsureFolderExists();
+            using (var fs = new FileStream(newfilepath, FileMode.Create, FileAccess.ReadWrite))
+            using (var writer = new BinaryWriter(fs))
+            {
+                cr2w.Write(writer);
+                MainController.LogString($"Succesfully created file {newfilepath}.", Logtype.Success);
+            }
+
+            return cr2w;
+        }
 
         private void bulkExportToolStripMenuItem_Click(object sender, EventArgs e)
         {

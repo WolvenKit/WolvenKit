@@ -76,19 +76,6 @@ namespace WolvenKit.Common
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string TextureDirectory
-        {
-            get
-            {
-                if (!Directory.Exists(Path.Combine(ModDirectory, "TextureCache")))
-                    Directory.CreateDirectory(Path.Combine(ModDirectory, "TextureCache"));
-                return Path.Combine(ModDirectory, "TextureCache");
-            }
-        }
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string RadishDirectory
         {
             get
@@ -151,6 +138,33 @@ namespace WolvenKit.Common
                 if (!Directory.Exists(Path.Combine(DlcDirectory, EProjectFolders.Cooked.ToString())))
                     Directory.CreateDirectory(Path.Combine(DlcDirectory, EProjectFolders.Cooked.ToString()));
                 return Path.Combine(DlcDirectory, EProjectFolders.Cooked.ToString());
+            }
+        }
+        #endregion
+
+        #region RAW-level Dirs
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string RawModDirectory
+        {
+            get
+            {
+                if (!Directory.Exists(Path.Combine(RawDirectory, "Mod")))
+                    Directory.CreateDirectory(Path.Combine(RawDirectory, "Mod"));
+                return Path.Combine(RawDirectory, "Mod");
+            }
+        }
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string RawDlcDirectory
+        {
+            get
+            {
+                if (!Directory.Exists(Path.Combine(RawDirectory, "DLC")))
+                    Directory.CreateDirectory(Path.Combine(RawDirectory, "DLC"));
+                return Path.Combine(RawDirectory, "DLC");
             }
         }
         #endregion
@@ -329,8 +343,6 @@ namespace WolvenKit.Common
 
         public void CreateDefaultDirectories()
         {
-            
-
             // create top-level directories
             _ = ModDirectory;
             _ = DlcDirectory;
@@ -338,14 +350,16 @@ namespace WolvenKit.Common
             _ = RadishDirectory;
 
             // create mod-level directories
-            //_ = ModTextureCacheDirectory;
             _ = ModUncookedDirectory;
             _ = ModCookedDirectory;
 
             // create dlc-level directories
-            //_ = DlcTextureCacheDirectory;
             _ = DlcUncookedDirectory;
             _ = DlcCookedDirectory;
+
+            // create raw-level directories
+            _ = RawModDirectory;
+            _ = RawDlcDirectory;
         }
 
 

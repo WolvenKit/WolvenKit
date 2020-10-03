@@ -12,6 +12,8 @@ using System.Windows.Input;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools;
@@ -20,6 +22,7 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using WolvenKit.DDS;
 using static WolvenKit.CR2W.Types.Enums;
+using static WolvenKit.DDS.TexconvWrapper;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -29,29 +32,30 @@ namespace WolvenKit.App.ViewModels
 
         public ImportViewModel()
         {
-            Logger = MainController.Get().Logger;
-
-
             UseLocalResourcesCommand = new RelayCommand(UseLocalResources, CanUseLocalResources);
             OpenFolderCommand = new RelayCommand(OpenFolder, CanOpenFolder);
             TryGetTextureGroupsCommand = new RelayCommand(TryGetTextureGroups, CanTryGetTextureGroups);
             ImportCommand = new RelayCommand(Import, CanImport);
 
             Importableobjects = new BindingList<ImportableFile>();
-            Importableobjects.ListChanged += new ListChangedEventHandler(Importableobjects_ListChanged);
+            //Importableobjects.ListChanged += new ListChangedEventHandler(Importableobjects_ListChanged);
 
             // on start use mod files
             UseLocalResourcesCommand.SafeExecute();
+
+            xbmdict = new Dictionary<string, XBMDumpRecord>();
+            RegisterXBMDump();
         }
 
         #region Fields
         private readonly List<string> importableexts = Enum.GetNames(typeof(EImportable)).Select(_ => $".{_}".ToLower()).ToList();
-        private readonly LoggerService Logger;
-        
+
+        //private readonly Dictionary<ulong, XBMDumpRecord> xbmdict;
+        private readonly Dictionary<string, XBMDumpRecord> xbmdict;
         private DirectoryInfo importdepot;
         #endregion
 
-        void Importableobjects_ListChanged(object sender, ListChangedEventArgs e) => OnPropertyChanged(nameof(Importableobjects));
+        //void Importableobjects_ListChanged(object sender, ListChangedEventArgs e) => OnPropertyChanged(nameof(Importableobjects));
 
         #region Properties
         #region SelectedItem
@@ -108,7 +112,8 @@ namespace WolvenKit.App.ViewModels
             }
             AddObjects(importablefiles, MainController.Get().ActiveMod.FileDirectory);
 
-            TryGetTextureGroupsCommand.SafeExecute();
+            //TryGetTextureGroupsCommand.SafeExecute();
+            OnPropertyChanged(nameof(Importableobjects));
         }
 
         private bool CanOpenFolder() => MainController.Get().ActiveMod != null;
@@ -122,50 +127,47 @@ namespace WolvenKit.App.ViewModels
 
         private void TryGetTextureGroups()
         {
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MainController.XBMDumpPath);
-            using (var fr = new FileStream(path, FileMode.Open, FileAccess.Read))
-            using (var sr = new StreamReader(fr))
-            using (var csv = new CsvReader(sr, CultureInfo.InvariantCulture))
+            foreach (var importable in Importableobjects)
             {
-                var records = csv.GetRecords<XBMDump>();
-                var recordsl = csv.GetRecords<XBMDump>().ToList();
-
-                foreach (var importable in Importableobjects)
-                {
-                    // check for non-texture files
-                    if (importable.GetImportableType() != EImportable.bmp &&
-                        //importable.GetImportableType() != EImportable.dds &&
-                        importable.GetImportableType() != EImportable.jpg &&
-                        importable.GetImportableType() != EImportable.png &&
-                        importable.GetImportableType() != EImportable.tga
-                        )
-                        continue;
-
-                    // try getting texture group from vanilla files
-                    try
-                    {
-                        string xbmfullpath = Path.ChangeExtension(importable.GetRelativePath(), "xbm");
-                        var xpath = xbmfullpath.Split(Path.DirectorySeparatorChar).Last();
-
-                        var foundrecords = recordsl.FirstOrDefault(_ => _.RedName.Contains(xpath));
-                        if (foundrecords != null)
-                        {
-                            string stxtgroup = foundrecords.TextureGroup;
-                            ETextureGroup etxtgroup = (ETextureGroup)Enum.Parse(typeof(ETextureGroup), stxtgroup);
-                            importable.TextureGroup = etxtgroup;
-
-                            importable.SetState(ImportableFile.EObjectState.Ready);
-                            importable.IsSelected = true;
-                        }
-                        else
-                            importable.SetState(ImportableFile.EObjectState.NoTextureGroup);
-                    }
-                    catch (Exception)
-                    {
-                        importable.SetState(ImportableFile.EObjectState.Error);
-                    }
-                }
+                TryGetTextureGroup(importable);
             }
+        }
+
+        private void TryGetTextureGroup(ImportableFile importable)
+        {
+            // check for non-texture files
+            if (importable.GetImportableType() != EImportable.bmp &&
+                //importable.GetImportableType() != EImportable.dds &&
+                importable.GetImportableType() != EImportable.jpg &&
+                importable.GetImportableType() != EImportable.png &&
+                importable.GetImportableType() != EImportable.tga
+            )
+                return;
+
+            // try getting texture group from vanilla files
+            //var hash = FNV1A64HashAlgorithm.HashString();
+            var hash = Path.GetFileName(importable.GetREDRelativePath().Item1);
+            if (xbmdict.ContainsKey(hash))
+            {
+                var record = xbmdict[hash];
+                string stxtgroup = record.TextureGroup;
+                if (string.IsNullOrEmpty(stxtgroup))
+                {
+                    //importable.TextureGroup = ETextureGroup.None;
+                    importable.SetState(ImportableFile.EObjectState.NoTextureGroup);
+                }
+                else
+                {
+                    ETextureGroup etxtgroup = (ETextureGroup)Enum.Parse(typeof(ETextureGroup), stxtgroup);
+                    importable.TextureGroup = etxtgroup;
+
+                    importable.SetState(ImportableFile.EObjectState.Ready);
+                    importable.IsSelected = true;
+                }
+                
+            }
+            else
+                importable.SetState(ImportableFile.EObjectState.NoTextureGroup);
         }
 
         private bool CanImport() => Importableobjects != null;
@@ -193,7 +195,7 @@ namespace WolvenKit.App.ViewModels
                     {
                         var exNewpath = $"{GetNewPath(file)}";
                         // create directory
-                        EnsureFolderExists(exNewpath);
+                        exNewpath.EnsureFolderExists();
                         using (var fs = new FileStream(exNewpath, FileMode.Create, FileAccess.ReadWrite))
                         using (var writer = new BinaryWriter(fs))
                         {
@@ -220,24 +222,13 @@ namespace WolvenKit.App.ViewModels
 
                 
 
-                // https://stackoverflow.com/a/3695190
-                void EnsureFolderExists(string path)
-                {
-                    string directoryName = Path.GetDirectoryName(path);
-                    // If path is a file name only, directory name will be an empty string
-                    if (!string.IsNullOrWhiteSpace(directoryName))
-                    {
-                        // Create all directories on the path that don't already exist
-                        Directory.CreateDirectory(directoryName);
-                    }
-                }
+                
             }
 
             async Task StartImport(ImportableFile file)
             {
-                var relPath = file.GetRelativePath();
                 var newpath = GetNewPath(file);
-                var filepath = Path.Combine(importdepot.FullName, relPath);
+                var filepath = Path.Combine(importdepot.FullName, file.GetRelativePath());
 
                 var import = new Wcc_lite.import()
                 {
@@ -251,28 +242,7 @@ namespace WolvenKit.App.ViewModels
 
             string GetNewPath(ImportableFile file)
             {
-                var relPath = file.GetRelativePath();
-                string importext = $".{file.ImportType:G}";
-                string rawext = $".{file.GetImportableType():G}";
-
-                // make new path
-                // first, trim Raw from the path
-                if (relPath.Substring(0, 3) == "Raw")
-                    relPath = relPath.Substring(4);
-                // then, trim Mod or dlc from the path
-                bool isDLC = false;
-                if (relPath.Substring(0, 3) == "Mod")
-                {
-                    relPath = relPath.Substring(4);
-                }
-                if (relPath.Substring(0, 3) == "DLC")
-                {
-                    isDLC = true;
-                    relPath = relPath.Substring(4);
-                }
-
-                // new path with new extension
-                relPath = Path.ChangeExtension(relPath, importext);
+                var (relPath, isDLC) = file.GetREDRelativePath();
                 var newpath = isDLC ? Path.Combine(ActiveMod.DlcUncookedDirectory, relPath) : Path.Combine(ActiveMod.ModUncookedDirectory, relPath);
 
                 return newpath;
@@ -291,9 +261,8 @@ namespace WolvenKit.App.ViewModels
             // create mipmaps with texconv?
             // create a temporary dds
             var tempdir = MainController.WorkDir;
-            var textureformat = ImageUtility.GetTextureFormatFromCompression(compression);
-            var texconvformat = CommonImageTools.GetTexconvFormatFromTextureFormat(textureformat);
-            var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, texconvformat);
+            var textureformat = ImageUtility.GetEFormatFromCompression(compression);
+            var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, textureformat);
 
             if (!File.Exists(ddsfile)) throw new NotImplementedException();
             var metadata = DDSUtils.ReadHeader(ddsfile);
@@ -322,7 +291,7 @@ namespace WolvenKit.App.ViewModels
 
             // funkiest way to calculate log2, the length of the bit array is also the number of mipmaps
             // height = 1024 = 2^10 = 11 mipmaps
-            string b = Convert.ToString(Math.Max(height, width), 2);
+            string b = System.Convert.ToString(Math.Max(height, width), 2);
             int mipcount = b.Length;
 
             xbm.Mipdata = new CCompressedBuffer<SMipData>(cr2w, xbm, "Mipdata") { IsSerialized = true };
@@ -361,59 +330,70 @@ namespace WolvenKit.App.ViewModels
 
             return cr2w;
 
-            uint GetMipMapSize(uint _width, uint _height, ETextureFormat _textureformat)
+            uint GetMipMapSize(uint _width, uint _height, EFormat _textureformat)
             {
                 switch (_textureformat)
                 {
-                    case ETextureFormat.TEXFMT_BC1:
-                    case ETextureFormat.TEXFMT_BC4:
-                    {
+                    case EFormat.BC1_UNORM:
+                    case EFormat.BC4_UNORM:
                         return Math.Max(1, (_height / 4)) * Math.Max(1, (_width / 4)) * 8;
-                    }
-                    case ETextureFormat.TEXFMT_BC2:
-                    case ETextureFormat.TEXFMT_BC3:
-                    case ETextureFormat.TEXFMT_BC5:
-                    {
+                    case EFormat.BC2_UNORM:
+                    case EFormat.BC3_UNORM:
+                    case EFormat.BC5_UNORM:
                         return Math.Max(1, (_height / 4)) * Math.Max(1, (_width / 4)) * 16;
-                    }
-                    //case ETextureFormat.TEXFMT_BC6H:
-                    case ETextureFormat.TEXFMT_BC7:
-                    case ETextureFormat.TEXFMT_R8G8B8A8:
+                    //case EFormat.R32G32B32A32_FLOAT:
+                    //case EFormat.R16G16B16A16_FLOAT:
+                    //case EFormat.BC6H_UF16:
+                    case EFormat.R8G8B8A8_UNORM:
+                    case EFormat.BC7_UNORM:
                     default:
-                    {
-                        throw new MissingFormatException($"Missing Format: {_textureformat}");
-                    }
+                        throw new ArgumentOutOfRangeException(nameof(_textureformat), _textureformat, null);
                 }
             }
 
-            uint GetBlockSize(uint _width, ETextureFormat _textureformat)
+            uint GetBlockSize(uint _width, EFormat _textureformat)
             {
                 switch (_textureformat)
                 {
-                    case ETextureFormat.TEXFMT_BC1:
-                    case ETextureFormat.TEXFMT_BC4:
-                    {
+                    case EFormat.BC1_UNORM:
+                    case EFormat.BC4_UNORM:
                         return Math.Max(1, (_width / 4)) * 8;
-                    }
-                    case ETextureFormat.TEXFMT_BC2:
-                    case ETextureFormat.TEXFMT_BC3:
-                    case ETextureFormat.TEXFMT_BC5:
-                    {
+                    case EFormat.BC2_UNORM:
+                    case EFormat.BC3_UNORM:
+                    case EFormat.BC5_UNORM:
                         return Math.Max(1, (_width / 4)) * 16;
-                    }
-                    //case ETextureFormat.TEXFMT_BC6H:
-                    case ETextureFormat.TEXFMT_BC7:
-                    case ETextureFormat.TEXFMT_R8G8B8A8:
+                    //case EFormat.R32G32B32A32_FLOAT:
+                    //case EFormat.R16G16B16A16_FLOAT:
+                    //case EFormat.BC6H_UF16:
+                    case EFormat.R8G8B8A8_UNORM:
+                    case EFormat.BC7_UNORM:
                     default:
-                    {
                         throw new MissingFormatException($"Missing Format: {_textureformat}");
-                    }
                 }
             }
         }
 
         #region Methods
-        public void AddObjects(List<string> importablefiles, string dirpath)
+
+        private void RegisterXBMDump()
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MainController.XBMDumpPath);
+            using (var fr = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (var sr = new StreamReader(fr))
+            using (var csv = new CsvReader(sr, CultureInfo.InvariantCulture))
+            {
+                var records = csv.GetRecords<XBMDumpRecord>();
+                foreach (var record in records)
+                {
+                    //var hash = FNV1A64HashAlgorithm.HashString(record.RedName);
+                    var hash = Path.GetFileName(record.RedName);
+                    if (!xbmdict.ContainsKey(hash))
+                        xbmdict.Add(hash, record);
+                }
+            }
+        }
+
+        private void AddObjects(IEnumerable<string> importablefiles, string dirpath)
         {
             Importableobjects.Clear();
             importdepot = new DirectoryInfo(dirpath);
@@ -439,12 +419,16 @@ namespace WolvenKit.App.ViewModels
                     importableobj.IsSelected = true;
                 }
 
+                TryGetTextureGroup(importableobj);
+
                 if (!Importableobjects.Contains(importableobj))
                     Importableobjects.Add(importableobj);
                 else
                 {
 
                 }
+
+                
             }
         }
         #endregion

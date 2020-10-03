@@ -269,7 +269,6 @@ namespace WolvenKit.Render
                 sf.Filter = "Irrlicht mesh | *.irrm | Collada mesh | *.coll | STL Mesh | *.stl | OBJ Mesh | *.obj | PLY Mesh | *.ply | B3D Mesh | *.b3d | FBX Mesh | *.fbx";
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
-                    /*
                     MeshWriterType mwt = 0;
                     switch (Path.GetExtension(sf.FileName).Trim())
                     {
@@ -305,7 +304,6 @@ namespace WolvenKit.Render
                         MessageBox.Show(this, "Sucessfully wrote file!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     else
                         MessageBox.Show(this, "Failed to write file!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    */
                 }
             }
         }

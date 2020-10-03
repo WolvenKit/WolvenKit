@@ -11,8 +11,8 @@ namespace WolvenKit.CR2W.Reflection
     /// </summary>
     public static class AssemblyDictionary
     {
-        private static Dictionary<String, Type> m_types;
-        private static Dictionary<String, Type> m_enums;
+        private static Dictionary<string, Type> m_types;
+        private static Dictionary<string, Type> m_enums;
 
         static AssemblyDictionary()
         {

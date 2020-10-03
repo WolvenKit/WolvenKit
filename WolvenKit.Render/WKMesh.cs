@@ -12,6 +12,7 @@ using WolvenKit.DDS;
 using static WolvenKit.CR2W.Types.Enums;
 using WolvenKit.Common.Model;
 using System.Linq;
+using static WolvenKit.DDS.TexconvWrapper;
 
 namespace WolvenKit.Render
 {
@@ -67,27 +68,27 @@ namespace WolvenKit.Render
             }
         }
 
-        public static ETextureFormat GetTextureFormatFromCompression(ETextureCompression compression)
+        public static EFormat GetTextureFormatFromCompression(ETextureCompression compression)
         {
             switch (compression)
             {
                 case ETextureCompression.TCM_DXTNoAlpha:
                 case ETextureCompression.TCM_Normals:
-                    return ETextureFormat.TEXFMT_BC1;
+                    return EFormat.BC1_UNORM;
                 case ETextureCompression.TCM_DXTAlpha:
                 case ETextureCompression.TCM_NormalsHigh:
                 case ETextureCompression.TCM_NormalsGloss:
                 case ETextureCompression.TCM_QualityColor:
-                    return ETextureFormat.TEXFMT_BC3;
+                    return EFormat.BC3_UNORM;
                 case ETextureCompression.TCM_QualityR:
-                    return ETextureFormat.TEXFMT_BC4;
+                    return EFormat.BC4_UNORM;
                 case ETextureCompression.TCM_QualityRG:
-                    return ETextureFormat.TEXFMT_BC5;
+                    return EFormat.BC5_UNORM;
                 case ETextureCompression.TCM_DXTAlphaLinear:
                 case ETextureCompression.TCM_RGBE:
                 case ETextureCompression.TCM_None:
                 default:
-                    return ETextureFormat.TEXFMT_R8G8B8A8;
+                    return EFormat.R8G8B8A8_UNORM;
             }
         }
         /// <summary>
@@ -105,27 +106,7 @@ namespace WolvenKit.Render
             uint height = xbm.Mipdata.elements[residentMipIndex].Height.val;
 
             ETextureCompression compression = xbm.Compression.WrappedEnum;
-
             var ddsformat = GetTextureFormatFromCompression(compression);
-            if (ddsformat == ETextureFormat.TEXFMT_R8G8B8A8)
-            {
-                ETextureRawFormat format = xbm.Format.WrappedEnum;
-                switch (format)
-                {
-                    case ETextureRawFormat.TRF_TrueColor:
-                        ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
-                        break;
-                    case ETextureRawFormat.TRF_Grayscale:
-                        break;
-                    case ETextureRawFormat.TRF_HDR:
-                    case ETextureRawFormat.TRF_AlphaGrayscale:
-                    case ETextureRawFormat.TRF_HDRGrayscale:
-                    default:
-                        ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
-                        //throw new Exception("Invalid texture format type! [" + format + "]");
-                        break;
-                }
-            }
 
             return new DDSMetadata(width, height, (uint)mipcount, ddsformat);
         }
@@ -142,6 +123,22 @@ namespace WolvenKit.Render
 
         private void HandleMaterial(ref Material mat, string path, IrrlichtDevice dev, string texType)
         {
+            Texture tex = dev.VideoDriver.GetTexture(path);
+            mat.Type = IrrlichtLime.Video.MaterialType.NormalMapSolid;
+
+            switch (texType)
+            {
+                case "Diffuse":
+                    mat.SetTexture(0, tex);
+                    break;
+                case "Normal":
+                    mat.SetTexture(1, tex);
+                    break;
+                default:
+                    break;
+            }
+
+            /*
             // make it from the xbm
             CR2WFile imgAssetFile;
             using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
@@ -156,25 +153,25 @@ namespace WolvenKit.Render
                 ReadFile file = dev.FileSystem.CreateMemoryReadFile("temp", Xbm2Bmp(xbm));
 
                 Image img = dev.VideoDriver.CreateImage(file);
-                Texture tex = dev.VideoDriver.AddTexture(path, img);
-                tex.Grab();
+                Texture tex2 = dev.VideoDriver.AddTexture(path, img);
+                tex2.Grab();
 
-                mat.Type = IrrlichtLime.Video.MaterialType.NormalMapSolid;
-                //mat.Type = IrrlichtLime.Video.MaterialType.Solid;
+                //mat.Type = IrrlichtLime.Video.MaterialType.NormalMapSolid;
 
-                switch (texType)
-                {
-                    case "Diffuse":
-                        mat.SetTexture(0, tex);
-                        break;
-                    case "Normal":
-                        mat.SetTexture(1, tex);
-                        break;
-                    default:
-                        break;
-                }
+                //switch (texType)
+                //{
+                //    case "Diffuse":
+                //        mat.SetTexture(0, tex);
+                //        break;
+                //    case "Normal":
+                //        mat.SetTexture(1, tex);
+                //        break;
+                //    default:
+                //        break;
+                //}
                 img.Drop();
             }
+            */
         }
 
         private void HandleW2MIMaterial(ref Material mat, string basePath, string root, IrrlichtDevice dev)
@@ -581,17 +578,17 @@ namespace WolvenKit.Render
                         }
                         meshBuff.SetMaterial(mat);
 
-                        CData.staticMesh.AddMeshBuffer(meshBuff);
+                        CData.staticMesh.AddMeshBufferEx(meshBuff);
                         CData.staticMesh = dev.SceneManager.MeshManipulator.CreateMeshWithTangents(CData.staticMesh, true);
                         meshBuff.Drop();
                     }
                 }
-
             }
         }
 
         public Mesh GetMesh()
         {
+            /*
             Mesh m = Mesh.Create();
 
             for (int i = 0; i < CData.staticMesh.MeshBufferCount; ++i)
@@ -603,6 +600,8 @@ namespace WolvenKit.Render
             }
 
             return m;
+            */
+            return CData.staticMesh;
         }
     }
 }

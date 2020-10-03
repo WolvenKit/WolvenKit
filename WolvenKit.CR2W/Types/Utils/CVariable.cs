@@ -519,10 +519,26 @@ namespace WolvenKit.CR2W.Types
                         continue;
                     else
                     {
-                        if (this.accessor[this, item.Name] is CVariable cbuf)
+                        var b = this.accessor[this, item.Name];
+                        if (b == null)
                         {
-                            cbuf.Write(file);
+                            // buffers always need to be written
+                            // so if they are null, we still need to instantiate an empty variable
+                            string vartype = REDReflection.GetREDTypeString(item.Type, att.Flags);
+                            string varname = REDReflection.GetREDNameString(item);
+                            var parsedvar = CR2WTypeManager.Create(vartype, varname, this.cr2w, this);     // create new variable and parent to this 
+                            if (parsedvar == null)
+                                throw new InvalidParsingException($"Variable {vartype}:{varname} was not read in class {this.GetType().Name}");
+                            parsedvar.Write(file);
                         }
+                        else
+                        {
+                            if (b is CVariable cbuf)
+                            {
+                                cbuf.Write(file);
+                            }
+                        }
+                        
 
                         continue;
                         //throw new NotImplementedException();

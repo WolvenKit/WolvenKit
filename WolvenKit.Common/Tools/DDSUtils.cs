@@ -178,22 +178,25 @@ namespace WolvenKit.Common
                 // dwFourCC
                 switch (format)
                 {
-                    //case ETextureFormat.TEXFMT_R8G8B8X8:            SetPixelmask(DDSPF_X8R8G8B8, ref ddspf);            break;
-                    case ETextureFormat.TEXFMT_R8G8B8A8: SetPixelmask(DDSPF_A8R8G8B8, ref ddspf); break;
-                    //case ETextureFormat.TEXFMT_R16G16_Uint:         SetPixelmask(DDSPF_G16R16, ref ddspf);              break;
-                    case ETextureFormat.TEXFMT_BC1: ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '1'); break;
-                    case ETextureFormat.TEXFMT_BC2: ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '3'); break;
-                    case ETextureFormat.TEXFMT_BC3: ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '5'); break;
-                    case ETextureFormat.TEXFMT_BC4: ddspf.dwFourCC = MAKEFOURCC('B', 'C', '4', 'U'); break;
-                    case ETextureFormat.TEXFMT_BC5: ddspf.dwFourCC = MAKEFOURCC('B', 'C', '5', 'U'); break;
-                    //case ETextureFormat.TEXFMT_Float_R16G16B16A16:  ddspf.dwFourCC = 113;                               break;
-                    //case ETextureFormat.TEXFMT_Float_R32G32B32A32:  ddspf.dwFourCC = 116;                               break;
-                    //case ETextureFormat.TEXFMT_BC6H:
-                    case ETextureFormat.TEXFMT_BC7: dxt10 = true; break;
+                    case TexconvWrapper.EFormat.R8G8B8A8_UNORM:
+                        SetPixelmask(DDSPF_A8R8G8B8, ref ddspf); break;
+                    case TexconvWrapper.EFormat.BC1_UNORM:
+                        ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '1'); break;
+                    case TexconvWrapper.EFormat.BC2_UNORM:
+                        ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '3'); break;
+                    case TexconvWrapper.EFormat.BC3_UNORM:
+                        ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '5'); break;
+                    case TexconvWrapper.EFormat.BC4_UNORM:
+                        ddspf.dwFourCC = MAKEFOURCC('B', 'C', '4', 'U'); break;
+                    case TexconvWrapper.EFormat.BC5_UNORM:
+                        ddspf.dwFourCC = MAKEFOURCC('B', 'C', '5', 'U'); break;
+                    case TexconvWrapper.EFormat.BC7_UNORM:
+                        dxt10 = true; break;
+                    //case TexconvWrapper.EFormat.R32G32B32A32_FLOAT:
+                    //case TexconvWrapper.EFormat.R16G16B16A16_FLOAT:
+                    //case TexconvWrapper.EFormat.BC6H_UF16:
                     default:
-                        {
-                            throw new MissingFormatException($"Missing Format: {format}");
-                        }
+                        throw new MissingFormatException($"Missing Format: {format}");
                 }
                 if (dxt10)
                     ddspf.dwFourCC = MAKEFOURCC('D', 'X', '1', '0');
@@ -214,40 +217,33 @@ namespace WolvenKit.Common
             }
 
             // dwPitchOrLinearSize
+            uint p = 0;
             switch (format)
             {
-
-                case ETextureFormat.TEXFMT_BC1:
-                case ETextureFormat.TEXFMT_BC2:
-                case ETextureFormat.TEXFMT_BC3:
-                case ETextureFormat.TEXFMT_BC4:
-                case ETextureFormat.TEXFMT_BC5:
-                //case ETextureFormat.TEXFMT_BC6H:
-                case ETextureFormat.TEXFMT_BC7:
-                    {
-                        uint p = 0;
-                        if (format == ETextureFormat.TEXFMT_BC1 || format == ETextureFormat.TEXFMT_BC4)
-                            p = width * height / 2;
-                        else
-                            p = width * height;
-
-                        header.dwPitchOrLinearSize = (uint)(p);
-                        header.dwFlags |= DDSD_LINEARSIZE;
-                        break;
-                    }
-                case ETextureFormat.TEXFMT_R8G8B8A8:
-                    //case ETextureFormat.TEXFMT_R8G8B8X8:
-                    //case ETextureFormat.TEXFMT_R16G16_Uint:
-                    {
-                        var bpp = ddspf.dwRGBBitCount;
-                        header.dwPitchOrLinearSize = (width * bpp + 7) / 8;
-                        header.dwFlags |= DDSD_PITCH;
-                        break;
-                    }
+                case TexconvWrapper.EFormat.R8G8B8A8_UNORM:
+                    var bpp = ddspf.dwRGBBitCount;
+                    header.dwPitchOrLinearSize = (width * bpp + 7) / 8;
+                    header.dwFlags |= DDSD_PITCH;
+                    break;
+                case TexconvWrapper.EFormat.BC1_UNORM:
+                case TexconvWrapper.EFormat.BC4_UNORM:
+                    p = width * height / 2;
+                    header.dwPitchOrLinearSize = (uint)(p);
+                    header.dwFlags |= DDSD_LINEARSIZE;
+                    break;
+                case TexconvWrapper.EFormat.BC2_UNORM:
+                case TexconvWrapper.EFormat.BC3_UNORM:
+                case TexconvWrapper.EFormat.BC5_UNORM:
+                case TexconvWrapper.EFormat.BC7_UNORM:
+                    p = width * height;
+                    header.dwPitchOrLinearSize = (uint)(p);
+                    header.dwFlags |= DDSD_LINEARSIZE;
+                    break;
+                //case TexconvWrapper.EFormat.BC6H_UF16:
+                //case TexconvWrapper.EFormat.R32G32B32A32_FLOAT:
+                //case TexconvWrapper.EFormat.R16G16B16A16_FLOAT:
                 default:
-                    {
-                        throw new MissingFormatException($"Missing Format: {format}");
-                    }
+                    throw new MissingFormatException($"Missing Format: {format}");
             }
             // unused R8G8_B8G8, G8R8_G8B8, legacy UYVY-packed, and legacy YUY2-packed formats,
             // header.dwPitchOrLinearSize = ((width + 1) >> 1) * 4;
@@ -281,7 +277,7 @@ namespace WolvenKit.Common
                 // dxgiFormat
                 switch (format)
                 {
-                    case ETextureFormat.TEXFMT_BC7:
+                    case TexconvWrapper.EFormat.BC7_UNORM:
                         {
                             dxt10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM;
                             break;

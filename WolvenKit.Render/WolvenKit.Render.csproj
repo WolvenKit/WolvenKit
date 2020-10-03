@@ -90,10 +90,6 @@
     <Reference Include="FSharp.Core, Version=4.7.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\FSharp.Core.4.7.1\lib\net45\FSharp.Core.dll</HintPath>
     </Reference>
-    <Reference Include="IrrlichtLime, Version=1.6.1.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libs\IrrlichtLime.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack">
       <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
@@ -237,16 +233,16 @@
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
       <Name>WolvenKit.CR2W</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WolvenKit.IrrlichtLime\IrrlichtLime.vcxproj">
+      <Project>{4f6ef8e3-f26f-49db-867d-fd10fb083b0d}</Project>
+      <Name>IrrlichtLime</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WolvenKit.W3Strings\WolvenKit.W3Strings.csproj">
       <Project>{32d40d10-d6c3-48f0-aeb6-0f41c7e75cfd}</Project>
       <Name>WolvenKit.W3Strings</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Libs\Irrlicht.dll">
-      <Link>Irrlicht.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\FindInFile_16x.png" />
     <Content Include="Terrain\basemap.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

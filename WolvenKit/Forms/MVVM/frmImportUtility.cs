@@ -65,24 +65,25 @@ namespace WolvenKit.Forms
         #endregion
 
         #region Commands
-        private void toolStripButtonOpenFolder_Click(object sender, EventArgs e)
-        {
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog
-            {
-                InitialDirectory = "C:\\Users",
-                IsFolderPicker = true
-            };
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-            {
-                var importableexts = Enum.GetNames(typeof(EImportable)).Select(_ => $".{_}").ToList();
-                var importablefiles = (from file in Directory.GetFiles(dialog.FileName, "*.*")
-                                       from ext in importableexts
-                                       where file.Contains(ext)
-                                       select file).ToList();
-                viewModel.AddObjects(importablefiles, dialog.FileName);
-            }
-        }
-        private void toolStripButtonLocalResources_Click(object sender, EventArgs e) => viewModel.UseLocalResourcesCommand.SafeExecute();
+        // deprecated
+        //private void toolStripButtonOpenFolder_Click(object sender, EventArgs e)
+        //{
+        //    CommonOpenFileDialog dialog = new CommonOpenFileDialog
+        //    {
+        //        InitialDirectory = "C:\\Users",
+        //        IsFolderPicker = true
+        //    };
+        //    if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+        //    {
+        //        var importableexts = Enum.GetNames(typeof(EImportable)).Select(_ => $".{_}").ToList();
+        //        var importablefiles = (from file in Directory.GetFiles(dialog.FileName, "*.*")
+        //                               from ext in importableexts
+        //                               where file.Contains(ext)
+        //                               select file).ToList();
+        //        viewModel.AddObjects(importablefiles, dialog.FileName);
+        //    }
+        //}
+        //private void toolStripButtonLocalResources_Click(object sender, EventArgs e) => viewModel.UseLocalResourcesCommand.SafeExecute();
         private void toolStripButtonRefresh_Click(object sender, EventArgs e) => viewModel.TryGetTextureGroupsCommand.SafeExecute();
         private void toolStripButtonImport_Click(object sender, EventArgs e) => viewModel.ImportCommand.SafeExecute();
         #endregion

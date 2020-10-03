@@ -46,6 +46,8 @@ namespace WolvenKit.CR2W.Types
             byte[] bytesource;
             if (isUncooked)
             {
+                if (this.Mipdata.Count <= 0) return null;
+
                 bytesource = this.Mipdata.First().Mip.Bytes;
                 for (var index = 1; index < this.Mipdata.Count; index++)
                 {
@@ -68,8 +70,8 @@ namespace WolvenKit.CR2W.Types
             Mipdata.Read(file, size, (int)MipsCount.val);
 
             ResidentmipSize.Read(file, 4);
-            unk1.Read(file, 4);
-            unk2.Read(file, 4);
+            unk1.Read(file, 2);
+            unk2.Read(file, 2);
             Residentmip.Read(file, ResidentmipSize.val);
         }
 

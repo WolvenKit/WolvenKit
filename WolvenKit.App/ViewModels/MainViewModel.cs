@@ -794,7 +794,7 @@ namespace WolvenKit.App.ViewModels
                         if (dlc)
                         {
                             cook.trimdir = ActiveMod.GetDLCRelativePath();
-                            var seeddir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed.dlc{ActiveMod.Name}.files");
+                            var seeddir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed_dlc{ActiveMod.Name}.files");
                             cook.seed = seeddir;
                         }
                         else
