@@ -6954,13 +6954,13 @@ In this way it is possible to change the materials of a mesh
 This flag can be set by setReadOnlyMaterials().
 	\return Whether the materials are read-only. 
 </member>
-<member name="M:irr.scene.IMeshWriter.getType" decl="false" source="d:\tools\wk\wolvenkit.irrlicht\include\imeshwriter.h" line="31">
+<member name="M:irr.scene.IMeshWriter.getType" decl="false" source="d:\tools\wk\wolvenkit.irrlicht\include\imeshwriter.h" line="32">
 For own implementations, use MAKE_IRR_ID as shown in the
 		EMESH_WRITER_TYPE enumeration to return your own unique mesh
 		type id.
 		\return Type of the mesh writer. 
 </member>
-<member name="M:irr.scene.IMeshWriter.writeMesh(irr.io.IWriteFile*,irr.scene.IMesh*,System.Int32)" decl="false" source="d:\tools\wk\wolvenkit.irrlicht\include\imeshwriter.h" line="38">
+<member name="M:irr.scene.IMeshWriter.writeMesh(irr.io.IWriteFile*,irr.scene.IMesh*,System.Int32)" decl="false" source="d:\tools\wk\wolvenkit.irrlicht\include\imeshwriter.h" line="46">
 \param file File handle to write the mesh to.
 		\param mesh Pointer to mesh to be written.
 		\param flags Optional flags to set properties of the writer.

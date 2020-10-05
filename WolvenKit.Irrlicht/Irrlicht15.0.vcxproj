@@ -1201,7 +1201,6 @@
     <ClInclude Include=".\source\lzma\LzmaDec.h" />
     <ClInclude Include=".\source\lzma\Types.h" />
     <ClInclude Include=".\source\CW3DataCache.h" />
-    <ClInclude Include=".\source\source\CImageLoaderXBM.h" />
     <ClInclude Include=".\source\Utils_Halffloat.h" />
     <ClInclude Include=".\source\Utils_Loaders_Irr.h" />
     <ClInclude Include=".\source\Utils_RedEngine.h" />

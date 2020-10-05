@@ -7,6 +7,7 @@
 #define MESHCOMBINER
 
 #include <ISceneManager.h>
+#include <SMesh.h>
 
 namespace irr
 {
@@ -14,6 +15,7 @@ namespace irr
 	{
 
 		void combineMeshes(scene::ISkinnedMesh* newMesh, scene::IMesh* addition, bool preserveBones);
+        void combineMeshes(scene::SMesh* newMesh, scene::SMesh* addition);
 		scene::ISkinnedMesh* copySkinnedMesh(scene::ISceneManager* smgr, scene::IMesh* meshToCopy, bool preserveBones);
 
 	}

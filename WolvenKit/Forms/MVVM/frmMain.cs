@@ -3582,12 +3582,6 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             return cr2w;
         }
 
-        private void bulkExportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var be = new frmBulkExporter();
-            be.ShowDialog();
-        }
-
         private void sceneViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var dlg = new CommonOpenFileDialog() { Title = "Select file" };

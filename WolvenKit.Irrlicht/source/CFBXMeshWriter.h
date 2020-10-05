@@ -45,6 +45,17 @@ namespace scene
 		//! Returns the type of the mesh writer
 		virtual EMESH_WRITER_TYPE getType() const _IRR_OVERRIDE_;
 
+        //! Sets a matrix to use for local to world transformation
+        virtual void setTransform(const irr::core::matrix4& m)  _IRR_OVERRIDE_
+        {
+            LocalToWorld = m;
+        }
+
+        virtual void setImageType(core::stringc extension)  _IRR_OVERRIDE_
+        {
+            TexExtension = extension;
+        }
+
 		//! writes a scene starting with the given node
 		//virtual bool writeScene(io::IWriteFile* file, scene::ISceneNode* root, int writeRoot);
 
@@ -80,6 +91,8 @@ namespace scene
 		io::IFileSystem* _fileSystem;
 		video::IVideoDriver* _videoDriver;
 		io::path _directory;
+        core::stringc TexExtension;
+        core::matrix4 LocalToWorld;
 
 	};
 }

@@ -66,9 +66,10 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 
 	io::path name;
 	core::cutFilenameExtension(name,file->getFileName()) += ".mtl";
-	file->write("# exported by Irrlicht\n",23);
+    core::stringc mtlName = (core::stringc)name;
+    file->write("# exported by Irrlicht\n", 23);
 	file->write("mtllib ",7);
-	file->write(name.c_str(),name.size());
+	file->write(mtlName.c_str(), mtlName.size());
 	file->write("\n\n",2);
 
 	// write mesh buffers
@@ -91,7 +92,10 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 			for (j=0; j<vertexCount; ++j)
 			{
 				file->write("v ",2);
-				getVectorAsStringLine(buffer->getPosition(j), num);
+                irr::core::vector3df v = buffer->getPosition(j);
+                LocalToWorld.transformVect(v);
+
+				getVectorAsStringLine(v, num);
 				file->write(num.c_str(), num.size());
 			}
 
@@ -158,41 +162,44 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 				file->write("\n",1);
 			}
 			file->write("\n",1);
+            file->flush();
 			allVertexCount += vertexCount;
 		}
 	}
 
+    file->drop();
+
 	if (mat.size() == 0)
 		return true;
 
-	file = FileSystem->createAndWriteFile( name );
-	if (file)
+	io::IWriteFile* mtlFile = FileSystem->createAndWriteFile( name );
+	if (mtlFile)
 	{
-		os::Printer::log("Writing material", file->getFileName());
+		os::Printer::log("Writing material", mtlFile->getFileName());
 
-		file->write("# exported by Irrlicht\n\n",24);
+        mtlFile->write("# exported by Irrlicht\n\n",24);
 		for (u32 i=0; i<mat.size(); ++i)
 		{
 			core::stringc num(i);
-			file->write("newmtl mat",10);
-			file->write(num.c_str(),num.size());
-			file->write("\n",1);
+            mtlFile->write("newmtl mat",10);
+            mtlFile->write(num.c_str(),num.size());
+            mtlFile->write("\n",1);
 
 			getColorAsStringLine(mat[i]->AmbientColor, "Ka", num);
-			file->write(num.c_str(),num.size());
+            mtlFile->write(num.c_str(),num.size());
 			getColorAsStringLine(mat[i]->DiffuseColor, "Kd", num);
-			file->write(num.c_str(),num.size());
+            mtlFile->write(num.c_str(),num.size());
 			getColorAsStringLine(mat[i]->SpecularColor, "Ks", num);
-			file->write(num.c_str(),num.size());
+            mtlFile->write(num.c_str(),num.size());
 			getColorAsStringLine(mat[i]->EmissiveColor, "Ke", num);
-			file->write(num.c_str(),num.size());
+            mtlFile->write(num.c_str(),num.size());
 			num = core::stringc((double)(mat[i]->Shininess/0.128f));
-			file->write("Ns ", 3);
-			file->write(num.c_str(),num.size());
-			file->write("\n", 1);
+            mtlFile->write("Ns ", 3);
+            mtlFile->write(num.c_str(),num.size());
+            mtlFile->write("\n", 1);
 			if (mat[i]->getTexture(0))
 			{
-				file->write("map_Kd ", 7);
+                mtlFile->write("map_Kd ", 7);
 
 				f32 tposX, tposY, tscaleX, tscaleY;
 				const core::matrix4& textureMatrix =  mat[i]->getTextureMatrix(0);
@@ -202,41 +209,56 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 			   //Write texture translation values
 				if ( !core::equals(tposX, 0.f) || !core::equals(tposY, 0.f) )
 				{
-					file->write("-o ", 3);
+                    mtlFile->write("-o ", 3);
 			   		core::stringc tx(tposX);
 			   		core::stringc ty(tposY);
 
-					file->write(tx.c_str(), tx.size());
-					file->write(" ", 1);
-					file->write(ty.c_str(), ty.size());
-					file->write(" ", 1);
+                    mtlFile->write(tx.c_str(), tx.size());
+                    mtlFile->write(" ", 1);
+                    mtlFile->write(ty.c_str(), ty.size());
+                    mtlFile->write(" ", 1);
 				}
 
 				//Write texture scaling values
 				if ( !core::equals(tscaleX, 1.f) || !core::equals(tscaleY, 1.f) )
 				{
-					file->write("-s ", 3);
+                    mtlFile->write("-s ", 3);
 
 					core::stringc sx(tscaleX);
 					core::stringc sy(tscaleY);
 
-					file->write(sx.c_str(), sx.size());
-					file->write(" ", 1);
-					file->write(sy.c_str(), sy.size());
-					file->write(" ", 1);
+                    mtlFile->write(sx.c_str(), sx.size());
+                    mtlFile->write(" ", 1);
+                    mtlFile->write(sy.c_str(), sy.size());
+                    mtlFile->write(" ", 1);
 				}
 
-				io::path tname = FileSystem->getRelativeFilename(mat[i]->getTexture(0)->getName(),
-						FileSystem->getFileDir(file->getFileName()));
-				// avoid blanks as .obj cannot handle strings with spaces
-				if (tname.findFirst(' ') != -1)
-					tname = FileSystem->getFileBasename(tname);
-				file->write(tname.c_str(), tname.size());
-				file->write("\n",1);
-			}
-			file->write("\n",1);
+                core::stringc tname = (core::stringc)(FileSystem->getFileBasename(mat[i]->getTexture(0)->getName()));
+                if (!TexExtension.empty())
+                {
+                    core::stringc ext = tname.subString(tname.findLastChar("."), 4);
+                    tname = tname.replace(ext, TexExtension);
+                }
+
+                mtlFile->write(tname.c_str(), tname.size());
+                mtlFile->write("\n",1);
+            }
+            if (mat[i]->getTexture(1))
+            {
+                mtlFile->write("map_Bump ", 9);
+                core::stringc tname = (core::stringc)(FileSystem->getFileBasename(mat[i]->getTexture(1)->getName()));
+                if (!TexExtension.empty())
+                {
+                    core::stringc ext = tname.subString(tname.findLastChar("."), 4);
+                    tname = tname.replace(ext, TexExtension);
+                }
+
+                mtlFile->write(tname.c_str(), tname.size());
+                mtlFile->write("\n", 1);
+            }
+            mtlFile->write("\n",1);
 		}
-		file->drop();
+        mtlFile->drop();
 	}
 	return true;
 }

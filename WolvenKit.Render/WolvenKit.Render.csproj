@@ -244,6 +244,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\FindInFile_16x.png" />
+    <None Include="Resources\Output_16x.png" />
+    <None Include="Resources\AddNodefromFile_354.png" />
     <Content Include="Terrain\basemap.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

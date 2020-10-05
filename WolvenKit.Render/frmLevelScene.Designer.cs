@@ -1,4 +1,6 @@
-﻿namespace WolvenKit.Render
+﻿using System;
+
+namespace WolvenKit.Render
 {
     partial class frmLevelScene
     {
@@ -32,6 +34,7 @@
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.addMeshButton = new System.Windows.Forms.ToolStripButton();
+            this.exportMeshButton = new System.Windows.Forms.ToolStripButton();
             this.sceneView = new System.Windows.Forms.TreeView();
             this.irrlichtPanel = new System.Windows.Forms.Panel();
             this.levelPanel.SuspendLayout();
@@ -76,7 +79,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addMeshButton});
+            this.addMeshButton,
+            this.exportMeshButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(35, 25);
@@ -87,13 +91,25 @@
             // 
             this.addMeshButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.addMeshButton.Enabled = false;
-            this.addMeshButton.Image = global::WolvenKit.Render.Properties.Resources.FindInFile_16x;
+            this.addMeshButton.Image = global::WolvenKit.Render.Properties.Resources.AddNodefromFile_354;
             this.addMeshButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.addMeshButton.Name = "addMeshButton";
             this.addMeshButton.Size = new System.Drawing.Size(23, 20);
             this.addMeshButton.Text = "toolStripButton1";
             this.addMeshButton.ToolTipText = "Add more meshes";
             this.addMeshButton.Click += new System.EventHandler(this.addMeshButton_Click);
+            // 
+            // exportMeshButton
+            // 
+            this.exportMeshButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.exportMeshButton.Enabled = false;
+            this.exportMeshButton.Image = global::WolvenKit.Render.Properties.Resources.Output_16x;
+            this.exportMeshButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.exportMeshButton.Name = "exportMeshButton";
+            this.exportMeshButton.Size = new System.Drawing.Size(23, 20);
+            this.exportMeshButton.Text = "toolStripButton1";
+            this.exportMeshButton.ToolTipText = "Export meshes";
+            this.exportMeshButton.Click += new System.EventHandler(this.exportMeshButton_Click);
             // 
             // sceneView
             // 
@@ -106,6 +122,7 @@
             this.sceneView.Size = new System.Drawing.Size(331, 499);
             this.sceneView.TabIndex = 1;
             this.sceneView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.sceneView_AfterCheck);
+            this.sceneView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.sceneView_AfterSelect);
             // 
             // irrlichtPanel
             // 
@@ -152,5 +169,6 @@
         private System.Windows.Forms.Panel irrlichtPanel;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton addMeshButton;
+        private System.Windows.Forms.ToolStripButton exportMeshButton;
     }
 }

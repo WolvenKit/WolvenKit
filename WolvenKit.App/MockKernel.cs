@@ -25,7 +25,6 @@ namespace WolvenKit.App
         private ViewModel MainVM { get; set; }
         private ViewModel RadishVM { get; set; }
         private BulkEditorViewModel BulkEditVM { get; set; }
-        private BulkExportViewModel BulkExportVM { get; set; }
         private ModkitViewModel ModkitVM { get; set; }
         private ViewModel ImportVM { get; set; }
         private ViewModel ModExplorertVM { get; set; }
@@ -43,13 +42,6 @@ namespace WolvenKit.App
             if ((BulkEditorViewModel)BulkEditVM == null)
                 BulkEditVM = new BulkEditorViewModel();
             return (BulkEditorViewModel)BulkEditVM;
-        }
-
-        public BulkExportViewModel GetBulkExportViewModel()
-        {
-            if ((BulkExportViewModel)BulkExportVM == null)
-                BulkExportVM = new BulkExportViewModel();
-            return (BulkExportViewModel)BulkExportVM;
         }
 
         public ModkitViewModel GetModkitViewModel()

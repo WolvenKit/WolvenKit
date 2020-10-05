@@ -7,6 +7,7 @@
 
 #include "IReferenceCounted.h"
 #include "EMeshWriterEnums.h"
+#include "matrix4.h"
 
 namespace irr
 {
@@ -33,6 +34,13 @@ namespace scene
 		type id.
 		\return Type of the mesh writer. */
 		virtual EMESH_WRITER_TYPE getType() const = 0;
+
+        //! Sets a matrix to use for local to world transformation
+        virtual void setTransform(const irr::core::matrix4&) {};
+
+        //! Sets the extension to use for externally referenced images
+        // in case an override of the existing name is desired (ie. xbm -> png)
+        virtual void setImageType(core::stringc extension) {};
 
 		//! Write a static mesh.
 		/** \param file File handle to write the mesh to.

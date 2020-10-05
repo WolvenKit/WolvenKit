@@ -196,6 +196,86 @@ namespace irr
             }
             */
         }
+
+        void combineMeshes(scene::SMesh* newMesh, scene::SMesh* addition)
+        {
+            if (!newMesh || !addition)
+                return;
+
+            const u32 sourceMeshBufferCount = newMesh->getMeshBufferCount();
+            const u32 meshBufferCount = addition->getMeshBufferCount();
+            for (u32 b = 0; b < meshBufferCount; ++b)
+            {
+                const scene::IMeshBuffer* const mb = addition->getMeshBuffer(b);
+                switch (mb->getVertexType())
+                {
+                case video::EVT_STANDARD:
+                {
+                    scene::SSkinMeshBuffer *buffer = new scene::SSkinMeshBuffer();
+                    buffer->VertexType = video::EVT_STANDARD;
+
+                    buffer->Material = mb->getMaterial();
+                    const u32 vcount = mb->getVertexCount();
+                    buffer->Vertices_Standard.reallocate(vcount);
+                    video::S3DVertex* vertices = (video::S3DVertex*)mb->getVertices();
+                    for (u32 i = 0; i < vcount; ++i)
+                        buffer->Vertices_Standard.push_back(vertices[i]);
+                    const u32 icount = mb->getIndexCount();
+                    buffer->Indices.reallocate(icount);
+                    const u16* indices = mb->getIndices();
+                    for (u32 i = 0; i < icount; ++i)
+                        buffer->Indices.push_back(indices[i]);
+
+                    newMesh->addMeshBuffer(buffer);
+                }
+                break;
+                case video::EVT_2TCOORDS:
+                {
+                    scene::SSkinMeshBuffer *buffer = new scene::SSkinMeshBuffer();
+                    buffer->VertexType = video::EVT_2TCOORDS;
+
+                    buffer->Material = mb->getMaterial();
+                    const u32 vcount = mb->getVertexCount();
+                    buffer->Vertices_2TCoords.reallocate(vcount);
+                    video::S3DVertex2TCoords* vertices = (video::S3DVertex2TCoords*)mb->getVertices();
+                    for (u32 i = 0; i < vcount; ++i)
+                        buffer->Vertices_2TCoords.push_back(vertices[i]);
+                    const u32 icount = mb->getIndexCount();
+                    buffer->Indices.reallocate(icount);
+                    const u16* indices = mb->getIndices();
+                    for (u32 i = 0; i < icount; ++i)
+                        buffer->Indices.push_back(indices[i]);
+
+                    newMesh->addMeshBuffer(buffer);
+                }
+                break;
+                case video::EVT_TANGENTS:
+                {
+                    scene::SSkinMeshBuffer *buffer = new scene::SSkinMeshBuffer();
+                    buffer->VertexType = video::EVT_TANGENTS;
+
+                    buffer->Material = mb->getMaterial();
+                    const u32 vcount = mb->getVertexCount();
+                    buffer->Vertices_Tangents.reallocate(vcount);
+                    video::S3DVertexTangents* vertices = (video::S3DVertexTangents*)mb->getVertices();
+                    for (u32 i = 0; i < vcount; ++i)
+                        buffer->Vertices_Tangents.push_back(vertices[i]);
+                    const u32 icount = mb->getIndexCount();
+                    buffer->Indices.reallocate(icount);
+                    const u16* indices = mb->getIndices();
+                    for (u32 i = 0; i < icount; ++i)
+                        buffer->Indices.push_back(indices[i]);
+
+                    newMesh->addMeshBuffer(buffer);
+                }
+                break;
+                }// end switch
+
+            }// end for all mesh buffers
+
+            newMesh->setBoundingBox(addition->getBoundingBox());
+        }
+
     }
 }
 #endif

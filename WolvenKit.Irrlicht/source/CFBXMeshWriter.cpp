@@ -26,9 +26,6 @@
 #include "os.h"
 #include <string>
 #include <vector>
-//#include "irrAssimp/IrrAssimp.h"
-
-
 
 namespace irr
 {
@@ -152,6 +149,7 @@ namespace scene
 		{
 			/// vertex
 			core::vector3df vertex = buffer->getPosition(j);
+            LocalToWorld.transformVect(vertex);
 			lControlPoints[j] = FbxVector4(vertex.X, vertex.Y, vertex.Z);
 
 			// diffuse
@@ -623,7 +621,14 @@ namespace scene
 						lTexture->SetTextureUse(FbxTexture::eStandard);
 					}
 
-					lTexture->SetFileName(core::stringc(mat.getTexture(j)->getName()).c_str());
+                    core::stringc tname = (core::stringc)(_fileSystem->getFileBasename(mat.getTexture(j)->getName()));
+                    if (!TexExtension.empty())
+                    {
+                        core::stringc ext = tname.subString(tname.findLastChar("."), 4);
+                        tname = tname.replace(ext, TexExtension);
+                    }
+
+					lTexture->SetFileName(tname.c_str());
 					//lTexture->SetTextureUse(FbxTexture::eStandard);
 					lTexture->SetMappingType(FbxTexture::eUV);
 					lTexture->SetMaterialUse(FbxFileTexture::eModelMaterial);

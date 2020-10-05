@@ -60,7 +60,7 @@ namespace scene
 		EMWF_WRITE_COMPRESSED = 0x2,
 
 		//! write in binary format rather than text
-		EMWF_WRITE_BINARY = 0x4
+		EMWF_WRITE_BINARY = 0x4,
 	};
 
 } // end namespace scene

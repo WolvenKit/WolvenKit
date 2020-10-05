@@ -38,5 +38,16 @@ MeshWriterType MeshWriter::Type::get()
 	return (MeshWriterType)m_MeshWriter->getType();
 }
 
+void MeshWriter::SetTransform(Matrix^ value)
+{
+    m_MeshWriter->setTransform(*(value->m_NativeValue));
+}
+
+void MeshWriter::SetImageType(System::String^ extension)
+{
+    core::stringc n = Lime::StringToStringC(extension);
+    m_MeshWriter->setImageType(n);
+}
+
 } // end namespace Scene
 } // end namespace IrrlichtLime

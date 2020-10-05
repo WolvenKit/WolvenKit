@@ -5,6 +5,7 @@ using IrrlichtLime.IO;
 using IrrlichtLime.Scene;
 using IrrlichtLime.Video;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Microsoft.WindowsAPICodePack.Dialogs.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -165,27 +166,6 @@ namespace WolvenKit.Render
                             }
                             string meshPath = depot + meshName;
 
-
-                            // hacky way
-                            /*
-                            CR2WFile meshAssetFile;
-                            using (var fs = new FileStream(meshPath, FileMode.Open, FileAccess.Read))
-                            using (var reader = new BinaryReader(fs))
-                            {
-                                meshAssetFile = new CR2WFile();
-                                meshAssetFile.FileName = meshPath; // needed for WKMesh loader!
-                                meshAssetFile.Read(reader);
-                                fs.Close();
-                            }
-
-                            CommonData cdata = new CommonData();
-                            WKMesh renderMesh = new WKMesh(cdata);
-                            renderMesh.LoadData(meshAssetFile, device);
-
-                            Mesh m = renderMesh.GetMesh();
-                            */
-
-                            //WKIrrlicht version... textures not quite right still
                             Mesh m = smgr.GetMesh(meshPath);
                             m = device.SceneManager.MeshManipulator.CreateMeshWithTangents(m, true);
 
@@ -289,29 +269,6 @@ namespace WolvenKit.Render
                 worldNode = smgr.AddEmptySceneNode();
                 worldNode.Rotation = new Vector3Df(-90, 0, 0);
                 worldNode.Visible = true;
-
-                /*
-                // test image loader
-                string texName = "D:/Tools/ModTools/r4data/items/work/bag_human/textures/remains_human_01.xbm";
-
-                IrrlichtLime.Video.Image t1 = smgr.VideoDriver.CreateImage(texName);
-                IrrlichtLime.Video.Image t2;
-                {
-                    CR2WFile imgAssetFile;
-                    using (var fs = new FileStream(texName, FileMode.Open, FileAccess.Read))
-                    using (var reader = new BinaryReader(fs))
-                    {
-                        imgAssetFile = new CR2WFile();
-                        imgAssetFile.Read(reader);
-                        fs.Close();
-
-                        CBitmapTexture xbm = ((CBitmapTexture)imgAssetFile.chunks[0].data);
-
-                        ReadFile file = device.FileSystem.CreateMemoryReadFile("temp", WKMesh.Xbm2Bmp(xbm));
-                        t2 = device.VideoDriver.CreateImage(file);
-                    }
-                }
-                */
 
                 ParseScene();
                 smgr.AddCameraSceneNodeMaya();
@@ -451,8 +408,9 @@ namespace WolvenKit.Render
             if (node.MeshNode == null)
             {
                 MeshSceneNode meshNode = smgr.AddMeshSceneNode(node.Mesh, worldNode, node.ID, node.Position, node.Rotation);
-                meshNode.SetMaterialFlag(MaterialFlag.Lighting, false);
-                meshNode.SetMaterialFlag(MaterialFlag.GouraudShading, true);
+                //meshNode.SetMaterialFlag(MaterialFlag.Lighting, false);
+                //meshNode.SetMaterialFlag(MaterialFlag.GouraudShading, true);
+                meshNode.SetMaterialFlag(MaterialFlag.Lighting, true);
 
                 /*
                 foreach (MeshBuffer mb in node.Mesh.MeshBuffers)
@@ -485,6 +443,142 @@ namespace WolvenKit.Render
         private void Hide(RenderTreeNode node)
         {
             node.MeshNode.Visible = false;
+        }
+
+        private void ExportTexture(string fileName, Texture tex)
+        {
+            // TODO: allow DXT1 and DTX5 images in memory and then decompress for conversion and export
+            if(!IrrlichtLime.Video.Image.IsCompressedFormat(tex.ColorFormat))
+            {
+                IrrlichtLime.Video.Image img = device.VideoDriver.CreateImage(tex);
+                device.VideoDriver.WriteImage(img, fileName);
+                img.Drop();
+            }
+        }
+
+        private void ExportNode(RenderTreeNode node, string exportMeshDirectory, string modelExtension, string texExtension, bool transformToWorld, string instanceName)
+        {
+            string meshNameOnly = Path.GetFileNameWithoutExtension(node.FullPath);
+            string filename = exportMeshDirectory + "\\" + meshNameOnly + instanceName + modelExtension;
+
+            // export textures too!
+            foreach (var mb in node.Mesh.MeshBuffers)
+            {
+                if (mb.Material.GetTexture(0) != null)
+                {
+                    string tname = mb.Material.GetTexture(0).Name.ToString();
+                    tname = tname.Replace(".xbm", texExtension);
+                    tname = exportMeshDirectory + "\\" + Path.GetFileName(tname);
+
+                    ExportTexture(tname, mb.Material.GetTexture(0));
+                }
+
+                if (mb.Material.GetTexture(1) != null)
+                {
+                    string tname = mb.Material.GetTexture(1).Name.ToString();
+                    tname = tname.Replace(".xbm", texExtension);
+                    tname = exportMeshDirectory + "\\" + Path.GetFileName(tname);
+
+                    ExportTexture(tname, mb.Material.GetTexture(1));
+                }
+            }
+
+            if (modelExtension == ".obj")
+            {
+                var mw = smgr.CreateMeshWriter(MeshWriterType.Obj);
+                if (transformToWorld)
+                {
+                    Matrix localToWorld = new Matrix(node.Position, node.Rotation);
+                    mw.SetTransform(localToWorld);
+                }
+                mw.SetImageType(texExtension);
+                mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), node.Mesh, MeshWriterFlag.None);
+            }
+            else if (modelExtension == ".fbx")
+            {
+                var mw = smgr.CreateMeshWriter(MeshWriterType.Fbx);
+                if (transformToWorld)
+                {
+                    Matrix localToWorld = new Matrix(node.Position, node.Rotation);
+                    mw.SetTransform(localToWorld);
+                }
+                mw.SetImageType(texExtension);
+                mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), node.Mesh, MeshWriterFlag.None);
+            }
+        }
+
+        private void AddOpenFileDialogCustomControls(CommonFileDialog openDialog)
+        {
+            // Add a geometry type ComboBox
+            CommonFileDialogGroupBox geoBox = new CommonFileDialogGroupBox("Geometry");
+            CommonFileDialogComboBox geoComboBox = new CommonFileDialogComboBox("geoComboBox");
+            geoComboBox.Items.Add(new CommonFileDialogComboBoxItem(".fbx"));
+            geoComboBox.Items.Add(new CommonFileDialogComboBoxItem(".obj"));
+            geoComboBox.SelectedIndex = 1;
+            geoBox.Items.Add(geoComboBox);
+            openDialog.Controls.Add(geoBox);
+
+            // Add a texture ComboBox
+            CommonFileDialogGroupBox texBox = new CommonFileDialogGroupBox("Texture");
+            CommonFileDialogComboBox texComboBox = new CommonFileDialogComboBox("texComboBox");
+            texComboBox.Items.Add(new CommonFileDialogComboBoxItem(".bmp"));
+            texComboBox.Items.Add(new CommonFileDialogComboBoxItem(".jpg"));
+            texComboBox.Items.Add(new CommonFileDialogComboBoxItem(".png"));
+            texComboBox.Items.Add(new CommonFileDialogComboBoxItem(".tga"));
+            texComboBox.SelectedIndex = 2;
+            texBox.Items.Add(texComboBox);
+            openDialog.Controls.Add(texBox);
+
+            // Create and add a separator
+            openDialog.Controls.Add(new CommonFileDialogSeparator());
+
+            // Add a world or local space option
+            openDialog.Controls.Add(new CommonFileDialogCheckBox("worldSpaceCheckBox", "World Space", false));
+
+            // Add a multiple objects or single merged object
+            openDialog.Controls.Add(new CommonFileDialogCheckBox("mergeCheckBox", "Merge", false));
+        }
+
+        private void Export(TreeNode node)
+        {
+            // OBJ for now
+            var dlg = new CommonOpenFileDialog() { Title = "Select export folder" };
+            dlg.IsFolderPicker = true;
+            AddOpenFileDialogCustomControls(dlg);
+
+            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                string exportMeshDirectory = dlg.FileName;
+
+                CommonFileDialogComboBox geoComboBox = dlg.Controls["geoComboBox"] as CommonFileDialogComboBox;
+                string modelExtension = geoComboBox.Items[geoComboBox.SelectedIndex].Text;
+
+                CommonFileDialogComboBox texComboBox = dlg.Controls["texComboBox"] as CommonFileDialogComboBox;
+                string texExtension = texComboBox.Items[texComboBox.SelectedIndex].Text;
+
+                CommonFileDialogCheckBox worldSpaceCheckBox = dlg.Controls["worldSpaceCheckBox"] as CommonFileDialogCheckBox;
+                bool transformToWorld = worldSpaceCheckBox.IsChecked;
+
+                CommonFileDialogCheckBox mergeCheckBox = dlg.Controls["mergeCheckBox"] as CommonFileDialogCheckBox;
+                bool mergeObjects = mergeCheckBox.IsChecked;
+
+                if (node.Nodes.Count > 0)
+                {
+                    // TODO: if merging is desired, combine all the objects into one mesh with multiple buffers
+                    int instance = 0;                    
+                    foreach(RenderTreeNode rn in node.Nodes)
+                    {
+                        string instanceName = "_" + instance.ToString();
+                        ExportNode(rn, exportMeshDirectory, modelExtension, texExtension, transformToWorld, instanceName);
+                        ++instance;
+                    }
+                }
+                else
+                {
+                    string instanceName = "";
+                    ExportNode((RenderTreeNode)node, exportMeshDirectory, modelExtension, texExtension, transformToWorld, instanceName);
+                }
+            }
         }
 
         private void irrlichtPanel_Enter(object sender, EventArgs e)
@@ -554,6 +648,17 @@ namespace WolvenKit.Render
                 inputFilename = dlg.FileName;
                 doAddNodes = true;
             }
+        }
+        private void exportMeshButton_Click(object sender, EventArgs e)
+        {
+            // get selected nodes
+            TreeNode node = sceneView.SelectedNode;
+            Export(node);
+        }
+
+        private void sceneView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            exportMeshButton.Enabled = sceneView.SelectedNode != null;
         }
     }
 }

@@ -50,44 +50,24 @@ namespace video
         u32 blocksize;
     } PACK_STRUCT;
 
-    /*
-    struct ddsPixelFormat
+    struct ddsColorBlock
     {
-        u32	Size;
-        u32 Flags;
-        u32 FourCC;
-        u32 RGBBitCount;
-        u32	RBitMask;
-        u32 GBitMask;
-        u32 BBitMask;
-        u32	ABitMask;
+        u16		colors[2];
+        u8		row[4];
     } PACK_STRUCT;
 
-    struct ddsCaps
+    struct ddsAlphaBlock3BitLinear
     {
-        u32		caps1;
-        u32		caps2;
-        u32		caps3;
-        u32		caps4;
+        u8		alpha0;
+        u8		alpha1;
+        u8		stuff[6];
     } PACK_STRUCT;
 
-    struct ddsHeader
-    {
-        c8 Magic[4];
-        u32 Size;
-        u32 Flags;
-        u32 Height;
-        u32 Width;
-        u32 PitchOrLinearSize;
-        u32 Depth;
-        u32 MipMapCount;
-        u32 Reserved1[11];
-        ddsPixelFormat PixelFormat;
-        ddsCaps Caps;
-        u32 Reserved2;
-    } PACK_STRUCT;
-    */
 
+    struct ddsColor
+    {
+        u8		r, g, b, a;
+    } PACK_STRUCT;
     // Default alignment
 #include "irrunpack.h"
 

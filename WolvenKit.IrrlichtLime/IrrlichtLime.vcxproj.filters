@@ -643,6 +643,9 @@
     <ClInclude Include="MeshLoaderHelper.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="MeshCombiner.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GPUProgrammingServices.cpp">
@@ -961,6 +964,9 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="MeshLoaderHelper.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshCombiner.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>

@@ -23,6 +23,10 @@ public:
 
 	property MeshWriterType Type { MeshWriterType get(); }
 
+    void SetTransform(Matrix^ value);
+    void SetImageType(System::String^ extension);
+
+
 internal:
 
 	static MeshWriter^ Wrap(scene::IMeshWriter* ref);

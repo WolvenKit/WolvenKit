@@ -240,7 +240,6 @@
     <Compile Include="ViewModels\Documents\ScriptDocumentViewModel.cs" />
     <Compile Include="ViewModels\Documents\CR2WDocumentViewModel.cs" />
     <Compile Include="ViewModels\Documents\IDocumentViewModel.cs" />
-    <Compile Include="ViewModels\BulkExportViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\BulkEditViewModel.cs" />
     <Compile Include="ViewModels\Documents\CloseableViewModel.cs" />

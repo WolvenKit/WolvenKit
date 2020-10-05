@@ -252,6 +252,7 @@
     <ClInclude Include="MaterialRenderer.h" />
     <ClInclude Include="MaterialRendererServices.h" />
     <ClInclude Include="MaterialType.h" />
+    <ClInclude Include="MeshCombiner.h" />
     <ClInclude Include="MeshLoaderHelper.h" />
     <ClInclude Include="MeshWriter.h" />
     <ClInclude Include="MeshWriterFlag.h" />
@@ -447,6 +448,7 @@
     <ClCompile Include="MaterialLayer.cpp" />
     <ClCompile Include="MaterialRenderer.cpp" />
     <ClCompile Include="MaterialRendererServices.cpp" />
+    <ClCompile Include="MeshCombiner.cpp" />
     <ClCompile Include="MeshLoaderHelper.cpp" />
     <ClCompile Include="MeshWriter.cpp" />
     <ClCompile Include="Randomizer.cpp" />
