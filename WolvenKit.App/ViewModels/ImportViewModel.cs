@@ -175,7 +175,6 @@ namespace WolvenKit.App.ViewModels
         private async void Import()
         {
             var filesToImport = Importableobjects.Where(_ => _.IsSelected).ToList();
-            var ActiveMod = MainController.Get().ActiveMod;
 
             foreach (var file in filesToImport)
             {
@@ -242,8 +241,10 @@ namespace WolvenKit.App.ViewModels
 
             string GetNewPath(ImportableFile file)
             {
-                var (relPath, isDLC) = file.GetREDRelativePath();
-                var newpath = isDLC ? Path.Combine(ActiveMod.DlcUncookedDirectory, relPath) : Path.Combine(ActiveMod.ModUncookedDirectory, relPath);
+                var (relPath, isDlc) = file.GetREDRelativePath();
+                var newpath = isDlc
+                    ? Path.Combine(MainController.Get().ActiveMod.DlcUncookedDirectory, relPath)
+                    : Path.Combine(MainController.Get().ActiveMod.ModUncookedDirectory, relPath);
 
                 return newpath;
             }

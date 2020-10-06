@@ -66,6 +66,7 @@ namespace WolvenKit
             finally
             {
                 rwlock.ExitWriteLock();
+                ModExplorer?.UpdateTreeView(true);
             }
         }
 
@@ -79,6 +80,8 @@ namespace WolvenKit
                 {
                     System.Console.WriteLine(filePath);
                 }
+
+                
                 filePaths.Clear();
             }
             finally
@@ -89,8 +92,8 @@ namespace WolvenKit
                     processTimer.Dispose();
                     processTimer = null;
                 }
-                rwlock.ExitReadLock();
                 OnFileChange(this, new RequestFilesChangeArgs(filePaths));
+                rwlock.ExitReadLock();
             }
         }
 

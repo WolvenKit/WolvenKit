@@ -65,7 +65,7 @@ namespace WolvenKit.CR2W.Types
                 else
                 {
                     Reference = cr2w.chunks[val - 1];
-                    Reference.Referrers.Add(this as CVariable); //Populate the reverse-lookup
+                    Reference.Referrers.Add(this); //Populate the reverse-lookup
                 }
 
                 if (Reference != null && !Reference.IsVirtuallyMounted)
