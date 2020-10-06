@@ -67,22 +67,22 @@ namespace WolvenKit.CR2W.Types
             // Try reparenting on virtual mountpoint
             if (Reference != null)
             {
-                Reference.Referrers.Add(this); //Populate the reverse-lookup
+                //Populate the reverse-lookup
+                Reference.AdReferrers.Add(this);
+                cr2w.chunks[GetVarChunkIndex()].AbReferrers.Add(this as CVariable);
+                //Soft mount the chunk
+                Reference.MountChunkVirtually(GetVarChunkIndex());
 
-                if (!Reference.IsVirtuallyMounted)
+                //Hard mounts
+                switch (REDName)
                 {
-                    Reference.VirtualParentChunkIndex = GetVarChunkIndex();
-                }
-                else switch (REDName)
-                {
-                    case "parent" when !cr2w.chunks[GetVarChunkIndex()].IsVirtuallyMounted:
-                        cr2w.chunks[GetVarChunkIndex()].VirtualParentChunkIndex = Reference.ChunkIndex;
+                    case "parent" when cr2w.chunks[GetVarChunkIndex()].IsVirtuallyMounted:
+                        cr2w.chunks[GetVarChunkIndex()].MountChunkVirtually(Reference.ChunkIndex, true);
                         break;
-                    case "child" when Reference.IsVirtuallyMounted:
-                        //remount, needed for chardattachment
-                        Reference.IsVirtuallyMounted = false;
-                        Reference.VirtualParentChunkIndex = GetVarChunkIndex();
-                        break;
+                 //   case "child" when Reference.IsVirtuallyMounted:
+                 //       //tried for IAttachments, not the proper way to do it, this is graph viz territory
+                 //       Reference.MountChunkVirtually(GetVarChunkIndex(), true);
+                 //       break;
                 }
             }
         }

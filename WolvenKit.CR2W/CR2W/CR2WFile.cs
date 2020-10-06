@@ -141,8 +141,6 @@ namespace WolvenKit.CR2W
 
         public bool RemoveChunk(CR2WExportWrapper chunk)
         {
-            var r = chunk.Referrers;
-
             int idx = chunks.IndexOf(chunk);
             chunks.RemoveAt(idx);
 
