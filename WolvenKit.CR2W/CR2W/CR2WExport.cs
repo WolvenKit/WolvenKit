@@ -76,7 +76,7 @@ namespace WolvenKit.CR2W
                 objectFlags = (ushort)(cooked ? 8192 : 0),
             };
             IsVirtuallyMounted = false;
-            Referrers = new List<CVariable>();
+            Referrers = new List<IChunkPtrAccessor>();
 
             this.cr2w = file;
             this.REDType = redtype;
@@ -95,7 +95,7 @@ namespace WolvenKit.CR2W
 
             REDType = cr2w.names[export.className].Str;
             IsVirtuallyMounted = false;
-            Referrers = new List<CVariable>();
+            Referrers = new List<IChunkPtrAccessor>();
         }
         #endregion
 
@@ -122,9 +122,16 @@ namespace WolvenKit.CR2W
             get => (int)_export.parentID - 1;
             private set => _export.parentID = (uint)(value + 1);
         }
-        private void SetParentChunk(CR2WExportWrapper parent)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parent"></param>
+        public void SetParentChunk(CR2WExportWrapper parent)
         {
-            ParentChunkIndex = parent == null ? -1 : cr2w.chunks.IndexOf(parent);
+            ParentChunkIndex = parent == null 
+                ? -1 
+                : cr2w.chunks.IndexOf(parent);
             IsVirtuallyMounted = false;
             VirtualParentChunkIndex = ParentChunkIndex;
         }
@@ -146,7 +153,7 @@ namespace WolvenKit.CR2W
         /// Reverse lookup : CVariables, being CPtr or CHandle, which reference this chunk.
         /// Beware, in case of multithreading, this needs locking!
         /// </summary>
-        public readonly List<CVariable> Referrers;
+        public readonly List<IChunkPtrAccessor> Referrers;
 
 
         public string REDType { get; private set; }
@@ -156,8 +163,10 @@ namespace WolvenKit.CR2W
         public string REDName => REDType + " #" + (ChunkIndex);
 
         public int ChunkIndex => cr2w.chunks.IndexOf(this);
-        private CR2WExportWrapper ParentChunk => ParentChunkIndex==-1 ? null : cr2w.chunks[ParentChunkIndex];
-        public CR2WExportWrapper VirtualParentChunk => VirtualParentChunkIndex==-1 ? null : cr2w.chunks[VirtualParentChunkIndex];
+        public CR2WExportWrapper ParentChunk => ParentChunkIndex == -1 ? null : cr2w.chunks[ParentChunkIndex];
+
+        public CR2WExportWrapper VirtualParentChunk =>
+            VirtualParentChunkIndex == -1 ? null : cr2w.chunks[VirtualParentChunkIndex];
 
         /// <summary>
         /// This property is used as BindingProperty in frmChunkProperties
