@@ -76,8 +76,8 @@ namespace WolvenKit.CR2W
                 objectFlags = (ushort)(cooked ? 8192 : 0),
             };
             _virtualParentChunkIndex = -1;
-            AdReferrers = new List<CVariable>();
-            AbReferrers = new List<CVariable>();
+            AdReferences = new List<IChunkPtrAccessor>();
+            AbReferences = new List<IChunkPtrAccessor>();
 
             this.cr2w = file;
             this.REDType = redtype;
@@ -96,8 +96,8 @@ namespace WolvenKit.CR2W
 
             REDType = cr2w.names[export.className].Str;
             _virtualParentChunkIndex = -1;
-            AdReferrers = new List<CVariable>();
-            AbReferrers = new List<CVariable>();
+            AdReferences = new List<IChunkPtrAccessor>();
+            AbReferences = new List<IChunkPtrAccessor>();
         }
         #endregion
 
@@ -124,7 +124,8 @@ namespace WolvenKit.CR2W
             get => (int)_export.parentID - 1;
             private set => _export.parentID = (uint)(value + 1);
         }
-        private void SetParentChunk(CR2WExportWrapper parent)
+
+        public void SetParentChunk(CR2WExportWrapper parent)
         {
             ParentChunkIndex = parent == null ? -1 : cr2w.chunks.IndexOf(parent);
         }
@@ -147,17 +148,17 @@ namespace WolvenKit.CR2W
         public bool IsVirtuallyMounted => _virtualParentChunkIndex > -1 ? true : false;
 
         /// <summary>
-        /// Reverse lookup : CVariables, being CPtr or CHandle, which are referenced by this chunk.
-        /// Beware, in case of multithreading, this needs locking!
-        /// </summary>
-        public readonly List<CVariable> AbReferrers;
-
-        /// <summary>
         /// Reverse lookup : CVariables, being CPtr or CHandle, which reference this chunk.
         /// Beware, in case of multithreading, this needs locking!
         /// </summary>
-        public readonly List<CVariable> AdReferrers;
-
+        public List<IChunkPtrAccessor> AdReferences;
+        
+        /// <summary>
+        /// Playing with latin here, ab means toward, ab away from.
+        /// Reverse lookup : CVariables, being CPtr or CHandle, which are referenced by this chunk.
+        /// Beware, in case of multithreading, this needs locking!
+        /// </summary>
+        public List<IChunkPtrAccessor> AbReferences;
 
         public string REDType { get; private set; }
 
@@ -166,8 +167,6 @@ namespace WolvenKit.CR2W
         public string REDName => REDType + " #" + (ChunkIndex);
 
         public int ChunkIndex => cr2w.chunks.IndexOf(this);
-        private CR2WExportWrapper ParentChunk => ParentChunkIndex==-1 ? null : cr2w.chunks[ParentChunkIndex];
-        public CR2WExportWrapper VirtualParentChunk => VirtualParentChunkIndex==-1 ? null : cr2w.chunks[VirtualParentChunkIndex];
 
         /// <summary>
         /// This property is used as BindingProperty in frmChunkProperties
@@ -231,7 +230,7 @@ namespace WolvenKit.CR2W
 
         public void SetOffset(uint offset) => _export.dataOffset = offset;
 
-        private CR2WExportWrapper GetParentChunk() => ParentChunkIndex >= 0 ? cr2w.chunks[ParentChunkIndex] : null;
+        public CR2WExportWrapper GetParentChunk() => ParentChunkIndex >= 0 ? cr2w.chunks[ParentChunkIndex] : null;
 
         public CR2WExportWrapper GetVirtualParentChunk()
         {

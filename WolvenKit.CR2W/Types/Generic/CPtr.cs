@@ -68,8 +68,8 @@ namespace WolvenKit.CR2W.Types
             if (Reference != null)
             {
                 //Populate the reverse-lookup
-                Reference.AdReferrers.Add(this);
-                cr2w.chunks[GetVarChunkIndex()].AbReferrers.Add(this as CVariable);
+                Reference.AdReferences.Add(this);
+                cr2w.chunks[GetVarChunkIndex()].AbReferences.Add(this);
                 //Soft mount the chunk
                 Reference.MountChunkVirtually(GetVarChunkIndex());
 

@@ -139,14 +139,68 @@ namespace WolvenKit.CR2W
             return chunk;
         }
 
-        public bool RemoveChunk(CR2WExportWrapper chunk)
+        /// <summary>
+        /// Recursive, reentrant function.
+        /// Delete the chunk and all chunks virtually mounted to it : its children chunks.
+        /// Reindex the hierarchy.
+        /// Returns the number of chunks removed.
+        /// </summary>
+        /// <param name="chunk"></param>
+        /// <returns></returns>
+        public int RemoveChunkRecursive(CR2WExportWrapper chunk, bool reentrant = false)
         {
+            // To reindex later, we need a middle-ground copy, between deep and shallow, of the parenting hierarchy.
+            var oldparentinghierarchy = new Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)>();
+            if (!reentrant)
+            {
+                foreach (var achunk in chunks)
+                {
+                    oldparentinghierarchy.Add(achunk, (achunk.GetParentChunk(), achunk.GetVirtualParentChunk()));
+                }
+            }
+
+            int removed = 1;
             int idx = chunks.IndexOf(chunk);
+            
+            // Nullify references toward this chunk
+            foreach(var referrer in chunk.AdReferences)
+            {
+                // This leaves a dangling cptr/chandle in AdReferences,
+                // which needs to be adressed later.
+                referrer.Reference = null;
+            }
+
+            int i = 0;
+            while (true)
+            {
+                var achunk = chunks[i++];
+
+                // Remove children chunks
+                if (achunk.GetVirtualParentChunk() == chunk)
+                {
+                    removed += RemoveChunkRecursive(achunk, true);
+                }
+
+                if (i == chunks.Count())
+                    break;
+            }
+
+            // Actually remove the chunk
             chunks.RemoveAt(idx);
+
+            // Reindex the trees from the root function call
+            if (!reentrant)
+            {
+                foreach (var achunk in chunks)
+                {
+                    achunk.SetParentChunk(oldparentinghierarchy[achunk].oldchunkparent);
+                    achunk.MountChunkVirtually(chunks.IndexOf(oldparentinghierarchy[achunk].oldchunkvparent), true);
+                }
+            }
 
             OnPropertyChanged(nameof(chunks));
 
-            return true;
+            return removed;
         }
 
         /// <summary>

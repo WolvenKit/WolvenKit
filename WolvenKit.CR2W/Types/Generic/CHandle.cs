@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [REDMeta()]
-    public class CHandle<T> : CVariable, IHandleAccessor where T : CVariable
+    public class CHandle<T> : CVariable, IHandleAccessor
     {
         public CHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -66,8 +66,8 @@ namespace WolvenKit.CR2W.Types
                 {
                     Reference = cr2w.chunks[val - 1];
                     //Add to the reverse-lookups
-                    Reference.AdReferrers.Add(this as CVariable);
-                    cr2w.chunks[GetVarChunkIndex()].AbReferrers.Add(this as CVariable);
+                    Reference.AdReferences.Add(this);
+                    cr2w.chunks[GetVarChunkIndex()].AbReferences.Add(this);
                     //Soft mount the chunk
                     if(this.ParentVar.REDType!="AttachmentsReference")
                     {
