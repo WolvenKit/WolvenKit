@@ -147,8 +147,14 @@ namespace WolvenKit.CR2W
         /// </summary>
         /// <param name="chunk"></param>
         /// <returns></returns>
-        public int RemoveChunkRecursive(CR2WExportWrapper chunk, bool reentrant = false)
+        public int RemoveChunkRecursive(
+            CR2WExportWrapper chunk,
+            bool reentrant = false,
+            Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)>
+                passedoldparentinghierarchy= null)
         {
+            int removed = 1;
+
             // To reindex later, we need a middle-ground copy, between deep and shallow, of the parenting hierarchy.
             var oldparentinghierarchy = new Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)>();
             if (!reentrant)
@@ -158,9 +164,6 @@ namespace WolvenKit.CR2W
                     oldparentinghierarchy.Add(achunk, (achunk.GetParentChunk(), achunk.GetVirtualParentChunk()));
                 }
             }
-
-            int removed = 1;
-            int idx = chunks.IndexOf(chunk);
             
             // Nullify references toward this chunk
             foreach(var referrer in chunk.AdReferences)
@@ -173,20 +176,31 @@ namespace WolvenKit.CR2W
             int i = 0;
             while (true)
             {
+                if (i >= chunks.Count())
+                    break;
                 var achunk = chunks[i++];
 
                 // Remove children chunks
-                if (achunk.GetVirtualParentChunk() == chunk)
+                if(!reentrant)
                 {
-                    removed += RemoveChunkRecursive(achunk, true);
+                    if (oldparentinghierarchy[achunk].oldchunkvparent == chunk)
+                    {
+                        removed += RemoveChunkRecursive(achunk, true, oldparentinghierarchy);
+                        i = 0;
+                    }
                 }
-
-                if (i == chunks.Count())
-                    break;
+                else
+                {
+                    if (passedoldparentinghierarchy[achunk].oldchunkvparent == chunk)
+                    {
+                        removed += RemoveChunkRecursive(achunk, true, passedoldparentinghierarchy);
+                        i = 0;
+                    }
+                }
             }
 
             // Actually remove the chunk
-            chunks.RemoveAt(idx);
+            chunks.Remove(chunk);
 
             // Reindex the trees from the root function call
             if (!reentrant)
@@ -196,9 +210,9 @@ namespace WolvenKit.CR2W
                     achunk.SetParentChunk(oldparentinghierarchy[achunk].oldchunkparent);
                     achunk.MountChunkVirtually(chunks.IndexOf(oldparentinghierarchy[achunk].oldchunkvparent), true);
                 }
-            }
 
-            OnPropertyChanged(nameof(chunks));
+                OnPropertyChanged(nameof(chunks));
+            }
 
             return removed;
         }
