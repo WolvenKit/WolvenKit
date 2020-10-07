@@ -298,6 +298,8 @@ namespace WolvenKit
                 }
             }
 
+            if (itemstoDelete.Count <= 0) return;
+
             if (MessageBox.Show(
                 "Are you sure you want to permanently delete this?", "Confirmation", MessageBoxButtons.OKCancel
             ) == DialogResult.OK)
@@ -437,6 +439,11 @@ namespace WolvenKit
             vm.SelectedItems = s;
         }
 
+        private void treeListView_SelectionChanged(object sender, EventArgs e)
+        {
+            var s = treeListView.SelectedObjects.Cast<FileSystemInfo>().ToList();
+            vm.SelectedItems = s;
+        }
 
         #endregion
 
@@ -672,6 +679,7 @@ namespace WolvenKit
                 UIController.Get().Window.ResumeMonitoring();
             }
         }
+
 
 
 

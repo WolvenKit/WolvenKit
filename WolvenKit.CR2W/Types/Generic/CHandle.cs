@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [REDMeta()]
-    public class CHandle<T> : CVariable, IHandleAccessor
+    public class CHandle<T> : CVariable, IHandleAccessor where T : CVariable
     {
         public CHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

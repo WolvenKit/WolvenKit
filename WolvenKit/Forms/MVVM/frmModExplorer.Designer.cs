@@ -48,6 +48,7 @@ namespace WolvenKit
             this.addAllDependenciesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fastRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cookToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listAllDependenciesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.removeFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,7 +69,6 @@ namespace WolvenKit
             this.resetfilesButton = new System.Windows.Forms.ToolStripButton();
             this.treeListView = new BrightIdeasSoftware.TreeListView();
             this.olvColumnName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.listAllDependenciesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenu.SuspendLayout();
             this.searchstrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.treeListView)).BeginInit();
@@ -94,7 +94,7 @@ namespace WolvenKit
             this.toolStripSeparator4,
             this.showFileInExplorerToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(249, 336);
+            this.contextMenu.Size = new System.Drawing.Size(249, 314);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             this.contextMenu.Opened += new System.EventHandler(this.contextMenu_Opened);
             // 
@@ -199,6 +199,13 @@ namespace WolvenKit
             this.cookToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.cookToolStripMenuItem.Text = "Cook files in directory";
             this.cookToolStripMenuItem.Click += new System.EventHandler(this.cookToolStripMenuItem_Click);
+            // 
+            // listAllDependenciesToolStripMenuItem
+            // 
+            this.listAllDependenciesToolStripMenuItem.Name = "listAllDependenciesToolStripMenuItem";
+            this.listAllDependenciesToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.listAllDependenciesToolStripMenuItem.Text = "List all dependencies";
+            this.listAllDependenciesToolStripMenuItem.Click += new System.EventHandler(this.listAllDependenciesToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
@@ -386,6 +393,7 @@ namespace WolvenKit
             this.treeListView.View = System.Windows.Forms.View.Details;
             this.treeListView.VirtualMode = true;
             this.treeListView.CellClick += new System.EventHandler<BrightIdeasSoftware.CellClickEventArgs>(this.treeListView_CellClick);
+            this.treeListView.SelectionChanged += new System.EventHandler(this.treeListView_SelectionChanged);
             this.treeListView.ItemActivate += new System.EventHandler(this.treeListView_ItemActivate);
             this.treeListView.SelectedIndexChanged += new System.EventHandler(this.treeListView_SelectedIndexChanged);
             this.treeListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.modFileList_KeyDown);
@@ -395,13 +403,6 @@ namespace WolvenKit
             this.olvColumnName.AspectName = "Name";
             this.olvColumnName.FillsFreeSpace = true;
             this.olvColumnName.Text = "Name";
-            // 
-            // listAllDependenciesToolStripMenuItem
-            // 
-            this.listAllDependenciesToolStripMenuItem.Name = "listAllDependenciesToolStripMenuItem";
-            this.listAllDependenciesToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.listAllDependenciesToolStripMenuItem.Text = "List all dependencies";
-            this.listAllDependenciesToolStripMenuItem.Click += new System.EventHandler(this.listAllDependenciesToolStripMenuItem_Click);
             // 
             // frmModExplorer
             // 
