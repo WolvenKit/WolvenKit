@@ -88,7 +88,7 @@ namespace core
 			}
 
 			//! Simple operator for directly accessing every element of the matrix.
-			const T& operator()(const s32 row, const s32 col) const { return M[row * 4 + col]; }
+			const T& operator()(const s32 row, const s32 col) const noexcept { return M[row * 4 + col]; }
 
 			//! Simple operator for linearly accessing every element of the matrix.
 			T& operator[](u32 index)
@@ -143,7 +143,7 @@ namespace core
 			//! Set this matrix to the product of two matrices
 			/** Calculate b*a, no optimization used,
 			use it if you know you never have a identity matrix */
-			CMatrix4<T>& setbyproduct_nocheck(const CMatrix4<T>& other_a,const CMatrix4<T>& other_b );
+			CMatrix4<T>& setbyproduct_nocheck(const CMatrix4<T>& other_a,const CMatrix4<T>& other_b ) noexcept;
 
 			//! Multiply by another matrix.
 			/** Calculate other*this */
@@ -358,7 +358,7 @@ namespace core
 			/** \param center Position to rotate around
 			\param translate Translation applied after the rotation
 			 */
-			void setRotationCenter(const core::vector3df& center, const core::vector3df& translate);
+			void setRotationCenter(const core::vector3df& center, const core::vector3df& translate) noexcept;
 
 			//! Builds a matrix which rotates a source vector to a look vector over an arbitrary axis
 			/** \param camPos: viewer position in world coo
@@ -432,7 +432,7 @@ namespace core
 			CMatrix4<T>& setM(const T* data);
 
 			//! Sets if the matrix is definitely identity matrix
-			void setDefinitelyIdentityMatrix( bool isDefinitelyIdentityMatrix);
+			void setDefinitelyIdentityMatrix( bool isDefinitelyIdentityMatrix) noexcept;
 
 			//! Gets if the matrix is definitely identity matrix
 			bool getDefinitelyIdentityMatrix() const;
@@ -683,7 +683,7 @@ namespace core
 		}
 		return *this;
 #else
-		CMatrix4<T> temp ( *this );
+		const CMatrix4<T> temp ( *this );
 		return setbyproduct_nocheck( temp, other );
 #endif
 	}
@@ -692,7 +692,7 @@ namespace core
 	// set this matrix to the product of two other matrices
 	// goal is to reduce stack use and copy
 	template <class T>
-	inline CMatrix4<T>& CMatrix4<T>::setbyproduct_nocheck(const CMatrix4<T>& other_a,const CMatrix4<T>& other_b )
+	inline CMatrix4<T>& CMatrix4<T>::setbyproduct_nocheck(const CMatrix4<T>& other_a,const CMatrix4<T>& other_b ) noexcept
 	{
 		const T *m1 = other_a.M;
 		const T *m2 = other_b.M;
@@ -2168,7 +2168,7 @@ namespace core
 
 	//! Builds a combined matrix which translate to a center before rotation and translate afterward
 	template <class T>
-	inline void CMatrix4<T>::setRotationCenter(const core::vector3df& center, const core::vector3df& translation)
+	inline void CMatrix4<T>::setRotationCenter(const core::vector3df& center, const core::vector3df& translation) noexcept
 	{
 		M[12] = -M[0]*center.X - M[4]*center.Y - M[8]*center.Z + (center.X - translation.X );
 		M[13] = -M[1]*center.X - M[5]*center.Y - M[9]*center.Z + (center.Y - translation.Y );
@@ -2327,7 +2327,7 @@ namespace core
 
 	// sets if the matrix is definitely identity matrix
 	template <class T>
-	inline void CMatrix4<T>::setDefinitelyIdentityMatrix( bool isDefinitelyIdentityMatrix)
+	inline void CMatrix4<T>::setDefinitelyIdentityMatrix( bool isDefinitelyIdentityMatrix) noexcept
 	{
 #if defined ( USE_MATRIX_TEST )
 		definitelyIdentityMatrix = isDefinitelyIdentityMatrix;

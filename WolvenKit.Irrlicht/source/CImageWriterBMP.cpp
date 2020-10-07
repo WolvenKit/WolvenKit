@@ -10,6 +10,7 @@
 #include "IWriteFile.h"
 #include "CColorConverter.h"
 #include "irrString.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -18,7 +19,7 @@ namespace video
 
 IImageWriter* createImageWriterBMP()
 {
-	return new CImageWriterBMP;
+	return DBG_NEW CImageWriterBMP;
 }
 
 CImageWriterBMP::CImageWriterBMP()
@@ -108,7 +109,7 @@ bool CImageWriterBMP::writeImage(io::IWriteFile* file, IImage* image, u32 param)
 	size_t row_size = ((3 * imageHeader.Width) + 3) & ~3;
 
 	// allocate and clear memory for our scan line
-	u8* row_pointer = new u8[row_size];
+	u8* row_pointer = DBG_NEW u8[row_size];
 	memset(row_pointer, 0, row_size);
 
 	// convert the image to 24-bit BGR and flip it over

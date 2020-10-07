@@ -6,7 +6,7 @@
 #define __C_VERTEX_BUFFER_H_INCLUDED__
 
 #include "IVertexBuffer.h"
-
+#include "../source/debug.h"
 
 namespace irr
 {
@@ -103,17 +103,17 @@ namespace scene
 			{
 				case video::EVT_STANDARD:
 				{
-					NewVertices=new CSpecificVertexList<video::S3DVertex>;
+					NewVertices= DBG_NEW CSpecificVertexList<video::S3DVertex>;
 					break;
 				}
 				case video::EVT_2TCOORDS:
 				{
-					NewVertices=new CSpecificVertexList<video::S3DVertex2TCoords>;
+					NewVertices= DBG_NEW CSpecificVertexList<video::S3DVertex2TCoords>;
 					break;
 				}
 				case video::EVT_TANGENTS:
 				{
-					NewVertices=new CSpecificVertexList<video::S3DVertexTangents>;
+					NewVertices= DBG_NEW CSpecificVertexList<video::S3DVertexTangents>;
 					break;
 				}
 			}

@@ -7,6 +7,7 @@
 #include "ISceneManager.h"
 #include "S3DVertex.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -185,7 +186,7 @@ ISceneNode* CVolumeLightSceneNode::clone(ISceneNode* newParent, ISceneManager* n
 	if (!newManager)
 		newManager = SceneManager;
 
-	CVolumeLightSceneNode* nb = new CVolumeLightSceneNode(newParent,
+	CVolumeLightSceneNode* nb = DBG_NEW CVolumeLightSceneNode(newParent,
 		newManager, ID, SubdivideU, SubdivideV, FootColor, TailColor, RelativeTranslation);
 
 	nb->cloneMembers(this, newManager);

@@ -9,7 +9,7 @@
 #include "IGUISpriteBank.h"
 #include "SMeshBuffer.h"
 #include "os.h"
-
+#include "debug.h"
 
 namespace irr
 {
@@ -145,10 +145,10 @@ CBillboardTextSceneNode::CBillboardTextSceneNode(ISceneNode* parent, ISceneManag
 			Font->grab();
 
 			// mesh with one buffer per texture
-			Mesh = new SMesh();
+			Mesh = DBG_NEW SMesh();
 			for (u32 i=0; i<Font->getSpriteBank()->getTextureCount(); ++i)
 			{
-				SMeshBuffer *mb = new SMeshBuffer();
+				SMeshBuffer *mb = DBG_NEW SMeshBuffer();
 				mb->Material = Material;
 				mb->Material.setTexture(0, Font->getSpriteBank()->getTexture(i));
 				Mesh->addMeshBuffer(mb);

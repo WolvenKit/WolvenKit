@@ -73,14 +73,23 @@ namespace WolvenKit.CR2W.Types
             base.Write(file);
 
             byte[] buffer;
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
+            MemoryStream ms = null;
+            try
             {
-                BlockData.Write(bw);
-                blocksize.val = (int)ms.Length;
-                buffer = ms.ToArray();
+                ms = new MemoryStream();
+                using (var bw = new BinaryWriter(ms))
+                {
+                    BlockData.Write(bw);
+                    blocksize.val = (int)ms.Length;
+                    buffer = ms.ToArray();
+                    ms.Close();
+                    ms = null;
+                }
             }
-
+            finally
+            {
+                ms?.Dispose();
+            }
             blocksize.Write(file);
             file.Write(buffer);
         }

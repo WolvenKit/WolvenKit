@@ -15,6 +15,7 @@
 #include "IFileSystem.h"
 #include "IVideoDriver.h"
 #include "IMeshManipulator.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -128,7 +129,7 @@ CLWOMeshFileLoader::CLWOMeshFileLoader(scene::ISceneManager* smgr,
 	setDebugName("CLWOMeshFileLoader");
 	#endif
 
-	TextureLoader = new CMeshTextureLoader( FileSystem, SceneManager->getVideoDriver() );
+	TextureLoader = DBG_NEW CMeshTextureLoader( FileSystem, SceneManager->getVideoDriver() );
 }
 
 
@@ -159,7 +160,7 @@ IAnimatedMesh* CLWOMeshFileLoader::createMesh(io::IReadFile* file)
 	if (Mesh)
 		Mesh->drop();
 
-	Mesh = new SMesh();
+	Mesh = DBG_NEW SMesh();
 
 	if (!readFileHeader())
 		return 0;
@@ -376,7 +377,7 @@ IAnimatedMesh* CLWOMeshFileLoader::createMesh(io::IReadFile* file)
 		// add bump maps
 		if (Materials[i]->Meshbuffer->Material.MaterialType==video::EMT_NORMAL_MAP_SOLID)
 		{
-			SMesh* tmpmesh = new SMesh();
+			SMesh* tmpmesh = DBG_NEW SMesh();
 			tmpmesh->addMeshBuffer(Materials[i]->Meshbuffer);
 			SceneManager->getMeshManipulator()->createMeshWithTangents(tmpmesh, true, true);
 			Mesh->addMeshBuffer(tmpmesh->getMeshBuffer(0));
@@ -394,7 +395,7 @@ IAnimatedMesh* CLWOMeshFileLoader::createMesh(io::IReadFile* file)
 	}
 	Mesh->recalculateBoundingBox();
 
-	SAnimatedMesh* am = new SAnimatedMesh();
+	SAnimatedMesh* am = DBG_NEW SAnimatedMesh();
 	am->Type = EAMT_3DS;
 	am->addMesh(Mesh);
 	am->recalculateBoundingBox();

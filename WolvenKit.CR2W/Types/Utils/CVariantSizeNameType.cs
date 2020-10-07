@@ -28,23 +28,35 @@ namespace WolvenKit.CR2W.Types
             CVariable parsedvar = null;
             var varsize = file.ReadUInt32();
             var buffer = file.ReadBytes((int)varsize - 4);
-            using (var ms = new MemoryStream(buffer))
-            using (var br = new BinaryReader(ms))
+
+            MemoryStream ms = null;
+            try
             {
-                var nameId = br.ReadUInt16();
-                var typeId = br.ReadUInt16();
-
-                if (nameId == 0)
+                ms = new MemoryStream(buffer);
+                using (var br = new BinaryReader(ms))
                 {
-                    return;
+                    var nameId = br.ReadUInt16();
+                    var typeId = br.ReadUInt16();
+
+                    if (nameId == 0)
+                    {
+                        return;
+                    }
+
+                    var typename = cr2w.names[typeId].Str;
+                    var varname = cr2w.names[nameId].Str;
+
+                    parsedvar = CR2WTypeManager.Create(typename, varname, cr2w, this);
+                    parsedvar.IsSerialized = true;
+                    parsedvar.Read(br, size);
+
+                    ms.Close();
+                    ms = null;
                 }
-
-                var typename = cr2w.names[typeId].Str;
-                var varname = cr2w.names[nameId].Str;
-
-                parsedvar = CR2WTypeManager.Create(typename, varname, cr2w, this);
-                parsedvar.IsSerialized = true;
-                parsedvar.Read(br, size);
+            }
+            finally
+            {
+                ms?.Dispose();
             }
 
             Variant = parsedvar;
@@ -57,12 +69,22 @@ namespace WolvenKit.CR2W.Types
             byte[] varvalue;
 
             // use a temporary stream to write the variable and get the length of the variable
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
+            MemoryStream ms = null;
+            try
             {
-                Variant.Write(bw);
-                varsize += (UInt32)ms.Length;
-                varvalue = ms.ToArray();
+                ms = new MemoryStream();
+                using (var bw = new BinaryWriter(ms))
+                {
+                    Variant.Write(bw);
+                    varsize += (UInt32)ms.Length;
+                    varvalue = ms.ToArray();
+                    ms.Close();
+                    ms = null;
+                }
+            }
+            finally
+            {
+                ms?.Dispose();
             }
 
             // write variable

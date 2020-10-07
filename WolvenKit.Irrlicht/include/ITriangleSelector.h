@@ -29,8 +29,8 @@ struct SCollisionTriangleRange
 {
 	SCollisionTriangleRange()
 		: RangeStart(0), RangeSize(0)
-		, Selector(0), SceneNode(0)
-		, MeshBuffer(0), MaterialIndex(0)
+		, Selector(nullptr), SceneNode(nullptr)
+		, MeshBuffer(nullptr), MaterialIndex(0)
 	{}
 
 	//! Check if this triangle index inside the range

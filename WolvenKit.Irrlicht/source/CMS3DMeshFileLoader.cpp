@@ -9,7 +9,7 @@
 #include "os.h"
 #include "CMS3DMeshFileLoader.h"
 #include "CSkinnedMesh.h"
-
+#include "debug.h"
 
 namespace irr
 {
@@ -131,7 +131,7 @@ IAnimatedMesh* CMS3DMeshFileLoader::createMesh(io::IReadFile* file)
 	if (!file)
 		return 0;
 
-	AnimatedMesh = new CSkinnedMesh();
+	AnimatedMesh = DBG_NEW CSkinnedMesh();
 
 	if ( load(file) )
 	{
@@ -158,7 +158,7 @@ bool CMS3DMeshFileLoader::load(io::IReadFile* file)
 
 	// read whole file
 
-	u8* buffer = new u8[fileSize];
+	u8* buffer = DBG_NEW u8[fileSize];
 	long read = (long)file->read(buffer, fileSize);
 	if (read != fileSize)
 	{

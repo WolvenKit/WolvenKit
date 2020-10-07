@@ -21,6 +21,7 @@
 #endif // _IRR_COMPILE_WITH_SHADOW_VOLUME_SCENENODE_
 #include "EProfileIDs.h"
 #include "IProfiler.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -356,7 +357,7 @@ IShadowVolumeSceneNode* COctreeSceneNode::addShadowVolumeSceneNode(
 	if (Shadow)
 		Shadow->drop();
 
-	Shadow = new CShadowVolumeSceneNode(shadowMesh, this, SceneManager, id,  zfailmethod, infinity);
+	Shadow = DBG_NEW CShadowVolumeSceneNode(shadowMesh, this, SceneManager, id,  zfailmethod, infinity);
 	return Shadow;
 #else
 	return 0;
@@ -460,7 +461,7 @@ bool COctreeSceneNode::createTree(IMesh* mesh)
 					}
 				}
 
-				StdOctree = new Octree<video::S3DVertex>(StdMeshes, MinimalPolysPerNode);
+				StdOctree = DBG_NEW Octree<video::S3DVertex>(StdMeshes, MinimalPolysPerNode);
 				nodeCount = StdOctree->getNodeCount();
 			}
 			break;
@@ -512,7 +513,7 @@ bool COctreeSceneNode::createTree(IMesh* mesh)
 					}
 				}
 
-				LightMapOctree = new Octree<video::S3DVertex2TCoords>(LightMapMeshes, MinimalPolysPerNode);
+				LightMapOctree = DBG_NEW Octree<video::S3DVertex2TCoords>(LightMapMeshes, MinimalPolysPerNode);
 				nodeCount = LightMapOctree->getNodeCount();
 			}
 			break;
@@ -562,7 +563,7 @@ bool COctreeSceneNode::createTree(IMesh* mesh)
 					}
 				}
 
-				TangentsOctree = new Octree<video::S3DVertexTangents>(TangentsMeshes, MinimalPolysPerNode);
+				TangentsOctree = DBG_NEW Octree<video::S3DVertexTangents>(TangentsMeshes, MinimalPolysPerNode);
 				nodeCount = TangentsOctree->getNodeCount();
 			}
 			break;

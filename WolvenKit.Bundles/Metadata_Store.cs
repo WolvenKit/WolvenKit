@@ -93,18 +93,27 @@ namespace WolvenKit.Bundles
                 //Read the file infos
                 fileInfoList = new TDynArray<UFileInfo>();
                 fileInfoList.Deserialize(br);
-                
 
-                using (var ms = new MemoryStream(FileStringTable))
+                MemoryStream ms = null;
+                try
                 {
-                    using (var brr = new BinaryReader(ms))
+                    ms = new MemoryStream(FileStringTable);
                     {
-                        foreach (var inf in fileInfoList)
+                        using (var brr = new BinaryReader(ms))
                         {
-                            brr.BaseStream.Seek(inf.StringTableNameOffset, SeekOrigin.Begin);
-                            inf.path = ReadCR2WString(brr);
+                            foreach (var inf in fileInfoList)
+                            {
+                                brr.BaseStream.Seek(inf.StringTableNameOffset, SeekOrigin.Begin);
+                                inf.path = ReadCR2WString(brr);
+                            }
                         }
+                        ms.Close();
+                        ms = null;
                     }
+                }
+                finally
+                {
+                    ms?.Dispose();
                 }
 
                 //Read the file entry infos

@@ -9,6 +9,7 @@
 #include "os.h"
 #include "irrMap.h"
 #include "triangle3d.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -584,7 +585,7 @@ SMesh* CMeshManipulator::createMeshCopy(scene::IMesh* mesh) const
 	if (!mesh)
 		return 0;
 
-	SMesh* clone = new SMesh();
+	SMesh* clone = DBG_NEW SMesh();
 
 	const u32 meshBufferCount = mesh->getMeshBufferCount();
 
@@ -595,7 +596,7 @@ SMesh* CMeshManipulator::createMeshCopy(scene::IMesh* mesh) const
 		{
 		case video::EVT_STANDARD:
 			{
-				SMeshBuffer* buffer = new SMeshBuffer();
+				SMeshBuffer* buffer = DBG_NEW SMeshBuffer();
 				buffer->Material = mb->getMaterial();
 				const u32 vcount = mb->getVertexCount();
 				buffer->Vertices.reallocate(vcount);
@@ -613,7 +614,7 @@ SMesh* CMeshManipulator::createMeshCopy(scene::IMesh* mesh) const
 			break;
 		case video::EVT_2TCOORDS:
 			{
-				SMeshBufferLightMap* buffer = new SMeshBufferLightMap();
+				SMeshBufferLightMap* buffer = DBG_NEW SMeshBufferLightMap();
 				buffer->Material = mb->getMaterial();
 				const u32 vcount = mb->getVertexCount();
 				buffer->Vertices.reallocate(vcount);
@@ -631,7 +632,7 @@ SMesh* CMeshManipulator::createMeshCopy(scene::IMesh* mesh) const
 			break;
 		case video::EVT_TANGENTS:
 			{
-				SMeshBufferTangents* buffer = new SMeshBufferTangents();
+				SMeshBufferTangents* buffer = DBG_NEW SMeshBufferTangents();
 				buffer->Material = mb->getMaterial();
 				const u32 vcount = mb->getVertexCount();
 				buffer->Vertices.reallocate(vcount);
@@ -663,7 +664,7 @@ IMesh* CMeshManipulator::createMeshUniquePrimitives(IMesh* mesh) const
 	if (!mesh)
 		return 0;
 
-	SMesh* clone = new SMesh();
+	SMesh* clone = DBG_NEW SMesh();
 
 	const u32 meshBufferCount = mesh->getMeshBufferCount();
 
@@ -677,7 +678,7 @@ IMesh* CMeshManipulator::createMeshUniquePrimitives(IMesh* mesh) const
 		{
 		case video::EVT_STANDARD:
 			{
-				SMeshBuffer* buffer = new SMeshBuffer();
+				SMeshBuffer* buffer = DBG_NEW SMeshBuffer();
 				buffer->Material = mb->getMaterial();
 
 				video::S3DVertex* v =
@@ -703,7 +704,7 @@ IMesh* CMeshManipulator::createMeshUniquePrimitives(IMesh* mesh) const
 			break;
 		case video::EVT_2TCOORDS:
 			{
-				SMeshBufferLightMap* buffer = new SMeshBufferLightMap();
+				SMeshBufferLightMap* buffer = DBG_NEW SMeshBufferLightMap();
 				buffer->Material = mb->getMaterial();
 
 				video::S3DVertex2TCoords* v =
@@ -728,7 +729,7 @@ IMesh* CMeshManipulator::createMeshUniquePrimitives(IMesh* mesh) const
 			break;
 		case video::EVT_TANGENTS:
 			{
-				SMeshBufferTangents* buffer = new SMeshBufferTangents();
+				SMeshBufferTangents* buffer = DBG_NEW SMeshBufferTangents();
 				buffer->Material = mb->getMaterial();
 
 				video::S3DVertexTangents* v =
@@ -765,7 +766,7 @@ IMesh* CMeshManipulator::createMeshUniquePrimitives(IMesh* mesh) const
 // not yet 32bit
 IMesh* CMeshManipulator::createMeshWelded(IMesh *mesh, f32 tolerance) const
 {
-	SMesh* clone = new SMesh();
+	SMesh* clone = DBG_NEW SMesh();
 	clone->BoundingBox = mesh->getBoundingBox();
 
 	core::array<u16> redirects;
@@ -784,7 +785,7 @@ IMesh* CMeshManipulator::createMeshWelded(IMesh *mesh, f32 tolerance) const
 		{
 		case video::EVT_STANDARD:
 		{
-			SMeshBuffer* buffer = new SMeshBuffer();
+			SMeshBuffer* buffer = DBG_NEW SMeshBuffer();
 			buffer->BoundingBox = mb->getBoundingBox();
 			buffer->Material = mb->getMaterial();
 			clone->addMeshBuffer(buffer);
@@ -827,7 +828,7 @@ IMesh* CMeshManipulator::createMeshWelded(IMesh *mesh, f32 tolerance) const
 		}
 		case video::EVT_2TCOORDS:
 		{
-			SMeshBufferLightMap* buffer = new SMeshBufferLightMap();
+			SMeshBufferLightMap* buffer = DBG_NEW SMeshBufferLightMap();
 			buffer->BoundingBox = mb->getBoundingBox();
 			buffer->Material = mb->getMaterial();
 			clone->addMeshBuffer(buffer);
@@ -870,7 +871,7 @@ IMesh* CMeshManipulator::createMeshWelded(IMesh *mesh, f32 tolerance) const
 		}
 		case video::EVT_TANGENTS:
 		{
-			SMeshBufferTangents* buffer = new SMeshBufferTangents();
+			SMeshBufferTangents* buffer = DBG_NEW SMeshBufferTangents();
 			buffer->BoundingBox = mb->getBoundingBox();
 			buffer->Material = mb->getMaterial();
 			clone->addMeshBuffer(buffer);
@@ -957,13 +958,13 @@ IMesh* CMeshManipulator::createMeshWithTangents(IMesh* mesh, bool recalculateNor
 		return 0;
 
 	// copy mesh and fill data into SMeshBufferTangents
-	SMesh* clone = new SMesh();
+	SMesh* clone = DBG_NEW SMesh();
 	const u32 meshBufferCount = mesh->getMeshBufferCount();
 
 	for (u32 b=0; b<meshBufferCount; ++b)
 	{
 		const IMeshBuffer* const original = mesh->getMeshBuffer(b);
-		SMeshBufferTangents* buffer = new SMeshBufferTangents();
+		SMeshBufferTangents* buffer = DBG_NEW SMeshBufferTangents();
 
 		// copy material
 		buffer->Material = original->getMaterial();
@@ -1346,13 +1347,13 @@ IMesh* CMeshManipulator::createMeshWith2TCoords(IMesh* mesh) const
 
 	// copy mesh and fill data into SMeshBufferLightMap
 
-	SMesh* clone = new SMesh();
+	SMesh* clone = DBG_NEW SMesh();
 	const u32 meshBufferCount = mesh->getMeshBufferCount();
 
 	for (u32 b=0; b<meshBufferCount; ++b)
 	{
 		const IMeshBuffer* const original = mesh->getMeshBuffer(b);
-		SMeshBufferLightMap* buffer = new SMeshBufferLightMap();
+		SMeshBufferLightMap* buffer = DBG_NEW SMeshBufferLightMap();
 
 		// copy material
 		buffer->Material = original->getMaterial();
@@ -1419,13 +1420,13 @@ IMesh* CMeshManipulator::createMeshWith1TCoords(IMesh* mesh) const
 		return 0;
 
 	// copy mesh and fill data into SMeshBuffer
-	SMesh* clone = new SMesh();
+	SMesh* clone = DBG_NEW SMesh();
 	const u32 meshBufferCount = mesh->getMeshBufferCount();
 
 	for (u32 b=0; b<meshBufferCount; ++b)
 	{
 		const IMeshBuffer* const original = mesh->getMeshBuffer(b);
-		SMeshBuffer* buffer = new SMeshBuffer();
+		SMeshBuffer* buffer = DBG_NEW SMeshBuffer();
 
 		// copy material
 		buffer->Material = original->getMaterial();
@@ -1511,7 +1512,7 @@ s32 CMeshManipulator::getPolyCount(scene::IAnimatedMesh* mesh) const
 //! create a new AnimatedMesh and adds the mesh to it
 IAnimatedMesh * CMeshManipulator::createAnimatedMesh(scene::IMesh* mesh, scene::E_ANIMATED_MESH_TYPE type) const
 {
-	return new SAnimatedMesh(mesh, type);
+	return DBG_NEW SAnimatedMesh(mesh, type);
 }
 
 namespace
@@ -1694,7 +1695,7 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh *mesh) const
 	if (!mesh)
 		return 0;
 
-	SMesh *newmesh = new SMesh();
+	SMesh *newmesh = DBG_NEW SMesh();
 	newmesh->BoundingBox = mesh->getBoundingBox();
 
 	const u32 mbcount = mesh->getMeshBufferCount();
@@ -1715,8 +1716,8 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh *mesh) const
 		const u32 vcount = mb->getVertexCount();
 		const u16 *ind = mb->getIndices();
 
-		vcache *vc = new vcache[vcount];
-		tcache *tc = new tcache[tcount];
+		vcache *vc = DBG_NEW vcache[vcount];
+		tcache *tc = DBG_NEW tcache[tcount];
 
 		f_lru lru(vc, tc);
 
@@ -1770,7 +1771,7 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh *mesh) const
 			{
 				video::S3DVertex *v = (video::S3DVertex *) mb->getVertices();
 
-				SMeshBuffer *buf = new SMeshBuffer();
+				SMeshBuffer *buf = DBG_NEW SMeshBuffer();
 				buf->Material = mb->getMaterial();
 
 				buf->Vertices.reallocate(vcount);
@@ -1882,7 +1883,7 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh *mesh) const
 			{
 				video::S3DVertex2TCoords *v = (video::S3DVertex2TCoords *) mb->getVertices();
 
-				SMeshBufferLightMap *buf = new SMeshBufferLightMap();
+				SMeshBufferLightMap *buf = DBG_NEW SMeshBufferLightMap();
 				buf->Material = mb->getMaterial();
 
 				buf->Vertices.reallocate(vcount);
@@ -1995,7 +1996,7 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh *mesh) const
 			{
 				video::S3DVertexTangents *v = (video::S3DVertexTangents *) mb->getVertices();
 
-				SMeshBufferTangents *buf = new SMeshBufferTangents();
+				SMeshBufferTangents *buf = DBG_NEW SMeshBufferTangents();
 				buf->Material = mb->getMaterial();
 
 				buf->Vertices.reallocate(vcount);

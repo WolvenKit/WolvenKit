@@ -47,7 +47,7 @@ namespace scene
 				const core::vector3df& rotation = core::vector3df(0,0,0),
 				const core::vector3df& scale = core::vector3df(1.0f, 1.0f, 1.0f))
 			: RelativeTranslation(position), RelativeRotation(rotation), RelativeScale(scale),
-				Parent(0), SceneManager(mgr), TriangleSelector(0), ID(id),
+				Parent(nullptr), SceneManager(mgr), TriangleSelector(nullptr), ID(id),
 				AutomaticCullingState(EAC_BOX), DebugDataVisible(EDS_OFF),
 				IsVisible(true), IsDebugObject(false)
 		{
@@ -697,7 +697,7 @@ namespace scene
 		\param out The attribute container to write into.
 		\param options Additional options which might influence the
 		serialization. */
-		virtual void serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options=0) const
+		void serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options=0) const override
 		{
 			if (!out)
 				return;
@@ -722,7 +722,7 @@ namespace scene
 		\param in The attribute container to read from.
 		\param options Additional options which might influence the
 		deserialization. */
-		virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0)
+		void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0) override
 		{
 			if (!in)
 				return;
@@ -736,7 +736,7 @@ namespace scene
 			IsVisible = in->getAttributeAsBool("Visible", IsVisible);
 			if (in->existsAttribute("AutomaticCulling"))
 			{
-				s32 tmpState = in->getAttributeAsEnumeration("AutomaticCulling",
+				const s32 tmpState = in->getAttributeAsEnumeration("AutomaticCulling",
 						scene::AutomaticCullingNames);
 				if (tmpState != -1)
 					AutomaticCullingState = (u32)tmpState;

@@ -8,6 +8,7 @@
 #include "CMD3MeshFileLoader.h"
 #include "CAnimatedMeshMD3.h"
 #include "irrString.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -37,7 +38,7 @@ bool CMD3MeshFileLoader::isALoadableFileExtension(const io::path& filename) cons
 
 IAnimatedMesh* CMD3MeshFileLoader::createMesh(io::IReadFile* file)
 {
-	CAnimatedMeshMD3 * mesh = new CAnimatedMeshMD3();
+	CAnimatedMeshMD3 * mesh = DBG_NEW CAnimatedMeshMD3();
 
 	if ( mesh->loadModelFile ( 0, file, SceneManager->getFileSystem(), SceneManager->getVideoDriver() ) )
 		return mesh;

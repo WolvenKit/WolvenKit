@@ -84,7 +84,7 @@ namespace scene
 
 		//! The render method.
 		/** Does nothing as bones are not visible. */
-		virtual void render() { }
+		void render() override { }
 
 		//! How the relative transformation of the bone is used
 		virtual void setSkinningSpace( E_BONE_SKINNING_SPACE space ) =0;

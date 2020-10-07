@@ -123,8 +123,8 @@ namespace WolvenKit
 
         private ObjectListView listView;
         private OLVColumn ImportIndex;
-        private OLVColumn Handle;
-        private OLVColumn Size;
+        private OLVColumn Handle; // warning CS0108: 'frmEmbeddedFiles.Handle' hides inherited member 'Control.Handle'. Use the new keyword if hiding was intended.
+        private OLVColumn Size;   // warning CS0108: 'frmEmbeddedFiles.Size' hides inherited member 'Form.Size'. Use the new keyword if hiding was intended.
         private OLVColumn ClassName;
         private OLVColumn ImportPath;
         private OLVColumn ImportClass;

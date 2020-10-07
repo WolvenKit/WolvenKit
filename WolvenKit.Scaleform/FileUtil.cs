@@ -670,12 +670,18 @@ namespace WolvenKit.Scaleform
                 Directory.CreateDirectory(destinationDirectory);
             }
 
-            using (FileStream outStream = File.Open(destinationFile, FileMode.Create, FileAccess.Write, FileShare.Read))
+            FileStream outStream = null;
+            try
             {
+                outStream = File.Open(destinationFile, FileMode.Create, FileAccess.Write, FileShare.Read);
                 using (StreamWriter sw = new StreamWriter(outStream, Encoding.ASCII))
                 {
                     sw.Write(sourceText);
                 }
+            }
+            finally
+            {
+                outStream?.Dispose();
             }
         }
     }

@@ -503,7 +503,7 @@ namespace video
 					break;
 				case ECF_R8G8B8:
 					{
-						u8* p = (u8*)data;
+						const u8* p = (u8*)data;
 						set(255, p[0],p[1],p[2]);
 					}
 					break;

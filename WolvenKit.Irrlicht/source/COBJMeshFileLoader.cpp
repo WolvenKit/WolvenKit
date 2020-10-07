@@ -40,7 +40,7 @@ COBJMeshFileLoader::COBJMeshFileLoader(scene::ISceneManager* smgr, io::IFileSyst
 	if (FileSystem)
 		FileSystem->grab();
 
-	TextureLoader = new CMeshTextureLoader( FileSystem, SceneManager->getVideoDriver() );
+	TextureLoader = DBG_NEW CMeshTextureLoader( FileSystem, SceneManager->getVideoDriver() );
 }
 
 
@@ -82,14 +82,14 @@ IAnimatedMesh* COBJMeshFileLoader::createMesh(io::IReadFile* file)
 	core::array<core::vector3df, core::irrAllocatorFast<core::vector3df> > normalsBuffer(1000);
 	core::array<core::vector2df, core::irrAllocatorFast<core::vector2df> > textureCoordBuffer(1000);
 
-	SObjMtl * currMtl = new SObjMtl();
+	SObjMtl * currMtl = DBG_NEW SObjMtl();
 	Materials.push_back(currMtl);
 	u32 smoothingGroup=0;
 
 	const io::path fullName = file->getFileName();
 	const io::path relPath = FileSystem->getFileDir(fullName)+"/";
 
-	c8* buf = new c8[filesize];
+	c8* buf = DBG_NEW c8[filesize];
 	memset(buf, 0, filesize);
 	file->read((void*)buf, filesize);
 	const c8* const bufEnd = buf+filesize;
@@ -294,7 +294,7 @@ IAnimatedMesh* COBJMeshFileLoader::createMesh(io::IReadFile* file)
 		++lineNr;
 	}	// end while(bufPtr && (bufPtr-buf<filesize))
 
-	SMesh* mesh = new SMesh();
+	SMesh* mesh = DBG_NEW SMesh();
 
 	// Combine all the groups (meshbuffers) into the mesh
 	for ( u32 m = 0; m < Materials.size(); ++m )
@@ -322,7 +322,7 @@ IAnimatedMesh* COBJMeshFileLoader::createMesh(io::IReadFile* file)
 	if ( 0 != mesh->getMeshBufferCount() )
 	{
 		mesh->recalculateBoundingBox();
-		animMesh = new SAnimatedMesh();
+		animMesh = DBG_NEW SAnimatedMesh();
 		animMesh->Type = EAMT_OBJ;
 		animMesh->addMesh(mesh);
 		animMesh->recalculateBoundingBox();
@@ -529,7 +529,7 @@ void COBJMeshFileLoader::readMTL(const c8* fileName, const io::path& relPath)
 		return;
 	}
 
-	c8* buf = new c8[filesize];
+	c8* buf = DBG_NEW c8[filesize];
 	mtlReader->read((void*)buf, filesize);
 	const c8* bufEnd = buf+filesize;
 
@@ -550,7 +550,7 @@ void COBJMeshFileLoader::readMTL(const c8* fileName, const io::path& relPath)
 				c8 mtlNameBuf[WORD_BUFFER_LENGTH];
 				bufPtr = goAndCopyNextWord(mtlNameBuf, bufPtr, WORD_BUFFER_LENGTH, bufEnd);
 
-				currMaterial = new SObjMtl;
+				currMaterial = DBG_NEW SObjMtl;
 				currMaterial->Name = mtlNameBuf;
 			}
 			break;
@@ -759,14 +759,14 @@ COBJMeshFileLoader::SObjMtl* COBJMeshFileLoader::findMtl(const core::stringc& mt
 	// we found a partial match
 	if (defMaterial)
 	{
-		Materials.push_back(new SObjMtl(*defMaterial));
+		Materials.push_back(DBG_NEW SObjMtl(*defMaterial));
 		Materials.getLast()->Group = grpName;
 		return Materials.getLast();
 	}
 	// we found a new group for a non-existant material
 	else if (grpName.size())
 	{
-		Materials.push_back(new SObjMtl(*Materials[0]));
+		Materials.push_back(DBG_NEW SObjMtl(*Materials[0]));
 		Materials.getLast()->Group = grpName;
 		return Materials.getLast();
 	}

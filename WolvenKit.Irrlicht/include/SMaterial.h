@@ -307,7 +307,7 @@ namespace video
 		{
 			// These pointers are checked during assignment
 			for (u32 i=0; i<MATERIAL_MAX_TEXTURES_USED; ++i)
-				TextureLayer[i].TextureMatrix = 0;
+				TextureLayer[i].TextureMatrix = nullptr;
 			*this = other;
 		}
 
@@ -571,7 +571,7 @@ namespace video
 		\return Texture for texture level i, if defined, else 0. */
 		ITexture* getTexture(u32 i) const
 		{
-			return i < MATERIAL_MAX_TEXTURES ? TextureLayer[i].Texture : 0;
+			return i < MATERIAL_MAX_TEXTURES ? TextureLayer[i].Texture : nullptr;
 		}
 
 		//! Sets the i-th texture

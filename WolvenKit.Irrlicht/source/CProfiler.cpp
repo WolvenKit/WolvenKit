@@ -4,6 +4,7 @@
 
 #include "CProfiler.h"
 #include "CTimer.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -15,7 +16,7 @@ IRRLICHT_API IProfiler& IRRCALLCONV getProfiler()
 
 CProfiler::CProfiler()
 {
-	Timer = new CTimer(true);
+	Timer = DBG_NEW CTimer(true);
 
 	addGroup(L"overview");
 }

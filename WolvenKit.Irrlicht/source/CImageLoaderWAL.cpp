@@ -13,6 +13,7 @@
 #include "IFileSystem.h"
 #include "IReadFile.h"
 #include "irrString.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -83,11 +84,11 @@ IImage* CImageLoaderLMP::loadImage(irr::io::IReadFile* file) const
 	if ( rawtexsize + sizeof ( header ) != (u32)file->getSize() )
 		return 0;
 
-	u8 *rawtex = new u8 [ rawtexsize ];
+	u8 *rawtex = DBG_NEW u8 [ rawtexsize ];
 
 	file->read(rawtex, rawtexsize);
 
-	IImage* image = new CImage(ECF_A8R8G8B8, core::dimension2d<u32>(header.width, header.height));
+	IImage* image = DBG_NEW CImage(ECF_A8R8G8B8, core::dimension2d<u32>(header.width, header.height));
 
 	CColorConverter::convert8BitTo32Bit(rawtex, (u8*)image->getData(), header.width, header.height, (u8*) colormap_h, 0, false);
 
@@ -174,7 +175,7 @@ IImage* CImageLoaderWAL2::loadImage(irr::io::IReadFile* file) const
 
 	// palette
 	//u32 paletteofs = header.mipmap[0] + ((rawtexsize * 85) >> 6) + 2;
-	u32 *pal = new u32 [ 192 + 256 ];
+	u32 *pal = DBG_NEW u32 [ 192 + 256 ];
 	u8 *s = (u8*) pal;
 
 	file->seek ( file->getSize() - 768 - 2 );
@@ -196,12 +197,12 @@ IImage* CImageLoaderWAL2::loadImage(irr::io::IReadFile* file) const
 	}
 
 	u32 rawtexsize = header.width * header.height;
-	u8 *rawtex = new u8 [ rawtexsize ];
+	u8 *rawtex = DBG_NEW u8 [ rawtexsize ];
 
 	file->seek ( header.mipmap[0] );
 	file->read(rawtex, rawtexsize);
 
-	IImage* image = new CImage(format, core::dimension2d<u32>(header.width, header.height));
+	IImage* image = DBG_NEW CImage(format, core::dimension2d<u32>(header.width, header.height));
 
 	switch ( format )
 	{
@@ -251,12 +252,12 @@ IImage* CImageLoaderWAL::loadImage(irr::io::IReadFile* file) const
 
 	u32 rawtexsize = header.width * header.height;
 
-	u8 *rawtex = new u8 [ rawtexsize ];
+	u8 *rawtex = DBG_NEW u8 [ rawtexsize ];
 
 	file->seek ( header.mipmap[0] );
 	file->read(rawtex, rawtexsize);
 
-	IImage* image = new CImage(ECF_A8R8G8B8, core::dimension2d<u32>(header.width, header.height));
+	IImage* image = DBG_NEW CImage(ECF_A8R8G8B8, core::dimension2d<u32>(header.width, header.height));
 
 	CColorConverter::convert8BitTo32Bit(rawtex, (u8*)image->getData(), header.width, header.height, (u8*) colormap_pcx, 0, false);
 

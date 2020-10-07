@@ -14,6 +14,7 @@
 #include "IReadFile.h"
 #include "fast_atof.h"
 #include "coreutil.h"
+#include "debug.h"
 
 #ifdef _DEBUG
 #define IRR_OGRE_LOADER_DEBUG
@@ -163,7 +164,7 @@ IAnimatedMesh* COgreMeshFileLoader::createMesh(io::IReadFile* file)
 				((SMeshBuffer*)Mesh->getMeshBuffer(i))->recalculateBoundingBox();
 
 			((SMesh*)Mesh)->recalculateBoundingBox();
-			SAnimatedMesh* am = new SAnimatedMesh();
+			SAnimatedMesh* am = DBG_NEW SAnimatedMesh();
 			am->Type = EAMT_3DS;
 			am->addMesh(Mesh);
 			am->recalculateBoundingBox();
@@ -194,9 +195,9 @@ bool COgreMeshFileLoader::readChunk(io::IReadFile* file)
 				Meshes.push_back(OgreMesh());
 				readObjectChunk(file, data, Meshes.getLast());
 				if (Skeleton.Bones.size())
-					Mesh = new CSkinnedMesh();
+					Mesh = DBG_NEW CSkinnedMesh();
 				else
-					Mesh = new SMesh();
+					Mesh = DBG_NEW SMesh();
 				composeObject();
 			}
 			break;

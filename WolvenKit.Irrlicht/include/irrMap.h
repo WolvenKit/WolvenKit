@@ -7,6 +7,7 @@
 
 #include "irrTypes.h"
 #include "irrMath.h"
+#include "../source/debug.h"
 
 namespace irr
 {
@@ -24,7 +25,7 @@ class map
 	public:
 
 		RBTree(const KeyTypeRB& k, const ValueTypeRB& v)
-			: LeftChild(0), RightChild(0), Parent(0), Key(k),
+			: LeftChild(nullptr), RightChild(nullptr), Parent(nullptr), Key(k),
 				Value(v), IsRed(true) {}
 
 		void setLeftChild(RBTree* p)
@@ -69,22 +70,22 @@ class map
 
 		bool isRoot() const
 		{
-			return Parent==0;
+			return Parent==nullptr;
 		}
 
 		bool isLeftChild() const
 		{
-			return (Parent != 0) && (Parent->getLeftChild()==this);
+			return (Parent != nullptr) && (Parent->getLeftChild()==this);
 		}
 
 		bool isRightChild() const
 		{
-			return (Parent!=0) && (Parent->getRightChild()==this);
+			return (Parent!= nullptr) && (Parent->getRightChild()==this);
 		}
 
 		bool isLeaf() const
 		{
-			return (LeftChild==0) && (RightChild==0);
+			return (LeftChild== nullptr) && (RightChild== nullptr);
 		}
 
 		unsigned int getLevel() const
@@ -530,9 +531,9 @@ class map
 	{
 	public:
 
-		ParentLastIterator() : Root(0), Cur(0) {}
+		ParentLastIterator() : Root(nullptr), Cur(nullptr) {}
 
-		explicit ParentLastIterator(Node* root) : Root(root), Cur(0)
+		explicit ParentLastIterator(Node* root) : Root(root), Cur(nullptr)
 		{
 			reset();
 		}
@@ -544,7 +545,7 @@ class map
 
 		bool atEnd() const
 		{
-			return Cur==0;
+			return Cur==nullptr;
 		}
 
 		Node* getNode()
@@ -579,7 +580,7 @@ class map
 
 		Node* getMin(Node* n)
 		{
-			while(n!=0 && (n->getLeftChild()!=0 || n->getRightChild()!=0))
+			while(n!= nullptr && (n->getLeftChild()!= nullptr || n->getRightChild()!= nullptr))
 			{
 				if (n->getLeftChild())
 					n = n->getLeftChild();
@@ -592,7 +593,7 @@ class map
 		void inc()
 		{
 			// Already at end?
-			if (Cur==0)
+			if (Cur==nullptr)
 				return;
 
 			// Note: Starting point is the node as far down to the left as possible.
@@ -656,7 +657,7 @@ class map
 
 
 	// Constructor.
-	map() : Root(0), Size(0) {}
+	map() : Root(nullptr), Size(0) {}
 
 	// Destructor
 	~map()
@@ -680,7 +681,7 @@ class map
 	bool insert(const KeyType& keyNew, const ValueType& v)
 	{
 		// First insert node the "usual" way (no fancy balance logic yet)
-		Node* newNode = new Node(keyNew,v);
+		Node* newNode = DBG_NEW Node(keyNew,v);
 		if (!insert(newNode))
 		{
 			delete newNode;
@@ -694,7 +695,7 @@ class map
 			{
 				// If newNode is a left child, get its right 'uncle'
 				Node* newNodesUncle = newNode->getParent()->getParent()->getRightChild();
-				if ( newNodesUncle!=0 && newNodesUncle->isRed())
+				if ( newNodesUncle!=nullptr && newNodesUncle->isRed())
 				{
 					// case 1 - change the colors
 					newNode->getParent()->setBlack();
@@ -723,7 +724,7 @@ class map
 			{
 				// If newNode is a right child, get its left 'uncle'
 				Node* newNodesUncle = newNode->getParent()->getParent()->getLeftChild();
-				if ( newNodesUncle!=0 && newNodesUncle->isRed())
+				if ( newNodesUncle!=nullptr && newNodesUncle->isRed())
 				{
 					// case 1 - change the colors
 					newNode->getParent()->setBlack();
@@ -1002,9 +1003,9 @@ class map
 	void setRoot(Node* newRoot)
 	{
 		Root = newRoot;
-		if (Root != 0)
+		if (Root != nullptr)
 		{
-			Root->setParent(0);
+			Root->setParent(nullptr);
 			Root->setBlack();
 		}
 	}
@@ -1015,7 +1016,7 @@ class map
 	{
 		bool result=true; // Assume success
 
-		if (Root==0)
+		if (Root== nullptr)
 		{
 			setRoot(newNode);
 			Size = 1;
@@ -1031,24 +1032,24 @@ class map
 				if (keyNew == key)
 				{
 					result = false;
-					pNode = 0;
+					pNode = nullptr;
 				}
 				else if (keyNew < key)
 				{
-					if (pNode->getLeftChild() == 0)
+					if (pNode->getLeftChild() == nullptr)
 					{
 						pNode->setLeftChild(newNode);
-						pNode = 0;
+						pNode = nullptr;
 					}
 					else
 						pNode = pNode->getLeftChild();
 				}
 				else // keyNew > key
 				{
-					if (pNode->getRightChild()==0)
+					if (pNode->getRightChild()== nullptr)
 					{
 						pNode->setRightChild(newNode);
-						pNode = 0;
+						pNode = nullptr;
 					}
 					else
 					{

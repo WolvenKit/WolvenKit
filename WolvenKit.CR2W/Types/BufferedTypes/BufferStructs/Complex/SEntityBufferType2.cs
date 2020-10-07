@@ -44,14 +44,24 @@ namespace WolvenKit.CR2W.Types
             byte[] buffer;
 
             // use a temporary stream to write the variables and get the overall length of the component
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
+            MemoryStream ms = null;
+            try
             {
-                componentName.Write(bw);
-                variables.Write(bw);
+                ms = new MemoryStream();
+                using (var bw = new BinaryWriter(ms))
+                {
+                    componentName.Write(bw);
+                    variables.Write(bw);
 
-                sizeofdata.val += (UInt32)ms.Length;
-                buffer = ms.ToArray();
+                    sizeofdata.val += (UInt32)ms.Length;
+                    buffer = ms.ToArray();
+                    ms.Close();
+                    ms = null;
+                }
+            }
+            finally
+            {
+                ms?.Dispose();
             }
 
             sizeofdata.Write(file);

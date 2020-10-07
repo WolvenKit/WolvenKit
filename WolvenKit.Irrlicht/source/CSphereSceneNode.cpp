@@ -14,6 +14,7 @@
 #else
 #include "IShadowVolumeSceneNode.h"
 #endif // _IRR_COMPILE_WITH_SHADOW_VOLUME_SCENENODE_
+#include "debug.h"
 
 namespace irr
 {
@@ -99,7 +100,7 @@ IShadowVolumeSceneNode* CSphereSceneNode::addShadowVolumeSceneNode(
 	if (Shadow)
 		Shadow->drop();
 
-	Shadow = new CShadowVolumeSceneNode(shadowMesh, this, SceneManager, id,  zfailmethod, infinity);
+	Shadow = DBG_NEW CShadowVolumeSceneNode(shadowMesh, this, SceneManager, id,  zfailmethod, infinity);
 	return Shadow;
 #else
 	return 0;
@@ -190,7 +191,7 @@ ISceneNode* CSphereSceneNode::clone(ISceneNode* newParent, ISceneManager* newMan
 	if (!newManager)
 		newManager = SceneManager;
 
-	CSphereSceneNode* nb = new CSphereSceneNode(Radius, PolyCountX, PolyCountY, newParent,
+	CSphereSceneNode* nb = DBG_NEW CSphereSceneNode(Radius, PolyCountX, PolyCountY, newParent,
 		newManager, ID, RelativeTranslation);
 
 	nb->cloneMembers(this, newManager);

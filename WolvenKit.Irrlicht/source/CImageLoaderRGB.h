@@ -25,6 +25,7 @@
 #ifdef _IRR_COMPILE_WITH_RGB_LOADER_
 
 #include "IImageLoader.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -95,31 +96,31 @@ namespace video
 		bool allocateTemps()
 		{
 			tmp = tmpR = tmpG = tmpB = tmpA = 0;
-			tmp = new u8 [Header.Xsize * 256 * Header.BPC];
+			tmp = DBG_NEW u8 [Header.Xsize * 256 * Header.BPC];
 			if (!tmp)
 				return false;
 
 			if (Header.Zsize >= 1)
 			{
-				tmpR = new u8[Header.Xsize * Header.BPC];
+				tmpR = DBG_NEW u8[Header.Xsize * Header.BPC];
 				if (!tmpR)
 					return false;
 			}
 			if (Header.Zsize >= 2)
 			{
-				tmpG = new u8[Header.Xsize * Header.BPC];
+				tmpG = DBG_NEW u8[Header.Xsize * Header.BPC];
 				if (!tmpG)
 					return false;
 			}
 			if (Header.Zsize >= 3)
 			{
-				tmpB = new u8[Header.Xsize * Header.BPC];
+				tmpB = DBG_NEW u8[Header.Xsize * Header.BPC];
 				if (!tmpB)
 					return false;
 			}
 			if (Header.Zsize >= 4)
 			{
-				tmpA = new u8[Header.Xsize * Header.BPC];
+				tmpA = DBG_NEW u8[Header.Xsize * Header.BPC];
 				if (!tmpA)
 					return false;
 			}

@@ -85,6 +85,9 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <CodeAnalysisRuleSet>..\MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -136,6 +139,7 @@
       </SubSystem>
       <LinkTimeCodeGeneration>
       </LinkTimeCodeGeneration>
+      <AdditionalLibraryDirectories>..\Libs\debug</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>

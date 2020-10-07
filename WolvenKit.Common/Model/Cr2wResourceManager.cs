@@ -43,19 +43,37 @@ namespace WolvenKit.Common.Model
 
             if (File.Exists(pathashespath))
             {
-                using (StreamReader reader = File.OpenText(pathashespath))
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                StreamReader reader = null;
+                try
                 {
-                    HashdumpDict = csv.GetRecords<HashDump>().ToDictionary(_ => _.Path, _ => _.HashInt);
+                    reader = File.OpenText(pathashespath);
+                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                    {
+                        HashdumpDict = csv.GetRecords<HashDump>().ToDictionary(_ => _.Path, _ => _.HashInt);
+                        reader = null;
+                    }
+                }
+                finally
+                {
+                    reader?.Dispose();
                 }
             }
 
             if (File.Exists(custompathashespath))
             {
-                using (StreamReader reader = File.OpenText(custompathashespath))
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                StreamReader reader = null;
+                try
                 {
-                    CHashdumpDict = csv.GetRecords<HashDump>().ToDictionary(_ => _.Path, _ => _.HashInt);
+                    reader = File.OpenText(custompathashespath);
+                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                    {
+                        CHashdumpDict = csv.GetRecords<HashDump>().ToDictionary(_ => _.Path, _ => _.HashInt);
+                        reader = null;
+                    }
+                }
+                finally
+                {
+                    reader?.Dispose();
                 }
             }
         }
@@ -100,18 +118,36 @@ namespace WolvenKit.Common.Model
 
         public void Write()
         {
-            using (var writer = new StreamWriter(custompathashespath))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            StreamWriter writer = null;
+            try
             {
-                csv.WriteRecords(CHashdumpDict.Select(_ => new HashDump { Path = _.Key, HashInt = _.Value }));
+                writer = new StreamWriter(custompathashespath);
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    writer = null;
+                    csv.WriteRecords(CHashdumpDict.Select(_ => new HashDump { Path = _.Key, HashInt = _.Value }));
+                }
+            }
+            finally
+            {
+                writer?.Dispose();
             }
         }
         public void WriteVanilla()
         {
-            using (var writer = new StreamWriter(pathashespath))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            StreamWriter writer = null;
+            try
             {
-                csv.WriteRecords(HashdumpDict.Select(_ => new HashDump { Path = _.Key, HashInt = _.Value }));
+                writer = new StreamWriter(pathashespath);
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    writer = null;
+                    csv.WriteRecords(HashdumpDict.Select(_ => new HashDump { Path = _.Key, HashInt = _.Value }));
+                }
+            }
+            finally
+            {
+                writer?.Dispose();
             }
         }
 

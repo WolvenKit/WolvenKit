@@ -24,53 +24,53 @@ namespace gui
 		CGUIWindow(IGUIEnvironment* environment, IGUIElement* parent, s32 id, core::rect<s32> rectangle);
 
 		//! destructor
-		virtual ~CGUIWindow();
+		~CGUIWindow();
 
 		//! called if an event happened.
-		virtual bool OnEvent(const SEvent& event) _IRR_OVERRIDE_;
+		bool OnEvent(const SEvent& event) _IRR_OVERRIDE_;
 
 		//! update absolute position
-		virtual void updateAbsolutePosition() _IRR_OVERRIDE_;
+		void updateAbsolutePosition() _IRR_OVERRIDE_;
 
 		//! draws the element and its children
-		virtual void draw() _IRR_OVERRIDE_;
+		void draw() _IRR_OVERRIDE_;
 
 		//! Returns pointer to the close button
-		virtual IGUIButton* getCloseButton() const _IRR_OVERRIDE_;
+		IGUIButton* getCloseButton() const _IRR_OVERRIDE_;
 
 		//! Returns pointer to the minimize button
-		virtual IGUIButton* getMinimizeButton() const _IRR_OVERRIDE_;
+		IGUIButton* getMinimizeButton() const _IRR_OVERRIDE_;
 
 		//! Returns pointer to the maximize button
-		virtual IGUIButton* getMaximizeButton() const _IRR_OVERRIDE_;
+		IGUIButton* getMaximizeButton() const _IRR_OVERRIDE_;
 
 		//! Returns true if the window is draggable, false if not
-		virtual bool isDraggable() const _IRR_OVERRIDE_;
+		bool isDraggable() const _IRR_OVERRIDE_;
 
 		//! Sets whether the window is draggable
-		virtual void setDraggable(bool draggable) _IRR_OVERRIDE_;
+		void setDraggable(bool draggable) _IRR_OVERRIDE_;
 
 		//! Set if the window background will be drawn
-		virtual void setDrawBackground(bool draw) _IRR_OVERRIDE_;
+		void setDrawBackground(bool draw) _IRR_OVERRIDE_;
 
 		//! Get if the window background will be drawn
-		virtual bool getDrawBackground() const _IRR_OVERRIDE_;
+		bool getDrawBackground() const _IRR_OVERRIDE_;
 
 		//! Set if the window titlebar will be drawn
 		//! Note: If the background is not drawn, then the titlebar is automatically also not drawn
-		virtual void setDrawTitlebar(bool draw) _IRR_OVERRIDE_;
+		void setDrawTitlebar(bool draw) _IRR_OVERRIDE_;
 
 		//! Get if the window titlebar will be drawn
-		virtual bool getDrawTitlebar() const _IRR_OVERRIDE_;
+		bool getDrawTitlebar() const _IRR_OVERRIDE_;
 
 		//! Returns the rectangle of the drawable area (without border and without titlebar)
-		virtual core::rect<s32> getClientRect() const _IRR_OVERRIDE_;
+		core::rect<s32> getClientRect() const _IRR_OVERRIDE_;
 
 		//! Writes attributes of the element.
-		virtual void serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const _IRR_OVERRIDE_;
+		void serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const _IRR_OVERRIDE_;
 
 		//! Reads attributes of the element
-		virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options) _IRR_OVERRIDE_;
+		void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options) _IRR_OVERRIDE_;
 
 	protected:
 

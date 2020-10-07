@@ -160,8 +160,7 @@ namespace WolvenKit.App.ViewModels
             RunCommand = new RelayCommand(Run, CanRun);
             Options = new BulkEditOptions();
 
-
-            ProgressReport = new ProgressReport();
+            ProgressReport = null;
         }
 
         public event EventHandler PerformStep = delegate { };

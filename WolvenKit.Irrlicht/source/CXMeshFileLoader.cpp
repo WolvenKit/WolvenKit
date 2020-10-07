@@ -16,6 +16,7 @@
 #include "IVideoDriver.h"
 #include "IFileSystem.h"
 #include "IReadFile.h"
+#include "debug.h"
 
 #ifdef _DEBUG
 #define _XREADER_DEBUG
@@ -37,7 +38,7 @@ CXMeshFileLoader::CXMeshFileLoader(scene::ISceneManager* smgr, io::IFileSystem* 
 	setDebugName("CXMeshFileLoader");
 	#endif
 
-	TextureLoader = new CMeshTextureLoader( FileSystem, SceneManager->getVideoDriver() );
+	TextureLoader = DBG_NEW CMeshTextureLoader( FileSystem, SceneManager->getVideoDriver() );
 }
 
 
@@ -65,7 +66,7 @@ IAnimatedMesh* CXMeshFileLoader::createMesh(io::IReadFile* file)
 	u32 time = os::Timer::getRealTime();
 #endif
 
-	AnimatedMesh = new CSkinnedMesh();
+	AnimatedMesh = DBG_NEW CSkinnedMesh();
 
 	if (load(file))
 	{
@@ -309,7 +310,7 @@ bool CXMeshFileLoader::load(io::IReadFile* file)
 			if (mesh->FaceMaterialIndices.size() != 0)
 			{
 				// store vertices in buffers and remember relation in verticesLinkIndex
-				u32* vCountArray = new u32[mesh->Buffers.size()];
+				u32* vCountArray = DBG_NEW u32[mesh->Buffers.size()];
 				memset(vCountArray, 0, mesh->Buffers.size()*sizeof(u32));
 				// count vertices in each buffer and reallocate
 				for (i=0; i<mesh->Vertices.size(); ++i)
@@ -408,7 +409,7 @@ bool CXMeshFileLoader::readFileIntoMemory(io::IReadFile* file)
 		return false;
 	}
 
-	Buffer = new c8[size];
+	Buffer = DBG_NEW c8[size];
 
 	//! read all into memory
 	if (file->read(Buffer, size) != static_cast<size_t>(size))
@@ -998,7 +999,7 @@ bool CXMeshFileLoader::parseDataObjectMesh(SXMesh &mesh)
 				}
 			}
 			const u32 datasize = readInt();
-			u32* data = new u32[datasize];
+			u32* data = DBG_NEW u32[datasize];
 			for (j=0; j<datasize; ++j)
 				data[j]=readInt();
 
@@ -1040,7 +1041,7 @@ bool CXMeshFileLoader::parseDataObjectMesh(SXMesh &mesh)
 			}
 			const u32 dataformat = readInt();
 			const u32 datasize = readInt();
-			u32* data = new u32[datasize];
+			u32* data = DBG_NEW u32[datasize];
 			for (u32 j=0; j<datasize; ++j)
 				data[j]=readInt();
 			if (dataformat&0x102) // 2nd uv set

@@ -8,6 +8,7 @@
 #include "ICameraSceneNode.h"
 #include "S3DVertex.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -245,7 +246,7 @@ ISceneNode* CSkyBoxSceneNode::clone(ISceneNode* newParent, ISceneManager* newMan
 	if (!newParent) newParent = Parent;
 	if (!newManager) newManager = SceneManager;
 
-	CSkyBoxSceneNode* nb = new CSkyBoxSceneNode(0,0,0,0,0,0, newParent,
+	CSkyBoxSceneNode* nb = DBG_NEW CSkyBoxSceneNode(0,0,0,0,0,0, newParent,
 		newManager, ID);
 
 	nb->cloneMembers(this, newManager);

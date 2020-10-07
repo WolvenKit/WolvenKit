@@ -21,6 +21,7 @@
 #include "SMeshBufferLightMap.h"
 #include "irrString.h"
 #include "ISceneManager.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -37,7 +38,7 @@ COCTLoader::COCTLoader(ISceneManager* smgr, io::IFileSystem* fs)
 	if (FileSystem)
 		FileSystem->grab();
 
-	TextureLoader = new CMeshTextureLoader( FileSystem, SceneManager->getVideoDriver() );
+	TextureLoader = DBG_NEW CMeshTextureLoader( FileSystem, SceneManager->getVideoDriver() );
 }
 
 
@@ -63,7 +64,7 @@ void COCTLoader::OCTLoadLights(io::IReadFile* file, scene::ISceneNode * parent, 
 	file->seek(sizeof(octTexture)*header.numTextures, true);
 	file->seek(sizeof(octLightmap)*header.numLightmaps, true);
 
-	octLight * lights = new octLight[header.numLights];
+	octLight * lights = DBG_NEW octLight[header.numLights];
 	file->read(lights, header.numLights * sizeof(octLight));
 
 	//TODO: Skip past my extended data just for good form
@@ -94,11 +95,11 @@ IAnimatedMesh* COCTLoader::createMesh(io::IReadFile* file)
 	octHeader header;
 	file->read(&header, sizeof(octHeader));
 
-	octVert * verts = new octVert[header.numVerts];
-	octFace * faces = new octFace[header.numFaces];
-	octTexture * textures = new octTexture[header.numTextures];
-	octLightmap * lightmaps = new octLightmap[header.numLightmaps];
-	octLight * lights = new octLight[header.numLights];
+	octVert * verts = DBG_NEW octVert[header.numVerts];
+	octFace * faces = DBG_NEW octFace[header.numFaces];
+	octTexture * textures = DBG_NEW octTexture[header.numTextures];
+	octLightmap * lightmaps = DBG_NEW octLightmap[header.numLightmaps];
+	octLight * lights = DBG_NEW octLight[header.numLights];
 
 	file->read(verts, sizeof(octVert) * header.numVerts);
 	file->read(faces, sizeof(octFace) * header.numFaces);
@@ -125,10 +126,10 @@ IAnimatedMesh* COCTLoader::createMesh(io::IReadFile* file)
 	// a "null" texture and "null" lightmap.  Ones that end up with nothing in them
 	// will be removed later.
 
-	SMesh * Mesh = new SMesh();
+	SMesh * Mesh = DBG_NEW SMesh();
 	for (i=0; i<(header.numTextures+1) * (header.numLightmaps+1); ++i)
 	{
-		scene::SMeshBufferLightMap* buffer = new scene::SMeshBufferLightMap();
+		scene::SMeshBufferLightMap* buffer = DBG_NEW scene::SMeshBufferLightMap();
 
 		buffer->Material.MaterialType = video::EMT_LIGHTMAP;
 		buffer->Material.Lighting = false;
@@ -310,7 +311,7 @@ IAnimatedMesh* COCTLoader::createMesh(io::IReadFile* file)
 
 
 	// Set up an animated mesh to hold the mesh
-	SAnimatedMesh* AMesh = new SAnimatedMesh();
+	SAnimatedMesh* AMesh = DBG_NEW SAnimatedMesh();
 	AMesh->Type = EAMT_OCT;
 	AMesh->addMesh(Mesh);
 	AMesh->recalculateBoundingBox();

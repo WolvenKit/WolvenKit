@@ -230,18 +230,18 @@ IImage* CImageLoaderRGB::loadImage(io::IReadFile* file) const
 			{
 			case 1:
 				// BW (grayscale) image
-				paletteData = new s32[256];
+				paletteData = DBG_NEW s32[256];
 				for (int n=0; n<256; n++)
 					paletteData[n] = n;
 
-				image = new CImage(ECF_A1R5G5B5, core::dimension2d<u32>(rgb.Header.Xsize, rgb.Header.Ysize));
+				image = DBG_NEW CImage(ECF_A1R5G5B5, core::dimension2d<u32>(rgb.Header.Xsize, rgb.Header.Ysize));
 				if (image)
 					CColorConverter::convert8BitTo16Bit(rgb.rgbData, (s16*)image->getData(), rgb.Header.Xsize, rgb.Header.Ysize, paletteData, 0, true);
 				break;
 			case 3:
 				// RGB image
 				// one byte per COLOR VALUE, eg, 24bpp
-				image = new CImage(ECF_R8G8B8, core::dimension2d<u32>(rgb.Header.Xsize, rgb.Header.Ysize));
+				image = DBG_NEW CImage(ECF_R8G8B8, core::dimension2d<u32>(rgb.Header.Xsize, rgb.Header.Ysize));
 				if (image)
 					CColorConverter::convert24BitTo24Bit(rgb.rgbData, (u8*)image->getData(), rgb.Header.Xsize, rgb.Header.Ysize, 0, true, false);
 				break;
@@ -251,7 +251,7 @@ IImage* CImageLoaderRGB::loadImage(io::IReadFile* file) const
 
 				converttoARGB(reinterpret_cast<u32*>(rgb.rgbData), 	rgb.Header.Ysize * rgb.Header.Xsize);
 
-				image = new CImage(ECF_A8R8G8B8, core::dimension2d<u32>(rgb.Header.Xsize, rgb.Header.Ysize));
+				image = DBG_NEW CImage(ECF_A8R8G8B8, core::dimension2d<u32>(rgb.Header.Xsize, rgb.Header.Ysize));
 				if (image)
 					CColorConverter::convert32BitTo32Bit((s32*)rgb.rgbData, (s32*)image->getData(), rgb.Header.Xsize, rgb.Header.Ysize, 0, true);
 
@@ -352,10 +352,10 @@ bool CImageLoaderRGB::readOffsetTables(io::IReadFile* file, rgbStruct& rgb) cons
 	rgb.TableLen = rgb.Header.Ysize * rgb.Header.Zsize ; // calc size of tables
 
 	// return error if unable to allocate tables
-	rgb.StartTable = new u32[rgb.TableLen];
+	rgb.StartTable = DBG_NEW u32[rgb.TableLen];
 	if (!rgb.StartTable)
 		return false;
-	rgb.LengthTable = new u32[rgb.TableLen];
+	rgb.LengthTable = DBG_NEW u32[rgb.TableLen];
 	if (!rgb.LengthTable)
 		return false;
 
@@ -387,7 +387,7 @@ void CImageLoaderRGB::processFile(io::IReadFile* file, rgbStruct& rgb) const
 	u16 *tempShort;
 
 	// calculate the size of the buffer needed: XSIZE * YSIZE * ZSIZE * BPC
-	rgb.rgbData = new u8 [(rgb.Header.Xsize)*(rgb.Header.Ysize)*(rgb.Header.Zsize)*(rgb.Header.BPC)];
+	rgb.rgbData = DBG_NEW u8 [(rgb.Header.Xsize)*(rgb.Header.Ysize)*(rgb.Header.Zsize)*(rgb.Header.BPC)];
 	u8 *ptr = rgb.rgbData;
 
 	// cycle through all scanlines

@@ -12,7 +12,7 @@
 #include "CImage.h"
 #include "os.h"
 #include "irrString.h"
-
+#include "debug.h"
 
 namespace irr
 {
@@ -88,8 +88,8 @@ IImage* CImageLoaderPCX::loadImage(io::IReadFile* file) const
 		const long pos = file->getPos();
 		file->seek( file->getSize()-256*3, false );
 
-		u8 *tempPalette = new u8[768];
-		paletteData = new s32[256];
+		u8 *tempPalette = DBG_NEW u8[768];
+		paletteData = DBG_NEW s32[256];
 		file->read( tempPalette, 768 );
 
 		for( s32 i=0; i<256; i++ )
@@ -106,7 +106,7 @@ IImage* CImageLoaderPCX::loadImage(io::IReadFile* file) const
 	}
 	else if( header.BitsPerPixel == 4 )
 	{
-		paletteData = new s32[16];
+		paletteData = DBG_NEW s32[16];
 		for( s32 i=0; i<16; i++ )
 		{
 			paletteData[i] = (0xff000000 |
@@ -120,7 +120,7 @@ IImage* CImageLoaderPCX::loadImage(io::IReadFile* file) const
 	const s32 width = header.XMax - header.XMin + 1;
 	const s32 height = header.YMax - header.YMin + 1;
 	const s32 imagebytes = header.BytesPerLine * header.Planes * header.BitsPerPixel * height / 8;
-	u8* PCXData = new u8[imagebytes];
+	u8* PCXData = DBG_NEW u8[imagebytes];
 
 	u8 cnt, value;
 	s32 lineoffset=0, linestart=0, nextmode=1;
@@ -169,12 +169,12 @@ IImage* CImageLoaderPCX::loadImage(io::IReadFile* file) const
 		switch(header.Planes) // TODO: Other formats
 		{
 		case 1:
-			image = new CImage(ECF_A1R5G5B5, core::dimension2d<u32>(width, height));
+			image = DBG_NEW CImage(ECF_A1R5G5B5, core::dimension2d<u32>(width, height));
 			if (image)
 				CColorConverter::convert8BitTo16Bit(PCXData, (s16*)image->getData(), width, height, paletteData, pad);
 			break;
 		case 3:
-			image = new CImage(ECF_R8G8B8, core::dimension2d<u32>(width, height));
+			image = DBG_NEW CImage(ECF_R8G8B8, core::dimension2d<u32>(width, height));
 			if (image)
 				CColorConverter::convert24BitTo24Bit(PCXData, (u8*)image->getData(), width, height, pad);
 			break;
@@ -184,7 +184,7 @@ IImage* CImageLoaderPCX::loadImage(io::IReadFile* file) const
 	{
 		if (header.Planes==1)
 		{
-			image = new CImage(ECF_A1R5G5B5, core::dimension2d<u32>(width, height));
+			image = DBG_NEW CImage(ECF_A1R5G5B5, core::dimension2d<u32>(width, height));
 			if (image)
 				CColorConverter::convert4BitTo16Bit(PCXData, (s16*)image->getData(), width, height, paletteData, pad);
 		}
@@ -193,13 +193,13 @@ IImage* CImageLoaderPCX::loadImage(io::IReadFile* file) const
 	{
 		if (header.Planes==4)
 		{
-			image = new CImage(ECF_A1R5G5B5, core::dimension2d<u32>(width, height));
+			image = DBG_NEW CImage(ECF_A1R5G5B5, core::dimension2d<u32>(width, height));
 			if (image)
 				CColorConverter::convert4BitTo16Bit(PCXData, (s16*)image->getData(), width, height, paletteData, pad);
 		}
 		else if (header.Planes==1)
 		{
-			image = new CImage(ECF_A1R5G5B5, core::dimension2d<u32>(width, height));
+			image = DBG_NEW CImage(ECF_A1R5G5B5, core::dimension2d<u32>(width, height));
 			if (image)
 				CColorConverter::convert1BitTo16Bit(PCXData, (s16*)image->getData(), width, height, pad);
 		}
@@ -217,7 +217,7 @@ IImage* CImageLoaderPCX::loadImage(io::IReadFile* file) const
 //! creates a loader which is able to load pcx images
 IImageLoader* createImageLoaderPCX()
 {
-	return new CImageLoaderPCX();
+	return DBG_NEW CImageLoaderPCX();
 }
 
 

@@ -11,7 +11,7 @@
 #include "CColorConverter.h"
 #include "CImage.h"
 #include "irrString.h"
-
+#include "debug.h"
 
 namespace irr
 {
@@ -35,7 +35,7 @@ u8 *CImageLoaderTGA::loadCompressedImage(io::IReadFile *file, const STGAHeader& 
 
 	s32 bytesPerPixel = header.PixelDepth/8;
 	s32 imageSize =  header.ImageHeight * header.ImageWidth * bytesPerPixel;
-	u8* data = new u8[imageSize];
+	u8* data = DBG_NEW u8[imageSize];
 	s32 currentByte = 0;
 
 	while(currentByte < imageSize)
@@ -113,10 +113,10 @@ IImage* CImageLoaderTGA::loadImage(io::IReadFile* file) const
 	if (header.ColorMapType)
 	{
 		// create 32 bit palette
-		palette = new u32[ header.ColorMapLength];
+		palette = DBG_NEW u32[ header.ColorMapLength];
 
 		// read color map
-		u8 * colorMap = new u8[header.ColorMapEntrySize/8 * header.ColorMapLength];
+		u8 * colorMap = DBG_NEW u8[header.ColorMapEntrySize/8 * header.ColorMapLength];
 		file->read(colorMap,header.ColorMapEntrySize/8 * header.ColorMapLength);
 
 		// convert to 32-bit palette
@@ -145,7 +145,7 @@ IImage* CImageLoaderTGA::loadImage(io::IReadFile* file) const
 		)
 	{
 		const s32 imageSize = header.ImageHeight * header.ImageWidth * header.PixelDepth/8;
-		data = new u8[imageSize];
+		data = DBG_NEW u8[imageSize];
 	  	file->read(data, imageSize);
 	}
 	else
@@ -169,7 +169,7 @@ IImage* CImageLoaderTGA::loadImage(io::IReadFile* file) const
 		{
 			if (header.ImageType==3) // grey image
 			{
-				image = new CImage(ECF_R8G8B8,
+				image = DBG_NEW CImage(ECF_R8G8B8,
 					core::dimension2d<u32>(header.ImageWidth, header.ImageHeight));
 				if (image)
 					CColorConverter::convert8BitTo24Bit((u8*)data,
@@ -179,7 +179,7 @@ IImage* CImageLoaderTGA::loadImage(io::IReadFile* file) const
 			}
 			else
 			{
-				image = new CImage(ECF_A1R5G5B5,
+				image = DBG_NEW CImage(ECF_A1R5G5B5,
 					core::dimension2d<u32>(header.ImageWidth, header.ImageHeight));
 				if (image)
 					CColorConverter::convert8BitTo16Bit((u8*)data,
@@ -191,21 +191,21 @@ IImage* CImageLoaderTGA::loadImage(io::IReadFile* file) const
 		}
 		break;
 	case 16:
-		image = new CImage(ECF_A1R5G5B5,
+		image = DBG_NEW CImage(ECF_A1R5G5B5,
 			core::dimension2d<u32>(header.ImageWidth, header.ImageHeight));
 		if (image)
 			CColorConverter::convert16BitTo16Bit((s16*)data,
 				(s16*)image->getData(), header.ImageWidth,	header.ImageHeight, 0, (header.ImageDescriptor&0x20)==0);
 		break;
 	case 24:
-			image = new CImage(ECF_R8G8B8,
+			image = DBG_NEW CImage(ECF_R8G8B8,
 				core::dimension2d<u32>(header.ImageWidth, header.ImageHeight));
 			if (image)
 				CColorConverter::convert24BitTo24Bit(
 					(u8*)data, (u8*)image->getData(), header.ImageWidth, header.ImageHeight, 0, (header.ImageDescriptor&0x20)==0, true);
 		break;
 	case 32:
-			image = new CImage(ECF_A8R8G8B8,
+			image = DBG_NEW CImage(ECF_A8R8G8B8,
 				core::dimension2d<u32>(header.ImageWidth, header.ImageHeight));
 			if (image)
 				CColorConverter::convert32BitTo32Bit((s32*)data,

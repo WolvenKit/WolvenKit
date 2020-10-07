@@ -14,6 +14,7 @@
 #include "coreutil.h"
 #include "os.h"
 #include "IVideoDriver.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -22,7 +23,7 @@ namespace scene
 
 CSMFMeshFileLoader::CSMFMeshFileLoader(irr::io::IFileSystem* fs, video::IVideoDriver* driver)
 {
-	TextureLoader = new CMeshTextureLoader( fs, driver );
+	TextureLoader = DBG_NEW CMeshTextureLoader( fs, driver );
 }
 
 //! Returns true if the file might be loaded by this class.
@@ -41,7 +42,7 @@ IAnimatedMesh* CSMFMeshFileLoader::createMesh(io::IReadFile* file)
 		getMeshTextureLoader()->setMeshFile(file);
 
 	// create empty mesh
-	SMesh *mesh = new SMesh();
+	SMesh *mesh = DBG_NEW SMesh();
 
 	// load file
 	u16 version;
@@ -63,7 +64,7 @@ IAnimatedMesh* CSMFMeshFileLoader::createMesh(io::IReadFile* file)
 		mesh->getMeshBuffer(i)->recalculateBoundingBox();
 
 	mesh->recalculateBoundingBox();
-	SAnimatedMesh *am = new SAnimatedMesh();
+	SAnimatedMesh *am = DBG_NEW SAnimatedMesh();
 	am->addMesh(mesh);
 	mesh->drop();
 	am->recalculateBoundingBox();
@@ -116,7 +117,7 @@ void CSMFMeshFileLoader::loadLimb(io::IReadFile* file, SMesh* mesh, const core::
 	// create mesh buffer if none was found
 	if (i == mesh->MeshBuffers.size())
 	{
-		CMeshBuffer<video::S3DVertex>* mb = new CMeshBuffer<video::S3DVertex>();
+		CMeshBuffer<video::S3DVertex>* mb = DBG_NEW CMeshBuffer<video::S3DVertex>();
 		mb->Material.TextureLayer[0].Texture = texture;
 
 		// horribly hacky way to do this, maybe it's in the flags?

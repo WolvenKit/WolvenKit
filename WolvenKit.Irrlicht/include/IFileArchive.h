@@ -73,7 +73,7 @@ public:
 	virtual const IFileList* getFileList() const =0;
 
 	//! get the archive type
-	virtual E_FILE_ARCHIVE_TYPE getType() const { return EFAT_UNKNOWN; }
+	virtual E_FILE_ARCHIVE_TYPE getType() const noexcept { return EFAT_UNKNOWN; }
 
 	//! return the name (id) of the file Archive
 	virtual const io::path& getArchiveName() const =0;

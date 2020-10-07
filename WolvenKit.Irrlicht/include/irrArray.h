@@ -25,7 +25,7 @@ class array
 public:
 
 	//! Default constructor for empty array.
-	array() : data(0), allocated(0), used(0),
+	array() : data(nullptr), allocated(0), used(0),
 			strategy(ALLOC_STRATEGY_DOUBLE), free_when_destroyed(true), is_sorted(true)
 	{
 	}
@@ -33,7 +33,7 @@ public:
 
 	//! Constructs an array and allocates an initial chunk of memory.
 	/** \param start_count Amount of elements to pre-allocate. */
-	explicit array(u32 start_count) : data(0), allocated(0), used(0),
+	explicit array(u32 start_count) : data(nullptr), allocated(0), used(0),
 			strategy(ALLOC_STRATEGY_DOUBLE),
 			free_when_destroyed(true), is_sorted(true)
 	{
@@ -42,7 +42,7 @@ public:
 
 
 	//! Copy constructor
-	array(const array<T, TAlloc>& other) : data(0)
+	array(const array<T, TAlloc>& other) : data(nullptr)
 	{
 		*this = other;
 	}
@@ -205,7 +205,7 @@ public:
 
 			allocator.deallocate(data); // delete [] data;
 		}
-		data = 0;
+		data = nullptr;
 		used = 0;
 		allocated = 0;
 		is_sorted = true;
@@ -271,7 +271,7 @@ public:
 
 		//if (allocated < other.allocated)
 		if (other.allocated == 0)
-			data = 0;
+			data = nullptr;
 		else
 			data = allocator.allocate(other.allocated); // new T[other.allocated];
 
@@ -335,7 +335,7 @@ public:
 
 
 	//! Gets last element
-	const T& getLast() const
+	const T& getLast() const noexcept
 	{
 		_IRR_DEBUG_BREAK_IF(!used) // access violation
 
@@ -345,7 +345,7 @@ public:
 
 	//! Gets a pointer to the array.
 	/** \return Pointer to the array. */
-	T* pointer()
+	T* pointer() noexcept
 	{
 		return data;
 	}
@@ -353,7 +353,7 @@ public:
 
 	//! Gets a const pointer to the array.
 	/** \return Pointer to the array. */
-	const T* const_pointer() const
+	const T* const_pointer() const noexcept
 	{
 		return data;
 	}
@@ -361,7 +361,7 @@ public:
 
 	//! Get number of occupied elements of the array.
 	/** \return Size of elements in the array which are actually occupied. */
-	u32 size() const
+	u32 size() const noexcept
 	{
 		return used;
 	}
@@ -370,7 +370,7 @@ public:
 	//! Get amount of memory allocated.
 	/** \return Amount of memory allocated. The amount of bytes
 	allocated would be allocated_size() * sizeof(ElementTypeUsed); */
-	u32 allocated_size() const
+	u32 allocated_size() const noexcept
 	{
 		return allocated;
 	}
@@ -378,7 +378,7 @@ public:
 
 	//! Check if array is empty.
 	/** \return True if the array is empty false if not. */
-	bool empty() const
+	bool empty() const noexcept
 	{
 		return used == 0;
 	}

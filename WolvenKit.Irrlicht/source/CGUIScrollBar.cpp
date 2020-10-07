@@ -12,6 +12,7 @@
 #include "IGUIFont.h"
 #include "IGUIFontBitmap.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -470,7 +471,7 @@ void CGUIScrollBar::refreshControls()
 		const s32 w = (h < RelativeRect.getWidth() / 2) ? h : RelativeRect.getWidth() / 2;
 		if (!UpButton)
 		{
-			UpButton = new CGUIButton(Environment, this, -1, core::rect<s32>(0,0, w, h), NoClip);
+			UpButton = DBG_NEW CGUIButton(Environment, this, -1, core::rect<s32>(0,0, w, h), NoClip);
 			UpButton->setSubElement(true);
 			UpButton->setTabStop(false);
 		}
@@ -484,7 +485,7 @@ void CGUIScrollBar::refreshControls()
 		UpButton->setAlignment(EGUIA_UPPERLEFT, EGUIA_UPPERLEFT, EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT);
 		if (!DownButton)
 		{
-			DownButton = new CGUIButton(Environment, this, -1, core::rect<s32>(RelativeRect.getWidth()-w, 0, RelativeRect.getWidth(), h), NoClip);
+			DownButton = DBG_NEW CGUIButton(Environment, this, -1, core::rect<s32>(RelativeRect.getWidth()-w, 0, RelativeRect.getWidth(), h), NoClip);
 			DownButton->setSubElement(true);
 			DownButton->setTabStop(false);
 		}
@@ -503,7 +504,7 @@ void CGUIScrollBar::refreshControls()
 		const s32 h = (w < RelativeRect.getHeight() / 2) ? w : RelativeRect.getHeight() / 2;
 		if (!UpButton)
 		{
-			UpButton = new CGUIButton(Environment, this, -1, core::rect<s32>(0,0, w, h), NoClip);
+			UpButton = DBG_NEW CGUIButton(Environment, this, -1, core::rect<s32>(0,0, w, h), NoClip);
 			UpButton->setSubElement(true);
 			UpButton->setTabStop(false);
 		}
@@ -517,7 +518,7 @@ void CGUIScrollBar::refreshControls()
 		UpButton->setAlignment(EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT, EGUIA_UPPERLEFT, EGUIA_UPPERLEFT);
 		if (!DownButton)
 		{
-			DownButton = new CGUIButton(Environment, this, -1, core::rect<s32>(0,RelativeRect.getHeight()-h, w, RelativeRect.getHeight()), NoClip);
+			DownButton = DBG_NEW CGUIButton(Environment, this, -1, core::rect<s32>(0,RelativeRect.getHeight()-h, w, RelativeRect.getHeight()), NoClip);
 			DownButton->setSubElement(true);
 			DownButton->setTabStop(false);
 		}

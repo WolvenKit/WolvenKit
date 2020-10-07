@@ -9,6 +9,7 @@
 
 #include "os.h"
 #include "coreutil.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -76,7 +77,7 @@ IFileArchive* CArchiveLoaderPAK::createArchive(io::IReadFile* file, bool ignoreC
 	if ( file )
 	{
 		file->seek ( 0 );
-		archive = new CPakReader(file, ignoreCase, ignorePaths);
+		archive = DBG_NEW CPakReader(file, ignoreCase, ignorePaths);
 	}
 	return archive;
 }

@@ -45,10 +45,10 @@ namespace io
 		virtual long getPos() const _IRR_OVERRIDE_;
 
 		//! returns name of file
-		virtual const io::path& getFileName() const _IRR_OVERRIDE_;
+		const io::path& getFileName() const _IRR_OVERRIDE_;
 
 		//! Get the type of the class implementing this interface
-		virtual EREAD_FILE_TYPE getType() const _IRR_OVERRIDE_
+		EREAD_FILE_TYPE getType() const noexcept _IRR_OVERRIDE_
 		{
 			return ERFT_READ_FILE;
 		}

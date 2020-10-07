@@ -24,7 +24,7 @@ private:
 	//! List element node with pointer to previous and next element in the list.
 	struct SKListNode
 	{
-		SKListNode(const T& e) : Next(0), Prev(0), Element(e) {}
+		SKListNode(const T& e) : Next(nullptr), Prev(nullptr), Element(e) {}
 
 		SKListNode* Next;
 		SKListNode* Prev;
@@ -38,22 +38,22 @@ public:
 	class Iterator
 	{
 	public:
-		Iterator() : Current(0) {}
+		Iterator() noexcept : Current(nullptr) {}
 
-		Iterator& operator ++()    { Current = Current->Next; return *this; }
+		Iterator& operator ++() noexcept { Current = Current->Next; return *this; }
 		Iterator& operator --()    { Current = Current->Prev; return *this; }
-		Iterator  operator ++(s32) { Iterator tmp = *this; Current = Current->Next; return tmp; }
+		Iterator  operator ++(s32) noexcept { Iterator tmp = *this; Current = Current->Next; return tmp; }
 		Iterator  operator --(s32) { Iterator tmp = *this; Current = Current->Prev; return tmp; }
 
 		Iterator& operator +=(s32 num)
 		{
 			if(num > 0)
 			{
-				while (num-- && this->Current != 0) ++(*this);
+				while (num-- && this->Current != nullptr) ++(*this);
 			}
 			else
 			{
-				while(num++ && this->Current != 0) --(*this);
+				while(num++ && this->Current != nullptr) --(*this);
 			}
 			return *this;
 		}
@@ -63,12 +63,12 @@ public:
 		Iterator  operator - (s32 num) const { return (*this)+ (-num); }
 
 		bool operator ==(const Iterator&      other) const { return Current == other.Current; }
-		bool operator !=(const Iterator&      other) const { return Current != other.Current; }
+		bool operator !=(const Iterator&      other) const noexcept { return Current != other.Current; }
 		bool operator ==(const ConstIterator& other) const { return Current == other.Current; }
 		bool operator !=(const ConstIterator& other) const { return Current != other.Current; }
 
-		T & operator * () { return Current->Element; }
-		T * operator ->() { return &Current->Element; }
+		T & operator * () noexcept { return Current->Element; }
+		T * operator ->() noexcept { return &Current->Element; }
 
 	private:
 		explicit Iterator(SKListNode* begin) : Current(begin) {}
@@ -84,7 +84,7 @@ public:
 	{
 	public:
 
-		ConstIterator() : Current(0) {}
+		ConstIterator() : Current(nullptr) {}
 		ConstIterator(const Iterator& iter) : Current(iter.Current)  {}
 
 		ConstIterator& operator ++()    { Current = Current->Next; return *this; }
@@ -96,11 +96,11 @@ public:
 		{
 			if(num > 0)
 			{
-				while(num-- && this->Current != 0) ++(*this);
+				while(num-- && this->Current != nullptr) ++(*this);
 			}
 			else
 			{
-				while(num++ && this->Current != 0) --(*this);
+				while(num++ && this->Current != nullptr) --(*this);
 			}
 			return *this;
 		}
@@ -130,11 +130,11 @@ public:
 
 	//! Default constructor for empty list.
 	list()
-		: First(0), Last(0), Size(0) {}
+		: First(nullptr), Last(nullptr), Size(0) {}
 
 
 	//! Copy constructor.
-	list(const list<T>& other) : First(0), Last(0), Size(0)
+	list(const list<T>& other) : First(nullptr), Last(nullptr), Size(0)
 	{
 		*this = other;
 	}
@@ -191,7 +191,7 @@ public:
 		}
 
 		//First = 0; handled by loop
-		Last = 0;
+		Last = nullptr;
 		Size = 0;
 	}
 
@@ -200,7 +200,7 @@ public:
 	/** \return True if the list is empty and false if not. */
 	bool empty() const
 	{
-		return (First == 0);
+		return (First == nullptr);
 	}
 
 
@@ -213,12 +213,12 @@ public:
 
 		++Size;
 
-		if (First == 0)
+		if (First == nullptr)
 			First = node;
 
 		node->Prev = Last;
 
-		if (Last != 0)
+		if (Last != nullptr)
 			Last->Next = node;
 
 		Last = node;
@@ -268,7 +268,7 @@ public:
 	/** \return List iterator pointing to null. */
 	Iterator end()
 	{
-		return Iterator(0);
+		return Iterator(nullptr);
 	}
 
 
@@ -276,7 +276,7 @@ public:
 	/** \return Const list iterator pointing to null. */
 	ConstIterator end() const
 	{
-		return ConstIterator(0);
+		return ConstIterator(nullptr);
 	}
 
 
@@ -375,7 +375,7 @@ public:
 
 		allocator.destruct(it.Current);
 		allocator.deallocate(it.Current);
-		it.Current = 0;
+		it.Current = nullptr;
 		--Size;
 
 		return returnIterator;

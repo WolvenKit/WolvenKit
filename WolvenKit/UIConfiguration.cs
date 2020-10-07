@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
@@ -52,7 +54,7 @@ namespace WolvenKit
         {
             if (File.Exists(ConfigurationPath) && new FileInfo(ConfigurationPath).Length != 0)
             {
-                var ser = new XmlSerializer(typeof (UIConfiguration));
+                XmlSerializer ser = new XmlSerializer(typeof(UIConfiguration));
                 var stream = new FileStream(ConfigurationPath, FileMode.Open, FileAccess.Read);
                 var config = (UIConfiguration) ser.Deserialize(stream);
                 stream.Close();

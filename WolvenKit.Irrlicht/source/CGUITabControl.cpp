@@ -12,6 +12,7 @@
 #include "IVideoDriver.h"
 #include "rect.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -244,7 +245,7 @@ void CGUITabControl::refreshSprites()
 //! Adds a tab
 IGUITab* CGUITabControl::addTab(const wchar_t* caption, s32 id)
 {
-	CGUITab* tab = new CGUITab(Tabs.size(), Environment, this, calcTabPos(), id);
+	CGUITab* tab = DBG_NEW CGUITab(Tabs.size(), Environment, this, calcTabPos(), id);
 
 	tab->setText(caption);
 	tab->setAlignment(EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT, EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT);
@@ -307,7 +308,7 @@ IGUITab* CGUITabControl::insertTab(s32 idx, const wchar_t* caption, s32 id)
 	if ( idx < 0 || idx > (s32)Tabs.size() )	// idx == Tabs.size() is indeed ok here as core::array can handle that
 		return NULL;
 
-	CGUITab* tab = new CGUITab(idx, Environment, this, calcTabPos(), id);
+	CGUITab* tab = DBG_NEW CGUITab(idx, Environment, this, calcTabPos(), id);
 
 	tab->setText(caption);
 	tab->setAlignment(EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT, EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT);

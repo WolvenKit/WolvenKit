@@ -141,7 +141,7 @@ bool COpenGLDriver::genericDriverInit()
 
 	// reset cache handler
 	delete CacheHandler;
-	CacheHandler = new COpenGLCacheHandler(this);
+	CacheHandler = DBG_NEW COpenGLCacheHandler(this);
 
 	if (queryFeature(EVDF_ARB_GLSL))
 	{
@@ -241,7 +241,7 @@ void COpenGLDriver::createMaterialRenderers()
 	addAndDropMaterialRenderer(new COpenGLMaterialRenderer_SOLID_2_LAYER(this));
 
 	// add the same renderer for all lightmap types
-	COpenGLMaterialRenderer_LIGHTMAP* lmr = new COpenGLMaterialRenderer_LIGHTMAP(this);
+	COpenGLMaterialRenderer_LIGHTMAP* lmr = DBG_NEW COpenGLMaterialRenderer_LIGHTMAP(this);
 	addMaterialRenderer(lmr); // for EMT_LIGHTMAP:
 	addMaterialRenderer(lmr); // for EMT_LIGHTMAP_ADD:
 	addMaterialRenderer(lmr); // for EMT_LIGHTMAP_M2:
@@ -264,23 +264,23 @@ void COpenGLDriver::createMaterialRenderers()
 	// add normal map renderers
 	s32 tmp = 0;
 	video::IMaterialRenderer* renderer = 0;
-	renderer = new COpenGLNormalMapRenderer(this, tmp, EMT_SOLID);
+	renderer = DBG_NEW COpenGLNormalMapRenderer(this, tmp, EMT_SOLID);
 	renderer->drop();
-	renderer = new COpenGLNormalMapRenderer(this, tmp, EMT_TRANSPARENT_ADD_COLOR);
+	renderer = DBG_NEW COpenGLNormalMapRenderer(this, tmp, EMT_TRANSPARENT_ADD_COLOR);
 	renderer->drop();
-	renderer = new COpenGLNormalMapRenderer(this, tmp, EMT_TRANSPARENT_VERTEX_ALPHA);
+	renderer = DBG_NEW COpenGLNormalMapRenderer(this, tmp, EMT_TRANSPARENT_VERTEX_ALPHA);
 	renderer->drop();
 
 	// add parallax map renderers
-	renderer = new COpenGLParallaxMapRenderer(this, tmp, EMT_SOLID);
+	renderer = DBG_NEW COpenGLParallaxMapRenderer(this, tmp, EMT_SOLID);
 	renderer->drop();
-	renderer = new COpenGLParallaxMapRenderer(this, tmp, EMT_TRANSPARENT_ADD_COLOR);
+	renderer = DBG_NEW COpenGLParallaxMapRenderer(this, tmp, EMT_TRANSPARENT_ADD_COLOR);
 	renderer->drop();
-	renderer = new COpenGLParallaxMapRenderer(this, tmp, EMT_TRANSPARENT_VERTEX_ALPHA);
+	renderer = DBG_NEW COpenGLParallaxMapRenderer(this, tmp, EMT_TRANSPARENT_VERTEX_ALPHA);
 	renderer->drop();
 
 	// add basic 1 texture blending
-	addAndDropMaterialRenderer(new COpenGLMaterialRenderer_ONETEXTURE_BLEND(this));
+	addAndDropMaterialRenderer(DBG_NEW COpenGLMaterialRenderer_ONETEXTURE_BLEND(this));
 }
 
 bool COpenGLDriver::beginScene(u16 clearFlag, SColor clearColor, f32 clearDepth, u8 clearStencil, const SExposedVideoData& videoData, core::rect<s32>* sourceRect)
@@ -549,7 +549,7 @@ bool COpenGLDriver::updateIndexHardwareBuffer(SHWBufferLink_opengl *HWBuffer)
 
 
 //! updates hardware buffer if needed
-bool COpenGLDriver::updateHardwareBuffer(SHWBufferLink *HWBuffer)
+bool COpenGLDriver::updateHardwareBuffer(SHWBufferLink *HWBuffer) noexcept
 {
 	if (!HWBuffer)
 		return false;
@@ -585,7 +585,7 @@ bool COpenGLDriver::updateHardwareBuffer(SHWBufferLink *HWBuffer)
 
 
 //! Create hardware buffer from meshbuffer
-COpenGLDriver::SHWBufferLink *COpenGLDriver::createHardwareBuffer(const scene::IMeshBuffer* mb)
+COpenGLDriver::SHWBufferLink *COpenGLDriver::createHardwareBuffer(const scene::IMeshBuffer* mb) noexcept
 {
 #if defined(GL_ARB_vertex_buffer_object)
 	if (!mb || (mb->getHardwareMappingHint_Index()==scene::EHM_NEVER && mb->getHardwareMappingHint_Vertex()==scene::EHM_NEVER))
@@ -643,7 +643,7 @@ void COpenGLDriver::deleteHardwareBuffer(SHWBufferLink *_HWBuffer)
 
 
 //! Draw hardware buffer
-void COpenGLDriver::drawHardwareBuffer(SHWBufferLink *_HWBuffer)
+void COpenGLDriver::drawHardwareBuffer(SHWBufferLink *_HWBuffer) noexcept
 {
 	if (!_HWBuffer)
 		return;
@@ -799,7 +799,7 @@ u32 COpenGLDriver::getOcclusionQueryResult(scene::ISceneNode* node) const
 //! Create render target.
 IRenderTarget* COpenGLDriver::addRenderTarget()
 {
-	COpenGLRenderTarget* renderTarget = new COpenGLRenderTarget(this);
+	COpenGLRenderTarget* renderTarget = DBG_NEW COpenGLRenderTarget(this);
 	RenderTargets.push_back(renderTarget);
 
 	return renderTarget;
@@ -2010,14 +2010,14 @@ ITexture* COpenGLDriver::createDeviceDependentTexture(const io::path& name, IIma
 	core::array<IImage*> imageArray(1);
 	imageArray.push_back(image);
 
-	COpenGLTexture* texture = new COpenGLTexture(name, imageArray, ETT_2D, this);
+	COpenGLTexture* texture = DBG_NEW COpenGLTexture(name, imageArray, ETT_2D, this);
 
 	return texture;
 }
 
 ITexture* COpenGLDriver::createDeviceDependentTextureCubemap(const io::path& name, const core::array<IImage*>& image)
 {
-	COpenGLTexture* texture = new COpenGLTexture(name, image, ETT_CUBEMAP, this);
+	COpenGLTexture* texture = DBG_NEW COpenGLTexture(name, image, ETT_CUBEMAP, this);
 
 	return texture;
 }
@@ -3698,7 +3698,7 @@ s32 COpenGLDriver::addShaderMaterial(const c8* vertexShaderProgram,
 	E_MATERIAL_TYPE baseMaterial, s32 userData)
 {
 	s32 nr = -1;
-	COpenGLShaderMaterialRenderer* r = new COpenGLShaderMaterialRenderer(
+	COpenGLShaderMaterialRenderer* r = DBG_NEW COpenGLShaderMaterialRenderer(
 		this, nr, vertexShaderProgram, pixelShaderProgram,
 		callback, baseMaterial, userData);
 
@@ -3727,7 +3727,7 @@ s32 COpenGLDriver::addHighLevelShaderMaterial(
 {
 	s32 nr = -1;
 
-	COpenGLSLMaterialRenderer* r = new COpenGLSLMaterialRenderer(
+	COpenGLSLMaterialRenderer* r = DBG_NEW COpenGLSLMaterialRenderer(
 			this, nr,
 			vertexShaderProgram, vertexShaderEntryPointName, vsCompileTarget,
 			pixelShaderProgram, pixelShaderEntryPointName, psCompileTarget,
@@ -3766,7 +3766,7 @@ ITexture* COpenGLDriver::addRenderTargetTexture(const core::dimension2d<u32>& si
 		destSize = destSize.getOptimalSize((size == size.getOptimalSize()), false, false);
 	}
 
-	COpenGLTexture* renderTargetTexture = new COpenGLTexture(name, destSize, ETT_2D, format, this);
+	COpenGLTexture* renderTargetTexture = DBG_NEW COpenGLTexture(name, destSize, ETT_2D, format, this);
 	addTexture(renderTargetTexture);
 	renderTargetTexture->drop();
 
@@ -3794,7 +3794,7 @@ ITexture* COpenGLDriver::addRenderTargetTextureCubemap(const irr::u32 sideLen, c
 		destSize = destSize.getOptimalSize((size == size.getOptimalSize()), false, false);
 	}
 
-	COpenGLTexture* renderTargetTexture = new COpenGLTexture(name, destSize, ETT_CUBEMAP, format, this);
+	COpenGLTexture* renderTargetTexture = DBG_NEW COpenGLTexture(name, destSize, ETT_CUBEMAP, format, this);
 	addTexture(renderTargetTexture);
 	renderTargetTexture->drop();
 
@@ -4013,7 +4013,7 @@ IImage* COpenGLDriver::createScreenShot(video::ECOLOR_FORMAT format, video::E_RE
 		// opengl images are horizontally flipped, so we have to fix that here.
 		const s32 pitch=newImage->getPitch();
 		u8* p2 = pixels + (ScreenSize.Height - 1) * pitch;
-		u8* tmpBuffer = new u8[pitch];
+		u8* tmpBuffer = DBG_NEW u8[pitch];
 		for (u32 i=0; i < ScreenSize.Height; i += 2)
 		{
 			memcpy(tmpBuffer, pixels, pitch);
@@ -4416,7 +4416,7 @@ namespace video
 	IVideoDriver* createOpenGLDriver(const SIrrlichtCreationParameters& params, io::IFileSystem* io, IContextManager* contextManager)
 	{
 #ifdef _IRR_COMPILE_WITH_OPENGL_
-		COpenGLDriver* ogl = new COpenGLDriver(params, io, contextManager);
+		COpenGLDriver* ogl = DBG_NEW COpenGLDriver(params, io, contextManager);
 
 		if (!ogl->initDriver())
 		{

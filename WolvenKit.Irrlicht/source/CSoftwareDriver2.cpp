@@ -36,7 +36,7 @@ CBurningVideoDriver::CBurningVideoDriver(const irr::SIrrlichtCreationParameters&
 	#endif
 
 	// create backbuffer
-	BackBuffer = new CImage(BURNINGSHADER_COLOR_FORMAT, params.WindowSize);
+	BackBuffer = DBG_NEW CImage(BURNINGSHADER_COLOR_FORMAT, params.WindowSize);
 	if (BackBuffer)
 	{
 		BackBuffer->fill(SColor(0));
@@ -93,9 +93,9 @@ CBurningVideoDriver::CBurningVideoDriver(const irr::SIrrlichtCreationParameters&
 
 
 	// add the same renderer for all solid types
-	CSoftware2MaterialRenderer_SOLID* smr = new CSoftware2MaterialRenderer_SOLID( this);
-	CSoftware2MaterialRenderer_TRANSPARENT_ADD_COLOR* tmr = new CSoftware2MaterialRenderer_TRANSPARENT_ADD_COLOR( this);
-	CSoftware2MaterialRenderer_UNSUPPORTED * umr = new CSoftware2MaterialRenderer_UNSUPPORTED ( this );
+	CSoftware2MaterialRenderer_SOLID* smr = DBG_NEW CSoftware2MaterialRenderer_SOLID( this);
+	CSoftware2MaterialRenderer_TRANSPARENT_ADD_COLOR* tmr = DBG_NEW CSoftware2MaterialRenderer_TRANSPARENT_ADD_COLOR( this);
+	CSoftware2MaterialRenderer_UNSUPPORTED * umr = DBG_NEW CSoftware2MaterialRenderer_UNSUPPORTED ( this );
 
 	//!TODO: addMaterialRenderer depends on pushing order....
 	addMaterialRenderer ( smr ); // EMT_SOLID
@@ -337,7 +337,7 @@ bool CBurningVideoDriver::queryFeature(E_VIDEO_DRIVER_FEATURE feature) const
 //! Create render target.
 IRenderTarget* CBurningVideoDriver::addRenderTarget()
 {
-	CSoftwareRenderTarget2* renderTarget = new CSoftwareRenderTarget2(this);
+	CSoftwareRenderTarget2* renderTarget = DBG_NEW CSoftwareRenderTarget2(this);
 	RenderTargets.push_back(renderTarget);
 
 	return renderTarget;
@@ -1996,7 +1996,7 @@ void CBurningVideoDriver::OnResize(const core::dimension2d<u32>& size)
 
 		if (BackBuffer)
 			BackBuffer->drop();
-		BackBuffer = new CImage(BURNINGSHADER_COLOR_FORMAT, realSize);
+		BackBuffer = DBG_NEW CImage(BURNINGSHADER_COLOR_FORMAT, realSize);
 
 		if (resetRT)
 			setRenderTargetImage(BackBuffer);
@@ -2220,7 +2220,7 @@ ITexture* CBurningVideoDriver::addRenderTargetTexture(const core::dimension2d<u3
 		const io::path& name, const ECOLOR_FORMAT format)
 {
 	IImage* img = createImage(BURNINGSHADER_COLOR_FORMAT, size);
-	ITexture* tex = new CSoftwareTexture2(img, name, CSoftwareTexture2::IS_RENDERTARGET );
+	ITexture* tex = DBG_NEW CSoftwareTexture2(img, name, CSoftwareTexture2::IS_RENDERTARGET );
 	img->drop();
 	addTexture(tex);
 	tex->drop();
@@ -2403,7 +2403,7 @@ dreadglobal b;
 DWORD WINAPI dreadFun( void *p)
 {
     printf("Hi This is burning dread\n");
-	b.driver = new irr::video::CBurningVideoDriver(*b.params, b.io, b.presenter);
+	b.driver = DBG_NEW irr::video::CBurningVideoDriver(*b.params, b.io, b.presenter);
 
 	SetEvent ( b.sync );
 	while ( 1 )

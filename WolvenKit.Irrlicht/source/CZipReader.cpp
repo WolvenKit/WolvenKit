@@ -5,6 +5,7 @@
 #include "CZipReader.h"
 
 #include "os.h"
+#include "debug.h"
 
 // This method is used for error output from bzip2.
 extern "C" void bz_internal_error(int errorCode)
@@ -111,7 +112,7 @@ IFileArchive* CArchiveLoaderZIP::createArchive(io::IReadFile* file, bool ignoreC
 
 		bool isGZip = (sig == 0x8b1f);
 
-		archive = new CZipReader(FileSystem, file, ignoreCase, ignorePaths, isGZip);
+		archive = DBG_NEW CZipReader(FileSystem, file, ignoreCase, ignorePaths, isGZip);
 	}
 	return archive;
 }
@@ -166,7 +167,7 @@ CZipReader::~CZipReader()
 
 
 //! get the archive type
-E_FILE_ARCHIVE_TYPE CZipReader::getType() const
+E_FILE_ARCHIVE_TYPE CZipReader::getType() const noexcept
 {
 	return IsGZip ? EFAT_GZIP : EFAT_ZIP;
 }
@@ -316,7 +317,7 @@ bool CZipReader::scanZipHeader(bool ignoreGPBits)
 
 	// read filename
 	{
-		c8 *tmp = new c8 [ entry.header.FilenameLength + 2 ];
+		c8 *tmp = DBG_NEW c8 [ entry.header.FilenameLength + 2 ];
 		File->read(tmp, entry.header.FilenameLength);
 		tmp[entry.header.FilenameLength] = 0;
 		ZipFileName = tmp;
@@ -559,7 +560,7 @@ IReadFile* CZipReader::createAndOpenFile(u32 index)
 			return 0;
 		}
 		decryptedSize= e.header.DataDescriptor.CompressedSize-saltSize-12;
-		decryptedBuf= new u8[decryptedSize];
+		decryptedBuf= DBG_NEW u8[decryptedSize];
 		u32 c = 0;
 		while ((c+32768)<=decryptedSize)
 		{
@@ -625,7 +626,7 @@ IReadFile* CZipReader::createAndOpenFile(u32 index)
   			#ifdef _IRR_COMPILE_WITH_ZLIB_
 
 			const u32 uncompressedSize = e.header.DataDescriptor.UncompressedSize;
-			c8* pBuf = new c8[ uncompressedSize ];
+			c8* pBuf = DBG_NEW c8[ uncompressedSize ];
 			if (!pBuf)
 			{
 				swprintf_irr ( buf, 64, L"Not enough memory for decompressing %s", core::stringw(Files[index].FullName).c_str() );
@@ -638,7 +639,7 @@ IReadFile* CZipReader::createAndOpenFile(u32 index)
 			u8 *pcData = decryptedBuf;
 			if (!pcData)
 			{
-				pcData = new u8[decryptedSize];
+				pcData = DBG_NEW u8[decryptedSize];
 				if (!pcData)
 				{
 					swprintf_irr ( buf, 64, L"Not enough memory for decompressing %s", core::stringw(Files[index].FullName).c_str() );
@@ -699,7 +700,7 @@ IReadFile* CZipReader::createAndOpenFile(u32 index)
   			#ifdef _IRR_COMPILE_WITH_BZIP2_
 
 			const u32 uncompressedSize = e.header.DataDescriptor.UncompressedSize;
-			c8* pBuf = new c8[ uncompressedSize ];
+			c8* pBuf = DBG_NEW c8[ uncompressedSize ];
 			if (!pBuf)
 			{
 				swprintf_irr ( buf, 64, L"Not enough memory for decompressing %s", core::stringw(Files[index].FullName).c_str() );
@@ -712,7 +713,7 @@ IReadFile* CZipReader::createAndOpenFile(u32 index)
 			u8 *pcData = decryptedBuf;
 			if (!pcData)
 			{
-				pcData = new u8[decryptedSize];
+				pcData = DBG_NEW u8[decryptedSize];
 				if (!pcData)
 				{
 					swprintf_irr ( buf, 64, L"Not enough memory for decompressing %s", core::stringw(Files[index].FullName).c_str() );
@@ -772,7 +773,7 @@ IReadFile* CZipReader::createAndOpenFile(u32 index)
   			#ifdef _IRR_COMPILE_WITH_LZMA_
 
 			u32 uncompressedSize = e.header.DataDescriptor.UncompressedSize;
-			c8* pBuf = new c8[ uncompressedSize ];
+			c8* pBuf = DBG_NEW c8[ uncompressedSize ];
 			if (!pBuf)
 			{
 				swprintf_irr ( buf, 64, L"Not enough memory for decompressing %s", core::stringw(Files[index].FullName).c_str() );
@@ -785,7 +786,7 @@ IReadFile* CZipReader::createAndOpenFile(u32 index)
 			u8 *pcData = decryptedBuf;
 			if (!pcData)
 			{
-				pcData = new u8[decryptedSize];
+				pcData = DBG_NEW u8[decryptedSize];
 				if (!pcData)
 				{
 					swprintf_irr ( buf, 64, L"Not enough memory for decompressing %s", core::stringw(Files[index].FullName).c_str() );

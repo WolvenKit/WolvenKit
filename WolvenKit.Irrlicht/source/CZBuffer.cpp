@@ -5,6 +5,7 @@
 #include "IrrCompileConfig.h"
 #include "CZBuffer.h"
 #include "irrString.h"
+#include "debug.h"
 
 #ifdef _IRR_COMPILE_WITH_SOFTWARE_
 
@@ -54,7 +55,7 @@ void CZBuffer::setSize(const core::dimension2d<u32>& size)
 	delete [] Buffer;
 
 	TotalSize = size.Width * size.Height;
-	Buffer = new TZBufferType[TotalSize];
+	Buffer = DBG_NEW TZBufferType[TotalSize];
 	BufferEnd = Buffer + TotalSize;
 }
 

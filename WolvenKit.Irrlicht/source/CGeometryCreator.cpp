@@ -9,6 +9,7 @@
 #include "IMesh.h"
 #include "IVideoDriver.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -17,7 +18,7 @@ namespace scene
 
 IMesh* CGeometryCreator::createCubeMesh(const core::vector3df& size) const
 {
-	SMeshBuffer* buffer = new SMeshBuffer();
+	SMeshBuffer* buffer = DBG_NEW SMeshBuffer();
 
 	// Create indices
 	const u16 u[36] = {   0,2,1,   0,3,2,   1,5,4,   1,2,5,   4,6,7,   4,5,6,
@@ -57,7 +58,7 @@ IMesh* CGeometryCreator::createCubeMesh(const core::vector3df& size) const
 		buffer->BoundingBox.addInternalPoint(buffer->Vertices[i].Pos);
 	}
 
-	SMesh* mesh = new SMesh;
+	SMesh* mesh = DBG_NEW SMesh;
 	mesh->addMeshBuffer(buffer);
 	buffer->drop();
 
@@ -93,7 +94,7 @@ IMesh* CGeometryCreator::createHillPlaneMesh(
 	++tileCount.Height;
 	++tileCount.Width;
 
-	SMeshBuffer* buffer = new SMeshBuffer();
+	SMeshBuffer* buffer = DBG_NEW SMeshBuffer();
 	video::S3DVertex vtx;
 	vtx.Color.set(255,255,255,255);
 
@@ -159,7 +160,7 @@ IMesh* CGeometryCreator::createHillPlaneMesh(
 	buffer->recalculateBoundingBox();
 	buffer->setHardwareMappingHint(EHM_STATIC);
 
-	SMesh* mesh = new SMesh();
+	SMesh* mesh = DBG_NEW SMesh();
 	mesh->addMeshBuffer(buffer);
 	mesh->recalculateBoundingBox();
 	buffer->drop();
@@ -191,7 +192,7 @@ IMesh* CGeometryCreator::createGeoplaneMesh(f32 radius, u32 rows, u32 columns) c
 	rows = clamp<u32>(rows, 3, 2048);
 	columns = clamp<u32>(columns, 3, 2048);
 
-	SMeshBuffer * const mb = new SMeshBuffer();
+	SMeshBuffer * const mb = DBG_NEW SMeshBuffer();
 	S3DVertex v(0, 0, 0, 0, 1, 0, SColor(255, 255, 255, 255), 0, 0);
 	const float anglestep = (2 * PI) / columns;
 
@@ -253,7 +254,7 @@ IMesh* CGeometryCreator::createGeoplaneMesh(f32 radius, u32 rows, u32 columns) c
 	}
 
 	// Done
-	SMesh * const mesh = new SMesh();
+	SMesh * const mesh = DBG_NEW SMesh();
 	mesh->addMeshBuffer(mb);
 	mb->recalculateBoundingBox();
 	mb->setHardwareMappingHint(EHM_STATIC);
@@ -278,7 +279,7 @@ IMesh* CGeometryCreator::createTerrainMesh(video::IImage* texture,
 	video::S3DVertex vtx;
 	vtx.Color.set(255,255,255,255);
 
-	SMesh* mesh = new SMesh();
+	SMesh* mesh = DBG_NEW SMesh();
 
 	const u32 tm = os::Timer::getRealTime()/1000;
 	const core::dimension2d<u32> hMapSize= heightmap->getDimension();
@@ -297,7 +298,7 @@ IMesh* CGeometryCreator::createTerrainMesh(video::IImage* texture,
 			if (processed.Y + blockSize.Height > hMapSize.Height)
 				blockSize.Height = hMapSize.Height - processed.Y;
 
-			SMeshBuffer* buffer = new SMeshBuffer();
+			SMeshBuffer* buffer = DBG_NEW SMeshBuffer();
 			buffer->setHardwareMappingHint(scene::EHM_STATIC);
 			buffer->Vertices.reallocate(blockSize.getArea());
 			// add vertices of vertex block
@@ -455,7 +456,7 @@ IMesh* CGeometryCreator::createSphereMesh(f32 radius, u32 polyCountX, u32 polyCo
 
 	const u32 polyCountXPitch = polyCountX+1; // get to same vertex on next level
 
-	SMeshBuffer* buffer = new SMeshBuffer();
+	SMeshBuffer* buffer = DBG_NEW SMeshBuffer();
 
 	buffer->Indices.reallocate((polyCountX * polyCountY) * 6);
 
@@ -590,7 +591,7 @@ IMesh* CGeometryCreator::createSphereMesh(f32 radius, u32 polyCountX, u32 polyCo
 	buffer->BoundingBox.addInternalPoint(0.0f,0.0f,radius);
 	buffer->BoundingBox.addInternalPoint(0.0f,0.0f,-radius);
 
-	SMesh* mesh = new SMesh();
+	SMesh* mesh = DBG_NEW SMesh();
 	mesh->addMeshBuffer(buffer);
 	buffer->drop();
 
@@ -605,7 +606,7 @@ IMesh* CGeometryCreator::createCylinderMesh(f32 radius, f32 length,
 			u32 tesselation, const video::SColor& color,
 			bool closeTop, f32 oblique) const
 {
-	SMeshBuffer* buffer = new SMeshBuffer();
+	SMeshBuffer* buffer = DBG_NEW SMeshBuffer();
 
 	const f32 recTesselation = core::reciprocal((f32)tesselation);
 	const f32 recTesselationHalf = recTesselation * 0.5f;
@@ -729,7 +730,7 @@ IMesh* CGeometryCreator::createCylinderMesh(f32 radius, f32 length,
 	}
 
 	buffer->recalculateBoundingBox();
-	SMesh* mesh = new SMesh();
+	SMesh* mesh = DBG_NEW SMesh();
 	mesh->addMeshBuffer(buffer);
 	mesh->setHardwareMappingHint(EHM_STATIC);
 	mesh->recalculateBoundingBox();
@@ -744,7 +745,7 @@ IMesh* CGeometryCreator::createConeMesh(f32 radius, f32 length, u32 tesselation,
 					const video::SColor& colorBottom,
 					f32 oblique) const
 {
-	SMeshBuffer* buffer = new SMeshBuffer();
+	SMeshBuffer* buffer = DBG_NEW SMeshBuffer();
 
 	const f32 angleStep = (core::PI * 2.f ) / tesselation;
 	const f32 angleStepHalf = angleStep*0.5f;
@@ -820,7 +821,7 @@ IMesh* CGeometryCreator::createConeMesh(f32 radius, f32 length, u32 tesselation,
 	buffer->Indices.push_back(0);
 
 	buffer->recalculateBoundingBox();
-	SMesh* mesh = new SMesh();
+	SMesh* mesh = DBG_NEW SMesh();
 	mesh->addMeshBuffer(buffer);
 	buffer->drop();
 
@@ -851,7 +852,7 @@ IMesh* CGeometryCreator::createVolumeLightMesh(
 		const video::SColor footColor, const video::SColor tailColor,
 		const f32 lpDistance, const core::vector3df& lightDim) const
 {
-	SMeshBuffer* Buffer = new SMeshBuffer();
+	SMeshBuffer* Buffer = DBG_NEW SMeshBuffer();
 	Buffer->setHardwareMappingHint(EHM_STATIC);
 
 	const core::vector3df lightPoint(0, -(lpDistance*lightDim.Y), 0);
@@ -974,7 +975,7 @@ IMesh* CGeometryCreator::createVolumeLightMesh(
 	Buffer->setDirty(EBT_VERTEX_AND_INDEX);
 
 	Buffer->recalculateBoundingBox();
-	SMesh* mesh = new SMesh();
+	SMesh* mesh = DBG_NEW SMesh();
 	mesh->addMeshBuffer(Buffer);
 	Buffer->drop();
 

@@ -19,6 +19,7 @@
 #include "IProfiler.h"
 
 #include "os.h"
+#include "debug.h"
 
 // We need this include for the case of skinned mesh support without
 // any such loader
@@ -251,20 +252,20 @@ CSceneManager::CSceneManager(video::IVideoDriver* driver, io::IFileSystem* fs,
 
 	// create mesh cache if not there already
 	if (!MeshCache)
-		MeshCache = new CMeshCache();
+		MeshCache = DBG_NEW CMeshCache();
 	else
 		MeshCache->grab();
 
 	// set scene parameters
-	Parameters = new io::CAttributes();
+	Parameters = DBG_NEW io::CAttributes();
 	Parameters->setAttribute(DEBUG_NORMAL_LENGTH, 1.f);
 	Parameters->setAttribute(DEBUG_NORMAL_COLOR, video::SColor(255, 34, 221, 221));
 
 	// create collision manager
-	CollisionManager = new CSceneCollisionManager(this, Driver);
+	CollisionManager = DBG_NEW CSceneCollisionManager(this, Driver);
 
 	// create geometry creator
-	GeometryCreator = new CGeometryCreator();
+	GeometryCreator = DBG_NEW CGeometryCreator();
 
 	// add file format loaders. add the least commonly used ones first,
 	// as these are checked last
@@ -273,85 +274,85 @@ CSceneManager::CSceneManager(video::IVideoDriver* driver, io::IFileSystem* fs,
 	// shallow copies from the previous manager if there is one.
 
 	#ifdef _IRR_COMPILE_WITH_STL_LOADER_
-	MeshLoaderList.push_back(new CSTLMeshFileLoader());
+	MeshLoaderList.push_back(DBG_NEW CSTLMeshFileLoader());
 	#endif
 	#ifdef _IRR_COMPILE_WITH_PLY_LOADER_
-	MeshLoaderList.push_back(new CPLYMeshFileLoader(this));
+	MeshLoaderList.push_back(DBG_NEW CPLYMeshFileLoader(this));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_SMF_LOADER_
-	MeshLoaderList.push_back(new CSMFMeshFileLoader(FileSystem, Driver));
+	MeshLoaderList.push_back(DBG_NEW CSMFMeshFileLoader(FileSystem, Driver));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_OCT_LOADER_
-	MeshLoaderList.push_back(new COCTLoader(this, FileSystem));
+	MeshLoaderList.push_back(DBG_NEW COCTLoader(this, FileSystem));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_CSM_LOADER_
-	MeshLoaderList.push_back(new CCSMLoader(this, FileSystem));
+	MeshLoaderList.push_back(DBG_NEW CCSMLoader(this, FileSystem));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_LMTS_LOADER_
-	MeshLoaderList.push_back(new CLMTSMeshFileLoader(FileSystem, Driver, Parameters));
+	MeshLoaderList.push_back(DBG_NEW CLMTSMeshFileLoader(FileSystem, Driver, Parameters));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_MY3D_LOADER_
-	MeshLoaderList.push_back(new CMY3DMeshFileLoader(this, FileSystem));
+	MeshLoaderList.push_back(DBG_NEW CMY3DMeshFileLoader(this, FileSystem));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_DMF_LOADER_
-	MeshLoaderList.push_back(new CDMFLoader(this, FileSystem));
+	MeshLoaderList.push_back(DBG_NEW CDMFLoader(this, FileSystem));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_OGRE_LOADER_
-	MeshLoaderList.push_back(new COgreMeshFileLoader(FileSystem, Driver));
+	MeshLoaderList.push_back(DBG_NEW COgreMeshFileLoader(FileSystem, Driver));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_HALFLIFE_LOADER_
-	MeshLoaderList.push_back(new CHalflifeMDLMeshFileLoader( this ));
+	MeshLoaderList.push_back(DBG_NEW CHalflifeMDLMeshFileLoader( this ));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_MD3_LOADER_
-	MeshLoaderList.push_back(new CMD3MeshFileLoader( this));
+	MeshLoaderList.push_back(DBG_NEW CMD3MeshFileLoader( this));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_LWO_LOADER_
-	MeshLoaderList.push_back(new CLWOMeshFileLoader(this, FileSystem));
+	MeshLoaderList.push_back(DBG_NEW CLWOMeshFileLoader(this, FileSystem));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_MD2_LOADER_
-	MeshLoaderList.push_back(new CMD2MeshFileLoader());
+	MeshLoaderList.push_back(DBG_NEW CMD2MeshFileLoader());
 	#endif
 	#ifdef _IRR_COMPILE_WITH_IRR_MESH_LOADER_
-	MeshLoaderList.push_back(new CIrrMeshFileLoader(this, FileSystem));
+	MeshLoaderList.push_back(DBG_NEW CIrrMeshFileLoader(this, FileSystem));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_BSP_LOADER_
-	MeshLoaderList.push_back(new CBSPMeshFileLoader(this, FileSystem));
+	MeshLoaderList.push_back(DBG_NEW CBSPMeshFileLoader(this, FileSystem));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_COLLADA_LOADER_
-	MeshLoaderList.push_back(new CColladaFileLoader(this, FileSystem));
+	MeshLoaderList.push_back(DBG_NEW CColladaFileLoader(this, FileSystem));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_3DS_LOADER_
-	MeshLoaderList.push_back(new C3DSMeshFileLoader(this, FileSystem));
+	MeshLoaderList.push_back(DBG_NEW C3DSMeshFileLoader(this, FileSystem));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_X_LOADER_
-	MeshLoaderList.push_back(new CXMeshFileLoader(this, FileSystem));
+	MeshLoaderList.push_back(DBG_NEW CXMeshFileLoader(this, FileSystem));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_MS3D_LOADER_
-	MeshLoaderList.push_back(new CMS3DMeshFileLoader(Driver));
+	MeshLoaderList.push_back(DBG_NEW CMS3DMeshFileLoader(Driver));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_OBJ_LOADER_
-	MeshLoaderList.push_back(new COBJMeshFileLoader(this, FileSystem));
+	MeshLoaderList.push_back(DBG_NEW COBJMeshFileLoader(this, FileSystem));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_B3D_LOADER_
-	MeshLoaderList.push_back(new CB3DMeshFileLoader(this));
+	MeshLoaderList.push_back(DBG_NEW CB3DMeshFileLoader(this));
 	#endif
 	#ifdef _IRR_COMPILE_WITH_W3ENT_LOADER_
-	MeshLoaderList.push_back(new CW3EntLoader(this, FileSystem));
+	MeshLoaderList.push_back(DBG_NEW CW3EntLoader(this, FileSystem));
 	#endif // _IRR_COMPILE_WITH_W3ENT_LOADER_
 
 
 	
 	// scene loaders
 	#ifdef _IRR_COMPILE_WITH_IRR_SCENE_LOADER_
-	SceneLoaderList.push_back(new CSceneLoaderIrr(this, FileSystem));
+	SceneLoaderList.push_back(DBG_NEW CSceneLoaderIrr(this, FileSystem));
 	#endif
 
 	// factories
-	ISceneNodeFactory* factory = new CDefaultSceneNodeFactory(this);
+	ISceneNodeFactory* factory = DBG_NEW CDefaultSceneNodeFactory(this);
 	registerSceneNodeFactory(factory);
 	factory->drop();
 
-	ISceneNodeAnimatorFactory* animatorFactory = new CDefaultSceneNodeAnimatorFactory(this, CursorControl);
+	ISceneNodeAnimatorFactory* animatorFactory = DBG_NEW CDefaultSceneNodeAnimatorFactory(this, CursorControl);
 	registerSceneNodeAnimatorFactory(animatorFactory);
 	animatorFactory->drop();
 
@@ -541,7 +542,7 @@ ITextSceneNode* CSceneManager::addTextSceneNode(gui::IGUIFont* font,
 	if (!parent)
 		parent = this;
 
-	ITextSceneNode* t = new CTextSceneNode(parent, this, id, font,
+	ITextSceneNode* t = DBG_NEW CTextSceneNode(parent, this, id, font,
 		getSceneCollisionManager(), position, text, color);
 	t->drop();
 
@@ -565,7 +566,7 @@ IBillboardTextSceneNode* CSceneManager::addBillboardTextSceneNode(gui::IGUIFont*
 	if (!parent)
 		parent = this;
 
-	IBillboardTextSceneNode* node = new CBillboardTextSceneNode(parent, this, id, font, text, position, size,
+	IBillboardTextSceneNode* node = DBG_NEW CBillboardTextSceneNode(parent, this, id, font, text, position, size,
 		colorTop, colorBottom);
 	node->drop();
 
@@ -586,7 +587,7 @@ IMeshSceneNode* CSceneManager::addQuake3SceneNode(const IMeshBuffer* meshBuffer,
 	if (!parent)
 		parent = this;
 
-	CQuake3ShaderSceneNode* node = new CQuake3ShaderSceneNode( parent,
+	CQuake3ShaderSceneNode* node = DBG_NEW CQuake3ShaderSceneNode( parent,
 		this, id, FileSystem,
 		meshBuffer, shader );
 	node->drop();
@@ -609,7 +610,7 @@ IVolumeLightSceneNode* CSceneManager::addVolumeLightSceneNode(
 	if (!parent)
 		parent = this;
 
-	IVolumeLightSceneNode* node = new CVolumeLightSceneNode(parent, this, id, subdivU, subdivV, foot, tail, position, rotation, scale);
+	IVolumeLightSceneNode* node = DBG_NEW CVolumeLightSceneNode(parent, this, id, subdivU, subdivV, foot, tail, position, rotation, scale);
 	node->drop();
 
 	return node;
@@ -626,7 +627,7 @@ IMeshSceneNode* CSceneManager::addCubeSceneNode(f32 size, ISceneNode* parent,
 	if (!parent)
 		parent = this;
 
-	IMeshSceneNode* node = new CCubeSceneNode(size, parent, this, id, position, rotation, scale);
+	IMeshSceneNode* node = DBG_NEW CCubeSceneNode(size, parent, this, id, position, rotation, scale);
 	node->drop();
 
 	return node;
@@ -645,7 +646,7 @@ IMeshSceneNode* CSceneManager::addSphereSceneNode(f32 radius, s32 polyCount,
 	if (!parent)
 		parent = this;
 
-	IMeshSceneNode* node = new CSphereSceneNode(radius, polyCount, polyCount, parent, this, id, position, rotation, scale);
+	IMeshSceneNode* node = DBG_NEW CSphereSceneNode(radius, polyCount, polyCount, parent, this, id, position, rotation, scale);
 	node->drop();
 
 	return node;
@@ -667,7 +668,7 @@ IMeshSceneNode* CSceneManager::addMeshSceneNode(IMesh* mesh, ISceneNode* parent,
 	if (!parent)
 		parent = this;
 
-	IMeshSceneNode* node = new CMeshSceneNode(mesh, parent, this, id, position, rotation, scale);
+	IMeshSceneNode* node = DBG_NEW CMeshSceneNode(mesh, parent, this, id, position, rotation, scale);
 	node->drop();
 
 	return node;
@@ -683,7 +684,7 @@ ISceneNode* CSceneManager::addWaterSurfaceSceneNode(IMesh* mesh, f32 waveHeight,
 	if (!parent)
 		parent = this;
 
-	ISceneNode* node = new CWaterSurfaceSceneNode(waveHeight, waveSpeed, waveLength,
+	ISceneNode* node = DBG_NEW CWaterSurfaceSceneNode(waveHeight, waveSpeed, waveLength,
 		mesh, parent, this, id, position, rotation, scale);
 
 	node->drop();
@@ -707,7 +708,7 @@ IAnimatedMeshSceneNode* CSceneManager::addAnimatedMeshSceneNode(IAnimatedMesh* m
 		parent = this;
 
 	IAnimatedMeshSceneNode* node =
-		new CAnimatedMeshSceneNode(mesh, parent, this, id, position, rotation, scale);
+        DBG_NEW CAnimatedMeshSceneNode(mesh, parent, this, id, position, rotation, scale);
 	node->drop();
 
 	return node;
@@ -742,7 +743,7 @@ IOctreeSceneNode* CSceneManager::addOctreeSceneNode(IMesh* mesh, ISceneNode* par
 	if (!parent)
 		parent = this;
 
-	COctreeSceneNode* node = new COctreeSceneNode(parent, this, id, minimalPolysPerNode);
+	COctreeSceneNode* node = DBG_NEW COctreeSceneNode(parent, this, id, minimalPolysPerNode);
 
 	if (node)
 	{
@@ -770,7 +771,7 @@ ICameraSceneNode* CSceneManager::addCameraSceneNode(ISceneNode* parent,
 	if (!parent)
 		parent = this;
 
-	ICameraSceneNode* node = new CCameraSceneNode(parent, this, id, position, lookat);
+	ICameraSceneNode* node = DBG_NEW CCameraSceneNode(parent, this, id, position, lookat);
 
 	if (makeActive)
 		setActiveCamera(node);
@@ -791,7 +792,7 @@ ICameraSceneNode* CSceneManager::addCameraSceneNodeMaya(ISceneNode* parent,
 			core::vector3df(0,0,100), id, makeActive);
 	if (node)
 	{
-		ISceneNodeAnimator* anm = new CSceneNodeAnimatorCameraMaya(CursorControl,
+		ISceneNodeAnimator* anm = DBG_NEW CSceneNodeAnimatorCameraMaya(CursorControl,
 			rotateSpeed, zoomSpeed, translationSpeed, distance);
 
 		node->addAnimator(anm);
@@ -813,7 +814,7 @@ ICameraSceneNode* CSceneManager::addCameraSceneNodeFPS(ISceneNode* parent,
 			core::vector3df(0,0,100), id, makeActive);
 	if (node)
 	{
-		ISceneNodeAnimator* anm = new CSceneNodeAnimatorCameraFPS(CursorControl,
+		ISceneNodeAnimator* anm = DBG_NEW CSceneNodeAnimatorCameraFPS(CursorControl,
 				rotateSpeed, moveSpeed, jumpSpeed,
 				keyMapArray, keyMapSize, noVerticalMovement, invertMouseY);
 
@@ -836,7 +837,7 @@ ILightSceneNode* CSceneManager::addLightSceneNode(ISceneNode* parent,
 	if (!parent)
 		parent = this;
 
-	ILightSceneNode* node = new CLightSceneNode(parent, this, id, position, color, range);
+	ILightSceneNode* node = DBG_NEW CLightSceneNode(parent, this, id, position, color, range);
 	node->drop();
 
 	return node;
@@ -855,7 +856,7 @@ IBillboardSceneNode* CSceneManager::addBillboardSceneNode(ISceneNode* parent,
 	if (!parent)
 		parent = this;
 
-	IBillboardSceneNode* node = new CBillboardSceneNode(parent, this, id, position, size,
+	IBillboardSceneNode* node = DBG_NEW CBillboardSceneNode(parent, this, id, position, size,
 		colorTop, colorBottom);
 	node->drop();
 
@@ -875,7 +876,7 @@ ISceneNode* CSceneManager::addSkyBoxSceneNode(video::ITexture* top, video::IText
 	if (!parent)
 		parent = this;
 
-	ISceneNode* node = new CSkyBoxSceneNode(top, bottom, left, right,
+	ISceneNode* node = DBG_NEW CSkyBoxSceneNode(top, bottom, left, right,
 			front, back, parent, this, id);
 
 	node->drop();
@@ -893,7 +894,7 @@ ISceneNode* CSceneManager::addSkyDomeSceneNode(video::ITexture* texture,
 	if (!parent)
 		parent = this;
 
-	ISceneNode* node = new CSkyDomeSceneNode(texture, horiRes, vertRes,
+	ISceneNode* node = DBG_NEW CSkyDomeSceneNode(texture, horiRes, vertRes,
 		texturePercentage, spherePercentage, radius, parent, this, id);
 
 	node->drop();
@@ -914,7 +915,7 @@ IParticleSystemSceneNode* CSceneManager::addParticleSystemSceneNode(
 	if (!parent)
 		parent = this;
 
-	IParticleSystemSceneNode* node = new CParticleSystemSceneNode(withDefaultEmitter,
+	IParticleSystemSceneNode* node = DBG_NEW CParticleSystemSceneNode(withDefaultEmitter,
 		parent, this, id, position, rotation, scale);
 	node->drop();
 
@@ -977,7 +978,7 @@ ITerrainSceneNode* CSceneManager::addTerrainSceneNode(
 		return 0;
 	}
 
-	CTerrainSceneNode* node = new CTerrainSceneNode(parent, this, FileSystem, id,
+	CTerrainSceneNode* node = DBG_NEW CTerrainSceneNode(parent, this, FileSystem, id,
 		maxLOD, patchSize, position, rotation, scale);
 
 	if (!node->loadHeightMap(heightMapFile, vertexColor, smoothFactor))
@@ -1004,7 +1005,7 @@ ISceneNode* CSceneManager::addEmptySceneNode(ISceneNode* parent, s32 id)
 	if (!parent)
 		parent = this;
 
-	ISceneNode* node = new CEmptySceneNode(parent, this, id);
+	ISceneNode* node = DBG_NEW CEmptySceneNode(parent, this, id);
 	node->drop();
 
 	return node;
@@ -1018,7 +1019,7 @@ IDummyTransformationSceneNode* CSceneManager::addDummyTransformationSceneNode(
 	if (!parent)
 		parent = this;
 
-	IDummyTransformationSceneNode* node = new CDummyTransformationSceneNode(
+	IDummyTransformationSceneNode* node = DBG_NEW CDummyTransformationSceneNode(
 		parent, this, id);
 	node->drop();
 
@@ -1047,7 +1048,7 @@ IAnimatedMesh* CSceneManager::addHillPlaneMesh(const io::path& name,
 	if (!mesh)
 		return 0;
 
-	SAnimatedMesh* animatedMesh = new SAnimatedMesh();
+	SAnimatedMesh* animatedMesh = DBG_NEW SAnimatedMesh();
 	if (!animatedMesh)
 	{
 		mesh->drop();
@@ -1082,7 +1083,7 @@ IAnimatedMesh* CSceneManager::addTerrainMesh(const io::path& name,
 	if (!mesh)
 		return 0;
 
-	SAnimatedMesh* animatedMesh = new SAnimatedMesh();
+	SAnimatedMesh* animatedMesh = DBG_NEW SAnimatedMesh();
 	if (!animatedMesh)
 	{
 		mesh->drop();
@@ -1115,7 +1116,7 @@ IAnimatedMesh* CSceneManager::addArrowMesh(const io::path& name,
 	if (!mesh)
 		return 0;
 
-	SAnimatedMesh* animatedMesh = new SAnimatedMesh();
+	SAnimatedMesh* animatedMesh = DBG_NEW SAnimatedMesh();
 	if (!animatedMesh)
 	{
 		mesh->drop();
@@ -1144,7 +1145,7 @@ IAnimatedMesh* CSceneManager::addSphereMesh(const io::path& name,
 	if (!mesh)
 		return 0;
 
-	SAnimatedMesh* animatedMesh = new SAnimatedMesh();
+	SAnimatedMesh* animatedMesh = DBG_NEW SAnimatedMesh();
 	if (!animatedMesh)
 	{
 		mesh->drop();
@@ -1175,7 +1176,7 @@ IAnimatedMesh* CSceneManager::addVolumeLightMesh(const io::path& name,
 	if (!mesh)
 		return 0;
 
-	SAnimatedMesh* animatedMesh = new SAnimatedMesh();
+	SAnimatedMesh* animatedMesh = DBG_NEW SAnimatedMesh();
 	if (!animatedMesh)
 	{
 		mesh->drop();
@@ -1762,7 +1763,7 @@ video::SColor CSceneManager::getShadowColor() const
 //! creates a rotation animator, which rotates the attached scene node around itself.
 ISceneNodeAnimator* CSceneManager::createRotationAnimator(const core::vector3df& rotationPerSecond)
 {
-	ISceneNodeAnimator* anim = new CSceneNodeAnimatorRotation(os::Timer::getTime(),
+	ISceneNodeAnimator* anim = DBG_NEW CSceneNodeAnimatorRotation(os::Timer::getTime(),
 		rotationPerSecond);
 
 	return anim;
@@ -1779,7 +1780,7 @@ ISceneNodeAnimator* CSceneManager::createFlyCircleAnimator(
 	const f32 orbitDurationMs = (core::DEGTORAD * 360.f) / speed;
 	const u32 effectiveTime = os::Timer::getTime() + (u32)(orbitDurationMs * startPosition);
 
-	ISceneNodeAnimator* anim = new CSceneNodeAnimatorFlyCircle(
+	ISceneNodeAnimator* anim = DBG_NEW CSceneNodeAnimatorFlyCircle(
 			effectiveTime, center,
 			radius, speed, direction,radiusEllipsoid);
 	return anim;
@@ -1791,7 +1792,7 @@ ISceneNodeAnimator* CSceneManager::createFlyCircleAnimator(
 ISceneNodeAnimator* CSceneManager::createFlyStraightAnimator(const core::vector3df& startPoint,
 					const core::vector3df& endPoint, u32 timeForWay, bool loop,bool pingpong)
 {
-	ISceneNodeAnimator* anim = new CSceneNodeAnimatorFlyStraight(startPoint,
+	ISceneNodeAnimator* anim = DBG_NEW CSceneNodeAnimatorFlyStraight(startPoint,
 		endPoint, timeForWay, loop, os::Timer::getTime(), pingpong);
 
 	return anim;
@@ -1803,7 +1804,7 @@ ISceneNodeAnimator* CSceneManager::createFlyStraightAnimator(const core::vector3
 ISceneNodeAnimator* CSceneManager::createTextureAnimator(const core::array<video::ITexture*>& textures,
 	s32 timePerFrame, bool loop)
 {
-	ISceneNodeAnimator* anim = new CSceneNodeAnimatorTexture(textures,
+	ISceneNodeAnimator* anim = DBG_NEW CSceneNodeAnimatorTexture(textures,
 		timePerFrame, loop, os::Timer::getTime());
 
 	return anim;
@@ -1814,7 +1815,7 @@ ISceneNodeAnimator* CSceneManager::createTextureAnimator(const core::array<video
 //! some time automatically.
 ISceneNodeAnimator* CSceneManager::createDeleteAnimator(u32 when)
 {
-	return new CSceneNodeAnimatorDelete(this, os::Timer::getTime() + when);
+	return DBG_NEW CSceneNodeAnimatorDelete(this, os::Timer::getTime() + when);
 }
 
 
@@ -1825,7 +1826,7 @@ ISceneNodeAnimatorCollisionResponse* CSceneManager::createCollisionResponseAnima
 	const core::vector3df& gravityPerSecond,
 	const core::vector3df& ellipsoidTranslation, f32 slidingValue)
 {
-	ISceneNodeAnimatorCollisionResponse* anim = new
+	ISceneNodeAnimatorCollisionResponse* anim = DBG_NEW
 		CSceneNodeAnimatorCollisionResponse(this, world, sceneNode,
 			ellipsoidRadius, gravityPerSecond,
 			ellipsoidTranslation, slidingValue);
@@ -1839,7 +1840,7 @@ ISceneNodeAnimator* CSceneManager::createFollowSplineAnimator(s32 startTime,
 	const core::array< core::vector3df >& points,
 	f32 speed, f32 tightness, bool loop, bool pingpong)
 {
-	ISceneNodeAnimator* a = new CSceneNodeAnimatorFollowSpline(startTime, points,
+	ISceneNodeAnimator* a = DBG_NEW CSceneNodeAnimatorFollowSpline(startTime, points,
 		speed, tightness, loop, pingpong);
 	return a;
 }
@@ -1921,14 +1922,14 @@ ITriangleSelector* CSceneManager::createTriangleSelector(IMesh* mesh, ISceneNode
 	if (!mesh)
 		return 0;
 
-	return new CTriangleSelector(mesh, node, separateMeshbuffers);
+	return DBG_NEW CTriangleSelector(mesh, node, separateMeshbuffers);
 }
 
 ITriangleSelector* CSceneManager::createTriangleSelector(const IMeshBuffer* meshBuffer, irr::u32 materialIndex, ISceneNode* node)
 {
 	if ( !meshBuffer)
 		return 0;
-	return new  CTriangleSelector(meshBuffer, materialIndex, node);
+	return DBG_NEW  CTriangleSelector(meshBuffer, materialIndex, node);
 }
 
 
@@ -1938,7 +1939,7 @@ ITriangleSelector* CSceneManager::createTriangleSelector(IAnimatedMeshSceneNode*
 	if (!node || !node->getMesh())
 		return 0;
 
-	return new CTriangleSelector(node, separateMeshbuffers);
+	return DBG_NEW CTriangleSelector(node, separateMeshbuffers);
 }
 
 
@@ -1948,7 +1949,7 @@ ITriangleSelector* CSceneManager::createTriangleSelectorFromBoundingBox(ISceneNo
 	if (!node)
 		return 0;
 
-	return new CTriangleBBSelector(node);
+	return DBG_NEW CTriangleBBSelector(node);
 }
 
 
@@ -1959,7 +1960,7 @@ ITriangleSelector* CSceneManager::createOctreeTriangleSelector(IMesh* mesh,
 	if (!mesh)
 		return 0;
 
-	return new COctreeTriangleSelector(mesh, node, minimalPolysPerNode);
+	return DBG_NEW COctreeTriangleSelector(mesh, node, minimalPolysPerNode);
 }
 
 ITriangleSelector* CSceneManager::createOctreeTriangleSelector(IMeshBuffer* meshBuffer, irr::u32 materialIndex,
@@ -1968,13 +1969,13 @@ ITriangleSelector* CSceneManager::createOctreeTriangleSelector(IMeshBuffer* mesh
 	if ( !meshBuffer)
 		return 0;
 
-	return new COctreeTriangleSelector(meshBuffer, materialIndex, node, minimalPolysPerNode);
+	return DBG_NEW COctreeTriangleSelector(meshBuffer, materialIndex, node, minimalPolysPerNode);
 }
 
 //! Creates a meta triangle selector.
 IMetaTriangleSelector* CSceneManager::createMetaTriangleSelector()
 {
-	return new CMetaTriangleSelector();
+	return DBG_NEW CMetaTriangleSelector();
 }
 
 
@@ -1983,7 +1984,7 @@ ITriangleSelector* CSceneManager::createTerrainTriangleSelector(
 	ITerrainSceneNode* node, s32 LOD)
 {
 #ifdef _IRR_COMPILE_WITH_TERRAIN_SCENENODE_
-	return new CTerrainTriangleSelector(node, LOD);
+	return DBG_NEW CTerrainTriangleSelector(node, LOD);
 #else
 	return 0;
 #endif
@@ -2164,7 +2165,7 @@ IMeshCache* CSceneManager::getMeshCache()
 //! Creates a new scene manager.
 ISceneManager* CSceneManager::createNewSceneManager(bool cloneContent)
 {
-	CSceneManager* manager = new CSceneManager(Driver, FileSystem, CursorControl, MeshCache, GUIEnvironment);
+	CSceneManager* manager = DBG_NEW CSceneManager(Driver, FileSystem, CursorControl, MeshCache, GUIEnvironment);
 
 	if (cloneContent)
 		manager->cloneMembers(this, manager);
@@ -2601,7 +2602,7 @@ const video::SColorf& CSceneManager::getAmbientLight() const
 ISkinnedMesh* CSceneManager::createSkinnedMesh()
 {
 #ifdef _IRR_COMPILE_WITH_SKINNED_MESH_SUPPORT_
-	return new CSkinnedMesh();
+	return DBG_NEW CSkinnedMesh();
 #else
 	return 0;
 #endif
@@ -2614,51 +2615,51 @@ IMeshWriter* CSceneManager::createMeshWriter(EMESH_WRITER_TYPE type)
 	{
 	case EMWT_IRR_MESH:
 #ifdef _IRR_COMPILE_WITH_IRR_WRITER_
-		return new CIrrMeshWriter(Driver, FileSystem);
+		return DBG_NEW CIrrMeshWriter(Driver, FileSystem);
 #else
 		return 0;
 #endif
 	case EMWT_COLLADA:
 #ifdef _IRR_COMPILE_WITH_COLLADA_WRITER_
-		return new CColladaMeshWriter(this, Driver, FileSystem);
+		return DBG_NEW CColladaMeshWriter(this, Driver, FileSystem);
 #else
 		return 0;
 #endif
 	case EMWT_STL:
 #ifdef _IRR_COMPILE_WITH_STL_WRITER_
-		return new CSTLMeshWriter(this);
+		return DBG_NEW CSTLMeshWriter(this);
 #else
 		return 0;
 #endif
 	case EMWT_OBJ:
 #ifdef _IRR_COMPILE_WITH_OBJ_WRITER_
-		return new COBJMeshWriter(this, FileSystem);
+		return DBG_NEW COBJMeshWriter(this, FileSystem);
 #else
 		return 0;
 #endif
 
 	case EMWT_PLY:
 #ifdef _IRR_COMPILE_WITH_PLY_WRITER_
-		return new CPLYMeshWriter();
+		return DBG_NEW CPLYMeshWriter();
 #else
 		return 0;
 #endif
 
 	case EMWT_B3D:
 #ifdef _IRR_COMPILE_WITH_B3D_WRITER_
-		return new CB3DMeshWriter();
+		return DBG_NEW CB3DMeshWriter();
 #else
 		return 0;
 #endif
 	case EMWT_FBX:
 #ifdef _IRR_COMPILE_WITH_FBX_WRITER_
-		return new CFBXMeshWriter(this, Driver, FileSystem);
+		return DBG_NEW CFBXMeshWriter(this, Driver, FileSystem);
 #else
 		return 0;
 #endif // _IRR_COMPILE_WITH_GLTF_WRITER_
 	case EMWT_GLTF:
 #ifdef _IRR_COMPILE_WITH_GLTF_WRITER_
-		return new CGLTFMeshWriter(this, Driver, FileSystem);
+		return DBG_NEW CGLTFMeshWriter(this, Driver, FileSystem);
 #else
 		return 0;
 #endif // _IRR_COMPILE_WITH_GLTF_WRITER_
@@ -2674,7 +2675,7 @@ ISceneManager* createSceneManager(video::IVideoDriver* driver,
 		io::IFileSystem* fs, gui::ICursorControl* cursorcontrol,
 		gui::IGUIEnvironment *guiEnvironment)
 {
-	return new CSceneManager(driver, fs, cursorcontrol, 0, guiEnvironment );
+	return DBG_NEW CSceneManager(driver, fs, cursorcontrol, 0, guiEnvironment );
 }
 
 

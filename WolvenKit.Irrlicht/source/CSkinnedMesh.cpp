@@ -9,6 +9,7 @@
 #include "CBoneSceneNode.h"
 #include "IAnimatedMeshSceneNode.h"
 #include "os.h"
+#include "debug.h"
 
 namespace
 {
@@ -1190,7 +1191,7 @@ void CSkinnedMesh::updateBoundingBox(void)
 
 scene::SSkinMeshBuffer *CSkinnedMesh::addMeshBuffer()
 {
-	scene::SSkinMeshBuffer *buffer=new scene::SSkinMeshBuffer();
+	scene::SSkinMeshBuffer *buffer= DBG_NEW scene::SSkinMeshBuffer();
 	LocalBuffers.push_back(buffer);
 	return buffer;
 }
@@ -1198,7 +1199,7 @@ scene::SSkinMeshBuffer *CSkinnedMesh::addMeshBuffer()
 
 CSkinnedMesh::SJoint *CSkinnedMesh::addJoint(SJoint *parent)
 {
-	SJoint *joint=new SJoint;
+	SJoint *joint= DBG_NEW SJoint;
 
 	AllJoints.push_back(joint);
 	if (!parent)
@@ -1374,7 +1375,7 @@ void CSkinnedMesh::addJoints(core::array<IBoneSceneNode*> &jointChildSceneNodes,
 	//Create new joints
 	for (u32 i=0; i<AllJoints.size(); ++i)
 	{
-		jointChildSceneNodes.push_back(new CBoneSceneNode(0, smgr, 0, i, AllJoints[i]->Name.c_str()));
+		jointChildSceneNodes.push_back(DBG_NEW CBoneSceneNode(0, smgr, 0, i, AllJoints[i]->Name.c_str()));
 	}
 
 	//Match up parents

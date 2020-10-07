@@ -18,7 +18,7 @@ namespace irr
 	namespace video
 	{
 
-		CD3D9RenderTarget::CD3D9RenderTarget(CD3D9Driver* driver) : DepthStencilSurface(0), Driver(driver)
+		CD3D9RenderTarget::CD3D9RenderTarget(CD3D9Driver* driver) : DepthStencilSurface(nullptr), Driver(driver)
 		{
 #ifdef _DEBUG
 			setDebugName("CD3D9RenderTarget");

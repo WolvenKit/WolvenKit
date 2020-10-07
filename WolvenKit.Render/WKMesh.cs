@@ -579,7 +579,9 @@ namespace WolvenKit.Render
                         meshBuff.SetMaterial(mat);
 
                         CData.staticMesh.AddMeshBufferEx(meshBuff);
-                        CData.staticMesh = dev.SceneManager.MeshManipulator.CreateMeshWithTangents(CData.staticMesh, true);
+                        var smgr = dev.SceneManager;
+                        CData.staticMesh = smgr.MeshManipulator.CreateMeshWithTangents(CData.staticMesh, true);
+                        smgr.Drop();
                         meshBuff.Drop();
                     }
                 }

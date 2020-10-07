@@ -45,7 +45,7 @@ namespace io
 		virtual const io::path& getFileName() const = 0;
 
 		//! Get the type of the class implementing this interface
-		virtual EREAD_FILE_TYPE getType() const
+		virtual EREAD_FILE_TYPE getType() const noexcept
 		{
 			return EFIT_UNKNOWN;
 		}

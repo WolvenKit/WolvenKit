@@ -40,18 +40,18 @@ namespace scene
 	public:
 
 		CFBXMeshWriter(ISceneManager* smgr, video::IVideoDriver* driver, io::IFileSystem* fs);
-		virtual ~CFBXMeshWriter();
+		~CFBXMeshWriter();
 
 		//! Returns the type of the mesh writer
-		virtual EMESH_WRITER_TYPE getType() const _IRR_OVERRIDE_;
+		EMESH_WRITER_TYPE getType() const _IRR_OVERRIDE_;
 
         //! Sets a matrix to use for local to world transformation
-        virtual void setTransform(const irr::core::matrix4& m)  _IRR_OVERRIDE_
+        void setTransform(const irr::core::matrix4& m) noexcept _IRR_OVERRIDE_
         {
             LocalToWorld = m;
         }
 
-        virtual void setImageType(core::stringc extension)  _IRR_OVERRIDE_
+        void setImageType(core::stringc extension) noexcept _IRR_OVERRIDE_
         {
             TexExtension = extension;
         }
@@ -60,7 +60,7 @@ namespace scene
 		//virtual bool writeScene(io::IWriteFile* file, scene::ISceneNode* root, int writeRoot);
 
 		//! writes a mesh
-		virtual bool writeMesh(io::IWriteFile* file, IMesh* mesh, s32 flags = EMWF_NONE) _IRR_OVERRIDE_;
+		bool writeMesh(io::IWriteFile* file, IMesh* mesh, s32 flags = EMWF_NONE) _IRR_OVERRIDE_;
 
 		
 

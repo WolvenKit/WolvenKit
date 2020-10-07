@@ -9,6 +9,7 @@
 #include "irrString.h"
 #include "irrArray.h"
 #include "fast_atof.h"
+#include "debug.h"
 
 #ifdef _DEBUG
 #define IRR_DEBUGPRINT(x) printf((x));
@@ -569,7 +570,7 @@ private:
 		// For ASCII we need 1 0's, for UTF-16 2, for UTF-32 4.
 		size += 4;
 
-		char* data8 = new char[size];
+		char* data8 = DBG_NEW char[size];
 
 		if (!callback->read(data8, size-4))
 		{
@@ -670,7 +671,7 @@ private:
 			// copies bytes. This is a problem when there are
 			// unicode symbols using more than one character.
 
-			TextData = new char_type[sizeWithoutHeader];
+			TextData = DBG_NEW char_type[sizeWithoutHeader];
 
 			if ( sizeof(src_char_type) == 1 )
 			{

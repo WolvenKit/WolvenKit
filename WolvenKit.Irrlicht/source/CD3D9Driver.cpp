@@ -17,7 +17,6 @@
 #include "CD3D9ParallaxMapRenderer.h"
 #include "CD3D9HLSLMaterialRenderer.h"
 #include "SIrrCreationParameters.h"
-#include "debug.h"
 
 namespace irr
 {
@@ -1042,7 +1041,7 @@ bool CD3D9Driver::updateIndexHardwareBuffer(SHWBufferLink_d3d9 *hwBuffer)
 
 
 //! updates hardware buffer if needed
-bool CD3D9Driver::updateHardwareBuffer(SHWBufferLink *hwBuffer)
+bool CD3D9Driver::updateHardwareBuffer(SHWBufferLink *hwBuffer) noexcept
 {
 	if (!hwBuffer)
 		return false;
@@ -1076,7 +1075,7 @@ bool CD3D9Driver::updateHardwareBuffer(SHWBufferLink *hwBuffer)
 
 
 //! Create hardware buffer from meshbuffer
-CD3D9Driver::SHWBufferLink *CD3D9Driver::createHardwareBuffer(const scene::IMeshBuffer* mb)
+CD3D9Driver::SHWBufferLink *CD3D9Driver::createHardwareBuffer(const scene::IMeshBuffer* mb) noexcept
 {
 	// Looks like d3d does not support only partial buffering, so refuse
 	// in any case of NEVER
@@ -1131,7 +1130,7 @@ void CD3D9Driver::deleteHardwareBuffer(SHWBufferLink *_HWBuffer)
 
 
 //! Draw hardware buffer
-void CD3D9Driver::drawHardwareBuffer(SHWBufferLink *_HWBuffer)
+void CD3D9Driver::drawHardwareBuffer(SHWBufferLink *_HWBuffer) noexcept
 {
 	if (!_HWBuffer)
 		return;

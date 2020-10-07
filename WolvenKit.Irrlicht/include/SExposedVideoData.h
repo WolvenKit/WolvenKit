@@ -24,8 +24,8 @@ you are using the software or the null device.
 */
 struct SExposedVideoData
 {
-	SExposedVideoData() {OpenGLWin32.HDc=0; OpenGLWin32.HRc=0; OpenGLWin32.HWnd=0;}
-	explicit SExposedVideoData(void* Window) {OpenGLWin32.HDc=0; OpenGLWin32.HRc=0; OpenGLWin32.HWnd=Window;}
+	SExposedVideoData() noexcept {OpenGLWin32.HDc=0; OpenGLWin32.HRc=0; OpenGLWin32.HWnd=0;}
+	explicit SExposedVideoData(void* Window) noexcept {OpenGLWin32.HDc=0; OpenGLWin32.HRc=0; OpenGLWin32.HWnd=Window;}
 
 	struct SD3D9
 	{

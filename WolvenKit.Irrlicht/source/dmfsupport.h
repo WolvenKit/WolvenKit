@@ -20,6 +20,7 @@
 
 #include "irrString.h"
 #include "fast_atof.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -128,7 +129,7 @@ This function loads a StringList from a file where each string is divided by a \
 void LoadFromFile(io::IReadFile* file, StringList& strlist)
 {
 	const long sz = file->getSize();
-	char* buf = new char[sz+1];
+	char* buf = DBG_NEW char[sz+1];
 	file->read(buf, sz);
 	buf[sz] = 0;
 	char* p = buf;

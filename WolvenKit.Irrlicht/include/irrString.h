@@ -36,7 +36,7 @@ outside the string class for explicit use.
 template <typename T, typename TAlloc = irrAllocator<T> >
 class string;
 static size_t multibyteToWString(string<wchar_t>& destination, const char* source, u32 sourceSize);
-inline s32 isdigit(s32 c);
+inline s32 isdigit(s32 c) noexcept;
 
 enum eLocaleID
 {
@@ -108,7 +108,7 @@ public:
 
 	//! Constructor
 	string(const string<T,TAlloc>& other)
-	: array(0), allocated(0), used(0)
+	: array(nullptr), allocated(0), used(0)
 	{
 		*this = other;
 	}
@@ -116,7 +116,7 @@ public:
 	//! Constructor from other string types
 	template <class B, class A>
 	string(const string<B, A>& other)
-	: array(0), allocated(0), used(0)
+	: array(nullptr), allocated(0), used(0)
 	{
 		*this = other;
 	}
@@ -124,7 +124,7 @@ public:
 
 	//! Constructs a string from a float
 	explicit string(const double number)
-	: array(0), allocated(0), used(0)
+	: array(nullptr), allocated(0), used(0)
 	{
 		c8 tmpbuf[255];
 		snprintf_irr(tmpbuf, 255, "%0.6f", number);
@@ -134,7 +134,7 @@ public:
 
 	//! Constructs a string from an int
 	explicit string(int number)
-	: array(0), allocated(0), used(0)
+	: array(nullptr), allocated(0), used(0)
 	{
 		// store if negative and make positive
 
@@ -182,7 +182,7 @@ public:
 
 	//! Constructs a string from an unsigned int
 	explicit string(unsigned int number)
-	: array(0), allocated(0), used(0)
+	: array(nullptr), allocated(0), used(0)
 	{
 		// temporary buffer for 16 numbers
 
@@ -213,7 +213,7 @@ public:
 
 	//! Constructs a string from a long
 	explicit string(long number)
-	: array(0), allocated(0), used(0)
+	: array(nullptr), allocated(0), used(0)
 	{
 		// store if negative and make positive
 
@@ -261,7 +261,7 @@ public:
 
 	//! Constructs a string from an unsigned long
 	explicit string(unsigned long number)
-	: array(0), allocated(0), used(0)
+	: array(nullptr), allocated(0), used(0)
 	{
 		// temporary buffer for 16 numbers
 
@@ -293,7 +293,7 @@ public:
 	//! Constructor for copying a string from a pointer with a given length
 	template <class B>
 	string(const B* const c, u32 length)
-	: array(0), allocated(0), used(0)
+	: array(nullptr), allocated(0), used(0)
 	{
 		if (!c)
 		{
@@ -315,7 +315,7 @@ public:
 	//! Constructor for Unicode and ASCII strings
 	template <class B>
 	string(const B* const c)
-	: array(0), allocated(0), used(0)
+	: array(nullptr), allocated(0), used(0)
 	{
 		*this = c;
 	}
@@ -1435,7 +1435,7 @@ private:
 		array = allocator.allocate(new_size); //new T[new_size];
 		allocated = new_size;
 
-		u32 amount = used < new_size ? used : new_size;
+		const u32 amount = used < new_size ? used : new_size;
 		for (u32 i=0; i<amount; ++i)
 			array[i] = old_array[i];
 
@@ -1468,7 +1468,7 @@ What the function does exactly depends on the LC_CTYPE of the current c locale.
 \return The number of wide characters written to destination, not including the eventual terminating null character or -1 when conversion failed */
 static inline size_t multibyteToWString(string<wchar_t>& destination, const core::string<c8>& source)
 {
-	return multibyteToWString(destination, source.c_str(), (u32)source.size());
+	return multibyteToWString(destination, source.c_str(), static_cast<u32>(source.size()));
 }
 
 //! Convert multibyte string to wide-character string
@@ -1479,7 +1479,7 @@ What the function does exactly depends on the LC_CTYPE of the current c locale.
 \return The number of wide characters written to destination, not including the eventual terminating null character  or -1 when conversion failed. */
 static inline size_t multibyteToWString(string<wchar_t>& destination, const char* source)
 {
-	u32 s = source ? (u32)strlen(source) : 0;
+	const u32 s = source ? static_cast<u32>(strlen(source)) : 0;
 	return multibyteToWString(destination, source, s);
 }
 
@@ -1493,13 +1493,13 @@ static size_t multibyteToWString(string<wchar_t>& destination, const char* sourc
 #pragma warning(push)
 #pragma warning(disable: 4996)	// 'mbstowcs': This function or variable may be unsafe. Consider using mbstowcs_s instead.
 #endif
-		size_t written = mbstowcs(destination.array, source, (size_t)sourceSize);
+		const size_t written = mbstowcs(destination.array, source, static_cast<size_t>(sourceSize));
 #if defined(_MSC_VER)
 #pragma warning(pop)
 #endif
-		if ( written != (size_t)-1 )
+		if ( written != static_cast<size_t>(-1) )
 		{
-			destination.used = (u32)written+1;
+			destination.used = static_cast<u32>(written+1);
 			destination.array[destination.used-1] = 0;
 		}
 		else

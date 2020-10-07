@@ -55,7 +55,7 @@ namespace scene
 		}
 
 		//! Event receiver, override this function for camera controlling animators
-		virtual bool OnEvent(const SEvent& event) _IRR_OVERRIDE_
+		bool OnEvent(const SEvent& event) _IRR_OVERRIDE_
 		{
 			return false;
 		}
@@ -129,14 +129,14 @@ namespace scene
 		}
 
 		//! Writes attributes of the scene node animator.
-		virtual void serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options=0) const _IRR_OVERRIDE_
+		void serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options=0) const _IRR_OVERRIDE_
 		{
 			out->addBool("IsEnabled", IsEnabled);
 			// timers not serialized as they usually depend on system-time which is different on each application start.
 		}
 
 		//! Reads attributes of the scene node animator.
-		virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0) _IRR_OVERRIDE_
+		void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0) _IRR_OVERRIDE_
 		{
 			IsEnabled = in->getAttributeAsBool("IsEnabled", IsEnabled);
 			PauseTimeSum = 0;

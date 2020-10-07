@@ -47,7 +47,7 @@ inline bool hasFileExtension(const io::path& filename, const io::path& ext0,
 //! cut the filename extension from a source file path and store it in a dest file path
 inline io::path& cutFilenameExtension ( io::path &dest, const io::path &source )
 {
-	s32 endPos = source.findLast ( '.' );
+	const s32 endPos = source.findLast ( '.' );
 	dest = source.subString ( 0, endPos < 0 ? source.size () : endPos );
 	return dest;
 }
@@ -55,7 +55,7 @@ inline io::path& cutFilenameExtension ( io::path &dest, const io::path &source )
 //! get the filename extension from a file path
 inline io::path& getFileNameExtension ( io::path &dest, const io::path &source )
 {
-	s32 endPos = source.findLast ( '.' );
+	const s32 endPos = source.findLast ( '.' );
 	if ( endPos < 0 )
 		dest = "";
 	else
@@ -115,12 +115,11 @@ inline s32 isInSameDirectory ( const io::path& path, const io::path& file )
 {
 	s32 subA = 0;
 	s32 subB = 0;
-	s32 pos;
+	s32 pos = 0;
 
 	if ( path.size() && !path.equalsn ( file, path.size() ) )
 		return -1;
 
-	pos = 0;
 	while ( (pos = path.findNext ( '/', pos )) >= 0 )
 	{
 		subA += 1;
@@ -178,7 +177,7 @@ static inline io::path mergeFilename(const io::path& path, const io::path& filen
 
 	if ( !result.empty() )
 	{
-		fschar_t last = result.lastChar();
+		const fschar_t last = result.lastChar();
 		if ( last != _IRR_TEXT('/') && last != _IRR_TEXT('\\') )
 			result += _IRR_TEXT('/');
 	}
@@ -196,9 +195,9 @@ static inline io::path mergeFilename(const io::path& path, const io::path& filen
 
 
 //! some standard function ( to remove dependencies )
-inline s32 isdigit(s32 c) { return c >= '0' && c <= '9'; }
-inline s32 isspace(s32 c) { return c == ' ' || c == '\f' || c == '\n' || c == '\r' || c == '\t' || c == '\v'; }
-inline s32 isupper(s32 c) { return c >= 'A' && c <= 'Z'; }
+inline s32 isdigit(s32 c) noexcept { return c >= '0' && c <= '9'; }
+inline s32 isspace(s32 c) noexcept { return c == ' ' || c == '\f' || c == '\n' || c == '\r' || c == '\t' || c == '\v'; }
+inline s32 isupper(s32 c) noexcept { return c >= 'A' && c <= 'Z'; }
 
 
 } // end namespace core

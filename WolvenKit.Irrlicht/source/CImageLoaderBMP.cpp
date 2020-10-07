@@ -12,6 +12,7 @@
 #include "CImage.h"
 #include "os.h"
 #include "irrString.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -51,7 +52,7 @@ bool CImageLoaderBMP::isALoadableFileFormat(io::IReadFile* file) const
 void CImageLoaderBMP::decompress8BitRLE(u8*& bmpData, s32 size, s32 width, s32 height, s32 pitch) const
 {
 	u8* p = bmpData;
-	u8* newBmp = new u8[(width+pitch)*height];
+	u8* newBmp = DBG_NEW u8[(width+pitch)*height];
 	u8* d = newBmp;
 	u8* destEnd = newBmp + (width+pitch)*height;
 	s32 line = 0;
@@ -118,7 +119,7 @@ void CImageLoaderBMP::decompress4BitRLE(u8*& bmpData, s32 size, s32 width, s32 h
 {
 	s32 lineWidth = (width+1)/2+pitch;
 	u8* p = bmpData;
-	u8* newBmp = new u8[lineWidth*height];
+	u8* newBmp = DBG_NEW u8[lineWidth*height];
 	u8* d = newBmp;
 	u8* destEnd = newBmp + lineWidth*height;
 	s32 line = 0;
@@ -263,7 +264,7 @@ IImage* CImageLoaderBMP::loadImage(io::IReadFile* file) const
 	s32* paletteData = 0;
 	if (paletteSize)
 	{
-		paletteData = new s32[paletteSize];
+		paletteData = DBG_NEW s32[paletteSize];
 		file->read(paletteData, paletteSize * sizeof(s32));
 #ifdef __BIG_ENDIAN__
 		for (s32 i=0; i<paletteSize; ++i)
@@ -291,7 +292,7 @@ IImage* CImageLoaderBMP::loadImage(io::IReadFile* file) const
 	s32 lineData = widthInBytes + ((4-(widthInBytes%4)))%4;
 	pitch = lineData - widthInBytes;
 
-	u8* bmpData = new u8[header.BitmapDataSize];
+	u8* bmpData = DBG_NEW u8[header.BitmapDataSize];
 	file->read(bmpData, header.BitmapDataSize);
 
 	// decompress data if needed
@@ -316,32 +317,32 @@ IImage* CImageLoaderBMP::loadImage(io::IReadFile* file) const
 	switch(header.BPP)
 	{
 	case 1:
-		image = new CImage(ECF_A1R5G5B5, dim);
+		image = DBG_NEW CImage(ECF_A1R5G5B5, dim);
 		if (image)
 			CColorConverter::convert1BitTo16Bit(bmpData, (s16*)image->getData(), header.Width, header.Height, pitch, true);
 		break;
 	case 4:
-		image = new CImage(ECF_A1R5G5B5, dim);
+		image = DBG_NEW CImage(ECF_A1R5G5B5, dim);
 		if (image)
 			CColorConverter::convert4BitTo16Bit(bmpData, (s16*)image->getData(), header.Width, header.Height, paletteData, pitch, true);
 		break;
 	case 8:
-		image = new CImage(ECF_A1R5G5B5, dim);
+		image = DBG_NEW CImage(ECF_A1R5G5B5, dim);
 		if (image)
 			CColorConverter::convert8BitTo16Bit(bmpData, (s16*)image->getData(), header.Width, header.Height, paletteData, pitch, true);
 		break;
 	case 16:
-		image = new CImage(ECF_A1R5G5B5, dim);
+		image = DBG_NEW CImage(ECF_A1R5G5B5, dim);
 		if (image)
 			CColorConverter::convert16BitTo16Bit((s16*)bmpData, (s16*)image->getData(), header.Width, header.Height, pitch, true);
 		break;
 	case 24:
-		image = new CImage(ECF_R8G8B8, dim);
+		image = DBG_NEW CImage(ECF_R8G8B8, dim);
 		if (image)
 			CColorConverter::convert24BitTo24Bit(bmpData, (u8*)image->getData(), header.Width, header.Height, pitch, true, true);
 		break;
 	case 32: // thx to Reinhard Ostermeier
-		image = new CImage(ECF_A8R8G8B8, dim);
+		image = DBG_NEW CImage(ECF_A8R8G8B8, dim);
 		if (image)
 			CColorConverter::convert32BitTo32Bit((s32*)bmpData, (s32*)image->getData(), header.Width, header.Height, pitch, true);
 		break;
@@ -359,7 +360,7 @@ IImage* CImageLoaderBMP::loadImage(io::IReadFile* file) const
 //! creates a loader which is able to load windows bitmaps
 IImageLoader* createImageLoaderBMP()
 {
-	return new CImageLoaderBMP;
+	return DBG_NEW CImageLoaderBMP;
 }
 
 

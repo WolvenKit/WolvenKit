@@ -10,6 +10,7 @@
 #include "CWADReader.h"
 #include "os.h"
 #include "coreutil.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -58,7 +59,7 @@ IFileArchive* CArchiveLoaderWAD::createArchive(io::IReadFile* file, bool ignoreC
 	if ( file )
 	{
 		file->seek ( 0 );
-		archive = new CWADReader(file, ignoreCase, ignorePaths);
+		archive = DBG_NEW CWADReader(file, ignoreCase, ignorePaths);
 	}
 	return archive;
 }

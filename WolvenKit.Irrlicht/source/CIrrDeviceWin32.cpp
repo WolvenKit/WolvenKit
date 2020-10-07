@@ -42,6 +42,15 @@
 #include "CWGLManager.h"
 #endif
 
+#ifdef _DEBUG
+    #define _CRTDBG_MAP_ALLOC
+    #include <stdlib.h>
+    #include <crtdbg.h>
+    #define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#else
+    #define DBG_NEW new
+#endif
+
 namespace irr
 {
 	namespace video
@@ -422,7 +431,7 @@ irr::core::stringc SJoystickWin32Control::findJoystickName(int index, const JOYC
     {
         char *name;
         /* allocate enough memory for the OEM name text ... */
-        name = new char[regsize];
+        name = DBG_NEW char[regsize];
         if (name)
         {
             /* ... and read it from the registry */
@@ -998,7 +1007,7 @@ CIrrDeviceWin32::CIrrDeviceWin32(const SIrrlichtCreationParameters& params)
 	// get windows version and create OS operator
 	core::stringc winversion;
 	getWindowsVersion(winversion);
-	Operator = new COSOperator(winversion);
+	Operator = DBG_NEW COSOperator(winversion);
 	os::Printer::log(winversion.c_str(), ELL_INFORMATION);
 
 	// get handle to exe file
@@ -1103,9 +1112,9 @@ CIrrDeviceWin32::CIrrDeviceWin32(const SIrrlichtCreationParameters& params)
 
 	// create cursor control
 
-	Win32CursorControl = new CCursorControl(this, CreationParams.WindowSize, HWnd, CreationParams.Fullscreen);
+	Win32CursorControl = DBG_NEW CCursorControl(this, CreationParams.WindowSize, HWnd, CreationParams.Fullscreen);
 	CursorControl = Win32CursorControl;
-	JoyControl = new SJoystickWin32Control(this);
+	JoyControl = DBG_NEW SJoystickWin32Control(this);
 
 	// initialize doubleclicks with system values
 	MouseMultiClicks.DoubleClickTime = GetDoubleClickTime();
@@ -1183,7 +1192,7 @@ void CIrrDeviceWin32::createDriver()
 #ifdef _IRR_COMPILE_WITH_OPENGL_
 		switchToFullScreen();
 
-		ContextManager = new video::CWGLManager();
+		ContextManager = DBG_NEW video::CWGLManager();
 		ContextManager->initialize(CreationParams, video::SExposedVideoData(HWnd));
 
 		VideoDriver = video::createOpenGLDriver(CreationParams, FileSystem, ContextManager);

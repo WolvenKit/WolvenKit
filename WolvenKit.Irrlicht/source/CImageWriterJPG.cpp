@@ -10,6 +10,7 @@
 #include "IWriteFile.h"
 #include "CImage.h"
 #include "irrString.h"
+#include "debug.h"
 
 #ifdef _IRR_COMPILE_WITH_LIBJPEG_
 #include <stdio.h> // required for jpeglib.h
@@ -152,7 +153,7 @@ static bool writeJPEGFile(io::IWriteFile* file, IImage* image, u32 quality)
 	jpeg_set_quality(&cinfo, quality, TRUE);
 	jpeg_start_compress(&cinfo, TRUE);
 
-	u8 * dest = new u8[dim.Width*3];
+	u8 * dest = DBG_NEW u8[dim.Width*3];
 
 	if (dest)
 	{
@@ -195,7 +196,7 @@ namespace video
 
 IImageWriter* createImageWriterJPG()
 {
-	return new CImageWriterJPG;
+	return DBG_NEW CImageWriterJPG;
 }
 
 CImageWriterJPG::CImageWriterJPG()

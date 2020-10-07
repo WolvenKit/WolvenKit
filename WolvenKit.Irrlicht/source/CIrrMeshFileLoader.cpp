@@ -15,6 +15,7 @@
 #include "IMeshSceneNode.h"
 #include "CDynamicMeshBuffer.h"
 #include "SMeshBufferLightMap.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -81,8 +82,8 @@ IAnimatedMesh* CIrrMeshFileLoader::createMesh(io::IReadFile* file)
 //! reads a mesh sections and creates a mesh from it
 IAnimatedMesh* CIrrMeshFileLoader::readMesh(io::IXMLReader* reader)
 {
-	SAnimatedMesh* animatedmesh = new SAnimatedMesh();
-	SMesh* mesh = new SMesh();
+	SAnimatedMesh* animatedmesh = DBG_NEW SAnimatedMesh();
+	SMesh* mesh = DBG_NEW SMesh();
 
 	animatedmesh->addMesh(mesh);
 	mesh->drop();
@@ -196,18 +197,18 @@ IMeshBuffer* CIrrMeshFileLoader::readMeshBuffer(io::IXMLReader* reader)
 				video::E_INDEX_TYPE itype = (vertexCount > 65536)?irr::video::EIT_32BIT:irr::video::EIT_16BIT;
 				if (vertexTypeName1 == vertexType)
 				{
-					buffer = new CDynamicMeshBuffer(irr::video::EVT_STANDARD, itype);
+					buffer = DBG_NEW CDynamicMeshBuffer(irr::video::EVT_STANDARD, itype);
 
 				}
 				else
 				if (vertexTypeName2 == vertexType)
 				{
-					buffer = new CDynamicMeshBuffer(irr::video::EVT_2TCOORDS, itype);
+					buffer = DBG_NEW CDynamicMeshBuffer(irr::video::EVT_2TCOORDS, itype);
 				}
 				else
 				if (vertexTypeName3 == vertexType)
 				{
-					buffer = new CDynamicMeshBuffer(irr::video::EVT_TANGENTS, itype);
+					buffer = DBG_NEW CDynamicMeshBuffer(irr::video::EVT_TANGENTS, itype);
 				}
 				buffer->getVertexBuffer().reallocate(vertexCount);
 				buffer->Material = material;

@@ -9,6 +9,7 @@
 #include "irrString.h"
 #include "SMaterial.h"
 #include "fast_atof.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -352,7 +353,7 @@ void COpenGLExtensionHandler::initExtensions(bool stencilBuffer)
 		if (t)
 		{
 			len = strlen(t);
-			str = new c8[len+1];
+			str = DBG_NEW c8[len+1];
 		}
 		c8* p = str;
 

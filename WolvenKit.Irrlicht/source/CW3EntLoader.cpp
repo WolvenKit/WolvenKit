@@ -41,20 +41,14 @@ CW3EntLoader::CW3EntLoader(scene::ISceneManager* smgr, io::IFileSystem* fs)
     setDebugName("CW3ENTLoader");
 	#endif
 
-    if (_fileSystem)
-        _fileSystem->grab();
-
-    if (_sceneManager)
-        _sceneManager->grab();
-
     TextureLoader = DBG_NEW CMeshTextureLoader(_fileSystem, _sceneManager->getVideoDriver());
     LoaderHelper = DBG_NEW CW3MeshLoaderHelper(this, _sceneManager, _fileSystem);
 }
 
 CW3EntLoader::~CW3EntLoader()
 {
-    _fileSystem->drop();
-    _sceneManager->drop();
+    _fileSystem = nullptr;
+    _sceneManager = nullptr;
 
     Strings.clear();
     Materials.clear();
@@ -397,7 +391,13 @@ bool CW3EntLoader::W3_ReadBuffer(io::IReadFile* file, SBufferInfos bufferInfos, 
         }
 
         buffer->Vertices_Standard.push_back(video::S3DVertex());
-        buffer->Vertices_Standard[i].Pos = core::vector3df(x, y, z) / 65535.f * bufferInfos.quantizationScale + bufferInfos.quantizationOffset;
+        //buffer->Vertices_Standard[i].Pos = core::vector3df(x, y, z) / 65535.f * bufferInfos.quantizationScale + bufferInfos.quantizationOffset;
+
+        f32 xf = x / 65535.0f;
+        f32 yf = y / 65535.0f;
+        f32 zf = z / 65535.0f;
+
+        buffer->Vertices_Standard[i].Pos = core::vector3df(xf, yf, zf) * bufferInfos.quantizationScale + bufferInfos.quantizationOffset;
         buffer->Vertices_Standard[i].Color = defaultColor;
         //std::cout << "Position=" << x << ", " << y << ", " << z << std::endl;
     }
@@ -1825,7 +1825,8 @@ void CW3EntLoader::W3_CMaterialInstances(io::IReadFile* file, W3_DataInfos infos
 // Check the file format version and load the mesh if it's ok
 bool CW3EntLoader::load(io::IReadFile* file)
 {
-    readString(file, 4); // CR2W
+    file->seek(4, true); // CR2W
+    //core::stringc unused = readString(file, 4); // CR2W - this leaked memory.  Rather than allocate and read 4 bytes, just skip them
 
     const s32 fileFormatVersion = readS32(file);
     os::Printer::log((formatString("File format version : %d", fileFormatVersion)).c_str(), ELL_INFORMATION);

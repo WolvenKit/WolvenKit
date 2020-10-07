@@ -21,6 +21,7 @@
 
 #include "CMY3DHelper.h"
 #include "os.h"
+#include "debug.h"
 
 // v3.15 - May 16, 2005
 
@@ -62,7 +63,7 @@ CMY3DMeshFileLoader::CMY3DMeshFileLoader(ISceneManager* scmgr, io::IFileSystem* 
 	if (FileSystem)
 		FileSystem->grab();
 
-	TextureLoader = new CMeshTextureLoader( FileSystem, SceneManager->getVideoDriver() );
+	TextureLoader = DBG_NEW CMeshTextureLoader( FileSystem, SceneManager->getVideoDriver() );
 }
 
 
@@ -405,7 +406,7 @@ IAnimatedMesh* CMY3DMeshFileLoader::createMesh(io::IReadFile* file)
 			(buffer->Vertices.size()+vertsNum) > SceneManager->getVideoDriver()->getMaximalPrimitiveCount())
 		{
 			// creating new mesh buffer for this material
-			buffer = new scene::SMeshBufferLightMap();
+			buffer = DBG_NEW scene::SMeshBufferLightMap();
 
 			buffer->Material.MaterialType = video::EMT_LIGHTMAP_M2; // EMT_LIGHTMAP_M4 also possible
 			buffer->Material.Wireframe = false;
@@ -637,7 +638,7 @@ IAnimatedMesh* CMY3DMeshFileLoader::createMesh(io::IReadFile* file)
 	}
 
 	// creating mesh
-	SMesh* mesh = new SMesh();
+	SMesh* mesh = DBG_NEW SMesh();
 
 	for (u32 num=0; num<MeshBufferEntry.size(); ++num)
 	{
@@ -657,7 +658,7 @@ IAnimatedMesh* CMY3DMeshFileLoader::createMesh(io::IReadFile* file)
 	if (id != MY3D_FILE_END_ID)
 		os::Printer::log("Loading finished, but can not find MY3D_FILE_END_ID token.", ELL_WARNING);
 
-	SAnimatedMesh* am = new SAnimatedMesh();
+	SAnimatedMesh* am = DBG_NEW SAnimatedMesh();
 
 	am->addMesh(mesh);
 	mesh->drop();

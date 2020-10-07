@@ -43,6 +43,7 @@
 
 #include "BuiltInFont.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -75,7 +76,7 @@ CGUIEnvironment::CGUIEnvironment(io::IFileSystem* fs, video::IVideoDriver* drive
 	#endif
 
 	// gui factory
-	IGUIElementFactory* factory = new CDefaultGUIElementFactory(this);
+	IGUIElementFactory* factory = DBG_NEW CDefaultGUIElementFactory(this);
 	registerGUIElementFactory(factory);
 	factory->drop();
 
@@ -172,7 +173,7 @@ void CGUIEnvironment::loadBuiltInFont()
 	io::IReadFile* file = FileSystem->createMemoryReadFile(BuiltInFontData,
 				BuiltInFontDataSize, DefaultFontName, false);
 
-	CGUIFont* font = new CGUIFont(this, DefaultFontName );
+	CGUIFont* font = DBG_NEW CGUIFont(this, DefaultFontName );
 	if (!font->load(file))
 	{
 		os::Printer::log("Error: Could not load built-in Font. Did you compile without the BMP loader?", ELL_ERROR);
@@ -668,7 +669,7 @@ If you no longer need the skin, you should call IGUISkin::drop().
 See IReferenceCounted::drop() for more information. */
 IGUISkin* CGUIEnvironment::createSkin(EGUI_SKIN_TYPE type)
 {
-	IGUISkin* skin = new CGUISkin(type, Driver);
+	IGUISkin* skin = DBG_NEW CGUISkin(type, Driver);
 
 	IGUIFont* builtinfont = getBuiltInFont();
 	IGUIFontBitmap* bitfont = 0;
@@ -1011,7 +1012,7 @@ void CGUIEnvironment::deserializeAttributes(io::IAttributes* in, io::SAttributeR
 //! adds a button. The returned pointer must not be dropped.
 IGUIButton* CGUIEnvironment::addButton(const core::rect<s32>& rectangle, IGUIElement* parent, s32 id, const wchar_t* text, const wchar_t *tooltiptext)
 {
-	IGUIButton* button = new CGUIButton(this, parent ? parent : this, id, rectangle);
+	IGUIButton* button = DBG_NEW CGUIButton(this, parent ? parent : this, id, rectangle);
 	if (text)
 		button->setText(text);
 
@@ -1029,7 +1030,7 @@ IGUIWindow* CGUIEnvironment::addWindow(const core::rect<s32>& rectangle, bool mo
 {
 	parent = parent ? parent : this;
 
-	IGUIWindow* win = new CGUIWindow(this, parent, id, rectangle);
+	IGUIWindow* win = DBG_NEW CGUIWindow(this, parent, id, rectangle);
 	if (text)
 		win->setText(text);
 	win->drop();
@@ -1038,7 +1039,7 @@ IGUIWindow* CGUIEnvironment::addWindow(const core::rect<s32>& rectangle, bool mo
 	{
 		// Careful, don't just set the modal as parent above. That will mess up the focus (and is hard to change because we have to be very
 		// careful not to get virtual function call, like OnEvent, in the window.
-		CGUIModalScreen * modalScreen = new CGUIModalScreen(this, parent, -1);
+		CGUIModalScreen * modalScreen = DBG_NEW CGUIModalScreen(this, parent, -1);
 		modalScreen->drop();
 		modalScreen->addChild(win);
 	}
@@ -1052,7 +1053,7 @@ IGUIElement* CGUIEnvironment::addModalScreen(IGUIElement* parent)
 {
 	parent = parent ? parent : this;
 
-	IGUIElement *win = new CGUIModalScreen(this, parent, -1);
+	IGUIElement *win = DBG_NEW CGUIModalScreen(this, parent, -1);
 	win->drop();
 
 	return win;
@@ -1081,7 +1082,7 @@ IGUIWindow* CGUIEnvironment::addMessageBox(const wchar_t* caption, const wchar_t
 	rect.LowerRightCorner.X = rect.UpperLeftCorner.X + msgBoxDim.Width;
 	rect.LowerRightCorner.Y = rect.UpperLeftCorner.Y + msgBoxDim.Height;
 
-	IGUIWindow* win = new CGUIMessageBox(this, caption, text, flag,
+	IGUIWindow* win = DBG_NEW CGUIMessageBox(this, caption, text, flag,
 		parent, id, rect, image);
 	win->drop();
 
@@ -1089,7 +1090,7 @@ IGUIWindow* CGUIEnvironment::addMessageBox(const wchar_t* caption, const wchar_t
 	{
 		// Careful, don't just set the modal as parent above. That will mess up the focus (and is hard to change because we have to be very
 		// careful not to get virtual function call, like OnEvent, in the CGUIMessageBox.
-		CGUIModalScreen * modalScreen = new CGUIModalScreen(this, parent, -1);
+		CGUIModalScreen * modalScreen = DBG_NEW CGUIModalScreen(this, parent, -1);
 		modalScreen->drop();
 		modalScreen->addChild( win );
 	}
@@ -1102,7 +1103,7 @@ IGUIWindow* CGUIEnvironment::addMessageBox(const wchar_t* caption, const wchar_t
 //! adds a scrollbar. The returned pointer must not be dropped.
 IGUIScrollBar* CGUIEnvironment::addScrollBar(bool horizontal, const core::rect<s32>& rectangle, IGUIElement* parent, s32 id)
 {
-	IGUIScrollBar* bar = new CGUIScrollBar(horizontal, this, parent ? parent : this, id, rectangle);
+	IGUIScrollBar* bar = DBG_NEW CGUIScrollBar(horizontal, this, parent ? parent : this, id, rectangle);
 	bar->drop();
 	return bar;
 }
@@ -1110,7 +1111,7 @@ IGUIScrollBar* CGUIEnvironment::addScrollBar(bool horizontal, const core::rect<s
 //! Adds a table to the environment
 IGUITable* CGUIEnvironment::addTable(const core::rect<s32>& rectangle, IGUIElement* parent, s32 id, bool drawBackground)
 {
-	CGUITable* b = new CGUITable(this, parent ? parent : this, id, rectangle, true, drawBackground, false);
+	CGUITable* b = DBG_NEW CGUITable(this, parent ? parent : this, id, rectangle, true, drawBackground, false);
 	b->drop();
 	return b;
 }
@@ -1118,7 +1119,7 @@ IGUITable* CGUIEnvironment::addTable(const core::rect<s32>& rectangle, IGUIEleme
 	//! Adds an element to display the information from the Irrlicht profiler
 IGUIProfiler* CGUIEnvironment::addProfilerDisplay(const core::rect<s32>& rectangle, IGUIElement* parent, s32 id)
 {
-	CGUIProfiler* p = new CGUIProfiler(this, parent ? parent : this, id, rectangle, NULL);
+	CGUIProfiler* p = DBG_NEW CGUIProfiler(this, parent ? parent : this, id, rectangle, NULL);
 	p->drop();
 	return p;
 }
@@ -1131,7 +1132,7 @@ IGUIImage* CGUIEnvironment::addImage(video::ITexture* image, core::position2d<s3
 	if (image)
 		sz = core::dimension2d<s32>(image->getOriginalSize());
 
-	IGUIImage* img = new CGUIImage(this, parent ? parent : this,
+	IGUIImage* img = DBG_NEW CGUIImage(this, parent ? parent : this,
 		id, core::rect<s32>(pos, sz));
 
 	if (text)
@@ -1151,7 +1152,7 @@ IGUIImage* CGUIEnvironment::addImage(video::ITexture* image, core::position2d<s3
 //! adds an image. The returned pointer must not be dropped.
 IGUIImage* CGUIEnvironment::addImage(const core::rect<s32>& rectangle, IGUIElement* parent, s32 id, const wchar_t* text, bool useAlphaChannel)
 {
-	IGUIImage* img = new CGUIImage(this, parent ? parent : this,
+	IGUIImage* img = DBG_NEW CGUIImage(this, parent ? parent : this,
 		id, rectangle);
 
 	if (text)
@@ -1168,7 +1169,7 @@ IGUIImage* CGUIEnvironment::addImage(const core::rect<s32>& rectangle, IGUIEleme
 //! adds an mesh viewer. The returned pointer must not be dropped.
 IGUIMeshViewer* CGUIEnvironment::addMeshViewer(const core::rect<s32>& rectangle, IGUIElement* parent, s32 id, const wchar_t* text)
 {
-	IGUIMeshViewer* v = new CGUIMeshViewer(this, parent ? parent : this,
+	IGUIMeshViewer* v = DBG_NEW CGUIMeshViewer(this, parent ? parent : this,
 		id, rectangle);
 
 	if (text)
@@ -1182,7 +1183,7 @@ IGUIMeshViewer* CGUIEnvironment::addMeshViewer(const core::rect<s32>& rectangle,
 //! adds a checkbox
 IGUICheckBox* CGUIEnvironment::addCheckBox(bool checked, const core::rect<s32>& rectangle, IGUIElement* parent, s32 id, const wchar_t* text)
 {
-	IGUICheckBox* b = new CGUICheckBox(checked, this,
+	IGUICheckBox* b = DBG_NEW CGUICheckBox(checked, this,
 		parent ? parent : this , id , rectangle);
 
 	if (text)
@@ -1197,7 +1198,7 @@ IGUICheckBox* CGUIEnvironment::addCheckBox(bool checked, const core::rect<s32>& 
 IGUIListBox* CGUIEnvironment::addListBox(const core::rect<s32>& rectangle,
 					IGUIElement* parent, s32 id, bool drawBackground)
 {
-	IGUIListBox* b = new CGUIListBox(this, parent ? parent : this, id, rectangle,
+	IGUIListBox* b = DBG_NEW CGUIListBox(this, parent ? parent : this, id, rectangle,
 		true, drawBackground, false);
 
 	if (CurrentSkin && CurrentSkin->getSpriteBank())
@@ -1219,7 +1220,7 @@ IGUITreeView* CGUIEnvironment::addTreeView(const core::rect<s32>& rectangle,
 					 bool drawBackground,
 					 bool scrollBarVertical, bool scrollBarHorizontal)
 {
-	IGUITreeView* b = new CGUITreeView(this, parent ? parent : this, id, rectangle,
+	IGUITreeView* b = DBG_NEW CGUITreeView(this, parent ? parent : this, id, rectangle,
 		true, drawBackground, scrollBarVertical, scrollBarHorizontal);
 
 	b->setIconFont ( getBuiltInFont () );
@@ -1234,7 +1235,7 @@ IGUIFileOpenDialog* CGUIEnvironment::addFileOpenDialog(const wchar_t* title,
 {
 	parent = parent ? parent : this;
 
-	IGUIFileOpenDialog* d = new CGUIFileOpenDialog(title, this, parent, id,
+	IGUIFileOpenDialog* d = DBG_NEW CGUIFileOpenDialog(title, this, parent, id,
 			restoreCWD, startDir);
 	d->drop();
 
@@ -1242,7 +1243,7 @@ IGUIFileOpenDialog* CGUIEnvironment::addFileOpenDialog(const wchar_t* title,
 	{
 		// Careful, don't just set the modal as parent above. That will mess up the focus (and is hard to change because we have to be very
 		// careful not to get virtual function call, like OnEvent, in the window.
-		CGUIModalScreen * modalScreen = new CGUIModalScreen(this, parent, -1);
+		CGUIModalScreen * modalScreen = DBG_NEW CGUIModalScreen(this, parent, -1);
 		modalScreen->drop();
 		modalScreen->addChild(d);
 	}
@@ -1257,7 +1258,7 @@ IGUIColorSelectDialog* CGUIEnvironment::addColorSelectDialog(const wchar_t* titl
 {
 	parent = parent ? parent : this;
 
-	IGUIColorSelectDialog* d = new CGUIColorSelectDialog( title,
+	IGUIColorSelectDialog* d = DBG_NEW CGUIColorSelectDialog( title,
 			this, parent, id);
 	d->drop();
 
@@ -1265,7 +1266,7 @@ IGUIColorSelectDialog* CGUIEnvironment::addColorSelectDialog(const wchar_t* titl
 	{
 		// Careful, don't just set the modal as parent above. That will mess up the focus (and is hard to change because we have to be very
 		// careful not to get virtual function call, like OnEvent, in the window.
-		CGUIModalScreen * modalScreen = new CGUIModalScreen(this, parent, -1);
+		CGUIModalScreen * modalScreen = DBG_NEW CGUIModalScreen(this, parent, -1);
 		modalScreen->drop();
 		modalScreen->addChild(d);
 	}
@@ -1280,7 +1281,7 @@ IGUIStaticText* CGUIEnvironment::addStaticText(const wchar_t* text,
 				bool border, bool wordWrap,
 				IGUIElement* parent, s32 id, bool background)
 {
-	IGUIStaticText* d = new CGUIStaticText(text, border, this,
+	IGUIStaticText* d = DBG_NEW CGUIStaticText(text, border, this,
 			parent ? parent : this, id, rectangle, background);
 
 	d->setWordWrap(wordWrap);
@@ -1295,7 +1296,7 @@ IGUIEditBox* CGUIEnvironment::addEditBox(const wchar_t* text,
 			const core::rect<s32>& rectangle, bool border,
 			IGUIElement* parent, s32 id)
 {
-	IGUIEditBox* d = new CGUIEditBox(text, border, this,
+	IGUIEditBox* d = DBG_NEW CGUIEditBox(text, border, this,
 			parent ? parent : this, id, rectangle);
 
 	d->drop();
@@ -1308,7 +1309,7 @@ IGUISpinBox* CGUIEnvironment::addSpinBox(const wchar_t* text,
 					 const core::rect<s32> &rectangle,
 					 bool border,IGUIElement* parent, s32 id)
 {
-	IGUISpinBox* d = new CGUISpinBox(text, border,this,
+	IGUISpinBox* d = DBG_NEW CGUISpinBox(text, border,this,
 		parent ? parent : this, id, rectangle);
 
 	d->drop();
@@ -1320,7 +1321,7 @@ IGUISpinBox* CGUIEnvironment::addSpinBox(const wchar_t* text,
 IGUITabControl* CGUIEnvironment::addTabControl(const core::rect<s32>& rectangle,
 	IGUIElement* parent, bool fillbackground, bool border, s32 id)
 {
-	IGUITabControl* t = new CGUITabControl(this, parent ? parent : this,
+	IGUITabControl* t = DBG_NEW CGUITabControl(this, parent ? parent : this,
 		rectangle, fillbackground, border, id);
 	t->drop();
 	return t;
@@ -1331,7 +1332,7 @@ IGUITabControl* CGUIEnvironment::addTabControl(const core::rect<s32>& rectangle,
 IGUITab* CGUIEnvironment::addTab(const core::rect<s32>& rectangle,
 	IGUIElement* parent, s32 id)
 {
-	IGUITab* t = new CGUITab(-1, this, parent ? parent : this,
+	IGUITab* t = DBG_NEW CGUITab(-1, this, parent ? parent : this,
 		rectangle, id);
 	t->drop();
 	return t;
@@ -1342,7 +1343,7 @@ IGUITab* CGUIEnvironment::addTab(const core::rect<s32>& rectangle,
 IGUIContextMenu* CGUIEnvironment::addContextMenu(const core::rect<s32>& rectangle,
 	IGUIElement* parent, s32 id)
 {
-	IGUIContextMenu* c = new CGUIContextMenu(this,
+	IGUIContextMenu* c = DBG_NEW CGUIContextMenu(this,
 		parent ? parent : this, id, rectangle, true);
 	c->drop();
 	return c;
@@ -1355,7 +1356,7 @@ IGUIContextMenu* CGUIEnvironment::addMenu(IGUIElement* parent, s32 id)
 	if (!parent)
 		parent = this;
 
-	IGUIContextMenu* c = new CGUIMenu(this,
+	IGUIContextMenu* c = DBG_NEW CGUIMenu(this,
 		parent, id, core::rect<s32>(0,0,
 				parent->getAbsolutePosition().getWidth(),
 				parent->getAbsolutePosition().getHeight()));
@@ -1372,7 +1373,7 @@ IGUIToolBar* CGUIEnvironment::addToolBar(IGUIElement* parent, s32 id)
 	if (!parent)
 		parent = this;
 
-	IGUIToolBar* b = new CGUIToolBar(this, parent, id, core::rect<s32>(0,0,10,10));
+	IGUIToolBar* b = DBG_NEW CGUIToolBar(this, parent, id, core::rect<s32>(0,0,10,10));
 	b->drop();
 	return b;
 }
@@ -1391,7 +1392,7 @@ IGUIInOutFader* CGUIEnvironment::addInOutFader(const core::rect<s32>* rectangle,
 	if (!parent)
 		parent = this;
 
-	IGUIInOutFader* fader = new CGUIInOutFader(this, parent, id, rect);
+	IGUIInOutFader* fader = DBG_NEW CGUIInOutFader(this, parent, id, rect);
 	fader->drop();
 	return fader;
 }
@@ -1401,7 +1402,7 @@ IGUIInOutFader* CGUIEnvironment::addInOutFader(const core::rect<s32>* rectangle,
 IGUIComboBox* CGUIEnvironment::addComboBox(const core::rect<s32>& rectangle,
 	IGUIElement* parent, s32 id)
 {
-	IGUIComboBox* t = new CGUIComboBox(this, parent ? parent : this,
+	IGUIComboBox* t = DBG_NEW CGUIComboBox(this, parent ? parent : this,
 		id, rectangle);
 	t->drop();
 	return t;
@@ -1461,7 +1462,7 @@ IGUIFont* CGUIEnvironment::getFont(const io::path& filename)
 
 		if (t==EGFT_BITMAP)
 		{
-			CGUIFont* font = new CGUIFont(this, filename);
+			CGUIFont* font = DBG_NEW CGUIFont(this, filename);
 			ifont = (IGUIFont*)font;
 
 			// load the font
@@ -1490,7 +1491,7 @@ IGUIFont* CGUIEnvironment::getFont(const io::path& filename)
 	if (!ifont)
 	{
 
-		CGUIFont* font = new CGUIFont(this, f.NamedPath.getPath() );
+		CGUIFont* font = DBG_NEW CGUIFont(this, f.NamedPath.getPath() );
 		ifont = (IGUIFont*)font;
 		if (!font->load(f.NamedPath.getPath()))
 		{
@@ -1591,7 +1592,7 @@ IGUISpriteBank* CGUIEnvironment::addEmptySpriteBank(const io::path& name)
 
 	// create a new sprite bank
 
-	b.Bank = new CGUISpriteBank(this);
+	b.Bank = DBG_NEW CGUISpriteBank(this);
 	Banks.push_back(b);
 
 	return b.Bank;
@@ -1602,7 +1603,7 @@ IGUISpriteBank* CGUIEnvironment::addEmptySpriteBank(const io::path& name)
 IGUIImageList* CGUIEnvironment::createImageList(  video::ITexture* texture,
 					core::dimension2d<s32>	imageSize, bool useAlphaChannel )
 {
-	CGUIImageList* imageList = new CGUIImageList( Driver );
+	CGUIImageList* imageList = DBG_NEW CGUIImageList( Driver );
 	if( !imageList->createImageList( texture, imageSize, useAlphaChannel ) )
 	{
 		imageList->drop();
@@ -1682,7 +1683,7 @@ IGUIEnvironment* createGUIEnvironment(io::IFileSystem* fs,
 					video::IVideoDriver* Driver,
 					IOSOperator* op)
 {
-	return new CGUIEnvironment(fs, Driver, op);
+	return DBG_NEW CGUIEnvironment(fs, Driver, op);
 }
 
 

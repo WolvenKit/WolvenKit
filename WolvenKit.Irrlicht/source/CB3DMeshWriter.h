@@ -27,10 +27,10 @@ public:
 	CB3DMeshWriter();
 
 	//! Returns the type of the mesh writer
-    virtual EMESH_WRITER_TYPE getType() const;
+    EMESH_WRITER_TYPE getType() const override;
 
 	//! writes a mesh
-    virtual bool writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 flags=EMWF_NONE);
+    bool writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 flags=EMWF_NONE) override;
 
 private:
 	u32 Size;
@@ -39,7 +39,7 @@ private:
     u32 getJointChunkSize(const ISkinnedMesh* mesh, ISkinnedMesh::SJoint* joint);
     core::array<ISkinnedMesh::SJoint*> getRootJoints(const ISkinnedMesh* mesh);
 
-    u32 getUVlayerCount(IMesh *mesh);
+    u32 getUVlayerCount(const IMesh *mesh);
     ISkinnedMesh* getSkinned (IMesh *mesh);
 
 	void write(io::IWriteFile* file, const void *ptr, const u32 bytes);

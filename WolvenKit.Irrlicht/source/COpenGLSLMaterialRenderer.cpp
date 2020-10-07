@@ -351,7 +351,7 @@ bool COpenGLSLMaterialRenderer::createShader(GLenum shaderType, const char* shad
 #endif
 			if (maxLength)
 			{
-				GLchar *infoLog = new GLchar[maxLength];
+				GLchar *infoLog = DBG_NEW GLchar[maxLength];
 				Driver->extGlGetShaderInfoLog(shaderHandle, maxLength, &length, infoLog);
 				os::Printer::log(reinterpret_cast<const c8*>(infoLog), ELL_ERROR);
 				delete [] infoLog;
@@ -389,7 +389,7 @@ bool COpenGLSLMaterialRenderer::createShader(GLenum shaderType, const char* shad
 #endif
 			if (maxLength)
 			{
-				GLcharARB *infoLog = new GLcharARB[maxLength];
+				GLcharARB *infoLog = DBG_NEW GLcharARB[maxLength];
 				Driver->extGlGetInfoLog(shaderHandle, maxLength, &length, infoLog);
 				os::Printer::log(reinterpret_cast<const c8*>(infoLog), ELL_ERROR);
 				delete [] infoLog;
@@ -427,7 +427,7 @@ bool COpenGLSLMaterialRenderer::linkProgram()
 #endif
 			if (maxLength)
 			{
-				GLchar *infoLog = new GLchar[maxLength];
+				GLchar *infoLog = DBG_NEW GLchar[maxLength];
 				Driver->extGlGetProgramInfoLog(Program2, maxLength, &length, infoLog);
 				os::Printer::log(reinterpret_cast<const c8*>(infoLog), ELL_ERROR);
 				delete [] infoLog;
@@ -462,7 +462,7 @@ bool COpenGLSLMaterialRenderer::linkProgram()
 
 		// seems that some implementations use an extra null terminator
 		++maxlen;
-		c8 *buf = new c8[maxlen];
+		c8 *buf = DBG_NEW c8[maxlen];
 
 		UniformInfo.clear();
 		UniformInfo.reallocate(num);
@@ -504,7 +504,7 @@ bool COpenGLSLMaterialRenderer::linkProgram()
 #endif
 			if (maxLength)
 			{
-				GLcharARB *infoLog = new GLcharARB[maxLength];
+				GLcharARB *infoLog = DBG_NEW GLcharARB[maxLength];
 				Driver->extGlGetInfoLog(Program, maxLength, &length, infoLog);
 				os::Printer::log(reinterpret_cast<const c8*>(infoLog), ELL_ERROR);
 				delete [] infoLog;
@@ -539,7 +539,7 @@ bool COpenGLSLMaterialRenderer::linkProgram()
 
 		// seems that some implementations use an extra null terminator
 		++maxlen;
-		c8 *buf = new c8[maxlen];
+		c8 *buf = DBG_NEW c8[maxlen];
 
 		UniformInfo.clear();
 		UniformInfo.reallocate(num);

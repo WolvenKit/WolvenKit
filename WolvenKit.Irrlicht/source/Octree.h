@@ -10,6 +10,7 @@
 #include "aabbox3d.h"
 #include "irrArray.h"
 #include "CMeshBuffer.h"
+#include "debug.h"
 
 /**
 	Flags for Octree
@@ -62,17 +63,17 @@ public:
 	Octree(const core::array<SMeshChunk>& meshes, s32 minimalPolysPerNode=128) :
 		IndexData(0), IndexDataCount(meshes.size()), NodeCount(0)
 	{
-		IndexData = new SIndexData[IndexDataCount];
+		IndexData = DBG_NEW SIndexData[IndexDataCount];
 
 		// construct array of all indices
 
-		core::array<SIndexChunk>* indexChunks = new core::array<SIndexChunk>;
+		core::array<SIndexChunk>* indexChunks = DBG_NEW core::array<SIndexChunk>;
 		indexChunks->reallocate(meshes.size());
 		for (u32 i=0; i!=meshes.size(); ++i)
 		{
 			IndexData[i].CurrentSize = 0;
 			IndexData[i].MaxSize = meshes[i].Indices.size();
-			IndexData[i].Indices = new u16[IndexData[i].MaxSize];
+			IndexData[i].Indices = DBG_NEW u16[IndexData[i].MaxSize];
 
 			indexChunks->push_back(SIndexChunk());
 			SIndexChunk& tic = indexChunks->getLast();
@@ -82,7 +83,7 @@ public:
 		}
 
 		// create tree
-		Root = new OctreeNode(NodeCount, 0, meshes, indexChunks, minimalPolysPerNode);
+		Root = DBG_NEW OctreeNode(NodeCount, 0, meshes, indexChunks, minimalPolysPerNode);
 	}
 
 	//! returns all ids of polygons partially or fully enclosed
@@ -209,7 +210,7 @@ private:
 
 				// create indices for child
 				bool added = false;
-				core::array<SIndexChunk>* cindexChunks = new core::array<SIndexChunk>;
+				core::array<SIndexChunk>* cindexChunks = DBG_NEW core::array<SIndexChunk>;
 				cindexChunks->reallocate(allmeshdata.size());
 				for (i=0; i<allmeshdata.size(); ++i)
 				{
@@ -243,7 +244,7 @@ private:
 				}
 
 				if (added)
-					Children[ch] = new OctreeNode(nodeCount, Depth,
+					Children[ch] = DBG_NEW OctreeNode(nodeCount, Depth,
 						allmeshdata, cindexChunks, minimalPolysPerNode);
 				else
 					delete cindexChunks;

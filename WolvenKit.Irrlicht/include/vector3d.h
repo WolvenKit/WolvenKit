@@ -433,12 +433,12 @@ namespace core
 		{
 			if (X!=0)
 			{
-				angle.Y = round32((f32)(atan2((f64)Z,(f64)X) * RADTODEG64));
+				angle.Y = round32(static_cast<f32>(atan2((f64)Z,(f64)X) * RADTODEG64));
 			}
 			else if (Z<0)
 				angle.Y=180;
 
-			angle.X = round32((f32)(acos(Y * core::reciprocal_squareroot(length)) * RADTODEG64));
+			angle.X = round32(static_cast<f32>(acos(Y * core::reciprocal_squareroot(length)) * RADTODEG64));
 		}
 		return angle;
 	}

@@ -35,7 +35,7 @@ struct SAttributeReadWriteOptions
 {
 	//! Constructor
 	SAttributeReadWriteOptions()
-		: Flags(0), Filename(0)
+		: Flags(0), Filename(nullptr)
 	{
 	}
 

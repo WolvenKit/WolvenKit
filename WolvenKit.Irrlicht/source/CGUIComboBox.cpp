@@ -13,6 +13,7 @@
 #include "IGUIButton.h"
 #include "CGUIListBox.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -466,7 +467,7 @@ void CGUIComboBox::openCloseMenu()
 		core::rect<s32> r(0, AbsoluteRect.getHeight(),
 			AbsoluteRect.getWidth(), AbsoluteRect.getHeight() + h);
 
-		ListBox = new CGUIListBox(Environment, this, -1, r, false, true, true);
+		ListBox = DBG_NEW CGUIListBox(Environment, this, -1, r, false, true, true);
 		ListBox->setSubElement(true);
 		ListBox->setNotClipped(true);
 		ListBox->drop();

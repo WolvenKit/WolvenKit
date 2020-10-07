@@ -11,6 +11,7 @@
 
 #include "SMaterial.h"
 #include "ITexture.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -197,13 +198,13 @@ public:
 
 		FrameBufferCount = core::max_(static_cast<GLuint>(1), static_cast<GLuint>(feature.MultipleRenderTarget));
 
-		BlendEquation = new GLenum[FrameBufferCount];
-		BlendSourceRGB = new GLenum[FrameBufferCount];
-		BlendDestinationRGB = new GLenum[FrameBufferCount];
-		BlendSourceAlpha = new GLenum[FrameBufferCount];
-		BlendDestinationAlpha = new GLenum[FrameBufferCount];
-		Blend = new bool[FrameBufferCount];
-		ColorMask = new u8[FrameBufferCount];
+		BlendEquation = DBG_NEW GLenum[FrameBufferCount];
+		BlendSourceRGB = DBG_NEW GLenum[FrameBufferCount];
+		BlendDestinationRGB = DBG_NEW GLenum[FrameBufferCount];
+		BlendSourceAlpha = DBG_NEW GLenum[FrameBufferCount];
+		BlendDestinationAlpha = DBG_NEW GLenum[FrameBufferCount];
+		Blend = DBG_NEW bool[FrameBufferCount];
+		ColorMask = DBG_NEW u8[FrameBufferCount];
 
 		// Initial OpenGL values from specification.
 

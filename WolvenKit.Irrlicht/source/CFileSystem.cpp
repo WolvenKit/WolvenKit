@@ -24,6 +24,7 @@
 #include "CLimitReadFile.h"
 #include "CWriteFile.h"
 #include "irrList.h"
+#include "debug.h"
 
 #if defined (__STRICT_ANSI__)
     #error Compiling with __STRICT_ANSI__ not supported. g++ does set this when compiling with -std=c++11 or -std=c++0x. Use instead -std=gnu++11 or -std=gnu++0x. Or use -U__STRICT_ANSI__ to disable strict ansi.
@@ -65,27 +66,27 @@ CFileSystem::CFileSystem()
 	getWorkingDirectory();
 
 #ifdef __IRR_COMPILE_WITH_PAK_ARCHIVE_LOADER_
-	ArchiveLoader.push_back(new CArchiveLoaderPAK(this));
+	ArchiveLoader.push_back(DBG_NEW CArchiveLoaderPAK(this));
 #endif
 
 #ifdef __IRR_COMPILE_WITH_NPK_ARCHIVE_LOADER_
-	ArchiveLoader.push_back(new CArchiveLoaderNPK(this));
+	ArchiveLoader.push_back(DBG_NEW CArchiveLoaderNPK(this));
 #endif
 
 #ifdef __IRR_COMPILE_WITH_TAR_ARCHIVE_LOADER_
-	ArchiveLoader.push_back(new CArchiveLoaderTAR(this));
+	ArchiveLoader.push_back(DBG_NEW CArchiveLoaderTAR(this));
 #endif
 
 #ifdef __IRR_COMPILE_WITH_WAD_ARCHIVE_LOADER_
-	ArchiveLoader.push_back(new CArchiveLoaderWAD(this));
+	ArchiveLoader.push_back(DBG_NEW CArchiveLoaderWAD(this));
 #endif
 
 #ifdef __IRR_COMPILE_WITH_MOUNT_ARCHIVE_LOADER_
-	ArchiveLoader.push_back(new CArchiveLoaderMount(this));
+	ArchiveLoader.push_back(DBG_NEW CArchiveLoaderMount(this));
 #endif
 
 #ifdef __IRR_COMPILE_WITH_ZIP_ARCHIVE_LOADER_
-	ArchiveLoader.push_back(new CArchiveLoaderZIP(this));
+	ArchiveLoader.push_back(DBG_NEW CArchiveLoaderZIP(this));
 #endif
 
 }
@@ -137,7 +138,7 @@ IReadFile* CFileSystem::createMemoryReadFile(const void* memory, s32 len,
 	if (!memory)
 		return 0;
 	else
-		return new CMemoryReadFile(memory, len, fileName, deleteMemoryWhenDropped);
+		return DBG_NEW CMemoryReadFile(memory, len, fileName, deleteMemoryWhenDropped);
 }
 
 
@@ -148,7 +149,7 @@ IReadFile* CFileSystem::createLimitReadFile(const io::path& fileName,
 	if (!alreadyOpenedFile)
 		return 0;
 	else
-		return new CLimitReadFile(alreadyOpenedFile, pos, areaSize, fileName);
+		return DBG_NEW CLimitReadFile(alreadyOpenedFile, pos, areaSize, fileName);
 }
 
 
@@ -159,7 +160,7 @@ IWriteFile* CFileSystem::createMemoryWriteFile(void* memory, s32 len,
 	if (!memory)
 		return 0;
 	else
-		return new CMemoryWriteFile(memory, len, fileName, deleteMemoryWhenDropped);
+		return DBG_NEW CMemoryWriteFile(memory, len, fileName, deleteMemoryWhenDropped);
 }
 
 
@@ -842,7 +843,7 @@ IFileList* CFileSystem::createFileList()
 		#ifdef _IRR_WINDOWS_API_
 		#if !defined ( _WIN32_WCE )
 
-		r = new CFileList(Path, true, false);
+		r = DBG_NEW CFileList(Path, true, false);
 
 		// TODO: Should be unified once mingw adapts the proper types
 #if defined(__GNUC__)
@@ -917,7 +918,7 @@ IFileList* CFileSystem::createFileList()
 	else
 	{
 		//! create file list for the virtual filesystem
-		r = new CFileList(Path, false, false);
+		r = DBG_NEW CFileList(Path, false, false);
 
 		//! add relative navigation
 		SFileListEntry e2;
@@ -952,7 +953,7 @@ IFileList* CFileSystem::createFileList()
 //! Creates an empty filelist
 IFileList* CFileSystem::createEmptyFileList(const io::path& path, bool ignoreCase, bool ignorePaths)
 {
-	return new CFileList(path, ignoreCase, ignorePaths);
+	return DBG_NEW CFileList(path, ignoreCase, ignorePaths);
 }
 
 
@@ -1112,14 +1113,14 @@ IXMLWriterUTF8* CFileSystem::createXMLWriterUTF8(IWriteFile* file)
 //! and out of zipfiles, which are able to be added to the filesystem.
 IFileSystem* createFileSystem()
 {
-	return new CFileSystem();
+	return DBG_NEW CFileSystem();
 }
 
 
 //! Creates a new empty collection of attributes, usable for serialization and more.
 IAttributes* CFileSystem::createEmptyAttributes(video::IVideoDriver* driver)
 {
-	return new CAttributes(driver);
+	return DBG_NEW CAttributes(driver);
 }
 
 

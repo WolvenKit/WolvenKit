@@ -32,18 +32,18 @@ namespace video
 	public:
 
 		//! constructor
-		IRenderTarget() : DepthStencil(0), DriverType(EDT_NULL)
+		IRenderTarget() noexcept : DepthStencil(0), DriverType(EDT_NULL)
 		{
 		}
 
 		//! Returns an array of previously set textures.
-		const core::array<ITexture*>& getTexture() const
+		const core::array<ITexture*>& getTexture() const noexcept
 		{
 			return Texture;
 		}
 
 		//! Returns a of previously set depth / depth-stencil texture.
-		ITexture* getDepthStencil() const
+		ITexture* getDepthStencil() const noexcept
 		{
 			return DepthStencil;
 		}
@@ -79,7 +79,7 @@ namespace video
 		}
 
 		//! Get driver type of render target.
-		E_DRIVER_TYPE getDriverType() const
+		E_DRIVER_TYPE getDriverType() const noexcept
 		{
 			return DriverType;
 		}

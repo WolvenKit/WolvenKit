@@ -58,23 +58,34 @@ namespace WolvenKit.CR2W.Types
             base.Write(file);
 
             byte[] buffer;
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
+
+            MemoryStream ms = null;
+            try
             {
-                bw.WriteBit6(Data.elements.Count);
-                foreach (var cvar in Data.elements)
+                ms = new MemoryStream();
+                using (var bw = new BinaryWriter(ms))
                 {
-                    var ClassName = new CName(cr2w, null, "")
+                    bw.WriteBit6(Data.elements.Count);
+                    foreach (var cvar in Data.elements)
                     {
-                        Value = cvar.REDType
-                    };
-                    ClassName.Write(bw);
+                        var ClassName = new CName(cr2w, null, "")
+                        {
+                            Value = cvar.REDType
+                        };
+                        ClassName.Write(bw);
 
-                    cvar.Write(bw);
+                        cvar.Write(bw);
+                    }
+                    buffer = ms.ToArray();
+
+                    ms.Close();
+                    ms = null;
                 }
-                buffer = ms.ToArray();
             }
-
+            finally
+            {
+                ms?.Dispose();
+            }
             file.Write(buffer.Length + 4);
             file.Write(buffer);
         }

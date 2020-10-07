@@ -158,7 +158,7 @@ namespace scene
 		//! Calculate how many geometric primitives are used by this meshbuffer
 		virtual u32 getPrimitiveCount() const
 		{
-			u32 indexCount = getIndexCount();
+			const u32 indexCount = getIndexCount();
 			switch (getPrimitiveType())
 			{
                 case scene::EPT_POINTS:	        return indexCount;

@@ -30,8 +30,7 @@ namespace WolvenKit.CR2W
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                throw;
             }
             
         }

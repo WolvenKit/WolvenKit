@@ -9,6 +9,7 @@
 #include <wchar.h>
 #include "irrString.h"
 #include "IrrCompileConfig.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -18,13 +19,13 @@ namespace io
 //! creates an IXMLReader
 IXMLWriter* createIXMLWriter(IWriteFile* file)
 {
-	return new CXMLWriter(file);
+	return DBG_NEW CXMLWriter(file);
 }
 
 //! creates an IXMLReader
 IXMLWriterUTF8* createIXMLWriterUTF8(IWriteFile* file)
 {
-	return new CXMLWriterUTF8(file);
+	return DBG_NEW CXMLWriterUTF8(file);
 }
 
 //! Constructor

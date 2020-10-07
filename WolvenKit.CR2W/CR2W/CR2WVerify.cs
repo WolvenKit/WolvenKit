@@ -30,6 +30,7 @@ namespace WolvenKit.CR2W
         private CR2WBuffer[]        m_buffers;
         private CR2WEmbedded[]      m_embedded;
 
+        private bool isDisposed;
         private Dictionary<uint, string> m_dictionary;
         #endregion
 
@@ -49,6 +50,11 @@ namespace WolvenKit.CR2W
             ProcessFile();
         }
         #endregion
+
+        ~CR2WVerify()
+        {
+            Dispose(false);
+        }
 
         #region Main
         private void ProcessFile()
@@ -296,7 +302,18 @@ namespace WolvenKit.CR2W
 
         public void Dispose()
         {
-            m_stream.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (isDisposed) return;
+
+            if (disposing)
+            {
+                m_stream.Dispose();
+            }
+
             m_strings = null;
             m_names = null;
             m_imports = null;
@@ -305,6 +322,8 @@ namespace WolvenKit.CR2W
             m_buffers = null;
             m_embedded = null;
             m_temp = null;
+
+            isDisposed = true;
         }
     }
 }

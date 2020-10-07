@@ -3,6 +3,7 @@
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
 #include "CReadFile.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -99,7 +100,7 @@ const io::path& CReadFile::getFileName() const
 
 IReadFile* CReadFile::createReadFile(const io::path& fileName)
 {
-	CReadFile* file = new CReadFile(fileName);
+	CReadFile* file = DBG_NEW CReadFile(fileName);
 	if (file->isOpen())
 		return file;
 

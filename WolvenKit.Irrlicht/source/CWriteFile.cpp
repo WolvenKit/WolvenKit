@@ -4,6 +4,7 @@
 
 #include "CWriteFile.h"
 #include <stdio.h>
+#include "debug.h"
 
 namespace irr
 {
@@ -116,7 +117,7 @@ bool CWriteFile::flush()
 
 IWriteFile* CWriteFile::createWriteFile(const io::path& fileName, bool append)
 {
-	CWriteFile* file = new CWriteFile(fileName, append);
+	CWriteFile* file = DBG_NEW CWriteFile(fileName, append);
 	if (file->isOpen())
 		return file;
 

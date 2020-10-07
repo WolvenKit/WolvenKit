@@ -26,6 +26,7 @@
 #include "IAnimatedMesh.h"
 #include "SMesh.h"
 #include "CDynamicMeshBuffer.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -50,8 +51,8 @@ namespace scene
 		setDebugName("CTerrainSceneNode");
 		#endif
 
-		Mesh = new SMesh();
-		RenderBuffer = new CDynamicMeshBuffer(video::EVT_2TCOORDS, video::EIT_16BIT);
+		Mesh = DBG_NEW SMesh();
+		RenderBuffer = DBG_NEW CDynamicMeshBuffer(video::EVT_2TCOORDS, video::EIT_16BIT);
 		RenderBuffer->setHardwareMappingHint(scene::EHM_STATIC, scene::EBT_VERTEX);
 		RenderBuffer->setHardwareMappingHint(scene::EHM_DYNAMIC, scene::EBT_INDEX);
 
@@ -143,13 +144,13 @@ namespace scene
 		if (numVertices <= 65536)
 		{
 			//small enough for 16bit buffers
-			mb=new scene::CDynamicMeshBuffer(video::EVT_2TCOORDS, video::EIT_16BIT);
+			mb= DBG_NEW scene::CDynamicMeshBuffer(video::EVT_2TCOORDS, video::EIT_16BIT);
 			RenderBuffer->getIndexBuffer().setType(video::EIT_16BIT);
 		}
 		else
 		{
 			//we need 32bit buffers
-			mb=new scene::CDynamicMeshBuffer(video::EVT_2TCOORDS, video::EIT_32BIT);
+			mb= DBG_NEW scene::CDynamicMeshBuffer(video::EVT_2TCOORDS, video::EIT_32BIT);
 			RenderBuffer->getIndexBuffer().setType(video::EIT_32BIT);
 		}
 
@@ -312,13 +313,13 @@ namespace scene
 		if (numVertices <= 65536)
 		{
 			//small enough for 16bit buffers
-			mb=new scene::CDynamicMeshBuffer(video::EVT_2TCOORDS, video::EIT_16BIT);
+			mb= DBG_NEW scene::CDynamicMeshBuffer(video::EVT_2TCOORDS, video::EIT_16BIT);
 			RenderBuffer->getIndexBuffer().setType(video::EIT_16BIT);
 		}
 		else
 		{
 			//we need 32bit buffers
-			mb=new scene::CDynamicMeshBuffer(video::EVT_2TCOORDS, video::EIT_32BIT);
+			mb= DBG_NEW scene::CDynamicMeshBuffer(video::EVT_2TCOORDS, video::EIT_32BIT);
 			RenderBuffer->getIndexBuffer().setType(video::EIT_32BIT);
 		}
 
@@ -1254,7 +1255,7 @@ namespace scene
 		if (TerrainData.Patches)
 			delete [] TerrainData.Patches;
 
-		TerrainData.Patches = new SPatch[TerrainData.PatchCount * TerrainData.PatchCount];
+		TerrainData.Patches = DBG_NEW SPatch[TerrainData.PatchCount * TerrainData.PatchCount];
 	}
 
 
@@ -1468,7 +1469,7 @@ namespace scene
 		if (!newManager)
 			newManager = SceneManager;
 
-		CTerrainSceneNode* nb = new CTerrainSceneNode(
+		CTerrainSceneNode* nb = DBG_NEW CTerrainSceneNode(
 			newParent, newManager, FileSystem, ID,
 			4, ETPS_17, getPosition(), getRotation(), getScale());
 

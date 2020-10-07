@@ -12,6 +12,7 @@
 #include "IGUIFont.h"
 #include "IGUISpriteBank.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -91,7 +92,7 @@ u32 CGUIContextMenu::insertItem(u32 idx, const wchar_t* text, s32 commandId, boo
 
 	if (hasSubMenu)
 	{
-		s.SubMenu = new CGUIContextMenu(Environment, this, commandId,
+		s.SubMenu = DBG_NEW CGUIContextMenu(Environment, this, commandId,
 			core::rect<s32>(0,0,100,100), false, false);
 		s.SubMenu->setVisible(false);
 	}

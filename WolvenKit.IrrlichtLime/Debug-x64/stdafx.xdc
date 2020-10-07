@@ -925,7 +925,7 @@ Which vertex type is used can be determined by getVertexType().
 <member name="M:irr.scene.CVertexBuffer.getChangedID" decl="false" source="d:\tools\wk\wolvenkit.irrlicht\include\cvertexbuffer.h" line="198">
 This shouldn't be used for anything outside the VideoDriver. 
 </member>
-<member name="M:irr.scene.CIndexBuffer.getChangedID" decl="false" source="d:\tools\wk\wolvenkit.irrlicht\include\cindexbuffer.h" line="214">
+<member name="M:irr.scene.CIndexBuffer.getChangedID" decl="false" source="d:\tools\wk\wolvenkit.irrlicht\include\cindexbuffer.h" line="215">
 This shouldn't be used for anything outside the VideoDriver. 
 </member>
 <member name="D:irr.io.path" decl="false" source="d:\tools\wk\wolvenkit.irrlicht\include\path.h" line="16">
@@ -9438,7 +9438,7 @@ The view frustum is enclosed by 6 planes. These six planes share
 <member name="M:irr.scene.SViewFrustum.clipLine(irr.core.line3d&lt;System.Single&gt;*!System.Runtime.CompilerServices.IsImplicitlyDereferenced)" decl="true" source="d:\tools\wk\wolvenkit.irrlicht\include\sviewfrustum.h" line="111">
 \return True if the line was clipped, false if not 
 </member>
-<member name="M:irr.createDevice(irr.video.E_DRIVER_TYPE,irr.core.dimension2d&lt;System.UInt32&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.UInt32,System.Boolean,System.Boolean,System.Boolean,irr.IEventReceiver*)" decl="true" source="d:\tools\wk\wolvenkit.irrlicht\include\irrlicht.h" line="314">
+<member name="M:irr.createDevice(irr.video.E_DRIVER_TYPE,irr.core.dimension2d&lt;System.UInt32&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.UInt32,System.Boolean,System.Boolean,System.Boolean,irr.IEventReceiver*)" decl="true" source="d:\tools\wk\wolvenkit.irrlicht\include\irrlicht.h" line="313">
 If you need more parameters to be passed to the creation of the Irrlicht Engine device,
 	use the createDeviceEx() function.
 	\param driverType: Type of the video driver to use. This can currently be video::EDT_NULL,
@@ -9457,7 +9457,7 @@ If you need more parameters to be passed to the creation of the Irrlicht Engine 
 	device could not be created.
 
 </member>
-<member name="M:irr.createDeviceEx(irr.SIrrlichtCreationParameters!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced)" decl="true" source="d:\tools\wk\wolvenkit.irrlicht\include\irrlicht.h" line="353">
+<member name="M:irr.createDeviceEx(irr.SIrrlichtCreationParameters!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced)" decl="true" source="d:\tools\wk\wolvenkit.irrlicht\include\irrlicht.h" line="352">
 Usually you should used createDevice() for creating an Irrlicht Engine device.
 	Use this function only if you wish to specify advanced parameters like a window
 	handle in which the device should be created.

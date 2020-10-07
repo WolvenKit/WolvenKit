@@ -131,9 +131,9 @@ namespace CR2WTests
                 });
                 return w3;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 

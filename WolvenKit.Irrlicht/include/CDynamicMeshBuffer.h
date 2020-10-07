@@ -22,8 +22,8 @@ namespace scene
 		CDynamicMeshBuffer(video::E_VERTEX_TYPE vertexType, video::E_INDEX_TYPE indexType)
 		: PrimitiveType(EPT_TRIANGLES)
 		{
-			VertexBuffer=new CVertexBuffer(vertexType);
-			IndexBuffer=new CIndexBuffer(indexType);
+			VertexBuffer= DBG_NEW CVertexBuffer(vertexType);
+			IndexBuffer= DBG_NEW CIndexBuffer(indexType);
 		}
 
 		//! destructor

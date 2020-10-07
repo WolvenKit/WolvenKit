@@ -21,6 +21,7 @@
 #include "CColorConverter.h"
 #include "CImage.h"
 #include "irrString.h"
+#include "debug.h"
 
 // Header flag values
 #define DDSD_CAPS			0x00000001
@@ -716,10 +717,10 @@ IImage* CImageLoaderDDS::loadImage(io::IReadFile* file) const
 
 #ifdef _IRR_COMPILE_WITH_DDS_DECODER_LOADER_
 		u32 newSize = file->getSize() - sizeof(ddsHeader);
-		u8* memFile = new u8[newSize];
+		u8* memFile = DBG_NEW u8[newSize];
 		file->read(memFile, newSize);
 
-		image = new CImage(ECF_A8R8G8B8, core::dimension2d<u32>(width, height));
+		image = DBG_NEW CImage(ECF_A8R8G8B8, core::dimension2d<u32>(width, height));
 
 		if (DDSDecompress(&header, memFile, (u8*)image->lock()) == -1)
 		{
@@ -739,7 +740,7 @@ IImage* CImageLoaderDDS::loadImage(io::IReadFile* file) const
 			else
 				dataSize = header.Width * header.Height * header.Depth * (header.PixelFormat.RGBBitCount / 8);
 
-			u8* data = new u8[dataSize];
+			u8* data = DBG_NEW u8[dataSize];
 			file->read(data, dataSize);
 
 			switch (header.PixelFormat.RGBBitCount) // Bytes per pixel
@@ -797,7 +798,7 @@ IImage* CImageLoaderDDS::loadImage(io::IReadFile* file) const
 			{
 				if (!is3D) // Currently 3D textures are unsupported.
 				{
-					image = new CImage(format, core::dimension2d<u32>(header.Width, header.Height), data, true, true);
+					image = DBG_NEW CImage(format, core::dimension2d<u32>(header.Width, header.Height), data, true, true);
 				}
 			}
 			else
@@ -834,10 +835,10 @@ IImage* CImageLoaderDDS::loadImage(io::IReadFile* file) const
 				{
 					dataSize = IImage::getDataSizeFromFormat(format, header.Width, header.Height);
 
-					u8* data = new u8[dataSize];
+					u8* data = DBG_NEW u8[dataSize];
 					file->read(data, dataSize);
 
-					image = new CImage(format, core::dimension2d<u32>(header.Width, header.Height), data, true, true);
+					image = DBG_NEW CImage(format, core::dimension2d<u32>(header.Width, header.Height), data, true, true);
 
 					if (mipMapCount > 0)
 					{
@@ -856,7 +857,7 @@ IImage* CImageLoaderDDS::loadImage(io::IReadFile* file) const
 						}
 						while (tmpWidth != 1 || tmpHeight != 1);
 
-						u8* mipMapsData = new u8[mipMapsDataSize];
+						u8* mipMapsData = DBG_NEW u8[mipMapsDataSize];
 						file->read(mipMapsData, mipMapsDataSize);
 
 						image->setMipMapsData(mipMapsData, true, true);
@@ -874,7 +875,7 @@ IImage* CImageLoaderDDS::loadImage(io::IReadFile* file) const
 //! creates a loader which is able to load dds images
 IImageLoader* createImageLoaderDDS()
 {
-	return new CImageLoaderDDS();
+	return DBG_NEW CImageLoaderDDS();
 }
 
 

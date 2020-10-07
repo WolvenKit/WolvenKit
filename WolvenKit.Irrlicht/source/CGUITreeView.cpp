@@ -14,6 +14,7 @@
 #include "IGUIFont.h"
 #include "CGUIScrollBar.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -83,7 +84,7 @@ IGUITreeViewNode* CGUITreeViewNode::addChildBack(
 	void*					data /*= 0*/,
 	IReferenceCounted*			data2 /*= 0*/ )
 {
-	CGUITreeViewNode*	newChild = new CGUITreeViewNode( Owner, this );
+	CGUITreeViewNode*	newChild = DBG_NEW CGUITreeViewNode( Owner, this );
 
 	Children.push_back( newChild );
 	newChild->Text = text;
@@ -107,7 +108,7 @@ IGUITreeViewNode* CGUITreeViewNode::addChildFront(
 	void*					data /*= 0*/,
 	IReferenceCounted*			data2 /*= 0*/ )
 {
-	CGUITreeViewNode*	newChild = new CGUITreeViewNode( Owner, this );
+	CGUITreeViewNode*	newChild = DBG_NEW CGUITreeViewNode( Owner, this );
 
 	Children.push_front( newChild );
 	newChild->Text = text;
@@ -139,7 +140,7 @@ IGUITreeViewNode* CGUITreeViewNode::insertChildAfter(
 	{
 		if( other == *itOther )
 		{
-			newChild = new CGUITreeViewNode( Owner, this );
+			newChild = DBG_NEW CGUITreeViewNode( Owner, this );
 			newChild->Text = text;
 			newChild->Icon = icon;
 			newChild->ImageIndex = imageIndex;
@@ -173,7 +174,7 @@ IGUITreeViewNode* CGUITreeViewNode::insertChildBefore(
 	{
 		if( other == *itOther )
 		{
-			newChild = new CGUITreeViewNode( Owner, this );
+			newChild = DBG_NEW CGUITreeViewNode( Owner, this );
 			newChild->Text = text;
 			newChild->Icon = icon;
 			newChild->ImageIndex = imageIndex;
@@ -455,7 +456,7 @@ CGUITreeView::CGUITreeView(IGUIEnvironment* environment, IGUIElement* parent,
 
 	if ( scrollBarVertical )
 	{
-		ScrollBarV = new CGUIScrollBar( false, Environment, this, -1,
+		ScrollBarV = DBG_NEW CGUIScrollBar( false, Environment, this, -1,
 			core::rect<s32>(	RelativeRect.getWidth() - ScrollBarSize,
 								0,
 								RelativeRect.getWidth(),
@@ -470,7 +471,7 @@ CGUITreeView::CGUITreeView(IGUIEnvironment* environment, IGUIElement* parent,
 
 	if ( scrollBarHorizontal )
 	{
-		ScrollBarH = new CGUIScrollBar( true, Environment, this, -1,
+		ScrollBarH = DBG_NEW CGUIScrollBar( true, Environment, this, -1,
 			core::rect<s32>(	0,
 								RelativeRect.getHeight() - ScrollBarSize,
 								RelativeRect.getWidth() - ScrollBarSize,
@@ -483,7 +484,7 @@ CGUITreeView::CGUITreeView(IGUIEnvironment* environment, IGUIElement* parent,
 		ScrollBarH->grab();
 	}
 
-	Root = new CGUITreeViewNode( this, 0 );
+	Root = DBG_NEW CGUITreeViewNode( this, 0 );
 	Root->Expanded = true;
 
 	recalculateItemHeight();
@@ -756,29 +757,28 @@ bool CGUITreeView::OnEvent( const SEvent &event )
 void CGUITreeView::mouseAction( s32 xpos, s32 ypos, bool onlyHover /*= false*/ )
 {
 	IGUITreeViewNode*		oldSelected = Selected;
-	IGUITreeViewNode*		hitNode = 0;
+	IGUITreeViewNode*		hitNode = nullptr;
 	s32						selIdx=-1;
-	s32						n;
 	IGUITreeViewNode*		node;
 	SEvent					event;
 
 	event.EventType			= EET_GUI_EVENT;
 	event.GUIEvent.Caller	= this;
-	event.GUIEvent.Element = 0;
+	event.GUIEvent.Element = nullptr;
 
 	xpos -= AbsoluteRect.UpperLeftCorner.X;
 	ypos -= AbsoluteRect.UpperLeftCorner.Y;
 
 	// find new selected item.
-	s32 scrollBarVPos = ScrollBarV ? ScrollBarV->getPos() : 0;
+	const s32 scrollBarVPos = ScrollBarV ? ScrollBarV->getPos() : 0;
 	if( ItemHeight != 0 )
 	{
 		selIdx = ( ( ypos - 1 ) + scrollBarVPos ) / ItemHeight;
 	}
 
-	hitNode = 0;
+	hitNode = nullptr;
 	node = Root->getFirstChild();
-	n = 0;
+	s32 n = 0;
 	while( node )
 	{
 		if( selIdx == n )
@@ -790,7 +790,7 @@ void CGUITreeView::mouseAction( s32 xpos, s32 ypos, bool onlyHover /*= false*/ )
 		++n;
 	}
 
-	s32 scrollBarHPos = ScrollBarH ? ScrollBarH->getPos() : 0;
+	const s32 scrollBarHPos = ScrollBarH ? ScrollBarH->getPos() : 0;
 	xpos += scrollBarHPos; // correction for shift
 	if( hitNode && xpos > hitNode->getLevel() * IndentWidth )
 	{
@@ -815,12 +815,12 @@ void CGUITreeView::mouseAction( s32 xpos, s32 ypos, bool onlyHover /*= false*/ )
 		}
 		LastEventNode = hitNode;
 		Parent->OnEvent( event );
-		LastEventNode = 0;
+		LastEventNode = nullptr;
 	}
 
 	if( Selected && !Selected->isVisible() )
 	{
-		Selected = 0;
+		Selected = nullptr;
 	}
 
 	// post selection news
@@ -832,14 +832,14 @@ void CGUITreeView::mouseAction( s32 xpos, s32 ypos, bool onlyHover /*= false*/ )
 			event.GUIEvent.EventType = EGET_TREEVIEW_NODE_DESELECT;
 			LastEventNode = oldSelected;
 			Parent->OnEvent( event );
-			LastEventNode = 0;
+			LastEventNode = nullptr;
 		}
 		if( Selected )
 		{
 			event.GUIEvent.EventType = EGET_TREEVIEW_NODE_SELECT;
 			LastEventNode = Selected;
 			Parent->OnEvent( event );
-			LastEventNode = 0;
+			LastEventNode = nullptr;
 		}
 	}
 }
@@ -852,14 +852,14 @@ void CGUITreeView::draw()
 		return;
 	}
 
-	IGUISkin* skin = Environment->getSkin();
+	const IGUISkin* skin = Environment->getSkin();
 
 	updateScrollBarSize(skin->getSize(EGDS_SCROLLBAR_SIZE));
 	recalculateItemHeight(); // if the font changed
 
 	irr::video::IVideoDriver* driver = Environment->getVideoDriver();
 
-	core::rect<s32>* clipRect = 0;
+	core::rect<s32>* clipRect = nullptr;
 	if( Clip )
 	{
 		clipRect = &AbsoluteClippingRect;
@@ -1106,8 +1106,6 @@ void CGUITreeView::draw()
 //! Irrlicht engine as icon font, the icon strings defined in GUIIcons.h can be used.
 void CGUITreeView::setIconFont( IGUIFont* font )
 {
-	s32	height;
-
 	if ( font )
 		font->grab();
 	if ( IconFont )
@@ -1118,7 +1116,7 @@ void CGUITreeView::setIconFont( IGUIFont* font )
 	IconFont = font;
 	if( IconFont )
 	{
-		height = IconFont->getDimension( L" " ).Height;
+		const s32 height = IconFont->getDimension( L" " ).Height;
 		if( height > ItemHeight )
 		{
 			ItemHeight = height;
@@ -1148,13 +1146,13 @@ void CGUITreeView::setImageList( IGUIImageList* imageList )
 }
 
 //! Access the vertical scrollbar
-IGUIScrollBar* CGUITreeView::getVerticalScrollBar() const
+IGUIScrollBar* CGUITreeView::getVerticalScrollBar() const noexcept
 {
 	return ScrollBarV;
 }
 
 //! Access the horizontal scrollbar
-IGUIScrollBar* CGUITreeView::getHorizontalScrollBar() const
+IGUIScrollBar* CGUITreeView::getHorizontalScrollBar() const noexcept
 {
 	return ScrollBarH;
 }

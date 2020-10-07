@@ -4,6 +4,7 @@
 
 #include "CEmptySceneNode.h"
 #include "ISceneManager.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -54,7 +55,7 @@ ISceneNode* CEmptySceneNode::clone(ISceneNode* newParent, ISceneManager* newMana
 	if (!newManager)
 		newManager = SceneManager;
 
-	CEmptySceneNode* nb = new CEmptySceneNode(newParent,
+	CEmptySceneNode* nb = DBG_NEW CEmptySceneNode(newParent,
 		newManager, ID);
 
 	nb->cloneMembers(this, newManager);

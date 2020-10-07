@@ -14,6 +14,7 @@
 #include "fast_atof.h"
 #include "coreutil.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -40,8 +41,8 @@ IAnimatedMesh* CSTLMeshFileLoader::createMesh(io::IReadFile* file)
 	if (filesize < 6) // we need a header
 		return 0;
 
-	SMesh* mesh = new SMesh();
-	SMeshBuffer* meshBuffer = new SMeshBuffer();
+	SMesh* mesh = DBG_NEW SMesh();
+	SMeshBuffer* meshBuffer = DBG_NEW SMeshBuffer();
 	mesh->addMeshBuffer(meshBuffer);
 	meshBuffer->drop();
 
@@ -153,7 +154,7 @@ IAnimatedMesh* CSTLMeshFileLoader::createMesh(io::IReadFile* file)
 	if ( 0 != mesh->getMeshBufferCount() )
 	{
 		mesh->recalculateBoundingBox();
-		pAM = new SAnimatedMesh();
+		pAM = DBG_NEW SAnimatedMesh();
 		pAM->Type = EAMT_OBJ;
 		pAM->addMesh(mesh);
 		pAM->recalculateBoundingBox();

@@ -10,6 +10,7 @@
 #include "CImage.h"
 #include "os.h"
 #include "irrString.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -147,7 +148,7 @@ IImage* CImageLoaderJPG::loadImage(io::IReadFile* file) const
 	Filename = file->getFileName();
 
 	u8 **rowPtr=0;
-	u8* input = new u8[file->getSize()];
+	u8* input = DBG_NEW u8[file->getSize()];
 	file->read(input, file->getSize());
 
 	// allocate and initialize JPEG decompression object
@@ -229,12 +230,12 @@ IImage* CImageLoaderJPG::loadImage(io::IReadFile* file) const
 	u32 height = cinfo.image_height;
 
 	// Allocate memory for buffer
-	u8* output = new u8[rowspan * height];
+	u8* output = DBG_NEW u8[rowspan * height];
 
 	// Here we use the library's state variable cinfo.output_scanline as the
 	// loop counter, so that we don't have to keep track ourselves.
 	// Create array of row pointers for lib
-	rowPtr = new u8* [height];
+	rowPtr = DBG_NEW u8* [height];
 
 	for( u32 i = 0; i < height; i++ )
 		rowPtr[i] = &output[ i * rowspan ];
@@ -257,7 +258,7 @@ IImage* CImageLoaderJPG::loadImage(io::IReadFile* file) const
 	IImage* image = 0;
 	if (useCMYK)
 	{
-		image = new CImage(ECF_R8G8B8,
+		image = DBG_NEW CImage(ECF_R8G8B8,
 				core::dimension2d<u32>(width, height));
 		const u32 size = 3*width*height;
 		u8* data = (u8*)image->getData();
@@ -277,7 +278,7 @@ IImage* CImageLoaderJPG::loadImage(io::IReadFile* file) const
 		delete [] output;
 	}
 	else
-		image = new CImage(ECF_R8G8B8,
+		image = DBG_NEW CImage(ECF_R8G8B8,
 				core::dimension2d<u32>(width, height), output);
 
 	delete [] input;
@@ -292,7 +293,7 @@ IImage* CImageLoaderJPG::loadImage(io::IReadFile* file) const
 //! creates a loader which is able to load jpeg images
 IImageLoader* createImageLoaderJPG()
 {
-	return new CImageLoaderJPG();
+	return DBG_NEW CImageLoaderJPG();
 }
 
 } // end namespace video

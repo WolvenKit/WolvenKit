@@ -30,7 +30,7 @@ CSoftwareDriver::CSoftwareDriver(const core::dimension2d<u32>& windowSize, bool 
 
 	// create backbuffer
 
-	BackBuffer = new CImage(ECF_A1R5G5B5, windowSize);
+	BackBuffer = DBG_NEW CImage(ECF_A1R5G5B5, windowSize);
 	if (BackBuffer)
 	{
 		BackBuffer->fill(SColor(0));
@@ -177,7 +177,7 @@ bool CSoftwareDriver::queryFeature(E_VIDEO_DRIVER_FEATURE feature) const
 //! Create render target.
 IRenderTarget* CSoftwareDriver::addRenderTarget()
 {
-	CSoftwareRenderTarget* renderTarget = new CSoftwareRenderTarget(this);
+	CSoftwareRenderTarget* renderTarget = DBG_NEW CSoftwareRenderTarget(this);
 	RenderTargets.push_back(renderTarget);
 
 	return renderTarget;
@@ -247,7 +247,7 @@ bool CSoftwareDriver::endScene()
 
 ITexture* CSoftwareDriver::createDeviceDependentTexture(const io::path& name, IImage* image)
 {
-	CSoftwareTexture* texture = new CSoftwareTexture(image, name, false);
+	CSoftwareTexture* texture = DBG_NEW CSoftwareTexture(image, name, false);
 
 	return texture;
 }
@@ -768,7 +768,7 @@ void CSoftwareDriver::OnResize(const core::dimension2d<u32>& size)
 
 		if (BackBuffer)
 			BackBuffer->drop();
-		BackBuffer = new CImage(ECF_A1R5G5B5, realSize);
+		BackBuffer = DBG_NEW CImage(ECF_A1R5G5B5, realSize);
 
 		if (resetRT)
 			setRenderTargetImage(BackBuffer);
@@ -896,7 +896,7 @@ ITexture* CSoftwareDriver::addRenderTargetTexture(const core::dimension2d<u32>& 
 												  const ECOLOR_FORMAT format)
 {
 	IImage* img = createImage(video::ECF_A1R5G5B5, size);
-	ITexture* tex = new CSoftwareTexture(img, name, true);
+	ITexture* tex = DBG_NEW CSoftwareTexture(img, name, true);
 	img->drop();
 	addTexture(tex);
 	tex->drop();

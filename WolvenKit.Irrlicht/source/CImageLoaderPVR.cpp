@@ -10,6 +10,7 @@
 #include "os.h"
 #include "CImage.h"
 #include "irrString.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -210,7 +211,7 @@ core::array<IImage*> CImageLoaderPVR::loadImages(io::IReadFile* file, E_TEXTURE_
 			mipMapsDataArray.set_used(imageArray.size());
 
 			for (u32 j = 0; j < mipMapsDataArray.size(); ++j)
-				mipMapsDataArray[j] = new u8[dataSize];
+				mipMapsDataArray[j] = DBG_NEW u8[dataSize];
 		}
 
 		// read texture
@@ -226,10 +227,10 @@ core::array<IImage*> CImageLoaderPVR::loadImages(io::IReadFile* file, E_TEXTURE_
 				{
 					dataSize = IImage::getDataSizeFromFormat(format, header.Width, header.Height);
 
-					u8* data = new u8[dataSize];
+					u8* data = DBG_NEW u8[dataSize];
 					file->read(data, dataSize);
 
-					imageArray[j] = new CImage(format, core::dimension2d<u32>(header.Width, header.Height), data, true, true);
+					imageArray[j] = DBG_NEW CImage(format, core::dimension2d<u32>(header.Width, header.Height), data, true, true);
 				}
 			}
 			else

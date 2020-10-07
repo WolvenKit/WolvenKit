@@ -7,6 +7,7 @@
 #include "CColorConverter.h"
 #include "CBlit.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -25,7 +26,7 @@ CImage::CImage(ECOLOR_FORMAT format, const core::dimension2d<u32>& size, void* d
 	{
 		const u32 dataSize = getDataSizeFromFormat(Format, Size.Width, Size.Height);
 
-		Data = new u8[dataSize];
+		Data = DBG_NEW u8[dataSize];
 		memcpy(Data, data, dataSize);
 		DeleteMemory = true;
 	}
@@ -35,7 +36,7 @@ CImage::CImage(ECOLOR_FORMAT format, const core::dimension2d<u32>& size, void* d
 //! Constructor of empty image
 CImage::CImage(ECOLOR_FORMAT format, const core::dimension2d<u32>& size) : IImage(format, size, true)
 {
-	Data = new u8[getDataSizeFromFormat(Format, Size.Width, Size.Height)];
+	Data = DBG_NEW u8[getDataSizeFromFormat(Format, Size.Width, Size.Height)];
 	DeleteMemory = true;
 }
 

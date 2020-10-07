@@ -92,7 +92,7 @@ namespace video
 				{
 					MatrixAllocator.destruct(TextureMatrix);
 					MatrixAllocator.deallocate(TextureMatrix);
-					TextureMatrix = 0;
+					TextureMatrix = nullptr;
 				}
 			}
 			else
@@ -103,7 +103,7 @@ namespace video
 					MatrixAllocator.construct(TextureMatrix,*other.TextureMatrix);
 				}
 				else
-					TextureMatrix = 0;
+					TextureMatrix = nullptr;
 			}
 			TextureWrapU = other.TextureWrapU;
 			TextureWrapV = other.TextureWrapV;

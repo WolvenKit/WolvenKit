@@ -10,7 +10,7 @@
 #include "os.h"
 #include "CImage.h"
 #include "irrString.h"
-
+#include "debug.h"
 
 namespace irr
 {
@@ -137,7 +137,7 @@ IImage* CImageLoaderPSD::loadImage(io::IReadFile* file) const
 
 	// create image data block
 
-	imageData = new u32[header.width * header.height];
+	imageData = DBG_NEW u32[header.width * header.height];
 
 	bool res = false;
 
@@ -151,7 +151,7 @@ IImage* CImageLoaderPSD::loadImage(io::IReadFile* file) const
 	if (res)
 	{
 		// create surface
-		image = new CImage(ECF_A8R8G8B8,
+		image = DBG_NEW CImage(ECF_A8R8G8B8,
 			core::dimension2d<u32>(header.width, header.height), imageData);
 	}
 
@@ -165,7 +165,7 @@ IImage* CImageLoaderPSD::loadImage(io::IReadFile* file) const
 
 bool CImageLoaderPSD::readRawImageData(io::IReadFile* file, const PsdHeader& header, u32* imageData) const
 {
-	u8* tmpData = new u8[header.width * header.height];
+	u8* tmpData = DBG_NEW u8[header.width * header.height];
 
 	for (s32 channel=0; channel<header.channels && channel < 3; ++channel)
 	{
@@ -236,8 +236,8 @@ bool CImageLoaderPSD::readRLEImageData(io::IReadFile* file, const PsdHeader& hea
 	type 1 (no compression).
 	*/
 
-	u8* tmpData = new u8[header.width * header.height];
-	u16 *rleCount= new u16 [header.height * header.channels];
+	u8* tmpData = DBG_NEW u8[header.width * header.height];
+	u16 *rleCount= DBG_NEW u16 [header.height * header.channels];
 
 	s32 size=0;
 
@@ -257,7 +257,7 @@ bool CImageLoaderPSD::readRLEImageData(io::IReadFile* file, const PsdHeader& hea
 		size += rleCount[y];
 	}
 
-	s8 *buf = new s8[size];
+	s8 *buf = DBG_NEW s8[size];
 	if (!file->read(buf, size))
 	{
 		delete [] rleCount;

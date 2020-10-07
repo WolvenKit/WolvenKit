@@ -38,21 +38,31 @@ namespace WolvenKit.CR2W.Types
             if (buffersize != CalculateBufferSize())
                 throw new InvalidParsingException("Calculated buffersize is not equal actual buffersize.");
 
-            using (var ms = new MemoryStream(file.ReadBytes((int)buffersize)))
-            using (var br = new BinaryReader(ms))
+            MemoryStream ms = null;
+            try
             {
-                int wc = WaypointsCount != null ? WaypointsCount.val : 0;
-                int cc = ComponentsMappingsCount != null ? ComponentsMappingsCount.val : 0;
-                int wgc = WaypointsGroupsCount != null ? WaypointsGroupsCount.val : 0;
-                int ic = IndexesCount != null ? (int)IndexesCount.val : 0;
+                ms = new MemoryStream(file.ReadBytes((int)buffersize));
+                using (var br = new BinaryReader(ms))
+                {
+                    int wc = WaypointsCount != null ? WaypointsCount.val : 0;
+                    int cc = ComponentsMappingsCount != null ? ComponentsMappingsCount.val : 0;
+                    int wgc = WaypointsGroupsCount != null ? WaypointsGroupsCount.val : 0;
+                    int ic = IndexesCount != null ? (int)IndexesCount.val : 0;
 
-                Waypoints.Read(br, (uint)wc * 20, wc);
-                ComponentsMappings.Read(br, (uint)cc * 32, cc);
-                WaypointsGroups.Read(br, (uint)wgc * 12, wgc);
-                Indexes.Read(br, (uint)ic * 2, ic);
+                    Waypoints.Read(br, (uint)wc * 20, wc);
+                    ComponentsMappings.Read(br, (uint)cc * 32, cc);
+                    WaypointsGroups.Read(br, (uint)wgc * 12, wgc);
+                    Indexes.Read(br, (uint)ic * 2, ic);
 
-                if (buffersize - ms.Position > 0)
-                    throw new InvalidParsingException("Did not read buffer to the end.");
+                    ms.Close();
+                    ms = null;
+                    if (buffersize - ms.Position > 0)
+                        throw new InvalidParsingException("Did not read buffer to the end.");
+                }
+            }
+            finally
+            {
+                ms?.Dispose();
             }
 
         }
@@ -62,24 +72,35 @@ namespace WolvenKit.CR2W.Types
 
             base.Write(file);
 
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
+            MemoryStream ms = null;
+            try
             {
-                Waypoints.Write(bw);
-                ComponentsMappings.Write(bw);
-                WaypointsGroups.Write(bw);
-                Indexes.Write(bw);
+                ms = new MemoryStream();
+                using (var bw = new BinaryWriter(ms))
+                {
+                    Waypoints.Write(bw);
+                    ComponentsMappings.Write(bw);
+                    WaypointsGroups.Write(bw);
+                    Indexes.Write(bw);
 
-                bw.Flush();
+                    bw.Flush();
 
-                int buffersize = (int)ms.Position;
+                    int buffersize = (int)ms.Position;
 
-                int calcb = CalculateBufferSize();
-                if (buffersize != calcb)
-                    throw new InvalidParsingException("Calculated buffersize is not equal actual buffersize.");
+                    int calcb = CalculateBufferSize();
+                    if (buffersize != calcb)
+                        throw new InvalidParsingException("Calculated buffersize is not equal actual buffersize.");
 
-                file.Write(buffersize);
-                file.Write(ms.ToArray());
+                    file.Write(buffersize);
+                    file.Write(ms.ToArray());
+
+                    ms.Close();
+                    ms = null;
+                }
+            }
+            finally
+            {
+                ms?.Dispose();
             }
         }
 

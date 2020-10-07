@@ -190,7 +190,7 @@ IAnimatedMesh* CPLYMeshFileLoader::createMesh(io::IReadFile* file)
 			}
 			else if (strcmp(word, "element") == 0)
 			{
-				SPLYElement* el = new SPLYElement;
+				SPLYElement* el = DBG_NEW SPLYElement;
 				el->Name = getNextWord();
 				el->Count = atoi(getNextWord());
 				el->IsFixedWidth = true;
@@ -230,7 +230,7 @@ IAnimatedMesh* CPLYMeshFileLoader::createMesh(io::IReadFile* file)
 		if (continueReading)
 		{
 			// create a mesh buffer
-			CDynamicMeshBuffer *mb = new CDynamicMeshBuffer(video::EVT_STANDARD, vertCount > 65565 ? video::EIT_32BIT : video::EIT_16BIT);
+			CDynamicMeshBuffer *mb = DBG_NEW CDynamicMeshBuffer(video::EVT_STANDARD, vertCount > 65565 ? video::EIT_32BIT : video::EIT_16BIT);
 			mb->getVertexBuffer().reallocate(vertCount);
 			mb->getIndexBuffer().reallocate(vertCount);
 			mb->setHardwareMappingHint(EHM_STATIC);
@@ -262,11 +262,11 @@ IAnimatedMesh* CPLYMeshFileLoader::createMesh(io::IReadFile* file)
 			mb->recalculateBoundingBox();
 			if (!hasNormals)
 				SceneManager->getMeshManipulator()->recalculateNormals(mb);
-			SMesh* m = new SMesh();
+			SMesh* m = DBG_NEW SMesh();
 			m->addMeshBuffer(mb);
 			m->recalculateBoundingBox();
 			mb->drop();
-			animMesh = new SAnimatedMesh();
+			animMesh = DBG_NEW SAnimatedMesh();
 			animMesh->addMesh(m);
 			animMesh->recalculateBoundingBox();
 			m->drop();
@@ -442,7 +442,7 @@ bool CPLYMeshFileLoader::allocateBuffer()
 	ElementList.clear();
 
 	if (!Buffer)
-		Buffer = new c8[PLY_INPUT_BUFFER_SIZE];
+		Buffer = DBG_NEW c8[PLY_INPUT_BUFFER_SIZE];
 
 	// not enough memory?
 	if (!Buffer)

@@ -11,6 +11,7 @@
 #include "IAnimatedMesh.h"
 #include "IMaterialRenderer.h"
 #include "IFileSystem.h"
+#include "debug.h"
 #ifdef _IRR_COMPILE_WITH_SHADOW_VOLUME_SCENENODE_
 #include "CShadowVolumeSceneNode.h"
 #else
@@ -311,7 +312,7 @@ IShadowVolumeSceneNode* CMeshSceneNode::addShadowVolumeSceneNode(
 	if (Shadow)
 		Shadow->drop();
 
-	Shadow = new CShadowVolumeSceneNode(shadowMesh, this, SceneManager, id,  zfailmethod, infinity);
+	Shadow = DBG_NEW CShadowVolumeSceneNode(shadowMesh, this, SceneManager, id,  zfailmethod, infinity);
 	return Shadow;
 #else
 	return 0;
@@ -432,7 +433,7 @@ ISceneNode* CMeshSceneNode::clone(ISceneNode* newParent, ISceneManager* newManag
 	if (!newManager)
 		newManager = SceneManager;
 
-	CMeshSceneNode* nb = new CMeshSceneNode(Mesh, newParent,
+	CMeshSceneNode* nb = DBG_NEW CMeshSceneNode(Mesh, newParent,
 		newManager, ID, RelativeTranslation, RelativeRotation, RelativeScale);
 
 	nb->cloneMembers(this, newManager);

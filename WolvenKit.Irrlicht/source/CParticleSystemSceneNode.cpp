@@ -24,6 +24,7 @@
 #include "CParticleRotationAffector.h"
 #include "CParticleScaleAffector.h"
 #include "SViewFrustum.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -43,7 +44,7 @@ CParticleSystemSceneNode::CParticleSystemSceneNode(bool createDefaultEmitter,
 	setDebugName("CParticleSystemSceneNode");
 	#endif
 
-	Buffer = new SMeshBuffer();
+	Buffer = DBG_NEW SMeshBuffer();
 	if (createDefaultEmitter)
 	{
 		IParticleEmitter* e = createBoxEmitter();

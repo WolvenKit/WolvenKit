@@ -692,7 +692,7 @@ inline vector3df quaternion::operator* (const vector3df& v) const
 	// nVidia SDK implementation
 
 	vector3df uv, uuv;
-	vector3df qvec(X, Y, Z);
+	const vector3df qvec(X, Y, Z);
 	uv = qvec.crossProduct(v);
 	uuv = qvec.crossProduct(uv);
 	uv *= (2.0f * W);

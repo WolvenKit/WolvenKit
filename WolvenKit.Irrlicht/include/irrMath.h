@@ -121,7 +121,7 @@ namespace core
 
 	//! returns minimum of two values. Own implementation to get rid of the STL (VS6 problems)
 	template<class T>
-	inline const T& min_(const T& a, const T& b)
+	inline const T& min_(const T& a, const T& b) noexcept
 	{
 		return a < b ? a : b;
 	}
@@ -135,7 +135,7 @@ namespace core
 
 	//! returns maximum of two values. Own implementation to get rid of the STL (VS6 problems)
 	template<class T>
-	inline const T& max_(const T& a, const T& b)
+	inline const T& max_(const T& a, const T& b) noexcept
 	{
 		return a < b ? b : a;
 	}
@@ -186,64 +186,64 @@ namespace core
 	inline T roundingError();
 
 	template <>
-	inline f32 roundingError()
+	constexpr f32 roundingError()
 	{
 		return ROUNDING_ERROR_f32;
 	}
 
 	template <>
-	inline f64 roundingError()
+    constexpr f64 roundingError()
 	{
 		return ROUNDING_ERROR_f64;
 	}
 
 	template <>
-	inline s32 roundingError()
+    constexpr s32 roundingError()
 	{
 		return ROUNDING_ERROR_S32;
 	}
 
 	template <>
-	inline u32 roundingError()
+    constexpr u32 roundingError()
 	{
 		return ROUNDING_ERROR_S32;
 	}
 
 #ifdef __IRR_HAS_S64
 	template <>
-	inline s64 roundingError()
+    constexpr s64 roundingError()
 	{
 		return ROUNDING_ERROR_S64;
 	}
 
 	template <>
-	inline u64 roundingError()
+    constexpr u64 roundingError()
 	{
 		return ROUNDING_ERROR_S64;
 	}
 #endif
 
 	template <class T>
-	inline T relativeErrorFactor()
+    constexpr T relativeErrorFactor()
 	{
 		return 1;
 	}
 
 	template <>
-	inline f32 relativeErrorFactor()
+    constexpr f32 relativeErrorFactor()
 	{
 		return 4;
 	}
 
 	template <>
-	inline f64 relativeErrorFactor()
+    constexpr f64 relativeErrorFactor()
 	{
 		return 8;
 	}
 
 	//! returns if a equals b, taking possible rounding errors into account
 	template <class T>
-	inline bool equals(const T a, const T b, const T tolerance = roundingError<T>()) 
+	inline bool equals(const T a, const T b, const T tolerance = roundingError<T>())  noexcept
 	{
 		return (a + tolerance >= b) && (a - tolerance <= b);
 	}
@@ -283,8 +283,8 @@ namespace core
 		// by one integer number. Also works the other way round, an integer of 1 interpreted as float
 		// is for example the smallest possible float number.
 
-		FloatIntUnion32 fa(a);
-		FloatIntUnion32 fb(b);
+		const FloatIntUnion32 fa(a);
+		const FloatIntUnion32 fb(b);
 
 		// Different signs, we could maybe get difference to 0, but so close to 0 using epsilons is better.
 		if ( fa.sign() != fb.sign() )
@@ -296,7 +296,7 @@ namespace core
 		}
 
 		// Find the difference in ULPs.
-		int ulpsDiff = abs_(fa.i- fb.i);
+		const int ulpsDiff = abs_(fa.i- fb.i);
 		if (ulpsDiff <= maxUlpDiff)
 			return true;
 
@@ -677,7 +677,7 @@ namespace core
 #endif
 		return t;
 #else // no fast math
-		return (s32) floorf ( x );
+		return static_cast<s32>( floorf ( x ) );
 #endif
 	}
 
@@ -709,7 +709,7 @@ namespace core
 #endif
 		return t;
 #else // not fast math
-		return (s32) ceilf ( x );
+		return static_cast<s32>( ceilf ( x ) );
 #endif
 	}
 
@@ -738,7 +738,7 @@ namespace core
 #endif
 		return t;
 #else // no fast math
-		return (s32) round_(x);
+		return static_cast<s32>( round_(x) );
 #endif
 	}
 

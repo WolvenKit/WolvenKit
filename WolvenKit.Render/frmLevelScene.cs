@@ -96,7 +96,7 @@ namespace WolvenKit.Render
         private IrrlichtDevice device;
         private VideoDriver driver;
         private SceneManager smgr;
-        private GUIEnvironment gui;
+        //private GUIEnvironment gui;
 
         private IrrlichtLime.Scene.SceneNode worldNode;
         private IrrlichtLime.Scene.SceneNode lightNode;
@@ -113,6 +113,7 @@ namespace WolvenKit.Render
             this.meshId = 1;
             this.doAddNodes = false;
             InitializeComponent();
+            this.sceneView.Enabled = false;
         }
 
         private void AddLayer(string layerFileName, string layerName, ref int meshId)
@@ -167,7 +168,7 @@ namespace WolvenKit.Render
                             string meshPath = depot + meshName;
 
                             Mesh m = smgr.GetMesh(meshPath);
-                            m = device.SceneManager.MeshManipulator.CreateMeshWithTangents(m, true);
+                            m = smgr.MeshManipulator.CreateMeshWithTangents(m, true);
 
                             RenderTreeNode meshNode = new RenderTreeNode(meshName, meshId++, m, translation, rotation);
 
@@ -188,6 +189,23 @@ namespace WolvenKit.Render
 
         private void ParseScene()
         {
+            //string meshPath = "D:/Tools/ModTools/r4data/engine/textures/editor/grey.xbm";
+            //Mesh m = smgr.GetMesh(meshPath);
+            //m = smgr.MeshManipulator.CreateMeshWithTangents(m, true);
+            /*
+            CR2WFile imgAssetFile;
+            using (var fs = new FileStream(meshPath, FileMode.Open, FileAccess.Read))
+            using (var reader = new BinaryReader(fs))
+            {
+                imgAssetFile = new CR2WFile();
+                imgAssetFile.Read(reader);
+                fs.Close();
+            }
+
+            Texture dudtex = driver.GetTexture(meshPath);
+            */
+            //===============================================
+
             if (Path.GetExtension(inputFilename) == ".w2w")
             {
                 CR2WFile world;
@@ -259,7 +277,7 @@ namespace WolvenKit.Render
 
                 driver = device.VideoDriver;
                 smgr = device.SceneManager;
-                gui = device.GUIEnvironment;
+                //gui = device.GUIEnvironment;
 
                 smgr.Attributes.SetValue("TW_TW3_TEX_PATH", depot);
                 driver.SetTextureCreationFlag(TextureCreationFlag.Always32Bit, true);
@@ -270,8 +288,16 @@ namespace WolvenKit.Render
                 worldNode.Rotation = new Vector3Df(-90, 0, 0);
                 worldNode.Visible = true;
 
+                var dome = smgr.AddSkyDomeSceneNode(driver.GetTexture("Terrain\\skydome.jpg"), 16, 8, 0.95f, 2.0f);
+                dome.Visible = true;
+
                 ParseScene();
                 smgr.AddCameraSceneNodeMaya();
+
+                sceneView.Invoke((MethodInvoker)delegate
+                {
+                    this.sceneView.Enabled = true;
+                });
 
                 toolStrip.Invoke((MethodInvoker)delegate
                 {
@@ -284,13 +310,15 @@ namespace WolvenKit.Render
                     {
                         AddLayer(inputFilename, inputFilename, ref meshId);
                         doAddNodes = false;
+                        sceneView.Invoke((MethodInvoker)delegate
+                        {
+                            this.sceneView.Enabled = true;
+                        });
                     }
                     driver.BeginScene(ClearBufferFlag.All, new IrrlichtLime.Video.Color(0, 0, 100));
                     smgr.DrawAll();
                     driver.EndScene();
                 }
-
-                device.Drop();
             }
             catch (ThreadAbortException) { }
             catch (NullReferenceException) { }
@@ -408,32 +436,14 @@ namespace WolvenKit.Render
             if (node.MeshNode == null)
             {
                 MeshSceneNode meshNode = smgr.AddMeshSceneNode(node.Mesh, worldNode, node.ID, node.Position, node.Rotation);
-                //meshNode.SetMaterialFlag(MaterialFlag.Lighting, false);
-                //meshNode.SetMaterialFlag(MaterialFlag.GouraudShading, true);
                 meshNode.SetMaterialFlag(MaterialFlag.Lighting, true);
-
-                /*
-                foreach (MeshBuffer mb in node.Mesh.MeshBuffers)
-                {
-                    if (mb.Material.GetTexture(0) != null)
-                    {
-                        //driver.RemoveTexture(mb.Material.GetTexture(0));
-                        meshNode.SetMaterialTexture(0, mb.Material.GetTexture(0));
-                    }
-
-                    if (mb.Material.GetTexture(1) != null)
-                    {
-                        //driver.RemoveTexture(mb.Material.GetTexture(1));
-                        meshNode.SetMaterialTexture(1, mb.Material.GetTexture(1));
-                    }
-                }
-                */
                 node.MeshNode = meshNode;
             }
-            node.MeshNode.Visible = true;
 
             // otherwise the node is already in the scene so just put it in camera focus
+            node.MeshNode.Visible = true;
             var camera = smgr.ActiveCamera;
+
 
             // for a Maya camera just set the target
             camera.Target = new Vector3Df(node.MeshNode.AbsolutePosition);
@@ -450,8 +460,8 @@ namespace WolvenKit.Render
             // TODO: allow DXT1 and DTX5 images in memory and then decompress for conversion and export
             if(!IrrlichtLime.Video.Image.IsCompressedFormat(tex.ColorFormat))
             {
-                IrrlichtLime.Video.Image img = device.VideoDriver.CreateImage(tex);
-                device.VideoDriver.WriteImage(img, fileName);
+                IrrlichtLime.Video.Image img = driver.CreateImage(tex);
+                driver.WriteImage(img, fileName);
                 img.Drop();
             }
         }
@@ -647,6 +657,7 @@ namespace WolvenKit.Render
             {
                 inputFilename = dlg.FileName;
                 doAddNodes = true;
+                sceneView.Enabled = false;
             }
         }
         private void exportMeshButton_Click(object sender, EventArgs e)

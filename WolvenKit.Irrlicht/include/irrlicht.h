@@ -193,7 +193,6 @@
 #include "vector2d.h"
 #include "vector3d.h"
 
-
 /*! \mainpage Irrlicht Engine 1.9 API documentation
  *
  * <div align="center"><img src="logobig.png" ></div>

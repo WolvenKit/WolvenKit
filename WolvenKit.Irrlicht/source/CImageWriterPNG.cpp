@@ -11,6 +11,7 @@
 #include "IWriteFile.h"
 #include "irrString.h"
 #include "os.h" // for logging
+#include "debug.h"
 
 #ifdef _IRR_COMPILE_WITH_LIBPNG_
 #ifndef _IRR_USE_NON_SYSTEM_LIB_PNG_
@@ -138,7 +139,7 @@ bool CImageWriterPNG::writeImage(io::IWriteFile* file, IImage* image,u32 param) 
 	default:
 		break;
 	}
-	u8* tmpImage = new u8[image->getDimension().Height*lineWidth];
+	u8* tmpImage = DBG_NEW u8[image->getDimension().Height*lineWidth];
 	if (!tmpImage)
 	{
 		os::Printer::log("PNGWriter: Internal PNG create image failure\n", file->getFileName(), ELL_ERROR);
@@ -171,7 +172,7 @@ bool CImageWriterPNG::writeImage(io::IWriteFile* file, IImage* image,u32 param) 
 	// Create array of pointers to rows in image data
 
 	//Used to point to image rows
-	u8** RowPointers = new png_bytep[image->getDimension().Height];
+	u8** RowPointers = DBG_NEW png_bytep[image->getDimension().Height];
 	if (!RowPointers)
 	{
 		os::Printer::log("PNGWriter: Internal PNG create row pointers failure\n", file->getFileName(), ELL_ERROR);

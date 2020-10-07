@@ -9,6 +9,7 @@
 #include "os.h"
 #include "IGUISkin.h"
 #include "IGUIEnvironment.h"
+#include "debug.h"
 
 // to close the device on terminate signal
 irr::CIrrDeviceConsole *DeviceToClose;
@@ -157,7 +158,7 @@ CIrrDeviceConsole::CIrrDeviceConsole(const SIrrlichtCreationParameters& params)
 
 
 #ifdef _IRR_WINDOWS_NT_CONSOLE_
-	CursorControl = new CCursorControl(CreationParams.WindowSize);
+	CursorControl = DBG_NEW CCursorControl(CreationParams.WindowSize);
 #endif
 
 	if (VideoDriver)
@@ -166,7 +167,7 @@ CIrrDeviceConsole::CIrrDeviceConsole(const SIrrlichtCreationParameters& params)
 #ifdef _IRR_USE_CONSOLE_FONT_
 		if (GUIEnvironment)
 		{
-			ConsoleFont = new gui::CGUIConsoleFont(this);
+			ConsoleFont = DBG_NEW gui::CGUIConsoleFont(this);
 			gui::IGUISkin *skin = GUIEnvironment->getSkin();
 			if (skin)
 			{

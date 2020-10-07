@@ -63,11 +63,20 @@ namespace WolvenKit.CR2W
         {
             //await Task.Run(() =>
             //{
-                using (MemoryMappedViewStream vs = mmf.CreateViewStream(_buffer.offset, _buffer.memSize, MemoryMappedFileAccess.Read))
+            MemoryMappedViewStream vs = null;
+            try
+            {
+                vs = mmf.CreateViewStream(_buffer.offset, _buffer.memSize, MemoryMappedFileAccess.Read);
                 using (BinaryReader br = new BinaryReader(vs))
                 {
+                    vs = null;
                     Data = br.ReadBytes((int)_buffer.memSize);
                 }
+            }
+            finally
+            {
+                vs?.Dispose();
+            }
             //}
             //);
         }

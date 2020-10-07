@@ -19,6 +19,7 @@
 #else
 #include "IShadowVolumeSceneNode.h"
 #endif
+#include "debug.h"
 
 namespace irr
 {
@@ -51,13 +52,13 @@ CQuake3ShaderSceneNode::CQuake3ShaderSceneNode(
 	this->Name = Shader->name;
 
 	// take lightmap vertex type
-	MeshBuffer = new SMeshBuffer();
+	MeshBuffer = DBG_NEW SMeshBuffer();
 
-	Mesh = new SMesh ();
+	Mesh = DBG_NEW SMesh ();
 	Mesh->addMeshBuffer ( MeshBuffer );
 	MeshBuffer->drop ();
 
-	//Original = new SMeshBufferLightMap();
+	//Original = DBG_NEW SMeshBufferLightMap();
 	Original = (const scene::SMeshBufferLightMap*) original;
 	Original->grab();
 
@@ -530,7 +531,7 @@ IShadowVolumeSceneNode* CQuake3ShaderSceneNode::addShadowVolumeSceneNode(
 	if (Shadow)
 		Shadow->drop();
 
-	Shadow = new CShadowVolumeSceneNode(shadowMesh, this, SceneManager, id,  zfailmethod, infinity);
+	Shadow = DBG_NEW CShadowVolumeSceneNode(shadowMesh, this, SceneManager, id,  zfailmethod, infinity);
 	return Shadow;
 #else
 	return 0;

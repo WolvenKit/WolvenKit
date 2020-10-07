@@ -12,6 +12,7 @@
 #include "os.h"
 #include "fast_atof.h"
 #include "coreutil.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -80,14 +81,14 @@ IImage* CImageLoaderPPM::loadImage(io::IReadFile* file) const
 		{
 			if (file->getSize()-file->getPos() < (long)bytesize)
 				return 0;
-			data = new u8[bytesize];
+			data = DBG_NEW u8[bytesize];
 			file->read(data, bytesize);
 		}
 		else
 		{
 			if (file->getSize()-file->getPos() < (long)(2*size)) // optimistic test
 				return 0;
-			data = new u8[bytesize];
+			data = DBG_NEW u8[bytesize];
 			memset(data, 0, bytesize);
 			u32 shift=0;
 			for (u32 i=0; i<size; ++i)
@@ -99,7 +100,7 @@ IImage* CImageLoaderPPM::loadImage(io::IReadFile* file) const
 					shift=0;
 			}
 		}
-		image = new CImage(ECF_A1R5G5B5, core::dimension2d<u32>(width, height));
+		image = DBG_NEW CImage(ECF_A1R5G5B5, core::dimension2d<u32>(width, height));
 		if (image)
 			CColorConverter::convert1BitTo16Bit(data, (s16*)image->getData(), width, height);
 	}
@@ -118,9 +119,9 @@ IImage* CImageLoaderPPM::loadImage(io::IReadFile* file) const
 			{
 				if (file->getSize()-file->getPos() < (long)size)
 					return 0;
-				data = new u8[size];
+				data = DBG_NEW u8[size];
 				file->read(data, size);
-				image = new CImage(ECF_A8R8G8B8, core::dimension2d<u32>(width, height));
+				image = DBG_NEW CImage(ECF_A8R8G8B8, core::dimension2d<u32>(width, height));
 				if (image)
 				{
 					u8* ptr = (u8*)image->getData();
@@ -137,7 +138,7 @@ IImage* CImageLoaderPPM::loadImage(io::IReadFile* file) const
 			{
 				if (file->getSize()-file->getPos() < (long)(2*size)) // optimistic test
 					return 0;
-				image = new CImage(ECF_A8R8G8B8, core::dimension2d<u32>(width, height));
+				image = DBG_NEW CImage(ECF_A8R8G8B8, core::dimension2d<u32>(width, height));
 				if (image)
 				{
 					u8* ptr = (u8*)image->getData();
@@ -160,9 +161,9 @@ IImage* CImageLoaderPPM::loadImage(io::IReadFile* file) const
 			{
 				if (file->getSize()-file->getPos() < (long)bytesize)
 					return 0;
-				data = new u8[bytesize];
+				data = DBG_NEW u8[bytesize];
 				file->read(data, bytesize);
-				image = new CImage(ECF_A8R8G8B8, core::dimension2d<u32>(width, height));
+				image = DBG_NEW CImage(ECF_A8R8G8B8, core::dimension2d<u32>(width, height));
 				if (image)
 				{
 					u8* ptr = (u8*)image->getData();
@@ -179,7 +180,7 @@ IImage* CImageLoaderPPM::loadImage(io::IReadFile* file) const
 			{
 				if (file->getSize()-file->getPos() < (long)(2*bytesize)) // optimistic test
 					return 0;
-				image = new CImage(ECF_A8R8G8B8, core::dimension2d<u32>(width, height));
+				image = DBG_NEW CImage(ECF_A8R8G8B8, core::dimension2d<u32>(width, height));
 				if (image)
 				{
 					u8* ptr = (u8*)image->getData();
@@ -263,7 +264,7 @@ void CImageLoaderPPM::skipToNextToken(io::IReadFile* file) const
 //! creates a loader which is able to load windows bitmaps
 IImageLoader* createImageLoaderPPM()
 {
-	return new CImageLoaderPPM;
+	return DBG_NEW CImageLoaderPPM;
 }
 
 

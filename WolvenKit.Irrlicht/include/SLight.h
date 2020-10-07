@@ -40,7 +40,7 @@ const c8* const LightTypeNames[] =
 */
 struct SLight
 {
-	SLight() : AmbientColor(0.f,0.f,0.f), DiffuseColor(1.f,1.f,1.f),
+	SLight() noexcept : AmbientColor(0.f,0.f,0.f), DiffuseColor(1.f,1.f,1.f),
 		SpecularColor(1.f,1.f,1.f), Attenuation(1.f,0.f,0.f),
 		OuterCone(45.f), InnerCone(0.f), Falloff(2.f),
 		Position(0.f,0.f,0.f), Direction(0.f,0.f,1.f),

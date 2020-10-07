@@ -11,6 +11,7 @@
 #include "ICameraSceneNode.h"
 #include "IAnimatedMesh.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -46,7 +47,7 @@ CSkyDomeSceneNode::CSkyDomeSceneNode(video::ITexture* sky, u32 horiRes, u32 vert
 
 	setAutomaticCulling(scene::EAC_OFF);
 
-	Buffer = new SMeshBuffer();
+	Buffer = DBG_NEW SMeshBuffer();
 	Buffer->Material.Lighting = false;
 	Buffer->Material.ZBuffer = video::ECFN_DISABLED;
 	Buffer->Material.ZWriteEnable = false;
@@ -251,7 +252,7 @@ ISceneNode* CSkyDomeSceneNode::clone(ISceneNode* newParent, ISceneManager* newMa
 	if (!newManager)
 		newManager = SceneManager;
 
-	CSkyDomeSceneNode* nb = new CSkyDomeSceneNode(Buffer->Material.TextureLayer[0].Texture, HorizontalResolution, VerticalResolution, TexturePercentage,
+	CSkyDomeSceneNode* nb = DBG_NEW CSkyDomeSceneNode(Buffer->Material.TextureLayer[0].Texture, HorizontalResolution, VerticalResolution, TexturePercentage,
 		SpherePercentage, Radius, newParent, newManager, ID);
 
 	nb->cloneMembers(this, newManager);

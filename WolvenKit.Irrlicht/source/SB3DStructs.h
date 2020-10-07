@@ -56,7 +56,7 @@ struct SB3dMaterial
 		fx(0)
 	{
 		for (u32 i=0; i<video::MATERIAL_MAX_TEXTURES; ++i)
-			Textures[i]=0;
+			Textures[i]=nullptr;
 	}
 	video::SMaterial Material;
 	f32 red, green, blue, alpha;

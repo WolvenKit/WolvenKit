@@ -91,7 +91,7 @@ void CGUIWindow::refreshSprites()
 {
 	if (!Environment)
 		return;
-	IGUISkin* skin  = Environment->getSkin();
+	const IGUISkin* skin  = Environment->getSkin();
 	if ( !skin )
 		return;
 
@@ -155,7 +155,7 @@ bool CGUIWindow::OnEvent(const SEvent& event)
 						SEvent e;
 						e.EventType = EET_GUI_EVENT;
 						e.GUIEvent.Caller = this;
-						e.GUIEvent.Element = 0;
+						e.GUIEvent.Element = nullptr;
 						e.GUIEvent.EventType = EGET_ELEMENT_CLOSED;
 
 						// if the event was not absorbed

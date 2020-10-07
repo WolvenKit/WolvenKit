@@ -117,7 +117,7 @@ public:
 			bool ignorePaths=true,
 			E_FILE_ARCHIVE_TYPE archiveType=EFAT_UNKNOWN,
 			const core::stringc& password="",
-			IFileArchive** retArchive=0) =0;
+			IFileArchive** retArchive= nullptr) =0;
 
 	//! Adds an archive to the file system.
 	/** After calling this, the Irrlicht Engine will also search and open

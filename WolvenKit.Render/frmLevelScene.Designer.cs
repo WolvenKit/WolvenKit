@@ -15,9 +15,31 @@ namespace WolvenKit.Render
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                components?.Dispose();
+                irrThread.Abort();
+                irrThread = null;
+                smgr = null;
+                driver = null;
+                device?.Close();
+                device?.Drop();
+                device?.Dispose();
+                device = null;
+
+                foreach(System.Windows.Forms.TreeNode t in sceneView.Nodes)
+                {
+                    if(t.Nodes.Count > 0)
+                    {
+                        // free the RenderTreeNodes!
+                        foreach(RenderTreeNode rn in t.Nodes)
+                        {
+                            rn.Mesh.Drop();
+                            rn.Position.Dispose();
+                            rn.Rotation.Dispose();
+                        }
+                    }
+                }
             }
             base.Dispose(disposing);
         }

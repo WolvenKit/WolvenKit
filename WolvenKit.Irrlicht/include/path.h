@@ -23,7 +23,7 @@ typedef core::string<fschar_t> path;
 struct SNamedPath
 {
 	//! Constructor
-	SNamedPath() {}
+	SNamedPath() noexcept  {}
 
 	//! Constructor
 	SNamedPath(const path& p) : Path(p), InternalName( PathToName(p) )

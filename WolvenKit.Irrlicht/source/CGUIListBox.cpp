@@ -13,6 +13,7 @@
 #include "IGUISpriteBank.h"
 #include "CGUIScrollBar.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -35,7 +36,7 @@ CGUIListBox::CGUIListBox(IGUIEnvironment* environment, IGUIElement* parent,
 
 	IGUISkin* skin = Environment->getSkin();
 
-	ScrollBar = new CGUIScrollBar(false, Environment, this, -1,
+	ScrollBar = DBG_NEW CGUIScrollBar(false, Environment, this, -1,
 		core::recti(0, 0, 1, 1),
 		!clip);
 	ScrollBar->setSubElement(true);

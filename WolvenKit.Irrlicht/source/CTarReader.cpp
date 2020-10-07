@@ -11,6 +11,7 @@
 #include "os.h"
 #include "coreutil.h"
 #include "errno.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -65,7 +66,7 @@ IFileArchive* CArchiveLoaderTAR::createArchive(io::IReadFile* file, bool ignoreC
 	if (file)
 	{
 		file->seek(0);
-		archive = new CTarReader(file, ignoreCase, ignorePaths);
+		archive = DBG_NEW CTarReader(file, ignoreCase, ignorePaths);
 	}
 	return archive;
 }

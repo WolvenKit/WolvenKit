@@ -4,6 +4,7 @@
 
 #include "CLimitReadFile.h"
 #include "irrString.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -118,7 +119,7 @@ const io::path& CLimitReadFile::getFileName() const
 
 IReadFile* createLimitReadFile(const io::path& fileName, IReadFile* alreadyOpenedFile, long pos, long areaSize)
 {
-	return new CLimitReadFile(alreadyOpenedFile, pos, areaSize, fileName);
+	return DBG_NEW CLimitReadFile(alreadyOpenedFile, pos, areaSize, fileName);
 }
 
 

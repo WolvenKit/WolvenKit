@@ -55,7 +55,7 @@ CSoftwareTexture2::CSoftwareTexture2(IImage* image, const io::path& name, u32 fl
 
 		if (OriginalSize == optSize)
 		{
-			MipMap[0] = new CImage(BURNINGSHADER_COLOR_FORMAT, image->getDimension());
+			MipMap[0] = DBG_NEW CImage(BURNINGSHADER_COLOR_FORMAT, image->getDimension());
 
 			if (!IsCompressed)
 				image->copyTo(MipMap[0]);
@@ -71,7 +71,7 @@ CSoftwareTexture2::CSoftwareTexture2(IImage* image, const io::path& name, u32 fl
 						);
 
 			os::Printer::log ( buf, ELL_WARNING );
-			MipMap[0] = new CImage(BURNINGSHADER_COLOR_FORMAT, optSize);
+			MipMap[0] = DBG_NEW CImage(BURNINGSHADER_COLOR_FORMAT, optSize);
 
 			if (!IsCompressed)
 				image->copyToScalingBoxFilter ( MipMap[0],0, false );
@@ -131,8 +131,8 @@ void CSoftwareTexture2::regenerateMipMapLevels(void* data, u32 layer)
 		{
 			if (OriginalFormat != BURNINGSHADER_COLOR_FORMAT)
 			{
-				IImage* tmpImage = new CImage(OriginalFormat, origSize, data, true, false);
-				MipMap[i] = new CImage(BURNINGSHADER_COLOR_FORMAT, newSize);
+				IImage* tmpImage = DBG_NEW CImage(OriginalFormat, origSize, data, true, false);
+				MipMap[i] = DBG_NEW CImage(BURNINGSHADER_COLOR_FORMAT, newSize);
 				if (origSize==newSize)
 					tmpImage->copyTo(MipMap[i]);
 				else
@@ -142,11 +142,11 @@ void CSoftwareTexture2::regenerateMipMapLevels(void* data, u32 layer)
 			else
 			{
 				if (origSize==newSize)
-					MipMap[i] = new CImage(BURNINGSHADER_COLOR_FORMAT, newSize, data, false);
+					MipMap[i] = DBG_NEW CImage(BURNINGSHADER_COLOR_FORMAT, newSize, data, false);
 				else
 				{
-					MipMap[i] = new CImage(BURNINGSHADER_COLOR_FORMAT, newSize);
-					IImage* tmpImage = new CImage(BURNINGSHADER_COLOR_FORMAT, origSize, data, true, false);
+					MipMap[i] = DBG_NEW CImage(BURNINGSHADER_COLOR_FORMAT, newSize);
+					IImage* tmpImage = DBG_NEW CImage(BURNINGSHADER_COLOR_FORMAT, origSize, data, true, false);
 					tmpImage->copyToScalingBoxFilter(MipMap[i]);
 					tmpImage->drop();
 				}
@@ -155,7 +155,7 @@ void CSoftwareTexture2::regenerateMipMapLevels(void* data, u32 layer)
 		}
 		else
 		{
-			MipMap[i] = new CImage(BURNINGSHADER_COLOR_FORMAT, newSize);
+			MipMap[i] = DBG_NEW CImage(BURNINGSHADER_COLOR_FORMAT, newSize);
 
 			//static u32 color[] = { 0, 0xFFFF0000, 0xFF00FF00,0xFF0000FF,0xFFFFFF00,0xFFFF00FF,0xFF00FFFF,0xFF0F0F0F };
 			MipMap[i]->fill ( 0 );

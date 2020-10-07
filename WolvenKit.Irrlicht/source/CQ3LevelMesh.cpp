@@ -13,6 +13,7 @@
 #include "ILightSceneNode.h"
 #include "IQ3Shader.h"
 #include "IFileList.h"
+#include "debug.h"
 
 //#define TJUNCTION_SOLVER_ROUND
 //#define TJUNCTION_SOLVER_0125
@@ -206,7 +207,7 @@ void CQ3LevelMesh::loadTextures(tBSPLump* l, io::IReadFile* file)
 	NumTextures = l->length / sizeof(tBSPTexture);
 	if ( !NumTextures )
 		return;
-	Textures = new tBSPTexture[NumTextures];
+	Textures = DBG_NEW tBSPTexture[NumTextures];
 
 	file->seek(l->offset);
 	file->read(Textures, l->length);
@@ -228,7 +229,7 @@ void CQ3LevelMesh::loadLightmaps(tBSPLump* l, io::IReadFile* file)
 	NumLightMaps = l->length / sizeof(tBSPLightmap);
 	if ( !NumLightMaps )
 		return;
-	LightMaps = new tBSPLightmap[NumLightMaps];
+	LightMaps = DBG_NEW tBSPLightmap[NumLightMaps];
 
 	file->seek(l->offset);
 	file->read(LightMaps, l->length);
@@ -241,7 +242,7 @@ void CQ3LevelMesh::loadVerts(tBSPLump* l, io::IReadFile* file)
 	NumVertices = l->length / sizeof(tBSPVertex);
 	if ( !NumVertices )
 		return;
-	Vertices = new tBSPVertex[NumVertices];
+	Vertices = DBG_NEW tBSPVertex[NumVertices];
 
 	file->seek(l->offset);
 	file->read(Vertices, l->length);
@@ -270,7 +271,7 @@ void CQ3LevelMesh::loadFaces(tBSPLump* l, io::IReadFile* file)
 	NumFaces = l->length / sizeof(tBSPFace);
 	if (!NumFaces)
 		return;
-	Faces = new tBSPFace[NumFaces];
+	Faces = DBG_NEW tBSPFace[NumFaces];
 
 	file->seek(l->offset);
 	file->read(Faces, l->length);
@@ -395,7 +396,7 @@ void CQ3LevelMesh::loadFogs(tBSPLump* l, io::IReadFile* file)
 void CQ3LevelMesh::loadModels(tBSPLump* l, io::IReadFile* file)
 {
 	NumModels = l->length / sizeof(tBSPModel);
-	Models = new tBSPModel[NumModels];
+	Models = DBG_NEW tBSPModel[NumModels];
 
 	file->seek( l->offset );
 	file->read(Models, l->length);
@@ -418,7 +419,7 @@ void CQ3LevelMesh::loadModels(tBSPLump* l, io::IReadFile* file)
 		}
 	}
 
-	BrushEntities = new SMesh*[NumModels];
+	BrushEntities = DBG_NEW SMesh*[NumModels];
 }
 
 /*!
@@ -428,7 +429,7 @@ void CQ3LevelMesh::loadMeshVerts(tBSPLump* l, io::IReadFile* file)
 	NumMeshVerts = l->length / sizeof(s32);
 	if (!NumMeshVerts)
 		return;
-	MeshVerts = new s32[NumMeshVerts];
+	MeshVerts = DBG_NEW s32[NumMeshVerts];
 
 	file->seek(l->offset);
 	file->read(MeshVerts, l->length);
@@ -618,7 +619,7 @@ void CQ3LevelMesh::parser_parse( const void * data, const u32 size, CQ3LevelMesh
 
 	SVariable entity ( "" );
 
-	groupList = new SVarGroupList();
+	groupList = DBG_NEW SVarGroupList();
 
 	groupList->VariableGroup.push_back( SVarGroup() );
 	active = last = 0;
@@ -682,7 +683,7 @@ void CQ3LevelMesh::parser_parse( const void * data, const u32 size, CQ3LevelMesh
 
 					// new group
 					groupList->drop();
-					groupList = new SVarGroupList();
+					groupList = DBG_NEW SVarGroupList();
 					groupList->VariableGroup.push_back( SVarGroup() );
 					last = 0;
 				}
@@ -845,13 +846,13 @@ s32 CQ3LevelMesh::setShaderMaterial( video::SMaterial &material, const tBSPFace 
 */
 scene::SMesh** CQ3LevelMesh::buildMesh(s32 num)
 {
-	scene::SMesh** newmesh = new SMesh *[quake3::E_Q3_MESH_SIZE];
+	scene::SMesh** newmesh = DBG_NEW SMesh *[quake3::E_Q3_MESH_SIZE];
 
 	s32 i, j, k,s;
 
 	for (i = 0; i < E_Q3_MESH_SIZE; i++)
 	{
-		newmesh[i] = new SMesh();
+		newmesh[i] = DBG_NEW SMesh();
 	}
 
 	s32 *index;
@@ -955,7 +956,7 @@ scene::SMesh** CQ3LevelMesh::buildMesh(s32 num)
 				// create a seperate mesh buffer
 				if ( 0 == buffer )
 				{
-					buffer = new scene::SMeshBufferLightMap();
+					buffer = DBG_NEW scene::SMeshBufferLightMap();
 					newmesh[ item[g].index ]->addMeshBuffer( buffer );
 					buffer->drop();
 					buffer->getMaterial() = item[g].index != E_Q3_MESH_FOG ? material : material2;
@@ -1351,7 +1352,7 @@ void CQ3LevelMesh::createCurvedSurface_bezier(SMeshBufferLightMap* meshBuffer,
 	}
 
 	// create a temporary patch
-	Bezier.Patch = new scene::SMeshBufferLightMap();
+	Bezier.Patch = DBG_NEW scene::SMeshBufferLightMap();
 
 	//Loop through the biquadratic patches
 	for( j = 0; j < biquadHeight; ++j)
@@ -1628,7 +1629,7 @@ void CQ3LevelMesh::InitShader()
 
 	group.Variable.push_back( variable );
 
-	element.VarGroup = new SVarGroupList();
+	element.VarGroup = DBG_NEW SVarGroupList();
 	element.VarGroup->VariableGroup.push_back( group );
 	element.VarGroup->VariableGroup.push_back( SVarGroup() );
 	element.name = element.VarGroup->VariableGroup[0].Variable[0].name;

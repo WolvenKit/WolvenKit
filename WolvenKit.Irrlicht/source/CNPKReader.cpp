@@ -10,6 +10,7 @@
 
 #include "os.h"
 #include "coreutil.h"
+#include "debug.h"
 
 #ifdef _DEBUG
 #define IRR_DEBUG_NPK_READER
@@ -80,7 +81,7 @@ IFileArchive* CArchiveLoaderNPK::createArchive(io::IReadFile* file, bool ignoreC
 	if ( file )
 	{
 		file->seek ( 0 );
-		archive = new CNPKReader(file, ignoreCase, ignorePaths);
+		archive = DBG_NEW CNPKReader(file, ignoreCase, ignorePaths);
 	}
 	return archive;
 }

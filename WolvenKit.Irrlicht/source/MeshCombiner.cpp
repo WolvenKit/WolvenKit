@@ -9,6 +9,7 @@
 #ifdef _IRR_COMPILE_WITH_W3ENT_LOADER_
 
 #include "MeshCombiner.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -211,7 +212,7 @@ namespace irr
                 {
                 case video::EVT_STANDARD:
                 {
-                    scene::SSkinMeshBuffer *buffer = new scene::SSkinMeshBuffer();
+                    scene::SSkinMeshBuffer *buffer = DBG_NEW scene::SSkinMeshBuffer();
                     buffer->VertexType = video::EVT_STANDARD;
 
                     buffer->Material = mb->getMaterial();
@@ -231,7 +232,7 @@ namespace irr
                 break;
                 case video::EVT_2TCOORDS:
                 {
-                    scene::SSkinMeshBuffer *buffer = new scene::SSkinMeshBuffer();
+                    scene::SSkinMeshBuffer *buffer = DBG_NEW scene::SSkinMeshBuffer();
                     buffer->VertexType = video::EVT_2TCOORDS;
 
                     buffer->Material = mb->getMaterial();
@@ -251,7 +252,7 @@ namespace irr
                 break;
                 case video::EVT_TANGENTS:
                 {
-                    scene::SSkinMeshBuffer *buffer = new scene::SSkinMeshBuffer();
+                    scene::SSkinMeshBuffer *buffer = DBG_NEW scene::SSkinMeshBuffer();
                     buffer->VertexType = video::EVT_TANGENTS;
 
                     buffer->Material = mb->getMaterial();

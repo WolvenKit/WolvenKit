@@ -31,13 +31,13 @@ struct SSkinMeshBuffer : public IMeshBuffer
 	}
 
 	//! Get Material of this buffer.
-	virtual const video::SMaterial& getMaterial() const
+	const video::SMaterial& getMaterial() const override
 	{
 		return Material;
 	}
 
 	//! Get Material of this buffer.
-	virtual video::SMaterial& getMaterial()
+	video::SMaterial& getMaterial() override
 	{
 		return Material;
 	}
@@ -57,7 +57,7 @@ struct SSkinMeshBuffer : public IMeshBuffer
 	}
 
 	//! Get pointer to vertex array
-	virtual const void* getVertices() const
+	const void* getVertices() const override
 	{
 		switch (VertexType)
 		{
@@ -71,7 +71,7 @@ struct SSkinMeshBuffer : public IMeshBuffer
 	}
 
 	//! Get pointer to vertex array
-	virtual void* getVertices()
+	void* getVertices() override
 	{
 		switch (VertexType)
 		{
@@ -85,7 +85,7 @@ struct SSkinMeshBuffer : public IMeshBuffer
 	}
 
 	//! Get vertex count
-	virtual u32 getVertexCount() const
+	u32 getVertexCount() const override
 	{
 		switch (VertexType)
 		{
@@ -100,43 +100,43 @@ struct SSkinMeshBuffer : public IMeshBuffer
 
 	//! Get type of index data which is stored in this meshbuffer.
 	/** \return Index type of this buffer. */
-	virtual video::E_INDEX_TYPE getIndexType() const
+	video::E_INDEX_TYPE getIndexType() const override
 	{
 		return video::EIT_16BIT;
 	}
 
 	//! Get pointer to index array
-	virtual const u16* getIndices() const
+	const u16* getIndices() const override
 	{
 		return Indices.const_pointer();
 	}
 
 	//! Get pointer to index array
-	virtual u16* getIndices()
+	u16* getIndices() override
 	{
 		return Indices.pointer();
 	}
 
 	//! Get index count
-	virtual u32 getIndexCount() const
+	u32 getIndexCount() const override
 	{
 		return Indices.size();
 	}
 
 	//! Get bounding box
-	virtual const core::aabbox3d<f32>& getBoundingBox() const
+	const core::aabbox3d<f32>& getBoundingBox() const override
 	{
 		return BoundingBox;
 	}
 
 	//! Set bounding box
-	virtual void setBoundingBox( const core::aabbox3df& box)
+	void setBoundingBox( const core::aabbox3df& box) override
 	{
 		BoundingBox = box;
 	}
 
 	//! Recalculate bounding box
-	virtual void recalculateBoundingBox()
+	void recalculateBoundingBox() override
 	{
 		if(!BoundingBoxNeedsRecalculated)
 			return;
@@ -185,7 +185,7 @@ struct SSkinMeshBuffer : public IMeshBuffer
 	}
 
 	//! Get vertex type
-	virtual video::E_VERTEX_TYPE getVertexType() const
+	video::E_VERTEX_TYPE getVertexType() const override
 	{
 		return VertexType;
 	}
@@ -243,7 +243,7 @@ struct SSkinMeshBuffer : public IMeshBuffer
 	}
 
 	//! returns position of vertex i
-	virtual const core::vector3df& getPosition(u32 i) const
+	const core::vector3df& getPosition(u32 i) const override
 	{
 		switch (VertexType)
 		{
@@ -257,7 +257,7 @@ struct SSkinMeshBuffer : public IMeshBuffer
 	}
 
 	//! returns position of vertex i
-	virtual core::vector3df& getPosition(u32 i)
+	core::vector3df& getPosition(u32 i) override
 	{
 		switch (VertexType)
 		{
@@ -271,7 +271,7 @@ struct SSkinMeshBuffer : public IMeshBuffer
 	}
 
 	//! returns normal of vertex i
-	virtual const core::vector3df& getNormal(u32 i) const
+	const core::vector3df& getNormal(u32 i) const override
 	{
 		switch (VertexType)
 		{
@@ -285,7 +285,7 @@ struct SSkinMeshBuffer : public IMeshBuffer
 	}
 
 	//! returns normal of vertex i
-	virtual core::vector3df& getNormal(u32 i)
+	core::vector3df& getNormal(u32 i) override
 	{
 		switch (VertexType)
 		{
@@ -299,7 +299,7 @@ struct SSkinMeshBuffer : public IMeshBuffer
 	}
 
 	//! returns texture coords of vertex i
-	virtual const core::vector2df& getTCoords(u32 i) const
+	const core::vector2df& getTCoords(u32 i) const override
 	{
 		switch (VertexType)
 		{
@@ -313,7 +313,7 @@ struct SSkinMeshBuffer : public IMeshBuffer
 	}
 
 	//! returns texture coords of vertex i
-	virtual core::vector2df& getTCoords(u32 i)
+	core::vector2df& getTCoords(u32 i) override
 	{
 		switch (VertexType)
 		{
@@ -327,25 +327,25 @@ struct SSkinMeshBuffer : public IMeshBuffer
 	}
 
 	//! append the vertices and indices to the current buffer
-	virtual void append(const void* const vertices, u32 numVertices, const u16* const indices, u32 numIndices) {}
+	void append(const void* const vertices, u32 numVertices, const u16* const indices, u32 numIndices) override {}
 
 	//! append the meshbuffer to the current buffer
-	virtual void append(const IMeshBuffer* const other) {}
+	void append(const IMeshBuffer* const other) override {}
 
 	//! get the current hardware mapping hint for vertex buffers
-	virtual E_HARDWARE_MAPPING getHardwareMappingHint_Vertex() const
+	E_HARDWARE_MAPPING getHardwareMappingHint_Vertex() const override
 	{
 		return MappingHint_Vertex;
 	}
 
 	//! get the current hardware mapping hint for index buffers
-	virtual E_HARDWARE_MAPPING getHardwareMappingHint_Index() const
+	E_HARDWARE_MAPPING getHardwareMappingHint_Index() const override
 	{
 		return MappingHint_Index;
 	}
 
 	//! set the hardware mapping hint, for driver
-	virtual void setHardwareMappingHint( E_HARDWARE_MAPPING NewMappingHint, E_BUFFER_TYPE Buffer=EBT_VERTEX_AND_INDEX )
+	void setHardwareMappingHint( E_HARDWARE_MAPPING NewMappingHint, E_BUFFER_TYPE Buffer=EBT_VERTEX_AND_INDEX ) override
 	{
 		if (Buffer==EBT_VERTEX)
 			MappingHint_Vertex=NewMappingHint;
@@ -359,19 +359,19 @@ struct SSkinMeshBuffer : public IMeshBuffer
 	}
 
 	//! Describe what kind of primitive geometry is used by the meshbuffer
-	virtual void setPrimitiveType(E_PRIMITIVE_TYPE type)
+	void setPrimitiveType(E_PRIMITIVE_TYPE type) override
 	{
 		PrimitiveType = type;
 	}
 
 	//! Get the kind of primitive geometry which is used by the meshbuffer
-	virtual E_PRIMITIVE_TYPE getPrimitiveType() const
+	E_PRIMITIVE_TYPE getPrimitiveType() const override
 	{
 		return PrimitiveType;
 	}
 
 	//! flags the mesh as changed, reloads hardware buffers
-	virtual void setDirty(E_BUFFER_TYPE Buffer=EBT_VERTEX_AND_INDEX)
+	void setDirty(E_BUFFER_TYPE Buffer=EBT_VERTEX_AND_INDEX) override
 	{
 		if (Buffer==EBT_VERTEX_AND_INDEX || Buffer==EBT_VERTEX)
 			++ChangedID_Vertex;
@@ -379,9 +379,9 @@ struct SSkinMeshBuffer : public IMeshBuffer
 			++ChangedID_Index;
 	}
 
-	virtual u32 getChangedID_Vertex() const {return ChangedID_Vertex;}
+	u32 getChangedID_Vertex() const override { return ChangedID_Vertex; } 
 
-	virtual u32 getChangedID_Index() const {return ChangedID_Index;}
+	u32 getChangedID_Index() const override { return ChangedID_Index; }
 
 	//! Call this after changing the positions of any vertex.
 	void boundingBoxNeedsRecalculated(void) { BoundingBoxNeedsRecalculated = true; }

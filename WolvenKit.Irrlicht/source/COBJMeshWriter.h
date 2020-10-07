@@ -26,24 +26,24 @@ namespace scene
 	public:
 
 		COBJMeshWriter(scene::ISceneManager* smgr, io::IFileSystem* fs);
-		virtual ~COBJMeshWriter();
+		~COBJMeshWriter();
 
 		//! Returns the type of the mesh writer
-		virtual EMESH_WRITER_TYPE getType() const _IRR_OVERRIDE_;
+		EMESH_WRITER_TYPE getType() const _IRR_OVERRIDE_;
 
         //! Sets a matrix to use for local to world transformation
-        virtual void setTransform(const irr::core::matrix4& m)  _IRR_OVERRIDE_
+        void setTransform(const irr::core::matrix4& m) noexcept _IRR_OVERRIDE_
         {
             LocalToWorld = m;
         }
 
-        virtual void setImageType(core::stringc extension)  _IRR_OVERRIDE_
+        void setImageType(core::stringc extension) noexcept _IRR_OVERRIDE_
         {
             TexExtension = extension;
         }
 
 		//! writes a mesh
-		virtual bool writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 flags=EMWF_NONE) _IRR_OVERRIDE_;
+		bool writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 flags=EMWF_NONE) _IRR_OVERRIDE_;
 
 	protected:
 		// create vector output with line end into string

@@ -40,7 +40,7 @@ CSoftwareTexture::CSoftwareTexture(IImage* image, const io::path& name, bool ren
 		OriginalSize = image->getDimension();
 		core::dimension2d<u32> optSize = OriginalSize.getOptimalSize();
 
-		Image = new CImage(ECF_A1R5G5B5, OriginalSize);
+		Image = DBG_NEW CImage(ECF_A1R5G5B5, OriginalSize);
 
 		if (!IsCompressed)
 			image->copyTo(Image);
@@ -52,7 +52,7 @@ CSoftwareTexture::CSoftwareTexture(IImage* image, const io::path& name, bool ren
 		}
 		else
 		{
-			Texture = new CImage(ECF_A1R5G5B5, optSize);
+			Texture = DBG_NEW CImage(ECF_A1R5G5B5, optSize);
 			Image->copyToScaling(Texture);
 		}
 

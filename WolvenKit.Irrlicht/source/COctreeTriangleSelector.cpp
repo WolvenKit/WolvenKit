@@ -6,6 +6,7 @@
 #include "ISceneNode.h"
 
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -28,7 +29,7 @@ COctreeTriangleSelector::COctreeTriangleSelector(const IMesh* mesh,
 		const u32 start = os::Timer::getRealTime();
 
 		// create the triangle octree
-		Root = new SOctreeNode();
+		Root = DBG_NEW SOctreeNode();
 		Root->Triangles = Triangles;
 		constructOctree(Root);
 
@@ -53,7 +54,7 @@ COctreeTriangleSelector::COctreeTriangleSelector(const IMeshBuffer* meshBuffer, 
 		const u32 start = os::Timer::getRealTime();
 
 		// create the triangle octree
-		Root = new SOctreeNode();
+		Root = DBG_NEW SOctreeNode();
 		Root->Triangles = Triangles;
 		constructOctree(Root);
 
@@ -101,7 +102,7 @@ void COctreeTriangleSelector::constructOctree(SOctreeNode* node)
 		{
 			box.reset(middle);
 			box.addInternalPoint(edges[ch]);
-			node->Child[ch] = new SOctreeNode();
+			node->Child[ch] = DBG_NEW SOctreeNode();
 
 			for (s32 i=0; i<(s32)node->Triangles.size(); ++i)
 			{

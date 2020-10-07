@@ -11,6 +11,7 @@
 #include "IGUIButton.h"
 #include "IGUIFont.h"
 #include "CGUIButton.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -145,7 +146,7 @@ IGUIButton* CGUIToolBar::addButton(s32 id, const wchar_t* text,const wchar_t* to
 
 	ButtonX += rectangle.getWidth();
 
-	IGUIButton* button = new CGUIButton(Environment, this, id, rectangle);
+	IGUIButton* button = DBG_NEW CGUIButton(Environment, this, id, rectangle);
 	button->drop();
 
 	if (text)

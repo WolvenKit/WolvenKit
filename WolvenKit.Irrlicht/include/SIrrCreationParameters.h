@@ -20,7 +20,7 @@ namespace irr
 	struct SIrrlichtCreationParameters
 	{
 		//! Constructs a SIrrlichtCreationParameters structure with default values.
-		SIrrlichtCreationParameters() :
+		SIrrlichtCreationParameters() noexcept :
 			DeviceType(EIDT_BEST),
 			DriverType(video::EDT_BURNINGSVIDEO),
 			WindowSize(core::dimension2d<u32>(800, 600)),
@@ -37,7 +37,7 @@ namespace irr
 			IgnoreInput(false),
 			Stereobuffer(false),
 			HighPrecisionFPU(false),
-			EventReceiver(0),
+			EventReceiver(nullptr),
 			WindowId(0),
 #ifdef _DEBUG
 			LoggingLevel(ELL_DEBUG),

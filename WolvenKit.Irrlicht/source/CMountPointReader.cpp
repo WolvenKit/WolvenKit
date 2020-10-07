@@ -8,6 +8,7 @@
 
 #include "CReadFile.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -69,7 +70,7 @@ IFileArchive* CArchiveLoaderMount::createArchive(const io::path& filename, bool 
 
 	if (FileSystem->changeWorkingDirectoryTo(fullPath))
 	{
-		archive = new CMountPointReader(FileSystem, fullPath, ignoreCase, ignorePaths);
+		archive = DBG_NEW CMountPointReader(FileSystem, fullPath, ignoreCase, ignorePaths);
 	}
 
 	FileSystem->changeWorkingDirectoryTo(save);

@@ -330,10 +330,20 @@ namespace WolvenKit.CR2W
 
         public EFileReadErrorCodes Read(byte[] data)
         {
-            using (var ms = new MemoryStream(data))
-            using (var br = new BinaryReader(ms))
+            MemoryStream ms = null;
+            try
             {
-                return Read(br);
+                ms = new MemoryStream(data);
+                using (var br = new BinaryReader(ms))
+                {
+                    ms.Close();
+                    ms = null;
+                    return Read(br);
+                }
+            }
+            finally
+            {
+                ms?.Dispose();
             }
         }
 
@@ -442,12 +452,21 @@ namespace WolvenKit.CR2W
         public CR2WFile GetAdditionalCr2wFile()
         {
             if (AdditionalCr2WFileBytes == null) return null;
-            using (var ms2 = new MemoryStream(AdditionalCr2WFileBytes))
-            using (var br2 = new BinaryReader(ms2))
+            MemoryStream ms2 = null;
+            try
             {
-                AdditionalCr2WFile = new CR2WFile();
-                AdditionalCr2WFile.Read(br2);
-                return AdditionalCr2WFile;
+                ms2 = new MemoryStream(AdditionalCr2WFileBytes);
+                using (var br2 = new BinaryReader(ms2))
+                {
+                    ms2 = null;
+                    AdditionalCr2WFile = new CR2WFile();
+                    AdditionalCr2WFile.Read(br2);
+                    return AdditionalCr2WFile;
+                }
+            }
+            finally
+            {
+                ms2?.Dispose();
             }
         }
 
@@ -585,21 +604,31 @@ namespace WolvenKit.CR2W
 
 
             headerOffset = 0;
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
+            MemoryStream ms = null;
+            try
             {
-                // first write the file to memory
-                // this also sets m_fileheader.fileSize and m_fileheader.bufferSize, offsets
-                WriteData(bw);
+                ms = new MemoryStream();
+                using (var bw = new BinaryWriter(ms))
+                {
+                    // first write the file to memory
+                    // this also sets m_fileheader.fileSize and m_fileheader.bufferSize, offsets
+                    WriteData(bw);
 
-                // Write headers once to allocate the space for it
-                WriteHeader(file);
+                    // Write headers once to allocate the space for it
+                    WriteHeader(file);
 
-                headerOffset = (uint)file.BaseStream.Position;
+                    headerOffset = (uint)file.BaseStream.Position;
 
-                // Write buffers
-                ms.Seek(0, SeekOrigin.Begin);
-                ms.WriteTo(file.BaseStream);
+                    // Write buffers
+                    ms.Seek(0, SeekOrigin.Begin);
+                    ms.WriteTo(file.BaseStream);
+                    ms.Close();
+                    ms = null;
+                }
+            }
+            finally
+            {
+                ms?.Dispose();
             }
 
             #region Update Offsets

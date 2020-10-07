@@ -28,14 +28,14 @@ public:
 
 	//! constructor
 	IImage(ECOLOR_FORMAT format, const core::dimension2d<u32>& size, bool deleteMemory) :
-		Format(format), Size(size), Data(0), MipMapsData(0), BytesPerPixel(0), Pitch(0), DeleteMemory(deleteMemory), DeleteMipMapsMemory(false)
+		Format(format), Size(size), Data(nullptr), MipMapsData(nullptr), BytesPerPixel(0), Pitch(0), DeleteMemory(deleteMemory), DeleteMipMapsMemory(false)
 	{
 		BytesPerPixel = getBitsPerPixelFromFormat(Format) / 8;
 		Pitch = BytesPerPixel * Size.Width;
 	}
 
 	//! destructor
-	virtual ~IImage()
+	~IImage()
 	{
 		if (DeleteMemory)
 			delete[] Data;
@@ -246,7 +246,7 @@ public:
 			}
 			else
 			{
-				MipMapsData = 0;
+				MipMapsData = nullptr;
 			}
 		}
 	}
@@ -293,7 +293,7 @@ public:
 	/** \return True if image has MipMaps, else false. */
 	_IRR_DEPRECATED_ bool hasMipMaps() const
 	{
-		return (getMipMapsData() != 0);
+		return (getMipMapsData() != nullptr);
 	}
 
 	//! get the amount of Bits per Pixel of the given color format

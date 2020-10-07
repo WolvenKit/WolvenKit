@@ -28,10 +28,10 @@ namespace video
 		bool Enabled;
 
 		//! Default constructor
-		SOverrideMaterial() : EnableFlags(0), EnablePasses(0), Enabled(false) {}
+		SOverrideMaterial() noexcept : EnableFlags(0), EnablePasses(0), Enabled(false) {}
 
 		//! Apply the enabled overrides
-		void apply(SMaterial& material)
+		void apply(SMaterial& material) noexcept
 		{
 			if (Enabled)
 			{

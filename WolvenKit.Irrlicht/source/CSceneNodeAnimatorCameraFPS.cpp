@@ -9,6 +9,7 @@
 #include "ICursorControl.h"
 #include "ICameraSceneNode.h"
 #include "ISceneNodeAnimatorCollisionResponse.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -352,7 +353,7 @@ void CSceneNodeAnimatorCameraFPS::setInvertMouse(bool invert)
 ISceneNodeAnimator* CSceneNodeAnimatorCameraFPS::createClone(ISceneNode* node, ISceneManager* newManager)
 {
 	CSceneNodeAnimatorCameraFPS * newAnimator =
-		new CSceneNodeAnimatorCameraFPS(CursorControl,	RotateSpeed, MoveSpeed, JumpSpeed,
+        DBG_NEW CSceneNodeAnimatorCameraFPS(CursorControl,	RotateSpeed, MoveSpeed, JumpSpeed,
 											0, 0, NoVerticalMovement);
 	newAnimator->cloneMembers(this);
 	newAnimator->setKeyMap(KeyMap);

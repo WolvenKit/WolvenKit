@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Microsoft Mixed (C++ /CLR) Recommended Rules" Description="These rules focus on the most common and critical problems in your C++ projects that support the Common Language Runtime, including potential security holes, application crashes, and other important logic and design errors. This ruleset is designed to be configured with the Visual Studio Profression edition and higher." ToolsVersion="10.0">
+  <Localization ResourceAssembly="Microsoft.VisualStudio.CodeAnalysis.RuleSets.Strings.dll" ResourceBaseName="Microsoft.VisualStudio.CodeAnalysis.RuleSets.Strings.Localized">
+    <Name Resource="MixedRecommendedRules_Name" />
+    <Description Resource="MixedRecommendedRules_Description" />
+  </Localization>
+  <Include Path="NativeRecommendedRules.ruleset" Action="Default" />
+  <Include Path="MinimumRecommendedRules.ruleset" Action="Default" />
+</RuleSet>

@@ -8,7 +8,6 @@
 #include "CImage.h"
 #include "irrString.h"
 #include "CD3D9Driver.h"
-#include "debug.h"
 
 #define DDSD_CAPS			0x00000001
 #define DDSD_HEIGHT			0x00000002
@@ -30,15 +29,15 @@ namespace irr
 namespace video
 {
 #ifdef XBM_STORE_UNCOMPRESSED_IMAGES
-    static int Unpack565(u8 const* packed, u8* colour)
+    static int Unpack565(u8 const* packed, u8* colour) noexcept
     {
         // build the packed value
-        int value = (int)packed[0] | ((int)packed[1] << 8);
+        const int value = (int)packed[0] | ((int)packed[1] << 8);
 
         // get the components in the stored range
-        u8 red = (u8)((value >> 11) & 0x1f);
-        u8 green = (u8)((value >> 5) & 0x3f);
-        u8 blue = (u8)(value & 0x1f);
+        const u8 red = (u8)((value >> 11) & 0x1f);
+        const u8 green = (u8)((value >> 5) & 0x3f);
+        const u8 blue = (u8)(value & 0x1f);
 
         // scale up to 8 bits
         colour[0] = (red << 3) | (red >> 2);
@@ -57,14 +56,14 @@ namespace video
 
         // unpack the endpoints
         u8 codes[16];
-        int a = Unpack565(bytes, codes);
-        int b = Unpack565(bytes + 2, codes + 4);
+        const int a = Unpack565(bytes, codes);
+        const int b = Unpack565(bytes + 2, codes + 4);
 
         // generate the midpoints
         for (int i = 0; i < 3; ++i)
         {
-            int c = codes[i];
-            int d = codes[4 + i];
+            const int c = codes[i];
+            const int d = codes[4 + i];
 
             if (a <= b)
             {
@@ -87,7 +86,7 @@ namespace video
         for (int i = 0; i < 4; ++i)
         {
             u8* ind = indices + 4 * i;
-            u8 packed = bytes[4 + i];
+            const u8 packed = bytes[4 + i];
 
             ind[0] = packed & 0x3;
             ind[1] = (packed >> 2) & 0x3;
@@ -98,7 +97,7 @@ namespace video
         // store out the colours
         for (int i = 0; i < 16; ++i)
         {
-            u8 offset = 4 * indices[i];
+            const u8 offset = 4 * indices[i];
             for (int j = 0; j < 4; ++j)
                 rgba[4 * i + j] = codes[offset + j];
         }
@@ -111,14 +110,14 @@ namespace video
 
         // unpack the endpoints
         u8 codes[16];
-        int a = Unpack565(bytes, codes);
-        int b = Unpack565(bytes + 2, codes + 4);
+        const int a = Unpack565(bytes, codes);
+        const int b = Unpack565(bytes + 2, codes + 4);
 
         // generate the midpoints
         for (int i = 0; i < 3; ++i)
         {
-            int c = codes[i];
-            int d = codes[4 + i];
+            const int c = codes[i];
+            const int d = codes[4 + i];
 
             codes[8 + i] = (u8)((2 * c + d) / 3);
             codes[12 + i] = (u8)((c + 2 * d) / 3);
@@ -133,7 +132,7 @@ namespace video
         for (int i = 0; i < 4; ++i)
         {
             u8* ind = indices + 4 * i;
-            u8 packed = bytes[4 + i];
+            const u8 packed = bytes[4 + i];
 
             ind[0] = packed & 0x3;
             ind[1] = (packed >> 2) & 0x3;
@@ -144,18 +143,18 @@ namespace video
         // store out the colours
         for (int i = 0; i < 16; ++i)
         {
-            u8 offset = 4 * indices[i];
+            const u8 offset = 4 * indices[i];
             for (int j = 0; j < 4; ++j)
                 rgba[4 * i + j] = codes[offset + j];
         }
     }
 
-    void DecompressAlphaDxt5(u8* rgba, void const* block)
+    void DecompressAlphaDxt5(u8* rgba, void const* block) noexcept
     {
         // get the two alpha values
         u8 const* bytes = reinterpret_cast<u8 const*>(block);
-        int alpha0 = bytes[0];
-        int alpha1 = bytes[1];
+        const int alpha0 = bytes[0];
+        const int alpha1 = bytes[1];
 
         // compare the values to build the codebook
         u8 codes[8];
@@ -186,7 +185,7 @@ namespace video
             int value = 0;
             for (int j = 0; j < 3; ++j)
             {
-                int byte = *src++;
+                const int byte = *src++;
                 value |= (byte << 8 * j);
             }
 
@@ -352,10 +351,21 @@ bool CImageLoaderXBM::isALoadableFileFormat(io::IReadFile* file) const
 
 u32 ReadVariable(io::IReadFile* file)
 {
+#ifdef _DEBUG
+    u16 nameId, typeId;
+    file->read(&nameId, sizeof(u16));
+    os::Printer::log("namdId = ", core::stringc(nameId), ELL_DEBUG);
+
+    file->read(&typeId, sizeof(u16));
+    os::Printer::log("typeId = ", core::stringc(typeId), ELL_DEBUG);
+#else
     file->seek(sizeof(u16), true); // nameId
     file->seek(sizeof(u16), true); // typeId
+#endif
     u32 size;
     file->read(&size, sizeof(u32));
+
+
     u32 var;
     file->read(&var, size - 4);
 
@@ -381,12 +391,11 @@ IImage* CImageLoaderXBM::loadImage(io::IReadFile* file) const
     file->read(&tableheaders, sizeof(CR2WTable) * 10);
 
     // strings
-    //file->seek(tableheaders[0].itemCount, true);
-    u32 start = tableheaders[0].offset;
-    u32 strings_size = tableheaders[0].itemCount;
-    u32 crc = tableheaders[0].crc32;
+    const u32 start = tableheaders[0].offset;
+    const u32 strings_size = tableheaders[0].itemCount;
+    const u32 crc = tableheaders[0].crc32;
 
-    char* temp = new char[strings_size];
+    char* temp = DBG_NEW char[strings_size];
     file->read(temp, tableheaders[0].itemCount);
 
     // read the other tables
@@ -410,15 +419,22 @@ IImage* CImageLoaderXBM::loadImage(io::IReadFile* file) const
     file->seek(chunks.dataOffset, false); // move to absolute file offset
     
     file->seek(1, true); // skip zero byte
+
     // read variables
-    u32 width = ReadVariable(file);
-    u32 height = ReadVariable(file);
-    u16 compression = (u16)ReadVariable(file);
-    u16 textureGroup = (u16)ReadVariable(file);
-    u8 residentMipIndex = (u8)ReadVariable(file);
-    u32 textureCacheKey = ReadVariable(file);
+    const u32 width = ReadVariable(file);
+    const u32 height = ReadVariable(file);
+    const u16 compression = (u16)ReadVariable(file);
+    const u16 textureGroup = (u16)ReadVariable(file);
+    
+    u8 residentMipIndex = 0;
+    if (width > 16)
+    {
+        residentMipIndex = (u8)ReadVariable(file);
+    }
+    const u32 textureCacheKey = ReadVariable(file);
     file->seek(sizeof(u16), true); // end of variables flag
     file->seek(sizeof(u32), true); // unknown variable
+
     u32 mipsCount;
     file->read(&mipsCount, sizeof(u32));
 
@@ -458,8 +474,8 @@ IImage* CImageLoaderXBM::loadImage(io::IReadFile* file) const
     }
     delete[] temp;
 
-    u32 h = mipData[residentMipIndex].height;
-    u32 w = mipData[residentMipIndex].width;
+    const u32 h = mipData[residentMipIndex].height;
+    const u32 w = mipData[residentMipIndex].width;
 
 #ifdef XBM_STORE_UNCOMPRESSED_IMAGES
     // for now, use uncompressed so we can export the images into other formats
@@ -476,6 +492,7 @@ IImage* CImageLoaderXBM::loadImage(io::IReadFile* file) const
     {
         DecompressDXT5Image((u8*)image->lock(), w, h, rawData);
     }
+    delete[] rawData;
 #else
     // if we want to have compressed images in memory
     u32 lod0DataSize = 0;

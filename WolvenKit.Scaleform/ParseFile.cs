@@ -1080,71 +1080,79 @@ namespace WolvenKit.Scaleform
                 fullFilePath = Path.Combine(fullOutputDirectory, String.Format("{0}_{1}{2}", Path.GetFileNameWithoutExtension(fullFilePath), fileCount.ToString("X3"), Path.GetExtension(fullFilePath)));
             }
 
-            using (FileStream fs = File.Open(fullFilePath, FileMode.Create, FileAccess.Write))
-            using (CryptoStream hashStream = new CryptoStream(fs, checksumAlgorithm, CryptoStreamMode.Write))
+            FileStream fs = null;
+            try
             {
-                int read = 0;
-                ulong totalBytes = 0;
-                byte[] bytes = new byte[Constants.FileReadChunkSize];
-
-                // reset location
-                stream.Seek(0, SeekOrigin.Begin);
-
-                // move stream pointer in long size chunks
-                while (startingOffset > long.MaxValue) //
+                fs = File.Open(fullFilePath, FileMode.Create, FileAccess.Write);
+                using (CryptoStream hashStream = new CryptoStream(fs, checksumAlgorithm, CryptoStreamMode.Write))
                 {
-                    stream.Seek(long.MaxValue, SeekOrigin.Current);
-                    startingOffset -= long.MaxValue;
-                }
+                    int read = 0;
+                    ulong totalBytes = 0;
+                    byte[] bytes = new byte[Constants.FileReadChunkSize];
 
-                // less than a long now, should be ok
-                stream.Seek((long)startingOffset, SeekOrigin.Current);
+                    // reset location
+                    stream.Seek(0, SeekOrigin.Begin);
 
-                int maxread = length > (ulong)bytes.Length ? bytes.Length : (int)length;
-
-                while ((read = stream.Read(bytes, 0, maxread)) > 0)
-                {
-                    hashStream.Write(bytes, 0, read);
-                    totalBytes += (ulong)read;
-
-                    maxread = (length - totalBytes) > (ulong)bytes.Length ? bytes.Length : (int)(length - totalBytes);
-                }
-
-                hashStream.FlushFinalBlock();
-                checksumHash = checksumAlgorithm.Hash;
-
-                #region Log Files
-                if (outputLogFile)
-                {
-                    logInfo.AppendLine(
-                        String.Format("Extracted - Offset: 0x{0}    Length: 0x{1}    File: {2}",
-                            startingOffset.ToString("X8"),
-                            length.ToString("X8"),
-                            Path.GetFileName(fullFilePath)));
-
-                    using (StreamWriter logWriter = new StreamWriter(Path.Combine(fullOutputDirectory, ParseFile.LogFileName), true))
+                    // move stream pointer in long size chunks
+                    while (startingOffset > long.MaxValue) //
                     {
-                        logWriter.Write(logInfo.ToString());
+                        stream.Seek(long.MaxValue, SeekOrigin.Current);
+                        startingOffset -= long.MaxValue;
                     }
-                }
 
-                if (makeBatchFile)
-                {
-                    snakeBiteBatch.AppendLine(
-                        String.Format("snakebite.exe \"{0}\" \"{1}\" 0x{2} 0x{3}",
-                            Path.GetFileName(((FileStream)stream).Name),
-                            Path.GetFileNameWithoutExtension(((FileStream)stream).Name) + Path.DirectorySeparatorChar + Path.GetFileName(fullFilePath),
-                            startingOffset.ToString("X8"),
-                            (startingOffset + length - 1).ToString("X8")));
+                    // less than a long now, should be ok
+                    stream.Seek((long)startingOffset, SeekOrigin.Current);
 
-                    using (StreamWriter batchWriter = new StreamWriter(Path.Combine(fullOutputDirectory, ParseFile.SnakeBiteBatchFileName), true))
+                    int maxread = length > (ulong)bytes.Length ? bytes.Length : (int)length;
+
+                    while ((read = stream.Read(bytes, 0, maxread)) > 0)
                     {
-                        batchWriter.Write(snakeBiteBatch.ToString());
-                    }
-                }
-                #endregion
+                        hashStream.Write(bytes, 0, read);
+                        totalBytes += (ulong)read;
 
-                return checksumHash;
+                        maxread = (length - totalBytes) > (ulong)bytes.Length ? bytes.Length : (int)(length - totalBytes);
+                    }
+
+                    hashStream.FlushFinalBlock();
+                    checksumHash = checksumAlgorithm.Hash;
+
+                    #region Log Files
+                    if (outputLogFile)
+                    {
+                        logInfo.AppendLine(
+                            String.Format("Extracted - Offset: 0x{0}    Length: 0x{1}    File: {2}",
+                                startingOffset.ToString("X8"),
+                                length.ToString("X8"),
+                                Path.GetFileName(fullFilePath)));
+
+                        using (StreamWriter logWriter = new StreamWriter(Path.Combine(fullOutputDirectory, ParseFile.LogFileName), true))
+                        {
+                            logWriter.Write(logInfo.ToString());
+                        }
+                    }
+
+                    if (makeBatchFile)
+                    {
+                        snakeBiteBatch.AppendLine(
+                            String.Format("snakebite.exe \"{0}\" \"{1}\" 0x{2} 0x{3}",
+                                Path.GetFileName(((FileStream)stream).Name),
+                                Path.GetFileNameWithoutExtension(((FileStream)stream).Name) + Path.DirectorySeparatorChar + Path.GetFileName(fullFilePath),
+                                startingOffset.ToString("X8"),
+                                (startingOffset + length - 1).ToString("X8")));
+
+                        using (StreamWriter batchWriter = new StreamWriter(Path.Combine(fullOutputDirectory, ParseFile.SnakeBiteBatchFileName), true))
+                        {
+                            batchWriter.Write(snakeBiteBatch.ToString());
+                        }
+                    }
+                    #endregion
+
+                    return checksumHash;
+                }
+            }
+            finally
+            {
+                fs?.Dispose();
             }
         }
 

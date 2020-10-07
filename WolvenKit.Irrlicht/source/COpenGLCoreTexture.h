@@ -16,6 +16,7 @@
 #include "os.h"
 #include "CImage.h"
 #include "CColorConverter.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -253,7 +254,7 @@ public:
 					u8* srcA = static_cast<u8*>(tmpImage->getData());
 					u8* srcB = srcA + (tmpImage->getDimension().Height - 1) * pitch;
 
-					u8* tmpBuffer = new u8[pitch];
+					u8* tmpBuffer = DBG_NEW u8[pitch];
 
 					for (u32 i = 0; i < tmpImage->getDimension().Height; i += 2)
 					{
@@ -534,7 +535,7 @@ protected:
 			{
 				const core::dimension2d<u32> tmpImageSize(width, height);
 
-				tmpImage = new CImage(ColorFormat, tmpImageSize);
+				tmpImage = DBG_NEW CImage(ColorFormat, tmpImageSize);
 				tmpData = tmpImage->getData();
 
 				Converter(data, tmpImageSize.getArea(), tmpData);

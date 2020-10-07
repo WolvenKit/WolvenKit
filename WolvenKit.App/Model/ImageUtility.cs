@@ -303,18 +303,26 @@ namespace WolvenKit.App.Model
             if (xbm == null)
                 return null;
 
-            
-
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
+            MemoryStream ms = null;
+            try
             {
-                DDSUtils.GenerateAndWriteHeader(bw.BaseStream, GetDDSMetadata(xbm));
+                ms = new MemoryStream();
+                using (var bw = new BinaryWriter(ms))
+                {
+                    DDSUtils.GenerateAndWriteHeader(bw.BaseStream, GetDDSMetadata(xbm));
 
-                bw.Write(xbm.GetBytes());
+                    bw.Write(xbm.GetBytes());
 
-                ms.Flush();
+                    ms.Flush();
 
-                return ms.ToArray();
+                    ms.Close();
+                    ms = null;
+                    return ms.ToArray();
+                }
+            }
+            finally
+            {
+                ms?.Dispose();
             }
         }
 

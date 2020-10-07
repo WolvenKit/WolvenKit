@@ -13,6 +13,7 @@
 #include "CLogger.h"
 #include "irrString.h"
 #include "IRandomizer.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -24,7 +25,7 @@ CIrrDeviceStub::CIrrDeviceStub(const SIrrlichtCreationParameters& params)
 	InputReceivingSceneManager(0), VideoModeList(0), ContextManager(0),
 	CreationParams(params), Close(false)
 {
-	Timer = new CTimer(params.UsePerformanceTimer);
+	Timer = DBG_NEW CTimer(params.UsePerformanceTimer);
 	if (os::Printer::Logger)
 	{
 		os::Printer::Logger->grab();
@@ -33,7 +34,7 @@ CIrrDeviceStub::CIrrDeviceStub(const SIrrlichtCreationParameters& params)
 	}
 	else
 	{
-		Logger = new CLogger(UserReceiver);
+		Logger = DBG_NEW CLogger(UserReceiver);
 		os::Printer::Logger = Logger;
 	}
 	Logger->setLogLevel(CreationParams.LoggingLevel);
@@ -42,7 +43,7 @@ CIrrDeviceStub::CIrrDeviceStub(const SIrrlichtCreationParameters& params)
 	Randomizer = createDefaultRandomizer();
 
 	FileSystem = io::createFileSystem();
-	VideoModeList = new video::CVideoModeList();
+	VideoModeList = DBG_NEW video::CVideoModeList();
 
 	core::stringc s = "Irrlicht Engine version ";
 	s.append(getVersion());
@@ -56,11 +57,11 @@ CIrrDeviceStub::~CIrrDeviceStub()
 {
 	VideoModeList->drop();
 
-	if (GUIEnvironment)
-		GUIEnvironment->drop();
+    if (GUIEnvironment)
+        GUIEnvironment->drop();
 
-	if (SceneManager)
-		SceneManager->drop();
+    if (SceneManager)
+        SceneManager->drop();
 	
 	if (VideoDriver)
 		VideoDriver->drop();
@@ -323,7 +324,7 @@ namespace
 //! Creates a new default randomizer.
 IRandomizer* CIrrDeviceStub::createDefaultRandomizer() const
 {
-	IRandomizer* r = new SDefaultRandomizer();
+	IRandomizer* r = DBG_NEW SDefaultRandomizer();
 	if (r)
 		r->reset();
 	return r;

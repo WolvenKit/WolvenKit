@@ -49,11 +49,21 @@ namespace WolvenKit.CR2W.Types
                 file.Write(Variant.GettypeId());
 
                 byte[] buffer = System.Array.Empty<byte>();
-                using (var ms = new MemoryStream())
-                using (var bw = new BinaryWriter(ms))
+                MemoryStream ms = null;
+                try
                 {
-                    Variant.Write(bw);
-                    buffer = ms.ToArray();
+                    ms = new MemoryStream();
+                    using (var bw = new BinaryWriter(ms))
+                    {
+                        Variant.Write(bw);
+                        buffer = ms.ToArray();
+                        ms.Close();
+                        ms = null;
+                    }
+                }
+                finally
+                {
+                    ms?.Dispose();
                 }
                 file.Write(buffer.Length + 4);
                 file.Write(buffer);

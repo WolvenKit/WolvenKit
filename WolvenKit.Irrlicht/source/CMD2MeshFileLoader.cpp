@@ -8,6 +8,7 @@
 #include "CMD2MeshFileLoader.h"
 #include "CAnimatedMeshMD2.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -103,7 +104,7 @@ bool CMD2MeshFileLoader::isALoadableFileExtension(const io::path& filename) cons
 //! See IReferenceCounted::drop() for more information.
 IAnimatedMesh* CMD2MeshFileLoader::createMesh(io::IReadFile* file)
 {
-	IAnimatedMesh* msh = new CAnimatedMeshMD2();
+	IAnimatedMesh* msh = DBG_NEW CAnimatedMeshMD2();
 	if (msh)
 	{
 		if (loadFile(file, (CAnimatedMeshMD2*)msh) )
@@ -162,7 +163,7 @@ bool CMD2MeshFileLoader::loadFile(io::IReadFile* file, CAnimatedMeshMD2* mesh)
 
 	// create vertex arrays for each keyframe
 	delete [] mesh->FrameList;
-	mesh->FrameList = new core::array<CAnimatedMeshMD2::SMD2Vert>[header.numFrames];
+	mesh->FrameList = DBG_NEW core::array<CAnimatedMeshMD2::SMD2Vert>[header.numFrames];
 
 	// allocate space in vertex arrays
 	s32 i;
@@ -187,7 +188,7 @@ bool CMD2MeshFileLoader::loadFile(io::IReadFile* file, CAnimatedMeshMD2* mesh)
 	//
 
 	file->seek(header.offsetTexcoords);
-	SMD2TextureCoordinate* textureCoords = new SMD2TextureCoordinate[header.numTexcoords];
+	SMD2TextureCoordinate* textureCoords = DBG_NEW SMD2TextureCoordinate[header.numTexcoords];
 
 	if (!file->read(textureCoords, sizeof(SMD2TextureCoordinate)*header.numTexcoords))
 	{
@@ -208,7 +209,7 @@ bool CMD2MeshFileLoader::loadFile(io::IReadFile* file, CAnimatedMeshMD2* mesh)
 
 	file->seek(header.offsetTriangles);
 
-	SMD2Triangle *triangles = new SMD2Triangle[header.numTriangles];
+	SMD2Triangle *triangles = DBG_NEW SMD2Triangle[header.numTriangles];
 	if (!file->read(triangles, header.numTriangles *sizeof(SMD2Triangle)))
 	{
 		delete[] triangles;

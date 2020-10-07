@@ -11,6 +11,7 @@
 #include "irrString.h"
 #include "SMeshBuffer.h"
 #include "irrMap.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -45,7 +46,7 @@ private:
 		SObjMtl() : Meshbuffer(0), Bumpiness (1.0f), Illumination(0),
 			RecalculateNormals(false)
 		{
-			Meshbuffer = new SMeshBuffer();
+			Meshbuffer = DBG_NEW SMeshBuffer();
 			Meshbuffer->Material.Shininess = 0.0f;
 			Meshbuffer->Material.AmbientColor = video::SColorf(0.2f, 0.2f, 0.2f, 1.0f).toSColor();
 			Meshbuffer->Material.DiffuseColor = video::SColorf(0.8f, 0.8f, 0.8f, 1.0f).toSColor();
@@ -57,7 +58,7 @@ private:
 			Bumpiness(o.Bumpiness), Illumination(o.Illumination),
 			RecalculateNormals(false)
 		{
-			Meshbuffer = new SMeshBuffer();
+			Meshbuffer = DBG_NEW SMeshBuffer();
 			Meshbuffer->Material = o.Meshbuffer->Material;
 		}
 

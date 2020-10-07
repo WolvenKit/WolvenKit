@@ -424,8 +424,8 @@ namespace WolvenKit
 
             foreach (var window in dockPanel.FloatWindows.ToList())
             {
-                window.Dispose();
                 window.Close();
+                window.Dispose();
             }
 
             return true;
@@ -2345,6 +2345,12 @@ namespace WolvenKit
 
             SaveDockPanelLayout();
             ToolStripManager.SaveSettings(this);
+
+            foreach (var dc in dockPanel.DocumentsToArray())
+            {
+                dc.DockHandler.DockPanel = null;
+                dc.DockHandler.Close();
+            }
         }
 
         private void frmMain_Shown(object sender, EventArgs e)

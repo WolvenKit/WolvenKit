@@ -99,6 +99,7 @@ namespace WolvenKit.CR2W
         }
         #endregion
 
+
         private CR2WExport _export;
         [DataMember()]
         public CR2WExport Export => _export;
@@ -247,7 +248,6 @@ namespace WolvenKit.CR2W
         }
 
 
-
         public void ReadData(BinaryReader file)
         {
             file.BaseStream.Seek(_export.dataOffset, SeekOrigin.Begin);
@@ -287,9 +287,14 @@ namespace WolvenKit.CR2W
         {
             //await Task.Run(() =>
             //{
-                using (MemoryMappedViewStream vs = mmf.CreateViewStream(_export.dataOffset, _export.dataSize, MemoryMappedFileAccess.Read))
+            MemoryMappedViewStream vs = null;
+            try
+            {
+                vs = mmf.CreateViewStream(_export.dataOffset, _export.dataSize, MemoryMappedFileAccess.Read);
                 using (BinaryReader br = new BinaryReader(vs))
                 {
+                    vs = null;
+
                     CreateDefaultData();
 
                     data.Read(br, _export.dataSize);
@@ -310,13 +315,18 @@ namespace WolvenKit.CR2W
                         unknownBytes.Bytes = new byte[0];
                     }
 
-                    if (cr2w.Logger!= null)
+                    if (cr2w.Logger != null)
                     {
                         float percentprogress = (float)(1 / (float)cr2w.chunks.Count * 100.0);
                         cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
                     }
-                    
+
                 }
+            }
+            finally
+            {
+                vs?.Dispose();
+            }
             //}
             //);
         }

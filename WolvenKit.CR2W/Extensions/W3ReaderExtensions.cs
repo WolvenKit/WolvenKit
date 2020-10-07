@@ -12,19 +12,28 @@ namespace WolvenKit.CR2W
     {
         public static CVariable CopyViaBuffer(CVariable source, CVariable destination)
         {
-            using (MemoryStream ms = new MemoryStream())
-            using (BinaryWriter bw = new BinaryWriter(ms))
+            MemoryStream ms = null;
+            try
             {
-                source.Write(bw);
-
-                ms.Position = 0;
-
-                using (BinaryReader reader = new BinaryReader(ms))
+                ms = new MemoryStream();
+                using (BinaryWriter bw = new BinaryWriter(ms))
                 {
-                    destination.Read(reader, (uint)ms.Length);
+                    source.Write(bw);
+
+                    ms.Position = 0;
+
+                    using (BinaryReader reader = new BinaryReader(ms))
+                    {
+                        destination.Read(reader, (uint)ms.Length);
+                        ms.Close();
+                        ms = null;
+                    }
                 }
             }
-
+            finally
+            {
+                ms?.Dispose();
+            }
 
             return destination;
         }
@@ -184,7 +193,7 @@ namespace WolvenKit.CR2W
             if (unknownFlag)
             {
                 throw new NotImplementedException();
-                readstring = Encoding.Unicode.GetString(br.ReadBytes((len * 2) - 1));
+                //readstring = Encoding.Unicode.GetString(br.ReadBytes((len * 2) - 1));
             }
             else
                 readstring = Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(len - 1));

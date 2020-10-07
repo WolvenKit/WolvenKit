@@ -3,7 +3,7 @@ using IrrlichtLime.Core;
 
 namespace WolvenKit.Render
 {
-    public class SBufferInfos
+    public class SBufferInfos : System.IDisposable
     {
         public uint vertexBufferOffset = 0;
         public uint vertexBufferSize = 0;
@@ -15,6 +15,23 @@ namespace WolvenKit.Render
         public Vector3Df quantizationOffset = new Vector3Df(0, 0, 0);
 
         public List<SVertexBufferInfos> verticesBuffer = new List<SVertexBufferInfos>();
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // Dispose managed resources.
+                quantizationScale.Dispose();
+                quantizationOffset.Dispose();
+            }
+            // Free native resources.
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            System.GC.SuppressFinalize(this);
+        }
     }
 
     // Informations about the .buffer file
@@ -65,10 +82,26 @@ namespace WolvenKit.Render
             public float strength = 0;
         }
 
-        public class BoneEntry
+        public class BoneEntry : System.IDisposable
         {
             public string name = "";
             public Matrix offsetMatrix = new Matrix();
+
+            protected virtual void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    // Dispose managed resources.
+                    offsetMatrix.Dispose();
+                }
+                // Free native resources.
+            }
+
+            public void Dispose()
+            {
+                Dispose(true);
+                System.GC.SuppressFinalize(this);
+            }
         }
 
         public List<VertexSkinningEntry> vertices = new List<VertexSkinningEntry>();

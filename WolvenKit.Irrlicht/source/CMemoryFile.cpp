@@ -4,6 +4,7 @@
 
 #include "CMemoryFile.h"
 #include "irrString.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -170,14 +171,14 @@ bool CMemoryWriteFile::flush()
 
 IReadFile* createMemoryReadFile(const void* memory, long size, const io::path& fileName, bool deleteMemoryWhenDropped)
 {
-	CMemoryReadFile* file = new CMemoryReadFile(memory, size, fileName, deleteMemoryWhenDropped);
+	CMemoryReadFile* file = DBG_NEW CMemoryReadFile(memory, size, fileName, deleteMemoryWhenDropped);
 	return file;
 }
 
 
 IWriteFile* createMemoryWriteFile(void* memory, long size, const io::path& fileName, bool deleteMemoryWhenDropped)
 {
-	CMemoryWriteFile* file = new CMemoryWriteFile(memory, size, fileName, deleteMemoryWhenDropped);
+	CMemoryWriteFile* file = DBG_NEW CMemoryWriteFile(memory, size, fileName, deleteMemoryWhenDropped);
 	return file;
 }
 

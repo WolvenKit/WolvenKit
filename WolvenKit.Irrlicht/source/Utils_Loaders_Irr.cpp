@@ -8,7 +8,7 @@
 
 #include <cstdarg>
 #include "Utils_Loaders_Irr.h"
-
+#include "debug.h"
 
 namespace irr
 {
@@ -40,10 +40,14 @@ namespace scene
 
     core::stringc readString(io::IReadFile* file, int nbChars)
     {
-        char * returnedString = new char[nbChars + 1];
+        char * returnedString = DBG_NEW char[nbChars + 1];
         file->read(returnedString, nbChars);
         returnedString[nbChars] = '\0';
-        return returnedString;
+
+        core::stringc res(returnedString, nbChars);
+        delete [] returnedString;
+
+        return res;
     }
 
     core::stringc readStringUntilNull(io::IReadFile* file)

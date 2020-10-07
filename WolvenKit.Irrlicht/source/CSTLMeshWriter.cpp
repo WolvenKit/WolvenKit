@@ -14,6 +14,7 @@
 #include "ISceneManager.h"
 #include "IMeshCache.h"
 #include "IWriteFile.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -72,7 +73,7 @@ bool CSTLMeshWriter::writeMeshBinary(io::IWriteFile* file, scene::IMesh* mesh, s
 		file->write(name.c_str(),73);
 	else
 	{
-		char* buf = new char[80];
+		char* buf = DBG_NEW char[80];
 		memset(buf, 0, 80);
 		file->write(name.c_str(),name.size());
 		file->write(buf,sizeleft);

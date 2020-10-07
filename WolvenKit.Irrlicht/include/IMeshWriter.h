@@ -26,7 +26,7 @@ namespace scene
 	public:
 
 		//! Destructor
-		virtual ~IMeshWriter() {}
+		~IMeshWriter() {}
 
 		//! Get the type of the mesh writer
 		/** For own implementations, use MAKE_IRR_ID as shown in the
@@ -36,11 +36,11 @@ namespace scene
 		virtual EMESH_WRITER_TYPE getType() const = 0;
 
         //! Sets a matrix to use for local to world transformation
-        virtual void setTransform(const irr::core::matrix4&) {};
+        virtual void setTransform(const irr::core::matrix4&) noexcept {};
 
         //! Sets the extension to use for externally referenced images
         // in case an override of the existing name is desired (ie. xbm -> png)
-        virtual void setImageType(core::stringc extension) {};
+        virtual void setImageType(core::stringc extension) noexcept {};
 
 		//! Write a static mesh.
 		/** \param file File handle to write the mesh to.

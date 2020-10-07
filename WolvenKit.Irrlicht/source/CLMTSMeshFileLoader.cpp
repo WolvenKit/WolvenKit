@@ -78,6 +78,7 @@ Version 1.0 - 29 July 2004
 #include "IAttributes.h"
 #include "ISceneManager.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -99,7 +100,7 @@ CLMTSMeshFileLoader::CLMTSMeshFileLoader(io::IFileSystem* fs,
 	if (FileSystem)
 		FileSystem->grab();
 
-	TextureLoader = new CMeshTextureLoader( FileSystem, Driver );
+	TextureLoader = DBG_NEW CMeshTextureLoader( FileSystem, Driver );
 }
 
 
@@ -176,7 +177,7 @@ IAnimatedMesh* CLMTSMeshFileLoader::createMesh(io::IReadFile* file)
 		return 0;
 	}
 
-	Textures = new SLMTSTextureInfoEntry[Header.TextureCount];
+	Textures = DBG_NEW SLMTSTextureInfoEntry[Header.TextureCount];
 
 	file->read(Textures, sizeof(SLMTSTextureInfoEntry)*Header.TextureCount);
 	if (FlipEndianess)
@@ -197,7 +198,7 @@ IAnimatedMesh* CLMTSMeshFileLoader::createMesh(io::IReadFile* file)
 		return 0;
 	}
 
-	Subsets = new SLMTSSubsetInfoEntry[Header.SubsetCount];
+	Subsets = DBG_NEW SLMTSSubsetInfoEntry[Header.SubsetCount];
 	const s32 subsetUserSize = Header.SubsetSize - sizeof(SLMTSSubsetInfoEntry);
 
 	for (i=0; i<Header.SubsetCount; ++i)
@@ -226,7 +227,7 @@ IAnimatedMesh* CLMTSMeshFileLoader::createMesh(io::IReadFile* file)
 		return 0;
 	}
 
-	Triangles = new SLMTSTriangleDataEntry[(Header.TriangleCount*3)];
+	Triangles = DBG_NEW SLMTSTriangleDataEntry[(Header.TriangleCount*3)];
 	const s32 triUserSize = Header.VertexSize - sizeof(SLMTSTriangleDataEntry);
 
 	for (i=0; i<(Header.TriangleCount*3); ++i)
@@ -248,7 +249,7 @@ IAnimatedMesh* CLMTSMeshFileLoader::createMesh(io::IReadFile* file)
 
 	/////////////////////////////////////////////////////////////////
 
-	SMesh* mesh = new SMesh();
+	SMesh* mesh = DBG_NEW SMesh();
 
 	constructMesh(mesh);
 
@@ -256,7 +257,7 @@ IAnimatedMesh* CLMTSMeshFileLoader::createMesh(io::IReadFile* file)
 
 	cleanup();
 
-	SAnimatedMesh* am = new SAnimatedMesh();
+	SAnimatedMesh* am = DBG_NEW SAnimatedMesh();
 	am->Type = EAMT_LMTS; // not unknown to irrlicht anymore
 
 	am->addMesh(mesh);
@@ -270,7 +271,7 @@ void CLMTSMeshFileLoader::constructMesh(SMesh* mesh)
 {
 	for (s32 i=0; i<Header.SubsetCount; ++i)
 	{
-		scene::SMeshBufferLightMap* meshBuffer = new scene::SMeshBufferLightMap();
+		scene::SMeshBufferLightMap* meshBuffer = DBG_NEW scene::SMeshBufferLightMap();
 
 		// EMT_LIGHTMAP_M2/EMT_LIGHTMAP_M4 also possible
 		meshBuffer->Material.MaterialType = video::EMT_LIGHTMAP;

@@ -6,6 +6,7 @@
 #define __C_INDEX_BUFFER_H_INCLUDED__
 
 #include "IIndexBuffer.h"
+#include "../source/debug.h"
 
 namespace irr
 {
@@ -118,12 +119,12 @@ namespace scene
 			{
 				case video::EIT_16BIT:
 				{
-					NewIndices=new CSpecificIndexList<u16>;
+					NewIndices= DBG_NEW CSpecificIndexList<u16>;
 					break;
 				}
 				case video::EIT_32BIT:
 				{
-					NewIndices=new CSpecificIndexList<u32>;
+					NewIndices= DBG_NEW CSpecificIndexList<u32>;
 					break;
 				}
 			}

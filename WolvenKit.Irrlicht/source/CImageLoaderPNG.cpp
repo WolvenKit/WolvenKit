@@ -17,6 +17,7 @@
 #include "CImage.h"
 #include "CReadFile.h"
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -223,9 +224,9 @@ IImage* CImageLoaderPng::loadImage(io::IReadFile* file) const
 
 	// Create the image structure to be filled by png data
 	if (ColorType==PNG_COLOR_TYPE_RGB_ALPHA)
-		image = new CImage(ECF_A8R8G8B8, core::dimension2d<u32>(Width, Height));
+		image = DBG_NEW CImage(ECF_A8R8G8B8, core::dimension2d<u32>(Width, Height));
 	else
-		image = new CImage(ECF_R8G8B8, core::dimension2d<u32>(Width, Height));
+		image = DBG_NEW CImage(ECF_R8G8B8, core::dimension2d<u32>(Width, Height));
 	if (!image)
 	{
 		os::Printer::log("LOAD PNG: Internal PNG create image struct failure\n", file->getFileName(), ELL_ERROR);
@@ -234,7 +235,7 @@ IImage* CImageLoaderPng::loadImage(io::IReadFile* file) const
 	}
 
 	// Create array of pointers to rows in image data
-	RowPointers = new png_bytep[Height];
+	RowPointers = DBG_NEW png_bytep[Height];
 	if (!RowPointers)
 	{
 		os::Printer::log("LOAD PNG: Internal PNG create row pointers failure\n", file->getFileName(), ELL_ERROR);
@@ -276,7 +277,7 @@ IImage* CImageLoaderPng::loadImage(io::IReadFile* file) const
 
 IImageLoader* createImageLoaderPNG()
 {
-	return new CImageLoaderPng();
+	return DBG_NEW CImageLoaderPng();
 }
 
 

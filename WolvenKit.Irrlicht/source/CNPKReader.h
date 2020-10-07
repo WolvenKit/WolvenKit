@@ -105,7 +105,7 @@ namespace io
 		virtual const IFileList* getFileList() const _IRR_OVERRIDE_;
 
 		//! get the class Type
-		virtual E_FILE_ARCHIVE_TYPE getType() const _IRR_OVERRIDE_ { return EFAT_NPK; }
+		virtual E_FILE_ARCHIVE_TYPE getType() const noexcept _IRR_OVERRIDE_ { return EFAT_NPK; }
 
 	private:
 

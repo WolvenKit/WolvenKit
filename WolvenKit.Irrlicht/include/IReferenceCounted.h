@@ -47,8 +47,8 @@ namespace irr
 	public:
 
 		//! Constructor.
-		IReferenceCounted()
-			: DebugName(0), ReferenceCounter(1)
+		IReferenceCounted() noexcept
+			: DebugName(nullptr), ReferenceCounter(1)
 		{
 #ifdef _IRR_COMPILE_WITH_LEAK_HUNTER_
 			LeakHunter::addObject(this);
@@ -93,7 +93,7 @@ namespace irr
 		You will not have to drop the pointer to the loaded texture,
 		because the name of the method does not start with 'create'.
 		The texture is stored somewhere by the driver. */
-		void grab() const { ++ReferenceCounter; }
+		void grab() const noexcept { ++ReferenceCounter; }
 
 		//! Drops the object. Decrements the reference counter by one.
 		/** The IReferenceCounted class provides a basic reference
@@ -123,7 +123,7 @@ namespace irr
 		because the name of the method does not start with 'create'.
 		The texture is stored somewhere by the driver.
 		\return True, if the object was deleted. */
-		bool drop() const
+		bool drop() const noexcept
 		{
 			// someone is doing bad reference counting.
 			_IRR_DEBUG_BREAK_IF(ReferenceCounter <= 0)
@@ -140,7 +140,7 @@ namespace irr
 
 		//! Get the reference count.
 		/** \return Current value of the reference counter. */
-		s32 getReferenceCount() const
+		s32 getReferenceCount() const noexcept
 		{
 			return ReferenceCounter;
 		}
@@ -149,7 +149,7 @@ namespace irr
 		/** The Debugname may only be set and changed by the object
 		itself. This method should only be used in Debug mode.
 		\return Returns a string, previously set by setDebugName(); */
-		const c8* getDebugName() const
+		const c8* getDebugName() const noexcept
 		{
 			return DebugName;
 		}
@@ -160,7 +160,7 @@ namespace irr
 		/** The Debugname may only be set and changed by the object
 		itself. This method should only be used in Debug mode.
 		\param newName: New debug name to set. */
-		void setDebugName(const c8* newName)
+		void setDebugName(const c8* newName) noexcept
 		{
 			DebugName = newName;
 		}

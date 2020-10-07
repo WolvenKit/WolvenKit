@@ -9,6 +9,7 @@
 #include "SoftwareDriver2_compile_config.h"
 #include "SoftwareDriver2_helper.h"
 #include "irrAllocator.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -499,7 +500,7 @@ struct SAlignedVertex
 		: ElementSize ( element )
 	{
 		u32 byteSize = (ElementSize << SIZEOF_SVERTEX_LOG2 ) + aligned;
-		mem = new u8 [ byteSize ];
+		mem = DBG_NEW u8 [ byteSize ];
 		data = (s4DVertex*) mem;
 	}
 

@@ -10,6 +10,7 @@
 #include "IWriteFile.h"
 #include "CColorConverter.h"
 #include "irrString.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -18,7 +19,7 @@ namespace video
 
 IImageWriter* createImageWriterTGA()
 {
-	return new CImageWriterTGA;
+	return DBG_NEW CImageWriterTGA;
 }
 
 CImageWriterTGA::CImageWriterTGA()
@@ -111,7 +112,7 @@ bool CImageWriterTGA::writeImage(io::IWriteFile *file, IImage *image,u32 param) 
 	size_t row_size = ((imageHeader.PixelDepth / 8) * imageHeader.ImageWidth);
 
 	// allocate a row do translate data into
-	u8* row_pointer = new u8[row_size];
+	u8* row_pointer = DBG_NEW u8[row_size];
 
 	u32 y;
 	for (y = 0; y < imageHeader.ImageHeight; ++y)

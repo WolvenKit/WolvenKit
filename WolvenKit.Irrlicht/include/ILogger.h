@@ -40,7 +40,7 @@ class ILogger : public virtual IReferenceCounted
 public:
 
 	//! Destructor
-	virtual ~ILogger() {}
+	~ILogger() {}
 
 	//! Returns the current set log level.
 	virtual ELOG_LEVEL getLogLevel() const = 0;

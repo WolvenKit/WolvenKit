@@ -329,13 +329,13 @@ class line2d
 	template <>
 	inline vector2df line2d<irr::f32>::getClosestPoint(const vector2df& point, bool checkOnlySegments) const
 	{
-		vector2df c = point - start;
+		const vector2df c = point - start;
 		vector2df v = end - start;
-		f32 d = (f32)v.getLength();
+		const f32 d = (f32)v.getLength();
 		if ( d == 0 ) // can't tell much when the line is just a single point
 			return start;
 		v /= d;
-		f32 t = v.dotProduct(c);
+		const f32 t = v.dotProduct(c);
 
 		if ( checkOnlySegments )
 		{

@@ -8,6 +8,7 @@
 #include "ICameraSceneNode.h"
 
 #include "os.h"
+#include "debug.h"
 
 namespace irr
 {
@@ -264,7 +265,7 @@ ISceneNode* CLightSceneNode::clone(ISceneNode* newParent, ISceneManager* newMana
 	if (!newManager)
 		newManager = SceneManager;
 
-	CLightSceneNode* nb = new CLightSceneNode(newParent,
+	CLightSceneNode* nb = DBG_NEW CLightSceneNode(newParent,
 		newManager, ID, RelativeTranslation, LightData.DiffuseColor, LightData.Radius);
 
 	nb->cloneMembers(this, newManager);
