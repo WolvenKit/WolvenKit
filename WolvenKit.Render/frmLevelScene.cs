@@ -149,8 +149,11 @@ namespace WolvenKit.Render
                             float rx, ry, rz;
                             MatrixToEuler(rot, out rx, out ry, out rz); // radians
 
-                            Vector3Df rotation = new Vector3Df(rx * RADIANS_TO_DEGREES, ry * RADIANS_TO_DEGREES, rz * RADIANS_TO_DEGREES);
-                            Vector3Df translation = new Vector3Df(position.X.val, position.Y.val, position.Z.val);
+                            //Vector3Df rotation = new Vector3Df(rx * RADIANS_TO_DEGREES, ry * RADIANS_TO_DEGREES, rz * RADIANS_TO_DEGREES);
+                            //Vector3Df translation = new Vector3Df(position.X.val, position.Y.val, position.Z.val);
+
+                            Vector3Df rotation = new Vector3Df(rx * RADIANS_TO_DEGREES, ry * RADIANS_TO_DEGREES, -rz * RADIANS_TO_DEGREES);
+                            Vector3Df translation = new Vector3Df(-position.X.val, position.Y.val, position.Z.val);
 
                             // now get mesh to apply this to!
                             SBlockDataMeshObject mo = (SBlockDataMeshObject)block.packedObject;
