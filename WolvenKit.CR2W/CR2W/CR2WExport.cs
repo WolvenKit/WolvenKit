@@ -75,8 +75,9 @@ namespace WolvenKit.CR2W
             {
                 objectFlags = (ushort)(cooked ? 8192 : 0),
             };
-            IsVirtuallyMounted = false;
-            Referrers = new List<IChunkPtrAccessor>();
+            _virtualParentChunkIndex = -1;
+            AdReferences = new List<IChunkPtrAccessor>();
+            AbReferences = new List<IChunkPtrAccessor>();
 
             this.cr2w = file;
             this.REDType = redtype;
@@ -94,8 +95,9 @@ namespace WolvenKit.CR2W
             _export = export;
 
             REDType = cr2w.names[export.className].Str;
-            IsVirtuallyMounted = false;
-            Referrers = new List<IChunkPtrAccessor>();
+            _virtualParentChunkIndex = -1;
+            AdReferences = new List<IChunkPtrAccessor>();
+            AbReferences = new List<IChunkPtrAccessor>();
         }
         #endregion
 
@@ -123,38 +125,40 @@ namespace WolvenKit.CR2W
             private set => _export.parentID = (uint)(value + 1);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parent"></param>
         public void SetParentChunk(CR2WExportWrapper parent)
         {
-            ParentChunkIndex = parent == null 
-                ? -1 
-                : cr2w.chunks.IndexOf(parent);
-            IsVirtuallyMounted = false;
-            VirtualParentChunkIndex = ParentChunkIndex;
+            ParentChunkIndex = parent == null ? -1 : cr2w.chunks.IndexOf(parent);
         }
 
-        public bool IsVirtuallyMounted { get; set; }
         private int _virtualParentChunkIndex;
         public int VirtualParentChunkIndex
         {
-            get => IsVirtuallyMounted ? _virtualParentChunkIndex : ParentChunkIndex;
-            set
+            get => _virtualParentChunkIndex > -1 ? _virtualParentChunkIndex : ParentChunkIndex;
+            private set => _virtualParentChunkIndex = value;
+        }
+
+        public void MountChunkVirtually(int virtualparentchunkindex, bool force=false)
+        {
+            if(!IsVirtuallyMounted || force)
             {
-                if (IsVirtuallyMounted) return;
-                _virtualParentChunkIndex = value;
-                IsVirtuallyMounted = true;
+                VirtualParentChunkIndex = virtualparentchunkindex;
             }
         }
+
+        public bool IsVirtuallyMounted => _virtualParentChunkIndex > -1 ? true : false;
 
         /// <summary>
         /// Reverse lookup : CVariables, being CPtr or CHandle, which reference this chunk.
         /// Beware, in case of multithreading, this needs locking!
         /// </summary>
-        public readonly List<IChunkPtrAccessor> Referrers;
-
+        public List<IChunkPtrAccessor> AdReferences;
+        
+        /// <summary>
+        /// Playing with latin here, ab means toward, ab away from.
+        /// Reverse lookup : CVariables, being CPtr or CHandle, which are referenced by this chunk.
+        /// Beware, in case of multithreading, this needs locking!
+        /// </summary>
+        public List<IChunkPtrAccessor> AbReferences;
 
         public string REDType { get; private set; }
 
@@ -163,10 +167,6 @@ namespace WolvenKit.CR2W
         public string REDName => REDType + " #" + (ChunkIndex);
 
         public int ChunkIndex => cr2w.chunks.IndexOf(this);
-        public CR2WExportWrapper ParentChunk => ParentChunkIndex == -1 ? null : cr2w.chunks[ParentChunkIndex];
-
-        public CR2WExportWrapper VirtualParentChunk =>
-            VirtualParentChunkIndex == -1 ? null : cr2w.chunks[VirtualParentChunkIndex];
 
         /// <summary>
         /// This property is used as BindingProperty in frmChunkProperties
@@ -230,11 +230,11 @@ namespace WolvenKit.CR2W
 
         public void SetOffset(uint offset) => _export.dataOffset = offset;
 
-        private CR2WExportWrapper GetParentChunk() => ParentChunkIndex >= 0 ? cr2w.chunks[ParentChunkIndex] : null;
+        public CR2WExportWrapper GetParentChunk() => ParentChunkIndex >= 0 ? cr2w.chunks[ParentChunkIndex] : null;
 
         public CR2WExportWrapper GetVirtualParentChunk()
         {
-            if (IsVirtuallyMounted && VirtualParentChunkIndex != -1)
+            if (_virtualParentChunkIndex > -1)
             {
                 return cr2w.chunks[VirtualParentChunkIndex];
             }
@@ -271,7 +271,6 @@ namespace WolvenKit.CR2W
 
             //TODO explain next two lines
             data.VarChunkIndex = ChunkIndex;
-            VirtualParentChunkIndex = ParentChunkIndex;
 
             data.Read(file, _export.dataSize);
 
@@ -344,7 +343,6 @@ namespace WolvenKit.CR2W
 
                 //TODO explain next two lines
                 data.VarChunkIndex = ChunkIndex;
-                VirtualParentChunkIndex = ParentChunkIndex;
 
                 data.Read(br, _export.dataSize);
 

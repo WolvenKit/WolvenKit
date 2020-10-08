@@ -371,11 +371,11 @@ namespace WolvenKit.Forms
                 {
                     case IPtrAccessor ptr:
                         if (ptr.Reference != null)
-                            node.cr2w.RemoveChunk(ptr.Reference);
+                            node.cr2w.RemoveChunkRecursive(ptr.Reference);
                         break;
                     case IHandleAccessor hdl when hdl.ChunkHandle:
                         if (hdl.Reference != null)
-                            node.cr2w.RemoveChunk(hdl.Reference);
+                            node.cr2w.RemoveChunkRecursive(hdl.Reference);
                         break;
                 }
 
@@ -517,7 +517,7 @@ namespace WolvenKit.Forms
             var node = (IEditableVariable)treeView.SelectedObject;
             if (node is IChunkPtrAccessor iptr && iptr.Reference != null)
             {
-                node.cr2w.RemoveChunk(iptr.Reference);
+                node.cr2w.RemoveChunkRecursive(iptr.Reference);
             }
         }
 

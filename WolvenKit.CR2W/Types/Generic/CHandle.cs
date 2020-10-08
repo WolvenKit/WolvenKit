@@ -65,16 +65,14 @@ namespace WolvenKit.CR2W.Types
                 else
                 {
                     Reference = cr2w.chunks[val - 1];
-                    Reference.Referrers.Add(this); //Populate the reverse-lookup
-                }
-
-                if (Reference != null && !Reference.IsVirtuallyMounted)
-                {
-                    Reference.VirtualParentChunkIndex = GetVarChunkIndex();
-                }
-                else
-                {
-                    //var bozza = "bozza";
+                    //Add to the reverse-lookups
+                    Reference.AdReferences.Add(this);
+                    cr2w.chunks[GetVarChunkIndex()].AbReferences.Add(this);
+                    //Soft mount the chunk
+                    if(this.ParentVar.REDType!="AttachmentsReference")
+                    {
+                        Reference.MountChunkVirtually(GetVarChunkIndex());
+                    }
                 }
             }
             else
