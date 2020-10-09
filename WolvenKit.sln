@@ -21,6 +21,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Save", "WolvenKit.Save\WolvenKit.Save.csproj", "{9C026DA7-481D-43C6-8C18-635D69FDB423}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Render", "WolvenKit.Render\WolvenKit.Render.csproj", "{8BE56F4F-3B98-4BD8-8052-2B5E630AF3D7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4F6EF8E3-F26F-49DB-867D-FD10FB083B0D} = {4F6EF8E3-F26F-49DB-867D-FD10FB083B0D}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Scaleform", "WolvenKit.Scaleform\WolvenKit.Scaleform.csproj", "{031DD6DA-B643-4C2A-A30D-A2E2212724C2}"
 EndProject
@@ -54,6 +57,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Console", "WolvenKit.Console\WolvenKit.Console.csproj", "{B4343A73-9BF6-4F82-9CCE-F2D5F6BCC9E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.App", "WolvenKit.App\WolvenKit.App.csproj", "{6C5EE693-7F88-4259-90D5-9B247E61A15A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IrrlichtLime", "WolvenKit.IrrlichtLime\IrrlichtLime.vcxproj", "{4F6EF8E3-F26F-49DB-867D-FD10FB083B0D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DD5C43CB-34A8-409B-9010-5A5A52787552} = {DD5C43CB-34A8-409B-9010-5A5A52787552}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Irrlicht", "WolvenKit.Irrlicht\Irrlicht15.0.vcxproj", "{DD5C43CB-34A8-409B-9010-5A5A52787552}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -129,6 +139,14 @@ Global
 		{6C5EE693-7F88-4259-90D5-9B247E61A15A}.Debug|x64.Build.0 = Debug|x64
 		{6C5EE693-7F88-4259-90D5-9B247E61A15A}.Release|x64.ActiveCfg = Release|x64
 		{6C5EE693-7F88-4259-90D5-9B247E61A15A}.Release|x64.Build.0 = Release|x64
+		{4F6EF8E3-F26F-49DB-867D-FD10FB083B0D}.Debug|x64.ActiveCfg = Debug|x64
+		{4F6EF8E3-F26F-49DB-867D-FD10FB083B0D}.Debug|x64.Build.0 = Debug|x64
+		{4F6EF8E3-F26F-49DB-867D-FD10FB083B0D}.Release|x64.ActiveCfg = Release|x64
+		{4F6EF8E3-F26F-49DB-867D-FD10FB083B0D}.Release|x64.Build.0 = Release|x64
+		{DD5C43CB-34A8-409B-9010-5A5A52787552}.Debug|x64.ActiveCfg = Debug|x64
+		{DD5C43CB-34A8-409B-9010-5A5A52787552}.Debug|x64.Build.0 = Debug|x64
+		{DD5C43CB-34A8-409B-9010-5A5A52787552}.Release|x64.ActiveCfg = Release|x64
+		{DD5C43CB-34A8-409B-9010-5A5A52787552}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

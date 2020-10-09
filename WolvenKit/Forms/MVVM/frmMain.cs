@@ -44,6 +44,7 @@ namespace WolvenKit
     using Wwise.Wwise;
     using Enums = Enums;
     using WolvenKit.CR2W.Reflection;
+    using Microsoft.WindowsAPICodePack.Dialogs;
 
     public partial class frmMain : Form
     {
@@ -423,8 +424,8 @@ namespace WolvenKit
 
             foreach (var window in dockPanel.FloatWindows.ToList())
             {
-                window.Dispose();
                 window.Close();
+                window.Dispose();
             }
 
             return true;
@@ -2344,6 +2345,12 @@ namespace WolvenKit
 
             SaveDockPanelLayout();
             ToolStripManager.SaveSettings(this);
+
+            foreach (var dc in dockPanel.DocumentsToArray())
+            {
+                dc.DockHandler.DockPanel = null;
+                dc.DockHandler.Close();
+            }
         }
 
         private void frmMain_Shown(object sender, EventArgs e)
@@ -3582,5 +3589,18 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             return cr2w;
         }
 
+        private void sceneViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var dlg = new CommonOpenFileDialog() { Title = "Select file" };
+            dlg.Multiselect = false;
+            dlg.Filters.Add(new CommonFileDialogFilter("Files", ".w2w,.w2l"));
+            dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
+            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                // parse the w2w and provide information to the scene
+                Render.frmLevelScene sceneView = new Render.frmLevelScene(dlg.FileName, MainController.Get().Configuration.DepotPath, MainController.Get().TextureManager);
+                sceneView.Show(this.dockPanel, DockState.Document);
+            }
+        }
     }
 }

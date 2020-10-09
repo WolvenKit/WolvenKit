@@ -11,7 +11,7 @@ using FastMember;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta(EREDMetaInfo.REDStruct)]
-    class SBlockDataMeshObject : CVariable
+    public class SBlockDataMeshObject : CVariable
     {
         [Ordinal(1)] [RED] public CUInt16 meshIndex { get; set; }
         [Ordinal(2)] [RED] public CUInt16 forceAutoHide { get; set; }
