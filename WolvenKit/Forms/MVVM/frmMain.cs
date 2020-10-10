@@ -3597,7 +3597,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 // parse the w2w and provide information to the scene
-                Render.frmLevelScene sceneView = new Render.frmLevelScene(dlg.FileName, MainController.Get().Configuration.DepotPath);
+                Render.frmLevelScene sceneView = new Render.frmLevelScene(dlg.FileName, MainController.Get().Configuration.DepotPath, MainController.Get().TextureManager);
                 sceneView.Show(this.dockPanel, DockState.Document);
             }
         }

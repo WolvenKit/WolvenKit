@@ -65,6 +65,9 @@ IImageLoader* createImageLoaderRGB();
 //! creates a loader which is able to load xbm images
 IImageLoader* createImageLoaderXBM();
 
+//! creates a loader which is able to load cube images
+IImageLoader* createImageLoaderCube();
+
 
 //! creates a writer which is able to save bmp images
 IImageWriter* createImageWriterBMP();
@@ -164,6 +167,9 @@ CNullDriver::CNullDriver(io::IFileSystem* io, const core::dimension2d<u32>& scre
 #endif
 #ifdef _IRR_COMPILE_WITH_BMP_LOADER_
 	SurfaceLoader.push_back(video::createImageLoaderBMP());
+#endif
+#ifdef _IRR_COMPILE_WITH_CUBE_LOADER_
+    SurfaceLoader.push_back(video::createImageLoaderCube());
 #endif
 #ifdef _IRR_COMPILE_WITH_XBM_LOADER_
     // put this first since this is the common Witcher image format

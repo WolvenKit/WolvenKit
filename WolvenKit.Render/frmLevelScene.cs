@@ -96,7 +96,10 @@ namespace WolvenKit.Render
         private IrrlichtDevice device;
         private VideoDriver driver;
         private SceneManager smgr;
-        //private GUIEnvironment gui;
+        private GUIEnvironment gui;
+        private GUIStaticText fpstext;
+        private GUIStaticText vertexCountText;
+        private int totalVertexCount = 0;
 
         private IrrlichtLime.Scene.SceneNode worldNode;
         private IrrlichtLime.Scene.SceneNode lightNode;
@@ -105,8 +108,9 @@ namespace WolvenKit.Render
         private string depot;
         private int meshId;
         private bool doAddNodes;
+        private Cache.TextureManager textureManager;
 
-        public frmLevelScene(string filename, string depotPath)
+        public frmLevelScene(string filename, string depotPath, Cache.TextureManager textureManager)
         {
             this.inputFilename = filename;
             this.depot = depotPath + "\\";
@@ -173,6 +177,11 @@ namespace WolvenKit.Render
                             Mesh m = smgr.GetMesh(meshPath);
                             m = smgr.MeshManipulator.CreateMeshWithTangents(m, true);
 
+                            foreach (var mb in m.MeshBuffers)
+                            {
+                                totalVertexCount += mb.VertexCount;
+                            }
+
                             RenderTreeNode meshNode = new RenderTreeNode(meshName, meshId++, m, translation, rotation);
 
                             sceneView.Invoke((MethodInvoker)delegate
@@ -192,6 +201,28 @@ namespace WolvenKit.Render
 
         private void ParseScene()
         {
+            //string meshPath = "D:/Tools/ModTools/r4data/environment/architecture/human/redania/novigrad/poor/poor_woodenfoof_loam/poor_woodenfoof_loam_roofb.w2mesh";
+            //string meshPath = "D:/Tools/ModTools/r4data/environment/architecture/human/redania/novigrad/poor/poor_houses_parts/poor_frame_window_stone_g.w2mesh";
+            //Mesh m = smgr.GetMesh(meshPath);
+
+            //string imgPath = "D:/Tools/ModTools/r4data/fx/textures/cloud/stars_cubemap/stars2.w2cube";
+            //Texture dudtex = driver.GetTexture(imgPath);
+
+            /*
+            string imgPath = "D:/Tools/ModTools/r4data/fx/textures/cloud/stars_cubemap/stars2.w2cube";
+            Texture dudtex = driver.GetTexture(imgPath);
+
+            CR2WFile imgAssetFile;
+            using (var fs = new FileStream(imgPath, FileMode.Open, FileAccess.Read))
+            using (var reader = new BinaryReader(fs))
+            {
+                imgAssetFile = new CR2WFile();
+                imgAssetFile.Read(reader);
+                fs.Close();
+            }
+            CBitmapTexture xbm = ((CBitmapTexture)imgAssetFile.chunks[0].data);
+            */
+
             //string meshPath = "D:/Tools/ModTools/r4data/engine/textures/editor/grey.xbm";
             //Mesh m = smgr.GetMesh(meshPath);
             //m = smgr.MeshManipulator.CreateMeshWithTangents(m, true);
@@ -280,7 +311,7 @@ namespace WolvenKit.Render
 
                 driver = device.VideoDriver;
                 smgr = device.SceneManager;
-                //gui = device.GUIEnvironment;
+                gui = device.GUIEnvironment;
 
                 smgr.Attributes.SetValue("TW_TW3_TEX_PATH", depot);
                 driver.SetTextureCreationFlag(TextureCreationFlag.Always32Bit, true);
@@ -293,8 +324,17 @@ namespace WolvenKit.Render
 
                 var dome = smgr.AddSkyDomeSceneNode(driver.GetTexture("Terrain\\skydome.jpg"), 16, 8, 0.95f, 2.0f);
                 dome.Visible = true;
+                
+                fpstext = gui.AddStaticText("0 fps",
+                    new Recti(2, 10, 200, 30), false, false, null, 1, false);
+                fpstext.OverrideColor = IrrlichtLime.Video.Color.SolidRed;
 
                 ParseScene();
+
+                vertexCountText = gui.AddStaticText(totalVertexCount.ToString() + " vertices",
+                    new Recti(2, 32, 200, 52), false, false, null, 1, false);
+                vertexCountText.OverrideColor = IrrlichtLime.Video.Color.SolidRed;
+
                 smgr.AddCameraSceneNodeMaya();
 
                 sceneView.Invoke((MethodInvoker)delegate
@@ -319,7 +359,10 @@ namespace WolvenKit.Render
                         });
                     }
                     driver.BeginScene(ClearBufferFlag.All, new IrrlichtLime.Video.Color(0, 0, 100));
+                    int val = driver.FPS;
+                    fpstext.Text = val.ToString() + "fps";
                     smgr.DrawAll();
+                    gui.DrawAll();
                     driver.EndScene();
                 }
             }
@@ -506,6 +549,7 @@ namespace WolvenKit.Render
                 }
                 mw.SetImageType(texExtension);
                 mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), node.Mesh, MeshWriterFlag.None);
+                mw.Drop();
             }
             else if (modelExtension == ".fbx")
             {
@@ -517,6 +561,7 @@ namespace WolvenKit.Render
                 }
                 mw.SetImageType(texExtension);
                 mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), node.Mesh, MeshWriterFlag.None);
+                mw.Drop();
             }
         }
 
@@ -673,6 +718,32 @@ namespace WolvenKit.Render
         private void sceneView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             exportMeshButton.Enabled = sceneView.SelectedNode != null;
+        }
+
+        private void showAllButton_Click(object sender, EventArgs e)
+        {
+            foreach(TreeNode node in sceneView.Nodes)
+            {
+                node.Checked = true;
+                foreach (RenderTreeNode n in node.Nodes)
+                {
+                    n.Checked = true;
+                    Render(n);
+                }
+            }
+
+        }
+
+        private void irrlichtPanel_Resize(object sender, EventArgs e)
+        {
+            if (smgr != null)
+            {
+                var camera = smgr.ActiveCamera;
+                if (camera != null)
+                {
+                    camera.AspectRatio = (float)irrlichtPanel.Width / (float)irrlichtPanel.Height;
+                }
+            }
         }
     }
 }

@@ -349,7 +349,7 @@ bool CImageLoaderXBM::isALoadableFileFormat(io::IReadFile* file) const
     return id == MAGIC;
 }
 
-u32 ReadVariable(io::IReadFile* file)
+static u32 ReadVariable(io::IReadFile* file)
 {
 #ifdef _DEBUG
     u16 nameId, typeId;
@@ -375,6 +375,8 @@ u32 ReadVariable(io::IReadFile* file)
 //! creates a surface from the file
 IImage* CImageLoaderXBM::loadImage(io::IReadFile* file) const
 {    
+    os::Printer::log("XBM file ", file->getFileName().c_str(), ELL_DEBUG);
+
 	u32 id = 0;
 	file->read(&id, sizeof(u32));
 
@@ -426,12 +428,31 @@ IImage* CImageLoaderXBM::loadImage(io::IReadFile* file) const
     const u16 compression = (u16)ReadVariable(file);
     const u16 textureGroup = (u16)ReadVariable(file);
     
+    // could be a residentMipIndex or the textureCacheKey
     u8 residentMipIndex = 0;
-    if (width > 16)
+    u32 textureCacheKey = 0;
+
+    u16 nameId;
+    file->read(&nameId, sizeof(u16));
+    file->seek(sizeof(u16), true); // typeId
+    u32 size;
+    file->read(&size, sizeof(u32));
+    size -= 4;
+
+    // textureCacheKey is at the end of the list of variables so either it IS the end or the residentMipIndex is before it
+    if(size == 4)
     {
-        residentMipIndex = (u8)ReadVariable(file);
+        file->read(&textureCacheKey, size);
     }
-    const u32 textureCacheKey = ReadVariable(file);
+    else if(size == 1)
+    {
+        u32 var;
+        file->read(&var, size);
+        residentMipIndex = (u8)var;
+
+        textureCacheKey = ReadVariable(file);
+    }
+    
     file->seek(sizeof(u16), true); // end of variables flag
     file->seek(sizeof(u32), true); // unknown variable
 

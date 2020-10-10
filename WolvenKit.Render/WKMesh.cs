@@ -29,11 +29,13 @@ namespace WolvenKit.Render
             CData = cdata;
         }
 
+        /*
         /// <summary>
         /// Create a System.Drawing.Bitmap from a Redengine CBitmapTexture with Wkit DDS Utility
         /// </summary>
         /// <param name="xbm"></param>
         /// <returns></returns>
+        /// 
         public static byte[] Xbm2Bmp(CBitmapTexture xbm)
         {
             if (xbm == null)
@@ -120,6 +122,7 @@ namespace WolvenKit.Render
         {
             return ddsImage.Length > 128 ? ddsImage.Skip(128).ToArray() : new byte[0];
         }
+        */
 
         private void HandleMaterial(ref Material mat, string path, IrrlichtDevice dev, string texType)
         {

@@ -649,6 +649,11 @@ B3D, MS3D or X meshes */
 #ifdef NO_IRR_COMPILE_WITH_XBM_LOADER_
 #undef _IRR_COMPILE_WITH_XBM_LOADER_
 #endif
+//! Define _IRR_COMPILE_WITH_CUBE_LOADER_ if you want to load .cube files
+#define _IRR_COMPILE_WITH_CUBE_LOADER_
+#ifdef NO_IRR_COMPILE_WITH_CUBE_LOADER_
+#undef _IRR_COMPILE_WITH_CUBE_LOADER_
+#endif
 
 
 //! Define _IRR_COMPILE_WITH_BMP_WRITER_ if you want to write .bmp files

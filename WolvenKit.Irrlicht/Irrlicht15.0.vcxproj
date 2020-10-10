@@ -62,7 +62,7 @@
     <ProjectName>Irrlicht</ProjectName>
     <ProjectGuid>{DD5C43CB-34A8-409B-9010-5A5A52787552}</ProjectGuid>
     <RootNamespace>Irrlicht</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|Win32'" Label="Configuration">
@@ -131,7 +131,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -141,7 +141,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -1289,6 +1289,7 @@
     <ClInclude Include=".\source\CGUIToolBar.h" />
     <ClInclude Include=".\source\CGUITreeView.h" />
     <ClInclude Include=".\source\CGUIWindow.h" />
+    <ClInclude Include="source\CImageLoaderCube.h" />
     <ClInclude Include="source\debug.h" />
   </ItemGroup>
   <ItemGroup>
@@ -1615,6 +1616,7 @@
     <ClCompile Include=".\source\CGUIToolBar.cpp" />
     <ClCompile Include=".\source\CGUITreeView.cpp" />
     <ClCompile Include=".\source\CGUIWindow.cpp" />
+    <ClCompile Include="source\CImageLoaderCube.cpp" />
     <ClCompile Include="source\CImageLoaderXBM.cpp" />
   </ItemGroup>
   <ItemGroup>

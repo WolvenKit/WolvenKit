@@ -102,7 +102,7 @@ IAnimatedMesh* CW3EntLoader::createMesh(io::IReadFile* f)
     _animations.clear();
 
     writeLogHeader(f);
-    os::Printer::log("Start loading", ELL_DEBUG);
+    os::Printer::log("Start loading", f->getFileName().c_str(), ELL_DEBUG);
 
 
     _animatedMesh = _sceneManager->createSkinnedMesh();
@@ -1686,11 +1686,22 @@ video::SMaterial CW3EntLoader::ReadMaterialFile(core::stringc filename)
     if (core::hasFileExtension(filename, "w2mi"))
         return ReadW2MIFile(filename);
     else if (core::hasFileExtension(filename, "w2mg"))
-        ; // shader, not handled
-    else
-        os::Printer::log((formatString("Unknown type of file for a material : %s", filename.c_str())).c_str(), ELL_ERROR);
+    {
+        // shader, not handled
+        // hot pink!
+        video::SMaterial material;
+        material.DiffuseColor.setRed(255);
+        material.DiffuseColor.setGreen(105);
+        material.DiffuseColor.setBlue(180);
+        return material;
+    }
+
+    os::Printer::log((formatString("Unknown type of file for a material : %s", filename.c_str())).c_str(), ELL_ERROR);
 
     video::SMaterial material;
+    material.DiffuseColor.setRed(0);
+    material.DiffuseColor.setGreen(255);
+    material.DiffuseColor.setBlue(0);
     return material;
 }
 
