@@ -113,6 +113,7 @@ namespace scene
 		core::stringc MeshName;
 		s32 MinimalPolysPerNode;
 		s32 PassCount;
+		bool Initialized;
 
 		IMesh * Mesh;
 		IShadowVolumeSceneNode* Shadow;

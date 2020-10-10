@@ -34,7 +34,7 @@ COctreeSceneNode::COctreeSceneNode(ISceneNode* parent, ISceneManager* mgr,
 					 s32 id, s32 minimalPolysPerNode)
 	: IOctreeSceneNode(parent, mgr, id), StdOctree(0), LightMapOctree(0),
 	TangentsOctree(0), VertexType((video::E_VERTEX_TYPE)-1),
-	MinimalPolysPerNode(minimalPolysPerNode), Mesh(0), Shadow(0),
+	MinimalPolysPerNode(minimalPolysPerNode), Mesh(0), Shadow(0), Initialized(false),
 	UseVBOs(EOV_USE_VBO_WITH_VISIBITLY), PolygonChecks(EOPC_BOX)
 {
 #ifdef _DEBUG
@@ -136,6 +136,9 @@ void renderMeshBuffer(video::IVideoDriver* driver, EOCTREENODE_VBO useVBO, typen
 //! renders the node.
 void COctreeSceneNode::render()
 {
+	if (!Initialized)
+		return;
+
 	IRR_PROFILE(CProfileScope psRender(EPID_OC_RENDER);)
 	video::IVideoDriver* driver = SceneManager->getVideoDriver();
 
@@ -575,6 +578,8 @@ bool COctreeSceneNode::createTree(IMesh* mesh)
 	sprintf(tmp, "Needed %ums to create Octree SceneNode.(%u nodes, %u polys)",
 		endTime - beginTime, nodeCount, polyCount/3);
 	os::Printer::log(tmp, ELL_INFORMATION);
+
+    Initialized = true;
 
 	return true;
 }

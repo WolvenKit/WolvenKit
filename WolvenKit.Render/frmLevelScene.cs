@@ -1,4 +1,7 @@
-﻿using IrrlichtLime;
+﻿//#define USE_WK_OCTREE
+
+using Assimp;
+using IrrlichtLime;
 using IrrlichtLime.Core;
 using IrrlichtLime.GUI;
 using IrrlichtLime.IO;
@@ -153,9 +156,6 @@ namespace WolvenKit.Render
                             float rx, ry, rz;
                             MatrixToEuler(rot, out rx, out ry, out rz); // radians
 
-                            //Vector3Df rotation = new Vector3Df(rx * RADIANS_TO_DEGREES, ry * RADIANS_TO_DEGREES, rz * RADIANS_TO_DEGREES);
-                            //Vector3Df translation = new Vector3Df(position.X.val, position.Y.val, position.Z.val);
-
                             Vector3Df rotation = new Vector3Df(rx * RADIANS_TO_DEGREES, ry * RADIANS_TO_DEGREES, -rz * RADIANS_TO_DEGREES);
                             Vector3Df translation = new Vector3Df(-position.X.val, position.Y.val, position.Z.val);
 
@@ -174,13 +174,25 @@ namespace WolvenKit.Render
                             }
                             string meshPath = depot + meshName;
 
-                            Mesh m = smgr.GetMesh(meshPath);
+                            IrrlichtLime.Scene.Mesh m = smgr.GetMesh(meshPath);
+#if USE_WK_OCTREE
+                            // apply position and rotation!
+                            
+                            foreach (var mb in m.MeshBuffers)
+                            {
+                                totalVertexCount += mb.VertexCount;
+                                mb.SetHardwareMappingHint(HardwareMappingHint.Static, HardwareBufferType.VertexAndIndex);
+                            }
+                            m = smgr.MeshManipulator.CreateMeshWithTangents(m, true);
+#else
                             m = smgr.MeshManipulator.CreateMeshWithTangents(m, true);
 
                             foreach (var mb in m.MeshBuffers)
                             {
                                 totalVertexCount += mb.VertexCount;
+                                mb.SetHardwareMappingHint(HardwareMappingHint.Static, HardwareBufferType.VertexAndIndex);
                             }
+#endif
 
                             RenderTreeNode meshNode = new RenderTreeNode(meshName, meshId++, m, translation, rotation);
 
@@ -332,7 +344,7 @@ namespace WolvenKit.Render
                 ParseScene();
 
                 vertexCountText = gui.AddStaticText(totalVertexCount.ToString() + " vertices",
-                    new Recti(2, 32, 200, 52), false, false, null, 1, false);
+                    new Recti(2, 32, 300, 52), false, false, null, 1, false);
                 vertexCountText.OverrideColor = IrrlichtLime.Video.Color.SolidRed;
 
                 smgr.AddCameraSceneNodeMaya();
@@ -481,7 +493,12 @@ namespace WolvenKit.Render
         {
             if (node.MeshNode == null)
             {
+#if USE_WK_OCTREE
+                MeshSceneNode meshNode = smgr.AddOctreeSceneNode(node.Mesh, worldNode, node.ID);
+#else
                 MeshSceneNode meshNode = smgr.AddMeshSceneNode(node.Mesh, worldNode, node.ID, node.Position, node.Rotation);
+#endif
+                meshNode.AutomaticCulling = CullingType.FrustumBox;
                 meshNode.SetMaterialFlag(MaterialFlag.Lighting, true);
                 node.MeshNode = meshNode;
             }
