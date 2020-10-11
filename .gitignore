@@ -267,3 +267,5 @@ docs/doxygen.warnings
 
 #Local git wiki repository - preferred to not delve into git submodules/subtree horrors
 Wolven-kit.wiki
+WolvenKit.IrrlichtLime/Debug-x64
+WolvenKit.IrrlichtLime/Release-x64
