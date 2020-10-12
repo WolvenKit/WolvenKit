@@ -150,9 +150,6 @@ namespace WolvenKit.Render
                             float rx, ry, rz;
                             MatrixToEuler(rot, out rx, out ry, out rz); // radians
 
-                            //Vector3Df rotation = new Vector3Df(rx * RADIANS_TO_DEGREES, ry * RADIANS_TO_DEGREES, rz * RADIANS_TO_DEGREES);
-                            //Vector3Df translation = new Vector3Df(position.X.val, position.Y.val, position.Z.val);
-
                             Vector3Df rotation = new Vector3Df(rx * RADIANS_TO_DEGREES, ry * RADIANS_TO_DEGREES, -rz * RADIANS_TO_DEGREES);
                             Vector3Df translation = new Vector3Df(-position.X.val, position.Y.val, position.Z.val);
 
@@ -171,8 +168,14 @@ namespace WolvenKit.Render
                             }
                             string meshPath = depot + meshName;
 
-                            Mesh m = smgr.GetMesh(meshPath);
+                            IrrlichtLime.Scene.Mesh m = smgr.GetMesh(meshPath);
                             m = smgr.MeshManipulator.CreateMeshWithTangents(m, true);
+
+                            foreach (var mb in m.MeshBuffers)
+                            {
+                                //TODO: would be nice to move these hardware hints into the Mesh class if we know that the mesh is static
+                                mb.SetHardwareMappingHint(HardwareMappingHint.Static, HardwareBufferType.VertexAndIndex);
+                            }
 
                             RenderTreeNode meshNode = new RenderTreeNode(meshName, meshId++, m, translation, rotation);
 
@@ -459,6 +462,7 @@ namespace WolvenKit.Render
             {
                 MeshSceneNode meshNode = smgr.AddMeshSceneNode(node.Mesh, worldNode, node.ID, node.Position, node.Rotation);
                 meshNode.SetMaterialFlag(MaterialFlag.Lighting, true);
+                meshNode.SetMaterialFlag(MaterialFlag.BackFaceCulling, false);
                 node.MeshNode = meshNode;
             }
 
@@ -525,6 +529,7 @@ namespace WolvenKit.Render
                 }
                 mw.SetImageType(texExtension);
                 mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), node.Mesh, MeshWriterFlag.None);
+                mw.Drop();
             }
             else if (modelExtension == ".fbx")
             {
@@ -536,6 +541,7 @@ namespace WolvenKit.Render
                 }
                 mw.SetImageType(texExtension);
                 mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), node.Mesh, MeshWriterFlag.None);
+                mw.Drop();
             }
         }
 
@@ -692,6 +698,32 @@ namespace WolvenKit.Render
         private void sceneView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             exportMeshButton.Enabled = sceneView.SelectedNode != null;
+        }
+
+        private void showAllButton_Click(object sender, EventArgs e)
+        {
+            foreach(TreeNode node in sceneView.Nodes)
+            {
+                node.Checked = true;
+                foreach (RenderTreeNode n in node.Nodes)
+                {
+                    n.Checked = true;
+                    Render(n);
+                }
+            }
+
+        }
+
+        private void irrlichtPanel_Resize(object sender, EventArgs e)
+        {
+            if (smgr != null)
+            {
+                var camera = smgr.ActiveCamera;
+                if (camera != null)
+                {
+                    camera.AspectRatio = (float)irrlichtPanel.Width / (float)irrlichtPanel.Height;
+                }
+            }
         }
     }
 }

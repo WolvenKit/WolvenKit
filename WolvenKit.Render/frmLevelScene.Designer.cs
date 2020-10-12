@@ -52,11 +52,13 @@ namespace WolvenKit.Render
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLevelScene));
             this.levelPanel = new System.Windows.Forms.Panel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.addMeshButton = new System.Windows.Forms.ToolStripButton();
             this.exportMeshButton = new System.Windows.Forms.ToolStripButton();
+            this.showAllButton = new System.Windows.Forms.ToolStripButton();
             this.sceneView = new System.Windows.Forms.TreeView();
             this.irrlichtPanel = new System.Windows.Forms.Panel();
             this.levelPanel.SuspendLayout();
@@ -102,7 +104,8 @@ namespace WolvenKit.Render
             this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addMeshButton,
-            this.exportMeshButton});
+            this.exportMeshButton,
+            this.showAllButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(35, 25);
@@ -132,6 +135,16 @@ namespace WolvenKit.Render
             this.exportMeshButton.Text = "toolStripButton1";
             this.exportMeshButton.ToolTipText = "Export meshes";
             this.exportMeshButton.Click += new System.EventHandler(this.exportMeshButton_Click);
+            // 
+            // showAllButton
+            // 
+            this.showAllButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.showAllButton.Image = ((System.Drawing.Image)(resources.GetObject("showAllButton.Image")));
+            this.showAllButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.showAllButton.Name = "showAllButton";
+            this.showAllButton.Size = new System.Drawing.Size(23, 20);
+            this.showAllButton.Text = "Show All";
+            this.showAllButton.Click += new System.EventHandler(this.showAllButton_Click);
             // 
             // sceneView
             // 
