@@ -205,5 +205,6 @@ namespace WolvenKit.Render
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton addMeshButton;
         private System.Windows.Forms.ToolStripButton exportMeshButton;
+        private System.Windows.Forms.ToolStripButton showAllButton;
     }
 }

@@ -89,6 +89,9 @@
     <CodeAnalysisRuleSet>..\MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LibraryPath>$(ProjectDir)lib\$(Configuration);$(LibraryPath)&gt;$(ProjectDir)lib\$(Configuration)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
