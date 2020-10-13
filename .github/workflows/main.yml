@@ -20,4 +20,4 @@ jobs:
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
     - name: Build with MSBuild
-      run: msbuild  WolvenKit.sln -p:Configuration=Release
+      run: msbuild  WolvenKit.sln -p:Configuration=Release -p:Platform=x64
