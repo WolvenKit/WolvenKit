@@ -16,8 +16,6 @@
 *.txt			text eol=crlf
 *.xml			text eol=crlf
 *.yml			text eol=crlf
-
-
 # Explicitly declare files you do not want to be treated as text
 *.bmp binary
 *.dll binary
@@ -31,3 +29,4 @@
 *.tga binary
 *.xbm binary
 *.zip binary
+*.lib filter=lfs diff=lfs merge=lfs -text

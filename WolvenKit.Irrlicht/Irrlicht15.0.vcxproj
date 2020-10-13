@@ -1,0 +1,1629 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release - Fast FPU|Win32">
+      <Configuration>Release - Fast FPU</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release - Fast FPU|x64">
+      <Configuration>Release - Fast FPU</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="SDL-Debug|Win32">
+      <Configuration>SDL-Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="SDL-Debug|x64">
+      <Configuration>SDL-Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Static lib - Debug|Win32">
+      <Configuration>Static lib - Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Static lib - Debug|x64">
+      <Configuration>Static lib - Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Static lib - Release - Fast FPU|Win32">
+      <Configuration>Static lib - Release - Fast FPU</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Static lib - Release - Fast FPU|x64">
+      <Configuration>Static lib - Release - Fast FPU</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Static lib - Release|Win32">
+      <Configuration>Static lib - Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Static lib - Release|x64">
+      <Configuration>Static lib - Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>Irrlicht</ProjectName>
+    <ProjectGuid>{DD5C43CB-34A8-409B-9010-5A5A52787552}</ProjectGuid>
+    <RootNamespace>Irrlicht</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\bin\Win32-VisualStudio\debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\bin\Win32-VisualStudio\release\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">obj\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)bin\$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|Win32'">..\..\bin\Win32-VisualStudio\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|x64'">..\..\bin\Win64-VisualStudio\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|Win32'">obj\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|x64'">obj\$(Configuration)64\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|x64'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|Win32'">..\..\lib\Win32-VisualStudio\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|x64'">..\..\lib\Win64-VisualStudio\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|Win32'">obj\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|x64'">obj\$(Configuration)64\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|Win32'">..\..\lib\Win32-VisualStudio\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|x64'">..\..\lib\Win64-VisualStudio\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|Win32'">obj\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|x64'">obj\$(Configuration)64\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|Win32'">..\..\lib\Win32-VisualStudio\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|x64'">..\..\lib\Win64-VisualStudio\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|Win32'">obj\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|x64'">obj\$(Configuration)64\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|Win32'">..\..\bin\Win32-VisualStudio\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|x64'">..\..\bin\Win64-VisualStudio\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|Win32'">obj\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|x64'">obj\$(Configuration)64\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|x64'">true</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|Win32'" />
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|x64'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|Win32'" />
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|x64'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|Win32'" />
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|x64'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|Win32'" />
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|x64'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|Win32'" />
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|x64'" />
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IncludePath)</IncludePath>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">obj\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)bin\$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|Win32'">$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|x64'">$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|Win32'">$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|x64'">$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|Win32'">$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|x64'">$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|Win32'">$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|x64'">$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|Win32'">$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|x64'">$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|Win32'">$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|Win32'">$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|Win32'">$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|Win32'">$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|Win32'">$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(LibraryPath);$(VSInstallDir);$(VSInstallDir)lib\amd64;$(ProjectDir)lib\$(Configuration)\</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|x64'">$(DXSDK_DIR)Lib\x64;$(LibraryPath);$(VSInstallDir);$(VSInstallDir)lib\amd64</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(LibraryPath);$(VSInstallDir);$(VSInstallDir)lib\amd64;$(ProjectDir)lib\$(Configuration)\</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|x64'">$(DXSDK_DIR)Lib\x64;$(LibraryPath);$(VSInstallDir);$(VSInstallDir)lib\amd64</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|x64'">$(DXSDK_DIR)Lib\x64;$(LibraryPath);$(VSInstallDir);$(VSInstallDir)lib\amd64</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|x64'">$(DXSDK_DIR)Lib\x64;$(LibraryPath);$(VSInstallDir);$(VSInstallDir)lib\amd64</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|x64'">$(DXSDK_DIR)Lib\x64;$(LibraryPath);$(VSInstallDir);$(VSInstallDir)lib\amd64</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\..\Debug/Irrlicht.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\include;zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;IRRLICHT_EXPORTS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <DisableSpecificWarnings>4577</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c07</Culture>
+    </ResourceCompile>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <Link>
+      <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\bin\Win32-visualstudio\debug\Irrlicht.dll</OutputFile>
+      <AdditionalLibraryDirectories>D:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libci.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>..\..\lib\Win32-visualstudio\$(Configuration)\Irrlicht.lib</ImportLibrary>
+      <Version>1.9</Version>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TypeLibraryName>.\..\Debug/Irrlicht.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\source\zlib;.\external\assimp\include;.\external\fbx\include;.\external\d3d9\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_WINDOWS;_USRDLL;IRRLICHT_EXPORTS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <DisableSpecificWarnings>4577</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ShowIncludes>false</ShowIncludes>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c07</Culture>
+    </ResourceCompile>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <Link>
+      <AdditionalDependencies>libxml2-md.lib;libfbxsdk-md.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;opengl32.lib;winmm.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)external\fbx\libs\debug;$(ProjectDir)external\d3d9\libs;%(AdditionalLibraryDirectories);$(ProjectDir)lib\$(Configuration)\</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libci.lib;libmct;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>..\..\lib\Win64-visualstudio\$(Configuration)\Irrlicht.lib</ImportLibrary>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y $(TargetPath) $(SolutionDir)Libs</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy to library folder</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\..\Release/Irrlicht.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>D:\Program Files\Autodesk\FBX\FBX SDK\2020.0.1\include;.\include;zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;IRRLICHT_EXPORTS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <DisableSpecificWarnings>4577</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c07</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>assimp-vc141-mt.lib;libxml2-md.lib;libfbxsdk-md.lib;kernel32.lib;user32.lib;gdi32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\bin\Win32-visualstudio\release\Irrlicht.dll</OutputFile>
+      <IgnoreSpecificDefaultLibraries>libci.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>..\..\lib\Win32-visualstudio\$(Configuration)\Irrlicht.lib</ImportLibrary>
+      <Version>1.9</Version>
+      <AdditionalLibraryDirectories>D:\Program Files\Autodesk\FBX\FBX SDK\2020.0.1\lib\vs2017\x86\release;D:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TypeLibraryName>.\..\Release/Irrlicht.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>.\source\zlib;.\external\assimp\include;.\external\fbx\include;.\external\d3d9\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_WINDOWS;_USRDLL;IRRLICHT_EXPORTS;_CRT_SECURE_NO_DEPRECATE;_CRTDBG_MAP_ALLOC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <DisableSpecificWarnings>4577</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <BasicRuntimeChecks>
+      </BasicRuntimeChecks>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>libxml2-md.lib;libfbxsdk-md.lib;kernel32.lib;user32.lib;gdi32.lib;opengl32.lib;winmm.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <IgnoreSpecificDefaultLibraries>libci.lib;libmct;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>..\..\lib\Win64-visualstudio\$(Configuration)\Irrlicht.lib</ImportLibrary>
+      <AdditionalLibraryDirectories>$(ProjectDir)external\fbx\libs\release;$(ProjectDir)external\d3d9\libs;%(AdditionalLibraryDirectories);$(ProjectDir)lib\$(Configuration)\</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y $(TargetPath) $(SolutionDir)Libs</Command>
+      <Message>Copy to library folder</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\..\Release/Irrlicht.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>.\include;zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;IRRLICHT_EXPORTS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <DisableSpecificWarnings>4577</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c07</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\bin\Win32-visualstudio\Irrlicht.dll</OutputFile>
+      <IgnoreSpecificDefaultLibraries>libci.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>..\..\lib\Win32-visualstudio\Irrlicht.lib</ImportLibrary>
+      <SubSystem>Windows</SubSystem>
+      <Version>1.9</Version>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|x64'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TypeLibraryName>.\..\Release/Irrlicht.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>.\include;zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_WINDOWS;_USRDLL;IRRLICHT_EXPORTS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <DisableSpecificWarnings>4577</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c07</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\bin\Win64-visualstudio\Irrlicht.dll</OutputFile>
+      <IgnoreSpecificDefaultLibraries>libci.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>..\..\lib\Win64-visualstudio\Irrlicht.lib</ImportLibrary>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\..\Debug/Irrlicht.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\include;zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;_IRR_STATIC_LIB_;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>false</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>4577</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c07</Culture>
+    </ResourceCompile>
+    <Lib>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\lib\Win32-visualstudio\Irrlicht.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|x64'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TypeLibraryName>.\..\Debug/Irrlicht.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\include;zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_WINDOWS;_USRDLL;_IRR_STATIC_LIB_;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>false</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>4577</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c07</Culture>
+    </ResourceCompile>
+    <Lib>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\lib\Win64-visualstudio\Irrlicht.lib</OutputFile>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\..\Release/Irrlicht.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>.\include;zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;_IRR_STATIC_LIB_;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <DisableSpecificWarnings>4577</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c07</Culture>
+    </ResourceCompile>
+    <Lib>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\lib\Win32-visualstudio\Irrlicht.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|x64'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TypeLibraryName>.\..\Release/Irrlicht.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>.\include;zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_WINDOWS;_USRDLL;_IRR_STATIC_LIB_;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <DisableSpecificWarnings>4577</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c07</Culture>
+    </ResourceCompile>
+    <Lib>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\lib\Win64-visualstudio\Irrlicht.lib</OutputFile>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\..\Release/Irrlicht.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>.\include;zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;_IRR_STATIC_LIB_;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <CallingConvention>FastCall</CallingConvention>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <DisableSpecificWarnings>4577</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c07</Culture>
+    </ResourceCompile>
+    <Lib>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\lib\Win32-visualstudio\Irrlicht.lib</OutputFile>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|x64'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TypeLibraryName>.\..\Release/Irrlicht.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>.\include;zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_WINDOWS;_USRDLL;_IRR_STATIC_LIB_;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <CallingConvention>FastCall</CallingConvention>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <DisableSpecificWarnings>4577</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c07</Culture>
+    </ResourceCompile>
+    <Lib>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\lib\Win64-visualstudio\Irrlicht.lib</OutputFile>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\..\Debug/Irrlicht.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\include;zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;IRRLICHT_EXPORTS;_CRT_SECURE_NO_DEPRECATE;_IRR_USE_SDL_DEVICE_=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>false</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>4577</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c07</Culture>
+    </ResourceCompile>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <Link>
+      <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\bin\Win32-visualstudio\Irrlicht.dll</OutputFile>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libci.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>..\..\lib\Win32-visualstudio\Irrlicht.lib</ImportLibrary>
+      <Version>1.9</Version>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|x64'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TypeLibraryName>.\..\Debug/Irrlicht.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\include;zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_WINDOWS;_USRDLL;IRRLICHT_EXPORTS;_CRT_SECURE_NO_DEPRECATE;_IRR_USE_SDL_DEVICE_=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>false</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>4577</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c07</Culture>
+    </ResourceCompile>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\bin\Win64-visualstudio\Irrlicht.dll</OutputFile>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libci.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>..\..\lib\Win64-visualstudio\Irrlicht.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include=".\include\EDriverFeatures.h" />
+    <ClInclude Include=".\include\EMaterialFlags.h" />
+    <ClInclude Include=".\include\IAnimatedMeshMD3.h" />
+    <ClInclude Include=".\include\IEventReceiver.h" />
+    <ClInclude Include=".\include\IMeshLoaderHelper.h" />
+    <ClInclude Include=".\include\IProfiler.h" />
+    <ClInclude Include=".\include\ILogger.h" />
+    <ClInclude Include=".\include\IOSOperator.h" />
+    <ClInclude Include=".\include\IRandomizer.h" />
+    <ClInclude Include=".\include\IReferenceCounted.h" />
+    <ClInclude Include=".\include\IRenderTarget.h" />
+    <ClInclude Include=".\include\IrrCompileConfig.h" />
+    <ClInclude Include=".\include\irrlicht.h" />
+    <ClInclude Include=".\include\leakHunter.h" />
+    <ClInclude Include=".\include\IrrlichtDevice.h" />
+    <ClInclude Include=".\include\irrTypes.h" />
+    <ClInclude Include=".\include\ITimer.h" />
+    <ClInclude Include=".\include\Keycodes.h" />
+    <ClInclude Include=".\include\SIrrCreationParameters.h" />
+    <ClInclude Include=".\include\SKeyMap.h" />
+    <ClInclude Include=".\include\EDriverTypes.h" />
+    <ClInclude Include=".\include\IContextManager.h" />
+    <ClInclude Include=".\include\IGeometryCreator.h" />
+    <ClInclude Include=".\include\IGPUProgrammingServices.h" />
+    <ClInclude Include=".\include\IImage.h" />
+    <ClInclude Include=".\include\IImageLoader.h" />
+    <ClInclude Include=".\include\IMaterialRenderer.h" />
+    <ClInclude Include=".\include\IMaterialRendererServices.h" />
+    <ClInclude Include=".\include\IShaderConstantSetCallBack.h" />
+    <ClInclude Include=".\include\ITexture.h" />
+    <ClInclude Include=".\include\IVideoDriver.h" />
+    <ClInclude Include=".\include\IVideoModeList.h" />
+    <ClInclude Include=".\include\S3DVertex.h" />
+    <ClInclude Include=".\include\SColor.h" />
+    <ClInclude Include=".\include\SExposedVideoData.h" />
+    <ClInclude Include=".\include\SLight.h" />
+    <ClInclude Include=".\include\SMaterial.h" />
+    <ClInclude Include=".\include\SMaterialLayer.h" />
+    <ClInclude Include=".\include\aabbox3d.h" />
+    <ClInclude Include=".\include\coreutil.h" />
+    <ClInclude Include=".\include\dimension2d.h" />
+    <ClInclude Include=".\include\heapsort.h" />
+    <ClInclude Include=".\include\irrAllocator.h" />
+    <ClInclude Include=".\include\irrArray.h" />
+    <ClInclude Include=".\include\irrList.h" />
+    <ClInclude Include=".\include\irrMap.h" />
+    <ClInclude Include=".\include\irrMath.h" />
+    <ClInclude Include=".\include\irrString.h" />
+    <ClInclude Include=".\include\line2d.h" />
+    <ClInclude Include=".\include\line3d.h" />
+    <ClInclude Include=".\include\matrix4.h" />
+    <ClInclude Include=".\include\plane3d.h" />
+    <ClInclude Include=".\include\position2d.h" />
+    <ClInclude Include=".\include\quaternion.h" />
+    <ClInclude Include=".\include\rect.h" />
+    <ClInclude Include=".\include\triangle3d.h" />
+    <ClInclude Include=".\include\vector2d.h" />
+    <ClInclude Include=".\include\vector3d.h" />
+    <ClInclude Include=".\include\EAttributes.h" />
+    <ClInclude Include=".\include\IAttributeExchangingObject.h" />
+    <ClInclude Include=".\include\IAttributes.h" />
+    <ClInclude Include=".\include\IFileList.h" />
+    <ClInclude Include=".\include\IFileSystem.h" />
+    <ClInclude Include=".\include\IReadFile.h" />
+    <ClInclude Include=".\include\irrXML.h" />
+    <ClInclude Include=".\include\IWriteFile.h" />
+    <ClInclude Include=".\include\IXMLReader.h" />
+    <ClInclude Include=".\include\IXMLWriter.h" />
+    <ClInclude Include=".\include\path.h" />
+    <ClInclude Include=".\include\CDynamicMeshBuffer.h" />
+    <ClInclude Include=".\include\CIndexBuffer.h" />
+    <ClInclude Include=".\include\CMeshBuffer.h" />
+    <ClInclude Include=".\include\CVertexBuffer.h" />
+    <ClInclude Include=".\include\ECullingTypes.h" />
+    <ClInclude Include=".\include\EDebugSceneTypes.h" />
+    <ClInclude Include=".\include\EMeshWriterEnums.h" />
+    <ClInclude Include=".\include\EPrimitiveTypes.h" />
+    <ClInclude Include=".\include\ESceneNodeAnimatorTypes.h" />
+    <ClInclude Include=".\include\ESceneNodeTypes.h" />
+    <ClInclude Include=".\include\IAnimatedMesh.h" />
+    <ClInclude Include=".\include\IAnimatedMeshMD2.h" />
+    <ClInclude Include=".\include\IAnimatedMeshSceneNode.h" />
+    <ClInclude Include=".\include\IBillboardSceneNode.h" />
+    <ClInclude Include=".\include\ICameraSceneNode.h" />
+    <ClInclude Include=".\include\IDummyTransformationSceneNode.h" />
+    <ClInclude Include=".\include\ILightSceneNode.h" />
+    <ClInclude Include=".\include\IMesh.h" />
+    <ClInclude Include=".\include\IMeshBuffer.h" />
+    <ClInclude Include=".\include\IMeshCache.h" />
+    <ClInclude Include=".\include\IMeshLoader.h" />
+    <ClInclude Include=".\include\IMeshManipulator.h" />
+    <ClInclude Include=".\include\IMeshSceneNode.h" />
+    <ClInclude Include=".\include\IMeshTextureLoader.h" />
+    <ClInclude Include=".\include\IMeshWriter.h" />
+    <ClInclude Include=".\include\IMetaTriangleSelector.h" />
+    <ClInclude Include=".\include\IParticleAffector.h" />
+    <ClInclude Include=".\include\IParticleAnimatedMeshSceneNodeEmitter.h" />
+    <ClInclude Include=".\include\IParticleAttractionAffector.h" />
+    <ClInclude Include=".\include\IParticleBoxEmitter.h" />
+    <ClInclude Include=".\include\IParticleCylinderEmitter.h" />
+    <ClInclude Include=".\include\IParticleEmitter.h" />
+    <ClInclude Include=".\include\IParticleFadeOutAffector.h" />
+    <ClInclude Include=".\include\IParticleGravityAffector.h" />
+    <ClInclude Include=".\include\IParticleMeshEmitter.h" />
+    <ClInclude Include=".\include\IParticleRingEmitter.h" />
+    <ClInclude Include=".\include\IParticleRotationAffector.h" />
+    <ClInclude Include=".\include\IParticleSphereEmitter.h" />
+    <ClInclude Include=".\include\IParticleSystemSceneNode.h" />
+    <ClInclude Include=".\include\IQ3LevelMesh.h" />
+    <ClInclude Include=".\include\IQ3Shader.h" />
+    <ClInclude Include=".\include\ISceneCollisionManager.h" />
+    <ClInclude Include=".\include\ISceneManager.h" />
+    <ClInclude Include=".\include\ISceneLoader.h" />
+    <ClInclude Include=".\include\ISceneNode.h" />
+    <ClInclude Include=".\include\ISceneNodeAnimator.h" />
+    <ClInclude Include=".\include\ISceneNodeAnimatorCameraFPS.h" />
+    <ClInclude Include=".\include\ISceneNodeAnimatorCameraMaya.h" />
+    <ClInclude Include=".\include\ISceneNodeAnimatorCollisionResponse.h" />
+    <ClInclude Include=".\include\ISceneNodeAnimatorFactory.h" />
+    <ClInclude Include=".\include\ISceneNodeFactory.h" />
+    <ClInclude Include=".\include\IShadowVolumeSceneNode.h" />
+    <ClInclude Include=".\include\ISkinnedMesh.h" />
+    <ClInclude Include=".\include\ITerrainSceneNode.h" />
+    <ClInclude Include=".\include\ITextSceneNode.h" />
+    <ClInclude Include=".\include\ITriangleSelector.h" />
+    <ClInclude Include=".\include\IVolumeLightSceneNode.h" />
+    <ClInclude Include=".\include\SAnimatedMesh.h" />
+    <ClInclude Include=".\include\SceneParameters.h" />
+    <ClInclude Include=".\include\SMesh.h" />
+    <ClInclude Include=".\include\SMeshBuffer.h" />
+    <ClInclude Include=".\include\SMeshBufferLightMap.h" />
+    <ClInclude Include=".\include\SMeshBufferTangents.h" />
+    <ClInclude Include=".\include\SParticle.h" />
+    <ClInclude Include=".\include\SSkinMeshBuffer.h" />
+    <ClInclude Include=".\include\SViewFrustum.h" />
+    <ClInclude Include=".\include\EGUIAlignment.h" />
+    <ClInclude Include=".\include\EGUIElementTypes.h" />
+    <ClInclude Include=".\include\EMessageBoxFlags.h" />
+    <ClInclude Include=".\include\EFocusFlags.h" />
+    <ClInclude Include=".\include\ICursorControl.h" />
+    <ClInclude Include=".\include\IGUIButton.h" />
+    <ClInclude Include=".\include\IGUICheckbox.h" />
+    <ClInclude Include=".\include\IGUIComboBox.h" />
+    <ClInclude Include=".\include\IGUIContextMenu.h" />
+    <ClInclude Include=".\include\IGUIEditBox.h" />
+    <ClInclude Include=".\include\IGUIElement.h" />
+    <ClInclude Include=".\include\IGUIElementFactory.h" />
+    <ClInclude Include=".\include\IGUIEnvironment.h" />
+    <ClInclude Include=".\include\IGUIFileOpenDialog.h" />
+    <ClInclude Include=".\include\IGUIFont.h" />
+    <ClInclude Include=".\include\IGUIImage.h" />
+    <ClInclude Include=".\include\IGUIImageList.h" />
+    <ClInclude Include=".\include\IGUIInOutFader.h" />
+    <ClInclude Include=".\include\IGUIListBox.h" />
+    <ClInclude Include=".\include\IGUIMeshViewer.h" />
+    <ClInclude Include=".\include\IGUIProfiler.h" />
+    <ClInclude Include=".\include\IGUIScrollBar.h" />
+    <ClInclude Include=".\include\IGUISkin.h" />
+    <ClInclude Include=".\include\IGUISpinBox.h" />
+    <ClInclude Include=".\include\IGUISpriteBank.h" />
+    <ClInclude Include=".\include\IGUIStaticText.h" />
+    <ClInclude Include=".\include\IGUITabControl.h" />
+    <ClInclude Include=".\include\IGUIToolbar.h" />
+    <ClInclude Include=".\include\IGUITreeView.h" />
+    <ClInclude Include=".\include\IGUIWindow.h" />
+    <ClInclude Include=".\source\CB3DMeshWriter.h" />
+    <ClInclude Include=".\source\CD3D9RenderTarget.h" />
+    <ClInclude Include=".\source\CDefaultSceneNodeAnimatorFactory.h" />
+    <ClInclude Include=".\source\CDefaultSceneNodeFactory.h" />
+    <ClInclude Include=".\source\CFBXMeshWriter.h" />
+    <ClInclude Include=".\source\CGeometryCreator.h" />
+    <ClInclude Include=".\source\CGLXManager.h" />
+    <ClInclude Include=".\source\CMeshCache.h" />
+    <ClInclude Include=".\source\CMeshManipulator.h" />
+    <ClInclude Include=".\source\COpenGLCoreCacheHandler.h" />
+    <ClInclude Include=".\source\COpenGLCoreFeature.h" />
+    <ClInclude Include=".\source\COpenGLCoreRenderTarget.h" />
+    <ClInclude Include=".\source\COpenGLCoreTexture.h" />
+    <ClInclude Include=".\source\COpenGLCacheHandler.h" />
+    <ClInclude Include=".\source\COpenGLCommon.h" />
+    <ClInclude Include=".\source\COpenGLDriver.h" />
+    <ClInclude Include=".\source\COpenGLExtensionHandler.h" />
+    <ClInclude Include=".\source\COpenGLMaterialRenderer.h" />
+    <ClInclude Include=".\source\COpenGLNormalMapRenderer.h" />
+    <ClInclude Include=".\source\COpenGLParallaxMapRenderer.h" />
+    <ClInclude Include=".\source\COpenGLShaderMaterialRenderer.h" />
+    <ClInclude Include=".\source\COpenGLSLMaterialRenderer.h" />
+    <ClInclude Include=".\source\CSceneManager.h" />
+    <ClInclude Include=".\source\CW3Animation.h" />
+    <ClInclude Include=".\source\CW3EntLoader.h" />
+    <ClInclude Include=".\source\CW3MeshLoaderHelper.h" />
+    <ClInclude Include=".\source\CW3Skeleton.h" />
+    <ClInclude Include=".\source\CWGLManager.h" />
+    <ClInclude Include=".\source\MeshCombiner.h" />
+    <ClInclude Include=".\source\Octree.h" />
+    <ClInclude Include=".\source\CSMFMeshFileLoader.h" />
+    <ClInclude Include=".\source\C3DSMeshFileLoader.h" />
+    <ClInclude Include=".\source\CAnimatedMeshHalfLife.h" />
+    <ClInclude Include=".\source\CAnimatedMeshMD2.h" />
+    <ClInclude Include=".\source\CAnimatedMeshMD3.h" />
+    <ClInclude Include=".\source\CB3DMeshFileLoader.h" />
+    <ClInclude Include=".\source\CBSPMeshFileLoader.h" />
+    <ClInclude Include=".\source\CColladaFileLoader.h" />
+    <ClInclude Include=".\source\CCSMLoader.h" />
+    <ClInclude Include=".\source\CDMFLoader.h" />
+    <ClInclude Include=".\source\CIrrMeshFileLoader.h" />
+    <ClInclude Include=".\source\CLMTSMeshFileLoader.h" />
+    <ClInclude Include=".\source\CLWOMeshFileLoader.h" />
+    <ClInclude Include=".\source\CMD2MeshFileLoader.h" />
+    <ClInclude Include=".\source\CMD3MeshFileLoader.h" />
+    <ClInclude Include=".\source\CMeshTextureLoader.h" />
+    <ClInclude Include=".\source\CMS3DMeshFileLoader.h" />
+    <ClInclude Include=".\source\CMY3DHelper.h" />
+    <ClInclude Include=".\source\CMY3DMeshFileLoader.h" />
+    <ClInclude Include=".\source\COBJMeshFileLoader.h" />
+    <ClInclude Include=".\source\COCTLoader.h" />
+    <ClInclude Include=".\source\COgreMeshFileLoader.h" />
+    <ClInclude Include=".\source\CPLYMeshFileLoader.h" />
+    <ClInclude Include=".\source\CQ3LevelMesh.h" />
+    <ClInclude Include=".\source\CSkinnedMesh.h" />
+    <ClInclude Include=".\source\CSTLMeshFileLoader.h" />
+    <ClInclude Include=".\source\CXMeshFileLoader.h" />
+    <ClInclude Include=".\source\dmfsupport.h" />
+    <ClInclude Include=".\source\CAnimatedMeshSceneNode.h" />
+    <ClInclude Include=".\source\CBillboardSceneNode.h" />
+    <ClInclude Include=".\source\CBoneSceneNode.h" />
+    <ClInclude Include=".\source\CCameraSceneNode.h" />
+    <ClInclude Include=".\source\CCubeSceneNode.h" />
+    <ClInclude Include=".\source\CDummyTransformationSceneNode.h" />
+    <ClInclude Include=".\source\CEmptySceneNode.h" />
+    <ClInclude Include=".\source\CLightSceneNode.h" />
+    <ClInclude Include=".\source\CMeshSceneNode.h" />
+    <ClInclude Include=".\source\COctreeSceneNode.h" />
+    <ClInclude Include=".\source\CQuake3ShaderSceneNode.h" />
+    <ClInclude Include=".\source\CShadowVolumeSceneNode.h" />
+    <ClInclude Include=".\source\CSkyBoxSceneNode.h" />
+    <ClInclude Include=".\source\CSkyDomeSceneNode.h" />
+    <ClInclude Include=".\source\CSphereSceneNode.h" />
+    <ClInclude Include=".\source\CTerrainSceneNode.h" />
+    <ClInclude Include=".\source\CTextSceneNode.h" />
+    <ClInclude Include=".\source\CVolumeLightSceneNode.h" />
+    <ClInclude Include=".\source\CWaterSurfaceSceneNode.h" />
+    <ClInclude Include=".\source\CParticleAnimatedMeshSceneNodeEmitter.h" />
+    <ClInclude Include=".\source\CParticleAttractionAffector.h" />
+    <ClInclude Include=".\source\CParticleBoxEmitter.h" />
+    <ClInclude Include=".\source\CParticleCylinderEmitter.h" />
+    <ClInclude Include=".\source\CParticleFadeOutAffector.h" />
+    <ClInclude Include=".\source\CParticleGravityAffector.h" />
+    <ClInclude Include=".\source\CParticleMeshEmitter.h" />
+    <ClInclude Include=".\source\CParticlePointEmitter.h" />
+    <ClInclude Include=".\source\CParticleRingEmitter.h" />
+    <ClInclude Include=".\source\CParticleRotationAffector.h" />
+    <ClInclude Include=".\source\CParticleScaleAffector.h" />
+    <ClInclude Include=".\source\CParticleSphereEmitter.h" />
+    <ClInclude Include=".\source\CParticleSystemSceneNode.h" />
+    <ClInclude Include=".\source\CMetaTriangleSelector.h" />
+    <ClInclude Include=".\source\COctreeTriangleSelector.h" />
+    <ClInclude Include=".\source\CSceneCollisionManager.h" />
+    <ClInclude Include=".\source\CTerrainTriangleSelector.h" />
+    <ClInclude Include=".\source\CTriangleBBSelector.h" />
+    <ClInclude Include=".\source\CTriangleSelector.h" />
+    <ClInclude Include=".\source\CSceneLoaderIrr.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorCameraFPS.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorCameraMaya.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorCollisionResponse.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorDelete.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorFlyCircle.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorFlyStraight.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorFollowSpline.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorRotation.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorTexture.h" />
+    <ClInclude Include=".\source\CColladaMeshWriter.h" />
+    <ClInclude Include=".\source\CIrrMeshWriter.h" />
+    <ClInclude Include=".\source\COBJMeshWriter.h" />
+    <ClInclude Include=".\source\CPLYMeshWriter.h" />
+    <ClInclude Include=".\source\CSTLMeshWriter.h" />
+    <ClInclude Include=".\source\CVideoModeList.h" />
+    <ClInclude Include=".\source\CSoftwareDriver.h" />
+    <ClInclude Include=".\source\CSoftwareTexture.h" />
+    <ClInclude Include=".\source\CTRTextureGouraud.h" />
+    <ClInclude Include=".\source\CZBuffer.h" />
+    <ClInclude Include=".\source\ITriangleRenderer.h" />
+    <ClInclude Include=".\source\IZBuffer.h" />
+    <ClInclude Include=".\source\resource.h" />
+    <ClInclude Include=".\source\S2DVertex.h" />
+    <ClInclude Include=".\source\SB3DStructs.h" />
+    <ClInclude Include=".\source\CColorConverter.h" />
+    <ClInclude Include=".\source\CFPSCounter.h" />
+    <ClInclude Include=".\source\CImage.h" />
+    <ClInclude Include=".\source\CNullDriver.h" />
+    <ClInclude Include=".\source\IImagePresenter.h" />
+    <ClInclude Include=".\source\CImageWriterBMP.h" />
+    <ClInclude Include=".\source\CImageWriterJPG.h" />
+    <ClInclude Include=".\source\CImageWriterPCX.h" />
+    <ClInclude Include=".\source\CImageWriterPNG.h" />
+    <ClInclude Include=".\source\CImageWriterPPM.h" />
+    <ClInclude Include=".\source\CImageWriterPSD.h" />
+    <ClInclude Include=".\source\CImageWriterTGA.h" />
+    <ClInclude Include=".\source\CImageLoaderBMP.h" />
+    <ClInclude Include=".\source\CImageLoaderDDS.h" />
+    <ClInclude Include=".\source\CImageLoaderJPG.h" />
+    <ClInclude Include=".\source\CImageLoaderPCX.h" />
+    <ClInclude Include=".\source\CImageLoaderPNG.h" />
+    <ClInclude Include=".\source\CImageLoaderPPM.h" />
+    <ClInclude Include=".\source\CImageLoaderPSD.h" />
+    <ClInclude Include=".\source\CImageLoaderPVR.h" />
+    <ClInclude Include=".\source\CImageLoaderRGB.h" />
+    <ClInclude Include=".\source\CImageLoaderTGA.h" />
+    <ClInclude Include=".\source\CImageLoaderWAL.h" />
+    <ClInclude Include=".\source\CImageLoaderXBM.h" />
+    <ClInclude Include=".\source\CD3D9Driver.h" />
+    <ClInclude Include=".\source\CD3D9HLSLMaterialRenderer.h" />
+    <ClInclude Include=".\source\CD3D9MaterialRenderer.h" />
+    <ClInclude Include=".\source\CD3D9NormalMapRenderer.h" />
+    <ClInclude Include=".\source\CD3D9ParallaxMapRenderer.h" />
+    <ClInclude Include=".\source\CD3D9ShaderMaterialRenderer.h" />
+    <ClInclude Include=".\source\CD3D9Texture.h" />
+    <ClInclude Include=".\source\CDepthBuffer.h" />
+    <ClInclude Include=".\source\CSoftware2MaterialRenderer.h" />
+    <ClInclude Include=".\source\CSoftwareDriver2.h" />
+    <ClInclude Include=".\source\CSoftwareTexture2.h" />
+    <ClInclude Include=".\source\IBurningShader.h" />
+    <ClInclude Include=".\source\IDepthBuffer.h" />
+    <ClInclude Include=".\source\S4DVertex.h" />
+    <ClInclude Include=".\source\SoftwareDriver2_compile_config.h" />
+    <ClInclude Include=".\source\SoftwareDriver2_helper.h" />
+    <ClInclude Include=".\source\CLogger.h" />
+    <ClInclude Include=".\source\COSOperator.h" />
+    <ClInclude Include=".\source\CTimer.h" />
+    <ClInclude Include=".\source\os.h" />
+    <ClInclude Include=".\source\CProfiler.h" />
+    <ClInclude Include=".\source\EProfileIDs.h" />
+    <ClInclude Include=".\source\lzma\LzmaDec.h" />
+    <ClInclude Include=".\source\lzma\Types.h" />
+    <ClInclude Include=".\source\CW3DataCache.h" />
+    <ClInclude Include=".\source\Utils_Halffloat.h" />
+    <ClInclude Include=".\source\Utils_Loaders_Irr.h" />
+    <ClInclude Include=".\source\Utils_RedEngine.h" />
+    <ClInclude Include=".\source\zlib\crc32.h" />
+    <ClInclude Include=".\source\zlib\deflate.h" />
+    <ClInclude Include=".\source\zlib\inffast.h" />
+    <ClInclude Include=".\source\zlib\inffixed.h" />
+    <ClInclude Include=".\source\zlib\inftrees.h" />
+    <ClInclude Include=".\source\zlib\trees.h" />
+    <ClInclude Include=".\source\zlib\zconf.h" />
+    <ClInclude Include=".\source\zlib\zlib.h" />
+    <ClInclude Include=".\source\zlib\zutil.h" />
+    <ClInclude Include=".\source\jpeglib\cderror.h" />
+    <ClInclude Include=".\source\jpeglib\jconfig.h" />
+    <ClInclude Include=".\source\jpeglib\jdct.h" />
+    <ClInclude Include=".\source\jpeglib\jerror.h" />
+    <ClInclude Include=".\source\jpeglib\jinclude.h" />
+    <ClInclude Include=".\source\jpeglib\jmemsys.h" />
+    <ClInclude Include=".\source\jpeglib\jmorecfg.h" />
+    <ClInclude Include=".\source\jpeglib\jpegint.h" />
+    <ClInclude Include=".\source\jpeglib\jpeglib.h" />
+    <ClInclude Include=".\source\jpeglib\jversion.h" />
+    <ClInclude Include=".\source\libpng\png.h" />
+    <ClInclude Include=".\source\libpng\pngconf.h" />
+    <ClInclude Include=".\source\aesGladman\aes.h" />
+    <ClInclude Include=".\source\aesGladman\aesopt.h" />
+    <ClInclude Include=".\source\aesGladman\fileenc.h" />
+    <ClInclude Include=".\source\aesGladman\hmac.h" />
+    <ClInclude Include=".\source\aesGladman\prng.h" />
+    <ClInclude Include=".\source\aesGladman\pwd2key.h" />
+    <ClInclude Include=".\source\aesGladman\sha1.h" />
+    <ClInclude Include=".\source\aesGladman\sha2.h" />
+    <ClInclude Include=".\source\bzip2\bzlib.h" />
+    <ClInclude Include=".\source\bzip2\bzlib_private.h" />
+    <ClInclude Include=".\source\CIrrDeviceConsole.h" />
+    <ClInclude Include=".\source\CIrrDeviceFB.h" />
+    <ClInclude Include=".\source\CIrrDeviceLinux.h" />
+    <ClInclude Include=".\source\CIrrDeviceSDL.h" />
+    <ClInclude Include=".\source\CIrrDeviceStub.h" />
+    <ClInclude Include=".\source\CIrrDeviceWin32.h" />
+    <ClInclude Include=".\source\CAttributeImpl.h" />
+    <ClInclude Include=".\source\CAttributes.h" />
+    <ClInclude Include=".\source\CFileList.h" />
+    <ClInclude Include=".\source\CFileSystem.h" />
+    <ClInclude Include=".\source\CLimitReadFile.h" />
+    <ClInclude Include=".\source\CMemoryFile.h" />
+    <ClInclude Include=".\source\CMountPointReader.h" />
+    <ClInclude Include=".\source\CNPKReader.h" />
+    <ClInclude Include=".\source\CPakReader.h" />
+    <ClInclude Include=".\source\CReadFile.h" />
+    <ClInclude Include=".\source\CTarReader.h" />
+    <ClInclude Include=".\source\CWADReader.h" />
+    <ClInclude Include=".\source\CWriteFile.h" />
+    <ClInclude Include=".\source\CXMLReader.h" />
+    <ClInclude Include=".\source\CXMLReaderImpl.h" />
+    <ClInclude Include=".\source\CXMLWriter.h" />
+    <ClInclude Include=".\source\CZipReader.h" />
+    <ClInclude Include=".\source\IAttribute.h" />
+    <ClInclude Include=".\source\BuiltInFont.h" />
+    <ClInclude Include=".\source\CDefaultGUIElementFactory.h" />
+    <ClInclude Include=".\source\CGUIButton.h" />
+    <ClInclude Include=".\source\CGUICheckbox.h" />
+    <ClInclude Include=".\source\CGUIColorSelectDialog.h" />
+    <ClInclude Include=".\source\CGUIComboBox.h" />
+    <ClInclude Include=".\source\CGUIContextMenu.h" />
+    <ClInclude Include=".\source\CGUIEditBox.h" />
+    <ClInclude Include=".\source\CGUIEnvironment.h" />
+    <ClInclude Include=".\source\CGUIFileOpenDialog.h" />
+    <ClInclude Include=".\source\CGUIFont.h" />
+    <ClInclude Include=".\source\CGUIImage.h" />
+    <ClInclude Include=".\source\CGUIImageList.h" />
+    <ClInclude Include=".\source\CGUIInOutFader.h" />
+    <ClInclude Include=".\source\CGUIListBox.h" />
+    <ClInclude Include=".\source\CGUIMenu.h" />
+    <ClInclude Include=".\source\CGUIMeshViewer.h" />
+    <ClInclude Include=".\source\CGUIMessageBox.h" />
+    <ClInclude Include=".\source\CGUIModalScreen.h" />
+    <ClInclude Include=".\source\CGUIProfiler.h" />
+    <ClInclude Include=".\source\CGUIScrollBar.h" />
+    <ClInclude Include=".\source\CGUISkin.h" />
+    <ClInclude Include=".\source\CGUISpinBox.h" />
+    <ClInclude Include=".\source\CGUISpriteBank.h" />
+    <ClInclude Include=".\source\CGUIStaticText.h" />
+    <ClInclude Include=".\source\CGUITabControl.h" />
+    <ClInclude Include=".\source\CGUITable.h" />
+    <ClInclude Include=".\source\CGUIToolBar.h" />
+    <ClInclude Include=".\source\CGUITreeView.h" />
+    <ClInclude Include=".\source\CGUIWindow.h" />
+    <ClInclude Include="source\CImageLoaderCube.h" />
+    <ClInclude Include="source\debug.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\.gitignore" />
+    <None Include="..\..\changes.txt" />
+    <None Include="..\..\readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include=".\source\CB3DMeshWriter.cpp" />
+    <ClCompile Include=".\source\CD3D9RenderTarget.cpp" />
+    <ClCompile Include=".\source\CDefaultSceneNodeAnimatorFactory.cpp" />
+    <ClCompile Include=".\source\CDefaultSceneNodeFactory.cpp" />
+    <ClCompile Include=".\source\CFBXMeshWriter.cpp" />
+    <ClCompile Include=".\source\CGeometryCreator.cpp" />
+    <ClCompile Include=".\source\CGLXManager.cpp" />
+    <ClCompile Include=".\source\CMeshCache.cpp" />
+    <ClCompile Include=".\source\CMeshManipulator.cpp" />
+    <ClCompile Include=".\source\COpenGLCacheHandler.cpp" />
+    <ClCompile Include=".\source\COpenGLDriver.cpp" />
+    <ClCompile Include=".\source\COpenGLExtensionHandler.cpp" />
+    <ClCompile Include=".\source\COpenGLNormalMapRenderer.cpp" />
+    <ClCompile Include=".\source\COpenGLParallaxMapRenderer.cpp" />
+    <ClCompile Include=".\source\COpenGLShaderMaterialRenderer.cpp" />
+    <ClCompile Include=".\source\COpenGLSLMaterialRenderer.cpp" />
+    <ClCompile Include=".\source\CSceneManager.cpp" />
+    <ClCompile Include=".\source\C3DSMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CSMFMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CAnimatedMeshHalfLife.cpp" />
+    <ClCompile Include=".\source\CAnimatedMeshMD2.cpp" />
+    <ClCompile Include=".\source\CAnimatedMeshMD3.cpp" />
+    <ClCompile Include=".\source\CB3DMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CBSPMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CColladaFileLoader.cpp" />
+    <ClCompile Include=".\source\CCSMLoader.cpp" />
+    <ClCompile Include=".\source\CDMFLoader.cpp" />
+    <ClCompile Include=".\source\CIrrMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CLMTSMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CLWOMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CMD2MeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CMD3MeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CMeshTextureLoader.cpp" />
+    <ClCompile Include=".\source\CMS3DMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CMY3DMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\COBJMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\COCTLoader.cpp" />
+    <ClCompile Include=".\source\COgreMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CPLYMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CQ3LevelMesh.cpp" />
+    <ClCompile Include=".\source\CSkinnedMesh.cpp" />
+    <ClCompile Include=".\source\CSTLMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CW3Animation.cpp" />
+    <ClCompile Include=".\source\CW3MeshLoaderHelper.cpp" />
+    <ClCompile Include=".\source\CWGLManager.cpp" />
+    <ClCompile Include=".\source\CXMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CAnimatedMeshSceneNode.cpp" />
+    <ClCompile Include=".\source\CBillboardSceneNode.cpp" />
+    <ClCompile Include=".\source\CBoneSceneNode.cpp" />
+    <ClCompile Include=".\source\CCameraSceneNode.cpp" />
+    <ClCompile Include=".\source\CCubeSceneNode.cpp" />
+    <ClCompile Include=".\source\CDummyTransformationSceneNode.cpp" />
+    <ClCompile Include=".\source\CEmptySceneNode.cpp" />
+    <ClCompile Include=".\source\CLightSceneNode.cpp" />
+    <ClCompile Include=".\source\CMeshSceneNode.cpp" />
+    <ClCompile Include=".\source\COctreeSceneNode.cpp" />
+    <ClCompile Include=".\source\CQuake3ShaderSceneNode.cpp" />
+    <ClCompile Include=".\source\CShadowVolumeSceneNode.cpp" />
+    <ClCompile Include=".\source\CSkyBoxSceneNode.cpp" />
+    <ClCompile Include=".\source\CSkyDomeSceneNode.cpp" />
+    <ClCompile Include=".\source\CSphereSceneNode.cpp" />
+    <ClCompile Include=".\source\CTerrainSceneNode.cpp" />
+    <ClCompile Include=".\source\CTextSceneNode.cpp" />
+    <ClCompile Include=".\source\CVolumeLightSceneNode.cpp" />
+    <ClCompile Include=".\source\CWaterSurfaceSceneNode.cpp" />
+    <ClCompile Include=".\source\CParticleAnimatedMeshSceneNodeEmitter.cpp" />
+    <ClCompile Include=".\source\CParticleAttractionAffector.cpp" />
+    <ClCompile Include=".\source\CParticleBoxEmitter.cpp" />
+    <ClCompile Include=".\source\CParticleCylinderEmitter.cpp" />
+    <ClCompile Include=".\source\CParticleFadeOutAffector.cpp" />
+    <ClCompile Include=".\source\CParticleGravityAffector.cpp" />
+    <ClCompile Include=".\source\CParticleMeshEmitter.cpp" />
+    <ClCompile Include=".\source\CParticlePointEmitter.cpp" />
+    <ClCompile Include=".\source\CParticleRingEmitter.cpp" />
+    <ClCompile Include=".\source\CParticleRotationAffector.cpp" />
+    <ClCompile Include=".\source\CParticleScaleAffector.cpp" />
+    <ClCompile Include=".\source\CParticleSphereEmitter.cpp" />
+    <ClCompile Include=".\source\CParticleSystemSceneNode.cpp" />
+    <ClCompile Include=".\source\CMetaTriangleSelector.cpp" />
+    <ClCompile Include=".\source\COctreeTriangleSelector.cpp" />
+    <ClCompile Include=".\source\CSceneCollisionManager.cpp" />
+    <ClCompile Include=".\source\CTerrainTriangleSelector.cpp" />
+    <ClCompile Include=".\source\CTriangleBBSelector.cpp" />
+    <ClCompile Include=".\source\CTriangleSelector.cpp" />
+    <ClCompile Include=".\source\CSceneLoaderIrr.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorCameraFPS.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorCameraMaya.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorCollisionResponse.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorDelete.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorFlyCircle.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorFlyStraight.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorFollowSpline.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorRotation.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorTexture.cpp" />
+    <ClCompile Include=".\source\CColladaMeshWriter.cpp" />
+    <ClCompile Include=".\source\CIrrMeshWriter.cpp" />
+    <ClCompile Include=".\source\COBJMeshWriter.cpp" />
+    <ClCompile Include=".\source\CPLYMeshWriter.cpp" />
+    <ClCompile Include=".\source\CSTLMeshWriter.cpp" />
+    <ClCompile Include=".\source\CVideoModeList.cpp" />
+    <ClCompile Include=".\source\CSoftwareDriver.cpp" />
+    <ClCompile Include=".\source\CSoftwareTexture.cpp" />
+    <ClCompile Include=".\source\CTRFlat.cpp" />
+    <ClCompile Include=".\source\CTRFlatWire.cpp" />
+    <ClCompile Include=".\source\CTRGouraud.cpp" />
+    <ClCompile Include=".\source\CTRGouraudWire.cpp" />
+    <ClCompile Include=".\source\CTRTextureFlat.cpp" />
+    <ClCompile Include=".\source\CTRTextureFlatWire.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraud.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudAdd.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudNoZ.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudWire.cpp" />
+    <ClCompile Include=".\source\CZBuffer.cpp" />
+    <ClCompile Include=".\source\CColorConverter.cpp" />
+    <ClCompile Include=".\source\CFPSCounter.cpp" />
+    <ClCompile Include=".\source\CImage.cpp" />
+    <ClCompile Include=".\source\CNullDriver.cpp" />
+    <ClCompile Include=".\source\CImageWriterBMP.cpp" />
+    <ClCompile Include=".\source\CImageWriterJPG.cpp" />
+    <ClCompile Include=".\source\CImageWriterPCX.cpp" />
+    <ClCompile Include=".\source\CImageWriterPNG.cpp" />
+    <ClCompile Include=".\source\CImageWriterPPM.cpp" />
+    <ClCompile Include=".\source\CImageWriterPSD.cpp" />
+    <ClCompile Include=".\source\CImageWriterTGA.cpp" />
+    <ClCompile Include=".\source\CImageLoaderBMP.cpp" />
+    <ClCompile Include=".\source\CImageLoaderDDS.cpp" />
+    <ClCompile Include=".\source\CImageLoaderJPG.cpp" />
+    <ClCompile Include=".\source\CImageLoaderPCX.cpp" />
+    <ClCompile Include=".\source\CImageLoaderPNG.cpp" />
+    <ClCompile Include=".\source\CImageLoaderPPM.cpp" />
+    <ClCompile Include=".\source\CImageLoaderPSD.cpp" />
+    <ClCompile Include=".\source\CImageLoaderPVR.cpp" />
+    <ClCompile Include=".\source\CImageLoaderRGB.cpp" />
+    <ClCompile Include=".\source\CImageLoaderTGA.cpp" />
+    <ClCompile Include=".\source\CImageLoaderWAL.cpp" />
+    <ClCompile Include=".\source\CD3D9Driver.cpp" />
+    <ClCompile Include=".\source\CD3D9HLSLMaterialRenderer.cpp" />
+    <ClCompile Include=".\source\CD3D9NormalMapRenderer.cpp" />
+    <ClCompile Include=".\source\CD3D9ParallaxMapRenderer.cpp" />
+    <ClCompile Include=".\source\CD3D9ShaderMaterialRenderer.cpp" />
+    <ClCompile Include=".\source\CD3D9Texture.cpp" />
+    <ClCompile Include=".\source\CBurningShader_Raster_Reference.cpp" />
+    <ClCompile Include=".\source\CDepthBuffer.cpp" />
+    <ClCompile Include=".\source\CSoftwareDriver2.cpp" />
+    <ClCompile Include=".\source\CSoftwareTexture2.cpp" />
+    <ClCompile Include=".\source\CTRGouraud2.cpp" />
+    <ClCompile Include=".\source\CTRGouraudAlpha2.cpp" />
+    <ClCompile Include=".\source\CTRGouraudAlphaNoZ2.cpp" />
+    <ClCompile Include=".\source\CTRNormalMap.cpp" />
+    <ClCompile Include=".\source\CTRStencilShadow.cpp" />
+    <ClCompile Include=".\source\CTRTextureBlend.cpp" />
+    <ClCompile Include=".\source\CTRTextureDetailMap2.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraud2.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudAdd2.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudAddNoZ2.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudAlpha.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudAlphaNoZ.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudNoZ2.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudVertexAlpha2.cpp" />
+    <ClCompile Include=".\source\CTRTextureLightMap2_Add.cpp" />
+    <ClCompile Include=".\source\CTRTextureLightMap2_M1.cpp" />
+    <ClCompile Include=".\source\CTRTextureLightMap2_M2.cpp" />
+    <ClCompile Include=".\source\CTRTextureLightMap2_M4.cpp" />
+    <ClCompile Include=".\source\CTRTextureLightMapGouraud2_M4.cpp" />
+    <ClCompile Include=".\source\CTRTextureWire2.cpp" />
+    <ClCompile Include=".\source\IBurningShader.cpp" />
+    <ClCompile Include=".\source\CLogger.cpp" />
+    <ClCompile Include=".\source\COSOperator.cpp" />
+    <ClCompile Include=".\source\CW3EntLoader.cpp" />
+    <ClCompile Include=".\source\Irrlicht.cpp" />
+    <ClCompile Include=".\source\MeshCombiner.cpp" />
+    <ClCompile Include=".\source\os.cpp" />
+    <ClCompile Include=".\source\CW3Skeleton.cpp" />
+    <ClCompile Include=".\source\CW3DataCache.cpp" />
+    <ClCompile Include=".\source\utf8.cpp" />
+    <ClCompile Include=".\source\CProfiler.cpp" />
+    <ClCompile Include=".\source\leakHunter.cpp" />
+    <ClCompile Include=".\source\lzma\LzmaDec.c" />
+    <ClCompile Include=".\source\Utils_Loaders_Irr.cpp" />
+    <ClCompile Include=".\source\Utils_RedEngine.cpp" />
+    <ClCompile Include=".\source\zlib\adler32.c" />
+    <ClCompile Include=".\source\zlib\compress.c" />
+    <ClCompile Include=".\source\zlib\crc32.c" />
+    <ClCompile Include=".\source\zlib\deflate.c" />
+    <ClCompile Include=".\source\zlib\inffast.c" />
+    <ClCompile Include=".\source\zlib\inflate.c" />
+    <ClCompile Include=".\source\zlib\inftrees.c" />
+    <ClCompile Include=".\source\zlib\trees.c" />
+    <ClCompile Include=".\source\zlib\uncompr.c" />
+    <ClCompile Include=".\source\zlib\zutil.c" />
+    <ClCompile Include=".\source\jpeglib\jaricom.c" />
+    <ClCompile Include=".\source\jpeglib\jcapimin.c" />
+    <ClCompile Include=".\source\jpeglib\jcapistd.c" />
+    <ClCompile Include=".\source\jpeglib\jcarith.c" />
+    <ClCompile Include=".\source\jpeglib\jccoefct.c" />
+    <ClCompile Include=".\source\jpeglib\jccolor.c" />
+    <ClCompile Include=".\source\jpeglib\jcdctmgr.c" />
+    <ClCompile Include=".\source\jpeglib\jchuff.c" />
+    <ClCompile Include=".\source\jpeglib\jcinit.c" />
+    <ClCompile Include=".\source\jpeglib\jcmainct.c" />
+    <ClCompile Include=".\source\jpeglib\jcmarker.c" />
+    <ClCompile Include=".\source\jpeglib\jcmaster.c" />
+    <ClCompile Include=".\source\jpeglib\jcomapi.c" />
+    <ClCompile Include=".\source\jpeglib\jcparam.c" />
+    <ClCompile Include=".\source\jpeglib\jcprepct.c" />
+    <ClCompile Include=".\source\jpeglib\jcsample.c" />
+    <ClCompile Include=".\source\jpeglib\jctrans.c" />
+    <ClCompile Include=".\source\jpeglib\jdapimin.c" />
+    <ClCompile Include=".\source\jpeglib\jdapistd.c" />
+    <ClCompile Include=".\source\jpeglib\jdarith.c" />
+    <ClCompile Include=".\source\jpeglib\jdatadst.c" />
+    <ClCompile Include=".\source\jpeglib\jdatasrc.c" />
+    <ClCompile Include=".\source\jpeglib\jdcoefct.c" />
+    <ClCompile Include=".\source\jpeglib\jdcolor.c" />
+    <ClCompile Include=".\source\jpeglib\jddctmgr.c" />
+    <ClCompile Include=".\source\jpeglib\jdhuff.c" />
+    <ClCompile Include=".\source\jpeglib\jdinput.c" />
+    <ClCompile Include=".\source\jpeglib\jdmainct.c" />
+    <ClCompile Include=".\source\jpeglib\jdmarker.c" />
+    <ClCompile Include=".\source\jpeglib\jdmaster.c" />
+    <ClCompile Include=".\source\jpeglib\jdmerge.c" />
+    <ClCompile Include=".\source\jpeglib\jdpostct.c" />
+    <ClCompile Include=".\source\jpeglib\jdsample.c" />
+    <ClCompile Include=".\source\jpeglib\jdtrans.c" />
+    <ClCompile Include=".\source\jpeglib\jerror.c" />
+    <ClCompile Include=".\source\jpeglib\jfdctflt.c" />
+    <ClCompile Include=".\source\jpeglib\jfdctfst.c" />
+    <ClCompile Include=".\source\jpeglib\jfdctint.c" />
+    <ClCompile Include=".\source\jpeglib\jidctflt.c" />
+    <ClCompile Include=".\source\jpeglib\jidctfst.c" />
+    <ClCompile Include=".\source\jpeglib\jidctint.c" />
+    <ClCompile Include=".\source\jpeglib\jmemmgr.c" />
+    <ClCompile Include=".\source\jpeglib\jmemnobs.c" />
+    <ClCompile Include=".\source\jpeglib\jquant1.c" />
+    <ClCompile Include=".\source\jpeglib\jquant2.c" />
+    <ClCompile Include=".\source\jpeglib\jutils.c" />
+    <ClCompile Include=".\source\libpng\png.c" />
+    <ClCompile Include=".\source\libpng\pngerror.c" />
+    <ClCompile Include=".\source\libpng\pngget.c" />
+    <ClCompile Include=".\source\libpng\pngmem.c" />
+    <ClCompile Include=".\source\libpng\pngpread.c" />
+    <ClCompile Include=".\source\libpng\pngread.c" />
+    <ClCompile Include=".\source\libpng\pngrio.c" />
+    <ClCompile Include=".\source\libpng\pngrtran.c" />
+    <ClCompile Include=".\source\libpng\pngrutil.c" />
+    <ClCompile Include=".\source\libpng\pngset.c" />
+    <ClCompile Include=".\source\libpng\pngtrans.c" />
+    <ClCompile Include=".\source\libpng\pngwio.c" />
+    <ClCompile Include=".\source\libpng\pngwrite.c" />
+    <ClCompile Include=".\source\libpng\pngwtran.c" />
+    <ClCompile Include=".\source\libpng\pngwutil.c" />
+    <ClCompile Include=".\source\aesGladman\aescrypt.cpp" />
+    <ClCompile Include=".\source\aesGladman\aeskey.cpp" />
+    <ClCompile Include=".\source\aesGladman\aestab.cpp" />
+    <ClCompile Include=".\source\aesGladman\fileenc.cpp" />
+    <ClCompile Include=".\source\aesGladman\hmac.cpp" />
+    <ClCompile Include=".\source\aesGladman\prng.cpp" />
+    <ClCompile Include=".\source\aesGladman\pwd2key.cpp" />
+    <ClCompile Include=".\source\aesGladman\sha1.cpp" />
+    <ClCompile Include=".\source\aesGladman\sha2.cpp" />
+    <ClCompile Include=".\source\bzip2\blocksort.c" />
+    <ClCompile Include=".\source\bzip2\bzcompress.c" />
+    <ClCompile Include=".\source\bzip2\bzlib.c" />
+    <ClCompile Include=".\source\bzip2\crctable.c" />
+    <ClCompile Include=".\source\bzip2\decompress.c" />
+    <ClCompile Include=".\source\bzip2\huffman.c" />
+    <ClCompile Include=".\source\bzip2\randtable.c" />
+    <ClCompile Include=".\source\CIrrDeviceConsole.cpp" />
+    <ClCompile Include=".\source\CIrrDeviceFB.cpp" />
+    <ClCompile Include=".\source\CIrrDeviceLinux.cpp" />
+    <ClCompile Include=".\source\CIrrDeviceSDL.cpp" />
+    <ClCompile Include=".\source\CIrrDeviceStub.cpp" />
+    <ClCompile Include=".\source\CIrrDeviceWin32.cpp" />
+    <ClCompile Include=".\source\CAttributes.cpp" />
+    <ClCompile Include=".\source\CFileList.cpp" />
+    <ClCompile Include=".\source\CFileSystem.cpp" />
+    <ClCompile Include=".\source\CLimitReadFile.cpp" />
+    <ClCompile Include=".\source\CMemoryFile.cpp" />
+    <ClCompile Include=".\source\CMountPointReader.cpp" />
+    <ClCompile Include=".\source\CNPKReader.cpp" />
+    <ClCompile Include=".\source\CPakReader.cpp" />
+    <ClCompile Include=".\source\CReadFile.cpp" />
+    <ClCompile Include=".\source\CTarReader.cpp" />
+    <ClCompile Include=".\source\CWADReader.cpp" />
+    <ClCompile Include=".\source\CWriteFile.cpp" />
+    <ClCompile Include=".\source\CXMLReader.cpp" />
+    <ClCompile Include=".\source\CXMLWriter.cpp" />
+    <ClCompile Include=".\source\CZipReader.cpp" />
+    <ClCompile Include=".\source\irrXML.cpp" />
+    <ClCompile Include=".\source\CDefaultGUIElementFactory.cpp" />
+    <ClCompile Include=".\source\CGUIButton.cpp" />
+    <ClCompile Include=".\source\CGUICheckbox.cpp" />
+    <ClCompile Include=".\source\CGUIColorSelectDialog.cpp" />
+    <ClCompile Include=".\source\CGUIComboBox.cpp" />
+    <ClCompile Include=".\source\CGUIContextMenu.cpp" />
+    <ClCompile Include=".\source\CGUIEditBox.cpp" />
+    <ClCompile Include=".\source\CGUIEnvironment.cpp" />
+    <ClCompile Include=".\source\CGUIFileOpenDialog.cpp" />
+    <ClCompile Include=".\source\CGUIFont.cpp" />
+    <ClCompile Include=".\source\CGUIImage.cpp" />
+    <ClCompile Include=".\source\CGUIImageList.cpp" />
+    <ClCompile Include=".\source\CGUIInOutFader.cpp" />
+    <ClCompile Include=".\source\CGUIListBox.cpp" />
+    <ClCompile Include=".\source\CGUIMenu.cpp" />
+    <ClCompile Include=".\source\CGUIMeshViewer.cpp" />
+    <ClCompile Include=".\source\CGUIMessageBox.cpp" />
+    <ClCompile Include=".\source\CGUIModalScreen.cpp" />
+    <ClCompile Include=".\source\CGUIProfiler.cpp" />
+    <ClCompile Include=".\source\CGUIScrollBar.cpp" />
+    <ClCompile Include=".\source\CGUISkin.cpp" />
+    <ClCompile Include=".\source\CGUISpinBox.cpp" />
+    <ClCompile Include=".\source\CGUISpriteBank.cpp" />
+    <ClCompile Include=".\source\CGUIStaticText.cpp" />
+    <ClCompile Include=".\source\CGUITabControl.cpp" />
+    <ClCompile Include=".\source\CGUITable.cpp" />
+    <ClCompile Include=".\source\CGUIToolBar.cpp" />
+    <ClCompile Include=".\source\CGUITreeView.cpp" />
+    <ClCompile Include=".\source\CGUIWindow.cpp" />
+    <ClCompile Include="source\CImageLoaderCube.cpp" />
+    <ClCompile Include="source\CImageLoaderXBM.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Irrlicht.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

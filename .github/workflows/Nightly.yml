@@ -11,7 +11,12 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout github repo (+ download lfs dependencies)
+      uses: actions/checkout@v2
+      with:
+        lfs: true
+    - name: Checkout LFS objects
+      run: git lfs checkout
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
     - name: Restore packages
@@ -19,7 +24,7 @@ jobs:
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
     - name: Build with MSBuild
-      run: msbuild  WolvenKit.sln -p:Configuration=Release
+      run: msbuild  WolvenKit.sln -p:Configuration=Release  -p:Platform=x64 -m
     - name: Zip Release
       run: |
         cd $Env:GITHUB_WORKSPACE\\WolvenKit\bin

@@ -18,9 +18,11 @@ namespace WolvenKit
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                hotkeys?.Dispose();
+                rwlock?.Dispose();
+                components?.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -104,6 +106,7 @@ namespace WolvenKit
             this.experimentalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.terrainViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sceneViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openUncookedFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unbundleGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -758,7 +761,8 @@ namespace WolvenKit
             // 
             this.experimentalToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.terrainViewerToolStripMenuItem,
-            this.bulkEditorToolStripMenuItem});
+            this.bulkEditorToolStripMenuItem,
+            this.sceneViewerToolStripMenuItem});
             this.experimentalToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Test_16x;
             this.experimentalToolStripMenuItem.Name = "experimentalToolStripMenuItem";
             this.experimentalToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
@@ -777,6 +781,13 @@ namespace WolvenKit
             this.bulkEditorToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.bulkEditorToolStripMenuItem.Text = "Bulk Editor";
             this.bulkEditorToolStripMenuItem.Click += new System.EventHandler(this.bulkEditorToolStripMenuItem_Click);
+            // 
+            // sceneViewerToolStripMenuItem
+            // 
+            this.sceneViewerToolStripMenuItem.Name = "sceneViewerToolStripMenuItem";
+            this.sceneViewerToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.sceneViewerToolStripMenuItem.Text = "Scene Viewer";
+            this.sceneViewerToolStripMenuItem.Click += new System.EventHandler(this.sceneViewerToolStripMenuItem_Click);
             // 
             // gameToolStripMenuItem
             // 
@@ -1281,5 +1292,6 @@ namespace WolvenKit
         private ToolStripLabel modNameToolStripLabel;
         private ToolStripLabel wkitVersionToolStripLabel;
         private System.IO.FileSystemWatcher watcher;
+        private ToolStripMenuItem sceneViewerToolStripMenuItem;
     }
 }

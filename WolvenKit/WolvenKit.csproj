@@ -204,10 +204,6 @@
       <HintPath>..\packages\MarkerMetro.Unity.Ionic.Zlib.2.0.0.14\lib\net35\Ionic.ZLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="IrrlichtLime, Version=1.6.1.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libs\IrrlichtLime.dll</HintPath>
-    </Reference>
     <Reference Include="jsutil, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\jsutil.dll</HintPath>
     </Reference>
@@ -980,6 +976,10 @@
     <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj">
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
       <Name>WolvenKit.CR2W</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WolvenKit.IrrlichtLime\IrrlichtLime.vcxproj">
+      <Project>{4f6ef8e3-f26f-49db-867d-fd10fb083b0d}</Project>
+      <Name>IrrlichtLime</Name>
     </ProjectReference>
     <ProjectReference Include="..\WolvenKit.Net\WolvenKit.Net.csproj">
       <Project>{f60b8974-617d-45b5-bd33-68a9f739de4f}</Project>
