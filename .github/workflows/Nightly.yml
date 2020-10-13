@@ -19,7 +19,7 @@ jobs:
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
     - name: Build with MSBuild
-      run: msbuild  WolvenKit.sln -p:Configuration=Release  -p:Platform=x64
+      run: msbuild  WolvenKit.sln -p:Configuration=Release  -p:Platform=x64 -m
     - name: Zip Release
       run: |
         cd $Env:GITHUB_WORKSPACE\\WolvenKit\bin
