@@ -49,7 +49,10 @@ namespace WolvenKit.Forms
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSearchBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripClearButton = new System.Windows.Forms.ToolStripButton();
-            this.showTreetoolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.ChunkDisplayMode = new System.Windows.Forms.ToolStripSplitButton();
+            this.ChunkDisplayMenuItemLinear = new System.Windows.Forms.ToolStripMenuItem();
+            this.ChunkDisplayMenuItemParent = new System.Windows.Forms.ToolStripMenuItem();
+            this.ChunkDisplayMenuItemVirtualParent = new System.Windows.Forms.ToolStripMenuItem();
             this.ExpandBTN = new System.Windows.Forms.ToolStripButton();
             this.CollapseBTN = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip1.SuspendLayout();
@@ -69,7 +72,7 @@ namespace WolvenKit.Forms
             this.copyChunkToolStripMenuItem,
             this.pasteChunkToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(193, 212);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(193, 190);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // expandAllToolStripMenuItem
@@ -173,7 +176,7 @@ namespace WolvenKit.Forms
             this.toolStripLabel1,
             this.toolStripSearchBox,
             this.toolStripClearButton,
-            this.showTreetoolStripButton,
+            this.ChunkDisplayMode,
             this.ExpandBTN,
             this.CollapseBTN});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -207,16 +210,47 @@ namespace WolvenKit.Forms
             this.toolStripClearButton.Text = "Clear";
             this.toolStripClearButton.Click += new System.EventHandler(this.resetBTN_Click);
             // 
-            // showTreetoolStripButton
+            // ChunkDisplayMode
             // 
-            this.showTreetoolStripButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.showTreetoolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.showTreetoolStripButton.Image = global::WolvenKit.Properties.Resources.LayerGroupVisibled;
-            this.showTreetoolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.showTreetoolStripButton.Name = "showTreetoolStripButton";
-            this.showTreetoolStripButton.Size = new System.Drawing.Size(28, 28);
-            this.showTreetoolStripButton.Text = "Show/Hide Tree";
-            this.showTreetoolStripButton.Click += new System.EventHandler(this.showTreetoolStripButton_Click);
+            this.ChunkDisplayMode.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.ChunkDisplayMode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ChunkDisplayMode.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ChunkDisplayMenuItemLinear,
+            this.ChunkDisplayMenuItemParent,
+            this.ChunkDisplayMenuItemVirtualParent});
+            this.ChunkDisplayMode.Image = global::WolvenKit.Properties.Resources.ui_menu_blue;
+            this.ChunkDisplayMode.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.ChunkDisplayMode.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ChunkDisplayMode.Name = "ChunkDisplayMode";
+            this.ChunkDisplayMode.Size = new System.Drawing.Size(32, 28);
+            this.ChunkDisplayMode.Text = "Chunk display mode";
+            this.ChunkDisplayMode.ToolTipText = "Chunk display mode";
+            // 
+            // ChunkDisplayMenuItemLinear
+            // 
+            this.ChunkDisplayMenuItemLinear.CheckOnClick = true;
+            this.ChunkDisplayMenuItemLinear.Name = "ChunkDisplayMenuItemLinear";
+            this.ChunkDisplayMenuItemLinear.Size = new System.Drawing.Size(180, 22);
+            this.ChunkDisplayMenuItemLinear.Text = "Linear";
+            this.ChunkDisplayMenuItemLinear.Click += new System.EventHandler(this.ChunkDisplayMenuItemLinear_Click);
+            // 
+            // ChunkDisplayMenuItemParent
+            // 
+            this.ChunkDisplayMenuItemParent.CheckOnClick = true;
+            this.ChunkDisplayMenuItemParent.Name = "ChunkDisplayMenuItemParent";
+            this.ChunkDisplayMenuItemParent.Size = new System.Drawing.Size(180, 22);
+            this.ChunkDisplayMenuItemParent.Text = "Parent";
+            this.ChunkDisplayMenuItemParent.Click += new System.EventHandler(this.ChunkDisplayMenuItemParent_Click);
+            // 
+            // ChunkDisplayMenuItemVirtualParent
+            // 
+            this.ChunkDisplayMenuItemVirtualParent.Checked = true;
+            this.ChunkDisplayMenuItemVirtualParent.CheckOnClick = true;
+            this.ChunkDisplayMenuItemVirtualParent.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ChunkDisplayMenuItemVirtualParent.Name = "ChunkDisplayMenuItemVirtualParent";
+            this.ChunkDisplayMenuItemVirtualParent.Size = new System.Drawing.Size(180, 22);
+            this.ChunkDisplayMenuItemVirtualParent.Text = "Virtual Parent";
+            this.ChunkDisplayMenuItemVirtualParent.Click += new System.EventHandler(this.ChunkDisplayMenuItemVirtualParent_Click);
             // 
             // ExpandBTN
             // 
@@ -275,7 +309,6 @@ namespace WolvenKit.Forms
         private ToolStripTextBox toolStripSearchBox;
         private ToolStripButton toolStripClearButton;
         private ToolStripLabel toolStripLabel1;
-        private ToolStripButton showTreetoolStripButton;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem expandAllToolStripMenuItem;
         private ToolStripMenuItem expandAllChildrenToolStripMenuItem;
@@ -285,5 +318,9 @@ namespace WolvenKit.Forms
         private ToolStripMenuItem pasteChunkToolStripMenuItem;
         private ToolStripButton ExpandBTN;
         private ToolStripButton CollapseBTN;
+        private ToolStripSplitButton ChunkDisplayMode;
+        private ToolStripMenuItem ChunkDisplayMenuItemLinear;
+        private ToolStripMenuItem ChunkDisplayMenuItemParent;
+        private ToolStripMenuItem ChunkDisplayMenuItemVirtualParent;
     }
 }

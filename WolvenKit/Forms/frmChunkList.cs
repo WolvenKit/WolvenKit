@@ -18,14 +18,17 @@ namespace WolvenKit.Forms
     public partial class frmChunkList : DockContent, IThemedContent
     {
         #region Fields
-        private bool listview;
         private bool isLargefile;
-        private CR2WFile file;
-
         private readonly Dictionary<int, int> childrencountDict = new Dictionary<int, int>();
         private readonly Dictionary<int, List<CR2WExportWrapper>> childrenDict = new Dictionary<int, List<CR2WExportWrapper>>();
         private readonly CR2WDocumentViewModel viewModel;
-
+        private enum EChunkDisplayMode
+        {
+            Linear,
+            Parent,
+            VirtualParent
+        }
+        private EChunkDisplayMode ChunkDisplayValue;
         #endregion
 
         #region Properties
@@ -40,17 +43,9 @@ namespace WolvenKit.Forms
         {
             InitializeComponent();
             ApplyCustomTheme();
+            ChunkDisplayValue = EChunkDisplayMode.VirtualParent;
             //limitTB.Enabled = limitCB.Checked;
             treeListView.ItemSelectionChanged += chunkListView_ItemSelectionChanged;
-
-            treeListView.CanExpandGetter = delegate (object x) {
-                var idx = ((CR2WExportWrapper)x).ChunkIndex;
-                return !listview && childrencountDict[idx] > 0;
-            };
-            treeListView.ChildrenGetter = delegate (object x) {
-                var idx = ((CR2WExportWrapper)x).ChunkIndex;
-                return !listview ? childrenDict[idx] : new List<CR2WExportWrapper>();
-            };
 
             viewModel = _viewmodel;
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -79,7 +74,16 @@ namespace WolvenKit.Forms
 
             File.GenerateChunksDict();
 
-            Dictionary<int, int> dParentids = File.chunks.ToDictionary(_ => _.ChunkIndex, _ => _.VirtualParentChunkIndex);
+            var dParentids = new Dictionary<int, int>();
+            if (ChunkDisplayValue == EChunkDisplayMode.Parent)
+            {
+                dParentids = File.chunks.ToDictionary(_ => _.ChunkIndex, _ => _.ParentChunkIndex);
+            }
+            else if (ChunkDisplayValue == EChunkDisplayMode.VirtualParent)
+            {
+                dParentids = File.chunks.ToDictionary(_ => _.ChunkIndex, _ => _.VirtualParentChunkIndex);
+            }
+
             foreach (var chunk in File.chunks)
             {
                 var childrenidxlist = dParentids.Where(_ => _.Value == chunk.ChunkIndex).Select(_ => _.Key);
@@ -100,21 +104,43 @@ namespace WolvenKit.Forms
 
                 }
             }
+
+            treeListView.CanExpandGetter = delegate (object x) {
+                var idx = ((CR2WExportWrapper)x).ChunkIndex;
+                return ChunkDisplayValue != EChunkDisplayMode.Linear && childrencountDict[idx] > 0;
+            };
+            treeListView.ChildrenGetter = delegate (object x) {
+                var idx = ((CR2WExportWrapper)x).ChunkIndex;
+                return ChunkDisplayValue != EChunkDisplayMode.Linear ? childrenDict[idx] : new List<CR2WExportWrapper>();
+            };
         }
-        
 
         public void UpdateList()
         {
             if (File == null)
                 return;
 
+            // Could be done only once... TODO decouple background worker result
             isLargefile = File.chunks.Count > 1000;
-            if (isLargefile)
-                listview = true;
+            if(isLargefile)
+            {
+                ChunkDisplayMenuItemLinear.Checked = true;
+                ChunkDisplayMenuItemVirtualParent.Checked = true;
+                ChunkDisplayMenuItemParent.Enabled = false;
+                ChunkDisplayMenuItemVirtualParent.Enabled = false;
+            }
 
-            if (listview)
+            if (ChunkDisplayValue == EChunkDisplayMode.Linear)
                 treeListView.Roots = File.chunks;
-            else
+            else if (ChunkDisplayValue == EChunkDisplayMode.Parent)
+            {
+                UpdateHelperList();
+                var model = File.chunks.Where(_ => _.GetParentChunk() == null).ToList();
+                treeListView.Roots = model;
+
+                treeListView.ExpandAll();
+            }
+            else if (ChunkDisplayValue == EChunkDisplayMode.VirtualParent)
             {
                 UpdateHelperList();
                 var model = File.chunks.Where(_ => _.GetVirtualParentChunk() == null).ToList();
@@ -182,12 +208,6 @@ namespace WolvenKit.Forms
             MainController.Get().ProjectUnsaved = true;
         }
 
-        private void showTreetoolStripButton_Click(object sender, EventArgs e)
-        {
-            listview = !listview;
-            UpdateList();
-        }
-
         private void expandAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             treeListView.ExpandAll();
@@ -235,11 +255,34 @@ namespace WolvenKit.Forms
             viewModel.PasteVariableCommand.SafeExecute();
         }
 
-        #endregion
-
         private void ExpandBTN_Click(object sender, EventArgs e) => treeListView.ExpandAll();
 
         private void CollapseBTN_Click(object sender, EventArgs e) => treeListView.CollapseAll();
+
+        private void ChunkDisplayMenuItemLinear_Click(object sender, EventArgs e)
+        {
+            ChunkDisplayMenuItemParent.Checked = false;
+            ChunkDisplayMenuItemVirtualParent.Checked = false;
+            ChunkDisplayValue = EChunkDisplayMode.Linear;
+            UpdateList();
+        }
+
+        private void ChunkDisplayMenuItemParent_Click(object sender, EventArgs e)
+        {
+            ChunkDisplayMenuItemLinear.Checked = false;
+            ChunkDisplayMenuItemVirtualParent.Checked = false;
+            ChunkDisplayValue = EChunkDisplayMode.Parent;
+            UpdateList();
+        }
+
+        private void ChunkDisplayMenuItemVirtualParent_Click(object sender, EventArgs e)
+        {
+            ChunkDisplayMenuItemLinear.Checked = false;
+            ChunkDisplayMenuItemParent.Checked = false;
+            ChunkDisplayValue = EChunkDisplayMode.VirtualParent;
+            UpdateList();
+        }
+        #endregion
     }
 }
  
