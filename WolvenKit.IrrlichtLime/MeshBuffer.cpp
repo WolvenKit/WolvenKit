@@ -147,6 +147,35 @@ void MeshBuffer::Append(array<Video::Vertex3D^>^ verticesStandard, array<unsigne
 		vb[i + vbSize] = *verticesStandard[i]->m_NativeValue;
 }
 
+void MeshBuffer::Append(array<Video::Vertex3D^>^ verticesStandard, array<unsigned int>^ indices32bit, PrimitiveType ptype)
+{
+    LIME_ASSERT(this->VertexType == Video::VertexType::Standard);
+    LIME_ASSERT(this->IndexType == Video::IndexType::_32Bit);
+    LIME_ASSERT(verticesStandard != nullptr);
+    LIME_ASSERT(indices32bit != nullptr);
+
+    // as i know:
+    // 1) 32bit meshbuffers is only possible with IDynamicMeshBuffer, so i will cast to it
+    // 2) append() doesn't have ability to be used with 32 bit indices, so we are going to implement it here manually
+
+    scene::IDynamicMeshBuffer* mb = (scene::IDynamicMeshBuffer*)m_MeshBuffer;
+    scene::IIndexBuffer& ib = mb->getIndexBuffer();
+    scene::IVertexBuffer& vb = mb->getVertexBuffer();
+
+    unsigned int ibSize = ib.size();
+    unsigned int vbSize = vb.size();
+
+    ib.set_used(ibSize + indices32bit->Length);
+    for (int i = 0; i < indices32bit->Length; i++)
+        ib.setValue(i + ibSize, indices32bit[i] + vbSize); // simple "ib[i + ibSize] = ...;" leads to error C2106: '=' : left operand must be l-value
+
+    vb.set_used(vbSize + verticesStandard->Length);
+    for (int i = 0; i < verticesStandard->Length; i++)
+        vb[i + vbSize] = *verticesStandard[i]->m_NativeValue;
+
+	mb->setPrimitiveType(scene::EPT_TRIANGLE_STRIP);
+}
+
 void MeshBuffer::Append(array<Video::Vertex3DTTCoords^>^ verticesTTCoords, array<unsigned int>^ indices32bit)
 {
 	LIME_ASSERT(this->VertexType == Video::VertexType::TTCoords);
@@ -191,6 +220,31 @@ void MeshBuffer::Append(array<Video::Vertex3DTangents^>^ verticesTangents, array
 	vb.set_used(vbSize + verticesTangents->Length);
 	for (int i = 0; i < verticesTangents->Length; i++)
 		vb[i + vbSize] = *verticesTangents[i]->m_NativeValue;
+}
+
+void MeshBuffer::Append(array<Video::Vertex3DTTCoords^>^ verticesTTCoords, array<unsigned int>^ indices32bit, PrimitiveType ptype)
+{
+    LIME_ASSERT(this->VertexType == Video::VertexType::TTCoords);
+    LIME_ASSERT(this->IndexType == Video::IndexType::_32Bit);
+    LIME_ASSERT(verticesTTCoords != nullptr);
+    LIME_ASSERT(indices32bit != nullptr);
+
+    scene::IDynamicMeshBuffer* mb = (scene::IDynamicMeshBuffer*)m_MeshBuffer;
+    scene::IIndexBuffer& ib = mb->getIndexBuffer();
+    scene::IVertexBuffer& vb = mb->getVertexBuffer();
+
+    unsigned int ibSize = ib.size();
+    unsigned int vbSize = vb.size();
+
+    ib.set_used(ibSize + indices32bit->Length);
+    for (int i = 0; i < indices32bit->Length; i++)
+        ib.setValue(i + ibSize, indices32bit[i] + vbSize);
+
+    vb.set_used(vbSize + verticesTTCoords->Length);
+    for (int i = 0; i < verticesTTCoords->Length; i++)
+        vb[i + vbSize] = *verticesTTCoords[i]->m_NativeValue;
+
+	mb->setPrimitiveType(scene::EPT_TRIANGLE_STRIP);
 }
 
 Vector3Df^ MeshBuffer::GetNormal(int vertexIndex)

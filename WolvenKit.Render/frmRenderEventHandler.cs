@@ -1,12 +1,10 @@
-﻿using System;
-using IrrlichtLime;
+﻿using IrrlichtLime;
 using IrrlichtLime.Core;
-using IrrlichtLime.Video;
 using IrrlichtLime.Scene;
-using IrrlichtLime.GUI;
-using System.Windows.Forms;
+using IrrlichtLime.Video;
+using System;
 using System.IO;
-using System.Collections.Generic;
+using System.Windows.Forms;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.Render
@@ -14,11 +12,6 @@ namespace WolvenKit.Render
     public partial class frmRender
     {
         #region event handlers
-        private bool firstrun = true;
-        private System.Windows.Forms.Timer resizeTimer = new System.Windows.Forms.Timer();
-        private static bool renderStarted = true;
-        private static float currCursorPosX = 0;
-        private static float currCursorPosY = 0;
 
         /// <summary>
         /// setup visibility of render context menu
@@ -41,85 +34,61 @@ namespace WolvenKit.Render
             }
         }
 
-        private void ResizeTimer(object sender, EventArgs e)
-        {
-            resizeTimer.Stop();
-            if (irrThread != null)
-            {
-                RestartIrrThread();
-            }
-        }
-
-
         private void irrlichtPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            if (renderStarted && e.Button == MouseButtons.Left)
+            if (device != null)
             {
-                modelAutorotating = false;
-                // Around Y axis
-                float deltaDirection = currCursorPosX - e.X;
-                modelAngle.Y = (modelAngle.Y + deltaDirection / 4.0f) % 360.0f;
-                if (modelAngle.Y < 0)
-                    modelAngle.Y = 360.0f + modelAngle.Y;
+                MouseEventType mev = MouseEventType.Move;
+                uint buttonStates = 0;
 
-                // Around Z axis
-                deltaDirection = currCursorPosY - e.Y;
-                modelAngle.Z = (modelAngle.Z + deltaDirection / 20.0f) % 360.0f;
-                if (modelAngle.Z < 0)
-                    modelAngle.Z = 360.0f + modelAngle.Z;
+                if (e.Button == MouseButtons.Left)
+                {
+                    buttonStates = 1;
+                }
+                else if (e.Button == MouseButtons.Right)
+                {
+                    buttonStates = 2;
+                }
+                else if (e.Button == MouseButtons.Middle)
+                {
+                    buttonStates = 4;
+                }
+
+                float wheel = e.Delta;
+                Event evt = new Event(mev, e.X, e.Y, wheel, buttonStates);
+                if (device.PostEvent(evt))
+                {
+                    lightNode.Position = smgr.ActiveCamera.Position;
+                }
             }
-            else if (renderStarted && e.Button == MouseButtons.Middle)
-            {
-                modelAutorotating = false;
-                float deltaDirection = currCursorPosX - e.X;
-                modelPosition.Z = modelPosition.Z - deltaDirection * scaleMul / 100;
-
-                deltaDirection = currCursorPosY - e.Y;
-                modelPosition.Y = modelPosition.Y + deltaDirection * scaleMul / 100;
-            }
-            else if (renderStarted && e.Delta > 0)
-		    {
-			    modelPosition.X = modelPosition.X + (float)e.Delta / 10.0f;
-		    }
-            currCursorPosX = e.X;
-            currCursorPosY = e.Y;
-
-            // This method should only work when the mouse is captured by the Form.
-            // For instance, when the left mouse button is pressed:
-            // It traps the mouse to be able to scroll infinitely
-            /*if (!(e.Button == MouseButtons.Left || e.Button == MouseButtons.Right))
-                return;
-
-            Point p = PointToScreen(e.Location);
-            int x = p.X;
-            int y = p.Y;
-            Rectangle bounds = this.Bounds;
-
-            if (x <= bounds.Left + 1)
-                x = bounds.Right - 10;
-            else if (x >= bounds.Right - 9)
-                x = bounds.Left + 2;
-
-            if (y <= bounds.Top + 8)
-                y = bounds.Bottom - 2;
-            else if (y >= bounds.Bottom - 1)
-                y = bounds.Top + 9;
-
-            if (x != p.X || y != p.Y)
-            {
-                Cursor.Position = new Point(x, y);
-                currentPosX = x - (bounds.Left + 1);
-                currentPosY = y - (bounds.Top + 1);
-            }*/
         }
-        protected override void OnSizeChanged(EventArgs e)
+
+        private void irrlichtPanel_MouseWheel(object sender, MouseEventArgs e)
         {
-            base.OnSizeChanged(e);
-            if (firstrun == false)
-                resizeTimer.Start();
-            else
-                firstrun = false;
+            if (device != null)
+            {
+                MouseEventType mev = MouseEventType.Wheel;
+                uint buttonStates = 7;
+                float wheel = e.Delta;
+                Event evt = new Event(mev, e.X, e.Y, wheel, buttonStates);
+                if (device.PostEvent(evt))
+                {
+                    lightNode.Position = smgr.ActiveCamera.Position;
+                }
+            }
         }
+        private void irrlichtPanel_Resize(object sender, EventArgs e)
+        {
+            if (smgr != null)
+            {
+                var camera = smgr.ActiveCamera;
+                if (camera != null)
+                {
+                    camera.AspectRatio = (float)irrlichtPanel.Width / (float)irrlichtPanel.Height;
+                }
+            }
+        }
+
         private bool device_OnEvent(Event e) // vl: not working, why????
         {
             if (e.Type == EventType.Log)
@@ -152,7 +121,7 @@ namespace WolvenKit.Render
                 else
                     modelAngle = new Vector3Df(startModelAngleWithAnim.X, startModelAngleWithAnim.Y, startModelAngleWithAnim.Z);
 
-                modelPosition = new Vector3Df(0.0f);
+                //modelPosition = new Vector3Df(0.0f);
                 currAnimIdx = -1;
 
             }
@@ -160,6 +129,7 @@ namespace WolvenKit.Render
 
         static bool OnKeyUp(KeyCode keyCode)
 		{
+            /*
 			if (device == null)
             {
                 return false;
@@ -179,7 +149,7 @@ namespace WolvenKit.Render
 
 					break;
 			}
-
+            */
 			return false;
 		} 
         
@@ -254,12 +224,10 @@ namespace WolvenKit.Render
             {
                 CheckMenuItem(di, false);
             }
-            node.DebugDataVisible = DebugSceneType.Off;
-        }
-        private void Bithack3D_MouseWheel(object sender, MouseEventArgs e)
-        {
-            if (renderStarted)
-                modelPosition.X = modelPosition.X + (float)e.Delta / 1000.0f;
+            if(node != null)
+            {
+                node.DebugDataVisible = DebugSceneType.Off;
+            }
         }
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
@@ -301,7 +269,7 @@ namespace WolvenKit.Render
                     var mw = smgr.CreateMeshWriter(mwt);
                     //if (mw.WriteMesh(device.FileSystem.CreateWriteFile(sf.FileName), cdata.staticMesh, MeshWriterFlag.None))
                     if (mw.WriteMesh(device.FileSystem.CreateWriteFile(sf.FileName), skinnedMesh, MeshWriterFlag.None))
-                        MessageBox.Show(this, "Sucessfully wrote file!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(this, "Successfully wrote file!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     else
                         MessageBox.Show(this, "Failed to write file!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -342,15 +310,19 @@ namespace WolvenKit.Render
 
         private void selectAnimationToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            node.DebugDataVisible = DebugSceneType.Off;
+            if (node != null)
+            {
+                node.DebugDataVisible = DebugSceneType.Off;
+            }
+
             currAnimIdx = Animations.AnimationNames.FindIndex(kv => kv.Key.Equals(e.ClickedItem.Text));
             anims.SelectAnimation(AnimFile, currAnimIdx);
             anims.Apply(skinnedMesh);
 
-            modelPosition = new Vector3Df(0.0f);
+            //modelPosition = new Vector3Df(0.0f);
             modelAngle = new Vector3Df(startModelAngleWithAnim.X, startModelAngleWithAnim.Y, startModelAngle.Z);
 
-            RestartIrrThread();
+            //RestartIrrThread();
         }
         private void decreaseToolStripMenuItem_Click(object sender, EventArgs e)
         {

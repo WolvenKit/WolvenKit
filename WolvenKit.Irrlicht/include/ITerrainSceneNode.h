@@ -174,6 +174,11 @@ namespace scene
 			video::SColor vertexColor=video::SColor(255,255,255,255),
 			s32 smoothFactor=0) =0;
 
+		// For reading USHORT height data for WolvenKit
+		virtual bool loadHeightMap(io::IReadFile* file,
+			s32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize,
+			const core::vector3df& anchor) { return false; };
+
 		//! Force node to use a fixed LOD level at the borders of the terrain.
 		/** This can be useful when several TerrainSceneNodes are connected.
 		\param borderLOD When >= 0 all patches at the 4 borders will use the 

@@ -1,4 +1,4 @@
-﻿//#define USE_WK_OCTREE
+﻿//#define USE_METHOD1
 
 using Assimp;
 using IrrlichtLime;
@@ -103,9 +103,10 @@ namespace WolvenKit.Render
         private GUIStaticText fpstext;
         private GUIStaticText vertexCountText;
         private int totalVertexCount = 0;
+        private bool busy = false;
 
         private IrrlichtLime.Scene.SceneNode worldNode;
-        private IrrlichtLime.Scene.SceneNode lightNode;
+        //private IrrlichtLime.Scene.SceneNode lightNode;
 
         private string inputFilename;
         private string depot;
@@ -121,6 +122,221 @@ namespace WolvenKit.Render
             this.doAddNodes = false;
             InitializeComponent();
             this.sceneView.Enabled = false;
+            this.distanceBar.Value = 3;
+        }
+
+        private void LoadTerrain(string tileFileName, int dimension, float maxHeight, float heightOffset, float tileSize, Vector3Df pt, ref IrrlichtLime.Scene.Mesh m)
+        {
+            // convert the .w2ter file into a heightmap
+            //string lod1 = tileFileName + ".1.buffer";
+            string lod1 = tileFileName + ".3.buffer";
+            //string lod1 = tileFileName + ".5.buffer"; // 32 KB
+            //string lod1 = tileFileName + ".6.buffer"; // also 32 KB
+            //string lod1 = tileFileName + ".13.buffer";
+
+            float heightScale = maxHeight - heightOffset;
+
+//#if _DEBUG
+            Console.WriteLine($"Processing {lod1}");
+//#endif
+
+            byte[] buffer = File.ReadAllBytes(lod1);
+
+            float stepSize = tileSize / dimension;
+
+            // rawData is dimension x dimension pixels x unsigned 16 bit per channel (524,288 for 512 x 512 for example)
+            //MeshBuffer mb = MeshBuffer.Create(VertexType.TTCoords, IndexType._32Bit);
+            MeshBuffer mb = MeshBuffer.Create(VertexType.Standard, IndexType._32Bit);
+            //Vertex3DTTCoords[] verts = new Vertex3DTTCoords[dimension * dimension];
+            Vertex3D[] verts = new Vertex3D[dimension * dimension];
+            int nIndices = (dimension - 1) * (dimension * 2) + (dimension - 2) * 2;
+            uint[] indices = new uint[nIndices];
+
+            // convert the heightmap into points of a grid
+            int index = 0;
+            int byteIndex = 0;
+            float currY = pt.Y;
+            float tdSize = 1.0f / (float)(dimension - 1);
+
+            int r = 0;
+            int g = 0;
+            int b = 0;
+
+            //float dv = 0.0f;
+
+            System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
+            stopWatch.Start();
+
+            for (int y=0; y < dimension; ++y)
+            {
+                float currX = pt.X;
+                //float du = 0.0f;
+
+                for (int x=0; x < dimension; ++x, ++index, byteIndex += 2)
+                {
+                    ushort val = (ushort)((int)buffer[byteIndex] | (int)buffer[byteIndex + 1] << 8);
+                    float hN = (float)val / 65535.0f;
+                    float h =  hN * heightScale + heightOffset;
+
+                    if(h < 0.0f)
+                    {
+                        r = 0;
+                        g = 0;
+                        b = (int)(h/heightOffset * 255);
+                    }
+                    else
+                    {
+                        r = (int)(h/maxHeight * 255);
+                        g = r;
+                        b = r;
+                        // brown
+                        //r = 66;
+                        //g = 40;
+                        //b = 14;
+                    }
+
+                    IrrlichtLime.Video.Color c = new IrrlichtLime.Video.Color(r, g, b);
+                    //Vertex3DTTCoords v = new Vertex3DTTCoords();
+                    verts[index] = new Vertex3D(-currX, currY, h, 0.0f, 0.0f, 1.0f, c);
+                    //v.TCoords.X = du;
+                    //v.TCoords.Y = dv;
+
+                    currX += stepSize;
+                    //du += tdSize;
+                }
+                currY += stepSize;
+                //dv += tdSize;
+            }
+
+            stopWatch.Stop();
+            // Get the elapsed time as a TimeSpan value.
+            TimeSpan ts = stopWatch.Elapsed;
+
+            // Format and display the TimeSpan value.
+            string elapsedTime = String.Format("{0:00}.{1:00}", ts.Seconds, ts.Milliseconds / 10);
+            Console.WriteLine("RunTime " + elapsedTime);
+
+            /*
+            int rowIndex = dimension;
+
+            for (int y = 1; y < dimension - 1; ++y)
+            {
+                for (int x = 1; x < dimension - 1; ++x)
+                {
+                    int colIndex = rowIndex + x;
+
+                    Vector3Df sum = new Vector3Df(0.0f, 0.0f, 0.0f);
+                    Vector3Df v0 = new Vector3Df(verts[colIndex - dimension].Position - verts[colIndex].Position);
+                    Vector3Df v1 = new Vector3Df(verts[colIndex + dimension].Position - verts[colIndex].Position);
+                    Vector3Df v2 = new Vector3Df(verts[colIndex - 1].Position - verts[colIndex].Position);
+                    Vector3Df v3 = new Vector3Df(verts[colIndex + 1].Position - verts[colIndex].Position);
+
+                    sum += v0.CrossProduct(v2);
+                    sum += v2.CrossProduct(v1);
+                    sum += v1.CrossProduct(v3);
+                    sum += v3.CrossProduct(v0);
+
+                    verts[colIndex].Normal = sum.Normalize();
+                }
+
+                rowIndex += dimension;
+            }
+            */
+            // create faces
+            index = 0;
+            uint row0Index = 0;
+            uint row1Index = (uint)dimension;
+
+            for (int z = 0; z < dimension - 2; ++z)
+            {
+                // do two rows at a time to make a triangle strip
+                for (int x = 0; x < dimension; ++x)
+                {
+                    indices[index++] = row0Index++;
+                    indices[index++] = row1Index++;
+                }
+
+                // add degenerate triangle to get to next row
+                indices[index++] = row1Index - 1;
+                indices[index++] = row0Index;
+            }
+
+            // do two rows at a time to make a triangle strip
+            for (int x = 0; x < dimension; ++x)
+            {
+                indices[index++] = row0Index++;
+                indices[index++] = row1Index++;
+            }
+
+            mb.Append(verts, indices, IrrlichtLime.Scene.PrimitiveType.TriangleStrip);
+            mb.SetHardwareMappingHint(HardwareMappingHint.Static, HardwareBufferType.VertexAndIndex);
+            mb.RecalculateBoundingBox();
+
+            m.AddMeshBufferEx(mb); // buffer is copied
+            mb.Drop();
+
+            //smgr.MeshManipulator.RecalculateNormals(m);
+        }
+
+        private void AddTerrain(CClipMap info, ref int meshId)
+        {
+            TreeNode terrainNode = new TreeNode("Terrain " + meshId.ToString());
+
+            float maxHeight = info.HighestElevation.val;
+            float minHeight = info.LowestElevation.val;
+            uint numTilesPerEdge = info.NumTilesPerEdge.val;
+            float terrainSize = info.TerrainSize.val / numTilesPerEdge;
+            Vector3Df startPoint = new Vector3Df(info.TerrainCorner.X.val, info.TerrainCorner.Y.val, info.TerrainCorner.Z.val);
+
+            //string texFileName = info.Material.DepotPath; // this is a .w2mg
+            //Texture terrainTex = driver.GetTexture("");
+            Vector3Df nextRow = new Vector3Df(startPoint);
+            Vector3Df dy = new Vector3Df(0.0f, terrainSize, 0.0f);
+            Vector3Df dx = new Vector3Df(terrainSize, 0.0f, 0.0f);
+
+            int index = 0;
+            for (uint y=0; y < numTilesPerEdge; ++y)
+            {
+                Vector3Df nextColumn = new Vector3Df(startPoint + dy * y);
+
+                for (uint x = 0; x < numTilesPerEdge; ++x)
+                {
+                    var tile = info.TerrainTiles[index++];
+
+                    Vector3Df nextPt = new Vector3Df(nextColumn + dx * x);
+
+                    Vector3Df unusedPosition = new Vector3Df(0.0f, 0.0f, 0.0f);
+                    Vector3Df unusedRotation = new Vector3Df(0.0f, 0.0f, 0.0f);
+
+#if !USE_METHOD1
+                    IrrlichtLime.Scene.Mesh m = IrrlichtLime.Scene.Mesh.Create();
+                    RenderTreeNode terrainMeshNode = new RenderTreeNode("Tiles " + index.ToString(), meshId++, m, unusedPosition, unusedRotation);
+
+                    var tileFileName = depot + tile.DepotPath;
+                    //LoadTerrain(tileFileName, 512, maxHeight, minHeight, terrainSize, nextPt, ref m);
+                    LoadTerrain(tileFileName, 256, maxHeight, minHeight, terrainSize, nextPt, ref m);
+                    //LoadTerrain(tileFileName, 128, maxHeight, minHeight, terrainSize, nextPt, ref m);
+                    //LoadTerrain(tileFileName, 16, maxHeight, minHeight, terrainSize, nextPt, ref m);
+                    terrainNode.Nodes.Add(terrainMeshNode);
+#else
+                    var tileFileName = depot + tile.DepotPath + ".3.buffer";
+                    var node = smgr.AddTerrainSceneNodeWolvenKit(tileFileName, worldNode, meshId, 256, maxHeight, minHeight, terrainSize, nextPt, 5, TerrainPatchSize._17);
+                    node.Visible = false;
+                    RenderTreeNode terrainMeshNode = new RenderTreeNode("Tiles " + index.ToString(), meshId++, node.Mesh, unusedPosition, unusedRotation);
+                    terrainMeshNode.MeshNode = node;
+                    terrainNode.Nodes.Add(terrainMeshNode);
+#endif
+                }
+            }
+
+#if USE_METHOD1
+            terrainNode.UpdateBounds();
+#endif
+
+            sceneView.Invoke((MethodInvoker)delegate
+            {
+                sceneView.Nodes.Add(terrainNode);
+            });
         }
 
         private void AddLayer(string layerFileName, string layerName, ref int meshId)
@@ -175,24 +391,14 @@ namespace WolvenKit.Render
                             string meshPath = depot + meshName;
 
                             IrrlichtLime.Scene.Mesh m = smgr.GetMesh(meshPath);
-#if USE_WK_OCTREE
-                            // apply position and rotation!
-                            
-                            foreach (var mb in m.MeshBuffers)
-                            {
-                                totalVertexCount += mb.VertexCount;
-                                mb.SetHardwareMappingHint(HardwareMappingHint.Static, HardwareBufferType.VertexAndIndex);
-                            }
-                            m = smgr.MeshManipulator.CreateMeshWithTangents(m, true);
-#else
                             m = smgr.MeshManipulator.CreateMeshWithTangents(m, true);
 
                             foreach (var mb in m.MeshBuffers)
                             {
                                 totalVertexCount += mb.VertexCount;
+                                //TODO: would be nice to move these hardware hints into the Mesh class if we know that the mesh is static
                                 mb.SetHardwareMappingHint(HardwareMappingHint.Static, HardwareBufferType.VertexAndIndex);
                             }
-#endif
 
                             RenderTreeNode meshNode = new RenderTreeNode(meshName, meshId++, m, translation, rotation);
 
@@ -272,9 +478,14 @@ namespace WolvenKit.Render
 
                         AddLayer(layerFileName, info.DepotFilePath.ToString(), ref meshId);
                     }
+                    else if (worldChunk.REDType == "CClipMap")
+                    {
+                        CClipMap info = (CClipMap)worldChunk.data;
+                        AddTerrain(info, ref meshId);
+                    }
                 }
             }
-            else if(Path.GetExtension(inputFilename) == ".w2l")
+            else if (Path.GetExtension(inputFilename) == ".w2l")
             {
                 AddLayer(inputFilename, inputFilename, ref meshId);
             }
@@ -315,7 +526,8 @@ namespace WolvenKit.Render
                 if (irrlichtPanel.InvokeRequired)
                     irrlichtPanel.Invoke(new MethodInvoker(delegate { irrparam.WindowID = irrlichtPanel.Handle; }));
                 irrparam.DriverType = DriverType.Direct3D9;
-                irrparam.BitsPerPixel = 16;
+                irrparam.BitsPerPixel = 32;
+                irrparam.AntiAliasing = 1;
 
                 device = IrrlichtDevice.CreateDevice(irrparam);
 
@@ -328,8 +540,8 @@ namespace WolvenKit.Render
                 smgr.Attributes.SetValue("TW_TW3_TEX_PATH", depot);
                 driver.SetTextureCreationFlag(TextureCreationFlag.Always32Bit, true);
 
-                lightNode = smgr.AddLightSceneNode(null, new Vector3Df(0, 0, 0), new Colorf(1.0f, 1.0f, 1.0f), 2000);
-                smgr.AmbientLight = new Colorf(0.3f, 0.3f, 0.3f);
+                //lightNode = smgr.AddLightSceneNode(null, new Vector3Df(0, 0, 0), new Colorf(1.0f, 1.0f, 1.0f), 200000);
+                smgr.AmbientLight = new Colorf(1.0f, 1.0f, 1.0f);
                 worldNode = smgr.AddEmptySceneNode();
                 worldNode.Rotation = new Vector3Df(-90, 0, 0);
                 worldNode.Visible = true;
@@ -337,21 +549,28 @@ namespace WolvenKit.Render
                 var dome = smgr.AddSkyDomeSceneNode(driver.GetTexture("Terrain\\skydome.jpg"), 16, 8, 0.95f, 2.0f);
                 dome.Visible = true;
                 
-                fpstext = gui.AddStaticText("0 fps",
+                fpstext = gui.AddStaticText("FPS: 0",
                     new Recti(2, 10, 200, 30), false, false, null, 1, false);
                 fpstext.OverrideColor = IrrlichtLime.Video.Color.SolidRed;
+                fpstext.OverrideFont = gui.GetFont("#DefaultWKFont");
 
                 ParseScene();
 
-                vertexCountText = gui.AddStaticText(totalVertexCount.ToString() + " vertices",
+                vertexCountText = gui.AddStaticText("Vertices: " + totalVertexCount.ToString(),
                     new Recti(2, 32, 300, 52), false, false, null, 1, false);
                 vertexCountText.OverrideColor = IrrlichtLime.Video.Color.SolidRed;
+                vertexCountText.OverrideFont = gui.GetFont("#DefaultWKFont");
 
-                smgr.AddCameraSceneNodeMaya();
+                var camera = smgr.AddCameraSceneNodeWolvenKit();
+                
+                distanceBar.Invoke((MethodInvoker)delegate
+                {
+                    camera.FarValue = (float)Math.Pow(10.0, (double)distanceBar.Value);
+                });
 
                 sceneView.Invoke((MethodInvoker)delegate
                 {
-                    this.sceneView.Enabled = true;
+                    sceneView.Enabled = true;
                 });
 
                 toolStrip.Invoke((MethodInvoker)delegate
@@ -359,23 +578,57 @@ namespace WolvenKit.Render
                     addMeshButton.Enabled = true;
                 });
 
+                var viewPort = driver.ViewPort;
+                var lineMat = new IrrlichtLime.Video.Material
+                {
+                    Lighting = false
+                };
+
                 while (device.Run())
                 {
-                    if(doAddNodes)
+                    if (this.Visible)
                     {
-                        AddLayer(inputFilename, inputFilename, ref meshId);
-                        doAddNodes = false;
-                        sceneView.Invoke((MethodInvoker)delegate
+                        if (doAddNodes)
                         {
-                            this.sceneView.Enabled = true;
-                        });
+                            AddLayer(inputFilename, inputFilename, ref meshId);
+                            doAddNodes = false;
+                            sceneView.Invoke((MethodInvoker)delegate
+                            {
+                                sceneView.Enabled = true;
+                            });
+                        }
+
+                        driver.ViewPort = viewPort;
+
+                        driver.BeginScene(ClearBufferFlag.All, new IrrlichtLime.Video.Color(0, 0, 100));
+                        int val = driver.FPS;
+                        fpstext.Text = "FPS: " + val.ToString();
+
+                        if (!busy)
+                        {
+                            smgr.DrawAll();
+                        }
+
+                        gui.DrawAll();
+
+                        // draw xyz axis right bottom
+                        driver.ViewPort = new Recti(irrlichtPanel.Width - 100, irrlichtPanel.Height - 80, irrlichtPanel.Width, irrlichtPanel.Height);
+
+                        driver.SetMaterial(lineMat);
+                        var matrix = new Matrix(new Vector3Df(0, 0, 0), smgr.ActiveCamera.ModelRotation);
+                        driver.SetTransform(TransformationState.World, matrix);
+                        matrix = matrix.BuildProjectionMatrixOrthoLH(100, 80, 0.001f, 10000.0f);
+                        driver.SetTransform(TransformationState.Projection, matrix);
+                        matrix = matrix.BuildCameraLookAtMatrixLH(new Vector3Df(50, 0, 0), new Vector3Df(0, 0, 0), new Vector3Df(0, 1f, 0));
+                        driver.SetTransform(TransformationState.View, matrix);
+                        driver.Draw3DLine(0, 0, 0, 30f, 0, 0, IrrlichtLime.Video.Color.SolidGreen);
+                        driver.Draw3DLine(0, 0, 0, 0, 30f, 0, IrrlichtLime.Video.Color.SolidBlue);
+                        driver.Draw3DLine(0, 0, 0, 0, 0, 30f, IrrlichtLime.Video.Color.SolidRed);
+
+                        driver.EndScene();
                     }
-                    driver.BeginScene(ClearBufferFlag.All, new IrrlichtLime.Video.Color(0, 0, 100));
-                    int val = driver.FPS;
-                    fpstext.Text = val.ToString() + "fps";
-                    smgr.DrawAll();
-                    gui.DrawAll();
-                    driver.EndScene();
+                    else
+                        device.Yield();
                 }
             }
             catch (ThreadAbortException) { }
@@ -419,7 +672,22 @@ namespace WolvenKit.Render
                 Event evt = new Event(mev, e.X, e.Y, wheel, buttonStates);
                 if(device.PostEvent(evt))
                 {
-                    lightNode.Position = smgr.ActiveCamera.Position;
+                    //lightNode.Position = smgr.ActiveCamera.Position;
+                }
+            }
+        }
+
+        private void irrlichtPanel_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (device != null)
+            {
+                MouseEventType mev = MouseEventType.Wheel;
+                uint buttonStates = 7;
+                float wheel = e.Delta;
+                Event evt = new Event(mev, e.X, e.Y, wheel, buttonStates);
+                if (device.PostEvent(evt))
+                {
+                    //lightNode.Position = smgr.ActiveCamera.Position;
                 }
             }
         }
@@ -482,7 +750,7 @@ namespace WolvenKit.Render
                     break;
                 }
             }
-            lightNode.Position = cam.Position;
+            //lightNode.Position = cam.Position;
         }
 
         private void irrlichtPanel_Click(object sender, EventArgs e)
@@ -491,26 +759,32 @@ namespace WolvenKit.Render
 
         private void Render(RenderTreeNode node)
         {
+            busy = true;
+
             if (node.MeshNode == null)
             {
-#if USE_WK_OCTREE
-                MeshSceneNode meshNode = smgr.AddOctreeSceneNode(node.Mesh, worldNode, node.ID);
-#else
                 MeshSceneNode meshNode = smgr.AddMeshSceneNode(node.Mesh, worldNode, node.ID, node.Position, node.Rotation);
-#endif
                 meshNode.AutomaticCulling = CullingType.FrustumBox;
-                meshNode.SetMaterialFlag(MaterialFlag.Lighting, true);
-                node.MeshNode = meshNode;
+
+                //meshNode.SetMaterialFlag(MaterialFlag.Wireframe, true);
+                //meshNode.SetMaterialFlag(MaterialFlag.Lighting, true);
+
+                // for terrain!
+                meshNode.SetMaterialFlag(MaterialFlag.BackFaceCulling, true);
+                meshNode.SetMaterialFlag(MaterialFlag.Lighting, false);
+
+                node.MeshNode = meshNode;                
             }
 
             // otherwise the node is already in the scene so just put it in camera focus
             node.MeshNode.Visible = true;
             var camera = smgr.ActiveCamera;
 
-
             // for a Maya camera just set the target
             camera.Target = new Vector3Df(node.MeshNode.AbsolutePosition);
-            lightNode.Position = camera.Position;
+            //lightNode.Position = camera.Position;
+
+            busy = false;
         }
 
         private void Hide(RenderTreeNode node)
@@ -759,6 +1033,18 @@ namespace WolvenKit.Render
                 if (camera != null)
                 {
                     camera.AspectRatio = (float)irrlichtPanel.Width / (float)irrlichtPanel.Height;
+                }
+            }
+        }
+
+        private void distanceBar_ValueChanged(object sender, EventArgs e)
+        {
+            if (smgr != null)
+            {
+                var camera = smgr.ActiveCamera;
+                if (camera != null)
+                {
+                    camera.FarValue = Math.Max(100.0f, (float)Math.Pow(10.0, (double)distanceBar.Value));
                 }
             }
         }

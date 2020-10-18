@@ -4120,11 +4120,11 @@ This only modifies the relative rotation of the node.
 <member name="M:irr.scene.ICameraSceneNode.getViewFrustum" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ICameraSceneNode.h" line="138">
 \return The current view frustum. 
 </member>
-<member name="M:irr.scene.ICameraSceneNode.setInputReceiverEnabled(System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ICameraSceneNode.h" line="142">
+<member name="M:irr.scene.ICameraSceneNode.setInputReceiverEnabled(System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ICameraSceneNode.h" line="144">
 If this is set to true, the camera will respond to key
 		inputs otherwise not. 
 </member>
-<member name="M:irr.scene.ICameraSceneNode.bindTargetAndRotation(System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ICameraSceneNode.h" line="156">
+<member name="M:irr.scene.ICameraSceneNode.bindTargetAndRotation(System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ICameraSceneNode.h" line="158">
 When bound, calling setRotation() will update the camera's
 		target position to be along its +Z axis, and likewise calling
 		setTarget() will update its rotation so that its +Z axis will
@@ -4134,7 +4134,7 @@ When bound, calling setRotation() will update the camera's
 		and targeting, false to unbind them.
 		@see getTargetAndRotationBinding() 
 </member>
-<member name="M:irr.scene.ICameraSceneNode.getTargetAndRotationBinding" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ICameraSceneNode.h" line="170">
+<member name="M:irr.scene.ICameraSceneNode.getTargetAndRotationBinding" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ICameraSceneNode.h" line="172">
 @see bindTargetAndRotation() 
 </member>
 <member name="F:EIDT_WIN32" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\EDeviceTypes.h" line="16">
@@ -8178,7 +8178,24 @@ This is a standard camera with an animator that provides mouse control similar
 		\return Returns a pointer to the interface of the camera if successful, otherwise 0.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addCameraSceneNodeFPS(irr.scene.ISceneNode*,System.Single,System.Single,System.Int32,irr.SKeyMap*,System.Int32,System.Boolean,System.Single,System.Boolean,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="613">
+<member name="M:irr.scene.ISceneManager.addCameraSceneNodeWolvenKit(irr.scene.ISceneNode*,System.Single,System.Single,System.Single,System.Int32,System.Single,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="613">
+This is a standard camera with an animator that provides mouse control.
+		The camera does not react on setPosition anymore after applying this animator. Instead
+		use setTarget, to fix the target the camera the camera hovers around. And setDistance
+		to set the current distance from that target, i.e. the radius of the orbit the camera
+		hovers on.
+		\param parent: Parent scene node of the camera. Can be null.
+		\param rotateSpeed: Rotation speed of the camera.
+		\param zoomSpeed: Zoom speed of the camera.
+		\param translationSpeed: TranslationSpeed of the camera.
+		\param id: id of the camera. This id can be used to identify the camera.
+		\param distance Initial distance of the camera from the object
+		\param makeActive Flag whether this camera should become the active one.
+		Make sure you always have one active camera.
+		\return Returns a pointer to the interface of the camera if successful, otherwise 0.
+		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
+</member>
+<member name="M:irr.scene.ISceneManager.addCameraSceneNodeFPS(irr.scene.ISceneNode*,System.Single,System.Single,System.Int32,irr.SKeyMap*,System.Int32,System.Boolean,System.Single,System.Boolean,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="634">
 This FPS camera is intended to provide a demonstration of a
 		camera that behaves like a typical First Person Shooter. It is
 		useful for simple demos and prototyping but is not intended to
@@ -8243,7 +8260,7 @@ This FPS camera is intended to provide a demonstration of a
 		otherwise 0. This pointer should not be dropped. See
 		IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addLightSceneNode(irr.scene.ISceneNode*,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.video.SColorf,System.Single,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="683">
+<member name="M:irr.scene.ISceneManager.addLightSceneNode(irr.scene.ISceneNode*,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.video.SColorf,System.Single,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="704">
 The light will cast dynamic light on all
 		other scene nodes in the scene, which have the material flag video::MTF_LIGHTING
 		turned on. (This is the default setting in most scene nodes).
@@ -8257,7 +8274,7 @@ The light will cast dynamic light on all
 		\return Pointer to the interface of the light if successful, otherwise NULL.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addBillboardSceneNode(irr.scene.ISceneNode*,irr.core.dimension2d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Int32,irr.video.SColor,irr.video.SColor)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="701">
+<member name="M:irr.scene.ISceneManager.addBillboardSceneNode(irr.scene.ISceneNode*,irr.core.dimension2d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Int32,irr.video.SColor,irr.video.SColor)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="722">
 A billboard is like a 3d sprite: A 2d element,
 		which always looks to the camera. It is usually used for things
 		like explosions, fire, lensflares and things like that.
@@ -8277,7 +8294,7 @@ A billboard is like a 3d sprite: A 2d element,
 		This pointer should not be dropped. See
 		IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addSkyBoxSceneNode(irr.video.ITexture*,irr.video.ITexture*,irr.video.ITexture*,irr.video.ITexture*,irr.video.ITexture*,irr.video.ITexture*,irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="725">
+<member name="M:irr.scene.ISceneManager.addSkyBoxSceneNode(irr.video.ITexture*,irr.video.ITexture*,irr.video.ITexture*,irr.video.ITexture*,irr.video.ITexture*,irr.video.ITexture*,irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="746">
 A skybox is a big cube with 6 textures on it and
 		is drawn around the camera position.
 		\param top: Texture for the top plane of the box.
@@ -8293,7 +8310,7 @@ A skybox is a big cube with 6 textures on it and
 		\return Pointer to the sky box if successful, otherwise NULL.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addSkyDomeSceneNode(irr.video.ITexture*,System.UInt32,System.UInt32,System.Single,System.Single,System.Single,irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="744">
+<member name="M:irr.scene.ISceneManager.addSkyDomeSceneNode(irr.video.ITexture*,System.UInt32,System.UInt32,System.Single,System.Single,System.Single,irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="765">
 A skydome is a large (half-) sphere with a panoramic texture
 		on the inside and is drawn around the camera position.
 		\param texture: Texture for the dome.
@@ -8312,7 +8329,7 @@ A skydome is a large (half-) sphere with a panoramic texture
 		\return Pointer to the sky dome if successful, otherwise NULL.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addParticleSystemSceneNode(System.Boolean,irr.scene.ISceneNode*,System.Int32,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="767">
+<member name="M:irr.scene.ISceneManager.addParticleSystemSceneNode(System.Boolean,irr.scene.ISceneNode*,System.Int32,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="788">
 \param withDefaultEmitter: Creates a default working point emitter
 		which emits some particles. Set this to true to see a particle system
 		in action. If set to false, you'll have to set the emitter you want by
@@ -8326,7 +8343,7 @@ A skydome is a large (half-) sphere with a panoramic texture
 		\return Pointer to the created scene node.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addTerrainSceneNode(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.scene.ISceneNode*,System.Int32,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.video.SColor,System.Int32,irr.scene.E_TERRAIN_PATCH_SIZE,System.Int32,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="786">
+<member name="M:irr.scene.ISceneManager.addTerrainSceneNode(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.scene.ISceneNode*,System.Int32,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.video.SColor,System.Int32,irr.scene.E_TERRAIN_PATCH_SIZE,System.Int32,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="807">
 This node implements is a simple terrain renderer which uses
 		a technique known as geo mip mapping
 		for reducing the detail of triangle blocks which are far away.
@@ -8383,7 +8400,7 @@ This node implements is a simple terrain renderer which uses
 		not be dropped. See IReferenceCounted::drop() for more
 		information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addTerrainSceneNode(irr.io.IReadFile*,irr.scene.ISceneNode*,System.Int32,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.video.SColor,System.Int32,irr.scene.E_TERRAIN_PATCH_SIZE,System.Int32,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="852">
+<member name="M:irr.scene.ISceneManager.addTerrainSceneNode(irr.io.IReadFile*,irr.scene.ISceneNode*,System.Int32,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.video.SColor,System.Int32,irr.scene.E_TERRAIN_PATCH_SIZE,System.Int32,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="873">
 Just like the other addTerrainSceneNode() method, but takes an IReadFile
 		pointer as parameter for the heightmap. For more information take a look
 		at the other function.
@@ -8412,18 +8429,18 @@ Just like the other addTerrainSceneNode() method, but takes an IReadFile
 		not be dropped. See IReferenceCounted::drop() for more
 		information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addQuake3SceneNode(irr.scene.IMeshBuffer!System.Runtime.CompilerServices.IsConst*,irr.scene.quake3.IShader!System.Runtime.CompilerServices.IsConst*,irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="890">
+<member name="M:irr.scene.ISceneManager.addQuake3SceneNode(irr.scene.IMeshBuffer!System.Runtime.CompilerServices.IsConst*,irr.scene.quake3.IShader!System.Runtime.CompilerServices.IsConst*,irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="919">
 A Quake3 Scene renders multiple meshes for a specific HighLanguage Shader (Quake3 Style )
 		\return Pointer to the quake3 scene node if successful, otherwise NULL.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addEmptySceneNode(irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="899">
+<member name="M:irr.scene.ISceneManager.addEmptySceneNode(irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="928">
 Can be used for doing advanced transformations
 		or structuring the scene graph.
 		\return Pointer to the created scene node.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addDummyTransformationSceneNode(irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="906">
+<member name="M:irr.scene.ISceneManager.addDummyTransformationSceneNode(irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="935">
 This scene node does not render itself, and does not respond to set/getPosition,
 		set/getRotation and set/getScale. Its just a simple scene node that takes a
 		matrix as relative transformation, making it possible to insert any transformation
@@ -8431,7 +8448,7 @@ This scene node does not render itself, and does not respond to set/getPosition,
 		\return Pointer to the created scene node.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addBillboardTextSceneNode(irr.gui.IGUIFont*,System.Char!System.Runtime.CompilerServices.IsConst*,irr.scene.ISceneNode*,irr.core.dimension2d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Int32,irr.video.SColor,irr.video.SColor)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="922">
+<member name="M:irr.scene.ISceneManager.addBillboardTextSceneNode(irr.gui.IGUIFont*,System.Char!System.Runtime.CompilerServices.IsConst*,irr.scene.ISceneNode*,irr.core.dimension2d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Int32,irr.video.SColor,irr.video.SColor)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="951">
 \param font The font to use on the billboard. Pass 0 to use the GUI environment's default font.
 \param text The text to display on the billboard.
 \param parent The billboard's parent. Pass 0 to use the root scene node.
@@ -8443,7 +8460,7 @@ This scene node does not render itself, and does not respond to set/getPosition,
 \return Pointer to the billboard if successful, otherwise NULL.
 This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addHillPlaneMesh(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.dimension2d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.dimension2d&lt;System.UInt32&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.video.SMaterial*,System.Single,irr.core.dimension2d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.dimension2d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="940">
+<member name="M:irr.scene.ISceneManager.addHillPlaneMesh(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.dimension2d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.dimension2d&lt;System.UInt32&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.video.SMaterial*,System.Single,irr.core.dimension2d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.dimension2d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="969">
 The mesh is generated on the fly
 		and looks like a plane with some hills on it. It is uses mostly for quick
 		tests of the engine only. You can specify how many hills there should be
@@ -8471,7 +8488,7 @@ The mesh is generated on the fly
 		exists. If successful, a pointer to the mesh is returned.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addTerrainMesh(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.video.IImage*,irr.video.IImage*,irr.core.dimension2d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Single,irr.core.dimension2d&lt;System.UInt32&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="973">
+<member name="M:irr.scene.ISceneManager.addTerrainMesh(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.video.IImage*,irr.video.IImage*,irr.core.dimension2d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Single,irr.core.dimension2d&lt;System.UInt32&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1002">
 The mesh is generated on the fly
 		from a texture file and a height map file. Both files may be huge
 		(8000x8000 pixels would be no problem) because the generator splits the
@@ -8495,7 +8512,7 @@ The mesh is generated on the fly
 		exists, or that a texture could not be found. If successful, a pointer to the mesh is returned.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addArrowMesh(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.video.SColor,irr.video.SColor,System.UInt32,System.UInt32,System.Single,System.Single,System.Single,System.Single)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1002">
+<member name="M:irr.scene.ISceneManager.addArrowMesh(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.video.SColor,irr.video.SColor,System.UInt32,System.UInt32,System.Single,System.Single,System.Single,System.Single)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1031">
 \param name Name of the mesh
 		\param vtxColorCylinder color of the cylinder
 		\param vtxColorCone color of the cone
@@ -8508,7 +8525,7 @@ The mesh is generated on the fly
 		\return Pointer to the arrow mesh if successful, otherwise 0.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addSphereMesh(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Single,System.UInt32,System.UInt32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1021">
+<member name="M:irr.scene.ISceneManager.addSphereMesh(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Single,System.UInt32,System.UInt32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1050">
 \param name Name of the mesh
 		\param radius Radius of the sphere
 		\param polyCountX Number of quads used for the horizontal tiling
@@ -8516,7 +8533,7 @@ The mesh is generated on the fly
 		\return Pointer to the sphere mesh if successful, otherwise 0.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addVolumeLightMesh(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.UInt32!System.Runtime.CompilerServices.IsConst,System.UInt32!System.Runtime.CompilerServices.IsConst,irr.video.SColor!System.Runtime.CompilerServices.IsConst,irr.video.SColor!System.Runtime.CompilerServices.IsConst)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1032">
+<member name="M:irr.scene.ISceneManager.addVolumeLightMesh(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.UInt32!System.Runtime.CompilerServices.IsConst,System.UInt32!System.Runtime.CompilerServices.IsConst,irr.video.SColor!System.Runtime.CompilerServices.IsConst,irr.video.SColor!System.Runtime.CompilerServices.IsConst)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1061">
 \param name Name of the mesh
 		\param SubdivideU Horizontal subdivision count
 		\param SubdivideV Vertical subdivision count
@@ -8526,7 +8543,7 @@ The mesh is generated on the fly
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information.
 
 </member>
-<member name="M:irr.scene.ISceneManager.getRootSceneNode" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1046">
+<member name="M:irr.scene.ISceneManager.getRootSceneNode" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1075">
 This is the scene node which is parent
 		of all scene nodes. The root scene node is a special scene node which
 		only exists to manage all scene nodes. It will not be rendered and cannot
@@ -8534,7 +8551,7 @@ This is the scene node which is parent
 		\return Pointer to the root scene node.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.getSceneNodeFromId(System.Int32,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1055">
+<member name="M:irr.scene.ISceneManager.getSceneNodeFromId(System.Int32,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1084">
 \param id: The id to search for
 		\param start: Scene node to start from. All children of this scene
 		node are searched. If null is specified, the root scene node is
@@ -8543,7 +8560,7 @@ This is the scene node which is parent
 		and null if no scene node could be found.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.getSceneNodeFromName(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1065">
+<member name="M:irr.scene.ISceneManager.getSceneNodeFromName(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1094">
 \param name: The name to search for
 		\param start: Scene node to start from. All children of this scene
 		node are searched. If null is specified, the root scene node is
@@ -8552,7 +8569,7 @@ This is the scene node which is parent
 		and null if no scene node could be found.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.getSceneNodeFromType(irr.scene.ESCENE_NODE_TYPE,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1075">
+<member name="M:irr.scene.ISceneManager.getSceneNodeFromType(irr.scene.ESCENE_NODE_TYPE,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1104">
 \param type: The type to search for
 		\param start: Scene node to start from. All children of this scene
 		node are searched. If null is specified, the root scene node is
@@ -8561,23 +8578,23 @@ This is the scene node which is parent
 		and null if no scene node could be found.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.getSceneNodesFromType(irr.scene.ESCENE_NODE_TYPE,irr.core.array&lt;irr.scene.ISceneNode**,irr.core.irrAllocator&lt;irr.scene.ISceneNode**&gt;&gt;*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1085">
+<member name="M:irr.scene.ISceneManager.getSceneNodesFromType(irr.scene.ESCENE_NODE_TYPE,irr.core.array&lt;irr.scene.ISceneNode**,irr.core.irrAllocator&lt;irr.scene.ISceneNode**&gt;&gt;*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1114">
 \param type: Type of scene node to find (ESNT_ANY will return all child nodes).
 		\param outNodes: results will be added to this array (outNodes is not cleared).
 		\param start: Scene node to start from. This node and all children of this scene
 		node are checked (recursively, so also children of children, etc). If null is specified,
 		the root scene node is taken as start-node. 
 </member>
-<member name="M:irr.scene.ISceneManager.getActiveCamera" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1095">
+<member name="M:irr.scene.ISceneManager.getActiveCamera" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1124">
 \return The active camera is returned. Note that this can
 		be NULL, if there was no camera created yet.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.setActiveCamera(irr.scene.ICameraSceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1101">
+<member name="M:irr.scene.ISceneManager.setActiveCamera(irr.scene.ICameraSceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1130">
 The previous active camera will be deactivated.
 		\param camera: The new camera which should be active. 
 </member>
-<member name="M:irr.scene.ISceneManager.registerNodeForRendering(irr.scene.ISceneNode*,irr.scene.E_SCENE_NODE_RENDER_PASS)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1112">
+<member name="M:irr.scene.ISceneManager.registerNodeForRendering(irr.scene.ISceneNode*,irr.scene.E_SCENE_NODE_RENDER_PASS)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1141">
 This method should only be used by SceneNodes when they get a
 		ISceneNode::OnRegisterSceneNode() call.
 		\param node: Node to register for drawing. Usually scene nodes would set 'this'
@@ -8587,25 +8604,25 @@ This method should only be used by SceneNodes when they get a
 		and will use ESNRP_SHADOW for this. See scene::E_SCENE_NODE_RENDER_PASS for details.
 		\return scene will be rendered ( passed culling ) 
 </member>
-<member name="M:irr.scene.ISceneManager.clearAllRegisteredNodesForRendering" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1124">
+<member name="M:irr.scene.ISceneManager.clearAllRegisteredNodesForRendering" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1153">
 Usually you don't have to care about this as drawAll will clear nodes
 		after rendering them. But sometimes you might have to manully reset this.
 		For example when you deleted nodes between registering and rendering. 
 </member>
-<member name="M:irr.scene.ISceneManager.drawAll" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1130">
+<member name="M:irr.scene.ISceneManager.drawAll" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1159">
 This can only be invoked between
 		IVideoDriver::beginScene() and IVideoDriver::endScene(). Please note that
 		the scene is not only drawn when calling this, but also animated
 		by existing scene node animators, culling of scene nodes is done, etc. 
 </member>
-<member name="M:irr.scene.ISceneManager.createRotationAnimator(irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1137">
+<member name="M:irr.scene.ISceneManager.createRotationAnimator(irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1166">
 \param rotationSpeed Specifies the speed of the animation in degree per 10 milliseconds.
 		\return The animator. Attach it to a scene node with ISceneNode::addAnimator()
 		and the animator will animate it.
 		If you no longer need the animator, you should call ISceneNodeAnimator::drop().
 		See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.createFlyCircleAnimator(irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Single,System.Single,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Single,System.Single)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1145">
+<member name="M:irr.scene.ISceneManager.createFlyCircleAnimator(irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Single,System.Single,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Single,System.Single)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1174">
 \param center: Center of the circle.
 		\param radius: Radius of the circle.
 		\param speed: The orbital speed, in radians per millisecond.
@@ -8619,7 +8636,7 @@ This can only be invoked between
 		If you no longer need the animator, you should call ISceneNodeAnimator::drop().
 		See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.createFlyStraightAnimator(irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.UInt32,System.Boolean,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1165">
+<member name="M:irr.scene.ISceneManager.createFlyStraightAnimator(irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d&lt;System.Single&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.UInt32,System.Boolean,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1194">
 \param startPoint: Start point of the line.
 		\param endPoint: End point of the line.
 		\param timeForWay: Time in milliseconds how long the node should need to
@@ -8633,7 +8650,7 @@ This can only be invoked between
 		If you no longer need the animator, you should call ISceneNodeAnimator::drop().
 		See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.createTextureAnimator(irr.core.array&lt;irr.video.ITexture**,irr.core.irrAllocator&lt;irr.video.ITexture**&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Int32,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1181">
+<member name="M:irr.scene.ISceneManager.createTextureAnimator(irr.core.array&lt;irr.video.ITexture**,irr.core.irrAllocator&lt;irr.video.ITexture**&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Int32,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1210">
 \param textures: List of textures to use.
 		\param timePerFrame: Time in milliseconds, how long any texture in the list
 		should be visible.
@@ -8644,7 +8661,7 @@ This can only be invoked between
 		If you no longer need the animator, you should call ISceneNodeAnimator::drop().
 		See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.createDeleteAnimator(System.UInt32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1194">
+<member name="M:irr.scene.ISceneManager.createDeleteAnimator(System.UInt32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1223">
 \param timeMs: Time in milliseconds, after when the node will be deleted.
 		\return The animator. Attach it to a scene node with ISceneNode::addAnimator()
 		and the animator will animate it.
@@ -8652,7 +8669,7 @@ This can only be invoked between
 		See IReferenceCounted::drop() for more information. 
 </member>
 <!-- Discarding badly formed XML document comment for member 'M:irr.scene.ISceneManager.createCollisionResponseAnimator(irr.scene.ITriangleSelector*,irr.scene.ISceneNode*,irr.core.vector3d<System.Single>!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d<System.Single>!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.core.vector3d<System.Single>!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Single)'. -->
-<member name="M:irr.scene.ISceneManager.createFollowSplineAnimator(System.Int32,irr.core.array&lt;irr.core.vector3d&lt;System.Single&gt;,irr.core.irrAllocator&lt;irr.core.vector3d&lt;System.Single&gt;&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Single,System.Single,System.Boolean,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1240">
+<member name="M:irr.scene.ISceneManager.createFollowSplineAnimator(System.Int32,irr.core.array&lt;irr.core.vector3d&lt;System.Single&gt;,irr.core.irrAllocator&lt;irr.core.vector3d&lt;System.Single&gt;&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,System.Single,System.Single,System.Boolean,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1269">
 The animator modifies the position of
 		the attached scene node to make it follow a Hermite spline.
 		It uses a subset of Hermite splines: either cardinal splines
@@ -8662,7 +8679,7 @@ The animator modifies the position of
 		If you no longer need the animator, you should call ISceneNodeAnimator::drop().
 		See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.createTriangleSelector(irr.scene.IMesh*,irr.scene.ISceneNode*,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1253">
+<member name="M:irr.scene.ISceneManager.createTriangleSelector(irr.scene.IMesh*,irr.scene.ISceneNode*,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1282">
 Triangle selectors
 		can be used for doing collision detection. Don't use this selector
 		for a huge amount of triangles like in Quake3 maps.
@@ -8684,21 +8701,21 @@ Triangle selectors
 		If you no longer need the selector, you should call ITriangleSelector::drop().
 		See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.createTriangleSelector(irr.scene.IMeshBuffer!System.Runtime.CompilerServices.IsConst*,System.UInt32,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1276">
+<member name="M:irr.scene.ISceneManager.createTriangleSelector(irr.scene.IMeshBuffer!System.Runtime.CompilerServices.IsConst*,System.UInt32,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1305">
 This is a static selector which won't update when the mesh changes.
 \param meshBuffer Triangles of that meshbuffer are used
 \param materialIndex If you pass a material index that index can be returned by the triangle selector.
 \para node: Scene node of which transformation is used.
 
 </member>
-<member name="M:irr.scene.ISceneManager.createTriangleSelector(irr.scene.IAnimatedMeshSceneNode*,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1285">
+<member name="M:irr.scene.ISceneManager.createTriangleSelector(irr.scene.IAnimatedMeshSceneNode*,System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1314">
 Details of the mesh associated with the node will be extracted internally.
 		\param node The animated mesh scene node from which to build the selector
 		\param separateMeshbuffers: When true it's possible to get information which meshbuffer
 		got hit in collision tests. But has a slight speed cost.
 
 </member>
-<member name="M:irr.scene.ISceneManager.createTriangleSelectorFromBoundingBox(irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1294">
+<member name="M:irr.scene.ISceneManager.createTriangleSelectorFromBoundingBox(irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1323">
 Triangle selectors
 		can be used for doing collision detection. Every time when triangles are
 		queried, the triangle selector gets the bounding box of the scene node,
@@ -8708,7 +8725,7 @@ Triangle selectors
 		If you no longer need the selector, you should call ITriangleSelector::drop().
 		See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.createOctreeTriangleSelector(irr.scene.IMesh*,irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1305">
+<member name="M:irr.scene.ISceneManager.createOctreeTriangleSelector(irr.scene.IMesh*,irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1334">
 Triangle selectors
 		can be used for doing collision detection. This triangle selector is
 		optimized for huge amounts of triangle, it organizes them in an octree.
@@ -8732,7 +8749,7 @@ Triangle selectors
 		If you no longer need the selector, you should call ITriangleSelector::drop().
 		See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.createOctreeTriangleSelector(irr.scene.IMeshBuffer*,System.UInt32,irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1331">
+<member name="M:irr.scene.ISceneManager.createOctreeTriangleSelector(irr.scene.IMeshBuffer*,System.UInt32,irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1360">
 Triangle selectors
 		can be used for doing collision detection. This triangle selector is
 		optimized for huge amounts of triangle, it organizes them in an octree.
@@ -8757,10 +8774,10 @@ Triangle selectors
 		If you no longer need the selector, you should call ITriangleSelector::drop().
 		See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.createOctTreeTriangleSelector(irr.scene.IMesh*,irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1358">
+<member name="M:irr.scene.ISceneManager.createOctTreeTriangleSelector(irr.scene.IMesh*,irr.scene.ISceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1387">
 \deprecated Use createOctreeTriangleSelector instead. This method may be removed by Irrlicht 1.9. 
 </member>
-<member name="M:irr.scene.ISceneManager.createMetaTriangleSelector" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1366">
+<member name="M:irr.scene.ISceneManager.createMetaTriangleSelector" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1395">
 A meta triangle selector is nothing more than a
 		collection of one or more triangle selectors providing together
 		the interface of one triangle selector. In this way,
@@ -8769,14 +8786,14 @@ A meta triangle selector is nothing more than a
 		If you no longer need the selector, you should call ITriangleSelector::drop().
 		See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.createTerrainTriangleSelector(irr.scene.ITerrainSceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1376">
+<member name="M:irr.scene.ISceneManager.createTerrainTriangleSelector(irr.scene.ITerrainSceneNode*,System.Int32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1405">
 \param node: Pointer to the created terrain scene node
 		\param LOD: Level of detail, 0 for highest detail.
 		\return The selector, or null if not successful.
 		If you no longer need the selector, you should call ITriangleSelector::drop().
 		See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addExternalMeshLoader(irr.scene.IMeshLoader*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1385">
+<member name="M:irr.scene.ISceneManager.addExternalMeshLoader(irr.scene.IMeshLoader*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1414">
 If you want the engine to be extended with
 		file formats it currently is not able to load (e.g. .cob), just implement
 		the IMeshLoader interface in your loading class and add it with this method.
@@ -8784,12 +8801,12 @@ If you want the engine to be extended with
 		newer or updated versions without the need to recompile the engine.
 		\param externalLoader: Implementation of a new mesh loader. 
 </member>
-<member name="M:irr.scene.ISceneManager.getMeshLoader(System.UInt32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1397">
+<member name="M:irr.scene.ISceneManager.getMeshLoader(System.UInt32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1426">
 \param index The index of the loader to retrieve. This parameter is an 0-based
 		array index.
 		\return A pointer to the specified loader, 0 if the index is incorrect. 
 </member>
-<member name="M:irr.scene.ISceneManager.addExternalSceneLoader(irr.scene.ISceneLoader*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1403">
+<member name="M:irr.scene.ISceneManager.addExternalSceneLoader(irr.scene.ISceneLoader*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1432">
 If you want the engine to be extended with
 		file formats it currently is not able to load (e.g. .vrml), just implement
 		the ISceneLoader interface in your loading class and add it with this method.
@@ -8797,20 +8814,20 @@ If you want the engine to be extended with
 		with newer or updated versions without the need to recompile the engine.
 		\param externalLoader: Implementation of a new mesh loader. 
 </member>
-<member name="M:irr.scene.ISceneManager.getSceneLoader(System.UInt32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1415">
+<member name="M:irr.scene.ISceneManager.getSceneLoader(System.UInt32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1444">
 \param index The index of the loader to retrieve. This parameter is an 0-based
 		array index.
 		\return A pointer to the specified loader, 0 if the index is incorrect. 
 </member>
-<member name="M:irr.scene.ISceneManager.getSceneCollisionManager" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1421">
+<member name="M:irr.scene.ISceneManager.getSceneCollisionManager" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1450">
 \return Pointer to the collision manager
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.getMeshManipulator" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1426">
+<member name="M:irr.scene.ISceneManager.getMeshManipulator" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1455">
 \return Pointer to the mesh manipulator
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addToDeletionQueue(irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1431">
+<member name="M:irr.scene.ISceneManager.addToDeletionQueue(irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1460">
 The scene node is immediately
 		deleted when it's secure. Which means when the scene node does not
 		execute animators and things like that. This method is for example
@@ -8820,18 +8837,18 @@ The scene node is immediately
 		See ISceneManager::createDeleteAnimator() for details.
 		\param node: Node to delete. 
 </member>
-<member name="M:irr.scene.ISceneManager.postEventFromUser(irr.SEvent!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1442">
+<member name="M:irr.scene.ISceneManager.postEventFromUser(irr.SEvent!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1471">
 Usually you do not have to
 		use this method, it is used by the internal engine. 
 </member>
-<member name="M:irr.scene.ISceneManager.clear" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1447">
+<member name="M:irr.scene.ISceneManager.clear" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1476">
 All scene nodes are removed. 
 </member>
-<member name="M:irr.scene.ISceneManager.getParameters" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1451">
+<member name="M:irr.scene.ISceneManager.getParameters" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1480">
 String parameters can be used by plugins and mesh loaders.
 		See	COLLADA_CREATE_SCENE_INSTANCES and DMF_USE_MATERIALS_DIRS 
 </member>
-<member name="M:irr.scene.ISceneManager.getSceneNodeRenderPass" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1456">
+<member name="M:irr.scene.ISceneManager.getSceneNodeRenderPass" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1485">
 All scene nodes are being rendered in a specific order.
 		First lights, cameras, sky boxes, solid geometry, and then transparent
 		stuff. During the rendering process, scene nodes may want to know what the scene
@@ -8839,41 +8856,41 @@ All scene nodes are being rendered in a specific order.
 		twice, once for transparent geometry and once for solid. When knowing what rendering
 		pass currently is active they can render the correct part of their geometry. 
 </member>
-<member name="M:irr.scene.ISceneManager.getDefaultSceneNodeFactory" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1465">
+<member name="M:irr.scene.ISceneManager.getDefaultSceneNodeFactory" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1494">
 \return Pointer to the default scene node factory
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.registerSceneNodeFactory(irr.scene.ISceneNodeFactory*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1470">
+<member name="M:irr.scene.ISceneManager.registerSceneNodeFactory(irr.scene.ISceneNodeFactory*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1499">
 Use this to extend the scene manager with new scene node types which it should be
 		able to create automatically, for example when loading data from xml files. 
 </member>
-<member name="M:irr.scene.ISceneManager.getSceneNodeFactory(System.UInt32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1478">
+<member name="M:irr.scene.ISceneManager.getSceneNodeFactory(System.UInt32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1507">
 \return Pointer to the requested scene node factory, or 0 if it does not exist.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.getDefaultSceneNodeAnimatorFactory" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1483">
+<member name="M:irr.scene.ISceneManager.getDefaultSceneNodeAnimatorFactory" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1512">
 \return Pointer to the default scene node animator factory
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.registerSceneNodeAnimatorFactory(irr.scene.ISceneNodeAnimatorFactory*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1488">
+<member name="M:irr.scene.ISceneManager.registerSceneNodeAnimatorFactory(irr.scene.ISceneNodeAnimatorFactory*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1517">
 Use this to extend the scene manager with new scene node animator types which it should be
 		able to create automatically, for example when loading data from xml files. 
 </member>
-<member name="M:irr.scene.ISceneManager.getSceneNodeAnimatorFactory(System.UInt32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1496">
+<member name="M:irr.scene.ISceneManager.getSceneNodeAnimatorFactory(System.UInt32)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1525">
 \return Pointer to the requested scene node animator factory, or 0 if it does not exist.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.addSceneNode(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1507">
+<member name="M:irr.scene.ISceneManager.addSceneNode(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1536">
 \return Pointer to the scene node added by a factory
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.createSceneNodeAnimator(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1512">
+<member name="M:irr.scene.ISceneManager.createSceneNodeAnimator(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1541">
 \param typeName: Type of the scene node animator to add.
 		\param target: Target scene node of the new animator.
 		\return Returns pointer to the new scene node animator or null if not successful. You need to
 		drop this pointer after calling this, see IReferenceCounted::drop() for details. 
 </member>
-<member name="M:irr.scene.ISceneManager.createNewSceneManager(System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1519">
+<member name="M:irr.scene.ISceneManager.createNewSceneManager(System.Boolean)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1548">
 This can be used to easily draw and/or store two
 		independent scenes at the same time. The mesh cache will be
 		shared between all existing scene managers, which means if you
@@ -8893,7 +8910,7 @@ This can be used to easily draw and/or store two
 		ISceneManager::drop().
 		See IReferenceCounted::drop() for more information. 
 </member>
-<member name="M:irr.scene.ISceneManager.saveScene(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.scene.ISceneUserDataSerializer*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1540">
+<member name="M:irr.scene.ISceneManager.saveScene(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.scene.ISceneUserDataSerializer*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1569">
 Scene nodes with the option isDebugObject set to true are
 		not being saved. The scene is usually written to an .irr file,
 		an xml based format. .irr files can Be edited with the Irrlicht
@@ -8910,7 +8927,7 @@ Scene nodes with the option isDebugObject set to true are
 		is also the default).
 		\return True if successful. 
 </member>
-<member name="M:irr.scene.ISceneManager.saveScene(irr.io.IWriteFile*,irr.scene.ISceneUserDataSerializer*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1558">
+<member name="M:irr.scene.ISceneManager.saveScene(irr.io.IWriteFile*,irr.scene.ISceneUserDataSerializer*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1587">
 Scene nodes with the option isDebugObject set to true are
 		not being saved. The scene is usually written to an .irr file,
 		an xml based format. .irr files can Be edited with the Irrlicht
@@ -8927,7 +8944,7 @@ Scene nodes with the option isDebugObject set to true are
 		is also the default).
 		\return True if successful. 
 </member>
-<member name="M:irr.scene.ISceneManager.saveScene(irr.io.IIrrXMLWriter&lt;System.Char,irr.IReferenceCounted&gt;*,irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.scene.ISceneUserDataSerializer*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1576">
+<member name="M:irr.scene.ISceneManager.saveScene(irr.io.IIrrXMLWriter&lt;System.Char,irr.IReferenceCounted&gt;*,irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.scene.ISceneUserDataSerializer*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1605">
 Scene nodes with the option isDebugObject set to true are
 		not being saved. The scene is usually written to an .irr file,
 		an xml based format. .irr files can Be edited with the Irrlicht
@@ -8946,7 +8963,7 @@ Scene nodes with the option isDebugObject set to true are
 		is also the default).
 		\return True if successful. 
 </member>
-<member name="M:irr.scene.ISceneManager.loadScene(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.scene.ISceneUserDataSerializer*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1596">
+<member name="M:irr.scene.ISceneManager.loadScene(irr.core.string&lt;System.Char,irr.core.irrAllocator&lt;System.Char&gt;&gt;!System.Runtime.CompilerServices.IsConst*!System.Runtime.CompilerServices.IsImplicitlyDereferenced,irr.scene.ISceneUserDataSerializer*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1625">
 The scene is usually loaded from an .irr file, an xml based
 		format, but other scene formats can be added to the engine via
 		ISceneManager::addExternalSceneLoader. .irr files can Be edited
@@ -8964,7 +8981,7 @@ The scene is usually loaded from an .irr file, an xml based
 		(which is also the default).
 		\return True if successful. 
 </member>
-<member name="M:irr.scene.ISceneManager.loadScene(irr.io.IReadFile*,irr.scene.ISceneUserDataSerializer*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1615">
+<member name="M:irr.scene.ISceneManager.loadScene(irr.io.IReadFile*,irr.scene.ISceneUserDataSerializer*,irr.scene.ISceneNode*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1644">
 The scene is usually loaded from an .irr file, an xml based
 		format, but other scene formats can be added to the engine via
 		ISceneManager::addExternalSceneLoader. .irr files can Be edited
@@ -8982,23 +8999,23 @@ The scene is usually loaded from an .irr file, an xml based
 		(which is also the default).
 		\return True if successful. 
 </member>
-<member name="M:irr.scene.ISceneManager.createMeshWriter(irr.scene.EMESH_WRITER_TYPE)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1634">
+<member name="M:irr.scene.ISceneManager.createMeshWriter(irr.scene.EMESH_WRITER_TYPE)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1663">
 Note: You need to drop() the pointer after use again, see IReferenceCounted::drop()
 		for details. 
 </member>
-<member name="M:irr.scene.ISceneManager.createSkinnedMesh" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1639">
+<member name="M:irr.scene.ISceneManager.createSkinnedMesh" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1668">
 Note: You need to drop() the pointer after use again, see IReferenceCounted::drop()
 		for details. 
 </member>
-<member name="M:irr.scene.ISceneManager.setLightManager(irr.scene.ILightManager*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1650">
+<member name="M:irr.scene.ISceneManager.setLightManager(irr.scene.ILightManager*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1679">
 \param[in] lightManager: the new callbacks manager. You may pass 0 to remove the
 			current callbacks manager and restore the default behavior. 
 </member>
-<member name="M:irr.scene.ISceneManager.getGeometryCreator" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1661">
+<member name="M:irr.scene.ISceneManager.getGeometryCreator" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1690">
 The geometry creator provides some helper methods to create various types of
 		basic geometry. This can be useful for custom scene nodes. 
 </member>
-<member name="M:irr.scene.ISceneManager.isCulled(irr.scene.ISceneNode!System.Runtime.CompilerServices.IsConst*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1666">
+<member name="M:irr.scene.ISceneManager.isCulled(irr.scene.ISceneNode!System.Runtime.CompilerServices.IsConst*)" decl="false" source="D:\Tools\WK\WolvenKit.Irrlicht\include\ISceneManager.h" line="1695">
 Please note that depending on the used culling method this
 		check can be rather coarse, or slow. A positive result is
 		correct, though, i.e. if this method returns true the node is

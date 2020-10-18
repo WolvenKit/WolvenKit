@@ -55,6 +55,7 @@ const wchar_t IRR_XML_FORMAT_GUI_ELEMENT[]		= L"element";
 const wchar_t IRR_XML_FORMAT_GUI_ELEMENT_ATTR_TYPE[]	= L"type";
 
 const io::path CGUIEnvironment::DefaultFontName = "#DefaultFont";
+const io::path CGUIEnvironment::DefaultWKFontName = "#DefaultWKFont";
 
 //! constructor
 CGUIEnvironment::CGUIEnvironment(io::IFileSystem* fs, video::IVideoDriver* driver, IOSOperator* op)
@@ -188,6 +189,24 @@ void CGUIEnvironment::loadBuiltInFont()
 	Fonts.push_back(f);
 
 	file->drop();
+
+    file = FileSystem->createMemoryReadFile(BuiltInWKFontData,
+        BuiltInWKFontDataSize, DefaultWKFontName, false);
+
+    font = DBG_NEW CGUIFont(this, DefaultWKFontName);
+    if (!font->load(file))
+    {
+        os::Printer::log("Error: Could not load built-in Font. Did you compile without the BMP loader?", ELL_ERROR);
+        font->drop();
+        file->drop();
+        return;
+    }
+
+    f.NamedPath.setPath(DefaultWKFontName);
+    f.Font = font;
+    Fonts.push_back(f);
+
+    file->drop();
 }
 
 
@@ -1551,6 +1570,13 @@ IGUIFont* CGUIEnvironment::getBuiltInFont() const
 	return Fonts[0].Font;
 }
 
+IGUIFont* CGUIEnvironment::getBuiltInWKFont() const
+{
+    if (Fonts.empty())
+        return 0;
+
+    return Fonts[1].Font;
+}
 
 IGUISpriteBank* CGUIEnvironment::getSpriteBank(const io::path& filename)
 {

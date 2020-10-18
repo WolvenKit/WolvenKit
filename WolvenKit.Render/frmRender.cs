@@ -43,6 +43,14 @@ namespace WolvenKit.Render
         private CR2WFile rigFile;
         private CR2WFile animFile;
 
+        private GUIStaticText mAnimText;
+        private GUIStaticText mPositionText;
+        private GUIStaticText mRotationText;
+        private GUIStaticText fpsText;
+        private GUIStaticText infoText;
+        private Recti infoViewRect;
+
+        public string DepotPath { get; set; }
         /// <summary>
         /// Witcher file containing mesh data.
         /// </summary>
@@ -54,8 +62,7 @@ namespace WolvenKit.Render
                 try
                 {
                     meshFile = value;
-                    mesh = new WKMesh(cdata);
-                    mesh.LoadData(meshFile, device);
+                    doPostLoad = true;
                 }
                 catch (Exception ex)
                 {
@@ -118,35 +125,40 @@ namespace WolvenKit.Render
         /// </summary>
         private Thread irrThread;
 
-        private static IrrlichtDevice device = null;
+        private IrrlichtDevice device;
         private VideoDriver driver;
         private SceneManager smgr;
         private GUIEnvironment gui;
+        private bool doPostLoad = false;
+        private bool doExit = false;
 
-        private static SceneNode node = null;
         private SkinnedMesh skinnedMesh;
 
         /// <summary>
         /// The common data.
         /// </summary>
-        private CommonData cdata = new CommonData();
-        private WKMesh mesh;
+        //private CommonData cdata = new CommonData();
+        private CommonData cdata = null;
+        //private WKMesh mesh;
+        private IrrlichtLime.Scene.SceneNode worldNode = null;
+        private IrrlichtLime.Scene.SceneNode node = null;
+        //private IrrlichtLime.Scene.Mesh mesh;
+        private IrrlichtLime.Scene.SceneNode lightNode = null;
         private Rig rig;
         private Animations anims;
         private int currAnimIdx = -1;
         private ILoggerService Logger;
 
         //private static Quaternion modelAngle = new Quaternion(new Vertex3f(), 0);
-        private Vector3Df modelPosition = new Vector3Df(0.0f);
+        //private Vector3Df modelPosition = new Vector3Df(0.0f);
         private Vector3Df modelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
         private Vector3Df startModelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
-        //private Vector3Df startModelAngleWithAnim = new Vector3Df(180.0f, 270.0f, 0.0f);
         private Vector3Df startModelAngleWithAnim = new Vector3Df(0.0f, 0.0f, 0.0f);
         private float scaleMul = 1;
 
         private bool modelAutorotating = true;
         private bool suppressTextureWarning = false;
-        private static bool useLight = false;
+        private bool useLight = false;
         #endregion
 
         /// <summary>
@@ -158,9 +170,6 @@ namespace WolvenKit.Render
         {
             Logger = renderHelper.getLogger();
             Logger.LogString("Render Init", Logtype.Normal);
-
-            resizeTimer.Tick += ResizeTimer;
-            resizeTimer.Interval = 1000;
 
             // start an irrlicht thread
             StartIrrThread();
@@ -183,7 +192,7 @@ namespace WolvenKit.Render
         {
             irrThread.Abort();
             // restart an irrlicht thread
-            skinnedMesh.Drop();
+            //skinnedMesh.Drop();
             StartIrrThread();
         }
 
@@ -194,13 +203,16 @@ namespace WolvenKit.Render
         {
             try
             {
+                infoViewRect = new Recti(this.ClientSize.Width - 100, this.ClientSize.Height - 80, this.ClientSize.Width, this.ClientSize.Height);
+
                 IrrlichtCreationParameters irrparam = new IrrlichtCreationParameters();
                 if (irrlichtPanel.IsDisposed)
                     throw new Exception("Form closed!");
                 if (irrlichtPanel.InvokeRequired)
                     irrlichtPanel.Invoke(new MethodInvoker(delegate { irrparam.WindowID = irrlichtPanel.Handle; }));
                 irrparam.DriverType = DriverType.Direct3D9;
-                irrparam.BitsPerPixel = 16;
+                irrparam.BitsPerPixel = 32;
+                irrparam.AntiAliasing = 1;
 
                 device = IrrlichtDevice.CreateDevice(irrparam);
 
@@ -211,18 +223,22 @@ namespace WolvenKit.Render
                 smgr = device.SceneManager;
                 gui = device.GUIEnvironment;
 
+                smgr.Attributes.SetValue("TW_TW3_TEX_PATH", DepotPath + "\\"); // need trailing slash!
+                driver.SetTextureCreationFlag(TextureCreationFlag.Always32Bit, true);
+
                 var animText = "";
                 if (Animations.AnimationNames.Count > 0 && currAnimIdx != -1)
                     animText = "Animation: " + Animations.AnimationNames[currAnimIdx].Key;
 
-                var mAnimText = gui.AddStaticText(animText, new Recti(0, this.ClientSize.Height - 80, 100, this.ClientSize.Height - 70));
-                var mPositionText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 70, 100, this.ClientSize.Height - 60));
-                var mRotationText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 60, 100, this.ClientSize.Height - 50));
-                var fpsText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 50, 100, this.ClientSize.Height - 40));
-                var infoText = gui.AddStaticText("[Space] - Reset\n[LMouse] - Rotate\n[MMouse] - Move\n[Wheel] - Zoom", new Recti(0, this.ClientSize.Height - 40, 100, this.ClientSize.Height));
+                mAnimText = gui.AddStaticText(animText, new Recti(0, this.ClientSize.Height - 80, 100, this.ClientSize.Height - 70));
+                mPositionText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 70, 100, this.ClientSize.Height - 60));
+                mRotationText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 60, 100, this.ClientSize.Height - 50));
+                fpsText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 50, 100, this.ClientSize.Height - 40));
+                infoText = gui.AddStaticText("[Space] - Reset\n[LMouse] - Rotate\n[MMouse] - Move\n[Wheel] - Zoom", new Recti(0, this.ClientSize.Height - 40, 100, this.ClientSize.Height));
                 mAnimText.OverrideColor = mPositionText.OverrideColor = mRotationText.OverrideColor = fpsText.OverrideColor = infoText.OverrideColor = new Color(255, 255, 255);
                 mAnimText.BackgroundColor = mPositionText.BackgroundColor = mRotationText.BackgroundColor = fpsText.BackgroundColor = infoText.BackgroundColor = new Color(0, 0, 0);
 
+                /*
                 skinnedMesh = smgr.CreateSkinnedMesh();
                 foreach (var meshBuffer in cdata.staticMesh.MeshBuffers)
                     skinnedMesh.AddMeshBuffer(meshBuffer);
@@ -245,16 +261,21 @@ namespace WolvenKit.Render
                 {
                     node = n;
                 }
+                */
+                //node.Scale = new Vector3Df(3.0f);
+                //node.SetMaterialFlag(MaterialFlag.Lighting, false);
 
-                node.Scale = new Vector3Df(3.0f);
-                node.SetMaterialFlag(MaterialFlag.Lighting, false);
+                //SetMaterials(driver);
 
-                SetMaterials(driver);
+                resetDebugViewMenu();                                                       //reset debug view featchers
+                smgr.Attributes.SetValue(SceneParameters.DebugNormalLength, scaleMul / 2);  //calculate normals length
+                
+                //var camera = smgr.AddCameraSceneNodeMaya();
 
-                CameraSceneNode camera = smgr.AddCameraSceneNode(null, new Vector3Df(node.BoundingBox.Radius * 8, node.BoundingBox.Radius, 0), new Vector3Df(0, node.BoundingBox.Radius, 0));
-                camera.NearValue = 0.001f;
-                camera.FOV = 45 * CommonData.PI_OVER_180;
-                scaleMul = node.BoundingBox.Radius / 4;
+                lightNode = smgr.AddLightSceneNode(null, new Vector3Df(0, 0, 0), new Colorf(1.0f, 1.0f, 1.0f), 2000);
+                smgr.AmbientLight = new Colorf(0.3f, 0.3f, 0.3f);
+                worldNode = smgr.AddEmptySceneNode();
+                worldNode.Visible = true;
 
                 var viewPort = driver.ViewPort;
                 var lineMat = new Material
@@ -262,53 +283,75 @@ namespace WolvenKit.Render
                     Lighting = false
                 };
 
-                resetDebugViewMenu();                                                       //reset debug view featchers
-                smgr.Attributes.SetValue(SceneParameters.DebugNormalLength, scaleMul / 2);  //calculate normals length
-
                 // main drawing loop
-                while (device.Run() && driver != null)
+                while (device.Run())
                 {
+                    if (doExit)
+                    {
+                        Console.WriteLine("Device yielding and exiting....");
+                        device.Yield();
+                        return;
+                    }
+
                     if (this.Visible)
                     {
-                        driver.ViewPort = viewPort;
+                        if (doPostLoad)
+                        {
+                            IrrlichtLime.Scene.Mesh mesh = smgr.GetMesh(meshFile.FileName);
+                            mesh = smgr.MeshManipulator.CreateMeshWithTangents(mesh, true);
+
+                            node = smgr.AddMeshSceneNode(mesh, worldNode);
+                            node.SetMaterialFlag(MaterialFlag.Lighting, true);
+                            node.SetMaterialFlag(MaterialFlag.BackFaceCulling, false);
+                            node.Scale = new Vector3Df(3.0f);
+
+                            var camera = smgr.AddCameraSceneNodeWolvenKit();
+                            camera.Target = new Vector3Df(node.AbsolutePosition);
+                            lightNode.Position = camera.Position;
+
+                            doPostLoad = false;
+                        }
+
+                        //driver.ViewPort = viewPort;
                         driver.BeginScene(ClearBufferFlag.All, new Color(100, 101, 140));
 
-                        node.Position = modelPosition;
-                        node.Rotation = modelAngle;
+                        if (node != null)
+                        {
+                            node.Rotation = modelAngle;
+                        }
 
                         //update info box
-                        mPositionText.Text = $"X: {modelPosition.X.ToString("F2")} Y: {modelPosition.Y.ToString("F2")} Z: {modelPosition.Z.ToString("F2")}";
-                        mRotationText.Text = $"Yaw: {modelAngle.Y.ToString("F2")} Roll: {modelAngle.Z.ToString("F2")}";
-                        fpsText.Text = $"FPS: {driver.FPS}";
+                        //mPositionText.Text = $"X: {modelPosition.X.ToString("F2")} Y: {modelPosition.Y.ToString("F2")} Z: {modelPosition.Z.ToString("F2")}";
+
+                        //mRotationText.Text = $"Yaw: {modelAngle.Y.ToString("F2")} Roll: {modelAngle.Z.ToString("F2")}";
+                        //fpsText.Text = $"FPS: {driver.FPS}";
 
                         smgr.DrawAll();
                         gui.DrawAll();
 
-
                         // draw xyz axis right bottom
-                        driver.ViewPort = new Recti(this.ClientSize.Width - 100, this.ClientSize.Height - 80, this.ClientSize.Width, this.ClientSize.Height);
+                        /*
+                        driver.ViewPort = infoViewRect;
 
                         driver.SetMaterial(lineMat);
-                        var matrix = new Matrix(new Vector3Df(0, 0, 0), modelAngle);
+                        var matrix = new Matrix(new Vector3Df(0, 0, 0), smgr.ActiveCamera.ModelRotation);
                         driver.SetTransform(TransformationState.World, matrix);
-                        matrix = matrix.BuildProjectionMatrixOrthoLH(100, 80, camera.NearValue, camera.FarValue);
+                        matrix = matrix.BuildProjectionMatrixOrthoLH(100, 80, 0.001f, 10000.0f);
                         driver.SetTransform(TransformationState.Projection, matrix);
                         matrix = matrix.BuildCameraLookAtMatrixLH(new Vector3Df(50, 0, 0), new Vector3Df(0, 0, 0), new Vector3Df(0, 1f, 0));
                         driver.SetTransform(TransformationState.View, matrix);
                         driver.Draw3DLine(0, 0, 0, 30f, 0, 0, Color.SolidGreen);
                         driver.Draw3DLine(0, 0, 0, 0, 30f, 0, Color.SolidBlue);
                         driver.Draw3DLine(0, 0, 0, 0, 0, 30f, Color.SolidRed);
-
+                        */
                         driver.EndScene();
                     }
                     else
                         device.Yield();
                 }
-
-                device.Drop();
             }
-            catch (ThreadAbortException) { }
-            catch (NullReferenceException) { }
+            //catch (ThreadAbortException) { }
+            //catch (NullReferenceException) { }
             catch (Exception ex)
             {
                 if (!this.IsDisposed)
@@ -324,6 +367,7 @@ namespace WolvenKit.Render
         /// </summary>
         private void SetMaterials(VideoDriver driver)//, AnimatedMeshSceneNode node)
         {
+            /*
             List<Material> materials = new List<Material>();
             //mat.Type = MaterialType.Solid;
             foreach (var materialInstance in cdata.materialInstances)
@@ -354,6 +398,7 @@ namespace WolvenKit.Render
                     node.SetMaterialTexture(i, mat.GetTexture(i));
                 }
             }
+            */
         }
 
         /// <summary>
@@ -417,7 +462,6 @@ namespace WolvenKit.Render
             // Change camera rotation
             if (modelAutorotating)
                 modelAngle.Y = (modelAngle.Y + 1f) % 360.0f;
-            //angle_autorotate_rad = angle_autorotate * PI_OVER_180;
 
         }
 

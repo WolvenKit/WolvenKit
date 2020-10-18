@@ -256,7 +256,7 @@ SW3Animation* CW3EntLoader::getAnimationByIdx(int idx)
 void CW3EntLoader::W3_CSkeletalAnimation(io::IReadFile* file, W3_DataInfos infos)
 {
     file->seek(infos.adress + 1);
-    os::Printer::log("W3_CSkeletalAnimation", ELL_INFORMATION);
+    os::Printer::log("W3_CSkeletalAnimation", ELL_DEBUG);
 
     float duration, fps;
     int animBuffer;
@@ -1251,7 +1251,7 @@ void chechNaNErrors(core::vector3df& vector3)
 CW3Skeleton CW3EntLoader::W3_CSkeleton(io::IReadFile* file, W3_DataInfos infos)
 {
     file->seek(infos.adress + 1);
-    os::Printer::log("W3_CSkeleton", ELL_INFORMATION);
+    os::Printer::log("W3_CSkeleton", ELL_DEBUG);
 
     CW3Skeleton skeleton;
     SPropertyHeader propHeader;
@@ -1346,7 +1346,7 @@ CW3Skeleton CW3EntLoader::W3_CSkeleton(io::IReadFile* file, W3_DataInfos infos)
     }
 
     Skeleton = skeleton;
-    os::Printer::log("W3_CSkeleton end", ELL_INFORMATION);
+    os::Printer::log("W3_CSkeleton end", ELL_DEBUG);
     
     return skeleton;
 }
@@ -1355,7 +1355,7 @@ void CW3EntLoader::W3_CMeshComponent(io::IReadFile* file, W3_DataInfos infos)
 {
     file->seek(infos.adress + 1);
     //std::cout << "W3_CMeshComponent, @infos.adress=" << infos.adress << ", end @" << infos.adress + infos.size << std::endl;
-    os::Printer::log("W3_CMeshComponent", ELL_INFORMATION);
+    os::Printer::log("W3_CMeshComponent", ELL_DEBUG);
 
     SPropertyHeader propHeader;
     while (ReadPropertyHeader(file, propHeader))
@@ -1384,13 +1384,13 @@ void CW3EntLoader::W3_CMeshComponent(io::IReadFile* file, W3_DataInfos infos)
         file->seek(propHeader.endPos);
     }
 
-    os::Printer::log("W3_CMeshComponent end", ELL_INFORMATION);
+    os::Printer::log("W3_CMeshComponent end", ELL_DEBUG);
 }
 
 void CW3EntLoader::W3_CEntityTemplate(io::IReadFile* file, W3_DataInfos infos)
 {
     file->seek(infos.adress + 1);
-    os::Printer::log("W3_CEntityTemplate", ELL_INFORMATION);
+    os::Printer::log("W3_CEntityTemplate", ELL_DEBUG);
 
     //std::cout << "W3_CEntityTemplate, @infos.adress=" << infos.adress << ", end @" << infos.adress + infos.size << std::endl;
 
@@ -1427,7 +1427,7 @@ void CW3EntLoader::W3_CEntityTemplate(io::IReadFile* file, W3_DataInfos infos)
         file->seek(propHeader.endPos);
     }
 
-    os::Printer::log("W3_CEntityTemplate end", ELL_INFORMATION);
+    os::Printer::log("W3_CEntityTemplate end", ELL_DEBUG);
 }
 
 void CW3EntLoader::W3_CEntity(io::IReadFile* file, W3_DataInfos infos)
@@ -1466,7 +1466,7 @@ char readBonesNumber(io::IReadFile* file)
 
 void CW3EntLoader::W3_CMesh(io::IReadFile* file, W3_DataInfos infos)
 {
-    os::Printer::log("W3_CMesh", ELL_INFORMATION);
+    os::Printer::log("W3_CMesh", ELL_DEBUG);
 
     SBufferInfos bufferInfos;
     core::array<SMeshInfos> meshes;
@@ -1531,7 +1531,7 @@ void CW3EntLoader::W3_CMesh(io::IReadFile* file, W3_DataInfos infos)
         }
         os::Printer::log("OK", ELL_DEBUG);
    }
-   os::Printer::log("W3_CMesh end", ELL_INFORMATION);
+   os::Printer::log("W3_CMesh end", ELL_DEBUG);
 }
 
 void CW3EntLoader::ReadBones(io::IReadFile* file)
@@ -1707,7 +1707,7 @@ video::SMaterial CW3EntLoader::ReadMaterialFile(core::stringc filename)
 
 video::SMaterial CW3EntLoader::ReadW2MIFile(core::stringc filename)
 {
-    os::Printer::log((formatString("Read W2MI : %s", filename.c_str())).c_str(), ELL_INFORMATION);
+    os::Printer::log((formatString("Read W2MI : %s", filename.c_str())).c_str(), ELL_DEBUG);
 
     video::SMaterial material;
     io::path fullFilename = ConfigGameTexturesPath + filename;
@@ -1751,7 +1751,7 @@ video::SMaterial CW3EntLoader::W3_CMaterialInstance(io::IReadFile* file, W3_Data
 
     while (file->getPos() < endOfChunk)
     {
-        os::Printer::log("Read property...", ELL_INFORMATION);
+        os::Printer::log("Read property...", ELL_DEBUG);
 
         SPropertyHeader propHeader;
         u16 extra;
@@ -1763,8 +1763,8 @@ video::SMaterial CW3EntLoader::W3_CMaterialInstance(io::IReadFile* file, W3_Data
             u32 fileId = readU32(file);
             fileId = 0xFFFFFFFF - fileId;
 
-            os::Printer::log("baseMat found", ELL_INFORMATION);
-            os::Printer::log((formatString("base material : %s", Files[fileId].c_str())).c_str(), ELL_INFORMATION);
+            os::Printer::log("baseMat found", ELL_DEBUG);
+            os::Printer::log((formatString("base material : %s", Files[fileId].c_str())).c_str(), ELL_DEBUG);
             mat = ReadMaterialFile(Files[fileId]);
 
             file->seek(propHeader.endPos);
@@ -1773,12 +1773,12 @@ video::SMaterial CW3EntLoader::W3_CMaterialInstance(io::IReadFile* file, W3_Data
         //{
         //    // imaterial
         //    file->seek(-2, true);
-        //    os::Printer::log("iMaterial found", ELL_INFORMATION);
+        //    os::Printer::log("iMaterial found", ELL_DEBUG);
         //    return ReadIMaterialProperty(file);
         //}
         else
         {
-            os::Printer::log("non material found", ELL_INFORMATION);
+            os::Printer::log("non material found", ELL_DEBUG);
             // read and ignore
             file->seek(-2, true);
             video::SMaterial tempMat = ReadIMaterialProperty(file);
@@ -1789,49 +1789,13 @@ video::SMaterial CW3EntLoader::W3_CMaterialInstance(io::IReadFile* file, W3_Data
             return mat;
         }
          
-        os::Printer::log("Done", ELL_INFORMATION);
+        os::Printer::log("Done", ELL_DEBUG);
     }
 
-    os::Printer::log("", ELL_INFORMATION);
+    os::Printer::log("", ELL_DEBUG);
     return mat;
 }
 
-/*
-void CW3EntLoader::W3_CMaterialInstances(io::IReadFile* file, W3_DataInfos infos)
-{
-    file->seek(infos.adress + 1);
-
-    const s32 endOfChunk = infos.adress + infos.size;
-
-    while (file->getPos() < endOfChunk)
-    {
-        os::Printer::log("Read property...", ELL_INFORMATION);
-
-        SPropertyHeader propHeader;
-        if (!ReadPropertyHeader(file, propHeader))
-        {
-            file->seek(-2, true);
-            video::SMaterial mat = ReadIMaterialProperty(file);
-            Materials.push_back(mat);
-        }
-
-        // material in a w2mi file
-        if (propHeader.propName == "baseMaterial")
-        {
-            u32 fileId = readU32(file);
-            fileId = 0xFFFFFFFF - fileId;
-
-            os::Printer::log("baseMat found", ELL_INFORMATION);
-            os::Printer::log((formatString("base material : %s", Files[fileId].c_str())).c_str(), ELL_INFORMATION);
-            video::SMaterial mat = ReadMaterialFile(Files[fileId]);
-            Materials.push_back(mat);
-        }
-
-        file->seek(propHeader.endPos);
-        os::Printer::log("Done", ELL_INFORMATION);
-    }    
-}
-*/
 
 // Check the file format version and load the mesh if it's ok
 bool CW3EntLoader::load(io::IReadFile* file)
@@ -1840,7 +1804,7 @@ bool CW3EntLoader::load(io::IReadFile* file)
     //core::stringc unused = readString(file, 4); // CR2W - this leaked memory.  Rather than allocate and read 4 bytes, just skip them
 
     const s32 fileFormatVersion = readS32(file);
-    os::Printer::log((formatString("File format version : %d", fileFormatVersion)).c_str(), ELL_INFORMATION);
+    os::Printer::log((formatString("File format version : %d", fileFormatVersion)).c_str(), ELL_DEBUG);
 
     if (getTWFileFormatVersion(file) == REV_WITCHER_3)
     {

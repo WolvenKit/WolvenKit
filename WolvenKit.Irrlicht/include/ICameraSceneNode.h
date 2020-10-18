@@ -138,6 +138,8 @@ namespace scene
 		/** \return The current view frustum. */
 		virtual const SViewFrustum* getViewFrustum() const =0;
 
+		virtual const core::vector3df getModelRotation() const = 0;
+
 		//! Disables or enables the camera to get key or mouse inputs.
 		/** If this is set to true, the camera will respond to key
 		inputs otherwise not. */

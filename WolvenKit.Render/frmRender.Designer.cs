@@ -1,4 +1,6 @@
-﻿namespace WolvenKit.Render
+﻿using System;
+
+namespace WolvenKit.Render
 {
     partial class frmRender
     {
@@ -13,15 +15,37 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
+            System.Console.WriteLine($"frmRender.Dispose({disposing})... ");
             if (disposing)                
             {
+                Console.WriteLine("Tell thread to exit...");
+                doExit = true;
+
+                Console.WriteLine("Now carry on");
+                node = null;
+                worldNode = null;
+
                 startModelAngleWithAnim?.Dispose();
                 startModelAngle?.Dispose();
-                modelPosition?.Dispose();
+                //modelPosition?.Dispose();
                 modelAngle?.Dispose();
                 components?.Dispose();
+                components = null;
+
+                //irrThread.Abort();
+                irrThread = null;
+
+                gui = null;
+                smgr = null;
+                driver = null;
+                device?.Close();
+                device?.Drop();
+                device?.Dispose();
+                device = null;
+
             }
             base.Dispose(disposing);
+            System.Console.WriteLine($"frmRender.Dispose({disposing})... done");
         }
 
         #region Windows Form Designer generated code
@@ -75,6 +99,8 @@
             this.irrlichtPanel.Size = new System.Drawing.Size(412, 316);
             this.irrlichtPanel.TabIndex = 1;
             this.irrlichtPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.irrlichtPanel_MouseMove);
+            this.irrlichtPanel.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.irrlichtPanel_MouseWheel);
+            this.irrlichtPanel.Resize += new System.EventHandler(this.irrlichtPanel_Resize);
             // 
             // contextMenuStrip
             // 
@@ -308,7 +334,6 @@
             this.Text = "Renderer";
             this.Load += new System.EventHandler(this.frmRender_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Bithack3D_KeyDown);
-            this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.Bithack3D_MouseWheel);
             this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 

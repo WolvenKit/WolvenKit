@@ -2578,6 +2578,7 @@ namespace WolvenKit
         {
             var dlg = new OpenFileDialog() { Title = "Open CR2W File" };
             dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
+            dlg.Filter = "Scene (*.w2scene)|*.w2scene|Quest (*.w2quest)|*.w2quest|Phase (*.w2phase)|*.w2phase|Journal (*.journal)|*.journal|Image (*.xbm)|*.xbm|Image (*.redswf)|*.redswf|Other (*.srt)|*.srt|Mesh (*.w2mesh)|*.w2mesh|All Files (*.*)|*.*";
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 OpenCr2wFile(dlg.FileName);
@@ -2698,7 +2699,7 @@ namespace WolvenKit
                                 Logger.LogString(ex.ToString() + "\n", Logtype.Error);
                             }
 
-                            MainController.Get().ProjectStatus = "File imported succesfully!";
+                            MainController.Get().ProjectStatus = "File imported successfully!";
                         }
                     }
                 }

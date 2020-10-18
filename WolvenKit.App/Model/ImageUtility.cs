@@ -312,11 +312,8 @@ namespace WolvenKit.App.Model
                     DDSUtils.GenerateAndWriteHeader(bw.BaseStream, GetDDSMetadata(xbm));
 
                     bw.Write(xbm.GetBytes());
-
                     ms.Flush();
-
                     ms.Close();
-                    ms = null;
                     return ms.ToArray();
                 }
             }

@@ -17,6 +17,8 @@ namespace WolvenKit.Render
         {
             if (disposing)
             {
+                device?.Yield();
+
                 components?.Dispose();
                 irrThread.Abort();
                 irrThread = null;
@@ -30,14 +32,17 @@ namespace WolvenKit.Render
 
                 foreach(System.Windows.Forms.TreeNode t in sceneView.Nodes)
                 {
-                    if(t.Nodes.Count > 0)
+                    if (t as GroupTreeNode == null)
                     {
-                        // free the RenderTreeNodes!
-                        foreach(RenderTreeNode rn in t.Nodes)
+                        if (t.Nodes.Count > 0)
                         {
-                            rn.Mesh.Drop();
-                            rn.Position.Dispose();
-                            rn.Rotation.Dispose();
+                            // free the RenderTreeNodes!
+                            foreach (RenderTreeNode rn in t.Nodes)
+                            {
+                                rn.Mesh?.Drop();
+                                rn.Position?.Dispose();
+                                rn.Rotation?.Dispose();
+                            }
                         }
                     }
                 }
@@ -56,6 +61,7 @@ namespace WolvenKit.Render
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLevelScene));
             this.levelPanel = new System.Windows.Forms.Panel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.distanceBar = new System.Windows.Forms.TrackBar();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.addMeshButton = new System.Windows.Forms.ToolStripButton();
             this.exportMeshButton = new System.Windows.Forms.ToolStripButton();
@@ -67,6 +73,7 @@ namespace WolvenKit.Render
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.distanceBar)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -88,6 +95,7 @@ namespace WolvenKit.Render
             // 
             // splitContainer.Panel1
             // 
+            this.splitContainer.Panel1.Controls.Add(this.distanceBar);
             this.splitContainer.Panel1.Controls.Add(this.toolStrip);
             this.splitContainer.Panel1.Controls.Add(this.sceneView);
             // 
@@ -97,6 +105,17 @@ namespace WolvenKit.Render
             this.splitContainer.Size = new System.Drawing.Size(993, 527);
             this.splitContainer.SplitterDistance = 331;
             this.splitContainer.TabIndex = 1;
+            // 
+            // distanceBar
+            // 
+            this.distanceBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.distanceBar.AutoSize = false;
+            this.distanceBar.Location = new System.Drawing.Point(82, 3);
+            this.distanceBar.Name = "distanceBar";
+            this.distanceBar.Size = new System.Drawing.Size(246, 22);
+            this.distanceBar.TabIndex = 3;
+            this.distanceBar.ValueChanged += new System.EventHandler(this.distanceBar_ValueChanged);
             // 
             // toolStrip
             // 
@@ -172,6 +191,7 @@ namespace WolvenKit.Render
             this.irrlichtPanel.MouseEnter += new System.EventHandler(this.irrlichtPanel_Enter);
             this.irrlichtPanel.MouseLeave += new System.EventHandler(this.irrlichtPanel_Leave);
             this.irrlichtPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.irrlichtPanel_MouseMove);
+            this.irrlichtPanel.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.irrlichtPanel_MouseWheel);
             this.irrlichtPanel.Resize += new System.EventHandler(this.irrlichtPanel_Resize);
             // 
             // frmLevelScene
@@ -192,6 +212,7 @@ namespace WolvenKit.Render
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.distanceBar)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -208,5 +229,6 @@ namespace WolvenKit.Render
         private System.Windows.Forms.ToolStripButton addMeshButton;
         private System.Windows.Forms.ToolStripButton exportMeshButton;
         private System.Windows.Forms.ToolStripButton showAllButton;
+        private System.Windows.Forms.TrackBar distanceBar;
     }
 }

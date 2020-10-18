@@ -17,11 +17,13 @@ namespace WolvenKit.Forms
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
+            System.Console.WriteLine($"frmChunkList.Dispose({disposing})...");
             if (disposing && (components != null))
             {
                 components.Dispose();
             }
             base.Dispose(disposing);
+            System.Console.WriteLine($"frmChunkList.Dispose({disposing})... done");
         }
 
         #region Windows Form Designer generated code

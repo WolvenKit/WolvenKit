@@ -38,6 +38,7 @@ ref class SceneNode;
 ref class SceneNodeAnimator;
 ref class SkinnedMesh;
 ref class TerrainSceneNode;
+ref class TerrainSceneNodeWolvenKit;
 ref class TextSceneNode;
 ref class TriangleSelector;
 ref class VolumeLightSceneNode;
@@ -104,6 +105,8 @@ public:
 	CameraSceneNode^ AddCameraSceneNodeMaya(SceneNode^ parent, float rotateSpeed);
 	CameraSceneNode^ AddCameraSceneNodeMaya(SceneNode^ parent);
 	CameraSceneNode^ AddCameraSceneNodeMaya();
+
+	CameraSceneNode^ AddCameraSceneNodeWolvenKit();
 
 	MeshSceneNode^ AddCubeSceneNode(float size, SceneNode^ parent, int id, Vector3Df^ position, Vector3Df^ rotation, Vector3Df^ scale);
 	MeshSceneNode^ AddCubeSceneNode(float size, SceneNode^ parent, int id, Vector3Df^ position, Vector3Df^ rotation);
@@ -217,6 +220,8 @@ public:
 	TerrainSceneNode^ AddTerrainSceneNode(IO::ReadFile^ heightMapFile, SceneNode^ parent, int id);
 	TerrainSceneNode^ AddTerrainSceneNode(IO::ReadFile^ heightMapFile, SceneNode^ parent);
 	TerrainSceneNode^ AddTerrainSceneNode(IO::ReadFile^ heightMapFile);
+
+	TerrainSceneNodeWolvenKit^ AddTerrainSceneNodeWolvenKit(String^ heightMapFileName, SceneNode^ parent, int id, int dimension, float maxHeight, float minHeight, float tileSize, Vector3Df^ anchor, int maxLOD, TerrainPatchSize patchSize);
 
 	TextSceneNode^ AddTextSceneNode(GUI::GUIFont^ font, String^ text, Video::Color^ color, SceneNode^ parent, Vector3Df^ position, int id);
 	TextSceneNode^ AddTextSceneNode(GUI::GUIFont^ font, String^ text, Video::Color^ color, SceneNode^ parent, Vector3Df^ position);

@@ -107,6 +107,8 @@ namespace scene
 		//! Sets the field of view (Default: PI / 3.5f)
 		virtual void setFOV(f32 fovy) _IRR_OVERRIDE_;
 
+		virtual const core::vector3df getModelRotation() const _IRR_OVERRIDE_;
+
 		//! PreRender event
 		virtual void OnRegisterSceneNode() _IRR_OVERRIDE_;
 

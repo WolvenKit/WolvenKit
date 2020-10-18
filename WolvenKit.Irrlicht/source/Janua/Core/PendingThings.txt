@@ -1,0 +1,45 @@
+
+Code:
+
+Must:
+
+--Logger: add timestamp
+--Process scene xml file.
+--KD tree for efficient queries to voxels and cells (query point/ aabb)
+--Remove recursion in findvisiblecells
+--Remove debug limits
+
+Nice to have:
+--Replace all vectors that use std::find with associative containers.
+--Replace Asserts and throw Logic_err to something like error enums.
+--Optimize Point3i ordering
+--Make the member variables naming consistent.
+
+
+Optimization:
+--Replace voxelization algorithm.
+--Simplify graph. Combine cells that have the same occlusion values.
+
+Library:
+--Add namespace
+
+
+
+Janua Preprocesor.exe
+
+--januaPreprocess.exe -scene scene1.rawscene.xml  -output "c:\scene1_pvs.lrb" -name "scene1" -Voxelsize "10.0f; 10.0f; 10.0f"  -MaxCellSize  "10;5;8"
+
+
+Editor:
+--Ver el escenario como quedo dividido en celdas. Mostrar lista de celdas, con su informacion: Id, volumen, nivel de occlusion, celdas vecinas, cantidad de modelos.
+--Ver celdas ordenadas por cantidad de modelos, por cantidad de oclusion.
+--Mapa de calor con nivel de occlusion
+
+
+Interoperablidad:
+--Portar en orden: 
+v 1: runtime: .h y .lib  preprocesor: .exe  (todo windows). Pruebas: Marian.
+v 1.1  lo mismo que 1 pero para linux. Armar makefile.
+v 1.2  port del runtime a android, tech demo.
+
+

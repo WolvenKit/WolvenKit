@@ -183,6 +183,7 @@
 #endif // _IRR_COMPILE_WITH_WATER_SURFACE_SCENENODE_
 #ifdef _IRR_COMPILE_WITH_TERRAIN_SCENENODE_
 #include "CTerrainSceneNode.h"
+#include "CTerrainSceneNodeWolvenKit.h"
 #endif // _IRR_COMPILE_WITH_TERRAIN_SCENENODE_
 #include "CEmptySceneNode.h"
 #include "CTextSceneNode.h"
@@ -209,6 +210,7 @@
 #include "CSceneNodeAnimatorFollowSpline.h"
 #include "CSceneNodeAnimatorCameraFPS.h"
 #include "CSceneNodeAnimatorCameraMaya.h"
+#include "CSceneNodeAnimatorCameraWolvenKit.h"
 #include "CDefaultSceneNodeAnimatorFactory.h"
 
 #include "CGeometryCreator.h"
@@ -803,6 +805,27 @@ ICameraSceneNode* CSceneManager::addCameraSceneNodeMaya(ISceneNode* parent,
 }
 
 
+//! Adds a camera scene node which is able to be controlled with the mouse similar
+//! to in the 3D Software Maya by Alias Wavefront.
+//! The returned pointer must not be dropped.
+ICameraSceneNode* CSceneManager::addCameraSceneNodeWolvenKit(ISceneNode* parent,
+    f32 rotateSpeed, f32 zoomSpeed, f32 translationSpeed, s32 id, f32 distance,
+    bool makeActive)
+{
+    ICameraSceneNode* node = addCameraSceneNode(parent, core::vector3df(),
+        core::vector3df(0, 0, 100), id, makeActive);
+    if (node)
+    {
+        ISceneNodeAnimator* anm = DBG_NEW CSceneNodeAnimatorCameraWolvenKit(CursorControl,
+            rotateSpeed, zoomSpeed, translationSpeed, distance);
+
+        node->addAnimator(anm);
+        anm->drop();
+    }
+
+    return node;
+}
+
 //! Adds a camera scene node which is able to be controlled with the mouse and keys
 //! like in most first person shooters (FPS):
 ICameraSceneNode* CSceneManager::addCameraSceneNodeFPS(ISceneNode* parent,
@@ -998,6 +1021,46 @@ ITerrainSceneNode* CSceneManager::addTerrainSceneNode(
 #endif // _IRR_COMPILE_WITH_TERRAIN_SCENENODE_
 }
 
+ITerrainSceneNode* CSceneManager::addTerrainSceneNodeWolvenKit(
+    const io::path& heightMapFileName,
+    ISceneNode* parent, s32 id,
+    s32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize,
+    const core::vector3df& anchor,
+    s32 maxLOD, E_TERRAIN_PATCH_SIZE patchSize) 
+{
+    io::IReadFile* file = FileSystem->createAndOpenFile(heightMapFileName);
+
+    if (!file)
+    {
+        os::Printer::log("Could not load terrain, because file could not be opened.",
+            heightMapFileName, ELL_ERROR);
+        return 0;
+    }
+
+    if (!parent)
+        parent = this;
+
+    CTerrainSceneNodeWolvenKit* node = DBG_NEW CTerrainSceneNodeWolvenKit(parent, this, FileSystem, id,
+        maxLOD, patchSize);
+
+    if (!node->loadHeightMap(file, dimension, maxHeight, minHeight, tileSize, anchor))
+    {
+		if (file)
+			file->drop();
+		
+		node->remove();
+        node->drop();
+        return nullptr;
+    }
+
+	if (file)
+		file->drop();
+
+    node->drop();
+
+
+    return node;
+}
 
 //! Adds an empty scene node.
 ISceneNode* CSceneManager::addEmptySceneNode(ISceneNode* parent, s32 id)

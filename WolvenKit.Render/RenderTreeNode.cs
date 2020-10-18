@@ -22,6 +22,6 @@ namespace WolvenKit.Render
         public int ID { get; set; }
         public Vector3Df Position { get; set; }
         public Vector3Df Rotation { get; set; }
-        public MeshSceneNode MeshNode { get; set; }
+        public SceneNode MeshNode { get; set; }
     }
 }

@@ -388,6 +388,7 @@ namespace WolvenKit
         private void frmCR2WDocument_FormClosed(object sender, FormClosedEventArgs e)
         {
             // close all float windows
+            System.Console.WriteLine($"frmCR2WDocument closed...");
 
             FormPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "cr2wdocument_layout.xml"));
 
@@ -398,6 +399,7 @@ namespace WolvenKit
 
             // needed?
             vm.PropertyChanged -= ViewModel_PropertyChanged;
+            System.Console.WriteLine($"frmCR2WDocument closed...done");
         }
 
 
@@ -566,6 +568,7 @@ namespace WolvenKit
                                 {
                                     LoadDocument = LoadDocumentAndGetFile,
                                     MeshFile = this.File,
+                                    DepotPath = MainController.Get().Configuration.DepotPath,
                                     DockAreas = DockAreas.Document,
                                     renderHelper = new Render.RenderHelper(MainController.Get().ActiveMod, MainController.Get().Logger)
                                 };

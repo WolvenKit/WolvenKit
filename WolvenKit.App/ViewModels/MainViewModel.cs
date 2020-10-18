@@ -514,7 +514,16 @@ namespace WolvenKit.App.ViewModels
             bool isDLC = false;
             EProjectFolders projectFolder = EProjectFolders.Uncooked;
             if (string.IsNullOrWhiteSpace(alternateOutDirectory))
-                (relativepath, isDLC, projectFolder) = importfilepath.GetModRelativePath(ActiveMod.FileDirectory);
+            {
+                try
+                {
+                    (relativepath, isDLC, projectFolder) = importfilepath.GetModRelativePath(ActiveMod.FileDirectory);
+                }
+                catch(Exception)
+                {
+                    return;
+                }
+            }
             else
             {
                 relativepath = importfilepath.Substring(alternateOutDirectory.Length + 1);
