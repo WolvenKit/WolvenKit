@@ -374,6 +374,7 @@
       <DisableSpecificWarnings>4577</DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ShowIncludes>false</ShowIncludes>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -470,6 +471,7 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <SDLCheck>false</SDLCheck>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -1292,10 +1294,49 @@
     <ClInclude Include=".\source\CGUIToolBar.h" />
     <ClInclude Include=".\source\CGUITreeView.h" />
     <ClInclude Include=".\source\CGUIWindow.h" />
+    <ClInclude Include="include\CSceneManagerWolvenKit.h" />
+    <ClInclude Include="include\ITerrainSceneNodeWolvenKit.h" />
     <ClInclude Include="source\CImageLoaderCube.h" />
     <ClInclude Include="source\CSceneNodeAnimatorCameraWolvenKit.h" />
     <ClInclude Include="source\CTerrainSceneNodeWolvenKit.h" />
     <ClInclude Include="source\debug.h" />
+    <ClInclude Include="source\Janua\Core\AABB.h" />
+    <ClInclude Include="source\Janua\Core\Cell.h" />
+    <ClInclude Include="source\Janua\Core\CollisionUtils.h" />
+    <ClInclude Include="source\Janua\Core\LineSegment.h" />
+    <ClInclude Include="source\Janua\Core\Matrix4x4.h" />
+    <ClInclude Include="source\Janua\Core\Plane.h" />
+    <ClInclude Include="source\Janua\Core\Point3i.h" />
+    <ClInclude Include="source\Janua\Core\Portal.h" />
+    <ClInclude Include="source\Janua\Core\PortalQuad.h" />
+    <ClInclude Include="source\Janua\Core\Ray.h" />
+    <ClInclude Include="source\Janua\Core\StabbingLine.h" />
+    <ClInclude Include="source\Janua\Core\stdafx.h" />
+    <ClInclude Include="source\Janua\Core\targetver.h" />
+    <ClInclude Include="source\Janua\Core\Triangle.h" />
+    <ClInclude Include="source\Janua\Core\Utils.h" />
+    <ClInclude Include="source\Janua\Core\Vector3f.h" />
+    <ClInclude Include="source\Janua\Core\Voxel.h" />
+    <ClInclude Include="source\Janua\Core\VoxelContainer.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\Logger.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\Model.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\ModelInstance.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\pugiconfig.hpp" />
+    <ClInclude Include="source\Janua\JanuaEngine\pugixml.hpp" />
+    <ClInclude Include="source\Janua\JanuaEngine\PVSDatabase.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\PVSDatabaseExporter.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\PVSDatabaseImporter.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\PVSGenerator.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\PVSPreprocessor.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\Query.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\QueryResult.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\Scene.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\SceneObjectType.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\SceneOptions.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\SceneTile.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\TrianglesOctree.h" />
+    <ClInclude Include="source\Janua\JanuaEngine\Utilities.h" />
+    <ClInclude Include="source\Janua\JanuaRuntime\JanuaRuntime.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\.gitignore" />
@@ -1623,11 +1664,47 @@
     <ClCompile Include=".\source\CGUIWindow.cpp" />
     <ClCompile Include="source\CImageLoaderCube.cpp" />
     <ClCompile Include="source\CImageLoaderXBM.cpp" />
+    <ClCompile Include="source\CSceneManagerWolvenKit.cpp" />
     <ClCompile Include="source\CSceneNodeAnimatorCameraWolvenKit.cpp" />
     <ClCompile Include="source\CTerrainSceneNodeWolvenKit.cpp" />
+    <ClCompile Include="source\Janua\Core\AABB.cpp" />
+    <ClCompile Include="source\Janua\Core\Cell.cpp" />
+    <ClCompile Include="source\Janua\Core\CollisionUtils.cpp" />
+    <ClCompile Include="source\Janua\Core\LineSegment.cpp" />
+    <ClCompile Include="source\Janua\Core\Matrix4x4.cpp" />
+    <ClCompile Include="source\Janua\Core\Plane.cpp" />
+    <ClCompile Include="source\Janua\Core\Point3i.cpp" />
+    <ClCompile Include="source\Janua\Core\Portal.cpp" />
+    <ClCompile Include="source\Janua\Core\PortalQuad.cpp" />
+    <ClCompile Include="source\Janua\Core\Ray.cpp" />
+    <ClCompile Include="source\Janua\Core\StabbingLine.cpp" />
+    <ClCompile Include="source\Janua\Core\stdafx.cpp" />
+    <ClCompile Include="source\Janua\Core\Triangle.cpp" />
+    <ClCompile Include="source\Janua\Core\Vector3f.cpp" />
+    <ClCompile Include="source\Janua\Core\Voxel.cpp" />
+    <ClCompile Include="source\Janua\Core\VoxelContainer.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\Logger.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\Model.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\ModelInstance.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\pugixml.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\PVSDatabase.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\PVSDatabaseExporter.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\PVSDatabaseImporter.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\PVSGenerator.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\PVSPreprocessor.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\Query.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\QueryResult.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\Scene.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\SceneOptions.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\SceneTile.cpp" />
+    <ClCompile Include="source\Janua\JanuaEngine\TrianglesOctree.cpp" />
+    <ClCompile Include="source\Janua\JanuaRuntime\JanuaRuntime.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Irrlicht.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="source\Janua\Core\PendingThings.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

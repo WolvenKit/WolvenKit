@@ -6,9 +6,12 @@
 using std::string;
 using std::ostringstream;
 
-string NumberToString(int pNumber)
+namespace Janua
 {
-	ostringstream oOStrStream;
-	oOStrStream << pNumber;
-	return oOStrStream.str();
+	string NumberToString(int pNumber)
+	{
+		ostringstream oOStrStream;
+		oOStrStream << pNumber;
+		return oOStrStream.str();
+	}
 }

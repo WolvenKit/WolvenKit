@@ -29,19 +29,21 @@ namespace scene
 
 //! Constructor
 CW3EntLoader::CW3EntLoader(scene::ISceneManager* smgr, io::IFileSystem* fs)
-: meshToAnimate(nullptr),
-  _sceneManager(smgr),
-  _fileSystem(fs),
-  _animatedMesh(nullptr),
-  FrameOffset(0),
-  ConfigLoadSkeleton(true),
-  ConfigLoadOnlyBestLOD(false)
+    : meshToAnimate(nullptr),
+    _sceneManager(smgr),
+    _fileSystem(fs),
+    _videoDriver(smgr->getVideoDriver()),
+    _animatedMesh(nullptr),
+    _staticMesh(nullptr),
+    FrameOffset(0),
+    ConfigLoadSkeleton(true),
+    ConfigLoadOnlyBestLOD(false)
 {
-	#ifdef _DEBUG
+#ifdef _DEBUG
     setDebugName("CW3ENTLoader");
-	#endif
+#endif
 
-    TextureLoader = DBG_NEW CMeshTextureLoader(_fileSystem, _sceneManager->getVideoDriver());
+    TextureLoader = DBG_NEW CMeshTextureLoader(_fileSystem, _videoDriver);
     LoaderHelper = DBG_NEW CW3MeshLoaderHelper(this, _sceneManager, _fileSystem);
 }
 
@@ -49,6 +51,7 @@ CW3EntLoader::~CW3EntLoader()
 {
     _fileSystem = nullptr;
     _sceneManager = nullptr;
+    _videoDriver = nullptr;
 
     Strings.clear();
     Materials.clear();
@@ -63,7 +66,7 @@ CW3EntLoader::~CW3EntLoader()
 //! based on the file extension (e.g. ".bsp")
 bool CW3EntLoader::isALoadableFileExtension(const io::path& filename) const
 {
-    io::IReadFile* file = _sceneManager->getFileSystem()->createAndOpenFile(filename);
+    io::IReadFile* file = _fileSystem->createAndOpenFile(filename);
     if (!file)
         return false;
 
@@ -91,8 +94,8 @@ IAnimatedMesh* CW3EntLoader::createMesh(io::IReadFile* f)
         ConfigGameTexturesPath = SceneManager->getParameters()->getAttributeAsString("TW_TW3_TEX_PATH");
     #endif
 
-    ConfigLoadSkeleton = _sceneManager->getParameters()->getAttributeAsBool("TW_TW3_LOAD_SKEL");
-    ConfigLoadOnlyBestLOD = _sceneManager->getParameters()->getAttributeAsBool("TW_TW3_LOAD_BEST_LOD_ONLY");
+    //ConfigLoadSkeleton = _sceneManager->getParameters()->getAttributeAsBool("TW_TW3_LOAD_SKEL");
+    //ConfigLoadOnlyBestLOD = _sceneManager->getParameters()->getAttributeAsBool("TW_TW3_LOAD_BEST_LOD_ONLY");
 
     //Clear up
     Strings.clear();
@@ -121,6 +124,79 @@ IAnimatedMesh* CW3EntLoader::createMesh(io::IReadFile* f)
     //SceneManager->getParameters()->setAttribute("TW_FEEDBACK", Feedback.c_str());
 
 	return _animatedMesh;
+}
+
+video::SMaterial CW3EntLoader::createMaterial(io::IReadFile* f)
+{
+    video::SMaterial material;
+
+    if (!f)
+    {
+        return material;
+    }
+
+#ifdef _IRR_WCHAR_FILESYSTEM
+    ConfigGamePath = _sceneManager->getParameters()->getAttributeAsStringW("TW_GAME_PATH");
+    ConfigGameTexturesPath = _sceneManager->getParameters()->getAttributeAsStringW("TW_TW3_TEX_PATH");
+#else
+    ConfigGamePath = SceneManager->getParameters()->getAttributeAsString("TW_GAME_PATH");
+    ConfigGameTexturesPath = SceneManager->getParameters()->getAttributeAsString("TW_TW3_TEX_PATH");
+#endif
+
+    //Clear up
+    Strings.clear();
+    Materials.clear();
+    Files.clear();
+    Meshes.clear();
+    _animations.clear();
+
+    writeLogHeader(f);
+    os::Printer::log("Start loading", f->getFileName().c_str(), ELL_DEBUG);
+
+    if (load(f))
+    {
+        return Materials[0];
+    }
+
+    os::Printer::log("LOADING FINISHED", ELL_DEBUG);
+
+    return material;
+}
+
+IMesh* CW3EntLoader::createStaticMesh(io::IReadFile* f)
+{
+    if (!f)
+        return nullptr;
+
+#ifdef _IRR_WCHAR_FILESYSTEM
+    ConfigGamePath = _sceneManager->getParameters()->getAttributeAsStringW("TW_GAME_PATH");
+    ConfigGameTexturesPath = _sceneManager->getParameters()->getAttributeAsStringW("TW_TW3_TEX_PATH");
+#else
+    ConfigGamePath = SceneManager->getParameters()->getAttributeAsString("TW_GAME_PATH");
+    ConfigGameTexturesPath = SceneManager->getParameters()->getAttributeAsString("TW_TW3_TEX_PATH");
+#endif
+
+    //Clear up
+    Strings.clear();
+    Materials.clear();
+    Files.clear();
+    Meshes.clear();
+
+    writeLogHeader(f);
+    os::Printer::log("Start loading", f->getFileName().c_str(), ELL_DEBUG);
+
+    _staticMesh = DBG_NEW SMesh();
+
+    if (!load(f))
+    {
+        _staticMesh->drop();
+        _staticMesh = nullptr;
+    }
+
+    os::Printer::log("LOADING FINISHED", ELL_DEBUG);
+
+    return _staticMesh;
+
 }
 
 void CW3EntLoader::writeLogBoolProperty(core::stringc name, bool value)
@@ -454,6 +530,114 @@ bool CW3EntLoader::W3_ReadBuffer(io::IReadFile* file, SBufferInfos bufferInfos, 
             buffer->Indices[i+1] = indice;
         else if (i % 3 == 2)
             buffer->Indices[i-1] = indice;
+    }
+
+    _sceneManager->getMeshManipulator()->recalculateNormals(buffer);
+    bufferFile->drop();
+
+    return true;
+}
+
+bool CW3EntLoader::W3_ReadBufferStatic(io::IReadFile* file, SBufferInfos bufferInfos, SMeshInfos meshInfos)
+{
+    SVertexBufferInfos vBufferInf;
+    u32 nbVertices = 0;
+    u32 firstVertexOffset = 0;
+    u32 nbIndices = 0;
+    u32 firstIndiceOffset = 0;
+    for (u32 i = 0; i < bufferInfos.verticesBuffer.size(); ++i)
+    {
+        nbVertices += bufferInfos.verticesBuffer[i].nbVertices;
+        if (nbVertices > meshInfos.firstVertex)
+        {
+            vBufferInf = bufferInfos.verticesBuffer[i];
+            // the index of the first vertex in the buffer
+            firstVertexOffset = meshInfos.firstVertex - (nbVertices - vBufferInf.nbVertices);
+            //std::cout << "firstVertexOffset=" << firstVertexOffset << std::endl;
+            break;
+        }
+    }
+    for (u32 i = 0; i < bufferInfos.verticesBuffer.size(); ++i)
+    {
+        nbIndices += bufferInfos.verticesBuffer[i].nbIndices;
+        if (nbIndices > meshInfos.firstIndice)
+        {
+            vBufferInf = bufferInfos.verticesBuffer[i];
+            firstIndiceOffset = meshInfos.firstIndice - (nbIndices - vBufferInf.nbIndices);
+            //std::cout << "firstIndiceOffset=" << firstVertexOffset << std::endl;
+            break;
+        }
+    }
+
+    // Check if it's the best LOD
+    if (ConfigLoadOnlyBestLOD && vBufferInf.lod != 1)
+        return false;
+
+    io::IReadFile* bufferFile = _fileSystem->createAndOpenFile(file->getFileName() + ".1.buffer");
+    if (!bufferFile)
+    {
+        os::Printer::log(" failed to open .buffer file ", ELL_ERROR);
+        return false;
+    }
+
+    scene::SMeshBuffer* buffer = DBG_NEW SMeshBuffer();
+    _staticMesh->addMeshBuffer(buffer);
+    buffer->drop(); // owned by the static mesh now
+
+    u32 vertexSize = 8;
+    bufferFile->seek(vBufferInf.verticesCoordsOffset + firstVertexOffset * vertexSize);
+
+    const video::SColor defaultColor(255, 255, 255, 255);
+
+    buffer->Vertices.set_used(meshInfos.numVertices);
+
+    for (u32 i = 0; i < meshInfos.numVertices; ++i)
+    {
+        u16 x, y, z, w;
+
+        bufferFile->read(&x, 2);
+        bufferFile->read(&y, 2);
+        bufferFile->read(&z, 2);
+        bufferFile->read(&w, 2);
+
+        f32 xf = x / 65535.0f;
+        f32 yf = y / 65535.0f;
+        f32 zf = z / 65535.0f;
+
+        buffer->Vertices[i].Pos = core::vector3df(xf, yf, zf) * bufferInfos.quantizationScale + bufferInfos.quantizationOffset;
+        buffer->Vertices[i].Color = defaultColor;
+    }
+    bufferFile->seek(vBufferInf.uvOffset + firstVertexOffset * 4);
+
+    for (u32 i = 0; i < meshInfos.numVertices; ++i)
+    {
+        u16 u, v;
+        bufferFile->read(&u, 2);
+        bufferFile->read(&v, 2);
+
+        f32 uf = halfToFloat(u);
+        f32 vf = halfToFloat(v);
+
+        buffer->Vertices[i].TCoords = core::vector2df(uf, vf);
+    }
+
+    // Indices -------------------------------------------------------------------
+    bufferFile->seek(bufferInfos.indicesBufferOffset + vBufferInf.indicesOffset + firstIndiceOffset * 2);
+
+    //std::cout << "POS Indices=" << bufferFile->getPos() - bufferInfos.indicesBufferOffset << std::endl;
+    //std::cout << "num indices=" << meshInfos.numIndices << std::endl;
+    buffer->Indices.set_used(meshInfos.numIndices);
+    for (u32 i = 0; i < meshInfos.numIndices; ++i)
+    {
+        const u16 indice = readU16(bufferFile);
+
+        // Indice need to be inversed for the normals
+        if (i % 3 == 0)
+            buffer->Indices[i] = indice;
+        else if (i % 3 == 1)
+            buffer->Indices[i + 1] = indice;
+        else if (i % 3 == 2)
+            buffer->Indices[i - 1] = indice;
     }
 
     _sceneManager->getMeshManipulator()->recalculateNormals(buffer);
@@ -1412,7 +1596,7 @@ void CW3EntLoader::W3_CEntityTemplate(io::IReadFile* file, W3_DataInfos infos)
             file->read(data, arraySize);
 
 
-            io::IReadFile* entityFile = _sceneManager->getFileSystem()->createMemoryReadFile(data, arraySize, "tmpMemFile.w2ent_MEMORY", true);
+            io::IReadFile* entityFile = _fileSystem->createMemoryReadFile(data, arraySize, "tmpMemFile.w2ent_MEMORY", true);
             if (!entityFile)
                 os::Printer::log("fail", ELL_ERROR);
 
@@ -1504,32 +1688,50 @@ void CW3EntLoader::W3_CMesh(io::IReadFile* file, W3_DataInfos infos)
 
    os::Printer::log((formatString("All properties read, @=%d", file->getPos())).c_str(), ELL_DEBUG);
 
-   if (!isStatic && NbBonesPos > 0 && ConfigLoadSkeleton)
+   if (isStatic)
    {
-        ReadBones(file);
+       for (u32 i = 0; i < meshes.size(); ++i)
+       {
+           os::Printer::log("Read buffer...", ELL_DEBUG);
+           if (!W3_ReadBufferStatic(file, bufferInfos, meshes[i]))
+               continue;
+
+           if (meshes[i].materialID < Materials.size())
+           {
+               _staticMesh->getMeshBuffer(_staticMesh->getMeshBufferCount() - 1)->getMaterial() = Materials[meshes[i].materialID];
+           }
+           os::Printer::log("OK", ELL_DEBUG);
+       }
    }
-
-   for (u32 i = 0; i < meshes.size(); ++i)
+   else
    {
-        os::Printer::log("Read buffer...", ELL_DEBUG);
-        if (!W3_ReadBuffer(file, bufferInfos, meshes[i]))
-            continue;
+       if (NbBonesPos > 0 && ConfigLoadSkeleton)
+       {
+           ReadBones(file);
+       }
 
-        //std::cout << "Read a buffer, Material ID = "  << meshes[i].materialID << std::endl;
-        if (meshes[i].materialID < Materials.size())
-        {
-            //std::cout << "Material assigned to meshbuffer" << std::endl;
-            _animatedMesh->getMeshBuffer(_animatedMesh->getMeshBufferCount() - 1)->getMaterial() = Materials[meshes[i].materialID];
-        }
-        else
-        {
-            //std::cout << "Error, mat " << meshes[i].materialID << "doesn't exist" << std::endl;
-            /*
-            if (Materials.size() >= 1)
-                _animatedMesh->getMeshBuffer(_animatedMesh->getMeshBufferCount() - 1)->getMaterial() = Materials[0];
-            */
-        }
-        os::Printer::log("OK", ELL_DEBUG);
+       for (u32 i = 0; i < meshes.size(); ++i)
+       {
+           os::Printer::log("Read buffer...", ELL_DEBUG);
+           if (!W3_ReadBuffer(file, bufferInfos, meshes[i]))
+               continue;
+
+           //std::cout << "Read a buffer, Material ID = "  << meshes[i].materialID << std::endl;
+           if (meshes[i].materialID < Materials.size())
+           {
+               //std::cout << "Material assigned to meshbuffer" << std::endl;
+               _animatedMesh->getMeshBuffer(_animatedMesh->getMeshBufferCount() - 1)->getMaterial() = Materials[meshes[i].materialID];
+           }
+           else
+           {
+               //std::cout << "Error, mat " << meshes[i].materialID << "doesn't exist" << std::endl;
+               /*
+               if (Materials.size() >= 1)
+                   _animatedMesh->getMeshBuffer(_animatedMesh->getMeshBufferCount() - 1)->getMaterial() = Materials[0];
+               */
+           }
+           os::Printer::log("OK", ELL_DEBUG);
+       }
    }
    os::Printer::log("W3_CMesh end", ELL_DEBUG);
 }
@@ -1721,6 +1923,9 @@ video::SMaterial CW3EntLoader::ReadW2MIFile(core::stringc filename)
     {
         CW3EntLoader w2miLoader(_sceneManager, _fileSystem);
         IAnimatedMesh* matMesh = nullptr;
+
+        material = w2miLoader.createMaterial(matFile);
+/*
         matMesh = w2miLoader.createMesh(matFile);
         if (matMesh)
             matMesh->drop();
@@ -1734,7 +1939,7 @@ video::SMaterial CW3EntLoader::ReadW2MIFile(core::stringc filename)
             os::Printer::log((formatString("%s has more than 1 material", fullFilename.c_str())).c_str(), ELL_ERROR);
         else
             os::Printer::log((formatString("%s has no material", fullFilename.c_str())).c_str(), ELL_ERROR);
-
+*/
         matFile->drop();
     }
 
@@ -1822,7 +2027,7 @@ video::ITexture* CW3EntLoader::getTexture(io::path filename)
 {
     if (!core::hasFileExtension(filename.c_str(), "xbm"))
     {
-        return _sceneManager->getVideoDriver()->getTexture(filename);
+        return _videoDriver->getTexture(filename);
     }
 
     video::ITexture* texture = nullptr;

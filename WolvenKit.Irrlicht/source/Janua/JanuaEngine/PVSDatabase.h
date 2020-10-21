@@ -14,60 +14,61 @@
 #include "..\Core\Portal.h"
 #include "..\Core\AABB.h"
 
-
 using std::shared_ptr;
 
-/**
-* PVSDatabase contains information about the Potentially Visible Set.
-* It is composed of Cells and Portals that are generated based on the voxelized Scene.
-*/
-class PVSDatabase
+namespace Janua
 {
-public:
-
 	/**
-	* Create a PVSDatabase by the given cells, scene AABB and Voxel size.
-	* @param cells			The set of Cells.
-	* @param sceneAABB		The  Axis Aligned Bounding Box of the scene.
-	* @param voxelSize		The voxel X, Y and Z dimensions.
+	* PVSDatabase contains information about the Potentially Visible Set.
+	* It is composed of Cells and Portals that are generated based on the voxelized Scene.
 	*/
-	PVSDatabase(vector<shared_ptr<Cell>> cells, const AABB sceneAABB, const Vector3f voxelSize);
+	class PVSDatabase
+	{
+	public:
 
-	virtual ~PVSDatabase(void);
+		/**
+		* Create a PVSDatabase by the given cells, scene AABB and Voxel size.
+		* @param cells			The set of Cells.
+		* @param sceneAABB		The  Axis Aligned Bounding Box of the scene.
+		* @param voxelSize		The voxel X, Y and Z dimensions.
+		*/
+		PVSDatabase(vector<shared_ptr<Cell>> cells, const AABB sceneAABB, const Vector3f voxelSize);
 
-	static vector<shared_ptr<Cell>> getNeighbourCells(const Cell& cell);
+		virtual ~PVSDatabase(void);
 
-	/**
-	* Returns the Scene Axis Aligned Bounding Box.
-	* @return The Scene AABB.
-	*/
-	AABB getSceneAABB() const { return m_sceneAABB; };
+		static vector<shared_ptr<Cell>> getNeighbourCells(const Cell& cell);
 
-	//TODO: remove in the future.
-	vector<shared_ptr<Cell>> m_cells; //The cells contained in the scene. 
-	
-	/**
-	* Inserts all the Cells in the PVS Database at the end of the vector.
-	* @param cells	The cell vector.
-	*/
-	void getAllCells(vector<shared_ptr<Cell>>& cells) const;
+		/**
+		* Returns the Scene Axis Aligned Bounding Box.
+		* @return The Scene AABB.
+		*/
+		AABB getSceneAABB() const { return m_sceneAABB; };
 
-	/**
-	* Inserts all the Portals in the PVS Database at the end of the vector.
-	* @param portals	The portals vector.
-	*/
-	void getAllPortals(vector<shared_ptr<Portal>>& portals) const;
+		//TODO: remove in the future.
+		vector<shared_ptr<Cell>> m_cells; //The cells contained in the scene. 
 
-	/**
-	* Returns the Voxel dimensions.
-	* @return The voxel dimensions in X, Y and Z.
-	*/
-	const Vector3f getVoxelSize() const { return m_voxelSize; };
+		/**
+		* Inserts all the Cells in the PVS Database at the end of the vector.
+		* @param cells	The cell vector.
+		*/
+		void getAllCells(vector<shared_ptr<Cell>>& cells) const;
 
-private:
+		/**
+		* Inserts all the Portals in the PVS Database at the end of the vector.
+		* @param portals	The portals vector.
+		*/
+		void getAllPortals(vector<shared_ptr<Portal>>& portals) const;
 
-	AABB m_sceneAABB;
-	Vector3f m_voxelSize;
-	
-};
+		/**
+		* Returns the Voxel dimensions.
+		* @return The voxel dimensions in X, Y and Z.
+		*/
+		const Vector3f getVoxelSize() const { return m_voxelSize; };
 
+	private:
+
+		AABB m_sceneAABB;
+		Vector3f m_voxelSize;
+
+	};
+}

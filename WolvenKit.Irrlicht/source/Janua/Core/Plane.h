@@ -10,15 +10,17 @@
 
 #include "Vector3f.h"
 
-class Plane
+namespace Janua
 {
-public:
+	class Plane
+	{
+	public:
 
-	Plane(const Vector3f normal, float d);
+		Plane(const Vector3f normal, float d);
 
-	const Vector3f normal;
-	const float d;
+		const Vector3f normal;
+		const float d;
 
-	~Plane(void);
-};
-
+		~Plane(void);
+	};
+}

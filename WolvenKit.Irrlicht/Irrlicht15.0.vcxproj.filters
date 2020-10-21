@@ -1,3 +1,993 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include=".\source\CB3DMeshWriter.cpp" />
+    <ClCompile Include=".\source\CD3D9RenderTarget.cpp" />
+    <ClCompile Include=".\source\CDefaultSceneNodeAnimatorFactory.cpp" />
+    <ClCompile Include=".\source\CDefaultSceneNodeFactory.cpp" />
+    <ClCompile Include=".\source\CFBXMeshWriter.cpp" />
+    <ClCompile Include=".\source\CGeometryCreator.cpp" />
+    <ClCompile Include=".\source\CGLXManager.cpp" />
+    <ClCompile Include=".\source\CMeshCache.cpp" />
+    <ClCompile Include=".\source\CMeshManipulator.cpp" />
+    <ClCompile Include=".\source\COpenGLCacheHandler.cpp" />
+    <ClCompile Include=".\source\COpenGLDriver.cpp" />
+    <ClCompile Include=".\source\COpenGLExtensionHandler.cpp" />
+    <ClCompile Include=".\source\COpenGLNormalMapRenderer.cpp" />
+    <ClCompile Include=".\source\COpenGLParallaxMapRenderer.cpp" />
+    <ClCompile Include=".\source\COpenGLShaderMaterialRenderer.cpp" />
+    <ClCompile Include=".\source\COpenGLSLMaterialRenderer.cpp" />
+    <ClCompile Include=".\source\CSceneManager.cpp" />
+    <ClCompile Include=".\source\C3DSMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CSMFMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CAnimatedMeshHalfLife.cpp" />
+    <ClCompile Include=".\source\CAnimatedMeshMD2.cpp" />
+    <ClCompile Include=".\source\CAnimatedMeshMD3.cpp" />
+    <ClCompile Include=".\source\CB3DMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CBSPMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CColladaFileLoader.cpp" />
+    <ClCompile Include=".\source\CCSMLoader.cpp" />
+    <ClCompile Include=".\source\CDMFLoader.cpp" />
+    <ClCompile Include=".\source\CIrrMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CLMTSMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CLWOMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CMD2MeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CMD3MeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CMeshTextureLoader.cpp" />
+    <ClCompile Include=".\source\CMS3DMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CMY3DMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\COBJMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\COCTLoader.cpp" />
+    <ClCompile Include=".\source\COgreMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CPLYMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CQ3LevelMesh.cpp" />
+    <ClCompile Include=".\source\CSkinnedMesh.cpp" />
+    <ClCompile Include=".\source\CSTLMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CW3Animation.cpp" />
+    <ClCompile Include=".\source\CW3MeshLoaderHelper.cpp" />
+    <ClCompile Include=".\source\CWGLManager.cpp" />
+    <ClCompile Include=".\source\CXMeshFileLoader.cpp" />
+    <ClCompile Include=".\source\CAnimatedMeshSceneNode.cpp" />
+    <ClCompile Include=".\source\CBillboardSceneNode.cpp" />
+    <ClCompile Include=".\source\CBoneSceneNode.cpp" />
+    <ClCompile Include=".\source\CCameraSceneNode.cpp" />
+    <ClCompile Include=".\source\CCubeSceneNode.cpp" />
+    <ClCompile Include=".\source\CDummyTransformationSceneNode.cpp" />
+    <ClCompile Include=".\source\CEmptySceneNode.cpp" />
+    <ClCompile Include=".\source\CLightSceneNode.cpp" />
+    <ClCompile Include=".\source\CMeshSceneNode.cpp" />
+    <ClCompile Include=".\source\COctreeSceneNode.cpp" />
+    <ClCompile Include=".\source\CQuake3ShaderSceneNode.cpp" />
+    <ClCompile Include=".\source\CShadowVolumeSceneNode.cpp" />
+    <ClCompile Include=".\source\CSkyBoxSceneNode.cpp" />
+    <ClCompile Include=".\source\CSkyDomeSceneNode.cpp" />
+    <ClCompile Include=".\source\CSphereSceneNode.cpp" />
+    <ClCompile Include=".\source\CTerrainSceneNode.cpp" />
+    <ClCompile Include=".\source\CTextSceneNode.cpp" />
+    <ClCompile Include=".\source\CVolumeLightSceneNode.cpp" />
+    <ClCompile Include=".\source\CWaterSurfaceSceneNode.cpp" />
+    <ClCompile Include=".\source\CParticleAnimatedMeshSceneNodeEmitter.cpp" />
+    <ClCompile Include=".\source\CParticleAttractionAffector.cpp" />
+    <ClCompile Include=".\source\CParticleBoxEmitter.cpp" />
+    <ClCompile Include=".\source\CParticleCylinderEmitter.cpp" />
+    <ClCompile Include=".\source\CParticleFadeOutAffector.cpp" />
+    <ClCompile Include=".\source\CParticleGravityAffector.cpp" />
+    <ClCompile Include=".\source\CParticleMeshEmitter.cpp" />
+    <ClCompile Include=".\source\CParticlePointEmitter.cpp" />
+    <ClCompile Include=".\source\CParticleRingEmitter.cpp" />
+    <ClCompile Include=".\source\CParticleRotationAffector.cpp" />
+    <ClCompile Include=".\source\CParticleScaleAffector.cpp" />
+    <ClCompile Include=".\source\CParticleSphereEmitter.cpp" />
+    <ClCompile Include=".\source\CParticleSystemSceneNode.cpp" />
+    <ClCompile Include=".\source\CMetaTriangleSelector.cpp" />
+    <ClCompile Include=".\source\COctreeTriangleSelector.cpp" />
+    <ClCompile Include=".\source\CSceneCollisionManager.cpp" />
+    <ClCompile Include=".\source\CTerrainTriangleSelector.cpp" />
+    <ClCompile Include=".\source\CTriangleBBSelector.cpp" />
+    <ClCompile Include=".\source\CTriangleSelector.cpp" />
+    <ClCompile Include=".\source\CSceneLoaderIrr.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorCameraFPS.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorCameraMaya.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorCollisionResponse.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorDelete.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorFlyCircle.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorFlyStraight.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorFollowSpline.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorRotation.cpp" />
+    <ClCompile Include=".\source\CSceneNodeAnimatorTexture.cpp" />
+    <ClCompile Include=".\source\CColladaMeshWriter.cpp" />
+    <ClCompile Include=".\source\CIrrMeshWriter.cpp" />
+    <ClCompile Include=".\source\COBJMeshWriter.cpp" />
+    <ClCompile Include=".\source\CPLYMeshWriter.cpp" />
+    <ClCompile Include=".\source\CSTLMeshWriter.cpp" />
+    <ClCompile Include=".\source\CVideoModeList.cpp" />
+    <ClCompile Include=".\source\CSoftwareDriver.cpp" />
+    <ClCompile Include=".\source\CSoftwareTexture.cpp" />
+    <ClCompile Include=".\source\CTRFlat.cpp" />
+    <ClCompile Include=".\source\CTRFlatWire.cpp" />
+    <ClCompile Include=".\source\CTRGouraud.cpp" />
+    <ClCompile Include=".\source\CTRGouraudWire.cpp" />
+    <ClCompile Include=".\source\CTRTextureFlat.cpp" />
+    <ClCompile Include=".\source\CTRTextureFlatWire.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraud.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudAdd.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudNoZ.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudWire.cpp" />
+    <ClCompile Include=".\source\CZBuffer.cpp" />
+    <ClCompile Include=".\source\CColorConverter.cpp" />
+    <ClCompile Include=".\source\CFPSCounter.cpp" />
+    <ClCompile Include=".\source\CImage.cpp" />
+    <ClCompile Include=".\source\CNullDriver.cpp" />
+    <ClCompile Include=".\source\CImageWriterBMP.cpp" />
+    <ClCompile Include=".\source\CImageWriterJPG.cpp" />
+    <ClCompile Include=".\source\CImageWriterPCX.cpp" />
+    <ClCompile Include=".\source\CImageWriterPNG.cpp" />
+    <ClCompile Include=".\source\CImageWriterPPM.cpp" />
+    <ClCompile Include=".\source\CImageWriterPSD.cpp" />
+    <ClCompile Include=".\source\CImageWriterTGA.cpp" />
+    <ClCompile Include=".\source\CImageLoaderBMP.cpp" />
+    <ClCompile Include=".\source\CImageLoaderDDS.cpp" />
+    <ClCompile Include=".\source\CImageLoaderJPG.cpp" />
+    <ClCompile Include=".\source\CImageLoaderPCX.cpp" />
+    <ClCompile Include=".\source\CImageLoaderPNG.cpp" />
+    <ClCompile Include=".\source\CImageLoaderPPM.cpp" />
+    <ClCompile Include=".\source\CImageLoaderPSD.cpp" />
+    <ClCompile Include=".\source\CImageLoaderPVR.cpp" />
+    <ClCompile Include=".\source\CImageLoaderRGB.cpp" />
+    <ClCompile Include=".\source\CImageLoaderTGA.cpp" />
+    <ClCompile Include=".\source\CImageLoaderWAL.cpp" />
+    <ClCompile Include=".\source\CD3D9Driver.cpp" />
+    <ClCompile Include=".\source\CD3D9HLSLMaterialRenderer.cpp" />
+    <ClCompile Include=".\source\CD3D9NormalMapRenderer.cpp" />
+    <ClCompile Include=".\source\CD3D9ParallaxMapRenderer.cpp" />
+    <ClCompile Include=".\source\CD3D9ShaderMaterialRenderer.cpp" />
+    <ClCompile Include=".\source\CD3D9Texture.cpp" />
+    <ClCompile Include=".\source\CBurningShader_Raster_Reference.cpp" />
+    <ClCompile Include=".\source\CDepthBuffer.cpp" />
+    <ClCompile Include=".\source\CSoftwareDriver2.cpp" />
+    <ClCompile Include=".\source\CSoftwareTexture2.cpp" />
+    <ClCompile Include=".\source\CTRGouraud2.cpp" />
+    <ClCompile Include=".\source\CTRGouraudAlpha2.cpp" />
+    <ClCompile Include=".\source\CTRGouraudAlphaNoZ2.cpp" />
+    <ClCompile Include=".\source\CTRNormalMap.cpp" />
+    <ClCompile Include=".\source\CTRStencilShadow.cpp" />
+    <ClCompile Include=".\source\CTRTextureBlend.cpp" />
+    <ClCompile Include=".\source\CTRTextureDetailMap2.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraud2.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudAdd2.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudAddNoZ2.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudAlpha.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudAlphaNoZ.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudNoZ2.cpp" />
+    <ClCompile Include=".\source\CTRTextureGouraudVertexAlpha2.cpp" />
+    <ClCompile Include=".\source\CTRTextureLightMap2_Add.cpp" />
+    <ClCompile Include=".\source\CTRTextureLightMap2_M1.cpp" />
+    <ClCompile Include=".\source\CTRTextureLightMap2_M2.cpp" />
+    <ClCompile Include=".\source\CTRTextureLightMap2_M4.cpp" />
+    <ClCompile Include=".\source\CTRTextureLightMapGouraud2_M4.cpp" />
+    <ClCompile Include=".\source\CTRTextureWire2.cpp" />
+    <ClCompile Include=".\source\IBurningShader.cpp" />
+    <ClCompile Include=".\source\CLogger.cpp" />
+    <ClCompile Include=".\source\COSOperator.cpp" />
+    <ClCompile Include=".\source\CW3EntLoader.cpp" />
+    <ClCompile Include=".\source\Irrlicht.cpp" />
+    <ClCompile Include=".\source\MeshCombiner.cpp" />
+    <ClCompile Include=".\source\os.cpp" />
+    <ClCompile Include=".\source\CW3Skeleton.cpp" />
+    <ClCompile Include=".\source\CW3DataCache.cpp" />
+    <ClCompile Include=".\source\utf8.cpp" />
+    <ClCompile Include=".\source\CProfiler.cpp" />
+    <ClCompile Include=".\source\leakHunter.cpp" />
+    <ClCompile Include=".\source\lzma\LzmaDec.c" />
+    <ClCompile Include=".\source\Utils_Loaders_Irr.cpp" />
+    <ClCompile Include=".\source\Utils_RedEngine.cpp" />
+    <ClCompile Include=".\source\zlib\adler32.c" />
+    <ClCompile Include=".\source\zlib\compress.c" />
+    <ClCompile Include=".\source\zlib\crc32.c" />
+    <ClCompile Include=".\source\zlib\deflate.c" />
+    <ClCompile Include=".\source\zlib\inffast.c" />
+    <ClCompile Include=".\source\zlib\inflate.c" />
+    <ClCompile Include=".\source\zlib\inftrees.c" />
+    <ClCompile Include=".\source\zlib\trees.c" />
+    <ClCompile Include=".\source\zlib\uncompr.c" />
+    <ClCompile Include=".\source\zlib\zutil.c" />
+    <ClCompile Include=".\source\jpeglib\jaricom.c" />
+    <ClCompile Include=".\source\jpeglib\jcapimin.c" />
+    <ClCompile Include=".\source\jpeglib\jcapistd.c" />
+    <ClCompile Include=".\source\jpeglib\jcarith.c" />
+    <ClCompile Include=".\source\jpeglib\jccoefct.c" />
+    <ClCompile Include=".\source\jpeglib\jccolor.c" />
+    <ClCompile Include=".\source\jpeglib\jcdctmgr.c" />
+    <ClCompile Include=".\source\jpeglib\jchuff.c" />
+    <ClCompile Include=".\source\jpeglib\jcinit.c" />
+    <ClCompile Include=".\source\jpeglib\jcmainct.c" />
+    <ClCompile Include=".\source\jpeglib\jcmarker.c" />
+    <ClCompile Include=".\source\jpeglib\jcmaster.c" />
+    <ClCompile Include=".\source\jpeglib\jcomapi.c" />
+    <ClCompile Include=".\source\jpeglib\jcparam.c" />
+    <ClCompile Include=".\source\jpeglib\jcprepct.c" />
+    <ClCompile Include=".\source\jpeglib\jcsample.c" />
+    <ClCompile Include=".\source\jpeglib\jctrans.c" />
+    <ClCompile Include=".\source\jpeglib\jdapimin.c" />
+    <ClCompile Include=".\source\jpeglib\jdapistd.c" />
+    <ClCompile Include=".\source\jpeglib\jdarith.c" />
+    <ClCompile Include=".\source\jpeglib\jdatadst.c" />
+    <ClCompile Include=".\source\jpeglib\jdatasrc.c" />
+    <ClCompile Include=".\source\jpeglib\jdcoefct.c" />
+    <ClCompile Include=".\source\jpeglib\jdcolor.c" />
+    <ClCompile Include=".\source\jpeglib\jddctmgr.c" />
+    <ClCompile Include=".\source\jpeglib\jdhuff.c" />
+    <ClCompile Include=".\source\jpeglib\jdinput.c" />
+    <ClCompile Include=".\source\jpeglib\jdmainct.c" />
+    <ClCompile Include=".\source\jpeglib\jdmarker.c" />
+    <ClCompile Include=".\source\jpeglib\jdmaster.c" />
+    <ClCompile Include=".\source\jpeglib\jdmerge.c" />
+    <ClCompile Include=".\source\jpeglib\jdpostct.c" />
+    <ClCompile Include=".\source\jpeglib\jdsample.c" />
+    <ClCompile Include=".\source\jpeglib\jdtrans.c" />
+    <ClCompile Include=".\source\jpeglib\jerror.c" />
+    <ClCompile Include=".\source\jpeglib\jfdctflt.c" />
+    <ClCompile Include=".\source\jpeglib\jfdctfst.c" />
+    <ClCompile Include=".\source\jpeglib\jfdctint.c" />
+    <ClCompile Include=".\source\jpeglib\jidctflt.c" />
+    <ClCompile Include=".\source\jpeglib\jidctfst.c" />
+    <ClCompile Include=".\source\jpeglib\jidctint.c" />
+    <ClCompile Include=".\source\jpeglib\jmemmgr.c" />
+    <ClCompile Include=".\source\jpeglib\jmemnobs.c" />
+    <ClCompile Include=".\source\jpeglib\jquant1.c" />
+    <ClCompile Include=".\source\jpeglib\jquant2.c" />
+    <ClCompile Include=".\source\jpeglib\jutils.c" />
+    <ClCompile Include=".\source\libpng\png.c" />
+    <ClCompile Include=".\source\libpng\pngerror.c" />
+    <ClCompile Include=".\source\libpng\pngget.c" />
+    <ClCompile Include=".\source\libpng\pngmem.c" />
+    <ClCompile Include=".\source\libpng\pngpread.c" />
+    <ClCompile Include=".\source\libpng\pngread.c" />
+    <ClCompile Include=".\source\libpng\pngrio.c" />
+    <ClCompile Include=".\source\libpng\pngrtran.c" />
+    <ClCompile Include=".\source\libpng\pngrutil.c" />
+    <ClCompile Include=".\source\libpng\pngset.c" />
+    <ClCompile Include=".\source\libpng\pngtrans.c" />
+    <ClCompile Include=".\source\libpng\pngwio.c" />
+    <ClCompile Include=".\source\libpng\pngwrite.c" />
+    <ClCompile Include=".\source\libpng\pngwtran.c" />
+    <ClCompile Include=".\source\libpng\pngwutil.c" />
+    <ClCompile Include=".\source\aesGladman\aescrypt.cpp" />
+    <ClCompile Include=".\source\aesGladman\aeskey.cpp" />
+    <ClCompile Include=".\source\aesGladman\aestab.cpp" />
+    <ClCompile Include=".\source\aesGladman\fileenc.cpp" />
+    <ClCompile Include=".\source\aesGladman\hmac.cpp" />
+    <ClCompile Include=".\source\aesGladman\prng.cpp" />
+    <ClCompile Include=".\source\aesGladman\pwd2key.cpp" />
+    <ClCompile Include=".\source\aesGladman\sha1.cpp" />
+    <ClCompile Include=".\source\aesGladman\sha2.cpp" />
+    <ClCompile Include=".\source\bzip2\blocksort.c" />
+    <ClCompile Include=".\source\bzip2\bzcompress.c" />
+    <ClCompile Include=".\source\bzip2\bzlib.c" />
+    <ClCompile Include=".\source\bzip2\crctable.c" />
+    <ClCompile Include=".\source\bzip2\decompress.c" />
+    <ClCompile Include=".\source\bzip2\huffman.c" />
+    <ClCompile Include=".\source\bzip2\randtable.c" />
+    <ClCompile Include=".\source\CIrrDeviceConsole.cpp" />
+    <ClCompile Include=".\source\CIrrDeviceFB.cpp" />
+    <ClCompile Include=".\source\CIrrDeviceLinux.cpp" />
+    <ClCompile Include=".\source\CIrrDeviceSDL.cpp" />
+    <ClCompile Include=".\source\CIrrDeviceStub.cpp" />
+    <ClCompile Include=".\source\CIrrDeviceWin32.cpp" />
+    <ClCompile Include=".\source\CAttributes.cpp" />
+    <ClCompile Include=".\source\CFileList.cpp" />
+    <ClCompile Include=".\source\CFileSystem.cpp" />
+    <ClCompile Include=".\source\CLimitReadFile.cpp" />
+    <ClCompile Include=".\source\CMemoryFile.cpp" />
+    <ClCompile Include=".\source\CMountPointReader.cpp" />
+    <ClCompile Include=".\source\CNPKReader.cpp" />
+    <ClCompile Include=".\source\CPakReader.cpp" />
+    <ClCompile Include=".\source\CReadFile.cpp" />
+    <ClCompile Include=".\source\CTarReader.cpp" />
+    <ClCompile Include=".\source\CWADReader.cpp" />
+    <ClCompile Include=".\source\CWriteFile.cpp" />
+    <ClCompile Include=".\source\CXMLReader.cpp" />
+    <ClCompile Include=".\source\CXMLWriter.cpp" />
+    <ClCompile Include=".\source\CZipReader.cpp" />
+    <ClCompile Include=".\source\irrXML.cpp" />
+    <ClCompile Include=".\source\CDefaultGUIElementFactory.cpp" />
+    <ClCompile Include=".\source\CGUIButton.cpp" />
+    <ClCompile Include=".\source\CGUICheckbox.cpp" />
+    <ClCompile Include=".\source\CGUIColorSelectDialog.cpp" />
+    <ClCompile Include=".\source\CGUIComboBox.cpp" />
+    <ClCompile Include=".\source\CGUIContextMenu.cpp" />
+    <ClCompile Include=".\source\CGUIEditBox.cpp" />
+    <ClCompile Include=".\source\CGUIEnvironment.cpp" />
+    <ClCompile Include=".\source\CGUIFileOpenDialog.cpp" />
+    <ClCompile Include=".\source\CGUIFont.cpp" />
+    <ClCompile Include=".\source\CGUIImage.cpp" />
+    <ClCompile Include=".\source\CGUIImageList.cpp" />
+    <ClCompile Include=".\source\CGUIInOutFader.cpp" />
+    <ClCompile Include=".\source\CGUIListBox.cpp" />
+    <ClCompile Include=".\source\CGUIMenu.cpp" />
+    <ClCompile Include=".\source\CGUIMeshViewer.cpp" />
+    <ClCompile Include=".\source\CGUIMessageBox.cpp" />
+    <ClCompile Include=".\source\CGUIModalScreen.cpp" />
+    <ClCompile Include=".\source\CGUIProfiler.cpp" />
+    <ClCompile Include=".\source\CGUIScrollBar.cpp" />
+    <ClCompile Include=".\source\CGUISkin.cpp" />
+    <ClCompile Include=".\source\CGUISpinBox.cpp" />
+    <ClCompile Include=".\source\CGUISpriteBank.cpp" />
+    <ClCompile Include=".\source\CGUIStaticText.cpp" />
+    <ClCompile Include=".\source\CGUITabControl.cpp" />
+    <ClCompile Include=".\source\CGUITable.cpp" />
+    <ClCompile Include=".\source\CGUIToolBar.cpp" />
+    <ClCompile Include=".\source\CGUITreeView.cpp" />
+    <ClCompile Include=".\source\CGUIWindow.cpp" />
+    <ClCompile Include="source\CImageLoaderCube.cpp" />
+    <ClCompile Include="source\CImageLoaderXBM.cpp" />
+    <ClCompile Include="source\CSceneNodeAnimatorCameraWolvenKit.cpp" />
+    <ClCompile Include="source\Janua\JanuaRuntime\JanuaRuntime.c">
+      <Filter>Janua\Runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\Logger.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\Model.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\ModelInstance.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\pugixml.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\PVSDatabase.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\PVSDatabaseExporter.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\PVSDatabaseImporter.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\PVSGenerator.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\PVSPreprocessor.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\Query.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\QueryResult.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\Scene.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\SceneOptions.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\SceneTile.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\JanuaEngine\TrianglesOctree.cpp">
+      <Filter>Janua\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\AABB.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\Cell.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\CollisionUtils.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\LineSegment.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\Matrix4x4.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\Plane.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\Point3i.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\Portal.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\PortalQuad.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\Ray.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\StabbingLine.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\stdafx.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\Triangle.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\Vector3f.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\Voxel.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Janua\Core\VoxelContainer.cpp">
+      <Filter>Janua\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CTerrainSceneNodeWolvenKit.cpp" />
+    <ClCompile Include="source\CSceneManagerWolvenKit.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include=".\include\EDriverFeatures.h" />
+    <ClInclude Include=".\include\EMaterialFlags.h" />
+    <ClInclude Include=".\include\IAnimatedMeshMD3.h" />
+    <ClInclude Include=".\include\IEventReceiver.h" />
+    <ClInclude Include=".\include\IMeshLoaderHelper.h" />
+    <ClInclude Include=".\include\IProfiler.h" />
+    <ClInclude Include=".\include\ILogger.h" />
+    <ClInclude Include=".\include\IOSOperator.h" />
+    <ClInclude Include=".\include\IRandomizer.h" />
+    <ClInclude Include=".\include\IReferenceCounted.h" />
+    <ClInclude Include=".\include\IRenderTarget.h" />
+    <ClInclude Include=".\include\IrrCompileConfig.h" />
+    <ClInclude Include=".\include\irrlicht.h" />
+    <ClInclude Include=".\include\leakHunter.h" />
+    <ClInclude Include=".\include\IrrlichtDevice.h" />
+    <ClInclude Include=".\include\irrTypes.h" />
+    <ClInclude Include=".\include\ITimer.h" />
+    <ClInclude Include=".\include\Keycodes.h" />
+    <ClInclude Include=".\include\SIrrCreationParameters.h" />
+    <ClInclude Include=".\include\SKeyMap.h" />
+    <ClInclude Include=".\include\EDriverTypes.h" />
+    <ClInclude Include=".\include\IContextManager.h" />
+    <ClInclude Include=".\include\IGeometryCreator.h" />
+    <ClInclude Include=".\include\IGPUProgrammingServices.h" />
+    <ClInclude Include=".\include\IImage.h" />
+    <ClInclude Include=".\include\IImageLoader.h" />
+    <ClInclude Include=".\include\IMaterialRenderer.h" />
+    <ClInclude Include=".\include\IMaterialRendererServices.h" />
+    <ClInclude Include=".\include\IShaderConstantSetCallBack.h" />
+    <ClInclude Include=".\include\ITexture.h" />
+    <ClInclude Include=".\include\IVideoDriver.h" />
+    <ClInclude Include=".\include\IVideoModeList.h" />
+    <ClInclude Include=".\include\S3DVertex.h" />
+    <ClInclude Include=".\include\SColor.h" />
+    <ClInclude Include=".\include\SExposedVideoData.h" />
+    <ClInclude Include=".\include\SLight.h" />
+    <ClInclude Include=".\include\SMaterial.h" />
+    <ClInclude Include=".\include\SMaterialLayer.h" />
+    <ClInclude Include=".\include\aabbox3d.h" />
+    <ClInclude Include=".\include\coreutil.h" />
+    <ClInclude Include=".\include\dimension2d.h" />
+    <ClInclude Include=".\include\heapsort.h" />
+    <ClInclude Include=".\include\irrAllocator.h" />
+    <ClInclude Include=".\include\irrArray.h" />
+    <ClInclude Include=".\include\irrList.h" />
+    <ClInclude Include=".\include\irrMap.h" />
+    <ClInclude Include=".\include\irrMath.h" />
+    <ClInclude Include=".\include\irrString.h" />
+    <ClInclude Include=".\include\line2d.h" />
+    <ClInclude Include=".\include\line3d.h" />
+    <ClInclude Include=".\include\matrix4.h" />
+    <ClInclude Include=".\include\plane3d.h" />
+    <ClInclude Include=".\include\position2d.h" />
+    <ClInclude Include=".\include\quaternion.h" />
+    <ClInclude Include=".\include\rect.h" />
+    <ClInclude Include=".\include\triangle3d.h" />
+    <ClInclude Include=".\include\vector2d.h" />
+    <ClInclude Include=".\include\vector3d.h" />
+    <ClInclude Include=".\include\EAttributes.h" />
+    <ClInclude Include=".\include\IAttributeExchangingObject.h" />
+    <ClInclude Include=".\include\IAttributes.h" />
+    <ClInclude Include=".\include\IFileList.h" />
+    <ClInclude Include=".\include\IFileSystem.h" />
+    <ClInclude Include=".\include\IReadFile.h" />
+    <ClInclude Include=".\include\irrXML.h" />
+    <ClInclude Include=".\include\IWriteFile.h" />
+    <ClInclude Include=".\include\IXMLReader.h" />
+    <ClInclude Include=".\include\IXMLWriter.h" />
+    <ClInclude Include=".\include\path.h" />
+    <ClInclude Include=".\include\CDynamicMeshBuffer.h" />
+    <ClInclude Include=".\include\CIndexBuffer.h" />
+    <ClInclude Include=".\include\CMeshBuffer.h" />
+    <ClInclude Include=".\include\CVertexBuffer.h" />
+    <ClInclude Include=".\include\ECullingTypes.h" />
+    <ClInclude Include=".\include\EDebugSceneTypes.h" />
+    <ClInclude Include=".\include\EMeshWriterEnums.h" />
+    <ClInclude Include=".\include\EPrimitiveTypes.h" />
+    <ClInclude Include=".\include\ESceneNodeAnimatorTypes.h" />
+    <ClInclude Include=".\include\ESceneNodeTypes.h" />
+    <ClInclude Include=".\include\IAnimatedMesh.h" />
+    <ClInclude Include=".\include\IAnimatedMeshMD2.h" />
+    <ClInclude Include=".\include\IAnimatedMeshSceneNode.h" />
+    <ClInclude Include=".\include\IBillboardSceneNode.h" />
+    <ClInclude Include=".\include\ICameraSceneNode.h" />
+    <ClInclude Include=".\include\IDummyTransformationSceneNode.h" />
+    <ClInclude Include=".\include\ILightSceneNode.h" />
+    <ClInclude Include=".\include\IMesh.h" />
+    <ClInclude Include=".\include\IMeshBuffer.h" />
+    <ClInclude Include=".\include\IMeshCache.h" />
+    <ClInclude Include=".\include\IMeshLoader.h" />
+    <ClInclude Include=".\include\IMeshManipulator.h" />
+    <ClInclude Include=".\include\IMeshSceneNode.h" />
+    <ClInclude Include=".\include\IMeshTextureLoader.h" />
+    <ClInclude Include=".\include\IMeshWriter.h" />
+    <ClInclude Include=".\include\IMetaTriangleSelector.h" />
+    <ClInclude Include=".\include\IParticleAffector.h" />
+    <ClInclude Include=".\include\IParticleAnimatedMeshSceneNodeEmitter.h" />
+    <ClInclude Include=".\include\IParticleAttractionAffector.h" />
+    <ClInclude Include=".\include\IParticleBoxEmitter.h" />
+    <ClInclude Include=".\include\IParticleCylinderEmitter.h" />
+    <ClInclude Include=".\include\IParticleEmitter.h" />
+    <ClInclude Include=".\include\IParticleFadeOutAffector.h" />
+    <ClInclude Include=".\include\IParticleGravityAffector.h" />
+    <ClInclude Include=".\include\IParticleMeshEmitter.h" />
+    <ClInclude Include=".\include\IParticleRingEmitter.h" />
+    <ClInclude Include=".\include\IParticleRotationAffector.h" />
+    <ClInclude Include=".\include\IParticleSphereEmitter.h" />
+    <ClInclude Include=".\include\IParticleSystemSceneNode.h" />
+    <ClInclude Include=".\include\IQ3LevelMesh.h" />
+    <ClInclude Include=".\include\IQ3Shader.h" />
+    <ClInclude Include=".\include\ISceneCollisionManager.h" />
+    <ClInclude Include=".\include\ISceneManager.h" />
+    <ClInclude Include=".\include\ISceneLoader.h" />
+    <ClInclude Include=".\include\ISceneNode.h" />
+    <ClInclude Include=".\include\ISceneNodeAnimator.h" />
+    <ClInclude Include=".\include\ISceneNodeAnimatorCameraFPS.h" />
+    <ClInclude Include=".\include\ISceneNodeAnimatorCameraMaya.h" />
+    <ClInclude Include=".\include\ISceneNodeAnimatorCollisionResponse.h" />
+    <ClInclude Include=".\include\ISceneNodeAnimatorFactory.h" />
+    <ClInclude Include=".\include\ISceneNodeFactory.h" />
+    <ClInclude Include=".\include\IShadowVolumeSceneNode.h" />
+    <ClInclude Include=".\include\ISkinnedMesh.h" />
+    <ClInclude Include=".\include\ITerrainSceneNode.h" />
+    <ClInclude Include=".\include\ITextSceneNode.h" />
+    <ClInclude Include=".\include\ITriangleSelector.h" />
+    <ClInclude Include=".\include\IVolumeLightSceneNode.h" />
+    <ClInclude Include=".\include\SAnimatedMesh.h" />
+    <ClInclude Include=".\include\SceneParameters.h" />
+    <ClInclude Include=".\include\SMesh.h" />
+    <ClInclude Include=".\include\SMeshBuffer.h" />
+    <ClInclude Include=".\include\SMeshBufferLightMap.h" />
+    <ClInclude Include=".\include\SMeshBufferTangents.h" />
+    <ClInclude Include=".\include\SParticle.h" />
+    <ClInclude Include=".\include\SSkinMeshBuffer.h" />
+    <ClInclude Include=".\include\SViewFrustum.h" />
+    <ClInclude Include=".\include\EGUIAlignment.h" />
+    <ClInclude Include=".\include\EGUIElementTypes.h" />
+    <ClInclude Include=".\include\EMessageBoxFlags.h" />
+    <ClInclude Include=".\include\EFocusFlags.h" />
+    <ClInclude Include=".\include\ICursorControl.h" />
+    <ClInclude Include=".\include\IGUIButton.h" />
+    <ClInclude Include=".\include\IGUICheckbox.h" />
+    <ClInclude Include=".\include\IGUIComboBox.h" />
+    <ClInclude Include=".\include\IGUIContextMenu.h" />
+    <ClInclude Include=".\include\IGUIEditBox.h" />
+    <ClInclude Include=".\include\IGUIElement.h" />
+    <ClInclude Include=".\include\IGUIElementFactory.h" />
+    <ClInclude Include=".\include\IGUIEnvironment.h" />
+    <ClInclude Include=".\include\IGUIFileOpenDialog.h" />
+    <ClInclude Include=".\include\IGUIFont.h" />
+    <ClInclude Include=".\include\IGUIImage.h" />
+    <ClInclude Include=".\include\IGUIImageList.h" />
+    <ClInclude Include=".\include\IGUIInOutFader.h" />
+    <ClInclude Include=".\include\IGUIListBox.h" />
+    <ClInclude Include=".\include\IGUIMeshViewer.h" />
+    <ClInclude Include=".\include\IGUIProfiler.h" />
+    <ClInclude Include=".\include\IGUIScrollBar.h" />
+    <ClInclude Include=".\include\IGUISkin.h" />
+    <ClInclude Include=".\include\IGUISpinBox.h" />
+    <ClInclude Include=".\include\IGUISpriteBank.h" />
+    <ClInclude Include=".\include\IGUIStaticText.h" />
+    <ClInclude Include=".\include\IGUITabControl.h" />
+    <ClInclude Include=".\include\IGUIToolbar.h" />
+    <ClInclude Include=".\include\IGUITreeView.h" />
+    <ClInclude Include=".\include\IGUIWindow.h" />
+    <ClInclude Include=".\source\CB3DMeshWriter.h" />
+    <ClInclude Include=".\source\CD3D9RenderTarget.h" />
+    <ClInclude Include=".\source\CDefaultSceneNodeAnimatorFactory.h" />
+    <ClInclude Include=".\source\CDefaultSceneNodeFactory.h" />
+    <ClInclude Include=".\source\CFBXMeshWriter.h" />
+    <ClInclude Include=".\source\CGeometryCreator.h" />
+    <ClInclude Include=".\source\CGLXManager.h" />
+    <ClInclude Include=".\source\CMeshCache.h" />
+    <ClInclude Include=".\source\CMeshManipulator.h" />
+    <ClInclude Include=".\source\COpenGLCoreCacheHandler.h" />
+    <ClInclude Include=".\source\COpenGLCoreFeature.h" />
+    <ClInclude Include=".\source\COpenGLCoreRenderTarget.h" />
+    <ClInclude Include=".\source\COpenGLCoreTexture.h" />
+    <ClInclude Include=".\source\COpenGLCacheHandler.h" />
+    <ClInclude Include=".\source\COpenGLCommon.h" />
+    <ClInclude Include=".\source\COpenGLDriver.h" />
+    <ClInclude Include=".\source\COpenGLExtensionHandler.h" />
+    <ClInclude Include=".\source\COpenGLMaterialRenderer.h" />
+    <ClInclude Include=".\source\COpenGLNormalMapRenderer.h" />
+    <ClInclude Include=".\source\COpenGLParallaxMapRenderer.h" />
+    <ClInclude Include=".\source\COpenGLShaderMaterialRenderer.h" />
+    <ClInclude Include=".\source\COpenGLSLMaterialRenderer.h" />
+    <ClInclude Include=".\source\CSceneManager.h" />
+    <ClInclude Include=".\source\CW3Animation.h" />
+    <ClInclude Include=".\source\CW3EntLoader.h" />
+    <ClInclude Include=".\source\CW3MeshLoaderHelper.h" />
+    <ClInclude Include=".\source\CW3Skeleton.h" />
+    <ClInclude Include=".\source\CWGLManager.h" />
+    <ClInclude Include=".\source\MeshCombiner.h" />
+    <ClInclude Include=".\source\Octree.h" />
+    <ClInclude Include=".\source\CSMFMeshFileLoader.h" />
+    <ClInclude Include=".\source\C3DSMeshFileLoader.h" />
+    <ClInclude Include=".\source\CAnimatedMeshHalfLife.h" />
+    <ClInclude Include=".\source\CAnimatedMeshMD2.h" />
+    <ClInclude Include=".\source\CAnimatedMeshMD3.h" />
+    <ClInclude Include=".\source\CB3DMeshFileLoader.h" />
+    <ClInclude Include=".\source\CBSPMeshFileLoader.h" />
+    <ClInclude Include=".\source\CColladaFileLoader.h" />
+    <ClInclude Include=".\source\CCSMLoader.h" />
+    <ClInclude Include=".\source\CDMFLoader.h" />
+    <ClInclude Include=".\source\CIrrMeshFileLoader.h" />
+    <ClInclude Include=".\source\CLMTSMeshFileLoader.h" />
+    <ClInclude Include=".\source\CLWOMeshFileLoader.h" />
+    <ClInclude Include=".\source\CMD2MeshFileLoader.h" />
+    <ClInclude Include=".\source\CMD3MeshFileLoader.h" />
+    <ClInclude Include=".\source\CMeshTextureLoader.h" />
+    <ClInclude Include=".\source\CMS3DMeshFileLoader.h" />
+    <ClInclude Include=".\source\CMY3DHelper.h" />
+    <ClInclude Include=".\source\CMY3DMeshFileLoader.h" />
+    <ClInclude Include=".\source\COBJMeshFileLoader.h" />
+    <ClInclude Include=".\source\COCTLoader.h" />
+    <ClInclude Include=".\source\COgreMeshFileLoader.h" />
+    <ClInclude Include=".\source\CPLYMeshFileLoader.h" />
+    <ClInclude Include=".\source\CQ3LevelMesh.h" />
+    <ClInclude Include=".\source\CSkinnedMesh.h" />
+    <ClInclude Include=".\source\CSTLMeshFileLoader.h" />
+    <ClInclude Include=".\source\CXMeshFileLoader.h" />
+    <ClInclude Include=".\source\dmfsupport.h" />
+    <ClInclude Include=".\source\CAnimatedMeshSceneNode.h" />
+    <ClInclude Include=".\source\CBillboardSceneNode.h" />
+    <ClInclude Include=".\source\CBoneSceneNode.h" />
+    <ClInclude Include=".\source\CCameraSceneNode.h" />
+    <ClInclude Include=".\source\CCubeSceneNode.h" />
+    <ClInclude Include=".\source\CDummyTransformationSceneNode.h" />
+    <ClInclude Include=".\source\CEmptySceneNode.h" />
+    <ClInclude Include=".\source\CLightSceneNode.h" />
+    <ClInclude Include=".\source\CMeshSceneNode.h" />
+    <ClInclude Include=".\source\COctreeSceneNode.h" />
+    <ClInclude Include=".\source\CQuake3ShaderSceneNode.h" />
+    <ClInclude Include=".\source\CShadowVolumeSceneNode.h" />
+    <ClInclude Include=".\source\CSkyBoxSceneNode.h" />
+    <ClInclude Include=".\source\CSkyDomeSceneNode.h" />
+    <ClInclude Include=".\source\CSphereSceneNode.h" />
+    <ClInclude Include=".\source\CTerrainSceneNode.h" />
+    <ClInclude Include=".\source\CTextSceneNode.h" />
+    <ClInclude Include=".\source\CVolumeLightSceneNode.h" />
+    <ClInclude Include=".\source\CWaterSurfaceSceneNode.h" />
+    <ClInclude Include=".\source\CParticleAnimatedMeshSceneNodeEmitter.h" />
+    <ClInclude Include=".\source\CParticleAttractionAffector.h" />
+    <ClInclude Include=".\source\CParticleBoxEmitter.h" />
+    <ClInclude Include=".\source\CParticleCylinderEmitter.h" />
+    <ClInclude Include=".\source\CParticleFadeOutAffector.h" />
+    <ClInclude Include=".\source\CParticleGravityAffector.h" />
+    <ClInclude Include=".\source\CParticleMeshEmitter.h" />
+    <ClInclude Include=".\source\CParticlePointEmitter.h" />
+    <ClInclude Include=".\source\CParticleRingEmitter.h" />
+    <ClInclude Include=".\source\CParticleRotationAffector.h" />
+    <ClInclude Include=".\source\CParticleScaleAffector.h" />
+    <ClInclude Include=".\source\CParticleSphereEmitter.h" />
+    <ClInclude Include=".\source\CParticleSystemSceneNode.h" />
+    <ClInclude Include=".\source\CMetaTriangleSelector.h" />
+    <ClInclude Include=".\source\COctreeTriangleSelector.h" />
+    <ClInclude Include=".\source\CSceneCollisionManager.h" />
+    <ClInclude Include=".\source\CTerrainTriangleSelector.h" />
+    <ClInclude Include=".\source\CTriangleBBSelector.h" />
+    <ClInclude Include=".\source\CTriangleSelector.h" />
+    <ClInclude Include=".\source\CSceneLoaderIrr.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorCameraFPS.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorCameraMaya.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorCollisionResponse.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorDelete.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorFlyCircle.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorFlyStraight.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorFollowSpline.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorRotation.h" />
+    <ClInclude Include=".\source\CSceneNodeAnimatorTexture.h" />
+    <ClInclude Include=".\source\CColladaMeshWriter.h" />
+    <ClInclude Include=".\source\CIrrMeshWriter.h" />
+    <ClInclude Include=".\source\COBJMeshWriter.h" />
+    <ClInclude Include=".\source\CPLYMeshWriter.h" />
+    <ClInclude Include=".\source\CSTLMeshWriter.h" />
+    <ClInclude Include=".\source\CVideoModeList.h" />
+    <ClInclude Include=".\source\CSoftwareDriver.h" />
+    <ClInclude Include=".\source\CSoftwareTexture.h" />
+    <ClInclude Include=".\source\CTRTextureGouraud.h" />
+    <ClInclude Include=".\source\CZBuffer.h" />
+    <ClInclude Include=".\source\ITriangleRenderer.h" />
+    <ClInclude Include=".\source\IZBuffer.h" />
+    <ClInclude Include=".\source\resource.h" />
+    <ClInclude Include=".\source\S2DVertex.h" />
+    <ClInclude Include=".\source\SB3DStructs.h" />
+    <ClInclude Include=".\source\CColorConverter.h" />
+    <ClInclude Include=".\source\CFPSCounter.h" />
+    <ClInclude Include=".\source\CImage.h" />
+    <ClInclude Include=".\source\CNullDriver.h" />
+    <ClInclude Include=".\source\IImagePresenter.h" />
+    <ClInclude Include=".\source\CImageWriterBMP.h" />
+    <ClInclude Include=".\source\CImageWriterJPG.h" />
+    <ClInclude Include=".\source\CImageWriterPCX.h" />
+    <ClInclude Include=".\source\CImageWriterPNG.h" />
+    <ClInclude Include=".\source\CImageWriterPPM.h" />
+    <ClInclude Include=".\source\CImageWriterPSD.h" />
+    <ClInclude Include=".\source\CImageWriterTGA.h" />
+    <ClInclude Include=".\source\CImageLoaderBMP.h" />
+    <ClInclude Include=".\source\CImageLoaderDDS.h" />
+    <ClInclude Include=".\source\CImageLoaderJPG.h" />
+    <ClInclude Include=".\source\CImageLoaderPCX.h" />
+    <ClInclude Include=".\source\CImageLoaderPNG.h" />
+    <ClInclude Include=".\source\CImageLoaderPPM.h" />
+    <ClInclude Include=".\source\CImageLoaderPSD.h" />
+    <ClInclude Include=".\source\CImageLoaderPVR.h" />
+    <ClInclude Include=".\source\CImageLoaderRGB.h" />
+    <ClInclude Include=".\source\CImageLoaderTGA.h" />
+    <ClInclude Include=".\source\CImageLoaderWAL.h" />
+    <ClInclude Include=".\source\CImageLoaderXBM.h" />
+    <ClInclude Include=".\source\CD3D9Driver.h" />
+    <ClInclude Include=".\source\CD3D9HLSLMaterialRenderer.h" />
+    <ClInclude Include=".\source\CD3D9MaterialRenderer.h" />
+    <ClInclude Include=".\source\CD3D9NormalMapRenderer.h" />
+    <ClInclude Include=".\source\CD3D9ParallaxMapRenderer.h" />
+    <ClInclude Include=".\source\CD3D9ShaderMaterialRenderer.h" />
+    <ClInclude Include=".\source\CD3D9Texture.h" />
+    <ClInclude Include=".\source\CDepthBuffer.h" />
+    <ClInclude Include=".\source\CSoftware2MaterialRenderer.h" />
+    <ClInclude Include=".\source\CSoftwareDriver2.h" />
+    <ClInclude Include=".\source\CSoftwareTexture2.h" />
+    <ClInclude Include=".\source\IBurningShader.h" />
+    <ClInclude Include=".\source\IDepthBuffer.h" />
+    <ClInclude Include=".\source\S4DVertex.h" />
+    <ClInclude Include=".\source\SoftwareDriver2_compile_config.h" />
+    <ClInclude Include=".\source\SoftwareDriver2_helper.h" />
+    <ClInclude Include=".\source\CLogger.h" />
+    <ClInclude Include=".\source\COSOperator.h" />
+    <ClInclude Include=".\source\CTimer.h" />
+    <ClInclude Include=".\source\os.h" />
+    <ClInclude Include=".\source\CProfiler.h" />
+    <ClInclude Include=".\source\EProfileIDs.h" />
+    <ClInclude Include=".\source\lzma\LzmaDec.h" />
+    <ClInclude Include=".\source\lzma\Types.h" />
+    <ClInclude Include=".\source\CW3DataCache.h" />
+    <ClInclude Include=".\source\Utils_Halffloat.h" />
+    <ClInclude Include=".\source\Utils_Loaders_Irr.h" />
+    <ClInclude Include=".\source\Utils_RedEngine.h" />
+    <ClInclude Include=".\source\zlib\crc32.h" />
+    <ClInclude Include=".\source\zlib\deflate.h" />
+    <ClInclude Include=".\source\zlib\inffast.h" />
+    <ClInclude Include=".\source\zlib\inffixed.h" />
+    <ClInclude Include=".\source\zlib\inftrees.h" />
+    <ClInclude Include=".\source\zlib\trees.h" />
+    <ClInclude Include=".\source\zlib\zconf.h" />
+    <ClInclude Include=".\source\zlib\zlib.h" />
+    <ClInclude Include=".\source\zlib\zutil.h" />
+    <ClInclude Include=".\source\jpeglib\cderror.h" />
+    <ClInclude Include=".\source\jpeglib\jconfig.h" />
+    <ClInclude Include=".\source\jpeglib\jdct.h" />
+    <ClInclude Include=".\source\jpeglib\jerror.h" />
+    <ClInclude Include=".\source\jpeglib\jinclude.h" />
+    <ClInclude Include=".\source\jpeglib\jmemsys.h" />
+    <ClInclude Include=".\source\jpeglib\jmorecfg.h" />
+    <ClInclude Include=".\source\jpeglib\jpegint.h" />
+    <ClInclude Include=".\source\jpeglib\jpeglib.h" />
+    <ClInclude Include=".\source\jpeglib\jversion.h" />
+    <ClInclude Include=".\source\libpng\png.h" />
+    <ClInclude Include=".\source\libpng\pngconf.h" />
+    <ClInclude Include=".\source\aesGladman\aes.h" />
+    <ClInclude Include=".\source\aesGladman\aesopt.h" />
+    <ClInclude Include=".\source\aesGladman\fileenc.h" />
+    <ClInclude Include=".\source\aesGladman\hmac.h" />
+    <ClInclude Include=".\source\aesGladman\prng.h" />
+    <ClInclude Include=".\source\aesGladman\pwd2key.h" />
+    <ClInclude Include=".\source\aesGladman\sha1.h" />
+    <ClInclude Include=".\source\aesGladman\sha2.h" />
+    <ClInclude Include=".\source\bzip2\bzlib.h" />
+    <ClInclude Include=".\source\bzip2\bzlib_private.h" />
+    <ClInclude Include=".\source\CIrrDeviceConsole.h" />
+    <ClInclude Include=".\source\CIrrDeviceFB.h" />
+    <ClInclude Include=".\source\CIrrDeviceLinux.h" />
+    <ClInclude Include=".\source\CIrrDeviceSDL.h" />
+    <ClInclude Include=".\source\CIrrDeviceStub.h" />
+    <ClInclude Include=".\source\CIrrDeviceWin32.h" />
+    <ClInclude Include=".\source\CAttributeImpl.h" />
+    <ClInclude Include=".\source\CAttributes.h" />
+    <ClInclude Include=".\source\CFileList.h" />
+    <ClInclude Include=".\source\CFileSystem.h" />
+    <ClInclude Include=".\source\CLimitReadFile.h" />
+    <ClInclude Include=".\source\CMemoryFile.h" />
+    <ClInclude Include=".\source\CMountPointReader.h" />
+    <ClInclude Include=".\source\CNPKReader.h" />
+    <ClInclude Include=".\source\CPakReader.h" />
+    <ClInclude Include=".\source\CReadFile.h" />
+    <ClInclude Include=".\source\CTarReader.h" />
+    <ClInclude Include=".\source\CWADReader.h" />
+    <ClInclude Include=".\source\CWriteFile.h" />
+    <ClInclude Include=".\source\CXMLReader.h" />
+    <ClInclude Include=".\source\CXMLReaderImpl.h" />
+    <ClInclude Include=".\source\CXMLWriter.h" />
+    <ClInclude Include=".\source\CZipReader.h" />
+    <ClInclude Include=".\source\IAttribute.h" />
+    <ClInclude Include=".\source\BuiltInFont.h" />
+    <ClInclude Include=".\source\CDefaultGUIElementFactory.h" />
+    <ClInclude Include=".\source\CGUIButton.h" />
+    <ClInclude Include=".\source\CGUICheckbox.h" />
+    <ClInclude Include=".\source\CGUIColorSelectDialog.h" />
+    <ClInclude Include=".\source\CGUIComboBox.h" />
+    <ClInclude Include=".\source\CGUIContextMenu.h" />
+    <ClInclude Include=".\source\CGUIEditBox.h" />
+    <ClInclude Include=".\source\CGUIEnvironment.h" />
+    <ClInclude Include=".\source\CGUIFileOpenDialog.h" />
+    <ClInclude Include=".\source\CGUIFont.h" />
+    <ClInclude Include=".\source\CGUIImage.h" />
+    <ClInclude Include=".\source\CGUIImageList.h" />
+    <ClInclude Include=".\source\CGUIInOutFader.h" />
+    <ClInclude Include=".\source\CGUIListBox.h" />
+    <ClInclude Include=".\source\CGUIMenu.h" />
+    <ClInclude Include=".\source\CGUIMeshViewer.h" />
+    <ClInclude Include=".\source\CGUIMessageBox.h" />
+    <ClInclude Include=".\source\CGUIModalScreen.h" />
+    <ClInclude Include=".\source\CGUIProfiler.h" />
+    <ClInclude Include=".\source\CGUIScrollBar.h" />
+    <ClInclude Include=".\source\CGUISkin.h" />
+    <ClInclude Include=".\source\CGUISpinBox.h" />
+    <ClInclude Include=".\source\CGUISpriteBank.h" />
+    <ClInclude Include=".\source\CGUIStaticText.h" />
+    <ClInclude Include=".\source\CGUITabControl.h" />
+    <ClInclude Include=".\source\CGUITable.h" />
+    <ClInclude Include=".\source\CGUIToolBar.h" />
+    <ClInclude Include=".\source\CGUITreeView.h" />
+    <ClInclude Include=".\source\CGUIWindow.h" />
+    <ClInclude Include="source\CImageLoaderCube.h" />
+    <ClInclude Include="source\CSceneNodeAnimatorCameraWolvenKit.h" />
+    <ClInclude Include="source\debug.h" />
+    <ClInclude Include="source\Janua\JanuaRuntime\JanuaRuntime.h">
+      <Filter>Janua\Runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\Logger.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\Model.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\ModelInstance.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\pugiconfig.hpp">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\pugixml.hpp">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\PVSDatabase.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\PVSDatabaseExporter.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\PVSDatabaseImporter.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\PVSGenerator.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\PVSPreprocessor.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\Query.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\QueryResult.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\Scene.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\SceneObjectType.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\SceneOptions.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\SceneTile.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\TrianglesOctree.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\JanuaEngine\Utilities.h">
+      <Filter>Janua\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\AABB.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\Cell.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\CollisionUtils.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\LineSegment.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\Matrix4x4.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\Plane.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\Point3i.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\Portal.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\PortalQuad.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\Ray.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\StabbingLine.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\stdafx.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\targetver.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\Triangle.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\Utils.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\Vector3f.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\Voxel.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Janua\Core\VoxelContainer.h">
+      <Filter>Janua\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ITerrainSceneNodeWolvenKit.h" />
+    <ClInclude Include="source\CTerrainSceneNodeWolvenKit.h" />
+    <ClInclude Include="include\CSceneManagerWolvenKit.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Irrlicht.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\.gitignore" />
+    <None Include="..\..\changes.txt" />
+    <None Include="..\..\readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Janua">
+      <UniqueIdentifier>{7b9eabc7-67fb-418f-92a8-2e7280947b60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Janua\Core">
+      <UniqueIdentifier>{63c4e6d2-26ee-4547-9a8c-8b75a6bd2390}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Janua\Engine">
+      <UniqueIdentifier>{537d69af-c669-4cff-baa8-586d5e403a6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Janua\Runtime">
+      <UniqueIdentifier>{c8035f42-f65a-4a8f-b54b-5d28dcc32eeb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="source\Janua\Core\PendingThings.txt">
+      <Filter>Janua\Core</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

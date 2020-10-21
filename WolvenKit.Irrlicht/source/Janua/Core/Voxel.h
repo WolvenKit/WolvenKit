@@ -8,28 +8,29 @@
 
 #pragma once
 
-class Voxel
+namespace Janua
 {
-public:
+	class Voxel
+	{
+	public:
 
-	enum VoxelStatus {
-		EMPTY = 0,
-		SOLID
+		enum VoxelStatus {
+			EMPTY = 0,
+			SOLID
+		};
+
+
+		Voxel(void);
+		Voxel(VoxelStatus status);
+
+		~Voxel(void);
+
+		VoxelStatus getStatus() const { return status; }
+		void setStatus(VoxelStatus val) { status = val; }
+
+	private:
+
+		VoxelStatus status;
+
 	};
-
-
-	Voxel(void);
-	Voxel(VoxelStatus status);
-
-	~Voxel(void);
-
-	VoxelStatus getStatus() const { return status; }
-	void setStatus(VoxelStatus val) { status = val; }
-
-private:
-
-	VoxelStatus status;
-
-};
-
-
+}

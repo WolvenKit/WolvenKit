@@ -10,16 +10,18 @@
 
 #include "Vector3f.h"
 
-class Ray
+namespace Janua
 {
-public:
+	class Ray
+	{
+	public:
 
 
-	Ray(void);
-	Ray(const Vector3f origin, const Vector3f direction);
-	~Ray(void);
+		Ray(void);
+		Ray(const Vector3f origin, const Vector3f direction);
+		~Ray(void);
 
-	Vector3f origin;
-	Vector3f direction;
-};
-
+		Vector3f origin;
+		Vector3f direction;
+	};
+}

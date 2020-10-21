@@ -1,0 +1,158 @@
+enum MessageType
+{
+	INVALID = 0,
+	ADD_NODE,
+	SHOW_NODE,
+	HIDE_NODE,
+	SELECT_NODE,
+	SHUTDOWN,
+	NUM_MESSAGE_TYPES
+};
+
+
+public struct WKMessage
+{
+	public WKMessage(MessageType m, SceneNode n, TreeNode tn = null)
+	{
+		message = m;
+		node = n;
+		treeNode = tn;
+	}
+	
+	public MessageType message ( get; }
+	public SceneNode node { get; }
+	public TreeNOde treeNode { get; }
+};
+
+ConcurrentQueue<WKMessage> commandQueue = new ConcurrentQueue<WKMessage>();
+
+//============================
+
+//UI
+
+        private void sceneView_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            TreeNode node = e.Node;
+            if (node.Checked)
+            {
+                if (node.Nodes.Count > 0)
+                {
+                    foreach (RenderTreeNode n in node.Nodes)
+                    {
+                        n.Checked = true;
+                        WKMessage m = new WKMessage(MessageType.SHOW_NODE, n);
+						commandQueue.Enqueue(m);
+                    }
+                }
+                else
+                {
+                    WKMessage m = new WKMessage(MessageType.SHOW_NODE, node);
+					commandQueue.Enqueue(m);
+                }
+            }
+            else
+            {
+                if (node.Nodes.Count > 0)
+                {
+                    foreach (RenderTreeNode n in node.Nodes)
+                    {
+                        n.Checked = false;
+						WKMessage m = new WKMessage(MessageType.HIDE_NODE, n);
+						commandQueue.Enqueue(m);
+                    }                    
+                }
+                else
+                {
+					WKMessage m = new WKMessage(MessageType.HIDE_NODE, node);
+					commandQueue.Enqueue(m);
+                }
+            }
+        }
+
+        private void addMeshButton_Click(object sender, EventArgs e)
+        {
+            var dlg = new CommonOpenFileDialog() { Title = "Select W2L file" };
+            dlg.Multiselect = false;
+            dlg.Filters.Add(new CommonFileDialogFilter("W2L Files", ".w2l"));
+            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                inputFilename = dlg.FileName;
+                addMeshButton.Enabled = false; // enable when loading is completed
+				
+				// launch background worker which will load the meshes, enqueue the nodes, add items to the tree
+            }
+        }
+//============================
+
+
+
+void ProcessCommands()
+{
+	WKMessage m;
+	if(commandQueue.TryDequeue(out m))
+	{
+		switch(m.message)
+		{
+			case MessageType.ADD_NODE:
+				smgr.AddNode(m.node.MeshNode);
+				if(m.treeNode != null)
+				{
+					sceneView.Invoke((MethodInvoker)delegate
+					{
+						sceneView.Nodes.Add(m.treeNode);
+					}
+				}
+				break;
+			case MessageType.SHOW_NODE:
+				m.node.MeshNode.Visible = true;
+				break;
+			case MessageType.HIDE_NODE:
+				m.node.MeshNode.Visible = false;
+				break;
+			case MessageType.SELECT_NODE:
+				smgr.SelectNode(m.node.MeshNode);
+				break;
+			case MessageType.SHUTDOWN:
+				device.Yield();
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+
+                while (device.Run())
+                {
+                    if (this.Visible)
+                    {
+						ProcessCommands();
+
+                        driver.ViewPort = viewPort;
+
+                        driver.BeginScene(ClearBufferFlag.All, new IrrlichtLime.Video.Color(0, 0, 100));
+                        int val = driver.FPS;
+                        fpstext.Text = "FPS: " + val.ToString();
+
+                        smgr.DrawAll();
+                        gui.DrawAll();
+
+                        // draw xyz axis right bottom
+                        driver.ViewPort = new Recti(irrlichtPanel.Width - 100, irrlichtPanel.Height - 80, irrlichtPanel.Width, irrlichtPanel.Height);
+
+                        driver.SetMaterial(lineMat);
+                        var matrix = new Matrix(new Vector3Df(0, 0, 0), smgr.ActiveCamera.ModelRotation);
+                        driver.SetTransform(TransformationState.World, matrix);
+                        matrix = matrix.BuildProjectionMatrixOrthoLH(100, 80, 0.001f, 10000.0f);
+                        driver.SetTransform(TransformationState.Projection, matrix);
+                        matrix = matrix.BuildCameraLookAtMatrixLH(new Vector3Df(50, 0, 0), new Vector3Df(0, 0, 0), new Vector3Df(0, 1f, 0));
+                        driver.SetTransform(TransformationState.View, matrix);
+                        driver.Draw3DLine(0, 0, 0, 30f, 0, 0, IrrlichtLime.Video.Color.SolidGreen);
+                        driver.Draw3DLine(0, 0, 0, 0, 30f, 0, IrrlichtLime.Video.Color.SolidBlue);
+                        driver.Draw3DLine(0, 0, 0, 0, 0, 30f, IrrlichtLime.Video.Color.SolidRed);
+
+                        driver.EndScene();
+                    }
+                    else
+                        device.Yield();
+                }

@@ -2134,11 +2134,11 @@ TerrainSceneNode^ SceneManager::AddTerrainSceneNode(IO::ReadFile^ heightMapFile)
 	return TerrainSceneNode::Wrap(n);
 }
 
-TerrainSceneNodeWolvenKit^ SceneManager::AddTerrainSceneNodeWolvenKit(String^ heightMapFileName, SceneNode^ parent, int id, int dimension , float maxHeight, float minHeight, float tileSize, Vector3Df^ anchor, int maxLOD, TerrainPatchSize patchSize)
+TerrainSceneNodeWolvenKit^ SceneManager::AddTerrainSceneNodeWolvenKit(String^ heightMapFileName, SceneNode^ parent, int id, int dimension , float maxHeight, float minHeight, float tileSize, Vector3Df^ anchor)
 {
 	LIME_ASSERT(heightMapFileName != nullptr);
 
-	scene::ITerrainSceneNode* n = m_SceneManager->addTerrainSceneNodeWolvenKit(
+	scene::ITerrainSceneNodeWolvenKit* n = m_SceneManager->addTerrainSceneNodeWolvenKit(
 		Lime::StringToPath(heightMapFileName),
 		LIME_SAFEREF(parent, m_SceneNode),
 		id,
@@ -2146,9 +2146,7 @@ TerrainSceneNodeWolvenKit^ SceneManager::AddTerrainSceneNodeWolvenKit(String^ he
 		maxHeight,
 		minHeight,
 		tileSize,
-		*anchor->m_NativeValue,
-		maxLOD,
-		(scene::E_TERRAIN_PATCH_SIZE)patchSize);
+		*anchor->m_NativeValue);
 
 	return TerrainSceneNodeWolvenKit::Wrap(n);
 }
@@ -3022,6 +3020,11 @@ AnimatedMesh^ SceneManager::GetMesh(IO::ReadFile^ file)
 
 	scene::IAnimatedMesh* m = m_SceneManager->getMesh(file->m_ReadFile);
 	return AnimatedMesh::Wrap(m);
+}
+
+Mesh^ SceneManager::GetStaticMesh(String^ filename)
+{
+	return nullptr;
 }
 
 MeshLoader^ SceneManager::GetMeshLoader(int index)

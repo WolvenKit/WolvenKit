@@ -122,6 +122,7 @@ namespace scene
 	class ISceneNodeFactory;
 	class ISceneUserDataSerializer;
 	class ITerrainSceneNode;
+	class ITerrainSceneNodeWolvenKit;
 	class ITextSceneNode;
 	class ITriangleSelector;
 	class IVolumeLightSceneNode;
@@ -394,6 +395,8 @@ namespace scene
 		This pointer should not be dropped. See
 		IReferenceCounted::drop() for more information. */
 		virtual IAnimatedMesh* getMesh(io::IReadFile* file) = 0;
+
+		virtual IMesh* getStaticMesh(const io::path& filename) { return nullptr; }
 
 		//! Get interface to the mesh cache which is shared between all existing scene managers.
 		/** With this interface, it is possible to manually add new loaded
@@ -908,12 +911,11 @@ namespace scene
 			bool addAlsoIfHeightmapEmpty = false) = 0;
 
 		// for WolvenKit
-        virtual ITerrainSceneNode* addTerrainSceneNodeWolvenKit(
+        virtual ITerrainSceneNodeWolvenKit* addTerrainSceneNodeWolvenKit(
 			const io::path& heightMapFileName,
             ISceneNode* parent, s32 id,
 			s32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize,
-            const core::vector3df& anchor,
-            s32 maxLOD = 5, E_TERRAIN_PATCH_SIZE patchSize = ETPS_17) = 0;
+            const core::vector3df& anchor) = 0;
 
 		//! Adds a quake3 scene node to the scene graph.
 		/** A Quake3 Scene renders multiple meshes for a specific HighLanguage Shader (Quake3 Style )

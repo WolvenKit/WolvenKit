@@ -8,68 +8,71 @@
 
 #pragma once
 
-#include "stdafx.h"
 #include "Model.h"
 #include "../Core/Matrix4x4.h"
 #include "SceneOptions.h"
 #include "ModelInstance.h"
 #include "SceneObjectType.h"
+#include <string>
+#include <vector>
 
 using std::string;
 using std::vector;
 
 //TODO: add namespace
-
-/**
-* A Scene contains several Model instances inside under a previously set SceneOptions.
-*
-*/
-class Scene
+namespace Janua
 {
-public:
-	
-
-	Scene(const SceneOptions& options);
-	Scene(const SceneOptions& options, const string& name);
-
 	/**
-	* Adds a Model instance to the current Scene. One Model can have several instances of itself, in different parts of the scene. This is to avoid storing the geometry of each instance.
-	* @param model				The Model to add.
-	* @param modelId			The model id. Must be a positive integer. 
-	* @param transformMatrix	The Matrix4x4 transform matrix for this instance.		
-	* @param type				The scene object type. Occluder or Occludee.
+	* A Scene contains several Model instances inside under a previously set SceneOptions.
+	*
 	*/
-	void addModelInstance(const Model& model, int modelId, const Matrix4x4& transformMatrix, SceneObjectType type);
+	class Scene
+	{
+	public:
 
-	/**
-	* Returns the number of Models instances in the current Scene.
-	* @return The number of Model instances.
-	*/
-	int getModelInstancesCount() const;
+		Scene();
+		Scene(const SceneOptions& options);
+		Scene(const SceneOptions& options, const string& name);
 
-	/**
-	* Returns the Model Instance at the given index.
-	* @param index				The zero based index of the set of Model instances.
-	* @return					The Model Instance at index.					
-	*/
-	const ModelInstance& getModelInstance( int index )const;
+		/**
+		* Adds a Model instance to the current Scene. One Model can have several instances of itself, in different parts of the scene. This is to avoid storing the geometry of each instance.
+		* @param model				The Model to add.
+		* @param modelId			The model id. Must be a positive integer.
+		* @param transformMatrix	The Matrix4x4 transform matrix for this instance.
+		* @param type				The scene object type. Occluder or Occludee.
+		*/
+		void addModelInstance(const Model& model, int modelId, const Matrix4x4& transformMatrix, SceneObjectType type);
 
-	/**
-	* The name of the Scene.
-	*/
-	const string name;
+		/**
+		* Returns the number of Models instances in the current Scene.
+		* @return The number of Model instances.
+		*/
+		int getModelInstancesCount() const;
 
-	/**
-	* The Scene Options used in this Scene.
-	*/
-	const SceneOptions& options;
+		/**
+		* Returns the Model Instance at the given index.
+		* @param index				The zero based index of the set of Model instances.
+		* @return					The Model Instance at index.
+		*/
+		const ModelInstance& getModelInstance(int index)const;
 
-	virtual ~Scene(void);
+		/**
+		* The name of the Scene.
+		*/
+		const string name;
 
-	Scene& Scene::operator = (const Scene& otherScene);
+		/**
+		* The Scene Options used in this Scene.
+		*/
+		SceneOptions options;
 
-private:
+		virtual ~Scene(void);
 
-	vector<ModelInstance> modelInstances;
+		Scene& Scene::operator = (const Scene& otherScene);
 
-};
+	private:
+
+		vector<ModelInstance> modelInstances;
+
+	};
+}

@@ -9,42 +9,45 @@
 #include "AABB.h"
 #include "Point3i.h"
 #include <vector>
-
-class Portal;
+#include <memory>
 
 using std::shared_ptr;
 using std::vector;
 
-class Cell
+namespace Janua
 {
-public:
+	class Portal;
 
-	Cell(const Point3i minPoint, const Point3i maxPoint);
-	~Cell(void);
+	class Cell
+	{
+	public:
 
-	Point3i minPoint;
-	Point3i maxPoint;
+		Cell(const Point3i minPoint, const Point3i maxPoint);
+		~Cell(void);
 
-	const vector<shared_ptr<Portal>> getPortals() const { return m_portals; };
-	void addPortal(const shared_ptr<Portal> val);
+		Point3i minPoint;
+		Point3i maxPoint;
 
-	vector<shared_ptr<Cell>> getVisibleCells() const { return m_visibleSetCells; };
-	void addVisibleCell(const shared_ptr<Cell> val);
+		const vector<shared_ptr<Portal>> getPortals() const { return m_portals; };
+		void addPortal(const shared_ptr<Portal> val);
 
-	friend bool Cell::operator == (const Cell& lhs, const Cell& rhs );
-	friend bool Cell::operator != (const Cell& lhs, const Cell& rhs );
+		vector<shared_ptr<Cell>> getVisibleCells() const { return m_visibleSetCells; };
+		void addVisibleCell(const shared_ptr<Cell> val);
 
-	void addModelId(int modelId);
-	void getModelsIds(vector<int>& modelIds) const;
+		friend bool Cell::operator == (const Cell& lhs, const Cell& rhs);
+		friend bool Cell::operator != (const Cell& lhs, const Cell& rhs);
 
-	bool isModelIdInCell(int modelId) const;
+		void addModelId(int modelId);
+		void getModelsIds(vector<int>& modelIds) const;
 
-private:
+		bool isModelIdInCell(int modelId) const;
 
-	vector<int> m_modelIds; //The id's of the models inside the cell
+	private:
 
-	vector<shared_ptr<Portal>> m_portals; //The portals that connect to other Cells.
-	vector<shared_ptr<Cell>> m_visibleSetCells; //The Cells that are potentially visible from the current Cell
+		vector<int> m_modelIds; //The id's of the models inside the cell
 
-};
+		vector<shared_ptr<Portal>> m_portals; //The portals that connect to other Cells.
+		vector<shared_ptr<Cell>> m_visibleSetCells; //The Cells that are potentially visible from the current Cell
 
+	};
+}

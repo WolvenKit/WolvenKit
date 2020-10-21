@@ -1,17 +1,18 @@
-#include "StdAfx.h"
 #include "QueryResult.h"
 
-
-QueryResult::QueryResult(const vector<int> getVisibleModelIds) : m_VisibleModelIds(getVisibleModelIds)
+namespace Janua
 {
+	QueryResult::QueryResult(const vector<int> getVisibleModelIds) : m_VisibleModelIds(getVisibleModelIds)
+	{
 
-}
+	}
 
-const vector<int> QueryResult::getVisibleModelIds() const
-{
-	return m_VisibleModelIds;
-}
+	const vector<int> QueryResult::getVisibleModelIds() const
+	{
+		return m_VisibleModelIds;
+	}
 
-QueryResult::~QueryResult(void)
-{
+	QueryResult::~QueryResult(void)
+	{
+	}
 }

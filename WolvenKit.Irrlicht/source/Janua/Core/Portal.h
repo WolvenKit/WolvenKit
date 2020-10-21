@@ -10,22 +10,23 @@
 #include "Point3i.h"
 #include "Cell.h"
 
-
-class Portal
+namespace Janua
 {
-public:
+	class Portal
+	{
+	public:
 
-	Portal (shared_ptr<Cell> fromCell, shared_ptr<Cell> toCell, Point3i minPoint, Point3i maxPoint, Point3i facingPlane);
-	~Portal(void);
+		Portal(shared_ptr<Cell> fromCell, shared_ptr<Cell> toCell, Point3i minPoint, Point3i maxPoint, Point3i facingPlane);
+		~Portal(void);
 
-	shared_ptr<Cell> fromCell; 
-	shared_ptr<Cell> toCell;
-	
-	Point3i minPoint, maxPoint; //The voxels shared between cells.
+		shared_ptr<Cell> fromCell;
+		shared_ptr<Cell> toCell;
 
-	Point3i facingPlane; //The plane where it points at. eg. (1,0,0) YZ plane pointing to +X.
+		Point3i minPoint, maxPoint; //The voxels shared between cells.
 
-private:
+		Point3i facingPlane; //The plane where it points at. eg. (1,0,0) YZ plane pointing to +X.
 
-};
+	private:
 
+	};
+}

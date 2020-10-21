@@ -17,70 +17,71 @@
 #include <vector>
 using std::vector;
 
-
-/**
-* An Octree that is built from all the models triangles
-*/
-class TrianglesOctree
+namespace Janua
 {
-
-public:
-
 	/**
-	* A node of the octree
+	* An Octree that is built from all the models triangles
 	*/
-	struct OctreeNode
+	class TrianglesOctree
 	{
-		AABB aabb;
-		vector<OctreeNode*> children;
-		vector<Triangle> triangles;
 
-		bool isLeaf()
+	public:
+
+		/**
+		* A node of the octree
+		*/
+		struct OctreeNode
 		{
-			return children.size() == 0;
-		}
+			AABB aabb;
+			vector<OctreeNode*> children;
+			vector<Triangle> triangles;
+
+			bool isLeaf()
+			{
+				return children.size() == 0;
+			}
+		};
+
+
+
+		TrianglesOctree();
+		~TrianglesOctree();
+
+		/**
+		* Builds the octree
+		*/
+		void build(const Scene* scene, const AABB sceneAABB, const Vector3f voxelSize);
+
+		/**
+		* Check all the voxels of the scene and the solid ones to the voxelContainer.
+		* It check collisions against the triangles octree
+		*/
+		void detectSolidVoxels(VoxelContainer& voxelContainer, const AABB sceneAABB);
+
+		/**
+		* Free resources
+		*/
+		void dispose();
+
+	private:
+
+		void buildRecursive(OctreeNode* parentNode, vector<Triangle>& triangles, const Vector3f voxelSize);
+		void getTrianglesInAABB(vector<Triangle>& triangles, AABB aabb, vector<Triangle>& outTriangles);
+		bool testTriangleAABB(const Triangle& t, const AABB& aabb) const;
+		void getLeafNodesForAABB(const AABB& aabb, vector<OctreeNode*>& nodes);
+		void getLeafNodesForAABBRecursive(const AABB& aabb, OctreeNode* node, vector<OctreeNode*>& nodes);
+		void disposeRecursive(OctreeNode* node);
+
+	public:
+
+		/**
+		* Root node of the octree
+		*/
+		OctreeNode* rootNode;
+
+	private:
+
+		static const Vector3f NODE_COMBINATIONS[];
+
 	};
-
-
-
-	TrianglesOctree();
-	~TrianglesOctree();
-
-	/**
-	* Builds the octree
-	*/
-	void build(const Scene* scene, const AABB sceneAABB, const Vector3f voxelSize);
-
-	/**
-	* Check all the voxels of the scene and the solid ones to the voxelContainer.
-	* It check collisions against the triangles octree
-	*/
-	void detectSolidVoxels(VoxelContainer& voxelContainer, const AABB sceneAABB);
-
-	/**
-	* Free resources
-	*/
-	void dispose();
-
-private:
-
-	void buildRecursive(OctreeNode* parentNode, vector<Triangle> &triangles, const Vector3f voxelSize);
-	void getTrianglesInAABB(vector<Triangle> &triangles, AABB aabb, vector<Triangle> &outTriangles);
-	bool testTriangleAABB(const Triangle &t, const AABB &aabb) const;
-	void getLeafNodesForAABB(const AABB &aabb, vector<OctreeNode*> &nodes);
-	void getLeafNodesForAABBRecursive(const AABB &aabb, OctreeNode* node, vector<OctreeNode*> &nodes);
-	void disposeRecursive(OctreeNode* node);
-
-public:
-
-	/**
-	* Root node of the octree
-	*/
-	OctreeNode* rootNode;
-
-private:
-
-	static const Vector3f NODE_COMBINATIONS[];
-
-};
-
+}

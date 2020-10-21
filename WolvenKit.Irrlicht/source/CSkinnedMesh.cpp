@@ -104,12 +104,20 @@ CSkinnedMesh::CSkinnedMesh()
 	#endif
 
 	SkinningBuffers=&LocalBuffers;
+
+    char mess[64];
+    sprintf(mess, "Skinned mesh created: %p\n", this);
+    os::Printer::log(mess, ELL_DEBUG);
 }
 
 
 //! destructor
 CSkinnedMesh::~CSkinnedMesh()
 {
+	char mess[64];
+	sprintf(mess,"Skinned mesh destroyed: %p\n", this);
+	os::Printer::log(mess, ELL_DEBUG);
+
 	for (u32 i=0; i<AllJoints.size(); ++i)
 		delete AllJoints[i];
 

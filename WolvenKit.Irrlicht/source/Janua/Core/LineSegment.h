@@ -10,14 +10,16 @@
 
 #include "Vector3f.h"
 
-class LineSegment
+namespace Janua
 {
-public:
+	class LineSegment
+	{
+	public:
 
-	LineSegment(Vector3f startPoint, Vector3f endPoint);
+		LineSegment(Vector3f startPoint, Vector3f endPoint);
 
-	const Vector3f startPoint, endPoint;
+		const Vector3f startPoint, endPoint;
 
-	~LineSegment(void);
-};
-
+		~LineSegment(void);
+	};
+}

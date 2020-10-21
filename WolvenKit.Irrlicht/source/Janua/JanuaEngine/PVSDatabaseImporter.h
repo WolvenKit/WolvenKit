@@ -1,20 +1,22 @@
 #pragma once
 #include "PVSDatabase.h"
 
-/**
-* Imports the PVS from a buffer.
-*/
-class PVSDatabaseImporter
+namespace Janua
 {
-public:
-	PVSDatabaseImporter(void);
-
 	/**
-	* Loads a PVS Database from a buffer.
-	* @return A pointer to the PVSDatabase loaded.
+	* Imports the PVS from a buffer.
 	*/
-	shared_ptr<PVSDatabase> load(char* buffer);
+	class PVSDatabaseImporter
+	{
+	public:
+		PVSDatabaseImporter(void);
 
-	virtual ~PVSDatabaseImporter(void);
-};
+		/**
+		* Loads a PVS Database from a buffer.
+		* @return A pointer to the PVSDatabase loaded.
+		*/
+		shared_ptr<PVSDatabase> load(char* buffer);
 
+		virtual ~PVSDatabaseImporter(void);
+	};
+}

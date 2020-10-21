@@ -19,6 +19,7 @@
 #include "CW3Animation.h"
 #include "Utils_RedEngine.h"
 #include "MeshCombiner.h"
+#include "CSceneManagerWolvenKit.h"
 
 
 namespace irr
@@ -121,7 +122,8 @@ namespace scene
         //! If you no longer need the mesh, you should call IAnimatedMesh::drop().
         //! See IReferenceCounted::drop() for more information.
         virtual IAnimatedMesh* createMesh(io::IReadFile* file);
-
+        video::SMaterial createMaterial(io::IReadFile* file);
+        IMesh* createStaticMesh(io::IReadFile* file);
 
         core::array<video::SMaterial> Materials;
         CW3Skeleton Skeleton;
@@ -135,9 +137,14 @@ namespace scene
 
         scene::ISceneManager* _sceneManager;
         io::IFileSystem* _fileSystem;
-        scene::ISkinnedMesh* _animatedMesh;
+        video::IVideoDriver* _videoDriver;
 
+        scene::ISkinnedMesh* _animatedMesh;
         core::array<scene::ISkinnedMesh*> Meshes;
+
+        scene::SMesh* _staticMesh;
+        core::array<scene::SMesh*> _staticMeshes;
+
 
         // Strings table
         core::array<core::stringc> Strings;
@@ -171,6 +178,7 @@ namespace scene
 
         // load a mesh buffer from the buffer file
         bool W3_ReadBuffer(io::IReadFile* file, SBufferInfos bufferInfos, SMeshInfos meshInfos);
+        bool W3_ReadBufferStatic(io::IReadFile* file, SBufferInfos bufferInfos, SMeshInfos meshInfos);
 
         // animation helper functions
         SAnimationBufferBitwiseCompressedData ReadSAnimationBufferBitwiseCompressedDataProperty(io::IReadFile* file);

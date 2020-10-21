@@ -1,7 +1,5 @@
 #include "stdafx.h"
-#include "DynamicMeshBuffer.h"
 #include "Mesh.h"
-#include "MeshBuffer.h"
 #include "ReadFile.h"
 #include "SceneNode.h"
 #include "TerrainSceneNodeWolvenKit.h"
@@ -12,7 +10,7 @@ using namespace System;
 namespace IrrlichtLime {
 namespace Scene {
 
-TerrainSceneNodeWolvenKit^ TerrainSceneNodeWolvenKit::Wrap(scene::ITerrainSceneNode* ref)
+TerrainSceneNodeWolvenKit^ TerrainSceneNodeWolvenKit::Wrap(scene::ITerrainSceneNodeWolvenKit* ref)
 {
 	if (ref == nullptr)
 		return nullptr;
@@ -20,8 +18,8 @@ TerrainSceneNodeWolvenKit^ TerrainSceneNodeWolvenKit::Wrap(scene::ITerrainSceneN
 	return gcnew TerrainSceneNodeWolvenKit(ref);
 }
 
-TerrainSceneNodeWolvenKit::TerrainSceneNodeWolvenKit(scene::ITerrainSceneNode* ref)
-	: TerrainSceneNode(ref)
+TerrainSceneNodeWolvenKit::TerrainSceneNodeWolvenKit(scene::ITerrainSceneNodeWolvenKit* ref)
+	: SceneNode(ref)
 {
 	LIME_ASSERT(ref != nullptr);
 	m_TerrainSceneNode = ref;
@@ -36,6 +34,12 @@ bool TerrainSceneNodeWolvenKit::LoadHeightMap(IO::ReadFile^ file, int dimension,
 		LIME_SAFEREF(file, m_ReadFile),
 		dimension, maxHeight, minHeight, tileSize,
 		*anchor->m_NativeValue);
+}
+
+Scene::Mesh^ TerrainSceneNodeWolvenKit::Mesh::get()
+{
+    scene::IMesh* m = m_TerrainSceneNode->getMesh();
+    return Scene::Mesh::Wrap(m);
 }
 
 } // end namespace Scene

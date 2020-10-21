@@ -2,16 +2,18 @@
 
 #include <fstream>
 
-class Logger
+namespace Janua
 {
-public:
-	Logger(void);
+	class Logger
+	{
+	public:
+		Logger(void);
 
-	static void Log(const std::string & );
+		static void Log(const std::string&);
 
-	static void Flush();
+		static void Flush();
 
-	virtual ~Logger(void);
+		virtual ~Logger(void);
 
-};
-
+	};
+}

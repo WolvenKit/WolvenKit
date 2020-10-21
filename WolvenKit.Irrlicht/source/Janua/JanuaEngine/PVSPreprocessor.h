@@ -17,104 +17,106 @@ using namespace std;
 using namespace pugi;
 
 
-/**
-* Tool to create the PVS from an input XML file with the raw scene data
-*/
-class PVSPreprocessor
+namespace Janua
 {
-
-public:
-
 	/**
-	* Raw-data for a mesh
+	* Tool to create the PVS from an input XML file with the raw scene data
 	*/
-	struct MeshData
+	class PVSPreprocessor
 	{
-		/**
-		* A unique identifier for the mesh
-		*/
-		unsigned int id;
+
+	public:
 
 		/**
-		* Occludee or Occluder
+		* Raw-data for a mesh
 		*/
-		SceneObjectType type;
+		struct MeshData
+		{
+			/**
+			* A unique identifier for the mesh
+			*/
+			unsigned int id;
+
+			/**
+			* Occludee or Occluder
+			*/
+			SceneObjectType type;
+
+			/**
+			* Number of triangles for the mesh
+			*/
+			unsigned int trianglesCount;
+
+			/**
+			* Vertex values (x, y z) for each triangle (the vertices are not indexed)
+			*/
+			float* vertexData;
+		};
+
+
 
 		/**
-		* Number of triangles for the mesh
+		* Constructor
 		*/
-		unsigned int trianglesCount;
+		PVSPreprocessor();
 
 		/**
-		* Vertex values (x, y z) for each triangle (the vertices are not indexed)
+		* Import meshes from the XML raw format file
 		*/
-		float* vertexData;
+		bool addMeshesFromXmlFile(const string inputPath);
+
+
+		/**
+		* Do the PVS building
+		*/
+		void buildPVS();
+
+		/**
+		* Free resources
+		*/
+		void dispose();
+
+		/**
+		* Retrieve error messages
+		*/
+		string getErrors();
+
+		/**
+		* Split string
+		*/
+		static vector<string> split(const string& text, char sep);
+
+	private:
+
+		vector<MeshData> meshes;
+
+		vector<string> errorMessages;
+
+	public:
+
+		/**
+		* The name of the scene
+		*/
+		string sceneName;
+
+		/**
+		* The path where the PVS file will be saved
+		*/
+		string outputPath;
+
+		/**
+		* The size of each voxel
+		*/
+		Vector3f voxelSize;
+
+		/**
+		* The max size a cell can achieve
+		*/
+		Vector3f maxCellSize;
+
+	private:
+
+		string PVSPreprocessor::toString(const int n);
+
 	};
-
-
-
-	/**
-	* Constructor
-	*/
-	PVSPreprocessor();
-
-	/**
-	* Import meshes from the XML raw format file
-	*/
-	bool addMeshesFromXmlFile(const string inputPath);
-
-
-	/**
-	* Do the PVS building
-	*/
-	void buildPVS();
-
-	/**
-	* Free resources
-	*/
-	void dispose();
-
-	/**
-	* Retrieve error messages
-	*/
-	string getErrors();
-
-	/**
-	* Split string
-	*/
-	static vector<string> split(const string &text, char sep);
-
-private:
-
-	vector<MeshData> meshes;
-
-	vector<string> errorMessages;
-
-public:
-
-	/**
-	* The name of the scene
-	*/
-	string sceneName;
-
-	/**
-	* The path where the PVS file will be saved
-	*/
-	string outputPath;
-
-	/**
-	* The size of each voxel
-	*/
-	Vector3f voxelSize;
-
-	/**
-	* The max size a cell can achieve
-	*/
-	Vector3f maxCellSize;
-
-private:
-
-	string PVSPreprocessor::toString(const int n);
-
-};
-
+}

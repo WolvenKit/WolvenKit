@@ -4,24 +4,26 @@
 
 using std::vector;
 
-/**
-* A QueryResult contains the visible model Ids.
-*/
-class QueryResult
+namespace Janua
 {
-public:
-
 	/**
-	* Creates a QueryResult containing the collection of given Model Ids.
-	* @param getVisibleModelIds	The vector of model Ids.
+	* A QueryResult contains the visible model Ids.
 	*/
-	QueryResult(const vector<int> getVisibleModelIds);
+	class QueryResult
+	{
+	public:
+
+		/**
+		* Creates a QueryResult containing the collection of given Model Ids.
+		* @param getVisibleModelIds	The vector of model Ids.
+		*/
+		QueryResult(const vector<int> getVisibleModelIds);
 
 
-	const vector<int> getVisibleModelIds() const;
-	virtual ~QueryResult(void);
+		const vector<int> getVisibleModelIds() const;
+		virtual ~QueryResult(void);
 
-private:
-	vector<int> m_VisibleModelIds;
-};
-
+	private:
+		vector<int> m_VisibleModelIds;
+	};
+}

@@ -14,6 +14,8 @@
 #include "CAttributes.h"
 #include "ILightManager.h"
 
+#include "Janua/JanuaEngine/PVSGenerator.h"
+
 namespace irr
 {
 namespace io
@@ -277,12 +279,11 @@ namespace scene
 			s32 maxLOD=4, E_TERRAIN_PATCH_SIZE patchSize=ETPS_17,s32 smoothFactor=0,
 			bool addAlsoIfHeightmapEmpty=false) _IRR_OVERRIDE_;
 
-        ITerrainSceneNode* addTerrainSceneNodeWolvenKit(
+		ITerrainSceneNodeWolvenKit* addTerrainSceneNodeWolvenKit(
 			const io::path& heightMapFileName,
             ISceneNode* parent, s32 id,
             s32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize,
-			const core::vector3df& anchor,
-            s32 maxLOD = 5, E_TERRAIN_PATCH_SIZE patchSize = ETPS_17) _IRR_OVERRIDE_;
+			const core::vector3df& anchor);
 
 		//! Adds a dummy transformation scene node to the scene graph.
 		virtual IDummyTransformationSceneNode* addDummyTransformationSceneNode(
@@ -678,6 +679,8 @@ namespace scene
 		const core::stringw IRR_XML_FORMAT_NODE_ATTR_TYPE;
 
 		IGeometryCreator* GeometryCreator;
+
+		Janua::Scene ocScene;
 	};
 
 } // end namespace video

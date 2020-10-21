@@ -13,35 +13,37 @@
 
 using namespace std::rel_ops;
 
-class Point3i
+namespace Janua
 {
-public:
-
-	union 
+	class Point3i
 	{
-		int vec[3];
-		struct
+	public:
+
+		union
 		{
-			int x;
-			int y;
-			int z;
+			int vec[3];
+			struct
+			{
+				int x;
+				int y;
+				int z;
+			};
 		};
+
+
+		Point3i(void);
+		Point3i(int x, int y, int z);
+		~Point3i(void);
+
+		friend bool Point3i::operator < (const Point3i& lhs, const Point3i& rhs);
+		friend bool Point3i::operator == (const Point3i& lhs, const Point3i& rhs);
+		friend bool Point3i::operator != (const Point3i& lhs, const Point3i& rhs);
+
+		Point3i Point3i::operator + (const Point3i& otherPoint);
+		Point3i Point3i::operator - (const Point3i& otherPoint);
+
+		friend Point3i operator + (const Point3i& lhs, const Point3i& rhs);
+		friend Point3i operator - (const Point3i& lhs, const Point3i& rhs);
+
 	};
-
-
-	Point3i(void);
-	Point3i(int x, int y, int z);
-	~Point3i(void);
-
-	friend bool Point3i::operator < (const Point3i& lhs, const Point3i& rhs );
-	friend bool Point3i::operator == (const Point3i& lhs, const Point3i& rhs );
-	friend bool Point3i::operator != (const Point3i& lhs, const Point3i& rhs );
-
-	Point3i Point3i::operator + (const Point3i& otherPoint);
-	Point3i Point3i::operator - (const Point3i& otherPoint);
-
-	friend Point3i operator + (const Point3i& lhs, const Point3i& rhs);
-	friend Point3i operator - (const Point3i& lhs, const Point3i& rhs);
-
-};
-
+}

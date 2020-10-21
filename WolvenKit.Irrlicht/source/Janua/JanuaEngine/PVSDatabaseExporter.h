@@ -1,37 +1,39 @@
 #pragma once
 #include "PVSDatabase.h"
 
-/**
-* Exports a PVSDatabase to a buffer.
-*/
-class PVSDatabaseExporter
+namespace Janua
 {
-public:
-
 	/**
-	* Creates a PVSDatabaseExporter from PVSDatabase
+	* Exports a PVSDatabase to a buffer.
 	*/
-	PVSDatabaseExporter(const PVSDatabase& pvsDatabase);
+	class PVSDatabaseExporter
+	{
+	public:
 
-	/**
-	* Saves the PVS Database into the given buffer.
-	* The buffer must have enough allocated memory to store it.
-	* @param	buffer	The buffer to store the database.
-	*/
-	void saveToBuffer( char* buffer);
+		/**
+		* Creates a PVSDatabaseExporter from PVSDatabase
+		*/
+		PVSDatabaseExporter(const PVSDatabase& pvsDatabase);
 
-	/**
-	* Returns the size in bytes that a buffer would need to store the PVS Database.
-	* @return The size in bytes.
-	*/
-	int getBufferSize() const;
+		/**
+		* Saves the PVS Database into the given buffer.
+		* The buffer must have enough allocated memory to store it.
+		* @param	buffer	The buffer to store the database.
+		*/
+		void saveToBuffer(char* buffer);
 
-	virtual ~PVSDatabaseExporter(void);
+		/**
+		* Returns the size in bytes that a buffer would need to store the PVS Database.
+		* @return The size in bytes.
+		*/
+		int getBufferSize() const;
 
-private:
+		virtual ~PVSDatabaseExporter(void);
 
-	void save( char* buffer, int& allocatedSize, bool saveToBufferEnabled) const;
+	private:
 
-	const PVSDatabase& m_pvsDatabase;
-};
+		void save(char* buffer, int& allocatedSize, bool saveToBufferEnabled) const;
 
+		const PVSDatabase& m_pvsDatabase;
+	};
+}

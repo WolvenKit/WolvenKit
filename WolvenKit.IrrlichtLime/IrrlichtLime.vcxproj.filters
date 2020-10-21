@@ -652,6 +652,9 @@
     <ClInclude Include="TerrainSceneNodeWolvenKit.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="SceneManagerWolvenKit.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GPUProgrammingServices.cpp">
@@ -979,6 +982,9 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="TerrainSceneNodeWolvenKit.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManagerWolvenKit.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>

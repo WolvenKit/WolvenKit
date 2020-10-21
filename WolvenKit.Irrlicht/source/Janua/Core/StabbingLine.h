@@ -14,14 +14,16 @@
 
 using std::vector;
 
-class StabbingLine
+namespace Janua
 {
-public:
+	class StabbingLine
+	{
+	public:
 
-	StabbingLine(void);
-	
-	static bool StabbingLineBetweenPortalsExist( vector<PortalQuad>& portalQuads );
+		StabbingLine(void);
 
-	~StabbingLine(void);
-};
+		static bool StabbingLineBetweenPortalsExist(vector<PortalQuad>& portalQuads);
 
+		~StabbingLine(void);
+	};
+}

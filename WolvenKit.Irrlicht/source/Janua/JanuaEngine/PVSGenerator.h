@@ -20,83 +20,85 @@
 using std::vector;
 using std::pair;
 
-/**
-* The PVSGenerator processes the visibility information from a given Scene.
-* It generas a PVSDatabase as output containing the occlusion data.
-*/
-class PVSGenerator
+namespace Janua
 {
-public:
-	PVSGenerator(const Scene& pScene);//, const Vector3f cellSize);
-
 	/**
-	* Processes the scene and produces a PVSDatabase containing the occlusion data.
-	* @return	A pointer to the PVSDatabase generated.
+	* The PVSGenerator processes the visibility information from a given Scene.
+	* It generas a PVSDatabase as output containing the occlusion data.
 	*/
-	shared_ptr<PVSDatabase> generatePVSDatabase();
+	class PVSGenerator
+	{
+	public:
+		PVSGenerator(const Scene& pScene);//, const Vector3f cellSize);
 
-	/** For debugging only */
-	PortalQuad getPortalRectangle(const Portal& portal, const Vector3f& voxelSize) const;
-	/** For debugging only */
-	vector<Vector3f> getAllSolidVoxelPositionsInWorldSpace() const;
+		/**
+		* Processes the scene and produces a PVSDatabase containing the occlusion data.
+		* @return	A pointer to the PVSDatabase generated.
+		*/
+		shared_ptr<PVSDatabase> generatePVSDatabase();
 
-	~PVSGenerator(void);
-	
-private:
+		/** For debugging only */
+		PortalQuad getPortalRectangle(const Portal& portal, const Vector3f& voxelSize) const;
+		/** For debugging only */
+		vector<Vector3f> getAllSolidVoxelPositionsInWorldSpace() const;
 
-	const Scene &scene;
-	Vector3f cellSize;
-	AABB m_SceneAABB;
-	shared_ptr<VoxelContainer> m_voxelContainer;
-	vector<shared_ptr<SceneTile>> m_sceneTiles;
+		~PVSGenerator(void);
 
-	AABB getSceneAABB();
-	
-	void voxelizeModels( VoxelContainer& voxelContainer, const AABB sceneAABB); //Generate voxels from the models in the scene.
+	private:
 
-	void generateCellsFromEmptyVoxelsUsingTiles( VoxelContainer& voxelContainer, vector<shared_ptr<Cell>>& cells) const; //Convert empty space to axis aligned Cells
+		const Scene& scene;
+		Vector3f cellSize;
+		AABB m_SceneAABB;
+		shared_ptr<VoxelContainer> m_voxelContainer;
+		vector<shared_ptr<SceneTile>> m_sceneTiles;
 
-	void testExpansion( Point3i& minVoxelPos, Point3i& maxVoxelPoint, VoxelContainer::NEIGHBOUR_DIRECTION dir, const VoxelContainer& voxelContainer, const SceneTile& tile) const; //Expand the cell to one direction.
+		AABB getSceneAABB();
 
-	bool tryNewAABB( const Point3i &minVoxelPos, const Point3i &maxVoxelPoint, const VoxelContainer::NEIGHBOUR_DIRECTION& expandDirection, const VoxelContainer& voxelContainer, const SceneTile& tile ) const; //test if the expanded cell only contains empty voxels.
+		void voxelizeModels(VoxelContainer& voxelContainer, const AABB sceneAABB); //Generate voxels from the models in the scene.
 
-	bool isVoxelInsideAnExistingCells( const vector<shared_ptr<Cell>>& existingCells, const Point3i& point ) const; //Verify if a voxel is already contained in a list of C.ells.
+		void generateCellsFromEmptyVoxelsUsingTiles(VoxelContainer& voxelContainer, vector<shared_ptr<Cell>>& cells) const; //Convert empty space to axis aligned Cells
 
-	bool isVoxelInsideCell(const Cell& cell, const Point3i& point) const; //Check if a voxel is contained in a particular Cell.
+		void testExpansion(Point3i& minVoxelPos, Point3i& maxVoxelPoint, VoxelContainer::NEIGHBOUR_DIRECTION dir, const VoxelContainer& voxelContainer, const SceneTile& tile) const; //Expand the cell to one direction.
 
-	void getCellFromPoint( const vector<shared_ptr<Cell>>& existingCells, const Point3i& point, int& cellIndex,  int startingCell = 0) const; //Find which Cell contains a given point. Return the index of the cell.
+		bool tryNewAABB(const Point3i& minVoxelPos, const Point3i& maxVoxelPoint, const VoxelContainer::NEIGHBOUR_DIRECTION& expandDirection, const VoxelContainer& voxelContainer, const SceneTile& tile) const; //test if the expanded cell only contains empty voxels.
 
-	void buildConectivityGraph( vector<shared_ptr<Cell>>& cells,  vector<shared_ptr<Portal>>& portals,  const VoxelContainer& voxelContainer); //Create connections betweeen Cells through Portals.
+		bool isVoxelInsideAnExistingCells(const vector<shared_ptr<Cell>>& existingCells, const Point3i& point) const; //Verify if a voxel is already contained in a list of C.ells.
 
-	void generatePVS(vector<shared_ptr<Cell>>& cells,  vector<shared_ptr<Portal>>& portals,  const VoxelContainer& voxelContainer);
+		bool isVoxelInsideCell(const Cell& cell, const Point3i& point) const; //Check if a voxel is contained in a particular Cell.
 
-	void getCellsSharedVoxels(const pair<Cell, Cell> cells, vector<Point3i>& sharedVoxels) const; //Get the shared voxels between two cells (only originating cell's voxels)
+		void getCellFromPoint(const vector<shared_ptr<Cell>>& existingCells, const Point3i& point, int& cellIndex, int startingCell = 0) const; //Find which Cell contains a given point. Return the index of the cell.
 
-	void getCellsSharedVoxelsOnlyExternals(const pair<Cell, Cell> cells, vector<Point3i>& sharedVoxels) const; //Get the shared voxels between two cells.(only neighbour cell's voxels)
-	
-	void getMinMaxPointFromVoxels(const vector<Point3i> voxels, Point3i& minPoint, Point3i& maxPoint ) const; //Get the minumum and maximum (AABB) points for a given set of voxels.
+		void buildConectivityGraph(vector<shared_ptr<Cell>>& cells, vector<shared_ptr<Portal>>& portals, const VoxelContainer& voxelContainer); //Create connections betweeen Cells through Portals.
 
-	Point3i getPortalFacingWallPlane( const vector<Point3i> voxels, const Point3i& minPoint, const Point3i& maxPoint, const pair<Cell,Cell>& cellPairs ) const; //Returns the normal of the plane that conforms a Portal.
+		void generatePVS(vector<shared_ptr<Cell>>& cells, vector<shared_ptr<Portal>>& portals, const VoxelContainer& voxelContainer);
 
-	void getCellExternalVoxels(const Cell& cell, vector<Point3i>& externalVoxels ) const; //Returns the cell´s surrounding voxels.
+		void getCellsSharedVoxels(const pair<Cell, Cell> cells, vector<Point3i>& sharedVoxels) const; //Get the shared voxels between two cells (only originating cell's voxels)
 
-	void findVisibleCells(const shared_ptr<Cell>& startingCell , vector<shared_ptr<Portal>>& portalSequence, vector<shared_ptr<Cell>>& visibleCellSet, const VoxelContainer& voxelContainer, int &callDepth);
-	
-	void findVisibleCellsNoneRecursive(const shared_ptr<Cell>& startingCell, vector<shared_ptr<Portal>>& portalSequence, vector<shared_ptr<Cell>>& visibleCellSet, const VoxelContainer& voxelContainer);
+		void getCellsSharedVoxelsOnlyExternals(const pair<Cell, Cell> cells, vector<Point3i>& sharedVoxels) const; //Get the shared voxels between two cells.(only neighbour cell's voxels)
 
-	bool stabbingLineExists(const shared_ptr<Cell>& cell, const vector<shared_ptr<Portal>>& portalSequence , const shared_ptr<Portal>& nPortal, const VoxelContainer& voxelContainer) const;
+		void getMinMaxPointFromVoxels(const vector<Point3i> voxels, Point3i& minPoint, Point3i& maxPoint) const; //Get the minumum and maximum (AABB) points for a given set of voxels.
 
-	bool testRay( const AABB& voxelAABB, const Ray& ray ) const;
+		Point3i getPortalFacingWallPlane(const vector<Point3i> voxels, const Point3i& minPoint, const Point3i& maxPoint, const pair<Cell, Cell>& cellPairs) const; //Returns the normal of the plane that conforms a Portal.
 
-	Point3i findNextUnexploredVoxel(const vector<shared_ptr<Cell>>& cells, VoxelContainer& voxelContainer) const;
-	
-	Point3i findSeedPointInTile(const SceneTile& tile, VoxelContainer& voxelContainer) const;
+		void getCellExternalVoxels(const Cell& cell, vector<Point3i>& externalVoxels) const; //Returns the cell´s surrounding voxels.
 
-	void addModelsToCells(const vector<shared_ptr<Cell>>& cells, VoxelContainer& voxelContainer, const AABB sceneAABB);
+		void findVisibleCells(const shared_ptr<Cell>& startingCell, vector<shared_ptr<Portal>>& portalSequence, vector<shared_ptr<Cell>>& visibleCellSet, const VoxelContainer& voxelContainer, int& callDepth);
 
-	bool portalSequenceContainsCoplanarPortals(const vector<PortalQuad>& portalQuads) const;
+		void findVisibleCellsNoneRecursive(const shared_ptr<Cell>& startingCell, vector<shared_ptr<Portal>>& portalSequence, vector<shared_ptr<Cell>>& visibleCellSet, const VoxelContainer& voxelContainer);
 
-	void createSceneTiles();
+		bool stabbingLineExists(const shared_ptr<Cell>& cell, const vector<shared_ptr<Portal>>& portalSequence, const shared_ptr<Portal>& nPortal, const VoxelContainer& voxelContainer) const;
 
-};
+		bool testRay(const AABB& voxelAABB, const Ray& ray) const;
 
+		Point3i findNextUnexploredVoxel(const vector<shared_ptr<Cell>>& cells, VoxelContainer& voxelContainer) const;
+
+		Point3i findSeedPointInTile(const SceneTile& tile, VoxelContainer& voxelContainer) const;
+
+		void addModelsToCells(const vector<shared_ptr<Cell>>& cells, VoxelContainer& voxelContainer, const AABB sceneAABB);
+
+		bool portalSequenceContainsCoplanarPortals(const vector<PortalQuad>& portalQuads) const;
+
+		void createSceneTiles();
+
+	};
+}

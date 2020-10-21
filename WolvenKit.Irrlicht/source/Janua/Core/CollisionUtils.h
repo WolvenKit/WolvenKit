@@ -23,47 +23,46 @@
 #include <stdio.h>
 
 
-
-/**
-* Intersection and collision detection routines
-*/
-class CollisionUtils
+namespace Janua
 {
-
-public:
-
 	/**
-	* Plane-Box collision
+	* Intersection and collision detection routines
 	*/
-	static int planeBoxOverlap(float normal[3], float vert[3], float maxbox[3]);
+	class CollisionUtils
+	{
 
-	/**
-	* Triangle-Box collision
-	*/
-	static int triBoxOverlap(float boxcenter[3],float boxhalfsize[3],float triverts[3][3]);
+	public:
 
+		/**
+		* Plane-Box collision
+		*/
+		static int planeBoxOverlap(float normal[3], float vert[3], float maxbox[3]);
 
-
-	#define NUMDIM	3
-	#define RIGHT	0
-	#define LEFT	1
-	#define MIDDLE	2
-	#define TRUE	1
-	#define FALSE	0
-
-	/* 
-	Fast Ray-Box Intersection
-	by Andrew Woo
-	from "Graphics Gems", Academic Press, 1990
-	*/
-	static bool HitBoundingBox(double minB[NUMDIM], double maxB[NUMDIM], double origin[NUMDIM], double dir[NUMDIM], double coord[NUMDIM]);
-
-	/**
-	* AABB-AABB test
-	*/
-	static bool boxBoxOverlapTest(float aMin[3], float aMax[3], float bMin[3], float bMax[3]);
-
-};
+		/**
+		* Triangle-Box collision
+		*/
+		static int triBoxOverlap(float boxcenter[3], float boxhalfsize[3], float triverts[3][3]);
 
 
 
+#define NUMDIM	3
+#define RIGHT	0
+#define LEFT	1
+#define MIDDLE	2
+#define TRUE	1
+#define FALSE	0
+
+		/*
+		Fast Ray-Box Intersection
+		by Andrew Woo
+		from "Graphics Gems", Academic Press, 1990
+		*/
+		static bool HitBoundingBox(double minB[NUMDIM], double maxB[NUMDIM], double origin[NUMDIM], double dir[NUMDIM], double coord[NUMDIM]);
+
+		/**
+		* AABB-AABB test
+		*/
+		static bool boxBoxOverlapTest(float aMin[3], float aMax[3], float bMin[3], float bMax[3]);
+
+	};
+}

@@ -13,16 +13,12 @@
 
 #include "CTerrainSceneNodeWolvenKit.h"
 #include "IVideoDriver.h"
-#include "ISceneManager.h"
 #include "irrMath.h"
 #include "os.h"
-#include "IFileSystem.h"
 #include "IReadFile.h"
-#include "ITextSceneNode.h"
-#include "IAnimatedMesh.h"
-#include "SMesh.h"
-#include "CDynamicMeshBuffer.h"
+#include "ISceneManager.h"
 #include "debug.h"
+#include "CDynamicMeshBuffer.h"
 
 namespace irr
 {
@@ -30,15 +26,10 @@ namespace scene
 {
 
 	//! constructor
-	CTerrainSceneNodeWolvenKit::CTerrainSceneNodeWolvenKit(ISceneNode* parent, ISceneManager* mgr,
-			io::IFileSystem* fs, s32 id, s32 maxLOD, E_TERRAIN_PATCH_SIZE patchSize,
-			const core::vector3df& position,
-			const core::vector3df& rotation,
-			const core::vector3df& scale)
-	: CTerrainSceneNode(parent, mgr, fs, id, maxLOD, patchSize, position, rotation, scale)
+	CTerrainSceneNodeWolvenKit::CTerrainSceneNodeWolvenKit(ISceneNode* parent, ISceneManager* mgr, s32 id,
+            const core::vector3df& position, const core::vector3df& rotation, const core::vector3df& scale)
+        : ITerrainSceneNodeWolvenKit(parent, mgr, id, position, rotation, scale)
 	{
-		UseDefaultRotationPivot = false;
-
 		#ifdef _DEBUG
 		setDebugName("CTerrainSceneNodeWolvenKit");
 		#endif
@@ -50,15 +41,44 @@ namespace scene
 	{
 	}
 
+    IMesh* CTerrainSceneNodeWolvenKit::getMesh() { return Mesh; }
+
+    void CTerrainSceneNodeWolvenKit::OnRegisterSceneNode()
+    {
+        if (!IsVisible || !SceneManager->getActiveCamera())
+            return;
+
+        SceneManager->registerNodeForRendering(this);
+
+        //ISceneNode::OnRegisterSceneNode();
+    }
+
+    void CTerrainSceneNodeWolvenKit::render()
+    {
+        video::IVideoDriver* driver = SceneManager->getVideoDriver();
+
+        if (!Mesh || !driver)
+            return;
+
+        //driver->setTransform(video::ETS_WORLD, AbsoluteTransformation);
+
+        scene::IMeshBuffer* mb = Mesh->getMeshBuffer(0);
+        driver->drawMeshBuffer(mb);
+    }
+
+    const core::aabbox3d<f32>& CTerrainSceneNodeWolvenKit::getBoundingBox() const
+    {
+        return Mesh->getBoundingBox();
+    }
 
 	//! Initializes the terrain data. Loads the vertices from the heightMapFile
 	bool CTerrainSceneNodeWolvenKit::loadHeightMap(io::IReadFile* file, s32 dimension,
-		f32 maxHeight, f32 minHeight, float tileSize, const core::vector3df& anchor)
+		f32 maxHeight, f32 minHeight, f32 tileSize, const core::vector3df& anchor)
 	{
 		if (!file)
 			return false;
 
-		Mesh->MeshBuffers.clear();
+		Mesh = DBG_NEW scene::SMesh();
 
 		//-----------------------------------
 		const u32 startTime = os::Timer::getRealTime();
@@ -69,83 +89,37 @@ namespace scene
 
 		file->read(bytes, dimension * dimension * sizeof(u16));
 
-		HeightmapFile = file->getFileName();
-
-		// Get the dimension of the heightmap data
-		TerrainData.Size = dimension;
-
-		switch (TerrainData.PatchSize)
-		{
-		case ETPS_9:
-			if (TerrainData.MaxLOD > 3)
-			{
-				TerrainData.MaxLOD = 3;
-			}
-			break;
-		case ETPS_17:
-			if (TerrainData.MaxLOD > 4)
-			{
-				TerrainData.MaxLOD = 4;
-			}
-			break;
-		case ETPS_33:
-			if (TerrainData.MaxLOD > 5)
-			{
-				TerrainData.MaxLOD = 5;
-			}
-			break;
-		case ETPS_65:
-			if (TerrainData.MaxLOD > 6)
-			{
-				TerrainData.MaxLOD = 6;
-			}
-			break;
-		case ETPS_129:
-			if (TerrainData.MaxLOD > 7)
-			{
-				TerrainData.MaxLOD = 7;
-			}
-			break;
-		}
 
 		// --- Generate vertex data from heightmap ----
 		// resize the vertex array for the mesh buffer one time (makes loading faster)
-		scene::CDynamicMeshBuffer* mb = 0;
 
-		const u32 numVertices = TerrainData.Size * TerrainData.Size;
-		if (numVertices <= 65536)
-		{
-			//small enough for 16bit buffers
-			mb = DBG_NEW scene::CDynamicMeshBuffer(video::EVT_2TCOORDS, video::EIT_16BIT);
-			RenderBuffer->getIndexBuffer().setType(video::EIT_16BIT);
-		}
-		else
-		{
-			//we need 32bit buffers
-			mb = DBG_NEW scene::CDynamicMeshBuffer(video::EVT_2TCOORDS, video::EIT_32BIT);
-			RenderBuffer->getIndexBuffer().setType(video::EIT_32BIT);
-		}
 
-		mb->getVertexBuffer().set_used(numVertices);
+		//we need 32bit buffers
+		scene::CDynamicMeshBuffer* mb = DBG_NEW scene::CDynamicMeshBuffer(video::E_VERTEX_TYPE::EVT_STANDARD, video::EIT_32BIT);
+
+        const u32 numVertices = dimension * dimension;
+        mb->getVertexBuffer().set_used(numVertices);
+
+        const u32 nIndices = (dimension - 1) * (dimension * 2) + (dimension - 2) * 2;
+        mb->getIndexBuffer().set_used(nIndices);
 
         s32 index = 0;
         f32 currY = anchor.Y;
 		f32 stepSize = tileSize / dimension;
-        f32 tdSize = 1.0f / (f32)(dimension - 1);
 		u16* val = bytes;
 
         s32 r = 0;
         s32 g = 0;
         s32 b = 0;
 
-		f32 dv = 0.0f;
+        scene::IVertexBuffer& vb = mb->getVertexBuffer();
+        vb.setHardwareMappingHint(EHM_STATIC);
 
-		for (s32 y = 0; y < TerrainData.Size; ++y)
+		for (s32 y = 0; y < dimension; ++y)
 		{
 			f32 currX = anchor.X;
-			f32 du = 0.0f;
 
-			for (s32 x = 0; x < TerrainData.Size; ++x)
+			for (s32 x = 0; x < dimension; ++x)
 			{
                 f32 hN = (f32)(*val++ / 65535.0f);
                 f32 h = hN * heightScale + minHeight;
@@ -163,55 +137,60 @@ namespace scene
                     b = r;
                 }
 
-                video::S3DVertex2TCoords& vertex = static_cast<video::S3DVertex2TCoords*>(mb->getVertexBuffer().pointer())[index++];
+                video::S3DVertex& vertex = static_cast<video::S3DVertex*>(vb.pointer())[index++];
                 vertex.Normal.set(0.0f, 0.0f, 1.0f);
                 vertex.Color.set(255, r, g, b);
                 vertex.Pos.X = -currX;
                 vertex.Pos.Y = currY;
                 vertex.Pos.Z = h;
 
-                vertex.TCoords.X = vertex.TCoords2.X = 1.f - du;
-                vertex.TCoords.Y = vertex.TCoords2.Y = dv;
-
 				currX += stepSize;
-				du += tdSize;
 			}
 
 			currY += stepSize;
-			dv += tdSize;
 		}
 
-		// calculate smooth normals for the vertices
-		//calculateNormals(mb);
+        // create faces
+        index = 0;
+        s32 row0Index = 0;
+        s32 row1Index = dimension;
+
+        scene::IIndexBuffer& ib = mb->getIndexBuffer();
+
+        for (s32 z = 0; z < dimension - 2; ++z)
+        {
+            // do two rows at a time to make a triangle strip
+            for (s32 x = 0; x < dimension; ++x)
+            {
+                ib.setValue(index++, row0Index++);
+                ib.setValue(index++, row1Index++);
+            }
+
+            // add degenerate triangle to get to next row
+            ib.setValue(index++, row1Index - 1);
+            ib.setValue(index++, row0Index);
+        }
+
+        // do two rows at a time to make a triangle strip
+        for (int x = 0; x < dimension; ++x)
+        {
+            ib.setValue(index++, row0Index++);
+            ib.setValue(index++, row1Index++);
+        }
+
+        ib.setHardwareMappingHint(EHM_STATIC);
+        mb->setPrimitiveType(EPT_TRIANGLE_STRIP);
+        
+        //calculateNormals(mb);
 
 		// add the MeshBuffer to the mesh
 		Mesh->addMeshBuffer(mb);
 
-		// We copy the data to the renderBuffer, after the normals have been calculated.
-		RenderBuffer->getVertexBuffer().set_used(numVertices);
-
-		for (u32 i = 0; i < numVertices; ++i)
-		{
-			RenderBuffer->getVertexBuffer()[i] = mb->getVertexBuffer()[i];
-			//RenderBuffer->getVertexBuffer()[i].Pos *= TerrainData.Scale;
-			//RenderBuffer->getVertexBuffer()[i].Pos += TerrainData.Position;
-		}
+        irr::core::aabbox3df bounds(-anchor.X, anchor.Y, minHeight, -(anchor.X + tileSize), anchor.Y + tileSize, maxHeight);
+        Mesh->setBoundingBox(bounds);
 
 		// We no longer need the mb
 		mb->drop();
-
-		// calculate all the necessary data for the patches and the terrain
-		calculateDistanceThresholds();
-		createPatches();
-		calculatePatchData();
-
-		// Pre-allocate memory for indices
-
-		RenderBuffer->getIndexBuffer().set_used(
-				TerrainData.PatchCount * TerrainData.PatchCount *
-				TerrainData.CalcPatchSize * TerrainData.CalcPatchSize * 6);
-
-		RenderBuffer->setDirty();
 
         delete[] bytes;
 
@@ -220,7 +199,7 @@ namespace scene
 
 		c8 tmp[255];
 		snprintf_irr(tmp, 255, "Generated terrain data (%dx%d) in %.4f seconds",
-			TerrainData.Size, TerrainData.Size, (endTime - startTime) / 1000.0f );
+			dimension, dimension, (endTime - startTime) / 1000.0f );
 		os::Printer::log(tmp);
 		//-----------------------------------
 

@@ -1,38 +1,41 @@
-#include "StdAfx.h"
 #include "SceneTile.h"
+#include <stdexcept>
 
 using std::logic_error;
 
-SceneTile::SceneTile(const Point3i fromVoxelIndex, const Point3i toVoxelIndex)
+namespace Janua
 {
-	m_fromVoxelIndex = fromVoxelIndex;
-	m_toVoxelIndex = toVoxelIndex;
+	SceneTile::SceneTile(const Point3i fromVoxelIndex, const Point3i toVoxelIndex)
+	{
+		m_fromVoxelIndex = fromVoxelIndex;
+		m_toVoxelIndex = toVoxelIndex;
 
-}
-
-
-SceneTile::~SceneTile(void)
-{
-}
+	}
 
 
-void SceneTile::addCell(const shared_ptr<Cell> cell)
-{
+	SceneTile::~SceneTile(void)
+	{
+	}
 
-	m_cells.push_back(cell);
 
-}
+	void SceneTile::addCell(const shared_ptr<Cell> cell)
+	{
 
-void SceneTile::setNumberOfSolidVoxelsInside(int numberOfSolidVoxels)
-{
-	if( numberOfSolidVoxels < 0 )
-		throw new logic_error("Number of solid voxels cannot be negative");
+		m_cells.push_back(cell);
 
-	m_numberOfVoxels = numberOfSolidVoxels;
+	}
 
-}
+	void SceneTile::setNumberOfSolidVoxelsInside(int numberOfSolidVoxels)
+	{
+		if (numberOfSolidVoxels < 0)
+			throw new logic_error("Number of solid voxels cannot be negative");
 
-int SceneTile::getNumberOfVoxelsInside() const
-{
-	return (m_toVoxelIndex.x - m_fromVoxelIndex.x + 1) *  (m_toVoxelIndex.y - m_fromVoxelIndex.y + 1) *  (m_toVoxelIndex.z - m_fromVoxelIndex.z + 1);
+		m_numberOfVoxels = numberOfSolidVoxels;
+
+	}
+
+	int SceneTile::getNumberOfVoxelsInside() const
+	{
+		return (m_toVoxelIndex.x - m_fromVoxelIndex.x + 1) * (m_toVoxelIndex.y - m_fromVoxelIndex.y + 1) * (m_toVoxelIndex.z - m_fromVoxelIndex.z + 1);
+	}
 }

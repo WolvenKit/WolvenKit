@@ -10,19 +10,21 @@
 
 #include "Vector3f.h"
 
-//Portal quadrilateral in Counter Clock wise order.
-//eg.
-//     d ------- c
-//		|		| 
-//		|		|
-//	   a ------- b	
-class PortalQuad
+namespace Janua
 {
-public:
-	PortalQuad(const Vector3f points[4]);
+	//Portal quadrilateral in Counter Clock wise order.
+	//eg.
+	//     d ------- c
+	//		|		| 
+	//		|		|
+	//	   a ------- b	
+	class PortalQuad
+	{
+	public:
+		PortalQuad(const Vector3f points[4]);
 
-	Vector3f points[4];
+		Vector3f points[4];
 
-	~PortalQuad(void);
-};
-
+		~PortalQuad(void);
+	};
+}

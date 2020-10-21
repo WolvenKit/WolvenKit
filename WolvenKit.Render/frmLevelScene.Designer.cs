@@ -1,4 +1,7 @@
-﻿using System;
+﻿#define USE_CUSTOM_SCENEMANAGER
+
+using IrrlichtLime.Scene;
+using System;
 
 namespace WolvenKit.Render
 {
@@ -23,7 +26,11 @@ namespace WolvenKit.Render
                 irrThread.Abort();
                 irrThread = null;
                 gui = null;
+#if USE_CUSTOM_SCENEMANAGER
+                smgr.Drop();
+#endif
                 smgr = null;
+
                 driver = null;
                 device?.Close();
                 device?.Drop();
@@ -32,17 +39,21 @@ namespace WolvenKit.Render
 
                 foreach(System.Windows.Forms.TreeNode t in sceneView.Nodes)
                 {
-                    if (t as GroupTreeNode == null)
+                    if (t.Nodes.Count > 0)
                     {
-                        if (t.Nodes.Count > 0)
+                        // free the RenderTreeNodes!
+                        foreach (RenderTreeNode rn in t.Nodes)
                         {
-                            // free the RenderTreeNodes!
-                            foreach (RenderTreeNode rn in t.Nodes)
+                            if (rn.MeshNode == null)
                             {
-                                rn.Mesh?.Drop();
-                                rn.Position?.Dispose();
-                                rn.Rotation?.Dispose();
+                                rn.Mesh.Drop();
                             }
+                            else
+                            {
+                                rn.MeshNode.Drop();
+                            }
+                            rn.Position?.Dispose();
+                            rn.Rotation?.Dispose();
                         }
                     }
                 }
@@ -50,7 +61,7 @@ namespace WolvenKit.Render
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+#region Windows Form Designer generated code
 
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -111,10 +122,14 @@ namespace WolvenKit.Render
             this.distanceBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.distanceBar.AutoSize = false;
+            this.distanceBar.LargeChange = 1;
             this.distanceBar.Location = new System.Drawing.Point(82, 3);
+            this.distanceBar.Maximum = 5;
+            this.distanceBar.Minimum = 1;
             this.distanceBar.Name = "distanceBar";
             this.distanceBar.Size = new System.Drawing.Size(246, 22);
             this.distanceBar.TabIndex = 3;
+            this.distanceBar.Value = 2;
             this.distanceBar.ValueChanged += new System.EventHandler(this.distanceBar_ValueChanged);
             // 
             // toolStrip
@@ -219,7 +234,7 @@ namespace WolvenKit.Render
 
         }
 
-        #endregion
+#endregion
 
         private System.Windows.Forms.Panel levelPanel;
         private System.Windows.Forms.SplitContainer splitContainer;

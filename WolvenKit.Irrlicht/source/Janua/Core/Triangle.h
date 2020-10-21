@@ -9,19 +9,22 @@
 #pragma once
 
 #include "Vector3f.h"
-class Triangle
+
+namespace Janua
 {
-public:
-	Triangle(const Vector3f& pA, const Vector3f& pB, const Vector3f& pC);
+	class Triangle
+	{
+	public:
+		Triangle(const Vector3f& pA, const Vector3f& pB, const Vector3f& pC);
 
-	Vector3f a;
-	Vector3f b;
-	Vector3f c;
+		Vector3f a;
+		Vector3f b;
+		Vector3f c;
 
-	static Triangle Transform(const Triangle pOriginalTriangle, const Matrix4x4& pTransformMatrix);
+		static Triangle Transform(const Triangle pOriginalTriangle, const Matrix4x4& pTransformMatrix);
 
-	//Triangle& Triangle::operator = (const Triangle& otherTriangle);
+		//Triangle& Triangle::operator = (const Triangle& otherTriangle);
 
-	~Triangle(void);
-};
-
+		~Triangle(void);
+	};
+}
