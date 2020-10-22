@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
-using WolvenKit.CR2W.SRT;
 using WolvenKit.CR2W.Types;
-using WolvenKit.Radish.Model;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -20,6 +14,8 @@ namespace WolvenKit.App.ViewModels
     {
         public CR2WDocumentViewModel()
         {
+            chunkDisplayMode = EChunkDisplayMode.VirtualParent;
+
             CopyVariableCommand = new RelayCommand(CopyVariable, CanCopyVariable);
             PasteVariableCommand = new RelayCommand(PasteVariable, CanPasteVariable);
 
@@ -27,11 +23,17 @@ namespace WolvenKit.App.ViewModels
         }
 
         #region Fields
+        public enum EChunkDisplayMode
+        {
+            Linear,
+            Parent,
+            VirtualParent
+        }
+        public EChunkDisplayMode chunkDisplayMode;
 
         #endregion
 
         #region Properties
-
 
         #region OpenEmbedded
         private Dictionary<string, CR2WDocumentViewModel> _openEmbedded;
@@ -57,15 +59,21 @@ namespace WolvenKit.App.ViewModels
         }
         #endregion
         #region SelectedChunk
-        private CR2WExportWrapper _selectedChunk;
-        public CR2WExportWrapper SelectedChunk
+        private List<CR2WExportWrapper> _selectedChunks;
+        public List<CR2WExportWrapper> SelectedChunks
         {
-            get => _selectedChunk;
+            get => _selectedChunks;
             set
             {
-                _selectedChunk = value;
-                OnPropertyChanged();
-                
+                if(_selectedChunks != value)
+                {
+                    _selectedChunks = value;
+                    // update the property list only if out of multi-selection
+                    if(_selectedChunks.Count() == 1)
+                    {
+                        OnPropertyChanged();
+                    }
+                }
             }
         }
         #endregion
@@ -90,6 +98,9 @@ namespace WolvenKit.App.ViewModels
 
         }
 
+        /// <summary>
+        /// Paste-in-place = replace = overwrite, or paste-insert
+        /// </summary>
         private void PasteVariable()
         {
             if (CopyController.Source == null || CopyController.Target == null) return;
@@ -102,44 +113,86 @@ namespace WolvenKit.App.ViewModels
             if (!areOfTheSameType || !(CopyController.Source.First() is CVariable csource)) return;
 
 
-            // if only one variable was copied and that one variable is of the same type as the selected variable
+            // -------------------------------------------------------------------------------------------------------------------
+            // Paste-in-place - if only one variable was copied and that one variable is of the same type as the selected variable
+            // -------------------------------------------------------------------------------------------------------------------
             if (CopyController.Source.Count == 1 && ctarget.GetType() == csource.GetType())
             {
+                var sourcechunk = csource.cr2w.chunks[csource.LookUpChunkIndex()];
+                var targetchunk = ctarget.cr2w.chunks[ctarget.LookUpChunkIndex()];
+
                 var context = new CR2WCopyAction()
                 {
-                    DestinationFile = ctarget.cr2w,
-                    Parent = ctarget.ParentVar as CVariable
+                    SourceChunk = sourcechunk,
+                    SourceFile = csource.cr2w,
+                    DestinationChunk = targetchunk,
+                    DestinationFile = ctarget.cr2w
                 };
+
+                //Remember the old parenting hierarchy
+                var oldparentinghierarchy = new Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)>();
+                foreach (var achunk in context.DestinationFile.chunks)
+                {
+                    oldparentinghierarchy.Add(achunk, (achunk.ParentChunk, achunk.VirtualParentChunk));
+                }
+
+                // remove children chunks
+                ctarget.cr2w.RemoveChunks(
+                    new List<CR2WExportWrapper>() { targetchunk },
+                    true,
+                    (CR2WFile.EChunkDisplayMode)chunkDisplayMode);
+                // copy-paste recursively children chunks
+                context.AddChildrenChunks(sourcechunk, targetchunk, oldparentinghierarchy);
 
                 var copy = csource.Copy(context);
                 ctarget.SetValue(copy);
-                ctarget.IsSerialized = true;
+                ctarget.IsSerialized = true; // why repeat?
 
-                OnPropertyChanged(nameof(SelectedChunk));
+                OnPropertyChanged(nameof(File));
             }
 
-            // check if the target is an array and the elementtype is of the same type as the selected nodes
-            if (ctarget is IArrayAccessor targetarray && targetarray.Elementtype == first.REDType)
+            // -------------------------------------------------------------------------------------------------------------------
+            // Paste-insert - check if the target is an array and the elementtype is of the same type as the selected nodes
+            // -------------------------------------------------------------------------------------------------------------------
+            else if (ctarget is IArrayAccessor targetarray && targetarray.Elementtype == first.REDType)
             {
                 if (!targetarray.CanAddVariable(null)) return;
-                // disable pasting pointers for now
-                if (first is IChunkPtrAccessor) return;
+
+                var targetarraychunk = targetarray.cr2w.chunks[targetarray.LookUpChunkIndex()];
+
+                //Remember the old parenting hierarchy
+                var oldparentinghierarchy = new Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)>();
+                foreach (var achunk in targetarray.cr2w.chunks)
+                {
+                    oldparentinghierarchy.Add(achunk, (achunk.ParentChunk, achunk.VirtualParentChunk));
+                }
+
+                // Copy-paste
+                var context = new CR2WCopyAction()
+                {
+                    SourceFile = csource.cr2w,
+                    DestinationFile = targetarray.cr2w,
+                    DestinationChunk = targetarraychunk,
+                    Parent = targetarray.ParentVar as CVariable
+                };
+
+                if (first is IChunkPtrAccessor && CopyController.Source.Cast<IChunkPtrAccessor>().All(_=>_.Reference != null))
+                {
+                    context.PasteChunksInArray(
+                        CopyController.Source.Cast<IChunkPtrAccessor>().Select(_=>_.Reference).ToList(),
+                        targetarray,
+                        oldparentinghierarchy);
+                }
 
                 foreach (var sourceelement in CopyController.Source)
                 {
-                    var context = new CR2WCopyAction()
-                    {
-                        DestinationFile = targetarray.cr2w,
-                        Parent = targetarray.ParentVar as CVariable
-                    };
-
                     var copy = sourceelement.Copy(context);
                     copy.IsSerialized = true;
-
                     targetarray.AddVariable(copy);
                 }
 
-                OnPropertyChanged(nameof(SelectedChunk));
+
+                OnPropertyChanged(nameof(File));
             }
         }
         #endregion

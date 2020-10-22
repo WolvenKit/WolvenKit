@@ -70,11 +70,11 @@ namespace WolvenKit.CR2W.Types
 		/// <summary>
 		/// Not in RTTI
 		/// </summary>
-		[Ordinal(28)] [RED("teleportToRequestedFacingDirection ")] 		public CFloat TeleportToRequestedFacingDirection { get; set;}
+		[Ordinal(28)] [RED("teleportToRequestedFacingDirection ")] 		public CBool TeleportToRequestedFacingDirection { get; set;}
 		/// <summary>
 		/// Not in RTTI
 		/// </summary>
-		[Ordinal(29)] [RED("teleportAwayFromRequestedFacingDirection ")] 		public CFloat TeleportAwayFromRequestedFacingDirection { get; set;}
+		[Ordinal(29)] [RED("teleportAwayFromRequestedFacingDirection ")] 		public CBool TeleportAwayFromRequestedFacingDirection { get; set;}
 
 		public CBTTaskTeleportDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -67,11 +67,11 @@ namespace WolvenKit.CR2W.Types
                     Reference = cr2w.chunks[val - 1];
                     //Add to the reverse-lookups
                     Reference.AdReferences.Add(this);
-                    cr2w.chunks[GetVarChunkIndex()].AbReferences.Add(this);
+                    cr2w.chunks[LookUpChunkIndex()].AbReferences.Add(this);
                     //Soft mount the chunk
                     if(this.ParentVar.REDType!="AttachmentsReference")
                     {
-                        Reference.MountChunkVirtually(GetVarChunkIndex());
+                        Reference.MountChunkVirtually(LookUpChunkIndex());
                     }
                 }
             }
@@ -139,7 +139,7 @@ namespace WolvenKit.CR2W.Types
             // Ptr
             if (ChunkHandle && Reference != null)
             {
-                CR2WExportWrapper newref = context.DestinationFile.TryLookupReference(copy, Reference);
+                CR2WExportWrapper newref = context.TryLookupReference(Reference, copy);
                 if (newref != null)
                     copy.Reference = newref;
             }
@@ -158,6 +158,12 @@ namespace WolvenKit.CR2W.Types
             }
 
             return ClassName + ": " + DepotPath;
+        }
+        public override string REDLeanValue()
+        {
+            if (Reference == null)
+                return "";
+            return $"{Reference.ChunkIndex}";
         }
 
         #endregion

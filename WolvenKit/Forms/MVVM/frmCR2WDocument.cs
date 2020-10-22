@@ -410,7 +410,7 @@ namespace WolvenKit
             }
 
             // Update Selected Chunk in the ViewModel
-            vm.SelectedChunk = e.Chunk;
+            vm.SelectedChunks = new List<CR2WExportWrapper>() { e.Chunk };
 
             if (e.Chunk.data is CBitmapTexture xbm)
             {
