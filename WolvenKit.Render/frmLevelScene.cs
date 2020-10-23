@@ -1,7 +1,4 @@
-﻿#define USE_METHOD1
-#define USE_CUSTOM_SCENEMANAGER
-
-using Assimp;
+﻿using Assimp;
 using IrrlichtLime;
 using IrrlichtLime.Core;
 using IrrlichtLime.GUI;
@@ -11,6 +8,7 @@ using IrrlichtLime.Video;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Microsoft.WindowsAPICodePack.Dialogs.Controls;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -99,193 +97,27 @@ namespace WolvenKit.Render
 
         private IrrlichtDevice device;
         private VideoDriver driver;
-#if USE_CUSTOM_SCENEMANAGER
         private SceneManagerWolvenKit smgr;
-#else
-        private SceneManager smgr;
-#endif
+        private ConcurrentQueue<RenderMessage> commandQueue = new ConcurrentQueue<RenderMessage>();
         private GUIEnvironment gui;
-        private GUIStaticText fpstext;
+        private GUIStaticText fpsText;
         private GUIStaticText vertexCountText;
+        private GUIStaticText meshCountText;
         private int totalVertexCount = 0;
-        private bool busy = false;
+        private int totalMeshCount = 0;
 
         private IrrlichtLime.Scene.SceneNode worldNode;
         private IrrlichtLime.Scene.SceneNode lightNode;
 
         private string inputFilename;
-        private string depot;
+        private readonly string depot;
         private int meshId;
-        private bool doAddNodes;
-        private Cache.TextureManager textureManager;
 
-        public frmLevelScene(string filename, string depotPath, Cache.TextureManager textureManager)
-        {
-            this.inputFilename = filename;
-            this.depot = depotPath + "\\";
-            this.meshId = 1;
-            this.doAddNodes = false;
-            InitializeComponent();
-            this.sceneView.Enabled = false;
-            this.distanceBar.Value = 3;
-        }
-
-        private void LoadTerrain(string tileFileName, int dimension, float maxHeight, float heightOffset, float tileSize, Vector3Df pt, ref IrrlichtLime.Scene.Mesh m)
-        {
-            // convert the .w2ter file into a heightmap
-            //string lod1 = tileFileName + ".1.buffer";
-            string lod1 = tileFileName + ".3.buffer";
-            //string lod1 = tileFileName + ".5.buffer"; // 32 KB
-            //string lod1 = tileFileName + ".6.buffer"; // also 32 KB
-            //string lod1 = tileFileName + ".13.buffer";
-
-            float heightScale = maxHeight - heightOffset;
-
-//#if _DEBUG
-            Console.WriteLine($"Processing {lod1}");
-//#endif
-
-            byte[] buffer = File.ReadAllBytes(lod1);
-
-            float stepSize = tileSize / dimension;
-
-            // rawData is dimension x dimension pixels x unsigned 16 bit per channel (524,288 for 512 x 512 for example)
-            //MeshBuffer mb = MeshBuffer.Create(VertexType.TTCoords, IndexType._32Bit);
-            MeshBuffer mb = MeshBuffer.Create(VertexType.Standard, IndexType._32Bit);
-            //Vertex3DTTCoords[] verts = new Vertex3DTTCoords[dimension * dimension];
-            Vertex3D[] verts = new Vertex3D[dimension * dimension];
-            int nIndices = (dimension - 1) * (dimension * 2) + (dimension - 2) * 2;
-            uint[] indices = new uint[nIndices];
-
-            // convert the heightmap into points of a grid
-            int index = 0;
-            int byteIndex = 0;
-            float currY = pt.Y;
-            float tdSize = 1.0f / (float)(dimension - 1);
-
-            int r = 0;
-            int g = 0;
-            int b = 0;
-
-            //float dv = 0.0f;
-
-            System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
-            stopWatch.Start();
-
-            for (int y=0; y < dimension; ++y)
-            {
-                float currX = pt.X;
-                //float du = 0.0f;
-
-                for (int x=0; x < dimension; ++x, ++index, byteIndex += 2)
-                {
-                    ushort val = (ushort)((int)buffer[byteIndex] | (int)buffer[byteIndex + 1] << 8);
-                    float hN = (float)val / 65535.0f;
-                    float h =  hN * heightScale + heightOffset;
-
-                    if(h < 0.0f)
-                    {
-                        r = 0;
-                        g = 0;
-                        b = (int)(h/heightOffset * 255);
-                    }
-                    else
-                    {
-                        r = (int)(h/maxHeight * 255);
-                        g = r;
-                        b = r;
-                        // brown
-                        //r = 66;
-                        //g = 40;
-                        //b = 14;
-                    }
-
-                    IrrlichtLime.Video.Color c = new IrrlichtLime.Video.Color(r, g, b);
-                    //Vertex3DTTCoords v = new Vertex3DTTCoords();
-                    verts[index] = new Vertex3D(-currX, currY, h, 0.0f, 0.0f, 1.0f, c);
-                    //v.TCoords.X = du;
-                    //v.TCoords.Y = dv;
-
-                    currX += stepSize;
-                    //du += tdSize;
-                }
-                currY += stepSize;
-                //dv += tdSize;
-            }
-
-            stopWatch.Stop();
-            // Get the elapsed time as a TimeSpan value.
-            TimeSpan ts = stopWatch.Elapsed;
-
-            // Format and display the TimeSpan value.
-            string elapsedTime = String.Format("{0:00}.{1:00}", ts.Seconds, ts.Milliseconds / 10);
-            Console.WriteLine("RunTime " + elapsedTime);
-
-            /*
-            int rowIndex = dimension;
-
-            for (int y = 1; y < dimension - 1; ++y)
-            {
-                for (int x = 1; x < dimension - 1; ++x)
-                {
-                    int colIndex = rowIndex + x;
-
-                    Vector3Df sum = new Vector3Df(0.0f, 0.0f, 0.0f);
-                    Vector3Df v0 = new Vector3Df(verts[colIndex - dimension].Position - verts[colIndex].Position);
-                    Vector3Df v1 = new Vector3Df(verts[colIndex + dimension].Position - verts[colIndex].Position);
-                    Vector3Df v2 = new Vector3Df(verts[colIndex - 1].Position - verts[colIndex].Position);
-                    Vector3Df v3 = new Vector3Df(verts[colIndex + 1].Position - verts[colIndex].Position);
-
-                    sum += v0.CrossProduct(v2);
-                    sum += v2.CrossProduct(v1);
-                    sum += v1.CrossProduct(v3);
-                    sum += v3.CrossProduct(v0);
-
-                    verts[colIndex].Normal = sum.Normalize();
-                }
-
-                rowIndex += dimension;
-            }
-            */
-            // create faces
-            index = 0;
-            uint row0Index = 0;
-            uint row1Index = (uint)dimension;
-
-            for (int z = 0; z < dimension - 2; ++z)
-            {
-                // do two rows at a time to make a triangle strip
-                for (int x = 0; x < dimension; ++x)
-                {
-                    indices[index++] = row0Index++;
-                    indices[index++] = row1Index++;
-                }
-
-                // add degenerate triangle to get to next row
-                indices[index++] = row1Index - 1;
-                indices[index++] = row0Index;
-            }
-
-            // do two rows at a time to make a triangle strip
-            for (int x = 0; x < dimension; ++x)
-            {
-                indices[index++] = row0Index++;
-                indices[index++] = row1Index++;
-            }
-
-            mb.Append(verts, indices, IrrlichtLime.Scene.PrimitiveType.TriangleStrip);
-            mb.SetHardwareMappingHint(HardwareMappingHint.Static, HardwareBufferType.VertexAndIndex);
-            mb.RecalculateBoundingBox();
-
-            m.AddMeshBufferEx(mb); // buffer is copied
-            mb.Drop();
-
-            //smgr.MeshManipulator.RecalculateNormals(m);
-        }
+        private System.ComponentModel.BackgroundWorker backgroundLoader;
 
         private void AddTerrain(CClipMap info, ref int meshId)
         {
-            TreeNode terrainNode = new TreeNode("Terrain " + meshId.ToString());
+            TreeNode terrainNode = new TreeNode("Terrain");
 
             float maxHeight = info.HighestElevation.val;
             float minHeight = info.LowestElevation.val;
@@ -299,8 +131,13 @@ namespace WolvenKit.Render
             Vector3Df dy = new Vector3Df(0.0f, terrainSize, 0.0f);
             Vector3Df dx = new Vector3Df(terrainSize, 0.0f, 0.0f);
 
+            progressBar.Invoke((MethodInvoker)delegate
+            {
+                progressBar.Maximum = (int)(numTilesPerEdge * numTilesPerEdge);
+            });
+
             int index = 0;
-            for (uint y=0; y < numTilesPerEdge; ++y)
+            for (uint y = 0; y < numTilesPerEdge; ++y)
             {
                 Vector3Df nextColumn = new Vector3Df(startPoint + dy * y);
 
@@ -313,35 +150,18 @@ namespace WolvenKit.Render
                     Vector3Df unusedPosition = new Vector3Df(0.0f, 0.0f, 0.0f);
                     Vector3Df unusedRotation = new Vector3Df(0.0f, 0.0f, 0.0f);
 
-#if !USE_METHOD1
-                    IrrlichtLime.Scene.Mesh m = IrrlichtLime.Scene.Mesh.Create();
-                    RenderTreeNode terrainMeshNode = new RenderTreeNode("Tiles " + index.ToString(), meshId++, m, unusedPosition, unusedRotation);
+                    var tileFileName = tile.DepotPath + ".3.buffer";
 
-                    var tileFileName = depot + tile.DepotPath;
-                    //LoadTerrain(tileFileName, 512, maxHeight, minHeight, terrainSize, nextPt, ref m);
-                    LoadTerrain(tileFileName, 256, maxHeight, minHeight, terrainSize, nextPt, ref m);
-                    //LoadTerrain(tileFileName, 128, maxHeight, minHeight, terrainSize, nextPt, ref m);
-                    //LoadTerrain(tileFileName, 16, maxHeight, minHeight, terrainSize, nextPt, ref m);
-                    terrainNode.Nodes.Add(terrainMeshNode);
-#else
-                    var tileFileName = depot + tile.DepotPath + ".3.buffer";
-                    var node = smgr.AddTerrainSceneNodeWolvenKit(tileFileName, worldNode, meshId, 256, maxHeight, minHeight, terrainSize, nextPt);
-                    node.Visible = false;
-#if !USE_CUSTOM_SCENEMANAGER
-                    node.SetMaterialFlag(MaterialFlag.BackFaceCulling, false);
-                    node.SetMaterialFlag(MaterialFlag.Lighting, false);
-#endif
-                    RenderTreeNode terrainMeshNode = new RenderTreeNode("Tiles " + index.ToString(), meshId++, node.Mesh, unusedPosition, unusedRotation);
-                    terrainMeshNode.MeshNode = node;
-                    terrainNode.Nodes.Add(terrainMeshNode);
-#endif
+                    RenderMessage message = new RenderMessage(MessageType.ADD_TERRAIN_NODE, tileFileName, maxHeight, minHeight, terrainSize, nextPt, terrainNode);
+                    commandQueue.Enqueue(message);
+
+                    progressBar.Invoke((MethodInvoker)delegate
+                    {
+                        progressBar.PerformStep();
+                    });
+
                 }
             }
-
-            sceneView.Invoke((MethodInvoker)delegate
-            {
-                sceneView.Nodes.Add(terrainNode);
-            });
         }
 
         private void AddLayer(string layerFileName, string layerName, ref int meshId)
@@ -365,9 +185,12 @@ namespace WolvenKit.Render
                 {
                     CSectorData sd = (CSectorData)chunk.data;
 
-                    // only add sector node if there are meshes
-                    bool atLeastOneMesh = false;
+                    progressBar.Invoke((MethodInvoker)delegate
+                    {
+                        progressBar.Maximum = sd.BlockData.Count;
+                    });
 
+                    // only add sector node if there are meshes
                     foreach (var block in sd.BlockData)
                     {
                         if (block.packedObjectType == Enums.BlockDataObjectType.Mesh)
@@ -395,29 +218,12 @@ namespace WolvenKit.Render
                             }
                             string meshPath = depot + meshName;
 
-#if USE_CUSTOM_SCENEMANAGER
-                            IrrlichtLime.Scene.Mesh m = smgr.GetStaticMesh(meshPath);
-#else
-                            IrrlichtLime.Scene.Mesh m = smgr.GetMesh(meshPath);
-                            m = smgr.MeshManipulator.CreateMeshWithTangents(m, true);
+                            RenderMessage message = new RenderMessage(MessageType.ADD_MESH_NODE, meshName, translation, rotation, layerNode);
+                            commandQueue.Enqueue(message);
 
-                            foreach (var mb in m.MeshBuffers)
+                            progressBar.Invoke((MethodInvoker)delegate
                             {
-                                totalVertexCount += mb.VertexCount;
-                                //TODO: would be nice to move these hardware hints into the Mesh class if we know that the mesh is static
-                                mb.SetHardwareMappingHint(HardwareMappingHint.Static, HardwareBufferType.VertexAndIndex);
-                            }
-#endif
-                            RenderTreeNode meshNode = new RenderTreeNode(meshName, meshId++, m, translation, rotation);
-
-                            sceneView.Invoke((MethodInvoker)delegate
-                            {
-                                if (!atLeastOneMesh)
-                                {
-                                    sceneView.Nodes.Add(layerNode);
-                                    atLeastOneMesh = true;
-                                }
-                                layerNode.Nodes.Add(meshNode);
+                                progressBar.PerformStep();
                             });
                         }
                     }
@@ -425,47 +231,8 @@ namespace WolvenKit.Render
             }
         }
 
-        private void ParseScene()
+        private bool LoadScene(BackgroundWorker worker, DoWorkEventArgs e)
         {
-            //string meshPath = "D:/Tools/ModTools/r4data/environment/architecture/human/redania/novigrad/poor/poor_woodenfoof_loam/poor_woodenfoof_loam_roofb.w2mesh";
-            //string meshPath = "D:/Tools/ModTools/r4data/environment/architecture/human/redania/novigrad/poor/poor_houses_parts/poor_frame_window_stone_g.w2mesh";
-            //Mesh m = smgr.GetMesh(meshPath);
-
-            //string imgPath = "D:/Tools/ModTools/r4data/fx/textures/cloud/stars_cubemap/stars2.w2cube";
-            //Texture dudtex = driver.GetTexture(imgPath);
-
-            /*
-            string imgPath = "D:/Tools/ModTools/r4data/fx/textures/cloud/stars_cubemap/stars2.w2cube";
-            Texture dudtex = driver.GetTexture(imgPath);
-
-            CR2WFile imgAssetFile;
-            using (var fs = new FileStream(imgPath, FileMode.Open, FileAccess.Read))
-            using (var reader = new BinaryReader(fs))
-            {
-                imgAssetFile = new CR2WFile();
-                imgAssetFile.Read(reader);
-                fs.Close();
-            }
-            CBitmapTexture xbm = ((CBitmapTexture)imgAssetFile.chunks[0].data);
-            */
-
-            //string meshPath = "D:/Tools/ModTools/r4data/engine/textures/editor/grey.xbm";
-            //Mesh m = smgr.GetMesh(meshPath);
-            //m = smgr.MeshManipulator.CreateMeshWithTangents(m, true);
-            /*
-            CR2WFile imgAssetFile;
-            using (var fs = new FileStream(meshPath, FileMode.Open, FileAccess.Read))
-            using (var reader = new BinaryReader(fs))
-            {
-                imgAssetFile = new CR2WFile();
-                imgAssetFile.Read(reader);
-                fs.Close();
-            }
-
-            Texture dudtex = driver.GetTexture(meshPath);
-            */
-            //===============================================
-
             if (Path.GetExtension(inputFilename) == ".w2w")
             {
                 CR2WFile world;
@@ -483,8 +250,7 @@ namespace WolvenKit.Render
                     {
                         CLayerInfo info = (CLayerInfo)worldChunk.data;
                         string layerFileName = depot + info.DepotFilePath;
-
-                        //AddLayer(layerFileName, info.DepotFilePath.ToString(), ref meshId);
+                        AddLayer(layerFileName, info.DepotFilePath.ToString(), ref meshId);
                     }
                     else if (worldChunk.REDType == "CClipMap")
                     {
@@ -492,10 +258,226 @@ namespace WolvenKit.Render
                         AddTerrain(info, ref meshId);
                     }
                 }
+
+                // reset the progress bar
+                progressBar.Invoke((MethodInvoker)delegate
+                {
+                    progressBar.Value = 0;
+                });
             }
             else if (Path.GetExtension(inputFilename) == ".w2l")
             {
                 AddLayer(inputFilename, inputFilename, ref meshId);
+
+                // reset the progress bar
+                progressBar.Invoke((MethodInvoker)delegate
+                {
+                    progressBar.Value = 0;
+                });
+            }
+
+            return true;
+        }
+
+        private void LoadScene(object sender, DoWorkEventArgs e)
+        {
+            // Get the BackgroundWorker that raised this event.
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            e.Result = LoadScene(worker, e);
+        }
+
+        //private void LoadSceneProgress(object sender, ProgressChangedEventArgs e)
+        //{
+        //    this.progressBar.Value = e.ProgressPercentage;
+        //}
+
+        private void SceneLoaded(object sender, RunWorkerCompletedEventArgs e)
+        {
+            // First, handle the case where an exception was thrown.
+            if (e.Error != null)
+            {
+                MessageBox.Show(e.Error.Message);
+            }
+            else if (e.Cancelled)
+            {
+                // Next, handle the case where the user canceled 
+                // the operation.
+                // Note that due to a race condition in 
+                // the DoWork event handler, the Cancelled
+                // flag may not have been set, even though
+                // CancelAsync was called.
+                //resultLabel.Text = "Canceled";
+            }
+            else
+            {
+                // Finally, handle the case where the operation 
+                // succeeded.
+                //resultLabel.Text = e.Result.ToString();
+            }
+
+            toolStrip.Invoke((MethodInvoker)delegate
+            {
+                toolStrip.Items[0].Enabled = true; // add mesh
+                toolStrip.Items[2].Enabled = true; // show all
+            });
+        }
+
+        public frmLevelScene(string filename, string depotPath, Cache.TextureManager textureManager)
+        {
+            this.inputFilename = filename;
+            this.depot = depotPath + "\\";
+            this.meshId = 1;
+            InitializeComponent();
+
+            this.showAllButton.Enabled = false;
+            this.addMeshButton.Enabled = false;
+
+            this.progressBar.Minimum = 0;
+            this.progressBar.Maximum = 10;
+            this.progressBar.Value = 0;
+            this.progressBar.Step = 1;
+
+            this.queueSizeBar.Minimum = 0;
+            this.queueSizeBar.Maximum = 5000;
+            this.queueSizeBar.Value = 0;
+            this.queueSizeBar.Step = 1;
+
+            this.distanceBar.Value = 3;
+
+            this.backgroundLoader = new System.ComponentModel.BackgroundWorker();
+            this.backgroundLoader.DoWork += new DoWorkEventHandler(LoadScene);
+            this.backgroundLoader.RunWorkerCompleted += new RunWorkerCompletedEventHandler(SceneLoaded);
+            //this.backgroundLoader.ProgressChanged += new ProgressChangedEventHandler(LoadSceneProgress);
+        }
+
+        void ProcessCommand()
+        {
+            queueSizeBar.Invoke((MethodInvoker)delegate
+            {
+                if (commandQueue.Count > queueSizeBar.Maximum)
+                {
+                    queueSizeBar.Maximum = commandQueue.Count;
+                    queueSizeBar.Value = queueSizeBar.Maximum;
+                }
+                else
+                {
+                    queueSizeBar.Value = commandQueue.Count;
+                }
+            });
+
+            RenderMessage m;
+            if (commandQueue.TryDequeue(out m))
+            {
+                switch (m.Message)
+                {
+                    case MessageType.ADD_MESH_NODE:
+                        {
+                            IrrlichtLime.Scene.Mesh mesh = smgr.GetStaticMesh(depot + m.MeshName);
+                            foreach (var mb in mesh.MeshBuffers)
+                            {
+                                totalVertexCount += mb.VertexCount;
+                            }
+                            MeshSceneNode meshNode = smgr.AddMeshSceneNode(mesh, worldNode, meshId++, m.Translation, m.Rotation);
+                            meshNode.Grab();
+
+                            RenderTreeNode rn = new RenderTreeNode(m.MeshName, meshNode);
+                            if (m.TreeNode.GetNodeCount(false) > 0)
+                            {
+                                // TODO: does this need to be invoked?
+                                sceneView.Invoke((MethodInvoker)delegate
+                                {
+                                    m.TreeNode.Nodes.Add(rn);
+                                });
+                            }
+                            else
+                            {
+                                sceneView.Invoke((MethodInvoker)delegate
+                                {
+                                    sceneView.Nodes.Add(m.TreeNode);
+                                    m.TreeNode.Nodes.Add(rn);
+                                });
+                            }
+
+                            ++totalMeshCount;
+
+                            vertexCountText.Text = "Vertices: " + totalVertexCount.ToString();
+                            meshCountText.Text = "Meshes: " + totalMeshCount.ToString();
+                        }
+                        break;
+                    case MessageType.ADD_TERRAIN_NODE:
+                        {
+                            var meshNode = smgr.AddTerrainSceneNodeWolvenKit(depot + m.MeshName, worldNode, meshId, 256, m.MaxHeight, m.MinHeight, m.TerrainSize, m.Translation);
+                            meshNode.Grab();
+                            foreach (var mb in meshNode.Mesh.MeshBuffers)
+                            {
+                                totalVertexCount += mb.VertexCount;
+                            }
+
+                            RenderTreeNode rn = new RenderTreeNode("Tile " + meshId.ToString(), meshNode);
+                            meshId++;
+
+                            if (m.TreeNode.GetNodeCount(false) > 0)
+                            {
+                                // TODO: does this need to be invoked?
+                                sceneView.Invoke((MethodInvoker)delegate
+                                {
+                                    m.TreeNode.Nodes.Add(rn);
+                                });
+                            }
+                            else
+                            {
+                                sceneView.Invoke((MethodInvoker)delegate
+                                {
+                                    sceneView.Nodes.Add(m.TreeNode);
+                                    m.TreeNode.Nodes.Add(rn);
+                                });
+                            }
+
+                            ++totalMeshCount;
+
+                            vertexCountText.Text = "Vertices: " + totalVertexCount.ToString();
+                            meshCountText.Text = "Meshes: " + totalMeshCount.ToString();
+                        }
+                        break;
+                    case MessageType.SHOW_NODE:
+                        {
+                            m.Node.Visible = true;
+                            var camera = smgr.ActiveCamera;
+
+                            // just set the target
+                            camera.Target = new Vector3Df(m.Node.AbsolutePosition);
+                            lightNode.Position = camera.Position;
+                        }
+                        break;
+                    case MessageType.HIDE_NODE:
+                        {
+                            m.Node.Visible = false;
+                        }
+                        break;
+                    case MessageType.SELECT_NODE:
+                        {
+                            smgr.SelectNode(m.Node);
+                            var camera = smgr.ActiveCamera;
+
+                            // just set the target
+                            camera.Target = new Vector3Df(m.Node.AbsolutePosition);
+                            lightNode.Position = camera.Position;
+                        }
+                        break;
+                    case MessageType.DESELECT_NODE:
+                        {
+                            smgr.DeselectNode();
+                        }
+                        break;
+                    case MessageType.SHUTDOWN:
+                        {
+                            device.Yield();
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -508,6 +490,8 @@ namespace WolvenKit.Render
             irrThread = new Thread(irrThreadStart);
             irrThread.IsBackground = true;
             irrThread.Start();
+
+            backgroundLoader.RunWorkerAsync();
         }
 
         /// <summary>
@@ -525,7 +509,9 @@ namespace WolvenKit.Render
         /// </summary>
         private void StartIrr()
         {
+#if DEBUG
             try
+#endif
             {
                 //Setup
                 IrrlichtCreationParameters irrparam = new IrrlichtCreationParameters();
@@ -542,11 +528,7 @@ namespace WolvenKit.Render
                 if (device == null) throw new NullReferenceException("Could not create device for engine!");
 
                 driver = device.VideoDriver;
-#if USE_CUSTOM_SCENEMANAGER
                 smgr = SceneManagerWolvenKit.Create(device);
-#else
-                smgr = device.SceneManager;
-#endif
                 gui = device.GUIEnvironment;
 
                 smgr.Attributes.SetValue("TW_TW3_TEX_PATH", depot);
@@ -561,12 +543,10 @@ namespace WolvenKit.Render
                 var dome = smgr.AddSkyDomeSceneNode(driver.GetTexture("Terrain\\skydome.jpg"), 16, 8, 0.95f, 2.0f);
                 dome.Visible = true;
                 
-                fpstext = gui.AddStaticText("FPS: 0",
+                fpsText = gui.AddStaticText("FPS: 0",
                     new Recti(2, 10, 200, 30), false, false, null, 1, false);
-                fpstext.OverrideColor = IrrlichtLime.Video.Color.SolidRed;
-                fpstext.OverrideFont = gui.GetFont("#DefaultWKFont");
-
-                ParseScene();
+                fpsText.OverrideColor = IrrlichtLime.Video.Color.SolidRed;
+                fpsText.OverrideFont = gui.GetFont("#DefaultWKFont");
 
                 //smgr.SaveScene("pvs.lrb");
 
@@ -575,22 +555,18 @@ namespace WolvenKit.Render
                 vertexCountText.OverrideColor = IrrlichtLime.Video.Color.SolidRed;
                 vertexCountText.OverrideFont = gui.GetFont("#DefaultWKFont");
 
+                meshCountText = gui.AddStaticText("Meshes: " + totalMeshCount.ToString(),
+                    new Recti(2, 54, 300, 74), false, false, null, 1, false);
+                meshCountText.OverrideColor = IrrlichtLime.Video.Color.SolidRed;
+                meshCountText.OverrideFont = gui.GetFont("#DefaultWKFont");
+
                 var camera = smgr.AddCameraSceneNodeWolvenKit();
+                camera.FarValue = 10000.0f;
 
-                distanceBar.Invoke((MethodInvoker)delegate
-                {
-                    camera.FarValue = (float)Math.Pow(10.0, (double)distanceBar.Value);
-                });
-
-                sceneView.Invoke((MethodInvoker)delegate
-                {
-                    sceneView.Enabled = true;
-                });
-
-                toolStrip.Invoke((MethodInvoker)delegate
-                {
-                    addMeshButton.Enabled = true;
-                });
+                //distanceBar.Invoke((MethodInvoker)delegate
+                //{
+                //    camera.FarValue = (float)Math.Pow(10.0, (double)distanceBar.Value);
+                //});
 
                 var viewPort = driver.ViewPort;
                 var lineMat = new IrrlichtLime.Video.Material
@@ -602,27 +578,15 @@ namespace WolvenKit.Render
                 {
                     if (this.Visible)
                     {
-                        if (doAddNodes)
-                        {
-                            AddLayer(inputFilename, inputFilename, ref meshId);
-                            doAddNodes = false;
-                            sceneView.Invoke((MethodInvoker)delegate
-                            {
-                                sceneView.Enabled = true;
-                            });
-                        }
+                        ProcessCommand();
 
                         driver.ViewPort = viewPort;
 
                         driver.BeginScene(ClearBufferFlag.All, new IrrlichtLime.Video.Color(0, 0, 100));
                         int val = driver.FPS;
-                        fpstext.Text = "FPS: " + val.ToString();
+                        fpsText.Text = "FPS: " + val.ToString();
 
-                        if (!busy)
-                        {
-                            smgr.DrawAll();
-                        }
-
+                        smgr.DrawAll();
                         gui.DrawAll();
 
                         // draw xyz axis right bottom
@@ -645,6 +609,7 @@ namespace WolvenKit.Render
                         device.Yield();
                 }
             }
+#if DEBUG
             catch (ThreadAbortException) { }
             catch (NullReferenceException) { }
             catch (Exception ex)
@@ -655,6 +620,7 @@ namespace WolvenKit.Render
                     //this.Invoke(new MethodInvoker(delegate { this.Close(); }));
                 }
             }
+#endif
         }
 
         private void frmLevelScene_Load(object sender, EventArgs e)
@@ -684,16 +650,10 @@ namespace WolvenKit.Render
 
                 float wheel = e.Delta;
                 Event evt = new Event(mev, e.X, e.Y, wheel, buttonStates);
-#if USE_CUSTOM_SCENEMANAGER
                 smgr.PostEvent(evt);
-#else
-                if (device.PostEvent(evt))
-#endif
+                if (smgr.ActiveCamera != null)
                 {
-                    if (smgr.ActiveCamera != null)
-                    {
-                        lightNode.Position = smgr.ActiveCamera.Position;
-                    }
+                    lightNode.Position = smgr.ActiveCamera.Position;
                 }
             }
         }
@@ -706,126 +666,27 @@ namespace WolvenKit.Render
                 uint buttonStates = 7;
                 float wheel = e.Delta;
                 Event evt = new Event(mev, e.X, e.Y, wheel, buttonStates);
-#if USE_CUSTOM_SCENEMANAGER
                 smgr.PostEvent(evt);
-#else
-                if (device.PostEvent(evt))
-#endif
+                if (smgr.ActiveCamera != null)
                 {
-                    if (smgr.ActiveCamera != null)
-                    {
-                        lightNode.Position = smgr.ActiveCamera.Position;
-                    }
+                    lightNode.Position = smgr.ActiveCamera.Position;
                 }
             }
-        }
-
-        private void irrlichtPanel_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private void frmLevelScene_KeyDown(object sender, KeyEventArgs e)
-        {
-            var cam = smgr.ActiveCamera;
-            float cameraspeed = 1f;
-            switch (e.KeyCode)
-            {
-                case Keys.Escape:
-                {
-                    device.Close();
-                    irrThread.Abort();
-                    this.Close();
-                    break;
-                }
-                case Keys.W:
-                {
-                    var vec = (cam.Target - cam.Position).Normalize() * cameraspeed;
-                    cam.Position += vec;
-                    cam.Target += vec;
-                    break;
-                }
-                case Keys.S:
-                {
-                    var vec = (cam.Target - cam.Position).Normalize() * cameraspeed;
-                    cam.Position -= vec;
-                    cam.Target -= vec;
-                    break;
-                }
-                case Keys.A:
-                {
-                    var vec = (cam.Target - cam.Position).Normalize().DotProduct(cam.Target.Normalize()) * cameraspeed;
-                    cam.Position -= vec;
-                    cam.Target -= vec;
-                    break;
-                }
-                case Keys.D:
-                {
-                    var vec = (cam.Target - cam.Position).Normalize().DotProduct(cam.Target.Normalize()) *cameraspeed;
-                    cam.Position += vec;
-                    cam.Target += vec;
-                    break;
-                }
-                case Keys.P:
-                {
-                    Console.WriteLine("--------- DEBUG ---------");
-                    Console.WriteLine($"[DEBUG] Camera position - (X - {cam.Position.X}, Y - {cam.Position.Y}, Z - {cam.Position.Z})");
-                    Console.WriteLine("--------- DEBUG ---------");
-                    break;
-                }
-                case Keys.Q:
-                {
-                    break;
-                }
-            }
-            //lightNode.Position = cam.Position;
-        }
-
-        private void irrlichtPanel_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void Render(RenderTreeNode node)
-        {
-            busy = true;
-
-            if (node.MeshNode == null)
-            {
-                MeshSceneNode meshNode = smgr.AddMeshSceneNode(node.Mesh, worldNode, node.ID, node.Position, node.Rotation);
-#if !USE_CUSTOM_SCENEMANAGER
-                meshNode.AutomaticCulling = CullingType.FrustumBox;
-                meshNode.SetMaterialFlag(MaterialFlag.BackFaceCulling, true);
-                meshNode.SetMaterialFlag(MaterialFlag.Lighting, false);
-#endif
-                node.MeshNode = meshNode;
-                node.MeshNode.Grab();
-            }
-
-            // otherwise the node is already in the scene so just put it in camera focus
-            node.MeshNode.Visible = true;
-            var camera = smgr.ActiveCamera;
-
-            // for a Maya camera just set the target
-            camera.Target = new Vector3Df(node.MeshNode.AbsolutePosition);
-            lightNode.Position = camera.Position;
-
-            busy = false;
-        }
-
-        private void Hide(RenderTreeNode node)
-        {
-            node.MeshNode.Visible = false;
         }
 
         private void ExportTexture(string fileName, Texture tex)
         {
-            // TODO: allow DXT1 and DTX5 images in memory and then decompress for conversion and export
-            if(!IrrlichtLime.Video.Image.IsCompressedFormat(tex.ColorFormat))
+            IrrlichtLime.Video.Image img = null;
+            if (IrrlichtLime.Video.Image.IsCompressedFormat(tex.ColorFormat))
             {
-                IrrlichtLime.Video.Image img = driver.CreateImage(tex);
-                driver.WriteImage(img, fileName);
-                img.Drop();
+                img = driver.CreateUncompressedImage(tex);
             }
+            else
+            {
+                img = driver.CreateImage(tex);
+            }
+            driver.WriteImage(img, fileName);
+            img.Drop();
         }
 
         private void ExportNode(RenderTreeNode node, string exportMeshDirectory, string modelExtension, string texExtension, bool transformToWorld, string instanceName)
@@ -834,7 +695,8 @@ namespace WolvenKit.Render
             string filename = exportMeshDirectory + "\\" + meshNameOnly + instanceName + modelExtension;
 
             // export textures too!
-            foreach (var mb in node.Mesh.MeshBuffers)
+            MeshSceneNode meshNode = (MeshSceneNode)node.MeshNode;
+            foreach (var mb in meshNode.Mesh.MeshBuffers)
             {
                 if (mb.Material.GetTexture(0) != null)
                 {
@@ -860,11 +722,11 @@ namespace WolvenKit.Render
                 var mw = smgr.CreateMeshWriter(MeshWriterType.Obj);
                 if (transformToWorld)
                 {
-                    Matrix localToWorld = new Matrix(node.Position, node.Rotation);
+                    Matrix localToWorld = new Matrix(node.MeshNode.Position, node.MeshNode.Rotation);
                     mw.SetTransform(localToWorld);
                 }
                 mw.SetImageType(texExtension);
-                mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), node.Mesh, MeshWriterFlag.None);
+                mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), ((MeshSceneNode)(node.MeshNode)).Mesh, MeshWriterFlag.None);
                 mw.Drop();
             }
             else if (modelExtension == ".fbx")
@@ -872,11 +734,11 @@ namespace WolvenKit.Render
                 var mw = smgr.CreateMeshWriter(MeshWriterType.Fbx);
                 if (transformToWorld)
                 {
-                    Matrix localToWorld = new Matrix(node.Position, node.Rotation);
+                    Matrix localToWorld = new Matrix(node.MeshNode.Position, node.MeshNode.Rotation);
                     mw.SetTransform(localToWorld);
                 }
                 mw.SetImageType(texExtension);
-                mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), node.Mesh, MeshWriterFlag.None);
+                mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), ((MeshSceneNode)(node.MeshNode)).Mesh, MeshWriterFlag.None);
                 mw.Drop();
             }
         }
@@ -936,22 +798,32 @@ namespace WolvenKit.Render
                 CommonFileDialogCheckBox mergeCheckBox = dlg.Controls["mergeCheckBox"] as CommonFileDialogCheckBox;
                 bool mergeObjects = mergeCheckBox.IsChecked;
 
+                exportMeshButton.Enabled = false;
+
                 if (node.Nodes.Count > 0)
                 {
                     // TODO: if merging is desired, combine all the objects into one mesh with multiple buffers
+                    progressBar.Maximum = node.Nodes.Count;
+
                     int instance = 0;                    
                     foreach(RenderTreeNode rn in node.Nodes)
                     {
                         string instanceName = "_" + instance.ToString();
                         ExportNode(rn, exportMeshDirectory, modelExtension, texExtension, transformToWorld, instanceName);
                         ++instance;
+
+                        progressBar.PerformStep();
                     }
+
+                    progressBar.Value = 0;
                 }
                 else
                 {
                     string instanceName = "";
                     ExportNode((RenderTreeNode)node, exportMeshDirectory, modelExtension, texExtension, transformToWorld, instanceName);
                 }
+
+                exportMeshButton.Enabled = true;
             }
         }
 
@@ -987,12 +859,14 @@ namespace WolvenKit.Render
                     foreach (RenderTreeNode n in node.Nodes)
                     {
                         n.Checked = true;
-                        Render(n);
+                        RenderMessage m = new RenderMessage(MessageType.SHOW_NODE, n.MeshNode);
+                        commandQueue.Enqueue(m);
                     }
                 }
                 else
                 {
-                    Render((RenderTreeNode)node);
+                    RenderMessage m = new RenderMessage(MessageType.SHOW_NODE, ((RenderTreeNode)node).MeshNode);
+                    commandQueue.Enqueue(m);
                 }
             }
             else
@@ -1002,12 +876,14 @@ namespace WolvenKit.Render
                     foreach (RenderTreeNode n in node.Nodes)
                     {
                         n.Checked = false;
-                        Hide(n); 
-                    }                    
+                        RenderMessage m = new RenderMessage(MessageType.HIDE_NODE, n.MeshNode);
+                        commandQueue.Enqueue(m);
+                    }
                 }
                 else
                 {
-                    Hide((RenderTreeNode)node);
+                    RenderMessage m = new RenderMessage(MessageType.HIDE_NODE, ((RenderTreeNode)node).MeshNode);
+                    commandQueue.Enqueue(m);
                 }
             }
         }
@@ -1020,8 +896,10 @@ namespace WolvenKit.Render
             if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 inputFilename = dlg.FileName;
-                doAddNodes = true;
-                sceneView.Enabled = false;
+                addMeshButton.Enabled = false;
+                showAllButton.Enabled = false;
+
+                backgroundLoader.RunWorkerAsync();
             }
         }
         private void exportMeshButton_Click(object sender, EventArgs e)
@@ -1033,21 +911,45 @@ namespace WolvenKit.Render
 
         private void sceneView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            exportMeshButton.Enabled = sceneView.SelectedNode != null;
+            // ignore parent nodes as they are just containers for the mesh nodes
+            if (sceneView.SelectedNode.Nodes.Count > 0)
+                return;
+
+            if(sceneView.SelectedNode != null)
+            {
+                exportMeshButton.Enabled = true;
+                RenderTreeNode rn = (RenderTreeNode)sceneView.SelectedNode;
+                RenderMessage message = new RenderMessage(MessageType.SELECT_NODE, rn.MeshNode);
+                commandQueue.Enqueue(message);
+            }
+            else
+            {
+                exportMeshButton.Enabled = false;
+                RenderMessage message = new RenderMessage(MessageType.DESELECT_NODE);
+                commandQueue.Enqueue(message);
+            }
+
         }
 
         private void showAllButton_Click(object sender, EventArgs e)
-        {
+        {            
+            progressBar.Maximum = sceneView.Nodes.Count;
+            progressBar.Value = 0;
+
             foreach(TreeNode node in sceneView.Nodes)
             {
                 node.Checked = true;
                 foreach (RenderTreeNode n in node.Nodes)
                 {
                     n.Checked = true;
-                    Render(n);
+                    RenderMessage message = new RenderMessage(MessageType.SHOW_NODE, n.MeshNode);
+                    commandQueue.Enqueue(message);
+
+                    progressBar.PerformStep();
                 }
             }
 
+            progressBar.Value = 0;
         }
 
         private void irrlichtPanel_Resize(object sender, EventArgs e)
@@ -1071,6 +973,49 @@ namespace WolvenKit.Render
                 {
                     camera.FarValue = Math.Max(10.0f, (float)Math.Pow(10.0, (double)distanceBar.Value));
                 }
+            }
+        }
+
+        private void progressBar_Resize(object sender, EventArgs e)
+        {
+            progressBar.Width = splitContainer.Panel2.Width - 2;
+        }
+
+        private void queueSizeBar_Resize(object sender, EventArgs e)
+        {
+            queueSizeBar.Width = splitContainer.Panel2.Width - 2;
+        }
+
+        private void frmLevelScene_KeyDown(object sender, KeyEventArgs e)
+        {
+            char keyChar;
+            IrrlichtLime.KeyCode keyCode;
+
+            switch (e.KeyCode)
+            {
+                case Keys.W:
+                    {
+                        // move camera forward
+                        keyCode = KeyCode.KeyW;
+                        keyChar = 'w';
+                    }
+                    break;
+                case Keys.S:
+                    {
+                        // move camera back
+                        keyCode = KeyCode.KeyS;
+                        keyChar = 's';
+                    }
+                    break;
+                default:
+                    return; // ignore
+            }
+
+            Event evt = new Event(keyChar, keyCode, true);
+            smgr.PostEvent(evt);
+            if (smgr.ActiveCamera != null)
+            {
+                lightNode.Position = smgr.ActiveCamera.Position;
             }
         }
     }

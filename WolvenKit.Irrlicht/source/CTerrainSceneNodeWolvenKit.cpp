@@ -17,8 +17,13 @@
 #include "os.h"
 #include "IReadFile.h"
 #include "ISceneManager.h"
-#include "debug.h"
 #include "CDynamicMeshBuffer.h"
+#include "debug.h"
+
+inline float lerp(float a, float b, float t)
+{
+    return a + t * (b - a);
+}
 
 namespace irr
 {
@@ -39,6 +44,8 @@ namespace scene
 	//! destructor
 	CTerrainSceneNodeWolvenKit::~CTerrainSceneNodeWolvenKit()
 	{
+        if (Mesh)
+            Mesh->drop();
 	}
 
     IMesh* CTerrainSceneNodeWolvenKit::getMesh() { return Mesh; }
@@ -49,8 +56,6 @@ namespace scene
             return;
 
         SceneManager->registerNodeForRendering(this);
-
-        //ISceneNode::OnRegisterSceneNode();
     }
 
     void CTerrainSceneNodeWolvenKit::render()
@@ -60,7 +65,7 @@ namespace scene
         if (!Mesh || !driver)
             return;
 
-        //driver->setTransform(video::ETS_WORLD, AbsoluteTransformation);
+        driver->setTransform(video::ETS_WORLD, AbsoluteTransformation);
 
         scene::IMeshBuffer* mb = Mesh->getMeshBuffer(0);
         driver->drawMeshBuffer(mb);
@@ -73,26 +78,20 @@ namespace scene
 
 	//! Initializes the terrain data. Loads the vertices from the heightMapFile
 	bool CTerrainSceneNodeWolvenKit::loadHeightMap(io::IReadFile* file, s32 dimension,
-		f32 maxHeight, f32 minHeight, f32 tileSize, const core::vector3df& anchor)
+		f32 maxHeight, f32 minHeight, f32 tileSize)
 	{
 		if (!file)
 			return false;
 
 		Mesh = DBG_NEW scene::SMesh();
 
-		//-----------------------------------
-		const u32 startTime = os::Timer::getRealTime();
-		//-----------------------------------
-
 		f32 heightScale = maxHeight - minHeight;
 		u16* bytes = DBG_NEW u16[dimension * dimension];
 
 		file->read(bytes, dimension * dimension * sizeof(u16));
 
-
 		// --- Generate vertex data from heightmap ----
 		// resize the vertex array for the mesh buffer one time (makes loading faster)
-
 
 		//we need 32bit buffers
 		scene::CDynamicMeshBuffer* mb = DBG_NEW scene::CDynamicMeshBuffer(video::E_VERTEX_TYPE::EVT_STANDARD, video::EIT_32BIT);
@@ -104,20 +103,23 @@ namespace scene
         mb->getIndexBuffer().set_used(nIndices);
 
         s32 index = 0;
-        f32 currY = anchor.Y;
-		f32 stepSize = tileSize / dimension;
+        f32 currY = 0.0f;
+        f32 stepSize = tileSize / dimension;
 		u16* val = bytes;
 
-        s32 r = 0;
-        s32 g = 0;
-        s32 b = 0;
+        u32 r = 0;
+        u32 g = 0;
+        u32 b = 0;
 
         scene::IVertexBuffer& vb = mb->getVertexBuffer();
         vb.setHardwareMappingHint(EHM_STATIC);
 
+        f32 minZ = 1.0E9f;
+        f32 maxZ = -1.0E9f;
+
 		for (s32 y = 0; y < dimension; ++y)
 		{
-			f32 currX = anchor.X;
+            f32 currX = 0.0f;
 
 			for (s32 x = 0; x < dimension; ++x)
 			{
@@ -128,23 +130,53 @@ namespace scene
                 {
                     r = 0;
                     g = 0;
-                    b = (s32)(h / minHeight * 255);
+                    b = 153;
                 }
                 else
                 {
-                    r = (s32)(h / maxHeight * 255);
-                    g = r;
-                    b = r;
+                    f32 hscaled = h / maxHeight * 2.0f - 1e-05f; // hscaled should range in [0,2)
+                    s32 hi = s32(hscaled); // hi should range in [0,1]
+                    f32 hfrac = hscaled - f32(hi); // hfrac should range in [0,1]
+                    if (hi == 0)
+                    {
+                        r = u32(lerp(0.1f, 0.4f, hfrac) * 255.0f);
+                        g = u32(lerp(0.3f, 0.8f, hfrac) * 255.0f);
+                        b = u32(lerp(0.1f, 0.4f, hfrac) * 255.0f);
+                    }
+                    else
+                    {
+                        r = u32(lerp(0.4f, 1.0f, hfrac) * 255.0f);
+                        g = u32(lerp(0.8f, 1.0f, hfrac) * 255.0f);
+                        b = u32(lerp(0.4f, 1.0f, hfrac) * 255.0f);
+                    }
                 }
+
+                //if (h < 0.0f)
+                //{
+                //    r = 0;
+                //    g = 0;
+                //    b = (u32)(h / minHeight * 255);
+                //}
+                //else
+                //{
+                //    r = (u32)(h / maxHeight * 255);
+                //    g = r;
+                //    b = r;
+                //}
 
                 video::S3DVertex& vertex = static_cast<video::S3DVertex*>(vb.pointer())[index++];
                 vertex.Normal.set(0.0f, 0.0f, 1.0f);
                 vertex.Color.set(255, r, g, b);
-                vertex.Pos.X = -currX;
+                vertex.Pos.X = currX;
                 vertex.Pos.Y = currY;
                 vertex.Pos.Z = h;
 
-				currX += stepSize;
+                if (h < minZ)
+                    minZ = h;
+                else if (h > maxZ)
+                    maxZ = h;
+
+				currX -= stepSize;
 			}
 
 			currY += stepSize;
@@ -186,7 +218,7 @@ namespace scene
 		// add the MeshBuffer to the mesh
 		Mesh->addMeshBuffer(mb);
 
-        irr::core::aabbox3df bounds(-anchor.X, anchor.Y, minHeight, -(anchor.X + tileSize), anchor.Y + tileSize, maxHeight);
+        irr::core::aabbox3df bounds(-tileSize, 0.0f, minZ, 0.0f, tileSize, maxZ);
         Mesh->setBoundingBox(bounds);
 
 		// We no longer need the mb
@@ -194,15 +226,8 @@ namespace scene
 
         delete[] bytes;
 
-		//-----------------------------------
-		const u32 endTime = os::Timer::getRealTime();
-
-		c8 tmp[255];
-		snprintf_irr(tmp, 255, "Generated terrain data (%dx%d) in %.4f seconds",
-			dimension, dimension, (endTime - startTime) / 1000.0f );
-		os::Printer::log(tmp);
-		//-----------------------------------
-
+        // update relative position
+        
 		return true;
 	}
 

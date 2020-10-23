@@ -33,7 +33,7 @@ namespace scene
 
 		//! Initializes the terrain data.  Loads the vertices from the heightMapFile.
 		bool loadHeightMap(io::IReadFile* file, s32 dimension,
-			f32 maxHeight, f32 minHeight, f32 tileSize, const core::vector3df& anchor);
+			f32 maxHeight, f32 minHeight, f32 tileSize);
 
 	private:
 		SMesh* Mesh;

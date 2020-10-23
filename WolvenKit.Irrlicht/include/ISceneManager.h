@@ -1164,6 +1164,9 @@ namespace scene
 		by existing scene node animators, culling of scene nodes is done, etc. */
 		virtual void drawAll() = 0;
 
+		virtual void SelectNode(ISceneNode* node) {}
+		virtual void DeselectNode() {}
+
 		//! Creates a rotation animator, which rotates the attached scene node around itself.
 		/** \param rotationSpeed Specifies the speed of the animation in degree per 10 milliseconds.
 		\return The animator. Attach it to a scene node with ISceneNode::addAnimator()

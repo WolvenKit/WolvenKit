@@ -17,7 +17,7 @@ public ref class TerrainSceneNodeWolvenKit : SceneNode
 public:
 
 	bool LoadHeightMap(IO::ReadFile^ file, int dimension, 
-		float maxHeight, float minHeight, float tileSize, Vector3Df^ anchor);
+		float maxHeight, float minHeight, float tileSize);
 
 	property Scene::Mesh^ Mesh { Scene::Mesh^ get(); }
 

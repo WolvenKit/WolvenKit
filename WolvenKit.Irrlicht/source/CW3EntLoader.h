@@ -156,6 +156,7 @@ namespace scene
 
         bool ConfigLoadSkeleton;
         bool ConfigLoadOnlyBestLOD;
+        bool IsStaticMesh;
         io::path ConfigGameTexturesPath;
         io::path ConfigGamePath;
 

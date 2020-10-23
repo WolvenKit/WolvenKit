@@ -37,7 +37,8 @@ CW3EntLoader::CW3EntLoader(scene::ISceneManager* smgr, io::IFileSystem* fs)
     _staticMesh(nullptr),
     FrameOffset(0),
     ConfigLoadSkeleton(true),
-    ConfigLoadOnlyBestLOD(false)
+    ConfigLoadOnlyBestLOD(false),
+    IsStaticMesh(false)
 {
 #ifdef _DEBUG
     setDebugName("CW3ENTLoader");
@@ -85,6 +86,8 @@ IAnimatedMesh* CW3EntLoader::createMesh(io::IReadFile* f)
 {
 	if (!f)
         return nullptr;
+
+    IsStaticMesh = false;
 
     #ifdef _IRR_WCHAR_FILESYSTEM
         ConfigGamePath = _sceneManager->getParameters()->getAttributeAsStringW("TW_GAME_PATH");
@@ -168,6 +171,7 @@ IMesh* CW3EntLoader::createStaticMesh(io::IReadFile* f)
     if (!f)
         return nullptr;
 
+    IsStaticMesh = true;
 #ifdef _IRR_WCHAR_FILESYSTEM
     ConfigGamePath = _sceneManager->getParameters()->getAttributeAsStringW("TW_GAME_PATH");
     ConfigGameTexturesPath = _sceneManager->getParameters()->getAttributeAsStringW("TW_TW3_TEX_PATH");
@@ -195,6 +199,7 @@ IMesh* CW3EntLoader::createStaticMesh(io::IReadFile* f)
 
     os::Printer::log("LOADING FINISHED", ELL_DEBUG);
 
+    _staticMesh->recalculateBoundingBox();
     return _staticMesh;
 
 }
@@ -1688,7 +1693,7 @@ void CW3EntLoader::W3_CMesh(io::IReadFile* file, W3_DataInfos infos)
 
    os::Printer::log((formatString("All properties read, @=%d", file->getPos())).c_str(), ELL_DEBUG);
 
-   if (isStatic)
+   if (IsStaticMesh)
    {
        for (u32 i = 0; i < meshes.size(); ++i)
        {
@@ -1699,13 +1704,15 @@ void CW3EntLoader::W3_CMesh(io::IReadFile* file, W3_DataInfos infos)
            if (meshes[i].materialID < Materials.size())
            {
                _staticMesh->getMeshBuffer(_staticMesh->getMeshBufferCount() - 1)->getMaterial() = Materials[meshes[i].materialID];
+               _staticMesh->getMeshBuffer(_staticMesh->getMeshBufferCount() - 1)->recalculateBoundingBox();
            }
+
            os::Printer::log("OK", ELL_DEBUG);
        }
    }
    else
    {
-       if (NbBonesPos > 0 && ConfigLoadSkeleton)
+       if (!isStatic && NbBonesPos > 0 && ConfigLoadSkeleton)
        {
            ReadBones(file);
        }

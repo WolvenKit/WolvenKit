@@ -135,6 +135,7 @@
     <Compile Include="Animation\ExportAnimation.cs" />
     <Compile Include="Animation\ExportFace.cs" />
     <Compile Include="Animation\IgnorableSerializerContractResolver.cs" />
+    <Compile Include="RenderMessage.cs" />
     <Compile Include="RenderTreeNode.cs" />
     <Compile Include="CommonData.cs" />
     <Compile Include="frmLevelScene.cs">

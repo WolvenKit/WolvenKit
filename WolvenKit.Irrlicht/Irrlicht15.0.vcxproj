@@ -1300,6 +1300,7 @@
     <ClInclude Include="source\CSceneNodeAnimatorCameraWolvenKit.h" />
     <ClInclude Include="source\CTerrainSceneNodeWolvenKit.h" />
     <ClInclude Include="source\debug.h" />
+    <ClInclude Include="source\dxtinfo.h" />
     <ClInclude Include="source\Janua\Core\AABB.h" />
     <ClInclude Include="source\Janua\Core\Cell.h" />
     <ClInclude Include="source\Janua\Core\CollisionUtils.h" />
@@ -1667,6 +1668,7 @@
     <ClCompile Include="source\CSceneManagerWolvenKit.cpp" />
     <ClCompile Include="source\CSceneNodeAnimatorCameraWolvenKit.cpp" />
     <ClCompile Include="source\CTerrainSceneNodeWolvenKit.cpp" />
+    <ClCompile Include="source\dxtinfo.cpp" />
     <ClCompile Include="source\Janua\Core\AABB.cpp" />
     <ClCompile Include="source\Janua\Core\Cell.cpp" />
     <ClCompile Include="source\Janua\Core\CollisionUtils.cpp" />

@@ -77,7 +77,7 @@ Applications must call this method before performing any rendering. This method 
 </summary>
 <returns>False if failed.</returns>
 </member>
-<member name="M:IrrlichtLime.Video.VideoDriver.SetRenderTarget(IrrlichtLime.Video.Texture,IrrlichtLime.Video.ClearBufferFlag,IrrlichtLime.Video.Color,System.Single,System.Byte)" decl="true" source="D:\Tools\WK\WolvenKit.IrrlichtLime\VideoDriver.h" line="278">
+<member name="M:IrrlichtLime.Video.VideoDriver.SetRenderTarget(IrrlichtLime.Video.Texture,IrrlichtLime.Video.ClearBufferFlag,IrrlichtLime.Video.Color,System.Single,System.Byte)" decl="true" source="D:\Tools\WK\WolvenKit.IrrlichtLime\VideoDriver.h" line="279">
 <summary>
 Sets a new render target.
 This will only work if the driver supports the <see cref="F:IrrlichtLime.Video.VideoDriverFeature.RenderToTarget"/>, which can be queried with <c>QueryFeature()</c>.
@@ -92,7 +92,7 @@ If set to <c>null</c>, it sets the previous render target which was set before t
 <param name="clearStencil">The clear value for the stencil buffer. Default is 0.</param>
 <returns>True if successful and false if not.</returns>
 </member>
-<member name="M:IrrlichtLime.Video.VideoDriver.SetRenderTarget(IrrlichtLime.Video.Texture,IrrlichtLime.Video.ClearBufferFlag,IrrlichtLime.Video.Color,System.Single)" decl="true" source="D:\Tools\WK\WolvenKit.IrrlichtLime\VideoDriver.h" line="293">
+<member name="M:IrrlichtLime.Video.VideoDriver.SetRenderTarget(IrrlichtLime.Video.Texture,IrrlichtLime.Video.ClearBufferFlag,IrrlichtLime.Video.Color,System.Single)" decl="true" source="D:\Tools\WK\WolvenKit.IrrlichtLime\VideoDriver.h" line="294">
 <summary>
 Sets a new render target.
 This will only work if the driver supports the <see cref="F:IrrlichtLime.Video.VideoDriverFeature.RenderToTarget"/>, which can be queried with <c>QueryFeature()</c>.
@@ -106,7 +106,7 @@ If set to <c>null</c>, it sets the previous render target which was set before t
 <param name="clearDepth">The clear value for the depth buffer. Default is 1.f.</param>
 <returns>True if successful and false if not.</returns>
 </member>
-<member name="M:IrrlichtLime.Video.VideoDriver.SetRenderTarget(IrrlichtLime.Video.Texture,IrrlichtLime.Video.ClearBufferFlag,IrrlichtLime.Video.Color)" decl="true" source="D:\Tools\WK\WolvenKit.IrrlichtLime\VideoDriver.h" line="307">
+<member name="M:IrrlichtLime.Video.VideoDriver.SetRenderTarget(IrrlichtLime.Video.Texture,IrrlichtLime.Video.ClearBufferFlag,IrrlichtLime.Video.Color)" decl="true" source="D:\Tools\WK\WolvenKit.IrrlichtLime\VideoDriver.h" line="308">
 <summary>
 Sets a new render target.
 This will only work if the driver supports the <see cref="F:IrrlichtLime.Video.VideoDriverFeature.RenderToTarget"/>, which can be queried with <c>QueryFeature()</c>.
@@ -119,7 +119,7 @@ If set to <c>null</c>, it sets the previous render target which was set before t
 <param name="clearColor">The clear color for the color buffer. Default is black.</param>
 <returns>True if successful and false if not.</returns>
 </member>
-<member name="M:IrrlichtLime.Video.VideoDriver.SetRenderTarget(IrrlichtLime.Video.Texture,IrrlichtLime.Video.ClearBufferFlag)" decl="true" source="D:\Tools\WK\WolvenKit.IrrlichtLime\VideoDriver.h" line="320">
+<member name="M:IrrlichtLime.Video.VideoDriver.SetRenderTarget(IrrlichtLime.Video.Texture,IrrlichtLime.Video.ClearBufferFlag)" decl="true" source="D:\Tools\WK\WolvenKit.IrrlichtLime\VideoDriver.h" line="321">
 <summary>
 Sets a new render target.
 This will only work if the driver supports the <see cref="F:IrrlichtLime.Video.VideoDriverFeature.RenderToTarget"/>, which can be queried with <c>QueryFeature()</c>.
@@ -131,7 +131,7 @@ If set to <c>null</c>, it sets the previous render target which was set before t
 <param name="clearFlag">A combination of the <see cref="T:IrrlichtLime.Video.ClearBufferFlag"/> bit-flags. Default is <see cref="F:IrrlichtLime.Video.ClearBufferFlag.Color"/> | <see cref="F:IrrlichtLime.Video.ClearBufferFlag.Depth"/>.</param>
 <returns>True if successful and false if not.</returns>
 </member>
-<member name="M:IrrlichtLime.Video.VideoDriver.SetRenderTarget(IrrlichtLime.Video.Texture)" decl="true" source="D:\Tools\WK\WolvenKit.IrrlichtLime\VideoDriver.h" line="332">
+<member name="M:IrrlichtLime.Video.VideoDriver.SetRenderTarget(IrrlichtLime.Video.Texture)" decl="true" source="D:\Tools\WK\WolvenKit.IrrlichtLime\VideoDriver.h" line="333">
 <summary>
 Sets a new render target.
 This will only work if the driver supports the <see cref="F:IrrlichtLime.Video.VideoDriverFeature.RenderToTarget"/>, which can be queried with <c>QueryFeature()</c>.

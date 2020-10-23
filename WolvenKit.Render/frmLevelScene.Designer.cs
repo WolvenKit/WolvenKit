@@ -1,6 +1,4 @@
-﻿#define USE_CUSTOM_SCENEMANAGER
-
-using IrrlichtLime.Scene;
+﻿using IrrlichtLime.Scene;
 using System;
 
 namespace WolvenKit.Render
@@ -20,15 +18,14 @@ namespace WolvenKit.Render
         {
             if (disposing)
             {
-                device?.Yield();
+                RenderMessage message = new RenderMessage(MessageType.SHUTDOWN);
+                commandQueue.Enqueue(message);
 
                 components?.Dispose();
                 irrThread.Abort();
                 irrThread = null;
                 gui = null;
-#if USE_CUSTOM_SCENEMANAGER
                 smgr.Drop();
-#endif
                 smgr = null;
 
                 driver = null;
@@ -44,16 +41,9 @@ namespace WolvenKit.Render
                         // free the RenderTreeNodes!
                         foreach (RenderTreeNode rn in t.Nodes)
                         {
-                            if (rn.MeshNode == null)
-                            {
-                                rn.Mesh.Drop();
-                            }
-                            else
-                            {
-                                rn.MeshNode.Drop();
-                            }
-                            rn.Position?.Dispose();
-                            rn.Rotation?.Dispose();
+                            rn.MeshNode.Drop();
+                            //rn.Position?.Dispose();
+                            //rn.Rotation?.Dispose();
                         }
                     }
                 }
@@ -72,6 +62,8 @@ namespace WolvenKit.Render
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLevelScene));
             this.levelPanel = new System.Windows.Forms.Panel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.queueSizeBar = new System.Windows.Forms.ProgressBar();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.distanceBar = new System.Windows.Forms.TrackBar();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.addMeshButton = new System.Windows.Forms.ToolStripButton();
@@ -106,6 +98,8 @@ namespace WolvenKit.Render
             // 
             // splitContainer.Panel1
             // 
+            this.splitContainer.Panel1.Controls.Add(this.queueSizeBar);
+            this.splitContainer.Panel1.Controls.Add(this.progressBar);
             this.splitContainer.Panel1.Controls.Add(this.distanceBar);
             this.splitContainer.Panel1.Controls.Add(this.toolStrip);
             this.splitContainer.Panel1.Controls.Add(this.sceneView);
@@ -116,6 +110,28 @@ namespace WolvenKit.Render
             this.splitContainer.Size = new System.Drawing.Size(993, 527);
             this.splitContainer.SplitterDistance = 331;
             this.splitContainer.TabIndex = 1;
+            // 
+            // queueSizeBar
+            // 
+            this.queueSizeBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.queueSizeBar.ForeColor = System.Drawing.Color.Gold;
+            this.queueSizeBar.Location = new System.Drawing.Point(0, 504);
+            this.queueSizeBar.Name = "queueSizeBar";
+            this.queueSizeBar.Size = new System.Drawing.Size(0, 10);
+            this.queueSizeBar.TabIndex = 4;
+            this.queueSizeBar.Resize += new System.EventHandler(this.queueSizeBar_Resize);
+            // 
+            // progressBar
+            // 
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.progressBar.Location = new System.Drawing.Point(0, 514);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(0, 10);
+            this.progressBar.TabIndex = 5;
+            this.progressBar.Resize += new System.EventHandler(this.progressBar_Resize);
             // 
             // distanceBar
             // 
@@ -189,7 +205,7 @@ namespace WolvenKit.Render
             this.sceneView.CheckBoxes = true;
             this.sceneView.Location = new System.Drawing.Point(0, 28);
             this.sceneView.Name = "sceneView";
-            this.sceneView.Size = new System.Drawing.Size(331, 499);
+            this.sceneView.Size = new System.Drawing.Size(331, 469);
             this.sceneView.TabIndex = 1;
             this.sceneView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.sceneView_AfterCheck);
             this.sceneView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.sceneView_AfterSelect);
@@ -201,8 +217,6 @@ namespace WolvenKit.Render
             this.irrlichtPanel.Name = "irrlichtPanel";
             this.irrlichtPanel.Size = new System.Drawing.Size(658, 527);
             this.irrlichtPanel.TabIndex = 0;
-            this.irrlichtPanel.Click += new System.EventHandler(this.irrlichtPanel_Click);
-            this.irrlichtPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.irrlichtPanel_MouseDown);
             this.irrlichtPanel.MouseEnter += new System.EventHandler(this.irrlichtPanel_Enter);
             this.irrlichtPanel.MouseLeave += new System.EventHandler(this.irrlichtPanel_Leave);
             this.irrlichtPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.irrlichtPanel_MouseMove);
@@ -245,5 +259,7 @@ namespace WolvenKit.Render
         private System.Windows.Forms.ToolStripButton exportMeshButton;
         private System.Windows.Forms.ToolStripButton showAllButton;
         private System.Windows.Forms.TrackBar distanceBar;
+        private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.ProgressBar queueSizeBar;
     }
 }

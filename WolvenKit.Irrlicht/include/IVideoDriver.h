@@ -1279,6 +1279,10 @@ namespace video
 				const core::position2d<s32>& pos,
 				const core::dimension2d<u32>& size) =0;
 
+		virtual IImage* createUncompressedImage(ITexture* texture,
+			const core::position2d<s32>& pos,
+			const core::dimension2d<u32>& size) = 0;
+
 		//! Event handler for resize events. Only used by the engine internally.
 		/** Used to notify the driver that the window was resized.
 		Usually, there is no need to call this method. */

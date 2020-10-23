@@ -7,6 +7,7 @@
 #include "irrString.h"
 #include "irrArray.h"
 #include "IMeshLoader.h"
+
 //#include "Janua/JanuaRuntime/JanuaRuntime.h"
 
 namespace irr
@@ -70,6 +71,11 @@ namespace scene
             s32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize,
 			const core::vector3df& anchor) _IRR_OVERRIDE_;
 
+        ILightSceneNode* addLightSceneNode(ISceneNode* parent = 0,
+            const core::vector3df& position = core::vector3df(0, 0, 0),
+            video::SColorf color = video::SColorf(1.0f, 1.0f, 1.0f),
+            f32 range = 100.0f, s32 id = -1) _IRR_OVERRIDE_;
+
 		//! Adds an empty scene node.
 		ISceneNode* addEmptySceneNode(ISceneNode* parent, s32 id=-1) _IRR_OVERRIDE_;
 
@@ -84,6 +90,9 @@ namespace scene
 
 		//! Returns a mesh writer implementation if available
 		IMeshWriter* createMeshWriter(EMESH_WRITER_TYPE type) _IRR_OVERRIDE_;
+
+        void SelectNode(ISceneNode* node) _IRR_OVERRIDE_;
+        void DeselectNode() _IRR_OVERRIDE_;
 
 		//! draws all scene nodes
 		void drawAll() _IRR_OVERRIDE_;
@@ -106,11 +115,6 @@ namespace scene
         // for ISceneNode interface
         void render() _IRR_OVERRIDE_ {}
         const core::aabbox3d<f32>& getBoundingBox() const _IRR_OVERRIDE_;
-
-        ILightSceneNode* addLightSceneNode(ISceneNode* parent = 0,
-            const core::vector3df& position = core::vector3df(0, 0, 0),
-            video::SColorf color = video::SColorf(1.0f, 1.0f, 1.0f),
-            f32 range = 100.0f, s32 id = -1) _IRR_OVERRIDE_;
 
 		// unused bloat functions
 		IAnimatedMesh* getMesh(io::IReadFile* file) _IRR_OVERRIDE_;
@@ -307,6 +311,7 @@ namespace scene
         ISceneNode* Light;
 		ISceneNode* SkyDome;
 		ISceneNode* WaterNode;
+        IMeshSceneNode* HighlightNode;
 		core::array<ISceneNode*> SolidNodeList;
 
         gui::ICursorControl* CursorControl;

@@ -420,6 +420,7 @@
     </ClCompile>
     <ClCompile Include="source\CTerrainSceneNodeWolvenKit.cpp" />
     <ClCompile Include="source\CSceneManagerWolvenKit.cpp" />
+    <ClCompile Include="source\dxtinfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include=".\include\EDriverFeatures.h" />
@@ -962,6 +963,7 @@
     <ClInclude Include="include\ITerrainSceneNodeWolvenKit.h" />
     <ClInclude Include="source\CTerrainSceneNodeWolvenKit.h" />
     <ClInclude Include="include\CSceneManagerWolvenKit.h" />
+    <ClInclude Include="source\dxtinfo.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Irrlicht.rc" />

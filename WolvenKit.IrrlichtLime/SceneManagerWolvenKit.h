@@ -42,6 +42,9 @@ public:
 
 	MeshWriter^ CreateMeshWriter(MeshWriterType type);
 
+	void SelectNode(SceneNode^ node);
+	void DeselectNode();
+
 	void DrawAll();
 
 	AnimatedMesh^ GetMesh(String^ filename);

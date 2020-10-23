@@ -16,7 +16,8 @@ CSceneNodeAnimatorCameraWolvenKit::CSceneNodeAnimatorCameraWolvenKit(gui::ICurso
 	TargetMinDistance(0.f),
 	ZoomSpeed(zoomSpeed), RotateSpeed(rotateSpeed), TranslateSpeed(translateSpeed),
 	CurrentZoom(distance), RotX(0.0f), RotY(0.0f), nRotX(0.0f), nRotY(0.0f),
-	Zooming(false), Rotating(false), Moving(false), Translating(false)
+	Zooming(false), Rotating(false), Moving(false), Translating(false),
+	firstInput(true)
 {
 	#ifdef _DEBUG
 	setDebugName("CSceneNodeAnimatorCameraWolvenKit");
@@ -29,6 +30,11 @@ CSceneNodeAnimatorCameraWolvenKit::CSceneNodeAnimatorCameraWolvenKit(gui::ICurso
 	}
 
 	allKeysUp();
+
+    KeyMap.push_back(SKeyMap(EKA_MOVE_FORWARD, irr::KEY_KEY_W));
+    KeyMap.push_back(SKeyMap(EKA_MOVE_BACKWARD, irr::KEY_KEY_S));
+    KeyMap.push_back(SKeyMap(EKA_STRAFE_LEFT, irr::KEY_KEY_A));
+    KeyMap.push_back(SKeyMap(EKA_STRAFE_RIGHT, irr::KEY_KEY_D));
 }
 
 
@@ -47,8 +53,21 @@ CSceneNodeAnimatorCameraWolvenKit::~CSceneNodeAnimatorCameraWolvenKit()
 //! for changing their position, look at target or whatever.
 bool CSceneNodeAnimatorCameraWolvenKit::OnEvent(const SEvent& event)
 {
-	if (event.EventType != EET_MOUSE_INPUT_EVENT)
+    allKeysUp();
+
+	if (event.EventType == EET_KEY_INPUT_EVENT)
+	{
+        for (u32 i = 0; i < KeyMap.size(); ++i)
+        {
+            if (KeyMap[i].KeyCode == event.KeyInput.Key)
+            {
+                CursorKeys[KeyMap[i].Action] = event.KeyInput.PressedDown;
+                return true;
+            }
+        }
+
 		return false;
+	}
 
 	WheelDelta = 0.0f;
 
@@ -105,7 +124,6 @@ void CSceneNodeAnimatorCameraWolvenKit::animateNode(ISceneNode *node, u32 timeMs
 {
 	//LM = Rotate around camera pivot
 	//Wheel = Dolly forth/back in view direction (speed % distance camera pivot - max distance to pivot)
-	//MM = Move on camera plane (Screen center is about the mouse pointer, depending on move speed)
 
 	if (!node || node->getType() != ESNT_CAMERA)
 		return;
@@ -114,7 +132,9 @@ void CSceneNodeAnimatorCameraWolvenKit::animateNode(ISceneNode *node, u32 timeMs
 
 	// If the camera isn't the active camera, and receiving input, then don't process it.
 	if (!camera->isInputReceiverEnabled())
+	{
 		return;
+	}
 
 	scene::ISceneManager * smgr = camera->getSceneManager();
 	if (smgr && smgr->getActiveCamera() != camera)
@@ -144,33 +164,6 @@ void CSceneNodeAnimatorCameraWolvenKit::animateNode(ISceneNode *node, u32 timeMs
             nZoom = CurrentZoom = old;
 		Zooming = false;
 	}
-	/*
-	if ( (isMouseKeyDown(0) && isMouseKeyDown(2)) || isMouseKeyDown(1) )
-	{
-		if (!Zooming)
-		{
-			ZoomStart = MousePos;
-			Zooming = true;
-		}
-		else
-		{
-			nZoom += (ZoomStart.X - MousePos.X) * ZoomSpeed;
-
-			if (nZoom < TargetMinDistance+0.1f) // jox: fixed bug: bounce back when zooming too close
-				nZoom = TargetMinDistance+0.1f;
-		}
-	}
-	else if (Zooming)
-	{
-		const f32 old = CurrentZoom;
-		CurrentZoom = CurrentZoom + (ZoomStart.X - MousePos.X ) * ZoomSpeed;
-		nZoom = CurrentZoom;
-
-		if (nZoom < TargetMinDistance)
-			nZoom = CurrentZoom = old;
-		Zooming = false;
-	}
-	*/
 
 	// Translation ---------------------------------
 
@@ -188,7 +181,7 @@ void CSceneNodeAnimatorCameraWolvenKit::animateNode(ISceneNode *node, u32 timeMs
 	tvectY = tvectY.crossProduct(upVector.Y > 0 ? pos - target : target - pos);
 	tvectY.normalize();
 
-	//if (isMouseKeyDown(2) && !Zooming)
+	/*
 	if (isMouseKeyDown(1) && !Zooming)
 	{
 		if (!Translating)
@@ -209,6 +202,7 @@ void CSceneNodeAnimatorCameraWolvenKit::animateNode(ISceneNode *node, u32 timeMs
 		OldTarget = translate;
 		Translating = false;
 	}
+	*/
 
 	// Rotation ------------------------------------
 
@@ -238,11 +232,38 @@ void CSceneNodeAnimatorCameraWolvenKit::animateNode(ISceneNode *node, u32 timeMs
 
 	// Set pos ------------------------------------
 
-	pos = translate;
-	pos.X += nZoom;
+    pos = translate;
+    pos.X += nZoom;
 
 	pos.rotateXYBy(nRotY, translate);
 	pos.rotateXZBy(-nRotX, translate);
+
+	/*
+    constexpr f32 moveStepSize = 10.0f;
+    if (CursorKeys[EKA_MOVE_FORWARD])
+    {
+        translate += tvectX * moveStepSize;
+		pos += tvectX * moveStepSize;
+    }
+
+    if (CursorKeys[EKA_MOVE_BACKWARD])
+    {
+        translate -= tvectX * moveStepSize;
+		pos -= tvectX * moveStepSize;
+    }
+
+    if (CursorKeys[EKA_STRAFE_LEFT])
+    {
+        translate -= tvectY * moveStepSize;
+		pos -= tvectY * moveStepSize;
+    }
+
+    if (CursorKeys[EKA_STRAFE_RIGHT])
+    {
+        translate += tvectY * moveStepSize;
+		pos += tvectY * moveStepSize;
+    }
+	*/
 
 	camera->setPosition(pos);
 	camera->setTarget(translate);
@@ -268,6 +289,9 @@ void CSceneNodeAnimatorCameraWolvenKit::allKeysUp()
 {
 	for (s32 i=0; i<3; ++i)
 		MouseKeys[i] = false;
+
+    for (u32 i = 0; i < EKA_COUNT; ++i)
+        CursorKeys[i] = false;
 }
 
 

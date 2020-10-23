@@ -349,16 +349,16 @@ namespace WolvenKit.CR2W
 
         public EFileReadErrorCodes Read(BinaryReader file)
         {
-            //m_stream = file.BaseStream;
-
+#if DEBUG
             Stopwatch stopwatch1 = new Stopwatch();
             stopwatch1.Start();
-
+#endif
             #region Read Headers
 
             var startpos = file.BaseStream.Position;
+#if DEBUG
             Logger?.LogProgress(1, "Reading headers...");
-
+#endif
             // read file header
             var id = file.BaseStream.ReadStruct<uint>();
             if (id != MAGIC)
@@ -368,7 +368,7 @@ namespace WolvenKit.CR2W
             if (m_fileheader.version > 163 || m_fileheader.version < 159)
                 return EFileReadErrorCodes.UnsupportedVersion;
 
-            var dt = new CDateTime(m_fileheader.timeStamp, null, "");
+            //var dt = new CDateTime(m_fileheader.timeStamp, null, "");
 
             // Tables [7-9] are not used in cr2w so far.
             m_tableheaders = file.BaseStream.ReadStructs<CR2WTable>(10);
@@ -390,21 +390,26 @@ namespace WolvenKit.CR2W
                 Handle = StringDictionary[_.path],
             }).ToList(); // block 7
 
+#if DEBUG
             Logger?.LogProgress(100);
-            #endregion
+#endif
+#endregion
 
-            #region Read Data
+#region Read Data
 
+#if DEBUG
             Logger?.LogProgress(1, "Reading chunks...");
+#endif
             // Read object data //block 5
             for (int i = 0; i < chunks.Count; i++)
             {
                 CR2WExportWrapper chunk = chunks[i];
 
                 chunk.ReadData(file);
-
+#if DEBUG
                 int percentprogress = (int)((float)i / (float)chunks.Count * 100.0);
                 Logger?.LogProgress(percentprogress, $"Reading chunk {chunk.REDName}...");
+#endif
             }
             // Read buffer data //block 6
             if (m_hasInternalBuffer)
@@ -413,9 +418,10 @@ namespace WolvenKit.CR2W
                 {
                     CR2WBufferWrapper buffer = buffers[i];
                     buffer.ReadData(file);
-
+#if DEBUG
                     int percentprogress = (int)((float)i / (float)buffers.Count * 100.0);
                     Logger?.LogProgress(percentprogress);
+#endif
                 }
             }
             // Read embedded files //block 7
@@ -423,11 +429,12 @@ namespace WolvenKit.CR2W
             {
                 CR2WEmbeddedWrapper emb = embedded[i];
                 emb.ReadData(file);
-
+#if DEBUG
                 int percentprogress = (int)((float)i / (float)embedded.Count * 100.0);
                 Logger?.LogProgress(percentprogress, $"Reading embedded file {emb.ClassName}...");
+#endif
             }
-            #endregion
+#endregion
 
 
 
@@ -438,14 +445,12 @@ namespace WolvenKit.CR2W
             {
                 var bytesleft = file.BaseStream.Length - readbytes;
                 AdditionalCr2WFileBytes = file.ReadBytes((int) bytesleft);
-
-
             }
 
-
+#if DEBUG
             Logger?.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n");
             stopwatch1.Stop();
-            //m_stream = null;
+#endif            
             return 0;
         }
 
@@ -509,9 +514,9 @@ namespace WolvenKit.CR2W
 
             return m_temp;
         }
-        #endregion
+#endregion
 
-        #region Write
+#region Write
         public void Write(BinaryWriter file)
         {
             //m_stream = file.BaseStream;
@@ -521,9 +526,9 @@ namespace WolvenKit.CR2W
             //m_fileheader.numChunks = (uint)chunks.Count;          //this is weird, I don't think it actually is the number of chunks
             var nn = new List<CR2WNameWrapper>(names);
 
-            #region Update Tables
+#region Update Tables
 
-            #region Stringtable
+#region Stringtable
             StringDictionary.Clear();
 
 
@@ -541,11 +546,11 @@ namespace WolvenKit.CR2W
 
             
 
-            #endregion
+#endregion
 
             var inverseDictionary = StringDictionary.ToDictionary(x => x.Value, x => x.Key);
 
-            #region Names
+#region Names
             names.Clear();
             foreach (var name in nameslist)
             {
@@ -559,8 +564,8 @@ namespace WolvenKit.CR2W
                     value = newoffset
                 }, this));
             }
-            #endregion
-            #region Imports
+#endregion
+#region Imports
             imports.Clear();
             foreach (var import in importslist)
             {
@@ -575,8 +580,8 @@ namespace WolvenKit.CR2W
                         flags = (ushort)import.Item3    //TODO finish all flags
                     }, this));
             }
-            #endregion
-            #region Embedded 
+#endregion
+#region Embedded 
             for (var i = 0; i < embedded.Count; i++)
             {
                 var emb = embedded[i];
@@ -599,8 +604,8 @@ namespace WolvenKit.CR2W
                         emb.SetImportIndex((uint)importindex);
                 }
             }
-            #endregion
-            #endregion
+#endregion
+#endregion
 
 
             headerOffset = 0;
@@ -631,7 +636,7 @@ namespace WolvenKit.CR2W
                 ms?.Dispose();
             }
 
-            #region Update Offsets
+#region Update Offsets
             for (var i = 0; i < chunks.Count; i++)
             {
                 var newoffset = chunks[i].Export.dataOffset + headerOffset;
@@ -653,7 +658,7 @@ namespace WolvenKit.CR2W
             }
             m_fileheader.fileSize += headerOffset;
             m_fileheader.bufferSize += headerOffset;
-            #endregion
+#endregion
 
             for (int i = 0; i < chunks.Count; i++)
                 FixExportCRC32(chunks[i].Export);
@@ -983,7 +988,7 @@ namespace WolvenKit.CR2W
                         .Select(_ => new SNameArg(EStringTableMod.None, _)));
 
                     // for all buffers
-                    #region Buffer Hacks After Variables
+#region Buffer Hacks After Variables
                     switch (cvar)
                     {
                         case CFoliageResource cfr:
@@ -1108,7 +1113,7 @@ namespace WolvenKit.CR2W
                         default:
                             break;
                     }
-                    #endregion
+#endregion
                     break;
                 }
                 default:
@@ -1273,14 +1278,14 @@ namespace WolvenKit.CR2W
                 {
                     CheckVarNameAndTypes();
 
-                    #region Buffer Hacks Before Variables
+#region Buffer Hacks Before Variables
                     if (var is CEntity ent)
                     {
                         CHandle<CEntityTemplate> t = ent.Template;
                         if (t != null && !t.ChunkHandle)
                             AddUniqueToTable(t.ClassName);
                     }
-                    #endregion
+#endregion
                 }
 
 
@@ -1339,7 +1344,7 @@ namespace WolvenKit.CR2W
         {
             WriteFileHeader(file);
 
-            #region Write Tables
+#region Write Tables
             m_tableheaders[1].itemCount = (uint)names.Count;
             m_tableheaders[1].offset = (uint) file.BaseStream.Position;
             WriteTable<CR2WName>(file.BaseStream, names.Select(_ => _.Name).ToArray(), 1);
@@ -1369,7 +1374,7 @@ namespace WolvenKit.CR2W
                 m_tableheaders[6].offset = (uint)file.BaseStream.Position;
                 WriteTable<CR2WEmbedded>(file.BaseStream, embedded.Select(_ => _.Embedded).ToArray(), 6);
             }
-            #endregion
+#endregion
         }
 
         private void WriteFileHeader(BinaryWriter file)
@@ -1429,7 +1434,7 @@ namespace WolvenKit.CR2W
 
 
 
-        #endregion
+#endregion
     }
 }
 

@@ -312,7 +312,7 @@ namespace WolvenKit.Render
                             doPostLoad = false;
                         }
 
-                        //driver.ViewPort = viewPort;
+                        driver.ViewPort = viewPort;
                         driver.BeginScene(ClearBufferFlag.All, new Color(100, 101, 140));
 
                         if (node != null)
@@ -322,15 +322,13 @@ namespace WolvenKit.Render
 
                         //update info box
                         //mPositionText.Text = $"X: {modelPosition.X.ToString("F2")} Y: {modelPosition.Y.ToString("F2")} Z: {modelPosition.Z.ToString("F2")}";
-
                         //mRotationText.Text = $"Yaw: {modelAngle.Y.ToString("F2")} Roll: {modelAngle.Z.ToString("F2")}";
-                        //fpsText.Text = $"FPS: {driver.FPS}";
+                        fpsText.Text = $"FPS: {driver.FPS}";
 
                         smgr.DrawAll();
                         gui.DrawAll();
 
                         // draw xyz axis right bottom
-                        /*
                         driver.ViewPort = infoViewRect;
 
                         driver.SetMaterial(lineMat);
@@ -343,7 +341,6 @@ namespace WolvenKit.Render
                         driver.Draw3DLine(0, 0, 0, 30f, 0, 0, Color.SolidGreen);
                         driver.Draw3DLine(0, 0, 0, 0, 30f, 0, Color.SolidBlue);
                         driver.Draw3DLine(0, 0, 0, 0, 0, 30f, Color.SolidRed);
-                        */
                         driver.EndScene();
                     }
                     else

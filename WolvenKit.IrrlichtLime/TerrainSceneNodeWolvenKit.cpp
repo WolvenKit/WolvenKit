@@ -26,14 +26,11 @@ TerrainSceneNodeWolvenKit::TerrainSceneNodeWolvenKit(scene::ITerrainSceneNodeWol
 }
 
 bool TerrainSceneNodeWolvenKit::LoadHeightMap(IO::ReadFile^ file, int dimension,
-    float maxHeight, float minHeight, float tileSize, Vector3Df^ anchor)
+    float maxHeight, float minHeight, float tileSize)
 {
-	LIME_ASSERT(anchor != nullptr);
-
 	return m_TerrainSceneNode->loadHeightMap(
 		LIME_SAFEREF(file, m_ReadFile),
-		dimension, maxHeight, minHeight, tileSize,
-		*anchor->m_NativeValue);
+		dimension, maxHeight, minHeight, tileSize);
 }
 
 Scene::Mesh^ TerrainSceneNodeWolvenKit::Mesh::get()

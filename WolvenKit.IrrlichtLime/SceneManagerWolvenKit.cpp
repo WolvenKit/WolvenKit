@@ -151,6 +151,16 @@ SceneNode^ SceneManagerWolvenKit::AddWaterSurfaceSceneNode(Mesh^ mesh, float wav
 	return SceneNode::Wrap(n);
 }
 
+void SceneManagerWolvenKit::SelectNode(SceneNode^ node)
+{
+	m_SceneManager->SelectNode(LIME_SAFEREF(node, m_SceneNode));
+}
+
+void SceneManagerWolvenKit::DeselectNode()
+{
+	m_SceneManager->DeselectNode();
+}
+
 void SceneManagerWolvenKit::DrawAll()
 {
 	m_SceneManager->drawAll();

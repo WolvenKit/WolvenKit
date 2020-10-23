@@ -1046,9 +1046,9 @@ ITerrainSceneNodeWolvenKit* CSceneManager::addTerrainSceneNodeWolvenKit(
     if (!parent)
         parent = this;
 
-    CTerrainSceneNodeWolvenKit* node = DBG_NEW CTerrainSceneNodeWolvenKit(parent, this, id);
+    CTerrainSceneNodeWolvenKit* node = DBG_NEW CTerrainSceneNodeWolvenKit(parent, this, id, anchor);
 
-    if (!node->loadHeightMap(file, dimension, maxHeight, minHeight, tileSize, anchor))
+    if (!node->loadHeightMap(file, dimension, maxHeight, minHeight, tileSize))
     {
 		if (file)
 			file->drop();

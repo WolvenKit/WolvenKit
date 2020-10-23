@@ -3022,7 +3022,7 @@ AnimatedMesh^ SceneManager::GetMesh(IO::ReadFile^ file)
 	return AnimatedMesh::Wrap(m);
 }
 
-Mesh^ SceneManager::GetStaticMesh(String^ filename)
+Mesh^ SceneManager::GetStaticMesh(String^)
 {
 	return nullptr;
 }

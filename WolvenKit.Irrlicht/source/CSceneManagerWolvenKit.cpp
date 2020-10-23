@@ -1,3 +1,4 @@
+#define USE_CULLING 1
 
 #include "IrrCompileConfig.h"
 #include "CSceneManagerWolvenKit.h"
@@ -9,11 +10,10 @@
 #include "IWriteFile.h"
 #include "ISceneLoader.h"
 #include "CAttributes.h"
+#include "CW3EntLoader.h"
 
 #include "os.h"
 #include "debug.h"
-
-#include "CW3EntLoader.h"
 
 #ifdef _IRR_COMPILE_WITH_SKINNED_MESH_SUPPORT_
 #include "CSkinnedMesh.h"
@@ -59,6 +59,7 @@ CSceneManagerWolvenKit::CSceneManagerWolvenKit(video::IVideoDriver* driver, io::
 ,Light(nullptr)
 ,SkyDome(nullptr)
 ,WaterNode(nullptr)
+,HighlightNode(nullptr)
 ,MeshLoader(nullptr)
 ,ActiveCamera(nullptr)
 ,AmbientLight(1.0f, 1.0f, 1.0f, 1.0f)
@@ -76,6 +77,7 @@ CSceneManagerWolvenKit::CSceneManagerWolvenKit(video::IVideoDriver* driver, io::
 
 
 	MeshLoader = DBG_NEW CW3EntLoader(this, FileSystem);
+
 
     Parameters = DBG_NEW io::CAttributes();
 
@@ -165,9 +167,9 @@ IMeshSceneNode* CSceneManagerWolvenKit::addMeshSceneNode(IMesh* mesh, ISceneNode
 	node->setAutomaticCulling(E_CULLING_TYPE::EAC_FRUSTUM_BOX);
 	node->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_BACK_FACE_CULLING, true);
 	node->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
-
+    node->setVisible(false);
 	node->drop();
-	
+	    
 	SolidNodeList.push_back(node);
 
 	return node;
@@ -269,9 +271,11 @@ ITerrainSceneNodeWolvenKit* CSceneManagerWolvenKit::addTerrainSceneNodeWolvenKit
         return 0;
     }
 
-    CTerrainSceneNodeWolvenKit* node = DBG_NEW CTerrainSceneNodeWolvenKit(parent, this, id);
+    core::vector3df pt = anchor;
+    pt.X *= -1.0f; // flip this
+    CTerrainSceneNodeWolvenKit* node = DBG_NEW CTerrainSceneNodeWolvenKit(parent, this, id, pt);
 
-    if (!node->loadHeightMap(file, dimension, maxHeight, minHeight, tileSize, anchor))
+    if (!node->loadHeightMap(file, dimension, maxHeight, minHeight, tileSize))
     {
 		if (file)
 			file->drop();
@@ -284,6 +288,7 @@ ITerrainSceneNodeWolvenKit* CSceneManagerWolvenKit::addTerrainSceneNodeWolvenKit
 	if (file)
 		file->drop();
 
+    node->setVisible(false);
     node->setAutomaticCulling(E_CULLING_TYPE::EAC_FRUSTUM_BOX);
     node->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_BACK_FACE_CULLING, true);
     node->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
@@ -390,6 +395,16 @@ ILightSceneNode* CSceneManagerWolvenKit::addLightSceneNode(ISceneNode* parent,
     return node;
 }
 
+void CSceneManagerWolvenKit::SelectNode(ISceneNode* node)
+{
+    HighlightNode = (IMeshSceneNode*)node;
+}
+
+void CSceneManagerWolvenKit::DeselectNode()
+{
+    HighlightNode = nullptr;
+}
+
 //! This method is called just before the rendering process of the whole scene.
 //! draws all scene nodes
 void CSceneManagerWolvenKit::drawAll()
@@ -401,18 +416,16 @@ void CSceneManagerWolvenKit::drawAll()
 	Driver->setTransform ( video::ETS_WORLD, core::IdentityMatrix );
 	for (s32 i=video::ETS_COUNT-1; i>=video::ETS_TEXTURE_0; --i)
 		Driver->setTransform ( (video::E_TRANSFORMATION_STATE)i, core::IdentityMatrix );
-	
+
 	OnAnimate(os::Timer::getTime());
 
 	/*!
 		First Scene Node for prerendering should be the active camera
 		consistent Camera is needed for culling
 	*/
-	//core::vector3df camWorldPos(0, 0, 0);
 	if (ActiveCamera)
 	{
 		ActiveCamera->render();
-		//camWorldPos = ActiveCamera->getAbsolutePosition();
 	}
 
 	Driver->deleteAllDynamicLights();
@@ -441,19 +454,61 @@ void CSceneManagerWolvenKit::drawAll()
 			SolidNodeList[ result.model_ids[i] ]->render();
 		}
 		*/
+#if USE_CULLING
+        const SViewFrustum* frust = ActiveCamera->getViewFrustum();
 
         for (u32 i = 0; i < SolidNodeList.size(); ++i)
         {
-			//if (SolidNodeList[i]->isVisible() && 
-			//	(ActiveCamera->getViewFrustum()->boundingBox.isFullInside(SolidNodeList[i]->getBoundingBox()) ||
-			//	 ActiveCamera->getViewFrustum()->boundingBox.intersectsWithBox(SolidNodeList[i]->getBoundingBox())))
+            ISceneNode* node = SolidNodeList[i];
 
-			if (SolidNodeList[i]->isVisible())
+            bool isCulled = false;
+			if (node->isVisible())
 			{
-				SolidNodeList[i]->render();
+                core::vector3df edges[8];
+                node->getTransformedBoundingBox().getEdges(edges);
+
+                for (s32 i = 0; i < scene::SViewFrustum::VF_PLANE_COUNT; ++i)
+                {
+                    bool boxInFrustum = false;
+                    for (u32 j = 0; j < 8; ++j)
+                    {
+                        if (frust->planes[i].classifyPointRelation(edges[j]) != core::ISREL3D_FRONT)
+                        {
+                            boxInFrustum = true;
+                            break;
+                        }
+                    }
+
+                    if (!boxInFrustum)
+                    {
+                        isCulled = true;
+                        break;
+                    }
+                }
+
+                if (!isCulled)
+                {
+                    node->render();
+                }
 			}
         }
-	}
+#else
+        for (u32 i = 0; i < SolidNodeList.size(); ++i)
+        {
+            SolidNodeList[i]->render();
+        }
+#endif
+
+        if (HighlightNode)
+        {
+            video::SMaterial m;
+            m.Lighting = false;
+            m.AntiAliasing = 1;
+            Driver->setTransform(video::ETS_WORLD, HighlightNode->getAbsoluteTransformation());
+            Driver->setMaterial(m);
+            Driver->draw3DBox(HighlightNode->getBoundingBox(), video::SColor(255, 255, 255, 0));
+        }
+    }
 }
 
 //! Returns a pointer to the mesh manipulator.
