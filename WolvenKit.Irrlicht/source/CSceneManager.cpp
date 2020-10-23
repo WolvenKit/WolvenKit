@@ -21,9 +21,6 @@
 #include "os.h"
 #include "debug.h"
 
-#define MAKE_SCENE
-#include "Janua/JanuaEngine/PVSDatabaseExporter.h"
-
 // We need this include for the case of skinned mesh support without
 // any such loader
 #ifdef _IRR_COMPILE_WITH_SKINNED_MESH_SUPPORT_
@@ -235,10 +232,6 @@ CSceneManager::CSceneManager(video::IVideoDriver* driver, io::IFileSystem* fs,
 	MeshCache(cache), CurrentRenderPass(ESNRP_NONE), LightManager(0),
 	IRR_XML_FORMAT_SCENE(L"irr_scene"), IRR_XML_FORMAT_NODE(L"node"), IRR_XML_FORMAT_NODE_ATTR_TYPE(L"type")
 {
-    Janua::SceneOptions ocSceneOptions;
-    //ocSceneOptions.setVoxelSize(10.0f, 10.0f, 10.0f);
-	ocScene.options = ocSceneOptions;
-
 	#ifdef _DEBUG
 	ISceneManager::setDebugName("CSceneManager ISceneManager");
 	ISceneNode::setDebugName("CSceneManager ISceneNode");
@@ -1031,7 +1024,7 @@ ITerrainSceneNode* CSceneManager::addTerrainSceneNode(
 ITerrainSceneNodeWolvenKit* CSceneManager::addTerrainSceneNodeWolvenKit(
     const io::path& heightMapFileName,
     ISceneNode* parent, s32 id,
-    s32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize,
+    u32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize,
     const core::vector3df& anchor)
 {
     io::IReadFile* file = FileSystem->createAndOpenFile(heightMapFileName);
@@ -1062,50 +1055,6 @@ ITerrainSceneNodeWolvenKit* CSceneManager::addTerrainSceneNodeWolvenKit(
 		file->drop();
 
     node->drop();
-
-#if defined(MAKE_SCENE)
-    // add to pvs scene 
-	u32 numVerts = node->getMesh()->getMeshBuffer(0)->getVertexCount();
-	video::S3DVertex* vertices = static_cast<video::S3DVertex*>(node->getMesh()->getMeshBuffer(0)->getVertices());
-    
-    f32* verts = new f32[numVerts * 3];
-	s32 triangleCount = (dimension - 1) * (dimension - 1) * 2;
-	s32* indices = new s32[triangleCount * 3];
-
-	f32* pVert = verts;
-	video::S3DVertex* pVertex = vertices;
-
-	// Positions
-	for (u32 i = 0; i < numVerts; ++i, ++pVertex)
-	{
-		*pVert++ = pVertex->Pos.X;
-		*pVert++ = pVertex->Pos.Y;
-		*pVert++ = pVertex->Pos.Z;
-	}
-
-	// Faces
-    s32 row0Index = 0;
-    s32 row1Index = dimension;
-	s32* pFace = indices;
-
-	for (s32 y = 0; y < dimension - 1; ++y)
-	{
-		for (s32 x = 0; x < dimension - 1; ++x)
-		{
-			// one row of triangles, two at a time
-			*pFace++ = row0Index++;
-			*pFace++ = row1Index;
-			*pFace++ = row0Index;
-
-            *pFace++ = row0Index;
-            *pFace++ = row1Index++;
-            *pFace++ = row1Index;
-		}
-	}
-
-    Janua::Model* ocModel = new Janua::Model(verts, numVerts, indices, triangleCount);
-    ocScene.addModelInstance((*ocModel), id, Janua::Matrix4x4(), OCCLUDER);
-#endif
 
     return node;
 }
@@ -2358,26 +2307,6 @@ ISceneNodeAnimatorFactory* CSceneManager::getSceneNodeAnimatorFactory(u32 index)
 //! \param filename: Name of the file .
 bool CSceneManager::saveScene(const io::path& filename, ISceneUserDataSerializer* userDataSerializer, ISceneNode* node)
 {
-	core::stringc outputPath = (core::stringc)filename;
-	Janua::PVSGenerator generator = Janua::PVSGenerator(ocScene);
-	printf("generating database...");
-	shared_ptr<Janua::PVSDatabase> ocDatabase = generator.generatePVSDatabase();
-	printf("done\n");
-
-    //Export to file
-    Janua::PVSDatabaseExporter dbExporter(*ocDatabase);
-    int allocatedSize = dbExporter.getBufferSize();
-    char* buffer = new char[allocatedSize];
-	printf("saving to buffer...");
-    dbExporter.saveToBuffer(buffer);
-	printf("done\n");
-    FILE* file = fopen(outputPath.c_str(), "wb");
-    fwrite(buffer, 1, allocatedSize, file);
-    fclose(file);
-	printf("wrote %s\n",outputPath.c_str());
-    delete[] buffer;
-
-/*
 	bool ret = false;
 	io::IWriteFile* file = FileSystem->createAndWriteFile(filename);
 	if (file)
@@ -2389,9 +2318,6 @@ bool CSceneManager::saveScene(const io::path& filename, ISceneUserDataSerializer
 		os::Printer::log("Unable to open file", filename, ELL_ERROR);
 
 	return ret;
-*/
-
-	return true;
 }
 
 

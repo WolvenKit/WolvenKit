@@ -112,7 +112,7 @@ SceneNode^ SceneManagerWolvenKit::AddSkyDomeSceneNode(Video::Texture^ texture, i
 	return SceneNode::Wrap(n);
 }
 
-TerrainSceneNodeWolvenKit^ SceneManagerWolvenKit::AddTerrainSceneNodeWolvenKit(String^ heightMapFileName, SceneNode^ parent, int id, int dimension , float maxHeight, float minHeight, float tileSize, Vector3Df^ anchor)
+TerrainSceneNodeWolvenKit^ SceneManagerWolvenKit::AddTerrainSceneNodeWolvenKit(String^ heightMapFileName, SceneNode^ parent, int id, unsigned int dimension , float maxHeight, float minHeight, float tileSize, Vector3Df^ anchor)
 {
 	LIME_ASSERT(heightMapFileName != nullptr);
 

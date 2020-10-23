@@ -25,8 +25,8 @@ TerrainSceneNodeWolvenKit::TerrainSceneNodeWolvenKit(scene::ITerrainSceneNodeWol
 	m_TerrainSceneNode = ref;
 }
 
-bool TerrainSceneNodeWolvenKit::LoadHeightMap(IO::ReadFile^ file, int dimension,
-    float maxHeight, float minHeight, float tileSize)
+bool TerrainSceneNodeWolvenKit::LoadHeightMap(IO::ReadFile^ file, u32 dimension,
+    f32 maxHeight, f32 minHeight, f32 tileSize)
 {
 	return m_TerrainSceneNode->loadHeightMap(
 		LIME_SAFEREF(file, m_ReadFile),

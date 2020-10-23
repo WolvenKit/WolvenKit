@@ -256,7 +256,7 @@ ISceneNode* CSceneManagerWolvenKit::addSkyDomeSceneNode(video::ITexture* texture
 ITerrainSceneNodeWolvenKit* CSceneManagerWolvenKit::addTerrainSceneNodeWolvenKit(
     const io::path& heightMapFileName,
     ISceneNode* parent, s32 id,
-    s32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize,
+    u32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize,
     const core::vector3df& anchor)
 {
     if (!parent)
@@ -1029,6 +1029,26 @@ ISceneNodeAnimatorFactory* CSceneManagerWolvenKit::getSceneNodeAnimatorFactory(u
 
 bool CSceneManagerWolvenKit::saveScene(const io::path& filename, ISceneUserDataSerializer* userDataSerializer, ISceneNode* node)
 {
+/*
+    core::stringc outputPath = (core::stringc)filename;
+    Janua::PVSGenerator generator = Janua::PVSGenerator(ocScene);
+    printf("generating database...");
+    shared_ptr<Janua::PVSDatabase> ocDatabase = generator.generatePVSDatabase();
+    printf("done\n");
+
+    //Export to file
+    Janua::PVSDatabaseExporter dbExporter(*ocDatabase);
+    int allocatedSize = dbExporter.getBufferSize();
+    char* buffer = new char[allocatedSize];
+    printf("saving to buffer...");
+    dbExporter.saveToBuffer(buffer);
+    printf("done\n");
+    FILE* file = fopen(outputPath.c_str(), "wb");
+    fwrite(buffer, 1, allocatedSize, file);
+    fclose(file);
+    printf("wrote %s\n",outputPath.c_str());
+    delete[] buffer;
+*/
     return false;
 }
 

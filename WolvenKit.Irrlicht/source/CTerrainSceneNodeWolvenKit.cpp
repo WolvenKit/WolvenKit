@@ -77,7 +77,7 @@ namespace scene
     }
 
 	//! Initializes the terrain data. Loads the vertices from the heightMapFile
-	bool CTerrainSceneNodeWolvenKit::loadHeightMap(io::IReadFile* file, s32 dimension,
+	bool CTerrainSceneNodeWolvenKit::loadHeightMap(io::IReadFile* file, u32 dimension,
 		f32 maxHeight, f32 minHeight, f32 tileSize)
 	{
 		if (!file)
@@ -117,11 +117,11 @@ namespace scene
         f32 minZ = 1.0E9f;
         f32 maxZ = -1.0E9f;
 
-		for (s32 y = 0; y < dimension; ++y)
+		for (u32 y = 0; y < dimension; ++y)
 		{
             f32 currX = 0.0f;
 
-			for (s32 x = 0; x < dimension; ++x)
+			for (u32 x = 0; x < dimension; ++x)
 			{
                 f32 hN = (f32)(*val++ / 65535.0f);
                 f32 h = hN * heightScale + minHeight;
@@ -151,19 +151,6 @@ namespace scene
                     }
                 }
 
-                //if (h < 0.0f)
-                //{
-                //    r = 0;
-                //    g = 0;
-                //    b = (u32)(h / minHeight * 255);
-                //}
-                //else
-                //{
-                //    r = (u32)(h / maxHeight * 255);
-                //    g = r;
-                //    b = r;
-                //}
-
                 video::S3DVertex& vertex = static_cast<video::S3DVertex*>(vb.pointer())[index++];
                 vertex.Normal.set(0.0f, 0.0f, 1.0f);
                 vertex.Color.set(255, r, g, b);
@@ -189,10 +176,10 @@ namespace scene
 
         scene::IIndexBuffer& ib = mb->getIndexBuffer();
 
-        for (s32 z = 0; z < dimension - 2; ++z)
+        for (u32 z = 0; z < dimension - 2; ++z)
         {
             // do two rows at a time to make a triangle strip
-            for (s32 x = 0; x < dimension; ++x)
+            for (u32 x = 0; x < dimension; ++x)
             {
                 ib.setValue(index++, row0Index++);
                 ib.setValue(index++, row1Index++);
@@ -204,7 +191,7 @@ namespace scene
         }
 
         // do two rows at a time to make a triangle strip
-        for (int x = 0; x < dimension; ++x)
+        for (u32 x = 0; x < dimension; ++x)
         {
             ib.setValue(index++, row0Index++);
             ib.setValue(index++, row1Index++);

@@ -221,7 +221,7 @@ public:
 	TerrainSceneNode^ AddTerrainSceneNode(IO::ReadFile^ heightMapFile, SceneNode^ parent);
 	TerrainSceneNode^ AddTerrainSceneNode(IO::ReadFile^ heightMapFile);
 
-	TerrainSceneNodeWolvenKit^ AddTerrainSceneNodeWolvenKit(String^ heightMapFileName, SceneNode^ parent, int id, int dimension, float maxHeight, float minHeight, float tileSize, Vector3Df^ anchor);
+	TerrainSceneNodeWolvenKit^ AddTerrainSceneNodeWolvenKit(String^ heightMapFileName, SceneNode^ parent, int id, unsigned int dimension, float maxHeight, float minHeight, float tileSize, Vector3Df^ anchor);
 
 	TextSceneNode^ AddTextSceneNode(GUI::GUIFont^ font, String^ text, Video::Color^ color, SceneNode^ parent, Vector3Df^ position, int id);
 	TextSceneNode^ AddTextSceneNode(GUI::GUIFont^ font, String^ text, Video::Color^ color, SceneNode^ parent, Vector3Df^ position);

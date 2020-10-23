@@ -35,10 +35,11 @@ namespace WolvenKit.Render
             Node = null;
             MaxHeight = 0.0f;
             MinHeight = 0.0f;
+            TileRes = 0;
             TerrainSize = 0.0f;
         }
 
-        public RenderMessage(MessageType m, string name, float maxHeight, float minHeight, float terrainSize, Vector3Df anchorPt, TreeNode tn)
+        public RenderMessage(MessageType m, string name, uint tileRes, float maxHeight, float minHeight, float terrainSize, Vector3Df anchorPt, TreeNode tn)
         {
             Message = m;
             MeshName = name;
@@ -46,6 +47,7 @@ namespace WolvenKit.Render
             Translation = anchorPt;
             MaxHeight = maxHeight;
             MinHeight = minHeight;
+            TileRes = tileRes;
             TerrainSize = terrainSize;
 
             Node = null;
@@ -63,6 +65,7 @@ namespace WolvenKit.Render
             Translation = new Vector3Df(0.0f, 0.0f, 0.0f);
             MaxHeight = 0.0f;
             MinHeight = 0.0f;
+            TileRes = 0;
             TerrainSize = 0.0f;
         }
 
@@ -77,20 +80,9 @@ namespace WolvenKit.Render
             Translation = new Vector3Df(0.0f, 0.0f, 0.0f);
             MaxHeight = 0.0f;
             MinHeight = 0.0f;
+            TileRes = 0;
             TerrainSize = 0.0f;
         }
-
-        /*
-        public RenderMessage(MessageType m, SceneNode n, TreeNode tn)
-        {
-            Message = m;
-            Node = n;
-            MeshPath = "";
-            TreeNode = tn;
-            Rotation = new Vector3Df(0.0f, 0.0f, 0.0f);
-            Translation = new Vector3Df(0.0f, 0.0f, 0.0f);
-        }
-        */
 
         public string MeshName { get; }
         public Vector3Df Rotation { get; }
@@ -100,6 +92,7 @@ namespace WolvenKit.Render
         public SceneNode Node { get; }
         public float MaxHeight { get; }
         public float MinHeight { get; }
+        public uint TileRes { get; }
         public float TerrainSize { get; }
     }
 

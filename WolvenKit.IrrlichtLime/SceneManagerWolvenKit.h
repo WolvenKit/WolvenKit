@@ -36,7 +36,7 @@ public:
 
 	SceneNode^ AddSkyDomeSceneNode(Video::Texture^ texture, int horiRes, int vertRes, float texturePercentage, float spherePercentage);
 
-	TerrainSceneNodeWolvenKit^ AddTerrainSceneNodeWolvenKit(String^ heightMapFileName, SceneNode^ parent, int id, int dimension, float maxHeight, float minHeight, float tileSize, Vector3Df^ anchor);
+	TerrainSceneNodeWolvenKit^ AddTerrainSceneNodeWolvenKit(String^ heightMapFileName, SceneNode^ parent, int id, unsigned int dimension, float maxHeight, float minHeight, float tileSize, Vector3Df^ anchor);
 
 	SceneNode^ AddWaterSurfaceSceneNode(Mesh^ mesh, float waveHeight, float waveSpeed, float waveLength, SceneNode^ parent, int id, Vector3Df^ position, Vector3Df^ rotation, Vector3Df^ scale);
 

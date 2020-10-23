@@ -65,7 +65,7 @@ namespace scene
         virtual IMesh* getMesh() = 0;
 
 		virtual bool loadHeightMap(io::IReadFile* file,
-			s32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize) =0;
+			u32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize) =0;
 
 
 	};

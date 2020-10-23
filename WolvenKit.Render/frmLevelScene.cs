@@ -123,6 +123,10 @@ namespace WolvenKit.Render
             float minHeight = info.LowestElevation.val;
             uint numTilesPerEdge = info.NumTilesPerEdge.val;
             float terrainSize = info.TerrainSize.val / numTilesPerEdge;
+
+            uint tileRes = 0;
+            int tileLOD = 0;
+
             Vector3Df startPoint = new Vector3Df(info.TerrainCorner.X.val, info.TerrainCorner.Y.val, info.TerrainCorner.Z.val);
 
             //string texFileName = info.Material.DepotPath; // this is a .w2mg
@@ -144,15 +148,34 @@ namespace WolvenKit.Render
                 for (uint x = 0; x < numTilesPerEdge; ++x)
                 {
                     var tile = info.TerrainTiles[index++];
-
+ 
                     Vector3Df nextPt = new Vector3Df(nextColumn + dx * x);
 
-                    Vector3Df unusedPosition = new Vector3Df(0.0f, 0.0f, 0.0f);
-                    Vector3Df unusedRotation = new Vector3Df(0.0f, 0.0f, 0.0f);
 
-                    var tileFileName = tile.DepotPath + ".3.buffer";
+                    // read the .wter file to get the LOD we need
+                    {
+                        var wterFileName = depot + tile.DepotPath;
 
-                    RenderMessage message = new RenderMessage(MessageType.ADD_TERRAIN_NODE, tileFileName, maxHeight, minHeight, terrainSize, nextPt, terrainNode);
+                        CR2WFile wter;
+                        using (var fs = new FileStream(wterFileName, FileMode.Open, FileAccess.Read))
+                        using (var reader = new BinaryReader(fs))
+                        {
+                            wter = new CR2WFile();
+                            wter.Read(reader);
+                            fs.Close();
+                        }
+
+                        CTerrainTile crw = (CTerrainTile)wter.chunks[0].data;
+                        tileLOD = (int)crw.Groups[1].Lod1.val;
+                        tileRes = (uint)crw.Groups[1].Resolution.val;
+                    }
+
+                    var tileFileName = tile.DepotPath;
+                    tileFileName += ".";
+                    tileFileName += tileLOD.ToString();
+                    tileFileName += ".buffer";
+
+                    RenderMessage message = new RenderMessage(MessageType.ADD_TERRAIN_NODE, tileFileName, tileRes, maxHeight, minHeight, terrainSize, nextPt, terrainNode);
                     commandQueue.Enqueue(message);
 
                     progressBar.Invoke((MethodInvoker)delegate
@@ -407,7 +430,7 @@ namespace WolvenKit.Render
                         break;
                     case MessageType.ADD_TERRAIN_NODE:
                         {
-                            var meshNode = smgr.AddTerrainSceneNodeWolvenKit(depot + m.MeshName, worldNode, meshId, 256, m.MaxHeight, m.MinHeight, m.TerrainSize, m.Translation);
+                            var meshNode = smgr.AddTerrainSceneNodeWolvenKit(depot + m.MeshName, worldNode, meshId, m.TileRes, m.MaxHeight, m.MinHeight, m.TerrainSize, m.Translation);
                             meshNode.Grab();
                             foreach (var mb in meshNode.Mesh.MeshBuffers)
                             {

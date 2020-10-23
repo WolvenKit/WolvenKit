@@ -14,8 +14,6 @@
 #include "CAttributes.h"
 #include "ILightManager.h"
 
-#include "Janua/JanuaEngine/PVSGenerator.h"
-
 namespace irr
 {
 namespace io
@@ -282,7 +280,7 @@ namespace scene
 		ITerrainSceneNodeWolvenKit* addTerrainSceneNodeWolvenKit(
 			const io::path& heightMapFileName,
             ISceneNode* parent, s32 id,
-            s32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize,
+            u32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize,
 			const core::vector3df& anchor);
 
 		//! Adds a dummy transformation scene node to the scene graph.
@@ -679,8 +677,6 @@ namespace scene
 		const core::stringw IRR_XML_FORMAT_NODE_ATTR_TYPE;
 
 		IGeometryCreator* GeometryCreator;
-
-		Janua::Scene ocScene;
 	};
 
 } // end namespace video
