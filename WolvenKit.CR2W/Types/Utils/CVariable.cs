@@ -33,21 +33,19 @@ namespace WolvenKit.CR2W.Types
             this.cr2w = cr2w;
             this.ParentVar = parent;
             this.REDName = name;
-
             this.VarChunkIndex = -1;
+
             InternalGuid = Guid.NewGuid();
             accessor = TypeAccessor.Create(this.GetType());
         }
 
 
         #region Fields
-
         public readonly TypeAccessor accessor;
 
         #endregion
 
         #region Properties
-
         /// <summary>
         /// Stores the parent cr2w file.
         /// used a lot
@@ -62,7 +60,6 @@ namespace WolvenKit.CR2W.Types
         /// Must also be set when a variable is edited in the editor
         /// </summary>
         public bool IsSerialized { get; set; }
-
         public void SetIsSerialized()
         {
             IsSerialized = true;
@@ -123,9 +120,9 @@ namespace WolvenKit.CR2W.Types
                     //return "<NO NAME SET>";
                 }
                 else
-                    return  name;
+                    return name;
             }
-            private set => name = value;
+            set => name = value;
         }
 
         /// <summary>
@@ -146,6 +143,10 @@ namespace WolvenKit.CR2W.Types
         /// AspectName in frmChunkProperties
         /// </summary>
         public string REDValue => this.ToString();
+        /// <summary>
+        /// Exported to database
+        /// </summary>
+        public virtual string REDLeanValue() => this.REDValue;
         #endregion
 
         #region Methods
@@ -182,7 +183,11 @@ namespace WolvenKit.CR2W.Types
             return _nam;
         }
 
-        protected int GetVarChunkIndex()
+        /// <summary>
+        /// Recurses through parents until the root cvariable to find the meaningful chunkindex
+        /// </summary>
+        /// <returns></returns>
+        public int LookUpChunkIndex()
         {
             var currentcvar = this as IEditableVariable;
             while (currentcvar.VarChunkIndex == -1)
@@ -192,7 +197,7 @@ namespace WolvenKit.CR2W.Types
             return currentcvar.VarChunkIndex;
         }
 #if DEBUG
-        public int GottenVarChunkIndex => GetVarChunkIndex();
+        public int GottenVarChunkIndex => LookUpChunkIndex();
 #endif
 
         #region Virtual
@@ -402,8 +407,7 @@ namespace WolvenKit.CR2W.Types
             {
                 if (member.Name == varname)
                 {
-                    if (this.cr2w.FileName == "characters\\npc_entities\\monsters\\vampire_katakan_lvl1.w2ent" && this.REDType == "CBTTaskTeleportDecoratorDef")
-                        System.Console.WriteLine(this.ParentVar);
+
                     accessor[this, varname] = value;
                     return true;
                 }
@@ -569,12 +573,8 @@ namespace WolvenKit.CR2W.Types
             foreach (var item in GetEditableVariables())
             {
                 if (!(item is CVariable cvar)) continue;
-                var innercontext = new CR2WCopyAction()
-                {
-                    DestinationFile = copy.cr2w,
-                    Parent = copy
-                };
-                copy.TrySettingFastMemberAccessor(cvar.Copy(innercontext));
+                context.Parent = copy;
+                copy.TrySettingFastMemberAccessor(cvar.Copy(context));
             }
 
             return copy;

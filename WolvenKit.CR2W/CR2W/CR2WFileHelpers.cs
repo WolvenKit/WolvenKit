@@ -27,7 +27,7 @@ namespace WolvenKit.CR2W
             if (res == null || res.REDName != res.REDType || res.ParentVar != null)
                 throw new NotImplementedException();
 
-            file.CreateChunk(res);
+            //file.CreateChunk(res);
 
             return file;
         }

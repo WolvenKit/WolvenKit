@@ -65,7 +65,8 @@ namespace WolvenKit.Forms
         public event EventHandler RequestChunkViewUpdate;
         public event EventHandler<RequestByteArrayFileOpenArgs> RequestBytesOpen;
 
-        private CR2WExportWrapper Chunk => viewModel.SelectedChunk;
+        private CR2WExportWrapper Chunk => 
+            (viewModel.SelectedChunks != null && viewModel.SelectedChunks.Count > 0) ? viewModel.SelectedChunks.First() : null;
 
         private List<IEditableVariable> GetSelectedObjects()
         {
@@ -81,8 +82,8 @@ namespace WolvenKit.Forms
             hotkeys.RegisterHotkey(Keys.Oemplus, AddListElement, "Add Element");
             hotkeys.RegisterHotkey(Keys.Add, AddListElement, "Add Element");
 
-            hotkeys.RegisterHotkey(Keys.OemMinus, RemoveListElement, "Add Element");
-            hotkeys.RegisterHotkey(Keys.Subtract, RemoveListElement, "Add Element");
+            hotkeys.RegisterHotkey(Keys.OemMinus, RemoveListElement, "Remove Element");
+            hotkeys.RegisterHotkey(Keys.Subtract, RemoveListElement, "Remove Element");
 
             hotkeys.RegisterHotkey(Keys.Control | Keys.C, CopyVariable, "Copy Element");
             hotkeys.RegisterHotkey(Keys.Control | Keys.V, PasteVariable, "Paste Element");
@@ -93,8 +94,8 @@ namespace WolvenKit.Forms
             hotkeys.UnregisterHotkey(Keys.Oemplus,  "Add Element");
             hotkeys.UnregisterHotkey(Keys.Add,  "Add Element");
 
-            hotkeys.UnregisterHotkey(Keys.OemMinus,  "Add Element");
-            hotkeys.UnregisterHotkey(Keys.Subtract,  "Add Element");
+            hotkeys.UnregisterHotkey(Keys.OemMinus,  "Remove Element");
+            hotkeys.UnregisterHotkey(Keys.Subtract,  "Remove Element");
 
             hotkeys.UnregisterHotkey(Keys.Control | Keys.C, "Copy Element");
             hotkeys.UnregisterHotkey(Keys.Control | Keys.V, "Paste Element");
@@ -243,7 +244,7 @@ namespace WolvenKit.Forms
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(viewModel.SelectedChunk))
+            if (e.PropertyName == nameof(viewModel.SelectedChunks))
             {
                 UpdateTreeListView();
             }
@@ -281,21 +282,35 @@ namespace WolvenKit.Forms
 
                         List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType).Select(_ => _.Name).ToList();
                         if (availableTypes.Count <= 0)
-                            return;
-
-                        using (var form = new frmAddChunk(availableTypes))
                         {
-                            var result = form.ShowDialog();
-                            if (result == DialogResult.OK)
+                            return;
+                        }
+                        else if (availableTypes.Count == 1)
+                        {
+                            newChunktype = availableTypes.First();
+                        }
+                        else
+                        {
+                            using (var form = new frmAddChunk(availableTypes))
                             {
-                                newChunktype = form.ChunkType;
+                                var result = form.ShowDialog();
+                                if (result == DialogResult.OK)
+                                {
+                                    newChunktype = form.ChunkType;
+                                }
                             }
                         }
 
                         if (string.IsNullOrEmpty(newChunktype))
                             return;
 
-                        ptr.Reference = newvar.cr2w.CreateChunk(newChunktype, Chunk);
+                        var cr2w = viewModel.File as CR2WFile;
+                        ptr.Reference = cr2w.CreateChunk(
+                            newChunktype,
+                            cr2w.GetLastChildrenIndexRecursive(cr2w.chunks[ptr.LookUpChunkIndex()]) + 1,
+                            Chunk,
+                            Chunk,
+                            newvar);
                         break;
                     }
                 case IHandleAccessor handle:
@@ -332,22 +347,37 @@ namespace WolvenKit.Forms
 
                             List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType).Select(_ => _.Name).ToList();
                             if (availableTypes.Count <= 0)
-                                return;
-
-                            using (var form = new frmAddChunk(availableTypes))
                             {
-                                var result = form.ShowDialog();
-                                if (result == DialogResult.OK)
+                                return;
+                            }
+                            else if (availableTypes.Count == 1)
+                            {
+                                newhandletype = availableTypes.First();
+                            }
+                            else
+                            {
+                                using (var form = new frmAddChunk(availableTypes))
                                 {
-                                    newhandletype = form.ChunkType;
+                                    var result = form.ShowDialog();
+                                    if (result == DialogResult.OK)
+                                    {
+                                        newhandletype = form.ChunkType;
+                                    }
                                 }
                             }
+
 
                             if (string.IsNullOrEmpty(newhandletype))
                                 return;
 
                             handle.ChunkHandle = true;
-                            handle.Reference = newvar.cr2w.CreateChunk(newhandletype, Chunk);
+                            var cr2w = viewModel.File as CR2WFile;
+                            handle.Reference = cr2w.CreateChunk(
+                                newhandletype,
+                                cr2w.GetLastChildrenIndexRecursive(cr2w.chunks[handle.LookUpChunkIndex()]) + 1,
+                                Chunk,
+                                Chunk,
+                                newvar);
                         }
 
                         break;
@@ -362,29 +392,30 @@ namespace WolvenKit.Forms
             if (treeView.SelectedObjects.Count <= 0)
                 return;
 
-            var parentmodel = treeView.SelectedObjects.Cast<IEditableVariable>().FirstOrDefault()?.ParentVar;
-            foreach (IEditableVariable node in treeView.SelectedObjects)
+            var temp = new IEditableVariable[treeView.SelectedObjects.Count];
+            treeView.SelectedObjects.CopyTo(temp,0);
+
+            // remove target chunks if any ptr
+            var toberemovedchunks = treeView.SelectedObjects.Cast<IChunkPtrAccessor>().
+                    Where(_ => _.ParentVar != null).
+                    Where(_ => _.ParentVar.CanRemoveVariable(_)).
+                    Where(_ => _.Reference != null).
+                    Select(_ => _.Reference).ToList();
+
+            if (toberemovedchunks.Count()>0)
             {
-                if (node?.ParentVar == null || !node.ParentVar.CanRemoveVariable(node)) continue;
-
-                switch (node)
-                {
-                    case IPtrAccessor ptr:
-                        if (ptr.Reference != null)
-                            node.cr2w.RemoveChunkRecursive(ptr.Reference);
-                        break;
-                    case IHandleAccessor hdl when hdl.ChunkHandle:
-                        if (hdl.Reference != null)
-                            node.cr2w.RemoveChunkRecursive(hdl.Reference);
-                        break;
-                }
-
-                node.ParentVar.RemoveVariable(node);
-                //treeView.RefreshObject(node.ParentVar);
-
+                (viewModel.File as CR2WFile).RemoveChunks(
+                toberemovedchunks,
+                false,
+                (CR2WFile.EChunkDisplayMode)viewModel.chunkDisplayMode);
             }
-            treeView.RefreshObject(parentmodel);
-            //RequestChunkViewUpdate?.Invoke(null, null);
+
+            foreach (var node in temp)
+            {
+                node.ParentVar.RemoveVariable(node);
+            }
+
+            UpdateTreeListView();
         }
 
 
@@ -417,7 +448,7 @@ namespace WolvenKit.Forms
 
 
             goToChunkToolStripMenuItem.Visible = selectedNodes.Count == 1 && selectedNodes.All(x => x is IChunkPtrAccessor);
-            deleteChunkToolStripMenuItem.Visible = selectedNodes.Count == 1 && selectedNodes.All(x => x is IChunkPtrAccessor);
+            deleteChunkToolStripMenuItem.Visible = selectedNodes.Count == 1 || selectedNodes.All(x => x is IChunkPtrAccessor);
 
             bool IsPastingAllowed()
             {
@@ -437,7 +468,7 @@ namespace WolvenKit.Forms
                     }
 
                     // check if the target is an array and the elementtype is of the same type as the selected nodes
-                    if (ctarget is IArrayAccessor targetarray && targetarray.Elementtype == firstcopy.REDType && !(firstcopy is IChunkPtrAccessor))
+                    if (ctarget is IArrayAccessor targetarray && targetarray.Elementtype == firstcopy.REDType)
                     {
                         return true;
                     }
@@ -480,11 +511,11 @@ namespace WolvenKit.Forms
             if (e.Column == null || e.Item == null)
                 return;
 
-            if (e.ModifierKeys == Keys.Control)
+            if (e.ModifierKeys == Keys.Alt)
             {
                 if (e.Model is IPtrAccessor ptr)
                 {
-                    viewModel.SelectedChunk = ptr.Reference;
+                    viewModel.SelectedChunks = new List<CR2WExportWrapper>() { ptr.Reference };
                     //OnChunkRequest?.Invoke(this, new SelectChunkArgs() {Chunk =  } );
                     return;
                 }
@@ -505,21 +536,22 @@ namespace WolvenKit.Forms
 
         private void GotoChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (IEditableVariable) treeView.SelectedObject;
+            var node = (IEditableVariable)treeView.SelectedObject;
             if (node is IChunkPtrAccessor iptr && iptr.Reference != null)
             {
-                viewModel.SelectedChunk = iptr.Reference;
+                viewModel.SelectedChunks = new List<CR2WExportWrapper>() { iptr.Reference };
             }
         }
 
         private void DeleteChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (IEditableVariable)treeView.SelectedObject;
-            if (node is IChunkPtrAccessor iptr && iptr.Reference != null)
-            {
-                node.cr2w.RemoveChunkRecursive(iptr.Reference);
-            }
+            // remove target chunks
+            (viewModel.File as CR2WFile).RemoveChunks(
+                treeView.SelectedObjects.Cast<IChunkPtrAccessor>().Select(_ => _.Reference).ToList(),
+                false,
+                (CR2WFile.EChunkDisplayMode)viewModel.chunkDisplayMode);
         }
+
 
         private void copyTextToolStripMenuItem_Click(object sender, EventArgs e)
         {

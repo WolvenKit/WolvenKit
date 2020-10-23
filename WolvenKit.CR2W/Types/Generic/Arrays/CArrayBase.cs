@@ -156,6 +156,8 @@ namespace WolvenKit.CR2W.Types
             return builder.ToString();
         }
 
+        public override string REDLeanValue() => "";
+
         private void UpdateNames()
         {
             for (int i = 0; i < Elements.Count; i++)
@@ -167,10 +169,11 @@ namespace WolvenKit.CR2W.Types
         public override CVariable Copy(CR2WCopyAction context)
         {
             var copy = base.Copy(context) as CArrayBase<T>;
+            context.Parent = copy;
 
             foreach (var element in Elements)
             {
-                var ccopy = element.Copy(new CR2WCopyAction() { DestinationFile = context.DestinationFile, Parent = copy });
+                var ccopy = element.Copy(context);
                 if (ccopy is T copye)
                     copy.Elements.Add(copye);
             }

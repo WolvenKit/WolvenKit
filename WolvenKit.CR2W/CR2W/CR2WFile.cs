@@ -1,23 +1,17 @@
 ﻿using RED.CRC32;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
 using WolvenKit.CR2W.Types.Utils;
-using WolvenKit.Utils;
 
 namespace WolvenKit.CR2W
 {
@@ -34,7 +28,7 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Constructor
-        public CR2WFile(LoggerService logger = null)
+        public CR2WFile(LoggerService logger=null)
         {
             names = new List<CR2WNameWrapper>();            //block 2
             imports = new List<CR2WImportWrapper>();        //block 3
@@ -116,17 +110,34 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Supporting Functions
-        public CR2WExportWrapper CreateChunk(string type, CR2WExportWrapper parent = null)
+        // Does not reindex if no parenting passed
+        public CR2WExportWrapper CreateChunk(string type, int chunkindex=0, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null, CVariable cvar = null)
         {
             var chunk = new CR2WExportWrapper(this, type, parent);
-            chunk.CreateDefaultData();
+            if (cvar != null)
+            {
+                chunk.CreateDefaultData();
+            }
+            else
+            {
+                chunk.CreateDefaultData(cvar);
+            }
 
+            if (parent!=null)
+            {
+                chunk.ParentChunk = parent;
+            }
+            if (virtualparent != null)
+            {
+                chunk.MountChunkVirtually(virtualparent);
+            }
 
-            chunks.Add(chunk);
+            chunks.Insert(chunkindex, chunk);
             return chunk;
         }
 
-        public CR2WExportWrapper CreateChunk(CVariable cvar, CR2WExportWrapper parent = null)
+        // Does not reindex if no parenting passed
+        public CR2WExportWrapper CreateChunk(CVariable cvar, int chunkindex, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null)
         {
             // checks to see if the variable from which the chunk is built is properly constructed
             if (cvar == null || cvar.REDName != cvar.REDType || cvar.ParentVar != null)
@@ -135,25 +146,44 @@ namespace WolvenKit.CR2W
             var chunk = new CR2WExportWrapper(this, cvar.REDType, parent);
             chunk.CreateDefaultData(cvar);
 
-            chunks.Add(chunk);
+            if (parent != null)
+            {
+                chunk.ParentChunk = parent;
+            }
+            if (virtualparent != null)
+            {
+                chunk.MountChunkVirtually(virtualparent);
+            }
+
+            chunks.Insert(chunkindex, chunk);
             return chunk;
         }
 
-        /// <summary>
-        /// Recursive, reentrant function.
-        /// Delete the chunk and all chunks virtually mounted to it : its children chunks.
-        /// Reindex the hierarchy.
-        /// Returns the number of chunks removed.
-        /// </summary>
-        /// <param name="chunk"></param>
-        /// <returns></returns>
-        public int RemoveChunkRecursive(
-            CR2WExportWrapper chunk,
-            bool reentrant = false,
-            Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)>
-                passedoldparentinghierarchy= null)
+        public enum EChunkDisplayMode
         {
-            int removed = 1;
+            Linear,
+            Parent,
+            VirtualParent
+        }
+
+        /// <summary>
+        /// Delete the chunk and/or its children chunks.
+        /// Reindex the hierarchy.
+        /// </summary>
+        /// <param name="chunk">The chunk dealt with.</param>
+        /// <param name="onlychildren">The method can remove the chunk and descendance, or only the descendance.</param>
+        /// <param name="recursionmode">The method can remove only the chunk (Linear), the real children (Parent), the virtual children (VirtualParent).</param>
+        /// <param name="reentrant">Called for children chunks</param>
+        /// <param name="passedoldparentinghierarchy">Passed for children chunks</param>
+        /// <returns>Number of chunks removed</returns>
+        public int RemoveChunks(
+            List<CR2WExportWrapper> toberemovedchunks,
+            bool onlychildren = false,
+            EChunkDisplayMode recursionmode = EChunkDisplayMode.VirtualParent,
+            bool reentrant = false,
+            Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)> passedoldparentinghierarchy= null)
+        {
+            int removed = onlychildren ? 0 : 1;
 
             // To reindex later, we need a middle-ground copy, between deep and shallow, of the parenting hierarchy.
             var oldparentinghierarchy = new Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)>();
@@ -161,97 +191,126 @@ namespace WolvenKit.CR2W
             {
                 foreach (var achunk in chunks)
                 {
-                    oldparentinghierarchy.Add(achunk, (achunk.GetParentChunk(), achunk.GetVirtualParentChunk()));
+                    oldparentinghierarchy.Add(achunk, (achunk.ParentChunk, achunk.VirtualParentChunk));
                 }
             }
-            
-            // Nullify references toward this chunk
-            foreach(var referrer in chunk.AdReferences)
-            {
-                // This leaves a dangling cptr/chandle in AdReferences,
-                // which needs to be adressed later.
-                referrer.Reference = null;
-            }
 
-            int i = 0;
-            while (true)
+            foreach(var chunk in toberemovedchunks)
             {
-                if (i >= chunks.Count())
-                    break;
-                var achunk = chunks[i++];
-
-                // Remove children chunks
-                if(!reentrant)
+                // Nullify references toward this chunk
+                if ((!onlychildren && !reentrant) || reentrant)
                 {
-                    if (oldparentinghierarchy[achunk].oldchunkvparent == chunk)
+                    foreach (var referrer in chunk.AdReferences)
                     {
-                        removed += RemoveChunkRecursive(achunk, true, oldparentinghierarchy);
-                        i = 0;
+                        // This leaves a dangling cptr/chandle in AdReferences,
+                        // which needs to be adressed later.
+                        referrer.Reference = null;
                     }
                 }
-                else
+
+                //Recurse
+                int i = 0;
+                while (recursionmode != EChunkDisplayMode.Linear)
                 {
-                    if (passedoldparentinghierarchy[achunk].oldchunkvparent == chunk)
+                    if (i >= chunks.Count())
+                        break;
+                    var achunk = chunks[i++];
+
+                    // Remove children chunks
+                    if (recursionmode == EChunkDisplayMode.Parent)
                     {
-                        removed += RemoveChunkRecursive(achunk, true, passedoldparentinghierarchy);
-                        i = 0;
+                        if (!reentrant)
+                        {
+                            if (oldparentinghierarchy[achunk].oldchunkparent == chunk)
+                            {
+                                removed += RemoveChunks(
+                                    new List<CR2WExportWrapper>() { achunk },
+                                    false,
+                                    recursionmode,
+                                    true,
+                                    oldparentinghierarchy);
+                                i = 0;
+                            }
+                        }
+                        else
+                        {
+                            if (passedoldparentinghierarchy[achunk].oldchunkparent == chunk)
+                            {
+                                removed += RemoveChunks(
+                                    new List<CR2WExportWrapper>() { achunk },
+                                    false,
+                                    recursionmode,
+                                    true,
+                                    passedoldparentinghierarchy);
+                                i = 0;
+                            }
+                        }
                     }
+                    else if (recursionmode == EChunkDisplayMode.VirtualParent)
+                    {
+                        if (!reentrant)
+                        {
+                            if (oldparentinghierarchy[achunk].oldchunkvparent == chunk)
+                            {
+                                removed += RemoveChunks(
+                                    new List<CR2WExportWrapper>() { achunk },
+                                    false,
+                                    recursionmode,
+                                    true,
+                                    oldparentinghierarchy);
+                                i = 0;
+                            }
+                        }
+                        else
+                        {
+                            if (passedoldparentinghierarchy[achunk].oldchunkvparent == chunk)
+                            {
+                                removed += RemoveChunks(
+                                    new List<CR2WExportWrapper>() { achunk },
+                                    false,
+                                    recursionmode,
+                                    true,
+                                    passedoldparentinghierarchy);
+                                i = 0;
+                            }
+                        }
+                    }
+                }
+
+                // Actually remove the chunk
+                if ((!reentrant && !onlychildren) || reentrant)
+                {
+                    chunks.Remove(chunk);
                 }
             }
 
-            // Actually remove the chunk
-            chunks.Remove(chunk);
 
-            // Reindex the trees from the root function call
-            if (!reentrant)
+
+            // Reindex the tree from the root function call
+            if (!reentrant && removed > 0)
             {
                 foreach (var achunk in chunks)
                 {
-                    achunk.SetParentChunk(oldparentinghierarchy[achunk].oldchunkparent);
-                    achunk.MountChunkVirtually(chunks.IndexOf(oldparentinghierarchy[achunk].oldchunkvparent), true);
+                    achunk.ParentChunk = oldparentinghierarchy[achunk].oldchunkparent;
                 }
 
+                //Update UI
                 OnPropertyChanged(nameof(chunks));
             }
 
             return removed;
         }
 
-        /// <summary>
-        /// Tries to look up a chunk reference in a cr2w file by a number of checks
-        /// This method is only called on Pointer/Soft copy
-        /// This is unsafe! A chunk could fit all criteria but still not be the intended pointer/soft reference *for the user*!
-        /// It is deterministically impossible to get this right, so the user will always have to double check.
-        /// </summary>
-        /// <param name="targetVariable"></param>
-        /// <param name="oldExportWrapper"></param>
-        /// <returns></returns>
-        internal CR2WExportWrapper TryLookupReference(CVariable targetVariable, CR2WExportWrapper oldExportWrapper)
+        public int GetLastChildrenIndexRecursive(CR2WExportWrapper chunk)
         {
-            // this needs to be somewhat fast, because there are fils with thousands of chunks
-            // checks: chunkindex, chunktype, 
-
-            var vardepstring = targetVariable.GetFullDependencyStringName();
-            var chunkdepstring = oldExportWrapper.GetFullChunkDependencyStringName();
-
-            var targetchunk = chunks.Where(_ =>
-                _.GetFullChunkDependencyStringName() == chunkdepstring)
-                .ToList();
-
-            if (targetchunk.Count == 1)
+            if (chunk.VirtualChildrenChunks.Count() == 0)
             {
-                //Logger?.LogString($"Found exactly one chunk target. Please double check pointer targets in {vardepstring}", Logtype.Success);
-                return targetchunk.FirstOrDefault();
-            }
-            else if (targetchunk.Count > 1)
-            {
-                Logger?.LogString($"More than one chunk target found, please set pointer target manually in {vardepstring}", Logtype.Error);
-                return null;
+                return chunk.ChunkIndex;
             }
             else
             {
-                Logger?.LogString($"No chunk target found, please set pointer target manually in {vardepstring}", Logtype.Error);
-                return null;
+                return GetLastChildrenIndexRecursive(chunk.VirtualChildrenChunks.Where(
+                    _ => _.ChunkIndex == chunk.VirtualChildrenChunks.Max(p => p.ChunkIndex)).FirstOrDefault());
             }
         }
 

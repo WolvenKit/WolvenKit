@@ -69,15 +69,16 @@ namespace WolvenKit.CR2W.Types
             {
                 //Populate the reverse-lookup
                 Reference.AdReferences.Add(this);
-                cr2w.chunks[GetVarChunkIndex()].AbReferences.Add(this);
+                cr2w.chunks[LookUpChunkIndex()].AbReferences.Add(this);
                 //Soft mount the chunk
-                Reference.MountChunkVirtually(GetVarChunkIndex());
+                Reference.MountChunkVirtually(LookUpChunkIndex());
 
                 //Hard mounts
                 switch (REDName)
                 {
-                    case "parent" when cr2w.chunks[GetVarChunkIndex()].IsVirtuallyMounted:
-                        cr2w.chunks[GetVarChunkIndex()].MountChunkVirtually(Reference.ChunkIndex, true);
+                    case "parent":
+                    case "transformParent":
+                        cr2w.chunks[LookUpChunkIndex()].MountChunkVirtually(Reference, true);
                         break;
                  //   case "child" when Reference.IsVirtuallyMounted:
                  //       //tried for IAttachments, not the proper way to do it, this is graph viz territory
@@ -117,7 +118,7 @@ namespace WolvenKit.CR2W.Types
 
             if (Reference != null)
             {
-                CR2WExportWrapper newref = context.DestinationFile.TryLookupReference(copy, Reference);
+                CR2WExportWrapper newref = context.TryLookupReference(Reference, copy);
                 if (newref != null)
                     copy.SetValue(newref);
             }
@@ -135,6 +136,14 @@ namespace WolvenKit.CR2W.Types
             return $"{Reference.REDType} #{Reference.ChunkIndex}";
         }
 
+        public override string REDLeanValue()
+        {
+            if (Reference == null)
+                return "";
+            return $"{Reference.ChunkIndex}";
+        }
+
+
         //public override void SerializeToXml(XmlWriter xw)
         //{
         //    DataContractSerializer ser = new DataContractSerializer(GetType());
@@ -150,5 +159,5 @@ namespace WolvenKit.CR2W.Types
         #endregion
     }
 
-    
+
 }

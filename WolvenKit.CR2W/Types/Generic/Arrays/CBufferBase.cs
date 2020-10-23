@@ -154,10 +154,11 @@ namespace WolvenKit.CR2W.Types
         public override CVariable Copy(CR2WCopyAction context)
         {
             var copy = base.Copy(context) as CBufferBase<T>;
+            context.Parent = copy;
 
             foreach (var element in elements)
             {
-                var ccopy = element.Copy(new CR2WCopyAction() { DestinationFile = context.DestinationFile, Parent = copy });
+                var ccopy = element.Copy(context);
                 if (ccopy is T copye)
                     copy.elements.Add(copye);
             }

@@ -18,6 +18,8 @@ namespace WolvenKit.CR2W
         IEditableVariable ParentVar { get; }
         bool IsSerialized { get; set; }
         int VarChunkIndex { get; set; }
+        int LookUpChunkIndex();
+
         CR2WFile cr2w { get; set; }
 
 

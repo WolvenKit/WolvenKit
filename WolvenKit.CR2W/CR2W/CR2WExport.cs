@@ -75,17 +75,16 @@ namespace WolvenKit.CR2W
             {
                 objectFlags = (ushort)(cooked ? 8192 : 0),
             };
-            _virtualParentChunkIndex = -1;
             AdReferences = new List<IChunkPtrAccessor>();
             AbReferences = new List<IChunkPtrAccessor>();
 
             this.cr2w = file;
             this.REDType = redtype;
-            SetParentChunk(parentchunk);
+            ParentChunk = parentchunk;
         }
 
         /// <summary>
-        /// This constructor is only used in cr2w parsing
+        /// This constructor is only used in cr2w parsing = deserialization
         /// </summary>
         /// <param name="export"></param>
         /// <param name="file"></param>
@@ -95,7 +94,6 @@ namespace WolvenKit.CR2W
             _export = export;
 
             REDType = cr2w.names[export.className].Str;
-            _virtualParentChunkIndex = -1;
             AdReferences = new List<IChunkPtrAccessor>();
             AbReferences = new List<IChunkPtrAccessor>();
         }
@@ -125,38 +123,31 @@ namespace WolvenKit.CR2W
             private set => _export.parentID = (uint)(value + 1);
         }
 
-        public void SetParentChunk(CR2WExportWrapper parent)
+        public CR2WExportWrapper ParentChunk
         {
-            ParentChunkIndex = parent == null ? -1 : cr2w.chunks.IndexOf(parent);
+            get => ParentChunkIndex == -1 ? null : cr2w.chunks[ParentChunkIndex];
+            set => ParentChunkIndex = value == null ? -1 : cr2w.chunks.IndexOf(value);
         }
 
-        private int _virtualParentChunkIndex;
-        public int VirtualParentChunkIndex
-        {
-            get => _virtualParentChunkIndex > -1 ? _virtualParentChunkIndex : ParentChunkIndex;
-            private set => _virtualParentChunkIndex = value;
-        }
+        public CR2WExportWrapper VirtualParentChunk;
 
-        public void MountChunkVirtually(int virtualparentchunkindex, bool force=false)
-        {
-            if(!IsVirtuallyMounted || force)
-            {
-                VirtualParentChunkIndex = virtualparentchunkindex;
-            }
-        }
+        public int VirtualParentChunkIndex => cr2w.chunks.IndexOf(VirtualParentChunk);
 
-        public bool IsVirtuallyMounted => _virtualParentChunkIndex > -1 ? true : false;
+        public List<CR2WExportWrapper> ChildrenChunks => cr2w.chunks.Where(_ => _.ParentChunk == this).ToList();
 
-        /// <summary>
-        /// Reverse lookup : CVariables, being CPtr or CHandle, which reference this chunk.
-        /// Beware, in case of multithreading, this needs locking!
-        /// </summary>
-        public List<IChunkPtrAccessor> AdReferences;
-        
+        public List<CR2WExportWrapper> VirtualChildrenChunks => cr2w.chunks.Where(_ => _.VirtualParentChunk == this).ToList();
+
         /// <summary>
         /// Playing with latin here, ab means toward, ab away from.
-        /// Reverse lookup : CVariables, being CPtr or CHandle, which are referenced by this chunk.
-        /// Beware, in case of multithreading, this needs locking!
+        /// This is the directed-graph in-edge list :
+        /// CVariables, being CPtr or CHandle, which reference this chunk.
+        /// </summary>
+        public List<IChunkPtrAccessor> AdReferences;
+
+        /// <summary>
+        /// Playing with latin here, ab means toward, ab away from.
+        /// This is the directed-graph out-edge list :
+        /// CVariables, being CPtr or CHandle, which are referenced by this chunk.
         /// </summary>
         public List<IChunkPtrAccessor> AbReferences;
 
@@ -213,14 +204,14 @@ namespace WolvenKit.CR2W
         /// We can use something like this for hashing
         /// </summary>
         /// <returns></returns>
-        public string GetFullChunkDependencyStringName()
+        public string GetFullChunkTypeDependencyString()
         {
             var depstr = this.REDName;
-            var par = this.GetVirtualParentChunk();
+            var par = this.VirtualParentChunk;
             while (par != null)
             {
                 depstr = $"{par.REDName}.{depstr}";
-                par = par.GetVirtualParentChunk();
+                par = par.VirtualParentChunk;
             }
 
             return depstr;
@@ -229,17 +220,6 @@ namespace WolvenKit.CR2W
         public void SetType(ushort val) => _export.className = val;
 
         public void SetOffset(uint offset) => _export.dataOffset = offset;
-
-        public CR2WExportWrapper GetParentChunk() => ParentChunkIndex >= 0 ? cr2w.chunks[ParentChunkIndex] : null;
-
-        public CR2WExportWrapper GetVirtualParentChunk()
-        {
-            if (_virtualParentChunkIndex > -1)
-            {
-                return cr2w.chunks[VirtualParentChunkIndex];
-            }
-            else return GetParentChunk();
-        }
 
         public virtual List<IEditableVariable> GetEditableVariables()
         {
@@ -255,21 +235,27 @@ namespace WolvenKit.CR2W
             return vars;
         }
 
-
+        public void MountChunkVirtually(int virtualparentchunkindex, bool force = false)
+        {
+            if (VirtualParentChunk == null || force)
+            {
+                VirtualParentChunk = cr2w.chunks[virtualparentchunkindex];
+            }
+        }
+        public void MountChunkVirtually(CR2WExportWrapper virtualparentchunk, bool force = false)
+        {
+            if (VirtualParentChunk == null || force)
+            {
+                VirtualParentChunk = virtualparentchunk;
+            }
+        }
 
         public void ReadData(BinaryReader file)
         {
             file.BaseStream.Seek(_export.dataOffset, SeekOrigin.Begin);
 
             CreateDefaultData();
-            if(data.REDType== "CBTTaskTeleportDecoratorDef" ||
-                data.REDType == "CBTTaskTeleportDef")
-            {
-                //System.Console.WriteLine("Not bothering with buggy vars yoo");
-                //return;
-            }
 
-            //TODO explain next two lines
             data.VarChunkIndex = ChunkIndex;
 
             data.Read(file, _export.dataSize);
@@ -341,7 +327,6 @@ namespace WolvenKit.CR2W
             {
                 CreateDefaultData();
 
-                //TODO explain next two lines
                 data.VarChunkIndex = ChunkIndex;
 
                 data.Read(br, _export.dataSize);
@@ -408,7 +393,7 @@ namespace WolvenKit.CR2W
 
             if (cvar == null)
             {
-                data = CR2WTypeManager.Create(REDType, REDType, cr2w, GetParentChunk()?.data);
+                data = CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data);
             }
             else
             {

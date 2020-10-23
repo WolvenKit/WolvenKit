@@ -18,14 +18,10 @@ namespace WolvenKit.Forms
     public partial class frmChunkList : DockContent, IThemedContent
     {
         #region Fields
-        private bool listview;
         private bool isLargefile;
-        private CR2WFile file;
-
         private readonly Dictionary<int, int> childrencountDict = new Dictionary<int, int>();
         private readonly Dictionary<int, List<CR2WExportWrapper>> childrenDict = new Dictionary<int, List<CR2WExportWrapper>>();
         private readonly CR2WDocumentViewModel viewModel;
-
         #endregion
 
         #region Properties
@@ -43,15 +39,6 @@ namespace WolvenKit.Forms
             //limitTB.Enabled = limitCB.Checked;
             treeListView.ItemSelectionChanged += chunkListView_ItemSelectionChanged;
 
-            treeListView.CanExpandGetter = delegate (object x) {
-                var idx = ((CR2WExportWrapper)x).ChunkIndex;
-                return !listview && childrencountDict[idx] > 0;
-            };
-            treeListView.ChildrenGetter = delegate (object x) {
-                var idx = ((CR2WExportWrapper)x).ChunkIndex;
-                return !listview ? childrenDict[idx] : new List<CR2WExportWrapper>();
-            };
-
             viewModel = _viewmodel;
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
@@ -60,10 +47,30 @@ namespace WolvenKit.Forms
         {
             switch (e.PropertyName)
             {
-                case nameof(viewModel.SelectedChunk):
+                case nameof(viewModel.SelectedChunks):
                 {
-                    if (treeListView.SelectedObject != viewModel.SelectedChunk)
-                        treeListView.SelectedObject = viewModel.SelectedChunk;
+                    // ??
+                    /*if (treeListView.SelectedObjects.Cast<CR2WExportWrapper>().ToList() != viewModel.SelectedChunks)
+                        {
+                            var d1 = treeListView.SelectedObjects.Cast<CR2WExportWrapper>().ToList();
+                            var d2 = viewModel.SelectedChunks;
+                            var d3 = treeListView.SelectedObjects.Cast<CR2WExportWrapper>().ToList().Equals(viewModel.SelectedChunks);
+                            var d4 = d1 == d2;*/
+
+                    var left = treeListView.SelectedObjects.Cast<CR2WExportWrapper>().ToList();
+                    var right = viewModel.SelectedChunks;
+                    if (left.Count()==right.Count())
+                    {
+                        var equals = true;
+                        for (int i = 0; i < left.Count(); i++)
+                        {
+                            if (left[i] != right[i]) { equals = false; break; }
+                        }
+                        if (!equals)
+                        {
+                            treeListView.SelectedObjects = viewModel.SelectedChunks;
+                        }
+                    }
                     break;
                 }
             }
@@ -79,7 +86,16 @@ namespace WolvenKit.Forms
 
             File.GenerateChunksDict();
 
-            Dictionary<int, int> dParentids = File.chunks.ToDictionary(_ => _.ChunkIndex, _ => _.VirtualParentChunkIndex);
+            var dParentids = new Dictionary<int, int>();
+            if (viewModel.chunkDisplayMode == CR2WDocumentViewModel.EChunkDisplayMode.Parent)
+            {
+                dParentids = File.chunks.ToDictionary(_ => _.ChunkIndex, _ => _.ParentChunkIndex);
+            }
+            else if (viewModel.chunkDisplayMode == CR2WDocumentViewModel.EChunkDisplayMode.VirtualParent)
+            {
+                dParentids = File.chunks.ToDictionary(_ => _.ChunkIndex, _ => _.VirtualParentChunkIndex);
+            }
+
             foreach (var chunk in File.chunks)
             {
                 var childrenidxlist = dParentids.Where(_ => _.Value == chunk.ChunkIndex).Select(_ => _.Key);
@@ -100,31 +116,53 @@ namespace WolvenKit.Forms
 
                 }
             }
+
+            treeListView.CanExpandGetter = delegate (object x) {
+                var idx = ((CR2WExportWrapper)x).ChunkIndex;
+                return viewModel.chunkDisplayMode != CR2WDocumentViewModel.EChunkDisplayMode.Linear && childrencountDict[idx] > 0;
+            };
+            treeListView.ChildrenGetter = delegate (object x) {
+                var idx = ((CR2WExportWrapper)x).ChunkIndex;
+                return viewModel.chunkDisplayMode != CR2WDocumentViewModel.EChunkDisplayMode.Linear ? childrenDict[idx] : new List<CR2WExportWrapper>();
+            };
         }
-        
 
         public void UpdateList()
         {
             if (File == null)
                 return;
 
+            // Could be done only once... TODO decouple background worker result
             isLargefile = File.chunks.Count > 1000;
-            if (isLargefile)
-                listview = true;
+            if(isLargefile)
+            {
+                ChunkDisplayMenuItemLinear.Checked = true;
+                ChunkDisplayMenuItemVirtualParent.Checked = true;
+                ChunkDisplayMenuItemParent.Enabled = false;
+                ChunkDisplayMenuItemVirtualParent.Enabled = false;
+            }
 
-            if (listview)
+            if (viewModel.chunkDisplayMode == CR2WDocumentViewModel.EChunkDisplayMode.Linear)
                 treeListView.Roots = File.chunks;
-            else
+            else if (viewModel.chunkDisplayMode == CR2WDocumentViewModel.EChunkDisplayMode.Parent)
             {
                 UpdateHelperList();
-                var model = File.chunks.Where(_ => _.GetVirtualParentChunk() == null).ToList();
+                var model = File.chunks.Where(_ => _.ParentChunk == null).ToList();
+                treeListView.Roots = model;
+
+                treeListView.ExpandAll();
+            }
+            else if (viewModel.chunkDisplayMode == CR2WDocumentViewModel.EChunkDisplayMode.VirtualParent)
+            {
+                UpdateHelperList();
+                var model = File.chunks.Where(_ => _.VirtualParentChunk == null).ToList();
                 treeListView.Roots = model;
 
                 treeListView.ExpandAll();
             }
 
-            // select the first item
-            //treeListView.SelectedIndex = 0; // TODO: doesn't work? why?
+            treeListView.SelectedIndex = 0;
+            this.Update();
         }
 
         public void ApplyCustomTheme()
@@ -160,7 +198,7 @@ namespace WolvenKit.Forms
 
         private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            viewModel.SelectedChunk = (CR2WExportWrapper) treeListView.SelectedObject;
+            viewModel.SelectedChunks = treeListView.SelectedObjects.Cast<CR2WExportWrapper>().ToList();
         }
 
         private void resetBTN_Click(object sender, EventArgs e)
@@ -180,12 +218,6 @@ namespace WolvenKit.Forms
         private void listView_ItemsChanged(object sender, ItemsChangedEventArgs e)
         {
             MainController.Get().ProjectUnsaved = true;
-        }
-
-        private void showTreetoolStripButton_Click(object sender, EventArgs e)
-        {
-            listview = !listview;
-            UpdateList();
         }
 
         private void expandAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -226,20 +258,85 @@ namespace WolvenKit.Forms
 
         private void copyChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CopyController.Source = new List<IEditableVariable>() {viewModel.SelectedChunk.data};
+            CopyController.Source = viewModel.SelectedChunks.Select(_=>_.data as IEditableVariable).ToList();
         }
 
         private void pasteChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CopyController.Target = viewModel.SelectedChunk.data;
+            if (viewModel.SelectedChunks.Count()>1)
+            {
+                return;
+            }
+            CopyController.Target = viewModel.SelectedChunks.First().data;
             viewModel.PasteVariableCommand.SafeExecute();
         }
-
-        #endregion
 
         private void ExpandBTN_Click(object sender, EventArgs e) => treeListView.ExpandAll();
 
         private void CollapseBTN_Click(object sender, EventArgs e) => treeListView.CollapseAll();
+
+        private void ChunkDisplayMenuItemLinear_Click(object sender, EventArgs e)
+        {
+            ChunkDisplayMenuItemParent.Checked = false;
+            ChunkDisplayMenuItemVirtualParent.Checked = false;
+            viewModel.chunkDisplayMode = CR2WDocumentViewModel.EChunkDisplayMode.Linear;
+            UpdateList();
+        }
+
+        private void ChunkDisplayMenuItemParent_Click(object sender, EventArgs e)
+        {
+            ChunkDisplayMenuItemLinear.Checked = false;
+            ChunkDisplayMenuItemVirtualParent.Checked = false;
+            viewModel.chunkDisplayMode = CR2WDocumentViewModel.EChunkDisplayMode.Parent;
+            UpdateList();
+        }
+
+        private void ChunkDisplayMenuItemVirtualParent_Click(object sender, EventArgs e)
+        {
+            ChunkDisplayMenuItemLinear.Checked = false;
+            ChunkDisplayMenuItemParent.Checked = false;
+            viewModel.chunkDisplayMode = CR2WDocumentViewModel.EChunkDisplayMode.VirtualParent;
+            UpdateList();
+        }
+        #endregion
+
+        /// <summary>
+        /// Tri-state toggle
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ChunkDisplayMode_ButtonClick(object sender, EventArgs e)
+        {
+            if (viewModel.chunkDisplayMode == CR2WDocumentViewModel.EChunkDisplayMode.Linear)
+            {
+                ChunkDisplayMenuItemLinear.Checked = false;
+                viewModel.chunkDisplayMode = CR2WDocumentViewModel.EChunkDisplayMode.Parent;
+                ChunkDisplayMenuItemParent.Checked = true;
+                UpdateList();
+            }
+            else if (viewModel.chunkDisplayMode == CR2WDocumentViewModel.EChunkDisplayMode.Parent)
+            {
+                ChunkDisplayMenuItemParent.Checked = false;
+                viewModel.chunkDisplayMode = CR2WDocumentViewModel.EChunkDisplayMode.VirtualParent;
+                ChunkDisplayMenuItemVirtualParent.Checked = true;
+                UpdateList();
+            }
+            else if (viewModel.chunkDisplayMode == CR2WDocumentViewModel.EChunkDisplayMode.VirtualParent)
+            {
+                ChunkDisplayMenuItemVirtualParent.Checked = false;
+                viewModel.chunkDisplayMode = CR2WDocumentViewModel.EChunkDisplayMode.Linear;
+                ChunkDisplayMenuItemLinear.Checked = true;
+                UpdateList();
+            }
+        }
+
+        private void deleteChunktoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            File.RemoveChunks(
+                treeListView.SelectedObjects.Cast<CR2WExportWrapper>().ToList(),
+                false,
+                (CR2WFile.EChunkDisplayMode)viewModel.chunkDisplayMode);
+        }
     }
 }
  
