@@ -27,7 +27,7 @@ namespace WolvenKit.CR2W
         public CVariable Parent { get; set; }
 
         /// <summary>
-        /// 
+        /// Used when pasting-in-place a chunk, takes care of (virtual) children.
         /// </summary>
         /// <param name="sourcechunk"></param>
         /// <param name="destinationchunk"></param>
@@ -67,7 +67,12 @@ namespace WolvenKit.CR2W
             }
         }
 
-
+        /// <summary>
+        /// Used whith paste-insert
+        /// </summary>
+        /// <param name="sourcechunks"></param>
+        /// <param name="targetarray"></param>
+        /// <param name="oldparentinghierarchy"></param>
         public void PasteChunksInArray(
             List<CR2WExportWrapper> sourcechunks,
             IArrayAccessor targetarray,
@@ -113,6 +118,12 @@ namespace WolvenKit.CR2W
             }
         }
 
+        /// <summary>
+        /// Recursive function used both by paste-in-place and paste-insert.
+        /// </summary>
+        /// <param name="sourcechunk"></param>
+        /// <param name="destinationchunk"></param>
+        /// <param name="inplace"></param>
         private void DeepChunkCopy (CR2WExportWrapper sourcechunk, CR2WExportWrapper destinationchunk, bool inplace = true)
         {
             Parent = null;

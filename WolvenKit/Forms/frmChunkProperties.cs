@@ -267,8 +267,7 @@ namespace WolvenKit.Forms
             parentarray.AddVariable(newvar);
             parentarray.IsSerialized = true;
 
-            treeView.RefreshObject(carray);
-            //RequestChunkViewUpdate?.Invoke(null, null);
+            UpdateTreeListView();
         }
 
         private void AddNewChunkFor(CVariable newvar)
