@@ -110,7 +110,7 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Supporting Functions
-        // Does not reindex if no parenting passed
+        // Does not reindex /TODO
         public CR2WExportWrapper CreateChunk(string type, int chunkindex=0, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null, CVariable cvar = null)
         {
             var chunk = new CR2WExportWrapper(this, type, parent);
@@ -136,7 +136,7 @@ namespace WolvenKit.CR2W
             return chunk;
         }
 
-        // Does not reindex if no parenting passed
+        // Does not reindex /TODO
         public CR2WExportWrapper CreateChunk(CVariable cvar, int chunkindex, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null)
         {
             // checks to see if the variable from which the chunk is built is properly constructed
@@ -167,10 +167,10 @@ namespace WolvenKit.CR2W
         }
 
         /// <summary>
-        /// Delete the chunk and/or its children chunks.
-        /// Reindex the hierarchy.
+        /// Deletes the chunk and/or its children chunks.
+        /// Reindexes the hierarchy.
         /// </summary>
-        /// <param name="chunk">The chunk dealt with.</param>
+        /// <param name="toberemovedchunks">The chunks dealt with.</param>
         /// <param name="onlychildren">The method can remove the chunk and descendance, or only the descendance.</param>
         /// <param name="recursionmode">The method can remove only the chunk (Linear), the real children (Parent), the virtual children (VirtualParent).</param>
         /// <param name="reentrant">Called for children chunks</param>
