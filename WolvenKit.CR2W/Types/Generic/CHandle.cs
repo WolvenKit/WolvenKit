@@ -65,11 +65,11 @@ namespace WolvenKit.CR2W.Types
                 else
                 {
                     Reference = cr2w.chunks[val - 1];
-                    //Add to the reverse-lookups
+                    //Populate the reverse-lookups
                     Reference.AdReferences.Add(this);
                     cr2w.chunks[LookUpChunkIndex()].AbReferences.Add(this);
-                    //Soft mount the chunk
-                    if(this.ParentVar.REDType!="AttachmentsReference")
+                    //Soft mount the chunk except root chunk
+                    if (Reference.ChunkIndex != 0)
                     {
                         Reference.MountChunkVirtually(LookUpChunkIndex());
                     }

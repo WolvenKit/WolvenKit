@@ -240,6 +240,7 @@ namespace WolvenKit.CR2W
             if (VirtualParentChunk == null || force)
             {
                 VirtualParentChunk = cr2w.chunks[virtualparentchunkindex];
+                //cr2w.Logger.LogString($"Mounted {this.REDName} to {VirtualParentChunk.REDName}.");
             }
         }
         public void MountChunkVirtually(CR2WExportWrapper virtualparentchunk, bool force = false)
