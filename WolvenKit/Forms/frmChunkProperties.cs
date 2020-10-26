@@ -395,11 +395,17 @@ namespace WolvenKit.Forms
             treeView.SelectedObjects.CopyTo(temp,0);
 
             // remove target chunks if any ptr
-            var toberemovedchunks = treeView.SelectedObjects.Cast<IChunkPtrAccessor>().
-                    Where(_ => _.ParentVar != null).
-                    Where(_ => _.ParentVar.CanRemoveVariable(_)).
-                    Where(_ => _.Reference != null).
-                    Select(_ => _.Reference).ToList();
+            var toberemovedchunks = new List<CR2WExportWrapper>();
+            foreach ( var selectedobject in treeView.SelectedObjects)
+            {
+                if (selectedobject is IChunkPtrAccessor chunkptraccessor &&
+                    chunkptraccessor.ParentVar != null &&
+                    chunkptraccessor.ParentVar.CanRemoveVariable(chunkptraccessor) &&
+                    chunkptraccessor.Reference != null)
+                {
+                    toberemovedchunks.Add(chunkptraccessor.Reference);
+                }
+            }
 
             if (toberemovedchunks.Count()>0)
             {
