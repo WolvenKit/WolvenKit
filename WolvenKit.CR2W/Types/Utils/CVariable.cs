@@ -122,7 +122,7 @@ namespace WolvenKit.CR2W.Types
                 else
                     return name;
             }
-            set => name = value;
+            private set => name = value;
         }
 
         /// <summary>

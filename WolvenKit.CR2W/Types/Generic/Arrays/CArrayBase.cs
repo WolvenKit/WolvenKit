@@ -158,11 +158,17 @@ namespace WolvenKit.CR2W.Types
 
         public override string REDLeanValue() => "";
 
+        /// <summary>
+        /// Usually CArrayBase elements's names are indices, so reindexes
+        /// </summary>
         private void UpdateNames()
         {
             for (int i = 0; i < Elements.Count; i++)
             {
-                Elements[i].SetREDName(i.ToString());
+                if (!(Elements[i] is CVariantSizeNameType))
+                {
+                    Elements[i].SetREDName(i.ToString());
+                }
             }
         }
 
