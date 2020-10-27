@@ -791,7 +791,7 @@ namespace WolvenKit.Render
 
         private void irrlichtPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            if(device != null)
+            if (device != null && smgr != null)
             {
                 MouseEventType mev = MouseEventType.Move;
                 uint buttonStates = 0;
