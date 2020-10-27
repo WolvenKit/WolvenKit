@@ -213,8 +213,6 @@ namespace WolvenKit.Render
                 {
                     CSectorData sd = (CSectorData)chunk.data;
 
-                    Console.WriteLine($"                                 [{layerName}] : {sd.Unknown1}");
-
                     progressBar.Invoke((MethodInvoker)delegate
                     {
                         progressBar.Maximum = sd.BlockData.Count;
