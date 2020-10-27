@@ -122,6 +122,7 @@ namespace scene
 	class ISceneNodeFactory;
 	class ISceneUserDataSerializer;
 	class ITerrainSceneNode;
+	class ITerrainSceneNodeWolvenKit;
 	class ITextSceneNode;
 	class ITriangleSelector;
 	class IVolumeLightSceneNode;
@@ -395,6 +396,8 @@ namespace scene
 		IReferenceCounted::drop() for more information. */
 		virtual IAnimatedMesh* getMesh(io::IReadFile* file) = 0;
 
+		virtual IMesh* getStaticMesh(const io::path& filename) { return nullptr; }
+
 		//! Get interface to the mesh cache which is shared between all existing scene managers.
 		/** With this interface, it is possible to manually add new loaded
 		meshes (if ISceneManager::getMesh() is not sufficient), to remove them and to iterate
@@ -608,6 +611,27 @@ namespace scene
 			f32 rotateSpeed=-1500.f, f32 zoomSpeed=200.f,
 			f32 translationSpeed=1500.f, s32 id=-1, f32 distance=70.f,
 			bool makeActive=true) =0;
+
+		//! Adds a WolvenKit style user controlled camera scene node to the scene graph.
+		/** This is a standard camera with an animator that provides mouse control.
+		The camera does not react on setPosition anymore after applying this animator. Instead
+		use setTarget, to fix the target the camera the camera hovers around. And setDistance
+		to set the current distance from that target, i.e. the radius of the orbit the camera
+		hovers on.
+		\param parent: Parent scene node of the camera. Can be null.
+		\param rotateSpeed: Rotation speed of the camera.
+		\param zoomSpeed: Zoom speed of the camera.
+		\param translationSpeed: TranslationSpeed of the camera.
+		\param id: id of the camera. This id can be used to identify the camera.
+		\param distance Initial distance of the camera from the object
+		\param makeActive Flag whether this camera should become the active one.
+		Make sure you always have one active camera.
+		\return Returns a pointer to the interface of the camera if successful, otherwise 0.
+		This pointer should not be dropped. See IReferenceCounted::drop() for more information. */
+		virtual ICameraSceneNode* addCameraSceneNodeWolvenKit(ISceneNode* parent = 0,
+			f32 rotateSpeed = -1500.f, f32 zoomSpeed = 0.1f,
+			f32 translationSpeed = 1500.f, s32 id = -1, f32 distance = 70.f,
+			bool makeActive = true) = 0;
 
 		//! Adds a camera scene node with an animator which provides mouse and keyboard control appropriate for first person shooters (FPS).
 		/** This FPS camera is intended to provide a demonstration of a
@@ -886,6 +910,13 @@ namespace scene
 			s32 maxLOD=5, E_TERRAIN_PATCH_SIZE patchSize=ETPS_17, s32 smoothFactor=0,
 			bool addAlsoIfHeightmapEmpty = false) = 0;
 
+		// for WolvenKit
+        virtual ITerrainSceneNodeWolvenKit* addTerrainSceneNodeWolvenKit(
+			const io::path& heightMapFileName,
+            ISceneNode* parent, s32 id,
+			u32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize,
+            const core::vector3df& anchor) = 0;
+
 		//! Adds a quake3 scene node to the scene graph.
 		/** A Quake3 Scene renders multiple meshes for a specific HighLanguage Shader (Quake3 Style )
 		\return Pointer to the quake3 scene node if successful, otherwise NULL.
@@ -1132,6 +1163,9 @@ namespace scene
 		the scene is not only drawn when calling this, but also animated
 		by existing scene node animators, culling of scene nodes is done, etc. */
 		virtual void drawAll() = 0;
+
+		virtual void SelectNode(ISceneNode* node) {}
+		virtual void DeselectNode() {}
 
 		//! Creates a rotation animator, which rotates the attached scene node around itself.
 		/** \param rotationSpeed Specifies the speed of the animation in degree per 10 milliseconds.

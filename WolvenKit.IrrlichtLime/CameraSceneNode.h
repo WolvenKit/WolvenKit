@@ -33,6 +33,7 @@ public:
 	property Scene::ViewFrustum^ ViewFrustum { Scene::ViewFrustum^ get(); }
 	property Matrix^ ViewMatrix { Matrix^ get(); }
 	property Matrix^ ViewMatrixAffector { Matrix^ get(); void set(Matrix^ value); }
+	property Vector3Df^ ModelRotation { Vector3Df^ get(); }
 
 internal:
 

@@ -83,6 +83,8 @@ public:
 	//! returns default font
 	IGUIFont* getBuiltInFont() const _IRR_OVERRIDE_;
 
+	IGUIFont* getBuiltInWKFont() const;
+
 	//! returns the sprite bank
 	IGUISpriteBank* getSpriteBank(const io::path& filename) _IRR_OVERRIDE_;
 
@@ -323,6 +325,7 @@ private:
 	IOSOperator* Operator;
 	u32 FocusFlags;
 	static const io::path DefaultFontName;
+	static const io::path DefaultWKFontName;
 };
 
 } // end namespace gui

@@ -1,13 +1,11 @@
-// Copyright (C) 2002-2012 Nikolaus Gebhardt
-// This file is part of the "Irrlicht Engine".
-// For conditions of distribution and use, see copyright notice in irrlicht.h
-
-#ifndef __C_SCENE_NODE_ANIMATOR_CAMERA_MAYA_H_INCLUDED__
-#define __C_SCENE_NODE_ANIMATOR_CAMERA_MAYA_H_INCLUDED__
+#ifndef __C_SCENE_NODE_ANIMATOR_CAMERA_WOLVENKIT_H_INCLUDED__
+#define __C_SCENE_NODE_ANIMATOR_CAMERA_WOLVENKIT_H_INCLUDED__
 
 #include "ISceneNodeAnimatorCameraMaya.h"
 #include "ICameraSceneNode.h"
 #include "vector2d.h"
+#include "SKeyMap.h"
+#include "irrArray.h"
 
 namespace irr
 {
@@ -24,15 +22,15 @@ namespace scene
 	/** This scene node animator can be attached to a camera to make it act
 	like a 3d modeling tool camera
 	*/
-	class CSceneNodeAnimatorCameraMaya : public ISceneNodeAnimatorCameraMaya
+	class CSceneNodeAnimatorCameraWolvenKit : public ISceneNodeAnimatorCameraMaya
 	{
 	public:
 		//! Constructor
-		CSceneNodeAnimatorCameraMaya(gui::ICursorControl* cursor, f32 rotateSpeed = -1500.f,
-			f32 zoomSpeed = 200.f, f32 translationSpeed = 1500.f, f32 distance=70.f);
+		CSceneNodeAnimatorCameraWolvenKit(gui::ICursorControl* cursor, f32 rotateSpeed = -1500.f,
+			f32 zoomSpeed = 1.f, f32 translationSpeed = 1500.f, f32 distance=70.f);
 
 		//! Destructor
-		virtual ~CSceneNodeAnimatorCameraMaya();
+		virtual ~CSceneNodeAnimatorCameraWolvenKit();
 
 		//! Animates the scene node, currently only works on cameras
 		virtual void animateNode(ISceneNode* node, u32 timeMs) _IRR_OVERRIDE_;
@@ -70,7 +68,8 @@ namespace scene
 		//! Returns the minimal distance to the camera target for zoom
 		virtual f32 getTargetMinDistance() const _IRR_OVERRIDE_;
 
-		const core::vector3df getModelRotation() const _IRR_OVERRIDE_;
+        //! Returns the model rotation
+        const core::vector3df getModelRotation() const _IRR_OVERRIDE_;
 
 		//! This animator will receive events when attached to the active camera
 		virtual bool isEventReceiverEnabled() const _IRR_OVERRIDE_
@@ -81,7 +80,7 @@ namespace scene
 		//! Returns type of the scene node
 		virtual ESCENE_NODE_ANIMATOR_TYPE getType() const _IRR_OVERRIDE_
 		{
-			return ESNAT_CAMERA_MAYA;
+			return ESNAT_CAMERA_WOLVENKIT;
 		}
 
 		//! Creates a clone of this animator.
@@ -103,6 +102,7 @@ namespace scene
 		bool isMouseKeyDown(s32 key) const;
 
 		bool MouseKeys[3];
+		f32  WheelDelta;
 
 		gui::ICursorControl *CursorControl;
 		scene::ICameraSceneNode* OldCamera;
@@ -118,6 +118,7 @@ namespace scene
 		f32 TranslateSpeed;
 		f32 CurrentZoom;
 		f32 RotX, RotY;
+        f32 nRotX, nRotY;
 		bool Zooming;
 		bool Rotating;
 		bool Moving;

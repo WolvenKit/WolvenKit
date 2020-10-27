@@ -1,8 +1,4 @@
-// Copyright (C) 2002-2012 Nikolaus Gebhardt
-// This file is part of the "Irrlicht Engine".
-// For conditions of distribution and use, see copyright notice in irrlicht.h
-
-#include "CSceneNodeAnimatorCameraMaya.h"
+#include "CSceneNodeAnimatorCameraWolvenKit.h"
 #include "ICursorControl.h"
 #include "ICameraSceneNode.h"
 #include "SViewFrustum.h"
@@ -14,16 +10,16 @@ namespace scene
 {
 
 //! constructor
-CSceneNodeAnimatorCameraMaya::CSceneNodeAnimatorCameraMaya(gui::ICursorControl* cursor,
+CSceneNodeAnimatorCameraWolvenKit::CSceneNodeAnimatorCameraWolvenKit(gui::ICursorControl* cursor,
 	f32 rotateSpeed, f32 zoomSpeed, f32 translateSpeed, f32 distance)
-	: CursorControl(cursor), OldCamera(0), MousePos(0.5f, 0.5f),
+	: CursorControl(cursor), OldCamera(0), MousePos(0.5f, 0.5f), WheelDelta(0.0f),
 	TargetMinDistance(0.f),
 	ZoomSpeed(zoomSpeed), RotateSpeed(rotateSpeed), TranslateSpeed(translateSpeed),
-	CurrentZoom(distance), RotX(0.0f), RotY(0.0f),
+	CurrentZoom(distance), RotX(0.0f), RotY(0.0f), nRotX(0.0f), nRotY(0.0f),
 	Zooming(false), Rotating(false), Moving(false), Translating(false)
 {
 	#ifdef _DEBUG
-	setDebugName("CSceneNodeAnimatorCameraMaya");
+	setDebugName("CSceneNodeAnimatorCameraWolvenKit");
 	#endif
 
 	if (CursorControl)
@@ -37,7 +33,7 @@ CSceneNodeAnimatorCameraMaya::CSceneNodeAnimatorCameraMaya(gui::ICursorControl* 
 
 
 //! destructor
-CSceneNodeAnimatorCameraMaya::~CSceneNodeAnimatorCameraMaya()
+CSceneNodeAnimatorCameraWolvenKit::~CSceneNodeAnimatorCameraWolvenKit()
 {
 	if (CursorControl)
 		CursorControl->drop();
@@ -49,10 +45,12 @@ CSceneNodeAnimatorCameraMaya::~CSceneNodeAnimatorCameraMaya()
 //! example with scene::ISceneManager::addMayaCameraSceneNode or
 //! scene::ISceneManager::addMeshViewerCameraSceneNode, may want to get this input
 //! for changing their position, look at target or whatever.
-bool CSceneNodeAnimatorCameraMaya::OnEvent(const SEvent& event)
+bool CSceneNodeAnimatorCameraWolvenKit::OnEvent(const SEvent& event)
 {
 	if (event.EventType != EET_MOUSE_INPUT_EVENT)
 		return false;
+
+	WheelDelta = 0.0f;
 
 	switch(event.MouseInput.Event)
 	{
@@ -86,6 +84,9 @@ bool CSceneNodeAnimatorCameraMaya::OnEvent(const SEvent& event)
 		}
 		break;
 	case EMIE_MOUSE_WHEEL:
+		WheelDelta = event.MouseInput.Wheel;
+		Zooming = true;
+		break;
 	case EMIE_LMOUSE_DOUBLE_CLICK:
 	case EMIE_RMOUSE_DOUBLE_CLICK:
 	case EMIE_MMOUSE_DOUBLE_CLICK:
@@ -100,11 +101,10 @@ bool CSceneNodeAnimatorCameraMaya::OnEvent(const SEvent& event)
 
 
 //! OnAnimate() is called just before rendering the whole scene.
-void CSceneNodeAnimatorCameraMaya::animateNode(ISceneNode *node, u32 timeMs)
+void CSceneNodeAnimatorCameraWolvenKit::animateNode(ISceneNode *node, u32 timeMs)
 {
-	//Alt + LM = Rotate around camera pivot
-	//Alt + LM + MM = Dolly forth/back in view direction (speed % distance camera pivot - max distance to pivot)
-	//Alt + MM = Move on camera plane (Screen center is about the mouse pointer, depending on move speed)
+	//LM = Rotate around camera pivot
+	//Wheel = Dolly forth/back in view direction (speed % distance camera pivot - max distance to pivot)
 
 	if (!node || node->getType() != ESNT_CAMERA)
 		return;
@@ -113,7 +113,9 @@ void CSceneNodeAnimatorCameraMaya::animateNode(ISceneNode *node, u32 timeMs)
 
 	// If the camera isn't the active camera, and receiving input, then don't process it.
 	if (!camera->isInputReceiverEnabled())
+	{
 		return;
+	}
 
 	scene::ISceneManager * smgr = camera->getSceneManager();
 	if (smgr && smgr->getActiveCamera() != camera)
@@ -129,33 +131,18 @@ void CSceneNodeAnimatorCameraMaya::animateNode(ISceneNode *node, u32 timeMs)
 		OldTarget += camera->getTarget() - LastCameraTarget;
 	}
 
-	f32 nRotX = RotX;
-	f32 nRotY = RotY;
+	nRotX = RotX;
+	nRotY = RotY;
 	f32 nZoom = CurrentZoom;
 
-	if ( (isMouseKeyDown(0) && isMouseKeyDown(2)) || isMouseKeyDown(1) )
+	if (Zooming)
 	{
-		if (!Zooming)
-		{
-			ZoomStart = MousePos;
-			Zooming = true;
-		}
-		else
-		{
-			nZoom += (ZoomStart.X - MousePos.X) * ZoomSpeed;
+        const f32 old = CurrentZoom;
+        CurrentZoom = CurrentZoom + WheelDelta * ZoomSpeed;
+        nZoom = CurrentZoom;
 
-			if (nZoom < TargetMinDistance+0.1f) // jox: fixed bug: bounce back when zooming too close
-				nZoom = TargetMinDistance+0.1f;
-		}
-	}
-	else if (Zooming)
-	{
-		const f32 old = CurrentZoom;
-		CurrentZoom = CurrentZoom + (ZoomStart.X - MousePos.X ) * ZoomSpeed;
-		nZoom = CurrentZoom;
-
-		if (nZoom < TargetMinDistance)
-			nZoom = CurrentZoom = old;
+        if (nZoom < TargetMinDistance)
+            nZoom = CurrentZoom = old;
 		Zooming = false;
 	}
 
@@ -224,8 +211,8 @@ void CSceneNodeAnimatorCameraMaya::animateNode(ISceneNode *node, u32 timeMs)
 
 	// Set pos ------------------------------------
 
-	pos = translate;
-	pos.X += nZoom;
+    pos = translate;
+    pos.X += nZoom;
 
 	pos.rotateXYBy(nRotY, translate);
 	pos.rotateXZBy(-nRotX, translate);
@@ -244,13 +231,13 @@ void CSceneNodeAnimatorCameraMaya::animateNode(ISceneNode *node, u32 timeMs)
 }
 
 
-bool CSceneNodeAnimatorCameraMaya::isMouseKeyDown(s32 key) const
+bool CSceneNodeAnimatorCameraWolvenKit::isMouseKeyDown(s32 key) const
 {
 	return MouseKeys[key];
 }
 
 
-void CSceneNodeAnimatorCameraMaya::allKeysUp()
+void CSceneNodeAnimatorCameraWolvenKit::allKeysUp()
 {
 	for (s32 i=0; i<3; ++i)
 		MouseKeys[i] = false;
@@ -258,86 +245,87 @@ void CSceneNodeAnimatorCameraMaya::allKeysUp()
 
 
 //! Sets the rotation speed
-void CSceneNodeAnimatorCameraMaya::setRotateSpeed(f32 speed)
+void CSceneNodeAnimatorCameraWolvenKit::setRotateSpeed(f32 speed)
 {
 	RotateSpeed = speed;
 }
 
 
 //! Sets the movement speed
-void CSceneNodeAnimatorCameraMaya::setMoveSpeed(f32 speed)
+void CSceneNodeAnimatorCameraWolvenKit::setMoveSpeed(f32 speed)
 {
 	TranslateSpeed = speed;
 }
 
 
 //! Sets the zoom speed
-void CSceneNodeAnimatorCameraMaya::setZoomSpeed(f32 speed)
+void CSceneNodeAnimatorCameraWolvenKit::setZoomSpeed(f32 speed)
 {
 	ZoomSpeed = speed;
 }
 
 
 //! Set the distance
-void CSceneNodeAnimatorCameraMaya::setDistance(f32 distance)
+void CSceneNodeAnimatorCameraWolvenKit::setDistance(f32 distance)
 {
 	CurrentZoom=distance;
 }
 
 
 //! Gets the rotation speed
-f32 CSceneNodeAnimatorCameraMaya::getRotateSpeed() const
+f32 CSceneNodeAnimatorCameraWolvenKit::getRotateSpeed() const
 {
 	return RotateSpeed;
 }
 
 
 // Gets the movement speed
-f32 CSceneNodeAnimatorCameraMaya::getMoveSpeed() const
+f32 CSceneNodeAnimatorCameraWolvenKit::getMoveSpeed() const
 {
 	return TranslateSpeed;
 }
 
 
 //! Gets the zoom speed
-f32 CSceneNodeAnimatorCameraMaya::getZoomSpeed() const
+f32 CSceneNodeAnimatorCameraWolvenKit::getZoomSpeed() const
 {
 	return ZoomSpeed;
 }
 
 
 //! Returns the current distance, i.e. orbit radius
-f32 CSceneNodeAnimatorCameraMaya::getDistance() const
+f32 CSceneNodeAnimatorCameraWolvenKit::getDistance() const
 {
 	return CurrentZoom;
 }
 
-void CSceneNodeAnimatorCameraMaya::setTargetMinDistance(f32 minDistance)
+void CSceneNodeAnimatorCameraWolvenKit::setTargetMinDistance(f32 minDistance)
 {
 	TargetMinDistance = minDistance;
 	if ( CurrentZoom < TargetMinDistance )
 		CurrentZoom = TargetMinDistance;
 }
 
-f32 CSceneNodeAnimatorCameraMaya::getTargetMinDistance() const
+f32 CSceneNodeAnimatorCameraWolvenKit::getTargetMinDistance() const
 {
 	return TargetMinDistance;
 }
 
-const core::vector3df CSceneNodeAnimatorCameraMaya::getModelRotation() const
+//! Returns the model rotation
+const core::vector3df CSceneNodeAnimatorCameraWolvenKit::getModelRotation() const
 {
-	return core::vector3df(0.0f, -RotX, RotY);
+	return core::vector3df(0.0f, -nRotX, nRotY);
 }
 
-ISceneNodeAnimator* CSceneNodeAnimatorCameraMaya::createClone(ISceneNode* node, ISceneManager* newManager)
+ISceneNodeAnimator* CSceneNodeAnimatorCameraWolvenKit::createClone(ISceneNode* node, ISceneManager* newManager)
 {
-	CSceneNodeAnimatorCameraMaya * newAnimator =
-		new CSceneNodeAnimatorCameraMaya(CursorControl, RotateSpeed, ZoomSpeed, TranslateSpeed);
+	CSceneNodeAnimatorCameraWolvenKit* newAnimator =
+		new CSceneNodeAnimatorCameraWolvenKit(CursorControl, RotateSpeed, ZoomSpeed, TranslateSpeed);
 	newAnimator->cloneMembers(this);
 	return newAnimator;
 }
 
-void CSceneNodeAnimatorCameraMaya::serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const
+void CSceneNodeAnimatorCameraWolvenKit::serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const
 {
 	ISceneNodeAnimator::serializeAttributes(out, options);
 
@@ -348,7 +336,7 @@ void CSceneNodeAnimatorCameraMaya::serializeAttributes(io::IAttributes* out, io:
 	out->addFloat("CurrentZoom", CurrentZoom);
 }
 
-void CSceneNodeAnimatorCameraMaya::deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options)
+void CSceneNodeAnimatorCameraWolvenKit::deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options)
 {
 	ISceneNodeAnimator::deserializeAttributes(in, options);
 
