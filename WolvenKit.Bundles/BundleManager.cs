@@ -102,7 +102,7 @@ namespace WolvenKit.Bundles
             var di = new DirectoryInfo(exedir);
             if (!di.Exists)
                 return;
-
+            var dlc = Path.Combine(di.Parent.Parent.FullName, "DLC");
             var content = Path.Combine(di.Parent.Parent.FullName, "content");
 
             var contentdirs = new List<string>(Directory.GetDirectories(content, "content*"));
@@ -114,12 +114,12 @@ namespace WolvenKit.Bundles
 
             var patchdirs = new List<string>(Directory.GetDirectories(content, "patch*"));
             patchdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in patchdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)))
+            foreach (var file in patchdirs.SelectMany(dir =>
+                Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)))
             {
                 LoadBundle(file, true);
             }
 
-            var dlc = Path.Combine(di.Parent.Parent.FullName, "DLC");
             if (Directory.Exists(dlc))
             {
                 var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
@@ -145,7 +145,12 @@ namespace WolvenKit.Bundles
         /// <param name="exedir"></param>
         public void LoadModsBundles(string exedir)
         {
-            var mods = Path.Combine(exedir, @"..\..\Mods\");
+            var di = new DirectoryInfo(exedir);
+            if (!di.Exists)
+                return;
+            var mods = Path.Combine(di.Parent.Parent.FullName, "Mods");
+            var dlc = Path.Combine(di.Parent.Parent.FullName, "DLC");
+
             if (!Directory.Exists(mods))
                 Directory.CreateDirectory(mods);
             var modsdirs = new List<string>(Directory.GetDirectories(mods));
@@ -155,8 +160,7 @@ namespace WolvenKit.Bundles
             {
                 LoadModBundle(file);
             }
-
-            var dlc = Path.Combine(exedir, @"..\..\DLC\");
+            
             if (Directory.Exists(dlc))
             {
                 var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
