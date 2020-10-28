@@ -94,27 +94,36 @@ namespace WolvenKit.App
         #region Archive Managers
         private SoundManager soundManager;
         private SoundManager modsoundmanager;
+
         private BundleManager bundleManager;
         private BundleManager modbundleManager;
+        
         private TextureManager textureManager;
-        private CollisionManager collisionManager;
         private TextureManager modTextureManager;
+
+        private CollisionManager collisionManager;
+        private CollisionManager modCollisionManager;
+
         private W3StringManager w3StringManager;
         private SpeechManager speechManager;
 
         //Public getters
         public W3StringManager W3StringManager => w3StringManager;
 
-      
 
-        public BundleManager BundleManager => bundleManager;
-        public BundleManager ModBundleManager => modbundleManager;
+        private BundleManager BundleManager => bundleManager;
+        private BundleManager ModBundleManager => modbundleManager;
+
         public SoundManager SoundManager => soundManager;
-        public SoundManager ModSoundManager => modsoundmanager;
+        private SoundManager ModSoundManager => modsoundmanager;
+
         public TextureManager TextureManager => textureManager;
-        public TextureManager ModTextureManager => modTextureManager;
-        public CollisionManager CollisionManager => collisionManager;
-        public SpeechManager SpeechManager => speechManager;
+        private TextureManager ModTextureManager => modTextureManager;
+
+        private CollisionManager CollisionManager => collisionManager;
+        private CollisionManager ModCollisionManager => modCollisionManager;
+
+        private SpeechManager SpeechManager => speechManager;
 
         //public Dictionary<string, MemoryMappedFile> mmfs = new Dictionary<string, MemoryMappedFile>();
 
@@ -140,6 +149,11 @@ namespace WolvenKit.App
                     MainController.Get().ModTextureManager.LoadModsBundles(exeDir);
                     managers.Add(MainController.Get().ModTextureManager);
                 }
+                if (MainController.Get().ModCollisionManager != null)
+                {
+                    MainController.Get().ModCollisionManager.LoadModsBundles(exeDir);
+                    managers.Add(MainController.Get().ModCollisionManager);
+                }
             }
             else
             {
@@ -156,7 +170,7 @@ namespace WolvenKit.App
         #endregion
 
         #region Logging
-        public LoggerService Logger { get; set; }
+        public LoggerService Logger { get; private set; }
 
         private KeyValuePair<string, Logtype> _logMessage = new KeyValuePair<string, Logtype>("", Logtype.Normal);
         public KeyValuePair<string, Logtype> LogMessage
@@ -338,6 +352,14 @@ namespace WolvenKit.App
                     }
                 }
                 #endregion
+                loadStatus = "Loading mod texure manager!";
+                #region Load mod texture manager
+                if (modTextureManager == null)
+                {
+                    modTextureManager = new TextureManager();
+                    modTextureManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                }
+                #endregion
 
                 loadStatus = "Loading collision manager!";
                 #region Load collision manager
@@ -377,6 +399,14 @@ namespace WolvenKit.App
                     }
                 }
                 #endregion
+                loadStatus = "Loading mod collision manager!";
+                #region Load mod collision manager
+                if (modCollisionManager == null)
+                {
+                    modCollisionManager = new CollisionManager();
+                    modCollisionManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                }
+                #endregion
 
                 loadStatus = "Loading speech manager!";
                 #region Load speech manager
@@ -384,15 +414,6 @@ namespace WolvenKit.App
                 {
                     speechManager = new SpeechManager();
                     speechManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                }
-                #endregion
-
-                loadStatus = "Loading mod texure manager!";
-                #region Load mod texture manager
-                if (modTextureManager == null)
-                {
-                    modTextureManager = new TextureManager();
-                    modTextureManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 #endregion
 
@@ -434,7 +455,6 @@ namespace WolvenKit.App
                     }
                 }
                 #endregion
-
                 loadStatus = "Loading mod sound manager!";
                 #region Load mod sound manager
                 if (modsoundmanager == null)

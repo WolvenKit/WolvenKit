@@ -30,6 +30,9 @@ namespace WolvenKit.Cache
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
+        private readonly string[] vanillaDLClist = new string[] { "DLC1", "DLC2", "DLC3", "DLC4", "DLC5", "DLC6", "DLC7", "DLC8", "DLC9", "DLC10", "DLC11", "DLC12", "DLC13", "DLC14", "DLC15", "DLC16", "bob", "ep1" };
+
+
         /// <summary>
         ///     Load a single mod collision cache
         /// </summary>
@@ -80,7 +83,11 @@ namespace WolvenKit.Cache
         /// <param name="exedir">Path to executable directory</param>
         public void LoadAll(string exedir)
         {
-            var content = Path.Combine(exedir, @"..\..\content\");
+            var di = new DirectoryInfo(exedir);
+            if (!di.Exists)
+                return;
+            var dlc = Path.Combine(di.Parent.Parent.FullName, "DLC");
+            var content = Path.Combine(di.Parent.Parent.FullName, "content");
 
             var contentdirs = new List<string>(Directory.GetDirectories(content, "content*"));
             contentdirs.Sort(new AlphanumComparator<string>());
@@ -91,17 +98,23 @@ namespace WolvenKit.Cache
 
             var patchdirs = new List<string>(Directory.GetDirectories(content, "patch*"));
             patchdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in patchdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Collision)))
+            foreach (var file in patchdirs
+                .SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories)
+                    .Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Collision)))
             {
                 LoadBundle(file);
             }
 
-            var dlc = Path.Combine(exedir, @"..\..\DLC\");
             if (Directory.Exists(dlc))
             {
                 var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
                 dlcdirs.Sort(new AlphanumComparator<string>());
-                foreach (var file in dlcdirs.Where(dir => new Regex("(DLC..)|(DLC.)|(BOB)|(ep.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories).OrderBy(k => k).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Collision)))
+
+                foreach (var file in dlcdirs
+                    .Where(_ => vanillaDLClist.Contains(new DirectoryInfo(_).Name))
+                    .SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories)
+                        .OrderBy(k => k)
+                        .Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Collision)))
                 {
                     LoadBundle(file);
                 }
@@ -116,7 +129,12 @@ namespace WolvenKit.Cache
         /// <param name="exedir"></param>
         public void LoadModsBundles(string exedir)
         {
-            var mods = Path.Combine(exedir, @"..\..\Mods\");
+            var di = new DirectoryInfo(exedir);
+            if (!di.Exists)
+                return;
+            var mods = Path.Combine(di.Parent.Parent.FullName, "Mods");
+            var dlc = Path.Combine(di.Parent.Parent.FullName, "DLC");
+
             if (!Directory.Exists(mods))
                 Directory.CreateDirectory(mods);
             var modsdirs = new List<string>(Directory.GetDirectories(mods));
@@ -127,12 +145,16 @@ namespace WolvenKit.Cache
                 LoadModBundle(file);
             }
 
-            var dlc = Path.Combine(exedir, @"..\..\DLC\");
             if (Directory.Exists(dlc))
             {
                 var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
                 dlcdirs.Sort(new AlphanumComparator<string>());
-                foreach (var file in dlcdirs.Where(dir => !new Regex("(DLC..)|(DLC.)|(BOB)|(bob)|(EP.)|(ep.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories).OrderBy(k => k).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Collision)))
+
+                var tmp = dlcdirs.Where(_ => !vanillaDLClist.Contains(new DirectoryInfo(_).Name)).ToList();
+                foreach (var file in tmp
+                    .SelectMany(dir => Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories)
+                        .OrderBy(k => k)
+                        .Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Collision)))
                 {
                     LoadModBundle(file);
                 }
