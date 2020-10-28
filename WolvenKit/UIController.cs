@@ -35,14 +35,9 @@ namespace WolvenKit
 
     public class UIController : IVariableEditor, INotifyPropertyChanged
     {
-        private static UIController mainController;
+        private static UIController uiController;
         public UIConfiguration Configuration { get; private set; }
         public frmMain Window { get; private set; }
-
-        public const string ManagerCacheDir = "ManagerCache";
-        public string VLCLibDir = "C:\\Program Files\\VideoLAN\\VLC";
-        public string InitialModProject = "";
-        public string InitialWKP = "";
 
         // Color Themes
         public VisualStudioToolStripExtender ToolStripExtender { get; set; }
@@ -120,13 +115,13 @@ namespace WolvenKit
 
         public static UIController Get()
         {
-            if (mainController == null)
+            if (uiController == null)
             {
-                mainController = new UIController();
-                mainController.Configuration = UIConfiguration.Load();
-                mainController.Window = new frmMain();
+                uiController = new UIController();
+                uiController.Configuration = UIConfiguration.Load();
+                uiController.Window = new frmMain();
             }
-            return mainController;
+            return uiController;
         }
 
 
