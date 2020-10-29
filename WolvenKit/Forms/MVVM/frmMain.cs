@@ -1113,6 +1113,7 @@ namespace WolvenKit
                 case ".BAT":
                 case ".YML":
                 case ".LOG":
+                case ".INI":
                     ShellExecute(fullpath);
                     break;
 
