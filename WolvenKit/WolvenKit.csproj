@@ -1024,10 +1024,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Icons\Files\apb_32x.png" />
+    <Content Include="Resources\Icons\Files\blend_32x.png" />
     <Content Include="Resources\Icons\Files\fbx_32x.png" />
     <Content Include="Resources\Icons\Files\image_32x.png" />
     <Content Include="Resources\Icons\Files\xbm_32x.png" />
     <Content Include="Resources\Icons\Files\xml_32x.png" />
+    <Content Include="Resources\Icons\Files\ZipFile_32x.png" />
     <Content Include="Resources\Icons\GUI\Asset_Browser_16x.png" />
     <Content Include="Resources\Icons\GUI\Asset_Browser_Other_Mod_16x.png" />
     <Content Include="Resources\Icons\GUI\Discord_32x.png" />

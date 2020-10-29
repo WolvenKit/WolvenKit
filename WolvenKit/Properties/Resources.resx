@@ -583,4 +583,10 @@
   <data name="Export_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\export_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="blend" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\files\blend_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="zip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\files\zipfile_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

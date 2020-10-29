@@ -1102,11 +1102,17 @@ namespace WolvenKit
                 case ".WS":
                 // other
                 case ".FBX":
+                case ".XCF":
+                case ".PSD":
                 case ".APB":
+                case ".APX":
+                case ".CTW":
+                case ".BLEND":
+                case ".ZIP":
+                case ".RAR":
                 case ".BAT":
                 case ".YML":
                 case ".LOG":
-                case ".INI":
                     ShellExecute(fullpath);
                     break;
 
