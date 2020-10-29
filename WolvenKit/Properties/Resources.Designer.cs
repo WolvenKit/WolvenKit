@@ -143,6 +143,16 @@ namespace WolvenKit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap blend {
+            get {
+                object obj = ResourceManager.GetObject("blend", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap box {
             get {
                 object obj = ResourceManager.GetObject("box", resourceCulture);
@@ -1606,6 +1616,16 @@ namespace WolvenKit.Properties {
         internal static System.Drawing.Bitmap xml {
             get {
                 object obj = ResourceManager.GetObject("xml", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap zip {
+            get {
+                object obj = ResourceManager.GetObject("zip", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

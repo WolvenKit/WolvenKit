@@ -167,7 +167,12 @@ namespace WolvenKit.App.ViewModels
                 
             }
             else
-                importable.SetState(ImportableFile.EObjectState.NoTextureGroup);
+            {
+                importable.TextureGroup = ETextureGroup.Default;
+                importable.SetState(ImportableFile.EObjectState.Ready);
+                importable.IsSelected = true;
+                //importable.SetState(ImportableFile.EObjectState.NoTextureGroup);
+            }
         }
 
         private bool CanImport() => Importableobjects != null;

@@ -307,24 +307,26 @@ namespace WolvenKit
             this.resetfilesButton});
             this.searchstrip.Location = new System.Drawing.Point(0, 0);
             this.searchstrip.Name = "searchstrip";
-            this.searchstrip.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.searchstrip.Size = new System.Drawing.Size(373, 33);
+            this.searchstrip.Padding = new System.Windows.Forms.Padding(2);
+            this.searchstrip.Size = new System.Drawing.Size(373, 31);
             this.searchstrip.TabIndex = 1;
             this.searchstrip.Text = "toolStrip1";
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Image = global::WolvenKit.Properties.Resources.Filter_16x;
+            this.toolStripLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Padding = new System.Windows.Forms.Padding(4, 2, 4, 2);
-            this.toolStripLabel1.Size = new System.Drawing.Size(28, 24);
+            this.toolStripLabel1.Padding = new System.Windows.Forms.Padding(2);
+            this.toolStripLabel1.Size = new System.Drawing.Size(24, 28);
             // 
             // searchBox
             // 
             this.searchBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.searchBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.searchBox.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.searchBox.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.searchBox.Name = "searchBox";
-            this.searchBox.Size = new System.Drawing.Size(108, 27);
+            this.searchBox.Size = new System.Drawing.Size(160, 27);
             this.searchBox.TextChanged += new System.EventHandler(this.searchBox_TextChanged);
             // 
             // showhideButton
@@ -380,9 +382,10 @@ namespace WolvenKit
             this.treeListView.ContextMenuStrip = this.contextMenu;
             this.treeListView.Cursor = System.Windows.Forms.Cursors.Default;
             this.treeListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.treeListView.HideSelection = false;
             this.treeListView.IsSimpleDragSource = true;
-            this.treeListView.Location = new System.Drawing.Point(0, 33);
+            this.treeListView.Location = new System.Drawing.Point(0, 31);
             this.treeListView.Margin = new System.Windows.Forms.Padding(2);
             this.treeListView.Name = "treeListView";
             this.treeListView.ShowGroups = false;
