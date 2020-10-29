@@ -160,7 +160,7 @@ namespace WolvenKit
         /// <param name="args"></param>
         public void WorkerLoadFileSetup(LoadFileArgs args)
         {
-            MainController.Get().ProjectStatus = "Busy";
+            MainController.Get().ProjectStatus = EProjectStatus.Busy;
 
             this.Text = Path.GetFileName(args.Filename) + " [" + args.Filename + "]";
 
@@ -183,7 +183,7 @@ namespace WolvenKit
             else
                 MainController.LogString("The background worker is currently busy.\r\n", Logtype.Error);
 
-            MainController.Get().ProjectStatus = "Ready";
+            MainController.Get().ProjectStatus = EProjectStatus.Ready;
         }
 
         /// <summary>

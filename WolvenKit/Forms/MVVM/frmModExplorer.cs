@@ -563,6 +563,8 @@ namespace WolvenKit
 
             if (File.Exists(newfullpath))
                 return;
+
+            MainController.Get().ProjectStatus = EProjectStatus.Busy;
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(newfullpath) ?? throw new InvalidOperationException());
@@ -573,7 +575,7 @@ namespace WolvenKit
             }
 
             File.Move(fullpath, newfullpath);
-            MainController.Get().ProjectStatus = "File moved";
+            MainController.Get().ProjectStatus = EProjectStatus.Ready;
         }
 
 

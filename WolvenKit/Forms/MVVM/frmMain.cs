@@ -19,6 +19,7 @@ using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
 using SearchOption = System.IO.SearchOption;
 using System.IO.MemoryMappedFiles;
+using WolvenKit.App.Model;
 
 
 namespace WolvenKit
@@ -45,6 +46,7 @@ namespace WolvenKit
     using Enums = Enums;
     using WolvenKit.CR2W.Reflection;
     using Microsoft.WindowsAPICodePack.Dialogs;
+    using System.Globalization;
 
     public partial class frmMain : Form
     {
@@ -81,6 +83,7 @@ namespace WolvenKit
 
         private delegate void StrDelegate(string t);
         private delegate void LogDelegate(string t, Logtype type);
+        private delegate void IntDelegate(int t);
 
         private readonly Queue<string> lastClosedTab = new Queue<string>();
         private DeserializeDockContent m_deserializeDockContent;
@@ -157,6 +160,8 @@ namespace WolvenKit
             watcher.Error += Watcher_Error;
             filePaths = new List<string>();
             rwlock = new ReaderWriterLockSlim();
+
+            this.toolStripDropDownButtonGit.Paint += toolStripDropDownButtonGit_Paint;
         }
 
         #endregion
@@ -513,6 +518,10 @@ namespace WolvenKit
             var theme = UIController.GetTheme();
             this.dockPanel.Theme = theme;
             visualStudioToolStripExtender1.SetStyle(menuStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+
+            //visualStudioToolStripExtender1.SetStyle(statusToolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, new VS2015LightTheme());
+            //statusToolStrip.BackColor = SystemColors.HotTrack;
+
             visualStudioToolStripExtender1.SetStyle(toolbarToolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
         }
 
@@ -822,16 +831,22 @@ namespace WolvenKit
         /// <param name="e"></param>
         private void MainControllerUpdated(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "ProjectStatus")
-                Invoke(new StrDelegate(SetStatusLabelText), ((MainController)sender).ProjectStatus);
-            if (e.PropertyName == "LogMessage")
-                Invoke(new LogDelegate(AddOutput), ((MainController)sender).LogMessage.Key + "\n",
-                    ((MainController)sender).LogMessage.Value);
-
-            void SetStatusLabelText(string text)
+            switch (e.PropertyName)
             {
-                statusLBL.Text = text;
+                case "ProjectStatus":
+                    Invoke(new StrDelegate(SetStatusLabelText), ((MainController)sender).ProjectStatus.ToString());
+                    break;
+                case "LogMessage":
+                    Invoke(new LogDelegate(AddOutput), ((MainController)sender).LogMessage.Key + "\n",
+                        ((MainController)sender).LogMessage.Value);
+                    break;
+                case "StatusProgress":
+                    Invoke(new IntDelegate(SetStatusProgressbarValue), ((MainController)sender).StatusProgress);
+                    break;
             }
+
+            void SetStatusLabelText(string text) => statusLBL.Text = text;
+            void SetStatusProgressbarValue(int val) => toolStripProgressBar1.Value = val;
         }
 
         private void Assetbrowser_FileAdd(object sender, AddFileArgs Details)
@@ -843,7 +858,7 @@ namespace WolvenKit
                 return;
             }
 
-            MainController.Get().ProjectStatus = "Busy";
+            MainController.Get().ProjectStatus = EProjectStatus.Busy;
 
             // Backgroundworker
             if (!MainBackgroundWorker.IsBusy)
@@ -884,11 +899,15 @@ namespace WolvenKit
                 ResumeMonitoring();
                 vm.SaveMod();
                 this.BringToFront();
+                MainController.Get().ProjectStatus = EProjectStatus.Ready;
             }
             else
+            {
                 Logger.LogString("The background worker is currently busy.\r\n", Logtype.Error);
+                MainController.Get().ProjectStatus = EProjectStatus.Errored;
+            }
 
-            MainController.Get().ProjectStatus = "Ready";
+            
 
         }
 
@@ -1000,16 +1019,19 @@ namespace WolvenKit
 
         private void ModExplorer_RequestFileRename(object sender, RequestFileOpenArgs e)
         {
+            
             var filename = e.File;
 
-            if (!File.Exists(filename)) return;
+            if (!File.Exists(filename))
+                return;
 
             var dlg = new frmRenameDialog() { FileName = filename };
             if (dlg.ShowDialog() == DialogResult.OK && dlg.FileName != filename)
             {
                 var newfullpath = Path.Combine(ActiveMod.FileDirectory, dlg.FileName);
 
-                if (File.Exists(newfullpath)) return;
+                if (File.Exists(newfullpath))
+                    return;
 
                 // Rename file in file structure
                 try
@@ -1022,7 +1044,6 @@ namespace WolvenKit
 
                 File.Move(filename, newfullpath);
             }
-            MainController.Get().ProjectStatus = "File renamed";
         }
 
         private void ModExplorer_RequestFastRender(object sender, RequestFileOpenArgs e)
@@ -1214,7 +1235,6 @@ namespace WolvenKit
             {
                 Output.Clear();
             }
-            MainController.Get().ProjectStatus = "Output cleared";
         }
 
         private void AddOutput(string text, Logtype type = Logtype.Normal)
@@ -1345,6 +1365,8 @@ namespace WolvenKit
             var packsettings = new frmPackSettings();
             if (packsettings.ShowDialog() == DialogResult.OK)
             {
+                MainController.Get().ProjectStatus = EProjectStatus.Busy;
+
                 toolStripBtnPack.Enabled = false;
                 ShowConsole();
                 ShowOutput();
@@ -1733,7 +1755,7 @@ namespace WolvenKit
                     vm.InstallMod();
 
                 //Report that we are done
-                MainController.Get().ProjectStatus = install ? "Mod Packed&Installed" : "Mod packed!";
+                MainController.Get().ProjectStatus = EProjectStatus.Ready;
                 toolStripBtnPack.Enabled = true;
                 return true;
             }
@@ -1930,7 +1952,7 @@ namespace WolvenKit
 
             ResetWindows();
             Logger.LogString("\"" + ActiveMod.Name + "\" loaded successfully!\n", Logtype.Success);
-            MainController.Get().ProjectStatus = "Ready";
+            MainController.Get().ProjectStatus = EProjectStatus.Ready;
 
             #region upgrade from older mod projects
             if (!old.Descendants("Version").Any() || (old.Descendants("Version").Any()
@@ -2268,7 +2290,7 @@ namespace WolvenKit
                     break;
                 }
                 else
-                    MainController.Get().ProjectStatus = "Ready";
+                    MainController.Get().ProjectStatus = EProjectStatus.Ready;
             }
 
             if (exit)
@@ -2660,6 +2682,8 @@ namespace WolvenKit
                         sf.FileName = of.FileName;
                         if (sf.ShowDialog() == DialogResult.OK)
                         {
+                            MainController.Get().ProjectStatus = EProjectStatus.Busy;
+
                             try
                             {
                                 ConvertRig rig = new ConvertRig();
@@ -2671,7 +2695,7 @@ namespace WolvenKit
                                 Logger.LogString(ex.ToString() + "\n", Logtype.Error);
                             }
 
-                            MainController.Get().ProjectStatus = "File imported succesfully!";
+                            MainController.Get().ProjectStatus = EProjectStatus.Ready;
                         }
                     }
                 }
@@ -2695,6 +2719,8 @@ namespace WolvenKit
                         sf.FileName = of.FileName;
                         if (sf.ShowDialog() == DialogResult.OK)
                         {
+                            MainController.Get().ProjectStatus = EProjectStatus.Busy;
+
                             try
                             {
                                 ConvertAnimation anim = new ConvertAnimation();
@@ -2705,7 +2731,7 @@ namespace WolvenKit
                                 Logger.LogString(ex.ToString() + "\n", Logtype.Error);
                             }
 
-                            MainController.Get().ProjectStatus = "File imported succesfully!";
+                            MainController.Get().ProjectStatus = EProjectStatus.Ready;
                         }
                     }
                 }
@@ -3453,8 +3479,9 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             {
                 return;
             }
+            MainController.Get().ProjectStatus = EProjectStatus.Busy;
             vm.SaveAllFiles();
-            MainController.Get().ProjectStatus = "Item saved";
+            MainController.Get().ProjectStatus = EProjectStatus.Ready;
             Logger.LogString("Saved!\n", Logtype.Success);
         }
 
@@ -3558,6 +3585,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     newChunktypename = form.ChunkType.Split(' ').Last().TrimStart("(").TrimEnd(')');
                     redextension = form.ChunkType.Split(' ').First();
                 }
+                else
+                {
+                    return null;
+                }
             }
 
             if (string.IsNullOrEmpty(redextension)) return null;
@@ -3598,8 +3629,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
         private void sceneViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var dlg = new CommonOpenFileDialog() { Title = "Select file" };
-            dlg.Multiselect = false;
+            var dlg = new CommonOpenFileDialog {Title = "Select file", Multiselect = false};
             dlg.Filters.Add(new CommonFileDialogFilter("Files", ".w2w,.w2l"));
             dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
             if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
@@ -3609,5 +3639,125 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 sceneView.Show(this.dockPanel, DockState.Document);
             }
         }
+
+        void toolStripDropDownButtonGit_Paint(object sender, PaintEventArgs e)
+        {
+            if (toolStripDropDownButtonGit.Pressed)
+            {
+                //e.Graphics.FillRectangle(Brushes.Transparent, e.ClipRectangle);
+            }
+        }
+
+        private async void backupModProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // check if there is a mod project loaded
+            if (ActiveMod == null)
+            {
+                MainController.LogString($"No mod project loaded.", Logtype.Error);
+                return;
+            }
+
+            // check if git is in PATH
+            var mpath = System.Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
+            var upath = System.Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User);
+            if (mpath == null && upath == null) 
+                return;
+            
+            if ((mpath != null && !mpath.Split(';').Any(_ => _.Contains("\\Git\\"))) 
+                && ((upath != null && !upath.Split(';').Any(_ => _.Contains("\\Git\\")))))
+            {
+                switch (MessageBox.Show(
+                    "Git was not found in your PATH environmental variables, it may not be installed on your machine. " +
+                    "Please install git to use the backup feature for WolvenKit.",
+                    "Git installation not found.",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning))
+                {
+                    default: 
+                        //break;
+                        return;
+                    //case DialogResult.Yes:
+                    //{
+                    //    break;
+                    //}
+                    //case DialogResult.No:
+                    //{
+                    //    break;
+                    //}
+                }
+            }
+
+            // check if git version errors
+            var trygetgit = await ProcessHelper.RunCommandLineAsync(Logger, "", "git --version");
+            if (trygetgit != 0)
+            {
+                MainController.LogString($"Git is not installed, or is installed improperly. Aborting.", Logtype.Error);
+                return;
+            }
+
+            MainController.Get().ProjectStatus = EProjectStatus.Busy;
+            MainController.Get().StatusProgress = 0;
+            MainController.LogString($"Backing up mod project. Please wait...", Logtype.Important);
+
+            // create git repo - rerunning git init is safe
+            //MainController.LogString($"Running git init command...", Logtype.Important);
+            string templatedir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? throw new InvalidOperationException(), "Resources/GitTemplateDir");
+            var resultInit = await GitHelper.InitRepository(Logger, ActiveMod.ProjectDirectory, templatedir, ActiveMod.Author, ActiveMod.Email);
+            if (resultInit)
+            {
+                MainController.Get().StatusProgress = 25;
+                //MainController.LogString($"Created git repository for project ({ActiveMod.Name}) at {ActiveMod.ProjectDirectory}.", Logtype.Success);
+            }
+            else
+            {
+                MainController.Get().ProjectStatus = EProjectStatus.Ready;
+                MainController.Get().StatusProgress = 100;
+                MainController.LogString($"Error creating git repository for project {ActiveMod.Name}.", Logtype.Error);
+                return;
+            }
+
+            string sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace("/", "-");
+            string commitMessage = ActiveMod.Name + "_" + DateTime.Now.ToString(sysFormat + "_HH-mm-ss");
+            string archiveName = commitMessage + ".zip";
+            string archivePath = Path.Combine(ActiveMod.BackupDirectory, archiveName);
+
+
+            // commit new files
+            MainController.LogString($"Running git commit command...", Logtype.Important);
+            var resultCommit = await GitHelper.Commit(Logger, ActiveMod.ProjectDirectory, commitMessage);
+            if (resultCommit)
+            {
+                MainController.Get().StatusProgress = 50;
+                MainController.LogString($"Successfully commited git repo for project {ActiveMod.Name}.",
+                    Logtype.Success);
+            }
+            else
+            {
+                MainController.Get().ProjectStatus = EProjectStatus.Ready;
+                MainController.Get().StatusProgress = 100;
+                MainController.LogString($"Git repo failed to commit for project {ActiveMod.Name}.", Logtype.Error);
+                return;
+            }
+
+            // git archive zip to ./_backups
+            MainController.LogString($"Running git archive command...", Logtype.Important);
+            var resultArchive = await GitHelper.Archive(Logger, ActiveMod.ProjectDirectory, archivePath);
+            if (resultArchive)
+            {
+                MainController.Get().StatusProgress = 100;
+                MainController.Get().ProjectStatus = EProjectStatus.Ready;
+                MainController.LogString($"Successfully created git archive for project ({ActiveMod.Name}) at {archivePath}.", Logtype.Success);
+            }
+            else
+            {
+                MainController.Get().StatusProgress = 100;
+                MainController.Get().ProjectStatus = EProjectStatus.Ready;
+                MainController.LogString($"Error creating git archive for project {ActiveMod.Name}.", Logtype.Error);
+                return;
+            }
+        }
+
+        private void openBackupFolderToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.ShowFolderInExplorer(ActiveMod.BackupDirectory);
+
+        private void commandPromptHereToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.OpenConsoleAtPath(ActiveMod.ProjectDirectory);
     }
 }

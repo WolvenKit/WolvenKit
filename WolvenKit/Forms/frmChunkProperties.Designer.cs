@@ -140,7 +140,7 @@ namespace WolvenKit.Forms
             this.deleteChunkToolStripMenuItem,
             this.goToChunkToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(255, 264);
+            this.contextMenu.Size = new System.Drawing.Size(255, 286);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // expandAllToolStripMenuItem
@@ -236,7 +236,7 @@ namespace WolvenKit.Forms
             // deleteChunkToolStripMenuItem
             // 
             this.deleteChunkToolStripMenuItem.Name = "deleteChunkToolStripMenuItem";
-            this.deleteChunkToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.deleteChunkToolStripMenuItem.ShortcutKeyDisplayString = "Del";
             this.deleteChunkToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
             this.deleteChunkToolStripMenuItem.Text = "Delete Chunk Target";
             this.deleteChunkToolStripMenuItem.Click += new System.EventHandler(this.DeleteChunkToolStripMenuItem_Click);

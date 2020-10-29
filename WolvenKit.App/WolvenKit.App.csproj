@@ -229,9 +229,11 @@
     <Compile Include="Model\CopyController.cs" />
     <Compile Include="Model\CsvCommonFunctions.cs" />
     <Compile Include="Model\CsvMaps.cs" />
+    <Compile Include="Model\GitHelper.cs" />
     <Compile Include="Model\ImageUtility.cs" />
     <Compile Include="Model\ImportModel.cs" />
     <Compile Include="Model\IWolvenkitView.cs" />
+    <Compile Include="Model\ProcessHelper.cs" />
     <Compile Include="Model\SearchParameters.cs" />
     <Compile Include="Model\WKPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

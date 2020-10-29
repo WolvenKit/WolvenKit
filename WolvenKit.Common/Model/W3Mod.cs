@@ -19,6 +19,34 @@ namespace WolvenKit.Common
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
+        public string BackupDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "_backups");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string RecyclebinDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "_recyclebin");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
         public string FileDirectory
         {
             get
@@ -327,17 +355,31 @@ namespace WolvenKit.Common
         [Category("About")]
         [Description("The name of your mod.")]
         public string Name { get; set; }
+
+        [Category("About")]
+        [Description("The name of your mod.")]
+        public string Author { get; set; }
+
+        [Category("About")]
+        [Description("The name of your mod.")]
+        public string Email { get; set; }
+
+        [Browsable(false)]
         [Category("About")]
         [Description("The version of your mod. It's a string so 0.1-ALPHA and such is possible.")]
         public string Version { get; set; } = "0.62";
 
         public object Clone()
         {
-            var clone = new W3Mod();
-            clone.Name = Name;
-            clone.FileName = FileName;
-            //clone.Version = Version;
-            clone.LastOpenedFiles = LastOpenedFiles;
+            var clone = new W3Mod
+            {
+                Name = Name, 
+                Author = Author,
+                Email =  Email,
+                Version = Version,
+                FileName = FileName, 
+                LastOpenedFiles = LastOpenedFiles
+            };
             return clone;
         }
 
@@ -393,7 +435,7 @@ namespace WolvenKit.Common
         }
 
         /// <summary>
-        /// Returns the first raltive folder path in the ActiveMod/dlc directory
+        /// Returns the first reltive folder path in the ActiveMod/dlc directory
         /// Does not support multiple DLC
         /// </summary>
         /// <returns></returns>
