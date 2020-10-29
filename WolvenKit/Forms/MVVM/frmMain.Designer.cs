@@ -188,7 +188,7 @@ namespace WolvenKit
             this.toolbarToolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolbarToolStrip.Name = "toolbarToolStrip";
             this.toolbarToolStrip.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.toolbarToolStrip.Size = new System.Drawing.Size(36, 660);
+            this.toolbarToolStrip.Size = new System.Drawing.Size(36, 635);
             this.toolbarToolStrip.Stretch = true;
             this.toolbarToolStrip.TabIndex = 6;
             this.toolbarToolStrip.Text = "topTS";
@@ -1096,7 +1096,7 @@ namespace WolvenKit
             this.dockPanel.Margin = new System.Windows.Forms.Padding(2);
             this.dockPanel.Name = "dockPanel";
             this.dockPanel.ShowDocumentIcon = true;
-            this.dockPanel.Size = new System.Drawing.Size(1341, 660);
+            this.dockPanel.Size = new System.Drawing.Size(1341, 635);
             this.dockPanel.TabIndex = 9;
             this.dockPanel.ActiveDocumentChanged += new System.EventHandler(this.dockPanel_ActiveDocumentChanged);
             // 
@@ -1163,7 +1163,7 @@ namespace WolvenKit
             // 
             this.toolStripDropDownButtonGit.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripDropDownButtonGit.AutoToolTip = false;
-            this.toolStripDropDownButtonGit.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.toolStripDropDownButtonGit.BackColor = System.Drawing.Color.Transparent;
             this.toolStripDropDownButtonGit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.backupModProjectToolStripMenuItem,
             this.toolStripSeparator13,
@@ -1224,7 +1224,7 @@ namespace WolvenKit
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.dockPanel);
             this.toolStripContainer1.ContentPanel.Margin = new System.Windows.Forms.Padding(2);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1341, 660);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1341, 635);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             // 
             // toolStripContainer1.LeftToolStripPanel

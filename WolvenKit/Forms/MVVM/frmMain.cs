@@ -82,6 +82,7 @@ namespace WolvenKit
         private readonly ToolStripRenderer toolStripRenderer = new ToolStripProfessionalRenderer();
 
         private delegate void StrDelegate(string t);
+        private delegate void ColorDelegate(Color t);
         private delegate void LogDelegate(string t, Logtype type);
         private delegate void IntDelegate(int t);
 
@@ -834,6 +835,19 @@ namespace WolvenKit
             switch (e.PropertyName)
             {
                 case "ProjectStatus":
+                    switch (((MainController)sender).ProjectStatus)
+                    {
+                        
+                        case EProjectStatus.Busy:
+                            Invoke(new ColorDelegate(SetStatusBarColor), Color.FromArgb(202, 81, 0));
+                            break;
+                        case EProjectStatus.Errored:
+                        case EProjectStatus.Idle:
+                        case EProjectStatus.Ready:
+                        default:
+                            Invoke(new ColorDelegate(SetStatusBarColor), SystemColors.HotTrack);
+                            break;
+                    }
                     Invoke(new StrDelegate(SetStatusLabelText), ((MainController)sender).ProjectStatus.ToString());
                     break;
                 case "LogMessage":
@@ -847,6 +861,7 @@ namespace WolvenKit
 
             void SetStatusLabelText(string text) => statusLBL.Text = text;
             void SetStatusProgressbarValue(int val) => toolStripProgressBar1.Value = val;
+            void SetStatusBarColor(Color color) => this.statusToolStrip.BackColor = color;
         }
 
         private void Assetbrowser_FileAdd(object sender, AddFileArgs Details)
