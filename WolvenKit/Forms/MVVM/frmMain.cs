@@ -19,8 +19,8 @@ using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
 using SearchOption = System.IO.SearchOption;
 using System.IO.MemoryMappedFiles;
+using Microsoft.VisualBasic.FileIO;
 using WolvenKit.App.Model;
-
 
 namespace WolvenKit
 {
@@ -1014,11 +1014,13 @@ namespace WolvenKit
                 {
                     if (File.Exists(fullpath))
                     {
-                        File.Delete(fullpath);
+                        FileSystem.DeleteFile(fullpath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                        //File.Delete(fullpath);
                     }
                     else
                     {
-                        Directory.Delete(fullpath, true);
+                        FileSystem.DeleteDirectory(fullpath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                        //Directory.Delete(fullpath, true);
                     }
                 }
                 catch (Exception)
