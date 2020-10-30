@@ -516,7 +516,7 @@ namespace WolvenKit
         }
         private void ApplyCustomTheme()
         {
-            var theme = UIController.GetTheme();
+            var theme = UIController.GetThemeBase();
             this.dockPanel.Theme = theme;
             visualStudioToolStripExtender1.SetStyle(menuStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
 
@@ -524,6 +524,21 @@ namespace WolvenKit
             //statusToolStrip.BackColor = SystemColors.HotTrack;
 
             visualStudioToolStripExtender1.SetStyle(toolbarToolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+
+            switch (UIController.GetColorTheme)
+            {
+                case EColorThemes.VS2015Light:
+                case EColorThemes.VS2015Blue:
+                    this.iconToolStripMenuItem.Image = new Bitmap(UIController.GetIconByKey(EAppIcons.Wkit_dark));
+                    this.aboutRedkit2ToolStripMenuItem.Image = new Bitmap(UIController.GetIconByKey(EAppIcons.Wkit_dark));
+                    break;
+                case EColorThemes.VS2015Dark:
+                    this.iconToolStripMenuItem.Image = new Bitmap(UIController.GetIconByKey(EAppIcons.Wkit_light));
+                    this.aboutRedkit2ToolStripMenuItem.Image = new Bitmap(UIController.GetIconByKey(EAppIcons.Wkit_light));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         #region UI formborderstyle none

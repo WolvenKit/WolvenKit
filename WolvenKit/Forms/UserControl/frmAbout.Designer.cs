@@ -91,7 +91,7 @@ namespace WolvenKit
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackgroundImage = global::WolvenKit.Properties.Resources.Logo_wkit;
+            this.pictureBox1.BackgroundImage = global::WolvenKit.Properties.Resources.Wkit_logo_500x;
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);

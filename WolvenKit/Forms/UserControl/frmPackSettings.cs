@@ -71,7 +71,7 @@ namespace WolvenKit
             if (Directory.GetFiles(activemod.DlcUncookedDirectory, "*", SearchOption.AllDirectories).Any())
                 dlcCOL.Checked = true;
 
-            this.Icon = new Icon(@"Resources\Icons\GUI\Wkit_dark_16x.ico", new Size(16, 16));
+            this.Icon = UIController.GetThemedWkitIcon();
 
         }
 

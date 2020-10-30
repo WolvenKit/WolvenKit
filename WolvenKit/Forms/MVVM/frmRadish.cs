@@ -40,12 +40,14 @@ namespace WolvenKit.Forms
             
             PropertyGrid.SelectedObject = viewModel.CurrentWorkflow;
             PropertyGridSettings.SelectedObject = RadishController.GetConfig();
+
+            this.Icon = new Icon(UIController.GetIconByKey(EAppIcons.Radish), new Size(16, 16));
         }
 
         #region Methods
         public void ApplyCustomTheme()
         {
-            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetThemeBase());
 
             Color background = UIController.GetBackColor();
             Color highlight = UIController.GetHighlightColor();
