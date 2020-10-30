@@ -233,8 +233,14 @@ namespace WolvenKit
                 case "dds": return Resources.image;
                 case "jpg": return Resources.image;
                 case "jpeg": return Resources.image;
+                case "xcf": return Resources.image;
+                case "psd": return Resources.image;
                 case "xml": return Resources.xml;
                 case "apb": return Resources.apb;
+                case "apx": return Resources.apb;
+                case "ctw": return Resources.apb;
+                case "blend": return Resources.blend;
+                case "zip": return Resources.zip;
 
                 case ClosedDirImageKey: return Resources.FolderClosed_16x;
                 case OpenDirImageKey: return Resources.FolderOpened_16x;
@@ -557,6 +563,8 @@ namespace WolvenKit
 
             if (File.Exists(newfullpath))
                 return;
+
+            MainController.Get().ProjectStatus = EProjectStatus.Busy;
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(newfullpath) ?? throw new InvalidOperationException());
@@ -567,7 +575,7 @@ namespace WolvenKit
             }
 
             File.Move(fullpath, newfullpath);
-            MainController.Get().ProjectStatus = "File moved";
+            MainController.Get().ProjectStatus = EProjectStatus.Ready;
         }
 
 

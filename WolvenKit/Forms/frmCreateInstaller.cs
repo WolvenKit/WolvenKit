@@ -64,10 +64,14 @@ namespace WolvenKit.Forms
 
         async Task CreatePackage(string outpath)
         {
+            
             if (MainController.Get().ActiveMod == null)
             {
                 MessageBox.Show("No project loaded!","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                return;
             }
+
+            MainController.Get().ProjectStatus = EProjectStatus.Busy;
             var packeddir = Path.Combine(MainController.Get().ActiveMod.ProjectDirectory, @"packed\");
             var contentdir = Path.Combine(MainController.Get().ActiveMod.ProjectDirectory, @"packed\content\");
             if (!Directory.Exists(contentdir))
@@ -95,13 +99,14 @@ namespace WolvenKit.Forms
             var pkg = new WKPackage(asm,iconpathTB.Text,Path.Combine(MainController.Get().ActiveMod.ProjectDirectory, @"packed"));
 
             pkg.Save(outpath);
-            MainController.Get().LogMessage = new KeyValuePair<string, Logtype>("Installer created: " + outpath + "\n", Logtype.Success);
+            MainController.LogString("Installer created: " + outpath + "\n", Logtype.Success);
             if (!File.Exists(outpath))
             {
-                MainController.Get().LogMessage = new KeyValuePair<string, Logtype>("Couldn't create installer. Something went wrong.", Logtype.Error);
+                MainController.Get().ProjectStatus = EProjectStatus.Errored;
+                MainController.LogString("Couldn't create installer. Something went wrong.", Logtype.Error);
                 return;
             }
-            MainController.Get().ProjectStatus = "Ready";
+            MainController.Get().ProjectStatus = EProjectStatus.Ready;
             Commonfunctions.ShowFileInExplorer(outpath);
         }
 

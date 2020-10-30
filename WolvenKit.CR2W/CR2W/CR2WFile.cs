@@ -137,7 +137,7 @@ namespace WolvenKit.CR2W
         }
 
         // Does not reindex /TODO
-        public CR2WExportWrapper CreateChunk(CVariable cvar, int chunkindex, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null)
+        public CR2WExportWrapper CreateChunk(CVariable cvar, int chunkindex=0, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null)
         {
             // checks to see if the variable from which the chunk is built is properly constructed
             if (cvar == null || cvar.REDName != cvar.REDType || cvar.ParentVar != null)
@@ -957,7 +957,7 @@ namespace WolvenKit.CR2W
 
             // CDPR changed the type of CPtr<IBehTreeNodeDefinition> RootNode
             // to CHandle<IBehTreeNodeDefinition> RootNode in CBehTree in patch1
-            bool skipnamecheck = chunks[0].data is CBehTree;
+            bool skipnamecheck = chunks?.Count > 0 && chunks.First().data is CBehTree;
 
             foreach (var c in chunks)
             {

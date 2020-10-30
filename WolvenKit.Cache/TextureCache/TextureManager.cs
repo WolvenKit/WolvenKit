@@ -30,6 +30,9 @@ namespace WolvenKit.Cache
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
+        private readonly string[] vanillaDLClist = new string[] { "DLC1", "DLC2", "DLC3", "DLC4", "DLC5", "DLC6", "DLC7", "DLC8", "DLC9", "DLC10", "DLC11", "DLC12", "DLC13", "DLC14", "DLC15", "DLC16", "bob", "ep1" };
+
+
         /// <summary>
         ///     Load a single mod soundcache
         /// </summary>
@@ -80,7 +83,11 @@ namespace WolvenKit.Cache
         /// <param name="exedir">Path to executable directory</param>
         public void LoadAll(string exedir)
         {
-            var content = Path.Combine(exedir, @"..\..\content\");
+            var di = new DirectoryInfo(exedir);
+            if (!di.Exists)
+                return;
+            var dlc = Path.Combine(di.Parent.Parent.FullName, "DLC");
+            var content = Path.Combine(di.Parent.Parent.FullName, "content");
 
             var contentdirs = new List<string>(Directory.GetDirectories(content, "content*"));
             contentdirs.Sort(new AlphanumComparator<string>());
@@ -96,12 +103,16 @@ namespace WolvenKit.Cache
                 LoadBundle(file);
             }
 
-            var dlc = Path.Combine(exedir, @"..\..\DLC\");
             if (Directory.Exists(dlc))
             {
                 var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
                 dlcdirs.Sort(new AlphanumComparator<string>());
-                foreach (var file in dlcdirs.Where(dir => new Regex("(DLC..)|(DLC.)|(BOB)|(ep.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories).OrderBy(k => k).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
+
+                foreach (var file in dlcdirs
+                    .Where(_ => vanillaDLClist.Contains(new DirectoryInfo(_).Name))
+                    .SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories)
+                        .OrderBy(k => k)
+                        .Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
                 {
                     LoadBundle(file);
                 }
@@ -116,7 +127,12 @@ namespace WolvenKit.Cache
         /// <param name="exedir"></param>
         public void LoadModsBundles(string exedir)
         {
-            var mods = Path.Combine(exedir, @"..\..\Mods\");
+            var di = new DirectoryInfo(exedir);
+            if (!di.Exists)
+                return;
+            var mods = Path.Combine(di.Parent.Parent.FullName, "Mods");
+            var dlc = Path.Combine(di.Parent.Parent.FullName, "DLC");
+
             if (!Directory.Exists(mods))
                 Directory.CreateDirectory(mods);
             var modsdirs = new List<string>(Directory.GetDirectories(mods));
@@ -127,12 +143,16 @@ namespace WolvenKit.Cache
                 LoadModBundle(file);
             }
 
-            var dlc = Path.Combine(exedir, @"..\..\DLC\");
             if (Directory.Exists(dlc))
             {
                 var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
                 dlcdirs.Sort(new AlphanumComparator<string>());
-                foreach (var file in dlcdirs.Where(dir => !new Regex("(DLC..)|(DLC.)|(BOB)|(bob)|(EP.)|(ep.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories).OrderBy(k => k).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
+
+                var tmp = dlcdirs.Where(_ => !vanillaDLClist.Contains(new DirectoryInfo(_).Name)).ToList();
+                foreach (var file in tmp
+                    .SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories)
+                        .OrderBy(k => k)
+                        .Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
                 {
                     LoadModBundle(file);
                 }
@@ -140,7 +160,7 @@ namespace WolvenKit.Cache
             RebuildRootNode();
         }
 
-        public static string GetModFolder(string path)
+        private static string GetModFolder(string path)
         {
             if (path.Split('\\').Length > 3 && path.Split('\\').Contains("content"))
             {
@@ -152,7 +172,7 @@ namespace WolvenKit.Cache
         /// <summary>
         ///     Rebuilds the soundcache tree structure also rebuilds NOTE: Filelist,autocomplete,extensions
         /// </summary>
-        public void RebuildRootNode()
+        private void RebuildRootNode()
         {
             RootNode = new WitcherTreeNode(EBundleType.TextureCache);
             RootNode.Name = EBundleType.TextureCache.ToString();
@@ -190,7 +210,7 @@ namespace WolvenKit.Cache
         /// <summary>
         /// Calls GetFiles on the rootnode
         /// </summary>
-        public void RebuildFileList()
+        private void RebuildFileList()
         {
             FileList = GetFiles(RootNode);
         }
@@ -198,7 +218,7 @@ namespace WolvenKit.Cache
         /// <summary>
         /// Gets the avaliable extensions in the files
         /// </summary>
-        public void RebuildExtensions()
+        private void RebuildExtensions()
         {
             foreach (var file in FileList.Where(file => !Extensions.Contains(file.Name.Split('.').Last())))
             {
@@ -210,7 +230,7 @@ namespace WolvenKit.Cache
         /// <summary>
         /// Gets the distinct filenames from the loaded bundles so they can be used for autocomplete
         /// </summary>
-        public void RebuildAutoCompleteSource()
+        private void RebuildAutoCompleteSource()
         {
             AutocompleteSource.AddRange(FileList.Select(x => GetFileName(x.Name)).Distinct().ToArray());
         }
@@ -220,7 +240,7 @@ namespace WolvenKit.Cache
         /// </summary>
         /// <param name="mainnode">The rootnode to get the files from</param>
         /// <returns></returns>
-        public List<IWitcherFile> GetFiles(WitcherTreeNode mainnode)
+        private List<IWitcherFile> GetFiles(WitcherTreeNode mainnode)
         {
             var bundfiles = new List<IWitcherFile>();
             if (mainnode?.Files != null)
@@ -239,7 +259,7 @@ namespace WolvenKit.Cache
         /// </summary>
         /// <param name="s">Path/Name of the file</param>
         /// <returns></returns>
-        public string GetFileName(string s)
+        private string GetFileName(string s)
         {
             return s.Contains('\\') ? s.Split('\\').Last() : s;
         }
