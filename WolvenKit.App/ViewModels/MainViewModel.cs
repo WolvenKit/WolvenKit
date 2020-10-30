@@ -202,6 +202,7 @@ namespace WolvenKit.App.ViewModels
         /// <returns></returns>
         private async Task DumpFile(string folder, string outfolder, string file = "")
         {
+            MainController.Get().ProjectStatus = EProjectStatus.Busy;
             WCC_Command cmd = null;
             try
             {
@@ -228,7 +229,7 @@ namespace WolvenKit.App.ViewModels
                 Logger.LogString(ex.ToString() + "\n", Logtype.Error);
             }
 
-            MainController.Get().ProjectStatus = "File dumped succesfully!";
+            MainController.Get().ProjectStatus = EProjectStatus.Ready;
 
         }
 
@@ -777,7 +778,7 @@ namespace WolvenKit.App.ViewModels
                     if (Directory.Exists(dir_uncooked) && Directory.GetFiles(dir_uncooked, "*", SearchOption.AllDirectories).Any())
                     {
                         Logger.LogString($"======== Cooking {type} ======== \n", Logtype.Important);
-                        MainController.Get().ProjectStatus = $"Cooking {type}";
+                        //MainController.Get().ProjectStatus = $"Cooking {type}";
 
                         if (!Directory.Exists(dir_cooked))
                         {
@@ -846,7 +847,7 @@ namespace WolvenKit.App.ViewModels
                     if (Directory.Exists(inputDir) && Directory.GetFiles(inputDir, "*", SearchOption.AllDirectories).Any())
                     {
                         Logger.LogString($"======== Packing {type} bundles ======== \n", Logtype.Important);
-                        MainController.Get().ProjectStatus = $"Packing {type} bundles";
+                        //MainController.Get().ProjectStatus = $"Packing {type} bundles";
 
                         var pack = new Wcc_lite.pack()
                         {
@@ -897,7 +898,7 @@ namespace WolvenKit.App.ViewModels
                     if (Directory.GetFiles(outDir, "*.bundle", SearchOption.AllDirectories).Any())
                     {
                         Logger.LogString($"======== Packing {type} metadata ======== \n", Logtype.Important);
-                        MainController.Get().ProjectStatus = $"Packing {type} metadata";
+                        //MainController.Get().ProjectStatus = $"Packing {type} metadata";
 
                         var metadata = new Wcc_lite.metadatastore()
                         {
@@ -985,7 +986,7 @@ namespace WolvenKit.App.ViewModels
                     if (File.Exists(dbfile))
                     {
                         Logger.LogString($"======== Generating {type} {cachetype} cache ======== \n", Logtype.Important);
-                        MainController.Get().ProjectStatus = $"Generating {type} {cachetype} cache";
+                        //MainController.Get().ProjectStatus = $"Generating {type} {cachetype} cache";
 
                         var buildcache = new Wcc_lite.buildcache()
                         {
@@ -1090,6 +1091,7 @@ namespace WolvenKit.App.ViewModels
         public void SaveAllFiles()
         {
             if (GetOpenDocuments().Count <= 0) return;
+            MainController.Get().ProjectStatus = EProjectStatus.Busy;
 
             foreach (var d in GetOpenDocuments().Values.Where(d => d.SaveTarget != null))
             {
@@ -1101,7 +1103,7 @@ namespace WolvenKit.App.ViewModels
                 d.SaveFile();
             }
             Logger.LogString("All files saved!\n", Logtype.Success);
-            MainController.Get().ProjectStatus = "Item(s) Saved";
+            MainController.Get().ProjectStatus = EProjectStatus.Ready;
             MainController.Get().ProjectUnsaved = false;
         }
         

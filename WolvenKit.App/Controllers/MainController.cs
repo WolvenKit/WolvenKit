@@ -20,6 +20,14 @@ namespace WolvenKit.App
     using WolvenKit.CR2W.Types;
     using WolvenKit.W3Speech;
 
+    public enum EProjectStatus
+    {
+        Idle,
+        Ready,
+        Busy,
+        Errored
+    }
+
     /// <summary>
     /// Supervisor of all subsystem managers. Singleton.
     /// </summary>
@@ -69,11 +77,18 @@ namespace WolvenKit.App
         /// </summary>
         public bool ProjectUnsaved = false;
 
-        private string _projectstatus = "Idle";
-        public string ProjectStatus
+        private EProjectStatus _projectstatus = EProjectStatus.Idle;
+        public EProjectStatus ProjectStatus
         {
             get => _projectstatus;
             set => SetField(ref _projectstatus, value, nameof(ProjectStatus));
+        }
+
+        private int _statusProgress = 0;
+        public int StatusProgress
+        {
+            get => _statusProgress;
+            set => SetField(ref _statusProgress, value, nameof(StatusProgress));
         }
 
         private string _loadstatus = "Loading...";

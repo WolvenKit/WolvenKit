@@ -82,7 +82,7 @@ namespace WolvenKit.App.ViewModels
 
         public virtual void SaveFile()
         {
-            
+            MainController.Get().ProjectStatus = EProjectStatus.Busy;
 
             // save File
             if (SaveTarget == null)
@@ -96,7 +96,7 @@ namespace WolvenKit.App.ViewModels
 
             // Logging
             MainController.LogString(FileName + " saved!\n", Logtype.Success);
-            MainController.Get().ProjectStatus = "Saved";
+            MainController.Get().ProjectStatus = EProjectStatus.Ready;
         }
 
         protected byte[] GetRawBytes()

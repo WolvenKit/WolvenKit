@@ -1023,6 +1023,10 @@
     <None Include="Resources\Pictures\geralt.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\GitTemplateDir\info\exclude">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="Resources\Icons\git.png" />
     <Content Include="Resources\Icons\Files\apb_32x.png" />
     <Content Include="Resources\Icons\Files\blend_32x.png" />
     <Content Include="Resources\Icons\Files\fbx_32x.png" />

@@ -54,6 +54,7 @@ namespace WolvenKit.App.ViewModels
 
         public void SaveFile()
         {
+            MainController.Get().ProjectStatus = EProjectStatus.Busy;
             // encode in UTF-16LE
             Encoding enc = Encoding.Unicode;
 
@@ -74,7 +75,7 @@ namespace WolvenKit.App.ViewModels
 
             // Logging
             MainController.LogString(FileName + " saved!\n", Logtype.Success);
-            MainController.Get().ProjectStatus = "Saved";
+            MainController.Get().ProjectStatus = EProjectStatus.Ready;
         }
 
 
