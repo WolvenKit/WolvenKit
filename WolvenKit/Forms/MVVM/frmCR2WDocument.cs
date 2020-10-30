@@ -233,7 +233,7 @@ namespace WolvenKit
                 window.Close();
             }
 
-            this.FormPanel.Theme = UIController.GetTheme();
+            this.FormPanel.Theme = UIController.GetThemeBase();
         }
 
         private IDockContent GetContentFromPersistString(string persistString)

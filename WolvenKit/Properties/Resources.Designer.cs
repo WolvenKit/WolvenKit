@@ -413,9 +413,9 @@ namespace WolvenKit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap geralt {
+        internal static System.Drawing.Bitmap git {
             get {
-                object obj = ResourceManager.GetObject("geralt", resourceCulture);
+                object obj = ResourceManager.GetObject("git", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -461,16 +461,6 @@ namespace WolvenKit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon ImportPackage_16x1 {
-            get {
-                object obj = ResourceManager.GetObject("ImportPackage_16x1", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap journal {
@@ -496,36 +486,6 @@ namespace WolvenKit.Properties {
         internal static System.Drawing.Bitmap LinkValidator_16x {
             get {
                 object obj = ResourceManager.GetObject("LinkValidator_16x", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap loading_black {
-            get {
-                object obj = ResourceManager.GetObject("loading_black", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Logo {
-            get {
-                object obj = ResourceManager.GetObject("Logo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Logo_wkit {
-            get {
-                object obj = ResourceManager.GetObject("Logo_wkit", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -651,16 +611,6 @@ namespace WolvenKit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon PictureResample_16x {
-            get {
-                object obj = ResourceManager.GetObject("PictureResample_16x", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap PlayStep_16x {
@@ -717,16 +667,6 @@ namespace WolvenKit.Properties {
             get {
                 object obj = ResourceManager.GetObject("radish_32x", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon radish_icon {
-            get {
-                object obj = ResourceManager.GetObject("radish_icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -1531,16 +1471,6 @@ namespace WolvenKit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon witcher3_101 {
-            get {
-                object obj = ResourceManager.GetObject("witcher3_101", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap WK_Logo2_32 {
@@ -1566,26 +1496,6 @@ namespace WolvenKit.Properties {
         internal static System.Drawing.Bitmap wkit_splash {
             get {
                 object obj = ResourceManager.GetObject("wkit_splash", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap wkit_splash2 {
-            get {
-                object obj = ResourceManager.GetObject("wkit_splash2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap wolven_kit_icon {
-            get {
-                object obj = ResourceManager.GetObject("wolven_kit_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

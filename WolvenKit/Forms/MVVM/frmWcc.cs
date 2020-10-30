@@ -39,7 +39,7 @@ namespace WolvenKit.Forms.MVVM
             objectListView.SetObjects(viewModel.Commands);
             propertyGrid.SelectedObject = viewModel.SelectedObject;
 
-            this.Icon = new Icon(@"Resources\Icons\GUI\WCC_32x.ico", new Size(16,16));
+            this.Icon = new Icon(UIController.GetIconByKey(EAppIcons.Wcc), new Size(16,16));
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -52,7 +52,7 @@ namespace WolvenKit.Forms.MVVM
 
         public void ApplyCustomTheme()
         {
-            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetThemeBase());
 
             Color background = UIController.GetBackColor();
             Color highlight = UIController.GetHighlightColor();

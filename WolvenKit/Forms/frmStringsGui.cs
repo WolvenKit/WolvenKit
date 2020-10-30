@@ -55,7 +55,7 @@ namespace WolvenKit
             comboBoxLanguagesMode.SelectedIndex = 0;
             CreateDataTable();
 
-            this.Icon = new Icon(@"Resources\Icons\GUI\Wkit_dark_16x.ico", new Size(16, 16));
+            this.Icon = UIController.GetThemedWkitIcon();
 
             if (activeMod != null)
             {

@@ -39,7 +39,7 @@ namespace WolvenKit
             GameSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
             VarlistRecieved += UpdateVarDgv;
 
-            this.Icon = new Icon(@"Resources\Icons\GUI\Wkit_dark_16x.ico", new Size(16, 16));
+            this.Icon = UIController.GetThemedWkitIcon();
 
         }
 
