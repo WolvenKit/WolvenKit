@@ -45,9 +45,9 @@ namespace WolvenKit.Common
         /// </summary>
         protected void RebuildRootNode()
         {
-            RootNode = new WitcherTreeNode(EBundleType.Bundle)
+            RootNode = new WitcherTreeNode(TypeName)
             {
-                Name = EBundleType.Bundle.ToString()
+                Name = TypeName.ToString()
             };
             foreach (var item in Items)
             {
