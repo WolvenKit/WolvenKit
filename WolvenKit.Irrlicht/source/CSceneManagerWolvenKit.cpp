@@ -349,9 +349,9 @@ ITerrainSceneNodeWolvenKit* CSceneManagerWolvenKit::addTerrainSceneNodeWolvenKit
     s32 row1Index = dimension;
 	s32* pFace = indices;
 
-	for (s32 y = 0; y < dimension - 1; ++y)
+	for (u32 y = 0; y < dimension - 1; ++y)
 	{
-		for (s32 x = 0; x < dimension - 1; ++x)
+		for (u32 x = 0; x < dimension - 1; ++x)
 		{
 			// one row of triangles, two at a time
 			*pFace++ = row0Index++;
@@ -440,7 +440,6 @@ void CSceneManagerWolvenKit::DeselectNode()
 void CSceneManagerWolvenKit::drawAll()
 {
 	// reset all transforms
-	Driver->setMaterial(video::SMaterial());
 	Driver->setTransform ( video::ETS_PROJECTION, core::IdentityMatrix );
 	Driver->setTransform ( video::ETS_VIEW, core::IdentityMatrix );
 	Driver->setTransform ( video::ETS_WORLD, core::IdentityMatrix );
@@ -1058,26 +1057,6 @@ ISceneNodeAnimatorFactory* CSceneManagerWolvenKit::getSceneNodeAnimatorFactory(u
 
 bool CSceneManagerWolvenKit::saveScene(const io::path& filename, ISceneUserDataSerializer* userDataSerializer, ISceneNode* node)
 {
-/*
-    core::stringc outputPath = (core::stringc)filename;
-    Janua::PVSGenerator generator = Janua::PVSGenerator(ocScene);
-    printf("generating database...");
-    shared_ptr<Janua::PVSDatabase> ocDatabase = generator.generatePVSDatabase();
-    printf("done\n");
-
-    //Export to file
-    Janua::PVSDatabaseExporter dbExporter(*ocDatabase);
-    int allocatedSize = dbExporter.getBufferSize();
-    char* buffer = new char[allocatedSize];
-    printf("saving to buffer...");
-    dbExporter.saveToBuffer(buffer);
-    printf("done\n");
-    FILE* file = fopen(outputPath.c_str(), "wb");
-    fwrite(buffer, 1, allocatedSize, file);
-    fclose(file);
-    printf("wrote %s\n",outputPath.c_str());
-    delete[] buffer;
-*/
     return false;
 }
 

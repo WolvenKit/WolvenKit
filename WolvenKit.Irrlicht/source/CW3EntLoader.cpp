@@ -40,9 +40,9 @@ CW3EntLoader::CW3EntLoader(scene::ISceneManager* smgr, io::IFileSystem* fs)
     ConfigLoadOnlyBestLOD(false),
     IsStaticMesh(false)
 {
-	#ifdef _DEBUG
+#ifdef _DEBUG
     setDebugName("CW3ENTLoader");
-	#endif
+#endif
 
     TextureLoader = DBG_NEW CMeshTextureLoader(_fileSystem, _videoDriver);
     LoaderHelper = DBG_NEW CW3MeshLoaderHelper(this, _sceneManager, _fileSystem);
@@ -299,6 +299,16 @@ bool CW3EntLoader::W3_load(io::IReadFile* file)
         else if (dataTypeName == "CSkeletalAnimation")
         { 
             W3_CSkeletalAnimation(file, infos);
+        }
+        else if (dataTypeName == "CMaterialGraph")
+        {
+            video::SMaterial mat = W3_CMaterialGraph(file, infos);
+            //os::Printer::log("Material loaded", ELL_DEBUG);
+            Materials.push_back(mat);
+        }
+        else if (dataTypeName == "CMaterialParameterTexture")
+        {
+            W3_CUnknown(file, infos);
         }
         else
         {
@@ -1337,6 +1347,41 @@ void CW3EntLoader::readAnimBuffer(  core::array<core::array<SAnimationBufferBitw
 
     }
 }
+
+video::SMaterial CW3EntLoader::W3_CMaterialGraph(io::IReadFile* file, W3_DataInfos infos)
+{
+    file->seek(infos.adress + 1);
+
+    video::SMaterial material;
+    material.DiffuseColor.setRed(255);
+    material.DiffuseColor.setGreen(105);
+    material.DiffuseColor.setBlue(180);
+
+    const s32 endOfChunk = infos.adress + infos.size;
+
+    /*
+    while (file->getPos() < endOfChunk)
+    {
+        os::Printer::log("Read property...", ELL_DEBUG);
+
+        SPropertyHeader propHeader;
+        u16 extra;
+        bool rc = ReadPropertyHeader(file, propHeader, extra);
+        if (rc)
+        {
+            std::cout << "-> @" << file->getPos() << ", property = " << propHeader.propName.c_str() << ", type = " << propHeader.propType.c_str() << std::endl;
+
+            file->seek(propHeader.endPos);
+        }
+    }
+    */
+
+    file->seek(endOfChunk);
+
+    os::Printer::log("W3_CMaterialGraph end", ELL_DEBUG);
+    return material;
+}
+
 
 void CW3EntLoader::W3_CUnknown(io::IReadFile* file, W3_DataInfos infos)
 {
