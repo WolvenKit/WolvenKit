@@ -19,6 +19,7 @@
 #include "CW3Animation.h"
 #include "Utils_RedEngine.h"
 #include "MeshCombiner.h"
+#include "CSceneManagerWolvenKit.h"
 
 
 namespace irr
@@ -173,6 +174,7 @@ namespace scene
         CW3Skeleton W3_CSkeleton(io::IReadFile* file, W3_DataInfos infos);
         void W3_CAnimationBufferBitwiseCompressed(io::IReadFile* file, W3_DataInfos infos, u32 animIdx);
         void W3_CSkeletalAnimation(io::IReadFile* file, W3_DataInfos infos);
+        video::SMaterial W3_CMaterialGraph(io::IReadFile* file, W3_DataInfos infos);
         void W3_CUnknown(io::IReadFile* file, W3_DataInfos infos);
 
         // load a mesh buffer from the buffer file

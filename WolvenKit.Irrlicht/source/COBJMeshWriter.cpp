@@ -16,6 +16,7 @@
 #include "IWriteFile.h"
 #include "IFileSystem.h"
 #include "ITexture.h"
+#include <CDynamicMeshBuffer.h>
 
 namespace irr
 {
@@ -66,7 +67,9 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 
 	io::path name;
 	core::cutFilenameExtension(name,file->getFileName()) += ".mtl";
-    core::stringc mtlName = (core::stringc)name;
+	io::path matName = name;
+    core::stringc mtlName = core::deletePathFromFilename(matName);
+	
     file->write("# exported by Irrlicht\n", 23);
 	file->write("mtllib ",7);
 	file->write(mtlName.c_str(), mtlName.size());
@@ -80,7 +83,7 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 	for (u32 i=0; i<mesh->getMeshBufferCount(); ++i)
 	{
 		core::stringc num(i+1);
-		IMeshBuffer* buffer = mesh->getMeshBuffer(i);
+		scene::CDynamicMeshBuffer* buffer = (scene::CDynamicMeshBuffer*)(mesh->getMeshBuffer(i));
 		if (buffer && buffer->getVertexCount())
 		{
 			file->write("g grp", 5);
@@ -132,34 +135,101 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 			file->write("\n",1);
 
 			const u32 indexCount = buffer->getIndexCount();
-			for (j=0; j<indexCount; j+=3)
+			const scene::IIndexBuffer& indices = buffer->getIndexBuffer();
+			if (indexCount == vertexCount * 3)
 			{
-				file->write("f ",2);
-				num = core::stringc(buffer->getIndices()[j+2]+allVertexCount);
-				file->write(num.c_str(), num.size());
-				file->write("/",1);
-				file->write(num.c_str(), num.size());
-				file->write("/",1);
-				file->write(num.c_str(), num.size());
-				file->write(" ",1);
+				for (j = 0; j < indexCount; j += 3)
+				{
+					file->write("f ", 2);
+					u32 idx = indices[j + 2] + allVertexCount;
+					num = core::stringc(idx);
+					file->write(num.c_str(), num.size());
+					file->write("/", 1);
+					file->write(num.c_str(), num.size());
+					file->write("/", 1);
+					file->write(num.c_str(), num.size());
+					file->write(" ", 1);
 
-				num = core::stringc(buffer->getIndices()[j+1]+allVertexCount);
-				file->write(num.c_str(), num.size());
-				file->write("/",1);
-				file->write(num.c_str(), num.size());
-				file->write("/",1);
-				file->write(num.c_str(), num.size());
-				file->write(" ",1);
+                    idx = indices[j + 1] + allVertexCount;
+                    num = core::stringc(idx);
+					file->write(num.c_str(), num.size());
+					file->write("/", 1);
+					file->write(num.c_str(), num.size());
+					file->write("/", 1);
+					file->write(num.c_str(), num.size());
+					file->write(" ", 1);
 
-				num = core::stringc(buffer->getIndices()[j+0]+allVertexCount);
-				file->write(num.c_str(), num.size());
-				file->write("/",1);
-				file->write(num.c_str(), num.size());
-				file->write("/",1);
-				file->write(num.c_str(), num.size());
-				file->write(" ",1);
+                    idx = indices[j] + allVertexCount;
+                    num = core::stringc(idx);
+					file->write(num.c_str(), num.size());
+					file->write("/", 1);
+					file->write(num.c_str(), num.size());
+					file->write("/", 1);
+					file->write(num.c_str(), num.size());
 
-				file->write("\n",1);
+					file->write("\n", 1);
+				}
+			}
+			else // triangle strip!
+			{
+                for (j = 0; j < indexCount - 2; j += 2)
+                {
+                    file->write("f ", 2);
+                    u32 idx = indices[j] + allVertexCount;
+                    num = core::stringc(idx);
+                    file->write(num.c_str(), num.size());
+                    file->write("/", 1);
+                    file->write(num.c_str(), num.size());
+                    file->write("/", 1);
+                    file->write(num.c_str(), num.size());
+                    file->write(" ", 1);
+
+                    idx = indices[j + 1] + allVertexCount;
+                    num = core::stringc(idx);
+                    file->write(num.c_str(), num.size());
+                    file->write("/", 1);
+                    file->write(num.c_str(), num.size());
+                    file->write("/", 1);
+                    file->write(num.c_str(), num.size());
+                    file->write(" ", 1);
+
+                    idx = indices[j + 2] + allVertexCount;
+                    num = core::stringc(idx);
+                    file->write(num.c_str(), num.size());
+                    file->write("/", 1);
+                    file->write(num.c_str(), num.size());
+                    file->write("/", 1);
+                    file->write(num.c_str(), num.size());
+                    file->write("\n", 1);
+
+                    file->write("f ", 2);
+                    idx = indices[j + 3] + allVertexCount;
+                    num = core::stringc(idx);
+                    file->write(num.c_str(), num.size());
+                    file->write("/", 1);
+                    file->write(num.c_str(), num.size());
+                    file->write("/", 1);
+                    file->write(num.c_str(), num.size());
+                    file->write(" ", 1);
+
+                    idx = indices[j + 2] + allVertexCount;
+                    num = core::stringc(idx);
+                    file->write(num.c_str(), num.size());
+                    file->write("/", 1);
+                    file->write(num.c_str(), num.size());
+                    file->write("/", 1);
+                    file->write(num.c_str(), num.size());
+                    file->write(" ", 1);
+
+                    idx = indices[j + 1] + allVertexCount;
+                    num = core::stringc(idx);
+                    file->write(num.c_str(), num.size());
+                    file->write("/", 1);
+                    file->write(num.c_str(), num.size());
+                    file->write("/", 1);
+                    file->write(num.c_str(), num.size());
+					file->write("\n", 1);
+                }
 			}
 			file->write("\n",1);
             file->flush();

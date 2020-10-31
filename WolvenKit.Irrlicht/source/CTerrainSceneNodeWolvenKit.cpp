@@ -67,6 +67,11 @@ namespace scene
 
         driver->setTransform(video::ETS_WORLD, AbsoluteTransformation);
 
+        video::SMaterial m;
+        m.Lighting = false;
+        m.AntiAliasing = 1;
+        driver->setMaterial(m);
+
         scene::IMeshBuffer* mb = Mesh->getMeshBuffer(0);
         driver->drawMeshBuffer(mb);
     }

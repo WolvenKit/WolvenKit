@@ -18,14 +18,11 @@ namespace WolvenKit.Render
         {
             if (disposing)
             {
-                RenderMessage message = new RenderMessage(MessageType.SHUTDOWN);
-                commandQueue.Enqueue(message);
-
                 components?.Dispose();
-                irrThread.Abort();
+                irrThread?.Abort();
                 irrThread = null;
                 gui = null;
-                smgr.Drop();
+                smgr?.Drop();
                 smgr = null;
 
                 driver = null;

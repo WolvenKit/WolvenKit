@@ -519,6 +519,32 @@ namespace WolvenKit.Render
             {
                 switch (m.Message)
                 {
+                    case MessageType.SHOW_NODE:
+                        {
+                            m.Node.Visible = true;
+                            var camera = smgr.ActiveCamera;
+
+                            // just set the target
+                            camera.Target = m.Node.AbsolutePosition;
+                            lightNode.Position = camera.Position;
+                        }
+                        break;
+                    case MessageType.HIDE_NODE:
+                        {
+                            m.Node.Visible = false;
+                        }
+                        break;
+                    case MessageType.SELECT_NODE:
+                        {
+                            // highlight and 
+                            smgr.SelectNode(m.Node);
+                            var camera = smgr.ActiveCamera;
+
+                            // just set the target
+                            camera.Target = m.Node.AbsolutePosition;
+                            lightNode.Position = camera.Position;
+                        }
+                        break;
                     case MessageType.ADD_MESH_NODE:
                         {
                             IrrlichtLime.Scene.Mesh mesh = smgr.GetStaticMesh(depot + m.MeshName);
@@ -591,32 +617,6 @@ namespace WolvenKit.Render
                             meshCountText.Text = "Meshes: " + totalMeshCount.ToString();
                         }
                         break;
-                    case MessageType.SHOW_NODE:
-                        {
-                            m.Node.Visible = true;
-                            var camera = smgr.ActiveCamera;
-
-                            // just set the target
-                            camera.Target = new Vector3Df(m.Node.AbsolutePosition);
-                            lightNode.Position = camera.Position;
-                        }
-                        break;
-                    case MessageType.HIDE_NODE:
-                        {
-                            m.Node.Visible = false;
-                        }
-                        break;
-                    case MessageType.SELECT_NODE:
-                        {
-                            // highlight and 
-                            smgr.SelectNode(m.Node);
-                            var camera = smgr.ActiveCamera;
-
-                            // just set the target
-                            camera.Target = new Vector3Df(m.Node.AbsolutePosition);
-                            lightNode.Position = camera.Position;
-                        }
-                        break;
                     case MessageType.DESELECT_NODE:
                         {
                             smgr.DeselectNode();
@@ -670,6 +670,8 @@ namespace WolvenKit.Render
             try
 #endif
             {
+                float DEGREES_TO_RADIANS = (float)(Math.PI / 180.0);
+
                 //Setup
                 IrrlichtCreationParameters irrparam = new IrrlichtCreationParameters();
                 if (irrlichtPanel.IsDisposed)
@@ -729,6 +731,14 @@ namespace WolvenKit.Render
                     Lighting = false
                 };
 
+                var WMatrix = new Matrix(new Vector3Df(0, 0, 0), smgr.ActiveCamera.ModelRotation);
+
+                var PMatrix = new Matrix();
+                PMatrix = PMatrix.BuildProjectionMatrixOrthoLH(100, 80, 0.001f, 10000.0f);
+
+                var VMatrix = new Matrix();
+                VMatrix = VMatrix.BuildCameraLookAtMatrixLH(new Vector3Df(50, 0, 0), new Vector3Df(0, 0, 0), new Vector3Df(0, 1f, 0));
+
                 int gizmoX = (int)(irrlichtPanel.Width * 0.92f);
                 int gizmoY = (int)(irrlichtPanel.Height * 0.92f);
                 var gizmoViewPort = new Recti(gizmoX, gizmoY, irrlichtPanel.Width, irrlichtPanel.Height);
@@ -739,7 +749,7 @@ namespace WolvenKit.Render
                     {
                         ProcessCommand();
 
-                        driver.BeginScene(ClearBufferFlag.All, new IrrlichtLime.Video.Color(0, 0, 100));
+                        driver.BeginScene(ClearBufferFlag.All);
                         int val = driver.FPS;
                         fpsText.Text = "FPS: " + val.ToString();
 
@@ -750,12 +760,12 @@ namespace WolvenKit.Render
                         driver.ViewPort = gizmoViewPort;
 
                         driver.SetMaterial(lineMat);
-                        var matrix = new Matrix(new Vector3Df(0, 0, 0), smgr.ActiveCamera.ModelRotation);
-                        driver.SetTransform(TransformationState.World, matrix);
-                        matrix = matrix.BuildProjectionMatrixOrthoLH(100, 80, 0.001f, 10000.0f);
-                        driver.SetTransform(TransformationState.Projection, matrix);
-                        matrix = matrix.BuildCameraLookAtMatrixLH(new Vector3Df(50, 0, 0), new Vector3Df(0, 0, 0), new Vector3Df(0, 1f, 0));
-                        driver.SetTransform(TransformationState.View, matrix);
+
+                        WMatrix.SetRotationRadians(smgr.ActiveCamera.ModelRotation * DEGREES_TO_RADIANS);
+                        driver.SetTransform(TransformationState.World, WMatrix);
+                        driver.SetTransform(TransformationState.Projection, PMatrix);
+                        driver.SetTransform(TransformationState.View, VMatrix);
+
                         driver.Draw3DLine(0, 0, 0, 30f, 0, 0, IrrlichtLime.Video.Color.SolidGreen);
                         driver.Draw3DLine(0, 0, 0, 0, 30f, 0, IrrlichtLime.Video.Color.SolidBlue);
                         driver.Draw3DLine(0, 0, 0, 0, 0, 30f, IrrlichtLime.Video.Color.SolidRed);
@@ -789,7 +799,7 @@ namespace WolvenKit.Render
 
         private void irrlichtPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            if (device != null && smgr != null)
+            if(device != null && smgr != null)
             {
                 MouseEventType mev = MouseEventType.Move;
                 uint buttonStates = 0;
@@ -854,25 +864,28 @@ namespace WolvenKit.Render
             string filename = exportMeshDirectory + "\\" + meshNameOnly + instanceName + modelExtension;
 
             // export textures too!
-            MeshSceneNode meshNode = (MeshSceneNode)node.MeshNode;
-            foreach (var mb in meshNode.Mesh.MeshBuffers)
+            if (node.MeshNode.GetType().Equals(typeof(MeshSceneNode)))
             {
-                if (mb.Material.GetTexture(0) != null)
+                MeshSceneNode meshNode = (MeshSceneNode)node.MeshNode;
+                foreach (var mb in meshNode.Mesh.MeshBuffers)
                 {
-                    string tname = mb.Material.GetTexture(0).Name.ToString();
-                    tname = tname.Replace(".xbm", texExtension);
-                    tname = exportMeshDirectory + "\\" + Path.GetFileName(tname);
+                    if (mb.Material.GetTexture(0) != null)
+                    {
+                        string tname = mb.Material.GetTexture(0).Name.ToString();
+                        tname = tname.Replace(".xbm", texExtension);
+                        tname = exportMeshDirectory + "\\" + Path.GetFileName(tname);
 
-                    ExportTexture(tname, mb.Material.GetTexture(0));
-                }
+                        ExportTexture(tname, mb.Material.GetTexture(0));
+                    }
 
-                if (mb.Material.GetTexture(1) != null)
-                {
-                    string tname = mb.Material.GetTexture(1).Name.ToString();
-                    tname = tname.Replace(".xbm", texExtension);
-                    tname = exportMeshDirectory + "\\" + Path.GetFileName(tname);
+                    if (mb.Material.GetTexture(1) != null)
+                    {
+                        string tname = mb.Material.GetTexture(1).Name.ToString();
+                        tname = tname.Replace(".xbm", texExtension);
+                        tname = exportMeshDirectory + "\\" + Path.GetFileName(tname);
 
-                    ExportTexture(tname, mb.Material.GetTexture(1));
+                        ExportTexture(tname, mb.Material.GetTexture(1));
+                    }
                 }
             }
 
@@ -885,7 +898,10 @@ namespace WolvenKit.Render
                     mw.SetTransform(localToWorld);
                 }
                 mw.SetImageType(texExtension);
-                mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), ((MeshSceneNode)(node.MeshNode)).Mesh, MeshWriterFlag.None);
+                if (node.MeshNode.GetType().Equals(typeof(MeshSceneNode)))
+                    mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), ((MeshSceneNode)(node.MeshNode)).Mesh, MeshWriterFlag.None);
+                else
+                    mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), ((TerrainSceneNodeWolvenKit)(node.MeshNode)).Mesh, MeshWriterFlag.None);
                 mw.Drop();
             }
             else if (modelExtension == ".fbx")
@@ -897,7 +913,10 @@ namespace WolvenKit.Render
                     mw.SetTransform(localToWorld);
                 }
                 mw.SetImageType(texExtension);
-                mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), ((MeshSceneNode)(node.MeshNode)).Mesh, MeshWriterFlag.None);
+                if (node.MeshNode.GetType().Equals(typeof(MeshSceneNode)))
+                    mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), ((MeshSceneNode)(node.MeshNode)).Mesh, MeshWriterFlag.None);
+                //else
+                //    mw.WriteMesh(device.FileSystem.CreateWriteFile(filename), ((TerrainSceneNodeWolvenKit)(node.MeshNode)).Mesh, MeshWriterFlag.None);
                 mw.Drop();
             }
         }
