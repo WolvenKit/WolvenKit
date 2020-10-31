@@ -276,6 +276,28 @@ namespace WolvenKit
                 case nameof(vm.File):
                     chunkList.UpdateList();
                     break;
+                case nameof(vm.SelectedChunks):
+                    if (propertyWindow == null || propertyWindow.IsDisposed)
+                    {
+                        propertyWindow = new frmChunkProperties(vm);
+                        propertyWindow.Show(FormPanel, DockState.DockRight);
+                    }
+
+                    if (vm.SelectedChunks.Count > 0)
+                    {
+                        if (vm.SelectedChunks.First().data is CBitmapTexture xbm)
+                        {
+                            if (ImageViewer == null || ImageViewer.IsDisposed)
+                            {
+                                ImageViewer = new frmImagePreview();
+                                ImageViewer.Show(FormPanel, DockState.Document);
+                            }
+
+                            ImageViewer.SetImage(vm.SelectedChunks.First());
+                        }
+                    }
+
+                    break;
             }
         }
 
@@ -403,25 +425,12 @@ namespace WolvenKit
 
         private void frmCR2WDocument_OnSelectChunk(object sender, SelectChunkArgs e)
         {
-            if (propertyWindow == null || propertyWindow.IsDisposed)
-            {
-                propertyWindow = new frmChunkProperties(vm);
-                propertyWindow.Show(FormPanel, DockState.DockRight);
-            }
+            
 
             // Update Selected Chunk in the ViewModel
             vm.SelectedChunks = new List<CR2WExportWrapper>() { e.Chunk };
 
-            if (e.Chunk.data is CBitmapTexture xbm)
-            {
-                if (ImageViewer == null || ImageViewer.IsDisposed)
-                {
-                    ImageViewer = new frmImagePreview();
-                    ImageViewer.Show(FormPanel, DockState.Document);
-                }
-
-                ImageViewer.SetImage(e.Chunk);
-            }
+            
         }
 
 

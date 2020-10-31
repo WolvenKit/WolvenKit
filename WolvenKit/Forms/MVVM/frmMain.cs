@@ -2180,12 +2180,13 @@ namespace WolvenKit
                     case EBundleType.CollisionCache:
                     case EBundleType.TextureCache:
                         {
-                            // add pngs, jpgs and dds directly to Uncooked (not Raw, since they don't get imported)
+                            // add pngs, jpgs and dds directly to Cooked
+                            // (not Raw, since they don't get imported, and not uncooked, since they don't get cooked)
                             if (extension == ".png" || extension == ".jpg" || extension == ".dds")
                             {
                                 newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                    ? Path.Combine("DLC", EProjectFolders.Uncooked.ToString(), $"dlc{ActiveMod.Name}", relativePath)
-                                    : Path.Combine("Mod", EProjectFolders.Uncooked.ToString(), relativePath));
+                                    ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}", relativePath)
+                                    : Path.Combine("Mod", EProjectFolders.Cooked.ToString(), relativePath));
                             }
                             // all other textures and collision stuff goes into Raw (since they have to be imported first)
                             else
