@@ -71,15 +71,15 @@
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\bin\$(Configuration)-$(PlatformTarget)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)-$(PlatformTarget)\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)bin\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)-$(PlatformTarget)\</IntDir>
     <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">*.obj;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;*.xml;*.log;*.tlog;$(TargetPath)</ExtensionsToDeleteOnClean>
     <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">*.obj;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;*.xml;*.log;*.tlog;$(TargetPath)</ExtensionsToDeleteOnClean>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\bin\$(Configuration)-$(PlatformTarget)\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\bin\$(Configuration)-$(PlatformTarget)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)-$(PlatformTarget)\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)bin\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)-$(PlatformTarget)\</IntDir>
     <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">*.obj;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;*.xml;*.log;*.tlog;$(TargetPath)</ExtensionsToDeleteOnClean>
     <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|x64'">*.obj;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;*.xml;*.log;*.tlog;$(TargetPath)</ExtensionsToDeleteOnClean>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
@@ -87,10 +87,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <CodeAnalysisRuleSet>..\MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>$(ProjectDir)lib\$(Configuration);$(LibraryPath)&gt;$(ProjectDir)lib\$(Configuration)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -228,6 +224,7 @@
     <ClInclude Include="AttributeType.h" />
     <ClInclude Include="BlendFactor.h" />
     <ClInclude Include="BlendOperation.h" />
+    <ClInclude Include="CameraWolvenKitSceneNodeAnimator.h" />
     <ClInclude Include="ClearBufferFlag.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ColorFormat.h" />
@@ -271,6 +268,7 @@
     <ClInclude Include="Randomizer.h" />
     <ClInclude Include="ReadFile.h" />
     <ClInclude Include="RenderTarget.h" />
+    <ClInclude Include="SceneManagerWolvenKit.h" />
     <ClInclude Include="SceneParameters.h" />
     <ClInclude Include="ShaderCallBackInheritor.h" />
     <ClInclude Include="SJoint.h" />
@@ -279,6 +277,7 @@
     <ClInclude Include="SScaleKey.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="SWeight.h" />
+    <ClInclude Include="TerrainSceneNodeWolvenKit.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureClamp.h" />
     <ClInclude Include="TextureCreationFlag.h" />
@@ -445,6 +444,7 @@
     <ClCompile Include="ArchiveLoader.cpp" />
     <ClCompile Include="AttributeExchangingObject.cpp" />
     <ClCompile Include="Attributes.cpp" />
+    <ClCompile Include="CameraWolvenKitSceneNodeAnimator.cpp" />
     <ClCompile Include="FileArchive.cpp" />
     <ClCompile Include="FileList.cpp" />
     <ClCompile Include="FileSystem.cpp" />
@@ -461,12 +461,14 @@
     <ClCompile Include="MeshWriter.cpp" />
     <ClCompile Include="Randomizer.cpp" />
     <ClCompile Include="ReadFile.cpp" />
+    <ClCompile Include="SceneManagerWolvenKit.cpp" />
     <ClCompile Include="SJoint.cpp" />
     <ClCompile Include="SPositionKey.cpp" />
     <ClCompile Include="SRotationKey.cpp" />
     <ClCompile Include="SScaleKey.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="SWeight.cpp" />
+    <ClCompile Include="TerrainSceneNodeWolvenKit.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturePainter.cpp" />
     <ClCompile Include="VideoDriver.cpp" />

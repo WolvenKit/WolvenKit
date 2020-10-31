@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IrrlichtLime.Scene;
+using System;
 
 namespace WolvenKit.Render
 {
@@ -17,10 +18,16 @@ namespace WolvenKit.Render
         {
             if (disposing)
             {
+                RenderMessage message = new RenderMessage(MessageType.SHUTDOWN);
+                commandQueue.Enqueue(message);
+
                 components?.Dispose();
                 irrThread.Abort();
                 irrThread = null;
+                gui = null;
+                smgr.Drop();
                 smgr = null;
+
                 driver = null;
                 device?.Close();
                 device?.Drop();
@@ -29,14 +36,12 @@ namespace WolvenKit.Render
 
                 foreach(System.Windows.Forms.TreeNode t in sceneView.Nodes)
                 {
-                    if(t.Nodes.Count > 0)
+                    if (t.Nodes.Count > 0)
                     {
                         // free the RenderTreeNodes!
-                        foreach(RenderTreeNode rn in t.Nodes)
+                        foreach (RenderTreeNode rn in t.Nodes)
                         {
-                            rn.Mesh.Drop();
-                            rn.Position.Dispose();
-                            rn.Rotation.Dispose();
+                            rn.MeshNode.Drop();
                         }
                     }
                 }
@@ -44,7 +49,7 @@ namespace WolvenKit.Render
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+#region Windows Form Designer generated code
 
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -55,17 +60,24 @@ namespace WolvenKit.Render
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLevelScene));
             this.levelPanel = new System.Windows.Forms.Panel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.translateModeBtn = new System.Windows.Forms.Button();
+            this.rotateModeBtn = new System.Windows.Forms.Button();
+            this.queueSizeBar = new System.Windows.Forms.ProgressBar();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.distanceBar = new System.Windows.Forms.TrackBar();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.addMeshButton = new System.Windows.Forms.ToolStripButton();
             this.exportMeshButton = new System.Windows.Forms.ToolStripButton();
             this.showAllButton = new System.Windows.Forms.ToolStripButton();
             this.sceneView = new System.Windows.Forms.TreeView();
             this.irrlichtPanel = new System.Windows.Forms.Panel();
+            this.saveButton = new System.Windows.Forms.ToolStripButton();
             this.levelPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.distanceBar)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -87,6 +99,11 @@ namespace WolvenKit.Render
             // 
             // splitContainer.Panel1
             // 
+            this.splitContainer.Panel1.Controls.Add(this.translateModeBtn);
+            this.splitContainer.Panel1.Controls.Add(this.rotateModeBtn);
+            this.splitContainer.Panel1.Controls.Add(this.queueSizeBar);
+            this.splitContainer.Panel1.Controls.Add(this.progressBar);
+            this.splitContainer.Panel1.Controls.Add(this.distanceBar);
             this.splitContainer.Panel1.Controls.Add(this.toolStrip);
             this.splitContainer.Panel1.Controls.Add(this.sceneView);
             // 
@@ -97,6 +114,63 @@ namespace WolvenKit.Render
             this.splitContainer.SplitterDistance = 331;
             this.splitContainer.TabIndex = 1;
             // 
+            // translateModeBtn
+            // 
+            this.translateModeBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.translateModeBtn.Image = global::WolvenKit.Render.Properties.Resources.move1;
+            this.translateModeBtn.Location = new System.Drawing.Point(301, 4);
+            this.translateModeBtn.Name = "translateModeBtn";
+            this.translateModeBtn.Size = new System.Drawing.Size(24, 24);
+            this.translateModeBtn.TabIndex = 7;
+            this.translateModeBtn.UseVisualStyleBackColor = true;
+            // 
+            // rotateModeBtn
+            // 
+            this.rotateModeBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.rotateModeBtn.Image = global::WolvenKit.Render.Properties.Resources.rotate;
+            this.rotateModeBtn.Location = new System.Drawing.Point(268, 4);
+            this.rotateModeBtn.Name = "rotateModeBtn";
+            this.rotateModeBtn.Size = new System.Drawing.Size(24, 24);
+            this.rotateModeBtn.TabIndex = 6;
+            this.rotateModeBtn.UseVisualStyleBackColor = true;
+            // 
+            // queueSizeBar
+            // 
+            this.queueSizeBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.queueSizeBar.ForeColor = System.Drawing.Color.Gold;
+            this.queueSizeBar.Location = new System.Drawing.Point(0, 504);
+            this.queueSizeBar.Name = "queueSizeBar";
+            this.queueSizeBar.Size = new System.Drawing.Size(0, 10);
+            this.queueSizeBar.TabIndex = 4;
+            this.queueSizeBar.Resize += new System.EventHandler(this.queueSizeBar_Resize);
+            // 
+            // progressBar
+            // 
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.progressBar.Location = new System.Drawing.Point(0, 514);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(0, 10);
+            this.progressBar.TabIndex = 5;
+            this.progressBar.Resize += new System.EventHandler(this.progressBar_Resize);
+            // 
+            // distanceBar
+            // 
+            this.distanceBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.distanceBar.AutoSize = false;
+            this.distanceBar.LargeChange = 1;
+            this.distanceBar.Location = new System.Drawing.Point(130, 3);
+            this.distanceBar.Maximum = 5;
+            this.distanceBar.Minimum = 1;
+            this.distanceBar.Name = "distanceBar";
+            this.distanceBar.Size = new System.Drawing.Size(132, 22);
+            this.distanceBar.TabIndex = 3;
+            this.distanceBar.Value = 2;
+            this.distanceBar.ValueChanged += new System.EventHandler(this.distanceBar_ValueChanged);
+            // 
             // toolStrip
             // 
             this.toolStrip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -105,7 +179,8 @@ namespace WolvenKit.Render
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addMeshButton,
             this.exportMeshButton,
-            this.showAllButton});
+            this.showAllButton,
+            this.saveButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(35, 25);
@@ -154,7 +229,7 @@ namespace WolvenKit.Render
             this.sceneView.CheckBoxes = true;
             this.sceneView.Location = new System.Drawing.Point(0, 28);
             this.sceneView.Name = "sceneView";
-            this.sceneView.Size = new System.Drawing.Size(331, 499);
+            this.sceneView.Size = new System.Drawing.Size(331, 469);
             this.sceneView.TabIndex = 1;
             this.sceneView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.sceneView_AfterCheck);
             this.sceneView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.sceneView_AfterSelect);
@@ -166,11 +241,23 @@ namespace WolvenKit.Render
             this.irrlichtPanel.Name = "irrlichtPanel";
             this.irrlichtPanel.Size = new System.Drawing.Size(658, 527);
             this.irrlichtPanel.TabIndex = 0;
-            this.irrlichtPanel.Click += new System.EventHandler(this.irrlichtPanel_Click);
-            this.irrlichtPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.irrlichtPanel_MouseDown);
+            this.irrlichtPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.irrlichtPanel_MouseClick);
             this.irrlichtPanel.MouseEnter += new System.EventHandler(this.irrlichtPanel_Enter);
             this.irrlichtPanel.MouseLeave += new System.EventHandler(this.irrlichtPanel_Leave);
             this.irrlichtPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.irrlichtPanel_MouseMove);
+            this.irrlichtPanel.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.irrlichtPanel_MouseWheel);
+            this.irrlichtPanel.Resize += new System.EventHandler(this.irrlichtPanel_Resize);
+            // 
+            // saveButton
+            // 
+            this.saveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.saveButton.Image = ((System.Drawing.Image)(resources.GetObject("saveButton.Image")));
+            this.saveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(23, 20);
+            this.saveButton.Text = "toolStripButton1";
+            this.saveButton.ToolTipText = "Save Changes";
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // frmLevelScene
             // 
@@ -184,19 +271,21 @@ namespace WolvenKit.Render
             this.Text = "Level Scene renderer";
             this.Load += new System.EventHandler(this.frmLevelScene_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmLevelScene_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.frmLevelScene_KeyUp);
             this.levelPanel.ResumeLayout(false);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel1.PerformLayout();
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.distanceBar)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
-        #endregion
+#endregion
 
         private System.Windows.Forms.Panel levelPanel;
         private System.Windows.Forms.SplitContainer splitContainer;
@@ -206,5 +295,11 @@ namespace WolvenKit.Render
         private System.Windows.Forms.ToolStripButton addMeshButton;
         private System.Windows.Forms.ToolStripButton exportMeshButton;
         private System.Windows.Forms.ToolStripButton showAllButton;
+        private System.Windows.Forms.TrackBar distanceBar;
+        private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.ProgressBar queueSizeBar;
+        private System.Windows.Forms.Button rotateModeBtn;
+        private System.Windows.Forms.Button translateModeBtn;
+        private System.Windows.Forms.ToolStripButton saveButton;
     }
 }

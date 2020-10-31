@@ -7,6 +7,7 @@
 #include "IVideoDriver.h"
 #include "os.h"
 #include "debug.h"
+#include <ISceneNodeAnimatorCameraMaya.h>
 
 namespace irr
 {
@@ -232,6 +233,17 @@ void CCameraSceneNode::setFOV(f32 f)
 	recalculateProjectionMatrix();
 }
 
+const core::vector3df CCameraSceneNode::getModelRotation() const
+{
+	if (Animators.empty())
+	{
+		return core::vector3df(0, 0, 0);
+	}
+
+	// get value from animator!
+	ISceneNodeAnimatorCameraMaya* mayaCamera = (ISceneNodeAnimatorCameraMaya * )*(Animators.begin());
+	return mayaCamera->getModelRotation();
+}
 
 void CCameraSceneNode::recalculateProjectionMatrix()
 {

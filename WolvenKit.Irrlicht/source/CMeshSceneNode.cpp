@@ -1,6 +1,7 @@
 // Copyright (C) 2002-2012 Nikolaus Gebhardt
 // This file is part of the "Irrlicht Engine".
 // For conditions of distribution and use, see copyright notice in irrlicht.h
+#define USE_WK_RENDER 1
 
 #include "CMeshSceneNode.h"
 #include "IVideoDriver.h"
@@ -120,6 +121,23 @@ void CMeshSceneNode::OnRegisterSceneNode()
 //! renders the node.
 void CMeshSceneNode::render()
 {
+#if USE_WK_RENDER
+    video::IVideoDriver* driver = SceneManager->getVideoDriver();
+	driver->setTransform(video::ETS_WORLD, AbsoluteTransformation);
+	Box = Mesh->getBoundingBox();
+
+    for (u32 i = 0; i < Mesh->getMeshBufferCount(); ++i)
+    {
+        scene::IMeshBuffer* mb = Mesh->getMeshBuffer(i);
+        if (mb)
+        {
+            const video::SMaterial& material = Materials[i];
+
+            driver->setMaterial(material);
+            driver->drawMeshBuffer(mb);
+        }
+    }
+#else
 	video::IVideoDriver* driver = SceneManager->getVideoDriver();
 
 	if (!Mesh || !driver)
@@ -227,6 +245,7 @@ void CMeshSceneNode::render()
 			}
 		}
 	}
+#endif
 }
 
 
@@ -292,6 +311,7 @@ void CMeshSceneNode::setMesh(IMesh* mesh)
 			Mesh->drop();
 
 		Mesh = mesh;
+
 		copyMaterials();
 	}
 }

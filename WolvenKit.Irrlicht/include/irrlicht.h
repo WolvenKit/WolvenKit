@@ -151,6 +151,7 @@
 #include "IShadowVolumeSceneNode.h"
 #include "ISkinnedMesh.h"
 #include "ITerrainSceneNode.h"
+#include "ITerrainSceneNodeWolvenKit.h"
 #include "ITextSceneNode.h"
 #include "ITexture.h"
 #include "ITimer.h"
@@ -192,6 +193,7 @@
 #include "triangle3d.h"
 #include "vector2d.h"
 #include "vector3d.h"
+#include "CSceneManagerWolvenKit.h"
 
 /*! \mainpage Irrlicht Engine 1.9 API documentation
  *
@@ -363,6 +365,7 @@ namespace irr
 	typedef IrrlichtDevice* (IRRCALLCONV *funcptr_createDeviceEx )( const SIrrlichtCreationParameters& parameters );
 
 
+    extern "C" IRRLICHT_API  scene::CSceneManagerWolvenKit* IRRCALLCONV CreateWolvenKitSceneManager(void* device);
 	// THE FOLLOWING IS AN EMPTY LIST OF ALL SUB NAMESPACES
 	// EXISTING ONLY FOR THE DOCUMENTATION SOFTWARE DOXYGEN.
 

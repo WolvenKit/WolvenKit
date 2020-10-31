@@ -50,24 +50,6 @@ namespace video
         u32 blocksize;
     } PACK_STRUCT;
 
-    struct ddsColorBlock
-    {
-        u16		colors[2];
-        u8		row[4];
-    } PACK_STRUCT;
-
-    struct ddsAlphaBlock3BitLinear
-    {
-        u8		alpha0;
-        u8		alpha1;
-        u8		stuff[6];
-    } PACK_STRUCT;
-
-
-    struct ddsColor
-    {
-        u8		r, g, b, a;
-    } PACK_STRUCT;
     // Default alignment
 #include "irrunpack.h"
 

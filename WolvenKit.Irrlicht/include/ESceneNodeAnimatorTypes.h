@@ -40,6 +40,9 @@ namespace scene
 		//! Maya camera animator
 		ESNAT_CAMERA_MAYA,
 
+        //! Maya camera animator
+        ESNAT_CAMERA_WOLVENKIT,
+
 		//! Amount of built-in scene node animators
 		ESNAT_COUNT,
 

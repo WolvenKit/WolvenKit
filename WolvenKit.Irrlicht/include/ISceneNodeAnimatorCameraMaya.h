@@ -56,6 +56,8 @@ namespace scene
 		//! Returns the minimal distance to the camera target for zoom
 		virtual f32 getTargetMinDistance() const = 0;
 
+		//! Returns the degree rotations of the axes of the model.  Useful for gizmo orientation
+		virtual const core::vector3df getModelRotation() const = 0;
 	};
 
 } // end namespace scene

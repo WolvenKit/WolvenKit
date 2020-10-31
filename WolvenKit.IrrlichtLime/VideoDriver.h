@@ -122,6 +122,7 @@ public:
 
 	Image^ CreateImage(Texture^ texture, Vector2Di^ pos, Dimension2Di^ size);
 	Image^ CreateImage(Texture^ texture);
+	Image^ CreateUncompressedImage(Texture^ texture);
 
 	Image^ CreateImage(Video::ColorFormat format, Dimension2Di^ size);
 	Image^ CreateImage(String^ filename);

@@ -121,7 +121,8 @@ namespace scene
         //! If you no longer need the mesh, you should call IAnimatedMesh::drop().
         //! See IReferenceCounted::drop() for more information.
         virtual IAnimatedMesh* createMesh(io::IReadFile* file);
-
+        video::SMaterial createMaterial(io::IReadFile* file);
+        IMesh* createStaticMesh(io::IReadFile* file);
 
         core::array<video::SMaterial> Materials;
         CW3Skeleton Skeleton;
@@ -135,9 +136,14 @@ namespace scene
 
         scene::ISceneManager* _sceneManager;
         io::IFileSystem* _fileSystem;
-        scene::ISkinnedMesh* _animatedMesh;
+        video::IVideoDriver* _videoDriver;
 
+        scene::ISkinnedMesh* _animatedMesh;
         core::array<scene::ISkinnedMesh*> Meshes;
+
+        scene::SMesh* _staticMesh;
+        core::array<scene::SMesh*> _staticMeshes;
+
 
         // Strings table
         core::array<core::stringc> Strings;
@@ -149,6 +155,7 @@ namespace scene
 
         bool ConfigLoadSkeleton;
         bool ConfigLoadOnlyBestLOD;
+        bool IsStaticMesh;
         io::path ConfigGameTexturesPath;
         io::path ConfigGamePath;
 
@@ -160,7 +167,6 @@ namespace scene
         bool W3_load(io::IReadFile* file);
         void W3_CMesh(io::IReadFile* file, W3_DataInfos infos);
         video::SMaterial W3_CMaterialInstance(io::IReadFile* file, W3_DataInfos infos);
-        //void W3_CMaterialInstances(io::IReadFile* file, W3_DataInfos infos);
         void W3_CMeshComponent(io::IReadFile* file, W3_DataInfos infos);
         void W3_CEntityTemplate(io::IReadFile* file, W3_DataInfos infos);   // Not handled yet
         void W3_CEntity(io::IReadFile* file, W3_DataInfos infos);           // Not handled yet
@@ -171,6 +177,7 @@ namespace scene
 
         // load a mesh buffer from the buffer file
         bool W3_ReadBuffer(io::IReadFile* file, SBufferInfos bufferInfos, SMeshInfos meshInfos);
+        bool W3_ReadBufferStatic(io::IReadFile* file, SBufferInfos bufferInfos, SMeshInfos meshInfos);
 
         // animation helper functions
         SAnimationBufferBitwiseCompressedData ReadSAnimationBufferBitwiseCompressedDataProperty(io::IReadFile* file);
@@ -203,13 +210,14 @@ namespace scene
         
         void ReadRenderChunksProperty(io::IReadFile* file, SBufferInfos* buffer);
         void ReadMaterialsProperty(io::IReadFile* file);
-        video::SMaterial ReadIMaterialProperty(io::IReadFile* file);
+        video::SMaterial ReadIMaterialProperty(io::IReadFile* file, bool& valid);
         core::array<core::vector3df> ReadBonesPosition(io::IReadFile* file);
         void ReadRenderLODSProperty(io::IReadFile* file);
 
         // read external files
         video::SMaterial ReadMaterialFile(core::stringc filename);
         video::SMaterial ReadW2MIFile(core::stringc filename);
+        video::SMaterial ReadW2MGFile(core::stringc filename);
         ISkinnedMesh* ReadW2MESHFile(core::stringc filename);
 
         void computeLocal(ISkinnedMesh::SJoint* joint);

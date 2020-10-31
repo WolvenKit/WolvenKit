@@ -111,6 +111,15 @@ namespace irr
 		return dev;
 	}
 
+	extern "C" IRRLICHT_API  scene::CSceneManagerWolvenKit * IRRCALLCONV CreateWolvenKitSceneManager(void* device)
+	{
+		IrrlichtDevice* dev = (IrrlichtDevice*)device;
+		scene::CSceneManagerWolvenKit* smgr = DBG_NEW scene::CSceneManagerWolvenKit(dev->getVideoDriver(),
+			dev->getFileSystem(), dev->getCursorControl());
+		return smgr;
+	}
+
+
 namespace core
 {
 	const matrix4 IdentityMatrix(matrix4::EM4CONST_IDENTITY);

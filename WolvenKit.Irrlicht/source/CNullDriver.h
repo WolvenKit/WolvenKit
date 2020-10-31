@@ -375,6 +375,10 @@ namespace video
 				const core::position2d<s32>& pos,
 				const core::dimension2d<u32>& size) _IRR_OVERRIDE_;
 
+        IImage* createUncompressedImage(ITexture* texture,
+            const core::position2d<s32>& pos,
+            const core::dimension2d<u32>& size) _IRR_OVERRIDE_;
+
 		//! Draws a mesh buffer
 		void drawMeshBuffer(const scene::IMeshBuffer* mb) _IRR_OVERRIDE_;
 

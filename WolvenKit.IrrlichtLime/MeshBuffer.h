@@ -21,8 +21,10 @@ public:
 	void Append(array<Video::Vertex3DTTCoords^>^ verticesTTCoords, array<unsigned short>^ indices16bit);
 	void Append(array<Video::Vertex3DTangents^>^ verticesTangents, array<unsigned short>^ indices16bit);
 	void Append(array<Video::Vertex3D^>^ verticesStandard, array<unsigned int>^ indices32bit);
+	void Append(array<Video::Vertex3D^>^ verticesStandard, array<unsigned int>^ indices32bit, PrimitiveType ptype);
 	void Append(array<Video::Vertex3DTTCoords^>^ verticesTTCoords, array<unsigned int>^ indices32bit);
 	void Append(array<Video::Vertex3DTangents^>^ verticesTangents, array<unsigned int>^ indices32bit);
+	void Append(array<Video::Vertex3DTTCoords^>^ verticesTTCoords, array<unsigned int>^ indices32bit, PrimitiveType ptype);
 
 	Vector3Df^ GetNormal(int vertexIndex);
 	Vector3Df^ GetPosition(int vertexIndex);
