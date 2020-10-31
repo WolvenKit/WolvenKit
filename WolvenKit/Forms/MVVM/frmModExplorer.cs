@@ -99,7 +99,7 @@ namespace WolvenKit
         #region Methods
         public void ApplyCustomTheme()
         {
-            UIController.Get().ToolStripExtender.SetStyle(searchstrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
+            UIController.Get().ToolStripExtender.SetStyle(searchstrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetThemeBase());
 
             this.treeListView.BackColor = UIController.GetBackColor();
             this.treeListView.ForeColor = UIController.GetForeColor();

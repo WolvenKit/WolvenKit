@@ -167,7 +167,7 @@ namespace WolvenKit.Forms
 
         public void ApplyCustomTheme()
         {
-            UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetThemeBase());
             toolStripSearchBox.BackColor = UIController.GetPalette().ToolWindowCaptionButtonInactiveHovered.Background;
 
             this.treeListView.BackColor = UIController.GetBackColor();
@@ -175,6 +175,9 @@ namespace WolvenKit.Forms
 
             this.treeListView.HeaderFormatStyle = UIController.GetHeaderFormatStyle();
             treeListView.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
+
+            this.toolStripSearchBox.BackColor = UIController.GetPalette().ToolWindowCaptionButtonInactiveHovered.Background;
+            this.toolStripSearchBox.ForeColor = UIController.GetForeColor();
         }
         #endregion
 

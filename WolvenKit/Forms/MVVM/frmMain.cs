@@ -19,8 +19,8 @@ using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
 using SearchOption = System.IO.SearchOption;
 using System.IO.MemoryMappedFiles;
+using Microsoft.VisualBasic.FileIO;
 using WolvenKit.App.Model;
-
 
 namespace WolvenKit
 {
@@ -516,7 +516,7 @@ namespace WolvenKit
         }
         private void ApplyCustomTheme()
         {
-            var theme = UIController.GetTheme();
+            var theme = UIController.GetThemeBase();
             this.dockPanel.Theme = theme;
             visualStudioToolStripExtender1.SetStyle(menuStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
 
@@ -524,6 +524,21 @@ namespace WolvenKit
             //statusToolStrip.BackColor = SystemColors.HotTrack;
 
             visualStudioToolStripExtender1.SetStyle(toolbarToolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+
+            switch (UIController.GetColorTheme)
+            {
+                case EColorThemes.VS2015Light:
+                case EColorThemes.VS2015Blue:
+                    this.iconToolStripMenuItem.Image = new Bitmap(UIController.GetIconByKey(EAppIcons.Wkit_dark));
+                    this.aboutRedkit2ToolStripMenuItem.Image = new Bitmap(UIController.GetIconByKey(EAppIcons.Wkit_dark));
+                    break;
+                case EColorThemes.VS2015Dark:
+                    this.iconToolStripMenuItem.Image = new Bitmap(UIController.GetIconByKey(EAppIcons.Wkit_light));
+                    this.aboutRedkit2ToolStripMenuItem.Image = new Bitmap(UIController.GetIconByKey(EAppIcons.Wkit_light));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         #region UI formborderstyle none
@@ -1014,11 +1029,13 @@ namespace WolvenKit
                 {
                     if (File.Exists(fullpath))
                     {
-                        File.Delete(fullpath);
+                        FileSystem.DeleteFile(fullpath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                        //File.Delete(fullpath);
                     }
                     else
                     {
-                        Directory.Delete(fullpath, true);
+                        FileSystem.DeleteDirectory(fullpath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                        //Directory.Delete(fullpath, true);
                     }
                 }
                 catch (Exception)

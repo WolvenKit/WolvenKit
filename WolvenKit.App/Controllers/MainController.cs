@@ -107,40 +107,22 @@ namespace WolvenKit.App
         #endregion
 
         #region Archive Managers
-        private SoundManager soundManager;
-        private SoundManager modsoundmanager;
-
-        private BundleManager bundleManager;
-        private BundleManager modbundleManager;
-        
-        private TextureManager textureManager;
-        private TextureManager modTextureManager;
-
-        private CollisionManager collisionManager;
-        private CollisionManager modCollisionManager;
-
-        private W3StringManager w3StringManager;
-        private SpeechManager speechManager;
-
-        //Public getters
-        public W3StringManager W3StringManager => w3StringManager;
+        public W3StringManager W3StringManager { get; private set; }
 
 
-        private BundleManager BundleManager => bundleManager;
-        private BundleManager ModBundleManager => modbundleManager;
+        private BundleManager BundleManager { get; set; }
+        private BundleManager ModBundleManager { get; set; }
 
-        public SoundManager SoundManager => soundManager;
-        private SoundManager ModSoundManager => modsoundmanager;
+        public SoundManager SoundManager { get; private set; }
+        private SoundManager ModSoundManager { get; set; }
 
-        public TextureManager TextureManager => textureManager;
-        private TextureManager ModTextureManager => modTextureManager;
+        public TextureManager TextureManager { get; private set; }
+        private TextureManager ModTextureManager { get; set; }
 
-        private CollisionManager CollisionManager => collisionManager;
-        private CollisionManager ModCollisionManager => modCollisionManager;
+        private CollisionManager CollisionManager { get; set; }
+        private CollisionManager ModCollisionManager { get; set; }
 
-        private SpeechManager SpeechManager => speechManager;
-
-        //public Dictionary<string, MemoryMappedFile> mmfs = new Dictionary<string, MemoryMappedFile>();
+        private SpeechManager SpeechManager { get; set; }
 
         public List<IWitcherArchiveManager> GetManagers(bool loadmods)
         {
@@ -247,7 +229,7 @@ namespace WolvenKit.App
                 #region Load string manager
                 var sw = new System.Diagnostics.Stopwatch();
                 sw.Start();
-                if (w3StringManager == null)
+                if (W3StringManager == null)
                 {
                     try
                     {
@@ -255,17 +237,17 @@ namespace WolvenKit.App
                         {
                             using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"), FileMode.Open))
                             {
-                                w3StringManager = ProtoBuf.Serializer.Deserialize<W3StringManager>(file);
+                                W3StringManager = ProtoBuf.Serializer.Deserialize<W3StringManager>(file);
                             }
                         }
                         else
                         {
-                            w3StringManager = new W3StringManager();
-                            w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
+                            W3StringManager = new W3StringManager();
+                            W3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
                             Directory.CreateDirectory(ManagerCacheDir);
                             using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"), FileMode.Create))
                             {
-                                ProtoBuf.Serializer.Serialize(file, w3StringManager);
+                                ProtoBuf.Serializer.Serialize(file, W3StringManager);
                             }
                         }
                     }
@@ -273,8 +255,8 @@ namespace WolvenKit.App
                     {
                         if (File.Exists(Path.Combine(ManagerCacheDir, "string_cache.bin")))
                             File.Delete(Path.Combine(ManagerCacheDir, "string_cache.bin"));
-                        w3StringManager = new W3StringManager();
-                        w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
+                        W3StringManager = new W3StringManager();
+                        W3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
                 }
 
@@ -284,7 +266,7 @@ namespace WolvenKit.App
 
                 loadStatus = "Loading bundle manager!";
                 #region Load bundle manager
-                if (bundleManager == null)
+                if (BundleManager == null)
                 {
                     try
                     {
@@ -296,14 +278,14 @@ namespace WolvenKit.App
                                 serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                                 serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                                 serializer.TypeNameHandling = TypeNameHandling.Auto;
-                                bundleManager = (BundleManager)serializer.Deserialize(file, typeof(BundleManager));
+                                BundleManager = (BundleManager)serializer.Deserialize(file, typeof(BundleManager));
                             }
                         }
                         else
                         {
-                            bundleManager = new BundleManager();
-                            bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText(Path.Combine(ManagerCacheDir, "bundle_cache.json"), JsonConvert.SerializeObject(bundleManager, Formatting.None, new JsonSerializerSettings()
+                            BundleManager = new BundleManager();
+                            BundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                            File.WriteAllText(Path.Combine(ManagerCacheDir, "bundle_cache.json"), JsonConvert.SerializeObject(BundleManager, Formatting.None, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -315,23 +297,23 @@ namespace WolvenKit.App
                     {
                         if (File.Exists(Path.Combine(ManagerCacheDir, "bundle_cache.json")))
                             File.Delete(Path.Combine(ManagerCacheDir, "bundle_cache.json"));
-                        bundleManager = new BundleManager();
-                        bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                        BundleManager = new BundleManager();
+                        BundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
                 }
                 #endregion
                 loadStatus = "Loading mod bundle manager!";
                 #region Load mod bundle manager
-                if (modbundleManager == null)
+                if (ModBundleManager == null)
                 {
-                    modbundleManager = new BundleManager();
-                    modbundleManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    ModBundleManager = new BundleManager();
+                    ModBundleManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 #endregion
 
                 loadStatus = "Loading texture manager!";
                 #region Load texture manager
-                if (textureManager == null)
+                if (TextureManager == null)
                 {
                     try
                     {
@@ -343,14 +325,14 @@ namespace WolvenKit.App
                                 serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                                 serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                                 serializer.TypeNameHandling = TypeNameHandling.Auto;
-                                textureManager = (TextureManager)serializer.Deserialize(file, typeof(TextureManager));
+                                TextureManager = (TextureManager)serializer.Deserialize(file, typeof(TextureManager));
                             }
                         }
                         else
                         {
-                            textureManager = new TextureManager();
-                            textureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText(Path.Combine(ManagerCacheDir, "texture_cache.json"), JsonConvert.SerializeObject(textureManager, Formatting.None, new JsonSerializerSettings()
+                            TextureManager = new TextureManager();
+                            TextureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                            File.WriteAllText(Path.Combine(ManagerCacheDir, "texture_cache.json"), JsonConvert.SerializeObject(TextureManager, Formatting.None, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -362,23 +344,23 @@ namespace WolvenKit.App
                     {
                         if (File.Exists(Path.Combine(ManagerCacheDir, "texture_cache.json")))
                             File.Delete(Path.Combine(ManagerCacheDir, "texture_cache.json"));
-                        textureManager = new TextureManager();
-                        textureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                        TextureManager = new TextureManager();
+                        TextureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
                 }
                 #endregion
                 loadStatus = "Loading mod texure manager!";
                 #region Load mod texture manager
-                if (modTextureManager == null)
+                if (ModTextureManager == null)
                 {
-                    modTextureManager = new TextureManager();
-                    modTextureManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    ModTextureManager = new TextureManager();
+                    ModTextureManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 #endregion
 
                 loadStatus = "Loading collision manager!";
                 #region Load collision manager
-                if (collisionManager == null)
+                if (CollisionManager == null)
                 {
                     try
                     {
@@ -390,14 +372,14 @@ namespace WolvenKit.App
                                 serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                                 serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                                 serializer.TypeNameHandling = TypeNameHandling.Auto;
-                                collisionManager = (CollisionManager)serializer.Deserialize(file, typeof(CollisionManager));
+                                CollisionManager = (CollisionManager)serializer.Deserialize(file, typeof(CollisionManager));
                             }
                         }
                         else
                         {
-                            collisionManager = new CollisionManager();
-                            collisionManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText(Path.Combine(ManagerCacheDir, "collision_cache.json"), JsonConvert.SerializeObject(collisionManager, Formatting.None, new JsonSerializerSettings()
+                            CollisionManager = new CollisionManager();
+                            CollisionManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                            File.WriteAllText(Path.Combine(ManagerCacheDir, "collision_cache.json"), JsonConvert.SerializeObject(CollisionManager, Formatting.None, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -409,32 +391,32 @@ namespace WolvenKit.App
                     {
                         if (File.Exists(Path.Combine(ManagerCacheDir, "collision_cache.json")))
                             File.Delete(Path.Combine(ManagerCacheDir, "collision_cache.json"));
-                        collisionManager = new CollisionManager();
-                        collisionManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                        CollisionManager = new CollisionManager();
+                        CollisionManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
                 }
                 #endregion
                 loadStatus = "Loading mod collision manager!";
                 #region Load mod collision manager
-                if (modCollisionManager == null)
+                if (ModCollisionManager == null)
                 {
-                    modCollisionManager = new CollisionManager();
-                    modCollisionManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    ModCollisionManager = new CollisionManager();
+                    ModCollisionManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 #endregion
 
                 loadStatus = "Loading speech manager!";
                 #region Load speech manager
-                if (speechManager == null)
+                if (SpeechManager == null)
                 {
-                    speechManager = new SpeechManager();
-                    speechManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    SpeechManager = new SpeechManager();
+                    SpeechManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 #endregion
 
                 loadStatus = "Loading sound manager!";
                 #region Load sound manager
-                if (soundManager == null)
+                if (SoundManager == null)
                 {
                     try
                     {
@@ -446,14 +428,14 @@ namespace WolvenKit.App
                                 serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                                 serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                                 serializer.TypeNameHandling = TypeNameHandling.Auto;
-                                soundManager = (SoundManager)serializer.Deserialize(file, typeof(SoundManager));
+                                SoundManager = (SoundManager)serializer.Deserialize(file, typeof(SoundManager));
                             }
                         }
                         else
                         {
-                            soundManager = new SoundManager();
-                            soundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText(Path.Combine(ManagerCacheDir, "sound_cache.json"), JsonConvert.SerializeObject(soundManager, Formatting.None, new JsonSerializerSettings()
+                            SoundManager = new SoundManager();
+                            SoundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                            File.WriteAllText(Path.Combine(ManagerCacheDir, "sound_cache.json"), JsonConvert.SerializeObject(SoundManager, Formatting.None, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -465,17 +447,17 @@ namespace WolvenKit.App
                     {
                         if (File.Exists(Path.Combine(ManagerCacheDir, "sound_cache.json")))
                             File.Delete(Path.Combine(ManagerCacheDir, "sound_cache.json"));
-                        soundManager = new SoundManager();
-                        soundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                        SoundManager = new SoundManager();
+                        SoundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
                 }
                 #endregion
                 loadStatus = "Loading mod sound manager!";
                 #region Load mod sound manager
-                if (modsoundmanager == null)
+                if (ModSoundManager == null)
                 {
-                    modsoundmanager = new SoundManager();
-                    modsoundmanager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    ModSoundManager = new SoundManager();
+                    ModSoundManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 #endregion
 

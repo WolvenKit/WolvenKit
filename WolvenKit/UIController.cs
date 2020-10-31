@@ -33,26 +33,35 @@ namespace WolvenKit
         VS2015Blue = 2,
     }
 
+    public enum EAppIcons
+    {
+        Wkit_dark,
+        Wkit_light,
+        Radish,
+        Wcc
+    }
+
+    public enum EImageIcons
+    {
+        Wkit_dark,
+        Wkit_light,
+
+    }
+
     public class UIController : IVariableEditor, INotifyPropertyChanged
     {
-        private static UIController mainController;
+        private static UIController uiController;
         public UIConfiguration Configuration { get; private set; }
         public frmMain Window { get; private set; }
 
-        public const string ManagerCacheDir = "ManagerCache";
-        public string VLCLibDir = "C:\\Program Files\\VideoLAN\\VLC";
-        public string InitialModProject = "";
-        public string InitialWKP = "";
-
         // Color Themes
+        #region Color Themes
         public VisualStudioToolStripExtender ToolStripExtender { get; set; }
         private readonly List<ThemeBase> _themesList = new List<ThemeBase>() { new VS2015LightTheme(), new VS2015DarkTheme(), new VS2015BlueTheme() };
-        public static ThemeBase GetTheme()
-        {
-            return Get()._themesList[(int)Get().Configuration.ColorTheme];
-        }
+        public static ThemeBase GetThemeBase() => Get()._themesList[(int)Get().Configuration.ColorTheme];
+        public static EColorThemes GetColorTheme => Get().Configuration.ColorTheme;
 
-        public static DockPanelColorPalette GetPalette() => GetTheme().ColorPalette;
+        public static DockPanelColorPalette GetPalette() => GetThemeBase().ColorPalette;
 
         /// <summary>
         /// Light | Dark | Blue
@@ -102,7 +111,27 @@ namespace WolvenKit
             };
             return hfs;
         }
+        #endregion
 
+        // Icon library
+
+        #region Icon Library
+        // must be set to Copy in the resources!
+        private readonly Dictionary<EAppIcons, string> iconDict = new Dictionary<EAppIcons, string>()
+        {
+            {EAppIcons.Wcc, @"Resources\WolvenKit\Icons\WCC_32x.ico"},
+            {EAppIcons.Wkit_dark, @"Resources\WolvenKit\Icons\Wkit_dark_16x.ico"},
+            {EAppIcons.Wkit_light, @"Resources\WolvenKit\Icons\Wkit_light_16x.ico"},
+            {EAppIcons.Radish, @"Resources\WolvenKit\Icons\radish_icon.ico"},
+        };
+        // must be set to Copy in the resources!
+        private readonly Dictionary<EImageIcons, string> imageDict = new Dictionary<EImageIcons, string>()
+        {
+            {EImageIcons.Wkit_dark, @"Resources\WolvenKit\wk_ribbon_dark_small.png"},
+            {EImageIcons.Wkit_light, @"Resources\WolvenKit\wk_ribbon_light_small.png"},
+        };
+
+        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -120,15 +149,33 @@ namespace WolvenKit
 
         public static UIController Get()
         {
-            if (mainController == null)
+            if (uiController == null)
             {
-                mainController = new UIController();
-                mainController.Configuration = UIConfiguration.Load();
-                mainController.Window = new frmMain();
+                uiController = new UIController();
+                uiController.Configuration = UIConfiguration.Load();
+                uiController.Window = new frmMain();
             }
-            return mainController;
+            return uiController;
         }
 
+        public static string GetImageByKey(EImageIcons key) => Get().imageDict[key];
+        public static string GetIconByKey(EAppIcons key) => Get().iconDict[key];
+
+        public static Icon GetThemedWkitIcon()
+        {
+            switch (UIController.GetColorTheme)
+            {
+                case EColorThemes.VS2015Light:
+                case EColorThemes.VS2015Blue:
+                    return new Icon(UIController.GetIconByKey(EAppIcons.Wkit_dark), new Size(16, 16));
+                case EColorThemes.VS2015Dark:
+                    // disable for now until we get properly themed forms
+                    //return new Icon(UIController.GetIconByKey(EAppIcons.Wkit_light), new Size(16, 16));
+                    return new Icon(UIController.GetIconByKey(EAppIcons.Wkit_dark), new Size(16, 16));
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
 
         public void ImportBytes(CVariable editvar)
         {
