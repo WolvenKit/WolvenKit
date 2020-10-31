@@ -167,7 +167,6 @@ namespace scene
         bool W3_load(io::IReadFile* file);
         void W3_CMesh(io::IReadFile* file, W3_DataInfos infos);
         video::SMaterial W3_CMaterialInstance(io::IReadFile* file, W3_DataInfos infos);
-        //void W3_CMaterialInstances(io::IReadFile* file, W3_DataInfos infos);
         void W3_CMeshComponent(io::IReadFile* file, W3_DataInfos infos);
         void W3_CEntityTemplate(io::IReadFile* file, W3_DataInfos infos);   // Not handled yet
         void W3_CEntity(io::IReadFile* file, W3_DataInfos infos);           // Not handled yet
@@ -211,13 +210,14 @@ namespace scene
         
         void ReadRenderChunksProperty(io::IReadFile* file, SBufferInfos* buffer);
         void ReadMaterialsProperty(io::IReadFile* file);
-        video::SMaterial ReadIMaterialProperty(io::IReadFile* file);
+        video::SMaterial ReadIMaterialProperty(io::IReadFile* file, bool& valid);
         core::array<core::vector3df> ReadBonesPosition(io::IReadFile* file);
         void ReadRenderLODSProperty(io::IReadFile* file);
 
         // read external files
         video::SMaterial ReadMaterialFile(core::stringc filename);
         video::SMaterial ReadW2MIFile(core::stringc filename);
+        video::SMaterial ReadW2MGFile(core::stringc filename);
         ISkinnedMesh* ReadW2MESHFile(core::stringc filename);
 
         void computeLocal(ISkinnedMesh::SJoint* joint);

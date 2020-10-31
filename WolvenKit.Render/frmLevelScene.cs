@@ -705,8 +705,6 @@ namespace WolvenKit.Render
                 fpsText.OverrideColor = IrrlichtLime.Video.Color.SolidRed;
                 fpsText.OverrideFont = gui.GetFont("#DefaultWKFont");
 
-                //smgr.SaveScene("pvs.lrb");
-
                 vertexCountText = gui.AddStaticText("Vertices: " + totalVertexCount.ToString(),
                     new Recti(2, 32, 300, 52), false, false, null, 1, false);
                 vertexCountText.OverrideColor = IrrlichtLime.Video.Color.SolidRed;

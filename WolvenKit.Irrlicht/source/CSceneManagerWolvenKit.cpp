@@ -321,8 +321,6 @@ ITerrainSceneNodeWolvenKit* CSceneManagerWolvenKit::addTerrainSceneNodeWolvenKit
 
     node->setVisible(false);
     node->setAutomaticCulling(E_CULLING_TYPE::EAC_FRUSTUM_BOX);
-    node->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_BACK_FACE_CULLING, true);
-    node->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
 
     node->drop();
 

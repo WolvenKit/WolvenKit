@@ -67,7 +67,7 @@ CW3EntLoader::~CW3EntLoader()
 //! based on the file extension (e.g. ".bsp")
 bool CW3EntLoader::isALoadableFileExtension(const io::path& filename) const
 {
-    io::IReadFile* file = _sceneManager->getFileSystem()->createAndOpenFile(filename);
+    io::IReadFile* file = _fileSystem->createAndOpenFile(filename);
     if (!file)
         return false;
 
@@ -273,9 +273,6 @@ bool CW3EntLoader::W3_load(io::IReadFile* file)
             video::SMaterial mat = W3_CMaterialInstance(file, infos);
             os::Printer::log("Material loaded", ELL_DEBUG);
             Materials.push_back(mat);
-
-            //W3_CMaterialInstances(file, infos);
-            //os::Printer::log("Added to mat list", ELL_DEBUG);
         }
         else if (dataTypeName == "CEntityTemplate")
         {
@@ -941,13 +938,19 @@ void CW3EntLoader::ReadRenderChunksProperty(io::IReadFile* file, SBufferInfos* b
     }
 }
 
-video::SMaterial CW3EntLoader::ReadIMaterialProperty(io::IReadFile* file)
+video::SMaterial CW3EntLoader::ReadIMaterialProperty(io::IReadFile* file, bool& valid)
 {
+    valid = false;
+
     os::Printer::log("IMaterial", ELL_DEBUG);
     video::SMaterial mat;
     mat.MaterialType = video::EMT_SOLID;
 
     s32 nbProperty = readS32(file);
+    if (nbProperty == 0)
+    {
+        return mat;
+    }
     //std::cout << "nb property = " << nbProperty << std::endl;
     //std::cout << "adress = " << file->getPos() << std::endl;
 
@@ -981,6 +984,8 @@ video::SMaterial CW3EntLoader::ReadIMaterialProperty(io::IReadFile* file)
 
                 if (texture)
                 {
+                    valid = true;
+
                     os::Printer::log((formatString("load texture %s ", Files[texId].c_str())).c_str(), ELL_DEBUG);
                     mat.setTexture(textureLayer, texture);
 
@@ -1337,7 +1342,7 @@ void CW3EntLoader::W3_CUnknown(io::IReadFile* file, W3_DataInfos infos)
 {
     file->seek(infos.adress + 1);
     //std::cout << "W3_CUnknown, @infos.adress=" << infos.adress << ", end @" << infos.adress + infos.size << std::endl;
-    os::Printer::log("W3_CUknown", ELL_WARNING);
+    os::Printer::log("W3_CUknown", ELL_DEBUG);
 
     SPropertyHeader propHeader;
     while (ReadPropertyHeader(file, propHeader))
@@ -1345,14 +1350,13 @@ void CW3EntLoader::W3_CUnknown(io::IReadFile* file, W3_DataInfos infos)
         //std::cout << "-> @" << file->getPos() <<", property = " << propHeader.propName.c_str() << ", type = " << propHeader.propType.c_str() << std::endl;
         file->seek(propHeader.endPos);
     }
-    os::Printer::log("W3_CUknown end", ELL_WARNING);
+    os::Printer::log("W3_CUknown end", ELL_DEBUG);
 }
-
 
 void CW3EntLoader::W3_CAnimationBufferBitwiseCompressed(io::IReadFile* file, W3_DataInfos infos, u32 idx)
 {
     file->seek(infos.adress + 1);
-    os::Printer::log("W3_CAnimationBufferBitwiseCompressed", ELL_WARNING);
+    os::Printer::log("W3_CAnimationBufferBitwiseCompressed", ELL_DEBUG);
 
     core::array<core::array<SAnimationBufferBitwiseCompressedData> > inf;
     core::array<s8> data;
@@ -1895,11 +1899,34 @@ video::SMaterial CW3EntLoader::ReadMaterialFile(core::stringc filename)
     if (core::hasFileExtension(filename, "w2mi"))
         return ReadW2MIFile(filename);
     else if (core::hasFileExtension(filename, "w2mg"))
-        ; // shader, not handled
-    else
-        os::Printer::log((formatString("Unknown type of file for a material : %s", filename.c_str())).c_str(), ELL_ERROR);
+        return ReadW2MGFile(filename);
+
+    os::Printer::log((formatString("Unknown type of file for a material : %s", filename.c_str())).c_str(), ELL_ERROR);
 
     video::SMaterial material;
+    material.DiffuseColor.setRed(0);
+    material.DiffuseColor.setGreen(255);
+    material.DiffuseColor.setBlue(0);
+    return material;
+}
+video::SMaterial CW3EntLoader::ReadW2MGFile(core::stringc filename)
+{
+    video::SMaterial material;
+
+    io::path fullFilename = ConfigGameTexturesPath + filename;
+    io::IReadFile* matFile = _fileSystem->createAndOpenFile(fullFilename);
+
+    if (!matFile)
+    {
+        os::Printer::log((formatString("Fail to open the w2mg file : %s", fullFilename.c_str())).c_str(), ELL_ERROR);
+    }
+    else
+    {
+        CW3EntLoader w2mgLoader(_sceneManager, _fileSystem);
+        material = w2mgLoader.createMaterial(matFile);
+        matFile->drop();
+    }
+
     return material;
 }
 
@@ -1941,7 +1968,7 @@ video::SMaterial CW3EntLoader::W3_CMaterialInstance(io::IReadFile* file, W3_Data
         u16 extra;
         bool rc = ReadPropertyHeader(file, propHeader, extra);
 
-        if(propHeader.propName == "baseMaterial")
+        if (propHeader.propName == "baseMaterial")
         {
             // base material
             u32 fileId = readU32(file);
@@ -1958,18 +1985,21 @@ video::SMaterial CW3EntLoader::W3_CMaterialInstance(io::IReadFile* file, W3_Data
             os::Printer::log("non material found", ELL_DEBUG);
             // read and ignore
             file->seek(-2, true);
-            video::SMaterial tempMat = ReadIMaterialProperty(file);
-            if (extra > 0)
+            bool isValid;
+            video::SMaterial tempMat = ReadIMaterialProperty(file, isValid);
+            if (isValid)
             {
                 return tempMat;
             }
-            return mat;
+
+            if(!rc)
+                return mat;
+
+            file->seek(propHeader.endPos);
         }
-         
         os::Printer::log("Done", ELL_DEBUG);
     }
 
-    os::Printer::log("", ELL_DEBUG);
     return mat;
 }
 
@@ -2009,34 +2039,6 @@ video::ITexture* CW3EntLoader::getTexture(io::path filename)
     {
         texture = getMeshTextureLoader()->getTexture(fullFilename);
     }
-
-    /*
-    if (texture)
-        return texture;
-
-    // Else, if extracted with wcc_lite, we check all the possible filename
-    core::array<io::path> possibleExtensions;
-    possibleExtensions.push_back(".dds");
-    possibleExtensions.push_back(".bmp");
-    possibleExtensions.push_back(".jpg");
-    possibleExtensions.push_back(".jpeg");
-    possibleExtensions.push_back(".tga");
-    possibleExtensions.push_back(".png");
-
-    io::path baseFilename;
-    core::cutFilenameExtension(baseFilename, filename);
-
-    for (u32 i = 0; i < possibleExtensions.size(); ++i)
-    {
-        filename = ConfigGameTexturesPath + baseFilename + possibleExtensions[i];
-
-        if (_fileSystem->existFile(filename))
-            texture = _sceneManager->getVideoDriver()->getTexture(filename);
-
-        if (texture)
-            return texture;
-    }
-    */
 
     return texture;
 }

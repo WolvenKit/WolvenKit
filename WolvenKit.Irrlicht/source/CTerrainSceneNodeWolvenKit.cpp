@@ -200,7 +200,26 @@ namespace scene
         ib.setHardwareMappingHint(EHM_STATIC);
         mb->setPrimitiveType(EPT_TRIANGLE_STRIP);
         
-        //calculateNormals(mb);
+        for (u32 y = 1; y < dimension - 1; ++y)
+        {
+            index = y * dimension + 1;
+
+            for (u32 x = 1; x < dimension - 1; ++x, ++index)
+            {
+                video::S3DVertex& vback = static_cast<video::S3DVertex*>(vb.pointer())[index - dimension];
+                video::S3DVertex& vforward = static_cast<video::S3DVertex*>(vb.pointer())[index + dimension];
+                video::S3DVertex& vleft = static_cast<video::S3DVertex*>(vb.pointer())[index - 1];
+                video::S3DVertex& vright = static_cast<video::S3DVertex*>(vb.pointer())[index + 1];
+
+                f32 nX = vleft.Pos.X - vright.Pos.X;
+                f32 nY = vback.Pos.Y - vforward.Pos.Y;
+                f32 nZ = 100.0f;
+
+                video::S3DVertex& vertex = static_cast<video::S3DVertex*>(vb.pointer())[index];
+                vertex.Normal.set(nX, nY, nZ);
+                vertex.Normal.normalize();
+            }
+        }
 
 		// add the MeshBuffer to the mesh
 		Mesh->addMeshBuffer(mb);
