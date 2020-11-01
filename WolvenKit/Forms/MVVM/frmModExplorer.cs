@@ -192,7 +192,9 @@ namespace WolvenKit
             ModCookedImageKey, //= "<MODC>";
             ModUncookedImageKey, //= "<MODU>";
             RawImageKey, //= "<RAW>";
-            RadishImageKey
+            RadishImageKey,
+            RawModImageKey,
+            RawDlcImageKey
         }
 
         
@@ -260,6 +262,10 @@ namespace WolvenKit
                 case nameof(ECustomImageKeys.OpenDirImageKey): return Resources.FolderOpened_16x;
 
                 case nameof(ECustomImageKeys.RawImageKey): return Resources.Dot_greenblueNoHalo_16x;
+                case nameof(ECustomImageKeys.RawModImageKey): return Resources.Dot_greenblueNoHalo_16x;
+                case nameof(ECustomImageKeys.RawDlcImageKey): return Resources.Dot_greenblueNoHalo_16x;
+
+
                 case nameof(ECustomImageKeys.RadishImageKey): return Resources.Dot_redNoHalo_16x;
 
                 case nameof(ECustomImageKeys.ModImageKey): return Resources.Dot_blueNoHalo_16x;
@@ -298,6 +304,11 @@ namespace WolvenKit
 
                 if (node.FullName == ActiveMod.RawDirectory)
                     return ECustomImageKeys.RawImageKey.ToString();
+                if (node.FullName == ActiveMod.RawModDirectory)
+                    return ECustomImageKeys.RawModImageKey.ToString();
+                if (node.FullName == ActiveMod.RawDlcDirectory)
+                    return ECustomImageKeys.RawDlcImageKey.ToString();
+
                 if (node.FullName == ActiveMod.RadishDirectory)
                     return ECustomImageKeys.RadishImageKey.ToString();
 
