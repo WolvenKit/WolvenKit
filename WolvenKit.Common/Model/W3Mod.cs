@@ -231,11 +231,11 @@ namespace WolvenKit.Common
         {
             get
             {
-                if (string.IsNullOrEmpty(GetDLCName()))
+                if (string.IsNullOrEmpty(GetDlcName()))
                 {
                     return null;
                 }
-                var dir = Path.Combine(ProjectDirectory, "cooked", "DLC", GetDLCName(), "content");
+                var dir = Path.Combine(ProjectDirectory, "cooked", "DLC", GetDlcName(), "content");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
                 return dir;
@@ -248,11 +248,11 @@ namespace WolvenKit.Common
         {
             get
             {
-                if (string.IsNullOrEmpty(GetDLCName()))
+                if (string.IsNullOrEmpty(GetDlcName()))
                 {
                     return null;
                 }
-                var dir = Path.Combine(ProjectDirectory, "packed", "DLC", GetDLCName(), "content");
+                var dir = Path.Combine(ProjectDirectory, "packed", "DLC", GetDlcName(), "content");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
                 return dir;
@@ -406,68 +406,49 @@ namespace WolvenKit.Common
 
 
         /// <summary>
-        /// Returns the first folder name in the ActiveMod/dlc directory
+        /// Returns the first relative folder path in the ActiveMod/dlc directory
         /// Does not support multiple DLC
         /// </summary>
         /// <returns></returns>
-        public string GetDLCName()
+        public string GetDlcName()
         {
-            string dlcname = "";
-            dlcname = $"dlc{Name}";
-            //try
-            //{
-            //    if (Directory.Exists(Path.Combine(DlcCookedDirectory, "dlc")))
-            //    {
-            //        if (Directory.GetDirectories(Path.Combine(DlcCookedDirectory, "dlc")).Any())
-            //            return (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcCookedDirectory, "dlc")).First())).Name;
-
-            //    }
-            //    else if (Directory.Exists(Path.Combine(DlcUncookedDirectory, "dlc")))
-            //    {
-            //        if (Directory.GetDirectories(Path.Combine(DlcUncookedDirectory, "dlc")).Any())
-            //            return (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcUncookedDirectory, "dlc")).First())).Name;
-            //    }
-            //}
-            //catch (Exception)
-            //{
-            //}
-            return dlcname;
+            if (!string.IsNullOrEmpty(GetDlcCookedRelativePath()))
+                return GetDlcCookedRelativePath();
+            if (!string.IsNullOrEmpty(GetDlcUncookedRelativePath()))
+                return GetDlcUncookedRelativePath();
+            return "";
         }
 
         /// <summary>
-        /// Returns the first reltive folder path in the ActiveMod/dlc directory
-        /// Does not support multiple DLC
+        /// Returns the first folder name in the DlcCookedDirectory.
+        /// Does not support multiple dlc
         /// </summary>
         /// <returns></returns>
-        public string GetDLCRelativePath()
+        public string GetDlcCookedRelativePath()
         {
             string relpath = "";
-            try
+            if (Directory.Exists(DlcCookedDirectory) && Directory.GetDirectories(DlcCookedDirectory).Any())
             {
-                if (Directory.Exists(Path.Combine(DlcCookedDirectory, "dlc")))
-                {
-                    if (Directory.GetDirectories(Path.Combine(DlcCookedDirectory, "dlc")).Any())
-                    {
-                        relpath = (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcCookedDirectory, "dlc")).First())).FullName;
-                        return relpath.Substring(DlcCookedDirectory.Length + 1);
-                    }
-
-                }
-                else if (Directory.Exists(Path.Combine(DlcUncookedDirectory, "dlc")))
-                {
-                    if (Directory.GetDirectories(Path.Combine(DlcUncookedDirectory, "dlc")).Any())
-                    {
-                        relpath = (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcUncookedDirectory, "dlc")).First())).FullName;
-                        return relpath.Substring(DlcUncookedDirectory.Length + 1);
-                    }
-
-                }
-            }
-            catch (Exception)
-            {
+                relpath = (new DirectoryInfo(Directory.GetDirectories(DlcCookedDirectory).First())).FullName;
+                return relpath.Substring(DlcCookedDirectory.Length + 1);
             }
             return relpath;
         }
 
+        /// <summary>
+        /// Returns the first folder name in the DlcUncookedDirectory.
+        /// Does not support multiple dlc
+        /// </summary>
+        /// <returns></returns>
+        public string GetDlcUncookedRelativePath()
+        {
+            string relpath = "";
+            if (Directory.Exists(DlcUncookedDirectory) && Directory.GetDirectories(DlcUncookedDirectory).Any())
+            {
+                relpath = (new DirectoryInfo(Directory.GetDirectories(DlcUncookedDirectory).First())).FullName;
+                return relpath.Substring(DlcUncookedDirectory.Length + 1);
+            }
+            return relpath;
+        }
     }
 }

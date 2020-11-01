@@ -1407,15 +1407,15 @@ namespace WolvenKit
 
                 //Create the dirs. So script only mods don't die.
                 Directory.CreateDirectory(ActiveMod.PackedModDirectory);
-                if (!string.IsNullOrEmpty(ActiveMod.GetDLCName()))
+                if (!string.IsNullOrEmpty(ActiveMod.GetDlcName()))
                     Directory.CreateDirectory(ActiveMod.PackedDlcDirectory);
 
 
                 //------------------------PRE COOKING------------------------------------//
-                // have a check if somehow users forget to add a dlc fodler in their dlc :(
+                // have a check if somehow users forget to add a dlc folder in their dlc :(
                 // but have files inform them that it just not gonna work
                 bool initialDlcCheck = true;
-                if (ActiveMod.DLCFiles.Any() && string.IsNullOrEmpty(ActiveMod.GetDLCName()))
+                if (ActiveMod.DLCFiles.Any() && string.IsNullOrEmpty(ActiveMod.GetDlcName()))
                 {
                     Logger.LogString("Files in your dlc directory need to have the following structure: dlc\\DLCNAME\\files. Dlc will not be packed.", Logtype.Error);
                     initialDlcCheck = false;
@@ -1711,8 +1711,7 @@ namespace WolvenKit
 
                         //Create dlc soundspc.cache
                         if (Directory.Exists(sounddlcdir) && new DirectoryInfo(sounddlcdir)
-                            .GetFiles("*.*", SearchOption.AllDirectories)
-                            .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
+                            .GetFiles("*.*", SearchOption.AllDirectories).Any(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")))
                         {
                             SoundCache.Write(
                                 new DirectoryInfo(sounddlcdir)
@@ -2170,11 +2169,12 @@ namespace WolvenKit
                 {
                     // extract files from bundle to Cooked
                     case EBundleType.Bundle:
-                        {
-                            newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}", relativePath)
-                                : Path.Combine( "Mod", EProjectFolders.Cooked.ToString(), relativePath));
-                        }
+                    {
+                        newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                            ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}",
+                                NormalizeDlcPath(relativePath))
+                            : Path.Combine("Mod", EProjectFolders.Cooked.ToString(), relativePath));
+                    }
                         break;
                     // extract files from Collision and Texture caches to Raw (except for pngs etc)
                     case EBundleType.CollisionCache:
@@ -2185,13 +2185,14 @@ namespace WolvenKit
                             if (extension == ".png" || extension == ".jpg" || extension == ".dds")
                             {
                                 newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                    ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}", relativePath)
+                                    ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}",
+                                        NormalizeDlcPath(relativePath))
                                     : Path.Combine("Mod", EProjectFolders.Cooked.ToString(), relativePath));
                             }
                             // all other textures and collision stuff goes into Raw (since they have to be imported first)
                             else
                                 newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
-                                    ? Path.Combine("DLC", $"dlc{ActiveMod.Name}", relativePath)
+                                    ? Path.Combine("DLC", $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
                                     : Path.Combine("Mod", relativePath));
                         }
                         break;
@@ -2199,11 +2200,12 @@ namespace WolvenKit
                     case EBundleType.SoundCache:
                     case EBundleType.Speech:
                     case EBundleType.Shader:
-                        {
-                            newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), $"dlc{ActiveMod.Name}", relativePath)
-                                : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), relativePath));
-                        }
+                    {
+                        newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                            ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(),
+                                $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
+                            : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), relativePath));
+                    }
                         break;
                     case EBundleType.ANY:
                     default:
@@ -2263,6 +2265,19 @@ namespace WolvenKit
             }
 
             return skip;
+
+            string NormalizeDlcPath(string path)
+            {
+                // trim off 2 folders from dlc paths for jato
+                if (addAsDLC && path.StartsWith("dlc"))
+                {
+                    var splits = path.Split(Path.DirectorySeparatorChar).ToList();
+                    if (splits.Count > 2)
+                        path = string.Join(Path.DirectorySeparatorChar.ToString(), splits.Skip(2));
+                }
+                return path;
+            }
+
         }
 
         /// <summary>
@@ -3406,10 +3421,8 @@ namespace WolvenKit
 
         }
 
-        private void openUncookedFolderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Commonfunctions.ShowFileInExplorer(MainController.Get().Configuration.DepotPath);
-        }
+        private void openUncookedFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
+            Commonfunctions.ShowFolderInExplorer(MainController.Get().Configuration.DepotPath);
 
         private void saveExplorerToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -3586,15 +3599,9 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
         #endregion
 
-        private void ModchunkToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CreateCustomCr2wFile(false);
-        }
+        private void ModchunkToolStripMenuItem_Click(object sender, EventArgs e) => CreateCustomCr2wFile(false);
 
-        private void DLCChunkToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CreateCustomCr2wFile(true);
-        }
+        private void DLCChunkToolStripMenuItem_Click(object sender, EventArgs e) => CreateCustomCr2wFile(true);
 
         private CR2WFile CreateCustomCr2wFile(bool isDlc)
         {

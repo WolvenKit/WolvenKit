@@ -400,7 +400,7 @@ namespace WolvenKit
                 pasteToolStripMenuItem.Enabled = File.Exists(Clipboard.GetText());
 
                 cookToolStripMenuItem.Enabled = (!Enum.GetNames(typeof(EImportable)).Contains(ext) && !isbundle && !israw);
-                markAsModDlcFileToolStripMenuItem.Enabled = isbundle && !isToplevelDir;
+                //markAsModDlcFileToolStripMenuItem.Enabled = isbundle && !isToplevelDir;
 
                 showFileInExplorerToolStripMenuItem.Text = selectedobject.IsDirectory() ? "Open Folder in Explorer" : "Open File in Explorer";
                 FileActionsToolStripMenuItem.Enabled = !israw;
@@ -552,6 +552,7 @@ namespace WolvenKit
             }
         }
 
+        // deprecated
         private void markAsModDlcFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!(treeListView.SelectedObject is FileSystemInfo selectedobject)) return;
