@@ -181,8 +181,22 @@ namespace WolvenKit
                 treeListView.ModelFilter = TextMatchFilter.Contains(treeListView, searchBox.Text.ToUpper());
         }
 
-        private const string OpenDirImageKey = "<ODIR>";
-        private const string ClosedDirImageKey = "<CDIR>";
+        private enum ECustomImageKeys
+        {
+            OpenDirImageKey, //= "<ODIR>";
+            ClosedDirImageKey, //= "<CDIR>";
+            ModImageKey, //= "<MOD>";
+            DlcImageKey, //= "<DLC>";
+            DlcCookedImageKey, //= "<DLCC>";
+            DlcUncookedImageKey, //= "<DLCU>";
+            ModCookedImageKey, //= "<MODC>";
+            ModUncookedImageKey, //= "<MODU>";
+            RawImageKey, //= "<RAW>";
+            RadishImageKey
+        }
+
+        
+
         private static Image GetSmallIconForFileType(string extension)
         {
             extension = extension.TrimStart('.');
@@ -242,18 +256,54 @@ namespace WolvenKit
                 case "blend": return Resources.blend;
                 case "zip": return Resources.zip;
 
-                case ClosedDirImageKey: return Resources.FolderClosed_16x;
-                case OpenDirImageKey: return Resources.FolderOpened_16x;
-                default: return Resources.BlankFile_16x;
+                case nameof(ECustomImageKeys.ClosedDirImageKey): return Resources.FolderClosed_16x;
+                case nameof(ECustomImageKeys.OpenDirImageKey): return Resources.FolderOpened_16x;
 
+                case nameof(ECustomImageKeys.RawImageKey): return Resources.Dot_greenblueNoHalo_16x;
+                case nameof(ECustomImageKeys.RadishImageKey): return Resources.Dot_redNoHalo_16x;
+
+                case nameof(ECustomImageKeys.ModImageKey): return Resources.Dot_blueNoHalo_16x;
+                case nameof(ECustomImageKeys.ModCookedImageKey): return Resources.circle_blue_cooked;
+                case nameof(ECustomImageKeys.ModUncookedImageKey): return Resources.Dot_blueNoHalo_16x;
+
+                case nameof(ECustomImageKeys.DlcImageKey): return Resources.Dot_greenNoHalo_16x;
+                case nameof(ECustomImageKeys.DlcCookedImageKey): return Resources.circle_green_cooked;
+                case nameof(ECustomImageKeys.DlcUncookedImageKey): return Resources.Dot_greenNoHalo_16x;
+                 
+                default: return Resources.BlankFile_16x;
             }
         }
         private string GetFileExtension(object obj)
         {
-            if (!(obj is FileSystemInfo node)) return OpenDirImageKey;
+            if (!(obj is FileSystemInfo node))
+            {
+                return ECustomImageKeys.OpenDirImageKey.ToString();
+            }
             if (node.IsDirectory())
             {
-                return treeListView.IsExpanded(node) ? OpenDirImageKey : ClosedDirImageKey;
+                // check for base dirs
+                if (node.FullName == ActiveMod.ModDirectory)
+                    return ECustomImageKeys.ModImageKey.ToString();
+                if (node.FullName == ActiveMod.ModCookedDirectory)
+                    return ECustomImageKeys.ModCookedImageKey.ToString();
+                if (node.FullName == ActiveMod.ModUncookedDirectory)
+                    return ECustomImageKeys.ModUncookedImageKey.ToString();
+
+                if (node.FullName == ActiveMod.DlcDirectory)
+                    return ECustomImageKeys.DlcImageKey.ToString();
+                if (node.FullName == ActiveMod.DlcCookedDirectory)
+                    return ECustomImageKeys.DlcCookedImageKey.ToString();
+                if (node.FullName == ActiveMod.DlcUncookedDirectory)
+                    return ECustomImageKeys.DlcUncookedImageKey.ToString();
+
+                if (node.FullName == ActiveMod.RawDirectory)
+                    return ECustomImageKeys.RawImageKey.ToString();
+                if (node.FullName == ActiveMod.RadishDirectory)
+                    return ECustomImageKeys.RadishImageKey.ToString();
+
+                return treeListView.IsExpanded(node)
+                    ? ECustomImageKeys.OpenDirImageKey.ToString()
+                    : ECustomImageKeys.ClosedDirImageKey.ToString();
             }
             else
                 return (node as FileInfo)?.Extension;
