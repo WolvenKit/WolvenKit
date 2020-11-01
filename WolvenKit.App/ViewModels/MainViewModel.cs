@@ -1036,7 +1036,11 @@ namespace WolvenKit.App.ViewModels
                     for (int i = 0; i < files.Length; i++)
                     {
                         var file = files[i];
-                        var relpath = $"dlc\\{file.FullName.Substring(uncookeddlcdir.FullName.Length + 1)}";
+                        var relpath = $"{file.FullName.Substring(uncookeddlcdir.FullName.Length + 1)}";
+                        if (!relpath.StartsWith("dlc\\"))
+                        {
+                            relpath = $"dlc\\{relpath}";
+                        }
 
                         relpath = relpath.Replace("\\", "\\\\");
                         sr.WriteLine("\t\t{");
@@ -1066,9 +1070,13 @@ namespace WolvenKit.App.ViewModels
             if (string.IsNullOrEmpty(ActiveMod.GetDlcUncookedRelativePath()))
                 return;
 
-            string r4link = $"{MainController.Get().Configuration.DepotPath}\\dlc\\{ActiveMod.GetDlcName()}";
-            //string projlink = $"{ActiveMod.DlcUncookedDirectory}\\dlc\\{ActiveMod.GetDlcName()}";
+            // hack to determine if older project
+            string r4link = Path.Combine(MainController.Get().Configuration.DepotPath, "dlc", ActiveMod.GetDlcName());
             string projlink = Path.Combine(ActiveMod.DlcUncookedDirectory, ActiveMod.GetDlcUncookedRelativePath());
+            if (new DirectoryInfo(ActiveMod.DlcUncookedDirectory).GetDirectories().Any(_ => _.Name == "dlc"))
+            {
+                projlink = Path.Combine(ActiveMod.DlcUncookedDirectory, "dlc", ActiveMod.GetDlcUncookedRelativePath());
+            }
 
             if (Directory.Exists(r4link))
             {

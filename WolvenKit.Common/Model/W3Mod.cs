@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Xml.Serialization;
 using WolvenKit.Common.Model;
 
@@ -427,9 +428,25 @@ namespace WolvenKit.Common
         public string GetDlcCookedRelativePath()
         {
             string relpath = "";
-            if (Directory.Exists(DlcCookedDirectory) && Directory.GetDirectories(DlcCookedDirectory).Any())
+            var di = new DirectoryInfo(DlcCookedDirectory);
+            if (di.Exists && di.GetDirectories().Any())
             {
-                relpath = (new DirectoryInfo(Directory.GetDirectories(DlcCookedDirectory).First())).FullName;
+                // support older projects
+                if (di.GetDirectories().Any(_ => _.Name == "dlc"))
+                {
+                    var subdi = di.GetDirectories().First(_ => _.Name == "dlc");
+                    if (subdi.Exists && subdi.GetDirectories().Any())
+                    {
+                        relpath = subdi.GetDirectories().First().FullName;
+                        return relpath.Substring(DlcCookedDirectory.Length + 5);
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                }
+                else
+                    relpath = di.GetDirectories().First().FullName;
                 return relpath.Substring(DlcCookedDirectory.Length + 1);
             }
             return relpath;
@@ -443,9 +460,25 @@ namespace WolvenKit.Common
         public string GetDlcUncookedRelativePath()
         {
             string relpath = "";
-            if (Directory.Exists(DlcUncookedDirectory) && Directory.GetDirectories(DlcUncookedDirectory).Any())
+            var di = new DirectoryInfo(DlcUncookedDirectory);
+            if (di.Exists && di.GetDirectories().Any())
             {
-                relpath = (new DirectoryInfo(Directory.GetDirectories(DlcUncookedDirectory).First())).FullName;
+                // support older projects
+                if (di.GetDirectories().Any(_ => _.Name == "dlc"))
+                {
+                    var subdi = di.GetDirectories().First(_ => _.Name == "dlc");
+                    if (subdi.Exists && subdi.GetDirectories().Any())
+                    {
+                        relpath = subdi.GetDirectories().First().FullName;
+                        return relpath.Substring(DlcUncookedDirectory.Length + 5);
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                }
+                else
+                    relpath = di.GetDirectories().First().FullName;
                 return relpath.Substring(DlcUncookedDirectory.Length + 1);
             }
             return relpath;
