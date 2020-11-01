@@ -638,7 +638,7 @@ namespace WolvenKit.App.ViewModels
                     //Delete the old install log. We will make a new one so this is not needed anymore.
                     File.Delete(ActiveMod.ProjectDirectory + "\\install_log.xml");
                 }
-                XDocument installlog = new XDocument(new XElement("InstalLog", new XAttribute("Project", ActiveMod.Name), new XAttribute("Build_date", DateTime.Now.ToString())));
+                var installlog = new XDocument(new XElement("InstalLog", new XAttribute("Project", ActiveMod.Name), new XAttribute("Build_date", DateTime.Now.ToString())));
                 var fileroot = new XElement("Files");
                 //Copy and log the files.
                 if (!Directory.Exists(Path.Combine(ActiveMod.ProjectDirectory, "packed")))
@@ -794,7 +794,7 @@ namespace WolvenKit.App.ViewModels
 
                         if (dlc)
                         {
-                            cook.trimdir = ActiveMod.GetDLCRelativePath();
+                            cook.trimdir = $"dlc\\{ActiveMod.GetDlcName()}";
                             var seeddir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed_dlc{ActiveMod.Name}.files");
                             cook.seed = seeddir;
                         }
@@ -1035,8 +1035,13 @@ namespace WolvenKit.App.ViewModels
                     FileInfo[] files = uncookeddlcdir.GetFiles("*", SearchOption.AllDirectories);
                     for (int i = 0; i < files.Length; i++)
                     {
-                        FileInfo file = files[i];
-                        var relpath = file.FullName.Substring(uncookeddlcdir.FullName.Length + 1);
+                        var file = files[i];
+                        var relpath = $"{file.FullName.Substring(uncookeddlcdir.FullName.Length + 1)}";
+                        if (!relpath.StartsWith("dlc\\"))
+                        {
+                            relpath = $"dlc\\{relpath}";
+                        }
+
                         relpath = relpath.Replace("\\", "\\\\");
                         sr.WriteLine("\t\t{");
                         sr.WriteLine($"\t\t\t\"path\": \"{relpath}\",");
@@ -1060,23 +1065,27 @@ namespace WolvenKit.App.ViewModels
         /// </summary>
         public void CreateVirtualLinks()
         {
-            if (string.IsNullOrEmpty(ActiveMod.GetDLCName()))
+            if (string.IsNullOrEmpty(ActiveMod.GetDlcName()))
+                return;
+            if (string.IsNullOrEmpty(ActiveMod.GetDlcUncookedRelativePath()))
                 return;
 
-            string r4link = $"{MainController.Get().Configuration.DepotPath}\\dlc\\{ActiveMod.GetDLCName()}";
-            string projlink = $"{ActiveMod.DlcUncookedDirectory}\\dlc\\{ActiveMod.GetDLCName()}";
-
+            // hack to determine if older project
+            string r4link = Path.Combine(MainController.Get().Configuration.DepotPath, "dlc", ActiveMod.GetDlcName());
+            string projlink = Path.Combine(ActiveMod.DlcUncookedDirectory, ActiveMod.GetDlcUncookedRelativePath());
+            if (new DirectoryInfo(ActiveMod.DlcUncookedDirectory).GetDirectories().Any(_ => _.Name == "dlc"))
+            {
+                projlink = Path.Combine(ActiveMod.DlcUncookedDirectory, "dlc", ActiveMod.GetDlcUncookedRelativePath());
+            }
 
             if (Directory.Exists(r4link))
             {
-                var dbg = new DirectoryInfo(r4link);
-
                 Directory.Delete(r4link);
             }
             if (!Directory.Exists(r4link))
             {
                 string args = $"/c mklink /J \"{r4link}\" \"{projlink}\"";
-                ProcessStartInfo startInfo = new ProcessStartInfo("cmd.exe", args)
+                var startInfo = new ProcessStartInfo("cmd.exe", args)
                 {
                     WindowStyle = ProcessWindowStyle.Minimized
                 };

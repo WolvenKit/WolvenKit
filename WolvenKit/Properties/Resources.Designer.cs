@@ -415,7 +415,7 @@ namespace WolvenKit.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap git {
             get {
-                object obj = ResourceManager.GetObject("git", resourceCulture);
+                object obj = ResourceManager.GetObject($"git", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

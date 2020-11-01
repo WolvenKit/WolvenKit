@@ -29,8 +29,18 @@ namespace WolvenKit
                 modBDL.Checked = true;
                 modMD.Checked = true;
             }
+            if (Directory.GetFiles(activemod.ModUncookedDirectory, "*.*", SearchOption.AllDirectories).Any())
+            {
+                modBDL.Checked = true;
+                modMD.Checked = true;
+            }
 
             if (Directory.GetFiles(activemod.DlcCookedDirectory, "*.*", SearchOption.AllDirectories).Any())
+            {
+                dlcBDL.Checked = true;
+                dlcMD.Checked = true;
+            }
+            if (Directory.GetFiles(activemod.DlcUncookedDirectory, "*.*", SearchOption.AllDirectories).Any())
             {
                 dlcBDL.Checked = true;
                 dlcMD.Checked = true;

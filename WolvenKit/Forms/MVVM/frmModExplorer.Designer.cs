@@ -264,6 +264,7 @@ namespace WolvenKit
             this.markAsModDlcFileToolStripMenuItem.Name = "markAsModDlcFileToolStripMenuItem";
             this.markAsModDlcFileToolStripMenuItem.Size = new System.Drawing.Size(248, 26);
             this.markAsModDlcFileToolStripMenuItem.Text = "Mark as [Mod/Dlc] file";
+            this.markAsModDlcFileToolStripMenuItem.Visible = false;
             this.markAsModDlcFileToolStripMenuItem.Click += new System.EventHandler(this.markAsModDlcFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
@@ -318,7 +319,7 @@ namespace WolvenKit
             this.toolStripLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Padding = new System.Windows.Forms.Padding(2);
-            this.toolStripLabel1.Size = new System.Drawing.Size(24, 28);
+            this.toolStripLabel1.Size = new System.Drawing.Size(24, 27);
             // 
             // searchBox
             // 
@@ -389,7 +390,7 @@ namespace WolvenKit
             this.treeListView.Margin = new System.Windows.Forms.Padding(2);
             this.treeListView.Name = "treeListView";
             this.treeListView.ShowGroups = false;
-            this.treeListView.Size = new System.Drawing.Size(373, 527);
+            this.treeListView.Size = new System.Drawing.Size(373, 529);
             this.treeListView.TabIndex = 2;
             this.treeListView.UseCompatibleStateImageBehavior = false;
             this.treeListView.UseFiltering = true;
