@@ -580,4 +580,10 @@
   <data name="Dot_redNoHalo_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\gui\dot_rednohalo_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Project_Explorer_Base_Dir_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\gui\project_explorer_base_dir_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="redcloth" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\gui\files\redcloth_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

@@ -242,6 +242,7 @@ namespace WolvenKit
                 case "w2cutscene": return Resources.w2cutscene;
 
                 case "xbm": return Resources.xbm;
+                case "redcloth": return Resources.redcloth;
 
                 case "fbx": return Resources.fbx;
                 case "tga": return Resources.image;
@@ -261,20 +262,20 @@ namespace WolvenKit
                 case nameof(ECustomImageKeys.ClosedDirImageKey): return Resources.FolderClosed_16x;
                 case nameof(ECustomImageKeys.OpenDirImageKey): return Resources.FolderOpened_16x;
 
-                case nameof(ECustomImageKeys.RawImageKey): return Resources.Dot_greenblueNoHalo_16x;
-                case nameof(ECustomImageKeys.RawModImageKey): return Resources.Dot_greenblueNoHalo_16x;
-                case nameof(ECustomImageKeys.RawDlcImageKey): return Resources.Dot_greenblueNoHalo_16x;
+                case nameof(ECustomImageKeys.RawImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(ECustomImageKeys.RawModImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(ECustomImageKeys.RawDlcImageKey): return Resources.Project_Explorer_Base_Dir_16x;
 
 
-                case nameof(ECustomImageKeys.RadishImageKey): return Resources.Dot_redNoHalo_16x;
+                case nameof(ECustomImageKeys.RadishImageKey): return Resources.Project_Explorer_Base_Dir_16x;
 
-                case nameof(ECustomImageKeys.ModImageKey): return Resources.Dot_blueNoHalo_16x;
-                case nameof(ECustomImageKeys.ModCookedImageKey): return Resources.circle_blue_cooked;
-                case nameof(ECustomImageKeys.ModUncookedImageKey): return Resources.Dot_blueNoHalo_16x;
+                case nameof(ECustomImageKeys.ModImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(ECustomImageKeys.ModCookedImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(ECustomImageKeys.ModUncookedImageKey): return Resources.Project_Explorer_Base_Dir_16x;
 
-                case nameof(ECustomImageKeys.DlcImageKey): return Resources.Dot_greenNoHalo_16x;
-                case nameof(ECustomImageKeys.DlcCookedImageKey): return Resources.circle_green_cooked;
-                case nameof(ECustomImageKeys.DlcUncookedImageKey): return Resources.Dot_greenNoHalo_16x;
+                case nameof(ECustomImageKeys.DlcImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(ECustomImageKeys.DlcCookedImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(ECustomImageKeys.DlcUncookedImageKey): return Resources.Project_Explorer_Base_Dir_16x;
                  
                 default: return Resources.BlankFile_16x;
             }
