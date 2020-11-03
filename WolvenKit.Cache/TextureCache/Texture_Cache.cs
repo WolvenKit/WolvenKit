@@ -14,6 +14,9 @@ namespace WolvenKit.Cache
 {
     public class TextureCache : IWitcherArchive
     {
+        public static byte[] Magic = { (byte)'H', (byte)'C', (byte)'X', (byte)'T' };
+        public static uint MagicInt = 1415070536;
+
         //The images packed into this Texture cache file
         public List<TextureCacheItem> Files;
 
@@ -65,8 +68,9 @@ namespace WolvenKit.Cache
                     //The stringtable
                     //Every offset is 4 bytes
                     //The sum of this is how much we need to jump from the back
-                    var jmp = -(32 + (EntryCount * 52) + StringTableSize + (MipOffsetTableSize * 4));
-                    br.BaseStream.Seek(jmp, SeekOrigin.End);
+                    var stringtableoffset = -(32 + (EntryCount * 52) + StringTableSize + (MipOffsetTableSize * 4));
+
+                    br.BaseStream.Seek(stringtableoffset, SeekOrigin.End);
                     for (var i = 0; i < MipOffsetTableSize; i++)
                     {
                         Chunkoffsets.Add(br.ReadUInt32());
@@ -76,6 +80,10 @@ namespace WolvenKit.Cache
                     {
                         Names.Add(br.ReadCR2WString());
                     }
+
+                    // jump to entry table
+                    var entrytableoffset = -(32 + (EntryCount * 52));
+                    br.BaseStream.Seek(entrytableoffset, SeekOrigin.End);
                     for (var i = 0; i < EntryCount; i++)
                     {
                         var ti = new TextureCacheItem(this)

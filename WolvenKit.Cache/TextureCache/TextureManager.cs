@@ -18,6 +18,7 @@ namespace WolvenKit.Cache
             Items = new Dictionary<string, List<IWitcherFile>>();
             Archives = new Dictionary<string, TextureCache>();
             FileList = new List<IWitcherFile>();
+
             Extensions = new List<string>();
             AutocompleteSource = new AutoCompleteStringCollection();
         }
@@ -124,6 +125,12 @@ namespace WolvenKit.Cache
             var di = new DirectoryInfo(exedir);
             if (!di.Exists)
                 return;
+
+            // this is slow
+            Archives.Clear();
+            Items.Clear();
+            FileList.Clear();
+
             var mods = Path.Combine(di.Parent.Parent.FullName, "Mods");
             var dlc = Path.Combine(di.Parent.Parent.FullName, "DLC");
 

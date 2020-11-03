@@ -434,6 +434,14 @@ namespace WolvenKit
                 window.Dispose();
             }
 
+            // close misc doc windows (like a docked asset browser)
+            foreach (var doc in dockPanel.Documents.ToList())
+            {
+                if (!(doc is DockContent dc)) continue;
+                dc.Close();
+                dc.Dispose();
+            }
+
             return true;
         }
 
@@ -2217,7 +2225,7 @@ namespace WolvenKit
                 // more than one archive
                 if (archives.Count() > 1)
                 {
-                    var dlg = new frmExtractAmbigious(archives.Select(x => x.Key).ToList());
+                    var dlg = new frmExtractAmbigious(archives.Select(x => x.Value).ToList());
                     if (!skip)
                     {
                         var res = dlg.ShowDialog();
@@ -2227,18 +2235,22 @@ namespace WolvenKit
                             return skip;
                         }
                     }
-                    var selectedBundle = archives.FirstOrDefault(x => x.Key == dlg.SelectedBundle).Value;
-                    try
-                    {
+                    var selectedBundle = dlg.SelectedBundle;
+                    //try
+                    //{
                         Directory.CreateDirectory(Path.GetDirectoryName(newpath));
                         if (File.Exists(newpath))
                         {
                             File.Delete(newpath);
                         }
 
-                        selectedBundle.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
-                    }
-                    catch { }
+                        selectedBundle.Extract(new BundleFileExtractArgs(newpath,
+                            MainController.Get().Configuration.UncookExtension));
+                    //}
+                    //catch (Exception ex)
+                    //{
+
+                    //}
                     return skip;
                 }
 
@@ -3799,5 +3811,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         private void openBackupFolderToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.ShowFolderInExplorer(ActiveMod.BackupDirectory);
 
         private void commandPromptHereToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.OpenConsoleAtPath(ActiveMod.ProjectDirectory);
+
+        
     }
 }
