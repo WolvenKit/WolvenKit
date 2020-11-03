@@ -562,24 +562,6 @@
   <data name="git" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\gui\git.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="circle_blue_cooked" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\gui\circle_blue_cooked.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="circle_green_cooked" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\gui\circle_green_cooked.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Dot_blueNoHalo_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\gui\dot_bluenohalo_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Dot_greenblueNoHalo_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\gui\dot_greenbluenohalo_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Dot_greenNoHalo_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\gui\dot_greennohalo_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Dot_redNoHalo_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\gui\dot_rednohalo_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Project_Explorer_Base_Dir_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\gui\project_explorer_base_dir_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

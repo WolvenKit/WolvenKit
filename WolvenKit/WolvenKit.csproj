@@ -1026,11 +1026,6 @@
     <None Include="Resources\GitTemplateDir\info\exclude">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="Resources\GUI\circle_blue_cooked.png" />
-    <Content Include="Resources\GUI\circle_green_cooked.png" />
-    <Content Include="Resources\GUI\Dot_blueNoHalo_16x.png" />
-    <Content Include="Resources\GUI\Dot_greenblueNoHalo_16x.png" />
-    <Content Include="Resources\GUI\Dot_greenNoHalo_16x.png" />
     <Content Include="Resources\GUI\Files\redcloth_32x.png" />
     <Content Include="Resources\GUI\git.png" />
     <Content Include="Resources\GUI\Files\apb_32x.png" />
@@ -1053,7 +1048,6 @@
     <Content Include="Resources\GUI\Open_Project_light_64x.png" />
     <Content Include="Resources\GUI\Preferences_dark_64x.png" />
     <Content Include="Resources\GUI\Preferences_light_64x.png" />
-    <Content Include="Resources\GUI\Dot_redNoHalo_16x.png" />
     <Content Include="Resources\GUI\Project_Explorer_Base_Dir_16x.png" />
     <Content Include="Resources\GUI\Strings_Encoder_16x.png" />
     <Content Include="Resources\WolvenKit\Icons\WCC_32x.ico">

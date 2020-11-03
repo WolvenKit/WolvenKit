@@ -183,26 +183,6 @@ namespace WolvenKit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap circle_blue_cooked {
-            get {
-                object obj = ResourceManager.GetObject("circle_blue_cooked", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap circle_green_cooked {
-            get {
-                object obj = ResourceManager.GetObject("circle_green_cooked", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Clock {
             get {
                 object obj = ResourceManager.GetObject("Clock", resourceCulture);
@@ -286,46 +266,6 @@ namespace WolvenKit.Properties {
         internal static System.Drawing.Bitmap Discord_32x {
             get {
                 object obj = ResourceManager.GetObject("Discord_32x", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Dot_blueNoHalo_16x {
-            get {
-                object obj = ResourceManager.GetObject("Dot_blueNoHalo_16x", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Dot_greenblueNoHalo_16x {
-            get {
-                object obj = ResourceManager.GetObject("Dot_greenblueNoHalo_16x", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Dot_greenNoHalo_16x {
-            get {
-                object obj = ResourceManager.GetObject("Dot_greenNoHalo_16x", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Dot_redNoHalo_16x {
-            get {
-                object obj = ResourceManager.GetObject("Dot_redNoHalo_16x", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
