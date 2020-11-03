@@ -16,6 +16,7 @@
 #include "CColorConverter.h"
 #include "IAttributeExchangingObject.h"
 #include "IRenderTarget.h"
+#include "dxtinfo.h"
 #include "debug.h"
 
 namespace irr
@@ -1755,6 +1756,38 @@ IImage* CNullDriver::createImage(ITexture* texture, const core::position2d<s32>&
 		texture->unlock();
 		return image;
 	}
+}
+
+IImage* CNullDriver::createUncompressedImage(ITexture* texture,
+    const core::position2d<s32>& pos,
+    const core::dimension2d<u32>& size)
+{
+    if ((pos == core::position2di(0, 0)) && (size == texture->getSize()))
+    {
+        void* rawData = texture->lock(ETLM_READ_ONLY);
+        if (!rawData)
+            return nullptr;
+
+        // use uncompressed so we can export the images into other formats
+		u32 w = size.Width;
+		u32 h = size.Height;
+        IImage* image = DBG_NEW CImage(ECF_A8R8G8B8, size);
+
+        if (texture->getColorFormat() == ECF_DXT1)
+        {
+            DecompressDXT1Image((u8*)image->lock(), w, h, rawData);
+        }
+        else
+        {
+            DecompressDXT5Image((u8*)image->lock(), w, h, rawData);
+        }
+
+        texture->unlock();
+        return image;
+    }
+
+	// TODO: Not handled
+	return nullptr;
 }
 
 

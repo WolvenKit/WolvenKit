@@ -65,12 +65,11 @@
             this.objectListView.HasCollapsibleGroups = false;
             this.objectListView.HeaderMinimumHeight = 30;
             this.objectListView.HideSelection = false;
-            this.objectListView.Location = new System.Drawing.Point(0, 54);
-            this.objectListView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.objectListView.Location = new System.Drawing.Point(0, 35);
             this.objectListView.Name = "objectListView";
             this.objectListView.RowHeight = 20;
             this.objectListView.ShowGroups = false;
-            this.objectListView.Size = new System.Drawing.Size(1200, 649);
+            this.objectListView.Size = new System.Drawing.Size(801, 423);
             this.objectListView.TabIndex = 0;
             this.objectListView.UseAlternatingBackColors = true;
             this.objectListView.UseCompatibleStateImageBehavior = false;
@@ -130,8 +129,8 @@
             this.toolStripComboBox1});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Padding = new System.Windows.Forms.Padding(8);
-            this.toolStrip.Size = new System.Drawing.Size(1200, 49);
+            this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.toolStrip.Size = new System.Drawing.Size(800, 38);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -141,7 +140,7 @@
             this.toolStripButtonImport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImport.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.toolStripButtonImport.Name = "toolStripButtonImport";
-            this.toolStripButtonImport.Size = new System.Drawing.Size(95, 33);
+            this.toolStripButtonImport.Size = new System.Drawing.Size(71, 28);
             this.toolStripButtonImport.Text = "Import";
             this.toolStripButtonImport.Click += new System.EventHandler(this.toolStripButtonImport_Click);
             // 
@@ -149,7 +148,7 @@
             // 
             this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 33);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 28);
             // 
             // toolStripButtonRefresh
             // 
@@ -157,7 +156,7 @@
             this.toolStripButtonRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRefresh.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.toolStripButtonRefresh.Name = "toolStripButtonRefresh";
-            this.toolStripButtonRefresh.Size = new System.Drawing.Size(224, 33);
+            this.toolStripButtonRefresh.Size = new System.Drawing.Size(159, 28);
             this.toolStripButtonRefresh.Text = "Auto-Fill Texturegroups";
             this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefresh_Click);
             // 
@@ -169,18 +168,16 @@
             "WolvenKit"});
             this.toolStripComboBox1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.toolStripComboBox1.Name = "toolStripComboBox1";
-            this.toolStripComboBox1.Size = new System.Drawing.Size(180, 33);
+            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 28);
             this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
             // 
             // frmImportUtility
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 692);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.objectListView);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "frmImportUtility";
             this.Text = "Import Utility";
             ((System.ComponentModel.ISupportInitialize)(this.objectListView)).EndInit();

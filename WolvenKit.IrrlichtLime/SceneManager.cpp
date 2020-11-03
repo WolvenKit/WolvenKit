@@ -31,6 +31,7 @@
 #include "SceneNodeAnimator.h"
 #include "SkinnedMesh.h"
 #include "TerrainSceneNode.h"
+#include "TerrainSceneNodeWolvenKit.h"
 #include "TextSceneNode.h"
 #include "Texture.h"
 #include "TriangleSelector.h"
@@ -773,6 +774,12 @@ CameraSceneNode^ SceneManager::AddCameraSceneNodeMaya()
 {
 	scene::ICameraSceneNode* n = m_SceneManager->addCameraSceneNodeMaya();
 	return CameraSceneNode::Wrap(n);
+}
+
+CameraSceneNode^ SceneManager::AddCameraSceneNodeWolvenKit()
+{
+    scene::ICameraSceneNode* n = m_SceneManager->addCameraSceneNodeWolvenKit();
+    return CameraSceneNode::Wrap(n);
 }
 
 MeshSceneNode^ SceneManager::AddCubeSceneNode(float size, SceneNode^ parent, int id, Vector3Df^ position, Vector3Df^ rotation, Vector3Df^ scale)
@@ -2127,6 +2134,23 @@ TerrainSceneNode^ SceneManager::AddTerrainSceneNode(IO::ReadFile^ heightMapFile)
 	return TerrainSceneNode::Wrap(n);
 }
 
+TerrainSceneNodeWolvenKit^ SceneManager::AddTerrainSceneNodeWolvenKit(String^ heightMapFileName, SceneNode^ parent, int id, unsigned int dimension , float maxHeight, float minHeight, float tileSize, Vector3Df^ anchor)
+{
+	LIME_ASSERT(heightMapFileName != nullptr);
+
+	scene::ITerrainSceneNodeWolvenKit* n = m_SceneManager->addTerrainSceneNodeWolvenKit(
+		Lime::StringToPath(heightMapFileName),
+		LIME_SAFEREF(parent, m_SceneNode),
+		id,
+		dimension,
+		maxHeight,
+		minHeight,
+		tileSize,
+		*anchor->m_NativeValue);
+
+	return TerrainSceneNodeWolvenKit::Wrap(n);
+}
+
 TextSceneNode^ SceneManager::AddTextSceneNode(GUI::GUIFont^ font, String^ text, Video::Color^ color, SceneNode^ parent, Vector3Df^ position, int id)
 {
 	LIME_ASSERT(color != nullptr);
@@ -2996,6 +3020,11 @@ AnimatedMesh^ SceneManager::GetMesh(IO::ReadFile^ file)
 
 	scene::IAnimatedMesh* m = m_SceneManager->getMesh(file->m_ReadFile);
 	return AnimatedMesh::Wrap(m);
+}
+
+Mesh^ SceneManager::GetStaticMesh(String^)
+{
+	return nullptr;
 }
 
 MeshLoader^ SceneManager::GetMeshLoader(int index)

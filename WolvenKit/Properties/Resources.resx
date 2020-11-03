@@ -118,26 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="wolven_kit_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\wolven_kit_icon.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="wcc_eula" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wcc_eula.rtf;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
   </data>
-  <data name="ImportPackage_16x1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\importpackage_16x.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="PictureResample_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\pictureresample_16x.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="radish_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\radish_icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="witcher3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\pictures\witcher3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="witcher3_101" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\witcher3_101.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\wolvenkit\witcher3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="AddNodefromFile_354" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\addnodefromfile_354.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -199,9 +184,6 @@
   <data name="gear_16xLG" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\gear_16xlg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="geralt" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\pictures\geralt.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="home" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\customimages\home.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -216,15 +198,6 @@
   </data>
   <data name="LinkValidator_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\linkvalidator_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="loading_black" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\pictures\loading_black.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\pictures\logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Logo_wkit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\pictures\logo_wkit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="NewSolutionFolder_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\newsolutionfolder_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -251,7 +224,7 @@
     <value>..\resources\visualstudio\property_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="radish_32x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\pictures\radish_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\wolvenkit\radish_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="redgame" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\redengine\redgame.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -458,34 +431,31 @@
     <value>..\resources\visualstudio\folderclosed_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="wkit_splash" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\pictures\wkit_splash.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="wkit_splash2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\pictures\wkit_splash2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\wolvenkit\wkit_splash.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WK_Logo2_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\pictures\wk_logo2_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\wolvenkit\wk_logo2_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Asset_Browser_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\gui\asset_browser_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\asset_browser_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Discord_32x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\gui\discord_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\discord_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="apb" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\files\apb_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\GUI\files\apb_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="fbx" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\files\fbx_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\GUI\files\fbx_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="image" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\files\image_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\GUI\files\image_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="xbm" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\files\xbm_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\GUI\files\xbm_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="xml" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\files\xml_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\GUI\files\xml_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Compliant_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\compliant_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -512,49 +482,49 @@
     <value>..\resources\visualstudio\statusnotstarted_red_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Asset_Browser_Other_Mod_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\gui\asset_browser_other_mod_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\asset_browser_other_mod_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="FindInFile_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\findinfile_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="window_close_24x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\gui\window_close_24x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\window_close_24x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="window_maximize_24x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\gui\window_maximize_24x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\window_maximize_24x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="window_minimize_24x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\gui\window_minimize_24x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\window_minimize_24x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Strings_Encoder_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\gui\strings_encoder_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\strings_encoder_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WCC_32x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\gui\wcc_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\wolvenkit\wcc_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Wkit_logo_500x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\wkit_logo_500x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\wolvenkit\wkit_logo_500x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Filter_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\filter_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="New_Project_dark_64x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\gui\new_project_dark_64x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\new_project_dark_64x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="New_Project_light_64x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\gui\new_project_light_64x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\new_project_light_64x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Open_Project_dark_64x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\gui\open_project_dark_64x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\open_project_dark_64x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Open_Project_light_64x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\gui\open_project_light_64x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\open_project_light_64x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Preferences_dark_64x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\gui\preferences_dark_64x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\preferences_dark_64x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Preferences_light_64x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\gui\preferences_light_64x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\preferences_light_64x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Close_red_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\close_red_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -584,9 +554,15 @@
     <value>..\resources\visualstudio\export_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="blend" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\files\blend_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\files\blend_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="zip" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\files\zipfile_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\gui\files\zipfile_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="git" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\gui\git.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="git" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\gui\git.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

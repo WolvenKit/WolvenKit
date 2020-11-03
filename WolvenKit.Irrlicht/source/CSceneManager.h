@@ -148,6 +148,14 @@ namespace scene
 			f32 translationSpeed=1500.f, s32 id=-1, f32 distance=70.f,
 			bool makeActive=true) _IRR_OVERRIDE_;
 
+        //! Adds a camera scene node which is able to be controlle with the mouse similar
+		//! like in the 3D Software Maya by Alias Wavefront.
+		//! The returned pointer must not be dropped.
+        ICameraSceneNode* addCameraSceneNodeWolvenKit(ISceneNode* parent = 0,
+            f32 rotateSpeed = -1500.f, f32 zoomSpeed = 200.f,
+            f32 translationSpeed = 100.f, s32 id = -1, f32 distance = 70.f,
+            bool makeActive = true) _IRR_OVERRIDE_;
+
 		//! Adds a camera scene node which is able to be controled with the mouse and keys
 		//! like in most first person shooters (FPS):
 		virtual ICameraSceneNode* addCameraSceneNodeFPS(ISceneNode* parent = 0,
@@ -268,6 +276,12 @@ namespace scene
 			video::SColor vertexColor = video::SColor(255,255,255,255),
 			s32 maxLOD=4, E_TERRAIN_PATCH_SIZE patchSize=ETPS_17,s32 smoothFactor=0,
 			bool addAlsoIfHeightmapEmpty=false) _IRR_OVERRIDE_;
+
+		ITerrainSceneNodeWolvenKit* addTerrainSceneNodeWolvenKit(
+			const io::path& heightMapFileName,
+            ISceneNode* parent, s32 id,
+            u32 dimension, f32 maxHeight, f32 minHeight, f32 tileSize,
+			const core::vector3df& anchor);
 
 		//! Adds a dummy transformation scene node to the scene graph.
 		virtual IDummyTransformationSceneNode* addDummyTransformationSceneNode(

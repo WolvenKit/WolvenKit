@@ -1,7 +1,6 @@
 // Copyright (C) 2002-2012 Nikolaus Gebhardt
 // This file is part of the "Irrlicht Engine".
 // For conditions of distribution and use, see copyright notice in irrlicht.h
-
 #include "CSceneCollisionManager.h"
 #include "ISceneNode.h"
 #include "ICameraSceneNode.h"
@@ -42,7 +41,7 @@ CSceneCollisionManager::~CSceneCollisionManager()
 ISceneNode* CSceneCollisionManager::getSceneNodeFromScreenCoordinatesBB(
 		const core::position2d<s32>& pos, s32 idBitMask, bool noDebugObjects, scene::ISceneNode* root)
 {
-	const core::line3d<f32> ln = getRayFromScreenCoordinates(pos, 0);
+	const core::line3d<f32> ln = getRayFromScreenCoordinates(pos, nullptr);
 
 	if ( ln.start == ln.end )
 		return 0;
@@ -57,12 +56,12 @@ ISceneNode* CSceneCollisionManager::getSceneNodeFromRayBB(
 		const core::line3d<f32>& ray,
 		s32 idBitMask, bool noDebugObjects, scene::ISceneNode* root)
 {
-	ISceneNode* best = 0;
+	ISceneNode* best = nullptr;
 	f32 dist = FLT_MAX;
 
 	core::line3d<f32> truncatableRay(ray);
 
-	getPickedNodeBB((root==0)?SceneManager->getRootSceneNode():root, truncatableRay,
+	getPickedNodeBB((root==nullptr)?SceneManager->getRootSceneNode():root, truncatableRay,
 		idBitMask, noDebugObjects, dist, best);
 
 	return best;
@@ -305,7 +304,7 @@ void CSceneCollisionManager::getPickedNodeFromBBAndSelector(
 			{
 				const f32 distanceSquared = (candidateHitResult.Intersection - ray.start).getLengthSQ();
 
-				if(distanceSquared < outBestDistanceSquared)
+				if (distanceSquared < outBestDistanceSquared)
 				{
 					outBestDistanceSquared = distanceSquared;
 					hitResult = candidateHitResult;

@@ -85,6 +85,8 @@ namespace WolvenKit.Forms
             hotkeys.RegisterHotkey(Keys.OemMinus, RemoveListElement, "Remove Element");
             hotkeys.RegisterHotkey(Keys.Subtract, RemoveListElement, "Remove Element");
 
+            hotkeys.RegisterHotkey(Keys.Delete, DeleteChunkTarget, "Remove Chunk Target");
+
             hotkeys.RegisterHotkey(Keys.Control | Keys.C, CopyVariable, "Copy Element");
             hotkeys.RegisterHotkey(Keys.Control | Keys.V, PasteVariable, "Paste Element");
         }
@@ -96,6 +98,8 @@ namespace WolvenKit.Forms
 
             hotkeys.UnregisterHotkey(Keys.OemMinus,  "Remove Element");
             hotkeys.UnregisterHotkey(Keys.Subtract,  "Remove Element");
+
+            hotkeys.UnregisterHotkey(Keys.Delete, "Remove Chunk Target");
 
             hotkeys.UnregisterHotkey(Keys.Control | Keys.C, "Copy Element");
             hotkeys.UnregisterHotkey(Keys.Control | Keys.V, "Paste Element");
@@ -229,8 +233,7 @@ namespace WolvenKit.Forms
 
         public void ApplyCustomTheme()
         {
-            UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
-            toolStripSearchBox.BackColor = UIController.GetPalette().ToolWindowCaptionButtonInactiveHovered.Background;
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetThemeBase());
 
             this.treeView.BackColor = UIController.GetBackColor();
             this.treeView.AlternateRowBackColor = UIController.GetPalette().OverflowButtonHovered.Background;
@@ -239,6 +242,9 @@ namespace WolvenKit.Forms
 
             this.treeView.HeaderFormatStyle = UIController.GetHeaderFormatStyle();
             treeView.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
+
+            this.toolStripSearchBox.BackColor = UIController.GetPalette().ToolWindowCaptionButtonInactiveHovered.Background;
+            this.toolStripSearchBox.ForeColor = UIController.GetForeColor();
         }
         #endregion
 
@@ -297,6 +303,10 @@ namespace WolvenKit.Forms
                                 {
                                     newChunktype = form.ChunkType;
                                 }
+                                else
+                                {
+                                    return;
+                                }
                             }
                         }
 
@@ -310,6 +320,8 @@ namespace WolvenKit.Forms
                             Chunk,
                             Chunk,
                             newvar);
+
+                        RequestChunkViewUpdate?.Invoke(null, null);
                         break;
                     }
                 case IHandleAccessor handle:
@@ -362,6 +374,10 @@ namespace WolvenKit.Forms
                                     {
                                         newhandletype = form.ChunkType;
                                     }
+                                    else
+                                    {
+                                        return;
+                                    }
                                 }
                             }
 
@@ -379,10 +395,22 @@ namespace WolvenKit.Forms
                                 newvar);
                         }
 
+                        RequestChunkViewUpdate?.Invoke(null, null);
                         break;
                     }
             }
-            RequestChunkViewUpdate?.Invoke(null, null);
+        }
+
+        private void DeleteChunkTarget(HotKeyEventArgs e)
+        {
+            // remove target chunks
+            if (viewModel.File is CR2WFile file)
+            {
+                file.RemoveChunks(
+                    treeView.SelectedObjects.Cast<IChunkPtrAccessor>().Select(_ => _.Reference).ToList(),
+                    false,
+                    (CR2WFile.EChunkDisplayMode)viewModel.chunkDisplayMode);
+            }
         }
 
         private void RemoveListElement(HotKeyEventArgs e)
@@ -407,12 +435,15 @@ namespace WolvenKit.Forms
                 }
             }
 
-            if (toberemovedchunks.Count()>0)
+            if (toberemovedchunks.Any())
             {
-                (viewModel.File as CR2WFile).RemoveChunks(
-                toberemovedchunks,
-                false,
-                (CR2WFile.EChunkDisplayMode)viewModel.chunkDisplayMode);
+                if (viewModel.File is CR2WFile file)
+                {
+                    file.RemoveChunks(
+                        toberemovedchunks,
+                        false,
+                        (CR2WFile.EChunkDisplayMode)viewModel.chunkDisplayMode);
+                }
             }
 
             foreach (var node in temp)
@@ -452,8 +483,8 @@ namespace WolvenKit.Forms
             pasteToolStripMenuItem.Enabled = IsPastingAllowed();
 
 
-            goToChunkToolStripMenuItem.Visible = selectedNodes.Count == 1 && selectedNodes.All(x => x is IChunkPtrAccessor);
-            deleteChunkToolStripMenuItem.Visible = selectedNodes.Count == 1 || selectedNodes.All(x => x is IChunkPtrAccessor);
+            goToChunkToolStripMenuItem.Enabled = selectedNodes.Count == 1 && selectedNodes.All(x => x is IChunkPtrAccessor);
+            deleteChunkToolStripMenuItem.Enabled = selectedNodes.Count == 1 && selectedNodes.All(x => x is IChunkPtrAccessor);
 
             bool IsPastingAllowed()
             {
@@ -550,11 +581,7 @@ namespace WolvenKit.Forms
 
         private void DeleteChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // remove target chunks
-            (viewModel.File as CR2WFile).RemoveChunks(
-                treeView.SelectedObjects.Cast<IChunkPtrAccessor>().Select(_ => _.Reference).ToList(),
-                false,
-                (CR2WFile.EChunkDisplayMode)viewModel.chunkDisplayMode);
+            DeleteChunkTarget(null);
         }
 
 

@@ -160,5 +160,10 @@ void CameraSceneNode::ViewMatrixAffector::set(Matrix^ value)
 	m_CameraSceneNode->setViewMatrixAffector(*value->m_NativeValue);
 }
 
+Vector3Df^ CameraSceneNode::ModelRotation::get()
+{
+    return gcnew Vector3Df(m_CameraSceneNode->getModelRotation());
+}
+
 } // end namespace Scene
 } // end namespace IrrlichtLime

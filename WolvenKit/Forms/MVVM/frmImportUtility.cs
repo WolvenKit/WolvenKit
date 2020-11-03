@@ -53,7 +53,7 @@ namespace WolvenKit.Forms
         #region Methods
         public void ApplyCustomTheme()
         {
-            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetThemeBase());
 
             this.objectListView.BackColor = UIController.GetBackColor();
             this.objectListView.AlternateRowBackColor = UIController.GetPalette().OverflowButtonHovered.Background;

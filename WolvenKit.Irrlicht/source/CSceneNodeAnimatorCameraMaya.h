@@ -70,6 +70,8 @@ namespace scene
 		//! Returns the minimal distance to the camera target for zoom
 		virtual f32 getTargetMinDistance() const _IRR_OVERRIDE_;
 
+		const core::vector3df getModelRotation() const _IRR_OVERRIDE_;
+
 		//! This animator will receive events when attached to the active camera
 		virtual bool isEventReceiverEnabled() const _IRR_OVERRIDE_
 		{

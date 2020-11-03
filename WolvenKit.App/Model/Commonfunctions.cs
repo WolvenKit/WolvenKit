@@ -20,9 +20,28 @@ namespace WolvenKit.App
         /// Show the given path in the windows explorer.
         /// </summary>
         /// <param name="path">The file/folder to show.</param>
-        public static void ShowFileInExplorer(string path)
+        public static void ShowFileInExplorer(string path) => Process.Start("explorer.exe", "/select, \"" + path + "\"");
+
+        /// <summary>
+        /// Show the given folder in the windows explorer.
+        /// </summary>
+        /// <param name="path">The file/folder to show.</param>
+        public static void ShowFolderInExplorer(string path) => Process.Start("explorer.exe", "\"" + path + "\"");
+
+        /// <summary>
+        /// Opens command prompt at given location
+        /// </summary>
+        /// <param name="path"></param>
+        public static void OpenConsoleAtPath(string path)
         {
-            Process.Start("explorer.exe", "/select, \"" + path + "\"");
+            using (var process = Process.Start(new ProcessStartInfo("cmd.exe")
+            {
+                UseShellExecute = false,
+                WorkingDirectory = path
+            }))
+            {
+                process?.WaitForExit();
+            }
         }
 
         /// <summary>

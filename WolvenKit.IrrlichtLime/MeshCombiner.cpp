@@ -7,7 +7,7 @@
 namespace IrrlictLime {
 namespace Scene {
 
-    void combineMeshes(Mesh^ newMesh, Mesh^ addition)
+    void combineMeshes(Mesh^ /*newMesh*/, Mesh^ /*addition*/)
     {
         //scene::SMesh* mDst = (scene::SMesh*)(newMesh->m_Mesh);
         //scene::SMesh* mSrc = (scene::SMesh*)(addition->m_Mesh);

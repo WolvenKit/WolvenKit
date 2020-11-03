@@ -60,7 +60,7 @@ namespace WolvenKit
                 (File.Exists(txExecutablePath.Text) && Path.GetExtension(txExecutablePath.Text) == ".exe" && txExecutablePath.Text.Contains("witcher3.exe")) &&
                 Directory.Exists(txDepot.Text);
 
-            this.Icon = new Icon(@"Resources\Icons\GUI\Wkit_dark_16x.ico", new Size(16, 16));
+            this.Icon = UIController.GetThemedWkitIcon();
 
         }
 

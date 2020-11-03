@@ -99,7 +99,7 @@ namespace WolvenKit
         #region Methods
         public void ApplyCustomTheme()
         {
-            UIController.Get().ToolStripExtender.SetStyle(searchstrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
+            UIController.Get().ToolStripExtender.SetStyle(searchstrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetThemeBase());
 
             this.treeListView.BackColor = UIController.GetBackColor();
             this.treeListView.ForeColor = UIController.GetForeColor();
@@ -400,7 +400,7 @@ namespace WolvenKit
                 pasteToolStripMenuItem.Enabled = File.Exists(Clipboard.GetText());
 
                 cookToolStripMenuItem.Enabled = (!Enum.GetNames(typeof(EImportable)).Contains(ext) && !isbundle && !israw);
-                markAsModDlcFileToolStripMenuItem.Enabled = isbundle && !isToplevelDir;
+                //markAsModDlcFileToolStripMenuItem.Enabled = isbundle && !isToplevelDir;
 
                 showFileInExplorerToolStripMenuItem.Text = selectedobject.IsDirectory() ? "Open Folder in Explorer" : "Open File in Explorer";
                 FileActionsToolStripMenuItem.Enabled = !israw;
@@ -552,6 +552,7 @@ namespace WolvenKit
             }
         }
 
+        // deprecated
         private void markAsModDlcFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!(treeListView.SelectedObject is FileSystemInfo selectedobject)) return;
@@ -563,6 +564,8 @@ namespace WolvenKit
 
             if (File.Exists(newfullpath))
                 return;
+
+            MainController.Get().ProjectStatus = EProjectStatus.Busy;
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(newfullpath) ?? throw new InvalidOperationException());
@@ -573,7 +576,7 @@ namespace WolvenKit
             }
 
             File.Move(fullpath, newfullpath);
-            MainController.Get().ProjectStatus = "File moved";
+            MainController.Get().ProjectStatus = EProjectStatus.Ready;
         }
 
 

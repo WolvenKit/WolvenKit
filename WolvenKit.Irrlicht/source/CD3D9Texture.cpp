@@ -1,6 +1,7 @@
 // Copyright (C) 2002-2012 Nikolaus Gebhardt
 // This file is part of the "Irrlicht Engine".
 // For conditions of distribution and use, see copyright notice in irrlicht.h
+#define ALLOW_COMPRESSED_FORMATS 1
 
 #include "IrrCompileConfig.h"
 
@@ -182,8 +183,10 @@ void* CD3D9Texture::lock(E_TEXTURE_LOCK_MODE mode, u32 mipmapLevel, u32 layer, E
 	if (LockData)
 		return LockData;
 
+#if !ALLOW_COMPRESSED_FORMATS
 	if (IImage::isCompressedFormat(ColorFormat))
 		return 0;
+#endif
 
 	LockReadOnly = (mode == ETLM_READ_ONLY);
 	LockLayer = layer;

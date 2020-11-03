@@ -69,7 +69,7 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>wolven_kit_icon2.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\WolvenKit\Icons\wolven_kit_icon2.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>56D600A08C1A75A7D44B3384AB83B913576E5024</ManifestCertificateThumbprint>
@@ -1020,47 +1020,53 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Pictures\geralt.jpg" />
+    <None Include="Resources\Legacy\geralt.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Icons\Files\apb_32x.png" />
-    <Content Include="Resources\Icons\Files\blend_32x.png" />
-    <Content Include="Resources\Icons\Files\fbx_32x.png" />
-    <Content Include="Resources\Icons\Files\image_32x.png" />
-    <Content Include="Resources\Icons\Files\xbm_32x.png" />
-    <Content Include="Resources\Icons\Files\xml_32x.png" />
-    <Content Include="Resources\Icons\Files\ZipFile_32x.png" />
-    <Content Include="Resources\Icons\GUI\Asset_Browser_16x.png" />
-    <Content Include="Resources\Icons\GUI\Asset_Browser_Other_Mod_16x.png" />
-    <Content Include="Resources\Icons\GUI\Discord_32x.png" />
-    <Content Include="Resources\Icons\GUI\New_Project_dark_64x.png">
+    <None Include="Resources\GitTemplateDir\info\exclude">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="Resources\GUI\git.png" />
+    <Content Include="Resources\GUI\Files\apb_32x.png" />
+    <Content Include="Resources\GUI\Files\blend_32x.png" />
+    <Content Include="Resources\GUI\Files\fbx_32x.png" />
+    <Content Include="Resources\GUI\Files\image_32x.png" />
+    <Content Include="Resources\GUI\Files\xbm_32x.png" />
+    <Content Include="Resources\GUI\Files\xml_32x.png" />
+    <Content Include="Resources\GUI\Files\ZipFile_32x.png" />
+    <Content Include="Resources\GUI\Asset_Browser_16x.png" />
+    <Content Include="Resources\GUI\Asset_Browser_Other_Mod_16x.png" />
+    <Content Include="Resources\GUI\Discord_32x.png" />
+    <Content Include="Resources\GUI\New_Project_dark_64x.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Icons\GUI\New_Project_light_64x.png">
+    <Content Include="Resources\GUI\New_Project_light_64x.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Icons\GUI\Open_Project_dark_64x.png" />
-    <Content Include="Resources\Icons\GUI\Open_Project_light_64x.png" />
-    <Content Include="Resources\Icons\GUI\Preferences_dark_64x.png" />
-    <Content Include="Resources\Icons\GUI\Preferences_light_64x.png" />
-    <Content Include="Resources\Icons\GUI\Strings_Encoder_16x.png" />
-    <Content Include="Resources\Icons\GUI\WCC_32x.ico">
+    <Content Include="Resources\GUI\Open_Project_dark_64x.png" />
+    <Content Include="Resources\GUI\Open_Project_light_64x.png" />
+    <Content Include="Resources\GUI\Preferences_dark_64x.png" />
+    <Content Include="Resources\GUI\Preferences_light_64x.png" />
+    <Content Include="Resources\GUI\Strings_Encoder_16x.png" />
+    <Content Include="Resources\WolvenKit\Icons\WCC_32x.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Icons\GUI\WCC_32x.png" />
-    <Content Include="Resources\Icons\GUI\window_close_24x.png" />
-    <Content Include="Resources\Icons\GUI\window_maximize_24x.png" />
-    <Content Include="Resources\Icons\GUI\window_minimize_24x.png" />
-    <Content Include="Resources\Icons\GUI\Wkit_dark_16x.ico">
+    <Content Include="Resources\WolvenKit\WCC_32x.png" />
+    <Content Include="Resources\GUI\window_close_24x.png" />
+    <Content Include="Resources\GUI\window_maximize_24x.png" />
+    <Content Include="Resources\GUI\window_minimize_24x.png" />
+    <Content Include="Resources\WolvenKit\Icons\Wkit_dark_16x.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Icons\GUI\Wkit_light_16x.ico" />
-    <Content Include="Resources\Icons\Wkit_logo_500x.png">
+    <Content Include="Resources\WolvenKit\Icons\Wkit_light_16x.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Pictures\wkit_splash.png" />
-    <Content Include="Resources\Pictures\wkit_splash2.png" />
-    <Content Include="Resources\Pictures\WK_Logo2_32.png" />
+    <Content Include="Resources\WolvenKit\Wkit_logo_500x.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\WolvenKit\wkit_splash.png" />
+    <Content Include="Resources\Legacy\wkit_splash2.png" />
+    <Content Include="Resources\WolvenKit\WK_Logo2_32.png" />
     <Content Include="Resources\VisualStudio\Add_16x.png" />
     <Content Include="Resources\VisualStudio\Close_red_16x.png" />
     <Content Include="Resources\VisualStudio\Compliant_16x.png" />
@@ -1086,7 +1092,13 @@
     <Content Include="Resources\VisualStudio\Test_StatusBarAni_05_16x.png" />
     <Content Include="Resources\VisualStudio\UserCode_16x.png" />
     <Content Include="Resources\VisualStudio\ValidateDocument_16x.png" />
-    <Content Include="wolven_kit_icon2.ico" />
+    <Content Include="Resources\WolvenKit\wk_ribbon_dark_small.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\WolvenKit\wk_ribbon_light_small.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\WolvenKit\Icons\wolven_kit_icon2.ico" />
     <Content Include="..\Libs\Irrlicht.dll">
       <Link>Irrlicht.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1103,9 +1115,9 @@
     <None Include="Resources\CustomImages\ui-check-box.png" />
     <None Include="Resources\CustomImages\ui-check-box-uncheck.png" />
     <None Include="Resources\CustomImages\wooden-box--arrow.png" />
-    <None Include="Resources\Pictures\Logo.png" />
-    <None Include="Resources\Pictures\loading_black.png" />
-    <None Include="Resources\Pictures\Logo_wkit.png" />
+    <None Include="Resources\Legacy\Logo.png" />
+    <None Include="Resources\Legacy\loading_black.png" />
+    <None Include="Resources\Legacy\Logo_wkit.png" />
     <Content Include="discord-rpc.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1123,12 +1135,12 @@
     <None Include="Resources\VisualStudio\Property_16x.png" />
     <None Include="Resources\VisualStudio\RemoteServer_16x.png" />
     <None Include="Resources\VisualStudio\Settings_Inverse_16x.png" />
-    <Content Include="Resources\Icons\Clock.ico" />
+    <Content Include="Resources\GUI\Clock.ico" />
     <Content Include="Resources\CustomImages\Clock.png" />
-    <Content Include="Resources\Icons\wolven_kit_icon.ico">
+    <Content Include="Resources\WolvenKit\Icons\wolven_kit_icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Pictures\WK_Logo.svg" />
+    <Content Include="Resources\Legacy\WK_Logo.svg" />
     <Content Include="Resources\RedEngine\bird.png" />
     <Content Include="Resources\RedEngine\csv.png" />
     <Content Include="Resources\RedEngine\detail.png" />
@@ -1193,25 +1205,25 @@
     <Content Include="Resources\RedEngine\ExpandIcon.png" />
     <None Include="Resources\VisualStudio\Refresh_16x.png" />
     <Content Include="Resources\CustomImages\Highlighter.png" />
-    <Content Include="Resources\Icons\ImportPackage_16x.ico" />
     <Content Include="Resources\VisualStudio\FolderClosed_16x.png" />
     <Content Include="Resources\VisualStudio\ImportPackage_16x.png" />
     <Content Include="Resources\VisualStudio\LinkValidator_16x.png" />
-    <Content Include="Resources\Icons\PictureResample_16x.ico" />
-    <Content Include="Resources\Pictures\witcher3.png" />
+    <Content Include="Resources\WolvenKit\witcher3.png" />
     <Content Include="Resources\VisualStudio\PlayStep_16x.png" />
-    <Content Include="Resources\Pictures\radish_32x.png" />
-    <Content Include="Resources\Icons\radish_icon.ico" />
+    <Content Include="Resources\WolvenKit\radish_32x.png" />
+    <Content Include="Resources\WolvenKit\Icons\radish_icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\VisualStudio\RunPause_16x.png" />
     <Content Include="Resources\VisualStudio\RunUpdate_16x.png" />
     <Content Include="Resources\VisualStudio\Run_16x.png" />
     <Content Include="Resources\CustomImages\UpButton.png" />
-    <Content Include="wolven_kit_icon.ico" />
+    <Content Include="Resources\Legacy\wolven_kit_icon.ico" />
     <None Include="Resources\RedEngine\ExitIcon.png" />
     <None Include="Resources\RedEngine\LayerGroupVisibled.png" />
     <None Include="Resources\wcc_eula.rtf" />
-    <None Include="Resources\Icons\witcher3_102.ico" />
-    <Content Include="Resources\Icons\witcher3_101.ico">
+    <None Include="Resources\WolvenKit\Icons\witcher3_102.ico" />
+    <Content Include="Resources\WolvenKit\Icons\witcher3_101.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\CustomImages\refresh.png" />
@@ -1236,372 +1248,372 @@
   <ItemGroup>
     <PublishFile Include="AltoControls">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Crc32C.NET">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Cyotek.Windows.Forms.ImageBox">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Doboz">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="ICSharpCode.SharpZipLib">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="IniParserLTK">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Ionic.ZLib">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Irrlicht.dll">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Licenses\License.doboz4net.txt">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Licenses\License.dockpanelsuit.txt">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Licenses\License.dotnetzip.txt">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Licenses\License.dotnetzip.zlib.txt">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Licenses\License.lz4net.txt">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Licenses\License.objectlistview.txt">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Licenses\License.W3SaveGameEditor.txt">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="LZ4">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="LZ4PCL">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="ObjectListView">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="OpenGL.Net">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="OpenGL.Net.WinForms">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Snappy.NET">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="System.Runtime.CompilerServices.Unsafe">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Vlc.DotNet.Core">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Vlc.DotNet.Core.Interops">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Vlc.DotNet.Forms">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="W3SavegameEditor.Core">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="WeifenLuo.WinFormsUI.Docking">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="WolvenKit.Bundles">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="WolvenKit.Cache">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="WolvenKit.Interfaces">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="WolvenKit.Net">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="WolvenKit.Render">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="WolvenKit.Scaleform">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="WolvenKit.W3Speech">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="WolvenKit.W3Strings">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="wolven_kit_icon.ico">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>

@@ -223,7 +223,7 @@ namespace scene
 		virtual ISceneNode* clone(ISceneNode* newParent,
 				ISceneManager* newManager) _IRR_OVERRIDE_;
 
-	private:
+	protected:
 		friend class CTerrainTriangleSelector;
 
 		struct SPatch

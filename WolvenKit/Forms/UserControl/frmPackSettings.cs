@@ -29,8 +29,18 @@ namespace WolvenKit
                 modBDL.Checked = true;
                 modMD.Checked = true;
             }
+            if (Directory.GetFiles(activemod.ModUncookedDirectory, "*.*", SearchOption.AllDirectories).Any())
+            {
+                modBDL.Checked = true;
+                modMD.Checked = true;
+            }
 
             if (Directory.GetFiles(activemod.DlcCookedDirectory, "*.*", SearchOption.AllDirectories).Any())
+            {
+                dlcBDL.Checked = true;
+                dlcMD.Checked = true;
+            }
+            if (Directory.GetFiles(activemod.DlcUncookedDirectory, "*.*", SearchOption.AllDirectories).Any())
             {
                 dlcBDL.Checked = true;
                 dlcMD.Checked = true;
@@ -71,7 +81,7 @@ namespace WolvenKit
             if (Directory.GetFiles(activemod.DlcUncookedDirectory, "*", SearchOption.AllDirectories).Any())
                 dlcCOL.Checked = true;
 
-            this.Icon = new Icon(@"Resources\Icons\GUI\Wkit_dark_16x.ico", new Size(16, 16));
+            this.Icon = UIController.GetThemedWkitIcon();
 
         }
 

@@ -324,6 +324,10 @@ f32 CSceneNodeAnimatorCameraMaya::getTargetMinDistance() const
 	return TargetMinDistance;
 }
 
+const core::vector3df CSceneNodeAnimatorCameraMaya::getModelRotation() const
+{
+	return core::vector3df(0.0f, -RotX, RotY);
+}
 
 ISceneNodeAnimator* CSceneNodeAnimatorCameraMaya::createClone(ISceneNode* node, ISceneManager* newManager)
 {
