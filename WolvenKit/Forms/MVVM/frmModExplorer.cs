@@ -76,6 +76,10 @@ namespace WolvenKit
         public event EventHandler<RequestFileOpenArgs> RequestFileRename;
         public event EventHandler<RequestFileOpenArgs> RequestFastRender;
         public event EventHandler<RequestFileDeleteArgs> RequestFileDelete;
+
+        public FileSystemInfo GetSelectedObject() =>
+            treeListView.SelectedObject is FileSystemInfo selectedobject ? selectedobject : null;
+
         #endregion
 
 

@@ -2906,15 +2906,28 @@ namespace WolvenKit
                 try
                 {
                     FileInfo fi = new FileInfo(dlg.FileName);
-                    var newfilepath = Path.Combine(ActiveMod.FileDirectory, fi.Name);
+                    var newfilepath = Path.Combine(ActiveMod.RawDirectory, fi.Name);
+
+                    var explorer = (frmModExplorer) GetModExplorer();
+                    if (explorer?.GetSelectedObject() != null)
+                    {
+                        var fsi = explorer.GetSelectedObject();
+                        newfilepath = Path.Combine(fsi.IsDirectory() 
+                            ? fsi.FullName 
+                            : fsi.GetParent().FullName, fi.Name);
+                    }
+
+                    
                     if (File.Exists(newfilepath))
                         newfilepath = $"{newfilepath.TrimEnd(fi.Extension.ToCharArray())} - copy{fi.Extension}";
 
                     fi.CopyToAndCreate(newfilepath, false);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                 }
+
+
             }
         }
 
