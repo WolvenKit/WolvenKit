@@ -2376,10 +2376,14 @@ namespace WolvenKit
             AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
             richpresenceworker.RunWorkerAsync();
 
-            if (MainController.Get().Configuration.IsWelcomeFormDisabled) return;
+            ResetWindows();
+            if (MainController.Get().Configuration.IsWelcomeFormDisabled)
+            {
+                return;
+            }
+
             if (!string.IsNullOrEmpty(MainController.Get().InitialFilePath))
             {
-                ResetWindows();
                 return;
             }
 
