@@ -75,7 +75,7 @@ namespace WolvenKit.CR2W.Types
 
         public override string ToString()
         {
-            return Variant.ToString();
+            return Variant == null ? "NULL" : Variant.ToString();
         }
 
         public override CVariable Copy(CR2WCopyAction context)
