@@ -84,7 +84,7 @@ namespace WolvenKit.CR2W
             return type;
         }
 
-        public static bool TypeExists(string typeName) => m_types.ContainsKey(typeName);
+        public static bool TypeExists(string typeName) => m_types?.ContainsKey(typeName) ?? false;
 
         private static void LoadTypes()
         {

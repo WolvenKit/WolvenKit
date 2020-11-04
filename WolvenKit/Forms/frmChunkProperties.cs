@@ -26,7 +26,7 @@ namespace WolvenKit.Forms
     public partial class frmChunkProperties : DockContent, IThemedContent
     {
         private bool showOnlySerialized = true;
-        private HotkeyCollection hotkeys;
+        //private HotkeyCollection hotkeys;
         private readonly CR2WDocumentViewModel viewModel;
 
         public frmChunkProperties(CR2WDocumentViewModel _viewmodel)
@@ -39,7 +39,7 @@ namespace WolvenKit.Forms
                 var root = showOnlySerialized
                     ? ((IEditableVariable)x).GetEditableVariables().Where(_ => _.IsSerialized)
                     : ((IEditableVariable)x).GetEditableVariables();
-                return root.Any();
+                return root?.Any() ?? false;
             };
             treeView.ChildrenGetter = x =>
             {
@@ -53,9 +53,9 @@ namespace WolvenKit.Forms
                 ? "Show all variables"
                 : "Show edited variables";
 
-            hotkeys = new HotkeyCollection(Dfust.Hotkeys.Enums.Scope.Application);
+            //hotkeys = new HotkeyCollection(Dfust.Hotkeys.Enums.Scope.Application);
 
-            RegisterHotkeys();
+            //RegisterHotkeys();
 
             viewModel = _viewmodel;
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -77,32 +77,43 @@ namespace WolvenKit.Forms
 
         #region UI Methods
 
+        private bool isInCellEditMode = false;
         private void RegisterHotkeys()
         {
-            hotkeys.RegisterHotkey(Keys.Oemplus, AddListElement, "Add Element");
-            hotkeys.RegisterHotkey(Keys.Add, AddListElement, "Add Element");
+            isInCellEditMode = false;
+            //hotkeys.RegisterHotkey(Keys.Oemplus, AddListElement, "Add Element");
+            //hotkeys.RegisterHotkey(Keys.Add, AddListElement, "Add Element");
 
-            hotkeys.RegisterHotkey(Keys.OemMinus, RemoveListElement, "Remove Element");
-            hotkeys.RegisterHotkey(Keys.Subtract, RemoveListElement, "Remove Element");
+            //hotkeys.RegisterHotkey(Keys.OemMinus, RemoveListElement, "Remove Element");
+            //hotkeys.RegisterHotkey(Keys.Subtract, RemoveListElement, "Remove Element");
 
-            hotkeys.RegisterHotkey(Keys.Delete, DeleteChunkTarget, "Remove Chunk Target");
+            //hotkeys.RegisterHotkey(Keys.Delete, DeleteChunkTarget, "Remove Chunk Target");
 
-            hotkeys.RegisterHotkey(Keys.Control | Keys.C, CopyVariable, "Copy Element");
-            hotkeys.RegisterHotkey(Keys.Control | Keys.V, PasteVariable, "Paste Element");
+            //hotkeys.RegisterHotkey(Keys.Control | Keys.C, CopyVariable, "Copy Element");
+            //hotkeys.RegisterHotkey(Keys.Control | Keys.V, PasteVariable, "Paste Element");
         }
 
         private void UnregisterHotkeys()
         {
-            hotkeys.UnregisterHotkey(Keys.Oemplus,  "Add Element");
-            hotkeys.UnregisterHotkey(Keys.Add,  "Add Element");
+            isInCellEditMode = true;
+            //try
+            //{
+            //    hotkeys.UnregisterHotkey(Keys.Oemplus, "Add Element");
+            //    hotkeys.UnregisterHotkey(Keys.Add, "Add Element");
 
-            hotkeys.UnregisterHotkey(Keys.OemMinus,  "Remove Element");
-            hotkeys.UnregisterHotkey(Keys.Subtract,  "Remove Element");
+            //    hotkeys.UnregisterHotkey(Keys.OemMinus, "Remove Element");
+            //    hotkeys.UnregisterHotkey(Keys.Subtract, "Remove Element");
 
-            hotkeys.UnregisterHotkey(Keys.Delete, "Remove Chunk Target");
+            //    hotkeys.UnregisterHotkey(Keys.Delete, "Remove Chunk Target");
 
-            hotkeys.UnregisterHotkey(Keys.Control | Keys.C, "Copy Element");
-            hotkeys.UnregisterHotkey(Keys.Control | Keys.V, "Paste Element");
+            //    hotkeys.UnregisterHotkey(Keys.Control | Keys.C, "Copy Element");
+            //    hotkeys.UnregisterHotkey(Keys.Control | Keys.V, "Paste Element");
+            //}
+            //catch (Exception e)
+            //{
+            //    //Console.WriteLine(e);
+            //    //throw;
+            //}
         }
 
         private void CopyVariable(HotKeyEventArgs e)
@@ -224,7 +235,7 @@ namespace WolvenKit.Forms
             if (e.Control is ArrayEditor arrayEditor)
                 arrayEditor.RequestBytesOpen -= ByteArrayEditor_RequestBytesOpen;
 
-            // unregister hotkeys
+            // register hotkeys
             RegisterHotkeys();
         }
 
@@ -265,7 +276,26 @@ namespace WolvenKit.Forms
             // Create new CVariable
             CVariable newvar = CR2WTypeManager.Create(parentarray.Elementtype, "", Chunk.cr2w, carray as CVariable, false);
             if (newvar == null) return;
-            
+
+            if (newvar is IVariantAccessor ivar)
+            {
+                List<string> availableTypes = CR2WManager.GetAvailableTypes("CObject").Select(_ => _.Name).ToList();
+                var newVariantType = "";
+                using (var form = new frmAddChunk(availableTypes))
+                {
+                    var result = form.ShowDialog();
+                    if (result == DialogResult.OK)
+                    {
+                        newVariantType = form.ChunkType;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
+
+
             AddNewChunkFor(newvar);
 
             newvar.IsSerialized = true;

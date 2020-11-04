@@ -140,7 +140,7 @@ namespace WolvenKit.Forms
             this.deleteChunkToolStripMenuItem,
             this.goToChunkToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(255, 286);
+            this.contextMenu.Size = new System.Drawing.Size(255, 264);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // expandAllToolStripMenuItem
@@ -182,7 +182,7 @@ namespace WolvenKit.Forms
             // 
             this.addVariableToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Add_16x;
             this.addVariableToolStripMenuItem.Name = "addVariableToolStripMenuItem";
-            this.addVariableToolStripMenuItem.ShortcutKeyDisplayString = "+";
+            this.addVariableToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.Insert)));
             this.addVariableToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
             this.addVariableToolStripMenuItem.Text = "Add List Element";
             this.addVariableToolStripMenuItem.Click += new System.EventHandler(this.addVariableToolStripMenuItem_Click);
@@ -191,7 +191,7 @@ namespace WolvenKit.Forms
             // 
             this.removeVariableToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Remove_color_16x;
             this.removeVariableToolStripMenuItem.Name = "removeVariableToolStripMenuItem";
-            this.removeVariableToolStripMenuItem.ShortcutKeyDisplayString = "-";
+            this.removeVariableToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.Delete)));
             this.removeVariableToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
             this.removeVariableToolStripMenuItem.Text = "Remove List Element";
             this.removeVariableToolStripMenuItem.Click += new System.EventHandler(this.removeVariableToolStripMenuItem_Click);
@@ -205,7 +205,6 @@ namespace WolvenKit.Forms
             // 
             this.copyToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Copy_16x;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+C";
             this.copyToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
             this.copyToolStripMenuItem.Text = "Copy Variable";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
@@ -214,7 +213,6 @@ namespace WolvenKit.Forms
             // 
             this.pasteToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Paste_16x;
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+V";
             this.pasteToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
             this.pasteToolStripMenuItem.Text = "Paste Variable";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
@@ -236,7 +234,7 @@ namespace WolvenKit.Forms
             // deleteChunkToolStripMenuItem
             // 
             this.deleteChunkToolStripMenuItem.Name = "deleteChunkToolStripMenuItem";
-            this.deleteChunkToolStripMenuItem.ShortcutKeyDisplayString = "Del";
+            this.deleteChunkToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Delete)));
             this.deleteChunkToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
             this.deleteChunkToolStripMenuItem.Text = "Delete Chunk Target";
             this.deleteChunkToolStripMenuItem.Click += new System.EventHandler(this.DeleteChunkToolStripMenuItem_Click);

@@ -415,7 +415,7 @@ namespace WolvenKit.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap git {
             get {
-                object obj = ResourceManager.GetObject($"git", resourceCulture);
+                object obj = ResourceManager.GetObject("git", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -633,6 +633,16 @@ namespace WolvenKit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Project_Explorer_Base_Dir_16x {
+            get {
+                object obj = ResourceManager.GetObject("Project_Explorer_Base_Dir_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap properties_16xLG {
             get {
                 object obj = ResourceManager.GetObject("properties_16xLG", resourceCulture);
@@ -656,6 +666,16 @@ namespace WolvenKit.Properties {
         internal static System.Drawing.Bitmap radish_32x {
             get {
                 object obj = ResourceManager.GetObject("radish_32x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap redcloth {
+            get {
+                object obj = ResourceManager.GetObject("redcloth", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
