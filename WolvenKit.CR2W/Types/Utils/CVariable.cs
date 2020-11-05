@@ -628,7 +628,43 @@ namespace WolvenKit.CR2W.Types
         #endregion
 
         #region Override
-        public override string ToString() => $"<{REDType}>{REDName}";
+        public override string ToString()
+        {
+            // check first if there is a property called "Name"
+            var dbg = this.accessor.GetMembers();
+            foreach (var member in this.accessor.GetMembers())
+            {
+                switch (member.Name)
+                {
+                    case "Name":
+                    {
+                        dynamic dyn = this;
+                        dynamic cnam = dyn.Name;
+                        return cnam.ToString();
+                    }
+                    case "instanceName":
+                    {
+                        dynamic dyn = this;
+                        dynamic cnam = dyn.InstanceName;
+                        return cnam.ToString();
+                    }
+                    case "appearanceName":
+                    {
+                        dynamic dyn = this;
+                        dynamic cnam = dyn.AppearanceName;
+                        return cnam.ToString();
+                    }
+                    case "appearance":
+                    {
+                        dynamic dyn = this;
+                        dynamic cnam = dyn.Appearance;
+                        return cnam.ToString();
+                    }
+                }
+            }
+
+            return $"<{REDType}>{REDName}";
+        }
 
         #endregion
 

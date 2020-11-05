@@ -872,7 +872,7 @@ namespace WolvenKit
             // openUncookedFolderToolStripMenuItem
             // 
             this.openUncookedFolderToolStripMenuItem.Name = "openUncookedFolderToolStripMenuItem";
-            this.openUncookedFolderToolStripMenuItem.Size = new System.Drawing.Size(200, 26);
+            this.openUncookedFolderToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.openUncookedFolderToolStripMenuItem.Text = "Open Uncooked Folder";
             this.openUncookedFolderToolStripMenuItem.ToolTipText = "Opens r4data folder location";
             this.openUncookedFolderToolStripMenuItem.Click += new System.EventHandler(this.openUncookedFolderToolStripMenuItem_Click);
@@ -880,7 +880,7 @@ namespace WolvenKit
             // unbundleGameToolStripMenuItem
             // 
             this.unbundleGameToolStripMenuItem.Name = "unbundleGameToolStripMenuItem";
-            this.unbundleGameToolStripMenuItem.Size = new System.Drawing.Size(200, 26);
+            this.unbundleGameToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.unbundleGameToolStripMenuItem.Text = "Unbundle Game";
             this.unbundleGameToolStripMenuItem.ToolTipText = "Extracts compressed files from installed game";
             this.unbundleGameToolStripMenuItem.Click += new System.EventHandler(this.unbundleGameToolStripMenuItem_Click);
@@ -888,7 +888,7 @@ namespace WolvenKit
             // uncookGameToolStripMenuItem
             // 
             this.uncookGameToolStripMenuItem.Name = "uncookGameToolStripMenuItem";
-            this.uncookGameToolStripMenuItem.Size = new System.Drawing.Size(200, 26);
+            this.uncookGameToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.uncookGameToolStripMenuItem.Text = "Uncook Game";
             this.uncookGameToolStripMenuItem.ToolTipText = "Extracts compressed files from installed game, and \"un-compresses\" the files (e.g" +
     ". combines mesh and buffer files into single w2mesh)";
@@ -897,13 +897,13 @@ namespace WolvenKit
             // toolStripSeparator12
             // 
             this.toolStripSeparator12.Name = "toolStripSeparator12";
-            this.toolStripSeparator12.Size = new System.Drawing.Size(197, 6);
+            this.toolStripSeparator12.Size = new System.Drawing.Size(193, 6);
             // 
             // saveExplorerToolStripMenuItem
             // 
             this.saveExplorerToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.witcher3;
             this.saveExplorerToolStripMenuItem.Name = "saveExplorerToolStripMenuItem";
-            this.saveExplorerToolStripMenuItem.Size = new System.Drawing.Size(200, 26);
+            this.saveExplorerToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.saveExplorerToolStripMenuItem.Text = "Save Explorer";
             this.saveExplorerToolStripMenuItem.Click += new System.EventHandler(this.saveExplorerToolStripMenuItem_Click);
             // 
@@ -911,7 +911,7 @@ namespace WolvenKit
             // 
             this.GameDebuggerToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.bug;
             this.GameDebuggerToolStripMenuItem.Name = "GameDebuggerToolStripMenuItem";
-            this.GameDebuggerToolStripMenuItem.Size = new System.Drawing.Size(200, 26);
+            this.GameDebuggerToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.GameDebuggerToolStripMenuItem.Text = "Game Debugger";
             this.GameDebuggerToolStripMenuItem.Click += new System.EventHandler(this.GameDebuggerToolStripMenuItem_Click);
             // 
@@ -956,6 +956,7 @@ namespace WolvenKit
             // 
             // scriptToolStripMenuItem
             // 
+            this.scriptToolStripMenuItem.Enabled = false;
             this.scriptToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.PlayStep_16x;
             this.scriptToolStripMenuItem.Name = "scriptToolStripMenuItem";
             this.scriptToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
