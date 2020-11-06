@@ -36,6 +36,8 @@ namespace WolvenKit.CR2W.Types
         [DataMember(EmitDefaultValue = false)]
         public string ClassName { get; set; }
 
+
+
         [DataMember(EmitDefaultValue = false)]
         public ushort Flags { get; set; }
 
@@ -47,6 +49,22 @@ namespace WolvenKit.CR2W.Types
         #endregion
 
         #region Methods
+
+        public void ChangeHandleType()
+        {
+            ChunkHandle = !ChunkHandle;
+            // change to external path
+            if (ChunkHandle)
+            {
+                
+            }
+            // change to chunk handle
+            else
+            {
+                
+            }
+        }
+
         public override void Read(BinaryReader file, uint size)
         {
             SetValueInternal(file.ReadInt32());

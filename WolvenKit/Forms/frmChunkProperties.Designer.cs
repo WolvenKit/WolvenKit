@@ -61,6 +61,7 @@ namespace WolvenKit.Forms
             this.toolStripButtonColorPicker = new System.Windows.Forms.ToolStripButton();
             this.ExpandBTN = new System.Windows.Forms.ToolStripButton();
             this.CollapseBTN = new System.Windows.Forms.ToolStripButton();
+            this.changeHandleTypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.treeView)).BeginInit();
             this.contextMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -138,9 +139,10 @@ namespace WolvenKit.Forms
             this.copyTextToolStripMenuItem,
             this.toolSplitPtr,
             this.deleteChunkToolStripMenuItem,
-            this.goToChunkToolStripMenuItem});
+            this.goToChunkToolStripMenuItem,
+            this.changeHandleTypeToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(255, 264);
+            this.contextMenu.Size = new System.Drawing.Size(255, 308);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // expandAllToolStripMenuItem
@@ -332,6 +334,13 @@ namespace WolvenKit.Forms
             this.CollapseBTN.ToolTipText = "Collapse all";
             this.CollapseBTN.Click += new System.EventHandler(this.CollapseBTN_Click);
             // 
+            // changeHandleTypeToolStripMenuItem
+            // 
+            this.changeHandleTypeToolStripMenuItem.Name = "changeHandleTypeToolStripMenuItem";
+            this.changeHandleTypeToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
+            this.changeHandleTypeToolStripMenuItem.Text = "Change Handle Type";
+            this.changeHandleTypeToolStripMenuItem.Click += new System.EventHandler(this.changeHandleTypeToolStripMenuItem_Click);
+            // 
             // frmChunkProperties
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -383,5 +392,6 @@ namespace WolvenKit.Forms
         private ToolStripButton toolStripButtonColorPicker;
         private ToolStripButton ExpandBTN;
         private ToolStripButton CollapseBTN;
+        private ToolStripMenuItem changeHandleTypeToolStripMenuItem;
     }
 }
