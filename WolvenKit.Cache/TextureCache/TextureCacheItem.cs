@@ -164,6 +164,10 @@ namespace WolvenKit.Cache
                 Extract(output);
             }
 
+            // don't convert if user extract extension id already dds
+            if (e.Extension == EUncookExtension.dds)
+                return newpath;
+
             var extractext = e.Extension;
             // do not convert pngs, jpgs and dds
             if (!(Path.GetExtension(e.FileName) == ".dds" || Path.GetExtension(e.FileName) == ".w2l"))
