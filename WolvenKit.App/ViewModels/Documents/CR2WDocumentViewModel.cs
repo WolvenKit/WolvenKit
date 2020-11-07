@@ -114,35 +114,82 @@ namespace WolvenKit.App.ViewModels
 
 
             // -------------------------------------------------------------------------------------------------------------------
-            // Paste-in-place - if only one variable was copied and that one variable is of the same type as the selected variable
+            // Paste-in-place - 1-->1 - if only one variable was copied and that one variable is of the same type as the target variable
             // -------------------------------------------------------------------------------------------------------------------
             if (CopyController.Source.Count == 1 && ctarget.GetType() == csource.GetType())
             {
-                var sourcechunk = csource.cr2w.chunks[csource.LookUpChunkIndex()];
-                var targetchunk = ctarget.cr2w.chunks[ctarget.LookUpChunkIndex()];
-
-                var context = new CR2WCopyAction()
-                {
-                    SourceChunk = sourcechunk,
-                    SourceFile = csource.cr2w,
-                    DestinationChunk = targetchunk,
-                    DestinationFile = ctarget.cr2w
-                };
-
                 //Remember the old parenting hierarchy
                 var oldparentinghierarchy = new Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)>();
-                foreach (var achunk in context.DestinationFile.chunks)
+                foreach (var achunk in ctarget.cr2w.chunks)
                 {
                     oldparentinghierarchy.Add(achunk, (achunk.ParentChunk, achunk.VirtualParentChunk));
                 }
 
-                // remove children chunks
-                ctarget.cr2w.RemoveChunks(
+                var context = new CR2WCopyAction();
+
+                if (ctarget.ParentVar == null) // if we are in a "pure chunk" paste - no parent variable
+                {
+                    var sourcechunk = csource.cr2w.chunks[csource.LookUpChunkIndex()];
+                    var targetchunk = ctarget.cr2w.chunks[ctarget.LookUpChunkIndex()];
+
+                    context = new CR2WCopyAction()
+                    {
+                        SourceChunk = sourcechunk,
+                        SourceFile = csource.cr2w,
+                        DestinationChunk = targetchunk,
+                        DestinationFile = ctarget.cr2w
+                    };
+
+                    // remove all virtual children chunks
+                    ctarget.cr2w.RemoveChunks(
                     new List<CR2WExportWrapper>() { targetchunk },
                     true,
-                    (CR2WFile.EChunkDisplayMode)chunkDisplayMode);
-                // copy-paste recursively children chunks
-                context.AddChildrenChunks(sourcechunk, targetchunk, oldparentinghierarchy);
+                    CR2WFile.EChunkDisplayMode.VirtualParent);
+
+                    // copy-paste recursively children chunks
+                    context.AddChildrenChunks(sourcechunk, targetchunk, oldparentinghierarchy);
+                }
+                // if we are pasting a non-chunk variable, a pointer in an array,
+                // we don't want to delete all children of the chunk.
+                else if (ctarget is IChunkPtrAccessor ctargetptr)
+                {
+                    context = new CR2WCopyAction()
+                    {
+                        SourceChunk = (csource as IChunkPtrAccessor).Reference,
+                        SourceFile = csource.cr2w,
+                        DestinationChunk = ctargetptr.Reference,
+                        DestinationFile = ctarget.cr2w
+                    };
+
+                    // remove all virtual children chunks of the reference
+                    ctarget.cr2w.RemoveChunks(
+                    new List<CR2WExportWrapper>() { ctargetptr.Reference },
+                    true,
+                    CR2WFile.EChunkDisplayMode.VirtualParent,
+                    true);
+
+                    // copy-paste recursively children chunks
+                    context.AddChildrenChunks((csource as IChunkPtrAccessor).Reference, ctargetptr.Reference, oldparentinghierarchy);
+
+                    var refcopy = (csource as IChunkPtrAccessor).Reference.data.Copy(context);
+                    ctargetptr.Reference.data.SetValue(refcopy);
+                    ctargetptr.Reference.data.IsSerialized = true; // why repeat?
+
+                    foreach (var chunktranslationentry in context.chunkTranslation)
+                    {
+                        // Corner cases :
+                        // - add descending CNewNPC components
+                        if (ctargetptr.ParentVar.REDName == "Components" &&
+                            context.DestinationFile.chunks[ctargetptr.ParentVar.LookUpChunkIndex()].REDType == "CNewNPC" &&
+                            chunktranslationentry.Value.data is CComponent &&
+                            context.SourceChunk != chunktranslationentry.Key)
+                        {
+                            var uppercopy = CR2WTypeManager.Create("ptr:CComponent", chunktranslationentry.Value.REDName, context.DestinationFile, (ctargetptr.ParentVar as CVariable));
+                            (uppercopy as IChunkPtrAccessor).Reference = chunktranslationentry.Value;
+                            ctargetptr.ParentVar.AddVariable(uppercopy);
+                        }
+                    }
+                }
 
                 var copy = csource.Copy(context);
                 ctarget.SetValue(copy);
@@ -152,7 +199,7 @@ namespace WolvenKit.App.ViewModels
             }
 
             // -------------------------------------------------------------------------------------------------------------------
-            // Paste-insert - check if the target is an array and the elementtype is of the same type as the selected nodes
+            // Paste-insert - n-->1 - check if the target is an array and the elementtype is of the same type as the selected nodes
             // -------------------------------------------------------------------------------------------------------------------
             else if (ctarget is IArrayAccessor targetarray && targetarray.Elementtype == first.REDType)
             {
@@ -184,10 +231,12 @@ namespace WolvenKit.App.ViewModels
                         oldparentinghierarchy);
                 }
 
+                // Add new pointers to the array and reparent them
                 foreach (var sourceelement in CopyController.Source)
                 {
                     var copy = sourceelement.Copy(context);
                     copy.IsSerialized = true;
+                    copy.ParentVar = targetarray as IEditableVariable;
                     targetarray.AddVariable(copy);
                 }
 

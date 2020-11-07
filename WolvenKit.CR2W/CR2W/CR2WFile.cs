@@ -173,6 +173,7 @@ namespace WolvenKit.CR2W
         /// <param name="toberemovedchunks">The chunks dealt with.</param>
         /// <param name="onlychildren">The method can remove the chunk and descendance, or only the descendance.</param>
         /// <param name="recursionmode">The method can remove only the chunk (Linear), the real children (Parent), the virtual children (VirtualParent).</param>
+        /// <param name="purgereferrers">Try to not leave null pointers</param>
         /// <param name="reentrant">Called for children chunks</param>
         /// <param name="passedoldparentinghierarchy">Passed for children chunks</param>
         /// <returns>Number of chunks removed</returns>
@@ -180,6 +181,7 @@ namespace WolvenKit.CR2W
             List<CR2WExportWrapper> toberemovedchunks,
             bool onlychildren = false,
             EChunkDisplayMode recursionmode = EChunkDisplayMode.VirtualParent,
+            bool purgereferrers = false,
             bool reentrant = false,
             Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)> passedoldparentinghierarchy= null)
         {
@@ -202,9 +204,16 @@ namespace WolvenKit.CR2W
                 {
                     foreach (var referrer in chunk.AdReferences)
                     {
-                        // This leaves a dangling cptr/chandle in AdReferences,
-                        // which needs to be adressed later.
-                        referrer.Reference = null;
+                        if (purgereferrers && referrer.ParentVar is IArrayAccessor)
+                        {
+                            referrer.ParentVar.RemoveVariable(referrer as IEditableVariable);
+                        }
+                        else
+                        {
+                            // This leaves a dangling cptr/chandle in AdReferences,
+                            // which needs to be adressed later.
+                            referrer.Reference = null;
+                        }
                     }
                 }
 
@@ -228,6 +237,7 @@ namespace WolvenKit.CR2W
                                     false,
                                     recursionmode,
                                     true,
+                                    purgereferrers,
                                     oldparentinghierarchy);
                                 i = 0;
                             }
@@ -241,6 +251,7 @@ namespace WolvenKit.CR2W
                                     false,
                                     recursionmode,
                                     true,
+                                    purgereferrers,
                                     passedoldparentinghierarchy);
                                 i = 0;
                             }
@@ -257,6 +268,7 @@ namespace WolvenKit.CR2W
                                     false,
                                     recursionmode,
                                     true,
+                                    purgereferrers,
                                     oldparentinghierarchy);
                                 i = 0;
                             }
@@ -270,6 +282,7 @@ namespace WolvenKit.CR2W
                                     false,
                                     recursionmode,
                                     true,
+                                    purgereferrers,
                                     passedoldparentinghierarchy);
                                 i = 0;
                             }

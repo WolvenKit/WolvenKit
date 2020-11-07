@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W
     /// </summary>
     public class CR2WCopyAction
     {
-        internal Dictionary<CR2WExportWrapper, CR2WExportWrapper> chunkTranslation; // source, target
+        public Dictionary<CR2WExportWrapper, CR2WExportWrapper> chunkTranslation; // source, target
 
         public CR2WCopyAction()
         {
@@ -63,7 +63,7 @@ namespace WolvenKit.CR2W
                 // parent
                 chunktranslationentry.Value.ParentChunk = TryLookupReference(chunktranslationentry.Key.ParentChunk);
                 // virtual parent
-                chunktranslationentry.Value.MountChunkVirtually(chunktranslationentry.Key.VirtualParentChunk,true);
+                chunktranslationentry.Value.MountChunkVirtually(TryLookupReference(chunktranslationentry.Key.VirtualParentChunk), true);
             }
         }
 
@@ -85,8 +85,9 @@ namespace WolvenKit.CR2W
                 SourceChunk = sourcechunk;
                 //Create the related chunk
                 var newchunk = DestinationFile.CreateChunk(
-                    sourcechunk.data.REDType,
-                    DestinationFile.GetLastChildrenIndexRecursive(DestinationChunk) + 1);
+                        sourcechunk.data.REDType,
+                        DestinationFile.GetLastChildrenIndexRecursive(DestinationChunk) + 1);
+
                 if(!chunkTranslation.ContainsKey(sourcechunk))
                 {
                     chunkTranslation.Add(sourcechunk, newchunk);
@@ -114,7 +115,18 @@ namespace WolvenKit.CR2W
             {
                 var copy = chunktranslationentry.Key.data.Copy(this);
                 chunktranslationentry.Value.CreateDefaultData(copy);
-                targetarray.AddVariable(copy);
+
+                // Corner cases :
+                // - add descending CNewNPC components
+                if (targetarray.REDName == "Components" &&
+                    DestinationFile.chunks[targetarray.LookUpChunkIndex()].REDType == "CNewNPC" &&
+                    copy is CComponent &&
+                    !sourcechunks.Contains(chunktranslationentry.Key))
+                {
+                    var uppercopy = CR2WTypeManager.Create("ptr:CComponent", chunktranslationentry.Value.REDName, DestinationFile, (targetarray as CVariable));
+                    (uppercopy as IChunkPtrAccessor).Reference = chunktranslationentry.Value;
+                    targetarray.AddVariable(uppercopy);
+                }
             }
         }
 
@@ -144,7 +156,6 @@ namespace WolvenKit.CR2W
                     newchunk.ParentChunk = TryLookupReference(sourcevirtualchildchunk.ParentChunk);
                     newchunk.MountChunkVirtually(TryLookupReference(sourcevirtualchildchunk.VirtualParentChunk), true);
                 }
-
 
                 DeepChunkCopy(sourcevirtualchildchunk, newchunk, inplace);
             }

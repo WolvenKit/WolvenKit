@@ -120,7 +120,6 @@ namespace WolvenKit.Forms
         {
             if (GetSelectedObjects().Count > 0)
                 CopyController.Source = GetSelectedObjects();
-            //viewModel.CopyVariableCommand.SafeExecute();
         }
 
         private void PasteVariable(HotKeyEventArgs e)
