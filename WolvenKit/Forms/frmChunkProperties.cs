@@ -528,7 +528,9 @@ namespace WolvenKit.Forms
                 if (areOfTheSameType && selectedNodes.Count == 1 && selectedNodes.First() is CVariable ctarget)
                 {
                     // if only one variable was copied and that one variable is of the same type as the selected variable
-                    if (CopyController.Source.Count == 1 && CopyController.Source.First() is CVariable ccopy && ctarget.GetType() == ccopy.GetType())
+                    if (CopyController.Source.Count == 1 
+                        && CopyController.Source.First() is CVariable ccopy 
+                        && ctarget.GetType() == ccopy.GetType())
                     {
                         return true;
                     }
@@ -618,15 +620,18 @@ namespace WolvenKit.Forms
         private void copyTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var node = (IEditableVariable) treeView.SelectedObject;
-            if (node?.ParentVar == null || !node.ParentVar.CanRemoveVariable(node))
+            if (node?.ParentVar == null)
                 return;
-            if (node.REDValue != null)
+            switch (node.REDValue)
             {
-                if(node.REDValue == "")
+                case null:
+                    return;
+                case "":
                     Clipboard.SetText(node.REDType + ":??");
-                else
+                    break;
+                default:
                     Clipboard.SetText(node.REDValue);
-
+                    break;
             }
         }
 
@@ -710,5 +715,14 @@ namespace WolvenKit.Forms
         private void ExpandBTN_Click(object sender, EventArgs e) => treeView.ExpandAll();
 
         private void CollapseBTN_Click(object sender, EventArgs e) => treeView.CollapseAll();
+
+        private void changeHandleTypeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var node = (IEditableVariable)treeView.SelectedObject;
+            if (node is IHandleAccessor ihdl)
+            {
+                ihdl.ChangeHandleType();
+            }
+        }
     }
 }

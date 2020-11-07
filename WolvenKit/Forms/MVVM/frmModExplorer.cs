@@ -447,6 +447,8 @@ namespace WolvenKit
                         || selectedobject.FullName == ActiveMod.ModCookedDirectory
                         || selectedobject.FullName == ActiveMod.DlcCookedDirectory
                         || selectedobject.FullName == ActiveMod.DlcUncookedDirectory
+                        || selectedobject.FullName == ActiveMod.RawModDirectory
+                        || selectedobject.FullName == ActiveMod.RawDlcDirectory
                         ;
 
                 createW2animsToolStripMenuItem.Enabled = !isToplevelDir;
