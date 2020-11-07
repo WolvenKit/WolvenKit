@@ -212,16 +212,15 @@ namespace WolvenKit.App.ViewModels
                     using (var mem = new MemoryStream())
                     using (var writer = new BinaryWriter(mem))
                     {
+                        // save embedded files inside the embedded file if any
+                        model.SaveFile();
+
                         model.File.Write(writer);
 
-                        //OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = mem, File = File });
                         bytearray.SetValue(mem.ToArray());
                     }
-                    
-                    //model.SaveFile();
                 }
             }
-
             base.SaveFile();
         }
 
