@@ -642,22 +642,34 @@ namespace WolvenKit.CR2W.Types
                         dynamic cnam = dyn.Name;
                         return cnam.ToString();
                     }
-                    case "instanceName":
+                    case "InstanceName":
                     {
                         dynamic dyn = this;
                         dynamic cnam = dyn.InstanceName;
                         return cnam.ToString();
                     }
-                    case "appearanceName":
+                    case "AppearanceName":
                     {
                         dynamic dyn = this;
                         dynamic cnam = dyn.AppearanceName;
                         return cnam.ToString();
                     }
-                    case "appearance":
+                    case "Appearance":
                     {
                         dynamic dyn = this;
                         dynamic cnam = dyn.Appearance;
+                        return cnam.ToString();
+                    }
+                    case "ChildName":
+                    {
+                        dynamic dyn = this;
+                        dynamic cnam = dyn.ChildName;
+                        return cnam.ToString();
+                    }
+                    case "OldName":
+                    {
+                        dynamic dyn = this;
+                        dynamic cnam = dyn.OldName;
                         return cnam.ToString();
                     }
                 }
