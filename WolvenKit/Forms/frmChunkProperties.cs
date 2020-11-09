@@ -62,7 +62,7 @@ namespace WolvenKit.Forms
         }
 
         #region Properties
-        public event EventHandler RequestChunkViewUpdate;
+        
         public event EventHandler<RequestByteArrayFileOpenArgs> RequestBytesOpen;
 
         private CR2WExportWrapper Chunk => 
@@ -76,46 +76,6 @@ namespace WolvenKit.Forms
 
 
         #region UI Methods
-
-        private bool isInCellEditMode = false;
-        private void RegisterHotkeys()
-        {
-            isInCellEditMode = false;
-            //hotkeys.RegisterHotkey(Keys.Oemplus, AddListElement, "Add Element");
-            //hotkeys.RegisterHotkey(Keys.Add, AddListElement, "Add Element");
-
-            //hotkeys.RegisterHotkey(Keys.OemMinus, RemoveListElement, "Remove Element");
-            //hotkeys.RegisterHotkey(Keys.Subtract, RemoveListElement, "Remove Element");
-
-            //hotkeys.RegisterHotkey(Keys.Delete, DeleteChunkTarget, "Remove Chunk Target");
-
-            //hotkeys.RegisterHotkey(Keys.Control | Keys.C, CopyVariable, "Copy Element");
-            //hotkeys.RegisterHotkey(Keys.Control | Keys.V, PasteVariable, "Paste Element");
-        }
-
-        private void UnregisterHotkeys()
-        {
-            isInCellEditMode = true;
-            //try
-            //{
-            //    hotkeys.UnregisterHotkey(Keys.Oemplus, "Add Element");
-            //    hotkeys.UnregisterHotkey(Keys.Add, "Add Element");
-
-            //    hotkeys.UnregisterHotkey(Keys.OemMinus, "Remove Element");
-            //    hotkeys.UnregisterHotkey(Keys.Subtract, "Remove Element");
-
-            //    hotkeys.UnregisterHotkey(Keys.Delete, "Remove Chunk Target");
-
-            //    hotkeys.UnregisterHotkey(Keys.Control | Keys.C, "Copy Element");
-            //    hotkeys.UnregisterHotkey(Keys.Control | Keys.V, "Paste Element");
-            //}
-            //catch (Exception e)
-            //{
-            //    //Console.WriteLine(e);
-            //    //throw;
-            //}
-        }
-
         private void CopyVariable(HotKeyEventArgs e)
         {
             if (GetSelectedObjects().Count > 0)
@@ -168,8 +128,6 @@ namespace WolvenKit.Forms
                     e.Control = EditorHandler.GetEditor(ivar);
                     if (e.Control != null)
                     {
-                        // unregister hotkeys
-                        UnregisterHotkeys();
 
                         e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
                         e.Control.Width = e.CellBounds.Width;
@@ -184,11 +142,10 @@ namespace WolvenKit.Forms
                                     if (ptrcomboitem.Text == $"<Add new chunk ...>")
                                     {
                                         // raise event
-                                        AddNewChunkFor(ivar as CVariable);
+                                        viewModel.AddNewChunkFor(ivar as CVariable);
 
                                         // select item
                                         editor.UpdateComboBoxWith(iptr);
-
                                     }
                                     else
                                     {
@@ -234,9 +191,6 @@ namespace WolvenKit.Forms
                 byteArrayEditor.RequestBytesOpen -= ByteArrayEditor_RequestBytesOpen;
             if (e.Control is ArrayEditor arrayEditor)
                 arrayEditor.RequestBytesOpen -= ByteArrayEditor_RequestBytesOpen;
-
-            // register hotkeys
-            RegisterHotkeys();
         }
 
         private void ByteArrayEditor_RequestBytesOpen(object sender, RequestByteArrayFileOpenArgs e) =>
@@ -264,170 +218,6 @@ namespace WolvenKit.Forms
             if (e.PropertyName == nameof(viewModel.SelectedChunks))
             {
                 UpdateTreeListView();
-            }
-        }
-
-        private void AddListElement(HotKeyEventArgs e)
-        {
-            var carray = (IEditableVariable)treeView.SelectedObject;
-            if (carray == null || !carray.CanAddVariable(null) || !(carray is IArrayAccessor parentarray))
-                return;
-
-            // Create new CVariable
-            CVariable newvar = CR2WTypeManager.Create(parentarray.Elementtype, "", Chunk.cr2w, carray as CVariable, false);
-            if (newvar == null) return;
-
-            if (newvar is IVariantAccessor ivar)
-            {
-                List<string> availableTypes = CR2WManager.GetAvailableTypes("CObject").Select(_ => _.Name).ToList();
-                var newVariantType = "";
-                using (var form = new frmAddChunk(availableTypes))
-                {
-                    var result = form.ShowDialog();
-                    if (result == DialogResult.OK)
-                    {
-                        newVariantType = form.ChunkType;
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-            }
-
-
-            AddNewChunkFor(newvar);
-
-            newvar.IsSerialized = true;
-
-            parentarray.AddVariable(newvar);
-            parentarray.IsSerialized = true;
-
-            UpdateTreeListView();
-        }
-
-        private void AddNewChunkFor(CVariable newvar)
-        {
-            switch (newvar)
-            {
-                case IPtrAccessor ptr:
-                    {
-                        string newChunktype = "";
-                        string innerParentType = ptr.ReferenceType /*parentarray.Elementtype.Substring("ptr:".Length)*/;
-
-                        List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType).Select(_ => _.Name).ToList();
-                        if (availableTypes.Count <= 0)
-                        {
-                            return;
-                        }
-                        else if (availableTypes.Count == 1)
-                        {
-                            newChunktype = availableTypes.First();
-                        }
-                        else
-                        {
-                            using (var form = new frmAddChunk(availableTypes))
-                            {
-                                var result = form.ShowDialog();
-                                if (result == DialogResult.OK)
-                                {
-                                    newChunktype = form.ChunkType;
-                                }
-                                else
-                                {
-                                    return;
-                                }
-                            }
-                        }
-
-                        if (string.IsNullOrEmpty(newChunktype))
-                            return;
-
-                        var cr2w = viewModel.File as CR2WFile;
-                        ptr.Reference = cr2w.CreateChunk(
-                            newChunktype,
-                            cr2w.GetLastChildrenIndexRecursive(cr2w.chunks[ptr.LookUpChunkIndex()]) + 1,
-                            Chunk,
-                            Chunk,
-                            newvar);
-
-                        RequestChunkViewUpdate?.Invoke(null, null);
-                        break;
-                    }
-                case IHandleAccessor handle:
-                    {
-                        bool isChunkHandle = true;
-
-                        // check parent if the handle is a chunkhandle
-                        if (newvar.ParentVar is IArrayAccessor parentarray && parentarray.Count > 0 
-                                                                           && parentarray is IList il && il[0] is IHandleAccessor ih)
-                        {
-                            isChunkHandle = ih.ChunkHandle;
-                        }
-                        else
-                        {
-                            // ask the user?
-                            switch (MessageBox.Show(
-                                "Please select Yes if this a CHandle to an existing chunk, or No if it is a CHandle to an external source.",
-                                "New CHandle",
-                                MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-                            {
-                                case DialogResult.No:
-                                {
-                                    isChunkHandle = false;
-                                    break;
-                                }
-                            }
-                        }
-
-                        // it is a chunk handle, so create a new chunk
-                        if (isChunkHandle)
-                        {
-                            string newhandletype = "";
-                            string innerParentType = handle.ReferenceType /*parentarray.Elementtype.Substring("handle:".Length)*/;
-
-                            List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType).Select(_ => _.Name).ToList();
-                            if (availableTypes.Count <= 0)
-                            {
-                                return;
-                            }
-                            else if (availableTypes.Count == 1)
-                            {
-                                newhandletype = availableTypes.First();
-                            }
-                            else
-                            {
-                                using (var form = new frmAddChunk(availableTypes))
-                                {
-                                    var result = form.ShowDialog();
-                                    if (result == DialogResult.OK)
-                                    {
-                                        newhandletype = form.ChunkType;
-                                    }
-                                    else
-                                    {
-                                        return;
-                                    }
-                                }
-                            }
-
-
-                            if (string.IsNullOrEmpty(newhandletype))
-                                return;
-
-                            handle.ChunkHandle = true;
-                            var cr2w = viewModel.File as CR2WFile;
-                            handle.Reference = cr2w.CreateChunk(
-                                newhandletype,
-                                cr2w.GetLastChildrenIndexRecursive(cr2w.chunks[handle.LookUpChunkIndex()]) + 1,
-                                Chunk,
-                                Chunk,
-                                newvar);
-                        }
-
-                        RequestChunkViewUpdate?.Invoke(null, null);
-                        break;
-                    }
             }
         }
 
@@ -488,13 +278,11 @@ namespace WolvenKit.Forms
         #region Events
         private void addVariableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddListElement(null);
+             if (treeView.SelectedObject is IEditableVariable editableVariable)
+                 viewModel.AddListElement(editableVariable);
         }
 
-        private void removeVariableToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RemoveListElement(null);
-        }
+        private void removeVariableToolStripMenuItem_Click(object sender, EventArgs e) => RemoveListElement(null);
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
@@ -589,17 +377,10 @@ namespace WolvenKit.Forms
                 }
             }
 
-            //if (e.ClickCount == 2 && e.Column.AspectName == nameof(VariableListNode.Name))
-            //{
-            //    treeView.StartCellEdit(e.Item, 0);
-            //}
-            //else 
             if (e.Column.AspectName == nameof(IEditableVariable.REDValue))
             {
                 treeView.StartCellEdit(e.Item, olvColumn4.Index);
             }
-
-            
         }
 
         private void GotoChunkToolStripMenuItem_Click(object sender, EventArgs e)

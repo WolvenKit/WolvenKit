@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
 using WolvenKit.Common.Model;
@@ -66,6 +67,9 @@ namespace WolvenKit.CR2W.Types
 
         public override string ToString()
         {
+            if (Bytes == null)
+                Bytes = Array.Empty<byte>();
+
             return Bytes.Length + " bytes";
         }
         //public override void SerializeToXml(XmlWriter xw)
