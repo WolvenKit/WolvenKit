@@ -57,9 +57,6 @@ namespace WolvenKit
 
         #endregion
 
-
-
-
         public frmCR2WDocument(CR2WDocumentViewModel documentViewModel)
         {
             vm = documentViewModel;
@@ -304,9 +301,6 @@ namespace WolvenKit
 
         private void ChunkWindowRequestChunkViewUpdate(object sender, EventArgs e) => chunkList.UpdateList();
 
-        //private void PropertyWindow_OnRequestChunk(object sender, SelectChunkArgs e) => chunkList.SelectChunk(e.Chunk);
-
-
         private void PropertyWindowOnRequestBytesOpen(object sender, RequestByteArrayFileOpenArgs e)
         {
             if (e.Variable is IByteSource source)
@@ -376,7 +370,7 @@ namespace WolvenKit
             }
 
             // else: open and dock new form
-            var doc = new frmCR2WDocument(new CR2WDocumentViewModel())
+            var doc = new frmCR2WDocument(new CR2WDocumentViewModel(new Utility.ProductionWindowFactory()))
             {
                 Text = Path.GetFileName(key) + " [" + key + "]"
             };
@@ -441,8 +435,6 @@ namespace WolvenKit
 
         private void frmCR2WDocument_Load(object sender, EventArgs e)
         {
-           
-
             string config = Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "cr2wdocument_layout.xml");
             if (System.IO.File.Exists(config))
             {
@@ -471,7 +463,7 @@ namespace WolvenKit
                 propertyWindow.Show(FormPanel, DockState.DockRight);
             }
 
-            propertyWindow.RequestChunkViewUpdate += ChunkWindowRequestChunkViewUpdate;
+            //propertyWindow .RequestChunkViewUpdate += ChunkWindowRequestChunkViewUpdate;
             propertyWindow.RequestBytesOpen += PropertyWindowOnRequestBytesOpen;
 
 

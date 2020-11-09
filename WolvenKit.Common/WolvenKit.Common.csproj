@@ -156,6 +156,7 @@
     <Compile Include="Model\IByteSource.cs" />
     <Compile Include="Model\WitcherArchiveManager.cs" />
     <Compile Include="Model\IWolvenkitFile.cs" />
+    <Compile Include="Services\IWindowFactory.cs" />
     <Compile Include="Tools\AlphanumComparator.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Tools\CommonImageTools.cs" />

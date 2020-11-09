@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
+using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 
@@ -12,8 +14,10 @@ namespace WolvenKit.App.ViewModels
 {
     public class CR2WDocumentViewModel : CommonDocumentViewModel
     {
-        public CR2WDocumentViewModel()
+        public CR2WDocumentViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
+            OpenChunkFormCommand = new DelegateCommand<IEnumerable<string>>(OpenChunkForm); ;
+
             chunkDisplayMode = EChunkDisplayMode.VirtualParent;
 
             CopyVariableCommand = new RelayCommand(CopyVariable, CanCopyVariable);
@@ -21,8 +25,9 @@ namespace WolvenKit.App.ViewModels
 
             _openEmbedded =new Dictionary<string, CR2WDocumentViewModel>();
         }
-
         #region Fields
+        
+
         public enum EChunkDisplayMode
         {
             Linear,
@@ -34,6 +39,10 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         #region Properties
+
+        public CR2WExportWrapper SelectedChunk => (SelectedChunks != null && SelectedChunks.Count > 0) 
+                ? SelectedChunks.First() 
+                : null;
 
         #region OpenEmbedded
         private Dictionary<string, CR2WDocumentViewModel> _openEmbedded;
@@ -79,15 +88,17 @@ namespace WolvenKit.App.ViewModels
         #endregion
         #endregion
 
-        
-
         #region Commands
         public ICommand CopyVariableCommand { get; }
         public ICommand PasteVariableCommand { get; }
-
+        public ICommand OpenChunkFormCommand { get; }
         #endregion
 
         #region Commands Implementation
+
+        private string openChunkFormRef = "";
+        public void OpenChunkForm(IEnumerable<string> value) => m_windowFactory.ShowAddChunkFormModal(value, ref openChunkFormRef);
+
         protected bool CanCopyVariable() => true;
 
         protected bool CanPasteVariable() => CopyController.Source != null && CopyController.Target != null;
@@ -273,7 +284,145 @@ namespace WolvenKit.App.ViewModels
             base.SaveFile();
         }
 
+        public void AddNewChunkFor(CVariable newvar)
+        {
+            switch (newvar)
+            {
+                case IPtrAccessor ptr:
+                    {
+                        string newChunktype = "";
+                        string innerParentType = ptr.ReferenceType /*parentarray.Elementtype.Substring("ptr:".Length)*/;
 
-        
+                        List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType).Select(_ => _.Name).ToList();
+                        if (availableTypes.Count <= 0)
+                        {
+                            return;
+                        }
+                        else if (availableTypes.Count == 1)
+                        {
+                            newChunktype = availableTypes.First();
+                        }
+                        else
+                        {
+                            OpenChunkFormCommand.SafeExecute(availableTypes);
+                            newChunktype = openChunkFormRef;
+                        }
+
+                        if (string.IsNullOrEmpty(newChunktype))
+                            return;
+
+                        var cr2w = /*viewModel.*/File as CR2WFile;
+                        ptr.Reference = cr2w.CreateChunk(
+                            newChunktype,
+                            cr2w.GetLastChildrenIndexRecursive(cr2w.chunks[ptr.LookUpChunkIndex()]) + 1,
+                            SelectedChunk,
+                            SelectedChunk,
+                            newvar);
+                        ptr.IsSerialized = true;
+
+                        OnPropertyChanged(nameof(File));
+                        //RequestChunkViewUpdate?.Invoke(null, null);
+                        break;
+                    }
+                case IHandleAccessor handle:
+                    {
+                        bool isChunkHandle = true;
+
+                        // check parent if the handle is a chunkhandle
+                        if (newvar.ParentVar is IArrayAccessor parentarray && parentarray.Count > 0
+                                                                           && parentarray is IList il && il[0] is IHandleAccessor ih)
+                        {
+                            isChunkHandle = ih.ChunkHandle;
+                        }
+                        else
+                        {
+                            //// ask the user?
+                            //switch (MessageBox.Show(
+                            //    "Please select Yes if this a CHandle to an existing chunk, or No if it is a CHandle to an external source.",
+                            //    "New CHandle",
+                            //    MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                            //{
+                            //    case DialogResult.No:
+                            //        {
+                            //            isChunkHandle = false;
+                            //            break;
+                            //        }
+                            //}
+                        }
+
+                        // it is a chunk handle, so create a new chunk
+                        if (isChunkHandle)
+                        {
+                            string newhandletype = "";
+                            string innerParentType = handle.ReferenceType /*parentarray.Elementtype.Substring("handle:".Length)*/;
+
+                            List<string> availableTypes = CR2WManager.GetAvailableTypes(innerParentType).Select(_ => _.Name).ToList();
+                            if (availableTypes.Count <= 0)
+                            {
+                                return;
+                            }
+                            else if (availableTypes.Count == 1)
+                            {
+                                newhandletype = availableTypes.First();
+                            }
+                            else
+                            {
+                                OpenChunkFormCommand.SafeExecute(availableTypes);
+                                newhandletype = openChunkFormRef;
+                            }
+
+
+                            if (string.IsNullOrEmpty(newhandletype))
+                                return;
+
+                            handle.ChunkHandle = true;
+                            var cr2w = /*viewModel.*/File as CR2WFile;
+                            handle.Reference = cr2w.CreateChunk(
+                                newhandletype,
+                                cr2w.GetLastChildrenIndexRecursive(cr2w.chunks[handle.LookUpChunkIndex()]) + 1,
+                                SelectedChunk,
+                                SelectedChunk,
+                                newvar);
+                            handle.IsSerialized = true;
+                        }
+
+                        OnPropertyChanged(nameof(File));
+                        //RequestChunkViewUpdate?.Invoke(null, null);
+                        break;
+                    }
+            }
+        }
+
+        public void AddListElement(IEditableVariable editableVariable)
+        {
+            if (editableVariable == null || !editableVariable.CanAddVariable(null) || !(editableVariable is IArrayAccessor parentarray))
+                return;
+
+            // Create new CVariable
+            CVariable newvar = CR2WTypeManager.Create(parentarray.Elementtype, "", SelectedChunk.cr2w, editableVariable as CVariable, false);
+            if (newvar == null) return;
+
+            if (newvar is IVariantAccessor ivar)
+            {
+                List<string> availableTypes = CR2WManager.GetAvailableTypes("CObject").Select(_ => _.Name).ToList();
+                var newVariantType = "";
+                OpenChunkFormCommand.SafeExecute(availableTypes);
+                newVariantType = openChunkFormRef;
+                //TODO: implement creating new cvariants
+
+                return;
+            }
+
+
+            AddNewChunkFor(newvar);
+
+            newvar.IsSerialized = true;
+
+            parentarray.AddVariable(newvar);
+            parentarray.IsSerialized = true;
+
+            OnPropertyChanged(nameof(SelectedChunks));
+            //UpdateTreeListView();
+        }
     }
 }

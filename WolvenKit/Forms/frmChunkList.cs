@@ -161,7 +161,12 @@ namespace WolvenKit.Forms
                 treeListView.ExpandAll();
             }
 
-            treeListView.SelectedIndex = 0;
+            // find selectedchunk index
+            CR2WExportWrapper selectedChunk = viewModel.SelectedChunk;
+            if (selectedChunk != null && selectedChunk.ChunkIndex <= treeListView.Items.Count)
+                treeListView.SelectedIndex = selectedChunk.ChunkIndex;
+            else
+                treeListView.SelectedIndex = 0;
             this.Update();
         }
 
@@ -184,7 +189,7 @@ namespace WolvenKit.Forms
         #region Events
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
-            var selectedNodes = treeListView.SelectedObjects.Cast<CR2WExportWrapper>().ToList();
+            List<CR2WExportWrapper> selectedNodes = treeListView.SelectedObjects.Cast<CR2WExportWrapper>().ToList();
             if (selectedNodes.ToArray().Length <= 0)
             {
                 e.Cancel = true;
@@ -197,7 +202,69 @@ namespace WolvenKit.Forms
                                                   && selectedNodes.Count == 1 
                                                   && selectedNodes.First().data is CVariable csel
                                                   && csel.GetType() == ccopy.GetType();
+
+            AddChunkPointers(toolStripMenuItemAddChunk, selectedNodes.FirstOrDefault());
+
+
         }
+
+        private void AddChunkPointers(ToolStripMenuItem menu, CR2WExportWrapper chunk)
+        {
+            var chunkData = chunk.data;
+            menu.DropDownItems.Clear();
+
+            foreach (var variable in chunkData.GetEditableVariables())
+            {
+                if (variable is IHandleAccessor ihdl && ihdl.IsSerialized && !ihdl.ChunkHandle) continue;
+
+                // single ptrs
+                if (variable is IChunkPtrAccessor ptrAccessor)
+                {
+                    ToolStripItem item = new ToolStripMenuItem()
+                    {
+                        Text = ptrAccessor.REDName,
+                        Name = ptrAccessor.REDName,
+                        Tag = variable
+                    };
+                    item.Click += new EventHandler(ptr_Click);
+                    menu.DropDownItems.Add(item);
+                }
+
+                // array ptrs
+                if (variable is IArrayAccessor arrayAccessor 
+                    && (arrayAccessor.Elementtype.Contains("handle:") || arrayAccessor.Elementtype.Contains("ptr:")))
+                {
+                    ToolStripItem item = new ToolStripMenuItem()
+                    {
+                        Text = arrayAccessor.REDName,
+                        Name = arrayAccessor.REDName,
+                        Tag = variable
+                    };
+                    item.Click += new EventHandler(arrayPtr_Click);
+                    menu.DropDownItems.Add(item);
+                }
+            }
+
+
+            void ptr_Click(object sender, EventArgs e)
+            {
+                if (sender is ToolStripItem item && item.Tag is IEditableVariable variable && variable is IChunkPtrAccessor ptrAccessor)
+                {
+                    viewModel.AddNewChunkFor(variable as CVariable);
+                }
+            }
+
+            void arrayPtr_Click(object sender, EventArgs e)
+            {
+                if (sender is ToolStripItem item && item.Tag is IEditableVariable variable)
+                {
+                    viewModel.AddListElement(variable);
+                }
+            }
+
+        }
+
+        
 
         private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {

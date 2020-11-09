@@ -1339,7 +1339,7 @@ namespace WolvenKit
             // switch between cr2w files and non-cr2w files (e.g. srt)
             if (Path.GetExtension(filename) == ".srt")
             {
-                var doc = new frmOtherDocument(new CommonDocumentViewModel());
+                var doc = new frmOtherDocument(new CommonDocumentViewModel(new Utility.ProductionWindowFactory()));
 
                 doc.Activated += doc_Activated;
                 doc.Show(dockPanel, DockState.Document);
@@ -1352,7 +1352,7 @@ namespace WolvenKit
 
 
                 //var doc = Args.Doc;
-                frmCR2WDocument doc = new frmCR2WDocument(new CR2WDocumentViewModel());
+                frmCR2WDocument doc = new frmCR2WDocument(new CR2WDocumentViewModel(new Utility.ProductionWindowFactory()));
                 doc.WorkerLoadFileSetup(new LoadFileArgs(filename, memoryStream));
 
 

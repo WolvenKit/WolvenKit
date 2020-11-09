@@ -42,6 +42,8 @@ namespace WolvenKit.Forms
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.copyChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.deleteChunktoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treeListView = new BrightIdeasSoftware.TreeListView();
             this.olvcolName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvcolPreview = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -55,8 +57,7 @@ namespace WolvenKit.Forms
             this.ChunkDisplayMenuItemVirtualParent = new System.Windows.Forms.ToolStripMenuItem();
             this.ExpandBTN = new System.Windows.Forms.ToolStripButton();
             this.CollapseBTN = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.deleteChunktoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemAddChunk = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.treeListView)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -74,9 +75,10 @@ namespace WolvenKit.Forms
             this.copyChunkToolStripMenuItem,
             this.pasteChunkToolStripMenuItem,
             this.toolStripSeparator2,
-            this.deleteChunktoolStripMenuItem});
+            this.deleteChunktoolStripMenuItem,
+            this.toolStripMenuItemAddChunk});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(193, 248);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(193, 278);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // expandAllToolStripMenuItem
@@ -133,6 +135,21 @@ namespace WolvenKit.Forms
             this.pasteChunkToolStripMenuItem.Size = new System.Drawing.Size(192, 30);
             this.pasteChunkToolStripMenuItem.Text = "Paste Chunk";
             this.pasteChunkToolStripMenuItem.Click += new System.EventHandler(this.pasteChunkToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(189, 6);
+            // 
+            // deleteChunktoolStripMenuItem
+            // 
+            this.deleteChunktoolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Close_red_16x;
+            this.deleteChunktoolStripMenuItem.Name = "deleteChunktoolStripMenuItem";
+            this.deleteChunktoolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.deleteChunktoolStripMenuItem.Size = new System.Drawing.Size(192, 30);
+            this.deleteChunktoolStripMenuItem.Text = "Delete chunk";
+            this.deleteChunktoolStripMenuItem.ToolTipText = "Delete chunk(s), and children chunks according to chunk display mode";
+            this.deleteChunktoolStripMenuItem.Click += new System.EventHandler(this.deleteChunktoolStripMenuItem_Click);
             // 
             // treeListView
             // 
@@ -199,6 +216,7 @@ namespace WolvenKit.Forms
             // 
             // toolStripSearchBox
             // 
+            this.toolStripSearchBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripSearchBox.Name = "toolStripSearchBox";
             this.toolStripSearchBox.Size = new System.Drawing.Size(122, 31);
             this.toolStripSearchBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.searchTB_KeyUp);
@@ -279,20 +297,11 @@ namespace WolvenKit.Forms
             this.CollapseBTN.ToolTipText = "Collapse all";
             this.CollapseBTN.Click += new System.EventHandler(this.CollapseBTN_Click);
             // 
-            // toolStripSeparator2
+            // toolStripMenuItemAddChunk
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(189, 6);
-            // 
-            // deleteChunktoolStripMenuItem
-            // 
-            this.deleteChunktoolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Close_red_16x;
-            this.deleteChunktoolStripMenuItem.Name = "deleteChunktoolStripMenuItem";
-            this.deleteChunktoolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.deleteChunktoolStripMenuItem.Size = new System.Drawing.Size(192, 30);
-            this.deleteChunktoolStripMenuItem.Text = "Delete chunk";
-            this.deleteChunktoolStripMenuItem.ToolTipText = "Delete chunk(s), and children chunks according to chunk display mode";
-            this.deleteChunktoolStripMenuItem.Click += new System.EventHandler(this.deleteChunktoolStripMenuItem_Click);
+            this.toolStripMenuItemAddChunk.Name = "toolStripMenuItemAddChunk";
+            this.toolStripMenuItemAddChunk.Size = new System.Drawing.Size(192, 30);
+            this.toolStripMenuItemAddChunk.Text = "Add Chunk";
             // 
             // frmChunkList
             // 
@@ -343,5 +352,6 @@ namespace WolvenKit.Forms
         private ToolStripMenuItem ChunkDisplayMenuItemVirtualParent;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripMenuItem deleteChunktoolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItemAddChunk;
     }
 }
