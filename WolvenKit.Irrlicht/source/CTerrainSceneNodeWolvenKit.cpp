@@ -156,7 +156,7 @@ namespace scene
                     }
                 }
 
-                video::S3DVertex& vertex = static_cast<video::S3DVertex*>(vb.pointer())[index++];
+                video::S3DVertex & vertex = static_cast<video::S3DVertex*>(vb.pointer())[index++];
                 vertex.Normal.set(0.0f, 0.0f, 1.0f);
                 vertex.Color.set(255, r, g, b);
                 vertex.Pos.X = currX;
@@ -168,7 +168,7 @@ namespace scene
                 else if (h > maxZ)
                     maxZ = h;
 
-				currX -= stepSize;
+				currX += stepSize;
 			}
 
 			currY += stepSize;
@@ -229,7 +229,7 @@ namespace scene
 		// add the MeshBuffer to the mesh
 		Mesh->addMeshBuffer(mb);
 
-        irr::core::aabbox3df bounds(-tileSize, 0.0f, minZ, 0.0f, tileSize, maxZ);
+        irr::core::aabbox3df bounds(0.0f, 0.0f, minZ, tileSize, tileSize, maxZ);
         Mesh->setBoundingBox(bounds);
 
 		// We no longer need the mb

@@ -136,7 +136,8 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 
 			const u32 indexCount = buffer->getIndexCount();
 			const scene::IIndexBuffer& indices = buffer->getIndexBuffer();
-			if (indexCount == vertexCount * 3)
+			
+			if(buffer->getPrimitiveType() == EPT_TRIANGLES)
 			{
 				for (j = 0; j < indexCount; j += 3)
 				{
@@ -170,7 +171,7 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 					file->write("\n", 1);
 				}
 			}
-			else // triangle strip!
+			else if (buffer->getPrimitiveType() == EPT_TRIANGLE_STRIP)
 			{
                 for (j = 0; j < indexCount - 2; j += 2)
                 {
@@ -315,7 +316,7 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
             }
             if (mat[i]->getTexture(1))
             {
-                mtlFile->write("map_Bump ", 9);
+                mtlFile->write("bump ", 5);
                 core::stringc tname = (core::stringc)(FileSystem->getFileBasename(mat[i]->getTexture(1)->getName()));
                 if (!TexExtension.empty())
                 {
