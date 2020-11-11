@@ -85,9 +85,6 @@ CSceneManagerWolvenKit::CSceneManagerWolvenKit(video::IVideoDriver* driver, io::
 
 
     Parameters = DBG_NEW io::CAttributes();
-
-	//TODO: fill buffer with pvs data
-	//janua_handler_load_database(&handler, databaseBuffer);
 }
 
 //! destructor
@@ -171,10 +168,10 @@ IMesh* CSceneManagerWolvenKit::getStaticMesh(const io::path& filename)
 IMeshSceneNode* CSceneManagerWolvenKit::addMeshSceneNode(IMesh* mesh, ISceneNode* parent, s32 id,
 	const core::vector3df& position, const core::vector3df& rotation, const core::vector3df&, bool)
 {
-	IMeshSceneNode* node = DBG_NEW CMeshSceneNode(mesh, parent, this, id, position, rotation);
-	node->setAutomaticCulling(E_CULLING_TYPE::EAC_FRUSTUM_BOX);
-	node->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_BACK_FACE_CULLING, true);
-	node->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
+    IMeshSceneNode* node = DBG_NEW CMeshSceneNode(mesh, parent, this, id, position, rotation);
+    node->setAutomaticCulling(E_CULLING_TYPE::EAC_FRUSTUM_BOX);
+    node->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_BACK_FACE_CULLING, false);
+    node->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
     node->setVisible(false);
 
 	node->drop();
@@ -303,7 +300,6 @@ ITerrainSceneNodeWolvenKit* CSceneManagerWolvenKit::addTerrainSceneNodeWolvenKit
     }
 
     core::vector3df pt = anchor;
-    pt.X *= -1.0f; // flip this
     CTerrainSceneNodeWolvenKit* node = DBG_NEW CTerrainSceneNodeWolvenKit(parent, this, id, pt);
 
     if (!node->loadHeightMap(file, dimension, maxHeight, minHeight, tileSize))
@@ -324,49 +320,6 @@ ITerrainSceneNodeWolvenKit* CSceneManagerWolvenKit::addTerrainSceneNodeWolvenKit
 
     node->drop();
 
-#if defined(MAKE_SCENE)
-    // add to pvs scene 
-	u32 numVerts = node->getMesh()->getMeshBuffer(0)->getVertexCount();
-	video::S3DVertex* vertices = static_cast<video::S3DVertex*>(node->getMesh()->getMeshBuffer(0)->getVertices());
-    
-    f32* verts = new f32[numVerts * 3];
-	s32 triangleCount = (dimension - 1) * (dimension - 1) * 2;
-	s32* indices = new s32[triangleCount * 3];
-
-	f32* pVert = verts;
-	video::S3DVertex* pVertex = vertices;
-
-	// Positions
-	for (u32 i = 0; i < numVerts; ++i, ++pVertex)
-	{
-		*pVert++ = pVertex->Pos.X;
-		*pVert++ = pVertex->Pos.Y;
-		*pVert++ = pVertex->Pos.Z;
-	}
-
-	// Faces
-    s32 row0Index = 0;
-    s32 row1Index = dimension;
-	s32* pFace = indices;
-
-	for (u32 y = 0; y < dimension - 1; ++y)
-	{
-		for (u32 x = 0; x < dimension - 1; ++x)
-		{
-			// one row of triangles, two at a time
-			*pFace++ = row0Index++;
-			*pFace++ = row1Index;
-			*pFace++ = row0Index;
-
-            *pFace++ = row0Index;
-            *pFace++ = row1Index++;
-            *pFace++ = row1Index;
-		}
-	}
-
-    Janua::Model* ocModel = new Janua::Model(verts, numVerts, indices, triangleCount);
-    ocScene.addModelInstance((*ocModel), id, Janua::Matrix4x4(), OCCLUDER);
-#endif
 
 	SolidNodeList.push_back(node);
 
@@ -473,16 +426,6 @@ void CSceneManagerWolvenKit::drawAll()
 
 	// render default objects
 	{
-		//TODO: use PVSHandler to get visible set
-		/*
-		janua_query_result result;
-		janua_query_visibility_from_position( &PVSHandler, camWorldPos.X, camWorldPos.Y, camWorldPos.Z, &result );
-	
-		for (u32 i=0; i<result.model_ids_count; ++i)
-		{
-			SolidNodeList[ result.model_ids[i] ]->render();
-		}
-		*/
 #if USE_CULLING
         const SViewFrustum* frust = ActiveCamera->getViewFrustum();
 

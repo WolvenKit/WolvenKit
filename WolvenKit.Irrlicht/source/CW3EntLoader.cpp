@@ -195,6 +195,7 @@ IMesh* CW3EntLoader::createStaticMesh(io::IReadFile* f)
     {
         _staticMesh->drop();
         _staticMesh = nullptr;
+        return nullptr;
     }
 
     os::Printer::log("LOADING FINISHED", ELL_DEBUG);
