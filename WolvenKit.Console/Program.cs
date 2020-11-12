@@ -67,7 +67,7 @@ namespace WolvenKit.Console
                 DumpMetadataStoreOptions,
                 CR2WToPostgresOptions>(_args)
                         .MapResult(
-                          async (CacheOptions opts) => await  ConsoleFunctions.DumpCache(opts),
+                          async (CacheOptions opts) => await  ConsoleFunctions.Cache(opts),
                           async (BundleOptions opts) => await RunBundle(opts),
                           async (DumpCookedEffectsOptions opts) => await ConsoleFunctions.DumpCookedEffects(opts),
                           async (DumpXbmsOptions opts) => await ConsoleFunctions.DumpXbmInfo(opts),

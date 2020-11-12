@@ -131,11 +131,12 @@ namespace WolvenKit.Cache
                         // image
                         using (var vs = file.CreateViewStream((PageOffset * 4096) + 9, ZSize, MemoryMappedFileAccess.Read))
                         {
-                            //if ( format != ETextureFormat.TEXFMT_R8G8B8A8)
+                            // extracts all 6 faces after each other
                             new ZlibStream(vs, CompressionMode.Decompress).CopyTo(imagestream);
 
                         }
                         //mipmaps
+                        // mipmap data <offset, size>
                         var mipmapoffsets = new List<Tuple<long, long>>();
                         foreach (var mipinfo in MipMapInfo)
                         {
@@ -151,18 +152,23 @@ namespace WolvenKit.Cache
                         //assemble faces
                         for (int i = 0; i < 6; i++)
                         {
+                            // get one face
                             var offset = 0 + (i * imagestream.Length / 6);
-                            imagereader.BaseStream.Seek(offset, SeekOrigin.Begin);
                             var facesize = (int)imagestream.Length / 6;
+
+                            imagereader.BaseStream.Seek(offset, SeekOrigin.Begin);
                             var face = imagereader.ReadBytes(facesize);
                             output.Write(face, 0, face.Length);
 
+                            // get mipmaps for face
                             foreach (var o in mipmapoffsets)
                             {
                                 var mipsize = (o.Item2 / 6);
                                 var moffset = o.Item1 + (i * mipsize);
+
                                 mipmapreader.BaseStream.Seek(moffset, SeekOrigin.Begin);
                                 var mipmap = mipmapreader.ReadBytes((int)(mipsize));
+                                
                                 output.Write(mipmap, 0, mipmap.Length);
                             }
                         }
@@ -174,6 +180,7 @@ namespace WolvenKit.Cache
         public string Extract(BundleFileExtractArgs e)
         {
             var newpath = Path.ChangeExtension(e.FileName, "dds");
+            var ext = Path.GetExtension(e.FileName);
 
             // create new directory and delete existing file
             Directory.CreateDirectory(Path.GetDirectoryName(newpath) ?? "");
@@ -189,15 +196,23 @@ namespace WolvenKit.Cache
             // don't convert if user extract extension is already dds
             if (e.Extension == EUncookExtension.dds)
                 return newpath;
+            // don't convert w2cube cubemaps
+            if (ext == ".w2cube")
+                return newpath;
 
             var extractext = e.Extension;
             // do not convert pngs, jpgs and dds
-            if (!(Path.GetExtension(e.FileName) == ".dds" || Path.GetExtension(e.FileName) == ".w2l"))
+            if (!(ext == ".dds" || ext == ".w2l"))
             {
-                if (Path.GetExtension(e.FileName) == ".png")
-                    extractext = EUncookExtension.png;
-                else if (Path.GetExtension(e.FileName) == ".jpg")
-                    extractext = EUncookExtension.jpg;
+                switch (ext)
+                {
+                    case ".png":
+                        extractext = EUncookExtension.png;
+                        break;
+                    case ".jpg":
+                        extractext = EUncookExtension.jpg;
+                        break;
+                }
 
 
                 //convert

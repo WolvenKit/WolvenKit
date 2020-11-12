@@ -18,6 +18,7 @@ namespace WolvenKit.Cache
 {
     public class TextureCache : IWitcherArchive
     {
+        #region Properties
         // constants
         public static byte[] Magic = { (byte)'H', (byte)'C', (byte)'X', (byte)'T' };
         private const uint MagicInt = 1415070536;
@@ -27,7 +28,7 @@ namespace WolvenKit.Cache
         public string ArchiveAbsolutePath { get; set; }
 
 
-        #region Properties
+        
         //The images packed into these Texture cache files
         public List<TextureCacheItem> Files;
         private List<string> Names;
@@ -188,7 +189,10 @@ namespace WolvenKit.Cache
         }
         #endregion
 
-        #region Write
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputfolder"></param>
         public void LoadFiles(string inputfolder)
         {
             var di = new DirectoryInfo(inputfolder);
@@ -205,7 +209,7 @@ namespace WolvenKit.Cache
             foreach (var filename in inputfiles)
             {
                 var ext = Path.GetExtension(filename);
-                var relativepath = filename.Substring(di.FullName.Length + 1);
+                
 
                 switch (ext)
                 {
@@ -237,6 +241,9 @@ namespace WolvenKit.Cache
                         {
                             var ddsheader = DDSUtils.ReadHeader(filename);
 
+                            var redpath = Path.ChangeExtension(filename, ddsheader.Iscubemap ? ".w2cube" : ".xbm");
+                            var relativepath = redpath.Substring(di.FullName.Length + 1);
+
                             #region Create Table Item
                             var (type1, type2) =
                                 CommonImageTools.GetREDEngineByteFromEFormat(ddsheader.Format);
@@ -255,7 +262,7 @@ namespace WolvenKit.Cache
                                 Name = relativepath,
                                 FullName = filename,
                                 
-                                Hash = (uint)FNV1A64HashAlgorithm.HashString(relativepath),
+                                Hash = HashKey(relativepath),
 
                                 /*------------- TextureCache Data ---------------*/
                                 // NOTE: these need to be populated after writing the files
@@ -282,7 +289,7 @@ namespace WolvenKit.Cache
                                 Unk1 = 0x00, //TODO: figure this out
 
                                 Format = CommonImageTools.GetEFormatFromREDEngineByte(type1)
-                        };
+                            };
                             #endregion
 
                             Files.Add(ti);
@@ -294,8 +301,12 @@ namespace WolvenKit.Cache
                 }
             }
         }
-
-
+        
+        #region Write
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="outpath"></param>
         public void Write(string outpath)
         {
             int page = 0;
@@ -313,93 +324,160 @@ namespace WolvenKit.Cache
                     if (!File.Exists(ddsfile))
                         continue;
 
+                    // checks
+                    long ddssize = -1;
+                    // get dds file size //TODO: make this better
+                    using (var readfs = new FileStream(ddsfile, FileMode.Open, FileAccess.Read))
+                    {
+                        ddssize = readfs.Length - 128;
+                    }
+                    if (ti.IsCube != 0)
+                    {
+                        if (ddssize % 6 != 0)
+                            throw new CacheWritingException($"{ti.Name} incorrect cubemap (not divisible by 6).");
+                    }
+                    ti.UncompressedSize = (uint)ddssize;
+                    var ddsoffset = (uint)128; // dds header size
+                    var startoffset = cacheFileStream.Position;
+
+                    // check for alignment
+                    if (cacheFileStream.Position % 4096 != 0)
+                        throw new CacheWritingException($"{ti.Name} Improperly aligned (pos: {cacheFileStream.Position}).");
+
                     // cubemaps
                     if (ti.IsCube != 0)
                     {
-
-                    }
-                    // xbms
-                    else
-                    {
-                        //using (var readfs = new FileStream(ddsfile, FileMode.Open, FileAccess.Read))
-                        //using (var br = new BinaryReader(readfs))
+                        // dds cube textures are structured in 6 faces (each with mipmaps)
+                        // files in the texture cache are structured by mipmaps (each with 6 faces) 
+                        // sigh...
                         using (var file = MemoryMappedFile.CreateFromFile(ddsfile, FileMode.Open))
                         {
-                            var ddsoffset = (uint)128; // dds header size
-                            var startoffset = cacheFileStream.Position;
+                            #region Main Image
+                            // get main image
+                            var imgsize = DDSUtils.CalculateMipMapSize(ti.BaseWidth, ti.BaseHeight, ti.Format);
+                            ti.PageOffset = (uint)(cacheFileStream.Position / 4096);
 
-                            // copy main image and mipmaps to the texture.cache
-                            // no mipmaps means NumMipOffsets is 0
-                            for (int i = 0; i < ti.NumMipOffsets + 1; i++)
+                            // all faces and mipmaps get compressed at once 
+                            using (var allfacesms = new MemoryStream())
                             {
-                                // first idx is the main image. check for alignment
-                                // subsequent mipmaps are appended
-                                // last 6 mips are concatenated into one compressed buffer
-                                uint mipWidth = (uint)(ti.BaseWidth / (Math.Pow(2, i)));
-                                uint mipHeight = (uint)(ti.BaseHeight / (Math.Pow(2, i)));
-                                var size = DDSUtils.CalculateMipMapSize(mipWidth, mipHeight, ti.Format);
-                                // TODO: non-square textures. fml
-                                if (mipWidth == 32)
-                                    size = 696;
-                                if (i == 0)
+                                for (int i = 0; i < 6; i++)
                                 {
-                                    if (cacheFileStream.Position % 4096 != 0)
-                                        throw new CacheWritingException(
-                                            $"{ti.Name} Improperly aligned (pos: {cacheFileStream.Position}).");
-                                    ti.PageOffset = (uint)(cacheFileStream.Position / 4096);
+                                    var faceoffset = ddssize / 6 * i;
+                                    using (var vs = file.CreateViewStream(faceoffset, imgsize,
+                                        MemoryMappedFileAccess.Read))
+                                    {
+                                        vs.CopyTo(allfacesms);
+                                    }
                                 }
 
+                                // compress the assembled stream of all faces
+                                ti.Size = 6 * imgsize;
+                                ti.ZSize = (uint)WriteImgFromStream(allfacesms, cacheWriter, (byte)(ti.NumMipOffsets)).Item1;
+                            }
+                            #endregion
+
+                            #region MipMaps 
+                            // no mipmaps means NumMipOffsets is 0
+                            var totalmipmapsizeuptonow = 0;
+                            for (int i = 0; i < ti.NumMipOffsets; i++)
+                            {
+                                uint mipWidth = (uint)(ti.BaseWidth / (Math.Pow(2, i + 1)));
+                                uint mipHeight = (uint)(ti.BaseHeight / (Math.Pow(2, i + 1)));
+                                var mipsize = DDSUtils.CalculateMipMapSize(mipWidth, mipHeight, ti.Format);
+                                // last 6 mips are concatenated into one compressed buffer
+                                // TODO: non-square textures. fml
+                                if (mipWidth == 32)
+                                    mipsize = 696;
+                                byte idx = (byte)(ti.NumMipOffsets - 1 - i);
                                 
-                                byte idx = (byte)(ti.NumMipOffsets - i);
 
-                                using (var viewstream = file.CreateViewStream(ddsoffset, size, MemoryMappedFileAccess.Read))
-                                using (var zlibstream = new ZlibStream(viewstream, CompressionMode.Compress))
-                                using (var mipms = new MemoryStream())
+                                // all faces and mipmaps get compressed at once 
+                                using (var allmips = new MemoryStream())
                                 {
-                                    zlibstream.CopyTo(mipms);
-
-                                    // each compressed image has a header (9 bytes: zsize, size, idx)
-                                    var zsize = (uint) mipms.Length;
-                                    if (i == 0)
+                                    for (int j = 0; j < 6; j++)
                                     {
-                                        ti.Size = size;
-                                        ti.ZSize = zsize;
+                                        // find correct mip: divide dds by 6 + the main size + the size of all mips before the current one
+                                        
+                                        var mipoffset = (ddssize / 6 * j) + (ti.Size / 6) + (totalmipmapsizeuptonow);
+                                        using (var vs = file.CreateViewStream(mipoffset, mipsize,
+                                            MemoryMappedFileAccess.Read))
+                                        {
+                                            vs.CopyTo(allmips);
+                                        }
                                     }
 
-                                    // write to cache file
-                                    // header
-                                    var mipmapoffset = cacheFileStream.Position;
-                                    cacheWriter.Write(zsize);
-                                    cacheWriter.Write(size);
-                                    cacheWriter.Write(idx);
-                                    // compressed image
-                                    mipms.Seek(0, SeekOrigin.Begin);
-                                    mipms.CopyTo(cacheFileStream);
+                                    // compress the assembled stream of all mipmaps
+                                    totalmipmapsizeuptonow += (int)mipsize;
+                                    mipsize *= 6; //TODO
+                                    var (zsize, offset) = WriteImgFromStream(allmips, cacheWriter, idx);
+                                    ti.MipMapInfo.Add(new MipmapInfo(offset, (uint)zsize, (uint)mipsize, idx));
+                                    MipOffsets.Add((uint)offset);
+                                }
 
-                                    ti.UncompressedSize += size;
 
-                                    if (i != 0)
-                                    {
-                                        ti.MipMapInfo.Add(new MipmapInfo(mipmapoffset, (uint) zsize, (uint) size, idx));
-                                        MipOffsets.Add((uint)mipmapoffset);
-                                    }
+                                ti.MipOffsetIndex = MipOffsets.Count;
+                                ddsoffset += mipsize;
+                            }
+                            #endregion
+                        }
+                    }
+                    else
+                    {
+                        using (var file = MemoryMappedFile.CreateFromFile(ddsfile, FileMode.Open))
+                        {
+                            #region Main Image
+                            // get main image
+                            ti.Size = DDSUtils.CalculateMipMapSize(ti.BaseWidth, ti.BaseHeight, ti.Format);
+                            ti.PageOffset = (uint)(cacheFileStream.Position / 4096);
+
+                            // compress image
+                            using (var vs = file.CreateViewStream(ddsoffset, ti.Size, MemoryMappedFileAccess.Read))
+                            {
+                                ti.ZSize = (uint)WriteImgFromStream(vs, cacheWriter, (byte)(ti.NumMipOffsets)).Item1;
+                            }
+                            #endregion
+
+                            #region MipMaps 
+                            // no mipmaps means NumMipOffsets is 0
+                            for (int i = 0; i < ti.NumMipOffsets; i++)
+                            {
+                                uint mipWidth = (uint) (ti.BaseWidth / (Math.Pow(2, i + 1)));
+                                uint mipHeight = (uint) (ti.BaseHeight / (Math.Pow(2, i + 1)));
+                                var mipsize = DDSUtils.CalculateMipMapSize(mipWidth, mipHeight, ti.Format);
+
+                                // last 6 mips are concatenated into one compressed buffer
+                                // TODO: non-square textures. fml
+                                if (mipWidth == 32)
+                                    mipsize = 696;
+
+                                byte idx = (byte)(ti.NumMipOffsets - 1 - i);
+
+                                // compress image and write to cache
+                                using (var viewstream =
+                                    file.CreateViewStream(ddsoffset, mipsize, MemoryMappedFileAccess.Read))
+                                {
+                                    var (zsize, offset) = WriteImgFromStream(viewstream, cacheWriter, idx);
+                                    ti.MipMapInfo.Add(new MipmapInfo(offset, (uint)zsize, (uint)mipsize, idx));
+                                    MipOffsets.Add((uint)offset);
                                 }
 
                                 ti.MipOffsetIndex = MipOffsets.Count;
-                                ddsoffset += size;
+                                ddsoffset += mipsize;
                             }
-
-                            // padding to next page (4096 byte pages)
-                            var endoffset = cacheFileStream.Position;
-                            page = (int) (endoffset / 4096);
-                            var paddinglen = (4096 * (page + 1)) - endoffset;
-                            var padding = new byte[paddinglen];
-                            cacheWriter.Write(padding);
-
-                            ti.CompressedSize = (uint)(endoffset - startoffset);
+                            #endregion
                         }
                     }
 
+                    //TODO: check if the complete dds file is read
+
+                    // padding to next page (4096 byte pages)
+                    var endoffset = cacheFileStream.Position;
+                    page = (int)(endoffset / 4096);
+                    var paddinglen = (4096 * (page + 1)) - endoffset;
+                    var padding = new byte[paddinglen];
+                    cacheWriter.Write(padding);
+
+                    ti.CompressedSize = (uint)(endoffset - startoffset);
                 }
 
                 #endregion
@@ -410,6 +488,7 @@ namespace WolvenKit.Cache
                 MipTableEntryCount = (uint)MipOffsets.Count;
 
                 // write tables
+                #region Tables
                 foreach (var mipOffset in MipOffsets)
                 {
                     cacheWriter.Write(mipOffset);
@@ -449,31 +528,69 @@ namespace WolvenKit.Cache
                     ms.Seek(0, SeekOrigin.Begin);
                     ms.CopyTo(cacheFileStream);
                 }
+                #endregion
 
                 // write footer
                 WriteFooter(cacheWriter);
-            }
-
-
-
-            void WriteFooter(BinaryWriter bw)
-            {
-                bw.Write(Crc);
-
-                bw.Write(UsedPages);
-                bw.Write(EntryCount);
-
-                bw.Write(StringTableSize);
-                bw.Write(MipTableEntryCount);
-
-                bw.Write(MagicInt);
-                bw.Write(Version);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="bw"></param>
+        private void WriteFooter(BinaryWriter bw)
+        {
+            bw.Write(Crc);
+
+            bw.Write(UsedPages);
+            bw.Write(EntryCount);
+
+            bw.Write(StringTableSize);
+            bw.Write(MipTableEntryCount);
+
+            bw.Write(MagicInt);
+            bw.Write(Version);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inStream"></param>
+        /// <param name="outWriter"></param>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        private static (int, long) WriteImgFromStream(Stream inStream, BinaryWriter outWriter, byte n)
+        {
+            int size = (int)inStream.Length;
+            int zsize = -1;
+            long offset = -1;
+            inStream.Seek(0, SeekOrigin.Begin);
+
+            using (var zlibstream = new ZlibStream(inStream, CompressionMode.Compress))
+            using (var tempms = new MemoryStream())
+            {
+                zlibstream.CopyTo(tempms);
+                zsize = (int)tempms.Length;
+
+                // write header
+                offset = outWriter.BaseStream.Position;
+                outWriter.Write(zsize);
+                outWriter.Write(size);
+                outWriter.Write(n);
+
+                // write compressed image
+                tempms.Seek(0, SeekOrigin.Begin);
+                tempms.CopyTo(outWriter.BaseStream);
+            }
+
+            return (zsize, offset);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bytes"></param>
         /// <returns></returns>
         private static ulong CalculateChecksum(IEnumerable<byte> bytes)
         {
@@ -489,7 +606,10 @@ namespace WolvenKit.Cache
         }
 
         public ulong DBG_crc => CalculateMyChecksum();
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private ulong CalculateMyChecksum()
         {
             // write tables
@@ -523,7 +643,103 @@ namespace WolvenKit.Cache
                 return CalculateChecksum(ms.ToArray());
             }
         }
-
         #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void DumpInfo()
+        {
+            const string head = "Format\t" +
+                                "Format2\t" +
+                                "BPP\t" +
+                                "Width\t" +
+                                "Height\t" +
+                                "Size\t" +
+                                "PageOffset\t" +
+                                "CompressedSize\t" +
+                                "UncompressedSize\t" +
+                                "MipOffsetIndex\t" +
+                                "NumMipOffsets\t" +
+                                "TimeStamp\t" +
+                                "Mips\t" +
+                                "Slices\t" +
+                                "Cube\t" +
+                                "Unk1\t" +
+                                "Hash\t" +
+                                "Name\t" +
+                                "Extension\t" +
+                                "MipmapCount\t" +
+                                "Mipmaps";
+
+            // dump chache info
+            using (var writer = File.CreateText($"{this.ArchiveAbsolutePath}.info"))
+            {
+                writer.WriteLine($"ArchiveAbsolutePath: {ArchiveAbsolutePath}\r\n");
+
+                writer.WriteLine($"CRC: {Crc}\r\n");
+                writer.WriteLine($"UsedPages: {UsedPages}\r\n");
+                writer.WriteLine($"EntryCount: {EntryCount}\r\n");
+                writer.WriteLine($"StringTableSize: {StringTableSize}\r\n");
+                writer.WriteLine($"MipTableEntryCount: {MipTableEntryCount}\r\n");
+                writer.WriteLine($"Version: {Version}\r\n");
+            }
+
+            // dump and extract files
+            using (var writer = File.CreateText($"{this.ArchiveAbsolutePath}.txt"))
+            {
+                // write header
+                writer.WriteLine(head);
+
+                // write info elements
+                foreach (var x in Files)
+                {
+                    string ext = x.Name.Split('.').Last();
+
+                    string info = $"{x.Type1:X2}\t" +
+                                  $"{x.Type2:X2}\t" +
+                                  $"{x.BaseAlignment}\t" +
+                                  $"{x.BaseWidth}\t" +
+                                  $"{x.BaseHeight}\t" +
+                                  $"{x.Size}\t" +
+                                  $"{x.PageOffset}\t" +
+                                  $"{x.CompressedSize}\t" +
+                                  $"{x.UncompressedSize}\t" +
+                                  $"{x.MipOffsetIndex}\t" +
+                                  $"{x.NumMipOffsets}\t" +
+                                  $"{x.TimeStamp}\t" +
+                                  $"{x.Mipcount}\t" +
+                                  $"{x.SliceCount}\t" +
+                                  $"{x.IsCube.ToString("X2")}\t" +
+                                  $"{x.Unk1.ToString()}/{x.Unk1.ToString("X2")}\t" +
+                                  $"{x.Hash}\t" +
+                                  $"{x.Name}\t"
+                        ;
+                    info += $"{x.Name.Split('.').Last()}\t";
+                    info += $"{x.MipMapInfo.Count()}\t";
+                    info += "<";
+                    foreach (var y in x.MipMapInfo)
+                    {
+                        info += $"<{y.Size},{y.ZSize}>";
+                    }
+
+                    info += ">";
+
+                    writer.WriteLine(info);
+                }
+            }
+        }
+
+        private uint HashKey(string key)
+        {
+            char[] keyConverted = key.ToCharArray();
+            uint hash = 0;
+            foreach (char c in keyConverted)
+            {
+                hash *= 31;
+                hash += (uint)c;
+            }
+            return hash;
+        }
     }
 }
