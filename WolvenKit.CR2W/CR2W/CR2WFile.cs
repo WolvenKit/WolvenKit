@@ -764,10 +764,15 @@ namespace WolvenKit.CR2W
             m_fileheader.bufferSize += headerOffset;
             #endregion
 
-            for (int i = 0; i < chunks.Count; i++)
-                FixExportCRC32(chunks[i].Export);
-            for (int i = 0; i < buffers.Count; i++)
-                FixBufferCRC32(buffers[i].Buffer);
+            foreach (var chunk in chunks)
+            {
+                FixExportCRC32(chunk.Export);
+            }
+
+            foreach (var buffer in buffers)
+            {
+                FixBufferCRC32(buffer.Buffer);
+            }
 
             // Write headers again with fixed offsets
             //m_fileheader.crc32 = CalculateHeaderCRC32();

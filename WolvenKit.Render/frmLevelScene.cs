@@ -24,9 +24,8 @@ using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Common;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
-using WolvenKit.DDS;
 using static WolvenKit.CR2W.Types.Enums;
-using static WolvenKit.DDS.TexconvWrapper;
+using static WolvenKit.Common.Tools.DDS.TexconvWrapper;
 
 namespace WolvenKit.Render
 {

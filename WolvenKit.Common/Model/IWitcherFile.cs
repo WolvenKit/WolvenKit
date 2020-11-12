@@ -6,10 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common.Model;
 
-/// <summary>
-/// Various enums, mod default filesystem structure, atomic-file compression service manager (Cr2wResourceManager class),
-/// FNV1A hash functions, logger service...
-/// </summary>
+
 namespace WolvenKit.Common
 {
     /// <summary>
@@ -22,11 +19,14 @@ namespace WolvenKit.Common
         /// <summary>
         /// Uncompressed asset size in bytes
         /// </summary>
-        long Size { get; set; }
+        uint Size { get; set; }
         /// <summary>
         /// Compressed asset asize in bytes
         /// </summary>
         uint ZSize { get; set; }
+        /// <summary>
+        /// !!! Double check when writing !!! Some files use 64bit, older files may use 32bit.
+        /// </summary>
         long PageOffset { get; set; }
         string CompressionType { get; }
 

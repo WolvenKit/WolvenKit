@@ -6,8 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Tools.DDS;
 using WolvenKit.Common.Wcc;
-using static WolvenKit.DDS.TexconvWrapper;
+using static WolvenKit.Common.Tools.DDS.TexconvWrapper;
 
 namespace WolvenKit.Common.Tools
 {
@@ -19,7 +20,7 @@ namespace WolvenKit.Common.Tools
         /// </summary>
         /// <param name="redbyte"></param>
         /// <returns></returns>
-        public static EFormat GetEFormatFromREDEngineByte(short redbyte)
+        public static EFormat GetEFormatFromREDEngineByte(byte redbyte)
         {
             switch (redbyte)
             {
@@ -38,6 +39,24 @@ namespace WolvenKit.Common.Tools
                     throw new NotImplementedException();
             }
         }
+
+        public static (byte, byte) GetREDEngineByteFromEFormat(EFormat fmt)
+        {
+            switch (fmt)
+            {
+                case EFormat.R8G8B8A8_UNORM: return (0xFD, 0x3); // Attention! this returns 0xFDx 0x3 //TODO: 
+                case EFormat.BC1_UNORM: return (0x7, 0x4);
+                case EFormat.BC2_UNORM: return (0x0D, 0x4);
+                case EFormat.BC3_UNORM: return (0x08, 0x4);
+                case EFormat.BC4_UNORM: return (0x0E, 0x4);
+                case EFormat.BC5_UNORM: return (0x0F, 0x4);
+                case EFormat.BC7_UNORM: return (0x0A, 0x4);
+                default:
+                    return (0x0, 0x0); // Attention! this returns 0x 0x
+            }
+        }
+
+
 
         public enum ERedTextureFormat
         {

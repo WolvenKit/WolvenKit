@@ -17,8 +17,11 @@ namespace WolvenKit.Bundles
         public string Name { get; set; }
         public byte[] Hash { get; set; }
         public uint Empty { get; set; }
-        public long Size { get; set; }
+        public uint Size { get; set; }
         public uint ZSize { get; set; }
+        /// <summary>
+        /// !!! Double check when writing !!! Some files use 64bit, older files may use 32bit.
+        /// </summary>
         public long PageOffset { get; set; }
         public ulong TimeStamp { get; set; }
         public byte[] Zero { get; set; }

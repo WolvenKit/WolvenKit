@@ -127,7 +127,8 @@ namespace WolvenKit.Console
             // Dump texture cache infos
             using (StreamWriter writer = File.CreateText(Path.Combine(outDir, $"__ddsdump_{idx}.txt")))
             {
-                string head = "Format1\t" +
+                string head = 
+                    "Format1\t" +
                     "Format2\t" +
                     "BPP\t" +
                     "Width\t" +

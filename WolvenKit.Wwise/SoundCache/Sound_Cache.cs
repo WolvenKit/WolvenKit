@@ -71,7 +71,7 @@ namespace WolvenKit.Cache
         /// </summary>
         /// <param name="FileList">The list of files to concat.</param>
         /// <returns>The concatenated string.</returns>
-        public static byte[] GetNames(List<string> FileList)
+        private static byte[] GetNames(List<string> FileList)
         {
             return Encoding.UTF8.GetBytes(string.Join("\0",FileList.Select(x=> Path.GetFileName(GetIDFromPath(x)).Trim())) + "\0");
         }
@@ -88,7 +88,7 @@ namespace WolvenKit.Cache
         /// </summary>
         /// <param name="FileList">The list of details to build the info for.</param>
         /// <returns>The initialized list of files.</returns>
-        public static List<SoundCacheItem> BuildInfo(List<string> FileList)
+        private static List<SoundCacheItem> BuildInfo(List<string> FileList)
         {
             var res = new List<SoundCacheItem>();
             foreach (var item in FileList)
@@ -101,7 +101,7 @@ namespace WolvenKit.Cache
         /// </summary>
         /// <param name="FileList">The list of files to build the info for.</param>
         /// <returns></returns>
-        public static byte[] GetInfo(List<string> FileList)
+        private static byte[] GetInfo(List<string> FileList)
         {            
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
@@ -135,7 +135,7 @@ namespace WolvenKit.Cache
         /// Calculates the FNV1A64 hash (with a slight change) for the soundcache.
         /// </summary>
         /// <returns></returns>
-        public static ulong CalculateChecksum(List<string> Files2Buffer)
+        private static ulong CalculateChecksum(List<string> Files2Buffer)
         {
             byte[] bytes = (GetNames(Files2Buffer).Concat(GetInfo(Files2Buffer))).ToArray();
             const ulong fnv64Offset = 0xcbf29ce484222325;
@@ -187,7 +187,7 @@ namespace WolvenKit.Cache
                 {
                     sf.NameOffset = br.ReadInt64();
                     sf.PageOffset = br.ReadInt64();
-                    sf.Size = br.ReadInt64();
+                    sf.Size = (uint)br.ReadInt64();
                 }
                 else
                 {

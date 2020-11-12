@@ -17,12 +17,12 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools;
+using WolvenKit.Common.Tools.DDS;
 using WolvenKit.Common.Wcc;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
-using WolvenKit.DDS;
 using static WolvenKit.CR2W.Types.Enums;
-using static WolvenKit.DDS.TexconvWrapper;
+using static WolvenKit.Common.Tools.DDS.TexconvWrapper;
 
 namespace WolvenKit.App.ViewModels
 {

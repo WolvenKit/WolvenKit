@@ -1327,7 +1327,7 @@ namespace WolvenKit
         /// <param name="filename"></param>
         /// <param name="memoryStream"></param>
         /// <param name="suppressErrors"></param>
-        public IWolvenkitView LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
+        private IWolvenkitView LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
         {
             if (memoryStream == null && !File.Exists(filename))
                 return null;
@@ -1369,7 +1369,6 @@ namespace WolvenKit
         }
 
         #region Mod Utility
-
         private void PackProject()
         {
             if (ActiveMod == null)
@@ -1803,6 +1802,7 @@ namespace WolvenKit
                 return false;
             }
         }
+
         /// <summary>
         /// Creates a new W3Mod
         /// </summary>

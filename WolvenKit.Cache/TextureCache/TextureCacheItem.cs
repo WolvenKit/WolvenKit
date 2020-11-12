@@ -7,30 +7,55 @@ using System.Text;
 using System.Threading.Tasks;
 using Ionic.Zlib;
 using WolvenKit.Common;
+using WolvenKit.Common.Tools.DDS;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Cache
 {
     using WolvenKit.Common.Model;
     using WolvenKit.Common.Tools;
-    using WolvenKit.DDS;
     using static WolvenKit.CR2W.Types.Enums;
+
+    public class MipmapInfo
+    {
+        public long Offset { get; }
+
+        public uint Size { get; }   //unused
+        public uint ZSize { get; }
+        public byte Idx { get; }    //unused
+
+        public MipmapInfo(long offset, uint zsize, uint size, byte idx)
+        {
+            Offset = offset;
+            Size = size;
+            ZSize = zsize;
+            Idx = idx;
+        }
+
+    }
 
     public class TextureCacheItem : IWitcherFile
     {
+        
+
         public IWitcherArchive Bundle { get; set; }
         public string DateString { get; set; }
 
         public string CompressionType => "Zlib";
+        public EFormat Format { get; set; }
 
         public string ParentFile;
+        public string FullName { get; set; }
 
         public string Name { get; set; }
         public UInt32 Hash;
-        public Int32 PathStringIndex;
+        public Int32 StringTableOffset;
+        /// <summary>
+        /// !!! Double check when writing !!! Some files use 64bit, older files may use 32bit.
+        /// </summary>
         public long PageOffset { get; set; }
-        public Int32 CompressedSize;
-        public Int32 UncompressedSize;
+        public uint CompressedSize;
+        public uint UncompressedSize;
         public UInt32 BaseAlignment;
         public UInt16 BaseWidth;
         public UInt16 BaseHeight;
@@ -44,11 +69,11 @@ namespace WolvenKit.Cache
         public Byte IsCube;
         public Byte Unk1;
 
-        public long Size { get; set; }
-        public UInt32 ZSize { get; set; }
-        public Byte SliceIdx;
+        public uint Size { get; set; }
+        public uint ZSize { get; set; }
+        public byte MipIdx;
 
-        public List<Tuple<uint, uint>> MipMapInfo = new List<Tuple<uint, uint>>();
+        public readonly List<MipmapInfo> MipMapInfo = new List<MipmapInfo>();
 
         
 
@@ -62,12 +87,11 @@ namespace WolvenKit.Cache
             using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
             {
                 // generate header
-                TexconvWrapper.EFormat format = CommonImageTools.GetEFormatFromREDEngineByte(Type1);
                 var metadata = new DDSMetadata(
                     BaseWidth,
                     BaseHeight,
                     (uint)Mipcount,
-                    format,
+                    Format,
                     BaseAlignment,
                     IsCube == 1,
                     SliceCount,
@@ -85,8 +109,8 @@ namespace WolvenKit.Cache
                     }
                     for (int i = 0; i < NumMipOffsets; i++)
                     {
-                        var mippageoffset = MipMapInfo[i].Item1;
-                        var mipzsize = MipMapInfo[i].Item2;
+                        var mippageoffset = MipMapInfo[i].Offset;
+                        var mipzsize = MipMapInfo[i].ZSize;
 
                         using (var viewstream = file.CreateViewStream((mippageoffset), mipzsize, MemoryMappedFileAccess.Read))
                         {
@@ -113,20 +137,18 @@ namespace WolvenKit.Cache
                         }
                         //mipmaps
                         var mipmapoffsets = new List<Tuple<long, long>>();
-                        foreach (Tuple<uint, uint> v in MipMapInfo)
+                        foreach (var mipinfo in MipMapInfo)
                         {
                             var beginoffset = mipmapstream.Position;
-                            var mipoffset = v.Item1;
-                            var mipZsize = v.Item2;
 
-                            using (var temp_vs = file.CreateViewStream((mipoffset), mipZsize, MemoryMappedFileAccess.Read))
+                            using (var tempvs = file.CreateViewStream(mipinfo.Offset, mipinfo.ZSize, MemoryMappedFileAccess.Read))
                             {
-                                new ZlibStream(temp_vs, CompressionMode.Decompress).CopyTo(mipmapstream);
+                                new ZlibStream(tempvs, CompressionMode.Decompress).CopyTo(mipmapstream);
                             }
                             mipmapoffsets.Add(new Tuple<long, long>(beginoffset, mipmapstream.Position - beginoffset));
                         }
 
-                        //assemble mipmaps
+                        //assemble faces
                         for (int i = 0; i < 6; i++)
                         {
                             var offset = 0 + (i * imagestream.Length / 6);
@@ -164,7 +186,7 @@ namespace WolvenKit.Cache
                 Extract(output);
             }
 
-            // don't convert if user extract extension id already dds
+            // don't convert if user extract extension is already dds
             if (e.Extension == EUncookExtension.dds)
                 return newpath;
 
@@ -197,6 +219,31 @@ namespace WolvenKit.Cache
         void p_Exited(object sender, EventArgs e)
         {
            
+        }
+
+        public void Write(BinaryWriter bw)
+        {
+            bw.Write(Hash);
+            bw.Write(StringTableOffset);
+            // !!! Uses 32bit !!!
+            bw.Write((uint)PageOffset);
+            bw.Write(CompressedSize);
+            bw.Write(UncompressedSize);
+
+            bw.Write(BaseAlignment);
+            bw.Write(BaseWidth);
+            bw.Write(BaseHeight);
+            bw.Write(Mipcount);
+            bw.Write(SliceCount);
+
+            bw.Write(MipOffsetIndex);
+            bw.Write(NumMipOffsets);
+            bw.Write(TimeStamp);
+
+            bw.Write(Type1);
+            bw.Write(Type2);
+            bw.Write(IsCube);
+            bw.Write(Unk1);
         }
     }
 }

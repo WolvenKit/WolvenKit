@@ -19,8 +19,11 @@ namespace WolvenKit.Wwise.SoundCache
 
 
         public long NameOffset;
+        /// <summary>
+        /// !!! Double check when writing !!! Some files use 64bit, older files may use 32bit.
+        /// </summary>
         public long PageOffset { get; set; }
-        public long Size { get; set; }
+        public uint Size { get; set; }
         public uint ZSize { get; set; }
 
         public SoundCacheItem(IWitcherArchive Parent)

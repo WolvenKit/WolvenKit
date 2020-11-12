@@ -5,12 +5,12 @@ using System.Linq;
 using WolvenKit.CR2W.Types;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using WolvenKit.Common.Tools.DDS;
 using static WolvenKit.CR2W.Types.Enums;
-using static WolvenKit.DDS.TexconvWrapper;
+using static WolvenKit.Common.Tools.DDS.TexconvWrapper;
 
 namespace WolvenKit.App.Model
 {
-    using DDS;
     using WolvenKit.Common;
     using WolvenKit.Common.Model;
     using WolvenKit.Common.Tools;
