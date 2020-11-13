@@ -43,9 +43,11 @@ namespace WolvenKit.App
 
 
         [XmlIgnore]
-        public string GameDLCDir => Path.Combine(ExecutablePath, @"..\..\DLC\");
+        public string GameDlcDir => Path.Combine(GameRootDir, "DLC");
         [XmlIgnore]
-        public string GameModDir => Path.Combine(ExecutablePath, @"..\..\Mods\");
+        public string GameModDir => Path.Combine(GameRootDir, "Mods");
+        [XmlIgnore]
+        public string GameContentDir => Path.Combine(GameRootDir, "content");
         [XmlIgnore]
         public string GameRootDir => Path.Combine(ExecutablePath, @"..\..\..\");
 

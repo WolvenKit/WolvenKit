@@ -60,6 +60,10 @@ namespace WolvenKit.Cache
         /// <param name="filename"></param>
         public TextureCache(string filename)
         {
+            MipOffsets = new List<uint>();
+            Names = new List<string>();
+            Files = new List<TextureCacheItem>();
+
             this.Read(filename);
         }
         #endregion
