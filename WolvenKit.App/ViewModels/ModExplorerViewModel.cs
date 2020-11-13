@@ -21,7 +21,7 @@ namespace WolvenKit.App.ViewModels
     {
         private readonly MainViewModel MainVM;
 
-        public ModExplorerViewModel(MainViewModel mainViewModel)
+        public ModExplorerViewModel(IWindowFactory windowFactory, MainViewModel mainViewModel) : base(windowFactory)
         {
             MainVM = mainViewModel;
             LastChange = DateTime.Now;

@@ -370,7 +370,7 @@ namespace WolvenKit
             }
 
             // else: open and dock new form
-            var doc = new frmCR2WDocument(new CR2WDocumentViewModel(new Utility.ProductionWindowFactory()))
+            var doc = new frmCR2WDocument(new CR2WDocumentViewModel(UIController.Get().WindowFactory))
             {
                 Text = Path.GetFileName(key) + " [" + key + "]"
             };

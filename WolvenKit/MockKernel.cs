@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using WolvenKit.App.ViewModels;
 using WolvenKit.Common;
+using WolvenKit.App;
 
-namespace WolvenKit.App
+namespace WolvenKit
 {
     /// <summary>
     /// View models
@@ -33,42 +34,42 @@ namespace WolvenKit.App
         public MainViewModel GetMainViewModel()
         {
             if ((MainViewModel)MainVM == null)
-                MainVM = new MainViewModel();
+                MainVM = new MainViewModel(UIController.Get().WindowFactory);
             return (MainViewModel)MainVM;
         }
 
         public BulkEditorViewModel GetBulkEditorViewModel()
         {
             if ((BulkEditorViewModel)BulkEditVM == null)
-                BulkEditVM = new BulkEditorViewModel();
+                BulkEditVM = new BulkEditorViewModel(UIController.Get().WindowFactory, GetMainViewModel());
             return (BulkEditorViewModel)BulkEditVM;
         }
 
         public ModkitViewModel GetModkitViewModel()
         {
             if ((ModkitViewModel)ModkitVM == null)
-                ModkitVM = new ModkitViewModel();
+                ModkitVM = new ModkitViewModel(UIController.Get().WindowFactory);
             return (ModkitViewModel)ModkitVM;
         }
 
         public RadishViewModel GetRadishViewModel()
         {
             if ((RadishViewModel)RadishVM == null)
-                RadishVM = new RadishViewModel();
+                RadishVM = new RadishViewModel(UIController.Get().WindowFactory);
             return (RadishViewModel)RadishVM;
         }
 
         public ImportViewModel GetImportViewModel()
         {
             if ((ImportViewModel)ImportVM == null)
-                ImportVM = new ImportViewModel();
+                ImportVM = new ImportViewModel(UIController.Get().WindowFactory);
             return (ImportViewModel)ImportVM;
         }
 
         public ModExplorerViewModel GetModExplorerModel()
         {
             if ((ModExplorerViewModel)ModExplorertVM == null)
-                ModExplorertVM = new ModExplorerViewModel(GetMainViewModel());
+                ModExplorertVM = new ModExplorerViewModel(UIController.Get().WindowFactory, GetMainViewModel());
             return (ModExplorerViewModel)ModExplorertVM;
         }
 

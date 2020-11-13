@@ -16,6 +16,8 @@ using WolvenKit.Common;
 using System.IO;
 using IrrlichtLime.GUI;
 using System.Runtime.InteropServices;
+using MessageBoxButtons = System.Windows.Forms.MessageBoxButtons;
+using MessageBoxIcon = System.Windows.Forms.MessageBoxIcon;
 
 namespace WolvenKit.Render.FastRender
 {

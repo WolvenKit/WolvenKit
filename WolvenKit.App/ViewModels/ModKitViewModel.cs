@@ -26,7 +26,7 @@ namespace WolvenKit.App.ViewModels
     {
         
 
-        public ModkitViewModel()
+        public ModkitViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
             Logger = MainController.Get().Logger;
             

@@ -13,6 +13,8 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using static WolvenKit.Forms.frmChunkProperties;
+using MessageBoxButtons = System.Windows.Forms.MessageBoxButtons;
+using MessageBoxIcon = System.Windows.Forms.MessageBoxIcon;
 
 namespace WolvenKit.Forms
 {

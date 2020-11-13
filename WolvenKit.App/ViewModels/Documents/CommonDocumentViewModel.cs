@@ -17,13 +17,13 @@ namespace WolvenKit.App.ViewModels
 {
     public class CommonDocumentViewModel : CloseableViewModel, IDocumentViewModel
     {
-        public CommonDocumentViewModel(IWindowFactory windowFactory)
+        public CommonDocumentViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
-            m_windowFactory = windowFactory;
+            
         }
 
         #region Fields
-        protected readonly IWindowFactory m_windowFactory;
+        
         
         public event EventHandler<FileSavedEventArgs> OnFileSaved;
         #endregion

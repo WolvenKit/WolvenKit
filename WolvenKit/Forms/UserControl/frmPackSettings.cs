@@ -3,19 +3,23 @@ using System.Linq;
 using System.Windows.Forms;
 using System.IO;
 using WolvenKit.App;
-using System.Drawing;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit
 {
     public partial class frmPackSettings : Form
     {
-        public (bool, bool) PackBundles => (modBDL.Checked, dlcBDL.Checked);
-        public (bool, bool) GenMetadata => (modMD.Checked, dlcMD.Checked);
-        public (bool, bool) GenTexCache => (modTEX.Checked, dlcTEX.Checked);
-        public (bool, bool) GenCollCache => (modCOL.Checked, dlcCOL.Checked);
-        public (bool, bool) Scripts => (modSCR.Checked, dlcSCR.Checked);
-        public (bool, bool) Sound => (modSND.Checked, dlcSND.Checked);
-        public (bool, bool) Strings => (modSTR.Checked, dlcSTR.Checked);
+        public PackSettings PackSettings => new PackSettings()
+        {
+            PackBundles = (modBDL.Checked, dlcBDL.Checked),
+            GenMetadata = (modMD.Checked, dlcMD.Checked),
+            GenTexCache = (modTEX.Checked, dlcTEX.Checked),
+            GenCollCache = (modCOL.Checked, dlcCOL.Checked),
+            Scripts = (modSCR.Checked, dlcSCR.Checked),
+            Sound = (modSND.Checked, dlcSND.Checked),
+            Strings = (modSTR.Checked, dlcSTR.Checked)
+
+        };
 
         public frmPackSettings()
         {
@@ -91,17 +95,17 @@ namespace WolvenKit
             | modTEX.Checked | dlcTEX.Checked | modSND.Checked | dlcSND.Checked
             | modSCR.Checked | dlcSCR.Checked | modSTR.Checked | modCOL.Checked | dlcCOL.Checked)
             {
-                DialogResult = DialogResult.OK;
+                DialogResult = System.Windows.Forms.DialogResult.OK;
             }
             else
             {
-                DialogResult = DialogResult.Cancel;
+                DialogResult = System.Windows.Forms.DialogResult.Cancel;
             }
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
+            DialogResult = System.Windows.Forms.DialogResult.Cancel;
         }
     }
 }
