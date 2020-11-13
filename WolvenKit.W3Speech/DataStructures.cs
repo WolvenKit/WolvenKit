@@ -63,7 +63,7 @@ namespace WolvenKit.W3Speech
 
         public IWitcherArchive Bundle { get; set; }
         public string Name { get; set; }
-        public long Size { get; set; }
+        public uint Size { get; set; }
         public uint ZSize { get; set; }
 
         public long PageOffset { get; set; }

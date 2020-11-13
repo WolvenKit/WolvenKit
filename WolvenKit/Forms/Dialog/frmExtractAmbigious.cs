@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using WolvenKit.Common;
@@ -21,7 +22,8 @@ namespace WolvenKit
             for (int i = 0; i < files.Count; i++)
             {
                 var file = files[i];
-                var key = $"{file.Name}";
+                var archiveName = Path.GetFileName(file.Bundle.ArchiveAbsolutePath);
+                var key = $"{archiveName}";
                 if (filesDict.ContainsKey(key))
                 {
                     key = $"{key}_{i}";

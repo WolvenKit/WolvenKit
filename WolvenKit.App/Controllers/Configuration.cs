@@ -19,14 +19,14 @@ namespace WolvenKit.App
             }
         }
 
-
+        
 
 
         /// <summary>
         ///     Configuration values
         /// </summary>
         public string ExecutablePath { get; set; }
-        // public string DepotHash { get; set; } //deprecated
+
         public string TextLanguage { get; set; }
         public string VoiceLanguage { get; set; }
         public string WccLite { get; set; }
@@ -39,10 +39,15 @@ namespace WolvenKit.App
         public EUncookExtension UncookExtension { get; set; }
         public bool IsWelcomeFormDisabled { get; set; }
 
+        public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
+
+
         [XmlIgnore]
-        public string GameDLCDir => Path.Combine(ExecutablePath, @"..\..\DLC\");
+        public string GameDlcDir => Path.Combine(GameRootDir, "DLC");
         [XmlIgnore]
-        public string GameModDir => Path.Combine(ExecutablePath, @"..\..\Mods\");
+        public string GameModDir => Path.Combine(GameRootDir, "Mods");
+        [XmlIgnore]
+        public string GameContentDir => Path.Combine(GameRootDir, "content");
         [XmlIgnore]
         public string GameRootDir => Path.Combine(ExecutablePath, @"..\..\..\");
 

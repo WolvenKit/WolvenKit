@@ -267,7 +267,9 @@ namespace WolvenKit.App.ViewModels
             // uncook the folder with wcc
             
             // TODO: this will run over mods :(
-            var indir = Path.GetFullPath(MainController.Get().Configuration.GameRootDir);
+            var indir = isDLC 
+                ? Path.GetFullPath(MainController.Get().Configuration.GameDlcDir)
+                : Path.GetFullPath(MainController.Get().Configuration.GameContentDir);
 
 
             var wccuncook = new Wcc_lite.uncook()
@@ -299,12 +301,12 @@ namespace WolvenKit.App.ViewModels
 
             if (string.IsNullOrWhiteSpace(newpath)) return 0;
 
-            int uncookedFilesCount = 0;
             int addedFilesCount = 0;
             var fis = di.GetFiles("*", SearchOption.AllDirectories);
             foreach (var f in fis)
             {
-                if (!f.Name.Contains(Path.GetFileName(relativePath))) continue;
+                if (f.Name != Path.GetFileName(relativePath))
+                    continue;
 
                 try
                 {
@@ -315,7 +317,7 @@ namespace WolvenKit.App.ViewModels
 
                     f.CopyToAndCreate(newpath);
 
-                    uncookedFilesCount++;
+                    addedFilesCount++;
                 }
                 catch (Exception ex)
                 {
@@ -327,13 +329,13 @@ namespace WolvenKit.App.ViewModels
 
             // Logging
             Logger.LogString($"Moved {addedFilesCount} files to project.", Logtype.Important);
-            if (uncookedFilesCount > 0)
-                Logger.LogString($"Successfully uncooked {uncookedFilesCount} files.", Logtype.Success);
+            if (addedFilesCount > 0)
+                Logger.LogString($"Successfully uncooked {addedFilesCount} files.", Logtype.Success);
             else
                 Logger.LogString($"Wcc_lite is unable to uncook this file.", Logtype.Error);
 
 
-            return uncookedFilesCount;
+            return addedFilesCount;
         }
 
         /// <summary>

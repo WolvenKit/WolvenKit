@@ -1,29 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
-using static WolvenKit.DDS.TexconvWrapper;
+﻿using static WolvenKit.Common.Tools.DDS.TexconvWrapper;
 
-/// <summary>
-/// DDS aka DirectDraw Surface is an obsolete image file format, property Microsoft
-/// </summary>
-namespace WolvenKit.DDS
+namespace WolvenKit.Common.Tools.DDS
 {
-    public struct DDSMetadata
+    public readonly struct DDSMetadata
     {
         public uint Width { get; }
         public uint Height { get;}
         public uint Mipscount { get;}
         public EFormat Format { get;}
-        //public uint Bpp { get;}
+        public uint Bpp { get;}
         public bool Iscubemap { get; }
         public uint Slicecount { get; }
         public bool Normal { get;}
 
-        public DDSMetadata(uint width, uint height, uint mipscount = 0,
+        public DDSMetadata(uint width, uint height,
+            uint mipscount = 0,
             EFormat format = EFormat.R8G8B8A8_UNORM, uint bpp = 16,
             bool iscubemap = false, uint slicecount = 0, bool normal = false)
         {
@@ -31,7 +22,7 @@ namespace WolvenKit.DDS
             Height = height;
             Mipscount = mipscount;
             Format = format;
-            //Bpp = bpp;
+            Bpp = bpp;
             Iscubemap = iscubemap;
             Slicecount = slicecount;
             Normal = normal;
@@ -51,11 +42,40 @@ namespace WolvenKit.DDS
             Width = ddsheader.dwWidth;
             Height = ddsheader.dwHeight;
             Mipscount = ddsheader.dwMipMapCount;
-            Format = EFormat.R8G8B8A8_UNORM; //TODO unused
-            //Bpp = bpp;
+
+            switch (ddsheader.ddspf.dwFourCC)
+            {
+                case 0x31545844:    //DXT1
+                    Format = EFormat.BC1_UNORM;
+                    break;
+                case 0x33545844:    //DXT3
+                    Format = EFormat.BC2_UNORM;
+                    break;
+                case 0x35545844:    //DXT5
+                    Format = EFormat.BC3_UNORM;
+                    break;
+                case 0x55344342:    //BC4U
+                    Format = EFormat.BC4_UNORM;
+                    break;
+                case 0x55354342:    //BC5U
+                    Format = EFormat.BC5_UNORM;
+                    break;
+                //case
+                //    Format = EFormat.R8G8B8A8_UNORM:
+                //    SetPixelmask(DDSPF_A8R8G8B8, ref ddspf); break;
+                //case 
+                //    Format = EFormat.BC7_UNORM ;          //TODO: dxt10 is currently unsupported
+                //    dxt10 = true; break;      
+                default:
+                    Format = EFormat.R8G8B8A8_UNORM;
+                    break;
+            }
+            
+            
+            Bpp = 16;                                       //TODO: in vanilla this is always 16 ???
             Iscubemap = iscubemap;
-            Slicecount = 0; //TODO
-            Normal = false; //TODO
+            Slicecount = iscubemap ? (uint)6 : (uint)0;     //TODO: does not account for texarrays
+            Normal = false;                                 //unused in vanilla
         }
     }
 }

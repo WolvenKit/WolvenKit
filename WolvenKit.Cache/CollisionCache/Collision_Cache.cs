@@ -162,7 +162,7 @@ namespace WolvenKit.Cache
                 Unk2 = br.ReadUInt64(), //null
                 PageOffset = br.ReadUInt32(),
                 ZSize = br.ReadUInt32(),
-                Size = (long)br.ReadUInt32(),
+                Size = br.ReadUInt32(),
                 Unk3 = br.ReadUInt32(),
                 unk4 = br.ReadBytes(16),
                 unk5 = br.ReadBytes(16),
@@ -188,7 +188,7 @@ namespace WolvenKit.Cache
                     Version = 2;
                     DataOffset += 0x10;
                     for (int i = 0; i < data_array.Count; i++)
-                        data_array[i].PageOffset = -1;
+                        data_array[i].PageOffset = -1;   //TODO: -1
                 }
 
                 if (buffersize <= CACHE_BUFFER_SIZE)

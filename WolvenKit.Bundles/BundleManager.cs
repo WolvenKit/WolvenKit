@@ -23,6 +23,7 @@ namespace WolvenKit.Bundles
         public Dictionary<string, Bundle> Bundles { get; }
         
         public override EBundleType TypeName => EBundleType.Bundle;
+        public static string SerializationVersion => "1.0";
 
         /// <summary>
         ///     Load a single mod bundle

@@ -24,7 +24,7 @@ namespace WolvenKit.Cache
 
         public Dictionary<string, CollisionCache> Archives { get; set; }
         public override EBundleType TypeName => EBundleType.CollisionCache;
-
+        public static string SerializationVersion => "1.0";
 
         /// <summary>
         ///     Load a single mod collision cache

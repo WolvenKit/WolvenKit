@@ -1,30 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using WolvenKit.Common.Model;
-using WolvenKit.DDS;
 
-namespace WolvenKit.Common
+namespace WolvenKit.Common.Tools.DDS
 {
-    
-
-    public class MissingFormatException : Exception
-    {
-        public MissingFormatException(string message)
-            : base(message)
-        {
-        }
-    }
-
-
     public static class DDSUtils
     {
         const uint DDS_MAGIC = 0x20534444; // "DDS "
-
 
         // constants
         #region DDS_HEADER
@@ -71,6 +53,17 @@ namespace WolvenKit.Common
 
         #endregion
 
+        private static uint MAKEFOURCC(char ch0, char ch1, char ch2, char ch3) => (uint)(ch0 | ch1 << 8 | ch2 << 16 | ch3 << 24);
+        private static void SetPixelmask(Func<uint[]> pfmtfactory, ref DDS_PIXELFORMAT pfmt)
+        {
+            uint[] masks = pfmtfactory.Invoke();
+            pfmt.dwRGBBitCount = masks[0];
+            pfmt.dwRBitMask = masks[1];
+            pfmt.dwGBitMask = masks[2];
+            pfmt.dwBBitMask = masks[3];
+            pfmt.dwABitMask = masks[4];
+        }
+
         #region DDS_PIXELFORMAT 
         // dwSize
         const uint PIXELFORMAT_SIZE = 32;
@@ -93,22 +86,11 @@ namespace WolvenKit.Common
         static uint[] DDSPF_R8G8B8() => new uint[5] { 24, 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000 };
         #endregion
 
+        #region Writing
         public static void GenerateAndWriteHeader(Stream stream, DDSMetadata metadata)
         {
             var (header, dxt10header) = GenerateHeader(metadata);
             WriteHeader(stream, header, dxt10header);
-        }
-
-        private static uint MAKEFOURCC(char ch0, char ch1, char ch2, char ch3) => (uint)(ch0 | ch1 << 8 | ch2 << 16 | ch3 << 24);
-
-        private static void SetPixelmask(Func<uint[]> pfmtfactory, ref DDS_PIXELFORMAT pfmt)
-        {
-            uint[] masks = pfmtfactory.Invoke();
-            pfmt.dwRGBBitCount = masks[0];
-            pfmt.dwRBitMask = masks[1];
-            pfmt.dwGBitMask = masks[2];
-            pfmt.dwBBitMask = masks[3];
-            pfmt.dwABitMask = masks[4];
         }
 
         private static (DDS_HEADER, DDS_HEADER_DXT10) GenerateHeader(DDSMetadata metadata)
@@ -178,23 +160,23 @@ namespace WolvenKit.Common
                 // dwFourCC
                 switch (format)
                 {
-                    case TexconvWrapper.EFormat.R8G8B8A8_UNORM:
+                    case EFormat.R8G8B8A8_UNORM:
                         SetPixelmask(DDSPF_A8R8G8B8, ref ddspf); break;
-                    case TexconvWrapper.EFormat.BC1_UNORM:
+                    case EFormat.BC1_UNORM:
                         ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '1'); break;
-                    case TexconvWrapper.EFormat.BC2_UNORM:
+                    case EFormat.BC2_UNORM:
                         ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '3'); break;
-                    case TexconvWrapper.EFormat.BC3_UNORM:
+                    case EFormat.BC3_UNORM:
                         ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '5'); break;
-                    case TexconvWrapper.EFormat.BC4_UNORM:
+                    case EFormat.BC4_UNORM:
                         ddspf.dwFourCC = MAKEFOURCC('B', 'C', '4', 'U'); break;
-                    case TexconvWrapper.EFormat.BC5_UNORM:
+                    case EFormat.BC5_UNORM:
                         ddspf.dwFourCC = MAKEFOURCC('B', 'C', '5', 'U'); break;
-                    case TexconvWrapper.EFormat.BC7_UNORM:
+                    case EFormat.BC7_UNORM:
                         dxt10 = true; break;
-                    //case TexconvWrapper.EFormat.R32G32B32A32_FLOAT:
-                    //case TexconvWrapper.EFormat.R16G16B16A16_FLOAT:
-                    //case TexconvWrapper.EFormat.BC6H_UF16:
+                    //case EFormat.R32G32B32A32_FLOAT:
+                    //case EFormat.R16G16B16A16_FLOAT:
+                    //case EFormat.BC6H_UF16:
                     default:
                         throw new MissingFormatException($"Missing Format: {format}");
                 }
@@ -220,28 +202,28 @@ namespace WolvenKit.Common
             uint p = 0;
             switch (format)
             {
-                case TexconvWrapper.EFormat.R8G8B8A8_UNORM:
+                case EFormat.R8G8B8A8_UNORM:
                     var bpp = ddspf.dwRGBBitCount;
                     header.dwPitchOrLinearSize = (width * bpp + 7) / 8;
                     header.dwFlags |= DDSD_PITCH;
                     break;
-                case TexconvWrapper.EFormat.BC1_UNORM:
-                case TexconvWrapper.EFormat.BC4_UNORM:
-                    p = width * height / 2;
+                case EFormat.BC1_UNORM:
+                case EFormat.BC4_UNORM:
+                    p = width * height / 2; //max(1,width ?4)x max(1,height ?4)x 8 (DXT1)
                     header.dwPitchOrLinearSize = (uint)(p);
                     header.dwFlags |= DDSD_LINEARSIZE;
                     break;
-                case TexconvWrapper.EFormat.BC2_UNORM:
-                case TexconvWrapper.EFormat.BC3_UNORM:
-                case TexconvWrapper.EFormat.BC5_UNORM:
-                case TexconvWrapper.EFormat.BC7_UNORM:
-                    p = width * height;
+                case EFormat.BC2_UNORM:
+                case EFormat.BC3_UNORM:
+                case EFormat.BC5_UNORM:
+                case EFormat.BC7_UNORM:
+                    p = width * height;     //max(1,width ?4)x max(1,height ?4)x 16 (DXT2-5)
                     header.dwPitchOrLinearSize = (uint)(p);
                     header.dwFlags |= DDSD_LINEARSIZE;
                     break;
-                //case TexconvWrapper.EFormat.BC6H_UF16:
-                //case TexconvWrapper.EFormat.R32G32B32A32_FLOAT:
-                //case TexconvWrapper.EFormat.R16G16B16A16_FLOAT:
+                //case EFormat.BC6H_UF16:
+                //case EFormat.R32G32B32A32_FLOAT:
+                //case EFormat.R16G16B16A16_FLOAT:
                 default:
                     throw new MissingFormatException($"Missing Format: {format}");
             }
@@ -277,7 +259,7 @@ namespace WolvenKit.Common
                 // dxgiFormat
                 switch (format)
                 {
-                    case TexconvWrapper.EFormat.BC7_UNORM:
+                    case EFormat.BC7_UNORM:
                         {
                             dxt10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM;
                             break;
@@ -312,7 +294,9 @@ namespace WolvenKit.Common
             if (header.ddspf.dwFourCC == MAKEFOURCC('D', 'X', '1', '0'))
                 stream.WriteStruct(dxt10header);
         }
+        #endregion
 
+        #region Reading
         public static DDSMetadata ReadHeader(string ddsfile)
         {
             var metadata = new DDSMetadata();
@@ -331,5 +315,30 @@ namespace WolvenKit.Common
                 return metadata;
             }
         }
+
+        public static uint CalculateMipMapSize(uint width, uint height, EFormat format)
+        {
+            //TODO: dword align, check if sizes are not pow2
+            
+
+            switch (format)
+            {
+                case EFormat.R8G8B8A8_UNORM: 
+                    return width * height * 4; //(width * bpp + 7) / 8;
+                case EFormat.BC1_UNORM:
+                case EFormat.BC4_UNORM:
+                    return width * height / 2;  //max(1,width ?4)x max(1,height ?4)x 8 (DXT1)
+                case EFormat.BC2_UNORM:
+                case EFormat.BC3_UNORM:
+                case EFormat.BC5_UNORM:
+                case EFormat.BC7_UNORM:
+                    return width * height;      //max(1,width ?4)x max(1,height ?4)x 16 (DXT2-5)
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        #endregion
+
     }
 }

@@ -13,6 +13,15 @@ namespace WolvenKit.Console
     {
         [Option(HelpText = "Specify the cache path.", Required = true)]
         public string path { get; set; }
+
+        [Option(HelpText = "Specify wether to create a texture cache from the path specified.", Required = false)]
+        public bool create { get; set; }
+
+        [Option(HelpText = "Specify wether to create a txt dump of the cache.", Required = false)]
+        public bool dump { get; set; }
+
+        [Option(HelpText = "Specify wether to extract the dds files of the cache.", Required = false)]
+        public bool extract { get; set; }
     }
 
     [Verb("bundle", HelpText = "Witcher 3 Bundle IO.")]

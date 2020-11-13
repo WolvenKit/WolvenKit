@@ -77,6 +77,7 @@ namespace WolvenKit.W3Strings
 
         private List<List<string>> importedStrings = new List<List<string>>();
 
+        public static string SerializationVersion => "1.0";
 
         public void Load(string newlanguage, string path, bool onlyIfLanguageChanged = false)
         {
