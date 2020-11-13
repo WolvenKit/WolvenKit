@@ -237,6 +237,7 @@ namespace WolvenKit.Cache
 
                             break;
                         }
+                    case ".DDS":
                     case ".dds":
                         {
                             var ddsheader = DDSUtils.ReadHeader(filename);

@@ -12,6 +12,7 @@ namespace WolvenKit.App
     using Common;
     using Common.Services;
     using CR2W;
+    using System.Diagnostics;
     using System.IO.Compression;
     using System.Reflection;
     using W3Strings;
@@ -217,6 +218,36 @@ namespace WolvenKit.App
         #endregion
 
         #region Methods
+        private static string GetManagerPath(EManagerType type)
+        {
+            switch (type)
+            {
+                case EManagerType.BundleManager: return Path.Combine(ManagerCacheDir, "bundle_cache.json");
+                case EManagerType.CollisionManager: return Path.Combine(ManagerCacheDir, "collision_cache.json");
+                case EManagerType.SoundManager: return Path.Combine(ManagerCacheDir, "sound_cache.json");
+                case EManagerType.W3StringManager: return Path.Combine(ManagerCacheDir, "string_cache.bin");
+                case EManagerType.TextureManager: return Path.Combine(ManagerCacheDir, "texture_cache.json");
+                case EManagerType.Max:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+        }
+        private static string GetManagerVersion(EManagerType type)
+        {
+            switch (type)
+            {
+                case EManagerType.BundleManager: return BundleManager.SerializationVersion;
+                case EManagerType.CollisionManager: return WolvenKit.Cache.CollisionManager.SerializationVersion;
+                case EManagerType.SoundManager: return WolvenKit.Cache.SoundManager.SerializationVersion;
+                case EManagerType.W3StringManager: return W3Strings.W3StringManager.SerializationVersion;
+                case EManagerType.TextureManager: return WolvenKit.Cache.TextureManager.SerializationVersion;
+                case EManagerType.Max:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+        }
+
+
         /// <summary>
         /// Initializes the archive managers in an async thread
         /// </summary>
@@ -225,6 +256,21 @@ namespace WolvenKit.App
         {
             try
             {
+                // add a mechanism to update individual cache managers 
+                for (var j = 0; j < Configuration.ManagerVersions.Length; j++)
+                {
+                    var savedversions = Configuration.ManagerVersions[j];
+                    var e = (EManagerType)j;
+                    var curversion = GetManagerVersion(e);
+
+                    if (savedversions != curversion)
+                    {
+                        if (File.Exists(GetManagerPath(e)))
+                            File.Delete(GetManagerPath(e));
+                    }
+                }
+
+
                 loadStatus = "Loading string manager";
                 #region Load string manager
                 var sw = new System.Diagnostics.Stopwatch();
@@ -233,9 +279,9 @@ namespace WolvenKit.App
                 {
                     try
                     {
-                        if (File.Exists(Path.Combine(ManagerCacheDir, "string_cache.bin")) && new FileInfo(Path.Combine(ManagerCacheDir, "string_cache.bin")).Length > 0)
+                        if (File.Exists(GetManagerPath(EManagerType.W3StringManager)) && new FileInfo(GetManagerPath(EManagerType.W3StringManager)).Length > 0)
                         {
-                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"), FileMode.Open))
+                            using (var file = File.Open(GetManagerPath(EManagerType.W3StringManager), FileMode.Open))
                             {
                                 W3StringManager = ProtoBuf.Serializer.Deserialize<W3StringManager>(file);
                             }
@@ -245,16 +291,18 @@ namespace WolvenKit.App
                             W3StringManager = new W3StringManager();
                             W3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
                             Directory.CreateDirectory(ManagerCacheDir);
-                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"), FileMode.Create))
+                            using (var file = File.Open(GetManagerPath(EManagerType.W3StringManager), FileMode.Create))
                             {
                                 ProtoBuf.Serializer.Serialize(file, W3StringManager);
                             }
+
+                            Configuration.ManagerVersions[(int)EManagerType.W3StringManager] = W3StringManager.SerializationVersion;
                         }
                     }
                     catch (System.Exception)
                     {
-                        if (File.Exists(Path.Combine(ManagerCacheDir, "string_cache.bin")))
-                            File.Delete(Path.Combine(ManagerCacheDir, "string_cache.bin"));
+                        if (File.Exists(GetManagerPath(EManagerType.W3StringManager)))
+                            File.Delete(GetManagerPath(EManagerType.W3StringManager));
                         W3StringManager = new W3StringManager();
                         W3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
@@ -270,9 +318,9 @@ namespace WolvenKit.App
                 {
                     try
                     {
-                        if (File.Exists(Path.Combine(ManagerCacheDir, "bundle_cache.json")))
+                        if (File.Exists(GetManagerPath(EManagerType.BundleManager)))
                         {
-                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir, "bundle_cache.json")))
+                            using (StreamReader file = File.OpenText(GetManagerPath(EManagerType.BundleManager)))
                             {
                                 JsonSerializer serializer = new JsonSerializer();
                                 serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -285,18 +333,19 @@ namespace WolvenKit.App
                         {
                             BundleManager = new BundleManager();
                             BundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText(Path.Combine(ManagerCacheDir, "bundle_cache.json"), JsonConvert.SerializeObject(BundleManager, Formatting.None, new JsonSerializerSettings()
+                            File.WriteAllText(GetManagerPath(EManagerType.BundleManager), JsonConvert.SerializeObject(BundleManager, Formatting.None, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                                 TypeNameHandling = TypeNameHandling.Auto
                             }));
+                            Configuration.ManagerVersions[(int)EManagerType.BundleManager] = BundleManager.SerializationVersion;
                         }
                     }
                     catch (System.Exception ex)
                     {
-                        if (File.Exists(Path.Combine(ManagerCacheDir, "bundle_cache.json")))
-                            File.Delete(Path.Combine(ManagerCacheDir, "bundle_cache.json"));
+                        if (File.Exists(GetManagerPath(EManagerType.BundleManager)))
+                            File.Delete(GetManagerPath(EManagerType.BundleManager));
                         BundleManager = new BundleManager();
                         BundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
@@ -317,9 +366,9 @@ namespace WolvenKit.App
                 {
                     try
                     {
-                        if (File.Exists(Path.Combine(ManagerCacheDir, "texture_cache.json")))
+                        if (File.Exists(GetManagerPath(EManagerType.TextureManager)))
                         {
-                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir, "texture_cache.json")))
+                            using (StreamReader file = File.OpenText(GetManagerPath(EManagerType.TextureManager)))
                             {
                                 JsonSerializer serializer = new JsonSerializer();
                                 serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -332,18 +381,19 @@ namespace WolvenKit.App
                         {
                             TextureManager = new TextureManager();
                             TextureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText(Path.Combine(ManagerCacheDir, "texture_cache.json"), JsonConvert.SerializeObject(TextureManager, Formatting.None, new JsonSerializerSettings()
+                            File.WriteAllText(GetManagerPath(EManagerType.TextureManager), JsonConvert.SerializeObject(TextureManager, Formatting.None, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                                 TypeNameHandling = TypeNameHandling.Auto
                             }));
+                            Configuration.ManagerVersions[(int)EManagerType.TextureManager] = TextureManager.SerializationVersion;
                         }
                     }
                     catch (System.Exception)
                     {
-                        if (File.Exists(Path.Combine(ManagerCacheDir, "texture_cache.json")))
-                            File.Delete(Path.Combine(ManagerCacheDir, "texture_cache.json"));
+                        if (File.Exists(GetManagerPath(EManagerType.TextureManager)))
+                            File.Delete(GetManagerPath(EManagerType.TextureManager));
                         TextureManager = new TextureManager();
                         TextureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
@@ -364,9 +414,9 @@ namespace WolvenKit.App
                 {
                     try
                     {
-                        if (File.Exists(Path.Combine(ManagerCacheDir, "collision_cache.json")))
+                        if (File.Exists(GetManagerPath(EManagerType.CollisionManager)))
                         {
-                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir, "collision_cache.json")))
+                            using (StreamReader file = File.OpenText(GetManagerPath(EManagerType.CollisionManager)))
                             {
                                 JsonSerializer serializer = new JsonSerializer();
                                 serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -379,18 +429,19 @@ namespace WolvenKit.App
                         {
                             CollisionManager = new CollisionManager();
                             CollisionManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText(Path.Combine(ManagerCacheDir, "collision_cache.json"), JsonConvert.SerializeObject(CollisionManager, Formatting.None, new JsonSerializerSettings()
+                            File.WriteAllText(GetManagerPath(EManagerType.CollisionManager), JsonConvert.SerializeObject(CollisionManager, Formatting.None, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                                 TypeNameHandling = TypeNameHandling.Auto
                             }));
+                            Configuration.ManagerVersions[(int)EManagerType.CollisionManager] = CollisionManager.SerializationVersion;
                         }
                     }
                     catch (System.Exception)
                     {
-                        if (File.Exists(Path.Combine(ManagerCacheDir, "collision_cache.json")))
-                            File.Delete(Path.Combine(ManagerCacheDir, "collision_cache.json"));
+                        if (File.Exists(GetManagerPath(EManagerType.CollisionManager)))
+                            File.Delete(GetManagerPath(EManagerType.CollisionManager));
                         CollisionManager = new CollisionManager();
                         CollisionManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
@@ -420,9 +471,9 @@ namespace WolvenKit.App
                 {
                     try
                     {
-                        if (File.Exists(Path.Combine(ManagerCacheDir, "sound_cache.json")))
+                        if (File.Exists(GetManagerPath(EManagerType.SoundManager)))
                         {
-                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir, "sound_cache.json")))
+                            using (StreamReader file = File.OpenText(GetManagerPath(EManagerType.SoundManager)))
                             {
                                 JsonSerializer serializer = new JsonSerializer();
                                 serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -435,18 +486,19 @@ namespace WolvenKit.App
                         {
                             SoundManager = new SoundManager();
                             SoundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText(Path.Combine(ManagerCacheDir, "sound_cache.json"), JsonConvert.SerializeObject(SoundManager, Formatting.None, new JsonSerializerSettings()
+                            File.WriteAllText(GetManagerPath(EManagerType.SoundManager), JsonConvert.SerializeObject(SoundManager, Formatting.None, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                                 TypeNameHandling = TypeNameHandling.Auto
                             }));
+                            Configuration.ManagerVersions[(int)EManagerType.SoundManager] = SoundManager.SerializationVersion;
                         }
                     }
                     catch (System.Exception ex)
                     {
-                        if (File.Exists(Path.Combine(ManagerCacheDir, "sound_cache.json")))
-                            File.Delete(Path.Combine(ManagerCacheDir, "sound_cache.json"));
+                        if (File.Exists(GetManagerPath(EManagerType.SoundManager)))
+                            File.Delete(GetManagerPath(EManagerType.SoundManager));
                         SoundManager = new SoundManager();
                         SoundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
