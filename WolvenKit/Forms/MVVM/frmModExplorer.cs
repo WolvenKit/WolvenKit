@@ -581,9 +581,9 @@ namespace WolvenKit
 
         private void addAllDependenciesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UIController.Get().Window.PauseMonitoring();
+            MockKernel.Get().Window.PauseMonitoring();
             vm.AddAllImportsCommand.SafeExecute();
-            UIController.Get().Window.ResumeMonitoring();
+            MockKernel.Get().Window.ResumeMonitoring();
         }
 
         private void listAllDependenciesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -743,19 +743,19 @@ namespace WolvenKit
         }
         private void exportW2meshToFbxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UIController.Get().Window.PauseMonitoring();
+            MockKernel.Get().Window.PauseMonitoring();
             vm.ExportMeshCommand.SafeExecute();
-            UIController.Get().Window.ResumeMonitoring();
+            MockKernel.Get().Window.ResumeMonitoring();
         }
 
         private void fastRenderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
-                UIController.Get().Window.PauseMonitoring();
+                MockKernel.Get().Window.PauseMonitoring();
                 vm.AddAllImportsCommand.SafeExecute();
                 RequestFastRender?.Invoke(this, new RequestFileOpenArgs { File = selectedobject.FullName });
-                UIController.Get().Window.ResumeMonitoring();
+                MockKernel.Get().Window.ResumeMonitoring();
             }
         }
 

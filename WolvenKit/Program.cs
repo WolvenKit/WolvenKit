@@ -42,7 +42,7 @@ namespace WolvenKit
                     }
                 }
             }
-            Application.Run(UIController.Get().Window);   
+            Application.Run(MockKernel.Get().Window);   
         }
     }
 }

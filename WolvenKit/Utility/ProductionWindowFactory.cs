@@ -26,7 +26,7 @@ namespace WolvenKit.Utility
 
         public void ShowStringsGUIModal()
         {
-            var StringsGui = UIController.Get().StringsGui;
+            var StringsGui = MockKernel.Get().StringsGui;
 
             if (StringsGui == null)
             {
@@ -39,7 +39,7 @@ namespace WolvenKit.Utility
 
         public void RequestStringsGUI()
         {
-            var StringsGui = UIController.Get().StringsGui;
+            var StringsGui = MockKernel.Get().StringsGui;
 
             if (StringsGui == null)
                 StringsGui = new frmStringsGui();
@@ -109,42 +109,11 @@ namespace WolvenKit.Utility
                 : "";
         }
 
-        public void ShowConsole()
-        {
-            var Console = UIController.Get().Console;
-            if (Console == null || Console.IsDisposed)
-            {
-                GetConsole();
-                Console.Show(UIController.Get().Window.GetDockPanel(), WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
-            }
 
-            Console.Activate();
-        }
-        public void ShowOutput()
-        {
-            var Output = UIController.Get().Output;
-            if (Output == null || Output.IsDisposed)
-            {
-                GetOutput();
-                Output.Show(UIController.Get().Window.GetDockPanel(), WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
-            }
 
-            Output.Activate();
-        }
 
-        private WeifenLuo.WinFormsUI.Docking.IDockContent GetConsole()
-        {
-            var Console = UIController.Get().Console;
-            if (Console == null || Console.IsDisposed)
-                Console = new frmConsole();
-            return Console;
-        }
-        private WeifenLuo.WinFormsUI.Docking.IDockContent GetOutput()
-        {
-            var Output = UIController.Get().Output;
-            if (Output == null || Output.IsDisposed)
-                Output = new frmOutput();
-            return Output;
-        }
+        void IWindowFactory.ShowConsole() => MockKernel.Get().ShowConsole();
+
+        void IWindowFactory.ShowOutput() => MockKernel.Get().ShowOutput();
     }
 }

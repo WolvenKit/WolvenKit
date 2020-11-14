@@ -559,9 +559,9 @@ namespace WolvenKit
                             {
                                 // add all dependencies
 
-                                UIController.Get().Window.PauseMonitoring();
-                                MockKernel.Get().GetMainViewModel().AddAllImports(filename, true, false);
-                                UIController.Get().Window.ResumeMonitoring();
+                                MockKernel.Get().Window.PauseMonitoring();
+                                WccHelper.AddAllImports(filename, true, false);
+                                MockKernel.Get().Window.ResumeMonitoring();
 
                                 this.RenderViewer = new Render.frmRender
                                 {

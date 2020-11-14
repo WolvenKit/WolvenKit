@@ -125,7 +125,7 @@ namespace WolvenKit
 
             if (applyTheme)
             {
-                UIController.Get().Window.GlobalApplyTheme();
+                MockKernel.Get().Window.GlobalApplyTheme();
                 RequestApplyTheme?.Invoke();
             }
                 

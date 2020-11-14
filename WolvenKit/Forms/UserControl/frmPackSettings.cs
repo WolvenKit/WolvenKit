@@ -74,8 +74,8 @@ namespace WolvenKit
                 dlcSCR.Checked = true;
 
             // Strings
-            if (Directory.Exists(UIController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")
-                && Directory.GetFiles(UIController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")
+            if (Directory.Exists(MainController.Get().ActiveMod.ProjectDirectory + "\\strings")
+                && Directory.GetFiles(MainController.Get().ActiveMod.ProjectDirectory + "\\strings")
                 .Any(x => x.EndsWith(".w3strings")))
                 modSTR.Checked = true;
 

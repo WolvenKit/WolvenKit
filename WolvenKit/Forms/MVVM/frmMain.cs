@@ -24,7 +24,6 @@ using WolvenKit.App.Model;
 
 namespace WolvenKit
 {
-    using Cache;
     using Common;
     //using Common.Services;
     using Common.Wcc;
@@ -38,11 +37,9 @@ namespace WolvenKit
     using Bundles;
     using Common.Extensions;
     using Common.Model;
-    using Forms.MVVM;
     using Render;
     using Scaleform;
     using Wwise.Player;
-    using Wwise.Wwise;
     using Enums = Enums;
     using WolvenKit.CR2W.Reflection;
     using Microsoft.WindowsAPICodePack.Dialogs;
@@ -50,34 +47,14 @@ namespace WolvenKit
 
     public partial class frmMain : Form
     {
-        private readonly MainViewModel vm;
+        private const string BaseTitle = "Wolven kit";
 
         #region Fields
+        private readonly MainViewModel vm;
 
-        #region Forms
-        //private List<IWolvenkitView> OpenDocuments { get; set; } = new List<IWolvenkitView>();
-        private frmModExplorer ModExplorer { get; set; }
-        private frmOutput Output { get; set; }
-        private frmConsole Console { get; set; }
-        private frmImportUtility ImportUtility { get; set; }
-
-
-        
-        private frmWelcome Welcome { get; set; }
-        private frmRadish RadishUtility { get; set; }
         private frmProgress ProgressForm { get; set; }
-        private frmWcc FormModKit { get; set; }
+        //private List<frmImagePreview> OpenImages { get; } = new List<frmImagePreview>();
 
-
-        private frmScriptEditor ScriptPreview { get; set; }
-        //private List<frmScriptEditor> OpenScripts { get; set; } = new List<frmScriptEditor>();
-        private frmImagePreview ImagePreview { get; set; }
-        private List<frmImagePreview> OpenImages { get; set; } = new List<frmImagePreview>();
-
-        #endregion
-
-        private const string BaseTitle = "Wolven kit";
-        
         private readonly HotkeyCollection hotkeys;
         private readonly ToolStripRenderer toolStripRenderer = new ToolStripProfessionalRenderer();
 
@@ -95,22 +72,10 @@ namespace WolvenKit
         #endregion
 
         #region Properties
-
-        public EventHandler errored;
-        //private IWolvenkitView _activedocument;
-        //public IWolvenkitView ActiveDocument
-        //{
-        //    get => _activedocument;
-        //    set
-        //    {
-        //        _activedocument = value;
-        //        UpdateTitle();
-        //    }
-        //}
-        public W3Mod ActiveMod
+        private W3Mod ActiveMod
         {
             get => MainController.Get().ActiveMod;
-            private set
+            set
             {
                 MainController.Get().ActiveMod = value ?? throw new ArgumentNullException(nameof(value));
                 UpdateTitle();
@@ -152,7 +117,7 @@ namespace WolvenKit
 
 
             ToolStripManager.LoadSettings(this);
-            m_deserializeDockContent = new DeserializeDockContent(GetContentFromPersistString);
+            m_deserializeDockContent = new DeserializeDockContent(MockKernel.Get().GetContentFromPersistString);
             this.FormBorderStyle = FormBorderStyle.None;
             menuStrip1.Show();
 
@@ -168,264 +133,7 @@ namespace WolvenKit
 
         #endregion
 
-        #region UI Methods
-        #region Show Forms
-
-        public DockPanel GetDockPanel() => dockPanel;
-
-        private IDockContent GetModExplorer()
-        {
-            if (ModExplorer == null || ModExplorer.IsDisposed)
-                ModExplorer = new frmModExplorer();
-
-            ModExplorer.RequestAssetBrowser += ModExplorer_RequestAssetBrowser;
-            ModExplorer.RequestFileOpen += ModExplorer_RequestFileOpen;
-            ModExplorer.RequestFileRename += ModExplorer_RequestFileRename;
-            ModExplorer.RequestFileDelete += ModExplorer_RequestFileDelete;
-            ModExplorer.RequestFastRender += ModExplorer_RequestFastRender;
-
-            return ModExplorer;
-        }
-        private void ShowModExplorer()
-        {
-            if (ModExplorer == null || ModExplorer.IsDisposed)
-            {
-                GetModExplorer();
-                ModExplorer.Show(dockPanel, DockState.DockLeft);
-
-            }
-            ModExplorer.Activate();
-
-        }
-        private IDockContent GetOutput()
-        {
-            if (Output == null || Output.IsDisposed)
-                Output = new frmOutput();
-            return Output;
-        }
-        private void ShowOutput()
-        {
-            if (Output == null || Output.IsDisposed)
-            {
-                GetOutput();
-                Output.Show(dockPanel, DockState.DockBottom);
-            }
-
-            Output.Activate();
-        }
-        private IDockContent GetConsole()
-        {
-            if (Console == null || Console.IsDisposed)
-                Console = new frmConsole();
-            return Console;
-        }
-        private void ShowConsole()
-        {
-            if (Console == null || Console.IsDisposed)
-            {
-                GetConsole();
-                Console.Show(dockPanel, DockState.DockBottom);
-            }
-
-            Console.Activate();
-        }
-        private IDockContent GetWelcome()
-        {
-            if (Welcome == null || Welcome.IsDisposed)
-                Welcome = new frmWelcome(this);
-            return Welcome;
-        }
-        private void ShowWelcome()
-        {
-            if (Welcome == null || Welcome.IsDisposed)
-            {
-                GetWelcome();
-                Welcome.Show(dockPanel, DockState.Document);
-            }
-
-            Welcome.Activate();
-        }
-        private void ShowModKit()
-        {
-            if (FormModKit == null || FormModKit.IsDisposed)
-            {
-                FormModKit = new frmWcc();
-                FormModKit.Show(dockPanel, DockState.Document);
-            }
-
-            FormModKit.Activate();
-        }
-        private IDockContent GetImportUtility()
-        {
-            if (ImportUtility == null || ImportUtility.IsDisposed)
-                ImportUtility = new frmImportUtility();
-            return ImportUtility;
-        }
-        private void ShowImportUtility()
-        {
-            if (ImportUtility == null || ImportUtility.IsDisposed)
-            {
-                ImportUtility = new frmImportUtility();
-                ImportUtility.Show(dockPanel, DockState.DockRight);
-            }
-
-            ImportUtility.Activate();
-        }
-        private void ShowRadishUtility()
-        {
-            if (ActiveMod == null)
-            {
-                MessageBox.Show(@"Please create a new mod project."
-                    , "Missing Mod Project"
-                    , System.Windows.Forms.MessageBoxButtons.OK
-                    , System.Windows.Forms.MessageBoxIcon.Information);
-                return;
-            }
-            var filedir = new DirectoryInfo(MainController.Get().ActiveMod.FileDirectory);
-            var radishdir = filedir.GetFiles("*.bat", SearchOption.AllDirectories)?.FirstOrDefault(_ => _.Name == "_settings_.bat")?.Directory;
-            if (radishdir == null)
-            {
-                Logger.LogString("ERROR! No radish mod directory found.\r\n", WolvenKit.Common.Services.Logtype.Error);
-                return;
-            }
-
-            if (RadishUtility == null || RadishUtility.IsDisposed)
-            {
-                RadishUtility = new frmRadish();
-                RadishUtility.Show(dockPanel, DockState.Document);
-            }
-
-            RadishUtility.Activate();
-        }
-        private void ShowImagePreview()
-        {
-            if (ImagePreview == null || ImagePreview.IsDisposed)
-            {
-                ImagePreview = new frmImagePreview();
-                ImagePreview.Show(dockPanel, DockState.Document);
-            }
-            ImagePreview.Activate();
-        }
-        private void ShowScriptPreview()
-        {
-            if (ScriptPreview == null || ScriptPreview.IsDisposed)
-            {
-                ScriptPreview = new frmScriptEditor(new ScriptDocumentViewModel(UIController.Get().WindowFactory));
-                ScriptPreview.Show(dockPanel, DockState.Document);
-            }
-
-            ScriptPreview.Activate();
-        }
-
-        /// <summary>
-        /// Initializes all dockwindows
-        /// </summary>
-        private void InitWindows()
-        {
-            GetModExplorer();
-            GetConsole();
-            GetOutput();
-            GetImportUtility();
-        }
-
-
-        /// <summary>
-        /// Closes all the "file documents", resets modexplorer and clears the output.
-        /// </summary>
-        public void ResetWindows()
-        {
-            if (isDockPanelInitialized)
-                SaveDockPanelLayout();
-
-            if (!CloseWindows()) return;
-
-            InitDockPanel();
-
-            //ClearOutput();
-        }
-
-        private void CreateInstaller()
-        {
-            var cif = new frmCreateInstaller();
-            cif.ShowDialog();
-        }
-
-        /// <summary>
-        /// Closes and saves all the "file documents", resets modexplorer.
-        /// </summary>
-        private bool CloseWindows()
-        {
-            if (!vm.CloseAllDocuments()) return false;
-
-            ModExplorer?.Close();
-            ModExplorer = null;
-            Output?.Close();
-            Output = null;
-            Console?.Close();
-            Console = null;
-            if (Welcome != null)
-            {
-                Welcome?.Close();
-                Welcome = new frmWelcome(this);
-            }
-            ImportUtility?.Close();
-            ImportUtility = null;
-            RadishUtility?.Close();
-            RadishUtility = null;
-            ScriptPreview?.Close();
-            ScriptPreview = null;
-            ImagePreview?.Close();
-            ImagePreview = null;
-            FormModKit?.Close();
-            FormModKit = null;
-
-            foreach (var t in OpenImages.ToList())
-            {
-                t.Close();
-            }
-
-            foreach (var window in dockPanel.FloatWindows.ToList())
-            {
-                window.Close();
-                window.Dispose();
-            }
-
-            // close misc doc windows (like a docked asset browser)
-            foreach (var doc in dockPanel.Documents.ToList())
-            {
-                if (!(doc is DockContent dc)) continue;
-                dc.Close();
-                dc.Dispose();
-            }
-
-            return true;
-        }
-
-        private IWolvenkitView TryOpenExisting(string key)
-        {
-            // check if already open
-            var opendocs2 = dockPanel.Documents
-                .Where(_ => _ is IWolvenkitView);
-
-            foreach (var dockContent in opendocs2)
-            {
-                if (dockContent is IWolvenkitView iview && iview.FileName == key)
-                {
-                    iview?.Activate();
-                    return iview;
-                }
-            }
-
-            // check on the viewmodel
-            //foreach (var t in GetOpenDocuments().Values.Where(_ => _.FileName == key))
-            //{
-            //    t.Activate();
-            //    return true;
-            //}
-
-            return null;
-        }
-
+        #region Methods
         /// <summary>
         /// Opens a document in the background
         /// </summary>
@@ -566,7 +274,268 @@ namespace WolvenKit
             return ActiveMod;
         }
 
+        /// <summary>
+        /// Deserializes a w3modproj File and loads the W3mod
+        /// </summary>
+        /// <param name="file"></param>
+        public void OpenMod(string file = "")
+        {
+            if (!File.Exists(file))
+                return;
+            if (!vm.CloseAllDocuments())
+                return;
+
+            //Opening the file from a dialog
+            if (string.IsNullOrEmpty(file))
+            {
+                var s = UIController.Get().WindowFactory.ShowOpenFileDialog("Open Witcher 3 Mod Project", "Witcher 3 Mod|*.w3modproj",
+                    MainController.Get().Configuration.InitialModDirectory);
+                if (!string.IsNullOrEmpty(s))
+                    file = s;
+                else
+                    return;
+            }
+
+            var old = XDocument.Load(file);
+            #region Upgrade from w3edit
+            try
+            {
+                if (old.Descendants("InstallAsDLC").Any())
+                {
+                    //This is an old "Sarcen's W3Edit"-project. We need to upgrade it.
+                    //Put the files into their respective folder.
+                    switch (MessageBox.Show(
+                        "The project you are opening has been made with an older version of Wolven Kit or Sarcen's Witcher 3 Edit.\n" +
+                        "It needs to be upgraded for use with Wolvenkit.\n" +
+                        "To load as a mod please press yes. To load as a DLC project please press no.\n" +
+                        "You can manually do the upgrade if you check the project structure: https://github.com/Traderain/Wolven-kit/wiki/Project-structure press cancel if you desire to do so. This may not always work but I tried my best.",
+                        "Out of date project", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                    {
+                        default:
+                            return;
+                        case DialogResult.Yes:
+                            {
+                                Commonfunctions.DirectoryMove(Path.Combine(Path.GetDirectoryName(file), old.Root.Element("Name").Value, "files"),
+                                    Path.Combine(Path.GetDirectoryName(file), old.Root.Element("Name").Value, "files", "Mod", EBundleType.Bundle.ToString()));
+                                break;
+                            }
+                        case DialogResult.No:
+                            {
+                                Commonfunctions.DirectoryMove(Path.Combine(Path.GetDirectoryName(file), old.Root.Element("Name").Value, "files"),
+                                    Path.Combine(Path.GetDirectoryName(file), old.Root.Element("Name").Value, "files", "DLC", EBundleType.Bundle.ToString()));
+                                break;
+                            }
+
+                    }
+                    //Upgrade the project xml
+                    var nw = new W3Mod
+                    {
+                        Name = old.Root.Element("Name")?.Value,
+                        FileName = file,
+                    };
+
+                    File.Delete(file);
+                    XmlSerializer xs = new XmlSerializer(typeof(W3Mod));
+                    var mf = new FileStream(file, FileMode.Create);
+                    xs.Serialize(mf, nw);
+                    mf.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to upgrade the project!\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            #endregion
+
+
+
+            MainController.Get().Configuration.InitialModDirectory = Path.GetDirectoryName(file);
+
+            // Loading the project
+            var ser = new XmlSerializer(typeof(W3Mod));
+            using (var modfile = new FileStream(file, FileMode.Open, FileAccess.Read))
+            {
+                ActiveMod = (W3Mod)ser.Deserialize(modfile);
+                ActiveMod.FileName = file;
+                ActiveMod.CreateDefaultDirectories();
+                watcher.Path = ActiveMod.FileDirectory;
+            }
+
+            ResetWindows();
+            Logger.LogString("\"" + ActiveMod.Name + "\" loaded successfully!\n", Common.Services.Logtype.Success);
+            MainController.Get().ProjectStatus = EProjectStatus.Ready;
+
+            #region upgrade from older mod projects
+            if (!old.Descendants("Version").Any() || (old.Descendants("Version").Any()
+                                                      && int.TryParse(old.Descendants("Version").First().Value, out int version)
+                                                      && version < 0.62))
+            {
+                MessageBox.Show(
+                    "The project you are opening has been made with an older version of Wolven Kit.\n" +
+                    "Some folder names have changed:\n" +
+                    "CollisionCache and TextureCache have been unified into one Uncooked directory.\n" +
+                    "Bundle has been renamed to Cooked",
+                    "Out of date project", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+                // check if any directories are misnamed
+                // remap CollisionCache ===> Uncooked
+                // remap TextureCache   ===> Uncooked
+                // remap Bundle         ===> Cooked
+                // mod
+                MoveFiles(EBundleType.CollisionCache, EProjectFolders.Uncooked);
+                MoveFiles(EBundleType.TextureCache, EProjectFolders.Uncooked);
+                MoveFiles(EBundleType.Bundle, EProjectFolders.Cooked);
+
+                // dlc
+                MoveFiles(EBundleType.CollisionCache, EProjectFolders.Uncooked, true);
+                MoveFiles(EBundleType.TextureCache, EProjectFolders.Uncooked, true);
+                MoveFiles(EBundleType.Bundle, EProjectFolders.Cooked, true);
+
+
+                //Upgrade the project xml
+                File.Delete(file);
+                XmlSerializer xs = new XmlSerializer(typeof(W3Mod));
+                var mf = new FileStream(file, FileMode.Create);
+                xs.Serialize(mf, ActiveMod);
+                mf.Close();
+            }
+
+
+            #endregion
+
+            // Hash all filepaths
+            var relativepaths = ActiveMod.ModFiles
+                .Select(_ => _.Substring(_.IndexOf(Path.DirectorySeparatorChar) + 1))
+                .ToList();
+            Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
+
+            // register all custom classes
+            CR2WManager.Init(ActiveMod.FileDirectory, MainController.Get().Logger);
+
+            // update import
+            MockKernel.Get().GetImportViewModel().UseLocalResourcesCommand.SafeExecute();
+
+            RepopulateRecentFiles(file);
+
+            void MoveFiles(EBundleType oldtype, EProjectFolders newtype, bool isDlc = false)
+            {
+                var di = new DirectoryInfo(Path.Combine(isDlc ? ActiveMod.DlcDirectory : ActiveMod.ModDirectory, oldtype.ToString()));
+                if (di.Exists && di.GetFiles("*", SearchOption.AllDirectories).Any())
+                {
+                    // move all files from old folders to new
+                    foreach (var fi in di.GetFiles("*", SearchOption.AllDirectories))
+                    {
+                        try
+                        {
+                            var relpath = fi.FullName.Substring(di.FullName.Length + 1);
+                            var newpath = Path.Combine(isDlc ? ActiveMod.DlcDirectory : ActiveMod.ModDirectory, newtype.ToString(), relpath);
+                            if (!File.Exists(newpath))
+                            {
+                                Directory.CreateDirectory(new FileInfo(newpath).Directory.FullName);
+                                File.Move(fi.FullName, newpath);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.LogString($"Couldn't move file {fi.FullName}. Please manually upgrade your mod project.", Common.Services.Logtype.Error);
+                        }
+                    }
+                }
+                // delete old directories
+                if (di.Exists && !di.GetFiles("*", SearchOption.AllDirectories).Any())
+                {
+                    di.Delete(true);
+                }
+            }
+        }
         #endregion
+
+        #region UI Methods
+        public DockPanel GetDockPanel() => dockPanel;
+        /// <summary>
+        /// Closes all the "file documents", resets modexplorer and clears the output.
+        /// </summary>
+        public void ResetWindows()
+        {
+            if (isDockPanelInitialized)
+                SaveDockPanelLayout();
+
+            if (!CloseWindows()) return;
+
+            InitDockPanel();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void CreateInstaller()
+        {
+            var cif = new frmCreateInstaller();
+            cif.ShowDialog();
+        }
+
+        //TODO: rework this for ViewModels
+        /// <summary>
+        /// Closes and saves all the "file documents", resets modexplorer.
+        /// </summary>
+        private bool CloseWindows()
+        {
+            if (!vm.CloseAllDocuments())
+                return false;
+
+            MockKernel.Get().CloseMainWindows();
+
+            
+            //TODO: unused
+            //foreach (var t in OpenImages.ToList())
+            //{
+            //    t.Close();
+            //}
+
+            foreach (var window in dockPanel.FloatWindows.ToList())
+            {
+                window.Close();
+                window.Dispose();
+            }
+
+            // close misc doc windows (like a docked asset browser)
+            foreach (var doc in dockPanel.Documents.ToList())
+            {
+                if (!(doc is DockContent dc)) continue;
+                dc.Close();
+                dc.Dispose();
+            }
+
+            return true;
+        }
+
+        //TODO: rework this for ViewModels
+        private IWolvenkitView TryOpenExisting(string key)
+        {
+            // check if already open
+            var opendocs2 = dockPanel.Documents
+                .Where(_ => _ is IWolvenkitView);
+
+            foreach (var dockContent in opendocs2)
+            {
+                if (dockContent is IWolvenkitView iview && iview.FileName == key)
+                {
+                    iview?.Activate();
+                    return iview;
+                }
+            }
+
+            // check on the viewmodel
+            //foreach (var t in GetOpenDocuments().Values.Where(_ => _.FileName == key))
+            //{
+            //    t.Activate();
+            //    return true;
+            //}
+
+            return null;
+        }
+
         private void SaveDockPanelLayout() => dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"));
         private bool isDockPanelInitialized;
         private void InitDockPanel()
@@ -582,61 +551,19 @@ namespace WolvenKit
                 }
                 catch (Exception exception)
                 {
-                    ShowWindows();
+                    MockKernel.Get().ShowWindows();
                     System.Console.WriteLine(exception);
                 }
             }
             else
             {
-                ShowWindows();
+                MockKernel.Get().ShowWindows();
                 SaveDockPanelLayout();
             }
 
             isDockPanelInitialized = true;
 
-            void ShowWindows()
-            {
-                ShowModExplorer();
-                ShowConsole();
-                ShowOutput();
-                ShowImportUtility();
-            }
-        }
-
-        private IDockContent GetContentFromPersistString(string persistString)
-        {
-            if (persistString == typeof(frmModExplorer).ToString())
-                return GetModExplorer();
-            else if (persistString == typeof(frmConsole).ToString())
-                return GetConsole();
-            else if (persistString == typeof(frmOutput).ToString())
-                return GetOutput();
-            //else if (persistString == typeof(frmWelcome).ToString())
-            //    return GetWelcome();
-            if (persistString == typeof(frmImportUtility).ToString())
-                return GetImportUtility();
-            //else
-            //{
-            //    // DummyDoc overrides GetPersistString to add extra information into persistString.
-            //    // Any DockContent may override this value to add any needed information for deserialization.
-
-            //    string[] parsedStrings = persistString.Split(new char[] { ',' });
-            //    if (parsedStrings.Length != 3)
-            //        return null;
-
-            //    if (parsedStrings[0] != typeof(DummyDoc).ToString())
-            //        return null;
-
-            //    DummyDoc dummyDoc = new DummyDoc();
-            //    if (parsedStrings[1] != string.Empty)
-            //        dummyDoc.FileName = parsedStrings[1];
-            //    if (parsedStrings[2] != string.Empty)
-            //        dummyDoc.Text = parsedStrings[2];
-
-            //    return dummyDoc;
-            //}
-            else
-                return null;
+            
         }
 
         public void GlobalApplyTheme()
@@ -842,9 +769,6 @@ namespace WolvenKit
             public static bool operator !=(RECT rect1, RECT rect2) { return !(rect1 == rect2); }
         }
 
-
-        #endregion
-
         private void UpdateTitle()
         {
             wkitVersionToolStripLabel.Text = $"v{Version}: {Assembly.GetExecutingAssembly().GetLinkerTime().ToString("yyyy MMMM dd")}";
@@ -863,6 +787,7 @@ namespace WolvenKit
             }
         }
 
+        #endregion
         #endregion
 
         #region BackGroundWorker
@@ -917,7 +842,7 @@ namespace WolvenKit
 
             if (!pack.Result)
                 return;
-            vm.executeGame();
+            MainViewModel.ExecuteGame();
         }
         private void HKCloseTab(HotKeyEventArgs e)
         {
@@ -950,10 +875,10 @@ namespace WolvenKit
         #endregion
 
         #region Events
-        private void Welcome_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Welcome = null;
-        }
+        //private void Welcome_FormClosed(object sender, FormClosedEventArgs e)
+        //{
+        //    Welcome = null;
+        //}
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -1040,20 +965,22 @@ namespace WolvenKit
         }
         private void AddOutput(string text, WolvenKit.Common.Services.Logtype type = WolvenKit.Common.Services.Logtype.Normal)
         {
-            if (Output != null && !Output.IsDisposed)
-            {
-                if (string.IsNullOrWhiteSpace(text))
-                    return;
+            if (string.IsNullOrWhiteSpace(text))
+                return;
+            ((frmOutput)MockKernel.Get().GetOutput()).AddText(text, type);
 
-                Output.AddText(text, type);
-            }
+            //if (Output != null && !Output.IsDisposed)
+            //{
+            //    Output.AddText(text, type);
+            //}
         }
         private void ClearOutput()
         {
-            if (Output != null && !Output.IsDisposed)
-            {
-                Output.Clear();
-            }
+            ((frmOutput)MockKernel.Get().GetOutput()).Clear();
+            //if (Output != null && !Output.IsDisposed)
+            //{
+            //    Output.Clear();
+            //}
         }
 
         /// <summary>
@@ -1208,7 +1135,7 @@ namespace WolvenKit
             MockKernel.Get().GetImportViewModel().UseLocalResourcesCommand.SafeExecute();
         }
 
-        private void ModExplorer_RequestFileDelete(object sender, RequestFileDeleteArgs e)
+        public void ModExplorer_RequestFileDelete(object sender, RequestFileDeleteArgs e)
         {
             PauseMonitoring();
 
@@ -1266,7 +1193,7 @@ namespace WolvenKit
             vm.SaveMod();
         }
 
-        private void ModExplorer_RequestFileRename(object sender, RequestFileOpenArgs e)
+        public void ModExplorer_RequestFileRename(object sender, RequestFileOpenArgs e)
         {
             
             var filename = e.File;
@@ -1295,15 +1222,15 @@ namespace WolvenKit
             }
         }
 
-        private void ModExplorer_RequestFastRender(object sender, RequestFileOpenArgs e)
+        public void ModExplorer_RequestFastRender(object sender, RequestFileOpenArgs e)
         {
             Render.FastRender.frmFastRender ren = new Render.FastRender.frmFastRender(e.File, Logger, ActiveMod);
             ren.Show(this.dockPanel, DockState.Document);
         }
 
-        private void ModExplorer_RequestAssetBrowser(object sender, RequestFileOpenArgs e) => OpenAssetBrowser(false, e.File);
+        public void ModExplorer_RequestAssetBrowser(object sender, RequestFileOpenArgs e) => OpenAssetBrowser(false, e.File);
 
-        private void ModExplorer_RequestFileOpen(object sender, RequestFileOpenArgs e)
+        public void ModExplorer_RequestFileOpen(object sender, RequestFileOpenArgs e)
         {
             var fullpath = e.File;
 
@@ -1326,8 +1253,7 @@ namespace WolvenKit
                             var existing = TryOpenExisting(fullpath);
                             if (existing == null)
                             {
-                                ShowScriptPreview();
-                                ScriptPreview.LoadFile(fullpath);
+                                MockKernel.Get().ShowScriptPreview().LoadFile(fullpath);
                             }
                             break;
                         }
@@ -1338,14 +1264,14 @@ namespace WolvenKit
                     case ".JPEG":
                     case ".DDS":
                         {
-                            if (OpenImages.Any(_ => _.Text == Path.GetFileName(fullpath)))
+                            //TODO: unused
+                            //if (OpenImages.Any(_ => _.Text == Path.GetFileName(fullpath)))
+                            //{
+                            //    OpenImages.First(_ => _.Text == Path.GetFileName(fullpath)).Activate();
+                            //}
+                            //else
                             {
-                                OpenImages.First(_ => _.Text == Path.GetFileName(fullpath)).Activate();
-                            }
-                            else
-                            {
-                                ShowImagePreview();
-                                ImagePreview.SetImage(fullpath);
+                                MockKernel.Get().ShowImagePreview().SetImage(fullpath);
                             }
                             break;
                         }
@@ -1458,181 +1384,7 @@ namespace WolvenKit
         }
         #endregion
 
-        /// <summary>
-        /// Deserializes a w3modproj File and loads the W3mod
-        /// </summary>
-        /// <param name="file"></param>
-        public void OpenMod(string file = "")
-        {
-            if (!File.Exists(file))
-                return;
-            if (!vm.CloseAllDocuments())
-                return;
-
-            //Opening the file from a dialog
-            if (string.IsNullOrEmpty(file))
-            {
-                var s = UIController.Get().WindowFactory.ShowOpenFileDialog("Open Witcher 3 Mod Project", "Witcher 3 Mod|*.w3modproj",
-                    MainController.Get().Configuration.InitialModDirectory);
-                if (!string.IsNullOrEmpty(s))
-                    file = s;
-                else
-                    return;
-            }
-
-            var old = XDocument.Load(file);
-            #region Upgrade from w3edit
-            try
-            {
-                if (old.Descendants("InstallAsDLC").Any())
-                {
-                    //This is an old "Sarcen's W3Edit"-project. We need to upgrade it.
-                    //Put the files into their respective folder.
-                    switch (MessageBox.Show(
-                        "The project you are opening has been made with an older version of Wolven Kit or Sarcen's Witcher 3 Edit.\n" +
-                        "It needs to be upgraded for use with Wolvenkit.\n" +
-                        "To load as a mod please press yes. To load as a DLC project please press no.\n" +
-                        "You can manually do the upgrade if you check the project structure: https://github.com/Traderain/Wolven-kit/wiki/Project-structure press cancel if you desire to do so. This may not always work but I tried my best.",
-                        "Out of date project", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-                    {
-                        default:
-                            return;
-                        case DialogResult.Yes:
-                            {
-                                Commonfunctions.DirectoryMove(Path.Combine(Path.GetDirectoryName(file), old.Root.Element("Name").Value, "files"),
-                                    Path.Combine(Path.GetDirectoryName(file), old.Root.Element("Name").Value, "files", "Mod", EBundleType.Bundle.ToString()));
-                                break;
-                            }
-                        case DialogResult.No:
-                            {
-                                Commonfunctions.DirectoryMove(Path.Combine(Path.GetDirectoryName(file), old.Root.Element("Name").Value, "files"),
-                                    Path.Combine(Path.GetDirectoryName(file), old.Root.Element("Name").Value, "files", "DLC", EBundleType.Bundle.ToString()));
-                                break;
-                            }
-
-                    }
-                    //Upgrade the project xml
-                    var nw = new W3Mod
-                    {
-                        Name = old.Root.Element("Name")?.Value,
-                        FileName = file,
-                    };
-
-                    File.Delete(file);
-                    XmlSerializer xs = new XmlSerializer(typeof(W3Mod));
-                    var mf = new FileStream(file, FileMode.Create);
-                    xs.Serialize(mf, nw);
-                    mf.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Failed to upgrade the project!\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            #endregion
-
-
-
-            MainController.Get().Configuration.InitialModDirectory = Path.GetDirectoryName(file);
-
-            // Loading the project
-            var ser = new XmlSerializer(typeof(W3Mod));
-            using (var modfile = new FileStream(file, FileMode.Open, FileAccess.Read))
-            {
-                ActiveMod = (W3Mod)ser.Deserialize(modfile);
-                ActiveMod.FileName = file;
-                ActiveMod.CreateDefaultDirectories();
-                watcher.Path = ActiveMod.FileDirectory;
-            }
-
-            ResetWindows();
-            Logger.LogString("\"" + ActiveMod.Name + "\" loaded successfully!\n", Common.Services.Logtype.Success);
-            MainController.Get().ProjectStatus = EProjectStatus.Ready;
-
-            #region upgrade from older mod projects
-            if (!old.Descendants("Version").Any() || (old.Descendants("Version").Any()
-                                                      && int.TryParse(old.Descendants("Version").First().Value, out int version)
-                                                      && version < 0.62))
-            {
-                MessageBox.Show(
-                    "The project you are opening has been made with an older version of Wolven Kit.\n" +
-                    "Some folder names have changed:\n" +
-                    "CollisionCache and TextureCache have been unified into one Uncooked directory.\n" +
-                    "Bundle has been renamed to Cooked",
-                    "Out of date project", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
-                // check if any directories are misnamed
-                // remap CollisionCache ===> Uncooked
-                // remap TextureCache   ===> Uncooked
-                // remap Bundle         ===> Cooked
-                // mod
-                MoveFiles(EBundleType.CollisionCache, EProjectFolders.Uncooked);
-                MoveFiles(EBundleType.TextureCache, EProjectFolders.Uncooked);
-                MoveFiles(EBundleType.Bundle, EProjectFolders.Cooked);
-
-                // dlc
-                MoveFiles(EBundleType.CollisionCache, EProjectFolders.Uncooked, true);
-                MoveFiles(EBundleType.TextureCache, EProjectFolders.Uncooked, true);
-                MoveFiles(EBundleType.Bundle, EProjectFolders.Cooked, true);
-
-
-                //Upgrade the project xml
-                File.Delete(file);
-                XmlSerializer xs = new XmlSerializer(typeof(W3Mod));
-                var mf = new FileStream(file, FileMode.Create);
-                xs.Serialize(mf, ActiveMod);
-                mf.Close();
-            }
-
-
-            #endregion
-
-            // Hash all filepaths
-            var relativepaths = ActiveMod.ModFiles
-                .Select(_ => _.Substring(_.IndexOf(Path.DirectorySeparatorChar) + 1))
-                .ToList();
-            Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
-
-            // register all custom classes
-            CR2WManager.Init(ActiveMod.FileDirectory, MainController.Get().Logger);
-
-            // update import
-            MockKernel.Get().GetImportViewModel().UseLocalResourcesCommand.SafeExecute();
-
-            RepopulateRecentFiles(file);
-
-            void MoveFiles(EBundleType oldtype, EProjectFolders newtype, bool isDlc = false)
-            {
-                var di = new DirectoryInfo(Path.Combine(isDlc ? ActiveMod.DlcDirectory : ActiveMod.ModDirectory, oldtype.ToString()));
-                if (di.Exists && di.GetFiles("*", SearchOption.AllDirectories).Any())
-                {
-                    // move all files from old folders to new
-                    foreach (var fi in di.GetFiles("*", SearchOption.AllDirectories))
-                    {
-                        try
-                        {
-                            var relpath = fi.FullName.Substring(di.FullName.Length + 1);
-                            var newpath = Path.Combine(isDlc ? ActiveMod.DlcDirectory : ActiveMod.ModDirectory, newtype.ToString(), relpath);
-                            if (!File.Exists(newpath))
-                            {
-                                Directory.CreateDirectory(new FileInfo(newpath).Directory.FullName);
-                                File.Move(fi.FullName, newpath);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.LogString($"Couldn't move file {fi.FullName}. Please manually upgrade your mod project.", Common.Services.Logtype.Error);
-                        }
-                    }
-                }
-                // delete old directories
-                if (di.Exists && !di.GetFiles("*", SearchOption.AllDirectories).Any())
-                {
-                    di.Delete(true);
-                }
-            }
-        }
+        
 
         #region UI Events
         private void frmMain_Load(object sender, EventArgs e)
@@ -1668,7 +1420,7 @@ namespace WolvenKit
 
 
             // Initialize DockPanel
-            InitWindows();
+            MockKernel.Get().InitWindows();
 
             //Update check should be after we are all set up. It goes on in the background.
             AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
@@ -2200,7 +1952,7 @@ namespace WolvenKit
                     FileInfo fi = new FileInfo(dlg.FileName);
                     var newfilepath = Path.Combine(ActiveMod.RawDirectory, fi.Name);
 
-                    var explorer = (frmModExplorer) GetModExplorer();
+                    var explorer = (frmModExplorer)MockKernel.Get().GetModExplorer();
                     if (explorer?.GetSelectedObject() != null)
                     {
                         var fsi = explorer.GetSelectedObject();
@@ -2376,7 +2128,7 @@ namespace WolvenKit
 
         private void witcher3ModkitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowModKit();
+            MockKernel.Get().ShowModKit();
         }
 
         private void bulkEditorToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2389,27 +2141,27 @@ namespace WolvenKit
         #region View
         private void modExplorerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowModExplorer();
+            MockKernel.Get().ShowModExplorer();
         }
 
         private void OutputToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowOutput();
+            MockKernel.Get().ShowOutput();
         }
 
         private void consoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowConsole();
+            MockKernel.Get().ShowConsole();
         }
 
         private void importUtilityToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowImportUtility();
+            MockKernel.Get().ShowImportUtility();
         }
 
         private void RadishUtilitytoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowRadishUtility();
+            MockKernel.Get().ShowRadishUtility();
         }
 
         private void scriptToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2840,12 +2592,12 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
 
         private void toolStripButtonRadishUtil_Click(object sender, EventArgs e)
         {
-            ShowRadishUtility();
+            MockKernel.Get().ShowRadishUtility();
         }
 
         private void toolStripButtonImportUtil_Click(object sender, EventArgs e)
         {
-            ShowImportUtility();
+            MockKernel.Get().ShowImportUtility();
         }
 
         private void launchWithCostumParametersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2853,13 +2605,13 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
             var getparams = new Input("Please give the commands to launch the game with!");
             if (getparams.ShowDialog() == DialogResult.OK)
             {
-                vm.executeGame(getparams.Resulttext);
+                MainViewModel.ExecuteGame(getparams.Resulttext);
             }
         }
 
         private void LaunchGameForDebuggingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            vm.executeGame();
+            MainViewModel.ExecuteGame();
         }
 
         private void packProjectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2881,7 +2633,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
             var getparams = new Input("Please give the commands to launch the game with!");
             if (getparams.ShowDialog() == DialogResult.OK)
             {
-                vm.executeGame(getparams.Resulttext);
+                MainViewModel.ExecuteGame(getparams.Resulttext);
             }
         }
 
@@ -2893,7 +2645,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
 
             if (!pack.Result)
                 return;
-            vm.executeGame();
+            MainViewModel.ExecuteGame();
         }
 
 

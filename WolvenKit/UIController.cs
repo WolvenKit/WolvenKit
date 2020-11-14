@@ -54,12 +54,9 @@ namespace WolvenKit
         private static UIController uiController;
 
         public UIConfiguration Configuration { get; private set; }
-        public frmMain Window { get; private set; }
         public IWindowFactory WindowFactory { get; private set; }
 
-        public frmStringsGui StringsGui { get; set; }
-        public frmConsole Console { get; set; }
-        public frmOutput Output { get; set; }
+        
 
         // Color Themes
         #region Color Themes
@@ -161,7 +158,7 @@ namespace WolvenKit
                 uiController = new UIController();
                 uiController.Configuration = UIConfiguration.Load();
                 uiController.WindowFactory = new ProductionWindowFactory();
-                uiController.Window = new frmMain();
+                //uiController.Window = new frmMain();
                 
             }
             return uiController;
