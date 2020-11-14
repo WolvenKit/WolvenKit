@@ -28,7 +28,7 @@ namespace WolvenKit
             return kernel;
         }
 
-        // Singletons
+        // View Models
         private ViewModel MainVM { get; set; }
         private ViewModel RadishVM { get; set; }
         private BulkEditorViewModel BulkEditVM { get; set; }

@@ -259,8 +259,13 @@ namespace WolvenKit.Cache
                             var maxSide = Math.Max(ddsheader.Width, ddsheader.Height);
                             //var minSide = Math.Min(ddsheader.Width, ddsheader.Height);
                             var realmipscount = Math.Max(1, Math.Log10(maxSide / 32)/Math.Log10(2));
-                            if (ddsheader.Mipscount == 1)
+                            if (ddsheader.Mipscount == 1) //TODO: fix this
                                 realmipscount = 0;
+                            if (ddsheader.Mipscount == 0) //TODO: fix this
+                            {
+                                realmipscount = 0;
+
+                            }
 
                             var ti = new TextureCacheItem(this)
                             {
@@ -276,14 +281,14 @@ namespace WolvenKit.Cache
                                 PageOffset = 0,        //done
                                 CompressedSize = 0,    //done
                                 UncompressedSize = 0,  //done
-                                MipOffsetIndex = -1,    //done
+                                MipOffsetIndex = 0,    //done
 
                                 /*------------- Image data ---------------*/
                                 NumMipOffsets = (int)realmipscount,
                                 BaseAlignment = ddsheader.Bpp,
                                 BaseWidth = (ushort)ddsheader.Width,
                                 BaseHeight = (ushort)ddsheader.Height,
-                                Mipcount = (ushort)ddsheader.Mipscount,
+                                Mipcount = (ushort)Math.Max(1,ddsheader.Mipscount),
                                 SliceCount = (ushort)ddsheader.Slicecount, //TODO
 
                                 TimeStamp = 0 /*(long)CDateTime.Now.ToUInt64()*/, //NOTE: Not even CDPR could be bothered to use their own Timestamps
@@ -367,7 +372,7 @@ namespace WolvenKit.Cache
                             {
                                 for (int i = 0; i < 6; i++)
                                 {
-                                    var faceoffset = ddssize / 6 * i;
+                                    var faceoffset = 128 + ddssize / 6 * i;
                                     using (var vs = file.CreateViewStream(faceoffset, imgsize,
                                         MemoryMappedFileAccess.Read))
                                     {

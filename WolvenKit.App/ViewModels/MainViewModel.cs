@@ -90,6 +90,9 @@ namespace WolvenKit.App.ViewModels
             _openDocuments = new Dictionary<string, IDocumentViewModel>();
         }
 
+
+
+
         #region Mod
         /// <summary>
         /// Saves a W3ModProject

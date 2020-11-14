@@ -280,8 +280,6 @@ namespace WolvenKit
         /// <param name="file"></param>
         public void OpenMod(string file = "")
         {
-            if (!File.Exists(file))
-                return;
             if (!vm.CloseAllDocuments())
                 return;
 
@@ -1383,8 +1381,6 @@ namespace WolvenKit
             }
         }
         #endregion
-
-        
 
         #region UI Events
         private void frmMain_Load(object sender, EventArgs e)
