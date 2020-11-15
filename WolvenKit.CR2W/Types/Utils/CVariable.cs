@@ -634,44 +634,47 @@ namespace WolvenKit.CR2W.Types
             var dbg = this.accessor.GetMembers();
             foreach (var member in this.accessor.GetMembers())
             {
-                switch (member.Name)
+                if (member.Name == "Name")
                 {
-                    case "Name":
-                    {
-                        dynamic dyn = this;
-                        dynamic cnam = dyn.Name;
+                    dynamic dyn = this;
+                    dynamic cnam = dyn.Name;
+                    if (cnam != null)
                         return cnam.ToString();
-                    }
-                    case "InstanceName":
-                    {
-                        dynamic dyn = this;
-                        dynamic cnam = dyn.InstanceName;
+                }
+                if (member.Name == "InstanceName")
+                {
+                    dynamic dyn = this;
+                    dynamic cnam = dyn.InstanceName;
+                    if (cnam != null)
                         return cnam.ToString();
-                    }
-                    case "AppearanceName":
-                    {
-                        dynamic dyn = this;
-                        dynamic cnam = dyn.AppearanceName;
+                }
+                if (member.Name == "AppearanceName")
+                {
+                    dynamic dyn = this;
+                    dynamic cnam = dyn.AppearanceName;
+                    if (cnam != null)
                         return cnam.ToString();
-                    }
-                    case "Appearance":
-                    {
-                        dynamic dyn = this;
-                        dynamic cnam = dyn.Appearance;
+                }
+                if (member.Name == "Appearance")
+                {
+                    dynamic dyn = this;
+                    dynamic cnam = dyn.Appearance;
+                    if (cnam != null)
                         return cnam.ToString();
-                    }
-                    case "ChildName":
-                    {
-                        dynamic dyn = this;
-                        dynamic cnam = dyn.ChildName;
+                }
+                if (member.Name == "ChildName")
+                {
+                    dynamic dyn = this;
+                    dynamic cnam = dyn.ChildName;
+                    if (cnam != null)
                         return cnam.ToString();
-                    }
-                    case "OldName":
-                    {
-                        dynamic dyn = this;
-                        dynamic cnam = dyn.OldName;
+                }
+                if (member.Name == "OldName")
+                {
+                    dynamic dyn = this;
+                    dynamic cnam = dyn.OldName;
+                    if (cnam != null)
                         return cnam.ToString();
-                    }
                 }
             }
 

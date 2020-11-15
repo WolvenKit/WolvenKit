@@ -43,16 +43,13 @@ namespace WolvenKit.CR2W.Types
         {
             base.Write(file);
 
-            if (Parameters != null)
+            for (var i = 0; i < BufferParameters.Count; i++)
             {
-                for (var i = 0; i < Parameters.Count; i++)
-                {
-                    CVariant variable = BufferParameters[i];
+                var variable = BufferParameters[i];
 
-                    file.Write(variable.GetnameId());
+                file.Write(variable.GetnameId());
 
-                    variable.Write(file);
-                }
+                variable.Write(file);
             }
             file.Write((ushort)0);
         }

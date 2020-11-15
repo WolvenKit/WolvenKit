@@ -40,14 +40,7 @@ namespace WolvenKit.CR2W
             {
                 availableTypes.Add(AssemblyDictionary.GetTypeByName(typename));
                 var subclasses = AssemblyDictionary.GetSubClassesOf(AssemblyDictionary.GetTypeByName(typename));
-                // recursive
-                foreach (var subclass in subclasses)
-                {
-                    var ss = GetAvailableTypes(subclass.Name);
-                    availableTypes.AddRange(ss);
-                }
                 availableTypes.AddRange(subclasses);
-                
             }
             else
             {
@@ -55,14 +48,7 @@ namespace WolvenKit.CR2W
                 {
                     availableTypes.Add(CR2WManager.GetTypeByName(typename));
                     var subclasses = CR2WManager.GetSubClassesOf(AssemblyDictionary.GetTypeByName(typename));
-                    // recursive
-                    foreach (var subclass in subclasses)
-                    {
-                        var ss = GetAvailableTypes(subclass.Name);
-                        availableTypes.AddRange(ss);
-                    }
                     availableTypes.AddRange(subclasses);
-
                 }
                 else
                 {

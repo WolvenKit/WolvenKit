@@ -25,7 +25,7 @@ namespace WolvenKit.Forms
 {
     public partial class frmChunkProperties : DockContent, IThemedContent
     {
-        private bool showOnlySerialized = true;
+        private bool showOnlySerialized = false;
         //private HotkeyCollection hotkeys;
         private readonly CR2WDocumentViewModel viewModel;
 
@@ -118,20 +118,34 @@ namespace WolvenKit.Forms
 
         private void treeView_CellEditStarting(object sender, CellEditEventArgs e)
         {
-            if (!(e.RowObject is IEditableVariable ivar)) return;
+            if (!(e.RowObject is IEditableVariable editableVariable)) return;
             switch (e.Column.AspectName)
             {
                 //var variable = (e.RowObject as VariableListNode).Variable;
                 case "REDValue":
                 {
-                    e.Control = EditorHandler.GetEditor(ivar);
+                    // if variant is null, ask the user to create a new wrapped cvar
+                    if (editableVariable is IVariantAccessor ivariant && ivariant.Variant == null)
+                    {
+                        var availableTypes = CR2WManager.GetAvailableTypes(nameof(IReferencable)).Select(_ => _.Name);
+                        var variantType = new Utility.ProductionWindowFactory().ShowAddChunkFormModal(availableTypes);
+
+                        var variant = CR2WTypeManager.Create(variantType, "Variant", editableVariable.cr2w,
+                            (CVariable)editableVariable);
+                        variant.IsSerialized = true;
+                        ivariant.Variant = variant;
+                        editableVariable.IsSerialized = true;
+                    }
+
+                    e.Control = EditorHandler.GetEditor(editableVariable);
                     if (e.Control != null)
                     {
 
                         e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
                         e.Control.Width = e.CellBounds.Width;
 
-                        if (ivar is IChunkPtrAccessor iptr && e.Control is ComboBox editor)
+                        // update references for pointer type variables
+                        if (editableVariable is IChunkPtrAccessor iptr && e.Control is ComboBox editor)
                         {
                             editor.SelectedIndexChanged += delegate(object o, EventArgs _e)
                             {
@@ -141,7 +155,7 @@ namespace WolvenKit.Forms
                                     if (ptrcomboitem.Text == $"<Add new chunk ...>")
                                     {
                                         // raise event
-                                        viewModel.AddNewChunkFor(ivar as CVariable);
+                                        viewModel.AddNewChunkFor(iptr);
 
                                         // select item
                                         editor.UpdateComboBoxWith(iptr);
@@ -156,7 +170,6 @@ namespace WolvenKit.Forms
 
                         if (e.Control is ByteArrayEditor byteArrayEditor)
                             byteArrayEditor.RequestBytesOpen += ByteArrayEditor_RequestBytesOpen;
-
                         if (e.Control is ArrayEditor arrayEditor)
                         {
                             arrayEditor.parentref = this;
