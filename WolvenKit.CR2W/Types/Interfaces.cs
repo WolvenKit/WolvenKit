@@ -43,6 +43,10 @@ namespace WolvenKit.CR2W.Types
         CVariable Variant { get; set; }
     }
 
+    public interface IBufferVariantAccessor : IVariantAccessor
+    {
+    }
+
     public interface IREDPrimitive
     {
 

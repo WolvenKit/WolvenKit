@@ -47,9 +47,14 @@ namespace WolvenKit
             }
 
             // Textures
-            if (Directory.GetFiles(activemod.ModUncookedDirectory, "*.xbm", SearchOption.AllDirectories).Any())
+            var texallowedExtensions = new[] { ".xbm", ".dds", ".png", ".jpg" };
+            if (Directory
+                .GetFiles(activemod.ModUncookedDirectory, "*", SearchOption.AllDirectories)
+                .Any(file => texallowedExtensions.Any(file.ToLower().EndsWith)))
                 modTEX.Checked = true;
-            if (Directory.GetFiles(activemod.DlcUncookedDirectory, "*.xbm", SearchOption.AllDirectories).Any())
+            if (Directory
+                .GetFiles(activemod.DlcUncookedDirectory, "*", SearchOption.AllDirectories)
+                .Any(file => texallowedExtensions.Any(file.ToLower().EndsWith)))
                 dlcTEX.Checked = true;
 
             // Sound
@@ -59,7 +64,7 @@ namespace WolvenKit
                 .Any(file => allowedExtensions.Any(file.ToLower().EndsWith)))
                 modSND.Checked = true;
             if (Directory
-                .GetFiles(activemod.ModDirectory, "*", SearchOption.AllDirectories)
+                .GetFiles(activemod.DlcDirectory, "*", SearchOption.AllDirectories)
                 .Any(file => allowedExtensions.Any(file.ToLower().EndsWith)))
                 dlcSND.Checked = true;
 
@@ -76,10 +81,11 @@ namespace WolvenKit
                 modSTR.Checked = true;
 
             // Collision
-            if (Directory.GetFiles(activemod.ModUncookedDirectory, "*", SearchOption.AllDirectories).Any())
-                modCOL.Checked = true;
-            if (Directory.GetFiles(activemod.DlcUncookedDirectory, "*", SearchOption.AllDirectories).Any())
-                dlcCOL.Checked = true;
+            //TODO: disable for now
+            //if (Directory.GetFiles(activemod.ModUncookedDirectory, "*", SearchOption.AllDirectories).Any())
+            //    modCOL.Checked = true;
+            //if (Directory.GetFiles(activemod.DlcUncookedDirectory, "*", SearchOption.AllDirectories).Any())
+            //    dlcCOL.Checked = true;
 
             this.Icon = UIController.GetThemedWkitIcon();
 

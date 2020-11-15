@@ -507,12 +507,12 @@ namespace WolvenKit
                 case ".w2quest":
                 case ".w2phase":
                     {
-                        this.flowDiagram = new frmChunkFlowDiagram();
-                        this.flowDiagram.OnOutput += MainController.LogString;
-                        this.flowDiagram.File = this.File;
-                        this.flowDiagram.DockAreas = DockAreas.Document;
-                        this.flowDiagram.OnSelectChunk += this.frmCR2WDocument_OnSelectChunk;
-                        this.flowDiagram.Show(this.FormPanel, DockState.Document);
+                        //this.flowDiagram = new frmChunkFlowDiagram();
+                        //this.flowDiagram.OnOutput += MainController.LogString;
+                        //this.flowDiagram.File = this.File;
+                        //this.flowDiagram.DockAreas = DockAreas.Document;
+                        //this.flowDiagram.OnSelectChunk += this.frmCR2WDocument_OnSelectChunk;
+                        //this.flowDiagram.Show(this.FormPanel, DockState.Document);
                         break;
                     }
 

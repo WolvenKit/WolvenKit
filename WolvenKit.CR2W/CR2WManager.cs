@@ -40,37 +40,28 @@ namespace WolvenKit.CR2W
             {
                 availableTypes.Add(AssemblyDictionary.GetTypeByName(typename));
                 var subclasses = AssemblyDictionary.GetSubClassesOf(AssemblyDictionary.GetTypeByName(typename));
-                // recursive
-                foreach (var subclass in subclasses)
-                {
-                    var ss = GetAvailableTypes(subclass.Name);
-                    availableTypes.AddRange(ss);
-                }
                 availableTypes.AddRange(subclasses);
-                
+
+                // check if subclasses exist in custom assemblies
+                var ssubclasses = CR2WManager.GetSubClassesOf(AssemblyDictionary.GetTypeByName(typename));
+                availableTypes.AddRange(ssubclasses);
+            }
+            else if (CR2WManager.TypeExists(typename))
+            {
+                availableTypes.Add(CR2WManager.GetTypeByName(typename));
+                var subclasses = CR2WManager.GetSubClassesOf(CR2WManager.GetTypeByName(typename));
+                availableTypes.AddRange(subclasses);
+
+                // check if subclasses exist in main assembly
+                var ssubclasses = AssemblyDictionary.GetSubClassesOf(CR2WManager.GetTypeByName(typename));
+                availableTypes.AddRange(ssubclasses);
             }
             else
             {
-                if (CR2WManager.TypeExists(typename))
-                {
-                    availableTypes.Add(CR2WManager.GetTypeByName(typename));
-                    var subclasses = CR2WManager.GetSubClassesOf(AssemblyDictionary.GetTypeByName(typename));
-                    // recursive
-                    foreach (var subclass in subclasses)
-                    {
-                        var ss = GetAvailableTypes(subclass.Name);
-                        availableTypes.AddRange(ss);
-                    }
-                    availableTypes.AddRange(subclasses);
-
-                }
-                else
-                {
-                    //MainController.LogString(
-                    //    "No such type exists. Make sure you have all custom types in a .ws file inside the modproject.",
-                    //    Logtype.Error);
-                    return null;
-                }
+                //MainController.LogString(
+                //    "No such type exists. Make sure you have all custom types in a .ws file inside the modproject.",
+                //    Logtype.Error);
+                return null;
             }
 
             return availableTypes.Distinct();
@@ -106,14 +97,14 @@ namespace WolvenKit.CR2W
         /// Completely reloads a custom assembly
         /// from .ws scripts and compiles all classes
         /// </summary>
-        public static void ReloadAssembly()
+        public static void ReloadAssembly(ILoggerService logger = null)
         {
             if (m_projectinfo != null && m_projectinfo.Exists)
             {
 
                 var (count, csharpstring) = InterpretScriptClasses();
                 if (count <= 0) return;
-                m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly);
+                m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly, logger);
                 if (m_assembly != null)
                 {
                     m_logger.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}", Logtype.Success);
@@ -198,6 +189,10 @@ namespace WolvenKit.CR2W.Types
                             depth += line.Count(_ => _ == '{');
                             depth -= line.Count(_ => _ == '}');
                             continue;
+                        }
+                        else if (line.Contains("enum "))
+                        {
+
                         }
 
                         // if reading, interpret results
@@ -357,7 +352,7 @@ namespace WolvenKit.CR2W.Types
             m_logger = logger;
             m_projectinfo = new DirectoryInfo(projectpath);
 
-            ReloadAssembly();
+            ReloadAssembly(logger);
         }
 
     }

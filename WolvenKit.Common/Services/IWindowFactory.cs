@@ -8,6 +8,6 @@ namespace WolvenKit.Common.Services
 {
     public interface IWindowFactory
     {
-        string ShowAddChunkFormModal(IEnumerable<string> availableTypes, ref string output);
+        string ShowAddChunkFormModal(IEnumerable<string> availableTypes);
     }
 }

@@ -132,34 +132,34 @@ namespace WolvenKit.App
 
             if (loadmods)
             {
-                if (MainController.Get().ModBundleManager != null)
-                {
-                    MainController.Get().ModBundleManager.LoadModsBundles(exeDir); // load mods added after WK was started
-                    managers.Add(MainController.Get().ModBundleManager);
-                }
-                if (MainController.Get().ModSoundManager != null)
-                {
-                    MainController.Get().ModSoundManager.LoadModsBundles(exeDir);
-                    managers.Add(MainController.Get().ModSoundManager);
-                }
-                if (MainController.Get().ModTextureManager != null)
-                {
-                    MainController.Get().ModTextureManager.LoadModsBundles(exeDir);
-                    managers.Add(MainController.Get().ModTextureManager);
-                }
-                if (MainController.Get().ModCollisionManager != null)
-                {
-                    MainController.Get().ModCollisionManager.LoadModsBundles(exeDir);
-                    managers.Add(MainController.Get().ModCollisionManager);
-                }
+                ModBundleManager = new BundleManager();
+                ModBundleManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                managers.Add(MainController.Get().ModBundleManager);
+
+                ModTextureManager = new TextureManager();
+                ModTextureManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                managers.Add(MainController.Get().ModTextureManager);
+
+                ModSoundManager = new SoundManager();
+                ModSoundManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                managers.Add(MainController.Get().ModSoundManager);
+
+                ModCollisionManager = new CollisionManager();
+                ModCollisionManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                managers.Add(MainController.Get().ModCollisionManager);
             }
             else
             {
-                if (MainController.Get().BundleManager != null) managers.Add(MainController.Get().BundleManager);
-                if (MainController.Get().SoundManager != null) managers.Add(MainController.Get().SoundManager);
-                if (MainController.Get().TextureManager != null) managers.Add(MainController.Get().TextureManager);
-                if (MainController.Get().CollisionManager != null) managers.Add(MainController.Get().CollisionManager);
-                if (MainController.Get().SpeechManager != null) managers.Add(MainController.Get().SpeechManager);
+                if (MainController.Get().BundleManager != null) 
+                    managers.Add(MainController.Get().BundleManager);
+                if (MainController.Get().SoundManager != null) 
+                    managers.Add(MainController.Get().SoundManager);
+                if (MainController.Get().TextureManager != null) 
+                    managers.Add(MainController.Get().TextureManager);
+                if (MainController.Get().CollisionManager != null) 
+                    managers.Add(MainController.Get().CollisionManager);
+                if (MainController.Get().SpeechManager != null) 
+                    managers.Add(MainController.Get().SpeechManager);
             }
 
             return managers;
