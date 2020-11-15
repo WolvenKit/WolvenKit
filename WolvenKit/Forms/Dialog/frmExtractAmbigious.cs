@@ -22,7 +22,7 @@ namespace WolvenKit
             for (int i = 0; i < files.Count; i++)
             {
                 var file = files[i];
-                var archiveName = Path.GetFileName(file.Bundle.ArchiveAbsolutePath);
+                var archiveName = file.Bundle.ArchiveAbsolutePath;
                 var key = $"{archiveName}";
                 if (filesDict.ContainsKey(key))
                 {

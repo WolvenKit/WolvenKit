@@ -67,7 +67,7 @@ namespace WolvenKit.App.ViewModels
             MainController.LogString(FilePath + " saved!", Logtype.Normal);
 
             // register all new classes
-            CR2WManager.ReloadAssembly();
+            CR2WManager.ReloadAssembly(MainController.Get().Logger);
 
 
             IsUnsaved = false;
