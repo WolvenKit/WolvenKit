@@ -145,7 +145,7 @@ namespace WolvenKit.CR2W
             return type;
         }
 
-        public static bool EnumExists(string typeName) => m_enums.ContainsKey(typeName);
+        public static bool EnumExists(string typeName) => m_enums?.ContainsKey(typeName) ?? false;
         #endregion
 
 
