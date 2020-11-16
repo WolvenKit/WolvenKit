@@ -1065,7 +1065,7 @@ namespace WolvenKit.CR2W
                     break;
                 case ISoftAccessor s:
                     break;
-                case IVariantAccessor ivariant:
+                case IBufferVariantAccessor ivariant:
                     EStringTableMod mod = EStringTableMod.None;
                     if (ivariant is CVariantSizeType)
                         mod = EStringTableMod.SkipName;
@@ -1082,10 +1082,10 @@ namespace WolvenKit.CR2W
                 case CVariable cvar:
                 {
                     // add parent if not already in guidlist
-                    // don't add array type parents, don't add IVariantAccessor type parents
+                    // don't add array type parents, don't add IBufferVariantAccessor type parents
                     if (cvar.ParentVar != null
                         && !cvar.ParentVar.GetType().IsGenericType
-                        && !(cvar.ParentVar is IVariantAccessor)
+                        && !(cvar.ParentVar is IBufferVariantAccessor)
                         && !(cvar.ParentVar is SEntityBufferType2)
                         && !guidlist.Contains(cvar.ParentVar.InternalGuid))
                     {

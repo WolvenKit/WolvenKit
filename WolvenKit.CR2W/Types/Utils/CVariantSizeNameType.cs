@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
     /// </summary>
     [DataContract(Namespace = "")]
     [REDMeta()]
-    public class CVariantSizeNameType : CVariable, IVariantAccessor
+    public class CVariantSizeNameType : CVariable, IBufferVariantAccessor
     {
         public CVariable Variant { get; set; }
 

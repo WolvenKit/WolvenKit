@@ -50,43 +50,44 @@ namespace WolvenKit.Render
             float r32 = rm.cy.val;
             float r33 = rm.cz.val;
 
-            float y = -(float)Math.Asin(Clamp(r13, -1.0f, 1.0f));
-            float c = (float)Math.Cos(y);
-            ry = y;
-            if (Math.Abs(ry) >= Math.PI * 2.0)
+            double Y = -Math.Asin(Clamp(r13, -1.0f, 1.0f));
+            double C = Math.Cos(Y);
+            ry = (float)Y;
+
+            double rotx, roty, X, Z;
+
+            if (Math.Abs(C) > 0.0005)
             {
-                ry = 0;
-            }
-
-            y *= (float)(180.0 / Math.PI);
-
-            if (Math.Abs(c) > 0.0005f)
-            {
-                float invC = 1.0f / c;
-                float rotx = r33 * invC;
-                float roty = r23 * invC;
-                rx = (float)Math.Atan2(roty, rotx);
-                if (rx < 0)
-                {
-                    rx += (float)(Math.PI * 2.0);
-                }
-
+                double invC = 1.0 / C;
+                rotx = r33 * invC;
+                roty = r23 * invC;
+                X = Math.Atan2(roty, rotx);
                 rotx = r11 * invC;
                 roty = r12 * invC;
-                rz = (float)Math.Atan2(roty, rotx);
-                if (rz < 0)
-                {
-                    rz += (float)(Math.PI * 2.0);
-                }
+                Z = Math.Atan2(roty, rotx);
             }
             else
             {
-                rx = 0;
-                rz = (float)Math.Atan2(-r21, r22);
-                if (rz < 0)
-                {
-                    rz += (float)(Math.PI * 2.0);
-                }
+                X = 0.0;
+                Z = Math.Atan2(-r21, r22);
+            }
+
+            rx = (float)X;
+            rz = (float)Z;
+
+            if (rx < 0)
+            {
+                rx += (float)(Math.PI * 2.0);
+            }
+
+            if (ry < 0)
+            {
+                ry += (float)(Math.PI * 2.0);
+            }
+
+            if (rz < 0)
+            {
+                rz += (float)(Math.PI * 2.0);
             }
         }
 
@@ -227,9 +228,8 @@ namespace WolvenKit.Render
                             float rx, ry, rz;
                             MatrixToEuler(rot, out rx, out ry, out rz); // radians
 
-                            //NOTE: Flipping the z axis rotation and the x axis translation since the assets seemed to be mirrored.  RHCS vs LHCS?
-                            Vector3Df rotation = new Vector3Df(rx * RADIANS_TO_DEGREES, ry * RADIANS_TO_DEGREES, -rz * RADIANS_TO_DEGREES);
-                            Vector3Df translation = new Vector3Df(-position.X.val, position.Y.val, position.Z.val);
+                            Vector3Df rotation = new Vector3Df(rx * RADIANS_TO_DEGREES, ry * RADIANS_TO_DEGREES, rz * RADIANS_TO_DEGREES);
+                            Vector3Df translation = new Vector3Df(position.X.val, position.Y.val, position.Z.val);
 
                             SBlockDataMeshObject mo = (SBlockDataMeshObject)block.packedObject;
                             ushort meshIndex = mo.meshIndex.val;
@@ -695,7 +695,10 @@ namespace WolvenKit.Render
                 lightNode = smgr.AddLightSceneNode(null, new Vector3Df(0, 0, 0), new Colorf(1.0f, 1.0f, 1.0f), 200000.0f);
                 smgr.AmbientLight = new Colorf(1.0f, 1.0f, 1.0f);
                 worldNode = smgr.AddEmptySceneNode();
+                //NOTE: Witcher assets use Z up but Irrlicht uses Y up so rotate the model
                 worldNode.Rotation = new Vector3Df(-90, 0, 0);
+                //NOTE: We also need to flip the x-coordinate with this rotation
+                worldNode.Scale = new Vector3Df(-1.0f, 1.0f, 1.0f);
                 worldNode.Visible = true;
 
                 var dome = smgr.AddSkyDomeSceneNode(driver.GetTexture("Terrain\\skydome.jpg"), 16, 8, 0.95f, 2.0f);

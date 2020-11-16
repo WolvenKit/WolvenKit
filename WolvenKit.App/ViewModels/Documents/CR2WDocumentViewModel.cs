@@ -16,7 +16,7 @@ namespace WolvenKit.App.ViewModels
     {
         public CR2WDocumentViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
-            OpenChunkFormCommand = new DelegateCommand<IEnumerable<string>>(OpenChunkForm); ;
+            //OpenChunkFormCommand = new DelegateCommand<IEnumerable<string>>(OpenChunkForm); ;
 
             chunkDisplayMode = EChunkDisplayMode.VirtualParent;
 
@@ -91,14 +91,9 @@ namespace WolvenKit.App.ViewModels
         #region Commands
         public ICommand CopyVariableCommand { get; }
         public ICommand PasteVariableCommand { get; }
-        public ICommand OpenChunkFormCommand { get; }
         #endregion
 
         #region Commands Implementation
-
-        private string openChunkFormRef = "";
-        public void OpenChunkForm(IEnumerable<string> value) => m_windowFactory.ShowAddChunkFormModal(value, ref openChunkFormRef);
-
         protected bool CanCopyVariable() => true;
 
         protected bool CanPasteVariable() => CopyController.Source != null && CopyController.Target != null;
@@ -127,7 +122,7 @@ namespace WolvenKit.App.ViewModels
             // -------------------------------------------------------------------------------------------------------------------
             // Paste-in-place - 1-->1 - if only one variable was copied and that one variable is of the same type as the target variable
             // -------------------------------------------------------------------------------------------------------------------
-            if (CopyController.Source.Count == 1 && ctarget.GetType() == csource.GetType())
+            if (CopyController.Source.Count == 1 && ctarget.GetType().IsSubclassOf(csource.GetType()))
             {
                 //Remember the old parenting hierarchy
                 var oldparentinghierarchy = new Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)>();
@@ -200,6 +195,14 @@ namespace WolvenKit.App.ViewModels
                             ctargetptr.ParentVar.AddVariable(uppercopy);
                         }
                     }
+                }
+                else
+                {
+                    context = new CR2WCopyAction()
+                    {
+                        SourceFile = csource.cr2w,
+                        DestinationFile = ctarget.cr2w
+                    };
                 }
 
                 var copy = csource.Copy(context);
@@ -284,7 +287,11 @@ namespace WolvenKit.App.ViewModels
             base.SaveFile();
         }
 
-        public void AddNewChunkFor(CVariable newvar)
+        /// <summary>
+        /// Adds a new chunk for variables implementing IPtrAccessor or IHandleAccessor
+        /// </summary>
+        /// <param name="newvar"></param>
+        public void AddNewChunkFor(IChunkPtrAccessor newvar)
         {
             switch (newvar)
             {
@@ -304,8 +311,7 @@ namespace WolvenKit.App.ViewModels
                         }
                         else
                         {
-                            OpenChunkFormCommand.SafeExecute(availableTypes);
-                            newChunktype = openChunkFormRef;
+                            newChunktype = m_windowFactory.ShowAddChunkFormModal(availableTypes);
                         }
 
                         if (string.IsNullOrEmpty(newChunktype))
@@ -317,7 +323,7 @@ namespace WolvenKit.App.ViewModels
                             cr2w.GetLastChildrenIndexRecursive(cr2w.chunks[ptr.LookUpChunkIndex()]) + 1,
                             SelectedChunk,
                             SelectedChunk,
-                            newvar);
+                            (CVariable)newvar);
                         ptr.IsSerialized = true;
 
                         OnPropertyChanged(nameof(File));
@@ -367,8 +373,7 @@ namespace WolvenKit.App.ViewModels
                             }
                             else
                             {
-                                OpenChunkFormCommand.SafeExecute(availableTypes);
-                                newhandletype = openChunkFormRef;
+                                newhandletype = m_windowFactory.ShowAddChunkFormModal(availableTypes);
                             }
 
 
@@ -382,7 +387,7 @@ namespace WolvenKit.App.ViewModels
                                 cr2w.GetLastChildrenIndexRecursive(cr2w.chunks[handle.LookUpChunkIndex()]) + 1,
                                 SelectedChunk,
                                 SelectedChunk,
-                                newvar);
+                                (CVariable)newvar);
                             handle.IsSerialized = true;
                         }
 
@@ -399,22 +404,23 @@ namespace WolvenKit.App.ViewModels
                 return;
 
             // Create new CVariable
-            CVariable newvar = CR2WTypeManager.Create(parentarray.Elementtype, "", SelectedChunk.cr2w, editableVariable as CVariable, false);
-            if (newvar == null) return;
+            var newvar = CR2WTypeManager.Create(parentarray.Elementtype, "", SelectedChunk.cr2w,
+                editableVariable as CVariable, false);
+            if (newvar == null)
+                return;
 
             if (newvar is IVariantAccessor ivar)
             {
-                List<string> availableTypes = CR2WManager.GetAvailableTypes("CObject").Select(_ => _.Name).ToList();
-                var newVariantType = "";
-                OpenChunkFormCommand.SafeExecute(availableTypes);
-                newVariantType = openChunkFormRef;
-                //TODO: implement creating new cvariants
+                var availableTypes = CR2WManager.GetAvailableTypes("CObject").Select(_ => _.Name);
+                var variantType = m_windowFactory.ShowAddChunkFormModal(availableTypes);
 
-                return;
+                var variant = CR2WTypeManager.Create(variantType, "Variant", newvar.cr2w, newvar);
+                variant.IsSerialized = true;
+                ivar.Variant = variant;
             }
 
-
-            AddNewChunkFor(newvar);
+            if (newvar is IChunkPtrAccessor chunkptr)
+                AddNewChunkFor(chunkptr);
 
             newvar.IsSerialized = true;
 

@@ -250,7 +250,7 @@ namespace WolvenKit.Forms
             {
                 if (sender is ToolStripItem item && item.Tag is IEditableVariable variable && variable is IChunkPtrAccessor ptrAccessor)
                 {
-                    viewModel.AddNewChunkFor(variable as CVariable);
+                    viewModel.AddNewChunkFor(ptrAccessor);
                 }
             }
 

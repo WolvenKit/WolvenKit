@@ -57,8 +57,17 @@ namespace WolvenKit
                 string extension = this.GetFileExtension(row);
                 if (!this.treeListView.SmallImageList.Images.ContainsKey(extension))
                 {
-                    Image smallImage = GetSmallIconForFileType(extension);
-                    this.treeListView.SmallImageList.Images.Add(extension, smallImage);
+                    try
+                    {
+                        Image smallImage = GetSmallIconForFileType(extension);
+                        this.treeListView.SmallImageList.Images.Add(extension, smallImage);
+                    }
+                    catch (Exception e)
+                    {
+                        MainController.LogString("e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3", Logtype.Error);
+                        this.Close();
+                    }
+                    
                 }
                 return extension;
             };

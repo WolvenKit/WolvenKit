@@ -12,12 +12,13 @@ namespace WolvenKit.Utility
 {
     public class ProductionWindowFactory : IWindowFactory
     {
-        public string ShowAddChunkFormModal(IEnumerable<string> availableTypes, ref string output)
+        public string ShowAddChunkFormModal(IEnumerable<string> availableTypes)
         {
             using (var form = new frmAddChunk(availableTypes.ToList()))
             {
                 var result = form.ShowDialog();
-                output = result == System.Windows.Forms.DialogResult.OK 
+
+                var output = result == DialogResult.OK 
                     ? form.ChunkType 
                     : "";
                 return output;

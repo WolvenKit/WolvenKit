@@ -20,18 +20,19 @@ namespace WolvenKit.Forms
     public partial class frmScriptEditor : DockContent, IWolvenkitView
     {
         private const bool CodeFoldingCircular = true;
-        private readonly FindReplace ScintillaFindReplace;
+        private readonly FindReplace scintillaFindReplace;
         private readonly ScriptDocumentViewModel vm;
+        private delegate void StrDelegate(string t);
 
-        public string autocompletelist = "array< PushBack string int integer bool float name range event function abstract " +
-                                         "const final private protected public theGame theInput thePlayer " +
-                                         "theSound enum struct state array false NULL true out inlined autobind editable " +
-                                         "entry exec hint import latent optional out quest saved statemachine timer break case" +
-                                         " continue else for if return switch while";
-        
+        private const string Autocompletelist =
+            "array< PushBack string int integer bool float name range event function abstract " +
+            "const final private protected public theGame theInput thePlayer " +
+            "theSound enum struct state array false NULL true out inlined autobind editable " +
+            "entry exec hint import latent optional out quest saved statemachine timer break case" +
+            " continue else for if return switch while";
+
 
         public string FileName => vm.FileName;
-
         public IDocumentViewModel GetViewModel() => vm;
 
         public frmScriptEditor(ScriptDocumentViewModel documentViewModel)
@@ -44,8 +45,8 @@ namespace WolvenKit.Forms
             InitializeComponent();
             ApplyCustomTheme();
 
-            ScintillaFindReplace = new FindReplace(scintillaControl);
-            ScintillaFindReplace.KeyPressed += ScintillaFindReplaceOnKeyPressed;
+            scintillaFindReplace = new FindReplace(scintillaControl);
+            scintillaFindReplace.KeyPressed += ScintillaFindReplaceOnKeyPressed;
             this.ShowIcon = false;
 
             ConfigureScintilla();
@@ -59,8 +60,13 @@ namespace WolvenKit.Forms
             switch (e.PropertyName)
             {
                 case nameof(vm.FormTitle):
+                {
+                    Invoke(new StrDelegate(SetFormTitle), vm.FormTitle);
                     break;
+                }
             }
+
+            void SetFormTitle(string text) => this.Text = text;
         }
 
         public void LoadFile(string path)
@@ -96,14 +102,8 @@ namespace WolvenKit.Forms
             if (lenEntered > 0)
             {
                 if (!scintillaControl.AutoCActive)
-                    scintillaControl.AutoCShow(lenEntered, autocompletelist);
+                    scintillaControl.AutoCShow(lenEntered, Autocompletelist);
             }
-
-            // notify unsaved
-            vm.IsUnsaved = true;
-            this.Text = $"{vm.FileName}*";
-
-            
         }
 
         private void SetupSyntaxHighlighting()
@@ -229,27 +229,27 @@ namespace WolvenKit.Forms
             }
             else if (e.Shift && e.KeyCode == Keys.F3)
             {
-                ScintillaFindReplace.Window.FindPrevious();
+                scintillaFindReplace.Window.FindPrevious();
                 e.SuppressKeyPress = true;
             }
             else if (e.KeyCode == Keys.F3)
             {
-                ScintillaFindReplace.Window.FindNext();
+                scintillaFindReplace.Window.FindNext();
                 e.SuppressKeyPress = true;
             }
             else if (e.Control && e.KeyCode == Keys.F)
             {
-                ScintillaFindReplace.ShowFind();
+                scintillaFindReplace.ShowFind();
                 e.SuppressKeyPress = true;
             }
             else if (e.Control && e.KeyCode == Keys.H)
             {
-                ScintillaFindReplace.ShowReplace();
+                scintillaFindReplace.ShowReplace();
                 e.SuppressKeyPress = true;
             }
             else if (e.Control && e.KeyCode == Keys.I)
             {
-                ScintillaFindReplace.ShowIncrementalSearch();
+                scintillaFindReplace.ShowIncrementalSearch();
                 e.SuppressKeyPress = true;
             }
             else if (e.Control && e.KeyCode == Keys.G)

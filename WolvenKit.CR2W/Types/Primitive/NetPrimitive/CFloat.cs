@@ -42,11 +42,6 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CFloat(cr2w, parent, name);
-        }
-
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CFloat) base.Copy(context);

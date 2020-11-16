@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using System.Runtime;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Common.Tools
 {
@@ -20,7 +21,7 @@ namespace WolvenKit.Common.Tools
         /// </summary>
         /// <param name="sourceString"></param>
         /// <returns></returns>
-        public static Assembly CompileAssemblyFromStrings(string sourceString, Assembly currentCustomAssembly)
+        public static Assembly CompileAssemblyFromStrings(string sourceString, Assembly currentCustomAssembly, ILoggerService logger  = null)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(sourceString);
             string assemblyName = Guid.NewGuid().ToString();
@@ -40,7 +41,7 @@ namespace WolvenKit.Common.Tools
             }
             catch (Exception ex)
             {
-                ex.ToString();
+                logger?.LogString(ex.ToString(), Logtype.Error);
             }
 
             return assembly;

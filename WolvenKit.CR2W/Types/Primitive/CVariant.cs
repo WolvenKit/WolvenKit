@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
     /// Format: [ushort typeID] [uint size] [byte[size] data]
     /// </summary>
     [REDMeta()]
-    public class CVariant : CVariable
+    public class CVariant : CVariable, IVariantAccessor
     {
-        public CVariable Variant;
+        public CVariable Variant { get; set; }
 
         public CVariant(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
@@ -87,21 +87,12 @@ namespace WolvenKit.CR2W.Types
             return copy;
         }
 
+        //public override List<IEditableVariable> GetEditableVariables() => new List<IEditableVariable> { Variant};
         public override List<IEditableVariable> GetEditableVariables() => Variant?.GetEditableVariables();
 
         public override string ToString()
         {
             return Variant != null ? Variant.ToString() : "";
-        }
-
-        public override bool CanAddVariable(IEditableVariable newvar)
-        {
-            return newvar == null || newvar is CVariable;
-        }
-
-        public override void AddVariable(CVariable var)
-        {
-            this.Variant = var;
         }
     }
 }

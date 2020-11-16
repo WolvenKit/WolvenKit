@@ -27,7 +27,7 @@ namespace WolvenKit.CR2W.Reflection
             return type;
         }
 
-        public static List<Type> GetSubClassesOf(Type type) => m_types.Values.Where(_ => _.IsSubclassOf(type)).ToList();
+        public static IEnumerable<Type> GetSubClassesOf(Type type) => m_types.Values.Where(_ => _.IsSubclassOf(type)).ToList();
 
         public static bool TypeExists(string typeName) => m_types.ContainsKey(typeName);
 
