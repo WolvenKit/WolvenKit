@@ -23,7 +23,7 @@ namespace WolvenKit.Cache
             AutocompleteSource = new AutoCompleteStringCollection();
         }
 
-        public Dictionary<string, TextureCache> Archives { get; }
+        private Dictionary<string, TextureCache> Archives { get; }
         public override EBundleType TypeName => EBundleType.TextureCache;
         public static string SerializationVersion => "1.1";
 

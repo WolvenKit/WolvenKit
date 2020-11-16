@@ -1167,22 +1167,36 @@ namespace WolvenKit
 
                 // Delete from file structure
                 var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
-                try
+
+                if (File.Exists(fullpath))
                 {
-                    if (File.Exists(fullpath))
+                    try
                     {
                         FileSystem.DeleteFile(fullpath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                         //File.Delete(fullpath);
                     }
-                    else
+                    catch (Exception exception)
+                    {
+                        MainController.LogString("Failed to delete " + fullpath + "!\r\n", Common.Services.Logtype.Error);
+                        throw;
+                    }
+                }
+                else if (Directory.Exists(fullpath))
+                {
+                    try
                     {
                         FileSystem.DeleteDirectory(fullpath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                         //Directory.Delete(fullpath, true);
                     }
+                    catch (Exception exception)
+                    {
+                        MainController.LogString("Failed to delete " + fullpath + "!\r\n", Common.Services.Logtype.Error);
+                        throw;
+                    }
                 }
-                catch (Exception)
+                else
                 {
-                    MainController.LogString("Failed to delete " + fullpath + "!\r\n", Common.Services.Logtype.Error);
+                    MainController.LogString("Request delete " + fullpath + "!\r\n", Common.Services.Logtype.Important);
                 }
             }
 
@@ -2848,9 +2862,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
 
         private void commandPromptHereToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.OpenConsoleAtPath(ActiveMod.ProjectDirectory);
 
-        private void dDStoTextureCacheToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
+        private void dDStoTextureCacheToolStripMenuItem_Click(object sender, EventArgs e) =>
+            vm.DdsToCacheCommand.SafeExecute();
     }
 }

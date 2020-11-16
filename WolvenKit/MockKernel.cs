@@ -305,13 +305,15 @@ namespace WolvenKit
         public IDockContent GetModExplorer()
         {
             if (ModExplorer == null || ModExplorer.IsDisposed)
+            {
                 ModExplorer = new frmModExplorer();
 
-            ModExplorer.RequestAssetBrowser += Window.ModExplorer_RequestAssetBrowser;
-            ModExplorer.RequestFileOpen += Window.ModExplorer_RequestFileOpen;
-            ModExplorer.RequestFileRename += Window.ModExplorer_RequestFileRename;
-            ModExplorer.RequestFileDelete += Window.ModExplorer_RequestFileDelete;
-            ModExplorer.RequestFastRender += Window.ModExplorer_RequestFastRender;
+                ModExplorer.RequestAssetBrowser += Window.ModExplorer_RequestAssetBrowser;
+                ModExplorer.RequestFileOpen += Window.ModExplorer_RequestFileOpen;
+                ModExplorer.RequestFileRename += Window.ModExplorer_RequestFileRename;
+                ModExplorer.RequestFileDelete += Window.ModExplorer_RequestFileDelete;
+                ModExplorer.RequestFastRender += Window.ModExplorer_RequestFastRender;
+            }
 
             return ModExplorer;
         }

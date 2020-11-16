@@ -22,6 +22,8 @@ using WolvenKit.CR2W;
 using WolvenKit.Wwise.Wwise;
 using WolvenKit.Common.WinFormsEnums;
 using WolvenKit.App.Model;
+using System.Windows.Input;
+using WolvenKit.App.Commands;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -88,10 +90,35 @@ namespace WolvenKit.App.ViewModels
             Title = "WolvenKit";
 
             _openDocuments = new Dictionary<string, IDocumentViewModel>();
+
+            DdsToCacheCommand = new RelayCommand(DdsToCache, CanDdsToCacheCommand);
         }
 
 
+        #region Commands
+        public ICommand DdsToCacheCommand { get; }
 
+
+        #endregion
+
+        #region CommandsImplementation
+
+        private bool CanDdsToCacheCommand() => MainController.Get().ActiveMod != null;
+
+        private void DdsToCache()
+        {
+            // Creation
+            var txc = new TextureCache();
+            txc.LoadFiles(ActiveMod.RawModDirectory, MainController.Get().Logger);
+            txc.Write(Path.Combine(ActiveMod.PackedModDirectory, "texture.cache"), MainController.Get().Logger);
+
+            MainController.LogString($@"Finished creating texture.cache.", Logtype.Success);
+
+            // Installing
+            InstallMod();
+        }
+
+        #endregion
 
         #region Mod
         /// <summary>
