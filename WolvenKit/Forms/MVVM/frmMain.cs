@@ -2652,7 +2652,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
 
         private async void backupModProjectToolStripMenuItem_Click(object sender, EventArgs e) => vm.BackupProjectCommand.SafeExecute();
 
-        private void openBackupFolderToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.ShowFolderInExplorer(ActiveMod.BackupDirectory);
+        private void openBackupFolderToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.ShowFolderInExplorer(ActiveMod?.BackupDirectory);
 
         private void commandPromptHereToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.OpenConsoleAtPath(ActiveMod.ProjectDirectory);
 
@@ -2679,7 +2679,9 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
 
             }
         }
-        
+
+        private void openModFolderToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.ShowFolderInExplorer(MainController.Get().Configuration.GameModDir);
         #endregion
+
     }
 }
