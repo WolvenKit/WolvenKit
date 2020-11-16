@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace WolvenKit.CR2W.Types
 {
-    public static class Enums
+    public static partial class Enums
     {
+
         public enum ETextureCompression
         {
             TCM_None,

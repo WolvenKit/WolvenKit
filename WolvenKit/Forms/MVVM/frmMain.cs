@@ -1,5 +1,6 @@
 ﻿using AutoUpdaterDotNET;
 using Dfust.Hotkeys;
+using Microsoft.VisualBasic.FileIO;
 using SharpPresence;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -17,36 +19,34 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
-using SearchOption = System.IO.SearchOption;
-using System.IO.MemoryMappedFiles;
-using Microsoft.VisualBasic.FileIO;
 using WolvenKit.App.Model;
+using SearchOption = System.IO.SearchOption;
 
 namespace WolvenKit
 {
+    using App;
+    using App.Commands;
+    using App.ViewModels;
+    using Bundles;
     using Cache;
     using Common;
+    using Common.Extensions;
+    using Common.Model;
     using Common.Services;
     using Common.Wcc;
     using CR2W;
     using CR2W.Types;
     using Extensions;
     using Forms;
-    using App;
-    using App.Commands;
-    using App.ViewModels;
-    using Bundles;
-    using Common.Extensions;
-    using Common.Model;
     using Forms.MVVM;
+    using Microsoft.WindowsAPICodePack.Dialogs;
     using Render;
     using Scaleform;
+    using System.Globalization;
+    using WolvenKit.CR2W.Reflection;
     using Wwise.Player;
     using Wwise.Wwise;
     using Enums = Enums;
-    using WolvenKit.CR2W.Reflection;
-    using Microsoft.WindowsAPICodePack.Dialogs;
-    using System.Globalization;
 
     public partial class frmMain : Form
     {
@@ -3708,12 +3708,12 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 // parse the w2w and provide information to the scene
-                Render.frmLevelScene sceneView = new Render.frmLevelScene(dlg.FileName, MainController.Get().Configuration.DepotPath, MainController.Get().TextureManager);
+                var sceneView = new Render.frmLevelScene(dlg.FileName, MainController.Get().Configuration.DepotPath, MainController.Get().TextureManager);
                 sceneView.Show(this.dockPanel, DockState.Document);
             }
         }
 
-        void toolStripDropDownButtonGit_Paint(object sender, PaintEventArgs e)
+        private void toolStripDropDownButtonGit_Paint(object sender, PaintEventArgs e)
         {
             if (toolStripDropDownButtonGit.Pressed)
             {
@@ -3825,7 +3825,6 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 MainController.Get().StatusProgress = 100;
                 MainController.Get().ProjectStatus = EProjectStatus.Ready;
                 MainController.LogString($"Error creating git archive for project {ActiveMod.Name}.", Logtype.Error);
-                return;
             }
         }
 
@@ -3833,6 +3832,26 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
         private void commandPromptHereToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.OpenConsoleAtPath(ActiveMod.ProjectDirectory);
 
-        
+        private void resetDocumentLayoutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (vm.GetOpenDocuments().Any())
+            {
+                MainController.LogString($"Please close all open documents.", Logtype.Error);
+                return;
+            }
+
+            try
+            {
+                var doclayoutconfig = Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath),
+                    "cr2wdocument_layout.xml");
+                if (File.Exists(doclayoutconfig))
+                    File.Delete(doclayoutconfig);
+                MainController.LogString($"Reset document layout.", Logtype.Success);
+            }
+            catch (Exception exception)
+            {
+
+            }
+        }
     }
 }

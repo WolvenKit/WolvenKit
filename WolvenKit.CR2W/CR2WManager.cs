@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools;
 using WolvenKit.CR2W.Reflection;
+using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W
 {
@@ -26,6 +27,7 @@ namespace WolvenKit.CR2W
         private static LoggerService m_logger;
         private static DirectoryInfo m_projectinfo;
         private static Dictionary<string, Type> m_types;
+        private static Dictionary<string, Type> m_enums;
 
         /// <summary>
         /// Gets all available types, custom and vanilla for a given typename
@@ -109,11 +111,50 @@ namespace WolvenKit.CR2W
                 {
                     m_logger.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}", Logtype.Success);
                     LoadTypes();
+                    LoadEnums();
                 }
                 else
                     m_logger.LogString($"Custom class assembly could not be compiled. An error occured", Logtype.Error);
             }
         }
+
+        #region Enums
+        private static void LoadEnums()
+        {
+            m_enums = new Dictionary<string, Type>();
+
+            if (!m_types.ContainsKey("Enums"))
+                return;
+
+
+            foreach (Type type in CR2WManager.GetTypeByName("Enums").GetNestedTypes())
+            {
+                if (!type.IsEnum)
+                    continue;
+
+                if (m_enums.ContainsKey(type.Name))
+                    continue;
+
+                m_enums.Add(type.Name, type);
+            }
+        }
+
+        public static Type GetEnumByName(string typeName)
+        {
+            m_enums.TryGetValue(typeName, out Type type);
+            return type;
+        }
+
+        public static bool EnumExists(string typeName) => m_enums?.ContainsKey(typeName) ?? false;
+        #endregion
+
+
+
+
+
+
+
+
 
 
         private const string header = @"
@@ -145,7 +186,8 @@ namespace WolvenKit.CR2W.Types
 
         private static (int, string) InterpretScriptClasses()
         {
-            List<string> importedClases = new List<string>();
+            List<string> importedClasses = new List<string>();
+            List<string> importedEnums = new List<string>();
             string output = "";
 
             using (StringWriter sw = new StringWriter())
@@ -154,7 +196,85 @@ namespace WolvenKit.CR2W.Types
                 sw.WriteLine(header);
 
                 FileInfo[] projectScriptFiles = m_projectinfo.GetFiles("*.ws", SearchOption.AllDirectories);
-                // all classes
+
+
+                sw.WriteLine("\tpublic static partial class Enums");
+                sw.WriteLine("\t{\r\n");
+                // interpret enums
+                #region Enums
+                foreach (var file in projectScriptFiles)
+                {
+                    int depth = 0;
+                    bool isReading = false;
+                    string enumname = "";
+                    string enumstring = "";
+
+                    var lines = File.ReadLines(file.FullName);
+                    foreach (var line in lines)
+                    {
+                        // check if should start reading
+                        if (line.Contains("enum "))
+                        {
+
+                            // interpret line
+                            string intline = InterpretEnumLine(line, ref enumname);
+                            if (!string.IsNullOrEmpty(intline))
+                            {
+                                // check if enum is vanilla
+                                if (AssemblyDictionary.EnumExists(enumname))
+                                    continue;
+                                if (importedEnums.Contains(enumname))
+                                    continue;
+
+                                enumstring += $"\t{intline}\r\n";
+
+                                isReading = true;
+                            }
+
+                            // increment or decrement the depth
+                            depth += line.Count(_ => _ == '{');
+                            depth -= line.Count(_ => _ == '}');
+                            continue;
+                        }
+
+                        // if reading, interpret results
+                        if (isReading)
+                        {
+                            // increment or decrement the depth
+                            depth += line.Count(_ => _ == '{');
+                            depth -= line.Count(_ => _ == '}');
+
+                            // only interpret variables at depth 1 (from the class depth)
+                            if (depth == 1)
+                            {
+                                if (!string.IsNullOrEmpty(line))
+                                {
+                                    var iline = InterpretEnumVarLine(line);
+                                    if (!string.IsNullOrEmpty(iline))
+                                    {
+                                        enumstring += $"\t\t\t{iline}\r\n";
+                                    }
+                                }
+                            }
+
+                            // if depth is 0 again, stop reading and write to output
+                            if (depth == 0)
+                            {
+                                sw.WriteLine(enumstring);
+                                sw.WriteLine("\t\t}");
+
+                                isReading = false;
+                                enumstring = "";
+                                importedEnums.Add(enumname);
+                            }
+                        }
+                    }
+                }
+                #endregion
+                sw.WriteLine("\t}\r\n");
+
+                // interpret classes
+                #region Classes
                 foreach (var file in projectScriptFiles)
                 {
                     int depth = 0;
@@ -177,7 +297,7 @@ namespace WolvenKit.CR2W.Types
                                 // check if class is vanilla
                                 if (AssemblyDictionary.TypeExists(classname))
                                     continue;
-                                if (importedClases.Contains(classname))
+                                if (importedClasses.Contains(classname))
                                     continue;
 
                                 classstring += $"{intline}\r\n";
@@ -190,10 +310,6 @@ namespace WolvenKit.CR2W.Types
                             depth -= line.Count(_ => _ == '}');
                             continue;
                         }
-                        else if (line.Contains("enum "))
-                        {
-
-                        }
 
                         // if reading, interpret results
                         if (isReading)
@@ -205,7 +321,7 @@ namespace WolvenKit.CR2W.Types
                             // only interpret variables at depth 1 (from the class depth)
                             if (depth == 1)
                             {
-                                string intline = InterpretVarLine(line, varcounter);
+                                string intline = InterpretVarLine(line, varcounter, importedEnums);
                                 if (!string.IsNullOrEmpty(intline))
                                 {
                                     classstring += $"{intline}";
@@ -223,25 +339,27 @@ namespace WolvenKit.CR2W.Types
                                 varcounter = 0;
                                 isReading = false;
                                 classstring = "";
-                                importedClases.Add(classname);
+                                importedClasses.Add(classname);
                             }
                         }
                     }
                 }
+                #endregion
+
 
                 // namespace end
                 sw.WriteLine("}");
                 output = sw.ToString();
             }
 
-            if (importedClases.Count > 0)
-                if (m_logger != null) m_logger.LogString($"Sucessfully parsed {importedClases.Count} custom classes: " +
-                $"{string.Join(", ", importedClases)}", Logtype.Success);
-            return (importedClases.Count, output);
+            if (importedClasses.Count > 0)
+                if (m_logger != null) m_logger.LogString($"Sucessfully parsed {importedClasses.Count} custom classes: " +
+                $"{string.Join(", ", importedClasses)}", Logtype.Success);
+            return (importedClasses.Count, output);
         }
 
 
-        private static string InterpretVarLine(string input, int counter)
+        private static string InterpretVarLine(string input, int counter, List<string> customenums)
         {
             string csline = "";
 
@@ -251,8 +369,7 @@ namespace WolvenKit.CR2W.Types
             {
                 string redtype = matchIsVar.Groups["VARTYPE"].Value;
                 // support generic types (e.g. array<string>)
-                string vartype = GetCsTypeRecursive(redtype);
-
+                string vartype = GetCsTypeRecursive(redtype, customenums);
 
                 string varname = matchIsVar.Groups["VARNAME"].Value;
                 // support multiple var declarations in one line (e.g. var i, j, size : int;)
@@ -278,7 +395,20 @@ namespace WolvenKit.CR2W.Types
             return csline;
         }
 
-        private static string GetCsTypeRecursive(string input)
+        private static string InterpretEnumVarLine(string input)
+        {
+            string csline = "";
+            var regvar = new Regex(@"\.*(?<VARNAME>\w+)\.*");
+            var matchIsVar = regvar.Match(input);
+            if (matchIsVar.Success)
+            {
+                csline = $"{matchIsVar.Groups["VARNAME"].Value},";
+            }
+
+            return csline;
+        }
+
+        private static string GetCsTypeRecursive(string input, List<string> customenums)
         {
             if (input.Contains("array")) // TODO: support for more generics?
             {
@@ -291,7 +421,7 @@ namespace WolvenKit.CR2W.Types
                 if (matchIsArray.Success)
                 {
                     var typename = matchIsArray.Groups["TYPE"].Value;
-                    returntype = $"CArray<{GetCsTypeRecursive(typename)}>";
+                    returntype = $"CArray<{GetCsTypeRecursive(typename, customenums)}>";
                 }
                 else
                 {
@@ -302,7 +432,7 @@ namespace WolvenKit.CR2W.Types
             else
             {
                 input = input.Trim(' ');
-                if (AssemblyDictionary.EnumExists(input))
+                if (AssemblyDictionary.EnumExists(input) || customenums.Contains(input))
                     input = $"CEnum<{input}>";
                 return REDReflection.GetWKitBaseTypeFromREDBaseType(input);
             }
@@ -343,6 +473,22 @@ namespace WolvenKit.CR2W.Types
 
             }
 
+
+            return csline;
+        }
+
+        private static string InterpretEnumLine(string input, ref string enumname)
+        {
+            string csline = "";
+
+            // check if class
+            var regClass = new Regex(@"(.*)enum\s+(\w+)(.*)");
+            var matchIsClass = regClass.Match(input);
+            if (matchIsClass.Success)
+            {
+                enumname = matchIsClass.Groups[2].Value;
+                csline += $"\tpublic enum {enumname}\r\n\t\t{{";
+            }
 
             return csline;
         }

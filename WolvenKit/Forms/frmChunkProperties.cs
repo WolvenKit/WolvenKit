@@ -330,8 +330,14 @@ namespace WolvenKit.Forms
                     // if only one variable was copied and that one variable is of the same type as the selected variable
                     if (CopyController.Source.Count == 1 
                         && CopyController.Source.First() is CVariable ccopy 
-                        && ctarget.GetType() == ccopy.GetType())
+                        /*&& ctarget.GetType() == ccopy.GetType()*/)
                     {
+                        // check if source type is subtype of targettype
+                        if (ctarget.GetType().IsSubclassOf(ccopy.GetType()))
+                            return true;
+                        if (ccopy.GetType().IsSubclassOf(ctarget.GetType()))
+                            return false;
+
                         return true;
                     }
 

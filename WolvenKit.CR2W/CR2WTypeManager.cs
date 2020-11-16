@@ -65,6 +65,12 @@ namespace WolvenKit.CR2W.Types
                 var cenum = MakeGenericEnumType(typeof(CEnum<>), e);
                 return cenum;
             }
+            else if (CR2WManager.EnumExists(typename))
+            {
+                Enum e = (Enum)Activator.CreateInstance(CR2WManager.GetEnumByName(typename));
+                var cenum = MakeGenericEnumType(typeof(CEnum<>), e);
+                return cenum;
+            }
             // check for generic type
             else if (typename.Contains(':'))
             {
@@ -305,13 +311,22 @@ namespace WolvenKit.CR2W.Types
 
         private static Enum CreateEnum(string value)
         {
-            var type = AssemblyDictionary.GetEnumByName(value);
-            Enum e = (Enum)Activator.CreateInstance(type);
+            if (AssemblyDictionary.EnumExists(value))
+            {
+                var type = AssemblyDictionary.GetEnumByName(value);
+                Enum e = (Enum) Activator.CreateInstance(type);
 
-            return e;
+                return e;
+            }
+            else if (CR2WManager.EnumExists(value))
+            {
+                var type = CR2WManager.GetEnumByName(value);
+                Enum e = (Enum)Activator.CreateInstance(type);
+
+                return e;
+            }
+
+            return null;
         }
-
-
-        
     }
 }
