@@ -10,6 +10,7 @@ namespace WolvenKit.Common.Services
     public interface IWindowFactory
     {
         string ShowAddChunkFormModal(IEnumerable<string> availableTypes);
+        string ShowRenameForm(string filepath);
         DialogResult ShowMessageBox(string message, string caption, MessageBoxButtons button, MessageBoxIcon icon);
         PackSettings ShowPackSettings();
         string ShowOpenFileDialog(string title, string filter, string initialDirectory);

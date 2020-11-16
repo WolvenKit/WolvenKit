@@ -12,6 +12,18 @@ namespace WolvenKit.Utility
 {
     public class ProductionWindowFactory : IWindowFactory
     {
+        public string ShowRenameForm(string filepath)
+        {
+            string output = "";
+            var dlg = new frmRenameDialog() { FileName = filepath };
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                output = dlg.FileName;
+            }
+
+            return output;
+        }
+
         public string ShowAddChunkFormModal(IEnumerable<string> availableTypes)
         {
             using (var form = new frmAddChunk(availableTypes.ToList()))

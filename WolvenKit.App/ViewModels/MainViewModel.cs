@@ -24,6 +24,10 @@ using WolvenKit.Common.WinFormsEnums;
 using WolvenKit.App.Model;
 using System.Windows.Input;
 using WolvenKit.App.Commands;
+using WolvenKit.CR2W.Reflection;
+using WolvenKit.CR2W.Types;
+using System.Globalization;
+using System.Reflection;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -92,19 +96,20 @@ namespace WolvenKit.App.ViewModels
             _openDocuments = new Dictionary<string, IDocumentViewModel>();
 
             DdsToCacheCommand = new RelayCommand(DdsToCache, CanDdsToCacheCommand);
+            CreateCr2wFileCommand = new DelegateCommand<bool>(CreateCr2w, CanCreateCr2w);
+            BackupProjectCommand = new RelayCommand(BackupProject, CanBackupProject);
         }
 
 
         #region Commands
         public ICommand DdsToCacheCommand { get; }
-
+        public ICommand CreateCr2wFileCommand { get; }
+        public ICommand BackupProjectCommand { get; }
 
         #endregion
 
         #region CommandsImplementation
-
         private bool CanDdsToCacheCommand() => MainController.Get().ActiveMod != null;
-
         private void DdsToCache()
         {
             // Creation
@@ -118,6 +123,221 @@ namespace WolvenKit.App.ViewModels
             InstallMod();
         }
 
+        private bool CanCreateCr2w(bool b) => MainController.Get().ActiveMod != null;
+        private void CreateCr2w(bool b) => CreateCustomCr2wFile(b);
+
+        private bool CanBackupProject() => MainController.Get().ActiveMod != null;
+
+        private async void BackupProject()
+        {
+            // check if there is a mod project loaded
+            if (ActiveMod == null)
+            {
+                MainController.LogString($"No mod project loaded.", Common.Services.Logtype.Error);
+                return;
+            }
+
+            // check if git is in PATH
+            var mpath = System.Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
+            var upath = System.Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User);
+            if (mpath == null && upath == null)
+                return;
+
+            if ((mpath != null && !mpath.Split(';').Any(_ => _.Contains("\\Git\\")))
+                && ((upath != null && !upath.Split(';').Any(_ => _.Contains("\\Git\\")))))
+            {
+                MainController.LogString(
+                    "Git was not found in your PATH environmental variables, it may not be installed on your machine. " +
+                    "Please install git to use the backup feature for WolvenKit.", Logtype.Error);
+            }
+
+            // check if git version errors
+            var trygetgit = await ProcessHelper.RunCommandLineAsync(Logger, "", "git --version");
+            if (trygetgit != 0)
+            {
+                MainController.LogString($"Git is not installed, or is installed improperly. Aborting.", Common.Services.Logtype.Error);
+                return;
+            }
+
+            MainController.Get().ProjectStatus = EProjectStatus.Busy;
+            MainController.Get().StatusProgress = 0;
+            MainController.LogString($"Backing up mod project. Please wait...", Common.Services.Logtype.Important);
+
+            // create git repo - rerunning git init is safe
+            //MainController.LogString($"Running git init command...", Logtype.Important);
+            string templatedir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? throw new InvalidOperationException(), "Resources/GitTemplateDir");
+            var resultInit = await GitHelper.InitRepository(Logger, ActiveMod.ProjectDirectory, templatedir, ActiveMod.Author, ActiveMod.Email);
+            if (resultInit)
+            {
+                MainController.Get().StatusProgress = 25;
+                //MainController.LogString($"Created git repository for project ({ActiveMod.Name}) at {ActiveMod.ProjectDirectory}.", Logtype.Success);
+            }
+            else
+            {
+                MainController.Get().ProjectStatus = EProjectStatus.Ready;
+                MainController.Get().StatusProgress = 100;
+                MainController.LogString($"Error creating git repository for project {ActiveMod.Name}.", Common.Services.Logtype.Error);
+                return;
+            }
+
+            string sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace("/", "-");
+            string commitMessage = ActiveMod.Name + "_" + DateTime.Now.ToString(sysFormat + "_HH-mm-ss");
+            string archiveName = commitMessage + ".zip";
+            string archivePath = Path.Combine(ActiveMod.BackupDirectory, archiveName);
+
+
+            // commit new files
+            MainController.LogString($"Running git commit command...", Common.Services.Logtype.Important);
+            var resultCommit = await GitHelper.Commit(Logger, ActiveMod.ProjectDirectory, commitMessage);
+            if (resultCommit)
+            {
+                MainController.Get().StatusProgress = 50;
+                MainController.LogString($"Successfully commited git repo for project {ActiveMod.Name}.",
+                    Common.Services.Logtype.Success);
+            }
+            else
+            {
+                MainController.Get().ProjectStatus = EProjectStatus.Ready;
+                MainController.Get().StatusProgress = 100;
+                MainController.LogString($"Git repo failed to commit for project {ActiveMod.Name}.", Common.Services.Logtype.Error);
+                return;
+            }
+
+            // git archive zip to ./_backups
+            MainController.LogString($"Running git archive command...", Common.Services.Logtype.Important);
+            var resultArchive = await GitHelper.Archive(Logger, ActiveMod.ProjectDirectory, archivePath);
+            if (resultArchive)
+            {
+                MainController.Get().StatusProgress = 100;
+                MainController.Get().ProjectStatus = EProjectStatus.Ready;
+                MainController.LogString($"Successfully created git archive for project ({ActiveMod.Name}) at {archivePath}.", Common.Services.Logtype.Success);
+            }
+            else
+            {
+                MainController.Get().StatusProgress = 100;
+                MainController.Get().ProjectStatus = EProjectStatus.Ready;
+                MainController.LogString($"Error creating git archive for project {ActiveMod.Name}.", Common.Services.Logtype.Error);
+                return;
+            }
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Start Game with custom arguments
+        /// </summary>
+        /// <param name="args"></param>
+        public static async void ExecuteGame(string args = "")
+        {
+            if (ActiveMod == null)
+                return;
+            if (Process.GetProcessesByName("Witcher3").Length != 0)
+            {
+                Logger.LogString(@"Game is already running!", Logtype.Error);
+                return;
+            }
+            var config = MainController.Get().Configuration;
+            var proc = new ProcessStartInfo(config.ExecutablePath)
+            {
+                WorkingDirectory = Path.GetDirectoryName(config.ExecutablePath),
+                Arguments = args == "" ? "-net -debugscripts" : args,
+                UseShellExecute = false,
+                RedirectStandardOutput = true
+            };
+
+
+            Logger.LogString("Executing " + proc.FileName + " " + proc.Arguments + "\n");
+
+            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var scriptlog = Path.Combine(documents, @"The Witcher 3\scriptslog.txt");
+            if (File.Exists(scriptlog))
+                File.Delete(scriptlog);
+
+            using (var process = Process.Start(proc))
+            {
+                await Task.Run(() => RedirectScriptlogOutput(process));
+            }
+        }
+
+        /// <summary>
+        /// Start redirecting script log output from the game
+        /// </summary>
+        /// <param name="process"></param>
+        /// <returns></returns>
+        private static async Task RedirectScriptlogOutput(Process process)
+        {
+            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var scriptlog = Path.Combine(documents, @"The Witcher 3\scriptslog.txt");
+            using (var fs = new FileStream(scriptlog, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
+            {
+                using (var fsr = new StreamReader(fs))
+                {
+                    while (!process.HasExited)
+                    {
+                        var result = await fsr.ReadToEndAsync();
+
+                        Logger.LogString(result);
+
+                        //Application.DoEvents();
+                    }
+                }
+                fs.Close();
+            }
+        }
+
+
+        
+        private CR2WFile CreateCustomCr2wFile(bool isDlc)
+        {
+            // ask user for type
+            List<string> availableTypes = CR2WManager.GetAvailableTypes("CResource").Select(_ => _.Name).ToList();
+            if (availableTypes.Count <= 0) return null;
+            // remove abstract classes
+
+            availableTypes = availableTypes
+                .Select(_ => $"{REDReflection.GetREDExtensionFromREDType(_)} ({_})")
+                .Where(_ => _.Split(' ').First() != "")
+                .ToList();
+
+            string newChunktypename = m_windowFactory.ShowAddChunkFormModal(availableTypes);
+
+            newChunktypename = newChunktypename.Split(' ').Last().TrimStart("(").TrimEnd(')');
+            var redextension = newChunktypename.Split(' ').First();
+
+            
+
+            if (string.IsNullOrEmpty(redextension)) return null;
+
+            // create cr2wfile
+            var cr2w = new CR2WFile();
+            var obj = CR2WTypeManager.Create(newChunktypename, newChunktypename, cr2w, null);
+            if (!(obj is CResource resource)) return null;
+            cr2w.FromCResource(resource);
+
+            // write cr2wfile
+            var initialDir = isDlc
+                ? ActiveMod.DlcUncookedDirectory
+                : ActiveMod.ModUncookedDirectory;
+
+            if (string.IsNullOrEmpty(redextension)) return null;
+
+            var filepath = Path.Combine(initialDir, $"{newChunktypename}.{redextension}");
+            var newfilepath = m_windowFactory.ShowRenameForm(filepath);
+            if (string.IsNullOrEmpty(newfilepath))
+                return null;
+
+
+            // create directory
+            newfilepath.EnsureFolderExists();
+            using (var fs = new FileStream(newfilepath, FileMode.Create, FileAccess.ReadWrite))
+            using (var writer = new BinaryWriter(fs))
+            {
+                cr2w.Write(writer);
+                MainController.LogString($"Succesfully created file {newfilepath}.", Common.Services.Logtype.Success);
+            }
+
+            return cr2w;
+        }
         #endregion
 
         #region Mod
@@ -243,6 +463,7 @@ namespace WolvenKit.App.ViewModels
             if (packsettings != null)
             {
                 MainController.Get().ProjectStatus = EProjectStatus.Busy;
+                MainController.Get().StatusProgress = 0;
 
                 //toolStripBtnPack.Enabled = false;
                 IsToolStripBtnPackEnabled = false;
@@ -319,6 +540,7 @@ namespace WolvenKit.App.ViewModels
                     }
                 }
                 #endregion
+                MainController.Get().StatusProgress = 5;
 
                 //------------------------- COOKING -------------------------------------//
                 #region Cooking
@@ -335,6 +557,7 @@ namespace WolvenKit.App.ViewModels
                     Logger.LogString("Cooking collision finished with errors. \n", Logtype.Error);
 
                 #endregion
+                MainController.Get().StatusProgress = 15;
 
                 //------------------------- POST COOKING --------------------------------//
                 #region Copy Cooked Files
@@ -406,6 +629,7 @@ namespace WolvenKit.App.ViewModels
                     }
                 }
                 #endregion
+                MainController.Get().StatusProgress = 20;
 
                 //------------------------- PACKING -------------------------------------//
                 #region Packing
@@ -430,6 +654,7 @@ namespace WolvenKit.App.ViewModels
                     //    Logger.LogString("Cooking assets failed. No bundles will be packed!\n", Logtype.Error);
                 }
                 #endregion
+                MainController.Get().StatusProgress = 40;
 
                 //------------------------ METADATA -------------------------------------//
                 #region Metadata
@@ -453,6 +678,7 @@ namespace WolvenKit.App.ViewModels
                         Logger.LogString("Packing bundles failed. No metadata will be created!\n", Logtype.Error);
                 }
                 #endregion
+                MainController.Get().StatusProgress = 50;
 
                 //------------------------ POST COOKING ---------------------------------//
 
@@ -570,6 +796,7 @@ namespace WolvenKit.App.ViewModels
                     }
                 }
                 #endregion
+                MainController.Get().StatusProgress = 60;
 
                 //---------------------------- SCRIPTS ----------------------------------//
                 #region Scripts
@@ -606,6 +833,7 @@ namespace WolvenKit.App.ViewModels
                         File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(ActiveMod.PackedDlcDirectory, "scripts")), true);
                 }
                 #endregion
+                MainController.Get().StatusProgress = 80;
 
                 //---------------------------- STRINGS ----------------------------------//
                 #region Strings
@@ -620,6 +848,7 @@ namespace WolvenKit.App.ViewModels
                         files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedModDirectory, Path.GetFileName(x))));
                 }
                 #endregion
+                MainController.Get().StatusProgress = 90;
 
                 //---------------------------- FINALIZE ---------------------------------//
 
@@ -629,6 +858,7 @@ namespace WolvenKit.App.ViewModels
                     InstallMod();
 
                 //Report that we are done
+                MainController.Get().StatusProgress = 100;
                 MainController.Get().ProjectStatus = EProjectStatus.Ready;
                 //toolStripBtnPack.Enabled = true;
                 IsToolStripBtnPackEnabled = true;
@@ -855,7 +1085,6 @@ namespace WolvenKit.App.ViewModels
         }
         #endregion
 
-
         #region Documents
         public bool CloseAllDocuments()
         {
@@ -945,70 +1174,6 @@ namespace WolvenKit.App.ViewModels
             Logger.LogString("All files saved!\n", Logtype.Success);
             MainController.Get().ProjectStatus = EProjectStatus.Ready;
             MainController.Get().ProjectUnsaved = false;
-        }
-        #endregion
-
-        #region Helper Methods
-        /// <summary>
-        /// Start Game with custom arguments
-        /// </summary>
-        /// <param name="args"></param>
-        public static async void ExecuteGame(string args = "")
-        {
-            if (ActiveMod == null)
-                return;
-            if (Process.GetProcessesByName("Witcher3").Length != 0)
-            {
-                Logger.LogString(@"Game is already running!", Logtype.Error);
-                return;
-            }
-            var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.ExecutablePath)
-            {
-                WorkingDirectory = Path.GetDirectoryName(config.ExecutablePath),
-                Arguments = args == "" ? "-net -debugscripts" : args,
-                UseShellExecute = false,
-                RedirectStandardOutput = true
-            };
-
-
-            Logger.LogString("Executing " + proc.FileName + " " + proc.Arguments + "\n");
-
-            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var scriptlog = Path.Combine(documents, @"The Witcher 3\scriptslog.txt");
-            if (File.Exists(scriptlog))
-                File.Delete(scriptlog);
-
-            using (var process = Process.Start(proc))
-            {
-                await Task.Run(() => RedirectScriptlogOutput(process));
-            }
-        }
-
-        /// <summary>
-        /// Start redirecting script log output from the game
-        /// </summary>
-        /// <param name="process"></param>
-        /// <returns></returns>
-        private static async Task RedirectScriptlogOutput(Process process)
-        {
-            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var scriptlog = Path.Combine(documents, @"The Witcher 3\scriptslog.txt");
-            using (var fs = new FileStream(scriptlog, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
-            {
-                using (var fsr = new StreamReader(fs))
-                {
-                    while (!process.HasExited)
-                    {
-                        var result = await fsr.ReadToEndAsync();
-
-                        Logger.LogString(result);
-
-                        //Application.DoEvents();
-                    }
-                }
-                fs.Close();
-            }
         }
         #endregion
     }

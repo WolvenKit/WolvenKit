@@ -2000,10 +2000,7 @@ namespace WolvenKit
         #endregion
 
         #region Project
-        private void createPackedInstallerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CreateInstaller();
-        }
+        private void createPackedInstallerToolStripMenuItem_Click(object sender, EventArgs e) => CreateInstaller();
 
         private void ReloadProjectToolStripMenuItem_Click(object sender, EventArgs e) => OpenMod(MainController.Get().ActiveMod?.FileName);
 
@@ -2147,34 +2144,18 @@ namespace WolvenKit
         #endregion
 
         #region View
-        private void modExplorerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MockKernel.Get().ShowModExplorer();
-        }
+        private void modExplorerToolStripMenuItem_Click(object sender, EventArgs e) => MockKernel.Get().ShowModExplorer();
 
-        private void OutputToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MockKernel.Get().ShowOutput();
-        }
+        private void OutputToolStripMenuItem_Click(object sender, EventArgs e) => MockKernel.Get().ShowOutput();
 
-        private void consoleToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MockKernel.Get().ShowConsole();
-        }
+        private void consoleToolStripMenuItem_Click(object sender, EventArgs e) => MockKernel.Get().ShowConsole();
 
-        private void importUtilityToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MockKernel.Get().ShowImportUtility();
-        }
+        private void importUtilityToolStripMenuItem_Click(object sender, EventArgs e) => MockKernel.Get().ShowImportUtility();
 
-        private void RadishUtilitytoolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MockKernel.Get().ShowRadishUtility();
-        }
+        private void RadishUtilitytoolStripMenuItem_Click(object sender, EventArgs e) => MockKernel.Get().ShowRadishUtility();
 
         private void scriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
         }
         #endregion
 
@@ -2593,20 +2574,11 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
 
 
 
-        private void toolStripBtnPack_Click(object sender, EventArgs e)
-        {
-            vm.PackProject();
-        }
+        private void toolStripBtnPack_Click(object sender, EventArgs e) => vm.PackProject();
 
-        private void toolStripButtonRadishUtil_Click(object sender, EventArgs e)
-        {
-            MockKernel.Get().ShowRadishUtility();
-        }
+        private void toolStripButtonRadishUtil_Click(object sender, EventArgs e) => MockKernel.Get().ShowRadishUtility();
 
-        private void toolStripButtonImportUtil_Click(object sender, EventArgs e)
-        {
-            MockKernel.Get().ShowImportUtility();
-        }
+        private void toolStripButtonImportUtil_Click(object sender, EventArgs e) => MockKernel.Get().ShowImportUtility();
 
         private void launchWithCostumParametersToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2617,10 +2589,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
             }
         }
 
-        private void LaunchGameForDebuggingToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MainViewModel.ExecuteGame();
-        }
+        private void LaunchGameForDebuggingToolStripMenuItem_Click(object sender, EventArgs e) => MainViewModel.ExecuteGame();
 
         private void packProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2656,76 +2625,9 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
             MainViewModel.ExecuteGame();
         }
 
+        private void ModchunkToolStripMenuItem_Click(object sender, EventArgs e) => vm.CreateCr2wFileCommand.SafeExecute(false);
 
-        #endregion
-
-        private void ModchunkToolStripMenuItem_Click(object sender, EventArgs e) => CreateCustomCr2wFile(false);
-
-        private void DLCChunkToolStripMenuItem_Click(object sender, EventArgs e) => CreateCustomCr2wFile(true);
-
-        private CR2WFile CreateCustomCr2wFile(bool isDlc)
-        {
-            // ask user for type
-            List<string> availableTypes = CR2WManager.GetAvailableTypes("CResource").Select(_ => _.Name).ToList();
-            if (availableTypes.Count <= 0) return null;
-            // remove abstract classes
-
-            availableTypes = availableTypes
-                .Select(_ => $"{REDReflection.GetREDExtensionFromREDType(_)} ({_})")
-                .Where(_ => _.Split(' ').First() != "")
-                .ToList();
-
-            string newChunktypename = "";
-            var redextension = "";
-            using (var form = new frmAddChunk(availableTypes))
-            {
-                var result = form.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    newChunktypename = form.ChunkType.Split(' ').Last().TrimStart("(").TrimEnd(')');
-                    redextension = form.ChunkType.Split(' ').First();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-
-            if (string.IsNullOrEmpty(redextension)) return null;
-
-            // create cr2wfile
-            var cr2w = new CR2WFile();
-            var obj = CR2WTypeManager.Create(newChunktypename, newChunktypename, cr2w, null);
-            if (!(obj is CResource resource)) return null;
-            cr2w.FromCResource(resource);
-
-            // write cr2wfile
-            var initialDir = isDlc
-                ? ActiveMod.DlcUncookedDirectory
-                : ActiveMod.ModUncookedDirectory;
-            
-            if (string.IsNullOrEmpty(redextension)) return null;
-
-            var filepath = Path.Combine(initialDir, $"{newChunktypename}.{redextension}");
-            var newfilepath = filepath;
-            var dlg = new frmRenameDialog() { FileName = filepath };
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                newfilepath = dlg.FileName;
-            }
-
-
-            // create directory
-            newfilepath.EnsureFolderExists();
-            using (var fs = new FileStream(newfilepath, FileMode.Create, FileAccess.ReadWrite))
-            using (var writer = new BinaryWriter(fs))
-            {
-                cr2w.Write(writer);
-                MainController.LogString($"Succesfully created file {newfilepath}.", Common.Services.Logtype.Success);
-            }
-
-            return cr2w;
-        }
+        private void DLCChunkToolStripMenuItem_Click(object sender, EventArgs e) => vm.CreateCr2wFileCommand.SafeExecute(true);
 
         private void sceneViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2748,120 +2650,13 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
             }
         }
 
-        private async void backupModProjectToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // check if there is a mod project loaded
-            if (ActiveMod == null)
-            {
-                MainController.LogString($"No mod project loaded.", Common.Services.Logtype.Error);
-                return;
-            }
-
-            // check if git is in PATH
-            var mpath = System.Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
-            var upath = System.Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User);
-            if (mpath == null && upath == null) 
-                return;
-            
-            if ((mpath != null && !mpath.Split(';').Any(_ => _.Contains("\\Git\\"))) 
-                && ((upath != null && !upath.Split(';').Any(_ => _.Contains("\\Git\\")))))
-            {
-                switch (MessageBox.Show(
-                    "Git was not found in your PATH environmental variables, it may not be installed on your machine. " +
-                    "Please install git to use the backup feature for WolvenKit.",
-                    "Git installation not found.",
-                    System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning))
-                {
-                    default: 
-                        //break;
-                        return;
-                    //case DialogResult.Yes:
-                    //{
-                    //    break;
-                    //}
-                    //case DialogResult.No:
-                    //{
-                    //    break;
-                    //}
-                }
-            }
-
-            // check if git version errors
-            var trygetgit = await ProcessHelper.RunCommandLineAsync(Logger, "", "git --version");
-            if (trygetgit != 0)
-            {
-                MainController.LogString($"Git is not installed, or is installed improperly. Aborting.", Common.Services.Logtype.Error);
-                return;
-            }
-
-            MainController.Get().ProjectStatus = EProjectStatus.Busy;
-            MainController.Get().StatusProgress = 0;
-            MainController.LogString($"Backing up mod project. Please wait...", Common.Services.Logtype.Important);
-
-            // create git repo - rerunning git init is safe
-            //MainController.LogString($"Running git init command...", Logtype.Important);
-            string templatedir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? throw new InvalidOperationException(), "Resources/GitTemplateDir");
-            var resultInit = await GitHelper.InitRepository(Logger, ActiveMod.ProjectDirectory, templatedir, ActiveMod.Author, ActiveMod.Email);
-            if (resultInit)
-            {
-                MainController.Get().StatusProgress = 25;
-                //MainController.LogString($"Created git repository for project ({ActiveMod.Name}) at {ActiveMod.ProjectDirectory}.", Logtype.Success);
-            }
-            else
-            {
-                MainController.Get().ProjectStatus = EProjectStatus.Ready;
-                MainController.Get().StatusProgress = 100;
-                MainController.LogString($"Error creating git repository for project {ActiveMod.Name}.", Common.Services.Logtype.Error);
-                return;
-            }
-
-            string sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace("/", "-");
-            string commitMessage = ActiveMod.Name + "_" + DateTime.Now.ToString(sysFormat + "_HH-mm-ss");
-            string archiveName = commitMessage + ".zip";
-            string archivePath = Path.Combine(ActiveMod.BackupDirectory, archiveName);
-
-
-            // commit new files
-            MainController.LogString($"Running git commit command...", Common.Services.Logtype.Important);
-            var resultCommit = await GitHelper.Commit(Logger, ActiveMod.ProjectDirectory, commitMessage);
-            if (resultCommit)
-            {
-                MainController.Get().StatusProgress = 50;
-                MainController.LogString($"Successfully commited git repo for project {ActiveMod.Name}.",
-                    Common.Services.Logtype.Success);
-            }
-            else
-            {
-                MainController.Get().ProjectStatus = EProjectStatus.Ready;
-                MainController.Get().StatusProgress = 100;
-                MainController.LogString($"Git repo failed to commit for project {ActiveMod.Name}.", Common.Services.Logtype.Error);
-                return;
-            }
-
-            // git archive zip to ./_backups
-            MainController.LogString($"Running git archive command...", Common.Services.Logtype.Important);
-            var resultArchive = await GitHelper.Archive(Logger, ActiveMod.ProjectDirectory, archivePath);
-            if (resultArchive)
-            {
-                MainController.Get().StatusProgress = 100;
-                MainController.Get().ProjectStatus = EProjectStatus.Ready;
-                MainController.LogString($"Successfully created git archive for project ({ActiveMod.Name}) at {archivePath}.", Common.Services.Logtype.Success);
-            }
-            else
-            {
-                MainController.Get().StatusProgress = 100;
-                MainController.Get().ProjectStatus = EProjectStatus.Ready;
-                MainController.LogString($"Error creating git archive for project {ActiveMod.Name}.", Common.Services.Logtype.Error);
-                return;
-            }
-        }
+        private async void backupModProjectToolStripMenuItem_Click(object sender, EventArgs e) => vm.BackupProjectCommand.SafeExecute();
 
         private void openBackupFolderToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.ShowFolderInExplorer(ActiveMod.BackupDirectory);
 
         private void commandPromptHereToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.OpenConsoleAtPath(ActiveMod.ProjectDirectory);
 
-        private void dDStoTextureCacheToolStripMenuItem_Click(object sender, EventArgs e) =>
-            vm.DdsToCacheCommand.SafeExecute();
+        private void dDStoTextureCacheToolStripMenuItem_Click(object sender, EventArgs e) => vm.DdsToCacheCommand.SafeExecute();
 
         private void resetDocumentLayoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2884,5 +2679,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
 
             }
         }
+        
+        #endregion
     }
 }
