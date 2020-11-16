@@ -536,7 +536,7 @@ namespace WolvenKit.App.Model
         /// <param name="newpath"></param>
         /// <param name="indir"></param>
         /// <returns></returns>
-        public static async Task<int> UncookFileToPath(string relativePath, bool isDLC, string alternateOutDirectory = "")
+        public static async Task<int> UncookFileToPath(string basedir, string relativePath, bool isDLC, string alternateOutDirectory = "")
         {
             #region Unbundle relative file directory to temp dir
             // create temporary uncooked directory
@@ -560,11 +560,14 @@ namespace WolvenKit.App.Model
             string relativeParentDir = Path.GetDirectoryName(relativePath);
 
             // uncook the folder with wcc
-
-            // TODO: this will run over mods :(
+            // check if mod or vanilla file
             var indir = isDLC
                 ? Path.GetFullPath(MainController.Get().Configuration.GameDlcDir)
                 : Path.GetFullPath(MainController.Get().Configuration.GameContentDir);
+            if (basedir.Contains(Path.GetFullPath(MainController.Get().Configuration.GameModDir)))
+            {
+                indir = basedir;
+            }
 
 
             var wccuncook = new Wcc_lite.uncook()

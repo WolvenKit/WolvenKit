@@ -24,13 +24,11 @@ using SearchOption = System.IO.SearchOption;
 
 namespace WolvenKit
 {
-    using Common;
     //using Common.Services;
     using App;
     using App.Commands;
     using App.ViewModels;
     using Bundles;
-    using Cache;
     using Common;
     using Common.Extensions;
     using Common.Model;
@@ -39,13 +37,6 @@ namespace WolvenKit
     using CR2W.Types;
     using Extensions;
     using Forms;
-    using App;
-    using App.Commands;
-    using App.ViewModels;
-    using Bundles;
-    using Common.Extensions;
-    using Common.Model;
-    using Forms.MVVM;
     using Microsoft.WindowsAPICodePack.Dialogs;
     using Render;
     using Scaleform;
@@ -2876,7 +2867,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
         {
             if (vm.GetOpenDocuments().Any())
             {
-                MainController.LogString($"Please close all open documents.", Logtype.Error);
+                MainController.LogString($"Please close all open documents.", Common.Services.Logtype.Error);
                 return;
             }
 
@@ -2886,7 +2877,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
                     "cr2wdocument_layout.xml");
                 if (File.Exists(doclayoutconfig))
                     File.Delete(doclayoutconfig);
-                MainController.LogString($"Reset document layout.", Logtype.Success);
+                MainController.LogString($"Reset document layout.", Common.Services.Logtype.Success);
             }
             catch (Exception exception)
             {

@@ -9,7 +9,7 @@ namespace WolvenKit.Common.Services
 {
     public interface IWindowFactory
     {
-        string ShowAddChunkFormModal(IEnumerable<string> availableTypes, ref string output);
+        string ShowAddChunkFormModal(IEnumerable<string> availableTypes);
         DialogResult ShowMessageBox(string message, string caption, MessageBoxButtons button, MessageBoxIcon icon);
         PackSettings ShowPackSettings();
         string ShowOpenFileDialog(string title, string filter, string initialDirectory);

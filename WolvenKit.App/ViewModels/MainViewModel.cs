@@ -639,7 +639,7 @@ namespace WolvenKit.App.ViewModels
                 return false;
             }
         }
-        
+
 
         /// <summary>
         /// Scans the depot and the given archivemanagers for a file. If found, extracts it to the project.
@@ -652,7 +652,8 @@ namespace WolvenKit.App.ViewModels
         /// <param name="uncook"></param>
         /// <param name="export"></param>
         /// <returns></returns>
-        public bool AddToMod(string relativePath, IWitcherArchiveManager manager, bool skipping, bool addAsDLC, bool uncook = false, bool export = false)
+        public bool AddToMod(string relativePath, IWitcherArchiveManager manager, bool skipping, bool addAsDLC,
+            bool uncook = false, bool export = false)
         {
             bool skip = skipping;
             string extension = Path.GetExtension(relativePath);
@@ -667,23 +668,23 @@ namespace WolvenKit.App.ViewModels
             // if uncooking check first if the file isn't already in the working depot or the r4depot
             if (uncook)
             {
-                var newpath = "";
+                var cnewpath = "";
                 // Working Depot
                 var fi = new FileInfo(Path.Combine(Path.GetFullPath(MainController.WorkDir), relativePath));
                 if (fi.Exists)
                 {
                     // copy to uncooked folder in mod project
-                    newpath = addAsDLC
+                    cnewpath = addAsDLC
                         ? Path.Combine(ActiveMod.DlcUncookedDirectory, $"dlc{ActiveMod.Name}", relativePath)
                         : Path.Combine(ActiveMod.ModUncookedDirectory, relativePath);
 
-                    fi.CopyToAndCreate(newpath, true);
+                    fi.CopyToAndCreate(cnewpath, true);
                     Logger.LogString($"Added {filename} from depot.", Logtype.Success);
 
                     // Optionally Export 
-                    if (export && File.Exists(newpath))
+                    if (export && File.Exists(cnewpath))
                     {
-                        var task = Task.Run(() => WccHelper.ExportFileToMod(newpath));
+                        var task = Task.Run(() => WccHelper.ExportFileToMod(cnewpath));
                         Task.WaitAll(task);
                     }
 
@@ -692,143 +693,153 @@ namespace WolvenKit.App.ViewModels
             }
             #endregion
 
+            // check if file in any manager
+            if (!(manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath))))
+                return skip;
 
-            if (manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath)))
+            // get archives with that file in them
+            var archives = manager.FileList
+                .Where(x => x.Name == relativePath)
+                .Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.ArchiveAbsolutePath, y)).ToList();
+
+
+
+            #region Get new Filename
+            var bundletype = archives.First().Value.Bundle.TypeName;
+            var bundletypestr = bundletype.ToString();
+            string newpath = "";
+            switch (bundletype)
             {
-                IEnumerable<KeyValuePair<string, IWitcherFile>> archives = manager.FileList
-                    .Where(x => x.Name == relativePath)
-                    .Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.ArchiveAbsolutePath, y));
-                //string newpath = "";
+                // extract files from bundle to Cooked
+                case EBundleType.Bundle:
+                    {
+                        newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                            ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}",
+                                NormalizeDlcPath(relativePath))
+                            : Path.Combine("Mod", EProjectFolders.Cooked.ToString(), relativePath));
+                    }
+                    break;
+                // extract files from Collision and Texture caches to Raw (except for pngs etc)
+                case EBundleType.CollisionCache:
+                case EBundleType.TextureCache:
+                    {
+                        // add pngs, jpgs and dds directly to Uncooked
+                        // (not Raw, since they don't get imported)
+                        if (extension == ".png" || extension == ".jpg" || extension == ".dds")
+                        {
+                            newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                                ? Path.Combine("DLC", EProjectFolders.Uncooked.ToString(), $"dlc{ActiveMod.Name}",
+                                    NormalizeDlcPath(relativePath))
+                                : Path.Combine("Mod", EProjectFolders.Uncooked.ToString(), relativePath));
+                        }
+                        // all other textures and collision stuff goes into Raw (since they have to be imported first)
+                        else
+                            newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
+                                ? Path.Combine("DLC", $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
+                                : Path.Combine("Mod", relativePath));
+                    }
+                    break;
+                // some special cases
+                case EBundleType.SoundCache:
+                case EBundleType.Speech:
+                case EBundleType.Shader:
+                    {
+                        newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                            ? Path.Combine("DLC", bundletypestr,
+                                $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
+                            : Path.Combine("Mod", bundletypestr, relativePath));
+                    }
+                    break;
+                case EBundleType.ANY:
+                default:
+                    throw new NotImplementedException();
+                    break;
+            }
+            #endregion
 
+            // more than one archive
+            if (archives.Count() > 1)
+            {
+                var a = archives.Select(x => x.Value).ToList();
+                var (s, selectedBundle) = m_windowFactory.ResolveExtractAmbigious(skip, a);
+                if (selectedBundle == null)
+                    return skip;
+                else
+                    skip = s;
 
                 #region Uncooking
-                // Uncooked files go into the uncooked folders
                 if (uncook)
                 {
-                    // copy to uncooked folder in mod project
-                    var uncookTask = Task.Run(() => WccHelper.UncookFileToPath(relativePath, addAsDLC));
-
-                    Task.WaitAll(uncookTask);
-
-                    var uncookedFilesCount = uncookTask.Result;
-
-                    // return if any files have been uncooked, continue to extract otherwise
-                    if (uncookedFilesCount > 0)
-                    {
-                        // Optionally Export 
-                        string _newpath = addAsDLC
-                            ? Path.Combine(ActiveMod.DlcUncookedDirectory, $"dlc{ActiveMod.Name}", relativePath)
-                            : Path.Combine(ActiveMod.ModUncookedDirectory, relativePath);
-                        if (export && File.Exists(_newpath))
-                        {
-                            var exportTask = Task.Run(() => WccHelper.ExportFileToMod(_newpath));
-                            Task.WaitAll(exportTask);
-                        }
-
-                        return skip;
-                    }
-                    else
-                        Logger.LogString($"Could not uncook {filename}, trying to extract file instead of uncooking.", Logtype.Important);
+                    var result = UncookInner(selectedBundle);
+                    if (result) return skip;
                 }
                 #endregion
 
                 #region Unbundling
-                var bundletype = archives.First().Value.Bundle.TypeName;
-                string newpath = "";
-                switch (bundletype)
+                ExtractInner(selectedBundle);
+                #endregion
+            }
+            else
+            {
+                #region Uncooking
+                if (uncook)
                 {
-                    // extract files from bundle to Cooked
-                    case EBundleType.Bundle:
-                        {
-                            newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}",
-                                    NormalizeDlcPath(relativePath))
-                                : Path.Combine("Mod", EProjectFolders.Cooked.ToString(), relativePath));
-                        }
-                        break;
-                    // extract files from Collision and Texture caches to Raw (except for pngs etc)
-                    case EBundleType.CollisionCache:
-                    case EBundleType.TextureCache:
-                        {
-                            // add pngs, jpgs and dds directly to Cooked
-                            // (not Raw, since they don't get imported, and not uncooked, since they don't get cooked)
-                            if (extension == ".png" || extension == ".jpg" || extension == ".dds")
-                            {
-                                newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                    ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}",
-                                        NormalizeDlcPath(relativePath))
-                                    : Path.Combine("Mod", EProjectFolders.Cooked.ToString(), relativePath));
-                            }
-                            // all other textures and collision stuff goes into Raw (since they have to be imported first)
-                            else
-                                newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
-                                    ? Path.Combine("DLC", $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
-                                    : Path.Combine("Mod", relativePath));
-                        }
-                        break;
-                    // some special cases
-                    case EBundleType.SoundCache:
-                    case EBundleType.Speech:
-                    case EBundleType.Shader:
-                        {
-                            newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(),
-                                    $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
-                                : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), relativePath));
-                        }
-                        break;
-                    case EBundleType.ANY:
-                    default:
-                        throw new NotImplementedException();
-                        break;
-                }
-
-
-                // more than one archive
-                if (archives.Count() > 1)
-                {
-                    var a = archives.Select(x => x.Value).ToList();
-                    var (s, selectedBundle) = m_windowFactory.ResolveExtractAmbigious(skip, a);
-                    if (selectedBundle == null)
-                        return skip;
-                    else
-                        skip = s;
-
-                    Directory.CreateDirectory(Path.GetDirectoryName(newpath));
-                    if (File.Exists(newpath))
-                    {
-                        File.Delete(newpath);
-                    }
-
-                    selectedBundle.Extract(new BundleFileExtractArgs(newpath,
-                        MainController.Get().Configuration.UncookExtension));
-
-                    return skip;
-                }
-
-                // Extract
-                try
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(newpath));
-                    if (File.Exists(newpath))
-                    {
-                        File.Delete(newpath);
-                    }
-
-                    archives.FirstOrDefault().Value.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
-
-                    Logger.LogString($"Succesfully extracted {filename}.", Logtype.Success);
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogString(ex.ToString(), Logtype.Error);
+                    var result = UncookInner(archives.FirstOrDefault().Value);
+                    if (result) return skip;
                 }
                 #endregion
 
-                return skip;
+
+                #region Unbundling
+                ExtractInner(archives.FirstOrDefault().Value);
+                #endregion
             }
 
             return skip;
+
+            void ExtractInner(IWitcherFile file)
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(newpath));
+                if (File.Exists(newpath))
+                {
+                    File.Delete(newpath);
+                }
+
+                file.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
+
+                Logger.LogString($"Succesfully extracted {filename}.", Logtype.Success);
+            }
+
+            bool UncookInner(IWitcherFile file)
+            {
+                var basedir = Path.GetDirectoryName(file.Bundle.ArchiveAbsolutePath);
+
+                // copy to uncooked folder in mod project
+                var uncookTask = Task.Run(() => WccHelper.UncookFileToPath(basedir, relativePath, addAsDLC));
+
+                Task.WaitAll(uncookTask);
+
+                var uncookedFilesCount = uncookTask.Result;
+                // return if any files have been uncooked, continue to extract otherwise
+                if (uncookedFilesCount > 0)
+                {
+                    // Optionally Export 
+                    string _newpath = addAsDLC
+                        ? Path.Combine(ActiveMod.DlcUncookedDirectory, $"dlc{ActiveMod.Name}", relativePath)
+                        : Path.Combine(ActiveMod.ModUncookedDirectory, relativePath);
+                    if (export && File.Exists(_newpath))
+                    {
+                        var exportTask = Task.Run(() => WccHelper.ExportFileToMod(_newpath));
+                        Task.WaitAll(exportTask);
+                    }
+
+                    return true;
+                }
+                else
+                    Logger.LogString($"Could not uncook {filename}, trying to extract file instead of uncooking.", Logtype.Important);
+
+                return false;
+            }
 
             string NormalizeDlcPath(string path)
             {
@@ -841,7 +852,6 @@ namespace WolvenKit.App.ViewModels
                 }
                 return path;
             }
-
         }
         #endregion
 
