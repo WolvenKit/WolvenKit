@@ -135,18 +135,12 @@ namespace WolvenKit.Bundles
         }
 
         /// <summary>
-        /// Loads the .bundle files from the /Mods/ folder
-        /// Note this resets everything
+        /// Loads bundles from specified mods and dlc folder
         /// </summary>
-        /// <param name="exedir"></param>
-        public override void LoadModsBundles(string exedir)
+        /// <param name="mods"></param>
+        /// <param name="dlc"></param>
+        public override void LoadModsBundles(string mods, string dlc)
         {
-            var di = new DirectoryInfo(exedir);
-            if (!di.Exists)
-                return;
-            var mods = Path.Combine(di.Parent.Parent.FullName, "Mods");
-            var dlc = Path.Combine(di.Parent.Parent.FullName, "DLC");
-
             if (!Directory.Exists(mods))
                 Directory.CreateDirectory(mods);
             var modsdirs = new List<string>(Directory.GetDirectories(mods));

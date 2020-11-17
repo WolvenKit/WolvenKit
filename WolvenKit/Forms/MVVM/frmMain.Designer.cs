@@ -116,6 +116,8 @@ namespace WolvenKit
             this.dDStoTextureCacheToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openUncookedFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openModFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
             this.unbundleGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uncookGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
@@ -161,8 +163,8 @@ namespace WolvenKit
             this.MainBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.visualStudioToolStripExtender2 = new WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender(this.components);
             this.watcher = new System.IO.FileSystemWatcher();
-            this.openModFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
+            this.openDlcFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
             this.toolbarToolStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.statusToolStrip.SuspendLayout();
@@ -194,7 +196,7 @@ namespace WolvenKit
             this.toolbarToolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolbarToolStrip.Name = "toolbarToolStrip";
             this.toolbarToolStrip.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.toolbarToolStrip.Size = new System.Drawing.Size(36, 660);
+            this.toolbarToolStrip.Size = new System.Drawing.Size(36, 635);
             this.toolbarToolStrip.Stretch = true;
             this.toolbarToolStrip.TabIndex = 6;
             this.toolbarToolStrip.Text = "topTS";
@@ -870,12 +872,14 @@ namespace WolvenKit
             // gameToolStripMenuItem
             // 
             this.gameToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openUncookedFolderToolStripMenuItem,
             this.openModFolderToolStripMenuItem,
+            this.openDlcFolderToolStripMenuItem,
             this.toolStripSeparator15,
             this.unbundleGameToolStripMenuItem,
             this.uncookGameToolStripMenuItem,
             this.toolStripSeparator12,
+            this.openUncookedFolderToolStripMenuItem,
+            this.toolStripSeparator16,
             this.saveExplorerToolStripMenuItem,
             this.GameDebuggerToolStripMenuItem});
             this.gameToolStripMenuItem.Name = "gameToolStripMenuItem";
@@ -890,6 +894,18 @@ namespace WolvenKit
             this.openUncookedFolderToolStripMenuItem.Text = "Open Uncooked Folder";
             this.openUncookedFolderToolStripMenuItem.ToolTipText = "Opens r4data folder location";
             this.openUncookedFolderToolStripMenuItem.Click += new System.EventHandler(this.openUncookedFolderToolStripMenuItem_Click);
+            // 
+            // openModFolderToolStripMenuItem
+            // 
+            this.openModFolderToolStripMenuItem.Name = "openModFolderToolStripMenuItem";
+            this.openModFolderToolStripMenuItem.Size = new System.Drawing.Size(200, 26);
+            this.openModFolderToolStripMenuItem.Text = "Open Mod Folder";
+            this.openModFolderToolStripMenuItem.Click += new System.EventHandler(this.openModFolderToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator15
+            // 
+            this.toolStripSeparator15.Name = "toolStripSeparator15";
+            this.toolStripSeparator15.Size = new System.Drawing.Size(197, 6);
             // 
             // unbundleGameToolStripMenuItem
             // 
@@ -1132,7 +1148,7 @@ namespace WolvenKit
             this.dockPanel.Margin = new System.Windows.Forms.Padding(2);
             this.dockPanel.Name = "dockPanel";
             this.dockPanel.ShowDocumentIcon = true;
-            this.dockPanel.Size = new System.Drawing.Size(1341, 660);
+            this.dockPanel.Size = new System.Drawing.Size(1341, 635);
             this.dockPanel.TabIndex = 9;
             this.dockPanel.ActiveDocumentChanged += new System.EventHandler(this.dockPanel_ActiveDocumentChanged);
             // 
@@ -1260,7 +1276,7 @@ namespace WolvenKit
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.dockPanel);
             this.toolStripContainer1.ContentPanel.Margin = new System.Windows.Forms.Padding(2);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1341, 660);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1341, 635);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             // 
             // toolStripContainer1.LeftToolStripPanel
@@ -1289,17 +1305,17 @@ namespace WolvenKit
             this.watcher.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
             this.watcher.Renamed += new System.IO.RenamedEventHandler(this.FileRenames_Detected);
             // 
-            // openModFolderToolStripMenuItem
+            // openDlcFolderToolStripMenuItem
             // 
-            this.openModFolderToolStripMenuItem.Name = "openModFolderToolStripMenuItem";
-            this.openModFolderToolStripMenuItem.Size = new System.Drawing.Size(200, 26);
-            this.openModFolderToolStripMenuItem.Text = "Open Mod Folder";
-            this.openModFolderToolStripMenuItem.Click += new System.EventHandler(this.openModFolderToolStripMenuItem_Click);
+            this.openDlcFolderToolStripMenuItem.Name = "openDlcFolderToolStripMenuItem";
+            this.openDlcFolderToolStripMenuItem.Size = new System.Drawing.Size(200, 26);
+            this.openDlcFolderToolStripMenuItem.Text = "Open Dlc Folder";
+            this.openDlcFolderToolStripMenuItem.Click += new System.EventHandler(this.openDlcFolderToolStripMenuItem_Click);
             // 
-            // toolStripSeparator15
+            // toolStripSeparator16
             // 
-            this.toolStripSeparator15.Name = "toolStripSeparator15";
-            this.toolStripSeparator15.Size = new System.Drawing.Size(197, 6);
+            this.toolStripSeparator16.Name = "toolStripSeparator16";
+            this.toolStripSeparator16.Size = new System.Drawing.Size(197, 6);
             // 
             // frmMain
             // 
@@ -1465,5 +1481,7 @@ namespace WolvenKit
         private ToolStripMenuItem resetDocumentLayoutToolStripMenuItem;
         private ToolStripMenuItem openModFolderToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator15;
+        private ToolStripMenuItem openDlcFolderToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator16;
     }
 }

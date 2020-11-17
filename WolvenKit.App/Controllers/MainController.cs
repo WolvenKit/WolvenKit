@@ -133,19 +133,19 @@ namespace WolvenKit.App
             if (loadmods)
             {
                 ModBundleManager = new BundleManager();
-                ModBundleManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                ModBundleManager.LoadModsBundles(Configuration.GameModDir, Configuration.GameDlcDir);
                 managers.Add(MainController.Get().ModBundleManager);
 
                 ModTextureManager = new TextureManager();
-                ModTextureManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                ModTextureManager.LoadModsBundles(Configuration.GameModDir, Configuration.GameDlcDir);
                 managers.Add(MainController.Get().ModTextureManager);
 
                 ModSoundManager = new SoundManager();
-                ModSoundManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                ModSoundManager.LoadModsBundles(Configuration.GameModDir, Configuration.GameDlcDir);
                 managers.Add(MainController.Get().ModSoundManager);
 
                 ModCollisionManager = new CollisionManager();
-                ModCollisionManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                ModCollisionManager.LoadModsBundles(Configuration.GameModDir, Configuration.GameDlcDir);
                 managers.Add(MainController.Get().ModCollisionManager);
             }
             else
@@ -351,14 +351,14 @@ namespace WolvenKit.App
                     }
                 }
                 #endregion
-                loadStatus = "Loading mod bundle manager!";
-                #region Load mod bundle manager
-                if (ModBundleManager == null)
-                {
-                    ModBundleManager = new BundleManager();
-                    ModBundleManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
-                }
-                #endregion
+                //loadStatus = "Loading mod bundle manager!";
+                //#region Load mod bundle manager
+                //if (ModBundleManager == null)
+                //{
+                //    ModBundleManager = new BundleManager();
+                //    ModBundleManager.LoadModsBundles(Configuration.GameModDir, Configuration.GameDlcDir);
+                //}
+                //#endregion
 
                 loadStatus = "Loading texture manager!";
                 #region Load texture manager
@@ -399,14 +399,14 @@ namespace WolvenKit.App
                     }
                 }
                 #endregion
-                loadStatus = "Loading mod texure manager!";
-                #region Load mod texture manager
-                if (ModTextureManager == null)
-                {
-                    ModTextureManager = new TextureManager();
-                    ModTextureManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
-                }
-                #endregion
+                //loadStatus = "Loading mod texure manager!";
+                //#region Load mod texture manager
+                //if (ModTextureManager == null)
+                //{
+                //    ModTextureManager = new TextureManager();
+                //    ModTextureManager.LoadModsBundles(Configuration.GameModDir, Configuration.GameDlcDir);
+                //}
+                //#endregion
 
                 loadStatus = "Loading collision manager!";
                 #region Load collision manager
@@ -447,14 +447,14 @@ namespace WolvenKit.App
                     }
                 }
                 #endregion
-                loadStatus = "Loading mod collision manager!";
-                #region Load mod collision manager
-                if (ModCollisionManager == null)
-                {
-                    ModCollisionManager = new CollisionManager();
-                    ModCollisionManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
-                }
-                #endregion
+                //loadStatus = "Loading mod collision manager!";
+                //#region Load mod collision manager
+                //if (ModCollisionManager == null)
+                //{
+                //    ModCollisionManager = new CollisionManager();
+                //    ModCollisionManager.LoadModsBundles(Configuration.GameModDir, Configuration.GameDlcDir);
+                //}
+                //#endregion
 
                 loadStatus = "Loading speech manager!";
                 #region Load speech manager
@@ -504,14 +504,14 @@ namespace WolvenKit.App
                     }
                 }
                 #endregion
-                loadStatus = "Loading mod sound manager!";
-                #region Load mod sound manager
-                if (ModSoundManager == null)
-                {
-                    ModSoundManager = new SoundManager();
-                    ModSoundManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
-                }
-                #endregion
+                //loadStatus = "Loading mod sound manager!";
+                //#region Load mod sound manager
+                //if (ModSoundManager == null)
+                //{
+                //    ModSoundManager = new SoundManager();
+                //    ModSoundManager.LoadModsBundles(Configuration.GameModDir, Configuration.GameDlcDir);
+                //}
+                //#endregion
 
                 loadStatus = "Loading depot manager!";
                 #region Load depot manager

@@ -41,11 +41,10 @@ namespace WolvenKit.App
 
         public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
 
+        public string GameModDir { get; set; }
+        public string GameDlcDir { get; set; }
+        
 
-        [XmlIgnore]
-        public string GameDlcDir => Path.Combine(GameRootDir, "DLC");
-        [XmlIgnore]
-        public string GameModDir => Path.Combine(GameRootDir, "Mods");
         [XmlIgnore]
         public string GameContentDir => Path.Combine(GameRootDir, "content");
         [XmlIgnore]

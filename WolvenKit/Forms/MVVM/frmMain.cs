@@ -1407,10 +1407,19 @@ namespace WolvenKit
                     exit = true;
                     break;
                 }
-                else
-                    MainController.Get().ProjectStatus = EProjectStatus.Ready;
             }
 
+            while (!Directory.Exists(MainController.Get().Configuration.GameModDir) || !Directory.Exists(MainController.Get().Configuration.GameDlcDir))
+            {
+                var sets = new frmSettings();
+                if (sets.ShowDialog() != DialogResult.OK)
+                {
+                    exit = true;
+                    break;
+                }
+            }
+
+            MainController.Get().ProjectStatus = EProjectStatus.Ready;
             if (exit)
             {
                 Visible = false;
@@ -2681,7 +2690,9 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
         }
 
         private void openModFolderToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.ShowFolderInExplorer(MainController.Get().Configuration.GameModDir);
-        #endregion
+        
+        private void openDlcFolderToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.ShowFolderInExplorer(MainController.Get().Configuration.GameDlcDir);
 
+        #endregion
     }
 }

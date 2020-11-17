@@ -26,7 +26,7 @@ namespace WolvenKit.Common
         public abstract void LoadModBundle(string filename);
         public abstract void LoadBundle(string filename, bool ispatch = false);
         public abstract void LoadAll(string exedir);
-        public abstract void LoadModsBundles(string exedir);
+        public abstract void LoadModsBundles(string mods, string dlc);
 
 
         protected readonly string[] VanillaDlClist = new string[] { "DLC1", "DLC2", "DLC3", "DLC4", "DLC5", "DLC6", "DLC7", "DLC8", "DLC9", "DLC10", "DLC11", "DLC12", "DLC13", "DLC14", "DLC15", "DLC16", "bob", "ep1" };

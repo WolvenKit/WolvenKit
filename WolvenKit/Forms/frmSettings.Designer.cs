@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace WolvenKit
+namespace WolvenKit.Forms
 {
     partial class frmSettings
     {
@@ -31,15 +31,15 @@ namespace WolvenKit
         /// </summary>
         private void InitializeComponent()
         {
-            this.txExecutablePath = new System.Windows.Forms.TextBox();
+            this.textBoxGame = new System.Windows.Forms.TextBox();
             this.lblExecutable = new System.Windows.Forms.Label();
-            this.btnBrowseExe = new System.Windows.Forms.Button();
+            this.buttonBrowseGame = new System.Windows.Forms.Button();
             this.btSave = new System.Windows.Forms.Button();
             this.lblLanguage = new System.Windows.Forms.Label();
             this.lblVoiceLanguage = new System.Windows.Forms.Label();
-            this.btBrowseWCC_Lite = new System.Windows.Forms.Button();
+            this.buttonBrowseWcc = new System.Windows.Forms.Button();
             this.lblWCC_Lite = new System.Windows.Forms.Label();
-            this.txWCC_Lite = new System.Windows.Forms.TextBox();
+            this.textBoxWcc = new System.Windows.Forms.TextBox();
             this.btCancel = new System.Windows.Forms.Button();
             this.txTextLanguage = new System.Windows.Forms.TextBox();
             this.txVoiceLanguage = new System.Windows.Forms.TextBox();
@@ -52,50 +52,52 @@ namespace WolvenKit
             this.labelExtension = new System.Windows.Forms.Label();
             this.checkBoxDisableWelcomeForm = new System.Windows.Forms.CheckBox();
             this.lblDepot = new System.Windows.Forms.Label();
-            this.txDepot = new System.Windows.Forms.TextBox();
+            this.textBoxDepot = new System.Windows.Forms.TextBox();
+            this.labelCustomModDir = new System.Windows.Forms.Label();
+            this.textBoxModDir = new System.Windows.Forms.TextBox();
+            this.labelCustomDlcDir = new System.Windows.Forms.Label();
+            this.textBoxDlcDir = new System.Windows.Forms.TextBox();
+            this.buttonBrowseModDir = new System.Windows.Forms.Button();
+            this.buttonBrowseDlcDir = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // txExecutablePath
+            // textBoxGame
             // 
-            this.txExecutablePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxGame.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txExecutablePath.Location = new System.Drawing.Point(52, 42);
-            this.txExecutablePath.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.txExecutablePath.Name = "txExecutablePath";
-            this.txExecutablePath.Size = new System.Drawing.Size(661, 26);
-            this.txExecutablePath.TabIndex = 0;
-            this.txExecutablePath.TextChanged += new System.EventHandler(this.txExecutablePath_TextChanged);
+            this.textBoxGame.Location = new System.Drawing.Point(35, 27);
+            this.textBoxGame.Name = "textBoxGame";
+            this.textBoxGame.Size = new System.Drawing.Size(442, 20);
+            this.textBoxGame.TabIndex = 0;
+            this.textBoxGame.TextChanged += new System.EventHandler(this.txExecutablePath_TextChanged);
             // 
             // lblExecutable
             // 
             this.lblExecutable.AutoSize = true;
-            this.lblExecutable.Location = new System.Drawing.Point(52, 14);
-            this.lblExecutable.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblExecutable.Location = new System.Drawing.Point(35, 9);
             this.lblExecutable.Name = "lblExecutable";
-            this.lblExecutable.Size = new System.Drawing.Size(197, 20);
+            this.lblExecutable.Size = new System.Drawing.Size(135, 13);
             this.lblExecutable.TabIndex = 1;
             this.lblExecutable.Text = "Witcher 3 executable path:";
             // 
-            // btnBrowseExe
+            // buttonBrowseGame
             // 
-            this.btnBrowseExe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowseExe.Location = new System.Drawing.Point(724, 40);
-            this.btnBrowseExe.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnBrowseExe.Name = "btnBrowseExe";
-            this.btnBrowseExe.Size = new System.Drawing.Size(112, 35);
-            this.btnBrowseExe.TabIndex = 2;
-            this.btnBrowseExe.Text = "Browse...";
-            this.btnBrowseExe.UseVisualStyleBackColor = true;
-            this.btnBrowseExe.Click += new System.EventHandler(this.btnBrowseExe_Click);
+            this.buttonBrowseGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonBrowseGame.Location = new System.Drawing.Point(483, 25);
+            this.buttonBrowseGame.Name = "buttonBrowseGame";
+            this.buttonBrowseGame.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowseGame.TabIndex = 2;
+            this.buttonBrowseGame.Text = "Browse...";
+            this.buttonBrowseGame.UseVisualStyleBackColor = true;
+            this.buttonBrowseGame.Click += new System.EventHandler(this.btnBrowseExe_Click);
             // 
             // btSave
             // 
             this.btSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSave.Location = new System.Drawing.Point(724, 474);
-            this.btSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btSave.Location = new System.Drawing.Point(483, 409);
             this.btSave.Name = "btSave";
-            this.btSave.Size = new System.Drawing.Size(112, 35);
+            this.btSave.Size = new System.Drawing.Size(75, 23);
             this.btSave.TabIndex = 3;
             this.btSave.Text = "Save";
             this.btSave.UseVisualStyleBackColor = true;
@@ -105,10 +107,9 @@ namespace WolvenKit
             // 
             this.lblLanguage.AutoSize = true;
             this.lblLanguage.Enabled = false;
-            this.lblLanguage.Location = new System.Drawing.Point(44, 229);
-            this.lblLanguage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblLanguage.Location = new System.Drawing.Point(29, 277);
             this.lblLanguage.Name = "lblLanguage";
-            this.lblLanguage.Size = new System.Drawing.Size(181, 20);
+            this.lblLanguage.Size = new System.Drawing.Size(124, 13);
             this.lblLanguage.TabIndex = 5;
             this.lblLanguage.Text = "Text Language (e.g. EN)";
             // 
@@ -116,54 +117,49 @@ namespace WolvenKit
             // 
             this.lblVoiceLanguage.AutoSize = true;
             this.lblVoiceLanguage.Enabled = false;
-            this.lblVoiceLanguage.Location = new System.Drawing.Point(44, 269);
-            this.lblVoiceLanguage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblVoiceLanguage.Location = new System.Drawing.Point(29, 303);
             this.lblVoiceLanguage.Name = "lblVoiceLanguage";
-            this.lblVoiceLanguage.Size = new System.Drawing.Size(206, 20);
+            this.lblVoiceLanguage.Size = new System.Drawing.Size(140, 13);
             this.lblVoiceLanguage.TabIndex = 7;
             this.lblVoiceLanguage.Text = "Speech Language (e.g. EN)";
             // 
-            // btBrowseWCC_Lite
+            // buttonBrowseWcc
             // 
-            this.btBrowseWCC_Lite.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btBrowseWCC_Lite.Location = new System.Drawing.Point(724, 102);
-            this.btBrowseWCC_Lite.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btBrowseWCC_Lite.Name = "btBrowseWCC_Lite";
-            this.btBrowseWCC_Lite.Size = new System.Drawing.Size(112, 35);
-            this.btBrowseWCC_Lite.TabIndex = 10;
-            this.btBrowseWCC_Lite.Text = "Browse...";
-            this.btBrowseWCC_Lite.UseVisualStyleBackColor = true;
-            this.btBrowseWCC_Lite.Click += new System.EventHandler(this.btBrowseWCC_Lite_Click);
+            this.buttonBrowseWcc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonBrowseWcc.Location = new System.Drawing.Point(483, 65);
+            this.buttonBrowseWcc.Name = "buttonBrowseWcc";
+            this.buttonBrowseWcc.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowseWcc.TabIndex = 10;
+            this.buttonBrowseWcc.Text = "Browse...";
+            this.buttonBrowseWcc.UseVisualStyleBackColor = true;
+            this.buttonBrowseWcc.Click += new System.EventHandler(this.btBrowseWCC_Lite_Click);
             // 
             // lblWCC_Lite
             // 
             this.lblWCC_Lite.AutoSize = true;
-            this.lblWCC_Lite.Location = new System.Drawing.Point(52, 77);
-            this.lblWCC_Lite.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblWCC_Lite.Location = new System.Drawing.Point(35, 50);
             this.lblWCC_Lite.Name = "lblWCC_Lite";
-            this.lblWCC_Lite.Size = new System.Drawing.Size(151, 20);
+            this.lblWCC_Lite.Size = new System.Drawing.Size(102, 13);
             this.lblWCC_Lite.TabIndex = 9;
-            this.lblWCC_Lite.Text = "WCC_Lite.exe Path:";
+            this.lblWCC_Lite.Text = "WCC_Lite.exe path:";
             // 
-            // txWCC_Lite
+            // textBoxWcc
             // 
-            this.txWCC_Lite.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxWcc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txWCC_Lite.Location = new System.Drawing.Point(52, 103);
-            this.txWCC_Lite.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.txWCC_Lite.Name = "txWCC_Lite";
-            this.txWCC_Lite.Size = new System.Drawing.Size(660, 26);
-            this.txWCC_Lite.TabIndex = 8;
-            this.txWCC_Lite.TextChanged += new System.EventHandler(this.txWCC_Lite_TextChanged);
+            this.textBoxWcc.Location = new System.Drawing.Point(35, 67);
+            this.textBoxWcc.Name = "textBoxWcc";
+            this.textBoxWcc.Size = new System.Drawing.Size(441, 20);
+            this.textBoxWcc.TabIndex = 8;
+            this.textBoxWcc.TextChanged += new System.EventHandler(this.txWCC_Lite_TextChanged);
             // 
             // btCancel
             // 
             this.btCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(603, 474);
-            this.btCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btCancel.Location = new System.Drawing.Point(402, 409);
             this.btCancel.Name = "btCancel";
-            this.btCancel.Size = new System.Drawing.Size(112, 35);
+            this.btCancel.Size = new System.Drawing.Size(75, 23);
             this.btCancel.TabIndex = 11;
             this.btCancel.Text = "Cancel";
             this.btCancel.UseVisualStyleBackColor = true;
@@ -171,19 +167,17 @@ namespace WolvenKit
             // txTextLanguage
             // 
             this.txTextLanguage.Enabled = false;
-            this.txTextLanguage.Location = new System.Drawing.Point(270, 218);
-            this.txTextLanguage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txTextLanguage.Location = new System.Drawing.Point(180, 270);
             this.txTextLanguage.Name = "txTextLanguage";
-            this.txTextLanguage.Size = new System.Drawing.Size(200, 26);
+            this.txTextLanguage.Size = new System.Drawing.Size(135, 20);
             this.txTextLanguage.TabIndex = 4;
             // 
             // txVoiceLanguage
             // 
             this.txVoiceLanguage.Enabled = false;
-            this.txVoiceLanguage.Location = new System.Drawing.Point(270, 265);
-            this.txVoiceLanguage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txVoiceLanguage.Location = new System.Drawing.Point(180, 300);
             this.txVoiceLanguage.Name = "txVoiceLanguage";
-            this.txVoiceLanguage.Size = new System.Drawing.Size(200, 26);
+            this.txVoiceLanguage.Size = new System.Drawing.Size(135, 20);
             this.txVoiceLanguage.TabIndex = 6;
             // 
             // exeSearcherSlave
@@ -199,10 +193,9 @@ namespace WolvenKit
             this.W3exeTickLBL.AutoSize = true;
             this.W3exeTickLBL.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.W3exeTickLBL.ForeColor = System.Drawing.Color.Red;
-            this.W3exeTickLBL.Location = new System.Drawing.Point(26, 48);
-            this.W3exeTickLBL.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.W3exeTickLBL.Location = new System.Drawing.Point(14, 30);
             this.W3exeTickLBL.Name = "W3exeTickLBL";
-            this.W3exeTickLBL.Size = new System.Drawing.Size(21, 20);
+            this.W3exeTickLBL.Size = new System.Drawing.Size(15, 13);
             this.W3exeTickLBL.TabIndex = 13;
             this.W3exeTickLBL.Text = "X";
             // 
@@ -211,10 +204,9 @@ namespace WolvenKit
             this.WCCexeTickLBL.AutoSize = true;
             this.WCCexeTickLBL.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.WCCexeTickLBL.ForeColor = System.Drawing.Color.Red;
-            this.WCCexeTickLBL.Location = new System.Drawing.Point(26, 109);
-            this.WCCexeTickLBL.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.WCCexeTickLBL.Location = new System.Drawing.Point(14, 70);
             this.WCCexeTickLBL.Name = "WCCexeTickLBL";
-            this.WCCexeTickLBL.Size = new System.Drawing.Size(21, 20);
+            this.WCCexeTickLBL.Size = new System.Drawing.Size(15, 13);
             this.WCCexeTickLBL.TabIndex = 14;
             this.WCCexeTickLBL.Text = "X";
             // 
@@ -222,10 +214,9 @@ namespace WolvenKit
             // 
             this.labelTheme.AutoSize = true;
             this.labelTheme.Enabled = false;
-            this.labelTheme.Location = new System.Drawing.Point(44, 326);
-            this.labelTheme.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelTheme.Location = new System.Drawing.Point(29, 340);
             this.labelTheme.Name = "labelTheme";
-            this.labelTheme.Size = new System.Drawing.Size(99, 20);
+            this.labelTheme.Size = new System.Drawing.Size(67, 13);
             this.labelTheme.TabIndex = 15;
             this.labelTheme.Text = "Color Theme";
             // 
@@ -233,40 +224,36 @@ namespace WolvenKit
             // 
             this.comboBoxTheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTheme.FormattingEnabled = true;
-            this.comboBoxTheme.Location = new System.Drawing.Point(270, 322);
-            this.comboBoxTheme.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.comboBoxTheme.Location = new System.Drawing.Point(180, 337);
             this.comboBoxTheme.Name = "comboBoxTheme";
-            this.comboBoxTheme.Size = new System.Drawing.Size(200, 28);
+            this.comboBoxTheme.Size = new System.Drawing.Size(135, 21);
             this.comboBoxTheme.TabIndex = 16;
             // 
             // comboBoxExtension
             // 
             this.comboBoxExtension.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxExtension.FormattingEnabled = true;
-            this.comboBoxExtension.Location = new System.Drawing.Point(270, 372);
-            this.comboBoxExtension.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.comboBoxExtension.Location = new System.Drawing.Point(180, 370);
             this.comboBoxExtension.Name = "comboBoxExtension";
-            this.comboBoxExtension.Size = new System.Drawing.Size(200, 28);
+            this.comboBoxExtension.Size = new System.Drawing.Size(135, 21);
             this.comboBoxExtension.TabIndex = 18;
             // 
             // labelExtension
             // 
             this.labelExtension.AutoSize = true;
             this.labelExtension.Enabled = false;
-            this.labelExtension.Location = new System.Drawing.Point(44, 377);
-            this.labelExtension.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelExtension.Location = new System.Drawing.Point(29, 373);
             this.labelExtension.Name = "labelExtension";
-            this.labelExtension.Size = new System.Drawing.Size(205, 20);
+            this.labelExtension.Size = new System.Drawing.Size(138, 13);
             this.labelExtension.TabIndex = 17;
             this.labelExtension.Text = "Uncooked Image Extension";
             // 
             // checkBoxDisableWelcomeForm
             // 
             this.checkBoxDisableWelcomeForm.AutoSize = true;
-            this.checkBoxDisableWelcomeForm.Location = new System.Drawing.Point(513, 325);
-            this.checkBoxDisableWelcomeForm.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.checkBoxDisableWelcomeForm.Location = new System.Drawing.Point(342, 339);
             this.checkBoxDisableWelcomeForm.Name = "checkBoxDisableWelcomeForm";
-            this.checkBoxDisableWelcomeForm.Size = new System.Drawing.Size(199, 24);
+            this.checkBoxDisableWelcomeForm.Size = new System.Drawing.Size(135, 17);
             this.checkBoxDisableWelcomeForm.TabIndex = 19;
             this.checkBoxDisableWelcomeForm.Text = "Disable Welcome Form";
             this.checkBoxDisableWelcomeForm.UseVisualStyleBackColor = true;
@@ -274,33 +261,97 @@ namespace WolvenKit
             // lblDepot
             // 
             this.lblDepot.AutoSize = true;
-            this.lblDepot.Location = new System.Drawing.Point(48, 138);
-            this.lblDepot.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDepot.Location = new System.Drawing.Point(35, 90);
             this.lblDepot.Name = "lblDepot";
-            this.lblDepot.Size = new System.Drawing.Size(171, 20);
+            this.lblDepot.Size = new System.Drawing.Size(114, 13);
             this.lblDepot.TabIndex = 21;
-            this.lblDepot.Text = "Uncooked Depot Path:";
+            this.lblDepot.Text = "Uncooked depot path:";
             // 
-            // txDepot
+            // textBoxDepot
             // 
-            this.txDepot.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxDepot.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txDepot.Enabled = false;
-            this.txDepot.Location = new System.Drawing.Point(48, 165);
-            this.txDepot.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.txDepot.Name = "txDepot";
-            this.txDepot.Size = new System.Drawing.Size(660, 26);
-            this.txDepot.TabIndex = 20;
+            this.textBoxDepot.Enabled = false;
+            this.textBoxDepot.Location = new System.Drawing.Point(35, 106);
+            this.textBoxDepot.Name = "textBoxDepot";
+            this.textBoxDepot.Size = new System.Drawing.Size(441, 20);
+            this.textBoxDepot.TabIndex = 20;
+            // 
+            // labelCustomModDir
+            // 
+            this.labelCustomModDir.AutoSize = true;
+            this.labelCustomModDir.Location = new System.Drawing.Point(35, 129);
+            this.labelCustomModDir.Name = "labelCustomModDir";
+            this.labelCustomModDir.Size = new System.Drawing.Size(65, 13);
+            this.labelCustomModDir.TabIndex = 23;
+            this.labelCustomModDir.Text = "Mods folder:";
+            // 
+            // textBoxModDir
+            // 
+            this.textBoxModDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxModDir.Enabled = false;
+            this.textBoxModDir.Location = new System.Drawing.Point(35, 145);
+            this.textBoxModDir.Name = "textBoxModDir";
+            this.textBoxModDir.Size = new System.Drawing.Size(441, 20);
+            this.textBoxModDir.TabIndex = 22;
+            // 
+            // labelCustomDlcDir
+            // 
+            this.labelCustomDlcDir.AutoSize = true;
+            this.labelCustomDlcDir.Location = new System.Drawing.Point(35, 168);
+            this.labelCustomDlcDir.Name = "labelCustomDlcDir";
+            this.labelCustomDlcDir.Size = new System.Drawing.Size(55, 13);
+            this.labelCustomDlcDir.TabIndex = 25;
+            this.labelCustomDlcDir.Text = "Dlc folder:";
+            // 
+            // textBoxDlcDir
+            // 
+            this.textBoxDlcDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxDlcDir.Enabled = false;
+            this.textBoxDlcDir.Location = new System.Drawing.Point(35, 184);
+            this.textBoxDlcDir.Name = "textBoxDlcDir";
+            this.textBoxDlcDir.Size = new System.Drawing.Size(441, 20);
+            this.textBoxDlcDir.TabIndex = 24;
+            // 
+            // buttonBrowseModDir
+            // 
+            this.buttonBrowseModDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonBrowseModDir.Location = new System.Drawing.Point(483, 143);
+            this.buttonBrowseModDir.Name = "buttonBrowseModDir";
+            this.buttonBrowseModDir.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowseModDir.TabIndex = 26;
+            this.buttonBrowseModDir.Text = "Browse...";
+            this.buttonBrowseModDir.UseVisualStyleBackColor = true;
+            this.buttonBrowseModDir.Click += new System.EventHandler(this.buttonBrowseModDir_Click);
+            // 
+            // buttonBrowseDlcDir
+            // 
+            this.buttonBrowseDlcDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonBrowseDlcDir.Location = new System.Drawing.Point(483, 182);
+            this.buttonBrowseDlcDir.Name = "buttonBrowseDlcDir";
+            this.buttonBrowseDlcDir.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowseDlcDir.TabIndex = 27;
+            this.buttonBrowseDlcDir.Text = "Browse...";
+            this.buttonBrowseDlcDir.UseVisualStyleBackColor = true;
+            this.buttonBrowseDlcDir.Click += new System.EventHandler(this.buttonBrowseDlcDir_Click);
             // 
             // frmSettings
             // 
             this.AcceptButton = this.btSave;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(882, 528);
+            this.ClientSize = new System.Drawing.Size(588, 444);
+            this.Controls.Add(this.buttonBrowseDlcDir);
+            this.Controls.Add(this.buttonBrowseModDir);
+            this.Controls.Add(this.labelCustomDlcDir);
+            this.Controls.Add(this.textBoxDlcDir);
+            this.Controls.Add(this.labelCustomModDir);
+            this.Controls.Add(this.textBoxModDir);
             this.Controls.Add(this.lblDepot);
-            this.Controls.Add(this.txDepot);
+            this.Controls.Add(this.textBoxDepot);
             this.Controls.Add(this.checkBoxDisableWelcomeForm);
             this.Controls.Add(this.comboBoxExtension);
             this.Controls.Add(this.labelExtension);
@@ -309,18 +360,17 @@ namespace WolvenKit
             this.Controls.Add(this.WCCexeTickLBL);
             this.Controls.Add(this.W3exeTickLBL);
             this.Controls.Add(this.btCancel);
-            this.Controls.Add(this.btBrowseWCC_Lite);
+            this.Controls.Add(this.buttonBrowseWcc);
             this.Controls.Add(this.lblWCC_Lite);
-            this.Controls.Add(this.txWCC_Lite);
+            this.Controls.Add(this.textBoxWcc);
             this.Controls.Add(this.lblVoiceLanguage);
             this.Controls.Add(this.txVoiceLanguage);
             this.Controls.Add(this.lblLanguage);
             this.Controls.Add(this.txTextLanguage);
             this.Controls.Add(this.btSave);
-            this.Controls.Add(this.btnBrowseExe);
+            this.Controls.Add(this.buttonBrowseGame);
             this.Controls.Add(this.lblExecutable);
-            this.Controls.Add(this.txExecutablePath);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Controls.Add(this.textBoxGame);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmSettings";
@@ -333,15 +383,15 @@ namespace WolvenKit
 
         #endregion
 
-        private TextBox txExecutablePath;
+        private TextBox textBoxGame;
         private Label lblExecutable;
-        private Button btnBrowseExe;
+        private Button buttonBrowseGame;
         private Button btSave;
         private Label lblLanguage;
         private Label lblVoiceLanguage;
-        private Button btBrowseWCC_Lite;
+        private Button buttonBrowseWcc;
         private Label lblWCC_Lite;
-        private TextBox txWCC_Lite;
+        private TextBox textBoxWcc;
         private Button btCancel;
         private TextBox txTextLanguage;
         private TextBox txVoiceLanguage;
@@ -354,6 +404,12 @@ namespace WolvenKit
         private Label labelExtension;
         private CheckBox checkBoxDisableWelcomeForm;
         private Label lblDepot;
-        private TextBox txDepot;
+        private TextBox textBoxDepot;
+        private Label labelCustomModDir;
+        private TextBox textBoxModDir;
+        private Label labelCustomDlcDir;
+        private TextBox textBoxDlcDir;
+        private Button buttonBrowseModDir;
+        private Button buttonBrowseDlcDir;
     }
 }
