@@ -33,7 +33,10 @@ namespace WolvenKit.Forms
         {
             InitializeComponent();
             var config = MainController.Get().Configuration;
+
             
+
+
             textBoxGame.Text = config.ExecutablePath;
             textBoxWcc.Text = config.WccLite;
 
@@ -49,7 +52,10 @@ namespace WolvenKit.Forms
             
             comboBoxTheme.Items.AddRange(Enum.GetValues(typeof(EColorThemes)).Cast<object>().ToArray());
             comboBoxTheme.SelectedItem = UIController.Get().Configuration.ColorTheme;
-            
+
+            comboBoxUpdateChannel.Items.AddRange(Enum.GetValues(typeof(EUpdateChannel)).Cast<object>().ToArray());
+            comboBoxUpdateChannel.SelectedItem = MainController.Get().Configuration.UpdateChannel;
+
             comboBoxExtension.Items.AddRange(Enum.GetValues(typeof(EUncookExtension)).Cast<object>().ToArray());
             comboBoxExtension.SelectedItem = MainController.Get().Configuration.UncookExtension;
 
@@ -124,6 +130,7 @@ namespace WolvenKit.Forms
             config.IsAutoInstallModsDisabled = !checkBoxAutoInstall.Checked;
 
             uiconfig.ColorTheme = (EColorThemes)comboBoxTheme.SelectedItem;
+            config.UpdateChannel = (EUpdateChannel)comboBoxUpdateChannel.SelectedItem;
 
             // save configs
             config.Save();

@@ -60,6 +60,8 @@ namespace WolvenKit.Forms
             this.buttonBrowseModDir = new System.Windows.Forms.Button();
             this.buttonBrowseDlcDir = new System.Windows.Forms.Button();
             this.checkBoxAutoInstall = new System.Windows.Forms.CheckBox();
+            this.labelUpdateChannel = new System.Windows.Forms.Label();
+            this.comboBoxUpdateChannel = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // textBoxGame
@@ -108,7 +110,7 @@ namespace WolvenKit.Forms
             // 
             this.lblLanguage.AutoSize = true;
             this.lblLanguage.Enabled = false;
-            this.lblLanguage.Location = new System.Drawing.Point(29, 277);
+            this.lblLanguage.Location = new System.Drawing.Point(35, 277);
             this.lblLanguage.Name = "lblLanguage";
             this.lblLanguage.Size = new System.Drawing.Size(124, 13);
             this.lblLanguage.TabIndex = 5;
@@ -118,7 +120,7 @@ namespace WolvenKit.Forms
             // 
             this.lblVoiceLanguage.AutoSize = true;
             this.lblVoiceLanguage.Enabled = false;
-            this.lblVoiceLanguage.Location = new System.Drawing.Point(29, 303);
+            this.lblVoiceLanguage.Location = new System.Drawing.Point(35, 303);
             this.lblVoiceLanguage.Name = "lblVoiceLanguage";
             this.lblVoiceLanguage.Size = new System.Drawing.Size(140, 13);
             this.lblVoiceLanguage.TabIndex = 7;
@@ -168,7 +170,7 @@ namespace WolvenKit.Forms
             // txTextLanguage
             // 
             this.txTextLanguage.Enabled = false;
-            this.txTextLanguage.Location = new System.Drawing.Point(180, 270);
+            this.txTextLanguage.Location = new System.Drawing.Point(186, 270);
             this.txTextLanguage.Name = "txTextLanguage";
             this.txTextLanguage.Size = new System.Drawing.Size(135, 20);
             this.txTextLanguage.TabIndex = 4;
@@ -176,7 +178,7 @@ namespace WolvenKit.Forms
             // txVoiceLanguage
             // 
             this.txVoiceLanguage.Enabled = false;
-            this.txVoiceLanguage.Location = new System.Drawing.Point(180, 300);
+            this.txVoiceLanguage.Location = new System.Drawing.Point(186, 300);
             this.txVoiceLanguage.Name = "txVoiceLanguage";
             this.txVoiceLanguage.Size = new System.Drawing.Size(135, 20);
             this.txVoiceLanguage.TabIndex = 6;
@@ -215,7 +217,7 @@ namespace WolvenKit.Forms
             // 
             this.labelTheme.AutoSize = true;
             this.labelTheme.Enabled = false;
-            this.labelTheme.Location = new System.Drawing.Point(29, 340);
+            this.labelTheme.Location = new System.Drawing.Point(35, 340);
             this.labelTheme.Name = "labelTheme";
             this.labelTheme.Size = new System.Drawing.Size(67, 13);
             this.labelTheme.TabIndex = 15;
@@ -225,7 +227,7 @@ namespace WolvenKit.Forms
             // 
             this.comboBoxTheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTheme.FormattingEnabled = true;
-            this.comboBoxTheme.Location = new System.Drawing.Point(180, 337);
+            this.comboBoxTheme.Location = new System.Drawing.Point(186, 337);
             this.comboBoxTheme.Name = "comboBoxTheme";
             this.comboBoxTheme.Size = new System.Drawing.Size(135, 21);
             this.comboBoxTheme.TabIndex = 16;
@@ -234,7 +236,7 @@ namespace WolvenKit.Forms
             // 
             this.comboBoxExtension.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxExtension.FormattingEnabled = true;
-            this.comboBoxExtension.Location = new System.Drawing.Point(180, 370);
+            this.comboBoxExtension.Location = new System.Drawing.Point(186, 370);
             this.comboBoxExtension.Name = "comboBoxExtension";
             this.comboBoxExtension.Size = new System.Drawing.Size(135, 21);
             this.comboBoxExtension.TabIndex = 18;
@@ -243,7 +245,7 @@ namespace WolvenKit.Forms
             // 
             this.labelExtension.AutoSize = true;
             this.labelExtension.Enabled = false;
-            this.labelExtension.Location = new System.Drawing.Point(29, 373);
+            this.labelExtension.Location = new System.Drawing.Point(35, 373);
             this.labelExtension.Name = "labelExtension";
             this.labelExtension.Size = new System.Drawing.Size(138, 13);
             this.labelExtension.TabIndex = 17;
@@ -252,7 +254,7 @@ namespace WolvenKit.Forms
             // checkBoxDisableWelcomeForm
             // 
             this.checkBoxDisableWelcomeForm.AutoSize = true;
-            this.checkBoxDisableWelcomeForm.Location = new System.Drawing.Point(342, 339);
+            this.checkBoxDisableWelcomeForm.Location = new System.Drawing.Point(348, 339);
             this.checkBoxDisableWelcomeForm.Name = "checkBoxDisableWelcomeForm";
             this.checkBoxDisableWelcomeForm.Size = new System.Drawing.Size(135, 17);
             this.checkBoxDisableWelcomeForm.TabIndex = 19;
@@ -343,12 +345,30 @@ namespace WolvenKit.Forms
             this.checkBoxAutoInstall.AutoSize = true;
             this.checkBoxAutoInstall.Checked = true;
             this.checkBoxAutoInstall.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAutoInstall.Location = new System.Drawing.Point(342, 372);
+            this.checkBoxAutoInstall.Location = new System.Drawing.Point(348, 372);
             this.checkBoxAutoInstall.Name = "checkBoxAutoInstall";
             this.checkBoxAutoInstall.Size = new System.Drawing.Size(147, 17);
             this.checkBoxAutoInstall.TabIndex = 28;
             this.checkBoxAutoInstall.Text = "Automatically Install Mods";
             this.checkBoxAutoInstall.UseVisualStyleBackColor = true;
+            // 
+            // labelUpdateChannel
+            // 
+            this.labelUpdateChannel.AutoSize = true;
+            this.labelUpdateChannel.Enabled = false;
+            this.labelUpdateChannel.Location = new System.Drawing.Point(35, 224);
+            this.labelUpdateChannel.Name = "labelUpdateChannel";
+            this.labelUpdateChannel.Size = new System.Drawing.Size(124, 13);
+            this.labelUpdateChannel.TabIndex = 29;
+            this.labelUpdateChannel.Text = "Text Language (e.g. EN)";
+            // 
+            // comboBoxUpdateChannel
+            // 
+            this.comboBoxUpdateChannel.FormattingEnabled = true;
+            this.comboBoxUpdateChannel.Location = new System.Drawing.Point(186, 221);
+            this.comboBoxUpdateChannel.Name = "comboBoxUpdateChannel";
+            this.comboBoxUpdateChannel.Size = new System.Drawing.Size(135, 21);
+            this.comboBoxUpdateChannel.TabIndex = 30;
             // 
             // frmSettings
             // 
@@ -357,6 +377,8 @@ namespace WolvenKit.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
             this.ClientSize = new System.Drawing.Size(588, 444);
+            this.Controls.Add(this.comboBoxUpdateChannel);
+            this.Controls.Add(this.labelUpdateChannel);
             this.Controls.Add(this.checkBoxAutoInstall);
             this.Controls.Add(this.buttonBrowseDlcDir);
             this.Controls.Add(this.buttonBrowseModDir);
@@ -426,5 +448,7 @@ namespace WolvenKit.Forms
         private Button buttonBrowseModDir;
         private Button buttonBrowseDlcDir;
         private CheckBox checkBoxAutoInstall;
+        private Label labelUpdateChannel;
+        private ComboBox comboBoxUpdateChannel;
     }
 }

@@ -44,7 +44,9 @@ namespace WolvenKit.App
 
         public string GameModDir { get; set; }
         public string GameDlcDir { get; set; }
-        
+
+        public EUpdateChannel UpdateChannel { get; set; }
+
 
         [XmlIgnore]
         public string GameContentDir => Path.Combine(GameRootDir, "content");

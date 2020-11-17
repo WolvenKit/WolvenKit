@@ -1440,7 +1440,18 @@ namespace WolvenKit
             MockKernel.Get().InitWindows();
 
             //Update check should be after we are all set up. It goes on in the background.
-            AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
+            switch (MainController.Get().Configuration.UpdateChannel)
+            {
+                case EUpdateChannel.Nightly:
+                    AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/NightlyUpdate.xml");
+                    break;
+                case EUpdateChannel.Stable:
+                default:
+                    AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
+                    break;
+            }
+
+            
             richpresenceworker.RunWorkerAsync();
 
             ResetWindows();

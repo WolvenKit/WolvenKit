@@ -29,6 +29,13 @@ namespace WolvenKit.App
         Errored
     }
 
+    public enum EUpdateChannel
+    {
+        Stable,
+        //Beta,
+        Nightly,
+    }
+
     /// <summary>
     /// Supervisor of all subsystem managers. Singleton.
     /// </summary>
