@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -11,6 +12,11 @@ namespace WolvenKit.App.ViewModels
     /// </summary>
     public abstract class CloseableViewModel : ViewModel
     {
+        public CloseableViewModel(IWindowFactory windowFactory) : base(windowFactory)
+        {
+            
+        }
+
         public event EventHandler ClosingRequest;
         public event EventHandler ActivateRequest;
 

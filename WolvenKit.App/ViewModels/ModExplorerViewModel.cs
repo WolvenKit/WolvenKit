@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WolvenKit.App.Commands;
+using WolvenKit.App.Model;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
@@ -21,7 +22,7 @@ namespace WolvenKit.App.ViewModels
     {
         private readonly MainViewModel MainVM;
 
-        public ModExplorerViewModel(MainViewModel mainViewModel)
+        public ModExplorerViewModel(IWindowFactory windowFactory, MainViewModel mainViewModel) : base(windowFactory)
         {
             MainVM = mainViewModel;
             LastChange = DateTime.Now;
@@ -117,7 +118,7 @@ namespace WolvenKit.App.ViewModels
         protected async void ExportMesh()
         {
             var fullpath = SelectedItems.First().FullName;
-            await Task.Run(() => MainVM.ExportFileToMod(fullpath));
+            await Task.Run(() => WccHelper.ExportFileToMod(fullpath));
 
         }
 
@@ -146,8 +147,7 @@ namespace WolvenKit.App.ViewModels
 
 
         protected bool CanAddAllImports() => SelectedItems != null;
-        protected async void AddAllImports() => await MainVM
-            .AddAllImports(SelectedItems.First().FullName);
+        protected async void AddAllImports() => await WccHelper.AddAllImports(SelectedItems.First().FullName);
 
 
         #endregion
@@ -291,8 +291,7 @@ namespace WolvenKit.App.ViewModels
         public async void DBG_logdependencies()
         {
             string workDir = Path.GetFullPath($"{MainController.WorkDir}_export");
-            await MainVM
-                .AddAllImports(SelectedItems.First().FullName, true, true, workDir, true);
+            await WccHelper.AddAllImports(SelectedItems.First().FullName, true, true, workDir, true);
         }
 
     }

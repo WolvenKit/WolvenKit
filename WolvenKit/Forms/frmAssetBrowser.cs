@@ -53,7 +53,8 @@ namespace WolvenKit
             {
                 if (manager == null)
                     continue;
-                FileList.AddRange(manager.FileList);
+
+                FileList.AddRange(manager.FileList.Where(_ => _ != null));
                 RootNode.Directories[manager.RootNode.Name] = manager.RootNode;
                 manager.RootNode.Parent = RootNode;
 
@@ -246,7 +247,7 @@ namespace WolvenKit
             }
         }
 
-        public string GetImageKey(string filename)
+        private string GetImageKey(string filename)
         {
             try
             {
@@ -343,20 +344,6 @@ namespace WolvenKit
             fileListView.Items.AddRange(results.ToArray());
         }
 
-        //public List<IWitcherFile> GetFiles(WitcherTreeNode mainnode)
-        //{
-        //    var bundfiles = new List<IWitcherFile>();
-        //    if (mainnode?.Files != null)
-        //    {
-        //        foreach (var wfile in mainnode.Files)
-        //        {
-        //            bundfiles.AddRange(wfile.Value);
-        //        }
-        //        bundfiles.AddRange(mainnode.Directories.Values.SelectMany(GetFiles));
-        //    }
-        //    return bundfiles;
-        //}
-
         private Tuple<WitcherListViewItem,IWitcherFile>[] SearchFiles(IWitcherFile[] files, string searchkeyword, string bundletypestr, string extension)
         {
             if(bundletypestr=="Any") bundletypestr="ANY";
@@ -427,16 +414,6 @@ namespace WolvenKit
 
             return collectedFilesList.ToArray();
         }
-
-        //public string[] GetExtensions(params string[] filename)
-        //{
-        //    var extensions = new List<string>();
-        //    foreach (var file in filename.Where(file => !extensions.Contains(file.Split('.').Last())))
-        //    {
-        //        extensions.Add(file.Split('.').Last());
-        //    }
-        //    return extensions.ToArray();
-        //}
 
         private void MarkSelected_Click(object sender, EventArgs e)
         {

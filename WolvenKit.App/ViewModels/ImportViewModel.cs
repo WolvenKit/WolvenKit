@@ -30,7 +30,7 @@ namespace WolvenKit.App.ViewModels
     {
         
 
-        public ImportViewModel()
+        public ImportViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
             UseLocalResourcesCommand = new RelayCommand(UseLocalResources, CanUseLocalResources);
             OpenFolderCommand = new RelayCommand(OpenFolder, CanOpenFolder);

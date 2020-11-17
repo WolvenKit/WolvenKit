@@ -150,10 +150,11 @@ namespace WolvenKit.App.ViewModels
 
     public class BulkEditorViewModel : ViewModel
     {
-        
+        private readonly MainViewModel MainVM;
 
-        public BulkEditorViewModel()
+        public BulkEditorViewModel(IWindowFactory windowFactory, MainViewModel mainViewModel) : base(windowFactory)
         {
+            MainVM = mainViewModel;
             Logger = MainController.Get().Logger;
             
 
@@ -202,7 +203,7 @@ namespace WolvenKit.App.ViewModels
         #region Commands Implementation
         protected bool CanRun()
         {
-            if (WolvenKit.App.MockKernel.Get().GetMainViewModel().GetOpenDocuments().Any())
+            if (MainVM.GetOpenDocuments().Any())
             {
                 Logger.LogString("Please close all open documents before running the bulk editor.", Logtype.Error);
                 return false;

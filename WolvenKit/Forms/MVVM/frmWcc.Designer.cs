@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.Forms.MVVM
+﻿namespace WolvenKit.Forms
 {
     partial class frmWcc
     {

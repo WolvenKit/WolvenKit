@@ -370,7 +370,7 @@ namespace WolvenKit
             }
 
             // else: open and dock new form
-            var doc = new frmCR2WDocument(new CR2WDocumentViewModel(new Utility.ProductionWindowFactory()))
+            var doc = new frmCR2WDocument(new CR2WDocumentViewModel(UIController.Get().WindowFactory))
             {
                 Text = Path.GetFileName(key) + " [" + key + "]"
             };
@@ -559,9 +559,9 @@ namespace WolvenKit
                             {
                                 // add all dependencies
 
-                                UIController.Get().Window.PauseMonitoring();
-                                MockKernel.Get().GetMainViewModel().AddAllImports(filename, true, false);
-                                UIController.Get().Window.ResumeMonitoring();
+                                MockKernel.Get().Window.PauseMonitoring();
+                                WccHelper.AddAllImports(filename, true, false);
+                                MockKernel.Get().Window.ResumeMonitoring();
 
                                 this.RenderViewer = new Render.frmRender
                                 {

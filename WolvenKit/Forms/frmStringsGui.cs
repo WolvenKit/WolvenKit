@@ -46,8 +46,6 @@ namespace WolvenKit
 
         DataTable dataTableGridViewSource;
 
-        W3Mod activeMod = UIController.Get().Window.ActiveMod;
-
         public frmStringsGui()
         {
             InitializeComponent();
@@ -57,9 +55,9 @@ namespace WolvenKit
 
             this.Icon = UIController.GetThemedWkitIcon();
 
-            if (activeMod != null)
+            if (MainController.Get().ActiveMod != null)
             {
-                var csvDir = (activeMod.ProjectDirectory + "\\strings\\CSV");
+                var csvDir = (MainController.Get().ActiveMod.ProjectDirectory + "\\strings\\CSV");
                 if (!Directory.Exists(csvDir))
                     return;
 
@@ -426,8 +424,8 @@ namespace WolvenKit
             
             string scriptsDir = "";
 
-            if (activeMod != null)
-                scriptsDir = (activeMod.FileDirectory + "\\scripts");
+            if (MainController.Get().ActiveMod != null)
+                scriptsDir = (MainController.Get().ActiveMod.FileDirectory + "\\scripts");
 
             var prefix = ShowScriptPrefixDialog();
 
@@ -770,11 +768,11 @@ namespace WolvenKit
             HashStringKeys();
 
             var outputPath = "";
-            if (activeMod != null)
+            if (MainController.Get().ActiveMod != null)
             {
-                outputPath = (activeMod.ProjectDirectory + "\\strings\\CSV");
+                outputPath = (MainController.Get().ActiveMod.ProjectDirectory + "\\strings\\CSV");
                 if (!Directory.Exists(outputPath))
-                    Directory.CreateDirectory(activeMod.ProjectDirectory + "\\strings\\CSV");
+                    Directory.CreateDirectory(MainController.Get().ActiveMod.ProjectDirectory + "\\strings\\CSV");
             }
             else
                 outputPath = GetPath();
@@ -1019,11 +1017,11 @@ namespace WolvenKit
             HashStringKeys();
 
             string stringsDir = "";
-            if (activeMod != null)
+            if (MainController.Get().ActiveMod != null)
             {
-                stringsDir = (activeMod.ProjectDirectory + "\\strings");
+                stringsDir = (MainController.Get().ActiveMod.ProjectDirectory + "\\strings");
                 if (!Directory.Exists(stringsDir))
-                    Directory.CreateDirectory(activeMod.ProjectDirectory + "\\strings");
+                    Directory.CreateDirectory(MainController.Get().ActiveMod.ProjectDirectory + "\\strings");
             }
             else
                 stringsDir = GetPath();
@@ -1114,7 +1112,7 @@ namespace WolvenKit
 
             if (type == "encoded")
             {
-                var stringsDir = activeMod.ProjectDirectory + "\\strings";
+                var stringsDir = MainController.Get().ActiveMod.ProjectDirectory + "\\strings";
                 if (!Directory.Exists(stringsDir))
                     return;
 
@@ -1135,7 +1133,7 @@ namespace WolvenKit
 
             if (type == "csv")
             {
-                var csvDir = activeMod.ProjectDirectory + "\\strings\\CSV";
+                var csvDir = MainController.Get().ActiveMod.ProjectDirectory + "\\strings\\CSV";
                 if (!Directory.Exists(csvDir))
                     return;
 
@@ -1182,10 +1180,10 @@ namespace WolvenKit
 
         public bool AreHashesDifferent()
         {
-            if (activeMod == null)
+            if (MainController.Get().ActiveMod == null)
                 return false;
 
-            var stringsHashPath = activeMod.ProjectDirectory + "\\strings\\hash";
+            var stringsHashPath = MainController.Get().ActiveMod.ProjectDirectory + "\\strings\\hash";
             if (!File.Exists(stringsHashPath))
                 return false;
 
@@ -1200,7 +1198,7 @@ namespace WolvenKit
             foreach (var b in hash)
                 hashStringsBytesSum += b;
 
-            var csvHashPath = activeMod.ProjectDirectory + "\\strings\\CSV\\hash";
+            var csvHashPath = MainController.Get().ActiveMod.ProjectDirectory + "\\strings\\CSV\\hash";
             if (!File.Exists(csvHashPath))
                 return false;
 

@@ -38,14 +38,16 @@ namespace WolvenKit.App
 
         public EUncookExtension UncookExtension { get; set; }
         public bool IsWelcomeFormDisabled { get; set; }
+        public bool IsAutoInstallModsDisabled { get; set; }
 
         public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
 
+        public string GameModDir { get; set; }
+        public string GameDlcDir { get; set; }
 
-        [XmlIgnore]
-        public string GameDlcDir => Path.Combine(GameRootDir, "DLC");
-        [XmlIgnore]
-        public string GameModDir => Path.Combine(GameRootDir, "Mods");
+        public EUpdateChannel UpdateChannel { get; set; }
+
+
         [XmlIgnore]
         public string GameContentDir => Path.Combine(GameRootDir, "content");
         [XmlIgnore]

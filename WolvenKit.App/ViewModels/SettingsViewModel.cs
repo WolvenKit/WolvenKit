@@ -30,7 +30,7 @@ namespace WolvenKit.App.ViewModels
 
 
 
-        public SettingsViewModel()
+        public SettingsViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
             Logger = MainController.Get().Logger;
             

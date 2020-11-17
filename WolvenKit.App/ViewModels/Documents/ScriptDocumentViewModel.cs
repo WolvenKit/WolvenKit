@@ -18,7 +18,7 @@ namespace WolvenKit.App.ViewModels
 {
     public class ScriptDocumentViewModel : CloseableViewModel, IDocumentViewModel
     {
-        public ScriptDocumentViewModel()
+        public ScriptDocumentViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
             
         }

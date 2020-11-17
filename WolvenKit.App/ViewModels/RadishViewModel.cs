@@ -34,7 +34,7 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
-        public RadishViewModel()
+        public RadishViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
             Logger = MainController.Get().Logger;
             switch (RadishController.Get().CheckSelf())

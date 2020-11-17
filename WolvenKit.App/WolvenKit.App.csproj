@@ -223,7 +223,6 @@
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\RadishController.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="MockKernel.cs" />
     <Compile Include="Model\Arguments\RequestEmbeddedFileOpenArgs.cs" />
     <Compile Include="Model\Arguments\SelectChunkArgs.cs" />
     <Compile Include="Model\Commonfunctions.cs" />
@@ -236,6 +235,7 @@
     <Compile Include="Model\IWolvenkitView.cs" />
     <Compile Include="Model\ProcessHelper.cs" />
     <Compile Include="Model\SearchParameters.cs" />
+    <Compile Include="Model\WccHelper.cs" />
     <Compile Include="Model\WKPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\RadishConfiguration.cs" />

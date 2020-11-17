@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using WolvenKit.App;
 using WolvenKit.Common.Services;
+using MessageBoxButtons = System.Windows.Forms.MessageBoxButtons;
+using MessageBoxIcon = System.Windows.Forms.MessageBoxIcon;
 
 namespace WolvenKit.Forms
 {
@@ -90,7 +92,7 @@ namespace WolvenKit.Forms
                     dir.Delete(true);
                 }
             }
-            var packtask = UIController.Get().Window.PackAndInstallMod();
+            var packtask = MockKernel.Get().GetMainViewModel().PackAndInstallMod();
             await packtask;
             var installdir = Path.Combine(MainController.Get().ActiveMod.ProjectDirectory, @"Installer/");
             if (!Directory.Exists(installdir))

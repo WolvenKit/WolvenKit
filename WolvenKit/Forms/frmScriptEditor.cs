@@ -12,6 +12,8 @@ using WolvenKit.Common.Services;
 using WolvenKit.Common.Model;
 using System.ComponentModel;
 using WolvenKit.App.ViewModels;
+using MessageBoxButtons = System.Windows.Forms.MessageBoxButtons;
+using MessageBoxIcon = System.Windows.Forms.MessageBoxIcon;
 
 namespace WolvenKit.Forms
 {

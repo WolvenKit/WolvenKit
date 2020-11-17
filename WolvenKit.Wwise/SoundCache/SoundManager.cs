@@ -133,14 +133,8 @@ namespace WolvenKit.Cache
         /// Note this resets everything
         /// </summary>
         /// <param name="exedir"></param>
-        public void LoadModsBundles(string exedir)
+        public void LoadModsBundles(string mods, string dlc)
         {
-            var di = new DirectoryInfo(exedir);
-            if (!di.Exists)
-                return;
-            var mods = Path.Combine(di.Parent.Parent.FullName, "Mods");
-            var dlc = Path.Combine(di.Parent.Parent.FullName, "DLC");
-
             if (!Directory.Exists(mods))
                 Directory.CreateDirectory(mods);
             var modsdirs = new List<string>(Directory.GetDirectories(mods));

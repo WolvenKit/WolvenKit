@@ -26,7 +26,11 @@ namespace WolvenKit.App
         /// Show the given folder in the windows explorer.
         /// </summary>
         /// <param name="path">The file/folder to show.</param>
-        public static void ShowFolderInExplorer(string path) => Process.Start("explorer.exe", "\"" + path + "\"");
+        public static void ShowFolderInExplorer(string path)
+        {
+            if (Directory.Exists(path))
+                Process.Start("explorer.exe", "\"" + path + "\"");
+        }
 
         /// <summary>
         /// Opens command prompt at given location

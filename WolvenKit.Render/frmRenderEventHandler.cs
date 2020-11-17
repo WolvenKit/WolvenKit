@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Collections.Generic;
 using WolvenKit.Common.Services;
+using MessageBoxButtons = System.Windows.Forms.MessageBoxButtons;
+using MessageBoxIcon = System.Windows.Forms.MessageBoxIcon;
 
 namespace WolvenKit.Render
 {

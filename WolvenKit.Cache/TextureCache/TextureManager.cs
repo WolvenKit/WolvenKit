@@ -23,7 +23,7 @@ namespace WolvenKit.Cache
             AutocompleteSource = new AutoCompleteStringCollection();
         }
 
-        public Dictionary<string, TextureCache> Archives { get; }
+        private Dictionary<string, TextureCache> Archives { get; }
         public override EBundleType TypeName => EBundleType.TextureCache;
         public static string SerializationVersion => "1.1";
 
@@ -116,23 +116,16 @@ namespace WolvenKit.Cache
         }
 
         /// <summary>
-        /// Loads the .cache soundcache files from the /Mods/ folder
-        /// Note this resets everything
+        /// Loads .cache files from given mods and dlc folder
         /// </summary>
-        /// <param name="exedir"></param>
-        public override void LoadModsBundles(string exedir)
+        /// <param name="mods"></param>
+        /// <param name="dlc"></param>
+        public override void LoadModsBundles(string mods, string dlc)
         {
-            var di = new DirectoryInfo(exedir);
-            if (!di.Exists)
-                return;
-
             // this is slow
             Archives.Clear();
             Items.Clear();
             FileList.Clear();
-
-            var mods = Path.Combine(di.Parent.Parent.FullName, "Mods");
-            var dlc = Path.Combine(di.Parent.Parent.FullName, "DLC");
 
             if (!Directory.Exists(mods))
                 Directory.CreateDirectory(mods);

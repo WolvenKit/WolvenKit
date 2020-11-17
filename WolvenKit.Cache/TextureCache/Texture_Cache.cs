@@ -9,6 +9,7 @@ using System.Text;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools;
 using WolvenKit.Common.Tools.DDS;
 using WolvenKit.CR2W;
@@ -197,13 +198,18 @@ namespace WolvenKit.Cache
         /// 
         /// </summary>
         /// <param name="inputfolder"></param>
-        public void LoadFiles(string inputfolder)
+        public void LoadFiles(string inputfolder, ILoggerService logger = null)
         {
+            
+
             var di = new DirectoryInfo(inputfolder);
             if (!di.Exists)
                 return;
             var inputfiles = di.GetFiles("*.dds", SearchOption.AllDirectories)
-                .Select(_ => _.FullName);
+                .Select(_ => _.FullName).ToList();
+
+            logger?.LogString($"[TextureCache] Begin caching.", Logtype.Important);
+            logger?.LogString($"[TextureCache] Found {inputfiles.Count} files.", Logtype.Important);
 
             // clear data
             Files.Clear();
@@ -217,30 +223,30 @@ namespace WolvenKit.Cache
 
                 switch (ext)
                 {
-                    case ".xbm":
-                        {
-                            // read cr2wfile
-                            var cr2w = new CR2WFile()
-                            {
-                                FileName = filename,
-                            };
-                            using (var cfs = new FileStream(filename, FileMode.Open, FileAccess.Read))
-                            using (var reader = new BinaryReader(cfs))
-                            {
-                                var errorcode = cr2w.Read(reader);
-                                if (errorcode != EFileReadErrorCodes.NoError)
-                                    continue;
-                            }
+                    //case ".xbm":
+                    //    {
+                    //        // read cr2wfile
+                    //        var cr2w = new CR2WFile()
+                    //        {
+                    //            FileName = filename,
+                    //        };
+                    //        using (var cfs = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                    //        using (var reader = new BinaryReader(cfs))
+                    //        {
+                    //            var errorcode = cr2w.Read(reader);
+                    //            if (errorcode != EFileReadErrorCodes.NoError)
+                    //                continue;
+                    //        }
 
-                            // check if CBitmapTexture
-                            if (!(cr2w.chunks.FirstOrDefault()?.data is CBitmapTexture xbm))
-                            {
-                                continue;
-                            }
+                    //        // check if CBitmapTexture
+                    //        if (!(cr2w.chunks.FirstOrDefault()?.data is CBitmapTexture xbm))
+                    //        {
+                    //            continue;
+                    //        }
 
 
-                            break;
-                        }
+                    //        break;
+                    //    }
                     case ".DDS":
                     case ".dds":
                         {
@@ -259,8 +265,13 @@ namespace WolvenKit.Cache
                             var maxSide = Math.Max(ddsheader.Width, ddsheader.Height);
                             //var minSide = Math.Min(ddsheader.Width, ddsheader.Height);
                             var realmipscount = Math.Max(1, Math.Log10(maxSide / 32)/Math.Log10(2));
-                            if (ddsheader.Mipscount == 1)
+                            if (ddsheader.Mipscount == 1) //TODO: fix this
                                 realmipscount = 0;
+                            if (ddsheader.Mipscount == 0) //TODO: fix this
+                            {
+                                realmipscount = 0;
+
+                            }
 
                             var ti = new TextureCacheItem(this)
                             {
@@ -276,14 +287,14 @@ namespace WolvenKit.Cache
                                 PageOffset = 0,        //done
                                 CompressedSize = 0,    //done
                                 UncompressedSize = 0,  //done
-                                MipOffsetIndex = -1,    //done
+                                MipOffsetIndex = 0,    //done
 
                                 /*------------- Image data ---------------*/
                                 NumMipOffsets = (int)realmipscount,
                                 BaseAlignment = ddsheader.Bpp,
                                 BaseWidth = (ushort)ddsheader.Width,
                                 BaseHeight = (ushort)ddsheader.Height,
-                                Mipcount = (ushort)ddsheader.Mipscount,
+                                Mipcount = (ushort)Math.Max(1,ddsheader.Mipscount),
                                 SliceCount = (ushort)ddsheader.Slicecount, //TODO
 
                                 TimeStamp = 0 /*(long)CDateTime.Now.ToUInt64()*/, //NOTE: Not even CDPR could be bothered to use their own Timestamps
@@ -299,12 +310,16 @@ namespace WolvenKit.Cache
 
                             Files.Add(ti);
                             Names.Add(ti.Name);
-                            
+
+                            logger?.LogString($"Cached {ti.Name}", Logtype.Normal);
+
                             break;
                         }
 
                 }
             }
+
+            logger?.LogString($"[TextureCache] Caching sucessful.", Logtype.Success);
         }
         
         #region Write
@@ -312,8 +327,10 @@ namespace WolvenKit.Cache
         /// 
         /// </summary>
         /// <param name="outpath"></param>
-        public void Write(string outpath)
+        public void Write(string outpath, ILoggerService logger = null)
         {
+            logger?.LogString($"[TextureCache] Begin writing.", Logtype.Important);
+            logger?.LogString($"[TextureCache] Found {Files.Count} files.", Logtype.Important);
             int page = 0;
 
             using (var cacheFileStream = new FileStream(outpath, FileMode.Create, FileAccess.Write))
@@ -367,7 +384,7 @@ namespace WolvenKit.Cache
                             {
                                 for (int i = 0; i < 6; i++)
                                 {
-                                    var faceoffset = ddssize / 6 * i;
+                                    var faceoffset = 128 + ddssize / 6 * i;
                                     using (var vs = file.CreateViewStream(faceoffset, imgsize,
                                         MemoryMappedFileAccess.Read))
                                     {
@@ -483,6 +500,8 @@ namespace WolvenKit.Cache
                     cacheWriter.Write(padding);
 
                     ti.CompressedSize = (uint)(endoffset - startoffset);
+
+                    logger?.LogString($"Written {ti.Name}", Logtype.Normal);
                 }
 
                 #endregion
@@ -537,6 +556,8 @@ namespace WolvenKit.Cache
 
                 // write footer
                 WriteFooter(cacheWriter);
+
+                logger?.LogString($"[TextureCache] Writing sucessful.", Logtype.Success);
             }
         }
 

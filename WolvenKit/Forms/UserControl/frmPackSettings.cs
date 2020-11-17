@@ -3,25 +3,31 @@ using System.Linq;
 using System.Windows.Forms;
 using System.IO;
 using WolvenKit.App;
-using System.Drawing;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit
 {
     public partial class frmPackSettings : Form
     {
-        public (bool, bool) PackBundles => (modBDL.Checked, dlcBDL.Checked);
-        public (bool, bool) GenMetadata => (modMD.Checked, dlcMD.Checked);
-        public (bool, bool) GenTexCache => (modTEX.Checked, dlcTEX.Checked);
-        public (bool, bool) GenCollCache => (modCOL.Checked, dlcCOL.Checked);
-        public (bool, bool) Scripts => (modSCR.Checked, dlcSCR.Checked);
-        public (bool, bool) Sound => (modSND.Checked, dlcSND.Checked);
-        public (bool, bool) Strings => (modSTR.Checked, dlcSTR.Checked);
+        public PackSettings PackSettings => new PackSettings()
+        {
+            PackBundles = (modBDL.Checked, dlcBDL.Checked),
+            GenMetadata = (modMD.Checked, dlcMD.Checked),
+            GenTexCache = (modTEX.Checked, dlcTEX.Checked),
+            GenCollCache = (modCOL.Checked, dlcCOL.Checked),
+            Scripts = (modSCR.Checked, dlcSCR.Checked),
+            Sound = (modSND.Checked, dlcSND.Checked),
+            Strings = (modSTR.Checked, dlcSTR.Checked),
+            InstallProject = checkBoxInstallMod.Checked
+        };
 
         public frmPackSettings()
         {
             var activemod = MainController.Get().ActiveMod;
 
             InitializeComponent();
+
+            checkBoxInstallMod.Checked = !MainController.Get().Configuration.IsAutoInstallModsDisabled;
 
             // Bundles + Metadata
             if (Directory.GetFiles(activemod.ModCookedDirectory, "*.*", SearchOption.AllDirectories).Any())
@@ -75,8 +81,8 @@ namespace WolvenKit
                 dlcSCR.Checked = true;
 
             // Strings
-            if (Directory.Exists(UIController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")
-                && Directory.GetFiles(UIController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")
+            if (Directory.Exists(MainController.Get().ActiveMod.ProjectDirectory + "\\strings")
+                && Directory.GetFiles(MainController.Get().ActiveMod.ProjectDirectory + "\\strings")
                 .Any(x => x.EndsWith(".w3strings")))
                 modSTR.Checked = true;
 
@@ -93,21 +99,25 @@ namespace WolvenKit
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
+            MainController.Get().Configuration.IsAutoInstallModsDisabled = !checkBoxInstallMod.Checked;
+
             if (modBDL.Checked | modMD.Checked | dlcBDL.Checked | dlcMD.Checked 
             | modTEX.Checked | dlcTEX.Checked | modSND.Checked | dlcSND.Checked
             | modSCR.Checked | dlcSCR.Checked | modSTR.Checked | modCOL.Checked | dlcCOL.Checked)
             {
-                DialogResult = DialogResult.OK;
+                DialogResult = System.Windows.Forms.DialogResult.OK;
             }
             else
             {
-                DialogResult = DialogResult.Cancel;
+                DialogResult = System.Windows.Forms.DialogResult.Cancel;
             }
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
+            MainController.Get().Configuration.IsAutoInstallModsDisabled = !checkBoxInstallMod.Checked;
+
+            DialogResult = System.Windows.Forms.DialogResult.Cancel;
         }
     }
 }

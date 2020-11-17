@@ -19,7 +19,7 @@ using WolvenKit.Common.Wcc;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Services;
 
-namespace WolvenKit.Forms.MVVM
+namespace WolvenKit.Forms
 {
     
 

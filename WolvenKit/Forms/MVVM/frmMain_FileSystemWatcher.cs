@@ -18,6 +18,9 @@ namespace WolvenKit
         private ReaderWriterLockSlim rwlock;
         private System.Timers.Timer processTimer;
         //private string watchedPath;
+
+        private frmModExplorer ModExplorer => (frmModExplorer)MockKernel.Get().GetModExplorer();
+
         private void InitFileSystemWatcher()
         {
             watcher = new FileSystemWatcher();

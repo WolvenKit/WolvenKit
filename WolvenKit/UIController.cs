@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Common.Services;
+using WolvenKit.Utility;
 
 namespace WolvenKit
 {
@@ -51,8 +52,11 @@ namespace WolvenKit
     public class UIController : IVariableEditor, INotifyPropertyChanged
     {
         private static UIController uiController;
+
         public UIConfiguration Configuration { get; private set; }
-        public frmMain Window { get; private set; }
+        public IWindowFactory WindowFactory { get; private set; }
+
+        
 
         // Color Themes
         #region Color Themes
@@ -153,7 +157,9 @@ namespace WolvenKit
             {
                 uiController = new UIController();
                 uiController.Configuration = UIConfiguration.Load();
-                uiController.Window = new frmMain();
+                uiController.WindowFactory = new ProductionWindowFactory();
+                //uiController.Window = new frmMain();
+                
             }
             return uiController;
         }
