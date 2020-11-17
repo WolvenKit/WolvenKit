@@ -410,7 +410,16 @@ namespace WolvenKit.App.ViewModels
                     Logger.LogString("Failed to install the mod! The packed directory doesn't exist! You forgot to tick any of the packing options?", Logtype.Important);
                     return;
                 }
-                fileroot.Add(Commonfunctions.DirectoryCopy(Path.Combine(ActiveMod.ProjectDirectory, "packed"), MainController.Get().Configuration.GameRootDir, true));
+
+                var packedmoddir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "Mods");
+                if (Directory.Exists(packedmoddir))
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, MainController.Get().Configuration.GameModDir, true));
+
+                var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
+                if (Directory.Exists(packeddlcdir))
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.GameDlcDir, true));
+                
+                
                 installlog.Root.Add(fileroot);
                 //Save the log.
                 installlog.Save(ActiveMod.ProjectDirectory + "\\install_log.xml");
@@ -449,7 +458,7 @@ namespace WolvenKit.App.ViewModels
         /// </summary>
         /// <param name="install"></param>
         /// <returns></returns>
-        public async Task<bool> PackAndInstallMod(bool install = true)
+        public async Task<bool> PackAndInstallMod()
         {
             if (ActiveMod == null)
                 return false;
@@ -465,14 +474,7 @@ namespace WolvenKit.App.ViewModels
                 MainController.Get().ProjectStatus = EProjectStatus.Busy;
                 MainController.Get().StatusProgress = 0;
 
-                //toolStripBtnPack.Enabled = false;
                 IsToolStripBtnPackEnabled = false;
-                //ShowConsole();
-                //ShowOutput();
-                //ClearOutput();
-
-                //m_windowFactory.ShowConsole();
-
 
                 SaveAllFiles();
 
@@ -854,7 +856,7 @@ namespace WolvenKit.App.ViewModels
 
 
                 //Install the mod
-                if (install)
+                if (!MainController.Get().Configuration.IsAutoInstallModsDisabled)
                     InstallMod();
 
                 //Report that we are done

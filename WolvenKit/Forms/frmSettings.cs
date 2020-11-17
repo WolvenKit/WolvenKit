@@ -45,6 +45,7 @@ namespace WolvenKit.Forms
             
 
             checkBoxDisableWelcomeForm.Checked = config.IsWelcomeFormDisabled;
+            checkBoxAutoInstall.Checked = !config.IsAutoInstallModsDisabled;
             
             comboBoxTheme.Items.AddRange(Enum.GetValues(typeof(EColorThemes)).Cast<object>().ToArray());
             comboBoxTheme.SelectedItem = UIController.Get().Configuration.ColorTheme;
@@ -88,6 +89,9 @@ namespace WolvenKit.Forms
                 return;
             }
 
+            MainController.Get().ProjectStatus = EProjectStatus.Busy;
+            MainController.Get().StatusProgress = 0;
+
             // get configs
             var config = MainController.Get().Configuration;
             var uiconfig = UIController.Get().Configuration;
@@ -117,6 +121,7 @@ namespace WolvenKit.Forms
             config.VoiceLanguage = txVoiceLanguage.Text;
             config.UncookExtension = (EUncookExtension)comboBoxExtension.SelectedItem;
             config.IsWelcomeFormDisabled = checkBoxDisableWelcomeForm.Checked;
+            config.IsAutoInstallModsDisabled = !checkBoxAutoInstall.Checked;
 
             uiconfig.ColorTheme = (EColorThemes)comboBoxTheme.SelectedItem;
 
@@ -226,6 +231,8 @@ namespace WolvenKit.Forms
                 MessageBox.Show(exception.ToString());
             }
 
+            MainController.Get().StatusProgress = 100;
+            MainController.Get().ProjectStatus = EProjectStatus.Ready;
         }
 
         private void btnBrowseExe_Click(object sender, EventArgs e)

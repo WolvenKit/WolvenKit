@@ -59,6 +59,7 @@ namespace WolvenKit.Forms
             this.textBoxDlcDir = new System.Windows.Forms.TextBox();
             this.buttonBrowseModDir = new System.Windows.Forms.Button();
             this.buttonBrowseDlcDir = new System.Windows.Forms.Button();
+            this.checkBoxAutoInstall = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // textBoxGame
@@ -337,6 +338,18 @@ namespace WolvenKit.Forms
             this.buttonBrowseDlcDir.UseVisualStyleBackColor = true;
             this.buttonBrowseDlcDir.Click += new System.EventHandler(this.buttonBrowseDlcDir_Click);
             // 
+            // checkBoxAutoInstall
+            // 
+            this.checkBoxAutoInstall.AutoSize = true;
+            this.checkBoxAutoInstall.Checked = true;
+            this.checkBoxAutoInstall.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxAutoInstall.Location = new System.Drawing.Point(342, 372);
+            this.checkBoxAutoInstall.Name = "checkBoxAutoInstall";
+            this.checkBoxAutoInstall.Size = new System.Drawing.Size(147, 17);
+            this.checkBoxAutoInstall.TabIndex = 28;
+            this.checkBoxAutoInstall.Text = "Automatically Install Mods";
+            this.checkBoxAutoInstall.UseVisualStyleBackColor = true;
+            // 
             // frmSettings
             // 
             this.AcceptButton = this.btSave;
@@ -344,6 +357,7 @@ namespace WolvenKit.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
             this.ClientSize = new System.Drawing.Size(588, 444);
+            this.Controls.Add(this.checkBoxAutoInstall);
             this.Controls.Add(this.buttonBrowseDlcDir);
             this.Controls.Add(this.buttonBrowseModDir);
             this.Controls.Add(this.labelCustomDlcDir);
@@ -411,5 +425,6 @@ namespace WolvenKit.Forms
         private TextBox textBoxDlcDir;
         private Button buttonBrowseModDir;
         private Button buttonBrowseDlcDir;
+        private CheckBox checkBoxAutoInstall;
     }
 }

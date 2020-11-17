@@ -1495,13 +1495,16 @@ namespace WolvenKit
 
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
         {
-            var config = UIController.Get().Configuration;
+            var uiconfig = UIController.Get().Configuration;
 
-            config.MainState = WindowState;
+            uiconfig.MainState = WindowState;
 
             WindowState = FormWindowState.Normal;
-            config.MainSize = Size;
-            config.MainLocation = Location;
+            uiconfig.MainSize = Size;
+            uiconfig.MainLocation = Location;
+
+            uiconfig.Save();
+            MainController.Get().Configuration.Save();
 
             SaveDockPanelLayout();
             ToolStripManager.SaveSettings(this);

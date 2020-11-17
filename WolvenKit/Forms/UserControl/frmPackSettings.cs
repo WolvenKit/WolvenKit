@@ -17,8 +17,8 @@ namespace WolvenKit
             GenCollCache = (modCOL.Checked, dlcCOL.Checked),
             Scripts = (modSCR.Checked, dlcSCR.Checked),
             Sound = (modSND.Checked, dlcSND.Checked),
-            Strings = (modSTR.Checked, dlcSTR.Checked)
-
+            Strings = (modSTR.Checked, dlcSTR.Checked),
+            InstallProject = checkBoxInstallMod.Checked
         };
 
         public frmPackSettings()
@@ -26,6 +26,8 @@ namespace WolvenKit
             var activemod = MainController.Get().ActiveMod;
 
             InitializeComponent();
+
+            checkBoxInstallMod.Checked = !MainController.Get().Configuration.IsAutoInstallModsDisabled;
 
             // Bundles + Metadata
             if (Directory.GetFiles(activemod.ModCookedDirectory, "*.*", SearchOption.AllDirectories).Any())
@@ -97,6 +99,8 @@ namespace WolvenKit
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
+            MainController.Get().Configuration.IsAutoInstallModsDisabled = !checkBoxInstallMod.Checked;
+
             if (modBDL.Checked | modMD.Checked | dlcBDL.Checked | dlcMD.Checked 
             | modTEX.Checked | dlcTEX.Checked | modSND.Checked | dlcSND.Checked
             | modSCR.Checked | dlcSCR.Checked | modSTR.Checked | modCOL.Checked | dlcCOL.Checked)
@@ -111,6 +115,8 @@ namespace WolvenKit
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
+            MainController.Get().Configuration.IsAutoInstallModsDisabled = !checkBoxInstallMod.Checked;
+
             DialogResult = System.Windows.Forms.DialogResult.Cancel;
         }
     }

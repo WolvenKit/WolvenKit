@@ -36,5 +36,7 @@ namespace WolvenKit.Common.Services
         public (bool, bool) Scripts { get; set; }
         public (bool, bool) Sound { get; set; }
         public (bool, bool) Strings { get; set; }
+
+        public bool InstallProject { get; set; }
     }
 }

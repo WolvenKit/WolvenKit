@@ -60,6 +60,7 @@
             this.dlcSND = new System.Windows.Forms.CheckBox();
             this.dlcSCR = new System.Windows.Forms.CheckBox();
             this.dlcSTR = new System.Windows.Forms.CheckBox();
+            this.checkBoxInstallMod = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // modMD
@@ -166,7 +167,7 @@
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(16, 224);
+            this.buttonOK.Location = new System.Drawing.Point(16, 262);
             this.buttonOK.Margin = new System.Windows.Forms.Padding(2);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(120, 35);
@@ -177,7 +178,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(147, 224);
+            this.buttonCancel.Location = new System.Drawing.Point(147, 262);
             this.buttonCancel.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(120, 35);
@@ -400,11 +401,25 @@
             this.dlcSTR.Text = "DLC";
             this.dlcSTR.UseVisualStyleBackColor = true;
             // 
+            // checkBoxInstallMod
+            // 
+            this.checkBoxInstallMod.AutoSize = true;
+            this.checkBoxInstallMod.Checked = true;
+            this.checkBoxInstallMod.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxInstallMod.Location = new System.Drawing.Point(16, 241);
+            this.checkBoxInstallMod.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxInstallMod.Name = "checkBoxInstallMod";
+            this.checkBoxInstallMod.Size = new System.Drawing.Size(89, 17);
+            this.checkBoxInstallMod.TabIndex = 38;
+            this.checkBoxInstallMod.Text = "Install Project";
+            this.checkBoxInstallMod.UseVisualStyleBackColor = true;
+            // 
             // frmPackSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(280, 270);
+            this.ClientSize = new System.Drawing.Size(280, 306);
+            this.Controls.Add(this.checkBoxInstallMod);
             this.Controls.Add(this.dlcSTR);
             this.Controls.Add(this.dlcSCR);
             this.Controls.Add(this.dlcSPEECH);
@@ -481,5 +496,6 @@
         private System.Windows.Forms.CheckBox dlcSND;
         private System.Windows.Forms.CheckBox dlcSCR;
         private System.Windows.Forms.CheckBox dlcSTR;
+        private System.Windows.Forms.CheckBox checkBoxInstallMod;
     }
 }
