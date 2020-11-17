@@ -884,10 +884,9 @@ namespace WolvenKit.App.ViewModels
         /// <param name="uncook"></param>
         /// <param name="export"></param>
         /// <returns></returns>
-        public bool AddToMod(string relativePath, IWitcherArchiveManager manager, bool skipping, bool addAsDLC,
+        public void AddToMod(string relativePath, IWitcherArchiveManager manager, List<string> prioritizedBundles, bool addAsDLC,
             bool uncook = false, bool export = false)
         {
-            bool skip = skipping;
             string extension = Path.GetExtension(relativePath);
             string filename = Path.GetFileName(relativePath);
 
@@ -920,21 +919,26 @@ namespace WolvenKit.App.ViewModels
                         Task.WaitAll(task);
                     }
 
-                    return skip;
+                    return;
                 }
             }
             #endregion
 
-            // check if file in any manager
+            // file is in no manager return, should never happen
             if (!(manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath))))
-                return skip;
+                return;
 
             // get archives with that file in them
-            var archives = manager.FileList
-                .Where(x => x.Name == relativePath)
-                .Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.ArchiveAbsolutePath, y)).ToList();
-
-
+            // <BundlePath, File>
+            var files = manager.FileList
+                .Where(x => x.Name == relativePath);
+            var archives = new Dictionary<string, IWitcherFile>();
+            foreach (var witcherFile in files)
+            {
+                string key = witcherFile.Bundle.ArchiveAbsolutePath;
+                if (!archives.ContainsKey(key))
+                    archives.Add(key, witcherFile);
+            }
 
             #region Get new Filename
             var bundletype = archives.First().Value.Bundle.TypeName;
@@ -992,23 +996,46 @@ namespace WolvenKit.App.ViewModels
             // more than one archive
             if (archives.Count() > 1)
             {
-                var a = archives.Select(x => x.Value).ToList();
-                var (s, selectedBundle) = m_windowFactory.ResolveExtractAmbigious(skip, a);
-                if (selectedBundle == null)
-                    return skip;
-                else
-                    skip = s;
+                // check against saved priority bundles
+                // if any of the prioritized bundles is in the archivesdict
+                // we select the first??
+                var priokeys = new List<string>();
+                IWitcherFile selectedFile;
+                foreach (var priokey in prioritizedBundles)
+                {
+                    if (archives.ContainsKey(priokey))
+                        priokeys.Add(priokey);
+                }
 
+                if (priokeys.Count > 0)
+                {
+                    selectedFile = archives[priokeys.First()];
+                }
+                else
+                {
+                    var a = archives.Select(x => x.Value).ToList();
+                    bool onlyusethisbundle;
+                    (onlyusethisbundle, selectedFile) = m_windowFactory.ResolveExtractAmbigious(a);
+                    if (selectedFile == null)
+                        return;
+                    if (onlyusethisbundle)
+                    {
+                        prioritizedBundles.Add(selectedFile.Bundle.ArchiveAbsolutePath);
+                    }
+                }
+                
+                
                 #region Uncooking
                 if (uncook)
                 {
-                    var result = UncookInner(selectedBundle);
-                    if (result) return skip;
+                    var result = UncookInner(selectedFile);
+                    if (result)
+                        return;
                 }
                 #endregion
 
                 #region Unbundling
-                ExtractInner(selectedBundle);
+                ExtractInner(selectedFile);
                 #endregion
             }
             else
@@ -1017,7 +1044,8 @@ namespace WolvenKit.App.ViewModels
                 if (uncook)
                 {
                     var result = UncookInner(archives.FirstOrDefault().Value);
-                    if (result) return skip;
+                    if (result)
+                        return;
                 }
                 #endregion
 
@@ -1027,7 +1055,7 @@ namespace WolvenKit.App.ViewModels
                 #endregion
             }
 
-            return skip;
+            return;
 
             void ExtractInner(IWitcherFile file)
             {

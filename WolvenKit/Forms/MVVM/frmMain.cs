@@ -1096,8 +1096,8 @@ namespace WolvenKit
                 Directory.Delete(Path.GetFullPath(MainController.WorkDir), true);
             Directory.CreateDirectory(Path.GetFullPath(MainController.WorkDir));
 
-            var skipping = false;
             var count = Details.SelectedPaths.Count;
+            List<string> prioritizedBundles = new List<string>();
             for (int i = 0; i < count; i++)
             {
                 if (bwAsync.CancellationPending || ProgressForm.Cancel)
@@ -1110,7 +1110,7 @@ namespace WolvenKit
                 WitcherListViewItem item = Details.SelectedPaths[i];
                 IWitcherArchiveManager manager = Details.Managers.First(_ => _.TypeName == item.BundleType);
 
-                skipping = vm.AddToMod(item.RelativePath, manager, skipping, Details.AddAsDLC, Details.Uncook, Details.Export);
+                vm.AddToMod(item.RelativePath, manager, prioritizedBundles, Details.AddAsDLC, Details.Uncook, Details.Export);
 
                 int percentprogress = (int)((float)i / (float)count * 100.0);
                 MainBackgroundWorker.ReportProgress(percentprogress, item.Text);

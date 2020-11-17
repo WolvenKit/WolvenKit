@@ -15,7 +15,7 @@ namespace WolvenKit.Common.Services
         PackSettings ShowPackSettings();
         string ShowOpenFileDialog(string title, string filter, string initialDirectory);
 
-        (bool, IWitcherFile) ResolveExtractAmbigious(bool skip, IEnumerable<IWitcherFile> options);
+        (bool, IWitcherFile) ResolveExtractAmbigious(IEnumerable<IWitcherFile> options);
 
         void RequestStringsGUI();
         void ShowStringsGUIModal();

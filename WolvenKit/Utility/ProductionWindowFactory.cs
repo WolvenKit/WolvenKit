@@ -81,17 +81,14 @@ namespace WolvenKit.Utility
             return (Common.WinFormsEnums.DialogResult) r;
         }
 
-        public (bool, IWitcherFile) ResolveExtractAmbigious(bool skip, IEnumerable<IWitcherFile> options)
+        public (bool, IWitcherFile) ResolveExtractAmbigious(IEnumerable<IWitcherFile> archives)
         {
-            var dlg = new frmExtractAmbigious(options);
-            if (!skip)
+            var dlg = new frmExtractAmbigious(archives);
+            var res = dlg.ShowDialog();
+            var skip = dlg.Skip;
+            if (res == DialogResult.Cancel)
             {
-                var res = dlg.ShowDialog();
-                skip = dlg.Skip;
-                if (res == DialogResult.Cancel)
-                {
-                    return (skip, null);
-                }
+                return (skip, null);
             }
             var selectedBundle = dlg.SelectedBundle;
             return (skip, selectedBundle);
