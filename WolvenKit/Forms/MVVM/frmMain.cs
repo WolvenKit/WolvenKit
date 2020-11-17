@@ -1466,6 +1466,8 @@ namespace WolvenKit
                         break;
                 }
             }
+
+            MainController.Get().StatusProgress = 100;
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
