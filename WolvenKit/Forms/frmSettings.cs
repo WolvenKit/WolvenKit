@@ -386,6 +386,8 @@ namespace WolvenKit.Forms
         {
             var config = MainController.Get().Configuration;
             var executablePath = config.ExecutablePath;
+            if (string.IsNullOrEmpty(executablePath))
+                executablePath = witcherexe;
 
             if (string.IsNullOrEmpty(config.GameModDir) || !Directory.Exists(config.GameModDir))
             {
@@ -410,6 +412,8 @@ namespace WolvenKit.Forms
         {
             var config = MainController.Get().Configuration;
             var executablePath = config.ExecutablePath;
+            if (string.IsNullOrEmpty(executablePath))
+                executablePath = witcherexe;
 
             if (string.IsNullOrEmpty(config.GameDlcDir) || !Directory.Exists(config.GameDlcDir))
             {
