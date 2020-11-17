@@ -17,12 +17,14 @@ jobs:
         lfs: true
     - name: Checkout LFS objects
       run: git lfs checkout
-    - name: Setup Nuget.exe
-      uses: warrenbuckley/Setup-Nuget@v1
-    - name: Restore packages
-      run: nuget restore WolvenKit.sln
     - name: Setup NuGet.exe for use with actions
       uses: NuGet/setup-nuget@v1.0.5
+      with:
+        nuget-version: latest
+    - name: Restore packages
+      run: nuget restore WolvenKit.sln
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1
     - name: Build with MSBuild
       run: msbuild  WolvenKit.sln -p:Configuration=Release  -p:Platform=x64 -m
     - name: Zip Release
