@@ -470,7 +470,7 @@ namespace WolvenKit
 
             chunkList.Activate();
 
-            if (File.embedded.Count > 0)
+            if (File.Embedded.Count > 0)
             {
                 embeddedFiles = new frmEmbeddedFiles
                 {
@@ -533,13 +533,13 @@ namespace WolvenKit
                             DockAreas = DockAreas.Document
                         };
                         this.ImageViewer.Show(this.FormPanel, DockState.Document);
-                        CR2WExportWrapper imagechunk = this.File?.chunks?.FirstOrDefault(_ => _.data.REDType.Contains("CBitmapTexture"));
+                        CR2WExportWrapper imagechunk = this.File?.Chunks?.FirstOrDefault(_ => _.data.REDType.Contains("CBitmapTexture"));
                         this.ImageViewer.SetImage(imagechunk);
                         break;
                     }
                 case ".redswf":
                     {
-                        CR2WExportWrapper imagechunk = this.File?.chunks?.FirstOrDefault(_ => _.data is CBitmapTexture);
+                        CR2WExportWrapper imagechunk = this.File?.Chunks?.FirstOrDefault(_ => _.data is CBitmapTexture);
                         if (imagechunk != null)
                         {
                             this.ImageViewer = new frmImagePreview
@@ -604,7 +604,7 @@ namespace WolvenKit
 
             var hasUnknownBytes = false;
 
-            foreach (var t in this.File.chunks.Where(t => t.unknownBytes?.Bytes != null && t.unknownBytes.Bytes.Length > 0))
+            foreach (var t in this.File.Chunks.Where(t => t.unknownBytes?.Bytes != null && t.unknownBytes.Bytes.Length > 0))
             {
                 output.Append(t.REDName + " contains " + t.unknownBytes.Bytes.Length + " unknown bytes. \n");
                 hasUnknownBytes = true;

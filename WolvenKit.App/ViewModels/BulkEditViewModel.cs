@@ -281,14 +281,14 @@ namespace WolvenKit.App.ViewModels
         {
             if (file == null)
                 return;
-            if (opts.ChunkName != null && !file.chunks.Any(_ => opts.ChunkName.Contains(_.REDType)))
+            if (opts.ChunkName != null && !file.Chunks.Any(_ => opts.ChunkName.Contains(_.REDType)))
                 return;
 
             List<string> excludedvalues = opts.Exclude == null ? new List<string>() : opts.Exclude.Split(',').ToList();
             List<string> includedvalues = opts.Include == null ? new List<string>() : opts.Include.Split(',').ToList();
 
             // get chunks that match chunkname
-            List<CR2WExportWrapper> chunks = opts.ChunkName != null ? file.chunks.Where(_ => _.data.GetType().Name == opts.ChunkName).ToList() : file.chunks;
+            List<CR2WExportWrapper> chunks = opts.ChunkName != null ? file.Chunks.Where(_ => _.data.GetType().Name == opts.ChunkName).ToList() : file.Chunks;
             
             var splits = opts.Name.Split('.');
 

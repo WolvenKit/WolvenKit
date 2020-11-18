@@ -85,7 +85,7 @@ namespace WolvenKit.Console
                                     var crw = new CR2WFile();
                                     crw.Read(br);
 
-                                    foreach (var c in crw.chunks)
+                                    foreach (var c in crw.Chunks)
                                     {
                                         if (!(c.data is CBitmapTexture x)) continue;
                                         string info = $"{f.Name}\t" +

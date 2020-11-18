@@ -29,7 +29,7 @@ namespace WolvenKit.Render
         {
             // *************** READ RIG DATA ***************
             if (rigFile != null)
-            foreach (var chunk in rigFile.chunks)
+            foreach (var chunk in rigFile.Chunks)
             {
                 if (chunk.REDType == "CSkeleton" && chunk.data is CSkeleton cSkeleton)
                 {

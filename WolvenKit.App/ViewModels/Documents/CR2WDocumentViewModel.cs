@@ -126,7 +126,7 @@ namespace WolvenKit.App.ViewModels
             {
                 //Remember the old parenting hierarchy
                 var oldparentinghierarchy = new Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)>();
-                foreach (var achunk in ctarget.cr2w.chunks)
+                foreach (var achunk in ctarget.cr2w.Chunks)
                 {
                     oldparentinghierarchy.Add(achunk, (achunk.ParentChunk, achunk.VirtualParentChunk));
                 }
@@ -135,8 +135,8 @@ namespace WolvenKit.App.ViewModels
 
                 if (ctarget.ParentVar == null) // if we are in a "pure chunk" paste - no parent variable
                 {
-                    var sourcechunk = csource.cr2w.chunks[csource.LookUpChunkIndex()];
-                    var targetchunk = ctarget.cr2w.chunks[ctarget.LookUpChunkIndex()];
+                    var sourcechunk = csource.cr2w.Chunks[csource.LookUpChunkIndex()];
+                    var targetchunk = ctarget.cr2w.Chunks[ctarget.LookUpChunkIndex()];
 
                     context = new CR2WCopyAction()
                     {
@@ -186,7 +186,7 @@ namespace WolvenKit.App.ViewModels
                         // Corner cases :
                         // - add descending CNewNPC components
                         if (ctargetptr.ParentVar.REDName == "Components" &&
-                            context.DestinationFile.chunks[ctargetptr.ParentVar.LookUpChunkIndex()].REDType == "CNewNPC" &&
+                            context.DestinationFile.Chunks[ctargetptr.ParentVar.LookUpChunkIndex()].REDType == "CNewNPC" &&
                             chunktranslationentry.Value.data is CComponent &&
                             context.SourceChunk != chunktranslationentry.Key)
                         {
@@ -219,11 +219,11 @@ namespace WolvenKit.App.ViewModels
             {
                 if (!targetarray.CanAddVariable(null)) return;
 
-                var targetarraychunk = targetarray.cr2w.chunks[targetarray.LookUpChunkIndex()];
+                var targetarraychunk = targetarray.cr2w.Chunks[targetarray.LookUpChunkIndex()];
 
                 //Remember the old parenting hierarchy
                 var oldparentinghierarchy = new Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)>();
-                foreach (var achunk in targetarray.cr2w.chunks)
+                foreach (var achunk in targetarray.cr2w.Chunks)
                 {
                     oldparentinghierarchy.Add(achunk, (achunk.ParentChunk, achunk.VirtualParentChunk));
                 }
@@ -320,7 +320,7 @@ namespace WolvenKit.App.ViewModels
                         var cr2w = /*viewModel.*/File as CR2WFile;
                         ptr.Reference = cr2w.CreateChunk(
                             newChunktype,
-                            cr2w.GetLastChildrenIndexRecursive(cr2w.chunks[ptr.LookUpChunkIndex()]) + 1,
+                            cr2w.GetLastChildrenIndexRecursive(cr2w.Chunks[ptr.LookUpChunkIndex()]) + 1,
                             SelectedChunk,
                             SelectedChunk,
                             (CVariable)newvar);
@@ -384,7 +384,7 @@ namespace WolvenKit.App.ViewModels
                             var cr2w = /*viewModel.*/File as CR2WFile;
                             handle.Reference = cr2w.CreateChunk(
                                 newhandletype,
-                                cr2w.GetLastChildrenIndexRecursive(cr2w.chunks[handle.LookUpChunkIndex()]) + 1,
+                                cr2w.GetLastChildrenIndexRecursive(cr2w.Chunks[handle.LookUpChunkIndex()]) + 1,
                                 SelectedChunk,
                                 SelectedChunk,
                                 (CVariable)newvar);

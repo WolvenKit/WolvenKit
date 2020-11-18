@@ -29,7 +29,7 @@ namespace WolvenKit.CR2W.Types
         public override void Read(BinaryReader file, uint size)
         {
             var idx = file.ReadUInt16();
-            Value = cr2w.names[idx].Str;
+            Value = cr2w.Names[idx].Str;
         }
 
         /// <summary>
@@ -40,8 +40,8 @@ namespace WolvenKit.CR2W.Types
         {
             ushort val = 0;
 
-            var nw = cr2w.names.First(_ => _.Str == Value);
-            val = (ushort)cr2w.names.IndexOf(nw);
+            var nw = cr2w.Names.First(_ => _.Str == Value);
+            val = (ushort)cr2w.Names.IndexOf(nw);
 
             file.Write(val);
         }

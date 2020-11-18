@@ -51,6 +51,7 @@ namespace WolvenKit
 
         #region Fields
         private readonly MainViewModel vm;
+        private bool isDockPanelInitialized;
 
         private frmProgress ProgressForm { get; set; }
         //private List<frmImagePreview> OpenImages { get; } = new List<frmImagePreview>();
@@ -535,7 +536,7 @@ namespace WolvenKit
         }
 
         private void SaveDockPanelLayout() => dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"));
-        private bool isDockPanelInitialized;
+        
         private void InitDockPanel()
         {
             ApplyCustomTheme();

@@ -321,7 +321,7 @@ namespace CR2WTests
             {
                 unknownclasses.TryAdd(ut,ut);
             }
-            foreach (var c in crw.chunks)
+            foreach (var c in crw.Chunks)
             {
                 var ubsl = c.unknownBytes?.Bytes != null ? c.unknownBytes.Bytes.Length : 0;
 

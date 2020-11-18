@@ -89,21 +89,21 @@ namespace WolvenKit.Forms
             var dParentids = new Dictionary<int, int>();
             if (viewModel.chunkDisplayMode == CR2WDocumentViewModel.EChunkDisplayMode.Parent)
             {
-                dParentids = File.chunks.ToDictionary(_ => _.ChunkIndex, _ => _.ParentChunkIndex);
+                dParentids = File.Chunks.ToDictionary(_ => _.ChunkIndex, _ => _.ParentChunkIndex);
             }
             else if (viewModel.chunkDisplayMode == CR2WDocumentViewModel.EChunkDisplayMode.VirtualParent)
             {
-                dParentids = File.chunks.ToDictionary(_ => _.ChunkIndex, _ => _.VirtualParentChunkIndex);
+                dParentids = File.Chunks.ToDictionary(_ => _.ChunkIndex, _ => _.VirtualParentChunkIndex);
             }
 
-            foreach (var chunk in File.chunks)
+            foreach (var chunk in File.Chunks)
             {
                 var childrenidxlist = dParentids.Where(_ => _.Value == chunk.ChunkIndex).Select(_ => _.Key);
 
                 IEnumerable<int> enumerable = childrenidxlist as int[] ?? childrenidxlist.ToArray();
                 if (enumerable.Any())
                 {
-                    List<CR2WExportWrapper> children = enumerable.Select(childid => File.chunksdict[childid]).ToList();
+                    List<CR2WExportWrapper> children = enumerable.Select(childid => File.Chunksdict[childid]).ToList();
                     childrenDict.Add(chunk.ChunkIndex, children);
 
                     var c = children.Count;
@@ -133,7 +133,7 @@ namespace WolvenKit.Forms
                 return;
 
             // Could be done only once... TODO decouple background worker result
-            isLargefile = File.chunks.Count > 1000;
+            isLargefile = File.Chunks.Count > 1000;
             if(isLargefile)
             {
                 ChunkDisplayMenuItemLinear.Checked = true;
@@ -143,11 +143,11 @@ namespace WolvenKit.Forms
             }
 
             if (viewModel.chunkDisplayMode == CR2WDocumentViewModel.EChunkDisplayMode.Linear)
-                treeListView.Roots = File.chunks;
+                treeListView.Roots = File.Chunks;
             else if (viewModel.chunkDisplayMode == CR2WDocumentViewModel.EChunkDisplayMode.Parent)
             {
                 UpdateHelperList();
-                var model = File.chunks.Where(_ => _.ParentChunk == null).ToList();
+                var model = File.Chunks.Where(_ => _.ParentChunk == null).ToList();
                 treeListView.Roots = model;
 
                 treeListView.ExpandAll();
@@ -155,7 +155,7 @@ namespace WolvenKit.Forms
             else if (viewModel.chunkDisplayMode == CR2WDocumentViewModel.EChunkDisplayMode.VirtualParent)
             {
                 UpdateHelperList();
-                var model = File.chunks.Where(_ => _.VirtualParentChunk == null).ToList();
+                var model = File.Chunks.Where(_ => _.VirtualParentChunk == null).ToList();
                 treeListView.Roots = model;
 
                 treeListView.ExpandAll();

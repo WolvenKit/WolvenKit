@@ -170,7 +170,7 @@ namespace WolvenKit.Render
                             fs.Close();
                         }
 
-                        CTerrainTile crw = (CTerrainTile)wter.chunks[0].data;
+                        CTerrainTile crw = (CTerrainTile)wter.Chunks[0].data;
                         tileLOD = (int)crw.Groups[1].Lod1.val;
                         tileRes = (uint)crw.Groups[1].Resolution.val;
                     }
@@ -207,7 +207,7 @@ namespace WolvenKit.Render
 
             TreeNode layerNode = new TreeNode(layerName);
 
-            foreach (var chunk in layer.chunks)
+            foreach (var chunk in layer.Chunks)
             {
                 if (chunk.REDType == "CSectorData")
                 {
@@ -270,7 +270,7 @@ namespace WolvenKit.Render
                     fs.Close();
                 }
 
-                foreach (var worldChunk in world.chunks)
+                foreach (var worldChunk in world.Chunks)
                 {
                     if (worldChunk.REDType == "CLayerInfo")
                     {

@@ -43,12 +43,12 @@ namespace WolvenKit.CR2W.Types
         {
             if (value > 0)
             {
-                DepotPath = cr2w.imports[value - 1].DepotPathStr;
+                DepotPath = cr2w.Imports[value - 1].DepotPathStr;
 
-                var filetype = cr2w.imports[value - 1].Import.className;
-                ClassName = cr2w.names[filetype].Str;
+                var filetype = cr2w.Imports[value - 1].Import.className;
+                ClassName = cr2w.Names[filetype].Str;
 
-                Flags = cr2w.imports[value - 1].Import.flags;
+                Flags = cr2w.Imports[value - 1].Import.flags;
             }
             else
             {
@@ -66,8 +66,8 @@ namespace WolvenKit.CR2W.Types
         {
             ushort val = 0;
 
-            var import = cr2w.imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName && _.Flags == Flags);
-            val = (ushort)(cr2w.imports.IndexOf(import) + 1);
+            var import = cr2w.Imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName && _.Flags == Flags);
+            val = (ushort)(cr2w.Imports.IndexOf(import) + 1);
 
 
             file.Write(val);

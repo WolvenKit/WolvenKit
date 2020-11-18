@@ -107,8 +107,8 @@ namespace WolvenKit.CR2W
             }
 
 
-            if (parsedFile.chunks != null && parsedFile.chunks.Any())
-                ClassName = parsedFile.chunks.FirstOrDefault()?.REDType;
+            if (parsedFile.Chunks != null && parsedFile.Chunks.Any())
+                ClassName = parsedFile.Chunks.FirstOrDefault()?.REDType;
 
             return parsedFile;
         }

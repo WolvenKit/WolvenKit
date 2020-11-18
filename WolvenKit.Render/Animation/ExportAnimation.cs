@@ -50,7 +50,7 @@ namespace WolvenKit.Render
         {
             AnimationNames.Clear();
             if (animFile != null)
-                foreach (var chunk in animFile.chunks)
+                foreach (var chunk in animFile.Chunks)
                 {
                     if (chunk.REDType == "CSkeletalAnimation" && chunk.data is CSkeletalAnimation anim)
                     {
@@ -77,7 +77,7 @@ namespace WolvenKit.Render
             currentBones.Clear();
             // *************** READ ANIMATION DATA ***************
             if (animFile != null)
-                foreach (var chunk in animFile.chunks)
+                foreach (var chunk in animFile.Chunks)
                 {
                     if (chunk.REDType == "CAnimationBufferMultipart" && chunk.ChunkIndex == AnimationNames[selectedAnimIdx].Value 
                         && chunk.data is CAnimationBufferMultipart multipart)

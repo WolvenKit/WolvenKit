@@ -33,7 +33,7 @@ namespace WolvenKit.Render
             SBufferInfos bufferInfos = new SBufferInfos();
 
             // *************** READ CHUNK INFOS ***************
-            foreach (var chunk in meshFile.chunks)
+            foreach (var chunk in meshFile.Chunks)
             {
                 if (chunk.REDType == "CMesh" && chunk.data is CMesh cmesh)
                 {

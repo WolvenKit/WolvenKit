@@ -59,7 +59,7 @@ namespace WolvenKit.App.ViewModels
         {
             if (File is CR2WFile cr2w)
             {
-                if (e.PropertyName == nameof(cr2w.chunks))
+                if (e.PropertyName == nameof(cr2w.Chunks))
                 {
                     OnPropertyChanged(nameof(File));
                 }
