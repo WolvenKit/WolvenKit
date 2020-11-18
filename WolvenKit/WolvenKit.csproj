@@ -69,7 +69,7 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\WolvenKit\Icons\wolven_kit_icon2.ico</ApplicationIcon>
+    <ApplicationIcon>Wkit_Icon_Flattened_256x.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>56D600A08C1A75A7D44B3384AB83B913576E5024</ManifestCertificateThumbprint>
@@ -1025,6 +1025,7 @@
     <None Include="Resources\Legacy\geralt.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Wkit_Icon_Flattened_256x.ico" />
     <None Include="Resources\GitTemplateDir\info\exclude">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
