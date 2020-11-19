@@ -140,7 +140,7 @@ namespace WolvenKit.Render.FastRender
 
 
 			// added by vl
-			if (meshFile != null && meshFile.Length > 0)
+			if (!string.IsNullOrEmpty(meshFile))
 			{
 				mesh = smgr.GetMesh(meshFile);
 			}

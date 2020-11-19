@@ -334,11 +334,11 @@ namespace WolvenKit.Render
                     switch (material.REDName)
                     {
                         case "Diffuse":
-                            Texture diffTexture = GetTexture(driver, (material.Variant as IHandleAccessor).DepotPath);
+                            Texture diffTexture = GetTexture(driver, (material.Variant as IHandleAccessor)?.DepotPath);
                             mat.SetTexture(0, diffTexture);
                             break;
                         case "Normal":
-                            Texture normTexture = GetTexture(driver, (material.Variant as IHandleAccessor).DepotPath);
+                            Texture normTexture = GetTexture(driver, (material.Variant as IHandleAccessor)?.DepotPath);
                             mat.SetTexture(1, normTexture);
                             //mat.Type = MaterialType.NormalMapSolid;
                             break;
@@ -363,36 +363,42 @@ namespace WolvenKit.Render
         {
             string[] textureFileExtensions = { ".xbm", ".tga", ".dds", ".bmp", ".jpg", ".jpeg", ".png" };
             Texture texture = null;
-            
 
+
+            // search in Raw first 
+            string rawTextureNullPath = Path.ChangeExtension(Path.Combine(renderHelper.getW3Mod().RawModDirectory, handleFilename), null);
             foreach (var textureFileExtension in textureFileExtensions)
             {
-                // search in Cooked
-                string cookedTextureNullPath = Path.ChangeExtension(Path.Combine(renderHelper.getW3Mod().ModCookedDirectory, handleFilename), null);
-                var texturepath = Path.ChangeExtension(cookedTextureNullPath, textureFileExtension);
+                string texturepath = Path.ChangeExtension(rawTextureNullPath, textureFileExtension);
                 if (File.Exists(texturepath))
                 {
-                    texture = driver.GetTexture(cookedTextureNullPath + textureFileExtension);
+                    texture = driver.GetTexture(rawTextureNullPath + textureFileExtension);
                     if (texture != null)
                         return texture; ;
                 }
+            }
 
-                // search in Uncooked
-                string uncookedTextureNullPath = Path.ChangeExtension(Path.Combine(renderHelper.getW3Mod().ModUncookedDirectory, handleFilename), null);
-                texturepath = Path.ChangeExtension(uncookedTextureNullPath, textureFileExtension);
+            // search in Uncooked next
+            string uncookedTextureNullPath = Path.ChangeExtension(Path.Combine(renderHelper.getW3Mod().ModUncookedDirectory, handleFilename), null);
+            foreach (var textureFileExtension in textureFileExtensions)
+            {
+                string texturepath = Path.ChangeExtension(uncookedTextureNullPath, textureFileExtension);
                 if (File.Exists(texturepath))
                 {
                     texture = driver.GetTexture(uncookedTextureNullPath + textureFileExtension);
                     if (texture != null)
                         return texture; ;
                 }
+            }
 
-                // search in Raw 
-                string rawTextureNullPath = Path.ChangeExtension(Path.Combine(renderHelper.getW3Mod().ModUncookedDirectory, handleFilename), null);
-                texturepath = Path.ChangeExtension(rawTextureNullPath, textureFileExtension);
+            // search in Cooked last (low res textures)
+            string cookedTextureNullPath = Path.ChangeExtension(Path.Combine(renderHelper.getW3Mod().ModCookedDirectory, handleFilename), null);
+            foreach (var textureFileExtension in textureFileExtensions)
+            {
+                string texturepath = Path.ChangeExtension(cookedTextureNullPath, textureFileExtension);
                 if (File.Exists(texturepath))
                 {
-                    texture = driver.GetTexture(rawTextureNullPath + textureFileExtension);
+                    texture = driver.GetTexture(cookedTextureNullPath + textureFileExtension);
                     if (texture != null)
                         return texture; ;
                 }
