@@ -334,11 +334,11 @@ namespace WolvenKit.Render
                     switch (material.REDName)
                     {
                         case "Diffuse":
-                            Texture diffTexture = GetTexture(driver, (material as IHandleAccessor).DepotPath);
+                            Texture diffTexture = GetTexture(driver, (material.Variant as IHandleAccessor).DepotPath);
                             mat.SetTexture(0, diffTexture);
                             break;
                         case "Normal":
-                            Texture normTexture = GetTexture(driver, (material as IHandleAccessor).DepotPath);
+                            Texture normTexture = GetTexture(driver, (material.Variant as IHandleAccessor).DepotPath);
                             mat.SetTexture(1, normTexture);
                             //mat.Type = MaterialType.NormalMapSolid;
                             break;

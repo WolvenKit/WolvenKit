@@ -54,15 +54,12 @@ namespace WolvenKit.CR2W
         }
 
         #region Fields
-        
         // constants
         private const uint MAGIC = 0x57325243; // "W2RC"
         private const uint DEADBEEF = 0xDEADBEEF;
 
         // IO
-        [DataMember(Order = 1, Name = "Header")]
         private CR2WFileHeader m_fileheader;
-
         private CR2WTable[] m_tableheaders;
         private byte[] m_strings;
         public Dictionary<uint, string> StringDictionary { get; private set; }
@@ -84,6 +81,7 @@ namespace WolvenKit.CR2W
         public List<CR2WPropertyWrapper> Properties { get; private set; }
 
         //[DataMember(Order = 2)]
+
         public List<CR2WExportWrapper> Chunks { get; private set; }
         public List<CR2WBufferWrapper> Buffers { get; private set; }
         public List<CR2WEmbeddedWrapper> Embedded { get; private set; }

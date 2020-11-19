@@ -207,7 +207,9 @@ namespace WolvenKit.Common.Wcc
         WorldEmissive,
         WorldNormal,
         WorldNormalHQ,
-        WorldSpecular
+        WorldSpecular,
+        SpeedTreeDiffuseWithAlpha, // not found in ghidra
+        SpeedTreeSpecularWithAlpha
     }
 
     public enum analyzers

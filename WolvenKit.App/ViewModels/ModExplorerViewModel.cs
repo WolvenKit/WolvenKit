@@ -147,7 +147,7 @@ namespace WolvenKit.App.ViewModels
 
 
         protected bool CanAddAllImports() => SelectedItems != null;
-        protected async void AddAllImports() => await WccHelper.AddAllImports(SelectedItems.First().FullName);
+        protected async void AddAllImports() => await WccHelper.AddAllImports(SelectedItems.First().FullName, true);
 
 
         #endregion
