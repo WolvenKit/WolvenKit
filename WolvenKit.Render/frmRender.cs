@@ -361,40 +361,43 @@ namespace WolvenKit.Render
         /// </summary>
         private Texture GetTexture(VideoDriver driver, string handleFilename)
         {
-            string modPath = renderHelper.getW3Mod().ModCookedDirectory;
-            string texturePath = Path.ChangeExtension(Path.Combine(modPath, handleFilename)
-                .Replace("Mod\\Cooked", "Raw\\Mod")
-                .Replace("DLC\\Cooked", "Raw\\DLC"), null);
-
-            string[] textureFileExtensions = { ".dds", ".bmp", ".tga", ".jpg", ".jpeg", ".png", ".xbm" };
+            string[] textureFileExtensions = { ".xbm", ".tga", ".dds", ".bmp", ".jpg", ".jpeg", ".png" };
             Texture texture = null;
+            
+
             foreach (var textureFileExtension in textureFileExtensions)
             {
-                var texturepath = Path.ChangeExtension(texturePath, textureFileExtension);
+                // search in Cooked
+                string cookedTextureNullPath = Path.ChangeExtension(Path.Combine(renderHelper.getW3Mod().ModCookedDirectory, handleFilename), null);
+                var texturepath = Path.ChangeExtension(cookedTextureNullPath, textureFileExtension);
                 if (File.Exists(texturepath))
                 {
-                    texture = driver.GetTexture(texturePath + textureFileExtension);
+                    texture = driver.GetTexture(cookedTextureNullPath + textureFileExtension);
+                    if (texture != null)
+                        return texture; ;
+                }
+
+                // search in Uncooked
+                string uncookedTextureNullPath = Path.ChangeExtension(Path.Combine(renderHelper.getW3Mod().ModUncookedDirectory, handleFilename), null);
+                texturepath = Path.ChangeExtension(uncookedTextureNullPath, textureFileExtension);
+                if (File.Exists(texturepath))
+                {
+                    texture = driver.GetTexture(uncookedTextureNullPath + textureFileExtension);
+                    if (texture != null)
+                        return texture; ;
+                }
+
+                // search in Raw 
+                string rawTextureNullPath = Path.ChangeExtension(Path.Combine(renderHelper.getW3Mod().ModUncookedDirectory, handleFilename), null);
+                texturepath = Path.ChangeExtension(rawTextureNullPath, textureFileExtension);
+                if (File.Exists(texturepath))
+                {
+                    texture = driver.GetTexture(rawTextureNullPath + textureFileExtension);
                     if (texture != null)
                         return texture; ;
                 }
             }
 
-
-            string dlcPath = renderHelper.getW3Mod().DlcCookedDirectory;
-            string texturePath1 = Path.ChangeExtension(Path.Combine(dlcPath, handleFilename)
-                .Replace("Mod\\Cooked", "Raw\\Mod")
-                .Replace("DLC\\Cooked", "Raw\\DLC"), null);
-                        
-            texture = null;
-            foreach (var textureFileExtension in textureFileExtensions)
-            {
-                var texturepath = Path.ChangeExtension(texturePath, textureFileExtension);
-                if (File.Exists(texturepath))
-                {
-                    texture = driver.GetTexture(texturePath + textureFileExtension);
-                    if (texture != null) break;
-                }
-            }
             //ImageUtility.Xbm2Dds();
             if (texture == null && !suppressTextureWarning)
             {
@@ -404,9 +407,12 @@ namespace WolvenKit.Render
 
 
                 suppressTextureWarning = true;
-                Logger.LogString($"Could not parse texture: {texturePath} or {texturePath1}", Logtype.Error);
+                Logger.LogString($"Could not parse texture: {handleFilename}", Logtype.Error);
             }
             return texture;
+
+
+
         }
 
         /// <summary>
