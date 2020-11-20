@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Collections.Generic;
 using WolvenKit.Common.Services;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
 using MessageBoxButtons = System.Windows.Forms.MessageBoxButtons;
 using MessageBoxIcon = System.Windows.Forms.MessageBoxIcon;
 
@@ -322,7 +324,18 @@ namespace WolvenKit.Render
                 var ofd = new OpenFileDialog();
                 ofd.Filter = "Rig file|*.w2rig";
                 if (ofd.ShowDialog() == DialogResult.OK)
-                    RigFile = LoadDocument(ofd.FileName);
+                {
+                    //RigFile = LoadDocument(ofd.FileName);
+                    using (var fs = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read))
+                    using (var reader = new BinaryReader(fs))
+                    {
+                        CR2WFile cr2w = new CR2WFile();
+                        cr2w.Read(reader);
+                        fs.Close();
+
+                        RigFile = cr2w;
+                    }
+                }
             }
         }
 
