@@ -224,8 +224,13 @@ namespace WolvenKit.Render
                 mAnimText.BackgroundColor = mPositionText.BackgroundColor = mRotationText.BackgroundColor = fpsText.BackgroundColor = infoText.BackgroundColor = new Color(0, 0, 0);
 
                 skinnedMesh = smgr.CreateSkinnedMesh();
-                foreach (var meshBuffer in cdata.staticMesh.MeshBuffers)
+                //foreach (var meshBuffer in cdata.staticMesh.MeshBuffers)
+                //    skinnedMesh.AddMeshBuffer(meshBuffer);
+
+                AnimatedMesh am = smgr.GetMesh(meshFile.FileName);
+                foreach (var meshBuffer in am.MeshBuffers)
                     skinnedMesh.AddMeshBuffer(meshBuffer);
+
                 smgr.MeshManipulator.RecalculateNormals(skinnedMesh);
                 if (RigFile != null)
                 {
