@@ -32,18 +32,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Catel.Core" Version="5.12.8" />
-    <PackageReference Include="Catel.MVVM" Version="5.12.8" />
+    <PackageReference Include="Catel.Core" Version="5.12.10" />
+    <PackageReference Include="Catel.MVVM" Version="5.12.10" />
     <PackageReference Include="Catel.Fody" Version="4.5.0" PrivateAssets="all" />
-    <PackageReference Include="Dirkster.AvalonDock" Version="4.40.0" />
-    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.40.0" />
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.50.0" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.50.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.0.1" />
-    <PackageReference Include="Fody" Version="6.2.5" PrivateAssets="all" />
+    <PackageReference Include="Fody" Version="6.3.0" PrivateAssets="all" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
-    <PackageReference Include="Orchestra.Shell.Ribbon.Fluent" Version="6.0.3" />
-    <PackageReference Include="SharpVectors.Reloaded" Version="1.6.0" />
-    <PackageReference Include="WpfAnalyzers" Version="3.1.0" PrivateAssets="all">
+    <PackageReference Include="Orchestra.Shell.Ribbon.Fluent" Version="6.1.1" />
+    <PackageReference Include="SharpVectors.Reloaded" Version="1.7.0" />
+    <PackageReference Include="WpfAnalyzers" Version="3.5.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="WPFFolderBrowser" Version="1.0.2" />
