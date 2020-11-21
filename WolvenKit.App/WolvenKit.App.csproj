@@ -304,6 +304,7 @@
     <Compile Include="ViewModels\ImportViewModel.cs" />
     <Compile Include="ViewModels\ModKitViewModel.cs" />
     <Compile Include="ViewModels\RadishViewModel.cs" />
+    <Compile Include="ViewModels\StatusBarViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -69,7 +69,7 @@ namespace WolvenKit.CR2W
             return availableTypes.Distinct();
         }
 
-        private static List<Type> GetSubClassesOf(Type type) => m_types.Values.Where(_ => _.IsSubclassOf(type)).ToList();
+        private static List<Type> GetSubClassesOf(Type type) => m_types?.Values.Where(_ => _.IsSubclassOf(type)).ToList();
 
         public static Type GetTypeByName(string typeName)
         {
