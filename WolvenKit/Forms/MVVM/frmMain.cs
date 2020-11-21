@@ -1174,12 +1174,10 @@ namespace WolvenKit
                     try
                     {
                         FileSystem.DeleteFile(fullpath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-                        //File.Delete(fullpath);
                     }
                     catch (Exception exception)
                     {
                         MainController.LogString("Failed to delete " + fullpath + "!\r\n", Common.Services.Logtype.Error);
-                        throw;
                     }
                 }
                 else if (Directory.Exists(fullpath))
@@ -1187,12 +1185,10 @@ namespace WolvenKit
                     try
                     {
                         FileSystem.DeleteDirectory(fullpath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-                        //Directory.Delete(fullpath, true);
                     }
                     catch (Exception exception)
                     {
                         MainController.LogString("Failed to delete " + fullpath + "!\r\n", Common.Services.Logtype.Error);
-                        throw;
                     }
                 }
                 else
