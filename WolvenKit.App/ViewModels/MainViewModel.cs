@@ -301,10 +301,10 @@ namespace WolvenKit.App.ViewModels
                 .Where(_ => _.Split(' ').First() != "")
                 .ToList();
 
-            string newChunktypename = m_windowFactory.ShowAddChunkFormModal(availableTypes);
+            string result = m_windowFactory.ShowAddChunkFormModal(availableTypes);
 
-            newChunktypename = newChunktypename.Split(' ').Last().TrimStart("(").TrimEnd(')');
-            var redextension = newChunktypename.Split(' ').First();
+            var newChunktypename = result.Split(' ').Last().TrimStart("(").TrimEnd(')');
+            var redextension = result.Split(' ').First();
 
             
 
