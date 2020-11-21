@@ -53,8 +53,9 @@ namespace WolvenKit.App.ViewModels
             {
                 if (_openEmbedded != value)
                 {
+                    var oldValue = _openEmbedded;
                     _openEmbedded = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged(() => OpenEmbedded, oldValue, value);
                 }
             }
         }
@@ -76,11 +77,12 @@ namespace WolvenKit.App.ViewModels
             {
                 if(_selectedChunks != value)
                 {
+                    var oldValue = _selectedChunks;
                     _selectedChunks = value;
                     // update the property list only if out of multi-selection
                     if(_selectedChunks.Count() == 1)
                     {
-                        OnPropertyChanged();
+                        RaisePropertyChanged(() => SelectedChunks, oldValue, value);
                     }
                 }
             }
@@ -209,7 +211,7 @@ namespace WolvenKit.App.ViewModels
                 ctarget.SetValue(copy);
                 ctarget.IsSerialized = true; // why repeat?
 
-                OnPropertyChanged(nameof(File));
+                RaisePropertyChanged(nameof(File));
             }
 
             // -------------------------------------------------------------------------------------------------------------------
@@ -255,7 +257,7 @@ namespace WolvenKit.App.ViewModels
                 }
 
 
-                OnPropertyChanged(nameof(File));
+                RaisePropertyChanged(nameof(File));
             }
         }
         #endregion
@@ -326,7 +328,7 @@ namespace WolvenKit.App.ViewModels
                             (CVariable)newvar);
                         ptr.IsSerialized = true;
 
-                        OnPropertyChanged(nameof(File));
+                        RaisePropertyChanged(nameof(File));
                         //RequestChunkViewUpdate?.Invoke(null, null);
                         break;
                     }
@@ -391,7 +393,7 @@ namespace WolvenKit.App.ViewModels
                             handle.IsSerialized = true;
                         }
 
-                        OnPropertyChanged(nameof(File));
+                        RaisePropertyChanged(nameof(File));
                         //RequestChunkViewUpdate?.Invoke(null, null);
                         break;
                     }
@@ -427,7 +429,7 @@ namespace WolvenKit.App.ViewModels
             parentarray.AddVariable(newvar);
             parentarray.IsSerialized = true;
 
-            OnPropertyChanged(nameof(SelectedChunks));
+            RaisePropertyChanged(nameof(SelectedChunks));
             //UpdateTreeListView();
         }
     }

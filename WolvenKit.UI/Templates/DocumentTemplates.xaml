@@ -1,0 +1,16 @@
+﻿<ResourceDictionary x:Class="ViperkitUI.Templates.DocumentTemplates"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:docV="clr-namespace:WolvenKit.UI.Views.Documents"
+                    xmlns:docVM="clr-namespace:WolvenKit.App.ViewModels;assembly=WolvenKit.App"
+                    xmlns:vm="clr-namespace:WolvenKit.App.ViewModels;assembly=WolvenKit.App"
+                    xmlns:oxy="http://oxyplot.org/wpf"
+                    xmlns:local="clr-namespace:ViperkitUI.Templates">
+
+    <DataTemplate DataType="{x:Type docVM:CR2WDocumentViewModel}">
+        <docV:DocumentView>
+
+        </docV:DocumentView>
+    </DataTemplate>
+
+</ResourceDictionary>

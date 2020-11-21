@@ -1,0 +1,39 @@
+﻿<ResourceDictionary x:Class="ViperkitUI.Templates.ToolTemplates"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:toolV="clr-namespace:WolvenKit.UI.Views.Tools"
+                    xmlns:toolVM="clr-namespace:WolvenKit.App.ViewModels;assembly=WolvenKit.App"
+                    xmlns:vm="clr-namespace:WolvenKit.App.ViewModels;assembly=WolvenKit.App"
+                    xmlns:local="clr-namespace:ViperkitUI.Templates">
+    
+    <DataTemplate DataType="{x:Type toolVM:BulkEditorViewModel}">
+        <toolV:BulkEditorView>
+            
+        </toolV:BulkEditorView>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type toolVM:ImportViewModel}">
+        <toolV:ImportView>
+
+        </toolV:ImportView>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type toolVM:ModExplorerViewModel}">
+        <toolV:ModExplorerView>
+            
+        </toolV:ModExplorerView>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type toolVM:ModkitViewModel}">
+        <toolV:ModkitView>
+
+        </toolV:ModkitView>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type toolVM:RadishViewModel}">
+        <toolV:RadishView>
+
+        </toolV:RadishView>
+    </DataTemplate>
+
+</ResourceDictionary>

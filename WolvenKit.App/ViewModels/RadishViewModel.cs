@@ -158,8 +158,9 @@ namespace WolvenKit.App.ViewModels
             {
                 if (_currentWorkflow != value)
                 {
+                    var oldValue = _currentWorkflow;
                     _currentWorkflow = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged(() => CurrentWorkflow, oldValue, value);
                 }
             }
         }

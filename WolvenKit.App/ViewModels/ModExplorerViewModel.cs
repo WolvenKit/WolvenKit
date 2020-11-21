@@ -37,8 +37,8 @@ namespace WolvenKit.App.ViewModels
             AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
 
 
-            treenodes = new BindingList<FileSystemInfo>();
-            treenodes.ListChanged += new ListChangedEventHandler(Treenodes_ListChanged);
+            Treenodes = new BindingList<FileSystemInfo>();
+            Treenodes.ListChanged += new ListChangedEventHandler(Treenodes_ListChanged);
 
             ExpandedNodesDict = new Dictionary<string, List<string>>();
         }
@@ -46,7 +46,7 @@ namespace WolvenKit.App.ViewModels
         #region Fields
         void Treenodes_ListChanged(object sender, ListChangedEventArgs e)
         {
-            OnPropertyChanged(nameof(treenodes));
+            RaisePropertyChanged(nameof(Treenodes));
         }
 
 
@@ -66,15 +66,16 @@ namespace WolvenKit.App.ViewModels
         }
         #region ModelList
         private BindingList<FileSystemInfo> _treenodes = null;
-        public BindingList<FileSystemInfo> treenodes
+        public BindingList<FileSystemInfo> Treenodes
         {
             get => _treenodes;
             set
             {
                 if (_treenodes != value)
                 {
+                    var oldValue = _treenodes;
                     _treenodes = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged(() => Treenodes, oldValue, value);
                 }
             }
         }
@@ -88,8 +89,9 @@ namespace WolvenKit.App.ViewModels
             {
                 if (_selectedItems != value)
                 {
+                    var oldValue = _selectedItems;
                     _selectedItems = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged(() => SelectedItems, oldValue, value);
                 }
             }
         }
@@ -164,14 +166,14 @@ namespace WolvenKit.App.ViewModels
 
             if (IsTreeview)
             {
-                treenodes = new BindingList<FileSystemInfo>(di.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly)
+                Treenodes = new BindingList<FileSystemInfo>(di.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly)
                     .Where(_ => _.Extension != ".bat")
                     .ToList());
                 
             }
             else
             {
-                treenodes = new BindingList<FileSystemInfo>(di.GetFileSystemInfos("*", SearchOption.AllDirectories)
+                Treenodes = new BindingList<FileSystemInfo>(di.GetFileSystemInfos("*", SearchOption.AllDirectories)
                     .Where(_ => _.Extension != ".bat")
                     .ToList());
             }

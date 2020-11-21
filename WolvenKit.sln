@@ -65,7 +65,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IrrlichtLime", "WolvenKit.I
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Irrlicht", "WolvenKit.Irrlicht\Irrlicht15.0.vcxproj", "{DD5C43CB-34A8-409B-9010-5A5A52787552}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.UI", "..\..\MyGit\WolvenKit.UI\WolvenKit.UI.csproj", "{13059317-C1F2-44A2-BE20-3D7C7D322EBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.UI", "WolvenKit.UI\WolvenKit.UI.csproj", "{13059317-C1F2-44A2-BE20-3D7C7D322EBC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

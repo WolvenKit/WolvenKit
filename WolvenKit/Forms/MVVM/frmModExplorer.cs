@@ -97,9 +97,9 @@ namespace WolvenKit
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(vm.treenodes))
+            if (e.PropertyName == nameof(vm.Treenodes))
             {
-                this.treeListView.SetObjects(vm.treenodes);
+                this.treeListView.SetObjects(vm.Treenodes);
                 UpdateTreeView(true);
             }
         }

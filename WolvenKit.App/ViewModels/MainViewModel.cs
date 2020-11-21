@@ -48,8 +48,9 @@ namespace WolvenKit.App.ViewModels
             {
                 if (_title != value)
                 {
+                    var oldValue = _title;
                     _title = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged(() => Title, oldValue, value);
                 }
             }
         }
@@ -73,8 +74,9 @@ namespace WolvenKit.App.ViewModels
             {
                 if (_activeDocument != value)
                 {
+                    var oldValue = _activeDocument;
                     _activeDocument = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged(() => ActiveDocument, oldValue, value);
                 }
             }
         }

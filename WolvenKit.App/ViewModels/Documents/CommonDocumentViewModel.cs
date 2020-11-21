@@ -41,8 +41,9 @@ namespace WolvenKit.App.ViewModels
             {
                 if (_file != value)
                 {
+                    var oldValue = _file;
                     _file = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged(() => File, oldValue, value);
                 }
             }
         }
@@ -61,7 +62,7 @@ namespace WolvenKit.App.ViewModels
             {
                 if (e.PropertyName == nameof(cr2w.Chunks))
                 {
-                    OnPropertyChanged(nameof(File));
+                    RaisePropertyChanged(nameof(File));
                 }
             }
 
@@ -179,7 +180,7 @@ namespace WolvenKit.App.ViewModels
                         FileName = filename
                     };
                     errorcode = File.Read(reader);
-                    OnPropertyChanged(nameof(File));
+                    RaisePropertyChanged(nameof(File));
                 }
                 else
                 {
@@ -192,7 +193,7 @@ namespace WolvenKit.App.ViewModels
                         LocalizedStringSource = MainController.Get()
                     };
                     errorcode = File.Read(reader);
-                    OnPropertyChanged(nameof(File));
+                    RaisePropertyChanged(nameof(File));
 
                     File.PropertyChanged += File_PropertyChanged;
                 }

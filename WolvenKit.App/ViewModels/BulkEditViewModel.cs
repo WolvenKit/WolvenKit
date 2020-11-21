@@ -187,8 +187,9 @@ namespace WolvenKit.App.ViewModels
             {
                 if (_progressReport != value)
                 {
+                    var oldValue = _progressReport;
                     _progressReport = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged(() => ProgressReport, oldValue, value);
                 }
             }
         }

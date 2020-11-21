@@ -67,8 +67,9 @@ namespace WolvenKit.App.ViewModels
             {
                 if (_importableobjects != value)
                 {
+                    var oldValue = _importableobjects;
                     _importableobjects = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged(() => Importableobjects, oldValue, value);
                 }
             }
         }
@@ -113,7 +114,7 @@ namespace WolvenKit.App.ViewModels
             AddObjects(importablefiles, MainController.Get().ActiveMod.FileDirectory);
 
             //TryGetTextureGroupsCommand.SafeExecute();
-            OnPropertyChanged(nameof(Importableobjects));
+            RaisePropertyChanged(nameof(Importableobjects));
         }
 
         private bool CanOpenFolder() => MainController.Get().ActiveMod != null;
