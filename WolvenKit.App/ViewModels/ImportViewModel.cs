@@ -92,7 +92,7 @@ namespace WolvenKit.App.ViewModels
         private void UseLocalResources()
         {
             var importablefiles = new List<string>();
-            foreach (var file in MainController.Get().ActiveMod.Files)
+            foreach (var file in MainController.Get().ActiveMod.RawFiles)
             {
                 var originalExt = Path.GetExtension(file);
                 var lowerExt = originalExt.ToLower();

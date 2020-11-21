@@ -132,7 +132,8 @@ namespace WolvenKit.Cache
         /// Loads the .cache soundcache files from the /Mods/ folder
         /// Note this resets everything
         /// </summary>
-        /// <param name="exedir"></param>
+        /// <param name="mods"></param>
+        /// <param name="dlc"></param>
         public void LoadModsBundles(string mods, string dlc)
         {
             if (!Directory.Exists(mods))
