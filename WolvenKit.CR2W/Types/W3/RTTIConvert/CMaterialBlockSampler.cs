@@ -11,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockSampler : CMaterialBlock
 	{
-		[Ordinal(1)] [RED("addressU")] 		public ETextureAddressing AddressU { get; set;}
+		[Ordinal(1)] [RED("addressU")] 		public CEnum<ETextureAddressing> AddressU { get; set;}
 
-		[Ordinal(2)] [RED("addressV")] 		public ETextureAddressing AddressV { get; set;}
+		[Ordinal(2)] [RED("addressV")] 		public CEnum<ETextureAddressing> AddressV { get; set;}
 
-		[Ordinal(3)] [RED("addressW")] 		public ETextureAddressing AddressW { get; set;}
+		[Ordinal(3)] [RED("addressW")] 		public CEnum<ETextureAddressing> AddressW { get; set;}
 
-		[Ordinal(4)] [RED("filterMin")] 		public ETextureFilteringMin FilterMin { get; set;}
+		[Ordinal(4)] [RED("filterMin")] 		public CEnum<ETextureFilteringMin> FilterMin { get; set;}
 
-		[Ordinal(5)] [RED("filterMag")] 		public ETextureFilteringMag FilterMag { get; set;}
+		[Ordinal(5)] [RED("filterMag")] 		public CEnum<ETextureFilteringMag> FilterMag { get; set;}
 
-		[Ordinal(6)] [RED("filterMip")] 		public ETextureFilteringMip FilterMip { get; set;}
+		[Ordinal(6)] [RED("filterMip")] 		public CEnum<ETextureFilteringMip> FilterMip { get; set;}
 
-		[Ordinal(7)] [RED("comparisonFunction")] 		public ETextureComparisonFunction ComparisonFunction { get; set;}
+		[Ordinal(7)] [RED("comparisonFunction")] 		public CEnum<ETextureComparisonFunction> ComparisonFunction { get; set;}
 
 		public CMaterialBlockSampler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
