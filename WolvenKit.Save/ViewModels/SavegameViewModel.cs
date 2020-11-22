@@ -42,8 +42,8 @@ namespace WolvenKit.W3SavegameEditor.ViewModels
 
         public SavegameViewModel()
         {
-            InitializeSavegames = new DelegateCommand(ExecuteInitializeSavegameList);
-            OpenSavegame = new DelegateCommand(ExecuteOpenSavegame);
+            InitializeSavegames = new Core.SaveModels.DelegateCommand(ExecuteInitializeSavegameList);
+            OpenSavegame = new Core.SaveModels.DelegateCommand(ExecuteOpenSavegame);
             Savegames = new ObservableCollection<SavegameModel>();
             Progress = new ReadSavegameProgress();
             ExecuteInitializeSavegameList(null);

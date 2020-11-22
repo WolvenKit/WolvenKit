@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Microsoft.CSharp;
+using System;
 using System.CodeDom.Compiler;
 using System.Reflection;
 using System.Text;
-using System.Windows.Forms;
-using Microsoft.CSharp;
+//using System.Windows.Forms;
 
 namespace WolvenKit.Scaleform
 {
@@ -79,9 +79,9 @@ namespace WolvenKit.Scaleform
             CompilerResults cr = c.CompileAssemblyFromSource(cp, sb.ToString());
             if (cr.Errors.Count > 0)
             {
-                MessageBox.Show("ERROR: " + cr.Errors[0].ErrorText,
-                    "Error evaluating cs code", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                //MessageBox.Show("ERROR: " + cr.Errors[0].ErrorText,
+                //    "Error evaluating cs code", MessageBoxButtons.OK,
+                //    MessageBoxIcon.Error);
                 return null;
             }
 

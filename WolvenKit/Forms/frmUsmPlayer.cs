@@ -11,7 +11,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Scaleform;
 
 
-namespace WolvenKit.Scaleform
+namespace WolvenKit.Forms
 {
     public partial class frmUsmPlayer : DockContent
     {

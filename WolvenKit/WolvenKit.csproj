@@ -473,6 +473,12 @@
     <Compile Include="Forms\Editors\PtrEditor.Designer.cs">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmUsmPlayer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmUsmPlayer.Designer.cs">
+      <DependentUpon>frmUsmPlayer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MVVM\frmBulkEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -835,6 +841,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\PtrEditor.resx">
       <DependentUpon>PtrEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmUsmPlayer.resx">
+      <DependentUpon>frmUsmPlayer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MVVM\frmWcc.resx">
       <DependentUpon>frmWcc.cs</DependentUpon>

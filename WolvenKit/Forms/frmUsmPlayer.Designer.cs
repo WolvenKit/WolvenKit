@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace WolvenKit.Scaleform
+namespace WolvenKit.Forms
 {
     partial class frmUsmPlayer
     {
