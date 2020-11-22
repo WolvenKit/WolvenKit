@@ -12,6 +12,7 @@ namespace WolvenKit.App
     using Common;
     using Common.Services;
     using CR2W;
+    using ProtoBuf;
     using System.Diagnostics;
     using System.IO.Compression;
     using System.Reflection;
@@ -368,7 +369,7 @@ namespace WolvenKit.App
                     {
                         using (var file = File.Open(GetManagerPath(EManagerType.W3StringManager), FileMode.Open))
                         {
-                            W3StringManager = ProtoBuf.Serializer.Deserialize<W3StringManager>(file);
+                            W3StringManager = Serializer.Deserialize<W3StringManager>(file);
                         }
                     }
                     else
@@ -378,7 +379,7 @@ namespace WolvenKit.App
                         Directory.CreateDirectory(ManagerCacheDir);
                         using (var file = File.Open(GetManagerPath(EManagerType.W3StringManager), FileMode.Create))
                         {
-                            ProtoBuf.Serializer.Serialize(file, W3StringManager);
+                            Serializer.Serialize(file, W3StringManager);
                         }
 
                         Configuration.ManagerVersions[(int)EManagerType.W3StringManager] = W3StringManager.SerializationVersion;
