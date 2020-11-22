@@ -547,6 +547,48 @@
     <Compile Include="Forms\MVVM\frmWcc.Designer.cs">
       <DependentUpon>frmWcc.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Player\AsioOutPlugin.cs" />
+    <Compile Include="Forms\Player\AsioOutSettingsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Player\AsioOutSettingsPanel.Designer.cs">
+      <DependentUpon>AsioOutSettingsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Player\AudioPlaybackPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Player\AudioPlaybackPanel.Designer.cs">
+      <DependentUpon>AudioPlaybackPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Player\AudioPlaybackPanelPlugin.cs" />
+    <Compile Include="Forms\Player\DirectSoundOutPlugin.cs" />
+    <Compile Include="Forms\Player\DirectSoundOutSettingsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Player\DirectSoundOutSettingsPanel.Designer.cs">
+      <DependentUpon>DirectSoundOutSettingsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Player\frmAudioPlayer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Player\frmAudioPlayer.Designer.cs">
+      <DependentUpon>frmAudioPlayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Player\IOutputDevicePlugin.cs" />
+    <Compile Include="Forms\Player\WasapiOutPlugin.cs" />
+    <Compile Include="Forms\Player\WasapiOutSettingsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Player\WasapiOutSettingsPanel.Designer.cs">
+      <DependentUpon>WasapiOutSettingsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Player\WaveOutPlugin.cs" />
+    <Compile Include="Forms\Player\WaveOutSettingsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Player\WaveOutSettingsPanel.Designer.cs">
+      <DependentUpon>WaveOutSettingsPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\UserControl\frmProgress.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -847,6 +889,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MVVM\frmWcc.resx">
       <DependentUpon>frmWcc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Player\AsioOutSettingsPanel.resx">
+      <DependentUpon>AsioOutSettingsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Player\AudioPlaybackPanel.resx">
+      <DependentUpon>AudioPlaybackPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Player\DirectSoundOutSettingsPanel.resx">
+      <DependentUpon>DirectSoundOutSettingsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Player\frmAudioPlayer.resx">
+      <DependentUpon>frmAudioPlayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Player\WasapiOutSettingsPanel.resx">
+      <DependentUpon>WasapiOutSettingsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Player\WaveOutSettingsPanel.resx">
+      <DependentUpon>WaveOutSettingsPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControl\frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
