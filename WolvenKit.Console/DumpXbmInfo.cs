@@ -46,18 +46,17 @@ namespace WolvenKit.Console
 
             using (StreamWriter writer = File.CreateText(Path.Combine(outDir, $"__xbmdump_{idx}.txt")))
             {
-
                 string head = "RedName\t" +
-                            "Width\t" +
-                            "Height\t" +
-                            "Format\t" +
-                            "Compression\t" +
-                            "TextureGroup\t" +
-                            "TextureCacheKey\t" +
-                            "unk\t" +
-                            "unk1\t" +
-                            "unk2\t"+
-                            "MipsCount\t"
+                              "Width\t" +
+                              "Height\t" +
+                              "Format\t" +
+                              "Compression\t" +
+                              "TextureGroup\t" +
+                              "TextureCacheKey\t" +
+                              "unk\t" +
+                              "unk1\t" +
+                              "unk2\t"+
+                              "MipsCount\t"
                             ;
                 writer.WriteLine(head);
                 System.Console.WriteLine(head);

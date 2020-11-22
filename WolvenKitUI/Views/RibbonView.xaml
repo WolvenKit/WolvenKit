@@ -1,0 +1,102 @@
+﻿<catel:UserControl x:Class="WolvenKitUI.Views.RibbonView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:catel="http://schemas.catelproject.com"
+                   xmlns:services="clr-namespace:Catel.Services;assembly=Catel.MVVM"
+                   xmlns:fluent="urn:fluent-ribbon"
+                   xmlns:local="clr-namespace:WolvenKitUI"
+                   xmlns:orchestra="http://schemas.wildgums.com/orchestra"
+                   xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
+                   xmlns:svgc="http://sharpvectors.codeplex.com/svgc/">
+
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <svgc:SvgViewbox x:Key="IconMoveTo" Source="/Resources/Icons/MoveToSubmodule_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconSelectObject" Source="/Resources/Icons/SelectObject_16x.svg"/>
+
+            
+
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <fluent:Ribbon Grid.Row="0" x:Name="ribbon">
+
+            <fluent:Ribbon.Menu>
+                <fluent:Backstage>
+
+                    <fluent:BackstageTabControl x:Name="backstageTabControl">
+                        <fluent:Button Header="Exit" 
+                                       Icon="pack://application:,,,/WolvenKitUI;component/Resources/Images/exit.png" 
+                                       Command="{catel:CommandManagerBinding Application.Exit}" />
+                    </fluent:BackstageTabControl>
+                </fluent:Backstage>
+            </fluent:Ribbon.Menu>
+
+            <!--Contextual Tab Groups-->
+            <fluent:Ribbon.ContextualGroups>
+                <fluent:RibbonContextualTabGroup x:Name="contextTabGroup"
+                                 Header="Tools" 
+                                 Visibility="Visible"
+                                 Background="Green"
+                                 BorderBrush="Orange"
+                                 Foreground="DarkGreen"
+                                
+                                             />
+            </fluent:Ribbon.ContextualGroups>
+
+            <!-- Home Tab -->
+            <fluent:RibbonTabItem Header="Home" >
+                <fluent:RibbonGroupBox Header="GroupBox1">
+                    <fluent:Button Header="Button1"
+                       Icon="{DynamicResource IconMoveTo}"
+                       LargeIcon="{DynamicResource IconMoveTo}" 
+                       Command="{Binding Command1}"/>
+                    <fluent:Button Header="Button2" 
+                       Icon="{DynamicResource IconMoveTo}"
+                       LargeIcon="{DynamicResource IconMoveTo}" 
+                       Command="{Binding Command1}"/>
+                </fluent:RibbonGroupBox>
+
+                <fluent:RibbonGroupBox Header="GroupBox2">
+                    <fluent:Button Header="Button1"
+                       Icon="{DynamicResource IconSelectObject}"
+                       LargeIcon="{DynamicResource IconSelectObject}" 
+                       Command="{Binding Command1}"/>
+                    <fluent:Button Header="Button2" 
+                       Icon="{DynamicResource IconSelectObject}"
+                       LargeIcon="{DynamicResource IconSelectObject}" 
+                       Command="{Binding Command1}"/>
+                </fluent:RibbonGroupBox>
+
+            </fluent:RibbonTabItem>
+
+
+            <!--Contextual  Tab-->
+            <fluent:RibbonTabItem Header="Search" 
+                              Group="{Binding Source={x:Reference contextTabGroup}}" 
+                              Visibility="{Binding StrContextualRibbonVisible}"
+                              ActiveTabBackground="AliceBlue"
+                              >
+
+
+            </fluent:RibbonTabItem>
+        </fluent:Ribbon>
+
+    </Grid>
+
+</catel:UserControl>

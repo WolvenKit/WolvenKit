@@ -7,6 +7,7 @@ using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
@@ -278,7 +279,7 @@ namespace WolvenKit.Cache
                                 Name = relativepath,
                                 FullName = filename,
                                 
-                                Hash = HashKey(relativepath),
+                                Hash = relativepath.HashStringKey(),
 
                                 /*------------- TextureCache Data ---------------*/
                                 // NOTE: these need to be populated after writing the files
@@ -756,16 +757,6 @@ namespace WolvenKit.Cache
             }
         }
 
-        private uint HashKey(string key)
-        {
-            char[] keyConverted = key.ToCharArray();
-            uint hash = 0;
-            foreach (char c in keyConverted)
-            {
-                hash *= 31;
-                hash += (uint)c;
-            }
-            return hash;
-        }
+        
     }
 }
