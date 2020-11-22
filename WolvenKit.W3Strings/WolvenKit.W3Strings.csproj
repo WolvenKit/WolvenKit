@@ -114,14 +114,14 @@
     <Compile Include="W3StringManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj">
-      <Project>{4D1019F1-F099-450F-85B8-697E0332A94F}</Project>
-      <Name>WolvenKit.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj">
+      <Project>{93a10f45-1846-4ae7-939b-5b5e39b260be}</Project>
+      <Name>WolvenKit.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

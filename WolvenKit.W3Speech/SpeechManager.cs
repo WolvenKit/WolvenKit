@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 
@@ -20,7 +19,7 @@ namespace WolvenKit.W3Speech
             Speeches = new Dictionary<string, W3Speech>();
             FileList = new List<IWitcherFile>();
             Extensions = new List<string>();
-            AutocompleteSource = new AutoCompleteStringCollection();
+            AutocompleteSource = new List<string>();
         }
 
         public Dictionary<string, List<IWitcherFile>> Items { get; set; }
@@ -29,7 +28,7 @@ namespace WolvenKit.W3Speech
         public List<IWitcherFile> FileList { get; set; }
         public EBundleType TypeName => EBundleType.Speech;
         public List<string> Extensions { get; set; }
-        public AutoCompleteStringCollection AutocompleteSource { get; set; }
+        public List<string> AutocompleteSource { get; set; }
 
         private readonly string[] vanillaDLClist = new string[] { "DLC1", "DLC2", "DLC3", "DLC4", "DLC5", "DLC6", "DLC7", "DLC8", "DLC9", "DLC10", "DLC11", "DLC12", "DLC13", "DLC14", "DLC15", "DLC16", "bob", "ep1" };
         public static string SerializationVersion => "1.0";

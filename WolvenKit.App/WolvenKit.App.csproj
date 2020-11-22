@@ -318,7 +318,7 @@
       <Name>WolvenKit.Cache</Name>
     </ProjectReference>
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj">
-      <Project>{4d1019f1-f099-450f-85b8-697e0332a94f}</Project>
+      <Project>{93a10f45-1846-4ae7-939b-5b5e39b260be}</Project>
       <Name>WolvenKit.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj">

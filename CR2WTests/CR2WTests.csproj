@@ -91,6 +91,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj">
+      <Project>{93a10f45-1846-4ae7-939b-5b5e39b260be}</Project>
+      <Name>WolvenKit.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WolvenKit.Nvidia\WolvenKit.Nvidia.csproj">
       <Project>{761c5a00-52e7-49d5-9f4f-7be7faf30ac6}</Project>
       <Name>WolvenKit.Nvidia</Name>
@@ -102,10 +106,6 @@
     <ProjectReference Include="..\WolvenKit.Cache\WolvenKit.Cache.csproj">
       <Project>{17cf5901-6e1f-467f-afe0-3cc04dc9688a}</Project>
       <Name>WolvenKit.Cache</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj">
-      <Project>{4d1019f1-f099-450f-85b8-697e0332a94f}</Project>
-      <Name>WolvenKit.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj">
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>

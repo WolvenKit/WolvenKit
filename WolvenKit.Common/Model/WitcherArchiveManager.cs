@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
@@ -17,7 +16,7 @@ namespace WolvenKit.Common
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
         public Dictionary<string, List<IWitcherFile>> Items { get; set; }
-        public AutoCompleteStringCollection AutocompleteSource { get; set; }
+        public List<string> AutocompleteSource { get; set; }
         public List<string> Extensions { get; set; }
 
 

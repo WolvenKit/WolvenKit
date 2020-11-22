@@ -76,7 +76,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -94,7 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj">
-      <Project>{4D1019F1-F099-450F-85B8-697E0332A94F}</Project>
+      <Project>{93a10f45-1846-4ae7-939b-5b5e39b260be}</Project>
       <Name>WolvenKit.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\WolvenKit.W3Strings\WolvenKit.W3Strings.csproj">

@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 
@@ -161,7 +160,7 @@ namespace WolvenKit.Bundles
                     WriteCompressedData(bw, File.ReadAllBytes(item), 5);
                 }
             }
-            MessageBox.Show("Done writing file!");
+            //MessageBox.Show("Done writing file!");
         }
 
         public uint GetSize => this.bundlesize;

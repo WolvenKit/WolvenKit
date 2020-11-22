@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 using WolvenKit.W3Strings;
 
 namespace WolvenKit.Bundles
