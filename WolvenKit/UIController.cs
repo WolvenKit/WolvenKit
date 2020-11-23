@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Common.Services;
 using WolvenKit.Utility;
+using WolvenKit.Common;
+using WolvenKit.App;
 
 namespace WolvenKit
 {
@@ -21,11 +23,9 @@ namespace WolvenKit
     using W3Strings;
     using Common;
     using App;
-    using WolvenKit.App.Model;
-    using WolvenKit.App.ViewModels;
     using BrightIdeasSoftware;
-    using WolvenKit.Forms.Editors;
-    using WolvenKit.Common.Model;
+    using global::WolvenKit.Common.Model;
+    using global::WolvenKit.Properties;
 
     public enum EColorThemes
     {
@@ -147,7 +147,7 @@ namespace WolvenKit
         /// <param name="form">The form to initialize.</param>
         public static void InitForm(Form form)
         {
-            Bitmap bmp = WolvenKit.Properties.Resources.Wkit_logo_500x;
+            Bitmap bmp = Resources.Wkit_logo_500x;
             form.Icon = Icon.FromHandle(bmp.GetHicon());
         }
 

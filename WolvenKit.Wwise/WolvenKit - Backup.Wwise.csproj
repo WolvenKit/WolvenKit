@@ -6,21 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="SoundCache\soundbanksinfo.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="SoundCache\soundbanksinfo.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="ini-parser" Version="2.5.2" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Cache\WolvenKit.Cache.csproj" />
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj" />

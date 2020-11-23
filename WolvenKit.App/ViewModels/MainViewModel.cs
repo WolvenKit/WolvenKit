@@ -28,6 +28,7 @@ using WolvenKit.CR2W.Reflection;
 using WolvenKit.CR2W.Types;
 using System.Globalization;
 using System.Reflection;
+using WolvenKit.Wwise;
 
 namespace WolvenKit.App.ViewModels
 {

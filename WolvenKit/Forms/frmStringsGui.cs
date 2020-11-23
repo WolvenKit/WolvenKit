@@ -11,11 +11,10 @@ using System.Xml.Linq;
 using System.IO;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using WolvenKit.App;
 
 namespace WolvenKit
 {
-    using Common;
-    using WolvenKit.App;
 
     enum EDisplayNameType
     {

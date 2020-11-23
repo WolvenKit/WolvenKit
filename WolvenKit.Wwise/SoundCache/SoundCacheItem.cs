@@ -3,7 +3,7 @@ using System.IO.MemoryMappedFiles;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 
-namespace WolvenKit.Wwise.SoundCache
+namespace WolvenKit.Wwise
 {
     public class SoundCacheItem : IWitcherFile
     {

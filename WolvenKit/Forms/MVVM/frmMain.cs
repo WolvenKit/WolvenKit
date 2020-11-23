@@ -21,6 +21,8 @@ using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App.Model;
 using SearchOption = System.IO.SearchOption;
+using WolvenKit.CR2W.Reflection;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit
 {
@@ -41,7 +43,7 @@ namespace WolvenKit
     using Render;
     using Scaleform;
     using System.Globalization;
-    using WolvenKit.CR2W.Reflection;
+    
     using Wwise.Player;
     using Enums = Enums;
 
@@ -62,12 +64,12 @@ namespace WolvenKit
         private delegate void BoolDelegate(bool t);
         private delegate void StrDelegate(string t);
         private delegate void ColorDelegate(Color t);
-        private delegate void LogDelegate(string t, WolvenKit.Common.Services.Logtype type);
+        private delegate void LogDelegate(string t, Logtype type);
         private delegate void IntDelegate(int t);
 
         private readonly Queue<string> lastClosedTab = new Queue<string>();
         private DeserializeDockContent m_deserializeDockContent;
-        private WolvenKit.Common.Services.LoggerService Logger { get; set; }
+        private LoggerService Logger { get; set; }
         private static string Version => FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
 
         #endregion
@@ -905,8 +907,8 @@ namespace WolvenKit
             switch (e.PropertyName)
             {
                 case "Log":
-                    Invoke(new LogDelegate(AddOutput), ((WolvenKit.Common.Services.LoggerService) sender).Log + "\n",
-                        ((WolvenKit.Common.Services.LoggerService) sender).Logtype);
+                    Invoke(new LogDelegate(AddOutput), ((LoggerService) sender).Log + "\n",
+                        ((LoggerService) sender).Logtype);
                     break;
                 case "Progress":
                 {
@@ -962,7 +964,7 @@ namespace WolvenKit
             void SetStatusProgressbarValue(int val) => toolStripProgressBar1.Value = val;
             void SetStatusBarColor(Color color) => this.statusToolStrip.BackColor = color;
         }
-        private void AddOutput(string text, WolvenKit.Common.Services.Logtype type = WolvenKit.Common.Services.Logtype.Normal)
+        private void AddOutput(string text, Logtype type = Logtype.Normal)
         {
             if (string.IsNullOrWhiteSpace(text))
                 return;
