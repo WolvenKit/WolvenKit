@@ -41,10 +41,12 @@ namespace WolvenKitUI
 
             // To auto-forward styles, check out Orchestra (see https://github.com/wildgums/orchestra)
             // StyleHelper.CreateStyleForwardersForDefaultStyles();
-            //var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
-            //viewModelLocator.NamingConventions.Add("WolvenKit.App.ViewModels.[VW]ViewModel");
+            var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
+            viewModelLocator.NamingConventions.Add("WolvenKit.App.ViewModels.[VW]ViewModel");
 
             //viewModelLocator.Register(typeof(MainView), typeof(WolvenKit.App.ViewModels.MainViewModel));
+            viewModelLocator.Register(typeof(RibbonView), typeof(WolvenKit.App.ViewModels.MainViewModel));
+            viewModelLocator.Register(typeof(StatusBarView), typeof(WolvenKit.App.ViewModels.StatusBarViewModel));
 
 
             var serviceLocator = ServiceLocator.Default;

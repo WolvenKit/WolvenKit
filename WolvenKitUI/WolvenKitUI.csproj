@@ -185,11 +185,43 @@
     </When>
   </Choose>
   <ItemGroup>
+    <None Remove="Resources\Icons\Close_16x.svg" />
+    <None Remove="Resources\Icons\ImportFile_16x.svg" />
     <None Remove="Resources\Icons\MoveToSubmodule_16x.svg" />
+    <None Remove="Resources\Icons\NewFile_16x.svg" />
+    <None Remove="Resources\Icons\NewSolutionFolder_16x.svg" />
+    <None Remove="Resources\Icons\OpenFile_16x.svg" />
+    <None Remove="Resources\Icons\OpenFolder_16x.svg" />
+    <None Remove="Resources\Icons\RunTest_16x.svg" />
+    <None Remove="Resources\Icons\Run_16x.svg" />
+    <None Remove="Resources\Icons\SearchFolderClosed_16x.svg" />
     <None Remove="Resources\Icons\SelectObject_16x.svg" />
+    <None Remove="Resources\Icons\Settings_16x.svg" />
+    <None Remove="Resources\Images\git.png" />
+    <None Remove="Resources\Images\New_Project_dark_64x.png" />
+    <None Remove="Resources\Images\New_Project_light_64x.png" />
+    <None Remove="Resources\Images\Open_Project_dark_64x.png" />
+    <None Remove="Resources\Images\Open_Project_light_64x.png" />
+    <None Remove="Resources\Images\Preferences_light_64x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Close_16x.svg" />
+    <Resource Include="Resources\Icons\ImportFile_16x.svg" />
+    <Resource Include="Resources\Icons\NewFile_16x.svg" />
+    <Resource Include="Resources\Icons\NewSolutionFolder_16x.svg" />
+    <Resource Include="Resources\Icons\OpenFile_16x.svg" />
+    <Resource Include="Resources\Icons\OpenFolder_16x.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WolvenKit.App\WolvenKit.App.csproj" />
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\MoveToSubmodule_16x.svg" />
+    <Resource Include="Resources\Icons\RunTest_16x.svg" />
+    <Resource Include="Resources\Icons\Run_16x.svg" />
+    <Resource Include="Resources\Icons\SearchFolderClosed_16x.svg" />
     <Resource Include="Resources\Icons\SelectObject_16x.svg" />
+    <Resource Include="Resources\Icons\Settings_16x.svg" />
   </ItemGroup>
 </Project>

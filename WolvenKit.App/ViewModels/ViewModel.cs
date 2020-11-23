@@ -22,6 +22,11 @@ namespace WolvenKit.App.ViewModels
             m_windowFactory = windowFactory;
         }
 
+        public ViewModel()
+        {
+
+        }
+
         public virtual void Initialize()
         {
             

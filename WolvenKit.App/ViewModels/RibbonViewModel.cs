@@ -2,16 +2,18 @@
 using Catel.MVVM;
 using Catel.Reflection;
 using Catel.Services;
-
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using WolvenKit.App.Commands;
+using WolvenKit.Common.Services;
 
-namespace WolvenKitUI.ViewModels
+namespace WolvenKit.App.ViewModels
 {
-    public class RibbonViewModel : ViewModelBase
+    public class RibbonViewModel : ViewModel
     {
         private readonly INavigationService _navigationService;
         private readonly IUIVisualizerService _uiVisualizerService;
@@ -25,6 +27,7 @@ namespace WolvenKitUI.ViewModels
             _uiVisualizerService = uiVisualizerService;
 
             ShowKeyboardMappings = new TaskCommand(OnShowKeyboardMappingsExecuteAsync);
+            Command1 = new RelayCommand(RunCommand1, CanRunCommand1);
 
             var assembly = AssemblyHelper.GetEntryAssembly();
             Title = assembly.Title();
@@ -35,6 +38,7 @@ namespace WolvenKitUI.ViewModels
         /// Gets the ShowKeyboardMappings command.
         /// </summary>
         public TaskCommand ShowKeyboardMappings { get; private set; }
+        public ICommand Command1 { get; }
 
         /// <summary>
         /// Method to invoke when the ShowKeyboardMappings command is executed.
@@ -42,6 +46,11 @@ namespace WolvenKitUI.ViewModels
         private async Task OnShowKeyboardMappingsExecuteAsync()
         {
             
+        }
+
+        private bool CanRunCommand1() => true;
+        private void RunCommand1()
+        {
         }
         #endregion
 

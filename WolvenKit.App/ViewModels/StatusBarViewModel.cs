@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 namespace WolvenKit.App.ViewModels
 {
     using Catel.MVVM;
+    using System.CodeDom;
+    using System.Windows.Input;
+    using WolvenKit.App.Commands;
 
     public class StatusBarViewModel : ViewModelBase
     {
@@ -16,5 +19,17 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         public bool EnableAutomaticUpdates { get; set; }
+
+        public StatusBarViewModel()
+        {
+            Command1 = new RelayCommand(RunCommand1, CanRunCommand1);
+        }
+
+        public ICommand Command1 { get; }
+
+        private bool CanRunCommand1() => true;
+        private void RunCommand1()
+        {
+        }
     }
 }

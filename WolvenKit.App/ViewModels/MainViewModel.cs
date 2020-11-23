@@ -29,6 +29,7 @@ using WolvenKit.CR2W.Types;
 using System.Globalization;
 using System.Reflection;
 using WolvenKit.Wwise;
+using Catel;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -55,10 +56,6 @@ namespace WolvenKit.App.ViewModels
 
             await base.CloseAsync();
         }
-
-
-
-
 
         #region Properties
         public bool IsToolStripBtnPackEnabled { get; private set; }
@@ -115,7 +112,7 @@ namespace WolvenKit.App.ViewModels
         
         #endregion
 
-        public MainViewModel(IWindowFactory windowFactory) : base(windowFactory)
+        public MainViewModel()
         {
             Title = "WolvenKit";
 
@@ -124,6 +121,7 @@ namespace WolvenKit.App.ViewModels
             DdsToCacheCommand = new RelayCommand(DdsToCache, CanDdsToCacheCommand);
             CreateCr2wFileCommand = new DelegateCommand<bool>(CreateCr2w, CanCreateCr2w);
             BackupProjectCommand = new RelayCommand(BackupProject, CanBackupProject);
+            Command1 = new RelayCommand(RunCommand1, CanRunCommand1);
         }
 
 
@@ -131,11 +129,16 @@ namespace WolvenKit.App.ViewModels
         public ICommand DdsToCacheCommand { get; }
         public ICommand CreateCr2wFileCommand { get; }
         public ICommand BackupProjectCommand { get; }
-
+        public ICommand Command1 { get; }
         #endregion
 
         #region CommandsImplementation
-        private bool CanDdsToCacheCommand() => MainController.Get().ActiveMod != null;
+        private bool CanRunCommand1() => true;
+        private void RunCommand1()
+        {
+        }
+
+        private bool CanDdsToCacheCommand() => true;
         private void DdsToCache()
         {
             // Creation

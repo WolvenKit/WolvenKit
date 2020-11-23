@@ -9,7 +9,7 @@
                    xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
                    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/">
 
-    
+    <!-- Resources -->
     <UserControl.Resources>
         <ResourceDictionary>
 
@@ -20,9 +20,23 @@
 
             <svgc:SvgViewbox x:Key="IconMoveTo" Source="/Resources/Icons/MoveToSubmodule_16x.svg"/>
             <svgc:SvgViewbox x:Key="IconSelectObject" Source="/Resources/Icons/SelectObject_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconNewSolutionFolder" Source="/Resources/Icons/NewSolutionFolder_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconOpenFolder" Source="/Resources/Icons/OpenFolder_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconClose" Source="/Resources/Icons/Close_16x.svg"/>
 
-            
+            <svgc:SvgViewbox x:Key="IconNewFile" Source="/Resources/Icons/NewFile_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconOpenFile" Source="/Resources/Icons/OpenFile_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconImportFile" Source="/Resources/Icons/ImportFile_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconSearchFolder" Source="/Resources/Icons/SearchFolderClosed_16x.svg"/>
 
+            <svgc:SvgViewbox x:Key="IconRun" Source="/Resources/Icons/Run_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconRunTest" Source="/Resources/Icons/RunTest_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconSettings" Source="/Resources/Icons/Settings_16x.svg"/>
+
+            <BitmapImage x:Key="IconGit" 
+                         UriSource="/WolvenKitUI;component/Resources/Images/git.png" />
+            <BitmapImage x:Key="IconPreferences" 
+                         UriSource="/WolvenKitUI;component/Resources/Images/Preferences_light_64x.png" />
 
         </ResourceDictionary>
     </UserControl.Resources>
@@ -35,19 +49,28 @@
         </Grid.RowDefinitions>
 
         <fluent:Ribbon Grid.Row="0" x:Name="ribbon">
-
+            <!-- Backstage -->
             <fluent:Ribbon.Menu>
                 <fluent:Backstage>
-
                     <fluent:BackstageTabControl x:Name="backstageTabControl">
-                        <fluent:Button Header="Exit" 
-                                       Icon="pack://application:,,,/WolvenKitUI;component/Resources/Images/exit.png" 
+                        <fluent:Button Header="New" 
+                                       Icon="{DynamicResource IconNewSolutionFolder}" 
+                                       Command="{catel:CommandManagerBinding Application.Exit}" />
+                        <fluent:Button Header="Open" 
+                                       Icon="{DynamicResource IconOpenFolder}" 
+                                       Command="{catel:CommandManagerBinding Application.Exit}" />
+
+                        <fluent:Button Header="Close" 
+                                       Icon="{DynamicResource IconClose}" 
+                                       Command="{catel:CommandManagerBinding Application.Exit}" />
+                        <fluent:Button Header="Options" 
+                                       Icon="{DynamicResource IconPreferences}"
                                        Command="{catel:CommandManagerBinding Application.Exit}" />
                     </fluent:BackstageTabControl>
                 </fluent:Backstage>
             </fluent:Ribbon.Menu>
 
-            <!--Contextual Tab Groups-->
+            <!-- Contextual Tab Groups -->
             <fluent:Ribbon.ContextualGroups>
                 <fluent:RibbonContextualTabGroup x:Name="contextTabGroup"
                                  Header="Tools" 
@@ -61,27 +84,46 @@
 
             <!-- Home Tab -->
             <fluent:RibbonTabItem Header="Home" >
-                <fluent:RibbonGroupBox Header="GroupBox1">
-                    <fluent:Button Header="Button1"
-                       Icon="{DynamicResource IconMoveTo}"
-                       LargeIcon="{DynamicResource IconMoveTo}" 
+                <!-- File -->
+                <fluent:RibbonGroupBox Header="File">
+                    <fluent:Button Header="Open File"
+                       Icon="{DynamicResource IconOpenFile}"
+                       LargeIcon="{DynamicResource IconOpenFile}" 
                        Command="{Binding Command1}"/>
-                    <fluent:Button Header="Button2" 
-                       Icon="{DynamicResource IconMoveTo}"
-                       LargeIcon="{DynamicResource IconMoveTo}" 
+                    <fluent:Button Header="New File" 
+                       Icon="{DynamicResource IconNewFile}"
+                       LargeIcon="{DynamicResource IconNewFile}" 
+                       Command="{Binding Command1}"/>
+                    <fluent:Button Header="Game Assets" 
+                       Icon="{DynamicResource IconSearchFolder}"
+                       LargeIcon="{DynamicResource IconSearchFolder}" 
                        Command="{Binding Command1}"/>
                 </fluent:RibbonGroupBox>
 
-                <fluent:RibbonGroupBox Header="GroupBox2">
-                    <fluent:Button Header="Button1"
-                       Icon="{DynamicResource IconSelectObject}"
-                       LargeIcon="{DynamicResource IconSelectObject}" 
+                <!-- Project -->
+                <fluent:RibbonGroupBox Header="Project">
+                    <fluent:Button Header="Pack Mod"
+                       Icon="{DynamicResource IconRun}"
+                       LargeIcon="{DynamicResource IconRun}" 
                        Command="{Binding Command1}"/>
-                    <fluent:Button Header="Button2" 
-                       Icon="{DynamicResource IconSelectObject}"
-                       LargeIcon="{DynamicResource IconSelectObject}" 
-                       Command="{Binding Command1}"/>
+                    <fluent:Button Header="Package Installer" 
+                       Icon="{DynamicResource IconRunTest}"
+                       LargeIcon="{DynamicResource IconRunTest}" 
+                       Command="{Binding DdsToCacheCommand}"
+                       Size="Middle"/>
+                    <fluent:Button Header="Backup Mod" 
+                       Icon="{DynamicResource IconGit}"
+                       LargeIcon="{DynamicResource IconGit}"
+                       Command="{Binding Command1}"
+                       Size="Middle"/>
+                    <fluent:Button Header="Mod Settings" 
+                       Icon="{DynamicResource IconSettings}"
+                       LargeIcon="{DynamicResource IconSettings}" 
+                       Command="{Binding Command1}"
+                       Size="Middle"/>
                 </fluent:RibbonGroupBox>
+
+                
 
             </fluent:RibbonTabItem>
 
