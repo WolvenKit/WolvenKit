@@ -79,16 +79,16 @@ namespace WolvenKit.App.ViewModels
 
         #region Open Documents
 
-        private readonly Dictionary<string, IDocumentViewModel> _openDocuments;
-        public Dictionary<string, IDocumentViewModel> GetOpenDocuments() => _openDocuments;
+        private readonly Dictionary<string, Old_IDocumentViewModel> _openDocuments;
+        public Dictionary<string, Old_IDocumentViewModel> GetOpenDocuments() => _openDocuments;
 
         
 
         #endregion
 
         #region Active Document
-        private IDocumentViewModel _activeDocument;
-        public IDocumentViewModel ActiveDocument
+        private Old_IDocumentViewModel _activeDocument;
+        public Old_IDocumentViewModel ActiveDocument
         {
             get => _activeDocument;
             set
@@ -116,7 +116,8 @@ namespace WolvenKit.App.ViewModels
         {
             Title = "WolvenKit";
 
-            _openDocuments = new Dictionary<string, IDocumentViewModel>();
+            _openDocuments = new Dictionary<string, Old_IDocumentViewModel>();
+            
 
             DdsToCacheCommand = new RelayCommand(DdsToCache, CanDdsToCacheCommand);
             CreateCr2wFileCommand = new DelegateCommand<bool>(CreateCr2w, CanCreateCr2w);
@@ -1199,7 +1200,7 @@ namespace WolvenKit.App.ViewModels
             return true;
         }
         
-        public void AddOpenDocument(IDocumentViewModel document)
+        public void AddOpenDocument(Old_IDocumentViewModel document)
         {
             if (_openDocuments.ContainsKey(document.FileName))
                 throw new NullReferenceException();

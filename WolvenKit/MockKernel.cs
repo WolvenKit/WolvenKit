@@ -60,7 +60,7 @@ namespace WolvenKit
         public MainViewModel GetMainViewModel()
         {
             if ((MainViewModel)MainVM == null)
-                MainVM = new MainViewModel(UIController.Get().WindowFactory);
+                MainVM = new MainViewModel();
             return (MainViewModel)MainVM;
         }
 

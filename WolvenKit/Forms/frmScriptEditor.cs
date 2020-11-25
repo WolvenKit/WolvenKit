@@ -33,7 +33,7 @@ namespace WolvenKit.Forms
 
 
         public string FileName => vm.FileName;
-        public IDocumentViewModel GetViewModel() => vm;
+        public Old_IDocumentViewModel GetViewModel() => vm;
 
         public frmScriptEditor(ScriptDocumentViewModel documentViewModel)
         {

@@ -15,7 +15,7 @@ using WolvenKit.Radish.Model;
 
 namespace WolvenKit.App.ViewModels
 {
-    public class CommonDocumentViewModel : CloseableViewModel, IDocumentViewModel
+    public class CommonDocumentViewModel : CloseableViewModel, Old_IDocumentViewModel
     {
         public CommonDocumentViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {

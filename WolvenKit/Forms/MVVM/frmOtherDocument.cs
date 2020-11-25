@@ -60,7 +60,7 @@ namespace WolvenKit.Forms
 
         //public bool GetIsDisposed() => this.IsDisposed;
 
-        public IDocumentViewModel GetViewModel() => vm;
+        public Old_IDocumentViewModel GetViewModel() => vm;
 
         public void ApplyCustomTheme()
         {

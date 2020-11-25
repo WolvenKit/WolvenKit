@@ -7,7 +7,7 @@ namespace WolvenKit.App.ViewModels
     /// <summary>
     /// Represents a viewmodel
     /// </summary>
-    public interface IDocumentViewModel/* : INotifyPropertyChanged, INotifyPropertyChanging*/
+    public interface Old_IDocumentViewModel/* : INotifyPropertyChanged, INotifyPropertyChanging*/
     {
         string FileName { get; }
 

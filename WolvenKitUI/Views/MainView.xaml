@@ -2,38 +2,17 @@
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com"
-                   xmlns:orccontrols="http://schemas.wildgums.com/orc/controls">
+                   xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
+                   xmlns:MWindow="clr-namespace:MWindowLib;assembly=MWindowLib"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:demos="clr-namespace:MLibTest.Demos"
+                   >
 
     <Grid>
-        <orccontrols:TabControl LoadTabItems="LazyLoading">
-            <TabItem Header="Info" >
-            
-                <Grid x:Name="LayoutRoot">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                
-                    <Label Grid.Row="0" Grid.Column="0" Content="{Binding Title}" FontSize="16" FontWeight="SemiBold" />
-                    <Label Grid.Row="1" Grid.Column="0">
-                        <TextBlock TextWrapping="Wrap">
-                            Congratulations! You just generated a new app using Orchestra.
-                            <LineBreak />
-                            <LineBreak />
-                            But there is so... much... more... goodness waiting for you :-)
-                            <LineBreak />
-                            <LineBreak />
-                            If you are interested in more great open source components, check out the list below:
-                            <LineBreak />
-                            <LineBreak />
-                            • https://github.com/wildgums => More than 60 open source components built on top of Catel<LineBreak />
-                            • https://github.com/fody => Fody is an extensible tool for weaving .net assemblies.<LineBreak />
-                        </TextBlock>
-                    </Label>
-                </Grid>
+        
 
-            </TabItem>
-        </orccontrols:TabControl>
+
+
     </Grid>
     
 </catel:UserControl>

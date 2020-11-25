@@ -14,7 +14,7 @@ namespace WolvenKit.Common.Model
     {
         string FileName { get; }
 
-        IDocumentViewModel GetViewModel();
+        Old_IDocumentViewModel GetViewModel();
 
         void Close();
         void Activate();
