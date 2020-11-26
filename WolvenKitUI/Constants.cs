@@ -12,6 +12,18 @@ namespace WolvenKitUI
 
             public const string About = "Application.About";
             public static readonly InputGesture AboutInputGesture = new InputGesture(Key.F1);
+
+            public const string Options = "Application.Options";
+            public static readonly InputGesture OptionsInputGesture = new InputGesture(Key.F12);
+
+
+            public const string OpenProject = "Application.OpenProject";
+            public static readonly InputGesture OpenProjectInputGesture = new InputGesture(Key.O, ModifierKeys.Control);
+            public const string NewProject = "Application.NewProject";
+            public static readonly InputGesture NewProjectInputGesture = new InputGesture(Key.N, ModifierKeys.Control);
+
+            //public const string SaveAll = "Application.SaveAll";
+            //public static readonly InputGesture SaveAllInputGesture = new InputGesture(Key.S, ModifierKeys.Control);
         }
     }
 

@@ -4,10 +4,11 @@
     using System.Windows.Media.Imaging;
     using System.Windows.Media;
     using System.Windows.Input;
-    using Settings.Interfaces;
     using WolvenKit.App.Commands;
     using Catel.IoC;
     using MLib.Interfaces;
+    using WolvenKit.App.Services;
+    using Catel;
 
 
     /// <summary>
@@ -27,6 +28,7 @@
         public const string ToolTitle = "Tool 1";
 
         private IWorkSpaceViewModel _workSpaceViewModel = null;
+        private readonly ISettingsManager _settingsManager;
 
         private Color _SelectedBackgroundColor;
         private Color _SelectedAccentColor;
@@ -39,9 +41,17 @@
         /// </summary>
         /// <param name="workSpaceViewModel">Is the link to the application's viewmodel
         /// to enable (event based) communication between this viewmodel and the application.</param>
-        public Tool1_ViewModel(IWorkSpaceViewModel workSpaceViewModel)
+        public Tool1_ViewModel(
+            IWorkSpaceViewModel workSpaceViewModel
+            //ISettingsManager settingsManager
+            )
             : base(ToolTitle)
         {
+            //Argument.IsNotNull(() => settingsManager);
+
+            _settingsManager = ServiceLocator.Default.ResolveType<ISettingsManager>();
+
+
             _workSpaceViewModel = workSpaceViewModel;
 
             SetupADToolDefaults();
@@ -111,14 +121,14 @@
                         Color accentColor = (Color)p;
 
                         var appearance = ServiceLocator.Default.ResolveType<IAppearanceManager>();
-                        var settings = ServiceLocator.Default.ResolveType<ISettingsManager>(); // add the default themes
+                        //var settings = ServiceLocator.Default.ResolveType<ISettingsManager>(); // add the default themes
 
                         // 1) You could use this if you where using MLib only
                         // appearance.SetAccentColor(accentColor);
 
                         // 2) But you should use this if you use MLib with additional libraries
                         //    with additional accent colors to be synchronized at run-time
-                        appearance.SetTheme(settings.Themes
+                        appearance.SetTheme(_settingsManager.Themes
                                             , appearance.ThemeName
                                             , accentColor);
 

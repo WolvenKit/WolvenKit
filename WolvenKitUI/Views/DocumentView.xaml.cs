@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using WolvenKit.App.ViewModels;
 
-namespace MLibTest.Demos.ViewModels.Views
+namespace WolvenKitUI.Views
 {
 	/// <summary>
 	/// Interaction logic for TextDocumentView.xaml

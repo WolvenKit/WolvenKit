@@ -14,12 +14,10 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using WolvenKitUI.Models;
-using Settings.UserProfile;
-using Settings.Interfaces;
 using MWindowInterfacesLib.Interfaces;
 using MLib.Interfaces;
 using MLib;
-using Settings;
+using WolvenKit.App.ViewModels;
 
 namespace WolvenKitUI
 {
@@ -29,7 +27,6 @@ namespace WolvenKitUI
     public partial class App : Application
     {
         #region fields
-        private readonly AppViewModel _appVM;
         #endregion fields
 
         #region constructors
@@ -44,7 +41,6 @@ namespace WolvenKitUI
         /// </summary>
         public App()
         {
-            _appVM = new AppViewModel(new AppLifeCycleViewModel());
             LayoutLoaded = new LayoutLoader(@".\AvalonDock.Layout.config");
         }
         #endregion constructors
@@ -65,80 +61,28 @@ namespace WolvenKitUI
 
             Log.Info("Starting application");
 
-            // Want to improve performance? Uncomment the lines below. Note though that this will disable
-            // some features. 
-            //
-            // For more information, see http://docs.catelproject.com/vnext/faq/performance-considerations/
+            
 
-            // Log.Info("Improving performance");
-            // Catel.Windows.Controls.UserControl.DefaultCreateWarningAndErrorValidatorForViewModelValue = false;
-            // Catel.Windows.Controls.UserControl.DefaultSkipSearchingForInfoBarMessageControlValue = true;
-
-            // TODO: Register custom types in the ServiceLocator
-            //Log.Info("Registering custom types");
-            //var serviceLocator = ServiceLocator.Default;
-            //serviceLocator.RegisterType<IMyInterface, IMyClass>();
-
-            // To auto-forward styles, check out Orchestra (see https://github.com/wildgums/orchestra)
-            // StyleHelper.CreateStyleForwardersForDefaultStyles();
+            // Register Viewmodels
             var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
             viewModelLocator.NamingConventions.Add("WolvenKit.App.ViewModels.[VW]ViewModel");
 
-            //viewModelLocator.Register(typeof(MainView), typeof(WolvenKit.App.ViewModels.MainViewModel));
-            viewModelLocator.Register(typeof(RibbonView), typeof(WolvenKit.App.ViewModels.MainViewModel));
-            viewModelLocator.Register(typeof(StatusBarView), typeof(WolvenKit.App.ViewModels.StatusBarViewModel));
+            viewModelLocator.Register(typeof(MainView), typeof(WolvenKitUI.ViewModels.WorkSpaceViewModel));
+            viewModelLocator.Register(typeof(RibbonView), typeof(RibbonViewModel));
+
+
+            
+            
+
 
 
             var serviceLocator = ServiceLocator.Default;
-            
-
-            var appearanceinstance = AppearanceManager.GetInstance();
-            var settingsinstance = SettingsManager.GetInstance(appearanceinstance.CreateThemeInfos());
-
-            serviceLocator.RegisterInstance(typeof(ISettingsManager), settingsinstance);
-            serviceLocator.RegisterInstance(typeof(IAppearanceManager), appearanceinstance);
-
-
-
-
-
-
-            var settings = serviceLocator.ResolveType<ISettingsManager>(); // add the default themes
-            var appearance = serviceLocator.ResolveType<IAppearanceManager>();
-
-
-
-
-
-
-
-
-
             var shellService = serviceLocator.ResolveType<IShellService>();
             shellService.CreateAsync<ShellWindow>();
 
+            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(this, "Dark.Red");
 
-
-
-
-
-
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			Log.Info("Calling base.OnStartup");
+            Log.Info("Calling base.OnStartup");
 
             base.OnStartup(e);
         }

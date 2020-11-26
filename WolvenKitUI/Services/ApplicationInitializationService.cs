@@ -2,12 +2,16 @@
 using Catel.IoC;
 using Catel.Logging;
 using Catel.MVVM;
+using MLib;
+using MLib.Interfaces;
 using Orchestra.Models;
 using Orchestra.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WolvenKit.App.Services;
+using WolvenKit.Common.Services;
 using InputGesture = Catel.Windows.Input.InputGesture;
 
 namespace WolvenKitUI.Services
@@ -47,6 +51,12 @@ namespace WolvenKitUI.Services
 
             commandManager.CreateCommandWithGesture(typeof(Commands.Application), nameof(Commands.Application.Exit));
             commandManager.CreateCommandWithGesture(typeof(Commands.Application), nameof(Commands.Application.About));
+            commandManager.CreateCommandWithGesture(typeof(Commands.Application), nameof(Commands.Application.Options));
+
+            commandManager.CreateCommandWithGesture(typeof(Commands.Application), nameof(Commands.Application.NewProject));
+            commandManager.CreateCommandWithGesture(typeof(Commands.Application), nameof(Commands.Application.OpenProject));
+
+
 
             var keyboardMappingsService = _serviceLocator.ResolveType<IKeyboardMappingsService>();
             keyboardMappingsService.AdditionalKeyboardMappings.Add(new KeyboardMapping("MyGroup.Zoom", "Mousewheel", ModifierKeys.Control));
@@ -72,7 +82,15 @@ namespace WolvenKitUI.Services
             var serviceLocator = _serviceLocator;
 
             serviceLocator.RegisterType<IAboutInfoService, AboutInfoService>();
+            serviceLocator.RegisterType<ILoggerService, LoggerService>();
 
+
+            serviceLocator.RegisterType<ISettingsManager, SettingsManager>();
+            
+
+
+            var appearanceinstance = AppearanceManager.GetInstance();
+            serviceLocator.RegisterInstance(typeof(IAppearanceManager), appearanceinstance);
             //throw new Exception("this is a test exception");
         }
     }

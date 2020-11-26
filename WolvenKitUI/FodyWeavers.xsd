@@ -10,32 +10,51 @@
           <xs:complexType>
             <xs:attribute name="WeaveProperties" type="xs:boolean">
               <xs:annotation>
-                <xs:documentation>Weave all regular properties on classes that inherit (directly or indirectly) from `Catel.Data.ModelBase` into Catel properties. The default value is <c>true</c>.</xs:documentation>
+                <xs:documentation>
+        Weave all regular properties on classes that inherit (directly or indirectly) from `Catel.Data.ModelBase` into Catel properties. The default value is <c>true</c>.
+      </xs:documentation>
               </xs:annotation>
             </xs:attribute>
             <xs:attribute name="WeaveExposedProperties" type="xs:boolean">
               <xs:annotation>
-                <xs:documentation>Weave all Catel properties decorated with both the `Catel.MVVM.ModelAttribute` and `Fody.ExposeAttribute` attributes as automatic mappings. The default value is <c>true</c>.</xs:documentation>
+                <xs:documentation>
+        Weave all Catel properties decorated with both the `Catel.MVVM.ModelAttribute` and `Fody.ExposeAttribute` attributes as automatic mappings. The default value is <c>true</c>.
+      </xs:documentation>
               </xs:annotation>
             </xs:attribute>
             <xs:attribute name="WeaveCalculatedProperties" type="xs:boolean">
               <xs:annotation>
-                <xs:documentation>Automatically raise change notifications for calculated properties (e.g. `FullName =&gt; FirstName + " " + LastName`). The default value is <c>true</c>.</xs:documentation>
+                <xs:documentation>
+        Automatically raise change notifications for calculated properties (e.g. `FullName =&gt; FirstName + " " + LastName`). The default value is <c>true</c>.
+      </xs:documentation>
               </xs:annotation>
             </xs:attribute>
             <xs:attribute name="WeaveArguments" type="xs:boolean">
               <xs:annotation>
-                <xs:documentation>Weave all Argument check attributes into actual argument checks. The default value is <c>true</c>.</xs:documentation>
+                <xs:documentation>
+        Weave all Argument check attributes into actual argument checks. The default value is <c>true</c>.
+      </xs:documentation>
               </xs:annotation>
             </xs:attribute>
             <xs:attribute name="WeaveLogging" type="xs:boolean">
               <xs:annotation>
-                <xs:documentation>Weave all calls to `LogManager.GetCurrentClassLogger()` into `LogManager.GetLogger(typeof(classname))`. The default value is <c>true</c>.</xs:documentation>
+                <xs:documentation>
+        Weave all calls to `LogManager.GetCurrentClassLogger()` into `LogManager.GetLogger(typeof(classname))`. The default value is <c>true</c>.
+      </xs:documentation>
               </xs:annotation>
             </xs:attribute>
             <xs:attribute name="GenerateXmlSchemas" type="xs:boolean">
               <xs:annotation>
-                <xs:documentation>Generate xml schemas for all classes that inherit (directly or indirectly) from `Catel.Data.ModelBase`. The default value is <c>false</c>.</xs:documentation>
+                <xs:documentation>
+        Generate xml schemas for all classes that inherit (directly or indirectly) from `Catel.Data.ModelBase`. The default value is <c>false</c>.
+      </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="GeneratedPropertyDataAccessibility" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>
+        The accessibility for generated property data. The default value is `Public`. Use either `Public`, `Internal` or `Private`.
+      </xs:documentation>
               </xs:annotation>
             </xs:attribute>
           </xs:complexType>

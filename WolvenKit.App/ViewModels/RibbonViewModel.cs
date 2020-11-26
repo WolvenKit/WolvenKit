@@ -1,56 +1,112 @@
 ﻿using Catel;
+using Catel.IoC;
 using Catel.MVVM;
 using Catel.Reflection;
 using Catel.Services;
+using MLib.Interfaces;
+using Orc.Theming;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using WolvenKit.App.Commands;
+using WolvenKit.App.Services;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.App.ViewModels
 {
     public class RibbonViewModel : ViewModel
     {
+        #region fields
+        private readonly ILoggerService _loggerService;
         private readonly INavigationService _navigationService;
         private readonly IUIVisualizerService _uiVisualizerService;
+        private readonly ISettingsManager _settingsManager;
+        private readonly IAppearanceManager _appearanceManager;
+        #endregion
 
-        public RibbonViewModel(INavigationService navigationService, IUIVisualizerService uiVisualizerService)
+        #region constructors
+        public RibbonViewModel(
+            ISettingsManager settingsManager,
+            IAppearanceManager appearanceManager,
+            ILoggerService loggerService, 
+            INavigationService navigationService, 
+            IUIVisualizerService uiVisualizerService
+            )
         {
+            Argument.IsNotNull(() => loggerService);
             Argument.IsNotNull(() => navigationService);
             Argument.IsNotNull(() => uiVisualizerService);
+            Argument.IsNotNull(() => settingsManager);
+            Argument.IsNotNull(() => appearanceManager);
 
+            _loggerService = loggerService;
             _navigationService = navigationService;
             _uiVisualizerService = uiVisualizerService;
+            _settingsManager = settingsManager;
+            _appearanceManager = appearanceManager;
+
+
 
             ShowKeyboardMappings = new TaskCommand(OnShowKeyboardMappingsExecuteAsync);
             Command1 = new RelayCommand(RunCommand1, CanRunCommand1);
 
+
             var assembly = AssemblyHelper.GetEntryAssembly();
             Title = assembly.Title();
+
+
+
+        }
+        #endregion
+
+        #region MyRegion
+        /// <summary>
+        /// Dependency Property on RibbonView
+        /// </summary>
+        public List<string> ListOfThemes => new List<string>(){ "Dark.Red", "Light.Blue"  };
+
+        private string _selectedTheme;
+        /// <summary>
+        /// Dependency Property on RibbonView
+        /// </summary>
+        public string SelectedTheme
+        {
+            get => _selectedTheme;
+            set
+            {
+                if (_selectedTheme != value)
+                {
+                    var oldValue = _selectedTheme;
+                    _selectedTheme = value;
+                    RaisePropertyChanged(() => SelectedTheme, oldValue, value);
+                }
+            }
         }
 
-        #region Commands
-        /// <summary>
-        /// Gets the ShowKeyboardMappings command.
-        /// </summary>
-        public TaskCommand ShowKeyboardMappings { get; private set; }
-        public ICommand Command1 { get; }
+        
 
-        /// <summary>
-        /// Method to invoke when the ShowKeyboardMappings command is executed.
-        /// </summary>
+
+        #endregion
+
+        #region Commands
+        public TaskCommand ShowKeyboardMappings { get; private set; }
+        
         private async Task OnShowKeyboardMappingsExecuteAsync()
         {
             
         }
 
+        public ICommand Command1 { get; }
         private bool CanRunCommand1() => true;
         private void RunCommand1()
         {
+            
         }
         #endregion
 

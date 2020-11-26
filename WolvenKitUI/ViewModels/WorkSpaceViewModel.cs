@@ -115,6 +115,22 @@
 		}
 		#endregion constructors
 
+		#region init
+		protected override async Task InitializeAsync()
+		{
+			await base.InitializeAsync();
+
+			// TODO: Write initialization code here and subscribe to events
+		}
+
+		protected override Task CloseAsync()
+		{
+			// TODO: Unsubscribe from events
+
+			return base.CloseAsync();
+		}
+		#endregion
+
 		/// <summary>
 		/// Event is raised when AvalonDock (or the user) selects a new document.
 		/// </summary>

@@ -114,6 +114,10 @@ namespace WolvenKit.App.ViewModels
 
         public MainViewModel()
         {
+
+
+
+
             Title = "WolvenKit";
 
             _openDocuments = new Dictionary<string, Old_IDocumentViewModel>();

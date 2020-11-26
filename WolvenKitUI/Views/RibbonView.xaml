@@ -14,9 +14,10 @@
         <ResourceDictionary>
 
 
-            <ResourceDictionary.MergedDictionaries>
+            <!--<ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+                --><!--<ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Dark.Red.xaml" />--><!--
+            </ResourceDictionary.MergedDictionaries>-->
 
             <svgc:SvgViewbox x:Key="IconMoveTo" Source="/Resources/Icons/MoveToSubmodule_16x.svg"/>
             <svgc:SvgViewbox x:Key="IconSelectObject" Source="/Resources/Icons/SelectObject_16x.svg"/>
@@ -55,17 +56,21 @@
                     <fluent:BackstageTabControl x:Name="backstageTabControl">
                         <fluent:Button Header="New" 
                                        Icon="{DynamicResource IconNewSolutionFolder}" 
-                                       Command="{catel:CommandManagerBinding Application.Exit}" />
+                                       Command="{catel:CommandManagerBinding Application.NewProject}" />
                         <fluent:Button Header="Open" 
                                        Icon="{DynamicResource IconOpenFolder}" 
-                                       Command="{catel:CommandManagerBinding Application.Exit}" />
+                                       Command="{catel:CommandManagerBinding Application.OpenProject}" />
 
                         <fluent:Button Header="Close" 
                                        Icon="{DynamicResource IconClose}" 
                                        Command="{catel:CommandManagerBinding Application.Exit}" />
+                        
                         <fluent:Button Header="Options" 
                                        Icon="{DynamicResource IconPreferences}"
-                                       Command="{catel:CommandManagerBinding Application.Exit}" />
+                                       Command="{catel:CommandManagerBinding Application.Options}" />
+                        <fluent:Button Header="About" 
+                                       Icon="{DynamicResource IconPreferences}"
+                                       Command="{catel:CommandManagerBinding Application.About}" />
                     </fluent:BackstageTabControl>
                 </fluent:Backstage>
             </fluent:Ribbon.Menu>
@@ -89,15 +94,17 @@
                     <fluent:Button Header="Open File"
                        Icon="{DynamicResource IconOpenFile}"
                        LargeIcon="{DynamicResource IconOpenFile}" 
-                       Command="{Binding Command1}"/>
+                       Command="{Binding OpenFileCommand}"/>
                     <fluent:Button Header="New File" 
                        Icon="{DynamicResource IconNewFile}"
                        LargeIcon="{DynamicResource IconNewFile}" 
-                       Command="{Binding Command1}"/>
+                       Command="{Binding NewFileCommand}"/>
                     <fluent:Button Header="Game Assets" 
                        Icon="{DynamicResource IconSearchFolder}"
                        LargeIcon="{DynamicResource IconSearchFolder}" 
-                       Command="{Binding Command1}"/>
+                       Command="{Binding AssetBrowserCommand}"/>
+                    
+                    
                 </fluent:RibbonGroupBox>
 
                 <!-- Project -->
@@ -109,7 +116,7 @@
                     <fluent:Button Header="Package Installer" 
                        Icon="{DynamicResource IconRunTest}"
                        LargeIcon="{DynamicResource IconRunTest}" 
-                       Command="{Binding DdsToCacheCommand}"
+                       Command="{Binding Command1}"
                        Size="Middle"/>
                     <fluent:Button Header="Backup Mod" 
                        Icon="{DynamicResource IconGit}"
@@ -122,6 +129,41 @@
                        Command="{Binding Command1}"
                        Size="Middle"/>
                 </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+
+            <!-- View Tab -->
+            <fluent:RibbonTabItem Header="View" >
+                <!-- File -->
+                <fluent:RibbonGroupBox Header="Themes">
+                    <fluent:ComboBox IsEditable="False"
+                                     InputWidth="120"
+                                     Header="Fonts"
+                                     SelectedItem="{Binding SelectedTheme, UpdateSourceTrigger=PropertyChanged}"
+                                     ItemsSource="{Binding ListOfThemes, Mode=OneWay}">
+                        <fluent:ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </fluent:ComboBox.ItemsPanel>
+                        <!--<fluent:ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"
+                                           FontFamily="{Binding}" />
+                            </DataTemplate>
+                        </fluent:ComboBox.ItemTemplate>-->
+                    </fluent:ComboBox>
+                    
+                    
+                </fluent:RibbonGroupBox>
+
+                <!-- Project -->
+                <fluent:RibbonGroupBox Header="Tools">
+                    <fluent:Button Header="Pack Mod"
+                       Icon="{DynamicResource IconRun}"
+                       LargeIcon="{DynamicResource IconRun}" 
+                       Command="{Binding Command1}"/>
+                    
+                </fluent:RibbonGroupBox>
 
                 
 
@@ -129,7 +171,7 @@
 
 
             <!--Contextual  Tab-->
-            <fluent:RibbonTabItem Header="Search" 
+            <fluent:RibbonTabItem Header="Context1" 
                               Group="{Binding Source={x:Reference contextTabGroup}}" 
                               Visibility="{Binding StrContextualRibbonVisible}"
                               ActiveTabBackground="AliceBlue"

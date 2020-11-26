@@ -12,7 +12,7 @@
 	public class BindingProxy : Freezable
 	{
 		public static readonly DependencyProperty DataProperty =
-			DependencyProperty.Register("Data", typeof(object), typeof(BindingProxy), new UIPropertyMetadata(null));
+			DependencyProperty.Register(nameof(Data), typeof(object), typeof(BindingProxy), new UIPropertyMetadata(null));
 
 		/// <summary>
 		/// Gets the data object this class is forwarding to everyone
