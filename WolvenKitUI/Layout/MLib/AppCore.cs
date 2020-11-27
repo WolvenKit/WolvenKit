@@ -1,4 +1,4 @@
-﻿namespace WolvenKitUI.Models
+﻿namespace WolvenKitUI.Layout.MLib
 {
 	using System;
 	using System.Diagnostics;

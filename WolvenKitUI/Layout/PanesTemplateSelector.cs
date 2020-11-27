@@ -1,8 +1,9 @@
-﻿namespace MLibTest.Demos
+﻿using AvalonDock.Layout;
+
+namespace WolvenKitUI.Layout
 {
 	using System.Windows.Controls;
 	using System.Windows;
-	using AvalonDock.Layout;
 	using WolvenKit.App.ViewModels;
 
 	/// <summary>
@@ -28,13 +29,8 @@
 		/// <summary>
 		/// Gets/sets the view instance of the file stats tool window.
 		/// </summary>
-		public DataTemplate FileStatsViewTemplate { get; set; }
+		public DataTemplate LogViewTemplate { get; set; }
 
-
-		/// <summary>
-		/// Gets a template for simple testing tool windows.
-		/// </summary>
-		public DataTemplate Tooln_ViewTemplate { get; set; }
 
 		/// <summary>
 		/// Determines the matching view for a specific given type of viewmodel.
@@ -50,10 +46,8 @@
             {
                 case IDocumentViewModel _:
                     return FileViewTemplate;
-                case FileStatsViewModel _:
-                    return FileStatsViewTemplate;
-                case Tool1_ViewModel _:
-                    return Tooln_ViewTemplate;
+                case LogViewModel _:
+                    return LogViewTemplate;
                 default:
                     return base.SelectTemplate(item, container);
             }

@@ -15,6 +15,7 @@ using System.Windows.Input;
 using Catel.MVVM;
 using WolvenKit.App.Commands;
 using Catel;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -34,14 +35,20 @@ namespace WolvenKit.App.ViewModels
         
 
 
-		private FileStatsViewModel _fileStats = null;
-		private Tool1_ViewModel _tool1 = null;
+		private LogViewModel _logViewModel = null;
+
+
+
 
 		private DocumentViewModel _activeDocument = null;
 
 		private int _newDocumentCounter = 0;
 
         private readonly IMessageService _messageService;
+        private readonly ILoggerService _loggerService;
+
+        
+            
 
         
             
@@ -56,11 +63,16 @@ namespace WolvenKit.App.ViewModels
 		/// <summary>
 		/// Class constructor
 		/// </summary>
-		public WorkSpaceViewModel(IMessageService messageService, ICommandManager commandManager)
+		public WorkSpaceViewModel(
+            ILoggerService loggerService,
+			IMessageService messageService, 
+            ICommandManager commandManager)
 		{
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => commandManager);
+            Argument.IsNotNull(() => loggerService);
 
+            _loggerService = loggerService;
 			_messageService = messageService;
 
             ShowLogCommand = new RelayCommand(ExecuteShowLog, CanShowLog);
@@ -102,17 +114,12 @@ namespace WolvenKit.App.ViewModels
 		#region commands
         public ICommand ShowLogCommand { get; private set; }
 		private bool CanShowLog() => true;
-        private void ExecuteShowLog()
-        {
-            Tool1.IsVisible = !Tool1.IsVisible;
-            // TODO: Handle command logic here
-        }
+        private void ExecuteShowLog() => Log.IsVisible = !Log.IsVisible;
 
         public ICommand ShowProjectExplorerCommand { get; private set; }
         private bool CanShowProjectExplorer() => true;
         private void ExecuteShowProjectExplorer()
         {
-            FileStats.IsVisible = !FileStats.IsVisible;
 			// TODO: Handle command logic here
 		}
 
@@ -122,9 +129,8 @@ namespace WolvenKit.App.ViewModels
         {
 			// TODO: Handle command logic here
 
-            
 
-        }
+		}
 
 
 		#endregion
@@ -164,7 +170,7 @@ namespace WolvenKit.App.ViewModels
 		/// <summary>
 		/// Gets an enumeration of all currently available tool window viewmodels.
 		/// </summary>
-		public IEnumerable<ToolViewModel> Tools => _tools ?? (_tools = new ToolViewModel[] {FileStats, Tool1});
+		public IEnumerable<ToolViewModel> Tools => _tools ?? (_tools = new ToolViewModel[] { Log });
 
         /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
 		public void CloseAllDocuments()
@@ -173,15 +179,20 @@ namespace WolvenKit.App.ViewModels
 			_files.Clear();
 		}
 
-		/// <summary>
-		/// Gets an instance of the file stats tool window viewmodels.
-		/// </summary>
-        public FileStatsViewModel FileStats => _fileStats ?? (_fileStats = new FileStatsViewModel(this as IWorkSpaceViewModel));
-
         /// <summary>
 		/// Gets an instance of the tool1 tool window viewmodel.
 		/// </summary>
-		public Tool1_ViewModel Tool1 => _tool1 ?? (_tool1 = new Tool1_ViewModel(this as IWorkSpaceViewModel));
+		public LogViewModel Log
+        {
+            get
+            {
+                if (_logViewModel == null)
+                {
+                    _logViewModel = new LogViewModel();
+                }
+                return _logViewModel;
+            }
+        }
 
         /// <summary>
 		/// Gets a open document command to open files from the file system.

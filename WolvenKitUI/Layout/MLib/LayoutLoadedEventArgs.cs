@@ -1,4 +1,4 @@
-namespace MLibTest.Models
+namespace WolvenKitUI.Layout.MLib
 {
 	using System;
 

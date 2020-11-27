@@ -13,12 +13,6 @@
     <UserControl.Resources>
         <ResourceDictionary>
 
-
-            <!--<ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
-                --><!--<ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Dark.Red.xaml" />--><!--
-            </ResourceDictionary.MergedDictionaries>-->
-
             <svgc:SvgViewbox x:Key="IconMoveTo" Source="/Resources/Icons/MoveToSubmodule_16x.svg"/>
             <svgc:SvgViewbox x:Key="IconSelectObject" Source="/Resources/Icons/SelectObject_16x.svg"/>
             <svgc:SvgViewbox x:Key="IconNewSolutionFolder" Source="/Resources/Icons/NewSolutionFolder_16x.svg"/>
@@ -168,11 +162,11 @@
                                    Icon="{DynamicResource IconLog}"
                                    LargeIcon="{DynamicResource IconLog}" 
                                    Command="{catel:CommandManagerBinding ShowLog}"/>
-                    <fluent:Button Header="View Log"
+                    <fluent:Button Header="View Project Explorer"
                                    Icon="{DynamicResource IconProjectExplorer}"
                                    LargeIcon="{DynamicResource IconProjectExplorer}" 
                                    Command="{catel:CommandManagerBinding ShowProjectExplorer}"/>
-                    <fluent:Button Header="View Log"
+                    <fluent:Button Header="View Import Utility"
                                    Icon="{DynamicResource IconImportUtility}"
                                    LargeIcon="{DynamicResource IconImportUtility}" 
                                    Command="{catel:CommandManagerBinding ShowImportUtility}"/>

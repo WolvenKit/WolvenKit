@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace WolvenKit.Common.Services
 {
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    public interface ILoggerService
+    public interface ILoggerService : INotifyPropertyChanged, INotifyPropertyChanging
     {
-       
+        event EventHandler<LogStringEventArgs> OnStringLogged;
 
         string Log { get; }
         ObservableCollection<InterpretedLogMessage> ErrorLog { get; }

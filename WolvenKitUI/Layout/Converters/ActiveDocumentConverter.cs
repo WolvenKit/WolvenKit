@@ -1,9 +1,9 @@
-﻿namespace MLibTest.Demos.Demos.Converters
-{
-	using System;
-	using System.Windows.Data;
-    using WolvenKit.App.ViewModels;
+﻿using System;
+using System.Windows.Data;
+using WolvenKit.App.ViewModels;
 
+namespace WolvenKitUI.Layout.Converters
+{
     public class ActiveDocumentConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

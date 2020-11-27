@@ -1,7 +1,8 @@
-﻿namespace MLibTest.Demos
+﻿using AvalonDock.Layout;
+
+namespace WolvenKitUI.Layout
 {
 	using System.Linq;
-	using AvalonDock.Layout;
 
 	class LayoutInitializer : ILayoutUpdateStrategy
 	{

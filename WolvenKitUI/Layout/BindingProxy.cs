@@ -1,4 +1,4 @@
-﻿namespace MLibTest.Demos
+﻿namespace WolvenKitUI.Layout
 {
 	using System.Windows;
 

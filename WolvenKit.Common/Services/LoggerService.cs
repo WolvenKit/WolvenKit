@@ -40,6 +40,7 @@ namespace WolvenKit.Common.Services
 
         #region Properties
         public ObservableCollection<InterpretedLogMessage> ErrorLog { get; set; }
+
         #region Log
         private string _log;
         public string Log
@@ -90,9 +91,12 @@ namespace WolvenKit.Common.Services
         /// <param name="value"></param>
         public void LogString(string value, Logtype type = Logtype.Normal)
         {
+            var datestring = DateTime.Now.ToString("G");
+            var text = $"[{datestring}] {value}\r";
+
             Logtype = type;
-            Log = value;// + "\r\n";
-            OnStringLogged?.Invoke(this, new LogStringEventArgs(value, type));
+            Log = text;// + "\r\n";
+            OnStringLogged?.Invoke(this, new LogStringEventArgs(text, type));
         }
         /// <summary>
         /// Log progress value

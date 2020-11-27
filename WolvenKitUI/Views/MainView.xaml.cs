@@ -7,9 +7,9 @@ using System.Windows;
 using System.Windows.Input;
 using AvalonDock.Layout.Serialization;
 using Catel.Data;
-using MLibTest.Models;
 using WolvenKit.App.Commands;
 using WolvenKit.App.ViewModels;
+using WolvenKitUI.Layout.MLib;
 
 namespace WolvenKitUI.Views
 {
@@ -101,9 +101,9 @@ namespace WolvenKitUI.Views
                     {
                         var stringLayoutSerializer = new XmlLayoutSerializer(dockManager);
                         using (var reader = new StringReader(result.XmlContent))
-						{
-							stringLayoutSerializer.Deserialize(reader);
-						}
+                        {
+                            stringLayoutSerializer.Deserialize(reader);
+                        }
                     }
 				}
 				catch (System.Exception exception)
@@ -143,9 +143,9 @@ namespace WolvenKitUI.Views
 
         private void OnSaveLayout(object parameter = null)
 		{
-			var layoutSerializer = new XmlLayoutSerializer(dockManager);
-			layoutSerializer.Serialize(@".\Resources\AvalonDock.Layout.config");
-		}
+            var layoutSerializer = new XmlLayoutSerializer(dockManager);
+            layoutSerializer.Serialize(@".\Resources\AvalonDock.Layout.config");
+        }
 
 		#endregion
         #endregion methods
