@@ -4,6 +4,7 @@ using Catel.Services;
 using Orchestra;
 using Orchestra.Services;
 using System.Threading.Tasks;
+using WolvenKit.App;
 
 namespace WolvenKitUI
 {
@@ -12,7 +13,7 @@ namespace WolvenKitUI
         private readonly INavigationService _navigationService;
 
         public ApplicationOptionsCommandContainer(ICommandManager commandManager, INavigationService navigationService)
-            : base(Commands.Application.Options, commandManager)
+            : base(AppCommands.Application.Options, commandManager)
         {
             Argument.IsNotNull(() => navigationService);
 

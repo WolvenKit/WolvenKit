@@ -10,6 +10,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WolvenKit.App;
 using WolvenKit.App.Services;
 using WolvenKit.Common.Services;
 using InputGesture = Catel.Windows.Input.InputGesture;
@@ -49,12 +50,18 @@ namespace WolvenKitUI.Services
         {
             var commandManager = ServiceLocator.Default.ResolveType<ICommandManager>();
 
-            commandManager.CreateCommandWithGesture(typeof(Commands.Application), nameof(Commands.Application.Exit));
-            commandManager.CreateCommandWithGesture(typeof(Commands.Application), nameof(Commands.Application.About));
-            commandManager.CreateCommandWithGesture(typeof(Commands.Application), nameof(Commands.Application.Options));
+            // global commands
+            commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.Exit));
+            commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.About));
+            commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.Options));
 
-            commandManager.CreateCommandWithGesture(typeof(Commands.Application), nameof(Commands.Application.NewProject));
-            commandManager.CreateCommandWithGesture(typeof(Commands.Application), nameof(Commands.Application.OpenProject));
+            commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.NewProject));
+            commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.OpenProject));
+
+            // application-wide commands that viewmodels can subscribe to
+            commandManager.CreateCommand(nameof(AppCommands.Application.ShowLog));
+            commandManager.CreateCommand(nameof(AppCommands.Application.ShowProjectExplorer));
+            commandManager.CreateCommand(nameof(AppCommands.Application.ShowImportUtility));
 
 
 
@@ -87,11 +94,6 @@ namespace WolvenKitUI.Services
 
             serviceLocator.RegisterType<ISettingsManager, SettingsManager>();
             
-
-
-            var appearanceinstance = AppearanceManager.GetInstance();
-            serviceLocator.RegisterInstance(typeof(IAppearanceManager), appearanceinstance);
-            //throw new Exception("this is a test exception");
         }
     }
 }

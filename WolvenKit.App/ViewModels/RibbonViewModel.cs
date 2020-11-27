@@ -27,13 +27,11 @@ namespace WolvenKit.App.ViewModels
         private readonly INavigationService _navigationService;
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly ISettingsManager _settingsManager;
-        private readonly IAppearanceManager _appearanceManager;
         #endregion
 
         #region constructors
         public RibbonViewModel(
             ISettingsManager settingsManager,
-            IAppearanceManager appearanceManager,
             ILoggerService loggerService, 
             INavigationService navigationService, 
             IUIVisualizerService uiVisualizerService
@@ -43,13 +41,11 @@ namespace WolvenKit.App.ViewModels
             Argument.IsNotNull(() => navigationService);
             Argument.IsNotNull(() => uiVisualizerService);
             Argument.IsNotNull(() => settingsManager);
-            Argument.IsNotNull(() => appearanceManager);
 
             _loggerService = loggerService;
             _navigationService = navigationService;
             _uiVisualizerService = uiVisualizerService;
             _settingsManager = settingsManager;
-            _appearanceManager = appearanceManager;
 
 
 

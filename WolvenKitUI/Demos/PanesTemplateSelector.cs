@@ -3,15 +3,15 @@
 	using System.Windows.Controls;
 	using System.Windows;
 	using AvalonDock.Layout;
-    using WolvenKit.App.ViewModels;
+	using WolvenKit.App.ViewModels;
 
-    /// <summary>
-    /// Implements a <see ref="DataTemplateSelector"/> for AvalonDock's documents and toolwindows.
-    ///
-    /// One instance of this class is usually initialized in XAML and it returns
-    /// a view for a specific given type of viewmodel.
-    /// </summary>
-    internal class PanesTemplateSelector : DataTemplateSelector
+	/// <summary>
+	/// Implements a <see ref="DataTemplateSelector"/> for AvalonDock's documents and toolwindows.
+	///
+	/// One instance of this class is usually initialized in XAML and it returns
+	/// a view for a specific given type of viewmodel.
+	/// </summary>
+	internal class PanesTemplateSelector : DataTemplateSelector
 	{
 		/// <summary>
 		/// Default class constructor.
@@ -30,10 +30,6 @@
 		/// </summary>
 		public DataTemplate FileStatsViewTemplate { get; set; }
 
-		/// <summary>
-		/// Gets/sets the view instance of the file stats tool window.
-		/// </summary>
-		public DataTemplate ColorPickerViewTemplate { get; set; }
 
 		/// <summary>
 		/// Gets a template for simple testing tool windows.
@@ -50,16 +46,17 @@
 		{
 			var itemAsLayoutContent = item as LayoutContent;
 
-			if (item is IDocumentViewModel)
-				return FileViewTemplate;
-
-			if (item is FileStatsViewModel)
-				return FileStatsViewTemplate;
-
-			if (item is Tool1_ViewModel)
-				return Tooln_ViewTemplate;
-
-			return base.SelectTemplate(item, container);
-		}
+			switch (item)
+            {
+                case IDocumentViewModel _:
+                    return FileViewTemplate;
+                case FileStatsViewModel _:
+                    return FileStatsViewTemplate;
+                case Tool1_ViewModel _:
+                    return Tooln_ViewTemplate;
+                default:
+                    return base.SelectTemplate(item, container);
+            }
+        }
 	}
 }

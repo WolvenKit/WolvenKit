@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
   <PropertyGroup>
-    <TargetFrameworks>net48;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net48</TargetFrameworks>
     <AssemblyName>WolvenKitUI</AssemblyName>
     <RootNamespace>WolvenKitUI</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -191,7 +191,9 @@
   </Choose>
   <ItemGroup>
     <None Remove="Resources\Icons\Close_16x.svg" />
+    <None Remove="Resources\Icons\EventLog_16x.svg" />
     <None Remove="Resources\Icons\ImportFile_16x.svg" />
+    <None Remove="Resources\Icons\ImportTheme_16x.svg" />
     <None Remove="Resources\Icons\MoveToSubmodule_16x.svg" />
     <None Remove="Resources\Icons\NewFile_16x.svg" />
     <None Remove="Resources\Icons\NewSolutionFolder_16x.svg" />
@@ -202,6 +204,7 @@
     <None Remove="Resources\Icons\SearchFolderClosed_16x.svg" />
     <None Remove="Resources\Icons\SelectObject_16x.svg" />
     <None Remove="Resources\Icons\Settings_16x.svg" />
+    <None Remove="Resources\Icons\SQLServerObjectExplorer_16x.svg" />
     <None Remove="Resources\Images\git.png" />
     <None Remove="Resources\Images\New_Project_dark_64x.png" />
     <None Remove="Resources\Images\New_Project_light_64x.png" />
@@ -210,8 +213,13 @@
     <None Remove="Resources\Images\Preferences_light_64x.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\AvalonDock.Layout.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Resources\Icons\Close_16x.svg" />
+    <Resource Include="Resources\Icons\EventLog_16x.svg" />
     <Resource Include="Resources\Icons\ImportFile_16x.svg" />
+    <Resource Include="Resources\Icons\ImportTheme_16x.svg" />
     <Resource Include="Resources\Icons\NewFile_16x.svg" />
     <Resource Include="Resources\Icons\NewSolutionFolder_16x.svg" />
     <Resource Include="Resources\Icons\OpenFile_16x.svg" />
@@ -228,5 +236,9 @@
     <Resource Include="Resources\Icons\SearchFolderClosed_16x.svg" />
     <Resource Include="Resources\Icons\SelectObject_16x.svg" />
     <Resource Include="Resources\Icons\Settings_16x.svg" />
+    <Resource Include="Resources\Icons\SQLServerObjectExplorer_16x.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
   </ItemGroup>
 </Project>

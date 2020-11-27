@@ -7,7 +7,6 @@ using Orchestra.Views;
 using System.Windows;
 using WolvenKitUI.Views;
 using Catel.MVVM;
-using WolvenKitUI.ViewModels;
 using MLibTest.Models;
 using System;
 using System.Diagnostics;
@@ -41,15 +40,11 @@ namespace WolvenKitUI
         /// </summary>
         public App()
         {
-            LayoutLoaded = new LayoutLoader(@".\AvalonDock.Layout.config");
+            
         }
         #endregion constructors
 
-        /// <summary>
-		/// Gets an object that loads the AvalonDock Xml layout string
-		/// in an aysnchronous background task.
-		/// </summary>
-		internal LayoutLoader LayoutLoaded { get; set; }
+        
 
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
@@ -61,14 +56,17 @@ namespace WolvenKitUI
 
             Log.Info("Starting application");
 
-            
+            var serviceLocator = ServiceLocator.Default;
+            //var workspaceinstance = new WorkSpaceViewModel();
+            //serviceLocator.RegisterInstance(typeof(WorkSpaceViewModel), workspaceinstance);
 
             // Register Viewmodels
             var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
+            
             viewModelLocator.NamingConventions.Add("WolvenKit.App.ViewModels.[VW]ViewModel");
 
-            viewModelLocator.Register(typeof(MainView), typeof(WolvenKitUI.ViewModels.WorkSpaceViewModel));
-            viewModelLocator.Register(typeof(RibbonView), typeof(RibbonViewModel));
+            viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
+            //viewModelLocator.Register(typeof(RibbonView), typeof(RibbonViewModel));
 
 
             
@@ -76,19 +74,21 @@ namespace WolvenKitUI
 
 
 
-            var serviceLocator = ServiceLocator.Default;
+            
             var shellService = serviceLocator.ResolveType<IShellService>();
             shellService.CreateAsync<ShellWindow>();
 
-            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(this, "Dark.Red");
+            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark.Red");
 
             Log.Info("Calling base.OnStartup");
 
             base.OnStartup(e);
         }
 
-		
 
-		
-	}
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+        }
+    }
 }

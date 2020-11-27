@@ -34,6 +34,13 @@
             <svgc:SvgViewbox x:Key="IconRunTest" Source="/Resources/Icons/RunTest_16x.svg"/>
             <svgc:SvgViewbox x:Key="IconSettings" Source="/Resources/Icons/Settings_16x.svg"/>
 
+
+            <svgc:SvgViewbox x:Key="IconLog" Source="/Resources/Icons/EventLog_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconProjectExplorer" Source="/Resources/Icons/SQLServerObjectExplorer_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconImportUtility" Source="/Resources/Icons/ImportTheme_16x.svg"/>
+
+
+
             <BitmapImage x:Key="IconGit" 
                          UriSource="/WolvenKitUI;component/Resources/Images/git.png" />
             <BitmapImage x:Key="IconPreferences" 
@@ -133,7 +140,7 @@
 
             <!-- View Tab -->
             <fluent:RibbonTabItem Header="View" >
-                <!-- File -->
+                <!-- Themes -->
                 <fluent:RibbonGroupBox Header="Themes">
                     <fluent:ComboBox IsEditable="False"
                                      InputWidth="120"
@@ -145,24 +152,30 @@
                                 <VirtualizingStackPanel />
                             </ItemsPanelTemplate>
                         </fluent:ComboBox.ItemsPanel>
-                        <!--<fluent:ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}"
-                                           FontFamily="{Binding}" />
-                            </DataTemplate>
-                        </fluent:ComboBox.ItemTemplate>-->
                     </fluent:ComboBox>
-                    
+                    <fluent:Button Header="Save Layout"
+                                   Icon="{DynamicResource IconMoveTo}"
+                                   LargeIcon="{DynamicResource IconMoveTo}" 
+                                   Command="{catel:CommandManagerBinding ShowImportUtility}"
+                                   Size="Small"/>
                     
                 </fluent:RibbonGroupBox>
 
+
                 <!-- Project -->
                 <fluent:RibbonGroupBox Header="Tools">
-                    <fluent:Button Header="Pack Mod"
-                       Icon="{DynamicResource IconRun}"
-                       LargeIcon="{DynamicResource IconRun}" 
-                       Command="{Binding Command1}"/>
-                    
+                    <fluent:Button Header="View Log"
+                                   Icon="{DynamicResource IconLog}"
+                                   LargeIcon="{DynamicResource IconLog}" 
+                                   Command="{catel:CommandManagerBinding ShowLog}"/>
+                    <fluent:Button Header="View Log"
+                                   Icon="{DynamicResource IconProjectExplorer}"
+                                   LargeIcon="{DynamicResource IconProjectExplorer}" 
+                                   Command="{catel:CommandManagerBinding ShowProjectExplorer}"/>
+                    <fluent:Button Header="View Log"
+                                   Icon="{DynamicResource IconImportUtility}"
+                                   LargeIcon="{DynamicResource IconImportUtility}" 
+                                   Command="{catel:CommandManagerBinding ShowImportUtility}"/>
                 </fluent:RibbonGroupBox>
 
                 

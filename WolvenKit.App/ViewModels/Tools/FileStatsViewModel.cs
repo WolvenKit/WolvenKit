@@ -40,11 +40,11 @@
 			_workSpaceViewModel.ActiveDocumentChanged += new EventHandler(OnActiveDocumentChanged);
 			ContentId = ToolContentId;
 
-			BitmapImage bi = new BitmapImage();
-			bi.BeginInit();
-			bi.UriSource = new Uri("pack://application:,,/Demos/Images/property-blue.png");
-			bi.EndInit();
-			IconSource = bi;
+			//BitmapImage bi = new BitmapImage();
+			//bi.BeginInit();
+			//bi.UriSource = new Uri("pack://application:,,,/WolvenKitUI;component/Resources/Images/git.png");
+			//bi.EndInit();
+			//IconSource = bi;
 		}
 
 		/// <summary>

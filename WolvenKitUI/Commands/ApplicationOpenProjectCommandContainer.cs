@@ -5,6 +5,7 @@ using Catel.Services;
 using Orchestra;
 using Orchestra.Services;
 using System.Threading.Tasks;
+using WolvenKit.App;
 
 namespace WolvenKitUI
 {
@@ -16,7 +17,7 @@ namespace WolvenKitUI
         public ApplicationOpenProjectCommandContainer(ICommandManager commandManager
             , INavigationService navigationService
             , IOpenFileService openFileService)
-            : base(Commands.Application.OpenProject, commandManager)
+            : base(AppCommands.Application.OpenProject, commandManager)
         {
             Argument.IsNotNull(() => navigationService);
             Argument.IsNotNull(() => openFileService);

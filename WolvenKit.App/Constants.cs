@@ -1,9 +1,9 @@
 ﻿using System.Windows.Input;
 using InputGesture = Catel.Windows.Input.InputGesture;
 
-namespace WolvenKitUI
+namespace WolvenKit.App
 {
-    public static class Commands
+    public static class AppCommands
     {
         public static class Application
         {
@@ -24,6 +24,11 @@ namespace WolvenKitUI
 
             //public const string SaveAll = "Application.SaveAll";
             //public static readonly InputGesture SaveAllInputGesture = new InputGesture(Key.S, ModifierKeys.Control);
+
+
+            public const string ShowLog = "Application.ShowLog";
+            public const string ShowProjectExplorer = "Application.ShowProjectExplorer";
+            public const string ShowImportUtility = "Application.ShowImportUtility";
         }
     }
 

@@ -5,14 +5,16 @@
 	using System.Windows;
 	using System.Windows.Data;
 
-	/// <summary>
-	/// Source: http://stackoverflow.com/questions/534575/how-do-i-invert-booleantovisibilityconverter
-	/// 
-	/// Implements a Boolean to Visibility converter
-	/// Use ConverterParameter=true to negate the visibility - boolean interpretation.
-	/// </summary>
-	[ValueConversion(typeof(Visibility), typeof(bool))]
-	public sealed class BoolToVisibilityConverter : IValueConverter
+    /// <summary>
+    /// Source: http://stackoverflow.com/questions/534575/how-do-i-invert-booleantovisibilityconverter
+    /// 
+    /// Implements a Boolean to Visibility converter
+    /// Use ConverterParameter=true to negate the visibility - boolean interpretation.
+    /// </summary>
+#pragma warning disable WPF0072 // ValueConversion must use correct types.
+    [ValueConversion(typeof(bool), typeof(Visibility))]
+#pragma warning restore WPF0072 // ValueConversion must use correct types.
+    public sealed class BoolToVisibilityConverter : IValueConverter
 	{
 		/// <summary>
 		/// Converts a <seealso cref="Boolean"/> value

@@ -20,13 +20,15 @@
 
 		public override System.Windows.Style SelectStyle(object item, System.Windows.DependencyObject container)
 		{
-			if (item is ToolViewModel)
-				return ToolStyle;
-
-			if (item is DocumentViewModel)
-				return FileStyle;
-
-			return base.SelectStyle(item, container);
-		}
+			switch (item)
+            {
+                case ToolViewModel _:
+                    return ToolStyle;
+                case DocumentViewModel _:
+                    return FileStyle;
+                default:
+                    return base.SelectStyle(item, container);
+            }
+        }
 	}
 }

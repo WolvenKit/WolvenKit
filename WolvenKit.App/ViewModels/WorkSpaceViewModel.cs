@@ -1,95 +1,27 @@
-﻿namespace WolvenKitUI.ViewModels
+﻿//
+// https://github.com/Dirkster99/AvalonDock/blob/5032524bae6e342dbb648a4c1d3fc3264f449db9/source/MLibTest/MLibTest/Demos/ViewModels/WorkSpaceViewModel.cs
+// 
+
+using Catel.Services;
+using WolvenKit.App.ViewModels;
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using Catel.MVVM;
+using WolvenKit.App.Commands;
+using Catel;
+
+namespace WolvenKit.App.ViewModels
 {
-	using WolvenKit.App.ViewModels;
-	using Microsoft.Win32;
-	using MWindowInterfacesLib.MsgBox.Enums;
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.Linq;
-    using System.Threading.Tasks;
-    using System.Windows;
-	using System.Windows.Input;
-    using Catel.MVVM;
-    using WolvenKit.App.Commands;
-
-    #region Helper Test Classes
     /// <summary>
-    /// This class is uses to create a type safe list
-    /// of enumeration members for selection in combobox.
-    /// </summary>
-    public class MessageImageCollection
-	{
-		public string Name { get; set; }
-		public MsgBoxImage EnumKey { get; set; }
-	}
-
-	/// <summary>
-	/// Test class to enumerate over message box buttons enumeration.
-	/// </summary>
-	public class MessageButtonCollection
-	{
-		public string Name { get; set; }
-		public MsgBoxButtons EnumKey { get; set; }
-	}
-
-	/// <summary>
-	/// Test class to enumerate over message box result enumeration.
-	/// The <seealso cref="MsgBoxResult"/> enumeration is used to define
-	/// a default button (if any).
-	/// </summary>
-	public class MessageResultCollection
-	{
-		public string Name { get; set; }
-		public MsgBoxResult EnumKey { get; set; }
-	}
-
-	/// <summary>
-	/// Test class to enumerate over languages (and their locale) that
-	/// are supported with specific (non-English) button and tool tip strings.
-	/// 
-	/// The class definition is based on BCP 47 which in turn is used to
-	/// set the UI and thread culture (which in turn selects the correct string resource in MsgBox assembly).
-	/// </summary>
-	public class LanguageCollection
-	{
-		public string Language { get; set; }
-		public string Locale { get; set; }
-		public string Name { get; set; }
-
-		/// <summary>
-		/// Get BCP47 language tag for this language
-		/// See also http://en.wikipedia.org/wiki/IETF_language_tag
-		/// </summary>
-		public string BCP47
-		{
-			get
-			{
-				if (string.IsNullOrEmpty(this.Locale) == false)
-					return String.Format("{0}-{1}", this.Language, this.Locale);
-				else
-					return String.Format("{0}", this.Language);
-			}
-		}
-
-		/// <summary>
-		/// Get BCP47 language tag for this language
-		/// See also http://en.wikipedia.org/wiki/IETF_language_tag
-		/// </summary>
-		public string DisplayName
-		{
-			get
-			{
-				return String.Format("{0} {1}", this.Name, this.BCP47);
-			}
-		}
-	}
-	#endregion Helper Test Classes
-
-	/// <summary>
 	/// The WorkSpaceViewModel implements AvalonDock demo specific properties, events and methods.
 	/// </summary>
-	internal class WorkSpaceViewModel : ViewModelBase, IWorkSpaceViewModel
+	public class WorkSpaceViewModel : ViewModelBase, IWorkSpaceViewModel
 	{
 		#region fields
 		private readonly ObservableCollection<DocumentViewModel> _files = new ObservableCollection<DocumentViewModel>();
@@ -97,21 +29,49 @@
 
 		private ICommand _openCommand = null;
 		private ICommand _newCommand = null;
+        
+
+        
+
 
 		private FileStatsViewModel _fileStats = null;
-		private Tool1_ViewModel _Tool1;
+		private Tool1_ViewModel _tool1 = null;
 
 		private DocumentViewModel _activeDocument = null;
 
 		private int _newDocumentCounter = 0;
+
+        private readonly IMessageService _messageService;
+
+        
+            
+
+        
+            
+
+
 		#endregion fields
 
 		#region constructors
 		/// <summary>
 		/// Class constructor
 		/// </summary>
-		public WorkSpaceViewModel()
+		public WorkSpaceViewModel(IMessageService messageService, ICommandManager commandManager)
 		{
+            Argument.IsNotNull(() => messageService);
+            Argument.IsNotNull(() => commandManager);
+
+			_messageService = messageService;
+
+            ShowLogCommand = new RelayCommand(ExecuteShowLog, CanShowLog);
+            ShowProjectExplorerCommand = new RelayCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer);
+            ShowImportUtilityCommand = new RelayCommand(ExecuteShowImportUtility, CanShowImportUtility);
+
+			// register as application-wide commands
+            commandManager.RegisterCommand(nameof(AppCommands.Application.ShowLog), ShowLogCommand, this);
+            commandManager.RegisterCommand(nameof(AppCommands.Application.ShowProjectExplorer), ShowProjectExplorerCommand, this);
+			commandManager.RegisterCommand(nameof(AppCommands.Application.ShowImportUtility), ShowImportUtilityCommand, this);
+
 		}
 		#endregion constructors
 
@@ -123,13 +83,52 @@
 			// TODO: Write initialization code here and subscribe to events
 		}
 
-		protected override Task CloseAsync()
+        protected override Task OnClosingAsync()
+        {
+            RaisePropertyChanged(nameof(SaveLayout));
+
+			return base.OnClosingAsync();
+        }
+
+        protected override Task CloseAsync()
 		{
 			// TODO: Unsubscribe from events
+            
 
 			return base.CloseAsync();
 		}
 		#endregion
+
+		#region commands
+        public ICommand ShowLogCommand { get; private set; }
+		private bool CanShowLog() => true;
+        private void ExecuteShowLog()
+        {
+            Tool1.IsVisible = !Tool1.IsVisible;
+            // TODO: Handle command logic here
+        }
+
+        public ICommand ShowProjectExplorerCommand { get; private set; }
+        private bool CanShowProjectExplorer() => true;
+        private void ExecuteShowProjectExplorer()
+        {
+            FileStats.IsVisible = !FileStats.IsVisible;
+			// TODO: Handle command logic here
+		}
+
+        public ICommand ShowImportUtilityCommand { get; private set; }
+        private bool CanShowImportUtility() => true;
+        private void ExecuteShowImportUtility()
+        {
+			// TODO: Handle command logic here
+
+            
+
+        }
+
+
+		#endregion
+
 
 		/// <summary>
 		/// Event is raised when AvalonDock (or the user) selects a new document.
@@ -137,10 +136,12 @@
 		public event EventHandler ActiveDocumentChanged;
 
 		#region Properties
+		public bool SaveLayout { get; set; }
+
 		/// <summary>
 		/// Gets/Sets the currently active document.
 		/// </summary>
-		public WolvenKit.App.ViewModels.DocumentViewModel ActiveDocument
+		public DocumentViewModel ActiveDocument
 		{
 			get => _activeDocument;
 			set             // This can also be set by the user via the view
@@ -158,29 +159,14 @@
 		/// <summary>
 		/// Gets a collection of all currently available document viewmodels
 		/// </summary>
-		public IEnumerable<DocumentViewModel> Files
-		{
-			get
-			{
-				return _files;
-			}
-		}
+		public IEnumerable<DocumentViewModel> Files => _files;
 
 		/// <summary>
 		/// Gets an enumeration of all currently available tool window viewmodels.
 		/// </summary>
-		public IEnumerable<ToolViewModel> Tools
-		{
-			get
-			{
-				if (_tools == null)
-					_tools = new ToolViewModel[] { FileStats, _Tool1 };
+		public IEnumerable<ToolViewModel> Tools => _tools ?? (_tools = new ToolViewModel[] {FileStats, Tool1});
 
-				return _tools;
-			}
-		}
-
-		/// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
+        /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
 		public void CloseAllDocuments()
 		{
 			ActiveDocument = null;
@@ -190,63 +176,27 @@
 		/// <summary>
 		/// Gets an instance of the file stats tool window viewmodels.
 		/// </summary>
-		public FileStatsViewModel FileStats
-		{
-			get
-			{
-				if (_fileStats == null)
-					_fileStats = new FileStatsViewModel(this as IWorkSpaceViewModel);
+        public FileStatsViewModel FileStats => _fileStats ?? (_fileStats = new FileStatsViewModel(this as IWorkSpaceViewModel));
 
-				return _fileStats;
-			}
-		}
-
-		/// <summary>
+        /// <summary>
 		/// Gets an instance of the tool1 tool window viewmodel.
 		/// </summary>
-		public Tool1_ViewModel Tool1
-		{
-			get
-			{
-				if (_Tool1 == null)
-					_Tool1 = new Tool1_ViewModel(this as IWorkSpaceViewModel);
+		public Tool1_ViewModel Tool1 => _tool1 ?? (_tool1 = new Tool1_ViewModel(this as IWorkSpaceViewModel));
 
-				return _Tool1;
-			}
-		}
-
-		/// <summary>
+        /// <summary>
 		/// Gets a open document command to open files from the file system.
 		/// </summary>
-		public ICommand OpenCommand
-		{
-			get
-			{
-				if (_openCommand == null)
-				{
-					_openCommand = new DelegateCommand<object>(async (p) => await OnOpenAsync(p), (p) => CanOpen(p));
-				}
+		public ICommand OpenCommand =>
+            _openCommand ?? (_openCommand =
+                new DelegateCommand<object>(async (p) => await OnOpenAsync(p), (p) => CanOpen(p)));
 
-				return _openCommand;
-			}
-		}
+        /// <summary>
+        /// Gets a new document command to create new documents from scratch.
+        /// </summary>
+        public ICommand NewCommand =>
+            _newCommand ?? (_newCommand = new DelegateCommand<object>((p) => OnNew(p), (p) => CanNew(p)));
 
-		/// <summary>
-		/// Gets a new document command to create new documents from scratch.
-		/// </summary>
-		public ICommand NewCommand
-		{
-			get
-			{
-				if (_newCommand == null)
-				{
-					_newCommand = new DelegateCommand<object>((p) => OnNew(p), (p) => CanNew(p));
-				}
-
-				return _newCommand;
-			}
-		}
-		#endregion Properties
+        #endregion Properties
 
 		#region methods
 		/// <summary>

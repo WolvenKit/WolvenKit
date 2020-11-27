@@ -3,6 +3,7 @@ using Catel.MVVM;
 using Catel.Services;
 using Orchestra;
 using System.Threading.Tasks;
+using WolvenKit.App;
 
 namespace WolvenKitUI
 {
@@ -11,7 +12,7 @@ namespace WolvenKitUI
         private readonly INavigationService _navigationService;
 
         public ApplicationExitCommandContainer(ICommandManager commandManager, INavigationService navigationService)
-            : base(Commands.Application.Exit, commandManager)
+            : base(AppCommands.Application.Exit, commandManager)
         {
             Argument.IsNotNull(() => navigationService);
 
