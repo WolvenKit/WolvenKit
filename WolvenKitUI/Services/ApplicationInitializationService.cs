@@ -2,8 +2,6 @@
 using Catel.IoC;
 using Catel.Logging;
 using Catel.MVVM;
-using MLib;
-using MLib.Interfaces;
 using Orchestra.Models;
 using Orchestra.Services;
 using System;
@@ -111,7 +109,8 @@ namespace WolvenKitUI.Services
 
         private void RegisterTypes()
         {
-            
+
+
 
             // project management
             _serviceLocator.RegisterType<IProjectSerializerSelector, ProjectSerializerSelector>();  //TODO: not needed?

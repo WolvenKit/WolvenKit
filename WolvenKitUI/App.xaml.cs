@@ -12,9 +12,6 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
-using MWindowInterfacesLib.Interfaces;
-using MLib.Interfaces;
-using MLib;
 using WolvenKit.App.ViewModels;
 
 namespace WolvenKitUI

@@ -4,6 +4,7 @@ using Catel.IoC;
 using Catel.Threading;
 using Orc.ProjectManagement;
 using Orc.FileSystem;
+using WolvenKit.App.Model;
 
 namespace WolvenKitUI.Model
 {

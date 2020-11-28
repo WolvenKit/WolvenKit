@@ -12,7 +12,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Orc.ProjectManagement;
 
-namespace WolvenKitUI.Model
+namespace WolvenKit.App.Model
 {
     public class Project : ProjectBase, IEquatable<Project>
     {

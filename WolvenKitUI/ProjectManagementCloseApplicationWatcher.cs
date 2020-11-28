@@ -10,6 +10,7 @@ using Catel;
 using Catel.Services;
 using Orc.ProjectManagement;
 using Orchestra;
+using WolvenKit.App.Model;
 using WolvenKitUI.Services;
 using WolvenKitUI.Model;
 

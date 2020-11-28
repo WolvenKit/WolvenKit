@@ -5,6 +5,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using WolvenKit.App.Model;
+
 namespace WolvenKitUI.Model
 {
     using System.Threading.Tasks;

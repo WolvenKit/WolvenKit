@@ -15,6 +15,9 @@ using System.Windows.Input;
 using Catel.MVVM;
 using WolvenKit.App.Commands;
 using Catel;
+using Catel.IoC;
+using Orc.ProjectManagement;
+using WolvenKit.App.Model;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.App.ViewModels
@@ -47,15 +50,8 @@ namespace WolvenKit.App.ViewModels
 
         private readonly IMessageService _messageService;
         private readonly ILoggerService _loggerService;
+        private readonly IProjectManager _projectManager;
 
-        
-            
-
-        
-            
-
-        
-            
 
 
 		#endregion fields
@@ -65,15 +61,18 @@ namespace WolvenKit.App.ViewModels
 		/// Class constructor
 		/// </summary>
 		public WorkSpaceViewModel(
-            ILoggerService loggerService,
+            IProjectManager projectManager,
+			ILoggerService loggerService,
 			IMessageService messageService, 
             ICommandManager commandManager)
 		{
-            Argument.IsNotNull(() => messageService);
+            Argument.IsNotNull(() => projectManager);
+			Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => commandManager);
             Argument.IsNotNull(() => loggerService);
 
-            _loggerService = loggerService;
+            _projectManager = projectManager;
+			_loggerService = loggerService;
 			_messageService = messageService;
 
             ShowLogCommand = new RelayCommand(ExecuteShowLog, CanShowLog);
@@ -91,14 +90,15 @@ namespace WolvenKit.App.ViewModels
 		#region init
 		protected override async Task InitializeAsync()
 		{
-			await base.InitializeAsync();
+            _projectManager.ProjectActivationAsync += OnProjectActivationAsync;
 
-			// TODO: Write initialization code here and subscribe to events
-		}
+			await base.InitializeAsync();
+        }
 
         protected override Task OnClosingAsync()
         {
-            RaisePropertyChanged(nameof(SaveLayout));
+            _projectManager.ProjectActivationAsync -= OnProjectActivationAsync;
+			RaisePropertyChanged(nameof(SaveLayout));
 
 			return base.OnClosingAsync();
         }
@@ -140,6 +140,8 @@ namespace WolvenKit.App.ViewModels
 		public event EventHandler ActiveDocumentChanged;
 
 		#region Properties
+        public Project Project { get; set; }
+
 		public bool SaveLayout { get; set; }
 
 		/// <summary>
@@ -200,9 +202,21 @@ namespace WolvenKit.App.ViewModels
         public ICommand NewCommand =>
             _newCommand ?? (_newCommand = new DelegateCommand<object>((p) => OnNew(p), (p) => CanNew(p)));
 
-        #endregion Properties
+		#endregion Properties
 
 		#region methods
+		private async Task OnProjectActivationAsync(object sender, ProjectUpdatingCancelEventArgs e)
+        {
+            var newProject = (Project)e.NewProject;
+            if (newProject is null)
+            {
+                return;
+            }
+
+            Project = newProject;
+
+            
+        }
 		/// <summary>
 		/// Checks if a document can be closed and asks the user whether
 		/// to save before closing if the document appears to be dirty.

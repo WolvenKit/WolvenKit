@@ -2,6 +2,7 @@
 using Catel;
 using Orc.Notifications;
 using Orc.ProjectManagement;
+using WolvenKit.App.Model;
 
 namespace WolvenKitUI.Model
 {
