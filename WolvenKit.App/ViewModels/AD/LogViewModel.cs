@@ -33,41 +33,11 @@ namespace WolvenKit.App.ViewModels
         public const string ToolTitle = "Log";
 
 
-        #region fields
-        
-
-        #endregion fields
-
         #region constructors
-
-
-
-        public LogViewModel(
-            //ILoggerService loggerService
-            )
-            : base(ToolTitle)
+        public LogViewModel(): base(ToolTitle)
         {
-            //Argument.IsNotNull(() => loggerService);
-            //_loggerService = loggerService;
 
-            
         }
-
-        
-
-        //private void LoggerServiceOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        //{
-
-        //    switch (e.PropertyName)
-        //    {
-        //        case "Log":
-        //            Log += _loggerService.Log;
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //}
-
         #endregion constructors
 
         #region properties

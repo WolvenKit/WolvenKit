@@ -10,72 +10,80 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Catel.Services;
+using Orc.ProjectManagement;
+using Orc.Squirrel;
 using WolvenKit.App;
 using WolvenKit.App.Services;
 using WolvenKit.Common.Services;
-using InputGesture = Catel.Windows.Input.InputGesture;
+using WolvenKitUI.Model;
+using Settings = WolvenKit.App.Settings;
 
 namespace WolvenKitUI.Services
 {
     public class ApplicationInitializationService : ApplicationInitializationServiceBase
     {
+        #region fields
+
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly IServiceLocator _serviceLocator;
+        private readonly ICommandManager _commandManager;
+        private readonly IPleaseWaitService _pleaseWaitService;
 
         public override bool ShowSplashScreen => true;
-
         public override bool ShowShell => true;
 
-        public ApplicationInitializationService(IServiceLocator serviceLocator)
+        #endregion
+
+        #region constructors
+
+        public ApplicationInitializationService(IServiceLocator serviceLocator, ICommandManager commandManager,
+            IPleaseWaitService pleaseWaitService)
         {
             Argument.IsNotNull(() => serviceLocator);
+            Argument.IsNotNull(() => commandManager);
+            Argument.IsNotNull(() => pleaseWaitService);
 
             _serviceLocator = serviceLocator;
+            _commandManager = commandManager;
+            _pleaseWaitService = pleaseWaitService;
         }
+
+        #endregion
+
+        #region events
 
         public override async Task InitializeBeforeCreatingShellAsync()
         {
             // Non-async first
-            await RegisterTypesAsync();
-            await InitializeCommandsAsync();
+            RegisterTypes();
+            InitializeCommands();
+            InitializeWatchers();
 
+            // async
             await RunAndWaitAsync(new Func<Task>[]
             {
-                InitializePerformanceAsync
+                InitializePerformanceAsync,
+                CheckForUpdatesAsync
             });
-        }
-
-        private async Task InitializeCommandsAsync()
-        {
-            var commandManager = ServiceLocator.Default.ResolveType<ICommandManager>();
-
-            // global commands
-            commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.Exit));
-            commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.About));
-            commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.Options));
-
-            commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.NewProject));
-            commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.OpenProject));
-
-            // application-wide commands that viewmodels can subscribe to
-            commandManager.CreateCommand(nameof(AppCommands.Application.ShowLog));
-            commandManager.CreateCommand(nameof(AppCommands.Application.ShowProjectExplorer));
-            commandManager.CreateCommand(nameof(AppCommands.Application.ShowImportUtility));
-
-
-
-            var keyboardMappingsService = _serviceLocator.ResolveType<IKeyboardMappingsService>();
-            keyboardMappingsService.AdditionalKeyboardMappings.Add(new KeyboardMapping("MyGroup.Zoom", "Mousewheel", ModifierKeys.Control));
         }
 
         public override async Task InitializeAfterCreatingShellAsync()
         {
-            Log.Info("Delay to show the splash screen");
-
-            Thread.Sleep(2500);
+            // TODO: update main window title?
         }
 
+        public override async Task InitializeAfterShowingShellAsync()
+        {
+            await base.InitializeAfterShowingShellAsync();
+
+            await LoadProjectAsync();
+        }
+
+        #endregion
+
+        #region methods
         private async Task InitializePerformanceAsync()
         {
             Log.Info("Improving performance");
@@ -84,16 +92,85 @@ namespace WolvenKitUI.Services
             Catel.Windows.Controls.UserControl.DefaultSkipSearchingForInfoBarMessageControlValue = true;
         }
 
-        private async Task RegisterTypesAsync()
+        private void InitializeCommands()
         {
-            var serviceLocator = _serviceLocator;
+            // global commands
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.Exit));
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.About));
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.Options));
 
-            serviceLocator.RegisterType<IAboutInfoService, AboutInfoService>();
-            serviceLocator.RegisterType<ILoggerService, LoggerService>();
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.NewProject));
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.OpenProject));
+
+            // application-wide commands that viewmodels can subscribe to
+            _commandManager.CreateCommand(nameof(AppCommands.Application.ShowLog));
+            _commandManager.CreateCommand(nameof(AppCommands.Application.ShowProjectExplorer));
+            _commandManager.CreateCommand(nameof(AppCommands.Application.ShowImportUtility));
+
+        }
+
+        private void RegisterTypes()
+        {
+            
+
+            // project management
+            _serviceLocator.RegisterType<IProjectSerializerSelector, ProjectSerializerSelector>();  //TODO: not needed?
+            //_serviceLocator.RegisterType<IMainWindowTitleService, MainWindowTitleService>();      //TODO: 
+            //_serviceLocator.RegisterType<IProjectValidator, WkitProjectValidator>();
+            _serviceLocator.RegisterType<ISaveProjectChangesService, SaveProjectChangesService>();
+            _serviceLocator.RegisterType<IInitialProjectLocationService, Model.InitialProjectLocationService>();
+
+            _serviceLocator.RegisterType<IProjectInitializer, FileProjectInitializer>();
 
 
-            serviceLocator.RegisterType<ISettingsManager, SettingsManager>();
+            _serviceLocator.RegisterTypeAndInstantiate<ProjectManagementCloseApplicationWatcher>();
+
+
+            // Orchestra
+            _serviceLocator.RegisterType<IAboutInfoService, AboutInfoService>();
+
+
+            // Wkit
+            _serviceLocator.RegisterType<ILoggerService, LoggerService>();
+            _serviceLocator.RegisterType<ISettingsManager, SettingsManager>();
+        }
+
+        private void InitializeWatchers()
+        {
             
         }
+
+        private async Task CheckForUpdatesAsync()
+        {
+            //TODO: enable
+//            Log.Info("Checking for updates");
+
+//            var updateService = _serviceLocator.ResolveType<IUpdateService>();
+//            updateService.Initialize(Settings.Application.AutomaticUpdates.AvailableChannels, Settings.Application.AutomaticUpdates.DefaultChannel,
+//                Settings.Application.AutomaticUpdates.CheckForUpdatesDefaultValue);
+
+//#pragma warning disable 4014
+//            // Not dot await, it's a background thread
+//            updateService.InstallAvailableUpdatesAsync(new SquirrelContext());
+//#pragma warning restore 4014
+        }
+
+        private async Task LoadProjectAsync()
+        {
+            using (_pleaseWaitService.PushInScope())
+            {
+                var projectManager = _serviceLocator.ResolveType<IProjectManager>();
+                if (projectManager == null)
+                {
+                    const string error = "Failed to resolve project manager";
+                    Log.Error(error);
+                    throw new Exception(error);
+                }
+
+                await projectManager.InitializeAsync();
+            }
+        }
+        #endregion
+
     }
 }

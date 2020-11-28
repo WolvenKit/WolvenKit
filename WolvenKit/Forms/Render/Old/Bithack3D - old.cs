@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using IrrlichtLime.Video;
 using OpenGL;
 
 namespace WolvenKit.Render
@@ -35,7 +36,7 @@ namespace WolvenKit.Render
         private static bool renderStarted = false;
 
         //private static Quaternion modelAngle = new Quaternion(new Vertex3f(), 0);
-        private static Vertex3f modelPosition = new Vertex3f(0.0f, -1.5f, -2.0f);
+        private static Vertex3f modelPosition = new Vertex3D(0.0f, -1.5f, -2.0f);
         private static Vertex3f modelAngle = new Vertex3f();
 
         private static bool model_autorotating;

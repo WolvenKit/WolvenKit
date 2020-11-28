@@ -52,6 +52,12 @@
                             <views:LogView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.LogViewTemplate>
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.ProjectExplorerTemplate>
+                        <DataTemplate>
+                            <views:ProjectExplorerView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.ProjectExplorerTemplate>
                     
                 </ad:PanesTemplateSelector>
             </DockingManager.LayoutItemTemplateSelector>

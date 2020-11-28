@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 using System.Data;
 using System.Threading;
 
@@ -18,8 +18,8 @@ namespace WolvenKit.Render
         /// </summary>
         [STAThread]        static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            //Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
             //using (var fo = new OpenFileDialog())
             //{
             //    fo.Filter = "DDS Image | *.dds";
@@ -29,7 +29,7 @@ namespace WolvenKit.Render
             //        var i = 0;
             //    }
             //}
-            Application.Run(new frmTerrain());
+            //Application.Run(new frmTerrain());
             //Application.Run(new FastRender.frmFastRender(null));
 
         }

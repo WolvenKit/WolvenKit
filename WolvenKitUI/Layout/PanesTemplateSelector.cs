@@ -27,9 +27,14 @@ namespace WolvenKitUI.Layout
 		public DataTemplate FileViewTemplate { get; set; }
 
 		/// <summary>
-		/// Gets/sets the view instance of the file stats tool window.
+		/// Gets/sets the view instance of the LogView.
 		/// </summary>
 		public DataTemplate LogViewTemplate { get; set; }
+
+		/// <summary>
+		/// Gets/sets the view instance of the ProjectExplorerView.
+		/// </summary>
+		public DataTemplate ProjectExplorerTemplate { get; set; }
 
 
 		/// <summary>
@@ -48,6 +53,8 @@ namespace WolvenKitUI.Layout
                     return FileViewTemplate;
                 case LogViewModel _:
                     return LogViewTemplate;
+                case ProjectExplorerViewModel _:
+                    return ProjectExplorerTemplate;
                 default:
                     return base.SelectTemplate(item, container);
             }

@@ -114,7 +114,7 @@ namespace WolvenKit.Render
             // translateModeBtn
             // 
             this.translateModeBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.translateModeBtn.Image = global::WolvenKit.Render.Properties.Resources.move1;
+            this.translateModeBtn.Image = global::WolvenKit.Properties.Resources.move1;
             this.translateModeBtn.Location = new System.Drawing.Point(301, 4);
             this.translateModeBtn.Name = "translateModeBtn";
             this.translateModeBtn.Size = new System.Drawing.Size(24, 24);
@@ -124,7 +124,7 @@ namespace WolvenKit.Render
             // rotateModeBtn
             // 
             this.rotateModeBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.rotateModeBtn.Image = global::WolvenKit.Render.Properties.Resources.rotate;
+            this.rotateModeBtn.Image = global::WolvenKit.Properties.Resources.rotate;
             this.rotateModeBtn.Location = new System.Drawing.Point(268, 4);
             this.rotateModeBtn.Name = "rotateModeBtn";
             this.rotateModeBtn.Size = new System.Drawing.Size(24, 24);
@@ -188,7 +188,7 @@ namespace WolvenKit.Render
             // 
             this.addMeshButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.addMeshButton.Enabled = false;
-            this.addMeshButton.Image = global::WolvenKit.Render.Properties.Resources.AddNodefromFile_354;
+            this.addMeshButton.Image = global::WolvenKit.Properties.Resources.AddNodefromFile_354;
             this.addMeshButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.addMeshButton.Name = "addMeshButton";
             this.addMeshButton.Size = new System.Drawing.Size(23, 20);
@@ -200,7 +200,7 @@ namespace WolvenKit.Render
             // 
             this.exportMeshButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.exportMeshButton.Enabled = false;
-            this.exportMeshButton.Image = global::WolvenKit.Render.Properties.Resources.Output_16x;
+            this.exportMeshButton.Image = global::WolvenKit.Properties.Resources.Output_16x;
             this.exportMeshButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.exportMeshButton.Name = "exportMeshButton";
             this.exportMeshButton.Size = new System.Drawing.Size(23, 20);

@@ -149,6 +149,9 @@
     <Reference Include="AltoControls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AltoControls.1.0.1\lib\AltoControls.dll</HintPath>
     </Reference>
+    <Reference Include="AssimpNet, Version=4.1.0.0, Culture=neutral, PublicKeyToken=0d51b391f59f42a6, processorArchitecture=MSIL">
+      <HintPath>..\packages\AssimpNet.4.1.0\lib\net40\AssimpNet.dll</HintPath>
+    </Reference>
     <Reference Include="AutocompleteMenu-ScintillaNET, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoCompleteMenu-ScintillaNET.1.6.2\lib\net461\AutocompleteMenu-ScintillaNET.dll</HintPath>
     </Reference>
@@ -589,6 +592,44 @@
     <Compile Include="Forms\Player\WaveOutSettingsPanel.Designer.cs">
       <DependentUpon>WaveOutSettingsPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Render\frmFastRender.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Render\frmFastRender.Designer.cs">
+      <DependentUpon>frmFastRender.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Render\frmLevelScene.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Render\frmLevelScene.Designer.cs">
+      <DependentUpon>frmLevelScene.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Render\frmRender.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Render\frmRender.Designer.cs">
+      <DependentUpon>frmRender.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Render\frmRenderEventHandler.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Render\frmTerrain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Render\frmTerrain.Designer.cs">
+      <DependentUpon>frmTerrain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Render\MeshPropertyDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Render\MeshPropertyDialog.Designer.cs">
+      <DependentUpon>MeshPropertyDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Render\Old\Positions.cs" />
+    <Compile Include="Forms\Render\Old\Program - old.cs" />
+    <Compile Include="Forms\Render\Old\Shaders.cs" />
+    <Compile Include="Forms\Render\RenderMessage.cs" />
+    <Compile Include="Forms\Render\RenderTreeNode.cs" />
     <Compile Include="Forms\UserControl\frmProgress.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -680,6 +721,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\IThemedContent.cs" />
+    <Compile Include="TargaImage.cs" />
     <Compile Include="UIConfiguration.cs" />
     <Compile Include="UIController.cs" />
     <Compile Include="Utility\EditorHandler.cs" />
@@ -907,6 +949,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Player\WaveOutSettingsPanel.resx">
       <DependentUpon>WaveOutSettingsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Render\frmFastRender.resx">
+      <DependentUpon>frmFastRender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Render\frmLevelScene.resx">
+      <DependentUpon>frmLevelScene.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Render\frmRender.resx">
+      <DependentUpon>frmRender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Render\frmTerrain.resx">
+      <DependentUpon>frmTerrain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Render\MeshPropertyDialog.resx">
+      <DependentUpon>MeshPropertyDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControl\frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
@@ -1146,6 +1203,8 @@
     <None Include="Resources\Legacy\geralt.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Render\move1.png" />
+    <Content Include="Resources\Render\rotate.png" />
     <Content Include="Wkit_Icon_Flattened_256x.ico" />
     <None Include="Resources\GitTemplateDir\info\exclude">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1745,6 +1804,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets'))" />
+    <Error Condition="!Exists('..\packages\AssimpNet.4.1.0\build\AssimpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AssimpNet.4.1.0\build\AssimpNet.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -1758,4 +1818,5 @@
       <MoveToLibFolder Include="$(OutputPath)*.dll ; $(OutputPath)*.pdb ; $(OutputPath)*.xml" />
     </ItemGroup>
   </Target>
+  <Import Project="..\packages\AssimpNet.4.1.0\build\AssimpNet.targets" Condition="Exists('..\packages\AssimpNet.4.1.0\build\AssimpNet.targets')" />
 </Project>

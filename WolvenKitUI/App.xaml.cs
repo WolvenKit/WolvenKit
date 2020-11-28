@@ -2,6 +2,7 @@
 using Catel.Logging;
 using Catel.Reflection;
 using Catel.Windows;
+using Orc.Squirrel;
 using Orchestra.Services;
 using Orchestra.Views;
 using System.Windows;
@@ -46,25 +47,23 @@ namespace WolvenKitUI
 
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
 #if DEBUG
             LogManager.AddDebugListener();
 #endif
-
             Log.Info("Starting application");
 
+            await SquirrelHelper.HandleSquirrelAutomaticallyAsync();
+
+
             var serviceLocator = ServiceLocator.Default;
-            //var workspaceinstance = new WorkSpaceViewModel();
-            //serviceLocator.RegisterInstance(typeof(WorkSpaceViewModel), workspaceinstance);
+
 
             // Register Viewmodels
             var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
-            
             viewModelLocator.NamingConventions.Add("WolvenKit.App.ViewModels.[VW]ViewModel");
-
             viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
-            //viewModelLocator.Register(typeof(RibbonView), typeof(RibbonViewModel));
 
 
             
@@ -74,7 +73,8 @@ namespace WolvenKitUI
 
             
             var shellService = serviceLocator.ResolveType<IShellService>();
-            shellService.CreateAsync<ShellWindow>();
+            await shellService.CreateAsync<ShellWindow>();
+
 
             ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark.Red");
 

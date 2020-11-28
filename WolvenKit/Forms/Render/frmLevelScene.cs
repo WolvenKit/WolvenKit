@@ -845,7 +845,7 @@ namespace WolvenKit.Render
             }
         }
 
-        private void ExportTexture(string fileName, Texture tex)
+        private void ExportTexture(string fileName, IrrlichtLime.Video.Texture tex)
         {
             IrrlichtLime.Video.Image img = null;
             if (IrrlichtLime.Video.Image.IsCompressedFormat(tex.ColorFormat))

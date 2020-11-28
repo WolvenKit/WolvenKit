@@ -36,6 +36,7 @@ namespace WolvenKit.App.ViewModels
 
 
 		private LogViewModel _logViewModel = null;
+		private ProjectExplorerViewModel _projectExplorerViewModel = null;
 
 
 
@@ -118,12 +119,9 @@ namespace WolvenKit.App.ViewModels
 
         public ICommand ShowProjectExplorerCommand { get; private set; }
         private bool CanShowProjectExplorer() => true;
-        private void ExecuteShowProjectExplorer()
-        {
-			// TODO: Handle command logic here
-		}
+        private void ExecuteShowProjectExplorer() => ProjectExplorer.IsVisible = !ProjectExplorer.IsVisible;
 
-        public ICommand ShowImportUtilityCommand { get; private set; }
+		public ICommand ShowImportUtilityCommand { get; private set; }
         private bool CanShowImportUtility() => true;
         private void ExecuteShowImportUtility()
         {
@@ -179,22 +177,17 @@ namespace WolvenKit.App.ViewModels
 			_files.Clear();
 		}
 
-        /// <summary>
-		/// Gets an instance of the tool1 tool window viewmodel.
+		/// <summary>
+		/// Gets an instance of the LogViewModel.
 		/// </summary>
-		public LogViewModel Log
-        {
-            get
-            {
-                if (_logViewModel == null)
-                {
-                    _logViewModel = new LogViewModel();
-                }
-                return _logViewModel;
-            }
-        }
+		public LogViewModel Log => _logViewModel ?? (_logViewModel = new LogViewModel());
 
         /// <summary>
+        /// Gets an instance of the LogViewModel.
+        /// </summary>
+        public ProjectExplorerViewModel ProjectExplorer => _projectExplorerViewModel ?? (_projectExplorerViewModel = new ProjectExplorerViewModel());
+
+		/// <summary>
 		/// Gets a open document command to open files from the file system.
 		/// </summary>
 		public ICommand OpenCommand =>

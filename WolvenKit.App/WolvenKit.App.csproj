@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net5.0-windows;net48</TargetFrameworks>
+    <TargetFrameworks>net5.0-windows;netcoreapp3.1;net48</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
@@ -26,6 +26,11 @@
     <PackageReference Include="Dirkster.MLib" Version="1.3.1.2" />
     <PackageReference Include="FastMember" Version="1.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Orc.CommandLine" Version="4.0.0" />
+    <PackageReference Include="Orc.FileSystem" Version="4.0.0" />
+    <PackageReference Include="Orc.Notifications" Version="4.0.0" />
+    <PackageReference Include="Orc.ProjectManagement" Version="4.0.2" />
+    <PackageReference Include="Orc.Squirrel" Version="4.0.4" />
     <PackageReference Include="Orc.Theming" Version="4.1.2" />
     <PackageReference Include="Pfim" Version="0.9.1" />
     <PackageReference Include="protobuf-net" Version="3.0.62" />
@@ -42,6 +47,11 @@
     <ProjectReference Include="..\WolvenKit.W3Speech\WolvenKit.W3Speech.csproj" />
     <ProjectReference Include="..\WolvenKit.W3Strings\WolvenKit.W3Strings.csproj" />
     <ProjectReference Include="..\WolvenKit.Wwise\WolvenKit.Wwise.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\Interfaces\" />
+    <Folder Include="ViewModels\Tools\" />
   </ItemGroup>
 
 </Project>
