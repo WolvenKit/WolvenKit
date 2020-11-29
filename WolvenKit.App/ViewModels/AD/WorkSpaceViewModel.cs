@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -16,6 +17,7 @@ using Catel.MVVM;
 using WolvenKit.App.Commands;
 using Catel;
 using Catel.IoC;
+using Catel.Threading;
 using Orc.ProjectManagement;
 using WolvenKit.App.Model;
 using WolvenKit.Common.Services;
@@ -123,15 +125,17 @@ namespace WolvenKit.App.ViewModels
 
 		public ICommand ShowImportUtilityCommand { get; private set; }
         private bool CanShowImportUtility() => true;
-        private void ExecuteShowImportUtility()
+        private async void ExecuteShowImportUtility()
         {
 			// TODO: Handle command logic here
+			var pleaseWaitService = ServiceLocator.Default.ResolveType<IPleaseWaitService>();
+
+            if (_projectManager.ActiveProject is Project p)
+			    p.Check();
+        }
 
 
-		}
-
-
-		#endregion
+        #endregion
 
 
 		/// <summary>

@@ -34,12 +34,14 @@ namespace WolvenKitUI.Views
             _loggerService.OnStringLogged += LoggerServiceOnOnStringLogged;
         }
 
+        private delegate void LogDelegate(string t, Logtype type);
         private void LoggerServiceOnOnStringLogged(object sender, LogStringEventArgs e)
         {
             var typ = e.Logtype;
             var msg = e.Message;
 
-            AddText(msg, typ);
+            this.Dispatcher.Invoke(new LogDelegate(AddText), ((LoggerService)sender).Log + "\n",
+                ((LoggerService)sender).Logtype);
         }
 
 

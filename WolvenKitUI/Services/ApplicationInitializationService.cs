@@ -131,7 +131,9 @@ namespace WolvenKitUI.Services
 
             // Wkit
             _serviceLocator.RegisterType<ILoggerService, LoggerService>();
-            _serviceLocator.RegisterType<ISettingsManager, SettingsManager>();
+
+            var config = SettingsManager.Load();
+            _serviceLocator.RegisterInstance(typeof(ISettingsManager), config);
         }
 
         private void InitializeWatchers()

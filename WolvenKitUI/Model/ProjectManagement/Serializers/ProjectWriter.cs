@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Catel;
 using Catel.IoC;
 using Catel.Threading;
@@ -26,8 +27,10 @@ namespace WolvenKitUI.Model
         #region Methods
         protected override Task<bool> WriteToLocationAsync(Project project, string location)
         {
+
+            throw new NotImplementedException();
             // deserialization is done inside the project
-            _fileService.WriteAllText(location, project.ToString());
+            //_fileService.WriteAllText(location, project.ToString());
 
             return TaskHelper<bool>.FromResult(true);
         }

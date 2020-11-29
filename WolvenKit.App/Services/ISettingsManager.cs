@@ -11,5 +11,9 @@ namespace WolvenKit.App.Services
         [XmlIgnore]
         IThemeInfos Themes { get; }
 
+
+        /*public*/ string ExecutablePath { get; set; }
+        /*public*/ string[] ManagerVersions { get; set; }
+        string TextLanguage { get; set; }
     }
 }
