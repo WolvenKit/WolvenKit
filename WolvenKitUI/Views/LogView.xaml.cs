@@ -22,7 +22,7 @@ namespace WolvenKitUI.Views
     /// <summary>
     /// Interaction logic for LogView.xaml
     /// </summary>
-    public partial class LogView : UserControl
+    public partial class LogView
     {
         private readonly ILoggerService _loggerService;
 

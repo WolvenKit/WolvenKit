@@ -26,6 +26,118 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Icons\Logo.ico" />
+    <None Remove="Resources\Images\Files\apb_32x.png" />
+    <None Remove="Resources\Images\Files\BlankFile_16x.png" />
+    <None Remove="Resources\Images\Files\blend_32x.png" />
+    <None Remove="Resources\Images\Files\fbx_32x.png" />
+    <None Remove="Resources\Images\Files\FolderClosed_16x.png" />
+    <None Remove="Resources\Images\Files\FolderOpened_16x.png" />
+    <None Remove="Resources\Images\Files\image_32x.png" />
+    <None Remove="Resources\Images\Files\Project_Explorer_Base_Dir_16x.png" />
+    <None Remove="Resources\Images\Files\redcloth_32x.png" />
+    <None Remove="Resources\Images\Files\w2mesh_32x.png" />
+    <None Remove="Resources\Images\Files\xbm_32x.png" />
+    <None Remove="Resources\Images\Files\xml_32x.png" />
+    <None Remove="Resources\Images\Files\zip_32x.png" />
+    <None Remove="Resources\Images\git.png" />
+    <None Remove="Resources\Images\Preferences_light_64x.png" />
+    <None Remove="Resources\Images\RedEngine\bird.png" />
+    <None Remove="Resources\Images\RedEngine\csv.png" />
+    <None Remove="Resources\Images\RedEngine\detail.png" />
+    <None Remove="Resources\Images\RedEngine\env.png" />
+    <None Remove="Resources\Images\RedEngine\ExitIcon.png" />
+    <None Remove="Resources\Images\RedEngine\ExpandIcon.png" />
+    <None Remove="Resources\Images\RedEngine\fev.png" />
+    <None Remove="Resources\Images\RedEngine\journal.png" />
+    <None Remove="Resources\Images\RedEngine\LayerGroupVisibled.png" />
+    <None Remove="Resources\Images\RedEngine\redgame.png" />
+    <None Remove="Resources\Images\RedEngine\redswf.png" />
+    <None Remove="Resources\Images\RedEngine\spawntree.png" />
+    <None Remove="Resources\Images\RedEngine\swf.png" />
+    <None Remove="Resources\Images\RedEngine\vbrush.png" />
+    <None Remove="Resources\Images\RedEngine\w2ainfo.png" />
+    <None Remove="Resources\Images\RedEngine\w2am.png" />
+    <None Remove="Resources\Images\RedEngine\w2anim.png" />
+    <None Remove="Resources\Images\RedEngine\w2animev.png" />
+    <None Remove="Resources\Images\RedEngine\w2anims.png" />
+    <None Remove="Resources\Images\RedEngine\w2beh.png" />
+    <None Remove="Resources\Images\RedEngine\w2behtree.png" />
+    <None Remove="Resources\Images\RedEngine\w2blb.png" />
+    <None Remove="Resources\Images\RedEngine\w2brix.png" />
+    <None Remove="Resources\Images\RedEngine\w2cent.png" />
+    <None Remove="Resources\Images\RedEngine\w2comm.png" />
+    <None Remove="Resources\Images\RedEngine\w2conv.png" />
+    <None Remove="Resources\Images\RedEngine\w2cube.png" />
+    <None Remove="Resources\Images\RedEngine\w2cutscene.png" />
+    <None Remove="Resources\Images\RedEngine\w2ds.png" />
+    <None Remove="Resources\Images\RedEngine\w2dset.png" />
+    <None Remove="Resources\Images\RedEngine\w2ent.png" />
+    <None Remove="Resources\Images\RedEngine\w2expr.png" />
+    <None Remove="Resources\Images\RedEngine\w2f.png" />
+    <None Remove="Resources\Images\RedEngine\w2faces.png" />
+    <None Remove="Resources\Images\RedEngine\w2fnt.png" />
+    <None Remove="Resources\Images\RedEngine\w2goalcrv.png" />
+    <None Remove="Resources\Images\RedEngine\w2guidesc.png" />
+    <None Remove="Resources\Images\RedEngine\w2je.png" />
+    <None Remove="Resources\Images\RedEngine\w2job.png" />
+    <None Remove="Resources\Images\RedEngine\w2l.png" />
+    <None Remove="Resources\Images\RedEngine\w2mesh.png" />
+    <None Remove="Resources\Images\RedEngine\w2mg.png" />
+    <None Remove="Resources\Images\RedEngine\w2mi.png" />
+    <None Remove="Resources\Images\RedEngine\w2p.png" />
+    <None Remove="Resources\Images\RedEngine\w2phase.png" />
+    <None Remove="Resources\Images\RedEngine\w2pr.png" />
+    <None Remove="Resources\Images\RedEngine\w2ps.png" />
+    <None Remove="Resources\Images\RedEngine\w2qlog.png" />
+    <None Remove="Resources\Images\RedEngine\w2quest.png" />
+    <None Remove="Resources\Images\RedEngine\w2rag.png" />
+    <None Remove="Resources\Images\RedEngine\w2ragdoll.png" />
+    <None Remove="Resources\Images\RedEngine\w2react.png" />
+    <None Remove="Resources\Images\RedEngine\w2rig.png" />
+    <None Remove="Resources\Images\RedEngine\w2rigm.png" />
+    <None Remove="Resources\Images\RedEngine\w2sbnk.png" />
+    <None Remove="Resources\Images\RedEngine\w2scene.png" />
+    <None Remove="Resources\Images\RedEngine\w2spwn.png" />
+    <None Remove="Resources\Images\RedEngine\w2steer.png" />
+    <None Remove="Resources\Images\RedEngine\w2surf.png" />
+    <None Remove="Resources\Images\RedEngine\w2w.png" />
+    <None Remove="Resources\Images\RedEngine\worldmap.png" />
+    <None Remove="Resources\Svg\case-sensitive.svg" />
+    <None Remove="Resources\Svg\Close_16x.svg" />
+    <None Remove="Resources\Svg\Close_red_16x.svg" />
+    <None Remove="Resources\Svg\EventLog_16x.svg" />
+    <None Remove="Resources\Svg\ImportFile_16x.svg" />
+    <None Remove="Resources\Svg\ImportTheme_16x.svg" />
+    <None Remove="Resources\Svg\Method_16x.svg" />
+    <None Remove="Resources\Svg\Method_left_16x.svg" />
+    <None Remove="Resources\Svg\MoveToSubmodule2_16x.svg" />
+    <None Remove="Resources\Svg\MoveToSubmodule_16x.svg" />
+    <None Remove="Resources\Svg\NewFile_16x.svg" />
+    <None Remove="Resources\Svg\NewSolutionFolder_16x.svg" />
+    <None Remove="Resources\Svg\OpenFile_16x.svg" />
+    <None Remove="Resources\Svg\OpenFolder_16x.svg" />
+    <None Remove="Resources\Svg\PackageProperty_16x.svg" />
+    <None Remove="Resources\Svg\PlaybackPreview_16x.svg" />
+    <None Remove="Resources\Svg\PushpinOutlineAngle_16x.svg" />
+    <None Remove="Resources\Svg\regex.svg" />
+    <None Remove="Resources\Svg\RunTest_16x.svg" />
+    <None Remove="Resources\Svg\Run_16x.svg" />
+    <None Remove="Resources\Svg\SearchFolderClosed_16x.svg" />
+    <None Remove="Resources\Svg\SelectAllItems_inversed_16x.svg" />
+    <None Remove="Resources\Svg\SelectInverseItems_inversed_16x.svg" />
+    <None Remove="Resources\Svg\SelectNoItems_inversed_16x.svg" />
+    <None Remove="Resources\Svg\SelectObject_16x.svg" />
+    <None Remove="Resources\Svg\Settings_16x.svg" />
+    <None Remove="Resources\Svg\SQLServerObjectExplorer_16x.svg" />
+    <None Remove="Resources\Svg\TypeDefinition_16x.svg" />
+    <None Remove="Resources\Svg\UploadFile_16x.svg" />
+    <None Remove="Resources\Svg\whole-word.svg" />
+    <None Remove="Resources\Svg\WK_Logo.svg" />
+    <None Remove="Resources\Svg\ZoomOriginalSize_16x.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Catel.Core" Version="5.12.11" />
     <PackageReference Include="Catel.MVVM" Version="5.12.11" />
     <PackageReference Include="Catel.Fody" Version="4.5.0" PrivateAssets="all" />
@@ -56,62 +168,196 @@
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
   
   <!-- Fallback code in case repository template is not found, code below can be removed when the repository template files are used -->
-  
-  <ItemGroup>
-    <None Remove="Resources\Icons\Close_16x.svg" />
-    <None Remove="Resources\Icons\EventLog_16x.svg" />
-    <None Remove="Resources\Icons\ImportFile_16x.svg" />
-    <None Remove="Resources\Icons\ImportTheme_16x.svg" />
-    <None Remove="Resources\Icons\MoveToSubmodule_16x.svg" />
-    <None Remove="Resources\Icons\NewFile_16x.svg" />
-    <None Remove="Resources\Icons\NewSolutionFolder_16x.svg" />
-    <None Remove="Resources\Icons\OpenFile_16x.svg" />
-    <None Remove="Resources\Icons\OpenFolder_16x.svg" />
-    <None Remove="Resources\Icons\RunTest_16x.svg" />
-    <None Remove="Resources\Icons\Run_16x.svg" />
-    <None Remove="Resources\Icons\SearchFolderClosed_16x.svg" />
-    <None Remove="Resources\Icons\SelectObject_16x.svg" />
-    <None Remove="Resources\Icons\Settings_16x.svg" />
-    <None Remove="Resources\Icons\SQLServerObjectExplorer_16x.svg" />
-    <None Remove="Resources\Images\git.png" />
-    <None Remove="Resources\Images\New_Project_dark_64x.png" />
-    <None Remove="Resources\Images\New_Project_light_64x.png" />
-    <None Remove="Resources\Images\Open_Project_dark_64x.png" />
-    <None Remove="Resources\Images\Open_Project_light_64x.png" />
-    <None Remove="Resources\Images\Preferences_light_64x.png" />
-  </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\AvalonDock.Layout.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Resources\Icons\Close_16x.svg" />
-    <Resource Include="Resources\Icons\EventLog_16x.svg" />
-    <Resource Include="Resources\Icons\ImportFile_16x.svg" />
-    <Resource Include="Resources\Icons\ImportTheme_16x.svg" />
-    <Resource Include="Resources\Icons\NewFile_16x.svg" />
-    <Resource Include="Resources\Icons\NewSolutionFolder_16x.svg" />
-    <Resource Include="Resources\Icons\OpenFile_16x.svg" />
-    <Resource Include="Resources\Icons\OpenFolder_16x.svg" />
+    <Content Include="Resources\Images\git.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\Close_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\Close_red_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\EventLog_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\ImportFile_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\Method_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\Method_left_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\MoveToSubmodule2_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\MoveToSubmodule_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\NewFile_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\OpenFile_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\PackageProperty_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\PlaybackPreview_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\PushpinOutlineAngle_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\regex.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\RunTest_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\Run_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\SearchFolderClosed_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\SelectAllItems_inversed_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\SelectInverseItems_inversed_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\SelectNoItems_inversed_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\SelectObject_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\Settings_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\SQLServerObjectExplorer_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\TypeDefinition_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\UploadFile_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\whole-word.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\WK_Logo.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\ZoomOriginalSize_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.App\WolvenKit.App.csproj" />
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Icons\MoveToSubmodule_16x.svg" />
-    <Resource Include="Resources\Icons\RunTest_16x.svg" />
-    <Resource Include="Resources\Icons\Run_16x.svg" />
-    <Resource Include="Resources\Icons\SearchFolderClosed_16x.svg" />
-    <Resource Include="Resources\Icons\SelectObject_16x.svg" />
-    <Resource Include="Resources\Icons\Settings_16x.svg" />
-    <Resource Include="Resources\Icons\SQLServerObjectExplorer_16x.svg" />
-    <Content Include="Resources\Images\git.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Resource Include="Resources\Images\Preferences_light_64x.png" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModels\" />
+    <Resource Include="Resources\Icons\Logo.ico" />
+    <Resource Include="Resources\Images\Files\apb_32x.png" />
+    <Resource Include="Resources\Images\Files\BlankFile_16x.png" />
+    <Resource Include="Resources\Images\Files\blend_32x.png" />
+    <Resource Include="Resources\Images\Files\fbx_32x.png" />
+    <Resource Include="Resources\Images\Files\FolderClosed_16x.png" />
+    <Resource Include="Resources\Images\Files\FolderOpened_16x.png" />
+    <Resource Include="Resources\Images\Files\image_32x.png" />
+    <Resource Include="Resources\Images\Files\Project_Explorer_Base_Dir_16x.png" />
+    <Resource Include="Resources\Images\Files\redcloth_32x.png" />
+    <Resource Include="Resources\Images\Files\w2mesh_32x.png" />
+    <Resource Include="Resources\Images\Files\xbm_32x.png" />
+    <Resource Include="Resources\Images\Files\xml_32x.png" />
+    <Resource Include="Resources\Images\Files\zip_32x.png" />
+    <Resource Include="Resources\Images\RedEngine\bird.png" />
+    <Resource Include="Resources\Images\RedEngine\csv.png" />
+    <Resource Include="Resources\Images\RedEngine\detail.png" />
+    <Resource Include="Resources\Images\RedEngine\env.png" />
+    <Resource Include="Resources\Images\RedEngine\ExitIcon.png" />
+    <Resource Include="Resources\Images\RedEngine\ExpandIcon.png" />
+    <Resource Include="Resources\Images\RedEngine\fev.png" />
+    <Resource Include="Resources\Images\RedEngine\journal.png" />
+    <Resource Include="Resources\Images\RedEngine\LayerGroupVisibled.png" />
+    <Resource Include="Resources\Images\RedEngine\redgame.png" />
+    <Resource Include="Resources\Images\RedEngine\redswf.png" />
+    <Resource Include="Resources\Images\RedEngine\spawntree.png" />
+    <Resource Include="Resources\Images\RedEngine\swf.png" />
+    <Resource Include="Resources\Images\RedEngine\vbrush.png" />
+    <Resource Include="Resources\Images\RedEngine\w2ainfo.png" />
+    <Resource Include="Resources\Images\RedEngine\w2am.png" />
+    <Resource Include="Resources\Images\RedEngine\w2anim.png" />
+    <Resource Include="Resources\Images\RedEngine\w2animev.png" />
+    <Resource Include="Resources\Images\RedEngine\w2anims.png" />
+    <Resource Include="Resources\Images\RedEngine\w2beh.png" />
+    <Resource Include="Resources\Images\RedEngine\w2behtree.png" />
+    <Resource Include="Resources\Images\RedEngine\w2blb.png" />
+    <Resource Include="Resources\Images\RedEngine\w2brix.png" />
+    <Resource Include="Resources\Images\RedEngine\w2cent.png" />
+    <Resource Include="Resources\Images\RedEngine\w2comm.png" />
+    <Resource Include="Resources\Images\RedEngine\w2conv.png" />
+    <Resource Include="Resources\Images\RedEngine\w2cube.png" />
+    <Resource Include="Resources\Images\RedEngine\w2cutscene.png" />
+    <Resource Include="Resources\Images\RedEngine\w2ds.png" />
+    <Resource Include="Resources\Images\RedEngine\w2dset.png" />
+    <Resource Include="Resources\Images\RedEngine\w2ent.png" />
+    <Resource Include="Resources\Images\RedEngine\w2expr.png" />
+    <Resource Include="Resources\Images\RedEngine\w2f.png" />
+    <Resource Include="Resources\Images\RedEngine\w2faces.png" />
+    <Resource Include="Resources\Images\RedEngine\w2fnt.png" />
+    <Resource Include="Resources\Images\RedEngine\w2goalcrv.png" />
+    <Resource Include="Resources\Images\RedEngine\w2guidesc.png" />
+    <Resource Include="Resources\Images\RedEngine\w2je.png" />
+    <Resource Include="Resources\Images\RedEngine\w2job.png" />
+    <Resource Include="Resources\Images\RedEngine\w2l.png" />
+    <Resource Include="Resources\Images\RedEngine\w2mesh.png" />
+    <Resource Include="Resources\Images\RedEngine\w2mg.png" />
+    <Resource Include="Resources\Images\RedEngine\w2mi.png" />
+    <Resource Include="Resources\Images\RedEngine\w2p.png" />
+    <Resource Include="Resources\Images\RedEngine\w2phase.png" />
+    <Resource Include="Resources\Images\RedEngine\w2pr.png" />
+    <Resource Include="Resources\Images\RedEngine\w2ps.png" />
+    <Resource Include="Resources\Images\RedEngine\w2qlog.png" />
+    <Resource Include="Resources\Images\RedEngine\w2quest.png" />
+    <Resource Include="Resources\Images\RedEngine\w2rag.png" />
+    <Resource Include="Resources\Images\RedEngine\w2ragdoll.png" />
+    <Resource Include="Resources\Images\RedEngine\w2react.png" />
+    <Resource Include="Resources\Images\RedEngine\w2rig.png" />
+    <Resource Include="Resources\Images\RedEngine\w2rigm.png" />
+    <Resource Include="Resources\Images\RedEngine\w2sbnk.png" />
+    <Resource Include="Resources\Images\RedEngine\w2scene.png" />
+    <Resource Include="Resources\Images\RedEngine\w2spwn.png" />
+    <Resource Include="Resources\Images\RedEngine\w2steer.png" />
+    <Resource Include="Resources\Images\RedEngine\w2surf.png" />
+    <Resource Include="Resources\Images\RedEngine\w2w.png" />
+    <Resource Include="Resources\Images\RedEngine\worldmap.png" />
+    <Content Include="Resources\Images\Preferences_light_64x.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\case-sensitive.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\ImportTheme_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\NewSolutionFolder_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\OpenFolder_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">

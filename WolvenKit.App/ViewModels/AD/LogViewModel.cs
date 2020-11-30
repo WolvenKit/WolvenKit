@@ -1,20 +1,19 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.Windows.Input;
+using WolvenKit.App.Commands;
+using Catel.IoC;
+using MLib.Interfaces;
+using WolvenKit.App.Services;
+using Catel;
+using Catel.Data;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.App.ViewModels
 {
-    using System;
-    using System.Windows.Media.Imaging;
-    using System.Windows.Media;
-    using System.Windows.Input;
-    using WolvenKit.App.Commands;
-    using Catel.IoC;
-    using MLib.Interfaces;
-    using WolvenKit.App.Services;
-    using Catel;
-    using Catel.Data;
-
 
     /// <summary>
     /// Implements the viewmodel that drives the log view.

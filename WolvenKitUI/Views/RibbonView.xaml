@@ -12,33 +12,32 @@
     <!-- Resources -->
     <UserControl.Resources>
         <ResourceDictionary>
+            <svgc:SvgViewbox x:Key="IconMoveTo" Source="/Resources/Svg/MoveToSubmodule_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconSelectObject" Source="/Resources/Svg/SelectObject_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconNewSolutionFolder" Source="/Resources/Svg/NewSolutionFolder_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconOpenFolder" Source="/Resources/Svg/OpenFolder_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconClose" Source="/Resources/Svg/Close_16x.svg"/>
 
-            <svgc:SvgViewbox x:Key="IconMoveTo" Source="/Resources/Icons/MoveToSubmodule_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconSelectObject" Source="/Resources/Icons/SelectObject_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconNewSolutionFolder" Source="/Resources/Icons/NewSolutionFolder_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconOpenFolder" Source="/Resources/Icons/OpenFolder_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconClose" Source="/Resources/Icons/Close_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconNewFile" Source="/Resources/Svg/NewFile_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconOpenFile" Source="/Resources/Svg/OpenFile_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconImportFile" Source="/Resources/Svg/ImportFile_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconSearchFolder" Source="/Resources/Svg/SearchFolderClosed_16x.svg"/>
 
-            <svgc:SvgViewbox x:Key="IconNewFile" Source="/Resources/Icons/NewFile_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconOpenFile" Source="/Resources/Icons/OpenFile_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconImportFile" Source="/Resources/Icons/ImportFile_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconSearchFolder" Source="/Resources/Icons/SearchFolderClosed_16x.svg"/>
-
-            <svgc:SvgViewbox x:Key="IconRun" Source="/Resources/Icons/Run_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconRunTest" Source="/Resources/Icons/RunTest_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconSettings" Source="/Resources/Icons/Settings_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconRun" Source="/Resources/Svg/Run_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconRunTest" Source="/Resources/Svg/RunTest_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconSettings" Source="/Resources/Svg/Settings_16x.svg"/>
 
 
-            <svgc:SvgViewbox x:Key="IconLog" Source="/Resources/Icons/EventLog_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconProjectExplorer" Source="/Resources/Icons/SQLServerObjectExplorer_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconImportUtility" Source="/Resources/Icons/ImportTheme_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconLog" Source="/Resources/Svg/EventLog_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconProjectExplorer" Source="/Resources/Svg/SQLServerObjectExplorer_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconImportUtility" Source="/Resources/Svg/ImportTheme_16x.svg"/>
 
 
 
             <BitmapImage x:Key="IconGit" 
-                         UriSource="/WolvenKitUI;component/Resources/Images/git.png" />
+                         UriSource="pack://application:,,,/Resources/Images/git.png" />
             <BitmapImage x:Key="IconPreferences" 
-                         UriSource="/WolvenKitUI;component/Resources/Images/Preferences_light_64x.png" />
+                         UriSource="pack://application:,,,/Resources/Images/Preferences_light_64x.png" />
 
         </ResourceDictionary>
     </UserControl.Resources>

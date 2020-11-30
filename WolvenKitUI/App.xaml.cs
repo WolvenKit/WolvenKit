@@ -51,6 +51,8 @@ namespace WolvenKitUI
 #endif
             Log.Info("Starting application");
 
+            var uri = new Uri("pack://application:,,,/WolvenKit.Resources;component/Resources/Images/git.png");
+
             await SquirrelHelper.HandleSquirrelAutomaticallyAsync();
 
 

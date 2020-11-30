@@ -51,10 +51,29 @@ namespace WolvenKit.App.Model
         [Description("The version of your mod. It's a string so 0.1-ALPHA and such is possible.")]
         public string Version { get; set; } = "0.62";
 
+
+        #region not serialized
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
         public string ProjectDirectory => Path.Combine(Path.GetDirectoryName(Location), Name);
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string FileDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "files");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+
+        #endregion
 
         #endregion
 

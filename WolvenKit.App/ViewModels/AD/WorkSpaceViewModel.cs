@@ -66,7 +66,8 @@ namespace WolvenKit.App.ViewModels
             IProjectManager projectManager,
 			ILoggerService loggerService,
 			IMessageService messageService, 
-            ICommandManager commandManager)
+            ICommandManager commandManager
+            )
 		{
             Argument.IsNotNull(() => projectManager);
 			Argument.IsNotNull(() => messageService);
@@ -124,7 +125,7 @@ namespace WolvenKit.App.ViewModels
         private void ExecuteShowProjectExplorer() => ProjectExplorer.IsVisible = !ProjectExplorer.IsVisible;
 
 		public ICommand ShowImportUtilityCommand { get; private set; }
-        private bool CanShowImportUtility() => true;
+        private bool CanShowImportUtility() => _projectManager.ActiveProject is Project;
         private async void ExecuteShowImportUtility()
         {
 			// TODO: Handle command logic here
@@ -174,7 +175,7 @@ namespace WolvenKit.App.ViewModels
 		/// <summary>
 		/// Gets an enumeration of all currently available tool window viewmodels.
 		/// </summary>
-		public IEnumerable<ToolViewModel> Tools => _tools ?? (_tools = new ToolViewModel[] { Log });
+		public IEnumerable<ToolViewModel> Tools => _tools ?? (_tools = new ToolViewModel[] { Log, ProjectExplorer });
 
         /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
 		public void CloseAllDocuments()
@@ -191,9 +192,17 @@ namespace WolvenKit.App.ViewModels
         /// <summary>
         /// Gets an instance of the LogViewModel.
         /// </summary>
-        public ProjectExplorerViewModel ProjectExplorer => _projectExplorerViewModel ?? (_projectExplorerViewModel = new ProjectExplorerViewModel());
+        public ProjectExplorerViewModel ProjectExplorer
+        {
 
-		/// <summary>
+            get
+            {
+                var vm = ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectExplorerViewModel>();
+                return _projectExplorerViewModel ?? (_projectExplorerViewModel = vm);
+            }
+        }
+
+        /// <summary>
 		/// Gets a open document command to open files from the file system.
 		/// </summary>
 		public ICommand OpenCommand =>

@@ -51,10 +51,10 @@ namespace WolvenKit.App.Model
 
         public Tw3Project(string location) : base(location)
         {
-            //t = InitializeAsync();
-
             _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+
+
         }
 
         
@@ -72,20 +72,6 @@ namespace WolvenKit.App.Model
             get
             {
                 var dir = Path.Combine(ProjectDirectory, "_backups");
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
-                return dir;
-            }
-        }
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string FileDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(ProjectDirectory, "files");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
                 return dir;

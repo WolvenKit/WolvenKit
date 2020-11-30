@@ -51,6 +51,7 @@ namespace WolvenKitUI
                 {
                     var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
                     {
+                        //TODO: support cp77 projects
                         Filter = "WolvenKit Project (*.w3modproj)|*w3modproj",
                         IsMultiSelect = false
                     });

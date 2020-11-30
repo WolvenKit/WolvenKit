@@ -16,7 +16,7 @@ namespace WolvenKitUI.Views
     /// <summary>
     /// Interaction logic for ProjectExplorerView.xaml
     /// </summary>
-    public partial class ProjectExplorerView : UserControl
+    public partial class ProjectExplorerView
     {
         public ProjectExplorerView()
         {

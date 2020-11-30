@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using Orc.ProjectManagement;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Services;
 using WolvenKit.Common.Services;
@@ -24,6 +25,7 @@ namespace WolvenKit.App.ViewModels
     {
         #region fields
         private readonly ILoggerService _loggerService;
+        private readonly IProjectManager _projectManager;
         private readonly INavigationService _navigationService;
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly ISettingsManager _settingsManager;
@@ -32,6 +34,7 @@ namespace WolvenKit.App.ViewModels
         #region constructors
         public RibbonViewModel(
             ISettingsManager settingsManager,
+            IProjectManager projectManager,
             ILoggerService loggerService, 
             INavigationService navigationService, 
             IUIVisualizerService uiVisualizerService
@@ -40,16 +43,15 @@ namespace WolvenKit.App.ViewModels
             Argument.IsNotNull(() => loggerService);
             Argument.IsNotNull(() => navigationService);
             Argument.IsNotNull(() => uiVisualizerService);
+            Argument.IsNotNull(() => projectManager);
             Argument.IsNotNull(() => settingsManager);
 
+            _projectManager = projectManager;
             _loggerService = loggerService;
             _navigationService = navigationService;
             _uiVisualizerService = uiVisualizerService;
             _settingsManager = settingsManager;
 
-
-
-            ShowKeyboardMappings = new TaskCommand(OnShowKeyboardMappingsExecuteAsync);
             Command1 = new RelayCommand(RunCommand1, CanRunCommand1);
 
 
@@ -61,7 +63,7 @@ namespace WolvenKit.App.ViewModels
         }
         #endregion
 
-        #region MyRegion
+        #region properties
         /// <summary>
         /// Dependency Property on RibbonView
         /// </summary>
@@ -91,12 +93,6 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         #region Commands
-        public TaskCommand ShowKeyboardMappings { get; private set; }
-        
-        private async Task OnShowKeyboardMappingsExecuteAsync()
-        {
-            
-        }
 
         public ICommand Command1 { get; }
         private bool CanRunCommand1() => true;

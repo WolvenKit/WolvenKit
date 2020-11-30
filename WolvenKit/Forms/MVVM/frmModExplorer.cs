@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.App.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Properties;
@@ -196,24 +197,6 @@ namespace WolvenKit
                 treeListView.ModelFilter = TextMatchFilter.Contains(treeListView, searchBox.Text.ToUpper());
         }
 
-        private enum ECustomImageKeys
-        {
-            OpenDirImageKey, //= "<ODIR>";
-            ClosedDirImageKey, //= "<CDIR>";
-            ModImageKey, //= "<MOD>";
-            DlcImageKey, //= "<DLC>";
-            DlcCookedImageKey, //= "<DLCC>";
-            DlcUncookedImageKey, //= "<DLCU>";
-            ModCookedImageKey, //= "<MODC>";
-            ModUncookedImageKey, //= "<MODU>";
-            RawImageKey, //= "<RAW>";
-            RadishImageKey,
-            RawModImageKey,
-            RawDlcImageKey
-        }
-
-        
-
         private static Image GetSmallIconForFileType(string extension)
         {
             extension = extension.TrimStart('.');
@@ -274,24 +257,24 @@ namespace WolvenKit
                 case "blend": return Resources.blend;
                 case "zip": return Resources.zip;
 
-                case nameof(ECustomImageKeys.ClosedDirImageKey): return Resources.FolderClosed_16x;
-                case nameof(ECustomImageKeys.OpenDirImageKey): return Resources.FolderOpened_16x;
+                case nameof(FileSystemInfoModel.ECustomImageKeys.ClosedDirImageKey): return Resources.FolderClosed_16x;
+                case nameof(FileSystemInfoModel.ECustomImageKeys.OpenDirImageKey): return Resources.FolderOpened_16x;
 
-                case nameof(ECustomImageKeys.RawImageKey): return Resources.Project_Explorer_Base_Dir_16x;
-                case nameof(ECustomImageKeys.RawModImageKey): return Resources.Project_Explorer_Base_Dir_16x;
-                case nameof(ECustomImageKeys.RawDlcImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(FileSystemInfoModel.ECustomImageKeys.RawImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(FileSystemInfoModel.ECustomImageKeys.RawModImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(FileSystemInfoModel.ECustomImageKeys.RawDlcImageKey): return Resources.Project_Explorer_Base_Dir_16x;
 
 
-                case nameof(ECustomImageKeys.RadishImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(FileSystemInfoModel.ECustomImageKeys.RadishImageKey): return Resources.Project_Explorer_Base_Dir_16x;
 
-                case nameof(ECustomImageKeys.ModImageKey): return Resources.Project_Explorer_Base_Dir_16x;
-                case nameof(ECustomImageKeys.ModCookedImageKey): return Resources.Project_Explorer_Base_Dir_16x;
-                case nameof(ECustomImageKeys.ModUncookedImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(FileSystemInfoModel.ECustomImageKeys.ModImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(FileSystemInfoModel.ECustomImageKeys.ModCookedImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(FileSystemInfoModel.ECustomImageKeys.ModUncookedImageKey): return Resources.Project_Explorer_Base_Dir_16x;
 
-                case nameof(ECustomImageKeys.DlcImageKey): return Resources.Project_Explorer_Base_Dir_16x;
-                case nameof(ECustomImageKeys.DlcCookedImageKey): return Resources.Project_Explorer_Base_Dir_16x;
-                case nameof(ECustomImageKeys.DlcUncookedImageKey): return Resources.Project_Explorer_Base_Dir_16x;
-                 
+                case nameof(FileSystemInfoModel.ECustomImageKeys.DlcImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(FileSystemInfoModel.ECustomImageKeys.DlcCookedImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+                case nameof(FileSystemInfoModel.ECustomImageKeys.DlcUncookedImageKey): return Resources.Project_Explorer_Base_Dir_16x;
+
                 default: return Resources.BlankFile_16x;
             }
         }
@@ -299,43 +282,42 @@ namespace WolvenKit
         {
             if (!(obj is FileSystemInfo node))
             {
-                return ECustomImageKeys.OpenDirImageKey.ToString();
+                return FileSystemInfoModel.ECustomImageKeys.OpenDirImageKey.ToString();
             }
             if (node.IsDirectory())
             {
                 // check for base dirs
                 if (node.FullName == ActiveMod.ModDirectory)
-                    return ECustomImageKeys.ModImageKey.ToString();
+                    return FileSystemInfoModel.ECustomImageKeys.ModImageKey.ToString();
                 if (node.FullName == ActiveMod.ModCookedDirectory)
-                    return ECustomImageKeys.ModCookedImageKey.ToString();
+                    return FileSystemInfoModel.ECustomImageKeys.ModCookedImageKey.ToString();
                 if (node.FullName == ActiveMod.ModUncookedDirectory)
-                    return ECustomImageKeys.ModUncookedImageKey.ToString();
+                    return FileSystemInfoModel.ECustomImageKeys.ModUncookedImageKey.ToString();
 
                 if (node.FullName == ActiveMod.DlcDirectory)
-                    return ECustomImageKeys.DlcImageKey.ToString();
+                    return FileSystemInfoModel.ECustomImageKeys.DlcImageKey.ToString();
                 if (node.FullName == ActiveMod.DlcCookedDirectory)
-                    return ECustomImageKeys.DlcCookedImageKey.ToString();
+                    return FileSystemInfoModel.ECustomImageKeys.DlcCookedImageKey.ToString();
                 if (node.FullName == ActiveMod.DlcUncookedDirectory)
-                    return ECustomImageKeys.DlcUncookedImageKey.ToString();
+                    return FileSystemInfoModel.ECustomImageKeys.DlcUncookedImageKey.ToString();
 
                 if (node.FullName == ActiveMod.RawDirectory)
-                    return ECustomImageKeys.RawImageKey.ToString();
+                    return FileSystemInfoModel.ECustomImageKeys.RawImageKey.ToString();
                 if (node.FullName == ActiveMod.RawModDirectory)
-                    return ECustomImageKeys.RawModImageKey.ToString();
+                    return FileSystemInfoModel.ECustomImageKeys.RawModImageKey.ToString();
                 if (node.FullName == ActiveMod.RawDlcDirectory)
-                    return ECustomImageKeys.RawDlcImageKey.ToString();
+                    return FileSystemInfoModel.ECustomImageKeys.RawDlcImageKey.ToString();
 
                 if (node.FullName == ActiveMod.RadishDirectory)
-                    return ECustomImageKeys.RadishImageKey.ToString();
+                    return FileSystemInfoModel.ECustomImageKeys.RadishImageKey.ToString();
 
                 return treeListView.IsExpanded(node)
-                    ? ECustomImageKeys.OpenDirImageKey.ToString()
-                    : ECustomImageKeys.ClosedDirImageKey.ToString();
+                    ? FileSystemInfoModel.ECustomImageKeys.OpenDirImageKey.ToString()
+                    : FileSystemInfoModel.ECustomImageKeys.ClosedDirImageKey.ToString();
             }
             else
                 return (node as FileInfo)?.Extension;
         }
-
         #endregion
 
         #region Control Events
