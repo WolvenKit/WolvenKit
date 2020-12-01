@@ -13,6 +13,11 @@ namespace WolvenKit.App.Model
 
         }
 
+        private Task initializeTask;
+
+
+        public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
+
         public override async Task Initialize() {}
         public override void Check() {}
 

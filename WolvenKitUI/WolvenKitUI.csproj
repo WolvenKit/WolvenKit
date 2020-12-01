@@ -26,6 +26,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Fonts\fontawesome-webfont.ttf" />
     <None Remove="Resources\Icons\Logo.ico" />
     <None Remove="Resources\Images\Files\apb_32x.png" />
     <None Remove="Resources\Images\Files\BlankFile_16x.png" />
@@ -265,9 +266,10 @@
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModels\" />
+    <Folder Include="Model\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Fonts\fontawesome-webfont.ttf" />
     <Resource Include="Resources\Icons\Logo.ico" />
     <Resource Include="Resources\Images\Files\apb_32x.png" />
     <Resource Include="Resources\Images\Files\BlankFile_16x.png" />

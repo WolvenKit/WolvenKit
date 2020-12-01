@@ -1,0 +1,124 @@
+﻿<catel:UserControl x:Class="WolvenKitUI.Views.RecentlyUsedItemsView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                   xmlns:local="clr-namespace:WolvenKitUI.Views"
+                   xmlns:global="clr-namespace:WolvenKitUI"
+                   xmlns:catel="http://schemas.catelproject.com"
+                   xmlns:orchestra="http://schemas.wildgums.com/orchestra"
+                   xmlns:orccontrols="http://schemas.wildgums.com/orc/controls" 
+                   xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
+                   mc:Ignorable="d" 
+                   d:DesignHeight="300" d:DesignWidth="300">
+
+    <Grid x:Name="topGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <orchestra:RibbonBackstageTabItemHeader Grid.Row="0" HeaderText="Recent documents" 
+                                                HeaderTextStyleKey="RibbonBackstageSubHeaderLabelStyle"
+                                                Icon="{orctheming:FontImage {x:Static global:FontAwesome.FolderOpenO}, FontFamily=FontAwesome}" />
+
+        <ItemsControl Grid.Row="1"
+                      ItemsSource="{Binding PinnedItems}"
+                      Visibility="{Binding PinnedItems, Converter={catel:CollectionToCollapsingVisibilityConverter}}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <orchestra:RibbonBackstageButton Command="{catel:CommandManagerBinding File.Open}"
+                                                     CommandParameter="{Binding Name}" ToolTip="{Binding Name}" ShowBorder="False">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="6" />
+                            </Grid.ColumnDefinitions>
+
+                            <orchestra:RibbonBackstageButton Grid.Column="0" 
+                                                             Command="{Binding ElementName=topGrid, Path=DataContext.UnpinItem}"
+                                                             CommandParameter="{Binding Name}" 
+                                                             Width="24" 
+                                                             Height="24" 
+                                                             ShowBorder="False">
+                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.ThumbTack}, FontFamily=FontAwesome}" />
+                            </orchestra:RibbonBackstageButton>
+
+                            <Label Grid.Column="1"
+                                   Content="{Binding Name, Converter={orchestra:PathToStringConverter}, ConverterParameter=100}" />
+
+                            <orchestra:RibbonBackstageButton Grid.Column="2"
+                                                             Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
+                                                             CommandParameter="{Binding Name}"
+                                                             Width="24" 
+                                                             Height="24"
+                                                             ToolTip="Open in explorer" 
+                                                             ShowBorder="False">
+                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.FolderOpenO}, FontFamily=FontAwesome}" />
+                            </orchestra:RibbonBackstageButton>
+                        </Grid>
+                    </orchestra:RibbonBackstageButton>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Border Grid.Row="2" 
+                Height="1" 
+                
+                Visibility="{Binding PinnedItems, Converter={catel:CollectionToCollapsingVisibilityConverter}}" />
+
+        <ItemsControl Grid.Row="3" 
+                      ItemsSource="{Binding RecentlyUsedItems}" 
+                      Visibility="{Binding RecentlyUsedItems, Converter={catel:CollectionToCollapsingVisibilityConverter}}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <orchestra:RibbonBackstageButton Command="{catel:CommandManagerBinding File.Open}"
+                                                     CommandParameter="{Binding Name}" 
+                                                     ToolTip="{Binding Name}" 
+                                                     ShowBorder="False">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="6" />
+                            </Grid.ColumnDefinitions>
+
+                            <orchestra:RibbonBackstageButton Grid.Column="0" 
+                                                             Command="{Binding ElementName=topGrid, Path=DataContext.PinItem}"
+                                                             CommandParameter="{Binding Name}" 
+                                                             Width="24" 
+                                                             Height="24" 
+                                                             ShowBorder="False">
+                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.ThumbTack}, FontFamily=FontAwesome}" >
+                                    <Image.RenderTransform>
+                                        <RotateTransform Angle="90" 
+                                                         CenterX="9" 
+                                                         CenterY="12.5"/>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </orchestra:RibbonBackstageButton>
+
+                            <Label Grid.Column="1" 
+                                   Content="{Binding Name, Converter={orchestra:PathToStringConverter}, ConverterParameter=100}" />
+
+                            <orchestra:RibbonBackstageButton Grid.Column="2" 
+                                                             Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
+                                                             CommandParameter="{Binding Name}" 
+                                                             Width="24" 
+                                                             Height="24" 
+                                                             ToolTip="Open in explorer" 
+                                                             ShowBorder="False">
+                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.FolderOpenO}, FontFamily=FontAwesome}" />
+                            </orchestra:RibbonBackstageButton>
+                        </Grid>
+                    </orchestra:RibbonBackstageButton>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</catel:UserControl>

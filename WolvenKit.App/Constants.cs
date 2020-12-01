@@ -31,6 +31,18 @@ namespace WolvenKit.App
             public const string ShowLog = "Application.ShowLog";
             public const string ShowProjectExplorer = "Application.ShowProjectExplorer";
             public const string ShowImportUtility = "Application.ShowImportUtility";
+
+            public const string ShowAssetBrowser = "Application.ShowAssetBrowser";
+            public const string ShowModSettings = "Application.ShowModSettings";
+            public const string ShowPackageInstaller = "Application.ShowPackageInstaller";
+            
+            public const string OpenFile = "Application.OpenFile";
+            public const string NewFile = "Application.NewFile";
+
+            public const string PackMod = "Application.PackMod";
+            public const string BackupMod = "Application.BackupMod";
+
+
         }
     }
 

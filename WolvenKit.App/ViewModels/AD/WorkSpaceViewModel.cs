@@ -82,11 +82,25 @@ namespace WolvenKit.App.ViewModels
             ShowProjectExplorerCommand = new RelayCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer);
             ShowImportUtilityCommand = new RelayCommand(ExecuteShowImportUtility, CanShowImportUtility);
 
+            OpenFileCommand = new RelayCommand(ExecuteOpenFile, CanOpenFile);
+            NewFileCommand = new RelayCommand(ExecuteNewFile, CanNewFile);
+
+            PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
+            BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
+
+
 			// register as application-wide commands
-            commandManager.RegisterCommand(nameof(AppCommands.Application.ShowLog), ShowLogCommand, this);
+			// View Tab
+			commandManager.RegisterCommand(nameof(AppCommands.Application.ShowLog), ShowLogCommand, this);
             commandManager.RegisterCommand(nameof(AppCommands.Application.ShowProjectExplorer), ShowProjectExplorerCommand, this);
 			commandManager.RegisterCommand(nameof(AppCommands.Application.ShowImportUtility), ShowImportUtilityCommand, this);
 
+			// Home Tab
+            commandManager.RegisterCommand(nameof(AppCommands.Application.OpenFile), OpenFileCommand, this);
+            commandManager.RegisterCommand(nameof(AppCommands.Application.NewFile), NewFileCommand, this);
+            
+            commandManager.RegisterCommand(nameof(AppCommands.Application.PackMod), PackModCommand, this);
+            commandManager.RegisterCommand(nameof(AppCommands.Application.BackupMod), BackupModCommand, this);
 		}
 		#endregion constructors
 
@@ -116,27 +130,77 @@ namespace WolvenKit.App.ViewModels
 		#endregion
 
 		#region commands
+		/// <summary>
+		/// Displays the LogView.
+		/// </summary>
         public ICommand ShowLogCommand { get; private set; }
 		private bool CanShowLog() => true;
         private void ExecuteShowLog() => Log.IsVisible = !Log.IsVisible;
 
+		/// <summary>
+		/// Displays the Project Explorer View.
+		/// </summary>
         public ICommand ShowProjectExplorerCommand { get; private set; }
         private bool CanShowProjectExplorer() => true;
         private void ExecuteShowProjectExplorer() => ProjectExplorer.IsVisible = !ProjectExplorer.IsVisible;
 
+		/// <summary>
+		/// Displays the Import Utility View
+		/// </summary>
 		public ICommand ShowImportUtilityCommand { get; private set; }
-        private bool CanShowImportUtility() => _projectManager.ActiveProject is Project;
+        private bool CanShowImportUtility() => true;
         private async void ExecuteShowImportUtility()
         {
-			// TODO: Handle command logic here
-			var pleaseWaitService = ServiceLocator.Default.ResolveType<IPleaseWaitService>();
-
-            if (_projectManager.ActiveProject is Project p)
-			    p.Check();
+			//TODO
         }
 
+		/// <summary>
+		/// Opens a physical file in WolvenKit.
+		/// </summary>
+        public ICommand OpenFileCommand { get; private set; }
+        private bool CanOpenFile() => true;
+        private async void ExecuteOpenFile()
+        {
+			//TODO
+            var dlg = new OpenFileDialog();
+            if (dlg.ShowDialog().GetValueOrDefault())
+            {
+                var fileViewModel = await OpenAsync(dlg.FileName);
+                ActiveDocument = fileViewModel;
+            }
+		}
 
-        #endregion
+		/// <summary>
+		/// Creates a new cr2w file in WolvenKit.
+		/// </summary>
+		public ICommand NewFileCommand { get; private set; }
+        private bool CanNewFile() => true;
+        private void ExecuteNewFile()
+        {
+            //TODO
+		}
+
+		/// <summary>
+		/// Packs the current mod project.
+		/// </summary>
+		public ICommand PackModCommand { get; private set; }
+        private bool CanPackMod() => _projectManager.ActiveProject is Project proj;
+        private async void ExecutePackMod()
+        {
+            //TODO
+		}
+
+		/// <summary>
+		/// Git-backup current mod project
+		/// </summary>
+		public ICommand BackupModCommand { get; private set; }
+        private bool CanBackupMod() => _projectManager.ActiveProject is Project;
+        private async void ExecuteBackupMod()
+        {
+            //TODO
+		}
+
+		#endregion
 
 
 		/// <summary>
@@ -202,19 +266,6 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
-        /// <summary>
-		/// Gets a open document command to open files from the file system.
-		/// </summary>
-		public ICommand OpenCommand =>
-            _openCommand ?? (_openCommand =
-                new DelegateCommand<object>(async (p) => await OnOpenAsync(p), (p) => CanOpen(p)));
-
-        /// <summary>
-        /// Gets a new document command to create new documents from scratch.
-        /// </summary>
-        public ICommand NewCommand =>
-            _newCommand ?? (_newCommand = new DelegateCommand<object>((p) => OnNew(p), (p) => CanNew(p)));
-
 		#endregion Properties
 
 		#region methods
@@ -227,8 +278,6 @@ namespace WolvenKit.App.ViewModels
             }
 
             Project = newProject;
-
-            
         }
 		/// <summary>
 		/// Checks if a document can be closed and asks the user whether
@@ -285,28 +334,7 @@ namespace WolvenKit.App.ViewModels
 			ActiveDocument.IsDirty = false;
 		}
 
-		#region OpenCommand
-		/// <summary>
-		/// Determines if application can currently open a document or not.
-		/// </summary>
-		/// <param name="parameter"></param>
-		/// <returns></returns>
-		private bool CanOpen(object parameter)
-		{
-			return true;
-		}
-
-		private async Task OnOpenAsync(object parameter)
-		{
-			var dlg = new OpenFileDialog();
-			if (dlg.ShowDialog().GetValueOrDefault())
-			{
-				var fileViewModel = await OpenAsync(dlg.FileName);
-				ActiveDocument = fileViewModel;
-			}
-		}
-
-		/// <summary>
+        /// <summary>
 		/// Open a file and return its content in a viewmodel.
 		/// </summary>
 		/// <param name="filepath"></param>
@@ -329,7 +357,6 @@ namespace WolvenKit.App.ViewModels
 
 			return null;
 		}
-		#endregion  OpenCommand
 
 		#region NewCommand
 		/// <summary>
@@ -337,12 +364,9 @@ namespace WolvenKit.App.ViewModels
 		/// </summary>
 		/// <param name="parameter"></param>
 		/// <returns></returns>
-		private bool CanNew(object parameter)
-		{
-			return true;
-		}
+		private bool CanNew(object parameter) => true;
 
-		private void OnNew(object parameter)
+        private void OnNew(object parameter)
 		{
 			string path = string.Format("Untitled{0}.txt", _newDocumentCounter++);
 

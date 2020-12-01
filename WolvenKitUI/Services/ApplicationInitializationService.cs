@@ -14,8 +14,9 @@ using Orc.Squirrel;
 using WolvenKit.App;
 using WolvenKit.App.Services;
 using WolvenKit.Common.Services;
-using WolvenKitUI.Model;
 using Settings = WolvenKit.App.Settings;
+using WolvenKit.App.Model.ProjectManagement;
+using System.Windows.Media;
 
 namespace WolvenKitUI.Services
 {
@@ -56,6 +57,7 @@ namespace WolvenKitUI.Services
         {
             // Non-async first
             RegisterTypes();
+            InitializeFonts();
             InitializeCommands();
             InitializeWatchers();
 
@@ -90,6 +92,13 @@ namespace WolvenKitUI.Services
             Catel.Windows.Controls.UserControl.DefaultSkipSearchingForInfoBarMessageControlValue = true;
         }
 
+        private void InitializeFonts()
+        {
+            Orc.Theming.FontImage.RegisterFont("FontAwesome", new FontFamily(new Uri("pack://application:,,,/WolvenKitUI;component/Resources/Fonts/", UriKind.RelativeOrAbsolute), "./#FontAwesome"));
+            Orc.Theming.FontImage.DefaultFontFamily = "FontAwesome";
+            Orc.Theming.FontImage.DefaultBrush = new SolidColorBrush(Color.FromArgb(255, 87, 87, 87));
+        }
+
         private void InitializeCommands()
         {
             // global commands
@@ -105,6 +114,11 @@ namespace WolvenKitUI.Services
             _commandManager.CreateCommand(nameof(AppCommands.Application.ShowProjectExplorer));
             _commandManager.CreateCommand(nameof(AppCommands.Application.ShowImportUtility));
 
+            _commandManager.CreateCommand(nameof(AppCommands.Application.OpenFile));
+            _commandManager.CreateCommand(nameof(AppCommands.Application.NewFile));
+            _commandManager.CreateCommand(nameof(AppCommands.Application.PackMod));
+            _commandManager.CreateCommand(nameof(AppCommands.Application.BackupMod));
+
         }
 
         private void RegisterTypes()
@@ -117,7 +131,7 @@ namespace WolvenKitUI.Services
             //_serviceLocator.RegisterType<IMainWindowTitleService, MainWindowTitleService>();      //TODO: 
             //_serviceLocator.RegisterType<IProjectValidator, WkitProjectValidator>();
             _serviceLocator.RegisterType<ISaveProjectChangesService, SaveProjectChangesService>();
-            _serviceLocator.RegisterType<IInitialProjectLocationService, Model.InitialProjectLocationService>();
+            _serviceLocator.RegisterType<IInitialProjectLocationService, WolvenKit.App.Model.ProjectManagement.InitialProjectLocationService>();
 
             _serviceLocator.RegisterType<IProjectInitializer, FileProjectInitializer>();
 
@@ -138,7 +152,7 @@ namespace WolvenKitUI.Services
 
         private void InitializeWatchers()
         {
-            
+            _serviceLocator.RegisterTypeAndInstantiate<RecentlyUsedItemsProjectWatcher>();
         }
 
         private async Task CheckForUpdatesAsync()

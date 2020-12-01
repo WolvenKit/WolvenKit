@@ -68,7 +68,7 @@
 			IsDirty = false;
 
 			//Set the icon only for open documents (just a test)
-			IconSource = ISC.ConvertFromInvariantString(@"pack://application:,,/Demos/Images/document.png") as ImageSource;
+			//IconSource = ISC.ConvertFromInvariantString(@"pack://application:,,/Demos/Images/document.png") as ImageSource;
 		}
 		#endregion ctors
 

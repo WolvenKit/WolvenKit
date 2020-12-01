@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.App.Model;
 
-namespace WolvenKitUI.Model
+namespace WolvenKit.App.Model.ProjectManagement
 {
     public enum SaveChangesReason
     {

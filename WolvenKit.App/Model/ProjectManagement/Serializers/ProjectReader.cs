@@ -7,7 +7,7 @@ using Orc.ProjectManagement;
 using WolvenKit.App.Model;
 using WolvenKit.Common;
 
-namespace WolvenKitUI.Model
+namespace WolvenKit.App.Model.ProjectManagement
 {
     public class ProjectReader : ProjectReaderBase
     {
@@ -39,7 +39,11 @@ namespace WolvenKitUI.Model
                     case ".w3modproj":
                         // TODO: use the old class because orc.projects don't have parameterless constructors
                         var ser = new XmlSerializer(typeof(W3Mod));
+#if NETCOREAPP
                         await using (var modfile = new FileStream(location, FileMode.Open, FileAccess.Read))
+#else
+                        using (var modfile = new FileStream(location, FileMode.Open, FileAccess.Read))
+#endif
                         {
                             var obj = (W3Mod)ser.Deserialize(modfile);
                             project = new Tw3Project(location)

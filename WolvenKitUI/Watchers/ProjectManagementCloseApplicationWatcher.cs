@@ -11,8 +11,8 @@ using Catel.Services;
 using Orc.ProjectManagement;
 using Orchestra;
 using WolvenKit.App.Model;
+using WolvenKit.App.Model.ProjectManagement;
 using WolvenKitUI.Services;
-using WolvenKitUI.Model;
 
 namespace WolvenKitUI
 {

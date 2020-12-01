@@ -7,7 +7,7 @@ using Orc.ProjectManagement;
 using Orc.FileSystem;
 using WolvenKit.App.Model;
 
-namespace WolvenKitUI.Model
+namespace WolvenKit.App.Model.ProjectManagement
 {
     public class ProjectWriter : ProjectWriterBase<Project>
     {

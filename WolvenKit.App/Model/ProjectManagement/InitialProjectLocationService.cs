@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace WolvenKitUI.Model
+namespace WolvenKit.App.Model.ProjectManagement
 {
     using System.IO;
     using System.Threading.Tasks;

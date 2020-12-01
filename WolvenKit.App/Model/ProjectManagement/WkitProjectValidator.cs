@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Orc.ProjectManagement;
 
-namespace WolvenKitUI.Model
+namespace WolvenKit.App.Model.ProjectManagement
 {
     public class WkitProjectValidator : ProjectValidatorBase
     {

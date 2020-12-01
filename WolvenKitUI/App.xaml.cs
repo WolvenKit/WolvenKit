@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using WolvenKit.App.ViewModels;
+using WolvenKitUI.ViewModels;
 
 namespace WolvenKitUI
 {
@@ -62,15 +63,19 @@ namespace WolvenKitUI
             // Register Viewmodels
             var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
             viewModelLocator.NamingConventions.Add("WolvenKit.App.ViewModels.[VW]ViewModel");
+
+            //TODO: rename later to MainViewModel
             viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
 
+            // local VMs
+            viewModelLocator.Register(typeof(OpenFileView), typeof(OpenFileViewModel));
+            viewModelLocator.Register(typeof(RecentlyUsedItemsView), typeof(RecentlyUsedItemsViewModel));
 
-            
-            
 
 
 
-            
+
+
             var shellService = serviceLocator.ResolveType<IShellService>();
             await shellService.CreateAsync<ShellWindow>();
 

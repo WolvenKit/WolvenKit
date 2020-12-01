@@ -33,6 +33,11 @@ namespace WolvenKit.App.Model
         #endregion
 
         #region properties
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public abstract bool IsInitialized { get; }
+
 
         [Category("About")]
         [Description("The name of your mod.")]
@@ -79,6 +84,7 @@ namespace WolvenKit.App.Model
 
         #region Methods
 
+        
         public abstract Task Initialize();
         public abstract void Check();
         #endregion

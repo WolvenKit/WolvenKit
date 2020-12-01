@@ -75,7 +75,7 @@ namespace WolvenKit.App.Services
                     };
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Defaults
                 config = new SettingsManager

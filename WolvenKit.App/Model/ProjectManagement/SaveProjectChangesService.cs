@@ -7,7 +7,7 @@
 
 using WolvenKit.App.Model;
 
-namespace WolvenKitUI.Model
+namespace WolvenKit.App.Model.ProjectManagement
 {
     using System.Threading.Tasks;
     using Catel;

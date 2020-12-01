@@ -30,7 +30,7 @@ namespace WolvenKit.App.Model
         private readonly ISettingsManager _settings;
         private readonly ILoggerService _logger;
 
-        private Task t;
+        private Task initializeTask;
 
         private W3StringManager W3StringManager;
         private BundleManager BundleManager;
@@ -61,7 +61,7 @@ namespace WolvenKit.App.Model
 
         #region properties
 
-        public bool IsInitialized => t.Status == TaskStatus.RanToCompletion;
+        public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
 
         #region Directories
         [XmlIgnore]
@@ -365,23 +365,23 @@ namespace WolvenKit.App.Model
         #endregion
 
         #region methods
-
-        public override void Check() => _logger.LogString($"{t.Status.ToString()}", Logtype.Error);
+        // TODO: debug
+        public override void Check() => _logger.LogString($"{initializeTask.Status.ToString()}", Logtype.Error);
 
         public sealed override async Task Initialize()
         {
-            // if t is null
-            if (t == null)
+            // if initializeTask is null
+            if (initializeTask == null)
             {
-                t =  Task.Run(() => InitializeAsync());
+                initializeTask =  Task.Run(() => InitializeAsync());
             }
             else
             {
                 // TODO: needed?
-                if (t.IsCompleted == false && 
-                    t.Status != TaskStatus.Running && 
-                    t.Status != TaskStatus.WaitingToRun &&
-                    t.Status != TaskStatus.WaitingForActivation)
+                if (initializeTask.IsCompleted == false && 
+                    initializeTask.Status != TaskStatus.Running && 
+                    initializeTask.Status != TaskStatus.WaitingToRun &&
+                    initializeTask.Status != TaskStatus.WaitingForActivation)
                 {
 
                 }
