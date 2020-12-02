@@ -107,7 +107,11 @@
     <None Remove="Resources\Svg\case-sensitive.svg" />
     <None Remove="Resources\Svg\Close_16x.svg" />
     <None Remove="Resources\Svg\Close_red_16x.svg" />
+    <None Remove="Resources\Svg\CollapseAll_16x.svg" />
+    <None Remove="Resources\Svg\CollapseChevronUpGroup_16x.svg" />
     <None Remove="Resources\Svg\EventLog_16x.svg" />
+    <None Remove="Resources\Svg\ExpandAll_16x.svg" />
+    <None Remove="Resources\Svg\ExpandChevronDownGroup_16x.svg" />
     <None Remove="Resources\Svg\ImportFile_16x.svg" />
     <None Remove="Resources\Svg\ImportTheme_16x.svg" />
     <None Remove="Resources\Svg\Method_16x.svg" />
@@ -182,7 +186,19 @@
     <Content Include="Resources\Svg\Close_red_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Svg\CollapseAll_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\CollapseChevronUpGroup_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Svg\EventLog_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\ExpandAll_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\ExpandChevronDownGroup_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Svg\ImportFile_16x.svg">

@@ -15,34 +15,30 @@
             <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
         </Grid.Resources>
 
-        <TreeView Name="TreeView" ItemsSource="{Binding Treenodes}">
+        <TreeView Name="TreeView" 
+                  ItemsSource="{Binding Treenodes}"
+                  
+                  >
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
+                    
                 </Style>
             </TreeView.ItemContainerStyle>
 
             <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type model:DirectoryInfoModel}" ItemsSource="{Binding Children}">
+                <HierarchicalDataTemplate DataType="{x:Type model:FileSystemInfoModel}" 
+                                          ItemsSource="{Binding Children}">
                     <StackPanel Orientation="Horizontal">
-                        <!--<Image Source="{Binding Path=ImageSource, UpdateSourceTrigger=PropertyChanged}" Margin="0,1,8,1"></Image>-->
                         <Image Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}" 
                                Margin="0,1,8,1"
                                Height="16"/>
                         <TextBlock Text="{Binding Path=Name}" />
                     </StackPanel>
-                    
+
                 </HierarchicalDataTemplate>
-                <DataTemplate DataType="{x:Type model:FileInfoModel}" >
-                    <StackPanel Orientation="Horizontal">
-                        <!--<Image Source="{Binding Path=ImageSource, UpdateSourceTrigger=PropertyChanged}" Margin="0,1,8,1"></Image>-->
-                        <Image Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}" 
-                               Margin="0,1,8,1"
-                               Height="16"/>
-                        <TextBlock Text="{Binding Path=Name}" />
-                    </StackPanel>
-                </DataTemplate>
             </TreeView.Resources>
         </TreeView>
 

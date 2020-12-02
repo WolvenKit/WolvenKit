@@ -8,6 +8,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -69,14 +70,20 @@ namespace WolvenKit.App.ViewModels
             ICommandManager commandManager
             )
 		{
+            #region dependency injection
+
             Argument.IsNotNull(() => projectManager);
-			Argument.IsNotNull(() => messageService);
+            Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => commandManager);
             Argument.IsNotNull(() => loggerService);
 
             _projectManager = projectManager;
-			_loggerService = loggerService;
-			_messageService = messageService;
+            _loggerService = loggerService;
+            _messageService = messageService;
+
+            #endregion
+
+            #region commands
 
             ShowLogCommand = new RelayCommand(ExecuteShowLog, CanShowLog);
             ShowProjectExplorerCommand = new RelayCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer);
@@ -89,22 +96,50 @@ namespace WolvenKit.App.ViewModels
             BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
 
 
-			// register as application-wide commands
-			// View Tab
-			commandManager.RegisterCommand(nameof(AppCommands.Application.ShowLog), ShowLogCommand, this);
-            commandManager.RegisterCommand(nameof(AppCommands.Application.ShowProjectExplorer), ShowProjectExplorerCommand, this);
-			commandManager.RegisterCommand(nameof(AppCommands.Application.ShowImportUtility), ShowImportUtilityCommand, this);
-
-			// Home Tab
-            commandManager.RegisterCommand(nameof(AppCommands.Application.OpenFile), OpenFileCommand, this);
-            commandManager.RegisterCommand(nameof(AppCommands.Application.NewFile), NewFileCommand, this);
             
-            commandManager.RegisterCommand(nameof(AppCommands.Application.PackMod), PackModCommand, this);
-            commandManager.RegisterCommand(nameof(AppCommands.Application.BackupMod), BackupModCommand, this);
+
+
+			// register as application-wide commands
+            RegisterCommands(commandManager);
+
+            #endregion
+
+			#region events
+
+			ProjectExplorer.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+
+            #endregion
+
 		}
 		#endregion constructors
 
 		#region init
+
+        private void RegisterCommands(ICommandManager commandManager)
+        {
+            // View Tab
+            commandManager.RegisterCommand(nameof(AppCommands.Application.ShowLog), ShowLogCommand, this);
+            commandManager.RegisterCommand(nameof(AppCommands.Application.ShowProjectExplorer), ShowProjectExplorerCommand, this);
+            commandManager.RegisterCommand(nameof(AppCommands.Application.ShowImportUtility), ShowImportUtilityCommand, this);
+
+            // Home Tab
+            commandManager.RegisterCommand(nameof(AppCommands.Application.OpenFile), OpenFileCommand, this);
+            commandManager.RegisterCommand(nameof(AppCommands.Application.NewFile), NewFileCommand, this);
+
+            commandManager.RegisterCommand(nameof(AppCommands.Application.PackMod), PackModCommand, this);
+            commandManager.RegisterCommand(nameof(AppCommands.Application.BackupMod), BackupModCommand, this);
+
+			
+		}
+
+		private void OnProjectExplorerOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName == "IsActive" && sender is PaneViewModel panevm)
+                ServiceLocator.Default.ResolveType<ICommandManager>()
+                    .GetCommand(nameof(AppCommands.Application.ViewSelected))
+                    .SafeExecute(new Tuple<PaneViewModel, bool>(panevm, panevm.IsActive));
+        }
+
 		protected override async Task InitializeAsync()
 		{
             _projectManager.ProjectActivationAsync += OnProjectActivationAsync;
@@ -200,15 +235,18 @@ namespace WolvenKit.App.ViewModels
             //TODO
 		}
 
+		
+
+
 		#endregion
 
+		#region Properties
 
 		/// <summary>
 		/// Event is raised when AvalonDock (or the user) selects a new document.
 		/// </summary>
 		public event EventHandler ActiveDocumentChanged;
 
-		#region Properties
         public Project Project { get; set; }
 
 		public bool SaveLayout { get; set; }

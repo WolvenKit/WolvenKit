@@ -37,7 +37,8 @@ namespace WolvenKit.App.ViewModels
             IProjectManager projectManager,
             ILoggerService loggerService, 
             INavigationService navigationService, 
-            IUIVisualizerService uiVisualizerService
+            IUIVisualizerService uiVisualizerService,
+            ICommandManager commandManager
             )
         {
             Argument.IsNotNull(() => loggerService);
@@ -45,6 +46,7 @@ namespace WolvenKit.App.ViewModels
             Argument.IsNotNull(() => uiVisualizerService);
             Argument.IsNotNull(() => projectManager);
             Argument.IsNotNull(() => settingsManager);
+            Argument.IsNotNull(() => commandManager);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
@@ -53,17 +55,31 @@ namespace WolvenKit.App.ViewModels
             _settingsManager = settingsManager;
 
             Command1 = new RelayCommand(RunCommand1, CanRunCommand1);
+            ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
 
+            commandManager.RegisterCommand(nameof(AppCommands.Application.ViewSelected), ViewSelectedCommand, this);
+            
 
             var assembly = AssemblyHelper.GetEntryAssembly();
             Title = assembly.Title();
 
-
+            
 
         }
         #endregion
 
         #region properties
+
+        public enum ERibbonContextualTabGroupVisibility
+        {
+            Collapsed,
+            Visible,
+        }
+
+        public ERibbonContextualTabGroupVisibility ProjectExplorerContextualTabGroupVisibility { get; set; }
+        public string ProjectExplorerContextualTabGroupVisibilityStr =>
+            ProjectExplorerContextualTabGroupVisibility.ToString();
+
         /// <summary>
         /// Dependency Property on RibbonView
         /// </summary>
@@ -87,12 +103,27 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
-        
+
 
 
         #endregion
 
-        #region Commands
+        #region commands
+
+        /// <summary>
+        /// Is raised when a PaneView is selected: shows the contextual ribbon tab
+        /// </summary>
+        public ICommand ViewSelectedCommand { get; private set; }
+        private bool CanViewSelected(object view) => true;
+        private void ExecuteViewSelected(object view)
+        {
+            if (!(view is Tuple<PaneViewModel, bool> tuple)) return;
+
+            if (tuple.Item1 is ProjectExplorerViewModel)
+                ProjectExplorerContextualTabGroupVisibility = tuple.Item2
+                    ? ERibbonContextualTabGroupVisibility.Visible
+                    : ERibbonContextualTabGroupVisibility.Collapsed;
+        }
 
         public ICommand Command1 { get; }
         private bool CanRunCommand1() => true;
@@ -102,7 +133,7 @@ namespace WolvenKit.App.ViewModels
         }
         #endregion
 
-        #region Methods
+        #region methods
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();

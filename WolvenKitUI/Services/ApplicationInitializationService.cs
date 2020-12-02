@@ -119,6 +119,15 @@ namespace WolvenKitUI.Services
             _commandManager.CreateCommand(nameof(AppCommands.Application.PackMod));
             _commandManager.CreateCommand(nameof(AppCommands.Application.BackupMod));
 
+            // Project Explorer
+            _commandManager.CreateCommand(nameof(AppCommands.Application.ExpandAll));
+            _commandManager.CreateCommand(nameof(AppCommands.Application.Expand));
+            _commandManager.CreateCommand(nameof(AppCommands.Application.CollapseAll));
+            _commandManager.CreateCommand(nameof(AppCommands.Application.Collapse));
+
+
+            _commandManager.CreateCommand(nameof(AppCommands.Application.ViewSelected));
+
         }
 
         private void RegisterTypes()

@@ -43,6 +43,17 @@ namespace WolvenKit.App
             public const string BackupMod = "Application.BackupMod";
 
 
+
+            public const string ViewSelected = "Application.ViewSelected";
+
+            #region Project Explorer
+            public const string ExpandAll = "Application.ExpandAll";
+            public const string CollapseAll = "Application.CollapseAll";
+            public const string Expand = "Application.Expand";
+            public const string Collapse = "Application.Collapse";
+            #endregion
+
+
         }
     }
 

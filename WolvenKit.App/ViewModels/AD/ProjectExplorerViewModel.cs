@@ -68,8 +68,8 @@ namespace WolvenKit.App.ViewModels
             _messageService = messageService;
 
             _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
-            LastChange = DateTime.Now;
 
+            #region commands
 
             CookCommand = new RelayCommand(Cook, CanCook);
             //DeleteFilesCommand = new RelayCommand(DeleteFiles, CanDeleteFiles);
@@ -79,34 +79,32 @@ namespace WolvenKit.App.ViewModels
             ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
             AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
 
+            // subscribe to global commands
+            ExpandAllCommand = new RelayCommand(ExecuteExpandAll, CanExpandAll);
+            CollapseAllCommand = new RelayCommand(ExecuteCollapseAll, CanCollapseAll);
+            ExpandCommand = new RelayCommand(ExecuteExpand, CanExpand);
+            CollapseCommand = new RelayCommand(ExecuteCollapse, CanCollapse);
+            commandManager.RegisterCommand(nameof(AppCommands.Application.ExpandAll), ExpandAllCommand, this);
+            commandManager.RegisterCommand(nameof(AppCommands.Application.CollapseAll), CollapseAllCommand, this);
+            commandManager.RegisterCommand(nameof(AppCommands.Application.Expand), ExpandCommand, this);
+            commandManager.RegisterCommand(nameof(AppCommands.Application.Collapse), CollapseCommand, this);
+            
+
+            #endregion
+
 
             Treenodes = new BindingList<FileSystemInfoModel>();
             Treenodes.ListChanged += new ListChangedEventHandler(Treenodes_ListChanged);
+
+            
 
             ExpandedNodesDict = new Dictionary<string, List<string>>();
         }
         #endregion constructors
 
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
-
-            _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
-        }
-
-        protected override async Task CloseAsync()
-        {
-            _projectManager.ProjectActivatedAsync -= OnProjectActivatedAsync;
-
-            await base.CloseAsync();
-        }
-
         #region Properties
         //public bool IsTreeview { get; set; } = true;
         public Dictionary<string, List<string>> ExpandedNodesDict { get; set; }
-
-        public static DateTime LastChange;
-        public static TimeSpan mindiff = TimeSpan.FromMilliseconds(500);
 
         #region ModelList
         private BindingList<FileSystemInfoModel> _treenodes = null;
@@ -124,21 +122,12 @@ namespace WolvenKit.App.ViewModels
             }
         }
         #endregion
+
+        private IEnumerable<FileSystemInfoModel> FlattenedNodes => Treenodes.Concat(Treenodes.SelectMany(_ => _.AllChildren));
+        private IEnumerable<FileSystemInfoModel> SelectedItems => FlattenedNodes.Where(_ => _.IsSelected);
         #region SelectedItem
-        private List<FileSystemInfo> _selectedItems = null;
-        public List<FileSystemInfo> SelectedItems
-        {
-            get => _selectedItems;
-            set
-            {
-                if (_selectedItems != value)
-                {
-                    var oldValue = _selectedItems;
-                    _selectedItems = value;
-                    RaisePropertyChanged(() => SelectedItems, oldValue, value);
-                }
-            }
-        }
+
+
         #endregion
         #endregion
 
@@ -149,7 +138,67 @@ namespace WolvenKit.App.ViewModels
         public ICommand CopyFileCommand { get; }
         public ICommand PasteFileCommand { get; }
         public ICommand AddAllImportsCommand { get; }
-        
+
+        #region Project Explorer
+
+        /// <summary>
+        /// Git-backup current mod project
+        /// </summary>
+        public ICommand ExpandAllCommand { get; private set; }
+        private bool CanExpandAll() => _projectManager.ActiveProject is Project;
+        private async void ExecuteExpandAll()
+        {
+            foreach (var node in Treenodes)
+            {
+                node.IsExpanded = true;
+                node.ExpandChildren(true);
+            }
+        }
+
+        /// <summary>
+        /// Git-backup current mod project
+        /// </summary>
+        public ICommand CollapseAllCommand { get; private set; }
+        private bool CanCollapseAll() => _projectManager.ActiveProject is Project;
+        private async void ExecuteCollapseAll()
+        {
+            foreach (var node in Treenodes)
+            {
+                node.IsExpanded = false;
+                node.CollapseChildren(true);
+            }
+        }
+
+        /// <summary>
+        /// Git-backup current mod project
+        /// </summary>
+        public ICommand ExpandCommand { get; private set; }
+        private bool CanExpand() => _projectManager.ActiveProject is Project && SelectedItems.Any();
+        private async void ExecuteExpand()
+        {
+            foreach (var node in SelectedItems)
+            {
+                node.IsExpanded = true;
+                node.ExpandChildren(true);
+            }
+        }
+
+        /// <summary>
+        /// Git-backup current mod project
+        /// </summary>
+        public ICommand CollapseCommand { get; private set; }
+        private bool CanCollapse() => _projectManager.ActiveProject is Project && SelectedItems.Any();
+        private async void ExecuteCollapse()
+        {
+            foreach (var node in SelectedItems)
+            {
+                node.IsExpanded = false;
+                node.CollapseChildren(true);
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Commands Implementation
@@ -223,6 +272,20 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         #region Methods
+        protected override async Task InitializeAsync()
+        {
+            await base.InitializeAsync();
+
+            _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
+        }
+
+        protected override async Task CloseAsync()
+        {
+            _projectManager.ProjectActivatedAsync -= OnProjectActivatedAsync;
+
+            await base.CloseAsync();
+        }
+
         void Treenodes_ListChanged(object sender, ListChangedEventArgs e)
         {
             RaisePropertyChanged(nameof(Treenodes));
@@ -248,17 +311,11 @@ namespace WolvenKit.App.ViewModels
             var fileDirectoryInfo = new DirectoryInfo(ActiveMod.FileDirectory);
             foreach (var fileSystemInfo in fileDirectoryInfo.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly))
             {
-                switch (fileSystemInfo)
-                {
-                    case DirectoryInfo di:
-                        Treenodes.Add(new DirectoryInfoModel(di));
-                        break;
-                    case FileInfo fi:
-                        Treenodes.Add(new FileInfoModel(fi));
-                        break;
-                }
+                Treenodes.Add(new FileSystemInfoModel(fileSystemInfo));
             }
         }
+
+
 
         private async void RequestFileCook(object sender, RequestFileOpenArgs e)
         {

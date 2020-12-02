@@ -34,6 +34,11 @@
             <svgc:SvgViewbox x:Key="IconProjectExplorer" Source="/Resources/Svg/SQLServerObjectExplorer_16x.svg"/>
             <svgc:SvgViewbox x:Key="IconImportUtility" Source="/Resources/Svg/ImportTheme_16x.svg"/>
 
+            <svgc:SvgViewbox x:Key="IconExpandAll" Source="/Resources/Svg/ExpandAll_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconCollapseAll" Source="/Resources/Svg/CollapseAll_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconExpand" Source="/Resources/Svg/ExpandChevronDownGroup_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconCollapse" Source="/Resources/Svg/CollapseChevronUpGroup_16x.svg"/>
+
 
 
             <BitmapImage x:Key="IconGit" 
@@ -127,12 +132,12 @@
 
             <!-- Contextual Tab Groups -->
             <fluent:Ribbon.ContextualGroups>
-                <fluent:RibbonContextualTabGroup x:Name="contextTabGroup"
+                <fluent:RibbonContextualTabGroup x:Name="ProjectExplorerContextualTabGroup"
                                  Header="Tools" 
-                                 Visibility="Visible"
+                                 Visibility="{Binding ProjectExplorerContextualTabGroupVisibilityStr}"
                                  Background="Green"
                                  BorderBrush="Orange"
-                                 Foreground="DarkGreen"
+                                 
                                 
                                              />
             </fluent:Ribbon.ContextualGroups>
@@ -196,11 +201,7 @@
                             </ItemsPanelTemplate>
                         </fluent:ComboBox.ItemsPanel>
                     </fluent:ComboBox>
-                    <fluent:Button Header="Save Layout"
-                                   Icon="{DynamicResource IconMoveTo}"
-                                   LargeIcon="{DynamicResource IconMoveTo}" 
-                                   Command="{catel:CommandManagerBinding ShowImportUtility}"
-                                   Size="Small"/>
+                    
                     
                 </fluent:RibbonGroupBox>
 
@@ -226,12 +227,34 @@
 
 
             <!--Contextual  Tab-->
-            <fluent:RibbonTabItem Header="Context1" 
-                              Group="{Binding Source={x:Reference contextTabGroup}}" 
-                              Visibility="{Binding StrContextualRibbonVisible}"
+            <fluent:RibbonTabItem Header="Project Explorer" 
+                              Group="{Binding Source={x:Reference ProjectExplorerContextualTabGroup}}" 
                               ActiveTabBackground="AliceBlue"
                               >
+                <!-- Themes -->
+                <fluent:RibbonGroupBox Header="View">
+                    <fluent:Button Header="Expand All"
+                                   Icon="{DynamicResource IconExpandAll}"
+                                   LargeIcon="{DynamicResource IconExpandAll}" 
+                                   Command="{catel:CommandManagerBinding ExpandAll}"
+                                   Size="Large"/>
+                    <fluent:Button Header="Collapse All"
+                                   Icon="{DynamicResource IconCollapseAll}"
+                                   LargeIcon="{DynamicResource IconCollapseAll}" 
+                                   Command="{catel:CommandManagerBinding CollapseAll}"
+                                   Size="Large"/>
+                    <fluent:Button Header="Expand"
+                                   Icon="{DynamicResource IconExpand}"
+                                   LargeIcon="{DynamicResource IconExpand}" 
+                                   Command="{catel:CommandManagerBinding Expand}"
+                                   Size="Large"/>
+                    <fluent:Button Header="Collapse"
+                                   Icon="{DynamicResource IconCollapse}"
+                                   LargeIcon="{DynamicResource IconCollapse}" 
+                                   Command="{catel:CommandManagerBinding Collapse}"
+                                   Size="Large"/>
 
+                </fluent:RibbonGroupBox>
 
             </fluent:RibbonTabItem>
         </fluent:Ribbon>

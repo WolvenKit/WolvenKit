@@ -18,6 +18,7 @@ using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
+using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using WolvenKit.W3Speech;
 using WolvenKit.W3Strings;
@@ -410,6 +411,15 @@ namespace WolvenKit.App.Model
             SoundManager ??= await Task.Run(() => Tw3Controller.LoadSoundManager());
             SpeechManager ??= await Task.Run(() => Tw3Controller.LoadSpeechManager());
 #endif
+
+            // Hash all filepaths
+            var relativepaths = ModFiles
+                .Select(_ => _.Substring(_.IndexOf(Path.DirectorySeparatorChar) + 1))
+                .ToList();
+            Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
+
+            // register all custom classes
+            CR2WManager.Init(FileDirectory, MainController.Get().Logger);
 
         }
 

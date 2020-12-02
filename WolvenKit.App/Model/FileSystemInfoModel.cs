@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using Catel.Data;
 using Catel.IoC;
 using Orc.ProjectManagement;
 using WolvenKit.Common.Extensions;
@@ -14,21 +16,8 @@ namespace WolvenKit.App.Model
     
 
 
-    public abstract class FileSystemInfoModel
+    public class FileSystemInfoModel : ObservableObject
     {
-        protected readonly FileSystemInfo _fileSystemInfo;
-        private readonly IProjectManager _projectManager;
-
-        protected FileSystemInfoModel(FileSystemInfo fileSystemInfo)
-        {
-            _fileSystemInfo = fileSystemInfo;
-            _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
-        }
-
-        public string Extension => GetFileExtension();
-        public bool IsExpanded { get; set; }
-
-
         public enum ECustomImageKeys
         {
             OpenDirImageKey, //= "<ODIR>";
@@ -44,7 +33,82 @@ namespace WolvenKit.App.Model
             RawModImageKey,
             RawDlcImageKey
         }
-        
+
+        private readonly FileSystemInfo _fileSystemInfo;
+        private readonly IProjectManager _projectManager;
+        private readonly FileSystemInfoModel _parent;
+
+        public FileSystemInfoModel(FileSystemInfo info)
+            : this(info, null)
+        {
+        }
+
+        private FileSystemInfoModel(FileSystemInfo fileSystemInfo, FileSystemInfoModel parent)
+        {
+            _fileSystemInfo = fileSystemInfo;
+            _parent = parent;
+            _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
+
+            List<FileSystemInfoModel> list = new List<FileSystemInfoModel>();
+            if (_fileSystemInfo is DirectoryInfo directoryInfo)
+                foreach (var child in directoryInfo.GetFileSystemInfos()) 
+                    list.Add(new FileSystemInfoModel(child, this));
+
+            _children = new List<FileSystemInfoModel>(list);
+        }
+
+
+        private bool _isExpanded;
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set
+            {
+                if (value != _isExpanded)
+                {
+                    _isExpanded = value;
+                    this.RaisePropertyChanged(nameof(IsExpanded));
+                }
+
+                // Expand all the way up to the root.
+                if (_isExpanded && _parent != null)
+                    _parent.IsExpanded = true;
+            }
+        }
+
+        public bool IsSelected { get; set; }
+
+        public string Extension => GetFileExtension();
+        public string Name => _fileSystemInfo.Name;
+        public string FullName => _fileSystemInfo.FullName;
+
+        private readonly IEnumerable<FileSystemInfoModel> _children = new List<FileSystemInfoModel>();
+        public IEnumerable<FileSystemInfoModel> Children => _children;
+
+        public IEnumerable<FileSystemInfoModel> AllChildren => Children.Concat(Children.SelectMany(_ => _.AllChildren));
+
+        //public IEnumerable<FileSystemInfoModel> Children => _fileSystemInfo is DirectoryInfo di
+        //    ? di.GetFileSystemInfos().Select(_ => new FileSystemInfoModel(_, this))
+        //    : new List<FileSystemInfoModel>();
+
+
+        public void ExpandChildren(bool recursive)
+        {
+            foreach (var info in Children)
+            {
+                info.IsExpanded = true;
+                info.ExpandChildren(recursive);
+            }
+        }
+        public void CollapseChildren(bool recursive)
+        {
+            foreach (var info in Children)
+            {
+                info.IsExpanded = false;
+                info.CollapseChildren(recursive);
+            }
+        }
+
         private string GetFileExtension()
         {
             
@@ -89,41 +153,5 @@ namespace WolvenKit.App.Model
             else
                 return (node as FileInfo)?.Extension;
         }
-    }
-
-    public class DirectoryInfoModel : FileSystemInfoModel
-    {
-        public DirectoryInfoModel(DirectoryInfo directoryInfo) : base(directoryInfo) { }
-
-        public string Name => _fileSystemInfo.Name;
-
-        public IEnumerable<FileSystemInfoModel> Children
-        {
-            get
-            {
-                var children = new List<FileSystemInfoModel>();
-                foreach (var fileSystemInfo in (_fileSystemInfo as DirectoryInfo).GetFileSystemInfos())
-                {
-                    switch (fileSystemInfo)
-                    {
-                        case DirectoryInfo di:
-                            children.Add(new DirectoryInfoModel(di));
-                            break;
-                        case FileInfo fi:
-                            children.Add(new FileInfoModel(fi));
-                            break;
-                    }
-                }
-
-                return children;
-            }
-        }
-    }
-
-    public class FileInfoModel : FileSystemInfoModel
-    {
-        public FileInfoModel(FileInfo fileInfo) : base(fileInfo) { }
-
-        public string Name => _fileSystemInfo.Name;
     }
 }
