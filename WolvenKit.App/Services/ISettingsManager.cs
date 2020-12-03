@@ -12,8 +12,22 @@ namespace WolvenKit.App.Services
         IThemeInfos Themes { get; }
 
 
+        bool CheckForUpdates { get; set; }
+
         /*public*/ string ExecutablePath { get; set; }
-        /*public*/ string[] ManagerVersions { get; set; }
+        /*public*/ string WccLitePath { get; set; }
+
+        string GameModDir { get; set; }
+        string GameDlcDir { get; set; }
+
+        string DepotPath { get; set; }
+
+        /*public*/
+        string[] ManagerVersions { get; set; }
         string TextLanguage { get; set; }
+
+        void Save();
+        
+
     }
 }

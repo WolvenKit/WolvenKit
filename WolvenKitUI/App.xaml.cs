@@ -72,7 +72,8 @@ namespace WolvenKitUI
             viewModelLocator.Register(typeof(RecentlyUsedItemsView), typeof(RecentlyUsedItemsViewModel));
 
 
-
+            var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
+            viewLocator.Register(typeof(SettingsViewModel), typeof(SettingsWindow));
 
 
 

@@ -25,6 +25,7 @@
     <PackageReference Include="CsvHelper" Version="16.1.0" />
     <PackageReference Include="Dirkster.MLib" Version="1.3.1.2" />
     <PackageReference Include="FastMember" Version="1.5.0" />
+    <PackageReference Include="MultiSelectTreeView" Version="1.0.9" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Orc.CommandLine" Version="4.0.0" />
     <PackageReference Include="Orc.FileSystem" Version="4.0.0" />

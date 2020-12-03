@@ -4,35 +4,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
+using Catel.IoC;
+using Catel.MVVM;
+using WolvenKit.App.Commands;
 
 namespace WolvenKit.App.Services
 {
     public class SettingsManager : ISettingsManager
     {
+        #region fields
 
-        /// <summary>
-		/// Gets the internal name and Uri source for all available themes.
-		/// </summary>
-		[XmlIgnore]
-        public IThemeInfos Themes { get; private set; }
-
-        public string ExecutablePath { get; set; }
-        public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
-        public string TextLanguage { get; set; }
-
-        /// <summary>
-        /// Hidden default constructor.
-        /// </summary>
-        public SettingsManager()
-		{
-
-
-
-			
-		}
-
-
-        public static string ConfigurationPath
+        private static string ConfigurationPath
         {
             get
             {
@@ -43,9 +25,51 @@ namespace WolvenKit.App.Services
             }
         }
 
+        #endregion
+
+        #region constructors
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public SettingsManager()
+        {
+
+
+
+
+        }
+
+        #endregion
+
+        #region properties
+
+        /// <summary>
+        /// Gets the internal name and Uri source for all available themes.
+        /// </summary>
+        [XmlIgnore]
+        public IThemeInfos Themes { get; private set; }
+
+        public bool CheckForUpdates { get; set; }
+
+        public string ExecutablePath { get; set; }
+        public string WccLitePath { get; set; }
+
+        public string GameModDir { get; set; }
+        public string GameDlcDir { get; set; }
+
+        public string DepotPath { get; set; }
+
+        public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
+        public string TextLanguage { get; set; }
+
+        #endregion
+
+        #region methods
+
         public void Save()
         {
-            var ser = new XmlSerializer(typeof(Configuration));
+            var ser = new XmlSerializer(typeof(SettingsManager));
             var stream = new FileStream(ConfigurationPath, FileMode.Create, FileAccess.Write);
             ser.Serialize(stream, this);
             stream.Close();
@@ -56,7 +80,7 @@ namespace WolvenKit.App.Services
             SettingsManager config;
             try
             {
-                if (File.Exists(ConfigurationPath) && new FileInfo(ConfigurationPath).Length != 0)
+                if (File.Exists(ConfigurationPath))
                 {
                     var ser = new XmlSerializer(typeof(SettingsManager));
                     
@@ -103,6 +127,7 @@ namespace WolvenKit.App.Services
             return config;
         }
 
+        #endregion
 
     }
 }

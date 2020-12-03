@@ -37,8 +37,7 @@ namespace WolvenKit.App.ViewModels
             IProjectManager projectManager,
             ILoggerService loggerService, 
             INavigationService navigationService, 
-            IUIVisualizerService uiVisualizerService,
-            ICommandManager commandManager
+            IUIVisualizerService uiVisualizerService
             )
         {
             Argument.IsNotNull(() => loggerService);
@@ -46,7 +45,6 @@ namespace WolvenKit.App.ViewModels
             Argument.IsNotNull(() => uiVisualizerService);
             Argument.IsNotNull(() => projectManager);
             Argument.IsNotNull(() => settingsManager);
-            Argument.IsNotNull(() => commandManager);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
@@ -57,13 +55,9 @@ namespace WolvenKit.App.ViewModels
             Command1 = new RelayCommand(RunCommand1, CanRunCommand1);
             ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
 
-            commandManager.RegisterCommand(nameof(AppCommands.Application.ViewSelected), ViewSelectedCommand, this);
-            
 
             var assembly = AssemblyHelper.GetEntryAssembly();
             Title = assembly.Title();
-
-            
 
         }
         #endregion
@@ -115,9 +109,9 @@ namespace WolvenKit.App.ViewModels
         /// </summary>
         public ICommand ViewSelectedCommand { get; private set; }
         private bool CanViewSelected(object view) => true;
-        private void ExecuteViewSelected(object view)
+        private void ExecuteViewSelected(object viewmodel)
         {
-            if (!(view is Tuple<PaneViewModel, bool> tuple)) return;
+            if (!(viewmodel is Tuple<PaneViewModel, bool> tuple)) return;
 
             if (tuple.Item1 is ProjectExplorerViewModel)
                 ProjectExplorerContextualTabGroupVisibility = tuple.Item2
@@ -139,6 +133,8 @@ namespace WolvenKit.App.ViewModels
             await base.InitializeAsync();
 
             // TODO: Write initialization code here and subscribe to events
+            var commandManager = ServiceLocator.Default.ResolveType<ICommandManager>();
+            commandManager.RegisterCommand(AppCommands.Application.ViewSelected, ViewSelectedCommand, this);
         }
 
         protected override Task CloseAsync()

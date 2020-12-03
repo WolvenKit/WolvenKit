@@ -149,15 +149,15 @@
                     <fluent:Button Header="Open File"
                        Icon="{DynamicResource IconOpenFile}"
                        LargeIcon="{DynamicResource IconOpenFile}" 
-                       Command="{catel:CommandManagerBinding OpenFile}"/>
+                       Command="{catel:CommandManagerBinding Application.OpenFile}"/>
                     <fluent:Button Header="New File" 
                        Icon="{DynamicResource IconNewFile}"
                        LargeIcon="{DynamicResource IconNewFile}" 
-                       Command="{catel:CommandManagerBinding NewFile}"/>
+                       Command="{catel:CommandManagerBinding Application.NewFile}"/>
                     <fluent:Button Header="Game Assets" 
                        Icon="{DynamicResource IconSearchFolder}"
                        LargeIcon="{DynamicResource IconSearchFolder}" 
-                       Command="{catel:CommandManagerBinding ShowAssetBrowser}"/>
+                       Command="{catel:CommandManagerBinding Application.ShowAssetBrowser}"/>
                     
                     
                 </fluent:RibbonGroupBox>
@@ -167,21 +167,21 @@
                     <fluent:Button Header="Pack Mod"
                        Icon="{DynamicResource IconRun}"
                        LargeIcon="{DynamicResource IconRun}" 
-                       Command="{catel:CommandManagerBinding PackMod}"/>
+                       Command="{catel:CommandManagerBinding Application.PackMod}"/>
                     <fluent:Button Header="Package Installer" 
                        Icon="{DynamicResource IconRunTest}"
                        LargeIcon="{DynamicResource IconRunTest}" 
-                       Command="{catel:CommandManagerBinding ShowPackageInstaller}"
+                       Command="{catel:CommandManagerBinding Application.ShowPackageInstaller}"
                        Size="Middle"/>
                     <fluent:Button Header="Backup Mod" 
                        Icon="{DynamicResource IconGit}"
                        LargeIcon="{DynamicResource IconGit}"
-                       Command="{catel:CommandManagerBinding BackupMod}"
+                       Command="{catel:CommandManagerBinding Application.BackupMod}"
                        Size="Middle"/>
                     <fluent:Button Header="Mod Settings" 
                        Icon="{DynamicResource IconSettings}"
                        LargeIcon="{DynamicResource IconSettings}" 
-                       Command="{catel:CommandManagerBinding ShowModSettings}"
+                       Command="{catel:CommandManagerBinding Settings.General}"
                        Size="Middle"/>
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
@@ -210,15 +210,15 @@
                     <fluent:Button Header="View Log"
                                    Icon="{DynamicResource IconLog}"
                                    LargeIcon="{DynamicResource IconLog}" 
-                                   Command="{catel:CommandManagerBinding ShowLog}"/>
+                                   Command="{catel:CommandManagerBinding Application.ShowLog}"/>
                     <fluent:Button Header="View Project Explorer"
                                    Icon="{DynamicResource IconProjectExplorer}"
                                    LargeIcon="{DynamicResource IconProjectExplorer}" 
-                                   Command="{catel:CommandManagerBinding ShowProjectExplorer}"/>
+                                   Command="{catel:CommandManagerBinding Application.ShowProjectExplorer}"/>
                     <fluent:Button Header="View Import Utility"
                                    Icon="{DynamicResource IconImportUtility}"
                                    LargeIcon="{DynamicResource IconImportUtility}" 
-                                   Command="{catel:CommandManagerBinding ShowImportUtility}"/>
+                                   Command="{catel:CommandManagerBinding Application.ShowImportUtility}"/>
                 </fluent:RibbonGroupBox>
 
                 
@@ -231,27 +231,27 @@
                               Group="{Binding Source={x:Reference ProjectExplorerContextualTabGroup}}" 
                               ActiveTabBackground="AliceBlue"
                               >
-                <!-- Themes -->
+                <!-- View -->
                 <fluent:RibbonGroupBox Header="View">
                     <fluent:Button Header="Expand All"
                                    Icon="{DynamicResource IconExpandAll}"
                                    LargeIcon="{DynamicResource IconExpandAll}" 
-                                   Command="{catel:CommandManagerBinding ExpandAll}"
+                                   Command="{catel:CommandManagerBinding ProjectExplorer.ExpandAll}"
                                    Size="Large"/>
                     <fluent:Button Header="Collapse All"
                                    Icon="{DynamicResource IconCollapseAll}"
                                    LargeIcon="{DynamicResource IconCollapseAll}" 
-                                   Command="{catel:CommandManagerBinding CollapseAll}"
+                                   Command="{catel:CommandManagerBinding ProjectExplorer.CollapseAll}"
                                    Size="Large"/>
                     <fluent:Button Header="Expand"
                                    Icon="{DynamicResource IconExpand}"
                                    LargeIcon="{DynamicResource IconExpand}" 
-                                   Command="{catel:CommandManagerBinding Expand}"
+                                   Command="{catel:CommandManagerBinding ProjectExplorer.Expand}"
                                    Size="Large"/>
                     <fluent:Button Header="Collapse"
                                    Icon="{DynamicResource IconCollapse}"
                                    LargeIcon="{DynamicResource IconCollapse}" 
-                                   Command="{catel:CommandManagerBinding Collapse}"
+                                   Command="{catel:CommandManagerBinding ProjectExplorer.Collapse}"
                                    Size="Large"/>
 
                 </fluent:RibbonGroupBox>

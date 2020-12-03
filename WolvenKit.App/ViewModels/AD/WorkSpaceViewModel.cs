@@ -106,7 +106,7 @@ namespace WolvenKit.App.ViewModels
 
 			#region events
 
-			ProjectExplorer.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+			
 
             #endregion
 
@@ -118,16 +118,17 @@ namespace WolvenKit.App.ViewModels
         private void RegisterCommands(ICommandManager commandManager)
         {
             // View Tab
-            commandManager.RegisterCommand(nameof(AppCommands.Application.ShowLog), ShowLogCommand, this);
-            commandManager.RegisterCommand(nameof(AppCommands.Application.ShowProjectExplorer), ShowProjectExplorerCommand, this);
-            commandManager.RegisterCommand(nameof(AppCommands.Application.ShowImportUtility), ShowImportUtilityCommand, this);
+            commandManager.RegisterCommand(AppCommands.Application.ShowLog, ShowLogCommand, this);
+            commandManager.RegisterCommand(AppCommands.Application.ShowProjectExplorer, ShowProjectExplorerCommand,
+                this);
+            commandManager.RegisterCommand(AppCommands.Application.ShowImportUtility, ShowImportUtilityCommand, this);
 
             // Home Tab
-            commandManager.RegisterCommand(nameof(AppCommands.Application.OpenFile), OpenFileCommand, this);
-            commandManager.RegisterCommand(nameof(AppCommands.Application.NewFile), NewFileCommand, this);
+            commandManager.RegisterCommand(AppCommands.Application.OpenFile, OpenFileCommand, this);
+            commandManager.RegisterCommand(AppCommands.Application.NewFile, NewFileCommand, this);
 
-            commandManager.RegisterCommand(nameof(AppCommands.Application.PackMod), PackModCommand, this);
-            commandManager.RegisterCommand(nameof(AppCommands.Application.BackupMod), BackupModCommand, this);
+            commandManager.RegisterCommand(AppCommands.Application.PackMod, PackModCommand, this);
+            commandManager.RegisterCommand(AppCommands.Application.BackupMod, BackupModCommand, this);
 
 			
 		}
@@ -136,7 +137,7 @@ namespace WolvenKit.App.ViewModels
         {
             if (args.PropertyName == "IsActive" && sender is PaneViewModel panevm)
                 ServiceLocator.Default.ResolveType<ICommandManager>()
-                    .GetCommand(nameof(AppCommands.Application.ViewSelected))
+                    .GetCommand(AppCommands.Application.ViewSelected)
                     .SafeExecute(new Tuple<PaneViewModel, bool>(panevm, panevm.IsActive));
         }
 
@@ -296,24 +297,28 @@ namespace WolvenKit.App.ViewModels
         /// </summary>
         public ProjectExplorerViewModel ProjectExplorer
         {
-
             get
             {
-                var vm = ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectExplorerViewModel>();
-                return _projectExplorerViewModel ?? (_projectExplorerViewModel = vm);
-            }
+                var model = _projectExplorerViewModel;
+                if (model == null)
+                {
+                    _projectExplorerViewModel =
+                        ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectExplorerViewModel>();
+                }
+
+                _projectExplorerViewModel.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+				return model;
+			}
         }
 
-		#endregion Properties
+        #endregion Properties
 
 		#region methods
 		private async Task OnProjectActivationAsync(object sender, ProjectUpdatingCancelEventArgs e)
         {
             var newProject = (Project)e.NewProject;
             if (newProject is null)
-            {
                 return;
-            }
 
             Project = newProject;
         }

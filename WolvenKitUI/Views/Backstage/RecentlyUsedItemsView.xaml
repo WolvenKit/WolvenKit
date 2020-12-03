@@ -76,10 +76,10 @@
                       Visibility="{Binding RecentlyUsedItems, Converter={catel:CollectionToCollapsingVisibilityConverter}}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <orchestra:RibbonBackstageButton Command="{catel:CommandManagerBinding File.Open}"
-                                                     CommandParameter="{Binding Name}" 
-                                                     ToolTip="{Binding Name}" 
-                                                     ShowBorder="False">
+                    <orchestra:RibbonBackstageButton  Command="{catel:CommandManagerBinding Application.OpenProject}"
+                                                      CommandParameter="{Binding Name}" 
+                                                      ToolTip="{Binding Name}" 
+                                                      ShowBorder="False">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Catel;
+using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
 using Catel.Threading;
@@ -54,13 +55,11 @@ namespace WolvenKit.App.ViewModels
         public ProjectExplorerViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
-            IMessageService messageService,
-            ICommandManager commandManager
+            IMessageService messageService
             ) : base(ToolTitle)
         {
             Argument.IsNotNull(() => projectManager);
             Argument.IsNotNull(() => messageService);
-            Argument.IsNotNull(() => commandManager);
             Argument.IsNotNull(() => loggerService);
 
             _projectManager = projectManager;
@@ -84,16 +83,14 @@ namespace WolvenKit.App.ViewModels
             CollapseAllCommand = new RelayCommand(ExecuteCollapseAll, CanCollapseAll);
             ExpandCommand = new RelayCommand(ExecuteExpand, CanExpand);
             CollapseCommand = new RelayCommand(ExecuteCollapse, CanCollapse);
-            commandManager.RegisterCommand(nameof(AppCommands.Application.ExpandAll), ExpandAllCommand, this);
-            commandManager.RegisterCommand(nameof(AppCommands.Application.CollapseAll), CollapseAllCommand, this);
-            commandManager.RegisterCommand(nameof(AppCommands.Application.Expand), ExpandCommand, this);
-            commandManager.RegisterCommand(nameof(AppCommands.Application.Collapse), CollapseCommand, this);
+
             
 
             #endregion
 
 
             Treenodes = new BindingList<FileSystemInfoModel>();
+            SelectedItems = new BindingList<FileSystemInfoModel>();
             Treenodes.ListChanged += new ListChangedEventHandler(Treenodes_ListChanged);
 
             
@@ -108,6 +105,8 @@ namespace WolvenKit.App.ViewModels
 
         #region ModelList
         private BindingList<FileSystemInfoModel> _treenodes = null;
+        private FileSystemInfoModel _selectedItem;
+
         public BindingList<FileSystemInfoModel> Treenodes
         {
             get => _treenodes;
@@ -123,8 +122,22 @@ namespace WolvenKit.App.ViewModels
         }
         #endregion
 
-        private IEnumerable<FileSystemInfoModel> FlattenedNodes => Treenodes.Concat(Treenodes.SelectMany(_ => _.AllChildren));
-        private IEnumerable<FileSystemInfoModel> SelectedItems => FlattenedNodes.Where(_ => _.IsSelected);
+        public BindingList<FileSystemInfoModel> SelectedItems { get; set; }
+
+        public FileSystemInfoModel SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                if (_selectedItem != value)
+                {
+                    var oldValue = _selectedItem;
+                    _selectedItem = value;
+                    RaisePropertyChanged(() => SelectedItem, oldValue, value);
+                }
+            }
+        }
+
         #region SelectedItem
 
 
@@ -173,28 +186,22 @@ namespace WolvenKit.App.ViewModels
         /// Git-backup current mod project
         /// </summary>
         public ICommand ExpandCommand { get; private set; }
-        private bool CanExpand() => _projectManager.ActiveProject is Project && SelectedItems.Any();
+        private bool CanExpand() => _projectManager.ActiveProject is Project && SelectedItem != null;
         private async void ExecuteExpand()
         {
-            foreach (var node in SelectedItems)
-            {
-                node.IsExpanded = true;
-                node.ExpandChildren(true);
-            }
+            SelectedItem.IsExpanded = true;
+            SelectedItem.ExpandChildren(true);
         }
 
         /// <summary>
         /// Git-backup current mod project
         /// </summary>
         public ICommand CollapseCommand { get; private set; }
-        private bool CanCollapse() => _projectManager.ActiveProject is Project && SelectedItems.Any();
+        private bool CanCollapse() => _projectManager.ActiveProject is Project && SelectedItem != null;
         private async void ExecuteCollapse()
         {
-            foreach (var node in SelectedItems)
-            {
-                node.IsExpanded = false;
-                node.CollapseChildren(true);
-            }
+            SelectedItem.IsExpanded = false;
+            SelectedItem.CollapseChildren(true);
         }
 
         #endregion
@@ -275,6 +282,12 @@ namespace WolvenKit.App.ViewModels
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();
+
+            var commandManager = ServiceLocator.Default.ResolveType<ICommandManager>();
+            commandManager.RegisterCommand(AppCommands.ProjectExplorer.ExpandAll, ExpandAllCommand, this);
+            commandManager.RegisterCommand(AppCommands.ProjectExplorer.CollapseAll, CollapseAllCommand, this);
+            commandManager.RegisterCommand(AppCommands.ProjectExplorer.Expand, ExpandCommand, this);
+            commandManager.RegisterCommand(AppCommands.ProjectExplorer.Collapse, CollapseCommand, this);
 
             _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
         }

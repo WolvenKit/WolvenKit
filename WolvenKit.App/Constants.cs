@@ -46,14 +46,21 @@ namespace WolvenKit.App
 
             public const string ViewSelected = "Application.ViewSelected";
 
-            #region Project Explorer
-            public const string ExpandAll = "Application.ExpandAll";
-            public const string CollapseAll = "Application.CollapseAll";
-            public const string Expand = "Application.Expand";
-            public const string Collapse = "Application.Collapse";
-            #endregion
+        }
+        public static class ProjectExplorer
+        {
+            public const string ExpandAll = "ProjectExplorer.ExpandAll";
+            public const string CollapseAll = "ProjectExplorer.CollapseAll";
+            public const string Expand = "ProjectExplorer.Expand";
+            public const string Collapse = "ProjectExplorer.Collapse";
+        }
 
 
+        public static class Settings
+        {
+
+            public const string General = "Settings.General";
+            public static readonly InputGesture GeneralInputGesture = new InputGesture(Key.S, ModifierKeys.Alt | ModifierKeys.Control);
         }
     }
 

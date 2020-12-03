@@ -54,7 +54,7 @@ namespace WolvenKit.App.Model
                 foreach (var child in directoryInfo.GetFileSystemInfos()) 
                     list.Add(new FileSystemInfoModel(child, this));
 
-            _children = new List<FileSystemInfoModel>(list);
+            _children = new ObservableCollection<FileSystemInfoModel>(list);
         }
 
 
@@ -76,16 +76,31 @@ namespace WolvenKit.App.Model
             }
         }
 
-        public bool IsSelected { get; set; }
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (_isSelected != value)
+                {
+                    var oldValue = _isSelected;
+                    _isSelected = value;
+                    RaisePropertyChanged(() => IsSelected, oldValue, value);
+                }
+            }
+        }
+
+        
 
         public string Extension => GetFileExtension();
         public string Name => _fileSystemInfo.Name;
         public string FullName => _fileSystemInfo.FullName;
 
-        private readonly IEnumerable<FileSystemInfoModel> _children = new List<FileSystemInfoModel>();
-        public IEnumerable<FileSystemInfoModel> Children => _children;
+        private readonly ObservableCollection<FileSystemInfoModel> _children;
+        public ObservableCollection<FileSystemInfoModel> Children => _children;
 
-        public IEnumerable<FileSystemInfoModel> AllChildren => Children.Concat(Children.SelectMany(_ => _.AllChildren));
+        //public IEnumerable<FileSystemInfoModel> AllChildren => Children.Concat(Children.SelectMany(_ => _.AllChildren));
 
         //public IEnumerable<FileSystemInfoModel> Children => _fileSystemInfo is DirectoryInfo di
         //    ? di.GetFileSystemInfos().Select(_ => new FileSystemInfoModel(_, this))

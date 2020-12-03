@@ -5,6 +5,7 @@ using Catel.MVVM;
 using Orchestra.Models;
 using Orchestra.Services;
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -17,6 +18,7 @@ using WolvenKit.Common.Services;
 using Settings = WolvenKit.App.Settings;
 using WolvenKit.App.Model.ProjectManagement;
 using System.Windows.Media;
+using WolvenKit.App.Commands;
 
 namespace WolvenKitUI.Services
 {
@@ -72,13 +74,23 @@ namespace WolvenKitUI.Services
         public override async Task InitializeAfterCreatingShellAsync()
         {
             // TODO: update main window title?
+
+            
         }
 
         public override async Task InitializeAfterShowingShellAsync()
         {
             await base.InitializeAfterShowingShellAsync();
 
+            // check settings
+            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            if (!File.Exists(settings.ExecutablePath) || !File.Exists(settings.WccLitePath))
+            {
+                _commandManager.GetCommand(AppCommands.Settings.General).SafeExecute();
+            }
+
             await LoadProjectAsync();
+
         }
 
         #endregion
@@ -104,29 +116,31 @@ namespace WolvenKitUI.Services
             // global commands
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.Exit));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.About));
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Settings), nameof(AppCommands.Settings.General));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.Options));
 
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.NewProject));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.OpenProject));
 
             // application-wide commands that viewmodels can subscribe to
-            _commandManager.CreateCommand(nameof(AppCommands.Application.ShowLog));
-            _commandManager.CreateCommand(nameof(AppCommands.Application.ShowProjectExplorer));
-            _commandManager.CreateCommand(nameof(AppCommands.Application.ShowImportUtility));
+            // Workspace Viewmodel
+            _commandManager.CreateCommand((AppCommands.Application.ShowLog));
+            _commandManager.CreateCommand((AppCommands.Application.ShowProjectExplorer));
+            _commandManager.CreateCommand((AppCommands.Application.ShowImportUtility));
 
-            _commandManager.CreateCommand(nameof(AppCommands.Application.OpenFile));
-            _commandManager.CreateCommand(nameof(AppCommands.Application.NewFile));
-            _commandManager.CreateCommand(nameof(AppCommands.Application.PackMod));
-            _commandManager.CreateCommand(nameof(AppCommands.Application.BackupMod));
+            _commandManager.CreateCommand((AppCommands.Application.OpenFile));
+            _commandManager.CreateCommand((AppCommands.Application.NewFile));
+            _commandManager.CreateCommand((AppCommands.Application.PackMod));
+            _commandManager.CreateCommand((AppCommands.Application.BackupMod));
 
-            // Project Explorer
-            _commandManager.CreateCommand(nameof(AppCommands.Application.ExpandAll));
-            _commandManager.CreateCommand(nameof(AppCommands.Application.Expand));
-            _commandManager.CreateCommand(nameof(AppCommands.Application.CollapseAll));
-            _commandManager.CreateCommand(nameof(AppCommands.Application.Collapse));
+            // Project Explorer Viewmodel
+            _commandManager.CreateCommand(AppCommands.ProjectExplorer.ExpandAll);
+            _commandManager.CreateCommand(AppCommands.ProjectExplorer.Expand);
+            _commandManager.CreateCommand(AppCommands.ProjectExplorer.CollapseAll);
+            _commandManager.CreateCommand(AppCommands.ProjectExplorer.Collapse);
 
 
-            _commandManager.CreateCommand(nameof(AppCommands.Application.ViewSelected));
+            _commandManager.CreateCommand(AppCommands.Application.ViewSelected);
 
         }
 
