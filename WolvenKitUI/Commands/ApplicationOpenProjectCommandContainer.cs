@@ -11,6 +11,7 @@ using Orc.FileSystem;
 using Orc.ProjectManagement;
 using WolvenKit.App;
 using WolvenKit.Common.Services;
+using Orc.Notifications;
 
 namespace WolvenKitUI
 {
@@ -26,9 +27,9 @@ namespace WolvenKitUI
             IProjectManager projectManager,
             IOpenFileService openFileService,
             IPleaseWaitService pleaseWaitService,
-            ILoggerService loggerService
-            )
-            : base(AppCommands.Application.OpenProject, commandManager, projectManager, loggerService)
+            INotificationService notificationService,
+            ILoggerService loggerService)
+            : base(AppCommands.Application.OpenProject, commandManager, projectManager, notificationService, loggerService)
         {
             Argument.IsNotNull(() => openFileService);
             Argument.IsNotNull(() => fileService);

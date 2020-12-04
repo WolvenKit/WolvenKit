@@ -35,7 +35,7 @@ namespace WolvenKit.App.ViewModels
         #region constructors
         public LogViewModel(): base(ToolTitle)
         {
-
+            SetupToolDefaults();
         }
         #endregion constructors
 
@@ -50,7 +50,22 @@ namespace WolvenKit.App.ViewModels
 
         #endregion
 
-        #region init
+        #region methods
+
+        /// <summary>
+        /// Initialize Avalondock specific defaults that are specific to this tool window.
+        /// </summary>
+        private void SetupToolDefaults()
+        {
+            ContentId = ToolContentId;           // Define a unique contentid for this toolwindow
+
+            //BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow
+            //bi.BeginInit();
+            //bi.UriSource = new Uri("pack://application:,,/Resources/Images/property-blue.png");
+            //bi.EndInit();
+            //IconSource = bi;
+        }
+
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();

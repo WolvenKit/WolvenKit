@@ -91,7 +91,8 @@ namespace WolvenKit.App.Model
             }
         }
 
-        
+        public bool IsDirectory => _fileSystemInfo is DirectoryInfo;
+        public bool IsFile => _fileSystemInfo is FileInfo;
 
         public string Extension => GetFileExtension();
         public string Name => _fileSystemInfo.Name;
@@ -109,6 +110,7 @@ namespace WolvenKit.App.Model
 
         public void ExpandChildren(bool recursive)
         {
+            IsExpanded = true;
             foreach (var info in Children)
             {
                 info.IsExpanded = true;
@@ -117,6 +119,7 @@ namespace WolvenKit.App.Model
         }
         public void CollapseChildren(bool recursive)
         {
+            IsExpanded = false;
             foreach (var info in Children)
             {
                 info.IsExpanded = false;

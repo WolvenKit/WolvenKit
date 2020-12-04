@@ -741,6 +741,7 @@ namespace WolvenKit
 
         private void fastRenderToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
                 MockKernel.Get().Window.PauseMonitoring();

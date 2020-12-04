@@ -241,7 +241,7 @@ namespace WolvenKit.App.ViewModels
 
 		#endregion
 
-		#region Properties
+		#region properties
 
 		/// <summary>
 		/// Event is raised when AvalonDock (or the user) selects a new document.
@@ -278,7 +278,7 @@ namespace WolvenKit.App.ViewModels
 		/// <summary>
 		/// Gets an enumeration of all currently available tool window viewmodels.
 		/// </summary>
-		public IEnumerable<ToolViewModel> Tools => _tools ?? (_tools = new ToolViewModel[] { Log, ProjectExplorer });
+		public IEnumerable<ToolViewModel> Tools => _tools ??= new ToolViewModel[] { Log, ProjectExplorer };
 
         /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
 		public void CloseAllDocuments()
@@ -290,7 +290,7 @@ namespace WolvenKit.App.ViewModels
 		/// <summary>
 		/// Gets an instance of the LogViewModel.
 		/// </summary>
-		public LogViewModel Log => _logViewModel ?? (_logViewModel = new LogViewModel());
+		public LogViewModel Log => _logViewModel ??= new LogViewModel();
 
         /// <summary>
         /// Gets an instance of the LogViewModel.
@@ -299,15 +299,14 @@ namespace WolvenKit.App.ViewModels
         {
             get
             {
-                var model = _projectExplorerViewModel;
-                if (model == null)
+                if (_projectExplorerViewModel == null)
                 {
                     _projectExplorerViewModel =
                         ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectExplorerViewModel>();
                 }
 
                 _projectExplorerViewModel.PropertyChanged += OnProjectExplorerOnPropertyChanged;
-				return model;
+				return _projectExplorerViewModel;
 			}
         }
 

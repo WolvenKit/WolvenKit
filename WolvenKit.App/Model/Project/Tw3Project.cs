@@ -10,6 +10,7 @@ using Catel;
 using Catel.IoC;
 using Catel.Threading;
 using Newtonsoft.Json;
+using Orc.Notifications;
 using ProtoBuf;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Services;
@@ -412,7 +413,9 @@ namespace WolvenKit.App.Model
             SpeechManager ??= await Task.Run(() => Tw3Controller.LoadSpeechManager());
 #endif
 
+
             // Hash all filepaths
+            _logger.LogString("Starting additional tasks...", Logtype.Important);
             var relativepaths = ModFiles
                 .Select(_ => _.Substring(_.IndexOf(Path.DirectorySeparatorChar) + 1))
                 .ToList();
@@ -420,6 +423,9 @@ namespace WolvenKit.App.Model
 
             // register all custom classes
             CR2WManager.Init(FileDirectory, MainController.Get().Logger);
+            _logger.LogString("Finished additional tasks...", Logtype.Success);
+
+            ServiceLocator.Default.ResolveType<INotificationService>().ShowNotification("WolvenKit", $"Project {Name} has finished loading.");
 
         }
 

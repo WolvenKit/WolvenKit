@@ -44,20 +44,14 @@ namespace WolvenKitUI.Layout
 		/// <param name="container">Identifies the container's instance that wants to resolve this association.</param>
 		public override System.Windows.DataTemplate SelectTemplate(object item,
 																   System.Windows.DependencyObject container)
-		{
-			var itemAsLayoutContent = item as LayoutContent;
-
-			switch (item)
+        {
+            return item switch
             {
-                case IDocumentViewModel _:
-                    return FileViewTemplate;
-                case LogViewModel _:
-                    return LogViewTemplate;
-                case ProjectExplorerViewModel _:
-                    return ProjectExplorerTemplate;
-                default:
-                    return base.SelectTemplate(item, container);
-            }
+                IDocumentViewModel _ => FileViewTemplate,
+                LogViewModel _ => LogViewTemplate,
+                ProjectExplorerViewModel _ => ProjectExplorerTemplate,
+                _ => base.SelectTemplate(item, container)
+            };
         }
 	}
 }

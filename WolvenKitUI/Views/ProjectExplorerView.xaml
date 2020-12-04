@@ -28,14 +28,33 @@
 
             <TreeView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Expand all" Command="{Binding ExpandAllCommand}"/>
-                    <MenuItem Header="Collapse all" Command="{Binding CollapseAllCommand}"/>
+                    <MenuItem Header="Open" Command="{Binding OpenFileCommand}"/>
                     <Separator/>
-                    <MenuItem Header="Expand children" Command="{Binding ExpandCommand}"/>
-                    <MenuItem Header="Collapse children" Command="{Binding CollapseCommand}"/>
+                    
+                    <MenuItem Header="Actions">
+                        <MenuItem Header="Add all Dependencies" Command="{Binding AddAllCommand}"/>
+                        <MenuItem Header="Fast Render" Command="{Binding FastRenderCommand}"/>
+                    </MenuItem>
+
+                    <MenuItem Header="Export">
+                        <MenuItem Header="Export with WCC" Command="{Binding ExportMeshCommand}"/>
+                        <MenuItem Header="Export to Json" Command="{Binding ExportJsonCommand}"/>
+                    </MenuItem>
+
                     <Separator/>
-                    <MenuItem Header="Rename" Command="{Binding RenameCommand}"/>
-                    <MenuItem Header="Delete" Command="{Binding DeleteCommand}"/>
+                    <MenuItem Header="Cut" Command="{Binding CutFileCommand}"/>
+                    <MenuItem Header="Copy" Command="{Binding CopyCommand}"/>
+                    <MenuItem Header="Delete" Command="{Binding DeleteFileCommand}"/>
+                    <MenuItem Header="Rename" Command="{Binding RenameFileCommand}"/>
+                    <Separator/>
+                    <MenuItem Header="Copy Relative Path" Command="{Binding CopyRelPathCommand}"/>
+                    <MenuItem Header="Open in File Explorer" Command="{Binding OpenInFileExplorerCommand}"/>
+                    <MenuItem Header="Open in Asset Browser Explorer" Command="{Binding OpenInAssetBrowserCommand}"/>
+                    <Separator/>
+                    <MenuItem Header="Expand Children" Command="{Binding ExpandCommand}"/>
+                    <MenuItem Header="Collapse Children" Command="{Binding CollapseCommand}"/>
+                    <Separator/>
+                    
                 </ContextMenu>
             </TreeView.ContextMenu>
 

@@ -8,6 +8,7 @@
 using System;
 using Catel.IoC;
 using Catel.Services;
+using Orc.Notifications;
 using WolvenKit.App.Model;
 using WolvenKit.Common.Services;
 
@@ -23,6 +24,7 @@ namespace WolvenKitUI
     {
         #region Fields
         protected readonly ICommandManager _commandManager;
+        protected readonly INotificationService _notificationService;
         protected readonly ILoggerService _logger;
         protected readonly IProjectManager _projectManager;
         protected readonly IPleaseWaitService _pleaseWaitService;
@@ -32,15 +34,19 @@ namespace WolvenKitUI
         protected ProjectCommandContainerBase(string commandName, 
             ICommandManager commandManager, 
             IProjectManager projectManager,
+            INotificationService notificationService,
             ILoggerService loggerService)
             : base(commandName, commandManager)
         {
             Argument.IsNotNull(() => projectManager);
             Argument.IsNotNull(() => loggerService);
+            Argument.IsNotNull(() => notificationService);
 
             _commandManager = commandManager;
             _projectManager = projectManager;
             _logger = loggerService;
+            _notificationService = notificationService;
+
             _pleaseWaitService = ServiceLocator.Default.ResolveType<IPleaseWaitService>();
 
             _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
@@ -64,11 +70,9 @@ namespace WolvenKitUI
             if (newProject == null)
                 return;
 
-            // TODO: move this to somewhere more global
-            // however, we want to unload the bundled from memory probably when a mod cp77 project is loaded and vice-versa
-            // ... not sure
-
             await Task.Run(() => newProject.Initialize());
+
+            
         }
 
         protected override bool CanExecute(object parameter)
