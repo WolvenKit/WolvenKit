@@ -36,8 +36,8 @@ namespace CP77Tools.Model
             foreach (var entry in Table.FileInfo)
             {
                 // get file offsets
-                var startindex = (int)entry.startindex;
-                var nextindex = (int)entry.nextindex;
+                var startindex = (int)entry.Value.startindex;
+                var nextindex = (int)entry.Value.nextindex;
 
                 using var ms = new MemoryStream();
                 using var bw = new BinaryWriter(ms);
@@ -95,7 +95,7 @@ namespace CP77Tools.Model
         public uint Table1count { get; private set; }
         public uint Table2count { get; private set; }
         public uint Table3count { get; private set; }
-        public List<FileInfoEntry> FileInfo { get; private set; }
+        public Dictionary<int, FileInfoEntry> FileInfo { get; private set; }
         public Dictionary<int, OffsetEntry> Offsets { get; private set; }
         public Dictionary<int, HashEntry> HashTable { get; private set; }
 
@@ -103,14 +103,14 @@ namespace CP77Tools.Model
         {
             Read(br);
 
-            FileInfo = new List<FileInfoEntry>();
+            FileInfo = new Dictionary<int, FileInfoEntry>();
             Offsets = new Dictionary<int, OffsetEntry>();
             HashTable = new Dictionary<int, HashEntry>();
 
             // read tables
             for (int i = 0; i < Table1count; i++)
             {
-                FileInfo.Add( new FileInfoEntry(br));
+                FileInfo.Add(i, new FileInfoEntry(br));
             }
 
             for (int i = 0; i < Table2count; i++)

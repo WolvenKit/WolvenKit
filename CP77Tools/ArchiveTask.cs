@@ -36,7 +36,7 @@ namespace CP77Tools
                     if (indir == null)
                         continue;
                     
-                    string outpath = Path.Combine(indir.FullName, $"extractedfile_{i}.bin");
+                    string outpath = Path.Combine(indir.FullName, $"extractedfile_{i}_{ar.Table.HashTable[i].Hash}.bin");
                     await File.WriteAllBytesAsync(outpath, file);
                 }
             }
