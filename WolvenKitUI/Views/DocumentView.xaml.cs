@@ -8,7 +8,7 @@ namespace WolvenKitUI.Views
 	/// <summary>
 	/// Interaction logic for TextDocumentView.xaml
 	/// </summary>
-	public partial class DocumentView : UserControl
+	public partial class DocumentView
 	{
 		private bool _viewInitialized;
 

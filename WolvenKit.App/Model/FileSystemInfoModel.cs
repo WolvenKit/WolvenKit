@@ -48,12 +48,12 @@ namespace WolvenKit.App.Model
 
         #region constructors
 
-        public FileSystemInfoModel(FileSystemInfo info)
-            : this(info, null)
-        {
-        }
+        //public FileSystemInfoModel(FileSystemInfo info)
+        //    : this(info, null)
+        //{
+        //}
 
-        private FileSystemInfoModel(FileSystemInfo fileSystemInfo, FileSystemInfoModel parent)
+        public  FileSystemInfoModel(FileSystemInfo fileSystemInfo, FileSystemInfoModel parent)
         {
             if (this is DummyFileSystemObjectInfo)
             {
@@ -70,21 +70,14 @@ namespace WolvenKit.App.Model
                 AddDummy();
             }
 
-
             PropertyChanged += new PropertyChangedEventHandler(FileSystemObjectInfo_PropertyChanged);
-
-
-            //List<FileSystemInfoModel> list = new List<FileSystemInfoModel>();
-            //if (_fileSystemInfo is DirectoryInfo directoryInfo) 
-            //    list.AddRange(directoryInfo.GetFileSystemInfos()
-            //        .Select(child => new FileSystemInfoModel(child, this)));
-
-            //Children = new ObservableCollection<FileSystemInfoModel>(list);
         }
 
         #endregion
 
         #region events
+
+        public event EventHandler RequestRefresh;
 
         public event EventHandler BeforeExpand;
 
@@ -94,25 +87,16 @@ namespace WolvenKit.App.Model
 
         public event EventHandler AfterExplore;
 
-        private void RaiseBeforeExpand()
-        {
-            BeforeExpand?.Invoke(this, EventArgs.Empty);
-        }
+        
+        public void RaiseRequestRefresh() => RequestRefresh?.Invoke(this, EventArgs.Empty);
 
-        private void RaiseAfterExpand()
-        {
-            AfterExpand?.Invoke(this, EventArgs.Empty);
-        }
+        private void RaiseBeforeExpand() => BeforeExpand?.Invoke(this, EventArgs.Empty);
 
-        private void RaiseBeforeExplore()
-        {
-            BeforeExplore?.Invoke(this, EventArgs.Empty);
-        }
+        private void RaiseAfterExpand() => AfterExpand?.Invoke(this, EventArgs.Empty);
 
-        private void RaiseAfterExplore()
-        {
-            AfterExplore?.Invoke(this, EventArgs.Empty);
-        }
+        private void RaiseBeforeExplore() => BeforeExplore?.Invoke(this, EventArgs.Empty);
+
+        private void RaiseAfterExplore() => AfterExplore?.Invoke(this, EventArgs.Empty);
 
         #endregion
 
@@ -221,25 +205,13 @@ namespace WolvenKit.App.Model
 
         #region methods
 
-        private void AddDummy()
-        {
-            Children.Add(new DummyFileSystemObjectInfo());
-        }
+        private void AddDummy() => Children.Add(new DummyFileSystemObjectInfo(this));
 
-        private bool HasDummy()
-        {
-            return GetDummy() != null;
-        }
+        private bool HasDummy() => GetDummy() != null;
 
-        private DummyFileSystemObjectInfo GetDummy()
-        {
-            return Children.OfType<DummyFileSystemObjectInfo>().FirstOrDefault();
-        }
+        private DummyFileSystemObjectInfo GetDummy() => Children.OfType<DummyFileSystemObjectInfo>().FirstOrDefault();
 
-        private void RemoveDummy()
-        {
-            Children.Remove(GetDummy());
-        }
+        private void RemoveDummy() => Children.Remove(GetDummy());
 
         private void ExploreDirectories()
         {
@@ -251,23 +223,15 @@ namespace WolvenKit.App.Model
                     if ((directory.Attributes & FileAttributes.System) != FileAttributes.System &&
                         (directory.Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
                     {
-                        var fileSystemObject = new FileSystemInfoModel(directory);
+                        var fileSystemObject = new FileSystemInfoModel(directory, this);
                         fileSystemObject.BeforeExplore += FileSystemObject_BeforeExplore;
                         fileSystemObject.AfterExplore += FileSystemObject_AfterExplore;
+                        fileSystemObject.RequestRefresh += FileSystemObject_RequestRefresh;
+
                         Children.Add(fileSystemObject);
                     }
                 }
             }
-        }
-
-        private void FileSystemObject_AfterExplore(object sender, EventArgs e)
-        {
-            RaiseAfterExplore();
-        }
-
-        private void FileSystemObject_BeforeExplore(object sender, EventArgs e)
-        {
-            RaiseBeforeExplore();
         }
 
         private void ExploreFiles()
@@ -280,11 +244,32 @@ namespace WolvenKit.App.Model
                     if ((file.Attributes & FileAttributes.System) != FileAttributes.System &&
                         (file.Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
                     {
-                        Children.Add(new FileSystemInfoModel(file));
+                        var fileSystemObject = new FileSystemInfoModel(file, this);
+                        fileSystemObject.RequestRefresh += FileSystemObject_RequestRefresh;
+
+                        Children.Add(fileSystemObject);
                     }
                 }
             }
         }
+
+        private void FileSystemObject_RequestRefresh(object sender, EventArgs e)
+        {
+            if (_parent == null)
+                return;
+            
+            // TODO
+            /*_parent.*/IsExpanded = false;
+            /*_parent?.*/Children.Clear();
+            /*_parent?.*/AddDummy();
+            /*_parent.*/IsExpanded = true;
+        }
+
+        private void FileSystemObject_AfterExplore(object sender, EventArgs e) => RaiseAfterExplore();
+
+        private void FileSystemObject_BeforeExplore(object sender, EventArgs e) => RaiseBeforeExplore();
+
+        
 
         public void ExpandChildren(bool recursive)
         {
@@ -353,8 +338,8 @@ namespace WolvenKit.App.Model
 
     internal class DummyFileSystemObjectInfo : FileSystemInfoModel
     {
-        public DummyFileSystemObjectInfo()
-            : base(new DirectoryInfo("DummyFileSystemObjectInfo"))
+        public DummyFileSystemObjectInfo(FileSystemInfoModel parent)
+            : base(new DirectoryInfo("DummyFileSystemObjectInfo"), parent)
         {
         }
     }

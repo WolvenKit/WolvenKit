@@ -9,20 +9,26 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Catel.MVVM;
 using WolvenKit.App.Commands;
 using Catel;
 using Catel.IoC;
 using Catel.Threading;
+using ControlzEx.Standard;
 using Orc.ProjectManagement;
 using WolvenKit.App.Model;
 using WolvenKit.Common.Services;
+using WolvenKit.CR2W;
+using NativeMethods = WolvenKit.App.NativeWin.NativeMethods;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -47,15 +53,16 @@ namespace WolvenKit.App.ViewModels
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
 
+        private delegate void DocumentViewModelDelegate(DocumentViewModel value);
 
+        private readonly DocumentViewModelDelegate addfiledel;
+        #endregion fields
 
-		#endregion fields
-
-		#region constructors
-		/// <summary>
-		/// Class constructor
-		/// </summary>
-		public WorkSpaceViewModel(
+        #region constructors
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        public WorkSpaceViewModel(
             IProjectManager projectManager,
 			ILoggerService loggerService,
 			IMessageService messageService, 
@@ -91,10 +98,10 @@ namespace WolvenKit.App.ViewModels
             BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
 
 
-            
+            addfiledel = vm => _files.Add(vm);
 
 
-			// register as application-wide commands
+            // register as application-wide commands
             RegisterCommands(commandManager);
 
             #endregion
@@ -201,7 +208,7 @@ namespace WolvenKit.App.ViewModels
                 var dlg = new OpenFileDialog();
                 if (dlg.ShowDialog().GetValueOrDefault())
                 {
-					model = new FileSystemInfoModel(new FileInfo(dlg.FileName));
+					model = new FileSystemInfoModel(new FileInfo(dlg.FileName), null);
                     ActiveDocument = await OpenAsync(model);
                 }
             }
@@ -209,16 +216,168 @@ namespace WolvenKit.App.ViewModels
             {
                 if (model.IsDirectory)
                     model.IsExpanded = !model.IsExpanded;
-                else if (model.IsFile) 
-                    ActiveDocument = await OpenAsync(model);
+                else if (model.IsFile)
+                {
+                    // TODO: make this a background task
+                    await RequestFileOpen(model);
+                    //await Task.Run(() => RequestFileOpen(model));
+                }
             }
 			
 		}
 
-		/// <summary>
-		/// Creates a new cr2w file in WolvenKit.
-		/// </summary>
-		public ICommand NewFileCommand { get; private set; }
+        private async Task RequestFileOpen(FileSystemInfoModel model)
+        {
+            var fullpath = model.FullName;
+
+            var ext = Path.GetExtension(fullpath).ToUpper();
+
+            #region inspect on single click
+
+            //// click
+            //if (e.Inspect)
+            //{
+            //    switch (ext)
+            //    {
+            //        case ".CSV":
+            //        case ".XML":
+            //        case ".TXT":
+            //        case ".BAT":
+            //        case ".WS":
+            //        case ".YML":
+            //        case ".LOG":
+            //        case ".INI":
+            //            {
+            //                var existing = TryOpenExisting(fullpath);
+            //                if (existing == null)
+            //                {
+            //                    MockKernel.Get().ShowScriptPreview().LoadFile(fullpath);
+            //                }
+            //                break;
+            //            }
+            //        case ".PNG":
+            //        case ".JPG":
+            //        case ".TGA":
+            //        case ".BMP":
+            //        case ".JPEG":
+            //        case ".DDS":
+            //            {
+            //                //TODO: unused
+            //                //if (OpenImages.Any(_ => _.Text == Path.GetFileName(fullpath)))
+            //                //{
+            //                //    OpenImages.First(_ => _.Text == Path.GetFileName(fullpath)).Activate();
+            //                //}
+            //                //else
+            //                {
+            //                    MockKernel.Get().ShowImagePreview().SetImage(fullpath);
+            //                }
+            //                break;
+            //            }
+            //        default:
+            //            break;
+            //    }
+            //    return;
+            //}
+
+            #endregion
+
+            // double click
+            switch (ext)
+            {
+                // images
+                case ".PNG":
+                case ".JPG":
+                case ".TGA":
+                case ".BMP":
+                case ".JPEG":
+                case ".DDS":
+                //text
+                case ".CSV":
+                case ".XML":
+                case ".TXT":
+                case ".WS":
+                // other
+                case ".FBX":
+                case ".XCF":
+                case ".PSD":
+                case ".APB":
+                case ".APX":
+                case ".CTW":
+                case ".BLEND":
+                case ".ZIP":
+                case ".RAR":
+                case ".BAT":
+                case ".YML":
+                case ".LOG":
+                case ".INI":
+                    ShellExecute(fullpath);
+                    break;
+                case ".BNK":
+                case ".WEM":
+                    {
+                        // TODO: port winforms
+                        //using (var sp = new frmAudioPlayer(fullpath))
+                        //{
+                        //    sp.ShowDialog();
+                        //}
+                        break;
+                    }
+                case ".SUBS":
+                    PolymorphExecute(fullpath, ".txt");
+                    break;
+                case ".USM":
+                    {
+                        // TODO: port winforms
+                        //if (!File.Exists(fullpath) || Path.GetExtension(fullpath) != ".usm")
+                        //    return;
+                        //var usmplayer = new frmUsmPlayer(fullpath);
+                        //usmplayer.Show(dockPanel, DockState.Document);
+                        break;
+                    }
+                    
+                default:
+                    ActiveDocument = await OpenAsync(model);
+                    break;
+            }
+
+            void ShellExecute(string path)
+            {
+                try
+                {
+                    var proc = new ProcessStartInfo(path) { UseShellExecute = true };
+                    Process.Start(proc);
+                }
+                catch (Win32Exception winex)
+                {
+                    // eat this: no default app set for filetype
+                    _loggerService.LogString($"No default prgram set in Windows to open file extension {Path.GetExtension(path)}", Common.Services.Logtype.Error);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+
+            void PolymorphExecute(string path, string extension)
+            {
+                File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, new byte[] { 0x01 });
+                var programname = new StringBuilder();
+                NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
+                if (programname.ToString().ToUpper().Contains(".EXE"))
+                {
+                    Process.Start(programname.ToString(), path);
+                }
+                else
+                {
+                    throw new InvalidFileTypeException("Invalid file type");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates a new cr2w file in WolvenKit.
+        /// </summary>
+        public ICommand NewFileCommand { get; private set; }
         private bool CanNewFile() => true;
         private void ExecuteNewFile()
         {
@@ -412,6 +571,8 @@ namespace WolvenKit.App.ViewModels
 			ActiveDocument.IsDirty = false;
 		}
 
+        
+
         /// <summary>
 		/// Open a file and return its content in a viewmodel.
 		/// </summary>
@@ -424,13 +585,21 @@ namespace WolvenKit.App.ViewModels
 			if (fileViewModel != null)
 				return fileViewModel;
 
+            // open file
 			fileViewModel = new DocumentViewModel(this as IWorkSpaceViewModel, model, true);
 			bool result = await fileViewModel.OpenFileAsync(model.FullName);
 
 			if (result)
 			{
-				_files.Add(fileViewModel);
-				return fileViewModel;
+                // TODO: this is not threadsafe
+                _files.Add(fileViewModel);
+
+                //Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
+                //{
+                //    addfiledel(fileViewModel);
+                //}), DispatcherPriority.ContextIdle);
+
+                return fileViewModel;
 			}
 
 			return null;

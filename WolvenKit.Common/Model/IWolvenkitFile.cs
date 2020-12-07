@@ -16,7 +16,7 @@ namespace WolvenKit.Common.Model
     {
         string FileName { get; set; }
 
-        EFileReadErrorCodes Read(BinaryReader file);
+        Task<EFileReadErrorCodes> Read(BinaryReader file);
 
         void Write(BinaryWriter writer);
 

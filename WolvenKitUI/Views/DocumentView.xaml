@@ -1,19 +1,68 @@
-﻿<UserControl
+﻿<catel:UserControl
 	x:Class="WolvenKitUI.Views.DocumentView"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:local="clr-namespace:WolvenKitUI.Views"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:behavior="clr-namespace:WolvenKitUI.Behavior"
+	xmlns:catel="http://schemas.catelproject.com"
+	xmlns:model="clr-namespace:WolvenKit.App.Model;assembly=WolvenKit.App"
+	xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+	xmlns:cmodel="clr-namespace:WolvenKit.Common.Model;assembly=WolvenKit.App"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
-	<Grid>
-		<TextBox
-			AcceptsReturn="True"
-			BorderThickness="0"
-			Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
-			TextWrapping="Wrap" />
-	</Grid>
+    <Grid
+        xmlns:conv="clr-namespace:WolvenKitUI.Layout.Converters">
+        <Grid.Resources>
+            <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
+        </Grid.Resources>
 
-</UserControl>
+        <TreeView Name="TreeView" 
+                             ItemsSource="{Binding Chunks}"
+                             
+                             >
+            <i:Interaction.Behaviors>
+                <behavior:TreeViewBehavior/>
+            </i:Interaction.Behaviors>
+
+            <TreeView.ContextMenu>
+                <ContextMenu>
+                    
+
+                </ContextMenu>
+            </TreeView.ContextMenu>
+
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                    <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkViewModel}" 
+                                          ItemsSource="{Binding Children}">
+                    <StackPanel Orientation="Horizontal">
+                        
+                        <TextBlock Text="{Binding Path=Name}" />
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewMouseRightButtonDown">
+                                <ei:ChangePropertyAction PropertyName="IsSelected" Value="true" 
+                                                         TargetObject="{Binding}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                    </StackPanel>
+
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+
+
+    </Grid>
+
+</catel:UserControl>

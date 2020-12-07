@@ -46,6 +46,7 @@
                     <Separator/>
                     <!--<MenuItem Header="Cut" Command="{Binding CutFileCommand}"/>-->
                     <MenuItem Header="Copy" Command="{Binding CopyCommand}"/>
+                    <MenuItem Header="Paste" Command="{Binding PasteFileCommand}"/>
                     <MenuItem Header="Delete" Command="{Binding DeleteFileCommand}"/>
                     <MenuItem Header="Rename" Command="{Binding RenameFileCommand}"/>
                     <Separator/>

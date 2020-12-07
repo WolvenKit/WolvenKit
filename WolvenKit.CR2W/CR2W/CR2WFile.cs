@@ -1,4 +1,5 @@
-﻿using RED.CRC32;
+﻿using Catel;
+using RED.CRC32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,12 +7,15 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading.Tasks;
+using Catel.IoC;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
 using WolvenKit.CR2W.Types.Utils;
+using System.Collections.ObjectModel;
 
 namespace WolvenKit.CR2W
 {
@@ -34,7 +38,7 @@ namespace WolvenKit.CR2W
         private readonly int[] TABLES_SIZES = new int[6] { 8, 8, 16, 24, 24, 24 };
         #endregion
 
-        public CR2WFile(LoggerService logger=null)
+        public CR2WFile()
         {
             Names = new List<CR2WNameWrapper>();            //block 2
             Imports = new List<CR2WImportWrapper>();        //block 3
@@ -47,7 +51,8 @@ namespace WolvenKit.CR2W
                 version = 162,
             };
 
-            Logger = logger ?? new LoggerService();
+            
+            Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
             StringDictionary = new Dictionary<uint, string>();
             m_tableheaders = new CR2WTable[10];
@@ -73,7 +78,8 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Properties
-        public LoggerService Logger { get; }
+
+        public ILoggerService Logger { get; }
 
         // Tables
         public List<CR2WNameWrapper> Names { get; private set; }
@@ -457,20 +463,20 @@ namespace WolvenKit.CR2W
             return (Imports, m_hasInternalBuffer, Buffers);
         }
 
-        public EFileReadErrorCodes Read(byte[] data)
+        public async Task<EFileReadErrorCodes> Read(byte[] data)
         {
-            using (var ms = new MemoryStream(data))
+            await using (var ms = new MemoryStream(data))
             using (var br = new BinaryReader(ms))
             {
-                return Read(br);
+                return await Read(br);
             }
         }
 
-        public EFileReadErrorCodes Read(BinaryReader file)
+        public async Task<EFileReadErrorCodes> Read(BinaryReader file)
         {
             //m_stream = file.BaseStream;
 
-            Stopwatch stopwatch1 = new Stopwatch();
+            var stopwatch1 = new Stopwatch();
             stopwatch1.Start();
 
             #region Read Headers
@@ -562,7 +568,7 @@ namespace WolvenKit.CR2W
             }
 
 
-            Logger?.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n");
+            Logger?.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n", Logtype.Normal);
             stopwatch1.Stop();
             //m_stream = null;
             return 0;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
@@ -149,24 +150,24 @@ namespace WolvenKit.App.ViewModels
         }
 
 
-        public EFileReadErrorCodes LoadFile(string filename, IVariableEditor variableEditor, LoggerService logger, Stream stream = null)
+        public async Task<EFileReadErrorCodes> LoadFile(string filename, IVariableEditor variableEditor, LoggerService logger, Stream stream = null)
         {
 
             if (stream != null)
             {
-                return loadFile(stream, filename, variableEditor, logger);
+                return await loadFile(stream, filename, variableEditor, logger);
             }
             else
             {
                 using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
                 {
-                    return loadFile(fs, filename, variableEditor, logger);
+                    return await loadFile(fs, filename, variableEditor, logger);
                 }
             }
 
         }
 
-        private EFileReadErrorCodes loadFile(Stream stream, string filename, IVariableEditor variableEditor, LoggerService logger)
+        private async Task<EFileReadErrorCodes> loadFile(Stream stream, string filename, IVariableEditor variableEditor, LoggerService logger)
         {
             EFileReadErrorCodes errorcode;
 
@@ -179,12 +180,12 @@ namespace WolvenKit.App.ViewModels
                     {
                         FileName = filename
                     };
-                    errorcode = File.Read(reader);
+                    errorcode = await File.Read(reader);
                     RaisePropertyChanged(nameof(File));
                 }
                 else
                 {
-                    File = new CR2WFile(logger)
+                    File = new CR2WFile()
                     {
                         FileName = filename,
 
@@ -192,7 +193,7 @@ namespace WolvenKit.App.ViewModels
 
                         LocalizedStringSource = MainController.Get()
                     };
-                    errorcode = File.Read(reader);
+                    errorcode = await File.Read(reader);
                     RaisePropertyChanged(nameof(File));
 
                     File.PropertyChanged += File_PropertyChanged;

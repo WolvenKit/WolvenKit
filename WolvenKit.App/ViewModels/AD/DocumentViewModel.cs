@@ -1,8 +1,16 @@
-﻿using WolvenKit.App.Model;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using WolvenKit.App.Model;
+using WolvenKit.Common.Model;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.SRT;
 
 namespace WolvenKit.App.ViewModels
 {
-	using System.IO;
+    using Catel.MVVM;
+    using System.IO;
 	using System.Text;
 	using System.Threading.Tasks;
 	using System.Windows.Input;
@@ -26,30 +34,32 @@ namespace WolvenKit.App.ViewModels
 		private string _initialPath;
 		private bool _isInitialized;
 		private bool _IsExistingInFileSystem;
-        #endregion fields
 
-        #region ctors
-        /// <summary>
-        /// class constructor
-        /// </summary>
-        /// <param name="workSpaceViewModel"></param>
-        /// <param name="initialPath"></param>
-        /// <param name="isExistingInFileSystem"></param>
-        public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel,
+        private FileSystemInfoModel fileinfo;
+		#endregion fields
+
+		#region ctors
+		/// <summary>
+		/// class constructor
+		/// </summary>
+		/// <param name="workSpaceViewModel"></param>
+		/// <param name="initialPath"></param>
+		/// <param name="isExistingInFileSystem"></param>
+		public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel,
 								FileSystemInfoModel model,
 								bool isExistingInFileSystem)
 			: this(workSpaceViewModel)
         {
-            Model = model;
-			_initialPath = Model.FullName;
+            fileinfo = model;
+			_initialPath = fileinfo.FullName;
 
 			try
 			{
-				Title = System.IO.Path.GetFileName(Model.FullName);
+				Title = System.IO.Path.GetFileName(fileinfo.FullName);
 			}
 			catch { }
 
-			ContentId = Model.FullName;
+			ContentId = fileinfo.FullName;
 			_IsExistingInFileSystem = isExistingInFileSystem;
 		}
 
@@ -74,11 +84,15 @@ namespace WolvenKit.App.ViewModels
 
 		#region Properties
 
+        
+
 		/// <summary>
 		/// 
 		/// </summary>
-		public FileSystemInfoModel Model { get; set; }
+        [Model]
+        public IWolvenkitFile File { get; set; }
 
+        public List<ChunkViewModel> Chunks => (File as CR2WFile)?.Chunks.Select(_ => new ChunkViewModel(_)).ToList();
 
 		/// <summary>
 		/// Gets the current path of the file being managed in this document viewmodel.
@@ -223,7 +237,42 @@ namespace WolvenKit.App.ViewModels
 				FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
 
 				//TODO
-				
+                await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+                {
+					EFileReadErrorCodes errorcode;
+
+                    using (var reader = new BinaryReader(stream))
+                    {
+						// switch between cr2wfiles and others (e.g. srt)
+                        
+
+						if (Path.GetExtension(path) == ".srt")
+                        {
+                            File = new Srtfile()
+                            {
+                                FileName = path
+							};
+                            errorcode = await File.Read(reader);
+                        }
+                        else
+                        {
+                            File = new CR2WFile()
+                            {
+                                FileName = path,
+
+								//TODO: ???
+                                //EditorController = variableEditor/*UIController.Get()*/,
+
+                                LocalizedStringSource = MainController.Get()
+                            };
+                            errorcode = await File.Read(reader);
+
+                            //File.PropertyChanged += File_PropertyChanged;
+                        }
+                    }
+
+				}
+
 
 				ContentId = path;
 				FilePath = path;
@@ -233,7 +282,7 @@ namespace WolvenKit.App.ViewModels
 
 				return true;
 			}
-			catch
+			catch (Exception ex)
 			{
 				// Not processing this catch in any other way than rejecting to initialize this
 				_isInitialized = false;

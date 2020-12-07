@@ -207,6 +207,8 @@ namespace WolvenKit.App.ViewModels
         private bool CanDeleteFile()
         {
             var b = _projectManager.ActiveProject is Project && SelectedItem != null;
+            if (!b)
+                return false;
 
             if (ActiveMod is Tw3Project tw3Project)
             {
@@ -256,6 +258,8 @@ namespace WolvenKit.App.ViewModels
                     //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
                     //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
                 }
+
+                SelectedItem.RaiseRequestRefresh();
             }
             catch (Exception exception)
             {
@@ -271,9 +275,6 @@ namespace WolvenKit.App.ViewModels
         private async void ExecuteRenameFile()
         {
             var filename = SelectedItem.FullName;
-            if (!File.Exists(filename))
-                return;
-
             
             var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
             var viewModel = new InputDialogViewModel() {Text = filename};
@@ -291,11 +292,21 @@ namespace WolvenKit.App.ViewModels
                 try
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
+                    if (SelectedItem.IsDirectory)
+                    {
+                        Directory.Move(filename, newfullpath);
+                    }
+                    else
+                    {
+                        File.Move(filename, newfullpath);
+                    }
+                    SelectedItem.RaiseRequestRefresh();
                 }
                 catch
                 {
+                    throw new NotImplementedException();
                 }
-                File.Move(filename, newfullpath);
+                
             });
         }
 
@@ -321,7 +332,7 @@ namespace WolvenKit.App.ViewModels
         /// Pastes a file from the clipboard into selected node.
         /// </summary>
         public ICommand PasteFileCommand { get; private set; }
-        private bool CanPasteFile() => _projectManager.ActiveProject is Project && SelectedItem != null;
+        private bool CanPasteFile() => _projectManager.ActiveProject is Project && SelectedItem != null && Clipboard.ContainsText();
         private void PasteFile()
         {
             if (File.Exists(Clipboard.GetText()))
@@ -337,7 +348,7 @@ namespace WolvenKit.App.ViewModels
                 }
             }
 
-            void SafeCopy(string src, string dest)
+            static void SafeCopy(string src, string dest)
             {
                 foreach (var path in FallbackPaths(dest).Where(path => !File.Exists(path)))
                 {
@@ -346,7 +357,7 @@ namespace WolvenKit.App.ViewModels
                 }
             }
 
-            IEnumerable<string> FallbackPaths(string path)
+            static IEnumerable<string> FallbackPaths(string path)
             {
                 yield return path;
 
@@ -435,7 +446,7 @@ namespace WolvenKit.App.ViewModels
             var fileDirectoryInfo = new DirectoryInfo(ActiveMod.FileDirectory);
             foreach (var fileSystemInfo in fileDirectoryInfo.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly))
             {
-                Treenodes.Add(new FileSystemInfoModel(fileSystemInfo));
+                Treenodes.Add(new FileSystemInfoModel(fileSystemInfo, null));
             }
         }
 

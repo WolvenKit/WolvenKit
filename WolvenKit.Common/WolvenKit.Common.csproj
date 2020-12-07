@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0-windows;netcoreapp3.1;net48</TargetFrameworks>
+    <TargetFrameworks>net5.0-windows;netcoreapp3.1</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
@@ -23,6 +23,10 @@
     <PackageReference Include="CsvHelper" Version="16.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
     <PackageReference Include="protobuf-net" Version="3.0.62" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\Cr2w\" />
   </ItemGroup>
 
 </Project>
