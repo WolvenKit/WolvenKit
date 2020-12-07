@@ -90,9 +90,34 @@ namespace WolvenKit.App.ViewModels
 		/// 
 		/// </summary>
         [Model]
-        public IWolvenkitFile File { get; set; }
+        private IWolvenkitFile File { get; set; }
 
+		/// <summary>
+		/// Bound to the View
+		/// </summary>
         public List<ChunkViewModel> Chunks => (File as CR2WFile)?.Chunks.Select(_ => new ChunkViewModel(_)).ToList();
+
+        /// <summary>
+        /// Bound to the View via TreeViewBehavior.cs
+        /// </summary>
+		public ChunkViewModel SelectedChunk { get; set; }
+
+      //      private ChunkViewModel _selectedChunk;
+      //	public ChunkViewModel SelectedChunk
+      //      {
+      //          get => _selectedChunk;
+      //          set
+      //          {
+      //              if (_selectedChunk != value)
+      //              {
+      //                  var oldValue = _selectedChunk;
+      //                  _selectedChunk = value;
+      //                  RaisePropertyChanged(() => SelectedChunk, oldValue, value);
+      //              }
+      //          }
+      //      }
+
+
 
 		/// <summary>
 		/// Gets the current path of the file being managed in this document viewmodel.

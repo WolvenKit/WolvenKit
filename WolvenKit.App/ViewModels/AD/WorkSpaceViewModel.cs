@@ -1,7 +1,4 @@
-﻿//
-// https://github.com/Dirkster99/AvalonDock/blob/5032524bae6e342dbb648a4c1d3fc3264f449db9/source/MLibTest/MLibTest/Demos/ViewModels/WorkSpaceViewModel.cs
-// 
-
+﻿
 using Catel.Services;
 using WolvenKit.App.ViewModels;
 using Microsoft.Win32;
@@ -124,6 +121,7 @@ namespace WolvenKit.App.ViewModels
             commandManager.RegisterCommand(AppCommands.Application.ShowProjectExplorer, ShowProjectExplorerCommand,
                 this);
             commandManager.RegisterCommand(AppCommands.Application.ShowImportUtility, ShowImportUtilityCommand, this);
+            commandManager.RegisterCommand(AppCommands.Application.ShowProperties, ShowPropertiesCommand, this);
 
             // Home Tab
             commandManager.RegisterCommand(AppCommands.Application.OpenFile, OpenFileCommand, this);
@@ -135,8 +133,11 @@ namespace WolvenKit.App.ViewModels
 			
 		}
 
+
 		private void OnProjectExplorerOnPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
+            // executes a global command that can be subscribed to from any viewmodel
+            // passes the currently active viewmodel
             if (args.PropertyName == "IsActive" && sender is PaneViewModel panevm)
                 ServiceLocator.Default.ResolveType<ICommandManager>()
                     .GetCommand(AppCommands.Application.ViewSelected)
@@ -225,6 +226,138 @@ namespace WolvenKit.App.ViewModels
             }
 			
 		}
+
+        
+
+        /// <summary>
+        /// Creates a new cr2w file in WolvenKit.
+        /// </summary>
+        public ICommand NewFileCommand { get; private set; }
+        private bool CanNewFile() => true;
+        private void ExecuteNewFile()
+        {
+            //TODO
+		}
+
+		/// <summary>
+		/// Packs the current mod project.
+		/// </summary>
+		public ICommand PackModCommand { get; private set; }
+        private bool CanPackMod() => _projectManager.ActiveProject is Project proj;
+        private async void ExecutePackMod()
+        {
+            //TODO
+		}
+
+		/// <summary>
+		/// Git-backup current mod project
+		/// </summary>
+		public ICommand BackupModCommand { get; private set; }
+        private bool CanBackupMod() => _projectManager.ActiveProject is Project;
+        private async void ExecuteBackupMod()
+        {
+            //TODO
+		}
+
+		
+
+
+		#endregion
+
+		#region properties
+
+		/// <summary>
+		/// Event is raised when AvalonDock (or the user) selects a new document.
+		/// </summary>
+		public event EventHandler ActiveDocumentChanged;
+
+        public Project Project { get; set; }
+
+		public bool SaveLayout { get; set; }
+
+		/// <summary>
+		/// Gets/Sets the currently active document.
+		/// </summary>
+		public DocumentViewModel ActiveDocument
+		{
+			get => _activeDocument;
+			set             // This can also be set by the user via the view
+			{
+				if (_activeDocument != value)
+				{
+					_activeDocument = value;
+					RaisePropertyChanged(nameof(ActiveDocument));
+
+                    ActiveDocumentChanged?.Invoke(this, EventArgs.Empty);
+                }
+			}
+		}
+
+		/// <summary>
+		/// Gets a collection of all currently available document viewmodels
+		/// </summary>
+		public IEnumerable<DocumentViewModel> Files => _files;
+
+		/// <summary>
+		/// Gets an enumeration of all currently available tool window viewmodels.
+		/// </summary>
+		public IEnumerable<ToolViewModel> Tools => _tools ??= new ToolViewModel[]
+        {
+            Log, 
+            ProjectExplorer, 
+            PropertiesViewModel, 
+            ImportViewModel
+        };
+
+        private LogViewModel _logViewModel = null;
+        /// <summary>
+		/// Gets an instance of the LogViewModel.
+		/// </summary>
+		public LogViewModel Log => _logViewModel ??= new LogViewModel();
+
+        private ProjectExplorerViewModel _projectExplorerViewModel = null;
+		/// <summary>
+		/// Gets an instance of the LogViewModel.
+		/// </summary>
+		public ProjectExplorerViewModel ProjectExplorer
+        {
+            get
+            {
+                _projectExplorerViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectExplorerViewModel>();
+                _projectExplorerViewModel.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+				return _projectExplorerViewModel;
+			}
+        }
+
+        private ImportViewModel _importViewModel = null;
+		/// <summary>
+		/// Gets an instance of the LogViewModel.
+		/// </summary>
+		public ImportViewModel ImportViewModel
+        {
+            get
+            {
+                _importViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ImportViewModel>();
+                return _importViewModel;
+            }
+        }
+
+        private PropertiesViewModel _propertiesViewModel = null;
+		/// <summary>
+		/// Gets an instance of the LogViewModel.
+		/// </summary>
+		public PropertiesViewModel PropertiesViewModel
+		{
+            get
+            {
+                _propertiesViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<PropertiesViewModel>();
+                return _propertiesViewModel;
+            }
+        }
+
+        #endregion Properties
+
+        #region methods
 
         private async Task RequestFileOpen(FileSystemInfoModel model)
         {
@@ -334,7 +467,7 @@ namespace WolvenKit.App.ViewModels
                         //usmplayer.Show(dockPanel, DockState.Document);
                         break;
                     }
-                    
+
                 default:
                     ActiveDocument = await OpenAsync(model);
                     break;
@@ -374,130 +507,7 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
-        /// <summary>
-        /// Creates a new cr2w file in WolvenKit.
-        /// </summary>
-        public ICommand NewFileCommand { get; private set; }
-        private bool CanNewFile() => true;
-        private void ExecuteNewFile()
-        {
-            //TODO
-		}
-
-		/// <summary>
-		/// Packs the current mod project.
-		/// </summary>
-		public ICommand PackModCommand { get; private set; }
-        private bool CanPackMod() => _projectManager.ActiveProject is Project proj;
-        private async void ExecutePackMod()
-        {
-            //TODO
-		}
-
-		/// <summary>
-		/// Git-backup current mod project
-		/// </summary>
-		public ICommand BackupModCommand { get; private set; }
-        private bool CanBackupMod() => _projectManager.ActiveProject is Project;
-        private async void ExecuteBackupMod()
-        {
-            //TODO
-		}
-
-		
-
-
-		#endregion
-
-		#region properties
-
-		/// <summary>
-		/// Event is raised when AvalonDock (or the user) selects a new document.
-		/// </summary>
-		public event EventHandler ActiveDocumentChanged;
-
-        public Project Project { get; set; }
-
-		public bool SaveLayout { get; set; }
-
-		/// <summary>
-		/// Gets/Sets the currently active document.
-		/// </summary>
-		public DocumentViewModel ActiveDocument
-		{
-			get => _activeDocument;
-			set             // This can also be set by the user via the view
-			{
-				if (_activeDocument != value)
-				{
-					_activeDocument = value;
-					RaisePropertyChanged(nameof(ActiveDocument));
-
-                    ActiveDocumentChanged?.Invoke(this, EventArgs.Empty);
-                }
-			}
-		}
-
-		/// <summary>
-		/// Gets a collection of all currently available document viewmodels
-		/// </summary>
-		public IEnumerable<DocumentViewModel> Files => _files;
-
-		/// <summary>
-		/// Gets an enumeration of all currently available tool window viewmodels.
-		/// </summary>
-		public IEnumerable<ToolViewModel> Tools => _tools ??= new ToolViewModel[] { Log, ProjectExplorer };
-
-        private LogViewModel _logViewModel = null;
-        /// <summary>
-		/// Gets an instance of the LogViewModel.
-		/// </summary>
-		public LogViewModel Log => _logViewModel ??= new LogViewModel();
-
-        private ProjectExplorerViewModel _projectExplorerViewModel = null;
-		/// <summary>
-		/// Gets an instance of the LogViewModel.
-		/// </summary>
-		public ProjectExplorerViewModel ProjectExplorer
-        {
-            get
-            {
-                _projectExplorerViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectExplorerViewModel>();
-                _projectExplorerViewModel.PropertyChanged += OnProjectExplorerOnPropertyChanged;
-				return _projectExplorerViewModel;
-			}
-        }
-
-        private ImportViewModel _importViewModel = null;
-		/// <summary>
-		/// Gets an instance of the LogViewModel.
-		/// </summary>
-		public ImportViewModel ImportViewModel
-        {
-            get
-            {
-                _importViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ImportViewModel>();
-                return _importViewModel;
-            }
-        }
-
-        private PropertiesViewModel _propertiesViewModel = null;
-		/// <summary>
-		/// Gets an instance of the LogViewModel.
-		/// </summary>
-		public PropertiesViewModel PropertiesViewModel
-		{
-            get
-            {
-                _propertiesViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<PropertiesViewModel>();
-                return _propertiesViewModel;
-            }
-        }
-
-		#endregion Properties
-
-		#region methods
-		private async Task OnProjectActivationAsync(object sender, ProjectUpdatingCancelEventArgs e)
+        private async Task OnProjectActivationAsync(object sender, ProjectUpdatingCancelEventArgs e)
         {
             var newProject = (Project)e.NewProject;
             if (newProject is null)
@@ -505,6 +515,11 @@ namespace WolvenKit.App.ViewModels
 
             Project = newProject;
         }
+
+        //
+        // https://github.com/Dirkster99/AvalonDock/blob/5032524bae6e342dbb648a4c1d3fc3264f449db9/source/MLibTest/MLibTest/Demos/ViewModels/WorkSpaceViewModel.cs
+        // 
+
 
         /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
         public void CloseAllDocuments()

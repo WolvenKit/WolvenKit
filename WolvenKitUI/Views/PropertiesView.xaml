@@ -19,7 +19,7 @@
         </Grid.Resources>
 
         <TreeView Name="TreeView" 
-                             ItemsSource="{Binding Poperties}"
+                             ItemsSource="{Binding Properties}"
                              
                              >
             <i:Interaction.Behaviors>

@@ -124,6 +124,7 @@
     <None Remove="Resources\Svg\OpenFolder_16x.svg" />
     <None Remove="Resources\Svg\PackageProperty_16x.svg" />
     <None Remove="Resources\Svg\PlaybackPreview_16x.svg" />
+    <None Remove="Resources\Svg\Property_left_16x.svg" />
     <None Remove="Resources\Svg\PushpinOutlineAngle_16x.svg" />
     <None Remove="Resources\Svg\regex.svg" />
     <None Remove="Resources\Svg\RunTest_16x.svg" />
@@ -227,6 +228,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Svg\PlaybackPreview_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\Property_left_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Svg\PushpinOutlineAngle_16x.svg">

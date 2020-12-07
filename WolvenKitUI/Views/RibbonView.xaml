@@ -33,6 +33,7 @@
             <svgc:SvgViewbox x:Key="IconLog" Source="/Resources/Svg/EventLog_16x.svg"/>
             <svgc:SvgViewbox x:Key="IconProjectExplorer" Source="/Resources/Svg/SQLServerObjectExplorer_16x.svg"/>
             <svgc:SvgViewbox x:Key="IconImportUtility" Source="/Resources/Svg/ImportTheme_16x.svg"/>
+            <svgc:SvgViewbox x:Key="IconProperties" Source="/Resources/Svg/Property_left_16x.svg"/>
 
             <svgc:SvgViewbox x:Key="IconExpandAll" Source="/Resources/Svg/ExpandAll_16x.svg"/>
             <svgc:SvgViewbox x:Key="IconCollapseAll" Source="/Resources/Svg/CollapseAll_16x.svg"/>
@@ -219,6 +220,10 @@
                                    Icon="{DynamicResource IconImportUtility}"
                                    LargeIcon="{DynamicResource IconImportUtility}" 
                                    Command="{catel:CommandManagerBinding Application.ShowImportUtility}"/>
+                    <fluent:Button Header="View Properties Window"
+                                   Icon="{DynamicResource IconProperties}"
+                                   LargeIcon="{DynamicResource IconProperties}" 
+                                   Command="{catel:CommandManagerBinding Application.ShowProperties}"/>
                 </fluent:RibbonGroupBox>
 
                 

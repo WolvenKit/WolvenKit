@@ -127,6 +127,7 @@ namespace WolvenKitUI.Services
             _commandManager.CreateCommand((AppCommands.Application.ShowLog));
             _commandManager.CreateCommand((AppCommands.Application.ShowProjectExplorer));
             _commandManager.CreateCommand((AppCommands.Application.ShowImportUtility));
+            _commandManager.CreateCommand((AppCommands.Application.ShowProperties));
 
             _commandManager.CreateCommand((AppCommands.Application.OpenFile));
             _commandManager.CreateCommand((AppCommands.Application.NewFile));

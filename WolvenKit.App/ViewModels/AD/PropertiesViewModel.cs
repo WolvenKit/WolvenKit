@@ -84,6 +84,11 @@ namespace WolvenKit.App.ViewModels
         #region Properties
 
 
+        /// <summary>
+        /// Bound to the View via TreeViewBehavior.cs
+        /// </summary>
+        public ChunkViewModel SelectedChunk { get; set; }
+
 
         #endregion
 
@@ -91,7 +96,7 @@ namespace WolvenKit.App.ViewModels
 
         #endregion
 
-        
+
 
         #region Methods
 
