@@ -157,6 +157,7 @@ namespace WolvenKitUI.Services
             _serviceLocator.RegisterType<IInitialProjectLocationService, WolvenKit.App.Model.ProjectManagement.InitialProjectLocationService>();
 
             _serviceLocator.RegisterType<IProjectInitializer, FileProjectInitializer>();
+            _serviceLocator.RegisterType<IProjectRefresherSelector, MyProjectRefresherSelector>();
 
 
             _serviceLocator.RegisterTypeAndInstantiate<ProjectManagementCloseApplicationWatcher>();

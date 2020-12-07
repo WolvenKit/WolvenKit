@@ -1,4 +1,6 @@
-﻿namespace WolvenKit.App.ViewModels
+﻿using WolvenKit.App.Model;
+
+namespace WolvenKit.App.ViewModels
 {
 	using System;
 	using System.Collections.Generic;
@@ -49,7 +51,7 @@
 		/// </summary>
 		/// <param name="filepath"></param>
 		/// <returns></returns>
-		Task<DocumentViewModel> OpenAsync(string filepath);
+		Task<DocumentViewModel> OpenAsync(FileSystemInfoModel model); 
 
 		/// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
 		void CloseAllDocuments();

@@ -17,7 +17,7 @@ namespace WolvenKitUI.Views
     {
         #region fields
 
-        private const string AvalonDockConfigPath = @".\AvalonDock.Layout.config";
+        private const string AvalonDockConfigPath = @".\Resources\AvalonDock.Layout.config";
 
 
 		ICommand _loadLayoutCommand = null;

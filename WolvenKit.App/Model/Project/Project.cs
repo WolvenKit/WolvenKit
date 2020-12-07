@@ -7,6 +7,7 @@
 
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -58,6 +59,23 @@ namespace WolvenKit.App.Model
 
 
         #region not serialized
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public List<string> Files
+        {
+            get
+            {
+                if (!Directory.Exists(FileDirectory))
+                {
+                    Directory.CreateDirectory(FileDirectory);
+                }
+                return Directory.EnumerateFiles(FileDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file.Substring(FileDirectory.Length + 1))
+                    .ToList();
+            }
+        }
 
         [XmlIgnore]
         [ReadOnly(true)]

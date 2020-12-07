@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -64,6 +65,8 @@ namespace WolvenKit.App.Model
         #region properties
 
         public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
+
+        
 
         #region Directories
         [XmlIgnore]
@@ -283,23 +286,10 @@ namespace WolvenKit.App.Model
         #endregion
         #endregion
 
+
         #region Files
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public List<string> Files
-        {
-            get
-            {
-                if (!Directory.Exists(FileDirectory))
-                {
-                    Directory.CreateDirectory(FileDirectory);
-                }
-                return Directory.EnumerateFiles(FileDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file.Substring(FileDirectory.Length + 1))
-                    .ToList();
-            }
-        }
+
+        
 
         [XmlIgnore]
         [ReadOnly(true)]
@@ -329,7 +319,9 @@ namespace WolvenKit.App.Model
                 {
                     Directory.CreateDirectory(DlcDirectory);
                 }
-                return Directory.EnumerateFiles(DlcDirectory, "*", SearchOption.AllDirectories).Select(file => file.Substring(DlcDirectory.Length + 1)).ToList();
+                return Directory.EnumerateFiles(DlcDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file.Substring(DlcDirectory.Length + 1))
+                    .ToList();
             }
         }
 
@@ -344,7 +336,9 @@ namespace WolvenKit.App.Model
                 {
                     Directory.CreateDirectory(RawDirectory);
                 }
-                return Directory.EnumerateFiles(RawDirectory, "*", SearchOption.AllDirectories).Select(file => file.Substring(RawDirectory.Length + 1)).ToList();
+                return Directory.EnumerateFiles(RawDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file.Substring(RawDirectory.Length + 1))
+                    .ToList();
             }
         }
 
@@ -359,7 +353,9 @@ namespace WolvenKit.App.Model
                 {
                     Directory.CreateDirectory(RadishDirectory);
                 }
-                return Directory.EnumerateFiles(RadishDirectory, "*", SearchOption.AllDirectories).Select(file => file.Substring(RadishDirectory.Length + 1)).ToList();
+                return Directory.EnumerateFiles(RadishDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file.Substring(RadishDirectory.Length + 1))
+                    .ToList();
             }
         }
         #endregion
@@ -397,21 +393,13 @@ namespace WolvenKit.App.Model
 
         private async Task InitializeAsync()
         {
-#if NET48
-            BundleManager = BundleManager ?? await Task.Run(() => Tw3Controller.LoadBundleManager());
-            W3StringManager = W3StringManager ?? await Task.Run(() => Tw3Controller.LoadStringsManager());
-            TextureManager = TextureManager ?? await Task.Run(() => Tw3Controller.LoadTextureManager());
-            CollisionManager = CollisionManager ?? await Task.Run(() => Tw3Controller.LoadCollisionManager());
-            SoundManager = SoundManager ?? await Task.Run(() => Tw3Controller.LoadSoundManager());
-            SpeechManager = SpeechManager ?? await Task.Run(() => Tw3Controller.LoadSpeechManager());
-#elif NETCOREAPP
-            BundleManager ??= await Task.Run(() => Tw3Controller.LoadBundleManager());
-            W3StringManager ??= await Task.Run(() => Tw3Controller.LoadStringsManager());
-            TextureManager ??= await Task.Run(() => Tw3Controller.LoadTextureManager());
-            CollisionManager ??= await Task.Run(() => Tw3Controller.LoadCollisionManager());
-            SoundManager ??= await Task.Run(() => Tw3Controller.LoadSoundManager());
-            SpeechManager ??= await Task.Run(() => Tw3Controller.LoadSpeechManager());
-#endif
+            BundleManager ??= await Task.Run(() => Tw3Controller.LoadBundleManager()).ConfigureAwait(false);
+            W3StringManager ??= await Task.Run(() => Tw3Controller.LoadStringsManager()).ConfigureAwait(false);
+            TextureManager ??= await Task.Run(() => Tw3Controller.LoadTextureManager()).ConfigureAwait(false);
+            CollisionManager ??= await Task.Run(() => Tw3Controller.LoadCollisionManager()).ConfigureAwait(false);
+            SoundManager ??= await Task.Run(() => Tw3Controller.LoadSoundManager()).ConfigureAwait(false);
+            SpeechManager ??= await Task.Run(() => Tw3Controller.LoadSpeechManager()).ConfigureAwait(false);
+
 
 
             // Hash all filepaths

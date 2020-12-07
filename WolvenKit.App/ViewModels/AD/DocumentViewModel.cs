@@ -1,4 +1,6 @@
-﻿namespace WolvenKit.App.ViewModels
+﻿using WolvenKit.App.Model;
+
+namespace WolvenKit.App.ViewModels
 {
 	using System.IO;
 	using System.Text;
@@ -34,19 +36,20 @@
         /// <param name="initialPath"></param>
         /// <param name="isExistingInFileSystem"></param>
         public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel,
-								string initialPath,
+								FileSystemInfoModel model,
 								bool isExistingInFileSystem)
 			: this(workSpaceViewModel)
-		{
-			_initialPath = initialPath;
+        {
+            Model = model;
+			_initialPath = Model.FullName;
 
 			try
 			{
-				Title = System.IO.Path.GetFileName(initialPath);
+				Title = System.IO.Path.GetFileName(Model.FullName);
 			}
 			catch { }
 
-			ContentId = initialPath;
+			ContentId = Model.FullName;
 			_IsExistingInFileSystem = isExistingInFileSystem;
 		}
 
@@ -66,14 +69,20 @@
 		public DocumentViewModel()
 		{
 			IsDirty = false;
-
-			//Set the icon only for open documents (just a test)
-			//IconSource = ISC.ConvertFromInvariantString(@"pack://application:,,/Demos/Images/document.png") as ImageSource;
-		}
+        }
 		#endregion ctors
 
 		#region Properties
-		/// <summary>Gets the current path of the file being managed in this document viewmodel.</summary>
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public FileSystemInfoModel Model { get; set; }
+
+
+		/// <summary>
+		/// Gets the current path of the file being managed in this document viewmodel.
+		/// </summary>
 		public string FilePath
 		{
 			get => _filePath;
@@ -99,21 +108,6 @@
 					return "Noname" + (IsDirty ? "*" : "");
 
 				return System.IO.Path.GetFileName(FilePath) + (IsDirty ? "*" : "");
-			}
-		}
-
-		/// <summary>Gets/sets the text content being managed in this document viewmodel.</summary>
-		public string TextContent
-		{
-			get => _textContent;
-			set
-			{
-				if (_textContent != value)
-				{
-					_textContent = value;
-					RaisePropertyChanged(nameof(TextContent));
-					IsDirty = true;
-				}
 			}
 		}
 
@@ -228,20 +222,9 @@
 				// 2. The file is to be accessed sequentially from beginning to end.
 				FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
 
-				using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, DefaultBufferSize, DefaultOptions))
-				{
-					var bom = new byte[4];
-					await stream.ReadAsync(bom, 0, 4);
-					stream.Seek(0, SeekOrigin.Begin);
-					Encoding fileEncoding = GetEncoding(bom);
+				//TODO
+				
 
-					using (var reader = new StreamReader(stream, fileEncoding))
-					{
-						textContent = await reader.ReadToEndAsync();
-					}
-				}
-
-				TextContent = textContent;
 				ContentId = path;
 				FilePath = path;
 				IsDirty = false;

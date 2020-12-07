@@ -16,12 +16,7 @@ namespace WolvenKit.App.ViewModels
 		/// </summary>
 		string FilePath { get; }
 
-		/// <summary>
-		/// Gets/sets the text content being managed in this document viewmodel.
-		/// </summary>
-		string TextContent { get; set; }
-
-		/// <summary>
+        /// <summary>
 		/// Gets/sets whether the documents content has been changed without saving into file system or not.
 		/// </summary>
 		bool IsDirty { get; set; }

@@ -9,6 +9,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Catel;
+using Catel.Services;
+using Catel.Threading;
+using Orc.ProjectManagement;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
 using WolvenKit.Common;
@@ -26,31 +30,61 @@ using static WolvenKit.Common.Tools.DDS.TexconvWrapper;
 
 namespace WolvenKit.App.ViewModels
 {
-    public class ImportViewModel : ViewModel
+    public class ImportViewModel : ToolViewModel
     {
-        
 
-        public ImportViewModel(IWindowFactory windowFactory) : base(windowFactory)
+
+
+        #region constructors
+
+        public ImportViewModel(
+            IProjectManager projectManager,
+            ILoggerService loggerService,
+            IMessageService messageService
+        ) : base(ToolTitle)
         {
-            UseLocalResourcesCommand = new RelayCommand(UseLocalResources, CanUseLocalResources);
-            OpenFolderCommand = new RelayCommand(OpenFolder, CanOpenFolder);
-            TryGetTextureGroupsCommand = new RelayCommand(TryGetTextureGroups, CanTryGetTextureGroups);
-            ImportCommand = new RelayCommand(Import, CanImport);
+            Argument.IsNotNull(() => projectManager);
+            Argument.IsNotNull(() => messageService);
+            Argument.IsNotNull(() => loggerService);
+
+            _projectManager = projectManager;
+            _loggerService = loggerService;
+            _messageService = messageService;
+
+            _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
+            _projectManager.ProjectRefreshedAsync += ProjectManagerOnProjectRefreshedAsync;
+
+
+            SetupCommands();
+            SetupToolDefaults();
 
             Importableobjects = new BindingList<ImportableFile>();
-            //Importableobjects.ListChanged += new ListChangedEventHandler(Importableobjects_ListChanged);
-
-            // on start use mod files
             UseLocalResourcesCommand.SafeExecute();
-
             xbmdict = new Dictionary<string, XBMDumpRecord>();
             RegisterXBMDump();
+
         }
 
+        #endregion
+
         #region Fields
+        /// <summary>
+        /// Identifies the <see ref="ContentId"/> of this tool window.
+        /// </summary>
+        public const string ToolContentId = "Import_Tool";
+
+        /// <summary>
+        /// Identifies the caption string used for this tool window.
+        /// </summary>
+        public const string ToolTitle = "Import";
+
+        private readonly IMessageService _messageService;
+        private readonly ILoggerService _loggerService;
+        private readonly IProjectManager _projectManager;
+
+
         private readonly List<string> importableexts = Enum.GetNames(typeof(EImportable)).Select(_ => $".{_}".ToLower()).ToList();
 
-        //private readonly Dictionary<ulong, XBMDumpRecord> xbmdict;
         private readonly Dictionary<string, XBMDumpRecord> xbmdict;
         private DirectoryInfo importdepot;
         #endregion
@@ -80,10 +114,10 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         #region Commands
-        public ICommand UseLocalResourcesCommand { get; }
-        public ICommand OpenFolderCommand { get; }
-        public ICommand TryGetTextureGroupsCommand { get; }
-        public ICommand ImportCommand { get; }
+        public ICommand UseLocalResourcesCommand { get; private set; }
+        public ICommand OpenFolderCommand { get; private set; }
+        public ICommand TryGetTextureGroupsCommand { get; private set; }
+        public ICommand ImportCommand { get; private set; }
         #endregion
 
         #region Commands Implementation
@@ -257,6 +291,49 @@ namespace WolvenKit.App.ViewModels
         }
         #endregion
 
+        #region Methods
+
+        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
+        {
+            var activeProject = args.NewProject;
+            if (activeProject == null)
+                return TaskHelper.Completed;
+
+            
+
+            return TaskHelper.Completed;
+        }
+
+        private Task ProjectManagerOnProjectRefreshedAsync(object sender, ProjectEventArgs e)
+        {
+            return TaskHelper.Completed;
+        }
+
+        /// <summary>
+        /// Initialize commands for this window.
+        /// </summary>
+        private void SetupCommands()
+        {
+            UseLocalResourcesCommand = new RelayCommand(UseLocalResources, CanUseLocalResources);
+            OpenFolderCommand = new RelayCommand(OpenFolder, CanOpenFolder);
+            TryGetTextureGroupsCommand = new RelayCommand(TryGetTextureGroups, CanTryGetTextureGroups);
+            ImportCommand = new RelayCommand(Import, CanImport);
+        }
+
+        /// <summary>
+        /// Initialize Avalondock specific defaults that are specific to this tool window.
+        /// </summary>
+        private void SetupToolDefaults()
+        {
+            ContentId = ToolContentId;           // Define a unique contentid for this toolwindow
+
+            //BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow
+            //bi.BeginInit();
+            //bi.UriSource = new Uri("pack://application:,,/Resources/Images/property-blue.png");
+            //bi.EndInit();
+            //IconSource = bi;
+        }
+
         private CR2WFile CreateCr2wXbmFromImagePath(ImportableFile file)
         {
             var fullpath = Path.Combine(importdepot.FullName, file.GetRelativePath());
@@ -380,7 +457,7 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
-        #region Methods
+        
 
         private void RegisterXBMDump()
         {

@@ -14,6 +14,7 @@ using System.Globalization;
 using System.Threading;
 using WolvenKit.App.ViewModels;
 using WolvenKitUI.ViewModels;
+using WolvenKitUI.Views.Dialogs;
 
 namespace WolvenKitUI
 {
@@ -74,6 +75,7 @@ namespace WolvenKitUI
 
             var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
             viewLocator.Register(typeof(SettingsViewModel), typeof(SettingsWindow));
+            viewLocator.Register(typeof(InputDialogViewModel), typeof(InputDialog));
 
 
 

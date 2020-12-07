@@ -1,4 +1,4 @@
-﻿<catel:UserControl x:Class="WolvenKitUI.Views.ProjectExplorerView"
+﻿<catel:UserControl x:Class="WolvenKitUI.Views.PropertiesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -19,7 +19,7 @@
         </Grid.Resources>
 
         <TreeView Name="TreeView" 
-                             ItemsSource="{Binding Treenodes}"
+                             ItemsSource="{Binding Poperties}"
                              
                              >
             <i:Interaction.Behaviors>

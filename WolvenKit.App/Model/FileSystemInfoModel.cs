@@ -1,6 +1,11 @@
-﻿using System;
+﻿//
+// https://medium.com/@mikependon/designing-a-wpf-treeview-file-explorer-565a3f13f6f2
+//
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,14 +13,13 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using Catel.Data;
 using Catel.IoC;
+using Catel.MVVM;
 using Orc.ProjectManagement;
 using WolvenKit.Common.Extensions;
 
 namespace WolvenKit.App.Model
 {
-    
-
-
+    [Model]
     public class FileSystemInfoModel : ObservableObject
     {
         public enum ECustomImageKeys
@@ -34,9 +38,15 @@ namespace WolvenKit.App.Model
             RawDlcImageKey
         }
 
-        private readonly FileSystemInfo _fileSystemInfo;
+        #region fields
+
+        
         private readonly IProjectManager _projectManager;
         private readonly FileSystemInfoModel _parent;
+
+        #endregion
+
+        #region constructors
 
         public FileSystemInfoModel(FileSystemInfo info)
             : this(info, null)
@@ -45,18 +55,95 @@ namespace WolvenKit.App.Model
 
         private FileSystemInfoModel(FileSystemInfo fileSystemInfo, FileSystemInfoModel parent)
         {
-            _fileSystemInfo = fileSystemInfo;
+            if (this is DummyFileSystemObjectInfo)
+            {
+                return;
+            }
+
+            Children = new ObservableCollection<FileSystemInfoModel>();
+            FileSystemInfo = fileSystemInfo;
             _parent = parent;
             _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
 
-            List<FileSystemInfoModel> list = new List<FileSystemInfoModel>();
-            if (_fileSystemInfo is DirectoryInfo directoryInfo)
-                foreach (var child in directoryInfo.GetFileSystemInfos()) 
-                    list.Add(new FileSystemInfoModel(child, this));
+            if (FileSystemInfo is DirectoryInfo)
+            {
+                AddDummy();
+            }
 
-            _children = new ObservableCollection<FileSystemInfoModel>(list);
+
+            PropertyChanged += new PropertyChangedEventHandler(FileSystemObjectInfo_PropertyChanged);
+
+
+            //List<FileSystemInfoModel> list = new List<FileSystemInfoModel>();
+            //if (_fileSystemInfo is DirectoryInfo directoryInfo) 
+            //    list.AddRange(directoryInfo.GetFileSystemInfos()
+            //        .Select(child => new FileSystemInfoModel(child, this)));
+
+            //Children = new ObservableCollection<FileSystemInfoModel>(list);
         }
 
+        #endregion
+
+        #region events
+
+        public event EventHandler BeforeExpand;
+
+        public event EventHandler AfterExpand;
+
+        public event EventHandler BeforeExplore;
+
+        public event EventHandler AfterExplore;
+
+        private void RaiseBeforeExpand()
+        {
+            BeforeExpand?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void RaiseAfterExpand()
+        {
+            AfterExpand?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void RaiseBeforeExplore()
+        {
+            BeforeExplore?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void RaiseAfterExplore()
+        {
+            AfterExplore?.Invoke(this, EventArgs.Empty);
+        }
+
+        #endregion
+
+        #region eventHandlers
+
+        void FileSystemObjectInfo_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (FileSystemInfo is DirectoryInfo)
+            {
+                if (string.Equals(e.PropertyName, "IsExpanded", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    RaiseBeforeExpand();
+                    if (IsExpanded)
+                    {
+                        if (HasDummy())
+                        {
+                            RaiseBeforeExplore();
+                            RemoveDummy();
+                            ExploreDirectories();
+                            ExploreFiles();
+                            RaiseAfterExplore();
+                        }
+                    }
+                    RaiseAfterExpand();
+                }
+            }
+        }
+
+        #endregion
+
+        #region properties
 
         private bool _isExpanded;
         public bool IsExpanded
@@ -91,22 +178,113 @@ namespace WolvenKit.App.Model
             }
         }
 
-        public bool IsDirectory => _fileSystemInfo is DirectoryInfo;
-        public bool IsFile => _fileSystemInfo is FileInfo;
+        public bool IsDirectory => FileSystemInfo is DirectoryInfo;
+        public bool IsFile => FileSystemInfo is FileInfo;
 
         public string Extension => GetFileExtension();
-        public string Name => _fileSystemInfo.Name;
-        public string FullName => _fileSystemInfo.FullName;
+        public string Name => FileSystemInfo.Name;
+        public string FullName => FileSystemInfo.FullName;
 
-        private readonly ObservableCollection<FileSystemInfoModel> _children;
-        public ObservableCollection<FileSystemInfoModel> Children => _children;
+        private ObservableCollection<FileSystemInfoModel> _children;
+        public ObservableCollection<FileSystemInfoModel> Children
+        {
+            get => _children;
+            set
+            {
+                if (_children != value)
+                {
+                    var oldValue = _children;
+                    _children = value;
+                    RaisePropertyChanged(() => Children, oldValue, value);
+                }
+            }
+        }
 
-        //public IEnumerable<FileSystemInfoModel> AllChildren => Children.Concat(Children.SelectMany(_ => _.AllChildren));
+        
 
-        //public IEnumerable<FileSystemInfoModel> Children => _fileSystemInfo is DirectoryInfo di
-        //    ? di.GetFileSystemInfos().Select(_ => new FileSystemInfoModel(_, this))
-        //    : new List<FileSystemInfoModel>();
 
+        private FileSystemInfo _fileSystemInfo;
+        public FileSystemInfo FileSystemInfo
+        {
+            get => _fileSystemInfo;
+            set
+            {
+                if (_fileSystemInfo != value)
+                {
+                    var oldValue = _fileSystemInfo;
+                    _fileSystemInfo = value;
+                    RaisePropertyChanged(() => FileSystemInfo, oldValue, value);
+                }
+            }
+        }
+        #endregion
+
+        #region methods
+
+        private void AddDummy()
+        {
+            Children.Add(new DummyFileSystemObjectInfo());
+        }
+
+        private bool HasDummy()
+        {
+            return GetDummy() != null;
+        }
+
+        private DummyFileSystemObjectInfo GetDummy()
+        {
+            return Children.OfType<DummyFileSystemObjectInfo>().FirstOrDefault();
+        }
+
+        private void RemoveDummy()
+        {
+            Children.Remove(GetDummy());
+        }
+
+        private void ExploreDirectories()
+        {
+            if (FileSystemInfo is DirectoryInfo directoryInfo)
+            {
+                var directories = directoryInfo.GetDirectories();
+                foreach (var directory in directories.OrderBy(d => d.Name))
+                {
+                    if ((directory.Attributes & FileAttributes.System) != FileAttributes.System &&
+                        (directory.Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
+                    {
+                        var fileSystemObject = new FileSystemInfoModel(directory);
+                        fileSystemObject.BeforeExplore += FileSystemObject_BeforeExplore;
+                        fileSystemObject.AfterExplore += FileSystemObject_AfterExplore;
+                        Children.Add(fileSystemObject);
+                    }
+                }
+            }
+        }
+
+        private void FileSystemObject_AfterExplore(object sender, EventArgs e)
+        {
+            RaiseAfterExplore();
+        }
+
+        private void FileSystemObject_BeforeExplore(object sender, EventArgs e)
+        {
+            RaiseBeforeExplore();
+        }
+
+        private void ExploreFiles()
+        {
+            if (FileSystemInfo is DirectoryInfo directoryInfo)
+            {
+                var files = directoryInfo.GetFiles();
+                foreach (var file in files.OrderBy(d => d.Name))
+                {
+                    if ((file.Attributes & FileAttributes.System) != FileAttributes.System &&
+                        (file.Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
+                    {
+                        Children.Add(new FileSystemInfoModel(file));
+                    }
+                }
+            }
+        }
 
         public void ExpandChildren(bool recursive)
         {
@@ -117,6 +295,7 @@ namespace WolvenKit.App.Model
                 info.ExpandChildren(recursive);
             }
         }
+
         public void CollapseChildren(bool recursive)
         {
             IsExpanded = false;
@@ -129,10 +308,7 @@ namespace WolvenKit.App.Model
 
         private string GetFileExtension()
         {
-            
-            
-
-            var node = _fileSystemInfo;
+            var node = FileSystemInfo;
             if (node.IsDirectory())
             {
                 if (_projectManager.ActiveProject is Tw3Project tw3Project)
@@ -170,6 +346,16 @@ namespace WolvenKit.App.Model
             }
             else
                 return (node as FileInfo)?.Extension;
+        }
+
+        #endregion
+    }
+
+    internal class DummyFileSystemObjectInfo : FileSystemInfoModel
+    {
+        public DummyFileSystemObjectInfo()
+            : base(new DirectoryInfo("DummyFileSystemObjectInfo"))
+        {
         }
     }
 }

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,15 +37,6 @@ namespace WolvenKit.App.ViewModels
 
 		private ICommand _openCommand = null;
 		private ICommand _newCommand = null;
-        
-
-        
-
-
-		private LogViewModel _logViewModel = null;
-		private ProjectExplorerViewModel _projectExplorerViewModel = null;
-
-
 
 
 		private DocumentViewModel _activeDocument = null;
@@ -88,8 +80,11 @@ namespace WolvenKit.App.ViewModels
             ShowLogCommand = new RelayCommand(ExecuteShowLog, CanShowLog);
             ShowProjectExplorerCommand = new RelayCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer);
             ShowImportUtilityCommand = new RelayCommand(ExecuteShowImportUtility, CanShowImportUtility);
+            ShowPropertiesCommand = new RelayCommand(ExecuteShowProperties, CanShowProperties);
 
-            OpenFileCommand = new RelayCommand(ExecuteOpenFile, CanOpenFile);
+            OpenFileCommand = new DelegateCommand<FileSystemInfoModel>(
+                async (p ) => await ExecuteOpenFile(p), 
+                (p) =>  CanOpenFile(p));
             NewFileCommand = new RelayCommand(ExecuteNewFile, CanNewFile);
 
             PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
@@ -185,25 +180,39 @@ namespace WolvenKit.App.ViewModels
 		/// </summary>
 		public ICommand ShowImportUtilityCommand { get; private set; }
         private bool CanShowImportUtility() => true;
-        private async void ExecuteShowImportUtility()
-        {
-			//TODO
-        }
+        private async void ExecuteShowImportUtility() => ImportViewModel.IsVisible = !ImportViewModel.IsVisible;
+
+        /// <summary>
+        /// Displays the Properties View
+        /// </summary>
+        public ICommand ShowPropertiesCommand { get; private set; }
+        private bool CanShowProperties() => true;
+        private async void ExecuteShowProperties() => PropertiesViewModel.IsVisible = !PropertiesViewModel.IsVisible;
 
 		/// <summary>
 		/// Opens a physical file in WolvenKit.
 		/// </summary>
-        public ICommand OpenFileCommand { get; private set; }
-        private bool CanOpenFile() => true;
-        private async void ExecuteOpenFile()
+		public ICommand OpenFileCommand { get; private set; }
+        private bool CanOpenFile(FileSystemInfoModel model) => true;
+        private async Task ExecuteOpenFile(FileSystemInfoModel model)
         {
-			//TODO
-            var dlg = new OpenFileDialog();
-            if (dlg.ShowDialog().GetValueOrDefault())
+            if (model == null)
             {
-                var fileViewModel = await OpenAsync(dlg.FileName);
-                ActiveDocument = fileViewModel;
+                var dlg = new OpenFileDialog();
+                if (dlg.ShowDialog().GetValueOrDefault())
+                {
+					model = new FileSystemInfoModel(new FileInfo(dlg.FileName));
+                    ActiveDocument = await OpenAsync(model);
+                }
             }
+            else
+            {
+                if (model.IsDirectory)
+                    model.IsExpanded = !model.IsExpanded;
+                else if (model.IsFile) 
+                    ActiveDocument = await OpenAsync(model);
+            }
+			
 		}
 
 		/// <summary>
@@ -280,37 +289,53 @@ namespace WolvenKit.App.ViewModels
 		/// </summary>
 		public IEnumerable<ToolViewModel> Tools => _tools ??= new ToolViewModel[] { Log, ProjectExplorer };
 
-        /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
-		public void CloseAllDocuments()
-		{
-			ActiveDocument = null;
-			_files.Clear();
-		}
-
-		/// <summary>
+        private LogViewModel _logViewModel = null;
+        /// <summary>
 		/// Gets an instance of the LogViewModel.
 		/// </summary>
 		public LogViewModel Log => _logViewModel ??= new LogViewModel();
 
-        /// <summary>
-        /// Gets an instance of the LogViewModel.
-        /// </summary>
-        public ProjectExplorerViewModel ProjectExplorer
+        private ProjectExplorerViewModel _projectExplorerViewModel = null;
+		/// <summary>
+		/// Gets an instance of the LogViewModel.
+		/// </summary>
+		public ProjectExplorerViewModel ProjectExplorer
         {
             get
             {
-                if (_projectExplorerViewModel == null)
-                {
-                    _projectExplorerViewModel =
-                        ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectExplorerViewModel>();
-                }
-
+                _projectExplorerViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectExplorerViewModel>();
                 _projectExplorerViewModel.PropertyChanged += OnProjectExplorerOnPropertyChanged;
 				return _projectExplorerViewModel;
 			}
         }
 
-        #endregion Properties
+        private ImportViewModel _importViewModel = null;
+		/// <summary>
+		/// Gets an instance of the LogViewModel.
+		/// </summary>
+		public ImportViewModel ImportViewModel
+        {
+            get
+            {
+                _importViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ImportViewModel>();
+                return _importViewModel;
+            }
+        }
+
+        private PropertiesViewModel _propertiesViewModel = null;
+		/// <summary>
+		/// Gets an instance of the LogViewModel.
+		/// </summary>
+		public PropertiesViewModel PropertiesViewModel
+		{
+            get
+            {
+                _propertiesViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<PropertiesViewModel>();
+                return _propertiesViewModel;
+            }
+        }
+
+		#endregion Properties
 
 		#region methods
 		private async Task OnProjectActivationAsync(object sender, ProjectUpdatingCancelEventArgs e)
@@ -321,6 +346,14 @@ namespace WolvenKit.App.ViewModels
 
             Project = newProject;
         }
+
+        /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
+        public void CloseAllDocuments()
+        {
+            ActiveDocument = null;
+            _files.Clear();
+        }
+
 		/// <summary>
 		/// Checks if a document can be closed and asks the user whether
 		/// to save before closing if the document appears to be dirty.
@@ -330,7 +363,7 @@ namespace WolvenKit.App.ViewModels
 		{
 			if (fileToClose.IsDirty)
 			{
-				var res = MessageBox.Show(string.Format("Save changes for file '{0}'?", fileToClose.FileName), "AvalonDock Test App", MessageBoxButton.YesNoCancel);
+				var res = MessageBox.Show($"Save changes for file '{fileToClose.FileName}'?", "AvalonDock Test App", MessageBoxButton.YesNoCancel);
 				if (res == MessageBoxResult.Cancel)
 					return;
 
@@ -372,24 +405,27 @@ namespace WolvenKit.App.ViewModels
 					fileToSave.FilePath = dlg.SafeFileName;
 			}
 
-			System.IO.File.WriteAllText(fileToSave.FilePath, fileToSave.TextContent);
+			// TODO
+
+			
+
 			ActiveDocument.IsDirty = false;
 		}
 
         /// <summary>
 		/// Open a file and return its content in a viewmodel.
 		/// </summary>
-		/// <param name="filepath"></param>
+		/// <param name="model"></param>
 		/// <returns></returns>
-		public async Task<DocumentViewModel> OpenAsync(string filepath)
+		public async Task<DocumentViewModel> OpenAsync(FileSystemInfoModel model)
 		{
 			// Check if we have already loaded this file and return it if so
-			var fileViewModel = _files.FirstOrDefault(fm => fm.FilePath == filepath);
+			var fileViewModel = _files.FirstOrDefault(fm => fm.ContentId == model.FullName);
 			if (fileViewModel != null)
 				return fileViewModel;
 
-			fileViewModel = new DocumentViewModel(this as IWorkSpaceViewModel, filepath, true);
-			bool result = await fileViewModel.OpenFileAsync(filepath);
+			fileViewModel = new DocumentViewModel(this as IWorkSpaceViewModel, model, true);
+			bool result = await fileViewModel.OpenFileAsync(model.FullName);
 
 			if (result)
 			{
@@ -410,11 +446,12 @@ namespace WolvenKit.App.ViewModels
 
         private void OnNew(object parameter)
 		{
-			string path = string.Format("Untitled{0}.txt", _newDocumentCounter++);
+			//TODO
+			//string path = string.Format("Untitled{0}.txt", _newDocumentCounter++);
 
-			var newFile = new DocumentViewModel(this as IWorkSpaceViewModel, path, false);
-			_files.Add(newFile);
-			ActiveDocument = newFile;
+			//var newFile = new DocumentViewModel(this as IWorkSpaceViewModel, path, false);
+			//_files.Add(newFile);
+			//ActiveDocument = newFile;
 		}
 
 		#endregion

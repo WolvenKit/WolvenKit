@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.IO.Packaging;
@@ -16,6 +17,7 @@ using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
 using Catel.Threading;
+using Orc.FileSystem;
 using Orc.ProjectManagement;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
@@ -70,17 +72,24 @@ namespace WolvenKit.App.ViewModels
             _messageService = messageService;
 
             _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
+            _projectManager.ProjectRefreshedAsync += ProjectManagerOnProjectRefreshedAsync;
 
 
             SetupCommands();
             SetupToolDefaults();
 
+
             Treenodes = new BindingList<FileSystemInfoModel>();
             Treenodes.ListChanged += new ListChangedEventHandler(Treenodes_ListChanged);
         }
+
+        
+
         #endregion constructors
 
         #region properties
+
+        private Project ActiveProject => _projectManager.ActiveProject as Project;
 
         private BindingList<FileSystemInfoModel> _treenodes = null;
         public BindingList<FileSystemInfoModel> Treenodes
@@ -157,18 +166,6 @@ namespace WolvenKit.App.ViewModels
                 Commonfunctions.ShowFileInExplorer(SelectedItem.FullName);
         }
 
-
-        /// <summary>
-        /// Opens selected node in Wkit.
-        /// </summary>
-        /// <returns></returns>
-        public ICommand OpenFileCommand { get; private set; }
-        private bool CanOpenFile() => _projectManager.ActiveProject is Project && SelectedItem != null;
-        private void ExecuteOpenFile()
-        {
-            // TODO: Handle command logic here
-        }
-
         /// <summary>
         /// Expands all nodes in the treeview.
         /// </summary>
@@ -242,23 +239,23 @@ namespace WolvenKit.App.ViewModels
             try
             {
                 // TODO
-                //if (SelectedItem.IsDirectory)
-                //    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath
-                //        , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
-                //        , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
-                //else
-                //    Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullpath
-                //        , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
-                //        , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                var _fileService = ServiceLocator.Default.ResolveType<IFileService>();
+                var _directoryService = ServiceLocator.Default.ResolveType<IDirectoryService>();
 
-                //if (SelectedItem.IsDirectory)
-                //    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath
-                //        , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
-                //        , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
-                //else
-                //    Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullpath
-                //        , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
-                //        , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                if (SelectedItem.IsDirectory)
+                {
+                    _directoryService.Delete(fullpath);
+                    //Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath
+                    //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
+                    //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                }
+                else
+                {
+                    _fileService.Delete(fullpath);
+                    //Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullpath
+                    //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
+                    //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                }
             }
             catch (Exception exception)
             {
@@ -271,33 +268,35 @@ namespace WolvenKit.App.ViewModels
         /// </summary>
         public ICommand RenameFileCommand { get; private set; }
         private bool CanRenameFile() => _projectManager.ActiveProject is Project && SelectedItem != null;
-        private void ExecuteRenameFile()
+        private async void ExecuteRenameFile()
         {
-            // TODO: Handle open documents
-
-            if (!File.Exists(SelectedItem.FullName))
+            var filename = SelectedItem.FullName;
+            if (!File.Exists(filename))
                 return;
 
+            
+            var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
+            var viewModel = new InputDialogViewModel() {Text = filename};
+            await visualizerService.ShowDialogAsync(viewModel, delegate(object? sender, UICompletedEventArgs args)
+            {
+                if (args.Result != true)
+                    return;
+                if (!(args.DataContext is InputDialogViewModel vm))
+                    return;
+                var newfullpath = Path.Combine(ActiveMod.FileDirectory, vm.Text);
 
-
-            //var dlg = new frmRenameDialog() { FileName = filename };
-            //if (dlg.ShowDialog() == DialogResult.OK && dlg.FileName != filename)
-            //{
-            //    var newfullpath = Path.Combine(ActiveMod.FileDirectory, dlg.FileName);
-
-            //    if (File.Exists(newfullpath))
-            //        return;
-
-            //    // Rename file in file structure
-            //    try
-            //    {
-            //        Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
-            //    }
-            //    catch
-            //    {
-            //    }
-            //    File.Move(filename, newfullpath);
-            //}
+                if (File.Exists(newfullpath))
+                    return;
+                    
+                try
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
+                }
+                catch
+                {
+                }
+                File.Move(filename, newfullpath);
+            });
         }
 
         /// <summary>
@@ -308,6 +307,7 @@ namespace WolvenKit.App.ViewModels
         private void ExecuteCutFile()
         {
             // TODO: Handle command logic here
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -425,6 +425,36 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         #region Methods
+
+        private void RepopulateTreeView()
+        {
+            if (ActiveMod == null)
+                return;
+
+            Treenodes.Clear();
+            var fileDirectoryInfo = new DirectoryInfo(ActiveMod.FileDirectory);
+            foreach (var fileSystemInfo in fileDirectoryInfo.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly))
+            {
+                Treenodes.Add(new FileSystemInfoModel(fileSystemInfo));
+            }
+        }
+
+        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
+        {
+            var activeProject = args.NewProject;
+            if (activeProject == null)
+                return TaskHelper.Completed;
+
+            RepopulateTreeView();
+
+            return TaskHelper.Completed;
+        }
+
+        private Task ProjectManagerOnProjectRefreshedAsync(object sender, ProjectEventArgs e)
+        {
+            return TaskHelper.Completed;
+        }
+
         /// <summary>
         /// Initialize commands for this window.
         /// </summary>
@@ -433,7 +463,6 @@ namespace WolvenKit.App.ViewModels
             CutFileCommand = new RelayCommand(ExecuteCutFile, CanCutFile);
             CopyFileCommand = new RelayCommand(CopyFile, CanCopyFile);
             PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
-            OpenFileCommand = new RelayCommand(ExecuteOpenFile, CanOpenFile);
             DeleteFileCommand = new RelayCommand(ExecuteDeleteFile, CanDeleteFile);
             RenameFileCommand = new RelayCommand(ExecuteRenameFile, CanRenameFile);
             CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
@@ -489,34 +518,8 @@ namespace WolvenKit.App.ViewModels
 
         void Treenodes_ListChanged(object sender, ListChangedEventArgs e)
         {
-            RaisePropertyChanged(nameof(Treenodes));
+            //RaisePropertyChanged(nameof(Treenodes));
         }
-
-        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
-        {
-            var activeProject = args.NewProject;
-            if (activeProject == null)
-                return TaskHelper.Completed;
-
-            RepopulateTreeView();
-
-            return TaskHelper.Completed;
-        }
-
-        private void RepopulateTreeView()
-        {
-            if (ActiveMod == null)
-                return;
-
-            Treenodes.Clear();
-            var fileDirectoryInfo = new DirectoryInfo(ActiveMod.FileDirectory);
-            foreach (var fileSystemInfo in fileDirectoryInfo.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly))
-            {
-                Treenodes.Add(new FileSystemInfoModel(fileSystemInfo));
-            }
-        }
-
-
 
         private async void RequestFileCook(object sender, RequestFileOpenArgs e)
         {
