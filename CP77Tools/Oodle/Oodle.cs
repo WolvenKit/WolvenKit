@@ -9,11 +9,11 @@ namespace CP77Tools.Oodle
 {
     public static class OodleHelper
     {
-        [DllImport(@"C:\Users\ghost\source\repos\CP77Tools\CP77Tools\oo2core_8_win64.dll")]
+        [DllImport(@"\oo2core_8_win64.dll")]
         public static extern int OodleLZ_Decompress(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize,
             uint a, uint b, ulong c, uint d, uint e, uint f, uint g, uint h, uint i, uint threadModule);
 
-        [DllImport(@"C:\Users\ghost\source\repos\CP77Tools\CP77Tools\oo2core_3_win64.dll")]
+        [DllImport(@"\oo2core_8_win64.dll")]
         public static extern int OodleLZ_Compress(OodleFormat format, byte[] buffer, long bufferSize, byte[] outputBuffer, OodleCompressionLevel level, uint unused1, uint unused2, uint unused3);
 
 

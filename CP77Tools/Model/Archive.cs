@@ -182,6 +182,12 @@ namespace CP77Tools.Model
 
         public void Extract(DirectoryInfo outdir)
         {
+            var dir = AppDomain.CurrentDomain.BaseDirectory;
+            var oodle = Path.Combine(dir, "oo2core_8_win64.dll");
+            if (!File.Exists(oodle))
+            {
+                return;
+            }
 
             foreach (var (key, value) in Files)
             {
@@ -202,7 +208,6 @@ namespace CP77Tools.Model
                     }
                     else
                     {
-                        // decompress
                         var decompressedBuffer = new byte[size];
                         int decompressedCount = OodleHelper.OodleLZ_Decompress(file, file.Length, decompressedBuffer, size
                             , 0, 0, 0, 0, 0, 0, 0, 0, 0, 3);
