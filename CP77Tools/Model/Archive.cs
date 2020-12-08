@@ -1,9 +1,11 @@
 ﻿using CP77Tools.Oodle;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using WolvenKit.Common.Extensions;
 
@@ -151,11 +153,11 @@ namespace CP77Tools.Model
 
             const string head = //"Hash\t" +
                                 "Hash64," +
-                                "Hash32," +
+                                "Datetime," +
                                 "VirtualSize," +
                                 "PhysicalSize," +
-                                "Unk1," +
-                                "Unk2," +
+                                //"Unk1," +
+                                //"Unk2," +
                                 "Flags," +
                                 "StartDataSector," +
                                 "NextDataSector," +
@@ -191,11 +193,11 @@ namespace CP77Tools.Model
 
                     string info =
                         $"{x.NameHash64:X2}," +
-                        $"{x.NameHash32:X2}," +
+                        $"{x.DateTime.ToString(CultureInfo.InvariantCulture)}," +
                         $"{VirtualSize}," +
                         $"{PhysicalSize}," +
-                        $"{x.Unk1:X2}," +
-                        $"{x.Unk2:X2}," +
+                        //$"{x.Unk1:X2}," +
+                        //$"{x.Unk2:X2}," +
                         $"{x.FileFlags}," +
                         $"{x.FirstDataSector}," +
                         $"{x.NextDataSector}," +
@@ -322,9 +324,10 @@ namespace CP77Tools.Model
     public class FileInfoEntry
     {
         public ulong NameHash64 { get; private set; }
-        public uint NameHash32 { get; private set; }
-        public ushort Unk1 { get; private set; } //???? maybe it's really one int32
-        public ushort Unk2 { get; private set; } //????
+        public DateTime DateTime { get; private set; }
+        //public System.Runtime.InteropServices.ComTypes.FILETIME Filetime { get; set; }
+        //public ushort Unk1 { get; private set; } //???? maybe it's really one int32
+        //public ushort Unk2 { get; private set; } //????
         public uint FileFlags { get; private set; }
         public uint FirstDataSector { get; private set; }
         public uint NextDataSector { get; private set; }
@@ -340,9 +343,12 @@ namespace CP77Tools.Model
         private void Read(BinaryReader br)
         {
             NameHash64 = br.ReadUInt64();
-            NameHash32 = br.ReadUInt32();
-            Unk1 = br.ReadUInt16();
-            Unk2 = br.ReadUInt16();
+            var f = br.ReadInt64();
+
+            DateTime = System.DateTime.FromFileTime(f);
+
+            //Unk1 = br.ReadUInt16();
+            //Unk2 = br.ReadUInt16();
 
             FileFlags = br.ReadUInt32();
             FirstDataSector = br.ReadUInt32();
