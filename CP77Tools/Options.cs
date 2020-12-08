@@ -18,11 +18,13 @@ namespace CP77Tools
         public bool extract { get; set; }
     }
 
-    [Verb("dbg", HelpText = "CyberPunk 77 Archive Tools.")]
-    public class DbgOptions
+    [Verb("cr2w", HelpText = "CyberPunk 77 cr2w Tools.")]
+    public class Cr2wOptions
     {
-        [Option(HelpText = "Specify the archive path.", Required = true)]
+        [Option(HelpText = "Specify the cr2w path.", Required = true)]
         public string path { get; set; }
 
+        [Option(HelpText = "Dump info.", Required = false)]
+        public bool dump { get; set; }
     }
 }

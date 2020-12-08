@@ -3,26 +3,50 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using CP77Tools.Oodle;
 
 namespace CP77Tools.Model
 {
     public class Archive
     {
-        public ArHeader Header { get; set; }
-        public List<byte[]> Files { get; set; }
-        public ArTable Table { get; set; }
+        public class ArchiveFile
+        {
+            private Archive _archive;
+            private int _key;
 
+            public ArchiveFile(Archive archive, int key)
+            {
+                _archive = archive;
+                RawBytes = new List<byte[]>();
+                OffsetEntries = new List<OffsetEntry>();
+
+                _key = key;
+            }
+
+            public List<byte[]> RawBytes { get; set; }
+            public List<OffsetEntry> OffsetEntries { get; set; }
+
+
+            public int Name => _key;
+
+            public FileInfoEntry Info => _archive.Table.FileInfo[_key];
+        }
+
+
+
+        public ArHeader Header { get; set; }
+        public ArTable Table { get; set; }
+        public Dictionary<int, ArchiveFile> Files { get; set; }
+        
         private string filepath;
 
         public Archive(string path)
         {
             filepath = path;
-            Files = new List<byte[]>();
+            Files = new Dictionary<int, ArchiveFile>();
 
-            using (var br = new BinaryReader(new FileStream(path, FileMode.Open)))
-            {
-                Read(br);
-            }
+            using var br = new BinaryReader(new FileStream(path, FileMode.Open));
+            Read(br);
         }
 
 
@@ -35,24 +59,50 @@ namespace CP77Tools.Model
             Table = new ArTable(br);
 
             // read files
-            foreach (var entry in Table.FileInfo)
+            foreach (var (key, value) in Table.FileInfo)
             {
+                var entry = new ArchiveFile(this, key);
                 // get file offsets
-                var startindex = (int)entry.Value.startindex;
-                var nextindex = (int)entry.Value.nextindex;
+                var startindex = (int)value.startindex;
+                var nextindex = (int)value.nextindex;
 
-                using var ms = new MemoryStream();
-                using var bw = new BinaryWriter(ms);
-                for (int i = startindex; i < nextindex; i++)
+                for (int j = startindex; j < nextindex; j++)
                 {
-                    var offsetentry = this.Table.Offsets[i];
-                    br.BaseStream.Seek((long)offsetentry.Offset, SeekOrigin.Begin);
-                    var buffer = br.ReadBytes((int)offsetentry.Zsize);
-                    bw.Write(buffer);
-                }
+                    var offsetentry = this.Table.Offsets[j];
+                    entry.OffsetEntries.Add(offsetentry);
 
-                Files.Add(ms.ToArray());
+                    br.BaseStream.Seek((long)offsetentry.Offset, SeekOrigin.Begin);
+
+                    // not compressed
+                    if (offsetentry.Size == offsetentry.Zsize)
+                    {
+                        var buffer = br.ReadBytes((int)offsetentry.Zsize);
+                        entry.RawBytes.Add(buffer);
+                    }
+                    else
+                    {
+                        // read the first 8 bytes
+                        var oodleCompression = br.ReadBytes(4);
+                        if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
+                            throw new NotImplementedException();
+                        var size = br.ReadUInt32();
+
+                        if (size != offsetentry.Size)
+                            throw new NotImplementedException();
+
+                        var buffer = br.ReadBytes((int)offsetentry.Zsize - 8);
+                        entry.RawBytes.Add(buffer);
+                    }
+                }
+                Files.Add(key, entry);
             }
+
+            //foreach (var entry in Table.Offsets)
+            //{
+            //    br.BaseStream.Seek((long)entry.Value.Offset + 8, SeekOrigin.Begin);
+            //    var buffer = br.ReadBytes((int)entry.Value.Zsize - 8);
+            //    Files.Add(buffer);
+            //}
         }
 
         /// <summary>
@@ -129,6 +179,49 @@ namespace CP77Tools.Model
                 }
             }
         }
+
+        public void Extract(DirectoryInfo outdir)
+        {
+
+            foreach (var (key, value) in Files)
+            {
+                using var ms = new MemoryStream();
+                using var bw = new BinaryWriter(ms);
+
+                // go through all chunks
+                for (int i = 0; i < value.RawBytes.Count; i++)
+                {
+                    var file = value.RawBytes[i];
+                    var size = value.OffsetEntries[i].Size;     // extracted size
+                    var zsize = value.OffsetEntries[i].Zsize;   // compressed size
+
+                    // not compressed
+                    if (size == zsize)
+                    {
+                        bw.Write(file);
+                    }
+                    else
+                    {
+                        // decompress
+                        var decompressedBuffer = new byte[size];
+                        int decompressedCount = OodleHelper.OodleLZ_Decompress(file, file.Length, decompressedBuffer, size
+                            , 0, 0, 0, 0, 0, 0, 0, 0, 0, 3);
+
+                        if (decompressedCount != decompressedBuffer.Length)
+                            throw new NotImplementedException();
+
+                        bw.Write(decompressedBuffer);
+                    }
+                }
+
+
+                // write
+                string outpath = Path.Combine(outdir.FullName, $"extractedfile_{key}.bin");
+                File.WriteAllBytesAsync(outpath, ms.ToArray());
+            }
+
+           
+        }
     }
 
 
@@ -152,9 +245,7 @@ namespace CP77Tools.Model
         {
             Magic = br.ReadBytes(4);
             if (!(Magic.SequenceEqual(new byte[] { 82, 68, 65, 82 })))
-            {
                 throw new NotImplementedException();
-            }
             Version = br.ReadUInt32();
             Tableoffset = br.ReadUInt64();
             Tablesize = br.ReadUInt64();

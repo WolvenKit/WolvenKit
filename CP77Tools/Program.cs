@@ -18,27 +18,29 @@ namespace CP77Tools
                 {
                     string line = System.Console.ReadLine();
                     var parsed = ParseText(line, ' ', '"');
-                    await Parse(parsed.ToArray());
+                    Parse(parsed.ToArray());
                 }
 
             }
             else
             {
-                await Parse(args);
+                Parse(args);
             }
         }
 
-        internal static Task Parse(string[] _args)
+        internal static int Parse(string[] _args)
         {
             var result = Parser.Default.ParseArguments<
-                    ArchiveOptions
+                    ArchiveOptions,
+                    Cr2wOptions
                 >(_args)
                         .MapResult(
-                          async (ArchiveOptions opts) => await ConsoleFunctions.ArchiveTask(opts),
+                          (ArchiveOptions opts) => ConsoleFunctions.ArchiveTask(opts),
+                          (Cr2wOptions opts) => ConsoleFunctions.Cr2wTask(opts),
                           
                           //errs => 1,
-                          _ => Task.FromResult(1));
-            return result;
+                          _ => /*Task.FromResult(1)*/1);
+            return 1;
         }
 
         public static IEnumerable<String> ParseText(String line, Char delimiter, Char textQualifier)
