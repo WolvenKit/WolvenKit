@@ -3,8 +3,8 @@ Modding tools for the cyberpunk 2077 game.
 
 # CP77 Tools Preview Version 0.1.1
 
-- requires oo2core_8_win64.dll in the same folder as the exe to run!
 - requires NET5.0.
+- requires oo2core_8_win64.dll in the same folder as the exe to run!
 (Please ask me for the dll or join our CDPR modding community discord: https://discord.gg/USZwxxFrKa)
 
 This release also contains an experimental and WIP file-viewer. 
