@@ -195,10 +195,10 @@ namespace WolvenKit.App.ViewModels
         
         protected override async Task<bool> SaveAsync()
         {
-            var cansave = 
-                (File.Exists(WccLitePath) && Path.GetExtension(WccLitePath) == ".exe" && WccLitePath.Contains("wcc_lite.exe")) &&
-                (File.Exists(ExecutablePath) && Path.GetExtension(ExecutablePath) == ".exe" && ExecutablePath.Contains("witcher3.exe"));
-            if (!cansave) return false;
+            //var cansave = 
+            //    //(File.Exists(WccLitePath) && Path.GetExtension(WccLitePath) == ".exe" && WccLitePath.Contains("wcc_lite.exe")) &&
+            //    (File.Exists(ExecutablePath) && Path.GetExtension(ExecutablePath) == ".exe" && ExecutablePath.Contains("witcher3.exe"));
+            //if (!cansave) return false;
 
 
             //_updateService.CheckForUpdates = _settingsManager.CheckForUpdates;

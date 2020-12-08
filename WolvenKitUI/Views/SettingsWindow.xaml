@@ -53,23 +53,25 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Label Content="{Binding ExecutablePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                <!--<Label Content="{Binding ExecutablePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                        Background="{Binding ExecutablePathBG}"
                        BorderBrush="Gray"
                        BorderThickness="1"
                        Grid.Column="0"  Grid.Row="0"/>
                 <Button Content="Browse..." Command="{Binding OpenGamePathCommand}" 
-                        Grid.Column="1" Grid.Row="0"/>
+                        Grid.Column="1" Grid.Row="0"/>-->
 
-                <Label Content="{Binding WccLitePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                <!--<Label Content="{Binding WccLitePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                        Background="{Binding WccLitePathBG}"
                        BorderBrush="Gray"
                        BorderThickness="1"
-                       Grid.Column="0"  Grid.Row="1"/>
+                       Grid.Column="0"  Grid.Row="1"
+                       
+                       />
                 <Button Content="Browse..." Command="{Binding OpenWccPathCommand}" 
-                        Grid.Column="1" Grid.Row="1"/>
+                        Grid.Column="1" Grid.Row="1"/>-->
 
-                <Label Content="{Binding GameModDir, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                <!--<Label Content="{Binding GameModDir, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                        BorderBrush="Gray"
                        BorderThickness="1"
                        Grid.Column="0"  Grid.Row="2"/>
@@ -81,7 +83,7 @@
                        BorderThickness="1"
                        Grid.Column="0"  Grid.Row="3"/>
                 <Button Content="Browse..." Command="{Binding OpenDlcDirectoryCommand}" 
-                        Grid.Column="1" Grid.Row="3"/>
+                        Grid.Column="1" Grid.Row="3"/>-->
                 
             </orccontrols:StackGrid>
         </GroupBox>

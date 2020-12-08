@@ -46,6 +46,7 @@ namespace WolvenKit.CR2W.Types
         #endregion
 
         #region Properties
+
         /// <summary>
         /// Stores the parent cr2w file.
         /// used a lot
@@ -202,6 +203,8 @@ namespace WolvenKit.CR2W.Types
 
         #region Virtual
 
+        public List<IEditableVariable> ChildrEditableVariables => GetEditableVariables();
+
         /// <summary>
         /// Gets the list of RED and REDBuffer variables from a CVariable
         /// Can be overwritten by child classes
@@ -209,7 +212,7 @@ namespace WolvenKit.CR2W.Types
         /// <returns></returns>
         public virtual List<IEditableVariable> GetEditableVariables()
         {
-            List<IEditableVariable> redvariables = new List<IEditableVariable>();
+            List<IEditableVariable> redvariables = new List<IEditableVariable>(UnknownCVariables);
 
             foreach (Member item in this.GetREDMembers(true))
             {
@@ -329,7 +332,15 @@ namespace WolvenKit.CR2W.Types
                     dbg_varnames.Add($"[{cvar.REDType}] {cvar.REDName}");
 #endif
 
-                    TrySettingFastMemberAccessor(cvar);
+                    // unknown types
+                    if (cvar.REDName.Contains("UNKNOWN:"))
+                    {
+                        UnknownCVariables.Add(cvar);
+                    }
+                    else
+                    {
+                        TrySettingFastMemberAccessor(cvar);
+                    }
                 }
                 #endregion
 
@@ -344,8 +355,8 @@ namespace WolvenKit.CR2W.Types
                     // parsed to far: possible file corruption
                     // BUT: this check is impossible for elements of an array.
                     // in this case, passed size is 0, so we can check for that
-                    if (size != 0)
-                        throw new InvalidParsingException($"Read bytes not equal to expected bytes. Difference: {bytesread - size}");
+                    //if (size != 0)
+                    //    throw new InvalidParsingException($"Read bytes not equal to expected bytes. Difference: {bytesread - size}");
                 }
                 else if (bytesread < size)
                 {
@@ -353,6 +364,8 @@ namespace WolvenKit.CR2W.Types
                 }
             }
         }
+
+        public List<CVariable> UnknownCVariables { get; set; } = new List<CVariable>();
 
         /// <summary>
         /// Instantiates and reads all REDVariables and REDBuffers in a CVariable 

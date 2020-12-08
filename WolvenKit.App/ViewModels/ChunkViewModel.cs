@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Common.Model
 {
@@ -15,6 +16,8 @@ namespace WolvenKit.Common.Model
         {
             _export = export;
         }
+
+        public CVariable Data => _export.data;
 
         public string Name => _export.REDName;
         public List<CR2WExportWrapper> Children => _export.VirtualChildrenChunks;

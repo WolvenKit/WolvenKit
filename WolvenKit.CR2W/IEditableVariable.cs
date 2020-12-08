@@ -26,6 +26,8 @@ namespace WolvenKit.CR2W
         void SetREDName(string val);
 
         //Control GetEditor();
+        List<IEditableVariable> ChildrEditableVariables { get; }
+
         List<IEditableVariable> GetEditableVariables();
         List<IEditableVariable> GetExistingVariables(bool includebuffers);
 

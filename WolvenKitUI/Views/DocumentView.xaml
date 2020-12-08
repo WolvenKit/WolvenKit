@@ -11,6 +11,8 @@
 	xmlns:model="clr-namespace:WolvenKit.App.Model;assembly=WolvenKit.App"
 	xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 	xmlns:cmodel="clr-namespace:WolvenKit.Common.Model;assembly=WolvenKit.App"
+	xmlns:types="clr-namespace:WolvenKit.CR2W.Types;assembly=WolvenKit.CR2W"
+	xmlns:cr2W="clr-namespace:WolvenKit.CR2W;assembly=WolvenKit.CR2W"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
@@ -20,7 +22,14 @@
             <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
         </Grid.Resources>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
         <TreeView Name="TreeView" 
+                  Grid.Row="0"
                              ItemsSource="{Binding Chunks}"
                              
                              >
@@ -61,7 +70,49 @@
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
         </TreeView>
+        <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" />
+        <TreeView Name="TreeViewProp" 
+                  Grid.Row="2"
+                  ItemsSource="{Binding SelectEditableVariables, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                  Grid.IsSharedSizeScope =" True"
+        >
 
+
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                    <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+
+            <TreeView.Resources>
+
+                
+                <HierarchicalDataTemplate DataType="{x:Type types:CVariable}" 
+                                          ItemsSource="{Binding ChildrEditableVariables}"
+                                          >
+                    <Grid Width="Auto">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="B" />
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="{Binding Path=REDName}" MinWidth="200" />
+                        <GridSplitter Grid.Column="1" Height="5" HorizontalAlignment="Stretch" />
+                        <TextBlock  Grid.Column="2" Text="{Binding Path=REDType}" MinWidth="200" Padding="10,0,0,0"/>
+                        <GridSplitter Grid.Column="3" Height="5" HorizontalAlignment="Stretch" />
+                        <TextBlock  Grid.Column="4" Text="{Binding Path=REDValue}" MinWidth="200" Padding="10,0,0,0"/>
+                        
+
+                    </Grid>
+
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
+        </TreeView>
 
     </Grid>
 

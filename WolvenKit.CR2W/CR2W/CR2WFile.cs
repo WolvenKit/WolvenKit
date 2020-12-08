@@ -434,7 +434,11 @@ namespace WolvenKit.CR2W
                 throw new FormatException($"Not a CR2W file, Magic read as 0x{id:X8}");
 
             m_fileheader = file.BaseStream.ReadStruct<CR2WFileHeader>();
-            if (m_fileheader.version > 163 || m_fileheader.version < 159)
+
+            //TODO: CP77
+
+
+            if (m_fileheader.version > 195 || m_fileheader.version < 163)
                 throw new FormatException($"Unknown Version {m_fileheader.version}. Supported versions: 159 - 163.");
 
             var dt = new CDateTime(m_fileheader.timeStamp, null, "");
@@ -490,7 +494,7 @@ namespace WolvenKit.CR2W
                 return EFileReadErrorCodes.NoCr2w;
 
             m_fileheader = file.BaseStream.ReadStruct<CR2WFileHeader>();
-            if (m_fileheader.version > 163 || m_fileheader.version < 159)
+            if (m_fileheader.version > 195 || m_fileheader.version < 163)
                 return EFileReadErrorCodes.UnsupportedVersion;
 
             var dt = new CDateTime(m_fileheader.timeStamp, null, "");
