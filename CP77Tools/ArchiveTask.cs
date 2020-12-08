@@ -42,9 +42,6 @@ namespace CP77Tools
         
         public static int ArchiveTask(ArchiveOptions options)
         {
-            
-
-
             if (options.extract || options.dump)
             {
                 // initial checks
@@ -62,33 +59,11 @@ namespace CP77Tools
                 if (indir == null)
                     return 0;
 
-                // load texture cache
-                // switch chache types
                 var ar = new Archive(inputFileInfo.FullName);
 
                 if (options.extract)
                 {
                     ar.Extract(indir);
-
-                    // ALL FILES
-
-                    //for (int i = 0; i < ar.Files.Count; i++)
-                    //{
-
-
-                    //    var f = ar.Files[i];
-                    //    var o = ar.Table.Offsets[i];
-                    //    var outbuffer = new byte[o.Size];
-
-                    //    var zero = f.Length - o.Zsize;
-
-                    //    int decompressedCount = OodleLZ_Decompress(f, f.Length, outbuffer, o.Size
-                    //        , 0, 0, 0, 0, 0, 0, 0, 0, 0, 3);
-
-                    //    string outpath = Path.Combine(indir.FullName, $"extractedfile_{i}.bin");
-                    //    File.WriteAllBytesAsync(outpath, outbuffer);
-                    //}
-
                 }
 
                 if (options.dump)
@@ -100,11 +75,6 @@ namespace CP77Tools
             Console.WriteLine($"Finished extracting {options.path}");
 
             return 1;
-        }
-
-        private static uint GetCompressionBound(uint bufferSize)
-        {
-            return bufferSize + 274 * ((bufferSize + 0x3FFFF) / 0x40000);
         }
     }
 }

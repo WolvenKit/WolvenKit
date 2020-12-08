@@ -64,7 +64,7 @@ namespace CP77Tools.Model
                 var entry = new ArchiveFile(this, key);
                 // get file offsets
                 var startindex = (int)value.startindex;
-                var nextindex = (int)value.nextindex;
+                var nextindex = (int)value.endindex;
 
                 for (int j = startindex; j < nextindex; j++)
                 {
@@ -130,14 +130,14 @@ namespace CP77Tools.Model
 
             }
 
-            const string head = //"Hash\t" +
+            const string head = "Hash\t" +
                                 "Offset\t" +
                                 "Size\t" +
                                 "Zsize\t" +
                                 "Header\t" +
                                 "somebool\t" +
                                 "startindex\t" +
-                                "nextindex\t" +
+                                "endindex\t" +
                                 "unk1\t" +
                                 "unk2\t" +
                                 "Footer\t"
@@ -156,23 +156,23 @@ namespace CP77Tools.Model
                     var idx = entry.Key;
 
                     var offsetEntry = Table.Offsets[idx];
-                    //var hashEntry = Table.HashTable[idx];
+                    
 
                     //string ext = x.Name.Split('.').Last();
 
                     string info =
-                        //$"{hashEntry.Hash:X2}\t +" +
                         $"{offsetEntry.Offset}\t" +
                         $"{offsetEntry.Size}\t" +
                         $"{offsetEntry.Zsize}\t" +
-                        $"{x.Header:X2}\t" +
-                        $"{x.somebool}\t" +
+                        $"{x.Hash}\t" +
+                        $"{BitConverter.ToString(x.Header)}\t" +
+                        $"{x.flag}\t" +
                         $"{x.startindex}\t" +
-                        $"{x.nextindex}\t" +
+                        $"{x.endindex}\t" +
                         $"{x.unk1}\t" +
                         $"{x.unk2}\t" +
-                        $"{x.Footer:X2}\t"
-                                  
+                        $"{BitConverter.ToString(x.Footer)}\t"
+
                         ;
                     
                     writer.WriteLine(info);
@@ -186,6 +186,7 @@ namespace CP77Tools.Model
             var oodle = Path.Combine(dir, "oo2core_8_win64.dll");
             if (!File.Exists(oodle))
             {
+                Console.WriteLine("oo2core_8_win64.dll not found. Please add it to the base directory of the CP77Tools.");
                 return;
             }
 
@@ -232,7 +233,7 @@ namespace CP77Tools.Model
 
 
 
-    public partial class ArHeader
+    public class ArHeader
     {
         public byte[] Magic { get; set; }
         public uint Version { get; set; }
@@ -258,10 +259,8 @@ namespace CP77Tools.Model
             Filesize = br.ReadUInt64();
         }
     }
-    public partial class ArTable
+    public class ArTable
     {
-        
-
         public uint Num { get; private set; }
         public uint Size { get; private set; }
         public ulong Checksum { get; private set; }
@@ -307,7 +306,7 @@ namespace CP77Tools.Model
             Table3count = br.ReadUInt32();
         }
     }
-    public partial class HashEntry
+    public class HashEntry
     {
         public ulong Hash { get; set; }
 
@@ -321,7 +320,7 @@ namespace CP77Tools.Model
             Hash = br.ReadUInt64();
         }
     }
-    public partial class OffsetEntry
+    public class OffsetEntry
     {
 
         public ulong Offset { get; set; }
@@ -340,12 +339,14 @@ namespace CP77Tools.Model
             Size = br.ReadUInt32();
         }
     }
-    public partial class FileInfoEntry
+
+    public class FileInfoEntry
     {
+        public ulong Hash { get; set; }
         public byte[] Header { get; set; }
-        public uint somebool { get; private set; }
+        public uint flag { get; private set; }
         public uint startindex { get; private set; }
-        public uint nextindex { get; private set; }
+        public uint endindex { get; private set; }
         public uint unk1 { get; private set; }
         public uint unk2 { get; private set; }
 
@@ -358,11 +359,12 @@ namespace CP77Tools.Model
 
         private void Read(BinaryReader br)
         {
-            Header = br.ReadBytes(16);
+            Hash = br.ReadUInt64();
+            Header = br.ReadBytes(8);
 
-            somebool = br.ReadUInt32();
+            flag = br.ReadUInt32();
             startindex = br.ReadUInt32();
-            nextindex = br.ReadUInt32();
+            endindex = br.ReadUInt32();
             unk1 = br.ReadUInt32();
             unk2 = br.ReadUInt32();
 
