@@ -54,3 +54,5 @@ dkms.conf
 #obj
 *obj/
 *bin/
+*.vs/
+*.suo

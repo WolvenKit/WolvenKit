@@ -11,6 +11,8 @@ namespace CP77Tools
         [Option(HelpText = "Specify the archive path.", Required = true)]
         public string path { get; set; }
 
+        [Option(HelpText = "Dump info.", Required = false)]
+        public bool dump { get; set; }
 
         [Option(HelpText = "Extract files.", Required = false)]
         public bool extract { get; set; }

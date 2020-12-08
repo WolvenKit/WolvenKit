@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
-using Kaitai;
 
 namespace CP77Tools.Model
 {
@@ -12,9 +12,11 @@ namespace CP77Tools.Model
         public List<byte[]> Files { get; set; }
         public ArTable Table { get; set; }
 
+        private string filepath;
+
         public Archive(string path)
         {
-
+            filepath = path;
             Files = new List<byte[]>();
 
             using (var br = new BinaryReader(new FileStream(path, FileMode.Open)))
@@ -52,6 +54,81 @@ namespace CP77Tools.Model
                 Files.Add(ms.ToArray());
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void DumpInfo()
+        {
+            
+
+            // dump chache info
+            using (var writer = File.CreateText($"{this.filepath}.info"))
+            {
+                writer.WriteLine($"Magic: {Header.Magic}\r\n");
+                writer.WriteLine($"Version: {Header.Version}\r\n");
+                writer.WriteLine($"Tableoffset: {Header.Tableoffset}\r\n");
+                writer.WriteLine($"Tablesize: {Header.Tablesize}\r\n");
+                writer.WriteLine($"Unk3: {Header.Unk3}\r\n");
+                writer.WriteLine($"Filesize: {Header.Filesize}\r\n");
+                writer.WriteLine($"Size: {Table.Size}\r\n");
+                writer.WriteLine($"Checksum: {Table.Checksum}\r\n");
+                writer.WriteLine($"Num: {Table.Num}\r\n");
+                writer.WriteLine($"Table1count: {Table.Table1count}\r\n");
+                writer.WriteLine($"Table2count: {Table.Table2count}\r\n");
+                writer.WriteLine($"Table3count: {Table.Table3count}\r\n");
+
+            }
+
+            const string head = //"Hash\t" +
+                                "Offset\t" +
+                                "Size\t" +
+                                "Zsize\t" +
+                                "Header\t" +
+                                "somebool\t" +
+                                "startindex\t" +
+                                "nextindex\t" +
+                                "unk1\t" +
+                                "unk2\t" +
+                                "Footer\t"
+                                ;
+
+            // dump and extract files
+            using (var writer = File.CreateText($"{this.filepath}.txt"))
+            {
+                // write header
+                writer.WriteLine(head);
+
+                // write info elements
+                foreach (var entry in Table.FileInfo)
+                {
+                    var x = entry.Value;
+                    var idx = entry.Key;
+
+                    var offsetEntry = Table.Offsets[idx];
+                    //var hashEntry = Table.HashTable[idx];
+
+                    //string ext = x.Name.Split('.').Last();
+
+                    string info =
+                        //$"{hashEntry.Hash:X2}\t +" +
+                        $"{offsetEntry.Offset}\t" +
+                        $"{offsetEntry.Size}\t" +
+                        $"{offsetEntry.Zsize}\t" +
+                        $"{x.Header:X2}\t" +
+                        $"{x.somebool}\t" +
+                        $"{x.startindex}\t" +
+                        $"{x.nextindex}\t" +
+                        $"{x.unk1}\t" +
+                        $"{x.unk2}\t" +
+                        $"{x.Footer:X2}\t"
+                                  
+                        ;
+                    
+                    writer.WriteLine(info);
+                }
+            }
+        }
     }
 
 
@@ -74,7 +151,7 @@ namespace CP77Tools.Model
         private void Read(BinaryReader br)
         {
             Magic = br.ReadBytes(4);
-            if (KaitaiStream.ByteArrayCompare(Magic, new byte[] { 82, 68, 65, 82 }) != 0)
+            if (!(Magic.SequenceEqual(new byte[] { 82, 68, 65, 82 })))
             {
                 throw new NotImplementedException();
             }
@@ -134,7 +211,6 @@ namespace CP77Tools.Model
             Table3count = br.ReadUInt32();
         }
     }
-
     public partial class HashEntry
     {
         public ulong Hash { get; set; }
@@ -149,7 +225,6 @@ namespace CP77Tools.Model
             Hash = br.ReadUInt64();
         }
     }
-
     public partial class OffsetEntry
     {
 
@@ -169,7 +244,6 @@ namespace CP77Tools.Model
             Size = br.ReadUInt32();
         }
     }
-
     public partial class FileInfoEntry
     {
         public byte[] Header { get; set; }
