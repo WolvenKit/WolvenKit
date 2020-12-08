@@ -56,3 +56,4 @@ dkms.conf
 *bin/
 *.vs/
 *.suo
+CP77Tools/Properties/launchSettings.json

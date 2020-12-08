@@ -1,9 +1,9 @@
-﻿using System;
+﻿using CP77Tools.Oodle;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using CP77Tools.Oodle;
 
 namespace CP77Tools.Model
 {
@@ -35,74 +35,68 @@ namespace CP77Tools.Model
 
 
         public ArHeader Header { get; set; }
+        public uint FilesCount { get; set; }
         public ArTable Table { get; set; }
         public Dictionary<int, ArchiveFile> Files { get; set; }
         
         private string filepath;
 
+
+        private BinaryReader binaryReader { get; set; }
+
         public Archive(string path)
         {
             filepath = path;
-            Files = new Dictionary<int, ArchiveFile>();
-
-            using var br = new BinaryReader(new FileStream(path, FileMode.Open));
-            Read(br);
+            binaryReader = new BinaryReader(new FileStream(path, FileMode.Open));
+            Header = new ArHeader(binaryReader);
+            binaryReader.BaseStream.Seek((long)Header.Tableoffset, SeekOrigin.Begin);
+            Table = new ArTable(binaryReader);
+            FilesCount = Table.Table1count;
         }
 
-
-        private void Read(BinaryReader br)
+        public byte[] GetFileData(int idx)
         {
-            Header = new ArHeader(br);
-
-            br.BaseStream.Seek((long)Header.Tableoffset, SeekOrigin.Begin);
-
-            Table = new ArTable(br);
-
-            // read files
-            foreach (var (key, value) in Table.FileInfo)
+            if (idx < Table.FileInfo.Count)
             {
-                var entry = new ArchiveFile(this, key);
-                // get file offsets
-                var startindex = (int)value.startindex;
-                var nextindex = (int)value.endindex;
+                var entry = Table.FileInfo[idx];
+                var startindex = (int)entry.FirstDataSector;
+                var nextindex = (int)entry.NextDataSector;
+
+                MemoryStream ms = new MemoryStream();
+                BinaryWriter bw = new BinaryWriter(ms);
 
                 for (int j = startindex; j < nextindex; j++)
                 {
-                    var offsetentry = this.Table.Offsets[j];
-                    entry.OffsetEntries.Add(offsetentry);
-
-                    br.BaseStream.Seek((long)offsetentry.Offset, SeekOrigin.Begin);
-
-                    // not compressed
-                    if (offsetentry.Size == offsetentry.Zsize)
+                    var offsetentry = this.Table.Offsets[idx];
+                    binaryReader.BaseStream.Seek((long)offsetentry.Offset, SeekOrigin.Begin);
+                    if (offsetentry.PhysicalSize == offsetentry.VirtualSize)
                     {
-                        var buffer = br.ReadBytes((int)offsetentry.Zsize);
-                        entry.RawBytes.Add(buffer);
+                        var buffer = binaryReader.ReadBytes((int)offsetentry.PhysicalSize);
+                        bw.Write(buffer);
                     }
                     else
                     {
-                        // read the first 8 bytes
-                        var oodleCompression = br.ReadBytes(4);
+                        var oodleCompression = binaryReader.ReadBytes(4);
                         if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
                             throw new NotImplementedException();
-                        var size = br.ReadUInt32();
+                        var size = binaryReader.ReadUInt32();
 
-                        if (size != offsetentry.Size)
+                        if (size != offsetentry.VirtualSize)
                             throw new NotImplementedException();
 
-                        var buffer = br.ReadBytes((int)offsetentry.Zsize - 8);
-                        entry.RawBytes.Add(buffer);
+                        var buffer = binaryReader.ReadBytes((int)offsetentry.PhysicalSize - 8);
+
+                        byte[] unpacked = new byte[offsetentry.VirtualSize];
+                        long unpackedSize = OodleLZ.Decompress(buffer, unpacked);
+                        if (unpackedSize != offsetentry.VirtualSize)
+                            throw new Exception(string.Format("Unpacked size doesn't match real size. {0} vs {1}", unpackedSize, offsetentry.VirtualSize));
+                        bw.Write(unpacked);
                     }
                 }
-                Files.Add(key, entry);
-            }
 
-            //foreach (var entry in Table.Offsets)
-            //{
-            //    br.BaseStream.Seek((long)entry.Value.Offset + 8, SeekOrigin.Begin);
-            //    var buffer = br.ReadBytes((int)entry.Value.Zsize - 8);
-            //    Files.Add(buffer);
-            //}
+                return ms.ToArray();
+            }
+            return null;
         }
 
         /// <summary>
@@ -110,7 +104,7 @@ namespace CP77Tools.Model
         /// </summary>
         public void DumpInfo()
         {
-            
+
 
             // dump chache info
             using (var writer = File.CreateText($"{this.filepath}.info"))
@@ -130,21 +124,22 @@ namespace CP77Tools.Model
 
             }
 
-            const string head = "Hash\t" +
-                                "Offset\t" +
-                                "Size\t" +
-                                "Zsize\t" +
-                                "Header\t" +
-                                "somebool\t" +
-                                "startindex\t" +
-                                "endindex\t" +
-                                "unk1\t" +
-                                "unk2\t" +
-                                "Footer\t"
-                                ;
+            const string head = //"Hash\t" +
+                                "Hash64," +
+                                "Hash32," +
+                                "VirtualSize," +
+                                "PhysicalSize," +
+                                "Unk1," +
+                                "Unk2," +
+                                "Flags," +
+                                "StartDataSector," +
+                                "NextDataSector," +
+                                "StartUnkSector," +
+                                "NextUnkSector," +
+                                "Footer,";
 
             // dump and extract files
-            using (var writer = File.CreateText($"{this.filepath}.txt"))
+            using (var writer = File.CreateText($"{this.filepath}.csv"))
             {
                 // write header
                 writer.WriteLine(head);
@@ -155,83 +150,39 @@ namespace CP77Tools.Model
                     var x = entry.Value;
                     var idx = entry.Key;
 
-                    var offsetEntry = Table.Offsets[idx];
-                    
+                    int PhysicalSize = 0;
+                    int VirtualSize = 0;
 
-                    //string ext = x.Name.Split('.').Last();
+                    var startindex = (int)x.FirstDataSector;
+                    var nextindex = (int)x.NextDataSector;
+
+                    for (int i = startindex; i < nextindex; i++)
+                    {
+                        PhysicalSize += (int)Table.Offsets[i].PhysicalSize;
+                        VirtualSize += (int)Table.Offsets[i].VirtualSize;
+                    }
+
+                    var offsetEntry = Table.Offsets[idx];
 
                     string info =
-                        $"{offsetEntry.Offset}\t" +
-                        $"{offsetEntry.Size}\t" +
-                        $"{offsetEntry.Zsize}\t" +
-                        $"{x.Hash}\t" +
-                        $"{BitConverter.ToString(x.Header)}\t" +
-                        $"{x.flag}\t" +
-                        $"{x.startindex}\t" +
-                        $"{x.endindex}\t" +
-                        $"{x.unk1}\t" +
-                        $"{x.unk2}\t" +
-                        $"{BitConverter.ToString(x.Footer)}\t"
+                        $"{x.NameHash64:X2}," +
+                        $"{x.NameHash32:X2}," +
+                        $"{VirtualSize}," +
+                        $"{PhysicalSize}," +
+                        $"{x.Unk1:X2}," +
+                        $"{x.Unk2:X2}," +
+                        $"{x.FileFlags}," +
+                        $"{x.FirstDataSector}," +
+                        $"{x.NextDataSector}," +
+                        $"{x.FirstUnkIndex}," +
+                        $"{x.NextUnkIndex}," +
+                        $"{BitConverter.ToString(x.SHA1Hash)}";
 
-                        ;
-                    
                     writer.WriteLine(info);
                 }
             }
         }
-
-        public void Extract(DirectoryInfo outdir)
-        {
-            var dir = AppDomain.CurrentDomain.BaseDirectory;
-            var oodle = Path.Combine(dir, "oo2core_8_win64.dll");
-            if (!File.Exists(oodle))
-            {
-                Console.WriteLine("oo2core_8_win64.dll not found. Please add it to the base directory of the CP77Tools.");
-                return;
-            }
-
-            foreach (var (key, value) in Files)
-            {
-                using var ms = new MemoryStream();
-                using var bw = new BinaryWriter(ms);
-
-                // go through all chunks
-                for (int i = 0; i < value.RawBytes.Count; i++)
-                {
-                    var file = value.RawBytes[i];
-                    var size = value.OffsetEntries[i].Size;     // extracted size
-                    var zsize = value.OffsetEntries[i].Zsize;   // compressed size
-
-                    // not compressed
-                    if (size == zsize)
-                    {
-                        bw.Write(file);
-                    }
-                    else
-                    {
-                        var decompressedBuffer = new byte[size];
-                        int decompressedCount = OodleHelper.OodleLZ_Decompress(file, file.Length, decompressedBuffer, size
-                            , 0, 0, 0, 0, 0, 0, 0, 0, 0, 3);
-
-                        if (decompressedCount != decompressedBuffer.Length)
-                            throw new NotImplementedException();
-
-                        bw.Write(decompressedBuffer);
-                    }
-                }
-
-
-                // write
-                string outpath = Path.Combine(outdir.FullName, $"extractedfile_{key}.bin");
-                File.WriteAllBytesAsync(outpath, ms.ToArray());
-            }
-
-           
-        }
     }
-
-
-
 
     public class ArHeader
     {
@@ -250,8 +201,9 @@ namespace CP77Tools.Model
         private void Read(BinaryReader br)
         {
             Magic = br.ReadBytes(4);
-            if (!(Magic.SequenceEqual(new byte[] { 82, 68, 65, 82 })))
+            if (!Magic.SequenceEqual(new byte[] { 82, 68, 65, 82 }))
                 throw new NotImplementedException();
+
             Version = br.ReadUInt32();
             Tableoffset = br.ReadUInt64();
             Tablesize = br.ReadUInt64();
@@ -259,6 +211,7 @@ namespace CP77Tools.Model
             Filesize = br.ReadUInt64();
         }
     }
+
     public class ArTable
     {
         public uint Num { get; private set; }
@@ -322,10 +275,9 @@ namespace CP77Tools.Model
     }
     public class OffsetEntry
     {
-
         public ulong Offset { get; set; }
-        public uint Zsize { get; set; }
-        public uint Size { get; set; }
+        public uint PhysicalSize { get; set; }
+        public uint VirtualSize { get; set; }
 
         public OffsetEntry(BinaryReader br)
         {
@@ -335,22 +287,23 @@ namespace CP77Tools.Model
         private void Read(BinaryReader br)
         {
             Offset = br.ReadUInt64();
-            Zsize = br.ReadUInt32();
-            Size = br.ReadUInt32();
+            PhysicalSize = br.ReadUInt32();
+            VirtualSize = br.ReadUInt32();
         }
     }
 
     public class FileInfoEntry
     {
-        public ulong Hash { get; set; }
-        public byte[] Header { get; set; }
-        public uint flag { get; private set; }
-        public uint startindex { get; private set; }
-        public uint endindex { get; private set; }
-        public uint unk1 { get; private set; }
-        public uint unk2 { get; private set; }
-
-        public byte[] Footer { get; set; }
+        public ulong NameHash64 { get; private set; }
+        public uint NameHash32 { get; private set; }
+        public ushort Unk1 { get; private set; } //???? maybe it's really one int32
+        public ushort Unk2 { get; private set; } //????
+        public uint FileFlags { get; private set; }
+        public uint FirstDataSector { get; private set; }
+        public uint NextDataSector { get; private set; }
+        public uint FirstUnkIndex { get; private set; }
+        public uint NextUnkIndex { get; private set; }
+        public byte[] SHA1Hash { get; set; }
 
         public FileInfoEntry(BinaryReader br)
         {
@@ -359,16 +312,18 @@ namespace CP77Tools.Model
 
         private void Read(BinaryReader br)
         {
-            Hash = br.ReadUInt64();
-            Header = br.ReadBytes(8);
+            NameHash64 = br.ReadUInt64();
+            NameHash32 = br.ReadUInt32();
+            Unk1 = br.ReadUInt16();
+            Unk2 = br.ReadUInt16();
 
-            flag = br.ReadUInt32();
-            startindex = br.ReadUInt32();
-            endindex = br.ReadUInt32();
-            unk1 = br.ReadUInt32();
-            unk2 = br.ReadUInt32();
+            FileFlags = br.ReadUInt32();
+            FirstDataSector = br.ReadUInt32();
+            NextDataSector = br.ReadUInt32();
+            FirstUnkIndex = br.ReadUInt32();
+            NextUnkIndex = br.ReadUInt32();
 
-            Footer = br.ReadBytes(20);
+            SHA1Hash = br.ReadBytes(20);
         }
     }
 }
