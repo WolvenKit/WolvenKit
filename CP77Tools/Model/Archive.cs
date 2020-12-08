@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
+using WolvenKit.Common.Extensions;
 
 namespace CP77Tools.Model
 {
@@ -42,15 +44,32 @@ namespace CP77Tools.Model
         private string filepath;
 
 
-        private BinaryReader binaryReader { get; set; }
+        //private BinaryReader binaryReader { get; set; }
+        private MemoryMappedFile mmf;
+        private string mmfhash => filepath.GetHashMD5();
 
         public Archive(string path)
         {
             filepath = path;
-            binaryReader = new BinaryReader(new FileStream(path, FileMode.Open));
-            Header = new ArHeader(binaryReader);
-            binaryReader.BaseStream.Seek((long)Header.Tableoffset, SeekOrigin.Begin);
-            Table = new ArTable(binaryReader);
+            mmf = MemoryMappedFile.CreateFromFile(filepath, FileMode.Open, mmfhash, 0,
+                MemoryMappedFileAccess.Read);
+
+
+            //binaryReader = new BinaryReader(new FileStream(path, FileMode.Open));
+            using (var vs = mmf.CreateViewStream(0, ArHeader.SIZE, MemoryMappedFileAccess.Read))
+            {
+                using var br = new BinaryReader(vs);
+                Header = new ArHeader(br);
+            }
+
+            //binaryReader.BaseStream.Seek((long)Header.Tableoffset, SeekOrigin.Begin);
+            using (var vs = mmf.CreateViewStream((long)Header.Tableoffset, (long)Header.Tablesize,
+                MemoryMappedFileAccess.Read))
+            {
+                using var br = new BinaryReader(vs);
+                Table = new ArTable(br);
+            }
+
             FilesCount = Table.Table1count;
         }
 
@@ -62,13 +81,18 @@ namespace CP77Tools.Model
                 var startindex = (int)entry.FirstDataSector;
                 var nextindex = (int)entry.NextDataSector;
 
-                MemoryStream ms = new MemoryStream();
-                BinaryWriter bw = new BinaryWriter(ms);
+                using var ms = new MemoryStream();
+                using var bw = new BinaryWriter(ms);
 
                 for (int j = startindex; j < nextindex; j++)
                 {
-                    var offsetentry = this.Table.Offsets[idx];
-                    binaryReader.BaseStream.Seek((long)offsetentry.Offset, SeekOrigin.Begin);
+                    var offsetentry = this.Table.Offsets[j];
+                    //binaryReader.BaseStream.Seek((long)offsetentry.Offset, SeekOrigin.Begin);
+
+                    using var vs = mmf.CreateViewStream((long)offsetentry.Offset, (long)offsetentry.PhysicalSize,
+                        MemoryMappedFileAccess.Read);
+                    using var binaryReader = new BinaryReader(vs);
+
                     if (offsetentry.PhysicalSize == offsetentry.VirtualSize)
                     {
                         var buffer = binaryReader.ReadBytes((int)offsetentry.PhysicalSize);
@@ -88,6 +112,7 @@ namespace CP77Tools.Model
 
                         byte[] unpacked = new byte[offsetentry.VirtualSize];
                         long unpackedSize = OodleLZ.Decompress(buffer, unpacked);
+
                         if (unpackedSize != offsetentry.VirtualSize)
                             throw new Exception(string.Format("Unpacked size doesn't match real size. {0} vs {1}", unpackedSize, offsetentry.VirtualSize));
                         bw.Write(unpacked);
@@ -186,6 +211,8 @@ namespace CP77Tools.Model
 
     public class ArHeader
     {
+        public static int SIZE = 40;
+
         public byte[] Magic { get; set; }
         public uint Version { get; set; }
         public ulong Tableoffset { get; set; }
@@ -197,6 +224,8 @@ namespace CP77Tools.Model
         {
             Read(br);
         }
+
+
 
         private void Read(BinaryReader br)
         {
@@ -211,7 +240,6 @@ namespace CP77Tools.Model
             Filesize = br.ReadUInt64();
         }
     }
-
     public class ArTable
     {
         public uint Num { get; private set; }
@@ -291,7 +319,6 @@ namespace CP77Tools.Model
             VirtualSize = br.ReadUInt32();
         }
     }
-
     public class FileInfoEntry
     {
         public ulong NameHash64 { get; private set; }

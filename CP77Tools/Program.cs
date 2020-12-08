@@ -32,14 +32,14 @@ namespace CP77Tools
         {
             var result = Parser.Default.ParseArguments<
                     ArchiveOptions,
-                    Cr2wOptions
+                    DumpOptions
                 >(_args)
                         .MapResult(
-                          (ArchiveOptions opts) => ConsoleFunctions.ArchiveTask(opts),
-                          (Cr2wOptions opts) => ConsoleFunctions.Cr2wTask(opts),
+                          async (ArchiveOptions opts) => await ConsoleFunctions.ArchiveTask(opts),
+                          async (DumpOptions opts) => await ConsoleFunctions.DumpTask(opts),
                           
                           //errs => 1,
-                          _ => /*Task.FromResult(1)*/1);
+                          _ => Task.FromResult(1));
             return 1;
         }
 
