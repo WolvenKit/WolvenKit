@@ -42,6 +42,14 @@ namespace CP77Tools.Model
         #region methods
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <returns></returns>
+        public ulong GetHashFromIndex(int idx) => _table.FileInfo[idx].NameHash64;
+
+
+        /// <summary>
         /// Reads the tables info to the archive.
         /// </summary>
         private void ReadTables()
@@ -88,7 +96,6 @@ namespace CP77Tools.Model
                     MemoryMappedFileAccess.Read);
            
 
-                //for (var i = 0; i < ar.FilesCount; i++)
                 Parallel.For(0, _filesCount, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
                 {
                     var file = GetFileData((int)i, mmf);
@@ -116,6 +123,11 @@ namespace CP77Tools.Model
             return 1;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <returns></returns>
         public byte[] ExtractOne(ulong hash)
         {
             using var mmf = MemoryMappedFile.CreateFromFile(_filepath, FileMode.Open, Mmfhash, 0,
@@ -133,7 +145,7 @@ namespace CP77Tools.Model
         /// </summary>
         /// <param name="idx"></param>
         /// <returns></returns>
-        private byte[] GetFileData(int idx, MemoryMappedFile mmf)
+        public byte[] GetFileData(int idx, MemoryMappedFile mmf)
         {
             if (idx >= _table.FileInfo.Count) return null;
 

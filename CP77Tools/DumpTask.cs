@@ -1,16 +1,21 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Catel.Collections;
+using ConsoleProgressBar;
 using CP77Tools.Model;
+using WolvenKit.Common.Extensions;
 using WolvenKit.CR2W;
 
 namespace CP77Tools
 {
     public class ArchiveDumpObject
     {
-        public Dictionary<ulong, Cr2wDumpObject> FileDictionary { get; set; }
+        public ConcurrentDictionary<ulong, Cr2wDumpObject> FileDictionary { get; set; }
         public string Filename { get; set; }
     }
 
@@ -39,60 +44,89 @@ namespace CP77Tools
 
             if (options.strings || options.imports || options.buffers || options.chunks || options.all)
             {
-                Dictionary<ulong, Cr2wDumpObject> fileDictionary = new Dictionary<ulong, Cr2wDumpObject>();
-                foreach (var key in ar.HashDictionary.Keys)
-                {
-                    var f = ar.ExtractOne(key);
 
-                    try
-                    {
-                        var cr2w = new CR2WFile();
+                using var pb = new ProgressBar();
+                using var p1 = pb.Progress.Fork();
 
-                        using var ms = new MemoryStream(f);
-                        using var br = new BinaryReader(ms);
-                        var (imports, _, buffers) = cr2w.ReadImportsAndBuffers(br);
-
-                        var obj = new Cr2wDumpObject();
-                        obj.Filename = key.ToString();
-
-                        if (options.strings || options.all)
-                            obj.Stringdict = cr2w.StringDictionary;
-                        if (options.imports || options.all)
-                            obj.Imports = imports;
-                        if (options.buffers || options.all)
-                            obj.Buffers = buffers;
-                        if (options.chunks || options.all)
-                            obj.Chunks = cr2w.Chunks;
-
-
-                        fileDictionary.Add(key, obj);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"Could not read file {key}.");
-                        //throw;
-                        continue;
-                    }
-                }
-
-                
-                var arobj = new ArchiveDumpObject()
-                {
-                    Filename = ar._filepath,
-                    FileDictionary = fileDictionary
-                };
-
+                int progress = 0;
 
                 try
                 {
-                    var joptions = new JsonSerializerOptions
+                    using var mmf = MemoryMappedFile.CreateFromFile(ar._filepath, FileMode.Open, ar._filepath.GetHashMD5(), 0,
+                        MemoryMappedFileAccess.Read);
+                    var fileDictionary = new ConcurrentDictionary<ulong, Cr2wDumpObject>();
+                    foreach (var (key, value) in ar.HashDictionary)
                     {
-                        WriteIndented = true
-                    };
-                    var jsonstring = JsonSerializer.Serialize(arobj, joptions);
+                        fileDictionary[key] = new Cr2wDumpObject();
+                    }
 
-                    File.WriteAllText($"{ar._filepath}.dump.json", jsonstring);
-                    Console.WriteLine($"Finished. Dump file written to {ar._filepath}.");
+                    var count = ar.HashDictionary.Count;
+                    Parallel.For(0, count, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
+                    {
+                        var key = ar.GetHashFromIndex(i);
+
+                        try
+                        {
+                            var f = ar.GetFileData((int)i, mmf);
+
+                            var cr2w = new CR2WFile();
+
+                            using var ms = new MemoryStream(f);
+                            using var br = new BinaryReader(ms);
+                            cr2w.ReadImportsAndBuffers(br);
+
+                            var obj = new Cr2wDumpObject {Filename = key.ToString()};
+
+                            if (options.strings || options.all)
+                                obj.Stringdict = cr2w.StringDictionary;
+                            if (options.imports || options.all)
+                                obj.Imports = cr2w.Imports;
+                            if (options.buffers || options.all)
+                                obj.Buffers = cr2w.Buffers;
+                            if (options.chunks || options.all)
+                                obj.Chunks = cr2w.Chunks;
+
+                            //fileDictionary[key] = obj;
+                            fileDictionary.AddOrUpdate(key, obj, (arg1, o) => obj);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine($"Could not read file {key}.");
+                            //throw;
+                            return;
+                        }
+                        finally
+                        {
+                            progress += 1;
+                            var perc = progress / (double)count;
+                            p1.Report(perc, $"Loading bundle entries: {progress}/{count}");
+                        }
+                    });
+
+
+                    var arobj = new ArchiveDumpObject()
+                    {
+                        Filename = ar._filepath,
+                        FileDictionary = fileDictionary
+                    };
+
+
+                    try
+                    {
+                        var joptions = new JsonSerializerOptions
+                        {
+                            WriteIndented = true
+                        };
+                        var jsonstring = JsonSerializer.Serialize(arobj, joptions);
+
+                        File.WriteAllText($"{ar._filepath}.dump.json", jsonstring);
+                        Console.WriteLine($"Finished. Dump file written to {ar._filepath}.");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
                 }
                 catch (Exception e)
                 {
