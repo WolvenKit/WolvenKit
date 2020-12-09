@@ -7,172 +7,207 @@ using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
+using System.Threading.Tasks;
+using ConsoleProgressBar;
 using WolvenKit.Common.Extensions;
 
 namespace CP77Tools.Model
 {
     public class Archive
     {
-        public class ArchiveFile
-        {
-            private Archive _archive;
-            private int _key;
+        #region fields
 
-            public ArchiveFile(Archive archive, int key)
-            {
-                _archive = archive;
-                RawBytes = new List<byte[]>();
-                OffsetEntries = new List<OffsetEntry>();
+        private ArHeader _header;
+        private uint _filesCount;
+        private ArTable _table;
+        private readonly string _filepath;
 
-                _key = key;
-            }
+        #endregion
 
-            public List<byte[]> RawBytes { get; set; }
-            public List<OffsetEntry> OffsetEntries { get; set; }
+        private string Mmfhash => _filepath.GetHashMD5();
 
 
-            public int Name => _key;
-
-            public FileInfoEntry Info => _archive.Table.FileInfo[_key];
-        }
-
-
-
-        public ArHeader Header { get; set; }
-        public uint FilesCount { get; set; }
-        public ArTable Table { get; set; }
-        public Dictionary<int, ArchiveFile> Files { get; set; }
-        
-        private string filepath;
-
-
-        //private BinaryReader binaryReader { get; set; }
-        private MemoryMappedFile mmf;
-        private string mmfhash => filepath.GetHashMD5();
 
         public Archive(string path)
         {
-            filepath = path;
-            mmf = MemoryMappedFile.CreateFromFile(filepath, FileMode.Open, mmfhash, 0,
+            _filepath = path;
+            
+
+            ReadTables();
+        }
+
+        #region methods
+
+        /// <summary>
+        /// Reads the tables info to the archive.
+        /// </summary>
+        private void ReadTables()
+        {
+            using var mmf = MemoryMappedFile.CreateFromFile(_filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
 
-
-            //binaryReader = new BinaryReader(new FileStream(path, FileMode.Open));
             using (var vs = mmf.CreateViewStream(0, ArHeader.SIZE, MemoryMappedFileAccess.Read))
             {
                 using var br = new BinaryReader(vs);
-                Header = new ArHeader(br);
+                _header = new ArHeader(br);
             }
 
-            //binaryReader.BaseStream.Seek((long)Header.Tableoffset, SeekOrigin.Begin);
-            using (var vs = mmf.CreateViewStream((long)Header.Tableoffset, (long)Header.Tablesize,
+            using (var vs = mmf.CreateViewStream((long)_header.Tableoffset, (long)_header.Tablesize,
                 MemoryMappedFileAccess.Read))
             {
                 using var br = new BinaryReader(vs);
-                Table = new ArTable(br);
+                _table = new ArTable(br);
             }
 
-            FilesCount = Table.Table1count;
-        }
-
-        public byte[] GetFileData(int idx)
-        {
-            if (idx < Table.FileInfo.Count)
-            {
-                var entry = Table.FileInfo[idx];
-                var startindex = (int)entry.FirstDataSector;
-                var nextindex = (int)entry.NextDataSector;
-
-                using var ms = new MemoryStream();
-                using var bw = new BinaryWriter(ms);
-
-                for (int j = startindex; j < nextindex; j++)
-                {
-                    var offsetentry = this.Table.Offsets[j];
-                    //binaryReader.BaseStream.Seek((long)offsetentry.Offset, SeekOrigin.Begin);
-
-                    using var vs = mmf.CreateViewStream((long)offsetentry.Offset, (long)offsetentry.PhysicalSize,
-                        MemoryMappedFileAccess.Read);
-                    using var binaryReader = new BinaryReader(vs);
-
-                    if (offsetentry.PhysicalSize == offsetentry.VirtualSize)
-                    {
-                        var buffer = binaryReader.ReadBytes((int)offsetentry.PhysicalSize);
-                        bw.Write(buffer);
-                    }
-                    else
-                    {
-                        var oodleCompression = binaryReader.ReadBytes(4);
-                        if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
-                            throw new NotImplementedException();
-                        var size = binaryReader.ReadUInt32();
-
-                        if (size != offsetentry.VirtualSize)
-                            throw new NotImplementedException();
-
-                        var buffer = binaryReader.ReadBytes((int)offsetentry.PhysicalSize - 8);
-
-                        byte[] unpacked = new byte[offsetentry.VirtualSize];
-                        long unpackedSize = OodleLZ.Decompress(buffer, unpacked);
-
-                        if (unpackedSize != offsetentry.VirtualSize)
-                            throw new Exception(string.Format("Unpacked size doesn't match real size. {0} vs {1}", unpackedSize, offsetentry.VirtualSize));
-                        bw.Write(unpacked);
-                    }
-                }
-
-                return ms.ToArray();
-            }
-            return null;
+            _filesCount = _table.Table1count;
         }
 
         /// <summary>
-        /// 
+        /// Extracts all Files to the specified directory.
+        /// </summary>
+        /// <param name="outDir"></param>
+        /// <returns></returns>
+        public int ExtractAll(DirectoryInfo outDir)
+        {
+            using var pb = new ProgressBar();
+            using var p1 = pb.Progress.Fork();
+
+            int progress = 0;
+
+            try
+            {
+                using var mmf = MemoryMappedFile.CreateFromFile(_filepath, FileMode.Open, Mmfhash, 0,
+                    MemoryMappedFileAccess.Read);
+           
+
+                //for (var i = 0; i < ar.FilesCount; i++)
+                Parallel.For(0, _filesCount, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
+                {
+                    var file = GetFileData((int)i, mmf);
+
+                    string extension = "bin";
+                    
+
+                    string outpath = Path.Combine(outDir.FullName,
+                        $"{_table.FileInfo[(int)i].NameHash64:X8}.{extension}");
+
+                    File.WriteAllBytes(outpath, file);
+
+
+                    progress += 1;
+                    var perc = progress / (double)_filesCount;
+                    p1.Report(perc, $"Loading bundle entries: {progress}/{_filesCount}");
+                });
+
+                mmf.Dispose();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+            return 1;
+        }
+
+        /// <summary>
+        /// Gets the bytes of one file by index from the archive.
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <returns></returns>
+        private byte[] GetFileData(int idx, MemoryMappedFile mmf)
+        {
+            if (idx >= _table.FileInfo.Count) return null;
+
+            var entry = _table.FileInfo[idx];
+            var startindex = (int)entry.FirstDataSector;
+            var nextindex = (int)entry.NextDataSector;
+
+            using var ms = new MemoryStream();
+            using var bw = new BinaryWriter(ms);
+
+            for (int j = startindex; j < nextindex; j++)
+            {
+                var offsetentry = this._table.Offsets[j];
+
+                using var vs = mmf.CreateViewStream((long)offsetentry.Offset, (long)offsetentry.PhysicalSize,
+                    MemoryMappedFileAccess.Read);
+                using var binaryReader = new BinaryReader(vs);
+
+                if (offsetentry.PhysicalSize == offsetentry.VirtualSize)
+                {
+                    var buffer = binaryReader.ReadBytes((int)offsetentry.PhysicalSize);
+                    bw.Write(buffer);
+                }
+                else
+                {
+                    var oodleCompression = binaryReader.ReadBytes(4);
+                    if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
+                        throw new NotImplementedException();
+                    var size = binaryReader.ReadUInt32();
+
+                    if (size != offsetentry.VirtualSize)
+                        throw new NotImplementedException();
+
+                    var buffer = binaryReader.ReadBytes((int)offsetentry.PhysicalSize - 8);
+
+                    byte[] unpacked = new byte[offsetentry.VirtualSize];
+                    long unpackedSize = OodleLZ.Decompress(buffer, unpacked);
+
+                    if (unpackedSize != offsetentry.VirtualSize)
+                        throw new Exception(string.Format("Unpacked size doesn't match real size. {0} vs {1}", unpackedSize, offsetentry.VirtualSize));
+                    bw.Write(unpacked);
+                }
+            }
+
+            return ms.ToArray();
+        }
+
+        /// <summary>
+        /// Dump archive info.
         /// </summary>
         public void DumpInfo()
         {
-
-
             // dump chache info
-            using (var writer = File.CreateText($"{this.filepath}.info"))
+            using (var writer = File.CreateText($"{this._filepath}.info"))
             {
-                writer.WriteLine($"Magic: {Header.Magic}\r\n");
-                writer.WriteLine($"Version: {Header.Version}\r\n");
-                writer.WriteLine($"Tableoffset: {Header.Tableoffset}\r\n");
-                writer.WriteLine($"Tablesize: {Header.Tablesize}\r\n");
-                writer.WriteLine($"Unk3: {Header.Unk3}\r\n");
-                writer.WriteLine($"Filesize: {Header.Filesize}\r\n");
-                writer.WriteLine($"Size: {Table.Size}\r\n");
-                writer.WriteLine($"Checksum: {Table.Checksum}\r\n");
-                writer.WriteLine($"Num: {Table.Num}\r\n");
-                writer.WriteLine($"Table1count: {Table.Table1count}\r\n");
-                writer.WriteLine($"Table2count: {Table.Table2count}\r\n");
-                writer.WriteLine($"Table3count: {Table.Table3count}\r\n");
+                writer.WriteLine($"Magic: {_header.Magic}\r\n");
+                writer.WriteLine($"Version: {_header.Version}\r\n");
+                writer.WriteLine($"Tableoffset: {_header.Tableoffset}\r\n");
+                writer.WriteLine($"Tablesize: {_header.Tablesize}\r\n");
+                writer.WriteLine($"Unk3: {_header.Unk3}\r\n");
+                writer.WriteLine($"Filesize: {_header.Filesize}\r\n");
+                writer.WriteLine($"Size: {_table.Size}\r\n");
+                writer.WriteLine($"Checksum: {_table.Checksum}\r\n");
+                writer.WriteLine($"Num: {_table.Num}\r\n");
+                writer.WriteLine($"Table1count: {_table.Table1count}\r\n");
+                writer.WriteLine($"Table2count: {_table.Table2count}\r\n");
+                writer.WriteLine($"Table3count: {_table.Table3count}\r\n");
 
             }
 
             const string head = //"Hash\t" +
-                                "Hash64," +
-                                "Datetime," +
-                                "VirtualSize," +
-                                "PhysicalSize," +
-                                //"Unk1," +
-                                //"Unk2," +
-                                "Flags," +
-                                "StartDataSector," +
-                                "NextDataSector," +
-                                "StartUnkSector," +
-                                "NextUnkSector," +
-                                "Footer,";
+                "Hash64," +
+                "Datetime," +
+                "VirtualSize," +
+                "PhysicalSize," +
+                //"Unk1," +
+                //"Unk2," +
+                "Flags," +
+                "StartDataSector," +
+                "NextDataSector," +
+                "StartUnkSector," +
+                "NextUnkSector," +
+                "Footer,";
 
             // dump and extract files
-            using (var writer = File.CreateText($"{this.filepath}.csv"))
+            using (var writer = File.CreateText($"{this._filepath}.csv"))
             {
                 // write header
                 writer.WriteLine(head);
 
                 // write info elements
-                foreach (var entry in Table.FileInfo)
+                foreach (var entry in _table.FileInfo)
                 {
                     var x = entry.Value;
                     var idx = entry.Key;
@@ -185,11 +220,11 @@ namespace CP77Tools.Model
 
                     for (int i = startindex; i < nextindex; i++)
                     {
-                        PhysicalSize += (int)Table.Offsets[i].PhysicalSize;
-                        VirtualSize += (int)Table.Offsets[i].VirtualSize;
+                        PhysicalSize += (int)_table.Offsets[i].PhysicalSize;
+                        VirtualSize += (int)_table.Offsets[i].VirtualSize;
                     }
 
-                    var offsetEntry = Table.Offsets[idx];
+                    var offsetEntry = _table.Offsets[idx];
 
                     string info =
                         $"{x.NameHash64:X2}," +
@@ -209,156 +244,11 @@ namespace CP77Tools.Model
                 }
             }
         }
+
+        #endregion
     }
 
-    public class ArHeader
-    {
-        public static int SIZE = 40;
-
-        public byte[] Magic { get; set; }
-        public uint Version { get; set; }
-        public ulong Tableoffset { get; set; }
-        public ulong Tablesize { get; set; }
-        public ulong Unk3 { get; set; }
-        public ulong Filesize { get; set; }
-
-        public ArHeader(BinaryReader br)
-        {
-            Read(br);
-        }
-
-
-
-        private void Read(BinaryReader br)
-        {
-            Magic = br.ReadBytes(4);
-            if (!Magic.SequenceEqual(new byte[] { 82, 68, 65, 82 }))
-                throw new NotImplementedException();
-
-            Version = br.ReadUInt32();
-            Tableoffset = br.ReadUInt64();
-            Tablesize = br.ReadUInt64();
-            Unk3 = br.ReadUInt64();
-            Filesize = br.ReadUInt64();
-        }
-    }
-    public class ArTable
-    {
-        public uint Num { get; private set; }
-        public uint Size { get; private set; }
-        public ulong Checksum { get; private set; }
-        public uint Table1count { get; private set; }
-        public uint Table2count { get; private set; }
-        public uint Table3count { get; private set; }
-        public Dictionary<int, FileInfoEntry> FileInfo { get; private set; }
-        public Dictionary<int, OffsetEntry> Offsets { get; private set; }
-        public Dictionary<int, HashEntry> HashTable { get; private set; }
-
-        public ArTable(BinaryReader br)
-        {
-            Read(br);
-
-            FileInfo = new Dictionary<int, FileInfoEntry>();
-            Offsets = new Dictionary<int, OffsetEntry>();
-            HashTable = new Dictionary<int, HashEntry>();
-
-            // read tables
-            for (int i = 0; i < Table1count; i++)
-            {
-                FileInfo.Add(i, new FileInfoEntry(br));
-            }
-
-            for (int i = 0; i < Table2count; i++)
-            {
-                Offsets.Add(i, new OffsetEntry(br));
-            }
-
-            for (int i = 0; i < Table3count; i++)
-            {
-                HashTable.Add(i, new HashEntry(br));
-            }
-        }
-
-        private void Read(BinaryReader br)
-        {
-            Num = br.ReadUInt32();
-            Size = br.ReadUInt32();
-            Checksum = br.ReadUInt64();
-            Table1count = br.ReadUInt32();
-            Table2count = br.ReadUInt32();
-            Table3count = br.ReadUInt32();
-        }
-    }
-    public class HashEntry
-    {
-        public ulong Hash { get; set; }
-
-        public HashEntry(BinaryReader br)
-        {
-            Read(br);
-        }
-
-        private void Read(BinaryReader br)
-        {
-            Hash = br.ReadUInt64();
-        }
-    }
-    public class OffsetEntry
-    {
-        public ulong Offset { get; set; }
-        public uint PhysicalSize { get; set; }
-        public uint VirtualSize { get; set; }
-
-        public OffsetEntry(BinaryReader br)
-        {
-            Read(br);
-        }
-
-        private void Read(BinaryReader br)
-        {
-            Offset = br.ReadUInt64();
-            PhysicalSize = br.ReadUInt32();
-            VirtualSize = br.ReadUInt32();
-        }
-    }
-    public class FileInfoEntry
-    {
-        public ulong NameHash64 { get; private set; }
-        public DateTime DateTime { get; private set; }
-        //public System.Runtime.InteropServices.ComTypes.FILETIME Filetime { get; set; }
-        //public ushort Unk1 { get; private set; } //???? maybe it's really one int32
-        //public ushort Unk2 { get; private set; } //????
-        public uint FileFlags { get; private set; }
-        public uint FirstDataSector { get; private set; }
-        public uint NextDataSector { get; private set; }
-        public uint FirstUnkIndex { get; private set; }
-        public uint NextUnkIndex { get; private set; }
-        public byte[] SHA1Hash { get; set; }
-
-        public FileInfoEntry(BinaryReader br)
-        {
-            Read(br);
-        }
-
-        private void Read(BinaryReader br)
-        {
-            NameHash64 = br.ReadUInt64();
-            var f = br.ReadInt64();
-
-            DateTime = System.DateTime.FromFileTime(f);
-
-            //Unk1 = br.ReadUInt16();
-            //Unk2 = br.ReadUInt16();
-
-            FileFlags = br.ReadUInt32();
-            FirstDataSector = br.ReadUInt32();
-            NextDataSector = br.ReadUInt32();
-            FirstUnkIndex = br.ReadUInt32();
-            NextUnkIndex = br.ReadUInt32();
-
-            SHA1Hash = br.ReadBytes(20);
-        }
-    }
+    
 }
 
 

@@ -28,6 +28,6 @@ namespace CP77Tools
         public string path { get; set; }
 
         [Option(HelpText = "Dump info.", Required = false)]
-        public bool strings { get; set; }
+        public bool dumpstrings { get; set; }
     }
 }
