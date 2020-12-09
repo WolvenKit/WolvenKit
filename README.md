@@ -5,7 +5,7 @@ Modding tools for the cyberpunk 2077 game.
 
 - requires NET5.0.
 - requires oo2core_8_win64.dll in the same folder as the exe to run!
-(Please ask me for the dll or join our CD77 modding tools discord: https://discord.gg/Epkq79kd96)
+(join our CD77 modding tools discord: https://discord.gg/Epkq79kd96)
 
 This release also contains an experimental and WIP file-viewer. 
 
