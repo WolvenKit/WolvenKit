@@ -471,11 +471,9 @@ namespace WolvenKit.CR2W
 
         public async Task<EFileReadErrorCodes> Read(byte[] data)
         {
-            await using (var ms = new MemoryStream(data))
-            using (var br = new BinaryReader(ms))
-            {
-                return await Read(br);
-            }
+            await using var ms = new MemoryStream(data);
+            using var br = new BinaryReader(ms);
+            return await Read(br);
         }
 
         public async Task<EFileReadErrorCodes> Read(BinaryReader file)

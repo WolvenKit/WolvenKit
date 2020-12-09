@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Catel.IoC;
 using CommandLine;
+using WolvenKit.Common.Services;
 
 namespace CP77Tools
 {
@@ -12,6 +14,9 @@ namespace CP77Tools
         [STAThread]
         public static async Task Main(string[] args)
         {
+            ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
+
+
             if (args == null || args.Length == 0)
             {
                 while (true)
@@ -32,11 +37,13 @@ namespace CP77Tools
         {
             var result = Parser.Default.ParseArguments<
                     ArchiveOptions,
+                    CR2WOptions,
                     DumpOptions
                 >(_args)
                         .MapResult(
                           async (ArchiveOptions opts) => await ConsoleFunctions.ArchiveTask(opts),
                           async (DumpOptions opts) => await ConsoleFunctions.DumpTask(opts),
+                          async (CR2WOptions opts) => await ConsoleFunctions.Cr2wTask(opts),
                           
                           //errs => 1,
                           _ => Task.FromResult(1));

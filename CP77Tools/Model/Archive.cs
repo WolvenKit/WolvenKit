@@ -21,7 +21,7 @@ namespace CP77Tools.Model
         private ArHeader _header;
         private uint _filesCount;
         private ArTable _table;
-        private readonly string _filepath;
+        public readonly string _filepath;
 
         public Dictionary<ulong, int> HashDictionary { get; set; } = new Dictionary<ulong, int>();
 

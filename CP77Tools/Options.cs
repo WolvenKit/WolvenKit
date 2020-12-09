@@ -21,7 +21,7 @@ namespace CP77Tools
         public string extension { get; set; }
     }
 
-    [Verb("dump", HelpText = "CyberPunk 77 cr2w Tools.")]
+    [Verb("dump", HelpText = "CyberPunk 77 Tools.")]
     public class DumpOptions
     {
         [Option(HelpText = "Specify the cr2w path.", Required = true)]
@@ -29,5 +29,13 @@ namespace CP77Tools
 
         [Option(HelpText = "Dump info.", Required = false)]
         public bool dumpstrings { get; set; }
+    }
+
+
+    [Verb("cr2w", HelpText = "CyberPunk 77 cr2w Tools.")]
+    public class CR2WOptions
+    {
+        [Option(HelpText = "Specify the cr2w path.", Required = true)]
+        public string path { get; set; }
     }
 }
