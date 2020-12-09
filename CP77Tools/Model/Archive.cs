@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,8 @@ namespace CP77Tools.Model
         private uint _filesCount;
         private ArTable _table;
         private readonly string _filepath;
+
+        public Dictionary<ulong, int> HashDictionary { get; set; } = new Dictionary<ulong, int>();
 
         #endregion
 
@@ -57,6 +60,11 @@ namespace CP77Tools.Model
             {
                 using var br = new BinaryReader(vs);
                 _table = new ArTable(br);
+            }
+
+            foreach (var (key, value) in _table.FileInfo)
+            {
+                HashDictionary.Add(value.NameHash64, key);
             }
 
             _filesCount = _table.Table1count;
@@ -98,8 +106,6 @@ namespace CP77Tools.Model
                     var perc = progress / (double)_filesCount;
                     p1.Report(perc, $"Loading bundle entries: {progress}/{_filesCount}");
                 });
-
-                mmf.Dispose();
             }
             catch (Exception e)
             {
@@ -108,6 +114,18 @@ namespace CP77Tools.Model
             }
 
             return 1;
+        }
+
+        public byte[] ExtractOne(ulong hash)
+        {
+            using var mmf = MemoryMappedFile.CreateFromFile(_filepath, FileMode.Open, Mmfhash, 0,
+                MemoryMappedFileAccess.Read);
+
+
+            var idx = HashDictionary[hash];
+            var file = GetFileData(idx, mmf);
+
+            return file;
         }
 
         /// <summary>

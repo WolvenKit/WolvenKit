@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using CP77Tools.Model;
+using WolvenKit.CR2W;
 
 namespace CP77Tools
 {
@@ -19,7 +20,13 @@ namespace CP77Tools
 
             if (options.dumpstrings)
             {
+                foreach (var key in ar.HashDictionary.Keys)
+                {
+                    var f = ar.ExtractOne(key);
 
+                    var cr2w = new CR2WFile();
+
+                }
 
 
             }

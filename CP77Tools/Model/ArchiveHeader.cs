@@ -61,7 +61,9 @@ namespace CP77Tools.Model
             // read tables
             for (int i = 0; i < Table1count; i++)
             {
-                FileInfo.Add(i, new FileInfoEntry(br));
+                var entry = new FileInfoEntry(br);
+                FileInfo.Add(i, entry);
+
             }
 
             for (int i = 0; i < Table2count; i++)
