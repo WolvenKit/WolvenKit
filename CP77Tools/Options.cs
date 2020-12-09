@@ -35,6 +35,12 @@ namespace CP77Tools
 
         [Option(HelpText = "Dump buffers.", Required = false)]
         public bool buffers { get; set; }
+
+        [Option(HelpText = "Dump chunks.", Required = false)]
+        public bool chunks { get; set; }
+
+        [Option(HelpText = "Dump all tables.", Required = false)]
+        public bool all { get; set; }
     }
 
 
@@ -43,5 +49,20 @@ namespace CP77Tools
     {
         [Option(HelpText = "Specify the cr2w path.", Required = true)]
         public string path { get; set; }
+
+        [Option(HelpText = "Dump strings.", Required = false)]
+        public bool strings { get; set; }
+
+        [Option(HelpText = "Dump imports.", Required = false)]
+        public bool imports { get; set; }
+
+        [Option(HelpText = "Dump buffers.", Required = false)]
+        public bool buffers { get; set; }
+
+        [Option(HelpText = "Dump chunks.", Required = false)]
+        public bool chunks { get; set; }
+
+        [Option(HelpText = "Dump all tables.", Required = false)]
+        public bool all { get; set; }
     }
 }

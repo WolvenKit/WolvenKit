@@ -11,6 +11,7 @@ using System.Linq;
 using System.IO.MemoryMappedFiles;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 [assembly: ContractNamespaceAttribute("",    ClrNamespace = "WolvenKit.CR2W")]
 
@@ -109,8 +110,9 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Properties
+        [JsonIgnore]
         public CR2WFile cr2w { get; }
-
+        [JsonIgnore]
         public CVariable data { get; private set; }
 
         /// <summary>
@@ -122,6 +124,7 @@ namespace WolvenKit.CR2W
             private set => _export.parentID = (uint)(value + 1);
         }
 
+        [JsonIgnore]
         public CR2WExportWrapper ParentChunk
         {
             get => ParentChunkIndex == -1 ? null : cr2w.Chunks[ParentChunkIndex];
@@ -130,10 +133,13 @@ namespace WolvenKit.CR2W
 
         public CR2WExportWrapper VirtualParentChunk;
 
+        [JsonIgnore]
         public int VirtualParentChunkIndex => cr2w.Chunks.IndexOf(VirtualParentChunk);
 
+        [JsonIgnore]
         public List<CR2WExportWrapper> ChildrenChunks => cr2w.Chunks.Where(_ => _.ParentChunk == this).ToList();
 
+        [JsonIgnore]
         public List<CR2WExportWrapper> VirtualChildrenChunks => cr2w.Chunks.Where(_ => _.VirtualParentChunk == this).ToList();
 
         /// <summary>
@@ -162,6 +168,7 @@ namespace WolvenKit.CR2W
         /// This property is used as BindingProperty in frmChunkProperties
         /// Do not delete!
         /// </summary>
+        [JsonIgnore]
         public string Preview
         {
             get
@@ -193,7 +200,7 @@ namespace WolvenKit.CR2W
         /// </summary>
         public string REDValue => this.ToString();
 
-
+        [JsonIgnore]
         public bool IsSerialized => true;
 
         #endregion
@@ -444,8 +451,6 @@ namespace WolvenKit.CR2W
         {
             throw new NotImplementedException();
         }
-
-        public Guid InternalGuid { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public CVariable Copy(CR2WCopyAction context)
         {

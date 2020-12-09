@@ -19,6 +19,7 @@ namespace CP77Tools
         public Dictionary<uint, string> Stringdict { get; set; }
         public List<CR2WImportWrapper> Imports { get; set; }
         public List<CR2WBufferWrapper> Buffers { get; set; }
+        public List<CR2WExportWrapper> Chunks { get; set; }
         public string Filename { get; set; }
     }
 
@@ -33,14 +34,11 @@ namespace CP77Tools
             if (!inputFileInfo.Exists)
                 return 0;
 
+
             var ar = new Archive(inputFileInfo.FullName);
 
-
-
-
-            if (options.strings || options.imports || options.buffers)
+            if (options.strings || options.imports || options.buffers || options.chunks || options.all)
             {
-
                 Dictionary<ulong, Cr2wDumpObject> fileDictionary = new Dictionary<ulong, Cr2wDumpObject>();
                 foreach (var key in ar.HashDictionary.Keys)
                 {
@@ -57,19 +55,21 @@ namespace CP77Tools
                         var obj = new Cr2wDumpObject();
                         obj.Filename = key.ToString();
 
-                        if (options.strings)
+                        if (options.strings || options.all)
                             obj.Stringdict = cr2w.StringDictionary;
-                        if (options.imports)
+                        if (options.imports || options.all)
                             obj.Imports = imports;
-                        if (options.buffers)
+                        if (options.buffers || options.all)
                             obj.Buffers = buffers;
-                        
+                        if (options.chunks || options.all)
+                            obj.Chunks = cr2w.Chunks;
+
 
                         fileDictionary.Add(key, obj);
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine($"Could not rad file {key}.");
+                        Console.WriteLine($"Could not read file {key}.");
                         //throw;
                         continue;
                     }
@@ -82,14 +82,23 @@ namespace CP77Tools
                     FileDictionary = fileDictionary
                 };
 
-                
-                var joptions = new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                };
-                var jsonstring = JsonSerializer.Serialize(arobj, joptions);
 
-                File.WriteAllText($"{ar._filepath}.dump.json", jsonstring);
+                try
+                {
+                    var joptions = new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    };
+                    var jsonstring = JsonSerializer.Serialize(arobj, joptions);
+
+                    File.WriteAllText($"{ar._filepath}.dump.json", jsonstring);
+                    Console.WriteLine($"Finished. Dump file written to {ar._filepath}.");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
             }
 
             return 1;
