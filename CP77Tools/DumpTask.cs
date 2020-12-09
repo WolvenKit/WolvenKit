@@ -16,7 +16,9 @@ namespace CP77Tools
 
     public class Cr2wDumpObject
     {
-        public Dictionary<uint, string> stringdict { get; set; }
+        public Dictionary<uint, string> Stringdict { get; set; }
+        public List<CR2WImportWrapper> Imports { get; set; }
+        public List<CR2WBufferWrapper> Buffers { get; set; }
         public string Filename { get; set; }
     }
 
@@ -36,7 +38,7 @@ namespace CP77Tools
 
 
 
-            if (options.dumpstrings)
+            if (options.strings || options.imports || options.buffers)
             {
 
                 Dictionary<ulong, Cr2wDumpObject> fileDictionary = new Dictionary<ulong, Cr2wDumpObject>();
@@ -52,17 +54,22 @@ namespace CP77Tools
                         using var br = new BinaryReader(ms);
                         var (imports, _, buffers) = cr2w.ReadImportsAndBuffers(br);
 
-                        var obj = new Cr2wDumpObject()
-                        {
-                            stringdict = cr2w.StringDictionary,
-                            Filename = key.ToString()
-                        };
+                        var obj = new Cr2wDumpObject();
+                        obj.Filename = key.ToString();
+
+                        if (options.strings)
+                            obj.Stringdict = cr2w.StringDictionary;
+                        if (options.imports)
+                            obj.Imports = imports;
+                        if (options.buffers)
+                            obj.Buffers = buffers;
+                        
 
                         fileDictionary.Add(key, obj);
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        Console.WriteLine($"Could not rad file {key}.");
                         //throw;
                         continue;
                     }
