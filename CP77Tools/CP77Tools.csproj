@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,16 +6,6 @@
     <AssemblyVersion>0.1.2.0</AssemblyVersion>
     <FileVersion>0.1.2.0</FileVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="oo2core_8_win64.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="oo2core_8_win64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
@@ -28,6 +18,12 @@
 
   <ItemGroup>
     <Folder Include="Extensions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="oo2core_8_win64.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
