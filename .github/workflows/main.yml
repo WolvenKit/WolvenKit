@@ -18,7 +18,7 @@ jobs:
       with:
         nuget-version: latest
     - name: Restore packages
-      run: nuget restore WolvenKit.sln
+      run: nuget restore CP77Tools.sln
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1
     - name: Build with MSBuild
