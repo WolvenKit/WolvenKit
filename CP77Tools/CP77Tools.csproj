@@ -8,7 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\archivehashes.csv" />
+    <None Remove="Resources\basegame_2_mainmenu.archive.hashes.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\archivehashes.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ConsoleProgressBar" Version="1.0.1" />
+    <PackageReference Include="CsvHelper" Version="18.0.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
   </ItemGroup>
 

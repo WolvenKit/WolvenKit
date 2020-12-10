@@ -9,7 +9,9 @@ using System.Reflection.Metadata;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
+using Catel.IoC;
 using ConsoleProgressBar;
+using CP77Tools.Services;
 using WolvenKit.Common.Extensions;
 
 namespace CP77Tools.Model
@@ -72,7 +74,14 @@ namespace CP77Tools.Model
 
             foreach (var (key, value) in _table.FileInfo)
             {
-                HashDictionary.Add(value.NameHash64, key);
+                if (!HashDictionary.ContainsKey(value.NameHash64))
+                {
+                    HashDictionary.Add(value.NameHash64, key);
+                }
+                else
+                {
+                    Console.WriteLine($"File already added in Archive {this._filepath}: hash {value.NameHash64}, idx {key}");
+                }
             }
 
             _filesCount = _table.Table1count;
@@ -85,6 +94,8 @@ namespace CP77Tools.Model
         /// <returns></returns>
         public int ExtractAll(DirectoryInfo outDir)
         {
+            var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
+
             using var pb = new ProgressBar();
             using var p1 = pb.Progress.Fork();
 
@@ -100,11 +111,23 @@ namespace CP77Tools.Model
                 {
                     var file = GetFileData((int)i, mmf);
 
-                    string extension = "bin";
-                    
+                    var info = _table.FileInfo[(int) i];
+
+                    var hash = info.NameHash64;
+                    string name = $"{hash:X2}.bin";
+                    if (_maincontroller.Hashdict.ContainsKey(hash))
+                    {
+                        name = _maincontroller.Hashdict[hash];
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Could not find hash {hash}");
+                    }
 
                     string outpath = Path.Combine(outDir.FullName,
-                        $"{_table.FileInfo[(int)i].NameHash64:X8}.{extension}");
+                        $"{name}");
+                    var fi = new FileInfo(outpath);
+                    Directory.CreateDirectory(fi.Directory.FullName);
 
                     File.WriteAllBytes(outpath, file);
 
@@ -128,7 +151,7 @@ namespace CP77Tools.Model
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
-        public byte[] ExtractOne(ulong hash)
+        public byte[] GetFileByHash(ulong hash)
         {
             using var mmf = MemoryMappedFile.CreateFromFile(_filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
@@ -198,6 +221,8 @@ namespace CP77Tools.Model
         /// </summary>
         public void DumpInfo(DirectoryInfo outdir)
         {
+            var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
+
             if (!outdir.Exists)
                 return;
             if (string.IsNullOrEmpty(_filepath))
@@ -223,7 +248,7 @@ namespace CP77Tools.Model
 
             }
 
-            const string head = //"Hash\t" +
+            const string head = "Name\t" +
                 "Hash64," +
                 "Datetime," +
                 "VirtualSize," +
@@ -246,6 +271,7 @@ namespace CP77Tools.Model
                 // write info elements
                 foreach (var entry in _table.FileInfo)
                 {
+                    
                     var x = entry.Value;
                     var idx = entry.Key;
 
@@ -263,7 +289,12 @@ namespace CP77Tools.Model
 
                     var offsetEntry = _table.Offsets[idx];
 
+                    var name = "NOT HASHED";
+                    if (_maincontroller.Hashdict.ContainsKey(x.NameHash64))
+                        name = _maincontroller.Hashdict[x.NameHash64];
+
                     string info =
+                        $"{name}," +
                         $"{x.NameHash64:X2}," +
                         $"{x.DateTime.ToString(CultureInfo.InvariantCulture)}," +
                         $"{VirtualSize}," +

@@ -9,6 +9,11 @@ using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.CommandLine.IO;
 using System.CommandLine.Parsing;
+using System.Globalization;
+using System.IO;
+using CP77Tools.Model;
+using CP77Tools.Services;
+using CsvHelper;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools
@@ -19,6 +24,26 @@ namespace CP77Tools
         public static async Task Main(string[] args)
         {
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
+            ServiceLocator.Default.RegisterType<IMainController, MainController>();
+
+            var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
+
+            // get csv data
+            Console.WriteLine("Loading Hashes...");
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes.csv");
+            using (var fr = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (var sr = new StreamReader(fr))
+            using (var csv = new CsvReader(sr, CultureInfo.InvariantCulture))
+            {
+                var records = csv.GetRecords<HashObject>();
+                foreach (var record in records)
+                {
+                    //var hash = Path.GetFileName(record.String);
+                    ulong hash = ulong.Parse(record.Hash);
+                    if (!_maincontroller.Hashdict.ContainsKey(hash))
+                        _maincontroller.Hashdict.Add(hash, record.String);
+                }
+            }
 
 
             #region commands
@@ -40,11 +65,11 @@ namespace CP77Tools
             var dump = new Command("dump")
             {
                 new Option<string>(new []{"--path", "-p"}),
-                new Option<bool>(new []{ "--all", "-a"}),
-                new Option<bool>(new []{ "--strings", "-s"}),
+                //new Option<bool>(new []{ "--all", "-a"}),
+                //new Option<bool>(new []{ "--strings", "-s"}),
                 new Option<bool>(new []{ "--imports", "-i"}),
-                new Option<bool>(new []{ "--buffers", "-b"}),
-                new Option<bool>(new []{ "--chunks", "-c"}),
+                //new Option<bool>(new []{ "--buffers", "-b"}),
+                //new Option<bool>(new []{ "--chunks", "-c"}),
             };
             rootCommand.Add(dump);
             
@@ -61,7 +86,7 @@ namespace CP77Tools
             };
             rootCommand.Add(cr2w);
 
-            dump.Handler = CommandHandler.Create<string, bool, bool, bool, bool, bool>(ConsoleFunctions.DumpTask);
+            dump.Handler = CommandHandler.Create<string, bool/*, bool, bool, bool, bool*/>(ConsoleFunctions.DumpTask);
             archive.Handler = CommandHandler.Create<string, string, bool, bool>(ConsoleFunctions.ArchiveTask);
             cr2w.Handler = CommandHandler.Create<string, bool, bool, bool, bool, bool>(ConsoleFunctions.Cr2wTask);
 
