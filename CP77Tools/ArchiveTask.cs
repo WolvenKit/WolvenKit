@@ -11,18 +11,18 @@ namespace CP77Tools
     public static partial class ConsoleFunctions
     {
         
-        public static async Task<int> ArchiveTask(ArchiveOptions options)
+        public static int ArchiveTask(string path, bool extract, bool dump)
         {
-            if (options.extract || options.dump)
+            if (extract || dump)
             {
                 // initial checks
-                var inputFileInfo = new FileInfo(options.path);
+                var inputFileInfo = new FileInfo(path);
                 if (!inputFileInfo.Exists)
                     return 0;
 
                 var ar = new Archive(inputFileInfo.FullName);
 
-                if (options.extract)
+                if (extract)
                 {
                     // mmf
                     var outDir = Directory.CreateDirectory(inputFileInfo.Directory + "\\" +
@@ -31,20 +31,20 @@ namespace CP77Tools
                         Directory.CreateDirectory(outDir.FullName);
                     if (inputFileInfo.Extension != ".archive")
                         return 0;
-                    var indir = new FileInfo(options.path).Directory;
+                    var indir = new FileInfo(path).Directory;
                     if (indir == null)
                         return 0;
 
                     ar.ExtractAll(outDir);
                 }
 
-                if (options.dump)
+                if (dump)
                 {
                     ar.DumpInfo();
                 }
             }
 
-            Console.WriteLine($"Finished extracting {options.path}");
+            Console.WriteLine($"Finished extracting {path}");
 
             return 1;
         }

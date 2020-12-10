@@ -16,14 +16,22 @@ CDPR modding community discord: https://discord.gg/USZwxxFrKa
 
 
 ## Usage: 
-* displays the help
+* displays the general help
 `--help`
+
+* displays help for a specific command
+`archive -h`
+
+
 * extract all files from archive
-`archive --extract --path=<PATH TO ARCHIVE>.archive`
-*  dump archive info from archive
-`dump --all --path=<PATH TO ARCHIVE>.archive`
-* dump and extrcat archive info from extracted cr2w files
-`cr2w --all --path=<PATH TO ARCHIVE>.archive` 
+`archive -e -p "<PATH TO ARCHIVE>.archive"`
+* dump archive info from archive
+`dump -a -p "<PATH TO ARCHIVE>.archive"`
+* dumps import info from extracted cr2w file
+`cr2w -i -p "<PATH TO FILE>"` 
+
+## v.0.1.3
+- much better command line help and syntax
 
 ## v.0.1.2
 - faster extraction

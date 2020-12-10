@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
-using CommandLine;
+using System.CommandLine;
+using System.CommandLine.Builder;
+using System.CommandLine.Invocation;
+using System.CommandLine.IO;
+using System.CommandLine.Parsing;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools
@@ -17,95 +21,74 @@ namespace CP77Tools
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
 
 
+            #region commands
+
+            var rootCommand = new RootCommand();
+
+            //archiveTask(string path, bool extract, bool dump)
+            var archive = new Command("archive")
+            {
+                new Option<string>(new []{"--path", "-p"}),
+                new Option<bool>(new []{ "--extract", "-e"}),
+                new Option<bool>(new []{ "--dump", "-d"}),
+            };
+            rootCommand.Add(archive);
+
+            //DumpTask(string path, bool all, bool strings, bool imports, bool buffers, bool chunks)
+            var dump = new Command("dump")
+            {
+                new Option<string>(new []{"--path", "-p"}),
+                new Option<bool>(new []{ "--all", "-a"}),
+                new Option<bool>(new []{ "--strings", "-s"}),
+                new Option<bool>(new []{ "--imports", "-i"}),
+                new Option<bool>(new []{ "--buffers", "-b"}),
+                new Option<bool>(new []{ "--chunks", "-c"}),
+            };
+            rootCommand.Add(dump);
+
+            //Cr2wTask(string path, bool all, bool strings, bool imports, bool buffers, bool chunks)
+            var cr2w = new Command("cr2w")
+            {
+                new Option<string>(new []{"--path", "-p"}),
+                new Option<bool>(new []{ "--all", "-a"}),
+                new Option<bool>(new []{ "--strings", "-s"}),
+                new Option<bool>(new []{ "--imports", "-i"}),
+                new Option<bool>(new []{ "--buffers", "-b"}),
+                new Option<bool>(new []{ "--chunks", "-c"}),
+            };
+            rootCommand.Add(cr2w);
+
+            archive.Handler = CommandHandler.Create<string, bool, bool>(ConsoleFunctions.ArchiveTask);
+            dump.Handler = CommandHandler.Create<string, bool, bool, bool, bool, bool>(ConsoleFunctions.DumpTask);
+            cr2w.Handler = CommandHandler.Create<string, bool, bool, bool, bool, bool>(ConsoleFunctions.Cr2wTask);
+
+            #endregion
+
+
+            // Run
             if (args == null || args.Length == 0)
             {
+                // write welcome message
+                rootCommand.InvokeAsync("-h").Wait();
+
                 while (true)
                 {
                     string line = System.Console.ReadLine();
-                    var parsed = ParseText(line, ' ', '"');
-                    Parse(parsed.ToArray());
+                    var parsed = CommandLineExtensions.ParseText(line, ' ', '"');
+                    rootCommand.InvokeAsync(parsed.ToArray()).Wait();
                 }
 
             }
             else
             {
-                Parse(args);
+                rootCommand.InvokeAsync(args).Wait();
             }
         }
 
-        internal static int Parse(string[] _args)
-        {
-            var result = Parser.Default.ParseArguments<
-                    ArchiveOptions,
-                    CR2WOptions,
-                    DumpOptions
-                >(_args)
-                        .MapResult(
-                          async (ArchiveOptions opts) => await ConsoleFunctions.ArchiveTask(opts),
-                          async (DumpOptions opts) => await ConsoleFunctions.DumpTask(opts),
-                          async (CR2WOptions opts) => await ConsoleFunctions.Cr2wTask(opts),
-                          
-                          //errs => 1,
-                          _ => Task.FromResult(1));
-            return 1;
-        }
 
-        public static IEnumerable<String> ParseText(String line, Char delimiter, Char textQualifier)
-        {
+        
 
-            if (line == null)
-                yield break;
 
-            else
-            {
-                Char prevChar = '\0';
-                Char nextChar = '\0';
-                Char currentChar = '\0';
-
-                Boolean inString = false;
-
-                StringBuilder token = new StringBuilder();
-
-                for (int i = 0; i < line.Length; i++)
-                {
-                    currentChar = line[i];
-
-                    if (i > 0)
-                        prevChar = line[i - 1];
-                    else
-                        prevChar = '\0';
-
-                    if (i + 1 < line.Length)
-                        nextChar = line[i + 1];
-                    else
-                        nextChar = '\0';
-
-                    if (currentChar == textQualifier && prevChar != 0x5c && !inString)
-                    {
-                        inString = true;
-                        continue;
-                    }
-
-                    if (currentChar == textQualifier && inString)
-                    {
-                        inString = false;
-                        continue;
-                    }
-
-                    if (currentChar == delimiter && !inString)
-                    {
-                        yield return token.ToString();
-                        token = token.Remove(0, token.Length);
-                        continue;
-                    }
-
-                    token = token.Append(currentChar);
-
-                }
-
-                yield return token.ToString();
-
-            }
-        }
+        
     }
 }

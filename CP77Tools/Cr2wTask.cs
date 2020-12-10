@@ -10,10 +10,10 @@ namespace CP77Tools
     public static partial class ConsoleFunctions
     {
 
-        public static async Task<int> Cr2wTask(CR2WOptions options)
+        public static int Cr2wTask(string path, bool all, bool strings, bool imports, bool buffers, bool chunks)
         {
             // initial checks
-            var inputFileInfo = new FileInfo(options.path);
+            var inputFileInfo = new FileInfo(path);
             if (!inputFileInfo.Exists)
                 return 0;
 
@@ -25,18 +25,18 @@ namespace CP77Tools
             {
                 using var ms = new MemoryStream(f);
                 using var br = new BinaryReader(ms);
-                var (imports, _, buffers) = cr2w.ReadImportsAndBuffers(br);
+                cr2w.ReadImportsAndBuffers(br);
 
                 var obj = new Cr2wDumpObject();
                 obj.Filename = inputFileInfo.FullName.ToString();
 
-                if (options.strings || options.all)
+                if (strings || all)
                     obj.Stringdict = cr2w.StringDictionary;
-                if (options.imports || options.all)
-                    obj.Imports = imports;
-                if (options.buffers || options.all)
-                    obj.Buffers = buffers;
-                if (options.chunks || options.all)
+                if (imports || all)
+                    obj.Imports = cr2w.Imports;
+                if (buffers || all)
+                    obj.Buffers = cr2w.Buffers;
+                if (chunks || all)
                     obj.Chunks = cr2w.Chunks;
 
                 var joptions = new JsonSerializerOptions

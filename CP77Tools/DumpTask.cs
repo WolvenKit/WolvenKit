@@ -32,17 +32,17 @@ namespace CP77Tools
     public static partial class ConsoleFunctions
     {
 
-        public static async Task<int> DumpTask(DumpOptions options)
+        public static int DumpTask(string path, bool all, bool strings, bool imports, bool buffers, bool chunks)
         {
             // initial checks
-            var inputFileInfo = new FileInfo(options.path);
+            var inputFileInfo = new FileInfo(path);
             if (!inputFileInfo.Exists)
                 return 0;
 
 
             var ar = new Archive(inputFileInfo.FullName);
 
-            if (options.strings || options.imports || options.buffers || options.chunks || options.all)
+            if (strings || imports || buffers || chunks || all)
             {
 
                 using var pb = new ProgressBar();
@@ -77,13 +77,13 @@ namespace CP77Tools
 
                             var obj = new Cr2wDumpObject {Filename = key.ToString()};
 
-                            if (options.strings || options.all)
+                            if (strings || all)
                                 obj.Stringdict = cr2w.StringDictionary;
-                            if (options.imports || options.all)
+                            if (imports || all)
                                 obj.Imports = cr2w.Imports;
-                            if (options.buffers || options.all)
+                            if (buffers || all)
                                 obj.Buffers = cr2w.Buffers;
-                            if (options.chunks || options.all)
+                            if (chunks || all)
                                 obj.Chunks = cr2w.Chunks;
 
                             //fileDictionary[key] = obj;
