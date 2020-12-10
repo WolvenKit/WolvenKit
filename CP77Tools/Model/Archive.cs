@@ -196,10 +196,17 @@ namespace CP77Tools.Model
         /// <summary>
         /// Dump archive info.
         /// </summary>
-        public void DumpInfo()
+        public void DumpInfo(DirectoryInfo outdir)
         {
+            if (!outdir.Exists)
+                return;
+            if (string.IsNullOrEmpty(_filepath))
+                return;
+
+            var outpath = Path.Combine(outdir.FullName, $"_{Path.GetFileNameWithoutExtension(_filepath)}" ?? "_archivedump");
+
             // dump chache info
-            using (var writer = File.CreateText($"{this._filepath}.info"))
+            using (var writer = File.CreateText($"{outpath}.info"))
             {
                 writer.WriteLine($"Magic: {_header.Magic}\r\n");
                 writer.WriteLine($"Version: {_header.Version}\r\n");
@@ -231,7 +238,7 @@ namespace CP77Tools.Model
                 "Footer,";
 
             // dump and extract files
-            using (var writer = File.CreateText($"{this._filepath}.csv"))
+            using (var writer = File.CreateText($"{outpath}.csv"))
             {
                 // write header
                 writer.WriteLine(head);

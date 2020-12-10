@@ -29,10 +29,12 @@ namespace CP77Tools
             var archive = new Command("archive")
             {
                 new Option<string>(new []{"--path", "-p"}),
+                new Option<string>(new []{ "--outpath", "-o"}),
                 new Option<bool>(new []{ "--extract", "-e"}),
                 new Option<bool>(new []{ "--dump", "-d"}),
             };
             rootCommand.Add(archive);
+            
 
             //DumpTask(string path, bool all, bool strings, bool imports, bool buffers, bool chunks)
             var dump = new Command("dump")
@@ -45,6 +47,7 @@ namespace CP77Tools
                 new Option<bool>(new []{ "--chunks", "-c"}),
             };
             rootCommand.Add(dump);
+            
 
             //Cr2wTask(string path, bool all, bool strings, bool imports, bool buffers, bool chunks)
             var cr2w = new Command("cr2w")
@@ -58,8 +61,8 @@ namespace CP77Tools
             };
             rootCommand.Add(cr2w);
 
-            archive.Handler = CommandHandler.Create<string, bool, bool>(ConsoleFunctions.ArchiveTask);
             dump.Handler = CommandHandler.Create<string, bool, bool, bool, bool, bool>(ConsoleFunctions.DumpTask);
+            archive.Handler = CommandHandler.Create<string, string, bool, bool>(ConsoleFunctions.ArchiveTask);
             cr2w.Handler = CommandHandler.Create<string, bool, bool, bool, bool, bool>(ConsoleFunctions.Cr2wTask);
 
             #endregion
