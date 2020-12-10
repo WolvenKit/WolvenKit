@@ -64,14 +64,14 @@ namespace CP77Tools.Oodle
             Unthreaded = 3,
         }
 
-        [DllImport("oo2core_8_win64.dll")]
+        [DllImport("oo2ext_7_win64.dll")]
         public static extern int OodleLZ_Decompress(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize,
             OodleLZ_FuzzSafe fuzzSafetyFlag,
             OodleLZ_CheckCRC crcCheckFlag,
             OodleLZ_Verbosity logVerbosityFlag,
             uint d, uint e, uint f, uint g, uint h, uint i, OodleLZ_Decode threadModule);
 
-        [DllImport("oo2core_8_win64.dll")]
+        [DllImport("oo2ext_7_win64.dll")]
         public static extern int OodleLZ_Compress(OodleLZ_Compressor format, byte[] buffer, long bufferSize, byte[] outputBuffer, OodleLZ_Compression level, uint unused1, uint unused2, uint unused3);
 
         public static int Decompress(byte[] inputBuffer, byte[] outputBuffer)
