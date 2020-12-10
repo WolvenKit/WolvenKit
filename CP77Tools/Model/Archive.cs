@@ -121,7 +121,7 @@ namespace CP77Tools.Model
                     }
                     else
                     {
-                        Console.WriteLine($"Could not find hash {hash}");
+                        //Console.WriteLine($"Could not find hash {hash}");
                     }
 
                     string outpath = Path.Combine(outDir.FullName,
