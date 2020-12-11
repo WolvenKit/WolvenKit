@@ -94,7 +94,7 @@ namespace CP77Tools.Model
                 {
                     var info = Files.Values.ToList()[i];
 
-                    var file = GetFileData(info.NameHash64, mmf);
+                    var (file, buffers) = GetFileData(info.NameHash64, mmf);
 
                     var hash = info.NameHash64;
                     string name = $"{hash:X2}.bin";
@@ -112,8 +112,15 @@ namespace CP77Tools.Model
                     var fi = new FileInfo(outpath);
                     Directory.CreateDirectory(fi.Directory.FullName);
 
+                    // write main file
                     File.WriteAllBytes(outpath, file);
-
+                    // write buffers
+                    for (int j = 0; j < buffers.Count(); j++)
+                    {
+                        var buffer = buffers[j];
+                        var bufferpath = $"{outpath}.{j}";
+                        File.WriteAllBytes(bufferpath, buffer);
+                    }
 
                     progress += 1;
                     var perc = progress / (double)FileCount;
@@ -139,7 +146,7 @@ namespace CP77Tools.Model
             using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
 
-            var file = GetFileData(hash, mmf);
+            var (file, buffers) = GetFileData(hash, mmf);
 
             return file;
         }
@@ -150,21 +157,31 @@ namespace CP77Tools.Model
         /// <param name="hash"></param>
         /// <param name="mmf"></param>
         /// <returns></returns>
-        public byte[] GetFileData(ulong hash, MemoryMappedFile mmf)
+        public (byte[], List<byte[]>) GetFileData(ulong hash, MemoryMappedFile mmf)
         {
-            if (!Files.ContainsKey(hash)) return null;
+            if (!Files.ContainsKey(hash)) return (null, null);
 
             var entry = Files[hash];
             var startindex = (int)entry.FirstDataSector;
             var nextindex = (int)entry.NextDataSector;
 
-            using var ms = new MemoryStream();
-            using var bw = new BinaryWriter(ms);
+            var file = ExtractFile(this._table.Offsets[startindex]);
+            var buffers = new List<byte[]>();
 
-            for (int j = startindex; j < nextindex; j++)
+            for (int j = startindex + 1; j < nextindex; j++)
             {
                 var offsetentry = this._table.Offsets[j];
+                var buffer = ExtractFile(offsetentry);
+                buffers.Add(buffer);
+            }
 
+            return (file, buffers);
+
+            // local
+            byte[] ExtractFile(OffsetEntry offsetentry)
+            {
+                using var ms = new MemoryStream();
+                using var bw = new BinaryWriter(ms);
                 using var vs = mmf.CreateViewStream((long)offsetentry.Offset, (long)offsetentry.PhysicalSize,
                     MemoryMappedFileAccess.Read);
                 using var binaryReader = new BinaryReader(vs);
@@ -194,9 +211,9 @@ namespace CP77Tools.Model
                             $"Unpacked size doesn't match real size. {unpackedSize} vs {offsetentry.VirtualSize}");
                     bw.Write(unpacked);
                 }
-            }
 
-            return ms.ToArray();
+                return ms.ToArray();
+            }
         }
 
         /// <summary>

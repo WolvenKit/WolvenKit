@@ -97,7 +97,7 @@ namespace CP77Tools
                     {
                         var entry = ar.Files.ToList()[i];
                         var hash = entry.Key;
-                        var f = ar.GetFileData(hash, mmf);
+                        var (f, buffers) = ar.GetFileData(hash, mmf);
 
                         // check if cr2w file
                         if (f.Length < 4)
