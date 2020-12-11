@@ -51,39 +51,41 @@ namespace CP77Tools
             var rootCommand = new RootCommand();
 
             //archiveTask(string path, bool extract, bool dump)
-            var archive = new Command("archive")
+            var archive = new Command("archive", "Target an archive to extract files or dump information.")
             {
-                new Option<string>(new []{"--path", "-p"}),
-                new Option<string>(new []{ "--outpath", "-o"}),
-                new Option<bool>(new []{ "--extract", "-e"}),
-                new Option<bool>(new []{ "--dump", "-d"}),
+                new Option<string>(new []{"--path", "-p"}, "Input path to .archive."),
+                new Option<string>(new []{ "--outpath", "-o"}, "Output directory to extract files to."),
+                new Option<bool>(new []{ "--extract", "-e"}, "Extract files from archive."),
+                new Option<bool>(new []{ "--dump", "-d"}, "Dump archive information."),
+                new Option<bool>(new []{ "--list", "-l"}, "List contents of archive."),
             };
             rootCommand.Add(archive);
-            
+            archive.Handler = CommandHandler.Create<string, string, bool, bool, bool>(ConsoleFunctions.ArchiveTask);
 
             //DumpTask(string path, bool all, bool strings, bool imports, bool buffers, bool chunks)
-            var dump = new Command("dump")
+            var dump = new Command("dump", "Target an archive or a directory to dump archive information.")
             {
-                new Option<string>(new []{"--path", "-p"}),
-                new Option<bool>(new []{ "--imports", "-i"}),
+                new Option<string>(new []{"--path", "-p"}, "Input path to .archive or to a directory (runs over all archives in directory)."),
+                new Option<bool>(new []{ "--imports", "-i"}, "Dump all imports (all filenames that are referenced by all files in the archive)."),
+                new Option<bool>(new []{ "--missinghashes", "-m"}, "List all missing hashes of all input archives."),
             };
             rootCommand.Add(dump);
-            
+            dump.Handler = CommandHandler.Create<string, bool, bool>(ConsoleFunctions.DumpTask);
 
             //Cr2wTask(string path, bool all, bool strings, bool imports, bool buffers, bool chunks)
-            var cr2w = new Command("cr2w")
+            var cr2w = new Command("cr2w", "Target a specific cr2w (extracted) file and dumps file information.")
             {
-                new Option<string>(new []{"--path", "-p"}),
-                new Option<bool>(new []{ "--all", "-a"}),
-                new Option<bool>(new []{ "--strings", "-s"}),
-                new Option<bool>(new []{ "--imports", "-i"}),
-                new Option<bool>(new []{ "--buffers", "-b"}),
-                new Option<bool>(new []{ "--chunks", "-c"}),
+                new Option<string>(new []{"--path", "-p"}, "Input path to a cr2w file."),
+                new Option<bool>(new []{ "--all", "-a"}, "Dump all information."),
+                new Option<bool>(new []{ "--strings", "-s"}, "Dump all strings in file."),
+                new Option<bool>(new []{ "--imports", "-i"}, "Dump all imports of file."),
+                new Option<bool>(new []{ "--buffers", "-b"}, "Dump all buffers of file."),
+                new Option<bool>(new []{ "--chunks", "-c"}, "Dump all class information of file."),
             };
             rootCommand.Add(cr2w);
 
-            dump.Handler = CommandHandler.Create<string, bool/*, bool, bool, bool, bool*/>(ConsoleFunctions.DumpTask);
-            archive.Handler = CommandHandler.Create<string, string, bool, bool>(ConsoleFunctions.ArchiveTask);
+            
+            
             cr2w.Handler = CommandHandler.Create<string, bool, bool, bool, bool, bool>(ConsoleFunctions.Cr2wTask);
 
             #endregion

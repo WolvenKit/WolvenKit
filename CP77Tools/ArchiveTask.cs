@@ -12,9 +12,10 @@ namespace CP77Tools
     public static partial class ConsoleFunctions
     {
         
-        public static int ArchiveTask(string path, string outpath, bool extract, bool dump)
+        public static int ArchiveTask(string path, string outpath, bool extract, bool dump, bool list)
         {
-            // initial checks
+            #region checks
+
             if (string.IsNullOrEmpty(path))
             {
                 Console.WriteLine("Input file does not exist");
@@ -35,8 +36,11 @@ namespace CP77Tools
             if (indir == null)
                 return 0;
 
-            if (extract || dump)
+            #endregion
+
+            if (extract || dump || list)
             {
+                // get outdirectory
                 var outDir = Directory.CreateDirectory(Path.Combine(
                         indir.FullName, 
                         inputFileInfo.Name.Replace(".archive", "")));
@@ -55,6 +59,7 @@ namespace CP77Tools
                 // read archive
                 var ar = new Archive(inputFileInfo.FullName);
 
+                // run
                 if (extract)
                 {
                     ar.ExtractAll(outDir);
@@ -65,6 +70,14 @@ namespace CP77Tools
                 {
                     ar.DumpInfo(outDir);
                     Console.WriteLine($"Finished dumping {path}.");
+                }
+
+                if (list)
+                {
+                    foreach (var entry in ar.Files)
+                    {
+                        Console.WriteLine(entry.Value.NameStr);
+                    }
                 }
             }
 

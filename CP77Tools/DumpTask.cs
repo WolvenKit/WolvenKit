@@ -45,9 +45,10 @@ namespace CP77Tools
     {
         private static byte[] MAGIC = new byte[] {0x43, 0x52, 0x32, 0x57};
 
-        public static int DumpTask(string path/*, bool all, bool strings*/, bool imports/*, bool buffers, bool chunks*/)
+        public static int DumpTask(string path, bool imports, bool missinghashes)
         {
-            // initial checks
+            #region checks
+
             var isDirectory = false;
             var inputFileInfo = new FileInfo(path);
             var inputDirInfo = new DirectoryInfo(path);
@@ -72,90 +73,68 @@ namespace CP77Tools
                 archives.Add(new Archive(inputFileInfo.FullName));
             }
 
-            if (imports /*|| strings || buffers || chunks || all*/)
+            #endregion
+
+            using var pb = new ProgressBar();
+
+            foreach (var ar in archives)
             {
-
-                foreach (var ar in archives)
+                if (imports)
                 {
-                    using var mmf = MemoryMappedFile.CreateFromFile(ar._filepath, FileMode.Open, ar._filepath.GetHashMD5(), 0,
-                    MemoryMappedFileAccess.Read);
-                    var fileDictionary = new ConcurrentDictionary<ulong, Cr2wDumpObject>();
-                    foreach (var (key, value) in ar.HashDictionary)
-                    {
-                        fileDictionary[key] = new Cr2wDumpObject();
-                    }
-
-                    using var pb = new ProgressBar();
+                    using var mmf = MemoryMappedFile.CreateFromFile(ar.Filepath, FileMode.Open,
+                        ar.Filepath.GetHashMD5(), 0,
+                        MemoryMappedFileAccess.Read);
                     using var p1 = pb.Progress.Fork();
-
                     int progress = 0;
 
-                    var count = ar.HashDictionary.Count;
-                    Parallel.For(0, count, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
+                    var fileDictionary = new ConcurrentDictionary<ulong, Cr2wDumpObject>();
+                    foreach (var (hash, value) in ar.Files) 
+                        fileDictionary[hash] = new Cr2wDumpObject();
+
+                    // get info
+                    var count = ar.FileCount;
+                    Parallel.For(0, count, new ParallelOptions {MaxDegreeOfParallelism = 8}, i =>
                     {
-                        var key = ar.GetHashFromIndex(i);
+                        var entry = ar.Files.ToList()[i];
+                        var hash = entry.Key;
+                        var f = ar.GetFileData(hash, mmf);
 
-                        var f = ar.GetFileData((int)i, mmf);
-
-                            // check if cr2w file
-                            if (f.Length < 4)
-                                return;
-
-                            var id = f.Take(4);
-                            if (!id.SequenceEqual(MAGIC))
-                                return;
-                            else
-                            {
-                                
-                            }
-
-                        try
-                        {
-                            var cr2w = new CR2WFile();
-
-                            using var ms = new MemoryStream(f);
-                            using var br = new BinaryReader(ms);
-                            cr2w.ReadImportsAndBuffers(br);
-
-                            var obj = new Cr2wDumpObject { Filename = key.ToString() };
-
-                            //if (strings || all)
-                            //    obj.Stringdict = cr2w.StringDictionary;
-                            if (imports /*|| all*/)
-                                obj.Imports = cr2w.Imports;
-                            //if (buffers || all)
-                            //    obj.Buffers = cr2w.Buffers;
-                            //if (chunks || all)
-                            //    obj.Chunks = cr2w.Chunks;
-
-                            //fileDictionary[key] = obj;
-                            fileDictionary.AddOrUpdate(key, obj, (arg1, o) => obj);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine($"Could not read file {key}.");
-                            //throw;
+                        // check if cr2w file
+                        if (f.Length < 4)
                             return;
-                        }
-                        finally
+                        var id = f.Take(4);
+                        if (!id.SequenceEqual(MAGIC))
+                            return;
+
+                        var cr2w = new CR2WFile();
+
+                        using var ms = new MemoryStream(f);
+                        using var br = new BinaryReader(ms);
+                        cr2w.ReadImportsAndBuffers(br);
+
+                        var obj = new Cr2wDumpObject
                         {
-                            progress += 1;
-                            var perc = progress / (double)count;
-                            p1.Report(perc, $"Loading bundle entries: {progress}/{count}");
-                        }
+                            Filename = hash.ToString(),
+                            Imports = cr2w.Imports
+                        };
+
+
+                        fileDictionary.AddOrUpdate(hash, obj, (arg1, o) => obj);
+
+                        progress += 1;
+                        var perc = progress / (double)count;
+                        p1.Report(perc, $"Loading bundle entries: {progress}/{count}");
                     });
 
-
+                    // write
                     var arobj = new ArchiveDumpObject()
                     {
-                        Filename = ar._filepath,
+                        Filename = ar.Filepath,
                         FileDictionary = fileDictionary
                     };
 
-
-                    // write
-                    using var writer = File.CreateText($"{ar._filepath}.imports.txt");
-                    using var hwriter = File.CreateText($"{ar._filepath}.hashes.csv");
+                    using var writer = File.CreateText($"{ar.Filepath}.imports.txt");
+                    using var hwriter = File.CreateText($"{ar.Filepath}.hashes.csv");
                     hwriter.WriteLine("String,Hash");
                     List<string> allimports = new List<string>();
 
@@ -163,12 +142,8 @@ namespace CP77Tools
                     {
                         if (value.Imports == null)
                             continue;
-                        foreach (var import in value.Imports)
-                        {
-                            allimports.Add(import.DepotPathStr);
-                        }
+                        allimports.AddRange(value.Imports.Select(import => import.DepotPathStr));
                     }
-
                     foreach (var str in allimports.Distinct())
                     {
                         writer.WriteLine(str);
@@ -176,12 +151,21 @@ namespace CP77Tools
                         hwriter.WriteLine($"{str},{hash}");
                     }
 
+                    Console.WriteLine($"Finished. Dump file written to {ar.Filepath}.");
+                }
 
-
-
-                    Console.WriteLine($"Finished. Dump file written to {ar._filepath}.");
+                if (missinghashes)
+                {
+                    foreach (var (hash, fileInfoEntry) in ar.Files)
+                    {
+                        if (fileInfoEntry.NameStr == hash.ToString())
+                        {
+                            Console.WriteLine(hash);
+                        }
+                    }
                 }
             }
+
 
             return 1;
         }

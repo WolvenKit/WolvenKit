@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CP77Tools.Model;
@@ -44,6 +45,15 @@ namespace CP77Tools
                         obj.ChunkData.Add(chunk.GetDumpObject(br));
                     }
                 }
+
+                //dump texture
+                
+
+
+
+
+
+
 
                 var joptions = new JsonSerializerOptions
                 {

@@ -21,70 +21,54 @@ namespace CP77Tools.Model
         #region fields
 
         private ArHeader _header;
-        private uint _filesCount;
         private ArTable _table;
-        public readonly string _filepath;
 
-        public Dictionary<ulong, int> HashDictionary { get; set; } = new Dictionary<ulong, int>();
+        private string Mmfhash => Filepath.GetHashMD5();
+
+
 
         #endregion
 
-        private string Mmfhash => _filepath.GetHashMD5();
-
-
+        #region constructors
 
         public Archive(string path)
         {
-            _filepath = path;
+            Filepath = path;
             
-
             ReadTables();
         }
 
+        #endregion
+
+        #region properties
+
+        public string Filepath { get; private set; }
+
+        public Dictionary<ulong, FileInfoEntry> Files => _table?.FileInfo;
+        public int FileCount => Files?.Count ?? 0;
+
+        #endregion
+
         #region methods
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="idx"></param>
-        /// <returns></returns>
-        public ulong GetHashFromIndex(int idx) => _table.FileInfo[idx].NameHash64;
-
 
         /// <summary>
         /// Reads the tables info to the archive.
         /// </summary>
         private void ReadTables()
         {
-            using var mmf = MemoryMappedFile.CreateFromFile(_filepath, FileMode.Open, Mmfhash, 0,
+            using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
 
             using (var vs = mmf.CreateViewStream(0, ArHeader.SIZE, MemoryMappedFileAccess.Read))
             {
-                using var br = new BinaryReader(vs);
-                _header = new ArHeader(br);
+                _header = new ArHeader(new BinaryReader(vs));
             }
 
             using (var vs = mmf.CreateViewStream((long)_header.Tableoffset, (long)_header.Tablesize,
                 MemoryMappedFileAccess.Read))
             {
-                using var br = new BinaryReader(vs);
-                _table = new ArTable(br);
+                _table = new ArTable(new BinaryReader(vs));
             }
-
-            foreach (var (key, value) in _table.FileInfo)
-            {
-                if (!HashDictionary.ContainsKey(value.NameHash64))
-                {
-                    HashDictionary.Add(value.NameHash64, key);
-                }
-                else
-                {
-                    Console.WriteLine($"File already added in Archive {this._filepath}: hash {value.NameHash64}, idx {key}");
-                }
-            }
-
-            _filesCount = _table.Table1count;
         }
 
         /// <summary>
@@ -103,15 +87,14 @@ namespace CP77Tools.Model
 
             try
             {
-                using var mmf = MemoryMappedFile.CreateFromFile(_filepath, FileMode.Open, Mmfhash, 0,
+                using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
                     MemoryMappedFileAccess.Read);
-           
 
-                Parallel.For(0, _filesCount, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
+                Parallel.For(0, FileCount, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
                 {
-                    var file = GetFileData((int)i, mmf);
+                    var info = Files.Values.ToList()[i];
 
-                    var info = _table.FileInfo[(int) i];
+                    var file = GetFileData(info.NameHash64, mmf);
 
                     var hash = info.NameHash64;
                     string name = $"{hash:X2}.bin";
@@ -133,8 +116,8 @@ namespace CP77Tools.Model
 
 
                     progress += 1;
-                    var perc = progress / (double)_filesCount;
-                    p1.Report(perc, $"Loading bundle entries: {progress}/{_filesCount}");
+                    var perc = progress / (double)FileCount;
+                    p1.Report(perc, $"Loading bundle entries: {progress}/{FileCount}");
                 });
             }
             catch (Exception e)
@@ -147,18 +130,16 @@ namespace CP77Tools.Model
         }
 
         /// <summary>
-        /// 
+        /// Returns a file by a given hash
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
         public byte[] GetFileByHash(ulong hash)
         {
-            using var mmf = MemoryMappedFile.CreateFromFile(_filepath, FileMode.Open, Mmfhash, 0,
+            using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
 
-
-            var idx = HashDictionary[hash];
-            var file = GetFileData(idx, mmf);
+            var file = GetFileData(hash, mmf);
 
             return file;
         }
@@ -166,13 +147,14 @@ namespace CP77Tools.Model
         /// <summary>
         /// Gets the bytes of one file by index from the archive.
         /// </summary>
-        /// <param name="idx"></param>
+        /// <param name="hash"></param>
+        /// <param name="mmf"></param>
         /// <returns></returns>
-        public byte[] GetFileData(int idx, MemoryMappedFile mmf)
+        public byte[] GetFileData(ulong hash, MemoryMappedFile mmf)
         {
-            if (idx >= _table.FileInfo.Count) return null;
+            if (!Files.ContainsKey(hash)) return null;
 
-            var entry = _table.FileInfo[idx];
+            var entry = Files[hash];
             var startindex = (int)entry.FirstDataSector;
             var nextindex = (int)entry.NextDataSector;
 
@@ -208,7 +190,8 @@ namespace CP77Tools.Model
                     long unpackedSize = OodleLZ.Decompress(buffer, unpacked);
 
                     if (unpackedSize != offsetentry.VirtualSize)
-                        throw new Exception(string.Format("Unpacked size doesn't match real size. {0} vs {1}", unpackedSize, offsetentry.VirtualSize));
+                        throw new Exception(
+                            $"Unpacked size doesn't match real size. {unpackedSize} vs {offsetentry.VirtualSize}");
                     bw.Write(unpacked);
                 }
             }
@@ -217,18 +200,16 @@ namespace CP77Tools.Model
         }
 
         /// <summary>
-        /// Dump archive info.
+        /// Dump archive info to the specified directory.
         /// </summary>
         public void DumpInfo(DirectoryInfo outdir)
         {
-            var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
-
             if (!outdir.Exists)
                 return;
-            if (string.IsNullOrEmpty(_filepath))
+            if (string.IsNullOrEmpty(Filepath))
                 return;
 
-            var outpath = Path.Combine(outdir.FullName, $"_{Path.GetFileNameWithoutExtension(_filepath)}" ?? "_archivedump");
+            var outpath = Path.Combine(outdir.FullName, $"_{Path.GetFileNameWithoutExtension(Filepath)}" ?? "_archivedump");
 
             // dump chache info
             using (var writer = File.CreateText($"{outpath}.info"))
@@ -253,8 +234,6 @@ namespace CP77Tools.Model
                 "Datetime," +
                 "VirtualSize," +
                 "PhysicalSize," +
-                //"Unk1," +
-                //"Unk2," +
                 "Flags," +
                 "StartDataSector," +
                 "NextDataSector," +
@@ -269,38 +248,26 @@ namespace CP77Tools.Model
                 writer.WriteLine(head);
 
                 // write info elements
-                foreach (var entry in _table.FileInfo)
+                foreach (var (idx, x) in _table.FileInfo)
                 {
-                    
-                    var x = entry.Value;
-                    var idx = entry.Key;
-
-                    int PhysicalSize = 0;
-                    int VirtualSize = 0;
+                    int physicalSize = 0;
+                    int virtualSize = 0;
 
                     var startindex = (int)x.FirstDataSector;
                     var nextindex = (int)x.NextDataSector;
 
                     for (int i = startindex; i < nextindex; i++)
                     {
-                        PhysicalSize += (int)_table.Offsets[i].PhysicalSize;
-                        VirtualSize += (int)_table.Offsets[i].VirtualSize;
+                        physicalSize += (int)_table.Offsets[i].PhysicalSize;
+                        virtualSize += (int)_table.Offsets[i].VirtualSize;
                     }
 
-                    var offsetEntry = _table.Offsets[idx];
-
-                    var name = "NOT HASHED";
-                    if (_maincontroller.Hashdict.ContainsKey(x.NameHash64))
-                        name = _maincontroller.Hashdict[x.NameHash64];
-
                     string info =
-                        $"{name}," +
+                        $"{x.NameStr}," +
                         $"{x.NameHash64:X2}," +
                         $"{x.DateTime.ToString(CultureInfo.InvariantCulture)}," +
-                        $"{VirtualSize}," +
-                        $"{PhysicalSize}," +
-                        //$"{x.Unk1:X2}," +
-                        //$"{x.Unk2:X2}," +
+                        $"{virtualSize}," +
+                        $"{physicalSize}," +
                         $"{x.FileFlags}," +
                         $"{x.FirstDataSector}," +
                         $"{x.NextDataSector}," +

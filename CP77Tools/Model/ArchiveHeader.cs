@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Catel.IoC;
+using CP77Tools.Services;
+using WolvenKit.CR2W.Types;
 
 namespace CP77Tools.Model
 {
@@ -46,34 +49,34 @@ namespace CP77Tools.Model
         public uint Table1count { get; private set; }
         public uint Table2count { get; private set; }
         public uint Table3count { get; private set; }
-        public Dictionary<int, FileInfoEntry> FileInfo { get; private set; }
-        public Dictionary<int, OffsetEntry> Offsets { get; private set; }
-        public Dictionary<int, HashEntry> HashTable { get; private set; }
+        public Dictionary<ulong, FileInfoEntry> FileInfo { get; private set; }
+        public List<OffsetEntry> Offsets { get; private set; }
+        public List<HashEntry> HashTable { get; private set; }
 
         public ArTable(BinaryReader br)
         {
             Read(br);
 
-            FileInfo = new Dictionary<int, FileInfoEntry>();
-            Offsets = new Dictionary<int, OffsetEntry>();
-            HashTable = new Dictionary<int, HashEntry>();
+            FileInfo = new Dictionary<ulong, FileInfoEntry>();
+            Offsets = new List<OffsetEntry>();
+            HashTable = new List<HashEntry> ();
 
             // read tables
             for (int i = 0; i < Table1count; i++)
             {
                 var entry = new FileInfoEntry(br);
-                FileInfo.Add(i, entry);
+                FileInfo.Add(entry.NameHash64, entry);
 
             }
 
             for (int i = 0; i < Table2count; i++)
             {
-                Offsets.Add(i, new OffsetEntry(br));
+                Offsets.Add(new OffsetEntry(br));
             }
 
             for (int i = 0; i < Table3count; i++)
             {
-                HashTable.Add(i, new HashEntry(br));
+                HashTable.Add(new HashEntry(br));
             }
         }
 
@@ -123,30 +126,34 @@ namespace CP77Tools.Model
     {
         public ulong NameHash64 { get; private set; }
         public DateTime DateTime { get; private set; }
-        //public System.Runtime.InteropServices.ComTypes.FILETIME Filetime { get; set; }
-        //public ushort Unk1 { get; private set; } //???? maybe it's really one int32
-        //public ushort Unk2 { get; private set; } //????
         public uint FileFlags { get; private set; }
         public uint FirstDataSector { get; private set; }
         public uint NextDataSector { get; private set; }
         public uint FirstUnkIndex { get; private set; }
         public uint NextUnkIndex { get; private set; }
-        public byte[] SHA1Hash { get; set; }
+        public byte[] SHA1Hash { get; private set; }
+
+        private string _nameStr;
+        public string NameStr => string.IsNullOrEmpty(_nameStr) ? NameHash64.ToString() : _nameStr;
+
+        private IMainController _mainController;
 
         public FileInfoEntry(BinaryReader br)
         {
-            Read(br);
+            _mainController = ServiceLocator.Default.ResolveType<IMainController>();
+
+            Read(br, _mainController);
         }
 
-        private void Read(BinaryReader br)
+        private void Read(BinaryReader br, IMainController mainController)
         {
             NameHash64 = br.ReadUInt64();
-            var f = br.ReadInt64();
 
-            DateTime = System.DateTime.FromFileTime(f);
+            if (mainController != null && mainController.Hashdict.ContainsKey(NameHash64))
+                _nameStr = mainController.Hashdict[NameHash64];
 
-            //Unk1 = br.ReadUInt16();
-            //Unk2 = br.ReadUInt16();
+            DateTime = System.DateTime.FromFileTime(br.ReadInt64());
+
 
             FileFlags = br.ReadUInt32();
             FirstDataSector = br.ReadUInt32();
