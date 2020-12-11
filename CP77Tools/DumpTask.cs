@@ -76,6 +76,10 @@ namespace CP77Tools
             #endregion
 
             using var pb = new ProgressBar();
+            var missinghashtxt = isDirectory 
+                ? Path.Combine(inputDirInfo.FullName, "missinghashes.txt") 
+                : $"{inputFileInfo.FullName}.missinghashes.txt";
+            using var mwriter = File.CreateText(missinghashtxt);
 
             foreach (var ar in archives)
             {
@@ -156,11 +160,12 @@ namespace CP77Tools
 
                 if (missinghashes)
                 {
+                    
                     foreach (var (hash, fileInfoEntry) in ar.Files)
                     {
                         if (fileInfoEntry.NameStr == hash.ToString())
                         {
-                            Console.WriteLine(hash);
+                            mwriter.WriteLine(hash);
                         }
                     }
                 }

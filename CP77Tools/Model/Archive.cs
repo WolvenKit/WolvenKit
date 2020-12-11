@@ -118,7 +118,7 @@ namespace CP77Tools.Model
                     for (int j = 0; j < buffers.Count(); j++)
                     {
                         var buffer = buffers[j];
-                        var bufferpath = $"{outpath}.{j}";
+                        var bufferpath = $"{outpath}.{j}.buffer";
                         File.WriteAllBytes(bufferpath, buffer);
                     }
 

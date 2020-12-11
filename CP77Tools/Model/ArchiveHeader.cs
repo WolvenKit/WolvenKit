@@ -65,8 +65,15 @@ namespace CP77Tools.Model
             for (int i = 0; i < Table1count; i++)
             {
                 var entry = new FileInfoEntry(br);
-                FileInfo.Add(entry.NameHash64, entry);
 
+                if (!FileInfo.ContainsKey(entry.NameHash64))
+                {
+                    FileInfo.Add(entry.NameHash64, entry);
+                }
+                else
+                {
+                    
+                }
             }
 
             for (int i = 0; i < Table2count; i++)
