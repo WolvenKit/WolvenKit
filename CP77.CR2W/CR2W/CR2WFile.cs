@@ -116,6 +116,9 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Supporting Functions
+
+
+
         // Does not reindex /TODO
         public CR2WExportWrapper CreateChunk(string type, int chunkindex=0, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null, CVariable cvar = null)
         {

@@ -37,7 +37,13 @@ namespace CP77Tools
                 if (buffers || all)
                     obj.Buffers = cr2w.Buffers;
                 if (chunks || all)
+                {
                     obj.Chunks = cr2w.Chunks;
+                    foreach (var chunk in cr2w.Chunks)
+                    {
+                        obj.ChunkData.Add(chunk.GetDumpObject(br));
+                    }
+                }
 
                 var joptions = new JsonSerializerOptions
                 {

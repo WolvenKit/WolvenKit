@@ -65,11 +65,7 @@ namespace CP77Tools
             var dump = new Command("dump")
             {
                 new Option<string>(new []{"--path", "-p"}),
-                //new Option<bool>(new []{ "--all", "-a"}),
-                //new Option<bool>(new []{ "--strings", "-s"}),
                 new Option<bool>(new []{ "--imports", "-i"}),
-                //new Option<bool>(new []{ "--buffers", "-b"}),
-                //new Option<bool>(new []{ "--chunks", "-c"}),
             };
             rootCommand.Add(dump);
             

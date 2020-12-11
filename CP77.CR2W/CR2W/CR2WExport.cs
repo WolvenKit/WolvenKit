@@ -110,6 +110,10 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Properties
+
+        public uint offset => Export.dataOffset;
+        public uint size => Export.dataSize;
+
         [JsonIgnore]
         public CR2WFile cr2w { get; }
         [JsonIgnore]
@@ -206,6 +210,133 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Methods
+
+        public class Cr2wVariableDumpObject
+        {
+            public string Name { get; set; }
+            public string Type { get; set; }
+            public int Size { get; set; }
+
+            public List<Cr2wVariableDumpObject> Variables { get; set; } = new List<Cr2wVariableDumpObject>();
+        }
+
+        public Cr2wVariableDumpObject GetDumpObject(BinaryReader br)
+        {
+            br.BaseStream.Seek(Export.dataOffset, SeekOrigin.Begin);
+            var o = new Cr2wVariableDumpObject()
+            {
+                Name = this.REDName,
+                Type =  this.REDType,
+                Size = (int)this.size
+            };
+
+
+            var zero = br.ReadByte();
+            if (zero != 0)
+                return null;
+
+            while (true)
+            {
+                var nameId = br.ReadUInt16();
+                if (nameId == 0)
+                    break;
+
+                var variable = new Cr2wVariableDumpObject
+                {
+                    Name = cr2w.StringDictionary.Values.ToList()[(int) nameId],
+                    Type = cr2w.StringDictionary.Values.ToList()[(int) br.ReadUInt16()],
+                    Size = br.ReadInt32()
+                };
+
+                var endoffset = br.BaseStream.Position + variable.Size - 4;
+
+                //var buffer = br.ReadBytes(variable.Size - 4);
+                // try read variable
+                //array
+                if (variable.Type.Contains("array:"))
+                {
+                    var count = br.ReadUInt32();
+                    for (int i = 0; i < count; i++)
+                    {
+                        // dbg for now
+                        variable.Variables = TryGetClassVariables(variable.Size);
+                    }
+                }
+
+                // may be another class:
+                else if (variable.Size > 9)
+                {
+                    variable.Variables = TryGetClassVariables(variable.Size);
+                }
+
+                // go to variable end
+                br.BaseStream.Seek(endoffset, SeekOrigin.Begin);
+                o.Variables.Add(variable);
+            }
+
+            return o;
+
+
+            List<Cr2wVariableDumpObject> TryGetClassVariables(int innersize)
+            {
+                var ret = new List<Cr2wVariableDumpObject>();
+                var startpos = br.BaseStream.Position;
+
+                var zero = br.ReadByte();
+                if (zero != 0)
+                    return ret;
+
+                while (true)
+                {
+                    var nameId = br.ReadUInt16();
+                    if (nameId == 0)
+                        return ret;
+
+                    try
+                    {
+                        var variable = new Cr2wVariableDumpObject
+                        {
+                            Name = cr2w.StringDictionary.Values.ToList()[(int) nameId],
+                            Type = cr2w.StringDictionary.Values.ToList()[(int) br.ReadUInt16()],
+                            Size = br.ReadInt32()
+                        };
+
+                        var endoffset = br.BaseStream.Position + variable.Size - 4;
+
+                        //var buffer = br.ReadBytes(variable.Size - 4);
+                        // try read variable
+                        //array
+                        if (variable.Type.Contains("array:"))
+                        {
+                            var count = br.ReadUInt32();
+                            for (int i = 0; i < count; i++)
+                            {
+                                variable.Variables = TryGetClassVariables(variable.Size);
+                            }
+                        }
+                        // may be another class:
+                        else if (variable.Size > 9)
+                        {
+                            variable.Variables = TryGetClassVariables(variable.Size);
+                        }
+
+                        // go to variable end
+                        br.BaseStream.Seek(endoffset, SeekOrigin.Begin);
+                        ret.Add(variable);
+                    }
+                    catch (Exception e)
+                    {
+                        return null;
+                    }
+                }
+            }
+
+        }
+
+
+
+
+
         /// <summary>
         /// We can use something like this for hashing
         /// </summary>

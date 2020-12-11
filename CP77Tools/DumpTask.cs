@@ -26,8 +26,18 @@ namespace CP77Tools
         public Dictionary<uint, string> Stringdict { get; set; }
         public List<CR2WImportWrapper> Imports { get; set; }
         public List<CR2WBufferWrapper> Buffers { get; set; }
+
         public List<CR2WExportWrapper> Chunks { get; set; }
+
+        public List<CR2WExportWrapper.Cr2wVariableDumpObject> ChunkData { get; } =
+            new List<CR2WExportWrapper.Cr2wVariableDumpObject>();
+
         public string Filename { get; set; }
+    }
+
+    public class Cr2wVariableObject
+    {
+
     }
 
 
