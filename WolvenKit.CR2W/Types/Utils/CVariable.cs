@@ -344,6 +344,11 @@ namespace WolvenKit.CR2W.Types
                 }
                 #endregion
 
+                //dbg
+                var endpos1 = file.BaseStream.Position;
+                var bytesread1 = endpos1 - startpos;
+                var bytesleft = size - bytesread1;
+
                 // parse only buffers
                 ReadAllRedVariables<REDBufferAttribute>(file);
 
