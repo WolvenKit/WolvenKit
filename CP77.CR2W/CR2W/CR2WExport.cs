@@ -216,6 +216,7 @@ namespace WolvenKit.CR2W
             public string Name { get; set; }
             public string Type { get; set; }
             public int Size { get; set; }
+            public long Offset { get; set; }
 
             public List<Cr2wVariableDumpObject> Variables { get; set; } = new List<Cr2wVariableDumpObject>();
         }
@@ -227,7 +228,8 @@ namespace WolvenKit.CR2W
             {
                 Name = this.REDName,
                 Type =  this.REDType,
-                Size = (int)this.size
+                Size = (int)this.size,
+                Offset = br.BaseStream.Position
             };
 
 
@@ -243,6 +245,7 @@ namespace WolvenKit.CR2W
 
                 var variable = new Cr2wVariableDumpObject
                 {
+                    Offset = br.BaseStream.Position - 3,
                     Name = cr2w.StringDictionary.Values.ToList()[(int) nameId],
                     Type = cr2w.StringDictionary.Values.ToList()[(int) br.ReadUInt16()],
                     Size = br.ReadInt32()
@@ -296,6 +299,7 @@ namespace WolvenKit.CR2W
                     {
                         var variable = new Cr2wVariableDumpObject
                         {
+                            Offset = br.BaseStream.Position - 3,
                             Name = cr2w.StringDictionary.Values.ToList()[(int) nameId],
                             Type = cr2w.StringDictionary.Values.ToList()[(int) br.ReadUInt16()],
                             Size = br.ReadInt32()
