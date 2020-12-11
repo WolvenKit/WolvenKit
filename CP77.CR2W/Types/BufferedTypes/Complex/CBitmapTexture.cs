@@ -14,7 +14,7 @@ namespace WolvenKit.CR2W.Types
     public partial class CBitmapTexture : ITexture, IByteSource
     {
 
-        [Ordinal(1000)] [REDBuffer] public CUInt32 unk { get; set; }
+        [Ordinal(1000)] [REDBuffer(true)] public CUInt32 unk { get; set; }
         [Ordinal(1001)] [REDBuffer(true)] public CUInt32 MipsCount { get; set; }
 
         [Ordinal(1002)] [REDBuffer(true)] public CCompressedBuffer<SMipData> Mipdata { get; set; }
@@ -65,7 +65,6 @@ namespace WolvenKit.CR2W.Types
         {
             base.Read(file, size);
 
-            //TODO: readd for tw3
             //MipsCount.Read(file, 4);
 
             //Mipdata.Read(file, size, (int)MipsCount.val);

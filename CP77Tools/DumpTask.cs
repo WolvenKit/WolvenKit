@@ -75,7 +75,7 @@ namespace CP77Tools
 
             #endregion
 
-            using var pb = new ProgressBar();
+            
             var missinghashtxt = isDirectory 
                 ? Path.Combine(inputDirInfo.FullName, "missinghashes.txt") 
                 : $"{inputFileInfo.FullName}.missinghashes.txt";
@@ -83,6 +83,7 @@ namespace CP77Tools
 
             foreach (var ar in archives)
             {
+                using var pb = new ProgressBar();
                 if (imports)
                 {
                     using var mmf = MemoryMappedFile.CreateFromFile(ar.Filepath, FileMode.Open,
