@@ -82,7 +82,7 @@ namespace CP77Tools.Model
         /// <returns></returns>
         public int ExtractAll(DirectoryInfo outDir, bool extract = true, bool uncook = false, EUncookExtension uncookext = EUncookExtension.tga)
         {
-            var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
+            var maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
 
             using var pb = new ProgressBar();
             using var p1 = pb.Progress.Fork();
@@ -99,9 +99,9 @@ namespace CP77Tools.Model
 
                 var hash = info.NameHash64;
                 string name = $"{hash:X2}.bin";
-                if (_maincontroller.Hashdict.ContainsKey(hash))
+                if (maincontroller.Hashdict.ContainsKey(hash))
                 {
-                    name = _maincontroller.Hashdict[hash];
+                    name = maincontroller.Hashdict[hash];
                 }
 
                 var outfile = new FileInfo(Path.Combine(outDir.FullName,
@@ -201,14 +201,12 @@ namespace CP77Tools.Model
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
-        public byte[] GetFileByHash(ulong hash)
+        public (byte[], List<byte[]>) GetFileByHash(ulong hash)
         {
             using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
 
-            var (file, buffers) = GetFileData(hash, mmf);
-
-            return file;
+            return GetFileData(hash, mmf);
         }
 
         /// <summary>

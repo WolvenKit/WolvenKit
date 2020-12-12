@@ -22,7 +22,7 @@ namespace CP77Tools
 
             var cr2w = new CR2WFile();
 
-            try
+            //try
             {
                 using var ms = new MemoryStream(f);
                 using var br = new BinaryReader(ms);
@@ -65,11 +65,11 @@ namespace CP77Tools
                 File.WriteAllText($"{inputFileInfo.FullName}.dump.json", jsonstring);
                 Console.WriteLine($"Finished. Dump file written to {inputFileInfo.FullName}.");
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //    throw;
+            //}
 
             return 1;
         }

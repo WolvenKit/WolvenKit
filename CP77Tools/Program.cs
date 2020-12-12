@@ -38,7 +38,6 @@ namespace CP77Tools
 
             var rootCommand = new RootCommand();
 
-            //archiveTask(string path, bool extract, bool dump)
             var archive = new Command("archive", "Target an archive to extract files or dump information.")
             {
                 new Option<string>(new []{"--path", "-p"}, "Input path to .archive."),
@@ -48,11 +47,11 @@ namespace CP77Tools
                 new Option<bool>(new []{ "--list", "-l"}, "List contents of archive."),
                 new Option<bool>(new []{ "--uncook", "-u"}, "Uncooks textures from archive."),
                 new Option<EUncookExtension>(new []{ "--uext"}, "Uncook extension (tga, bmp, jpg, png, dds). Default is tga."),
+                new Option<ulong>(new []{ "--hash", "-h"}, "Extract single file with given hash."),
             };
             rootCommand.Add(archive);
-            archive.Handler = CommandHandler.Create<string, string, bool, bool, bool, bool, EUncookExtension>(ConsoleFunctions.ArchiveTask);
+            archive.Handler = CommandHandler.Create<string, string, bool, bool, bool, bool, EUncookExtension, ulong>(ConsoleFunctions.ArchiveTask);
 
-            //DumpTask(string path, bool all, bool strings, bool imports, bool buffers, bool chunks)
             var dump = new Command("dump", "Target an archive or a directory to dump archive information.")
             {
                 new Option<string>(new []{"--path", "-p"}, "Input path to .archive or to a directory (runs over all archives in directory)."),
@@ -62,7 +61,6 @@ namespace CP77Tools
             rootCommand.Add(dump);
             dump.Handler = CommandHandler.Create<string, bool, bool>(ConsoleFunctions.DumpTask);
 
-            //Cr2wTask(string path, bool all, bool strings, bool imports, bool buffers, bool chunks)
             var cr2w = new Command("cr2w", "Target a specific cr2w (extracted) file and dumps file information.")
             {
                 new Option<string>(new []{"--path", "-p"}, "Input path to a cr2w file."),
@@ -70,10 +68,14 @@ namespace CP77Tools
                 new Option<bool>(new []{ "--chunks", "-c"}, "Dump all class information of file."),
             };
             rootCommand.Add(cr2w);
-
-            
-            
             cr2w.Handler = CommandHandler.Create<string, bool, bool>(ConsoleFunctions.Cr2wTask);
+
+            var hashTask = new Command("hash", "Some helper functions related to hashes.")
+            {
+                new Option<string>(new []{"--input", "-i"}, "Create FNV1A hash of given string"),
+            };
+            rootCommand.Add(hashTask);
+            hashTask.Handler = CommandHandler.Create<string>(ConsoleFunctions.HashTask);
 
             #endregion
 

@@ -262,10 +262,11 @@ namespace WolvenKit.CR2W
                     for (int i = 0; i < count; i++)
                     {
                         // dbg for now
-                        variable.Variables = TryGetClassVariables(variable.Size);
+                        var elementsize = (variable.Size - 8) / count;
+                        if (elementsize > 9)
+                            variable.Variables = TryGetClassVariables((int)elementsize);
                     }
                 }
-
                 // may be another class:
                 else if (variable.Size > 9)
                 {
@@ -291,12 +292,13 @@ namespace WolvenKit.CR2W
 
                 while (true)
                 {
-                    var nameId = br.ReadUInt16();
-                    if (nameId == 0)
-                        return ret;
-
                     try
                     {
+                        var nameId = br.ReadUInt16();
+                        if (nameId == 0)
+                            return ret;
+
+                    
                         var variable = new Cr2wVariableDumpObject
                         {
                             Offset = br.BaseStream.Position - 3,
