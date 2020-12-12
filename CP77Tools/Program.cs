@@ -15,6 +15,7 @@ using CP77Tools.Model;
 using CP77Tools.Services;
 using CsvHelper;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.Tools.DDS;
 
 namespace CP77Tools
 {
@@ -46,9 +47,10 @@ namespace CP77Tools
                 new Option<bool>(new []{ "--dump", "-d"}, "Dump archive information."),
                 new Option<bool>(new []{ "--list", "-l"}, "List contents of archive."),
                 new Option<bool>(new []{ "--uncook", "-u"}, "Uncooks textures from archive."),
+                new Option<EUncookExtension>(new []{ "--uext"}, "Uncook extension (tga, bmp, jpg, png, dds). Default is tga."),
             };
             rootCommand.Add(archive);
-            archive.Handler = CommandHandler.Create<string, string, bool, bool, bool, bool>(ConsoleFunctions.ArchiveTask);
+            archive.Handler = CommandHandler.Create<string, string, bool, bool, bool, bool, EUncookExtension>(ConsoleFunctions.ArchiveTask);
 
             //DumpTask(string path, bool all, bool strings, bool imports, bool buffers, bool chunks)
             var dump = new Command("dump", "Target an archive or a directory to dump archive information.")

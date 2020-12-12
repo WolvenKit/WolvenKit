@@ -5,6 +5,7 @@ using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Threading.Tasks;
 using CP77Tools.Model;
+using WolvenKit.Common.Tools.DDS;
 using WolvenKit.CR2W.Types;
 
 namespace CP77Tools
@@ -12,7 +13,7 @@ namespace CP77Tools
     public static partial class ConsoleFunctions
     {
         
-        public static int ArchiveTask(string path, string outpath, bool extract, bool dump, bool list, bool uncook)
+        public static int ArchiveTask(string path, string outpath, bool extract, bool dump, bool list, bool uncook, EUncookExtension uext)
         {
             #region checks
 
@@ -62,7 +63,7 @@ namespace CP77Tools
                 // run
                 if (extract || uncook)
                 {
-                    ar.ExtractAll(outDir, uncook);
+                    ar.ExtractAll(outDir, extract, uncook, uext);
                     Console.WriteLine($"Finished extracting {path}.");
                 }
 

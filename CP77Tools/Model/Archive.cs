@@ -80,7 +80,7 @@ namespace CP77Tools.Model
         /// </summary>
         /// <param name="outDir"></param>
         /// <returns></returns>
-        public int ExtractAll(DirectoryInfo outDir, bool uncook)
+        public int ExtractAll(DirectoryInfo outDir, bool extract = true, bool uncook = false, EUncookExtension uncookext = EUncookExtension.tga)
         {
             var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
 
@@ -104,20 +104,33 @@ namespace CP77Tools.Model
                     name = _maincontroller.Hashdict[hash];
                 }
 
-                string outpath = Path.Combine(outDir.FullName,
-                    $"{name}");
-                var fi = new FileInfo(outpath);
-                Directory.CreateDirectory(fi.Directory.FullName);
+                var outfile = new FileInfo(Path.Combine(outDir.FullName,
+                    $"{name}"));
+                if (outfile.Directory == null)
+                    return;
+                
+                
 
                 // write main file
-                File.WriteAllBytes(outpath, file);
+                if (extract)
+                {
+                    Directory.CreateDirectory(outfile.Directory.FullName);
+                    File.WriteAllBytes(outfile.FullName, file);
+                }
+
                 // write buffers
-                for (int j = 0; j < buffers.Count(); j++)
+                for (int j = 0; j < buffers.Count; j++)
                 {
                     if (uncook)
                     {
-                        if (Path.GetExtension(name) != ".xbm") continue;
-                        
+                        #region textures
+
+                        if (Path.GetExtension(name) != ".xbm")
+                            continue;
+                        if (buffers.Count > 1)
+                        {
+                            //TODO: Log
+                        }
 
                         // read cr2w
                         using var ms = new MemoryStream(file);
@@ -126,41 +139,48 @@ namespace CP77Tools.Model
                         var result = cr2w.Read(br);
                         if (result != EFileReadErrorCodes.NoError)
                             continue;
-                        if (cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm 
-                            && cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob)
+                        if (!(cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm) ||
+                            !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+                            continue;
+
+                        // create dds header
+                        var width = blob.Header.SizeInfo.Width.val;
+                        var height = blob.Header.SizeInfo.Height.val;
+                        var mips = blob.Header.TextureInfo.MipCount.val;
+                        var slicecount = blob.Header.TextureInfo.SliceCount.val;
+                        var alignment = blob.Header.TextureInfo.DataAlignment.val;
+
+                        Directory.CreateDirectory(outfile.Directory.FullName);
+                        using (var stream = new FileStream($"{outfile}.dds", FileMode.Create, FileAccess.Write))
                         {
-                            var width = blob.Header.SizeInfo.Width.val;
-                            var height = blob.Header.SizeInfo.Height.val;
-                            var mips = blob.Header.TextureInfo.MipCount.val;
-                            var slicecount = blob.Header.TextureInfo.SliceCount.val;
-                            var alignment = blob.Header.TextureInfo.DataAlignment.val;
-
-                            using (var stream = new FileStream($"{outpath}.dds", FileMode.Create, FileAccess.Write))
-                            {
-                                DDSUtils.GenerateAndWriteHeader(stream,
-                                    new DDSMetadata(width, height, mips, EFormat.BC7_UNORM, alignment, false, slicecount));
-                                var buffer = buffers[j];
-                                stream.Write(buffer);
+                            DDSUtils.GenerateAndWriteHeader(stream,
+                                new DDSMetadata(width, height, mips, EFormat.BC7_UNORM, alignment, false, slicecount));
+                            var buffer = buffers[j];
+                            stream.Write(buffer);
                                 
-                            }
+                        }
                             
-
-                            // convert to tga
+                        // convert to texture
+                        if (uncookext != EUncookExtension.dds)
+                        {
                             try
                             {
-                                var di = new FileInfo(outpath).Directory;
-                                TexconvWrapper.Convert(di.FullName, $"{outpath}.dds", EUncookExtension.tga);
+                                var di = new FileInfo(outfile.FullName).Directory;
+                                TexconvWrapper.Convert(di.FullName, $"{outfile}.dds", uncookext);
                             }
                             catch (Exception e)
                             {
                                 Console.WriteLine(e);
                             }
                         }
+
+                        #endregion
                     }
-                    else
+                    else if (extract)
                     {
                         var buffer = buffers[j];
-                        var bufferpath = $"{outpath}.{j}.buffer";
+                        var bufferpath = $"{outfile}.{j}.buffer";
+                        Directory.CreateDirectory(outfile.Directory.FullName);
                         File.WriteAllBytes(bufferpath, buffer);
                     }
                 }
