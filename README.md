@@ -22,9 +22,15 @@ CDPR modding community discord: https://discord.gg/USZwxxFrKa
 * displays help for a specific command
 `archive -h`
 
-
+###Main functions
 * extract all files from archive
 `archive -e -p "<PATH TO ARCHIVE>.archive"`
+
+* extract all textures from archive
+`archive -u --uext png "<PATH TO ARCHIVE>.archive"`
+
+
+###Debug Options
 * dump archive info from archive
 `dump -a -p "<PATH TO ARCHIVE>.archive"`
 * dumps import info from extracted cr2w file

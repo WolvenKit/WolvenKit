@@ -31,8 +31,8 @@ namespace CP77Tools
             Console.WriteLine("Loading Hashes...");
             Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes.csv"));
             Console.WriteLine("Loaded Hashes 1...");
-            Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes2.csv"));
-            Console.WriteLine("Loaded Hashes 2...");
+            //Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes2.csv"));
+            //Console.WriteLine("Loaded Hashes 2...");
 
             #region commands
 
