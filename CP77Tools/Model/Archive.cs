@@ -12,7 +12,11 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using ConsoleProgressBar;
 using CP77Tools.Services;
+using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Tools.DDS;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
 
 namespace CP77Tools.Model
 {
@@ -76,62 +80,98 @@ namespace CP77Tools.Model
         /// </summary>
         /// <param name="outDir"></param>
         /// <returns></returns>
-        public int ExtractAll(DirectoryInfo outDir)
+        public int ExtractAll(DirectoryInfo outDir, bool uncook)
         {
             var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
 
             using var pb = new ProgressBar();
             using var p1 = pb.Progress.Fork();
-
             int progress = 0;
 
-            try
+            using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
+                MemoryMappedFileAccess.Read);
+
+            Parallel.For(0, FileCount, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
             {
-                using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
-                    MemoryMappedFileAccess.Read);
+                var info = Files.Values.ToList()[i];
 
-                Parallel.For(0, FileCount, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
+                var (file, buffers) = GetFileData(info.NameHash64, mmf);
+
+                var hash = info.NameHash64;
+                string name = $"{hash:X2}.bin";
+                if (_maincontroller.Hashdict.ContainsKey(hash))
                 {
-                    var info = Files.Values.ToList()[i];
+                    name = _maincontroller.Hashdict[hash];
+                }
 
-                    var (file, buffers) = GetFileData(info.NameHash64, mmf);
+                string outpath = Path.Combine(outDir.FullName,
+                    $"{name}");
+                var fi = new FileInfo(outpath);
+                Directory.CreateDirectory(fi.Directory.FullName);
 
-                    var hash = info.NameHash64;
-                    string name = $"{hash:X2}.bin";
-                    if (_maincontroller.Hashdict.ContainsKey(hash))
+                // write main file
+                File.WriteAllBytes(outpath, file);
+                // write buffers
+                for (int j = 0; j < buffers.Count(); j++)
+                {
+                    if (uncook)
                     {
-                        name = _maincontroller.Hashdict[hash];
+                        if (Path.GetExtension(name) != ".xbm") continue;
+                        
+
+                        // read cr2w
+                        using var ms = new MemoryStream(file);
+                        using var br = new BinaryReader(ms);
+                        var cr2w = new CR2WFile();
+                        var result = cr2w.Read(br);
+                        if (result != EFileReadErrorCodes.NoError)
+                            continue;
+                        if (cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm 
+                            && cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob)
+                        {
+                            var width = blob.Header.SizeInfo.Width.val;
+                            var height = blob.Header.SizeInfo.Height.val;
+                            var mips = blob.Header.TextureInfo.MipCount.val;
+                            var slicecount = blob.Header.TextureInfo.SliceCount.val;
+                            var alignment = blob.Header.TextureInfo.DataAlignment.val;
+
+                            using (var stream = new FileStream($"{outpath}.dds", FileMode.Create, FileAccess.Write))
+                            {
+                                DDSUtils.GenerateAndWriteHeader(stream,
+                                    new DDSMetadata(width, height, mips, EFormat.BC7_UNORM, alignment, false, slicecount));
+                                var buffer = buffers[j];
+                                stream.Write(buffer);
+                                
+                            }
+                            
+
+                            // convert to tga
+                            try
+                            {
+                                var di = new FileInfo(outpath).Directory;
+                                TexconvWrapper.Convert(di.FullName, $"{outpath}.dds", EUncookExtension.tga);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e);
+                            }
+                        }
                     }
                     else
-                    {
-                        //Console.WriteLine($"Could not find hash {hash}");
-                    }
-
-                    string outpath = Path.Combine(outDir.FullName,
-                        $"{name}");
-                    var fi = new FileInfo(outpath);
-                    Directory.CreateDirectory(fi.Directory.FullName);
-
-                    // write main file
-                    File.WriteAllBytes(outpath, file);
-                    // write buffers
-                    for (int j = 0; j < buffers.Count(); j++)
                     {
                         var buffer = buffers[j];
                         var bufferpath = $"{outpath}.{j}.buffer";
                         File.WriteAllBytes(bufferpath, buffer);
                     }
+                }
 
-                    progress += 1;
-                    var perc = progress / (double)FileCount;
-                    p1.Report(perc, $"Loading bundle entries: {progress}/{FileCount}");
-                });
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+
+
+                progress += 1;
+                var perc = progress / (double)FileCount;
+                p1.Report(perc, $"Loading bundle entries: {progress}/{FileCount}");
+            });
+ 
 
             return 1;
         }

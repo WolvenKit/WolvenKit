@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CP77Tools.Services
 {
-    public interface IMainController : INotifyPropertyChanged, INotifyPropertyChanging
+    public interface IMainController
     {
         public Dictionary<ulong, string>  Hashdict { get; set; }
     }

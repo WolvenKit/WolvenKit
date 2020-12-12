@@ -12,7 +12,7 @@ namespace CP77Tools
     public static partial class ConsoleFunctions
     {
         
-        public static int ArchiveTask(string path, string outpath, bool extract, bool dump, bool list)
+        public static int ArchiveTask(string path, string outpath, bool extract, bool dump, bool list, bool uncook)
         {
             #region checks
 
@@ -38,7 +38,7 @@ namespace CP77Tools
 
             #endregion
 
-            if (extract || dump || list)
+            if (extract || dump || list || uncook)
             {
                 // get outdirectory
                 var outDir = Directory.CreateDirectory(Path.Combine(
@@ -60,9 +60,9 @@ namespace CP77Tools
                 var ar = new Archive(inputFileInfo.FullName);
 
                 // run
-                if (extract)
+                if (extract || uncook)
                 {
-                    ar.ExtractAll(outDir);
+                    ar.ExtractAll(outDir, uncook);
                     Console.WriteLine($"Finished extracting {path}.");
                 }
 

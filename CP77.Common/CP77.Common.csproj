@@ -5,6 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DDS\texconv.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="DDS\texconv.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Catel.Core" Version="5.12.11" />
   </ItemGroup>
 

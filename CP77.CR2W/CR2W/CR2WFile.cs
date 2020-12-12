@@ -476,10 +476,10 @@ namespace WolvenKit.CR2W
         {
             await using var ms = new MemoryStream(data);
             using var br = new BinaryReader(ms);
-            return await Read(br);
+            return await Task.Run(() => Read(br));
         }
 
-        public async Task<EFileReadErrorCodes> Read(BinaryReader file)
+        public EFileReadErrorCodes Read(BinaryReader file)
         {
             //m_stream = file.BaseStream;
 

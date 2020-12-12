@@ -9,11 +9,15 @@
 
   <ItemGroup>
     <None Remove="Resources\archivehashes.csv" />
+    <None Remove="Resources\archivehashes2.csv" />
     <None Remove="Resources\basegame_2_mainmenu.archive.hashes.csv" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Resources\archivehashes.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\archivehashes2.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

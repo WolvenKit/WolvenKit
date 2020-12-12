@@ -26,25 +26,12 @@ namespace CP77Tools
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
             ServiceLocator.Default.RegisterType<IMainController, MainController>();
 
-            var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
-
             // get csv data
             Console.WriteLine("Loading Hashes...");
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes.csv");
-            using (var fr = new FileStream(path, FileMode.Open, FileAccess.Read))
-            using (var sr = new StreamReader(fr))
-            using (var csv = new CsvReader(sr, CultureInfo.InvariantCulture))
-            {
-                var records = csv.GetRecords<HashObject>();
-                foreach (var record in records)
-                {
-                    //var hash = Path.GetFileName(record.String);
-                    ulong hash = ulong.Parse(record.Hash);
-                    if (!_maincontroller.Hashdict.ContainsKey(hash))
-                        _maincontroller.Hashdict.Add(hash, record.String);
-                }
-            }
-
+            Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes.csv"));
+            Console.WriteLine("Loaded Hashes 1...");
+            Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes2.csv"));
+            Console.WriteLine("Loaded Hashes 2...");
 
             #region commands
 
@@ -58,9 +45,10 @@ namespace CP77Tools
                 new Option<bool>(new []{ "--extract", "-e"}, "Extract files from archive."),
                 new Option<bool>(new []{ "--dump", "-d"}, "Dump archive information."),
                 new Option<bool>(new []{ "--list", "-l"}, "List contents of archive."),
+                new Option<bool>(new []{ "--uncook", "-u"}, "Uncooks textures from archive."),
             };
             rootCommand.Add(archive);
-            archive.Handler = CommandHandler.Create<string, string, bool, bool, bool>(ConsoleFunctions.ArchiveTask);
+            archive.Handler = CommandHandler.Create<string, string, bool, bool, bool, bool>(ConsoleFunctions.ArchiveTask);
 
             //DumpTask(string path, bool all, bool strings, bool imports, bool buffers, bool chunks)
             var dump = new Command("dump", "Target an archive or a directory to dump archive information.")
@@ -77,16 +65,13 @@ namespace CP77Tools
             {
                 new Option<string>(new []{"--path", "-p"}, "Input path to a cr2w file."),
                 new Option<bool>(new []{ "--all", "-a"}, "Dump all information."),
-                new Option<bool>(new []{ "--strings", "-s"}, "Dump all strings in file."),
-                new Option<bool>(new []{ "--imports", "-i"}, "Dump all imports of file."),
-                new Option<bool>(new []{ "--buffers", "-b"}, "Dump all buffers of file."),
                 new Option<bool>(new []{ "--chunks", "-c"}, "Dump all class information of file."),
             };
             rootCommand.Add(cr2w);
 
             
             
-            cr2w.Handler = CommandHandler.Create<string, bool, bool, bool, bool, bool>(ConsoleFunctions.Cr2wTask);
+            cr2w.Handler = CommandHandler.Create<string, bool, bool>(ConsoleFunctions.Cr2wTask);
 
             #endregion
 
@@ -112,7 +97,25 @@ namespace CP77Tools
         }
 
 
-        
+        private static void Loadhashes(string path)
+        {
+            var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
+
+            using (var fr = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (var sr = new StreamReader(fr))
+            using (var csv = new CsvReader(sr, CultureInfo.InvariantCulture))
+            {
+                var records1 = csv.GetRecords<HashObject>();
+                var Hashdict = _maincontroller.Hashdict;
+
+                foreach (var record in records1)
+                {
+                    ulong hash = ulong.Parse(record.Hash);
+                    if (!Hashdict.ContainsKey(hash))
+                        Hashdict.Add(hash, record.String);
+                }
+            }
+        }
 
 
         

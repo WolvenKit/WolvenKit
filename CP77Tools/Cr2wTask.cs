@@ -11,7 +11,7 @@ namespace CP77Tools
     public static partial class ConsoleFunctions
     {
 
-        public static int Cr2wTask(string path, bool all, bool strings, bool imports, bool buffers, bool chunks)
+        public static int Cr2wTask(string path, bool all, bool chunks)
         {
             // initial checks
             var inputFileInfo = new FileInfo(path);
@@ -31,12 +31,13 @@ namespace CP77Tools
                 var obj = new Cr2wDumpObject();
                 obj.Filename = inputFileInfo.FullName.ToString();
 
-                if (strings || all)
+                if (all)
+                {
                     obj.Stringdict = cr2w.StringDictionary;
-                if (imports || all)
                     obj.Imports = cr2w.Imports;
-                if (buffers || all)
                     obj.Buffers = cr2w.Buffers;
+                }
+
                 if (chunks || all)
                 {
                     obj.Chunks = cr2w.Chunks;
