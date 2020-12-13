@@ -1,7 +1,7 @@
 # CP77Tools
 Modding tools for the cyberpunk 2077 game.
 
-# CP77 Tools Preview Version 0.1.2
+# CP77 Tools Preview Version 0.1.3.3
 
 - requires NET5.0.
 
@@ -16,7 +16,7 @@ CDPR modding community discord: https://discord.gg/USZwxxFrKa
 
 
 ## Usage: 
-* displays the general help
+* displays the general help: list all commands
 `--help`
 
 * displays help for a specific command
@@ -33,8 +33,11 @@ CDPR modding community discord: https://discord.gg/USZwxxFrKa
 ###Debug Options
 * dump archive info from archive
 `dump -a -p "<PATH TO ARCHIVE>.archive"`
-* dumps import info from extracted cr2w file
-`cr2w -i -p "<PATH TO FILE>"` 
+* dumps class info from extracted cr2w file
+`cr2w -c -p "<PATH TO FILE>"` 
+
+## v.0.1.3.3
+- added cr2w class layout dumps
 
 ## v.0.1.3
 - much better command line help and syntax
