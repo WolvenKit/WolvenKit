@@ -73,7 +73,7 @@ namespace WolvenKit.CR2W
 
         // misc
         private uint headerOffset = 0;
-        private bool m_hasInternalBuffer;
+        //private bool m_hasInternalBuffer;
 
         private CR2WFile additionalCr2WFile;
         private byte[] additionalCr2WFileBytes;
@@ -449,7 +449,7 @@ namespace WolvenKit.CR2W
             var dt = new CDateTime(m_fileheader.timeStamp, null, "");
 
             m_tableheaders = file.BaseStream.ReadStructs<CR2WTable>(10);
-            m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+            //m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
 
             // read strings
             m_strings = ReadStringsBuffer(file.BaseStream);
@@ -469,7 +469,7 @@ namespace WolvenKit.CR2W
 
             #endregion
 
-            return (Imports, m_hasInternalBuffer, Buffers);
+            return (Imports, false, Buffers);
         }
 
         public EFileReadErrorCodes Read(byte[] data)
@@ -511,7 +511,7 @@ namespace WolvenKit.CR2W
 
             // Tables [7-9] are not used in cr2w so far.
             m_tableheaders = file.BaseStream.ReadStructs<CR2WTable>(10);
-            m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+            //m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
 
             // read strings - block 1 (index 0)
             m_strings = ReadStringsBuffer(file.BaseStream);
@@ -546,17 +546,17 @@ namespace WolvenKit.CR2W
                 Logger?.LogProgress(percentprogress, $"Reading chunk {chunk.REDName}...");
             }
             // Read buffer data //block 6
-            if (m_hasInternalBuffer)
-            {
-                for (int i = 0; i < Buffers.Count; i++)
-                {
-                    CR2WBufferWrapper buffer = Buffers[i];
-                    buffer.ReadData(file);
+            //if (m_hasInternalBuffer)
+            //{
+            //    for (int i = 0; i < Buffers.Count; i++)
+            //    {
+            //        CR2WBufferWrapper buffer = Buffers[i];
+            //        buffer.ReadData(file);
 
-                    int percentprogress = (int)((float)i / (float)Buffers.Count * 100.0);
-                    Logger?.LogProgress(percentprogress);
-                }
-            }
+            //        int percentprogress = (int)((float)i / (float)Buffers.Count * 100.0);
+            //        Logger?.LogProgress(percentprogress);
+            //    }
+            //}
             // Read embedded files //block 7
             for (int i = 0; i < Embedded.Count; i++)
             {
@@ -758,14 +758,14 @@ namespace WolvenKit.CR2W
                 Chunks[i].SetOffset(newoffset);
                 Chunks[i].SetType((ushort)GetStringIndex(Chunks[i].REDType));
             }
-            if (m_hasInternalBuffer)
-            {
-                for (var i = 0; i < Buffers.Count; i++)
-                {
-                    var newoffset = Buffers[i].Buffer.offset + headerOffset;
-                    Buffers[i].SetOffset(newoffset);
-                }
-            }
+            //if (m_hasInternalBuffer)
+            //{
+            //    for (var i = 0; i < Buffers.Count; i++)
+            //    {
+            //        var newoffset = Buffers[i].Buffer.offset + headerOffset;
+            //        Buffers[i].SetOffset(newoffset);
+            //    }
+            //}
             for (var i = 0; i < Embedded.Count; i++)
             {
                 var newoffset = Embedded[i].Embedded.dataOffset + headerOffset;
@@ -824,14 +824,14 @@ namespace WolvenKit.CR2W
                 //the object tree to find the deferred data buffers that will point to a buffer.
                 //The flag of the parent object indicates where to read the data from.
                 //For now this is a crude workaround.
-                if (m_hasInternalBuffer)
-                {
-                    file.BaseStream.Seek(buffer.offset, SeekOrigin.Begin);
-                    var m_temp = new byte[buffer.diskSize];
-                    file.BaseStream.Read(m_temp, 0, m_temp.Length);
-                    buffer.crc32 = Crc32Algorithm.Compute(m_temp);
-                }
-                else
+                //if (m_hasInternalBuffer)
+                //{
+                //    file.BaseStream.Seek(buffer.offset, SeekOrigin.Begin);
+                //    var m_temp = new byte[buffer.diskSize];
+                //    file.BaseStream.Read(m_temp, 0, m_temp.Length);
+                //    buffer.crc32 = Crc32Algorithm.Compute(m_temp);
+                //}
+                //else
                 {
                     /*var path = String.Format("{0}.{1}.buffer", m_filePath, buffer.index);
                     if (!File.Exists(path))
@@ -1541,13 +1541,13 @@ namespace WolvenKit.CR2W
             m_fileheader.fileSize = (uint)bw.BaseStream.Position;
 
             //Write Buffer data
-            if (m_hasInternalBuffer)
-            {
-                for (var i = 0; i < Buffers.Count; i++)
-                {
-                    Buffers[i].WriteData(bw);
-                }
-            }
+            //if (m_hasInternalBuffer)
+            //{
+            //    for (var i = 0; i < Buffers.Count; i++)
+            //    {
+            //        Buffers[i].WriteData(bw);
+            //    }
+            //}
             m_fileheader.bufferSize = (uint)bw.BaseStream.Position;
 
             // Write embedded data

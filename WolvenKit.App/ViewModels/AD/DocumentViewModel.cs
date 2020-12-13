@@ -114,7 +114,7 @@ namespace WolvenKit.App.ViewModels
                     _selectedChunk = value;
                     RaisePropertyChanged(() => SelectedChunk, oldValue, value);
 
-                    SelectEditableVariables = _selectedChunk.Data.ChildrEditableVariables;
+                    SelectEditableVariables = _selectedChunk.Data.ChildrExistingVariables;
 
                 }
             }

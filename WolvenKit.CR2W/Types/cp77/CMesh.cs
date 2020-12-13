@@ -49,9 +49,9 @@ namespace WolvenKit.CR2W.Types
 		// CP77
 
 
-		//[Ordinal(18)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
-		[Ordinal(18)] [RED("resourceVersion")] public CUInt8 ResourceVersion { get; set; }
-		[Ordinal(19)] [RED("parameters")] public CArray<CHandle<meshMeshParameter>> Parameters { get; set; }
+		[Ordinal(18)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
+		[Ordinal(19)] [RED("resourceVersion")] public CUInt8 ResourceVersion { get; set; }
+		[Ordinal(20)] [RED("parameters")] public CArray<CHandle<meshMeshParameter>> Parameters { get; set; }
 
         [Ordinal(1001)] [RED("boneNames")] public CArray<CName> BoneNames { get; set; }
         [Ordinal(1002)] [RED("boneRigMatrices")] public CArray<CMatrix> BoneRigMatrices { get; set; }
@@ -78,5 +78,7 @@ namespace WolvenKit.CR2W.Types
 
         
     }
+
+
 
 }

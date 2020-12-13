@@ -9,21 +9,14 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta()]
 	public class CMatrix : CVariable
 	{
-		[Ordinal(1)] [RED("X")] 		public Vector X { get; set;}
+		[Ordinal(1)] [RED("X")] 		public Vector4 X { get; set;}
 
-		[Ordinal(2)] [RED("Y")] 		public Vector Y { get; set;}
+		[Ordinal(2)] [RED("Y")] 		public Vector4 Y { get; set;}
 
-		[Ordinal(3)] [RED("Z")] 		public Vector Z { get; set;}
+		[Ordinal(3)] [RED("Z")] 		public Vector4 Z { get; set;}
 
-		[Ordinal(4)] [RED("W")] 		public Vector W { get; set;}
+		[Ordinal(4)] [RED("W")] 		public Vector4 W { get; set;}
 
 		public CMatrix(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
-
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMatrix(cr2w, parent, name);
-
-		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
-
-		public override void Write(BinaryWriter file) => base.Write(file);
-
-	}
+    }
 }
