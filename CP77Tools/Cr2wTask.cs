@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using CP77Tools.Model;
+using Newtonsoft.Json;
 using WolvenKit.CR2W;
 
 namespace CP77Tools
@@ -19,57 +19,54 @@ namespace CP77Tools
                 return 0;
 
             var f = File.ReadAllBytes(inputFileInfo.FullName);
+            using var ms = new MemoryStream(f);
+            using var br = new BinaryReader(ms);
 
             var cr2w = new CR2WFile();
-
-            //try
+            
+            if (all)
             {
-                using var ms = new MemoryStream(f);
-                using var br = new BinaryReader(ms);
                 cr2w.ReadImportsAndBuffers(br);
 
-                var obj = new Cr2wDumpObject();
-                obj.Filename = inputFileInfo.FullName.ToString();
+                var obj = new Cr2wDumpObject { Filename = inputFileInfo.FullName };
 
-                if (all)
+                obj.Stringdict = cr2w.StringDictionary;
+                obj.Imports = cr2w.Imports;
+                obj.Buffers = cr2w.Buffers;
+                obj.Chunks = cr2w.Chunks;
+                foreach (var chunk in cr2w.Chunks)
                 {
-                    obj.Stringdict = cr2w.StringDictionary;
-                    obj.Imports = cr2w.Imports;
-                    obj.Buffers = cr2w.Buffers;
+                    obj.ChunkData.Add(chunk.GetDumpObject(br));
                 }
 
-                if (chunks || all)
+                //write
+                File.WriteAllText($"{inputFileInfo.FullName}.info.json", 
+                    JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings()
                 {
-                    obj.Chunks = cr2w.Chunks;
-                    foreach (var chunk in cr2w.Chunks)
-                    {
-                        obj.ChunkData.Add(chunk.GetDumpObject(br));
-                    }
-                }
-
-                //dump texture
-                
-
-
-
-
-
-
-
-                var joptions = new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                };
-                var jsonstring = JsonSerializer.Serialize(obj, joptions);
-
-                File.WriteAllText($"{inputFileInfo.FullName}.dump.json", jsonstring);
-                Console.WriteLine($"Finished. Dump file written to {inputFileInfo.FullName}.");
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.None,
+                    TypeNameHandling = TypeNameHandling.Auto
+                }));
+                Console.WriteLine($"Finished. Dump file written to {inputFileInfo.FullName}.info.json");
             }
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e);
-            //    throw;
-            //}
+
+            if (chunks)
+            {
+                cr2w.Read(br);
+
+                //write
+                File.WriteAllText($"{inputFileInfo.FullName}.json",
+                    JsonConvert.SerializeObject(cr2w, Formatting.Indented, new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        PreserveReferencesHandling = PreserveReferencesHandling.None,
+                        TypeNameHandling = TypeNameHandling.None
+                    }));
+                Console.WriteLine($"Finished. Dump file written to {inputFileInfo.FullName}.json");
+            }
+
+            
+            
 
             return 1;
         }

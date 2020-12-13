@@ -11,14 +11,13 @@ using System.Linq;
 using System.IO.MemoryMappedFiles;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 [assembly: ContractNamespaceAttribute("", ClrNamespace = "WolvenKit.CR2W")]
 
 namespace WolvenKit.CR2W
 {
 
-    [DataContract(Namespace = "")]
     [StructLayout(LayoutKind.Explicit, Size = 24)]
     public struct CR2WExport
     {
@@ -57,7 +56,6 @@ namespace WolvenKit.CR2W
         public uint crc32;              // created upon write   //done
     }
 
-    [DataContract(Namespace = "")]
     public class CR2WExportWrapper
     {
 
@@ -99,25 +97,34 @@ namespace WolvenKit.CR2W
         }
         #endregion
 
-        private CR2WExport _export;
-        [DataMember()]
-        public CR2WExport Export => _export;
-
         #region Fields
+        private CR2WExport _export;
 
-        [NonSerialized]
-        public CBytes unknownBytes;
+
         #endregion
 
         #region Properties
-
-        public uint offset => Export.dataOffset;
-        public uint size => Export.dataSize;
-
         [JsonIgnore]
         public CR2WFile cr2w { get; }
-        [JsonIgnore]
+
+
+        public CR2WExport Export => _export;
         public CVariable data { get; private set; }
+        public string REDType { get; private set; }
+        public string REDName => REDType + " #" + (ChunkIndex);
+
+        /// <summary>
+        /// This property is used as BindingProperty in frmChunkProperties
+        /// Do not delete!
+        /// </summary>
+        [JsonIgnore]
+        public string REDValue => this.ToString();
+
+
+        [NonSerialized]
+        [JsonIgnore]
+        public CBytes unknownBytes;
+
 
         /// <summary>
         /// Main CR2WExport.parentId wrapper
@@ -134,8 +141,8 @@ namespace WolvenKit.CR2W
             get => ParentChunkIndex == -1 ? null : cr2w.Chunks[ParentChunkIndex];
             set => ParentChunkIndex = value == null ? -1 : cr2w.Chunks.IndexOf(value);
         }
-
-        public CR2WExportWrapper VirtualParentChunk;
+        [JsonIgnore]
+        public CR2WExportWrapper VirtualParentChunk { get; set; }
 
         [JsonIgnore]
         public int VirtualParentChunkIndex => cr2w.Chunks.IndexOf(VirtualParentChunk);
@@ -151,6 +158,7 @@ namespace WolvenKit.CR2W
         /// This is the directed-graph in-edge list :
         /// CVariables, being CPtr or CHandle, which reference this chunk.
         /// </summary>
+        [JsonIgnore]
         public List<IChunkPtrAccessor> AdReferences;
 
         /// <summary>
@@ -158,13 +166,9 @@ namespace WolvenKit.CR2W
         /// This is the directed-graph out-edge list :
         /// CVariables, being CPtr or CHandle, which are referenced by this chunk.
         /// </summary>
+        [JsonIgnore]
         public List<IChunkPtrAccessor> AbReferences;
 
-        public string REDType { get; private set; }
-
-
-        [DataMember]
-        public string REDName => REDType + " #" + (ChunkIndex);
 
         public int ChunkIndex => cr2w.Chunks.IndexOf(this);
 
@@ -197,13 +201,6 @@ namespace WolvenKit.CR2W
             }
         }
 
-
-        /// <summary>
-        /// This property is used as BindingProperty in frmChunkProperties
-        /// Do not delete!
-        /// </summary>
-        public string REDValue => this.ToString();
-
         [JsonIgnore]
         public bool IsSerialized => true;
 
@@ -228,7 +225,7 @@ namespace WolvenKit.CR2W
             {
                 Name = this.REDName,
                 Type = this.REDType,
-                Size = (int)this.size,
+                Size = (int)this.Export.dataSize,
                 Offset = br.BaseStream.Position
             };
 

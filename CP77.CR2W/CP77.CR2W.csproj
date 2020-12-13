@@ -9,6 +9,7 @@
     <PackageReference Include="DotNetHelper.FastMember.Extension" Version="2.0.0" />
     <PackageReference Include="FastMember" Version="1.5.0" />
     <PackageReference Include="FastMember.NetCore" Version="1.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>

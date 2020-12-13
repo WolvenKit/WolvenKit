@@ -32,6 +32,15 @@ namespace WolvenKit.CR2W.Types
             IBCT_Max
         }
 
+        public enum GpuWrapApiVertexPackingEStreamType
+        {
+            ST_Invalid,
+            ST_PerVertex,
+            ST_PerInstance,
+            ST_Max
+        }
+        
+
         public enum GpuWrapApiVertexPackingePackingType
         {
             PT_Invalid,

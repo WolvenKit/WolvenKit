@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Schema;
 using Catel.Data;
+using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.CR2W.Reflection;
@@ -19,7 +20,6 @@ using WolvenKit.Utils;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
     public abstract class CVariable : ObservableObject, IEditableVariable
     {
         protected CVariable()
@@ -42,16 +42,21 @@ namespace WolvenKit.CR2W.Types
 
 
         #region Fields
+        [JsonIgnore]
         public readonly TypeAccessor accessor;
 
         #endregion
 
         #region Properties
 
+        [JsonIgnore]
+        public List<CVariable> UnknownCVariables { get; set; } = new List<CVariable>();
+
         /// <summary>
         /// Stores the parent cr2w file.
         /// used a lot
         /// </summary>
+        [JsonIgnore]
         public CR2WFile cr2w { get; set; }
 
         /// <summary>
@@ -61,6 +66,7 @@ namespace WolvenKit.CR2W.Types
         /// Is set upon read
         /// Must also be set when a variable is edited in the editor
         /// </summary>
+        [JsonIgnore]
         public bool IsSerialized { get; set; }
         public void SetIsSerialized()
         {
@@ -79,7 +85,6 @@ namespace WolvenKit.CR2W.Types
         /// Is set on file read and should not be modified
         /// </summary>
         public ushort REDFlags => ParentVar?.REDFlags ?? _redFlags;
-
         public void SetREDFlags(ushort flag) => _redFlags = flag;
 
         /// <summary>
@@ -87,6 +92,7 @@ namespace WolvenKit.CR2W.Types
         /// should be replaced by a better hashing algorithm
         /// or the Fullname method
         /// </summary>
+        [JsonIgnore]
         public Guid InternalGuid { get; set; }
 
         /// <summary>
@@ -199,12 +205,14 @@ namespace WolvenKit.CR2W.Types
             return currentcvar.VarChunkIndex;
         }
 #if DEBUG
+        [JsonIgnore]
         public int GottenVarChunkIndex => LookUpChunkIndex();
 #endif
 
         #region Virtual
-
+        [JsonIgnore]
         public List<IEditableVariable> ChildrEditableVariables => GetEditableVariables();
+        
         public List<IEditableVariable> ChildrExistingVariables => GetExistingVariables(false);
 
         /// <summary>
@@ -387,7 +395,7 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-        public List<CVariable> UnknownCVariables { get; set; } = new List<CVariable>();
+        
 
         /// <summary>
         /// Instantiates and reads all REDVariables and REDBuffers in a CVariable 

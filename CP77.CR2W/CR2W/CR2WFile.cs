@@ -16,6 +16,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
 using System.Collections.ObjectModel;
 using Catel.Data;
+using Newtonsoft.Json;
 using WolvenKit.CR2W.Types.Utils;
 
 namespace WolvenKit.CR2W
@@ -69,7 +70,7 @@ namespace WolvenKit.CR2W
         private CR2WFileHeader m_fileheader;
         private CR2WTable[] m_tableheaders;
         private byte[] m_strings;
-        public Dictionary<uint, string> StringDictionary { get; private set; }
+        
 
         // misc
         private uint headerOffset = 0;
@@ -80,44 +81,38 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Properties
-
+        [JsonIgnore]
         public ILoggerService Logger { get; }
+        [JsonIgnore]
+        public ILocalizedStringSource LocalizedStringSource { get; set; }
+        [JsonIgnore]
+        public IVariableEditor EditorController { get; set; }
 
-        // Tables
+        [JsonIgnore]
+        public Dictionary<int, CR2WExportWrapper> Chunksdict { get; private set; }
+        [JsonIgnore]
+        public List<LocalizedString> LocalizedStrings = new List<LocalizedString>();
+
+
+        public string FileName { get; set; }
+        public readonly List<string> UnknownTypes = new List<string>();
+
+        public Dictionary<uint, string> StringDictionary { get; private set; }
+
+        [JsonIgnore]
         public List<CR2WNameWrapper> Names { get; private set; }
         public List<CR2WImportWrapper> Imports { get; private set; }
         public List<CR2WPropertyWrapper> Properties { get; private set; }
-
-        //[DataMember(Order = 2)]
-
         public List<CR2WExportWrapper> Chunks { get; private set; }
         public List<CR2WBufferWrapper> Buffers { get; private set; }
         public List<CR2WEmbeddedWrapper> Embedded { get; private set; }
 
-        public void GenerateChunksDict() => Chunksdict = Chunks.ToDictionary(_ => _.ChunkIndex, _ => _);
-        public Dictionary<int, CR2WExportWrapper> Chunksdict { get; private set; }
-
-        public List<LocalizedString> LocalizedStrings = new List<LocalizedString>();
-        public readonly List<string> UnknownTypes = new List<string>();
-
-        public string FileName { get; set; }
-
-
-        /// <summary>
-        ///     LocalizedStringSource
-        /// </summary>
-        public ILocalizedStringSource LocalizedStringSource { get; set; }
-
-        /// <summary>
-        ///     EditorController
-        /// </summary>
-        public IVariableEditor EditorController { get; set; }
 
         #endregion
 
         #region Supporting Functions
 
-
+        public void GenerateChunksDict() => Chunksdict = Chunks.ToDictionary(_ => _.ChunkIndex, _ => _);
 
         // Does not reindex /TODO
         public CR2WExportWrapper CreateChunk(string type, int chunkindex = 0, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null, CVariable cvar = null)
