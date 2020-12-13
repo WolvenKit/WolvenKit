@@ -310,13 +310,16 @@ namespace WolvenKit.App.Model
             {
                 DDSUtils.GenerateAndWriteHeader(bw.BaseStream, GetDDSMetadata(xbm));
 
-                bw.Write(xbm.GetBytes());
+                //TODO: deprecated
+                throw new NotImplementedException();
+                //bw.Write(xbm.GetBytes());
 
                 ms.Flush();
 
                 return ms.ToArray();
             }
         }
+
 
         /// <summary>
         /// Generate DDSMetadata from a Redengine CBitmapTexture
@@ -325,39 +328,42 @@ namespace WolvenKit.App.Model
         /// <returns></returns>
         private static DDSMetadata GetDDSMetadata(CBitmapTexture xbm)
         {
-            int residentMipIndex = xbm.ResidentMipIndex?.val ?? 0;
+            //TODO: deprecated
+            throw new NotImplementedException();
+
+            //int residentMipIndex = xbm.ResidentMipIndex?.val ?? 0;
                 
-            int mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
+            //int mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
 
-            uint width = xbm.Mipdata.elements[residentMipIndex].Width.val;
-            uint height = xbm.Mipdata.elements[residentMipIndex].Height.val;
+            //uint width = xbm.Mipdata.elements[residentMipIndex].Width.val;
+            //uint height = xbm.Mipdata.elements[residentMipIndex].Height.val;
 
-            ETextureCompression compression = xbm.Compression.WrappedEnum;
+            //ETextureCompression compression = xbm.Compression.WrappedEnum;
 
-            var ddsformat = ImageUtility.GetEFormatFromCompression(compression);
+            //var ddsformat = ImageUtility.GetEFormatFromCompression(compression);
 
 
-            // TODO: TEST THIS
-            if (ddsformat == EFormat.R8G8B8A8_UNORM)
-            {
-                ETextureRawFormat format = xbm.Format.WrappedEnum;
-                switch (format)
-                {
+            //// TODO: TEST THIS
+            //if (ddsformat == EFormat.R8G8B8A8_UNORM)
+            //{
+            //    ETextureRawFormat format = xbm.Format.WrappedEnum;
+            //    switch (format)
+            //    {
                     
-                    case ETextureRawFormat.TRF_Grayscale:   // only this is ever used
-                        break;
-                    case ETextureRawFormat.TRF_TrueColor:   // this is set if format is NULL
-                    case ETextureRawFormat.TRF_HDR:
-                    case ETextureRawFormat.TRF_AlphaGrayscale:
-                    case ETextureRawFormat.TRF_HDRGrayscale:
-                    default:
-                        ddsformat = EFormat.R8G8B8A8_UNORM;
-                        //throw new Exception("Invalid texture format type! [" + format + "]");
-                        break;
-                }
-            }
+            //        case ETextureRawFormat.TRF_Grayscale:   // only this is ever used
+            //            break;
+            //        case ETextureRawFormat.TRF_TrueColor:   // this is set if format is NULL
+            //        case ETextureRawFormat.TRF_HDR:
+            //        case ETextureRawFormat.TRF_AlphaGrayscale:
+            //        case ETextureRawFormat.TRF_HDRGrayscale:
+            //        default:
+            //            ddsformat = EFormat.R8G8B8A8_UNORM;
+            //            //throw new Exception("Invalid texture format type! [" + format + "]");
+            //            break;
+            //    }
+            //}
 
-            return new DDSMetadata(width, height, (uint)mipcount, ddsformat);
+            //return new DDSMetadata(width, height, (uint)mipcount, ddsformat);
         }
 
         /// <summary>
