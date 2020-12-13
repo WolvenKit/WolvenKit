@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 
         [Browsable(false)]
-        public List<int> Flags { get; set; }
+        //public List<int> Flags { get; set; }
         public string Elementtype { get; set; }
         public Type InnerType => this.GetType().GetGenericArguments().Single();
         #endregion
@@ -37,9 +37,10 @@ namespace WolvenKit.CR2W.Types
         {
             get
             {
-                return Flags != null
-                    ? BuildTypeName(Elementtype, Flags.ToArray())
-                    : BuildTypeName(Elementtype);
+                return BuildTypeName(Elementtype);
+                //return Flags != null
+                //    ? BuildTypeName(Elementtype, Flags.ToArray())
+                //    : BuildTypeName(Elementtype);
             }
         }
 

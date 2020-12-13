@@ -293,7 +293,7 @@ namespace WolvenKit.App.ViewModels
                             {
                                 FileName = path
 							};
-                            errorcode = await File.Read(reader);
+                            errorcode = File.Read(reader);
                         }
                         else
                         {
@@ -306,7 +306,7 @@ namespace WolvenKit.App.ViewModels
 
                                 LocalizedStringSource = MainController.Get()
                             };
-                            errorcode = await File.Read(reader);
+                            errorcode = File.Read(reader);
 
                             //File.PropertyChanged += File_PropertyChanged;
                         }

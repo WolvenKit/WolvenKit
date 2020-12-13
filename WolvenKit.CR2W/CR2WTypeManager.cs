@@ -102,47 +102,14 @@ namespace WolvenKit.CR2W.Types
                     case "array":
                         {
                             // match pattern e.g. 
-                            // array:            Array: (2),(0),(handle:CBitmapTexture)
-                            // array:            Array: (2),(0),(Int32)
-                            // array of array:   Array: (2),(0),(Array:133,0,EngineQsTransform)
+                            // array:            (array:)Float
+                            // array of array:   (array:)handle:meshMeshAppearance
 
-                            
-                            string[] arraysplits = innertype.Split(',');
-                            
-                            string body = string.Join(",", arraysplits.Skip(2));
-                            if (arraysplits.Length >= 3)
-                            {
-                                // TODO: they got rid of this in CP77!
-                                string flag1 = arraysplits[0];
-                                string flag2 = arraysplits[1];
 
-                                //byte arrays, these can be huge, using ordinary arrays is just too slow.
-                                if (body == "Uint8" || body == "Int8")
-                                {
-                                    var bytearray = new CByteArray(cr2w, parentVariable, varname);
-                                    // save the actual redengine type for serialization: e.g. array:2,0,Uint8
-                                    bytearray.InternalType = typename;
-                                    return bytearray;
-                                }
-
-                                // all other arrays
-                                CVariable innerobject = Create(body, "", cr2w, null);
-                                IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
-                                arrayacc.Flags = new List<int>() { int.Parse(flag1), int.Parse(flag2) };
-                                if (innerobject is IArrayAccessor accessor && accessor.Flags != null)
-                                {
-                                    arrayacc.Flags.AddRange(accessor.Flags);
-                                }
-                                arrayacc.Elementtype = body;
-                                return arrayacc as CVariable;
-                            }
-                            else
-                            {
-                                CVariable innerobject = Create(innertype, "", cr2w, null);
-                                IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
-                                arrayacc.Elementtype = body;
-                                return arrayacc as CVariable;
-                            }
+                            CVariable innerobject = Create(innertype, "", cr2w, null);
+                            IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
+                            arrayacc.Elementtype = innertype;
+                            return arrayacc as CVariable;
                         }
                     case "static":
                         {
@@ -156,7 +123,7 @@ namespace WolvenKit.CR2W.Types
                             {
                                 CVariable innerobject = Create(matchArrayType.Groups[2].Value, "", cr2w, null);
                                 var arrayacc = MakeArray(typeof(CStatic<>), innerobject.GetType());
-                                arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value) };
+                                //arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value) };
                                 arrayacc.Elementtype = matchArrayType.Groups[2].Value;
                                 return arrayacc as CVariable;
                             }
@@ -204,57 +171,28 @@ namespace WolvenKit.CR2W.Types
             }
             else
             {
-                #region FIXED SIZE ARRAYS
-                // match pattern e.g. 
-                // [(1)](Bezier2dHandle)
-                var regFixedSizeArray = new Regex(@"^\[(\d+)\](.+)$");
-                var matchFixedSizeArray = regFixedSizeArray.Match(typename);
-                if (matchFixedSizeArray.Success)
+
+                // check if custom type
+                if (CR2WManager.TypeExists(typename))
                 {
-                    CVariable innerobject = Create(matchFixedSizeArray.Groups[2].Value, "", cr2w, null);
-                    var arrayacc = MakeArray(typeof(CArrayFixedSize<>), innerobject.GetType());
-                    arrayacc.Flags = new List<int>() { int.Parse(matchFixedSizeArray.Groups[1].Value) };
-                    arrayacc.Elementtype = matchFixedSizeArray.Groups[2].Value;
-                    return arrayacc as CVariable;
+                    var type = CR2WManager.GetTypeByName(typename);
+                    object instance = Activator.CreateInstance(type, cr2w, parentVariable, varname);
+                    return instance as CVariable;
                 }
-                #endregion
-                
-                if (fullname.Contains("@SItem"))
+
+
+                // this should never happen
+
+                if (!cr2w.UnknownTypes.Contains(fullname))
+                    cr2w.UnknownTypes.Add(fullname);
+
+                if (readUnknownAsBytes)
                 {
-                    cr2w.UnknownTypes.Add($"Congratulations! You have found one of the hidden e3 files! These files are special." +
-                        $" If you edited this file and are experiencing errors, please contact a member of the Wkit Team. ErrorCode: {fullname}");
-                    return new SItem(cr2w, parentVariable, varname);
-                }
-                else if (fullname.Contains("#CEnvironmentDefinition"))
-                {
-                    cr2w.UnknownTypes.Add($"Congratulations! You have found one of the hidden e3 files! These files are special." +
-                        $" If you edited this file and are experiencing errors, please contact a member of the Wkit Team. ErrorCode: {fullname}");
-                    return new CHandle<CEnvironmentDefinition>(cr2w, parentVariable, varname);
+                    return new CBytes(cr2w, parentVariable, $"UNKNOWN:{typename}:{varname}");
                 }
                 else
-                {
-                    // check if custom type
-                    if (CR2WManager.TypeExists(typename))
-                    {
-                        var type = CR2WManager.GetTypeByName(typename);
-                        object instance = Activator.CreateInstance(type, cr2w, parentVariable, varname);
-                        return instance as CVariable;
-                    }
+                    return null;
 
-
-                    // this should never happen
-
-                    if (!cr2w.UnknownTypes.Contains(fullname))
-                        cr2w.UnknownTypes.Add(fullname);
-
-                    if (readUnknownAsBytes)
-                    {
-                        return new CBytes(cr2w, parentVariable, $"UNKNOWN:{typename}:{varname}");
-                    }
-                    else
-                        return null;
-                }
-                
             }            
                 
 

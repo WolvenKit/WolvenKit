@@ -180,7 +180,7 @@ namespace WolvenKit.App.ViewModels
                     {
                         FileName = filename
                     };
-                    errorcode = await File.Read(reader);
+                    errorcode = File.Read(reader);
                     RaisePropertyChanged(nameof(File));
                 }
                 else
@@ -193,7 +193,7 @@ namespace WolvenKit.App.ViewModels
 
                         LocalizedStringSource = MainController.Get()
                     };
-                    errorcode = await File.Read(reader);
+                    errorcode = File.Read(reader);
                     RaisePropertyChanged(nameof(File));
 
                     File.PropertyChanged += File_PropertyChanged;
