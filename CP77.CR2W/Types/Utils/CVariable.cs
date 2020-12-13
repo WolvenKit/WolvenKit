@@ -15,6 +15,7 @@ using Catel.Data;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.CR2W.Reflection;
+using WolvenKit.Utils;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -204,6 +205,7 @@ namespace WolvenKit.CR2W.Types
         #region Virtual
 
         public List<IEditableVariable> ChildrEditableVariables => GetEditableVariables();
+        public List<IEditableVariable> ChildrExistingVariables => GetExistingVariables(false);
 
         /// <summary>
         /// Gets the list of RED and REDBuffer variables from a CVariable
@@ -240,7 +242,7 @@ namespace WolvenKit.CR2W.Types
 
         public List<IEditableVariable> GetExistingVariables(bool includeBuffers = true)
         {
-            List<IEditableVariable> redvariables = new List<IEditableVariable>();
+            List<IEditableVariable> redvariables = new List<IEditableVariable>(UnknownCVariables);
 
             foreach (Member item in this.GetREDMembers(includeBuffers))
             {
@@ -321,28 +323,44 @@ namespace WolvenKit.CR2W.Types
                 List<string> dbg_varnames = new List<string>();
                 while (true)
                 {
-                    //cvar is a "children variable" : a property of a class.
-                    var cvar = cr2w.ReadVariable(file, this);
-                    if (cvar == null)
-                        break;
 
-                    cvar.IsSerialized = true;
+                    try
+                    {
+                        //cvar is a "children variable" : a property of a class.
+                        var cvar = cr2w.ReadVariable(file, this);
+                        if (cvar == null)
+                            break;
+
+                        cvar.IsSerialized = true;
 
 #if DEBUG
-                    dbg_varnames.Add($"[{cvar.REDType}] {cvar.REDName}");
+                        dbg_varnames.Add($"[{cvar.REDType}] {cvar.REDName}");
 #endif
 
-                    // unknown types
-                    if (cvar.REDName.Contains("UNKNOWN:"))
-                    {
-                        UnknownCVariables.Add(cvar);
+                        // unknown types
+                        if (cvar.REDName.Contains("UNKNOWN:"))
+                        {
+                            UnknownCVariables.Add(cvar);
+                        }
+                        else
+                        {
+                            TrySettingFastMemberAccessor(cvar);
+                        }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        TrySettingFastMemberAccessor(cvar);
+                        Console.WriteLine(e);
+                        throw;
                     }
+
+                    
                 }
                 #endregion
+
+                //dbg
+                var endpos1 = file.BaseStream.Position;
+                var bytesread1 = endpos1 - startpos;
+                var bytesleft = size - bytesread1;
 
                 // parse only buffers
                 ReadAllRedVariables<REDBufferAttribute>(file);
@@ -352,6 +370,10 @@ namespace WolvenKit.CR2W.Types
                 var bytesread = endpos - startpos;
                 if (bytesread > size)
                 {
+                    if (size > 0)
+                    {
+
+                    }
                     // parsed to far: possible file corruption
                     // BUT: this check is impossible for elements of an array.
                     // in this case, passed size is 0, so we can check for that
@@ -418,16 +440,24 @@ namespace WolvenKit.CR2W.Types
             varname = NormalizeName(varname);
             foreach (var member in this.accessor.GetMembers())
             {
-                if (member.Name == varname)
+                try
                 {
+                    if (member.Name == varname)
+                    {
 
-                    accessor[this, varname] = value;
-                    return true;
+                        accessor[this, varname] = value;
+                        return true;
+                    }
+                    else if (member.Name == varname.FirstCharToLower())
+                    {
+                        accessor[this, varname.FirstCharToLower()] = value;
+                        return true;
+                    }
                 }
-                else if (member.Name == varname.FirstCharToLower())
+                catch (Exception e)
                 {
-                    accessor[this, varname.FirstCharToLower()] = value;
-                    return true;
+                    Console.WriteLine(e);
+                    throw;
                 }
             }
             Debug.WriteLine($"({value.REDType}){varname} not found in ({this.REDType}){this.REDName}");

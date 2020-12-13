@@ -9,7 +9,7 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta]
-    public class rendRenderTextureBlobPC : CVariable
+    public class rendRenderTextureBlobPC : IRenderResourceBlob
     {
         [Ordinal(1)] [RED("header")] public rendRenderTextureBlobHeader Header { get; set; }
         [Ordinal(2)] [RED("textureData")] public serializationDeferredDataBuffer TextureData { get; set; }
@@ -105,4 +105,7 @@ namespace WolvenKit.CR2W.Types
 
 
     }
+
+
+
 }

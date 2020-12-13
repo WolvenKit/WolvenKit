@@ -16,12 +16,11 @@ using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
 using System.Collections.ObjectModel;
 using Catel.Data;
-using WolvenKit.Common;
 using WolvenKit.CR2W.Types.Utils;
 
 namespace WolvenKit.CR2W
 {
-    public class CR2WFile : ObservableObject, IWolvenkitFile
+    public class CR2WFile : Catel.Data.ObservableObject, IWolvenkitFile
     {
         #region Enums
         public enum EChunkDisplayMode
@@ -30,7 +29,7 @@ namespace WolvenKit.CR2W
             Parent,
             VirtualParent
         }
-        
+
         #endregion
 
         #region Constants
@@ -49,11 +48,12 @@ namespace WolvenKit.CR2W
             Buffers = new List<CR2WBufferWrapper>();        //block 6
             Embedded = new List<CR2WEmbeddedWrapper>();     //block 7
 
-            m_fileheader = new CR2WFileHeader(){
+            m_fileheader = new CR2WFileHeader()
+            {
                 version = 162,
             };
 
-            
+
             Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
             StringDictionary = new Dictionary<uint, string>();
@@ -73,7 +73,7 @@ namespace WolvenKit.CR2W
 
         // misc
         private uint headerOffset = 0;
-        private bool m_hasInternalBuffer;
+        //private bool m_hasInternalBuffer;
 
         private CR2WFile additionalCr2WFile;
         private byte[] additionalCr2WFileBytes;
@@ -102,7 +102,7 @@ namespace WolvenKit.CR2W
 
         public string FileName { get; set; }
 
-       
+
         /// <summary>
         ///     LocalizedStringSource
         /// </summary>
@@ -120,7 +120,7 @@ namespace WolvenKit.CR2W
 
 
         // Does not reindex /TODO
-        public CR2WExportWrapper CreateChunk(string type, int chunkindex=0, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null, CVariable cvar = null)
+        public CR2WExportWrapper CreateChunk(string type, int chunkindex = 0, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null, CVariable cvar = null)
         {
             var chunk = new CR2WExportWrapper(this, type, parent);
             if (cvar != null)
@@ -132,7 +132,7 @@ namespace WolvenKit.CR2W
                 chunk.CreateDefaultData(cvar);
             }
 
-            if (parent!=null)
+            if (parent != null)
             {
                 chunk.ParentChunk = parent;
             }
@@ -146,7 +146,7 @@ namespace WolvenKit.CR2W
         }
 
         // Does not reindex /TODO
-        public CR2WExportWrapper CreateChunk(CVariable cvar, int chunkindex=0, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null)
+        public CR2WExportWrapper CreateChunk(CVariable cvar, int chunkindex = 0, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null)
         {
             // checks to see if the variable from which the chunk is built is properly constructed
             if (cvar == null || cvar.REDName != cvar.REDType || cvar.ParentVar != null)
@@ -185,7 +185,7 @@ namespace WolvenKit.CR2W
             EChunkDisplayMode recursionmode = EChunkDisplayMode.VirtualParent,
             bool purgereferrers = false,
             bool reentrant = false,
-            Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)> passedoldparentinghierarchy= null)
+            Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)> passedoldparentinghierarchy = null)
         {
             int removed = onlychildren ? 0 : 1;
 
@@ -199,7 +199,7 @@ namespace WolvenKit.CR2W
                 }
             }
 
-            foreach(var chunk in toberemovedchunks)
+            foreach (var chunk in toberemovedchunks)
             {
                 // Nullify references toward this chunk
                 if ((!onlychildren && !reentrant) || reentrant)
@@ -382,7 +382,7 @@ namespace WolvenKit.CR2W
             // The "size" variable read is something a bit strange : it takes itself into account.
             //try
             //{
-                parsedvar.Read(file, size - 4);
+            parsedvar.Read(file, size - 4);
             //}
             //catch
             //{
@@ -449,7 +449,7 @@ namespace WolvenKit.CR2W
             var dt = new CDateTime(m_fileheader.timeStamp, null, "");
 
             m_tableheaders = file.BaseStream.ReadStructs<CR2WTable>(10);
-            m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+            //m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
 
             // read strings
             m_strings = ReadStringsBuffer(file.BaseStream);
@@ -469,10 +469,17 @@ namespace WolvenKit.CR2W
 
             #endregion
 
-            return (Imports, m_hasInternalBuffer, Buffers);
+            return (Imports, false, Buffers);
         }
 
-        public async Task<EFileReadErrorCodes> Read(byte[] data)
+        public EFileReadErrorCodes Read(byte[] data)
+        {
+            using var ms = new MemoryStream(data);
+            using var br = new BinaryReader(ms);
+            return Read(br);
+        }
+
+        public async Task<EFileReadErrorCodes> ReadAsync(byte[] data)
         {
             await using var ms = new MemoryStream(data);
             using var br = new BinaryReader(ms);
@@ -504,11 +511,11 @@ namespace WolvenKit.CR2W
 
             // Tables [7-9] are not used in cr2w so far.
             m_tableheaders = file.BaseStream.ReadStructs<CR2WTable>(10);
-            m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+            //m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
 
             // read strings - block 1 (index 0)
             m_strings = ReadStringsBuffer(file.BaseStream);
-            
+
             // read the other tables
             Names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList(); // block 2
             Imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList(); // block 3
@@ -539,17 +546,17 @@ namespace WolvenKit.CR2W
                 Logger?.LogProgress(percentprogress, $"Reading chunk {chunk.REDName}...");
             }
             // Read buffer data //block 6
-            if (m_hasInternalBuffer)
-            {
-                for (int i = 0; i < Buffers.Count; i++)
-                {
-                    CR2WBufferWrapper buffer = Buffers[i];
-                    buffer.ReadData(file);
+            //if (m_hasInternalBuffer)
+            //{
+            //    for (int i = 0; i < Buffers.Count; i++)
+            //    {
+            //        CR2WBufferWrapper buffer = Buffers[i];
+            //        buffer.ReadData(file);
 
-                    int percentprogress = (int)((float)i / (float)Buffers.Count * 100.0);
-                    Logger?.LogProgress(percentprogress);
-                }
-            }
+            //        int percentprogress = (int)((float)i / (float)Buffers.Count * 100.0);
+            //        Logger?.LogProgress(percentprogress);
+            //    }
+            //}
             // Read embedded files //block 7
             for (int i = 0; i < Embedded.Count; i++)
             {
@@ -569,7 +576,7 @@ namespace WolvenKit.CR2W
             if (readbytes != file.BaseStream.Length)
             {
                 var bytesleft = file.BaseStream.Length - readbytes;
-                additionalCr2WFileBytes = file.ReadBytes((int) bytesleft);
+                additionalCr2WFileBytes = file.ReadBytes((int)bytesleft);
 
 
             }
@@ -611,7 +618,7 @@ namespace WolvenKit.CR2W
             var m_temp = new byte[m_strings_size];
             stream.Read(m_temp, 0, m_temp.Length);
 
-            
+
             uint offset = 0;
             var tempstring = new List<byte>();
             for (uint i = 0; i < m_strings_size; i++)
@@ -662,7 +669,7 @@ namespace WolvenKit.CR2W
             m_tableheaders[0].itemCount = (uint)m_strings.Length;
             m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
 
-            
+
 
             #endregion
 
@@ -749,16 +756,16 @@ namespace WolvenKit.CR2W
             {
                 var newoffset = Chunks[i].Export.dataOffset + headerOffset;
                 Chunks[i].SetOffset(newoffset);
-                Chunks[i].SetType( (ushort)GetStringIndex(Chunks[i].REDType));
+                Chunks[i].SetType((ushort)GetStringIndex(Chunks[i].REDType));
             }
-            if (m_hasInternalBuffer)
-            {
-                for (var i = 0; i < Buffers.Count; i++)
-                {
-                    var newoffset = Buffers[i].Buffer.offset + headerOffset;
-                    Buffers[i].SetOffset(newoffset);
-                }
-            }
+            //if (m_hasInternalBuffer)
+            //{
+            //    for (var i = 0; i < Buffers.Count; i++)
+            //    {
+            //        var newoffset = Buffers[i].Buffer.offset + headerOffset;
+            //        Buffers[i].SetOffset(newoffset);
+            //    }
+            //}
             for (var i = 0; i < Embedded.Count; i++)
             {
                 var newoffset = Embedded[i].Embedded.dataOffset + headerOffset;
@@ -817,14 +824,14 @@ namespace WolvenKit.CR2W
                 //the object tree to find the deferred data buffers that will point to a buffer.
                 //The flag of the parent object indicates where to read the data from.
                 //For now this is a crude workaround.
-                if (m_hasInternalBuffer)
-                {
-                    file.BaseStream.Seek(buffer.offset, SeekOrigin.Begin);
-                    var m_temp = new byte[buffer.diskSize];
-                    file.BaseStream.Read(m_temp, 0, m_temp.Length);
-                    buffer.crc32 = Crc32Algorithm.Compute(m_temp);
-                }
-                else
+                //if (m_hasInternalBuffer)
+                //{
+                //    file.BaseStream.Seek(buffer.offset, SeekOrigin.Begin);
+                //    var m_temp = new byte[buffer.diskSize];
+                //    file.BaseStream.Read(m_temp, 0, m_temp.Length);
+                //    buffer.crc32 = Crc32Algorithm.Compute(m_temp);
+                //}
+                //else
                 {
                     /*var path = String.Format("{0}.{1}.buffer", m_filePath, buffer.index);
                     if (!File.Exists(path))
@@ -985,7 +992,7 @@ namespace WolvenKit.CR2W
                 chunkguidlist.Add(c.data.InternalGuid);
                 LoopWrapper(new SNameArg(EStringTableMod.SkipName, c.data));
             }
-            
+
             newimportslist.AddRange(newsoftlist);
 
             return (newnameslist.Values.ToList(), newimportslist);
@@ -1022,241 +1029,241 @@ namespace WolvenKit.CR2W
 
 
 
-        //struct SNameArg zobi ;
-        List<SNameArg> GetVariables(IEditableVariable ivar)
-        {
-            //check for looping references
-            if (guidlist.Contains(ivar.InternalGuid))
-                return null;
-            else
-                guidlist.Add(ivar.InternalGuid);
-
-            var returnedVariables = new List<SNameArg>();
-
-            // if variable is generic type or some special case 
-            switch(ivar)
+            //struct SNameArg zobi ;
+            List<SNameArg> GetVariables(IEditableVariable ivar)
             {
-                case IArrayAccessor a:
-                    switch(a)
-                    {
-                        case CArray<CName> cacn:
-                            returnedVariables.Add(new SNameArg(EStringTableMod.None, a)); ///???
-                            break;
-                        case CArray<CBool> cacb:
-                        case CArray<CUInt16> cacu16:
-                        case CArray<CInt16> caci16:
-                        case CArray<CUInt32> cacu32:
-                        case CArray<CInt32> caci32:
-                        case CArray<CUInt64> cacu64:
-                        case CArray<CInt64> caci64:
-                            break;
-                        default:
-                            var elements = a.GetEditableVariables();
-                            foreach (var item in elements)
-                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item));
-                            break;
-                    }
-                    break;
-                case IPtrAccessor p:
-                    if (p.Reference != null)
-                        returnedVariables.Add(new SNameArg(EStringTableMod.None, p.Reference.data));
-                    break;
-                case IHandleAccessor h:
-                    if (h.ChunkHandle)
-                        if (h.Reference != null)
-                            returnedVariables.Add(new SNameArg(EStringTableMod.None, h.Reference.data));
-                    break;
-                case ISoftAccessor s:
-                    break;
-                case IBufferVariantAccessor ivariant:
-                    EStringTableMod mod = EStringTableMod.None;
-                    if (ivariant is CVariantSizeType)
-                        mod = EStringTableMod.SkipName;
-                    returnedVariables.Add(new SNameArg(mod, ivariant.Variant));
-                    break;
-                case CVariant cVariant:
-                    returnedVariables.Add(new SNameArg(EStringTableMod.SkipName, cVariant.Variant));
-                    break;
-                case IdHandle i:
-                    returnedVariables.Add(new SNameArg(EStringTableMod.None, i));
-                    returnedVariables.Add(new SNameArg(EStringTableMod.None, i.handle.Reference?.data));
-                    break;
-                // check all other CVariables
-                case CVariable cvar:
+                //check for looping references
+                if (guidlist.Contains(ivar.InternalGuid))
+                    return null;
+                else
+                    guidlist.Add(ivar.InternalGuid);
+
+                var returnedVariables = new List<SNameArg>();
+
+                // if variable is generic type or some special case 
+                switch (ivar)
                 {
-                    // add parent if not already in guidlist
-                    // don't add array type parents, don't add IBufferVariantAccessor type parents
-                    if (cvar.ParentVar != null
-                        && !cvar.ParentVar.GetType().IsGenericType
-                        && !(cvar.ParentVar is IBufferVariantAccessor)
-                        && !(cvar.ParentVar is SEntityBufferType2)
-                        && !guidlist.Contains(cvar.ParentVar.InternalGuid))
-                    {
-                        returnedVariables.Add(new SNameArg(EStringTableMod.None, cvar.ParentVar));
-                    }
-
-                    // add all normal REDProperties
-                    returnedVariables.AddRange(cvar.GetExistingVariables(false)
-                        .Select(_ => new SNameArg(EStringTableMod.None, _)));
-
-                    // for all buffers
-                    #region Buffer Hacks After Variables
-                    switch (cvar)
-                    {
-                        case CFoliageResource cfr:
-                            if (cfr.Trees != null)
-                                returnedVariables.AddRange(cfr.Trees.Select(item =>
-                                    new SNameArg(EStringTableMod.SkipNameAndType, item.Treetype)));
-                            if (cfr.Grasses != null)
-                                returnedVariables.AddRange(cfr.Grasses.Select(item =>
-                                    new SNameArg(EStringTableMod.SkipNameAndType, item.Treetype)));
-                            break;
-                        case CClipMap cm:
-                            returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, cm.TerrainTiles));
-                            break;
-                        case CUmbraScene cus:
-                            if (cus.Tiles != null)
-                                returnedVariables.AddRange(cus.Tiles.Select(item =>
-                                    new SNameArg(EStringTableMod.SkipNameAndType, item)));
-                            break;
-                        case CSkeletalAnimationSetEntry csase:
-                            if (csase.Entries != null)
-                                returnedVariables.AddRange(csase.Entries.Select(item =>
-                                    new SNameArg(EStringTableMod.SkipNameAndType, item)));
-                            break;
-                        case CLayerInfo cli:
-                            returnedVariables.Add(new SNameArg(EStringTableMod.None, cli.ParentGroup.Reference?.data));
-                            break;
-                        case CMaterialInstance cmi:
-                            if (cmi.InstanceParameters != null)
-                                returnedVariables.AddRange(cmi.InstanceParameters.Select(iparam =>
-                                    new SNameArg(EStringTableMod.SkipNameAndType, iparam)));
-                            break;
-                        case CMesh cm:
-                            returnedVariables.Add(new SNameArg(EStringTableMod.None, cm.BoneNames));
-                            break;
-                        case CBehaviorGraphContainerNode bgcn:
-                            if (bgcn.Inputnodes != null)
-                                returnedVariables.AddRange(bgcn.Inputnodes.Select(item =>
-                                    new SNameArg(EStringTableMod.None, (item.Reference?.data))));
-                            returnedVariables.Add(new SNameArg(EStringTableMod.None, bgcn.Unk1));
-                            returnedVariables.Add(new SNameArg(EStringTableMod.None, bgcn.Unk2));
-                            switch (bgcn)
+                    case IArrayAccessor a:
+                        switch (a)
+                        {
+                            case CArray<CName> cacn:
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, a)); ///???
+                                break;
+                            case CArray<CBool> cacb:
+                            case CArray<CUInt16> cacu16:
+                            case CArray<CInt16> caci16:
+                            case CArray<CUInt32> cacu32:
+                            case CArray<CInt32> caci32:
+                            case CArray<CUInt64> cacu64:
+                            case CArray<CInt64> caci64:
+                                break;
+                            default:
+                                var elements = a.GetEditableVariables();
+                                foreach (var item in elements)
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item));
+                                break;
+                        }
+                        break;
+                    case IPtrAccessor p:
+                        if (p.Reference != null)
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, p.Reference.data));
+                        break;
+                    case IHandleAccessor h:
+                        if (h.ChunkHandle)
+                            if (h.Reference != null)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, h.Reference.data));
+                        break;
+                    case ISoftAccessor s:
+                        break;
+                    case IBufferVariantAccessor ivariant:
+                        EStringTableMod mod = EStringTableMod.None;
+                        if (ivariant is CVariantSizeType)
+                            mod = EStringTableMod.SkipName;
+                        returnedVariables.Add(new SNameArg(mod, ivariant.Variant));
+                        break;
+                    case CVariant cVariant:
+                        returnedVariables.Add(new SNameArg(EStringTableMod.SkipName, cVariant.Variant));
+                        break;
+                    case IdHandle i:
+                        returnedVariables.Add(new SNameArg(EStringTableMod.None, i));
+                        returnedVariables.Add(new SNameArg(EStringTableMod.None, i.handle.Reference?.data));
+                        break;
+                    // check all other CVariables
+                    case CVariable cvar:
+                        {
+                            // add parent if not already in guidlist
+                            // don't add array type parents, don't add IBufferVariantAccessor type parents
+                            if (cvar.ParentVar != null
+                                && !cvar.ParentVar.GetType().IsGenericType
+                                && !(cvar.ParentVar is IBufferVariantAccessor)
+                                && !(cvar.ParentVar is SEntityBufferType2)
+                                && !guidlist.Contains(cvar.ParentVar.InternalGuid))
                             {
-                                case CBehaviorGraphStageNode bgsn:
-                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsn.Outputnode.Reference?.data));
-                                    break;
-                                case CBehaviorGraphTopLevelNode bgtln:
-                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgtln.Outputnode.Reference?.data));
-                                    break;
-                                case CBehaviorGraphStateNode bgstn:
-                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgstn.Outputnode.Reference?.data));
-                                    break;
-                                case CBehaviorGraphStateMachineNode bgsmn:
-                                    if (bgsmn.Unk3 != null)
-                                        returnedVariables.AddRange(bgsmn.Unk3.Select(item =>
-                                            new SNameArg(EStringTableMod.None, (item.Reference?.data))));
-                                    if (bgsmn.Unk4 != null)
-                                        returnedVariables.AddRange(bgsmn.Unk4.Select(item =>
-                                            new SNameArg(EStringTableMod.None, (item.Reference?.data))));
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, cvar.ParentVar));
+                            }
 
-                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Handle1.Reference?.data));
-                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Outputnode.Reference?.data));
-                                    if (bgsmn.Inputnodes != null)
-                                        returnedVariables.AddRange(bgsmn.Inputnodes.Select(item =>
+                            // add all normal REDProperties
+                            returnedVariables.AddRange(cvar.GetExistingVariables(false)
+                                .Select(_ => new SNameArg(EStringTableMod.None, _)));
+
+                            // for all buffers
+                            #region Buffer Hacks After Variables
+                            switch (cvar)
+                            {
+                                case CFoliageResource cfr:
+                                    if (cfr.Trees != null)
+                                        returnedVariables.AddRange(cfr.Trees.Select(item =>
+                                            new SNameArg(EStringTableMod.SkipNameAndType, item.Treetype)));
+                                    if (cfr.Grasses != null)
+                                        returnedVariables.AddRange(cfr.Grasses.Select(item =>
+                                            new SNameArg(EStringTableMod.SkipNameAndType, item.Treetype)));
+                                    break;
+                                case CClipMap cm:
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, cm.TerrainTiles));
+                                    break;
+                                case CUmbraScene cus:
+                                    if (cus.Tiles != null)
+                                        returnedVariables.AddRange(cus.Tiles.Select(item =>
+                                            new SNameArg(EStringTableMod.SkipNameAndType, item)));
+                                    break;
+                                case CSkeletalAnimationSetEntry csase:
+                                    if (csase.Entries != null)
+                                        returnedVariables.AddRange(csase.Entries.Select(item =>
+                                            new SNameArg(EStringTableMod.SkipNameAndType, item)));
+                                    break;
+                                case CLayerInfo cli:
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, cli.ParentGroup.Reference?.data));
+                                    break;
+                                case CMaterialInstance cmi:
+                                    if (cmi.InstanceParameters != null)
+                                        returnedVariables.AddRange(cmi.InstanceParameters.Select(iparam =>
+                                            new SNameArg(EStringTableMod.SkipNameAndType, iparam)));
+                                    break;
+                                case CMesh cm:
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, cm.BoneNames));
+                                    break;
+                                case CBehaviorGraphContainerNode bgcn:
+                                    if (bgcn.Inputnodes != null)
+                                        returnedVariables.AddRange(bgcn.Inputnodes.Select(item =>
+                                            new SNameArg(EStringTableMod.None, (item.Reference?.data))));
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgcn.Unk1));
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgcn.Unk2));
+                                    switch (bgcn)
+                                    {
+                                        case CBehaviorGraphStageNode bgsn:
+                                            returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsn.Outputnode.Reference?.data));
+                                            break;
+                                        case CBehaviorGraphTopLevelNode bgtln:
+                                            returnedVariables.Add(new SNameArg(EStringTableMod.None, bgtln.Outputnode.Reference?.data));
+                                            break;
+                                        case CBehaviorGraphStateNode bgstn:
+                                            returnedVariables.Add(new SNameArg(EStringTableMod.None, bgstn.Outputnode.Reference?.data));
+                                            break;
+                                        case CBehaviorGraphStateMachineNode bgsmn:
+                                            if (bgsmn.Unk3 != null)
+                                                returnedVariables.AddRange(bgsmn.Unk3.Select(item =>
+                                                    new SNameArg(EStringTableMod.None, (item.Reference?.data))));
+                                            if (bgsmn.Unk4 != null)
+                                                returnedVariables.AddRange(bgsmn.Unk4.Select(item =>
+                                                    new SNameArg(EStringTableMod.None, (item.Reference?.data))));
+
+                                            returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Handle1.Reference?.data));
+                                            returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Outputnode.Reference?.data));
+                                            if (bgsmn.Inputnodes != null)
+                                                returnedVariables.AddRange(bgsmn.Inputnodes.Select(item =>
+                                                    new SNameArg(EStringTableMod.None, item.Reference?.data)));
+                                            returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Unk1));
+                                            returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Unk2));
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    break;
+                                case CBehaviorGraph cbg:
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, cbg.Toplevelnode.Reference?.data));
+                                    if (cbg.Variables1 != null)
+                                        returnedVariables.AddRange(cbg.Variables1.Select(item =>
+                                            new SNameArg(EStringTableMod.None, item)));
+                                    if (cbg.Descriptions != null)
+                                        returnedVariables.AddRange(cbg.Descriptions.Select(item =>
                                             new SNameArg(EStringTableMod.None, item.Reference?.data)));
-                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Unk1));
-                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Unk2));
+                                    if (cbg.Vectorvariables1 != null)
+                                        returnedVariables.AddRange(cbg.Vectorvariables1.Select(item =>
+                                            new SNameArg(EStringTableMod.None, item)));
+                                    if (cbg.Variables2 != null)
+                                        returnedVariables.AddRange(cbg.Variables2.Select(item =>
+                                            new SNameArg(EStringTableMod.None, item)));
+                                    if (cbg.Vectorvariables2 != null)
+                                        returnedVariables.AddRange(cbg.Vectorvariables2.Select(item =>
+                                            new SNameArg(EStringTableMod.None, item)));
+                                    break;
+                                case CNode cn:
+                                    if (cn.AttachmentsChild != null)
+                                        returnedVariables.AddRange(cn.AttachmentsChild.Select(att =>
+                                            new SNameArg(EStringTableMod.SkipNameAndType, att)));
+                                    if (cn.AttachmentsReference != null)
+                                        returnedVariables.AddRange(cn.AttachmentsReference.Select(att =>
+                                            new SNameArg(EStringTableMod.SkipNameAndType, att)));
+                                    if (cn is CEntity e)
+                                    {
+                                        if (e.Components != null)
+                                            returnedVariables.AddRange(e.Components.Select(component =>
+                                                new SNameArg(EStringTableMod.SkipNameAndType, component)));
+                                        if (e.BufferV1 != null)
+                                            returnedVariables.AddRange(e.BufferV1.Select(buffer =>
+                                                new SNameArg(EStringTableMod.SkipNameAndType, buffer)));
+                                        if (e.BufferV2 != null)
+                                            foreach (SEntityBufferType2 item in e.BufferV2)
+                                            {
+                                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item.componentName));
+                                                if (item.variables != null)
+                                                    returnedVariables.AddRange(item.variables.Select(el =>
+                                                        new SNameArg(EStringTableMod.TypeFirst, el.Variant)));
+                                            }
+                                    }
+                                    break;
+                                case SAppearanceAttachment aa:
+                                    if (aa.Data != null)
+                                        returnedVariables.AddRange(from CVariable item in aa.Data
+                                                                   select new SNameArg(EStringTableMod.SkipName, item));
+                                    break;
+                                case CCutsceneTemplate cct:
+                                    if (cct.Animevents != null)
+                                        returnedVariables.AddRange(cct.Animevents.Select(item =>
+                                            new SNameArg(EStringTableMod.SkipName, item.Variant)));
+                                    break;
+                                case CStorySceneSection csss:
+                                    if (csss.sceneEventElements != null)
+                                        returnedVariables.AddRange(csss.sceneEventElements.Select(item =>
+                                            new SNameArg(EStringTableMod.SkipNameAndType, item)));
+                                    break;
+                                case CStorySceneScript cssscpt:
+                                    if (cssscpt.BufferParameters != null)
+                                        returnedVariables.AddRange(cssscpt.BufferParameters.Select(item =>
+                                            new SNameArg(EStringTableMod.SkipType, item)));
+                                    break;
+                                case CQuestScriptBlock qsb:
+                                    if (qsb.BufferParameters != null)
+                                        returnedVariables.AddRange(qsb.BufferParameters.Select(item =>
+                                            new SNameArg(EStringTableMod.SkipType, item)));
+                                    break;
+                                case CFXTrackItem cfxti:
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, cfxti.buffername));
+                                    break;
+                                case CPhysicalCollision cpc:
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, cpc.Collisiontypes));
                                     break;
                                 default:
                                     break;
                             }
+                            #endregion
                             break;
-                        case CBehaviorGraph cbg:
-                            returnedVariables.Add(new SNameArg(EStringTableMod.None, cbg.Toplevelnode.Reference?.data));
-                            if (cbg.Variables1 != null)
-                                returnedVariables.AddRange(cbg.Variables1.Select(item =>
-                                    new SNameArg(EStringTableMod.None, item)));
-                            if (cbg.Descriptions != null)
-                                returnedVariables.AddRange(cbg.Descriptions.Select(item =>
-                                    new SNameArg(EStringTableMod.None, item.Reference?.data)));
-                            if (cbg.Vectorvariables1 != null)
-                                returnedVariables.AddRange(cbg.Vectorvariables1.Select(item =>
-                                    new SNameArg(EStringTableMod.None, item)));
-                            if (cbg.Variables2 != null)
-                                returnedVariables.AddRange(cbg.Variables2.Select(item =>
-                                    new SNameArg(EStringTableMod.None, item)));
-                            if (cbg.Vectorvariables2 != null)
-                                returnedVariables.AddRange(cbg.Vectorvariables2.Select(item =>
-                                    new SNameArg(EStringTableMod.None, item)));
-                            break;
-                        case CNode cn:
-                            if (cn.AttachmentsChild != null)
-                                returnedVariables.AddRange(cn.AttachmentsChild.Select(att =>
-                                    new SNameArg(EStringTableMod.SkipNameAndType, att)));
-                            if (cn.AttachmentsReference != null)
-                                returnedVariables.AddRange(cn.AttachmentsReference.Select(att =>
-                                    new SNameArg(EStringTableMod.SkipNameAndType, att)));
-                            if (cn is CEntity e)
-                            {
-                                if (e.Components != null)
-                                    returnedVariables.AddRange(e.Components.Select(component =>
-                                        new SNameArg(EStringTableMod.SkipNameAndType, component)));
-                                if (e.BufferV1 != null)
-                                    returnedVariables.AddRange(e.BufferV1.Select(buffer =>
-                                        new SNameArg(EStringTableMod.SkipNameAndType, buffer)));
-                                if (e.BufferV2 != null)
-                                    foreach (SEntityBufferType2 item in e.BufferV2)
-                                    {
-                                        returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item.componentName));
-                                        if (item.variables != null)
-                                            returnedVariables.AddRange(item.variables.Select(el =>
-                                                new SNameArg(EStringTableMod.TypeFirst, el.Variant)));
-                                    }
-                            }
-                            break;
-                        case SAppearanceAttachment aa:
-                            if (aa.Data != null)
-                                returnedVariables.AddRange(from CVariable item in aa.Data
-                                    select new SNameArg(EStringTableMod.SkipName, item));
-                            break;
-                        case CCutsceneTemplate cct:
-                            if (cct.Animevents != null)
-                                returnedVariables.AddRange(cct.Animevents.Select(item =>
-                                    new SNameArg(EStringTableMod.SkipName, item.Variant)));
-                            break;
-                        case CStorySceneSection csss:
-                            if (csss.sceneEventElements != null)
-                                returnedVariables.AddRange(csss.sceneEventElements.Select(item =>
-                                    new SNameArg(EStringTableMod.SkipNameAndType, item)));
-                            break;
-                        case CStorySceneScript cssscpt:
-                            if (cssscpt.BufferParameters != null)
-                                returnedVariables.AddRange(cssscpt.BufferParameters.Select(item =>
-                                    new SNameArg(EStringTableMod.SkipType, item)));
-                            break;
-                        case CQuestScriptBlock qsb:
-                            if (qsb.BufferParameters != null)
-                                returnedVariables.AddRange(qsb.BufferParameters.Select(item =>
-                                    new SNameArg(EStringTableMod.SkipType, item)));
-                            break;
-                        case CFXTrackItem cfxti:
-                            returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, cfxti.buffername));
-                            break;
-                        case CPhysicalCollision cpc:
-                            returnedVariables.Add(new SNameArg(EStringTableMod.None, cpc.Collisiontypes));
-                            break;
-                        default:
-                            break;
-                    }
-                    #endregion
-                    break;
+                        }
+                    default:
+                        break;
                 }
-                default:
-                    break;
-            }
 
-            return returnedVariables;
+                return returnedVariables;
             }
 
             void AddStrings(SNameArg tvar)
@@ -1317,7 +1324,7 @@ namespace WolvenKit.CR2W
                             if (h.ParentVar is CEntity)
                                 flags = EImportFlags.Template;
                         }
-                            
+
                         if (var.cr2w.Embedded.Any(_ => _.ImportPath == h.DepotPath && _.ImportClass == h.ClassName))
                             flags = EImportFlags.Inplace;
 
@@ -1386,7 +1393,7 @@ namespace WolvenKit.CR2W
                 {
                     foreach (var element in (var as CBufferVLQInt32<CName>).elements)
                     {
-                        if (element is CName )
+                        if (element is CName)
                         {
                             AddUniqueToTable((element as CName).Value);
                         }
@@ -1482,19 +1489,19 @@ namespace WolvenKit.CR2W
 
             #region Write Tables
             m_tableheaders[1].itemCount = (uint)Names.Count;
-            m_tableheaders[1].offset = (uint) file.BaseStream.Position;
+            m_tableheaders[1].offset = (uint)file.BaseStream.Position;
             WriteTable<CR2WName>(file.BaseStream, Names.Select(_ => _.Name).ToArray(), 1);
-            
+
             m_tableheaders[2].itemCount = (uint)Imports.Count;
-            m_tableheaders[2].offset = Imports.Count > 0 ? (uint) file.BaseStream.Position : 0;
+            m_tableheaders[2].offset = Imports.Count > 0 ? (uint)file.BaseStream.Position : 0;
             WriteTable<CR2WImport>(file.BaseStream, Imports.Select(_ => _.Import).ToArray(), 2);
 
             m_tableheaders[3].itemCount = (uint)Properties.Count;
-            m_tableheaders[3].offset = (uint) file.BaseStream.Position;
+            m_tableheaders[3].offset = (uint)file.BaseStream.Position;
             WriteTable<CR2WProperty>(file.BaseStream, Properties.Select(_ => _.Property).ToArray(), 3);
 
             m_tableheaders[4].itemCount = (uint)Chunks.Count;
-            m_tableheaders[4].offset = (uint) file.BaseStream.Position;
+            m_tableheaders[4].offset = (uint)file.BaseStream.Position;
             WriteTable<CR2WExport>(file.BaseStream, Chunks.Select(_ => _.Export).ToArray(), 4);
 
             if (Buffers.Count > 0)
@@ -1534,13 +1541,13 @@ namespace WolvenKit.CR2W
             m_fileheader.fileSize = (uint)bw.BaseStream.Position;
 
             //Write Buffer data
-            if (m_hasInternalBuffer)
-            {
-                for (var i = 0; i < Buffers.Count; i++)
-                {
-                    Buffers[i].WriteData(bw);
-                }
-            }
+            //if (m_hasInternalBuffer)
+            //{
+            //    for (var i = 0; i < Buffers.Count; i++)
+            //    {
+            //        Buffers[i].WriteData(bw);
+            //    }
+            //}
             m_fileheader.bufferSize = (uint)bw.BaseStream.Position;
 
             // Write embedded data

@@ -21,16 +21,16 @@ namespace WolvenKit.CR2W
         public ulong timeStamp;
 
         [DataMember]
+        [FieldOffset(16)]
+        public uint buildVersion;
+
+        [DataMember]
         [FieldOffset(20)]
         public uint bufferSize;
 
         [DataMember]
         [FieldOffset(24)]
         public uint fileSize;
-
-        [DataMember]
-        [FieldOffset(16)]
-        public uint buildVersion;
 
         [DataMember]
         [FieldOffset(28)]

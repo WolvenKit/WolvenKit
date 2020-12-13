@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
-[assembly: ContractNamespaceAttribute("",    ClrNamespace = "WolvenKit.CR2W")]
+[assembly: ContractNamespaceAttribute("", ClrNamespace = "WolvenKit.CR2W")]
 
 namespace WolvenKit.CR2W
 {
 
-    [DataContract(Namespace ="")]
+    [DataContract(Namespace = "")]
     [StructLayout(LayoutKind.Explicit, Size = 24)]
     public struct CR2WExport
     {
@@ -227,7 +227,7 @@ namespace WolvenKit.CR2W
             var o = new Cr2wVariableDumpObject()
             {
                 Name = this.REDName,
-                Type =  this.REDType,
+                Type = this.REDType,
                 Size = (int)this.size,
                 Offset = br.BaseStream.Position
             };
@@ -246,8 +246,8 @@ namespace WolvenKit.CR2W
                 var variable = new Cr2wVariableDumpObject
                 {
                     Offset = br.BaseStream.Position - 3,
-                    Name = cr2w.StringDictionary.Values.ToList()[(int) nameId],
-                    Type = cr2w.StringDictionary.Values.ToList()[(int) br.ReadUInt16()],
+                    Name = cr2w.StringDictionary.Values.ToList()[(int)nameId],
+                    Type = cr2w.StringDictionary.Values.ToList()[(int)br.ReadUInt16()],
                     Size = br.ReadInt32()
                 };
 
@@ -298,12 +298,12 @@ namespace WolvenKit.CR2W
                         if (nameId == 0)
                             return ret;
 
-                    
+
                         var variable = new Cr2wVariableDumpObject
                         {
                             Offset = br.BaseStream.Position - 3,
-                            Name = cr2w.StringDictionary.Values.ToList()[(int) nameId],
-                            Type = cr2w.StringDictionary.Values.ToList()[(int) br.ReadUInt16()],
+                            Name = cr2w.StringDictionary.Values.ToList()[(int)nameId],
+                            Type = cr2w.StringDictionary.Values.ToList()[(int)br.ReadUInt16()],
                             Size = br.ReadInt32()
                         };
 
@@ -409,7 +409,7 @@ namespace WolvenKit.CR2W
             unknownBytes = new CBytes(cr2w, data, "unknownBytes");
             if (bytesLeft > 0)
             {
-                unknownBytes.Read(file, (uint) bytesLeft);
+                unknownBytes.Read(file, (uint)bytesLeft);
             }
             else if (bytesLeft < 0)
             {
@@ -425,36 +425,36 @@ namespace WolvenKit.CR2W
         {
             //await Task.Run(() =>
             //{
-                using (MemoryMappedViewStream vs = mmf.CreateViewStream(_export.dataOffset, _export.dataSize, MemoryMappedFileAccess.Read))
-                using (BinaryReader br = new BinaryReader(vs))
+            using (MemoryMappedViewStream vs = mmf.CreateViewStream(_export.dataOffset, _export.dataSize, MemoryMappedFileAccess.Read))
+            using (BinaryReader br = new BinaryReader(vs))
+            {
+                CreateDefaultData();
+
+                data.Read(br, _export.dataSize);
+
+                // Unknown bytes
+                var bytesLeft = _export.dataSize - (br.BaseStream.Position - _export.dataOffset);
+                unknownBytes = new CBytes(cr2w, data, "unknownBytes");
+                if (bytesLeft > 0)
                 {
-                    CreateDefaultData();
-
-                    data.Read(br, _export.dataSize);
-
-                    // Unknown bytes
-                    var bytesLeft = _export.dataSize - (br.BaseStream.Position - _export.dataOffset);
-                    unknownBytes = new CBytes(cr2w, data, "unknownBytes");
-                    if (bytesLeft > 0)
-                    {
-                        unknownBytes.Read(br, (uint)bytesLeft);
-                    }
-                    else if (bytesLeft < 0)
-                    {
-                        //throw new InvalidParsingException("File read too far.");
-                    }
-                    else
-                    {
-                        unknownBytes.Bytes = new byte[0];
-                    }
-
-                    if (cr2w.Logger!= null)
-                    {
-                        float percentprogress = (float)(1 / (float)cr2w.Chunks.Count * 100.0);
-                        cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
-                    }
-                    
+                    unknownBytes.Read(br, (uint)bytesLeft);
                 }
+                else if (bytesLeft < 0)
+                {
+                    //throw new InvalidParsingException("File read too far.");
+                }
+                else
+                {
+                    unknownBytes.Bytes = new byte[0];
+                }
+
+                if (cr2w.Logger != null)
+                {
+                    float percentprogress = (float)(1 / (float)cr2w.Chunks.Count * 100.0);
+                    cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
+                }
+
+            }
             //}
             //);
         }
@@ -507,7 +507,7 @@ namespace WolvenKit.CR2W
 
         public void WriteData(BinaryWriter file)
         {
-            _export.dataOffset = (uint) file.BaseStream.Position;
+            _export.dataOffset = (uint)file.BaseStream.Position;
             //_export.className = (ushort)cr2w.GetStringIndex(_type);
 
             var posstart = file.BaseStream.Position;
@@ -523,7 +523,7 @@ namespace WolvenKit.CR2W
                 unknownBytes.Write(file);
             }
 
-            var newsize = (uint) (file.BaseStream.Position - posstart);
+            var newsize = (uint)(file.BaseStream.Position - posstart);
             _export.dataSize = newsize;
         }
 

@@ -16,6 +16,12 @@
 
   <ItemGroup>
     <PackageReference Include="Catel.Core" Version="5.12.11" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
+    <PackageReference Include="protobuf-net" Version="3.0.62" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Tools\" />
   </ItemGroup>
 
 </Project>
