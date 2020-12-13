@@ -30,11 +30,13 @@ namespace CP77Tools
             // get csv data
             Console.WriteLine("Loading Hashes...");
             Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes.csv"));
-            Console.WriteLine("Loaded Hashes 1...");
-            //Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes2.csv"));
-            //Console.WriteLine("Loaded Hashes 2...");
+            Console.WriteLine("Loaded Hashes.");
 
             #region commands
+
+            
+
+
 
             var rootCommand = new RootCommand();
 
