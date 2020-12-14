@@ -27,7 +27,7 @@ CDPR modding community discord: https://discord.gg/USZwxxFrKa
 `archive -e -p "<PATH TO ARCHIVE>.archive"`
 
 * extract all textures from archive
-`archive -u --uext png "<PATH TO ARCHIVE>.archive"`
+`archive -u --uext png -p "<PATH TO ARCHIVE>.archive"`
 
 
 ###Debug Options
