@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using Catel.IoC;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Common.Tools.DDS
 {
@@ -120,8 +122,8 @@ namespace WolvenKit.Common.Tools.DDS
             )
         {
             string textconvpath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "DDS/texconv.exe");
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
-            
             var argsss = $" -o '{outDir}' -y -f {format}  -ft {filetype} '{filepath}'";
 
             var proc = new ProcessStartInfo(textconvpath)
@@ -142,7 +144,7 @@ namespace WolvenKit.Common.Tools.DDS
             var fi = new FileInfo(Path.Combine(outDir, $"{Path.GetFileNameWithoutExtension(filepath)}.{filetype}"));
             if (!fi.Exists)
             {
-                throw new NotImplementedException();
+                logger.LogString($"Could not convert {fi.FullName}.", Logtype.Error);
             }
 
             return fi.FullName;

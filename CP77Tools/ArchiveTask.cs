@@ -68,32 +68,16 @@ namespace CP77Tools
                 {
                     if (hash != 0)
                     {
-                        var maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
-                        string name = $"{hash:X2}.bin";
-                        if (maincontroller.Hashdict.ContainsKey(hash))
-                        {
-                            name = maincontroller.Hashdict[hash];
-                        }
-                        var outfile = new FileInfo(Path.Combine(outDir.FullName,
-                            $"{name}"));
-                        if (outfile.Directory == null)
-                            return;
-                        var (file, buffers) = ar.GetFileByHash(hash);
-                        Directory.CreateDirectory(outfile.Directory.FullName);
-                        File.WriteAllBytes(outfile.FullName, file);
-                        for (int j = 0; j < buffers.Count; j++)
-                        {
-                            var buffer = buffers[j];
-                            var bufferpath = $"{outfile}.{j}.buffer";
-                            Directory.CreateDirectory(outfile.Directory.FullName);
-                            File.WriteAllBytes(bufferpath, buffer);
-                        }
+
+                        ar.ExtractSingle(hash, outDir, extract, uncook, uext);
                     }
                     else
                     {
-                        ar.ExtractAll(outDir, extract, uncook, uext);
-                        Console.WriteLine($"Finished extracting {path}.");
+                        Console.WriteLine($"{path}: Found {ar.FileCount} files.");
+                        var result = ar.ExtractAll(outDir, extract, uncook, uext);
+                        Console.WriteLine($"{path}: Extracted {result.Count} files.");
                     }
+                    
                 }
 
                 if (dump)

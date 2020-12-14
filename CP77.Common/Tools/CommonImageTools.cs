@@ -12,6 +12,9 @@ namespace WolvenKit.Common.Tools
 {
     public static class CommonImageTools
     {
+        
+
+
         /// <summary>
         /// Gets the texture compression method from some weird enum used in xbms
         /// Used when extracting from texture cache

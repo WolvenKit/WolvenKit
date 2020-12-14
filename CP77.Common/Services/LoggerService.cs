@@ -43,6 +43,24 @@ namespace WolvenKit.Common.Services
         public ObservableCollection<InterpretedLogMessage> ErrorLog { get; set; }
 
         #region Log
+        private string _errorLogStr;
+        public string ErrorLogStr
+        {
+            get => _errorLogStr;
+            set
+            {
+                if (_errorLogStr != value)
+                {
+                    _errorLogStr = value;
+                    RaisePropertyChanged(nameof(ErrorLogStr));
+
+                    // clean old log
+                    if (_errorLogStr.Length > LOGLENGTH)
+                        _errorLogStr = "";
+                }
+            }
+        }
+
         private string _log;
         public string Log
         {
@@ -53,10 +71,6 @@ namespace WolvenKit.Common.Services
                 {
                     _log = value;
                     RaisePropertyChanged(nameof(Log));
-
-                    // clean old log
-                    if (_log.Length > LOGLENGTH)
-                        _log = "";
                 }
             }
         }
@@ -100,6 +114,9 @@ namespace WolvenKit.Common.Services
             Logtype = type;
             Log = text;// + "\r\n";
             OnStringLogged?.Invoke(this, new LogStringEventArgs(text, type));
+
+            if (type == Logtype.Error)
+                ErrorLogStr += text + "\r\n";
         }
         /// <summary>
         /// Log progress value

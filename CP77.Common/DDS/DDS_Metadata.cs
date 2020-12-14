@@ -11,11 +11,12 @@ namespace WolvenKit.Common.Tools.DDS
         public uint Bpp { get;}
         public bool Iscubemap { get; }
         public uint Slicecount { get; }
+        public bool Dx10 { get; }
 
         public DDSMetadata(uint width, uint height,
             uint mipscount = 0,
             EFormat format = EFormat.R8G8B8A8_UNORM, uint bpp = 16,
-            bool iscubemap = false, uint slicecount = 0)
+            bool iscubemap = false, uint slicecount = 0, bool dx10 = false)
         {
             Width = width;
             Height = height;
@@ -24,6 +25,7 @@ namespace WolvenKit.Common.Tools.DDS
             Bpp = bpp;
             Iscubemap = iscubemap;
             Slicecount = slicecount;
+            Dx10 = dx10;
         }
 
         public DDSMetadata(DDS_HEADER ddsheader)
@@ -73,6 +75,7 @@ namespace WolvenKit.Common.Tools.DDS
             Bpp = 16;                                       //TODO: in vanilla this is always 16 ???
             Iscubemap = iscubemap;
             Slicecount = iscubemap ? (uint)6 : (uint)0;     //TODO: does not account for texarrays
+            Dx10 = false;
         }
     }
 }

@@ -11,9 +11,11 @@ using System.CommandLine.IO;
 using System.CommandLine.Parsing;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using CP77Tools.Model;
 using CP77Tools.Services;
 using CsvHelper;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.DDS;
 
@@ -38,6 +40,10 @@ namespace CP77Tools
 
 
 
+
+
+
+
             var rootCommand = new RootCommand();
 
             var archive = new Command("archive", "Target an archive to extract files or dump information.")
@@ -49,7 +55,7 @@ namespace CP77Tools
                 new Option<bool>(new []{ "--list", "-l"}, "List contents of archive."),
                 new Option<bool>(new []{ "--uncook", "-u"}, "Uncooks textures from archive."),
                 new Option<EUncookExtension>(new []{ "--uext"}, "Uncook extension (tga, bmp, jpg, png, dds). Default is tga."),
-                new Option<ulong>(new []{ "--hash", "-h"}, "Extract single file with given hash."),
+                new Option<ulong>(new []{ "--hash"}, "Extract single file with given hash."),
             };
             rootCommand.Add(archive);
             archive.Handler = CommandHandler.Create<string, string, bool, bool, bool, bool, EUncookExtension, ulong>(ConsoleFunctions.ArchiveTask);
@@ -59,9 +65,10 @@ namespace CP77Tools
                 new Option<string>(new []{"--path", "-p"}, "Input path to .archive or to a directory (runs over all archives in directory)."),
                 new Option<bool>(new []{ "--imports", "-i"}, "Dump all imports (all filenames that are referenced by all files in the archive)."),
                 new Option<bool>(new []{ "--missinghashes", "-m"}, "List all missing hashes of all input archives."),
+                new Option<bool>(new []{ "--info"}, "Dump all xbm info."),
             };
             rootCommand.Add(dump);
-            dump.Handler = CommandHandler.Create<string, bool, bool>(ConsoleFunctions.DumpTask);
+            dump.Handler = CommandHandler.Create<string, bool, bool, bool>(ConsoleFunctions.DumpTask);
 
             var cr2w = new Command("cr2w", "Target a specific cr2w (extracted) file and dumps file information.")
             {
@@ -75,12 +82,14 @@ namespace CP77Tools
             var hashTask = new Command("hash", "Some helper functions related to hashes.")
             {
                 new Option<string>(new []{"--input", "-i"}, "Create FNV1A hash of given string"),
+                new Option<bool>(new []{"--missing", "-m"}, ""),
             };
             rootCommand.Add(hashTask);
-            hashTask.Handler = CommandHandler.Create<string>(ConsoleFunctions.HashTask);
+            hashTask.Handler = CommandHandler.Create<string, bool>(ConsoleFunctions.HashTask);
 
             #endregion
 
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
             // Run
             if (args == null || args.Length == 0)
@@ -93,13 +102,36 @@ namespace CP77Tools
                     string line = System.Console.ReadLine();
                     var parsed = CommandLineExtensions.ParseText(line, ' ', '"');
                     rootCommand.InvokeAsync(parsed.ToArray()).Wait();
+
+                    await WriteLog();
                 }
 
             }
             else
             {
                 rootCommand.InvokeAsync(args).Wait();
+
+                await WriteLog();
             }
+
+
+            async Task WriteLog()
+            {
+                var t = DateTime.Now.ToString("yyyyMMddHHmmss");
+                var fi = new FileInfo(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                    $"errorlogs/log_{t}.txt"));
+                if (fi.Directory != null)
+                {
+                    Directory.CreateDirectory(fi.Directory.FullName);
+                    var log = logger.ErrorLogStr;
+                    await File.WriteAllTextAsync(fi.FullName, log);
+                }
+                else
+                {
+                    
+                }
+            }
+
         }
 
 

@@ -13,6 +13,7 @@ namespace WolvenKit.Common.Services
         event EventHandler<LogStringEventArgs> OnStringLogged;
 
         string Log { get; }
+        string ErrorLogStr { get; }
         ObservableCollection<InterpretedLogMessage> ErrorLog { get; }
 
         void Clear();

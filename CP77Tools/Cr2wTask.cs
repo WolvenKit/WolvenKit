@@ -28,7 +28,7 @@ namespace CP77Tools
             {
                 cr2w.ReadImportsAndBuffers(br);
 
-                var obj = new Cr2wDumpObject { Filename = inputFileInfo.FullName };
+                var obj = new Cr2wChunkInfo { Filename = inputFileInfo.FullName };
 
                 obj.Stringdict = cr2w.StringDictionary;
                 obj.Imports = cr2w.Imports;
