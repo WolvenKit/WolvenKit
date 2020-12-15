@@ -375,6 +375,7 @@ namespace CP77Tools.Model
             {
                 using var ms = new MemoryStream();
                 using var bw = new BinaryWriter(ms);
+
                 using var vs = mmf.CreateViewStream((long)offsetentry.Offset, (long)offsetentry.PhysicalSize,
                     MemoryMappedFileAccess.Read);
                 using var binaryReader = new BinaryReader(vs);

@@ -125,6 +125,7 @@ namespace CP77Tools.Model
         private void Read(BinaryReader br)
         {
             Offset = br.ReadUInt64();
+
             PhysicalSize = br.ReadUInt32();
             VirtualSize = br.ReadUInt32();
         }

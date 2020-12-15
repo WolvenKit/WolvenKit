@@ -87,6 +87,14 @@ namespace CP77Tools
             rootCommand.Add(hashTask);
             hashTask.Handler = CommandHandler.Create<string, bool>(ConsoleFunctions.HashTask);
 
+            var oodleTask = new Command("oodle", "Some helper functions related to oodle compression.")
+            {
+                new Option<string>(new []{"--path", "-p"}, ""),
+                new Option<bool>(new []{"--decompress", "-d"}, ""),
+            };
+            rootCommand.Add(oodleTask);
+            oodleTask.Handler = CommandHandler.Create<string, bool>(ConsoleFunctions.OodleTask);
+
             #endregion
 
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();

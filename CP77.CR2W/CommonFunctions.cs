@@ -13,19 +13,6 @@ namespace CP77.CR2W
         {
             switch (compression)
             {
-                //TRF_Invalid,
-                //TRF_TrueColor,  // 24-bit Color, likely R8G8B8(A8)
-                //TRF_DeepColor,  // 30-bit Color, likely R10G10B10A2
-                //TRF_Grayscale,  // Used alongside TCM_QualityColor etc. to indicate the texture is packed grayscale images?
-                //TRF_HDRFloat,   // 32-bit floating point, likely R32G32B32A32_FLOAT or R32G32B32_FLOAT
-                //TRF_HDRHalf,    // 16-bit floating point, likely R16G16B16A16_FLOAT
-                //TRF_HDRFloatGrayscale, // Probably R16_FLOAT
-                //TRF_Grayscale_Font, // ???
-                //TRF_R8G8,       // Probably R8G8_UNORM or R8G8_UINT, try SNORM/SINT otherwise
-                //TRF_R32UI,      // Probably R32_UINT
-                //TRF_AlphaGrayscale // Possibly A8_UNORM
-
-
                 case Enums.ETextureCompression.TCM_QualityR:
                     return EFormat.BC4_UNORM;
                 case Enums.ETextureCompression.TCM_QualityRG:
