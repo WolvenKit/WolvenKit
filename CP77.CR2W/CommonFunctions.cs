@@ -9,24 +9,72 @@ namespace CP77.CR2W
 {
     public static class CommonFunctions
     {
-        public static EFormat GetEformatFromCompression(Enums.ETextureCompression compression)
+        public static EFormat GetDXGIFormatFromXBM(Enums.ETextureCompression compression, Enums.ETextureRawFormat rawFormat)
         {
             switch (compression)
             {
+                //TRF_Invalid,
+                //TRF_TrueColor,  // 24-bit Color, likely R8G8B8(A8)
+                //TRF_DeepColor,  // 30-bit Color, likely R10G10B10A2
+                //TRF_Grayscale,  // Used alongside TCM_QualityColor etc. to indicate the texture is packed grayscale images?
+                //TRF_HDRFloat,   // 32-bit floating point, likely R32G32B32A32_FLOAT or R32G32B32_FLOAT
+                //TRF_HDRHalf,    // 16-bit floating point, likely R16G16B16A16_FLOAT
+                //TRF_HDRFloatGrayscale, // Probably R16_FLOAT
+                //TRF_Grayscale_Font, // ???
+                //TRF_R8G8,       // Probably R8G8_UNORM or R8G8_UINT, try SNORM/SINT otherwise
+                //TRF_R32UI,      // Probably R32_UINT
+                //TRF_AlphaGrayscale // Possibly A8_UNORM
+
+
                 case Enums.ETextureCompression.TCM_QualityR:
+                    return EFormat.BC4_UNORM;
                 case Enums.ETextureCompression.TCM_QualityRG:
+                case Enums.ETextureCompression.TCM_Normalmap:
                     return EFormat.BC5_UNORM;
                 case Enums.ETextureCompression.TCM_QualityColor:
                     return EFormat.BC7_UNORM;
                 case Enums.ETextureCompression.TCM_DXTNoAlpha:
-                case Enums.ETextureCompression.TCM_Normalmap:
                 case Enums.ETextureCompression.TCM_Normals_DEPRECATED:
                     return EFormat.BC1_UNORM;
                 case Enums.ETextureCompression.TCM_DXTAlphaLinear:
                 case Enums.ETextureCompression.TCM_DXTAlpha:
                     return EFormat.BC3_UNORM;
                 case Enums.ETextureCompression.TCM_None:
-                    return EFormat.R8G8B8A8_UNORM;
+                {
+                    switch (rawFormat)
+                    {
+                           
+                        case Enums.ETextureRawFormat.TRF_Invalid:
+                            return EFormat.R8G8B8A8_UNORM;
+                        case Enums.ETextureRawFormat.TRF_Grayscale_Font:
+                            throw new NotImplementedException();
+                        case Enums.ETextureRawFormat.TRF_R32UI:
+                            //return EFormat.R32_UINT;
+                            throw new NotImplementedException();
+                        case Enums.ETextureRawFormat.TRF_DeepColor:
+                            return EFormat.R10G10B10A2_UNORM;
+                        case Enums.ETextureRawFormat.TRF_TrueColor:
+                            return EFormat.R8G8B8A8_UNORM;
+                        
+                        case Enums.ETextureRawFormat.TRF_HDRFloat:
+                            return EFormat.R32G32B32A32_FLOAT;
+                        case Enums.ETextureRawFormat.TRF_HDRHalf:
+                            return EFormat.R16G16B16A16_FLOAT;
+                        case Enums.ETextureRawFormat.TRF_HDRFloatGrayscale:
+                            return EFormat.R16_FLOAT;
+                        case Enums.ETextureRawFormat.TRF_R8G8:
+                            return EFormat.R8G8_UNORM;
+
+
+                        case Enums.ETextureRawFormat.TRF_Grayscale:
+                            return EFormat.R8_UINT;
+                        case Enums.ETextureRawFormat.TRF_AlphaGrayscale:
+                            return EFormat.A8_UNORM;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(rawFormat), rawFormat, null);
+                    }
+                }
+                    
                 case Enums.ETextureCompression.TCM_RGBE:
                 case Enums.ETextureCompression.TCM_Normals:
                 case Enums.ETextureCompression.TCM_NormalsHigh_DEPRECATED:

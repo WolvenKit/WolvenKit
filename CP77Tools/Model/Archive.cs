@@ -1,5 +1,6 @@
 ﻿using CP77Tools.Oodle;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
 using ConsoleProgressBar;
@@ -78,126 +80,163 @@ namespace CP77Tools.Model
             }
         }
 
-        public int ExtractSingle(ulong hash, DirectoryInfo outDir, bool extract = true,
-            bool uncook = false,
-            EUncookExtension uncookext = EUncookExtension.tga)
+        /// <summary>
+        /// Uncooks a single file by hash.
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <param name="outDir"></param>
+        /// <param name="uncookext"></param>
+        /// <returns></returns>
+        public int UncookSingle(ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga)
         {
             using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
 
-            return ExtractSingleInner(mmf, hash, outDir, extract, uncook, uncookext);
+            return UncookSingleInner(mmf, hash, outDir, uncookext);
         }
 
-        private int ExtractSingleInner(MemoryMappedFile mmf, ulong hash, DirectoryInfo outDir, bool extract = true, bool uncook = false,
-            EUncookExtension uncookext = EUncookExtension.tga)
+        /// <summary>
+        /// Extracts a single file + buffers.
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <param name="outDir"></param>
+        /// <returns></returns>
+        public int ExtractSingle(ulong hash, DirectoryInfo outDir)
         {
-            var maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            var success = false;
+            using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
+                MemoryMappedFileAccess.Read);
+
+            return ExtractSingleInner(mmf, hash, outDir);
+        }
+        
+        private int UncookSingleInner(MemoryMappedFile mmf, ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga)
+        {
+            var uncooksuccess = false;
             var (file, buffers) = GetFileData(hash, mmf);
 
-            string name = $"{hash:X2}.bin";
-            if (maincontroller.Hashdict.ContainsKey(hash))
+            if (!Files.ContainsKey(hash))
+                return -1;
+            string name = Files[hash].NameStr;
+
+            // checks
+            var outfile = new FileInfo(Path.Combine(outDir.FullName,
+                $"{name}"));
+            if (outfile.Directory == null)
+                return -1;
+            if (buffers.Count > 1)
+                throw new NotImplementedException(); //TODO: can that happen?
+
+
+            // write buffers
+            foreach (var b in buffers)
             {
-                name = maincontroller.Hashdict[hash];
+                #region textures
+                // read cr2w
+                using var ms = new MemoryStream(file);
+                using var br = new BinaryReader(ms);
+                var cr2w = new CR2WFile();
+                var result = cr2w.Read(br);
+                if (result != EFileReadErrorCodes.NoError)
+                    continue;
+                if (!(cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm) ||
+                    !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+                    continue;
+
+                // create dds header
+                var newpath = Path.ChangeExtension(outfile.FullName, "dds");
+                try
+                {
+                    var width = blob.Header.SizeInfo.Width.val;
+                    var height = blob.Header.SizeInfo.Height.val;
+                    var mips = blob.Header.TextureInfo.MipCount.val;
+                    var slicecount = blob.Header.TextureInfo.SliceCount.val;
+                    var alignment = blob.Header.TextureInfo.DataAlignment.val;
+
+                    Enums.ETextureRawFormat rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
+                    if (xbm.Setup.RawFormat?.WrappedEnum != null)
+                        rawfmt = xbm.Setup.RawFormat.WrappedEnum;
+                    else
+                    {
+                    }
+
+                    Enums.ETextureCompression compression = Enums.ETextureCompression.TCM_None;
+                    if (xbm.Setup.Compression?.WrappedEnum != null)
+                        compression = xbm.Setup.Compression.WrappedEnum;
+                    else
+                    {
+                    }
+
+                    var texformat = CommonFunctions.GetDXGIFormatFromXBM(compression, rawfmt);
+
+                    Directory.CreateDirectory(outfile.Directory.FullName);
+                    using (var stream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
+                    {
+                        DDSUtils.GenerateAndWriteHeader(stream,
+                            new DDSMetadata(width, height, mips, texformat, alignment, false, slicecount, true));
+                        var buffer = b;
+                        stream.Write(buffer);
+
+                    }
+
+                    // success
+                    uncooksuccess = true;
+                }
+                catch
+                {
+                    uncooksuccess = false;
+                    continue;
+                }
+
+                // convert to texture
+                if (uncookext != EUncookExtension.dds)
+                {
+                    try
+                    {
+                        var di = new FileInfo(outfile.FullName).Directory;
+                        TexconvWrapper.Convert(di.FullName, $"{newpath}", uncookext);
+                    }
+                    catch (Exception e)
+                    {
+                        // silent
+                    }
+                }
+
+                #endregion
             }
+
+            return uncooksuccess ? 1 : 0;
+        }
+
+        private int ExtractSingleInner(MemoryMappedFile mmf, ulong hash, DirectoryInfo outDir)
+        {
+            var extractsuccess = false;
+            var (file, buffers) = GetFileData(hash, mmf);
+
+            if (!Files.ContainsKey(hash))
+                return -1;
+            string name = Files[hash].NameStr;
 
             var outfile = new FileInfo(Path.Combine(outDir.FullName,
                 $"{name}"));
             if (outfile.Directory == null)
-                return 0;
+                return -1;
 
             // write main file
-            if (extract)
-            {
-                Directory.CreateDirectory(outfile.Directory.FullName);
-                File.WriteAllBytes(outfile.FullName, file);
-                success = true;
-            }
+            Directory.CreateDirectory(outfile.Directory.FullName);
+            File.WriteAllBytes(outfile.FullName, file);
+            extractsuccess = true;
 
             // write buffers
             for (int j = 0; j < buffers.Count; j++)
             {
-                if (uncook)
-                {
-                    #region textures
-
-                    if (Path.GetExtension(name) != ".xbm")
-                        continue;
-                    if (buffers.Count > 1)
-                    {
-                        //TODO: Log
-                    }
-
-                    // read cr2w
-                    using var ms = new MemoryStream(file);
-                    using var br = new BinaryReader(ms);
-                    var cr2w = new CR2WFile();
-                    var result = cr2w.Read(br);
-                    if (result != EFileReadErrorCodes.NoError)
-                        continue;
-                    if (!(cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm) ||
-                        !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
-                        continue;
-
-                    // create dds header
-                    try
-                    {
-                        var width = blob.Header.SizeInfo.Width.val;
-                        var height = blob.Header.SizeInfo.Height.val;
-                        var mips = blob.Header.TextureInfo.MipCount.val;
-                        var slicecount = blob.Header.TextureInfo.SliceCount.val;
-                        var alignment = blob.Header.TextureInfo.DataAlignment.val;
-                        var compression = xbm.Setup.Compression?.WrappedEnum ?? Enums.ETextureCompression.TCM_None;
-
-                        var texformat = CommonFunctions.GetEformatFromCompression(compression);
-
-                        Directory.CreateDirectory(outfile.Directory.FullName);
-                        using (var stream = new FileStream($"{outfile}.dds", FileMode.Create, FileAccess.Write))
-                        {
-                            DDSUtils.GenerateAndWriteHeader(stream,
-                                new DDSMetadata(width, height, mips, texformat, alignment, false, slicecount, false));
-                            var buffer = buffers[j];
-                            stream.Write(buffer);
-
-                        }
-
-                        // success
-                        success = true;
-                    }
-                    catch
-                    {
-                        success = false;
-                        continue;
-                    }
-
-                    // convert to texture
-                    if (uncookext != EUncookExtension.dds)
-                    {
-                        try
-                        {
-                            var di = new FileInfo(outfile.FullName).Directory;
-                            TexconvWrapper.Convert(di.FullName, $"{outfile}.dds", uncookext);
-                        }
-                        catch (Exception e)
-                        {
-                            // silent
-                        }
-                    }
-
-                    #endregion
-                }
-                else if (extract)
-                {
-                    var buffer = buffers[j];
-                    var bufferpath = $"{outfile}.{j}.buffer";
-                    Directory.CreateDirectory(outfile.Directory.FullName);
-                    File.WriteAllBytes(bufferpath, buffer);
-                }
+                var buffer = buffers[j];
+                var bufferpath = $"{outfile}.{j}.buffer";
+                Directory.CreateDirectory(outfile.Directory.FullName);
+                File.WriteAllBytes(bufferpath, buffer);
+                extractsuccess = true;
             }
 
-
-            return success ? 1 : 0;
+            return extractsuccess ? 1 : 0;
         }
 
         /// <summary>
@@ -205,14 +244,13 @@ namespace CP77Tools.Model
         /// </summary>
         /// <param name="outDir"></param>
         /// <returns></returns>
-        public List<string> ExtractAll(DirectoryInfo outDir, bool extract = true, bool uncook = false, EUncookExtension uncookext = EUncookExtension.tga)
+        public (List<string>, int) ExtractAll(DirectoryInfo outDir)
         {
-            var maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
-
             using var pb = new ProgressBar();
             using var p1 = pb.Progress.Fork();
             int progress = 0;
-            var extracted = new List<string>();
+            var extractedList = new ConcurrentBag<string>();
+            var failedList = new ConcurrentBag<string>();
 
             using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
@@ -221,18 +259,76 @@ namespace CP77Tools.Model
             {
                 var info = Files.Values.ToList()[i];
 
-                var s = ExtractSingleInner(mmf, info.NameHash64, outDir, extract, uncook, uncookext);
+                int extracted = ExtractSingleInner(mmf, info.NameHash64, outDir);
 
+                if (extracted != 0)
+                    extractedList.Add(info.NameStr);
+                else
+                    failedList.Add(info.NameStr);
 
-                progress += 1;
+                Interlocked.Increment(ref progress);
                 var perc = progress / (double)FileCount;
                 p1.Report(perc, $"Loading bundle entries: {progress}/{FileCount}");
-                if (s != 0)
-                    extracted.Add(info.NameStr);
             });
- 
 
-            return extracted;
+            return (extractedList.ToList(), FileCount);
+        }
+
+        /// <summary>
+        /// Uncooks all Files to the specified directory.
+        /// </summary>
+        /// <param name="outDir"></param>
+        /// <param name="uncookext"></param>
+        /// <returns></returns>
+        public (List<string>, int) UncookAll(DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga)
+        {
+            using var pb = new ProgressBar();
+            using var p1 = pb.Progress.Fork();
+            int progress = 0;
+            var extractedList = new ConcurrentBag<string>();
+            var failedList = new ConcurrentBag<string>();
+            int all = 0;
+
+            using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
+                MemoryMappedFileAccess.Read);
+
+            Parallel.For(0, FileCount, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
+            {
+                var info = Files.Values.ToList()[i];
+
+                if (CanUncook(info.NameHash64))
+                {
+                    Interlocked.Increment(ref all);
+                    int uncooked = UncookSingleInner(mmf, info.NameHash64, outDir, uncookext);
+
+                    if (uncooked != 0)
+                        extractedList.Add(info.NameStr);
+                    else
+                        failedList.Add(info.NameStr);
+                }
+
+                Interlocked.Increment(ref progress);
+                var perc = progress / (double) FileCount;
+                p1.Report(perc, $"Loading bundle entries: {progress}/{FileCount}");
+                
+            });
+
+            
+            return (extractedList.ToList(), all);
+        }
+
+
+
+        private bool CanUncook(ulong hash)
+        {
+            if (!Files.ContainsKey(hash))
+                return false;
+            string name = Files[hash].NameStr;
+
+            if (Path.GetExtension(name) != ".xbm")
+                return false;
+
+            return true;
         }
 
         /// <summary>

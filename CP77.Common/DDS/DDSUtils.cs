@@ -84,6 +84,10 @@ namespace WolvenKit.Common.Tools.DDS
         static uint[] DDSPF_A1R5G5B5() => new uint[5] { 16, 0x00007c00, 0x000003e0, 0x0000001f, 0x00000000 };
         static uint[] DDSPF_A4R4G4B4() => new uint[5] { 16, 0x00000f00, 0x000000f0, 0x0000000f, 0x0000f000 };
         static uint[] DDSPF_R8G8B8() => new uint[5] { 24, 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000 };
+
+        static uint[] DDSPF_L8() => new uint[5] { 8, 0xff, 0x00, 0x00, 0x00 };
+        static uint[] DDSPF_A8() => new uint[5] { 8, 0x00, 0x00, 0x00, 0xff };
+        static uint[] DDSPF_A8L8() => new uint[5] { 16, 0x00ff, 0x0000, 0x0000, 0xff00 };
         #endregion
 
         #region Writing
@@ -100,7 +104,8 @@ namespace WolvenKit.Common.Tools.DDS
             var mipscount = metadata.Mipscount;
             var iscubemap = metadata.Iscubemap;
             var format = metadata.Format;
-            bool dxt10 = metadata.Format == EFormat.BC7_UNORM;
+            bool dxt10 = /*metadata.Format == EFormat.BC7_UNORM;*/metadata.Dx10;  //TODO
+            // for BC7_UNORM, R8_UINT
 
             var ddspf = new DDS_PIXELFORMAT()
             {
@@ -142,9 +147,9 @@ namespace WolvenKit.Common.Tools.DDS
                 dwReserved12 = 0,
             };
 
-            var dxt10header = new DDS_HEADER_DXT10()
+            var dx10header = new DDS_HEADER_DXT10()
             {
-                dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM, //TODO
+                dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM, 
                 resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D,
                 miscFlag = 0,
                 arraySize = metadata.Slicecount,
@@ -158,31 +163,47 @@ namespace WolvenKit.Common.Tools.DDS
             // pixelformat
             {
                 // dwFourCC
-                switch (format)
-                {
-                    case EFormat.R8G8B8A8_UNORM:
-                        SetPixelmask(DDSPF_A8R8G8B8, ref ddspf); break;
-                    case EFormat.BC1_UNORM:
-                        ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '1'); break;
-                    case EFormat.BC2_UNORM:
-                        ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '3'); break;
-                    case EFormat.BC3_UNORM:
-                        ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '5'); break;
-                    case EFormat.BC4_UNORM:
-                        ddspf.dwFourCC = MAKEFOURCC('B', 'C', '4', 'U'); break;
-                    case EFormat.BC5_UNORM:
-                        ddspf.dwFourCC = MAKEFOURCC('B', 'C', '5', 'U'); break;
-                    case EFormat.BC7_UNORM:
-                        dxt10 = true; break;
-                    //case EFormat.R32G32B32A32_FLOAT:
-                    //case EFormat.R16G16B16A16_FLOAT:
-                    //case EFormat.BC6H_UF16:
-                    default:
-                        throw new MissingFormatException($"Missing Format: {format}");
-                }
                 if (dxt10)
                     ddspf.dwFourCC = MAKEFOURCC('D', 'X', '1', '0');
-
+                else
+                {
+                    switch (format)
+                    {
+                        case EFormat.R32G32B32A32_FLOAT:
+                            ddspf.dwFourCC = 116; break;
+                        case EFormat.R16G16B16A16_FLOAT:
+                            ddspf.dwFourCC = 113; break;
+                        case EFormat.R10G10B10A2_UNORM:
+                            throw new NotImplementedException();
+                        case EFormat.R32_UINT:
+                            throw new NotImplementedException();
+                        case EFormat.R8G8_UNORM:
+                            SetPixelmask(DDSPF_A8L8, ref ddspf); break;
+                        case EFormat.R16_FLOAT:
+                            ddspf.dwFourCC = 111; break;
+                        case EFormat.R8_UINT:
+                            SetPixelmask(DDSPF_L8, ref ddspf); break;
+                        case EFormat.A8_UNORM:
+                            SetPixelmask(DDSPF_A8, ref ddspf); break;
+                        case EFormat.R8G8B8A8_UNORM:
+                            SetPixelmask(DDSPF_A8R8G8B8, ref ddspf); break;
+                        case EFormat.BC1_UNORM:
+                            ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '1'); break;
+                        case EFormat.BC2_UNORM:
+                            ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '3'); break;
+                        case EFormat.BC3_UNORM:
+                            ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '5'); break;
+                        case EFormat.BC4_UNORM:
+                            ddspf.dwFourCC = MAKEFOURCC('B', 'C', '4', 'U'); break;
+                        case EFormat.BC5_UNORM:
+                            ddspf.dwFourCC = MAKEFOURCC('B', 'C', '5', 'U'); break;
+                        case EFormat.BC7_UNORM:
+                            dxt10 = true; break;
+                        default:
+                            throw new MissingFormatException($"Missing Format: {format}");
+                    }
+                }
+                
                 // dwflags
                 if (ddspf.dwABitMask != 0) // check this
                     ddspf.dwFlags |= DDPF_ALPHAPIXELS;
@@ -201,6 +222,14 @@ namespace WolvenKit.Common.Tools.DDS
             uint p = 0;
             switch (format)
             {
+                case EFormat.R32G32B32A32_FLOAT:
+                case EFormat.R16G16B16A16_FLOAT:
+                case EFormat.R10G10B10A2_UNORM:
+                case EFormat.R32_UINT:
+                case EFormat.R8_UINT:
+                case EFormat.R8G8_UNORM:
+                case EFormat.R16_FLOAT:
+                case EFormat.A8_UNORM:
                 case EFormat.R8G8B8A8_UNORM:
                     var bpp = ddspf.dwRGBBitCount;
                     header.dwPitchOrLinearSize = (width * bpp + 7) / 8;
@@ -220,9 +249,6 @@ namespace WolvenKit.Common.Tools.DDS
                     header.dwPitchOrLinearSize = (uint)(p);
                     header.dwFlags |= DDSD_LINEARSIZE;
                     break;
-                //case EFormat.BC6H_UF16:
-                //case EFormat.R32G32B32A32_FLOAT:
-                //case EFormat.R16G16B16A16_FLOAT:
                 default:
                     throw new MissingFormatException($"Missing Format: {format}");
             }
@@ -258,15 +284,25 @@ namespace WolvenKit.Common.Tools.DDS
                 // dxgiFormat
                 switch (format)
                 {
-                    case EFormat.BC7_UNORM:
-                        {
-                            dxt10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM;
-                            break;
-                        }
+                    case EFormat.R32G32B32A32_FLOAT: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT; break;
+                    case EFormat.R16G16B16A16_FLOAT: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT; break;
+                    case EFormat.R10G10B10A2_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM; break;
+                    case EFormat.R8G8B8A8_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM; break;
+                    case EFormat.R32_UINT: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R32_UINT; break;
+                    case EFormat.R8G8_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM; break;
+                    case EFormat.R16_FLOAT: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT; break;
+                    case EFormat.R8_UINT: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8_UINT; break;
+                    case EFormat.A8_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_A8_UNORM; break;
+                    case EFormat.BC1_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM; break;
+                    case EFormat.BC2_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM; break;
+                    case EFormat.BC3_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM; break;
+                    case EFormat.BC4_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM; break;
+                    case EFormat.BC7_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM; break;
+                    case EFormat.BC5_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM; break;
                     default:
-                        {
-                            throw new MissingFormatException($"Missing Format: {format}");
-                        }
+                    {
+                        throw new MissingFormatException($"Missing Format: {format}");
+                    }
                 }
                 // resourceDimension
                 //if (slicecount > 0)
@@ -283,7 +319,7 @@ namespace WolvenKit.Common.Tools.DDS
 
             }
 
-            return (header, dxt10header);
+            return (header, dx10header);
         }
 
         private static void WriteHeader(Stream stream, DDS_HEADER header, DDS_HEADER_DXT10 dxt10header)

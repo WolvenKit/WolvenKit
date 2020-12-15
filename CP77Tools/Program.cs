@@ -117,6 +117,9 @@ namespace CP77Tools
 
             async Task WriteLog()
             {
+                if (string.IsNullOrEmpty(logger.ErrorLogStr))
+                    return;
+
                 var t = DateTime.Now.ToString("yyyyMMddHHmmss");
                 var fi = new FileInfo(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                     $"errorlogs/log_{t}.txt"));

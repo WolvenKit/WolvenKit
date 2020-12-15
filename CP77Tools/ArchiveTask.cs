@@ -68,14 +68,31 @@ namespace CP77Tools
                 {
                     if (hash != 0)
                     {
+                        if (extract)
+                        {
+                            ar.ExtractSingle(hash, outDir);
+                            Console.WriteLine($"{ar.Filepath}: Extracted one file: {hash}");
+                        }
 
-                        ar.ExtractSingle(hash, outDir, extract, uncook, uext);
+                        if (uncook)
+                        {
+                            ar.UncookSingle(hash, outDir, uext);
+                            Console.WriteLine($"{ar.Filepath}: Uncooked one file: {hash}");
+                        }
                     }
                     else
                     {
-                        Console.WriteLine($"{path}: Found {ar.FileCount} files.");
-                        var result = ar.ExtractAll(outDir, extract, uncook, uext);
-                        Console.WriteLine($"{path}: Extracted {result.Count} files.");
+                        if (extract)
+                        {
+                            var r = ar.ExtractAll(outDir);
+                            Console.WriteLine($"{ar.Filepath}: Extracted {r.Item1.Count}/{r.Item2} files.");
+                        }
+
+                        if (uncook)
+                        {
+                            var r = ar.UncookAll(outDir, uext);
+                            Console.WriteLine($"{ar.Filepath}: Uncooked {r.Item1.Count}/{r.Item2} files.");
+                        }
                     }
                     
                 }
