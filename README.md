@@ -22,19 +22,19 @@ CDPR modding community discord: https://discord.gg/USZwxxFrKa
 * displays help for a specific command
 `archive -h`
 
-###Main functions
+### Main functions
 * extract all files from archive
 `archive -e -p "<PATH TO ARCHIVE>.archive"`
 
-* extract all textures from archive
+* extract all textures from archive (supports conversion to tga, bmp, jpg, png, dds)
 `archive -u --uext png -p "<PATH TO ARCHIVE>.archive"`
 
 
-###Debug Options
-* dump archive info from archive
-`dump -a -p "<PATH TO ARCHIVE>.archive"`
-* dumps class info from extracted cr2w file
+### Debug Options
+* dumps property info from extracted cr2w file
 `cr2w -c -p "<PATH TO FILE>"` 
+* dumps class info from extracted cr2w file
+`cr2w -a -p "<PATH TO FILE>"` 
 
 ## v.0.1.3.3
 - added cr2w class layout dumps
