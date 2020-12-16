@@ -212,7 +212,7 @@ namespace WolvenKit.CR2W.Types
         #region Virtual
         [JsonIgnore]
         public List<IEditableVariable> ChildrEditableVariables => GetEditableVariables();
-        
+        [JsonIgnore]
         public List<IEditableVariable> ChildrExistingVariables => GetExistingVariables(false);
 
         /// <summary>

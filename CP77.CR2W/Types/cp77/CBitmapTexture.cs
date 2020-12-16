@@ -65,4 +65,6 @@ namespace WolvenKit.CR2W.Types
 
         public STextureGroupSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
+
+
 }

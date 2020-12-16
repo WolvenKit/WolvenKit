@@ -72,6 +72,15 @@ namespace WolvenKit.CR2W.Types
                 return cenum;
             }
             // check for generic type
+            else if (typename.StartsWith('['))
+            {
+                string generictype = typename.Substring(3);
+                CVariable innerobject = Create(generictype, "", cr2w, null);
+                var arrayacc = MakeArray(typeof(CStatic<>), innerobject.GetType());
+                //arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value) };
+                arrayacc.Elementtype = generictype;
+                return arrayacc as CVariable;
+            }
             else if (typename.Contains(':'))
             {
                 #region GENERIC TYPES
@@ -99,6 +108,12 @@ namespace WolvenKit.CR2W.Types
                             CVariable innerobject = Create(innertype, "", cr2w, null);
                             return MakeGenericType(typeof(CSoft<>), innerobject);
                         }
+                    case "CrRef":
+                    case "rRef":
+                    {
+                        CVariable innerobject = Create(innertype, "", cr2w, null);
+                        return MakeGenericType(typeof(rRef<>), innerobject);
+                    }
                     case "array":
                         {
                             // match pattern e.g. 
