@@ -215,6 +215,10 @@ namespace CP77Tools.Model
             if (!Files.ContainsKey(hash))
                 return -1;
             string name = Files[hash].NameStr;
+            if (string.IsNullOrEmpty(Path.GetExtension(name)))
+            {
+                name += ".bin";
+            }
 
             var outfile = new FileInfo(Path.Combine(outDir.FullName,
                 $"{name}"));

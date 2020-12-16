@@ -240,14 +240,16 @@ namespace CP77Tools
 
                 if (missinghashes)
                 {
-                    
+                    var ctr = 0;
                     foreach (var (hash, fileInfoEntry) in ar.Files)
                     {
                         if (fileInfoEntry.NameStr == hash.ToString())
                         {
                             mwriter.WriteLine(hash);
+                            ctr++;
                         }
                     }
+                    Console.WriteLine($"{ar.Filepath} - missing: {ctr}");
                 }
 
             }

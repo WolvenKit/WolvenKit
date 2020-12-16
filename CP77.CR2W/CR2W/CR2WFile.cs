@@ -455,12 +455,12 @@ namespace WolvenKit.CR2W
             Properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
             Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
             Buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList();
-            Embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
-            {
-                ParentFile = this,
-                ParentImports = Imports,
-                Handle = StringDictionary[_.path],
-            }).ToList();
+            //Embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
+            //{
+            //    ParentFile = this,
+            //    ParentImports = Imports,
+            //    Handle = StringDictionary[_.path],
+            //}).ToList();
 
             #endregion
 
@@ -517,12 +517,12 @@ namespace WolvenKit.CR2W
             Properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList(); // block 4
             Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this)).ToList(); // block 5
             Buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList(); // block 6
-            Embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
-            {
-                ParentFile = this,
-                ParentImports = Imports,
-                Handle = StringDictionary[_.path],
-            }).ToList(); // block 7
+            //Embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
+            //{
+            //    ParentFile = this,
+            //    ParentImports = Imports,
+            //    Handle = StringDictionary[_.path],
+            //}).ToList(); // block 7
 
             Logger?.LogProgress(100);
             #endregion
