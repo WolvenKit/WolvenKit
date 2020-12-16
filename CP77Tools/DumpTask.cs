@@ -7,8 +7,10 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Catel.Collections;
+using Catel.IoC;
 using ConsoleProgressBar;
 using CP77Tools.Model;
+using CP77Tools.Services;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -88,7 +90,8 @@ namespace CP77Tools
 
             #endregion
 
-            
+            var mainController = ServiceLocator.Default.ResolveType<IMainController>();
+
             var missinghashtxt = isDirectory 
                 ? Path.Combine(inputDirInfo.FullName, "missinghashes.txt") 
                 : $"{inputFileInfo.FullName}.missinghashes.txt";
@@ -141,6 +144,7 @@ namespace CP77Tools
                                 Imports = cr2w.Imports
                             };
 
+                            
 
                             fileDictionary.AddOrUpdate(hash, obj, (arg1, o) => obj);
                         }
@@ -218,7 +222,8 @@ namespace CP77Tools
                         {
                             writer.WriteLine(str);
                             var hash = FNV1A64HashAlgorithm.HashString(str);
-                            hwriter.WriteLine($"{str},{hash}");
+                            if (!mainController.Hashdict.ContainsKey(hash))
+                                hwriter.WriteLine($"{str},{hash}");
                         }
 
                         Console.WriteLine($"Finished. Dump file written to {ar.Filepath}.");

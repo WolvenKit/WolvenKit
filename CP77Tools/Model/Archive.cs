@@ -392,22 +392,29 @@ namespace CP77Tools.Model
                 else
                 {
                     var oodleCompression = binaryReader.ReadBytes(4);
-                    if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
-                        throw new NotImplementedException();
-                    var size = binaryReader.ReadUInt32();
+                    if ((oodleCompression.SequenceEqual(new byte[] {0x4b, 0x41, 0x52, 0x4b})))
+                    {
+                        var size = binaryReader.ReadUInt32();
 
-                    if (size != offsetentry.VirtualSize)
-                        throw new NotImplementedException();
+                        if (size != offsetentry.VirtualSize)
+                            throw new NotImplementedException();
 
-                    var buffer = binaryReader.ReadBytes((int)offsetentry.PhysicalSize - 8);
+                        var buffer = binaryReader.ReadBytes((int)offsetentry.PhysicalSize - 8);
 
-                    byte[] unpacked = new byte[offsetentry.VirtualSize];
-                    long unpackedSize = OodleLZ.Decompress(buffer, unpacked);
+                        byte[] unpacked = new byte[offsetentry.VirtualSize];
+                        long unpackedSize = OodleLZ.Decompress(buffer, unpacked);
 
-                    if (unpackedSize != offsetentry.VirtualSize)
-                        throw new Exception(
-                            $"Unpacked size doesn't match real size. {unpackedSize} vs {offsetentry.VirtualSize}");
-                    bw.Write(unpacked);
+                        if (unpackedSize != offsetentry.VirtualSize)
+                            throw new Exception(
+                                $"Unpacked size doesn't match real size. {unpackedSize} vs {offsetentry.VirtualSize}");
+                        bw.Write(unpacked);
+                    }
+                    else
+                    {
+                        binaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
+                        var buffer = binaryReader.ReadBytes((int)offsetentry.PhysicalSize);
+                        bw.Write(buffer);
+                    }
                 }
 
                 return ms.ToArray();
