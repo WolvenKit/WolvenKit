@@ -15654,11 +15654,6 @@ public class animAnimationBufferCompressed : CVariable
 	public animAnimationBufferCompressed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
-public class GpuWrapApieTextureType : CVariable
-{
-	public GpuWrapApieTextureType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
-[REDMeta]
 public class gameEffectObjectSingleFilter_BlackboardBoolCondition : CVariable
 {
 	[Ordinal(0)] [RED("parameter")] public gameEffectInputParameter_Bool Parameter { get; set; }

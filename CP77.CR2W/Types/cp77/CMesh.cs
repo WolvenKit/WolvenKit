@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta]
     public class CMesh : CVariable
     {
-        [Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+        [Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
         [Ordinal(1)] [RED("resourceVersion")] public CUInt8 ResourceVersion { get; set; }
         [Ordinal(2)] [RED("boundingBox")] public Box BoundingBox { get; set; }
         [Ordinal(3)] [RED("surfaceAreaPerAxis")] public Vector3 SurfaceAreaPerAxis { get; set; }

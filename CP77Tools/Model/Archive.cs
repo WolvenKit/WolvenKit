@@ -124,24 +124,27 @@ namespace CP77Tools.Model
             if (outfile.Directory == null)
                 return -1;
             if (buffers.Count > 1)
-                throw new NotImplementedException(); //TODO: can that happen?
+                return -1; //TODO: can that happen?
 
+            var cr2w = new CR2WFile();
+            using var ms = new MemoryStream(file);
+            using var br = new BinaryReader(ms);
+            cr2w.ReadImportsAndBuffers(br);
+            if (cr2w.StringDictionary[1] != "CBitmapTexture")
+                return -1;
+
+            br.BaseStream.Seek(0, SeekOrigin.Begin);
+            var result = cr2w.Read(br);
+            if (result != EFileReadErrorCodes.NoError)
+                return -1;
+            if (!(cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm) ||
+                !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+                return -1;
 
             // write buffers
             foreach (var b in buffers)
             {
                 #region textures
-                // read cr2w
-                using var ms = new MemoryStream(file);
-                using var br = new BinaryReader(ms);
-                var cr2w = new CR2WFile();
-                var result = cr2w.Read(br);
-                if (result != EFileReadErrorCodes.NoError)
-                    continue;
-                if (!(cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm) ||
-                    !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
-                    continue;
-
                 // create dds header
                 var newpath = Path.ChangeExtension(outfile.FullName, "dds");
                 try
@@ -329,10 +332,7 @@ namespace CP77Tools.Model
                 return false;
             string name = Files[hash].NameStr;
 
-            if (Path.GetExtension(name) != ".xbm")
-                return false;
-
-            return true;
+            return (Path.GetExtension(name) == ".xbm" || Path.GetExtension(name) == ".bin"); //TODO: remove when all filenames found
         }
 
         /// <summary>

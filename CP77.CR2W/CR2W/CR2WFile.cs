@@ -483,6 +483,7 @@ namespace WolvenKit.CR2W
         public EFileReadErrorCodes Read(BinaryReader file)
         {
             //m_stream = file.BaseStream;
+            StringDictionary.Clear();
 
             var stopwatch1 = new Stopwatch();
             stopwatch1.Start();

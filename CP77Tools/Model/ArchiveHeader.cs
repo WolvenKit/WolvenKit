@@ -142,7 +142,7 @@ namespace CP77Tools.Model
         public byte[] SHA1Hash { get; private set; }
 
         private string _nameStr;
-        public string NameStr => string.IsNullOrEmpty(_nameStr) ? NameHash64.ToString() : _nameStr;
+        public string NameStr => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64.ToString()}.bin" : _nameStr;
 
         private IMainController _mainController;
 
