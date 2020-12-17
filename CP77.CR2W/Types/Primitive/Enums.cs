@@ -39,26 +39,11 @@ namespace WolvenKit.CR2W.Types
         {
 
         }
-        public enum ETextureAddressing
-        {
-
-        }
-        public enum ETextureFilteringMin
-        {
-
-        }
-        public enum ETextureFilteringMag
-        {
-
-        }
-        public enum ETextureFilteringMip
-        {
-
-        }
-        public enum ETextureComparisonFunction
-        {
-
-        }
+        
+        
+        
+        
+        
         public enum ENoiseTypes
         {
 

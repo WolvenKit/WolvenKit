@@ -155,7 +155,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta]
     public class gamePersistentStateDataResource : CVariable
     {
-	    [Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	    [Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	    public gamePersistentStateDataResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 [REDMeta]
@@ -215,7 +215,7 @@ public class toolsTimeLineItemCollection : CVariable
 [REDMeta]
 public class worldTrafficCollisionResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("data")] public CHandle<worldTrafficStaticCollisionData> Data { get; set; }
 	public worldTrafficCollisionResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -304,7 +304,7 @@ public class AIArgumentNodeRefValue : CVariable
 [REDMeta]
 public class scnSceneResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("entryPoints")] public CArray<scnEntryPoint> EntryPoints { get; set; }
 	[Ordinal(2)] [RED("exitPoints")] public CArray<scnExitPoint> ExitPoints { get; set; }
 	[Ordinal(3)] [RED("actors")] public CArray<scnActorDef> Actors { get; set; }
@@ -319,6 +319,12 @@ public class scnSceneResource : CVariable
 	public scnSceneResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
+public class scnInterruptionScenarioId : CVariable
+	{
+    [Ordinal(0)] [RED("id")] public CUInt32 Id { get; set; }
+    public scnInterruptionScenarioId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+}
+	[REDMeta]
 public class questDeletionMarkerNodeDefinition : CVariable
 {
 	[Ordinal(0)] [RED("sockets")] public CArray<CHandle<graphGraphSocketDefinition>> Sockets { get; set; }
@@ -503,7 +509,7 @@ public class CParticleEventGenerator : CVariable
 [REDMeta]
 public class gameSmartObjectResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("entryPoints")] public CArray<gameSmartObjectGate> EntryPoints { get; set; }
 	[Ordinal(2)] [RED("exitPoints")] public CArray<gameSmartObjectGate> ExitPoints { get; set; }
 	[Ordinal(3)] [RED("bodyTypes")] public CArray<gameBodyTypeAnimationDefinition> BodyTypes { get; set; }
@@ -980,7 +986,7 @@ public class AIbehaviorSelectCoverTaskDefinition : CVariable
 [REDMeta]
 public class inkTextureAtlas : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("slots", 3)] public CArrayFixedSize<inkTextureSlot> Slots { get; set; }
 public inkTextureAtlas(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -2065,7 +2071,7 @@ public class questAchievementManagerNodeDefinition : CVariable
 [REDMeta]
 public class MorphTargetMesh : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("baseMesh")] public rRef<CMesh> BaseMesh { get; set; }
 	[Ordinal(2)] [RED("targets")] public CArray<MorphTargetMeshEntry> Targets { get; set; }
 	[Ordinal(3)] [RED("boundingBox")] public Box BoundingBox { get; set; }
@@ -2206,7 +2212,7 @@ public class entdismembermentWoundTypeE : CVariable
 [REDMeta]
 public class worldStreamingSector : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("level")] public CUInt8 Level { get; set; }
 	[Ordinal(2)] [RED("category")] public CInt8 Category { get; set; }
 	public worldStreamingSector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -2294,7 +2300,7 @@ public class scnOverrideInterruptConditions_InterruptionScenarioOperation : CVar
 [REDMeta]
 public class animAnimGraph : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("rootNode")] public CHandle<animAnimNode_Root> RootNode { get; set; }
 	[Ordinal(2)] [RED("variables")] public CHandle<animAnimVariableContainer> Variables { get; set; }
 	[Ordinal(3)] [RED("animFeatures")] public CArray<animAnimFeatureEntry> AnimFeatures { get; set; }
@@ -2387,7 +2393,7 @@ public class questETimeShiftType : CVariable
 [REDMeta]
 public class gameSmartObjectsCompiledResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("animationDatabase")] public CHandle<gameSmartObjectAnimationDatabase> AnimationDatabase { get; set; }
 	[Ordinal(2)] [RED("transformDictionary")] public CHandle<gameSmartObjectTransformDictionary> TransformDictionary { get; set; }
 	[Ordinal(3)] [RED("propertyDictionary")] public CHandle<gameSmartObjectPropertyDictionary> PropertyDictionary { get; set; }
@@ -2501,7 +2507,7 @@ public class AIRagdollDelegate : CVariable
 [REDMeta]
 public class CHairProfile : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("gradientEntriesID")] public CArray<rendGradientEntry> GradientEntriesID { get; set; }
 	[Ordinal(2)] [RED("gradientEntriesRootToTip")] public CArray<rendGradientEntry> GradientEntriesRootToTip { get; set; }
 	public CHairProfile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -3062,16 +3068,7 @@ public class ThrowGrenadeCommandCleanup : CVariable
 	[Ordinal(0)] [RED("inCommand")] public CHandle<AIArgumentMapping> InCommand { get; set; }
 	public ThrowGrenadeCommandCleanup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class animDangleConstraint_SimulationDyng : CVariable
-{
-	[Ordinal(0)] [RED("parentRotationAltersTransformsOfNonDanglesAndItsChildren")] public CBool ParentRotationAltersTransformsOfNonDanglesAndItsChildren { get; set; }
-	[Ordinal(1)] [RED("dangleAltersTransformsOfItsChildren")] public CBool DangleAltersTransformsOfItsChildren { get; set; }
-	[Ordinal(2)] [RED("substepTime")] public CFloat SubstepTime { get; set; }
-	[Ordinal(3)] [RED("particlesContainer")] public animDyngParticlesContainer ParticlesContainer { get; set; }
-	[Ordinal(4)] [RED("dyngConstraint")] public CHandle<animIDyngConstraint> DyngConstraint { get; set; }
-	public animDangleConstraint_SimulationDyng(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class AIbehaviorMappingConditionDefinition : CVariable
 {
@@ -3605,7 +3602,7 @@ public class AnimFeature_MeleeAttack : CVariable
 [REDMeta]
 public class gameinteractionsInteractionDescriptorResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("definition")] public gameinteractionsCHotSpotDefinition Definition { get; set; }
 	public gameinteractionsInteractionDescriptorResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -3707,11 +3704,6 @@ public class scnRidCameraAnimationSRRefId : CVariable
 	public scnRidCameraAnimationSRRefId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
-public class animAnimFeature_VehiclePassengerAnimSetup : CVariable
-{
-	public animAnimFeature_VehiclePassengerAnimSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
-[REDMeta]
 public class rendLightGroup : CVariable
 {
 	public rendLightGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -3772,7 +3764,7 @@ public class scnAudioEvent : CVariable
 [REDMeta]
 public class inkMenuResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("menusEntries")] public CArray<inkMenuEntry> MenusEntries { get; set; }
 	[Ordinal(2)] [RED("scenariosNames")] public CArray<CName> ScenariosNames { get; set; }
 	[Ordinal(3)] [RED("initialScenarioName")] public CName InitialScenarioName { get; set; }
@@ -4001,14 +3993,14 @@ public class gameinteractionsEBinaryOperator : CVariable
 [REDMeta]
 public class AIbehaviorResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("root")] public CHandle<AIbehaviorTreeNodeDefinition> Root { get; set; }
 	public AIbehaviorResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
 public class gameEffectSet : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("effects")] public CArray<gameEffectDefinition> Effects { get; set; }
 	public gameEffectSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -4402,15 +4394,15 @@ public class questPhaseNodeDefinition : CVariable
 [REDMeta]
 public class CMaterialTemplate : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("paramBlockSize", 3)] public CArrayFixedSize<CUInt32> ParamBlockSize { get; set; }
     [Ordinal(2)] [RED("materialVersion")] public CUInt8 MaterialVersion { get; set; }
     [Ordinal(3)] [RED("vertexFactories")] public CArray<CEnum<EMaterialVertexFactory>> VertexFactories { get; set; }
     [Ordinal(4)] [RED("name")] public CName Name { get; set; }
-    [Ordinal(5)]  [RED("parameters", 3)] public CArrayFixedSize<CHandle<CMaterialParameter>> Parameters { get; set; }
+    [Ordinal(5)]  [RED("parameters", 3)] public CArrayFixedSize<CArray<CHandle<CMaterialParameter>>> Parameters { get; set; }
 	[Ordinal(6)] [RED("techniques")] public CArray<MaterialTechnique> Techniques { get; set; }
-    [Ordinal(7)]  [RED("samplerStates", 3)] public CArrayFixedSize<SamplerStateInfo> SamplerStates { get; set; }
-	[Ordinal(8)]  [RED("usedParameters", 3)] public CArrayFixedSize<MaterialUsedParameter> UsedParameters { get; set; }
+    [Ordinal(7)]  [RED("samplerStates", 3)] public CArrayFixedSize<CArray<SamplerStateInfo>> SamplerStates { get; set; }
+	[Ordinal(8)]  [RED("usedParameters", 3)] public CArrayFixedSize<CArray<MaterialUsedParameter>> UsedParameters { get; set; }
 	[Ordinal(9)] [RED("resourceVersion")] public CUInt8 ResourceVersion { get; set; }
 public CMaterialTemplate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -4554,7 +4546,7 @@ public class questCombatNodeParams_ThrowGrenade : CVariable
 [REDMeta]
 public class CSkinProfile : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("diffuse")] public CColor Diffuse { get; set; }
 	[Ordinal(2)] [RED("roughness0")] public CFloat Roughness0 { get; set; }
 	[Ordinal(3)] [RED("roughness1")] public CFloat Roughness1 { get; set; }
@@ -4574,7 +4566,7 @@ public class InitCombatAfterHit : CVariable
 [REDMeta]
 public class animLipsyncMapping : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("languageCodeName")] public CName LanguageCodeName { get; set; }
 	[Ordinal(2)] [RED("scenePaths")] public CArray<CUInt64> ScenePaths { get; set; }
 	[Ordinal(3)] [RED("scenePreviewPaths")] public CArray<CUInt64> ScenePreviewPaths { get; set; }
@@ -5099,7 +5091,7 @@ public class questvehicleOnSplineParams : CVariable
 [REDMeta]
 public class CGradient : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	public CGradient(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -5140,7 +5132,7 @@ public class questVehicleCommandType : CVariable
 [REDMeta]
 public class appearanceCookedAppearanceData : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("dependencies")] public CArray<rRef<CResource>> Dependencies { get; set; }
 	[Ordinal(2)] [RED("totalSizeOnDisk")] public CUInt32 TotalSizeOnDisk { get; set; }
 	public appearanceCookedAppearanceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -5411,7 +5403,7 @@ public class gameEffectObjectFilter_HitRepresentation_Sphere : CVariable
 [REDMeta]
 public class CurveSet : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("curves")] public CArray<CurveSetEntry> Curves { get; set; }
 	public CurveSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -5564,7 +5556,7 @@ public class DistantProxiesSettings : CVariable
 [REDMeta]
 public class navLocomotionPathResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	public navLocomotionPathResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -5760,7 +5752,7 @@ public class questTransformAnimatorNodeDefinition : CVariable
 [REDMeta]
 public class worldAcousticDataResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("cells")] public CArray<worldAcousticDataCell> Cells { get; set; }
 	public worldAcousticDataResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -5778,7 +5770,7 @@ public class gameEffectObjectFilter_NoPuppet : CVariable
 [REDMeta]
 public class animRig : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("boneNames")] public CArray<CName> BoneNames { get; set; }
 	[Ordinal(2)] [RED("trackNames")] public CArray<CName> TrackNames { get; set; }
 	[Ordinal(3)] [RED("rigExtraTracks")] public CArray<animFloatTrackInfo> RigExtraTracks { get; set; }
@@ -6668,7 +6660,7 @@ public class questDisplayMessageBox_NodeType : CVariable
 [REDMeta]
 public class vehicleAudioVehicleCurveSet : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("curves")] public CArray<CurveSetEntry> Curves { get; set; }
 	public vehicleAudioVehicleCurveSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -6844,7 +6836,7 @@ public class EffectPostAction_BulletExplode : CVariable
 [REDMeta]
 public class animFacialSetup : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("rig")] public rRef<animRig> Rig { get; set; }
 	[Ordinal(2)] [RED("info")] public animFacialSetup_BufferInfo Info { get; set; }
 	[Ordinal(3)] [RED("posesInfo")] public animFacialSetup_PosesBufferInfo PosesInfo { get; set; }
@@ -7104,7 +7096,7 @@ public class AIbehaviorConvertCommandToDynamicWorkspotTaskDefinition : CVariable
 [REDMeta]
 public class worldTrafficPersistentLaneConnectionsResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	public worldTrafficPersistentLaneConnectionsResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -7195,7 +7187,7 @@ public class gameEffectTriggerRotationType : CVariable
 [REDMeta]
 public class animActionAnimDatabase : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("rows")] public CArray<animActionAnimDatabase_DatabaseRow> Rows { get; set; }
 	public animActionAnimDatabase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -7535,7 +7527,7 @@ public class ForcedRagdollDeathTask : CVariable
 [REDMeta]
 public class animGenericAnimDatabase : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("rows")] public CArray<animGenericAnimDatabase_DatabaseRow> Rows { get; set; }
 	public animGenericAnimDatabase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -7575,7 +7567,7 @@ public class gameEffectObjectProvider_SweepMelee_Box : CVariable
 [REDMeta]
 public class animFacialCustomizationSet : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("baseSetup")] public rRef<animFacialSetup> BaseSetup { get; set; }
 	[Ordinal(2)] [RED("targetSetups")] public CArray<raRef<animFacialSetup>> TargetSetups { get; set; }
 	[Ordinal(3)] [RED("targetSetupsTemp")] public CArray<animFacialCustomizationTargetEntryTemp> TargetSetupsTemp { get; set; }
@@ -7633,7 +7625,7 @@ public class questFlushAutopilot_NodeType : CVariable
 [REDMeta]
 public class gameLocationResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	public gameLocationResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -7698,7 +7690,7 @@ public class animAnimNode_ValueBySpeed : CVariable
 [REDMeta]
 public class DynamicTexture : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("width")] public CUInt32 Width { get; set; }
 	[Ordinal(2)] [RED("height")] public CUInt32 Height { get; set; }
 	[Ordinal(3)] [RED("generator")] public CHandle<IDynamicTextureGenerator> Generator { get; set; }
@@ -7800,7 +7792,7 @@ public class DistantLightsAreaSettings : CVariable
 [REDMeta]
 public class animAnimSet : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("animations")] public CArray<CHandle<animAnimSetEntry>> Animations { get; set; }
 	[Ordinal(2)] [RED("animationDataChunks")] public CArray<animAnimDataChunk> AnimationDataChunks { get; set; }
 	[Ordinal(3)] [RED("rig")] public rRef<animRig> Rig { get; set; }
@@ -7853,7 +7845,7 @@ public class animAnimNode_QuaternionInput : CVariable
 [REDMeta]
 public class scnInterestingConversationsResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("conversationGroups")] public CArray<CHandle<scnInterestingConversationsGroup>> ConversationGroups { get; set; }
 	public scnInterestingConversationsResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -7922,7 +7914,7 @@ public class gameJournalPhoneChoiceGroup : CVariable
 [REDMeta]
 public class CIESDataResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("samples", 128)] public CArrayFixedSize<Uint8> Samples { get; set; }
 public CIESDataResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -8405,12 +8397,6 @@ public class StimTargetsEvent : CVariable
 	public StimTargetsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
-public class scnInterruptionScenarioId : CVariable
-{
-	[Ordinal(0)] [RED("id")] public CUInt32 Id { get; set; }
-	public scnInterruptionScenarioId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
-[REDMeta]
 public class scnSceneSolutionHash : CVariable
 {
 	[Ordinal(0)] [RED("sceneSolutionHash")] public scnSceneSolutionHashHash SceneSolutionHash { get; set; }
@@ -8635,7 +8621,7 @@ public class animAnimStateMachineConditionalEntry : CVariable
 [REDMeta]
 public class worldStreamingWorld : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("version")] public CUInt32 Version { get; set; }
 	[Ordinal(2)] [RED("exteriorSectors")] public CArray<worldStreamingSectorDescriptor> ExteriorSectors { get; set; }
 	[Ordinal(3)] [RED("questSectors")] public CArray<worldStreamingSectorDescriptor> QuestSectors { get; set; }
@@ -9231,7 +9217,7 @@ public class PreviousFearPhaseCheck : CVariable
 [REDMeta]
 public class inkStyleResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("styles")] public CArray<inkStyle> Styles { get; set; }
 	public inkStyleResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -9253,7 +9239,7 @@ public class questRemoveToken_NodeSubType : CVariable
 [REDMeta]
 public class gameMappinResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	public gameMappinResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -9336,7 +9322,7 @@ public class InUnconsciousHighLevelState : CVariable
 [REDMeta]
 public class worldFoliageCompiledResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("version")] public CUInt32 Version { get; set; }
 	[Ordinal(2)] [RED("populationCount")] public CUInt32 PopulationCount { get; set; }
 	[Ordinal(3)] [RED("bucketCount")] public CUInt32 BucketCount { get; set; }
@@ -9591,7 +9577,7 @@ public class questSetProgress_NodeType : CVariable
 [REDMeta]
 public class JsonResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("root")] public CHandle<ISerializable> Root { get; set; }
 	public JsonResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -10032,7 +10018,7 @@ public class inkanimPlayVOEvent : CVariable
 [REDMeta]
 public class CTextureArray : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("setup")] public STextureGroupSetup Setup { get; set; }
 	[Ordinal(2)] [RED("renderTextureResource")] public rendRenderTextureResource RenderTextureResource { get; set; }
 	public CTextureArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -10287,7 +10273,7 @@ public class AIbehaviorActionMoveToSmartObjectNodeDefinition : CVariable
 [REDMeta]
 public class inkCreditsResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("sections")] public CArray<inkCreditsSectionEntry> Sections { get; set; }
 	public inkCreditsResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -10355,7 +10341,7 @@ public class GetFollowTarget : CVariable
 [REDMeta]
 public class workWorkspotResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("rootNode")] public CHandle<animAnimNode_Root> RootNode { get; set; }
 	[Ordinal(2)] [RED("variables")] public CHandle<animAnimVariableContainer> Variables { get; set; }
 	[Ordinal(3)] [RED("animFeatures")] public CArray<animAnimFeatureEntry> AnimFeatures { get; set; }
@@ -10737,7 +10723,7 @@ public class IsCoverDevice : CVariable
 [REDMeta]
 public class worldTrafficPersistentLanePolygonResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	public worldTrafficPersistentLanePolygonResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -10971,7 +10957,7 @@ public class entdismembermentWoundsConfigSet : CVariable
 [REDMeta]
 public class CReflectionProbeDataResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("textureData")] public rendRenderTextureResource TextureData { get; set; }
 	[Ordinal(2)] [RED("dataHash")] public CUInt64 DataHash { get; set; }
 	[Ordinal(3)] [RED("faceDepth", 6)] public CArrayFixedSize<CFloat> FaceDepth { get; set; }
@@ -11078,7 +11064,7 @@ public class CParticleInitializerRotationRate : CVariable
 [REDMeta]
 public class communityCommunityTemplate : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("communityTemplate")] public CHandle<communityCommunityTemplateData> CommunityTemplate { get; set; }
 	public communityCommunityTemplate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -11293,7 +11279,7 @@ public class AIbehaviorEventHandlerNodeDefinition : CVariable
 [REDMeta]
 public class questQuestPhaseResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("graph")] public CHandle<graphGraphDefinition> Graph { get; set; }
 	public questQuestPhaseResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -11463,7 +11449,7 @@ public class animUncompressedAllAnglesMotionExtraction : CVariable
 [REDMeta]
 public class CFoliageProfile : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	public CFoliageProfile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 
@@ -11515,7 +11501,7 @@ public class animAnimNode_FloatMathOp : CVariable
 [REDMeta]
 public class worldTrafficPersistentResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	public worldTrafficPersistentResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -11745,7 +11731,7 @@ public class animAnimNode_BoolToFloatConverter : CVariable
 [REDMeta]
 public class minimapEncodedShapes : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("Buffer")] public DataBuffer Buffer { get; set; }
 	[Ordinal(2)] [RED("QuantizationScale")] public Vector2 QuantizationScale { get; set; }
 	[Ordinal(3)] [RED("QuantizationBias")] public Vector2 QuantizationBias { get; set; }
@@ -11781,7 +11767,7 @@ public class questSetTriggerState_NodeType : CVariable
 [REDMeta]
 public class worldStreamingSectorInplaceContent : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("inplaceResources")] public CArray<rRef<CResource>> InplaceResources { get; set; }
 	public worldStreamingSectorInplaceContent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -11869,7 +11855,7 @@ public class gameSmartObjectDefinition : CVariable
 [REDMeta]
 public class worldStreamingQueryDataResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	public worldStreamingQueryDataResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -11969,7 +11955,7 @@ public class AIbehaviorIncludedTreeDefinition : CVariable
 [REDMeta]
 public class gameAreaResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	public gameAreaResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -12062,7 +12048,7 @@ public class IsNPCAloneInVehicle : CVariable
 [REDMeta]
 public class rendFont : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("fontBuffer")] public DataBuffer FontBuffer { get; set; }
 	public rendFont(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -12103,7 +12089,7 @@ public class animAnimNode_SkipConsoleEnd : CVariable
 [REDMeta]
 public class inkHudEntriesResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("rootWidget")] public rRef<inkWidgetLibraryResource> RootWidget { get; set; }
 	[Ordinal(2)] [RED("entries")] public CArray<inkHudWidgetSpawnEntry> Entries { get; set; }
 	public inkHudEntriesResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -12431,7 +12417,7 @@ public class scnLookAtEvent : CVariable
 [REDMeta]
 public class worldTrafficNullAreaCollisionResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("nullAreasCollisionData")] public CHandle<worldTrafficNullAreaCollisionData> NullAreasCollisionData { get; set; }
 	[Ordinal(2)] [RED("nullAreaBlockadeData")] public CHandle<worldTrafficNullAreaDynamicBlockadeData> NullAreaBlockadeData { get; set; }
 	public worldTrafficNullAreaCollisionResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -12439,7 +12425,7 @@ public class worldTrafficNullAreaCollisionResource : CVariable
 [REDMeta]
 public class CCubeTexture : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("setup")] public STextureGroupSetup Setup { get; set; }
 	[Ordinal(2)] [RED("renderTextureResource")] public rendRenderTextureResource RenderTextureResource { get; set; }
 	public CCubeTexture(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -12771,7 +12757,7 @@ public class ImageBasedFlareAreaSettings : CVariable
 [REDMeta]
 public class gameLootResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("data")] public CHandle<gameLootResourceData> Data { get; set; }
 	public gameLootResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -12908,7 +12894,7 @@ public class questVehicleTrunk_ConditionType : CVariable
 [REDMeta]
 public class gamePointOfInterestMappinResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	public gamePointOfInterestMappinResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -13773,7 +13759,7 @@ public class animAnimNode_GraphSlotConditions : CVariable
 [REDMeta]
 public class CTerrainSetup : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("tiling")] public CArray<CFloat> Tiling { get; set; }
 	[Ordinal(2)] [RED("physicalMaterial")] public CArray<CName> PhysicalMaterial { get; set; }
 	public CTerrainSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -13829,7 +13815,7 @@ public class questEntityManagerNodeDefinition : CVariable
 [REDMeta]
 public class physicsGeometryCache : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("sectorGeometries")] public CArray<physicsGeometryKey> SectorGeometries { get; set; }
 	[Ordinal(2)] [RED("sectorCacheEntries")] public CArray<physicsSectorCacheEntry> SectorCacheEntries { get; set; }
 	[Ordinal(3)] [RED("alwaysLoadedSector")] public physicsSectorEntry AlwaysLoadedSector { get; set; }
@@ -13896,7 +13882,7 @@ public class worldTrafficPersistentData : CVariable
 [REDMeta]
 public class Multilayer_LayerTemplate : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("overrides")] public Multilayer_LayerTemplateOverrides Overrides { get; set; }
 	[Ordinal(2)] [RED("colorTexture")] public rRef<CBitmapTexture> ColorTexture { get; set; }
 	[Ordinal(3)] [RED("normalTexture")] public rRef<CBitmapTexture> NormalTexture { get; set; }
@@ -13947,7 +13933,7 @@ public class worldTrafficNullAreaDynamicBlockadeData : CVariable
 [REDMeta]
 public class gameJournalResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("entry")] public CHandle<gameJournalEntry> Entry { get; set; }
 	public gameJournalResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -13976,7 +13962,7 @@ public class AIbehaviorWaitTargetToReachConditionDefinition : CVariable
 [REDMeta]
 public class worldEnvironmentDefinition : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("worldRenderSettings")] public WorldRenderAreaSettings WorldRenderSettings { get; set; }
 	[Ordinal(2)] [RED("worldShadowConfig")] public WorldShadowConfig WorldShadowConfig { get; set; }
 	[Ordinal(3)] [RED("worldLightingConfig")] public WorldLightingConfig WorldLightingConfig { get; set; }
@@ -14476,7 +14462,7 @@ public class worldOffMeshConnectionType : CVariable
 [REDMeta]
 public class gameHitRepresentationResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("representations")] public CArray<gameHitShapeContainer> Representations { get; set; }
 	[Ordinal(2)] [RED("overrides")] public CArray<gameHitRepresentationVisualTaggedOverride> Overrides { get; set; }
 	public gameHitRepresentationResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -14497,7 +14483,7 @@ public class questCharacterManagerCombat_EquipWeapon : CVariable
 [REDMeta]
 public class CPhysicsDecorationResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("resourceVersion")] public CUInt8 ResourceVersion { get; set; }
 	[Ordinal(2)] [RED("parameters")] public CArray<CHandle<meshMeshParameter>> Parameters { get; set; }
 	[Ordinal(3)] [RED("boundingBox")] public Box BoundingBox { get; set; }
@@ -14602,7 +14588,7 @@ public class animAnimDatabaseCollectionEntry : CVariable
 [REDMeta]
 public class Multilayer_Setup : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("layers")] public CArray<Multilayer_Layer> Layers { get; set; }
 	public Multilayer_Setup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -15007,7 +14993,7 @@ public class gameBlackboardSerializableID : CVariable
 [REDMeta]
 public class worldEffect : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("length")] public CFloat Length { get; set; }
 	[Ordinal(2)] [RED("trackRoot")] public CHandle<effectTrackGroup> TrackRoot { get; set; }
 	[Ordinal(3)] [RED("events")] public CArray<CHandle<effectTrackItem>> Events { get; set; }
@@ -15043,13 +15029,13 @@ public class worldTrafficStaticCollisionData : CVariable
 [REDMeta]
 public class worldTrafficPersistentSpatialResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	public worldTrafficPersistentSpatialResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
 public class worldEnvironmentAreaParameters : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("renderAreaSettings")] public WorldRenderAreaSettings RenderAreaSettings { get; set; }
 	[Ordinal(2)] [RED("resaved")] public CBool Resaved { get; set; }
 	public worldEnvironmentAreaParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -15074,7 +15060,7 @@ public class animAnimNode_Switch : CVariable
 [REDMeta]
 public class gameuiCharacterCustomizationUiPreset : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("isMaleVO")] public CBool IsMaleVO { get; set; }
 	[Ordinal(2)] [RED("values")] public CArray<gameuiCharacterCustomizationUiPresetValue> Values { get; set; }
 	public gameuiCharacterCustomizationUiPreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -15161,7 +15147,7 @@ public class animAnimNode_Timer : CVariable
 [REDMeta]
 public class inkanimAnimationLibraryResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("sequences")] public CArray<CHandle<inkanimSequence>> Sequences { get; set; }
 	public inkanimAnimationLibraryResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -15178,7 +15164,7 @@ public class worldDistantGINode : CVariable
 [REDMeta]
 public class inkWidgetLibraryResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("libraryItems")] public CArray<inkWidgetLibraryItem> LibraryItems { get; set; }
 	[Ordinal(2)] [RED("externalDependenciesForInternalItems")] public CArray<raRef<CResource>> ExternalDependenciesForInternalItems { get; set; }
 	public inkWidgetLibraryResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -15393,7 +15379,7 @@ public class questSetLootInteractionAccess_NodeType : CVariable
 [REDMeta]
 public class C2dArray : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("headers")] public CArray<CString> Headers { get; set; }
 	[Ordinal(2)] [RED("data")] public CArray<CArray<CString>> Data { get; set; }
 	public C2dArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -15813,7 +15799,7 @@ public class animAnimNode_StagePoseEntry : CVariable
 [REDMeta]
 public class gameDeviceResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("data")] public CHandle<gameDeviceResourceData> Data { get; set; }
 	public gameDeviceResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -15842,7 +15828,7 @@ public class gameJournalFileGroup : CVariable
 [REDMeta]
 public class CParticleSystem : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("emitters")] public CArray<CHandle<CParticleEmitter>> Emitters { get; set; }
 	[Ordinal(2)] [RED("boundingBox")] public Box BoundingBox { get; set; }
 	[Ordinal(3)] [RED("forceDynamicBbox")] public CBool ForceDynamicBbox { get; set; }
@@ -15934,7 +15920,7 @@ public class meshMeshParamDestructionStepData : CVariable
 [REDMeta]
 public class inkFontFamilyResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("familyName")] public CName FamilyName { get; set; }
 	[Ordinal(2)] [RED("fontStyles")] public CArray<inkFontStyle> FontStyles { get; set; }
 	public inkFontFamilyResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -15997,7 +15983,7 @@ public class TonemappingModeLinear : CVariable
 [REDMeta]
 public class entEntityTemplate : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("compiledData")] public DataBuffer CompiledData { get; set; }
 	[Ordinal(2)] [RED("resolvedDependencies")] public CArray<raRef<CResource>> ResolvedDependencies { get; set; }
 	public entEntityTemplate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -16058,7 +16044,7 @@ public class AIbehaviorStackScriptTaskDefinition : CVariable
 [REDMeta]
 public class scnRidResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("actors")] public CArray<scnActorRid> Actors { get; set; }
 	[Ordinal(2)] [RED("nextSerialNumber")] public scnRidSerialNumber NextSerialNumber { get; set; }
 	[Ordinal(3)] [RED("version")] public CUInt32 Version { get; set; }
@@ -16083,7 +16069,7 @@ public class worldStaticQuestMarkerNode : CVariable
 [REDMeta]
 public class questQuestResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("graph")] public CHandle<graphGraphDefinition> Graph { get; set; }
 	public questQuestResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -16386,7 +16372,7 @@ public class SyncAnimDeathTask : CVariable
 [REDMeta]
 public class appearanceAppearanceResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("appearances")] public CArray<CHandle<appearanceAppearanceDefinition>> Appearances { get; set; }
 	[Ordinal(2)] [RED("DismWoundConfig")] public entdismembermentWoundsConfigSet DismWoundConfig { get; set; }
 	public appearanceAppearanceResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -16509,7 +16495,7 @@ public class AIbehaviorDriveFollowTargetTreeNodeDefinition : CVariable
 [REDMeta]
 public class gameJournalDescriptorResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("entriesActivatedAtStart")] public CArray<CString> EntriesActivatedAtStart { get; set; }
 	public gameJournalDescriptorResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -16575,7 +16561,7 @@ public class questCharacterStatusEffect_CondtionType : CVariable
 [REDMeta]
 public class inkFullscreenCompositionResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("compositionPresets")] public CArray<inkCompositionPreset> CompositionPresets { get; set; }
 	public inkFullscreenCompositionResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -16863,7 +16849,7 @@ public class EffectExecutor_VisualEffectAtTarget : CVariable
 [REDMeta]
 public class worldTrafficLanesSpotsResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	public worldTrafficLanesSpotsResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -16915,7 +16901,7 @@ public class questCombatNodeParams_ShootAt : CVariable
 [REDMeta]
 public class gsmGameDefinition : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("mainQuest")] public raRef<questQuestResource> MainQuest { get; set; }
 	[Ordinal(2)] [RED("world")] public raRef<worldWorld> World { get; set; }
 	[Ordinal(3)] [RED("streamingWorld")] public raRef<CResource> StreamingWorld { get; set; }
@@ -16986,7 +16972,7 @@ public class AnimationsLoadedCondition : CVariable
 [REDMeta]
 public class worldNavigationTileResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("localBoundingBox")] public Box LocalBoundingBox { get; set; }
 	[Ordinal(2)] [RED("tilesData")] public CArray<worldNavigationTileData> TilesData { get; set; }
 	public worldNavigationTileResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -17116,7 +17102,7 @@ public class gameHitShape_OBB : CVariable
 [REDMeta]
 public class AIArchetype : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("behaviorDefinition")] public CHandle<AIbehaviorParameterizedBehavior> BehaviorDefinition { get; set; }
 	[Ordinal(2)] [RED("movementParameters", 5)] public CStatic<moveMovementParameters> MovementParameters { get; set; }
 	public AIArchetype(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -17372,7 +17358,7 @@ public class CheckStimTag : CVariable
 [REDMeta]
 public class Multilayer_Mask : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("renderResourceBlob")] public rendRenderMultilayerMaskResource RenderResourceBlob { get; set; }
 	public Multilayer_Mask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -17485,7 +17471,7 @@ public class SetGameplayRoleEvent : CVariable
 [REDMeta]
 public class inkShapeCollectionResource : CVariable
 {
-	[Ordinal(0)] [RED("cookingPlatform")] public ECookingPlatform CookingPlatform { get; set; }
+	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	[Ordinal(1)] [RED("presets")] public CArray<inkShapePreset> Presets { get; set; }
 	public inkShapeCollectionResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -17695,5 +17681,40 @@ public class scnChoiceNodeNsTimedParams : CVariable
 	[Ordinal(0)] [RED("action")] public scnChoiceNodeNsTimedAction Action { get; set; }
 	[Ordinal(1)] [RED("duration")] public scnSceneTime Duration { get; set; }
 	public scnChoiceNodeNsTimedParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+}
+
+[REDMeta]
+public class MaterialTechnique : CVariable
+	{
+    [Ordinal(0)] [RED("passes")] public CArray<MaterialPass> Passes { get; set; }
+    [Ordinal(1)] [RED("featureFlagsEnabledMask")] public FeatureFlagsMask FeatureFlagsEnabledMask { get; set; }
+    [Ordinal(2)] [RED("streamsToBind")] public CUInt32 StreamsToBind { get; set; }
+    public MaterialTechnique(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+}
+[REDMeta]
+public class MaterialPass : CVariable
+	{
+    [Ordinal(0)] [RED("stagePassNameRegular")] public CName StagePassNameRegular { get; set; }
+    [Ordinal(1)] [RED("stagePassNameDiscarded")] public CName StagePassNameDiscarded { get; set; }
+    [Ordinal(2)] [RED("depthStencilMode")] public PSODescDepthStencilModeDesc DepthStencilMode { get; set; }
+    [Ordinal(3)] [RED("rasterizerMode")] public PSODescRasterizerModeDesc RasterizerMode { get; set; }
+    [Ordinal(4)] [RED("blendMode")] public PSODescBlendModeDesc BlendMode { get; set; }
+    [Ordinal(5)] [RED("stencilWriteMask")] public CUInt8 StencilWriteMask { get; set; }
+    [Ordinal(6)] [RED("stencilRef")] public CUInt8 StencilRef { get; set; }
+    [Ordinal(7)] [RED("enablePixelShader")] public CBool EnablePixelShader { get; set; }
+    public MaterialPass(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+}
+[REDMeta]
+public class PSODescRasterizerModeDesc : CVariable
+	{
+    [Ordinal(0)] [RED("frontWinding")] public CEnum<PSODescRasterizerModeFrontFaceWinding> FrontWinding { get; set; }
+    [Ordinal(1)] [RED("valid")] public CBool Valid { get; set; }
+    public PSODescRasterizerModeDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+}
+[REDMeta]
+public class PSODescBlendModeDesc : CVariable
+	{
+    [Ordinal(0)] [RED("renderTarget", 8)] public CArrayFixedSize<PSODescRenderTarget> RenderTarget { get; set; }
+    public PSODescBlendModeDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 }

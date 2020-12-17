@@ -6,6 +6,113 @@ namespace WolvenKit.CR2W.Types
 {
     public static partial class Enums
     {
+        public enum PSODescBlendModeWriteMask
+        {
+            MASK_None,
+            MASK_R,
+            MASK_G,
+            MASK_B,
+            MASK_A,
+            MASK_RG,
+            MASK_RB,
+            MASK_RA,
+            MASK_GB,
+            MASK_GA,
+            MASK_BA,
+            MASK_RGB,
+            MASK_RGA,
+            MASK_RBA,
+            MASK_GBA,
+            MASK_RGBA
+        }
+        public enum ETextureFilteringMin
+        {
+            TFMin_Point,
+            TFMin_Linear,
+            TFMin_Anisotropic,
+            TFMin_AnisotropicLow,
+            TFMag_Point,
+            TFMag_Linear,
+            TFMip_None,
+            TFMip_Point,
+            TFMip_Linear
+        }
+        public enum ETextureFilteringMag
+        {
+            TFMag_Point,
+            TFMag_Linear
+        }
+        public enum ETextureAddressing
+        {
+            TA_Wrap,
+            TA_Mirror,
+            TA_Clamp,
+            TA_MirrorOnce,
+            TA_Border
+        }
+        public enum ETextureComparisonFunction
+        {
+            TCF_None,
+            TCF_Less,
+            TCF_Equal,
+            TCF_LessEqual,
+            TCF_Greater,
+            TCF_NotEqual,
+            TCF_GreaterEqual,
+            TCF_Always
+        }
+        public enum ETextureFilteringMip
+        {
+            TFMip_None,
+            TFMip_Point,
+            TFMip_Linear
+        }
+        public enum PSODescBlendModeFactor
+        {
+            FAC_Zero,
+            FAC_One,
+            FAC_SrcColor,
+            FAC_InvSrcColor,
+            FAC_SrcAlpha,
+            FAC_InvSrcAlpha,
+            FAC_DestColor,
+            FAC_InvDestColor,
+            FAC_DestAlpha,
+            FAC_InvDestAlpha,
+            FAC_BlendFactor,
+            FAC_InvBlendFactor,
+            FAC_Src1Color,
+            FAC_InvSrc1Color,
+            FAC_Src1Alpha,
+            FAC_InvSrc1Alpha,
+        }
+        public enum PSODescRasterizerModeFrontFaceWinding
+        {
+            FRONTFACE_CCW,
+            FRONTFACE_CW
+        }
+        public enum PSODescDepthStencilModeStencilOpMode
+        {
+            STENCILOP_Keep,
+            STENCILOP_Zero,
+            STENCILOP_Replace,
+            STENCILOP_IncreaseSaturate,
+            STENCILOP_DecreaseSaturate,
+            STENCILOP_Invert,
+            STENCILOP_Increase,
+            STENCILOP_Decrease
+        }
+        public enum PSODescDepthStencilModeComparisonMode
+        {
+            COMPARISON_Never,
+            COMPARISON_Less,
+            COMPARISON_Equal,
+            COMPARISON_LessEqual,
+            COMPARISON_Greater,
+            COMPARISON_NotEqual,
+            COMPARISON_GreaterEqual,
+            COMPARISON_Always
+        }
         public enum GpuWrapApiVertexPackingEStreamType
         {
             ST_Invalid,

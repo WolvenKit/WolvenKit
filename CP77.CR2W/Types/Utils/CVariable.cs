@@ -332,7 +332,7 @@ namespace WolvenKit.CR2W.Types
                 while (true)
                 {
 
-                    try
+                    //try
                     {
                         //cvar is a "children variable" : a property of a class.
                         var cvar = cr2w.ReadVariable(file, this);
@@ -355,11 +355,11 @@ namespace WolvenKit.CR2W.Types
                             TrySettingFastMemberAccessor(cvar);
                         }
                     }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                        throw;
-                    }
+                    //catch (Exception e)
+                    //{
+                    //    Console.WriteLine(e);
+                    //    throw;
+                    //}
 
                     
                 }

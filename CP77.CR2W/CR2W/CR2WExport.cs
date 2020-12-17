@@ -274,6 +274,7 @@ namespace WolvenKit.CR2W
 
                     if (variable.Type.Contains("array:"))
                     {
+
                         var count = br.ReadUInt32();
                         for (int i = 0; i < count; i++)
                         {

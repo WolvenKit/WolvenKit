@@ -76,7 +76,7 @@ namespace WolvenKit.CR2W.Types
             {
                 string generictype = typename.Substring(3);
                 CVariable innerobject = Create(generictype, "", cr2w, null);
-                var arrayacc = MakeArray(typeof(CStatic<>), innerobject.GetType());
+                var arrayacc = MakeArray(typeof(CArrayFixedSize<>), innerobject.GetType());
                 //arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value) };
                 arrayacc.Elementtype = generictype;
                 return arrayacc as CVariable;

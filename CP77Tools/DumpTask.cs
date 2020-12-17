@@ -343,7 +343,7 @@ namespace CP77Tools
             foreach (var (typename, variables) in typedict)
             {
                 //write
-                var sb = new StringBuilder($"[REDMeta] public class {typename} {{\r\n");
+                var sb = new StringBuilder($"[REDMeta] public class {typename} : CVariable {{\r\n");
 
                 var variableslist = variables.ToList();
                 for (int i = 0; i < variableslist.Count; i++)
@@ -402,7 +402,19 @@ namespace CP77Tools
                     if (oVariable.Type != null && oVariable.Type.Contains(":"))
                     {
                         var gentyp = oVariable.Type.Split(":").First();
-                        continue;
+                        var innertype = oVariable.Type.Substring(gentyp.Length + 1);
+                        var innertype2 = oVariable.Type[(gentyp.Length + 1)];
+                        if (gentyp == "array")
+                        {
+                            oVariable.Type = innertype;
+                            Register(oVariable);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+                        
                     }
 
                     Register(oVariable);

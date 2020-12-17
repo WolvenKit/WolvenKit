@@ -9,11 +9,34 @@ using WolvenKit.CR2W.Types;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta]
+    public class animDangleConstraint_Simulation : CVariable
+    {
+        public animDangleConstraint_Simulation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
     public class CResource : CVariable
     {
         public CResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-
+    [REDMeta]
+    public class scnInterruptionScenario : CVariable
+    {
+        [Ordinal(0)] [RED("id")] public scnInterruptionScenarioId Id { get; set; }
+        [Ordinal(1)] [RED("name")] public CName Name { get; set; }
+        [Ordinal(2)] [RED("interruptConditions")] public CHandle<scnIInterruptCondition> InterruptConditions { get; set; }
+        [Ordinal(3)] [RED("returnConditions")] public CHandle<scnIReturnCondition> ReturnConditions { get; set; }
+        public scnInterruptionScenario(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class animAnimEvent : CVariable
+    {
+        public animAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class animAnimFeature : CVariable
+    {
+        public animAnimFeature(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
     [REDMeta]
     public class CComponent : CVariable
     {
@@ -40,24 +63,110 @@ namespace WolvenKit.CR2W.Types
     {
         public IEvaluatorFloat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
+    [REDMeta]
+    public class FeatureFlagsMask : CVariable
+    {
+        [Ordinal(0)] [RED("flags")] public CUInt64 Flags { get; set; }
+        public FeatureFlagsMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class PSODescDepthStencilModeDesc : CVariable
+    {
+        [Ordinal(0)] [RED("depthTestEnable")] public CBool DepthTestEnable { get; set; }
+        [Ordinal(1)] [RED("depthFunc")] public CEnum<Enums.PSODescDepthStencilModeComparisonMode> DepthFunc { get; set; }
+        [Ordinal(2)] [RED("stencilEnable")] public CBool StencilEnable { get; set; }
+        [Ordinal(3)] [RED("stencilWriteMask")] public CBool StencilWriteMask { get; set; }
+        [Ordinal(4)] [RED("frontFace")] public PSODescStencilFuncDesc FrontFace { get; set; }
+        public PSODescDepthStencilModeDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class PSODescStencilFuncDesc : CVariable
+    {
+        [Ordinal(0)] [RED("stencilPassOp")] public CEnum<Enums.PSODescDepthStencilModeStencilOpMode> StencilPassOp { get; set; }
+        [Ordinal(1)] [RED("stencilFunc")] public CEnum<Enums.PSODescDepthStencilModeComparisonMode> StencilFunc { get; set; }
+        public PSODescStencilFuncDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class PSODescRenderTarget : CVariable
+    {
+        [Ordinal(0)] [RED("srcFactor")] public CEnum<Enums.PSODescBlendModeFactor> SrcFactor { get; set; }
+        [Ordinal(1)] [RED("srcAlphaFactor")] public CEnum<Enums.PSODescBlendModeFactor> srcAlphaFactor { get; set; }
+        public PSODescRenderTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
     [REDMeta] public class IEvaluatorColor : CVariable { public IEvaluatorColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class AIbehaviorTreeNodeDefinition : CVariable { public AIbehaviorTreeNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class AreaShapeOutline : CVariable { public AreaShapeOutline(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class worldITriggerAreaNotifer : CVariable { public worldITriggerAreaNotifer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class questCharacterManagerVisuals_EntityAppearanceOperationBaseEntityAppearanceEntry : CVariable { public questCharacterManagerVisuals_EntityAppearanceOperationBaseEntityAppearanceEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
+    [REDMeta]
+    public class questCharacterManagerVisuals_EntityAppearanceOperationBaseEntityAppearanceEntry : CVariable
+    {
+        [Ordinal(0)] [RED("puppetRef")] public gameEntityReference PuppetRef { get; set; }
+        [Ordinal(1)] [RED("appearanceName")] public CName AppearanceName { get; set; }
+        public questCharacterManagerVisuals_EntityAppearanceOperationBaseEntityAppearanceEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
     [REDMeta] public class gameEffectExecutor_KatanaBulletBendingEffectEntry : CVariable { public gameEffectExecutor_KatanaBulletBendingEffectEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class toolsTimeLineItemDescription : CVariable { public toolsTimeLineItemDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class workIEntry : CVariable { public workIEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class workIWorkspotCondition : CVariable { public workIWorkspotCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class scnEntryPoint : CVariable { public scnEntryPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class scnExitPoint : CVariable { public scnExitPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class scnActorDef : CVariable { public scnActorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class scnInterruptionScenario : CVariable { public scnInterruptionScenario(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
+    [REDMeta]
+    public class scnEntryPoint : CVariable
+    {
+        [Ordinal(0)] [RED("name")] public CName Name { get; set; }
+        [Ordinal(1)] [RED("nodeId")] public scnNodeId NodeId { get; set; }
+        public scnEntryPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class scnExitPoint : CVariable
+    {
+        [Ordinal(0)] [RED("name")] public CName Name { get; set; }
+        [Ordinal(1)] [RED("nodeId")] public scnNodeId NodeId { get; set; }
+        public scnExitPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class scnActorDef : CVariable
+    {
+        [Ordinal(0)] [RED("actorId")] public scnActorId ActorId { get; set; }
+        [Ordinal(1)] [RED("voicetagId")] public scnVoicetagId VoicetagId { get; set; }
+        [Ordinal(2)] [RED("acquisitionPlan")] public scnEntityAcquisitionPlan AcquisitionPlan { get; set; }
+        [Ordinal(3)] [RED("findActorInContextParams")] public scnFindEntityInContextParams FindActorInContextParams { get; set; }
+        [Ordinal(4)] [RED("lipsyncAnimSet")] public scnLipsyncAnimSetSRRefId LipsyncAnimSet { get; set; }
+        [Ordinal(5)] [RED("actorName")] public CString ActorName { get; set; }
+        public scnActorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class scnLipsyncAnimSetSRRefId : CVariable
+    {
+        [Ordinal(0)] [RED("id")] public CUInt32 Id { get; set; }
+        public scnLipsyncAnimSetSRRefId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class scnFindEntityInContextParams : CVariable
+    {
+        [Ordinal(0)] [RED("contextualName")] public scnContextualActorName ContextualName { get; set; }
+        [Ordinal(1)] [RED("voiceVagId")] public scnVoicetagId VoiceVagId { get; set; }
+        [Ordinal(2)] [RED("specRecordId")] public TweakDBID SpecRecordId { get; set; }
+        public scnFindEntityInContextParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class scnContextualActorName : CVariable
+    {
+        public scnContextualActorName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class scnVoicetagId : CVariable
+    {
+        [Ordinal(0)] [RED("id")] public CRUID Id { get; set; }
+        public scnVoicetagId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class scnEntityAcquisitionPlan : CVariable
+    {
+        public scnEntityAcquisitionPlan(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
     [REDMeta] public class graphGraphSocketDefinition : CVariable { public graphGraphSocketDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class gameJournalEntry : CVariable { public gameJournalEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class AIbehaviorConditionDefinition : CVariable { public AIbehaviorConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class AIArgumentDefinition : CVariable { public AIArgumentDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class animAnimEvent : CVariable { public animAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class worldWorld : CVariable { public worldWorld(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class worldTrafficLanePersistent : CVariable { public worldTrafficLanePersistent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class worldStreamingSectorDescriptor : CVariable { public worldStreamingSectorDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
@@ -74,12 +183,44 @@ namespace WolvenKit.CR2W.Types
     [REDMeta] public class worldAudioAttractAreaNodeSettings : CVariable { public worldAudioAttractAreaNodeSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class worldAdvertisementLightData : CVariable { public worldAdvertisementLightData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class worldAcousticDataCell : CVariable { public worldAcousticDataCell(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class workWorkspotItemOverrideItemOverride : CVariable { public workWorkspotItemOverrideItemOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class workWorkspotAnimsetEntry : CVariable { public workWorkspotAnimsetEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
+    [REDMeta]
+    public class workWorkspotItemOverrideItemOverride : CVariable
+    {
+        [Ordinal(0)] [RED("prevItemId")] public TweakDBID PrevItemId { get; set; }
+        public workWorkspotItemOverrideItemOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class workWorkspotAnimsetEntry : CVariable
+    {
+        [Ordinal(0)] [RED("rig")] public raRef<animRig> Rig { get; set; }
+        [Ordinal(1)] [RED("animations")] public animAnimSetup Animations { get; set; }
+        [Ordinal(2)] [RED("loadingHandles")] public rRef<animAnimSet> LoadingHandles { get; set; }
+        public workWorkspotAnimsetEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class animAnimSetup : CVariable
+    {
+        [Ordinal(0)] [RED("cinematics")] public animAnimSetupEntry Cinematics { get; set; }
+        public animAnimSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class animAnimSetupEntry : CVariable
+    {
+        [Ordinal(0)] [RED("animSet")] public raRef<animAnimSet> AnimSet { get; set; }
+        public animAnimSetupEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
     [REDMeta] public class workIWorkspotItemAction : CVariable { public workIWorkspotItemAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class workIScriptedCondition : CVariable { public workIScriptedCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class visIOccluderResource : CVariable { public visIOccluderResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class toolsSocketVisibilityData : CVariable { public toolsSocketVisibilityData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
+    [REDMeta]
+    public class toolsSocketVisibilityData : CVariable
+    {
+        [Ordinal(0)] [RED("socketId")] public CUInt32 SocketId { get; set; }
+        [Ordinal(1)] [RED("name")] public CName Name { get; set; }
+        [Ordinal(2)] [RED("placement")] public toolsSocketPlacement Placement { get; set; }
+        [Ordinal(3)] [RED("hidden")] public CBool Hidden { get; set; }
+        public toolsSocketVisibilityData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
     [REDMeta] public class toolsScreenplayLine : CVariable { public toolsScreenplayLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class toolsIGraphNodeDescriptor : CVariable { public toolsIGraphNodeDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class StimTargetData : CVariable { public StimTargetData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
@@ -215,7 +356,6 @@ namespace WolvenKit.CR2W.Types
     [REDMeta] public class meshDestructionBond : CVariable { public meshDestructionBond(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class meshChunkIndicesOffset : CVariable { public meshChunkIndicesOffset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class MaterialUsedParameter : CVariable { public MaterialUsedParameter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class MaterialTechnique : CVariable { public MaterialTechnique(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class locVoLengthEntry : CVariable { public locVoLengthEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class localizationPersistenceSubtitleMapEntry : CVariable { public localizationPersistenceSubtitleMapEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class localizationPersistenceOnScreenEntry : CVariable { public localizationPersistenceOnScreenEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
@@ -320,26 +460,108 @@ namespace WolvenKit.CR2W.Types
     [REDMeta] public class animGenericAnimDatabase_DatabaseRow : CVariable { public animGenericAnimDatabase_DatabaseRow(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class animFloatTrackInfo : CVariable { public animFloatTrackInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class animFacialCustomizationTargetEntryTemp : CVariable { public animFacialCustomizationTargetEntryTemp(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class animDyngParticle : CVariable { public animDyngParticle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class animDangleConstraint_Simulation : CVariable { public animDangleConstraint_Simulation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
+    [REDMeta]
+    public class animDyngParticle : CVariable
+    {
+        [Ordinal(0)] [RED("isFree")] public CBool IsFree { get; set; }
+        [Ordinal(1)] [RED("bone")] public animTransformIndex Bone { get; set; }
+        public animDyngParticle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class animDangleConstraint_SimulationDyng : CVariable
+    {
+        [Ordinal(0)] [RED("parentRotationAltersTransformsOfNonDanglesAndItsChildren")] public CBool ParentRotationAltersTransformsOfNonDanglesAndItsChildren { get; set; }
+        [Ordinal(1)] [RED("dangleAltersTransformsOfItsChildren")] public CBool DangleAltersTransformsOfItsChildren { get; set; }
+        [Ordinal(2)] [RED("substepTime")] public CFloat SubstepTime { get; set; }
+        [Ordinal(3)] [RED("particlesContainer")] public animDyngParticlesContainer ParticlesContainer { get; set; }
+        [Ordinal(4)] [RED("dyngConstraint")] public CHandle<animIDyngConstraint> DyngConstraint { get; set; }
+        public animDangleConstraint_SimulationDyng(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
     [REDMeta] public class animCorrectivePoseEntry : CVariable { public animCorrectivePoseEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class animAnimTransformMappingEntry : CVariable { public animAnimTransformMappingEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
+    [REDMeta]
+    public class animAnimTransformMappingEntry : CVariable
+    {
+        [Ordinal(0)] [RED("from")] public CName From { get; set; }
+        [Ordinal(1)] [RED("to")] public CName To { get; set; }
+        public animAnimTransformMappingEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
     [REDMeta] public class animAnimNode_VectorValue : CVariable { public animAnimNode_VectorValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class animAnimNode_QuaternionValue : CVariable { public animAnimNode_QuaternionValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class animAnimNode_MultipleParentConstraint_ParentInfo : CVariable { public animAnimNode_MultipleParentConstraint_ParentInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
+    [REDMeta]
+    public class animAnimNode_MultipleParentConstraint_ParentInfo : CVariable
+    {
+        [Ordinal(0)] [RED("parentTransform")] public animTransformIndex ParentTransform { get; set; }
+        [Ordinal(1)] [RED("parentWeightMode")] public animConstraintWeightMode ParentWeightMode { get; set; }
+        [Ordinal(2)] [RED("parentTrackWeight")] public animNamedTrackIndex ParentTrackWeight { get; set; }
+        public animAnimNode_MultipleParentConstraint_ParentInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
     [REDMeta] public class animAnimNode_IntValue : CVariable { public animAnimNode_IntValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class animAnimNode_FloatValue : CVariable { public animAnimNode_FloatValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class animAnimNode_BoolValue : CVariable { public animAnimNode_BoolValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class animAnimNode_BlendSpace_InternalsBlendSpacePoint : CVariable { public animAnimNode_BlendSpace_InternalsBlendSpacePoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class animAnimNode_BlendSpace_InternalsBlendSpaceCoordinateDescription : CVariable { public animAnimNode_BlendSpace_InternalsBlendSpaceCoordinateDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
+    [REDMeta]
+    public class animAnimNode_BlendSpace_InternalsBlendSpacePoint : CVariable
+    {
+        [Ordinal(0)] [RED("fixedCoordinates")] public CFloat FixedCoordinates { get; set; }
+        public animAnimNode_BlendSpace_InternalsBlendSpacePoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class animAnimNode_BlendSpace_InternalsBlendSpaceCoordinateDescription : CVariable
+    {
+        [Ordinal(0)] [RED("name")] public CName Name { get; set; }
+        public animAnimNode_BlendSpace_InternalsBlendSpaceCoordinateDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
     [REDMeta] public class animAnimNode_Base : CVariable { public animAnimNode_Base(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class animAnimMultiBoolToFloatEntry : CVariable { public animAnimMultiBoolToFloatEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class animAnimMathExpressionFloatSocket : CVariable { public animAnimMathExpressionFloatSocket(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class animAnimFeatureEntry : CVariable { public animAnimFeatureEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class animAnimFeature : CVariable { public animAnimFeature(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
+    [REDMeta]
+    public class animAnimMultiBoolToFloatEntry : CVariable
+    {
+        [Ordinal(0)] [RED("group")] public CName Group { get; set; }
+        [Ordinal(1)] [RED("name")] public CName Name { get; set; }
+        public animAnimMultiBoolToFloatEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class animAnimMathExpressionFloatSocket : CVariable
+    {
+        [Ordinal(0)] [RED("link")] public animFloatLink Link { get; set; }
+        public animAnimMathExpressionFloatSocket(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class animAnimFeatureEntry : CVariable
+    {
+        [Ordinal(0)] [RED("name")] public CName Name { get; set; }
+        [Ordinal(1)] [RED("className")] public CName ClassName { get; set; }
+        public animAnimFeatureEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class animAnimFeature_VehiclePassengerAnimSetup : CVariable
+    {
+        [Ordinal(0)] [RED("enableAdditiveAnim")] public CBool EnableAdditiveAnim { get; set; }
+        public animAnimFeature_VehiclePassengerAnimSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
     [REDMeta] public class animAnimDataChunk : CVariable { public animAnimDataChunk(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class animAdditionalFloatTrackEntry : CVariable { public animAdditionalFloatTrackEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class animActionAnimDatabase_DatabaseRow : CVariable { public animActionAnimDatabase_DatabaseRow(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
+    [REDMeta]
+    public class animAdditionalFloatTrackEntry : CVariable
+    {
+        [Ordinal(0)] [RED("trackInfo")] public animFloatTrackInfo TrackInfo { get; set; }
+        public animAdditionalFloatTrackEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class animActionAnimDatabase_AnimationData : CVariable
+    {
+        [Ordinal(0)] [RED("animationName")] public CName AnimationName { get; set; }
+        [Ordinal(1)] [RED("outTransitionDuration")] public CFloat OutTransitionDuration { get; set; }
+        [Ordinal(2)] [RED("outCanRequestInertialization")] public CBool OutCanRequestInertialization { get; set; }
+        [Ordinal(3)] [RED("streamingContext")] public CName StreamingContext { get; set; }
+        public animActionAnimDatabase_AnimationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class animActionAnimDatabase_DatabaseRow : CVariable
+    {
+        [Ordinal(0)] [RED("animFeatureName")] public CName AnimFeatureName { get; set; }
+        [Ordinal(1)] [RED("state")] public CInt32 State { get; set; }
+        [Ordinal(2)] [RED("animVariation")] public CInt32 AnimVariation { get; set; }
+        [Ordinal(3)] [RED("animationData")] public animActionAnimDatabase_AnimationData AnimationData { get; set; }
+        public animActionAnimDatabase_DatabaseRow(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
     [REDMeta] public class AISpot : CVariable { public AISpot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class AIRole : CVariable { public AIRole(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class AIGuardAreaConnectedCommunity : CVariable { public AIGuardAreaConnectedCommunity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
