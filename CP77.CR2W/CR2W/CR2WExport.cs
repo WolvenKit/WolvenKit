@@ -251,25 +251,27 @@ namespace WolvenKit.CR2W
 
             while (true)
             {
-                var nameId = br.ReadUInt16();
+                try
+                {
+                    var nameId = br.ReadUInt16();
                 if (nameId == 0)
                     break;
 
-                var variable = new Cr2wVariableDumpObject
-                {
-                    Offset = br.BaseStream.Position - 3,
-                    Name = cr2w.StringDictionary.Values.ToList()[(int)nameId],
-                    Type = cr2w.StringDictionary.Values.ToList()[(int)br.ReadUInt16()],
-                    Size = br.ReadInt32()
-                };
+                var variable = new Cr2wVariableDumpObject();
+                variable.Offset = br.BaseStream.Position - 3;
+                
+                    var typeId = (int)br.ReadUInt16();
+                    variable.Size = br.ReadInt32();
+                
 
                 var endoffset = br.BaseStream.Position + variable.Size - 4;
 
                 try
                 {
-                    //var buffer = br.ReadBytes(variable.Size - 4);
-                    // try read variable
-                    //array
+                    variable.Name = cr2w.StringDictionary.Values.ToList()[(int)nameId];
+                    variable.Type = cr2w.StringDictionary.Values.ToList()[typeId];
+
+
                     if (variable.Type.Contains("array:"))
                     {
                         var count = br.ReadUInt32();
@@ -296,6 +298,11 @@ namespace WolvenKit.CR2W
                 // go to variable end
                 br.BaseStream.Seek(endoffset, SeekOrigin.Begin);
                 o.Variables.Add(variable);
+                }
+                catch (Exception e)
+                {
+                    return o;
+                }
             }
 
             return o;

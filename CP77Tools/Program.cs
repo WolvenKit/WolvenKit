@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,6 @@ using System.IO;
 using System.Reflection;
 using CP77Tools.Model;
 using CP77Tools.Services;
-using CsvHelper;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.DDS;
@@ -31,7 +31,7 @@ namespace CP77Tools
 
             // get csv data
             Console.WriteLine("Loading Hashes...");
-            Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes.csv"));
+            await Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes.csv"));
             
 
             #region commands
@@ -151,25 +151,38 @@ namespace CP77Tools
         }
 
 
-        private static void Loadhashes(string path)
+        private static async Task Loadhashes(string path)
         {
             var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
 
             using var fr = new FileStream(path, FileMode.Open, FileAccess.Read);
             using var sr = new StreamReader(fr);
-            using var csv = new CsvReader(sr, CultureInfo.InvariantCulture);
-            var records1 = csv.GetRecords<HashObject>();
-            var Hashdict = _maincontroller.Hashdict;
 
-            var hashObjects = records1.ToList();
-            foreach (var record in hashObjects)
+            var hashDictionary = new ConcurrentDictionary<ulong,string>();
+
+            while (true)
             {
-                ulong hash = ulong.Parse(record.Hash);
-                if (!Hashdict.ContainsKey(hash))
-                    Hashdict.Add(hash, record.String);
+                string line = await sr.ReadLineAsync();
+                if (line == null)
+                {
+                    break;
+                }
+
+                // check line
+                line = line.Split(',',StringSplitOptions.RemoveEmptyEntries).First();
+                if (string.IsNullOrEmpty(line)) continue;
+
+                ulong hash = FNV1A64HashAlgorithm.HashString(line);
+                hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
             }
 
-            Console.WriteLine($"Loaded {hashObjects.Count} Hashes.");
+
+       
+
+            _maincontroller.Hashdict = hashDictionary.ToDictionary(
+                entry => entry.Key,
+                entry => entry.Value);
+            Console.WriteLine($"Loaded {hashDictionary.Count} Hashes.");
         }
 
 

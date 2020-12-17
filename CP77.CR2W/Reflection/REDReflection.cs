@@ -106,31 +106,27 @@ namespace WolvenKit.CR2W.Reflection
 
         public static string GetWKitBaseTypeFromREDBaseType(string typename)
         {
-            switch (typename)
+            return typename switch
             {
-                case "Uint8": return "CUInt8";
-                case "Int8": return "CInt8";
-                case "Uint16": return "CUInt16";
-                case "Int16": return "CInt16";
-                case "Uint32": return "CUInt32";
-                case "int": return "CInt32";
-                case "Int32": return "CInt32";
-                case "Uint64": return "CUInt64";
-                case "Int64": return "CInt64";
-                case "Bool": return "CBool";
-                case "bool": return "CBool";
-                case "Float": return "CFloat";
-                case "float": return "CFloat";
-                case "String": return "CString";
-                case "string": return "CString";
-                case "Color": return "CColor";
-                case "Matrix": return "CMatrix";
-                default:
-                {
-                    return typename;
-                }
-                    
-            }
+                "Uint8" => "CUInt8",
+                "Int8" => "CInt8",
+                "Uint16" => "CUInt16",
+                "Int16" => "CInt16",
+                "Uint32" => "CUInt32",
+                "int" => "CInt32",
+                "Int32" => "CInt32",
+                "Uint64" => "CUInt64",
+                "Int64" => "CInt64",
+                "Bool" => "CBool",
+                "bool" => "CBool",
+                "Float" => "CFloat",
+                "float" => "CFloat",
+                "String" => "CString",
+                "string" => "CString",
+                "Color" => "CColor",
+                "Matrix" => "CMatrix",
+                _ => typename
+            };
         }
 
         private static string GetREDTypeFroWkitType(string typename)

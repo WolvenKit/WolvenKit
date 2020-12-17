@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -105,7 +106,7 @@ namespace CP77Tools
             // Parallel
             foreach (var ar in archives)
             {
-                using var pb = new ProgressBar();
+                
 
                 if (classinfo)
                 {
@@ -124,7 +125,7 @@ namespace CP77Tools
                             File = fileinfo.Where(_ => Path.GetExtension(_.NameStr) == ext)
                         }).ToList();
 
-
+                    using var pb = new ProgressBar();
                     using var p1 = pb.Progress.Fork();
                     int progress = 0;
                     var total = query.Count;
@@ -153,7 +154,7 @@ namespace CP77Tools
                                 foreach (var chunk in cr2w.Chunks)
                                 {
                                     var o = chunk.GetDumpObject(br);
-                                    Register(o);
+                                    if (o != null) Register(o);
 
                                     // register variables
 
@@ -175,6 +176,7 @@ namespace CP77Tools
                     using var mmf = MemoryMappedFile.CreateFromFile(ar.Filepath, FileMode.Open,
                         ar.Filepath.GetHashMD5(), 0,
                         MemoryMappedFileAccess.Read);
+                    using var pb = new ProgressBar();
                     using var p1 = pb.Progress.Fork();
                     int progress = 0;
 
@@ -349,6 +351,11 @@ namespace CP77Tools
                     var typ = variableslist[i].Split(' ').First();
                     var nam = variableslist[i].Split(' ').Last();
                     var wktype = REDReflection.GetWKitBaseTypeFromREDBaseType(typ);
+                    
+                    if (string.IsNullOrEmpty(nam)) nam = "Missing";
+                    if (string.IsNullOrEmpty(typ)) typ = "Missing";
+
+
                     sb.Append($"\t[Ordinal({i})]  [RED(\"{nam}\")] public {wktype} {nam.FirstCharToUpper()} {{ get; set; }}\r\n");
                 }
 
@@ -376,6 +383,8 @@ namespace CP77Tools
 
             void Register(CR2WExportWrapper.Cr2wVariableDumpObject o)
             {
+                if (o?.Type == null) return;
+
                 o.Variables ??= new List<CR2WExportWrapper.Cr2wVariableDumpObject>();
 
                 IEnumerable<string> vars = o.Variables.Select(_ => _.ToSimpleString());
@@ -383,14 +392,14 @@ namespace CP77Tools
                 {
                     var existing = typedict[o.Type];
                     var newlist = o.Variables.Select(_ => _.ToSimpleString());
-                    vars = existing.Union(newlist);
+                    if (existing != null) vars = existing.Union(newlist);
                 }
                 typedict.AddOrUpdate(o.Type, vars, (arg1, ol) => ol);
 
                 foreach (var oVariable in o.Variables)
                 {
                     // generic types (arrays, handles, refs)
-                    if (oVariable.Type.Contains(":"))
+                    if (oVariable.Type != null && oVariable.Type.Contains(":"))
                     {
                         var gentyp = oVariable.Type.Split(":").First();
                         continue;
