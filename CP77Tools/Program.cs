@@ -65,10 +65,11 @@ namespace CP77Tools
                 new Option<string>(new []{"--path", "-p"}, "Input path to .archive or to a directory (runs over all archives in directory)."),
                 new Option<bool>(new []{ "--imports", "-i"}, "Dump all imports (all filenames that are referenced by all files in the archive)."),
                 new Option<bool>(new []{ "--missinghashes", "-m"}, "List all missing hashes of all input archives."),
-                new Option<bool>(new []{ "--info"}, "Dump all xbm info."),
+                new Option<bool>(new []{ "--texinfo"}, "Dump all xbm info."),
+                new Option<bool>(new []{ "--classinfo"}, "Dump all class info."),
             };
             rootCommand.Add(dump);
-            dump.Handler = CommandHandler.Create<string, bool, bool, bool>(ConsoleFunctions.DumpTask);
+            dump.Handler = CommandHandler.Create<string, bool, bool, bool, bool>(ConsoleFunctions.DumpTask);
 
             var cr2w = new Command("cr2w", "Target a specific cr2w (extracted) file and dumps file information.")
             {

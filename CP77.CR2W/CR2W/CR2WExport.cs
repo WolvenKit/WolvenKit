@@ -11,7 +11,10 @@ using System.Linq;
 using System.IO.MemoryMappedFiles;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Text;
 using Newtonsoft.Json;
+using WolvenKit.Common.Extensions;
+using WolvenKit.CR2W.Reflection;
 
 [assembly: ContractNamespaceAttribute("", ClrNamespace = "WolvenKit.CR2W")]
 
@@ -216,7 +219,19 @@ namespace WolvenKit.CR2W
             public long Offset { get; set; }
 
             public List<Cr2wVariableDumpObject> Variables { get; set; } = new List<Cr2wVariableDumpObject>();
+
+
+
+            public string ToVarString()
+            {
+                var wktype = REDReflection.GetWKitBaseTypeFromREDBaseType(Type);
+                return $"[RED(\"{Name}\")] public {wktype} {Name.FirstCharToUpper()} {{ get; set; }}";
+            }
+
+            public string ToSimpleString() => $"{Type} {Name}";
         }
+
+
 
         public Cr2wVariableDumpObject GetDumpObject(BinaryReader br)
         {
@@ -250,25 +265,33 @@ namespace WolvenKit.CR2W
 
                 var endoffset = br.BaseStream.Position + variable.Size - 4;
 
-                //var buffer = br.ReadBytes(variable.Size - 4);
-                // try read variable
-                //array
-                if (variable.Type.Contains("array:"))
+                try
                 {
-                    var count = br.ReadUInt32();
-                    for (int i = 0; i < count; i++)
+                    //var buffer = br.ReadBytes(variable.Size - 4);
+                    // try read variable
+                    //array
+                    if (variable.Type.Contains("array:"))
                     {
-                        // dbg for now
-                        var elementsize = (variable.Size - 8) / count;
-                        if (elementsize > 9)
-                            variable.Variables = TryGetClassVariables((int)elementsize);
+                        var count = br.ReadUInt32();
+                        for (int i = 0; i < count; i++)
+                        {
+                            // dbg for now
+                            var elementsize = (variable.Size - 8) / count;
+                            if (elementsize > 9)
+                                variable.Variables = TryGetClassVariables((int)elementsize);
+                        }
+                    }
+                    // may be another class:
+                    else if (variable.Size > 9)
+                    {
+                        variable.Variables = TryGetClassVariables(variable.Size);
                     }
                 }
-                // may be another class:
-                else if (variable.Size > 9)
+                catch (Exception e)
                 {
-                    variable.Variables = TryGetClassVariables(variable.Size);
+
                 }
+                
 
                 // go to variable end
                 br.BaseStream.Seek(endoffset, SeekOrigin.Begin);
