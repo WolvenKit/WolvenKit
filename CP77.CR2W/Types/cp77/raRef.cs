@@ -15,9 +15,9 @@ namespace WolvenKit.CR2W.Types
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [REDMeta()]
-    public class rRef<T> : CVariable, ISoftAccessor where T : CVariable
+    public class raRef<T> : CVariable, ISoftAccessor where T : CVariable
     {
-        public rRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public raRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
@@ -92,7 +92,7 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var copy = (rRef<T>)base.Copy(context);
+            var copy = (raRef<T>)base.Copy(context);
 
             copy.ClassName = ClassName;
             copy.Flags = Flags;

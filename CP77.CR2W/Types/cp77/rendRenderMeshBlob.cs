@@ -8,14 +8,7 @@ using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    [REDMeta]
-    public class rendRenderMeshBlob : CVariable
-    {
-        [Ordinal(1)] [RED("header")] public rendRenderMeshBlobHeader Header { get; set; }
-        [Ordinal(2)] [RED("renderBuffer")] public DataBuffer RenderBuffer { get; set; }
 
-        public rendRenderMeshBlob(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
 
     [REDMeta]
     public class DataBuffer : CVariable
@@ -37,18 +30,7 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
-    [REDMeta]
-    public class rendRenderMeshBlobHeader : CVariable
-    {
-        [Ordinal(1)] [RED("version")] public CUInt32 Version { get; set; }
 
-        [Ordinal(2)] [RED("dataProcessing")] public CUInt32 DataProcessing { get; set; }
-        [Ordinal(3)] [RED("bonePositions")] public CArray<Vector4> BonePositions { get; set; }
-        [Ordinal(4)] [RED("renderLODs")] public CArray<CFloat> RenderLODs { get; set; }
-        [Ordinal(5)] [RED("renderChunkInfos")] public CArray<rendChunk> RenderChunkInfos { get; set; }
-
-        public rendRenderMeshBlobHeader(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
 
 
     [REDMeta]

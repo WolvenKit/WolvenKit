@@ -7,14 +7,7 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.CR2W.Types
 {
-    [REDMeta]
-    public class Multilayer_Setup : CVariable
-    {
-        [Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
-        [Ordinal(1)] [RED("layers")] public CArray<Multilayer_Layer> Layers { get; set; }
 
-        public Multilayer_Setup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
 
     [REDMeta]
     public class Multilayer_Layer : CVariable

@@ -289,12 +289,12 @@ namespace WolvenKit.CR2W.Types
             // fixed class/struct (no leading null byte), read all properties in order
             if (tags.Contains(EREDMetaInfo.REDStruct))
             {
-                // CClipmapcookeddata has no trailing 0 ???
-                if (this is CClipMapCookedData cClip)
-                {
-                    cClip.Data.Bytes = file.ReadBytes((int)size);
-                    return;
-                }
+                //// CClipmapcookeddata has no trailing 0 ???
+                //if (this is CClipMapCookedData cClip)
+                //{
+                //    cClip.Data.Bytes = file.ReadBytes((int)size);
+                //    return;
+                //}
 
                 // parse all RED variables (normal + buffers)
                 ReadAllRedVariables<REDAttribute>(file);
