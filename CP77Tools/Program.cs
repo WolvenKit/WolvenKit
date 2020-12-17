@@ -32,7 +32,7 @@ namespace CP77Tools
             // get csv data
             Console.WriteLine("Loading Hashes...");
             Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes.csv"));
-            Console.WriteLine("Loaded Hashes.");
+            
 
             #region commands
 
@@ -109,6 +109,10 @@ namespace CP77Tools
                 while (true)
                 {
                     string line = System.Console.ReadLine();
+
+                    if (line == "q()")
+                        return;
+
                     var parsed = CommandLineExtensions.ParseText(line, ' ', '"');
                     rootCommand.InvokeAsync(parsed.ToArray()).Wait();
 
@@ -151,20 +155,21 @@ namespace CP77Tools
         {
             var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
 
-            using (var fr = new FileStream(path, FileMode.Open, FileAccess.Read))
-            using (var sr = new StreamReader(fr))
-            using (var csv = new CsvReader(sr, CultureInfo.InvariantCulture))
-            {
-                var records1 = csv.GetRecords<HashObject>();
-                var Hashdict = _maincontroller.Hashdict;
+            using var fr = new FileStream(path, FileMode.Open, FileAccess.Read);
+            using var sr = new StreamReader(fr);
+            using var csv = new CsvReader(sr, CultureInfo.InvariantCulture);
+            var records1 = csv.GetRecords<HashObject>();
+            var Hashdict = _maincontroller.Hashdict;
 
-                foreach (var record in records1)
-                {
-                    ulong hash = ulong.Parse(record.Hash);
-                    if (!Hashdict.ContainsKey(hash))
-                        Hashdict.Add(hash, record.String);
-                }
+            var hashObjects = records1.ToList();
+            foreach (var record in hashObjects)
+            {
+                ulong hash = ulong.Parse(record.Hash);
+                if (!Hashdict.ContainsKey(hash))
+                    Hashdict.Add(hash, record.String);
             }
+
+            Console.WriteLine($"Loaded {hashObjects.Count} Hashes.");
         }
 
 

@@ -366,7 +366,7 @@ namespace CP77Tools
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                     PreserveReferencesHandling = PreserveReferencesHandling.None,
-                    TypeNameHandling = TypeNameHandling.Auto
+                    TypeNameHandling = TypeNameHandling.None
                 }));
 
             Console.WriteLine("Done.");
