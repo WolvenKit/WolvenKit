@@ -29,10 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="oo2core_8_win64.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>

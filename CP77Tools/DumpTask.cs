@@ -155,9 +155,6 @@ namespace CP77Tools
                                 {
                                     var o = chunk.GetDumpObject(br);
                                     if (o != null) Register(o);
-
-                                    // register variables
-
                                 }
                             });
                         }
