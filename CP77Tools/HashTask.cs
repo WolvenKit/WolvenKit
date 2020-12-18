@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Catel.Collections;
-using ConsoleProgressBar;
 using CP77Tools.Model;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;

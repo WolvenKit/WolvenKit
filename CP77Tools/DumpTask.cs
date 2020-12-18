@@ -11,9 +11,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Catel.Collections;
 using Catel.IoC;
-using ConsoleProgressBar;
 using CP77Tools.Model;
 using CP77Tools.Services;
+using Luna.ConsoleProgressBar;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -125,10 +125,16 @@ namespace CP77Tools
                             File = fileinfo.Where(_ => Path.GetExtension(_.NameStr) == ext)
                         }).ToList();
 
-                    using var pb = new ProgressBar();
-                    using var p1 = pb.Progress.Fork();
+                    using var pb = new ConsoleProgressBar()
+                    {
+                        DisplayBars = true,
+                        DisplayAnimation = false
+                    };
+
                     int progress = 0;
                     var total = query.Count;
+
+                    Console.Write($"Exporting {total} bundle entries ");
 
                     // foreach extension
                     Parallel.ForEach(query, new ParallelOptions { MaxDegreeOfParallelism = 16 }, result =>
@@ -150,7 +156,7 @@ namespace CP77Tools
                                 {
                                     return;
                                 }
-
+                                
                                 foreach (var chunk in cr2w.Chunks)
                                 {
                                     var o = chunk.GetDumpObject(br);
@@ -163,8 +169,7 @@ namespace CP77Tools
                         }
                         
                         Interlocked.Increment(ref progress);
-                        var perc = progress / (double)total;
-                        p1.Report(perc, $"Loading bundle entries: {progress}/{total}");
+                        pb.Report(progress / (double)total);
 
                         Console.WriteLine($"Dumped extension {result.Key}");
                     });
@@ -176,16 +181,23 @@ namespace CP77Tools
                     using var mmf = MemoryMappedFile.CreateFromFile(ar.Filepath, FileMode.Open,
                         ar.Filepath.GetHashMD5(), 0,
                         MemoryMappedFileAccess.Read);
-                    using var pb = new ProgressBar();
-                    using var p1 = pb.Progress.Fork();
+
+                    using var pb = new ConsoleProgressBar()
+                    {
+                        DisplayBars = true,
+                        DisplayAnimation = false
+                    };
+
                     int progress = 0;
 
                     var fileDictionary = new ConcurrentDictionary<ulong, Cr2wChunkInfo>();
                     var texDictionary = new ConcurrentDictionary<ulong, Cr2wTextureInfo>();
 
-
                     // get info
                     var count = ar.FileCount;
+
+                    Console.Write($"Exporting {count} bundle entries ");
+
                     Parallel.For(0, count, new ParallelOptions {MaxDegreeOfParallelism = 8}, i =>
                     {
                         var entry = ar.Files.ToList()[i];
@@ -263,11 +275,8 @@ namespace CP77Tools
                             }
                         }
 
-                        
-
                         progress += 1;
-                        var perc = progress / (double)count;
-                        p1.Report(perc, $"Loading bundle entries: {progress}/{count}");
+                        pb.Report(progress / (double)count);
                     });
 
                     // write
