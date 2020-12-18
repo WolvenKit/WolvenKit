@@ -1,12 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using CP77Tools.Model;
 using Newtonsoft.Json;
 using WolvenKit.CR2W;
 
-namespace CP77Tools
+namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {

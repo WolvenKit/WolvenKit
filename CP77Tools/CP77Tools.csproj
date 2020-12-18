@@ -8,6 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Model\**" />
+    <Compile Remove="Oodle\**" />
+    <EmbeddedResource Remove="Model\**" />
+    <EmbeddedResource Remove="Oodle\**" />
+    <None Remove="Model\**" />
+    <None Remove="Oodle\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\archivehashes.csv" />
     <None Remove="Resources\basegame_2_mainmenu.archive.hashes.csv" />
   </ItemGroup>
@@ -32,11 +41,6 @@
     <None Update="oo2core_8_win64.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Model\" />
-    <Folder Include="Oodle\" />
   </ItemGroup>
 
 </Project>

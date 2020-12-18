@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
 using CP77.Common.Services;
+using CP77.CR2W.Archive;
 using WolvenKit.CR2W.Types;
 
 namespace CP77Tools.Model
@@ -53,7 +54,7 @@ namespace CP77Tools.Model
         public List<OffsetEntry> Offsets { get; private set; }
         public List<HashEntry> HashTable { get; private set; }
 
-        public ArTable(BinaryReader br)
+        public ArTable(BinaryReader br, Archive parent)
         {
             Read(br);
 
@@ -64,7 +65,7 @@ namespace CP77Tools.Model
             // read tables
             for (int i = 0; i < Table1count; i++)
             {
-                var entry = new FileInfoEntry(br);
+                var entry = new FileInfoEntry(br, parent);
 
                 if (!FileInfo.ContainsKey(entry.NameHash64))
                 {
@@ -130,46 +131,5 @@ namespace CP77Tools.Model
             VirtualSize = br.ReadUInt32();
         }
     }
-    public class FileInfoEntry
-    {
-        public ulong NameHash64 { get; private set; }
-        public DateTime DateTime { get; private set; }
-        public uint FileFlags { get; private set; }
-        public uint FirstDataSector { get; private set; }
-        public uint NextDataSector { get; private set; }
-        public uint FirstUnkIndex { get; private set; }
-        public uint NextUnkIndex { get; private set; }
-        public byte[] SHA1Hash { get; private set; }
-
-        private string _nameStr;
-        public string NameStr => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64.ToString()}.bin" : _nameStr;
-
-        private IMainController _mainController;
-
-        public FileInfoEntry(BinaryReader br)
-        {
-            _mainController = ServiceLocator.Default.ResolveType<IMainController>();
-
-            Read(br, _mainController);
-        }
-
-        private void Read(BinaryReader br, IMainController mainController)
-        {
-            NameHash64 = br.ReadUInt64();
-
-            if (mainController != null && mainController.Hashdict.ContainsKey(NameHash64))
-                _nameStr = mainController.Hashdict[NameHash64];
-
-            DateTime = System.DateTime.FromFileTime(br.ReadInt64());
-
-
-            FileFlags = br.ReadUInt32();
-            FirstDataSector = br.ReadUInt32();
-            NextDataSector = br.ReadUInt32();
-            FirstUnkIndex = br.ReadUInt32();
-            NextUnkIndex = br.ReadUInt32();
-
-            SHA1Hash = br.ReadBytes(20);
-        }
-    }
+    
 }

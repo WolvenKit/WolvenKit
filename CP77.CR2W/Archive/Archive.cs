@@ -5,24 +5,20 @@ using System.Globalization;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
 using CP77.Common.Tools;
-using CP77.CR2W;
 using CP77.CR2W.Extensions;
+using CP77Tools.Model;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools;
 using WolvenKit.Common.Tools.DDS;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 
-namespace CP77Tools.Model
+namespace CP77.CR2W.Archive
 {
     public class Archive
     {
@@ -59,7 +55,7 @@ namespace CP77Tools.Model
 
         #region properties
 
-        public string Filepath { get; private set; }
+        public string Filepath { get; }
 
         public Dictionary<ulong, FileInfoEntry> Files => _table?.FileInfo;
         public int FileCount => Files?.Count ?? 0;
@@ -84,7 +80,7 @@ namespace CP77Tools.Model
             using (var vs = mmf.CreateViewStream((long)_header.Tableoffset, (long)_header.Tablesize,
                 MemoryMappedFileAccess.Read))
             {
-                _table = new ArTable(new BinaryReader(vs));
+                _table = new ArTable(new BinaryReader(vs), this);
             }
         }
 

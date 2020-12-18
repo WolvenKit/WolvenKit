@@ -10,7 +10,6 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;

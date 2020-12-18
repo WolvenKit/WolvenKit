@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace WolvenKit.Common.FNV1A
+namespace CP77.Common.Tools.FNV1A
 {
 
     /// <summary>

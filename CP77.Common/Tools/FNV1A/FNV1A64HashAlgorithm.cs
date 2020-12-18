@@ -5,7 +5,7 @@ using System.Text;
 /// <summary>
 /// Hash algorithm, Fowler–Noll–Vo
 /// </summary>
-namespace WolvenKit.Common.FNV1A
+namespace CP77.Common.Tools.FNV1A
 {
     public sealed class FNV1A64HashAlgorithm : HashAlgorithm
     {

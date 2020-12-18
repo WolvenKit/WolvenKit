@@ -15,11 +15,12 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using CP77Tools.Model;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.DDS;
 using System.Diagnostics;
 using CP77.Common.Services;
+using CP77.Common.Tools.FNV1A;
+using CP77Tools.Extensions;
 using Luna.ConsoleProgressBar;
 
 namespace CP77Tools
@@ -66,7 +67,7 @@ namespace CP77Tools
             };
             rootCommand.Add(archive);
             archive.Handler = CommandHandler.Create<string, string, bool, bool, bool, bool, EUncookExtension, ulong, string, string>
-                (ConsoleFunctions.ArchiveTask);
+                (Tasks.ConsoleFunctions.ArchiveTask);
 
             var dump = new Command("dump", "Target an archive or a directory to dump archive information.")
             {
@@ -77,7 +78,7 @@ namespace CP77Tools
                 new Option<bool>(new []{ "--classinfo"}, "Dump all class info."),
             };
             rootCommand.Add(dump);
-            dump.Handler = CommandHandler.Create<string, bool, bool, bool, bool>(ConsoleFunctions.DumpTask);
+            dump.Handler = CommandHandler.Create<string, bool, bool, bool, bool>(Tasks.ConsoleFunctions.DumpTask);
 
             var cr2w = new Command("cr2w", "Target a specific cr2w (extracted) file and dumps file information.")
             {
@@ -86,7 +87,7 @@ namespace CP77Tools
                 new Option<bool>(new []{ "--chunks", "-c"}, "Dump all class information of file."),
             };
             rootCommand.Add(cr2w);
-            cr2w.Handler = CommandHandler.Create<string, bool, bool>(ConsoleFunctions.Cr2wTask);
+            cr2w.Handler = CommandHandler.Create<string, bool, bool>(Tasks.ConsoleFunctions.Cr2wTask);
 
             var hashTask = new Command("hash", "Some helper functions related to hashes.")
             {
@@ -94,7 +95,7 @@ namespace CP77Tools
                 new Option<bool>(new []{"--missing", "-m"}, ""),
             };
             rootCommand.Add(hashTask);
-            hashTask.Handler = CommandHandler.Create<string, bool>(ConsoleFunctions.HashTask);
+            hashTask.Handler = CommandHandler.Create<string, bool>(Tasks.ConsoleFunctions.HashTask);
 
             var oodleTask = new Command("oodle", "Some helper functions related to oodle compression.")
             {
@@ -102,7 +103,7 @@ namespace CP77Tools
                 new Option<bool>(new []{"--decompress", "-d"}, ""),
             };
             rootCommand.Add(oodleTask);
-            oodleTask.Handler = CommandHandler.Create<string, bool>(ConsoleFunctions.OodleTask);
+            oodleTask.Handler = CommandHandler.Create<string, bool>(Tasks.ConsoleFunctions.OodleTask);
 
             #endregion
 

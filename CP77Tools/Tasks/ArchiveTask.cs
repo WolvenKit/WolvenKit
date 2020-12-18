@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
-using System.Threading.Tasks;
-using Catel.IoC;
-using CP77Tools.Model;
+using CP77.CR2W.Archive;
 using WolvenKit.Common.Tools.DDS;
-using WolvenKit.CR2W.Types;
 
-namespace CP77Tools
+namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
@@ -27,7 +23,6 @@ namespace CP77Tools
 
             var inputFileInfo = new FileInfo(path);
             var inputDirInfo = new DirectoryInfo(path);
-            DirectoryInfo basedir;
 
             if (!inputFileInfo.Exists && !inputDirInfo.Exists)
             {
@@ -40,19 +35,20 @@ namespace CP77Tools
                 Console.WriteLine("Input file is not an .archive");
                 return;
             }
-            else if (inputDirInfo.GetFiles().Where(_=>_.Extension == ".archive").Count() < 1)
+            else if (inputDirInfo.Exists && inputDirInfo.GetFiles().All(_ => _.Extension != ".archive"))
             {
                 Console.WriteLine("No .archive file to process in the input directory");
                 return;
             }
 
-            basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
+            var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
 
             #endregion
 
             if (extract || dump || list || uncook)
             {
-                var tobeprocessedarchives = inputFileInfo.Exists ? new List<FileInfo> { inputFileInfo } :
+                var tobeprocessedarchives = inputFileInfo.Exists 
+                    ? new List<FileInfo> { inputFileInfo } :
                     inputDirInfo.GetFiles().Where(_ => _.Extension == ".archive");
                 foreach (var processedarchive in tobeprocessedarchives)
                 {
