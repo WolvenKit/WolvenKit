@@ -12,7 +12,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
-using ConsoleProgressBar;
 using CP77.CR2W;
 using CP77Tools.Services;
 using WolvenKit.Common;
@@ -22,6 +21,7 @@ using WolvenKit.Common.Tools;
 using WolvenKit.Common.Tools.DDS;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
+using Luna.ConsoleProgressBar;
 
 namespace CP77Tools.Model
 {
@@ -253,14 +253,20 @@ namespace CP77Tools.Model
         /// <returns></returns>
         public (List<string>, int) ExtractAll(DirectoryInfo outDir)
         {
-            using var pb = new ProgressBar();
-            using var p1 = pb.Progress.Fork();
+            using var pb = new ConsoleProgressBar()
+            {
+                DisplayBars = true,
+                DisplayAnimation = false
+            };
+
             int progress = 0;
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
 
             using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
+
+            Console.Write($"Exporting {FileCount} bundle entries ");
 
             Parallel.For(0, FileCount, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
             {
@@ -275,7 +281,7 @@ namespace CP77Tools.Model
 
                 Interlocked.Increment(ref progress);
                 var perc = progress / (double)FileCount;
-                p1.Report(perc, $"Loading bundle entries: {progress}/{FileCount}");
+                pb.Report(perc);
             });
 
             return (extractedList.ToList(), FileCount);
@@ -289,8 +295,12 @@ namespace CP77Tools.Model
         /// <returns></returns>
         public (List<string>, int) UncookAll(DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga)
         {
-            using var pb = new ProgressBar();
-            using var p1 = pb.Progress.Fork();
+            using var pb = new ConsoleProgressBar()
+            {
+                DisplayBars = true,
+                DisplayAnimation = false
+            };
+
             int progress = 0;
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
@@ -298,6 +308,8 @@ namespace CP77Tools.Model
 
             using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
+
+            Console.Write($"Exporting {FileCount} bundle entries ");
 
             Parallel.For(0, FileCount, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
             {
@@ -315,9 +327,7 @@ namespace CP77Tools.Model
                 }
 
                 Interlocked.Increment(ref progress);
-                var perc = progress / (double) FileCount;
-                p1.Report(perc, $"Loading bundle entries: {progress}/{FileCount}");
-                
+                pb.Report(progress / (double)FileCount);
             });
 
             
