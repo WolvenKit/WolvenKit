@@ -45,20 +45,24 @@ namespace CP77Tools
             if (extract || dump || list || uncook)
             {
                 // get outdirectory
-                var outDir = Directory.CreateDirectory(Path.Combine(
-                        indir.FullName, 
-                        inputFileInfo.Name.Replace(".archive", "")));
-                if (!string.IsNullOrEmpty(outpath))
+
+                DirectoryInfo outDir;
+
+                if (string.IsNullOrEmpty(outpath))
+                {
+                    outDir = Directory.CreateDirectory(Path.Combine(
+                            indir.FullName,
+                            inputFileInfo.Name.Replace(".archive", "")));
+                }
+                else
                 {
                     outDir = new DirectoryInfo(outpath);
+
                     if (!outDir.Exists)
                     {
-                        Console.WriteLine("Output directory does not exist");
-                        return;
+                        outDir = Directory.CreateDirectory(outpath);
                     }
                 }
-                if (!outDir.Exists)
-                    Directory.CreateDirectory(outDir.FullName);
 
                 // read archive
                 var ar = new Archive(inputFileInfo.FullName);
