@@ -26,11 +26,11 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-        //private string BuildTypeName(string elementtype, IEnumerator<int> flags)
-        //{
-        //    var v1 = flags.MoveNext() ? flags.Current : 0;
-        //    return $"static:{v1},{elementtype}";
-        //}
+        private string BuildTypeName(string elementtype, IEnumerator<int> flags)
+        {
+            var v1 = flags.MoveNext() ? flags.Current : 0;
+            return $"static:{v1},{elementtype}";
+        }
 
     }
 }
