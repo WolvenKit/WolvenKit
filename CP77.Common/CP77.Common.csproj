@@ -20,8 +20,4 @@
     <PackageReference Include="protobuf-net" Version="3.0.62" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Tools\" />
-  </ItemGroup>
-
 </Project>

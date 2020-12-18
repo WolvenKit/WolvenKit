@@ -1,13 +1,6 @@
-﻿using Catel.Data;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolvenKit.Common.Services;
+﻿using System.Collections.Generic;
 
-namespace CP77Tools.Services
+namespace CP77.Common.Services
 {
     public class MainController : IMainController
     {

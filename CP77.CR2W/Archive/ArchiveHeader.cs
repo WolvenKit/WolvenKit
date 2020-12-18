@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
-using CP77Tools.Services;
+using CP77.Common.Services;
 using WolvenKit.CR2W.Types;
 
 namespace CP77Tools.Model

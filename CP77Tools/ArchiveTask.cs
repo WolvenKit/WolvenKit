@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Catel.IoC;
 using CP77Tools.Model;
-using CP77Tools.Services;
 using WolvenKit.Common.Tools.DDS;
 using WolvenKit.CR2W.Types;
 

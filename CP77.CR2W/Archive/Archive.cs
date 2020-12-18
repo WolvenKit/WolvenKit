@@ -1,5 +1,4 @@
-﻿using CP77Tools.Oodle;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,9 +11,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
+using CP77.Common.Tools;
 using CP77.CR2W;
 using CP77.CR2W.Extensions;
-using CP77Tools.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
@@ -40,6 +39,15 @@ namespace CP77Tools.Model
 
         #region constructors
 
+        public Archive()
+        {
+            
+        }
+
+        /// <summary>
+        /// Creates and reads an archive from a path
+        /// </summary>
+        /// <param name="path"></param>
         public Archive(string path)
         {
             Filepath = path;
@@ -79,6 +87,34 @@ namespace CP77Tools.Model
                 _table = new ArTable(new BinaryReader(vs));
             }
         }
+
+        /// <summary>
+        /// Creates and archive from a folder and packs all files inside into it
+        /// </summary>
+        /// <param name="infolder"></param>
+        /// <returns></returns>
+        public static Archive CreateFromFolder(DirectoryInfo infolder)
+        {
+            var ar = new Archive();
+
+            
+
+
+
+            return ar;
+        }
+
+        /// <summary>
+        /// Serializes this archive to a redengine .archive file
+        /// </summary>
+        public void Serialize()
+        {
+
+
+
+
+        }
+
 
         /// <summary>
         /// Uncooks a single file by hash.
@@ -360,8 +396,6 @@ namespace CP77Tools.Model
             return (extractedList.ToList(), all);
         }
 
-
-
         private bool CanUncook(ulong hash)
         {
             if (!Files.ContainsKey(hash))
@@ -369,19 +403,6 @@ namespace CP77Tools.Model
             string name = Files[hash].NameStr;
 
             return (Path.GetExtension(name) == ".xbm" || Path.GetExtension(name) == ".bin"); //TODO: remove when all filenames found
-        }
-
-        /// <summary>
-        /// Returns a file by a given hash
-        /// </summary>
-        /// <param name="hash"></param>
-        /// <returns></returns>
-        public (byte[], List<byte[]>) GetFileByHash(ulong hash)
-        {
-            using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
-                MemoryMappedFileAccess.Read);
-
-            return GetFileData(hash, mmf);
         }
 
         /// <summary>

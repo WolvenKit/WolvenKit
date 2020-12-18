@@ -15,11 +15,11 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using CP77Tools.Model;
-using CP77Tools.Services;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.DDS;
 using System.Diagnostics;
+using CP77.Common.Services;
 using Luna.ConsoleProgressBar;
 
 namespace CP77Tools
