@@ -68,6 +68,12 @@ namespace CP77Tools
         {
             #region checks
 
+            if (string.IsNullOrEmpty(path))
+            {
+                Console.WriteLine("Please fill in an input path");
+                return 0;
+            }
+
             var isDirectory = false;
             var inputFileInfo = new FileInfo(path);
             var inputDirInfo = new DirectoryInfo(path);

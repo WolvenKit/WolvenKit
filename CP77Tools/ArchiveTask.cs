@@ -22,100 +22,116 @@ namespace CP77Tools
 
             if (string.IsNullOrEmpty(path))
             {
-                Console.WriteLine("Input file does not exist");
+                Console.WriteLine("Please fill in an input path");
                 return;
             }
+
             var inputFileInfo = new FileInfo(path);
-            if (!inputFileInfo.Exists)
+            var inputDirInfo = new DirectoryInfo(path);
+            DirectoryInfo basedir;
+
+            if (!inputFileInfo.Exists && !inputDirInfo.Exists)
             {
-                Console.WriteLine("Input file does not exist");
+                Console.WriteLine("Input path does not exist");
                 return;
             }
-            if (inputFileInfo.Extension != ".archive")
+
+            if (inputFileInfo.Exists && inputFileInfo.Extension != ".archive")
             {
                 Console.WriteLine("Input file is not an .archive");
                 return;
             }
-            var indir = new FileInfo(path).Directory;
-            if (indir == null)
+            else if (inputDirInfo.GetFiles().Where(_=>_.Extension == ".archive").Count() < 1)
+            {
+                Console.WriteLine("No .archive file to process in the input directory");
                 return;
+            }
+
+            basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
 
             #endregion
 
             if (extract || dump || list || uncook)
             {
-                // get outdirectory
-
-                DirectoryInfo outDir;
-
-                if (string.IsNullOrEmpty(outpath))
+                var tobeprocessedarchives = inputFileInfo.Exists ? new List<FileInfo> { inputFileInfo } :
+                    inputDirInfo.GetFiles().Where(_ => _.Extension == ".archive");
+                foreach (var processedarchive in tobeprocessedarchives)
                 {
-                    outDir = Directory.CreateDirectory(Path.Combine(
-                            indir.FullName,
-                            inputFileInfo.Name.Replace(".archive", "")));
-                }
-                else
-                {
-                    outDir = new DirectoryInfo(outpath);
-
-                    if (!outDir.Exists)
+                    // get outdirectory
+                    DirectoryInfo outDir;
+                    if (string.IsNullOrEmpty(outpath))
                     {
-                        outDir = Directory.CreateDirectory(outpath);
-                    }
-                }
-
-                // read archive
-                var ar = new Archive(inputFileInfo.FullName);
-
-                // run
-                if (extract || uncook)
-                {
-                    if (hash != 0)
-                    {
-                        if (extract)
-                        {
-                            ar.ExtractSingle(hash, outDir);
-                            Console.WriteLine($"{ar.Filepath}: Extracted one file: {hash}");
-                        }
-
-                        if (uncook)
-                        {
-                            ar.UncookSingle(hash, outDir, uext);
-                            Console.WriteLine($"{ar.Filepath}: Uncooked one file: {hash}");
-                        }
+                        outDir = Directory.CreateDirectory(Path.Combine(
+                                basedir.FullName,
+                                processedarchive.Name.Replace(".archive", "")));
                     }
                     else
                     {
-                        if (extract)
+                        outDir = new DirectoryInfo(outpath);
+                        if (!outDir.Exists)
                         {
-                            var r = ar.ExtractAll(outDir, pattern, regex);
-                            Console.WriteLine($"{ar.Filepath}: Extracted {r.Item1.Count}/{r.Item2} files.");
+                            outDir = Directory.CreateDirectory(outpath);
                         }
-
-                        if (uncook)
+                        if (inputDirInfo.Exists)
                         {
-                            var r = ar.UncookAll(outDir, pattern, regex, uext);
-                            Console.WriteLine($"{ar.Filepath}: Uncooked {r.Item1.Count}/{r.Item2} files.");
+                            outDir = Directory.CreateDirectory(Path.Combine(
+                                outDir.FullName,
+                                processedarchive.Name.Replace(".archive", "")));
                         }
                     }
-                    
-                }
 
-                if (dump)
-                {
-                    ar.DumpInfo(outDir);
-                    Console.WriteLine($"Finished dumping {path}.");
-                }
+                    // read archive
+                    var ar = new Archive(processedarchive.FullName);
 
-                if (list)
-                {
-                    foreach (var entry in ar.Files)
+                    // run
+                    if (extract || uncook)
                     {
-                        Console.WriteLine(entry.Value.NameStr);
+                        if (hash != 0)
+                        {
+                            if (extract)
+                            {
+                                ar.ExtractSingle(hash, outDir);
+                                Console.WriteLine($" {ar.Filepath}: Extracted one file: {hash}");
+                            }
+
+                            if (uncook)
+                            {
+                                ar.UncookSingle(hash, outDir, uext);
+                                Console.WriteLine($" {ar.Filepath}: Uncooked one file: {hash}");
+                            }
+                        }
+                        else
+                        {
+                            if (extract)
+                            {
+                                var r = ar.ExtractAll(outDir, pattern, regex);
+                                Console.WriteLine($" {ar.Filepath}: Extracted {r.Item1.Count}/{r.Item2} files.");
+                            }
+
+                            if (uncook)
+                            {
+                                var r = ar.UncookAll(outDir, pattern, regex, uext);
+                                Console.WriteLine($" {ar.Filepath}: Uncooked {r.Item1.Count}/{r.Item2} files.");
+                            }
+                        }
+
+                    }
+
+                    if (dump)
+                    {
+                        ar.DumpInfo(outDir);
+                        Console.WriteLine($"Finished dumping {processedarchive.FullName}.");
+                    }
+
+                    if (list)
+                    {
+                        foreach (var entry in ar.Files)
+                        {
+                            Console.WriteLine(entry.Value.NameStr);
+                        }
                     }
                 }
             }
-
             return;
         }
     }

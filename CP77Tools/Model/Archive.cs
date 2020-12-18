@@ -281,6 +281,9 @@ namespace CP77Tools.Model
                 finalmatches = queryMatchingFiles;
             }
 
+            Thread.Sleep(1000);
+            logger.LogProgress(0);
+
             Parallel.ForEach(finalmatches, new ParallelOptions { MaxDegreeOfParallelism = 8 }, info =>
             {
                 int extracted = ExtractSingleInner(mmf, info.NameHash64, outDir);
@@ -333,6 +336,9 @@ namespace CP77Tools.Model
 
                 finalmatches = queryMatchingFiles;
             }
+
+            Thread.Sleep(1000);
+            logger.LogProgress(0);
 
             Parallel.ForEach(finalmatches, new ParallelOptions { MaxDegreeOfParallelism = 8 }, info =>
             {
