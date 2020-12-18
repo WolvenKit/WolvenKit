@@ -21,7 +21,6 @@ using WolvenKit.Common.Tools;
 using WolvenKit.Common.Tools.DDS;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
-using Luna.ConsoleProgressBar;
 
 namespace CP77Tools.Model
 {
@@ -253,11 +252,7 @@ namespace CP77Tools.Model
         /// <returns></returns>
         public (List<string>, int) ExtractAll(DirectoryInfo outDir)
         {
-            using var pb = new ConsoleProgressBar()
-            {
-                DisplayBars = true,
-                DisplayAnimation = false
-            };
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
             int progress = 0;
             var extractedList = new ConcurrentBag<string>();
@@ -280,8 +275,7 @@ namespace CP77Tools.Model
                     failedList.Add(info.NameStr);
 
                 Interlocked.Increment(ref progress);
-                var perc = progress / (double)FileCount;
-                pb.Report(perc);
+                logger.LogProgress(progress / (float)FileCount);
             });
 
             return (extractedList.ToList(), FileCount);
@@ -295,11 +289,7 @@ namespace CP77Tools.Model
         /// <returns></returns>
         public (List<string>, int) UncookAll(DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga)
         {
-            using var pb = new ConsoleProgressBar()
-            {
-                DisplayBars = true,
-                DisplayAnimation = false
-            };
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
             int progress = 0;
             var extractedList = new ConcurrentBag<string>();
@@ -325,9 +315,8 @@ namespace CP77Tools.Model
                     else
                         failedList.Add(info.NameStr);
                 }
-
                 Interlocked.Increment(ref progress);
-                pb.Report(progress / (double)FileCount);
+                logger.LogProgress(progress / (float)FileCount);
             });
 
             

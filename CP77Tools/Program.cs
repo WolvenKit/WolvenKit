@@ -10,6 +10,7 @@ using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.CommandLine.IO;
 using System.CommandLine.Parsing;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -19,6 +20,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.DDS;
 using System.Diagnostics;
+using Luna.ConsoleProgressBar;
 
 namespace CP77Tools
 {
@@ -29,15 +31,17 @@ namespace CP77Tools
         {
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
             ServiceLocator.Default.RegisterType<IMainController, MainController>();
-
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             // get csv data
             Console.WriteLine("Loading Hashes...");
             await Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes.csv"));
+
             
+
 
             #region commands
 
-            
+
 
 
 
@@ -99,7 +103,6 @@ namespace CP77Tools
 
             #endregion
 
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
             // Run
             if (args == null || args.Length == 0)
@@ -115,6 +118,32 @@ namespace CP77Tools
                         return;
 
                     var parsed = CommandLineExtensions.ParseText(line, ' ', '"');
+
+                    using var pb = new ConsoleProgressBar()
+                    {
+                        DisplayBars = true,
+                        DisplayAnimation = false
+                    };
+
+
+                    logger.PropertyChanged += delegate (object? sender, PropertyChangedEventArgs args)
+                    {
+                        if (sender is LoggerService _logger)
+                        {
+                            switch (args.PropertyName)
+                            {
+                                case "Progress":
+                                {
+                                    pb.Report(_logger.Progress.Item1);
+                                    break;
+                                }
+                                default:
+                                    break;
+                            }
+                        }
+                    };
+
+
                     rootCommand.InvokeAsync(parsed.ToArray()).Wait();
 
                     await WriteLog();

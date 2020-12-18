@@ -13,11 +13,11 @@ using Catel.Collections;
 using Catel.IoC;
 using CP77Tools.Model;
 using CP77Tools.Services;
-using Luna.ConsoleProgressBar;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Reflection;
 using WolvenKit.CR2W.Types;
@@ -95,6 +95,7 @@ namespace CP77Tools
             #endregion
 
             var mainController = ServiceLocator.Default.ResolveType<IMainController>();
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
             var missinghashtxt = isDirectory 
                 ? Path.Combine(inputDirInfo.FullName, "missinghashes.txt") 
@@ -125,11 +126,7 @@ namespace CP77Tools
                             File = fileinfo.Where(_ => Path.GetExtension(_.NameStr) == ext)
                         }).ToList();
 
-                    using var pb = new ConsoleProgressBar()
-                    {
-                        DisplayBars = true,
-                        DisplayAnimation = false
-                    };
+
 
                     int progress = 0;
                     var total = query.Count;
@@ -166,7 +163,7 @@ namespace CP77Tools
                         }
                         
                         Interlocked.Increment(ref progress);
-                        pb.Report(progress / (double)total);
+                        logger.LogProgress(progress / (float)total);
 
                         Console.WriteLine($"Dumped extension {result.Key}");
                     });
@@ -178,12 +175,6 @@ namespace CP77Tools
                     using var mmf = MemoryMappedFile.CreateFromFile(ar.Filepath, FileMode.Open,
                         ar.Filepath.GetHashMD5(), 0,
                         MemoryMappedFileAccess.Read);
-
-                    using var pb = new ConsoleProgressBar()
-                    {
-                        DisplayBars = true,
-                        DisplayAnimation = false
-                    };
 
                     int progress = 0;
 
@@ -272,8 +263,8 @@ namespace CP77Tools
                             }
                         }
 
-                        progress += 1;
-                        pb.Report(progress / (double)count);
+                        Interlocked.Increment(ref progress);
+                        logger.LogProgress(progress / (float)count);
                     });
 
                     // write
