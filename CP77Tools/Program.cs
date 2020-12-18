@@ -18,6 +18,7 @@ using CP77Tools.Services;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.DDS;
+using System.Diagnostics;
 
 namespace CP77Tools
 {
@@ -155,37 +156,29 @@ namespace CP77Tools
         {
             var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
 
-            using var fr = new FileStream(path, FileMode.Open, FileAccess.Read);
-            using var sr = new StreamReader(fr);
+            Stopwatch watch = new Stopwatch();
+            watch.Restart();
 
             var hashDictionary = new ConcurrentDictionary<ulong,string>();
 
-            while (true)
+            Parallel.ForEach(File.ReadLines(path), line =>
             {
-                string line = await sr.ReadLineAsync();
-                if (line == null)
-                {
-                    break;
-                }
-
                 // check line
-                line = line.Split(',',StringSplitOptions.RemoveEmptyEntries).First();
-                if (string.IsNullOrEmpty(line)) continue;
-
-                ulong hash = FNV1A64HashAlgorithm.HashString(line);
-                hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
-            }
-
-
-       
+                line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
+                if (!string.IsNullOrEmpty(line))
+                {
+                    ulong hash = FNV1A64HashAlgorithm.HashString(line);
+                    hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
+                }                
+            });
 
             _maincontroller.Hashdict = hashDictionary.ToDictionary(
                 entry => entry.Key,
                 entry => entry.Value);
-            Console.WriteLine($"Loaded {hashDictionary.Count} Hashes.");
+
+            watch.Stop();
+
+            Console.WriteLine($"Loaded {hashDictionary.Count} hashes in {watch.ElapsedMilliseconds}ms.");
         }
-
-
-        
     }
 }
