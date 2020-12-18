@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
 using CP77.CR2W;
+using CP77.CR2W.Extensions;
 using CP77Tools.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -249,8 +250,9 @@ namespace CP77Tools.Model
         /// Extracts all Files to the specified directory.
         /// </summary>
         /// <param name="outDir"></param>
+        /// <param name="pattern"></param>
         /// <returns></returns>
-        public (List<string>, int) ExtractAll(DirectoryInfo outDir)
+        public (List<string>, int) ExtractAll(DirectoryInfo outDir, string pattern = "", string regex = "")
         {
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
@@ -263,10 +265,24 @@ namespace CP77Tools.Model
 
             Console.Write($"Exporting {FileCount} bundle entries ");
 
-            Parallel.For(0, FileCount, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
+            // check search pattern then regex
+            IEnumerable<FileInfoEntry> finalmatches = Files.Values;
+            if (!string.IsNullOrEmpty(pattern))
+                finalmatches = Files.Values.MatchesWildcard(item => item.NameStr, pattern);
+            if (!string.IsNullOrEmpty(regex))
             {
-                var info = Files.Values.ToList()[i];
+                var searchTerm = new System.Text.RegularExpressions.Regex($@"{regex}");
+                var queryMatchingFiles =
+                    from file in finalmatches
+                    let matches = searchTerm.Matches(file.NameStr)
+                    where matches.Count > 0
+                    select file;
+                    
+                finalmatches = queryMatchingFiles;
+            }
 
+            Parallel.ForEach(finalmatches, new ParallelOptions { MaxDegreeOfParallelism = 8 }, info =>
+            {
                 int extracted = ExtractSingleInner(mmf, info.NameHash64, outDir);
 
                 if (extracted != 0)
@@ -285,9 +301,10 @@ namespace CP77Tools.Model
         /// Uncooks all Files to the specified directory.
         /// </summary>
         /// <param name="outDir"></param>
+        /// <param name="pattern"></param>
         /// <param name="uncookext"></param>
         /// <returns></returns>
-        public (List<string>, int) UncookAll(DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga)
+        public (List<string>, int) UncookAll(DirectoryInfo outDir, string pattern = "", string regex = "", EUncookExtension uncookext = EUncookExtension.tga)
         {
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
@@ -299,12 +316,26 @@ namespace CP77Tools.Model
             using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
 
-            Console.Write($"Exporting {FileCount} bundle entries ");
+            Console.Write($"Uncooking {FileCount} bundle entries ");
 
-            Parallel.For(0, FileCount, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
+            // check search pattern then regex
+            IEnumerable<FileInfoEntry> finalmatches = Files.Values;
+            if (!string.IsNullOrEmpty(pattern))
+                finalmatches = Files.Values.MatchesWildcard(item => item.NameStr, pattern);
+            if (!string.IsNullOrEmpty(regex))
             {
-                var info = Files.Values.ToList()[i];
+                var searchTerm = new System.Text.RegularExpressions.Regex($@"{regex}");
+                var queryMatchingFiles =
+                    from file in finalmatches
+                    let matches = searchTerm.Matches(file.NameStr)
+                    where matches.Count > 0
+                    select file;
 
+                finalmatches = queryMatchingFiles;
+            }
+
+            Parallel.ForEach(finalmatches, new ParallelOptions { MaxDegreeOfParallelism = 8 }, info =>
+            {
                 if (CanUncook(info.NameHash64))
                 {
                     Interlocked.Increment(ref all);

@@ -32,11 +32,11 @@ namespace CP77Tools
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
             ServiceLocator.Default.RegisterType<IMainController, MainController>();
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+
+
             // get csv data
             Console.WriteLine("Loading Hashes...");
             await Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes.csv"));
-
-            
 
 
             #region commands
@@ -55,6 +55,8 @@ namespace CP77Tools
             {
                 new Option<string>(new []{"--path", "-p"}, "Input path to .archive."),
                 new Option<string>(new []{ "--outpath", "-o"}, "Output directory to extract files to."),
+                new Option<string>(new []{ "--pattern", "-w"}, "Use optional search pattern, e.g. *.ink. If bith regex and pattern is definedm, pattern will be used first"),
+                new Option<string>(new []{ "--regex", "-r"}, "Use optional regex pattern."),
                 new Option<bool>(new []{ "--extract", "-e"}, "Extract files from archive."),
                 new Option<bool>(new []{ "--dump", "-d"}, "Dump archive information."),
                 new Option<bool>(new []{ "--list", "-l"}, "List contents of archive."),
@@ -63,7 +65,8 @@ namespace CP77Tools
                 new Option<ulong>(new []{ "--hash"}, "Extract single file with given hash."),
             };
             rootCommand.Add(archive);
-            archive.Handler = CommandHandler.Create<string, string, bool, bool, bool, bool, EUncookExtension, ulong>(ConsoleFunctions.ArchiveTask);
+            archive.Handler = CommandHandler.Create<string, string, bool, bool, bool, bool, EUncookExtension, ulong, string, string>
+                (ConsoleFunctions.ArchiveTask);
 
             var dump = new Command("dump", "Target an archive or a directory to dump archive information.")
             {

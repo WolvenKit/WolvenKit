@@ -16,7 +16,7 @@ namespace CP77Tools
     {
         
         public static void ArchiveTask(string path, string outpath, bool extract, bool dump, bool list, 
-            bool uncook, EUncookExtension uext, ulong hash)
+            bool uncook, EUncookExtension uext, ulong hash, string pattern, string regex)
         {
             #region checks
 
@@ -88,13 +88,13 @@ namespace CP77Tools
                     {
                         if (extract)
                         {
-                            var r = ar.ExtractAll(outDir);
+                            var r = ar.ExtractAll(outDir, pattern, regex);
                             Console.WriteLine($"{ar.Filepath}: Extracted {r.Item1.Count}/{r.Item2} files.");
                         }
 
                         if (uncook)
                         {
-                            var r = ar.UncookAll(outDir, uext);
+                            var r = ar.UncookAll(outDir, pattern, regex, uext);
                             Console.WriteLine($"{ar.Filepath}: Uncooked {r.Item1.Count}/{r.Item2} files.");
                         }
                     }
