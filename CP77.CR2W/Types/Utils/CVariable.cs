@@ -212,7 +212,7 @@ namespace WolvenKit.CR2W.Types
         #region Virtual
         [JsonIgnore]
         public List<IEditableVariable> ChildrEditableVariables => GetEditableVariables();
-        
+        [JsonIgnore]
         public List<IEditableVariable> ChildrExistingVariables => GetExistingVariables(false);
 
         /// <summary>
@@ -289,12 +289,12 @@ namespace WolvenKit.CR2W.Types
             // fixed class/struct (no leading null byte), read all properties in order
             if (tags.Contains(EREDMetaInfo.REDStruct))
             {
-                // CClipmapcookeddata has no trailing 0 ???
-                if (this is CClipMapCookedData cClip)
-                {
-                    cClip.Data.Bytes = file.ReadBytes((int)size);
-                    return;
-                }
+                //// CClipmapcookeddata has no trailing 0 ???
+                //if (this is CClipMapCookedData cClip)
+                //{
+                //    cClip.Data.Bytes = file.ReadBytes((int)size);
+                //    return;
+                //}
 
                 // parse all RED variables (normal + buffers)
                 ReadAllRedVariables<REDAttribute>(file);
@@ -332,7 +332,7 @@ namespace WolvenKit.CR2W.Types
                 while (true)
                 {
 
-                    try
+                    //try
                     {
                         //cvar is a "children variable" : a property of a class.
                         var cvar = cr2w.ReadVariable(file, this);
@@ -355,11 +355,11 @@ namespace WolvenKit.CR2W.Types
                             TrySettingFastMemberAccessor(cvar);
                         }
                     }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                        throw;
-                    }
+                    //catch (Exception e)
+                    //{
+                    //    Console.WriteLine(e);
+                    //    throw;
+                    //}
 
                     
                 }

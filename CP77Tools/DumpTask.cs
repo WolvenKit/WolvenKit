@@ -4,18 +4,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Catel.Collections;
 using Catel.IoC;
-using ConsoleProgressBar;
 using CP77Tools.Model;
 using CP77Tools.Services;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
+using WolvenKit.CR2W.Reflection;
 using WolvenKit.CR2W.Types;
 
 namespace CP77Tools
@@ -60,7 +64,7 @@ namespace CP77Tools
     {
         private static byte[] MAGIC = new byte[] {0x43, 0x52, 0x32, 0x57};
 
-        public static int DumpTask(string path, bool imports, bool missinghashes, bool info)
+        public static int DumpTask(string path, bool imports, bool missinghashes, bool texinfo, bool classinfo)
         {
             #region checks
 
@@ -91,30 +95,97 @@ namespace CP77Tools
             #endregion
 
             var mainController = ServiceLocator.Default.ResolveType<IMainController>();
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
             var missinghashtxt = isDirectory 
                 ? Path.Combine(inputDirInfo.FullName, "missinghashes.txt") 
                 : $"{inputFileInfo.FullName}.missinghashes.txt";
             using var mwriter = File.CreateText(missinghashtxt);
 
+            var typedict = new ConcurrentDictionary<string, IEnumerable<string>>();
+
+            // Parallel
             foreach (var ar in archives)
             {
-                using var pb = new ProgressBar();
-                if (imports || info)
+                
+
+                if (classinfo)
                 {
                     using var mmf = MemoryMappedFile.CreateFromFile(ar.Filepath, FileMode.Open,
                         ar.Filepath.GetHashMD5(), 0,
                         MemoryMappedFileAccess.Read);
-                    using var p1 = pb.Progress.Fork();
+
+
+                    var fileinfo = ar.Files.Values;
+                    var query = fileinfo.GroupBy(
+                        ext => Path.GetExtension(ext.NameStr),
+                        file => file,
+                        (ext, finfo) => new
+                        {
+                            Key = ext,
+                            File = fileinfo.Where(_ => Path.GetExtension(_.NameStr) == ext)
+                        }).ToList();
+
+
+
+                    int progress = 0;
+                    var total = query.Count;
+
+                    Console.Write($"Exporting {total} bundle entries ");
+
+                    // foreach extension
+                    Parallel.ForEach(query, new ParallelOptions { MaxDegreeOfParallelism = 16 }, result =>
+                    {
+                        if (!string.IsNullOrEmpty(result.Key))
+                        {
+                            Parallel.ForEach(result.File, new ParallelOptions { MaxDegreeOfParallelism = 16 }, fi =>
+                            {
+                                var (f, b) = ar.GetFileData(fi.NameHash64, mmf);
+                                using var ms = new MemoryStream(f);
+                                using var br = new BinaryReader(ms);
+
+                                var cr2w = new CR2WFile();
+                                try
+                                {
+                                    cr2w.ReadImportsAndBuffers(br);
+                                }
+                                catch (Exception e)
+                                {
+                                    return;
+                                }
+                                
+                                foreach (var chunk in cr2w.Chunks)
+                                {
+                                    var o = chunk.GetDumpObject(br);
+                                    if (o != null) Register(o);
+                                }
+                            });
+                        }
+                        
+                        Interlocked.Increment(ref progress);
+                        logger.LogProgress(progress / (float)total);
+
+                        Console.WriteLine($"Dumped extension {result.Key}");
+                    });
+
+
+                }
+                if (imports || texinfo)
+                {
+                    using var mmf = MemoryMappedFile.CreateFromFile(ar.Filepath, FileMode.Open,
+                        ar.Filepath.GetHashMD5(), 0,
+                        MemoryMappedFileAccess.Read);
+
                     int progress = 0;
 
                     var fileDictionary = new ConcurrentDictionary<ulong, Cr2wChunkInfo>();
                     var texDictionary = new ConcurrentDictionary<ulong, Cr2wTextureInfo>();
-                    //foreach (var (hash, value) in ar.Files) 
-                    //    fileDictionary[hash] = new Cr2wChunkInfo();
 
                     // get info
                     var count = ar.FileCount;
+
+                    Console.Write($"Exporting {count} bundle entries ");
+
                     Parallel.For(0, count, new ParallelOptions {MaxDegreeOfParallelism = 8}, i =>
                     {
                         var entry = ar.Files.ToList()[i];
@@ -149,7 +220,7 @@ namespace CP77Tools
                             fileDictionary.AddOrUpdate(hash, obj, (arg1, o) => obj);
                         }
 
-                        if (info)
+                        if (texinfo)
                         {
                             if (!string.IsNullOrEmpty(entry.Value.NameStr) && entry.Value.NameStr.Contains(".xbm"))
                             {
@@ -192,9 +263,8 @@ namespace CP77Tools
                             }
                         }
 
-                        progress += 1;
-                        var perc = progress / (double)count;
-                        p1.Report(perc, $"Loading bundle entries: {progress}/{count}");
+                        Interlocked.Increment(ref progress);
+                        logger.LogProgress(progress / (float)count);
                     });
 
                     // write
@@ -229,7 +299,7 @@ namespace CP77Tools
                         Console.WriteLine($"Finished. Dump file written to {ar.Filepath}.");
                     }
 
-                    if (info)
+                    if (texinfo)
                     {
                         //write
                         File.WriteAllText($"{ar.Filepath}.textures.json",
@@ -256,11 +326,98 @@ namespace CP77Tools
                     }
                     Console.WriteLine($"{ar.Filepath} - missing: {ctr}");
                 }
-
             }
 
 
+            //write class definitions
+            var outdir = isDirectory 
+                ? Path.Combine(inputDirInfo.FullName, "ClassDefinitions")
+                : Path.Combine(inputFileInfo.Directory.FullName, "ClassDefinitions");
+            Directory.CreateDirectory(outdir);
+            var outfile = Path.Combine(outdir, "classdefinitions.txt");
+            var outfileS = Path.Combine(outdir, "classdefinitions_simple.json");
+            var text = "";
+            foreach (var (typename, variables) in typedict)
+            {
+                //write
+                var sb = new StringBuilder($"[REDMeta] public class {typename} : CVariable {{\r\n");
+
+                var variableslist = variables.ToList();
+                for (int i = 0; i < variableslist.Count; i++)
+                {
+                    var typ = variableslist[i].Split(' ').First();
+                    var nam = variableslist[i].Split(' ').Last();
+                    var wktype = REDReflection.GetWKitBaseTypeFromREDBaseType(typ);
+                    
+                    if (string.IsNullOrEmpty(nam)) nam = "Missing";
+                    if (string.IsNullOrEmpty(typ)) typ = "Missing";
+
+
+                    sb.Append($"\t[Ordinal({i})]  [RED(\"{nam}\")] public {wktype} {nam.FirstCharToUpper()} {{ get; set; }}\r\n");
+                }
+
+                sb.Append(
+                    $"public {typename}(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {{ }}\r\n");
+
+                sb.Append("}\r\n");
+                text += sb.ToString();
+            }
+            File.WriteAllText(outfile, text);
+
+            //write
+            File.WriteAllText(outfileS,
+                JsonConvert.SerializeObject(typedict, Formatting.Indented, new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.None,
+                    TypeNameHandling = TypeNameHandling.None
+                }));
+
+            Console.WriteLine("Done.");
+
+
             return 1;
+
+            void Register(CR2WExportWrapper.Cr2wVariableDumpObject o)
+            {
+                if (o?.Type == null) return;
+
+                o.Variables ??= new List<CR2WExportWrapper.Cr2wVariableDumpObject>();
+
+                IEnumerable<string> vars = o.Variables.Select(_ => _.ToSimpleString());
+                if (typedict.ContainsKey(o.Type))
+                {
+                    var existing = typedict[o.Type];
+                    var newlist = o.Variables.Select(_ => _.ToSimpleString());
+                    if (existing != null) vars = existing.Union(newlist);
+                }
+                typedict.AddOrUpdate(o.Type, vars, (arg1, ol) => ol);
+
+                foreach (var oVariable in o.Variables)
+                {
+                    // generic types (arrays, handles, refs)
+                    if (oVariable.Type != null && oVariable.Type.Contains(":"))
+                    {
+                        var gentyp = oVariable.Type.Split(":").First();
+                        var innertype = oVariable.Type.Substring(gentyp.Length + 1);
+                        var innertype2 = oVariable.Type[(gentyp.Length + 1)];
+                        if (gentyp == "array")
+                        {
+                            oVariable.Type = innertype;
+                            Register(oVariable);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+                        
+                    }
+
+                    Register(oVariable);
+                }
+            }
+
         }
     }
 }

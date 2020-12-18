@@ -19,17 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConsoleProgressBar" Version="1.0.1" />
+    <PackageReference Include="Luna.ConsoleProgressBar" Version="1.0.29" />
     <PackageReference Include="CsvHelper" Version="18.0.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CP77.CR2W\CP77.CR2W.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Extensions\" />
   </ItemGroup>
 
   <ItemGroup>

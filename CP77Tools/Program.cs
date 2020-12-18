@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,15 +10,17 @@ using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.CommandLine.IO;
 using System.CommandLine.Parsing;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using CP77Tools.Model;
 using CP77Tools.Services;
-using CsvHelper;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.DDS;
+using System.Diagnostics;
+using Luna.ConsoleProgressBar;
 
 namespace CP77Tools
 {
@@ -28,15 +31,17 @@ namespace CP77Tools
         {
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
             ServiceLocator.Default.RegisterType<IMainController, MainController>();
-
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             // get csv data
             Console.WriteLine("Loading Hashes...");
-            Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes.csv"));
-            Console.WriteLine("Loaded Hashes.");
+            await Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes.csv"));
+
+            
+
 
             #region commands
 
-            
+
 
 
 
@@ -65,10 +70,11 @@ namespace CP77Tools
                 new Option<string>(new []{"--path", "-p"}, "Input path to .archive or to a directory (runs over all archives in directory)."),
                 new Option<bool>(new []{ "--imports", "-i"}, "Dump all imports (all filenames that are referenced by all files in the archive)."),
                 new Option<bool>(new []{ "--missinghashes", "-m"}, "List all missing hashes of all input archives."),
-                new Option<bool>(new []{ "--info"}, "Dump all xbm info."),
+                new Option<bool>(new []{ "--texinfo"}, "Dump all xbm info."),
+                new Option<bool>(new []{ "--classinfo"}, "Dump all class info."),
             };
             rootCommand.Add(dump);
-            dump.Handler = CommandHandler.Create<string, bool, bool, bool>(ConsoleFunctions.DumpTask);
+            dump.Handler = CommandHandler.Create<string, bool, bool, bool, bool>(ConsoleFunctions.DumpTask);
 
             var cr2w = new Command("cr2w", "Target a specific cr2w (extracted) file and dumps file information.")
             {
@@ -97,7 +103,6 @@ namespace CP77Tools
 
             #endregion
 
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
             // Run
             if (args == null || args.Length == 0)
@@ -108,7 +113,37 @@ namespace CP77Tools
                 while (true)
                 {
                     string line = System.Console.ReadLine();
+
+                    if (line == "q()")
+                        return;
+
                     var parsed = CommandLineExtensions.ParseText(line, ' ', '"');
+
+                    using var pb = new ConsoleProgressBar()
+                    {
+                        DisplayBars = true,
+                        DisplayAnimation = false
+                    };
+
+
+                    logger.PropertyChanged += delegate (object? sender, PropertyChangedEventArgs args)
+                    {
+                        if (sender is LoggerService _logger)
+                        {
+                            switch (args.PropertyName)
+                            {
+                                case "Progress":
+                                {
+                                    pb.Report(_logger.Progress.Item1);
+                                    break;
+                                }
+                                default:
+                                    break;
+                            }
+                        }
+                    };
+
+
                     rootCommand.InvokeAsync(parsed.ToArray()).Wait();
 
                     await WriteLog();
@@ -146,27 +181,33 @@ namespace CP77Tools
         }
 
 
-        private static void Loadhashes(string path)
+        private static async Task Loadhashes(string path)
         {
             var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
 
-            using (var fr = new FileStream(path, FileMode.Open, FileAccess.Read))
-            using (var sr = new StreamReader(fr))
-            using (var csv = new CsvReader(sr, CultureInfo.InvariantCulture))
+            Stopwatch watch = new Stopwatch();
+            watch.Restart();
+
+            var hashDictionary = new ConcurrentDictionary<ulong,string>();
+
+            Parallel.ForEach(File.ReadLines(path), line =>
             {
-                var records1 = csv.GetRecords<HashObject>();
-                var Hashdict = _maincontroller.Hashdict;
-
-                foreach (var record in records1)
+                // check line
+                line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
+                if (!string.IsNullOrEmpty(line))
                 {
-                    ulong hash = ulong.Parse(record.Hash);
-                    if (!Hashdict.ContainsKey(hash))
-                        Hashdict.Add(hash, record.String);
-                }
-            }
+                    ulong hash = FNV1A64HashAlgorithm.HashString(line);
+                    hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
+                }                
+            });
+
+            _maincontroller.Hashdict = hashDictionary.ToDictionary(
+                entry => entry.Key,
+                entry => entry.Value);
+
+            watch.Stop();
+
+            Console.WriteLine($"Loaded {hashDictionary.Count} hashes in {watch.ElapsedMilliseconds}ms.");
         }
-
-
-        
     }
 }

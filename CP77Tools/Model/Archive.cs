@@ -12,7 +12,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
-using ConsoleProgressBar;
 using CP77.CR2W;
 using CP77Tools.Services;
 using WolvenKit.Common;
@@ -124,24 +123,27 @@ namespace CP77Tools.Model
             if (outfile.Directory == null)
                 return -1;
             if (buffers.Count > 1)
-                throw new NotImplementedException(); //TODO: can that happen?
+                return -1; //TODO: can that happen?
 
+            var cr2w = new CR2WFile();
+            using var ms = new MemoryStream(file);
+            using var br = new BinaryReader(ms);
+            cr2w.ReadImportsAndBuffers(br);
+            if (cr2w.StringDictionary[1] != "CBitmapTexture")
+                return -1;
+
+            br.BaseStream.Seek(0, SeekOrigin.Begin);
+            var result = cr2w.Read(br);
+            if (result != EFileReadErrorCodes.NoError)
+                return -1;
+            if (!(cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm) ||
+                !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+                return -1;
 
             // write buffers
             foreach (var b in buffers)
             {
                 #region textures
-                // read cr2w
-                using var ms = new MemoryStream(file);
-                using var br = new BinaryReader(ms);
-                var cr2w = new CR2WFile();
-                var result = cr2w.Read(br);
-                if (result != EFileReadErrorCodes.NoError)
-                    continue;
-                if (!(cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm) ||
-                    !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
-                    continue;
-
                 // create dds header
                 var newpath = Path.ChangeExtension(outfile.FullName, "dds");
                 try
@@ -250,14 +252,16 @@ namespace CP77Tools.Model
         /// <returns></returns>
         public (List<string>, int) ExtractAll(DirectoryInfo outDir)
         {
-            using var pb = new ProgressBar();
-            using var p1 = pb.Progress.Fork();
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+
             int progress = 0;
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
 
             using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
+
+            Console.Write($"Exporting {FileCount} bundle entries ");
 
             Parallel.For(0, FileCount, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
             {
@@ -271,8 +275,7 @@ namespace CP77Tools.Model
                     failedList.Add(info.NameStr);
 
                 Interlocked.Increment(ref progress);
-                var perc = progress / (double)FileCount;
-                p1.Report(perc, $"Loading bundle entries: {progress}/{FileCount}");
+                logger.LogProgress(progress / (float)FileCount);
             });
 
             return (extractedList.ToList(), FileCount);
@@ -286,8 +289,8 @@ namespace CP77Tools.Model
         /// <returns></returns>
         public (List<string>, int) UncookAll(DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga)
         {
-            using var pb = new ProgressBar();
-            using var p1 = pb.Progress.Fork();
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+
             int progress = 0;
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
@@ -295,6 +298,8 @@ namespace CP77Tools.Model
 
             using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
+
+            Console.Write($"Exporting {FileCount} bundle entries ");
 
             Parallel.For(0, FileCount, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
             {
@@ -310,11 +315,8 @@ namespace CP77Tools.Model
                     else
                         failedList.Add(info.NameStr);
                 }
-
                 Interlocked.Increment(ref progress);
-                var perc = progress / (double) FileCount;
-                p1.Report(perc, $"Loading bundle entries: {progress}/{FileCount}");
-                
+                logger.LogProgress(progress / (float)FileCount);
             });
 
             
@@ -329,10 +331,7 @@ namespace CP77Tools.Model
                 return false;
             string name = Files[hash].NameStr;
 
-            if (Path.GetExtension(name) != ".xbm")
-                return false;
-
-            return true;
+            return (Path.GetExtension(name) == ".xbm" || Path.GetExtension(name) == ".bin"); //TODO: remove when all filenames found
         }
 
         /// <summary>
