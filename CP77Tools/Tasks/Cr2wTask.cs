@@ -8,12 +8,13 @@ namespace CP77Tools.Tasks
     public static partial class ConsoleFunctions
     {
 
-        public static int Cr2wTask(string path, bool all, bool chunks)
+        public static int Cr2wTask(string path, string outpath, bool all, bool chunks)
         {
             // initial checks
             var inputFileInfo = new FileInfo(path);
             if (!inputFileInfo.Exists)
                 return 0;
+            if (string.IsNullOrEmpty(outpath)) { outpath = path; }
 
             var f = File.ReadAllBytes(inputFileInfo.FullName);
             using var ms = new MemoryStream(f);
@@ -37,14 +38,14 @@ namespace CP77Tools.Tasks
                 }
 
                 //write
-                File.WriteAllText($"{inputFileInfo.FullName}.info.json", 
+                File.WriteAllText($"{outpath}.info.json", 
                     JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings()
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                     PreserveReferencesHandling = PreserveReferencesHandling.None,
                     TypeNameHandling = TypeNameHandling.Auto
                 }));
-                Console.WriteLine($"Finished. Dump file written to {inputFileInfo.FullName}.info.json");
+                Console.WriteLine($"Finished. Dump file written to {outpath}.info.json");
             }
 
             if (chunks)
@@ -52,14 +53,14 @@ namespace CP77Tools.Tasks
                 cr2w.Read(br);
 
                 //write
-                File.WriteAllText($"{inputFileInfo.FullName}.json",
+                File.WriteAllText($"{outpath}.json",
                     JsonConvert.SerializeObject(cr2w, Formatting.Indented, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         PreserveReferencesHandling = PreserveReferencesHandling.None,
                         TypeNameHandling = TypeNameHandling.None
                     }));
-                Console.WriteLine($"Finished. Dump file written to {inputFileInfo.FullName}.json");
+                Console.WriteLine($"Finished. Dump file written to {outpath}.json");
             }
 
             

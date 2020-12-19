@@ -41,15 +41,8 @@ namespace CP77Tools
 
 
             #region commands
-
-
-
-
-
-
-
-
-
+            
+            
             var rootCommand = new RootCommand();
 
             var archive = new Command("archive", "Extract files or dump information from one or many archives.")
@@ -83,11 +76,12 @@ namespace CP77Tools
             var cr2w = new Command("cr2w", "Target a specific cr2w (extracted) file and dumps file information.")
             {
                 new Option<string>(new []{"--path", "-p"}, "Input path to a cr2w file."),
+                new Option<string>(new []{"--outpath", "-o"}, "Output path."),
                 new Option<bool>(new []{ "--all", "-a"}, "Dump all information."),
                 new Option<bool>(new []{ "--chunks", "-c"}, "Dump all class information of file."),
             };
             rootCommand.Add(cr2w);
-            cr2w.Handler = CommandHandler.Create<string, bool, bool>(Tasks.ConsoleFunctions.Cr2wTask);
+            cr2w.Handler = CommandHandler.Create<string,string, bool, bool>(Tasks.ConsoleFunctions.Cr2wTask);
 
             var hashTask = new Command("hash", "Some helper functions related to hashes.")
             {
@@ -100,10 +94,11 @@ namespace CP77Tools
             var oodleTask = new Command("oodle", "Some helper functions related to oodle compression.")
             {
                 new Option<string>(new []{"--path", "-p"}, ""),
+                new Option<string>(new []{"--outpath", "-o"}, ""),
                 new Option<bool>(new []{"--decompress", "-d"}, ""),
             };
             rootCommand.Add(oodleTask);
-            oodleTask.Handler = CommandHandler.Create<string, bool>(Tasks.ConsoleFunctions.OodleTask);
+            oodleTask.Handler = CommandHandler.Create<string,string, bool>(Tasks.ConsoleFunctions.OodleTask);
 
             #endregion
 
