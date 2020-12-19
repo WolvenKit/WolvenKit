@@ -50,7 +50,7 @@ namespace CP77Tools.Model
         public uint Table1count { get; private set; }
         public uint Table2count { get; private set; }
         public uint Table3count { get; private set; }
-        public Dictionary<ulong, FileInfoEntry> FileInfo { get; private set; }
+        public Dictionary<ulong, ArchiveItem> FileInfo { get; private set; }
         public List<OffsetEntry> Offsets { get; private set; }
         public List<HashEntry> HashTable { get; private set; }
 
@@ -58,14 +58,14 @@ namespace CP77Tools.Model
         {
             Read(br);
 
-            FileInfo = new Dictionary<ulong, FileInfoEntry>();
+            FileInfo = new Dictionary<ulong, ArchiveItem>();
             Offsets = new List<OffsetEntry>();
             HashTable = new List<HashEntry> ();
 
             // read tables
             for (int i = 0; i < Table1count; i++)
             {
-                var entry = new FileInfoEntry(br, parent);
+                var entry = new ArchiveItem(br, parent);
 
                 if (!FileInfo.ContainsKey(entry.NameHash64))
                 {
@@ -115,8 +115,8 @@ namespace CP77Tools.Model
     public class OffsetEntry
     {
         public ulong Offset { get; set; }
-        public uint PhysicalSize { get; set; }
-        public uint VirtualSize { get; set; }
+        public uint ZSize { get; set; }
+        public uint Size { get; set; }
 
         public OffsetEntry(BinaryReader br)
         {
@@ -127,8 +127,8 @@ namespace CP77Tools.Model
         {
             Offset = br.ReadUInt64();
 
-            PhysicalSize = br.ReadUInt32();
-            VirtualSize = br.ReadUInt32();
+            ZSize = br.ReadUInt32();
+            Size = br.ReadUInt32();
         }
     }
     

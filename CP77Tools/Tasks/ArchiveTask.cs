@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CP77.CR2W.Archive;
+using Newtonsoft.Json;
 using WolvenKit.Common.Tools.DDS;
 
 namespace CP77Tools.Tasks
@@ -116,6 +117,17 @@ namespace CP77Tools.Tasks
                     {
                         ar.DumpInfo(outDir);
                         Console.WriteLine($"Finished dumping {processedarchive.FullName}.");
+
+                        //write
+                        File.WriteAllText(Path.Combine(outDir.FullName, $"{ar.Name}.json"),
+                            JsonConvert.SerializeObject(ar, Formatting.Indented, new JsonSerializerSettings()
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                                PreserveReferencesHandling = PreserveReferencesHandling.None,
+                                TypeNameHandling = TypeNameHandling.None
+                            }));
+
+                        Console.WriteLine("Done.");
                     }
 
                     if (list)

@@ -7,16 +7,16 @@ using CP77.Common.Services;
 
 namespace CP77.CR2W.Archive
 {
-    public class FileInfoEntry
+    public class ArchiveItem
     {
-        public ulong NameHash64 { get; private set; }
-        public DateTime DateTime { get; private set; }
-        public uint FileFlags { get; private set; }
-        public uint FirstDataSector { get; private set; }
-        public uint NextDataSector { get; private set; }
-        public uint FirstUnkIndex { get; private set; }
-        public uint NextUnkIndex { get; private set; }
-        public byte[] SHA1Hash { get; private set; }
+        public ulong NameHash64 { get; set; }
+        public DateTime DateTime { get; set; }
+        public uint FileFlags { get; set; }
+        public uint FirstDataSector { get; set; }
+        public uint NextDataSector { get; set; }
+        public uint FirstUnkIndex { get; set; }
+        public uint NextUnkIndex { get; set; }
+        public byte[] SHA1Hash { get; set; }
 
         private string _nameStr;
         public string NameStr => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}.bin" : _nameStr;
@@ -24,12 +24,17 @@ namespace CP77.CR2W.Archive
 
         private Archive _parentArchive;
 
-        public FileInfoEntry(BinaryReader br, Archive parent)
+        public ArchiveItem(BinaryReader br, Archive parent)
         {
             _parentArchive = parent;
             var mainController = ServiceLocator.Default.ResolveType<IMainController>();
 
             Read(br, mainController);
+        }
+
+        public ArchiveItem(Archive parent)
+        {
+
         }
 
         private void Read(BinaryReader br, IMainController mainController)

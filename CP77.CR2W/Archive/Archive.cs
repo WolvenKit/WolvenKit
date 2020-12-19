@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
 using CP77.Common.Tools;
+using CP77.Common.Tools.FNV1A;
 using CP77.CR2W.Extensions;
 using CP77Tools.Model;
 using WolvenKit.Common;
@@ -28,8 +29,6 @@ namespace CP77.CR2W.Archive
         private ArTable _table;
 
         private string Mmfhash => Filepath.GetHashMD5();
-
-
 
         #endregion
 
@@ -57,9 +56,10 @@ namespace CP77.CR2W.Archive
 
         public string Filepath { get; }
 
-        public Dictionary<ulong, FileInfoEntry> Files => _table?.FileInfo;
+        public Dictionary<ulong, ArchiveItem> Files => _table?.FileInfo;
         public int FileCount => Files?.Count ?? 0;
 
+        public string Name => Path.GetFileName(Filepath);
         #endregion
 
         #region methods
@@ -91,10 +91,29 @@ namespace CP77.CR2W.Archive
         /// <returns></returns>
         public static Archive CreateFromFolder(DirectoryInfo infolder)
         {
+            if (!infolder.Exists) return null;
+
             var ar = new Archive();
 
-            
+            var f = infolder.GetFiles();
+            foreach (var fileInfo in f)
+            {
+                var relpath = fileInfo.FullName.Substring(infolder.FullName.Length + 1);
+                var hash = FNV1A64HashAlgorithm.HashString(relpath);
 
+                var item = new ArchiveItem(ar)
+                {
+                    NameHash64 = hash,
+                    DateTime = DateTime.Now,
+                    FileFlags = 0,  //TODO
+                    FirstDataSector = 0,
+                    NextDataSector = 0,
+                    FirstUnkIndex = 0,
+                    NextUnkIndex  =0,
+                    SHA1Hash = new byte[20]
+                };
+
+            }
 
 
             return ar;
@@ -298,7 +317,7 @@ namespace CP77.CR2W.Archive
             Console.Write($"Exporting {FileCount} bundle entries ");
 
             // check search pattern then regex
-            IEnumerable<FileInfoEntry> finalmatches = Files.Values;
+            IEnumerable<ArchiveItem> finalmatches = Files.Values;
             if (!string.IsNullOrEmpty(pattern))
                 finalmatches = Files.Values.MatchesWildcard(item => item.NameStr, pattern);
             if (!string.IsNullOrEmpty(regex))
@@ -354,7 +373,7 @@ namespace CP77.CR2W.Archive
             Console.Write($"Uncooking {FileCount} bundle entries ");
 
             // check search pattern then regex
-            IEnumerable<FileInfoEntry> finalmatches = Files.Values;
+            IEnumerable<ArchiveItem> finalmatches = Files.Values;
             if (!string.IsNullOrEmpty(pattern))
                 finalmatches = Files.Values.MatchesWildcard(item => item.NameStr, pattern);
             if (!string.IsNullOrEmpty(regex))
@@ -433,13 +452,13 @@ namespace CP77.CR2W.Archive
                 using var ms = new MemoryStream();
                 using var bw = new BinaryWriter(ms);
 
-                using var vs = mmf.CreateViewStream((long)offsetentry.Offset, (long)offsetentry.PhysicalSize,
+                using var vs = mmf.CreateViewStream((long)offsetentry.Offset, (long)offsetentry.ZSize,
                     MemoryMappedFileAccess.Read);
                 using var binaryReader = new BinaryReader(vs);
 
-                if (offsetentry.PhysicalSize == offsetentry.VirtualSize)
+                if (offsetentry.ZSize == offsetentry.Size)
                 {
-                    var buffer = binaryReader.ReadBytes((int)offsetentry.PhysicalSize);
+                    var buffer = binaryReader.ReadBytes((int)offsetentry.ZSize);
                     bw.Write(buffer);
                 }
                 else
@@ -449,23 +468,23 @@ namespace CP77.CR2W.Archive
                     {
                         var size = binaryReader.ReadUInt32();
 
-                        if (size != offsetentry.VirtualSize)
+                        if (size != offsetentry.Size)
                             throw new NotImplementedException();
 
-                        var buffer = binaryReader.ReadBytes((int)offsetentry.PhysicalSize - 8);
+                        var buffer = binaryReader.ReadBytes((int)offsetentry.ZSize - 8);
 
-                        byte[] unpacked = new byte[offsetentry.VirtualSize];
+                        byte[] unpacked = new byte[offsetentry.Size];
                         long unpackedSize = OodleLZ.Decompress(buffer, unpacked);
 
-                        if (unpackedSize != offsetentry.VirtualSize)
+                        if (unpackedSize != offsetentry.Size)
                             throw new Exception(
-                                $"Unpacked size doesn't match real size. {unpackedSize} vs {offsetentry.VirtualSize}");
+                                $"Unpacked size doesn't match real size. {unpackedSize} vs {offsetentry.Size}");
                         bw.Write(unpacked);
                     }
                     else
                     {
                         binaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
-                        var buffer = binaryReader.ReadBytes((int)offsetentry.PhysicalSize);
+                        var buffer = binaryReader.ReadBytes((int)offsetentry.ZSize);
                         bw.Write(buffer);
                     }
                 }
@@ -504,7 +523,7 @@ namespace CP77.CR2W.Archive
 
             }
 
-            const string head = "Name\t" +
+            const string head = "Name," +
                 "Hash64," +
                 "Datetime," +
                 "VirtualSize," +
@@ -533,8 +552,8 @@ namespace CP77.CR2W.Archive
 
                     for (int i = startindex; i < nextindex; i++)
                     {
-                        physicalSize += (int)_table.Offsets[i].PhysicalSize;
-                        virtualSize += (int)_table.Offsets[i].VirtualSize;
+                        physicalSize += (int)_table.Offsets[i].ZSize;
+                        virtualSize += (int)_table.Offsets[i].Size;
                     }
 
                     string info =

@@ -20,7 +20,7 @@ namespace CP77.CR2W.Archive
             Reload(indir);
 
             Archives = new List<Archive>();
-            Files = new Dictionary<ulong, List<FileInfoEntry>>();
+            Files = new Dictionary<ulong, List<ArchiveItem>>();
             Extensions = new List<string>();
         }
 
@@ -30,7 +30,7 @@ namespace CP77.CR2W.Archive
 
         public List<Archive> Archives { get; }
         public List<string> Extensions { get; }
-        public Dictionary<ulong, List<FileInfoEntry>> Files { get; }
+        public Dictionary<ulong, List<ArchiveItem>> Files { get; }
 
         #endregion
 
@@ -72,7 +72,7 @@ namespace CP77.CR2W.Archive
                 {
                     // add file
                     if (!Files.ContainsKey(hash))
-                        Files.Add(hash, new List<FileInfoEntry>());
+                        Files.Add(hash, new List<ArchiveItem>());
                     Files[hash].Add(value);
 
                     // add extension
