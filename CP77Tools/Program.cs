@@ -47,7 +47,7 @@ namespace CP77Tools
 
             var archive = new Command("archive", "Extract files or dump information from one or many archives.")
             {
-                new Option<string>(new []{"--path", "-p"}, "Input path. Can be a path to one .archive, or the content directory.\nIf this is a directory, all archives in it will be processed."),
+                new Option<string[]>(new []{"--path", "-p"}, "Input path. Can be a path to one .archive, or the content directory.\nIf this is a directory, all archives in it will be processed."),
                 new Option<string>(new []{ "--outpath", "-o"}, "Output directory to extract files to.\nIf not specified, will output to a new child directory, in place."),
                 new Option<string>(new []{ "--pattern", "-w"}, "Use optional search pattern, e.g. *.ink.\nIf both regex and pattern is defined, pattern will be used first."),
                 new Option<string>(new []{ "--regex", "-r"}, "Use optional regex pattern."),
@@ -59,7 +59,7 @@ namespace CP77Tools
                 new Option<ulong>(new []{ "--hash"}, "Extract single file with given hash."),
             };
             rootCommand.Add(archive);
-            archive.Handler = CommandHandler.Create<string, string, bool, bool, bool, bool, EUncookExtension, ulong, string, string>
+            archive.Handler = CommandHandler.Create<string[], string, bool, bool, bool, bool, EUncookExtension, ulong, string, string>
                 (Tasks.ConsoleFunctions.ArchiveTask);
 
             var dump = new Command("dump", "Target an archive or a directory to dump archive information.")
@@ -126,30 +126,29 @@ namespace CP77Tools
 
                     logger.PropertyChanged += delegate (object? sender, PropertyChangedEventArgs args)
                     {
-                        if (sender is LoggerService _logger)
+                        if (!(sender is LoggerService logger))
+                            return;
+                        switch (args.PropertyName)
                         {
-                            switch (args.PropertyName)
+                            case "Progress":
                             {
-                                case "Progress":
+                                if (logger.Progress.Item1 == 0)
                                 {
-                                    if (_logger.Progress.Item1 == 0)
+                                    pb = new ConsoleProgressBar()
                                     {
-                                        pb = new ConsoleProgressBar()
-                                        {
-                                            DisplayBars = true,
-                                            DisplayAnimation = false
-                                        };
-                                    }
-                                    pb.Report(_logger.Progress.Item1);
-                                    if (_logger.Progress.Item1 == 1)
-                                    {
-                                        System.Threading.Thread.Sleep(1000);
-                                    }
-                                    break;
+                                        DisplayBars = true,
+                                        DisplayAnimation = false
+                                    };
                                 }
-                                default:
-                                    break;
+                                pb.Report(logger.Progress.Item1);
+                                if (logger.Progress.Item1 == 1)
+                                {
+                                    System.Threading.Thread.Sleep(1000);
+                                }
+                                break;
                             }
+                            default:
+                                break;
                         }
                     };
 

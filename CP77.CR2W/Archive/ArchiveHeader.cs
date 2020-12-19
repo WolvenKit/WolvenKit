@@ -11,16 +11,23 @@ using WolvenKit.CR2W.Types;
 
 namespace CP77Tools.Model
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ArHeader
     {
-        public static int SIZE = 40;
+        public const uint MAGIC = 1380009042;
+        public const int SIZE = 40;
 
-        public byte[] Magic { get; set; }
-        public uint Version { get; set; }
-        public ulong Tableoffset { get; set; }
-        public ulong Tablesize { get; set; }
-        public ulong Unk3 { get; set; }
-        public ulong Filesize { get; set; }
+        
+        public uint Magic { get; private set; }
+        public uint Version { get; private set; }
+        public ulong Tableoffset { get; private set; }
+        public uint Tablesize { get; private set; }
+        public ulong Unk1 { get; private set; }
+        public ulong Unk2 { get; private set; }
+        public ulong Unk3 { get; private set; }
+        public ulong Filesize { get; private set; }
 
         public ArHeader(BinaryReader br)
         {
@@ -31,105 +38,17 @@ namespace CP77Tools.Model
 
         private void Read(BinaryReader br)
         {
-            Magic = br.ReadBytes(4);
-            if (!Magic.SequenceEqual(new byte[] { 82, 68, 65, 82 }))
+            Magic = br.ReadUInt32();
+            if (Magic != MAGIC)
                 throw new NotImplementedException();
 
             Version = br.ReadUInt32();
             Tableoffset = br.ReadUInt64();
-            Tablesize = br.ReadUInt64();
-            Unk3 = br.ReadUInt64();
+            Tablesize = br.ReadUInt32();
+            Unk1 = br.ReadUInt32();
+            Unk2 = br.ReadUInt32();
+            Unk3 = br.ReadUInt32();
             Filesize = br.ReadUInt64();
         }
     }
-    public class ArTable
-    {
-        public uint Num { get; private set; }
-        public uint Size { get; private set; }
-        public ulong Checksum { get; private set; }
-        public uint Table1count { get; private set; }
-        public uint Table2count { get; private set; }
-        public uint Table3count { get; private set; }
-        public Dictionary<ulong, ArchiveItem> FileInfo { get; private set; }
-        public List<OffsetEntry> Offsets { get; private set; }
-        public List<HashEntry> HashTable { get; private set; }
-
-        public ArTable(BinaryReader br, Archive parent)
-        {
-            Read(br);
-
-            FileInfo = new Dictionary<ulong, ArchiveItem>();
-            Offsets = new List<OffsetEntry>();
-            HashTable = new List<HashEntry> ();
-
-            // read tables
-            for (int i = 0; i < Table1count; i++)
-            {
-                var entry = new ArchiveItem(br, parent);
-
-                if (!FileInfo.ContainsKey(entry.NameHash64))
-                {
-                    FileInfo.Add(entry.NameHash64, entry);
-                }
-                else
-                {
-                    
-                }
-            }
-
-            for (int i = 0; i < Table2count; i++)
-            {
-                Offsets.Add(new OffsetEntry(br));
-            }
-
-            for (int i = 0; i < Table3count; i++)
-            {
-                HashTable.Add(new HashEntry(br));
-            }
-        }
-
-        private void Read(BinaryReader br)
-        {
-            Num = br.ReadUInt32();
-            Size = br.ReadUInt32();
-            Checksum = br.ReadUInt64();
-            Table1count = br.ReadUInt32();
-            Table2count = br.ReadUInt32();
-            Table3count = br.ReadUInt32();
-        }
-    }
-    public class HashEntry
-    {
-        public ulong Hash { get; set; }
-
-        public HashEntry(BinaryReader br)
-        {
-            Read(br);
-        }
-
-        private void Read(BinaryReader br)
-        {
-            Hash = br.ReadUInt64();
-        }
-    }
-    public class OffsetEntry
-    {
-        public ulong Offset { get; set; }
-        public uint ZSize { get; set; }
-        public uint Size { get; set; }
-
-        public OffsetEntry(BinaryReader br)
-        {
-            Read(br);
-        }
-
-        private void Read(BinaryReader br)
-        {
-            Offset = br.ReadUInt64();
-
-            ZSize = br.ReadUInt32();
-            Size = br.ReadUInt32();
-        }
-    }
-    
 }

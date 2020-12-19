@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using CP77.CR2W.Archive;
 using Newtonsoft.Json;
 using WolvenKit.Common.Tools.DDS;
@@ -10,8 +11,19 @@ namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
-        
-        public static void ArchiveTask(string path, string outpath, bool extract, bool dump, bool list, 
+        public static void ArchiveTask(string[] path, string outpath, bool extract, bool dump, bool list,
+            bool uncook, EUncookExtension uext, ulong hash, string pattern, string regex)
+        {
+
+            Parallel.ForEach(path, new ParallelOptions {MaxDegreeOfParallelism = 8}, file =>
+            {
+                ArchiveTaskInner(file, outpath, extract, dump, list,
+                    uncook, uext, hash, pattern, regex);
+            });
+        }
+
+
+        private static void ArchiveTaskInner(string path, string outpath, bool extract, bool dump, bool list, 
             bool uncook, EUncookExtension uext, ulong hash, string pattern, string regex)
         {
             #region checks
@@ -115,10 +127,6 @@ namespace CP77Tools.Tasks
 
                     if (dump)
                     {
-                        ar.DumpInfo(outDir);
-                        Console.WriteLine($"Finished dumping {processedarchive.FullName}.");
-
-                        //write
                         File.WriteAllText(Path.Combine(outDir.FullName, $"{ar.Name}.json"),
                             JsonConvert.SerializeObject(ar, Formatting.Indented, new JsonSerializerSettings()
                             {
@@ -127,7 +135,7 @@ namespace CP77Tools.Tasks
                                 TypeNameHandling = TypeNameHandling.None
                             }));
 
-                        Console.WriteLine("Done.");
+                        Console.WriteLine($"Finished dumping {processedarchive.FullName}.");
                     }
 
                     if (list)

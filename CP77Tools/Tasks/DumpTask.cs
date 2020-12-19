@@ -280,7 +280,6 @@ namespace CP77Tools.Tasks
 
                     if (imports)
                     {
-                        using var writer = File.CreateText($"{ar.Filepath}.imports.txt");
                         using var hwriter = File.CreateText($"{ar.Filepath}.hashes.csv");
                         hwriter.WriteLine("String,Hash");
                         List<string> allimports = new List<string>();
@@ -293,13 +292,23 @@ namespace CP77Tools.Tasks
                         }
                         foreach (var str in allimports.Distinct())
                         {
-                            writer.WriteLine(str);
                             var hash = FNV1A64HashAlgorithm.HashString(str);
                             if (!mainController.Hashdict.ContainsKey(hash))
                                 hwriter.WriteLine($"{str},{hash}");
                         }
 
                         Console.WriteLine($"Finished. Dump file written to {ar.Filepath}.");
+
+                        //write
+                        File.WriteAllText($"{ar.Filepath}.json",
+                            JsonConvert.SerializeObject(arobj, Formatting.Indented, new JsonSerializerSettings()
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                                PreserveReferencesHandling = PreserveReferencesHandling.None,
+                                TypeNameHandling = TypeNameHandling.None
+                            }));
+                        Console.WriteLine($"Finished. Dump file written to {inputFileInfo.FullName}.json");
+
                     }
 
                     if (texinfo)

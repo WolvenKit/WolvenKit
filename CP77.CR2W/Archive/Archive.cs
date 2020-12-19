@@ -12,6 +12,7 @@ using CP77.Common.Tools;
 using CP77.Common.Tools.FNV1A;
 using CP77.CR2W.Extensions;
 using CP77Tools.Model;
+using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
@@ -25,7 +26,9 @@ namespace CP77.CR2W.Archive
     {
         #region fields
 
+        [JsonProperty]
         private ArHeader _header;
+        [JsonProperty]
         private ArTable _table;
 
         private string Mmfhash => Filepath.GetHashMD5();
@@ -56,9 +59,12 @@ namespace CP77.CR2W.Archive
 
         public string Filepath { get; }
 
+        [JsonIgnore]
         public Dictionary<ulong, ArchiveItem> Files => _table?.FileInfo;
+
         public int FileCount => Files?.Count ?? 0;
 
+        [JsonIgnore]
         public string Name => Path.GetFileName(Filepath);
         #endregion
 
@@ -493,86 +499,7 @@ namespace CP77.CR2W.Archive
             }
         }
 
-        /// <summary>
-        /// Dump archive info to the specified directory.
-        /// </summary>
-        public void DumpInfo(DirectoryInfo outdir)
-        {
-            if (!outdir.Exists)
-                return;
-            if (string.IsNullOrEmpty(Filepath))
-                return;
-
-            var outpath = Path.Combine(outdir.FullName, $"_{Path.GetFileNameWithoutExtension(Filepath)}" ?? "_archivedump");
-
-            // dump chache info
-            using (var writer = File.CreateText($"{outpath}.info"))
-            {
-                writer.WriteLine($"Magic: {_header.Magic}\r\n");
-                writer.WriteLine($"Version: {_header.Version}\r\n");
-                writer.WriteLine($"Tableoffset: {_header.Tableoffset}\r\n");
-                writer.WriteLine($"Tablesize: {_header.Tablesize}\r\n");
-                writer.WriteLine($"Unk3: {_header.Unk3}\r\n");
-                writer.WriteLine($"Filesize: {_header.Filesize}\r\n");
-                writer.WriteLine($"Size: {_table.Size}\r\n");
-                writer.WriteLine($"Checksum: {_table.Checksum}\r\n");
-                writer.WriteLine($"Num: {_table.Num}\r\n");
-                writer.WriteLine($"Table1count: {_table.Table1count}\r\n");
-                writer.WriteLine($"Table2count: {_table.Table2count}\r\n");
-                writer.WriteLine($"Table3count: {_table.Table3count}\r\n");
-
-            }
-
-            const string head = "Name," +
-                "Hash64," +
-                "Datetime," +
-                "VirtualSize," +
-                "PhysicalSize," +
-                "Flags," +
-                "StartDataSector," +
-                "NextDataSector," +
-                "StartUnkSector," +
-                "NextUnkSector," +
-                "Footer,";
-
-            // dump and extract files
-            using (var writer = File.CreateText($"{outpath}.csv"))
-            {
-                // write header
-                writer.WriteLine(head);
-
-                // write info elements
-                foreach (var (idx, x) in _table.FileInfo)
-                {
-                    int physicalSize = 0;
-                    int virtualSize = 0;
-
-                    var startindex = (int)x.FirstDataSector;
-                    var nextindex = (int)x.NextDataSector;
-
-                    for (int i = startindex; i < nextindex; i++)
-                    {
-                        physicalSize += (int)_table.Offsets[i].ZSize;
-                        virtualSize += (int)_table.Offsets[i].Size;
-                    }
-
-                    string info =
-                        $"{x.NameStr}," +
-                        $"{x.NameHash64:X2}," +
-                        $"{x.DateTime.ToString(CultureInfo.InvariantCulture)}," +
-                        $"{virtualSize}," +
-                        $"{physicalSize}," +
-                        $"{x.FileFlags}," +
-                        $"{x.FirstDataSector}," +
-                        $"{x.NextDataSector}," +
-                        $"{x.FirstUnkIndex}," +
-                        $"{x.NextUnkIndex}," +
-                        $"{BitConverter.ToString(x.SHA1Hash)}";
-
-                    writer.WriteLine(info);
-                }
-            }
-        }
+        
 
         #endregion
     }
