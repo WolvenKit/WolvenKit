@@ -20,7 +20,7 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            Parallel.ForEach(path, new ParallelOptions {MaxDegreeOfParallelism = 8}, file =>
+            Parallel.ForEach(path, file =>
             {
                 ArchiveTaskInner(file, outpath, extract, dump, list,
                     uncook, uext, hash, pattern, regex);

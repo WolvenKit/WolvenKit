@@ -129,11 +129,11 @@ namespace CP77Tools.Tasks
                     Console.Write($"Exporting {total} bundle entries ");
 
                     // foreach extension
-                    Parallel.ForEach(query, new ParallelOptions { MaxDegreeOfParallelism = 16 }, result =>
+                    Parallel.ForEach(query, result =>
                     {
                         if (!string.IsNullOrEmpty(result.Key))
                         {
-                            Parallel.ForEach(result.File, new ParallelOptions { MaxDegreeOfParallelism = 16 }, fi =>
+                            Parallel.ForEach(result.File, fi =>
                             {
                                 var (f, b) = ar.GetFileData(fi.NameHash64, mmf);
                                 using var ms = new MemoryStream(f);
@@ -181,7 +181,7 @@ namespace CP77Tools.Tasks
 
                     Console.Write($"Exporting {count} bundle entries ");
 
-                    Parallel.For(0, count, new ParallelOptions {MaxDegreeOfParallelism = 8}, i =>
+                    Parallel.For(0, count, i =>
                     {
                         var entry = ar.Files.ToList()[i];
                         var hash = entry.Key;

@@ -26,11 +26,11 @@ namespace WolvenKit.CR2W
 
         [DataMember]
         [FieldOffset(20)]
-        public uint bufferSize;
+        public uint fileSize;
 
         [DataMember]
         [FieldOffset(24)]
-        public uint fileSize;
+        public uint bufferSize;
 
         [DataMember]
         [FieldOffset(28)]
