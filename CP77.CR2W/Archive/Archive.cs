@@ -112,10 +112,10 @@ namespace CP77.CR2W.Archive
                     NameHash64 = hash,
                     DateTime = DateTime.Now,
                     FileFlags = 0,  //TODO
-                    FirstDataSector = 0,
-                    NextDataSector = 0,
-                    FirstUnkIndex = 0,
-                    NextUnkIndex  =0,
+                    FirstOffsetTableIdx = 0,
+                    LastOffsetTableIdx = 0,
+                    FirstImportTableIdx = 0,
+                    LastImportTableIdx  =0,
                     SHA1Hash = new byte[20]
                 };
 
@@ -437,8 +437,8 @@ namespace CP77.CR2W.Archive
             if (!Files.ContainsKey(hash)) return (null, null);
 
             var entry = Files[hash];
-            var startindex = (int)entry.FirstDataSector;
-            var nextindex = (int)entry.NextDataSector;
+            var startindex = (int)entry.FirstOffsetTableIdx;
+            var nextindex = (int)entry.LastOffsetTableIdx;
 
             var file = ExtractFile(this._table.Offsets[startindex]);
             var buffers = new List<byte[]>();

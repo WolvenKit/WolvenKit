@@ -383,7 +383,15 @@ namespace WolvenKit.CR2W.Types
     [REDMeta] public class graphGraphDefinition : CVariable { public graphGraphDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class garmentMeshParamGarmentChunkData : CVariable { public garmentMeshParamGarmentChunkData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class gameVisualTagsAppearanceNamesPreset_Entity : CVariable { public gameVisualTagsAppearanceNamesPreset_Entity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class gameuiCharacterCustomizationUiPresetValue : CVariable { public gameuiCharacterCustomizationUiPresetValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
+
+    [REDMeta]
+    public class gameuiCharacterCustomizationUiPresetValue : CVariable
+    {
+        [Ordinal(0)] [RED("optionName")] public CName OptionName { get; set; }
+        [Ordinal(1)] [RED("isActive")] public CBool IsActive { get; set; }
+        [Ordinal(2)] [RED("value")] public CUInt32 value { get; set; }
+        public gameuiCharacterCustomizationUiPresetValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
     [REDMeta] public class gameSmartObjectMembershipMemberShip : CVariable { public gameSmartObjectMembershipMemberShip(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class gameSmartObjectGate : CVariable { public gameSmartObjectGate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class gameSmartObjectAnimationDatabase : CVariable { public gameSmartObjectAnimationDatabase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }

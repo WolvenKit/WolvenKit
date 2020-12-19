@@ -14,6 +14,11 @@ namespace CP77Tools.Tasks
         public static void ArchiveTask(string[] path, string outpath, bool extract, bool dump, bool list,
             bool uncook, EUncookExtension uext, ulong hash, string pattern, string regex)
         {
+            if (path == null || path.Length < 1)
+            {
+                Console.WriteLine("Please fill in an input path");
+                return;
+            }
 
             Parallel.ForEach(path, new ParallelOptions {MaxDegreeOfParallelism = 8}, file =>
             {
@@ -145,6 +150,8 @@ namespace CP77Tools.Tasks
                             Console.WriteLine(entry.Value.NameStr);
                         }
                     }
+
+
                 }
             }
             return;

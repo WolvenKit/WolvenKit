@@ -99,19 +99,11 @@ namespace CP77Tools.Tasks
 
             var mainController = ServiceLocator.Default.ResolveType<IMainController>();
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-
-            var missinghashtxt = isDirectory 
-                ? Path.Combine(inputDirInfo.FullName, "missinghashes.txt") 
-                : $"{inputFileInfo.FullName}.missinghashes.txt";
-            using var mwriter = File.CreateText(missinghashtxt);
-
             var typedict = new ConcurrentDictionary<string, IEnumerable<string>>();
 
             // Parallel
             foreach (var ar in archives)
             {
-                
-
                 if (classinfo)
                 {
                     using var mmf = MemoryMappedFile.CreateFromFile(ar.Filepath, FileMode.Open,
@@ -324,8 +316,63 @@ namespace CP77Tools.Tasks
                         Console.WriteLine($"Finished. Dump file written to {inputFileInfo.FullName}.json");
                     }
                 }
+            }
 
-                if (missinghashes)
+            if (classinfo)
+            {
+                //write class definitions
+                var outdir = isDirectory
+                ? Path.Combine(inputDirInfo.FullName, "ClassDefinitions")
+                : Path.Combine(inputFileInfo.Directory.FullName, "ClassDefinitions");
+                Directory.CreateDirectory(outdir);
+                var outfile = Path.Combine(outdir, "classdefinitions.txt");
+                var outfileS = Path.Combine(outdir, "classdefinitions_simple.json");
+                var text = "";
+                foreach (var (typename, variables) in typedict)
+                {
+                    //write
+                    var sb = new StringBuilder($"[REDMeta] public class {typename} : CVariable {{\r\n");
+
+                    var variableslist = variables.ToList();
+                    for (int i = 0; i < variableslist.Count; i++)
+                    {
+                        var typ = variableslist[i].Split(' ').First();
+                        var nam = variableslist[i].Split(' ').Last();
+                        var wktype = REDReflection.GetWKitBaseTypeFromREDBaseType(typ);
+
+                        if (string.IsNullOrEmpty(nam)) nam = "Missing";
+                        if (string.IsNullOrEmpty(typ)) typ = "Missing";
+
+
+                        sb.Append($"\t[Ordinal({i})]  [RED(\"{nam}\")] public {wktype} {nam.FirstCharToUpper()} {{ get; set; }}\r\n");
+                    }
+
+                    sb.Append(
+                        $"public {typename}(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {{ }}\r\n");
+
+                    sb.Append("}\r\n");
+                    text += sb.ToString();
+                }
+                File.WriteAllText(outfile, text);
+
+                //write
+                File.WriteAllText(outfileS,
+                    JsonConvert.SerializeObject(typedict, Formatting.Indented, new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        PreserveReferencesHandling = PreserveReferencesHandling.None,
+                        TypeNameHandling = TypeNameHandling.None
+                    }));
+
+                Console.WriteLine("Done.");
+            }
+            if (missinghashes)
+            {
+                var missinghashtxt = isDirectory
+                    ? Path.Combine(inputDirInfo.FullName, "missinghashes.txt")
+                    : $"{inputFileInfo.FullName}.missinghashes.txt";
+                using var mwriter = File.CreateText(missinghashtxt);
+                foreach (var ar in archives)
                 {
                     var ctr = 0;
                     foreach (var (hash, fileInfoEntry) in ar.Files)
@@ -339,53 +386,6 @@ namespace CP77Tools.Tasks
                     Console.WriteLine($"{ar.Filepath} - missing: {ctr}");
                 }
             }
-
-
-            //write class definitions
-            var outdir = isDirectory 
-                ? Path.Combine(inputDirInfo.FullName, "ClassDefinitions")
-                : Path.Combine(inputFileInfo.Directory.FullName, "ClassDefinitions");
-            Directory.CreateDirectory(outdir);
-            var outfile = Path.Combine(outdir, "classdefinitions.txt");
-            var outfileS = Path.Combine(outdir, "classdefinitions_simple.json");
-            var text = "";
-            foreach (var (typename, variables) in typedict)
-            {
-                //write
-                var sb = new StringBuilder($"[REDMeta] public class {typename} : CVariable {{\r\n");
-
-                var variableslist = variables.ToList();
-                for (int i = 0; i < variableslist.Count; i++)
-                {
-                    var typ = variableslist[i].Split(' ').First();
-                    var nam = variableslist[i].Split(' ').Last();
-                    var wktype = REDReflection.GetWKitBaseTypeFromREDBaseType(typ);
-                    
-                    if (string.IsNullOrEmpty(nam)) nam = "Missing";
-                    if (string.IsNullOrEmpty(typ)) typ = "Missing";
-
-
-                    sb.Append($"\t[Ordinal({i})]  [RED(\"{nam}\")] public {wktype} {nam.FirstCharToUpper()} {{ get; set; }}\r\n");
-                }
-
-                sb.Append(
-                    $"public {typename}(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {{ }}\r\n");
-
-                sb.Append("}\r\n");
-                text += sb.ToString();
-            }
-            File.WriteAllText(outfile, text);
-
-            //write
-            File.WriteAllText(outfileS,
-                JsonConvert.SerializeObject(typedict, Formatting.Indented, new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                    PreserveReferencesHandling = PreserveReferencesHandling.None,
-                    TypeNameHandling = TypeNameHandling.None
-                }));
-
-            Console.WriteLine("Done.");
 
 
             return 1;
