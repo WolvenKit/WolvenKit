@@ -59,33 +59,32 @@ namespace CP77.Common.Tools
             Unthreaded = 3,
         }
 
-        [DllImport("oo2ext_7_win64.dll")]
-        public static extern int OodleLZ_Decompress(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize,
-            OodleLZ_FuzzSafe fuzzSafetyFlag,
-            OodleLZ_CheckCRC crcCheckFlag,
-            OodleLZ_Verbosity logVerbosityFlag,
-            uint d, uint e, uint f, uint g, uint h, uint i, OodleLZ_Decode threadModule);
+#if IS_WINDOWS_BUILD
+        [DllImport("kraken.dll")]
+        static extern int Kraken_Decompress(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize);
 
-        [DllImport("oo2ext_7_win64.dll")]
-        public static extern int OodleLZ_Compress(OodleLZ_Compressor format, byte[] buffer, long bufferSize, byte[] outputBuffer, OodleLZ_Compression level, uint unused1, uint unused2, uint unused3);
+        [DllImport("kraken.dll")]
+        static extern int Kraken_Compress(byte[] buffer, long bufferSize, byte[] outputBuffer);
+#else
+        [DllImport("kraken.so")]
+        static extern int Kraken_Decompress(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize);
+
+        [DllImport("kraken.so")]
+        static extern int Kraken_Compress(byte[] buffer, long bufferSize, byte[] outputBuffer);
+#endif
 
         public static int Decompress(byte[] inputBuffer, byte[] outputBuffer)
         {
-            int readed = OodleLZ_Decompress(inputBuffer, inputBuffer.Length, outputBuffer, outputBuffer.Length, OodleLZ_FuzzSafe.No, OodleLZ_CheckCRC.No, OodleLZ_Verbosity.None, 0, 0, 0, 0, 0, 0, OodleLZ_Decode.Unthreaded);
-            return readed;
+            return Kraken_Decompress(inputBuffer, inputBuffer.Length, outputBuffer, outputBuffer.Length);
         }
 
         public static int Compress(byte[] inputBuffer, byte[] outputBuffer)
         {
-            return OodleLZ_Compress(
-                        OodleLZ_Compressor.Kraken,
-                        inputBuffer,
-                        inputBuffer.Length,
-                        outputBuffer,
-                        OodleLZ_Compression.Optimal5,
-                        0,
-                        0,
-                        0);
+#if !IS_WINDOWS_BUILD
+            throw new InvalidOperationException("Compression not supported on linux");
+#else
+            return Kraken_Compress(inputBuffer, inputBuffer.Length, outputBuffer);
+#endif
         }
     }
 }
