@@ -470,12 +470,12 @@ namespace WolvenKit.CR2W.SRT
              m_vAmbientColor = ReadStruct<Vec3>(br);
             m_eAmbientContrast = (ELightingEffect)br.ReadInt32();
             m_fAmbientContrastFactor = br.ReadSingle();
-            m_bAmbientOcclusion = br.ReadBoolean(); br.ParseUntilAligned();
+            m_bAmbientOcclusion = br.ReadBoolean(); br.ReadUntilAligned();
 
             // diffuse
              m_vDiffuseColor = ReadStruct<Vec3>(br);
             m_fDiffuseScalar = br.ReadSingle();
-            m_bDiffuseAlphaMaskIsOpaque = br.ReadBoolean(); br.ParseUntilAligned();
+            m_bDiffuseAlphaMaskIsOpaque = br.ReadBoolean(); br.ReadUntilAligned();
 
             // detail
             m_eDetailLayer = (ELightingEffect)br.ReadInt32();
@@ -499,13 +499,13 @@ namespace WolvenKit.CR2W.SRT
             m_eLodMethod = (ELodMethod)br.ReadInt32();
             m_bFadeToBillboard = br.ReadBoolean(); 
             m_bVertBillboard = br.ReadBoolean(); 
-            m_bHorzBillboard = br.ReadBoolean(); br.ParseUntilAligned();
+            m_bHorzBillboard = br.ReadBoolean(); br.ReadUntilAligned();
 
             // render states
             m_eShaderGenerationMode = (EShaderGenerationMode)br.ReadInt32();
-            m_bUsedAsGrass = br.ReadBoolean(); br.ParseUntilAligned();
+            m_bUsedAsGrass = br.ReadBoolean(); br.ReadUntilAligned();
             m_eFaceCulling = (ECullType)br.ReadInt32();
-            m_bBlending = br.ReadBoolean(); br.ParseUntilAligned();
+            m_bBlending = br.ReadBoolean(); br.ReadUntilAligned();
             m_eAmbientImageLighting = (ELightingEffect)br.ReadInt32();
              m_eHueVariation = (ELightingEffect)br.ReadInt32();
 
@@ -514,7 +514,7 @@ namespace WolvenKit.CR2W.SRT
              m_eFogColorStyle = (EFogColorType)br.ReadInt32();
             m_bCastsShadows = br.ReadBoolean();
             m_bReceivesShadows = br.ReadBoolean(); 
-            m_bShadowSmoothing = br.ReadBoolean(); br.ParseUntilAligned();
+            m_bShadowSmoothing = br.ReadBoolean(); br.ReadUntilAligned();
 
             // alpha effects
             m_fAlphaScalar = br.ReadSingle();
@@ -534,7 +534,7 @@ namespace WolvenKit.CR2W.SRT
 
             // vertex format data
             m_sVertexDecl = ReadStruct<SVertexDecl>(br);
-            br.ParseUntilAligned();
+            br.ReadUntilAligned();
 
             // misc
             m_pDescription.Read(br, stringtable);

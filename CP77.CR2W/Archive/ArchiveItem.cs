@@ -33,9 +33,17 @@ namespace CP77.CR2W.Archive
             Read(br, mainController);
         }
 
-        public ArchiveItem(Archive parent)
+        public ArchiveItem(ulong hash, DateTime datetime, uint flags
+            , uint firstOffsetTableIdx, uint lastOffsetTableIdx, uint firstImportTableIdx, uint lastImportTableIdx, byte[] sha1hash)
         {
-
+            NameHash64 = hash;
+            DateTime = datetime;
+            FileFlags = flags;
+            FirstImportTableIdx = firstImportTableIdx;
+            LastImportTableIdx = lastImportTableIdx;
+            FirstOffsetTableIdx = firstOffsetTableIdx;
+            LastOffsetTableIdx = lastOffsetTableIdx;
+            SHA1Hash = sha1hash;
         }
 
         private void Read(BinaryReader br, IMainController mainController)
@@ -55,6 +63,18 @@ namespace CP77.CR2W.Archive
             LastImportTableIdx = br.ReadUInt32();
 
             SHA1Hash = br.ReadBytes(20);
+        }
+
+        public void Write(BinaryWriter bw)
+        {
+            bw.Write(NameHash64);
+            bw.Write(DateTime.ToFileTime());
+            bw.Write(FileFlags);
+            bw.Write(FirstOffsetTableIdx);
+            bw.Write(LastOffsetTableIdx);
+            bw.Write(FirstImportTableIdx);
+            bw.Write(LastImportTableIdx);
+            bw.Write(SHA1Hash);
         }
     }
 }

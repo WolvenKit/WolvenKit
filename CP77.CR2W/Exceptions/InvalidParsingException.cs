@@ -8,4 +8,11 @@ namespace WolvenKit.CR2W.Types
         {
         }
     }
+
+    public class InvalidSerializationException : Exception
+    {
+        public InvalidSerializationException(string message) : base(message)
+        {
+        }
+    }
 }

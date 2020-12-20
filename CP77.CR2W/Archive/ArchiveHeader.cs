@@ -29,6 +29,11 @@ namespace CP77Tools.Model
         public ulong Unk3 { get; private set; }
         public ulong Filesize { get; private set; }
 
+        public ArHeader()
+        {
+            
+        }
+        
         public ArHeader(BinaryReader br)
         {
             Read(br);
@@ -49,6 +54,18 @@ namespace CP77Tools.Model
             Unk2 = br.ReadUInt32();
             Unk3 = br.ReadUInt32();
             Filesize = br.ReadUInt64();
+        }
+
+        public void Write(BinaryWriter bw)
+        {
+            bw.Write(MAGIC);
+            bw.Write(Version);
+            bw.Write(Tableoffset);
+            bw.Write(Tablesize);
+            bw.Write(Unk1);
+            bw.Write(Unk2);
+            bw.Write(Unk3);
+            bw.Write(Filesize);
         }
     }
 }

@@ -193,5 +193,10 @@ namespace WolvenKit.CR2W
                 throw new NullReferenceException();
             return readstring;
         }
+
+        public static void ReadUntilPage(this BinaryReader br, int pagesize)
+        {
+
+        }
     }
 }

@@ -18,7 +18,9 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.DDS;
 using WolvenKit.CR2W;
+using WolvenKit.CR2W.SRT;
 using WolvenKit.CR2W.Types;
+using StreamExtensions = Catel.IO.StreamExtensions;
 
 namespace CP77.CR2W.Archive
 {
@@ -39,7 +41,8 @@ namespace CP77.CR2W.Archive
 
         public Archive()
         {
-            
+            _header = new ArHeader();
+            _table = new ArTable();
         }
 
         /// <summary>
@@ -57,7 +60,7 @@ namespace CP77.CR2W.Archive
 
         #region properties
 
-        public string Filepath { get; }
+        public string Filepath { get; private init; }
 
         [JsonIgnore]
         public Dictionary<ulong, ArchiveItem> Files => _table?.FileInfo;
@@ -94,22 +97,32 @@ namespace CP77.CR2W.Archive
         /// Creates and archive from a folder and packs all files inside into it
         /// </summary>
         /// <param name="infolder"></param>
+        /// <param name="outpath"></param>
         /// <returns></returns>
-        public static Archive CreateFromFolder(DirectoryInfo infolder)
+        public static Archive WriteFromFolder(DirectoryInfo infolder, string outpath)
         {
             if (!infolder.Exists) return null;
 
-            var ar = new Archive();
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            var ar = new Archive
+            {
+                Filepath = outpath, _table = new ArTable()
+            };
+            using var fs = new FileStream(outpath, FileMode.Create);
+            using var bw = new BinaryWriter(fs);
 
-            // we use this to get all buffers
+            // write header to allocate bytes
+            ar._header.Write(bw);
+
+            // get all buffer paths beforehand
+            #region buffers pre-locate
+
             // TODO: fix that for textures (pack from .tga and not .buffer)? probably in an intermediary step
             var buffersDict = new ConcurrentDictionary<ulong, List<FileInfo>>();
             var allfiles = infolder.GetFiles("*", SearchOption.AllDirectories);
             var buffersList = allfiles.Where(_ => _.Extension == ".buffer");
-            var parentfiles = allfiles.Where(_ => _.Extension != ".buffer");
             Parallel.ForEach(buffersList, fileInfo =>
             {
-
                 // buffer path e.g. stand__rh_hold_tray__serve_milkshakes__01.scenerid.7.buffer
                 // removes 7 characters (".buffer") and then removes the extension (".7")
                 var relpath = fileInfo.FullName.Substring(infolder.FullName.Length + 1);
@@ -122,38 +135,90 @@ namespace CP77.CR2W.Archive
                 buffersDict[hash].Add(fileInfo);
             });
 
-            // all parentfiles
-            Parallel.ForEach(parentfiles, fileInfo =>
-            {
-                var relpath = fileInfo.FullName.Substring(infolder.FullName.Length + 1);
-                var hash = FNV1A64HashAlgorithm.HashString(relpath);
+            #endregion
 
+            // all parentfiles. don't multitherad this bc the file order matters?
+            #region write files
+
+            var parentfiles = allfiles.Where(_ => _.Extension != ".buffer");
+            //Parallel.ForEach(parentfiles, fileInfo =>
+            foreach (var fileInfo in parentfiles)
+            {
+                var relpath = fileInfo.FullName[(infolder.FullName.Length + 1)..];
+                var hash = FNV1A64HashAlgorithm.HashString(relpath);
+                
+
+
+                // read the cr2w and get imports
+
+                var cr2w = new CR2WFile();
+                using var cr2wfs = new FileStream(fileInfo.FullName, FileMode.Open);
+                using var cr2wbr = new BinaryReader(cr2wfs);
+
+                try
+                {
+                    cr2w.ReadImportsAndBuffers(cr2wbr);
+                }
+                catch (Exception e)
+                {
+                    logger.LogString($"Failed to read cr2w file {fileInfo.FullName}", Logtype.Error);
+                    continue;
+                }
+
+                //register imports
+                uint firstimportidx = (uint)ar._table.Dependencies.Count;
+                foreach (var cr2WImportWrapper in cr2w.Imports)
+                {
+                    if (!ar._table.Dependencies.Select(_ => _.HashStr).Contains(cr2WImportWrapper.DepotPathStr))
+                        ar._table.Dependencies.Add(
+                            new HashEntry(FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPathStr)));
+                }
+                uint lastimportidx = (uint)ar._table.Dependencies.Count + 1;
+
+                // kraken the file and write
+                var cr2winbuffer = StreamExtensions.ToByteArray(cr2wbr.BaseStream);
+                var cr2woutbuffer = new byte[100];
+                OodleLZ.Compress(cr2winbuffer, cr2woutbuffer);
+                ar._table.Offsets.Add(new OffsetEntry((ulong)bw.BaseStream.Position, (uint)cr2woutbuffer.Length, (uint)cr2winbuffer.Length));
+                bw.Write(cr2woutbuffer);
+
+                
+                // foreach buffer: kraken and write
                 // get buffers
                 var buffers = new List<FileInfo>();
                 if (buffersDict.ContainsKey(hash))
-                {
                     buffers = buffersDict[hash];
-                }
-
-
-
-                var item = new ArchiveItem(ar)
+                uint firstoffsetidx = (uint)ar._table.Offsets.Count;
+                foreach (var b in buffers)
                 {
-                    NameHash64 = hash,
-                    DateTime = DateTime.Now,
-                    FileFlags = 0, //TODO
-                    FirstOffsetTableIdx = 0,
-                    LastOffsetTableIdx = 0,
-                    FirstImportTableIdx = 0,
-                    LastImportTableIdx = 0,
-                    SHA1Hash = new byte[20]
-                };
+                    var inputbuffer = File.ReadAllBytes(b.FullName);
+                    var outputBuffer = new byte[100];
+                    OodleLZ.Compress(inputbuffer, outputBuffer);
+                    
+                    ar._table.Offsets.Add(new OffsetEntry((ulong)bw.BaseStream.Position, (uint)outputBuffer.Length, (uint)inputbuffer.Length));
+                    bw.Write(cr2woutbuffer);
+                }
+                uint lastoffsetidx = (uint)ar._table.Offsets.Count + 1;
 
-            });
+                // save table data
+                var sha1hash = new byte[20]; //TODO
+                var item = new ArchiveItem(hash, DateTime.Now, (uint)buffers.Count - 1
+                    , firstoffsetidx, lastoffsetidx, firstimportidx, lastimportidx
+                    , sha1hash );
+                ar._table.FileInfo.Add(hash, item);
+            };
 
+            #endregion
 
+            // padding to page (4096 bytes)
+            bw.PadUntilPage();
 
+            // write tables
+            ar._table.Write(bw);
 
+            // padding to page (4096 bytes)
+            bw.PadUntilPage();
+            
             return ar;
         }
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.SRT
 {
     public static class BinaryReaderExtensions
     {
-        public static void ParseUntilAligned(this BinaryReader br)
+        public static void ReadUntilAligned(this BinaryReader br)
         {
             // read padding
             int uiPadSize = 4 - (int)br.BaseStream.Position % 4;

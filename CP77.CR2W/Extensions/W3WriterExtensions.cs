@@ -225,6 +225,21 @@ namespace WolvenKit.CR2W
             // null terminated
             bw.Write((byte)0x00);
         }
+
+        /// <summary>
+        /// Padds until next page
+        /// </summary>
+        /// <param name="bw"></param>
+        /// <param name="pagesize"></param>
+        /// <param name="paddingbyte"></param>
+        public static void PadUntilPage(this BinaryWriter bw, int pagesize = 4096, byte paddingbyte = 0xD9)
+        {
+            var pos = bw.BaseStream.Position;
+            var mod = pos / 4096;
+            var diff = ((mod + 1) * 4096) - pos;
+            bw.Write(new byte[diff]);
+        }
+
     }
 
 }

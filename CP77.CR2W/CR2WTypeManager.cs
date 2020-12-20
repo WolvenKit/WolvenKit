@@ -114,6 +114,12 @@ namespace WolvenKit.CR2W.Types
                         CVariable innerobject = Create(innertype, "", cr2w, null);
                         return MakeGenericType(typeof(rRef<>), innerobject);
                     }
+                    case "CraRef":
+                    case "raRef":
+                    {
+                        CVariable innerobject = Create(innertype, "", cr2w, null);
+                        return MakeGenericType(typeof(raRef<>), innerobject);
+                    }
                     case "array":
                         {
                             // match pattern e.g. 

@@ -15,7 +15,7 @@ namespace CP77Tools.Model
     public class ArTable
     {
         public uint Num { get; private set; }
-        public uint Size { get; private set; }
+        public uint Size { get; set; }
         public ulong Checksum { get; private set; }
         public uint Table1count { get; private set; }
         public uint Table2count { get; private set; }
@@ -24,13 +24,31 @@ namespace CP77Tools.Model
         public List<OffsetEntry> Offsets { get; private set; }
         public List<HashEntry> Dependencies { get; private set; }
 
+        public ArTable()
+        {
+            Offsets = new List<OffsetEntry>();
+            Dependencies = new List<HashEntry>();
+            FileInfo = new Dictionary<ulong, ArchiveItem>();
+        }
+        
         public ArTable(BinaryReader br, Archive parent)
         {
-            Read(br);
-
             FileInfo = new Dictionary<ulong, ArchiveItem>();
             Offsets = new List<OffsetEntry>();
-            Dependencies = new List<HashEntry> ();
+            Dependencies = new List<HashEntry>();
+
+
+            Read(br, parent);
+        }
+
+        private void Read(BinaryReader br, Archive parent)
+        {
+            Num = br.ReadUInt32();
+            Size = br.ReadUInt32();
+            Checksum = br.ReadUInt64();
+            Table1count = br.ReadUInt32();
+            Table2count = br.ReadUInt32();
+            Table3count = br.ReadUInt32();
 
             // read tables
             for (int i = 0; i < Table1count; i++)
@@ -43,29 +61,54 @@ namespace CP77Tools.Model
                 }
                 else
                 {
-                    
+                    // TODO
                 }
             }
 
             for (int i = 0; i < Table2count; i++)
             {
-                Offsets.Add(new OffsetEntry(br));
+                Offsets.Add(new OffsetEntry(br, i));
             }
 
             for (int i = 0; i < Table3count; i++)
             {
-                Dependencies.Add(new HashEntry(br));
+                Dependencies.Add(new HashEntry(br, i));
             }
         }
 
-        private void Read(BinaryReader br)
+        public void Write(BinaryWriter bw)
         {
-            Num = br.ReadUInt32();
-            Size = br.ReadUInt32();
-            Checksum = br.ReadUInt64();
-            Table1count = br.ReadUInt32();
-            Table2count = br.ReadUInt32();
-            Table3count = br.ReadUInt32();
+            // write the table to a stream to calculate the size
+            using var ms = new MemoryStream();
+            using var tablewriter = new BinaryWriter(ms);
+            
+            Table1count = (uint)FileInfo.Count;
+            Table2count = (uint)Offsets.Count;
+            Table3count = (uint)Dependencies.Count;
+            tablewriter.Write(Checksum);
+            tablewriter.Write(Table1count);
+            tablewriter.Write(Table2count);
+            tablewriter.Write(Table3count);
+
+            foreach (var archiveItem in FileInfo)
+            {
+                archiveItem.Value.Write(tablewriter);
+            }
+
+            foreach (var offsetEntry in Offsets)
+            {
+                offsetEntry.Write(tablewriter);
+            }
+
+            foreach (var dependency in Dependencies)
+            {
+                dependency.Write(tablewriter);
+            }
+
+            Num = 8; //TODO
+            bw.Write(Num);
+            bw.Write(ms.Length);
+            ms.CopyTo(bw.BaseStream);
         }
     }
     
@@ -75,15 +118,22 @@ namespace CP77Tools.Model
     /// </summary>
     public class OffsetEntry
     {
-
+        public int Idx { get; private set; }
 
         public ulong Offset { get; private set; }
         public uint ZSize { get; private set; }
         public uint Size { get; private set; }
 
-        public OffsetEntry(BinaryReader br)
+        public OffsetEntry(ulong offset, uint zsize, uint size)
         {
-
+            Offset = offset;
+            ZSize = zsize;
+            Size = size;
+        }
+        
+        public OffsetEntry(BinaryReader br, int idx)
+        {
+            Idx = idx;
 
             Read(br);
         }
@@ -95,6 +145,13 @@ namespace CP77Tools.Model
             ZSize = br.ReadUInt32();
             Size = br.ReadUInt32();
         }
+
+        public void Write(BinaryWriter bw)
+        {
+            bw.Write(Offset);
+            bw.Write(ZSize);
+            bw.Write(Size);
+        }
     }
 
     /// <summary>
@@ -102,13 +159,21 @@ namespace CP77Tools.Model
     /// </summary>
     public class HashEntry
     {
+        
         public string HashStr { get; private set; }
 
-        private ulong Hash;
-
-
-        public HashEntry(BinaryReader br)
+        private ulong _hash;
+        [JsonProperty]
+        private int _idx;
+        
+        public HashEntry(ulong hash)
         {
+            _hash = hash;
+        }
+        
+        public HashEntry(BinaryReader br, int idx)
+        {
+            _idx = idx;
             var mainController = ServiceLocator.Default.ResolveType<IMainController>();
 
             Read(br, mainController);
@@ -117,10 +182,15 @@ namespace CP77Tools.Model
 
         private void Read(BinaryReader br, IMainController mainController)
         {
-            Hash = br.ReadUInt64();
+            _hash = br.ReadUInt64();
 
-            if (mainController != null && mainController.Hashdict.ContainsKey(Hash))
-                HashStr = mainController.Hashdict[Hash];
+            if (mainController != null && mainController.Hashdict.ContainsKey(_hash))
+                HashStr = mainController.Hashdict[_hash];
+        }
+
+        public void Write(BinaryWriter bw)
+        {
+            bw.Write(_hash);
         }
     }
 
