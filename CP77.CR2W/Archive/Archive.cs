@@ -99,16 +99,19 @@ namespace CP77.CR2W.Archive
         /// <param name="infolder"></param>
         /// <param name="outpath"></param>
         /// <returns></returns>
-        public static Archive WriteFromFolder(DirectoryInfo infolder, string outpath)
+        public static Archive WriteFromFolder(DirectoryInfo infolder, DirectoryInfo outpath)
         {
             if (!infolder.Exists) return null;
+            if (!outpath.Exists) return null;
+
+            var outfile = Path.Combine(outpath.FullName, "blob0.archive");
 
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             var ar = new Archive
             {
-                Filepath = outpath, _table = new ArTable()
+                Filepath = outfile, _table = new ArTable()
             };
-            using var fs = new FileStream(outpath, FileMode.Create);
+            using var fs = new FileStream(outfile, FileMode.Create);
             using var bw = new BinaryWriter(fs);
 
             // write header to allocate bytes
@@ -177,26 +180,51 @@ namespace CP77.CR2W.Archive
 
                 // kraken the file and write
                 var cr2winbuffer = StreamExtensions.ToByteArray(cr2wbr.BaseStream);
-                var cr2woutbuffer = new byte[100];
-                OodleLZ.Compress(cr2winbuffer, cr2woutbuffer);
-                ar._table.Offsets.Add(new OffsetEntry((ulong)bw.BaseStream.Position, (uint)cr2woutbuffer.Length, (uint)cr2winbuffer.Length));
-                bw.Write(cr2woutbuffer);
+                if (cr2winbuffer.Length < 255)
+                {
+                    ar._table.Offsets.Add(new OffsetEntry((ulong)bw.BaseStream.Position, (uint)cr2winbuffer.Length, (uint)cr2winbuffer.Length));
+                    bw.Write(cr2winbuffer);
+                }
+                else
+                {
+                    var cr2woutbuffer = new byte[OodleLZ.GetCompressionBound((uint)cr2winbuffer.Length)]; //TODO
+                    var r = OodleLZ.Compress(cr2winbuffer, cr2woutbuffer);
+                    if (r != cr2woutbuffer.Length)
+                    {
+                        continue;
+                    }
+                    ar._table.Offsets.Add(new OffsetEntry((ulong)bw.BaseStream.Position, (uint)cr2woutbuffer.Length, (uint)cr2winbuffer.Length));
+                    bw.Write(cr2woutbuffer);
+                }
+                
 
                 
                 // foreach buffer: kraken and write
                 // get buffers
                 var buffers = new List<FileInfo>();
                 if (buffersDict.ContainsKey(hash))
-                    buffers = buffersDict[hash];
+                    buffers = buffersDict[hash].OrderBy(x => x).ToList();
                 uint firstoffsetidx = (uint)ar._table.Offsets.Count;
                 foreach (var b in buffers)
                 {
                     var inputbuffer = File.ReadAllBytes(b.FullName);
-                    var outputBuffer = new byte[100];
-                    OodleLZ.Compress(inputbuffer, outputBuffer);
+                    if (inputbuffer.Length < 255)
+                    {
+                        ar._table.Offsets.Add(new OffsetEntry((ulong)bw.BaseStream.Position, (uint)inputbuffer.Length, (uint)inputbuffer.Length));
+                        bw.Write(inputbuffer);
+                    }
+                    else
+                    {
+                        var outputBuffer = new byte[OodleLZ.GetCompressionBound((uint)inputbuffer.Length)]; //TODO
+                        var br = OodleLZ.Compress(inputbuffer, outputBuffer);
+                        if (br != outputBuffer.Length)
+                        {
+                            continue;
+                        }
+                        ar._table.Offsets.Add(new OffsetEntry((ulong)bw.BaseStream.Position, (uint)outputBuffer.Length, (uint)inputbuffer.Length));
+                        bw.Write(outputBuffer);
+                    }
                     
-                    ar._table.Offsets.Add(new OffsetEntry((ulong)bw.BaseStream.Position, (uint)outputBuffer.Length, (uint)inputbuffer.Length));
-                    bw.Write(cr2woutbuffer);
                 }
                 uint lastoffsetidx = (uint)ar._table.Offsets.Count + 1;
 

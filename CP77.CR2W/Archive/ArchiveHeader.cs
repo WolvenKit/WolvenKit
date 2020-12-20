@@ -24,9 +24,9 @@ namespace CP77Tools.Model
         public uint Version { get; private set; }
         public ulong Tableoffset { get; private set; }
         public uint Tablesize { get; private set; }
-        public ulong Unk1 { get; private set; }
-        public ulong Unk2 { get; private set; }
-        public ulong Unk3 { get; private set; }
+        public uint Unk1 { get; private set; }
+        public uint Unk2 { get; private set; }
+        public uint Unk3 { get; private set; }
         public ulong Filesize { get; private set; }
 
         public ArHeader()

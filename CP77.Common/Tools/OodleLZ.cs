@@ -60,19 +60,19 @@ namespace CP77.Common.Tools
             Unthreaded = 3,
         }
 
-#if IS_WINDOWS_BUILD
-        [DllImport("kraken.dll")]
-        static extern int Kraken_Decompress(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize);
-
-        [DllImport("kraken.dll")]
-        static extern int Kraken_Compress(byte[] buffer, long bufferSize, byte[] outputBuffer);
-#else
+//#if _WINDOWS
         [DllImport("lib/kraken.dll")]
         static extern int Kraken_Decompress(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize);
 
         [DllImport("lib/kraken.dll")]
         static extern int Kraken_Compress(byte[] buffer, long bufferSize, byte[] outputBuffer);
-#endif
+//#else
+//        [DllImport("lib/kraken.os")]
+//        static extern int Kraken_Decompress(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize);
+
+//        [DllImport("lib/kraken.os")]
+//        static extern int Kraken_Compress(byte[] buffer, long bufferSize, byte[] outputBuffer);
+//#endif
 
         public static int Decompress(byte[] inputBuffer, byte[] outputBuffer)
         {
@@ -81,11 +81,43 @@ namespace CP77.Common.Tools
 
         public static int Compress(byte[] inputBuffer, byte[] outputBuffer)
         {
-#if !IS_WINDOWS_BUILD
-            throw new InvalidOperationException("Compression not supported on linux");
-#else
+
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                return Kraken_Compress(inputBuffer, inputBuffer.Length, outputBuffer);
+            }
+            else if (Environment.OSVersion.Platform == PlatformID.MacOSX)
+            {
+
+            }
+            else if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+
+            }
+
+#if _WINDOWS
             return Kraken_Compress(inputBuffer, inputBuffer.Length, outputBuffer);
+
+#else
+            throw new InvalidOperationException("Compression not supported on linux");
+            
 #endif
         }
+
+        public static uint GetCompressionBound(uint bufferSize)
+        {
+            return bufferSize + 274 * ((bufferSize + 0x3FFFF) / 0x40000);
+        }
+
+        /*public static uint GetDecompressionBound(uint bufferSize)
+        {
+            uint v2 = bufferSize + 272 + 0;
+            uint v3 = (bufferSize + 0x3FFFF) / 0x40000;
+            if (bufferSize + 16731 + 2 * v3 < v2)
+            {
+                v2 = bufferSize + 16731 + 2 * v3;
+            }
+            return v2;
+        }*/
     }
 }

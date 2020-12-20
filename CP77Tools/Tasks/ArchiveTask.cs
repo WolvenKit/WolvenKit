@@ -14,7 +14,7 @@ namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
-        public static ILoggerService logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+        private static readonly ILoggerService logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
         public static void ArchiveTask(string[] path, string outpath, bool extract, bool dump, bool list,
             bool uncook, EUncookExtension uext, ulong hash, string pattern, string regex)
@@ -138,7 +138,7 @@ namespace CP77Tools.Tasks
 
                     if (dump)
                     {
-                        File.WriteAllText(Path.Combine(outDir.FullName, $"{ar.Name}.json"),
+                        File.WriteAllText(Path.Combine(outDir.Parent.FullName, $"{ar.Name}.json"),
                             JsonConvert.SerializeObject(ar, Formatting.Indented, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
