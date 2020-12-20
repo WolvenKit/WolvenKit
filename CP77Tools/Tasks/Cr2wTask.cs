@@ -15,7 +15,7 @@ namespace CP77Tools.Tasks
             // initial checks
             if (string.IsNullOrEmpty(path))
             {
-                logger.LogString("Please fill in an input path", Logtype.Error)
+                logger.LogString("Please fill in an input path", Logtype.Error);
                 return 0;
             }
 
