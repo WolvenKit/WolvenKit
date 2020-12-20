@@ -13,8 +13,16 @@ namespace CP77Tools.Tasks
         public static int Cr2wTask(string path, string outpath, bool all, bool chunks)
         {
             // initial checks
-            if (string.IsNullOrEmpty(path)) logger.LogString("Please fill in an input path", Logtype.Error); return 0;
-            if (string.IsNullOrEmpty(outpath)) { outpath = path; }
+            if (string.IsNullOrEmpty(path))
+            {
+                logger.LogString("Please fill in an input path", Logtype.Error)
+                return 0;
+            }
+
+            if (string.IsNullOrEmpty(outpath))
+            {
+                outpath = path;
+            }
 
             var inputFileInfo = new FileInfo(path);
             var outputDirInfo = new DirectoryInfo(outpath);
