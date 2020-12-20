@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
     public class Multilayer_LayerTemplateOverridesColor : CVariable
     {
         [Ordinal(1)] [RED("n")] public CName N { get; set; }
-        [Ordinal(2)] [RED("v", 2)] public CStatic<CFloat> V { get; set; }
+        [Ordinal(2)] [RED("v", 2)] public CArrayFixedSize<CFloat> V { get; set; }
 
         public Multilayer_LayerTemplateOverridesColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
@@ -22,7 +22,7 @@ namespace WolvenKit.CR2W.Types
     public class Multilayer_LayerTemplateOverridesLevels : CVariable
     {
         [Ordinal(1)] [RED("n")] public CName N { get; set; }
-        [Ordinal(2)] [RED("v", 2)] public CStatic<CFloat> V { get; set; }
+        [Ordinal(2)] [RED("v", 2)] public CArrayFixedSize<CFloat> V { get; set; }
 
         public Multilayer_LayerTemplateOverridesLevels(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }

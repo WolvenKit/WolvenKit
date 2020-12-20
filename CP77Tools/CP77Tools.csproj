@@ -18,11 +18,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="lib\kraken.so" />
     <None Remove="Resources\archivehashes.csv" />
     <None Remove="Resources\basegame_2_mainmenu.archive.hashes.csv" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="lib\kraken.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\archivehashes.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -40,7 +44,7 @@
 
   <ItemGroup>
     <Content Include="lib\\kraken.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="lib\\kraken.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -33,9 +33,32 @@ namespace CP77Tools
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
             ServiceLocator.Default.RegisterType<IMainController, MainController>();
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            
+
+            
             logger.OnStringLogged += delegate (object? sender, LogStringEventArgs args)
             {
+                switch (args.Logtype)
+                {
+                    
+                    case Logtype.Error:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        break;
+                    case Logtype.Important:
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        break;
+                    case Logtype.Success:
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        break;
+                    case Logtype.Normal:
+                    case Logtype.Wcc:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                
                 Console.WriteLine("[" + args.Logtype + "]" + args.Message);
+                Console.ResetColor();
             };
 
             // get csv data
@@ -115,6 +138,7 @@ namespace CP77Tools
                 while (true)
                 {
                     string line = System.Console.ReadLine();
+                    
 
                     if (line == "q()")
                         return;
@@ -127,39 +151,39 @@ namespace CP77Tools
                     };
                     var parsed = CommandLineExtensions.ParseText(line, ' ', '"');
 
-                    logger.PropertyChanged += delegate (object? sender, PropertyChangedEventArgs args)
+                    logger.PropertyChanged += OnLoggerOnPropertyChanged;
+                    void OnLoggerOnPropertyChanged(object? sender, PropertyChangedEventArgs args)
                     {
-                        if (!(sender is LoggerService logger))
-                            return;
                         switch (args.PropertyName)
                         {
                             case "Progress":
                             {
                                 if (logger.Progress.Item1 == 0)
                                 {
-                                    pb = new ConsoleProgressBar()
-                                    {
-                                        DisplayBars = true,
-                                        DisplayAnimation = false
-                                    };
+                                    pb = new ConsoleProgressBar() { DisplayBars = true, DisplayAnimation = false };
                                 }
+
                                 pb.Report(logger.Progress.Item1);
                                 if (logger.Progress.Item1 == 1)
                                 {
                                     System.Threading.Thread.Sleep(1000);
+
+                                    Console.WriteLine();
+                                    pb.Dispose();
+                                    pb = null;
                                 }
+
                                 break;
                             }
                             default:
                                 break;
                         }
-                    };
-
-   
+                    }
 
                     rootCommand.InvokeAsync(parsed.ToArray()).Wait();
 
                     await WriteLog();
+                    logger.PropertyChanged -= OnLoggerOnPropertyChanged;
                 }
 
             }

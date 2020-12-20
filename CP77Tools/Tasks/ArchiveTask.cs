@@ -110,13 +110,13 @@ namespace CP77Tools.Tasks
                             if (extract)
                             {
                                 ar.ExtractSingle(hash, outDir);
-                                logger.LogString($" {ar.Filepath}: Extracted one file: {hash}", Logtype.Normal);
+                                logger.LogString($" {ar.Filepath}: Extracted one file: {hash}", Logtype.Success);
                             }
 
                             if (uncook)
                             {
                                 ar.UncookSingle(hash, outDir, uext);
-                                logger.LogString($" {ar.Filepath}: Uncooked one file: {hash}", Logtype.Normal);
+                                logger.LogString($" {ar.Filepath}: Uncooked one file: {hash}", Logtype.Success);
                             }
                         }
                         else
@@ -124,13 +124,13 @@ namespace CP77Tools.Tasks
                             if (extract)
                             {
                                 var r = ar.ExtractAll(outDir, pattern, regex);
-                                logger.LogString($" {ar.Filepath}: Extracted {r.Item1.Count}/{r.Item2} files.", Logtype.Normal);
+                                logger.LogString($"{ar.Filepath}: Extracted {r.Item1.Count}/{r.Item2} files.", Logtype.Success);
                             }
 
                             if (uncook)
                             {
                                 var r = ar.UncookAll(outDir, pattern, regex, uext);
-                                logger.LogString($" {ar.Filepath}: Uncooked {r.Item1.Count}/{r.Item2} files.", Logtype.Normal);
+                                logger.LogString($" {ar.Filepath}: Uncooked {r.Item1.Count}/{r.Item2} files.", Logtype.Success);
                             }
                         }
 

@@ -67,10 +67,10 @@ namespace CP77.Common.Tools
         [DllImport("kraken.dll")]
         static extern int Kraken_Compress(byte[] buffer, long bufferSize, byte[] outputBuffer);
 #else
-        [DllImport("kraken.so")]
+        [DllImport("lib/kraken.dll")]
         static extern int Kraken_Decompress(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize);
 
-        [DllImport("kraken.so")]
+        [DllImport("lib/kraken.dll")]
         static extern int Kraken_Compress(byte[] buffer, long bufferSize, byte[] outputBuffer);
 #endif
 
