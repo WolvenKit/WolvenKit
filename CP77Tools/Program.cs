@@ -33,16 +33,19 @@ namespace CP77Tools
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
             ServiceLocator.Default.RegisterType<IMainController, MainController>();
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-
+            logger.OnStringLogged += delegate (object? sender, LogStringEventArgs args)
+            {
+                Console.WriteLine("[" + args.Logtype + "]" + args.Message);
+            };
 
             // get csv data
-            Console.WriteLine("Loading Hashes...");
+            logger.LogString("Loading Hashes...", Logtype.Normal);
             await Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes.csv"));
 
 
             #region commands
-            
-            
+
+
             var rootCommand = new RootCommand();
 
             var archive = new Command("archive", "Extract files or dump information from one or many archives.")
@@ -152,6 +155,7 @@ namespace CP77Tools
                         }
                     };
 
+   
 
                     rootCommand.InvokeAsync(parsed.ToArray()).Wait();
 
@@ -193,7 +197,7 @@ namespace CP77Tools
         private static async Task Loadhashes(string path)
         {
             var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
-
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             Stopwatch watch = new Stopwatch();
             watch.Restart();
 
@@ -216,7 +220,7 @@ namespace CP77Tools
 
             watch.Stop();
 
-            Console.WriteLine($"Loaded {hashDictionary.Count} hashes in {watch.ElapsedMilliseconds}ms.");
+            logger.LogString($"Loaded {hashDictionary.Count} hashes in {watch.ElapsedMilliseconds}ms.", Logtype.Normal);
         }
     }
 }

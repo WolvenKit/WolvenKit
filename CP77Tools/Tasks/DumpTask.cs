@@ -67,7 +67,7 @@ namespace CP77Tools.Tasks
 
             if (string.IsNullOrEmpty(path))
             {
-                Console.WriteLine("Please fill in an input path");
+                ConsoleFunctions.logger.LogString("Please fill in an input path",Logtype.Error);
                 return 0;
             }
 
@@ -160,7 +160,7 @@ namespace CP77Tools.Tasks
                         Interlocked.Increment(ref progress);
                         logger.LogProgress(progress / (float)total);
 
-                        Console.WriteLine($"Dumped extension {result.Key}");
+                        logger.LogString($"Dumped extension {result.Key}", Logtype.Normal);
                     });
 
 
@@ -289,7 +289,7 @@ namespace CP77Tools.Tasks
                                 hwriter.WriteLine($"{str},{hash}");
                         }
 
-                        Console.WriteLine($"Finished. Dump file written to {ar.Filepath}.");
+                        logger.LogString($"Finished. Dump file written to {ar.Filepath}.", Logtype.Success);
 
                         //write
                         File.WriteAllText($"{ar.Filepath}.json",
@@ -299,7 +299,7 @@ namespace CP77Tools.Tasks
                                 PreserveReferencesHandling = PreserveReferencesHandling.None,
                                 TypeNameHandling = TypeNameHandling.None
                             }));
-                        Console.WriteLine($"Finished. Dump file written to {inputFileInfo.FullName}.json");
+                        logger.LogString($"Finished. Dump file written to {inputFileInfo.FullName}.json", Logtype.Success);
 
                     }
 
@@ -313,7 +313,7 @@ namespace CP77Tools.Tasks
                                 PreserveReferencesHandling = PreserveReferencesHandling.None,
                                 TypeNameHandling = TypeNameHandling.None
                             }));
-                        Console.WriteLine($"Finished. Dump file written to {inputFileInfo.FullName}.json");
+                        logger.LogString($"Finished. Dump file written to {inputFileInfo.FullName}.json", Logtype.Success);
                     }
                 }
             }
@@ -364,7 +364,7 @@ namespace CP77Tools.Tasks
                         TypeNameHandling = TypeNameHandling.None
                     }));
 
-                Console.WriteLine("Done.");
+                logger.LogString("Done.", Logtype.Success);
             }
             if (missinghashes)
             {
@@ -383,7 +383,7 @@ namespace CP77Tools.Tasks
                             ctr++;
                         }
                     }
-                    Console.WriteLine($"{ar.Filepath} - missing: {ctr}");
+                    logger.LogString($"{ar.Filepath} - missing: {ctr}", Logtype.Normal);
                 }
             }
 

@@ -6,17 +6,22 @@ using System.Threading.Tasks;
 using CP77.CR2W.Archive;
 using Newtonsoft.Json;
 using WolvenKit.Common.Tools.DDS;
+using CP77Tools;
+using Catel.IoC;
+using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
+        public static ILoggerService logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+
         public static void ArchiveTask(string[] path, string outpath, bool extract, bool dump, bool list,
             bool uncook, EUncookExtension uext, ulong hash, string pattern, string regex)
         {
             if (path == null || path.Length < 1)
             {
-                Console.WriteLine("Please fill in an input path");
+                logger.LogString("Please fill in an input path", Logtype.Error);
                 return;
             }
 
@@ -25,6 +30,7 @@ namespace CP77Tools.Tasks
                 ArchiveTaskInner(file, outpath, extract, dump, list,
                     uncook, uext, hash, pattern, regex);
             });
+
         }
 
 
@@ -35,7 +41,7 @@ namespace CP77Tools.Tasks
 
             if (string.IsNullOrEmpty(path))
             {
-                Console.WriteLine("Please fill in an input path");
+                logger.LogString("Please fill in an input path", Logtype.Error);
                 return;
             }
 
@@ -44,18 +50,18 @@ namespace CP77Tools.Tasks
 
             if (!inputFileInfo.Exists && !inputDirInfo.Exists)
             {
-                Console.WriteLine("Input path does not exist");
+                logger.LogString("Input path does not exist", Logtype.Error);
                 return;
             }
 
             if (inputFileInfo.Exists && inputFileInfo.Extension != ".archive")
             {
-                Console.WriteLine("Input file is not an .archive");
+                logger.LogString("Input file is not an .archive", Logtype.Error);
                 return;
             }
             else if (inputDirInfo.Exists && inputDirInfo.GetFiles().All(_ => _.Extension != ".archive"))
             {
-                Console.WriteLine("No .archive file to process in the input directory");
+                logger.LogString("No .archive file to process in the input directory", Logtype.Error);
                 return;
             }
 
@@ -104,13 +110,13 @@ namespace CP77Tools.Tasks
                             if (extract)
                             {
                                 ar.ExtractSingle(hash, outDir);
-                                Console.WriteLine($" {ar.Filepath}: Extracted one file: {hash}");
+                                logger.LogString($" {ar.Filepath}: Extracted one file: {hash}", Logtype.Normal);
                             }
 
                             if (uncook)
                             {
                                 ar.UncookSingle(hash, outDir, uext);
-                                Console.WriteLine($" {ar.Filepath}: Uncooked one file: {hash}");
+                                logger.LogString($" {ar.Filepath}: Uncooked one file: {hash}", Logtype.Normal);
                             }
                         }
                         else
@@ -118,13 +124,13 @@ namespace CP77Tools.Tasks
                             if (extract)
                             {
                                 var r = ar.ExtractAll(outDir, pattern, regex);
-                                Console.WriteLine($" {ar.Filepath}: Extracted {r.Item1.Count}/{r.Item2} files.");
+                                logger.LogString($" {ar.Filepath}: Extracted {r.Item1.Count}/{r.Item2} files.", Logtype.Normal);
                             }
 
                             if (uncook)
                             {
                                 var r = ar.UncookAll(outDir, pattern, regex, uext);
-                                Console.WriteLine($" {ar.Filepath}: Uncooked {r.Item1.Count}/{r.Item2} files.");
+                                logger.LogString($" {ar.Filepath}: Uncooked {r.Item1.Count}/{r.Item2} files.", Logtype.Normal);
                             }
                         }
 
@@ -140,14 +146,14 @@ namespace CP77Tools.Tasks
                                 TypeNameHandling = TypeNameHandling.None
                             }));
 
-                        Console.WriteLine($"Finished dumping {processedarchive.FullName}.");
+                        logger.LogString($"Finished dumping {processedarchive.FullName}.", Logtype.Success);
                     }
 
                     if (list)
                     {
                         foreach (var entry in ar.Files)
                         {
-                            Console.WriteLine(entry.Value.NameStr);
+                            logger.LogString(entry.Value.NameStr, Logtype.Normal);
                         }
                     }
 

@@ -16,7 +16,7 @@ namespace CP77Tools.Tasks
 
             if (!string.IsNullOrEmpty(input))
             {
-                Console.WriteLine(FNV1A64HashAlgorithm.HashString(input));
+                logger.LogString(FNV1A64HashAlgorithm.HashString(input).ToString(), WolvenKit.Common.Services.Logtype.Normal);
             }
 
             #endregion

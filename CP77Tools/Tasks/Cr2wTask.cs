@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using Catel.IoC;
 using Newtonsoft.Json;
+using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 
 namespace CP77Tools.Tasks
@@ -11,7 +13,7 @@ namespace CP77Tools.Tasks
         public static int Cr2wTask(string path, string outpath, bool all, bool chunks)
         {
             // initial checks
-            if (string.IsNullOrEmpty(path)) return 0;
+            if (string.IsNullOrEmpty(path)) logger.LogString("Please fill in an input path", Logtype.Error); return 0;
             if (string.IsNullOrEmpty(outpath)) { outpath = path; }
 
             var inputFileInfo = new FileInfo(path);
@@ -46,7 +48,7 @@ namespace CP77Tools.Tasks
                         PreserveReferencesHandling = PreserveReferencesHandling.None,
                         TypeNameHandling = TypeNameHandling.Auto
                     }));
-                Console.WriteLine($"Finished. Dump file written to {outputDirInfo.FullName} as " + inputFileInfo.Name + ".info.json");
+                logger.LogString($"Finished. Dump file written to {outputDirInfo.FullName} as " + inputFileInfo.Name + ".info.json", Logtype.Success);
             }
 
             if (chunks)
@@ -61,7 +63,7 @@ namespace CP77Tools.Tasks
                         PreserveReferencesHandling = PreserveReferencesHandling.None,
                         TypeNameHandling = TypeNameHandling.None
                     }));
-                Console.WriteLine($"Finished. Dump file written to {outputDirInfo.FullName} as " + inputFileInfo.Name + ".json");
+                logger.LogString($"Finished. Dump file written to {outputDirInfo.FullName} as " + inputFileInfo.Name + ".json", Logtype.Success);
             }
 
 
