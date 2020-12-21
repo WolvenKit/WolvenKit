@@ -106,16 +106,12 @@ namespace WolvenKit.CR2W.Types
                             // array:            Array: (2),(0),(Int32)
                             // array of array:   Array: (2),(0),(Array:133,0,EngineQsTransform)
 
-                            
                             string[] arraysplits = innertype.Split(',');
-                            
+                            string flag1 = arraysplits[0];
+                            string flag2 = arraysplits[1];
                             string body = string.Join(",", arraysplits.Skip(2));
                             if (arraysplits.Length >= 3)
                             {
-                                // TODO: they got rid of this in CP77!
-                                string flag1 = arraysplits[0];
-                                string flag2 = arraysplits[1];
-
                                 //byte arrays, these can be huge, using ordinary arrays is just too slow.
                                 if (body == "Uint8" || body == "Int8")
                                 {
