@@ -7,6 +7,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit
 {
@@ -59,7 +60,7 @@ namespace WolvenKit
         public MainViewModel GetMainViewModel()
         {
             if ((MainViewModel)MainVM == null)
-                MainVM = new MainViewModel(UIController.Get().WindowFactory);
+                MainVM = new MainViewModel();
             return (MainViewModel)MainVM;
         }
 
@@ -256,7 +257,7 @@ namespace WolvenKit
             var radishdir = filedir.GetFiles("*.bat", SearchOption.AllDirectories)?.FirstOrDefault(_ => _.Name == "_settings_.bat")?.Directory;
             if (radishdir == null)
             {
-                MainController.LogString("ERROR! No radish mod directory found.\r\n", WolvenKit.Common.Services.Logtype.Error);
+                MainController.LogString("ERROR! No radish mod directory found.\r\n", Logtype.Error);
                 return;
             }
 

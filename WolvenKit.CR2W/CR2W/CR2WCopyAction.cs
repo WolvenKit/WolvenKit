@@ -42,7 +42,7 @@ namespace WolvenKit.CR2W
             DeepChunkCopy(SourceChunk, DestinationChunk);
 
             // Reparent full old chunk hierarchy to take into account the inserted children
-            foreach (var achunk in DestinationFile.chunks)
+            foreach (var achunk in DestinationFile.Chunks)
             {
                 if (oldparentinghierarchy.ContainsKey(achunk))
                 {
@@ -101,7 +101,7 @@ namespace WolvenKit.CR2W
 
 
             // Reparent full old chunk hierarchy to take into account the inserted children
-            foreach (var achunk in DestinationFile.chunks)
+            foreach (var achunk in DestinationFile.Chunks)
             {
                 if (oldparentinghierarchy.ContainsKey(achunk))
                 {
@@ -119,7 +119,7 @@ namespace WolvenKit.CR2W
                 // Corner cases :
                 // - add descending CNewNPC components
                 if (targetarray.REDName == "Components" &&
-                    DestinationFile.chunks[targetarray.LookUpChunkIndex()].REDType == "CNewNPC" &&
+                    DestinationFile.Chunks[targetarray.LookUpChunkIndex()].REDType == "CNewNPC" &&
                     copy is CComponent &&
                     !sourcechunks.Contains(chunktranslationentry.Key))
                 {
@@ -202,7 +202,7 @@ namespace WolvenKit.CR2W
             }
             var chunkdepstring = oldExportWrapper.GetFullChunkTypeDependencyString();
 
-            var targetchunk = DestinationFile.chunks.Where(_ =>
+            var targetchunk = DestinationFile.Chunks.Where(_ =>
                 _.GetFullChunkTypeDependencyString() == chunkdepstring)
                 .ToList();
 

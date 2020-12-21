@@ -50,6 +50,46 @@ namespace WolvenKit.CR2W.Types
         {
 
         }
+        public enum EWetnessOverrideType
+        {
+
+        }
+        public enum ETextureAddressing
+        {
+
+        }
+        public enum ETextureFilteringMin
+        {
+
+        }
+        public enum ETextureFilteringMag
+        {
+
+        }
+        public enum ETextureFilteringMip
+        {
+
+        }
+        public enum ETextureComparisonFunction
+        {
+
+        }
+        public enum ENoiseTypes
+        {
+
+        }
+        public enum EGradientTypes
+        {
+
+        }
+        public enum EGradientExtrapolationModes
+        {
+
+        }
+        public enum EFrameBasisTypes
+        {
+
+        }
         #endregion
 
         #region Enums with shitty names

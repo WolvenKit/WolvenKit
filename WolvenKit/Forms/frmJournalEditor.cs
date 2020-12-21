@@ -38,10 +38,10 @@ namespace WolvenKit
 
         public void ParseJournal()
         {
-            var basenode = File.chunks[0];
+            var basenode = File.Chunks[0];
             CJournalResource journalResource = basenode.data as CJournalResource;
 
-            if (File != null && File.chunks.Count > 0)
+            if (File != null && File.Chunks.Count > 0)
             {
                 switch (basenode.REDType)
                 {

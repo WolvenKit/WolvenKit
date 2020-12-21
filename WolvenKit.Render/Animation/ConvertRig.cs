@@ -41,7 +41,7 @@ namespace WolvenKit.Render
                 {
                     W2RigFile = new CR2WFile();
                     w2rigFile.Read(br);
-                    CSkeleton skel = W2RigFile.chunks[0].data as CSkeleton;
+                    CSkeleton skel = W2RigFile.Chunks[0].data as CSkeleton;
 
                     CArray<SSkeletonBone> bonesorig = skel.Bones;
                     for (int i = 0; i < skeleton.names.Count; i++)
@@ -76,7 +76,7 @@ namespace WolvenKit.Render
                                 bw.Write(1f); // the w component
                             }
                         }
-                        W2RigFile.chunks[0].unknownBytes.SetValue(stream.ToArray());
+                        W2RigFile.Chunks[0].unknownBytes.SetValue(stream.ToArray());
                         //saveToFile();
                     }
                 }

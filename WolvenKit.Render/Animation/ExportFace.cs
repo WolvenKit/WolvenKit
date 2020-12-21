@@ -52,9 +52,9 @@ namespace WolvenKit.Render
                 W3FaceFile = new CR2WFile();
                 w3FaceFile.Read(br);
                 //int count = Read(br, 0);
-                CMimicFace chunkMimicFace = W3FaceFile.chunks[0].data as CMimicFace;
-                CSkeleton mimicSkeleton = W3FaceFile.chunks[1].data as CSkeleton;
-                CSkeleton floatTrackSkeleton = W3FaceFile.chunks[2].data as CSkeleton;
+                CMimicFace chunkMimicFace = W3FaceFile.Chunks[0].data as CMimicFace;
+                CSkeleton mimicSkeleton = W3FaceFile.Chunks[1].data as CSkeleton;
+                CSkeleton floatTrackSkeleton = W3FaceFile.Chunks[2].data as CSkeleton;
 
                 CArray<SSkeletonBone> mimicSkeletonBones = mimicSkeleton.Bones;
                 uint nbBones = (uint)mimicSkeletonBones.Count;

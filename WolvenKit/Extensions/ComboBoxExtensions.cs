@@ -19,7 +19,7 @@ namespace WolvenKit.Extensions
             editor.Items.Add(new PtrComboItem { Text = "", Value = null });
 
             var availableChunks = CR2WManager.GetAvailableTypes(ptr.ReferenceType).Select(_ => _.Name).ToList();
-            foreach (var chunk in ptr.cr2w.chunks.Where(_ => availableChunks.Contains(_.REDType)))
+            foreach (var chunk in ptr.cr2w.Chunks.Where(_ => availableChunks.Contains(_.REDType)))
             {
                 editor.Items.Add(new PtrComboItem
                     {

@@ -544,7 +544,7 @@ namespace WolvenKit.Wwise.Wwise
                 {
                     FileInfo fi = new FileInfo(f);
                     WEM w = new WEM();
-                    var sbi_name = WolvenKit.Cache.SoundCache.GetIDFromPath(f);
+                    var sbi_name = SoundCache.GetIDFromPath(f);
                     uint.TryParse(Path.GetFileNameWithoutExtension(sbi_name), out w._id);
                     w._size = (UInt32)fi.Length;
                     BinaryReader br = new BinaryReader(fi.OpenRead());

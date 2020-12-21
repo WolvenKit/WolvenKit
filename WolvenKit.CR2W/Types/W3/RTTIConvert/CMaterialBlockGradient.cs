@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockGradient : CMaterialBlock
 	{
-		[Ordinal(1)] [RED("gradientType")] 		public EGradientTypes GradientType { get; set;}
+		[Ordinal(1)] [RED("gradientType")] 		public CEnum<EGradientTypes> GradientType { get; set;}
 
 		[Ordinal(2)] [RED("reverse")] 		public CBool Reverse { get; set;}
 
@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[Ordinal(4)] [RED("offset")] 		public CFloat Offset { get; set;}
 
-		[Ordinal(5)] [RED("gradientExtrapolationMode")] 		public EGradientExtrapolationModes GradientExtrapolationMode { get; set;}
+		[Ordinal(5)] [RED("gradientExtrapolationMode")] 		public CEnum<EGradientExtrapolationModes> GradientExtrapolationMode { get; set;}
 
 		[Ordinal(6)] [RED("gradient")] 		public SSimpleCurve Gradient { get; set;}
 

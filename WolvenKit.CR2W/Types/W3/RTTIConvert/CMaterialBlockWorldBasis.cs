@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockWorldBasis : CMaterialBlock
 	{
-		[Ordinal(1)] [RED("frameBasis")] 		public EFrameBasisTypes FrameBasis { get; set;}
+		[Ordinal(1)] [RED("frameBasis")] 		public CEnum<EFrameBasisTypes> FrameBasis { get; set;}
 
 		public CMaterialBlockWorldBasis(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

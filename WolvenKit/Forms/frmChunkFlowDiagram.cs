@@ -83,9 +83,9 @@ namespace WolvenKit
 
             var rootNodes = new List<CR2WExportWrapper>();
 
-            var activeRoot = File.chunks[0];
+            var activeRoot = File.Chunks[0];
 
-            if (File != null && File.chunks.Count > 0)
+            if (File != null && File.Chunks.Count > 0)
             {
                 switch (activeRoot.REDType)
                 {
@@ -207,7 +207,7 @@ namespace WolvenKit
 
         private void getStorySceneRootNodes(List<CR2WExportWrapper> rootNodes)
         {
-            CStoryScene resource = (CStoryScene)File.chunks[0].data;
+            CStoryScene resource = (CStoryScene)File.Chunks[0].data;
             CArray<CPtr<CStorySceneControlPart>> controlParts = resource.ControlParts;
             if (controlParts != null)
             {
@@ -217,7 +217,7 @@ namespace WolvenKit
 
         private void getQuestPhaseRootNodes(List<CR2WExportWrapper> rootNodes)
         {
-            CQuestPhase resource = (CQuestPhase)File.chunks[0].data;
+            CQuestPhase resource = (CQuestPhase)File.Chunks[0].data;
             CPtr<CQuestGraph> graphObj = resource.Graph;
             if (graphObj != null)
             {
@@ -231,7 +231,7 @@ namespace WolvenKit
 
         private void getQuestRootNodes(List<CR2WExportWrapper> rootNodes)
         {
-            CQuest quest = (CQuest)File.chunks[0].data;
+            CQuest quest = (CQuest)File.Chunks[0].data;
             CPtr<CQuestGraph> graphObj = quest.Graph;
             if (graphObj != null)
             {

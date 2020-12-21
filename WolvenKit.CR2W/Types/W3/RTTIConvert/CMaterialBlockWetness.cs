@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockWetness : CMaterialBlock
 	{
-		[Ordinal(1)] [RED("overrideType")] 		public EWetnessOverrideType OverrideType { get; set;}
+		[Ordinal(1)] [RED("overrideType")] 		public CEnum<EWetnessOverrideType> OverrideType { get; set;}
 
 		public CMaterialBlockWetness(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

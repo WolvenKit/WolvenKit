@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 
@@ -20,7 +19,7 @@ namespace WolvenKit.Cache
             Archives = new Dictionary<string, CollisionCache>();
             FileList = new List<IWitcherFile>();
             Extensions = new List<string>();
-            AutocompleteSource = new AutoCompleteStringCollection();
+            AutocompleteSource = new List<string>();
         }
 
         public Dictionary<string, CollisionCache> Archives { get; set; }

@@ -1,4 +1,4 @@
-﻿using SymbolicLinkSupport;
+﻿//using SymbolicLinkSupport;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,6 +28,8 @@ using WolvenKit.CR2W.Reflection;
 using WolvenKit.CR2W.Types;
 using System.Globalization;
 using System.Reflection;
+using WolvenKit.Wwise;
+using Catel;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -36,6 +38,25 @@ namespace WolvenKit.App.ViewModels
     /// </summary>
     public sealed class MainViewModel : ViewModel
     {
+
+        // TODO: Register models with the vmpropmodel codesnippet
+        // TODO: Register view model properties with the vmprop or vmpropviewmodeltomodel codesnippets
+        // TODO: Register commands with the vmcommand or vmcommandwithcanexecute codesnippets
+
+        protected override async Task InitializeAsync()
+        {
+            await base.InitializeAsync();
+
+            // TODO: subscribe to events here
+        }
+
+        protected override async Task CloseAsync()
+        {
+            // TODO: unsubscribe from events here
+
+            await base.CloseAsync();
+        }
+
         #region Properties
         public bool IsToolStripBtnPackEnabled { get; private set; }
 
@@ -48,8 +69,9 @@ namespace WolvenKit.App.ViewModels
             {
                 if (_title != value)
                 {
+                    var oldValue = _title;
                     _title = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged(() => Title, oldValue, value);
                 }
             }
         }
@@ -57,24 +79,25 @@ namespace WolvenKit.App.ViewModels
 
         #region Open Documents
 
-        private readonly Dictionary<string, IDocumentViewModel> _openDocuments;
-        public Dictionary<string, IDocumentViewModel> GetOpenDocuments() => _openDocuments;
+        private readonly Dictionary<string, Old_IDocumentViewModel> _openDocuments;
+        public Dictionary<string, Old_IDocumentViewModel> GetOpenDocuments() => _openDocuments;
 
         
 
         #endregion
 
         #region Active Document
-        private IDocumentViewModel _activeDocument;
-        public IDocumentViewModel ActiveDocument
+        private Old_IDocumentViewModel _activeDocument;
+        public Old_IDocumentViewModel ActiveDocument
         {
             get => _activeDocument;
             set
             {
                 if (_activeDocument != value)
                 {
+                    var oldValue = _activeDocument;
                     _activeDocument = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged(() => ActiveDocument, oldValue, value);
                 }
             }
         }
@@ -89,15 +112,21 @@ namespace WolvenKit.App.ViewModels
         
         #endregion
 
-        public MainViewModel(IWindowFactory windowFactory) : base(windowFactory)
+        public MainViewModel()
         {
+
+
+
+
             Title = "WolvenKit";
 
-            _openDocuments = new Dictionary<string, IDocumentViewModel>();
+            _openDocuments = new Dictionary<string, Old_IDocumentViewModel>();
+            
 
             DdsToCacheCommand = new RelayCommand(DdsToCache, CanDdsToCacheCommand);
             CreateCr2wFileCommand = new DelegateCommand<bool>(CreateCr2w, CanCreateCr2w);
             BackupProjectCommand = new RelayCommand(BackupProject, CanBackupProject);
+            Command1 = new RelayCommand(RunCommand1, CanRunCommand1);
         }
 
 
@@ -105,11 +134,16 @@ namespace WolvenKit.App.ViewModels
         public ICommand DdsToCacheCommand { get; }
         public ICommand CreateCr2wFileCommand { get; }
         public ICommand BackupProjectCommand { get; }
-
+        public ICommand Command1 { get; }
         #endregion
 
         #region CommandsImplementation
-        private bool CanDdsToCacheCommand() => MainController.Get().ActiveMod != null;
+        private bool CanRunCommand1() => true;
+        private void RunCommand1()
+        {
+        }
+
+        private bool CanDdsToCacheCommand() => true;
         private void DdsToCache()
         {
             // Creation
@@ -299,10 +333,10 @@ namespace WolvenKit.App.ViewModels
                 .Where(_ => _.Split(' ').First() != "")
                 .ToList();
 
-            string newChunktypename = m_windowFactory.ShowAddChunkFormModal(availableTypes);
+            string result = m_windowFactory.ShowAddChunkFormModal(availableTypes);
 
-            newChunktypename = newChunktypename.Split(' ').Last().TrimStart("(").TrimEnd(')');
-            var redextension = newChunktypename.Split(' ').First();
+            var newChunktypename = result.Split(' ').Last().TrimStart("(").TrimEnd(')');
+            var redextension = result.Split(' ').First();
 
             
 
@@ -1170,7 +1204,7 @@ namespace WolvenKit.App.ViewModels
             return true;
         }
         
-        public void AddOpenDocument(IDocumentViewModel document)
+        public void AddOpenDocument(Old_IDocumentViewModel document)
         {
             if (_openDocuments.ContainsKey(document.FileName))
                 throw new NullReferenceException();

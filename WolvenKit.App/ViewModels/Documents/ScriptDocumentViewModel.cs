@@ -16,7 +16,7 @@ using WolvenKit.Radish.Model;
 
 namespace WolvenKit.App.ViewModels
 {
-    public class ScriptDocumentViewModel : CloseableViewModel, IDocumentViewModel
+    public class ScriptDocumentViewModel : CloseableViewModel, Old_IDocumentViewModel
     {
         public ScriptDocumentViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
@@ -44,8 +44,9 @@ namespace WolvenKit.App.ViewModels
             {
                 if (_text != value)
                 {
+                    var oldValue = _text;
                     _text = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged(() => Text, oldValue, value);
 
                     // notify unsaved
                     IsUnsaved = true;
@@ -64,8 +65,9 @@ namespace WolvenKit.App.ViewModels
             {
                 if (_formTitle != value)
                 {
+                    var oldValue = _formTitle;
                     _formTitle = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged(() => FormTitle, oldValue, value);
                 }
             }
         }

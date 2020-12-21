@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Catel.IoC;
+using Microsoft.CodeAnalysis.CSharp;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Services;
 
 namespace WolvenKit.App
 {
@@ -12,6 +16,7 @@ namespace WolvenKit.App
     using Common;
     using Common.Services;
     using CR2W;
+    using ProtoBuf;
     using System.Diagnostics;
     using System.IO.Compression;
     using System.Reflection;
@@ -63,12 +68,6 @@ namespace WolvenKit.App
 
         #region Fields
 
-        private static string ManagerCacheDir => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ManagerCache");
-
-        public static string WorkDir => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "tmp_workdir");
-
-        //private static string DepotZipPath => Path.Combine(ManagerCacheDir, "Depot.zip");
-        public static string XBMDumpPath => Path.Combine(ManagerCacheDir, "__xbmdump_3768555366.csv");
 
         public string InitialModProject { get; set; } = "";
         public string InitialWKP { get; set; } = "";
@@ -225,35 +224,12 @@ namespace WolvenKit.App
         #endregion
 
         #region Methods
-        private static string GetManagerPath(EManagerType type)
-        {
-            switch (type)
-            {
-                case EManagerType.BundleManager: return Path.Combine(ManagerCacheDir, "bundle_cache.json");
-                case EManagerType.CollisionManager: return Path.Combine(ManagerCacheDir, "collision_cache.json");
-                case EManagerType.SoundManager: return Path.Combine(ManagerCacheDir, "sound_cache.json");
-                case EManagerType.W3StringManager: return Path.Combine(ManagerCacheDir, "string_cache.bin");
-                case EManagerType.TextureManager: return Path.Combine(ManagerCacheDir, "texture_cache.json");
-                case EManagerType.Max:
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
-        }
-        private static string GetManagerVersion(EManagerType type)
-        {
-            switch (type)
-            {
-                case EManagerType.BundleManager: return BundleManager.SerializationVersion;
-                case EManagerType.CollisionManager: return WolvenKit.Cache.CollisionManager.SerializationVersion;
-                case EManagerType.SoundManager: return WolvenKit.Cache.SoundManager.SerializationVersion;
-                case EManagerType.W3StringManager: return W3Strings.W3StringManager.SerializationVersion;
-                case EManagerType.TextureManager: return WolvenKit.Cache.TextureManager.SerializationVersion;
-                case EManagerType.Max:
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
-        }
 
+        public static string ManagerCacheDir => Tw3Controller.ManagerCacheDir;
+        public static string WorkDir => Tw3Controller.WorkDir;
+        public static string XBMDumpPath => Tw3Controller.XBMDumpPath;
+        public static string GetManagerPath(EManagerType type) => Tw3Controller.GetManagerPath(type);
+        public static string GetManagerVersion(EManagerType type) => Tw3Controller.GetManagerVersion(type);
 
         /// <summary>
         /// Initializes the archive managers in an async thread
@@ -268,40 +244,31 @@ namespace WolvenKit.App
                 {
                     var savedversions = Configuration.ManagerVersions[j];
                     var e = (EManagerType)j;
-                    var curversion = GetManagerVersion(e);
+                    var curversion = Tw3Controller.GetManagerVersion(e);
 
                     if (savedversions != curversion)
                     {
-                        if (File.Exists(GetManagerPath(e)))
-                            File.Delete(GetManagerPath(e));
+                        if (File.Exists(Tw3Controller.GetManagerPath(e)))
+                            File.Delete(Tw3Controller.GetManagerPath(e));
                     }
                 }
 
                 //multithread these
-                var loadStringsManagerTask = LoadStringsManager();
-                var loadBundleManagerTask = LoadBundleManager();
-                var loadTextureManagerTask = LoadTextureManager();
-                var loadCollisionManagerTask = LoadCollisionManager();
-                var loadSoundManagerTask = LoadSoundManager();
-                var loadSpeechManagerTask = LoadSpeechManager();
-                var tasks = new List<Task>
-                {
-                    loadStringsManagerTask,
-                    loadBundleManagerTask,
-                    loadTextureManagerTask,
-                    loadCollisionManagerTask,
-                    loadSoundManagerTask,
-                    loadSpeechManagerTask,
-                };
-                await Task.WhenAny(tasks);
-
-
-                //await Task.Run(() => LoadStringsManager());
-                //await Task.Run(() => LoadBundleManager());
-                //await Task.Run(() => LoadTextureManager());
-                //await Task.Run(() => LoadCollisionManager());
-                //await Task.Run(() => LoadSoundManager());
-                //await Task.Run(() => LoadSpeechManager());
+#if NET48
+                BundleManager = BundleManager ?? await Task.Run(() => Tw3Controller.LoadBundleManager());
+                W3StringManager = W3StringManager ?? await Task.Run(() => Tw3Controller.LoadStringsManager());
+                TextureManager = TextureManager ?? await Task.Run(() => Tw3Controller.LoadTextureManager());
+                CollisionManager = CollisionManager ?? await Task.Run(() => Tw3Controller.LoadCollisionManager());
+                SoundManager = SoundManager ?? await Task.Run(() => Tw3Controller.LoadSoundManager());
+                SpeechManager = SpeechManager ?? await Task.Run(() => Tw3Controller.LoadSpeechManager());
+#elif NETCOREAPP
+                BundleManager ??= await Task.Run(() => Tw3Controller.LoadBundleManager());
+                W3StringManager ??= await Task.Run(() => Tw3Controller.LoadStringsManager());
+                TextureManager ??= await Task.Run(() => Tw3Controller.LoadTextureManager());
+                CollisionManager ??= await Task.Run(() => Tw3Controller.LoadCollisionManager());
+                SoundManager ??= await Task.Run(() => Tw3Controller.LoadSoundManager());
+                SpeechManager ??= await Task.Run(() => Tw3Controller.LoadSpeechManager());
+#endif
 
 
                 loadStatus = "Loading depot manager!";
@@ -354,233 +321,7 @@ namespace WolvenKit.App
             }
         }
 
-        private async Task LoadStringsManager()
-        {
-            loadStatus = "Loading string manager";
-            #region Load string manager
-            var sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
-            if (W3StringManager == null)
-            {
-                try
-                {
-                    if (File.Exists(GetManagerPath(EManagerType.W3StringManager)) && new FileInfo(GetManagerPath(EManagerType.W3StringManager)).Length > 0)
-                    {
-                        using (var file = File.Open(GetManagerPath(EManagerType.W3StringManager), FileMode.Open))
-                        {
-                            W3StringManager = ProtoBuf.Serializer.Deserialize<W3StringManager>(file);
-                        }
-                    }
-                    else
-                    {
-                        W3StringManager = new W3StringManager();
-                        W3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
-                        Directory.CreateDirectory(ManagerCacheDir);
-                        using (var file = File.Open(GetManagerPath(EManagerType.W3StringManager), FileMode.Create))
-                        {
-                            ProtoBuf.Serializer.Serialize(file, W3StringManager);
-                        }
-
-                        Configuration.ManagerVersions[(int)EManagerType.W3StringManager] = W3StringManager.SerializationVersion;
-                    }
-                }
-                catch (System.Exception)
-                {
-                    if (File.Exists(GetManagerPath(EManagerType.W3StringManager)))
-                        File.Delete(GetManagerPath(EManagerType.W3StringManager));
-                    W3StringManager = new W3StringManager();
-                    W3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
-                }
-            }
-
-            var i = sw.ElapsedMilliseconds;
-            sw.Stop();
-            #endregion
-        }
-
-        private async Task LoadBundleManager()
-        {
-            loadStatus = "Loading bundle manager!";
-            #region Load bundle manager
-            if (BundleManager == null)
-            {
-                try
-                {
-                    if (File.Exists(GetManagerPath(EManagerType.BundleManager)))
-                    {
-                        using (StreamReader file = File.OpenText(GetManagerPath(EManagerType.BundleManager)))
-                        {
-                            JsonSerializer serializer = new JsonSerializer();
-                            serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                            serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                            serializer.TypeNameHandling = TypeNameHandling.Auto;
-                            BundleManager = (BundleManager)serializer.Deserialize(file, typeof(BundleManager));
-                        }
-                    }
-                    else
-                    {
-                        BundleManager = new BundleManager();
-                        BundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                        File.WriteAllText(GetManagerPath(EManagerType.BundleManager), JsonConvert.SerializeObject(BundleManager, Formatting.None, new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                            TypeNameHandling = TypeNameHandling.Auto
-                        }));
-                        Configuration.ManagerVersions[(int)EManagerType.BundleManager] = BundleManager.SerializationVersion;
-                    }
-                }
-                catch (System.Exception ex)
-                {
-                    if (File.Exists(GetManagerPath(EManagerType.BundleManager)))
-                        File.Delete(GetManagerPath(EManagerType.BundleManager));
-                    BundleManager = new BundleManager();
-                    BundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                }
-            }
-            #endregion
-        }
-
-        private async Task LoadTextureManager()
-        {
-            loadStatus = "Loading texture manager!";
-            #region Load texture manager
-            if (TextureManager == null)
-            {
-                try
-                {
-                    if (File.Exists(GetManagerPath(EManagerType.TextureManager)))
-                    {
-                        using (StreamReader file = File.OpenText(GetManagerPath(EManagerType.TextureManager)))
-                        {
-                            JsonSerializer serializer = new JsonSerializer();
-                            serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                            serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                            serializer.TypeNameHandling = TypeNameHandling.Auto;
-                            TextureManager = (TextureManager)serializer.Deserialize(file, typeof(TextureManager));
-                        }
-                    }
-                    else
-                    {
-                        TextureManager = new TextureManager();
-                        TextureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                        File.WriteAllText(GetManagerPath(EManagerType.TextureManager), JsonConvert.SerializeObject(TextureManager, Formatting.None, new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                            TypeNameHandling = TypeNameHandling.Auto
-                        }));
-                        Configuration.ManagerVersions[(int)EManagerType.TextureManager] = TextureManager.SerializationVersion;
-                    }
-                }
-                catch (System.Exception)
-                {
-                    if (File.Exists(GetManagerPath(EManagerType.TextureManager)))
-                        File.Delete(GetManagerPath(EManagerType.TextureManager));
-                    TextureManager = new TextureManager();
-                    TextureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                }
-            }
-            #endregion
-        }
-
-        private async Task LoadCollisionManager()
-        {
-            loadStatus = "Loading collision manager!";
-            #region Load collision manager
-            if (CollisionManager == null)
-            {
-                try
-                {
-                    if (File.Exists(GetManagerPath(EManagerType.CollisionManager)))
-                    {
-                        using (StreamReader file = File.OpenText(GetManagerPath(EManagerType.CollisionManager)))
-                        {
-                            JsonSerializer serializer = new JsonSerializer();
-                            serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                            serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                            serializer.TypeNameHandling = TypeNameHandling.Auto;
-                            CollisionManager = (CollisionManager)serializer.Deserialize(file, typeof(CollisionManager));
-                        }
-                    }
-                    else
-                    {
-                        CollisionManager = new CollisionManager();
-                        CollisionManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                        File.WriteAllText(GetManagerPath(EManagerType.CollisionManager), JsonConvert.SerializeObject(CollisionManager, Formatting.None, new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                            TypeNameHandling = TypeNameHandling.Auto
-                        }));
-                        Configuration.ManagerVersions[(int)EManagerType.CollisionManager] = CollisionManager.SerializationVersion;
-                    }
-                }
-                catch (System.Exception)
-                {
-                    if (File.Exists(GetManagerPath(EManagerType.CollisionManager)))
-                        File.Delete(GetManagerPath(EManagerType.CollisionManager));
-                    CollisionManager = new CollisionManager();
-                    CollisionManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                }
-            }
-            #endregion
-        }
-
-        private async Task LoadSoundManager()
-        {
-            loadStatus = "Loading sound manager!";
-            #region Load sound manager
-            if (SoundManager == null)
-            {
-                try
-                {
-                    if (File.Exists(GetManagerPath(EManagerType.SoundManager)))
-                    {
-                        using (StreamReader file = File.OpenText(GetManagerPath(EManagerType.SoundManager)))
-                        {
-                            JsonSerializer serializer = new JsonSerializer();
-                            serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                            serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                            serializer.TypeNameHandling = TypeNameHandling.Auto;
-                            SoundManager = (SoundManager)serializer.Deserialize(file, typeof(SoundManager));
-                        }
-                    }
-                    else
-                    {
-                        SoundManager = new SoundManager();
-                        SoundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                        File.WriteAllText(GetManagerPath(EManagerType.SoundManager), JsonConvert.SerializeObject(SoundManager, Formatting.None, new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                            TypeNameHandling = TypeNameHandling.Auto
-                        }));
-                        Configuration.ManagerVersions[(int)EManagerType.SoundManager] = SoundManager.SerializationVersion;
-                    }
-                }
-                catch (System.Exception ex)
-                {
-                    if (File.Exists(GetManagerPath(EManagerType.SoundManager)))
-                        File.Delete(GetManagerPath(EManagerType.SoundManager));
-                    SoundManager = new SoundManager();
-                    SoundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                }
-            }
-            #endregion
-        }
-
-        private async Task LoadSpeechManager()
-        {
-            loadStatus = "Loading speech manager!";
-            #region Load speech manager
-            if (SpeechManager == null)
-            {
-                SpeechManager = new SpeechManager();
-                SpeechManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-            }
-            #endregion
-        }
+        
 
         /// <summary>
         /// Useful function for blindly importing a file.

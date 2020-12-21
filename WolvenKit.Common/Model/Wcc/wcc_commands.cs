@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.IO;
-using System.Windows.Forms.Design;
 using System.Runtime.CompilerServices;
 using System;
 
@@ -32,14 +31,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required")]
             [DescriptionAttribute("Path to the bundled directory.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("indir")]
             public string InputDirectory { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to the unbundled directory.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            ////[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
             public string OutputDirectory { get; set; }
@@ -49,14 +48,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Path to the input strings file.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("infile")]
             public string InputFile { get; set; }
 
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Relative inner path to be extracted.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            ////[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("In")]
             [REDName("targetdir")]
             public string TargetDirectory { get; set; }
@@ -107,14 +106,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Directory with the bundles (recursive).")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("indir")]
             public string Indir { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Absolute path to output text file.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outfile")]
             public string Outfile { get; set; }
@@ -124,14 +123,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Optional"),
             DescriptionAttribute("where to place output.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outpath")]
             public string Outpath { get; set; }
 
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Absolute path to input bundle (multiple can be specified).")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("infile")]
             public string Infile { get; set; }
@@ -152,7 +151,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("local - Use local depot(r4data)\n absolutepath - Use depot at given directory.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("depot")]
             public string Depot { get; set; }
@@ -165,7 +164,7 @@ namespace WolvenKit.Common.Wcc
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("absolutepath - Output absolute path for the exported file")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
@@ -202,21 +201,21 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("local - Use local depot(r4data) /n absolutepath - Use depot at given directory")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("depot")]
             public string Depot { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("inputfile - Absolute path to file to import")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("outputfile - Relative(depot) path for the output file")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
@@ -246,7 +245,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute(" dump the whole directory (recursive)")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("dir")]
             public string Dir { get; set; }
@@ -256,14 +255,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Optional"),
             DescriptionAttribute("depot path to the file")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("absolute path to the output file")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
@@ -288,14 +287,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("directory with the bundles (recursive)")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("dir")]
             public string InputDirectory { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("absolute path to output directory")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
             public string OutputDirectory { get; set; }
@@ -305,7 +304,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Optional"),
             DescriptionAttribute("optional bundles.json dump (for repacking)")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("json")]
             public string Json { get; set; }
@@ -332,14 +331,14 @@ namespace WolvenKit.Common.Wcc
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to cook.db.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string DataBase { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Uncooked Base Directory")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("basedir")]
             public string basedir { get; set; }
@@ -352,7 +351,7 @@ namespace WolvenKit.Common.Wcc
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to output cache file.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
@@ -387,7 +386,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to bundles directory.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("path")]
             public string Directory { get; set; }
@@ -413,7 +412,7 @@ namespace WolvenKit.Common.Wcc
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Sepcify output directory(required).")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
             public string outdir { get; set; }
@@ -424,56 +423,56 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Optional"),
             DescriptionAttribute("NO INFO")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("basedir")]
             public string basedir { get; set; }
 
             [CategoryAttribute("Optional"),
             DescriptionAttribute("NO INFO")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("mod")]
             public string mod { get; set; }
 
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Input seed file(required).")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("seed")]
             public string seed { get; set; }
 
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Manual depot file for cooking.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
 
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Cook.db file to check if it containes trimmed files.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("additionalDB")]
             public string AdditionalDB { get; set; }
 
             [CategoryAttribute("Optional"),
             DescriptionAttribute("List of trimmed files from cook.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path")]
             [REDName("trimedfiles")]
             public string trimedfiles { get; set; }
 
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Don't cook resources from one directory.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("excludedir")]
             public string excludedir { get; set; }
 
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Cook resources only from one directory.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags(/*"Path",*/ "In")]
             [REDName("trimdir")]
             public string trimdir { get; set; }
@@ -525,14 +524,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Input directory to pack")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("dir")]
             public string Directory { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Output directory with bundles (note: bundles bigger than 4GB are split)")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
             public string Outdir { get; set; }
@@ -625,7 +624,7 @@ namespace WolvenKit.Common.Wcc
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Output absolute path")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
@@ -657,21 +656,21 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("input cache file.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get;set;}
 
             [CategoryAttribute("Is Required")]
             [DescriptionAttribute("path to the cook.db file to use as a reference")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string Database { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("where to place output caches.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
             public string OutputDirectory { get; set; }
@@ -706,14 +705,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("path to the cook.db file to use as a reference")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string Database { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("where to place output.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Output { get; set; }
@@ -761,14 +760,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("<scriptfile.redscripts> - Input file (compiled script binary).")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("<outputfile.txt> - Output report file")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outpath")]
             public string Outpath { get; set; }
@@ -788,21 +787,21 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("cook.db file")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string db { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Validate single file.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("NO INFO")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
             public string Outdir { get; set; }
@@ -830,14 +829,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("cook.db file")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string db { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("NO INFO")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
             public string OutputDirectory { get; set; }
@@ -866,14 +865,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("depot path to the file")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("absolute path to the output file")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
@@ -893,21 +892,21 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to the base build (GoldMaster)")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("base")]
             public string Base { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("(pro) Path to the current build (latest cook)")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("current")]
             public string Current { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to the cooked mod directory")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("mod")]
             public string ModDirectory { get; set; }
@@ -922,7 +921,7 @@ namespace WolvenKit.Common.Wcc
 
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Output directory where the patched content will be dumped.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("path")]
             public string OutputDirectory { get; set; }
@@ -956,14 +955,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("cook.db file")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string db { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Outfile")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
@@ -983,14 +982,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("cook.db file")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string db { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Outfile")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
@@ -1010,14 +1009,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to the input strings file.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("instringsfile")]
             public string Instringsfile { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to the out charset file (if not given, default is used).")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outcharsetfile")]
             public string Outcharsetfile { get; set; }
@@ -1027,14 +1026,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Dumps all string entries into filepath. Only in single file mode.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outentriesfile")]
             public string Outentriesfile { get; set; }
 
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Path to base directory for recursive dump. Used with targetlanguage.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("directory")]
             public string Directory { get; set; }
@@ -1060,14 +1059,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Input Directory")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("indir")]
             public string InputDirectory { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("usmdir")]
             public string usmDirectory { get; set; }
@@ -1087,7 +1086,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Optional"),
             DescriptionAttribute("arabic font file")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("ar_font")]
             public string ArabicFontFile { get; set; }
@@ -1108,14 +1107,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Save dependency cache to file")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Use dependencies in cook.db file instead of full depot")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string db { get; set; }
@@ -1125,7 +1124,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Generate dependency report in given directory")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("report")]
             public string report { get; set; }
@@ -1145,28 +1144,28 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Use dependencies in cook.db file instead of full depot")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string db { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Initial list of seed files")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("seed")]
             public string Seed { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Additional list of seed files that represent spatial configuration(they override the existing bundles).")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("spatial")]
             public string SpatialSeeds { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Absolute path to the final output file (JSON bundle list)")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
@@ -1176,7 +1175,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Split bundles into chunks using given split file.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("split")]
             public string split { get; set; }
@@ -1206,7 +1205,7 @@ namespace WolvenKit.Common.Wcc
 
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Check only given files.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
@@ -1241,14 +1240,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("quest_path")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("quest")]
             public string quest { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("dump_path")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
@@ -1268,14 +1267,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Specifies path to the world file(required)")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("world")]
             public string world { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Specifies path to the output file(required)")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
@@ -1313,7 +1312,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("subtitles_path needs to be ucs-2 little endian because of our engine the output file is utf8...")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("subtitles")]
             public string Subtitles { get; set; }
@@ -1342,14 +1341,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("NO INFO")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("output_dir")]
             public string OutpuDirectory { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("NO INFO")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("sound_resource_dir")]
             public string SoundResourceDirectory { get; set; }
@@ -1379,14 +1378,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to the cook.db file")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string db { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Output file name")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
@@ -1396,7 +1395,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Path to the a seed file (multiple files supported)")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("seed")]
             public string seed { get; set; }
@@ -1422,21 +1421,21 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("absolute path to final deliverable. E.g., z:\\Build_109641Change_652889\\PS4")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("i")]
             public string InDirectory { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("absolute path where to create gp4, pkg and iso")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("o")]
             public string OutDirectory { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("absolute path to the language definitions")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("l")]
             public string Language { get; set; }
@@ -1446,7 +1445,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Optional"),
             DescriptionAttribute("temp directory")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path")]
             [REDName("t")]
             public string TempDirectory { get; set; }
@@ -1477,35 +1476,35 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to the split file(mapping resources to chunks, not required in DLC mode).")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("splitfile")]
             public string Splitfile { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to the ids file(mapping resources to string ID's).")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("idsfile")]
             public string Idsfile { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to the keys file[optional](mapping resources to string Key's).")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("keysfile")]
             public string Keysfile { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to the directory where the language files reside.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("indir")]
             public string Indir { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to the directory where the split files will reside.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
             public string outdir { get; set; }
@@ -1564,7 +1563,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("out directory.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
@@ -1588,7 +1587,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Optional"),
             DescriptionAttribute("absolute path to scan inside")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("fromAbsPath")]
             public string InputDirectory { get; set; }
@@ -1598,7 +1597,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Optional"),
             DescriptionAttribute("depot path to import to")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("toDepotPath")]
             public string DepotPath { get; set; }
@@ -1618,14 +1617,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Absolute path to temporary folder.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path")]
             [REDName("tmpdir")]
             public string TempDirectory { get; set; }
 
             [CategoryAttribute("Optional"),
             DescriptionAttribute("Base directory path to scan(full depot resave if not specified).")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("path")]
             public string Path { get; set; }
@@ -1713,7 +1712,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("pathToWorldFile")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("world")]
             public string WorldFile { get; set; }
@@ -1771,7 +1770,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("pathToWorldFile")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("world")]
             public string WorldFile { get; set; }
@@ -1799,7 +1798,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("pathToWorldFile")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("world")]
             public string WorldFile { get; set; }
@@ -1809,7 +1808,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Optional"),
             DescriptionAttribute("file")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("output")]
             public string output { get; set; }
@@ -1829,7 +1828,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("NO INFO")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("rootSearchDir")]
             public string RootSearchDir { get; set; }
@@ -1855,14 +1854,14 @@ namespace WolvenKit.Common.Wcc
             /// 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to the base directory where speech data resides.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("source_dir")]
             public string InputDirectory { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to the directory where the caches will be stored.")]
-            [EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out_dir")]
             public string OutputDirectory { get; set; }
@@ -1907,7 +1906,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("File Cache.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
@@ -1927,7 +1926,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("Path to the w2w file to load.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("world")]
             public string WorldFile { get; set; }
@@ -1966,14 +1965,14 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("NO INFO.")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("wwise_bin_dir")]
             public string Wwise_bin_dir { get; set; }
 
             [CategoryAttribute("Is Required"),
             DescriptionAttribute("NO INFO")]
-            [EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+            //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("voiceivers_source_dir")]
             public string Voiceivers_source_dir { get; set; }

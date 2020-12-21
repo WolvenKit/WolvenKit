@@ -93,7 +93,7 @@ namespace WolvenKit.CR2W
             this.cr2w = file;
             _export = export;
 
-            REDType = cr2w.names[export.className].Str;
+            REDType = cr2w.Names[export.className].Str;
             AdReferences = new List<IChunkPtrAccessor>();
             AbReferences = new List<IChunkPtrAccessor>();
         }
@@ -125,17 +125,17 @@ namespace WolvenKit.CR2W
 
         public CR2WExportWrapper ParentChunk
         {
-            get => ParentChunkIndex == -1 ? null : cr2w.chunks[ParentChunkIndex];
-            set => ParentChunkIndex = value == null ? -1 : cr2w.chunks.IndexOf(value);
+            get => ParentChunkIndex == -1 ? null : cr2w.Chunks[ParentChunkIndex];
+            set => ParentChunkIndex = value == null ? -1 : cr2w.Chunks.IndexOf(value);
         }
 
         public CR2WExportWrapper VirtualParentChunk;
 
-        public int VirtualParentChunkIndex => cr2w.chunks.IndexOf(VirtualParentChunk);
+        public int VirtualParentChunkIndex => cr2w.Chunks.IndexOf(VirtualParentChunk);
 
-        public List<CR2WExportWrapper> ChildrenChunks => cr2w.chunks.Where(_ => _.ParentChunk == this).ToList();
+        public List<CR2WExportWrapper> ChildrenChunks => cr2w.Chunks.Where(_ => _.ParentChunk == this).ToList();
 
-        public List<CR2WExportWrapper> VirtualChildrenChunks => cr2w.chunks.Where(_ => _.VirtualParentChunk == this).ToList();
+        public List<CR2WExportWrapper> VirtualChildrenChunks => cr2w.Chunks.Where(_ => _.VirtualParentChunk == this).ToList();
 
         /// <summary>
         /// Playing with latin here, ab means toward, ab away from.
@@ -157,7 +157,7 @@ namespace WolvenKit.CR2W
         [DataMember]
         public string REDName => REDType + " #" + (ChunkIndex);
 
-        public int ChunkIndex => cr2w.chunks.IndexOf(this);
+        public int ChunkIndex => cr2w.Chunks.IndexOf(this);
 
         /// <summary>
         /// This property is used as BindingProperty in frmChunkProperties
@@ -239,7 +239,7 @@ namespace WolvenKit.CR2W
         {
             if (VirtualParentChunk == null || force)
             {
-                VirtualParentChunk = cr2w.chunks[virtualparentchunkindex];
+                VirtualParentChunk = cr2w.Chunks[virtualparentchunkindex];
                 //cr2w.Logger.LogString($"Mounted {this.REDName} to {VirtualParentChunk.REDName}.");
             }
         }
@@ -307,7 +307,7 @@ namespace WolvenKit.CR2W
 
                     if (cr2w.Logger!= null)
                     {
-                        float percentprogress = (float)(1 / (float)cr2w.chunks.Count * 100.0);
+                        float percentprogress = (float)(1 / (float)cr2w.Chunks.Count * 100.0);
                         cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
                     }
                     
@@ -351,7 +351,7 @@ namespace WolvenKit.CR2W
                 stopwatch.Stop();
                 if (cr2w.Logger != null)
                 {
-                    float percentprogress = (float)(1 / (float)cr2w.chunks.Count * 100.0);
+                    float percentprogress = (float)(1 / (float)cr2w.Chunks.Count * 100.0);
                     cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
                     //cr2w.Logger.LogString($"{stopwatch.Elapsed} CHUNK {REDName}\n");
                 }

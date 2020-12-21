@@ -70,7 +70,7 @@ namespace WolvenKit.CR2W.SRT
         #endregion
 
         #region Read
-        public EFileReadErrorCodes Read(BinaryReader br)
+        public async Task<EFileReadErrorCodes> Read(BinaryReader br)
         {
             m_stream = br.BaseStream;
 

@@ -40,7 +40,7 @@ namespace WolvenKit
             if (File == null)
                 return;
 
-            listView.Objects = File.embedded;
+            listView.Objects = File.Embedded;
         }
 
         private void listView_CellClick(object sender, CellClickEventArgs e)

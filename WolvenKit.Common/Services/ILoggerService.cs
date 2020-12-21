@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace WolvenKit.Common.Services
 {
-    [TypeConverter(typeof(ExpandableObjectConverter))]
-    public interface ILoggerService
+    public interface ILoggerService : INotifyPropertyChanged, INotifyPropertyChanging
     {
-       
+        event EventHandler<LogStringEventArgs> OnStringLogged;
 
         string Log { get; }
         ObservableCollection<InterpretedLogMessage> ErrorLog { get; }
@@ -20,5 +19,9 @@ namespace WolvenKit.Common.Services
         void LogString(string value, Logtype type);
         void LogExtended(SystemLogFlag sflag, ToolLogFlag lflag, string cmdName, string value);
 
+
+        void LogProgress(float value);
+        void LogProgress(float value, string str);
+        void LogProgressInc(float value, string str);
     }
 }

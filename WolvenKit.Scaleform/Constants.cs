@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 
 namespace WolvenKit.Scaleform
 {
@@ -210,75 +209,75 @@ namespace WolvenKit.Scaleform
     /// <summary>
     /// Struct used to send messages conveying progress.
     /// </summary>
-    public struct ProgressStruct
-    {
-        /// <summary>
-        /// File name to display in progress bar.
-        /// </summary>
-        private string fileName;
+    //public struct ProgressStruct
+    //{
+    //    /// <summary>
+    //    /// File name to display in progress bar.
+    //    /// </summary>
+    //    private string fileName;
 
-        /// <summary>
-        /// Error message to display in output window.
-        /// </summary>
-        private string errorMessage;
+    //    /// <summary>
+    //    /// Error message to display in output window.
+    //    /// </summary>
+    //    private string errorMessage;
 
-        /// <summary>
-        /// Generic message to display in output window.
-        /// </summary>
-        private string genericMessage;
+    //    /// <summary>
+    //    /// Generic message to display in output window.
+    //    /// </summary>
+    //    private string genericMessage;
 
-        /// <summary>
-        /// New tree node to add to a TreeView.
-        /// </summary>
-        private TreeNode newNode;
+    //    /// <summary>
+    //    /// New tree node to add to a TreeView.
+    //    /// </summary>
+    //    private TreeNode newNode;
 
-        /// <summary>
-        /// Gets or sets fileName.
-        /// </summary>
-        public string FileName
-        {
-            get { return fileName; }
-            set { fileName = value; }
-        }
+    //    /// <summary>
+    //    /// Gets or sets fileName.
+    //    /// </summary>
+    //    public string FileName
+    //    {
+    //        get { return fileName; }
+    //        set { fileName = value; }
+    //    }
 
-        /// <summary>
-        /// Gets or sets errorMessage.
-        /// </summary>
-        public string ErrorMessage
-        {
-            get { return errorMessage; }
-            set { errorMessage = value; }
-        }
+    //    /// <summary>
+    //    /// Gets or sets errorMessage.
+    //    /// </summary>
+    //    public string ErrorMessage
+    //    {
+    //        get { return errorMessage; }
+    //        set { errorMessage = value; }
+    //    }
 
-        /// <summary>
-        /// Gets or sets genericMessage.
-        /// </summary>
-        public string GenericMessage
-        {
-            get { return genericMessage; }
-            set { genericMessage = value; }
-        }
+    //    /// <summary>
+    //    /// Gets or sets genericMessage.
+    //    /// </summary>
+    //    public string GenericMessage
+    //    {
+    //        get { return genericMessage; }
+    //        set { genericMessage = value; }
+    //    }
 
-        /// <summary>
-        /// Gets or sets newNode.
-        /// </summary>
-        public TreeNode NewNode
-        {
-            get { return newNode; }
-            set { newNode = value; }
-        }
+    //    /// <summary>
+    //    /// Gets or sets newNode.
+    //    /// </summary>
+    //    public TreeNode NewNode
+    //    {
+    //        get { return newNode; }
+    //        set { newNode = value; }
+    //    }
 
-        /// <summary>
-        /// Reset this node's values
-        /// </summary>
-        public void Clear()
-        {
-            fileName = String.Empty;
-            errorMessage = String.Empty;
-            genericMessage = String.Empty;
-            newNode = null;
-        }
-    }
+    //    /// <summary>
+    //    /// Reset this node's values
+    //    /// </summary>
+    //    public void Clear()
+    //    {
+    //        fileName = String.Empty;
+    //        errorMessage = String.Empty;
+    //        genericMessage = String.Empty;
+    //        newNode = null;
+    //    }
+    //}
 
     /// <summary>
     /// Struct used to allow TreeView to select a specific form and modify the originating node upon completion of a task.

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Catel.MVVM;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using WolvenKit.Common;
@@ -12,13 +13,18 @@ namespace WolvenKit.App.ViewModels
     /// <summary>
     /// Base abstract class for all viewmodels.
     /// </summary>
-    public abstract class ViewModel : ObservableObject, IViewModel
+    public abstract class ViewModel : ViewModelBase
     {
         protected readonly IWindowFactory m_windowFactory;
 
         public ViewModel(IWindowFactory windowFactory)
         {
             m_windowFactory = windowFactory;
+        }
+
+        public ViewModel()
+        {
+
         }
 
         public virtual void Initialize()

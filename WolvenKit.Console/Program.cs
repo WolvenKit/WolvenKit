@@ -19,7 +19,6 @@ namespace WolvenKit.Console
     using Bundles;
     using Common;
     using static WolvenKit.CR2W.Types.Enums;
-    using ConsoleProgressBar;
     using WolvenKit.Common.Model;
     using W3Speech;
     using Wwise;

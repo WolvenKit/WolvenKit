@@ -53,6 +53,18 @@ namespace WolvenKit.Common.Extensions
             return encoded;
         }
 
+        public static uint HashStringKey(this string key)
+        {
+            char[] keyConverted = key.ToCharArray();
+            uint hash = 0;
+            foreach (char c in keyConverted)
+            {
+                hash *= 31;
+                hash += (uint)c;
+            }
+            return hash;
+        }
+
         public static string TrimStart(this string target, string trimString)
         {
             if (string.IsNullOrEmpty(trimString)) return target;

@@ -40,7 +40,7 @@ namespace WolvenKit.CR2W
         private readonly CR2WFile _cr2w;
 
         public string DepotPathStr => _cr2w.StringDictionary[Import.depotPath];
-        public string ClassNameStr => _cr2w.names[Import.className].Str;
+        public string ClassNameStr => _cr2w.Names[Import.className].Str;
         public ushort Flags => Import.flags;
 
         public CR2WImportWrapper(CR2WImport import, CR2WFile cr2w)

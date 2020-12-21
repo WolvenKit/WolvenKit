@@ -82,10 +82,10 @@ namespace WolvenKit.CR2W.Types
                     Reference = null;
                 else
                 {
-                    Reference = cr2w.chunks[val - 1];
+                    Reference = cr2w.Chunks[val - 1];
                     //Populate the reverse-lookups
                     Reference.AdReferences.Add(this);
-                    cr2w.chunks[LookUpChunkIndex()].AbReferences.Add(this);
+                    cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
                     //Soft mount the chunk except root chunk
                     if (Reference.ChunkIndex != 0)
                     {
@@ -95,12 +95,12 @@ namespace WolvenKit.CR2W.Types
             }
             else
             {
-                DepotPath = cr2w.imports[-val - 1].DepotPathStr;
+                DepotPath = cr2w.Imports[-val - 1].DepotPathStr;
 
-                var filetype = cr2w.imports[-val - 1].Import.className;
-                ClassName = cr2w.names[filetype].Str;
+                var filetype = cr2w.Imports[-val - 1].Import.className;
+                ClassName = cr2w.Names[filetype].Str;
 
-                Flags = cr2w.imports[-val - 1].Import.flags;
+                Flags = cr2w.Imports[-val - 1].Import.flags;
             }
         }
 
@@ -118,8 +118,8 @@ namespace WolvenKit.CR2W.Types
             }
             else
             {
-                var import = cr2w.imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName);
-                val = -cr2w.imports.IndexOf(import) - 1;
+                var import = cr2w.Imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName);
+                val = -cr2w.Imports.IndexOf(import) - 1;
             }
             file.Write(val);
         }

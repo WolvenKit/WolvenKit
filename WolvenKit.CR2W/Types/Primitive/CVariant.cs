@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
             var typepos = file.BaseStream.Position;
 
             var typeId = file.ReadUInt16();
-            var typename = cr2w.names[typeId].Str;
+            var typename = cr2w.Names[typeId].Str;
 
             var varsize = file.ReadUInt32() - 4;
 

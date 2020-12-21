@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 
@@ -17,7 +16,7 @@ namespace WolvenKit.Bundles
             Bundles = new Dictionary<string, Bundle>();
             FileList = new List<IWitcherFile>();
             Extensions = new List<string>();
-            AutocompleteSource = new AutoCompleteStringCollection();
+            AutocompleteSource = new List<string>();
         }
 
         public Dictionary<string, Bundle> Bundles { get; }

@@ -358,11 +358,11 @@ namespace WolvenKit.Console
                     }
 
                     // We make a list of cr2w files with the cr2w file and all its embedded cr2w files AND flat compiled data.
-                    var crw_withembedded_withfcd = Enumerable.Concat(new[] { crw }, crw.embedded.Select(_ => _.GetParsedFile()).ToList()).ToList();
+                    var crw_withembedded_withfcd = Enumerable.Concat(new[] { crw }, crw.Embedded.Select(_ => _.GetParsedFile()).ToList()).ToList();
 
                     if (f.Name.Split('.').Last() == "w2ent")
                     {
-                        var fcd_cvar = (crw.chunks[0].data as CEntityTemplate).FlatCompiledData;
+                        var fcd_cvar = (crw.Chunks[0].data as CEntityTemplate).FlatCompiledData;
                         var fcd_data = (fcd_cvar as CByteArray).Bytes;
                         if (fcd_data != null && fcd_data.Length > 0)
                         {
@@ -443,7 +443,7 @@ namespace WolvenKit.Console
                         // Import
                         using (var importwriter = oneconn.BeginBinaryImport("COPY cr2w._3_import (file_id,depotpath,classname,flags) FROM STDIN (FORMAT BINARY)"))
                         {
-                            var imports = acrw.imports;
+                            var imports = acrw.Imports;
                             for (int j = 0; j < imports.Count(); j++)
                             {
                                 var import = imports[j];
@@ -461,7 +461,7 @@ namespace WolvenKit.Console
                         // Properties
                         using (var propertywriter = oneconn.BeginBinaryImport("COPY cr2w._4_property (file_id,classname,flags,propname,propflags,hash) FROM STDIN (FORMAT BINARY)"))
                         {
-                            var properties = acrw.properties;
+                            var properties = acrw.Properties;
                             for (int j = 0; j < properties.Count(); j++)
                             {
                                 var property = properties[j];
@@ -483,10 +483,10 @@ namespace WolvenKit.Console
                         var cvariddict = new Dictionary<IEditableVariable, int>();
                         using (var exportwriter = oneconn.BeginBinaryImport("COPY cr2w._5_export (file_id,chunkid,class_id,objectflags,parentchunkid,vparentchunkid,datasize,dataoffset,template,crc32) FROM STDIN (FORMAT BINARY)"))
                         {
-                            var data0 = acrw.chunks[0].data;
-                            for (int chunkcounter = 0; chunkcounter < acrw.chunks.Count; chunkcounter++)
+                            var data0 = acrw.Chunks[0].data;
+                            for (int chunkcounter = 0; chunkcounter < acrw.Chunks.Count; chunkcounter++)
                             {
-                                var chunk = acrw.chunks[chunkcounter];
+                                var chunk = acrw.Chunks[chunkcounter];
                                 var data = chunk.data;
                                 exportwriter.StartRow();
                                 exportwriter.Write(newfileid == -1 ? cr2w_file_id : newfileid, NpgsqlDbType.Integer);
@@ -514,9 +514,9 @@ namespace WolvenKit.Console
                         using (var referrerwriter = oneconn.BeginBinaryImport("COPY cr2w.referrers (file_id,referrer_in_array, referrer_type,referrer_name,referrer_value,referrer_chunkname,referrer_chunkid,referred_chunkname,referred_chunkid) FROM STDIN (FORMAT BINARY)"))
                         {
                             var mmchecks = new List<(int, int)>();
-                            for (int chunkcounter = 0; chunkcounter < acrw.chunks.Count; chunkcounter++)
+                            for (int chunkcounter = 0; chunkcounter < acrw.Chunks.Count; chunkcounter++)
                             {
-                                var chunk = acrw.chunks[chunkcounter];
+                                var chunk = acrw.Chunks[chunkcounter];
                                 if(chunk.AdReferences.Count >1)
                                 {
                                     foreach (var referrer in chunk.AdReferences)
@@ -575,9 +575,9 @@ namespace WolvenKit.Console
                         // Properties
                         using (var internalbufferwriter = oneconn.BeginBinaryImport("COPY cr2w._6_internalbuffer (file_id,flags,_index,_offset,disksize,memsize,crc32,_data) FROM STDIN (FORMAT BINARY)"))
                         {
-                            var buffers = acrw.buffers;
+                            var buffers = acrw.Buffers;
 
-                            if (acrw != crw_withembedded_withfcd.First() && acrw.embedded.Count() > 0)
+                            if (acrw != crw_withembedded_withfcd.First() && acrw.Embedded.Count() > 0)
                                 System.Console.WriteLine($"Double embbeded found at ${crw_withembedded_withfcd.First().FileName} !");
 
                             for (int j = 0; j < buffers.Count(); j++)
@@ -601,9 +601,9 @@ namespace WolvenKit.Console
                         // Embedded
                         using (var embeddedwriter = oneconn.BeginBinaryImport("COPY cr2w._7_embedded (file_id,importindex,path,pathhash,dataoffset,datasize,handle) FROM STDIN (FORMAT BINARY)"))
                         {
-                            var embedded = acrw.embedded;
+                            var embedded = acrw.Embedded;
 
-                            if (acrw != crw_withembedded_withfcd.First() && acrw.embedded.Count() > 0)
+                            if (acrw != crw_withembedded_withfcd.First() && acrw.Embedded.Count() > 0)
                                 System.Console.WriteLine($"Double embbeded found at ${crw_withembedded_withfcd.First().FileName} !");
 
                             for (int j = 0; j < embedded.Count(); j++)

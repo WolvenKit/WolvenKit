@@ -30,7 +30,7 @@ namespace WolvenKit.CR2W.Types
                     break;
 
                 // read cvariant
-                var varname = cr2w.names[nameId].Str;
+                var varname = cr2w.Names[nameId].Str;
                 CVariant cVariant = new CVariant(cr2w, BufferParameters, varname);
                 cVariant.Read(file, 0);
 

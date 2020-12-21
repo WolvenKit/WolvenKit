@@ -87,7 +87,7 @@ namespace WolvenKit.CR2W.Types
                     if (idx == 0)
                         break;
 
-                    string s = cr2w.names[idx].Str;
+                    string s = cr2w.Names[idx].Str;
 
                     strings.Add(s);
                 }
@@ -96,7 +96,7 @@ namespace WolvenKit.CR2W.Types
             {
                 var idx = file.ReadUInt16();
 
-                string s = cr2w.names[idx].Str;
+                string s = cr2w.Names[idx].Str;
 
                 strings.Add(s);
             }
@@ -114,8 +114,8 @@ namespace WolvenKit.CR2W.Types
 
             foreach (var item in Value)
             {
-                var nw = cr2w.names.First(_ => _.Str == item);
-                val = (ushort)cr2w.names.IndexOf(nw);
+                var nw = cr2w.Names.First(_ => _.Str == item);
+                val = (ushort)cr2w.Names.IndexOf(nw);
 
                 file.Write(val);
             }

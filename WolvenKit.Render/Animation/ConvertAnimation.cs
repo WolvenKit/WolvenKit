@@ -58,12 +58,12 @@ namespace WolvenKit.Render
         {
             try
             {
-                var SkeletalAnimationSet = w2AnimFile.chunks[0];
-                CSkeletalAnimationSet set = w2AnimFile.chunks[0].data as CSkeletalAnimationSet;
+                var SkeletalAnimationSet = w2AnimFile.Chunks[0];
+                CSkeletalAnimationSet set = w2AnimFile.Chunks[0].data as CSkeletalAnimationSet;
                 set.Animations = new CArray<CPtr<CSkeletalAnimationSetEntry>>(set.cr2w, set, "animations") {Elementtype = "ptr:CSkeletalAnimationSetEntry" };
                 set.Animations.AddVariable(new CPtr<CSkeletalAnimationSetEntry>(set.cr2w, set.Animations, "")
                 {
-                    Reference = SkeletalAnimationSet.cr2w.chunks[startIndex + 2],
+                    Reference = SkeletalAnimationSet.cr2w.Chunks[startIndex + 2],
                 });
 
                 // create chunks
@@ -75,7 +75,7 @@ namespace WolvenKit.Render
                 var setentry = SkeletalAnimation.data as CSkeletalAnimationSetEntry;
                 setentry.Animation = new CPtr<CSkeletalAnimation>(SkeletalAnimationSetEntry.cr2w, setentry, "animation")
                 {
-                    Reference = SkeletalAnimation.cr2w.chunks[startIndex + 4],
+                    Reference = SkeletalAnimation.cr2w.Chunks[startIndex + 4],
                 };
 
                 // SkeletalAnimation start
@@ -83,7 +83,7 @@ namespace WolvenKit.Render
                 anim.Name = new CName(SkeletalAnimation.cr2w, anim, "name");
                 anim.AnimBuffer = new CPtr<IAnimationBuffer>(SkeletalAnimation.cr2w, anim, "animBuffer")
                 {
-                    Reference = SkeletalAnimation.cr2w.chunks[startIndex + 4],
+                    Reference = SkeletalAnimation.cr2w.Chunks[startIndex + 4],
                 };
                 anim.FramesPerSecond = (CFloat)new CFloat(SkeletalAnimation.cr2w, anim, "framesPerSecond")
                 {
@@ -312,8 +312,8 @@ namespace WolvenKit.Render
                         bonelist = loadedAnim.bones;
                     }
 
-                    var skeletalAnimation = w2AnimFile.chunks[startIndex + 2].data as CSkeletalAnimation;
-                    var buffer = W2AnimFile.chunks[startIndex + 3].data as CAnimationBufferBitwiseCompressed;
+                    var skeletalAnimation = w2AnimFile.Chunks[startIndex + 2].data as CSkeletalAnimation;
+                    var buffer = W2AnimFile.Chunks[startIndex + 3].data as CAnimationBufferBitwiseCompressed;
 
                     skeletalAnimation.Name.SetValue(loadedAnim.name);
                     skeletalAnimation.Duration.SetValue(loadedAnim.duration);

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
@@ -19,7 +18,7 @@ namespace WolvenKit.Common
         List<IWitcherFile> FileList { get; set; }
         EBundleType TypeName { get; }
         List<string> Extensions { get; set; }
-        AutoCompleteStringCollection AutocompleteSource { get; set; }
+        List<string> AutocompleteSource { get; set; }
         Dictionary<string, List<IWitcherFile>> Items { get; set; }
     }
 }

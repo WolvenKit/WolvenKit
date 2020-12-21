@@ -671,8 +671,8 @@ namespace WolvenKit.Forms
         internal LoggerCR2W(CR2WFile cr2wFile, LoggerOutputFile writer, LoggerCR2WOptions options)
         {
             CR2W = cr2wFile;
-            Chunks = CR2W.chunks;
-            Embedded = CR2W.embedded;
+            Chunks = CR2W.Chunks;
+            Embedded = CR2W.Embedded;
             Writer = writer;
             Options = options;
             if (Options.LocalizeStrings)

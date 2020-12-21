@@ -245,7 +245,7 @@ namespace WolvenKit.CR2W.Types
 
                     if (readUnknownAsBytes)
                     {
-                        return new CBytes(cr2w, parentVariable, "unknownBytes");
+                        return new CBytes(cr2w, parentVariable, $"UNKNOWN:{typename}:{varname}");
                     }
                     else
                         return null;

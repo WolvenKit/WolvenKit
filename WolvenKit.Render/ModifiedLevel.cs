@@ -60,7 +60,7 @@ namespace WolvenKit.Render
             }
 
             // update all CSectorData objects
-            foreach (var chunk in layer.chunks)
+            foreach (var chunk in layer.Chunks)
             {
                 if (chunk.REDType == "CSectorData")
                 {

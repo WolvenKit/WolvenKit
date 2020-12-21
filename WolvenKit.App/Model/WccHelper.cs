@@ -648,7 +648,7 @@ namespace WolvenKit.App.Model
         /// <param name="loadmods"></param>
         /// <param name="silent"></param>
         /// <returns></returns>
-        public static string UnbundleFile(string relativePath, bool isDLC, EProjectFolders projectFolder, EBundleType bundleType = EBundleType.Bundle, string alternateOutDirectory = "", bool loadmods = false, bool silent = false)
+        public static string UnbundleFile(string relativePath, bool isDlc, EProjectFolders projectFolder, EBundleType bundleType = EBundleType.Bundle, string alternateOutDirectory = "", bool loadmods = false, bool silent = false)
         {
             string extension = Path.GetExtension(relativePath);
             string filename = Path.GetFileName(relativePath);
@@ -685,16 +685,20 @@ namespace WolvenKit.App.Model
                         switch (projectFolder)
                         {
                             case EProjectFolders.Cooked:
-                                newpath = Path.Combine(isDLC
+                                newpath = Path.Combine(isDlc
                                     ? ActiveMod.DlcCookedDirectory
                                     : ActiveMod.ModCookedDirectory, relativePath);
                                 break;
                             case EProjectFolders.Uncooked:
-                                newpath = Path.Combine(isDLC
+                                newpath = Path.Combine(isDlc
                                     ? ActiveMod.DlcUncookedDirectory
                                     : ActiveMod.ModUncookedDirectory, relativePath);
                                 break;
                             case EProjectFolders.Raw:
+                                newpath = Path.Combine(isDlc
+                                    ? ActiveMod.RawDlcDirectory
+                                    : ActiveMod.RawModDirectory, relativePath);
+                                break;
                             default:
                                 break;
                         }
@@ -704,15 +708,20 @@ namespace WolvenKit.App.Model
                         newpath = Path.Combine(alternateOutDirectory, relativePath);
                     }
 
-                    if (string.IsNullOrWhiteSpace(newpath)) return "";
+                    if (string.IsNullOrWhiteSpace(newpath))
+                        return "";
 
-                    if (!(extension == ".xbm" && bundleType == EBundleType.Bundle) || !File.Exists(newpath))
+                    // for xbms check if a file with the current export extensions exists
+                    if (!File.Exists(newpath) && (extension != ".xbm" || !File.Exists(Path.ChangeExtension(newpath,
+                        MainController.Get().Configuration.UncookExtension.ToString()))))
                     {
-                        string extractedfile = archive.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
-                        if (!silent) Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
+                        string extractedfile = archive.Extract(new BundleFileExtractArgs(newpath,
+                            MainController.Get().Configuration.UncookExtension));
+                        if (!silent)
+                            Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
                     }
-                    else
-                        if (!silent) Logger.LogString($"File already exists in mod project: {filename}.", Logtype.Success);
+                    //else
+                    //    if (!silent) Logger.LogString($"File already exists in mod project: {filename}.", Logtype.Success);
                     return newpath;
                 }
                 catch (Exception ex)
@@ -806,7 +815,8 @@ namespace WolvenKit.App.Model
         /// <param name="silent"></param>
         /// <param name="alternateOutDirectory"></param>
         /// <returns></returns>
-        public static async Task AddAllImports(string importfilepath, bool recursive = false, bool silent = false, string alternateOutDirectory = "", bool logonly = false)
+        public static async Task AddAllImports(string importfilepath, 
+            bool recursive = false, bool silent = false, string alternateOutDirectory = "", bool logonly = false)
         {
             if (!File.Exists(importfilepath))
                 return;
@@ -834,12 +844,18 @@ namespace WolvenKit.App.Model
 
             bool success = true;
             // add imports
-            foreach (CR2WImportWrapper import in importslist)
+            foreach (var import in importslist)
             {
                 var filename = Path.GetFileName(import.DepotPathStr);
                 if (logonly) MainController.LogString(filename, Logtype.Important);
 
                 var path = UnbundleFile(import.DepotPathStr, isDLC, projectFolder, EBundleType.Bundle, alternateOutDirectory, false, silent);
+                // If unbundled file is xbm, also extract tga from texturecache
+                if (Path.GetExtension(import.DepotPathStr) == ".xbm")
+                {
+                    UnbundleFile(import.DepotPathStr, isDLC, EProjectFolders.Raw, EBundleType.TextureCache, alternateOutDirectory, false, silent);
+                }
+
                 if (string.IsNullOrWhiteSpace(path))
                     Logger.LogString($"Did not unbundle {filename}, import is missing.", Logtype.Error);
                 else
@@ -870,8 +886,8 @@ namespace WolvenKit.App.Model
                 }
             }
 
-            if (success && !silent)
-                Logger.LogString($"Succesfully imported all dependencies.", Logtype.Success);
+            //if (success && !silent)
+            //    Logger.LogString($"Succesfully imported all dependencies.", Logtype.Success);
         }
 
         #endregion

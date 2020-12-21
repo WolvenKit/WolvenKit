@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using WolvenKit.Common;
 using WolvenKit.Cache;
 using WolvenKit.Wwise;
@@ -22,7 +21,7 @@ namespace WolvenKit.Cache
             Archives = new Dictionary<string, SoundCache>();
             FileList = new List<IWitcherFile>();
             Extensions = new List<string>();
-            AutocompleteSource = new AutoCompleteStringCollection();
+            AutocompleteSource = new List<string>();
             soundBanksInfo = new SoundBanksInfoXML(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "SoundCache","soundbanksinfo.xml"));
         }
 
@@ -32,7 +31,7 @@ namespace WolvenKit.Cache
         public List<IWitcherFile> FileList { get; set; }
         public EBundleType TypeName => EBundleType.SoundCache;
         public List<string> Extensions { get; set; }
-        public AutoCompleteStringCollection AutocompleteSource { get; set; }
+        public List<string> AutocompleteSource { get; set; }
 
         public static string SerializationVersion => "1.0";
 
@@ -132,7 +131,8 @@ namespace WolvenKit.Cache
         /// Loads the .cache soundcache files from the /Mods/ folder
         /// Note this resets everything
         /// </summary>
-        /// <param name="exedir"></param>
+        /// <param name="mods"></param>
+        /// <param name="dlc"></param>
         public void LoadModsBundles(string mods, string dlc)
         {
             if (!Directory.Exists(mods))

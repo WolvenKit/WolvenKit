@@ -33,7 +33,7 @@ namespace WolvenKit.Render
             SBufferInfos bufferInfos = new SBufferInfos();
 
             // *************** READ CHUNK INFOS ***************
-            foreach (var chunk in meshFile.chunks)
+            foreach (var chunk in meshFile.Chunks)
             {
                 if (chunk.REDType == "CMesh" && chunk.data is CMesh cmesh)
                 {
@@ -80,14 +80,15 @@ namespace WolvenKit.Render
                     bufferInfos.quantizationScale.Y = meshCookedData.QuantizationScale.Y.val;
                     bufferInfos.quantizationScale.Z = meshCookedData.QuantizationScale.Z.val;
 
-                    foreach (var item in meshCookedData.BonePositions)
-                    {
-                        Vector3Df pos = new Vector3Df();
-                        pos.X = item.X.val;
-                        pos.Y = item.Y.val;
-                        pos.Z = item.Z.val;
-                        bonePositions.Add(pos);
-                    }
+                    if (meshCookedData.BonePositions != null)
+                        foreach (var item in meshCookedData.BonePositions)
+                        {
+                            Vector3Df pos = new Vector3Df();
+                            pos.X = item.X.val;
+                            pos.Y = item.Y.val;
+                            pos.Z = item.Z.val;
+                            bonePositions.Add(pos);
+                        }
 
 
                     bufferInfos.verticesBuffer = vertexBufferInfos;
@@ -103,10 +104,13 @@ namespace WolvenKit.Render
                         meshInfo.firstIndex = meshChunk.FirstIndex == null ? 0 : meshChunk.FirstIndex.val;
                         meshInfo.materialID = meshChunk.MaterialID == null ? 0 : meshChunk.MaterialID.val;
 
-                        if (meshChunk.VertexType.WrappedEnum == Enums.EMeshVertexType.MVT_StaticMesh)
-                            meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_STATIC;
-                        else if (meshChunk.VertexType.WrappedEnum == Enums.EMeshVertexType.MVT_SkinnedMesh)
-                            meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_SKINNED;
+                        if (meshChunk.VertexType != null)
+                        {
+                            if (meshChunk.VertexType.WrappedEnum == Enums.EMeshVertexType.MVT_StaticMesh)
+                                meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_STATIC;
+                            else if (meshChunk.VertexType.WrappedEnum == Enums.EMeshVertexType.MVT_SkinnedMesh)
+                                meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_SKINNED;
+                        }
 
                         CData.meshInfos.Add(meshInfo);
                     }

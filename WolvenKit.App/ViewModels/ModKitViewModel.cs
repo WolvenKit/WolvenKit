@@ -60,8 +60,9 @@ namespace WolvenKit.App.ViewModels
             {
                 if (_selectedObject != value)
                 {
+                    var oldValue = _selectedObject;
                     _selectedObject = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged(() => SelectedObject, oldValue, value);
                 }
             }
         }

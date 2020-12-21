@@ -1,212 +1,68 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9C026DA7-481D-43C6-8C18-635D69FDB423}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WolvenKit.W3SavegameEditor.Core</RootNamespace>
-    <AssemblyName>WolvenKit.W3SavegameEditor.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworks>netcoreapp3.1;net5.0-windows</TargetFrameworks>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>CS1591</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>CS1591</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|x64'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|x64'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>CS1591</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|x64'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|x64'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|x64'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|x64'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="LZ4PCL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LZ4PCL.1.0.0\lib\portable-net4+netcore45+wpa81+MonoAndroid1+MonoTouch1\LZ4PCL.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="LZ4PCL" Version="1.0.0" />
   </ItemGroup>
+
+
+
+
   <ItemGroup>
-    <Compile Include="ChunkedLz4\ChunkedLz4File.cs" />
-    <Compile Include="ChunkedLz4\ChunkedLz4FileHeader.cs" />
-    <Compile Include="ChunkedLz4\ChunkedLz4FileTable.cs" />
-    <Compile Include="ChunkedLz4\Lz4Chunk.cs" />
-    <Compile Include="Common\IReadSavegameProgress.cs" />
-    <Compile Include="Common\ReadSavegameProgress.cs" />
-    <Compile Include="Exceptions\ParseVariableException.cs" />
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="Savegame\Attributes\CArrayAttribute.cs" />
-    <Compile Include="Savegame\Attributes\CNameAttribute.cs" />
-    <Compile Include="Savegame\Attributes\CSerializableAttribute.cs" />
-    <Compile Include="Savegame\Attributes\EnumNameAttribute.cs" />
-    <Compile Include="Savegame\Values\AdditionalContent.cs" />
-    <Compile Include="Savegame\Values\EntityStateChangeRequests.cs" />
-    <Compile Include="Savegame\Values\Quests\ExternalDialog.cs" />
-    <Compile Include="Savegame\Values\Fact.cs" />
-    <Compile Include="Savegame\Values\FactEntry.cs" />
-    <Compile Include="Savegame\Values\Facts.cs" />
-    <Compile Include="Savegame\Values\Gwint\CollectionCard.cs" />
-    <Compile Include="Savegame\Values\Journal\CWitcherJournalManager.cs" />
-    <Compile Include="Savegame\Values\Gwint\GwintDeck.cs" />
-    <Compile Include="Savegame\Values\Gwint\GwintDeckCard.cs" />
-    <Compile Include="Savegame\Values\Gwint\GwintDecks.cs" />
-    <Compile Include="Savegame\Values\Gwint\GwintManager.cs" />
-    <Compile Include="Savegame\Values\CWitcherGameResource.cs" />
-    <Compile Include="Savegame\Values\Engine\EntityHandle.cs" />
-    <Compile Include="Savegame\Values\EnvManager.cs" />
-    <Compile Include="Savegame\Values\Engine\EulerAngles.cs" />
-    <Compile Include="Savegame\Values\GameProp.cs" />
-    <Compile Include="Savegame\Values\Engine\GameTime.cs" />
-    <Compile Include="Savegame\Values\Engine\Handle.cs" />
-    <Compile Include="Savegame\Values\IdTag.cs" />
-    <Compile Include="Savegame\Values\IdTagManager.cs" />
-    <Compile Include="Savegame\Values\Journal\JEntryAdvancedInfo.cs" />
-    <Compile Include="Savegame\Values\Journal\JEntryAdvancedInfoGuid.cs" />
-    <Compile Include="Savegame\Values\Journal\JHighlightedObjective.cs" />
-    <Compile Include="Savegame\Values\Journal\JHuntingClue.cs" />
-    <Compile Include="Savegame\Values\Journal\JHuntingClues.cs" />
-    <Compile Include="Savegame\Values\Journal\JMonsterKnown.cs" />
-    <Compile Include="Savegame\Values\Journal\JMonsterKnownGuid.cs" />
-    <Compile Include="Savegame\Values\Journal\JObjectiveCounter.cs" />
-    <Compile Include="Savegame\Values\Journal\JObjectiveCounters.cs" />
-    <Compile Include="Savegame\Values\Journal\JTrackedQuest.cs" />
-    <Compile Include="Savegame\Values\Quests\Quest.cs" />
-    <Compile Include="Savegame\Values\Quests\QuestBlock.cs" />
-    <Compile Include="Savegame\Values\Quests\QuestCondition.cs" />
-    <Compile Include="Savegame\Values\Quests\QuestConditions.cs" />
-    <Compile Include="Savegame\Values\Quests\QuestExternalScenePlayer.cs" />
-    <Compile Include="Savegame\Values\Quests\QuestExternalScenePlayers.cs" />
-    <Compile Include="Savegame\Values\Quests\QuestSystem.cs" />
-    <Compile Include="Savegame\Values\Quests\QuestThread.cs" />
-    <Compile Include="Savegame\Values\Quests\QuestThreadKeyValue.cs" />
-    <Compile Include="Savegame\Values\SavegameRoot.cs" />
-    <Compile Include="Savegame\Values\SaveInfo.cs" />
-    <Compile Include="Savegame\Values\SaveInfoItem.cs" />
-    <Compile Include="Savegame\Values\Gwint\CollectionSize.cs" />
-    <Compile Include="Savegame\Values\Gwint\SelectedDeckIndex.cs" />
-    <Compile Include="Savegame\Values\SGameplayFact.cs" />
-    <Compile Include="Savegame\Values\SGameplayFactRemoval.cs" />
-    <Compile Include="Savegame\Values\TagList.cs" />
-    <Compile Include="Savegame\Values\TimerManager.cs" />
-    <Compile Include="Savegame\Values\Universe.cs" />
-    <Compile Include="Savegame\Values\W3Enum.cs" />
-    <Compile Include="Savegame\Values\W3EnvironmentManager.cs" />
-    <Compile Include="Savegame\Values\WorldInfo.cs" />
-    <Compile Include="Savegame\Values\WorldState.cs" />
-    <Compile Include="Savegame\VariableParsers\AvalVariableParser.cs" />
-    <Compile Include="Savegame\VariableParsers\BlckVariableParser.cs" />
-    <Compile Include="Savegame\VariableParsers\PorpVariableParser.cs" />
-    <Compile Include="Savegame\VariableParsers\SxapVariableParser.cs" />
-    <Compile Include="Savegame\Variables\AvalVariable.cs" />
-    <Compile Include="Savegame\Variables\BlckVariable.cs" />
-    <Compile Include="Savegame\Variables\BsVariable.cs" />
-    <Compile Include="Savegame\Variables\ManuVariable.cs" />
-    <Compile Include="Savegame\Variables\OpVariable.cs" />
-    <Compile Include="Savegame\Variables\PorpVariable.cs" />
-    <Compile Include="Savegame\Variables\SsVariable.cs" />
-    <Compile Include="Savegame\Variables\SxapVariable.cs" />
-    <Compile Include="Savegame\Variables\TypedVariable.cs" />
-    <Compile Include="Savegame\Variables\VariableSet.cs" />
-    <Compile Include="Savegame\SavegameFile.cs" />
-    <Compile Include="Savegame\Variables\UnknownVariable.cs" />
-    <Compile Include="Savegame\Variables\Variable.cs" />
-    <Compile Include="Savegame\Variables\VariableValue.cs" />
-    <Compile Include="Savegame\Variables\VlVariable.cs" />
-    <Compile Include="Savegame\VariableTableEntry.cs" />
-    <Compile Include="Savegame\VariableParser.cs" />
-    <Compile Include="Savegame\VariableParsers\BsVariableParser.cs" />
-    <Compile Include="Savegame\VariableParsers\ManuVariableParser.cs" />
-    <Compile Include="Savegame\VariableParsers\OpVariableParser.cs" />
-    <Compile Include="Savegame\VariableParsers\SsVariableParser.cs" />
-    <Compile Include="Savegame\VariableParsers\VariableParserBase.cs" />
-    <Compile Include="Savegame\VariableParsers\VlVariableParser.cs" />
-    <Compile Include="Savegame\VariableTypeMap.cs" />
-    <Compile Include="Savegame\VariableValueParser.cs" />
-    <Compile Include="SaveModels\DelegateCommand.cs" />
-    <Compile Include="SaveModels\SavegameDataModel.cs" />
-    <Compile Include="SaveModels\SavegameModel.cs" />
-    <Compile Include="SaveModels\SavegameViewModel.cs" />
-    <Compile Include="SaveModels\VariableModel.cs" />
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
+    <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

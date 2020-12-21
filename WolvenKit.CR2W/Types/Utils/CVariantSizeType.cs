@@ -35,7 +35,7 @@ namespace WolvenKit.CR2W.Types
             {
 
                 var typeId = br.ReadUInt16();
-                var typename = cr2w.names[typeId].Str;
+                var typename = cr2w.Names[typeId].Str;
 
                 parsedvar = CR2WTypeManager.Create(typename, nameof(Variant), cr2w, this);
                 parsedvar.IsSerialized = true;

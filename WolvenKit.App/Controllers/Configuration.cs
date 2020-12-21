@@ -42,6 +42,7 @@ namespace WolvenKit.App
 
         public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
 
+
         public string GameModDir { get; set; }
         public string GameDlcDir { get; set; }
 

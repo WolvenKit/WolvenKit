@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockNoise : CMaterialBlock
 	{
-		[Ordinal(1)] [RED("noiseType")] 		public ENoiseTypes NoiseType { get; set;}
+		[Ordinal(1)] [RED("noiseType")] 		public CEnum<ENoiseTypes> NoiseType { get; set;}
 
 		public CMaterialBlockNoise(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

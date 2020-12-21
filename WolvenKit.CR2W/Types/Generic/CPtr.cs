@@ -57,7 +57,7 @@ namespace WolvenKit.CR2W.Types
         {
             try
             {
-                Reference = val == 0 ? null : cr2w.chunks[val - 1];
+                Reference = val == 0 ? null : cr2w.Chunks[val - 1];
             }
             catch (Exception ex)
             {
@@ -69,7 +69,7 @@ namespace WolvenKit.CR2W.Types
             {
                 //Populate the reverse-lookups
                 Reference.AdReferences.Add(this);
-                cr2w.chunks[LookUpChunkIndex()].AbReferences.Add(this);
+                cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
                 //Soft mount the chunk except root chunk
                 if (Reference.ChunkIndex != 0)
                 {
@@ -80,7 +80,7 @@ namespace WolvenKit.CR2W.Types
                 {
                     case "parent":
                     case "transformParent":
-                        cr2w.chunks[LookUpChunkIndex()].MountChunkVirtually(Reference, true);
+                        cr2w.Chunks[LookUpChunkIndex()].MountChunkVirtually(Reference, true);
                         break;
                  //   case "child" when Reference.IsVirtuallyMounted:
                  //       //tried for w2ent IAttachments, not the proper way to do it, this is graph viz territory
