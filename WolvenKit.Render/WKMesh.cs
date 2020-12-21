@@ -116,23 +116,20 @@ namespace WolvenKit.Render
                     }
 
                     // bone names and matrices
-                    // TODO: fixup cp77
-
-                    CR2W.Types.CArray<CName> boneNames = cmesh.BoneNames;
-                    CArray<CMatrix> bonematrices = cmesh.BoneRigMatrices;
-                    CData.boneData.nbBones = (uint)boneNames.Count;
+                    CBufferVLQInt32<CName> boneNames = cmesh.BoneNames;
+                    CBufferVLQInt32<CMatrix4x4> bonematrices = cmesh.Bonematrices;
+                    CData.boneData.nbBones = (uint)boneNames.elements.Count;
                     for (int i = 0; i < CData.boneData.nbBones; i++)
                     {
-                        CName name = boneNames[i];
+                        CName name = boneNames.elements[i];
                         CData.boneData.jointNames.Add(name.Value);
 
-                        CMatrix cmatrix = bonematrices[i];
+                        CMatrix4x4 cmatrix = bonematrices.elements[i];
                         Matrix matrix = new Matrix();
-                        // TODO: fixup cp77
                         for (int j = 0; j < 16; j++)
                         {
-                            //float value = (cmatrix.fields[j] as CFloat).val;
-                            //matrix.SetElement(j, value);
+                            float value = (cmatrix.fields[j] as CFloat).val;
+                            matrix.SetElement(j, value);
                         }
                         CData.boneData.boneMatrices.Add(matrix);
                     }

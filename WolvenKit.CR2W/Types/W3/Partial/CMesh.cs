@@ -45,20 +45,6 @@ namespace WolvenKit.CR2W.Types
 
 		[Ordinal(17)] [RED("chunksBuffer")] 		public DeferredDataBuffer ChunksBuffer { get; set;}
 
-
-		// CP77
-
-
-		//[Ordinal(18)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
-		[Ordinal(18)] [RED("resourceVersion")] public CUInt8 ResourceVersion { get; set; }
-		[Ordinal(19)] [RED("parameters")] public CArray<CHandle<meshMeshParameter>> Parameters { get; set; }
-
-        [Ordinal(1001)] [RED("boneNames")] public CArray<CName> BoneNames { get; set; }
-        [Ordinal(1002)] [RED("boneRigMatrices")] public CArray<CMatrix> BoneRigMatrices { get; set; }
-        [Ordinal(1003)] [RED("boneVertexEpsilons")] public CArray<CFloat> BoneVertexEpsilons { get; set; }
-        [Ordinal(1004)] [RED("lodBoneMask")] public CArray<CUInt8> LodBoneMask { get; set; }
-
-
 		public CMesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMesh(cr2w, parent, name);
@@ -68,15 +54,4 @@ namespace WolvenKit.CR2W.Types
 		public override void Write(BinaryWriter file) => base.Write(file);
 
 	}
-
-
-    [REDMeta]
-    public class meshMeshParameter : CVariable
-    {
-
-        public meshMeshParameter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-
-        
-    }
-
 }

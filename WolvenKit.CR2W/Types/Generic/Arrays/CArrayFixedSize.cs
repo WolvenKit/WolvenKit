@@ -21,15 +21,15 @@ namespace WolvenKit.CR2W.Types
         {
             get
             {
-                return Elementtype;
+                return BuildTypeName(Elementtype, Flags.AsEnumerable().GetEnumerator());
             }
         }
 
-        //private string BuildTypeName(string elementtype, IEnumerator<int> flags)
-        //{
-        //    var v1 = flags.MoveNext() ? flags.Current : 0;
-        //    return $"[{v1}]{Elementtype}";
-        //}
+        private string BuildTypeName(string elementtype, IEnumerator<int> flags)
+        {
+            var v1 = flags.MoveNext() ? flags.Current : 0;
+            return $"[{v1}]{Elementtype}";
+        }
 
     }
 }

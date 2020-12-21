@@ -151,12 +151,12 @@ namespace WolvenKit.CR2W.Types
     {
         // ATTENTION: don't read and write like a normal VLQ array
         // this one is padded by 4 bytes after each inner list
-        //[Ordinal(1000)] [REDBuffer] public CBufferVLQInt32<CPaddedBuffer<CUInt16>> ChunkgroupIndeces { get; set; }
+        [Ordinal(1000)] [REDBuffer] public CBufferVLQInt32<CPaddedBuffer<CUInt16>> ChunkgroupIndeces { get; set; }
 
-        //[Ordinal(1001)] [REDBuffer] public CBufferVLQInt32<CName> BoneNames { get; set; }
-        //[Ordinal(1002)] [REDBuffer] public CBufferVLQInt32<CMatrix4x4> Bonematrices { get; set; }
-        //[Ordinal(1003)] [REDBuffer] public CBufferVLQInt32<CFloat> Block3 { get; set; }
-        //[Ordinal(1004)] [REDBuffer] public CBufferVLQInt32<CUInt32> BoneIndecesMappingBoneIndex { get; set; }
+        [Ordinal(1001)] [REDBuffer] public CBufferVLQInt32<CName> BoneNames { get; set; }
+        [Ordinal(1002)] [REDBuffer] public CBufferVLQInt32<CMatrix4x4> Bonematrices { get; set; }
+        [Ordinal(1003)] [REDBuffer] public CBufferVLQInt32<CFloat> Block3 { get; set; }
+        [Ordinal(1004)] [REDBuffer] public CBufferVLQInt32<CUInt32> BoneIndecesMappingBoneIndex { get; set; }
     }
 
     public partial class CNode : CObject

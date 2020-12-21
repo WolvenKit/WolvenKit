@@ -93,31 +93,10 @@ namespace WolvenKit.CR2W
             return Handle;
         }
 
-        public CR2WFile GetParsedFile()
+        public async Task<CR2WFile> GetParsedFile()
         {
             var parsedFile = new CR2WFile();
-            switch (parsedFile.Read(Data))
-            {
-                case EFileReadErrorCodes.NoError:
-                    break;
-                case EFileReadErrorCodes.NoCr2w:
-                case EFileReadErrorCodes.UnsupportedVersion:
-                    return null;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-
-            if (parsedFile.Chunks != null && parsedFile.Chunks.Any())
-                ClassName = parsedFile.Chunks.FirstOrDefault()?.REDType;
-
-            return parsedFile;
-        }
-
-        public async Task<CR2WFile> GetParsedFileAsync()
-        {
-            var parsedFile = new CR2WFile();
-            switch (await parsedFile.ReadAsync(Data))
+            switch (await parsedFile.Read(Data))
             {
                 case EFileReadErrorCodes.NoError:
                     break;

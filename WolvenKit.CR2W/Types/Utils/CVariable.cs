@@ -423,24 +423,16 @@ namespace WolvenKit.CR2W.Types
             varname = NormalizeName(varname);
             foreach (var member in this.accessor.GetMembers())
             {
-                try
+                if (member.Name == varname)
                 {
-                    if (member.Name == varname)
-                    {
 
-                        accessor[this, varname] = value;
-                        return true;
-                    }
-                    else if (member.Name == varname.FirstCharToLower())
-                    {
-                        accessor[this, varname.FirstCharToLower()] = value;
-                        return true;
-                    }
+                    accessor[this, varname] = value;
+                    return true;
                 }
-                catch (Exception e)
+                else if (member.Name == varname.FirstCharToLower())
                 {
-                    Console.WriteLine(e);
-                    throw;
+                    accessor[this, varname.FirstCharToLower()] = value;
+                    return true;
                 }
             }
             Debug.WriteLine($"({value.REDType}){varname} not found in ({this.REDType}){this.REDName}");

@@ -54,7 +54,7 @@ namespace WolvenKit.CR2W.Types
 
     public interface IArrayAccessor : IEditableVariable, IList
     {
-        //List<int> Flags { get; set; }
+        List<int> Flags { get; set; }
 
         string Elementtype { get; set; }
         Type InnerType { get; }
