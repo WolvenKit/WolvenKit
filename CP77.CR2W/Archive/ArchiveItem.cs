@@ -18,6 +18,7 @@ namespace CP77.CR2W.Archive
         public uint LastImportTableIdx { get; set; }
         public byte[] SHA1Hash { get; set; }
 
+        public string bytesAsString => BitConverter.ToString(SHA1Hash);
 
         private string _nameStr;
         public string NameStr => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}.bin" : _nameStr;

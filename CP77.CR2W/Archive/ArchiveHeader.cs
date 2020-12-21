@@ -22,16 +22,20 @@ namespace CP77Tools.Model
         
         public uint Magic { get; private set; }
         public uint Version { get; private set; }
-        public ulong Tableoffset { get; private set; }
-        public uint Tablesize { get; private set; }
+        public ulong Tableoffset { get; set; }
+        public uint Tablesize { get; set; }
         public uint Unk1 { get; private set; }
         public uint Unk2 { get; private set; }
         public uint Unk3 { get; private set; }
-        public ulong Filesize { get; private set; }
+        public ulong Filesize { get; set; }
 
         public ArHeader()
         {
-            
+            Magic = MAGIC;
+            Version = 12;
+            Unk1 = 0;
+            Unk2 = 0;
+            Unk3 = 0;
         }
         
         public ArHeader(BinaryReader br)

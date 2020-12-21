@@ -237,7 +237,14 @@ namespace WolvenKit.CR2W
             var pos = bw.BaseStream.Position;
             var mod = pos / 4096;
             var diff = ((mod + 1) * 4096) - pos;
-            bw.Write(new byte[diff]);
+
+            var buffer = new byte[diff];
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                buffer[i] = paddingbyte;
+            }
+
+            bw.Write(buffer);
         }
 
     }

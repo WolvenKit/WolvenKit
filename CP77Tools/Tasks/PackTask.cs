@@ -77,6 +77,7 @@ namespace CP77Tools.Tasks
             #endregion
 
             Archive.WriteFromFolder(basedir, outDir);
+            logger.LogString($"Finished dumping {Path.Combine(outDir.FullName, "blob0.archive")}.", Logtype.Success);
 
             return;
         }

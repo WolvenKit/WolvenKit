@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Catel.IO;
 using Catel.IoC;
 using CP77.Common.Services;
 using CP77.CR2W.Archive;
@@ -108,7 +109,7 @@ namespace CP77Tools.Model
             Num = 8; //TODO
             bw.Write(Num);
             bw.Write(ms.Length);
-            ms.CopyTo(bw.BaseStream);
+            bw.Write(tablewriter.BaseStream.ToByteArray());
         }
     }
     
