@@ -64,15 +64,15 @@ namespace WolvenKit.CR2W.Reflection
                 var gentype = type.GetGenericTypeDefinition();
                 if (gentype == typeof(CArray<>))
                 {
-                    //var v1 = flags.MoveNext() ? flags.Current : 0;
-                    //var v2 = flags.MoveNext() ? flags.Current : 0;
-                    return $"array:{GetREDTypeString(genprop, flags)}";
+                    var v1 = flags.MoveNext() ? flags.Current : 0;
+                    var v2 = flags.MoveNext() ? flags.Current : 0;
+                    return $"array:{v1},{v2},{GetREDTypeString(genprop, flags)}";
                 }
-                //if (gentype == typeof(CArrayFixedSize<>))
-                //{
-                //    //var v1 = flags.MoveNext() ? flags.Current : 0;
-                //    return $"[{v1}]{GetREDTypeString(genprop, flags)}";
-                //}
+                if (gentype == typeof(CArrayFixedSize<>))
+                {
+                    var v1 = flags.MoveNext() ? flags.Current : 0;
+                    return $"[{v1}]{GetREDTypeString(genprop, flags)}";
+                }
                 if (gentype == typeof(CPtr<>))
                 {
                     return $"ptr:{GetREDTypeString(genprop, flags)}";
@@ -85,11 +85,11 @@ namespace WolvenKit.CR2W.Reflection
                 {
                     return $"handle:{GetREDTypeString(genprop, flags)}";
                 }
-                //if (gentype == typeof(CStatic<>))
-                //{
-                //    var v1 = flags.MoveNext() ? flags.Current : 0;
-                //    return $"static:{v1},{GetREDTypeString(genprop, flags)}";
-                //}
+                if (gentype == typeof(CStatic<>))
+                {
+                    var v1 = flags.MoveNext() ? flags.Current : 0;
+                    return $"static:{v1},{GetREDTypeString(genprop, flags)}";
+                }
                 if (gentype == typeof(CEnum<>))
                 {
                     

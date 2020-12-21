@@ -204,7 +204,6 @@ namespace WolvenKit.CR2W.Types
         #region Virtual
 
         public List<IEditableVariable> ChildrEditableVariables => GetEditableVariables();
-        public List<IEditableVariable> ChildrExistingVariables => GetExistingVariables(false);
 
         /// <summary>
         /// Gets the list of RED and REDBuffer variables from a CVariable
@@ -241,7 +240,7 @@ namespace WolvenKit.CR2W.Types
 
         public List<IEditableVariable> GetExistingVariables(bool includeBuffers = true)
         {
-            List<IEditableVariable> redvariables = new List<IEditableVariable>(UnknownCVariables);
+            List<IEditableVariable> redvariables = new List<IEditableVariable>();
 
             foreach (Member item in this.GetREDMembers(includeBuffers))
             {
@@ -322,37 +321,26 @@ namespace WolvenKit.CR2W.Types
                 List<string> dbg_varnames = new List<string>();
                 while (true)
                 {
+                    //cvar is a "children variable" : a property of a class.
+                    var cvar = cr2w.ReadVariable(file, this);
+                    if (cvar == null)
+                        break;
 
-                    try
-                    {
-                        //cvar is a "children variable" : a property of a class.
-                        var cvar = cr2w.ReadVariable(file, this);
-                        if (cvar == null)
-                            break;
-
-                        cvar.IsSerialized = true;
+                    cvar.IsSerialized = true;
 
 #if DEBUG
-                        dbg_varnames.Add($"[{cvar.REDType}] {cvar.REDName}");
+                    dbg_varnames.Add($"[{cvar.REDType}] {cvar.REDName}");
 #endif
 
-                        // unknown types
-                        if (cvar.REDName.Contains("UNKNOWN:"))
-                        {
-                            UnknownCVariables.Add(cvar);
-                        }
-                        else
-                        {
-                            TrySettingFastMemberAccessor(cvar);
-                        }
-                    }
-                    catch (Exception e)
+                    // unknown types
+                    if (cvar.REDName.Contains("UNKNOWN:"))
                     {
-                        Console.WriteLine(e);
-                        throw;
+                        UnknownCVariables.Add(cvar);
                     }
-
-                    
+                    else
+                    {
+                        TrySettingFastMemberAccessor(cvar);
+                    }
                 }
                 #endregion
 
@@ -369,10 +357,6 @@ namespace WolvenKit.CR2W.Types
                 var bytesread = endpos - startpos;
                 if (bytesread > size)
                 {
-                    if (size > 0)
-                    {
-
-                    }
                     // parsed to far: possible file corruption
                     // BUT: this check is impossible for elements of an array.
                     // in this case, passed size is 0, so we can check for that

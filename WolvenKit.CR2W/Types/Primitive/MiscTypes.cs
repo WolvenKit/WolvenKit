@@ -7,13 +7,13 @@ using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    //[REDMeta(EREDMetaInfo.REDStruct )]
-    //public class DataBuffer : CVariable
-    //{
-    //    [REDBuffer] public CByteArray Bufferdata { get; set; }
-    //    public DataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    //    public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new DataBuffer(cr2w, parent, name);
-    //}
+    [REDMeta(EREDMetaInfo.REDStruct )]
+    public class DataBuffer : CVariable
+    {
+        [REDBuffer] public CByteArray Bufferdata { get; set; }
+        public DataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new DataBuffer(cr2w, parent, name);
+    }
 
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SharedDataBuffer : CVariable

@@ -39,8 +39,7 @@ namespace WolvenKit.CR2W.Reflection
 
         public override string ToString()
         {
-            //return $"{Name} [{string.Join(",", Flags)}]";
-            return $"{Name}";
+            return String.Format("{0} [{1}]", Name, String.Join(",", Flags));
         }
     }
 

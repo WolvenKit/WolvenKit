@@ -105,7 +105,4 @@ namespace WolvenKit.CR2W.Types
 
 
     }
-
-
-
 }
