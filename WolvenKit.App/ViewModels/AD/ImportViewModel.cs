@@ -336,128 +336,125 @@ namespace WolvenKit.App.ViewModels
 
         private CR2WFile CreateCr2wXbmFromImagePath(ImportableFile file)
         {
-            //TODO
-            throw new NotImplementedException();
+            var fullpath = Path.Combine(importdepot.FullName, file.GetRelativePath());
 
-            //var fullpath = Path.Combine(importdepot.FullName, file.GetRelativePath());
+            // experimental: create uncooked xbm
+            var compression = ImageUtility.GetTextureCompressionFromTextureGroup(file.TextureGroup);
+            var tg = file.TextureGroup.ToString();
 
-            //// experimental: create uncooked xbm
-            //var compression = ImageUtility.GetTextureCompressionFromTextureGroup(file.TextureGroup);
-            //var tg = file.TextureGroup.ToString();
+            // create mipmaps with texconv?
+            // create a temporary dds
+            var tempdir = MainController.WorkDir;
+            var textureformat = ImageUtility.GetEFormatFromCompression(compression);
+            var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, textureformat);
 
-            //// create mipmaps with texconv?
-            //// create a temporary dds
-            //var tempdir = MainController.WorkDir;
-            //var textureformat = ImageUtility.GetEFormatFromCompression(compression);
-            //var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, textureformat);
+            if (!File.Exists(ddsfile)) throw new NotImplementedException();
+            var metadata = DDSUtils.ReadHeader(ddsfile);
+            var width = metadata.Width;
+            var height = metadata.Height;
 
-            //if (!File.Exists(ddsfile)) throw new NotImplementedException();
-            //var metadata = DDSUtils.ReadHeader(ddsfile);
-            //var width = metadata.Width;
-            //var height = metadata.Height;
+            // create cr2wfile
+            var cr2w = new CR2WFile();
+            var xbm = new CBitmapTexture(cr2w, null, "CBitmapTexture");
+            xbm.Width = new CUInt32(cr2w, xbm, "width") { val = width, IsSerialized = true };
+            xbm.Height = new CUInt32(cr2w, xbm, "height") { val = height, IsSerialized = true };
+            xbm.Compression = new CEnum<ETextureCompression>(cr2w, xbm, "compression")
+                { WrappedEnum = compression, IsSerialized = true };
+            xbm.TextureGroup = new CName(cr2w, xbm, "textureGroup") { Value = tg, IsSerialized = true };
+            xbm.unk = new CUInt32(cr2w, xbm, "unk") { val = 0, IsSerialized = true };
+            xbm.unk1 = new CUInt16(cr2w, xbm, "unk1") { val = 512, IsSerialized = true }; //TODO: find out what that is
+            xbm.unk2 = new CUInt16(cr2w, xbm, "unk2") { val = 768, IsSerialized = true }; //TODO: find out what that is
 
-            //// create cr2wfile
-            //var cr2w = new CR2WFile();
-            //var xbm = new CBitmapTexture(cr2w, null, "CBitmapTexture");
-            //xbm.Width = new CUInt32(cr2w, xbm, "width") { val = width, IsSerialized = true };
-            //xbm.Height = new CUInt32(cr2w, xbm, "height") { val = height, IsSerialized = true };
-            //xbm.Compression = new CEnum<ETextureCompression>(cr2w, xbm, "compression")
-            //    { WrappedEnum = compression, IsSerialized = true };
-            //xbm.TextureGroup = new CName(cr2w, xbm, "textureGroup") { Value = tg, IsSerialized = true };
-            //xbm.unk = new CUInt32(cr2w, xbm, "unk") { val = 0, IsSerialized = true };
-            //xbm.unk1 = new CUInt16(cr2w, xbm, "unk1") { val = 512, IsSerialized = true }; //TODO: find out what that is
-            //xbm.unk2 = new CUInt16(cr2w, xbm, "unk2") { val = 768, IsSerialized = true }; //TODO: find out what that is
+            // read the mips
+            // check if not a power of 2
+            if (height % 2 != 0)
+            {
+                MainController.LogString("Height is not a power of 2. Please resize your image.", Logtype.Error);
+                return null;
+            }
 
-            //// read the mips
-            //// check if not a power of 2
-            //if (height % 2 != 0)
-            //{
-            //    MainController.LogString("Height is not a power of 2. Please resize your image.", Logtype.Error);
-            //    return null;
-            //}
+            // funkiest way to calculate log2, the length of the bit array is also the number of mipmaps
+            // height = 1024 = 2^10 = 11 mipmaps
+            string b = System.Convert.ToString(Math.Max(height, width), 2);
+            int mipcount = b.Length;
 
-            //// funkiest way to calculate log2, the length of the bit array is also the number of mipmaps
-            //// height = 1024 = 2^10 = 11 mipmaps
-            //string b = System.Convert.ToString(Math.Max(height, width), 2);
-            //int mipcount = b.Length;
+            xbm.Mipdata = new CCompressedBuffer<SMipData>(cr2w, xbm, "Mipdata") { IsSerialized = true };
+            using (var fs = new FileStream(ddsfile, FileMode.Open, FileAccess.Read))
+            using (var reader = new BinaryReader(fs))
+            {
+                // skip dds header
+                fs.Seek(128, SeekOrigin.Begin);
 
-            //xbm.Mipdata = new CCompressedBuffer<SMipData>(cr2w, xbm, "Mipdata") { IsSerialized = true };
-            //using (var fs = new FileStream(ddsfile, FileMode.Open, FileAccess.Read))
-            //using (var reader = new BinaryReader(fs))
-            //{
-            //    // skip dds header
-            //    fs.Seek(128, SeekOrigin.Begin);
-
-            //    var mipsizeH = height;
-            //    var mipsizeW = width;
-            //    // read data here
-            //    for (int i = 0; i < mipcount; i++)
-            //    {
+                var mipsizeH = height;
+                var mipsizeW = width;
+                // read data here
+                for (int i = 0; i < mipcount; i++)
+                {
                     
-            //        var buffer = reader.ReadBytes((int)GetMipMapSize(mipsizeW, mipsizeH, textureformat));
+                    var buffer = reader.ReadBytes((int)GetMipMapSize(mipsizeW, mipsizeH, textureformat));
 
-            //        var mipdata = new SMipData(cr2w, xbm.Mipdata, $"{i}") { IsSerialized = true };
-            //        mipdata.Height = new CUInt32(cr2w, mipdata, $"Height") { IsSerialized = true, val = mipsizeH};
-            //        mipdata.Width = new CUInt32(cr2w, mipdata, $"Width") { IsSerialized = true, val = mipsizeW };
-            //        mipdata.Blocksize = new CUInt32(cr2w, mipdata, $"Blocksize") { IsSerialized = true, val = GetBlockSize(mipsizeW, textureformat) };
-            //        mipdata.Mip = new CByteArray(cr2w, mipdata, $"Mip") { IsSerialized = true, Bytes = buffer };
+                    var mipdata = new SMipData(cr2w, xbm.Mipdata, $"{i}") { IsSerialized = true };
+                    mipdata.Height = new CUInt32(cr2w, mipdata, $"Height") { IsSerialized = true, val = mipsizeH};
+                    mipdata.Width = new CUInt32(cr2w, mipdata, $"Width") { IsSerialized = true, val = mipsizeW };
+                    mipdata.Blocksize = new CUInt32(cr2w, mipdata, $"Blocksize") { IsSerialized = true, val = GetBlockSize(mipsizeW, textureformat) };
+                    mipdata.Mip = new CByteArray(cr2w, mipdata, $"Mip") { IsSerialized = true, Bytes = buffer };
 
-            //        xbm.Mipdata.AddVariable(mipdata);
+                    xbm.Mipdata.AddVariable(mipdata);
 
-            //        mipsizeH = Math.Max(4, mipsizeH / 2);
-            //        mipsizeW = Math.Max(4, mipsizeW / 2);
-            //    }
+                    mipsizeH = Math.Max(4, mipsizeH / 2);
+                    mipsizeW = Math.Max(4, mipsizeW / 2);
+                }
 
-            //}
+            }
 
             // residentmips
 
 
-            //cr2w.FromCResource(xbm);
+            cr2w.FromCResource(xbm);
 
-            //return cr2w;
+            return cr2w;
 
-            //uint GetMipMapSize(uint _width, uint _height, EFormat _textureformat)
-            //{
-            //    switch (_textureformat)
-            //    {
-            //        case EFormat.BC1_UNORM:
-            //        case EFormat.BC4_UNORM:
-            //            return Math.Max(1, (_height / 4)) * Math.Max(1, (_width / 4)) * 8;
-            //        case EFormat.BC2_UNORM:
-            //        case EFormat.BC3_UNORM:
-            //        case EFormat.BC5_UNORM:
-            //            return Math.Max(1, (_height / 4)) * Math.Max(1, (_width / 4)) * 16;
-            //        //case EFormat.R32G32B32A32_FLOAT:
-            //        //case EFormat.R16G16B16A16_FLOAT:
-            //        //case EFormat.BC6H_UF16:
-            //        case EFormat.R8G8B8A8_UNORM:
-            //        case EFormat.BC7_UNORM:
-            //        default:
-            //            throw new ArgumentOutOfRangeException(nameof(_textureformat), _textureformat, null);
-            //    }
-            //}
+            uint GetMipMapSize(uint _width, uint _height, EFormat _textureformat)
+            {
+                switch (_textureformat)
+                {
+                    case EFormat.BC1_UNORM:
+                    case EFormat.BC4_UNORM:
+                        return Math.Max(1, (_height / 4)) * Math.Max(1, (_width / 4)) * 8;
+                    case EFormat.BC2_UNORM:
+                    case EFormat.BC3_UNORM:
+                    case EFormat.BC5_UNORM:
+                        return Math.Max(1, (_height / 4)) * Math.Max(1, (_width / 4)) * 16;
+                    //case EFormat.R32G32B32A32_FLOAT:
+                    //case EFormat.R16G16B16A16_FLOAT:
+                    //case EFormat.BC6H_UF16:
+                    case EFormat.R8G8B8A8_UNORM:
+                    case EFormat.BC7_UNORM:
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(_textureformat), _textureformat, null);
+                }
+            }
 
-            //uint GetBlockSize(uint _width, EFormat _textureformat)
-            //{
-            //    switch (_textureformat)
-            //    {
-            //        case EFormat.BC1_UNORM:
-            //        case EFormat.BC4_UNORM:
-            //            return Math.Max(1, (_width / 4)) * 8;
-            //        case EFormat.BC2_UNORM:
-            //        case EFormat.BC3_UNORM:
-            //        case EFormat.BC5_UNORM:
-            //            return Math.Max(1, (_width / 4)) * 16;
-            //        //case EFormat.R32G32B32A32_FLOAT:
-            //        //case EFormat.R16G16B16A16_FLOAT:
-            //        //case EFormat.BC6H_UF16:
-            //        case EFormat.R8G8B8A8_UNORM:
-            //        case EFormat.BC7_UNORM:
-            //        default:
-            //            throw new MissingFormatException($"Missing Format: {_textureformat}");
-            //    }
-            //}
+            uint GetBlockSize(uint _width, EFormat _textureformat)
+            {
+                switch (_textureformat)
+                {
+                    case EFormat.BC1_UNORM:
+                    case EFormat.BC4_UNORM:
+                        return Math.Max(1, (_width / 4)) * 8;
+                    case EFormat.BC2_UNORM:
+                    case EFormat.BC3_UNORM:
+                    case EFormat.BC5_UNORM:
+                        return Math.Max(1, (_width / 4)) * 16;
+                    //case EFormat.R32G32B32A32_FLOAT:
+                    //case EFormat.R16G16B16A16_FLOAT:
+                    //case EFormat.BC6H_UF16:
+                    case EFormat.R8G8B8A8_UNORM:
+                    case EFormat.BC7_UNORM:
+                    default:
+                        throw new MissingFormatException($"Missing Format: {_textureformat}");
+                }
+            }
         }
 
         

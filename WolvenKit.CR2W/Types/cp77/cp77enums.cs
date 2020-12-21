@@ -9,27 +9,17 @@ namespace WolvenKit.CR2W.Types
         public enum EMeshChunkFlags
         {
             MCF_RenderInScene,
-            MCF_RenderInShadows,
-            MCF_IsTwoSided,
-            MCF_IsRayTracedEmissive,
-            MCF_IsPrefabProxy,
+            MCF_RenderInShadows
         }
 
         public enum ECookingPlatform
         {
-            PLATFORM_None,
-            PLATFORM_PC,
-            PLATFORM_XboxOne,
-            PLATFORM_PS4,
-            PLATFORM_WindowsServer,
-            PLATFORM_LinuxServer
+            PLATFORM_PC
         }
 
         public enum GpuWrapApieIndexBufferChunkType
         {
-            IBCT_IndexUInt,
-            IBCT_IndexUShort,
-            IBCT_Max
+            IBCT_IndexUShort
         }
 
         public enum GpuWrapApiVertexPackingePackingType
@@ -71,32 +61,17 @@ namespace WolvenKit.CR2W.Types
 
         public enum GpuWrapApiVertexPackingePackingUsage
         {
-            PS_Invalid,
-            PS_SysPosition,
             PS_Position,
-            PS_Normal,
-            PS_Tangent,
-            PS_Binormal,
-            PS_TexCoord,
-            PS_Color,
             PS_SkinIndices,
             PS_SkinWeights,
-            PS_DestructionIndices,
-            PS_MultilayerPaint,
+            PS_TexCoord,
+            PS_Normal,
+            PS_Tangent,
+            PS_Color,
             PS_InstanceTransform,
-            PS_InstanceLODParams,
             PS_InstanceSkinningData,
-            PS_PatchSize,
-            PS_PatchBias,
-            PS_ExtraData,
-            PS_VehicleDmgNormal,
-            PS_VehicleDmgPosition,
-            PS_PositionDelta,
-            PS_LightBlockerIntensity,
-            PS_BoneIndex,
-            PS_Padding,
-            PS_PatchOffset,
-            PS_Max
+            PS_Invalid,
+            PS_ExtraData
         }
 
 
