@@ -42,21 +42,3 @@ https://github.com/WolvenKit/CP77Tools/releases
 `cr2w -c -p "<PATH TO FILE>"`
 * dumps class info from extracted cr2w file
 `cr2w -a -p "<PATH TO FILE>"`
-
-## v.0.1.3.3
-- added cr2w class layout dumps
-
-## v.0.1.3
-- much better command line help and syntax
-
-## v.0.1.2
-- faster extraction
-- supports dumping of .archive info
-- supports dumping of .cr2w file info
-
-## v.0.1.1
-- supports dumping .archive info
-- supports extracting and decompression of archive files
-
-## v0.1
-- extract binary files from an .archive bundle
