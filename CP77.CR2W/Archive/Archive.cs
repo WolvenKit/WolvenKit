@@ -183,7 +183,7 @@ namespace CP77.CR2W.Archive
                         ar._table.Dependencies.Add(
                             new HashEntry(FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPathStr)));
                 }
-                uint lastimportidx = (uint)ar._table.Dependencies.Count + 1;
+                uint lastimportidx = (uint)ar._table.Dependencies.Count;
 
                 // kraken the file and write
                 var cr2winbuffer = StreamExtensions.ToByteArray(cr2wbr.BaseStream);
