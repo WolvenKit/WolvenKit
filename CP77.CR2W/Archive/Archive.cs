@@ -151,16 +151,19 @@ namespace CP77.CR2W.Archive
 
             var parentfiles = allfiles.Where(_ => _.Extension != ".buffer");
             //Parallel.ForEach(parentfiles, fileInfo =>
-            var fileInfos = parentfiles.ToList();
+            var fileInfos = parentfiles
+                .OrderBy(_ => FNV1A64HashAlgorithm.HashString(GetRelpath(_)) )
+                .ToList();
+            
+            // local
+            string GetRelpath(FileInfo infi) => infi.FullName[(infolder.FullName.Length + 1)..];
+
             foreach (var fileInfo in fileInfos)
             {
-                var relpath = fileInfo.FullName[(infolder.FullName.Length + 1)..];
+                var relpath = GetRelpath(fileInfo);
                 var hash = FNV1A64HashAlgorithm.HashString(relpath);
                 
-
-
                 // read the cr2w and get imports
-
                 var cr2w = new CR2WFile();
                 using var cr2wfs = new FileStream(fileInfo.FullName, FileMode.Open);
                 using var cr2wbr = new BinaryReader(cr2wfs);
@@ -194,11 +197,13 @@ namespace CP77.CR2W.Archive
                 // get buffers
                 var buffers = new List<FileInfo>();
                 if (buffersDict.ContainsKey(hash))
-                    buffers = buffersDict[hash].OrderBy(x => x.FullName).ToList();
+                    buffers = buffersDict[hash]
+                        .OrderBy(x => x.FullName.Length)
+                        .ThenBy(x => x.FullName)
+                        .ToList();
                 uint firstoffsetidx = (uint)ar._table.Offsets.Count - 1;
-                foreach (var b in buffers)
+                foreach (var inputbuffer in buffers.Select(b => File.ReadAllBytes(b.FullName)))
                 {
-                    var inputbuffer = File.ReadAllBytes(b.FullName);
                     CompressAndWrite(inputbuffer);
                 }
 
@@ -531,7 +536,6 @@ namespace CP77.CR2W.Archive
         {
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
-            int progress = 0;
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
             int all = 0;
@@ -558,6 +562,7 @@ namespace CP77.CR2W.Archive
             }
 
             Thread.Sleep(1000);
+            int progress = 0;
             logger.LogProgress(0);
 
             Parallel.ForEach(finalmatches, info =>

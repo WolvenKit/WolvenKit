@@ -183,13 +183,13 @@ namespace CP77Tools
                                     pb = new ConsoleProgressBar() { DisplayBars = true, DisplayAnimation = false };
                                 }
 
-                                pb.Report(logger.Progress.Item1);
+                                pb?.Report(logger.Progress.Item1);
                                 if (logger.Progress.Item1 == 1)
                                 {
                                     System.Threading.Thread.Sleep(1000);
 
                                     Console.WriteLine();
-                                    pb.Dispose();
+                                    pb?.Dispose();
                                     pb = null;
                                 }
 
