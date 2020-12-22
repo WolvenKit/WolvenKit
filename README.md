@@ -1,8 +1,6 @@
 # CP77Tools
 Modding tools for the cyberpunk 2077 game.
 
-# CP77 Tools Preview Version 0.1.3.3
-
 - requires NET5.0.
 
 **The cp77 tools require the oo2ext_7_win64.dll to work.
@@ -17,6 +15,9 @@ It can be found here:
 CP77 Tools discord: https://discord.gg/Epkq79kd96
 CDPR modding community discord: https://discord.gg/USZwxxFrKa
 
+## Latest Release
+https://github.com/WolvenKit/CP77Tools/releases
+
 
 ## Usage:
 * displays the general help: list all commands
@@ -26,6 +27,9 @@ CDPR modding community discord: https://discord.gg/USZwxxFrKa
 `archive -h`
 
 ### Main functions
+* pack a folder into an .archive
+`pack -p "<PATH TO FOLDER>"`
+
 * extract all files from archive
 `archive -e -p "<PATH TO ARCHIVE>.archive"`
 
