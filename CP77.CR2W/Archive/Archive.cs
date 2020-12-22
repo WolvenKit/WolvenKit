@@ -183,7 +183,7 @@ namespace CP77.CR2W.Archive
                         ar._table.Dependencies.Add(
                             new HashEntry(FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPathStr)));
                 }
-                uint lastimportidx = (uint)ar._table.Dependencies.Count + 1;
+                uint lastimportidx = (uint)ar._table.Dependencies.Count;
 
                 // kraken the file and write
                 var cr2winbuffer = StreamExtensions.ToByteArray(cr2wbr.BaseStream);
@@ -195,14 +195,14 @@ namespace CP77.CR2W.Archive
                 var buffers = new List<FileInfo>();
                 if (buffersDict.ContainsKey(hash))
                     buffers = buffersDict[hash].OrderBy(x => x.FullName).ToList();
-                uint firstoffsetidx = (uint)ar._table.Offsets.Count;
+                uint firstoffsetidx = (uint)ar._table.Offsets.Count - 1;
                 foreach (var b in buffers)
                 {
                     var inputbuffer = File.ReadAllBytes(b.FullName);
                     CompressAndWrite(inputbuffer);
                 }
 
-                uint lastoffsetidx = (uint)ar._table.Offsets.Count + 1;
+                uint lastoffsetidx = (uint)ar._table.Offsets.Count;
 
                 // save table data
                 var sha1 = new System.Security.Cryptography.SHA1Managed();
@@ -273,12 +273,12 @@ namespace CP77.CR2W.Archive
                     {
                         0x4B, 0x41, 0x52, 0x4B  //KRAKEN, TODO: make this variable and dependent on the compression algo
                     };
-                    writelist.AddRange(BitConverter.GetBytes(zsize));
+                    writelist.AddRange(BitConverter.GetBytes(size));
                     writelist.AddRange(outBuffer.Take(r));
                     
                     ar._table.Offsets.Add(new OffsetEntry(
                         (ulong)bw.BaseStream.Position,
-                        (uint)zsize, 
+                        (uint)r+8,
                         size));
                     bw.Write(writelist.ToArray());
                 }
