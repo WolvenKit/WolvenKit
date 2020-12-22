@@ -20,6 +20,7 @@ using WolvenKit.Common.Tools.DDS;
 using System.Diagnostics;
 using CP77.Common.Services;
 using CP77.Common.Tools.FNV1A;
+using CP77Tools.Common.Services;
 using CP77Tools.Extensions;
 using Luna.ConsoleProgressBar;
 
@@ -31,8 +32,11 @@ namespace CP77Tools
         public static async Task Main(string[] args)
         {
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
+            ServiceLocator.Default.RegisterType<IHashService, HashService>();
             ServiceLocator.Default.RegisterType<IMainController, MainController>();
+
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+
             logger.OnStringLogged += delegate (object? sender, LogStringEventArgs args)
             {
                 switch (args.Logtype)
@@ -60,7 +64,7 @@ namespace CP77Tools
 
             // get csv data
             logger.LogString("Loading Hashes...", Logtype.Important);
-            await Loadhashes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/archivehashes.csv"));
+            await Loadhashes();
 
 
             #region commands
@@ -118,6 +122,17 @@ namespace CP77Tools
             {
                 new Option<string>(new []{"--input", "-i"}, "Create FNV1A hash of given string"),
                 new Option<bool>(new []{"--missing", "-m"}, ""),
+                new Command("update", "Update the Archived Hashes")
+                {
+                    Handler = CommandHandler.Create(async () =>
+                    {
+                        var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+                        if (await hashService.RefreshAsync())
+                        {
+                            await Loadhashes();
+                        }
+                    })
+                }
             };
             rootCommand.Add(hashTask);
             hashTask.Handler = CommandHandler.Create<string, bool>(Tasks.ConsoleFunctions.HashTask);
@@ -223,7 +238,7 @@ namespace CP77Tools
         }
 
 
-        private static async Task Loadhashes(string path)
+        private static async Task Loadhashes()
         {
             var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
@@ -232,7 +247,7 @@ namespace CP77Tools
 
             var hashDictionary = new ConcurrentDictionary<ulong,string>();
 
-            Parallel.ForEach(File.ReadLines(path), line =>
+            Parallel.ForEach(File.ReadLines(Constants.ArchiveHashesPath), line =>
             {
                 // check line
                 line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
