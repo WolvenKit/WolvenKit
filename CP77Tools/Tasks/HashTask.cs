@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using Catel.IoC;
 using CP77.Common.Tools.FNV1A;
+using CP77Tools.Common.Services;
 
 namespace CP77Tools.Tasks
 {
@@ -50,6 +53,18 @@ namespace CP77Tools.Tasks
 
             }
             
+
+            return 1;
+        }
+        
+        public static async Task<int> UpdateHashesAsync()
+        {
+            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+            if (await hashService.RefreshAsync())
+            {
+                // TODO: Would this be better managed entirely by IHashService
+                await Program.Loadhashes();
+            }
 
             return 1;
         }

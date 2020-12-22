@@ -1,25 +1,17 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
 using System.CommandLine;
-using System.CommandLine.Builder;
-using System.CommandLine.Invocation;
-using System.CommandLine.IO;
-using System.CommandLine.Parsing;
 using System.ComponentModel;
-using System.Globalization;
 using System.IO;
 using System.Reflection;
-using CP77Tools.Model;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools.DDS;
 using System.Diagnostics;
 using CP77.Common.Services;
 using CP77.Common.Tools.FNV1A;
+using CP77Tools.Commands;
 using CP77Tools.Common.Services;
 using CP77Tools.Extensions;
 using Luna.ConsoleProgressBar;
@@ -66,88 +58,15 @@ namespace CP77Tools
             logger.LogString("Loading Hashes...", Logtype.Important);
             await Loadhashes();
 
-
-            #region commands
-
-
-            var rootCommand = new RootCommand();
-
-            var pack = new Command("pack", "Pack a folder of files into an .archive file.")
+            var rootCommand = new RootCommand
             {
-                new Option<string[]>(new []{"--path", "-p"}, "Input path. Can be a path to one .archive, or the content directory.\nIf this is a directory, all archives in it will be processed."),
-                new Option<string>(new []{ "--outpath", "-o"}, "Output directory to extract files to.\nIf not specified, will output to a new child directory, in place."),
+                new PackCommand(),
+                new ArchiveCommand(),
+                new DumpCommand(),
+                new CR2WCommand(),
+                new HashCommand(),
+                new OodleCommand()
             };
-            rootCommand.Add(pack);
-            pack.Handler = CommandHandler.Create<string[], string>(Tasks.ConsoleFunctions.PackTask);
-
-            var archive = new Command("archive", "Extract files or dump information from one or many archives.")
-            {
-                new Option<string[]>(new []{"--path", "-p"}, "Input path. Can be a path to one .archive, or the content directory.\nIf this is a directory, all archives in it will be processed."),
-                new Option<string>(new []{ "--outpath", "-o"}, "Output directory to extract files to.\nIf not specified, will output to a new child directory, in place."),
-                new Option<string>(new []{ "--pattern", "-w"}, "Use optional search pattern, e.g. *.ink.\nIf both regex and pattern is defined, pattern will be used first."),
-                new Option<string>(new []{ "--regex", "-r"}, "Use optional regex pattern."),
-                new Option<bool>(new []{ "--extract", "-e"}, "Extract files from archive."),
-                new Option<bool>(new []{ "--dump", "-d"}, "Dump archive information."),
-                new Option<bool>(new []{ "--list", "-l"}, "List contents of archive."),
-                new Option<bool>(new []{ "--uncook", "-u"}, "Uncooks textures from archive."),
-                new Option<EUncookExtension>(new []{ "--uext"}, "Uncook extension (tga, bmp, jpg, png, dds). Default is tga."),
-                new Option<ulong>(new []{ "--hash"}, "Extract single file with given hash."),
-            };
-            rootCommand.Add(archive);
-            archive.Handler = CommandHandler.Create<string[], string, bool, bool, bool, bool, EUncookExtension, ulong, string, string>
-                (Tasks.ConsoleFunctions.ArchiveTask);
-
-            var dump = new Command("dump", "Target an archive or a directory to dump archive information.")
-            {
-                new Option<string>(new []{"--path", "-p"}, "Input path to .archive or to a directory (runs over all archives in directory)."),
-                new Option<bool>(new []{ "--imports", "-i"}, "Dump all imports (all filenames that are referenced by all files in the archive)."),
-                new Option<bool>(new []{ "--missinghashes", "-m"}, "List all missing hashes of all input archives."),
-                new Option<bool>(new []{ "--texinfo"}, "Dump all xbm info."),
-                new Option<bool>(new []{ "--classinfo"}, "Dump all class info."),
-            };
-            rootCommand.Add(dump);
-            dump.Handler = CommandHandler.Create<string, bool, bool, bool, bool>(Tasks.ConsoleFunctions.DumpTask);
-
-            var cr2w = new Command("cr2w", "Target a specific cr2w (extracted) file and dumps file information.")
-            {
-                new Option<string>(new []{"--path", "-p"}, "Input path to a cr2w file."),
-                new Option<string>(new []{"--outpath", "-o"}, "Output path."),
-                new Option<bool>(new []{ "--all", "-a"}, "Dump all information."),
-                new Option<bool>(new []{ "--chunks", "-c"}, "Dump all class information of file."),
-            };
-            rootCommand.Add(cr2w);
-            cr2w.Handler = CommandHandler.Create<string,string, bool, bool>(Tasks.ConsoleFunctions.Cr2wTask);
-
-            var hashTask = new Command("hash", "Some helper functions related to hashes.")
-            {
-                new Option<string>(new []{"--input", "-i"}, "Create FNV1A hash of given string"),
-                new Option<bool>(new []{"--missing", "-m"}, ""),
-                new Command("update", "Update the Archived Hashes")
-                {
-                    Handler = CommandHandler.Create(async () =>
-                    {
-                        var hashService = ServiceLocator.Default.ResolveType<IHashService>();
-                        if (await hashService.RefreshAsync())
-                        {
-                            await Loadhashes();
-                        }
-                    })
-                }
-            };
-            rootCommand.Add(hashTask);
-            hashTask.Handler = CommandHandler.Create<string, bool>(Tasks.ConsoleFunctions.HashTask);
-
-            var oodleTask = new Command("oodle", "Some helper functions related to oodle compression.")
-            {
-                new Option<string>(new []{"--path", "-p"}, ""),
-                new Option<string>(new []{"--outpath", "-o"}, ""),
-                new Option<bool>(new []{"--decompress", "-d"}, ""),
-            };
-            rootCommand.Add(oodleTask);
-            oodleTask.Handler = CommandHandler.Create<string,string, bool>(Tasks.ConsoleFunctions.OodleTask);
-
-            #endregion
-
 
             // Run
             if (args == null || args.Length == 0)
@@ -238,7 +157,7 @@ namespace CP77Tools
         }
 
 
-        private static async Task Loadhashes()
+        internal static async Task Loadhashes()
         {
             var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
