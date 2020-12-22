@@ -10,6 +10,7 @@ using CP77.Common.Services;
 using CP77.CR2W.Archive;
 using Newtonsoft.Json;
 using WolvenKit.CR2W.Types;
+using RED.CRC64;
 
 namespace CP77Tools.Model
 {
@@ -86,7 +87,7 @@ namespace CP77Tools.Model
             Table1count = (uint)FileInfo.Count;
             Table2count = (uint)Offsets.Count;
             Table3count = (uint)Dependencies.Count;
-            tablewriter.Write(Checksum);
+            //tablewriter.Write(Checksum);
             tablewriter.Write(Table1count);
             tablewriter.Write(Table2count);
             tablewriter.Write(Table3count);
@@ -108,7 +109,9 @@ namespace CP77Tools.Model
 
             Num = 8; //TODO
             bw.Write(Num);
-            bw.Write(ms.Length);
+            bw.Write((uint)ms.Length + 8);
+            //crc64 calculate
+            bw.Write(Crc64.Compute(tablewriter.BaseStream.ToByteArray()));
             bw.Write(tablewriter.BaseStream.ToByteArray());
         }
     }
