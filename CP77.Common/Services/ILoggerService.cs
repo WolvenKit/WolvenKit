@@ -18,7 +18,7 @@ namespace WolvenKit.Common.Services
         ObservableCollection<InterpretedLogMessage> ErrorLog { get; }
 
         void Clear();
-        void LogString(string value, Logtype type);
+        void LogString(string value, Logtype type = Logtype.Normal);
         void LogExtended(SystemLogFlag sflag, ToolLogFlag lflag, string cmdName, string value);
 
 
