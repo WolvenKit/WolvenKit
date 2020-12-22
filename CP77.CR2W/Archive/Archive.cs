@@ -130,9 +130,9 @@ namespace CP77.CR2W.Archive
             {
                 // buffer path e.g. stand__rh_hold_tray__serve_milkshakes__01.scenerid.7.buffer
                 // removes 7 characters (".buffer") and then removes the extension (".7")
-                var relpath = fileInfo.FullName.Substring(infolder.FullName.Length + 1);
-                var bufferParentfile = Path.GetFileNameWithoutExtension(relpath.Remove(relpath.Length - 7));
-                var hash = FNV1A64HashAlgorithm.HashString(bufferParentfile);
+                var relpath = fileInfo.FullName[(infolder.FullName.Length + 1)..];
+                relpath = Path.ChangeExtension(relpath.Remove(relpath.Length - 7), "").TrimEnd('.');
+                var hash = FNV1A64HashAlgorithm.HashString(relpath);
 
                 // add buffer
                 if (!buffersDict.ContainsKey(hash))
@@ -194,12 +194,14 @@ namespace CP77.CR2W.Archive
                 // get buffers
                 var buffers = new List<FileInfo>();
                 if (buffersDict.ContainsKey(hash))
-                    buffers = buffersDict[hash].OrderBy(x => x).ToList();
+                    buffers = buffersDict[hash].OrderBy(x => x.FullName).ToList();
                 uint firstoffsetidx = (uint)ar._table.Offsets.Count;
-                foreach (var inputbuffer in buffers.Select(b => File.ReadAllBytes(b.FullName)))
+                foreach (var b in buffers)
                 {
+                    var inputbuffer = File.ReadAllBytes(b.FullName);
                     CompressAndWrite(inputbuffer);
                 }
+
                 uint lastoffsetidx = (uint)ar._table.Offsets.Count + 1;
 
                 // save table data
