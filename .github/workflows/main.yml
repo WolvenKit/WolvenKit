@@ -22,7 +22,7 @@ jobs:
       run: |
         cd $Env:GITHUB_WORKSPACE\\WolvenKit.Irrlicht\\
         wget https://outwa.it/lib.zip
-        7zip  -y x lib.zip
+        7z  -y x lib.zip
     - name: Setup Nuget.exe
       uses: NuGet/setup-nuget@v1.0.5
       with:
