@@ -16,12 +16,12 @@ jobs:
       uses: actions/checkout@v2
     - name: Setup 7z with choco
       run: |
-        choco install 7z -y
+        choco install 7zip.install -y
     - name: Download libs for irrlicht
       run: |
         cd cd $Env:GITHUB_WORKSPACE\\WolvenKit.Irrlicht\\
         wget https://outwa.it/lib.zip
-        7z  -y x lib.zip
+        7zip_x64.exe  -y x lib.zip
     - name: Setup Nuget.exe
       uses: NuGet/setup-nuget@v1.0.5
       with:
