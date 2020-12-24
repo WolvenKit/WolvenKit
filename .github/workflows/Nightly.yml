@@ -14,10 +14,10 @@ jobs:
     - name: Checkout github repo (+ download lfs dependencies)
       uses: actions/checkout@v2
     - name: Setup 7z with choco
-      with: |
+      run: |
         choco install 7z -y
     - name: Download libs for irrlicht
-      with: |
+      run: |
         cd cd $Env:GITHUB_WORKSPACE\\WolvenKit.Irrlicht\\
         wget https://outwa.it/lib.zip
         7z  -y x lib.zip
