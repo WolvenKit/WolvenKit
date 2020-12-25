@@ -165,7 +165,7 @@ namespace CP77Tools.Tasks
                     {
                         foreach (var entry in ar.Files)
                         {
-                            logger.LogString(entry.Value.NameStr, Logtype.Normal);
+                            logger.LogString(entry.Value.FileName, Logtype.Normal);
                         }
                     }
 

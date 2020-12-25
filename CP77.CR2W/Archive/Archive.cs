@@ -357,7 +357,7 @@ namespace CP77.CR2W.Archive
 
             if (!Files.ContainsKey(hash))
                 return -1;
-            string name = Files[hash].NameStr;
+            string name = Files[hash].FileName;
 
             // checks
             var outfile = new FileInfo(Path.Combine(outDir.FullName,
@@ -458,7 +458,7 @@ namespace CP77.CR2W.Archive
 
             if (!Files.ContainsKey(hash))
                 return -1;
-            string name = Files[hash].NameStr;
+            string name = Files[hash].FileName;
             if (string.IsNullOrEmpty(Path.GetExtension(name)))
             {
                 name += ".bin";
@@ -509,13 +509,13 @@ namespace CP77.CR2W.Archive
             // check search pattern then regex
             IEnumerable<ArchiveItem> finalmatches = Files.Values;
             if (!string.IsNullOrEmpty(pattern))
-                finalmatches = Files.Values.MatchesWildcard(item => item.NameStr, pattern);
+                finalmatches = Files.Values.MatchesWildcard(item => item.FileName, pattern);
             if (!string.IsNullOrEmpty(regex))
             {
                 var searchTerm = new System.Text.RegularExpressions.Regex($@"{regex}");
                 var queryMatchingFiles =
                     from file in finalmatches
-                    let matches = searchTerm.Matches(file.NameStr)
+                    let matches = searchTerm.Matches(file.FileName)
                     where matches.Count > 0
                     select file;
 
@@ -531,9 +531,9 @@ namespace CP77.CR2W.Archive
                 int extracted = ExtractSingleInner(mmf, info.NameHash64, outDir);
 
                 if (extracted != 0)
-                    extractedList.Add(info.NameStr);
+                    extractedList.Add(info.FileName);
                 else
-                    failedList.Add(info.NameStr);
+                    failedList.Add(info.FileName);
 
                 Interlocked.Increment(ref progress);
                 logger.LogProgress(progress / (float)FileCount);
@@ -565,13 +565,13 @@ namespace CP77.CR2W.Archive
             // check search pattern then regex
             IEnumerable<ArchiveItem> finalmatches = Files.Values;
             if (!string.IsNullOrEmpty(pattern))
-                finalmatches = Files.Values.MatchesWildcard(item => item.NameStr, pattern);
+                finalmatches = Files.Values.MatchesWildcard(item => item.FileName, pattern);
             if (!string.IsNullOrEmpty(regex))
             {
                 var searchTerm = new System.Text.RegularExpressions.Regex($@"{regex}");
                 var queryMatchingFiles =
                     from file in finalmatches
-                    let matches = searchTerm.Matches(file.NameStr)
+                    let matches = searchTerm.Matches(file.FileName)
                     where matches.Count > 0
                     select file;
 
@@ -590,9 +590,9 @@ namespace CP77.CR2W.Archive
                     int uncooked = UncookSingleInner(mmf, info.NameHash64, outDir, uncookext);
 
                     if (uncooked != 0)
-                        extractedList.Add(info.NameStr);
+                        extractedList.Add(info.FileName);
                     else
-                        failedList.Add(info.NameStr);
+                        failedList.Add(info.FileName);
                 }
                 Interlocked.Increment(ref progress);
                 logger.LogProgress(progress / (float)FileCount);
@@ -606,7 +606,7 @@ namespace CP77.CR2W.Archive
         {
             if (!Files.ContainsKey(hash))
                 return false;
-            string name = Files[hash].NameStr;
+            string name = Files[hash].FileName;
 
             return (Path.GetExtension(name) == ".xbm" || Path.GetExtension(name) == ".bin"); //TODO: remove when all filenames found
         }

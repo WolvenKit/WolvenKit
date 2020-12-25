@@ -21,8 +21,9 @@ namespace CP77.CR2W.Archive
         public string bytesAsString => BitConverter.ToString(SHA1Hash);
 
         private string _nameStr;
-        public string NameStr => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}.bin" : _nameStr;
-        public string Extension => Path.GetExtension(NameStr);
+        public string NameOrHash => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}" : _nameStr;
+        public string FileName => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}.bin" : _nameStr;
+        public string Extension => Path.GetExtension(FileName);
 
         private Archive _parentArchive;
 

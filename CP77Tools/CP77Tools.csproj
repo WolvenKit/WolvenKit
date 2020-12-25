@@ -20,6 +20,7 @@
   <ItemGroup>
     <None Remove="lib\kraken.so" />
     <None Remove="Resources\archivehashes.csv" />
+    <None Remove="Resources\archivehashes.zip" />
     <None Remove="Resources\basegame_2_mainmenu.archive.hashes.csv" />
   </ItemGroup>
 
@@ -27,7 +28,7 @@
     <Content Include="lib\kraken.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\archivehashes.csv">
+    <Content Include="Resources\archivehashes.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

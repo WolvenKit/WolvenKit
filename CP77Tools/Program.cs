@@ -9,6 +9,7 @@ using System.IO;
 using System.Reflection;
 using WolvenKit.Common.Services;
 using System.Diagnostics;
+using System.IO.Compression;
 using CP77.Common.Services;
 using CP77.Common.Tools.FNV1A;
 using CP77Tools.Commands;
@@ -166,15 +167,17 @@ namespace CP77Tools
 
             var hashDictionary = new ConcurrentDictionary<ulong,string>();
 
+            ZipFile.ExtractToDirectory(Constants.ArchiveHashesZipPath, Constants.ResourcesPath);
+
             Parallel.ForEach(File.ReadLines(Constants.ArchiveHashesPath), line =>
             {
                 // check line
-                line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
-                if (!string.IsNullOrEmpty(line))
-                {
-                    ulong hash = FNV1A64HashAlgorithm.HashString(line);
-                    hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
-                }                
+                if (line.Contains(','))
+                    line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
+                if (string.IsNullOrEmpty(line))
+                    return;
+                ulong hash = FNV1A64HashAlgorithm.HashString(line);
+                hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
             });
 
             _maincontroller.Hashdict = hashDictionary.ToDictionary(

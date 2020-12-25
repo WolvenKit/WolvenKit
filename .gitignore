@@ -57,6 +57,7 @@ dkms.conf
 *.vs/
 *.suo
 CP77Tools/Properties/launchSettings.json
+CP77Tools/Resources/archivehashes.csv
 
 #include
 !texconv.exe

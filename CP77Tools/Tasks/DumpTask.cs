@@ -81,7 +81,8 @@ namespace CP77Tools.Tasks
                 else
                     isDirectory = true;
             }
-
+            #endregion
+            
             var archives = new List<Archive>();
 
             if (isDirectory)
@@ -95,7 +96,7 @@ namespace CP77Tools.Tasks
                 archives.Add(new Archive(inputFileInfo.FullName));
             }
 
-            #endregion
+            
 
             var mainController = ServiceLocator.Default.ResolveType<IMainController>();
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
@@ -113,12 +114,12 @@ namespace CP77Tools.Tasks
 
                     var fileinfo = ar.Files.Values;
                     var query = fileinfo.GroupBy(
-                        ext => Path.GetExtension(ext.NameStr),
+                        ext => Path.GetExtension(ext.FileName),
                         file => file,
                         (ext, finfo) => new
                         {
                             Key = ext,
-                            File = fileinfo.Where(_ => Path.GetExtension(_.NameStr) == ext)
+                            File = fileinfo.Where(_ => Path.GetExtension(_.FileName) == ext)
                         }).ToList();
 
 
@@ -185,7 +186,7 @@ namespace CP77Tools.Tasks
                     {
                         var entry = ar.Files.ToList()[i];
                         var hash = entry.Key;
-                        var filename = string.IsNullOrEmpty(entry.Value.NameStr) ? hash.ToString() : entry.Value.NameStr;
+                        var filename = string.IsNullOrEmpty(entry.Value.FileName) ? hash.ToString() : entry.Value.FileName;
 
                         if (imports)
                         {
@@ -217,7 +218,7 @@ namespace CP77Tools.Tasks
 
                         if (texinfo)
                         {
-                            if (!string.IsNullOrEmpty(entry.Value.NameStr) && entry.Value.NameStr.Contains(".xbm"))
+                            if (!string.IsNullOrEmpty(entry.Value.FileName) && entry.Value.FileName.Contains(".xbm"))
                             {
                                 var (f, buffers) = ar.GetFileData(hash, mmf);
 
@@ -377,7 +378,7 @@ namespace CP77Tools.Tasks
                     var ctr = 0;
                     foreach (var (hash, fileInfoEntry) in ar.Files)
                     {
-                        if (fileInfoEntry.NameStr == hash.ToString())
+                        if (fileInfoEntry.NameOrHash == hash.ToString())
                         {
                             mwriter.WriteLine(hash);
                             ctr++;
