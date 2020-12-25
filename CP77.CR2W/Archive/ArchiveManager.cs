@@ -16,12 +16,12 @@ namespace CP77.CR2W.Archive
         {
             _parentDirectoryInfo = indir;
 
-            // load files
-            Reload(indir);
-
             Archives = new List<Archive>();
             Files = new Dictionary<ulong, List<ArchiveItem>>();
             Extensions = new List<string>();
+
+            // load files
+            Reload(indir);
         }
 
         private DirectoryInfo _parentDirectoryInfo;

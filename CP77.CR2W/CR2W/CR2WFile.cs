@@ -33,6 +33,7 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Constants
+        public const uint MAGIC = 0x57325243; // "W2RC"
         private const long MAGIC_SIZE = 4;
         private const long FILEHEADER_SIZE = 36;
         private const long TABLEHEADER_SIZE = 12 * 10;
@@ -62,7 +63,7 @@ namespace WolvenKit.CR2W
 
         #region Fields
         // constants
-        private const uint MAGIC = 0x57325243; // "W2RC"
+        
         private const uint DEADBEEF = 0xDEADBEEF;
 
         // IO

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using CP77.CR2W.Archive;
 using Newtonsoft.Json;
 using WolvenKit.Common.Tools.DDS;
@@ -47,6 +48,7 @@ namespace CP77Tools.Tasks
 
             var inputFileInfo = new FileInfo(path);
             var inputDirInfo = new DirectoryInfo(path);
+            
 
             if (!inputFileInfo.Exists && !inputDirInfo.Exists)
             {
@@ -65,16 +67,26 @@ namespace CP77Tools.Tasks
                 return;
             }
 
+            var isDirectory = !inputFileInfo.Exists;
             var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
 
             #endregion
 
             if (extract || dump || list || uncook)
             {
-                var tobeprocessedarchives = inputFileInfo.Exists 
-                    ? new List<FileInfo> { inputFileInfo } :
-                    inputDirInfo.GetFiles().Where(_ => _.Extension == ".archive");
-                foreach (var processedarchive in tobeprocessedarchives)
+                var archiveFileInfos = new List<FileInfo>();
+                if (isDirectory)
+                {
+                    //var archiveManager = new ArchiveManager(basedir);
+                    // TODO: use the manager here?
+                }
+                else
+                {
+                    archiveFileInfos = new List<FileInfo> {inputFileInfo};
+                }
+
+              
+                foreach (var processedarchive in archiveFileInfos)
                 {
                     // get outdirectory
                     DirectoryInfo outDir;

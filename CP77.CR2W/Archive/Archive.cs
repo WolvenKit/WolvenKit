@@ -53,7 +53,7 @@ namespace CP77.CR2W.Archive
         public Archive(string path)
         {
             Filepath = path;
-            
+
             ReadTables();
         }
 
@@ -110,7 +110,8 @@ namespace CP77.CR2W.Archive
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             var ar = new Archive
             {
-                Filepath = outfile, _table = new ArTable()
+                Filepath = outfile,
+                _table = new ArTable()
             };
             using var fs = new FileStream(outfile, FileMode.Create);
             using var bw = new BinaryWriter(fs);
@@ -118,7 +119,7 @@ namespace CP77.CR2W.Archive
             // write header to allocate bytes
             ar._header.Write(bw);
             bw.Write(new byte[132]); // some weird padding
-             
+
             // get all buffer paths beforehand
             #region buffers pre-locate
 
@@ -152,9 +153,9 @@ namespace CP77.CR2W.Archive
             var parentfiles = allfiles.Where(_ => _.Extension != ".buffer");
             //Parallel.ForEach(parentfiles, fileInfo =>
             var fileInfos = parentfiles
-                .OrderBy(_ => FNV1A64HashAlgorithm.HashString(GetRelpath(_)) )
+                .OrderBy(_ => FNV1A64HashAlgorithm.HashString(GetRelpath(_)))
                 .ToList();
-            
+
             // local
             string GetRelpath(FileInfo infi) => infi.FullName[(infolder.FullName.Length + 1)..];
 
@@ -162,24 +163,40 @@ namespace CP77.CR2W.Archive
             {
                 var relpath = GetRelpath(fileInfo);
                 var hash = FNV1A64HashAlgorithm.HashString(relpath);
-                
+
+                if (fileInfo.Extension == ".bin")
+                    hash = ulong.Parse(Path.GetFileNameWithoutExtension(relpath));
+
                 // read the cr2w and get imports
-                var cr2w = new CR2WFile();
                 using var cr2wfs = new FileStream(fileInfo.FullName, FileMode.Open);
                 using var cr2wbr = new BinaryReader(cr2wfs);
 
-                try
-                {
-                    cr2w.ReadImportsAndBuffers(cr2wbr);
-                }
-                catch (Exception e)
-                {
-                    logger.LogString($"Failed to read cr2w file {fileInfo.FullName}", Logtype.Error);
-                    continue;
-                }
+                // peak if cr2w
+                var magic = cr2wbr.ReadUInt32();
+                var isCr2wFile = magic == CR2WFile.MAGIC;
+                cr2wbr.BaseStream.Seek(0, SeekOrigin.Begin);
 
+                var cr2w = new CR2WFile();
+                if (isCr2wFile)
+                {
+                    try
+                    {
+                        cr2w.ReadImportsAndBuffers(cr2wbr);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.LogString($"Failed to read cr2w file {fileInfo.FullName}", Logtype.Error);
+                        continue;
+                    }
+                }
+                else
+                {
+
+                }
+                
                 //register imports
                 uint firstimportidx = (uint)ar._table.Dependencies.Count;
+
                 foreach (var cr2WImportWrapper in cr2w.Imports)
                 {
                     if (!ar._table.Dependencies.Select(_ => _.HashStr).Contains(cr2WImportWrapper.DepotPathStr))
@@ -212,10 +229,10 @@ namespace CP77.CR2W.Archive
                 // save table data
                 var sha1 = new System.Security.Cryptography.SHA1Managed();
                 var sha1hash = sha1.ComputeHash(StreamExtensions.ToByteArray(cr2wbr.BaseStream));
-                var flags = buffers.Count > 0 ? (uint) buffers.Count - 1 : 0;
+                var flags = buffers.Count > 0 ? (uint)buffers.Count - 1 : 0;
                 var item = new ArchiveItem(hash, DateTime.Now, flags
                     , firstoffsetidx, lastoffsetidx, firstimportidx, lastimportidx
-                    , sha1hash );
+                    , sha1hash);
                 ar._table.FileInfo.Add(hash, item);
 
                 Interlocked.Increment(ref progress);
@@ -235,7 +252,7 @@ namespace CP77.CR2W.Archive
             // padding to page (4096 bytes)
             bw.PadUntilPage();
             var filesize = bw.BaseStream.Position;
-            
+
             // write the header again
             ar._header.Tableoffset = (ulong)tableoffset;
             ar._header.Tablesize = (uint)tablesize;
@@ -252,8 +269,8 @@ namespace CP77.CR2W.Archive
                 if (size < 255)
                 {
                     ar._table.Offsets.Add(new OffsetEntry(
-                        (ulong)bw.BaseStream.Position, 
-                        size, 
+                        (ulong)bw.BaseStream.Position,
+                        size,
                         size));
                     bw.Write(inbuffer);
                 }
@@ -263,16 +280,16 @@ namespace CP77.CR2W.Archive
                     var outBuffer = new byte[zsize];
 
                     var r = OodleHelper.Compress(
-                        inbuffer, 0, 
-                        (int)size, 
-                        outBuffer, 
-                        0, 
+                        inbuffer, 0,
+                        (int)size,
+                        outBuffer,
+                        0,
                         zsize);
                     if (r != zsize)
                     {
                         //Debugger.Break();
                     }
-                    
+
                     //resize buffer
                     var writelist = new List<byte>()
                     {
@@ -280,10 +297,10 @@ namespace CP77.CR2W.Archive
                     };
                     writelist.AddRange(BitConverter.GetBytes(size));
                     writelist.AddRange(outBuffer.Take(r));
-                    
+
                     ar._table.Offsets.Add(new OffsetEntry(
                         (ulong)bw.BaseStream.Position,
-                        (uint)r+8,
+                        (uint)r + 8,
                         size));
                     bw.Write(writelist.ToArray());
                 }
@@ -332,7 +349,7 @@ namespace CP77.CR2W.Archive
 
             return ExtractSingleInner(mmf, hash, outDir);
         }
-        
+
         private int UncookSingleInner(MemoryMappedFile mmf, ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga)
         {
             var uncooksuccess = false;
@@ -480,7 +497,7 @@ namespace CP77.CR2W.Archive
         {
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
-            
+
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
 
@@ -501,7 +518,7 @@ namespace CP77.CR2W.Archive
                     let matches = searchTerm.Matches(file.NameStr)
                     where matches.Count > 0
                     select file;
-                    
+
                 finalmatches = queryMatchingFiles;
             }
 
@@ -581,7 +598,7 @@ namespace CP77.CR2W.Archive
                 logger.LogProgress(progress / (float)FileCount);
             });
 
-            
+
             return (extractedList.ToList(), all);
         }
 
@@ -638,7 +655,7 @@ namespace CP77.CR2W.Archive
                 else
                 {
                     var oodleCompression = binaryReader.ReadBytes(4);
-                    if ((oodleCompression.SequenceEqual(new byte[] {0x4b, 0x41, 0x52, 0x4b})))
+                    if ((oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
                     {
                         var size = binaryReader.ReadUInt32();
 
@@ -667,12 +684,12 @@ namespace CP77.CR2W.Archive
             }
         }
 
-        
+
 
         #endregion
     }
 
-    
+
 }
 
 
