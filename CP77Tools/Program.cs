@@ -156,7 +156,7 @@ namespace CP77Tools
             }
 
         }
-
+        
 
         internal static async Task Loadhashes()
         {
@@ -167,9 +167,30 @@ namespace CP77Tools
 
             var hashDictionary = new ConcurrentDictionary<ulong,string>();
 
+            // TODO: proper update handling
+            try
+            {
+                File.Delete(Constants.ArchiveHashesPath);
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+            
             ZipFile.ExtractToDirectory(Constants.ArchiveHashesZipPath, Constants.ResourcesPath);
 
             Parallel.ForEach(File.ReadLines(Constants.ArchiveHashesPath), line =>
+            {
+                // check line
+                if (line.Contains(','))
+                    line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
+                if (string.IsNullOrEmpty(line))
+                    return;
+                ulong hash = FNV1A64HashAlgorithm.HashString(line);
+                hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
+            });
+
+            Parallel.ForEach(File.ReadLines(Constants.LooseHashesPath), line =>
             {
                 // check line
                 if (line.Contains(','))
