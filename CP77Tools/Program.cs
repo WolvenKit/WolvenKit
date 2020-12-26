@@ -190,16 +190,17 @@ namespace CP77Tools
                 hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
             });
 
-            Parallel.ForEach(File.ReadLines(Constants.LooseHashesPath), line =>
-            {
-                // check line
-                if (line.Contains(','))
-                    line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
-                if (string.IsNullOrEmpty(line))
-                    return;
-                ulong hash = FNV1A64HashAlgorithm.HashString(line);
-                hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
-            });
+            if (File.Exists(Constants.LooseHashesPath))
+                Parallel.ForEach(File.ReadLines(Constants.LooseHashesPath), line =>
+                {
+                    // check line
+                    if (line.Contains(','))
+                        line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
+                    if (string.IsNullOrEmpty(line))
+                        return;
+                    ulong hash = FNV1A64HashAlgorithm.HashString(line);
+                    hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
+                });
 
             _maincontroller.Hashdict = hashDictionary.ToDictionary(
                 entry => entry.Key,
