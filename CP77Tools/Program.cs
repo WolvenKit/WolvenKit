@@ -178,17 +178,17 @@ namespace CP77Tools
             }
             
             ZipFile.ExtractToDirectory(Constants.ArchiveHashesZipPath, Constants.ResourcesPath);
-
-            Parallel.ForEach(File.ReadLines(Constants.ArchiveHashesPath), line =>
-            {
-                // check line
-                if (line.Contains(','))
-                    line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
-                if (string.IsNullOrEmpty(line))
-                    return;
-                ulong hash = FNV1A64HashAlgorithm.HashString(line);
-                hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
-            });
+            if (File.Exists(Constants.ArchiveHashesPath))
+                Parallel.ForEach(File.ReadLines(Constants.ArchiveHashesPath), line =>
+                {
+                    // check line
+                    if (line.Contains(','))
+                        line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
+                    if (string.IsNullOrEmpty(line))
+                        return;
+                    ulong hash = FNV1A64HashAlgorithm.HashString(line);
+                    hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
+                });
 
             if (File.Exists(Constants.LooseHashesPath))
                 Parallel.ForEach(File.ReadLines(Constants.LooseHashesPath), line =>
