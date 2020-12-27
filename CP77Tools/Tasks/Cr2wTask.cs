@@ -61,6 +61,7 @@ namespace CP77Tools.Tasks
 
             if (chunks)
             {
+                br.BaseStream.Seek(0, SeekOrigin.Begin);
                 cr2w.Read(br);
 
                 //write
