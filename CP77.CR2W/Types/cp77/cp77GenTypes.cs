@@ -416,7 +416,6 @@ namespace WolvenKit.CR2W.Types
     [REDMeta] public class gameBodyTypeAnimationDefinition : CVariable { public gameBodyTypeAnimationDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class gameAppearanceNameVisualTagsPreset_Entity : CVariable { public gameAppearanceNameVisualTagsPreset_Entity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class ETransitionMode : CVariable { public ETransitionMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
-    [REDMeta] public class ERenderObjectType : CVariable { public ERenderObjectType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class entdismembermentWoundMeshes : CVariable { public entdismembermentWoundMeshes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class entdismembermentWoundDecal : CVariable { public entdismembermentWoundDecal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }
     [REDMeta] public class EGameplayRole : CVariable { public EGameplayRole(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { } }

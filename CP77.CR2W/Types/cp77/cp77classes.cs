@@ -585,18 +585,13 @@ public class CParticleModificatorNoise : CVariable
 	[Ordinal(2)] [RED("offset")] public CHandle<IEvaluatorVector> Offset { get; set; }
 	[Ordinal(3)] [RED("frequency")] public CHandle<IEvaluatorVector> Frequency { get; set; }
 	[Ordinal(4)] [RED("worldSpaceOffset")] public CBool WorldSpaceOffset { get; set; }
-	[Ordinal(5)] [RED("noiseType")] public ENoiseType NoiseType { get; set; }
+	[Ordinal(5)] [RED("noiseType")] public CEnum<ENoiseType> NoiseType { get; set; }
 	public CParticleModificatorNoise(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
 public class animMuteAnimEvents : CVariable
 {
 	public animMuteAnimEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
-[REDMeta]
-public class ETextureAnimationMode : CVariable
-{
-	public ETextureAnimationMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
 public class AlertedState : CVariable
@@ -2324,11 +2319,7 @@ public class animHipsIkRequest : CVariable
 	[Ordinal(4)] [RED("rightFootTransformIndex")] public animTransformIndex RightFootTransformIndex { get; set; }
 	public animHipsIkRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class ELightType : CVariable
-{
-	public ELightType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class AIbehaviorCTreeNodeControlledByQuestNodeDefinition : CVariable
 {
@@ -5350,11 +5341,7 @@ public class animAnimNode_BlendFromPose : CVariable
 	[Ordinal(0)] [RED("debug")] public CBool Debug { get; set; }
 	public animAnimNode_BlendFromPose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EAreaLightShape : CVariable
-{
-	public EAreaLightShape(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class questOverrideSplineSpeed_NodeType : CVariable
 {
@@ -15228,11 +15215,6 @@ public class animAnimsetWithOverridesTagCondition : CVariable
 	public animAnimsetWithOverridesTagCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 
-[REDMeta]
-public class ENoiseType : CVariable
-{
-	public ENoiseType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
 [REDMeta]
 public class animAnimNode_VectorJoin : CVariable
 {

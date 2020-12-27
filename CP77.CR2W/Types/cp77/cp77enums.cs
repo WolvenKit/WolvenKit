@@ -6,6 +6,49 @@ namespace WolvenKit.CR2W.Types
 {
     public static partial class Enums
     {
+        public enum ERenderObjectType
+        {
+            ROT_Static,
+            ROT_Terrain,
+            ROT_Road,
+            ROT_Skinned,
+            ROT_Character,
+            ROT_Foliage,
+            ROT_Grass,
+            ROT_Vehicle,
+            ROT_Weapon,
+            ROT_Particle,
+            ROT_Enemy,
+            ROT_CustomCharacter1,
+            ROT_CustomCharacter2,
+            ROT_CustomCharacter3,
+            ROT_MainPlayer,
+            ROT_NoAO,
+            ROT_NoLighting,
+            ROT_NoTXAA
+        }
+
+
+        public enum EAreaLightShape
+        {
+            ALS_Sphere,
+            ALS_Capsule
+        }
+        public enum ELightUnit
+        {
+            LU_Lumen,
+            LU_Watt,
+            LU_Lux,
+            LU_Nit,
+            LU_EV100
+        }
+        public enum ENoiseType
+        {
+            NT_Random,
+            NT_Simplex2D,
+            NT_Simplex3D
+        }
+
         public enum questSocketType
         {
             Undefined = 0,
