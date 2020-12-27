@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Catel.IO;
 using Catel.IoC;
-using CP77.Common.Services;
 using CP77.CR2W.Archive;
+using CP77Tools.Common.Services;
 using Newtonsoft.Json;
 using WolvenKit.CR2W.Types;
 using RED.CRC64;
@@ -178,13 +178,13 @@ namespace CP77Tools.Model
         public HashEntry(BinaryReader br, int idx)
         {
             _idx = idx;
-            var mainController = ServiceLocator.Default.ResolveType<IMainController>();
+            var mainController = ServiceLocator.Default.ResolveType<IHashService>();
 
             Read(br, mainController);
             
         }
 
-        private void Read(BinaryReader br, IMainController mainController)
+        private void Read(BinaryReader br, IHashService mainController)
         {
             _hash = br.ReadUInt64();
 

@@ -62,8 +62,7 @@ namespace CP77Tools.Tasks
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
             if (await hashService.RefreshAsync())
             {
-                // TODO: Would this be better managed entirely by IHashService
-                await Program.Loadhashes();
+                await hashService.ReloadLocally();
             }
 
             return 1;

@@ -11,6 +11,7 @@ using Catel.IoC;
 using CP77.Common.Services;
 using CP77.Common.Tools.FNV1A;
 using CP77.CR2W.Archive;
+using CP77Tools.Common.Services;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -98,7 +99,7 @@ namespace CP77Tools.Tasks
 
             
 
-            var mainController = ServiceLocator.Default.ResolveType<IMainController>();
+            var mainController = ServiceLocator.Default.ResolveType<IHashService>();
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             var typedict = new ConcurrentDictionary<string, IEnumerable<string>>();
 

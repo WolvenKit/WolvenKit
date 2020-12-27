@@ -15,6 +15,7 @@ using CP77.Common.Tools.FNV1A;
 using CP77Tools.Commands;
 using CP77Tools.Common.Services;
 using CP77Tools.Extensions;
+using CP77Tools.Tasks;
 using Luna.ConsoleProgressBar;
 
 namespace CP77Tools
@@ -26,10 +27,10 @@ namespace CP77Tools
         {
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
-            ServiceLocator.Default.RegisterType<IMainController, MainController>();
+            ServiceLocator.Default.RegisterType<IAppSettingsService, AppSettingsService>();
 
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-
+            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
             logger.OnStringLogged += delegate (object? sender, LogStringEventArgs args)
             {
                 switch (args.Logtype)
@@ -55,10 +56,6 @@ namespace CP77Tools
                 Console.ResetColor();
             };
 
-            // get csv data
-            logger.LogString("Loading Hashes...", Logtype.Important);
-            await Loadhashes();
-
             var rootCommand = new RootCommand
             {
                 new PackCommand(),
@@ -68,6 +65,9 @@ namespace CP77Tools
                 new HashCommand(),
                 new OodleCommand()
             };
+
+            //await ConsoleFunctions.UpdateHashesAsync();
+            await hashService.ReloadLocally();
 
             // Run
             if (args == null || args.Length == 0)
@@ -155,60 +155,6 @@ namespace CP77Tools
                 }
             }
 
-        }
-        
-
-        internal static async Task Loadhashes()
-        {
-            var _maincontroller = ServiceLocator.Default.ResolveType<IMainController>();
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            Stopwatch watch = new Stopwatch();
-            watch.Restart();
-
-            var hashDictionary = new ConcurrentDictionary<ulong,string>();
-
-            // TODO: proper update handling
-            try
-            {
-                File.Delete(Constants.ArchiveHashesPath);
-            }
-            catch (Exception e)
-            {
-                return;
-            }
-            
-            ZipFile.ExtractToDirectory(Constants.ArchiveHashesZipPath, Constants.ResourcesPath);
-            if (File.Exists(Constants.ArchiveHashesPath))
-                Parallel.ForEach(File.ReadLines(Constants.ArchiveHashesPath), line =>
-                {
-                    // check line
-                    if (line.Contains(','))
-                        line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
-                    if (string.IsNullOrEmpty(line))
-                        return;
-                    ulong hash = FNV1A64HashAlgorithm.HashString(line);
-                    hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
-                });
-
-            if (File.Exists(Constants.LooseHashesPath))
-                Parallel.ForEach(File.ReadLines(Constants.LooseHashesPath), line =>
-                {
-                    // check line
-                    if (line.Contains(','))
-                        line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
-                    if (string.IsNullOrEmpty(line))
-                        return;
-                    ulong hash = FNV1A64HashAlgorithm.HashString(line);
-                    hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
-                });
-
-            _maincontroller.Hashdict = hashDictionary.ToDictionary(
-                entry => entry.Key,
-                entry => entry.Value);
-
-            watch.Stop();
-
-            logger.LogString($"Loaded {hashDictionary.Count} hashes in {watch.ElapsedMilliseconds}ms.", Logtype.Success);
         }
     }
 }

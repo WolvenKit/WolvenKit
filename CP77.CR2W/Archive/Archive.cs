@@ -105,7 +105,7 @@ namespace CP77.CR2W.Archive
             if (!infolder.Exists) return null;
             if (!outpath.Exists) return null;
 
-            var outfile = Path.Combine(outpath.FullName, "blob0.archive");
+            var outfile = Path.Combine(outpath.FullName, "basegame_blob0.archive");
 
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             var ar = new Archive
@@ -228,7 +228,7 @@ namespace CP77.CR2W.Archive
 
                 // save table data
                 var sha1 = new System.Security.Cryptography.SHA1Managed();
-                var sha1hash = sha1.ComputeHash(StreamExtensions.ToByteArray(cr2wbr.BaseStream));
+                var sha1hash = sha1.ComputeHash(StreamExtensions.ToByteArray(cr2wbr.BaseStream)); //TODO: this is only correct for files with no buffer
                 var flags = buffers.Count > 0 ? (uint)buffers.Count - 1 : 0;
                 var item = new ArchiveItem(hash, DateTime.Now, flags
                     , firstoffsetidx, lastoffsetidx, firstimportidx, lastimportidx
