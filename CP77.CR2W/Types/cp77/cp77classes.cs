@@ -742,7 +742,7 @@ public class worldReflectionProbeNode : CVariable
 	[Ordinal(5)] [RED("skyScale")] public CFloat SkyScale { get; set; }
 	[Ordinal(6)] [RED("allInShadow")] public CBool AllInShadow { get; set; }
 	[Ordinal(7)] [RED("hideSkyColor")] public CBool HideSkyColor { get; set; }
-	[Ordinal(8)] [RED("ambientMode")] public envUtilsReflectionProbeAmbientContributionMode AmbientMode { get; set; }
+	[Ordinal(8)] [RED("ambientMode")] public CEnum<envUtilsReflectionProbeAmbientContributionMode> AmbientMode { get; set; }
 	[Ordinal(9)] [RED("captureOffset")] public Vector3 CaptureOffset { get; set; }
 	[Ordinal(10)] [RED("subScene")] public CBool SubScene { get; set; }
 	[Ordinal(11)] [RED("noFadeBlend")] public CBool NoFadeBlend { get; set; }
@@ -1473,7 +1473,7 @@ public class SAnimationBufferOrientationCompressionMethod : CVariable
 public class CheckArgumentInt : CVariable
 {
 	[Ordinal(0)] [RED("argumentVar")] public CName ArgumentVar { get; set; }
-	[Ordinal(1)] [RED("comparator")] public ECompareOp Comparator { get; set; }
+	[Ordinal(1)] [RED("comparator")] public CEnum<ECompareOp> Comparator { get; set; }
 	public CheckArgumentInt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -1918,7 +1918,7 @@ public class scneventsBraindanceVisibilityEvent : CVariable
 	[Ordinal(0)] [RED("id")] public scnSceneEventId Id { get; set; }
 	[Ordinal(1)] [RED("duration")] public CUInt32 Duration { get; set; }
 	[Ordinal(2)] [RED("performerId")] public scnPerformerId PerformerId { get; set; }
-	[Ordinal(3)] [RED("customMaterialParam")] public ECustomMaterialParam CustomMaterialParam { get; set; }
+	[Ordinal(3)] [RED("customMaterialParam")] public CEnum<ECustomMaterialParam> CustomMaterialParam { get; set; }
 	[Ordinal(4)] [RED("parameterIndex")] public CUInt32 ParameterIndex { get; set; }
 	public scneventsBraindanceVisibilityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -2084,7 +2084,7 @@ public class questDistanceVsDistanceComparison_ConditionType : CVariable
 {
 	[Ordinal(0)] [RED("distanceDefinition1")] public CHandle<questObjectDistance> DistanceDefinition1 { get; set; }
 	[Ordinal(1)] [RED("distanceDefinition2")] public CHandle<questObjectDistance> DistanceDefinition2 { get; set; }
-	[Ordinal(2)] [RED("comparisonType")] public EComparisonType ComparisonType { get; set; }
+	[Ordinal(2)] [RED("comparisonType")] public CEnum<EComparisonTyp> ComparisonType { get; set; }
 	public questDistanceVsDistanceComparison_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -2328,7 +2328,7 @@ public class scnOverridePhantomParamsEvent : CVariable
 [REDMeta]
 public class EffectExecutor_GameObjectOutline : CVariable
 {
-	[Ordinal(0)] [RED("outlineType")] public EOutlineType OutlineType { get; set; }
+	[Ordinal(0)] [RED("outlineType")] public CEnum<EOutlineType> OutlineType { get; set; }
 	public EffectExecutor_GameObjectOutline(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -3445,7 +3445,7 @@ public class physicsEClothCollisionMaskEnum : CVariable
 [REDMeta]
 public class SetSecuritySystemState : CVariable
 {
-	[Ordinal(0)] [RED("state")] public ESecuritySystemState State { get; set; }
+	[Ordinal(0)] [RED("state")] public CEnum<ESecuritySystemState> State { get; set; }
 	public SetSecuritySystemState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -3666,11 +3666,7 @@ public class scnRidCameraAnimationSRRefId : CVariable
 	[Ordinal(0)] [RED("id")] public CUInt32 Id { get; set; }
 	public scnRidCameraAnimationSRRefId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class rendLightGroup : CVariable
-{
-	public rendLightGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class UpdateDyingStimSource : CVariable
 {
@@ -3824,7 +3820,7 @@ public class EquipSecondaryWeaponCommandDelegate : CVariable
 public class questComparisonParam : CVariable
 {
 	[Ordinal(0)] [RED("entireCommunity")] public CBool EntireCommunity { get; set; }
-	[Ordinal(1)] [RED("comparisonType")] public EComparisonType ComparisonType { get; set; }
+	[Ordinal(1)] [RED("comparisonType")] public CEnum<EComparisonType> ComparisonType { get; set; }
 	public questComparisonParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -4484,11 +4480,7 @@ public class IncrimentStimThreshold : CVariable
 	[Ordinal(0)] [RED("thresholdTimeout")] public CFloat ThresholdTimeout { get; set; }
 	public IncrimentStimThreshold(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class rendLightAttenuation : CVariable
-{
-	public rendLightAttenuation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class questCombatNodeParams_ThrowGrenade : CVariable
 {
@@ -4720,7 +4712,7 @@ public class AIbehaviorAssignTaskDefinition : CVariable
 [REDMeta]
 public class AreaTypeTransition : CVariable
 {
-	[Ordinal(0)] [RED("transitionMode")] public ETransitionMode TransitionMode { get; set; }
+	[Ordinal(0)] [RED("transitionMode")] public CEnum<ETransitionMode> TransitionMode { get; set; }
 	public AreaTypeTransition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -4918,7 +4910,7 @@ public class questInventory_ConditionType : CVariable
 {
 	[Ordinal(0)] [RED("itemID")] public TweakDBID ItemID { get; set; }
 	[Ordinal(1)] [RED("quantity")] public CUInt32 Quantity { get; set; }
-	[Ordinal(2)] [RED("comparisonType")] public EComparisonType ComparisonType { get; set; }
+	[Ordinal(2)] [RED("comparisonType")] public CEnum<EComparisonType> ComparisonType { get; set; }
 	public questInventory_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -4991,8 +4983,8 @@ public class questTransformAnimatorNode_Action_Pause : CVariable
 [REDMeta]
 public class SetDoorType : CVariable
 {
-	[Ordinal(0)] [RED("doorTypeSideOne")] public EDoorType DoorTypeSideOne { get; set; }
-	[Ordinal(1)] [RED("doorTypeSideTwo")] public EDoorType DoorTypeSideTwo { get; set; }
+	[Ordinal(0)] [RED("doorTypeSideOne")] public CEnum<EDoorType> DoorTypeSideOne { get; set; }
+	[Ordinal(1)] [RED("doorTypeSideTwo")] public CEnum<EDoorType> DoorTypeSideTwo { get; set; }
 	public SetDoorType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -5046,7 +5038,7 @@ public class worldSpeedSplineNode : CVariable
 [REDMeta]
 public class ChangePresetEvent : CVariable
 {
-	[Ordinal(0)] [RED("presetID")] public ESmartHousePreset PresetID { get; set; }
+	[Ordinal(0)] [RED("presetID")] public CEnum<ESmartHousePreset> PresetID { get; set; }
 	public ChangePresetEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -5902,7 +5894,7 @@ public class AnimFeature_SceneSystemCarrying : CVariable
 public class questRenderPlane_NodeType : CVariable
 {
 	[Ordinal(0)] [RED("puppetRef")] public gameEntityReference PuppetRef { get; set; }
-	[Ordinal(1)] [RED("renderPlane")] public ERenderingPlane RenderPlane { get; set; }
+	[Ordinal(1)] [RED("renderPlane")] public CEnum<ERenderingPlane> RenderPlane { get; set; }
 	public questRenderPlane_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -6198,7 +6190,7 @@ public class Vector3 : CVariable
 [REDMeta]
 public class CEvaluatorVectorCurve : CVariable
 {
-	[Ordinal(0)] [RED("freeAxes")] public EFreeVectorAxes FreeAxes { get; set; }
+	[Ordinal(0)] [RED("freeAxes")] public CEnum<EFreeVectorAxes> FreeAxes { get; set; }
 	[Ordinal(1)] [RED("curves")] public curveData<Vector4> Curves { get; set; }
 	public CEvaluatorVectorCurve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -6285,7 +6277,7 @@ public class gameEffectObjectProvider_PhysicalRayFan : CVariable
 public class scnCheckSpeakersDistanceReturnConditionParams : CVariable
 {
 	[Ordinal(0)] [RED("distance")] public CFloat Distance { get; set; }
-	[Ordinal(1)] [RED("comparisonType")] public EComparisonType ComparisonType { get; set; }
+	[Ordinal(1)] [RED("comparisonType")] public CEnum<EComparisonType> ComparisonType { get; set; }
 	public scnCheckSpeakersDistanceReturnConditionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -6381,7 +6373,7 @@ public class CParticleInitializerRotationRate3D : CVariable
 public class scnCheckPlayerTargetEntityDistanceReturnConditionParams : CVariable
 {
 	[Ordinal(0)] [RED("distance")] public CFloat Distance { get; set; }
-	[Ordinal(1)] [RED("comparisonType")] public EComparisonType ComparisonType { get; set; }
+	[Ordinal(1)] [RED("comparisonType")] public CEnum<EComparisonType> ComparisonType { get; set; }
 	[Ordinal(2)] [RED("targetEntity")] public gameEntityReference TargetEntity { get; set; }
 	public scnCheckPlayerTargetEntityDistanceReturnConditionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -6404,8 +6396,8 @@ public class Build_ScriptConditionType : CVariable
 {
 	[Ordinal(0)] [RED("questAssignment")] public TweakDBID QuestAssignment { get; set; }
 	[Ordinal(1)] [RED("buildId")] public TweakDBID BuildId { get; set; }
-	[Ordinal(2)] [RED("difficulty")] public EGameplayChallengeLevel Difficulty { get; set; }
-	[Ordinal(3)] [RED("comparisonType")] public ECompareOp ComparisonType { get; set; }
+	[Ordinal(2)] [RED("difficulty")] public CEnum<EGameplayChallengeLevel> Difficulty { get; set; }
+	[Ordinal(3)] [RED("comparisonType")] public CEnum<ECompareOp> ComparisonType { get; set; }
 	public Build_ScriptConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -7033,7 +7025,7 @@ public class questSetCustomStyle_NodeType : CVariable
 [REDMeta]
 public class CEvaluatorVectorMultiCurve : CVariable
 {
-	[Ordinal(0)] [RED("freeAxes")] public EFreeVectorAxes FreeAxes { get; set; }
+	[Ordinal(0)] [RED("freeAxes")] public CEnum<EFreeVectorAxes> FreeAxes { get; set; }
 	[Ordinal(1)] [RED("curves")] public multiChannelCurve<CFloat> Curves { get; set; }
 	public CEvaluatorVectorMultiCurve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -7190,7 +7182,7 @@ public class questStartVehicle_NodeType : CVariable
 [REDMeta]
 public class CEvaluatorVectorStartEnd : CVariable
 {
-	[Ordinal(0)] [RED("freeAxes")] public EFreeVectorAxes FreeAxes { get; set; }
+	[Ordinal(0)] [RED("freeAxes")] public CEnum<EFreeVectorAxes> FreeAxes { get; set; }
 	[Ordinal(1)] [RED("start")] public Vector4 Start { get; set; }
 	[Ordinal(2)] [RED("end")] public Vector4 End { get; set; }
 	public CEvaluatorVectorStartEnd(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -7420,7 +7412,7 @@ public class worldLightChannelVolumeNode : CVariable
 	[Ordinal(0)] [RED("debugName")] public CName DebugName { get; set; }
 	[Ordinal(1)] [RED("sourcePrefabHash")] public CUInt64 SourcePrefabHash { get; set; }
 	[Ordinal(2)] [RED("outline")] public CHandle<AreaShapeOutline> Outline { get; set; }
-	[Ordinal(3)] [RED("channels")] public rendLightChannel Channels { get; set; }
+	[Ordinal(3)] [RED("channels")] public CEnum<rendLightChannel> Channels { get; set; }
 	public worldLightChannelVolumeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -7875,7 +7867,7 @@ public class scneventsSetAnimFeatureEvent : CVariable
 [REDMeta]
 public class AISetCombatPresetCommandParams : CVariable
 {
-	[Ordinal(0)] [RED("combatPreset")] public EAICombatPreset CombatPreset { get; set; }
+	[Ordinal(0)] [RED("combatPreset")] public CEnum<EAICombatPreset> CombatPreset { get; set; }
 	public AISetCombatPresetCommandParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -8204,7 +8196,7 @@ public class questAddCombatLogMessage_NodeType : CVariable
 public class questStreetCredTier_ConditionType : CVariable
 {
 	[Ordinal(0)] [RED("tierID")] public TweakDBID TierID { get; set; }
-	[Ordinal(1)] [RED("comparisonType")] public EComparisonType ComparisonType { get; set; }
+	[Ordinal(1)] [RED("comparisonType")] public CEnum<EComparisonType> ComparisonType { get; set; }
 	public questStreetCredTier_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -8784,12 +8776,12 @@ public class worldStaticLightNode : CVariable
 {
 	[Ordinal(0)] [RED("debugName")] public CName DebugName { get; set; }
 	[Ordinal(1)] [RED("sourcePrefabHash")] public CUInt64 SourcePrefabHash { get; set; }
-	[Ordinal(2)] [RED("type")] public ELightType Type { get; set; }
+	[Ordinal(2)] [RED("type")] public CEnum<ELightType> Type { get; set; }
 	[Ordinal(3)] [RED("color")] public CColor Color { get; set; }
-	[Ordinal(4)] [RED("unit")] public ELightUnit Unit { get; set; }
+	[Ordinal(4)] [RED("unit")] public CEnum<ELightUnit> Unit { get; set; }
 	[Ordinal(5)] [RED("intensity")] public CFloat Intensity { get; set; }
 	[Ordinal(6)] [RED("temperature")] public CFloat Temperature { get; set; }
-	[Ordinal(7)] [RED("lightChannel")] public rendLightChannel LightChannel { get; set; }
+	[Ordinal(7)] [RED("lightChannel")] public CEnum<rendLightChannel> LightChannel { get; set; }
 	[Ordinal(8)] [RED("useInFog")] public CBool UseInFog { get; set; }
 	[Ordinal(9)] [RED("clampAttenuation")] public CBool ClampAttenuation { get; set; }
 	[Ordinal(10)] [RED("spotCapsule")] public CBool SpotCapsule { get; set; }
@@ -8798,7 +8790,7 @@ public class worldStaticLightNode : CVariable
 	[Ordinal(13)] [RED("innerAngle")] public CFloat InnerAngle { get; set; }
 	[Ordinal(14)] [RED("outerAngle")] public CFloat OuterAngle { get; set; }
 	[Ordinal(15)] [RED("enableLocalShadows")] public CBool EnableLocalShadows { get; set; }
-	[Ordinal(16)] [RED("contactShadows")] public rendContactShadowReciever ContactShadows { get; set; }
+	[Ordinal(16)] [RED("contactShadows")] public CEnum<rendContactShadowReciever> ContactShadows { get; set; }
 	[Ordinal(17)] [RED("shadowFadeDistance")] public CFloat ShadowFadeDistance { get; set; }
 	[Ordinal(18)] [RED("shadowSoftnessMode")] public CEnum<ELightShadowSoftnessMode> ShadowSoftnessMode { get; set; }
 	[Ordinal(19)] [RED("allowDistantLight")] public CBool AllowDistantLight { get; set; }
@@ -9988,7 +9980,7 @@ public class CheckArgumentFloat : CVariable
 {
 	[Ordinal(0)] [RED("argumentVar")] public CName ArgumentVar { get; set; }
 	[Ordinal(1)] [RED("customVar")] public CFloat CustomVar { get; set; }
-	[Ordinal(2)] [RED("comparator")] public ECompareOp Comparator { get; set; }
+	[Ordinal(2)] [RED("comparator")] public CEnum<ECompareOp> Comparator { get; set; }
 	public CheckArgumentFloat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -10119,7 +10111,7 @@ public class ToggleForcedHighlightEvent : CVariable
 {
 	[Ordinal(0)] [RED("sourceName")] public CName SourceName { get; set; }
 	[Ordinal(1)] [RED("highlightData")] public CHandle<HighlightEditableData> HighlightData { get; set; }
-	[Ordinal(2)] [RED("operation")] public EToggleOperationType Operation { get; set; }
+	[Ordinal(2)] [RED("operation")] public CEnum<EToggleOperationType> Operation { get; set; }
 	public ToggleForcedHighlightEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -10668,9 +10660,9 @@ public class EffectExecutor_GrenadeTargetTracker : CVariable
 [REDMeta]
 public class HighlightEditableData : CVariable
 {
-	[Ordinal(0)] [RED("highlightType")] public EFocusForcedHighlightType HighlightType { get; set; }
-	[Ordinal(1)] [RED("outlineType")] public EFocusOutlineType OutlineType { get; set; }
-	[Ordinal(2)] [RED("priority")] public EPriority Priority { get; set; }
+	[Ordinal(0)] [RED("highlightType")] public CEnum<EFocusForcedHighlightType> HighlightType { get; set; }
+	[Ordinal(1)] [RED("outlineType")] public CEnum<EFocusOutlineType> OutlineType { get; set; }
+	[Ordinal(2)] [RED("priority")] public CEnum<EPriority> Priority { get; set; }
 	public HighlightEditableData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -11728,7 +11720,7 @@ public class questSetPossesion_NodeType : CVariable
 [REDMeta]
 public class EngineeringSkillCheck : CVariable
 {
-	[Ordinal(0)] [RED("difficulty")] public EGameplayChallengeLevel Difficulty { get; set; }
+	[Ordinal(0)] [RED("difficulty")] public CEnum<EGameplayChallengeLevel> Difficulty { get; set; }
 	public EngineeringSkillCheck(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -11746,7 +11738,7 @@ public class worldStreamingQueryDataResource : CVariable
 [REDMeta]
 public class DemolitionSkillCheck : CVariable
 {
-	[Ordinal(0)] [RED("difficulty")] public EGameplayChallengeLevel Difficulty { get; set; }
+	[Ordinal(0)] [RED("difficulty")] public CEnum<EGameplayChallengeLevel> Difficulty { get; set; }
 	public DemolitionSkillCheck(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -12006,7 +11998,7 @@ public class animFacialEmotionTransitionType : CVariable
 public class questCharacterHealth_ConditionType : CVariable
 {
 	[Ordinal(0)] [RED("percent")] public CFloat Percent { get; set; }
-	[Ordinal(1)] [RED("comparisonType")] public EComparisonType ComparisonType { get; set; }
+	[Ordinal(1)] [RED("comparisonType")] public CEnum<EComparisonType> ComparisonType { get; set; }
 	public questCharacterHealth_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -12137,7 +12129,7 @@ public class animAnimFallbackFrameDesc : CVariable
 public class SetPersistentForcedHighlightEvent : CVariable
 {
 	[Ordinal(0)] [RED("highlightData")] public CHandle<HighlightEditableData> HighlightData { get; set; }
-	[Ordinal(1)] [RED("operation")] public EToggleOperationType Operation { get; set; }
+	[Ordinal(1)] [RED("operation")] public CEnum<EToggleOperationType> Operation { get; set; }
 	public SetPersistentForcedHighlightEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -12574,7 +12566,7 @@ public class scnVarComparison_FactConditionTypeParams : CVariable
 {
 	[Ordinal(0)] [RED("factName")] public CName FactName { get; set; }
 	[Ordinal(1)] [RED("value")] public CInt32 Value { get; set; }
-	[Ordinal(2)] [RED("comparisonType")] public EComparisonType ComparisonType { get; set; }
+	[Ordinal(2)] [RED("comparisonType")] public CEnum<EComparisonType> ComparisonType { get; set; }
 	public scnVarComparison_FactConditionTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -12605,7 +12597,7 @@ public class questvehicleFollowParams : CVariable
 [REDMeta]
 public class PassiveRoleCondition : CVariable
 {
-	[Ordinal(0)] [RED("role")] public EAIRole Role { get; set; }
+	[Ordinal(0)] [RED("role")] public CEnum<EAIRole> Role { get; set; }
 	public PassiveRoleCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -12725,11 +12717,7 @@ public class effectTrackItemBloom : CVariable
 	[Ordinal(4)] [RED("bloomColorScale")] public effectEffectParameterEvaluatorFloat BloomColorScale { get; set; }
 	public effectTrackItemBloom(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class rendContactShadowReciever : CVariable
-{
-	public rendContactShadowReciever(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class BlurAreaSettings : CVariable
 {
@@ -12954,8 +12942,8 @@ public class audioAudSwitch : CVariable
 public class ColorGradingLutParams : CVariable
 {
 	[Ordinal(0)] [RED("LUT")] public rRef<CBitmapTexture> LUT { get; set; }
-	[Ordinal(1)] [RED("inputMapping")] public EColorMappingFunction InputMapping { get; set; }
-	[Ordinal(2)] [RED("outputMapping")] public EColorMappingFunction OutputMapping { get; set; }
+	[Ordinal(1)] [RED("inputMapping")] public CEnum<EColorMappingFunction> InputMapping { get; set; }
+	[Ordinal(2)] [RED("outputMapping")] public CEnum<EColorMappingFunction> OutputMapping { get; set; }
 	public ColorGradingLutParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -13074,7 +13062,7 @@ public class gameEffectExecutor_AnimFeature : CVariable
 [REDMeta]
 public class CheckCurrentWoundedState : CVariable
 {
-	[Ordinal(0)] [RED("woundedTypeToCompare")] public EWoundedBodyPart WoundedTypeToCompare { get; set; }
+	[Ordinal(0)] [RED("woundedTypeToCompare")] public CEnum<EWoundedBodyPart> WoundedTypeToCompare { get; set; }
 	public CheckCurrentWoundedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -13843,7 +13831,7 @@ public class gameinteractionsCLinkedLayersDefinition : CVariable
 [REDMeta]
 public class LightAreaSettings : CVariable
 {
-	[Ordinal(0)] [RED("season")] public ETimeOfYearSeason Season { get; set; }
+	[Ordinal(0)] [RED("season")] public CEnum<ETimeOfYearSeason> Season { get; set; }
 	[Ordinal(1)] [RED("sunColor")] public curveData<HDRColor> SunColor { get; set; }
 	[Ordinal(2)] [RED("moonColor")] public curveData<HDRColor> MoonColor { get; set; }
 	[Ordinal(3)] [RED("moonSize")] public curveData<CFloat> MoonSize { get; set; }
@@ -14021,7 +14009,7 @@ public class gamedataMappinPhase : CVariable
 [REDMeta]
 public class RevealPlayerSettings : CVariable
 {
-	[Ordinal(0)] [RED("revealPlayer")] public ERevealPlayerType RevealPlayer { get; set; }
+	[Ordinal(0)] [RED("revealPlayer")] public CEnum<ERevealPlayerType> RevealPlayer { get; set; }
 	[Ordinal(1)] [RED("revealPlayerOutsideSecurityPerimeter")] public CBool RevealPlayerOutsideSecurityPerimeter { get; set; }
 	public RevealPlayerSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -14121,7 +14109,7 @@ public class worldGISpaceNode : CVariable
 [REDMeta]
 public class HitShapeUserDataBase : CVariable
 {
-	[Ordinal(0)] [RED("dismembermentPart")] public EAIDismembermentBodyPart DismembermentPart { get; set; }
+	[Ordinal(0)] [RED("dismembermentPart")] public CEnum<EAIDismembermentBodyPart> DismembermentPart { get; set; }
 	public HitShapeUserDataBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -14994,7 +14982,7 @@ public class animAnimNodeSourceChannel_FloatTrack : CVariable
 public class questCharacterStatPool_ConditionType : CVariable
 {
 	[Ordinal(0)] [RED("percent")] public CFloat Percent { get; set; }
-	[Ordinal(1)] [RED("comparisonType")] public EComparisonType ComparisonType { get; set; }
+	[Ordinal(1)] [RED("comparisonType")] public CEnum<EComparisonType> ComparisonType { get; set; }
 	[Ordinal(2)] [RED("statPoolType")] public gamedataStatPoolType StatPoolType { get; set; }
 	public questCharacterStatPool_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -15463,7 +15451,7 @@ public class questInputController_ConditionType : CVariable
 [REDMeta]
 public class AIRoleCondition : CVariable
 {
-	[Ordinal(0)] [RED("role")] public EAIRole Role { get; set; }
+	[Ordinal(0)] [RED("role")] public CEnum<EAIRole> Role { get; set; }
 	public AIRoleCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -15631,7 +15619,7 @@ public class AIbehaviorDistanceToTargetObjectConditionDefinition : CVariable
 {
 	[Ordinal(0)] [RED("target")] public CHandle<AIArgumentMapping> Target { get; set; }
 	[Ordinal(1)] [RED("distance")] public CHandle<AIArgumentMapping> Distance { get; set; }
-	[Ordinal(2)] [RED("comparisonOperator")] public EComparisonType ComparisonOperator { get; set; }
+	[Ordinal(2)] [RED("comparisonOperator")] public CEnum<EComparisonType> ComparisonOperator { get; set; }
 	public AIbehaviorDistanceToTargetObjectConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -15664,11 +15652,7 @@ public class animDyngConstraintEllipsoid : CVariable
 	[Ordinal(4)] [RED("constraintScale2")] public CFloat ConstraintScale2 { get; set; }
 	public animDyngConstraintEllipsoid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class rendLightChannel : CVariable
-{
-	public rendLightChannel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class gameJournalFileGroup : CVariable
 {
@@ -15905,7 +15889,7 @@ public class scnRidResource : CVariable
 public class PaymentBalanced_ScriptConditionType : CVariable
 {
 	[Ordinal(0)] [RED("questAssignment")] public TweakDBID QuestAssignment { get; set; }
-	[Ordinal(1)] [RED("difficulty")] public EGameplayChallengeLevel Difficulty { get; set; }
+	[Ordinal(1)] [RED("difficulty")] public CEnum<EGameplayChallengeLevel> Difficulty { get; set; }
 	public PaymentBalanced_ScriptConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -15976,7 +15960,7 @@ public class questToggleTankCustomFPPLockOff_NodeType : CVariable
 public class scnCheckPlayerTargetNodeDistanceReturnConditionParams : CVariable
 {
 	[Ordinal(0)] [RED("distance")] public CFloat Distance { get; set; }
-	[Ordinal(1)] [RED("comparisonType")] public EComparisonType ComparisonType { get; set; }
+	[Ordinal(1)] [RED("comparisonType")] public CEnum<EComparisonType> ComparisonType { get; set; }
 	[Ordinal(2)] [RED("targetNode")] public NodeRef TargetNode { get; set; }
 	public scnCheckPlayerTargetNodeDistanceReturnConditionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
@@ -16044,7 +16028,7 @@ public class worldLightChannelShapeNode : CVariable
 	[Ordinal(0)] [RED("debugName")] public CName DebugName { get; set; }
 	[Ordinal(1)] [RED("sourcePrefabHash")] public CUInt64 SourcePrefabHash { get; set; }
 	[Ordinal(2)] [RED("shape")] public CHandle<GeometryShape> Shape { get; set; }
-	[Ordinal(3)] [RED("channels")] public rendLightChannel Channels { get; set; }
+	[Ordinal(3)] [RED("channels")] public CEnum<rendLightChannel> Channels { get; set; }
 	public worldLightChannelShapeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -16140,7 +16124,7 @@ public class questDistanceComparison_ConditionType : CVariable
 {
 	[Ordinal(0)] [RED("distanceDefinition1")] public CHandle<questObjectDistance> DistanceDefinition1 { get; set; }
 	[Ordinal(1)] [RED("distanceDefinition2")] public CHandle<questValueDistance> DistanceDefinition2 { get; set; }
-	[Ordinal(2)] [RED("comparisonType")] public EComparisonType ComparisonType { get; set; }
+	[Ordinal(2)] [RED("comparisonType")] public CEnum<EComparisonType> ComparisonType { get; set; }
 	public questDistanceComparison_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -17272,7 +17256,7 @@ public class SetAppearance : CVariable
 public class ToggleFocusClueEvent : CVariable
 {
 	[Ordinal(0)] [RED("isEnabled")] public CBool IsEnabled { get; set; }
-	[Ordinal(1)] [RED("investigationState")] public EFocusClueInvestigationState InvestigationState { get; set; }
+	[Ordinal(1)] [RED("investigationState")] public CEnum<EFocusClueInvestigationState> InvestigationState { get; set; }
 	public ToggleFocusClueEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -17296,7 +17280,7 @@ public class questEntityManagerSetAttachment_NodeType : CVariable
 [REDMeta]
 public class SetGameplayRoleEvent : CVariable
 {
-	[Ordinal(0)] [RED("gameplayRole")] public EGameplayRole GameplayRole { get; set; }
+	[Ordinal(0)] [RED("gameplayRole")] public CEnum<EGameplayRole> GameplayRole { get; set; }
 	public SetGameplayRoleEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]

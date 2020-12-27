@@ -262,6 +262,61 @@ namespace WolvenKit.CR2W.Types
             LU_Nit,
             LU_EV100
         }
+
+        public enum rendGIVolume
+        {
+            GI_Exterior,
+            GI_Interior1,
+            GI_Interior2,
+            GI_Interior3,
+            GI_Interior4,
+            rendGIGroup,
+            GI_Group0,
+            GI_Group1
+        }
+
+        public enum rendLightChannel
+        {
+            LC_Channel1,
+            LC_Channel2,
+            LC_Channel3,
+            LC_Channel4,
+            LC_Channel5,
+            LC_Channel6,
+            LC_Channel7,
+            LC_Channel8,
+            LC_ChannelWorld,
+            LC_Character,
+            LC_Player,
+            LC_Automated
+        }
+
+        public enum rendLightGroup
+        {
+            LG_Group0,
+            LG_Group1,
+            LG_Group2,
+            LG_Group3,
+            LG_Group4,
+            LG_Group5,
+            LG_Group6,
+            LG_Group7
+        }
+
+        public enum rendLightAttenuation
+        {
+            LA_InverseSquare,
+            LA_Linear
+        }
+
+        public enum rendContactShadowReciever
+        {
+            CSR_None,
+            CSR_All,
+            CSR_CharacterOnly
+        }
+
+
         public enum ENoiseType
         {
             NT_Random,
