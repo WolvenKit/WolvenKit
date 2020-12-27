@@ -1333,11 +1333,11 @@ namespace WolvenKit.CR2W.Types
             PM_SaveStateOnly,
             PM_Persist
         }
-        public enum ERenderingPlane
-        {
-            RPl_Scene,
-            RPl_Background
-        }
+        //public enum ERenderingPlane
+        //{
+        //    RPl_Scene,
+        //    RPl_Background
+        //}
         public enum ERenderingSortGroup
         {
             RSG_DebugUnlit,
@@ -2126,57 +2126,57 @@ namespace WolvenKit.CR2W.Types
         }
         // srcFormat == TRF_TrueColor && srcCompression == TCM_None
         
-        public enum EEnvColorGroup
-        {
-            ECG_Default,
-            ECG_LightsDefault,
-            ECG_LightsDawn,
-            ECG_LightsNoon,
-            ECG_LightsEvening,
-            ECG_LightsNight,
-            ECG_FX_Default,
-            ECG_FX_Fire,
-            ECG_FX_FireFlares,
-            ECG_FX_FireLight,
-            ECG_FX_Smoke,
-            ECG_FX_SmokeExplosion,
-            ECG_FX_Sky,
-            ECG_FX_SkyNight,
-            ECG_FX_SkyDawn,
-            ECG_FX_SkyNoon,
-            ECG_FX_SkySunset,
-            ECG_FX_SkyRain,
-            ECG_FX_MainCloudsMiddle,
-            ECG_FX_MainCloudsFront,
-            ECG_FX_MainCloudsBack,
-            ECG_FX_MainCloudsRim,
-            ECG_FX_BackgroundCloudsFront,
-            ECG_FX_BackgroundCloudsBack,
-            ECG_FX_BackgroundHazeFront,
-            ECG_FX_BackgroundHazeBack,
-            ECG_FX_Blood,
-            ECG_FX_Water,
-            ECG_FX_Fog,
-            ECG_FX_LightShaft,
-            ECG_FX_LightShaftSun,
-            ECG_FX_LightShaftInteriorDawn,
-            ECG_FX_LightShaftSpotlightDawn,
-            ECG_FX_LightShaftReflectionLightDawn,
-            ECG_FX_LightShaftInteriorNoon,
-            ECG_FX_LightShaftSpotlightNoon,
-            ECG_FX_LightShaftReflectionLightNoon,
-            ECG_FX_LightShaftInteriorEvening,
-            ECG_FX_LightShaftSpotlightEvening,
-            ECG_FX_LightShaftReflectionLightEvening,
-            ECG_FX_LightShaftInteriorNight,
-            ECG_FX_LightShaftSpotlightNight,
-            ECG_FX_LightShaftReflectionLightNight,
-            ECG_FX_Trails,
-            ECG_FX_ScreenParticles,
-            ECG_Custom0,
-            ECG_Custom1,
-            ECG_Custom2
-        }
+        //public enum EEnvColorGroup
+        //{
+        //    ECG_Default,
+        //    ECG_LightsDefault,
+        //    ECG_LightsDawn,
+        //    ECG_LightsNoon,
+        //    ECG_LightsEvening,
+        //    ECG_LightsNight,
+        //    ECG_FX_Default,
+        //    ECG_FX_Fire,
+        //    ECG_FX_FireFlares,
+        //    ECG_FX_FireLight,
+        //    ECG_FX_Smoke,
+        //    ECG_FX_SmokeExplosion,
+        //    ECG_FX_Sky,
+        //    ECG_FX_SkyNight,
+        //    ECG_FX_SkyDawn,
+        //    ECG_FX_SkyNoon,
+        //    ECG_FX_SkySunset,
+        //    ECG_FX_SkyRain,
+        //    ECG_FX_MainCloudsMiddle,
+        //    ECG_FX_MainCloudsFront,
+        //    ECG_FX_MainCloudsBack,
+        //    ECG_FX_MainCloudsRim,
+        //    ECG_FX_BackgroundCloudsFront,
+        //    ECG_FX_BackgroundCloudsBack,
+        //    ECG_FX_BackgroundHazeFront,
+        //    ECG_FX_BackgroundHazeBack,
+        //    ECG_FX_Blood,
+        //    ECG_FX_Water,
+        //    ECG_FX_Fog,
+        //    ECG_FX_LightShaft,
+        //    ECG_FX_LightShaftSun,
+        //    ECG_FX_LightShaftInteriorDawn,
+        //    ECG_FX_LightShaftSpotlightDawn,
+        //    ECG_FX_LightShaftReflectionLightDawn,
+        //    ECG_FX_LightShaftInteriorNoon,
+        //    ECG_FX_LightShaftSpotlightNoon,
+        //    ECG_FX_LightShaftReflectionLightNoon,
+        //    ECG_FX_LightShaftInteriorEvening,
+        //    ECG_FX_LightShaftSpotlightEvening,
+        //    ECG_FX_LightShaftReflectionLightEvening,
+        //    ECG_FX_LightShaftInteriorNight,
+        //    ECG_FX_LightShaftSpotlightNight,
+        //    ECG_FX_LightShaftReflectionLightNight,
+        //    ECG_FX_Trails,
+        //    ECG_FX_ScreenParticles,
+        //    ECG_Custom0,
+        //    ECG_Custom1,
+        //    ECG_Custom2
+        //}
         public enum EEnvFlareColorGroup
         {
             EFCG_Default,
@@ -2867,12 +2867,12 @@ namespace WolvenKit.CR2W.Types
             TAM_Speed,
             TAM_LifeTime
         }
-        public enum EFreeVectorAxes
-        {
-            FVA_One,
-            FVA_Two,
-            FVA_Three
-        }
+        //public enum EFreeVectorAxes
+        //{
+        //    FVA_One,
+        //    FVA_Two,
+        //    FVA_Three
+        //}
         public enum EAreaEnvironmentPointType
         {
             AEPT_FadeOut,

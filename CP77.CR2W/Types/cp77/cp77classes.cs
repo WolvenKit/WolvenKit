@@ -1178,11 +1178,7 @@ public class animAnimNode_BlendAdditive : CVariable
 	[Ordinal(2)] [RED("weightNode")] public animFloatLink WeightNode { get; set; }
 	public animAnimNode_BlendAdditive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EEnvColorGroup : CVariable
-{
-	public EEnvColorGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class animAnimStateTransitionCondition_WrapperValue : CVariable
 {
@@ -1435,11 +1431,7 @@ public class questUIElement_ConditionType : CVariable
 	[Ordinal(0)] [RED("element")] public TweakDBID Element { get; set; }
 	public questUIElement_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class ELightUnit : CVariable
-{
-	public ELightUnit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class Multilayer_LayerTemplateOverrides : CVariable
 {
@@ -1471,11 +1463,7 @@ public class VehicleDeathTask : CVariable
 {
 	public VehicleDeathTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EOutlineType : CVariable
-{
-	public EOutlineType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class SAnimationBufferOrientationCompressionMethod : CVariable
 {
@@ -1525,11 +1513,7 @@ public class InvestigationReactionFilter : CVariable
 {
 	public InvestigationReactionFilter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EFreeVectorAxes : CVariable
-{
-	public EFreeVectorAxes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class worldAutoFoliageMapping : CVariable
 {
@@ -1958,11 +1942,7 @@ public class QuestAddTransition : CVariable
 	[Ordinal(0)] [RED("transition")] public AreaTypeTransition Transition { get; set; }
 	public QuestAddTransition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EInkAnimationPlaybackOption : CVariable
-{
-	public EInkAnimationPlaybackOption(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class scnCheckPlayerTargetEntityDistanceInterruptConditionParams : CVariable
 {
@@ -1970,11 +1950,7 @@ public class scnCheckPlayerTargetEntityDistanceInterruptConditionParams : CVaria
 	[Ordinal(1)] [RED("targetEntity")] public gameEntityReference TargetEntity { get; set; }
 	public scnCheckPlayerTargetEntityDistanceInterruptConditionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EFocusForcedHighlightType : CVariable
-{
-	public EFocusForcedHighlightType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class gamemappinsOutlineMappinVolume : CVariable
 {
@@ -2010,11 +1986,7 @@ public class questElevator_ManageNPCAttachment_NodeType : CVariable
 	[Ordinal(0)] [RED("params")] public CArray<questElevator_ManageNPCAttachment_NodeTypeParams> Params { get; set; }
 	public questElevator_ManageNPCAttachment_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EComparisonType : CVariable
-{
-	public EComparisonType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class animMotionTableProvider_MasterSlaveBlend : CVariable
 {
@@ -3810,11 +3782,7 @@ public class scnlocLocStoreEmbedded : CVariable
 	[Ordinal(1)] [RED("vpEntries")] public CArray<scnlocLocStoreEmbeddedVariantPayloadEntry> VpEntries { get; set; }
 	public scnlocLocStoreEmbedded(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class ERenderMaterialType : CVariable
-{
-	public ERenderMaterialType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class animClampType : CVariable
 {
@@ -4050,11 +4018,6 @@ public class animAnimNode_IntVariable : CVariable
 {
 	[Ordinal(0)] [RED("variableName")] public CName VariableName { get; set; }
 	public animAnimNode_IntVariable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
-[REDMeta]
-public class ERevealPlayerType : CVariable
-{
-	public ERevealPlayerType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
 public class animIKTargetRequest : CVariable
@@ -4741,11 +4704,7 @@ public class questEventManagerNodeDefinition : CVariable
 	[Ordinal(4)] [RED("event")] public CHandle<IScriptable> Event { get; set; }
 	public questEventManagerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class ELightShadowSoftnessMode : CVariable
-{
-	public ELightShadowSoftnessMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class animAnimStateTransitionCondition_HasAnimation : CVariable
 {
@@ -4779,11 +4738,7 @@ public class questCharacterEquippedWeapon_ConditionType : CVariable
 	[Ordinal(0)] [RED("weaponTag")] public CName WeaponTag { get; set; }
 	public questCharacterEquippedWeapon_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EColorMappingFunction : CVariable
-{
-	public EColorMappingFunction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class scnAdditionalSpeakers : CVariable
 {
@@ -4929,11 +4884,7 @@ public class questSocketDefinition : CVariable
 	[Ordinal(1)] [RED("type")] public questSocketType Type { get; set; }
 	public questSocketDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class ECoverSpecialAction : CVariable
-{
-	public ECoverSpecialAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class scnDummyAlwaysTrueReturnCondition : CVariable
 {
@@ -5058,11 +5009,7 @@ public class questCharacterManagerCombat_AssignSquad : CVariable
 	[Ordinal(2)] [RED("squadType")] public AISquadType SquadType { get; set; }
 	public questCharacterManagerCombat_AssignSquad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class ESecuritySystemState : CVariable
-{
-	public ESecuritySystemState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class animAnimNode_FloatTrackModifier : CVariable
 {
@@ -5944,11 +5891,7 @@ public class AIArgumentCNameValue : CVariable
 	[Ordinal(0)] [RED("name")] public CName Name { get; set; }
 	public AIArgumentCNameValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EDoorType : CVariable
-{
-	public EDoorType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class AnimFeature_SceneSystemCarrying : CVariable
 {
@@ -6237,11 +6180,7 @@ public class AITakedownHandler : CVariable
 	[Ordinal(0)] [RED("inCommand")] public CHandle<AIArgumentMapping> InCommand { get; set; }
 	public AITakedownHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class ESmartHousePreset : CVariable
-{
-	public ESmartHousePreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class IncrimentStealthStimThreshold : CVariable
 {
@@ -6556,11 +6495,7 @@ public class animAnimEvent_Effect : CVariable
 	[Ordinal(2)] [RED("effectName")] public CName EffectName { get; set; }
 	public animAnimEvent_Effect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class ETimeOfYearSeason : CVariable
-{
-	public ETimeOfYearSeason(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class questSpawnToken_NodeSubType : CVariable
 {
@@ -6673,7 +6608,7 @@ public class worldTerrainCollisionNode : CVariable
 	[Ordinal(0)] [RED("debugName")] public CName DebugName { get; set; }
 	[Ordinal(1)] [RED("sourcePrefabHash")] public CUInt64 SourcePrefabHash { get; set; }
 	[Ordinal(2)] [RED("materials")] public CArray<CName> Materials { get; set; }
-	[Ordinal(3)] [RED("materialIndices")] public CArray<Uint8> MaterialIndices { get; set; }
+	[Ordinal(3)] [RED("materialIndices")] public CArray<CUInt8> MaterialIndices { get; set; }
 	[Ordinal(4)] [RED("heightfieldGeometry")] public serializationDeferredDataBuffer HeightfieldGeometry { get; set; }
 	[Ordinal(5)] [RED("actorTransform")] public WorldTransform ActorTransform { get; set; }
 	[Ordinal(6)] [RED("extents")] public Vector4 Extents { get; set; }
@@ -6775,11 +6710,7 @@ public class toolsSectionClipboardDataHolder : CVariable
 	[Ordinal(5)] [RED("actorData")] public CArray<scnbSceneActorData> ActorData { get; set; }
 	public toolsSectionClipboardDataHolder(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EAIRole : CVariable
-{
-	public EAIRole(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class ActionWeightCondition : CVariable
 {
@@ -6792,11 +6723,7 @@ public class DistantIrradianceeSettings : CVariable
 {
 	public DistantIrradianceeSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EAIDismembermentBodyPart : CVariable
-{
-	public EAIDismembermentBodyPart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class meshMeshParamDestructionBonds : CVariable
 {
@@ -7234,11 +7161,7 @@ public class scnSceneCategoryTag : CVariable
 {
 	public scnSceneCategoryTag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EEmitterGroup : CVariable
-{
-	public EEmitterGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class CombatConditions : CVariable
 {
@@ -8877,7 +8800,7 @@ public class worldStaticLightNode : CVariable
 	[Ordinal(15)] [RED("enableLocalShadows")] public CBool EnableLocalShadows { get; set; }
 	[Ordinal(16)] [RED("contactShadows")] public rendContactShadowReciever ContactShadows { get; set; }
 	[Ordinal(17)] [RED("shadowFadeDistance")] public CFloat ShadowFadeDistance { get; set; }
-	[Ordinal(18)] [RED("shadowSoftnessMode")] public ELightShadowSoftnessMode ShadowSoftnessMode { get; set; }
+	[Ordinal(18)] [RED("shadowSoftnessMode")] public CEnum<ELightShadowSoftnessMode> ShadowSoftnessMode { get; set; }
 	[Ordinal(19)] [RED("allowDistantLight")] public CBool AllowDistantLight { get; set; }
 	[Ordinal(20)] [RED("autoHideDistance")] public CFloat AutoHideDistance { get; set; }
 	public worldStaticLightNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -8931,7 +8854,7 @@ public class rendRenderParticleBlobEmitterInfo : CVariable
 	[Ordinal(1)] [RED("backLightingFactor")] public CFloat BackLightingFactor { get; set; }
 	[Ordinal(2)] [RED("maxParticles")] public CUInt32 MaxParticles { get; set; }
 	[Ordinal(3)] [RED("emitterLoops")] public CInt8 EmitterLoops { get; set; }
-	[Ordinal(4)] [RED("renderObjectType")] public ERenderObjectType RenderObjectType { get; set; }
+	[Ordinal(4)] [RED("renderObjectType")] public CEnum<ERenderObjectType> RenderObjectType { get; set; }
 	[Ordinal(5)] [RED("numModifiers")] public CUInt32 NumModifiers { get; set; }
 	[Ordinal(6)] [RED("modifierSetMask")] public CUInt64 ModifierSetMask { get; set; }
 	[Ordinal(7)] [RED("numInitializers")] public CUInt32 NumInitializers { get; set; }
@@ -9229,16 +9152,7 @@ public class gameMappinResource : CVariable
 	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
 	public gameMappinResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class ECustomMaterialParam : CVariable
-{
-	public ECustomMaterialParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
-[REDMeta]
-public class Uint8 : CVariable
-{
-	public Uint8(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class questMovePuppetNodeDefinition : CVariable
 {
@@ -10911,11 +10825,7 @@ public class AIFollowerRole : CVariable
 	[Ordinal(0)] [RED("followerRef")] public gameEntityReference FollowerRef { get; set; }
 	public AIFollowerRole(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EDocumentType : CVariable
-{
-	public EDocumentType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class VehicleQuestVisualDestructionEvent : CVariable
 {
@@ -10930,11 +10840,7 @@ public class VehicleQuestVisualDestructionEvent : CVariable
 	[Ordinal(8)] [RED("roof")] public CFloat Roof { get; set; }
 	public VehicleQuestVisualDestructionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EAIAttitude : CVariable
-{
-	public EAIAttitude(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class entdismembermentWoundsConfigSet : CVariable
 {
@@ -11644,11 +11550,7 @@ public class NPCInitTask : CVariable
 {
 	public NPCInitTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EToggleOperationType : CVariable
-{
-	public EToggleOperationType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class AIbehaviorAttachToElevatorCommandTaskDefinition : CVariable
 {
@@ -11758,11 +11660,7 @@ public class worldStreamingSectorInplaceContent : CVariable
 	[Ordinal(1)] [RED("inplaceResources")] public CArray<rRef<CResource>> InplaceResources { get; set; }
 	public worldStreamingSectorInplaceContent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EGameplayChallengeLevel : CVariable
-{
-	public EGameplayChallengeLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class questSpawnedVehicleType : CVariable
 {
@@ -11889,11 +11787,7 @@ public class gameEffectVectorEvaluator_HitNormal : CVariable
 {
 	public gameEffectVectorEvaluator_HitNormal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EDecalRenderMode : CVariable
-{
-	public EDecalRenderMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class EffectPreAction_PreAttack : CVariable
 {
@@ -12051,11 +11945,7 @@ public class AIArgumentPuppetRefValue : CVariable
 	[Ordinal(0)] [RED("name")] public CName Name { get; set; }
 	public AIArgumentPuppetRefValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class ECompareOp : CVariable
-{
-	public ECompareOp(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class animRigTagCondition : CVariable
 {
@@ -13180,11 +13070,7 @@ public class gameEffectExecutor_AnimFeature : CVariable
 	[Ordinal(3)] [RED("applyTo")] public gameEffectExecutor_AnimFeatureApplyTo ApplyTo { get; set; }
 	public gameEffectExecutor_AnimFeature(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EWoundedBodyPart : CVariable
-{
-	public EWoundedBodyPart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class CheckCurrentWoundedState : CVariable
 {
@@ -13360,11 +13246,7 @@ public class scneventsPlayerLookAtEventParams : CVariable
 	[Ordinal(7)] [RED("maxDuration")] public CFloat MaxDuration { get; set; }
 	public scneventsPlayerLookAtEventParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class envUtilsReflectionProbeAmbientContributionMode : CVariable
-{
-	public envUtilsReflectionProbeAmbientContributionMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class DispenseFreeSpecificItem : CVariable
 {
@@ -13690,11 +13572,7 @@ public class gameJournalBriefingPaperDollSection : CVariable
 	[Ordinal(0)] [RED("id")] public CString Id { get; set; }
 	public gameJournalBriefingPaperDollSection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EPriority : CVariable
-{
-	public EPriority(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class gameRegular1v1FinisherScenarioPivotSetting : CVariable
 {
@@ -14761,17 +14639,17 @@ public class worldAISpotNode : CVariable
 	[Ordinal(6)] [RED("useCrowdBlacklist")] public CBool UseCrowdBlacklist { get; set; }
 	public worldAISpotNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
+
 [REDMeta]
 public class AIbehaviorMountToEntTaskDefinition : CVariable
 {
-	[Ordinal(0)] [RED("mountData")] public CHandle<AIArgumentMapping> MountData { get; set; }
-	public AIbehaviorMountToEntTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    [Ordinal(0)] [RED("mountData")] public CHandle<AIArgumentMapping> MountData { get; set; }
+
+    public AIbehaviorMountToEntTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+    {
+    }
 }
-[REDMeta]
-public class EAICombatPreset : CVariable
-{
-	public EAICombatPreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class worldCrowdNullAreaCollisionHeader : CVariable
 {
@@ -15318,11 +15196,7 @@ public class SuppressSecuritySystemStateChange : CVariable
 	public SuppressSecuritySystemStateChange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 
-[REDMeta]
-public class EMaterialPriority : CVariable
-{
-	public EMaterialPriority(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class AIbehaviorShouldEnterCrowdConditionDefinition : CVariable
 {
@@ -16289,11 +16163,7 @@ public class vehicleEQuestVehicleWindowState : CVariable
 {
 	public vehicleEQuestVehicleWindowState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EHitReactionZone : CVariable
-{
-	public EHitReactionZone(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class CParticleModificatorTarget : CVariable
 {
@@ -16707,21 +16577,13 @@ public class questTeleport_NodeType : CVariable
 	[Ordinal(1)] [RED("params")] public questTeleportPuppetParams Params { get; set; }
 	public questTeleport_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class ERenderingPlane : CVariable
-{
-	public ERenderingPlane(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class RemoveStatusEffectsOnStoryTier : CVariable
 {
 	public RemoveStatusEffectsOnStoryTier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class envUtilsNeighborMode : CVariable
-{
-	public envUtilsNeighborMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class AIbehaviorStateCompletionStatus : CVariable
 {
@@ -17123,11 +16985,7 @@ public class AIbehaviorFSMStateDefinition : CVariable
 	[Ordinal(1)] [RED("isExit")] public CBool IsExit { get; set; }
 	public AIbehaviorFSMStateDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class EFocusClueInvestigationState : CVariable
-{
-	public EFocusClueInvestigationState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class questDeviceManager_NodeType : CVariable
 {
@@ -17145,11 +17003,7 @@ public class ShouldNPCContinueInAlerted : CVariable
 {
 	public ShouldNPCContinueInAlerted(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class ESecurityAreaType : CVariable
-{
-	public ESecurityAreaType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class questMinimize_NodeType : CVariable
 {

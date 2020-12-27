@@ -1,11 +1,205 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+// ReSharper disable InconsistentNaming
 
 namespace WolvenKit.CR2W.Types
 {
     public static partial class Enums
     {
+        public enum EAreaLightShape
+        {
+            ALS_Sphere,
+            ALS_Capsule
+        }
+        public enum EComparisonType
+        {
+            Greater,
+            GreaterOrEqual,
+            Equal,
+            NotEqual,
+            LessOrEqual
+        }
+        public enum ERenderMaterialType
+        {
+            RM_HitProxies,
+            RM_Shaded,
+            RM_Shaded_NoAmbient,
+            RM_GBufferOnly,
+            RM_SafeMode,
+            RM_OverlayOnly
+        }
+        public enum EColorMappingFunction
+        {
+            CMF_Linear,
+            CMF_sRGB,
+            CMF_ArriLogC
+        }
+        public enum ETimeOfYearSeason
+        {
+            ETOYS_Spring,
+            ETOYS_Summer,
+            ETOYS_Autumn,
+            ETOYS_Winter
+        }
+        public enum EEmitterGroup
+        {
+            EG_Default,
+            EG_Group0,
+            EG_Group1,
+            EG_Group2,
+            EG_Group3,
+            EG_Group4,
+            EG_Group5,
+            EG_Group6,
+            EG_Group7,
+            EG_Group8,
+            EG_Group9,
+            EG_Group10,
+            EG_Group11,
+            EG_Group12,
+            EG_Group13,
+            EG_Group14,
+            EG_Group15
+        }
+        public enum ECustomMaterialParam
+        {
+            ECMP_CustomParam0,
+            ECMP_CustomParam1,
+            ECMP_CustomParam2,
+            ECMP_CustomParam3,
+            ECMP_CustomParam4,
+            ECMP_CustomParam5,
+            ECMP_CustomParam6
+        }
+        public enum EDecalRenderMode
+        {
+            RM_HitProxies,
+            RM_Shaded,
+            RM_Shaded_NoAmbient,
+            RM_GBufferOnly,
+            RM_SafeMode
+        }
+
+        public enum envUtilsNeighborMode
+        {
+            eCLOSEST,
+            eONLY_GLOBAL,
+            eONLY_SELF,
+            eFILL_SURROUNDING
+        }
+        public enum envUtilsReflectionProbeAmbientContributionMode
+        {
+            eNO_AMBIENT_CONTRIBUTION,
+            eALLOW_AMBIENT_CONTRIBUTION,
+            eOVERRIDE_GI_AMBIENT
+        }
+        public enum EMaterialPriority
+        {
+            EMP_Normal,
+            EMP_Front
+        }
+        public enum ERenderingPlane
+        {
+            RPl_Scene,
+            RPl_Background,
+            RPl_Weapon
+        }
+        public enum EFocusOutlineType
+        {
+            
+        }
+        public enum EGameplayRole
+        {
+            
+        }
+        public enum ETransitionMode
+        {
+            
+        }
+        public enum EFocusClueInvestigationState
+        {
+            
+        }
+        public enum ESecurityAreaType
+        {
+            
+        }
+        public enum EHitReactionZone
+        {
+            
+        }
+        public enum EAICombatPreset
+        {
+            
+        }
+        public enum EPriority
+        {
+            
+        }
+        public enum EWoundedBodyPart
+        {
+            
+        }
+        public enum EGameplayChallengeLevel
+        {
+            
+        }
+        public enum EToggleOperationType
+        {
+            
+        }
+        public enum EDocumentType
+        {
+            
+        }
+        public enum EAIDismembermentBodyPart
+        {
+            
+        }
+        public enum EAIRole
+        {
+            
+        }
+        public enum ESmartHousePreset
+        {
+            
+        }
+        public enum EDoorType
+        {
+            
+        }
+        public enum ESecuritySystemState
+        {
+            
+        }
+        public enum ECoverSpecialAction
+        {
+            
+        }
+        public enum ERevealPlayerType
+        {
+            
+        }
+        public enum EInkAnimationPlaybackOption
+        {
+            
+        }
+        public enum EFocusForcedHighlightType
+        {
+            
+        }
+        public enum EOutlineType
+        {
+            
+        }
+        public enum EFreeVectorAxes
+        {
+            FVA_One,
+            FVA_Two,
+            FVA_Three,
+            FVA_Four
+        }
         public enum ERenderObjectType
         {
             ROT_Static,
@@ -29,11 +223,37 @@ namespace WolvenKit.CR2W.Types
         }
 
 
-        public enum EAreaLightShape
+        public enum ELightShadowSoftnessMode
         {
-            ALS_Sphere,
-            ALS_Capsule
+            LSSM_ExtraSoft,
+            LSSM_Soft,
+            LSSM_Default,
+            LSSM_Sharp,
+            LSSM_ExtraSharp
         }
+
+        public enum EEnvColorGroup
+        {
+            ECG_Default,
+            ECG_Sky,
+            ECG_Group0,
+            ECG_Group1,
+            ECG_Group2,
+            ECG_Group3,
+            ECG_Group4,
+            ECG_Group5,
+            ECG_Group6,
+            ECG_Group7,
+            ECG_Group8,
+            ECG_Group9,
+            ECG_Group10,
+            ECG_Group11,
+            ECG_Group12,
+            ECG_Group13,
+            ECG_Group14,
+            ECG_Group15,
+        }
+
         public enum ELightUnit
         {
             LU_Lumen,
