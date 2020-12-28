@@ -15236,14 +15236,7 @@ public class questSetLootInteractionAccess_NodeType : CVariable
 	[Ordinal(1)] [RED("accessible")] public CBool Accessible { get; set; }
 	public questSetLootInteractionAccess_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
-[REDMeta]
-public class C2dArray : CVariable
-{
-	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
-	[Ordinal(1)] [RED("headers")] public CArray<CString> Headers { get; set; }
-	[Ordinal(2)] [RED("data")] public CArray<CArray<CString>> Data { get; set; }
-	public C2dArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-}
+
 [REDMeta]
 public class animAnimNode_Blend2 : CVariable
 {
