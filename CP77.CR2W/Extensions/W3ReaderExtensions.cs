@@ -133,8 +133,9 @@ namespace WolvenKit.CR2W
             if (b == 0x80)
                 return null;
             if (b == 0x00)
-                throw new NotImplementedException();//return "";
-            
+                return "";
+
+
 
             var nxt = (b & (1 << 6)) != 0;
             var widechar = (b & (1 << 7)) == 0;

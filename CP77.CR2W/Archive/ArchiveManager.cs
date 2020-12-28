@@ -31,18 +31,29 @@ namespace CP77.CR2W.Archive
         public List<Archive> Archives { get; }
         public List<string> Extensions { get; }
         public Dictionary<ulong, List<ArchiveItem>> Files { get; }
+        public Dictionary<string, List<ArchiveItem>> GroupedFiles => 
+        
+            Files.Values.GroupBy(
+                f => f.FirstOrDefault().Extension,
+                file => file,
+                (ext, items) => new
+                {
+                    Key = ext,
+                    File = items.Where(_ => _.FirstOrDefault().Extension == ext).SelectMany(_ => _).ToList()
+                }).ToDictionary(_ => _.Key, _ => _.File);
+        
 
-        #endregion
+    #endregion
 
 
 
-        #region methods
+    #region methods
 
-        /// <summary>
-        /// Reload the ArchiveManager from given directory (optional).
-        /// </summary>
-        /// <param name="indir"></param>
-        public void Reload(DirectoryInfo indir = null)
+    /// <summary>
+    /// Reload the ArchiveManager from given directory (optional).
+    /// </summary>
+    /// <param name="indir"></param>
+    public void Reload(DirectoryInfo indir = null)
         {
             if (indir != null)
                 _parentDirectoryInfo = indir;

@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using Catel;
 using Catel.IoC;
 using CP77.Common.Tools.FNV1A;
-using CP77Tools.Common.Services;
 using WolvenKit.Common.Services;
 
 namespace CP77.Common.Services
@@ -142,7 +141,7 @@ namespace CP77.Common.Services
             return lines.Single();
         }
 
-        public async Task ReloadLocally()
+        public void ReloadLocally()
         {
             Logger.LogString("Loading local filename hashes...", Logtype.Important);
 

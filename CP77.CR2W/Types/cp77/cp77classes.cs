@@ -7,6 +7,22 @@ namespace WolvenKit.CR2W.Types
 {
 
 	[REDMeta]
+	public class entDistanceLODsPresets : CVariable
+	{
+		[Ordinal(0)] [RED("definitions", 4)] public CStatic<entLODDefinition> Definitions { get; set; }
+		public entDistanceLODsPresets(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+    [REDMeta]
+    public class entLODDefinition : CVariable
+    {
+        [Ordinal(0)] [RED("backgroundDistanceLODs", 4)] public CStatic<CFloat> BackgroundDistanceLODs { get; set; }
+        [Ordinal(1)] [RED("regularDistanceLODs", 4)] public CStatic<CFloat> RegularDistanceLODs { get; set; }
+        [Ordinal(2)] [RED("cinematicDistanceLODs", 4)] public CStatic<CFloat> CinematicDistanceLODs { get; set; }
+        [Ordinal(3)] [RED("vehicleDistanceLODs", 4)] public CStatic<CFloat> VehicleDistanceLODs { get; set; }
+        [Ordinal(4)] [RED("cinematicVehicleDistanceLODs", 4)] public CStatic<CFloat> CinematicVehicleDistanceLODs { get; set; }
+        public entLODDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+	[REDMeta]
 	public class questCharacterSpawned_ConditionType : CVariable
 	{
 		[Ordinal(0)] [RED("objectRef")] public gameEntityReference ObjectRef { get; set; }
@@ -2084,7 +2100,7 @@ public class questDistanceVsDistanceComparison_ConditionType : CVariable
 {
 	[Ordinal(0)] [RED("distanceDefinition1")] public CHandle<questObjectDistance> DistanceDefinition1 { get; set; }
 	[Ordinal(1)] [RED("distanceDefinition2")] public CHandle<questObjectDistance> DistanceDefinition2 { get; set; }
-	[Ordinal(2)] [RED("comparisonType")] public CEnum<EComparisonTyp> ComparisonType { get; set; }
+	[Ordinal(2)] [RED("comparisonType")] public CEnum<EComparisonType> ComparisonType { get; set; }
 	public questDistanceVsDistanceComparison_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -6674,8 +6690,8 @@ public class worldRotatingMeshNodeAxis : CVariable
 public class animSplineCompressedMotionExtraction : CVariable
 {
 	[Ordinal(0)] [RED("duration")] public CFloat Duration { get; set; }
-	[Ordinal(1)] [RED("posKeysData")] public CArray<Uint8> PosKeysData { get; set; }
-	[Ordinal(2)] [RED("rotKeysData")] public CArray<Uint8> RotKeysData { get; set; }
+	[Ordinal(1)] [RED("posKeysData")] public CArray<CUInt8> PosKeysData { get; set; }
+	[Ordinal(2)] [RED("rotKeysData")] public CArray<CUInt8> RotKeysData { get; set; }
 	public animSplineCompressedMotionExtraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -7330,7 +7346,7 @@ public class scnSceneWorkspotDataId : CVariable
 [REDMeta]
 public class meshMeshParamDeformableShapesData : CVariable
 {
-	[Ordinal(0)] [RED("ownerIndex")] public CArray<Uint8> OwnerIndex { get; set; }
+	[Ordinal(0)] [RED("ownerIndex")] public CArray<CUInt8> OwnerIndex { get; set; }
 	[Ordinal(1)] [RED("startingPose")] public CArray<Transform> StartingPose { get; set; }
 	[Ordinal(2)] [RED("finalPose")] public CArray<Transform> FinalPose { get; set; }
 	public meshMeshParamDeformableShapesData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -7475,7 +7491,7 @@ public class animFacialCustomizationSet : CVariable
 	[Ordinal(3)] [RED("targetSetupsTemp")] public CArray<animFacialCustomizationTargetEntryTemp> TargetSetupsTemp { get; set; }
 	[Ordinal(4)] [RED("numTargets")] public CUInt32 NumTargets { get; set; }
 	[Ordinal(5)] [RED("posesInfo")] public animFacialSetup_PosesBufferInfo PosesInfo { get; set; }
-	[Ordinal(6)] [RED("jointRegions")] public CArray<Uint8> JointRegions { get; set; }
+	[Ordinal(6)] [RED("jointRegions")] public CArray<CUInt8> JointRegions { get; set; }
 	[Ordinal(7)] [RED("mainPosesData")] public DataBuffer MainPosesData { get; set; }
 	[Ordinal(8)] [RED("usedTransformIndices")] public CArray<CUInt16> UsedTransformIndices { get; set; }
 	[Ordinal(9)] [RED("correctivePosesData")] public DataBuffer CorrectivePosesData { get; set; }
@@ -7817,7 +7833,7 @@ public class gameJournalPhoneChoiceGroup : CVariable
 public class CIESDataResource : CVariable
 {
 	[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
-	[Ordinal(1)] [RED("samples", 128)] public CArrayFixedSize<Uint8> Samples { get; set; }
+	[Ordinal(1)] [RED("samples", 128)] public CArrayFixedSize<CUInt8> Samples { get; set; }
 public CIESDataResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 }
 [REDMeta]
@@ -14349,7 +14365,7 @@ public class CPhysicsDecorationResource : CVariable
 	[Ordinal(10)] [RED("boneNames")] public CArray<CName> BoneNames { get; set; }
 	[Ordinal(11)] [RED("boneRigMatrices")] public CArray<CMatrix> BoneRigMatrices { get; set; }
 	[Ordinal(12)] [RED("boneVertexEpsilons")] public CArray<CFloat> BoneVertexEpsilons { get; set; }
-	[Ordinal(13)] [RED("lodBoneMask")] public CArray<Uint8> LodBoneMask { get; set; }
+	[Ordinal(13)] [RED("lodBoneMask")] public CArray<CUInt8> LodBoneMask { get; set; }
 	[Ordinal(14)] [RED("castGlobalShadowsCachedInCook")] public CBool CastGlobalShadowsCachedInCook { get; set; }
 	[Ordinal(15)] [RED("castLocalShadowsCachedInCook")] public CBool CastLocalShadowsCachedInCook { get; set; }
 	public CPhysicsDecorationResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

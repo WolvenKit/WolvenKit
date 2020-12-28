@@ -12,7 +12,7 @@ namespace CP77Tools.Commands
         
         public ArchiveCommand() : base(Name, Description)
         {
-            AddOption(new Option<string>(new[] {"--path", "-p"}, "Input path to .archive."));
+            AddOption(new Option<string[]>(new[] {"--path", "-p"}, "Input path to .archive."));
             AddOption(new Option<string>(new[] {"--outpath", "-o"}, "Output directory to extract files to."));
             AddOption(new Option<string>(new[] {"--pattern", "-w"}, "Use optional search pattern, e.g. *.ink. If bith regex and pattern is definedm, pattern will be used first"));
             AddOption(new Option<string>(new[] {"--regex", "-r"}, "Use optional regex pattern."));

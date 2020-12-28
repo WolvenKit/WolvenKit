@@ -11,7 +11,7 @@ namespace CP77Tools.Commands
 
         public HashCommand() : base(Name, Description)
         {
-            AddOption(new Option<string>(new[] {"--input", "-i"}, "Create FNV1A hash of given string"));
+            AddOption(new Option<string[]>(new[] {"--input", "-i"}, "Create FNV1A hash of given string"));
             AddOption(new Option<bool>(new[] {"--missing", "-m"}, ""));
             
             AddCommand(new Command("update", "Update the Archived Hashes")
@@ -19,7 +19,7 @@ namespace CP77Tools.Commands
                 Handler = CommandHandler.Create(ConsoleFunctions.UpdateHashesAsync)
             });
             
-            Handler = CommandHandler.Create<string, bool>(ConsoleFunctions.HashTask);
+            Handler = CommandHandler.Create<string[], bool>(ConsoleFunctions.HashTask);
         }
     }
 }

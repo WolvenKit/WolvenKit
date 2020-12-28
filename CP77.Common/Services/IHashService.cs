@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CP77Tools.Common.Services
+namespace CP77.Common.Services
 {
     public interface IHashService
     {
@@ -9,7 +9,7 @@ namespace CP77Tools.Common.Services
         
         Task<bool> RefreshAsync();
 
-        Task ReloadLocally();
+        void ReloadLocally();
         
     }
 }

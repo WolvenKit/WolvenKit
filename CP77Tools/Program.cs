@@ -13,7 +13,6 @@ using System.IO.Compression;
 using CP77.Common.Services;
 using CP77.Common.Tools.FNV1A;
 using CP77Tools.Commands;
-using CP77Tools.Common.Services;
 using CP77Tools.Extensions;
 using CP77Tools.Tasks;
 using Luna.ConsoleProgressBar;
@@ -67,7 +66,7 @@ namespace CP77Tools
             };
 
             //await ConsoleFunctions.UpdateHashesAsync();
-            await hashService.ReloadLocally();
+            /*await*/ hashService.ReloadLocally();
 
             // Run
             if (args == null || args.Length == 0)

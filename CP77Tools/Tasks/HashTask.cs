@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Catel.IoC;
+using CP77.Common.Services;
 using CP77.Common.Tools.FNV1A;
-using CP77Tools.Common.Services;
 
 namespace CP77Tools.Tasks
 {
@@ -13,13 +13,14 @@ namespace CP77Tools.Tasks
     public static partial class ConsoleFunctions
     {
 
-        public static int HashTask(string input, bool missing)
+        public static int HashTask(string[] input, bool missing)
         {
             #region checks
 
-            if (!string.IsNullOrEmpty(input))
+            foreach (var s in input)
             {
-                logger.LogString(FNV1A64HashAlgorithm.HashString(input).ToString(), WolvenKit.Common.Services.Logtype.Normal);
+                if (!string.IsNullOrEmpty(s))
+                    logger.LogString(FNV1A64HashAlgorithm.HashString(s).ToString(), WolvenKit.Common.Services.Logtype.Normal);
             }
 
             #endregion
@@ -62,7 +63,7 @@ namespace CP77Tools.Tasks
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
             if (await hashService.RefreshAsync())
             {
-                await hashService.ReloadLocally();
+                /*await*/ hashService.ReloadLocally();
             }
 
             return 1;

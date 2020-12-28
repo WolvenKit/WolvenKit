@@ -1,31 +1,54 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using Catel.IoC;
 using Newtonsoft.Json;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.Tools.DDS;
 using WolvenKit.CR2W;
 
 namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
+        public static void Cr2wTask(string[] path, string outpath, bool all, bool chunks)
+        {
+            if (path == null || path.Length < 1)
+            {
+                logger.LogString("Please fill in an input path", Logtype.Error);
+                return;
+            }
 
-        public static int Cr2wTask(string path, string outpath, bool all, bool chunks)
+            Parallel.ForEach(path, file =>
+            {
+                Cr2wTaskInner(file, outpath, all, chunks);
+            });
+
+        }
+
+        private static int Cr2wTaskInner(string path, string outpath, bool all, bool chunks)
         {
             // initial checks
             if (string.IsNullOrEmpty(path))
             {
-                logger.LogString("Please fill in an input path", Logtype.Error);
+                logger.LogString("Please fill in an input path.", Logtype.Error);
+                return 0;
+            }
+            var inputFileInfo = new FileInfo(path);
+            if (!inputFileInfo.Exists)
+            {
+                logger.LogString("Input file does not exist.", Logtype.Error);
                 return 0;
             }
 
-            if (string.IsNullOrEmpty(outpath))
+            var outputDirInfo = string.IsNullOrEmpty(outpath) 
+                ? inputFileInfo.Directory 
+                : new DirectoryInfo(outpath);
+            if (outputDirInfo == null || !outputDirInfo.Exists)
             {
-                outpath = path;
+                logger.LogString("Output directory is not valid.", Logtype.Error);
+                return 0;
             }
-
-            var inputFileInfo = new FileInfo(path);
-            var outputDirInfo = new DirectoryInfo(outpath);
 
             var f = File.ReadAllBytes(inputFileInfo.FullName);
             using var ms = new MemoryStream(f);
@@ -49,14 +72,14 @@ namespace CP77Tools.Tasks
                 }
 
                 //write
-                File.WriteAllText($"{outputDirInfo.FullName}" + inputFileInfo.Name + ".info.json",
+                File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{inputFileInfo.Name}.info.json"),
                     JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         PreserveReferencesHandling = PreserveReferencesHandling.None,
                         TypeNameHandling = TypeNameHandling.Auto
                     }));
-                logger.LogString($"Finished. Dump file written to {outputDirInfo.FullName} as " + inputFileInfo.Name + ".info.json", Logtype.Success);
+                logger.LogString($"Finished. Dump file written to {Path.Combine(outputDirInfo.FullName, $"{inputFileInfo.Name}.info.json")}", Logtype.Success);
             }
 
             if (chunks)
@@ -65,14 +88,14 @@ namespace CP77Tools.Tasks
                 cr2w.Read(br);
 
                 //write
-                File.WriteAllText($"{outputDirInfo.FullName}" + inputFileInfo.Name + ".json",
+                File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{inputFileInfo.Name}.json"),
                     JsonConvert.SerializeObject(cr2w, Formatting.Indented, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         PreserveReferencesHandling = PreserveReferencesHandling.None,
                         TypeNameHandling = TypeNameHandling.None
                     }));
-                logger.LogString($"Finished. Dump file written to {outputDirInfo.FullName} as " + inputFileInfo.Name + ".json", Logtype.Success);
+                logger.LogString($"Finished. Dump file written to {Path.Combine(outputDirInfo.FullName, $"{inputFileInfo.Name}.json")}", Logtype.Success);
             }
 
 
