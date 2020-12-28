@@ -22,12 +22,14 @@ namespace WolvenKit.CR2W.Types
         public void ToCsvStream(Stream stream, char seperator = ',')
         {
             using var writer = new StreamWriter(stream);
-            
+
             // write header
+            if (Headers?.Elements == null) return;
             string headerline = string.Join(seperator, Headers.Elements.Select(_ => _.val));
             writer.WriteLine(headerline);
             
             // write body
+            if (Data?.Elements == null) return;
             foreach (var dataElement in Data.Elements)
             {
                 string dataline = string.Join(seperator, dataElement.Elements.Select(_ => _.val));

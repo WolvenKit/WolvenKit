@@ -493,10 +493,15 @@ namespace CP77.CR2W.Archive
                     using var stream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     redcsv.ToCsvStream(stream);
 
+                    
+                    
                     break;
                 }
                 case EUncookable.json:
+                {
+                    
                     break;
+                }
                 default:
                     throw new ArgumentOutOfRangeException();
             }

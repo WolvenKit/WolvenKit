@@ -74,11 +74,12 @@ namespace CP77Tools.Tasks
 
             if (extract || dump || list || uncook)
             {
-                var archiveFileInfos = new List<FileInfo>();
+                List<FileInfo> archiveFileInfos;
                 if (isDirectory)
                 {
-                    //var archiveManager = new ArchiveManager(basedir);
+                    var archiveManager = new ArchiveManager(basedir);
                     // TODO: use the manager here?
+                    archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Filepath)).ToList();
                 }
                 else
                 {
