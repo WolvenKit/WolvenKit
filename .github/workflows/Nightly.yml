@@ -31,7 +31,7 @@ jobs:
     - name: Zip Release
       run: |
         cd $Env:GITHUB_WORKSPACE\\WolvenKitUI\bin
-        Compress-Archive -Path ./Release/net5.0-windows/ -DestinationPath WolvenKit.zip
+        Compress-Archive -Path ./Release/net5.0-windows/ -DestinationPath $Env:GITHUB_WORKSPACE\\WolvenKit.zip
     - name: Deploy Nightly
       uses: Maxzor/deploy-nightly@v1.0.4
       env:
@@ -39,6 +39,6 @@ jobs:
       with:
         upload_url: https://uploads.github.com/repos/Traderain/Wolven-kit/releases/11743470/assets{?name,label}
         release_id: 11743470
-        asset_path: $Env:GITHUB_WORKSPACE\\WolvenKitUI\bin\WolvenKit.zip
+        asset_path: $Env:GITHUB_WORKSPACE\\WolvenKit.zip
         asset_name: WolvenKit-Nightly-$$.zip
         asset_content_type: application/zip
