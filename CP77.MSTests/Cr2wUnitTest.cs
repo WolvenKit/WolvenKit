@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using CP77.Common.Services;
 using CP77.CR2W.Archive;
+using CP77.CR2W.Resources;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WolvenKit.Common.Services;
 
 namespace CP77.MSTests
 {
@@ -52,18 +52,6 @@ namespace CP77.MSTests
             }
             bm = new ArchiveManager(gameArchiveDir);
             GroupedFiles = bm.GroupedFiles;
-            //var singlefiles = bm.Files.Values
-            //    .Select(_ => _.FirstOrDefault())
-            //    .Where(_ => _ != null)
-            //    .ToList();
-            //var query = singlefiles.GroupBy(
-            //    f => f.Extension,
-            //    file => file,
-            //    (ext, items) => new
-            //    {
-            //        Key = ext,
-            //        File = items.Where(_ => _.Extension == ext)
-            //    }).ToList();
         }
 
 

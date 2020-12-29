@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using WolvenKit.Common.Services;
+using CP77.Common.Services;
 using WolvenKit.Common.Tools;
 using WolvenKit.CR2W.Reflection;
 using WolvenKit.CR2W.Types;

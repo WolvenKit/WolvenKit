@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Utils;
 

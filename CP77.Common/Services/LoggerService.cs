@@ -1,13 +1,9 @@
-﻿using Catel.Data;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Catel.Data;
 
-namespace WolvenKit.Common.Services
+namespace CP77.Common.Services
 {
     public enum Logtype
     {

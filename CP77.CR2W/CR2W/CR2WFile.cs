@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
 using System.Collections.ObjectModel;
 using Catel.Data;
+using CP77.Common.Services;
 using CP77.Common.Tools.FNV1A;
 using Newtonsoft.Json;
 

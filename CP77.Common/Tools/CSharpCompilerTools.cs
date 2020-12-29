@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using System.Runtime;
-using WolvenKit.Common.Services;
+using CP77.Common.Services;
 
 namespace WolvenKit.Common.Tools
 {

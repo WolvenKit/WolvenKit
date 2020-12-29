@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Catel.IoC;
+using CP77.Common.Services;
 using CP77.Common.Tools.FNV1A;
 using CP77.CR2W.Archive;
-using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.DDS;
 
 namespace CP77Tools.Tasks

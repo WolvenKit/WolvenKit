@@ -14,7 +14,6 @@ using CP77.CR2W.Archive;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Reflection;
 using WolvenKit.CR2W.Types;
@@ -139,10 +138,12 @@ namespace CP77Tools.Tasks
 
 
 
-                    int progress = 0;
                     var total = query.Count;
+                    logger.LogString($"Exporting {total} bundle entries ");
 
-                    Console.Write($"Exporting {total} bundle entries ");
+                    Thread.Sleep(1000);
+                    int progress = 0;
+                    logger.LogProgress(0);
 
                     // foreach extension
                     Parallel.ForEach(query, result =>
@@ -187,15 +188,16 @@ namespace CP77Tools.Tasks
                         ar.Filepath.GetHashMD5(), 0,
                         MemoryMappedFileAccess.Read);
 
-                    int progress = 0;
-
                     var fileDictionary = new ConcurrentDictionary<ulong, Cr2wChunkInfo>();
                     var texDictionary = new ConcurrentDictionary<ulong, Cr2wTextureInfo>();
 
                     // get info
                     var count = ar.FileCount;
+                    logger.LogString($"Exporting {count} bundle entries ");
 
-                    Console.Write($"Exporting {count} bundle entries ");
+                    Thread.Sleep(1000);
+                    int progress = 0;
+                    logger.LogProgress(0);
 
                     Parallel.For(0, count, i =>
                     {

@@ -20,7 +20,7 @@ namespace CP77Tools.Tasks
             foreach (var s in input)
             {
                 if (!string.IsNullOrEmpty(s))
-                    logger.LogString(FNV1A64HashAlgorithm.HashString(s).ToString(), WolvenKit.Common.Services.Logtype.Normal);
+                    logger.LogString(FNV1A64HashAlgorithm.HashString(s).ToString(), Logtype.Normal);
             }
 
             #endregion

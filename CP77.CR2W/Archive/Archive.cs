@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
+using CP77.Common.Services;
 using CP77.Common.Tools;
 using CP77.Common.Tools.FNV1A;
 using CP77.CR2W.Extensions;
@@ -16,7 +17,6 @@ using CP77Tools.Model;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.DDS;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.SRT;
@@ -556,15 +556,11 @@ namespace CP77.CR2W.Archive
         public (List<string>, int) ExtractAll(DirectoryInfo outDir, string pattern = "", string regex = "")
         {
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-
-
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
 
             using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
-
-            Console.Write($"Exporting {FileCount} bundle entries ");
 
             // check search pattern then regex
             IEnumerable<ArchiveItem> finalmatches = Files.Values;
@@ -582,11 +578,13 @@ namespace CP77.CR2W.Archive
                 finalmatches = queryMatchingFiles;
             }
 
+            var finalMatchesList = finalmatches.ToList();
+            logger.LogString($"Exporting {finalMatchesList.Count} bundle entries.");
+
             Thread.Sleep(1000);
             int progress = 0;
             logger.LogProgress(0);
-
-            Parallel.ForEach(finalmatches, info =>
+            Parallel.ForEach(finalMatchesList, info =>
             {
                 int extracted = ExtractSingleInner(mmf, info.NameHash64, outDir);
 
@@ -596,10 +594,10 @@ namespace CP77.CR2W.Archive
                     failedList.Add(info.FileName);
 
                 Interlocked.Increment(ref progress);
-                logger.LogProgress(progress / (float)FileCount);
+                logger.LogProgress(progress / (float)finalMatchesList.Count);
             });
 
-            return (extractedList.ToList(), FileCount);
+            return (extractedList.ToList(), finalMatchesList.Count);
         }
 
         /// <summary>
@@ -615,12 +613,10 @@ namespace CP77.CR2W.Archive
 
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
-            int all = 0;
+            
 
             using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
                 MemoryMappedFileAccess.Read);
-
-            Console.Write($"Uncooking {FileCount} bundle entries ");
 
             // check search pattern then regex
             IEnumerable<ArchiveItem> finalmatches = Files.Values;
@@ -638,28 +634,30 @@ namespace CP77.CR2W.Archive
                 finalmatches = queryMatchingFiles;
             }
 
+            var finalMatchesList = finalmatches.Where(_ => CanUncook(_.NameHash64)).ToList();
+            logger.LogString($"Uncooking {finalMatchesList.Count} bundle entries.");
+
             Thread.Sleep(1000);
             int progress = 0;
             logger.LogProgress(0);
-
-            Parallel.ForEach(finalmatches, info =>
+            Parallel.ForEach(finalMatchesList, info =>
             {
-                if (CanUncook(info.NameHash64))
-                {
-                    Interlocked.Increment(ref all);
-                    int uncooked = UncookSingleInner(mmf, info.NameHash64, outDir, uncookext);
+                int uncooked = UncookSingleInner(mmf, info.NameHash64, outDir, uncookext);
 
-                    if (uncooked != 0)
-                        extractedList.Add(info.FileName);
-                    else
-                        failedList.Add(info.FileName);
-                }
+                if (uncooked != 0)
+                    extractedList.Add(info.FileName);
+                else
+                    failedList.Add(info.FileName);
                 Interlocked.Increment(ref progress);
-                logger.LogProgress(progress / (float)FileCount);
+                logger.LogProgress(progress / (float)finalMatchesList.Count);
             });
 
+            foreach (var failed in failedList)
+            {
+                logger.LogString($"Failed to uncook {failed}.", Logtype.Error);
+            }
 
-            return (extractedList.ToList(), all);
+            return (extractedList.ToList(), finalMatchesList.Count);
         }
 
         private bool CanUncook(ulong hash)

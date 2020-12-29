@@ -2,6 +2,7 @@
 {
     public interface IAppSettingsService
     {
+        public string ETagPath { get; }
         public string ResourcesPath { get; }
         public string ArchiveHashesPath { get; }
         public string LooseHashesPath { get; }
