@@ -15,7 +15,6 @@ jobs:
       uses: actions/checkout@v2
     - name: Download libs for irrlicht
       run: |
-        cd $Env:GITHUB_WORKSPACE\\WolvenKit.Irrlicht\\
         Invoke-WebRequest https://outwa.it/lib.zip -OutFile $Env:GITHUB_WORKSPACE\\WolvenKit.Irrlicht\\lib.zip
         Expand-Archive $Env:GITHUB_WORKSPACE\\WolvenKit.Irrlicht\\lib.zip -DestinationPath $Env:GITHUB_WORKSPACE\\WolvenKit.Irrlicht\\ -Force
     - name: Setup Nuget.exe
@@ -30,8 +29,7 @@ jobs:
       run: msbuild  WolvenKit.sln -p:Configuration=Release  -p:Platform=x64 -m
     - name: Zip Release
       run: |
-        cd $Env:GITHUB_WORKSPACE\\WolvenKitUI\bin
-        Compress-Archive -Path ./Release/net5.0-windows/ -DestinationPath $Env:GITHUB_WORKSPACE\\WolvenKit.zip
+        Compress-Archive -Path $Env:GITHUB_WORKSPACE\\WolvenKitUI\\bin\\Release\\net5.0-windows\\ -DestinationPath $Env:GITHUB_WORKSPACE\\WolvenKit.zip
     - name: Deploy Nightly
       uses: Maxzor/deploy-nightly@v1.0.4
       env:
