@@ -31,7 +31,7 @@ jobs:
       run: |
         Compress-Archive -Path $Env:GITHUB_WORKSPACE\\WolvenKitUI\\bin\\Release\\net5.0-windows\\ -DestinationPath $Env:GITHUB_WORKSPACE\\WolvenKit.zip
     - name: Deploy Nightly
-      uses: Maxzor/deploy-nightly@v1.0.4
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
