@@ -13,11 +13,11 @@ jobs:
     steps:
     - name: Checkout github repo (+ download lfs dependencies)
       uses: actions/checkout@v2
-      with:
-        lfs: true
-    - name: Checkout LFS objects
-      run: git lfs checkout
-    - name: Setup NuGet.exe for use with actions
+    - name: Download libs for irrlicht
+      run: |
+        Invoke-WebRequest https://outwa.it/lib.zip -OutFile $Env:GITHUB_WORKSPACE\\WolvenKit.Irrlicht\\lib.zip
+        Expand-Archive $Env:GITHUB_WORKSPACE\\WolvenKit.Irrlicht\\lib.zip -DestinationPath $Env:GITHUB_WORKSPACE\\WolvenKit.Irrlicht\\ -Force
+    - name: Setup Nuget.exe
       uses: NuGet/setup-nuget@v1.0.5
       with:
         nuget-version: latest
@@ -29,15 +29,14 @@ jobs:
       run: msbuild  WolvenKit.sln -p:Configuration=Release  -p:Platform=x64 -m
     - name: Zip Release
       run: |
-        cd $Env:GITHUB_WORKSPACE\\WolvenKit\bin
-        Compress-Archive -Path ./x64/Release/ -DestinationPath WolvenKit.zip
+        Compress-Archive -Path $Env:GITHUB_WORKSPACE\\WolvenKitUI\\bin\\Release\\net5.0-windows\\ -DestinationPath $Env:GITHUB_WORKSPACE\\WolvenKit.zip
     - name: Deploy Nightly
-      uses: Maxzor/deploy-nightly@v1.0.4
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/Traderain/Wolven-kit/releases/11743470/assets{?name,label}
         release_id: 11743470
-        asset_path: WolvenKit\bin\WolvenKit.zip
+        asset_path: WolvenKit.zip
         asset_name: WolvenKit-Nightly-$$.zip
         asset_content_type: application/zip
