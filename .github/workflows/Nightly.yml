@@ -17,8 +17,6 @@ jobs:
       run: |
         Invoke-WebRequest https://outwa.it/lib.zip -OutFile $Env:GITHUB_WORKSPACE\\WolvenKit.Irrlicht\\lib.zip
         Expand-Archive $Env:GITHUB_WORKSPACE\\WolvenKit.Irrlicht\\lib.zip -DestinationPath $Env:GITHUB_WORKSPACE\\WolvenKit.Irrlicht\\ -Force
-        cd $Env:GITHUB_WORKSPACE\\
-        tree
     - name: Setup Nuget.exe
       uses: NuGet/setup-nuget@v1.0.5
       with:
@@ -32,6 +30,8 @@ jobs:
     - name: Zip Release
       run: |
         Compress-Archive -Path $Env:GITHUB_WORKSPACE\\WolvenKitUI\\bin\\Release\\net5.0-windows\\ -DestinationPath $Env:GITHUB_WORKSPACE\\WolvenKit.zip
+        cd $Env:GITHUB_WORKSPACE\\
+        tree
     - name: Deploy Nightly
       uses: Maxzor/deploy-nightly@v1.0.4
       env:
