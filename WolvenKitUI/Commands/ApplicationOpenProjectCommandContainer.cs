@@ -52,7 +52,7 @@ namespace WolvenKitUI
                 {
                     var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
                     {
-                        Filter = "Witcher 3 Project (*.w3modproj)|*.w3modproj | Cyberpunk 2077 Project | *.cpmodproj",
+                        Filter = "Witcher 3 Project (*.w3modproj)|*.w3modproj| Cyberpunk 2077 Project | *.cpmodproj",
                         IsMultiSelect = false,
                         Title = "Please select the Wolvenkit project you would like to open"
                     });
