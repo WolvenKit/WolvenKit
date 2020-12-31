@@ -1,95 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using Catel;
-using Catel.IoC;
-using Catel.Threading;
-using Newtonsoft.Json;
-using Orc.Notifications;
-using ProtoBuf;
-using WolvenKit.App.Controllers;
-using WolvenKit.App.Services;
-using WolvenKit.Bundles;
-using WolvenKit.Cache;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
-using WolvenKit.W3Speech;
-using WolvenKit.W3Strings;
 
-namespace WolvenKit.App.Model
+namespace WolvenKit.Common.Model
 {
-    public sealed class Tw3Project : EditorProject, ICloneable
+    public class CP77Mod : EditorProjectData, ICloneable
     {
-        #region fields
-        private readonly ISettingsManager _settings;
-        private readonly ILoggerService _logger;
-
-        private Task initializeTask;
-
-        private W3StringManager W3StringManager;
-        private BundleManager BundleManager;
-        private SoundManager SoundManager;
-        private TextureManager TextureManager;
-        private CollisionManager CollisionManager;
-
-        private BundleManager ModBundleManager;
-        private SoundManager ModSoundManager;
-        private TextureManager ModTextureManager;
-        private CollisionManager ModCollisionManager;
-
-        private SpeechManager SpeechManager { get; set; }
-
-        #endregion
-
-        public Tw3Project(string location) : base(location)
-        {
-            _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            if(File.Exists(location))
-                Load(location);
-        }
-
-        public Tw3Project() : base("") { }
-
-        
-
-        #region properties
-
-        public override void Save(string path)
-        {
-            using (var sf = new FileStream(path, FileMode.Create, FileAccess.Write))
-            {
-                var ser = new XmlSerializer(typeof(W3Mod));
-                ser.Serialize(sf, (W3Mod)this.Data);
-            }
-        }
-
-        public override void Load(string path)
-        {
-            using (var lf = new FileStream(path, FileMode.Open, FileAccess.Read))
-            {
-                var ser = new XmlSerializer(typeof(W3Mod));
-                var obj = (W3Mod)ser.Deserialize(lf);
-                this.Name = obj.Name;
-                this.Version = obj.Version;
-                this.Author = obj.Author;
-                this.Email = obj.Email;
-                this.GameType = GameType.Witcher3;
-            }
-        }
-
-        public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
-
-        
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string ProjectDirectory => Path.Combine(Path.GetDirectoryName(FileName), Name);
 
         #region Directories
         [XmlIgnore]
@@ -100,6 +25,34 @@ namespace WolvenKit.App.Model
             get
             {
                 var dir = Path.Combine(ProjectDirectory, "_backups");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string RecyclebinDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "_recyclebin");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string FileDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "files");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
                 return dir;
@@ -309,10 +262,23 @@ namespace WolvenKit.App.Model
         #endregion
         #endregion
 
-
         #region Files
-
-        
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public List<string> Files
+        {
+            get
+            {
+                if (!Directory.Exists(FileDirectory))
+                {
+                    Directory.CreateDirectory(FileDirectory);
+                }
+                return Directory.EnumerateFiles(FileDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file.Substring(FileDirectory.Length + 1))
+                    .ToList();
+            }
+        }
 
         [XmlIgnore]
         [ReadOnly(true)]
@@ -342,9 +308,7 @@ namespace WolvenKit.App.Model
                 {
                     Directory.CreateDirectory(DlcDirectory);
                 }
-                return Directory.EnumerateFiles(DlcDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file.Substring(DlcDirectory.Length + 1))
-                    .ToList();
+                return Directory.EnumerateFiles(DlcDirectory, "*", SearchOption.AllDirectories).Select(file => file.Substring(DlcDirectory.Length + 1)).ToList();
             }
         }
 
@@ -359,9 +323,7 @@ namespace WolvenKit.App.Model
                 {
                     Directory.CreateDirectory(RawDirectory);
                 }
-                return Directory.EnumerateFiles(RawDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file.Substring(RawDirectory.Length + 1))
-                    .ToList();
+                return Directory.EnumerateFiles(RawDirectory, "*", SearchOption.AllDirectories).Select(file => file.Substring(RawDirectory.Length + 1)).ToList();
             }
         }
 
@@ -376,75 +338,53 @@ namespace WolvenKit.App.Model
                 {
                     Directory.CreateDirectory(RadishDirectory);
                 }
-                return Directory.EnumerateFiles(RadishDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file.Substring(RadishDirectory.Length + 1))
-                    .ToList();
+                return Directory.EnumerateFiles(RadishDirectory, "*", SearchOption.AllDirectories).Select(file => file.Substring(RadishDirectory.Length + 1)).ToList();
             }
         }
         #endregion
 
-        #endregion
 
-        #region methods
-        // TODO: debug
-        public override void Check() => _logger.LogString($"{initializeTask.Status.ToString()}", Logtype.Error);
+        [Browsable(false)]
+        public List<string> LastOpenedFiles;
 
-        public sealed override async Task Initialize()
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string FileName { get; set; }
+
+        [Category("About")]
+        [Description("The name of your mod.")]
+        public string Name { get; set; }
+
+        [Category("About")]
+        [Description("The name of your mod.")]
+        public string Author { get; set; }
+
+        [Category("About")]
+        [Description("The name of your mod.")]
+        public string Email { get; set; }
+
+        [Browsable(false)]
+        [Category("About")]
+        [Description("The version of your mod. It's a string so 0.1-ALPHA and such is possible.")]
+        public string Version { get; set; } = "0.62";
+
+        public object Clone()
         {
-            // if initializeTask is null
-            if (initializeTask == null)
+            var clone = new Common.W3Mod
             {
-                initializeTask =  Task.Run(() => InitializeAsync());
-            }
-            else
-            {
-                // TODO: needed?
-                if (initializeTask.IsCompleted == false && 
-                    initializeTask.Status != TaskStatus.Running && 
-                    initializeTask.Status != TaskStatus.WaitingToRun &&
-                    initializeTask.Status != TaskStatus.WaitingForActivation)
-                {
-
-                }
-                else
-                {
-                    
-                }
-            }
-            
+                Name = Name,
+                Author = Author,
+                Email = Email,
+                Version = Version,
+                FileName = FileName,
+                LastOpenedFiles = LastOpenedFiles
+            };
+            return clone;
         }
 
-        private async Task InitializeAsync()
-        {
-            BundleManager ??= await Task.Run(() => Tw3Controller.LoadBundleManager()).ConfigureAwait(false);
-            W3StringManager ??= await Task.Run(() => Tw3Controller.LoadStringsManager()).ConfigureAwait(false);
-            TextureManager ??= await Task.Run(() => Tw3Controller.LoadTextureManager()).ConfigureAwait(false);
-            CollisionManager ??= await Task.Run(() => Tw3Controller.LoadCollisionManager()).ConfigureAwait(false);
-            SoundManager ??= await Task.Run(() => Tw3Controller.LoadSoundManager()).ConfigureAwait(false);
-            SpeechManager ??= await Task.Run(() => Tw3Controller.LoadSpeechManager()).ConfigureAwait(false);
-
-
-
-            // Hash all filepaths
-            _logger.LogString("Starting additional tasks...", Logtype.Important);
-            var relativepaths = ModFiles
-                .Select(_ => _.Substring(_.IndexOf(Path.DirectorySeparatorChar) + 1))
-                .ToList();
-            Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
-
-            // register all custom classes
-            CR2WManager.Init(FileDirectory, MainController.Get().Logger);
-            _logger.LogString("Finished additional tasks...", Logtype.Success);
-
-            ServiceLocator.Default.ResolveType<INotificationService>().ShowNotification("WolvenKit", $"Project {Name} has finished loading.");
-
-        }
-
-
-
-
-
-        public void CreateDefaultDirectories()
+        public override void CreateDefaultDirectories()
         {
             // create top-level directories
             _ = ModDirectory;
@@ -464,6 +404,7 @@ namespace WolvenKit.App.Model
             _ = RawModDirectory;
             _ = RawDlcDirectory;
         }
+
 
         /// <summary>
         /// Returns the first relative folder path in the ActiveMod/dlc directory
@@ -541,27 +482,6 @@ namespace WolvenKit.App.Model
                 return relpath.Substring(DlcUncookedDirectory.Length + 1);
             }
             return relpath;
-        }
-
-        #endregion
-
-
-        public object Clone()
-        {
-            var clone = new Tw3Project()
-            {
-                Name = Name,
-                Author = Author,
-                Email = Email,
-                Version = Version,
-                Location = Location
-            };
-            return clone;
-        }
-
-        public override string ToString()
-        {
-            return Location;
         }
     }
 }

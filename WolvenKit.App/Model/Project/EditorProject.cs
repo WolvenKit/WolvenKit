@@ -16,19 +16,30 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Orc.ProjectManagement;
+using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.App.Model
 {
-    public abstract class Project : ProjectBase, IEquatable<Project>
+    public abstract class EditorProject : ProjectBase, IEquatable<EditorProject>
     {
-        protected Project(string location)
+        protected EditorProject(string location)
             : base(location)
         {
 
         }
 
-        #region fields
+        protected EditorProject() : base("") { }
 
+        public EditorProjectData Data;
+
+        public abstract void Save(String path);
+
+        public abstract void Load(String path);
+
+
+        #region fields
+        [XmlIgnore]
         private bool _isInitialized;
 
         #endregion
@@ -38,6 +49,9 @@ namespace WolvenKit.App.Model
         [ReadOnly(true)]
         [Browsable(false)]
         public abstract bool IsInitialized { get; }
+
+        [XmlIgnore]
+        public GameType GameType;
 
 
         [Category("About")]
@@ -49,7 +63,7 @@ namespace WolvenKit.App.Model
         public string Author { get; set; }
 
         [Category("About")]
-        [Description("The name of your mod.")]
+        [Description("Your contact email.")]
         public string Email { get; set; }
 
         [Browsable(false)]
@@ -108,7 +122,7 @@ namespace WolvenKit.App.Model
         #endregion
 
         #region implements IEquatable
-        public bool Equals( Project other)
+        public bool Equals(EditorProject other)
         {
             if (ReferenceEquals(null, other))
                 return false;
@@ -127,7 +141,7 @@ namespace WolvenKit.App.Model
             if (ReferenceEquals(this, obj))
                 return true;
 
-            return obj.GetType() == GetType() && Equals((Project)obj);
+            return obj.GetType() == GetType() && Equals((EditorProject)obj);
         }
 
         public override int GetHashCode()
@@ -143,8 +157,7 @@ namespace WolvenKit.App.Model
 
         public override string ToString()
         {
-            //TODO: serialize?
-            throw new NotImplementedException();
+            return Location;
         }
     }
 

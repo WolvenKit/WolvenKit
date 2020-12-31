@@ -38,7 +38,7 @@ namespace WolvenKit.App.Model.ProjectManagement
         #endregion
 
         #region Methods
-        public Task<bool> EnsureChangesSavedAsync(Project project, SaveChangesReason reason)
+        public Task<bool> EnsureChangesSavedAsync(EditorProject project, SaveChangesReason reason)
         {
             Argument.IsNotNull(() => project);
 
@@ -47,7 +47,7 @@ namespace WolvenKit.App.Model.ProjectManagement
             return EnsureChangesSavedAsync(project, message);
         }
 
-        protected virtual string GetPromptText(Project project, SaveChangesReason reason)
+        protected virtual string GetPromptText(EditorProject project, SaveChangesReason reason)
         {
             Argument.IsNotNull(() => project);
 
@@ -72,7 +72,7 @@ namespace WolvenKit.App.Model.ProjectManagement
             return message;
         }
 
-        private async Task<bool> EnsureChangesSavedAsync(Project project, string message)
+        private async Task<bool> EnsureChangesSavedAsync(EditorProject project, string message)
         {
             Argument.IsNotNull(() => project);
             Argument.IsNotNullOrEmpty(() => message);

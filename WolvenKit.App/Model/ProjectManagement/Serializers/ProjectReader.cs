@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Catel;
+using Catel.Logging;
 using Orc.Notifications;
 using Orc.ProjectManagement;
 using WolvenKit.App.Model;
@@ -33,37 +34,23 @@ namespace WolvenKit.App.Model.ProjectManagement
                 if (!fi.Exists)
                     return null;
 
-                Project project = null;
+                EditorProject project = null;
                 switch (fi.Extension)
                 {
                     case ".w3modproj":
-                        // TODO: use the old class because orc.projects don't have parameterless constructors
-                        var ser = new XmlSerializer(typeof(W3Mod));
-#if NETCOREAPP
-                        await using (var modfile = new FileStream(location, FileMode.Open, FileAccess.Read))
-#else
-                        using (var modfile = new FileStream(location, FileMode.Open, FileAccess.Read))
-#endif
-                        {
-                            var obj = (W3Mod)ser.Deserialize(modfile);
-                            project = new Tw3Project(location)
-                            {
-                                Name = obj.Name,
-                                Version = obj.Version,
-                                Author = obj.Author,
-                                Email = obj.Email
-                            };
-                        }
+                    {
+                        project = new Tw3Project(location);
                         break;
+                    }
                     case ".cpmodproj":
-                        // TODO: for cp77 project, move to protobuf
+                    {
                         project = new Cp77Project(location);
                         break;
-                    default:
-                        break;
+                    }
                 }
 
-
+                _notificationService.ShowNotification("Success", "Project " + Path.GetFileNameWithoutExtension(location) +
+                                                      " loaded!");
                 return project;
 
             } catch (System.IO.IOException ex)

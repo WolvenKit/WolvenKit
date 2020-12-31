@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <UseWpf>true</UseWpf>
-    
+    <XamlDebuggingInformation>true</XamlDebuggingInformation>
     <ExtrasEnableImplicitWpfReferences>true</ExtrasEnableImplicitWpfReferences>
     <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
   </PropertyGroup>

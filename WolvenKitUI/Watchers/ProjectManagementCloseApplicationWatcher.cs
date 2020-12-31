@@ -39,7 +39,7 @@ namespace WolvenKitUI
         {
             using (_pleaseWaitService.PushInScope())
             {
-                var projects = _projectManager.Projects.OfType<Project>().OrderByDescending(x => x.IsDirty).ToArray();
+                var projects = _projectManager.Projects.OfType<EditorProject>().OrderByDescending(x => x.IsDirty).ToArray();
 
                 for (var i = 0; i < projects.Length; i++)
                 {
@@ -60,7 +60,7 @@ namespace WolvenKitUI
 
         protected override async Task<bool> PrepareClosingAsync()
         {
-            foreach (var project in _projectManager.Projects.OfType<Project>())
+            foreach (var project in _projectManager.Projects.OfType<EditorProject>())
             {
                 if (!await _saveProjectChangesService.EnsureChangesSavedAsync(project, SaveChangesReason.Closing))
                 {
