@@ -50,7 +50,7 @@ namespace WolvenKit.App.ViewModels
         private readonly IProjectManager _projectManager;
 
 
-        private Project ActiveMod => _projectManager.ActiveProject as Project;
+        private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
 
 
         #endregion
@@ -89,7 +89,7 @@ namespace WolvenKit.App.ViewModels
 
         #region properties
 
-        private Project ActiveProject => _projectManager.ActiveProject as Project;
+        private EditorProject ActiveEditorProject => _projectManager.ActiveProject as EditorProject;
 
         private BindingList<FileSystemInfoModel> _treenodes = null;
         public BindingList<FileSystemInfoModel> Treenodes
@@ -135,7 +135,7 @@ namespace WolvenKit.App.ViewModels
         /// Copies relative path of node.
         /// </summary>
         public ICommand CopyRelPathCommand { get; private set; }
-        private bool CanCopyRelPath() => _projectManager.ActiveProject is Project && SelectedItem != null;
+        private bool CanCopyRelPath() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
         private void ExecuteCopyRelPath()
         {
             if (SelectedItem.IsFile)
@@ -157,7 +157,7 @@ namespace WolvenKit.App.ViewModels
         /// Opens selected node in File Explorer.
         /// </summary>
         public ICommand OpenInFileExplorerCommand { get; private set; }
-        private bool CanOpenInFileExplorer() => _projectManager.ActiveProject is Project && SelectedItem != null;
+        private bool CanOpenInFileExplorer() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
         private void ExecuteOpenInFileExplorer()
         {
             if (SelectedItem.IsDirectory)
@@ -170,7 +170,7 @@ namespace WolvenKit.App.ViewModels
         /// Expands all nodes in the treeview.
         /// </summary>
         public ICommand ExpandAllCommand { get; private set; }
-        private bool CanExpandAll() => _projectManager.ActiveProject is Project;
+        private bool CanExpandAll() => _projectManager.ActiveProject is EditorProject;
         private async void ExecuteExpandAll()
         {
             foreach (var node in Treenodes) node.ExpandChildren(true);
@@ -180,7 +180,7 @@ namespace WolvenKit.App.ViewModels
         /// Collapses all nodes in the treeview.
         /// </summary>
         public ICommand CollapseAllCommand { get; private set; }
-        private bool CanCollapseAll() => _projectManager.ActiveProject is Project;
+        private bool CanCollapseAll() => _projectManager.ActiveProject is EditorProject;
         private async void ExecuteCollapseAll()
         {
             foreach (var node in Treenodes) node.CollapseChildren(true);
@@ -190,14 +190,14 @@ namespace WolvenKit.App.ViewModels
         /// Expands all children of the selected node.
         /// </summary>
         public ICommand ExpandCommand { get; private set; }
-        private bool CanExpand() => _projectManager.ActiveProject is Project && SelectedItem != null;
+        private bool CanExpand() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
         private async void ExecuteExpand() => SelectedItem.ExpandChildren(true);
 
         /// <summary>
         /// Collapses all children of the selected node.
         /// </summary>
         public ICommand CollapseCommand { get; private set; }
-        private bool CanCollapse() => _projectManager.ActiveProject is Project && SelectedItem != null;
+        private bool CanCollapse() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
         private async void ExecuteCollapse() => SelectedItem.CollapseChildren(true);
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace WolvenKit.App.ViewModels
         public ICommand DeleteFileCommand { get; private set; }
         private bool CanDeleteFile()
         {
-            var b = _projectManager.ActiveProject is Project && SelectedItem != null;
+            var b = _projectManager.ActiveProject is EditorProject && SelectedItem != null;
             if (!b)
                 return false;
 
@@ -271,7 +271,7 @@ namespace WolvenKit.App.ViewModels
         /// Renames selected node. 
         /// </summary>
         public ICommand RenameFileCommand { get; private set; }
-        private bool CanRenameFile() => _projectManager.ActiveProject is Project && SelectedItem != null;
+        private bool CanRenameFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
         private async void ExecuteRenameFile()
         {
             var filename = SelectedItem.FullName;
@@ -314,7 +314,7 @@ namespace WolvenKit.App.ViewModels
         /// Cuts selected node to the clipboard.
         /// </summary>
         public ICommand CutFileCommand { get; private set; }
-        private bool CanCutFile() => _projectManager.ActiveProject is Project && SelectedItem != null;
+        private bool CanCutFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
         private void ExecuteCutFile()
         {
             // TODO: Handle command logic here
@@ -325,14 +325,14 @@ namespace WolvenKit.App.ViewModels
         /// Copies selected node to the clipboard.
         /// </summary>
         public ICommand CopyFileCommand { get; private set; }
-        private bool CanCopyFile() => _projectManager.ActiveProject is Project && SelectedItem != null;
+        private bool CanCopyFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
         private void CopyFile() => Clipboard.SetText(SelectedItem.FullName);
 
         /// <summary>
         /// Pastes a file from the clipboard into selected node.
         /// </summary>
         public ICommand PasteFileCommand { get; private set; }
-        private bool CanPasteFile() => _projectManager.ActiveProject is Project && SelectedItem != null && Clipboard.ContainsText();
+        private bool CanPasteFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null && Clipboard.ContainsText();
         private void PasteFile()
         {
             if (File.Exists(Clipboard.GetText()))
@@ -413,7 +413,7 @@ namespace WolvenKit.App.ViewModels
         /// Exports selected node with wcc.
         /// </summary>
         public ICommand ExportMeshCommand { get; private set; }
-        private bool CanExportMesh() => _projectManager.ActiveProject is Project && SelectedItem != null 
+        private bool CanExportMesh() => _projectManager.ActiveProject is EditorProject && SelectedItem != null 
             && SelectedItem.IsFile && SelectedItem.Extension == ".w2mesh";
         private async void ExportMesh() => await Task.Run(() => WccHelper.ExportFileToMod(SelectedItem.FullName));
 

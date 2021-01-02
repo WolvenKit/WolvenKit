@@ -27,7 +27,7 @@ using WolvenKit.W3Strings;
 
 namespace WolvenKit.App.Model
 {
-    public class Tw3Project : Project
+    public sealed class Tw3Project : EditorProject, ICloneable
     {
         #region fields
         private readonly ISettingsManager _settings;
@@ -40,13 +40,11 @@ namespace WolvenKit.App.Model
         private SoundManager SoundManager;
         private TextureManager TextureManager;
         private CollisionManager CollisionManager;
-        
 
         private BundleManager ModBundleManager;
         private SoundManager ModSoundManager;
         private TextureManager ModTextureManager;
         private CollisionManager ModCollisionManager;
-
 
         private SpeechManager SpeechManager { get; set; }
 
@@ -56,13 +54,38 @@ namespace WolvenKit.App.Model
         {
             _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-
-
+            if(File.Exists(location))
+                Load(location);
         }
+
+        public Tw3Project() : base("") { }
 
         
 
         #region properties
+
+        public override void Save(string path)
+        {
+            using (var sf = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                var ser = new XmlSerializer(typeof(W3Mod));
+                ser.Serialize(sf, (W3Mod)this.Data);
+            }
+        }
+
+        public override void Load(string path)
+        {
+            using (var lf = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                var ser = new XmlSerializer(typeof(W3Mod));
+                var obj = (W3Mod)ser.Deserialize(lf);
+                this.Name = obj.Name;
+                this.Version = obj.Version;
+                this.Author = obj.Author;
+                this.Email = obj.Email;
+                this.GameType = GameType.Witcher3;
+            }
+        }
 
         public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
 
@@ -521,10 +544,20 @@ namespace WolvenKit.App.Model
         }
 
         #endregion
-        
 
 
-
+        public object Clone()
+        {
+            var clone = new Tw3Project()
+            {
+                Name = Name,
+                Author = Author,
+                Email = Email,
+                Version = Version,
+                Location = Location
+            };
+            return clone;
+        }
 
         public override string ToString()
         {

@@ -9,7 +9,7 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
 {
-    public class W3Mod : ICloneable
+    public class W3Mod : EditorProjectData, ICloneable
     {
         [XmlIgnore]
         [ReadOnly(true)]
@@ -384,7 +384,7 @@ namespace WolvenKit.Common
             return clone;
         }
 
-        public void CreateDefaultDirectories()
+        public override void CreateDefaultDirectories()
         {
             // create top-level directories
             _ = ModDirectory;

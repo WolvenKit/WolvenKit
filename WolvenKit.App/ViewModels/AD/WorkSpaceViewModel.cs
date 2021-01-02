@@ -243,7 +243,7 @@ namespace WolvenKit.App.ViewModels
 		/// Packs the current mod project.
 		/// </summary>
 		public ICommand PackModCommand { get; private set; }
-        private bool CanPackMod() => _projectManager.ActiveProject is Project proj;
+        private bool CanPackMod() => _projectManager.ActiveProject is EditorProject proj;
         private async void ExecutePackMod()
         {
             //TODO
@@ -253,7 +253,7 @@ namespace WolvenKit.App.ViewModels
 		/// Git-backup current mod project
 		/// </summary>
 		public ICommand BackupModCommand { get; private set; }
-        private bool CanBackupMod() => _projectManager.ActiveProject is Project;
+        private bool CanBackupMod() => _projectManager.ActiveProject is EditorProject;
         private async void ExecuteBackupMod()
         {
             //TODO
@@ -271,7 +271,7 @@ namespace WolvenKit.App.ViewModels
 		/// </summary>
 		public event EventHandler ActiveDocumentChanged;
 
-        public Project Project { get; set; }
+        public EditorProject EditorProject { get; set; }
 
 		public bool SaveLayout { get; set; }
 
@@ -509,11 +509,11 @@ namespace WolvenKit.App.ViewModels
 
         private async Task OnProjectActivationAsync(object sender, ProjectUpdatingCancelEventArgs e)
         {
-            var newProject = (Project)e.NewProject;
+            var newProject = (EditorProject)e.NewProject;
             if (newProject is null)
                 return;
 
-            Project = newProject;
+            EditorProject = newProject;
         }
 
         //

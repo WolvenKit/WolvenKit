@@ -26,6 +26,6 @@ namespace WolvenKit.App.Model.ProjectManagement
 
     public interface ISaveProjectChangesService
     {
-        Task<bool> EnsureChangesSavedAsync(Project project, SaveChangesReason reason);
+        Task<bool> EnsureChangesSavedAsync(EditorProject project, SaveChangesReason reason);
     }
 }
