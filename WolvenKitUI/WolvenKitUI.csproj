@@ -161,6 +161,8 @@
     <PackageReference Include="Orc.Squirrel.Xaml" Version="4.0.4" />
     <PackageReference Include="Orchestra.Shell.Ribbon.Fluent" Version="6.1.1" />
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.1" />
+	<PackageReference Include="System.Security.Permissions" Version="5.0.0" />
+	<PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
     <PackageReference Include="WpfAnalyzers" Version="3.5.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
