@@ -1,1822 +1,446 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{12FD792B-EC76-4969-8B42-9671025D5108}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WolvenKit</RootNamespace>
+    <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <AssemblyName>WolvenKit</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <PublishUrl>./Publish/</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
-    <UpdateMode>Background</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>false</MapFileExtensions>
-    <UpdateUrl>http://traderain.hu/Witcher/WolvenKit/Release/</UpdateUrl>
-    <SupportUrl>https://traderain.hu</SupportUrl>
-    <ErrorReportUrl>https://traderain.hu</ErrorReportUrl>
-    <ProductName>WolvenKit</ProductName>
-    <PublisherName>Traderain</PublisherName>
-    <SuiteName>WolvenKit</SuiteName>
-    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
-    <WebPage>publish.htm</WebPage>
-    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>18</ApplicationRevision>
-    <ApplicationVersion>0.0.2.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <CreateDesktopShortcut>true</CreateDesktopShortcut>
-    <PublishWizardCompleted>true</PublishWizardCompleted>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <RootNamespace>WolvenKit</RootNamespace>
+    <DefaultLanguage>en-US</DefaultLanguage>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <NoWarn>1591</NoWarn>
-    <DocumentationFile>bin\Debug\WolvenKit.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\Release\WolvenKit.xml</DocumentationFile>
-    <NoWarn>1591</NoWarn>
-  </PropertyGroup>
+
   <PropertyGroup>
+    <UseWpf>true</UseWpf>
+    <XamlDebuggingInformation>true</XamlDebuggingInformation>
+    <ExtrasEnableImplicitWpfReferences>true</ExtrasEnableImplicitWpfReferences>
+    <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Tools like SonarQube require a unique project guid -->
+    <ProjectGuid>{1DD8B40B-2548-4663-B208-1D107EF47ACF}</ProjectGuid>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>WolvenKit</StartupObject>
+    <NoWarn>$(NoWarn);SA1652</NoWarn>
     <ApplicationIcon>Wkit_Icon_Flattened_256x.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>56D600A08C1A75A7D44B3384AB83B913576E5024</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>W3Edit_1_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>false</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetZone>LocalIntranet</TargetZone>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>false</SignManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <NoWarn>1591</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>
-    </DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>bin\x86\Release\WolvenKit.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>1591</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <NoWarn>1591</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>
-    </DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>bin\x64\Release\WolvenKit.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>1591</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-  </PropertyGroup>
+
+<ItemGroup>
+    <ProjectReference Include="..\WolvenKit.Bundles\WolvenKit.Bundles.csproj" />
+    <ProjectReference Include="..\WolvenKit.Cache\WolvenKit.Cache.csproj" />
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
+    <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj" />
+    <ProjectReference Include="..\WolvenKit.Radish\WolvenKit.Radish.csproj" />
+    <ProjectReference Include="..\WolvenKit.W3Speech\WolvenKit.W3Speech.csproj" />
+    <ProjectReference Include="..\WolvenKit.W3Strings\WolvenKit.W3Strings.csproj" />
+    <ProjectReference Include="..\WolvenKit.Wwise\WolvenKit.Wwise.csproj" />
+  </ItemGroup>
+    <ItemGroup>
+    <None Remove="ManagerCache\__xbmdump_3768555366.csv" />
+  </ItemGroup>
+
   <ItemGroup>
-    <Reference Include="AltoControls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AltoControls.1.0.1\lib\AltoControls.dll</HintPath>
-    </Reference>
-    <Reference Include="AssimpNet, Version=4.1.0.0, Culture=neutral, PublicKeyToken=0d51b391f59f42a6, processorArchitecture=MSIL">
-      <HintPath>..\packages\AssimpNet.4.1.0\lib\net40\AssimpNet.dll</HintPath>
-    </Reference>
-    <Reference Include="AutocompleteMenu-ScintillaNET, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoCompleteMenu-ScintillaNET.1.6.2\lib\net461\AutocompleteMenu-ScintillaNET.dll</HintPath>
-    </Reference>
-    <Reference Include="AutoUpdater.NET, Version=1.6.4.0, Culture=neutral, PublicKeyToken=501435c91b35f4bc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autoupdater.NET.Official.1.6.4\lib\net45\AutoUpdater.NET.dll</HintPath>
-    </Reference>
-    <Reference Include="Catel.Core, Version=5.12.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Catel.Core.5.12.8\lib\net47\Catel.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Catel.MVVM, Version=5.12.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Catel.MVVM.5.12.8\lib\net47\Catel.MVVM.dll</HintPath>
-    </Reference>
-    <Reference Include="CircularProgressBar, Version=2.8.0.16, Culture=neutral, PublicKeyToken=310fd07b25df79b3, processorArchitecture=MSIL">
-      <HintPath>..\packages\CircularProgressBar.2.8.0.16\lib\net40\CircularProgressBar.dll</HintPath>
-    </Reference>
-    <Reference Include="CommandLine, Version=2.8.0.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommandLineParser.2.8.0\lib\net461\CommandLine.dll</HintPath>
-    </Reference>
-    <Reference Include="CSharpImageLibrary, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CSharpImageLibrary.4.2.0\lib\net462\CSharpImageLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="CsvHelper, Version=16.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\packages\CsvHelper.16.0.0\lib\net47\CsvHelper.dll</HintPath>
-    </Reference>
-    <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
-      <HintPath>..\packages\CyotekImageBox.1.3.0-Alpha1\lib\net20\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
-    </Reference>
-    <Reference Include="dbutil, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\dbutil.dll</HintPath>
-    </Reference>
-    <Reference Include="DevZH.FlatBuffers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevZH.FlatBuffers.1.4.0\lib\net35\DevZH.FlatBuffers.dll</HintPath>
-    </Reference>
-    <Reference Include="Dfust.Hotkeys, Version=1.2.6206.24906, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dfust.Hotkeys.1.2.6206.24906\lib\net452\Dfust.Hotkeys.dll</HintPath>
-    </Reference>
-    <Reference Include="Dfust.Hotkeys.Util, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dfust.Hotkeys.1.2.6206.24906\lib\net452\Dfust.Hotkeys.Util.dll</HintPath>
-    </Reference>
-    <Reference Include="Doboz">
-      <HintPath>..\packages\doboz4net.1.0.1\lib\net40-client\Doboz.dll</HintPath>
-    </Reference>
-    <Reference Include="FastMember, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FastMember.1.5.0\lib\net461\FastMember.dll</HintPath>
-    </Reference>
-    <Reference Include="format, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\format.dll</HintPath>
-    </Reference>
-    <Reference Include="Gma.System.MouseKeyHook, Version=5.6.130.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MouseKeyHook.5.6.0\lib\net40\Gma.System.MouseKeyHook.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=1.3.0.8, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpZipLib.1.3.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="IniParserLTK, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\IniParserLTK.1.1.5\lib\net45\IniParserLTK.dll</HintPath>
-    </Reference>
-    <Reference Include="Ionic.ZLib, Version=2.0.0.14, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MarkerMetro.Unity.Ionic.Zlib.2.0.0.14\lib\net35\Ionic.ZLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="jsutil, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\jsutil.dll</HintPath>
-    </Reference>
-    <Reference Include="LZ4, Version=1.0.15.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd, processorArchitecture=MSIL">
-      <HintPath>..\packages\lz4net.1.0.15.93\lib\net4-client\LZ4.dll</HintPath>
-    </Reference>
-    <Reference Include="LZ4PCL">
-      <HintPath>..\packages\LZ4PCL.1.0.0\lib\portable-net4+netcore45+wpa81+MonoAndroid1+MonoTouch1\LZ4PCL.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=1.3.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.1.3.5\lib\net46\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.JScript" />
-    <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="ObjectListView, Version=2.9.1.25410, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
-      <HintPath>..\packages\ObjectListView.Official.2.9.2-alpha2\lib\net20\ObjectListView.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenGL.Net, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenGL.Net.0.8.4\lib\net461\OpenGL.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenGL.Net.WinForms, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenGL.Net.WinForms.0.8.4\lib\net461\OpenGL.Net.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="PropertyGridEx, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PropertyGridEx.1.0.0\lib\net20\PropertyGridEx.dll</HintPath>
-    </Reference>
-    <Reference Include="protobuf-net, Version=3.0.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\packages\protobuf-net.3.0.62\lib\net461\protobuf-net.dll</HintPath>
-    </Reference>
-    <Reference Include="protobuf-net.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\packages\protobuf-net.Core.3.0.62\lib\net461\protobuf-net.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="RtfPipe, Version=1.0.7388.1242, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RtfPipe.1.0.7388.1242\lib\net45\RtfPipe.dll</HintPath>
-    </Reference>
-    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
-    </Reference>
-    <Reference Include="ScintillaNET_FindReplaceDialog, Version=1.0.3.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ScintillaNET_FindReplaceDialog.1.0.3.3\lib\net40-client\ScintillaNET_FindReplaceDialog.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Collections.Immutable, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.Immutable.5.0.0\lib\net461\System.Collections.Immutable.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ComponentModel.Annotations.4.6.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.6.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Console, Version=4.0.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Console.4.3.1\lib\net46\System.Console.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.OracleClient" />
-    <Reference Include="System.Design" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.5.0.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
-    </Reference>
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.Drawing.Design" />
-    <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net" />
-    <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.4.3.1\lib\net462\System.Runtime.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Extensions, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.Extensions.4.3.1\lib\net462\System.Runtime.Extensions.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Runtime.Serialization.Formatters, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.Serialization.Formatters.4.3.0\lib\net46\System.Runtime.Serialization.Formatters.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.Serialization.Primitives.4.3.0\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization.Xml, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.Serialization.Xml.4.3.0\lib\net46\System.Runtime.Serialization.Xml.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security" />
-    <Reference Include="System.Security.AccessControl, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.AccessControl.4.6.0\lib\net461\System.Security.AccessControl.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Permissions, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Permissions.4.6.0\lib\net461\System.Security.Permissions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Principal.Windows, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Principal.Windows.4.6.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Text.RegularExpressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.RegularExpressions.4.3.1\lib\net463\System.Text.RegularExpressions.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.5.24.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Tpl.Dataflow.4.5.24\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Xml.ReaderWriter.4.3.1\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
-    </Reference>
-    <Reference Include="UsefulThings, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UsefulCSharpThings.1.7.3\lib\net462\UsefulThings.dll</HintPath>
-    </Reference>
-    <Reference Include="vgmtplugin, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\vgmtplugin.dll</HintPath>
-    </Reference>
-    <Reference Include="vgmtutil, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\vgmtutil.dll</HintPath>
-    </Reference>
-    <Reference Include="VisualPlus, Version=0.4.1.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VisualPlus.0.4.1.4-beta\lib\VisualPlus\NET4\VisualPlus.dll</HintPath>
-    </Reference>
-    <Reference Include="Vlc.DotNet.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
-      <HintPath>..\packages\Vlc.DotNet.Core.3.1.0\lib\net45\Vlc.DotNet.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Vlc.DotNet.Core.Interops, Version=3.1.0.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
-      <HintPath>..\packages\Vlc.DotNet.Core.Interops.3.1.0\lib\net45\Vlc.DotNet.Core.Interops.dll</HintPath>
-    </Reference>
-    <Reference Include="Vlc.DotNet.Forms, Version=3.1.0.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
-      <HintPath>..\packages\Vlc.DotNet.Forms.3.1.0\lib\net45\Vlc.DotNet.Forms.dll</HintPath>
-    </Reference>
-    <Reference Include="VSLangProj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\Atflib\VSLangProj.dll</HintPath>
-    </Reference>
-    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=3.0.6.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>..\packages\DockPanelSuite.3.0.6\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
-    </Reference>
-    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=3.0.6.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>..\packages\DockPanelSuite.ThemeVS2015.3.0.6\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="WinFormAnimation, Version=1.6.0.4, Culture=neutral, PublicKeyToken=310fd07b25df79b3, processorArchitecture=MSIL">
-      <HintPath>..\packages\WinFormAnimation.1.6.0.4\lib\net40\WinFormAnimation.dll</HintPath>
-    </Reference>
+    <Content Include="ManagerCache\__xbmdump_3768555366.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\Interfaces\" />
+    <Folder Include="ViewModels\Tools\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Fonts\fontawesome-webfont.ttf" />
+    <None Remove="Resources\Icons\Logo.ico" />
+    <None Remove="Resources\Images\Files\apb_32x.png" />
+    <None Remove="Resources\Images\Files\BlankFile_16x.png" />
+    <None Remove="Resources\Images\Files\blend_32x.png" />
+    <None Remove="Resources\Images\Files\fbx_32x.png" />
+    <None Remove="Resources\Images\Files\FolderClosed_16x.png" />
+    <None Remove="Resources\Images\Files\FolderOpened_16x.png" />
+    <None Remove="Resources\Images\Files\image_32x.png" />
+    <None Remove="Resources\Images\Files\Project_Explorer_Base_Dir_16x.png" />
+    <None Remove="Resources\Images\Files\redcloth_32x.png" />
+    <None Remove="Resources\Images\Files\w2mesh_32x.png" />
+    <None Remove="Resources\Images\Files\xbm_32x.png" />
+    <None Remove="Resources\Images\Files\xml_32x.png" />
+    <None Remove="Resources\Images\Files\zip_32x.png" />
+    <None Remove="Resources\Images\git.png" />
+    <None Remove="Resources\Images\Preferences_light_64x.png" />
+    <None Remove="Resources\Images\RedEngine\bird.png" />
+    <None Remove="Resources\Images\RedEngine\csv.png" />
+    <None Remove="Resources\Images\RedEngine\detail.png" />
+    <None Remove="Resources\Images\RedEngine\env.png" />
+    <None Remove="Resources\Images\RedEngine\ExitIcon.png" />
+    <None Remove="Resources\Images\RedEngine\ExpandIcon.png" />
+    <None Remove="Resources\Images\RedEngine\fev.png" />
+    <None Remove="Resources\Images\RedEngine\journal.png" />
+    <None Remove="Resources\Images\RedEngine\LayerGroupVisibled.png" />
+    <None Remove="Resources\Images\RedEngine\redgame.png" />
+    <None Remove="Resources\Images\RedEngine\redswf.png" />
+    <None Remove="Resources\Images\RedEngine\spawntree.png" />
+    <None Remove="Resources\Images\RedEngine\swf.png" />
+    <None Remove="Resources\Images\RedEngine\vbrush.png" />
+    <None Remove="Resources\Images\RedEngine\w2ainfo.png" />
+    <None Remove="Resources\Images\RedEngine\w2am.png" />
+    <None Remove="Resources\Images\RedEngine\w2anim.png" />
+    <None Remove="Resources\Images\RedEngine\w2animev.png" />
+    <None Remove="Resources\Images\RedEngine\w2anims.png" />
+    <None Remove="Resources\Images\RedEngine\w2beh.png" />
+    <None Remove="Resources\Images\RedEngine\w2behtree.png" />
+    <None Remove="Resources\Images\RedEngine\w2blb.png" />
+    <None Remove="Resources\Images\RedEngine\w2brix.png" />
+    <None Remove="Resources\Images\RedEngine\w2cent.png" />
+    <None Remove="Resources\Images\RedEngine\w2comm.png" />
+    <None Remove="Resources\Images\RedEngine\w2conv.png" />
+    <None Remove="Resources\Images\RedEngine\w2cube.png" />
+    <None Remove="Resources\Images\RedEngine\w2cutscene.png" />
+    <None Remove="Resources\Images\RedEngine\w2ds.png" />
+    <None Remove="Resources\Images\RedEngine\w2dset.png" />
+    <None Remove="Resources\Images\RedEngine\w2ent.png" />
+    <None Remove="Resources\Images\RedEngine\w2expr.png" />
+    <None Remove="Resources\Images\RedEngine\w2f.png" />
+    <None Remove="Resources\Images\RedEngine\w2faces.png" />
+    <None Remove="Resources\Images\RedEngine\w2fnt.png" />
+    <None Remove="Resources\Images\RedEngine\w2goalcrv.png" />
+    <None Remove="Resources\Images\RedEngine\w2guidesc.png" />
+    <None Remove="Resources\Images\RedEngine\w2je.png" />
+    <None Remove="Resources\Images\RedEngine\w2job.png" />
+    <None Remove="Resources\Images\RedEngine\w2l.png" />
+    <None Remove="Resources\Images\RedEngine\w2mesh.png" />
+    <None Remove="Resources\Images\RedEngine\w2mg.png" />
+    <None Remove="Resources\Images\RedEngine\w2mi.png" />
+    <None Remove="Resources\Images\RedEngine\w2p.png" />
+    <None Remove="Resources\Images\RedEngine\w2phase.png" />
+    <None Remove="Resources\Images\RedEngine\w2pr.png" />
+    <None Remove="Resources\Images\RedEngine\w2ps.png" />
+    <None Remove="Resources\Images\RedEngine\w2qlog.png" />
+    <None Remove="Resources\Images\RedEngine\w2quest.png" />
+    <None Remove="Resources\Images\RedEngine\w2rag.png" />
+    <None Remove="Resources\Images\RedEngine\w2ragdoll.png" />
+    <None Remove="Resources\Images\RedEngine\w2react.png" />
+    <None Remove="Resources\Images\RedEngine\w2rig.png" />
+    <None Remove="Resources\Images\RedEngine\w2rigm.png" />
+    <None Remove="Resources\Images\RedEngine\w2sbnk.png" />
+    <None Remove="Resources\Images\RedEngine\w2scene.png" />
+    <None Remove="Resources\Images\RedEngine\w2spwn.png" />
+    <None Remove="Resources\Images\RedEngine\w2steer.png" />
+    <None Remove="Resources\Images\RedEngine\w2surf.png" />
+    <None Remove="Resources\Images\RedEngine\w2w.png" />
+    <None Remove="Resources\Images\RedEngine\worldmap.png" />
+    <None Remove="Resources\Svg\case-sensitive.svg" />
+    <None Remove="Resources\Svg\Close_16x.svg" />
+    <None Remove="Resources\Svg\Close_red_16x.svg" />
+    <None Remove="Resources\Svg\CollapseAll_16x.svg" />
+    <None Remove="Resources\Svg\CollapseChevronUpGroup_16x.svg" />
+    <None Remove="Resources\Svg\EventLog_16x.svg" />
+    <None Remove="Resources\Svg\ExpandAll_16x.svg" />
+    <None Remove="Resources\Svg\ExpandChevronDownGroup_16x.svg" />
+    <None Remove="Resources\Svg\ImportFile_16x.svg" />
+    <None Remove="Resources\Svg\ImportTheme_16x.svg" />
+    <None Remove="Resources\Svg\Method_16x.svg" />
+    <None Remove="Resources\Svg\Method_left_16x.svg" />
+    <None Remove="Resources\Svg\MoveToSubmodule2_16x.svg" />
+    <None Remove="Resources\Svg\MoveToSubmodule_16x.svg" />
+    <None Remove="Resources\Svg\NewFile_16x.svg" />
+    <None Remove="Resources\Svg\NewSolutionFolder_16x.svg" />
+    <None Remove="Resources\Svg\OpenFile_16x.svg" />
+    <None Remove="Resources\Svg\OpenFolder_16x.svg" />
+    <None Remove="Resources\Svg\PackageProperty_16x.svg" />
+    <None Remove="Resources\Svg\PlaybackPreview_16x.svg" />
+    <None Remove="Resources\Svg\Property_left_16x.svg" />
+    <None Remove="Resources\Svg\PushpinOutlineAngle_16x.svg" />
+    <None Remove="Resources\Svg\regex.svg" />
+    <None Remove="Resources\Svg\RunTest_16x.svg" />
+    <None Remove="Resources\Svg\Run_16x.svg" />
+    <None Remove="Resources\Svg\SearchFolderClosed_16x.svg" />
+    <None Remove="Resources\Svg\SelectAllItems_inversed_16x.svg" />
+    <None Remove="Resources\Svg\SelectInverseItems_inversed_16x.svg" />
+    <None Remove="Resources\Svg\SelectNoItems_inversed_16x.svg" />
+    <None Remove="Resources\Svg\SelectObject_16x.svg" />
+    <None Remove="Resources\Svg\Settings_16x.svg" />
+    <None Remove="Resources\Svg\SQLServerObjectExplorer_16x.svg" />
+    <None Remove="Resources\Svg\TypeDefinition_16x.svg" />
+    <None Remove="Resources\Svg\UploadFile_16x.svg" />
+    <None Remove="Resources\Svg\whole-word.svg" />
+    <None Remove="Resources\Svg\WK_Logo.svg" />
+    <None Remove="Resources\Svg\ZoomOriginalSize_16x.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Catel.Core" Version="5.12.11" />
+    <PackageReference Include="Catel.MVVM" Version="5.12.11" />
+    <PackageReference Include="Catel.Fody" Version="4.5.0" PrivateAssets="all" />
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.50.0" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.50.0" />
+    <PackageReference Include="Fody" Version="6.3.0" PrivateAssets="all" />
+    <PackageReference Include="CsvHelper" Version="16.1.0" />
+    <PackageReference Include="Dirkster.MLib" Version="1.3.1.2" />
+    <PackageReference Include="FastMember" Version="1.5.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Orc.CommandLine" Version="4.0.0" />
+    <PackageReference Include="Orc.FileSystem" Version="4.1.1" />
+    <PackageReference Include="Orc.Notifications" Version="4.0.0" />
+    <PackageReference Include="Orc.ProjectManagement" Version="4.0.2" />
+    <PackageReference Include="Orc.Theming" Version="4.2.0" />
+    <PackageReference Include="Pfim" Version="0.9.1" />
+    <PackageReference Include="protobuf-net" Version="3.0.62" />
+    <PackageReference Include="SharpZipLib" Version="1.3.1" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
+    <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
+    <PackageReference Include="Orc.ProjectManagement" Version="4.0.2" />
+    <PackageReference Include="Orc.Squirrel" Version="4.0.4" />
+    <PackageReference Include="Orc.Squirrel.Xaml" Version="4.0.4" />
+    <PackageReference Include="Orchestra.Shell.Ribbon.Fluent" Version="6.2" />
+    <PackageReference Include="SharpVectors.Reloaded" Version="1.7.1" />
+	  <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
+    <PackageReference Include="WpfAnalyzers" Version="3.5.2" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="NETStandard.Library" Version="2.0.1" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
+  
+  <!-- Fallback code in case repository template is not found, code below can be removed when the repository template files are used -->
+  <ItemGroup>
+    <Content Include="Resources\AvalonDock.Layout.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\git.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\Close_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\Close_red_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\CollapseAll_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\CollapseChevronUpGroup_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\EventLog_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\ExpandAll_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\ExpandChevronDownGroup_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\ImportFile_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\Method_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\Method_left_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\MoveToSubmodule2_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\MoveToSubmodule_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\NewFile_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\OpenFile_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\PackageProperty_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\PlaybackPreview_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\Property_left_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\PushpinOutlineAngle_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\regex.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\RunTest_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\Run_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\SearchFolderClosed_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\SelectAllItems_inversed_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\SelectInverseItems_inversed_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\SelectNoItems_inversed_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\SelectObject_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\Settings_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\SQLServerObjectExplorer_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\TypeDefinition_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\UploadFile_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\whole-word.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\WK_Logo.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\ZoomOriginalSize_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\ComboBoxExtensions.cs" />
-    <Compile Include="Forms\Editors\ArrayEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\Editors\ArrayEditor.Designer.cs">
-      <DependentUpon>ArrayEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Editors\ByteArrayEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\Editors\ByteArrayEditor.Designer.cs">
-      <DependentUpon>ByteArrayEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Editors\frmCsvEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Editors\frmCsvEditor.Designer.cs">
-      <DependentUpon>frmCsvEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Editors\IdTagEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\Editors\IdTagEditor.Designer.cs">
-      <DependentUpon>IdTagEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Editors\PtrEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\Editors\PtrEditor.Designer.cs">
-      <DependentUpon>PtrEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmUsmPlayer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmUsmPlayer.Designer.cs">
-      <DependentUpon>frmUsmPlayer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmBulkEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmBulkEditor.Designer.cs">
-      <DependentUpon>frmBulkEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmMain_FileSystemWatcher.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmOtherDocument.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmOtherDocument.Designer.cs">
-      <DependentUpon>frmOtherDocument.cs</DependentUpon>
-    </Compile>
-    <Compile Include="discord.cs" />
-    <Compile Include="Extensions\CustomFloatWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Extensions\RichTextBoxExtensions.cs" />
-    <Compile Include="FlowTreeEditors\LinkEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\Quest\QuestPhaseEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\Quest\QuestPhaseInputEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\Quest\QuestScriptBlockEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\Scene\SceneChoiceEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\Scene\SceneChoiceEditor.Designer.cs">
-      <DependentUpon>SceneChoiceEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FlowTreeEditors\Scene\SceneFlowConditionEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\Scene\SceneFlowConditionEditor.Designer.cs">
-      <DependentUpon>SceneFlowConditionEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FlowTreeEditors\Scene\SceneLinkEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\Scene\SceneLinkEditor.Designer.cs">
-      <DependentUpon>SceneLinkEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FlowTreeEditors\Scene\SceneRandomizerEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\Scene\SceneRandomizerEditor.Designer.cs">
-      <DependentUpon>SceneRandomizerEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FlowTreeEditors\Scene\SceneSectionEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\Scene\SceneSectionEditor.Designer.cs">
-      <DependentUpon>SceneSectionEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmWcc.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmWcc.Designer.cs">
-      <DependentUpon>frmWcc.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Player\AsioOutPlugin.cs" />
-    <Compile Include="Forms\Player\AsioOutSettingsPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\Player\AsioOutSettingsPanel.Designer.cs">
-      <DependentUpon>AsioOutSettingsPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Player\AudioPlaybackPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\Player\AudioPlaybackPanel.Designer.cs">
-      <DependentUpon>AudioPlaybackPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Player\AudioPlaybackPanelPlugin.cs" />
-    <Compile Include="Forms\Player\DirectSoundOutPlugin.cs" />
-    <Compile Include="Forms\Player\DirectSoundOutSettingsPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\Player\DirectSoundOutSettingsPanel.Designer.cs">
-      <DependentUpon>DirectSoundOutSettingsPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Player\frmAudioPlayer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Player\frmAudioPlayer.Designer.cs">
-      <DependentUpon>frmAudioPlayer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Player\IOutputDevicePlugin.cs" />
-    <Compile Include="Forms\Player\WasapiOutPlugin.cs" />
-    <Compile Include="Forms\Player\WasapiOutSettingsPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\Player\WasapiOutSettingsPanel.Designer.cs">
-      <DependentUpon>WasapiOutSettingsPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Player\WaveOutPlugin.cs" />
-    <Compile Include="Forms\Player\WaveOutSettingsPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\Player\WaveOutSettingsPanel.Designer.cs">
-      <DependentUpon>WaveOutSettingsPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Render\frmFastRender.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Render\frmFastRender.Designer.cs">
-      <DependentUpon>frmFastRender.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Render\frmLevelScene.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Render\frmLevelScene.Designer.cs">
-      <DependentUpon>frmLevelScene.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Render\frmRender.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Render\frmRender.Designer.cs">
-      <DependentUpon>frmRender.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Render\frmRenderEventHandler.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Render\frmTerrain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Render\frmTerrain.Designer.cs">
-      <DependentUpon>frmTerrain.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Render\MeshPropertyDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Render\MeshPropertyDialog.Designer.cs">
-      <DependentUpon>MeshPropertyDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Render\Old\Positions.cs" />
-    <Compile Include="Forms\Render\Old\Program - old.cs" />
-    <Compile Include="Forms\Render\Old\Shaders.cs" />
-    <Compile Include="Forms\Render\RenderMessage.cs" />
-    <Compile Include="Forms\Render\RenderTreeNode.cs" />
-    <Compile Include="Forms\UserControl\frmProgress.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\UserControl\frmProgress.Designer.cs">
-      <DependentUpon>frmProgress.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmRadish.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmRadish.Designer.cs">
-      <DependentUpon>frmRadish.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmCR2WtoText.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmCR2WtoText.Designer.cs">
-      <DependentUpon>frmCR2WtoText.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmImportUtility.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmImportUtility.Designer.cs">
-      <DependentUpon>frmImportUtility.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmMimics.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmMimics.Designer.cs">
-      <DependentUpon>frmMimics.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\UserControl\frmLoading.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\UserControl\frmLoading.Designer.cs">
-      <DependentUpon>frmLoading.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmChunkFlowDiagram.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmChunkFlowDiagram.Designer.cs">
-      <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmMusicPlayer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmMusicPlayer.Designer.cs">
-      <DependentUpon>frmMusicPlayer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmConsole.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmConsole.Designer.cs">
-      <DependentUpon>frmConsole.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmScriptEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmScriptEditor.Designer.cs">
-      <DependentUpon>frmScriptEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmAnims.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmAnims.Designer.cs">
-      <DependentUpon>frmAnims.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Dialog\frmStringsGuiImporterIDDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Dialog\frmStringsGuiImporterIDDialog.Designer.cs">
-      <DependentUpon>frmStringsGuiImporterIDDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmCreateInstaller.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmCreateInstaller.Designer.cs">
-      <DependentUpon>frmCreateInstaller.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmWelcome.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmWelcome.Designer.cs">
-      <DependentUpon>frmWelcome.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MockKernel.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Fonts\fontawesome-webfont.ttf" />
+    <Resource Include="Resources\Icons\Logo.ico" />
+    <Resource Include="Resources\Images\Files\apb_32x.png" />
+    <Resource Include="Resources\Images\Files\BlankFile_16x.png" />
+    <Resource Include="Resources\Images\Files\blend_32x.png" />
+    <Resource Include="Resources\Images\Files\fbx_32x.png" />
+    <Resource Include="Resources\Images\Files\FolderClosed_16x.png" />
+    <Resource Include="Resources\Images\Files\FolderOpened_16x.png" />
+    <Resource Include="Resources\Images\Files\image_32x.png" />
+    <Resource Include="Resources\Images\Files\Project_Explorer_Base_Dir_16x.png" />
+    <Resource Include="Resources\Images\Files\redcloth_32x.png" />
+    <Resource Include="Resources\Images\Files\w2mesh_32x.png" />
+    <Resource Include="Resources\Images\Files\xbm_32x.png" />
+    <Resource Include="Resources\Images\Files\xml_32x.png" />
+    <Resource Include="Resources\Images\Files\zip_32x.png" />
+    <Resource Include="Resources\Images\RedEngine\bird.png" />
+    <Resource Include="Resources\Images\RedEngine\csv.png" />
+    <Resource Include="Resources\Images\RedEngine\detail.png" />
+    <Resource Include="Resources\Images\RedEngine\env.png" />
+    <Resource Include="Resources\Images\RedEngine\ExitIcon.png" />
+    <Resource Include="Resources\Images\RedEngine\ExpandIcon.png" />
+    <Resource Include="Resources\Images\RedEngine\fev.png" />
+    <Resource Include="Resources\Images\RedEngine\journal.png" />
+    <Resource Include="Resources\Images\RedEngine\LayerGroupVisibled.png" />
+    <Resource Include="Resources\Images\RedEngine\redgame.png" />
+    <Resource Include="Resources\Images\RedEngine\redswf.png" />
+    <Resource Include="Resources\Images\RedEngine\spawntree.png" />
+    <Resource Include="Resources\Images\RedEngine\swf.png" />
+    <Resource Include="Resources\Images\RedEngine\vbrush.png" />
+    <Resource Include="Resources\Images\RedEngine\w2ainfo.png" />
+    <Resource Include="Resources\Images\RedEngine\w2am.png" />
+    <Resource Include="Resources\Images\RedEngine\w2anim.png" />
+    <Resource Include="Resources\Images\RedEngine\w2animev.png" />
+    <Resource Include="Resources\Images\RedEngine\w2anims.png" />
+    <Resource Include="Resources\Images\RedEngine\w2beh.png" />
+    <Resource Include="Resources\Images\RedEngine\w2behtree.png" />
+    <Resource Include="Resources\Images\RedEngine\w2blb.png" />
+    <Resource Include="Resources\Images\RedEngine\w2brix.png" />
+    <Resource Include="Resources\Images\RedEngine\w2cent.png" />
+    <Resource Include="Resources\Images\RedEngine\w2comm.png" />
+    <Resource Include="Resources\Images\RedEngine\w2conv.png" />
+    <Resource Include="Resources\Images\RedEngine\w2cube.png" />
+    <Resource Include="Resources\Images\RedEngine\w2cutscene.png" />
+    <Resource Include="Resources\Images\RedEngine\w2ds.png" />
+    <Resource Include="Resources\Images\RedEngine\w2dset.png" />
+    <Resource Include="Resources\Images\RedEngine\w2ent.png" />
+    <Resource Include="Resources\Images\RedEngine\w2expr.png" />
+    <Resource Include="Resources\Images\RedEngine\w2f.png" />
+    <Resource Include="Resources\Images\RedEngine\w2faces.png" />
+    <Resource Include="Resources\Images\RedEngine\w2fnt.png" />
+    <Resource Include="Resources\Images\RedEngine\w2goalcrv.png" />
+    <Resource Include="Resources\Images\RedEngine\w2guidesc.png" />
+    <Resource Include="Resources\Images\RedEngine\w2je.png" />
+    <Resource Include="Resources\Images\RedEngine\w2job.png" />
+    <Resource Include="Resources\Images\RedEngine\w2l.png" />
+    <Resource Include="Resources\Images\RedEngine\w2mesh.png" />
+    <Resource Include="Resources\Images\RedEngine\w2mg.png" />
+    <Resource Include="Resources\Images\RedEngine\w2mi.png" />
+    <Resource Include="Resources\Images\RedEngine\w2p.png" />
+    <Resource Include="Resources\Images\RedEngine\w2phase.png" />
+    <Resource Include="Resources\Images\RedEngine\w2pr.png" />
+    <Resource Include="Resources\Images\RedEngine\w2ps.png" />
+    <Resource Include="Resources\Images\RedEngine\w2qlog.png" />
+    <Resource Include="Resources\Images\RedEngine\w2quest.png" />
+    <Resource Include="Resources\Images\RedEngine\w2rag.png" />
+    <Resource Include="Resources\Images\RedEngine\w2ragdoll.png" />
+    <Resource Include="Resources\Images\RedEngine\w2react.png" />
+    <Resource Include="Resources\Images\RedEngine\w2rig.png" />
+    <Resource Include="Resources\Images\RedEngine\w2rigm.png" />
+    <Resource Include="Resources\Images\RedEngine\w2sbnk.png" />
+    <Resource Include="Resources\Images\RedEngine\w2scene.png" />
+    <Resource Include="Resources\Images\RedEngine\w2spwn.png" />
+    <Resource Include="Resources\Images\RedEngine\w2steer.png" />
+    <Resource Include="Resources\Images\RedEngine\w2surf.png" />
+    <Resource Include="Resources\Images\RedEngine\w2w.png" />
+    <Resource Include="Resources\Images\RedEngine\worldmap.png" />
+    <Content Include="Resources\Images\Preferences_light_64x.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\case-sensitive.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\ImportTheme_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\NewSolutionFolder_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Svg\OpenFolder_16x.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\IThemedContent.cs" />
-    <Compile Include="TargaImage.cs" />
-    <Compile Include="UIConfiguration.cs" />
-    <Compile Include="UIController.cs" />
-    <Compile Include="Utility\EditorHandler.cs" />
-    <Compile Include="Utility\ProductionWindowFactory.cs" />
-    <Compile Include="Utility\UnbundleGameArgs.cs" />
-    <Compile Include="Utility\AddFileArgs.cs" />
-    <Compile Include="Utility\LoadFileArgs.cs" />
-    <Compile Include="wcc_commands.cs" />
-    <Compile Include="WitcherListViewItem.cs" />
-    <Compile Include="Utility\CommonUIFunctions.cs" />
-    <Compile Include="Forms\UserControl\frmAbout.cs">
-      <SubType>Form</SubType>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Forms\UserControl\frmAbout.Designer.cs">
-      <DependentUpon>frmAbout.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmDebug.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmDebug.Designer.cs">
-      <DependentUpon>frmDebug.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\UserControl\frmImagePreview.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\UserControl\frmImagePreview.Designer.cs">
-      <DependentUpon>frmImagePreview.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmInstallPackage.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmInstallPackage.Designer.cs">
-      <DependentUpon>frmInstallPackage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmJournalEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmJournalEditor.Designer.cs">
-      <DependentUpon>frmJournalEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmMenuCreator.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmMenuCreator.Designer.cs">
-      <DependentUpon>frmMenuCreator.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\UserControl\frmPackSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\UserControl\frmPackSettings.Designer.cs">
-      <DependentUpon>frmPackSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmSaveEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmSaveEditor.Designer.cs">
-      <DependentUpon>frmSaveEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmStringsGui.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmStringsGui.Designer.cs">
-      <DependentUpon>frmStringsGui.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmStringsGuiImporter.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmStringsGuiImporter.Designer.cs">
-      <DependentUpon>frmStringsGuiImporter.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Dialog\frmStringsGuiScriptsPrefixDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Dialog\frmStringsGuiScriptsPrefixDialog.Designer.cs">
-      <DependentUpon>frmStringsGuiScriptsPrefixDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Dialog\frmTextInput.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Dialog\frmTextInput.Designer.cs">
-      <DependentUpon>frmTextInput.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\UserControl\frmWCCLicense.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\UserControl\frmWCCLicense.Designer.cs">
-      <DependentUpon>frmWCCLicense.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Utility\ImportExportUtility.cs" />
-    <Compile Include="FlowTreeEditors\ChunkEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\ChunkEditor.Designer.cs">
-      <DependentUpon>ChunkEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FlowTreeEditors\MoveEditorArgs.cs" />
-    <Compile Include="Forms\Dialog\frmAddChunk.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Dialog\frmAddChunk.Designer.cs">
-      <DependentUpon>frmAddChunk.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmAssetBrowser.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmAssetBrowser.Designer.cs">
-      <DependentUpon>frmAssetBrowser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmChunkList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmChunkList.Designer.cs">
-      <DependentUpon>frmChunkList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmChunkProperties.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmChunkProperties.Designer.cs">
-      <DependentUpon>frmChunkProperties.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmCR2WDocument.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmCR2WDocument.Designer.cs">
-      <DependentUpon>frmCR2WDocument.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmEmbeddedFiles.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmEmbeddedFiles.Designer.cs">
-      <DependentUpon>frmEmbeddedFiles.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Dialog\frmExtractAmbigious.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Dialog\frmExtractAmbigious.Designer.cs">
-      <DependentUpon>frmExtractAmbigious.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmHexEditorView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmHexEditorView.Designer.cs">
-      <DependentUpon>frmHexEditorView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmMain.Designer.cs">
-      <DependentUpon>frmMain.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmModExplorer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MVVM\frmModExplorer.Designer.cs">
-      <DependentUpon>frmModExplorer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\UserControl\frmModSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\UserControl\frmModSettings.Designer.cs">
-      <DependentUpon>frmModSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\UserControl\frmOutput.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\UserControl\frmOutput.Designer.cs">
-      <DependentUpon>frmOutput.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Dialog\frmRenameDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Dialog\frmRenameDialog.Designer.cs">
-      <DependentUpon>frmRenameDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmSettings.Designer.cs">
-      <DependentUpon>frmSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Win32.cs" />
-    <EmbeddedResource Include="FlowTreeEditors\Scene\SceneFlowConditionEditor.resx">
-      <DependentUpon>SceneFlowConditionEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FlowTreeEditors\Scene\SceneLinkEditor.resx">
-      <DependentUpon>SceneLinkEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Editors\ArrayEditor.resx">
-      <DependentUpon>ArrayEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Editors\ByteArrayEditor.resx">
-      <DependentUpon>ByteArrayEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Editors\frmCsvEditor.resx">
-      <DependentUpon>frmCsvEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Editors\IdTagEditor.resx">
-      <DependentUpon>IdTagEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Editors\PtrEditor.resx">
-      <DependentUpon>PtrEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmUsmPlayer.resx">
-      <DependentUpon>frmUsmPlayer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MVVM\frmWcc.resx">
-      <DependentUpon>frmWcc.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Player\AsioOutSettingsPanel.resx">
-      <DependentUpon>AsioOutSettingsPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Player\AudioPlaybackPanel.resx">
-      <DependentUpon>AudioPlaybackPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Player\DirectSoundOutSettingsPanel.resx">
-      <DependentUpon>DirectSoundOutSettingsPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Player\frmAudioPlayer.resx">
-      <DependentUpon>frmAudioPlayer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Player\WasapiOutSettingsPanel.resx">
-      <DependentUpon>WasapiOutSettingsPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Player\WaveOutSettingsPanel.resx">
-      <DependentUpon>WaveOutSettingsPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Render\frmFastRender.resx">
-      <DependentUpon>frmFastRender.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Render\frmLevelScene.resx">
-      <DependentUpon>frmLevelScene.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Render\frmRender.resx">
-      <DependentUpon>frmRender.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Render\frmTerrain.resx">
-      <DependentUpon>frmTerrain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Render\MeshPropertyDialog.resx">
-      <DependentUpon>MeshPropertyDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UserControl\frmAbout.resx">
-      <DependentUpon>frmAbout.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FlowTreeEditors\ChunkEditor.resx">
-      <DependentUpon>ChunkEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Dialog\frmAddChunk.resx">
-      <DependentUpon>frmAddChunk.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MVVM\frmBulkEditor.resx">
-      <DependentUpon>frmBulkEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MVVM\frmOtherDocument.resx">
-      <DependentUpon>frmOtherDocument.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UserControl\frmProgress.resx">
-      <DependentUpon>frmProgress.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MVVM\frmRadish.resx">
-      <DependentUpon>frmRadish.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmCR2WtoText.resx">
-      <DependentUpon>frmCR2WtoText.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MVVM\frmImportUtility.resx">
-      <DependentUpon>frmImportUtility.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmMimics.resx">
-      <DependentUpon>frmMimics.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmAssetBrowser.resx">
-      <DependentUpon>frmAssetBrowser.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmChunkList.resx">
-      <DependentUpon>frmChunkList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmChunkProperties.resx">
-      <DependentUpon>frmChunkProperties.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MVVM\frmCR2WDocument.resx">
-      <DependentUpon>frmCR2WDocument.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmDebug.resx">
-      <DependentUpon>frmDebug.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmEmbeddedFiles.resx">
-      <DependentUpon>frmEmbeddedFiles.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Dialog\frmExtractAmbigious.resx">
-      <DependentUpon>frmExtractAmbigious.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmHexEditorView.resx">
-      <DependentUpon>frmHexEditorView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UserControl\frmImagePreview.resx">
-      <DependentUpon>frmImagePreview.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmInstallPackage.resx">
-      <DependentUpon>frmInstallPackage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmJournalEditor.resx">
-      <DependentUpon>frmJournalEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UserControl\frmLoading.resx">
-      <DependentUpon>frmLoading.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MVVM\frmMain.resx">
-      <DependentUpon>frmMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmMenuCreator.resx">
-      <DependentUpon>frmMenuCreator.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MVVM\frmModExplorer.resx">
-      <DependentUpon>frmModExplorer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UserControl\frmModSettings.resx">
-      <DependentUpon>frmModSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmMusicPlayer.resx">
-      <DependentUpon>frmMusicPlayer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmConsole.resx">
-      <DependentUpon>frmConsole.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UserControl\frmOutput.resx">
-      <DependentUpon>frmOutput.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UserControl\frmPackSettings.resx">
-      <DependentUpon>frmPackSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmChunkFlowDiagram.resx">
-      <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Dialog\frmRenameDialog.resx">
-      <DependentUpon>frmRenameDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmSaveEditor.resx">
-      <DependentUpon>frmSaveEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmAnims.resx">
-      <DependentUpon>frmAnims.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmScriptEditor.resx">
-      <DependentUpon>frmScriptEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmSettings.resx">
-      <DependentUpon>frmSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmStringsGui.resx">
-      <DependentUpon>frmStringsGui.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmStringsGuiImporter.resx">
-      <DependentUpon>frmStringsGuiImporter.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Dialog\frmStringsGuiImporterIDDialog.resx">
-      <DependentUpon>frmStringsGuiImporterIDDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Dialog\frmStringsGuiScriptsPrefixDialog.resx">
-      <DependentUpon>frmStringsGuiScriptsPrefixDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Dialog\frmTextInput.resx">
-      <DependentUpon>frmTextInput.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UserControl\frmWCCLicense.resx">
-      <DependentUpon>frmWCCLicense.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmCreateInstaller.resx">
-      <DependentUpon>frmCreateInstaller.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmWelcome.resx">
-      <DependentUpon>frmWelcome.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="..\.editorconfig">
-      <Link>.editorconfig</Link>
-    </None>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config" />
-    <None Include="Properties\app.manifest">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Properties\Settings.settings">
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\VisualStudio\gear_16xLG.png" />
+    <Page Update="Views\ImportView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\PropertiesView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\VisualStudio\AddNodefromFile_354.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\VisualStudio\properties_16xLG.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\VisualStudio\package_16xLG.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\VisualStudio\FileGroup_10135_16x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WolvenKit.App\WolvenKit.App.csproj">
-      <Project>{6C5EE693-7F88-4259-90D5-9B247E61A15A}</Project>
-      <Name>WolvenKit.App</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Bundles\WolvenKit.Bundles.csproj">
-      <Project>{5bd2292a-24db-4b4a-a5b1-5d435769c289}</Project>
-      <Name>WolvenKit.Bundles</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj">
-      <Project>{93a10f45-1846-4ae7-939b-5b5e39b260be}</Project>
-      <Name>WolvenKit.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj">
-      <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
-      <Name>WolvenKit.CR2W</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.IrrlichtLime\IrrlichtLime.vcxproj">
-      <Project>{4f6ef8e3-f26f-49db-867d-fd10fb083b0d}</Project>
-      <Name>IrrlichtLime</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Net\WolvenKit.Net.csproj">
-      <Project>{f60b8974-617d-45b5-bd33-68a9f739de4f}</Project>
-      <Name>WolvenKit.Net</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Wolvenkit.Radish\WolvenKit.Radish.csproj">
-      <Project>{D4D390BB-C14D-423A-861A-470BED6D40A9}</Project>
-      <Name>WolvenKit.Radish</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Render\WolvenKit.Render.csproj">
-      <Project>{8be56f4f-3b98-4bd8-8052-2b5e630af3d7}</Project>
-      <Name>WolvenKit.Render</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Scaleform\WolvenKit.Scaleform.csproj">
-      <Project>{031dd6da-b643-4c2a-a30d-a2e2212724c2}</Project>
-      <Name>WolvenKit.Scaleform</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Cache\WolvenKit.Cache.csproj">
-      <Project>{17cf5901-6e1f-467f-afe0-3cc04dc9688a}</Project>
-      <Name>WolvenKit.Cache</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.W3Speech\WolvenKit.W3Speech.csproj">
-      <Project>{c025f253-c78b-4a3b-87e7-1b2a1a453b97}</Project>
-      <Name>WolvenKit.W3Speech</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.W3Strings\WolvenKit.W3Strings.csproj">
-      <Project>{32d40d10-d6c3-48f0-aeb6-0f41c7e75cfd}</Project>
-      <Name>WolvenKit.W3Strings</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Save\WolvenKit.Save.csproj">
-      <Project>{9c026da7-481d-43c6-8c18-635d69fdb423}</Project>
-      <Name>WolvenKit.Save</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Wwise\WolvenKit.Wwise.csproj">
-      <Project>{dcbbe807-cd6e-493e-8c04-db976a1591ea}</Project>
-      <Name>WolvenKit.Wwise</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Legacy\geralt.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\Render\move1.png" />
-    <Content Include="Resources\Render\rotate.png" />
-    <Content Include="Wkit_Icon_Flattened_256x.ico" />
-    <None Include="Resources\GitTemplateDir\info\exclude">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Content Include="Resources\GUI\Files\redcloth_32x.png" />
-    <Content Include="Resources\GUI\git.png" />
-    <Content Include="Resources\GUI\Files\apb_32x.png" />
-    <Content Include="Resources\GUI\Files\blend_32x.png" />
-    <Content Include="Resources\GUI\Files\fbx_32x.png" />
-    <Content Include="Resources\GUI\Files\image_32x.png" />
-    <Content Include="Resources\GUI\Files\xbm_32x.png" />
-    <Content Include="Resources\GUI\Files\xml_32x.png" />
-    <Content Include="Resources\GUI\Files\ZipFile_32x.png" />
-    <Content Include="Resources\GUI\Asset_Browser_16x.png" />
-    <Content Include="Resources\GUI\Asset_Browser_Other_Mod_16x.png" />
-    <Content Include="Resources\GUI\Discord_32x.png" />
-    <Content Include="Resources\GUI\New_Project_dark_64x.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\GUI\New_Project_light_64x.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\GUI\Open_Project_dark_64x.png" />
-    <Content Include="Resources\GUI\Open_Project_light_64x.png" />
-    <Content Include="Resources\GUI\Preferences_dark_64x.png" />
-    <Content Include="Resources\GUI\Preferences_light_64x.png" />
-    <Content Include="Resources\GUI\Project_Explorer_Base_Dir_16x.png" />
-    <Content Include="Resources\GUI\Strings_Encoder_16x.png" />
-    <Content Include="Resources\WolvenKit\Icons\WCC_32x.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\WolvenKit\WCC_32x.png" />
-    <Content Include="Resources\GUI\window_close_24x.png" />
-    <Content Include="Resources\GUI\window_maximize_24x.png" />
-    <Content Include="Resources\GUI\window_minimize_24x.png" />
-    <Content Include="Resources\WolvenKit\Icons\Wkit_dark_16x.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\WolvenKit\Icons\Wkit_light_16x.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\WolvenKit\Wkit_logo_500x.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\WolvenKit\wkit_splash.png" />
-    <Content Include="Resources\Legacy\wkit_splash2.png" />
-    <Content Include="Resources\WolvenKit\WK_Logo2_32.png" />
-    <Content Include="Resources\VisualStudio\Add_16x.png" />
-    <Content Include="Resources\VisualStudio\Close_red_16x.png" />
-    <Content Include="Resources\VisualStudio\Compliant_16x.png" />
-    <Content Include="Resources\VisualStudio\Copy_16x.png" />
-    <Content Include="Resources\VisualStudio\ExportToExcel_16x.png" />
-    <Content Include="Resources\VisualStudio\Export_16x.png" />
-    <Content Include="Resources\VisualStudio\Filter_16x.png" />
-    <Content Include="Resources\VisualStudio\FindInFile_16x.png" />
-    <Content Include="Resources\VisualStudio\Import_16x.png" />
-    <Content Include="Resources\VisualStudio\MailOpen_16x.png" />
-    <Content Include="Resources\VisualStudio\Open_16x.png" />
-    <Content Include="Resources\VisualStudio\Paste_16x.png" />
-    <Content Include="Resources\VisualStudio\Remove_color_16x.png" />
-    <Content Include="Resources\VisualStudio\Rename_16x.png" />
-    <Content Include="Resources\VisualStudio\StatusHelp_16x.png" />
-    <Content Include="Resources\VisualStudio\StatusHelp_grey_disabled_16x.png" />
-    <Content Include="Resources\VisualStudio\StatusInformation_exp_16x.png" />
-    <Content Include="Resources\VisualStudio\StatusInformation_grey_disabled_16x.png" />
-    <Content Include="Resources\VisualStudio\StatusNotStarted_red_16x.png" />
-    <Content Include="Resources\VisualStudio\StatusWarning_exp_16x.png" />
-    <Content Include="Resources\VisualStudio\StatusWarning_grey_16x.png" />
-    <Content Include="Resources\VisualStudio\Test_16x.png" />
-    <Content Include="Resources\VisualStudio\Test_StatusBarAni_05_16x.png" />
-    <Content Include="Resources\VisualStudio\UserCode_16x.png" />
-    <Content Include="Resources\VisualStudio\ValidateDocument_16x.png" />
-    <Content Include="Resources\WolvenKit\wk_ribbon_dark_small.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\WolvenKit\wk_ribbon_light_small.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\WolvenKit\Icons\wolven_kit_icon2.ico" />
-    <Content Include="..\Libs\Irrlicht.dll">
-      <Link>Irrlicht.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="Resources\CustomImages\box.png" />
-    <None Include="Resources\CustomImages\box--arrow.png" />
-    <None Include="Resources\CustomImages\bug.png" />
-    <None Include="Resources\CustomImages\exclamation-red.png" />
-    <None Include="Resources\CustomImages\edit-letter-spacing.png" />
-    <None Include="Resources\CustomImages\ui-menu-blue.png" />
-    <None Include="Resources\CustomImages\home.png" />
-    <None Include="Resources\CustomImages\stickman.png" />
-    <None Include="Resources\CustomImages\arrow-circle-315.png" />
-    <None Include="Resources\CustomImages\ui-check-box.png" />
-    <None Include="Resources\CustomImages\ui-check-box-uncheck.png" />
-    <None Include="Resources\CustomImages\wooden-box--arrow.png" />
-    <None Include="Resources\Legacy\Logo.png" />
-    <None Include="Resources\Legacy\loading_black.png" />
-    <None Include="Resources\Legacy\Logo_wkit.png" />
-    <Content Include="discord-rpc.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="Resources\VisualStudio\ExpandAll_16x.png" />
-    <None Include="Resources\VisualStudio\CollapseAll_16x.png" />
-    <None Include="Resources\VisualStudio\SaveStatusBar1_16x_c.png" />
-    <None Include="Resources\VisualStudio\FolderOpened_16x.png" />
-    <None Include="Resources\VisualStudio\BlankFile_16x.png" />
-    <None Include="Resources\VisualStudio\OpenFolder_16x.png" />
-    <None Include="Resources\VisualStudio\OpenFile_16x.png" />
-    <None Include="Resources\VisualStudio\Save_16x.png" />
-    <None Include="Resources\VisualStudio\SaveAll_16x.png" />
-    <None Include="Resources\VisualStudio\NewSolutionFolder_16x.png" />
-    <None Include="Resources\VisualStudio\Output_16x.png" />
-    <None Include="Resources\VisualStudio\Property_16x.png" />
-    <None Include="Resources\VisualStudio\RemoteServer_16x.png" />
-    <None Include="Resources\VisualStudio\Settings_Inverse_16x.png" />
-    <Content Include="Resources\GUI\Clock.ico" />
-    <Content Include="Resources\CustomImages\Clock.png" />
-    <Content Include="Resources\WolvenKit\Icons\wolven_kit_icon.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Legacy\WK_Logo.svg" />
-    <Content Include="Resources\RedEngine\bird.png" />
-    <Content Include="Resources\RedEngine\csv.png" />
-    <Content Include="Resources\RedEngine\detail.png" />
-    <Content Include="Resources\RedEngine\env.png" />
-    <Content Include="Resources\RedEngine\fev.png" />
-    <Content Include="Resources\RedEngine\journal.png" />
-    <Content Include="Resources\RedEngine\redgame.png" />
-    <Content Include="Resources\RedEngine\redswf.png" />
-    <Content Include="Resources\RedEngine\spawntree.png" />
-    <Content Include="Resources\RedEngine\swf.png" />
-    <Content Include="Resources\RedEngine\vbrush.png" />
-    <Content Include="Resources\RedEngine\w2ainfo.png" />
-    <Content Include="Resources\RedEngine\w2am.png" />
-    <Content Include="Resources\RedEngine\w2anim.png" />
-    <Content Include="Resources\RedEngine\w2animev.png" />
-    <Content Include="Resources\RedEngine\w2anims.png" />
-    <Content Include="Resources\RedEngine\w2beh.png" />
-    <Content Include="Resources\RedEngine\w2behtree.png" />
-    <Content Include="Resources\RedEngine\w2blb.png" />
-    <Content Include="Resources\RedEngine\w2brix.png" />
-    <Content Include="Resources\RedEngine\w2cent.png" />
-    <Content Include="Resources\RedEngine\w2comm.png" />
-    <Content Include="Resources\RedEngine\w2conv.png" />
-    <Content Include="Resources\RedEngine\w2cube.png" />
-    <Content Include="Resources\RedEngine\w2cutscene.png" />
-    <Content Include="Resources\RedEngine\w2ds.png" />
-    <Content Include="Resources\RedEngine\w2dset.png" />
-    <Content Include="Resources\RedEngine\w2ent.png" />
-    <Content Include="Resources\RedEngine\w2expr.png" />
-    <Content Include="Resources\RedEngine\w2f.png" />
-    <Content Include="Resources\RedEngine\w2faces.png" />
-    <Content Include="Resources\RedEngine\w2fnt.png" />
-    <Content Include="Resources\RedEngine\w2goalcrv.png" />
-    <Content Include="Resources\RedEngine\w2guidesc.png" />
-    <Content Include="Resources\RedEngine\w2je.png" />
-    <Content Include="Resources\RedEngine\w2job.png" />
-    <Content Include="Resources\RedEngine\w2l.png" />
-    <Content Include="Resources\RedEngine\w2mesh.png" />
-    <Content Include="Resources\RedEngine\w2mg.png" />
-    <Content Include="Resources\RedEngine\w2mi.png" />
-    <Content Include="Resources\RedEngine\w2p.png" />
-    <Content Include="Resources\RedEngine\w2phase.png" />
-    <Content Include="Resources\RedEngine\w2pr.png" />
-    <Content Include="Resources\RedEngine\w2ps.png" />
-    <Content Include="Resources\RedEngine\w2qlog.png" />
-    <Content Include="Resources\RedEngine\w2quest.png" />
-    <Content Include="Resources\RedEngine\w2rag.png" />
-    <Content Include="Resources\RedEngine\w2ragdoll.png" />
-    <Content Include="Resources\RedEngine\w2react.png" />
-    <Content Include="Resources\RedEngine\w2rig.png" />
-    <Content Include="Resources\RedEngine\w2rigm.png" />
-    <Content Include="Resources\RedEngine\w2sbnk.png" />
-    <Content Include="Resources\RedEngine\w2scene.png" />
-    <Content Include="Resources\RedEngine\w2spwn.png" />
-    <Content Include="Resources\RedEngine\w2steer.png" />
-    <Content Include="Resources\RedEngine\w2surf.png" />
-    <Content Include="Resources\RedEngine\w2w.png" />
-    <Content Include="Resources\RedEngine\worldmap.png" />
-    <Content Include="Resources\VisualStudio\Console_16x.png" />
-    <Content Include="Resources\CustomImages\DownButton.png" />
-    <Content Include="Resources\VisualStudio\EditTableRow_16x.png" />
-    <Content Include="Resources\RedEngine\ExpandIcon.png" />
-    <None Include="Resources\VisualStudio\Refresh_16x.png" />
-    <Content Include="Resources\CustomImages\Highlighter.png" />
-    <Content Include="Resources\VisualStudio\FolderClosed_16x.png" />
-    <Content Include="Resources\VisualStudio\ImportPackage_16x.png" />
-    <Content Include="Resources\VisualStudio\LinkValidator_16x.png" />
-    <Content Include="Resources\WolvenKit\witcher3.png" />
-    <Content Include="Resources\VisualStudio\PlayStep_16x.png" />
-    <Content Include="Resources\WolvenKit\radish_32x.png" />
-    <Content Include="Resources\WolvenKit\Icons\radish_icon.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\VisualStudio\RunPause_16x.png" />
-    <Content Include="Resources\VisualStudio\RunUpdate_16x.png" />
-    <Content Include="Resources\VisualStudio\Run_16x.png" />
-    <Content Include="Resources\CustomImages\UpButton.png" />
-    <Content Include="Resources\Legacy\wolven_kit_icon.ico" />
-    <None Include="Resources\RedEngine\ExitIcon.png" />
-    <None Include="Resources\RedEngine\LayerGroupVisibled.png" />
-    <None Include="Resources\wcc_eula.rtf" />
-    <None Include="Resources\WolvenKit\Icons\witcher3_102.ico" />
-    <Content Include="Resources\WolvenKit\Icons\witcher3_101.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="Resources\CustomImages\refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <PublishFile Include="AltoControls">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="Crc32C.NET">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="Cyotek.Windows.Forms.ImageBox">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="Doboz">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="ICSharpCode.SharpZipLib">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="IniParserLTK">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="Ionic.ZLib">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="Irrlicht.dll">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="Licenses\License.doboz4net.txt">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="Licenses\License.dockpanelsuit.txt">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="Licenses\License.dotnetzip.txt">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="Licenses\License.dotnetzip.zlib.txt">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="Licenses\License.lz4net.txt">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="Licenses\License.objectlistview.txt">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="Licenses\License.W3SaveGameEditor.txt">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="LZ4">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="LZ4PCL">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="ObjectListView">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="OpenGL.Net">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="OpenGL.Net.WinForms">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="Snappy.NET">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="Vlc.DotNet.Core">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="Vlc.DotNet.Core.Interops">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="Vlc.DotNet.Forms">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="W3SavegameEditor.Core">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="WeifenLuo.WinFormsUI.Docking">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="WolvenKit.Bundles">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="WolvenKit.Cache">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="WolvenKit.Interfaces">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="WolvenKit.Net">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="WolvenKit.Render">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="WolvenKit.Scaleform">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="WolvenKit.W3Speech">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="WolvenKit.W3Strings">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
-    <PublishFile Include="wolven_kit_icon.ico">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets'))" />
-    <Error Condition="!Exists('..\packages\AssimpNet.4.1.0\build\AssimpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AssimpNet.4.1.0\build\AssimpNet.targets'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <Target Name="AfterBuild">
-    <ItemGroup>
-      <MoveToLibFolder Include="$(OutputPath)*.dll ; $(OutputPath)*.pdb ; $(OutputPath)*.xml" />
-    </ItemGroup>
-  </Target>
-  <Import Project="..\packages\AssimpNet.4.1.0\build\AssimpNet.targets" Condition="Exists('..\packages\AssimpNet.4.1.0\build\AssimpNet.targets')" />
 </Project>
