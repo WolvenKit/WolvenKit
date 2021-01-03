@@ -6,25 +6,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Microsoft.CodeAnalysis.CSharp;
-using WolvenKit.Controllers;
-using WolvenKit.Services;
+using ProtoBuf;
+using System.Diagnostics;
+using System.IO.Compression;
+using System.Reflection;
 
 namespace WolvenKit
 {
+    using Controllers;
+    using Services;
+
     using Bundles;
     using Cache;
     using Common;
     using Common.Services;
     using CR2W;
-    using ProtoBuf;
-    using System.Diagnostics;
-    using System.IO.Compression;
-    using System.Reflection;
     using W3Strings;
-    using WolvenKit.Common.Model;
-    using WolvenKit.Common.Wcc;
-    using WolvenKit.CR2W.Types;
-    using WolvenKit.W3Speech;
+    using Common.Model;
+    using Common.Wcc;
+    using CR2W.Types;
+    using W3Speech;
 
     public enum EProjectStatus
     {

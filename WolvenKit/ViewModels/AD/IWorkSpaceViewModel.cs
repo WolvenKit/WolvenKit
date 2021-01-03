@@ -1,11 +1,12 @@
-﻿using WolvenKit.Model;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace WolvenKit.ViewModels
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.Threading.Tasks;
+	using Model;
+
 
 	/// <summary>
 	/// Defines the interface to the <see cref="WorkSpaceViewModel"/> which implements

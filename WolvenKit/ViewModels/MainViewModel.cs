@@ -12,27 +12,28 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using WolvenKit.Cache;
-using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
-using WolvenKit.Common.Wcc;
-using WolvenKit.CR2W;
-using WolvenKit.Wwise.Wwise;
-using WolvenKit.Common.WinFormsEnums;
-using WolvenKit.Model;
 using System.Windows.Input;
-using WolvenKit.Commands;
-using WolvenKit.CR2W.Reflection;
-using WolvenKit.CR2W.Types;
 using System.Globalization;
 using System.Reflection;
-using WolvenKit.Wwise;
 using Catel;
 
 namespace WolvenKit.ViewModels
 {
+    using Cache;
+    using Common;
+    using Common.Extensions;
+    using Common.Model;
+    using Common.Services;
+    using Common.Wcc;
+    using CR2W;
+    using Wwise.Wwise;
+    using Common.WinFormsEnums;
+    using Model;
+    using Commands;
+    using CR2W.Reflection;
+    using CR2W.Types;
+    using Wwise;
+
     /// <summary>
     /// 
     /// </summary>

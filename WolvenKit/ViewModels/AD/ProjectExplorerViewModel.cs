@@ -19,16 +19,16 @@ using Catel.Services;
 using Catel.Threading;
 using Orc.FileSystem;
 using Orc.ProjectManagement;
-using WolvenKit.Commands;
-using WolvenKit.Model;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
-using WolvenKit.Common.Wcc;
-using WolvenKit.CR2W;
 
 namespace WolvenKit.ViewModels
 {
+    using Commands;
+    using Model;
+    using Common;
+    using Common.Model;
+    using Common.Services;
+    using Common.Wcc;
+    using CR2W;
     public class ProjectExplorerViewModel : ToolViewModel
     {
         #region fields

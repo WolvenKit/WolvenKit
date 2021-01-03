@@ -16,11 +16,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Orc.ProjectManagement;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
 
 namespace WolvenKit.Model
 {
+    using Common;
+    using Common.Model;
+
     public abstract class EditorProject : ProjectBase, IEquatable<EditorProject>
     {
         protected EditorProject(string location)

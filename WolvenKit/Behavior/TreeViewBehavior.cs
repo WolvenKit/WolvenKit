@@ -1,10 +1,6 @@
 ﻿using Microsoft.Xaml.Behaviors;
 using System.Windows;
 using System.Windows.Controls;
-using WolvenKit.Model;
-using WolvenKit.ViewModels;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Model;
 
 namespace WolvenKit.Behavior
 {

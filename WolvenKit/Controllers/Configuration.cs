@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
-using WolvenKit.Common.Model;
 
 namespace WolvenKit
 {
+    using Common.Model;
+
     public class Configuration
     {
         public static string ConfigurationPath

@@ -8,19 +8,20 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Catel.IoC;
 using Orc.Notifications;
-using WolvenKit.Controllers;
-using WolvenKit.Services;
-using WolvenKit.Bundles;
-using WolvenKit.Cache;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
-using WolvenKit.CR2W;
-using WolvenKit.W3Speech;
-using WolvenKit.W3Strings;
 
 namespace WolvenKit.Model
 {
+    using Controllers;
+    using Services;
+    using Bundles;
+    using Cache;
+    using Common;
+    using Common.Model;
+    using Common.Services;
+    using CR2W;
+    using W3Speech;
+    using W3Strings;
+
     public sealed class Cp77Project : EditorProject, ICloneable
     {
 

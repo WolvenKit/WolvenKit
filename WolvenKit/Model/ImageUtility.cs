@@ -25,35 +25,35 @@ namespace WolvenKit.Model
             {
                 // missing:  0xFD
                 // missing:  0x0    //EFormat.R8G8B8A8_UNORM
-                case ETextureCompression.TCM_None:
-                    return EFormat.R8G8B8A8_UNORM;
+                case Enums.ETextureCompression.TCM_None:
+                    return Common.Tools.DDS.EFormat.R8G8B8A8_UNORM;
                 
 
                 //0x07 // exception: characters\models\animals\goose\model\t_01__goose_d01.xbm has 0x07 but TCM_DXTAlpha
-                case ETextureCompression.TCM_DXTNoAlpha:
-                case ETextureCompression.TCM_Normals:
-                    return EFormat.BC1_UNORM;
+                case Enums.ETextureCompression.TCM_DXTNoAlpha:
+                case Enums.ETextureCompression.TCM_Normals:
+                    return Common.Tools.DDS.EFormat.BC1_UNORM;
 
                 //0x08 // exception: characters\models\animals\goose\model\t_01__goose_d01.xbm has 0x07 but TCM_DXTAlpha
-                case ETextureCompression.TCM_DXTAlpha:
-                case ETextureCompression.TCM_NormalsHigh:
-                case ETextureCompression.TCM_NormalsGloss:
-                    return EFormat.BC3_UNORM; 
+                case Enums.ETextureCompression.TCM_DXTAlpha:
+                case Enums.ETextureCompression.TCM_NormalsHigh:
+                case Enums.ETextureCompression.TCM_NormalsGloss:
+                    return Common.Tools.DDS.EFormat.BC3_UNORM; 
 
 
-                case ETextureCompression.TCM_QualityColor:
-                    return EFormat.BC7_UNORM; //0x0A
+                case Enums.ETextureCompression.TCM_QualityColor:
+                    return Common.Tools.DDS.EFormat.BC7_UNORM; //0x0A
 
                 // missing:  0x0D   //EFormat.BC2_UNORM // used for not imported dds files in texturecache therefore will never come up here
 
-                case ETextureCompression.TCM_QualityR:
-                    return EFormat.BC4_UNORM; //0x0E
+                case Enums.ETextureCompression.TCM_QualityR:
+                    return Common.Tools.DDS.EFormat.BC4_UNORM; //0x0E
 
-                case ETextureCompression.TCM_QualityRG:
-                    return EFormat.BC5_UNORM; //0x0F
+                case Enums.ETextureCompression.TCM_QualityRG:
+                    return Common.Tools.DDS.EFormat.BC5_UNORM; //0x0F
 
-                case ETextureCompression.TCM_DXTAlphaLinear:    // unused
-                case ETextureCompression.TCM_RGBE:              // unused
+                case Enums.ETextureCompression.TCM_DXTAlphaLinear:    // unused
+                case Enums.ETextureCompression.TCM_RGBE:              // unused
                 default:
                     throw new NotImplementedException();
             }
@@ -64,71 +64,71 @@ namespace WolvenKit.Model
         /// </summary>
         /// <param name="textureGroup"></param>
         /// <returns></returns>
-        public static ETextureCompression GetTextureCompressionFromTextureGroup(ETextureGroup textureGroup)
+        public static Enums.ETextureCompression GetTextureCompressionFromTextureGroup(Common.Wcc.ETextureGroup textureGroup)
         {
             switch (textureGroup)
             {
-                case ETextureGroup.SystemNoMips:
-                    return ETextureCompression.TCM_None;
+                case Common.Wcc.ETextureGroup.SystemNoMips:
+                    return Enums.ETextureCompression.TCM_None;
 
-                case ETextureGroup.MimicDecalsNormal:
-                case ETextureGroup.FoliageDiffuse:
-                case ETextureGroup.WorldDiffuseWithAlpha:
-                case ETextureGroup.Particles:
-                case ETextureGroup.WorldSpecular:
-                case ETextureGroup.BillboardAtlas:
-                //case ETextureGroup.TerrainDiffuseAtlas: // found in engine.xml but not in wcc enum /shrug
-                case ETextureGroup.GUIWithAlpha:
-                case ETextureGroup.CharacterDiffuseWithAlpha:
-                case ETextureGroup.HeadDiffuseWithAlpha:
-                    return ETextureCompression.TCM_DXTAlpha;
+                case Common.Wcc.ETextureGroup.MimicDecalsNormal:
+                case Common.Wcc.ETextureGroup.FoliageDiffuse:
+                case Common.Wcc.ETextureGroup.WorldDiffuseWithAlpha:
+                case Common.Wcc.ETextureGroup.Particles:
+                case Common.Wcc.ETextureGroup.WorldSpecular:
+                case Common.Wcc.ETextureGroup.BillboardAtlas:
+                //case Common.Wcc.ETextureGroup.TerrainDiffuseAtlas: // found in engine.xml but not in wcc enum /shrug
+                case Common.Wcc.ETextureGroup.GUIWithAlpha:
+                case Common.Wcc.ETextureGroup.CharacterDiffuseWithAlpha:
+                case Common.Wcc.ETextureGroup.HeadDiffuseWithAlpha:
+                    return Enums.ETextureCompression.TCM_DXTAlpha;
 
-                case ETextureGroup.SpecialQuestDiffuse:
-                case ETextureGroup.TerrainDiffuse:
-                case ETextureGroup.GUIWithoutAlpha:
-                case ETextureGroup.WorldDiffuse:
-                case ETextureGroup.ParticlesWithoutAlpha:
-                case ETextureGroup.CharacterDiffuse:
-                case ETextureGroup.CharacterEmissive:
-                case ETextureGroup.HeadDiffuse:
-                case ETextureGroup.HeadEmissive:
-                case ETextureGroup.DiffuseNoMips:
-                    return ETextureCompression.TCM_DXTNoAlpha;
+                case Common.Wcc.ETextureGroup.SpecialQuestDiffuse:
+                case Common.Wcc.ETextureGroup.TerrainDiffuse:
+                case Common.Wcc.ETextureGroup.GUIWithoutAlpha:
+                case Common.Wcc.ETextureGroup.WorldDiffuse:
+                case Common.Wcc.ETextureGroup.ParticlesWithoutAlpha:
+                case Common.Wcc.ETextureGroup.CharacterDiffuse:
+                case Common.Wcc.ETextureGroup.CharacterEmissive:
+                case Common.Wcc.ETextureGroup.HeadDiffuse:
+                case Common.Wcc.ETextureGroup.HeadEmissive:
+                case Common.Wcc.ETextureGroup.DiffuseNoMips:
+                    return Enums.ETextureCompression.TCM_DXTNoAlpha;
 
-                //case ETextureGroup.TerrainNormalAtlas: // found in engine.xml but not in wcc enum /shrug
-                case ETextureGroup.DetailNormalMap:
-                case ETextureGroup.WorldNormalHQ:
-                case ETextureGroup.SpecialQuestNormal:
-                case ETextureGroup.CharacterNormalHQ:
-                case ETextureGroup.HeadNormalHQ:
-                    return ETextureCompression.TCM_NormalsHigh;
+                //case Common.Wcc.ETextureGroup.TerrainNormalAtlas: // found in engine.xml but not in wcc enum /shrug
+                case Common.Wcc.ETextureGroup.DetailNormalMap:
+                case Common.Wcc.ETextureGroup.WorldNormalHQ:
+                case Common.Wcc.ETextureGroup.SpecialQuestNormal:
+                case Common.Wcc.ETextureGroup.CharacterNormalHQ:
+                case Common.Wcc.ETextureGroup.HeadNormalHQ:
+                    return Enums.ETextureCompression.TCM_NormalsHigh;
 
 
-                case ETextureGroup.NormalmapGloss:
-                case ETextureGroup.CharacterNormalmapGloss:
-                case ETextureGroup.NormalsNoMips:
-                    return ETextureCompression.TCM_NormalsGloss;
+                case Common.Wcc.ETextureGroup.NormalmapGloss:
+                case Common.Wcc.ETextureGroup.CharacterNormalmapGloss:
+                case Common.Wcc.ETextureGroup.NormalsNoMips:
+                    return Enums.ETextureCompression.TCM_NormalsGloss;
 
-                case ETextureGroup.TerrainNormal:
-                case ETextureGroup.CharacterNormal:
-                case ETextureGroup.HeadNormal:
-                    return ETextureCompression.TCM_Normals;
+                case Common.Wcc.ETextureGroup.TerrainNormal:
+                case Common.Wcc.ETextureGroup.CharacterNormal:
+                case Common.Wcc.ETextureGroup.HeadNormal:
+                    return Enums.ETextureCompression.TCM_Normals;
 
-                case ETextureGroup.QualityOneChannel:
-                    return ETextureCompression.TCM_QualityR;
+                case Common.Wcc.ETextureGroup.QualityOneChannel:
+                    return Enums.ETextureCompression.TCM_QualityR;
 
-                case ETextureGroup.QualityTwoChannels:
-                    return ETextureCompression.TCM_QualityRG;
+                case Common.Wcc.ETextureGroup.QualityTwoChannels:
+                    return Enums.ETextureCompression.TCM_QualityRG;
 
-                case ETextureGroup.QualityColor:
-                    return ETextureCompression.TCM_QualityColor;
+                case Common.Wcc.ETextureGroup.QualityColor:
+                    return Enums.ETextureCompression.TCM_QualityColor;
 
-                case ETextureGroup.Default:
-                case ETextureGroup.Font:
-                case ETextureGroup.Flares:
-                case ETextureGroup.WorldNormal:
-                case ETextureGroup.PostFxMap:
-                //case ETextureGroup.TerrainSpecial: // found in engine.xml but not in wcc enum /shrug
+                case Common.Wcc.ETextureGroup.Default:
+                case Common.Wcc.ETextureGroup.Font:
+                case Common.Wcc.ETextureGroup.Flares:
+                case Common.Wcc.ETextureGroup.WorldNormal:
+                case Common.Wcc.ETextureGroup.PostFxMap:
+                //case Common.Wcc.ETextureGroup.TerrainSpecial: // found in engine.xml but not in wcc enum /shrug
                 default:
                     throw new NotImplementedException();
             }
@@ -301,7 +301,7 @@ namespace WolvenKit.Model
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
             {
-                DDSUtils.GenerateAndWriteHeader(bw.BaseStream, GetDDSMetadata(xbm));
+                Common.Tools.DDS.DDSUtils.GenerateAndWriteHeader(bw.BaseStream, GetDDSMetadata(xbm));
 
                 bw.Write(xbm.GetBytes());
 
@@ -316,7 +316,7 @@ namespace WolvenKit.Model
         /// </summary>
         /// <param name="xbm"></param>
         /// <returns></returns>
-        private static DDSMetadata GetDDSMetadata(CBitmapTexture xbm)
+        private static Common.Tools.DDS.DDSMetadata GetDDSMetadata(CBitmapTexture xbm)
         {
             int residentMipIndex = xbm.ResidentMipIndex?.val ?? 0;
                 
@@ -325,32 +325,32 @@ namespace WolvenKit.Model
             uint width = xbm.Mipdata.elements[residentMipIndex].Width.val;
             uint height = xbm.Mipdata.elements[residentMipIndex].Height.val;
 
-            ETextureCompression compression = xbm.Compression.WrappedEnum;
+            Enums.ETextureCompression compression = xbm.Compression.WrappedEnum;
 
             var ddsformat = ImageUtility.GetEFormatFromCompression(compression);
 
 
             // TODO: TEST THIS
-            if (ddsformat == EFormat.R8G8B8A8_UNORM)
+            if (ddsformat == Common.Tools.DDS.EFormat.R8G8B8A8_UNORM)
             {
-                ETextureRawFormat format = xbm.Format.WrappedEnum;
+                Enums.ETextureRawFormat format = xbm.Format.WrappedEnum;
                 switch (format)
                 {
                     
-                    case ETextureRawFormat.TRF_Grayscale:   // only this is ever used
+                    case Enums.ETextureRawFormat.TRF_Grayscale:   // only this is ever used
                         break;
-                    case ETextureRawFormat.TRF_TrueColor:   // this is set if format is NULL
-                    case ETextureRawFormat.TRF_HDR:
-                    case ETextureRawFormat.TRF_AlphaGrayscale:
-                    case ETextureRawFormat.TRF_HDRGrayscale:
+                    case Enums.ETextureRawFormat.TRF_TrueColor:   // this is set if format is NULL
+                    case Enums.ETextureRawFormat.TRF_HDR:
+                    case Enums.ETextureRawFormat.TRF_AlphaGrayscale:
+                    case Enums.ETextureRawFormat.TRF_HDRGrayscale:
                     default:
-                        ddsformat = EFormat.R8G8B8A8_UNORM;
+                        ddsformat = Common.Tools.DDS.EFormat.R8G8B8A8_UNORM;
                         //throw new Exception("Invalid texture format type! [" + format + "]");
                         break;
                 }
             }
 
-            return new DDSMetadata(width, height, (uint)mipcount, ddsformat);
+            return new Common.Tools.DDS.DDSMetadata(width, height, (uint)mipcount, ddsformat);
         }
 
         /// <summary>

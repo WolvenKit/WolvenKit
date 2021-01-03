@@ -13,20 +13,20 @@ using Catel.Threading;
 using Newtonsoft.Json;
 using Orc.Notifications;
 using ProtoBuf;
-using WolvenKit.Controllers;
-using WolvenKit.Services;
-using WolvenKit.Bundles;
-using WolvenKit.Cache;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
-using WolvenKit.W3Speech;
-using WolvenKit.W3Strings;
-
 namespace WolvenKit.Model
 {
+    using Controllers;
+    using Services;
+    using Bundles;
+    using Cache;
+    using Common;
+    using Common.Model;
+    using Common.Services;
+    using CR2W;
+    using CR2W.Types;
+    using W3Speech;
+    using W3Strings;
+
     public sealed class Tw3Project : EditorProject, ICloneable
     {
         #region fields

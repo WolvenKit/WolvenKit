@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using Newtonsoft.Json;
 using ProtoBuf;
-using WolvenKit.Services;
-using WolvenKit.Bundles;
-using WolvenKit.Cache;
-using WolvenKit.Common.Services;
-using WolvenKit.W3Speech;
-using WolvenKit.W3Strings;
 
 namespace WolvenKit.Controllers
 {
+    using Services;
+    using Bundles;
+    using Cache;
+    using Common.Services;
+    using W3Speech;
+    using W3Strings;
     public static class Tw3Controller
     {
         public static string GetManagerPath(EManagerType type)

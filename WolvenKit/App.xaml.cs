@@ -14,20 +14,19 @@ using System.Globalization;
 using System.Threading;
 using WolvenKit.ViewModels;
 using WolvenKit.Views.Dialogs;
-using WolvenKit.ViewModels;
 
 namespace WolvenKit
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public class WolvenKit : Application
+    public partial class App : Application
     {
         #region fields
         #endregion fields
 
         #region constructors
-        static WolvenKit()
+        static App()
         {
 
             
@@ -36,7 +35,7 @@ namespace WolvenKit
         /// <summary>
         /// Class constructor
         /// </summary>
-        public WolvenKit()
+        public App()
         {
             
         }
@@ -66,7 +65,7 @@ namespace WolvenKit
             viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.[VW]ViewModel");
 
             //TODO: rename later to MainViewModel
-            viewModelLocator.Register(typeof(Views.MainView), typeof(App.ViewModels.WorkSpaceViewModel));
+            viewModelLocator.Register(typeof(Views.MainView), typeof(ViewModels.WorkSpaceViewModel));
 
             // local VMs
             viewModelLocator.Register(typeof(Views.OpenFileView), typeof(ViewModels.OpenFileViewModel));
@@ -74,8 +73,8 @@ namespace WolvenKit
 
 
             var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
-            viewLocator.Register(typeof(App.ViewModels.SettingsViewModel), typeof(Views.SettingsWindow));
-            viewLocator.Register(typeof(App.ViewModels.InputDialogViewModel), typeof(Views.Dialogs.InputDialog));
+            viewLocator.Register(typeof(ViewModels.SettingsViewModel), typeof(Views.SettingsWindow));
+            viewLocator.Register(typeof(ViewModels.InputDialogViewModel), typeof(Views.Dialogs.InputDialog));
 
 
 

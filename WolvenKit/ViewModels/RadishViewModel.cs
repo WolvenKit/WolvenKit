@@ -10,13 +10,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
-using WolvenKit.Commands;
-using WolvenKit.Common;
-using WolvenKit.Common.Services;
-using WolvenKit.Radish.Model;
 
 namespace WolvenKit.ViewModels
 {
+    using Commands;
+    using Common;
+    using Common.Services;
+    using Radish.Model;
     public class RadishViewModel : ViewModel
     {
         public class FileWrapper

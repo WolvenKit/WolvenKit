@@ -2,7 +2,7 @@
 {
 	using System.Windows.Controls;
 	using System.Windows;
-    using WolvenKit.ViewModels;
+    using ViewModels;
 
     class PanesStyleSelector : StyleSelector
 	{

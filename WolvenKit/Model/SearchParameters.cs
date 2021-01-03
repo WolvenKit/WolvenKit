@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using WolvenKit.Commands;
-using WolvenKit.Common;
 
 namespace WolvenKit.Model
 {
+    using Commands;
+    using Common;
     public class SearchParameters : ObservableObject, INotifyPropertyChanged, INotifyPropertyChanging
     {
 

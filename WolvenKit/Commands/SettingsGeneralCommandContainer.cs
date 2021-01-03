@@ -12,11 +12,11 @@ using Catel.Logging;
 using Catel.MVVM;
 using Catel.Reflection;
 using Catel.Services;
-using WolvenKit;
-using WolvenKit.ViewModels;
 
 namespace WolvenKit.Commands
 {
+    using ViewModels;
+
     public class SettingsGeneralCommandContainer : CommandContainerBase
     {
         private const string ViewModelType = nameof(SettingsViewModel);

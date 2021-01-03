@@ -9,11 +9,12 @@ using System;
 using Catel.IoC;
 using Catel.Services;
 using Orc.Notifications;
-using WolvenKit.Model;
-using WolvenKit.Common.Services;
 
 namespace WolvenKit
 {
+    using Model;
+    using Common.Services;
+
     using System.Threading.Tasks;
     using Catel;
     using Catel.MVVM;

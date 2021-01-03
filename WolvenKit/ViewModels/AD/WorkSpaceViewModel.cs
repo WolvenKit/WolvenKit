@@ -16,19 +16,19 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Catel.MVVM;
-using WolvenKit.Commands;
 using Catel;
 using Catel.IoC;
 using Catel.Threading;
 using ControlzEx.Standard;
 using Orc.ProjectManagement;
-using WolvenKit.Model;
-using WolvenKit.Common.Services;
-using WolvenKit.CR2W;
 using NativeMethods = WolvenKit.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels
 {
+    using Model;
+    using Commands;
+    using Common.Services;
+    using CR2W;
     /// <summary>
 	/// The WorkSpaceViewModel implements AvalonDock demo specific properties, events and methods.
 	/// </summary>

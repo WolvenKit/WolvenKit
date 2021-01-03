@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using WolvenKit.CR2W;
 
 namespace WolvenKit.Model
 {
+    using CR2W;
+
     public static class CopyController
     {
         public static List<IEditableVariable> Source { get; set; }

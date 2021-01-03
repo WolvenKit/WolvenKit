@@ -7,8 +7,8 @@
     <ProjectGuid>{12FD792B-EC76-4969-8B42-9671025D5108}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WolvenKit</RootNamespace>
-    <AssemblyName>WolvenKit</AssemblyName>
+    <RootNamespace>WolvenKit.Legacy</RootNamespace>
+    <AssemblyName>WolvenKit.Legacy</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -30,9 +30,9 @@
     <UpdateUrl>http://traderain.hu/Witcher/WolvenKit/Release/</UpdateUrl>
     <SupportUrl>https://traderain.hu</SupportUrl>
     <ErrorReportUrl>https://traderain.hu</ErrorReportUrl>
-    <ProductName>WolvenKit</ProductName>
+    <ProductName>WolvenKit.Legacy</ProductName>
     <PublisherName>Traderain</PublisherName>
-    <SuiteName>WolvenKit</SuiteName>
+    <SuiteName>WolvenKit.Legacy</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
@@ -54,7 +54,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <NoWarn>1591</NoWarn>
-    <DocumentationFile>bin\Debug\WolvenKit.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\WolvenKit.Legacy.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -65,7 +65,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\Release\WolvenKit.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\WolvenKit.Legacy.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -111,7 +111,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>bin\x86\Release\WolvenKit.xml</DocumentationFile>
+    <DocumentationFile>bin\x86\Release\WolvenKit.Legacy.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -134,7 +134,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>bin\x64\Release\WolvenKit.xml</DocumentationFile>
+    <DocumentationFile>bin\x64\Release\WolvenKit.Legacy.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -1141,10 +1141,6 @@
     <None Include="Resources\VisualStudio\FileGroup_10135_16x.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WolvenKit\WolvenKit.csproj">
-      <Project>{6C5EE693-7F88-4259-90D5-9B247E61A15A}</Project>
-      <Name>WolvenKit</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WolvenKit.Bundles\WolvenKit.Bundles.csproj">
       <Project>{5bd2292a-24db-4b4a-a5b1-5d435769c289}</Project>
       <Name>WolvenKit.Bundles</Name>

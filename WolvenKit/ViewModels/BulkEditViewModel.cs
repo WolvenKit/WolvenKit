@@ -12,15 +12,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
-using WolvenKit.Commands;
-using WolvenKit.Common;
-using WolvenKit.Common.Services;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
-using WolvenKit.Radish.Model;
 
 namespace WolvenKit.ViewModels
 {
+    using Commands;
+    using Common;
+    using Common.Services;
+    using CR2W;
+    using CR2W.Types;
+    using Radish.Model;
     public class BulkEditOptions
     {
         public enum AvailableTypes

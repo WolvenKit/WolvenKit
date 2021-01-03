@@ -15,12 +15,12 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using Orc.ProjectManagement;
-using WolvenKit.Commands;
-using WolvenKit.Services;
-using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels
 {
+    using Commands;
+    using Services;
+    using Common.Services;
     public class RibbonViewModel : ViewModel
     {
         #region fields

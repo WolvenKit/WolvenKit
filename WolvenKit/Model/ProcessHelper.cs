@@ -27,10 +27,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WolvenKit.Common.Services;
 
 namespace WolvenKit.Model
 {
+	using Common.Services;
 
 
 	public static class ProcessHelper

@@ -4,7 +4,7 @@ namespace WolvenKit.Layout
 {
 	using System.Windows.Controls;
 	using System.Windows;
-	using WolvenKit.ViewModels;
+	using ViewModels;
 
 	/// <summary>
 	/// Implements a <see ref="DataTemplateSelector"/> for AvalonDock's documents and toolwindows.

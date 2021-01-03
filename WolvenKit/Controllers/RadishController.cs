@@ -6,12 +6,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using WolvenKit.ViewModels;
-using WolvenKit.Common;
-using WolvenKit.Common.Services;
 
 namespace WolvenKit
 {
+    using ViewModels;
+    using Common;
+    using Common.Services;
     /// <summary>
     /// Radish-modding-community-tools handler
     /// </summary>

@@ -7,13 +7,14 @@ using System.Windows;
 using System.Windows.Input;
 using AvalonDock.Layout.Serialization;
 using Catel.Data;
-using WolvenKit.Commands;
-using WolvenKit.ViewModels;
-using WolvenKit.Layout.MLib;
 
 namespace WolvenKit.Views
 {
-    public partial class MainView
+	using Commands;
+	using ViewModels;
+	using Layout.MLib;
+
+	public partial class MainView
     {
         #region fields
 

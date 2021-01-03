@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using WolvenKit.Model;
-using WolvenKit.Common.Model;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.SRT;
+using Catel.MVVM;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace WolvenKit.ViewModels
 {
-    using Catel.MVVM;
-    using System.IO;
-	using System.Text;
-	using System.Threading.Tasks;
-	using System.Windows.Input;
-	using System.Windows.Media;
-    using WolvenKit.Commands;
+	using Model;
+	using Common.Model;
+	using CR2W;
+	using CR2W.SRT;
+	using Commands;
 
     public class DocumentViewModel : PaneViewModel, IDocumentViewModel
 	{

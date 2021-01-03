@@ -5,15 +5,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
-using WolvenKit.Common.Wcc;
-using WolvenKit.CR2W;
 
 namespace WolvenKit.Model
 {
+    using Common;
+    using Common.Extensions;
+    using Common.Model;
+    using Common.Services;
+    using Common.Wcc;
+    using CR2W;
     public static class WccHelper
     {
         private static LoggerService Logger => MainController.Get().Logger;

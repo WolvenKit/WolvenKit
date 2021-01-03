@@ -4,18 +4,19 @@ using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Windows.Input;
-using WolvenKit.Commands;
-using WolvenKit.Model;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.SRT;
-using WolvenKit.CR2W.Types;
-using WolvenKit.Radish.Model;
 
 namespace WolvenKit.ViewModels
 {
+    using Commands;
+    using Model;
+    using Common;
+    using Common.Model;
+    using Common.Services;
+    using CR2W;
+    using CR2W.SRT;
+    using CR2W.Types;
+    using Radish.Model;
+
     public class ScriptDocumentViewModel : CloseableViewModel, Old_IDocumentViewModel
     {
         public ScriptDocumentViewModel(IWindowFactory windowFactory) : base(windowFactory)

@@ -11,15 +11,14 @@ using System.Xml;
 using System.Xml.Serialization;
 using Orc.Notifications;
 using Orc.ProjectManagement;
-using WolvenKit;
-using WolvenKit.Model;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
 using Settings = Orc.Squirrel.Settings;
 
 namespace WolvenKit
 {
+    using Model;
+    using Common;
+    using Common.Model;
+    using Common.Services;
     public class ApplicationNewProjectCommandContainer : ProjectCommandContainerBase
     {
         private readonly INavigationService _navigationService;

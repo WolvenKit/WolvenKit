@@ -6,11 +6,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WolvenKit.Common.Services;
-using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Model
 {
+    using Common.Services;
+    using CR2W.Types;
+
     public static class CsvCommonFunctions
     {
 

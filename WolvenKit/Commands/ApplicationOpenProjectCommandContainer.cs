@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 using Catel.Logging;
 using Orc.FileSystem;
 using Orc.ProjectManagement;
-using WolvenKit;
-using WolvenKit.Common.Services;
 using Orc.Notifications;
 
 namespace WolvenKit
 {
+    using Common.Services;
+
     public class ApplicationOpenProjectCommandContainer : ProjectCommandContainerBase
     {
         private readonly IOpenFileService _openFileService;

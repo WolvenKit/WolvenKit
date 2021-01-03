@@ -13,23 +13,26 @@ using Catel;
 using Catel.Services;
 using Catel.Threading;
 using Orc.ProjectManagement;
-using WolvenKit.Commands;
-using WolvenKit.Model;
-using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
-using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools;
-using WolvenKit.Common.Tools.DDS;
-using WolvenKit.Common.Wcc;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
-using static WolvenKit.CR2W.Types.Enums;
-using static WolvenKit.Common.Tools.DDS.TexconvWrapper;
 
 namespace WolvenKit.ViewModels
 {
+
+
+    using Commands;
+    using Model;
+    using Common;
+    using Common.Extensions;
+    using Common.FNV1A;
+    using Common.Model;
+    using Common.Services;
+    using Common.Tools;
+    using Common.Tools.DDS;
+    using Common.Wcc;
+    using CR2W;
+    using CR2W.Types;
+    using static CR2W.Types.Enums;
+    using static Common.Tools.DDS.TexconvWrapper;
+
     public class PropertiesViewModel : ToolViewModel
     {
 

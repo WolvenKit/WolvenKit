@@ -14,11 +14,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Catel.IoC;
 using ControlzEx.Theming;
-using WolvenKit.Common.Services;
-using WolvenKit.Extensions;
 
 namespace WolvenKit.Views
 {
+    using Common.Services;
+    using Extensions;
     /// <summary>
     /// Interaction logic for LogView.xaml
     /// </summary>

@@ -101,21 +101,21 @@ namespace WolvenKit.Layout.Converters
                 case "ctw":
                     return $"Files/apb_32x.png";
 
-                case nameof(App.Model.FileSystemInfoModel.ECustomImageKeys.ClosedDirImageKey):
+                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.ClosedDirImageKey):
                     return $"Files/FolderClosed_16x.png";
-                case nameof(App.Model.FileSystemInfoModel.ECustomImageKeys.OpenDirImageKey):
+                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.OpenDirImageKey):
                     return $"Files/FolderOpened_16x.png";
 
-                case nameof(App.Model.FileSystemInfoModel.ECustomImageKeys.RawImageKey):
-                case nameof(App.Model.FileSystemInfoModel.ECustomImageKeys.RawModImageKey): 
-                case nameof(App.Model.FileSystemInfoModel.ECustomImageKeys.RawDlcImageKey): 
-                case nameof(App.Model.FileSystemInfoModel.ECustomImageKeys.RadishImageKey):
-                case nameof(App.Model.FileSystemInfoModel.ECustomImageKeys.ModImageKey): 
-                case nameof(App.Model.FileSystemInfoModel.ECustomImageKeys.ModCookedImageKey): 
-                case nameof(App.Model.FileSystemInfoModel.ECustomImageKeys.ModUncookedImageKey): 
-                case nameof(App.Model.FileSystemInfoModel.ECustomImageKeys.DlcImageKey): 
-                case nameof(App.Model.FileSystemInfoModel.ECustomImageKeys.DlcCookedImageKey): 
-                case nameof(App.Model.FileSystemInfoModel.ECustomImageKeys.DlcUncookedImageKey):
+                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.RawImageKey):
+                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.RawModImageKey): 
+                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.RawDlcImageKey): 
+                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.RadishImageKey):
+                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.ModImageKey): 
+                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.ModCookedImageKey): 
+                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.ModUncookedImageKey): 
+                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.DlcImageKey): 
+                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.DlcCookedImageKey): 
+                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.DlcUncookedImageKey):
                     return $"Files/Project_Explorer_Base_Dir_16x.png";
 
                 default: return $"Files/BlankFile_32x.png";
