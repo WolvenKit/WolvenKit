@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(6)]  [RED("densityFactor")] public CFloat DensityFactor { get; set; }
 		[Ordinal(7)]  [RED("densityFalloff")] public CFloat DensityFalloff { get; set; }
 		[Ordinal(8)]  [RED("envColorGroup")] public CEnum<EEnvColorGroup> EnvColorGroup { get; set; }
-		[Ordinal(9)]  [RED("lightChannels")] public rendLightChannel LightChannels { get; set; }
+		[Ordinal(9)]  [RED("lightChannels")] public CEnum<rendLightChannel> LightChannels { get; set; }
 		[Ordinal(10)]  [RED("priority")] public CUInt8 Priority { get; set; }
 		[Ordinal(11)]  [RED("streamingDistance")] public CFloat StreamingDistance { get; set; }
 

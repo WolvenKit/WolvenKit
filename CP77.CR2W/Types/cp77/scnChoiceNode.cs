@@ -14,7 +14,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(3)]  [RED("atpParams")] public scnChoiceNodeNsAttachToPropParams AtpParams { get; set; }
 		[Ordinal(4)]  [RED("atsParams")] public scnChoiceNodeNsAttachToScreenParams AtsParams { get; set; }
 		[Ordinal(5)]  [RED("atwParams")] public scnChoiceNodeNsAttachToWorldParams AtwParams { get; set; }
-		[Ordinal(6)]  [RED("choiceFlags")] public scnChoiceNodeNsChoiceNodeBitFlags ChoiceFlags { get; set; }
+		[Ordinal(6)]  [RED("choiceFlags")] public CEnum<scnChoiceNodeNsChoiceNodeBitFlags> ChoiceFlags { get; set; }
 		[Ordinal(7)]  [RED("choiceGroup")] public CName ChoiceGroup { get; set; }
 		[Ordinal(8)]  [RED("choicePriority")] public CUInt8 ChoicePriority { get; set; }
 		[Ordinal(9)]  [RED("cpoHoldInputActionSection")] public CBool CpoHoldInputActionSection { get; set; }

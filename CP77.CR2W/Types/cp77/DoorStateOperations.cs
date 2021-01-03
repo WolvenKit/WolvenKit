@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	public class DoorStateOperations : DeviceOperations
 	{
 		[Ordinal(0)]  [RED("cachedState")] public CEnum<EDoorStatus> CachedState { get; set; }
-		[Ordinal(1)]  [RED("doorStateOperations")] public CArray<SDoorStateOperationData> DoorStateOperations { get; set; }
+		[Ordinal(1)]  [RED("doorStateOperations")] public CArray<SDoorStateOperationData> M_DoorStateOperations { get; set; }
 		[Ordinal(2)]  [RED("wasStateCached")] public CBool WasStateCached { get; set; }
 
 		public DoorStateOperations(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

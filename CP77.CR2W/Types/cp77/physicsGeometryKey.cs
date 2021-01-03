@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	public class physicsGeometryKey : CVariable
 	{
 		[Ordinal(0)]  [RED("pe")] public CUInt8 Pe { get; set; }
-		[Ordinal(1)]  [RED("ta")] public [12]Uint8 Ta { get; set; }
+		[Ordinal(1)]  [RED("ta", 12)] public CArrayFixedSize<CUInt8> Ta { get; set; }
 
 		public physicsGeometryKey(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

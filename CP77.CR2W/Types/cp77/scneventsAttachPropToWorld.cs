@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(2)]  [RED("fallbackAnimTime")] public CFloat FallbackAnimTime { get; set; }
 		[Ordinal(3)]  [RED("fallbackAnimationName")] public CName FallbackAnimationName { get; set; }
 		[Ordinal(4)]  [RED("fallbackAnimset")] public rRef<animAnimSet> FallbackAnimset { get; set; }
-		[Ordinal(5)]  [RED("fallbackCachedBones")] public CStatic<2,scneventsAttachPropToWorldCachedFallbackBone> FallbackCachedBones { get; set; }
+		[Ordinal(5)]  [RED("fallbackCachedBones", 2)] public CStatic<scneventsAttachPropToWorldCachedFallbackBone> FallbackCachedBones { get; set; }
 		[Ordinal(6)]  [RED("offsetMode")] public CEnum<scnOffsetMode> OffsetMode { get; set; }
 		[Ordinal(7)]  [RED("propId")] public scnPropId PropId { get; set; }
 		[Ordinal(8)]  [RED("referencePerformer")] public scnPerformerId ReferencePerformer { get; set; }

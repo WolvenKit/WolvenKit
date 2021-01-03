@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class rendEmitterSimulationShaders : CVariable
 	{
-		[Ordinal(0)]  [RED("simCS")] public [2]DataBuffer SimCS { get; set; }
+		[Ordinal(0)]  [RED("simCS", 2)] public CArrayFixedSize<DataBuffer> SimCS { get; set; }
 
 		public rendEmitterSimulationShaders(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

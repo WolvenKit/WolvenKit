@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("cpuTime")] public CFloat CpuTime { get; set; }
 		[Ordinal(1)]  [RED("engineTick")] public CUInt64 EngineTick { get; set; }
-		[Ordinal(2)]  [RED("engineTime")] public Double EngineTime { get; set; }
+		[Ordinal(2)]  [RED("engineTime")] public CDouble EngineTime { get; set; }
 		[Ordinal(3)]  [RED("gpuTime")] public CFloat GpuTime { get; set; }
 		[Ordinal(4)]  [RED("lastFps")] public CFloat LastFps { get; set; }
 		[Ordinal(5)]  [RED("lastTimeDelta")] public CFloat LastTimeDelta { get; set; }

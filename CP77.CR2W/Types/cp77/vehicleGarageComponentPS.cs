@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class vehicleGarageComponentPS : gameComponentPS
 	{
-		[Ordinal(0)]  [RED("activeVehicles")] public CStatic<3,vehicleGarageVehicleID> ActiveVehicles { get; set; }
+		[Ordinal(0)]  [RED("activeVehicles", 3)] public CStatic<vehicleGarageVehicleID> ActiveVehicles { get; set; }
 		[Ordinal(1)]  [RED("mountedVehicleData")] public vehicleGarageComponentVehicleData MountedVehicleData { get; set; }
 		[Ordinal(2)]  [RED("mountedVehicleStolen")] public CBool MountedVehicleStolen { get; set; }
 		[Ordinal(3)]  [RED("spawnedVehiclesData")] public CArray<vehicleGarageComponentVehicleData> SpawnedVehiclesData { get; set; }

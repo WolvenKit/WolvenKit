@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class audioAudioSceneData : audioAudioMetadata
 	{
-		[Ordinal(0)]  [RED("anyStateArray")] public [1]audioAudioStateData AnyStateArray { get; set; }
+		[Ordinal(0)]  [RED("anyStateArray", 1)] public CArrayFixedSize<audioAudioStateData> AnyStateArray { get; set; }
 		[Ordinal(1)]  [RED("anyStateTransitionsTable")] public CArray<audioAnyStateTransitionEntry> AnyStateTransitionsTable { get; set; }
 		[Ordinal(2)]  [RED("signalLeadingToShutdown")] public CName SignalLeadingToShutdown { get; set; }
 		[Ordinal(3)]  [RED("states")] public CArray<audioAudioStateData> States { get; set; }

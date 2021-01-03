@@ -14,7 +14,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(3)]  [RED("destruction")] public vehicleDestructionPSData Destruction { get; set; }
 		[Ordinal(4)]  [RED("flags")] public CUInt32 Flags { get; set; }
 		[Ordinal(5)]  [RED("questEnforcedTransform")] public Transform QuestEnforcedTransform { get; set; }
-		[Ordinal(6)]  [RED("wheelRuntimeData")] public CStatic<4,vehicleWheelRuntimePSData> WheelRuntimeData { get; set; }
+		[Ordinal(6)]  [RED("wheelRuntimeData", 4)] public CStatic<vehicleWheelRuntimePSData> WheelRuntimeData { get; set; }
 
 		public vehiclePersistentDataPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

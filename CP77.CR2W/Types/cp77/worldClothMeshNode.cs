@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	public class worldClothMeshNode : worldMeshNode
 	{
 		[Ordinal(0)]  [RED("affectedByWind")] public CBool AffectedByWind { get; set; }
-		[Ordinal(1)]  [RED("collisionMask")] public physicsEClothCollisionMaskEnum CollisionMask { get; set; }
+		[Ordinal(1)]  [RED("collisionMask")] public CEnum<physicsEClothCollisionMaskEnum> CollisionMask { get; set; }
 
 		public worldClothMeshNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

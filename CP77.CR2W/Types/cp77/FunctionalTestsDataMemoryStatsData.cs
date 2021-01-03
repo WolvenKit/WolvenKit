@@ -12,7 +12,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(1)]  [RED("cpuAllocationCount")] public CUInt32 CpuAllocationCount { get; set; }
 		[Ordinal(2)]  [RED("cpuBytesAllocated")] public CUInt64 CpuBytesAllocated { get; set; }
 		[Ordinal(3)]  [RED("engineTick")] public CUInt64 EngineTick { get; set; }
-		[Ordinal(4)]  [RED("engineTime")] public Double EngineTime { get; set; }
+		[Ordinal(4)]  [RED("engineTime")] public CDouble EngineTime { get; set; }
 		[Ordinal(5)]  [RED("gpuAllocationCount")] public CUInt32 GpuAllocationCount { get; set; }
 		[Ordinal(6)]  [RED("gpuBytesAllocated")] public CUInt64 GpuBytesAllocated { get; set; }
 		[Ordinal(7)]  [RED("lastTimeDelta")] public CFloat LastTimeDelta { get; set; }

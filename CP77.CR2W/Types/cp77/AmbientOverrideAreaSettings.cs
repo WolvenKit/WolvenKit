@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class AmbientOverrideAreaSettings : IAreaSettings
 	{
-		[Ordinal(0)]  [RED("color")] public [6]curveData<HDRColor> Color { get; set; }
+		[Ordinal(0)]  [RED("color", 6)] public CArrayFixedSize<curveData<HDRColor>> Color { get; set; }
 
 		public AmbientOverrideAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

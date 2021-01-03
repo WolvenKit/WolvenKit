@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	public class AIbehaviorMovementPolicyTaskItemDefinition : ISerializable
 	{
 		[Ordinal(0)]  [RED("function")] public CEnum<AIbehaviorMovementPolicyTaskFunctions> Function { get; set; }
-		[Ordinal(1)]  [RED("params")] public CStatic<4,handle<AIbehaviorExpressionSocket>> Params { get; set; }
+		[Ordinal(1)]  [RED("params", 4)] public CStatic<CHandle<AIbehaviorExpressionSocket>> Params { get; set; }
 
 		public AIbehaviorMovementPolicyTaskItemDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

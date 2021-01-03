@@ -20,7 +20,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(9)]  [RED("Resources")] public CArray<entdismembermentWoundMeshes> Resources { get; set; }
 		[Ordinal(10)]  [RED("UseProceduralCut")] public CBool UseProceduralCut { get; set; }
 		[Ordinal(11)]  [RED("UseSingleMeshForRagdoll")] public CBool UseSingleMeshForRagdoll { get; set; }
-		[Ordinal(12)]  [RED("WoundType")] public entdismembermentWoundTypeE WoundType { get; set; }
+		[Ordinal(12)]  [RED("WoundType")] public CEnum<entdismembermentWoundTypeE> WoundType { get; set; }
 
 		public entdismembermentWoundResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

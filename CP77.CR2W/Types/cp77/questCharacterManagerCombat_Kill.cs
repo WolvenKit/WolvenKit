@@ -16,7 +16,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(5)]  [RED("noRagdoll")] public CBool NoRagdoll { get; set; }
 		[Ordinal(6)]  [RED("puppetRef")] public gameEntityReference PuppetRef { get; set; }
 		[Ordinal(7)]  [RED("skipDefeatedState")] public CBool SkipDefeatedState { get; set; }
-		[Ordinal(8)]  [RED("woundType")] public entdismembermentWoundTypeE WoundType { get; set; }
+		[Ordinal(8)]  [RED("woundType")] public CEnum<entdismembermentWoundTypeE> WoundType { get; set; }
 
 		public questCharacterManagerCombat_Kill(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

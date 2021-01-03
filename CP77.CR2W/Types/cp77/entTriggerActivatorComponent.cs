@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class entTriggerActivatorComponent : entIPlacedComponent
 	{
-		[Ordinal(0)]  [RED("channels")] public TriggerChannel Channels { get; set; }
+		[Ordinal(0)]  [RED("channels")] public CEnum<TriggerChannel> Channels { get; set; }
 		[Ordinal(1)]  [RED("enableCCD")] public CBool EnableCCD { get; set; }
 		[Ordinal(2)]  [RED("height")] public CFloat Height { get; set; }
 		[Ordinal(3)]  [RED("isEnabled")] public CBool IsEnabled { get; set; }

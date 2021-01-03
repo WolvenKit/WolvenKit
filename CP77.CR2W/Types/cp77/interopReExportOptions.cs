@@ -9,9 +9,9 @@ namespace WolvenKit.CR2W.Types
 	public class interopReExportOptions : CVariable
 	{
 		[Ordinal(0)]  [RED("asBBoxPrefabsForceLast")] public CBool AsBBoxPrefabsForceLast { get; set; }
-		[Ordinal(1)]  [RED("asBBoxPrefabsSubdivide")] public Double AsBBoxPrefabsSubdivide { get; set; }
-		[Ordinal(2)]  [RED("asBBoxPrefabsThreshold")] public Double AsBBoxPrefabsThreshold { get; set; }
-		[Ordinal(3)]  [RED("asBBoxThreshold")] public Double AsBBoxThreshold { get; set; }
+		[Ordinal(1)]  [RED("asBBoxPrefabsSubdivide")] public CDouble AsBBoxPrefabsSubdivide { get; set; }
+		[Ordinal(2)]  [RED("asBBoxPrefabsThreshold")] public CDouble AsBBoxPrefabsThreshold { get; set; }
+		[Ordinal(3)]  [RED("asBBoxThreshold")] public CDouble AsBBoxThreshold { get; set; }
 		[Ordinal(4)]  [RED("assetName")] public CString AssetName { get; set; }
 		[Ordinal(5)]  [RED("assetPaths")] public CArray<CString> AssetPaths { get; set; }
 		[Ordinal(6)]  [RED("baseType")] public CString BaseType { get; set; }
@@ -28,7 +28,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(17)]  [RED("hjobToken")] public CString HjobToken { get; set; }
 		[Ordinal(18)]  [RED("jsonFile")] public AbsolutePathSerializable JsonFile { get; set; }
 		[Ordinal(19)]  [RED("maskDumpFilePath")] public AbsolutePathSerializable MaskDumpFilePath { get; set; }
-		[Ordinal(20)]  [RED("minBBoxDiag")] public Double MinBBoxDiag { get; set; }
+		[Ordinal(20)]  [RED("minBBoxDiag")] public CDouble MinBBoxDiag { get; set; }
 		[Ordinal(21)]  [RED("occlusionExportOptNames")] public CArray<CName> OcclusionExportOptNames { get; set; }
 		[Ordinal(22)]  [RED("occlusionExportOptValues")] public CArray<CBool> OcclusionExportOptValues { get; set; }
 		[Ordinal(23)]  [RED("onlyProxy")] public CBool OnlyProxy { get; set; }

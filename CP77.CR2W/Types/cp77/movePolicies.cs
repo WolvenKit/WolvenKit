@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(2)]  [RED("desiredDistance")] public CFloat DesiredDistance { get; set; }
 		[Ordinal(3)]  [RED("destination")] public Vector3 Destination { get; set; }
 		[Ordinal(4)]  [RED("destinationTangent")] public Vector3 DestinationTangent { get; set; }
-		[Ordinal(5)]  [RED("followSlotOverrides")] public CStatic<4,Vector3> FollowSlotOverrides { get; set; }
+		[Ordinal(5)]  [RED("followSlotOverrides", 4)] public CStatic<Vector3> FollowSlotOverrides { get; set; }
 		[Ordinal(6)]  [RED("hasLocalTargetOffset")] public CBool HasLocalTargetOffset { get; set; }
 		[Ordinal(7)]  [RED("ignoreNavigation")] public CBool IgnoreNavigation { get; set; }
 		[Ordinal(8)]  [RED("inRestrictedArea")] public CBool InRestrictedArea { get; set; }

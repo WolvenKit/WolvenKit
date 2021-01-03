@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class grsHeistState : CVariable
 	{
-		[Ordinal(0)]  [RED("playersInfo")] public CStatic<7,grsHeistPlayerGameInfo> PlayersInfo { get; set; }
+		[Ordinal(0)]  [RED("playersInfo", 7)] public CStatic<grsHeistPlayerGameInfo> PlayersInfo { get; set; }
 		[Ordinal(1)]  [RED("status")] public CEnum<grsHeistStatus> Status { get; set; }
 		[Ordinal(2)]  [RED("time")] public netTime Time { get; set; }
 

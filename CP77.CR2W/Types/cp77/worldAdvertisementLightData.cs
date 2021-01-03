@@ -31,7 +31,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(20)]  [RED("innerAngle")] public CFloat InnerAngle { get; set; }
 		[Ordinal(21)]  [RED("intensity")] public CFloat Intensity { get; set; }
 		[Ordinal(22)]  [RED("isEnabled")] public CBool IsEnabled { get; set; }
-		[Ordinal(23)]  [RED("lightChannel")] public rendLightChannel LightChannel { get; set; }
+		[Ordinal(23)]  [RED("lightChannel")] public CEnum<rendLightChannel> LightChannel { get; set; }
 		[Ordinal(24)]  [RED("lightName")] public CName LightName { get; set; }
 		[Ordinal(25)]  [RED("outerAngle")] public CFloat OuterAngle { get; set; }
 		[Ordinal(26)]  [RED("portalAngleCutoff")] public CUInt8 PortalAngleCutoff { get; set; }

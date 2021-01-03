@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class grsDeathmatchState : CVariable
 	{
-		[Ordinal(0)]  [RED("playersInfo")] public CStatic<7,grsDeathmatchPlayerGameInfo> PlayersInfo { get; set; }
+		[Ordinal(0)]  [RED("playersInfo", 7)] public CStatic<grsDeathmatchPlayerGameInfo> PlayersInfo { get; set; }
 		[Ordinal(1)]  [RED("sessionLength")] public netTime SessionLength { get; set; }
 		[Ordinal(2)]  [RED("status")] public CEnum<grsDeathmatchStatus> Status { get; set; }
 		[Ordinal(3)]  [RED("time")] public netTime Time { get; set; }

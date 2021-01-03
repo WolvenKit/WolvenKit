@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(0)]  [RED("alphaToCoverage")] public CBool AlphaToCoverage { get; set; }
 		[Ordinal(1)]  [RED("independent")] public CBool Independent { get; set; }
 		[Ordinal(2)]  [RED("numTargets")] public CUInt8 NumTargets { get; set; }
-		[Ordinal(3)]  [RED("renderTarget")] public [8]PSODescRenderTarget RenderTarget { get; set; }
+		[Ordinal(3)]  [RED("renderTarget", 8)] public CArrayFixedSize<PSODescRenderTarget> RenderTarget { get; set; }
 
 		public PSODescBlendModeDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

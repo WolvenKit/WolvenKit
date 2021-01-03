@@ -7,6 +7,37 @@ namespace WolvenKit.CR2W.Types
 {
     public static partial class Enums
     {
+	    public enum Sample_Enum_As_Bitfield_2_9{}
+	    public enum Sample_Enum_As_Bitfield_2_2{}
+	    public enum scnChoiceNodeNsChoiceNodeBitFlags{}
+	    public enum gameLootSlotState{}
+	    public enum worlduiContextVisibility{}
+	    public enum gameEItemDynamicTags{}
+	    public enum entdismembermentPlacementE{}
+	    public enum EMeshChunkRenderMask{}
+	    public enum EMeshChunkFlags{}
+	    public enum entdismembermentResourceSetMask{}
+	    public enum entdismembermentWoundTypeE{}
+	    public enum physicsEClothCollisionMaskEnum{}
+		public enum CensorshipFlags {}
+	    public enum TriggerChannel {}
+	    public enum worldEDeniedAreaFlags{}
+	    public enum rendLightChannel
+	    {
+		    LC_Channel1,
+		    LC_Channel2,
+		    LC_Channel3,
+		    LC_Channel4,
+		    LC_Channel5,
+		    LC_Channel6,
+		    LC_Channel7,
+		    LC_Channel8,
+		    LC_ChannelWorld,
+		    LC_Character,
+		    LC_Player,
+		    LC_Automated
+	    }
+	    
         public enum audioAudioVehicleCurve
 		{
 			ThrottleInput = 0,

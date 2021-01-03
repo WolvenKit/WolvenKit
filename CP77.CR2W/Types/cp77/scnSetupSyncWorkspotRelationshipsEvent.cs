@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class scnSetupSyncWorkspotRelationshipsEvent : scnSceneEvent
 	{
-		[Ordinal(0)]  [RED("syncedWorkspotIds")] public CStatic<4,scnSceneWorkspotInstanceId> SyncedWorkspotIds { get; set; }
+		[Ordinal(0)]  [RED("syncedWorkspotIds", 4)] public CStatic<scnSceneWorkspotInstanceId> SyncedWorkspotIds { get; set; }
 
 		public scnSetupSyncWorkspotRelationshipsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

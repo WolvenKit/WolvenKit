@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ProtectedEntities : MorphData
 	{
-		[Ordinal(0)]  [RED("protectedEntities")] public CArray<entEntityID> ProtectedEntities { get; set; }
+		[Ordinal(0)]  [RED("protectedEntities")] public CArray<entEntityID> M_ProtectedEntities { get; set; }
 
 		public ProtectedEntities(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class Hotkey : IScriptable
 	{
-		[Ordinal(0)]  [RED("hotkey")] public CEnum<gameEHotkey> Hotkey { get; set; }
+		[Ordinal(0)]  [RED("hotkey")] public CEnum<gameEHotkey> M_Hotkey { get; set; }
 		[Ordinal(1)]  [RED("itemID")] public gameItemID ItemID { get; set; }
 		[Ordinal(2)]  [RED("scope")] public CArray<CEnum<gamedataItemType>> Scope { get; set; }
 

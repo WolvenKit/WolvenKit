@@ -12,7 +12,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(1)]  [RED("brokenLights")] public CUInt32 BrokenLights { get; set; }
 		[Ordinal(2)]  [RED("detachedParts")] public CArray<CName> DetachedParts { get; set; }
 		[Ordinal(3)]  [RED("flatTire")] public CUInt8 FlatTire { get; set; }
-		[Ordinal(4)]  [RED("gridValues")] public [30]Float GridValues { get; set; }
+		[Ordinal(4)]  [RED("gridValues", 30)] public CArrayFixedSize<CFloat> GridValues { get; set; }
 		[Ordinal(5)]  [RED("windshieldPoints")] public CArray<Vector3> WindshieldPoints { get; set; }
 		[Ordinal(6)]  [RED("windshieldShattered")] public CBool WindshieldShattered { get; set; }
 

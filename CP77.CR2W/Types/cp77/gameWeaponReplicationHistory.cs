@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("continuousAttack")] public gameReplicatedContinuousAttack ContinuousAttack { get; set; }
 		[Ordinal(1)]  [RED("latestShotId")] public CUInt32 LatestShotId { get; set; }
-		[Ordinal(2)]  [RED("shots")] public CStatic<8,gameReplicatedShotData> Shots { get; set; }
+		[Ordinal(2)]  [RED("shots", 8)] public CStatic<gameReplicatedShotData> Shots { get; set; }
 		[Ordinal(3)]  [RED("weaponSlot")] public TweakDBID WeaponSlot { get; set; }
 
 		public gameWeaponReplicationHistory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

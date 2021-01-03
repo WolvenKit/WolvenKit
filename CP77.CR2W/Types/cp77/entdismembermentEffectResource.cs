@@ -14,9 +14,9 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(3)]  [RED("MatchToWoundByName")] public CBool MatchToWoundByName { get; set; }
 		[Ordinal(4)]  [RED("Name")] public CName Name { get; set; }
 		[Ordinal(5)]  [RED("Offset")] public Transform Offset { get; set; }
-		[Ordinal(6)]  [RED("Placement")] public entdismembermentPlacementE Placement { get; set; }
-		[Ordinal(7)]  [RED("ResourceSets")] public entdismembermentResourceSetMask ResourceSets { get; set; }
-		[Ordinal(8)]  [RED("WoundType")] public entdismembermentWoundTypeE WoundType { get; set; }
+		[Ordinal(6)]  [RED("Placement")] public CEnum<entdismembermentPlacementE> Placement { get; set; }
+		[Ordinal(7)]  [RED("ResourceSets")] public CEnum<entdismembermentResourceSetMask> ResourceSets { get; set; }
+		[Ordinal(8)]  [RED("WoundType")] public CEnum<entdismembermentWoundTypeE> WoundType { get; set; }
 
 		public entdismembermentEffectResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

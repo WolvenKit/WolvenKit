@@ -12,7 +12,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(1)]  [RED("anchorPlace")] public CEnum<inkEAnchor> AnchorPlace { get; set; }
 		[Ordinal(2)]  [RED("anchorPoint")] public Vector2 AnchorPoint { get; set; }
 		[Ordinal(3)]  [RED("attachToSlot")] public CBool AttachToSlot { get; set; }
-		[Ordinal(4)]  [RED("contextVisibility")] public worlduiContextVisibility ContextVisibility { get; set; }
+		[Ordinal(4)]  [RED("contextVisibility")] public CEnum<worlduiContextVisibility> ContextVisibility { get; set; }
 		[Ordinal(5)]  [RED("enabled")] public CBool Enabled { get; set; }
 		[Ordinal(6)]  [RED("gameContextVisibility")] public gameuiContext GameContextVisibility { get; set; }
 		[Ordinal(7)]  [RED("hudEntryName")] public CName HudEntryName { get; set; }

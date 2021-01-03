@@ -14,7 +14,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(3)]  [RED("haloWidth")] public CFloat HaloWidth { get; set; }
 		[Ordinal(4)]  [RED("saturation")] public curveData<CFloat> Saturation { get; set; }
 		[Ordinal(5)]  [RED("scale")] public curveData<CFloat> Scale { get; set; }
-		[Ordinal(6)]  [RED("tint")] public [8]Color Tint { get; set; }
+		[Ordinal(6)]  [RED("tint", 8)] public CArrayFixedSize<CColor> Tint { get; set; }
 		[Ordinal(7)]  [RED("treshold")] public CFloat Treshold { get; set; }
 
 		public ImageBasedFlareAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

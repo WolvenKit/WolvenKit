@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(2)]  [RED("id")] public CUInt32 Id { get; set; }
 		[Ordinal(3)]  [RED("position")] public Vector3 Position { get; set; }
 		[Ordinal(4)]  [RED("rotation")] public Quaternion Rotation { get; set; }
-		[Ordinal(5)]  [RED("tangents")] public [2]Vector3 Tangents { get; set; }
+		[Ordinal(5)]  [RED("tangents", 2)] public CArrayFixedSize<Vector3> Tangents { get; set; }
 
 		public SplinePoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

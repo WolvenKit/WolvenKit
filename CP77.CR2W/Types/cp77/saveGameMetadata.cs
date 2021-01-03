@@ -36,10 +36,10 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(25)]  [RED("mainQuest")] public CString MainQuest { get; set; }
 		[Ordinal(26)]  [RED("nextNonSavableEntityID")] public CUInt32 NextNonSavableEntityID { get; set; }
 		[Ordinal(27)]  [RED("nextSavableEntityID")] public CUInt32 NextSavableEntityID { get; set; }
-		[Ordinal(28)]  [RED("playTime")] public Double PlayTime { get; set; }
+		[Ordinal(28)]  [RED("playTime")] public CDouble PlayTime { get; set; }
 		[Ordinal(29)]  [RED("playerPosition")] public Vector3 PlayerPosition { get; set; }
 		[Ordinal(30)]  [RED("playthroughID")] public CString PlaythroughID { get; set; }
-		[Ordinal(31)]  [RED("playthroughTime")] public Double PlaythroughTime { get; set; }
+		[Ordinal(31)]  [RED("playthroughTime")] public CDouble PlaythroughTime { get; set; }
 		[Ordinal(32)]  [RED("pointOfNoReturnId")] public CString PointOfNoReturnId { get; set; }
 		[Ordinal(33)]  [RED("reflexes")] public CFloat Reflexes { get; set; }
 		[Ordinal(34)]  [RED("stealth")] public CFloat Stealth { get; set; }

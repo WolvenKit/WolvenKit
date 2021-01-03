@@ -12,12 +12,12 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(1)]  [RED("aByte")] public CUInt8 AByte { get; set; }
 		[Ordinal(2)]  [RED("aInt")] public CInt32 AInt { get; set; }
 		[Ordinal(3)]  [RED("aliasedCName")] public CName AliasedCName { get; set; }
-		[Ordinal(4)]  [RED("aliasedD")] public Double AliasedD { get; set; }
+		[Ordinal(4)]  [RED("aliasedD")] public CDouble AliasedD { get; set; }
 		[Ordinal(5)]  [RED("aliasedF")] public CFloat AliasedF { get; set; }
 		[Ordinal(6)]  [RED("aliasedStr")] public CString AliasedStr { get; set; }
 		[Ordinal(7)]  [RED("b")] public CBool B { get; set; }
 		[Ordinal(8)]  [RED("cName")] public CName CName { get; set; }
-		[Ordinal(9)]  [RED("d")] public Double D { get; set; }
+		[Ordinal(9)]  [RED("d")] public CDouble D { get; set; }
 		[Ordinal(10)]  [RED("dynArrayOfStructs")] public CArray<Ref_6_ReplicatedVariables_SubStructure> DynArrayOfStructs { get; set; }
 		[Ordinal(11)]  [RED("f")] public CFloat F { get; set; }
 		[Ordinal(12)]  [RED("i16")] public CInt16 I16 { get; set; }

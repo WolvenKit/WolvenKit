@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(2)]  [RED("bar2")] public inkWidgetReference Bar2 { get; set; }
 		[Ordinal(3)]  [RED("bar3")] public inkWidgetReference Bar3 { get; set; }
 		[Ordinal(4)]  [RED("bar4")] public inkWidgetReference Bar4 { get; set; }
-		[Ordinal(5)]  [RED("bars")] public [5]inkWidgetReference Bars { get; set; }
+		[Ordinal(5)]  [RED("bars", 5)] public CArrayFixedSize<inkWidgetReference> Bars { get; set; }
 
 		public LevelBarsController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

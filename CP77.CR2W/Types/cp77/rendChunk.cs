@@ -16,7 +16,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(5)]  [RED("mergedRenderMask")] public CUInt16 MergedRenderMask { get; set; }
 		[Ordinal(6)]  [RED("numIndices")] public CUInt32 NumIndices { get; set; }
 		[Ordinal(7)]  [RED("numVertices")] public CUInt16 NumVertices { get; set; }
-		[Ordinal(8)]  [RED("renderMask")] public EMeshChunkFlags RenderMask { get; set; }
+		[Ordinal(8)]  [RED("renderMask")] public CEnum<EMeshChunkFlags> RenderMask { get; set; }
 		[Ordinal(9)]  [RED("vertexFactory")] public CUInt8 VertexFactory { get; set; }
 
 		public rendChunk(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

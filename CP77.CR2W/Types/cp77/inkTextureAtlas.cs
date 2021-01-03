@@ -14,7 +14,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(3)]  [RED("isSingleTextureMode")] public CBool IsSingleTextureMode { get; set; }
 		[Ordinal(4)]  [RED("parts")] public CArray<inkTextureAtlasMapper> Parts { get; set; }
 		[Ordinal(5)]  [RED("slices")] public CArray<inkTextureAtlasSlice> Slices { get; set; }
-		[Ordinal(6)]  [RED("slots")] public [3]inkTextureSlot Slots { get; set; }
+		[Ordinal(6)]  [RED("slots", 3)] public CArrayFixedSize<inkTextureSlot> Slots { get; set; }
 		[Ordinal(7)]  [RED("texture")] public raRef<CBitmapTexture> Texture { get; set; }
 		[Ordinal(8)]  [RED("textureResolution")] public CEnum<inkETextureResolution> TextureResolution { get; set; }
 

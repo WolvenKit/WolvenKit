@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class animLookAtRequest : CVariable
 	{
-		[Ordinal(0)]  [RED("additionalParts")] public CStatic<2,animLookAtPartRequest> AdditionalParts { get; set; }
+		[Ordinal(0)]  [RED("additionalParts", 2)] public CStatic<animLookAtPartRequest> AdditionalParts { get; set; }
 		[Ordinal(1)]  [RED("calculatePositionInParentSpace")] public CBool CalculatePositionInParentSpace { get; set; }
 		[Ordinal(2)]  [RED("followingSpeedFactorOverride")] public CFloat FollowingSpeedFactorOverride { get; set; }
 		[Ordinal(3)]  [RED("hasOutTransition")] public CBool HasOutTransition { get; set; }

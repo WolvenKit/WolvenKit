@@ -14,7 +14,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(3)]  [RED("actionRecord")] public wCHandle<gamedataAIAction_Record> ActionRecord { get; set; }
 		[Ordinal(4)]  [RED("animationLoaded")] public CBool AnimationLoaded { get; set; }
 		[Ordinal(5)]  [RED("failureStatus")] public CBool FailureStatus { get; set; }
-		[Ordinal(6)]  [RED("generalSubActionsResults")] public [8]AIbehaviorUpdateOutcome GeneralSubActionsResults { get; set; }
+		[Ordinal(6)]  [RED("generalSubActionsResults", 8)] public CArrayFixedSize<CEnum<AIbehaviorUpdateOutcome>> GeneralSubActionsResults { get; set; }
 		[Ordinal(7)]  [RED("gracefullyInterrupted")] public CBool GracefullyInterrupted { get; set; }
 		[Ordinal(8)]  [RED("initializedAfterActivation")] public CBool InitializedAfterActivation { get; set; }
 		[Ordinal(9)]  [RED("lookatActivated")] public CBool LookatActivated { get; set; }
@@ -29,7 +29,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(18)]  [RED("phaseDuration")] public CFloat PhaseDuration { get; set; }
 		[Ordinal(19)]  [RED("phaseIteration")] public CUInt32 PhaseIteration { get; set; }
 		[Ordinal(20)]  [RED("phaseRecord")] public wCHandle<gamedataAIActionPhase_Record> PhaseRecord { get; set; }
-		[Ordinal(21)]  [RED("phaseSubActionsResults")] public [8]AIbehaviorUpdateOutcome PhaseSubActionsResults { get; set; }
+		[Ordinal(21)]  [RED("phaseSubActionsResults", 8)] public CArrayFixedSize<CEnum<AIbehaviorUpdateOutcome>> PhaseSubActionsResults { get; set; }
 		[Ordinal(22)]  [RED("repeatPhaseConditionCount")] public CInt32 RepeatPhaseConditionCount { get; set; }
 		[Ordinal(23)]  [RED("shouldCallGetActionRecordAgain")] public CBool ShouldCallGetActionRecordAgain { get; set; }
 		[Ordinal(24)]  [RED("startActionTimeStamp")] public CFloat StartActionTimeStamp { get; set; }

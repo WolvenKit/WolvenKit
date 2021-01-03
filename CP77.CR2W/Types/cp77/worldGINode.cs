@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	public class worldGINode : worldNode
 	{
 		[Ordinal(0)]  [RED("data")] public raRef<CGIDataResource> Data { get; set; }
-		[Ordinal(1)]  [RED("location")] public [3]Int16 Location { get; set; }
+		[Ordinal(1)]  [RED("location", 3)] public CArrayFixedSize<CInt16> Location { get; set; }
 
 		public worldGINode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

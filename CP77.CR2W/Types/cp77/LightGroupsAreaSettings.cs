@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class LightGroupsAreaSettings : IAreaSettings
 	{
-		[Ordinal(0)]  [RED("groupFade")] public [8]curveData<CFloat> GroupFade { get; set; }
+		[Ordinal(0)]  [RED("groupFade", 8)] public CArrayFixedSize<curveData<CFloat>> GroupFade { get; set; }
 
 		public LightGroupsAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

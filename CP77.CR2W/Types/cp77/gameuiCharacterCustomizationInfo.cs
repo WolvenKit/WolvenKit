@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class gameuiCharacterCustomizationInfo : IScriptable
 	{
-		[Ordinal(0)]  [RED("censorFlag")] public CensorshipFlags CensorFlag { get; set; }
+		[Ordinal(0)]  [RED("censorFlag")] public CEnum<CensorshipFlags> CensorFlag { get; set; }
 		[Ordinal(1)]  [RED("censorFlagAction")] public CEnum<gameuiCharacterCustomizationActionType> CensorFlagAction { get; set; }
 		[Ordinal(2)]  [RED("defaultIndex")] public CInt32 DefaultIndex { get; set; }
 		[Ordinal(3)]  [RED("enabled")] public CBool Enabled { get; set; }

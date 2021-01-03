@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	public class gamestateMachineActionParameterDouble : CVariable
 	{
 		[Ordinal(0)]  [RED("name")] public CName Name { get; set; }
-		[Ordinal(1)]  [RED("value")] public Double Value { get; set; }
+		[Ordinal(1)]  [RED("value")] public CDouble Value { get; set; }
 
 		public gamestateMachineActionParameterDouble(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

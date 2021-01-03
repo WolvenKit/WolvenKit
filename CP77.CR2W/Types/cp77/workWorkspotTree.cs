@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(4)]  [RED("availableRigSlots")] public CArray<CName> AvailableRigSlots { get; set; }
 		[Ordinal(5)]  [RED("blacklistVisualTags")] public redTagList BlacklistVisualTags { get; set; }
 		[Ordinal(6)]  [RED("blendOutTime")] public CFloat BlendOutTime { get; set; }
-		[Ordinal(7)]  [RED("censorshipFlags")] public CensorshipFlags CensorshipFlags { get; set; }
+		[Ordinal(7)]  [RED("censorshipFlags")] public CEnum<CensorshipFlags> CensorshipFlags { get; set; }
 		[Ordinal(8)]  [RED("customTransitionAnims")] public CArray<workTransitionAnim> CustomTransitionAnims { get; set; }
 		[Ordinal(9)]  [RED("disableAutoAnimsetGeneraion")] public CBool DisableAutoAnimsetGeneraion { get; set; }
 		[Ordinal(10)]  [RED("dontInjectWorkspotGraph")] public CBool DontInjectWorkspotGraph { get; set; }

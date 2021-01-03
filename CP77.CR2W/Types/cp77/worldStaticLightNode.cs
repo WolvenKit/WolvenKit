@@ -30,7 +30,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(19)]  [RED("iesProfile")] public raRef<CIESDataResource> IesProfile { get; set; }
 		[Ordinal(20)]  [RED("innerAngle")] public CFloat InnerAngle { get; set; }
 		[Ordinal(21)]  [RED("intensity")] public CFloat Intensity { get; set; }
-		[Ordinal(22)]  [RED("lightChannel")] public rendLightChannel LightChannel { get; set; }
+		[Ordinal(22)]  [RED("lightChannel")] public CEnum<rendLightChannel> LightChannel { get; set; }
 		[Ordinal(23)]  [RED("outerAngle")] public CFloat OuterAngle { get; set; }
 		[Ordinal(24)]  [RED("portalAngleCutoff")] public CUInt8 PortalAngleCutoff { get; set; }
 		[Ordinal(25)]  [RED("radius")] public CFloat Radius { get; set; }

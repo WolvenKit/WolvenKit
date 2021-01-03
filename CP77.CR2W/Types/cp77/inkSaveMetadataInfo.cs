@@ -11,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(0)]  [RED("initialLoadingScreenID")] public CUInt64 InitialLoadingScreenID { get; set; }
 		[Ordinal(1)]  [RED("internalName")] public CString InternalName { get; set; }
 		[Ordinal(2)]  [RED("isValid")] public CBool IsValid { get; set; }
-		[Ordinal(3)]  [RED("level")] public Double Level { get; set; }
+		[Ordinal(3)]  [RED("level")] public CDouble Level { get; set; }
 		[Ordinal(4)]  [RED("lifePath")] public CEnum<inkLifePath> LifePath { get; set; }
 		[Ordinal(5)]  [RED("locationName")] public CString LocationName { get; set; }
-		[Ordinal(6)]  [RED("playTime")] public Double PlayTime { get; set; }
-		[Ordinal(7)]  [RED("playthroughTime")] public Double PlaythroughTime { get; set; }
+		[Ordinal(6)]  [RED("playTime")] public CDouble PlayTime { get; set; }
+		[Ordinal(7)]  [RED("playthroughTime")] public CDouble PlaythroughTime { get; set; }
 		[Ordinal(8)]  [RED("saveID")] public CUInt32 SaveID { get; set; }
 		[Ordinal(9)]  [RED("saveIndex")] public CInt32 SaveIndex { get; set; }
 		[Ordinal(10)]  [RED("saveType")] public CEnum<inkSaveType> SaveType { get; set; }

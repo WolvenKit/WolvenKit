@@ -39,7 +39,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(28)]  [RED("hitCount")] public CUInt32 HitCount { get; set; }
 		[Ordinal(29)]  [RED("hitCountArrayCurrent")] public CInt32 HitCountArrayCurrent { get; set; }
 		[Ordinal(30)]  [RED("hitCountArrayEnd")] public CInt32 HitCountArrayEnd { get; set; }
-		[Ordinal(31)]  [RED("hitCountData")] public [100]Float HitCountData { get; set; }
+		[Ordinal(31)]  [RED("hitCountData", 100)] public CArrayFixedSize<CFloat> HitCountData { get; set; }
 		[Ordinal(32)]  [RED("hitDirection")] public Vector4 HitDirection { get; set; }
 		[Ordinal(33)]  [RED("hitIndicatorEnabled")] public CBool HitIndicatorEnabled { get; set; }
 		[Ordinal(34)]  [RED("hitIntensity")] public CEnum<EAIHitIntensity> HitIntensity { get; set; }

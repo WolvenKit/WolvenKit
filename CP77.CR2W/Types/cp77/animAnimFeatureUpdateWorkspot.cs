@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("animBlendTime")] public CFloat AnimBlendTime { get; set; }
 		[Ordinal(1)]  [RED("animName")] public CName AnimName { get; set; }
-		[Ordinal(2)]  [RED("animationStartTime")] public Double AnimationStartTime { get; set; }
+		[Ordinal(2)]  [RED("animationStartTime")] public CDouble AnimationStartTime { get; set; }
 		[Ordinal(3)]  [RED("boolsAsFlags")] public CInt32 BoolsAsFlags { get; set; }
 		[Ordinal(4)]  [RED("enableMotion")] public CBool EnableMotion { get; set; }
 		[Ordinal(5)]  [RED("facialIdleAnimation")] public CName FacialIdleAnimation { get; set; }

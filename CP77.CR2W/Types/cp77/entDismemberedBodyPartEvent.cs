@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class entDismemberedBodyPartEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("bones")] public CStatic<32,CName> Bones { get; set; }
+		[Ordinal(0)]  [RED("bones", 32)] public CStatic<CName> Bones { get; set; }
 
 		public entDismemberedBodyPartEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

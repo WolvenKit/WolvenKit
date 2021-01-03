@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(2)]  [RED("compileAllTechniques")] public CBool CompileAllTechniques { get; set; }
 		[Ordinal(3)]  [RED("hasDPL")] public CBool HasDPL { get; set; }
 		[Ordinal(4)]  [RED("materialVersion")] public CUInt8 MaterialVersion { get; set; }
-		[Ordinal(5)]  [RED("paramBlockSize")] public [3]Uint32 ParamBlockSize { get; set; }
+		[Ordinal(5)]  [RED("paramBlockSize", 3)] public CArrayFixedSize<CUInt32> ParamBlockSize { get; set; }
 		[Ordinal(6)]  [RED("vertexFactories")] public CArray<CEnum<EMaterialVertexFactory>> VertexFactories { get; set; }
 
 		public IMaterialDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

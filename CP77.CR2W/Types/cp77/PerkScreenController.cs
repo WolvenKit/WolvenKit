@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(2)]  [RED("attributeNameText")] public inkTextWidgetReference AttributeNameText { get; set; }
 		[Ordinal(3)]  [RED("boughtConnectionLinesContainer")] public inkCompoundWidgetReference BoughtConnectionLinesContainer { get; set; }
 		[Ordinal(4)]  [RED("boughtMaskContainer")] public inkCanvasWidgetReference BoughtMaskContainer { get; set; }
-		[Ordinal(5)]  [RED("connectionLines")] public [45]Int32 ConnectionLines { get; set; }
+		[Ordinal(5)]  [RED("connectionLines", 45)] public CArrayFixedSize<CInt32> ConnectionLines { get; set; }
 		[Ordinal(6)]  [RED("connectionLinesContainer")] public inkCompoundWidgetReference ConnectionLinesContainer { get; set; }
 		[Ordinal(7)]  [RED("currentIndex")] public CInt32 CurrentIndex { get; set; }
 		[Ordinal(8)]  [RED("dataManager")] public CHandle<PlayerDevelopmentDataManager> DataManager { get; set; }

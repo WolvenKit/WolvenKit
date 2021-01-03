@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class gameCrowdCreationData : CVariable
 	{
-		[Ordinal(0)]  [RED("timePeriods")] public CStatic<4,gameCrowdPhaseTimePeriod> TimePeriods { get; set; }
+		[Ordinal(0)]  [RED("timePeriods", 4)] public CStatic<gameCrowdPhaseTimePeriod> TimePeriods { get; set; }
 
 		public gameCrowdCreationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

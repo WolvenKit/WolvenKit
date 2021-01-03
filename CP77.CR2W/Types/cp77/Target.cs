@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("isInteresting")] public CBool IsInteresting { get; set; }
 		[Ordinal(1)]  [RED("isVisible")] public CBool IsVisible { get; set; }
-		[Ordinal(2)]  [RED("target")] public wCHandle<gameObject> Target { get; set; }
+		[Ordinal(2)]  [RED("target")] public wCHandle<gameObject> M_Target { get; set; }
 
 		public Target(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

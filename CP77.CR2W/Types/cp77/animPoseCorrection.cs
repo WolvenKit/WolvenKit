@@ -8,8 +8,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class animPoseCorrection : CVariable
 	{
-		[Ordinal(0)]  [RED("boneCorrections")] public CStatic<4,animBoneCorrection> BoneCorrections { get; set; }
-		[Ordinal(1)]  [RED("compareBones")] public CStatic<4,animCompareBone> CompareBones { get; set; }
+		[Ordinal(0)]  [RED("boneCorrections", 4)] public CStatic<animBoneCorrection> BoneCorrections { get; set; }
+		[Ordinal(1)]  [RED("compareBones", 4)] public CStatic<animCompareBone> CompareBones { get; set; }
 		[Ordinal(2)]  [RED("rbfCoefficient")] public CFloat RbfCoefficient { get; set; }
 		[Ordinal(3)]  [RED("rbfPowValue")] public CFloat RbfPowValue { get; set; }
 

@@ -48,7 +48,37 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
+    [REDMeta]
+    public class RenderSceneLayerMask : CVariable
+    {
+        public RenderSceneLayerMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
 
+    [REDMeta]
+    public class workWorkspotItemPolicy : CVariable
+    {
+        public workWorkspotItemPolicy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class MessageResourcePath : CVariable
+    {
+        public MessageResourcePath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class EditorObjectID : CVariable
+    {
+        public EditorObjectID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class gameuiContext : CVariable
+    {
+        public gameuiContext(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class animMuteAnimEvents : CVariable
+    {
+        public animMuteAnimEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
 
 
 

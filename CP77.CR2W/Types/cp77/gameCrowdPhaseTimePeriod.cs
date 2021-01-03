@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(0)]  [RED("Density")] public CName Density { get; set; }
 		[Ordinal(1)]  [RED("charactersData")] public CArray<gameCrowdTemplateCharacterData> CharactersData { get; set; }
 		[Ordinal(2)]  [RED("crowdType")] public CEnum<gameCrowdEntryType> CrowdType { get; set; }
-		[Ordinal(3)]  [RED("density")] public CFloat Density { get; set; }
+		[Ordinal(3)]  [RED("density")] public CFloat M_Density { get; set; }
 		[Ordinal(4)]  [RED("mergeMode")] public CEnum<gameCrowdCreationDataMergeMode> MergeMode { get; set; }
 		[Ordinal(5)]  [RED("reducedCharactersData")] public CArray<gameCrowdTemplateCharacterData> ReducedCharactersData { get; set; }
 		[Ordinal(6)]  [RED("useDensityPreset")] public CBool UseDensityPreset { get; set; }

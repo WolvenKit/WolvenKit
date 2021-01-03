@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class entLightChannelComponent : entIVisualComponent
 	{
-		[Ordinal(0)]  [RED("channels")] public rendLightChannel Channels { get; set; }
+		[Ordinal(0)]  [RED("channels")] public CEnum<rendLightChannel> Channels { get; set; }
 		[Ordinal(1)]  [RED("isEnabled")] public CBool IsEnabled { get; set; }
 		[Ordinal(2)]  [RED("shape")] public CHandle<GeometryShape> Shape { get; set; }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("THandle")] public CHandle<Sample_Replicated_Serializable> THandle { get; set; }
 		[Ordinal(1)]  [RED("bool")] public CBool Bool { get; set; }
-		[Ordinal(2)]  [RED("double")] public Double Double { get; set; }
+		[Ordinal(2)]  [RED("double")] public CDouble Double { get; set; }
 		[Ordinal(3)]  [RED("dynamicArray")] public CArray<Sample_Replicated_Struct> DynamicArray { get; set; }
 		[Ordinal(4)]  [RED("enum")] public CEnum<Sample_Replicated_Enum> Enum { get; set; }
 		[Ordinal(5)]  [RED("float")] public CFloat Float { get; set; }
@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 		[Ordinal(8)]  [RED("int64")] public CInt64 Int64 { get; set; }
 		[Ordinal(9)]  [RED("int8")] public CInt8 Int8 { get; set; }
 		[Ordinal(10)]  [RED("name")] public CName Name { get; set; }
-		[Ordinal(11)]  [RED("staticArray")] public CStatic<10,Sample_Replicated_Struct> StaticArray { get; set; }
+		[Ordinal(11)]  [RED("staticArray", 10)] public CStatic<Sample_Replicated_Struct> StaticArray { get; set; }
 		[Ordinal(12)]  [RED("string")] public CString String { get; set; }
 		[Ordinal(13)]  [RED("struct")] public Sample_Replicated_Struct Struct { get; set; }
 		[Ordinal(14)]  [RED("uint16")] public CUInt16 Uint16 { get; set; }
