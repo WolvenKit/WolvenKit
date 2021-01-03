@@ -54,6 +54,9 @@ dkms.conf
 #rider
 .idea
 
+#macOS
+.DS_Store
+
 #obj
 *obj/
 *bin/

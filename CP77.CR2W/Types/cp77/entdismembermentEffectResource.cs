@@ -1,0 +1,23 @@
+using System.IO;
+using WolvenKit.CR2W.Reflection;
+using FastMember;
+using static WolvenKit.CR2W.Types.Enums;
+
+namespace WolvenKit.CR2W.Types
+{
+	[REDMeta]
+	public class entdismembermentEffectResource : ISerializable
+	{
+		[Ordinal(0)]  [RED("AppearanceNames")] public CArray<CName> AppearanceNames { get; set; }
+		[Ordinal(1)]  [RED("BodyPartMask")] public physicsRagdollBodyPartE BodyPartMask { get; set; }
+		[Ordinal(2)]  [RED("Effect")] public raRef<worldEffect> Effect { get; set; }
+		[Ordinal(3)]  [RED("MatchToWoundByName")] public CBool MatchToWoundByName { get; set; }
+		[Ordinal(4)]  [RED("Name")] public CName Name { get; set; }
+		[Ordinal(5)]  [RED("Offset")] public Transform Offset { get; set; }
+		[Ordinal(6)]  [RED("Placement")] public entdismembermentPlacementE Placement { get; set; }
+		[Ordinal(7)]  [RED("ResourceSets")] public entdismembermentResourceSetMask ResourceSets { get; set; }
+		[Ordinal(8)]  [RED("WoundType")] public entdismembermentWoundTypeE WoundType { get; set; }
+
+		public entdismembermentEffectResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+}

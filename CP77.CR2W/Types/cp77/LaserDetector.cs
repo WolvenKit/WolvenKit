@@ -1,0 +1,15 @@
+using System.IO;
+using WolvenKit.CR2W.Reflection;
+using FastMember;
+using static WolvenKit.CR2W.Types.Enums;
+
+namespace WolvenKit.CR2W.Types
+{
+	[REDMeta]
+	public class LaserDetector : ProximityDetector
+	{
+		[Ordinal(0)]  [RED("lasers")] public [2]handle<entMeshComponent> Lasers { get; set; }
+
+		public LaserDetector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+}

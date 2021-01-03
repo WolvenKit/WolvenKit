@@ -1,0 +1,17 @@
+using System.IO;
+using WolvenKit.CR2W.Reflection;
+using FastMember;
+using static WolvenKit.CR2W.Types.Enums;
+
+namespace WolvenKit.CR2W.Types
+{
+	[REDMeta]
+	public class AIApproachingAreaEvent : AIAIEvent
+	{
+		[Ordinal(0)]  [RED("areaComponent")] public wCHandle<gameStaticAreaShapeComponent> AreaComponent { get; set; }
+		[Ordinal(1)]  [RED("isApproachCancellation")] public CBool IsApproachCancellation { get; set; }
+		[Ordinal(2)]  [RED("responseTarget")] public wCHandle<entEntity> ResponseTarget { get; set; }
+
+		public AIApproachingAreaEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+}

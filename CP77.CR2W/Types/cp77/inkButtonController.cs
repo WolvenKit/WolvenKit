@@ -1,0 +1,23 @@
+using System.IO;
+using WolvenKit.CR2W.Reflection;
+using FastMember;
+using static WolvenKit.CR2W.Types.Enums;
+
+namespace WolvenKit.CR2W.Types
+{
+	[REDMeta]
+	public class inkButtonController : inkWidgetLogicController
+	{
+		[Ordinal(0)]  [RED("ButtonClick")] public inkButtonClickCallback ButtonClick { get; set; }
+		[Ordinal(1)]  [RED("ButtonHoldComplete")] public inkButtonHoldCompleteCallback ButtonHoldComplete { get; set; }
+		[Ordinal(2)]  [RED("ButtonHoldProgressChanged")] public inkButtonProgressChangedCallback ButtonHoldProgressChanged { get; set; }
+		[Ordinal(3)]  [RED("ButtonSelectionChanged")] public inkButtonSelectionCallback ButtonSelectionChanged { get; set; }
+		[Ordinal(4)]  [RED("ButtonStateChanged")] public inkButtonStateChangeCallback ButtonStateChanged { get; set; }
+		[Ordinal(5)]  [RED("autoUpdateWidgetState")] public CBool AutoUpdateWidgetState { get; set; }
+		[Ordinal(6)]  [RED("canHold")] public CBool CanHold { get; set; }
+		[Ordinal(7)]  [RED("selectable")] public CBool Selectable { get; set; }
+		[Ordinal(8)]  [RED("selected")] public CBool Selected { get; set; }
+
+		public inkButtonController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+}

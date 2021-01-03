@@ -1,0 +1,23 @@
+using System.IO;
+using WolvenKit.CR2W.Reflection;
+using FastMember;
+using static WolvenKit.CR2W.Types.Enums;
+
+namespace WolvenKit.CR2W.Types
+{
+	[REDMeta]
+	public class UIScriptableSystem : gameScriptableSystem
+	{
+		[Ordinal(0)]  [RED("attachedPlayer")] public wCHandle<PlayerPuppet> AttachedPlayer { get; set; }
+		[Ordinal(1)]  [RED("backpackActiveFilter")] public CInt32 BackpackActiveFilter { get; set; }
+		[Ordinal(2)]  [RED("backpackActiveSorting")] public CInt32 BackpackActiveSorting { get; set; }
+		[Ordinal(3)]  [RED("inventoryListener")] public CHandle<gameInventoryScriptListener> InventoryListener { get; set; }
+		[Ordinal(4)]  [RED("inventoryListenerCallback")] public CHandle<UIScriptableInventoryListenerCallback> InventoryListenerCallback { get; set; }
+		[Ordinal(5)]  [RED("isBackpackActiveFilterSaved")] public CBool IsBackpackActiveFilterSaved { get; set; }
+		[Ordinal(6)]  [RED("newItems")] public CArray<gameItemID> NewItems { get; set; }
+		[Ordinal(7)]  [RED("vendorPanelPlayerActiveSorting")] public CInt32 VendorPanelPlayerActiveSorting { get; set; }
+		[Ordinal(8)]  [RED("vendorPanelVendorActiveSorting")] public CInt32 VendorPanelVendorActiveSorting { get; set; }
+
+		public UIScriptableSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+}

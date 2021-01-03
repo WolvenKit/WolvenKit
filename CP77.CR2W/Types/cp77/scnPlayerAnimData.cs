@@ -1,0 +1,17 @@
+using System.IO;
+using WolvenKit.CR2W.Reflection;
+using FastMember;
+using static WolvenKit.CR2W.Types.Enums;
+
+namespace WolvenKit.CR2W.Types
+{
+	[REDMeta]
+	public class scnPlayerAnimData : CVariable
+	{
+		[Ordinal(0)]  [RED("tierData")] public CHandle<gameSceneTierData> TierData { get; set; }
+		[Ordinal(1)]  [RED("unmountBodyCarry")] public CBool UnmountBodyCarry { get; set; }
+		[Ordinal(2)]  [RED("useZSnapping")] public CBool UseZSnapping { get; set; }
+
+		public scnPlayerAnimData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+}

@@ -1,0 +1,17 @@
+using System.IO;
+using WolvenKit.CR2W.Reflection;
+using FastMember;
+using static WolvenKit.CR2W.Types.Enums;
+
+namespace WolvenKit.CR2W.Types
+{
+	[REDMeta]
+	public class SpreadMapItem : CVariable
+	{
+		[Ordinal(0)]  [RED("count")] public CInt32 Count { get; set; }
+		[Ordinal(1)]  [RED("key")] public wCHandle<gamedataInteractionBase_Record> Key { get; set; }
+		[Ordinal(2)]  [RED("range")] public CFloat Range { get; set; }
+
+		public SpreadMapItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+}

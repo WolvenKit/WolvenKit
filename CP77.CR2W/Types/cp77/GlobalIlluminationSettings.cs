@@ -1,0 +1,23 @@
+using System.IO;
+using WolvenKit.CR2W.Reflection;
+using FastMember;
+using static WolvenKit.CR2W.Types.Enums;
+
+namespace WolvenKit.CR2W.Types
+{
+	[REDMeta]
+	public class GlobalIlluminationSettings : IAreaSettings
+	{
+		[Ordinal(0)]  [RED("ambientBase")] public curveData<HDRColor> AmbientBase { get; set; }
+		[Ordinal(1)]  [RED("diffuseScale")] public curveData<CFloat> DiffuseScale { get; set; }
+		[Ordinal(2)]  [RED("emissiveScale")] public curveData<CFloat> EmissiveScale { get; set; }
+		[Ordinal(3)]  [RED("lightScaleCompenensation")] public curveData<CFloat> LightScaleCompenensation { get; set; }
+		[Ordinal(4)]  [RED("localLightsScale")] public curveData<CFloat> LocalLightsScale { get; set; }
+		[Ordinal(5)]  [RED("multiBouceSaturation")] public curveData<CFloat> MultiBouceSaturation { get; set; }
+		[Ordinal(6)]  [RED("multiBouceScale")] public curveData<CFloat> MultiBouceScale { get; set; }
+		[Ordinal(7)]  [RED("rayTracedSkyRadianceScale")] public curveData<CFloat> RayTracedSkyRadianceScale { get; set; }
+		[Ordinal(8)]  [RED("reflectionCompensation")] public curveData<CFloat> ReflectionCompensation { get; set; }
+
+		public GlobalIlluminationSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+}
