@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +8,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Catel;
 using Catel.IoC;
@@ -16,16 +18,7 @@ namespace CP77.Common.Services
 {
     public class HashService : IHashService
     {
-        private Dictionary<ulong, string> _hashdict = new();
-        public Dictionary<ulong, string> Hashdict
-        {
-            get
-            {
-                return _hashdict;
-                
-            }
-            set => _hashdict = value;
-        }
+        public Dictionary<ulong, string> Hashdict { get; set; } = new();
 
         private static readonly ILoggerService Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
         private static readonly IAppSettingsService Appsettings = ServiceLocator.Default.ResolveType<IAppSettingsService>();
@@ -34,10 +27,7 @@ namespace CP77.Common.Services
 
         //private const string ResourceUrl = "https://nyxmods.com/cp77/files/archivehashes.csv";
         private const string ResourceUrl = "https://graphicscore.dev/cyberpunk/cyberbot/data/loosehashes.txt";
-        
-        
 
-        
 
         public async Task<bool> RefreshAsync()
         {
@@ -66,7 +56,6 @@ namespace CP77.Common.Services
 
             try
             {
-                
                 var response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
                 if (response.StatusCode == HttpStatusCode.NotModified)
                 {
@@ -130,7 +119,7 @@ namespace CP77.Common.Services
         private string GetLastEtag()
         {
             if (!File.Exists(Appsettings.ETagPath)) return null;
-            
+
             var lines = File.ReadLines(Appsettings.ETagPath)
                 .ToList();
 
@@ -146,51 +135,35 @@ namespace CP77.Common.Services
 
             Stopwatch watch = new();
             watch.Restart();
-
-            var hashDictionary = new ConcurrentDictionary<ulong, string>();
-
-            // TODO: proper update handling
-            try
+            
+            Hashdict.EnsureCapacity(1_500_000);
+            
+            using (var archive = ZipFile.Open(Appsettings.ArchiveHashesZipPath, ZipArchiveMode.Read, Encoding.UTF8))
             {
-                File.Delete(Appsettings.ArchiveHashesPath);
-            }
-            catch (Exception)
-            {
-                Logger.LogString($"Could not delete file {Appsettings.ArchiveHashesPath}.", Logtype.Error);
-            }
-
-            ZipFile.ExtractToDirectory(Appsettings.ArchiveHashesZipPath, Appsettings.ResourcesPath);
-            if (File.Exists(Appsettings.ArchiveHashesPath))
-                Parallel.ForEach(File.ReadLines(Appsettings.ArchiveHashesPath), line =>
+                var zipArchiveEntry = archive.GetEntry(Appsettings.ArchiveHashesPath);
+                if (zipArchiveEntry != null)
                 {
-                    // check line
-                    if (line.Contains(','))
-                        line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
-                    if (string.IsNullOrEmpty(line))
-                        return;
-                    ulong hash = FNV1A64HashAlgorithm.HashString(line);
-                    hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
-                });
+                    using var stream = zipArchiveEntry.Open();
+                    AddHashesFromStream(Hashdict, stream);
+                }
+            }
 
             if (File.Exists(Appsettings.LooseHashesPath))
-                Parallel.ForEach(File.ReadLines(Appsettings.LooseHashesPath), line =>
-                {
-                    // check line
-                    if (line.Contains(','))
-                        line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
-                    if (string.IsNullOrEmpty(line))
-                        return;
-                    ulong hash = FNV1A64HashAlgorithm.HashString(line);
-                    hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
-                });
-
-            Hashdict = hashDictionary.ToDictionary(
-                entry => entry.Key,
-                entry => entry.Value);
+                AddHashesFromStream(Hashdict, File.OpenRead(Appsettings.LooseHashesPath));
 
             watch.Stop();
 
-            Logger.LogString($"Loaded {hashDictionary.Count} hashes in {watch.ElapsedMilliseconds}ms.", Logtype.Success);
+            Logger.LogString($"Loaded {Hashdict.Count} hashes in {watch.ElapsedMilliseconds}ms.", Logtype.Success);
+        }
+
+        private static void AddHashesFromStream(IDictionary<ulong, string> dictionary, Stream stream)
+        {
+            string line;
+            using var sr = new StreamReader(stream, Encoding.UTF8);
+            while ((line = sr.ReadLine()) != null)
+            {
+                dictionary[FNV1A64HashAlgorithm.HashString(line)] = line;
+            }
         }
     }
 }
