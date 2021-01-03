@@ -1,0 +1,20 @@
+using System.IO;
+using WolvenKit.CR2W.Reflection;
+using FastMember;
+using static WolvenKit.CR2W.Types.Enums;
+
+namespace WolvenKit.CR2W.Types
+{
+	[REDMeta]
+	public class worldStreamingQueryRoadData : CVariable
+	{
+		[Ordinal(0)]  [RED("connectedRoadsCount")] public CUInt16 ConnectedRoadsCount { get; set; }
+		[Ordinal(1)]  [RED("connectedRoadsStartIndex")] public CUInt16 ConnectedRoadsStartIndex { get; set; }
+		[Ordinal(2)]  [RED("roadGlobalNodeId")] public worldGlobalNodeID RoadGlobalNodeId { get; set; }
+		[Ordinal(3)]  [RED("splineData")] public CHandle<Spline> SplineData { get; set; }
+		[Ordinal(4)]  [RED("totalRoadWidth")] public CFloat TotalRoadWidth { get; set; }
+		[Ordinal(5)]  [RED("transform")] public Transform Transform { get; set; }
+
+		public worldStreamingQueryRoadData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+}

@@ -1,0 +1,22 @@
+using System.IO;
+using WolvenKit.CR2W.Reflection;
+using FastMember;
+using static WolvenKit.CR2W.Types.Enums;
+
+namespace WolvenKit.CR2W.Types
+{
+	[REDMeta]
+	public class FindServersMenuGameController : PreGameSubMenuGameController
+	{
+		[Ordinal(0)]  [RED("LANStatusLabel")] public wCHandle<inkTextWidget> LANStatusLabel { get; set; }
+		[Ordinal(1)]  [RED("NONE_CHOOSEN")] public CInt32 NONE_CHOOSEN { get; set; }
+		[Ordinal(2)]  [RED("WEBStatusLabel")] public wCHandle<inkTextWidget> WEBStatusLabel { get; set; }
+		[Ordinal(3)]  [RED("c_offlineColor")] public CColor C_offlineColor { get; set; }
+		[Ordinal(4)]  [RED("c_onlineColor")] public CColor C_onlineColor { get; set; }
+		[Ordinal(5)]  [RED("curentlyChoosenServer")] public CInt32 CurentlyChoosenServer { get; set; }
+		[Ordinal(6)]  [RED("serversListCtrl")] public wCHandle<inkListController> ServersListCtrl { get; set; }
+		[Ordinal(7)]  [RED("token")] public wCHandle<inkTextWidget> Token { get; set; }
+
+		public FindServersMenuGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+}

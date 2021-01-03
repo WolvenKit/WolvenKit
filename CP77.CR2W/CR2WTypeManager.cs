@@ -53,7 +53,7 @@ namespace WolvenKit.CR2W.Types
                 var type = AssemblyDictionary.GetTypeByName(typename);
                 if (type != null)
                 {
-                    object instance = Activator.CreateInstance(type, cr2w, parentVariable, varname);
+                    object instance = System.Activator.CreateInstance(type, cr2w, parentVariable, varname);
                     return instance as CVariable;
                 }
             }
@@ -61,13 +61,13 @@ namespace WolvenKit.CR2W.Types
             // check for enum types
             if (AssemblyDictionary.EnumExists(typename))
             {
-                Enum e = (Enum)Activator.CreateInstance(AssemblyDictionary.GetEnumByName(typename));
+                Enum e = (Enum)System.Activator.CreateInstance(AssemblyDictionary.GetEnumByName(typename));
                 var cenum = MakeGenericEnumType(typeof(CEnum<>), e);
                 return cenum;
             }
             else if (CR2WManager.EnumExists(typename))
             {
-                Enum e = (Enum)Activator.CreateInstance(CR2WManager.GetEnumByName(typename));
+                Enum e = (Enum)System.Activator.CreateInstance(CR2WManager.GetEnumByName(typename));
                 var cenum = MakeGenericEnumType(typeof(CEnum<>), e);
                 return cenum;
             }
@@ -197,7 +197,7 @@ namespace WolvenKit.CR2W.Types
                 if (CR2WManager.TypeExists(typename))
                 {
                     var type = CR2WManager.GetTypeByName(typename);
-                    object instance = Activator.CreateInstance(type, cr2w, parentVariable, varname);
+                    object instance = System.Activator.CreateInstance(type, cr2w, parentVariable, varname);
                     return instance as CVariable;
                 }
 
@@ -236,7 +236,7 @@ namespace WolvenKit.CR2W.Types
                 }
                 
 
-                var array = Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
+                var array = System.Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
 
                 return array as IArrayAccessor;
             }
@@ -247,7 +247,7 @@ namespace WolvenKit.CR2W.Types
                 if (innerobject != null)
                 {
                     Type elementType = gentype.MakeGenericType(innerobject.GetType());
-                    CVariable handle = Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
+                    CVariable handle = System.Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
                     return handle;
                 }
                 else
@@ -261,7 +261,7 @@ namespace WolvenKit.CR2W.Types
                 if (innerobject != null)
                 {
                     Type elementType = gentype.MakeGenericType(innerobject.GetType());
-                    CVariable handle = Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
+                    CVariable handle = System.Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
                     return handle;
                 }
                 else
@@ -277,14 +277,14 @@ namespace WolvenKit.CR2W.Types
             if (AssemblyDictionary.EnumExists(value))
             {
                 var type = AssemblyDictionary.GetEnumByName(value);
-                Enum e = (Enum) Activator.CreateInstance(type);
+                Enum e = (Enum)System.Activator.CreateInstance(type);
 
                 return e;
             }
             else if (CR2WManager.EnumExists(value))
             {
                 var type = CR2WManager.GetEnumByName(value);
-                Enum e = (Enum)Activator.CreateInstance(type);
+                Enum e = (Enum)System.Activator.CreateInstance(type);
 
                 return e;
             }

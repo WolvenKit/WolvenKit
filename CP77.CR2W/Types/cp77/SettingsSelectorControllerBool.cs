@@ -1,0 +1,18 @@
+using System.IO;
+using WolvenKit.CR2W.Reflection;
+using FastMember;
+using static WolvenKit.CR2W.Types.Enums;
+
+namespace WolvenKit.CR2W.Types
+{
+	[REDMeta]
+	public class SettingsSelectorControllerBool : inkSettingsSelectorController
+	{
+		[Ordinal(0)]  [RED("offState")] public inkWidgetReference OffState { get; set; }
+		[Ordinal(1)]  [RED("offStateBody")] public inkWidgetReference OffStateBody { get; set; }
+		[Ordinal(2)]  [RED("onState")] public inkWidgetReference OnState { get; set; }
+		[Ordinal(3)]  [RED("onStateBody")] public inkWidgetReference OnStateBody { get; set; }
+
+		public SettingsSelectorControllerBool(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+}

@@ -1,0 +1,18 @@
+using System.IO;
+using WolvenKit.CR2W.Reflection;
+using FastMember;
+using static WolvenKit.CR2W.Types.Enums;
+
+namespace WolvenKit.CR2W.Types
+{
+	[REDMeta]
+	public class entLookAtLimits : CVariable
+	{
+		[Ordinal(0)]  [RED("backLimitDegrees")] public CFloat BackLimitDegrees { get; set; }
+		[Ordinal(1)]  [RED("hardLimitDegrees")] public CFloat HardLimitDegrees { get; set; }
+		[Ordinal(2)]  [RED("hardLimitDistance")] public CFloat HardLimitDistance { get; set; }
+		[Ordinal(3)]  [RED("softLimitDegrees")] public CFloat SoftLimitDegrees { get; set; }
+
+		public entLookAtLimits(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+}

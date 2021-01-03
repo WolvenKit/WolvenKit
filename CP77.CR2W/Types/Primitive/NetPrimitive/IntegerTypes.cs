@@ -7,6 +7,64 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta()]
+    public class CDouble : CVariable, IREDPrimitive
+    {
+        public CDouble()
+        {
+            
+        }
+
+        public CDouble(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        {
+        }
+
+        private double _val;
+
+        [DataMember]
+        public double val { get => _val; set => _val = value; }
+
+        public override void Read(BinaryReader file, uint size)
+        {
+            val = file.ReadDouble();
+        }
+
+        public override void Write(BinaryWriter file)
+        {
+            file.Write(val);
+        }
+
+        public override CVariable SetValue(object val)
+        {
+            switch (val)
+            {
+                case ulong o:
+                    this.val = o;
+                    break;
+                case string s:
+                    this.val = double.Parse(s);
+                    break;
+                case CUInt64 v:
+                    this.val = v.val;
+                    break;
+            }
+
+            return this;
+        }
+
+        public override CVariable Copy(CR2WCopyAction context)
+        {
+            var var = (CDouble)base.Copy(context);
+            var.val = val;
+            return var;
+        }
+
+        public override string ToString()
+        {
+            return val.ToString();
+        }
+    }
+    
+    [REDMeta()]
     public class CUInt64 : CVariable, IREDPrimitive
     {
         public CUInt64()

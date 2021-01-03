@@ -115,18 +115,19 @@ namespace WolvenKit.CR2W
             {
                 var copy = chunktranslationentry.Key.data.Copy(this);
                 chunktranslationentry.Value.CreateDefaultData(copy);
-
+                
+                //TODO: no CComponent in cp77
                 // Corner cases :
                 // - add descending CNewNPC components
-                if (targetarray.REDName == "Components" &&
-                    DestinationFile.Chunks[targetarray.LookUpChunkIndex()].REDType == "CNewNPC" &&
-                    copy is CComponent &&
-                    !sourcechunks.Contains(chunktranslationentry.Key))
-                {
-                    var uppercopy = CR2WTypeManager.Create("ptr:CComponent", chunktranslationentry.Value.REDName, DestinationFile, (targetarray as CVariable));
-                    (uppercopy as IChunkPtrAccessor).Reference = chunktranslationentry.Value;
-                    targetarray.AddVariable(uppercopy);
-                }
+                //if (targetarray.REDName == "Components" &&
+                //    DestinationFile.Chunks[targetarray.LookUpChunkIndex()].REDType == "CNewNPC" &&
+                //    copy is CComponent &&
+                //    !sourcechunks.Contains(chunktranslationentry.Key))
+                //{
+                //    var uppercopy = CR2WTypeManager.Create("ptr:CComponent", chunktranslationentry.Value.REDName, DestinationFile, (targetarray as CVariable));
+                //    (uppercopy as IChunkPtrAccessor).Reference = chunktranslationentry.Value;
+                //    targetarray.AddVariable(uppercopy);
+                //}
             }
         }
 

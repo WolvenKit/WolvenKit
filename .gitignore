@@ -51,6 +51,12 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+#rider
+.idea
+
+#macOS
+.DS_Store
+
 #obj
 *obj/
 *bin/
