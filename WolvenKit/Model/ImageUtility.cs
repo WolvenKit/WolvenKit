@@ -2,20 +2,13 @@
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using WolvenKit.CR2W.Types;
 using System.Runtime.InteropServices;
-using WolvenKit.Common.Tools.DDS;
-using static WolvenKit.CR2W.Types.Enums;
-using static WolvenKit.Common.Tools.DDS.TexconvWrapper;
+using System.Drawing.Imaging;
+using ImageFormat = Pfim.ImageFormat;
 
 namespace WolvenKit.Model
 {
-    using System.Drawing.Imaging;
-    using WolvenKit.Common;
-    using WolvenKit.Common.Model;
-    using WolvenKit.Common.Tools;
-    using WolvenKit.Common.Wcc;
-    using ImageFormat = Pfim.ImageFormat;
+    using CR2W.Types;
 
     public static class ImageUtility
     {
@@ -26,7 +19,7 @@ namespace WolvenKit.Model
         /// </summary>
         /// <param name="compression"></param>
         /// <returns></returns>
-        public static EFormat GetEFormatFromCompression(ETextureCompression compression)
+        public static Common.Tools.DDS.EFormat GetEFormatFromCompression(Enums.ETextureCompression compression)
         {
             switch (compression)
             {
