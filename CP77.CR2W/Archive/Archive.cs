@@ -18,10 +18,7 @@ using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Tools.DDS;
-using CP77.CR2W;
-using CP77.CR2W.SRT;
 using CP77.CR2W.Types;
-using StreamExtensions = Catel.IO.StreamExtensions;
 
 namespace CP77.CR2W.Archive
 {

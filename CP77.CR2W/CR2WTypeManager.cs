@@ -96,18 +96,12 @@ namespace CP77.CR2W.Types
                             CVariable innerobject = Create(innertype, "", cr2w, null);
                             return MakeGenericType(typeof(CHandle<>), innerobject);
                         }
-                    case "CPtr":
-                    case "ptr":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CPtr<>), innerobject);
-                        }
-                    case "CSoft":
-                    case "soft":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CSoft<>), innerobject);
-                        }
+                    case "wCHandle":
+                    case "whandle":
+                    {
+                        CVariable innerobject = Create(innertype, "", cr2w, null);
+                        return MakeGenericType(typeof(wCHandle<>), innerobject);
+                    }
                     case "CrRef":
                     case "rRef":
                     {
@@ -152,31 +146,6 @@ namespace CP77.CR2W.Types
                             {
                                 throw new InvalidParsingException($"Invalid static type format: typename: {typename}.");
                             }
-                        }
-                    case "CBufferUInt16":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CBufferUInt16<>), innerobject);
-                        }
-                    case "CBufferUInt32":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CBufferUInt32<>), innerobject);
-                        }
-                    case "CBufferVLQInt32":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CBufferVLQInt32<>), innerobject);
-                        }
-                    case "CCompressedBuffer":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CCompressedBuffer<>), innerobject);
-                        }
-                    case "CPaddedBuffer":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CPaddedBuffer<>), innerobject);
                         }
                     case "CEnum":
                         {

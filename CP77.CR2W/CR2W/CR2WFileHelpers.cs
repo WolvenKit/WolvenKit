@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using System.Xml;
 using WolvenKit.Common.Model;
 using CP77.CR2W.Types;
-using WolvenKit.Utils;
 
 namespace CP77.CR2W
 {

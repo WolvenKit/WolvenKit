@@ -166,10 +166,7 @@ namespace CP77.CR2W.Types
         {
             for (int i = 0; i < Elements.Count; i++)
             {
-                if (!(Elements[i] is CVariantSizeNameType))
-                {
-                    Elements[i].SetREDName(i.ToString());
-                }
+                Elements[i].SetREDName(i.ToString());
             }
         }
 

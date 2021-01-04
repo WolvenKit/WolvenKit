@@ -7,43 +7,102 @@ using CP77.CR2W.Reflection;
 
 namespace CP77.CR2W.Types
 {
-    //[REDMeta(EREDMetaInfo.REDStruct )]
-    //public class DataBuffer : CVariable
-    //{
-    //    [REDBuffer] public CByteArray Bufferdata { get; set; }
-    //    public DataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    //    public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new DataBuffer(cr2w, parent, name);
-    //}
-
-    [REDMeta(EREDMetaInfo.REDStruct)]
+    [REDMeta]
     public class SharedDataBuffer : CVariable
     {
-        [REDBuffer] public CByteArray Bufferdata { get; set; }
+        
         public SharedDataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SharedDataBuffer(cr2w, parent, name);
+
+        public CBytes Buffer { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
+        {
+            Buffer = new CBytes(cr2w, this, nameof(Buffer))
+            {
+                Bytes = new byte[0],
+                IsSerialized = true
+            };
+
+            Buffer.Read(file, size);
+        }
+    }
+    
+    [REDMeta]
+    public class DataBuffer : CVariable
+    {
+        
+        public DataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+        public CBytes Buffer { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
+        {
+            Buffer = new CBytes(cr2w, this, nameof(Buffer))
+            {
+                Bytes = new byte[0],
+                IsSerialized = true
+            };
+
+            Buffer.Read(file, size);
+        }
     }
 
-    [REDMeta(EREDMetaInfo.REDStruct)]
-    public class DeferredDataBuffer : CVariable
+    [REDMeta]
+    public class serializationDeferredDataBuffer : CVariable
     {
-        [REDBuffer] public CInt16 Bufferdata { get; set; }
-        public DeferredDataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {  }
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new DeferredDataBuffer(cr2w, parent, name);
+        
+        public serializationDeferredDataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+        public CBytes Buffer { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
+        {
+            Buffer = new CBytes(cr2w, this, nameof(Buffer))
+            {
+                Bytes = new byte[0],
+                IsSerialized = true
+            };
+
+            Buffer.Read(file, size);
+        }
     }
 
-    //FIXME is that an ID?
-    [REDMeta(EREDMetaInfo.REDStruct)]
-    public class GlobalVisID : CVariable
+    [REDMeta]
+    public class RenderSceneLayerMask : CVariable
     {
-        public GlobalVisID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new GlobalVisID(cr2w, parent, name);
+        public RenderSceneLayerMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
-    [REDMeta(EREDMetaInfo.REDStruct)]
-    public class SMeshTypeResourceLODLevel : CVariable
+    [REDMeta]
+    public class workWorkspotItemPolicy : CVariable
     {
-        [REDBuffer] public CFloat ResourceLODLevel { get; set; }
-        public SMeshTypeResourceLODLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SMeshTypeResourceLODLevel(cr2w, parent, name);
+        public workWorkspotItemPolicy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
+    [REDMeta]
+    public class MessageResourcePath : CVariable
+    {
+        public MessageResourcePath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class EditorObjectID : CVariable
+    {
+        public EditorObjectID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class gameuiContext : CVariable
+    {
+        public gameuiContext(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    [REDMeta]
+    public class animMuteAnimEvents : CVariable
+    {
+        public animMuteAnimEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+
+    [REDMeta()]
+    public class physicsRagdollBodyPartE : CVariable, IREDPrimitive
+    {
+        public physicsRagdollBodyPartE(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+    
 }

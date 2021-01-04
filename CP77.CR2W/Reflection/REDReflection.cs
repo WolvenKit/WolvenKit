@@ -64,32 +64,28 @@ namespace CP77.CR2W.Reflection
                 var gentype = type.GetGenericTypeDefinition();
                 if (gentype == typeof(CArray<>))
                 {
-                    //var v1 = flags.MoveNext() ? flags.Current : 0;
-                    //var v2 = flags.MoveNext() ? flags.Current : 0;
+                    var v1 = flags.MoveNext() ? flags.Current : 0;
+                    var v2 = flags.MoveNext() ? flags.Current : 0;
                     return $"array:{GetREDTypeString(genprop, flags)}";
                 }
-                //if (gentype == typeof(CArrayFixedSize<>))
-                //{
-                //    //var v1 = flags.MoveNext() ? flags.Current : 0;
-                //    return $"[{v1}]{GetREDTypeString(genprop, flags)}";
-                //}
-                if (gentype == typeof(CPtr<>))
+                if (gentype == typeof(CArrayFixedSize<>))
                 {
-                    return $"ptr:{GetREDTypeString(genprop, flags)}";
-                }
-                if (gentype == typeof(CSoft<>))
-                {
-                    return $"soft:{GetREDTypeString(genprop, flags)}";
+                    var v1 = flags.MoveNext() ? flags.Current : 0;
+                    return $"[{v1}]{GetREDTypeString(genprop, flags)}";
                 }
                 if (gentype == typeof(CHandle<>))
                 {
                     return $"handle:{GetREDTypeString(genprop, flags)}";
                 }
-                //if (gentype == typeof(CStatic<>))
-                //{
-                //    var v1 = flags.MoveNext() ? flags.Current : 0;
-                //    return $"static:{v1},{GetREDTypeString(genprop, flags)}";
-                //}
+                if (gentype == typeof(wCHandle<>))
+                {
+                    return $"whandle:{GetREDTypeString(genprop, flags)}";
+                }
+                if (gentype == typeof(CStatic<>))
+                {
+                    var v1 = flags.MoveNext() ? flags.Current : 0;
+                    return $"static:{v1},{GetREDTypeString(genprop, flags)}";
+                }
                 if (gentype == typeof(CEnum<>))
                 {
                     

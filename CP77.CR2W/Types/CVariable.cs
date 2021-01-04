@@ -16,7 +16,6 @@ using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using CP77.CR2W.Reflection;
-using WolvenKit.Utils;
 
 namespace CP77.CR2W.Types
 {
