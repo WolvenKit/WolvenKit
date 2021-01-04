@@ -254,6 +254,9 @@ paket-files/
 .idea/
 *.sln.iml
 
+#macOS
+.DS_Store
+
 # Ignore folders
 W3Edit.Render/Models/**
 !W3Edit.Render/Models/**
