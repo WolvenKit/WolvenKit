@@ -12,7 +12,7 @@ using Catel.Data;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 
-namespace WolvenKit.CR2W.SRT
+namespace CP77.CR2W.SRT
 {
     /// <summary>
     /// kinda wrong to make it inherit from cr2w but that way I can force it into a frmCr2wdocument 

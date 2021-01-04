@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FastMember;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Reflection;
-using WolvenKit.CR2W.Types;
+using CP77.CR2W;
+using CP77.CR2W.Reflection;
+using CP77.CR2W.Types;
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
 	[REDMeta]
     public class C2dArray : CVariable

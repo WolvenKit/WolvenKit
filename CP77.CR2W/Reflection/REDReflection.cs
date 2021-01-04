@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using WolvenKit.CR2W.Types;
+using CP77.CR2W.Types;
 
-namespace WolvenKit.CR2W.Reflection
+namespace CP77.CR2W.Reflection
 {
     /// <summary>
     /// Provides static methods for reading .NET runtime information 

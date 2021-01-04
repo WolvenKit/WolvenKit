@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using WolvenKit.CR2W.Reflection;
+using CP77.CR2W.Reflection;
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
     /// <summary>
     /// The reflection magic happens mostly here, with System.Activator.
@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
         {
             get
             {
-                const string nspace = "WolvenKit.CR2W.Types";
+                const string nspace = "CP77.CR2W.Types";
 
                 var cr2wassembly = Assembly.GetExecutingAssembly();
                 var vanillaclassNames = cr2wassembly.GetTypes()

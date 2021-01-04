@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Linq;
-using WolvenKit.CR2W.Reflection;
+using CP77.CR2W.Reflection;
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
     /// <summary>
     /// CSofts are Uint16 references to the imports table of a cr2w file

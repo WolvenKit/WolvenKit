@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 // ReSharper disable InconsistentNaming
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
     public static partial class Enums
     {

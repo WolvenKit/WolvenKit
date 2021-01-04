@@ -18,9 +18,9 @@ using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Tools.DDS;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.SRT;
-using WolvenKit.CR2W.Types;
+using CP77.CR2W;
+using CP77.CR2W.SRT;
+using CP77.CR2W.Types;
 using StreamExtensions = Catel.IO.StreamExtensions;
 
 namespace CP77.CR2W.Archive
@@ -215,7 +215,7 @@ namespace CP77.CR2W.Archive
                 uint lastimportidx = (uint)ar._table.Dependencies.Count;
 
                 // kraken the file and write
-                var cr2winbuffer = StreamExtensions.ToByteArray(cr2wbr.BaseStream);
+                var cr2winbuffer = Catel.IO.StreamExtensions.ToByteArray(cr2wbr.BaseStream);
                 CompressAndWrite(cr2winbuffer);
 
 
@@ -237,7 +237,7 @@ namespace CP77.CR2W.Archive
 
                 // save table data
                 var sha1 = new System.Security.Cryptography.SHA1Managed();
-                var sha1hash = sha1.ComputeHash(StreamExtensions.ToByteArray(cr2wbr.BaseStream)); //TODO: this is only correct for files with no buffer
+                var sha1hash = sha1.ComputeHash(Catel.IO.StreamExtensions.ToByteArray(cr2wbr.BaseStream)); //TODO: this is only correct for files with no buffer
                 var flags = buffers.Count > 0 ? (uint)buffers.Count - 1 : 0;
                 var item = new ArchiveItem(hash, DateTime.Now, flags
                     , firstoffsetidx, lastoffsetidx, firstimportidx, lastimportidx

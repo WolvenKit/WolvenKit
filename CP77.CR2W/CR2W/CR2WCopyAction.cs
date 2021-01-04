@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using CP77.Common.Services;
-using WolvenKit.CR2W.Types;
+using CP77.CR2W.Types;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     /// <summary>
     /// Copy-pasting has been scattered /TODO recentralize here

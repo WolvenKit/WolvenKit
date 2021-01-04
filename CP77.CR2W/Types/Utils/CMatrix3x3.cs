@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
     [DataContract(Namespace = "")]
     public class CMatrix3x3 : CVariable

@@ -4,7 +4,7 @@ using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     [StructLayout(LayoutKind.Explicit, Size = 24)]
     public struct CR2WBuffer

@@ -7,9 +7,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using WolvenKit.CR2W.Types;
+using CP77.CR2W.Types;
 
-namespace WolvenKit.CR2W.SRT
+namespace CP77.CR2W.SRT
 {
     [StructLayout(LayoutKind.Explicit, Size = 12)]
     [TypeConverter(typeof(ExpandableObjectConverter))]

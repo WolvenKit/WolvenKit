@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.CR2W.SRT
+namespace CP77.CR2W.SRT
 {
     public static class BinaryReaderExtensions
     {

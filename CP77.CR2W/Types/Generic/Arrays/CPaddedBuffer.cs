@@ -6,9 +6,9 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-using WolvenKit.CR2W.Reflection;
+using CP77.CR2W.Reflection;
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
     [REDMeta()]
     public class CPaddedBuffer<T> : CBufferBase<T> where T : CVariable

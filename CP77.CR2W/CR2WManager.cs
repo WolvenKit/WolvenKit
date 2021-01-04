@@ -6,10 +6,10 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using CP77.Common.Services;
 using WolvenKit.Common.Tools;
-using WolvenKit.CR2W.Reflection;
-using WolvenKit.CR2W.Types;
+using CP77.CR2W.Reflection;
+using CP77.CR2W.Types;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     public sealed class CR2WManager
     {
@@ -164,11 +164,11 @@ namespace WolvenKit.CR2W
         private const string header = @"
 using System.IO;
 using FastMember;
-using WolvenKit.CR2W.Reflection;
-using static WolvenKit.CR2W.Types.Enums;
+using CP77.CR2W.Reflection;
+using static CP77.CR2W.Types.Enums;
 
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
 ";
 

@@ -1,9 +1,9 @@
 using System.IO;
-using WolvenKit.CR2W.Reflection;
+using CP77.CR2W.Reflection;
 using FastMember;
-using static WolvenKit.CR2W.Types.Enums;
+using static CP77.CR2W.Types.Enums;
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
 	[REDMeta]
 	public class Sample_Namespace_1_12Sample_Class_Without_Default_Object_1_12 : CVariable

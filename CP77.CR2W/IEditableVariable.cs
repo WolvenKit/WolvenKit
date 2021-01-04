@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Newtonsoft.Json;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
+using CP77.CR2W;
+using CP77.CR2W.Types;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     public interface IEditableVariable
     {

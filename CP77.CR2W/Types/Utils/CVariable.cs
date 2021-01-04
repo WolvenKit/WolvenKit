@@ -15,10 +15,10 @@ using Catel.Data;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.CR2W.Reflection;
+using CP77.CR2W.Reflection;
 using WolvenKit.Utils;
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
     public abstract class CVariable : ObservableObject, IEditableVariable
     {

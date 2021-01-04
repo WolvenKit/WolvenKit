@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     public class InvalidChunkTypeException : Exception
     {
