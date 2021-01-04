@@ -18,10 +18,7 @@ using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Tools.DDS;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.SRT;
-using WolvenKit.CR2W.Types;
-using StreamExtensions = Catel.IO.StreamExtensions;
+using CP77.CR2W.Types;
 
 namespace CP77.CR2W.Archive
 {
@@ -133,10 +130,10 @@ namespace CP77.CR2W.Archive
             #region buffers pre-locate
 
             // TODO: fix that for textures (pack from .tga and not .buffer)? probably in an intermediary step
-            var buffersDict = new ConcurrentDictionary<ulong, List<FileInfo>>();
+            var buffersDict = new Dictionary<ulong, List<FileInfo>>();
             var allfiles = infolder.GetFiles("*", SearchOption.AllDirectories);
             var buffersList = allfiles.Where(_ => _.Extension == ".buffer");
-            Parallel.ForEach(buffersList, fileInfo =>
+            foreach (var fileInfo in buffersList)
             {
                 // buffer path e.g. stand__rh_hold_tray__serve_milkshakes__01.scenerid.7.buffer
                 // removes 7 characters (".buffer") and then removes the extension (".7")
@@ -146,9 +143,9 @@ namespace CP77.CR2W.Archive
 
                 // add buffer
                 if (!buffersDict.ContainsKey(hash))
-                    buffersDict.AddOrUpdate(hash, new List<FileInfo>(), (arg1, o) => new List<FileInfo>());
+                    buffersDict.Add(hash, new List<FileInfo>());
                 buffersDict[hash].Add(fileInfo);
-            });
+            }
 
             #endregion
 
@@ -215,7 +212,7 @@ namespace CP77.CR2W.Archive
                 uint lastimportidx = (uint)ar._table.Dependencies.Count;
 
                 // kraken the file and write
-                var cr2winbuffer = StreamExtensions.ToByteArray(cr2wbr.BaseStream);
+                var cr2winbuffer = Catel.IO.StreamExtensions.ToByteArray(cr2wbr.BaseStream);
                 CompressAndWrite(cr2winbuffer);
 
 
@@ -237,7 +234,7 @@ namespace CP77.CR2W.Archive
 
                 // save table data
                 var sha1 = new System.Security.Cryptography.SHA1Managed();
-                var sha1hash = sha1.ComputeHash(StreamExtensions.ToByteArray(cr2wbr.BaseStream)); //TODO: this is only correct for files with no buffer
+                var sha1hash = sha1.ComputeHash(Catel.IO.StreamExtensions.ToByteArray(cr2wbr.BaseStream)); //TODO: this is only correct for files with no buffer
                 var flags = buffers.Count > 0 ? (uint)buffers.Count - 1 : 0;
                 var item = new ArchiveItem(hash, DateTime.Now, flags
                     , firstoffsetidx, lastoffsetidx, firstimportidx, lastimportidx

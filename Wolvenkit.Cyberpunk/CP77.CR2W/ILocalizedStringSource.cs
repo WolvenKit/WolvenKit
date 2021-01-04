@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.CR2W
+﻿namespace CP77.CR2W
 {
     public interface ILocalizedStringSource
     {

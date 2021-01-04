@@ -11,10 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using WolvenKit.Common.Model;
-using WolvenKit.CR2W.Types;
-using WolvenKit.Utils;
+using CP77.CR2W.Types;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     public static class CR2WFileHelper
     {

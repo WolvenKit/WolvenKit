@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     [StructLayout(LayoutKind.Explicit, Size = 24)]
     public struct CR2WEmbedded

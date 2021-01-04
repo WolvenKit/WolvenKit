@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using CP77.Common.Services;
-using WolvenKit.CR2W.Types;
+using CP77.CR2W.Types;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     /// <summary>
     /// Copy-pasting has been scattered /TODO recentralize here
@@ -115,18 +115,19 @@ namespace WolvenKit.CR2W
             {
                 var copy = chunktranslationentry.Key.data.Copy(this);
                 chunktranslationentry.Value.CreateDefaultData(copy);
-
+                
+                //TODO: no CComponent in cp77
                 // Corner cases :
                 // - add descending CNewNPC components
-                if (targetarray.REDName == "Components" &&
-                    DestinationFile.Chunks[targetarray.LookUpChunkIndex()].REDType == "CNewNPC" &&
-                    copy is CComponent &&
-                    !sourcechunks.Contains(chunktranslationentry.Key))
-                {
-                    var uppercopy = CR2WTypeManager.Create("ptr:CComponent", chunktranslationentry.Value.REDName, DestinationFile, (targetarray as CVariable));
-                    (uppercopy as IChunkPtrAccessor).Reference = chunktranslationentry.Value;
-                    targetarray.AddVariable(uppercopy);
-                }
+                //if (targetarray.REDName == "Components" &&
+                //    DestinationFile.Chunks[targetarray.LookUpChunkIndex()].REDType == "CNewNPC" &&
+                //    copy is CComponent &&
+                //    !sourcechunks.Contains(chunktranslationentry.Key))
+                //{
+                //    var uppercopy = CR2WTypeManager.Create("ptr:CComponent", chunktranslationentry.Value.REDName, DestinationFile, (targetarray as CVariable));
+                //    (uppercopy as IChunkPtrAccessor).Reference = chunktranslationentry.Value;
+                //    targetarray.AddVariable(uppercopy);
+                //}
             }
         }
 

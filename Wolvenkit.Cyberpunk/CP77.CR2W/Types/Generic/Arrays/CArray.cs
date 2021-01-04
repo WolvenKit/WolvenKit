@@ -5,12 +5,12 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Linq;
-using WolvenKit.CR2W.Reflection;
+using CP77.CR2W.Reflection;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
     [REDMeta()]
     public class CArray<T> : CArrayBase<T> where T : CVariable

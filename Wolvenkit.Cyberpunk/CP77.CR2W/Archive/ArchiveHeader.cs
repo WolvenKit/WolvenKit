@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
 using CP77.CR2W.Archive;
-using WolvenKit.CR2W.Types;
+using CP77.CR2W.Types;
 
 namespace CP77Tools.Model
 {

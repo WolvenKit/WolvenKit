@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
     public interface IChunkPtrAccessor : IEditableVariable
     {

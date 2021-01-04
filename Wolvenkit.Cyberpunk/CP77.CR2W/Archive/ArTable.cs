@@ -9,7 +9,7 @@ using Catel.IoC;
 using CP77.Common.Services;
 using CP77.CR2W.Archive;
 using Newtonsoft.Json;
-using WolvenKit.CR2W.Types;
+using CP77.CR2W.Types;
 using RED.CRC64;
 
 namespace CP77Tools.Model

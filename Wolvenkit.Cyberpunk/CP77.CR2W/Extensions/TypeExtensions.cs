@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     public static class TypeExtensions
     {
