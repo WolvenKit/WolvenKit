@@ -14,9 +14,9 @@ using CP77.CR2W.Archive;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Reflection;
-using WolvenKit.CR2W.Types;
+using CP77.CR2W;
+using CP77.CR2W.Reflection;
+using CP77.CR2W.Types;
 
 namespace CP77Tools.Tasks
 {

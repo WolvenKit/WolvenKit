@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     [StructLayout(LayoutKind.Explicit, Size = 8)]
     public struct CR2WName

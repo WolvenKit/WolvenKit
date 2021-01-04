@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WolvenKit.CR2W.Reflection
+namespace CP77.CR2W.Reflection
 {
     /// <summary>
     /// Marks a field as serializable for redengine files.

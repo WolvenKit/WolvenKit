@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
     [Serializable]
     internal class InvalidPtrException : Exception

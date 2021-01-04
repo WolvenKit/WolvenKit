@@ -6,13 +6,13 @@ using System.Runtime.Serialization;
 using System.Text;
 
 using System.Linq;
-using WolvenKit.CR2W.Reflection;
+using CP77.CR2W.Reflection;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.CodeDom;
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
 
     [REDMeta()]
@@ -166,10 +166,7 @@ namespace WolvenKit.CR2W.Types
         {
             for (int i = 0; i < Elements.Count; i++)
             {
-                if (!(Elements[i] is CVariantSizeNameType))
-                {
-                    Elements[i].SetREDName(i.ToString());
-                }
+                Elements[i].SetREDName(i.ToString());
             }
         }
 

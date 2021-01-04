@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.InteropServices;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     /// IMPORT FLAGS
     [System.Flags]
