@@ -13,6 +13,12 @@
     <StartupObject />
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <ApplicationIcon>Wkit_Icon_Flattened_256x.ico</ApplicationIcon>
+	<PublishSingleFile>true</PublishSingleFile>
+	<SelfContained>false</SelfContained>
+	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	<PublishTrimmed>true</PublishTrimmed>
+	<PublishReadyToRun>true</PublishReadyToRun>
+	<DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
