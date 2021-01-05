@@ -9,9 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
-using CP77.Common.Services;
 using CP77.Common.Tools;
-using CP77.Common.Tools.FNV1A;
 using CP77.CR2W.Extensions;
 using CP77Tools.Model;
 using Newtonsoft.Json;
@@ -19,6 +17,8 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Tools.DDS;
 using CP77.CR2W.Types;
+using WolvenKit.Common.Tools.FNV1A;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Archive
 {

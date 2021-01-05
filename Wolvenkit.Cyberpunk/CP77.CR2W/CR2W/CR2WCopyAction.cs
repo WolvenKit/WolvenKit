@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CP77.Common.Services;
 using CP77.CR2W.Types;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W
 {

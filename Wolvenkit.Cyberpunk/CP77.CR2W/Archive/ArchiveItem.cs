@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Catel.IoC;
-using CP77.Common.Services;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Archive
 {
