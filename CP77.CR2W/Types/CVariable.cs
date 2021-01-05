@@ -470,22 +470,7 @@ namespace CP77.CR2W.Types
             Debug.WriteLine($"({value.REDType}){varname} not found in ({this.REDType}){this.REDName}");
             return false;
 
-            string NormalizeName(string name)
-            {
-                var nname = name.Replace('.', '_')
-                    .Replace(' ', '_')
-                    .Replace('/', '_')
-                    .Replace('\'', '_')
-                    .Replace('-', '_')
-                    .Replace('?', '_')
-                    .Replace('(', '_')
-                    .Replace(')', '_')
-                    .Replace('[', '_')
-                    .Replace(']', '_');
-                if (Regex.IsMatch(nname, @"^\d+"))
-                    nname = $"_{nname}";
-                return nname;
-            }
+            
         }
 
         /// <summary>
@@ -792,6 +777,35 @@ namespace CP77.CR2W.Types
                 c[++x] = (char)(b > 9 ? b + 0x37 : b + 0x30);
             }
             return new string(c);
+        }
+        
+        /// <summary>
+        /// Normalizes enum names with special characters.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="normalizeChar"></param>
+        /// <returns></returns>
+        public static string NormalizeName(string s, char normalizeChar = '_' )
+        {
+            var specialCharList = new[] {'.',' ', ':', '?', '/', '\'', '-', '(', ')', '[', ']'};
+            var finalvalue = s;
+            if (specialCharList.Any(s.Contains))
+            {
+                finalvalue = specialCharList
+                    .Aggregate(finalvalue, (_, c) => _.Replace(c.ToString(),
+                        normalizeChar.ToString()));
+            }
+
+            if (char.IsDigit(finalvalue[0]))
+                finalvalue = $"_{finalvalue}";
+            finalvalue = finalvalue switch
+            {
+                "true" => $"_{finalvalue}",
+                "false" => $"_{finalvalue}",
+                _ => finalvalue
+            };
+
+            return finalvalue;
         }
         #endregion
     }
