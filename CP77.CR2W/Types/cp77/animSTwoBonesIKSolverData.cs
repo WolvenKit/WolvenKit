@@ -8,15 +8,15 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animSTwoBonesIKSolverData : CVariable
 	{
-		[Ordinal(0)]  [RED("Joint bend dir in joint's BS")] public Vector4 Joint_bend_dir_joint { get; set; }
-		[Ordinal(1)]  [RED("Joint bend dir in lower's BS")] public Vector4 Joint_bend_dir_lower { get; set; }
-		[Ordinal(2)]  [RED("Joint bend dir in upper's BS")] public Vector4 Joint_bend_dir_upper { get; set; }
-		[Ordinal(3)]  [RED("Joint side dir in joint's BS")] public Vector4 Joint_side_dir_joint { get; set; }
-		[Ordinal(4)]  [RED("Joint side dir in lower's BS")] public Vector4 Joint_side_dir_lower { get; set; }
-		[Ordinal(5)]  [RED("Joint side dir in upper's BS")] public Vector4 Joint_side_dir_upper { get; set; }
-		[Ordinal(6)]  [RED("Joint to-next dir in joint's BS")] public Vector4 Joint_next_dir_joint { get; set; }
-		[Ordinal(7)]  [RED("Joint to-next dir in lower's BS")] public Vector4 Joint_next_dir_lower { get; set; }
-		[Ordinal(8)]  [RED("Joint to-next dir in upper's BS")] public Vector4 Joint_next_dir_upper { get; set; }
+		[Ordinal(0)]  [RED("Joint bend dir in joint's BS")] public Vector4 Joint_bend_dir_in_joint_s_BS { get; set; }
+		[Ordinal(1)]  [RED("Joint bend dir in lower's BS")] public Vector4 Joint_bend_dir_in_lower_s_BS { get; set; }
+		[Ordinal(2)]  [RED("Joint bend dir in upper's BS")] public Vector4 Joint_bend_dir_in_upper_s_BS { get; set; }
+		[Ordinal(3)]  [RED("Joint side dir in joint's BS")] public Vector4 Joint_side_dir_in_joint_s_BS { get; set; }
+		[Ordinal(4)]  [RED("Joint side dir in lower's BS")] public Vector4 Joint_side_dir_in_lower_s_BS { get; set; }
+		[Ordinal(5)]  [RED("Joint side dir in upper's BS")] public Vector4 Joint_side_dir_in_upper_s_BS { get; set; }
+		[Ordinal(6)]  [RED("Joint to-next dir in joint's BS")] public Vector4 Joint_to_next_dir_in_joint_s_BS { get; set; }
+		[Ordinal(7)]  [RED("Joint to-next dir in lower's BS")] public Vector4 Joint_to_next_dir_in_lower_s_BS { get; set; }
+		[Ordinal(8)]  [RED("Joint to-next dir in upper's BS")] public Vector4 Joint_to_next_dir_in_upper_s_BS { get; set; }
 		[Ordinal(9)]  [RED("allowToLock")] public CBool AllowToLock { get; set; }
 		[Ordinal(10)]  [RED("autoSetupDirs")] public CBool AutoSetupDirs { get; set; }
 		[Ordinal(11)]  [RED("ikBone")] public animTransformIndex IkBone { get; set; }
