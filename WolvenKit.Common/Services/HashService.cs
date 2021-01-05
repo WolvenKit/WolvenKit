@@ -13,7 +13,7 @@ using Catel.IoC;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.FNV1A;
 
-namespace CP77.Common.Services
+namespace WolvenKit.Common.Services
 {
     public class HashService : IHashService
     {

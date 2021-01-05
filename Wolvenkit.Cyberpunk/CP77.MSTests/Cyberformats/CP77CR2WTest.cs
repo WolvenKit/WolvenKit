@@ -5,15 +5,16 @@ using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Threading.Tasks;
 using Catel.IoC;
-using CP77.Common.Services;
 using CP77.CR2W.Archive;
 using CP77.CR2W.Resources;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WolvenKit.Common.Services;
 
-namespace CP77.MSTests
+namespace WolvenKit.CyberFormats.Test
 {
+
     [TestClass]
-    public class Cr2wUnitTest
+    public class CP77CR2WTest
     {
         static Dictionary<string, MemoryMappedFile> memorymappedbundles;
         static ArchiveManager bm;
@@ -30,7 +31,7 @@ namespace CP77.MSTests
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
             hashService.ReloadLocally();
 
-            DirectoryInfo finaldir;
+             DirectoryInfo finaldir;
             // check for CP77_DIR environment variable
             var CP77_DIR = System.Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
             if (!string.IsNullOrEmpty(CP77_DIR) && new DirectoryInfo(CP77_DIR).Exists)

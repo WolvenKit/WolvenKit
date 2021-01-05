@@ -1,4 +1,4 @@
-﻿namespace CP77.Common.Services
+﻿namespace WolvenKit.Common.Services
 {
     public interface IAppSettingsService
     {

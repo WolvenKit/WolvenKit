@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -14,7 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\CP77.CR2W\CP77.CR2W.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Witcherformats\" />
   </ItemGroup>
 
 </Project>
