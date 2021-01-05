@@ -20,7 +20,7 @@ namespace WolvenKit.ViewModels
     using Model;
     using Common;
     using Common.Extensions;
-    using Common.FNV1A;
+    using Common.Tools.FNV1A;
     using Common.Model;
     using Common.Services;
     using Common.Tools;
@@ -346,7 +346,7 @@ namespace WolvenKit.ViewModels
             // create a temporary dds
             var tempdir = MainController.WorkDir;
             var textureformat = ImageUtility.GetEFormatFromCompression(compression);
-            var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, textureformat);
+            var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, Common.Tools.DDS.EUncookExtension.dds, textureformat);
 
             if (!File.Exists(ddsfile)) throw new NotImplementedException();
             var metadata = DDSUtils.ReadHeader(ddsfile);

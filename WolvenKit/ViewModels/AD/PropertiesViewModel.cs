@@ -22,7 +22,7 @@ namespace WolvenKit.ViewModels
     using Model;
     using Common;
     using Common.Extensions;
-    using Common.FNV1A;
+    using Common.Tools.FNV1A;
     using Common.Model;
     using Common.Services;
     using Common.Tools;

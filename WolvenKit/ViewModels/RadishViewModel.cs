@@ -336,7 +336,8 @@ namespace WolvenKit.ViewModels
             void WriteFile(string contents, ERadishLogFilter type)
             {
                 var dt = DateTime.Now;
-                string idx = RED.CRC32.Crc32Algorithm.Compute(Encoding.ASCII.GetBytes($"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}{dt.Minute}{dt.Second}")).ToString();
+                string idx = RED.CRC32.Crc32Algorithm.Compute(Encoding.ASCII.GetBytes($"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}{dt.Minute}{dt.Second}"))
+                    .ToString();
                 string filename = $"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}-{idx}";
                 switch (type)
                 {

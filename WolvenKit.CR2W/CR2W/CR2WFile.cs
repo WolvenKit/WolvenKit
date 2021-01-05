@@ -10,12 +10,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
 using WolvenKit.Common;
-using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Tools.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
 using WolvenKit.CR2W.Types.Utils;
 using System.Collections.ObjectModel;
+using EFileReadErrorCodes = WolvenKit.Common.EFileReadErrorCodes;
 
 namespace WolvenKit.CR2W
 {
@@ -1563,6 +1564,11 @@ namespace WolvenKit.CR2W
             var crc = new Crc32Algorithm(false);
             stream.WriteStructs<T>(array, crc);
             m_tableheaders[index].crc32 = crc.HashUInt32;
+        }
+
+        Task<Common.Model.EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
+        {
+            throw new NotImplementedException();
         }
 
 

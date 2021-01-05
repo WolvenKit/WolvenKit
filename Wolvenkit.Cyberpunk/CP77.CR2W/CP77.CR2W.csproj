@@ -22,8 +22,4 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CP77.Common\CP77.Common.csproj" />
-  </ItemGroup>
-
 </Project>

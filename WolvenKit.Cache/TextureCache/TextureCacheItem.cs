@@ -219,7 +219,7 @@ namespace WolvenKit.Cache
                 var fi = new FileInfo(newpath);
                 if (fi.Exists)
                 {
-                    TexconvWrapper.Convert(Path.GetDirectoryName(newpath), newpath, extractext);
+                    TexconvWrapper.Convert(Path.GetDirectoryName(newpath), newpath, (Common.Tools.DDS.EUncookExtension)extractext);
                 }
 
                 // delete old DDS

@@ -5,6 +5,7 @@ using System.Reflection;
 using Catel.IoC;
 using CP77.Common.Services;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Common.Tools.DDS
 {

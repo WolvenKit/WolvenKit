@@ -10,7 +10,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Catel;
 using Catel.IoC;
-using CP77.Common.Tools.FNV1A;
+using WolvenKit.Common.Services;
+using WolvenKit.Common.Tools.FNV1A;
 
 namespace CP77.Common.Services
 {

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Catel.Data;
 
 namespace WolvenKit.Common.Services
 {
@@ -42,6 +39,24 @@ namespace WolvenKit.Common.Services
         public ObservableCollection<InterpretedLogMessage> ErrorLog { get; set; }
 
         #region Log
+        private string _errorLogStr;
+        public string ErrorLogStr
+        {
+            get => _errorLogStr;
+            set
+            {
+                if (_errorLogStr != value)
+                {
+                    _errorLogStr = value;
+                    OnPropertyChanged(nameof(ErrorLogStr));
+
+                    // clean old log
+                    if (_errorLogStr.Length > LOGLENGTH)
+                        _errorLogStr = "";
+                }
+            }
+        }
+
         private string _log;
         public string Log
         {
@@ -51,18 +66,14 @@ namespace WolvenKit.Common.Services
                 if (_log != value)
                 {
                     _log = value;
-                    OnPropertyChanged();
-
-                    // clean old log
-                    if (_log.Length > LOGLENGTH)
-                        _log = "";
+                    OnPropertyChanged(nameof(Log));
                 }
             }
         }
         #endregion
         #region progress
         private Tuple<float, string> _progress;
-        public Tuple<float,string> Progress
+        public Tuple<float, string> Progress
         {
             get => _progress;
             set
@@ -70,7 +81,7 @@ namespace WolvenKit.Common.Services
                 if (_progress != value)
                 {
                     _progress = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Progress));
                 }
             }
         }
@@ -85,6 +96,8 @@ namespace WolvenKit.Common.Services
 
         #region Methods
         public event EventHandler<LogStringEventArgs> OnStringLogged;
+        public event PropertyChangingEventHandler PropertyChanging;
+
         /// <summary>
         /// Log string
         /// </summary>
@@ -97,6 +110,9 @@ namespace WolvenKit.Common.Services
             Logtype = type;
             Log = text;// + "\r\n";
             OnStringLogged?.Invoke(this, new LogStringEventArgs(text, type));
+
+            if (type == Logtype.Error)
+                ErrorLogStr += text + "\r\n";
         }
         /// <summary>
         /// Log progress value
@@ -141,7 +157,7 @@ namespace WolvenKit.Common.Services
         /// <param name="sflag"></param>
         /// <param name="cmdName"></param>
         /// <param name="value"></param>
-        private void InterpretLogMessage(SystemLogFlag sflag, ToolLogFlag tool ,string cmdName, string value)
+        private void InterpretLogMessage(SystemLogFlag sflag, ToolLogFlag tool, string cmdName, string value)
         {
             if (tool == ToolLogFlag.TLF_Radish)
             {
@@ -165,7 +181,7 @@ namespace WolvenKit.Common.Services
                 };
                 InterpretWCCMessage(ref data, value);
                 //if (data.Flag != WccLogFlag.WLF_Info)
-                    ErrorLog.Add(data);
+                ErrorLog.Add(data);
             }
         }
 

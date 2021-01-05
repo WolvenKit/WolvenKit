@@ -151,7 +151,7 @@ namespace WolvenKit.ViewModels
         }
 
 
-        public async Task<EFileReadErrorCodes> LoadFile(string filename, IVariableEditor variableEditor, LoggerService logger, Stream stream = null)
+        public async Task<Common.Model.EFileReadErrorCodes> LoadFile(string filename, IVariableEditor variableEditor, LoggerService logger, Stream stream = null)
         {
 
             if (stream != null)
@@ -168,9 +168,9 @@ namespace WolvenKit.ViewModels
 
         }
 
-        private async Task<EFileReadErrorCodes> loadFile(Stream stream, string filename, IVariableEditor variableEditor, LoggerService logger)
+        private async Task<Common.Model.EFileReadErrorCodes> loadFile(Stream stream, string filename, IVariableEditor variableEditor, LoggerService logger)
         {
-            EFileReadErrorCodes errorcode;
+            Common.Model.EFileReadErrorCodes errorcode;
 
             using (var reader = new BinaryReader(stream))
             {
