@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using WolvenKit.Common.Tools.DDS;
 using CP77Tools;
 using Catel.IoC;
-using CP77.Common.Services;
+using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {

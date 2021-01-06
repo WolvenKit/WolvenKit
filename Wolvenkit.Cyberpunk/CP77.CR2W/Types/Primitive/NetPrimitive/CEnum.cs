@@ -111,7 +111,7 @@ namespace CP77.CR2W.Types
         public override void Write(BinaryWriter file)
         {
             ushort val = 0;
-
+            //TODO
             foreach (var item in Value)
             {
                 var nw = cr2w.Names.First(_ => _.Str == item);
@@ -159,14 +159,8 @@ namespace CP77.CR2W.Types
             else
             {
                 var s = Value.Last();
-
-                //handle EnumValues with Spaces in them. facepalm.
-                string finalvalue = s.Replace(" ", string.Empty);
-                finalvalue = finalvalue.Replace("'", string.Empty);
-                finalvalue = finalvalue.Replace("/", string.Empty);
-                finalvalue = finalvalue.Replace(".", string.Empty);
-
-                // set enum
+                var finalvalue = CVariable.NormalizeName(s);
+                
                 T en = (T)Enum.Parse(WrappedEnum.GetType(), finalvalue);
                 WrappedEnum = en;
             }
@@ -175,5 +169,6 @@ namespace CP77.CR2W.Types
         }
 
         public override string ToString() => string.Join(",", this.Value);
+        
     }
 }

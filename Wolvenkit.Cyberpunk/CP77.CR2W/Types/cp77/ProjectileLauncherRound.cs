@@ -20,7 +20,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(9)]  [RED("projectile")] public wCHandle<gameObject> Projectile { get; set; }
 		[Ordinal(10)]  [RED("projectileCollisionEvaluator")] public CHandle<ProjectileLauncherRoundCollisionEvaluator> ProjectileCollisionEvaluator { get; set; }
 		[Ordinal(11)]  [RED("projectileComponent")] public CHandle<gameprojectileComponent> ProjectileComponent { get; set; }
-		[Ordinal(12)]  [RED("projectileLauncherRound")] public CArray<gameSPartSlots> M_ProjectileLauncherRound { get; set; }
+		[Ordinal(12)]  [RED("projectileLauncherRound")] public CArray<gameSPartSlots> _ProjectileLauncherRound { get; set; }
 		[Ordinal(13)]  [RED("projectileLifetime")] public CFloat ProjectileLifetime { get; set; }
 		[Ordinal(14)]  [RED("projectilePosition")] public Vector4 ProjectilePosition { get; set; }
 		[Ordinal(15)]  [RED("projectileSpawnPoint")] public Vector4 ProjectileSpawnPoint { get; set; }

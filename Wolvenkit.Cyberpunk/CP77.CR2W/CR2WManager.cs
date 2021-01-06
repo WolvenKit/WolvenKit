@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools;
 using CP77.CR2W.Reflection;
 using CP77.CR2W.Types;
-using WolvenKit.Common.Services;
 
 namespace CP77.CR2W
 {
