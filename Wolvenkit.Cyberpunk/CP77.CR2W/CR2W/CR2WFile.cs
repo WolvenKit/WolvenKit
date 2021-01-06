@@ -14,10 +14,9 @@ using WolvenKit.Common.Model;
 using CP77.CR2W.Types;
 using System.Collections.ObjectModel;
 using Catel.Data;
-using Newtonsoft.Json;
-using WolvenKit.Common.Tools.FNV1A;
 using WolvenKit.Common.Services;
-using EFileReadErrorCodes = WolvenKit.Common.EFileReadErrorCodes;
+using WolvenKit.Common.Tools.FNV1A;
+using Newtonsoft.Json;
 
 namespace CP77.CR2W
 {
@@ -1062,11 +1061,6 @@ namespace CP77.CR2W
             var crc = new Crc32Algorithm(false);
             stream.WriteStructs<T>(array, crc);
             m_tableheaders[index].crc32 = crc.HashUInt32;
-        }
-
-        Task<WolvenKit.Common.Model.EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
-        {
-            throw new NotImplementedException();
         }
 
 
