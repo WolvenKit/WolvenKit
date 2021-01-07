@@ -12,9 +12,9 @@ namespace WolvenKit.Bundles
     {
         public BundleManager()
         {
-            Items = new Dictionary<string, List<IWitcherFile>>();
+            Items = new Dictionary<string, List<IGameFile>>();
             Bundles = new Dictionary<string, Bundle>();
-            FileList = new List<IWitcherFile>();
+            FileList = new List<IGameFile>();
             Extensions = new List<string>();
             AutocompleteSource = new List<string>();
         }
@@ -40,7 +40,7 @@ namespace WolvenKit.Bundles
             foreach (var item in bundle.Items)
             {
                 if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Key))
-                    Items.Add(GetModFolder(filename) + "\\" + item.Key, new List<IWitcherFile>());
+                    Items.Add(GetModFolder(filename) + "\\" + item.Key, new List<IGameFile>());
 
                 Items[GetModFolder(filename) + "\\" +item.Key].Add(item.Value);
             }
@@ -63,13 +63,13 @@ namespace WolvenKit.Bundles
             {
                 // add new key if the file isn't already in another bundle
                 if (!Items.ContainsKey(item.Key))
-                    Items.Add(item.Key, new List<IWitcherFile>());
+                    Items.Add(item.Key, new List<IGameFile>());
 
                 // if file is already in another bundle
                 if (ispatch && Items[item.Key].Count > 0)
                 {
                     // check if file is already in contentN directory (content0, content1 etc) 
-                    List<IWitcherFile> filesInBundles = Items[item.Key];
+                    List<IGameFile> filesInBundles = Items[item.Key];
                     var splits = filesInBundles.First().Bundle.ArchiveAbsolutePath.Split(Path.DirectorySeparatorChar);
                     var contentdir = splits[splits.Length - 3];
                     if (contentdir.Contains("content"))

@@ -11,11 +11,11 @@ namespace WolvenKit.Common
     /// <summary>
     /// 
     /// </summary>
-    public abstract class WitcherArchiveManager : IWitcherArchiveManager
+    public abstract class WitcherArchiveManager : IGameArchiveManager
     {
         public WitcherTreeNode RootNode { get; set; }
-        public List<IWitcherFile> FileList { get; set; }
-        public Dictionary<string, List<IWitcherFile>> Items { get; set; }
+        public List<IGameFile> FileList { get; set; }
+        public Dictionary<string, List<IGameFile>> Items { get; set; }
         public List<string> AutocompleteSource { get; set; }
         public List<string> Extensions { get; set; }
 
@@ -111,9 +111,9 @@ namespace WolvenKit.Common
         /// </summary>
         /// <param name="mainnode">The rootnode to get the files from</param>
         /// <returns></returns>
-        private static List<IWitcherFile> GetFiles(WitcherTreeNode mainnode)
+        private static List<IGameFile> GetFiles(WitcherTreeNode mainnode)
         {
-            var bundfiles = new List<IWitcherFile>();
+            var bundfiles = new List<IGameFile>();
             if (mainnode?.Files != null)
             {
                 foreach (var wfile in mainnode.Files)

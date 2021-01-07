@@ -7,10 +7,12 @@ using System.Linq;
 using System.Reflection;
 using Catel.Collections;
 using CP77Tools.Model;
+using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
 namespace CP77.CR2W.Archive
 {
-    public class ArchiveManager
+    public class ArchiveManager : IGameArchiveManager
     {
         public ArchiveManager(DirectoryInfo indir)
         {
@@ -22,6 +24,10 @@ namespace CP77.CR2W.Archive
 
             // load files
             Reload(indir);
+        }
+
+        public ArchiveManager()
+        {
         }
 
         private DirectoryInfo _parentDirectoryInfo;
@@ -41,19 +47,33 @@ namespace CP77.CR2W.Archive
                     Key = ext,
                     File = items.Where(_ => _.FirstOrDefault().Extension == ext).SelectMany(_ => _).ToList()
                 }).ToDictionary(_ => _.Key, _ => _.File);
-        
 
-    #endregion
+        public WitcherTreeNode RootNode { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public List<IGameFile> FileList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public EBundleType TypeName => throw new NotImplementedException();
+
+        List<string> IGameArchiveManager.Extensions { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public List<string> AutocompleteSource { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Dictionary<string, List<IGameFile>> Items { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+
+        #endregion
 
 
 
-    #region methods
+        #region methods
+        public void LoadAll(string exedir)
+        {
+            throw new NotImplementedException();
+        }
 
-    /// <summary>
-    /// Reload the ArchiveManager from given directory (optional).
-    /// </summary>
-    /// <param name="indir"></param>
-    public void Reload(DirectoryInfo indir = null)
+
+        /// <summary>
+        /// Reload the ArchiveManager from given directory (optional).
+        /// </summary>
+        /// <param name="indir"></param>
+        public void Reload(DirectoryInfo indir = null)
         {
             if (indir != null)
                 _parentDirectoryInfo = indir;

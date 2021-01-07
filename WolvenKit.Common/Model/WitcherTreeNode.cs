@@ -13,14 +13,14 @@ namespace WolvenKit.Common
         public WitcherTreeNode()
         {
             Directories = new Dictionary<string, WitcherTreeNode>();
-            Files = new Dictionary<string, List<IWitcherFile>>();
+            Files = new Dictionary<string, List<IGameFile>>();
             Name = "";
         }
 
         public WitcherTreeNode(EBundleType bundleType)
         {
             Directories = new Dictionary<string, WitcherTreeNode>();
-            Files = new Dictionary<string, List<IWitcherFile>>();
+            Files = new Dictionary<string, List<IGameFile>>();
             Name = "";
         }
 
@@ -66,6 +66,6 @@ namespace WolvenKit.Common
         public string Name { get; set; }
         public WitcherTreeNode Parent { get; set; }
         public Dictionary<string, WitcherTreeNode> Directories { get; set; }
-        public Dictionary<string, List<IWitcherFile>> Files { get; set; }
+        public Dictionary<string, List<IGameFile>> Files { get; set; }
     }
 }

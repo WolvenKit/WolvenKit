@@ -14,9 +14,9 @@ namespace WolvenKit.Cache
     {
         public TextureManager()
         {
-            Items = new Dictionary<string, List<IWitcherFile>>();
+            Items = new Dictionary<string, List<IGameFile>>();
             Archives = new Dictionary<string, TextureCache>();
-            FileList = new List<IWitcherFile>();
+            FileList = new List<IGameFile>();
 
             Extensions = new List<string>();
             AutocompleteSource = new List<string>();
@@ -41,7 +41,7 @@ namespace WolvenKit.Cache
             foreach (var item in bundle.Files)
             {
                 if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
-                    Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IWitcherFile>());
+                    Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IGameFile>());
 
                 Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
             }
@@ -63,7 +63,7 @@ namespace WolvenKit.Cache
             foreach (var item in bundle.Files)
             {
                 if (!Items.ContainsKey(item.Name))
-                    Items.Add(item.Name, new List<IWitcherFile>());
+                    Items.Add(item.Name, new List<IGameFile>());
 
                 Items[item.Name].Add(item);
             }

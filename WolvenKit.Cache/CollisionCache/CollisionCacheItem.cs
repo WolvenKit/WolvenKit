@@ -89,9 +89,9 @@ namespace WolvenKit.Cache
     /// <summary>
     /// Files packed into Collision.cache. Zlib compressed nxb/p3d file.
     /// </summary>
-    public class CollisionCacheItem : IWitcherFile
+    public class CollisionCacheItem : IGameFile
     {
-        public IWitcherArchive Bundle { get; set; }
+        public IGameArchive Bundle { get; set; }
         public string Name { get; set; }
         public uint Size { get; set; }
         public uint ZSize { get; set; }

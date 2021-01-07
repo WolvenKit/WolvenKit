@@ -663,13 +663,13 @@ namespace WolvenKit.Model
             //    UnbundleFile(relativePath, isDLC, projectFolder, EBundleType.TextureCache, alternateOutDirectory,
             //        loadmods, silent);
             //}
-            IWitcherArchiveManager manager = MainController.Get().GetManagers(loadmods).FirstOrDefault(_ => _.TypeName == bundleType);
+            IGameArchiveManager manager = MainController.Get().GetManagers(loadmods).FirstOrDefault(_ => _.TypeName == bundleType);
 
             if (manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath)))
             {
                 var archives = manager.FileList
                     .Where(x => x.Name == relativePath)
-                    .Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.ArchiveAbsolutePath, y))
+                    .Select(y => new KeyValuePair<string, IGameFile>(y.Bundle.ArchiveAbsolutePath, y))
                     .ToList();
 
 

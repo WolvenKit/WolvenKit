@@ -9,6 +9,7 @@ using WolvenKit.Common.Model;
 
 namespace CP77.CR2W
 {
+
     [StructLayout(LayoutKind.Explicit, Size = 24)]
     public struct CR2WEmbedded
     {
@@ -99,10 +100,10 @@ namespace CP77.CR2W
             var parsedFile = new CR2WFile();
             switch (parsedFile.Read(Data))
             {
-                case EFileReadErrorCodes.NoError:
+                case WolvenKit.Common.EFileReadErrorCodes.NoError:
                     break;
-                case EFileReadErrorCodes.NoCr2w:
-                case EFileReadErrorCodes.UnsupportedVersion:
+                case WolvenKit.Common.EFileReadErrorCodes.NoCr2w:
+                case WolvenKit.Common.EFileReadErrorCodes.UnsupportedVersion:
                     return null;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -120,10 +121,10 @@ namespace CP77.CR2W
             var parsedFile = new CR2WFile();
             switch (await parsedFile.ReadAsync(Data))
             {
-                case EFileReadErrorCodes.NoError:
+                case WolvenKit.Common.EFileReadErrorCodes.NoError:
                     break;
-                case EFileReadErrorCodes.NoCr2w:
-                case EFileReadErrorCodes.UnsupportedVersion:
+                case WolvenKit.Common.EFileReadErrorCodes.NoCr2w:
+                case WolvenKit.Common.EFileReadErrorCodes.UnsupportedVersion:
                     return null;
                 default:
                     throw new ArgumentOutOfRangeException();

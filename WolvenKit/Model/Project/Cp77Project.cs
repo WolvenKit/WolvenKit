@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Catel.IoC;
 using Orc.Notifications;
+using CP77.Common;
 
 namespace WolvenKit.Model
 {
@@ -21,6 +22,7 @@ namespace WolvenKit.Model
     using CR2W;
     using W3Speech;
     using W3Strings;
+    using CP77.CR2W.Archive;
 
     public sealed class Cp77Project : EditorProject, ICloneable
     {
@@ -29,7 +31,7 @@ namespace WolvenKit.Model
         private readonly ISettingsManager _settings;
         private readonly ILoggerService _logger;
         private Task initializeTask;
-        private BundleManager BundleManager;
+        private ArchiveManager archiveManager;
 
 
         #endregion
@@ -399,7 +401,7 @@ namespace WolvenKit.Model
 
         private async Task InitializeAsync()
         {
-            BundleManager ??= await Task.Run(() => Tw3Controller.LoadBundleManager()).ConfigureAwait(false);
+            archiveManager ??= await Task.Run(() => Cp77Controller.LoadArchiveManager()).ConfigureAwait(false);
 
 
 

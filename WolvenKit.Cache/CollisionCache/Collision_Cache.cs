@@ -14,7 +14,7 @@ using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Cache
 {
-    public class CollisionCache : IWitcherArchive
+    public class CollisionCache : IGameArchive
     {
         public const long BIT_LENGTH_32 = 1;
         public const long BIT_LENGTH_64 = 2;

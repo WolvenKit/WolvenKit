@@ -5,9 +5,9 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Wwise
 {
-    public class SoundCacheItem : IWitcherFile
+    public class SoundCacheItem : IGameFile
     {
-        public IWitcherArchive Bundle { get; set; }
+        public IGameArchive Bundle { get; set; }
         /// <summary>
         /// Name of the bundled item in the archive.
         /// </summary>
@@ -26,7 +26,7 @@ namespace WolvenKit.Wwise
         public uint Size { get; set; }
         public uint ZSize { get; set; }
 
-        public SoundCacheItem(IWitcherArchive Parent)
+        public SoundCacheItem(IGameArchive Parent)
         {
             this.Bundle = Parent;
         }

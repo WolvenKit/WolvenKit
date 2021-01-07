@@ -9,7 +9,7 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Bundles
 {
-    public class Bundle : IWitcherArchive
+    public class Bundle : IGameArchive
     {
         private static readonly byte[] IDString =
         {
@@ -26,7 +26,7 @@ namespace WolvenKit.Bundles
         private uint dataoffset;
         private uint dummysize;
 
-        public List<IWitcherFile> Patchedfiles { get; set; } = new List<IWitcherFile>();
+        public List<IGameFile> Patchedfiles { get; set; } = new List<IGameFile>();
 
         public Bundle(string filename)
         {

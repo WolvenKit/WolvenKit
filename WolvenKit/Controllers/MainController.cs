@@ -132,9 +132,9 @@ namespace WolvenKit
 
         private SpeechManager SpeechManager { get; set; }
 
-        public List<IWitcherArchiveManager> GetManagers(bool loadmods)
+        public List<IGameArchiveManager> GetManagers(bool loadmods)
         {
-            var managers = new List<IWitcherArchiveManager>();
+            var managers = new List<IGameArchiveManager>();
             var exeDir = Path.GetDirectoryName(Configuration.ExecutablePath);
 
             if (loadmods)
@@ -330,7 +330,7 @@ namespace WolvenKit
         /// <param name="name">The name of the file.</param>
         /// <param name="archive">The manager to search for the file in.</param>
         /// <returns></returns>
-        public static List<byte[]> ImportFile(string name,IWitcherArchiveManager archive)
+        public static List<byte[]> ImportFile(string name,IGameArchiveManager archive)
         {
             List<byte[]> ret = new List<byte[]>();
             archive.FileList.ToList().Where(x => x.Name.Contains(name)).ToList().ForEach(x =>

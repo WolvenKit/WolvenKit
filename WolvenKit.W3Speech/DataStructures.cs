@@ -12,7 +12,7 @@ namespace WolvenKit.W3Speech
     /// <summary>
     /// Describes the items found within the w3speech format.
     /// </summary>
-    public class SpeechEntry : IWitcherFile
+    public class SpeechEntry : IGameFile
     {
         /// <summary>
         /// ID as found in the w3speech format.
@@ -45,7 +45,7 @@ namespace WolvenKit.W3Speech
 
         }
 
-        public SpeechEntry(IWitcherArchive bundle, LanguageSpecificID id, UInt32 id_high, UInt32 wem_offs, UInt32 wem_size, UInt32 cr2w_offs, UInt32 cr2w_size, Single duration)
+        public SpeechEntry(IGameArchive bundle, LanguageSpecificID id, UInt32 id_high, UInt32 wem_offs, UInt32 wem_size, UInt32 cr2w_offs, UInt32 cr2w_size, Single duration)
         {
             this.Bundle = bundle;
             this.id = id;
@@ -61,7 +61,7 @@ namespace WolvenKit.W3Speech
             this.PageOffset = cr2w_offs;
         }
 
-        public IWitcherArchive Bundle { get; set; }
+        public IGameArchive Bundle { get; set; }
         public string Name { get; set; }
         public uint Size { get; set; }
         public uint ZSize { get; set; }
@@ -102,7 +102,7 @@ namespace WolvenKit.W3Speech
     /// <summary>
     /// Describes the w3speech format.
     /// </summary>
-    public class W3Speech : IWitcherArchive
+    public class W3Speech : IGameArchive
     {
         /// <summary>
         /// Usually CPSW.

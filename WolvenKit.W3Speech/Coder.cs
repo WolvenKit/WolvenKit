@@ -40,7 +40,7 @@ namespace WolvenKit.W3Speech
         /// <param name="br">The stream containing the w3speech format to read from.</param>
         /// <returns>All information found inside the stream.</returns>
         /// <exception cref="Exception">Something happened.</exception>
-        public static W3Speech Decode(IWitcherArchive parent, BinaryReader br)
+        public static W3Speech Decode(IGameArchive parent, BinaryReader br)
         {
             var str = System.Text.Encoding.Default.GetString(br.ReadBytes(4));
             var version = br.ReadUInt32();

@@ -12,13 +12,13 @@ namespace WolvenKit.Common
     /// Top-level game file, holds archived game assets. Types :
     /// .bundle, .cache (collision, texture, sound) .w3speech
     /// </summary>
-    public interface IWitcherArchiveManager
+    public interface IGameArchiveManager
     {
         WitcherTreeNode RootNode { get; set; }
-        List<IWitcherFile> FileList { get; set; }
+        List<IGameFile> FileList { get; set; }
         EBundleType TypeName { get; }
         List<string> Extensions { get; set; }
         List<string> AutocompleteSource { get; set; }
-        Dictionary<string, List<IWitcherFile>> Items { get; set; }
+        Dictionary<string, List<IGameFile>> Items { get; set; }
     }
 }

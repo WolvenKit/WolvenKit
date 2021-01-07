@@ -18,7 +18,7 @@ using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Cache
 {
-    public class TextureCache : IWitcherArchive
+    public class TextureCache : IGameArchive
     {
         #region Properties
         // constants

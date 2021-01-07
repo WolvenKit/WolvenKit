@@ -16,9 +16,7 @@ namespace WolvenKit
         SoundManager = 2,
         W3StringManager = 3,
         TextureManager = 4,
-        Max = 5,
+        ArchiveManager = 5,
+        Max = 6
     }
-
-
-
 }

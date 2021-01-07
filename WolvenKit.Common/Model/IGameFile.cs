@@ -12,9 +12,9 @@ namespace WolvenKit.Common
     /// <summary>
     /// Any game file
     /// </summary>
-    public interface IWitcherFile
+    public interface IGameFile
     {
-        IWitcherArchive Bundle { get; set; }
+        IGameArchive Bundle { get; set; }
         string Name { get; set; }
         /// <summary>
         /// Uncompressed asset size in bytes

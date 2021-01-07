@@ -30,7 +30,7 @@ namespace CP77.CR2W.Archive
     }
     
     
-    public class Archive
+    public class Archive : IGameArchive
     {
         #region fields
 
@@ -75,6 +75,10 @@ namespace CP77.CR2W.Archive
 
         [JsonIgnore]
         public string Name => Path.GetFileName(Filepath);
+
+        public WolvenKit.Common.Model.EBundleType TypeName => throw new NotImplementedException();
+
+        public string ArchiveAbsolutePath { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         #endregion
 
         #region methods

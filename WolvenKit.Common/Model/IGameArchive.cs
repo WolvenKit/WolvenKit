@@ -7,7 +7,7 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
 {
-    public interface IWitcherArchive
+    public interface IGameArchive
     {
         EBundleType TypeName { get; }
         string ArchiveAbsolutePath { get; set; }

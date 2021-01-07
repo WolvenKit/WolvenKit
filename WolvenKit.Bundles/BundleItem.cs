@@ -11,9 +11,9 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Bundles
 {
-    public class BundleItem : IWitcherFile
+    public class BundleItem : IGameFile
     {
-        public IWitcherArchive Bundle { get; set; }
+        public IGameArchive Bundle { get; set; }
         public string Name { get; set; }
         public byte[] Hash { get; set; }
         public uint Empty { get; set; }

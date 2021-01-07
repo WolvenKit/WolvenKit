@@ -919,7 +919,7 @@ namespace WolvenKit.ViewModels
         /// <param name="uncook"></param>
         /// <param name="export"></param>
         /// <returns></returns>
-        public void AddToMod(string relativePath, IWitcherArchiveManager manager, List<string> prioritizedBundles, bool addAsDLC,
+        public void AddToMod(string relativePath, IGameArchiveManager manager, List<string> prioritizedBundles, bool addAsDLC,
             bool uncook = false, bool export = false)
         {
             string extension = Path.GetExtension(relativePath);
@@ -967,7 +967,7 @@ namespace WolvenKit.ViewModels
             // <BundlePath, File>
             var files = manager.FileList
                 .Where(x => x.Name == relativePath);
-            var archives = new Dictionary<string, IWitcherFile>();
+            var archives = new Dictionary<string, IGameFile>();
             foreach (var witcherFile in files)
             {
                 string key = witcherFile.Bundle.ArchiveAbsolutePath;
@@ -1035,7 +1035,7 @@ namespace WolvenKit.ViewModels
                 // if any of the prioritized bundles is in the archivesdict
                 // we select the first??
                 var priokeys = new List<string>();
-                IWitcherFile selectedFile;
+                IGameFile selectedFile;
                 foreach (var priokey in prioritizedBundles)
                 {
                     if (archives.ContainsKey(priokey))
@@ -1092,7 +1092,7 @@ namespace WolvenKit.ViewModels
 
             return;
 
-            void ExtractInner(IWitcherFile file)
+            void ExtractInner(IGameFile file)
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(newpath));
                 if (File.Exists(newpath))
@@ -1105,7 +1105,7 @@ namespace WolvenKit.ViewModels
                 Logger.LogString($"Succesfully extracted {filename}.", Logtype.Success);
             }
 
-            bool UncookInner(IWitcherFile file)
+            bool UncookInner(IGameFile file)
             {
                 var basedir = Path.GetDirectoryName(file.Bundle.ArchiveAbsolutePath);
 

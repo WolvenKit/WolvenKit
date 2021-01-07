@@ -10,22 +10,22 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.W3Speech
 {
-    public class SpeechManager : IWitcherArchiveManager
+    public class SpeechManager : IGameArchiveManager
     {
 
         public SpeechManager()
         {
-            Items = new Dictionary<string, List<IWitcherFile>>();
+            Items = new Dictionary<string, List<IGameFile>>();
             Speeches = new Dictionary<string, W3Speech>();
-            FileList = new List<IWitcherFile>();
+            FileList = new List<IGameFile>();
             Extensions = new List<string>();
             AutocompleteSource = new List<string>();
         }
 
-        public Dictionary<string, List<IWitcherFile>> Items { get; set; }
+        public Dictionary<string, List<IGameFile>> Items { get; set; }
         public Dictionary<string, W3Speech> Speeches { get; set; }
         public WitcherTreeNode RootNode { get; set; }
-        public List<IWitcherFile> FileList { get; set; }
+        public List<IGameFile> FileList { get; set; }
         public EBundleType TypeName => EBundleType.Speech;
         public List<string> Extensions { get; set; }
         public List<string> AutocompleteSource { get; set; }
@@ -49,7 +49,7 @@ namespace WolvenKit.W3Speech
             foreach (var item in speech.item_infos)
             {
                 if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
-                    Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IWitcherFile>());
+                    Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IGameFile>());
 
                 Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
             }
@@ -73,7 +73,7 @@ namespace WolvenKit.W3Speech
                 foreach (var item in speech.item_infos)
                 {
                     if (!Items.ContainsKey(item.Name))
-                        Items.Add(item.Name, new List<IWitcherFile>());
+                        Items.Add(item.Name, new List<IGameFile>());
 
                     Items[item.Name].Add(item);
                 }
@@ -247,9 +247,9 @@ namespace WolvenKit.W3Speech
         /// </summary>
         /// <param name="mainnode">The rootnode to get the files from</param>
         /// <returns></returns>
-        private List<IWitcherFile> GetFiles(WitcherTreeNode mainnode)
+        private List<IGameFile> GetFiles(WitcherTreeNode mainnode)
         {
-            var bundfiles = new List<IWitcherFile>();
+            var bundfiles = new List<IGameFile>();
             if (mainnode?.Files != null)
             {
                 foreach (var wfile in mainnode.Files)
