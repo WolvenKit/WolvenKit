@@ -297,7 +297,7 @@ namespace WolvenKit.Model
         /// <param name="packmod"></param>
         /// <param name="packdlc"></param>
         /// <returns></returns>
-        public static async Task<int> GenerateCache(EBundleType cachetype, bool packmod, bool packdlc)
+        public static async Task<int> GenerateCache(EArchiveType cachetype, bool packmod, bool packdlc)
         {
             //const string db_dlcfiles = "db_dlcfiles";
             //const string db_dlctextures = "db_dlctextures";
@@ -317,13 +317,13 @@ namespace WolvenKit.Model
 
             switch (cachetype)
             {
-                case EBundleType.TextureCache:
+                case EArchiveType.TextureCache:
                     {
                         cbuilder = cachebuilder.textures;
                         filename = "texture.cache";
                     }
                     break;
-                case EBundleType.CollisionCache:
+                case EArchiveType.CollisionCache:
                     {
                         cbuilder = cachebuilder.physics;
                         filename = "collision.cache";
@@ -648,7 +648,7 @@ namespace WolvenKit.Model
         /// <param name="loadmods"></param>
         /// <param name="silent"></param>
         /// <returns></returns>
-        public static string UnbundleFile(string relativePath, bool isDlc, EProjectFolders projectFolder, EBundleType bundleType = EBundleType.Bundle, string alternateOutDirectory = "", bool loadmods = false, bool silent = false)
+        public static string UnbundleFile(string relativePath, bool isDlc, EProjectFolders projectFolder, EArchiveType bundleType = EArchiveType.Bundle, string alternateOutDirectory = "", bool loadmods = false, bool silent = false)
         {
             string extension = Path.GetExtension(relativePath);
             string filename = Path.GetFileName(relativePath);
@@ -849,11 +849,11 @@ namespace WolvenKit.Model
                 var filename = Path.GetFileName(import.DepotPathStr);
                 if (logonly) MainController.LogString(filename, Logtype.Important);
 
-                var path = UnbundleFile(import.DepotPathStr, isDLC, projectFolder, EBundleType.Bundle, alternateOutDirectory, false, silent);
+                var path = UnbundleFile(import.DepotPathStr, isDLC, projectFolder, EArchiveType.Bundle, alternateOutDirectory, false, silent);
                 // If unbundled file is xbm, also extract tga from texturecache
                 if (Path.GetExtension(import.DepotPathStr) == ".xbm")
                 {
-                    UnbundleFile(import.DepotPathStr, isDLC, EProjectFolders.Raw, EBundleType.TextureCache, alternateOutDirectory, false, silent);
+                    UnbundleFile(import.DepotPathStr, isDLC, EProjectFolders.Raw, EArchiveType.TextureCache, alternateOutDirectory, false, silent);
                 }
 
                 if (string.IsNullOrWhiteSpace(path))
@@ -880,7 +880,7 @@ namespace WolvenKit.Model
                     string bufferpath = $"{relativepath}.{index}.buffer";
                     var bufferName = $"{Path.GetFileName(relativepath)}.{index}.buffer";
 
-                    var path = UnbundleFile(bufferpath, isDLC, projectFolder, EBundleType.Bundle, alternateOutDirectory, false, silent);
+                    var path = UnbundleFile(bufferpath, isDLC, projectFolder, EArchiveType.Bundle, alternateOutDirectory, false, silent);
                     if (string.IsNullOrWhiteSpace(path))
                         Logger.LogString($"Did not unbundle {bufferName}, import is missing.", Logtype.Error);
                 }

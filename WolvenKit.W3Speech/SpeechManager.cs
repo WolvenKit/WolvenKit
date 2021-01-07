@@ -24,9 +24,9 @@ namespace WolvenKit.W3Speech
 
         public Dictionary<string, List<IGameFile>> Items { get; set; }
         public Dictionary<string, W3Speech> Speeches { get; set; }
-        public WitcherTreeNode RootNode { get; set; }
+        public GameFileTreeNode RootNode { get; set; }
         public List<IGameFile> FileList { get; set; }
-        public EBundleType TypeName => EBundleType.Speech;
+        public EArchiveType TypeName => EArchiveType.Speech;
         public List<string> Extensions { get; set; }
         public List<string> AutocompleteSource { get; set; }
 
@@ -182,8 +182,8 @@ namespace WolvenKit.W3Speech
         /// </summary>
         private void RebuildRootNode()
         {
-            RootNode = new WitcherTreeNode(EBundleType.Speech);
-            RootNode.Name = EBundleType.Speech.ToString();
+            RootNode = new GameFileTreeNode(EArchiveType.Speech);
+            RootNode.Name = EArchiveType.Speech.ToString();
             foreach (var item in Items)
             {
                 var currentNode = RootNode;
@@ -193,7 +193,7 @@ namespace WolvenKit.W3Speech
                 {
                     if (!currentNode.Directories.ContainsKey(parts[i]))
                     {
-                        var newNode = new WitcherTreeNode
+                        var newNode = new GameFileTreeNode
                         {
                             Parent = currentNode,
                             Name = parts[i]
@@ -247,7 +247,7 @@ namespace WolvenKit.W3Speech
         /// </summary>
         /// <param name="mainnode">The rootnode to get the files from</param>
         /// <returns></returns>
-        private List<IGameFile> GetFiles(WitcherTreeNode mainnode)
+        private List<IGameFile> GetFiles(GameFileTreeNode mainnode)
         {
             var bundfiles = new List<IGameFile>();
             if (mainnode?.Files != null)

@@ -727,7 +727,7 @@ namespace WolvenKit.ViewModels
                 //Generate collision cache
                 if (packsettings.GenCollCache.Item1 || packsettings.GenCollCache.Item2)
                 {
-                    var t = Task.Run(() => WccHelper.GenerateCache(EBundleType.CollisionCache, packsettings.GenCollCache.Item1, packsettings.GenCollCache.Item2));
+                    var t = Task.Run(() => WccHelper.GenerateCache(EArchiveType.CollisionCache, packsettings.GenCollCache.Item1, packsettings.GenCollCache.Item2));
                     await t.ContinueWith(antecedent =>
                     {
                         statusCol = antecedent.Result;
@@ -740,7 +740,7 @@ namespace WolvenKit.ViewModels
                 //Handle texture caching
                 if (packsettings.GenTexCache.Item1 || packsettings.GenTexCache.Item2)
                 {
-                    var t = Task.Run(() => WccHelper.GenerateCache(EBundleType.TextureCache, packsettings.GenTexCache.Item1, packsettings.GenTexCache.Item2));
+                    var t = Task.Run(() => WccHelper.GenerateCache(EArchiveType.TextureCache, packsettings.GenTexCache.Item1, packsettings.GenTexCache.Item2));
                     await t.ContinueWith(antecedent =>
                     {
                         statusTex = antecedent.Result;
@@ -756,7 +756,7 @@ namespace WolvenKit.ViewModels
                 {
                     if (packsettings.Sound.Item1)
                     {
-                        var soundmoddir = Path.Combine(ActiveMod.ModDirectory, EBundleType.SoundCache.ToString());
+                        var soundmoddir = Path.Combine(ActiveMod.ModDirectory, EArchiveType.SoundCache.ToString());
 
                         // We need to have the original soundcache's so we can rebuild them when packing the mod
                         foreach (var wem in Directory.GetFiles(soundmoddir, "*.wem", SearchOption.AllDirectories))
@@ -813,7 +813,7 @@ namespace WolvenKit.ViewModels
 
                     if (packsettings.Sound.Item2)
                     {
-                        var sounddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.SoundCache.ToString());
+                        var sounddlcdir = Path.Combine(ActiveMod.DlcDirectory, EArchiveType.SoundCache.ToString());
 
                         //Create dlc soundspc.cache
                         if (Directory.Exists(sounddlcdir) && new DirectoryInfo(sounddlcdir)
@@ -982,7 +982,7 @@ namespace WolvenKit.ViewModels
             switch (bundletype)
             {
                 // extract files from bundle to Cooked
-                case EBundleType.Bundle:
+                case EArchiveType.Bundle:
                     {
                         newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
                             ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}",
@@ -991,8 +991,8 @@ namespace WolvenKit.ViewModels
                     }
                     break;
                 // extract files from Collision and Texture caches to Raw (except for pngs etc)
-                case EBundleType.CollisionCache:
-                case EBundleType.TextureCache:
+                case EArchiveType.CollisionCache:
+                case EArchiveType.TextureCache:
                     {
                         // add pngs, jpgs and dds directly to Uncooked
                         // (not Raw, since they don't get imported)
@@ -1011,9 +1011,9 @@ namespace WolvenKit.ViewModels
                     }
                     break;
                 // some special cases
-                case EBundleType.SoundCache:
-                case EBundleType.Speech:
-                case EBundleType.Shader:
+                case EArchiveType.SoundCache:
+                case EArchiveType.Speech:
+                case EArchiveType.Shader:
                     {
                         newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
                             ? Path.Combine("DLC", bundletypestr,
@@ -1021,7 +1021,7 @@ namespace WolvenKit.ViewModels
                             : Path.Combine("Mod", bundletypestr, relativePath));
                     }
                     break;
-                case EBundleType.ANY:
+                case EArchiveType.ANY:
                 default:
                     throw new NotImplementedException();
                     break;

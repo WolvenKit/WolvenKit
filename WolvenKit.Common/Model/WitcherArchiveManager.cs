@@ -13,14 +13,14 @@ namespace WolvenKit.Common
     /// </summary>
     public abstract class WitcherArchiveManager : IGameArchiveManager
     {
-        public WitcherTreeNode RootNode { get; set; }
+        public GameFileTreeNode RootNode { get; set; }
         public List<IGameFile> FileList { get; set; }
         public Dictionary<string, List<IGameFile>> Items { get; set; }
         public List<string> AutocompleteSource { get; set; }
         public List<string> Extensions { get; set; }
 
 
-        public abstract EBundleType TypeName { get; }
+        public abstract EArchiveType TypeName { get; }
 
         public abstract void LoadModBundle(string filename);
         public abstract void LoadBundle(string filename, bool ispatch = false);
@@ -44,7 +44,7 @@ namespace WolvenKit.Common
         /// </summary>
         protected void RebuildRootNode()
         {
-            RootNode = new WitcherTreeNode(TypeName)
+            RootNode = new GameFileTreeNode(TypeName)
             {
                 Name = TypeName.ToString()
             };
@@ -57,7 +57,7 @@ namespace WolvenKit.Common
                 {
                     if (!currentNode.Directories.ContainsKey(parts[i]))
                     {
-                        var newNode = new WitcherTreeNode
+                        var newNode = new GameFileTreeNode
                         {
                             Parent = currentNode,
                             Name = parts[i]
@@ -111,7 +111,7 @@ namespace WolvenKit.Common
         /// </summary>
         /// <param name="mainnode">The rootnode to get the files from</param>
         /// <returns></returns>
-        private static List<IGameFile> GetFiles(WitcherTreeNode mainnode)
+        private static List<IGameFile> GetFiles(GameFileTreeNode mainnode)
         {
             var bundfiles = new List<IGameFile>();
             if (mainnode?.Files != null)

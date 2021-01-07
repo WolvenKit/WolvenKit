@@ -23,7 +23,7 @@ namespace WolvenKit.Cache
         }
 
         private Dictionary<string, TextureCache> Archives { get; }
-        public override EBundleType TypeName => EBundleType.TextureCache;
+        public override EArchiveType TypeName => EArchiveType.TextureCache;
         public static string SerializationVersion => "1.1";
 
 

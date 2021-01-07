@@ -140,7 +140,7 @@ namespace WolvenKit.W3Speech
             this.item_infos = item_infos;
         }
 
-        public EBundleType TypeName => EBundleType.Speech;
+        public EArchiveType TypeName => EArchiveType.Speech;
 
         public string ArchiveAbsolutePath { get; set; }
 

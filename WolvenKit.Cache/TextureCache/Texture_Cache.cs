@@ -25,7 +25,7 @@ namespace WolvenKit.Cache
         public static byte[] Magic = { (byte)'H', (byte)'C', (byte)'X', (byte)'T' };
         private const uint MagicInt = 1415070536;
 
-        public EBundleType TypeName => EBundleType.TextureCache;
+        public EArchiveType TypeName => EArchiveType.TextureCache;
 
         public string ArchiveAbsolutePath { get; set; }
 

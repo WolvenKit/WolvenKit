@@ -67,7 +67,7 @@ namespace WolvenKit.Common.Model
     }
 
 
-    public enum EBundleType
+    public enum EArchiveType
     {
         ANY,
         Bundle,

@@ -27,9 +27,9 @@ namespace WolvenKit.Cache
 
         public Dictionary<string, List<IGameFile>> Items { get; set; }
         public Dictionary<string, SoundCache> Archives { get; set; }
-        public WitcherTreeNode RootNode { get; set; }
+        public GameFileTreeNode RootNode { get; set; }
         public List<IGameFile> FileList { get; set; }
-        public EBundleType TypeName => EBundleType.SoundCache;
+        public EArchiveType TypeName => EArchiveType.SoundCache;
         public List<string> Extensions { get; set; }
         public List<string> AutocompleteSource { get; set; }
 
@@ -176,8 +176,8 @@ namespace WolvenKit.Cache
         /// </summary>
         private void RebuildRootNode()
         {
-            RootNode = new WitcherTreeNode(EBundleType.SoundCache);
-            RootNode.Name = EBundleType.SoundCache.ToString();
+            RootNode = new GameFileTreeNode(EArchiveType.SoundCache);
+            RootNode.Name = EArchiveType.SoundCache.ToString();
 
             foreach (var item in Items)
             {
@@ -188,7 +188,7 @@ namespace WolvenKit.Cache
                 {
                     if (!currentNode.Directories.ContainsKey(parts[i]))
                     {
-                        var newNode = new WitcherTreeNode
+                        var newNode = new GameFileTreeNode
                         {
                             Parent = currentNode,
                             Name = parts[i]
@@ -242,7 +242,7 @@ namespace WolvenKit.Cache
         /// </summary>
         /// <param name="mainnode">The rootnode to get the files from</param>
         /// <returns></returns>
-        private List<IGameFile> GetFiles(WitcherTreeNode mainnode)
+        private List<IGameFile> GetFiles(GameFileTreeNode mainnode)
         {
             var bundfiles = new List<IGameFile>();
             if (mainnode?.Files != null)

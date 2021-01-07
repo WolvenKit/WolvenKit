@@ -8,23 +8,23 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
 {
-    public class WitcherTreeNode
+    public class GameFileTreeNode
     {
-        public WitcherTreeNode()
+        public GameFileTreeNode()
         {
-            Directories = new Dictionary<string, WitcherTreeNode>();
+            Directories = new Dictionary<string, GameFileTreeNode>();
             Files = new Dictionary<string, List<IGameFile>>();
             Name = "";
         }
 
-        public WitcherTreeNode(EBundleType bundleType)
+        public GameFileTreeNode(EArchiveType bundleType)
         {
-            Directories = new Dictionary<string, WitcherTreeNode>();
+            Directories = new Dictionary<string, GameFileTreeNode>();
             Files = new Dictionary<string, List<IGameFile>>();
             Name = "";
         }
 
-        public EBundleType BundleType
+        public EArchiveType Type
         {
             get
             {
@@ -41,7 +41,7 @@ namespace WolvenKit.Common
                     bundlename = bundlenodenames.First();
                 }
 
-                return (EBundleType)Enum.Parse(typeof(EBundleType), bundlename);
+                return (EArchiveType)Enum.Parse(typeof(EArchiveType), bundlename);
             }
         }
 
@@ -64,8 +64,8 @@ namespace WolvenKit.Common
         }
 
         public string Name { get; set; }
-        public WitcherTreeNode Parent { get; set; }
-        public Dictionary<string, WitcherTreeNode> Directories { get; set; }
+        public GameFileTreeNode Parent { get; set; }
+        public Dictionary<string, GameFileTreeNode> Directories { get; set; }
         public Dictionary<string, List<IGameFile>> Files { get; set; }
     }
 }

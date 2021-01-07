@@ -48,10 +48,10 @@ namespace CP77.CR2W.Archive
                     File = items.Where(_ => _.FirstOrDefault().Extension == ext).SelectMany(_ => _).ToList()
                 }).ToDictionary(_ => _.Key, _ => _.File);
 
-        public WitcherTreeNode RootNode { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public GameFileTreeNode RootNode { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public List<IGameFile> FileList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public EBundleType TypeName => throw new NotImplementedException();
+        public EArchiveType TypeName => throw new NotImplementedException();
 
         List<string> IGameArchiveManager.Extensions { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public List<string> AutocompleteSource { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

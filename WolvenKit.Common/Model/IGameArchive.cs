@@ -9,7 +9,7 @@ namespace WolvenKit.Common
 {
     public interface IGameArchive
     {
-        EBundleType TypeName { get; }
+        EArchiveType TypeName { get; }
         string ArchiveAbsolutePath { get; set; }
     }
 }

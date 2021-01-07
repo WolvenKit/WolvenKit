@@ -34,7 +34,7 @@ namespace WolvenKit.Wwise
         public long buffsize;
         public long checksum;
 
-        public EBundleType TypeName => EBundleType.SoundCache;
+        public EArchiveType TypeName => EArchiveType.SoundCache;
         public string ArchiveAbsolutePath { get; set; }
 
         public static SoundBanksInfoXML info = new SoundBanksInfoXML(Path.Combine(
@@ -210,7 +210,7 @@ namespace WolvenKit.Wwise
         public static string GetIDFromPath(string path)
         {
             var split = path.Split(Path.DirectorySeparatorChar);
-            var actualpath = split.SkipWhile(x => x != EBundleType.SoundCache.ToString()).Skip(1).Aggregate("", (c, n) => c += Path.DirectorySeparatorChar + n).Trim().Trim(Path.DirectorySeparatorChar);
+            var actualpath = split.SkipWhile(x => x != EArchiveType.SoundCache.ToString()).Skip(1).Aggregate("", (c, n) => c += Path.DirectorySeparatorChar + n).Trim().Trim(Path.DirectorySeparatorChar);
             if (actualpath.EndsWith(".wem"))
             {
                 if (info.StreamedFiles.Any(x => x.Path == actualpath))

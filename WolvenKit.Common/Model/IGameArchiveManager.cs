@@ -14,9 +14,9 @@ namespace WolvenKit.Common
     /// </summary>
     public interface IGameArchiveManager
     {
-        WitcherTreeNode RootNode { get; set; }
+        GameFileTreeNode RootNode { get; set; }
         List<IGameFile> FileList { get; set; }
-        EBundleType TypeName { get; }
+        EArchiveType TypeName { get; }
         List<string> Extensions { get; set; }
         List<string> AutocompleteSource { get; set; }
         Dictionary<string, List<IGameFile>> Items { get; set; }

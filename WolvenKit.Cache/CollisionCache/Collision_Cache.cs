@@ -35,7 +35,7 @@ namespace WolvenKit.Cache
         public List<string> FileNames = new List<string>();
         public List<CollisionCacheItem> Files = new List<CollisionCacheItem>(); 
 
-        public EBundleType TypeName => EBundleType.CollisionCache;
+        public EArchiveType TypeName => EArchiveType.CollisionCache;
         public string ArchiveAbsolutePath { get; set; }
 
         public CollisionCache(string filename)

@@ -39,7 +39,7 @@ namespace WolvenKit.Bundles
 
         }
 
-        public EBundleType TypeName { get { return EBundleType.Bundle; } }
+        public EArchiveType TypeName { get { return EArchiveType.Bundle; } }
         public string ArchiveAbsolutePath { get; set; }
         public Dictionary<string, BundleItem> Items { get; set; }
         

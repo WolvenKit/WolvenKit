@@ -23,7 +23,7 @@ namespace WolvenKit.Cache
         }
 
         public Dictionary<string, CollisionCache> Archives { get; set; }
-        public override EBundleType TypeName => EBundleType.CollisionCache;
+        public override EArchiveType TypeName => EArchiveType.CollisionCache;
         public static string SerializationVersion => "1.0";
 
         /// <summary>
