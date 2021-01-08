@@ -338,12 +338,12 @@ namespace CP77.CR2W.Archive
         /// <param name="outDir"></param>
         /// <param name="uncookext"></param>
         /// <returns></returns>
-        public int UncookSingle(ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga)
+        public int UncookSingle(ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga, bool flip = false)
         {
             // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
             //     MemoryMappedFileAccess.Read);
             
-            return UncookSingleInner(hash, outDir, uncookext);
+            return UncookSingleInner(hash, outDir, uncookext, flip);
         }
 
         /// <summary>
@@ -360,7 +360,7 @@ namespace CP77.CR2W.Archive
             return ExtractSingleInner(hash, outDir);
         }
 
-        private int UncookSingleInner( ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga)
+        private int UncookSingleInner( ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga, bool flip = false)
         {
             var uncooksuccess = false;
             var (file, buffers) = GetFileData(hash);
@@ -442,7 +442,8 @@ namespace CP77.CR2W.Archive
                                 nstream.Write(buffer);
 
                             }
-
+                            if (flip)
+                                TexconvWrapper.VFlip(outfile.Directory.FullName, newpath, texformat);
                             // success
                             uncooksuccess = true;
                         }
@@ -608,7 +609,7 @@ namespace CP77.CR2W.Archive
         /// <param name="pattern"></param>
         /// <param name="uncookext"></param>
         /// <returns></returns>
-        public (List<string>, int) UncookAll(DirectoryInfo outDir, string pattern = "", string regex = "", EUncookExtension uncookext = EUncookExtension.tga)
+        public (List<string>, int) UncookAll(DirectoryInfo outDir, string pattern = "", string regex = "", EUncookExtension uncookext = EUncookExtension.tga, bool flip = false)
         {
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
@@ -642,7 +643,7 @@ namespace CP77.CR2W.Archive
             logger.LogProgress(0);
             Parallel.ForEach(finalMatchesList, info =>
             {
-                var uncooked = UncookSingleInner(info.NameHash64, outDir, uncookext);
+                var uncooked = UncookSingleInner(info.NameHash64, outDir, uncookext, flip);
 
                 if (uncooked != 0)
                     extractedList.Add(info.FileName);
