@@ -219,7 +219,7 @@ namespace CP77.CR2W.Archive
                                             true));
                                     ddsStream.Write(b);
                                     
-                                    if (flip)
+                                    if (flip && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                                         TexconvWrapper.VFlip(outfile.Directory.FullName, newpath, texformat);
                                 }
 
@@ -233,7 +233,7 @@ namespace CP77.CR2W.Archive
                             }
 
                             // convert to texture
-                            if (uncookext != EUncookExtension.dds)
+                            if (uncookext != EUncookExtension.dds && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                             {
                                 try
                                 {
