@@ -151,7 +151,7 @@ namespace CP77Tools.Tasks
                         {
                             Parallel.ForEach(result.File, fi =>
                             {
-                                var (f, b) = ar.GetFileData(fi.NameHash64);
+                                var (f, b) = ar.GetFileData(fi.NameHash64, false);
                                 using var ms = new MemoryStream(f);
                                 using var br = new BinaryReader(ms);
 
@@ -206,7 +206,7 @@ namespace CP77Tools.Tasks
 
                         if (imports)
                         {
-                            var (f, buffers) = ar.GetFileData(hash);
+                            var (f, buffers) = ar.GetFileData(hash, false);
 
                             // check if cr2w file
                             if (f.Length < 4)
@@ -236,7 +236,7 @@ namespace CP77Tools.Tasks
                         {
                             if (!string.IsNullOrEmpty(entry.Value.FileName) && entry.Value.FileName.Contains(".xbm"))
                             {
-                                var (f, buffers) = ar.GetFileData(hash);
+                                var (f, buffers) = ar.GetFileData(hash, false);
 
                                 // check if cr2w file
                                 if (f.Length < 4)

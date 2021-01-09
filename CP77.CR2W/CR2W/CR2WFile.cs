@@ -81,6 +81,8 @@ namespace CP77.CR2W
         #endregion
 
         #region Properties
+        public CR2WFileHeader Header => m_fileheader;
+        
         [JsonIgnore]
         public ILoggerService Logger { get; }
         [JsonIgnore]

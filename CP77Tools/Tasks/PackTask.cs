@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using CP77.Common.Services;
 using CP77.Common.Tools.FNV1A;
+using CP77.CR2W;
 using CP77.CR2W.Archive;
 using WolvenKit.Common.Tools.DDS;
 
@@ -76,7 +77,7 @@ namespace CP77Tools.Tasks
 
             #endregion
 
-            Archive.WriteFromFolder(basedir, outDir);
+            CommonFunctions.WriteFromFolder(basedir, outDir);
             logger.LogString($"Finished dumping {Path.Combine(outDir.FullName, "blob0.archive")}.", Logtype.Success);
 
             return;

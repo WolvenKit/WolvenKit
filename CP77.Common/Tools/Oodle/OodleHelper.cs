@@ -9,7 +9,32 @@ namespace CP77.Common.Tools
 {
     public static class OodleHelper
     {
-
+        public static int Decompress(byte[] inputBuffer, byte[] outputBuffer)
+        {
+            var r = -1;
+            try
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    r = OodleNative.OodleLZ_Decompress(inputBuffer, inputBuffer.Length, outputBuffer, outputBuffer.Length, OodleNative.OodleLZ_FuzzSafe.No, OodleNative.OodleLZ_CheckCRC.No, OodleNative.OodleLZ_Verbosity.None, 0, 0, 0, 0, 0, 0, OodleNative.OodleLZ_Decode.Unthreaded);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    r = OodleNative.Kraken_Decompress(inputBuffer, inputBuffer.Length, outputBuffer, outputBuffer.Length);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            return r;
+        }
+        
+        
         // gibbed
         public static int Compress(
             byte[] inputBytes,

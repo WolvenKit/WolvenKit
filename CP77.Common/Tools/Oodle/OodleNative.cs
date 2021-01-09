@@ -70,17 +70,13 @@ namespace CP77.Common.Tools
             OodleLZ_CheckCRC crcCheckFlag,
             OodleLZ_Verbosity logVerbosityFlag,
             uint d, uint e, uint f, uint g, uint h, uint i, OodleLZ_Decode threadModule);
+        
+        [DllImport("lib/liboodle.dylib", CallingConvention = CallingConvention.StdCall)]
+        public static extern int Kraken_Decompress(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize);
 
-        public static int Decompress(byte[] inputBuffer, byte[] outputBuffer)
-        {
-            int readed = OodleLZ_Decompress(inputBuffer, inputBuffer.Length, outputBuffer, outputBuffer.Length, OodleLZ_FuzzSafe.No, OodleLZ_CheckCRC.No, OodleLZ_Verbosity.None, 0, 0, 0, 0, 0, 0, OodleLZ_Decode.Unthreaded);
-            return readed;
-        }
-
-        // gibbed
         [DllImport("oo2ext_7_win64.dll", EntryPoint = "OodleLZ_GetCompressedBufferSizeNeeded", CallingConvention = CallingConvention.StdCall)]
         public static extern long GetCompressedBufferSizeNeeded(long size);
-
+        
         [DllImport("oo2ext_7_win64.dll", EntryPoint = "OodleLZ_Compress", CallingConvention = CallingConvention.StdCall)]
         public static extern long Compress(
             int algorithm,

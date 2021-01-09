@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
@@ -21,34 +23,14 @@ using CP77.CR2W.Types;
 
 namespace CP77.CR2W.Archive
 {
-    public enum EUncookable
-    {
-        bin, //TODO: remove when all hashes are found
-        xbm,
-        csv,
-        json
-    }
-    
-    
     public class Archive
     {
-        #region fields
-
-        [JsonProperty]
-        private ArHeader _header;
-        [JsonProperty]
-        private ArTable _table;
-
-        private string Mmfhash => Filepath.GetHashMD5();
-
-        #endregion
-
         #region constructors
 
         public Archive()
         {
-            _header = new ArHeader();
-            _table = new ArTable();
+            Header = new ArHeader();
+            Table = new ArTable();
         }
 
         /// <summary>
@@ -65,11 +47,12 @@ namespace CP77.CR2W.Archive
         #endregion
 
         #region properties
-
-        public string Filepath { get; private init; }
+        public ArHeader Header { get; set; }
+        public ArTable Table { get; set; }
+        public string Filepath { get; set; }
 
         [JsonIgnore]
-        public Dictionary<ulong, ArchiveItem> Files => _table?.FileInfo;
+        public Dictionary<ulong, ArchiveItem> Files => Table?.FileInfo;
 
         public int FileCount => Files?.Count ?? 0;
 
@@ -98,225 +81,10 @@ namespace CP77.CR2W.Archive
             // }
 
             using var vs = new FileStream(Filepath, FileMode.Open, FileAccess.Read);
-            _header = new ArHeader(new BinaryReader(vs));
-            vs.Seek((long) _header.Tableoffset, SeekOrigin.Begin);
-            _table = new ArTable(new BinaryReader(vs), this);
+            Header = new ArHeader(new BinaryReader(vs));
+            vs.Seek((long) Header.Tableoffset, SeekOrigin.Begin);
+            Table = new ArTable(new BinaryReader(vs), this);
             vs.Close();
-        }
-
-        /// <summary>
-        /// Creates and archive from a folder and packs all files inside into it
-        /// </summary>
-        /// <param name="infolder"></param>
-        /// <param name="outpath"></param>
-        /// <returns></returns>
-        public static Archive WriteFromFolder(DirectoryInfo infolder, DirectoryInfo outpath)
-        {
-            if (!infolder.Exists) return null;
-            if (!outpath.Exists) return null;
-
-            var outfile = Path.Combine(outpath.FullName, "basegame_blob0.archive");
-
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            var ar = new Archive
-            {
-                Filepath = outfile,
-                _table = new ArTable()
-            };
-            using var fs = new FileStream(outfile, FileMode.Create);
-            using var bw = new BinaryWriter(fs);
-
-            // write header to allocate bytes
-            ar._header.Write(bw);
-            bw.Write(new byte[132]); // some weird padding
-
-            // get all buffer paths beforehand
-            #region buffers pre-locate
-
-            // TODO: fix that for textures (pack from .tga and not .buffer)? probably in an intermediary step
-            var buffersDict = new Dictionary<ulong, List<FileInfo>>();
-            var allfiles = infolder.GetFiles("*", SearchOption.AllDirectories);
-            var buffersList = allfiles.Where(_ => _.Extension == ".buffer");
-            foreach (var fileInfo in buffersList)
-            {
-                // buffer path e.g. stand__rh_hold_tray__serve_milkshakes__01.scenerid.7.buffer
-                // removes 7 characters (".buffer") and then removes the extension (".7")
-                var relpath = fileInfo.FullName[(infolder.FullName.Length + 1)..];
-                relpath = Path.ChangeExtension(relpath.Remove(relpath.Length - 7), "").TrimEnd('.');
-                var hash = FNV1A64HashAlgorithm.HashString(relpath);
-
-                // add buffer
-                if (!buffersDict.ContainsKey(hash))
-                    buffersDict.Add(hash, new List<FileInfo>());
-                buffersDict[hash].Add(fileInfo);
-            }
-
-            #endregion
-
-            // all parentfiles. don't multitherad this bc the file order matters?
-            #region write files
-
-            Thread.Sleep(1000);
-            int progress = 0;
-            logger.LogProgress(0);
-
-            var parentfiles = allfiles.Where(_ => _.Extension != ".buffer");
-            //Parallel.ForEach(parentfiles, fileInfo =>
-            var fileInfos = parentfiles
-                .OrderBy(_ => FNV1A64HashAlgorithm.HashString(GetRelpath(_)))
-                .ToList();
-
-            // local
-            string GetRelpath(FileInfo infi) => infi.FullName[(infolder.FullName.Length + 1)..];
-
-            foreach (var fileInfo in fileInfos)
-            {
-                var relpath = GetRelpath(fileInfo);
-                var hash = FNV1A64HashAlgorithm.HashString(relpath);
-
-                if (fileInfo.Extension == ".bin")
-                    hash = ulong.Parse(Path.GetFileNameWithoutExtension(relpath));
-
-                // read the cr2w and get imports
-                using var cr2wfs = new FileStream(fileInfo.FullName, FileMode.Open);
-                using var cr2wbr = new BinaryReader(cr2wfs);
-
-                // peak if cr2w
-                var magic = cr2wbr.ReadUInt32();
-                var isCr2wFile = magic == CR2WFile.MAGIC;
-                cr2wbr.BaseStream.Seek(0, SeekOrigin.Begin);
-
-                var cr2w = new CR2WFile();
-                if (isCr2wFile)
-                {
-                    try
-                    {
-                        cr2w.ReadImportsAndBuffers(cr2wbr);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.LogString($"Failed to read cr2w file {fileInfo.FullName}", Logtype.Error);
-                        continue;
-                    }
-                }
-                else
-                {
-
-                }
-                
-                //register imports
-                uint firstimportidx = (uint)ar._table.Dependencies.Count;
-
-                foreach (var cr2WImportWrapper in cr2w.Imports)
-                {
-                    if (!ar._table.Dependencies.Select(_ => _.HashStr).Contains(cr2WImportWrapper.DepotPathStr))
-                        ar._table.Dependencies.Add(
-                            new HashEntry(FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPathStr)));
-                }
-                uint lastimportidx = (uint)ar._table.Dependencies.Count;
-
-                // kraken the file and write
-                var cr2winbuffer = Catel.IO.StreamExtensions.ToByteArray(cr2wbr.BaseStream);
-                CompressAndWrite(cr2winbuffer);
-
-
-                // foreach buffer: kraken and write
-                // get buffers
-                var buffers = new List<FileInfo>();
-                if (buffersDict.ContainsKey(hash))
-                    buffers = buffersDict[hash]
-                        .OrderBy(x => x.FullName.Length)
-                        .ThenBy(x => x.FullName)
-                        .ToList();
-                uint firstoffsetidx = (uint)ar._table.Offsets.Count - 1;
-                foreach (var inputbuffer in buffers.Select(b => File.ReadAllBytes(b.FullName)))
-                {
-                    CompressAndWrite(inputbuffer);
-                }
-
-                uint lastoffsetidx = (uint)ar._table.Offsets.Count;
-
-                // save table data
-                var sha1 = new System.Security.Cryptography.SHA1Managed();
-                var sha1hash = sha1.ComputeHash(Catel.IO.StreamExtensions.ToByteArray(cr2wbr.BaseStream)); //TODO: this is only correct for files with no buffer
-                var flags = buffers.Count > 0 ? (uint)buffers.Count - 1 : 0;
-                var item = new ArchiveItem(hash, DateTime.Now, flags
-                    , firstoffsetidx, lastoffsetidx, firstimportidx, lastimportidx
-                    , sha1hash);
-                ar._table.FileInfo.Add(hash, item);
-
-                Interlocked.Increment(ref progress);
-                logger.LogProgress(progress / (float)fileInfos.Count);
-            };
-
-            #endregion
-
-            // padding to page (4096 bytes)
-            bw.PadUntilPage();
-
-            // write tables
-            var tableoffset = bw.BaseStream.Position;
-            ar._table.Write(bw);
-            var tablesize = bw.BaseStream.Position - tableoffset;
-
-            // padding to page (4096 bytes)
-            bw.PadUntilPage();
-            var filesize = bw.BaseStream.Position;
-
-            // write the header again
-            ar._header.Tableoffset = (ulong)tableoffset;
-            ar._header.Tablesize = (uint)tablesize;
-            ar._header.Filesize = (ulong)filesize;
-            bw.BaseStream.Seek(0, SeekOrigin.Begin);
-            ar._header.Write(bw);
-
-            return ar;
-
-
-            int CompressAndWrite(byte[] inbuffer)
-            {
-                var size = (uint)inbuffer.Length;
-                if (size < 255)
-                {
-                    ar._table.Offsets.Add(new OffsetEntry(
-                        (ulong)bw.BaseStream.Position,
-                        size,
-                        size));
-                    bw.Write(inbuffer);
-                }
-                else
-                {
-                    var zsize = OodleHelper.GetCompressedBufferSizeNeeded((int)size);
-                    var outBuffer = new byte[zsize];
-
-                    var r = OodleHelper.Compress(
-                        inbuffer, 0,
-                        (int)size,
-                        outBuffer,
-                        0,
-                        zsize);
-                    if (r != zsize)
-                    {
-                        //Debugger.Break();
-                    }
-
-                    //resize buffer
-                    var writelist = new List<byte>()
-                    {
-                        0x4B, 0x41, 0x52, 0x4B  //KRAKEN, TODO: make this variable and dependent on the compression algo
-                    };
-                    writelist.AddRange(BitConverter.GetBytes(size));
-                    writelist.AddRange(outBuffer.Take(r));
-
-                    ar._table.Offsets.Add(new OffsetEntry(
-                        (ulong)bw.BaseStream.Position,
-                        (uint)r + 8,
-                        size));
-                    bw.Write(writelist.ToArray());
-                }
-
-                return 1;
-            }
         }
 
         /// <summary>
@@ -340,8 +108,7 @@ namespace CP77.CR2W.Archive
         /// <returns></returns>
         public int UncookSingle(ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga, bool flip = false)
         {
-            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
-            //     MemoryMappedFileAccess.Read);
+            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
             
             return UncookSingleInner(hash, outDir, uncookext, flip);
         }
@@ -354,160 +121,180 @@ namespace CP77.CR2W.Archive
         /// <returns></returns>
         public int ExtractSingle(ulong hash, DirectoryInfo outDir)
         {
-            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
-            //     MemoryMappedFileAccess.Read);
+            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
 
             return ExtractSingleInner(hash, outDir);
         }
 
         private int UncookSingleInner( ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga, bool flip = false)
         {
-            var uncooksuccess = false;
-            var (file, buffers) = GetFileData(hash);
-
+            // checks
             if (!Files.ContainsKey(hash))
                 return -1;
-            string name = Files[hash].FileName;
-
-            // checks
+            var name = Files[hash].FileName;
             var outfile = new FileInfo(Path.Combine(outDir.FullName,
                 $"{name}"));
             if (outfile.Directory == null)
                 return -1;
 
-            // switch uncookable extension
-            string ext = Path.GetExtension(name)[1..];
-            if (!Enum.TryParse(ext, true, out EUncookable extAsEnum))
-                return -1;
-
+            var uncooksuccess = false;
+            var (file, buffers) = GetFileData(hash, true);
+            
             var cr2w = new CR2WFile();
             using var ms = new MemoryStream(file);
             using var br = new BinaryReader(ms);
             cr2w.ReadImportsAndBuffers(br);
 
-            switch (extAsEnum)
+            var ext = Path.GetExtension(name)[1..];
+            
+            //TODO: temp fix to support uncooking unknown files
+            if (cr2w.StringDictionary[1] == "C2dArray")
+                ext = "csv";
+            else if (cr2w.StringDictionary[1] == "CBitmapTexture")
+                ext = "xbm";
+            
+            // uncook textures, meshes etc
+            if (Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext))
             {
-                case EUncookable.bin:
-                case EUncookable.xbm:
+                if (!Enum.TryParse(ext, true, out ECookedFileFormat extAsEnum))
+                    return -1;
+                switch (extAsEnum)
                 {
-                    if (buffers.Count > 1)
-                        return -1; //TODO: can that happen?
-                    if (cr2w.StringDictionary[1] != "CBitmapTexture")
-                        return -1;
-
-                    br.BaseStream.Seek(0, SeekOrigin.Begin);
-                    var result = cr2w.Read(br);
-                    if (result != EFileReadErrorCodes.NoError)
-                        return -1;
-                    if (!(cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm) ||
-                        !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
-                        return -1;
-
-                    // write buffers
-                    foreach (var b in buffers)
+                    case ECookedFileFormat.xbm:
                     {
-                        #region textures
-                        // create dds header
-                        var newpath = Path.ChangeExtension(outfile.FullName, "dds");
-                        try
+                        if (buffers.Count > 1)
+                            return -1; //TODO: can that happen?
+                        if (cr2w.StringDictionary[1] != "CBitmapTexture")
+                            return -1;
+
+                        br.BaseStream.Seek(0, SeekOrigin.Begin);
+                        var result = cr2w.Read(br);
+                        if (result != EFileReadErrorCodes.NoError)
+                            return -1;
+                        if (!(cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm) ||
+                            !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+                            return -1;
+
+                        // write buffers
+                        foreach (var b in buffers)
                         {
-                            var width = blob.Header.SizeInfo.Width.val;
-                            var height = blob.Header.SizeInfo.Height.val;
-                            var mips = blob.Header.TextureInfo.MipCount.val;
-                            var slicecount = blob.Header.TextureInfo.SliceCount.val;
-                            var alignment = blob.Header.TextureInfo.DataAlignment.val;
+                            #region textures
 
-                            Enums.ETextureRawFormat rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-                            if (xbm.Setup.RawFormat?.WrappedEnum != null)
-                                rawfmt = xbm.Setup.RawFormat.WrappedEnum;
-                            else
-                            {
-                            }
-
-                            Enums.ETextureCompression compression = Enums.ETextureCompression.TCM_None;
-                            if (xbm.Setup.Compression?.WrappedEnum != null)
-                                compression = xbm.Setup.Compression.WrappedEnum;
-                            else
-                            {
-                            }
-
-                            var texformat = CommonFunctions.GetDXGIFormatFromXBM(compression, rawfmt);
-
-                            Directory.CreateDirectory(outfile.Directory.FullName);
-                            using (var nstream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
-                            {
-                                DDSUtils.GenerateAndWriteHeader(nstream,
-                                    new DDSMetadata(width, height, mips, texformat, alignment, false, slicecount, true));
-                                var buffer = b;
-                                nstream.Write(buffer);
-
-                            }
-                            if (flip)
-                                TexconvWrapper.VFlip(outfile.Directory.FullName, newpath, texformat);
-                            // success
-                            uncooksuccess = true;
-                        }
-                        catch
-                        {
-                            uncooksuccess = false;
-                            continue;
-                        }
-
-                        // convert to texture
-                        if (uncookext != EUncookExtension.dds)
-                        {
+                            // create dds header
+                            var newpath = Path.ChangeExtension(outfile.FullName, "dds");
                             try
                             {
-                                var di = new FileInfo(outfile.FullName).Directory;
-                                TexconvWrapper.Convert(di.FullName, $"{newpath}", uncookext);
+                                #region get xbm data
+
+                                var width = blob.Header.SizeInfo.Width.val;
+                                var height = blob.Header.SizeInfo.Height.val;
+                                var mips = blob.Header.TextureInfo.MipCount.val;
+                                var slicecount = blob.Header.TextureInfo.SliceCount.val;
+                                var alignment = blob.Header.TextureInfo.DataAlignment.val;
+
+                                Enums.ETextureRawFormat rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
+                                if (xbm.Setup.RawFormat?.WrappedEnum != null)
+                                    rawfmt = xbm.Setup.RawFormat.WrappedEnum;
+                                else
+                                {
+                                }
+
+                                Enums.ETextureCompression compression = Enums.ETextureCompression.TCM_None;
+                                if (xbm.Setup.Compression?.WrappedEnum != null)
+                                    compression = xbm.Setup.Compression.WrappedEnum;
+                                else
+                                {
+                                }
+
+                                var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt);
+
+                                #endregion
+
+                                // extract and write buffer 
+                                Directory.CreateDirectory(outfile.Directory.FullName);
+                                using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
+                                {
+                                    DDSUtils.GenerateAndWriteHeader(ddsStream,
+                                        new DDSMetadata(width, height, mips, texformat, alignment, false, slicecount,
+                                            true));
+                                    ddsStream.Write(b);
+                                    
+                                    if (flip)
+                                        TexconvWrapper.VFlip(outfile.Directory.FullName, newpath, texformat);
+                                }
+
+                                // success
+                                uncooksuccess = true;
                             }
-                            catch (Exception e)
+                            catch
                             {
-                                // silent
+                                uncooksuccess = false;
+                                continue;
                             }
+
+                            // convert to texture
+                            if (uncookext != EUncookExtension.dds)
+                            {
+                                try
+                                {
+                                    var di = new FileInfo(outfile.FullName).Directory;
+                                    TexconvWrapper.Convert(di.FullName, $"{newpath}", uncookext);
+                                }
+                                catch (Exception e)
+                                {
+                                    // silent
+                                }
+                            }
+
+                            #endregion
                         }
 
-                        #endregion
+                        break;
                     }
+                    case ECookedFileFormat.csv:
+                    {
+                        if (buffers.Count > 0)
+                            return -1; //TODO: can that happen?
+                        if (cr2w.StringDictionary[1] != "C2dArray")
+                            return -1;
 
-                    break;
+                        br.BaseStream.Seek(0, SeekOrigin.Begin);
+                        var result = cr2w.Read(br);
+                        if (result != EFileReadErrorCodes.NoError)
+                            return -1;
+                        if (!(cr2w.Chunks.FirstOrDefault() is {data: C2dArray redcsv}))
+                            return -1;
+
+                        // write
+                        var newpath = $"{outfile.FullName}.csv";
+
+                        Directory.CreateDirectory(outfile.Directory.FullName);
+                        using var nstream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
+                        redcsv.ToCsvStream(nstream);
+
+
+                        break;
+                    }
+                    case ECookedFileFormat.json:
+                    {
+
+                        break;
+                    }
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
-                case EUncookable.csv:
-                {
-                    if (buffers.Count > 1)
-                        return -1; //TODO: can that happen?
-                    if (cr2w.StringDictionary[1] != "C2dArray")
-                        return -1;
-
-                    br.BaseStream.Seek(0, SeekOrigin.Begin);
-                    var result = cr2w.Read(br);
-                    if (result != EFileReadErrorCodes.NoError)
-                        return -1;
-                    if (!(cr2w.Chunks.FirstOrDefault() is {data: C2dArray redcsv}))
-                        return -1;
-
-                    // write
-                    
-                    var newpath = $"{outfile.FullName}.csv";
-
-                    Directory.CreateDirectory(outfile.Directory.FullName);
-                    using var nstream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
-                    redcsv.ToCsvStream(nstream);
-
-                    
-                    
-                    break;
-                }
-                case EUncookable.json:
-                {
-                    
-                    break;
-                }
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
-            
-            
+            else // extract buffers
+            {
+                for (int i = 0; i < buffers.Count; i++)
+                {
+                    var buffer = buffers[i];
+                    var bufferpath = $"{outfile}.{i}.buffer";
+                    Directory.CreateDirectory(outfile.Directory.FullName);
+                    File.WriteAllBytes(bufferpath, buffer);
+                }
+                uncooksuccess = true;
+            }
 
             return uncooksuccess ? 1 : 0;
         }
@@ -515,7 +302,7 @@ namespace CP77.CR2W.Archive
         private int ExtractSingleInner(ulong hash, DirectoryInfo outDir)
         {
             var extractsuccess = false;
-            var (file, buffers) = GetFileData(hash);
+            var (file, buffers) = GetFileData(hash, false);
 
             if (!Files.ContainsKey(hash))
                 return -1;
@@ -536,12 +323,13 @@ namespace CP77.CR2W.Archive
             extractsuccess = true;
 
             // write buffers
+            // buffers are usually(?) appended to the main file
+            // TODO: dump all buffered files and check this
             for (int j = 0; j < buffers.Count; j++)
             {
                 var buffer = buffers[j];
-                var bufferpath = $"{outfile}.{j}.buffer";
-                Directory.CreateDirectory(outfile.Directory.FullName);
-                File.WriteAllBytes(bufferpath, buffer);
+                using var fs = new FileStream(outfile.FullName, FileMode.Append, FileAccess.Write);
+                fs.Write(buffer);
                 extractsuccess = true;
             }
 
@@ -553,6 +341,7 @@ namespace CP77.CR2W.Archive
         /// </summary>
         /// <param name="outDir"></param>
         /// <param name="pattern"></param>
+        /// <param name="regex"></param>
         /// <returns></returns>
         public (List<string>, int) ExtractAll(DirectoryInfo outDir, string pattern = "", string regex = "")
         {
@@ -560,8 +349,7 @@ namespace CP77.CR2W.Archive
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
 
-            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
-            //     MemoryMappedFileAccess.Read);
+            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
 
             // check search pattern then regex
             IEnumerable<ArchiveItem> finalmatches = Files.Values;
@@ -607,6 +395,7 @@ namespace CP77.CR2W.Archive
         /// </summary>
         /// <param name="outDir"></param>
         /// <param name="pattern"></param>
+        /// <param name="regex"></param>
         /// <param name="uncookext"></param>
         /// <returns></returns>
         public (List<string>, int) UncookAll(DirectoryInfo outDir, string pattern = "", string regex = "", EUncookExtension uncookext = EUncookExtension.tga, bool flip = false)
@@ -616,8 +405,7 @@ namespace CP77.CR2W.Archive
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
             
-            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
-            //     MemoryMappedFileAccess.Read);
+            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
             
             // check search pattern then regex
             IEnumerable<ArchiveItem> finalmatches = Files.Values;
@@ -665,12 +453,14 @@ namespace CP77.CR2W.Archive
         {
             if (!Files.ContainsKey(hash))
                 return false;
-            string name = Files[hash].FileName;
+            var archiveItem = Files[hash]; 
+            string name = archiveItem.FileName;
+            var hasBuffers = (archiveItem.LastOffsetTableIdx - archiveItem.FirstOffsetTableIdx) > 1;
 
-            var values = Enum.GetValues(typeof(EUncookable))
-                .Cast<EUncookable>()
+            var values = Enum.GetValues(typeof(ECookedFileFormat))
+                .Cast<ECookedFileFormat>()
                 .Select(_ => $".{_}");
-            var b = values.Any(e => e == Path.GetExtension(name));
+            var b = values.Any(e => e == Path.GetExtension(name)) || hasBuffers ;
             return b;
         }
 
@@ -678,41 +468,46 @@ namespace CP77.CR2W.Archive
         /// Gets the bytes of one file by index from the archive.
         /// </summary>
         /// <param name="hash"></param>
-        /// <param name="mmf"></param>
+        /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public (byte[], List<byte[]>) GetFileData(ulong hash)
+        /// <exception cref="Exception"></exception>
+        public (byte[], List<byte[]>) GetFileData(ulong hash, bool decompressBuffers)
         {
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             if (!Files.ContainsKey(hash)) return (null, null);
 
             var entry = Files[hash];
             var startindex = (int)entry.FirstOffsetTableIdx;
             var nextindex = (int)entry.LastOffsetTableIdx;
-
-            var file = ExtractFile(this._table.Offsets[startindex]);
+            
+            // decompress main file
+            var file = ExtractFile(this.Table.Offsets[startindex], true);
+            
+            // don't decompress buffers
             var buffers = new List<byte[]>();
-
             for (int j = startindex + 1; j < nextindex; j++)
             {
-                var offsetentry = this._table.Offsets[j];
-                var buffer = ExtractFile(offsetentry);
+                var offsetentry = this.Table.Offsets[j];
+                var buffer = ExtractFile(offsetentry, decompressBuffers);
                 buffers.Add(buffer);
             }
 
             return (file, buffers);
 
             // local
-            byte[] ExtractFile(OffsetEntry offsetentry)
+            byte[] ExtractFile(OffsetEntry offsetentry, bool decompress)
             {
+                
                 using var ms = new MemoryStream();
                 using var bw = new BinaryWriter(ms);
 
-                // using var vs = mmf.CreateViewStream((long)offsetentry.Offset, (long)offsetentry.ZSize,
+                // using var stream = mmf.CreateViewStream((long)offsetentry.Offset, (long)offsetentry.ZSize,
                 //     MemoryMappedFileAccess.Read);
                 using var stream = new FileStream(Filepath, FileMode.Open, FileAccess.Read);
                 using var binaryReader = new BinaryReader(stream);
                 binaryReader.BaseStream.Seek((long) offsetentry.Offset, SeekOrigin.Begin);
 
-                if (offsetentry.ZSize == offsetentry.Size)
+                if (offsetentry.ZSize == offsetentry.Size || !decompress)
                 {
                     try
                     {
@@ -733,21 +528,29 @@ namespace CP77.CR2W.Archive
                         var size = binaryReader.ReadUInt32();
 
                         if (size != offsetentry.Size)
-                            throw new NotImplementedException();
+                            throw new Exception($"{hash}: Buffer size doesn't match size in info table. {size} vs {offsetentry.Size}");
 
-                        var buffer = binaryReader.ReadBytes((int)offsetentry.ZSize - 8);
+                        var inputBuffer = binaryReader.ReadBytes((int)offsetentry.ZSize - 8);
 
-                        byte[] unpacked = new byte[offsetentry.Size];
-                        long unpackedSize = OodleNative.Decompress(buffer, unpacked);
+                        try
+                        {
+                            var outputBuffer = new byte[offsetentry.Size];
+                            long unpackedSize = OodleHelper.Decompress(inputBuffer, outputBuffer);
 
-                        if (unpackedSize != offsetentry.Size)
-                            throw new Exception(
-                                $"Unpacked size doesn't match real size. {unpackedSize} vs {offsetentry.Size}");
-                        bw.Write(unpacked);
+                            if (unpackedSize != offsetentry.Size)
+                                throw new Exception($"{hash}: Unpacked size doesn't match real size. {unpackedSize} vs {offsetentry.Size}");
+                            bw.Write(outputBuffer);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.LogString($"Unable to decompress file {hash}. Exporting uncompressed file", Logtype.Error);
+                            bw.Write(inputBuffer);
+                        }
+                        
                     }
                     else
                     {
-                        binaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
+                        binaryReader.BaseStream.Seek((long) offsetentry.Offset, SeekOrigin.Begin);
                         var buffer = binaryReader.ReadBytes((int)offsetentry.ZSize);
                         bw.Write(buffer);
                     }

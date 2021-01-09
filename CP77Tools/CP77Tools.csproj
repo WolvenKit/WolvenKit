@@ -25,6 +25,10 @@
     <Content Include="lib\kraken.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="lib\liboodle.dylib" />
+    <Content Include="lib\liboodle.dylib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
