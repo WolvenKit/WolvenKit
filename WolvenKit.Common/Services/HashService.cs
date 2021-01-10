@@ -99,7 +99,7 @@ namespace WolvenKit.Common.Services
 
                 return true;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
                 Logger.LogString("Update Archive Hashes Failed - Server may not be available", Logtype.Error);
             }

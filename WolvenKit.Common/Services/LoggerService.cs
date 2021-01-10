@@ -96,7 +96,7 @@ namespace WolvenKit.Common.Services
 
         #region Methods
         public event EventHandler<LogStringEventArgs> OnStringLogged;
-        public event PropertyChangingEventHandler PropertyChanging;
+        //public event PropertyChangingEventHandler PropertyChanging;
 
         /// <summary>
         /// Log string

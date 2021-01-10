@@ -11,7 +11,7 @@ namespace WolvenKit.Common
     /// <summary>
     /// 
     /// </summary>
-    public abstract class CyberArchvieManager : IGameArchiveManager
+    public abstract class WitcherArchiveManager : IGameArchiveManager
     {
         public GameFileTreeNode RootNode { get; set; }
         public List<IGameFile> FileList { get; set; }

@@ -98,10 +98,10 @@ namespace WolvenKit.CR2W
             var parsedFile = new CR2WFile();
             switch (await parsedFile.Read(Data))
             {
-                case (Common.EFileReadErrorCodes)EFileReadErrorCodes.NoError:
+                case (EFileReadErrorCodes)EFileReadErrorCodes.NoError:
                     break;
-                case (Common.EFileReadErrorCodes)EFileReadErrorCodes.NoCr2w:
-                case (Common.EFileReadErrorCodes)EFileReadErrorCodes.UnsupportedVersion:
+                case (EFileReadErrorCodes)EFileReadErrorCodes.NoCr2w:
+                case (EFileReadErrorCodes)EFileReadErrorCodes.UnsupportedVersion:
                     return null;
                 default:
                     throw new ArgumentOutOfRangeException();

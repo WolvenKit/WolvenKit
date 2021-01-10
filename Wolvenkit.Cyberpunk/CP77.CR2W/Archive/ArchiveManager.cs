@@ -12,7 +12,7 @@ using WolvenKit.Common.Model;
 
 namespace CP77.CR2W.Archive
 {
-    public class ArchiveManager : IGameArchiveManager
+    public class ArchiveManager : CyberArchvieManager
     {
         public ArchiveManager(DirectoryInfo indir)
         {
@@ -20,7 +20,6 @@ namespace CP77.CR2W.Archive
 
             Archives = new List<Archive>();
             Files = new Dictionary<ulong, List<ArchiveItem>>();
-            Extensions = new List<string>();
 
             // load files
             Reload(indir);
@@ -35,7 +34,6 @@ namespace CP77.CR2W.Archive
         #region properties
 
         public List<Archive> Archives { get; }
-        public List<string> Extensions { get; }
         public Dictionary<ulong, List<ArchiveItem>> Files { get; }
         public Dictionary<string, List<ArchiveItem>> GroupedFiles => 
         
@@ -51,11 +49,11 @@ namespace CP77.CR2W.Archive
         public GameFileTreeNode RootNode { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public List<IGameFile> FileList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public EArchiveType TypeName => throw new NotImplementedException();
-
-        List<string> IGameArchiveManager.Extensions { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        List<string> Extensions { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public List<string> AutocompleteSource { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public Dictionary<string, List<IGameFile>> Items { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public override EArchiveType TypeName => EArchiveType.Archive;
 
 
         #endregion
@@ -63,7 +61,7 @@ namespace CP77.CR2W.Archive
 
 
         #region methods
-        public void LoadAll(string exedir)
+        public override void LoadAll(string exedir)
         {
             throw new NotImplementedException();
         }
@@ -114,6 +112,21 @@ namespace CP77.CR2W.Archive
 
             
 
+        }
+
+        public override void LoadModBundle(string filename)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void LoadBundle(string filename, bool ispatch = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void LoadModsBundles(string mods, string dlc)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

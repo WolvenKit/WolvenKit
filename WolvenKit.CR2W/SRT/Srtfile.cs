@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using EFileReadErrorCodes = WolvenKit.Common.EFileReadErrorCodes;
 
 namespace WolvenKit.CR2W.SRT
 {
@@ -1104,6 +1103,11 @@ namespace WolvenKit.CR2W.SRT
         }
 
         Task<Common.Model.EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetChunks()
         {
             throw new NotImplementedException();
         }

@@ -100,10 +100,10 @@ namespace CP77.CR2W
             var parsedFile = new CR2WFile();
             switch (parsedFile.Read(Data))
             {
-                case WolvenKit.Common.EFileReadErrorCodes.NoError:
+                case EFileReadErrorCodes.NoError:
                     break;
-                case WolvenKit.Common.EFileReadErrorCodes.NoCr2w:
-                case WolvenKit.Common.EFileReadErrorCodes.UnsupportedVersion:
+                case EFileReadErrorCodes.NoCr2w:
+                case EFileReadErrorCodes.UnsupportedVersion:
                     return null;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -121,10 +121,10 @@ namespace CP77.CR2W
             var parsedFile = new CR2WFile();
             switch (await parsedFile.ReadAsync(Data))
             {
-                case WolvenKit.Common.EFileReadErrorCodes.NoError:
+                case EFileReadErrorCodes.NoError:
                     break;
-                case WolvenKit.Common.EFileReadErrorCodes.NoCr2w:
-                case WolvenKit.Common.EFileReadErrorCodes.UnsupportedVersion:
+                case EFileReadErrorCodes.NoCr2w:
+                case EFileReadErrorCodes.UnsupportedVersion:
                     return null;
                 default:
                     throw new ArgumentOutOfRangeException();

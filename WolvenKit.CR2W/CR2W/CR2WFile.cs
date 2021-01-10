@@ -16,7 +16,6 @@ using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
 using WolvenKit.CR2W.Types.Utils;
 using System.Collections.ObjectModel;
-using EFileReadErrorCodes = WolvenKit.Common.EFileReadErrorCodes;
 
 namespace WolvenKit.CR2W
 {
@@ -1567,6 +1566,11 @@ namespace WolvenKit.CR2W
         }
 
         Task<Common.Model.EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetChunks()
         {
             throw new NotImplementedException();
         }

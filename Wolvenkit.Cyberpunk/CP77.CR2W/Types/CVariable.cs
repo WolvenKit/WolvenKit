@@ -19,7 +19,7 @@ using CP77.CR2W.Reflection;
 
 namespace CP77.CR2W.Types
 {
-    public abstract class CVariable : ObservableObject, IEditableVariable
+    public abstract class CVariable : WolvenKit.Common.ObservableObject, IEditableVariable
     {
         protected CVariable()
         {

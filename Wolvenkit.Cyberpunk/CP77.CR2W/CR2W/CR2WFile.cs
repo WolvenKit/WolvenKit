@@ -1063,6 +1063,16 @@ namespace CP77.CR2W
             m_tableheaders[index].crc32 = crc.HashUInt32;
         }
 
+        Task<EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetChunks()
+        {
+            throw new NotImplementedException();
+        }
+
 
 
         #endregion
