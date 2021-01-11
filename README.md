@@ -1,22 +1,34 @@
 # CP77Tools
-Modding tools for the cyberpunk 2077 game.
 
-- requires NET5.0.
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/) [![Discord](https://img.shields.io/discord/717692382849663036.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/Epkq79kd96)
+
+Modding tools for the CDPR Cyberpunk 2077 video game.
+
+- requires NET5.0. (https://dotnet.microsoft.com/download/dotnet/5.0)
 
 **The cp77 tools require the oo2ext_7_win64.dll to work.
 Copy and paste the dll into the cp77Tools folder.**
 
-If you are building from source, the dll needs to be in the same folder as the build .exe, e.g.
-C:\cpmod\CP77Tools\CP77Tools\bin\Debug\net5.0\oo2ext_7_win64.dll
-
 It can be found here:
 `Cyberpunk 2077\bin\x64\oo2ext_7_win64.dll`
 
-CP77 Tools discord: https://discord.gg/Epkq79kd96
-CDPR modding community discord: https://discord.gg/USZwxxFrKa
 
-## Latest Release
+-------------
+
+If you are building from source, the dll needs to be in the same folder as the build .exe, e.g.
+C:\cpmod\CP77Tools\CP77Tools\bin\Debug\net5.0\oo2ext_7_win64.dll
+
+
+
+CP77 Tools discord: https://discord.gg/Epkq79kd96
+
+
+## Latest Stable Release
 https://github.com/WolvenKit/CP77Tools/releases
+
+
+## Latest Beta Release
+https://github.com/WolvenKit/CP77Tools/releases/tag/nightly-build
 
 
 ## Usage:
