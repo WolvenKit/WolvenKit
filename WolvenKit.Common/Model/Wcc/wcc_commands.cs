@@ -1,9 +1,7 @@
-﻿using System.ComponentModel;
-using System.IO;
-using System.Runtime.CompilerServices;
-using System;
+﻿using System;
+using System.ComponentModel;
 
-namespace WolvenKit.Common.Wcc
+namespace WolvenKit.Common.Model.Wcc
 {
     /// <summary>
     /// All wcc_lite commands.
@@ -18,7 +16,7 @@ namespace WolvenKit.Common.Wcc
         #region Common Commands
 
         [Serializable]
-        [DescriptionAttribute("Uncooks resources from a given bundle set.\n Usage:  uncook -indir= -outdir = [options]")]
+        [Description("Uncooks resources from a given bundle set.\n Usage:  uncook -indir= -outdir = [options]")]
         public class uncook : WCC_Command
         {
             public uncook()
@@ -29,15 +27,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required")]
-            [DescriptionAttribute("Path to the bundled directory.")]
+            [Category("Is Required")]
+            [Description("Path to the bundled directory.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("indir")]
             public string InputDirectory { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to the unbundled directory.")]
+            [Category("Is Required"),
+            Description("Path to the unbundled directory.")]
             ////[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
@@ -46,54 +44,54 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Path to the input strings file.")]
+            [Category("Optional"),
+            Description("Path to the input strings file.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("infile")]
             public string InputFile { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Relative inner path to be extracted.")]
+            [Category("Optional"),
+            Description("Relative inner path to be extracted.")]
             ////[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("In")]
             [REDName("targetdir")]
             public string TargetDirectory { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Comma delineated list of file extensions to uncook. If options missing will uncook all av")]
+            [Category("Optional"),
+            Description("Comma delineated list of file extensions to uncook. If options missing will uncook all av")]
             [REDName("uncookext")]
             public string UncookExtensions { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Image format for XBM files. Choose one of bmp, png, jpg, or tga. Default is tga.")]
+            [Category("Optional"),
+            Description("Image format for XBM files. Choose one of bmp, png, jpg, or tga. Default is tga.")]
             [TypeConverter(typeof(EnumConverter))]
             [REDName("imgfmt")]
             public imageformat Imgfmt { get; set; } //enum
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Dump redswf files.")]
+            [Category("Optional"),
+            Description("Dump redswf files.")]
             [REDName("dumpswf")]
             public bool Dumpswf { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Upon failure, skips to the next file.")]
+            [Category("Optional"),
+            Description("Upon failure, skips to the next file.")]
             [REDName("skiperrors")]
             public bool Skiperrors { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Unbundles data without uncooking it.")]
+            [Category("Optional"),
+            Description("Unbundles data without uncooking it.")]
             [REDName("unbundleonly")]
             public bool Unbundleonly { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Target language for recursive dump. Used with targetlanguage.")]
+            [Category("Optional"),
+            Description("Target language for recursive dump. Used with targetlanguage.")]
             [REDName("uncookonly")]
             public bool Uncookonly { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute("Dumps info for bundled files.\n Usage: dumpbundleinfo -indir= -outpath=")]
+        [Description("Dumps info for bundled files.\n Usage: dumpbundleinfo -indir= -outpath=")]
         public class dumpbundleinfo : WCC_Command
         {
             public dumpbundleinfo()
@@ -104,15 +102,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Directory with the bundles (recursive).")]
+            [Category("Is Required"),
+            Description("Directory with the bundles (recursive).")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("indir")]
             public string Indir { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Absolute path to output text file.")]
+            [Category("Is Required"),
+            Description("Absolute path to output text file.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outfile")]
@@ -121,15 +119,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("where to place output.")]
+            [Category("Optional"),
+            Description("where to place output.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outpath")]
             public string Outpath { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Absolute path to input bundle (multiple can be specified).")]
+            [Category("Optional"),
+            Description("Absolute path to input bundle (multiple can be specified).")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("infile")]
@@ -138,7 +136,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Export single assets from the engine. \n Usage: export -depot= -file= -out=")]
+        [Description("Export single assets from the engine. \n Usage: export -depot= -file= -out=")]
         public class export : WCC_Command
         {
             public export()
@@ -149,21 +147,21 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("local - Use local depot(r4data)\n absolutepath - Use depot at given directory.")]
+            [Category("Is Required"),
+            Description("local - Use local depot(r4data)\n absolutepath - Use depot at given directory.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("depot")]
             public string Depot { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("relativepath - Local(depot) path for the file to export.")]
+            [Category("Is Required"),
+            Description("relativepath - Local(depot) path for the file to export.")]
             [REDTags("In")]
             [REDName("file")]
             public string File { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("absolutepath - Output absolute path for the exported file")]
+            [Category("Is Required"),
+            Description("absolutepath - Output absolute path for the exported file")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
@@ -172,8 +170,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("fbxversion - (Optional) Specify output FBX version - 2016, 2013, 2011, 2010, 2009.")]
+            [Category("Optional"),
+            Description("fbxversion - (Optional) Specify output FBX version - 2016, 2013, 2011, 2010, 2009.")]
             //[TypeConverter(typeof(EnumConverter))]
             [REDName("fbx")]
             public string Fbx { get; set; }
@@ -188,7 +186,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Import assets into the engine. \n Usage: import -depot= -file= -out=")]
+        [Description("Import assets into the engine. \n Usage: import -depot= -file= -out=")]
         public class import : WCC_Command
         {
             public import()
@@ -199,22 +197,22 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("local - Use local depot(r4data) /n absolutepath - Use depot at given directory")]
+            [Category("Is Required"),
+            Description("local - Use local depot(r4data) /n absolutepath - Use depot at given directory")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("depot")]
             public string Depot { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("inputfile - Absolute path to file to import")]
+            [Category("Is Required"),
+            Description("inputfile - Absolute path to file to import")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("outputfile - Relative(depot) path for the output file")]
+            [Category("Is Required"),
+            Description("outputfile - Relative(depot) path for the output file")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
@@ -223,8 +221,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("nameofgroup - (Optional) Name of texture group when importing texture.")]
+            [Category("Optional"),
+            Description("nameofgroup - (Optional) Name of texture group when importing texture.")]
             [TypeConverter(typeof(EnumConverter))]
             [REDName("texturegroup")]
             public ETextureGroup texturegroup { get; set; }
@@ -232,7 +230,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Dump file content(objects).\n Usage: dumpfile -file= -dir= -out=")]
+        [Description("Dump file content(objects).\n Usage: dumpfile -file= -dir= -out=")]
         public class dumpfile : WCC_Command
         {
             public dumpfile()
@@ -243,8 +241,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute(" dump the whole directory (recursive)")]
+            [Category("Is Required"),
+            Description(" dump the whole directory (recursive)")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("dir")]
@@ -253,28 +251,28 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("depot path to the file")]
+            [Category("Optional"),
+            Description("depot path to the file")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("absolute path to the output file")]
+            [Category("Is Required"),
+            Description("absolute path to the output file")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("exclude given file extensions")]
+            [Category("Optional"),
+            Description("exclude given file extensions")]
             [REDName("exclude")]
             public string Exclude { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute(" Unbundle the files.\n Usage: unbundle -dir= -outdir=")]
+        [Description(" Unbundle the files.\n Usage: unbundle -dir= -outdir=")]
         public class unbundle : WCC_Command
         {
             public unbundle()
@@ -285,15 +283,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("directory with the bundles (recursive)")]
+            [Category("Is Required"),
+            Description("directory with the bundles (recursive)")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("dir")]
             public string InputDirectory { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("absolute path to output directory")]
+            [Category("Is Required"),
+            Description("absolute path to output directory")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
@@ -302,8 +300,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("optional bundles.json dump (for repacking)")]
+            [Category("Optional"),
+            Description("optional bundles.json dump (for repacking)")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("json")]
@@ -311,7 +309,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Build data cache from cooked assets.\n Usage:  buildcache -db -out [optional params]")]
+        [Description("Build data cache from cooked assets.\n Usage:  buildcache -db -out [optional params]")]
         public class buildcache : WCC_Command
         {
             public buildcache()
@@ -323,34 +321,34 @@ namespace WolvenKit.Common.Wcc
             /// Required
             /// </summary>
             [REDTags(new string[] { "Keyword" })]
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Available Cache builders: physics, shaders, texture. ")]
+            [Category("Is Required"),
+            Description("Available Cache builders: physics, shaders, texture. ")]
             [Editor(typeof(EnumConverter), typeof(EnumConverter))]
             [REDName("builder")]
             public cachebuilder builder { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to cook.db.")]
+            [Category("Is Required"),
+            Description("Path to cook.db.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string DataBase { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Uncooked Base Directory")]
+            [Category("Is Required"),
+            Description("Uncooked Base Directory")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("basedir")]
             public string basedir { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Select target platform(required)")]
+            [Category("Is Required"),
+            Description("Select target platform(required)")]
             [TypeConverter(typeof(EnumConverter))]
             [REDName("platform")]
             public platform Platform { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to output cache file.")]
+            [Category("Is Required"),
+            Description("Path to output cache file.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
@@ -359,13 +357,13 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("N - Process every Nth file")]
+            [Category("Optional"),
+            Description("N - Process every Nth file")]
             [REDName("modulo")]
             public string Modulo { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("X - Initial offset for processing(use only with -modulo)")]
+            [Category("Optional"),
+            Description("X - Initial offset for processing(use only with -modulo)")]
             [REDName("offset")]
             public string Offset { get; set; }
 
@@ -373,7 +371,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Generates a metadata.store file for the specified directory.\n Usage: metadatastore -path=")]
+        [Description("Generates a metadata.store file for the specified directory.\n Usage: metadatastore -path=")]
         public class metadatastore : WCC_Command
         {
             public metadatastore()
@@ -384,8 +382,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to bundles directory.")]
+            [Category("Is Required"),
+            Description("Path to bundles directory.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("path")]
@@ -393,7 +391,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Cook file lists, generate cooked data and bundle files for packing.\n Usage: cook")]
+        [Description("Cook file lists, generate cooked data and bundle files for packing.\n Usage: cook")]
         public class cook : WCC_Command
         {
             public cook()
@@ -404,14 +402,14 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Select target platform(required)")]
+            [Category("Is Required"),
+            Description("Select target platform(required)")]
             [TypeConverter(typeof(EnumConverter))]
             [REDName("platform")]
             public platform Platform { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Sepcify output directory(required).")]
+            [Category("Is Required"),
+            Description("Sepcify output directory(required).")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
@@ -421,89 +419,89 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Optional"),
+            Description("NO INFO")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("basedir")]
             public string basedir { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Optional"),
+            Description("NO INFO")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("mod")]
             public string mod { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Input seed file(required).")]
+            [Category("Optional"),
+            Description("Input seed file(required).")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("seed")]
             public string seed { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Manual depot file for cooking.")]
+            [Category("Optional"),
+            Description("Manual depot file for cooking.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Cook.db file to check if it containes trimmed files.")]
+            [Category("Optional"),
+            Description("Cook.db file to check if it containes trimmed files.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("additionalDB")]
             public string AdditionalDB { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("List of trimmed files from cook.")]
+            [Category("Optional"),
+            Description("List of trimmed files from cook.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path")]
             [REDName("trimedfiles")]
             public string trimedfiles { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Don't cook resources from one directory.")]
+            [Category("Optional"),
+            Description("Don't cook resources from one directory.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("excludedir")]
             public string excludedir { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Cook resources only from one directory.")]
+            [Category("Optional"),
+            Description("Cook resources only from one directory.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags(/*"Path",*/ "In")]
             [REDName("trimdir")]
             public string trimdir { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Allow cooking errors.")]
+            [Category("Optional"),
+            Description("Allow cooking errors.")]
             [REDName("noerrors")]
             public bool noerrors { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Allow asserts.")]
+            [Category("Optional"),
+            Description("Allow asserts.")]
             [REDName("noasserts")]
             public bool noasserts { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("No output.")]
+            [Category("Optional"),
+            Description("No output.")]
             [REDName("silent")]
             public bool silent { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Ignore files with given extension.")]
+            [Category("Optional"),
+            Description("Ignore files with given extension.")]
             [REDName("ignore")]
             public bool ignore { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Capture and save all cooked string ID's.")]
+            [Category("Optional"),
+            Description("Capture and save all cooked string ID's.")]
             [REDName("stringids")]
             public bool stringids { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Capture and save all cooked string key's.")]
+            [Category("Optional"),
+            Description("Capture and save all cooked string key's.")]
             [REDName("stringkeys")]
             public bool stringkeys { get; set; }
 
@@ -511,7 +509,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Packs file from given directory into a bundle.\n Usage: pack -dir= -outdir= [-compression=]")]
+        [Description("Packs file from given directory into a bundle.\n Usage: pack -dir= -outdir= [-compression=]")]
         public class pack : WCC_Command
         {
             public pack()
@@ -522,15 +520,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Input directory to pack")]
+            [Category("Is Required"),
+            Description("Input directory to pack")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("dir")]
             public string Directory { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Output directory with bundles (note: bundles bigger than 4GB are split)")]
+            [Category("Is Required"),
+            Description("Output directory with bundles (note: bundles bigger than 4GB are split)")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
@@ -539,15 +537,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Compression type to use(default: LZ4HC)")]
+            [Category("Optional"),
+            Description("Compression type to use(default: LZ4HC)")]
             [TypeConverter(typeof(EnumConverter))]
             [REDName("compression")]
             public compression compression { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute("Cooks materials.\n Usage: cookmaterials -platform (-material=) (-fur=)")]
+        [Description("Cooks materials.\n Usage: cookmaterials -platform (-material=) (-fur=)")]
         public class cookmaterials : WCC_Command
         {
             public cookmaterials()
@@ -558,8 +556,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("")]
+            [Category("Is Required"),
+            Description("")]
             [TypeConverter(typeof(EnumConverter))]
             [REDName("platform")]
             public platform Platform { get; set; }
@@ -567,33 +565,33 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("")]
+            [Category("Optional"),
+            Description("")]
             [REDName("static")]
             public bool Static { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("")]
+            [Category("Optional"),
+            Description("")]
             [REDName("fastfx")]
             public bool fastfx { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("")]
+            [Category("Optional"),
+            Description("")]
             [REDName("allmaterials")]
             public bool allmaterials { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("")]
+            [Category("Optional"),
+            Description("")]
             [REDName("material")]
             public string material { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("")]
+            [Category("Optional"),
+            Description("")]
             [REDName("resaveCRC")]
             public bool resaveCRC { get; set; }
         
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("")]
+            [Category("Optional"),
+            Description("")]
             [REDName("fur")]
             public string fur { get; set; }
         }
@@ -603,7 +601,7 @@ namespace WolvenKit.Common.Wcc
         #region Uncommon Commands
 
         [Serializable]
-        [DescriptionAttribute("Analyze game and engine data and output cook lists.\n Usage: analyze -out [optional params]")]
+        [Description("Analyze game and engine data and output cook lists.\n Usage: analyze -out [optional params]")]
         public class analyze : WCC_Command
         {
             public analyze()
@@ -616,14 +614,14 @@ namespace WolvenKit.Common.Wcc
             /// Required
             /// </summary>
             [REDTags(new string[] { "Keyword" })]
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Choose object to analyze.")]
+            [Category("Is Required"),
+            Description("Choose object to analyze.")]
             [TypeConverter(typeof(EnumConverter))]
             [REDName("analyzer")]
             public analyzers Analyzer { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Output absolute path")]
+            [Category("Is Required"),
+            Description("Output absolute path")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
@@ -632,19 +630,19 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Choose file to analyze.")]
+            [Category("Is Required"),
+            Description("Choose file to analyze.")]
             [REDName("Object")]
             public string Object { get; set; }/// 
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("reddlc relative path to use with analyze r4dlc")]
+            [Category("Optional"),
+            Description("reddlc relative path to use with analyze r4dlc")]
             [REDName("-dlc")]
             public string reddlc { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute("Split cache file into multiple files.\n Usage: splitcache -file= -db=<cook.db> -outdir= Options:")]
+        [Description("Split cache file into multiple files.\n Usage: splitcache -file= -db=<cook.db> -outdir= Options:")]
         public class splitcache : WCC_Command
         {
             public splitcache()
@@ -654,22 +652,22 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("input cache file.")]
+            [Category("Is Required"),
+            Description("input cache file.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get;set;}
 
-            [CategoryAttribute("Is Required")]
-            [DescriptionAttribute("path to the cook.db file to use as a reference")]
+            [Category("Is Required")]
+            [Description("path to the cook.db file to use as a reference")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string Database { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("where to place output caches.")]
+            [Category("Is Required"),
+            Description("where to place output caches.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
@@ -679,20 +677,20 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("use custom fallback chunk name")]
+            [Category("Optional"),
+            Description("use custom fallback chunk name")]
             [REDName("fallback")]
             public string Fallback { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("remove data from non cooked files")]
+            [Category("Optional"),
+            Description("remove data from non cooked files")]
             [REDName("strip")]
             public bool Strip { get; set; }
         
         }
 
         [Serializable]
-        [DescriptionAttribute("Reports file usage and chunk distribution of a given cook database.\n Usage: reportchunks -db= -out=")]
+        [Description("Reports file usage and chunk distribution of a given cook database.\n Usage: reportchunks -db= -out=")]
         public class reportchunks : WCC_Command
         {
             public reportchunks()
@@ -703,15 +701,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("path to the cook.db file to use as a reference")]
+            [Category("Is Required"),
+            Description("path to the cook.db file to use as a reference")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string Database { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("where to place output.")]
+            [Category("Is Required"),
+            Description("where to place output.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
@@ -720,34 +718,34 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Outputs exhaustive report(default).")]
+            [Category("Optional"),
+            Description("Outputs exhaustive report(default).")]
             [REDName("showall")]
             public bool Showall { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Outputs global statistics.")]
+            [Category("Optional"),
+            Description("Outputs global statistics.")]
             [REDName("showsumary")]
             public bool Showsumary { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Outputs extension/chunk statistics.")]
+            [Category("Optional"),
+            Description("Outputs extension/chunk statistics.")]
             [REDName("showextensions")]
             public bool showextensions { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Outputs file/chunk statistics (slow!).")]
+            [Category("Optional"),
+            Description("Outputs file/chunk statistics (slow!).")]
             [REDName("showfilechunks")]
             public bool showfilechunks { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Outputs the list of files in each chunk(slow!)")]
+            [Category("Optional"),
+            Description("Outputs the list of files in each chunk(slow!)")]
             [REDName("showchunkfiles")]
             public bool showchunkfiles { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute("Dump data from compiled scripts. \n Usage: dumpscripts -file= -out=")]
+        [Description("Dump data from compiled scripts. \n Usage: dumpscripts -file= -out=")]
         public class dumpscripts : WCC_Command
         {
             public dumpscripts()
@@ -758,15 +756,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("<scriptfile.redscripts> - Input file (compiled script binary).")]
+            [Category("Is Required"),
+            Description("<scriptfile.redscripts> - Input file (compiled script binary).")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("<outputfile.txt> - Output report file")]
+            [Category("Is Required"),
+            Description("<outputfile.txt> - Output report file")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outpath")]
@@ -774,7 +772,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Validate resources.\n Usage: validate[-db= -file = -all] -outdir=")]
+        [Description("Validate resources.\n Usage: validate[-db= -file = -all] -outdir=")]
         public class validate : WCC_Command
         {
             public validate()
@@ -785,22 +783,22 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("cook.db file")]
+            [Category("Is Required"),
+            Description("cook.db file")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string db { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Validate single file.")]
+            [Category("Is Required"),
+            Description("Validate single file.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Is Required"),
+            Description("NO INFO")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
@@ -809,14 +807,14 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Validate all files in depot (not recommended)")]
+            [Category("Optional"),
+            Description("Validate all files in depot (not recommended)")]
             [REDName("all")]
             public bool all { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute("Save Dialog Lines.\n Usage: get_txts -db= -outdir= [-lang=]")]
+        [Description("Save Dialog Lines.\n Usage: get_txts -db= -outdir= [-lang=]")]
         public class get_txts : WCC_Command
         {
             public get_txts()
@@ -827,15 +825,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("cook.db file")]
+            [Category("Is Required"),
+            Description("cook.db file")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string db { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Is Required"),
+            Description("NO INFO")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
@@ -844,15 +842,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Optional"),
+            Description("NO INFO")]
             [TypeConverter(typeof(EnumConverter))]
             [REDName("lang")]
             public language lang { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute("Optimize(resort) collision cache.\n Usage: optimizecollisioncache -file= -out=")]
+        [Description("Optimize(resort) collision cache.\n Usage: optimizecollisioncache -file= -out=")]
         public class optimizecollisioncache : WCC_Command
         {
             public optimizecollisioncache()
@@ -863,15 +861,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("depot path to the file")]
+            [Category("Is Required"),
+            Description("depot path to the file")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("absolute path to the output file")]
+            [Category("Is Required"),
+            Description("absolute path to the output file")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
@@ -879,7 +877,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Generalized commandlet for creating differential patches for specified type of content.\n ote: you can use -mod OR -current params\n Usage: patch -base= -current= -mod= [-name= ] -outdir=")]
+        [Description("Generalized commandlet for creating differential patches for specified type of content.\n ote: you can use -mod OR -current params\n Usage: patch -base= -current= -mod= [-name= ] -outdir=")]
         public class patch : WCC_Command
         {
             public patch()
@@ -890,22 +888,22 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to the base build (GoldMaster)")]
+            [Category("Is Required"),
+            Description("Path to the base build (GoldMaster)")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("base")]
             public string Base { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("(pro) Path to the current build (latest cook)")]
+            [Category("Is Required"),
+            Description("(pro) Path to the current build (latest cook)")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("current")]
             public string Current { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to the cooked mod directory")]
+            [Category("Is Required"),
+            Description("Path to the cooked mod directory")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("mod")]
@@ -914,13 +912,13 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Output using custom directory name.")]
+            [Category("Optional"),
+            Description("Output using custom directory name.")]
             [REDName("name")]
             public string DirectoryName { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Output directory where the patched content will be dumped.")]
+            [Category("Optional"),
+            Description("Output directory where the patched content will be dumped.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("path")]
@@ -942,7 +940,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Extracts a list of character templates from cook.db.\n Usage: r4characters -db= -out=")]
+        [Description("Extracts a list of character templates from cook.db.\n Usage: r4characters -db= -out=")]
         public class r4characters : WCC_Command
         {
             public r4characters()
@@ -953,15 +951,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("cook.db file")]
+            [Category("Is Required"),
+            Description("cook.db file")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string db { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Outfile")]
+            [Category("Is Required"),
+            Description("Outfile")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
@@ -969,7 +967,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Extracts a list of character templates from cook.db.\n Usage: r4characters -db= -out=")]
+        [Description("Extracts a list of character templates from cook.db.\n Usage: r4characters -db= -out=")]
         public class r4charactersdlc : WCC_Command
         {
             public r4charactersdlc()
@@ -980,15 +978,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("cook.db file")]
+            [Category("Is Required"),
+            Description("cook.db file")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string db { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Outfile")]
+            [Category("Is Required"),
+            Description("Outfile")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
@@ -996,7 +994,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Dumps the charset used in a given strings file(*.w3strings).\n Usage: dumpcharset -instringsfile= -outcharsetfile= [options]")]
+        [Description("Dumps the charset used in a given strings file(*.w3strings).\n Usage: dumpcharset -instringsfile= -outcharsetfile= [options]")]
         public class dumpcharset : WCC_Command
         {
             public dumpcharset()
@@ -1007,15 +1005,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to the input strings file.")]
+            [Category("Is Required"),
+            Description("Path to the input strings file.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("instringsfile")]
             public string Instringsfile { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to the out charset file (if not given, default is used).")]
+            [Category("Is Required"),
+            Description("Path to the out charset file (if not given, default is used).")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outcharsetfile")]
@@ -1024,29 +1022,29 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Dumps all string entries into filepath. Only in single file mode.")]
+            [Category("Optional"),
+            Description("Dumps all string entries into filepath. Only in single file mode.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outentriesfile")]
             public string Outentriesfile { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Path to base directory for recursive dump. Used with targetlanguage.")]
+            [Category("Optional"),
+            Description("Path to base directory for recursive dump. Used with targetlanguage.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("directory")]
             public string Directory { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Target language for recursive dump. Used with targetlanguage.")]
+            [Category("Optional"),
+            Description("Target language for recursive dump. Used with targetlanguage.")]
             [TypeConverter(typeof(EnumConverter))]
             [REDName("language")]
             public language Language { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute("Create USMs.\n Usage:  NO INFO")]
+        [Description("Create USMs.\n Usage:  NO INFO")]
         public class venc : WCC_Command
         {
             public venc()
@@ -1057,35 +1055,35 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Input Directory")]
+            [Category("Is Required"),
+            Description("Input Directory")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("indir")]
             public string InputDirectory { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("")]
+            [Category("Is Required"),
+            Description("")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("usmdir")]
             public string usmDirectory { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("")]
+            [Category("Is Required"),
+            Description("")]
             [REDName("bitrate")]
             public int Bitrate { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("")]
+            [Category("Is Required"),
+            Description("")]
             [REDName("cue_subs")]
             public bool Cue_subs { get; set; }
 
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("arabic font file")]
+            [Category("Optional"),
+            Description("arabic font file")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("ar_font")]
@@ -1094,7 +1092,7 @@ namespace WolvenKit.Common.Wcc
         }
     
         [Serializable]
-        [DescriptionAttribute("Build dependency cache file.\n Usage: dependencies -out= -report= [-db=]")]
+        [Description("Build dependency cache file.\n Usage: dependencies -out= -report= [-db=]")]
         public class dependencies : WCC_Command
         {
             public dependencies()
@@ -1105,15 +1103,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Save dependency cache to file")]
+            [Category("Is Required"),
+            Description("Save dependency cache to file")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
             public string Out { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Use dependencies in cook.db file instead of full depot")]
+            [Category("Is Required"),
+            Description("Use dependencies in cook.db file instead of full depot")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
@@ -1122,8 +1120,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Generate dependency report in given directory")]
+            [Category("Optional"),
+            Description("Generate dependency report in given directory")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("report")]
@@ -1131,7 +1129,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Build final bundle lists.\n Usage: exportbundles -db= -seed= -spatial= -out=")]
+        [Description("Build final bundle lists.\n Usage: exportbundles -db= -seed= -spatial= -out=")]
         public class exportbundles : WCC_Command
         {
             public exportbundles()
@@ -1142,29 +1140,29 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Use dependencies in cook.db file instead of full depot")]
+            [Category("Is Required"),
+            Description("Use dependencies in cook.db file instead of full depot")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string db { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Initial list of seed files")]
+            [Category("Is Required"),
+            Description("Initial list of seed files")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("seed")]
             public string Seed { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Additional list of seed files that represent spatial configuration(they override the existing bundles).")]
+            [Category("Is Required"),
+            Description("Additional list of seed files that represent spatial configuration(they override the existing bundles).")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("spatial")]
             public string SpatialSeeds { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Absolute path to the final output file (JSON bundle list)")]
+            [Category("Is Required"),
+            Description("Absolute path to the final output file (JSON bundle list)")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
@@ -1173,21 +1171,21 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Split bundles into chunks using given split file.")]
+            [Category("Optional"),
+            Description("Split bundles into chunks using given split file.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("split")]
             public string split { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Use fast compression for bunles(much faster, larged output bundles).")]
+            [Category("Optional"),
+            Description("Use fast compression for bunles(much faster, larged output bundles).")]
             [REDName("extrafast")]
             public bool extrafast { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute("Check file versions.\n Usage: filever -ext= -file -min -verbose -histogram")]
+        [Description("Check file versions.\n Usage: filever -ext= -file -min -verbose -histogram")]
         public class filever : WCC_Command
         {
             public filever()
@@ -1198,36 +1196,36 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Check only files with give extensions")]
+            [Category("Optional"),
+            Description("Check only files with give extensions")]
             [REDName("ext")]
             public string ext { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Check only given files.")]
+            [Category("Optional"),
+            Description("Check only given files.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
             public string File { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Treat any file with version lower than given number as error.")]
+            [Category("Optional"),
+            Description("Treat any file with version lower than given number as error.")]
             [REDName("min")]
             public bool min { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Print all invalid files.")]
+            [Category("Optional"),
+            Description("Print all invalid files.")]
             [REDName("verbose")]
             public bool verbose { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Print version histogram.")]
+            [Category("Optional"),
+            Description("Print version histogram.")]
             [REDName("histogram")]
             public bool histogram { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute("Saves quest layout for use in external QuestDebugger.\n Usage: questlayoutdump -quest -out")]
+        [Description("Saves quest layout for use in external QuestDebugger.\n Usage: questlayoutdump -quest -out")]
         public class questlayoutdump : WCC_Command
         {
             public questlayoutdump()
@@ -1238,15 +1236,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("quest_path")]
+            [Category("Is Required"),
+            Description("quest_path")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("quest")]
             public string quest { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("dump_path")]
+            [Category("Is Required"),
+            Description("dump_path")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
@@ -1254,7 +1252,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Export spatial resource usage information from a given world.\n Usage:  resourceusage -world= -out= [options]")]
+        [Description("Export spatial resource usage information from a given world.\n Usage:  resourceusage -world= -out= [options]")]
         public class resourceusage : WCC_Command
         {
             public resourceusage()
@@ -1265,15 +1263,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Specifies path to the world file(required)")]
+            [Category("Is Required"),
+            Description("Specifies path to the world file(required)")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("world")]
             public string world { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Specifies path to the output file(required)")]
+            [Category("Is Required"),
+            Description("Specifies path to the output file(required)")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
@@ -1282,24 +1280,24 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Allow cooking errors")]
+            [Category("Optional"),
+            Description("Allow cooking errors")]
             [REDName("noerrors")]
             public bool noerrors { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Allow asserts")]
+            [Category("Optional"),
+            Description("Allow asserts")]
             [REDName("noasserts")]
             public bool noasserts { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("No output")]
+            [Category("Optional"),
+            Description("No output")]
             [REDName("silent")]
             public bool silent { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute("Don't ask.\n Usage: cooksubs font subtitles")]
+        [Description("Don't ask.\n Usage: cooksubs font subtitles")]
         public class cooksubs : WCC_Command
         {
             public cooksubs()
@@ -1310,15 +1308,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("subtitles_path needs to be ucs-2 little endian because of our engine the output file is utf8...")]
+            [Category("Is Required"),
+            Description("subtitles_path needs to be ucs-2 little endian because of our engine the output file is utf8...")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("subtitles")]
             public string Subtitles { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Is Required"),
+            Description("NO INFO")]
             [REDName("font")]
             public string Font { get; set; }
 
@@ -1328,7 +1326,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("No operation.\n Usage: wcc cooksounds output_dir sound_resource_dir platforms")]
+        [Description("No operation.\n Usage: wcc cooksounds output_dir sound_resource_dir platforms")]
         public class cooksounds : WCC_Command
         {
             public cooksounds()
@@ -1339,22 +1337,22 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Is Required"),
+            Description("NO INFO")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("output_dir")]
             public string OutpuDirectory { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Is Required"),
+            Description("NO INFO")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("sound_resource_dir")]
             public string SoundResourceDirectory { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Is Required"),
+            Description("NO INFO")]
             [TypeConverter(typeof(EnumConverter))]
             [REDName("platforms")]
             public platform Platforms { get; set; }
@@ -1365,7 +1363,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Split the files into content buckets.\n Usage: split -db= [-seed=] -out=")]
+        [Description("Split the files into content buckets.\n Usage: split -db= [-seed=] -out=")]
         public class split : WCC_Command
         {
             public split()
@@ -1376,15 +1374,15 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to the cook.db file")]
+            [Category("Is Required"),
+            Description("Path to the cook.db file")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("db")]
             public string db { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Output file name")]
+            [Category("Is Required"),
+            Description("Output file name")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
@@ -1393,22 +1391,22 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Path to the a seed file (multiple files supported)")]
+            [Category("Optional"),
+            Description("Path to the a seed file (multiple files supported)")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("seed")]
             public string seed { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Specify custom fallback chunk for unassigned resources")]
+            [Category("Optional"),
+            Description("Specify custom fallback chunk for unassigned resources")]
             [REDName("fallback")]
             public string fallback { get; set; }
 
         }
 
         [Serializable]
-        [DescriptionAttribute("Packs a world directories into a single dzip for faster loading and deployment on consoles.\n  Creates streaming installer data for use by the game. Supported cooking platforms: PS4.\n  Usage: package app [options]")]
+        [Description("Packs a world directories into a single dzip for faster loading and deployment on consoles.\n  Creates streaming installer data for use by the game. Supported cooking platforms: PS4.\n  Usage: package app [options]")]
         public class package : WCC_Command
         {
             public package()
@@ -1419,22 +1417,22 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("absolute path to final deliverable. E.g., z:\\Build_109641Change_652889\\PS4")]
+            [Category("Is Required"),
+            Description("absolute path to final deliverable. E.g., z:\\Build_109641Change_652889\\PS4")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("i")]
             public string InDirectory { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("absolute path where to create gp4, pkg and iso")]
+            [Category("Is Required"),
+            Description("absolute path where to create gp4, pkg and iso")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("o")]
             public string OutDirectory { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("absolute path to the language definitions")]
+            [Category("Is Required"),
+            Description("absolute path to the language definitions")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("l")]
@@ -1443,8 +1441,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("temp directory")]
+            [Category("Optional"),
+            Description("temp directory")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path")]
             [REDName("t")]
@@ -1463,7 +1461,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Splits strings and speech files for a given language based on JSON descriptor.\n Usage:splitstrings[-dlc] -splitfile= -idsfile= -keysfile= -indir= -outdir=")]
+        [Description("Splits strings and speech files for a given language based on JSON descriptor.\n Usage:splitstrings[-dlc] -splitfile= -idsfile= -keysfile= -indir= -outdir=")]
         public class splitstrings : WCC_Command
         {
             public splitstrings()
@@ -1474,36 +1472,36 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to the split file(mapping resources to chunks, not required in DLC mode).")]
+            [Category("Is Required"),
+            Description("Path to the split file(mapping resources to chunks, not required in DLC mode).")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("splitfile")]
             public string Splitfile { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to the ids file(mapping resources to string ID's).")]
+            [Category("Is Required"),
+            Description("Path to the ids file(mapping resources to string ID's).")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("idsfile")]
             public string Idsfile { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to the keys file[optional](mapping resources to string Key's).")]
+            [Category("Is Required"),
+            Description("Path to the keys file[optional](mapping resources to string Key's).")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("keysfile")]
             public string Keysfile { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to the directory where the language files reside.")]
+            [Category("Is Required"),
+            Description("Path to the directory where the language files reside.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("indir")]
             public string Indir { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to the directory where the split files will reside.")]
+            [Category("Is Required"),
+            Description("Path to the directory where the split files will reside.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("outdir")]
@@ -1512,45 +1510,45 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Add language to the splitting plan(default is 'en').")]
+            [Category("Optional"),
+            Description("Add language to the splitting plan(default is 'en').")]
             [REDName("language")]
             public language Language { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Add platform to the splitting plan(default is 'pc').")]
+            [Category("Optional"),
+            Description("Add platform to the splitting plan(default is 'pc').")]
             [REDName("platform")]
             public platform Platform { get; set; }
         
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Run in the DLC mode (no per-chunk splitting)")]
+            [Category("Optional"),
+            Description("Run in the DLC mode (no per-chunk splitting)")]
             [REDName("dlc")]
             public bool Dlc { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Split strings only (everything is done by default).")]
+            [Category("Optional"),
+            Description("Split strings only (everything is done by default).")]
             [REDName("idsfile")]
             public bool Dostrings { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Split speech only(everything is done by default).")]
+            [Category("Optional"),
+            Description("Split speech only(everything is done by default).")]
             [REDName("dospeech")]
             public bool Dospeech { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Merges all chunks into content0(debug option).")]
+            [Category("Optional"),
+            Description("Merges all chunks into content0(debug option).")]
             [REDName("allincontent0")]
             public bool Allincontent0 { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Outputs all files in the same folder(debug option).")]
+            [Category("Optional"),
+            Description("Outputs all files in the same folder(debug option).")]
             [REDName("allinsamefolder")]
             public bool allinsamefolder { get; set; }
 
         }
 
         [Serializable]
-        [DescriptionAttribute("Dumps SWF resources.\n Usage: swfdump[out]")]
+        [Description("Dumps SWF resources.\n Usage: swfdump[out]")]
         public class swfdump : WCC_Command
         {
             public swfdump()
@@ -1561,8 +1559,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("out directory.")]
+            [Category("Is Required"),
+            Description("out directory.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out")]
@@ -1574,7 +1572,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute(" Bulk import resources preserving directory structure.\n Usage: import [option1 value1 [option2 value2 [...]]]")]
+        [Description(" Bulk import resources preserving directory structure.\n Usage: import [option1 value1 [option2 value2 [...]]]")]
         public class swfimport : WCC_Command
         {
             public swfimport()
@@ -1585,8 +1583,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("absolute path to scan inside")]
+            [Category("Optional"),
+            Description("absolute path to scan inside")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("fromAbsPath")]
@@ -1595,8 +1593,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("depot path to import to")]
+            [Category("Optional"),
+            Description("depot path to import to")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("toDepotPath")]
@@ -1604,7 +1602,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Resaves resources and optionally submits the changes into P4.\n Usage:  resave -tmpdir= [options]")]
+        [Description("Resaves resources and optionally submits the changes into P4.\n Usage:  resave -tmpdir= [options]")]
         public class resave : WCC_Command
         {
             public resave()
@@ -1615,91 +1613,91 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Absolute path to temporary folder.")]
+            [Category("Is Required"),
+            Description("Absolute path to temporary folder.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path")]
             [REDName("tmpdir")]
             public string TempDirectory { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Base directory path to scan(full depot resave if not specified).")]
+            [Category("Optional"),
+            Description("Base directory path to scan(full depot resave if not specified).")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("path")]
             public string Path { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Comma-separated list of extensions to scan for (full resave if not specified).")]
+            [Category("Optional"),
+            Description("Comma-separated list of extensions to scan for (full resave if not specified).")]
             [REDName("ext")]
             public string ext { get; set; }
 
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Disables version control(local resave).")]
+            [Category("Optional"),
+            Description("Disables version control(local resave).")]
             [REDName("nosourcecontrol")]
             public bool nosourcecontrol { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Resave even if files are latest version.")]
+            [Category("Optional"),
+            Description("Resave even if files are latest version.")]
             [REDName("ignorefileversion")]
             public bool ignorefileversion { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Force reset and setup of streaming in world and layers (dangerous!).")]
+            [Category("Optional"),
+            Description("Force reset and setup of streaming in world and layers (dangerous!).")]
             [REDName("forcestreamingsetup")]
             public bool forcestreamingsetup { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Add resaved files into the given changelist(when enabled).")]
+            [Category("Optional"),
+            Description("Add resaved files into the given changelist(when enabled).")]
             [REDName("cl")]
             public bool cl { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Enables CL submit when finished(disabled by default).")]
+            [Category("Optional"),
+            Description("Enables CL submit when finished(disabled by default).")]
             [REDName("submitwhenfinished")]
             public bool submitwhenfinished { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Discards files for which data has not changed(disabled by default, potentially slow).")]
+            [Category("Optional"),
+            Description("Discards files for which data has not changed(disabled by default, potentially slow).")]
             [REDName("discardunchangeddata")]
             public bool discardunchangeddata { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Resaves only the given list of files.")]
+            [Category("Optional"),
+            Description("Resaves only the given list of files.")]
             [REDName("customresave")]
             public bool customresave { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("username -- username for Perforce")]
+            [Category("Optional"),
+            Description("username -- username for Perforce")]
             [REDName("p4user")]
             public bool p4user { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("client -- client(workspace) for Perforce")]
+            [Category("Optional"),
+            Description("client -- client(workspace) for Perforce")]
             [REDName("p4client")]
             public bool p4client { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("host -- hostname for Perforce")]
+            [Category("Optional"),
+            Description("host -- hostname for Perforce")]
             [REDName("p4host")]
             public bool p4host { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("password -- password for Perforce")]
+            [Category("Optional"),
+            Description("password -- password for Perforce")]
             [REDName("p4password")]
             public bool p4password { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("port -- port for Perforce")]
+            [Category("Optional"),
+            Description("port -- port for Perforce")]
             [REDName("p4port")]
             public bool p4port { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute("Generate occlusion for given worlds\n Usage: cookocclusion -world= [-smallesOccluder=][-smallestHole=][-tileSize=][-xMin=][-xMax=][-yMin=][-yMax=]")]
+        [Description("Generate occlusion for given worlds\n Usage: cookocclusion -world= [-smallesOccluder=][-smallestHole=][-tileSize=][-xMin=][-xMax=][-yMin=][-yMax=]")]
         public class cookocclusion : WCC_Command
         {
             public cookocclusion()
@@ -1710,8 +1708,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("pathToWorldFile")]
+            [Category("Is Required"),
+            Description("pathToWorldFile")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("world")]
@@ -1720,44 +1718,44 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Optional"),
+            Description("NO INFO")]
             [REDName("smallesOccluder")]
             public string smallesOccluder { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Optional"),
+            Description("NO INFO")]
             [REDName("smallestHole")]
             public string smallestHole { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Optional"),
+            Description("NO INFO")]
             [REDName("tileSize")]
             public string tileSize { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Optional"),
+            Description("NO INFO")]
             [REDName("xMin")]
             public string xMin { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Optional"),
+            Description("NO INFO")]
             [REDName("xMax")]
             public string xMax { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Optional"),
+            Description("NO INFO")]
             [REDName("yMin")]
             public string yMin { get; set; }
 
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Optional"),
+            Description("NO INFO")]
             [REDName("yMax")]
             public string yMax { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute("Calculate required memory for runtime occlusion data for the level.\n Usage: calculateRuntimeOcclusionMemory [-density=] -world=")]
+        [Description("Calculate required memory for runtime occlusion data for the level.\n Usage: calculateRuntimeOcclusionMemory [-density=] -world=")]
         public class calculateRuntimeOcclusionMemory : WCC_Command
         {
             public calculateRuntimeOcclusionMemory()
@@ -1768,8 +1766,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("pathToWorldFile")]
+            [Category("Is Required"),
+            Description("pathToWorldFile")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("world")]
@@ -1778,14 +1776,14 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Optional"),
+            Description("NO INFO")]
             [REDName("density")]
             public string Density { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute("Find duplicate geometry for the level.\n Usage: findDuplicates -world= [-output=]")]
+        [Description("Find duplicate geometry for the level.\n Usage: findDuplicates -world= [-output=]")]
         public class findDuplicates : WCC_Command
         {
             public findDuplicates()
@@ -1796,8 +1794,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("pathToWorldFile")]
+            [Category("Is Required"),
+            Description("pathToWorldFile")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("world")]
@@ -1806,8 +1804,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("file")]
+            [Category("Optional"),
+            Description("file")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("output")]
@@ -1815,7 +1813,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Generate navigation data for given world.\n Usage: pathlib -rootSearchDir= -filePattern=")]
+        [Description("Generate navigation data for given world.\n Usage: pathlib -rootSearchDir= -filePattern=")]
         public class pathlib : WCC_Command
         {
             public pathlib()
@@ -1826,21 +1824,21 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Is Required"),
+            Description("NO INFO")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("rootSearchDir")]
             public string RootSearchDir { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Is Required"),
+            Description("NO INFO")]
             [REDName("FilePattern")]
             public string FilePattern { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute(" Cooks strings and speech database, given a list of languages and platforms.\n Usage: pcookstrings -out_dir= -source_dir= -db_string_view= -languages= -platforms=")]
+        [Description(" Cooks strings and speech database, given a list of languages and platforms.\n Usage: pcookstrings -out_dir= -source_dir= -db_string_view= -languages= -platforms=")]
         public class cookstrings : WCC_Command
         {
             public cookstrings()
@@ -1852,33 +1850,33 @@ namespace WolvenKit.Common.Wcc
             /// Required
             /// </summary>
             /// 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to the base directory where speech data resides.")]
+            [Category("Is Required"),
+            Description("Path to the base directory where speech data resides.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("source_dir")]
             public string InputDirectory { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to the directory where the caches will be stored.")]
+            [Category("Is Required"),
+            Description("Path to the directory where the caches will be stored.")]
             //[EditorAttribute(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "Out")]
             [REDName("out_dir")]
             public string OutputDirectory { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("SQL query.")]
+            [Category("Is Required"),
+            Description("SQL query.")]
             [REDName("db_string_view")]
             public string db_string_view { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("List of languages to cook.")]
+            [Category("Is Required"),
+            Description("List of languages to cook.")]
             [TypeConverter(typeof(EnumConverter))]
             [REDName("languages")]
             public language Languages { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("List of platforms to cook for.")]
+            [Category("Is Required"),
+            Description("List of platforms to cook for.")]
             [TypeConverter(typeof(EnumConverter))]
             [REDName("platforms")]
             public platform Platforms { get; set; }
@@ -1886,14 +1884,14 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Optional
             /// </summary>
-            [CategoryAttribute("Optional"),
-            DescriptionAttribute("Cooks only strings.")]
+            [Category("Optional"),
+            Description("Cooks only strings.")]
             [REDName("skipspeech")]
             public bool Skipspeech { get; set; }
         }
 
         [Serializable]
-        [DescriptionAttribute("Test asynchronous collision cache access.\n Usage: testcollisioncache -file=")]
+        [Description("Test asynchronous collision cache access.\n Usage: testcollisioncache -file=")]
         public class testcollisioncache : WCC_Command
         {
             public testcollisioncache()
@@ -1904,8 +1902,8 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("File Cache.")]
+            [Category("Is Required"),
+            Description("File Cache.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("file")]
@@ -1913,7 +1911,7 @@ namespace WolvenKit.Common.Wcc
         }
     
         [Serializable]
-        [DescriptionAttribute(" Test memory framework, streaming, GC and resource management stability.\n Usage: testmem[params]")]
+        [Description(" Test memory framework, streaming, GC and resource management stability.\n Usage: testmem[params]")]
         public class testmem : WCC_Command
         {
             public testmem()
@@ -1924,25 +1922,25 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Path to the w2w file to load.")]
+            [Category("Is Required"),
+            Description("Path to the w2w file to load.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("world")]
             public string WorldFile { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Number of test iterations.")]
+            [Category("Is Required"),
+            Description("Number of test iterations.")]
             [REDName("numiter")]
             public string TestIterations { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Number of test points.")]
+            [Category("Is Required"),
+            Description("Number of test points.")]
             [REDName("numpoints")]
             public string TestPoints { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Extents (around origin) to test.")]
+            [Category("Is Required"),
+            Description("Extents (around origin) to test.")]
             [REDName("extents")]
             public string Extents { get; set; }
 
@@ -1952,7 +1950,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Convert voiceover files from .wav to .ogg.\n Usage: wcc voconvert -wwise_bin_dir= -voiceivers_source_dir= -platform= languages=")]
+        [Description("Convert voiceover files from .wav to .ogg.\n Usage: wcc voconvert -wwise_bin_dir= -voiceivers_source_dir= -platform= languages=")]
         public class voconvert : WCC_Command
         {
             public voconvert()
@@ -1963,28 +1961,28 @@ namespace WolvenKit.Common.Wcc
             /// <summary>
             /// Required
             /// </summary>
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("NO INFO.")]
+            [Category("Is Required"),
+            Description("NO INFO.")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("wwise_bin_dir")]
             public string Wwise_bin_dir { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("NO INFO")]
+            [Category("Is Required"),
+            Description("NO INFO")]
             //[EditorAttribute(typeof(FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
             [REDTags("Path", "In")]
             [REDName("voiceivers_source_dir")]
             public string Voiceivers_source_dir { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Platform (pc ..)")]
+            [Category("Is Required"),
+            Description("Platform (pc ..)")]
             [TypeConverter(typeof(EnumConverter))]
             [REDName("platform")]
             public platform Platform { get; set; }
 
-            [CategoryAttribute("Is Required"),
-            DescriptionAttribute("Languages (en, de...)")]
+            [Category("Is Required"),
+            Description("Languages (en, de...)")]
             [TypeConverter(typeof(EnumConverter))]
             [REDName("languages")]
             public language Languages { get; set; }
@@ -1998,7 +1996,7 @@ namespace WolvenKit.Common.Wcc
 
         #region Unknown Commands
         [Serializable]
-        [DescriptionAttribute("Simply tests wcc.")]
+        [Description("Simply tests wcc.")]
         public class cookertest : WCC_Command
         {
             public cookertest()
@@ -2008,7 +2006,7 @@ namespace WolvenKit.Common.Wcc
 
         }
         [Serializable]
-        [DescriptionAttribute("Glues files into optimal files. \n Usage: NO INFO")]
+        [Description("Glues files into optimal files. \n Usage: NO INFO")]
         public class gluefiles : WCC_Command
         {
             public gluefiles()
@@ -2019,7 +2017,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Glues files into optimal files. \n Usage: NO INFO")]
+        [Description("Glues files into optimal files. \n Usage: NO INFO")]
         public class gluefilesdlc : WCC_Command
         {
             public gluefilesdlc()
@@ -2030,7 +2028,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Attempts to load all resources to check for errors.\n Usage: NO INFO")]
+        [Description("Attempts to load all resources to check for errors.\n Usage: NO INFO")]
         public class loadtest : WCC_Command
         {
             public loadtest()
@@ -2041,7 +2039,7 @@ namespace WolvenKit.Common.Wcc
         }
 
         [Serializable]
-        [DescriptionAttribute("Creates the .dep files Creates the .dep files needed for the database creation used by the Database Viewer.\n Usage:  NO INFO")]
+        [Description("Creates the .dep files Creates the .dep files needed for the database creation used by the Database Viewer.\n Usage:  NO INFO")]
         public class WorldSceneDependencyInfoFiles : WCC_Command
         {
             public WorldSceneDependencyInfoFiles()

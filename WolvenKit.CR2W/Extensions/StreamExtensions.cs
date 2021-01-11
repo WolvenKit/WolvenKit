@@ -1,8 +1,8 @@
-﻿using RED.CRC32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using WolvenKit.Common.Tools.CRC32;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W

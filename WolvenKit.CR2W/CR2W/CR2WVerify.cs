@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using RED.CRC32;
+using WolvenKit.Common.Tools.CRC32;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Common.Tools.FNV1A;
 

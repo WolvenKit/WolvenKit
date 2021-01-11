@@ -1,16 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+﻿using System.Threading.Tasks;
 using Catel;
-using Catel.IoC;
 using Catel.Threading;
-using Orc.ProjectManagement;
 using Orc.FileSystem;
-using WolvenKit.Model;
-using WolvenKit.Common;
+using Orc.ProjectManagement;
+using WolvenKit.Model.Project;
 
-namespace WolvenKit.Model.ProjectManagement
+namespace WolvenKit.Model.ProjectManagement.Serializers
 {
     public class ProjectWriter : ProjectWriterBase<EditorProject>
     {

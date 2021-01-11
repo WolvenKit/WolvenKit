@@ -10,11 +10,11 @@
 	xmlns:catel="http://schemas.catelproject.com"
 	xmlns:model="clr-namespace:WolvenKit.Model"
 	xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
-	xmlns:cmodel="clr-namespace:WolvenKit.Common.Model"
-	xmlns:types="clr-namespace:WolvenKit.CR2W.Types;assembly=WolvenKit.CR2W"
+    xmlns:types="clr-namespace:WolvenKit.CR2W.Types;assembly=WolvenKit.CR2W"
 	xmlns:cr2W="clr-namespace:WolvenKit.CR2W;assembly=WolvenKit.CR2W"
     xmlns:conv="clr-namespace:WolvenKit.Layout.Converters"
-	d:DesignHeight="450"
+    xmlns:viewModels="clr-namespace:WolvenKit.ViewModels"
+    d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
     <Grid>
@@ -53,7 +53,7 @@
             </TreeView.ItemContainerStyle>
 
             <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkViewModel}" 
+                <HierarchicalDataTemplate DataType="{x:Type viewModels:ChunkViewModel}" 
                                           ItemsSource="{Binding Children}">
                     <StackPanel Orientation="Horizontal">
                         

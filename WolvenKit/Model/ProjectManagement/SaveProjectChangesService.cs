@@ -6,6 +6,7 @@
 
 
 using WolvenKit.Model;
+using WolvenKit.Model.Project;
 
 namespace WolvenKit.Model.ProjectManagement
 {

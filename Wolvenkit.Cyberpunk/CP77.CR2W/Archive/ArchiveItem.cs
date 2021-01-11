@@ -6,6 +6,7 @@ using Catel.IoC;
 using WolvenKit.Common.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Model.Arguments;
 
 namespace CP77.CR2W.Archive
 {

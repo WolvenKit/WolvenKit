@@ -1,20 +1,15 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Catel;
-using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
-using Orchestra;
-using Orchestra.Services;
-using System.Threading.Tasks;
-using Catel.Logging;
 using Orc.FileSystem;
-using Orc.ProjectManagement;
 using Orc.Notifications;
+using Orc.ProjectManagement;
+using WolvenKit.Common.Services;
 
-namespace WolvenKit
+namespace WolvenKit.Commands
 {
-    using Common.Services;
-
     public class ApplicationOpenProjectCommandContainer : ProjectCommandContainerBase
     {
         private readonly IOpenFileService _openFileService;

@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using AvalonDock.Layout.Serialization;
 using Catel.Data;
+using WolvenKit.ViewModels.AD;
 
 namespace WolvenKit.Views
 {

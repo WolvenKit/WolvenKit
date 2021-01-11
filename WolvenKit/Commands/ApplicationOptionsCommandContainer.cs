@@ -1,12 +1,8 @@
 ﻿using Catel;
 using Catel.MVVM;
 using Catel.Services;
-using Orchestra;
-using Orchestra.Services;
-using System.Threading.Tasks;
-using WolvenKit;
 
-namespace WolvenKit
+namespace WolvenKit.Commands
 {
     public class ApplicationOptionsCommandContainer : Catel.MVVM.CommandContainerBase
     {

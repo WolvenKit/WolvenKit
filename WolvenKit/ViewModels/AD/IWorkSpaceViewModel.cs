@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using WolvenKit.Model;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.ViewModels.AD
 {
-	using Model;
-
-
-	/// <summary>
+    /// <summary>
 	/// Defines the interface to the <see cref="WorkSpaceViewModel"/> which implements
 	/// AvalonDock demo specific properties, events and methods.
 	/// </summary>

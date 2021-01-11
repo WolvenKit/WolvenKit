@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using Catel.MVVM;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using Catel.MVVM;
+using WolvenKit.Commands;
+using WolvenKit.Common.Model;
+using WolvenKit.Controllers;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.SRT;
+using WolvenKit.Model;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.ViewModels.AD
 {
-	using Model;
-	using Common.Model;
-	using CR2W;
-	using CR2W.SRT;
-	using Commands;
-
     public class DocumentViewModel : PaneViewModel, IDocumentViewModel
 	{
 		#region fields

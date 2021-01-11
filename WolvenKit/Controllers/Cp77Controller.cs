@@ -9,6 +9,7 @@ using Catel.IoC;
 using Newtonsoft.Json;
 using ProtoBuf;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Controllers
 {

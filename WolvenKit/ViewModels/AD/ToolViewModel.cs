@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.ViewModels
+﻿namespace WolvenKit.ViewModels.AD
 {
 	public class ToolViewModel : PaneViewModel
 	{

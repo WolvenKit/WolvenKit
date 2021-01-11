@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Tools;
 
 namespace WolvenKit.Cache
 {

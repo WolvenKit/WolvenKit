@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using WolvenKit.Commands;
+using WolvenKit.Common.Services;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
+using WolvenKit.Model;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.ViewModels.Documents
 {
-    using Commands;
-    using Model;
-    using Common.Services;
-    using CR2W;
-    using CR2W.Types;
     public class CR2WDocumentViewModel : CommonDocumentViewModel
     {
         public CR2WDocumentViewModel(IWindowFactory windowFactory) : base(windowFactory)

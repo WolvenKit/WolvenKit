@@ -1,13 +1,11 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Configuration;
 
-namespace WolvenKit.Common.Wcc
+namespace WolvenKit.Common.Model.Wcc
 {
     #region Wcc_lite Command class
     public abstract class WCC_Command
@@ -17,7 +15,7 @@ namespace WolvenKit.Common.Wcc
 
         #region Properties
 
-        [CategoryAttribute("0 INFO")]
+        [Category("0 INFO")]
         [ReadOnly(true)]
         [Browsable(false)]
         public string Arguments => ConstructArgs();

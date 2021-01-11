@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Data;
 using WolvenKit.ViewModels;
+using WolvenKit.ViewModels.AD;
 
 namespace WolvenKit.Layout.Converters
 {

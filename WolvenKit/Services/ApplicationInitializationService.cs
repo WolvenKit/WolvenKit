@@ -19,6 +19,8 @@ using Settings = WolvenKit.Settings;
 using WolvenKit.Model.ProjectManagement;
 using System.Windows.Media;
 using WolvenKit.Commands;
+using WolvenKit.Model.ProjectManagement.Serializers;
+using WolvenKit.Watchers;
 
 namespace WolvenKit.Services
 {

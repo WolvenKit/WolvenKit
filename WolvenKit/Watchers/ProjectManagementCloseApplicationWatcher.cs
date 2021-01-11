@@ -10,13 +10,11 @@ using Catel;
 using Catel.Services;
 using Orc.ProjectManagement;
 using Orchestra;
+using WolvenKit.Model.Project;
+using WolvenKit.Model.ProjectManagement;
 
-namespace WolvenKit
+namespace WolvenKit.Watchers
 {
-    using Model;
-    using Model.ProjectManagement;
-    using Services;
-
     public class ProjectManagementCloseApplicationWatcher : CloseApplicationWatcherBase
     {
         private readonly IProjectManager _projectManager;

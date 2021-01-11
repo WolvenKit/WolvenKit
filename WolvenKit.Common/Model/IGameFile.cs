@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolvenKit.Common.Model;
+﻿using System.IO;
+using WolvenKit.Common.Model.Arguments;
 
-
-namespace WolvenKit.Common
+namespace WolvenKit.Common.Model
 {
     /// <summary>
     /// Any game file

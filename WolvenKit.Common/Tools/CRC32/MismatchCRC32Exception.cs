@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace RED.CRC32
+namespace WolvenKit.Common.Tools.CRC32
 {
     public class MismatchCRC32Exception : Exception
     {

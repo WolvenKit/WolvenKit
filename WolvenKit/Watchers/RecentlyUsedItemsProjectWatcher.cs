@@ -5,15 +5,15 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace WolvenKit
-{
-    using System;
-    using System.Threading.Tasks;
-    using Catel;
-    using Orc.ProjectManagement;
-    using Orchestra.Models;
-    using Orchestra.Services;
+using System;
+using System.Threading.Tasks;
+using Catel;
+using Orc.ProjectManagement;
+using Orchestra.Models;
+using Orchestra.Services;
 
+namespace WolvenKit.Watchers
+{
     public class RecentlyUsedItemsProjectWatcher : ProjectWatcherBase
     {
         #region Fields

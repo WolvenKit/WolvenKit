@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolvenKit.Common.Model;
-
-namespace WolvenKit.Common
+﻿namespace WolvenKit.Common.Model
 {
     public interface IGameArchive
     {

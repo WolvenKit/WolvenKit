@@ -1,5 +1,4 @@
-﻿using RED.CRC32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;

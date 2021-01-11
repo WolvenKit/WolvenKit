@@ -9,6 +9,7 @@ using CP77.CR2W.Archive;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 using WolvenKit.W3Strings;
 
 namespace WolvenKit.Controllers

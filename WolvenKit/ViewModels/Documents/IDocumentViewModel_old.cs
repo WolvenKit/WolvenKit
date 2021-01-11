@@ -1,11 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
+using WolvenKit.Common;
+using WolvenKit.Common.Model.Arguments;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.ViewModels.Documents
 {
-    using Common;
-
-
     /// <summary>
     /// Represents a viewmodel
     /// </summary>

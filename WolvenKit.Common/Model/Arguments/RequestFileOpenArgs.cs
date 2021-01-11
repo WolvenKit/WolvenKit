@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
-namespace WolvenKit.Common.Model
+namespace WolvenKit.Common.Model.Arguments
 {
     public class RequestFileOpenArgs : EventArgs
     {

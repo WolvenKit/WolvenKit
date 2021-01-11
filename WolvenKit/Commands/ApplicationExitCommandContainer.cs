@@ -1,11 +1,8 @@
 ﻿using Catel;
 using Catel.MVVM;
 using Catel.Services;
-using Orchestra;
-using System.Threading.Tasks;
-using WolvenKit;
 
-namespace WolvenKit
+namespace WolvenKit.Commands
 {
     public class ApplicationExitCommandContainer : Catel.MVVM.CommandContainerBase
     {

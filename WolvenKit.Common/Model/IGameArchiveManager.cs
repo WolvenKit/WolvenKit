@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolvenKit.Common.Model;
+﻿using System.Collections.Generic;
 
-namespace WolvenKit.Common
+namespace WolvenKit.Common.Model
 {
     /// <summary>
     /// Top-level game file, holds archived game assets. Types :

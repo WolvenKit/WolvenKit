@@ -1,5 +1,4 @@
 ﻿using Catel;
-using RED.CRC32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,6 +16,7 @@ using Catel.Data;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.FNV1A;
 using Newtonsoft.Json;
+using WolvenKit.Common.Tools.CRC32;
 
 namespace CP77.CR2W
 {

@@ -5,13 +5,12 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace WolvenKit.Model.ProjectManagement
-{
-    using System;
-    using Catel;
-    using Catel.IoC;
-    using Orc.ProjectManagement;
+using Catel;
+using Catel.IoC;
+using Orc.ProjectManagement;
 
+namespace WolvenKit.Model.ProjectManagement.Serializers
+{
     public class ProjectSerializerSelector : IProjectSerializerSelector
     {
         #region Fields

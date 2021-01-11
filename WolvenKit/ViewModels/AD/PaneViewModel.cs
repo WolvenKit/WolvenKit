@@ -1,9 +1,9 @@
-﻿namespace WolvenKit.ViewModels
-{
-    using Catel.MVVM;
-    using System.Windows.Media;
+﻿using System.Windows.Media;
+using Catel.MVVM;
 
-	public class PaneViewModel : ViewModelBase
+namespace WolvenKit.ViewModels.AD
+{
+    public class PaneViewModel : ViewModelBase
 	{
 		#region fields
 		private string _title = null;

@@ -11,13 +11,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using WolvenKit.Common.Model.Wcc;
+using WolvenKit.Controllers;
 
 namespace WolvenKit.ViewModels
 {
     using Commands;
     using Common;
     using Common.Services;
-    using Common.Wcc;
     using CR2W;
     using CR2W.Types;
     using Radish.Model;
@@ -33,10 +34,10 @@ namespace WolvenKit.ViewModels
 
             RunCommand = new Commands.RelayCommand(Run, CanRun);
 
-            List<Type> x = typeof(Common.Wcc.Wcc_lite).GetNestedTypes().ToList();//.Cast<WCC_Command>().ToList();
+            List<Type> x = typeof(Wcc_lite).GetNestedTypes().ToList();//.Cast<WCC_Command>().ToList();
             foreach (var item in x)
             {
-                var cmd = (Common.Wcc.WCC_Command)Activator.CreateInstance(item);
+                var cmd = (WCC_Command)Activator.CreateInstance(item);
                 Commands.Add(cmd);
             }
             Commands = Commands.OrderBy(_ => _.Name).ToList();
@@ -50,10 +51,10 @@ namespace WolvenKit.ViewModels
         #endregion
 
         #region Properties
-        public readonly List<Common.Wcc.WCC_Command> Commands = new List<Common.Wcc.WCC_Command>();
+        public readonly List<WCC_Command> Commands = new List<WCC_Command>();
         #region SelectedObject
-        private Common.Wcc.WCC_Command _selectedObject;
-        public Common.Wcc.WCC_Command SelectedObject
+        private WCC_Command _selectedObject;
+        public WCC_Command SelectedObject
         {
             get => _selectedObject;
             set

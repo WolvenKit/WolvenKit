@@ -1,5 +1,4 @@
 ﻿using Catel;
-using RED.CRC32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +15,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
 using WolvenKit.CR2W.Types.Utils;
 using System.Collections.ObjectModel;
+using WolvenKit.Common.Tools.CRC32;
 
 namespace WolvenKit.CR2W
 {

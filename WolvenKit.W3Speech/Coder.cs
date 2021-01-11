@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 using WolvenKit.W3Strings;
 
 namespace WolvenKit.W3Speech

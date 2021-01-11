@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
+﻿using System.Collections.Generic;
 
-namespace WolvenKit.Common.Model
+namespace WolvenKit.ViewModels
 {
     public class ChunkViewModel
     {

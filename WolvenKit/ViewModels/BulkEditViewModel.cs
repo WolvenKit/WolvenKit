@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using WolvenKit.Controllers;
 
 namespace WolvenKit.ViewModels
 {

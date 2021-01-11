@@ -16,11 +16,10 @@ using CP77Tools.Model;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Tools.DDS;
 using CP77.CR2W.Types;
-using CP77.Common.Tools;
+using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
-using EUncookExtension = WolvenKit.Common.Tools.DDS.EUncookExtension;
+using EUncookExtension = WolvenKit.Common.DDS.EUncookExtension;
 
 namespace CP77.CR2W.Archive
 {
@@ -367,7 +366,7 @@ namespace CP77.CR2W.Archive
             return ExtractSingleInner(hash, outDir);
         }
 
-        private int UncookSingleInner( ulong hash, DirectoryInfo outDir, WolvenKit.Common.Tools.DDS.EUncookExtension uncookext = EUncookExtension.tga)
+        private int UncookSingleInner( ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga)
         {
             var uncooksuccess = false;
             var (file, buffers) = GetFileData(hash);

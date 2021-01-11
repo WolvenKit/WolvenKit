@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using CP77.CR2W.Archive;
 using Newtonsoft.Json;
-using WolvenKit.Common.Tools.DDS;
 using CP77Tools;
 using Catel.IoC;
+using WolvenKit.Common.DDS;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks

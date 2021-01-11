@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.ViewModels.AD
 {
 	public interface IDocumentViewModel
 	{

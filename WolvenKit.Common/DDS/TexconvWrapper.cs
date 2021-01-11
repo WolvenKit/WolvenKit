@@ -1,12 +1,10 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using Catel.IoC;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 
-namespace WolvenKit.Common.Tools.DDS
+namespace WolvenKit.Common.DDS
 {
     /// <summary>
     /// Texconv format: DXGI format without the DXGI_FORMAT_ prefix

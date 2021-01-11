@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace WolvenKit.Common
+namespace WolvenKit.Common.Extensions
 
 {
     public static class StreamExtensions

@@ -1,4 +1,5 @@
 ﻿using AvalonDock.Layout;
+using WolvenKit.ViewModels.AD;
 
 namespace WolvenKit.Layout
 {

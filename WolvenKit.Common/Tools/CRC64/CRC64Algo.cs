@@ -1,5 +1,5 @@
 ﻿
-namespace RED.CRC64
+namespace WolvenKit.Common.Tools.CRC64
 {
 
     public class Crc64

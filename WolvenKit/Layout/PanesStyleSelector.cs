@@ -1,4 +1,6 @@
-﻿namespace WolvenKit.Layout
+﻿using WolvenKit.ViewModels.AD;
+
+namespace WolvenKit.Layout
 {
 	using System.Windows.Controls;
 	using System.Windows;
