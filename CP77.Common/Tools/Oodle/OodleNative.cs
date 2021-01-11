@@ -9,6 +9,8 @@ namespace CP77.Common.Tools
 {
     public static class OodleNative
     {
+        #region enums
+
         public enum OodleLZ_Compressor : int
         {
             LZH = 0,
@@ -64,6 +66,10 @@ namespace CP77.Common.Tools
             Unthreaded = 3,
         }
 
+        #endregion
+
+        #region windows
+
         [DllImport("oo2ext_7_win64.dll")]
         public static extern int OodleLZ_Decompress(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize,
             OodleLZ_FuzzSafe fuzzSafetyFlag,
@@ -71,9 +77,6 @@ namespace CP77.Common.Tools
             OodleLZ_Verbosity logVerbosityFlag,
             uint d, uint e, uint f, uint g, uint h, uint i, OodleLZ_Decode threadModule);
         
-        [DllImport("lib/liboodle.dylib", CallingConvention = CallingConvention.StdCall)]
-        public static extern int Kraken_Decompress(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize);
-
         [DllImport("oo2ext_7_win64.dll", EntryPoint = "OodleLZ_GetCompressedBufferSizeNeeded", CallingConvention = CallingConvention.StdCall)]
         public static extern long GetCompressedBufferSizeNeeded(long size);
         
@@ -89,5 +92,7 @@ namespace CP77.Common.Tools
             IntPtr a8,
             IntPtr a9,
             long a10);
+
+        #endregion
     }
 }

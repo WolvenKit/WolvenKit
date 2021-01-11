@@ -457,10 +457,8 @@ namespace CP77.CR2W.Archive
             string name = archiveItem.FileName;
             var hasBuffers = (archiveItem.LastOffsetTableIdx - archiveItem.FirstOffsetTableIdx) > 1;
 
-            var values = Enum.GetValues(typeof(ECookedFileFormat))
-                .Cast<ECookedFileFormat>()
-                .Select(_ => $".{_}");
-            var b = values.Any(e => e == Path.GetExtension(name)) || hasBuffers ;
+            var values = Enum.GetNames(typeof(ECookedFileFormat));
+            var b = values.Any(e => e == Path.GetExtension(name)[1..]) || hasBuffers ;
             return b;
         }
 

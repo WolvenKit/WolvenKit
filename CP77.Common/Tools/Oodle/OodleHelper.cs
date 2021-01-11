@@ -11,27 +11,15 @@ namespace CP77.Common.Tools
     {
         public static int Decompress(byte[] inputBuffer, byte[] outputBuffer)
         {
-            var r = -1;
-            try
-            {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    r = OodleNative.OodleLZ_Decompress(inputBuffer, inputBuffer.Length, outputBuffer, outputBuffer.Length, OodleNative.OodleLZ_FuzzSafe.No, OodleNative.OodleLZ_CheckCRC.No, OodleNative.OodleLZ_Verbosity.None, 0, 0, 0, 0, 0, 0, OodleNative.OodleLZ_Decode.Unthreaded);
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    r = OodleNative.Kraken_Decompress(inputBuffer, inputBuffer.Length, outputBuffer, outputBuffer.Length);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            return r;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return OodleNative.OodleLZ_Decompress(inputBuffer, inputBuffer.Length, outputBuffer,
+                    outputBuffer.Length, OodleNative.OodleLZ_FuzzSafe.No, OodleNative.OodleLZ_CheckCRC.No,
+                    OodleNative.OodleLZ_Verbosity.None, 0, 0, 0, 0, 0, 0, OodleNative.OodleLZ_Decode.Unthreaded);
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                return OozNative.Kraken_Decompress(inputBuffer, inputBuffer.Length, outputBuffer,
+                    outputBuffer.Length);
+            else
+                throw new NotImplementedException();
         }
         
         
@@ -75,32 +63,78 @@ namespace CP77.Common.Tools
             {
                 throw new ArgumentOutOfRangeException(nameof(outputCount));
             }
-
+            
             var inputHandle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
             var inputAddress = inputHandle.AddrOfPinnedObject() + inputOffset;
             var outputHandle = GCHandle.Alloc(outputBytes, GCHandleType.Pinned);
             var outputAddress = outputHandle.AddrOfPinnedObject() + outputOffset;
             
-            var result = (int)OodleNative.Compress(
-                (int)algo,
-                inputAddress,
-                inputCount,
-                outputAddress,
-                outputCount,
-                IntPtr.Zero,
-                IntPtr.Zero,
-                IntPtr.Zero,
-                IntPtr.Zero,
-                (int)level);
-            inputHandle.Free();
-            outputHandle.Free();
-            return result;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                
+
+                var result = (int)OodleNative.Compress(
+                    (int)algo,
+                    inputAddress,
+                    inputCount,
+                    outputAddress,
+                    outputCount,
+                    IntPtr.Zero,
+                    IntPtr.Zero,
+                    IntPtr.Zero,
+                    IntPtr.Zero,
+                    (int)level);
+                inputHandle.Free();
+                outputHandle.Free();
+                return result;
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                throw new NotImplementedException();
+                
+                try
+                {
+                    var result = OozNative.Compress(
+                        (int)algo,
+                        inputAddress,
+                        outputAddress,
+                        inputCount,
+                        IntPtr.Zero,
+                        IntPtr.Zero
+                    );
+                    inputHandle.Free();
+                    outputHandle.Free();
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         // gibbed
         public static int GetCompressedBufferSizeNeeded(int count)
         {
-            return (int)OodleNative.GetCompressedBufferSizeNeeded(count);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return (int) OodleNative.GetCompressedBufferSizeNeeded((long) count);
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                try
+                {
+                    return OozNative.GetCompressedBufferSizeNeeded(count);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            else
+                throw new NotImplementedException();
         }
     }
 }

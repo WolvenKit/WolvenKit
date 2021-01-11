@@ -10,8 +10,8 @@ namespace CP77Tools.Commands
         
         public PackCommand() : base(Name, Description)
         {
-            AddOption(new Option<string[]>(new[] {"--path", "-p"}, "Input path. Can be a path to one .archive, or the content directory.\nIf this is a directory, all archives in it will be processed."));
-            AddOption(new Option<string>(new[] {"--outpath", "-o"}, "Output directory to extract files to.\nIf not specified, will output to a new child directory, in place."));
+            AddOption(new Option<string[]>(new[] {"--path", "-p"}, "Input path. Must be a folder or a list of folders."));
+            AddOption(new Option<string>(new[] {"--outpath", "-o"}, "Output directory to create archive.\nIf not specified, will output twill be in place."));
             
             Handler = CommandHandler.Create<string[], string>(Tasks.ConsoleFunctions.PackTask);
         }

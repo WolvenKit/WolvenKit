@@ -29,7 +29,7 @@ namespace CP77Tools
             //TODO: check here for linking errors
             // try
             // {
-            //  Marshal.PrelinkAll(typeof(OodleNative));
+            //     Marshal.PrelinkAll(typeof(OozNative));
             // }
             // catch (Exception e)
             // {
@@ -74,7 +74,8 @@ namespace CP77Tools
                 new DumpCommand(),
                 new CR2WCommand(),
                 new HashCommand(),
-                new OodleCommand()
+                new OodleCommand(),
+                new RebuildCommand()
             };
 
             //await ConsoleFunctions.UpdateHashesAsync();
