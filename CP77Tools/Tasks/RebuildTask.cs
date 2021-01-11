@@ -26,7 +26,8 @@ namespace CP77Tools.Tasks
             bool textures,
             bool import,
             bool keep,
-            bool clean
+            bool clean,
+            bool unsaferaw
             )
         {
             if (path == null || path.Length < 1)
@@ -37,7 +38,7 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, p =>
             {
-                RebuildTaskInner(p, buffers, textures, import, keep, clean);
+                RebuildTaskInner(p, buffers, textures, import, keep, clean, unsaferaw);
             });
 
         }
@@ -47,7 +48,8 @@ namespace CP77Tools.Tasks
             bool textures,
             bool import,
             bool keep,
-            bool clean
+            bool clean,
+            bool unsaferaw
         )
         {
             #region checks
@@ -71,7 +73,7 @@ namespace CP77Tools.Tasks
             #endregion
 
 
-            ModTools.Recombine(basedir, buffers, textures, import, keep, clean);
+            ModTools.Recombine(basedir, buffers, textures, import, keep, clean, unsaferaw);
 
             return;
         }

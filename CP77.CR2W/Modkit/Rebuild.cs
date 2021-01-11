@@ -32,9 +32,10 @@ namespace CP77.CR2W
         public static bool Recombine(DirectoryInfo infolder, 
             bool useBuffers, 
             bool useTextures,
-            bool import,
+            bool import,    //create new
             bool keep,
-            bool clean
+            bool clean,
+            bool unsaferaw  
         )
         {
             var allFiles = infolder.GetFiles("*", SearchOption.AllDirectories).ToList(); 
@@ -102,6 +103,9 @@ namespace CP77.CR2W
             
             void GetTextures()
             {
+                if (!import && !unsaferaw)
+                    return;
+                
                 var texturesList = allFiles.Where(_ => _.Extension == ".dds");
                 foreach (var fileInfo in texturesList)
                 {
@@ -175,8 +179,11 @@ namespace CP77.CR2W
                         var buffer = buffers[i];
                         if (!buffer.Exists)
                             continue;
+
+                        var inbuffer = ReadBuffer(buffer);
+                        if (inbuffer.Length < 1) continue;
+
                         var offset = (uint)fileWriter.BaseStream.Position;
-                        var inbuffer = File.ReadAllBytes(buffer.FullName);
                         var (zsize, crc) = fileWriter.CompressAndWrite(inbuffer);
                         cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
                         {
@@ -198,6 +205,44 @@ namespace CP77.CR2W
                     //TODO: switch and call import with existing 
                 }
                 
+            }
+
+            byte[] ReadBuffer(FileInfo buffer)
+            {
+                using var fs = new FileStream(buffer.FullName, FileMode.Open, FileAccess.Read);
+                using var br = new BinaryReader(fs);
+                // if dds file, delete the 
+                if (unsaferaw)
+                {
+                    var bext = buffer.Extension;
+                    switch (bext)
+                    {
+                        case ".dds":
+                            // check if dx10
+                            fs.Seek(84, SeekOrigin.Begin);
+                            var fourcc = br.ReadInt32();
+                            // delete dds header
+                            if (fourcc != 808540228) //is dx10
+                            {
+                                fs.Seek(148, SeekOrigin.Begin);
+                                return br.ReadBytes((int)fs.Length - 148);
+                            }
+                            else
+                            {
+                                fs.Seek(128, SeekOrigin.Begin);
+                                return br.ReadBytes((int)fs.Length - 128);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    return Catel.IO.StreamExtensions.ToByteArray(fs);
+                }
+
+                return Array.Empty<byte>();
             }
 
             #endregion

@@ -21,9 +21,11 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool>(new[] {"--keep"}, 
                 "Optionally keep existing cr2w files intact and only append the buffer"));
             AddOption(new Option<bool>(new[] {"--clean"}, 
-                "Optionally remove rebuilt buffers and textures after successful recombination."));
+                "Optionally remove buffers and textures after successful recombination."));
+            AddOption(new Option<bool>(new[] {"--unsaferaw"}, 
+                "Optionally add raw assets (dds textures, fbx) as buffers without check."));
 
-            Handler = CommandHandler.Create<string[], bool, bool, bool, bool, bool>(Tasks.ConsoleFunctions.RebuildTask);
+            Handler = CommandHandler.Create<string[], bool, bool, bool, bool, bool, bool>(Tasks.ConsoleFunctions.RebuildTask);
         }
     }
 }
