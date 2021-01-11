@@ -41,7 +41,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: https://uploads.github.com/repos/WolvenKit/CP77Tools/releases/36017823/assets # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases in your browser and copy the full "upload_url" value including the {?name,label} part
+        upload_url: https://uploads.github.com/repos/WolvenKit/CP77Tools/releases/36017823/assets{?name,label} # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases in your browser and copy the full "upload_url" value including the {?name,label} part
         release_id: 36017823
         asset_path: nightly.zip
         asset_name: cp77tools-nightly-$$.zip
