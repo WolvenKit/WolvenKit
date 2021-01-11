@@ -1,0 +1,50 @@
+name: Nightly
+on:
+  push:
+    branches: [ nightly ]
+  pull_request:
+    branches: [ nightly ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100
+    - name: Install dependencies
+      run: dotnet restore
+    - uses: suisei-cn/actions-download-file@v1
+      id: oo2core_8_win64  # Remember to give an ID if you need the output
+      name: Download the file
+      with:
+        url: "https://cdn.discordapp.com/attachments/786130090102358017/786130170720682024/oo2core_8_win64.dll"
+        target: ./CP77Tools/
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        name: artifact
+        path: ./CP77Tools/bin/Release/net5.0
+    - uses: papeloto/action-zip@v1
+      with:
+        files: ./CP77Tools/bin/Release/net5.0
+        dest: nightly.zip
+    - name: Deploy Nightly
+      id: upload-release-asset 
+      uses: Maxzor/deploy-nightly@v1.0.4
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/rfuzzo/CP77Tools/releases/35035583/assets{?name,label} # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases in your browser and copy the full "upload_url" value including the {?name,label} part
+        release_id: 35035583
+        asset_path: ./nightly.zip
+        asset_name: nightly.zip
+        asset_content_type: application/zip
+        max_releases: 7    
