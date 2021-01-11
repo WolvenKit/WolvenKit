@@ -25,6 +25,8 @@ namespace CP77.CR2W.Archive
             Reload(indir);
         }
 
+        public static string SerializationVersion = "1.1";
+
         public ArchiveManager()
         {
         }

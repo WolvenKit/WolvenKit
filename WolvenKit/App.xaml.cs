@@ -62,7 +62,7 @@ namespace WolvenKit
 
             // Register Viewmodels
             var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
-            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.[VW]ViewModel");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels");
 
             //TODO: rename later to MainViewModel
             viewModelLocator.Register(typeof(Views.MainView), typeof(ViewModels.WorkSpaceViewModel));

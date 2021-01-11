@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
+using CP77.CR2W.Archive;
 using Newtonsoft.Json;
 using ProtoBuf;
 
@@ -28,7 +29,7 @@ namespace WolvenKit.Controllers
                 case EManagerType.SoundManager: return Path.Combine(ManagerCacheDir, "sound_cache.json");
                 case EManagerType.W3StringManager: return Path.Combine(ManagerCacheDir, "string_cache.bin");
                 case EManagerType.TextureManager: return Path.Combine(ManagerCacheDir, "texture_cache.json");
-                case EManagerType.Max:
+                case EManagerType.ArchiveManager: return Path.Combine(ManagerCacheDir, "archive_cache.json");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -42,6 +43,7 @@ namespace WolvenKit.Controllers
                 case EManagerType.SoundManager: return SoundManager.SerializationVersion;
                 case EManagerType.W3StringManager: return W3StringManager.SerializationVersion;
                 case EManagerType.TextureManager: return TextureManager.SerializationVersion;
+                case EManagerType.ArchiveManager: return ArchiveManager.SerializationVersion;
                 case EManagerType.Max:
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
