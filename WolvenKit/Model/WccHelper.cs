@@ -17,7 +17,7 @@ namespace WolvenKit.Model
     public static class WccHelper
     {
         private static LoggerService Logger => MainController.Get().Logger;
-        private static W3Mod ActiveMod => MainController.Get().ActiveMod;
+        private static W3Mod ActiveMod => (W3Mod)MainController.Get().ActiveMod;
 
         private const string db_dlcfiles = "db_dlcfiles";
         private const string db_dlctextures = "db_dlctextures";

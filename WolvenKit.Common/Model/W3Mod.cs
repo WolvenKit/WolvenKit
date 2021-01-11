@@ -11,10 +11,6 @@ namespace WolvenKit.Common
 {
     public class W3Mod : EditorProjectData, ICloneable
     {
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string ProjectDirectory => Path.Combine(Path.GetDirectoryName(FileName), Name);
 
         #region Directories
         [XmlIgnore]
@@ -343,33 +339,6 @@ namespace WolvenKit.Common
         }
         #endregion
 
-
-        [Browsable(false)] 
-        public List<string> LastOpenedFiles;
-
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string FileName { get; set; }
-
-        [Category("About")]
-        [Description("The name of your mod.")]
-        public string Name { get; set; }
-
-        [Category("About")]
-        [Description("The name of your mod.")]
-        public string Author { get; set; }
-
-        [Category("About")]
-        [Description("The name of your mod.")]
-        public string Email { get; set; }
-
-        [Browsable(false)]
-        [Category("About")]
-        [Description("The version of your mod. It's a string so 0.1-ALPHA and such is possible.")]
-        public string Version { get; set; } = "0.62";
-
         public object Clone()
         {
             var clone = new W3Mod
@@ -411,7 +380,7 @@ namespace WolvenKit.Common
         /// Does not support multiple DLC
         /// </summary>
         /// <returns></returns>
-        public string GetDlcName()
+        public override string GetDlcName()
         {
             if (!string.IsNullOrEmpty(GetDlcCookedRelativePath()))
                 return GetDlcCookedRelativePath();
@@ -425,7 +394,7 @@ namespace WolvenKit.Common
         /// Does not support multiple dlc
         /// </summary>
         /// <returns></returns>
-        public string GetDlcCookedRelativePath()
+        public override string GetDlcCookedRelativePath()
         {
             string relpath = "";
             var di = new DirectoryInfo(DlcCookedDirectory);
@@ -457,7 +426,7 @@ namespace WolvenKit.Common
         /// Does not support multiple dlc
         /// </summary>
         /// <returns></returns>
-        public string GetDlcUncookedRelativePath()
+        public override string GetDlcUncookedRelativePath()
         {
             string relpath = "";
             var di = new DirectoryInfo(DlcUncookedDirectory);

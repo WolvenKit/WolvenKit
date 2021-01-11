@@ -49,6 +49,8 @@ namespace WolvenKit
     {
         private static MainController mainController;
 
+        private static GameControllerBase gameController;
+
         private MainController()
         {
         }
@@ -60,11 +62,18 @@ namespace WolvenKit
                 mainController = new MainController
                 {
                     Configuration = Configuration.Load(),
-                    Logger = new LoggerService()
+                    Logger = new LoggerService(),
                 };
+                gameController = new MockGameController();
             }
 
             return mainController;
+        }
+
+        public static void SetGame(GameControllerBase controller)
+        {
+            gameController = controller;
+            controller.HandleStartup();
         }
 
         #region Fields
@@ -77,7 +86,7 @@ namespace WolvenKit
 
         #region Properties
         public Configuration Configuration { get; private set; }
-        public W3Mod ActiveMod { get; set; }
+        public EditorProjectData ActiveMod { get; set; }
         public WccLite WccHelper { get; set; }
         public List<HashDump> Hashdumplist { get; set; }
         /// <summary>
@@ -115,61 +124,11 @@ namespace WolvenKit
         #endregion
 
         #region Archive Managers
-        public W3StringManager W3StringManager { get; private set; }
-
-
-        private BundleManager BundleManager { get; set; }
-        private BundleManager ModBundleManager { get; set; }
-
-        public SoundManager SoundManager { get; private set; }
-        private SoundManager ModSoundManager { get; set; }
-
-        public TextureManager TextureManager { get; private set; }
-        private TextureManager ModTextureManager { get; set; }
-
-        private CollisionManager CollisionManager { get; set; }
-        private CollisionManager ModCollisionManager { get; set; }
-
-        private SpeechManager SpeechManager { get; set; }
 
         public List<IGameArchiveManager> GetManagers(bool loadmods)
         {
-            var managers = new List<IGameArchiveManager>();
-            var exeDir = Path.GetDirectoryName(Configuration.ExecutablePath);
-
-            if (loadmods)
-            {
-                ModBundleManager = new BundleManager();
-                ModBundleManager.LoadModsBundles(Configuration.GameModDir, Configuration.GameDlcDir);
-                managers.Add(MainController.Get().ModBundleManager);
-
-                ModTextureManager = new TextureManager();
-                ModTextureManager.LoadModsBundles(Configuration.GameModDir, Configuration.GameDlcDir);
-                managers.Add(MainController.Get().ModTextureManager);
-
-                ModSoundManager = new SoundManager();
-                ModSoundManager.LoadModsBundles(Configuration.GameModDir, Configuration.GameDlcDir);
-                managers.Add(MainController.Get().ModSoundManager);
-
-                ModCollisionManager = new CollisionManager();
-                ModCollisionManager.LoadModsBundles(Configuration.GameModDir, Configuration.GameDlcDir);
-                managers.Add(MainController.Get().ModCollisionManager);
-            }
-            else
-            {
-                if (MainController.Get().BundleManager != null) 
-                    managers.Add(MainController.Get().BundleManager);
-                if (MainController.Get().SoundManager != null) 
-                    managers.Add(MainController.Get().SoundManager);
-                if (MainController.Get().TextureManager != null) 
-                    managers.Add(MainController.Get().TextureManager);
-                if (MainController.Get().CollisionManager != null) 
-                    managers.Add(MainController.Get().CollisionManager);
-                if (MainController.Get().SpeechManager != null) 
-                    managers.Add(MainController.Get().SpeechManager);
-            }
-
-            return managers;
+            //TODO: Implement mod loading, it's not a priority atm so I left it out but we should support it.
+            return gameController.GetArchiveManagersManagers();
         }
 
         #endregion
@@ -226,9 +185,9 @@ namespace WolvenKit
 
         #region Methods
 
-        public static string ManagerCacheDir => Tw3Controller.ManagerCacheDir;
-        public static string WorkDir => Tw3Controller.WorkDir;
-        public static string XBMDumpPath => Tw3Controller.XBMDumpPath;
+        public static string ManagerCacheDir => GameControllerBase.ManagerCacheDir;
+        public static string WorkDir => GameControllerBase.WorkDir;
+        public static string XBMDumpPath => GameControllerBase.XBMDumpPath;
         public static string GetManagerPath(EManagerType type) => Tw3Controller.GetManagerPath(type);
         public static string GetManagerVersion(EManagerType type) => Tw3Controller.GetManagerVersion(type);
 
@@ -245,31 +204,18 @@ namespace WolvenKit
                 {
                     var savedversions = Configuration.ManagerVersions[j];
                     var e = (EManagerType)j;
-                    var curversion = Tw3Controller.GetManagerVersion(e);
+                    var curversion = GameControllerBase.GetManagerVersion(e);
 
                     if (savedversions != curversion)
                     {
-                        if (File.Exists(Tw3Controller.GetManagerPath(e)))
-                            File.Delete(Tw3Controller.GetManagerPath(e));
+                        if (File.Exists(GameControllerBase.GetManagerPath(e)))
+                            File.Delete(GameControllerBase.GetManagerPath(e));
                     }
                 }
 
                 //multithread these
-#if NET48
-                BundleManager = BundleManager ?? await Task.Run(() => Tw3Controller.LoadBundleManager());
-                W3StringManager = W3StringManager ?? await Task.Run(() => Tw3Controller.LoadStringsManager());
-                TextureManager = TextureManager ?? await Task.Run(() => Tw3Controller.LoadTextureManager());
-                CollisionManager = CollisionManager ?? await Task.Run(() => Tw3Controller.LoadCollisionManager());
-                SoundManager = SoundManager ?? await Task.Run(() => Tw3Controller.LoadSoundManager());
-                SpeechManager = SpeechManager ?? await Task.Run(() => Tw3Controller.LoadSpeechManager());
-#elif NETCOREAPP
-                BundleManager ??= await Task.Run(() => Tw3Controller.LoadBundleManager());
-                W3StringManager ??= await Task.Run(() => Tw3Controller.LoadStringsManager());
-                TextureManager ??= await Task.Run(() => Tw3Controller.LoadTextureManager());
-                CollisionManager ??= await Task.Run(() => Tw3Controller.LoadCollisionManager());
-                SoundManager ??= await Task.Run(() => Tw3Controller.LoadSoundManager());
-                SpeechManager ??= await Task.Run(() => Tw3Controller.LoadSpeechManager());
-#endif
+                gameController.HandleStartup();
+
 
 
                 loadStatus = "Loading depot manager!";
@@ -295,8 +241,9 @@ namespace WolvenKit
 
                 loadStatus = "Loading path hashes!";
                 #region PathHasManager
+                //TODO: Figure out something for this! Probably should be inside the bundle manager
                 // create pathhashes if they don't already exist
-                var fi = new FileInfo(Cr2wResourceManager.pathashespath);
+                /*var fi = new FileInfo(Cr2wResourceManager.pathashespath);
                 if (!fi.Exists)
                 {
                     foreach (string item in BundleManager.FileList.Select(_ => _.Name).Distinct())
@@ -304,7 +251,7 @@ namespace WolvenKit
                         Cr2wResourceManager.Get().RegisterVanillaPath(item);
                     }
                     Cr2wResourceManager.Get().WriteVanilla();
-                }
+                }*/
 
                 #endregion                
 
@@ -346,7 +293,9 @@ namespace WolvenKit
 
         public string GetLocalizedString(uint val)
         {
-            return W3StringManager.GetString(val);
+            //TODO: Idk what to do with this
+            //return W3StringManager.GetString(val);
+            return "";
         }
 
         public void UpdateWccHelper(string wccLite)
@@ -360,7 +309,8 @@ namespace WolvenKit
 
         public void ReloadStringManager()
         {
-            W3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath), true);
+            //TODO: Idk what to do with this
+            //W3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath), true);
         }
 
         protected bool SetField<T>(ref T field, T value, string propertyName)

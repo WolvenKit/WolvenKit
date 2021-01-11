@@ -109,16 +109,12 @@ namespace WolvenKit.ViewModels
         #region Fields
         private static Task _packer;
         private static LoggerService Logger => MainController.Get().Logger;
-        private static W3Mod ActiveMod => MainController.Get().ActiveMod;
+        private static EditorProjectData ActiveMod => MainController.Get().ActiveMod;
         
         #endregion
 
         public MainViewModel()
         {
-
-
-
-
             Title = "WolvenKit";
 
             _openDocuments = new Dictionary<string, Old_IDocumentViewModel>();
@@ -149,7 +145,7 @@ namespace WolvenKit.ViewModels
         {
             // Creation
             var txc = new TextureCache();
-            txc.LoadFiles(ActiveMod.RawModDirectory, MainController.Get().Logger);
+            txc.LoadFiles(((W3Mod)ActiveMod).RawModDirectory, MainController.Get().Logger);
             txc.Write(Path.Combine(ActiveMod.PackedModDirectory, "texture.cache"), MainController.Get().Logger);
 
             MainController.LogString($@"Finished creating texture.cache.", Logtype.Success);
@@ -771,8 +767,9 @@ namespace WolvenKit.ViewModels
                                 {
                                     if (!File.Exists(Path.Combine(soundmoddir, bnk.Path)))
                                     {
-                                        var bytes = MainController.ImportFile(bnk.Path, MainController.Get().SoundManager);
-                                        File.WriteAllBytes(Path.Combine(soundmoddir, bnk.Path), bytes[0].ToArray());
+                                        //TODO: Fix this somehow
+                                        //var bytes = MainController.ImportFile(bnk.Path, MainController.Get().SoundManager);
+                                        //File.WriteAllBytes(Path.Combine(soundmoddir, bnk.Path), bytes[0].ToArray());
                                         MainController.Get().Logger.LogString("Imported " + bnk.Path + " for rebuilding with the modded wem files!");
                                     }
                                     break;

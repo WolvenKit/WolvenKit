@@ -31,7 +31,6 @@ namespace WolvenKit.Model
         private readonly ISettingsManager _settings;
         private readonly ILoggerService _logger;
         private Task initializeTask;
-        private ArchiveManager archiveManager;
 
 
         #endregion
@@ -401,10 +400,6 @@ namespace WolvenKit.Model
 
         private async Task InitializeAsync()
         {
-            archiveManager ??= await Task.Run(() => Cp77Controller.LoadArchiveManager()).ConfigureAwait(false);
-
-
-
             // Hash all filepaths
             _logger.LogString("Starting additional tasks...", Logtype.Important);
             var relativepaths = ModFiles

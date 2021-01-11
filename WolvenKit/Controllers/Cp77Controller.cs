@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using Newtonsoft.Json;
 using ProtoBuf;
+using WolvenKit.Common;
 
 namespace WolvenKit.Controllers
 {
@@ -19,57 +20,68 @@ namespace WolvenKit.Controllers
     using W3Strings;
     using CP77.CR2W.Archive;
 
-    public static class Cp77Controller
+    public class Cp77Controller : GameControllerBase
     {
+        private static ArchiveManager archiveManager;
 
-        public static string ManagerCacheDir => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ManagerCache");
-        public static string WorkDir => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "tmp_workdir");
-        //private static string DepotZipPath => Path.Combine(ManagerCacheDir, "Depot.zip");
-        public static string XBMDumpPath => Path.Combine(ManagerCacheDir, "__xbmdump_3768555366.csv");
-
-
-        public static ArchiveManager LoadArchiveManager()
+        public ArchiveManager LoadArchiveManager()
         {
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            ArchiveManager archiveManager;
 
-            _logger.LogString("Loading Archive Manager ... ", Logtype.Important);
+            _logger.LogString("Loading archive Manager ... ", Logtype.Important);
             try
             {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
+                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.ArchiveManager)))
                 {
-                    using (StreamReader file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
+                    using (StreamReader file = File.OpenText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager)))
                     {
                         JsonSerializer serializer = new JsonSerializer();
                         serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                         serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                         serializer.TypeNameHandling = TypeNameHandling.Auto;
-                        archiveManager = (ArchiveManager)serializer.Deserialize(file, typeof(BundleManager));
+                        archiveManager = (ArchiveManager)serializer.Deserialize(file, typeof(ArchiveManager));
                     }
                 }
                 else
                 {
                     archiveManager = new ArchiveManager();
                     archiveManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
-                    File.WriteAllText(Tw3Controller.GetManagerPath(EManagerType.BundleManager), JsonConvert.SerializeObject(archiveManager, Formatting.None, new JsonSerializerSettings()
+                    File.WriteAllText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager), JsonConvert.SerializeObject(archiveManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                         TypeNameHandling = TypeNameHandling.Auto
                     }));
-                    _settings.ManagerVersions[(int)EManagerType.BundleManager] = BundleManager.SerializationVersion;
+                    _settings.ManagerVersions[(int)EManagerType.ArchiveManager] = ArchiveManager.SerializationVersion;
                 }
             }
             catch (System.Exception ex)
             {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
-                    File.Delete(Tw3Controller.GetManagerPath(EManagerType.BundleManager));
+                if (File.Exists(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager)))
+                    File.Delete(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager));
                 archiveManager = new ArchiveManager();
                 archiveManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
             }
-            _logger.LogString("Finished loading Bundle Manager.", Logtype.Success);
+            _logger.LogString("Finished loading archive manager.", Logtype.Success);
             return archiveManager;
+        }
+
+        public override List<IGameArchiveManager> GetArchiveManagersManagers()
+        {
+            return new List<IGameArchiveManager>()
+            {
+                archiveManager
+            };
+        }
+
+        public override void HandleStartup()
+        {
+            List<Func<IGameArchiveManager>> todo = new List<Func<IGameArchiveManager>>()
+            {
+                LoadArchiveManager
+            };
+            Parallel.ForEach(todo, _ => Task.Run(_));
         }
     }
 }
