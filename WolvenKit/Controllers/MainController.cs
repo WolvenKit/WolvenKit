@@ -70,7 +70,7 @@ namespace WolvenKit
             return mainController;
         }
 
-        public static void SetGame(GameControllerBase controller)
+        public void SetGame(GameControllerBase controller)
         {
             gameController = controller;
             controller.HandleStartup();

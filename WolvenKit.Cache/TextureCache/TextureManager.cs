@@ -31,7 +31,7 @@ namespace WolvenKit.Cache
         ///     Load a single mod soundcache
         /// </summary>
         /// <param name="filename"></param>
-        public override void LoadModBundle(string filename)
+        public override void LoadModArchive(string filename)
         {
             if (Archives.ContainsKey(filename))
                 return;
@@ -53,7 +53,7 @@ namespace WolvenKit.Cache
         ///     Load a single soundcache
         /// </summary>
         /// <param name="filename"></param>
-        public override void LoadBundle(string filename, bool ispatch = false)
+        public override void LoadArchive(string filename, bool ispatch = false)
         {
             if (Archives.ContainsKey(filename))
                 return;
@@ -87,14 +87,14 @@ namespace WolvenKit.Cache
             contentdirs.Sort(new AlphanumComparator<string>());
             foreach (var file in contentdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
             {
-                LoadBundle(file);
+                LoadArchive(file);
             }
 
             var patchdirs = new List<string>(Directory.GetDirectories(content, "patch*"));
             patchdirs.Sort(new AlphanumComparator<string>());
             foreach (var file in patchdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
             {
-                LoadBundle(file);
+                LoadArchive(file);
             }
 
             if (Directory.Exists(dlc))
@@ -108,7 +108,7 @@ namespace WolvenKit.Cache
                         .OrderBy(k => k)
                         .Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
                 {
-                    LoadBundle(file);
+                    LoadArchive(file);
                 }
             }
             RebuildRootNode();
@@ -119,7 +119,7 @@ namespace WolvenKit.Cache
         /// </summary>
         /// <param name="mods"></param>
         /// <param name="dlc"></param>
-        public override void LoadModsBundles(string mods, string dlc)
+        public override void LoadModsArchives(string mods, string dlc)
         {
             // this is slow
             Archives.Clear();
@@ -133,7 +133,7 @@ namespace WolvenKit.Cache
             var modbundles = modsdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)).ToList();
             foreach (var file in modbundles)
             {
-                LoadModBundle(file);
+                LoadModArchive(file);
             }
 
             if (Directory.Exists(dlc))
@@ -147,7 +147,7 @@ namespace WolvenKit.Cache
                         .OrderBy(k => k)
                         .Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
                 {
-                    LoadModBundle(file);
+                    LoadModArchive(file);
                 }
             }
             RebuildRootNode();

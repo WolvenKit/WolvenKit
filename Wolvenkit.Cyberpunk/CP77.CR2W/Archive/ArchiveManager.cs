@@ -5,6 +5,7 @@ using System.Text;
 using Catel.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Navigation;
 using Catel.Collections;
 using CP77Tools.Model;
 using WolvenKit.Common;
@@ -12,7 +13,7 @@ using WolvenKit.Common.Model;
 
 namespace CP77.CR2W.Archive
 {
-    public class ArchiveManager : CyberArchvieManager
+    public class ArchiveManager : CyberArchiveManager
     {
         public ArchiveManager(DirectoryInfo indir)
         {
@@ -48,25 +49,10 @@ namespace CP77.CR2W.Archive
                     File = items.Where(_ => _.FirstOrDefault().Extension == ext).SelectMany(_ => _).ToList()
                 }).ToDictionary(_ => _.Key, _ => _.File);
 
-        public GameFileTreeNode RootNode { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public List<IGameFile> FileList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        List<string> Extensions { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public List<string> AutocompleteSource { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Dictionary<string, List<IGameFile>> Items { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public override EArchiveType TypeName => EArchiveType.Archive;
-
 
         #endregion
 
-
-
         #region methods
-        public override void LoadAll(string exedir)
-        {
-            throw new NotImplementedException();
-        }
 
 
         /// <summary>
@@ -116,17 +102,24 @@ namespace CP77.CR2W.Archive
 
         }
 
-        public override void LoadModBundle(string filename)
+        public override EArchiveType TypeName => EArchiveType.Archive;
+
+        public override void LoadModArchive(string filename)
         {
             throw new NotImplementedException();
         }
 
-        public override void LoadBundle(string filename, bool ispatch = false)
+        public override void LoadArchive(string filename, bool ispatch = false)
         {
             throw new NotImplementedException();
         }
 
-        public override void LoadModsBundles(string mods, string dlc)
+        public override void LoadAll(string exedir)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void LoadModsArchives(string mods, string dlc)
         {
             throw new NotImplementedException();
         }

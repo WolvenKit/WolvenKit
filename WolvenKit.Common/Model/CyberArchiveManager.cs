@@ -11,7 +11,7 @@ namespace WolvenKit.Common
     /// <summary>
     /// 
     /// </summary>
-    public abstract class WitcherArchiveManager : IGameArchiveManager
+    public abstract class CyberArchiveManager : IGameArchiveManager
     {
         public GameFileTreeNode RootNode { get; set; }
         public List<IGameFile> FileList { get; set; }
@@ -22,10 +22,10 @@ namespace WolvenKit.Common
 
         public abstract EArchiveType TypeName { get; }
 
-        public abstract void LoadModBundle(string filename);
-        public abstract void LoadBundle(string filename, bool ispatch = false);
+        public abstract void LoadModArchive(string filename);
+        public abstract void LoadArchive(string filename, bool ispatch = false);
         public abstract void LoadAll(string exedir);
-        public abstract void LoadModsBundles(string mods, string dlc);
+        public abstract void LoadModsArchives(string mods, string dlc);
 
 
         protected readonly string[] VanillaDlClist = new string[] { "DLC1", "DLC2", "DLC3", "DLC4", "DLC5", "DLC6", "DLC7", "DLC8", "DLC9", "DLC10", "DLC11", "DLC12", "DLC13", "DLC14", "DLC15", "DLC16", "bob", "ep1" };

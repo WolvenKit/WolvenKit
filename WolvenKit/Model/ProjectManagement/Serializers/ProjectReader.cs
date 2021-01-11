@@ -7,6 +7,7 @@ using Orc.Notifications;
 using Orc.ProjectManagement;
 using WolvenKit.Model;
 using WolvenKit.Common;
+using WolvenKit.Controllers;
 
 namespace WolvenKit.Model.ProjectManagement
 {
@@ -40,11 +41,13 @@ namespace WolvenKit.Model.ProjectManagement
                     case ".w3modproj":
                     {
                         project = new Tw3Project(location);
+                        MainController.Get().SetGame(new Tw3Controller());
                         break;
                     }
                     case ".cpmodproj":
                     {
                         project = new Cp77Project(location);
+                        MainController.Get().SetGame(new Cp77Controller());
                         break;
                     }
                 }
