@@ -2,22 +2,19 @@
 using Orchestra.Services;
 using WolvenKit.Services;
 
-namespace WolvenKit
+/// <summary>
+/// Used by the ModuleInit. All code inside the Initialize method is ran as soon as the assembly is loaded.
+/// </summary>
+public static class ModuleInitializer
 {
     /// <summary>
-    /// Used by the ModuleInit. All code inside the Initialize method is ran as soon as the assembly is loaded.
+    /// Initializes the module.
     /// </summary>
-    public static class ModuleInitializer
+    public static void Initialize()
     {
-        /// <summary>
-        /// Initializes the module.
-        /// </summary>
-        public static void Initialize()
-        {
-            var serviceLocator = ServiceLocator.Default;
+        var serviceLocator = ServiceLocator.Default;
 
-            serviceLocator.RegisterType<IRibbonService, RibbonService>();
-            serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();
-        }
+        serviceLocator.RegisterType<IRibbonService, RibbonService>();
+        serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();
     }
 }

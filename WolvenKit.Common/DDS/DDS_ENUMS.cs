@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.Common.DDS
+﻿namespace WolvenKit.Common.Tools.DDS
 {
     public enum D3D10_RESOURCE_DIMENSION
     {

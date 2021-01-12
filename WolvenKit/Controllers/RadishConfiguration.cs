@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
-using WolvenKit.Common;
-using WolvenKit.Radish.Model;
 
-namespace WolvenKit.Controllers
+namespace WolvenKit
 {
+    using Common;
+    using Radish.Model;
     public class RadishConfiguration : ObservableObject
     {
         public RadishConfiguration()

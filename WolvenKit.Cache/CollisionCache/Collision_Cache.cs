@@ -155,7 +155,7 @@ namespace WolvenKit.Cache
             foreach (var ci in FileNames.Select(fileName => new CollisionCacheItem
             {
                 Name = fileName,
-                Bundle = this,
+                Archive = this,
 
                 NameOffset = br.ReadUInt32(),
                 Unk1 = br.ReadUInt32(),

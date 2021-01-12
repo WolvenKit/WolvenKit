@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Ionic.Zlib;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Arguments;
 using WolvenKit.CR2W;
 
 namespace WolvenKit.Cache
@@ -92,7 +91,7 @@ namespace WolvenKit.Cache
     /// </summary>
     public class CollisionCacheItem : IGameFile
     {
-        public IGameArchive Bundle { get; set; }
+        public IGameArchive Archive { get; set; }
         public string Name { get; set; }
         public uint Size { get; set; }
         public uint ZSize { get; set; }
@@ -114,7 +113,7 @@ namespace WolvenKit.Cache
 
         public void Extract(Stream output)
         {
-            using (var file = MemoryMappedFile.CreateFromFile(Bundle.ArchiveAbsolutePath, FileMode.Open))
+            using (var file = MemoryMappedFile.CreateFromFile(Archive.ArchiveAbsolutePath, FileMode.Open))
             using (var viewstream = file.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
             {
                 var zlib = new ZlibStream(viewstream, CompressionMode.Decompress);

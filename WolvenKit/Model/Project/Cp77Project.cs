@@ -3,18 +3,27 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Catel.IoC;
 using Orc.Notifications;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
-using WolvenKit.Controllers;
-using WolvenKit.CR2W;
-using WolvenKit.Services;
+using CP77.Common;
 
-namespace WolvenKit.Model.Project
+namespace WolvenKit.Model
 {
+    using Controllers;
+    using Services;
+    using Bundles;
+    using Cache;
+    using Common;
+    using Common.Model;
+    using Common.Services;
+    using CR2W;
+    using W3Speech;
+    using W3Strings;
+    using CP77.CR2W.Archive;
+
     public sealed class Cp77Project : EditorProject, ICloneable
     {
 
@@ -58,7 +67,7 @@ namespace WolvenKit.Model.Project
                 this.Version = obj.Version;
                 this.Author = obj.Author;
                 this.Email = obj.Email;
-                this.GameType = Common.GameType.Cyberpunk2077;
+                this.GameType = GameType.Cyberpunk2077;
             }
         }
 

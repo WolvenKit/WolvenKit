@@ -6,7 +6,6 @@ using Catel.IoC;
 using WolvenKit.Common.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Arguments;
 
 namespace CP77.CR2W.Archive
 {
@@ -28,7 +27,7 @@ namespace CP77.CR2W.Archive
         public string FileName => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}.bin" : _nameStr;
         public string Extension => Path.GetExtension(FileName);
 
-        public IGameArchive Bundle { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IGameArchive Archive { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public uint Size { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public uint ZSize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

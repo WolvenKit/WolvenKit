@@ -1,9 +1,12 @@
 ﻿using System;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
+using System.IO;
 
-namespace WolvenKit.Model.Arguments
+namespace WolvenKit.Model
 {
+    using Common.Model;
+    using CR2W;
+    using CR2W.Types;
+
     public class RequestEmbeddedFileOpenArgs : EventArgs
     {
         public CR2WEmbeddedWrapper Embeddedfile { get; }

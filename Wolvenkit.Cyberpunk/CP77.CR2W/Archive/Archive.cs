@@ -16,10 +16,11 @@ using CP77Tools.Model;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Tools.DDS;
 using CP77.CR2W.Types;
-using WolvenKit.Common.DDS;
+using CP77.Common.Tools;
 using WolvenKit.Common.Model;
-using EUncookExtension = WolvenKit.Common.DDS.EUncookExtension;
+using EUncookExtension = WolvenKit.Common.Tools.DDS.EUncookExtension;
 
 namespace CP77.CR2W.Archive
 {
@@ -78,9 +79,9 @@ namespace CP77.CR2W.Archive
         [JsonIgnore]
         public string Name => Path.GetFileName(Filepath);
 
-        public WolvenKit.Common.Model.EArchiveType TypeName => throw new NotImplementedException();
+        public EArchiveType TypeName => EArchiveType.Archive;
 
-        public string ArchiveAbsolutePath { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string ArchiveAbsolutePath { get; set; }
         #endregion
 
         #region methods
@@ -330,10 +331,7 @@ namespace CP77.CR2W.Archive
         /// </summary>
         public void Serialize()
         {
-
-
-
-
+            //TODO: Implement this!
         }
 
 
@@ -366,7 +364,7 @@ namespace CP77.CR2W.Archive
             return ExtractSingleInner(hash, outDir);
         }
 
-        private int UncookSingleInner( ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga)
+        private int UncookSingleInner( ulong hash, DirectoryInfo outDir, WolvenKit.Common.Tools.DDS.EUncookExtension uncookext = EUncookExtension.tga)
         {
             var uncooksuccess = false;
             var (file, buffers) = GetFileData(hash);

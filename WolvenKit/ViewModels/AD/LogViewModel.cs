@@ -1,6 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.Windows.Input;
+using WolvenKit.Commands;
+using Catel.IoC;
+using MLib.Interfaces;
+using WolvenKit.Services;
+using Catel;
+using Catel.Data;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using WolvenKit.Common.Services;
 
-namespace WolvenKit.ViewModels.AD
+namespace WolvenKit.ViewModels
 {
 
     /// <summary>

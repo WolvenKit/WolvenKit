@@ -16,7 +16,6 @@ using Catel.IoC;
 using Catel.MVVM;
 using Orc.ProjectManagement;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Model.Project;
 
 namespace WolvenKit.Model
 {

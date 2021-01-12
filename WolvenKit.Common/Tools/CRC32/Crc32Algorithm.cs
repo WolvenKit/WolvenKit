@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace WolvenKit.Common.Tools.CRC32
+namespace RED.CRC32
 {
 	/// <summary>
 	/// Implementation of CRC-32.

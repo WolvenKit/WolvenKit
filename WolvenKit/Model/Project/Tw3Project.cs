@@ -1,25 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Catel;
 using Catel.IoC;
+using Catel.Threading;
+using Newtonsoft.Json;
 using Orc.Notifications;
-using WolvenKit.Bundles;
-using WolvenKit.Cache;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
-using WolvenKit.Controllers;
-using WolvenKit.CR2W;
-using WolvenKit.Services;
-using WolvenKit.W3Speech;
-using WolvenKit.W3Strings;
-
-namespace WolvenKit.Model.Project
+using ProtoBuf;
+namespace WolvenKit.Model
 {
+    using Controllers;
+    using Services;
+    using Bundles;
+    using Cache;
+    using Common;
+    using Common.Model;
+    using Common.Services;
+    using CR2W;
+    using CR2W.Types;
+    using W3Speech;
+    using W3Strings;
+
     public sealed class Tw3Project : EditorProject, ICloneable
     {
         #region fields
@@ -76,7 +83,7 @@ namespace WolvenKit.Model.Project
                 this.Version = obj.Version;
                 this.Author = obj.Author;
                 this.Email = obj.Email;
-                this.GameType = Common.GameType.Witcher3;
+                this.GameType = GameType.Witcher3;
             }
         }
 

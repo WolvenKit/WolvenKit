@@ -10,7 +10,7 @@ using WolvenKit.Common.Services;
 using CP77.CR2W.Archive;
 using Newtonsoft.Json;
 using CP77.CR2W.Types;
-using WolvenKit.Common.Tools.CRC64;
+using RED.CRC64;
 
 namespace CP77Tools.Model
 {

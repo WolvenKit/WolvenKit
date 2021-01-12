@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
-using static WolvenKit.Common.DDS.TexconvWrapper;
+using WolvenKit.Common.Tools.DDS;
+using static WolvenKit.Common.Tools.DDS.TexconvWrapper;
 
 namespace WolvenKit.Common.Tools
 {

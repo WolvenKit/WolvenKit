@@ -1,16 +1,32 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Wcc;
-using WolvenKit.Common.Services;
-using WolvenKit.CR2W;
+using Catel.IoC;
+using Microsoft.CodeAnalysis.CSharp;
+using ProtoBuf;
+using System.Diagnostics;
+using System.IO.Compression;
+using System.Reflection;
 
-namespace WolvenKit.Controllers
+namespace WolvenKit
 {
+    using Controllers;
+    using Services;
+
+    using Bundles;
+    using Cache;
+    using Common;
+    using Common.Services;
+    using CR2W;
+    using W3Strings;
+    using Common.Model;
+    using Common.Wcc;
+    using CR2W.Types;
+    using W3Speech;
+
     public enum EProjectStatus
     {
         Idle,

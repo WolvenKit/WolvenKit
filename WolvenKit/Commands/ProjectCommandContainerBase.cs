@@ -5,19 +5,22 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-using System.Threading.Tasks;
-using Catel;
+using System;
 using Catel.IoC;
-using Catel.MVVM;
 using Catel.Services;
-using Catel.Threading;
 using Orc.Notifications;
-using Orc.ProjectManagement;
-using WolvenKit.Common.Services;
-using WolvenKit.Model.Project;
 
-namespace WolvenKit.Commands
+namespace WolvenKit
 {
+    using Model;
+    using Common.Services;
+
+    using System.Threading.Tasks;
+    using Catel;
+    using Catel.MVVM;
+    using Catel.Threading;
+    using Orc.ProjectManagement;
+
     public abstract class ProjectCommandContainerBase : CommandContainerBase
     {
         #region Fields

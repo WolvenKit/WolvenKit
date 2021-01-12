@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WolvenKit.Common.Model;
+using WolvenKit.Common.WinFormsEnums;
 
 namespace WolvenKit.Common.Services
 {

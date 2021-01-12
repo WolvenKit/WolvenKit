@@ -10,7 +10,6 @@ using CP77.CR2W.Archive;
 using Newtonsoft.Json;
 using ProtoBuf;
 using WolvenKit.Common;
-using WolvenKit.Common.Model;
 
 namespace WolvenKit.Controllers
 {
@@ -36,7 +35,7 @@ namespace WolvenKit.Controllers
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
-            _logger.LogString("Loading Bundle Manager ... ", Logtype.Important);
+            _logger.LogString("Loading Archive Manager ... ", Logtype.Important);
             try
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
@@ -70,7 +69,7 @@ namespace WolvenKit.Controllers
                 bundleManager = new BundleManager();
                 bundleManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
             }
-            _logger.LogString("Finished loading Bundle Manager.", Logtype.Success);
+            _logger.LogString("Finished loading Archive Manager.", Logtype.Success);
             return bundleManager;
         }
         public static W3StringManager LoadStringsManager()

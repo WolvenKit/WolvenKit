@@ -1,19 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Catel;
+﻿using Catel;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Reflection;
 using Catel.Services;
+using MLib.Interfaces;
+using Orc.Theming;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
 using Orc.ProjectManagement;
-using WolvenKit.Commands;
-using WolvenKit.Common.Services;
-using WolvenKit.Services;
 
-namespace WolvenKit.ViewModels.AD
+namespace WolvenKit.ViewModels
 {
+    using Commands;
+    using Services;
+    using Common.Services;
     public class RibbonViewModel : ViewModel
     {
         #region fields

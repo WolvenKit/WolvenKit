@@ -4,7 +4,7 @@
  * Max Vysokikh, 2016-2017
  */
 
-namespace WolvenKit.Common.Tools.CRC32
+namespace RED.CRC32
 {
 	internal class SafeProxyC : SafeProxy
 	{

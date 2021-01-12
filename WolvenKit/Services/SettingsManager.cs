@@ -7,7 +7,6 @@ using System.Xml.Serialization;
 using Catel.IoC;
 using Catel.MVVM;
 using WolvenKit.Commands;
-using WolvenKit.Controllers;
 
 namespace WolvenKit.Services
 {

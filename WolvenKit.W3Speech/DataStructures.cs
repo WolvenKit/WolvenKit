@@ -5,7 +5,6 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Arguments;
 using WolvenKit.W3Strings;
 
 namespace WolvenKit.W3Speech
@@ -48,7 +47,7 @@ namespace WolvenKit.W3Speech
 
         public SpeechEntry(IGameArchive bundle, LanguageSpecificID id, UInt32 id_high, UInt32 wem_offs, UInt32 wem_size, UInt32 cr2w_offs, UInt32 cr2w_size, Single duration)
         {
-            this.Bundle = bundle;
+            this.Archive = bundle;
             this.id = id;
             this.id_high = id_high;
             this.wem_offs = wem_offs;
@@ -62,7 +61,7 @@ namespace WolvenKit.W3Speech
             this.PageOffset = cr2w_offs;
         }
 
-        public IGameArchive Bundle { get; set; }
+        public IGameArchive Archive { get; set; }
         public string Name { get; set; }
         public uint Size { get; set; }
         public uint ZSize { get; set; }
@@ -73,7 +72,7 @@ namespace WolvenKit.W3Speech
 
         public void Extract(Stream output)
         {
-            using (var file = MemoryMappedFile.CreateFromFile(Bundle.ArchiveAbsolutePath, FileMode.Open))
+            using (var file = MemoryMappedFile.CreateFromFile(Archive.ArchiveAbsolutePath, FileMode.Open))
             {
                 using (var viewstream = file.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
                 {

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using WolvenKit.Common.Model;
 
-namespace WolvenKit.Common.Model.Wcc
+namespace WolvenKit.Common.Wcc
 {
     public static class REDTypes
     {
@@ -41,7 +44,7 @@ namespace WolvenKit.Common.Model.Wcc
         //            return EBundleType.TextureCache.ToString();
         //        case ".re": 
         //        case ".fbx": 
-        //            return EBundleType.Bundle.ToString();
+        //            return EBundleType.Archive.ToString();
         //        default: return "";
         //    }
         //}

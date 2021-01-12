@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WolvenKit.Common.Model.Wcc;
 
 namespace WolvenKit.Model
 {
     using Common;
+    using Common.Wcc;
 
     public class XBMDumpRecord
     {

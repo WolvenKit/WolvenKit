@@ -1,14 +1,20 @@
-﻿using System.IO;
-using WolvenKit.Common.Model.Arguments;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using WolvenKit.Common.Model;
 
-namespace WolvenKit.Common.Model
+
+namespace WolvenKit.Common
 {
     /// <summary>
     /// Any game file
     /// </summary>
     public interface IGameFile
     {
-        IGameArchive Bundle { get; set; }
+        IGameArchive Archive { get; set; }
         string Name { get; set; }
         /// <summary>
         /// Uncompressed asset size in bytes

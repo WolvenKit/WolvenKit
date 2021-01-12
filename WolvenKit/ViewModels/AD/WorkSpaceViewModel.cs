@@ -1,4 +1,8 @@
-﻿using System;
+﻿
+using Catel.Services;
+using WolvenKit.ViewModels;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -6,24 +10,25 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
+using Catel.MVVM;
 using Catel;
 using Catel.IoC;
-using Catel.MVVM;
-using Catel.Services;
-using Microsoft.Win32;
+using Catel.Threading;
+using ControlzEx.Standard;
 using Orc.ProjectManagement;
-using WolvenKit.Commands;
-using WolvenKit.Common.Services;
-using WolvenKit.CR2W;
-using WolvenKit.Model;
-using WolvenKit.Model.Project;
 using NativeMethods = WolvenKit.NativeWin.NativeMethods;
 
-namespace WolvenKit.ViewModels.AD
+namespace WolvenKit.ViewModels
 {
+    using Model;
+    using Commands;
+    using Common.Services;
+    using CR2W;
     /// <summary>
 	/// The WorkSpaceViewModel implements AvalonDock demo specific properties, events and methods.
 	/// </summary>

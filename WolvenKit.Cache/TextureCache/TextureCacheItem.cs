@@ -7,8 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ionic.Zlib;
 using WolvenKit.Common;
-using WolvenKit.Common.DDS;
-using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Tools.DDS;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Cache
@@ -39,7 +38,7 @@ namespace WolvenKit.Cache
     {
         
 
-        public IGameArchive Bundle { get; set; }
+        public IGameArchive Archive { get; set; }
         public string DateString { get; set; }
 
         public string CompressionType => "Zlib";
@@ -80,7 +79,7 @@ namespace WolvenKit.Cache
 
         public TextureCacheItem(IGameArchive parent)
         {
-            Bundle = parent;
+            Archive = parent;
         }
 
         public void Extract(Stream output)
@@ -220,7 +219,7 @@ namespace WolvenKit.Cache
                 var fi = new FileInfo(newpath);
                 if (fi.Exists)
                 {
-                    TexconvWrapper.Convert(Path.GetDirectoryName(newpath), newpath, (Common.DDS.EUncookExtension)extractext);
+                    TexconvWrapper.Convert(Path.GetDirectoryName(newpath), newpath, (Common.Tools.DDS.EUncookExtension)extractext);
                 }
 
                 // delete old DDS
