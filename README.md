@@ -1,6 +1,6 @@
 # CP77Tools
 
-[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/) [![Discord](https://img.shields.io/discord/717692382849663036.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/Epkq79kd96) ![GitHub all releases](https://img.shields.io/github/downloads/rfuzzo/cp77tools/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/rfuzzo/cp77tools?include_prereleases)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/) [![Discord](https://img.shields.io/discord/717692382849663036.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/Epkq79kd96) [![CodeFactor](https://www.codefactor.io/repository/github/wolvenkit/cp77tools/badge)](https://www.codefactor.io/repository/github/wolvenkit/cp77tools) ![GitHub all releases](https://img.shields.io/github/downloads/rfuzzo/cp77tools/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/rfuzzo/cp77tools?include_prereleases)
 
 Modding tools for the CDPR Cyberpunk 2077 video game.
 
