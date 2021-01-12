@@ -225,7 +225,7 @@ namespace WolvenKit.Model
                 }
                 catch (DirectoryNotFoundException)
                 {
-                    Logger.LogString($"{type} Bundle directory not found. Bundles will not be packed for {type}. \n", Logtype.Important);
+                    Logger.LogString($"{type} Archive directory not found. Bundles will not be packed for {type}. \n", Logtype.Important);
                     return -1;
                 }
                 catch (Exception ex)
@@ -655,7 +655,7 @@ namespace WolvenKit.Model
 
             // Jato said not to add textures to an fbx 
             // so I am keeping meshes violet :)
-            //if (extension == ".xbm" && bundleType == EBundleType.Bundle)
+            //if (extension == ".xbm" && bundleType == EBundleType.Archive)
             //{
             //    //var uncookTask = Task.Run(() => UncookFileToPath(relativePath, isDLC, alternateOutDirectory));
             //    //Task.WaitAll(uncookTask);
@@ -669,7 +669,7 @@ namespace WolvenKit.Model
             {
                 var archives = manager.FileList
                     .Where(x => x.Name == relativePath)
-                    .Select(y => new KeyValuePair<string, IGameFile>(y.Bundle.ArchiveAbsolutePath, y))
+                    .Select(y => new KeyValuePair<string, IGameFile>(y.Archive.ArchiveAbsolutePath, y))
                     .ToList();
 
 

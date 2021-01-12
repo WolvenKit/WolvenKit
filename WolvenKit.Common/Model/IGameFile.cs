@@ -14,7 +14,7 @@ namespace WolvenKit.Common
     /// </summary>
     public interface IGameFile
     {
-        IGameArchive Bundle { get; set; }
+        IGameArchive Archive { get; set; }
         string Name { get; set; }
         /// <summary>
         /// Uncompressed asset size in bytes

@@ -79,9 +79,9 @@ namespace CP77.CR2W.Archive
         [JsonIgnore]
         public string Name => Path.GetFileName(Filepath);
 
-        public WolvenKit.Common.Model.EArchiveType TypeName => throw new NotImplementedException();
+        public EArchiveType TypeName => EArchiveType.Archive;
 
-        public string ArchiveAbsolutePath { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string ArchiveAbsolutePath { get; set; }
         #endregion
 
         #region methods
@@ -331,10 +331,7 @@ namespace CP77.CR2W.Archive
         /// </summary>
         public void Serialize()
         {
-
-
-
-
+            //TODO: Implement this!
         }
 
 

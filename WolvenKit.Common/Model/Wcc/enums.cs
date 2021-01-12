@@ -44,7 +44,7 @@ namespace WolvenKit.Common.Wcc
         //            return EBundleType.TextureCache.ToString();
         //        case ".re": 
         //        case ".fbx": 
-        //            return EBundleType.Bundle.ToString();
+        //            return EBundleType.Archive.ToString();
         //        default: return "";
         //    }
         //}

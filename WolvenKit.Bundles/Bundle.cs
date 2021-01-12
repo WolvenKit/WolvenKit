@@ -56,7 +56,7 @@ namespace WolvenKit.Bundles
 
                 if (!IDString.SequenceEqual(idstring))
                 {
-                    throw new InvalidBundleException("Bundle header mismatch.");
+                    throw new InvalidBundleException("Archive header mismatch.");
                 }
 
                 bundlesize = reader.ReadUInt32();
@@ -69,7 +69,7 @@ namespace WolvenKit.Bundles
                 {
                     var item = new BundleItem
                     {
-                        Bundle = this
+                        Archive = this
                     };
 
                     var strname = Encoding.GetEncoding("ISO-8859-1").GetString(reader.ReadBytes(0x100));
@@ -103,7 +103,7 @@ namespace WolvenKit.Bundles
                     }
                     else
                     {
-                        Console.WriteLine("Warning: Bundle '" + ArchiveAbsolutePath + "' could not be fully loaded as resource '" + item.Name + "' is defined more than once. Thus, only the first definition was loaded.");
+                        Console.WriteLine("Warning: Archive '" + ArchiveAbsolutePath + "' could not be fully loaded as resource '" + item.Name + "' is defined more than once. Thus, only the first definition was loaded.");
                     }
                 }
 

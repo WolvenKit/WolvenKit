@@ -70,7 +70,7 @@ namespace WolvenKit.Bundles
                 {
                     // check if file is already in contentN directory (content0, content1 etc) 
                     List<IGameFile> filesInBundles = Items[item.Key];
-                    var splits = filesInBundles.First().Bundle.ArchiveAbsolutePath.Split(Path.DirectorySeparatorChar);
+                    var splits = filesInBundles.First().Archive.ArchiveAbsolutePath.Split(Path.DirectorySeparatorChar);
                     var contentdir = splits[splits.Length - 3];
                     if (contentdir.Contains("content"))
                     {

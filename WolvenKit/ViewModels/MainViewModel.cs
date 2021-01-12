@@ -594,7 +594,7 @@ namespace WolvenKit.ViewModels
 
                 //------------------------- POST COOKING --------------------------------//
                 #region Copy Cooked Files
-                // copy mod files from Bundle (cooked files) to \cooked
+                // copy mod files from Archive (cooked files) to \cooked
                 if (Directory.GetFiles(ActiveMod.ModCookedDirectory, "*", SearchOption.AllDirectories).Any())
                 {
                     Logger.LogString($"======== Adding cooked mod files ======== \n", Logtype.Important);
@@ -628,7 +628,7 @@ namespace WolvenKit.ViewModels
                     }
                 }
 
-                // copy dlc files from Bundle (cooked files) to \cooked
+                // copy dlc files from Archive (cooked files) to \cooked
                 if (Directory.GetFiles(ActiveMod.DlcCookedDirectory, "*", SearchOption.AllDirectories).Any())
                 {
                     Logger.LogString($"======== Adding cooked dlc files ======== \n", Logtype.Important);
@@ -923,8 +923,8 @@ namespace WolvenKit.ViewModels
             string filename = Path.GetFileName(relativePath);
 
 
-            // always uncook xbms, w2mesh, redcloth and redapex in Bundle
-            //if ((extension == ".xbm" /*|| Enum.GetNames(typeof(EExportable)).Contains(extension.TrimStart('.'))*/) && manager.TypeName == EBundleType.Bundle)
+            // always uncook xbms, w2mesh, redcloth and redapex in Archive
+            //if ((extension == ".xbm" /*|| Enum.GetNames(typeof(EExportable)).Contains(extension.TrimStart('.'))*/) && manager.TypeName == EBundleType.Archive)
             //    uncook = true;
 
             #region Check Existing Files in Working Dir
@@ -967,13 +967,13 @@ namespace WolvenKit.ViewModels
             var archives = new Dictionary<string, IGameFile>();
             foreach (var witcherFile in files)
             {
-                string key = witcherFile.Bundle.ArchiveAbsolutePath;
+                string key = witcherFile.Archive.ArchiveAbsolutePath;
                 if (!archives.ContainsKey(key))
                     archives.Add(key, witcherFile);
             }
 
             #region Get new Filename
-            var bundletype = archives.First().Value.Bundle.TypeName;
+            var bundletype = archives.First().Value.Archive.TypeName;
             var bundletypestr = bundletype.ToString();
             string newpath = "";
             switch (bundletype)
@@ -1052,7 +1052,7 @@ namespace WolvenKit.ViewModels
                         return;
                     if (onlyusethisbundle)
                     {
-                        prioritizedBundles.Add(selectedFile.Bundle.ArchiveAbsolutePath);
+                        prioritizedBundles.Add(selectedFile.Archive.ArchiveAbsolutePath);
                     }
                 }
                 
@@ -1104,7 +1104,7 @@ namespace WolvenKit.ViewModels
 
             bool UncookInner(IGameFile file)
             {
-                var basedir = Path.GetDirectoryName(file.Bundle.ArchiveAbsolutePath);
+                var basedir = Path.GetDirectoryName(file.Archive.ArchiveAbsolutePath);
 
                 // copy to uncooked folder in mod project
                 var uncookTask = Task.Run(() => WccHelper.UncookFileToPath(basedir, relativePath, addAsDLC));

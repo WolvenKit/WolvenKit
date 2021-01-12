@@ -38,7 +38,7 @@ namespace WolvenKit.Cache
     {
         
 
-        public IGameArchive Bundle { get; set; }
+        public IGameArchive Archive { get; set; }
         public string DateString { get; set; }
 
         public string CompressionType => "Zlib";
@@ -79,7 +79,7 @@ namespace WolvenKit.Cache
 
         public TextureCacheItem(IGameArchive parent)
         {
-            Bundle = parent;
+            Archive = parent;
         }
 
         public void Extract(Stream output)

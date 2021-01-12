@@ -7,7 +7,7 @@ namespace WolvenKit.Wwise
 {
     public class SoundCacheItem : IGameFile
     {
-        public IGameArchive Bundle { get; set; }
+        public IGameArchive Archive { get; set; }
         /// <summary>
         /// Name of the bundled item in the archive.
         /// </summary>
@@ -28,7 +28,7 @@ namespace WolvenKit.Wwise
 
         public SoundCacheItem(IGameArchive Parent)
         {
-            this.Bundle = Parent;
+            this.Archive = Parent;
         }
 
         public string CompressionType => "None";
