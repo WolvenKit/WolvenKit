@@ -70,13 +70,14 @@ namespace CP77.CR2W
                 else if (import && canImport)
                 {
                     //TODO: switch and call import
-                    
+                    Logger.LogString("Importing raw files into redengine files is not yet implemented.", Logtype.Error);
                 }
 
                 // if clean is selected, delete the buffer files
                 if (clean)
                 {
                     //TODO: loop and delet buffers
+                    Logger.LogString("Deleting raw files after rebuilding is not yet implemented.", Logtype.Error);
                 }
                 
                 
@@ -226,7 +227,8 @@ namespace CP77.CR2W
                 }
                 else
                 {
-                    //TODO: switch and call import with existing 
+                    Logger.LogString("Importing raw files into redengine files is not yet implemented.", Logtype.Error);
+                    //TODO: switch and call import with existing
                 }
                 
             }
