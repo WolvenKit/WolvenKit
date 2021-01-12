@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
 using CP77.Common.Services;
@@ -46,16 +47,19 @@ namespace CP77.CR2W
             // then the texture has priority
             if (useBuffers) GetBuffers();
             if (useTextures) GetTextures();
+            Logger.LogString($"Found {buffersDict.Count.ToString()} file(s) to rebuild.", Logtype.Important);
+            
+            Thread.Sleep(1000);
+            var progress = 0;
+            Logger.LogProgress(0);
             
             // loop through the buffersDict
             foreach (var (parentPath, buffers) in buffersDict)
             {
                 var ext = Path.GetExtension(parentPath)[1..];
                 
-                var values = Enum.GetValues(typeof(ECookedFileFormat))
-                    .Cast<ECookedFileFormat>()
-                    .Select(_ => $".{_}");
-                var canImport = values.Any(e => e == ext);
+                var values = Enum.GetNames(typeof(ECookedFileFormat));
+                var canImport = values.Any(_ => _ == ext);
                 
                 // if the parent cr2w exists
                 if (File.Exists(parentPath))
@@ -74,10 +78,14 @@ namespace CP77.CR2W
                 {
                     //TODO: loop and delet buffers
                 }
+                
+                
+                Interlocked.Increment(ref progress);
+                Logger.LogProgress(progress / (float)buffersDict.Count);
             }
             
             
-
+            Logger.LogString($"Successfully rebuilt {buffersDict.Count.ToString()} file(s).", Logtype.Success);
             return true;
 
 
@@ -173,8 +181,11 @@ namespace CP77.CR2W
                     // kraken the buffers and handle textures
                     using var fileWriter = new BinaryWriter(fileStream);
                     fileWriter.BaseStream.Seek(0, SeekOrigin.End);
-                    cr2w.Buffers.Clear();
-                    for (var i = 0; i < buffers.Count; i++)
+
+                    var existingBufferCount = cr2w.Buffers.Count;
+                    var newBufferCount = buffers.Count;
+
+                    for (var i = 0; i < newBufferCount; i++)
                     {
                         var buffer = buffers[i];
                         if (!buffer.Exists)
@@ -185,15 +196,28 @@ namespace CP77.CR2W
 
                         var offset = (uint)fileWriter.BaseStream.Position;
                         var (zsize, crc) = fileWriter.CompressAndWrite(inbuffer);
-                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+
+                        if (i < existingBufferCount)
                         {
-                            flags = 0,                              //TODO: find out what these are
-                            index = (uint)i,
-                            offset = offset,
-                            diskSize = zsize,
-                            memSize = (uint)inbuffer.Length,
-                            crc32 = crc
-                        }));
+                            var oldBuffer = cr2w.Buffers[i].Buffer;
+                            oldBuffer.offset = offset;
+                            oldBuffer.diskSize = zsize;
+                            oldBuffer.memSize = (uint)inbuffer.Length;
+                            oldBuffer.crc32 = crc;
+                            cr2w.Buffers[i].Buffer = oldBuffer;
+                        }
+                        else
+                        {
+                            cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                            {
+                                flags = 0,                              //TODO: find out what these are
+                                index = (uint)i,
+                                offset = offset,
+                                diskSize = zsize,
+                                memSize = (uint)inbuffer.Length,
+                                crc32 = crc
+                            }));   
+                        }
                     }
 
                     // write cr2w headers
@@ -211,10 +235,12 @@ namespace CP77.CR2W
             {
                 using var fs = new FileStream(buffer.FullName, FileMode.Open, FileAccess.Read);
                 using var br = new BinaryReader(fs);
+                var bext = buffer.Extension;
+                
                 // if dds file, delete the 
-                if (unsaferaw)
+                if (unsaferaw && bext != ".buffer")
                 {
-                    var bext = buffer.Extension;
+                    
                     switch (bext)
                     {
                         case ".dds":

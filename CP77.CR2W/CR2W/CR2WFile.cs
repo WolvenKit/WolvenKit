@@ -13,6 +13,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using CP77.CR2W.Types;
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using Catel.Data;
 using CP77.Common.Services;
 using CP77.Common.Tools.FNV1A;
@@ -741,6 +742,7 @@ namespace CP77.CR2W
                 }, this));
             }
             #endregion
+            
             #region Imports
             Imports.Clear();
             foreach (var import in importslist)
@@ -757,6 +759,7 @@ namespace CP77.CR2W
                     }, this));
             }
             #endregion
+            
             #region Embedded 
             for (var i = 0; i < Embedded.Count; i++)
             {
@@ -823,7 +826,7 @@ namespace CP77.CR2W
                 Embedded[i].SetOffset(newoffset);
             }
             m_fileheader.fileSize += headerOffset;
-            m_fileheader.bufferSize += headerOffset;
+            //m_fileheader.bufferSize += headerOffset;
             #endregion
             
             foreach (var chunk in Chunks)
@@ -935,7 +938,7 @@ namespace CP77.CR2W
 
             }
 
-            // build new stringsDixtionary
+            // build new stringsDictionary
             var strings = newstrings.ToArray();
             var stringscount = strings.Length;
 
@@ -996,6 +999,8 @@ namespace CP77.CR2W
                 m_tableheaders[5].offset = (uint)file.BaseStream.Position;
                 WriteTable<CR2WBuffer>(file.BaseStream, Buffers.Select(_ => _.Buffer).ToArray(), 5);
             }
+            else
+                file.Write(Marshal.SizeOf(typeof(CR2WBuffer)));
 
             if (Embedded.Count > 0)
             {
@@ -1003,6 +1008,9 @@ namespace CP77.CR2W
                 m_tableheaders[6].offset = (uint)file.BaseStream.Position;
                 WriteTable<CR2WEmbedded>(file.BaseStream, Embedded.Select(_ => _.Embedded).ToArray(), 6);
             }
+            else
+                file.Write(Marshal.SizeOf(typeof(CR2WEmbedded)));
+
             #endregion
             
             // calculate crc and write file header again
@@ -1014,6 +1022,12 @@ namespace CP77.CR2W
         {
             file.BaseStream.Seek(0, SeekOrigin.Begin);
 
+            // calculate filesize again
+            m_fileheader.fileSize = Chunks.Last().Export.dataOffset + Chunks.Last().Export.dataSize; 
+            
+            // calculate buffersize again
+            m_fileheader.bufferSize = (uint)Buffers.Sum(_ => _.Buffer.diskSize) + m_fileheader.fileSize;
+            
             file.BaseStream.WriteStruct<uint>(MAGIC);
             file.BaseStream.WriteStruct<CR2WFileHeader>(m_fileheader);
             file.BaseStream.WriteStructs<CR2WTable>(m_tableheaders); // offsets change if stringtable changes
@@ -1038,7 +1052,7 @@ namespace CP77.CR2W
             //        Buffers[i].WriteData(bw);
             //    }
             //}
-            m_fileheader.bufferSize = (uint)bw.BaseStream.Position;
+            //m_fileheader.bufferSize = (uint)bw.BaseStream.Position;
 
             // Write embedded data
             for (var i = 0; i < Embedded.Count; i++)

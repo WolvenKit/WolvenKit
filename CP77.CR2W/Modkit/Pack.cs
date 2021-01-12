@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 using Catel.IoC;
 using CP77.Common.Services;
 using CP77.Common.Tools;
@@ -210,7 +212,7 @@ namespace CP77.CR2W
         public static (uint, uint) CompressAndWrite(this BinaryWriter bw, byte[] inbuffer)
         {
             var size = (uint)inbuffer.Length;
-            if (size < 255)
+            if (size < 255 || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 var crc = Crc32Algorithm.Compute(inbuffer);
                 bw.Write(inbuffer);

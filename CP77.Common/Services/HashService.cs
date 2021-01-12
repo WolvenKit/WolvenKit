@@ -153,7 +153,7 @@ namespace CP77.Common.Services
 
             watch.Stop();
 
-            Logger.LogString($"Loaded {Hashdict.Count} hashes in {watch.ElapsedMilliseconds}ms.", Logtype.Success);
+            Logger.LogString($"Loaded {Hashdict.Count.ToString()} hashes in {watch.ElapsedMilliseconds.ToString()}ms.", Logtype.Success);
         }
 
         private static void AddHashesFromStream(IDictionary<ulong, string> dictionary, Stream stream)
