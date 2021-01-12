@@ -1,17 +1,24 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
+using Orchestra;
+using Orchestra.Services;
+using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 using Orc.Notifications;
 using Orc.ProjectManagement;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
-using WolvenKit.Model.Project;
+using Settings = Orc.Squirrel.Settings;
 
-namespace WolvenKit.Commands
+namespace WolvenKit
 {
+    using Model;
+    using Common;
+    using Common.Model;
+    using Common.Services;
     public class ApplicationNewProjectCommandContainer : ProjectCommandContainerBase
     {
         private readonly INavigationService _navigationService;

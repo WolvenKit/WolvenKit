@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace WolvenKit.Common.DDS
+namespace WolvenKit.Common.Tools.DDS
 {
     [StructLayout(LayoutKind.Explicit, Size = 32)]
     public struct DDS_PIXELFORMAT

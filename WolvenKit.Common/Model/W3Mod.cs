@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Xml.Serialization;
+using WolvenKit.Common.Model;
 
-namespace WolvenKit.Common.Model
+namespace WolvenKit.Common
 {
     public class W3Mod : EditorProjectData, ICloneable
     {

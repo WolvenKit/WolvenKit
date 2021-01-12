@@ -1,12 +1,15 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Catel;
+using Catel.Logging;
 using Orc.Notifications;
 using Orc.ProjectManagement;
+using WolvenKit.Model;
+using WolvenKit.Common;
 using WolvenKit.Controllers;
-using WolvenKit.Model.Project;
 
-namespace WolvenKit.Model.ProjectManagement.Serializers
+namespace WolvenKit.Model.ProjectManagement
 {
     public class ProjectReader : ProjectReaderBase
     {

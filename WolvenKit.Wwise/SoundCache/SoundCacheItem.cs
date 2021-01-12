@@ -2,7 +2,6 @@
 using System.IO.MemoryMappedFiles;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Arguments;
 
 namespace WolvenKit.Wwise
 {

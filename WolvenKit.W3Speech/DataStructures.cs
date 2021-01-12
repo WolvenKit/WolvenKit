@@ -5,7 +5,6 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Arguments;
 using WolvenKit.W3Strings;
 
 namespace WolvenKit.W3Speech

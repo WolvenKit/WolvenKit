@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using ProtoBuf;
 using WolvenKit.Common;
-using WolvenKit.Common.Tools;
 
 namespace WolvenKit.W3Strings
 {

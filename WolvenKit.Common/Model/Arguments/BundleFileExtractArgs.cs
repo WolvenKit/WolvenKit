@@ -1,4 +1,6 @@
-﻿namespace WolvenKit.Common.Model.Arguments
+﻿using System.IO;
+
+namespace WolvenKit.Common.Model
 {
     public class BundleFileExtractArgs
     {

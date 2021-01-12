@@ -1,8 +1,12 @@
 ﻿using System;
-using WolvenKit.Common.Services;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.ViewModels
 {
+    using Common.Services;
     /// <summary>
     /// https://stackoverflow.com/a/11948550
     /// </summary>

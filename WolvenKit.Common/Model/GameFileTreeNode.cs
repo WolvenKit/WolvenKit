@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using WolvenKit.Common.Model;
 
-namespace WolvenKit.Common.Model
+namespace WolvenKit.Common
 {
     public class GameFileTreeNode
     {

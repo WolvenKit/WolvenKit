@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using WolvenKit.Common;
-using WolvenKit.Common.Services;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace WolvenKit.Controllers
+namespace WolvenKit
 {
+    using ViewModels;
+    using Common;
+    using Common.Services;
     /// <summary>
     /// Radish-modding-community-tools handler
     /// </summary>

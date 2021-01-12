@@ -5,10 +5,10 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-using System.Globalization;
-
-namespace WolvenKit.Fonts
+namespace WolvenKit
 {
+    using System.Globalization;
+
     /// <summary>
     /// Class FontAwesome, characters can be found at http://fortawesome.github.io/Font-Awesome/cheatsheet/
     /// </summary>

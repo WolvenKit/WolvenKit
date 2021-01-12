@@ -16,10 +16,6 @@ using System.Windows.Input;
 using System.Globalization;
 using System.Reflection;
 using Catel;
-using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Model.Wcc;
-using WolvenKit.Controllers;
-using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.ViewModels
 {
@@ -28,8 +24,10 @@ namespace WolvenKit.ViewModels
     using Common.Extensions;
     using Common.Model;
     using Common.Services;
+    using Common.Wcc;
     using CR2W;
     using Wwise.Wwise;
+    using Common.WinFormsEnums;
     using Model;
     using Commands;
     using CR2W.Reflection;

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using WolvenKit.Common.Tools.DDS;
 using CP77.CR2W.Types;
-using WolvenKit.Common.DDS;
 
 namespace CP77.CR2W
 {

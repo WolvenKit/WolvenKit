@@ -1,9 +1,9 @@
-﻿using System;
+﻿using System.ComponentModel;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Reflection;
+using System;
 
-namespace WolvenKit.Common.Tools
+namespace VanWassenhove.Util
 {
     public class SortableBindingList<T> : BindingList<T>
     {

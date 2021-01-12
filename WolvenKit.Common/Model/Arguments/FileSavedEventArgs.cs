@@ -1,6 +1,7 @@
 ﻿using System.IO;
+using WolvenKit.Common.Model;
 
-namespace WolvenKit.Common.Model.Arguments
+namespace WolvenKit.Common
 {
     public class FileSavedEventArgs
     {

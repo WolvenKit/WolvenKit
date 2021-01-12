@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.IO.Packaging;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using Catel;
 using Catel.IoC;
 using Catel.MVVM;
@@ -14,18 +19,16 @@ using Catel.Services;
 using Catel.Threading;
 using Orc.FileSystem;
 using Orc.ProjectManagement;
-using WolvenKit.Commands;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Model.Wcc;
-using WolvenKit.Common.Services;
-using WolvenKit.Controllers;
-using WolvenKit.Model;
-using WolvenKit.Model.Project;
-using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.ViewModels.AD
+namespace WolvenKit.ViewModels
 {
+    using Commands;
+    using Model;
+    using Common;
+    using Common.Model;
+    using Common.Services;
+    using Common.Wcc;
+    using CR2W;
     public class ProjectExplorerViewModel : ToolViewModel
     {
         #region fields

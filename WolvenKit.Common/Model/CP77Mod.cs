@@ -13,7 +13,7 @@ namespace WolvenKit.Common.Model
     {
         public object Clone()
         {
-            var clone = new W3Mod
+            var clone = new Common.W3Mod
             {
                 Name = Name,
                 Author = Author,

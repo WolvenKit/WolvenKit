@@ -5,18 +5,23 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Orc.ProjectManagement;
-using WolvenKit.Common.Model;
 
-namespace WolvenKit.Model.Project
+namespace WolvenKit.Model
 {
+    using Common;
+    using Common.Model;
+
     public abstract class EditorProject : ProjectBase, IEquatable<EditorProject>
     {
         protected EditorProject(string location)
@@ -47,7 +52,7 @@ namespace WolvenKit.Model.Project
         public abstract bool IsInitialized { get; }
 
         [XmlIgnore]
-        public Common.GameType GameType;
+        public GameType GameType;
 
 
         [Category("About")]

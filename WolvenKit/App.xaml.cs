@@ -13,8 +13,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using WolvenKit.ViewModels;
-using WolvenKit.ViewModels.AD;
-using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit
@@ -67,16 +65,16 @@ namespace WolvenKit
             viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels");
 
             //TODO: rename later to MainViewModel
-            viewModelLocator.Register(typeof(Views.MainView), typeof(WorkSpaceViewModel));
+            viewModelLocator.Register(typeof(Views.MainView), typeof(ViewModels.WorkSpaceViewModel));
 
             // local VMs
-            viewModelLocator.Register(typeof(OpenFileView), typeof(ViewModels.OpenFileViewModel));
-            viewModelLocator.Register(typeof(RecentlyUsedItemsView), typeof(ViewModels.RecentlyUsedItemsViewModel));
+            viewModelLocator.Register(typeof(Views.OpenFileView), typeof(ViewModels.OpenFileViewModel));
+            viewModelLocator.Register(typeof(Views.RecentlyUsedItemsView), typeof(ViewModels.RecentlyUsedItemsViewModel));
 
 
             var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
             viewLocator.Register(typeof(ViewModels.SettingsViewModel), typeof(Views.SettingsWindow));
-            viewLocator.Register(typeof(InputDialogViewModel), typeof(Views.Dialogs.InputDialog));
+            viewLocator.Register(typeof(ViewModels.InputDialogViewModel), typeof(Views.Dialogs.InputDialog));
 
 
 

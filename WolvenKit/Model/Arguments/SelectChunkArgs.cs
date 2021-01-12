@@ -1,7 +1,7 @@
-﻿using WolvenKit.CR2W;
-
-namespace WolvenKit.Model.Arguments
+﻿namespace WolvenKit.Model
 {
+    using CR2W;
+
     public class SelectChunkArgs
     {
         public CR2WExportWrapper Chunk { get; set; }

@@ -8,7 +8,6 @@ using Snappy;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Arguments;
 
 namespace WolvenKit.Bundles
 {

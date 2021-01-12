@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using WolvenKit.Common.Extensions;
 
-namespace WolvenKit.Common.DDS
+namespace WolvenKit.Common.Tools.DDS
 {
     public static class DDSUtils
     {

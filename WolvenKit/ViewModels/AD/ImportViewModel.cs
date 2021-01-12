@@ -1,30 +1,35 @@
-﻿using System;
+﻿using CsvHelper;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Catel;
 using Catel.Services;
 using Catel.Threading;
-using CsvHelper;
 using Orc.ProjectManagement;
-using WolvenKit.Commands;
-using WolvenKit.Common.DDS;
-using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Model.Wcc;
-using WolvenKit.Common.Services;
-using WolvenKit.Controllers;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
-using WolvenKit.Model;
 
-namespace WolvenKit.ViewModels.AD
+namespace WolvenKit.ViewModels
 {
+    using Commands;
+    using Model;
+    using Common;
+    using Common.Extensions;
+    using Common.Tools.FNV1A;
+    using Common.Model;
+    using Common.Services;
+    using Common.Tools;
+    using Common.Tools.DDS;
+    using Common.Wcc;
+    using CR2W;
+    using CR2W.Types;
     using static CR2W.Types.Enums;
-
+    using static Common.Tools.DDS.TexconvWrapper;
     public class ImportViewModel : ToolViewModel
     {
 
@@ -341,7 +346,7 @@ namespace WolvenKit.ViewModels.AD
             // create a temporary dds
             var tempdir = MainController.WorkDir;
             var textureformat = ImageUtility.GetEFormatFromCompression(compression);
-            var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, textureformat);
+            var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, Common.Tools.DDS.EUncookExtension.dds, textureformat);
 
             if (!File.Exists(ddsfile)) throw new NotImplementedException();
             var metadata = DDSUtils.ReadHeader(ddsfile);

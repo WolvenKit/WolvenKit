@@ -1,7 +1,13 @@
-﻿using WolvenKit.ViewModels.Documents;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace WolvenKit.Model
+namespace WolvenKit.Common.Model
 {
+    using ViewModels;
+
     /// <summary>
     /// A CR2W Form
     /// </summary>

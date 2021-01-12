@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Tools;
 
 namespace WolvenKit.Bundles
 {

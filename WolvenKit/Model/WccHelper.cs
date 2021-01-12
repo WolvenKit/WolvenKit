@@ -5,9 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Model.Wcc;
-using WolvenKit.Controllers;
 
 namespace WolvenKit.Model
 {
@@ -15,6 +12,7 @@ namespace WolvenKit.Model
     using Common.Extensions;
     using Common.Model;
     using Common.Services;
+    using Common.Wcc;
     using CR2W;
     public static class WccHelper
     {

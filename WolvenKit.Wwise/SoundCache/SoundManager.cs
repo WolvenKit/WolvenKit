@@ -10,7 +10,6 @@ using WolvenKit.Cache;
 using WolvenKit.Wwise;
 using WolvenKit.Common.Model;
 using System.Reflection;
-using WolvenKit.Common.Tools;
 
 namespace WolvenKit.Cache
 {

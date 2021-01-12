@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using WolvenKit.Common.Services;
+using System.Linq;
 
-namespace WolvenKit.Common.Model.Wcc
+namespace WolvenKit.Common.Wcc
 {
+    using Services;
+    using System.Text;
+    using System.Threading;
+
     /// <summary>
     /// Closed-source program published by CDPR in the official Witcher 3 modkit.
     /// Provides a wide range of utilities, mainly cooking/uncooking,

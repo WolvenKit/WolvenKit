@@ -1,12 +1,38 @@
-﻿using System.Threading.Tasks;
+﻿using CsvHelper;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 using Catel;
 using Catel.Services;
 using Catel.Threading;
 using Orc.ProjectManagement;
-using WolvenKit.Common.Services;
 
-namespace WolvenKit.ViewModels.AD
+namespace WolvenKit.ViewModels
 {
+
+
+    using Commands;
+    using Model;
+    using Common;
+    using Common.Extensions;
+    using Common.Tools.FNV1A;
+    using Common.Model;
+    using Common.Services;
+    using Common.Tools;
+    using Common.Tools.DDS;
+    using Common.Wcc;
+    using CR2W;
+    using CR2W.Types;
+    using static CR2W.Types.Enums;
+    using static Common.Tools.DDS.TexconvWrapper;
+
     public class PropertiesViewModel : ToolViewModel
     {
 

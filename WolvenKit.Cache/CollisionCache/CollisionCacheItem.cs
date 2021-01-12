@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Ionic.Zlib;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Arguments;
 using WolvenKit.CR2W;
 
 namespace WolvenKit.Cache
