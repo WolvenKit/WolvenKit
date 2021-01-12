@@ -64,6 +64,9 @@ namespace WolvenKit.Views
 
             await LayoutLoaded.LoadLayoutAsync();
 
+			HomePageView MainMenuTesting = new HomePageView(); // This is for Testing purposes!!!
+			this.Content = MainMenuTesting;
+
             // Load and layout AvalonDock elements when MainWindow has loaded
             OnLoadLayoutAsync();
 
