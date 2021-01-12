@@ -71,6 +71,9 @@ namespace WolvenKit
             viewModelLocator.Register(typeof(Views.OpenFileView), typeof(ViewModels.OpenFileViewModel));
             viewModelLocator.Register(typeof(Views.RecentlyUsedItemsView), typeof(ViewModels.RecentlyUsedItemsViewModel));
 
+            viewModelLocator.Register(typeof(Views.HomePageView), typeof(ViewModels.HomePageViewModel));  // HomePage 
+
+
 
             var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
             viewLocator.Register(typeof(ViewModels.SettingsViewModel), typeof(Views.SettingsWindow));
