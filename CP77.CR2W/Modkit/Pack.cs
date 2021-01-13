@@ -33,12 +33,6 @@ namespace CP77.CR2W
             if (!infolder.Exists) return null;
             if (!outpath.Exists) return null;
             
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            
-            //TODO: Prepare the cr2w File in a previous step
-            //TODO: get textures, fbx and other buffer data.
-            
-            
             var outfile = Path.Combine(outpath.FullName, $"basegame_{infolder.Name}.archive");
             var ar = new Archive.Archive
             {
@@ -57,18 +51,26 @@ namespace CP77.CR2W
 
             #region write files
 
-            Thread.Sleep(1000);
-            int progress = 0;
-            logger.LogProgress(0);
-
+            var exludedExtensions = new[]
+            {
+                ".buffer",
+                ".dds",
+                ".DS_Store", //Hooray for OSX
+            };
             var allfiles = infolder.GetFiles("*", SearchOption.AllDirectories);
-            var parentfiles = allfiles.Where(_ => _.Extension != ".buffer");
+            var parentfiles = allfiles
+                .Where(_ => exludedExtensions.All(x => _.Extension != x));
             var fileInfos = parentfiles
                 .OrderBy(_ => FNV1A64HashAlgorithm.HashString(GetRelpath(_)))
                 .ToList();
 
             string GetRelpath(FileInfo infi) => infi.FullName[(infolder.FullName.Length + 1)..];
 
+            Logger.LogString($"Found {fileInfos.Count} bundle entries to pack.", Logtype.Important);
+            
+            Thread.Sleep(1000);
+            int progress = 0;
+            Logger.LogProgress(0);
             foreach (var fileInfo in fileInfos)
             {
                 var relpath = GetRelpath(fileInfo);
@@ -79,37 +81,16 @@ namespace CP77.CR2W
                 using var fileStream = new FileStream(fileInfo.FullName, FileMode.Open);
                 using var fileBinaryReader = new BinaryReader(fileStream);
 
-                // peak if cr2w
-                if (fileStream.Length < 4) 
-                    continue;
-                var magic = fileBinaryReader.ReadUInt32();
-                var isCr2wFile = magic == CR2WFile.MAGIC;
-                
                 // fileinfo data
                 uint firstimportidx = (uint)ar.Table.Dependencies.Count;
                 uint lastimportidx = (uint)ar.Table.Dependencies.Count;
-                uint firstoffsetidx = (uint)ar.Table.Offsets.Count - 1; //TODO?
+                uint firstoffsetidx = (uint)ar.Table.Offsets.Count;
                 uint lastoffsetidx = (uint)ar.Table.Offsets.Count;
                 int flags = 0;
                 
-                if (isCr2wFile)
+                var cr2w = TryReadCr2WFile(fileBinaryReader);
+                if (cr2w != null)
                 {
-                    var cr2w = new CR2WFile();
-                    
-                    try
-                    {
-                        //TODO: verify cr2w integrity
-                        
-                        
-                        fileBinaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
-                        cr2w.ReadImportsAndBuffers(fileBinaryReader);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.LogString($"Failed to read cr2w file {fileInfo.FullName}", Logtype.Error);
-                        continue;
-                    }
-                    
                     //register imports
                     foreach (var cr2WImportWrapper in cr2w.Imports)
                     {
@@ -123,8 +104,12 @@ namespace CP77.CR2W
                     var cr2wfilesize = (int)cr2w.Header.fileSize;
                     fileBinaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
                     var cr2winbuffer = fileBinaryReader.ReadBytes(cr2wfilesize);
-                    var (zsize, ctc) = bw.CompressAndWrite(cr2winbuffer);
-                    ar.Table.Offsets.Add(new OffsetEntry((ulong) bw.BaseStream.Position, zsize,
+                    var offset = bw.BaseStream.Position;
+                    
+                    var (zsize, crc) = bw.CompressAndWrite(cr2winbuffer);
+                    ar.Table.Offsets.Add(new OffsetEntry(
+                        (ulong) offset, 
+                        zsize,
                         (uint) cr2winbuffer.Length));
                     
                     // TODO: each cr2w needs to have the buffer already kraken'd
@@ -133,14 +118,16 @@ namespace CP77.CR2W
                     foreach (var buffer in bufferOffsets)
                     {
                         var bsize = buffer.memSize;
-                        var bzsize = buffer.diskSize;
+                        var bzsize = buffer.diskSize;  //compressed size of the buffer inside the cr2wfile
                         fileBinaryReader.BaseStream.Seek(buffer.offset, SeekOrigin.Begin);
-                        var b = fileBinaryReader.ReadBytes((int)bzsize);
-                        ar.Table.Offsets.Add(new OffsetEntry(
-                            (ulong)bw.BaseStream.Position,
-                            bzsize,
-                            bsize));
+                        var b = fileBinaryReader.ReadBytes((int)bzsize);   //read bzsize bytes from the cr2w
+                        var boffset = bw.BaseStream.Position;
+                        
                         bw.Write(b);
+                        ar.Table.Offsets.Add(new OffsetEntry(
+                            (ulong)boffset,
+                            bzsize,
+                            (uint) b.Length));
                     }
                     lastoffsetidx = (uint)ar.Table.Offsets.Count;
                     
@@ -149,7 +136,8 @@ namespace CP77.CR2W
                 else
                 {
                     // kraken the file and write
-                    var cr2winbuffer = File.ReadAllBytes(fileInfo.FullName);
+                    fileStream.Seek(0, SeekOrigin.Begin);
+                    var cr2winbuffer = Catel.IO.StreamExtensions.ToByteArray(fileStream);
                     var (zsize, crc) = bw.CompressAndWrite(cr2winbuffer);
                     ar.Table.Offsets.Add(new OffsetEntry((ulong) bw.BaseStream.Position, zsize,
                         (uint) cr2winbuffer.Length));
@@ -166,7 +154,7 @@ namespace CP77.CR2W
                 
 
                 Interlocked.Increment(ref progress);
-                logger.LogProgress(progress / (float)fileInfos.Count);
+                Logger.LogProgress(progress / (float)fileInfos.Count);
             };
 
             #endregion
@@ -212,7 +200,7 @@ namespace CP77.CR2W
         public static (uint, uint) CompressAndWrite(this BinaryWriter bw, byte[] inbuffer)
         {
             var size = (uint)inbuffer.Length;
-            if (size < 255 || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            if (size < 255)
             {
                 var crc = Crc32Algorithm.Compute(inbuffer);
                 bw.Write(inbuffer);
@@ -221,33 +209,18 @@ namespace CP77.CR2W
             }
             else
             {
-                var zsize = OodleHelper.GetCompressedBufferSizeNeeded((int)size);
-                var outBuffer = new byte[zsize];
-
+                IEnumerable<byte> outBuffer = new List<byte>();
                 var r = OodleHelper.Compress(
-                    inbuffer, 0,
+                    inbuffer, 
                     (int)size,
-                    outBuffer,
-                    0,
-                    zsize);
-                if (r != zsize)
-                {
-                    //Debugger.Break();
-                }
+                    ref outBuffer);
 
-                //resize buffer
-                var writelist = new List<byte>()
-                {
-                    0x4B, 0x41, 0x52, 0x4B  //KRAKEN, TODO: make this variable and dependent on the compression algo
-                };
-                writelist.AddRange(BitConverter.GetBytes(size));
-                writelist.AddRange(outBuffer.Take(r));
-
-                var b = writelist.ToArray();
+                var b = outBuffer.ToArray();
+                
                 var crc = Crc32Algorithm.Compute(b);
                 bw.Write(b);
 
-                return ((uint)r + 8, crc);
+                return ((uint)r, crc);
             }
         }
         

@@ -9,6 +9,13 @@ namespace CP77.Common.Tools
 {
     public static class OodleHelper
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputBuffer"></param>
+        /// <param name="outputBuffer"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public static int Decompress(byte[] inputBuffer, byte[] outputBuffer)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -23,62 +30,54 @@ namespace CP77.Common.Tools
         }
         
         
-        // gibbed
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputBytes"></param>
+        /// <param name="inputOffset"></param>
+        /// <param name="inputCount"></param>
+        /// <param name="outputBytes"></param>
+        /// <param name="outputOffset"></param>
+        /// <param name="outputCount"></param>
+        /// <param name="algo"></param>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <exception cref="NotImplementedException"></exception>
         public static int Compress(
             byte[] inputBytes,
-            int inputOffset,
+            // int inputOffset,
             int inputCount,
-            byte[] outputBytes,
-            int outputOffset,
-            int outputCount,
+            ref IEnumerable<byte> outputBuffer,
+            // int outputOffset,
+            // int outputCount,
             OodleNative.OodleLZ_Compressor algo = OodleNative.OodleLZ_Compressor.Kraken,
             OodleNative.OodleLZ_Compression level = OodleNative.OodleLZ_Compression.Optimal5)
         {
             if (inputBytes == null)
-            {
                 throw new ArgumentNullException(nameof(inputBytes));
-            }
-
-            if (inputOffset < 0 || inputOffset >= inputBytes.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(inputOffset));
-            }
-
-            if (inputCount <= 0 || inputOffset + inputCount > inputBytes.Length)
-            {
+            if (inputCount <= 0 || inputCount > inputBytes.Length)
                 throw new ArgumentOutOfRangeException(nameof(inputCount));
-            }
+            if (outputBuffer == null)
+                throw new ArgumentNullException(nameof(outputBuffer));
 
-            if (outputBytes == null)
-            {
-                throw new ArgumentNullException(nameof(outputBytes));
-            }
-
-            if (outputOffset < 0 || outputOffset >= outputBytes.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(outputOffset));
-            }
-
-            if (outputCount <= 0 || outputOffset + outputCount > outputBytes.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(outputCount));
-            }
-            
-            var inputHandle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
-            var inputAddress = inputHandle.AddrOfPinnedObject() + inputOffset;
-            var outputHandle = GCHandle.Alloc(outputBytes, GCHandleType.Pinned);
-            var outputAddress = outputHandle.AddrOfPinnedObject() + outputOffset;
-            
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
+                var compressedBufferSizeNeeded = OodleHelper.GetCompressedBufferSizeNeeded((int)inputCount);
+                var compressedBuffer = new byte[compressedBufferSizeNeeded];
                 
+                var inputHandle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
+                var inputAddress = inputHandle.AddrOfPinnedObject();
+                var outputHandle = GCHandle.Alloc(compressedBuffer, GCHandleType.Pinned);
+                var outputAddress = outputHandle.AddrOfPinnedObject();
 
                 var result = (int)OodleNative.Compress(
                     (int)algo,
                     inputAddress,
                     inputCount,
                     outputAddress,
-                    outputCount,
+                    compressedBufferSizeNeeded,
                     IntPtr.Zero,
                     IntPtr.Zero,
                     IntPtr.Zero,
@@ -86,31 +85,45 @@ namespace CP77.Common.Tools
                     (int)level);
                 inputHandle.Free();
                 outputHandle.Free();
-                return result;
+
+                //resize buffer
+                var writelist = new List<byte>()
+                {
+                    0x4B, 0x41, 0x52, 0x4B  //KRAKEN, TODO: make this variable and dependent on the compression algo
+                };
+                writelist.AddRange(BitConverter.GetBytes(inputCount));
+                writelist.AddRange(compressedBuffer.Take(result));
+                
+                outputBuffer = writelist;
+                
+                return outputBuffer.Count();
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                throw new NotImplementedException();
-                
-                try
-                {
-                    var result = OozNative.Compress(
-                        (int)algo,
-                        inputAddress,
-                        outputAddress,
-                        inputCount,
-                        IntPtr.Zero,
-                        IntPtr.Zero
-                    );
-                    inputHandle.Free();
-                    outputHandle.Free();
-                    return result;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
+                //TODO: use ooz to compress
+                outputBuffer = inputBytes;
+                return outputBuffer.Count();
+
+
+                // try
+                // {
+                //     var result = OozNative.Compress(
+                //         (int)algo,
+                //         inputAddress,
+                //         outputAddress,
+                //         inputCount,
+                //         IntPtr.Zero,
+                //         IntPtr.Zero
+                //     );
+                //     inputHandle.Free();
+                //     outputHandle.Free();
+                //     return result;
+                // }
+                // catch (Exception e)
+                // {
+                //     Console.WriteLine(e);
+                //     throw;
+                // }
             }
             else
             {
@@ -118,7 +131,12 @@ namespace CP77.Common.Tools
             }
         }
 
-        // gibbed
+        /// <summary>
+        /// Gets the max buffer size needed for oodle compression
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public static int GetCompressedBufferSizeNeeded(int count)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

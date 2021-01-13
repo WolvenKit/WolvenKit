@@ -999,8 +999,6 @@ namespace CP77.CR2W
                 m_tableheaders[5].offset = (uint)file.BaseStream.Position;
                 WriteTable<CR2WBuffer>(file.BaseStream, Buffers.Select(_ => _.Buffer).ToArray(), 5);
             }
-            else
-                file.Write(Marshal.SizeOf(typeof(CR2WBuffer)));
 
             if (Embedded.Count > 0)
             {
@@ -1008,8 +1006,6 @@ namespace CP77.CR2W
                 m_tableheaders[6].offset = (uint)file.BaseStream.Position;
                 WriteTable<CR2WEmbedded>(file.BaseStream, Embedded.Select(_ => _.Embedded).ToArray(), 6);
             }
-            else
-                file.Write(Marshal.SizeOf(typeof(CR2WEmbedded)));
 
             #endregion
             

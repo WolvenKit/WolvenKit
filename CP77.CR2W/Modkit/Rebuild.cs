@@ -19,6 +19,36 @@ namespace CP77.CR2W
     {
         private static readonly ILoggerService Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="br"></param>
+        /// <returns></returns>
+        public static CR2WFile TryReadCr2WFile(BinaryReader br)
+        {
+            // peak if cr2w
+            if (br.BaseStream.Length < 4) 
+                return null;
+            br.BaseStream.Seek(0, SeekOrigin.Begin);
+            var magic = br.ReadUInt32();
+            var isCr2wFile = magic == CR2WFile.MAGIC;
+            if (!isCr2wFile) 
+                return null;
+                
+            var cr2w = new CR2WFile();
+            try
+            {
+                //TODO: verify cr2w integrity
+                br.BaseStream.Seek(0, SeekOrigin.Begin);
+                cr2w.ReadImportsAndBuffers(br);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+                
+            return cr2w;
+        }
         
         /// <summary>
         /// 
@@ -29,7 +59,9 @@ namespace CP77.CR2W
         /// <param name="import"></param>
         /// <param name="keep"></param>
         /// <param name="clean"></param>
+        /// <param name="unsaferaw"></param>
         /// <returns></returns>
+        /// <exception cref="FileNotFoundException"></exception>
         public static bool Recombine(DirectoryInfo infolder, 
             bool useBuffers, 
             bool useTextures,
@@ -134,33 +166,7 @@ namespace CP77.CR2W
                 }
             }
 
-            static CR2WFile TryReadCr2WFile(BinaryReader br)
-            {
-                // peak if cr2w
-                if (br.BaseStream.Length < 4) 
-                    return null;
-                br.BaseStream.Seek(0, SeekOrigin.Begin);
-                var magic = br.ReadUInt32();
-                var isCr2wFile = magic == CR2WFile.MAGIC;
-                if (!isCr2wFile) 
-                    return null;
-                
-                var cr2w = new CR2WFile();
-                try
-                {
-                    //TODO: verify cr2w integrity
-                    br.BaseStream.Seek(0, SeekOrigin.Begin);
-                    cr2w.ReadImportsAndBuffers(br);
-                }
-                catch (Exception e)
-                {
-                    return null;
-                }
-                
-                return cr2w;
-            }
-
-            void AppendBuffersToFile(string parentPath, List<FileInfo> buffers)
+            bool AppendBuffersToFile(string parentPath, List<FileInfo> buffers)
             {
                 //check if cr2w
                 using var fileStream = new FileStream(parentPath, FileMode.Open, FileAccess.ReadWrite);
@@ -170,7 +176,7 @@ namespace CP77.CR2W
                 if (cr2w == null)
                 {
                     Logger.LogString($"Failed to read cr2w file {parentPath}", Logtype.Error);
-                    return;
+                    return false;
                 }
                 
                 if (keep)
@@ -190,7 +196,7 @@ namespace CP77.CR2W
                     {
                         var buffer = buffers[i];
                         if (!buffer.Exists)
-                            continue;
+                            throw new FileNotFoundException($"Could not find file {buffer.FullName} anymore.");
 
                         var inbuffer = ReadBuffer(buffer);
                         if (inbuffer.Length < 1) continue;
@@ -229,8 +235,10 @@ namespace CP77.CR2W
                 {
                     Logger.LogString("Importing raw files into redengine files is not yet implemented.", Logtype.Error);
                     //TODO: switch and call import with existing
+                    return false;
                 }
-                
+
+                return true;
             }
 
             byte[] ReadBuffer(FileInfo buffer)
@@ -250,7 +258,7 @@ namespace CP77.CR2W
                             fs.Seek(84, SeekOrigin.Begin);
                             var fourcc = br.ReadInt32();
                             // delete dds header
-                            if (fourcc != 808540228) //is dx10
+                            if (fourcc == 808540228) //is dx10
                             {
                                 fs.Seek(148, SeekOrigin.Begin);
                                 return br.ReadBytes((int)fs.Length - 148);
