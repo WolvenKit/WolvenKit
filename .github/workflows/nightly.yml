@@ -37,14 +37,12 @@ jobs:
         files: ./CP77Tools/bin/Release/net5.0
         dest: nightly.zip
     - name: Deploy Nightly
-      id: upload-release-asset 
-      uses: Maxzor/deploy-nightly@v1.0.4
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: https://uploads.github.com/repos/rfuzzo/CP77Tools/releases/35035583/assets{?name,label} # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases in your browser and copy the full "upload_url" value including the {?name,label} part
-        release_id: 35035583
-        asset_path: ./nightly.zip
-        asset_name: nightly.zip
+        upload_url: https://uploads.github.com/repos/WolvenKit/CP77Tools/releases/36240873/assets{?name,label} # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases in your browser and copy the full "upload_url" value including the {?name,label} part
+        release_id: 36240873
+        asset_path: nightly.zip
+        asset_name: cp77tools-nightly-$$.zip
         asset_content_type: application/zip
-        max_releases: 7    

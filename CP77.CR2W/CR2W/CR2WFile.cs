@@ -13,6 +13,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using CP77.CR2W.Types;
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using Catel.Data;
 using CP77.Common.Services;
 using CP77.Common.Tools.FNV1A;
@@ -81,6 +82,8 @@ namespace CP77.CR2W
         #endregion
 
         #region Properties
+        public CR2WFileHeader Header => m_fileheader;
+        
         [JsonIgnore]
         public ILoggerService Logger { get; }
         [JsonIgnore]
@@ -422,6 +425,63 @@ namespace CP77.CR2W
             else
                 throw new SerializationException();
         }
+        
+        public static void FixExportCRC32(Stream stream, CR2WExport export)
+        {
+            stream.Seek(export.dataOffset, SeekOrigin.Begin);
+            var m_temp = new byte[export.dataSize];
+            stream.Read(m_temp, 0, m_temp.Length);
+            export.crc32 = Crc32Algorithm.Compute(m_temp);
+        }
+
+        public static void FixBufferCRC32(Stream stream, CR2WBuffer buffer)
+        {
+            //This might throw errors, the way it should be checked for is by reading
+            //the object tree to find the deferred data buffers that will point to a buffer.
+            //The flag of the parent object indicates where to read the data from.
+            //For now this is a crude workaround.
+            // var m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+            // if (m_hasInternalBuffer)
+            {
+                stream.Seek(buffer.offset, SeekOrigin.Begin);
+                var m_temp = new byte[buffer.diskSize];
+                stream.Read(m_temp, 0, m_temp.Length);
+                buffer.crc32 = Crc32Algorithm.Compute(m_temp);
+            }
+            //else
+            {
+                /*var path = String.Format("{0}.{1}.buffer", m_filePath, buffer.index);
+                if (!File.Exists(path))
+                {
+                    return;
+                }
+                m_temp = File.ReadAllBytes(path);
+                buffer.crc32 = Crc32Algorithm.Compute(m_temp);*/
+            }
+        }
+
+        public uint CalculateHeaderCRC32()
+        {
+            var hash = new Crc32Algorithm(false);
+            hash.Append(BitConverter.GetBytes(MAGIC));
+            hash.Append(BitConverter.GetBytes(m_fileheader.version));
+            hash.Append(BitConverter.GetBytes(m_fileheader.flags));
+            hash.Append(BitConverter.GetBytes(m_fileheader.timeStamp));
+            hash.Append(BitConverter.GetBytes(m_fileheader.buildVersion));
+            hash.Append(BitConverter.GetBytes(m_fileheader.fileSize));
+            hash.Append(BitConverter.GetBytes(m_fileheader.bufferSize));
+            hash.Append(BitConverter.GetBytes(DEADBEEF));
+            hash.Append(BitConverter.GetBytes(m_fileheader.numChunks));
+            foreach (var h in m_tableheaders)
+            {
+                hash.Append(BitConverter.GetBytes(h.offset));
+                hash.Append(BitConverter.GetBytes(h.itemCount));
+                hash.Append(BitConverter.GetBytes(h.crc32));
+            }
+            return hash.HashUInt32;
+        }
+        
+        
         #endregion
 
         #region Read
@@ -506,7 +566,7 @@ namespace CP77.CR2W
 
             // Tables [7-9] are not used in cr2w so far.
             m_tableheaders = file.BaseStream.ReadStructs<CR2WTable>(10);
-            //m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+            var m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
 
             // read strings - block 1 (index 0)
             m_strings = ReadStringsBuffer(file.BaseStream);
@@ -641,7 +701,6 @@ namespace CP77.CR2W
 
             // update data
             //m_fileheader.timeStamp = CDateTime.Now.ToUInt64();    //this will change any vanilla assets simply by opening and saving in wkit
-            //m_fileheader.numChunks = (uint)chunks.Count;          //this is weird, I don't think it actually is the number of chunks
             var nn = new List<CR2WNameWrapper>(Names);
 
             #region Update Tables
@@ -683,6 +742,7 @@ namespace CP77.CR2W
                 }, this));
             }
             #endregion
+            
             #region Imports
             Imports.Clear();
             foreach (var import in importslist)
@@ -699,6 +759,7 @@ namespace CP77.CR2W
                     }, this));
             }
             #endregion
+            
             #region Embedded 
             for (var i = 0; i < Embedded.Count; i++)
             {
@@ -765,24 +826,22 @@ namespace CP77.CR2W
                 Embedded[i].SetOffset(newoffset);
             }
             m_fileheader.fileSize += headerOffset;
-            m_fileheader.bufferSize += headerOffset;
+            //m_fileheader.bufferSize += headerOffset;
             #endregion
-
+            
             foreach (var chunk in Chunks)
             {
-                FixExportCRC32(chunk.Export);
+                FixExportCRC32(file.BaseStream, chunk.Export);
             }
 
             foreach (var buffer in Buffers)
             {
-                FixBufferCRC32(buffer.Buffer);
+                FixBufferCRC32(file.BaseStream, buffer.Buffer);
             }
 
             // Write headers again with fixed offsets
-            //m_fileheader.crc32 = CalculateHeaderCRC32();
             WriteHeader(file);
-            m_fileheader.crc32 = CalculateHeaderCRC32();
-            WriteFileHeader(file);
+            
 
 
 
@@ -795,67 +854,9 @@ namespace CP77.CR2W
 
 
 
-
-
-
-
-
-
             //m_stream = null;
 
-            void FixExportCRC32(CR2WExport export) //FIXME do I wanna keep the ref?
-            {
-                file.BaseStream.Seek(export.dataOffset, SeekOrigin.Begin);
-                var m_temp = new byte[export.dataSize];
-                file.BaseStream.Read(m_temp, 0, m_temp.Length);
-                export.crc32 = Crc32Algorithm.Compute(m_temp);
-            }
-
-            void FixBufferCRC32(CR2WBuffer buffer) //FIXME do I wanna keep the ref?
-            {
-                //This might throw errors, the way it should be checked for is by reading
-                //the object tree to find the deferred data buffers that will point to a buffer.
-                //The flag of the parent object indicates where to read the data from.
-                //For now this is a crude workaround.
-                //if (m_hasInternalBuffer)
-                //{
-                //    file.BaseStream.Seek(buffer.offset, SeekOrigin.Begin);
-                //    var m_temp = new byte[buffer.diskSize];
-                //    file.BaseStream.Read(m_temp, 0, m_temp.Length);
-                //    buffer.crc32 = Crc32Algorithm.Compute(m_temp);
-                //}
-                //else
-                {
-                    /*var path = String.Format("{0}.{1}.buffer", m_filePath, buffer.index);
-                    if (!File.Exists(path))
-                    {
-                        return;
-                    }
-                    m_temp = File.ReadAllBytes(path);
-                    buffer.crc32 = Crc32Algorithm.Compute(m_temp);*/
-                }
-            }
-
-            uint CalculateHeaderCRC32()
-            {
-                var hash = new Crc32Algorithm(false);
-                hash.Append(BitConverter.GetBytes(MAGIC));
-                hash.Append(BitConverter.GetBytes(m_fileheader.version));
-                hash.Append(BitConverter.GetBytes(m_fileheader.flags));
-                hash.Append(BitConverter.GetBytes(m_fileheader.timeStamp));
-                hash.Append(BitConverter.GetBytes(m_fileheader.buildVersion));
-                hash.Append(BitConverter.GetBytes(m_fileheader.fileSize));
-                hash.Append(BitConverter.GetBytes(m_fileheader.bufferSize));
-                hash.Append(BitConverter.GetBytes(DEADBEEF));
-                hash.Append(BitConverter.GetBytes(m_fileheader.numChunks));
-                foreach (var h in m_tableheaders)
-                {
-                    hash.Append(BitConverter.GetBytes(h.offset));
-                    hash.Append(BitConverter.GetBytes(h.itemCount));
-                    hash.Append(BitConverter.GetBytes(h.crc32));
-                }
-                return hash.HashUInt32;
-            }
+            
         }
 
         /// <summary>
@@ -937,7 +938,7 @@ namespace CP77.CR2W
 
             }
 
-            // build new stringsDixtionary
+            // build new stringsDictionary
             var strings = newstrings.ToArray();
             var stringscount = strings.Length;
 
@@ -971,7 +972,7 @@ namespace CP77.CR2W
             throw new NotImplementedException();
         }
 
-        private void WriteHeader(BinaryWriter file)
+        public void WriteHeader(BinaryWriter file)
         {
             WriteFileHeader(file);
 
@@ -1005,13 +1006,24 @@ namespace CP77.CR2W
                 m_tableheaders[6].offset = (uint)file.BaseStream.Position;
                 WriteTable<CR2WEmbedded>(file.BaseStream, Embedded.Select(_ => _.Embedded).ToArray(), 6);
             }
+
             #endregion
+            
+            // calculate crc and write file header again
+            m_fileheader.crc32 = CalculateHeaderCRC32();
+            WriteFileHeader(file);
         }
 
         private void WriteFileHeader(BinaryWriter file)
         {
             file.BaseStream.Seek(0, SeekOrigin.Begin);
 
+            // calculate filesize again
+            m_fileheader.fileSize = Chunks.Last().Export.dataOffset + Chunks.Last().Export.dataSize; 
+            
+            // calculate buffersize again
+            m_fileheader.bufferSize = (uint)Buffers.Sum(_ => _.Buffer.diskSize) + m_fileheader.fileSize;
+            
             file.BaseStream.WriteStruct<uint>(MAGIC);
             file.BaseStream.WriteStruct<CR2WFileHeader>(m_fileheader);
             file.BaseStream.WriteStructs<CR2WTable>(m_tableheaders); // offsets change if stringtable changes
@@ -1036,7 +1048,7 @@ namespace CP77.CR2W
             //        Buffers[i].WriteData(bw);
             //    }
             //}
-            m_fileheader.bufferSize = (uint)bw.BaseStream.Position;
+            //m_fileheader.bufferSize = (uint)bw.BaseStream.Position;
 
             // Write embedded data
             for (var i = 0; i < Embedded.Count; i++)

@@ -10,6 +10,7 @@ using WolvenKit.Common.Tools.DDS;
 using CP77Tools;
 using Catel.IoC;
 using CP77.Common.Services;
+using CP77.CR2W;
 
 namespace CP77Tools.Tasks
 {
@@ -18,7 +19,7 @@ namespace CP77Tools.Tasks
         private static readonly ILoggerService logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
         public static void ArchiveTask(string[] path, string outpath, bool extract, bool dump, bool list,
-            bool uncook, EUncookExtension uext, ulong hash, string pattern, string regex)
+            bool uncook, EUncookExtension uext, bool flip, ulong hash, string pattern, string regex)
         {
             if (path == null || path.Length < 1)
             {
@@ -29,14 +30,14 @@ namespace CP77Tools.Tasks
             Parallel.ForEach(path, file =>
             {
                 ArchiveTaskInner(file, outpath, extract, dump, list,
-                    uncook, uext, hash, pattern, regex);
+                    uncook, uext, flip, hash, pattern, regex);
             });
 
         }
 
 
         private static void ArchiveTaskInner(string path, string outpath, bool extract, bool dump, bool list, 
-            bool uncook, EUncookExtension uext, ulong hash, string pattern, string regex)
+            bool uncook, EUncookExtension uext, bool flip, ulong hash, string pattern, string regex)
         {
             #region checks
 
@@ -128,7 +129,7 @@ namespace CP77Tools.Tasks
 
                             if (uncook)
                             {
-                                ar.UncookSingle(hash, outDir, uext);
+                                ar.UncookSingle(hash, outDir, uext, flip);
                                 logger.LogString($" {ar.Filepath}: Uncooked one file: {hash}", Logtype.Success);
                             }
                         }
@@ -142,7 +143,7 @@ namespace CP77Tools.Tasks
 
                             if (uncook)
                             {
-                                var r = ar.UncookAll(outDir, pattern, regex, uext);
+                                var r = ar.UncookAll(outDir, pattern, regex, uext, flip);
                                 logger.LogString($" {ar.Filepath}: Uncooked {r.Item1.Count}/{r.Item2} files.", Logtype.Success);
                             }
                         }
