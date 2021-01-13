@@ -78,7 +78,7 @@ namespace CP77.CR2W
         //private bool m_hasInternalBuffer;
 
         private CR2WFile additionalCr2WFile;
-        private byte[] additionalCr2WFileBytes;
+        public byte[] additionalCr2WFileBytes;
         #endregion
 
         #region Properties

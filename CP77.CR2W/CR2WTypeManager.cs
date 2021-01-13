@@ -153,9 +153,9 @@ namespace CP77.CR2W.Types
                             return MakeGenericEnumType(typeof(CEnum<>), innerobject);
                         }
                     default:
-                        {
-                            throw new NotImplementedException();
-                        }
+                    {
+                        throw new MissingTypeException(generictype);
+                    }
                 }
                 #endregion
             }

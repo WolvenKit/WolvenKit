@@ -48,6 +48,11 @@ namespace CP77.CR2W.Archive
             SHA1Hash = sha1hash;
         }
 
+        public (byte[], List<byte[]>) GetFileData()
+        {
+            return _parentArchive.GetFileData(NameHash64, true);
+        }
+
         private void Read(BinaryReader br, IHashService mainController)
         {
             NameHash64 = br.ReadUInt64();
