@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using Catel.IoC;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels
 {
@@ -277,11 +279,13 @@ namespace WolvenKit.ViewModels
 				// 2. The file is to be accessed sequentially from beginning to end.
 				FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
 
+                var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+                logger.LogString("Opening file: " + path + "...");
+
 				//TODO
                 await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
 					EFileReadErrorCodes errorcode;
-
                     using (var reader = new BinaryReader(stream))
                     {
 						// switch between cr2wfiles and others (e.g. srt)
