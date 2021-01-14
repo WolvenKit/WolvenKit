@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.Model.Project
+namespace WolvenKit.Common.Model
 {
-    public enum GameType
+    public interface IByteSource
     {
-        Witcher3,
-        Cyberpunk2077
+        byte[] GetBytes();
     }
 }
