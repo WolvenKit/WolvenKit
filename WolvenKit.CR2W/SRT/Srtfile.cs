@@ -1102,7 +1102,14 @@ namespace WolvenKit.CR2W.SRT
 
         }
 
-        
+        Task<Common.Model.EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void GetChunks()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

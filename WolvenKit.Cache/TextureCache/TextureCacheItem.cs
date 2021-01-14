@@ -34,11 +34,11 @@ namespace WolvenKit.Cache
 
     }
 
-    public class TextureCacheItem : IWitcherFile
+    public class TextureCacheItem : IGameFile
     {
         
 
-        public IWitcherArchive Bundle { get; set; }
+        public IGameArchive Archive { get; set; }
         public string DateString { get; set; }
 
         public string CompressionType => "Zlib";
@@ -77,9 +77,9 @@ namespace WolvenKit.Cache
 
         
 
-        public TextureCacheItem(IWitcherArchive parent)
+        public TextureCacheItem(IGameArchive parent)
         {
-            Bundle = parent;
+            Archive = parent;
         }
 
         public void Extract(Stream output)
@@ -219,7 +219,7 @@ namespace WolvenKit.Cache
                 var fi = new FileInfo(newpath);
                 if (fi.Exists)
                 {
-                    TexconvWrapper.Convert(Path.GetDirectoryName(newpath), newpath, extractext);
+                    TexconvWrapper.Convert(Path.GetDirectoryName(newpath), newpath, (Common.Tools.DDS.EUncookExtension)extractext);
                 }
 
                 // delete old DDS

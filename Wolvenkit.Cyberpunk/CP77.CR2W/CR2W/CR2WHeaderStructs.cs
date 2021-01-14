@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     #region Header Structs
     [DataContract(Namespace = "")]

@@ -11,9 +11,9 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Bundles
 {
-    public class BundleItem : IWitcherFile
+    public class BundleItem : IGameFile
     {
-        public IWitcherArchive Bundle { get; set; }
+        public IGameArchive Archive { get; set; }
         public string Name { get; set; }
         public byte[] Hash { get; set; }
         public uint Empty { get; set; }
@@ -56,7 +56,7 @@ namespace WolvenKit.Bundles
         public void ExtractExistingMMF(Stream output)
         {
             // old deprecated way of loading mmfs still used in unit test
-            var hash = Bundle.ArchiveAbsolutePath.GetHashMD5();
+            var hash = Archive.ArchiveAbsolutePath.GetHashMD5();
             using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(hash, MemoryMappedFileRights.Read))
                 //using (var viewstream = mmf.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
                 ExtractExistingMMF(output, mmf);
@@ -70,7 +70,7 @@ namespace WolvenKit.Bundles
         /// <param name="output"></param>
         public void ExtractExistingMMF(Stream output, MemoryMappedFile memorymappedbundle)
         {
-            /*                var hash = *//*@"Global\" + *//*Bundle.FileName.GetHashMD5();
+            /*                var hash = *//*@"Global\" + *//*Archive.FileName.GetHashMD5();
                         System.Console.WriteLine(hash);
                         using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(hash, MemoryMappedFileRights.Read, HandleInheritability.Inheritable))
             */
@@ -126,7 +126,7 @@ namespace WolvenKit.Bundles
 
         public void Extract(Stream output)
         {
-            using (var file = MemoryMappedFile.CreateFromFile(Bundle.ArchiveAbsolutePath, FileMode.Open))
+            using (var file = MemoryMappedFile.CreateFromFile(Archive.ArchiveAbsolutePath, FileMode.Open))
             using (var viewstream = file.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
             {
                 switch (CompressionType)

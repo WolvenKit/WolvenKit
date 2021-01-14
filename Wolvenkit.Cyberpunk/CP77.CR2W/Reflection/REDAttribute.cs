@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace WolvenKit.CR2W.Reflection
+namespace CP77.CR2W.Reflection
 {
     /// <summary>
     /// Marks a field as serializable for redengine files.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class REDAttribute : Attribute
     {
         public string Name { get; private set; }

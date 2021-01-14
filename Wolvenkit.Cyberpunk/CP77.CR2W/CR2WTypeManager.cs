@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using WolvenKit.CR2W.Reflection;
+using CP77.CR2W.Reflection;
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
     /// <summary>
     /// The reflection magic happens mostly here, with System.Activator.
@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
         {
             get
             {
-                const string nspace = "WolvenKit.CR2W.Types";
+                const string nspace = "CP77.CR2W.Types";
 
                 var cr2wassembly = Assembly.GetExecutingAssembly();
                 var vanillaclassNames = cr2wassembly.GetTypes()
@@ -53,7 +53,7 @@ namespace WolvenKit.CR2W.Types
                 var type = AssemblyDictionary.GetTypeByName(typename);
                 if (type != null)
                 {
-                    object instance = Activator.CreateInstance(type, cr2w, parentVariable, varname);
+                    object instance = System.Activator.CreateInstance(type, cr2w, parentVariable, varname);
                     return instance as CVariable;
                 }
             }
@@ -61,13 +61,13 @@ namespace WolvenKit.CR2W.Types
             // check for enum types
             if (AssemblyDictionary.EnumExists(typename))
             {
-                Enum e = (Enum)Activator.CreateInstance(AssemblyDictionary.GetEnumByName(typename));
+                Enum e = (Enum)System.Activator.CreateInstance(AssemblyDictionary.GetEnumByName(typename));
                 var cenum = MakeGenericEnumType(typeof(CEnum<>), e);
                 return cenum;
             }
             else if (CR2WManager.EnumExists(typename))
             {
-                Enum e = (Enum)Activator.CreateInstance(CR2WManager.GetEnumByName(typename));
+                Enum e = (Enum)System.Activator.CreateInstance(CR2WManager.GetEnumByName(typename));
                 var cenum = MakeGenericEnumType(typeof(CEnum<>), e);
                 return cenum;
             }
@@ -96,18 +96,12 @@ namespace WolvenKit.CR2W.Types
                             CVariable innerobject = Create(innertype, "", cr2w, null);
                             return MakeGenericType(typeof(CHandle<>), innerobject);
                         }
-                    case "CPtr":
-                    case "ptr":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CPtr<>), innerobject);
-                        }
-                    case "CSoft":
-                    case "soft":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CSoft<>), innerobject);
-                        }
+                    case "wCHandle":
+                    case "whandle":
+                    {
+                        CVariable innerobject = Create(innertype, "", cr2w, null);
+                        return MakeGenericType(typeof(wCHandle<>), innerobject);
+                    }
                     case "CrRef":
                     case "rRef":
                     {
@@ -153,31 +147,6 @@ namespace WolvenKit.CR2W.Types
                                 throw new InvalidParsingException($"Invalid static type format: typename: {typename}.");
                             }
                         }
-                    case "CBufferUInt16":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CBufferUInt16<>), innerobject);
-                        }
-                    case "CBufferUInt32":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CBufferUInt32<>), innerobject);
-                        }
-                    case "CBufferVLQInt32":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CBufferVLQInt32<>), innerobject);
-                        }
-                    case "CCompressedBuffer":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CCompressedBuffer<>), innerobject);
-                        }
-                    case "CPaddedBuffer":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CPaddedBuffer<>), innerobject);
-                        }
                     case "CEnum":
                         {
                             Enum innerobject = CreateEnum(innertype);
@@ -197,7 +166,7 @@ namespace WolvenKit.CR2W.Types
                 if (CR2WManager.TypeExists(typename))
                 {
                     var type = CR2WManager.GetTypeByName(typename);
-                    object instance = Activator.CreateInstance(type, cr2w, parentVariable, varname);
+                    object instance = System.Activator.CreateInstance(type, cr2w, parentVariable, varname);
                     return instance as CVariable;
                 }
 
@@ -236,7 +205,7 @@ namespace WolvenKit.CR2W.Types
                 }
                 
 
-                var array = Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
+                var array = System.Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
 
                 return array as IArrayAccessor;
             }
@@ -247,7 +216,7 @@ namespace WolvenKit.CR2W.Types
                 if (innerobject != null)
                 {
                     Type elementType = gentype.MakeGenericType(innerobject.GetType());
-                    CVariable handle = Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
+                    CVariable handle = System.Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
                     return handle;
                 }
                 else
@@ -261,7 +230,7 @@ namespace WolvenKit.CR2W.Types
                 if (innerobject != null)
                 {
                     Type elementType = gentype.MakeGenericType(innerobject.GetType());
-                    CVariable handle = Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
+                    CVariable handle = System.Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
                     return handle;
                 }
                 else
@@ -277,14 +246,14 @@ namespace WolvenKit.CR2W.Types
             if (AssemblyDictionary.EnumExists(value))
             {
                 var type = AssemblyDictionary.GetEnumByName(value);
-                Enum e = (Enum) Activator.CreateInstance(type);
+                Enum e = (Enum)System.Activator.CreateInstance(type);
 
                 return e;
             }
             else if (CR2WManager.EnumExists(value))
             {
                 var type = CR2WManager.GetEnumByName(value);
-                Enum e = (Enum)Activator.CreateInstance(type);
+                Enum e = (Enum)System.Activator.CreateInstance(type);
 
                 return e;
             }

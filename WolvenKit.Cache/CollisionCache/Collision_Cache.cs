@@ -14,7 +14,7 @@ using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Cache
 {
-    public class CollisionCache : IWitcherArchive
+    public class CollisionCache : IGameArchive
     {
         public const long BIT_LENGTH_32 = 1;
         public const long BIT_LENGTH_64 = 2;
@@ -35,7 +35,7 @@ namespace WolvenKit.Cache
         public List<string> FileNames = new List<string>();
         public List<CollisionCacheItem> Files = new List<CollisionCacheItem>(); 
 
-        public EBundleType TypeName => EBundleType.CollisionCache;
+        public EArchiveType TypeName => EArchiveType.CollisionCache;
         public string ArchiveAbsolutePath { get; set; }
 
         public CollisionCache(string filename)
@@ -155,7 +155,7 @@ namespace WolvenKit.Cache
             foreach (var ci in FileNames.Select(fileName => new CollisionCacheItem
             {
                 Name = fileName,
-                Bundle = this,
+                Archive = this,
 
                 NameOffset = br.ReadUInt32(),
                 Unk1 = br.ReadUInt32(),

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Tools.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools;
@@ -18,14 +18,14 @@ using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Cache
 {
-    public class TextureCache : IWitcherArchive
+    public class TextureCache : IGameArchive
     {
         #region Properties
         // constants
         public static byte[] Magic = { (byte)'H', (byte)'C', (byte)'X', (byte)'T' };
         private const uint MagicInt = 1415070536;
 
-        public EBundleType TypeName => EBundleType.TextureCache;
+        public EArchiveType TypeName => EArchiveType.TextureCache;
 
         public string ArchiveAbsolutePath { get; set; }
 

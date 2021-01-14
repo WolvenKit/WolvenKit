@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net5.0-windows</TargetFrameworks>
+    <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
@@ -10,7 +10,7 @@
     <PackageReference Include="doboz4net" Version="1.0.1" />
     <PackageReference Include="lz4net" Version="1.0.15.93" />
     <PackageReference Include="MarkerMetro.Unity.Ionic.Zlib" Version="2.0.0.14" />
-    <PackageReference Include="protobuf-net" Version="3.0.62" />
+    <PackageReference Include="protobuf-net" Version="3.0.73" />
 	<PackageReference Include="Snappy.NET" Version="1.1.1.8" />
   </ItemGroup>
 

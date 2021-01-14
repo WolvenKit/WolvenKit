@@ -107,10 +107,10 @@ namespace WolvenKit.Common.Extensions
                 projectfolder = EProjectFolders.Uncooked;
             }
 
-            else if (relativePath.StartsWith(EBundleType.SoundCache.ToString()))
-                relativePath = relativePath.Substring(EBundleType.SoundCache.ToString().Length + 1);
-            else if (relativePath.StartsWith(EBundleType.Speech.ToString()))
-                relativePath = relativePath.Substring(EBundleType.Speech.ToString().Length + 1);
+            else if (relativePath.StartsWith(EArchiveType.SoundCache.ToString()))
+                relativePath = relativePath.Substring(EArchiveType.SoundCache.ToString().Length + 1);
+            else if (relativePath.StartsWith(EArchiveType.Speech.ToString()))
+                relativePath = relativePath.Substring(EArchiveType.Speech.ToString().Length + 1);
 
             return (relativePath, isDLC, projectfolder);
         }

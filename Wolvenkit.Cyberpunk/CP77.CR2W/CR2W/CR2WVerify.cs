@@ -3,11 +3,11 @@ using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using CP77.Common.Tools.FNV1A;
+using WolvenKit.Common.Tools.FNV1A;
 using RED.CRC32;
-using WolvenKit.CR2W.Types;
+using CP77.CR2W.Types;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     public class CR2WVerify : IDisposable
     {

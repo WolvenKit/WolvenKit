@@ -1,28 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0-windows;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Tools\DDS\texconv.exe" />
+    <None Remove="DDS\texconv.exe" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Tools\DDS\texconv.exe">
+    <Content Include="DDS\texconv.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Catel.Analyzers" Version="1.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Catel.Core" Version="5.12.11" />
     <PackageReference Include="Catel.Fody" Version="4.5.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Catel.MVVM" Version="5.12.11" />
     <PackageReference Include="CsvHelper" Version="16.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
-    <PackageReference Include="protobuf-net" Version="3.0.62" />
+    <PackageReference Include="protobuf-net" Version="3.0.73" />
   </ItemGroup>
 
   <ItemGroup>

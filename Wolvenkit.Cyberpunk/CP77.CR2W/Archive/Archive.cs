@@ -4,24 +4,23 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
-using CP77.Common.Services;
-using CP77.Common.Tools;
-using CP77.Common.Tools.FNV1A;
+using WolvenKit.Common.Services;
+using WolvenKit.Common.Tools;
+using WolvenKit.Common.Tools.FNV1A;
 using CP77.CR2W.Extensions;
 using CP77Tools.Model;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Tools.DDS;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.SRT;
-using WolvenKit.CR2W.Types;
-using StreamExtensions = Catel.IO.StreamExtensions;
+using CP77.CR2W.Types;
+using CP77.Common.Tools;
+using WolvenKit.Common.Model;
+using EUncookExtension = WolvenKit.Common.Tools.DDS.EUncookExtension;
 
 namespace CP77.CR2W.Archive
 {
@@ -34,7 +33,7 @@ namespace CP77.CR2W.Archive
     }
     
     
-    public class Archive
+    public class Archive : IGameArchive
     {
         #region fields
 
@@ -79,6 +78,10 @@ namespace CP77.CR2W.Archive
 
         [JsonIgnore]
         public string Name => Path.GetFileName(Filepath);
+
+        public EArchiveType TypeName => EArchiveType.Archive;
+
+        public string ArchiveAbsolutePath { get; set; }
         #endregion
 
         #region methods
@@ -88,19 +91,24 @@ namespace CP77.CR2W.Archive
         /// </summary>
         private void ReadTables()
         {
-            using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
-                MemoryMappedFileAccess.Read);
+            //using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0, MemoryMappedFileAccess.Read);
 
-            using (var vs = mmf.CreateViewStream(0, ArHeader.SIZE, MemoryMappedFileAccess.Read))
-            {
-                _header = new ArHeader(new BinaryReader(vs));
-            }
+            // using (var vs = mmf.CreateViewStream(0, ArHeader.SIZE, MemoryMappedFileAccess.Read))
+            // {
+            //     _header = new ArHeader(new BinaryReader(vs));
+            // }
 
-            using (var vs = mmf.CreateViewStream((long)_header.Tableoffset, (long)_header.Tablesize,
-                MemoryMappedFileAccess.Read))
-            {
-                _table = new ArTable(new BinaryReader(vs), this);
-            }
+            // using (var vs = mmf.CreateViewStream((long)_header.Tableoffset, (long)_header.Tablesize,
+            //     MemoryMappedFileAccess.Read))
+            // {
+            //     _table = new ArTable(new BinaryReader(vs), this);
+            // }
+
+            using var vs = new FileStream(Filepath, FileMode.Open, FileAccess.Read);
+            _header = new ArHeader(new BinaryReader(vs));
+            vs.Seek((long) _header.Tableoffset, SeekOrigin.Begin);
+            _table = new ArTable(new BinaryReader(vs), this);
+            vs.Close();
         }
 
         /// <summary>
@@ -133,10 +141,10 @@ namespace CP77.CR2W.Archive
             #region buffers pre-locate
 
             // TODO: fix that for textures (pack from .tga and not .buffer)? probably in an intermediary step
-            var buffersDict = new ConcurrentDictionary<ulong, List<FileInfo>>();
+            var buffersDict = new Dictionary<ulong, List<FileInfo>>();
             var allfiles = infolder.GetFiles("*", SearchOption.AllDirectories);
             var buffersList = allfiles.Where(_ => _.Extension == ".buffer");
-            Parallel.ForEach(buffersList, fileInfo =>
+            foreach (var fileInfo in buffersList)
             {
                 // buffer path e.g. stand__rh_hold_tray__serve_milkshakes__01.scenerid.7.buffer
                 // removes 7 characters (".buffer") and then removes the extension (".7")
@@ -146,9 +154,9 @@ namespace CP77.CR2W.Archive
 
                 // add buffer
                 if (!buffersDict.ContainsKey(hash))
-                    buffersDict.AddOrUpdate(hash, new List<FileInfo>(), (arg1, o) => new List<FileInfo>());
+                    buffersDict.Add(hash, new List<FileInfo>());
                 buffersDict[hash].Add(fileInfo);
-            });
+            }
 
             #endregion
 
@@ -215,7 +223,7 @@ namespace CP77.CR2W.Archive
                 uint lastimportidx = (uint)ar._table.Dependencies.Count;
 
                 // kraken the file and write
-                var cr2winbuffer = StreamExtensions.ToByteArray(cr2wbr.BaseStream);
+                var cr2winbuffer = Catel.IO.StreamExtensions.ToByteArray(cr2wbr.BaseStream);
                 CompressAndWrite(cr2winbuffer);
 
 
@@ -237,7 +245,7 @@ namespace CP77.CR2W.Archive
 
                 // save table data
                 var sha1 = new System.Security.Cryptography.SHA1Managed();
-                var sha1hash = sha1.ComputeHash(StreamExtensions.ToByteArray(cr2wbr.BaseStream)); //TODO: this is only correct for files with no buffer
+                var sha1hash = sha1.ComputeHash(Catel.IO.StreamExtensions.ToByteArray(cr2wbr.BaseStream)); //TODO: this is only correct for files with no buffer
                 var flags = buffers.Count > 0 ? (uint)buffers.Count - 1 : 0;
                 var item = new ArchiveItem(hash, DateTime.Now, flags
                     , firstoffsetidx, lastoffsetidx, firstimportidx, lastimportidx
@@ -323,10 +331,7 @@ namespace CP77.CR2W.Archive
         /// </summary>
         public void Serialize()
         {
-
-
-
-
+            //TODO: Implement this!
         }
 
 
@@ -339,10 +344,10 @@ namespace CP77.CR2W.Archive
         /// <returns></returns>
         public int UncookSingle(ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga)
         {
-            using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
-                MemoryMappedFileAccess.Read);
-
-            return UncookSingleInner(mmf, hash, outDir, uncookext);
+            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
+            //     MemoryMappedFileAccess.Read);
+            
+            return UncookSingleInner(hash, outDir, uncookext);
         }
 
         /// <summary>
@@ -353,16 +358,16 @@ namespace CP77.CR2W.Archive
         /// <returns></returns>
         public int ExtractSingle(ulong hash, DirectoryInfo outDir)
         {
-            using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
-                MemoryMappedFileAccess.Read);
+            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
+            //     MemoryMappedFileAccess.Read);
 
-            return ExtractSingleInner(mmf, hash, outDir);
+            return ExtractSingleInner(hash, outDir);
         }
 
-        private int UncookSingleInner(MemoryMappedFile mmf, ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga)
+        private int UncookSingleInner( ulong hash, DirectoryInfo outDir, WolvenKit.Common.Tools.DDS.EUncookExtension uncookext = EUncookExtension.tga)
         {
             var uncooksuccess = false;
-            var (file, buffers) = GetFileData(hash, mmf);
+            var (file, buffers) = GetFileData(hash);
 
             if (!Files.ContainsKey(hash))
                 return -1;
@@ -387,7 +392,6 @@ namespace CP77.CR2W.Archive
             switch (extAsEnum)
             {
                 case EUncookable.bin:
-                    break;
                 case EUncookable.xbm:
                 {
                     if (buffers.Count > 1)
@@ -434,12 +438,12 @@ namespace CP77.CR2W.Archive
                             var texformat = CommonFunctions.GetDXGIFormatFromXBM(compression, rawfmt);
 
                             Directory.CreateDirectory(outfile.Directory.FullName);
-                            using (var stream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
+                            using (var nstream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
                             {
-                                DDSUtils.GenerateAndWriteHeader(stream,
+                                DDSUtils.GenerateAndWriteHeader(nstream,
                                     new DDSMetadata(width, height, mips, texformat, alignment, false, slicecount, true));
                                 var buffer = b;
-                                stream.Write(buffer);
+                                nstream.Write(buffer);
 
                             }
 
@@ -490,8 +494,8 @@ namespace CP77.CR2W.Archive
                     var newpath = $"{outfile.FullName}.csv";
 
                     Directory.CreateDirectory(outfile.Directory.FullName);
-                    using var stream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
-                    redcsv.ToCsvStream(stream);
+                    using var nstream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
+                    redcsv.ToCsvStream(nstream);
 
                     
                     
@@ -511,10 +515,10 @@ namespace CP77.CR2W.Archive
             return uncooksuccess ? 1 : 0;
         }
 
-        private int ExtractSingleInner(MemoryMappedFile mmf, ulong hash, DirectoryInfo outDir)
+        private int ExtractSingleInner(ulong hash, DirectoryInfo outDir)
         {
             var extractsuccess = false;
-            var (file, buffers) = GetFileData(hash, mmf);
+            var (file, buffers) = GetFileData(hash);
 
             if (!Files.ContainsKey(hash))
                 return -1;
@@ -559,8 +563,8 @@ namespace CP77.CR2W.Archive
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
 
-            using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
-                MemoryMappedFileAccess.Read);
+            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
+            //     MemoryMappedFileAccess.Read);
 
             // check search pattern then regex
             IEnumerable<ArchiveItem> finalmatches = Files.Values;
@@ -586,7 +590,8 @@ namespace CP77.CR2W.Archive
             logger.LogProgress(0);
             Parallel.ForEach(finalMatchesList, info =>
             {
-                int extracted = ExtractSingleInner(mmf, info.NameHash64, outDir);
+                
+                var extracted = ExtractSingleInner(info.NameHash64, outDir);
 
                 if (extracted != 0)
                     extractedList.Add(info.FileName);
@@ -614,10 +619,9 @@ namespace CP77.CR2W.Archive
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
             
-
-            using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
-                MemoryMappedFileAccess.Read);
-
+            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open, Mmfhash, 0,
+            //     MemoryMappedFileAccess.Read);
+            
             // check search pattern then regex
             IEnumerable<ArchiveItem> finalmatches = Files.Values;
             if (!string.IsNullOrEmpty(pattern))
@@ -642,7 +646,7 @@ namespace CP77.CR2W.Archive
             logger.LogProgress(0);
             Parallel.ForEach(finalMatchesList, info =>
             {
-                int uncooked = UncookSingleInner(mmf, info.NameHash64, outDir, uncookext);
+                var uncooked = UncookSingleInner(info.NameHash64, outDir, uncookext);
 
                 if (uncooked != 0)
                     extractedList.Add(info.FileName);
@@ -679,7 +683,7 @@ namespace CP77.CR2W.Archive
         /// <param name="hash"></param>
         /// <param name="mmf"></param>
         /// <returns></returns>
-        public (byte[], List<byte[]>) GetFileData(ulong hash, MemoryMappedFile mmf)
+        public (byte[], List<byte[]>) GetFileData(ulong hash)
         {
             if (!Files.ContainsKey(hash)) return (null, null);
 
@@ -705,14 +709,24 @@ namespace CP77.CR2W.Archive
                 using var ms = new MemoryStream();
                 using var bw = new BinaryWriter(ms);
 
-                using var vs = mmf.CreateViewStream((long)offsetentry.Offset, (long)offsetentry.ZSize,
-                    MemoryMappedFileAccess.Read);
-                using var binaryReader = new BinaryReader(vs);
+                // using var vs = mmf.CreateViewStream((long)offsetentry.Offset, (long)offsetentry.ZSize,
+                //     MemoryMappedFileAccess.Read);
+                using var stream = new FileStream(Filepath, FileMode.Open, FileAccess.Read);
+                using var binaryReader = new BinaryReader(stream);
+                binaryReader.BaseStream.Seek((long) offsetentry.Offset, SeekOrigin.Begin);
 
                 if (offsetentry.ZSize == offsetentry.Size)
                 {
-                    var buffer = binaryReader.ReadBytes((int)offsetentry.ZSize);
-                    bw.Write(buffer);
+                    try
+                    {
+                        var buffer = binaryReader.ReadBytes((int)offsetentry.ZSize);
+                        bw.Write(buffer);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
                 }
                 else
                 {

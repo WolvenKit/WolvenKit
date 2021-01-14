@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
     public class InvalidParsingException : Exception
     {

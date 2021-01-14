@@ -109,7 +109,7 @@ namespace WolvenKit.Bundles
                 fileEntryInfoList = new TDynArray<UFileEntryInfo>();
                 fileEntryInfoList.Deserialize(br);
                 
-                //Read the Bundle Infos
+                //Read the Archive Infos
                 bundleInfoList = new TDynArray<UBundleInfo>();
                 bundleInfoList.Deserialize(br);
 

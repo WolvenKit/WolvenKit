@@ -9,13 +9,12 @@ using System.IO;
 using System.Reflection;
 using System.Diagnostics;
 using System.IO.Compression;
-using CP77.Common.Services;
-using CP77.Common.Tools.FNV1A;
 using CP77.CR2W.Resources;
 using CP77Tools.Commands;
 using CP77Tools.Extensions;
 using CP77Tools.Tasks;
 using Luna.ConsoleProgressBar;
+using WolvenKit.Common.Services;
 
 namespace CP77Tools
 {

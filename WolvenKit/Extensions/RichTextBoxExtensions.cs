@@ -1,29 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace WolvenKit.Extensions
 {
     public static class RichTextBoxExtensions
     {
-        public static void AppendText(this RichTextBox box, string text, Color color, bool appendTime = true)
+        //https://stackoverflow.com/a/23402165
+        public static void AppendText(this RichTextBox box, string text, string color)
         {
-            box.SelectionStart = box.TextLength;
-            box.SelectionLength = 0;
-
-            box.SelectionColor = color;
-            if (appendTime)
-                box.AppendText("[" + DateTime.Now.ToString("G") + "]: " + text);
-            else
-                box.AppendText(text);
-            box.SelectionColor = box.ForeColor;
+            BrushConverter bc = new BrushConverter();
+            TextRange tr = new TextRange(box.Document.ContentEnd, box.Document.ContentEnd);
+            tr.Text = text;
+            try
+            {
+                tr.ApplyPropertyValue(TextElement.ForegroundProperty,
+                    bc.ConvertFromString(color));
+            }
+            catch (FormatException) { }
         }
     }
-
-    
 }

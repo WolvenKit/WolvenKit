@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using WolvenKit.CR2W.Reflection;
+using CP77.CR2W.Reflection;
 
-namespace WolvenKit.CR2W.Types
+namespace CP77.CR2W.Types
 {
     public interface IEnumAccessor
     {
@@ -111,7 +111,7 @@ namespace WolvenKit.CR2W.Types
         public override void Write(BinaryWriter file)
         {
             ushort val = 0;
-
+            //TODO
             foreach (var item in Value)
             {
                 var nw = cr2w.Names.First(_ => _.Str == item);
@@ -159,14 +159,8 @@ namespace WolvenKit.CR2W.Types
             else
             {
                 var s = Value.Last();
-
-                //handle EnumValues with Spaces in them. facepalm.
-                string finalvalue = s.Replace(" ", string.Empty);
-                finalvalue = finalvalue.Replace("'", string.Empty);
-                finalvalue = finalvalue.Replace("/", string.Empty);
-                finalvalue = finalvalue.Replace(".", string.Empty);
-
-                // set enum
+                var finalvalue = CVariable.NormalizeName(s);
+                
                 T en = (T)Enum.Parse(WrappedEnum.GetType(), finalvalue);
                 WrappedEnum = en;
             }
@@ -175,5 +169,6 @@ namespace WolvenKit.CR2W.Types
         }
 
         public override string ToString() => string.Join(",", this.Value);
+        
     }
 }

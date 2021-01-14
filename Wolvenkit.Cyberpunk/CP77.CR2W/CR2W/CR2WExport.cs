@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using WolvenKit.CR2W.Types;
+using CP77.CR2W.Types;
 using System.Runtime.InteropServices;
 //using System.Linq;
 using System.Runtime.Serialization;
@@ -14,11 +14,11 @@ using System.Diagnostics;
 using System.Text;
 using Newtonsoft.Json;
 using WolvenKit.Common.Extensions;
-using WolvenKit.CR2W.Reflection;
+using CP77.CR2W.Reflection;
 
-[assembly: ContractNamespaceAttribute("", ClrNamespace = "WolvenKit.CR2W")]
+[assembly: ContractNamespaceAttribute("", ClrNamespace = "CP77.CR2W")]
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
 
     [StructLayout(LayoutKind.Explicit, Size = 24)]

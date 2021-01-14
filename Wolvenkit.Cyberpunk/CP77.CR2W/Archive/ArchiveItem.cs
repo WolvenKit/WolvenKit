@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Catel.IoC;
-using CP77.Common.Services;
+using WolvenKit.Common.Services;
+using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
 namespace CP77.CR2W.Archive
 {
-    public class ArchiveItem
+    public class ArchiveItem : IGameFile
     {
         public ulong NameHash64 { get; set; }
         public DateTime DateTime { get; set; }
@@ -24,6 +26,14 @@ namespace CP77.CR2W.Archive
         public string NameOrHash => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}" : _nameStr;
         public string FileName => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}.bin" : _nameStr;
         public string Extension => Path.GetExtension(FileName);
+
+        public IGameArchive Archive { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public uint Size { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public uint ZSize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public long PageOffset { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public string CompressionType => throw new NotImplementedException();
 
         private Archive _parentArchive;
 
@@ -54,6 +64,14 @@ namespace CP77.CR2W.Archive
 
             if (mainController != null && mainController.Hashdict.ContainsKey(NameHash64))
                 _nameStr = mainController.Hashdict[NameHash64];
+            
+            // x-platform support
+            if (System.Runtime.InteropServices.RuntimeInformation
+                .IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
+            {
+                if (!string.IsNullOrEmpty(_nameStr) && _nameStr.Contains('\\'))
+                    _nameStr = _nameStr.Replace('\\', Path.DirectorySeparatorChar);
+            }
 
             DateTime = DateTime.FromFileTime(br.ReadInt64());
 
@@ -77,6 +95,16 @@ namespace CP77.CR2W.Archive
             bw.Write(FirstImportTableIdx);
             bw.Write(LastImportTableIdx);
             bw.Write(SHA1Hash);
+        }
+
+        public void Extract(Stream output)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Extract(BundleFileExtractArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

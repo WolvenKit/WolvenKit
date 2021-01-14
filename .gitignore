@@ -254,6 +254,9 @@ paket-files/
 .idea/
 *.sln.iml
 
+#macOS
+.DS_Store
+
 # Ignore folders
 W3Edit.Render/Models/**
 !W3Edit.Render/Models/**
@@ -270,3 +273,4 @@ Wolven-kit.wiki
 WolvenKit.IrrlichtLime/Debug-x64
 WolvenKit.IrrlichtLime/Release-x64
 Libs/Irrlicht.dll
+WolvenKit.IrrlichtLime/Release-x86

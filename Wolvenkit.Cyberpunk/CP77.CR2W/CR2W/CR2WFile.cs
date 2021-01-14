@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.CR2W.Types;
+using CP77.CR2W.Types;
 using System.Collections.ObjectModel;
 using Catel.Data;
-using CP77.Common.Services;
-using CP77.Common.Tools.FNV1A;
+using WolvenKit.Common.Services;
+using WolvenKit.Common.Tools.FNV1A;
 using Newtonsoft.Json;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     public class CR2WFile : Catel.Data.ObservableObject, IWolvenkitFile
     {
@@ -1061,6 +1061,16 @@ namespace WolvenKit.CR2W
             var crc = new Crc32Algorithm(false);
             stream.WriteStructs<T>(array, crc);
             m_tableheaders[index].crc32 = crc.HashUInt32;
+        }
+
+        Task<EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetChunks()
+        {
+            throw new NotImplementedException();
         }
 
 

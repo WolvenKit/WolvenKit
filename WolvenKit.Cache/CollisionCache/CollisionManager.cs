@@ -15,22 +15,22 @@ namespace WolvenKit.Cache
     {
         public CollisionManager()
         {
-            Items = new Dictionary<string, List<IWitcherFile>>();
+            Items = new Dictionary<string, List<IGameFile>>();
             Archives = new Dictionary<string, CollisionCache>();
-            FileList = new List<IWitcherFile>();
+            FileList = new List<IGameFile>();
             Extensions = new List<string>();
             AutocompleteSource = new List<string>();
         }
 
         public Dictionary<string, CollisionCache> Archives { get; set; }
-        public override EBundleType TypeName => EBundleType.CollisionCache;
+        public override EArchiveType TypeName => EArchiveType.CollisionCache;
         public static string SerializationVersion => "1.0";
 
         /// <summary>
         ///     Load a single mod collision cache
         /// </summary>
         /// <param name="filename"></param>
-        public override void LoadModBundle(string filename)
+        public override void LoadModArchive(string filename)
         {
             if (Archives.ContainsKey(filename))
                 return;
@@ -40,7 +40,7 @@ namespace WolvenKit.Cache
             foreach (var item in bundle.Files)
             {
                 if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
-                    Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IWitcherFile>());
+                    Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IGameFile>());
 
                 Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
             }
@@ -52,7 +52,7 @@ namespace WolvenKit.Cache
         ///     Load a single collision cache
         /// </summary>
         /// <param name="filename"></param>
-        public override void LoadBundle(string filename, bool ispatch = false)
+        public override void LoadArchive(string filename, bool ispatch = false)
         {
             if (Archives.ContainsKey(filename))
                 return;
@@ -62,7 +62,7 @@ namespace WolvenKit.Cache
             foreach (var item in bundle.Files)
             {
                 if (!Items.ContainsKey(item.Name))
-                    Items.Add(item.Name, new List<IWitcherFile>());
+                    Items.Add(item.Name, new List<IGameFile>());
 
                 Items[item.Name].Add(item);
             }
@@ -86,7 +86,7 @@ namespace WolvenKit.Cache
             contentdirs.Sort(new AlphanumComparator<string>());
             foreach (var file in contentdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Collision)))
             {
-                LoadBundle(file);
+                LoadArchive(file);
             }
 
             var patchdirs = new List<string>(Directory.GetDirectories(content, "patch*"));
@@ -95,7 +95,7 @@ namespace WolvenKit.Cache
                 .SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories)
                     .Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Collision)))
             {
-                LoadBundle(file);
+                LoadArchive(file);
             }
 
             if (Directory.Exists(dlc))
@@ -109,7 +109,7 @@ namespace WolvenKit.Cache
                         .OrderBy(k => k)
                         .Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Collision)))
                 {
-                    LoadBundle(file);
+                    LoadArchive(file);
                 }
             }
             RebuildRootNode();
@@ -120,7 +120,7 @@ namespace WolvenKit.Cache
         /// Note this resets everything
         /// </summary>
         /// <param name="exedir"></param>
-        public override void LoadModsBundles(string mods, string dlc)
+        public override void LoadModsArchives(string mods, string dlc)
         {
             if (!Directory.Exists(mods))
                 Directory.CreateDirectory(mods);
@@ -129,7 +129,7 @@ namespace WolvenKit.Cache
             var modbundles = modsdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Collision)).ToList();
             foreach (var file in modbundles)
             {
-                LoadModBundle(file);
+                LoadModArchive(file);
             }
 
             if (Directory.Exists(dlc))
@@ -143,7 +143,7 @@ namespace WolvenKit.Cache
                         .OrderBy(k => k)
                         .Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Collision)))
                 {
-                    LoadModBundle(file);
+                    LoadModArchive(file);
                 }
             }
             RebuildRootNode();

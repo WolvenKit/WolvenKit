@@ -67,7 +67,7 @@ namespace WolvenKit.Common.Model
     }
 
 
-    public enum EBundleType
+    public enum EArchiveType
     {
         ANY,
         Bundle,
@@ -75,6 +75,7 @@ namespace WolvenKit.Common.Model
         TextureCache,
         SoundCache,
         Speech,
+        Archive,
         Shader,
     }
 
@@ -90,8 +91,5 @@ namespace WolvenKit.Common.Model
         NoError,
         NoCr2w,
         UnsupportedVersion,
-
     }
 }
-
-

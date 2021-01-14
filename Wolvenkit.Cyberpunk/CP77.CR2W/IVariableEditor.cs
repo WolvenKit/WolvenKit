@@ -1,6 +1,6 @@
-﻿using WolvenKit.CR2W.Types;
+﻿using CP77.CR2W.Types;
 
-namespace WolvenKit.CR2W
+namespace CP77.CR2W
 {
     public interface IVariableEditor
     {

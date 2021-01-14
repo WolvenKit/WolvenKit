@@ -20,5 +20,7 @@ namespace WolvenKit.Common.Model
 
         void Write(BinaryWriter writer);
 
+        void GetChunks();
+
     }
 }
