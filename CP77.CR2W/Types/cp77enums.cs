@@ -8,6 +8,38 @@ namespace CP77.CR2W.Types
 {
     public static partial class Enums
     {
+		// flags
+		[Flags]
+		public enum EMeshChunkFlags
+		{
+			MCF_RenderInScene,
+			MCF_RenderInShadows,
+			MCF_IsTwoSided,
+			MCF_IsRayTracedEmissive,
+			MCF_IsPrefabProxy
+		}
+    
+		[Flags]
+		public enum CensorshipFlags
+		{
+			Censor_Nudity,
+			Censor_OverSexualised,
+			Censor_Suggestive,
+			Censor_Homosexuality,
+			Censor_Gore,
+			Censor_Drugs,
+			Censor_Religion,
+			Censor_Chinese
+
+		}
+		
+		[Flags]
+		public enum worldEDeniedAreaFlags
+		{
+			EDAF_Togglable
+		}
+    
+    
 	    public enum ETextureRawFormat
 	    {
 		    TRF_Invalid,
@@ -52,15 +84,82 @@ namespace CP77.CR2W.Types
 	    public enum gameLootSlotState{}
 	    public enum worlduiContextVisibility{}
 	    public enum gameEItemDynamicTags{}
-	    public enum entdismembermentPlacementE{}
-	    public enum EMeshChunkRenderMask{}
-	    public enum EMeshChunkFlags{}
-	    public enum entdismembermentResourceSetMask{}
-	    public enum entdismembermentWoundTypeE{}
-	    public enum physicsEClothCollisionMaskEnum{}
-		public enum CensorshipFlags {}
-	    public enum TriggerChannel {}
-	    public enum worldEDeniedAreaFlags{}
+
+	    public enum entdismembermentPlacementE
+	    {
+		    MAIN_MESH,
+		    DISM_MESH,
+		    RAGDOLL_CONTACT,
+		    RAGDOLL_CONTACT_SLIDE,
+		    RAGDOLL_SLEEP
+	    }
+
+	    public enum EMeshChunkRenderMask
+	    {
+		    MCR_Scene,
+		    MCR_Cascade1,
+		    MCR_Cascade2,
+		    MCR_Cascade3,
+		    MCR_Cascade4,
+		    MCR_DistantShadows,
+		    MCR_LocalShadows,
+		    MCR_IsTwoSided,
+		    MCR_IsRayTracedEmissive,
+		    MCR_PrefabProxy,
+		    MCR_Cascades
+	    }
+	    
+	    public enum entdismembermentResourceSetMask
+	    {
+		    fleshPartMask,
+            FleshBodyMask,
+            cyberPartMask,
+            CyberBodyMask
+	    }
+
+	    public enum entdismembermentWoundTypeE
+	    {
+		    CLEAN,
+            COARSE
+	    }
+
+	    public enum physicsEClothCollisionMaskEnum
+	    {
+		    CONVEX,
+		    TRIMESH
+	    }
+
+	    public enum TriggerChannel
+	    {
+		    TC_Default,
+		    TC_Player,
+		    TC_Camera,
+		    TC_Human,
+		    TC_SoundReverbArea,
+		    TC_SoundAmbientArea,
+		    TC_Quest,
+		    TC_Projectiles,
+		    TC_Vehicle,
+		    TC_Environment,
+		    TC_WaterNullArea,
+		    TC_Custom0,
+		    TC_Custom1,
+		    TC_Custom2,
+		    TC_Custom3,
+		    TC_Custom4,
+		    TC_Custom5,
+		    TC_Custom6,
+		    TC_Custom7,
+		    TC_Custom8,
+		    TC_Custom9,
+		    TC_Custom10,
+		    TC_Custom11,
+		    TC_Custom12,
+		    TC_Custom13,
+		    TC_Custom14
+	    }
+
+	    
 	    public enum rendLightChannel
 	    {
 		    LC_Channel1,
