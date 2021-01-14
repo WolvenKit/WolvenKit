@@ -11,8 +11,11 @@ using Catel;
 using Catel.IoC;
 using Catel.Threading;
 using Newtonsoft.Json;
+using Octokit;
 using Orc.Notifications;
 using ProtoBuf;
+using FileMode = System.IO.FileMode;
+
 namespace WolvenKit.Model
 {
     using Controllers;
