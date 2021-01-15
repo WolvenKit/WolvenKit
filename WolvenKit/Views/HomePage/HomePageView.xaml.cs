@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WolvenKit.Views
+namespace WolvenKit.Views.HomePage
 {
     public partial class HomePageView
     {
@@ -20,19 +20,30 @@ namespace WolvenKit.Views
             InitializeComponent();
 
 
+   
             InitiializeGitHub();
         }
 
         private async void InitiializeGitHub()
         {
             GhubClient = new GitHubClient(new ProductHeaderValue("WolvenKit"));
-            GhubClient.Credentials = GhubAuth("wolvenbot", "botwolven1");
+            GhubClient.Credentials = GhubAuth("wolvenbot", "botwolven1");            
+            
+
             await GhubLastReleaseAsync();
+            
+
+
+
+
         }
 
         GitHubClient GhubClient;
 
 
+
+
+        
 
         public Credentials GhubAuth(string u, string p)
         {
@@ -44,10 +55,26 @@ namespace WolvenKit.Views
 
         public async Task GhubLastReleaseAsync()
         {
-            var releases = await GhubClient.Repository.Release.GetAll("WolvenKit", "Wolven-Kit");
-            var latest = releases[0];
+            
+            try
+            {
+                var general = await GhubClient.Repository.Get("WolvenKit", "Wolven-Kit");
+                var g_stars = general.StargazersCount;
+                var g_forks = general.ForksCount;
+                var g_watchers = general.SubscribersCount;
 
 
+                WatchShield.SetCurrentValue(Shield.StatusProperty, g_watchers.ToString());
+                ForkShield.SetCurrentValue(Shield.StatusProperty, g_forks.ToString());
+                StarShield.SetCurrentValue(Shield.StatusProperty, g_stars.ToString());
+
+
+
+
+
+
+                var releases = await GhubClient.Repository.Release.GetLatest("WolvenKit", "Wolven-Kit");
+                var latest = releases; // Just a temp fix so I don't spam GHub api during dev
             ObservableCollection<GithubTimeLine> data = new ObservableCollection<GithubTimeLine>();
 
             var item = new GithubTimeLine() { TitleLabel = latest.TagName, TitleInfo = latest.Name, TitleStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelViolet) };
@@ -92,6 +119,12 @@ namespace WolvenKit.Views
             }
             data.Add(item);
             gitTime.SetCurrentValue(ItemsControl.ItemsSourceProperty, data);
+            }
+            catch { }
+
+
+
+           
 
         }
 

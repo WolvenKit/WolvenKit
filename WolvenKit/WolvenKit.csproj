@@ -47,6 +47,8 @@
     <PackageReference Include="FastMember" Version="1.5.0" />
     <PackageReference Include="HandyControls" Version="3.0.0" />
     <PackageReference Include="ini-parser" Version="2.5.2" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.3" />
+    <PackageReference Include="MahApps.Metro.IconPacks.BoxIcons" Version="4.8.0" />
     <PackageReference Include="MahApps.Metro.IconPacks.Codicons" Version="4.8.0" />
     <PackageReference Include="MarkerMetro.Unity.Ionic.Zlib" Version="2.0.0.14" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
@@ -288,5 +290,11 @@
     <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Styles\CustomBase\" />
+    <Folder Include="Resources\Styles\Custom\" />
+    <Folder Include="ViewModels\HomePage\Pages\" />
+    <Folder Include="Views\HomePage\Pages\" />
   </ItemGroup>
 </Project>

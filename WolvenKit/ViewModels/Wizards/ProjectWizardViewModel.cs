@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.ViewModels.Wizards
 {
-    class HomePageViewModel : ViewModelBase
+    class ProjectWizardViewModel : ViewModelBase
     {
     }
 }

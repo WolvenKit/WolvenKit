@@ -9,7 +9,7 @@
                    xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
                    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
                    xmlns:views="clr-namespace:WolvenKit.Views"
-                   xmlns:orctheming="http://schemas.wildgums.com/orc/theming">
+                   xmlns:orctheming="http://schemas.wildgums.com/orc/theming" xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage">
 
     <!-- Resources -->
     <UserControl.Resources>
@@ -58,6 +58,26 @@
         </Grid.RowDefinitions>
 
         <fluent:Ribbon Grid.Row="0" x:Name="ribbon">
+
+            <fluent:Ribbon.StartScreen>
+                <fluent:StartScreen IsOpen="True">
+                    <fluent:StartScreenTabControl  LeftContentMargin="0">
+
+                        <fluent:StartScreenTabControl.LeftContent >
+                            <HomeView:HomePageView />
+
+                        </fluent:StartScreenTabControl.LeftContent>
+                        <fluent:StartScreenTabControl.RightContent>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock VerticalAlignment="Center"
+                                HorizontalAlignment="Center">You can close the start screen by either clicking the button below or by pressing ESC</TextBlock>
+                                <fluent:Button HorizontalAlignment="Center"
+                                   IsDefinitive="True">Close start screen</fluent:Button>
+                            </StackPanel>
+                        </fluent:StartScreenTabControl.RightContent>
+                    </fluent:StartScreenTabControl>
+                </fluent:StartScreen>
+            </fluent:Ribbon.StartScreen>
             <!-- Backstage -->
             <fluent:Ribbon.Menu>
                 <fluent:Backstage x:Name="Backstage" >
