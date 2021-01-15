@@ -9,18 +9,12 @@
                 <hc:Theme Skin="Dark"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-        
+
     </catel:UserControl.Resources>
     <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" MinWidth="1024" MinHeight="720" >
 
-        <Grid HorizontalAlignment="Left" Width="320" Background="{DynamicResource Fluent.Ribbon.Brushes.ColorGallery.Item.BorderBrush}">
-            <ListBox>
-                <ListBoxItem Content="ListBoxItem"/>
-                <ListBoxItem Content="ListBoxItem"/>
-                <ListBoxItem Content="ListBoxItem"/>
 
-            </ListBox>
-        </Grid>
+            </Grid>
 
         <Grid HorizontalAlignment="Right" Background="{DynamicResource Fluent.Ribbon.Brushes.ColorGallery.Item.BorderBrush}">
 
