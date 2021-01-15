@@ -1,27 +1,18 @@
 ﻿<Application x:Class="WolvenKit.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-             xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:HC="https://github.com/ghost1372/HandyControls">
+             xmlns:hc="https://handyorg.github.io/handycontrol">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-
-
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <!-- Theme setting -->
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Blue.xaml" />
                 <hc:Theme Name="HandyTheme"/>
                 <hc:Theme Skin="Dark"/>
-                
-                
+
                 <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Dark.Red.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Dark.Blue.xaml"      />
 
-                <ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Dark.Red.xaml" />
 
-                <ResourceDictionary Source="pack://application:,,,/Resources/Styles/CustomHandyStyles.xaml"/>
 
 
 

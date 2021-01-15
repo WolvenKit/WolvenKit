@@ -29,7 +29,7 @@ namespace WolvenKit
         static App()
         {
 
-            
+
         }
 
         /// <summary>
@@ -37,11 +37,11 @@ namespace WolvenKit
         /// </summary>
         public App()
         {
-            
+
         }
         #endregion constructors
 
-        
+
 
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
