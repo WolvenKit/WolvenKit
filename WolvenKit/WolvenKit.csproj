@@ -296,6 +296,5 @@
     <Folder Include="Resources\Styles\Custom\" />
     <Folder Include="ViewModels\HomePage\Pages\" />
     <Folder Include="Views\HomePage\Pages\" />
-    <Folder Include="Views\Wizards\WizardPages\ProjectWizard\" />
   </ItemGroup>
 </Project>

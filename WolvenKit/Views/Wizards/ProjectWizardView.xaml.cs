@@ -1,9 +1,9 @@
 ﻿
 namespace WolvenKit.Views.Wizards
 {
-    public partial class ProjectWizard
+    public partial class ProjectWizardView
     {
-        public ProjectWizard()
+        public ProjectWizardView()
         {
             InitializeComponent();
         }

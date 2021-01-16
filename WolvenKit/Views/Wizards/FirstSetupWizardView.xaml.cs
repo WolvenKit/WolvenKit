@@ -1,9 +1,9 @@
 ﻿
 namespace WolvenKit.Views.Wizards
 {
-    public partial class FirstSetupWizard
+    public partial class FirstSetupWizardView
     {
-        public FirstSetupWizard()
+        public FirstSetupWizardView()
         {
             InitializeComponent();
         }

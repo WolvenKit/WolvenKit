@@ -1,9 +1,9 @@
 ﻿
 namespace WolvenKit.Views.Wizards
 {
-    public partial class PublishWizard
+    public partial class PublishWizardView
     {
-        public PublishWizard()
+        public PublishWizardView()
         {
             InitializeComponent();
         }
