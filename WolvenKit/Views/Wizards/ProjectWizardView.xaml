@@ -4,7 +4,7 @@
                    xmlns:catel="http://schemas.catelproject.com" 
                    xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol"
+                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:UCpage="clr-namespace:WolvenKit.Views.Wizards.WizardPages.ProjectWizard"
                    mc:Ignorable="av" >
 
 
@@ -19,6 +19,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="10*"/>
             <RowDefinition Height="90*"/>
+            <RowDefinition Height="10*"/>
+
         </Grid.RowDefinitions>
 
 
@@ -34,30 +36,20 @@
         </StackPanel>
 
 
-          
+        <Grid x:Name="PageGrid" Grid.Row="1">
 
-        <hc:TransitioningContentControl HorizontalAlignment="Stretch" Grid.Row="3" >
-                    <Grid Margin="5,5,5,5" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Stretch">
-                        <Grid Grid.Row="1" HorizontalAlignment="Stretch">
-                            <StackPanel Margin="0,10,0,0" Orientation="Vertical" VerticalAlignment="Top">
-                                <TextBlock Text="Select a Project Type"  FontSize="14" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,10"></TextBlock>
-                                <UniformGrid Margin="22,0,0,0" Rows="2" Columns="1">
-                                    <RadioButton  Margin="10,10,0,0" Background="{DynamicResource SecondaryRegionBrush}" Style="{StaticResource RadioButtonIcon}" Content="The Witcher 3"/>
-                                    <RadioButton Margin="10,10,0,0" Background="{DynamicResource SecondaryRegionBrush}" Style="{StaticResource RadioButtonIcon}" Content="Cyberpunk 2077" IsChecked="True"/>
-                                </UniformGrid>
-                            </StackPanel>
-                        </Grid>
-                    </Grid>
-                </hc:TransitioningContentControl>
+        </Grid>
+
+       
 
 
 
 
 
-        <Grid Grid.Row="1"  VerticalAlignment="Bottom" Height="95" Margin="0,0,0,0">
+        <Grid Grid.Row="2"  VerticalAlignment="Bottom" Height="95" Margin="0,0,0,0">
 
             <Button Margin="3" Width="50" Height="30" VerticalAlignment="Bottom" IsEnabled="True" hc:IconElement.Geometry="{StaticResource LeftGeometry}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Left" Click="Button_Click_1"/>
-            <hc:StepBar x:Name="StepMain" Margin="0,0,0,3" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Dock="Bottom"  StepIndex="{Binding StepIndex}">
+            <hc:StepBar x:Name="StepMain" Margin="0,0,0,3" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Dock="Bottom"  >
                         <hc:StepBarItem Content="Select Project Type"/>
                         <hc:StepBarItem Content="Project Configuration"/>
                         <hc:StepBarItem Content="Finalize Setup"/>
