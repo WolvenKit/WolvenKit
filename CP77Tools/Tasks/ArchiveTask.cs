@@ -19,7 +19,7 @@ namespace CP77Tools.Tasks
         private static readonly ILoggerService logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
         public static void ArchiveTask(string[] path, string outpath, bool extract, bool dump, bool list,
-            bool uncook, EUncookExtension uext, bool flip, ulong hash, string pattern, string regex)
+            bool uncook, EUncookExtension uext, bool flip, string hash, string pattern, string regex)
         {
             if (path == null || path.Length < 1)
             {
@@ -37,7 +37,7 @@ namespace CP77Tools.Tasks
 
 
         private static void ArchiveTaskInner(string path, string outpath, bool extract, bool dump, bool list, 
-            bool uncook, EUncookExtension uext, bool flip, ulong hash, string pattern, string regex)
+            bool uncook, EUncookExtension uext, bool flip, string hash, string pattern, string regex)
         {
             #region checks
 
@@ -116,21 +116,44 @@ namespace CP77Tools.Tasks
                     // read archive
                     var ar = new Archive(processedarchive.FullName);
 
+                    var isHash = ulong.TryParse(hash, out ulong hashNumber);
+
                     // run
                     if (extract || uncook)
                     {
-                        if (hash != 0)
+                        if (!isHash && File.Exists(hash))
+                        {
+                            var hashlist = File.ReadAllLines(hash)
+                                .ToList().Select(_ => ulong.TryParse(_, out ulong res) ? res : 0);
+                            logger.LogString($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...", Logtype.Normal);
+                            foreach (var hash_num in hashlist)
+                            {
+                                if (extract)
+                                {
+                                    ar.ExtractSingle(hash_num, outDir);
+                                    logger.LogString($" {ar.Filepath}: Extracted one file: {hash_num}", Logtype.Success);
+                                }
+
+                                if (uncook)
+                                {
+                                    ar.UncookSingle(hash_num, outDir, uext, flip);
+                                    logger.LogString($" {ar.Filepath}: Uncooked one file: {hash_num}", Logtype.Success);
+                                }
+                            }
+                            logger.LogString($"Bulk extraction from hashlist file completed!", Logtype.Success);
+                        }
+                        else if (isHash && hashNumber != 0)
                         {
                             if (extract)
                             {
-                                ar.ExtractSingle(hash, outDir);
-                                logger.LogString($" {ar.Filepath}: Extracted one file: {hash}", Logtype.Success);
+                                ar.ExtractSingle(hashNumber, outDir);
+                                logger.LogString($" {ar.Filepath}: Extracted one file: {hashNumber}", Logtype.Success);
                             }
 
                             if (uncook)
                             {
-                                ar.UncookSingle(hash, outDir, uext, flip);
-                                logger.LogString($" {ar.Filepath}: Uncooked one file: {hash}", Logtype.Success);
+                                ar.UncookSingle(hashNumber, outDir, uext, flip);
+                                logger.LogString($" {ar.Filepath}: Uncooked one file: {hashNumber}", Logtype.Success);
                             }
                         }
                         else

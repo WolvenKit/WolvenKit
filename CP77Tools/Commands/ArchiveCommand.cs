@@ -22,9 +22,9 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool>(new[] {"--uncook", "-u"}, "Uncooks textures from archive."));
             AddOption(new Option<EUncookExtension>(new[] {"--uext"}, "Uncook extension (tga, bmp, jpg, png, dds). Default is tga."));
             AddOption(new Option<bool>(new[] { "--flip", "-f" }, "Flips textures vertically"));
-            AddOption(new Option<ulong>(new[] {"--hash"}, "Extract single file with given hash."));
+            AddOption(new Option<string>(new[] {"--hash"}, "Extract single file with given hash. If a path is supplied it extracts all hashes from that."));
             
-            Handler = CommandHandler.Create<string[], string, bool, bool, bool, bool, EUncookExtension, bool, ulong, string, string>(ConsoleFunctions.ArchiveTask);
+            Handler = CommandHandler.Create<string[], string, bool, bool, bool, bool, EUncookExtension, bool, string, string, string>(ConsoleFunctions.ArchiveTask);
         }
     }
 }
