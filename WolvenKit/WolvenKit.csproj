@@ -295,6 +295,8 @@
     <Folder Include="Resources\Styles\CustomBase\" />
     <Folder Include="Resources\Styles\Custom\" />
     <Folder Include="ViewModels\HomePage\Pages\" />
+    <Folder Include="ViewModels\Wizards\WizardPages\PublishWizard\" />
     <Folder Include="Views\HomePage\Pages\" />
+    <Folder Include="Views\Wizards\WizardPages\PublishWizard\" />
   </ItemGroup>
 </Project>

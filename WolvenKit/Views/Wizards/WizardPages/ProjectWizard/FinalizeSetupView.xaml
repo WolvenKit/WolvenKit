@@ -11,7 +11,6 @@
                     <Grid Margin="22,0,0,0" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="6*"></ColumnDefinition>
-                            <ColumnDefinition Width="1*"></ColumnDefinition>
 
                         </Grid.ColumnDefinitions>
                         <StackPanel>
@@ -41,16 +40,18 @@
                                 <TextBlock Text="Project Path" VerticalAlignment="Center"></TextBlock>
                                 <TextBox Margin="100,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
-                    
+
+                            <hc:Divider></hc:Divider>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                                <Button Height="45" Content="Yes, Create my project!" Margin="0,0,0,0"></Button>
+
+                                <Button Height="45" Content="No, Cancel my project!" Margin="15,0,0,0"></Button>
+                            </StackPanel>
                         </StackPanel>
 
 
-                        <Grid Grid.Column="1">
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                                <Button Height="45" Content="Yes, Create my project!" Margin="5"></Button>
-
-                                <Button Height="45" Content="No, Cancel my project!" Margin="5,5,5,0"></Button>
-                            </StackPanel>
+                        <Grid Grid.Column="0">
+                       
                 
 
                         </Grid>
