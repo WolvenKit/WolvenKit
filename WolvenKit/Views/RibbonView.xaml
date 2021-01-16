@@ -9,6 +9,8 @@
                    xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
                    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
                    xmlns:views="clr-namespace:WolvenKit.Views"
+                       xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+
                    xmlns:orctheming="http://schemas.wildgums.com/orc/theming" xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage">
 
     <!-- Resources -->
@@ -59,25 +61,17 @@
 
         <fluent:Ribbon Grid.Row="0" x:Name="ribbon">
 
+            
+            <!-- StartScreen -->
             <fluent:Ribbon.StartScreen>
-                <fluent:StartScreen IsOpen="True">
-                    <fluent:StartScreenTabControl  LeftContentMargin="0">
+                <fluent:StartScreen x:Name="startScreen" IsOpen="True" >
+                    <HomeView:HomePageView />
 
-                        <fluent:StartScreenTabControl.LeftContent >
-                            <HomeView:HomePageView />
-
-                        </fluent:StartScreenTabControl.LeftContent>
-                        <fluent:StartScreenTabControl.RightContent>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock VerticalAlignment="Center"
-                                HorizontalAlignment="Center">You can close the start screen by either clicking the button below or by pressing ESC</TextBlock>
-                                <fluent:Button HorizontalAlignment="Center"
-                                   IsDefinitive="True">Close start screen</fluent:Button>
-                            </StackPanel>
-                        </fluent:StartScreenTabControl.RightContent>
-                    </fluent:StartScreenTabControl>
+                    
                 </fluent:StartScreen>
             </fluent:Ribbon.StartScreen>
+            
+            
             <!-- Backstage -->
             <fluent:Ribbon.Menu>
                 <fluent:Backstage x:Name="Backstage" >
@@ -96,12 +90,21 @@
                         </fluent:BackstageTabControl.Resources>
 
 
+                        <fluent:Button Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                                                   Height="120"
+
+                                        Icon="{iconPacks:Codicons Kind=Home}"
+                                        FontSize="18" Click="ShowStartScreen_OnClick" OverridesDefaultStyle="True">
+                            Home
+                        </fluent:Button>
+
+
 
 
                         <fluent:BackstageTabItem 
-                            Header="Home"
+                            Header="Files"
                             Height="120"
-                            Icon="{orctheming:FontImage {x:Static local:FontAwesome.Home}, FontFamily=FontAwesome}"
+                                        Icon="{iconPacks:Codicons Kind=RootFolder}"
                             
                             Style="{StaticResource MyFLuentButtonStyle}"
                         >
@@ -112,7 +115,7 @@
 
                         <fluent:Button  Header="Open"
                                         Height="120"
-                                        Icon="{orctheming:FontImage {x:Static local:FontAwesome.FolderOpenO}, FontFamily=FontAwesome}"
+                                        Icon="{iconPacks:Codicons Kind=FolderOpened}"
                                         Command="{catel:CommandManagerBinding Application.OpenProject}" 
                                         FontSize="18"
                         >
@@ -121,7 +124,7 @@
 
                         <fluent:Button Header="New"
                                        Height="120"
-                                       LargeIcon="{orctheming:FontImage {x:Static local:FontAwesome.File}, FontFamily=FontAwesome}"
+                                        Icon="{iconPacks:Codicons Kind=NewFolder}"
                                        FontSize="18"
                                        Command="{catel:CommandManagerBinding Application.NewProject}" >
 
@@ -134,11 +137,11 @@
 
                         <fluent:Button Header="Options" 
                                        
-                                       Icon="{orctheming:FontImage {x:Static local:FontAwesome.Cog}, FontFamily=FontAwesome}"
+                                        Icon="{iconPacks:Codicons Kind=Settings}"
                                        Command="{catel:CommandManagerBinding Application.Options}" />
 
                         <fluent:Button Header="About" 
-                                       Icon="{orctheming:FontImage {x:Static local:FontAwesome.Info}, FontFamily=FontAwesome}"
+                                        Icon="{iconPacks:Codicons Kind=Info}"
                                        Command="{catel:CommandManagerBinding Application.About}" 
                                        VerticalAlignment="Bottom"
                                        VerticalContentAlignment="Bottom"
@@ -163,6 +166,10 @@
                                              />
             </fluent:Ribbon.ContextualGroups>
 
+            
+            
+        
+            
             <!-- Home Tab -->
             <fluent:RibbonTabItem Header="Home" >
                 <!-- File -->

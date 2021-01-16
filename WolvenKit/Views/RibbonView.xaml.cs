@@ -16,8 +16,9 @@ namespace WolvenKit.Views
             InitializeComponent();
 
             ribbon.AddAboutButton();
-
             
+
+
         }
 
         protected override void OnViewModelChanged()
@@ -44,6 +45,12 @@ namespace WolvenKit.Views
                 default:
                     break;
             }
+        }
+
+        private void ShowStartScreen_OnClick(object sender, RoutedEventArgs e)
+        {          
+                this.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
+                this.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
         }
     }
 }

@@ -35,53 +35,6 @@
 
         </Grid>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         <Grid HorizontalAlignment="Left" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
 
 
@@ -201,15 +154,6 @@
                     <hc:Shield x:Name="ForkShield" Status ="5.0" Subject="Forks" HorizontalAlignment="Left" Color="{DynamicResource MahApps.Brushes.Accent4}" Margin="0,0,0,0"/>
                 </StackPanel>
             </Grid>
-
-
-
-
-
-
-         
-
-
 
             <hc:GithubTimeLine x:Name="gitTime" TitleInfo="Test" TitleLabel="Test" FontSize="12" HorizontalContentAlignment="Stretch"  VerticalContentAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FlowDirection="RightToLeft" MaxWidth="450" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="0,50,0,10" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"  >
                 <hc:GithubTimeLine.Style>

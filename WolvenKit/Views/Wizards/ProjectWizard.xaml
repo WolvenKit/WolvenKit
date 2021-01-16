@@ -13,7 +13,7 @@
 
 
     </catel:UserControl.Resources>
-    <Grid MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin=" 150,0,150,100">
+    <Grid MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,2,5">
 
 
         <Grid.RowDefinitions>
@@ -22,41 +22,50 @@
         </Grid.RowDefinitions>
 
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-            <iconPacks:PackIconCodicons Grid.Column="0" Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
 
-            <StackPanel Grid.Column="1" VerticalAlignment="Bottom" Orientation="Vertical" HorizontalAlignment="Stretch">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="5,5,5,4">
+            <iconPacks:PackIconCodicons  Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
 
-                <TextBlock Text="Let's make a project!" Grid.Column="1" FontSize="20" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,0"></TextBlock>
+            <StackPanel  VerticalAlignment="Bottom" Orientation="Vertical" HorizontalAlignment="Stretch">
+
+                <TextBlock Text="Let's make a project!"  FontSize="20" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,0"></TextBlock>
                 <hc:Divider  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,10,0,0"></hc:Divider>
             </StackPanel>
         </StackPanel>
 
 
+          
 
-        <hc:TransitioningContentControl Grid.Column="1" Grid.Row="1" >
-            <Grid Margin="22" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <hc:PropertyGrid  SelectedObject="{Binding DemoModel}" HorizontalAlignment="Stretch" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Style="{DynamicResource PropertyGridBaseStyle}" OverridesDefaultStyle="True"/>
-                <StackPanel hc:TitleElement.TitleWidth="168" Grid.Row="1" Margin="20,16,17,10">
-                    <TextBox hc:TitleElement.Title="String" hc:TitleElement.TitlePlacement="Left" Style="{DynamicResource TextBoxExtendBaseStyle}" Text="{Binding DemoModel.String,Mode=OneWay}" IsReadOnly="True"/>
-                    <TextBox hc:TitleElement.Title="Enum" hc:TitleElement.TitlePlacement="Left" Style="{StaticResource TextBoxExtend}" Text="{Binding DemoModel.Enum,Mode=OneWay}" IsReadOnly="True" Margin="0,6,0,0"/>
-                    <TextBox hc:TitleElement.Title="Integer" hc:TitleElement.TitlePlacement="Left" Style="{StaticResource TextBoxExtend}" Text="{Binding DemoModel.Integer,Mode=OneWay}" IsReadOnly="True" Margin="0,6,0,0"/>
-                    <TextBox hc:TitleElement.Title="Boolean" hc:TitleElement.TitlePlacement="Left" Style="{StaticResource TextBoxExtend}" Text="{Binding DemoModel.Boolean,Mode=OneWay}" IsReadOnly="True" Margin="0,6,0,0"/>
-                    <TextBox hc:TitleElement.Title="HorizontalAlignment" hc:TitleElement.TitlePlacement="Left" Style="{StaticResource TextBoxExtend}" Text="{Binding DemoModel.HorizontalAlignment,Mode=OneWay}" IsReadOnly="True" Margin="0,6,0,0"/>
-                    <TextBox hc:TitleElement.Title="VerticalAlignment" hc:TitleElement.TitlePlacement="Left" Style="{StaticResource TextBoxExtend}" Text="{Binding DemoModel.VerticalAlignment,Mode=OneWay}" IsReadOnly="True" Margin="0,6,0,0"/>
-                    <GroupBox Style="{StaticResource GroupBoxOriginal}" Header="ImageSource" hc:TitleElement.TitlePlacement="Left" Margin="0,6,0,0">
-                        <hc:Gravatar HorizontalAlignment="Left" Source="{Binding DemoModel.ImageSource}"/>
-                    </GroupBox>
-                </StackPanel>
-            </Grid>
-        </hc:TransitioningContentControl>
+        <hc:TransitioningContentControl HorizontalAlignment="Stretch" Grid.Row="3" >
+                    <Grid Margin="5,5,5,5" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Stretch">
+                        <Grid Grid.Row="1" HorizontalAlignment="Stretch">
+                            <StackPanel Margin="0,10,0,0" Orientation="Vertical" VerticalAlignment="Top">
+                                <TextBlock Text="Select a Project Type"  FontSize="14" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,10"></TextBlock>
+                                <UniformGrid Margin="22,0,0,0" Rows="2" Columns="1">
+                                    <RadioButton  Margin="10,10,0,0" Background="{DynamicResource SecondaryRegionBrush}" Style="{StaticResource RadioButtonIcon}" Content="The Witcher 3"/>
+                                    <RadioButton Margin="10,10,0,0" Background="{DynamicResource SecondaryRegionBrush}" Style="{StaticResource RadioButtonIcon}" Content="Cyberpunk 2077" IsChecked="True"/>
+                                </UniformGrid>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </hc:TransitioningContentControl>
 
 
 
+
+
+        <Grid Grid.Row="1"  VerticalAlignment="Bottom" Height="95" Margin="0,0,0,0">
+
+            <Button Margin="3" Width="50" Height="30" VerticalAlignment="Bottom" IsEnabled="True" hc:IconElement.Geometry="{StaticResource LeftGeometry}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Left" Click="Button_Click_1"/>
+            <hc:StepBar x:Name="StepMain" Margin="0,0,0,3" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Dock="Bottom"  StepIndex="{Binding StepIndex}">
+                        <hc:StepBarItem Content="Select Project Type"/>
+                        <hc:StepBarItem Content="Project Configuration"/>
+                        <hc:StepBarItem Content="Finalize Setup"/>
+
+            </hc:StepBar>
+            <Button Command="{Binding NextCmd}" CommandParameter="{Binding ElementName=StepMain}" Margin="3" VerticalAlignment="Bottom" Height="30" Width="50" IsEnabled="True" hc:IconElement.Geometry="{StaticResource RightGeometry}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Right" Click="Button_Click"/>
+
+          </Grid>
 
     </Grid>
 

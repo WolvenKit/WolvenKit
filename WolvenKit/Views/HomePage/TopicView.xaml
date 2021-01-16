@@ -4,7 +4,8 @@
                    xmlns:catel="http://schemas.catelproject.com" 
                    xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol"
+                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                   xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:wiz="clr-namespace:WolvenKit.Views.Wizards"
                    mc:Ignorable="av" >
 
 
@@ -13,13 +14,10 @@
 
 
     </catel:UserControl.Resources>
-    <Grid MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Margin="15,15,15,15">
-        <iconPacks:PackIconCodicons   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" VerticalAlignment="Top" HorizontalAlignment="Center" />
-        <hc:AnimationPath Data="{DynamicResource NewGeo}" 
-                          Duration="00:00:08" 
-                          Stretch="Uniform" StrokeThickness="1.5"
-                          Stroke="{DynamicResource AccentColorBrush}" PathLength="70" ></hc:AnimationPath>
-        
+    <Grid x:Name="TopicViewer" MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Margin="35,35,35,35">
+        <wiz:ProjectWizard/>
+
+
     </Grid>
 
 </catel:UserControl>
