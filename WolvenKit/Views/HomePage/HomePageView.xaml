@@ -56,7 +56,7 @@
                             <iconPacks:Codicons Height="25" Kind="Tools" Width="25"/>
                         </hc:SideMenuItem.Icon>
 
-                        <hc:SideMenuItem Header="Quick Setup" Command="{Binding SelectCmd}" CommandParameter="{Binding Header, RelativeSource={RelativeSource Self}}"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
+                        <hc:SideMenuItem Header="First Use Setup" Command="{Binding SelectCmd}" CommandParameter="{Binding Header, RelativeSource={RelativeSource Self}}"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:Codicons Height="13" Kind="DebugStart" Width="13"/>
                             </hc:SideMenuItem.Icon>

@@ -7,9 +7,17 @@ namespace WolvenKit.Views.Wizards
     {
         public ProjectWizardView()
         {
+            SPTV = new SelectProjectTypeView();
+            PCV = new ProjectConfigurationView();
+            FSV = new FinalizeSetupView();
+
             InitializeComponent();
             ShowPage();
         }
+
+        private SelectProjectTypeView SPTV;
+        private ProjectConfigurationView PCV;
+        private FinalizeSetupView FSV;
 
         private void ShowPage()
         {
@@ -17,15 +25,15 @@ namespace WolvenKit.Views.Wizards
             {
                 case 0:
                     PageGrid.Children.Clear();
-                    PageGrid.Children.Add(new SelectProjectTypeView());
+                    PageGrid.Children.Add(SPTV);
                     break;
                 case 1:
                     PageGrid.Children.Clear();
-                    PageGrid.Children.Add(new ProjectConfigurationView());
+                    PageGrid.Children.Add(PCV);
                     break;
                 case 2:
                     PageGrid.Children.Clear();
-                    PageGrid.Children.Add(new FinalizeSetupView());
+                    PageGrid.Children.Add(FSV);
                     break;
             }
         }
