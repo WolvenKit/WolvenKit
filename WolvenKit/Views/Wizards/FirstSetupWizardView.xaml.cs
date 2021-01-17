@@ -7,9 +7,23 @@ namespace WolvenKit.Views.Wizards
     {
         public FirstSetupWizardView()
         {
+
+            CUV = new CreateUserView();
+            STV = new SelectThemeView();
+            LGDV = new LocateGameDateView();
+            FSV = new FinalizeSetupView();
+            SIPV = new SetInitialPreferencesView();
+
             InitializeComponent();
             ShowPage();
         }
+
+
+        private CreateUserView CUV ;
+        private SelectThemeView STV ;
+        private LocateGameDateView LGDV ;
+        private FinalizeSetupView FSV ;
+        private SetInitialPreferencesView SIPV;
 
         private void ShowPage()
         {
@@ -17,13 +31,24 @@ namespace WolvenKit.Views.Wizards
             {
                 case 0:
                     PageGrid.Children.Clear();
-                    PageGrid.Children.Add(new CreateUserView());
+                    PageGrid.Children.Add(CUV);
                     break;
                 case 1:
                     PageGrid.Children.Clear();
-                    PageGrid.Children.Add(new SelectThemeView());
+                    PageGrid.Children.Add(STV);
                     break;
-      
+                case 2:
+                    PageGrid.Children.Clear();
+                    PageGrid.Children.Add(SIPV);
+                    break;
+                case 3:
+                    PageGrid.Children.Clear();
+                    PageGrid.Children.Add(LGDV);
+                    break;
+                case 4:
+                    PageGrid.Children.Clear();
+                    PageGrid.Children.Add(FSV);
+                    break;
             }
         }
 
