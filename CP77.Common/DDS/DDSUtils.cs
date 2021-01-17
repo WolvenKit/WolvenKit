@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -69,6 +69,7 @@ namespace WolvenKit.Common.Tools.DDS
         const uint PIXELFORMAT_SIZE = 32;
         // dwFlags
         const uint DDPF_ALPHAPIXELS = 0x00000001;
+        const uint DDPF_LUMINANCE = 0x00020000;
         const uint DDPF_ALPHA = 0x00000002;
         const uint DDPF_FOURCC = 0x00000004;
         const uint DDPF_RGB = 0x00000040;
@@ -181,6 +182,7 @@ namespace WolvenKit.Common.Tools.DDS
                             SetPixelmask(DDSPF_A8L8, ref ddspf); break;
                         case EFormat.R16_FLOAT:
                             ddspf.dwFourCC = 111; break;
+                        case EFormat.R8_UNORM:
                         case EFormat.R8_UINT:
                             SetPixelmask(DDSPF_L8, ref ddspf); break;
                         case EFormat.A8_UNORM:
@@ -211,17 +213,22 @@ namespace WolvenKit.Common.Tools.DDS
                     ddspf.dwFlags |= DDPF_ALPHA;*/ //old
                 if (ddspf.dwFourCC != 0)
                     ddspf.dwFlags |= DDPF_FOURCC;
-                if (ddspf.dwRGBBitCount != 0 && (ddspf.dwRBitMask != 0 || ddspf.dwGBitMask != 0 || ddspf.dwBBitMask != 0))
+                if (ddspf.dwRGBBitCount != 0 && ddspf.dwRBitMask != 0 && ddspf.dwGBitMask != 0 && ddspf.dwBBitMask != 0)
                     ddspf.dwFlags |= DDPF_RGB;
-                
+                if (ddspf.dwRBitMask != 0 && ddspf.dwGBitMask == 0 && ddspf.dwBBitMask == 0 && ddspf.dwABitMask == 0)
+                    ddspf.dwFlags |= DDPF_LUMINANCE;
 
                 header.ddspf = ddspf;
             }
 
             // dwPitchOrLinearSize
             uint p = 0;
+            var bpp = ddspf.dwRGBBitCount;
             switch (format)
             {
+                case EFormat.R8_UNORM:
+                    header.dwPitchOrLinearSize = (width * bpp + 7) / 8;
+                    break;
                 case EFormat.R32G32B32A32_FLOAT:
                 case EFormat.R16G16B16A16_FLOAT:
                 case EFormat.R10G10B10A2_UNORM:
@@ -231,7 +238,6 @@ namespace WolvenKit.Common.Tools.DDS
                 case EFormat.R16_FLOAT:
                 case EFormat.A8_UNORM:
                 case EFormat.R8G8B8A8_UNORM:
-                    var bpp = ddspf.dwRGBBitCount;
                     header.dwPitchOrLinearSize = (width * bpp + 7) / 8;
                     header.dwFlags |= DDSD_PITCH;
                     break;
@@ -292,6 +298,7 @@ namespace WolvenKit.Common.Tools.DDS
                     case EFormat.R8G8_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM; break;
                     case EFormat.R16_FLOAT: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT; break;
                     case EFormat.R8_UINT: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8_UINT; break;
+                    case EFormat.R8_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8_UNORM; break;
                     case EFormat.A8_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_A8_UNORM; break;
                     case EFormat.BC1_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM; break;
                     case EFormat.BC2_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM; break;

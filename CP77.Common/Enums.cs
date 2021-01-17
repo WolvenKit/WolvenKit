@@ -16,6 +16,7 @@
         xbm,
         csv,
         json,
+        mlmask
     }
 
     /// <summary>

@@ -52,7 +52,7 @@ namespace WolvenKit.Common.Tools.DDS
         //R16_UINT,
         //R16_SNORM,
         //R16_SINT,
-        //R8_UNORM,
+        R8_UNORM,
         R8_UINT,
         //R8_SNORM,
         //R8_SINT,

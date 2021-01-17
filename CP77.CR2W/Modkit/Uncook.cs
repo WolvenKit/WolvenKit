@@ -13,6 +13,7 @@ using CP77.Common.Tools.FNV1A;
 using CP77.CR2W.Archive;
 using CP77.CR2W.Extensions;
 using CP77.CR2W.Types;
+using CP77.CR2W.Uncooker;
 using WolvenKit.Common;
 using WolvenKit.Common.Tools.DDS;
 
@@ -201,6 +202,31 @@ namespace CP77.CR2W
                     case ECookedFileFormat.json:
                     {
 
+                        break;
+                    }
+                    case ECookedFileFormat.mlmask:
+                    {
+                        br.BaseStream.Seek(0, SeekOrigin.Begin);
+                        EFileReadErrorCodes result = EFileReadErrorCodes.NoCr2w;
+                        try
+                        {
+                            result = cr2w.Read(br);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.LogString(e.Message, Logtype.Error);
+                            return -1;
+                        }
+                        try
+                        {
+                            if (!Mlmask.UncookMultilayer(cr2w, buffers, outfile, uncookext))
+                                return -1;
+                            uncooksuccess = true;
+                        }
+                        catch
+                        {
+                            uncooksuccess = false;
+                        }
                         break;
                     }
                     default:
