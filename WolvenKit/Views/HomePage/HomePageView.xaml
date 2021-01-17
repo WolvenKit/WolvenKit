@@ -6,7 +6,7 @@
     xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:Mid="clr-namespace:WolvenKit.Views.HomePage"
+    xmlns:Mid="clr-namespace:WolvenKit.Views.HomePage" xmlns:HPPage="clr-namespace:WolvenKit.Views.HomePage.Pages"
     mc:Ignorable="av"
     x:Class="WolvenKit.Views.HomePage.HomePageView"
                    >
@@ -252,8 +252,8 @@
         </Grid>
         
         
-        <Grid x:Name="PageViewGrid" Margin="200,0,0,0">
-
+        <Grid  x:Name="PageViewGrid" Margin="200,0,0,0" >
+            <HPPage:WikiPageView></HPPage:WikiPageView>
         </Grid>
     </Grid>
 
