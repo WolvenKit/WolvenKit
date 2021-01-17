@@ -60,7 +60,8 @@ namespace CP77Tools.Tasks
     {
         private static byte[] MAGIC = {0x43, 0x52, 0x32, 0x57};
 
-        public static void DumpTask(string[] path, bool imports, bool missinghashes, bool texinfo, bool classinfo)
+        public static void DumpTask(string[] path, bool imports, bool missinghashes, 
+            bool texinfo, bool classinfo, bool dump, bool list)
         {
             if (path == null || path.Length < 1)
             {
@@ -70,12 +71,13 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                DumpTaskInner(file, imports, missinghashes, texinfo, classinfo);
+                DumpTaskInner(file, imports, missinghashes, texinfo, classinfo, dump, list);
             });
 
         }
 
-        public static int DumpTaskInner(string path, bool imports, bool missinghashes, bool texinfo, bool classinfo)
+        public static int DumpTaskInner(string path, bool imports, bool missinghashes, 
+            bool texinfo, bool classinfo, bool dump, bool list)
         {
             #region checks
 
@@ -333,6 +335,28 @@ namespace CP77Tools.Tasks
                         logger.LogString($"Finished. Dump file written to {inputFileInfo.FullName}.json", Logtype.Success);
                     }
                 }
+                
+                // TODO: add this here
+                if (dump)
+                {
+                    File.WriteAllText($"{ar.Filepath}.json",
+                        JsonConvert.SerializeObject(ar, Formatting.Indented, new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                            PreserveReferencesHandling = PreserveReferencesHandling.None,
+                            TypeNameHandling = TypeNameHandling.None
+                        }));
+
+                    logger.LogString($"Finished dumping {ar.Filepath}.", Logtype.Success);
+                }
+
+                if (list)
+                {
+                    foreach (var entry in ar.Files)
+                    {
+                        logger.LogString(entry.Value.FileName, Logtype.Normal);
+                    }
+                }
             }
 
             if (classinfo)
@@ -450,3 +474,4 @@ namespace CP77Tools.Tasks
         }
     }
 }
+

@@ -76,6 +76,7 @@ namespace CP77.CR2W
         /// <summary>
         /// Extracts all Files to the specified directory.
         /// </summary>
+        /// <param name="ar"></param>
         /// <param name="outDir"></param>
         /// <param name="pattern"></param>
         /// <param name="regex"></param>
