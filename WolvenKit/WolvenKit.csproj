@@ -294,9 +294,5 @@
   <ItemGroup>
     <Folder Include="Resources\Styles\CustomBase\" />
     <Folder Include="Resources\Styles\Custom\" />
-    <Folder Include="ViewModels\Wizards\WizardPages\ThemeWizard\" />
-    <Folder Include="ViewModels\Wizards\WizardPages\UserWizard\" />
-    <Folder Include="Views\Wizards\WizardPages\ThemeWizard\" />
-    <Folder Include="Views\Wizards\WizardPages\UserWizard\" />
   </ItemGroup>
 </Project>
