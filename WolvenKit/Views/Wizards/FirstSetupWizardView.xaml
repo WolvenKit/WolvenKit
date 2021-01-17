@@ -46,15 +46,10 @@
 
             <Button Margin="3" Width="50" Height="30" VerticalAlignment="Bottom" IsEnabled="True" hc:IconElement.Geometry="{StaticResource LeftGeometry}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Left" Click="Button_Click_1"/>
             <hc:StepBar x:Name="StepMain" Margin="0,0,0,3" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Dock="Bottom"  >
-                <hc:StepBarItem Content="Create User (Optional)" >
-                 
-                 
-                </hc:StepBarItem>
+                <hc:StepBarItem Content="Create User (Optional)" />
                 <hc:StepBarItem Content="Select Theme"/>
-
                 <hc:StepBarItem Content="Set Initial Preferences"/>
-                <hc:StepBarItem Content="Locate Game Installations"/>
-
+                <hc:StepBarItem Content="Locate Game Data"/>
                 <hc:StepBarItem Content="Finalize Setup"/>
 
             </hc:StepBar>
