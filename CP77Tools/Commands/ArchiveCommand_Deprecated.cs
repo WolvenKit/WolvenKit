@@ -5,12 +5,12 @@ using WolvenKit.Common.Tools.DDS;
 
 namespace CP77Tools.Commands
 {
-    public class ArchiveCommand : Command
+    public class ArchiveCommand_Deprecated : Command
     {
         private static string Name = "archive";
         private static string Description = "DEPRECATED - use 'unbundle' to extract files.";
         
-        public ArchiveCommand() : base(Name, Description)
+        public ArchiveCommand_Deprecated() : base(Name, Description)
         {
             AddOption(new Option<string[]>(new[] {"--path", "-p"}, "Input path to .archive."));
             AddOption(new Option<string>(new[] {"--outpath", "-o"}, "Output directory to extract files to."));
