@@ -25,7 +25,7 @@ namespace CP77.CR2W
     public static partial class ModTools
     {
         /// <summary>
-        /// Uncooks a single file by hash.
+        /// Uncooks a single file by hash. This will both extract and uncook the redengine file
         /// </summary>
         /// <param name="ar"></param>
         /// <param name="hash"></param>
@@ -53,7 +53,15 @@ namespace CP77.CR2W
 
             var uncooksuccess = false;
             var (file, buffers) = ar.GetFileData(hash, true);
-            
+
+            #region unbundle
+
+            File.WriteAllBytes(outfile.FullName, file);            
+
+            #endregion
+
+            #region uncook
+
             var cr2w = new CR2WFile();
             using var ms = new MemoryStream(file);
             using var br = new BinaryReader(ms);
@@ -244,6 +252,8 @@ namespace CP77.CR2W
                 }
                 uncooksuccess = true;
             }
+
+            #endregion
 
             return uncooksuccess ? 1 : 0;
         }
