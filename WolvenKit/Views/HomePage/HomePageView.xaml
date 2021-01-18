@@ -44,7 +44,7 @@
 
 
             <hc:TransitioningContentControl Margin="0,60,0,0">
-                <hc:SideMenu SideBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" BorderThickness="0" Width="200" SubSideBrush="{DynamicResource MahApps.Brushes.Accent}">
+                <hc:SideMenu x:Name="LeftSideMenu" SideBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" BorderThickness="0" Width="200" SubSideBrush="{DynamicResource MahApps.Brushes.Accent}">
                     <hc:Interaction.Triggers>
                         <hc:EventTrigger EventName="SelectionChanged">
                             <hc:EventToCommand Command="{Binding SwitchItemCmd}" PassEventArgsToCommand="True" />
@@ -55,13 +55,19 @@
                         <hc:SideMenuItem.Icon>
                             <iconPacks:Codicons Height="25" Kind="Tools" Width="25"/>
                         </hc:SideMenuItem.Icon>
+                        
+                        <hc:SideMenuItem Header="Welcome" Command="{Binding SelectCmd}" CommandParameter="{Binding Header, RelativeSource={RelativeSource Self}}"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
+                            <hc:SideMenuItem.Icon>
+                                <iconPacks:Codicons Height="13" Kind="DebugStart" Width="13"/>
+                            </hc:SideMenuItem.Icon>
+                        </hc:SideMenuItem>
 
                         <hc:SideMenuItem Header="First Use Setup" Command="{Binding SelectCmd}" CommandParameter="{Binding Header, RelativeSource={RelativeSource Self}}"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:Codicons Height="13" Kind="DebugStart" Width="13"/>
                             </hc:SideMenuItem.Icon>
                         </hc:SideMenuItem>
-
+                   
 
 
                     </hc:SideMenuItem>
@@ -86,12 +92,7 @@
                     <hc:SideMenuItem Header="Settings"  Margin="0,0,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
                         <hc:SideMenuItem.Icon>
                             <iconPacks:Codicons Height="25" Kind="Settings" Width="25" />
-                        </hc:SideMenuItem.Icon>
-                        <hc:SideMenuItem Header="Application" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
-                            <hc:SideMenuItem.Icon>
-                                <iconPacks:Codicons Height="13" Kind="Project" Width="13"/>
-                            </hc:SideMenuItem.Icon>
-                        </hc:SideMenuItem>
+                        </hc:SideMenuItem.Icon>       
 
                     </hc:SideMenuItem>
 
@@ -253,7 +254,7 @@
         
         
         <Grid  x:Name="PageViewGrid" Margin="200,0,0,0" >
-            <HPPage:WikiPageView></HPPage:WikiPageView>
+            <HPPage:RecentProjectView></HPPage:RecentProjectView>
         </Grid>
     </Grid>
 

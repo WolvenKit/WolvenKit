@@ -61,7 +61,7 @@ namespace WolvenKit.Views.HomePage
                 var general = await GhubClient.Repository.Get("WolvenKit", "Wolven-Kit");
                 var g_stars = general.StargazersCount;
                 var g_forks = general.ForksCount;
-                var g_watchers = general.SubscribersCount;
+                var g_watchers = general.SubscribersCount;  // Ignore that error its the only way to get the watchers atm. (Shit documentation online tbh)
 
 
                 WatchShield.SetCurrentValue(Shield.StatusProperty, g_watchers.ToString());
