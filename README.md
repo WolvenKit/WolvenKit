@@ -5,7 +5,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/wolvenkit/cp77tools/badge)](https://www.codefactor.io/repository/github/wolvenkit/cp77tools)
 ![GitHub all releases](https://img.shields.io/github/downloads/rfuzzo/cp77tools/total)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/rfuzzo/cp77tools)](https://github.com/WolvenKit/CP77Tools/releases)
-[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/rfuzzo/cp77tools?include_prereleases)](https://github.com/WolvenKit/CP77Tools/releases/tag/nightly-build)
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/rfuzzo/cp77tools?include_prereleases)](https://github.com/WolvenKit/CP77Tools/releases)
 
 Modding tools for the CDPR Cyberpunk 2077 video game.
 
@@ -14,7 +14,7 @@ Modding tools for the CDPR Cyberpunk 2077 video game.
 
 
 ## Latest Beta Release
-[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/rfuzzo/cp77tools?include_prereleases)](https://github.com/WolvenKit/CP77Tools/releases/tag/nightly-build) https://github.com/WolvenKit/CP77Tools/releases/tag/nightly-build
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/rfuzzo/cp77tools?include_prereleases)](https://github.com/WolvenKit/CP77Tools/releases) https://github.com/WolvenKit/CP77Tools/releases
 
 -------------
 
