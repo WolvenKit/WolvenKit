@@ -143,10 +143,11 @@ namespace CP77.CR2W
                                             true));
                                     ddsStream.Write(b);
                                     
-                                    if (flip && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                                        TexconvWrapper.VFlip(outfile.Directory.FullName, newpath, texformat);
+                                    
                                 }
 
+                                if (flip && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                                    TexconvWrapper.VFlip(outfile.Directory.FullName, newpath, texformat);
                                 // success
                                 uncooksuccess = true;
                             }
