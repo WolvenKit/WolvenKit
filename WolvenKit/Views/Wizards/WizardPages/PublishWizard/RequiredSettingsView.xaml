@@ -1,16 +1,41 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.Wizards.WizardPages.PublishWizard.RequiredSettingsView"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:catel="http://schemas.catelproject.com">
+                  xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        
-        <TextBlock Grid.Row="0" Text="{Binding Title}" />
-        <TextBlock Grid.Row="1" Text="Here goes your real content" />
+    <Grid HorizontalAlignment="Stretch" Grid.Row="3" >
+        <Grid Margin="5,5,5,5" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Stretch">
+            <Grid Grid.Row="1" HorizontalAlignment="Stretch">
+                <StackPanel Margin="0,10,0,0" Orientation="Vertical" VerticalAlignment="Top">
+                    <TextBlock Text="Required Settings"  FontSize="14" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,10"></TextBlock>
+                    <Grid Margin="22,0,0,0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" Text="Mod Logo"></TextBlock>
+                                <hc:ImageSelector Margin="85,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
+
+                            </StackPanel>
+                            <TextBox hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Mod Name" Style="{StaticResource TextBoxExtend}" Margin="0,32,0,0" Text="test" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" SelectionBrush="{DynamicResource MahApps.Brushes.Accent}" HorizontalAlignment="Stretch"/>
+                            <TextBox hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Mod Version" Style="{StaticResource TextBoxExtend}" Margin="0,32,0,0" Text="test" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" SelectionBrush="{DynamicResource MahApps.Brushes.Accent}" HorizontalAlignment="Stretch"/>
+                            <TextBox hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Mod Author" Style="{StaticResource TextBoxExtend}" Margin="0,32,0,0" Text="test" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" SelectionBrush="{DynamicResource MahApps.Brushes.Accent}" HorizontalAlignment="Stretch"/>
+
+
+                            <Grid >
+                                <RichTextBox Margin="140,32,0,0" HorizontalAlignment="Stretch" Height="100"></RichTextBox>
+
+                                <TextBlock Text="Description" Margin="2,32,0,0" VerticalAlignment="Center" />
+
+                            </Grid>
+
+
+
+                        </StackPanel>
+
+
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Grid>
     </Grid>
-    
+
 </catel:UserControl>

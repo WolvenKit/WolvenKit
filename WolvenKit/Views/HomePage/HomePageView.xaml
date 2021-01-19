@@ -111,7 +111,7 @@
                                 <iconPacks:PackIconBoxIcons Height="13" Kind="LogosGithub" Width="16" HorizontalAlignment="Center"/>
                             </hc:SideMenuItem.Icon>
                         </hc:SideMenuItem>
-                        <hc:SideMenuItem Header="SDK"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
+                        <hc:SideMenuItem Visibility="Collapsed" Header="SDK"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:PackIconBoxIcons Height="13" Kind="RegularPackage" Width="13" HorizontalAlignment="Center"/>
                             </hc:SideMenuItem.Icon>
