@@ -126,7 +126,7 @@ namespace CP77.CR2W
 
             void GetBuffers()
             {
-                var buffersList = allFiles.Where(_ => _.Extension == ".buffer");
+                var buffersList = allFiles.Where(_ => _.Extension.ToLower() == ".buffer");
                 foreach (var fileInfo in buffersList)
                 {
                     // buffer path e.g. stand__rh_hold_tray__serve_milkshakes__01.scenerid.11.buffer
@@ -147,7 +147,7 @@ namespace CP77.CR2W
                 if (!import && !unsaferaw)
                     return;
                 
-                var texturesList = allFiles.Where(_ => _.Extension == ".dds");
+                var texturesList = allFiles.Where(_ => _.Extension.ToLower() == ".dds");
                 foreach (var fileInfo in texturesList)
                 {
                     // dds path e.g. stand__rh_hold_tray__serve_milkshakes__01.dds
@@ -245,7 +245,7 @@ namespace CP77.CR2W
             {
                 using var fs = new FileStream(buffer.FullName, FileMode.Open, FileAccess.Read);
                 using var br = new BinaryReader(fs);
-                var bext = buffer.Extension;
+                var bext = buffer.Extension.ToLower();
                 
                 // if dds file, delete the 
                 if (unsaferaw && bext != ".buffer")

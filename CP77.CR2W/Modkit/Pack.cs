@@ -59,7 +59,7 @@ namespace CP77.CR2W
             };
             var allfiles = infolder.GetFiles("*", SearchOption.AllDirectories);
             var parentfiles = allfiles
-                .Where(_ => exludedExtensions.All(x => _.Extension != x));
+                .Where(_ => exludedExtensions.All(x => _.Extension.ToLower() != x));
             var fileInfos = parentfiles
                 .OrderBy(_ => FNV1A64HashAlgorithm.HashString(GetRelpath(_)))
                 .ToList();
@@ -75,7 +75,7 @@ namespace CP77.CR2W
             {
                 var relpath = GetRelpath(fileInfo);
                 var hash = FNV1A64HashAlgorithm.HashString(relpath);
-                if (fileInfo.Extension == ".bin")
+                if (fileInfo.Extension.ToLower() == ".bin")
                     hash = ulong.Parse(Path.GetFileNameWithoutExtension(relpath));
 
                 using var fileStream = new FileStream(fileInfo.FullName, FileMode.Open);
