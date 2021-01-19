@@ -58,7 +58,7 @@
                         
                         <hc:SideMenuItem Header="Welcome" Command="{Binding SelectCmd}" CommandParameter="{Binding Header, RelativeSource={RelativeSource Self}}"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
                             <hc:SideMenuItem.Icon>
-                                <iconPacks:Codicons Height="13" Kind="DebugStart" Width="13"/>
+                                <iconPacks:Codicons Height="15" Kind="Pinned" Width="15"/>
                             </hc:SideMenuItem.Icon>
                         </hc:SideMenuItem>
 
@@ -100,19 +100,20 @@
                         <hc:SideMenuItem.Icon>
                             <iconPacks:Codicons Height="25" Kind="Info" Width="25" />
                         </hc:SideMenuItem.Icon>
-                        <hc:SideMenuItem Header="Github"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
-                            <hc:SideMenuItem.Icon>
-                                <iconPacks:PackIconBoxIcons Height="13" Kind="LogosGithub" Width="16" HorizontalAlignment="Center"/>
-                            </hc:SideMenuItem.Icon>
-                        </hc:SideMenuItem>
+             
                         <hc:SideMenuItem Header="Wiki" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:PackIconBoxIcons Height="13" Kind="LogosWikipedia" Width="13" HorizontalAlignment="Center"/>
                             </hc:SideMenuItem.Icon>
                         </hc:SideMenuItem>
+                        <hc:SideMenuItem Header="Github"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
+                            <hc:SideMenuItem.Icon>
+                                <iconPacks:PackIconBoxIcons Height="13" Kind="LogosGithub" Width="16" HorizontalAlignment="Center"/>
+                            </hc:SideMenuItem.Icon>
+                        </hc:SideMenuItem>
                         <hc:SideMenuItem Header="SDK"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
                             <hc:SideMenuItem.Icon>
-                                <iconPacks:PackIconBoxIcons Height="13" Kind="RegularFolder" Width="13" HorizontalAlignment="Center"/>
+                                <iconPacks:PackIconBoxIcons Height="13" Kind="RegularPackage" Width="13" HorizontalAlignment="Center"/>
                             </hc:SideMenuItem.Icon>
                         </hc:SideMenuItem>
                         <hc:SideMenuItem Header="About"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">

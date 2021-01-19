@@ -91,53 +91,69 @@
 
 
                         <fluent:Button Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                                                   Height="120"
-
+                                        Height="60"
                                         Icon="{iconPacks:Codicons Kind=Home}"
                                         FontSize="18" Click="ShowStartScreen_OnClick" OverridesDefaultStyle="True">
                             Home
                         </fluent:Button>
-
-
-
-
-                        <fluent:BackstageTabItem 
-                            Header="Files"
-                            Height="120"
-                                        Icon="{iconPacks:Codicons Kind=RootFolder}"
-                            
-                            Style="{StaticResource MyFLuentButtonStyle}"
-                        >
+                        <fluent:SeparatorTabItem Height="Auto" Margin="20,10,20,10"/>
+                        <fluent:BackstageTabItem    Header="Files"
+                                                    Height="60"
+                                                    Icon="{iconPacks:Codicons Kind=RootFolder}"                            
+                                                    Style="{StaticResource MyFLuentButtonStyle}" >
                             <views:OpenFileView />
                         </fluent:BackstageTabItem>
-
-                       
-
                         <fluent:Button  Header="Open"
-                                        Height="120"
+                                        Height="60"
                                         Icon="{iconPacks:Codicons Kind=FolderOpened}"
                                         Command="{catel:CommandManagerBinding Application.OpenProject}" 
-                                        FontSize="18"
-                        >
+                                        FontSize="18">
 
                         </fluent:Button>
-
+                        <fluent:SeparatorTabItem Height="Auto" Margin="20,10,20,10"/>
                         <fluent:Button Header="New"
-                                       Height="120"
+                                       Height="60"
                                         Icon="{iconPacks:Codicons Kind=NewFolder}"
                                        FontSize="18"
                                        Command="{catel:CommandManagerBinding Application.NewProject}" >
-
-
-
-
                         </fluent:Button>
+                        <fluent:Button Header="Save"
+                                       Height="60"
+                                        Icon="{iconPacks:Codicons Kind=NewFolder}"
+                                       FontSize="18"
+                                       Command="{catel:CommandManagerBinding Application.NewProject}" >
+                        </fluent:Button>
+                        <fluent:Button Header="Save As"
+                                       Height="60"
+                                        Icon="{iconPacks:Codicons Kind=NewFolder}"
+                                       FontSize="18"
+                                       Command="{catel:CommandManagerBinding Application.NewProject}" >
+                        </fluent:Button>
+                        <fluent:Button Header="Publish"
+                                       Height="60"
+                                        Icon="{iconPacks:Codicons Kind=NewFolder}"
+                                       FontSize="18"
+                                       Command="{catel:CommandManagerBinding Application.NewProject}" >
+                        </fluent:Button>
+                        <fluent:SeparatorTabItem Height="Auto" Margin="20,10,20,10"/>
+
+
+
+
+
+
+
+
+
 
                         <fluent:SeparatorTabItem Height="Auto" Margin="20,200,20,0"/>
-
                         <fluent:Button Header="Options" 
                                        
                                         Icon="{iconPacks:Codicons Kind=Settings}"
+                                       Command="{catel:CommandManagerBinding Application.Options}" />
+                        <fluent:Button Header="Bug Report" 
+                                       
+                                        Icon="{iconPacks:Codicons Kind=Bug}"
                                        Command="{catel:CommandManagerBinding Application.Options}" />
 
                         <fluent:Button Header="About" 
