@@ -31,7 +31,7 @@ namespace CP77.CR2W.Uncooker
             return (l + r - 1) / r;
         }
 
-        public static bool UncookMultilayer(CR2WFile cr2w, List<byte[]> buffers, FileInfo outfile, EUncookExtension uncookext)
+        public static bool Uncook(CR2WFile cr2w, List<byte[]> buffers, FileInfo outfile, EUncookExtension uncookext)
         {
             //We need 2 buffers one for atlas one for tile data
             if (buffers.Count < 2)
