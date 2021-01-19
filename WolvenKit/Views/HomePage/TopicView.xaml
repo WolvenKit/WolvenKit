@@ -15,7 +15,7 @@
 
     </catel:UserControl.Resources>
     <Grid x:Name="TopicViewer" MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Margin="35,35,35,35">
-        <pag:WelcomePageView/>
+        <wiz:ThemeWizardView/>
 
 
     </Grid>
