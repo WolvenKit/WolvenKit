@@ -1,11 +1,12 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.HomePage.Pages.GithubPageView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol">
+                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf">
 
     <Grid Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
         <Grid Margin="3,75,3,0">
-            
+            <wv2:WebView2 Source="https://github.com/WolvenKit/Wolven-kit"/>
+
         </Grid>
         <Grid HorizontalAlignment="Right" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"></Grid>
 
