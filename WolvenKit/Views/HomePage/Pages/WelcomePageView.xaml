@@ -1,0 +1,70 @@
+﻿<catel:UserControl x:Class="WolvenKit.Views.HomePage.Pages.WelcomePageView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
+
+    <Grid MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,2,5">
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="90*"/>
+            <RowDefinition Height="10*"/>
+
+        </Grid.RowDefinitions>
+
+
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="5,5,5,4">
+            <iconPacks:PackIconCodicons  Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+
+            <StackPanel  VerticalAlignment="Bottom" Orientation="Vertical" HorizontalAlignment="Stretch">
+
+                <TextBlock Text="Welcome to WolvenKit!"  FontSize="20" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,0"></TextBlock>
+                <hc:Divider  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,10,0,0"></hc:Divider>
+            </StackPanel>
+        </StackPanel>
+
+
+        <Grid x:Name="PageGrid" Grid.Row="1">
+            <StackPanel Margin="22">
+
+                <TextBlock TextWrapping="Wrap">
+                    <Run  Text="If this is your first time using Wolvenkit, It is recommended to get yourself started by using our First Use Setup."> </Run>
+                    <LineBreak/> <LineBreak/>
+                    <Run Text="You can find the First Use Setup in the left SideMenu by clicking Get Started."/> 
+                    <LineBreak/>
+                    <Run Text="After setting yourself up you can start creating your own mod by creating a new project!"/>                    
+                    <LineBreak/><LineBreak/><LineBreak/>     
+                    <Run Text="Have fun modding!,"/>
+                    <LineBreak/><LineBreak/><LineBreak/>                   
+                    <Run Text="The WolvenKit Team."/>
+
+                </TextBlock>
+         
+
+            </StackPanel>
+            <hc:FlipClock  Margin="0,0,30,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" RenderTransformOrigin="0,0.5">
+                <hc:FlipClock.Effect>
+                    <hc:GrayScaleEffect></hc:GrayScaleEffect>
+                </hc:FlipClock.Effect>
+                <hc:FlipClock.LayoutTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="0.2" ScaleY="0.2"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </hc:FlipClock.LayoutTransform>
+
+            </hc:FlipClock>
+        </Grid>
+
+
+
+
+
+        
+
+    </Grid>
+</catel:UserControl>

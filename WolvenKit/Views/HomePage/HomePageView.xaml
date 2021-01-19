@@ -255,7 +255,7 @@
         
         
         <Grid  x:Name="PageViewGrid" Margin="200,0,0,0" >
-            <HPPage:AboutPageView></HPPage:AboutPageView>
+            
         </Grid>
     </Grid>
 
