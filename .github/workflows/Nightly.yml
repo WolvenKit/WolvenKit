@@ -25,7 +25,7 @@ jobs:
       run: msbuild  WolvenKit.sln -p:Configuration=Release  -p:Platform=x64 -m
     - name: Zip Release
       run: |
-        Compress-Archive -Path $Env:GITHUB_WORKSPACE\\WolvenKitUI\\bin\\Release\\net5.0-windows\\ -DestinationPath $Env:GITHUB_WORKSPACE\\WolvenKit.zip
+        Compress-Archive -Path $Env:GITHUB_WORKSPACE\\WolvenKit\\bin\\Release\\net5.0-windows\\ -DestinationPath $Env:GITHUB_WORKSPACE\\WolvenKit.zip
     - name: Deploy Nightly
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
