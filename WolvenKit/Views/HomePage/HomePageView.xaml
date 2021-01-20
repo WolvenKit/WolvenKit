@@ -125,8 +125,14 @@
 
 
                 </hc:SideMenu>
+                
             </hc:TransitioningContentControl>
+            <hc:Tag Margin="0,0,0,15" VerticalAlignment="Bottom" ShowCloseButton="False" Content="USERNAME">
+                <hc:Tag.Header>
+                    <iconPacks:PackIconCodicons Kind="Account"></iconPacks:PackIconCodicons>
 
+                </hc:Tag.Header>
+            </hc:Tag>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Height="54">
 
 
@@ -255,7 +261,6 @@
         
         
         <Grid  x:Name="PageViewGrid" Margin="200,0,0,0" >
-           
         </Grid>
     </Grid>
 

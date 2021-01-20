@@ -72,6 +72,11 @@ namespace WolvenKit
             //-- Category : ProjectView
             viewModelLocator.Register(typeof(Views.MainView), typeof(ViewModels.WorkSpaceViewModel));
 
+            //-- Category : AssetBrowser
+            viewModelLocator.Register(typeof(Views.AssetBrowser.AssetBrowserView), typeof(ViewModels.AssetBrowser.AssetBrowserViewModel));
+
+
+
 
 
             // ---- HeadCategory : FluentBackstage
@@ -88,7 +93,6 @@ namespace WolvenKit
             viewModelLocator.Register(typeof(Views.HomePage.Pages.SettingsPageView), typeof(ViewModels.HomePage.Pages.SettingsPageViewModel));
             viewModelLocator.Register(typeof(Views.HomePage.Pages.WikiPageView), typeof(ViewModels.HomePage.Pages.WikiPageViewModel));
             viewModelLocator.Register(typeof(Views.HomePage.Pages.WelcomePageView), typeof(ViewModels.HomePage.Pages.WelcomePageViewModel));
-
 
 
             // ---- HeadCategory : Wizards

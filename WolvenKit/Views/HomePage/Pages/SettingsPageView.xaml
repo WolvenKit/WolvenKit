@@ -13,7 +13,7 @@
                     <hc:TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconCodicons Kind="VM"></iconPacks:PackIconCodicons>
-                            <TextBlock Text="Application" Margin="10,0,0,0"></TextBlock>
+                            <TextBlock Text="General" Margin="10,0,0,0"></TextBlock>
                         </StackPanel>
                     </hc:TabItem.Header>
                     <hc:SimplePanel Background="{DynamicResource RegionBrush}"/>
@@ -24,14 +24,47 @@
                     <hc:TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconCodicons Kind="Code"></iconPacks:PackIconCodicons>
-                            <TextBlock Text="Editor" Margin="10,0,0,0"></TextBlock>
+                            <TextBlock Text="Project" Margin="10,0,0,0"></TextBlock>
                         </StackPanel>
                     </hc:TabItem.Header>
                     <hc:SimplePanel Background="{DynamicResource RegionBrush}">
 
                     </hc:SimplePanel>
                 </hc:TabItem>
+                <hc:TabItem  IsSelected="True" >
+                    <hc:TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconCodicons Kind="Code"></iconPacks:PackIconCodicons>
+                            <TextBlock Text="Tools" Margin="10,0,0,0"></TextBlock>
+                        </StackPanel>
+                    </hc:TabItem.Header>
+                    <hc:SimplePanel Background="{DynamicResource RegionBrush}">
 
+                    </hc:SimplePanel>
+                </hc:TabItem>
+                <hc:TabItem  IsSelected="True" >
+                    <hc:TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconCodicons Kind="Code"></iconPacks:PackIconCodicons>
+                            <TextBlock Text="Cyberpunk 2077" Margin="10,0,0,0"></TextBlock>
+                        </StackPanel>
+                    </hc:TabItem.Header>
+                    <hc:SimplePanel Background="{DynamicResource RegionBrush}">
+
+                    </hc:SimplePanel>
+                </hc:TabItem>
+                <hc:TabItem  IsSelected="True" >
+                    <hc:TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconCodicons Kind="Code"></iconPacks:PackIconCodicons>
+                            <TextBlock Text="The Witcher 3" Margin="10,0,0,0"></TextBlock>
+                        </StackPanel>
+                    </hc:TabItem.Header>
+                    <hc:SimplePanel Background="{DynamicResource RegionBrush}">
+
+                    </hc:SimplePanel>
+                </hc:TabItem>
+               
             </hc:TabControl>
         </Grid>
         <Grid HorizontalAlignment="Right" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"></Grid>

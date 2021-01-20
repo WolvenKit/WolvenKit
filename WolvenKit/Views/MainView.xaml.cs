@@ -14,7 +14,7 @@ namespace WolvenKit.Views
 	using ViewModels;
 	using Layout.MLib;
 
-	public partial class MainView
+    public partial class MainView
     {
         #region fields
 
@@ -206,6 +206,8 @@ namespace WolvenKit.Views
 				wspace.CloseAllDocuments();
 
 			App myApp = (App)Application.Current;
+
+
 
 			LayoutLoaderResult LoaderResult = await this.LayoutLoaded.GetLayoutString(OnLayoutLoaded_Event);
 

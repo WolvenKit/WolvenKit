@@ -9,7 +9,7 @@ namespace WolvenKit.Services
         public AboutInfo GetAboutInfo()
         {
             var aboutInfo = new AboutInfo(new Uri("pack://application:,,,/Resources/Images/CompanyLogo.png", UriKind.RelativeOrAbsolute),
-                uriInfo: new UriInfo("https://www.catelproject.com", "Product website"));
+                uriInfo: new UriInfo("https://github.com/WolvenKit/Wolven-kit", "Github Page"));
 
             return aboutInfo;
         }

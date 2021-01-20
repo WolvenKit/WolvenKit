@@ -6,6 +6,7 @@ using Orchestra.Services;
 using System.Windows;
 using Catel;
 using Catel.Data;
+using WolvenKit.Views.AssetBrowser;
 
 namespace WolvenKit.Views
 {
@@ -48,8 +49,11 @@ namespace WolvenKit.Views
         }
 
         private void ShowStartScreen_OnClick(object sender, RoutedEventArgs e)
-        {          
-                this.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
+        {
+            
+            AssetBrowserView assetBrowser = new AssetBrowserView();
+            assetBrowser.Show(); // For Testing purposes
+            this.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
                 this.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
         }
     }
