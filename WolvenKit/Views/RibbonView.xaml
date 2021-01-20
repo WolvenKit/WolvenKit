@@ -9,7 +9,9 @@
                    xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
                    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
                    xmlns:views="clr-namespace:WolvenKit.Views"
-                   xmlns:orctheming="http://schemas.wildgums.com/orc/theming">
+                       xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+
+                   xmlns:orctheming="http://schemas.wildgums.com/orc/theming" xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage">
 
     <!-- Resources -->
     <UserControl.Resources>
@@ -58,6 +60,18 @@
         </Grid.RowDefinitions>
 
         <fluent:Ribbon Grid.Row="0" x:Name="ribbon">
+
+            
+            <!-- StartScreen -->
+            <fluent:Ribbon.StartScreen>
+                <fluent:StartScreen x:Name="startScreen" IsOpen="True" >
+                    <HomeView:HomePageView />
+
+                    
+                </fluent:StartScreen>
+            </fluent:Ribbon.StartScreen>
+            
+            
             <!-- Backstage -->
             <fluent:Ribbon.Menu>
                 <fluent:Backstage x:Name="Backstage" >
@@ -76,49 +90,74 @@
                         </fluent:BackstageTabControl.Resources>
 
 
-
-
-                        <fluent:BackstageTabItem 
-                            Header="Home"
-                            Height="120"
-                            Icon="{orctheming:FontImage {x:Static local:FontAwesome.Home}, FontFamily=FontAwesome}"
-                            
-                            Style="{StaticResource MyFLuentButtonStyle}"
-                        >
+                        <fluent:Button Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                        Height="60"
+                                        Icon="{iconPacks:Codicons Kind=Home}"
+                                        FontSize="18" Click="ShowStartScreen_OnClick" OverridesDefaultStyle="True">
+                            Home
+                        </fluent:Button>
+                        <fluent:SeparatorTabItem Height="Auto" Margin="20,10,20,10"/>
+                        <fluent:BackstageTabItem    Header="Files"
+                                                    Height="60"
+                                                    Icon="{iconPacks:Codicons Kind=RootFolder}"                            
+                                                    Style="{StaticResource MyFLuentButtonStyle}" >
                             <views:OpenFileView />
                         </fluent:BackstageTabItem>
-
-                       
-
                         <fluent:Button  Header="Open"
-                                        Height="120"
-                                        Icon="{orctheming:FontImage {x:Static local:FontAwesome.FolderOpenO}, FontFamily=FontAwesome}"
+                                        Height="60"
+                                        Icon="{iconPacks:Codicons Kind=FolderOpened}"
                                         Command="{catel:CommandManagerBinding Application.OpenProject}" 
-                                        FontSize="18"
-                        >
+                                        FontSize="18">
 
                         </fluent:Button>
-
+                        <fluent:SeparatorTabItem Height="Auto" Margin="20,10,20,10"/>
                         <fluent:Button Header="New"
-                                       Height="120"
-                                       LargeIcon="{orctheming:FontImage {x:Static local:FontAwesome.File}, FontFamily=FontAwesome}"
+                                       Height="60"
+                                        Icon="{iconPacks:Codicons Kind=NewFolder}"
                                        FontSize="18"
                                        Command="{catel:CommandManagerBinding Application.NewProject}" >
-
-
-
-
                         </fluent:Button>
+                        <fluent:Button Header="Save"
+                                       Height="60"
+                                        Icon="{iconPacks:Codicons Kind=NewFolder}"
+                                       FontSize="18"
+                                       Command="{catel:CommandManagerBinding Application.NewProject}" >
+                        </fluent:Button>
+                        <fluent:Button Header="Save As"
+                                       Height="60"
+                                        Icon="{iconPacks:Codicons Kind=NewFolder}"
+                                       FontSize="18"
+                                       Command="{catel:CommandManagerBinding Application.NewProject}" >
+                        </fluent:Button>
+                        <fluent:Button Header="Publish"
+                                       Height="60"
+                                        Icon="{iconPacks:Codicons Kind=NewFolder}"
+                                       FontSize="18"
+                                       Command="{catel:CommandManagerBinding Application.NewProject}" >
+                        </fluent:Button>
+                        <fluent:SeparatorTabItem Height="Auto" Margin="20,10,20,10"/>
+
+
+
+
+
+
+
+
+
 
                         <fluent:SeparatorTabItem Height="Auto" Margin="20,200,20,0"/>
-
                         <fluent:Button Header="Options" 
                                        
-                                       Icon="{orctheming:FontImage {x:Static local:FontAwesome.Cog}, FontFamily=FontAwesome}"
+                                        Icon="{iconPacks:Codicons Kind=Settings}"
+                                       Command="{catel:CommandManagerBinding Application.Options}" />
+                        <fluent:Button Header="Bug Report" 
+                                       
+                                        Icon="{iconPacks:Codicons Kind=Bug}"
                                        Command="{catel:CommandManagerBinding Application.Options}" />
 
                         <fluent:Button Header="About" 
-                                       Icon="{orctheming:FontImage {x:Static local:FontAwesome.Info}, FontFamily=FontAwesome}"
+                                        Icon="{iconPacks:Codicons Kind=Info}"
                                        Command="{catel:CommandManagerBinding Application.About}" 
                                        VerticalAlignment="Bottom"
                                        VerticalContentAlignment="Bottom"
@@ -143,6 +182,10 @@
                                              />
             </fluent:Ribbon.ContextualGroups>
 
+            
+            
+        
+            
             <!-- Home Tab -->
             <fluent:RibbonTabItem Header="Home" >
                 <!-- File -->
@@ -187,6 +230,8 @@
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
 
+            
+
             <!-- View Tab -->
             <fluent:RibbonTabItem Header="View" >
                 <!-- Themes -->
@@ -230,7 +275,40 @@
 
             </fluent:RibbonTabItem>
 
+            
+            <!-- Tools Dropdown Tab -->
 
+                <fluent:RibbonTabItem Header="Tools">
+                <fluent:RibbonGroupBox Header="All">
+                    <fluent:ComboBox IsEditable="False"
+                                     InputWidth="120"
+                                     Header="Tools"
+                              >
+                        <fluent:ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </fluent:ComboBox.ItemsPanel>
+                        <ComboBoxItem Selected="ComboBoxItem_Selected" Content="Asset Browser"></ComboBoxItem>
+                    </fluent:ComboBox>
+
+
+                </fluent:RibbonGroupBox>
+
+                <!-- Quick Access Tools -->
+                <fluent:RibbonGroupBox Header="Quick Access">
+                    <fluent:Button Click="ComboBoxItem_Selected" Header="Asset Browser"/>
+
+
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+             
+
+
+
+
+
+            
             <!--Contextual  Tab-->
             <fluent:RibbonTabItem Header="Project Explorer" 
                               Group="{Binding Source={x:Reference ProjectExplorerContextualTabGroup}}" 

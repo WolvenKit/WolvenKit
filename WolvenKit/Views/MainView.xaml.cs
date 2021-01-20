@@ -14,7 +14,7 @@ namespace WolvenKit.Views
 	using ViewModels;
 	using Layout.MLib;
 
-	public partial class MainView
+    public partial class MainView
     {
         #region fields
 
@@ -64,8 +64,7 @@ namespace WolvenKit.Views
 
             await LayoutLoaded.LoadLayoutAsync();
 
-			HomePageView MainMenuTesting = new HomePageView(); // This is for Testing purposes!!!
-			this.Content = MainMenuTesting;
+		
 
             // Load and layout AvalonDock elements when MainWindow has loaded
             OnLoadLayoutAsync();
@@ -207,6 +206,8 @@ namespace WolvenKit.Views
 				wspace.CloseAllDocuments();
 
 			App myApp = (App)Application.Current;
+
+
 
 			LayoutLoaderResult LoaderResult = await this.LayoutLoaded.GetLayoutString(OnLayoutLoaded_Event);
 

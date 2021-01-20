@@ -29,7 +29,8 @@ namespace WolvenKit.Views
         public LogView()
         {
             InitializeComponent();
-
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) { return; } // Prevents Designer from trying to do the below.
+                                                                                              
             _loggerService = ServiceLocator.Default.ResolveType<ILoggerService>();
             _loggerService.OnStringLogged += LoggerServiceOnOnStringLogged;
         }

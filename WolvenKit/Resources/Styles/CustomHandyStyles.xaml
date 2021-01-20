@@ -1,0 +1,194 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"           
+                    xmlns:system="clr-namespace:System;assembly=mscorlib"
+                    xmlns:hc="https://handyorg.github.io/handycontrol">
+
+
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary>
+            <Geometry x:Key="GithubGeometry">M512 0C229.12 0 0 229.12 0 512c0 226.56 146.56 417.92 350.08 485.76 25.6 4.48 35.2-10.88 35.2-24.32 0-12.16-0.64-52.48-0.64-95.36-128.64 23.68-161.92-31.36-172.16-60.16-5.76-14.72-30.72-60.16-52.48-72.32-17.92-9.6-43.52-33.28-0.64-33.92 40.32-0.64 69.12 37.12 78.72 52.48 46.08 77.44 119.68 55.68 149.12 42.24 4.48-33.28 17.92-55.68 32.64-68.48-113.92-12.8-232.96-56.96-232.96-252.8 0-55.68 19.84-101.76 52.48-137.6-5.12-12.8-23.04-65.28 5.12-135.68 0 0 42.88-13.44 140.8 52.48 40.96-11.52 84.48-17.28 128-17.28 43.52 0 87.04 5.76 128 17.28 97.92-66.56 140.8-52.48 140.8-52.48 28.16 70.4 10.24 122.88 5.12 135.68 32.64 35.84 52.48 81.28 52.48 137.6 0 196.48-119.68 240-233.6 252.8 18.56 16 34.56 46.72 34.56 94.72 0 68.48-0.64 123.52-0.64 140.8 0 13.44 9.6 29.44 35.2 24.32A512.832 512.832 0 0 0 1024 512c0-282.88-229.12-512-512-512z</Geometry>
+
+            <Geometry x:Key="NewGeo">M 12,22.08 V 12 M 3.27,6.96 12,12.01 20.73,6.96 M 21,12 16.5,14.6 v 5.19 m -9,0 V 14.6 L 3,12 M 7.5,4.21 12,6.81 16.5,4.21 M 21,16 V 8 A 2,2 0 0 0 20,6.27 l -7,-4 a 2,2 0 0 0 -2,0 l -7,4 A 2,2 0 0 0 3,8 v 8 a 2,2 0 0 0 1,1.73 l 7,4 a 2,2 0 0 0 2,0 l 7,-4 A 2,2 0 0 0 21,16 Z</Geometry>
+            <Geometry x:Key="HuboGeo">M530 750H780L811.25 718.75V591.875H843.75L875 560.625V500L843.75 468.75H811.25V281.25L780 250H585L428.75 77.5L375 100V250H218.75L187.5 290V468.75H156.25L125 500V560.625L156.25 591.875H187.5V727.5L220.625 750H470.6249999999999V821.25A62.5 62.5 0 0 0 437.5 875A62.5 62.5 0 0 0 562.5 875A62.5 62.5 0 0 0 530 823.125V750zM750 500V687.5H250V321.25L406.25 312.5H437.5V175.625L550 303.1250000000001L571.875 312.5000000000001H750V500zM617.4999999999999 468.125A169.375 169.375 0 0 0 531.8749999999999 421.875V422.5A169.375 169.375 0 0 0 380.6249999999999 468.75L336.8749999999999 424.375C358.1249999999999 403.125 383.4374999999999 386.3749999999999 411.2499999999999 375C439.3749999999999 363.25 469.4999999999999 357.125 499.9999999999999 356.875A231.25 231.25 0 0 1 661.2499999999999 423.7500000000001L617.4999999999999 468.1250000000001zM405.625 593.75H343.125V531.25H405.625V593.75zM593.125 593.75H655.625V531.25H593.125V593.75z</Geometry>
+            <Geometry x:Key="WikiGeo">M515.456 408.235c-33.28-68.736-78.891-161.792-101.504-203.776-21.888-38.229-40.107-33.109-54.528-1.024-50.005 118.187-152.747 325.333-201.045 441.472-8.917 21.419-15.659 35.115-22.016 40.533-6.443 5.333-19.712 8.533-39.936 9.685-7.424 0.811-11.093 2.603-11.093 5.589v16.171l1.835 1.621c32.896 0.171 192.128 0 192.128 0l1.792-1.621v-15.445c0-4.267-2.688-6.272-8.021-6.272l-20.053-1.024c-17.195-1.109-25.813-5.845-25.813-15.573 0-4.779 1.877-11.733 5.931-21.376 38.485-94.123 171.392-374.272 171.392-374.272l4.864-1.664 85.76 171.179-17.152 37.973-59.008 116.096c0 0-11.307 23.253-15.232 31.019-25.899 51.328-25.301 53.973-51.456 57.472-7.381 0.853-11.136 1.792-11.136 5.333v16.64l2.133 1.579h152.661l4.053-1.28v-16.043c0-3.755-2.688-5.333-8.064-5.333l-10.965-1.664c-28.16-2.176-23.509-13.568-4.821-50.603l56.277-115.712 62.507 124.672c10.411 22.741 8.277 28.501 3.968 33.664-2.475 2.987-10.88 7.893-28.885 8.533l-7.168 0.768c-1.835 0-3.499 0.555-5.163 1.835-1.579 1.067-2.389 2.688-2.389 4.565v15.232l2.176 1.579c44.373 0.299 143.829 0 143.829 0l2.133-1.579v-15.531c0-4.309-2.133-6.315-6.869-6.315-22.997-1.024-27.819-3.371-36.437-15.616-4.267-6.571-13.355-20.907-22.955-36.907l-81.877-152.021-2.304-4.779 99.328-203.221 6.059-1.749 156.373 371.371c5.504 15.019 4.565 25.685-2.261 31.829-7.040 6.144-12.331 9.728-30.549 10.496l-14.933 0.597c-2.176 0-3.755 0.469-5.419 1.579-1.536 1.024-2.56 2.688-2.56 4.267v15.403l2.091 1.621h176.512l1.451-1.621v-15.531c0-4.267-2.645-6.4-7.424-6.4-23.083-1.024-40.107-6.4-51.328-14.976-11.221-9.088-19.84-21.931-26.197-37.973 0 0-143.829-329.387-193.024-438.997-18.688-35.84-37.461-32.64-53.461 1.109-20.352 41.685-63.061 134.656-94.123 203.136l1.92 1.28z</Geometry>
+            <Geometry x:Key="AboutGeo">M535.5 935.5625A425.00000000000006 425.00000000000006 0 0 0 797.5 809.375A441.25000000000006 441.25000000000006 0 0 0 826.25 222.4999999999999A428.12500000000006 428.12500000000006 0 0 0 290.0000000000001 113.7499999999999A437.49999999999994 437.49999999999994 0 0 0 95 332.4999999999999A444.99999999999994 444.99999999999994 0 0 0 80.625 626.8749999999999A437.49999999999994 437.49999999999994 0 0 0 253.7500000000001 863.7499999999999A425.00000000000006 425.00000000000006 0 0 0 535.5000000000001 935.5624999999998zM565 132.5A368.125 368.125 0 0 1 778.125 261.875A379.375 379.375 0 0 1 753.1249999999999 765.625A363.75000000000006 363.75000000000006 0 0 1 288.75 811.875A378.75 378.75 0 0 1 320 168.7500000000001A363.125 363.125 0 0 1 565 132.5000000000001zM460.9375 625H539.0625V687.5H460.9375V625zM539.0625 562.5V312.5H460.9375V562.5H539.0625z</Geometry>
+            <Geometry x:Key="SettingsGeo">M218.75 875H156.25V562.5H218.75V875zM600 562.5H400L375 596.875V659.375L400 687.5H600.0000000000001L625.0000000000001 656.25V593.75L600.0000000000001 562.5zM287.5 375H87.5L62.5 406.25V468.75L87.5 500H287.5L312.5 468.75V406.25L287.5 375zM531.25 875H468.75V750H531.25V875zM468.75 500H531.25V125H468.75V500zM218.75 312.5H156.25V125H218.75V312.5zM712.5 312.5H911.875L936.875 343.75V403.125L911.875 434.375H712.5L687.5 403.125V343.75L712.5 312.5zM843.75 875H781.25V500H843.75V875zM781.25 250H843.75V125H781.25V250z</Geometry>
+            <Geometry x:Key="RecentGeo">M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3</Geometry>
+        </ResourceDictionary>
+
+    </ResourceDictionary.MergedDictionaries>
+ 
+
+
+    <DrawingBrush x:Key="SortByCategoryDrawingBrush" o:Freeze="True">
+        <DrawingBrush.Drawing>
+            <DrawingGroup o:Freeze="True">
+                <GeometryDrawing o:Freeze="True" Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                <GeometryDrawing o:Freeze="True" Brush="#FFF6F6F6" Geometry="F1M0.9999,-0.000199999999999534L0.9999,15.9998 10.9999,15.9998 10.9999,13.4148 11.9999,14.4138 15.9999,10.4138 15.9999,5.5858 14.0009,7.5858 14.0009,3.0008 10.9999,3.0008 10.9999,-0.000199999999999534z" />
+                <GeometryDrawing o:Freeze="True" Brush="{DynamicResource MahApps.Brushes.ThemeBackground}" Geometry="F1M10,12.4141L10,15.0001 2,15.0001 2,1.0001 10,1.0001 10,3.0001 10,7.5861 8.414,6.0001 9,6.0001 9,3.0001 3,3.0001 3,6.0001 8,6.0001 8,7.0001 3,7.0001 3,10.0001 8,10.0001 8,10.4141 8.586,11.0001 3,11.0001 3,14.0001 9,14.0001 9,11.4141z" />
+                <GeometryDrawing o:Freeze="True" Brush="#FFEFEFF0" Geometry="F1M8.5859,11L2.9999,11 2.9999,14 8.9999,14 8.9999,11.414z M7.9999,7L2.9999,7 2.9999,10 7.9999,10z M7.9999,6L2.9999,6 2.9999,3 8.9999,3 8.9999,6 8.4139,6 7.9999,5.586z" />
+                <GeometryDrawing o:Freeze="True" Brush="{DynamicResource MahApps.Brushes.ThemeBackground}" Geometry="F1M13,10L13,4 11,4 11,10 9,8 9,10 12,13 15,10 15,8z" />
+            </DrawingGroup>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
+
+    <DrawingBrush x:Key="SortByNameDrawingBrush" o:Freeze="True">
+        <DrawingBrush.Drawing>
+            <DrawingGroup o:Freeze="True">
+                <GeometryDrawing o:Freeze="True" Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                <GeometryDrawing o:Freeze="True" Brush="#FFF6F6F6" Geometry="F1M0,-0.000199999999999534L0,8.9998 1,8.9998 1,12.0008 2.586,12.0008 1,13.5858 1,15.9998 8,15.9998 8,13.0008 6.449,13.0008 8,12.0008 8,10.9998 12,14.9998 16,10.9998 16,4.9998 14,6.9998 14,3.0008 10,3.0008 10,6.9998 9,5.9998 9,-0.000199999999999534z" />
+                <GeometryDrawing o:Freeze="True" Brush="{DynamicResource MahApps.Brushes.ThemeBackground}" Geometry="F1M7,7L5,2 4,2 2,7 3,7 3.399,6 5.601,6 6,7z M8,8L1,8 1,1 8,1z M4.5,3.25L5.2,5 3.8,5z M2,11L5,11 2,14 2,15 7,15 7,14 4.013,14 7,11.051 6.952,11 7,11 7,10 2,10z" />
+                <GeometryDrawing o:Freeze="True" Brush="#FFEFEFF0" Geometry="F1M3.7998,5L4.4998,3.25 5.1998,5z M5.9998,7L6.9998,7 4.9998,2 3.9998,2 1.9998,7 2.9998,7 3.3998,6 5.6008,6z" />
+                <GeometryDrawing o:Freeze="True" Brush="{DynamicResource MahApps.Brushes.ThemeBackground}" Geometry="F1M15,8L15,10 12,13 9,10 9,8 11,10 11,4 13,4 13,10z" />
+            </DrawingGroup>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
+
+
+    <Style BasedOn="{StaticResource ButtonGroupBaseStyle}" TargetType="hc:ButtonGroup"/>
+
+    <Style x:Key="ButtonGroupSolid" BasedOn="{StaticResource ButtonGroupBaseStyle}" TargetType="hc:ButtonGroup">
+        <Setter Property="hc:VisualElement.HighlightBorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+        <Setter Property="hc:VisualElement.HighlightBackground" Value="{DynamicResource MahApps.Brushes.ThemeBackground}"/>
+        <Setter Property="hc:VisualElement.HighlightForeground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}"/>
+    </Style>
+
+    <Style x:Key="PropertyItemToolTipBaseStyle" BasedOn="{StaticResource {x:Type ToolTip}}" TargetType="ToolTip">
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="hc:BorderElement.CornerRadius" Value="2"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToolTip">
+                    <Border Effect="{StaticResource EffectShadow2}" Margin="8" Background="{DynamicResource RegionBrush}" Padding="{TemplateBinding Padding}" BorderThickness="1" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" BorderBrush="{DynamicResource BorderBrush}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <ContentPresenter x:Name="Presenter" Margin="0,0,0,10"/>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock FontWeight="Bold" Text="{Binding PropertyTypeName,RelativeSource={RelativeSource AncestorType=hc:PropertyItem}}"/>
+                                <TextBlock Text="{Binding PropertyName,RelativeSource={RelativeSource AncestorType=hc:PropertyItem}}" Margin="6,0,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Content" Value="{x:Null}">
+                            <Setter TargetName="Presenter" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="Content" Value="">
+                            <Setter TargetName="Presenter" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PropertyItemBaseStyle" TargetType="hc:PropertyItem">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Margin" Value="0,0,0,6"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="hc:PropertyItem">
+                    <GroupBox Style="{StaticResource GroupBoxOriginal}" hc:TitleElement.TitlePlacement="Left">
+                        <GroupBox.Header>
+                            <TextBlock Padding="0,0,10,0" Width="{Binding Path=(hc:TitleElement.TitleWidth).Value,RelativeSource={RelativeSource TemplatedParent}}" Text="{TemplateBinding DisplayName}" TextTrimming="CharacterEllipsis">
+                                <TextBlock.ToolTip>
+                                    <ToolTip Style="{StaticResource PropertyItemToolTipBaseStyle}" Content="{TemplateBinding Description}"/>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                        </GroupBox.Header>
+                        <ContentPresenter ContentSource="EditorElement"/>
+                    </GroupBox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PropertyItemsControlBaseStyle" TargetType="hc:PropertyItemsControl">
+        <Setter Property="ItemContainerStyle" Value="{StaticResource PropertyItemBaseStyle}"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="hc:PropertyItemsControl">
+                    <hc:ScrollViewer Focusable="false" HorizontalScrollBarVisibility="Disabled">
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    </hc:ScrollViewer>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsGrouping" Value="False">
+                <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="PropertyGroupItemBaseStyle" TargetType="GroupItem">
+        <Setter Property="Margin" Value="0,0,0,6"/>
+        <Setter Property="Padding" Value="10,6,6,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GroupItem">
+                    <Expander BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" Header="{Binding Name}" IsExpanded="True" Background="{DynamicResource SecondaryRegionBrush}" Foreground="{DynamicResource PrimaryTextBrush}">
+                        <Border BorderThickness="1,0,1,1" BorderBrush="{DynamicResource BorderBrush}" Background="{DynamicResource RegionBrush}" CornerRadius="0,0,4,4">
+                            <ItemsPresenter Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </Expander>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PropertyGridBaseStyle" TargetType="hc:PropertyGrid">
+        <Setter Property="MaxTitleWidth" Value="200"/>
+        <Setter Property="MinTitleWidth" Value="120"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="hc:PropertyGrid">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid Margin="{TemplateBinding Padding}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <DockPanel LastChildFill="True" Margin="0,0,0,6">
+                                <hc:ButtonGroup Margin="0,0,6,0" Visibility="{Binding ShowSortButton,RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource Boolean2VisibilityConverter}}" Style="{StaticResource ButtonGroupSolid}">
+                                    <RadioButton Command="hc:ControlCommands.SortByCategory" IsChecked="True">
+                                        <Rectangle Width="16" Height="16" Fill="{StaticResource SortByCategoryDrawingBrush}"/>
+                                    </RadioButton>
+                                    <RadioButton Command="hc:ControlCommands.SortByName">
+                                        <Rectangle Width="16" Height="16" Fill="{StaticResource SortByNameDrawingBrush}"/>
+                                    </RadioButton>
+                                </hc:ButtonGroup>
+                                <hc:SearchBar x:Name="PART_SearchBar" IsRealTime="True" ShowClearButton="True" Style="{StaticResource SearchBarPlus}"/>
+                            </DockPanel>
+                            <hc:PropertyItemsControl Grid.Row="1" x:Name="PART_ItemsControl" Style="{StaticResource PropertyItemsControlBaseStyle}">
+                                <hc:PropertyItemsControl.GroupStyle>
+                                    <GroupStyle ContainerStyle="{StaticResource PropertyGroupItemBaseStyle}"/>
+                                </hc:PropertyItemsControl.GroupStyle>
+                            </hc:PropertyItemsControl>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+  
+
+    <Style BasedOn="{StaticResource WatermarkTextBoxBaseStyle}" TargetType="hc:WatermarkTextBox"/>
+
+    <Style BasedOn="{StaticResource TextBoxBaseStyle}" TargetType="TextBox"/>
+
+    <Style x:Key="TextBoxExtend" BasedOn="{StaticResource TextBoxExtendBaseStyle}" TargetType="TextBox"/>
+
+    <Style BasedOn="{StaticResource TextBoxPlusBaseStyle}" TargetType="hc:TextBox"/>
+    <Style BasedOn="{StaticResource TextBoxPlusBaseStyle}" TargetType="hc:MaskedTextBox"/>
+</ResourceDictionary>

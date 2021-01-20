@@ -1,0 +1,18 @@
+﻿<catel:UserControl x:Class="WolvenKit.Views.Wizards.WizardPages.ThemeWizard.ThemeWizardPageView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol" Initialized="UserControl_Initialized_1">
+
+    <Grid Margin="0" x:Name="PageGrid" Grid.Row="1">
+        <Grid HorizontalAlignment="Center" Margin="32,5,5,5">
+            <hc:ColorPicker Name="ColorPicker" Width="250" HorizontalAlignment="Left" />
+            <Border Margin="250,0,0,0" Grid.Column="1" HorizontalAlignment="Left" Width="Auto" BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" BorderThickness="1,1,1,1">
+                <UniformGrid Rows="10" Columns="6"  x:Name="HoneyColors">
+
+                </UniformGrid>
+            </Border>
+        </Grid>
+      
+    </Grid>
+
+</catel:UserControl>

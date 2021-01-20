@@ -6,6 +6,7 @@ using Orchestra.Services;
 using System.Windows;
 using Catel;
 using Catel.Data;
+using WolvenKit.Views.AssetBrowser;
 
 namespace WolvenKit.Views
 {
@@ -16,8 +17,9 @@ namespace WolvenKit.Views
             InitializeComponent();
 
             ribbon.AddAboutButton();
-
             
+
+
         }
 
         protected override void OnViewModelChanged()
@@ -44,6 +46,20 @@ namespace WolvenKit.Views
                 default:
                     break;
             }
+        }
+
+        private void ShowStartScreen_OnClick(object sender, RoutedEventArgs e) // Convert me to MVVM
+        {
+            
+ 
+            this.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
+                this.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
+        }
+
+        private void ComboBoxItem_Selected(object sender, RoutedEventArgs e) // Convert me to MVVM
+        {
+            AssetBrowserView assetBrowser = new AssetBrowserView();
+            assetBrowser.Show(); 
         }
     }
 }

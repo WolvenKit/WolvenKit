@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using CP77.CR2W.Archive;
+using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.DDS;
 
 namespace CP77Tools.Tasks
