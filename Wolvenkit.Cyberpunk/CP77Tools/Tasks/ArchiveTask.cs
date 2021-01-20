@@ -79,7 +79,7 @@ namespace CP77Tools.Tasks
                 {
                     var archiveManager = new ArchiveManager(basedir);
                     // TODO: use the manager here?
-                    archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Filepath)).ToList();
+                    archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Key)).ToList();
                 }
                 else
                 {
