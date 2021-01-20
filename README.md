@@ -4,11 +4,11 @@
 ![Screenshot](/assets/screenshot.png)
 ![Screenshot](/assets/screenshot2.png)
 
-![WolvenKit-Nightly](https://github.com/Traderain/Wolven-kit/workflows/WolvenKit-Nightly/badge.svg)
-[![GitHub issues](https://img.shields.io/github/issues/Traderain/Wolven-kit.svg)](https://github.com/Traderain/Wolven-kit/issues)
-[![GitHub forks](https://img.shields.io/github/forks/Traderain/Wolven-kit.svg)](https://github.com/Traderain/Wolven-kit/network)
-[![GitHub stars](https://img.shields.io/github/stars/Traderain/Wolven-kit.svg)](https://github.com/Traderain/Wolven-kit/stargazers)
-[![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Traderain/Wolven-kit/master/LICENSE)
+![WolvenKit-Nightly](https://github.com/WolvenKit/Wolven-kit/workflows/WolvenKit-Nightly/badge.svg)
+[![GitHub issues](https://img.shields.io/github/issues/WolvenKit/Wolven-kit.svg)](https://github.com/WolvenKit/Wolven-kit/issues)
+[![GitHub forks](https://img.shields.io/github/forks/WolvenKit/Wolven-kit.svg)](https://github.com/WolvenKit/Wolven-kit/network)
+[![GitHub stars](https://img.shields.io/github/stars/WolvenKit/Wolven-kit.svg)](https://github.com/WolvenKit/Wolven-kit/stargazers)
+[![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/WolvenKit/Wolven-kit/master/LICENSE)
 ![Github downloads](https://img.shields.io/github/downloads/WolvenKit/Wolven-Kit/total)
 [![Discord](https://img.shields.io/discord/717692382849663036.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/cp77modding)
 ***
