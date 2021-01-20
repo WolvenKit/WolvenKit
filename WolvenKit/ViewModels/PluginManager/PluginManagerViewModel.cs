@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.ViewModels.AssetBrowser
+namespace WolvenKit.ViewModels.PluginManager
 {
-    class AssetBrowserViewModel : ViewModelBase
+    class PluginManagerViewModel : ViewModelBase
     {
     }
 }
