@@ -7,6 +7,7 @@ using System.Windows;
 using Catel;
 using Catel.Data;
 using WolvenKit.Views.AssetBrowser;
+using WolvenKit.Views.CodeEditor;
 
 namespace WolvenKit.Views
 {
@@ -49,17 +50,26 @@ namespace WolvenKit.Views
         }
 
         private void ShowStartScreen_OnClick(object sender, RoutedEventArgs e) // Convert me to MVVM
-        {
-            
+        {        
  
             this.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
                 this.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
         }
 
-        private void ComboBoxItem_Selected(object sender, RoutedEventArgs e) // Convert me to MVVM
+       
+
+     
+
+        private void CBAssetBrowserItem_Selected(object sender, RoutedEventArgs e)
         {
             AssetBrowserView assetBrowser = new AssetBrowserView();
-            assetBrowser.Show(); 
+            assetBrowser.Show();
+        }
+
+        private void CBCodeEditorItem_Selected(object sender, RoutedEventArgs e)
+        {
+            CodeEditorView codeeditor = new CodeEditorView();
+            codeeditor.Show();
         }
     }
 }

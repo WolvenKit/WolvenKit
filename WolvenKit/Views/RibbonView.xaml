@@ -289,7 +289,9 @@
                                 <VirtualizingStackPanel />
                             </ItemsPanelTemplate>
                         </fluent:ComboBox.ItemsPanel>
-                        <ComboBoxItem Selected="ComboBoxItem_Selected" Content="Asset Browser"></ComboBoxItem>
+                        <ComboBoxItem x:Name="CBAssetBrowserItem" Content="Asset Browser" Selected="CBAssetBrowserItem_Selected"/>
+                        <ComboBoxItem x:Name="CBCodeEditorItem" Content="Asset Browser" Selected="CBCodeEditorItem_Selected"/>
+
                     </fluent:ComboBox>
 
 
@@ -297,7 +299,7 @@
 
                 <!-- Quick Access Tools -->
                 <fluent:RibbonGroupBox Header="Quick Access">
-                    <fluent:Button Click="ComboBoxItem_Selected" Header="Asset Browser"/>
+                    <fluent:Button Click="CBAssetBrowserItem_Selected" Header="Asset Browser"/>
 
 
                 </fluent:RibbonGroupBox>

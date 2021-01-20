@@ -75,6 +75,8 @@ namespace WolvenKit
             //-- Category : AssetBrowser
             viewModelLocator.Register(typeof(Views.AssetBrowser.AssetBrowserView), typeof(ViewModels.AssetBrowser.AssetBrowserViewModel));
 
+            //-- Category : CodeEditor
+            viewModelLocator.Register(typeof(Views.CodeEditor.CodeEditorView), typeof(ViewModels.CodeEditor.CodeEditorViewModel));
 
 
 
