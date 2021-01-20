@@ -60,8 +60,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rendering", "Rendering", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit", "WolvenKit\WolvenKit.csproj", "{1DD8B40B-2548-4663-B208-1D107EF47ACF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Legacy", "WolvenKit.Legacy\WolvenKit.Legacy.csproj", "{12FD792B-EC76-4969-8B42-9671025D5108}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -878,48 +876,6 @@ Global
 		{1DD8B40B-2548-4663-B208-1D107EF47ACF}.Static lib - Release|x64.Build.0 = Release|x64
 		{1DD8B40B-2548-4663-B208-1D107EF47ACF}.Static lib - Release|x86.ActiveCfg = Release|Any CPU
 		{1DD8B40B-2548-4663-B208-1D107EF47ACF}.Static lib - Release|x86.Build.0 = Release|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Debug|x64.ActiveCfg = Debug|x64
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Debug|x64.Build.0 = Debug|x64
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Debug|x86.ActiveCfg = Debug|x86
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Debug|x86.Build.0 = Debug|x86
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Release - Fast FPU|Any CPU.ActiveCfg = Release|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Release - Fast FPU|Any CPU.Build.0 = Release|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Release - Fast FPU|x64.ActiveCfg = Release|x64
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Release - Fast FPU|x64.Build.0 = Release|x64
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Release - Fast FPU|x86.ActiveCfg = Release|x86
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Release - Fast FPU|x86.Build.0 = Release|x86
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Release|Any CPU.Build.0 = Release|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Release|x64.ActiveCfg = Release|x64
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Release|x64.Build.0 = Release|x64
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Release|x86.ActiveCfg = Release|x86
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Release|x86.Build.0 = Release|x86
-		{12FD792B-EC76-4969-8B42-9671025D5108}.SDL-Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.SDL-Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.SDL-Debug|x64.ActiveCfg = Debug|x64
-		{12FD792B-EC76-4969-8B42-9671025D5108}.SDL-Debug|x64.Build.0 = Debug|x64
-		{12FD792B-EC76-4969-8B42-9671025D5108}.SDL-Debug|x86.ActiveCfg = Debug|x86
-		{12FD792B-EC76-4969-8B42-9671025D5108}.SDL-Debug|x86.Build.0 = Debug|x86
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Debug|x64.ActiveCfg = Debug|x64
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Debug|x64.Build.0 = Debug|x64
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Debug|x86.ActiveCfg = Debug|x86
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Debug|x86.Build.0 = Debug|x86
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Release - Fast FPU|Any CPU.ActiveCfg = Release|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Release - Fast FPU|Any CPU.Build.0 = Release|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Release - Fast FPU|x64.ActiveCfg = Release|x64
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Release - Fast FPU|x64.Build.0 = Release|x64
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Release - Fast FPU|x86.ActiveCfg = Release|x86
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Release - Fast FPU|x86.Build.0 = Release|x86
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Release|Any CPU.Build.0 = Release|Any CPU
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Release|x64.ActiveCfg = Release|x64
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Release|x64.Build.0 = Release|x64
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Release|x86.ActiveCfg = Release|x86
-		{12FD792B-EC76-4969-8B42-9671025D5108}.Static lib - Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
