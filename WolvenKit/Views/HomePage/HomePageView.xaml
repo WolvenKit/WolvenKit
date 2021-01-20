@@ -261,6 +261,7 @@
         
         
         <Grid  x:Name="PageViewGrid" Margin="200,0,0,0" >
+            <HPPage:RecentProjectView></HPPage:RecentProjectView>
         </Grid>
     </Grid>
 
