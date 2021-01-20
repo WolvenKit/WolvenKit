@@ -10,6 +10,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using WolvenKit.Views.HomePage.Pages;
+using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Views.HomePage
 {
@@ -18,32 +20,17 @@ namespace WolvenKit.Views.HomePage
         public HomePageView()
         {
             InitializeComponent();
-
-
-   
             InitiializeGitHub();
         }
 
         private async void InitiializeGitHub()
         {
             GhubClient = new GitHubClient(new ProductHeaderValue("WolvenKit"));
-            GhubClient.Credentials = GhubAuth("wolvenbot", "botwolven1");            
-            
-
+            GhubClient.Credentials = GhubAuth("wolvenbot", "botwolven1");
             await GhubLastReleaseAsync();
-            
-
-
-
-
         }
 
         GitHubClient GhubClient;
-
-
-
-
-        
 
         public Credentials GhubAuth(string u, string p)
         {
@@ -55,7 +42,7 @@ namespace WolvenKit.Views.HomePage
 
         public async Task GhubLastReleaseAsync()
         {
-            
+
             try
             {
                 var general = await GhubClient.Repository.Get("WolvenKit", "Wolven-Kit");
@@ -75,57 +62,52 @@ namespace WolvenKit.Views.HomePage
 
                 var releases = await GhubClient.Repository.Release.GetLatest("WolvenKit", "Wolven-Kit");
                 var latest = releases; // Just a temp fix so I don't spam GHub api during dev
-            ObservableCollection<GithubTimeLine> data = new ObservableCollection<GithubTimeLine>();
+                ObservableCollection<GithubTimeLine> data = new ObservableCollection<GithubTimeLine>();
 
-            var item = new GithubTimeLine() { TitleLabel = latest.TagName, TitleInfo = latest.Name, TitleStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelViolet) };
+                var item = new GithubTimeLine() { TitleLabel = latest.TagName, TitleInfo = latest.Name, TitleStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelViolet) };
 
-            var unresolvedbody = latest.Body;
-            var body = await ResolveBody(unresolvedbody);
+                var unresolvedbody = latest.Body;
+                var body = await ResolveBody(unresolvedbody);
 
-            foreach (var line in body)
-            {
-                if (!line.Contains('#'))
+                foreach (var line in body)
                 {
-                    string[] myStrings = { "more", "extra", "improved" };
-
-                    if (myStrings.Any(line.ToLowerInvariant().Contains))
+                    if (!line.Contains('#'))
                     {
-                        item.Members.Add(new ContentMember() { ContentTitle = "Addon", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelInfo) });
+                        string[] myStrings = { "more", "extra", "improved" };
 
-                    }
-                    else if (line.ToLowerInvariant().Contains("new"))
-                    {
-                        item.Members.Add(new ContentMember() { ContentTitle = "New", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelSuccess) });
+                        if (myStrings.Any(line.ToLowerInvariant().Contains))
+                        {
+                            item.Members.Add(new ContentMember() { ContentTitle = "Addon", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelInfo) });
 
-                    }
-                    else if (line.ToLowerInvariant().Contains("breaking change"))
-                    {
-                        item.Members.Add(new ContentMember() { ContentTitle = "Breaking", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelDanger) });
+                        }
+                        else if (line.ToLowerInvariant().Contains("new"))
+                        {
+                            item.Members.Add(new ContentMember() { ContentTitle = "New", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelSuccess) });
 
-                    }
-                    else if (line.ToLowerInvariant().Contains("overhaul"))
-                    {
-                        item.Members.Add(new ContentMember() { ContentTitle = "Overhaul", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelWarning) });
+                        }
+                        else if (line.ToLowerInvariant().Contains("breaking change"))
+                        {
+                            item.Members.Add(new ContentMember() { ContentTitle = "Breaking", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelDanger) });
 
-                    }
-                    else
-                    {
-                        item.Members.Add(new ContentMember() { ContentTitle = "Change", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelPrimary) });
+                        }
+                        else if (line.ToLowerInvariant().Contains("overhaul"))
+                        {
+                            item.Members.Add(new ContentMember() { ContentTitle = "Overhaul", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelWarning) });
+
+                        }
+                        else
+                        {
+                            item.Members.Add(new ContentMember() { ContentTitle = "Change", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelPrimary) });
+
+                        }
 
                     }
 
                 }
-
-            }
-            data.Add(item);
-            gitTime.SetCurrentValue(ItemsControl.ItemsSourceProperty, data);
+                data.Add(item);
+                gitTime.SetCurrentValue(ItemsControl.ItemsSourceProperty, data);
             }
             catch { }
-
-
-
-           
-
         }
 
         private async Task<string[]> ResolveBody(string unresolvedbody)
@@ -134,6 +116,85 @@ namespace WolvenKit.Views.HomePage
             var result = Regex.Split(Step1, "\r\n|\r|\n");
 
             return result;
+        }
+
+        private void SideMenu_WelcomeItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (IsLoaded && IsVisible && IsInitialized)
+            {
+                PageViewGrid.Children.Clear();
+
+                TopicViewer.TopicViewer.Children.Clear();
+                TopicViewer.TopicViewer.Children.Add(new WelcomePageView());
+            }
+
+        }
+
+        private void SideMenu_FirstUseItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (IsLoaded && IsVisible && IsInitialized)
+            {
+                PageViewGrid.Children.Clear();
+
+                TopicViewer.TopicViewer.Children.Clear();
+                TopicViewer.TopicViewer.Children.Add(new FirstSetupWizardView());
+            }
+        }
+
+        private void SideMenu_OpenRecentProjectItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (IsLoaded && IsVisible && IsInitialized)
+            {
+                PageViewGrid.Children.Clear();
+                PageViewGrid.Children.Add(new RecentProjectView());
+            }
+        }
+
+        private void SideMenu_NewProjectItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (IsLoaded && IsVisible && IsInitialized)
+            {
+                PageViewGrid.Children.Clear();
+
+                TopicViewer.TopicViewer.Children.Clear();
+                TopicViewer.TopicViewer.Children.Add(new ProjectWizardView());
+            }
+        }
+
+        private void SideMenu_WikiItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (IsLoaded && IsVisible && IsInitialized)
+            {
+                PageViewGrid.Children.Clear();
+                PageViewGrid.Children.Add(new WikiPageView());
+            }
+        }
+
+        private void SideMenu_GitHubItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (IsLoaded && IsVisible && IsInitialized)
+            {
+                PageViewGrid.Children.Clear();
+                PageViewGrid.Children.Add(new GithubPageView());
+            }
+        }
+
+        private void SideMenu_AboutItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (IsLoaded && IsVisible && IsInitialized)
+            {
+                PageViewGrid.Children.Clear();
+                PageViewGrid.Children.Add(new AboutPageView());
+            }
+        }
+
+        private void SideMenu_SettingsItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (IsLoaded && IsVisible && IsInitialized)
+            {
+                PageViewGrid.Children.Clear();
+                PageViewGrid.Children.Add(new SettingsPageView());
+            }
         }
     }
 }

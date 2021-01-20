@@ -48,13 +48,18 @@ namespace WolvenKit.Views
             }
         }
 
-        private void ShowStartScreen_OnClick(object sender, RoutedEventArgs e)
+        private void ShowStartScreen_OnClick(object sender, RoutedEventArgs e) // Convert me to MVVM
         {
             
-            AssetBrowserView assetBrowser = new AssetBrowserView();
-            assetBrowser.Show(); // For Testing purposes
+ 
             this.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
                 this.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
+        }
+
+        private void ComboBoxItem_Selected(object sender, RoutedEventArgs e) // Convert me to MVVM
+        {
+            AssetBrowserView assetBrowser = new AssetBrowserView();
+            assetBrowser.Show(); 
         }
     }
 }

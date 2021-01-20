@@ -230,6 +230,8 @@
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
 
+            
+
             <!-- View Tab -->
             <fluent:RibbonTabItem Header="View" >
                 <!-- Themes -->
@@ -273,7 +275,40 @@
 
             </fluent:RibbonTabItem>
 
+            
+            <!-- Tools Dropdown Tab -->
 
+                <fluent:RibbonTabItem Header="Tools">
+                <fluent:RibbonGroupBox Header="All">
+                    <fluent:ComboBox IsEditable="False"
+                                     InputWidth="120"
+                                     Header="Tools"
+                              >
+                        <fluent:ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </fluent:ComboBox.ItemsPanel>
+                        <ComboBoxItem Selected="ComboBoxItem_Selected" Content="Asset Browser"></ComboBoxItem>
+                    </fluent:ComboBox>
+
+
+                </fluent:RibbonGroupBox>
+
+                <!-- Quick Access Tools -->
+                <fluent:RibbonGroupBox Header="Quick Access">
+                    <fluent:Button Click="ComboBoxItem_Selected" Header="Asset Browser"/>
+
+
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+             
+
+
+
+
+
+            
             <!--Contextual  Tab-->
             <fluent:RibbonTabItem Header="Project Explorer" 
                               Group="{Binding Source={x:Reference ProjectExplorerContextualTabGroup}}" 
