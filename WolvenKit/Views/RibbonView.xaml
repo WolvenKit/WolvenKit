@@ -290,7 +290,7 @@
                             </ItemsPanelTemplate>
                         </fluent:ComboBox.ItemsPanel>
                         <ComboBoxItem x:Name="CBAssetBrowserItem" Content="Asset Browser" Selected="CBAssetBrowserItem_Selected"/>
-                        <ComboBoxItem x:Name="CBCodeEditorItem" Content="Asset Browser" Selected="CBCodeEditorItem_Selected"/>
+                        <ComboBoxItem x:Name="CBCodeEditorItem" Content="Code Editor (WIP)" Selected="CBCodeEditorItem_Selected"/>
 
                     </fluent:ComboBox>
 

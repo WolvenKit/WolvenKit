@@ -11,7 +11,19 @@
                   MinWidth="400"
                   WindowStyle="None" 
                   Title="Code Editor" >
+    <catel:DataWindow.Resources>
+        <ResourceDictionary>
 
+
+            <ResourceDictionary.MergedDictionaries>
+
+                <hc:Theme Name="HandyTheme"/>
+                <hc:Theme Skin="Dark"/>
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </catel:DataWindow.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -57,32 +69,28 @@
         </hc:TabControl>
 
 
-        <ToolBarTray Grid.Row="2" Grid.Column="1">
-            <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
-                <Menu Background="Transparent" VerticalAlignment="Center">
-                    <MenuItem Header="View">
-                        <MenuItem Header="Empty">
-
-                        </MenuItem>
-                        <MenuItem Header="Empty">
-
-                        </MenuItem>
-                    </MenuItem>
-                    <MenuItem Header="Edit">
-                        <MenuItem Header="Empty">
-
-                        </MenuItem>
-                        <MenuItem Header="Empty">
-
-                        </MenuItem>
-                        <MenuItem Header="Empty">
-
-                        </MenuItem>
-                    </MenuItem>
-                    <MenuItem Header="Bookmarks"/>
-                    <MenuItem Header="Tabs"/>
-
-                </Menu>
+        <ToolBarTray Orientation="Vertical" Grid.Row="2" Grid.Column="1">
+            <ToolBar Style="{StaticResource ToolBarBaseStyle}" Padding="6" Header="{}">
+                <CheckBox IsChecked="True" Margin="0,10,0,0"/>
+                <Separator Margin="0,10,0,0"/>
+                <RadioButton Margin="0,10,0,0"/>
+                <StackPanel>
+                    <RadioButton IsChecked="True" Margin="0,10,0,0"/>
+                    <RadioButton Margin="0,10,0,0"/>
+                </StackPanel>
+                <Button Content="" Margin="0,10,0,0"/>
+                <Button Content="" Margin="0,10,0,0" Style="{StaticResource ButtonPrimary}"/>
+            </ToolBar>
+            <ToolBar Style="{StaticResource ToolBarBaseStyle}" Band="1" Padding="6" Header="{}">
+                <CheckBox IsChecked="True" Margin="0,10,0,0"/>
+                <Separator Margin="0,10,0,0"/>
+                <RadioButton Margin="0,10,0,0"/>
+                <StackPanel>
+                    <RadioButton IsChecked="True" Margin="0,10,0,0"/>
+                    <RadioButton Margin="0,10,0,0"/>
+                </StackPanel>
+                <Button Content="" Margin="0,10,0,0"/>
+                <Button Content="" Margin="0,10,0,0" Style="{StaticResource ButtonPrimary}"/>
             </ToolBar>
 
         </ToolBarTray>
