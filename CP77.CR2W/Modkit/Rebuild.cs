@@ -40,7 +40,7 @@ namespace CP77.CR2W
             {
                 //TODO: verify cr2w integrity
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
-                cr2w.ReadImportsAndBuffers(br);
+                cr2w.Read(br);
             }
             catch (Exception e)
             {
@@ -49,7 +49,39 @@ namespace CP77.CR2W
                 
             return cr2w;
         }
-        
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="br"></param>
+        /// <returns></returns>
+        public static CR2WFile TryReadCr2WFileHeaders(BinaryReader br)
+        {
+            // peak if cr2w
+            if (br.BaseStream.Length < 4)
+                return null;
+            br.BaseStream.Seek(0, SeekOrigin.Begin);
+            var magic = br.ReadUInt32();
+            var isCr2wFile = magic == CR2WFile.MAGIC;
+            if (!isCr2wFile)
+                return null;
+
+            var cr2w = new CR2WFile();
+            try
+            {
+                //TODO: verify cr2w integrity
+                br.BaseStream.Seek(0, SeekOrigin.Begin);
+                cr2w.ReadImportsAndBuffers(br);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+            return cr2w;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -172,7 +204,7 @@ namespace CP77.CR2W
                 using var fileStream = new FileStream(parentPath, FileMode.Open, FileAccess.ReadWrite);
                 using var fileReader = new BinaryReader(fileStream);
 
-                var cr2w = TryReadCr2WFile(fileReader); 
+                var cr2w = TryReadCr2WFileHeaders(fileReader); 
                 if (cr2w == null)
                 {
                     Logger.LogString($"Failed to read cr2w file {parentPath}", Logtype.Error);

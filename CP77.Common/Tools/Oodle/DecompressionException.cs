@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CP77.CR2W.Types
+namespace CP77.Common.Tools.Oodle
 {
     public class DecompressionException : Exception
     {

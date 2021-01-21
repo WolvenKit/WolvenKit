@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using CP77.Common.Services;
+using CP77.Common.Tools.Oodle;
 
 namespace CP77.Common.Tools
 {
@@ -153,6 +156,70 @@ namespace CP77.Common.Tools
                 }
             else
                 throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void DecompressBuffer(this BinaryReader binaryReader, BinaryWriter bw, uint zSize, uint size)
+        {
+            if (zSize == size)
+            {
+                try
+                {
+                    var buffer = binaryReader.ReadBytes((int)zSize);
+                    bw.Write(buffer);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+            else
+            {
+                var pos = binaryReader.BaseStream.Position;
+                var oodleCompression = binaryReader.ReadBytes(4);
+                if ((oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
+                {
+                    var headerSize = binaryReader.ReadUInt32();
+
+                    if (headerSize != size)
+                        throw new Exception($"Buffer size doesn't match size in info table. {headerSize} vs {size}");
+
+                    var inputBuffer = binaryReader.ReadBytes((int)zSize - 8);
+
+                    try
+                    {
+                        var outputBuffer = new byte[size];
+                        long unpackedSize = OodleHelper.Decompress(inputBuffer, outputBuffer);
+
+                        if (unpackedSize != size)
+                            throw new DecompressionException(
+                                $"Unpacked size {unpackedSize} doesn't match real size {size}");
+                        bw.Write(outputBuffer);
+                    }
+                    catch (DecompressionException e)
+                    {
+                        //logger.LogString(e.Message, Logtype.Error);
+                        //logger.LogString(
+                        //    $"Unable to decompress file {hash.ToString()}. Exporting uncompressed file",
+                        //    Logtype.Error);
+                        bw.Write(inputBuffer);
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+
+                }
+                else
+                {
+                    binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
+                    var buffer = binaryReader.ReadBytes((int)zSize);
+                    bw.Write(buffer);
+                }
+            }
         }
     }
 }

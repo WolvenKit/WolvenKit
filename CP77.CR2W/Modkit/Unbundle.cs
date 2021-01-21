@@ -20,39 +20,17 @@ namespace CP77.CR2W
     /// </summary>
     public static partial class ModTools
     {
-        
         /// <summary>
-        /// Extracts a single file + buffers.
+        /// Expects uncompressed buffers
         /// </summary>
-        /// <param name="ar"></param>
-        /// <param name="hash"></param>
-        /// <param name="outDir"></param>
+        /// <param name="file"></param>
+        /// <param name="buffers"></param>
+        /// <param name="outfile"></param>
         /// <returns></returns>
-        public static int ExtractSingle(this Archive.Archive ar, ulong hash, DirectoryInfo outDir)
-        {
-            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
-
-            return ar.ExtractSingleInner(hash, outDir);
-        }
-        
-        private static int ExtractSingleInner(this Archive.Archive ar, ulong hash, DirectoryInfo outDir)
+        public static int Unbundle(byte[] file, List<byte[]> buffers, FileInfo outfile)
         {
             var extractsuccess = false;
-            var (file, buffers) = ar.GetFileData(hash, false);
-
-            if (!ar.Files.ContainsKey(hash))
-                return -1;
-            string name = ar.Files[hash].FileName;
-            if (string.IsNullOrEmpty(Path.GetExtension(name)))
-            {
-                name += ".bin";
-            }
-
-            var outfile = new FileInfo(Path.Combine(outDir.FullName,
-                $"{name}"));
-            if (outfile.Directory == null)
-                return -1;
-
+            
             // write main file
             Directory.CreateDirectory(outfile.Directory.FullName);
             using var fs = new FileStream(outfile.FullName, FileMode.Create, FileAccess.Write);
@@ -70,7 +48,45 @@ namespace CP77.CR2W
                 extractsuccess = true;
             }
 
+
             return extractsuccess ? 1 : 0;
+        }
+        
+        
+        /// <summary>
+        /// Extracts a single file + buffers.
+        /// </summary>
+        /// <param name="ar"></param>
+        /// <param name="hash"></param>
+        /// <param name="outDir"></param>
+        /// <returns></returns>
+        public static int ExtractSingle(this Archive.Archive ar, ulong hash, DirectoryInfo outDir)
+        {
+            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
+
+            return ar.ExtractSingleInner(hash, outDir);
+        }
+        
+        private static int ExtractSingleInner(this Archive.Archive ar, ulong hash, DirectoryInfo outDir)
+        {
+            
+            var (file, buffers) = ar.GetFileData(hash, false);
+
+            if (!ar.Files.ContainsKey(hash))
+                return -1;
+            string name = ar.Files[hash].FileName;
+            if (string.IsNullOrEmpty(Path.GetExtension(name)))
+            {
+                name += ".bin";
+            }
+
+            var outfile = new FileInfo(Path.Combine(outDir.FullName,
+                $"{name}"));
+            if (outfile.Directory == null)
+                return -1;
+
+
+            return Unbundle(file, buffers, outfile);
         }
 
         /// <summary>

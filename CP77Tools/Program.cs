@@ -73,6 +73,7 @@ namespace CP77Tools
                 new UncookCommand(),
                 new RebuildCommand(),
                 new PackCommand(),
+                new ExportCommand(),
                 
                 new DumpCommand(),
                 new CR2WCommand(),

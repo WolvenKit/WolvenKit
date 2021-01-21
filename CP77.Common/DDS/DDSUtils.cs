@@ -342,20 +342,19 @@ namespace WolvenKit.Common.Tools.DDS
         public static DDSMetadata ReadHeader(string ddsfile)
         {
             var metadata = new DDSMetadata();
-            using (var fs = new FileStream(ddsfile, FileMode.Open, FileAccess.Read))
-            using (var reader = new BinaryReader(fs))
-            {
-                if (fs.Length < 128) return metadata;
+            using var fs = new FileStream(ddsfile, FileMode.Open, FileAccess.Read);
+            using var reader = new BinaryReader(fs);
+            
+            if (fs.Length < 128) return metadata;
 
-                // check if DDS file
-                var buffer = reader.ReadBytes(4);
-                if (!buffer.SequenceEqual(BitConverter.GetBytes(DDS_MAGIC))) return metadata;
+            // check if DDS file
+            var buffer = reader.ReadBytes(4);
+            if (!buffer.SequenceEqual(BitConverter.GetBytes(DDS_MAGIC))) return metadata;
 
-                var id = reader.BaseStream.ReadStruct<DDS_HEADER>();
-                metadata = new DDSMetadata(id);
+            var id = reader.BaseStream.ReadStruct<DDS_HEADER>();
+            metadata = new DDSMetadata(id);
 
-                return metadata;
-            }
+            return metadata;
         }
 
         public static uint CalculateMipMapSize(uint width, uint height, EFormat format)

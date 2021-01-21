@@ -152,61 +152,18 @@ namespace CP77.CR2W.Archive
                 using var binaryReader = new BinaryReader(stream);
                 binaryReader.BaseStream.Seek((long) offsetentry.Offset, SeekOrigin.Begin);
 
-                if (offsetentry.ZSize == offsetentry.Size || !decompress)
+
+                var zSize = offsetentry.ZSize;
+                var size = offsetentry.Size;
+
+                if (!decompress)
                 {
-                    try
-                    {
-                        var buffer = binaryReader.ReadBytes((int)offsetentry.ZSize);
-                        bw.Write(buffer);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                        throw;
-                    }
+                    var buffer = binaryReader.ReadBytes((int)zSize);
+                    bw.Write(buffer);
                 }
                 else
                 {
-                    var oodleCompression = binaryReader.ReadBytes(4);
-                    if ((oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
-                    {
-                        var size = binaryReader.ReadUInt32();
-
-                        if (size != offsetentry.Size)
-                            throw new Exception($"{hash}: Buffer size doesn't match size in info table. {size} vs {offsetentry.Size}");
-
-                        var inputBuffer = binaryReader.ReadBytes((int)offsetentry.ZSize - 8);
-
-                        try
-                        {
-                            var outputBuffer = new byte[offsetentry.Size];
-                            long unpackedSize = OodleHelper.Decompress(inputBuffer, outputBuffer);
-
-                            if (unpackedSize != offsetentry.Size)
-                                throw new DecompressionException(
-                                    $"{hash}: Unpacked size {unpackedSize} doesn't match real size {offsetentry.Size}");
-                            bw.Write(outputBuffer);
-                        }
-                        catch (DecompressionException e)
-                        {
-                            logger.LogString(e.Message, Logtype.Error);
-                            logger.LogString(
-                                $"Unable to decompress file {hash.ToString()}. Exporting uncompressed file",
-                                Logtype.Error);
-                            bw.Write(inputBuffer);
-                        }
-                        catch (Exception e)
-                        {
-                            throw e;
-                        }
-                        
-                    }
-                    else
-                    {
-                        binaryReader.BaseStream.Seek((long) offsetentry.Offset, SeekOrigin.Begin);
-                        var buffer = binaryReader.ReadBytes((int)offsetentry.ZSize);
-                        bw.Write(buffer);
-                    }
+                    binaryReader.DecompressBuffer(bw, zSize, size);
                 }
 
                 return ms.ToArray();
