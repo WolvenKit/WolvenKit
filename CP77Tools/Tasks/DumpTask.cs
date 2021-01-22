@@ -8,8 +8,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
-using CP77.Common.Services;
-using CP77.Common.Tools.FNV1A;
 using CP77.CR2W.Archive;
 using Newtonsoft.Json;
 using WolvenKit.Common;
@@ -17,6 +15,8 @@ using WolvenKit.Common.Extensions;
 using CP77.CR2W;
 using CP77.CR2W.Reflection;
 using CP77.CR2W.Types;
+using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {

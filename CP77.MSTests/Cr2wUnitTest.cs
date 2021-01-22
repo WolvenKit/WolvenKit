@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
-using CP77.Common.Services;
+using WolvenKit.Common.Services;
 using CP77.CR2W;
 using CP77.CR2W.Archive;
 using CP77.CR2W.Resources;
@@ -878,7 +878,7 @@ namespace CP77.MSTests
             foreach (var file in files)
                 try
                 {
-                    var (fileBytes, bufferBytes) = file.GetFileData();
+                    var (fileBytes, bufferBytes) = (file.Archive as Archive).GetFileData(file.NameHash64, false);
 
                     using var ms = new MemoryStream(fileBytes);
                     using var br = new BinaryReader(ms);
