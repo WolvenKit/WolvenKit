@@ -14,7 +14,7 @@ using CP77.CR2W.Extensions;
 using CP77.CR2W.Types;
 using CP77.CR2W.Uncooker;
 using WolvenKit.Common;
-using WolvenKit.Common.Tools.DDS;
+using WolvenKit.Common.DDS;
 
 namespace CP77.CR2W
 {

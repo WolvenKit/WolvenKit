@@ -14,8 +14,8 @@ using CP77.CR2W.Types;
 using CP77Tools.Model;
 using RED.CRC32;
 using WolvenKit.Common;
+using WolvenKit.Common.DDS;
 using WolvenKit.Common.Oodle;
-using WolvenKit.Common.Tools.DDS;
 
 namespace CP77.CR2W
 {

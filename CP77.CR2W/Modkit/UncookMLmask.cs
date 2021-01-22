@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using WolvenKit.Common.Tools.DDS;
 using System.Runtime.InteropServices;
+using WolvenKit.Common.DDS;
 
 namespace CP77.CR2W.Uncooker
 {

@@ -16,7 +16,6 @@ using CP77Tools.Model;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Tools.DDS;
 using CP77.CR2W.Types;
 using WolvenKit.Common.Oodle;
 

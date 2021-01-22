@@ -10,7 +10,7 @@ using CP77.CR2W.Archive;
 using CP77.CR2W.Types;
 using CP77Tools.Model;
 using WolvenKit.Common;
-using WolvenKit.Common.Tools.DDS;
+using WolvenKit.Common.DDS;
 
 namespace CP77.CR2W
 {

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.Serialization;
 
-namespace WolvenKit.Common.Tools.DDS
+namespace WolvenKit.Common.DDS
 {
     [Serializable]
     public class MissingFormatException : Exception

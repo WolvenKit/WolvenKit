@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using WolvenKit.Common.Tools.DDS;
+using WolvenKit.Common.DDS;
 
 namespace WolvenKit.Common.Model
 {

@@ -1,6 +1,4 @@
-﻿using static WolvenKit.Common.Tools.DDS.TexconvWrapper;
-
-namespace WolvenKit.Common.Tools.DDS
+﻿namespace WolvenKit.Common.DDS
 {
     public readonly struct DDSMetadata
     {

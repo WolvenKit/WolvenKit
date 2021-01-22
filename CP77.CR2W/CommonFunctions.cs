@@ -9,10 +9,10 @@ using Catel.Linq;
 using WolvenKit.Common.Services;
 using CP77.CR2W.Archive;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using WolvenKit.Common.Tools.DDS;
 using CP77.CR2W.Types;
 using CP77Tools.Model;
 using WolvenKit.Common;
+using WolvenKit.Common.DDS;
 using static CP77.CR2W.Types.Enums;
 
 namespace CP77.CR2W
