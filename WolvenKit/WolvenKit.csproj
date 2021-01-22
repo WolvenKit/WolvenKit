@@ -22,6 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CP77.CR2W\WolvenKit.Cyberformats.csproj" />
     <ProjectReference Include="..\WolvenKit.Bundles\WolvenKit.Bundles.csproj" />
     <ProjectReference Include="..\WolvenKit.Cache\WolvenKit.Cache.csproj" />
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
