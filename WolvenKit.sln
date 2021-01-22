@@ -42,8 +42,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit", "WolvenKit\Wolv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Cyberformats", "CP77.CR2W\WolvenKit.Cyberformats.csproj", "{C62D5D2D-2B14-4A52-AE47-9808EE9D7AFE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CP77.Common", "CP77.Common\CP77.Common.csproj", "{6F9F559F-EDCB-481D-8503-F61CC43AA96E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -657,48 +655,6 @@ Global
 		{C62D5D2D-2B14-4A52-AE47-9808EE9D7AFE}.Static lib - Release|x64.Build.0 = Release|Any CPU
 		{C62D5D2D-2B14-4A52-AE47-9808EE9D7AFE}.Static lib - Release|x86.ActiveCfg = Release|Any CPU
 		{C62D5D2D-2B14-4A52-AE47-9808EE9D7AFE}.Static lib - Release|x86.Build.0 = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Debug|x64.Build.0 = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Debug|x86.Build.0 = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Release - Fast FPU|Any CPU.ActiveCfg = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Release - Fast FPU|Any CPU.Build.0 = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Release - Fast FPU|x64.ActiveCfg = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Release - Fast FPU|x64.Build.0 = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Release - Fast FPU|x86.ActiveCfg = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Release - Fast FPU|x86.Build.0 = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Release|x64.ActiveCfg = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Release|x64.Build.0 = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Release|x86.ActiveCfg = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Release|x86.Build.0 = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.SDL-Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.SDL-Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.SDL-Debug|x64.ActiveCfg = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.SDL-Debug|x64.Build.0 = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.SDL-Debug|x86.ActiveCfg = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.SDL-Debug|x86.Build.0 = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Debug|x64.ActiveCfg = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Debug|x64.Build.0 = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Debug|x86.ActiveCfg = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Debug|x86.Build.0 = Debug|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Release - Fast FPU|Any CPU.ActiveCfg = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Release - Fast FPU|Any CPU.Build.0 = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Release - Fast FPU|x64.ActiveCfg = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Release - Fast FPU|x64.Build.0 = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Release - Fast FPU|x86.ActiveCfg = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Release - Fast FPU|x86.Build.0 = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Release|Any CPU.Build.0 = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Release|x64.ActiveCfg = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Release|x64.Build.0 = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Release|x86.ActiveCfg = Release|Any CPU
-		{6F9F559F-EDCB-481D-8503-F61CC43AA96E}.Static lib - Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

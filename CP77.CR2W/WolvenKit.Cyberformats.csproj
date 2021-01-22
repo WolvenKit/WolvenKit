@@ -23,7 +23,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\CP77.Common\CP77.Common.csproj" />
 		<ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
 	</ItemGroup>
 
