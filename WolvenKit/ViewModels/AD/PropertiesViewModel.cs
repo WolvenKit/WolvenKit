@@ -13,6 +13,7 @@ using Catel;
 using Catel.Services;
 using Catel.Threading;
 using Orc.ProjectManagement;
+using WolvenKit.Common.DDS;
 
 namespace WolvenKit.ViewModels
 {
@@ -22,16 +23,15 @@ namespace WolvenKit.ViewModels
     using Model;
     using Common;
     using Common.Extensions;
-    using Common.Tools.FNV1A;
+    using Common.FNV1A;
     using Common.Model;
     using Common.Services;
     using Common.Tools;
-    using Common.Tools.DDS;
     using Common.Wcc;
     using CR2W;
     using CR2W.Types;
     using static CR2W.Types.Enums;
-    using static Common.Tools.DDS.TexconvWrapper;
+    using static TexconvWrapper;
 
     public class PropertiesViewModel : ToolViewModel
     {

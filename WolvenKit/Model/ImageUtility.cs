@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
+using WolvenKit.Common.DDS;
 using ImageFormat = Pfim.ImageFormat;
 
 namespace WolvenKit.Model
@@ -19,38 +20,38 @@ namespace WolvenKit.Model
         /// </summary>
         /// <param name="compression"></param>
         /// <returns></returns>
-        public static Common.Tools.DDS.EFormat GetEFormatFromCompression(Enums.ETextureCompression compression)
+        public static EFormat GetEFormatFromCompression(Enums.ETextureCompression compression)
         {
             switch (compression)
             {
                 // missing:  0xFD
                 // missing:  0x0    //EFormat.R8G8B8A8_UNORM
                 case Enums.ETextureCompression.TCM_None:
-                    return Common.Tools.DDS.EFormat.R8G8B8A8_UNORM;
+                    return EFormat.R8G8B8A8_UNORM;
                 
 
                 //0x07 // exception: characters\models\animals\goose\model\t_01__goose_d01.xbm has 0x07 but TCM_DXTAlpha
                 case Enums.ETextureCompression.TCM_DXTNoAlpha:
                 case Enums.ETextureCompression.TCM_Normals:
-                    return Common.Tools.DDS.EFormat.BC1_UNORM;
+                    return EFormat.BC1_UNORM;
 
                 //0x08 // exception: characters\models\animals\goose\model\t_01__goose_d01.xbm has 0x07 but TCM_DXTAlpha
                 case Enums.ETextureCompression.TCM_DXTAlpha:
                 case Enums.ETextureCompression.TCM_NormalsHigh:
                 case Enums.ETextureCompression.TCM_NormalsGloss:
-                    return Common.Tools.DDS.EFormat.BC3_UNORM; 
+                    return EFormat.BC3_UNORM; 
 
 
                 case Enums.ETextureCompression.TCM_QualityColor:
-                    return Common.Tools.DDS.EFormat.BC7_UNORM; //0x0A
+                    return EFormat.BC7_UNORM; //0x0A
 
                 // missing:  0x0D   //EFormat.BC2_UNORM // used for not imported dds files in texturecache therefore will never come up here
 
                 case Enums.ETextureCompression.TCM_QualityR:
-                    return Common.Tools.DDS.EFormat.BC4_UNORM; //0x0E
+                    return EFormat.BC4_UNORM; //0x0E
 
                 case Enums.ETextureCompression.TCM_QualityRG:
-                    return Common.Tools.DDS.EFormat.BC5_UNORM; //0x0F
+                    return EFormat.BC5_UNORM; //0x0F
 
                 case Enums.ETextureCompression.TCM_DXTAlphaLinear:    // unused
                 case Enums.ETextureCompression.TCM_RGBE:              // unused
@@ -301,7 +302,7 @@ namespace WolvenKit.Model
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
             {
-                Common.Tools.DDS.DDSUtils.GenerateAndWriteHeader(bw.BaseStream, GetDDSMetadata(xbm));
+                DDSUtils.GenerateAndWriteHeader(bw.BaseStream, GetDDSMetadata(xbm));
 
                 bw.Write(xbm.GetBytes());
 
@@ -316,7 +317,7 @@ namespace WolvenKit.Model
         /// </summary>
         /// <param name="xbm"></param>
         /// <returns></returns>
-        private static Common.Tools.DDS.DDSMetadata GetDDSMetadata(CBitmapTexture xbm)
+        private static DDSMetadata GetDDSMetadata(CBitmapTexture xbm)
         {
             int residentMipIndex = xbm.ResidentMipIndex?.val ?? 0;
                 
@@ -331,7 +332,7 @@ namespace WolvenKit.Model
 
 
             // TODO: TEST THIS
-            if (ddsformat == Common.Tools.DDS.EFormat.R8G8B8A8_UNORM)
+            if (ddsformat == EFormat.R8G8B8A8_UNORM)
             {
                 Enums.ETextureRawFormat format = xbm.Format.WrappedEnum;
                 switch (format)
@@ -344,13 +345,13 @@ namespace WolvenKit.Model
                     case Enums.ETextureRawFormat.TRF_AlphaGrayscale:
                     case Enums.ETextureRawFormat.TRF_HDRGrayscale:
                     default:
-                        ddsformat = Common.Tools.DDS.EFormat.R8G8B8A8_UNORM;
+                        ddsformat = EFormat.R8G8B8A8_UNORM;
                         //throw new Exception("Invalid texture format type! [" + format + "]");
                         break;
                 }
             }
 
-            return new Common.Tools.DDS.DDSMetadata(width, height, (uint)mipcount, ddsformat);
+            return new DDSMetadata(width, height, (uint)mipcount, ddsformat);
         }
 
         /// <summary>

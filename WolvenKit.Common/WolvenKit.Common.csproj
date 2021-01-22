@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Model\Cr2w\**" />
+    <EmbeddedResource Remove="Model\Cr2w\**" />
+    <None Remove="Model\Cr2w\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="DDS\texconv.exe" />
   </ItemGroup>
 
@@ -29,10 +35,6 @@
     <PackageReference Include="CsvHelper" Version="16.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
     <PackageReference Include="protobuf-net" Version="3.0.73" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Model\Cr2w\" />
   </ItemGroup>
 
 </Project>

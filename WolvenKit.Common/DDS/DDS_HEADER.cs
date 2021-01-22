@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace WolvenKit.Common.Tools.DDS
+namespace WolvenKit.Common.DDS
 {
     [StructLayout(LayoutKind.Explicit, Size = 124)]
     public struct DDS_HEADER

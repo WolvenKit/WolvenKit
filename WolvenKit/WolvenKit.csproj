@@ -22,11 +22,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CP77.CR2W\WolvenKit.Cyberformats.csproj" />
     <ProjectReference Include="..\WolvenKit.Bundles\WolvenKit.Bundles.csproj" />
     <ProjectReference Include="..\WolvenKit.Cache\WolvenKit.Cache.csproj" />
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj" />
-    <ProjectReference Include="..\Wolvenkit.Cyberpunk\CP77.CR2W\WolvenKit.Cyberformats.csproj" />
     <ProjectReference Include="..\WolvenKit.Radish\WolvenKit.Radish.csproj" />
     <ProjectReference Include="..\WolvenKit.W3Speech\WolvenKit.W3Speech.csproj" />
     <ProjectReference Include="..\WolvenKit.W3Strings\WolvenKit.W3Strings.csproj" />
