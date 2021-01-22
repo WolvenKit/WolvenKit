@@ -69,13 +69,18 @@ namespace CP77Tools
 
             var rootCommand = new RootCommand
             {
+                new UnbundleCommand(),
+                new UncookCommand(),
+                new RebuildCommand(),
                 new PackCommand(),
-                new ArchiveCommand(),
+                new ExportCommand(),
+                
                 new DumpCommand(),
                 new CR2WCommand(),
+                
                 new HashCommand(),
                 new OodleCommand(),
-                new RebuildCommand()
+                new ArchiveCommand_Deprecated(),
             };
 
             //await ConsoleFunctions.UpdateHashesAsync();

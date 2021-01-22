@@ -13,6 +13,7 @@ using CP77.Common.Tools.FNV1A;
 using CP77.CR2W.Archive;
 using CP77.CR2W.Extensions;
 using CP77.CR2W.Types;
+using CP77.CR2W.Uncooker;
 using WolvenKit.Common;
 using WolvenKit.Common.Tools.DDS;
 
@@ -24,7 +25,7 @@ namespace CP77.CR2W
     public static partial class ModTools
     {
         /// <summary>
-        /// Uncooks a single file by hash.
+        /// Uncooks a single file by hash. This will both extract and uncook the redengine file
         /// </summary>
         /// <param name="ar"></param>
         /// <param name="hash"></param>
@@ -32,7 +33,8 @@ namespace CP77.CR2W
         /// <param name="uncookext"></param>
         /// <param name="flip"></param>
         /// <returns></returns>
-        public static int UncookSingle(this Archive.Archive ar, ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga, bool flip = false)
+        public static int UncookSingle(this Archive.Archive ar, ulong hash, DirectoryInfo outDir, 
+            EUncookExtension uncookext = EUncookExtension.tga, bool flip = false)
         {
             // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
             
@@ -45,175 +47,54 @@ namespace CP77.CR2W
             if (!ar.Files.ContainsKey(hash))
                 return -1;
             var name = ar.Files[hash].FileName;
-            var outfile = new FileInfo(Path.Combine(outDir.FullName,
+            var infile = new FileInfo(Path.Combine(outDir.FullName,
                 $"{name}"));
-            if (outfile.Directory == null)
+            if (infile.Directory == null)
                 return -1;
 
-            var uncooksuccess = false;
-            var (file, buffers) = ar.GetFileData(hash, true);
             
-            var cr2w = new CR2WFile();
+            var (file, buffers) = ar.GetFileData(hash, false);
+
+            Unbundle(file, buffers, infile);
+
             using var ms = new MemoryStream(file);
             using var br = new BinaryReader(ms);
-            cr2w.ReadImportsAndBuffers(br);
-
+            
             var ext = Path.GetExtension(name)[1..];
-            
-            //TODO: temp fix to support uncooking unknown files
-            if (cr2w.StringDictionary[1] == "C2dArray")
-                ext = "csv";
-            else if (cr2w.StringDictionary[1] == "CBitmapTexture")
-                ext = "xbm";
-            
-            // uncook textures, meshes etc
+
+            var uncooksuccess = false;
             if (Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext))
             {
                 if (!Enum.TryParse(ext, true, out ECookedFileFormat extAsEnum))
                     return -1;
-                switch (extAsEnum)
+
+                var cr2w = TryReadCr2WFile(br);
+                if (cr2w == null)
                 {
-                    case ECookedFileFormat.xbm:
-                    {
-                        if (buffers.Count > 1)
-                            return -1; //TODO: can that happen?
-                        if (cr2w.StringDictionary[1] != "CBitmapTexture")
-                            return -1;
-
-                        br.BaseStream.Seek(0, SeekOrigin.Begin);
-                        EFileReadErrorCodes result = EFileReadErrorCodes.NoCr2w;
-                        try
-                        {
-                            result = cr2w.Read(br);
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.LogString(e.Message, Logtype.Error);
-                            return -1;
-                        }
-                        
-                        if (result != EFileReadErrorCodes.NoError)
-                            return -1;
-                        if (!(cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm) ||
-                            !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
-                            return -1;
-
-                        // write buffers
-                        foreach (var b in buffers)
-                        {
-                            #region textures
-
-                            // create dds header
-                            var newpath = Path.ChangeExtension(outfile.FullName, "dds");
-                            try
-                            {
-                                #region get xbm data
-
-                                var width = blob.Header.SizeInfo.Width.val;
-                                var height = blob.Header.SizeInfo.Height.val;
-                                var mips = blob.Header.TextureInfo.MipCount.val;
-                                var slicecount = blob.Header.TextureInfo.SliceCount.val;
-                                var alignment = blob.Header.TextureInfo.DataAlignment.val;
-
-                                Enums.ETextureRawFormat rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-                                if (xbm.Setup.RawFormat?.WrappedEnum != null)
-                                    rawfmt = xbm.Setup.RawFormat.WrappedEnum;
-                                else
-                                {
-                                }
-
-                                Enums.ETextureCompression compression = Enums.ETextureCompression.TCM_None;
-                                if (xbm.Setup.Compression?.WrappedEnum != null)
-                                    compression = xbm.Setup.Compression.WrappedEnum;
-                                else
-                                {
-                                }
-
-                                var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt);
-
-                                #endregion
-
-                                // extract and write buffer 
-                                Directory.CreateDirectory(outfile.Directory.FullName);
-                                using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
-                                {
-                                    DDSUtils.GenerateAndWriteHeader(ddsStream,
-                                        new DDSMetadata(width, height, mips, texformat, alignment, false, slicecount,
-                                            true));
-                                    ddsStream.Write(b);
-                                    
-                                    if (flip && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                                        TexconvWrapper.VFlip(outfile.Directory.FullName, newpath, texformat);
-                                }
-
-                                // success
-                                uncooksuccess = true;
-                            }
-                            catch
-                            {
-                                uncooksuccess = false;
-                                continue;
-                            }
-
-                            // convert to texture
-                            if (uncookext != EUncookExtension.dds && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                            {
-                                try
-                                {
-                                    var di = new FileInfo(outfile.FullName).Directory;
-                                    TexconvWrapper.Convert(di.FullName, $"{newpath}", uncookext);
-                                }
-                                catch (Exception e)
-                                {
-                                    // silent
-                                }
-                            }
-
-                            #endregion
-                        }
-
-                        break;
-                    }
-                    case ECookedFileFormat.csv:
-                    {
-                        if (buffers.Count > 0)
-                            return -1; //TODO: can that happen?
-                        if (cr2w.StringDictionary[1] != "C2dArray")
-                            return -1;
-
-                        br.BaseStream.Seek(0, SeekOrigin.Begin);
-                        var result = cr2w.Read(br);
-                        if (result != EFileReadErrorCodes.NoError)
-                            return -1;
-                        if (!(cr2w.Chunks.FirstOrDefault() is {data: C2dArray redcsv}))
-                            return -1;
-
-                        // write
-                        var newpath = $"{outfile.FullName}.csv";
-
-                        Directory.CreateDirectory(outfile.Directory.FullName);
-                        using var nstream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
-                        redcsv.ToCsvStream(nstream);
-
-
-                        break;
-                    }
-                    case ECookedFileFormat.json:
-                    {
-
-                        break;
-                    }
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    Logger.LogString($"Failed to read cr2w file {infile.FullName}", Logtype.Error);
+                    return -1;
                 }
+
+                cr2w.FileName = infile.FullName;
+
+                //TODO: do this better?
+                (_, buffers) = ar.GetFileData(hash, true);
+                uncooksuccess = Uncook(cr2w, buffers, extAsEnum, uncookext, flip) == 1;
             }
             else // extract buffers
             {
+                var cr2w = TryReadCr2WFileHeaders(br);
+                if (cr2w == null)
+                {
+                    Logger.LogString($"Failed to read cr2w file {infile.FullName}", Logtype.Error);
+                    return -1;
+                }
+
                 for (int i = 0; i < buffers.Count; i++)
                 {
                     var buffer = buffers[i];
-                    var bufferpath = $"{outfile}.{i}.buffer";
-                    Directory.CreateDirectory(outfile.Directory.FullName);
+                    var bufferpath = $"{infile}.{i}.buffer";
+                    Directory.CreateDirectory(infile.Directory.FullName);
                     File.WriteAllBytes(bufferpath, buffer);
                 }
                 uncooksuccess = true;
@@ -283,5 +164,286 @@ namespace CP77.CR2W
             return (extractedList.ToList(), finalMatchesList.Count);
         }
 
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public static int Uncook(CR2WFile cr2w, List<byte[]> buffers, ECookedFileFormat ext, 
+            EUncookExtension uncookext = EUncookExtension.tga, bool flip = false)
+        {
+            var infile = new FileInfo(cr2w.FileName);
+            var uncooksuccess = false;
+
+            // uncook textures, meshes etc
+            switch (ext)
+            {
+                case ECookedFileFormat.xbm:
+                {
+                    if (buffers.Count > 1)
+                        return -1; //TODO: can that happen?
+                    if (cr2w.StringDictionary[1] != "CBitmapTexture")
+                        return -1;
+
+
+                    if (!(cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm) ||
+                        !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+                        return -1;
+
+                    // create dds header
+                    var newpath = Path.ChangeExtension(infile.FullName, "dds");
+                    try
+                    {
+                        #region get xbm data
+
+                        var width = blob.Header.SizeInfo.Width.val;
+                        var height = blob.Header.SizeInfo.Height.val;
+                        var mips = blob.Header.TextureInfo.MipCount.val;
+                        var slicecount = blob.Header.TextureInfo.SliceCount.val;
+                        var alignment = blob.Header.TextureInfo.DataAlignment.val;
+
+                        Enums.ETextureRawFormat rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
+                        if (xbm.Setup.RawFormat?.WrappedEnum != null)
+                            rawfmt = xbm.Setup.RawFormat.WrappedEnum;
+                        else
+                        {
+                        }
+
+                        Enums.ETextureCompression compression = Enums.ETextureCompression.TCM_None;
+                        if (xbm.Setup.Compression?.WrappedEnum != null)
+                            compression = xbm.Setup.Compression.WrappedEnum;
+                        else
+                        {
+                        }
+
+                        var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt);
+
+                        #endregion
+
+                        // extract and write buffer 
+                        Directory.CreateDirectory(infile.Directory.FullName);
+                        using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
+                        {
+                            DDSUtils.GenerateAndWriteHeader(ddsStream,
+                                new DDSMetadata(width, height, mips, texformat, alignment, false, slicecount,
+                                    true));
+                            ddsStream.Write(buffers[0]);
+
+
+                        }
+
+                        if (flip && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                            TexconvWrapper.VFlip(infile.Directory.FullName, newpath, texformat);
+                        // success
+                        uncooksuccess = true;
+                    }
+                    catch
+                    {
+                        uncooksuccess = false;
+                        return -1;
+                    }
+
+                    // convert to texture
+                    if (uncookext != EUncookExtension.dds && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    {
+                        try
+                        {
+                            var di = new FileInfo(infile.FullName).Directory;
+                            TexconvWrapper.Convert(di.FullName, $"{newpath}", uncookext);
+                        }
+                        catch (Exception e)
+                        {
+                            // silent
+                        }
+                    }
+
+                    break;
+                }
+                case ECookedFileFormat.csv:
+                {
+                    if (buffers.Count > 0)
+                        return -1; //TODO: can that happen?
+                    if (cr2w.StringDictionary[1] != "C2dArray")
+                        return -1;
+
+
+                    if (!(cr2w.Chunks.FirstOrDefault() is {data: C2dArray redcsv}))
+                        return -1;
+
+                    // write
+                    var newpath = $"{infile.FullName}.csv";
+
+                    Directory.CreateDirectory(infile.Directory.FullName);
+                    using var nstream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
+                    redcsv.ToCsvStream(nstream);
+
+
+                    break;
+                }
+                case ECookedFileFormat.json:
+                {
+
+                    break;
+                }
+                case ECookedFileFormat.mlmask:
+                {
+
+                    try
+                    {
+                        if (!Mlmask.Uncook(cr2w, buffers, infile, uncookext))
+                            return -1;
+                        uncooksuccess = true;
+                    }
+                    catch
+                    {
+                        uncooksuccess = false;
+                    }
+
+                    break;
+                }
+                case ECookedFileFormat.cubemap:
+                {
+
+
+                    if (!(cr2w.Chunks.FirstOrDefault()?.data is CCubeTexture ctex) ||
+                        !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+                        return -1;
+
+                    try
+                    {
+                        var sliceCount = blob.Header.TextureInfo.SliceCount.val;
+                        var mipCount = blob.Header.TextureInfo.MipCount.val;
+                        var alignment = blob.Header.TextureInfo.DataAlignment.val;
+
+                        var height = blob.Header.SizeInfo.Height.val;
+                        var width = blob.Header.SizeInfo.Width.val;
+
+
+                        Enums.ETextureCompression compression = Enums.ETextureCompression.TCM_None;
+                        Enums.ETextureRawFormat rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
+
+                        if (ctex.Setup.RawFormat?.WrappedEnum != null)
+                            rawfmt = ctex.Setup.RawFormat.WrappedEnum;
+
+                        if (ctex.Setup.Compression?.WrappedEnum != null)
+                            compression = ctex.Setup.Compression.WrappedEnum;
+
+                        var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt);
+
+                        Directory.CreateDirectory(infile.Directory.FullName);
+
+                        var newpath = Path.ChangeExtension(infile.FullName, "dds");
+
+                        using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
+                        {
+                            DDSUtils.GenerateAndWriteHeader(ddsStream,
+                                new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
+                                    true));
+                            ddsStream.Write(buffers[0]);
+                        }
+
+                        uncooksuccess = true;
+                    }
+                    catch
+                    {
+                        uncooksuccess = false;
+                    }
+
+                    break;
+                }
+                case ECookedFileFormat.envprobe:
+                {
+
+
+                    if (!(cr2w.Chunks.FirstOrDefault()?.data is CReflectionProbeDataResource probe) ||
+                        !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+                        return -1;
+
+                    try
+                    {
+                        var sliceCount = blob.Header.TextureInfo.SliceCount.val;
+                        var mipCount = blob.Header.TextureInfo.MipCount.val;
+                        var alignment = blob.Header.TextureInfo.DataAlignment.val;
+
+                        var height = blob.Header.SizeInfo.Height.val;
+                        var width = blob.Header.SizeInfo.Width.val;
+
+                        EFormat texformat = EFormat.R8G8B8A8_UNORM;
+
+                        Directory.CreateDirectory(infile.Directory.FullName);
+
+                        var newpath = Path.ChangeExtension(infile.FullName, "dds");
+
+                        using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
+                        {
+                            DDSUtils.GenerateAndWriteHeader(ddsStream,
+                                new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
+                                    true));
+                            ddsStream.Write(buffers[0]);
+                        }
+
+                        uncooksuccess = true;
+                    }
+                    catch
+                    {
+                        uncooksuccess = false;
+                    }
+
+                    break;
+                }
+                case ECookedFileFormat.texarray:
+                {
+
+
+                    if (!(cr2w.Chunks.FirstOrDefault()?.data is CTextureArray texa) ||
+                        !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+                        return -1;
+
+                    try
+                    {
+                        var sliceCount = blob.Header.TextureInfo.SliceCount.val;
+                        var mipCount = blob.Header.TextureInfo.MipCount.val;
+                        var alignment = blob.Header.TextureInfo.DataAlignment.val;
+
+                        var height = blob.Header.SizeInfo.Height.val;
+                        var width = blob.Header.SizeInfo.Width.val;
+
+                        Enums.ETextureRawFormat rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
+                        if (texa.Setup.RawFormat?.WrappedEnum != null)
+                            rawfmt = texa.Setup.RawFormat.WrappedEnum;
+
+                        Enums.ETextureCompression compression = Enums.ETextureCompression.TCM_None;
+                        if (texa.Setup.Compression?.WrappedEnum != null)
+                            compression = texa.Setup.Compression.WrappedEnum;
+
+                        var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt);
+
+                        Directory.CreateDirectory(infile.Directory.FullName);
+
+                        var newpath = Path.ChangeExtension(infile.FullName, "dds");
+
+                        using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
+                        {
+                            DDSUtils.GenerateAndWriteHeader(ddsStream,
+                                new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
+                                    true));
+                            ddsStream.Write(buffers[0]);
+                        }
+
+                        uncooksuccess = true;
+                    }
+                    catch
+                    {
+                        uncooksuccess = false;
+                    }
+
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+
+            return uncooksuccess ? 1 : 0;
+        }
     }
 }

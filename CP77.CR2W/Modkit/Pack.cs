@@ -11,6 +11,7 @@ using CP77.Common.Services;
 using CP77.Common.Tools;
 using CP77.Common.Tools.FNV1A;
 using CP77.CR2W.Archive;
+using CP77.CR2W.Extensions;
 using CP77Tools.Model;
 using RED.CRC32;
 
@@ -59,12 +60,12 @@ namespace CP77.CR2W
             };
             var allfiles = infolder.GetFiles("*", SearchOption.AllDirectories);
             var parentfiles = allfiles
-                .Where(_ => exludedExtensions.All(x => _.Extension != x));
+                .Where(_ => exludedExtensions.All(x => _.Extension.ToLower() != x));
             var fileInfos = parentfiles
-                .OrderBy(_ => FNV1A64HashAlgorithm.HashString(GetRelpath(_)))
+                .OrderBy(_ => FNV1A64HashAlgorithm.HashString(_.FullName.RelativePath(infolder)))
                 .ToList();
 
-            string GetRelpath(FileInfo infi) => infi.FullName[(infolder.FullName.Length + 1)..];
+            
 
             Logger.LogString($"Found {fileInfos.Count} bundle entries to pack.", Logtype.Important);
             
@@ -73,9 +74,9 @@ namespace CP77.CR2W
             Logger.LogProgress(0);
             foreach (var fileInfo in fileInfos)
             {
-                var relpath = GetRelpath(fileInfo);
+                var relpath = fileInfo.FullName.RelativePath(infolder);
                 var hash = FNV1A64HashAlgorithm.HashString(relpath);
-                if (fileInfo.Extension == ".bin")
+                if (fileInfo.Extension.ToLower() == ".bin")
                     hash = ulong.Parse(Path.GetFileNameWithoutExtension(relpath));
 
                 using var fileStream = new FileStream(fileInfo.FullName, FileMode.Open);
@@ -88,7 +89,7 @@ namespace CP77.CR2W
                 uint lastoffsetidx = (uint)ar.Table.Offsets.Count;
                 int flags = 0;
                 
-                var cr2w = TryReadCr2WFile(fileBinaryReader);
+                var cr2w = TryReadCr2WFileHeaders(fileBinaryReader);
                 if (cr2w != null)
                 {
                     //register imports
