@@ -1,133 +1,149 @@
 ﻿<catel:DataWindow x:Class="WolvenKit.Views.PluginManager.PluginManagerView"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:catel="http://schemas.catelproject.com"  xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol"
+                  xmlns:catel="http://schemas.catelproject.com"  
+                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
+                  xmlns:hc="https://handyorg.github.io/handycontrol"
                   ShowInTaskbar="True" 
                   AllowsTransparency="True"           
                   BorderBrush="{x:Null}" 
                   WindowStartupLocation="CenterScreen"  
-                  Height="600" 
-                  Width="400"
-                  MaxHeight="600"
-                  MaxWidth="400"
-                         MinHeight="600"
-                  MinWidth="400"
+                  MinWidth="250"
                   WindowStyle="None" 
-                  Title="Plugin Manager" >
+                  Title="Plugin Manager">
+
+    <!--
+            Plugin Manager MVVM TODOLIST (REMOVE ITEM IF DONE)
+    
+    - Convert Click events for Close and minimize to MVVM
+    - Convert MouseDownEvent for CustomTitlebar to MVVM
+    - Add bindings for the PluginListBoxItemContent Templates (Install and uninstall)
+    - Add event for install and bind progress to progressbutton
+    - add event for uninstall and bind progress to progressbutton
+    - Add bindings for plugin title and plugin description for bottom detail view.   
+    
+    -->
+
+
+
     <catel:DataWindow.Resources>
         <ResourceDictionary>
-
-
             <ResourceDictionary.MergedDictionaries>
-
                 <hc:Theme Name="HandyTheme"/>
                 <hc:Theme Skin="Dark"/>
-               
             </ResourceDictionary.MergedDictionaries>
-     
+
+            <DataTemplate x:Key="PluginListBoxItemContentInstall">
+                <Grid Margin="-40,0,40,0" >
+                    <hc:Tag MinWidth="400" HorizontalContentAlignment="Left"  Margin="15,0,50,0" ShowCloseButton="False" Content="TEMPLATEPLUGINTITLE" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+                        <hc:Tag.Header>
+                            <iconPacks:PackIconBoxIcons Kind="RegularPlug"/>
+                        </hc:Tag.Header>
+                    </hc:Tag>
+                    <hc:ProgressButton Content="Install" Width="90"  HorizontalAlignment="Right" Margin="0,0,-45,0" />
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="PluginListBoxItemContentUninstall">
+                <Grid Margin="-40,0,40,0">
+                    <hc:Tag MinWidth="400" HorizontalContentAlignment="Left"  Margin="15,0,50,0" ShowCloseButton="False" Content="TEMPLATEPLUGINTITLE" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+                        <hc:Tag.Header>
+                            <iconPacks:PackIconBoxIcons Kind="RegularPlug"/>
+                        </hc:Tag.Header>
+                    </hc:Tag>
+                    <hc:ProgressButton Content="Uninstall" Width="90"  HorizontalAlignment="Right" Margin="0,0,-45,0" />
+                </Grid>
+            </DataTemplate>
+
         </ResourceDictionary>
 
     </catel:DataWindow.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
 
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="9*"/>
-        </Grid.RowDefinitions>
 
-       
 
-        <Grid x:Name="DraggableTitleBar" Grid.ColumnSpan="2" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
-            <!--TitleBar  Please add onmousedown event to be able to drag the window-->
-            <Button Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" BorderBrush="{x:Null}"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,5,3" >
-                <iconPacks:PackIconCodicons   Kind="Close"/>
-            </Button>
-            <Button BorderBrush="{x:Null}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,45,3" >
-                <iconPacks:PackIconCodicons  Kind="ChromeMinimize"/>
-            </Button>
-            <TextBlock Text="Plugin Manager" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
-        </Grid>
+    <Border BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
+        <Grid>
 
-        <hc:TabControl Style="{StaticResource TabControlInLine}" TabStripPlacement="Bottom" Grid.Row="2">
-            <hc:TabItem Header="Available">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-                    <hc:ScrollViewer Grid.Row="0">
-                        <hc:TransitioningContentControl >
-                        <ListBox Style="{StaticResource ListBoxModernStyle}" >
-                            <ListBoxItem x:Name="ItemParent"  >
-                                <Grid Margin="-40,0,40,0" Width="{Binding ActualWidth, ElementName=ItemParent}">
-                                    <hc:Shield Margin="15,0,0,0" Subject="TemplatePlugin" Status="V:1.2.32" Color="#1182c3"/>
-                                    <hc:ProgressButton Content="Install" Width="100"  HorizontalAlignment="Right" Margin="0,0,40,0" />
-                                </Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
 
-                            </ListBoxItem>
-                        </ListBox>
-                    </hc:TransitioningContentControl>
-                    </hc:ScrollViewer>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="9*"/>
+            </Grid.RowDefinitions>
 
-                    <hc:ScrollViewer Grid.Row="1">
 
-                        <Grid>
-                            <TextBlock Text="PLUGIN TITLE" Margin="15" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <avalonEdit:TextView></avalonEdit:TextView>
 
-                        </Grid>
-                    </hc:ScrollViewer>
-                    
+            <Grid x:Name="DraggableTitleBar" Grid.ColumnSpan="2" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown">
+                <!--TitleBar  Please add onmousedown event to be able to drag the window-->
+                <Button Click="Button_Click" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" BorderBrush="{x:Null}"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,5,3" >
+                    <iconPacks:PackIconCodicons   Kind="Close"/>
+                </Button>
+                <Button  Click="Button_Click_1" BorderBrush="{x:Null}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,45,3" >
+                    <iconPacks:PackIconCodicons  Kind="ChromeMinimize"/>
+                </Button>
+                <TextBlock Text="Plugin Manager" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            </Grid>
 
-                </Grid>
-                
-               
-                
-            </hc:TabItem>
-            <hc:TabItem Header="Installed">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-                    <hc:ScrollViewer Grid.Row="0">
-                        <hc:TransitioningContentControl >
-                            <ListBox Style="{StaticResource ListBoxModernStyle}" >
-                                <ListBoxItem x:Name="ItemParentDelete"  >
-                                    <Grid Margin="-40,0,40,0" Width="{Binding ActualWidth, ElementName=ItemParentDelete}">
-                                        <hc:Shield Margin="15,0,0,0" Subject="TemplatePlugin" Status="V:1.2.32" Color="#1182c3"/>
-                                        <hc:ProgressButton Content="Uninstall" Width="100"  HorizontalAlignment="Right" Margin="0,0,40,0" />
-                                    </Grid>
 
-                                </ListBoxItem>
+            <hc:TabControl Style="{StaticResource TabControlInLine}" TabStripPlacement="Bottom" Grid.Row="2">
+
+                <hc:TabItem Header="Available">
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+
+                        <hc:ScrollViewer Margin="3" Grid.Row="0">
+                            <ListBox Height="300" Margin="0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" Style="{StaticResource ListBoxModernStyle}" >
+                                <ListBoxItem  ContentTemplate="{DynamicResource PluginListBoxItemContentInstall}"/>
+                                <ListBoxItem  ContentTemplate="{DynamicResource PluginListBoxItemContentInstall}"/>
+                                <ListBoxItem  ContentTemplate="{DynamicResource PluginListBoxItemContentInstall}"/>
+                                <ListBoxItem  ContentTemplate="{DynamicResource PluginListBoxItemContentInstall}"/>
+                                <ListBoxItem  ContentTemplate="{DynamicResource PluginListBoxItemContentInstall}"/>
+                                <ListBoxItem  ContentTemplate="{DynamicResource PluginListBoxItemContentInstall}"/>
+                                <ListBoxItem  ContentTemplate="{DynamicResource PluginListBoxItemContentInstall}"/>
+
                             </ListBox>
-                        </hc:TransitioningContentControl>
-                    </hc:ScrollViewer>
+                        </hc:ScrollViewer>
 
-                    <hc:ScrollViewer Grid.Row="1">
+                        <hc:ScrollViewer Grid.Row="1">
+                            <StackPanel>
+                                <TextBlock Text="PLUGIN TITLEBINDME" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <TextBlock MinHeight="150" Text="PLUGIN DESCRIPTIONBINDME" Margin="15" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-                        <Grid>
-                            <TextBlock Text="PLUGIN TITLE" Margin="15" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <avalonEdit:TextView></avalonEdit:TextView>
+                            </StackPanel>
+                        </hc:ScrollViewer>
 
-                        </Grid>
-                    </hc:ScrollViewer>
+                    </Grid>
+                </hc:TabItem>
 
+                <hc:TabItem Header="Installed">
+                    <Grid>
 
-                </Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
 
+                        <hc:ScrollViewer Grid.Row="0" Margin="3">
+                            <ListBox Height="300" Margin="0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" Style="{StaticResource ListBoxModernStyle}">
+                                <ListBoxItem ContentTemplate="{DynamicResource PluginListBoxItemContentUninstall}"/>
+                            </ListBox>
+                        </hc:ScrollViewer>
 
-            </hc:TabItem>
-        </hc:TabControl>
-        
-      
+                        <hc:ScrollViewer Grid.Row="1">
+                            <StackPanel>
+                                <TextBlock Text="PLUGIN TITLE" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <TextBlock MinHeight="150" Text="PLUGIN DESCRIPTION" Margin="15" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            </StackPanel>
+                        </hc:ScrollViewer>
 
-
-
-
-
-
-    </Grid>
+                    </Grid>
+                </hc:TabItem>
+            </hc:TabControl>
+        </Grid>
+    </Border>
 
 </catel:DataWindow>

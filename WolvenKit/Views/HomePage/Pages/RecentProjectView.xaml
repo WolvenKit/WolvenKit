@@ -123,7 +123,7 @@
             <StackPanel Orientation="Vertical">
                 
                 <hc:TransitioningContentControl Margin="0,5,115,0">
-                    <hc:CoverView  ShowContent="False" BorderBrush="{x:Null}"  Grid.RowSpan="1" ItemContentHeight="55" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Margin="5,5,5,5" BorderThickness="1,1,1,1" ItemMargin="15,8,15,8" ItemHeight="250" ItemWidth="350">
+                    <hc:CoverView  ShowContent="False" BorderBrush="{x:Null}"  Grid.RowSpan="1" ItemContentHeight="55" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Margin="5,5,5,5" BorderThickness="1,1,1,1" ItemMargin="15,8,15,8" ItemHeight="200" ItemWidth="350">
 
 
                      
@@ -158,25 +158,20 @@
                                             <StackPanel Margin="5" Orientation="Vertical">
                                                 <StackPanel Margin="5" Orientation="Horizontal">
                                                     <hc:Divider Margin="5,15" LineStroke="{DynamicResource MahApps.Brushes.Accent3}" LineStrokeThickness="2" Width="15"/>
-                                                    <Border VerticalAlignment="Center" Height="20" Background="{DynamicResource MahApps.Brushes.Accent3}" CornerRadius="5,2,2,2">
-                                                        <TextBlock Width="280" Margin="5" VerticalAlignment="Center"  Text="Last Modified : "/>
-                                                    </Border>
-                                                </StackPanel>
-                                                <StackPanel Margin="5" Orientation="Horizontal">
-                                                    <hc:Divider Margin="5,15" LineStroke="{DynamicResource MahApps.Brushes.Accent3}" LineStrokeThickness="2" Width="15"/>
-                                                    <Border VerticalAlignment="Center" Height="20" Background="{DynamicResource MahApps.Brushes.Accent3}" CornerRadius="5,2,2,2">
-                                                        <TextBlock Width="280" Margin="5" VerticalAlignment="Center"  Text="Project Size : "/>
+
+                                                    <Border VerticalAlignment="Center" Height="25" Background="{DynamicResource MahApps.Brushes.Accent3}" CornerRadius="5,2,2,2">
+                                                        <TextBlock Width="280" Margin="5" VerticalAlignment="Center"  Text="Project Type : "/>
                                                     </Border>
 
                                                 </StackPanel>
                                                 <StackPanel Margin="5" Orientation="Horizontal">
                                                     <hc:Divider Margin="5,15" LineStroke="{DynamicResource MahApps.Brushes.Accent3}" LineStrokeThickness="2" Width="15"/>
-
-                                                    <Border VerticalAlignment="Center" Height="20" Background="{DynamicResource MahApps.Brushes.Accent3}" CornerRadius="5,2,2,2">
+                                                    <Border VerticalAlignment="Center" Height="25" Background="{DynamicResource MahApps.Brushes.Accent3}" CornerRadius="5,2,2,2">
                                                         <TextBlock Width="280" Margin="5" VerticalAlignment="Center"  Text="Last Modified : "/>
                                                     </Border>
-
                                                 </StackPanel>
+                                      
+                                             
 
 
                                             </StackPanel>
