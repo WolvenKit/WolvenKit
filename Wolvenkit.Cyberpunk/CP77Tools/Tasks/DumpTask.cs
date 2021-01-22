@@ -14,7 +14,6 @@ using WolvenKit.Common.Extensions;
 using CP77.CR2W;
 using CP77.CR2W.Reflection;
 using CP77.CR2W.Types;
-using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.FNV1A;
 using WolvenKit.Common.Model;

@@ -25,12 +25,12 @@ namespace WolvenKit.Common.Extensions
 
         public static string FirstCharToUpper(this string input)
         {
-            return input switch
+            switch (input)
             {
-                null => throw new ArgumentNullException(nameof(input)),
-                "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
-                _ => input.First().ToString().ToUpper() + input.Substring(1)
-            };
+                case null: throw new ArgumentNullException(nameof(input));
+                case "": throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
+                default: return input.First().ToString().ToUpper() + input.Substring(1);
+            }
         }
 
         public static string FirstCharToLower(this string input)
@@ -78,6 +78,42 @@ namespace WolvenKit.Common.Extensions
             return result;
         }
 
-        
+        public static (string, bool, EProjectFolders) GetModRelativePath(this string fullpath, string activeModFileDirectory)
+        {
+            var relativePath = fullpath.Substring(activeModFileDirectory.Length + 1);
+            bool isDLC;
+            EProjectFolders projectfolder = EProjectFolders.Cooked;
+
+            if (relativePath.StartsWith("DLC\\"))
+                isDLC = true;
+            else if (relativePath.StartsWith("Mod\\"))
+                isDLC = false;
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+            relativePath = relativePath.Substring(4);
+
+            if (relativePath.StartsWith(EProjectFolders.Cooked.ToString()))
+            {
+                relativePath = relativePath.Substring(EProjectFolders.Cooked.ToString().Length + 1);
+                projectfolder = EProjectFolders.Cooked;
+            }
+
+            if (relativePath.StartsWith(EProjectFolders.Uncooked.ToString()))
+            {
+                relativePath = relativePath.Substring(EProjectFolders.Uncooked.ToString().Length + 1);
+                projectfolder = EProjectFolders.Uncooked;
+            }
+
+            else if (relativePath.StartsWith(EArchiveType.SoundCache.ToString()))
+                relativePath = relativePath.Substring(EArchiveType.SoundCache.ToString().Length + 1);
+            else if (relativePath.StartsWith(EArchiveType.Speech.ToString()))
+                relativePath = relativePath.Substring(EArchiveType.Speech.ToString().Length + 1);
+
+            return (relativePath, isDLC, projectfolder);
+        }
+
     }
 }
