@@ -1102,7 +1102,7 @@ namespace WolvenKit.CR2W.SRT
 
         }
 
-        Task<Common.Model.EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
+        Task<Common.EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
         {
             throw new NotImplementedException();
         }

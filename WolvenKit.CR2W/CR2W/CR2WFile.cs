@@ -1565,7 +1565,7 @@ namespace WolvenKit.CR2W
             m_tableheaders[index].crc32 = crc.HashUInt32;
         }
 
-        Task<Common.Model.EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
+        Task<Common.EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
         {
             throw new NotImplementedException();
         }

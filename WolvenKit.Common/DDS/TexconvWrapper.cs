@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using Catel.IoC;
-using CP77.Common.Services;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Common.Tools.DDS
 {
@@ -99,16 +99,6 @@ namespace WolvenKit.Common.Tools.DDS
         //FP32,
         //BPTC,
         //BPTC_FLOAT
-    }
-
-    public enum EUncookExtension
-    {
-        tga,
-        bmp,
-        jpg,
-        jpeg,
-        png,
-        dds,
     }
 
     public static class TexconvWrapper

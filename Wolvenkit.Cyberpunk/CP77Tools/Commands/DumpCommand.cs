@@ -16,8 +16,11 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool>(new[] {"--missinghashes", "-m"}, "List all missing hashes of all input archives."));
             AddOption(new Option<bool>(new[] {"--texinfo"}, "Dump all xbm info."));
             AddOption(new Option<bool>(new[] {"--classinfo"}, "Dump all class info."));
+            AddOption(new Option<bool>(new[] {"--dump", "-d"}, "Dump archive information."));
+            AddOption(new Option<bool>(new[] {"--list", "-l"}, "List contents of archive."));
+
             
-            Handler = CommandHandler.Create<string[], bool, bool, bool, bool>(ConsoleFunctions.DumpTask);
+            Handler = CommandHandler.Create<string[], bool, bool, bool, bool, bool, bool>(ConsoleFunctions.DumpTask);
         }
     }
 }
