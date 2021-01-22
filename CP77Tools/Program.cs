@@ -73,7 +73,6 @@ namespace CP77Tools
                 
                 new HashCommand(),
                 new OodleCommand(),
-                new ArchiveCommand_Deprecated(),
             };
 
             //await ConsoleFunctions.UpdateHashesAsync();
