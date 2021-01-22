@@ -78,6 +78,12 @@ namespace WolvenKit
             //-- Category : CodeEditor
             viewModelLocator.Register(typeof(Views.CodeEditor.CodeEditorView), typeof(ViewModels.CodeEditor.CodeEditorViewModel));
 
+            //-- Category : PluginManager
+            viewModelLocator.Register(typeof(Views.PluginManager.PluginManagerView), typeof(ViewModels.PluginManager.PluginManagerViewModel));
+
+            //-- Category : VisualEditor
+            viewModelLocator.Register(typeof(Views.VisualEditor.VisualEditorView), typeof(ViewModels.VisualEditor.VisualEditorViewModel));
+            viewModelLocator.Register(typeof(Views.VisualEditor.Blocks.VisualBlockView), typeof(ViewModels.VisualEditor.Blocks.VisualBlockViewModel));
 
 
 
@@ -95,6 +101,7 @@ namespace WolvenKit
             viewModelLocator.Register(typeof(Views.HomePage.Pages.SettingsPageView), typeof(ViewModels.HomePage.Pages.SettingsPageViewModel));
             viewModelLocator.Register(typeof(Views.HomePage.Pages.WikiPageView), typeof(ViewModels.HomePage.Pages.WikiPageViewModel));
             viewModelLocator.Register(typeof(Views.HomePage.Pages.WelcomePageView), typeof(ViewModels.HomePage.Pages.WelcomePageViewModel));
+            viewModelLocator.Register(typeof(Views.HomePage.Pages.WebsitePageView), typeof(ViewModels.HomePage.Pages.WebsitePageViewModel));
 
 
             // ---- HeadCategory : Wizards

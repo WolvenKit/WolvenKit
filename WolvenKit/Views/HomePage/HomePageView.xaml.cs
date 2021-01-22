@@ -196,5 +196,14 @@ namespace WolvenKit.Views.HomePage
                 PageViewGrid.Children.Add(new SettingsPageView());
             }
         }
+
+        private void SideMenu_WebsiteItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (IsLoaded && IsVisible && IsInitialized)
+            {
+                PageViewGrid.Children.Clear();
+                PageViewGrid.Children.Add(new WebsitePageView());
+            }
+        }
     }
 }

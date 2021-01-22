@@ -296,6 +296,5 @@
   <ItemGroup>
     <Folder Include="Resources\Styles\CustomBase\" />
     <Folder Include="Resources\Styles\Custom\" />
-    <Folder Include="Views\PluginManager\" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,14 @@
+﻿<catel:UserControl x:Class="WolvenKit.Views.VisualEditor.Blocks.VisualBlockView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:catel="http://schemas.catelproject.com">
+
+    <Grid>
+        <Expander Width="200" Header="Example">
+            <Border Height="100" BorderThickness="1,0,1,1" BorderBrush="{DynamicResource BorderBrush}" Background="{DynamicResource SecondaryRegionBrush}" CornerRadius="0,0,4,4">
+                <TextBlock Text="Waddup"/>
+            </Border>
+        </Expander>
+    </Grid>
+    
+</catel:UserControl>
