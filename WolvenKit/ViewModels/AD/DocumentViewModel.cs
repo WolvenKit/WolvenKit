@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using Catel.IoC;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels

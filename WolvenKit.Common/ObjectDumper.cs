@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace WolvenKit
+namespace WolvenKit.Common
 {
     public class ObjectDumper
     {
