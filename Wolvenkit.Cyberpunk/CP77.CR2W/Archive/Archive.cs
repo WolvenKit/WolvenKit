@@ -20,7 +20,7 @@ using WolvenKit.Common.Tools.DDS;
 using CP77.CR2W.Types;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Tools.Oodle;
-using EUncookExtension = WolvenKit.Common.EUncookExtension;
+using EUncookExtension = WolvenKit.Common.Tools.DDS.EUncookExtension;
 
 namespace CP77.CR2W.Archive
 {

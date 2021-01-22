@@ -4,7 +4,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Linq;
 using System.Threading.Tasks;
-using WolvenKit.Common;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit.CR2W

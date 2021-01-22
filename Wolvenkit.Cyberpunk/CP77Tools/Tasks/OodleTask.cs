@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using WolvenKit.Common.Tools;
 using WolvenKit.Common.Tools.Oodle;
 
 namespace CP77Tools.Tasks
@@ -23,6 +22,8 @@ namespace CP77Tools.Tasks
                 using var ms = new MemoryStream(file);
                 using var br = new BinaryReader(ms);
 
+
+
                 var oodleCompression = br.ReadBytes(4);
                 if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
                     throw new NotImplementedException();
@@ -31,7 +32,7 @@ namespace CP77Tools.Tasks
                 var buffer = br.ReadBytes(file.Length - 8);
 
                 byte[] unpacked = new byte[size];
-                long unpackedSize = OodleHelper.Decompress(buffer, unpacked);
+                long unpackedSize = OodleNative.Decompress(buffer, unpacked);
 
                 using var msout = new MemoryStream();
                 using var bw = new BinaryWriter(msout);

@@ -18,17 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="lib\kraken.dll" />
     <None Remove="lib\kraken.so" />
-    <None Remove="lib\liboodle.dylib" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="lib\kraken.dll" />
     <Content Include="lib\kraken.so">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\liboodle.dylib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -40,7 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\CP77.CR2W\WolvenKit.Cyberformats.csproj" />
   </ItemGroup>
 

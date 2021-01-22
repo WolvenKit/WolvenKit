@@ -9,15 +9,12 @@ using System.IO;
 using System.Reflection;
 using System.Diagnostics;
 using System.IO.Compression;
-using System.Runtime.InteropServices;
-using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools;
-using WolvenKit.Common.Tools.FNV1A;
 using CP77.CR2W.Resources;
 using CP77Tools.Commands;
 using CP77Tools.Extensions;
 using CP77Tools.Tasks;
 using Luna.ConsoleProgressBar;
+using WolvenKit.Common.Services;
 
 namespace CP77Tools
 {
@@ -26,16 +23,6 @@ namespace CP77Tools
         [STAThread]
         public static async Task Main(string[] args)
         {
-            //TODO: check here for linking errors
-            // try
-            // {
-            //     Marshal.PrelinkAll(typeof(OozNative));
-            // }
-            // catch (Exception e)
-            // {
-            //  Console.WriteLine(e);
-            // }
-
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
             ServiceLocator.Default.RegisterType<IAppSettingsService, AppSettingsService>();
@@ -69,18 +56,12 @@ namespace CP77Tools
 
             var rootCommand = new RootCommand
             {
-                new UnbundleCommand(),
-                new UncookCommand(),
-                new RebuildCommand(),
                 new PackCommand(),
-                new ExportCommand(),
-                
+                new ArchiveCommand(),
                 new DumpCommand(),
                 new CR2WCommand(),
-                
                 new HashCommand(),
-                new OodleCommand(),
-                new ArchiveCommand_Deprecated(),
+                new OodleCommand()
             };
 
             //await ConsoleFunctions.UpdateHashesAsync();
