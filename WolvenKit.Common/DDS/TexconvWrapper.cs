@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using Catel.IoC;
-using CP77.Common.Services;
+using WolvenKit.Common.Services;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common.Tools.DDS
