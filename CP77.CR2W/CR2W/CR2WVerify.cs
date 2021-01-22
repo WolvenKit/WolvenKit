@@ -3,9 +3,9 @@ using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using CP77.Common.Tools.FNV1A;
 using RED.CRC32;
 using CP77.CR2W.Types;
+using WolvenKit.Common.FNV1A;
 
 namespace CP77.CR2W
 {

@@ -12,9 +12,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Catel;
 using Catel.IoC;
-using CP77.Common.Tools.FNV1A;
+using WolvenKit.Common.FNV1A;
 
-namespace CP77.Common.Services
+namespace WolvenKit.Common.Services
 {
     public class HashService : IHashService
     {

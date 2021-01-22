@@ -1,9 +1,9 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Catel.Data;
 
-namespace CP77.Common.Services
+namespace WolvenKit.Common.Services
 {
     public enum Logtype
     {
@@ -48,7 +48,7 @@ namespace CP77.Common.Services
                 if (_errorLogStr != value)
                 {
                     _errorLogStr = value;
-                    RaisePropertyChanged(nameof(ErrorLogStr));
+                    OnPropertyChanged(nameof(ErrorLogStr));
 
                     // clean old log
                     if (_errorLogStr.Length > LOGLENGTH)
@@ -66,14 +66,14 @@ namespace CP77.Common.Services
                 if (_log != value)
                 {
                     _log = value;
-                    RaisePropertyChanged(nameof(Log));
+                    OnPropertyChanged(nameof(Log));
                 }
             }
         }
         #endregion
         #region progress
         private Tuple<float, string> _progress;
-        public Tuple<float,string> Progress
+        public Tuple<float, string> Progress
         {
             get => _progress;
             set
@@ -81,7 +81,7 @@ namespace CP77.Common.Services
                 if (_progress != value)
                 {
                     _progress = value;
-                    RaisePropertyChanged(nameof(Progress));
+                    OnPropertyChanged(nameof(Progress));
                 }
             }
         }
@@ -96,7 +96,7 @@ namespace CP77.Common.Services
 
         #region Methods
         public event EventHandler<LogStringEventArgs> OnStringLogged;
-        public event PropertyChangingEventHandler PropertyChanging;
+        //public event PropertyChangingEventHandler PropertyChanging;
 
         /// <summary>
         /// Log string
@@ -157,7 +157,7 @@ namespace CP77.Common.Services
         /// <param name="sflag"></param>
         /// <param name="cmdName"></param>
         /// <param name="value"></param>
-        private void InterpretLogMessage(SystemLogFlag sflag, ToolLogFlag tool ,string cmdName, string value)
+        private void InterpretLogMessage(SystemLogFlag sflag, ToolLogFlag tool, string cmdName, string value)
         {
             if (tool == ToolLogFlag.TLF_Radish)
             {
@@ -181,7 +181,7 @@ namespace CP77.Common.Services
                 };
                 InterpretWCCMessage(ref data, value);
                 //if (data.Flag != WccLogFlag.WLF_Info)
-                    ErrorLog.Add(data);
+                ErrorLog.Add(data);
             }
         }
 

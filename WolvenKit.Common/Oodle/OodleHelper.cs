@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using CP77.Common.Services;
-using CP77.Common.Tools.Oodle;
 
-namespace CP77.Common.Tools
+namespace WolvenKit.Common.Oodle
 {
     public static class OodleHelper
     {

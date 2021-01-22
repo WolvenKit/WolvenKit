@@ -15,8 +15,8 @@ using CP77.CR2W.Types;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using Catel.Data;
-using CP77.Common.Services;
-using CP77.Common.Tools.FNV1A;
+using WolvenKit.Common.Services;
+using WolvenKit.Common.FNV1A;
 using Newtonsoft.Json;
 
 namespace CP77.CR2W
@@ -1078,6 +1078,16 @@ namespace CP77.CR2W
 
 
         #endregion
+
+        Task<EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetChunks()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

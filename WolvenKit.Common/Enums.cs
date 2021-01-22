@@ -1,13 +1,31 @@
 ﻿namespace WolvenKit.Common
 {
+    public enum EArchiveType
+    {
+        ANY,
+        Bundle,
+        CollisionCache,
+        TextureCache,
+        SoundCache,
+        Speech,
+        Archive,
+        Shader,
+    }
+
+    public enum EProjectFolders
+    {
+        Cooked,
+        Uncooked,
+        Raw
+    }
+
     public enum EFileReadErrorCodes
     {
         NoError,
         NoCr2w,
         UnsupportedVersion,
-
     }
-    
+
     /// <summary>
     /// Possible file extensions of cooked redengine files
     /// </summary>

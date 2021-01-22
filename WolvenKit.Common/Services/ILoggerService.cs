@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace CP77.Common.Services
+namespace WolvenKit.Common.Services
 {
     public interface ILoggerService : INotifyPropertyChanged, INotifyPropertyChanging
     {

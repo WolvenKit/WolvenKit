@@ -3,7 +3,7 @@ using System.Buffers;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace CP77.Common.Tools.FNV1A
+namespace WolvenKit.Common.FNV1A
 {
     /// <summary>
     /// Hash algorithm, Fowler–Noll–Vo

@@ -6,8 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
-using CP77.Common.Services;
-using CP77.Common.Tools.FNV1A;
+using WolvenKit.Common.Services;
 using WolvenKit.Common;
 
 namespace CP77.CR2W

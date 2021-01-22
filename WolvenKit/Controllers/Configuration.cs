@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using WolvenKit.Common.Tools.DDS;
 
 namespace WolvenKit
 {

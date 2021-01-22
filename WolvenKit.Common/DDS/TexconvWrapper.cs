@@ -117,7 +117,7 @@ namespace WolvenKit.Common.Tools.DDS
         private static string textconvpath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "DDS/texconv.exe");
 
 
-        public static bool Convert(string outDir,
+        public static string Convert(string outDir,
             string filepath,
             EUncookExtension filetype,
             EFormat format = EFormat.R8G8B8A8_UNORM,
@@ -145,10 +145,10 @@ namespace WolvenKit.Common.Tools.DDS
             if (!fi.Exists)
             {
                 logger.LogString($"Could not convert {fi.FullName}.", Logtype.Error);
-                return false;
+                return null;
             }
 
-            return true;
+            return fi.FullName;
         }
 
         public static void VFlip(string outDir, string filepath, EFormat format = EFormat.R8G8B8A8_UNORM)

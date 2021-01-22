@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Catel.IO;
 using Catel.IoC;
-using CP77.Common.Services;
+using WolvenKit.Common.Services;
 using CP77.CR2W.Archive;
 using Newtonsoft.Json;
 using CP77.CR2W.Types;

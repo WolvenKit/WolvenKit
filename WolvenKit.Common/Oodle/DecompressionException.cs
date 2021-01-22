@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CP77.Common.Tools.Oodle
+namespace WolvenKit.Common.Oodle
 {
     public class DecompressionException : Exception
     {

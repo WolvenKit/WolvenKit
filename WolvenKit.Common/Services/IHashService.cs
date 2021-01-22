@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CP77.Common.Services
+namespace WolvenKit.Common.Services
 {
     public interface IHashService
     {

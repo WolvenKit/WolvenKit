@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using CP77.Common.Services;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Resources
 {

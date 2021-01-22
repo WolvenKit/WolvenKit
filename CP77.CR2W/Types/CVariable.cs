@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using CP77.CR2W.Reflection;
+using ObservableObject = Catel.Data.ObservableObject;
 
 namespace CP77.CR2W.Types
 {
