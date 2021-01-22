@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using CP77.Common.Tools;
+using WolvenKit.Common.Oodle;
 
 namespace CP77Tools.Tasks
 {

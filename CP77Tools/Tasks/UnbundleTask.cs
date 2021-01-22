@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 using CP77.CR2W.Archive;
-using Newtonsoft.Json;
-using WolvenKit.Common.Tools.DDS;
-using CP77Tools;
 using Catel.IoC;
-using CP77.Common.Services;
 using CP77.CR2W;
+using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
@@ -77,7 +72,7 @@ namespace CP77Tools.Tasks
             {
                 var archiveManager = new ArchiveManager(basedir);
                 // TODO: use the manager here?
-                archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Filepath)).ToList();
+                archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.Filepath)).ToList();
             }
             else
             {
