@@ -12,6 +12,7 @@
     <RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>wolvenkit</PackageTags>
+    <Version>1.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\texconv.exe">
+    <Content Include="texconv.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Resources\archivehashes.zip" />

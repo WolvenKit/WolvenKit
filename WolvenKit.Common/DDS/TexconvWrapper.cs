@@ -112,7 +112,7 @@ namespace WolvenKit.Common.DDS
     public static class TexconvWrapper
     {
 
-        private static string textconvpath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "DDS/texconv.exe");
+        private static string textconvpath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "texconv.exe");
 
 
         public static string Convert(string outDir,
