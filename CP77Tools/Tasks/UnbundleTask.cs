@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 using CP77.CR2W.Archive;
-using Newtonsoft.Json;
-using WolvenKit.Common.Tools.DDS;
-using CP77Tools;
 using Catel.IoC;
-using CP77.Common.Services;
 using CP77.CR2W;
+using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
@@ -77,7 +72,7 @@ namespace CP77Tools.Tasks
             {
                 var archiveManager = new ArchiveManager(basedir);
                 // TODO: use the manager here?
-                archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Filepath)).ToList();
+                archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.ArchiveAbsolutePath)).ToList();
             }
             else
             {
@@ -127,7 +122,7 @@ namespace CP77Tools.Tasks
                         foreach (var hash_num in hashlist)
                         {
                             ar.ExtractSingle(hash_num, outDir);
-                            logger.LogString($" {ar.Filepath}: Extracted one file: {hash_num}", Logtype.Success);
+                            logger.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}", Logtype.Success);
                         }
 
                         logger.LogString($"Bulk extraction from hashlist file completed!", Logtype.Success);
@@ -135,12 +130,12 @@ namespace CP77Tools.Tasks
                     else if (isHash && hashNumber != 0)
                     {
                         ar.ExtractSingle(hashNumber, outDir);
-                        logger.LogString($" {ar.Filepath}: Extracted one file: {hashNumber}", Logtype.Success);
+                        logger.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}", Logtype.Success);
                     }
                     else
                     {
                         var r = ar.ExtractAll(outDir, pattern, regex);
-                        logger.LogString($"{ar.Filepath}: Extracted {r.Item1.Count}/{r.Item2} files.",
+                        logger.LogString($"{ar.ArchiveAbsolutePath}: Extracted {r.Item1.Count}/{r.Item2} files.",
                             Logtype.Success);
                     }
 

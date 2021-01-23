@@ -1,6 +1,6 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Invocation;
-using WolvenKit.Common.Tools.DDS;
+using WolvenKit.Common.DDS;
 
 namespace CP77Tools.Commands
 {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 using Catel.IoC;
@@ -7,17 +6,11 @@ using System.CommandLine;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
-using System.Diagnostics;
-using System.IO.Compression;
-using System.Runtime.InteropServices;
-using CP77.Common.Services;
-using CP77.Common.Tools;
-using CP77.Common.Tools.FNV1A;
 using CP77.CR2W.Resources;
 using CP77Tools.Commands;
 using CP77Tools.Extensions;
-using CP77Tools.Tasks;
 using Luna.ConsoleProgressBar;
+using WolvenKit.Common.Services;
 
 namespace CP77Tools
 {
@@ -80,7 +73,6 @@ namespace CP77Tools
                 
                 new HashCommand(),
                 new OodleCommand(),
-                new ArchiveCommand_Deprecated(),
             };
 
             //await ConsoleFunctions.UpdateHashesAsync();

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
-using CP77.Common.Services;
+using WolvenKit.Common.Services;
 using CP77.CR2W;
 using CP77.CR2W.Archive;
 using CP77.CR2W.Resources;
@@ -20,61 +20,16 @@ using WolvenKit.Common;
 namespace CP77.MSTests
 {
     [TestClass]
-    public class Cr2wUnitTest
+    public class Cr2WUnitTest : GameUnitTest
     {
-        private const string GameDirectorySetting = "GameDirectory";
-        private const string WriteToFileSetting = "WriteToFile";
-        
-        private static Dictionary<string, MemoryMappedFile> memorymappedbundles;
-        private static ArchiveManager bm;
-        private static Dictionary<string, List<ArchiveItem>> GroupedFiles;
-
-        private static IConfigurationRoot _config;
-
-        private static string TestResultsDirectory = "_CR2WTestResults";
-        private static string GameDirectoryPath;
-        private static bool WriteToFile;
-
         [ClassInitialize]
-        public static void Setup(TestContext context)
+        public static void SetupClass(TestContext context)
         {
-            _config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
-            
-            GameDirectoryPath = _config.GetSection(GameDirectorySetting).Value;
-            WriteToFile = Boolean.Parse(_config.GetSection(WriteToFileSetting).Value);
-
-            ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
-            ServiceLocator.Default.RegisterType<IHashService, HashService>();
-            ServiceLocator.Default.RegisterType<IAppSettingsService, AppSettingsService>();
-
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
-            hashService.ReloadLocally();
-
-            if (string.IsNullOrEmpty(GameDirectoryPath))
-                throw new ConfigurationErrorsException($"'{GameDirectorySetting}' is not configured");
-
-            var gameDirectory = new DirectoryInfo(GameDirectoryPath);
-
-            if (!gameDirectory.Exists)
-                throw new ConfigurationErrorsException($"'{GameDirectorySetting}' is not a valid directory");
-
-            memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
-            DirectoryInfo gameArchiveDir;
-            try
-            {
-                gameArchiveDir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-
-            bm = new ArchiveManager(gameArchiveDir);
-            GroupedFiles = bm.GroupedFiles;
+            Setup(context);
         }
+
+
+        #region test methods
 
         [TestMethod]
         public void Test_All_Extensions()
@@ -826,6 +781,8 @@ namespace CP77.MSTests
             Test_Extension(".xcube");
         }
 
+        #endregion
+
         private void Test_Extension(string extension = null)
         {
             var resultDir = Path.Combine(Environment.CurrentDirectory, TestResultsDirectory);
@@ -878,7 +835,7 @@ namespace CP77.MSTests
             foreach (var file in files)
                 try
                 {
-                    var (fileBytes, bufferBytes) = file.GetFileData();
+                    var (fileBytes, bufferBytes) = (file.Archive as Archive).GetFileData(file.NameHash64, false);
 
                     using var ms = new MemoryStream(fileBytes);
                     using var br = new BinaryReader(ms);

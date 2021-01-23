@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Threading.Tasks;
-using Catel.IoC;
-using CP77.Common.Services;
-using CP77.Common.Tools.FNV1A;
 using CP77.CR2W;
-using CP77.CR2W.Archive;
-using WolvenKit.Common.Tools.DDS;
+using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
@@ -71,7 +64,7 @@ namespace CP77Tools.Tasks
 
             var ar = ModTools.Pack(basedir, outDir);
             if (ar != null)
-                logger.LogString($"Finished packing {ar.Filepath}.", Logtype.Success);
+                logger.LogString($"Finished packing {ar.ArchiveAbsolutePath}.", Logtype.Success);
             else
                 logger.LogString($"Packing failed.", Logtype.Error);
 

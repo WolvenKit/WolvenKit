@@ -1,7 +1,7 @@
 using System;
 using System.Text;
-using CP77.Common.Tools.FNV1A;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WolvenKit.Common.FNV1A;
 
 namespace CP77.MSTests
 {

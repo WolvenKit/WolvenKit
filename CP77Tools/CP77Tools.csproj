@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <AssemblyVersion>1.1.0.0</AssemblyVersion>
     <FileVersion>1.1.0.0</FileVersion>
     <DefineConstants Condition=" '$(OS)' == 'Windows_NT' ">IS_WINDOWS_BUILD</DefineConstants>
@@ -33,12 +33,10 @@
 
   <ItemGroup>
     <PackageReference Include="Luna.ConsoleProgressBar" Version="1.0.29" />
-    <PackageReference Include="CsvHelper" Version="18.0.0" />
+    <PackageReference Include="CsvHelper" Version="21.1.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CP77.CR2W\CP77.CR2W.csproj" />
+    <PackageReference Include="WolvenKit.Common" Version="1.0.0" />
+    <PackageReference Include="WolvenKit.Cyberformats" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,6 +45,18 @@
     </Content>
     <Content Include="lib\\kraken.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="C:\Users\ghost\.nuget\packages\wolvenkit.common\1.0.0\contentFiles\any\net5.0-windows7.0\DDS\texconv.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ghost\.nuget\packages\wolvenkit.cyberformats\1.0.0\contentFiles\any\net5.0-windows7.0\Resources\archivehashes.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ghost\.nuget\packages\wolvenkit.cyberformats\1.0.1\contentFiles\any\net5.0-windows7.0\Resources\archivehashes.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

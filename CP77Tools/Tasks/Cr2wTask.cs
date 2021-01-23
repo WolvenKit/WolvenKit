@@ -1,11 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
-using Catel.IoC;
-using CP77.Common.Services;
 using Newtonsoft.Json;
-using WolvenKit.Common.Tools.DDS;
 using CP77.CR2W;
+using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
