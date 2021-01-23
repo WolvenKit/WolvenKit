@@ -13,12 +13,7 @@ namespace CP77Tools.Commands
         {
             AddOption(new Option<string[]>(new[] {"--input", "-i"}, "Create FNV1A hash of given string"));
             AddOption(new Option<bool>(new[] {"--missing", "-m"}, ""));
-            
-            AddCommand(new Command("update", "Update the Archived Hashes")
-            {
-                Handler = CommandHandler.Create(ConsoleFunctions.UpdateHashesAsync)
-            });
-            
+
             Handler = CommandHandler.Create<string[], bool>(ConsoleFunctions.HashTask);
         }
     }

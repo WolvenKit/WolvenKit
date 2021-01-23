@@ -63,6 +63,8 @@ CP77Tools.sln.DotSettings.user
 *bin/
 *.vs/
 *.suo
+*.user
+*.pubxml
 CP77Tools/Properties/launchSettings.json
 CP77Tools/Resources/archivehashes.csv
 
