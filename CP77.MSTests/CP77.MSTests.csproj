@@ -12,8 +12,6 @@
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.1" />
     <PackageReference Include="MSTest.TestFramework" Version="2.1.1" />
     <PackageReference Include="coverlet.collector" Version="1.3.0" />
-    <PackageReference Include="WolvenKit.Common" Version="1.0.0" />
-    <PackageReference Include="WolvenKit.Cyberformats" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +19,11 @@
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CP77.CR2W\WolvenKit.Cyberformats.csproj" />
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
