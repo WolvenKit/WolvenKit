@@ -22,12 +22,14 @@
 
   <ItemGroup>
     <None Remove="DDS\texconv.exe" />
+    <None Remove="Resources\archivehashes.zip" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="DDS\texconv.exe">
+    <Content Include="Resources\texconv.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Resources\archivehashes.zip" />
   </ItemGroup>
 
   <ItemGroup>

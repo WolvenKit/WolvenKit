@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,16 +8,7 @@
     <DefineConstants Condition=" '$(OS)' == 'Windows_NT' ">IS_WINDOWS_BUILD</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Model\**" />
-    <Compile Remove="Oodle\**" />
-    <EmbeddedResource Remove="Model\**" />
-    <EmbeddedResource Remove="Oodle\**" />
-    <None Remove="Model\**" />
-    <None Remove="Oodle\**" />
-  </ItemGroup>
-
-  <ItemGroup>
+	<ItemGroup>
     <None Remove="lib\kraken.so" />
   </ItemGroup>
 
@@ -51,23 +42,7 @@
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="C:\Users\ghost\.nuget\packages\wolvenkit.common\1.0.0\contentFiles\any\net5.0-windows7.0\DDS\texconv.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Update="C:\Users\ghost\.nuget\packages\wolvenkit.cyberformats\1.0.0\contentFiles\any\net5.0-windows7.0\Resources\archivehashes.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="oo2core_8_win64.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-
-  <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
 	  <DefineConstants>_WINDOWS</DefineConstants>
   </PropertyGroup>
 </Project>
