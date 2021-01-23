@@ -11,6 +11,8 @@
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
 		<PackageTags>wolvenkit, cyberpunk2077</PackageTags>
+		<AssemblyVersion>1.0.1.0</AssemblyVersion>
+		<FileVersion>1.0.1.0</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
