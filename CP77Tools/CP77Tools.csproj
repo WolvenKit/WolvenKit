@@ -35,8 +35,6 @@
     <PackageReference Include="Luna.ConsoleProgressBar" Version="1.0.29" />
     <PackageReference Include="CsvHelper" Version="18.0.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
-    <PackageReference Include="WolvenKit.Common" Version="1.0.0" />
-    <PackageReference Include="WolvenKit.Cyberformats" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +44,11 @@
     <Content Include="lib\\kraken.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CP77.CR2W\WolvenKit.Cyberformats.csproj" />
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
