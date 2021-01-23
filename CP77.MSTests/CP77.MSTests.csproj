@@ -23,4 +23,13 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="C:\Users\ghost\.nuget\packages\wolvenkit.common\1.0.0\contentFiles\any\net5.0-windows7.0\DDS\texconv.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ghost\.nuget\packages\wolvenkit.cyberformats\1.0.0\contentFiles\any\net5.0-windows7.0\Resources\archivehashes.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
