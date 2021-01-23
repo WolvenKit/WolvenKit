@@ -835,7 +835,9 @@ namespace CP77.MSTests
             foreach (var file in files)
                 try
                 {
-                    var (fileBytes, bufferBytes) = (file.Archive as Archive).GetFileData(file.NameHash64, false);
+                    if (file.Archive is not Archive ar)
+                        continue;
+                    var (fileBytes, bufferBytes) = ar.GetFileData(file.NameHash64, false);
 
                     using var ms = new MemoryStream(fileBytes);
                     using var br = new BinaryReader(ms);
@@ -883,7 +885,7 @@ namespace CP77.MSTests
                         Success = false,
                         Result = TestResult.ResultType.RuntimeException,
                         ExceptionType = e.GetType(),
-                        Message = e.Message
+                        Message = $"{file.NameOrHash} - {e.Message}"
                     });
                 }
 

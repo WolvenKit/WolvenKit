@@ -27,7 +27,7 @@ namespace CP77.CR2W.Archive
         public string FileName => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}.bin" : _nameStr;
         public string Extension => Path.GetExtension(FileName);
 
-        public IGameArchive Archive { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IGameArchive Archive { get; set; }
         public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public uint Size { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public uint ZSize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -35,11 +35,9 @@ namespace CP77.CR2W.Archive
 
         public string CompressionType => throw new NotImplementedException();
 
-        private Archive _parentArchive;
-
-        public ArchiveItem(BinaryReader br, Archive parent)
+        public ArchiveItem(BinaryReader br, IGameArchive parent)
         {
-            _parentArchive = parent;
+            Archive = parent;
             var mainController = ServiceLocator.Default.ResolveType<IHashService>();
 
             Read(br, mainController);

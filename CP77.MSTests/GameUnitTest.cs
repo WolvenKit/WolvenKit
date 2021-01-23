@@ -1,15 +1,19 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Catel.IoC;
 using CP77.CR2W.Archive;
 using CP77.CR2W.Resources;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
 
 namespace CP77.MSTests
@@ -49,6 +53,19 @@ namespace CP77.MSTests
             var gameDirectory = new DirectoryInfo(_gameDirectoryPath);
             if (!gameDirectory.Exists)
                 throw new ConfigurationErrorsException($"'{GameDirectorySetting}' is not a valid directory");
+
+            // copy oodle dll
+            var gameBinDir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "bin", "x64"));
+            var oodleInfo = new FileInfo(Path.Combine(gameBinDir.FullName, "oo2ext_7_win64.dll"));
+            if (!oodleInfo.Exists)
+                throw new DecompressionException("Could not find oo2ext_7_win64.dll.");
+
+            var ass = AppDomain.CurrentDomain.BaseDirectory;
+            var destFileName = Path.Combine(ass, "oo2ext_7_win64.dll");
+            if (!File.Exists(destFileName))
+                oodleInfo.CopyTo(destFileName);
+
+
 
             WriteToFile = Boolean.Parse(_config.GetSection(WriteToFileSetting).Value);
 

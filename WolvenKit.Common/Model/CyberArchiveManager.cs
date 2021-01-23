@@ -17,7 +17,7 @@ namespace WolvenKit.Common
         public List<IGameFile> FileList { get; set; }
         public Dictionary<string, List<IGameFile>> Items { get; set; }
         public List<string> AutocompleteSource { get; set; }
-        public List<string> Extensions { get; set; }
+        public List<string> Extensions { get; set; } = new();
 
 
         public abstract EArchiveType TypeName { get; }
