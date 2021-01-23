@@ -27,10 +27,10 @@ jobs:
       uses: actions/upload-artifact@v2.2.1
       with:
         name: artifact
-        path: ./CP77Tools/bin/Release/net5.0
+        path: ./CP77Tools/bin/Release/net5.0-windows
     - uses: papeloto/action-zip@v1
       with:
-        files: ./CP77Tools/bin/Release/net5.0
+        files: ./CP77Tools/bin/Release/net5.0-windows
         dest: release.zip
     - name: Create Release
       id: create_release
