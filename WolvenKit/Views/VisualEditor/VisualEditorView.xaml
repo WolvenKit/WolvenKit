@@ -1,0 +1,13 @@
+﻿<catel:DataWindow x:Class="WolvenKit.Views.VisualEditor.VisualEditorView"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  MinHeight="600"
+                  MinWidth="600"
+                  xmlns:catel="http://schemas.catelproject.com" xmlns:Vis="clr-namespace:WolvenKit.Views.VisualEditor.Blocks" xmlns:nodenetwork="clr-namespace:NodeNetwork.Views;assembly=NodeNetwork" xmlns:nod="clr-namespace:WolvenKit.Views.VisualEditor.NodeNetworkHelper">
+                   
+
+    <Grid >
+        <Vis:VisualBlockView/>
+    </Grid>
+    
+</catel:DataWindow>
