@@ -24,69 +24,85 @@
         </ResourceDictionary>
 
     </catel:DataWindow.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+    <Border Width="auto" Height="auto" BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
 
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="auto" Height="auto">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="auto"/>
-        </Grid.ColumnDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
 
-        <Grid x:Name="DraggableTitleBar" Grid.ColumnSpan="2" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
-            <!--TitleBar  Please add onmousedown event to be able to drag the window-->
-            <Button Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" BorderBrush="{x:Null}"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,5,3" >
-                <iconPacks:PackIconCodicons   Kind="Close"/>
-            </Button>
-            <Button BorderBrush="{x:Null}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,45,3" >
-                <iconPacks:PackIconCodicons  Kind="ChromeMinimize"/>
-            </Button>
-            <TextBlock Text="Code Editor" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid x:Name="DraggableTitleBar" Grid.ColumnSpan="2" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+                <!--TitleBar  Please add onmousedown event to be able to drag the window-->
+                <Button Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" BorderBrush="{x:Null}"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,5,3" >
+                    <iconPacks:PackIconCodicons   Kind="Close"/>
+                </Button>
+                <Button BorderBrush="{x:Null}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,45,3" >
+                    <iconPacks:PackIconCodicons  Kind="ChromeMinimize"/>
+                </Button>
+                <TextBlock Text="Code Editor" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            </Grid>
+
+
+            <Grid Grid.Row="1" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" Grid.ColumnSpan="2" Height="30">
+                <Menu Background="Transparent">
+                    <MenuItem Header="File">
+                        <MenuItem Header="New"   Background="Transparent"/>
+                        <MenuItem Header="Open"  Background="Transparent"/>
+                        <MenuItem Header="Recent"  Background="Transparent"/>
+
+
+                    </MenuItem>
+                    <MenuItem Header="Edit">
+                        <MenuItem Header="Undo" Background="Transparent" hc:Poptip.Content="CTRL+Z" hc:Poptip.Placement="Left"/>
+                        <MenuItem Header="Redo" Background="Transparent" hc:Poptip.Content="CTRL+Y" hc:Poptip.Placement="Left"/>
+                        <MenuItem Header="Cut" Background="Transparent" hc:Poptip.Content="CTRL+X" hc:Poptip.Placement="Left"/>
+                        <MenuItem Header="Copy" Background="Transparent" hc:Poptip.Content="CTRL+C" hc:Poptip.Placement="Left"/>
+                        <MenuItem Header="Paste" Background="Transparent" hc:Poptip.Content="CTRL+V" hc:Poptip.Placement="Left"/>
+
+
+
+                    </MenuItem>
+
+                    <MenuItem Background="Transparent" Header="SpecialMenu">
+
+
+
+
+                    </MenuItem>
+                    <MenuItem Header="File"/>
+                    <MenuItem Header="File"/>
+
+                </Menu>
+            </Grid>
+
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.ColumnSpan="2" Margin="0">
+                <hc:TabControl TabStripPlacement="Bottom" Margin="0" MinWidth="400" MinHeight="200" Style="{StaticResource TabControlCapsuleSolid}">
+                    <hc:TabItem Header="Document">
+                        <avalonEdit:TextEditor/>
+
+                    </hc:TabItem>
+                    <hc:TabItem Header="Document">
+                        <avalonEdit:TextEditor SyntaxHighlighting="C#" LineNumbersForeground="{DynamicResource MahApps.Brushes.Accent}" ShowLineNumbers="True"  Margin="0"/>
+                    </hc:TabItem>
+                </hc:TabControl>
+
+            </Grid>
+
+
+         
+
+
+
         </Grid>
+    </Border>
 
-
-        <Grid Grid.Row="1" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" Grid.ColumnSpan="2" Height="30">
-            <Menu Background="Transparent">
-                <MenuItem Header="File">
-                    <MenuItem Header="New"   Background="Transparent"/>
-                    <MenuItem Header="Open"  Background="Transparent"/>
-                    <MenuItem Header="Recent"  Background="Transparent"/>
-
-
-                </MenuItem>
-                <MenuItem Header="Edit">
-                    <MenuItem Header="Undo" Background="Transparent" hc:Poptip.Content="CTRL+Z" hc:Poptip.Placement="Left"/>
-                    <MenuItem Header="Redo" Background="Transparent" hc:Poptip.Content="CTRL+Y" hc:Poptip.Placement="Left"/>
-                    <MenuItem Header="Cut" Background="Transparent" hc:Poptip.Content="CTRL+X" hc:Poptip.Placement="Left"/>
-                    <MenuItem Header="Copy" Background="Transparent" hc:Poptip.Content="CTRL+C" hc:Poptip.Placement="Left"/>
-                    <MenuItem Header="Paste" Background="Transparent" hc:Poptip.Content="CTRL+V" hc:Poptip.Placement="Left"/>
-
-
-
-                </MenuItem>
-
-                <MenuItem Background="Transparent" Header="SpecialMenu">
-
-
-
-
-                </MenuItem>
-                <MenuItem Header="File"/>
-                <MenuItem Header="File"/>
-
-            </Menu>
-        </Grid>
-
-       
-       
-
-
-   
-    </Grid>
-    
 </catel:DataWindow>
