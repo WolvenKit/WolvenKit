@@ -158,14 +158,15 @@
 
                     <Grid Grid.Column="1">
                     <hc:TabControl IsAnimationEnabled="True" ShowCloseButton="True" IsDraggable="True"  >
-                        <hc:TabItem Header="TEST"></hc:TabItem> <!-- Bind Header to selected item in treeview-->
-                        <TabControl.ContentTemplate>
-                            <DataTemplate>
-                                <ListView BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" Background="Transparent">
-                                    <ListViewItem  Content="TEST"></ListViewItem>  <!--TestItem RemoveMe-->
-                                </ListView>
-                            </DataTemplate>
-                        </TabControl.ContentTemplate>
+                        <hc:TabItem Header="Depot"></hc:TabItem> <!-- Bind Header to selected item in treeview-->
+                        <ListView BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" Background="Transparent" ItemsSource="{Binding Path=CurrentNodeFiles}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                                    <GridViewColumn Header="Size" DisplayMemberBinding="{Binding Size}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                     </hc:TabControl>
              
                  
