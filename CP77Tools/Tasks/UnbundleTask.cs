@@ -72,7 +72,7 @@ namespace CP77Tools.Tasks
             {
                 var archiveManager = new ArchiveManager(basedir);
                 // TODO: use the manager here?
-                archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.Filepath)).ToList();
+                archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.ArchiveAbsolutePath)).ToList();
             }
             else
             {
@@ -122,7 +122,7 @@ namespace CP77Tools.Tasks
                         foreach (var hash_num in hashlist)
                         {
                             ar.ExtractSingle(hash_num, outDir);
-                            logger.LogString($" {ar.Filepath}: Extracted one file: {hash_num}", Logtype.Success);
+                            logger.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}", Logtype.Success);
                         }
 
                         logger.LogString($"Bulk extraction from hashlist file completed!", Logtype.Success);
@@ -130,12 +130,12 @@ namespace CP77Tools.Tasks
                     else if (isHash && hashNumber != 0)
                     {
                         ar.ExtractSingle(hashNumber, outDir);
-                        logger.LogString($" {ar.Filepath}: Extracted one file: {hashNumber}", Logtype.Success);
+                        logger.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}", Logtype.Success);
                     }
                     else
                     {
                         var r = ar.ExtractAll(outDir, pattern, regex);
-                        logger.LogString($"{ar.Filepath}: Extracted {r.Item1.Count}/{r.Item2} files.",
+                        logger.LogString($"{ar.ArchiveAbsolutePath}: Extracted {r.Item1.Count}/{r.Item2} files.",
                             Logtype.Success);
                     }
 

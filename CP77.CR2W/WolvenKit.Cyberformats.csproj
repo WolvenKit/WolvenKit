@@ -11,20 +11,10 @@
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
 		<PackageTags>wolvenkit, cyberpunk2077</PackageTags>
-		<AssemblyVersion>1.0.1.0</AssemblyVersion>
-		<FileVersion>1.0.1.0</FileVersion>
-		<Version>1.0.1</Version>
+		<AssemblyVersion>1.0.4.0</AssemblyVersion>
+		<FileVersion>1.0.4.0</FileVersion>
+		<Version>1.0.4</Version>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<None Remove="Resources\archivehashes.zip" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="Resources\archivehashes.zip">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Catel.Core" Version="5.12.11" />
@@ -36,6 +26,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Resources\" />
 	</ItemGroup>
 
 </Project>
