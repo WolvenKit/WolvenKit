@@ -3,8 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
+    <AssemblyVersion>1.1.0.2</AssemblyVersion>
+    <FileVersion>1.1.0.2</FileVersion>
 	<PublishSingleFile>true</PublishSingleFile>
 	  <SelfContained>false</SelfContained>
 	  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
@@ -33,7 +33,7 @@
     <PackageReference Include="CsvHelper" Version="21.1.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
 	<PackageReference Include="WolvenKit.Common" Version="1.0.2" GeneratePathProperty="true" />
-    <PackageReference Include="WolvenKit.Cyberformats" Version="1.0.2" />
+    <PackageReference Include="WolvenKit.Cyberformats" Version="1.0.4" />
   </ItemGroup>
 
 	<ItemGroup>
