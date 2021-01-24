@@ -42,10 +42,10 @@ C:\cpmod\CP77Tools\CP77Tools\bin\Debug\net5.0\oo2ext_7_win64.dll
 
 ### Main functions
 * extract all files from archive
-`archive -e -p "PATH TO ARCHIVE"`
+`unbundle -p "PATH TO ARCHIVE"`
 
 * extract all textures from archive (supports conversion to tga, bmp, jpg, png, dds)
-`archive -u --uext png -p "PATH TO ARCHIVE"`
+`uncook --uext png -p "PATH TO ARCHIVE"`
 
 * rebuild textures and buffers (this step is needed when packing textures!, see the wiki for how to use this command)
 `rebuild -p "PATH TO FOLDER" -b -t --keep --unsaferaw`
@@ -56,5 +56,3 @@ C:\cpmod\CP77Tools\CP77Tools\bin\Debug\net5.0\oo2ext_7_win64.dll
 ### Debug Options
 * dumps property info from extracted cr2w file
 `cr2w -c -p "<PATH TO FILE>"`
-* dumps class info from extracted cr2w file
-`cr2w -a -p "<PATH TO FILE>"`
