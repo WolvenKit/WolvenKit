@@ -37,7 +37,7 @@ namespace CP77.CR2W
             var outfile = Path.Combine(outpath.FullName, $"basegame_{infolder.Name}.archive");
             var ar = new Archive.Archive
             {
-                Filepath = outfile,
+                ArchiveAbsolutePath = outfile,
                 Table = new ArTable()
             };
             using var fs = new FileStream(outfile, FileMode.Create);

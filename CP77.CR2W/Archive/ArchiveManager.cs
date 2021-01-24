@@ -17,10 +17,11 @@ namespace CP77.CR2W.Archive
 {
     public class ArchiveManager : CyberArchiveManager
     {
-
-        public Dictionary<string, Archive> Archives { get; set; }
-
         public static string SerializationVersion = "1.1";
+
+        public ArchiveManager()
+        {
+        }
 
         public ArchiveManager(DirectoryInfo indir)
         {
@@ -33,15 +34,10 @@ namespace CP77.CR2W.Archive
             Reload(indir);
         }
 
-
-        public ArchiveManager()
-        {
-        }
-
         private DirectoryInfo _parentDirectoryInfo;
 
         #region properties
-
+        public Dictionary<string, Archive> Archives { get; set; }
         public Dictionary<ulong, List<ArchiveItem>> Files { get; }
         public Dictionary<string, List<ArchiveItem>> GroupedFiles =>
 

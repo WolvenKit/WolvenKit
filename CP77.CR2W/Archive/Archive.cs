@@ -21,7 +21,7 @@ using WolvenKit.Common.Oodle;
 
 namespace CP77.CR2W.Archive
 {
-    public class Archive
+    public class Archive : IGameArchive
     {
         #region constructors
 
@@ -37,7 +37,7 @@ namespace CP77.CR2W.Archive
         /// <param name="path"></param>
         public Archive(string path)
         {
-            Filepath = path;
+            ArchiveAbsolutePath = path;
 
             ReadTables();
         }
@@ -45,9 +45,11 @@ namespace CP77.CR2W.Archive
         #endregion
 
         #region properties
+        public EArchiveType TypeName => EArchiveType.Archive;
+
         public ArHeader Header { get; set; }
         public ArTable Table { get; set; }
-        public string Filepath { get; set; }
+        public string ArchiveAbsolutePath { get; set; }
 
         [JsonIgnore]
         public Dictionary<ulong, ArchiveItem> Files => Table?.FileInfo;
@@ -55,7 +57,7 @@ namespace CP77.CR2W.Archive
         public int FileCount => Files?.Count ?? 0;
 
         [JsonIgnore]
-        public string Name => Path.GetFileName(Filepath);
+        public string Name => Path.GetFileName(ArchiveAbsolutePath);
         #endregion
 
         #region methods
@@ -78,7 +80,7 @@ namespace CP77.CR2W.Archive
             //     _table = new ArTable(new BinaryReader(vs), this);
             // }
 
-            using var vs = new FileStream(Filepath, FileMode.Open, FileAccess.Read);
+            using var vs = new FileStream(ArchiveAbsolutePath, FileMode.Open, FileAccess.Read);
             Header = new ArHeader(new BinaryReader(vs));
             vs.Seek((long) Header.Tableoffset, SeekOrigin.Begin);
             Table = new ArTable(new BinaryReader(vs), this);
@@ -146,7 +148,7 @@ namespace CP77.CR2W.Archive
                 using var ms = new MemoryStream();
                 using var bw = new BinaryWriter(ms);
                 
-                using var stream = new FileStream(Filepath, FileMode.Open, FileAccess.Read);
+                using var stream = new FileStream(ArchiveAbsolutePath, FileMode.Open, FileAccess.Read);
                 using var binaryReader = new BinaryReader(stream);
                 binaryReader.BaseStream.Seek((long) offsetentry.Offset, SeekOrigin.Begin);
 
@@ -171,6 +173,8 @@ namespace CP77.CR2W.Archive
 
 
         #endregion
+
+        
     }
 
 

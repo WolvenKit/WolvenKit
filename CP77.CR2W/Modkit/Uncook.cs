@@ -248,10 +248,11 @@ namespace CP77.CR2W
                         {
                             var di = new FileInfo(infile.FullName).Directory;
                             TexconvWrapper.Convert(di.FullName, $"{newpath}", uncookext);
+                            uncooksuccess = true;
                         }
                         catch (Exception e)
                         {
-                            // silent
+                            uncooksuccess = false;
                         }
                     }
 
@@ -275,12 +276,11 @@ namespace CP77.CR2W
                     using var nstream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     redcsv.ToCsvStream(nstream);
 
-
+                    uncooksuccess = true;
                     break;
                 }
                 case ECookedFileFormat.json:
                 {
-
                     break;
                 }
                 case ECookedFileFormat.mlmask:
@@ -301,8 +301,6 @@ namespace CP77.CR2W
                 }
                 case ECookedFileFormat.cubemap:
                 {
-
-
                     if (!(cr2w.Chunks.FirstOrDefault()?.data is CCubeTexture ctex) ||
                         !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
                         return -1;
@@ -351,8 +349,6 @@ namespace CP77.CR2W
                 }
                 case ECookedFileFormat.envprobe:
                 {
-
-
                     if (!(cr2w.Chunks.FirstOrDefault()?.data is CReflectionProbeDataResource probe) ||
                         !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
                         return -1;
@@ -391,8 +387,6 @@ namespace CP77.CR2W
                 }
                 case ECookedFileFormat.texarray:
                 {
-
-
                     if (!(cr2w.Chunks.FirstOrDefault()?.data is CTextureArray texa) ||
                         !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
                         return -1;

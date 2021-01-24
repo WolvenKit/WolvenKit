@@ -9,6 +9,7 @@ namespace CP77.CR2W.Types
 	public class animAnimNode_Base : ISerializable
 	{
 		[Ordinal(0)]  [RED("id")] public CUInt32 Id { get; set; }
+		[Ordinal(1)]  [RED("poseInfoLogger")] public animPoseInfoLogger PoseInfoLogger { get; set; }
 
 		public animAnimNode_Base(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
