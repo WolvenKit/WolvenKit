@@ -14,6 +14,7 @@ using System.Globalization;
 using System.Threading;
 using WolvenKit.ViewModels;
 using WolvenKit.Views.Dialogs;
+using NodeNetwork;
 
 namespace WolvenKit
 {
@@ -84,6 +85,7 @@ namespace WolvenKit
             //-- Category : VisualEditor
             viewModelLocator.Register(typeof(Views.VisualEditor.VisualEditorView), typeof(ViewModels.VisualEditor.VisualEditorViewModel));
             viewModelLocator.Register(typeof(Views.VisualEditor.Blocks.VisualBlockView), typeof(ViewModels.VisualEditor.Blocks.VisualBlockViewModel));
+            NNViewRegistrar.RegisterSplat();
 
 
 

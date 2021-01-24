@@ -1,5 +1,7 @@
 ﻿
 using Catel.Windows;
+using DynamicData;
+using NodeNetwork.ViewModels;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,8 +16,11 @@ namespace WolvenKit.Views.VisualEditor
 
         public VisualEditorView() : base(DataWindowMode.Custom)
         {
-            InitializeComponent();
-      
+            InitializeComponent(); 
+            
+
+         
+
         }
     }
 }

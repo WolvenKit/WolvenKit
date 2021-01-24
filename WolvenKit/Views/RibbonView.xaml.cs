@@ -10,6 +10,7 @@ using WolvenKit.Views.AssetBrowser;
 using WolvenKit.Views.CodeEditor;
 using WolvenKit.Views.PluginManager;
 using WolvenKit.Views.VisualEditor;
+using WolvenKit.Views.VisualEditor.NodeNetworkHelper;
 
 namespace WolvenKit.Views
 {
@@ -82,7 +83,7 @@ namespace WolvenKit.Views
 
         private void CBVisualEditorItem_Selected(object sender, RoutedEventArgs e)
         {
-            VisualEditorView visualeditor = new VisualEditorView();
+            NodeNetworkView visualeditor = new NodeNetworkView();
             visualeditor.Show();
         }
     }

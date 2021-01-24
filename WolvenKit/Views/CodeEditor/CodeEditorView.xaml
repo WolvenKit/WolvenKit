@@ -7,8 +7,8 @@
                   ResizeMode="CanResizeWithGrip" 
                   BorderBrush="{x:Null}" 
                   WindowStartupLocation="CenterScreen"  
-                  MinHeight="600" 
-                  MinWidth="400"
+            
+                  
                   WindowStyle="None" 
                   Title="Code Editor" >
     <catel:DataWindow.Resources>
@@ -28,11 +28,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
 
+            <RowDefinition Height="30"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
@@ -49,51 +50,39 @@
         </Grid>
 
 
-        <hc:TabControl Style="{StaticResource TabControlInLine}" TabStripPlacement="Bottom" Grid.Row="2">
-            <hc:TabItem Header="Edit">
-                <avalonEdit:TextEditor
-            Margin="3"
-            Grid.Row="2"
-                    Name="avEditor"
-                    Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
-                            SyntaxHighlighting="C#"
-
-                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                    LineNumbersForeground="Black">
-
-                </avalonEdit:TextEditor>
-            </hc:TabItem>
-            <hc:TabItem Header="Compare">
-                
-            </hc:TabItem>
-        </hc:TabControl>
+        <Grid Grid.Row="1" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" Grid.ColumnSpan="2" Height="30">
+            <Menu Background="Transparent">
+                <MenuItem Header="File">
+                    <MenuItem Header="New"   Background="Transparent"/>
+                    <MenuItem Header="Open"  Background="Transparent"/>
+                    <MenuItem Header="Recent"  Background="Transparent"/>
 
 
-        <ToolBarTray Orientation="Vertical" Grid.Row="2" Grid.Column="1">
-            <ToolBar Style="{StaticResource ToolBarBaseStyle}" Padding="6" Header="{}">
-                <CheckBox IsChecked="True" Margin="0,10,0,0"/>
-                <Separator Margin="0,10,0,0"/>
-                <RadioButton Margin="0,10,0,0"/>
-                <StackPanel>
-                    <RadioButton IsChecked="True" Margin="0,10,0,0"/>
-                    <RadioButton Margin="0,10,0,0"/>
-                </StackPanel>
-                <Button Content="" Margin="0,10,0,0"/>
-                <Button Content="" Margin="0,10,0,0" Style="{StaticResource ButtonPrimary}"/>
-            </ToolBar>
-            <ToolBar Style="{StaticResource ToolBarBaseStyle}" Band="1" Padding="6" Header="{}">
-                <CheckBox IsChecked="True" Margin="0,10,0,0"/>
-                <Separator Margin="0,10,0,0"/>
-                <RadioButton Margin="0,10,0,0"/>
-                <StackPanel>
-                    <RadioButton IsChecked="True" Margin="0,10,0,0"/>
-                    <RadioButton Margin="0,10,0,0"/>
-                </StackPanel>
-                <Button Content="" Margin="0,10,0,0"/>
-                <Button Content="" Margin="0,10,0,0" Style="{StaticResource ButtonPrimary}"/>
-            </ToolBar>
+                </MenuItem>
+                <MenuItem Header="Edit">
+                    <MenuItem Header="Undo" Background="Transparent" hc:Poptip.Content="CTRL+Z" hc:Poptip.Placement="Left"/>
+                    <MenuItem Header="Redo" Background="Transparent" hc:Poptip.Content="CTRL+Y" hc:Poptip.Placement="Left"/>
+                    <MenuItem Header="Cut" Background="Transparent" hc:Poptip.Content="CTRL+X" hc:Poptip.Placement="Left"/>
+                    <MenuItem Header="Copy" Background="Transparent" hc:Poptip.Content="CTRL+C" hc:Poptip.Placement="Left"/>
+                    <MenuItem Header="Paste" Background="Transparent" hc:Poptip.Content="CTRL+V" hc:Poptip.Placement="Left"/>
 
-        </ToolBarTray>
+
+
+                </MenuItem>
+
+                <MenuItem Background="Transparent" Header="SpecialMenu">
+
+
+
+
+                </MenuItem>
+                <MenuItem Header="File"/>
+                <MenuItem Header="File"/>
+
+            </Menu>
+        </Grid>
+
+       
        
 
 
