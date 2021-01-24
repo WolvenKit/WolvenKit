@@ -1,0 +1,24 @@
+# Changelog
+
+
+
+v1.1.0.2
+Implemented
+- automatically copy oodle lib from game folder
+
+Fixed
+- fixed a bug where uncooking would not extract properly
+
+v1.1
+Implemented
+- Uncook support for more extensions
+- extracting from missing hash list
+- deprecate archive command: split to unbundle, uncook
+- add export command
+
+Fixed
+- update archivehashes.zip
+- fixed vertical flip
+- fixed uppercase uncook extensions
+- code refactoring
+- bugfixes
