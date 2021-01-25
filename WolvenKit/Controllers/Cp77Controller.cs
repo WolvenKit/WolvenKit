@@ -32,7 +32,7 @@ namespace WolvenKit.Controllers
             _logger.LogString("Loading archive Manager ... ", Logtype.Important);
             try
             {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.ArchiveManager)))
+                if (File.Exists(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager)))
                 {
                     using (StreamReader file = File.OpenText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager)))
                     {
@@ -46,7 +46,7 @@ namespace WolvenKit.Controllers
                 else
                 {
                     archiveManager = new ArchiveManager();
-                    archiveManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
+                    archiveManager.LoadAll(Path.GetDirectoryName(_settings.CP77ExecutablePath));
                     File.WriteAllText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager), JsonConvert.SerializeObject(archiveManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -61,7 +61,7 @@ namespace WolvenKit.Controllers
                 if (File.Exists(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager)))
                     File.Delete(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager));
                 archiveManager = new ArchiveManager();
-                archiveManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
+                archiveManager.LoadAll(Path.GetDirectoryName(_settings.CP77ExecutablePath));
             }
             _logger.LogString("Finished loading archive manager.", Logtype.Success);
             return archiveManager;

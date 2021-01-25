@@ -21,6 +21,9 @@ namespace CP77.CR2W.Archive
 
         public ArchiveManager()
         {
+            Archives = new Dictionary<string, Archive>();
+            Files = new Dictionary<ulong, List<ArchiveItem>>();
+            Items = new Dictionary<string, List<IGameFile>>();
         }
 
         public ArchiveManager(DirectoryInfo indir)
@@ -29,6 +32,7 @@ namespace CP77.CR2W.Archive
 
             Archives = new Dictionary<string, Archive>();
             Files = new Dictionary<ulong, List<ArchiveItem>>();
+            Items = new Dictionary<string, List<IGameFile>>();
 
             // load files
             Reload(indir);
@@ -152,42 +156,16 @@ namespace CP77.CR2W.Archive
         /// <param name="exedir">Path to executable directory</param>
         public override void LoadAll(string exedir)
         {
+            exedir = "D:\\SteamLibrary\\steamapps\\common\\Cyberpunk 2077\\bin\\x64\\";
             var di = new DirectoryInfo(exedir);
             if (!di.Exists)
                 return;
-            var dlc = Path.Combine(di.Parent.Parent.FullName, "DLC");
-            var content = Path.Combine(di.Parent.Parent.FullName, "content");
+            var archivedir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "content");
 
-            var contentdirs = new List<string>(Directory.GetDirectories(content, "content*"));
-            contentdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in contentdirs.SelectMany(dir => Directory.GetFiles(dir, "*.archive", SearchOption.AllDirectories)))
+            foreach (var file in Directory.GetFiles(archivedir, "*.archive"))
             {
                 LoadArchive(file);
             }
-
-            var patchdirs = new List<string>(Directory.GetDirectories(content, "patch*"));
-            patchdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in patchdirs.SelectMany(dir =>
-                Directory.GetFiles(dir, "*.archive", SearchOption.AllDirectories)))
-            {
-                LoadArchive(file, true);
-            }
-
-            if (Directory.Exists(dlc))
-            {
-                var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
-                dlcdirs.Sort(new AlphanumComparator<string>());
-
-                foreach (var file in dlcdirs
-                    .Where(_ => VanillaDlClist.Contains(new DirectoryInfo(_).Name))
-                    .SelectMany(dir => Directory.GetFiles(dir ?? "", "*.archive", SearchOption.AllDirectories)
-                    .OrderBy(k => k)))
-                {
-                    LoadArchive(file);
-                }
-            }
-
-
             RebuildRootNode();
         }
 
@@ -198,6 +176,7 @@ namespace CP77.CR2W.Archive
         /// <param name="dlc"></param>
         public override void LoadModsArchives(string mods, string dlc)
         {
+            return;
             if (!Directory.Exists(mods))
                 Directory.CreateDirectory(mods);
             var modsdirs = new List<string>(Directory.GetDirectories(mods));

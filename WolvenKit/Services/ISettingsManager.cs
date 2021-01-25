@@ -14,7 +14,8 @@ namespace WolvenKit.Services
 
         bool CheckForUpdates { get; set; }
 
-        /*public*/ string ExecutablePath { get; set; }
+        /*public*/ string W3ExecutablePath { get; set; }
+        /*public*/ string CP77ExecutablePath { get; set; }
         /*public*/ string WccLitePath { get; set; }
 
         string GameModDir { get; set; }

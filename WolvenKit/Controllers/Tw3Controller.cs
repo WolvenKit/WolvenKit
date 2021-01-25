@@ -35,7 +35,7 @@ namespace WolvenKit.Controllers
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
-            _logger.LogString("Loading Archive Manager ... ", Logtype.Important);
+            _logger.LogString("Loading Bundle Manager ... ", Logtype.Important);
             try
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
@@ -52,7 +52,7 @@ namespace WolvenKit.Controllers
                 else
                 {
                     bundleManager = new BundleManager();
-                    bundleManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
+                    bundleManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
                     File.WriteAllText(Tw3Controller.GetManagerPath(EManagerType.BundleManager), JsonConvert.SerializeObject(bundleManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -67,9 +67,9 @@ namespace WolvenKit.Controllers
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
                     File.Delete(Tw3Controller.GetManagerPath(EManagerType.BundleManager));
                 bundleManager = new BundleManager();
-                bundleManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
+                bundleManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
-            _logger.LogString("Finished loading Archive Manager.", Logtype.Success);
+            _logger.LogString("Finished loading Bundle Manager.", Logtype.Success);
             return bundleManager;
         }
         public static W3StringManager LoadStringsManager()
@@ -90,7 +90,7 @@ namespace WolvenKit.Controllers
                 else
                 {
                     w3StringManager = new W3StringManager();
-                    w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.ExecutablePath));
+                    w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
                     Directory.CreateDirectory(Tw3Controller.ManagerCacheDir);
                     using (var file = File.Open(Tw3Controller.GetManagerPath(EManagerType.W3StringManager), FileMode.Create))
                     {
@@ -105,7 +105,7 @@ namespace WolvenKit.Controllers
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)))
                     File.Delete(Tw3Controller.GetManagerPath(EManagerType.W3StringManager));
                 w3StringManager = new W3StringManager();
-                w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.ExecutablePath));
+                w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
             _logger.LogString("Finished loading Strings Manager.", Logtype.Success);
             return w3StringManager;
@@ -133,7 +133,7 @@ namespace WolvenKit.Controllers
                 else
                 {
                     textureManager = new TextureManager();
-                    textureManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
+                    textureManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
                     File.WriteAllText(Tw3Controller.GetManagerPath(EManagerType.TextureManager), JsonConvert.SerializeObject(textureManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -148,7 +148,7 @@ namespace WolvenKit.Controllers
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
                     File.Delete(Tw3Controller.GetManagerPath(EManagerType.TextureManager));
                 textureManager = new TextureManager();
-                textureManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
+                textureManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
             _logger.LogString("Finished loading Texture Manager.", Logtype.Success);
 
@@ -176,7 +176,7 @@ namespace WolvenKit.Controllers
                 else
                 {
                     collisionManager = new CollisionManager();
-                    collisionManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
+                    collisionManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
                     File.WriteAllText(Tw3Controller.GetManagerPath(EManagerType.CollisionManager), JsonConvert.SerializeObject(collisionManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -191,7 +191,7 @@ namespace WolvenKit.Controllers
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.CollisionManager)))
                     File.Delete(Tw3Controller.GetManagerPath(EManagerType.CollisionManager));
                 collisionManager = new CollisionManager();
-                collisionManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
+                collisionManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
             _logger.LogString("Finished loading Collision Manager.", Logtype.Success);
 
@@ -219,7 +219,7 @@ namespace WolvenKit.Controllers
                 else
                 {
                     soundManager = new SoundManager();
-                    soundManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
+                    soundManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
                     File.WriteAllText(Tw3Controller.GetManagerPath(EManagerType.SoundManager), JsonConvert.SerializeObject(soundManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -234,7 +234,7 @@ namespace WolvenKit.Controllers
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.SoundManager)))
                     File.Delete(Tw3Controller.GetManagerPath(EManagerType.SoundManager));
                 soundManager = new SoundManager();
-                soundManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
+                soundManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
             _logger.LogString("Finished loading Sound Manager.", Logtype.Success);
 
@@ -247,7 +247,7 @@ namespace WolvenKit.Controllers
 
             _logger.LogString("Loading Speech Manager ... ", Logtype.Important);
             speechManager = new SpeechManager();
-            speechManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
+            speechManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             _logger.LogString("Finished loading Speech Manager.", Logtype.Success);
 
             return speechManager;

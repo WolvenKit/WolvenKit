@@ -84,7 +84,7 @@ namespace WolvenKit.Services
 
             // check settings
             var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            if (!File.Exists(settings.ExecutablePath) || !File.Exists(settings.WccLitePath))
+            if (!File.Exists(settings.W3ExecutablePath) || !File.Exists(settings.WccLitePath))
             {
                 _commandManager.GetCommand(AppCommands.Settings.General).SafeExecute();
             }
