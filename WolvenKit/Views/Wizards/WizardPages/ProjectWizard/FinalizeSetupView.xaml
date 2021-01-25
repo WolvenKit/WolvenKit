@@ -22,23 +22,23 @@
                                     <LineBreak/>
                                     <Run Text="Optional"></Run>
                                 </TextBlock>
-                                <hc:ImageSelector Margin="100,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
+                                <hc:ImageSelector  Margin="100,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
                             </Grid>
                             <Grid Margin="5,32,0,0" >
 
                                 <TextBlock Text="Project Name" VerticalAlignment="Center">        </TextBlock>
-                                <TextBox Margin="100,0,0,0" Text="Project Name" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox  Margin="100,0,0,0" Text="Project Name" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
 
                             <Grid Margin="5,32,0,0" >
 
                                 <TextBlock Text="Project Type" VerticalAlignment="Center"></TextBlock>
-                                <TextBox Margin="100,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox   Margin="100,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <Grid Margin="5,32,0,0" >
 
                                 <TextBlock Text="Project Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox Margin="100,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox   Margin="100,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
 
                             <hc:Divider></hc:Divider>

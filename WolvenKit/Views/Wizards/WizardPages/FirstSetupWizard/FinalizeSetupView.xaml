@@ -30,7 +30,7 @@
                                     <LineBreak/>
                                     <Run Text="(Optional)"></Run>
                                 </TextBlock>
-                                <hc:ImageSelector Margin="100,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
+                                <hc:ImageSelector  Margin="100,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
 
                                 <TextBlock Margin="210,0,0,0" VerticalAlignment="Center" Text="Username"></TextBlock>
                             </Grid>
@@ -47,48 +47,48 @@
                             <Grid Margin="5,32,10,0" >
 
                                 <TextBlock Text="Games" VerticalAlignment="Center"></TextBlock>
-                                <TextBox Margin="200,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox  Margin="200,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <Grid Margin="5,32,10,0" >
 
                                 <TextBlock Text="Auto Install Mods" VerticalAlignment="Center"></TextBlock>
-                                <TextBox Margin="200,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox  Margin="200,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <Grid Margin="5,32,10,0" >
 
                                 <TextBlock Text="Automatic Updates" VerticalAlignment="Center"></TextBlock>
-                                <TextBox Margin="200,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox  Margin="200,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <hc:Divider Margin="0,32,10,0" Content="Game Data" HorizontalContentAlignment="Left"></hc:Divider>
                             <Grid Margin="5,32,10,0" >
 
                                 <TextBlock Text="TW3 Executable Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox  Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <Grid Margin="5,32,10,0" >
 
                                 <TextBlock Text="TW3 WCC_Lite.exe Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox  Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <Grid Margin="5,32,10,0" >
 
                                 <TextBlock Text="TW3 Uncooked Depot Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox   Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <Grid Margin="5,32,10,0" >
 
                                 <TextBlock Text="TW3 Mods Folder Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox  Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <Grid Margin="5,32,10,0" >
 
                                 <TextBlock Text="TW3 DLC Folder Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox  Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <Grid Margin="5,32,10,0" >
 
                                 <TextBlock Text="CP77 Executable Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox  Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
 
                             <hc:Divider Margin="0,32,10,5"></hc:Divider>

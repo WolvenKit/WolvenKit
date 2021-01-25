@@ -15,6 +15,9 @@ using System.Threading;
 using WolvenKit.ViewModels;
 using WolvenKit.Views.Dialogs;
 using NodeNetwork;
+using System.Windows.Media;
+using MLib.Interfaces;
+using HandyControl.Controls.SplashWindow;
 
 namespace WolvenKit
 {
@@ -29,6 +32,10 @@ namespace WolvenKit
         #region constructors
         static App()
         {
+
+
+         
+
 
 
         }
@@ -84,8 +91,6 @@ namespace WolvenKit
 
             //-- Category : VisualEditor
             viewModelLocator.Register(typeof(Views.VisualEditor.VisualEditorView), typeof(ViewModels.VisualEditor.VisualEditorViewModel));
-            viewModelLocator.Register(typeof(Views.VisualEditor.Blocks.VisualBlockView), typeof(ViewModels.VisualEditor.Blocks.VisualBlockViewModel));
-            NNViewRegistrar.RegisterSplat();
 
 
 
@@ -116,11 +121,11 @@ namespace WolvenKit
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ThemeWizard.ThemeWizardPageView), typeof(ViewModels.Wizards.WizardPages.ThemeWizard.ThemeWizardPageViewModel));
 
             //-- Category : ProjectWizard
-            viewModelLocator.Register(typeof(Views.Wizards.ProjectWizardView), typeof(ViewModels.Wizards.ProjectWizardViewModel));                                                             
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.SelectProjectTypeView), typeof(ViewModels.Wizards.WizardPages.ProjectWizard.SelectProjectTypeViewModel)); 
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.ProjectConfigurationView), typeof(ViewModels.Wizards.WizardPages.ProjectWizard.ProjectConfigurationViewModel));    
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.WizardPages.ProjectWizard.FinalizeSetupViewModel));      
-            
+            viewModelLocator.Register(typeof(Views.Wizards.ProjectWizardView), typeof(ViewModels.Wizards.ProjectWizardViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.SelectProjectTypeView), typeof(ViewModels.Wizards.WizardPages.ProjectWizard.SelectProjectTypeViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.ProjectConfigurationView), typeof(ViewModels.Wizards.WizardPages.ProjectWizard.ProjectConfigurationViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.WizardPages.ProjectWizard.FinalizeSetupViewModel));
+
             //-- Category : PublishWizard
             viewModelLocator.Register(typeof(Views.Wizards.PublishWizardView), typeof(ViewModels.Wizards.PublishWizardViewModel));
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.RequiredSettingsView), typeof(ViewModels.Wizards.WizardPages.PublishWizard.RequiredSettingsViewModel));
@@ -148,10 +153,18 @@ namespace WolvenKit
 
 
             ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark.Red");
+            HandyControl.Tools.ThemeManager.Current.SetCurrentValue(HandyControl.Tools.ThemeManager.ApplicationThemeProperty, HandyControl.Tools.ApplicationTheme.Dark);
 
             Log.Info("Calling base.OnStartup");
 
-            base.OnStartup(e);
+
+
+      
+            base.OnStartup(e); 
+            NNViewRegistrar.RegisterSplat();
+
+
+
         }
 
 

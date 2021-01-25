@@ -110,15 +110,15 @@
             </Style>
         </ResourceDictionary>
     </catel:UserControl.Resources>
-    
-    
-    
-    
-    
-    
-    
-    
-    <Grid Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
+
+
+
+
+
+
+
+
+    <Grid hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
         <Grid Margin="3,75,3,0">
             <StackPanel Orientation="Vertical">
                 

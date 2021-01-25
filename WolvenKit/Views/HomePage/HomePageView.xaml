@@ -15,15 +15,16 @@
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <hc:Theme Name="HandyTheme"/>
-                <hc:Theme Skin="Dark"/>
+                <hc:ThemeResources  RequestedTheme="Dark"/>
+           <hc:Theme/>
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
     </catel:UserControl.Resources>
 
-    <Grid MinWidth="1024" MinHeight="720" >
-
+    <Grid  hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="1024" MinHeight="720" >
+    
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="200,0,450,0">
             <Mid:TopicView x:Name="TopicViewer"/>
         </Grid>
@@ -161,7 +162,7 @@
             <hc:GithubTimeLine x:Name="gitTime" TitleInfo="Test" TitleLabel="Test" FontSize="12" HorizontalContentAlignment="Stretch"  VerticalContentAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FlowDirection="RightToLeft" MaxWidth="450" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="0,50,0,10" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"  >
                 <hc:GithubTimeLine.Style>
                     <Style TargetType="{x:Type hc:GithubTimeLine}" BasedOn="{StaticResource TreeViewBaseStyle}">
-                        <Setter Property="ItemContainerStyle" Value="{StaticResource GithubTreeViewItemBaseStyle}"/>
+                        <Setter Property="ItemContainerStyle" Value="{DynamicResource GithubTreeViewItemBaseStyle}"/>
                         <Setter Property="BorderThickness" Value="0"/>
                         <Setter Property="Template">
                             <Setter.Value>
