@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.ViewModels.AssetBrowser
 {
     class AssetBrowserViewModel : ViewModel
     {
+        public GameFileTreeNode CurrentNode { get; set; } = new GameFileTreeNode();
+        public List<AssetBrowserData> CurrentNodeFiles { get; set; } = new List<AssetBrowserData>();
+
     }
 }

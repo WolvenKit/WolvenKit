@@ -33,7 +33,4 @@ namespace WolvenKit.Common
         void Extract(Stream output);
         string Extract(BundleFileExtractArgs e);
     }
-
-
-
 }

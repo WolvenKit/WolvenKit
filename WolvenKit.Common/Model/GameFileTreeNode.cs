@@ -67,5 +67,37 @@ namespace WolvenKit.Common
         public GameFileTreeNode Parent { get; set; }
         public Dictionary<string, GameFileTreeNode> Directories { get; set; }
         public Dictionary<string, List<IGameFile>> Files { get; set; }
+
+        public List<AssetBrowserData> ToAssetBrowserData()
+        {
+            var ret = new List<AssetBrowserData>();
+            ret.Add(new AssetBrowserData()
+            {
+                Name = "..",
+                Type = EntryType.MoveUP,
+                This = this,
+                Parent = this.Parent
+            });
+            ret.AddRange(Directories.Select(d => new AssetBrowserData()
+            {
+                Name = d.Key,
+                Size = d.Value.Directories.Count + " directories, " + d.Value.Files.Count + " files",
+                Parent = this.Parent,
+                Children = d.Value,
+                This = this,
+                Type = EntryType.Directory
+            }));
+
+            ret.AddRange(Files.Select(f => new AssetBrowserData()
+            {
+                Name = f.Key,
+                Size = f.Value[0].Size + " bytes",
+                This = this,
+                Type = EntryType.File,
+                Parent = this.Parent
+            }));
+
+            return ret;
+        }
     }
 }
