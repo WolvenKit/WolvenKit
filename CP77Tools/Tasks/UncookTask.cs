@@ -71,7 +71,7 @@ namespace CP77Tools.Tasks
             {
                 var archiveManager = new ArchiveManager(basedir);
                 // TODO: use the manager here?
-                archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.Filepath)).ToList();
+                archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.ArchiveAbsolutePath)).ToList();
             }
             else
             {
@@ -112,12 +112,12 @@ namespace CP77Tools.Tasks
                 if (hash != 0)
                 {
                     ar.UncookSingle(hash, outDir, uext, flip);
-                    logger.LogString($" {ar.Filepath}: Uncooked one file: {hash}", Logtype.Success);
+                    logger.LogString($" {ar.ArchiveAbsolutePath}: Uncooked one file: {hash}", Logtype.Success);
                 }
                 else
                 {
                     var r = ar.UncookAll(outDir, pattern, regex, uext, flip);
-                    logger.LogString($" {ar.Filepath}: Uncooked {r.Item1.Count}/{r.Item2} files.",
+                    logger.LogString($" {ar.ArchiveAbsolutePath}: Uncooked {r.Item1.Count}/{r.Item2} files.",
                         Logtype.Success);
                 }
             }

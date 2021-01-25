@@ -7,8 +7,6 @@ namespace WolvenKit.Common.Services
     {
         public Dictionary<ulong, string> Hashdict { get; }
         
-        Task<bool> RefreshAsync();
-
         void ReloadLocally();
         
     }
