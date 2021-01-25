@@ -89,6 +89,8 @@ namespace CP77.CR2W
                     return -1;
                 }
 
+                (_, buffers) = ar.GetFileData(hash, true);
+
                 for (int i = 0; i < buffers.Count; i++)
                 {
                     var buffer = buffers[i];

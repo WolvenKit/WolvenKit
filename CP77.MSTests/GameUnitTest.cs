@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using Catel.IoC;
 using CP77.CR2W.Archive;
-using CP77.CR2W.Resources;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common.Oodle;
@@ -71,7 +70,6 @@ namespace CP77.MSTests
 
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
-            ServiceLocator.Default.RegisterType<IAppSettingsService, AppSettingsService>();
 
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
             hashService.ReloadLocally();

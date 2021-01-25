@@ -64,7 +64,7 @@ namespace CP77Tools.Tasks
 
             var ar = ModTools.Pack(basedir, outDir);
             if (ar != null)
-                logger.LogString($"Finished packing {ar.Filepath}.", Logtype.Success);
+                logger.LogString($"Finished packing {ar.ArchiveAbsolutePath}.", Logtype.Success);
             else
                 logger.LogString($"Packing failed.", Logtype.Error);
 

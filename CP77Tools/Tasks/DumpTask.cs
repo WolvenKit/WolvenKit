@@ -284,14 +284,14 @@ namespace CP77Tools.Tasks
                     // write
                     var arobj = new ArchiveDumpObject()
                     {
-                        Filename = ar.Filepath,
+                        Filename = ar.ArchiveAbsolutePath,
                         FileDictionary = fileDictionary,
                         TextureDictionary = texDictionary
                     };
 
                     if (imports)
                     {
-                        using var hwriter = File.CreateText($"{ar.Filepath}.hashes.csv");
+                        using var hwriter = File.CreateText($"{ar.ArchiveAbsolutePath}.hashes.csv");
                         hwriter.WriteLine("String,Hash");
                         List<string> allimports = new List<string>();
 
@@ -308,10 +308,10 @@ namespace CP77Tools.Tasks
                                 hwriter.WriteLine($"{str},{hash}");
                         }
 
-                        logger.LogString($"Finished. Dump file written to {ar.Filepath}.", Logtype.Success);
+                        logger.LogString($"Finished. Dump file written to {ar.ArchiveAbsolutePath}.", Logtype.Success);
 
                         //write
-                        File.WriteAllText($"{ar.Filepath}.json",
+                        File.WriteAllText($"{ar.ArchiveAbsolutePath}.json",
                             JsonConvert.SerializeObject(arobj, Formatting.Indented, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -325,7 +325,7 @@ namespace CP77Tools.Tasks
                     if (texinfo)
                     {
                         //write
-                        File.WriteAllText($"{ar.Filepath}.textures.json",
+                        File.WriteAllText($"{ar.ArchiveAbsolutePath}.textures.json",
                             JsonConvert.SerializeObject(arobj, Formatting.Indented, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -339,7 +339,7 @@ namespace CP77Tools.Tasks
                 // TODO: add this here
                 if (dump)
                 {
-                    File.WriteAllText($"{ar.Filepath}.json",
+                    File.WriteAllText($"{ar.ArchiveAbsolutePath}.json",
                         JsonConvert.SerializeObject(ar, Formatting.Indented, new JsonSerializerSettings()
                         {
                             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -347,7 +347,7 @@ namespace CP77Tools.Tasks
                             TypeNameHandling = TypeNameHandling.None
                         }));
 
-                    logger.LogString($"Finished dumping {ar.Filepath}.", Logtype.Success);
+                    logger.LogString($"Finished dumping {ar.ArchiveAbsolutePath}.", Logtype.Success);
                 }
 
                 if (list)
@@ -424,7 +424,7 @@ namespace CP77Tools.Tasks
                             ctr++;
                         }
                     }
-                    logger.LogString($"{ar.Filepath} - missing: {ctr}", Logtype.Normal);
+                    logger.LogString($"{ar.ArchiveAbsolutePath} - missing: {ctr}", Logtype.Normal);
                 }
             }
 
