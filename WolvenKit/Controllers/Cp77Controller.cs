@@ -22,7 +22,7 @@ namespace WolvenKit.Controllers
 
     public class Cp77Controller : GameControllerBase
     {
-        private static ArchiveManager archiveManager;
+        private static ArchiveManager archiveManager { get; set; } = new ArchiveManager();
 
         public ArchiveManager LoadArchiveManager()
         {

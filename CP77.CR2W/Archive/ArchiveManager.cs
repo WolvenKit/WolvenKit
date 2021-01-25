@@ -7,10 +7,12 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Navigation;
 using Catel.Collections;
-using CP77Tools.Model;
+ using Catel.IoC;
+ using CP77Tools.Model;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Tools;
+ using WolvenKit.Common.Services;
+ using WolvenKit.Common.Tools;
 using Path = System.IO.Path;
 
 namespace CP77.CR2W.Archive
@@ -24,6 +26,8 @@ namespace CP77.CR2W.Archive
             Archives = new Dictionary<string, Archive>();
             Files = new Dictionary<ulong, List<ArchiveItem>>();
             Items = new Dictionary<string, List<IGameFile>>();
+            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+            hashService.ReloadLocally();
         }
 
         public ArchiveManager(DirectoryInfo indir)
@@ -33,6 +37,8 @@ namespace CP77.CR2W.Archive
             Archives = new Dictionary<string, Archive>();
             Files = new Dictionary<ulong, List<ArchiveItem>>();
             Items = new Dictionary<string, List<IGameFile>>();
+            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+            hashService.ReloadLocally();
 
             // load files
             Reload(indir);
@@ -114,6 +120,7 @@ namespace CP77.CR2W.Archive
         /// </param>
         public override void LoadModArchive(string filename)
         {
+            return;
             if (Archives.ContainsKey(filename))
                 return;
 
@@ -143,9 +150,9 @@ namespace CP77.CR2W.Archive
             foreach (KeyValuePair<ulong, ArchiveItem> item in bundle.Files)
             {
                 // add new key if the file isn't already in another bundle
-                if (!Items.ContainsKey(item.Key.ToString()))
-                    Items.Add(item.Key.ToString(), new List<IGameFile>());
-                Items[item.Key.ToString()].Add(item.Value);
+                if (!Items.ContainsKey(item.Value.Name))
+                    Items.Add(item.Value.Name, new List<IGameFile>());
+                Items[item.Value.Name].Add(item.Value);
             }
             Archives.Add(filename, bundle);
         }
