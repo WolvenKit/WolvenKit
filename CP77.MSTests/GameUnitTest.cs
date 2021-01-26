@@ -24,7 +24,7 @@ namespace CP77.MSTests
         private const string WriteToFileSetting = "WriteToFile";
 
         private static ArchiveManager bm;
-        internal static Dictionary<string, List<ArchiveItem>> GroupedFiles;
+        internal static Dictionary<string, List<FileEntry>> GroupedFiles;
 
         private static IConfigurationRoot _config;
 
