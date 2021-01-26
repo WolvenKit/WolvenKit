@@ -14,30 +14,33 @@ using RED.CRC64;
 
 namespace CP77Tools.Model
 {
-    public class ArTable
+    public class Index
     {
-        public uint Num { get; private set; }
-        public uint Size { get; set; }
-        public ulong Checksum { get; private set; }
-        public uint Table1count { get; private set; }
-        public uint Table2count { get; private set; }
-        public uint Table3count { get; private set; }
-        public Dictionary<ulong, ArchiveItem> FileInfo { get; private set; }
-        public List<OffsetEntry> Offsets { get; private set; }
-        public List<HashEntry> Dependencies { get; private set; }
+        public uint FileTableOffset { get; private set; }
+        public uint FileTableSize { get; set; }
 
-        public ArTable()
+
+        public ulong Crc { get; private set; }
+        public uint FileEntryCount { get; private set; }
+        public uint FileSegmentCount { get; private set; }
+        public uint ResourceDependencyCount { get; private set; }
+
+        public Dictionary<ulong, FileEntry> FileEntries { get; private set; }
+        public List<FileSegment> FileSegments { get; private set; }
+        public List<Dependency> Dependencies { get; private set; }
+
+        public Index()
         {
-            Offsets = new List<OffsetEntry>();
-            Dependencies = new List<HashEntry>();
-            FileInfo = new Dictionary<ulong, ArchiveItem>();
+            FileSegments = new List<FileSegment>();
+            Dependencies = new List<Dependency>();
+            FileEntries = new Dictionary<ulong, FileEntry>();
         }
         
-        public ArTable(BinaryReader br, Archive parent)
+        public Index(BinaryReader br, Archive parent)
         {
-            FileInfo = new Dictionary<ulong, ArchiveItem>();
-            Offsets = new List<OffsetEntry>();
-            Dependencies = new List<HashEntry>();
+            FileEntries = new Dictionary<ulong, FileEntry>();
+            FileSegments = new List<FileSegment>();
+            Dependencies = new List<Dependency>();
 
 
             Read(br, parent);
@@ -45,21 +48,22 @@ namespace CP77Tools.Model
 
         private void Read(BinaryReader br, Archive parent)
         {
-            Num = br.ReadUInt32();
-            Size = br.ReadUInt32();
-            Checksum = br.ReadUInt64();
-            Table1count = br.ReadUInt32();
-            Table2count = br.ReadUInt32();
-            Table3count = br.ReadUInt32();
+            FileTableOffset = br.ReadUInt32();
+            FileTableSize = br.ReadUInt32();
+
+            Crc = br.ReadUInt64();
+            FileEntryCount = br.ReadUInt32();
+            FileSegmentCount = br.ReadUInt32();
+            ResourceDependencyCount = br.ReadUInt32();
 
             // read tables
-            for (int i = 0; i < Table1count; i++)
+            for (int i = 0; i < FileEntryCount; i++)
             {
-                var entry = new ArchiveItem(br, parent);
+                var entry = new FileEntry(br, parent);
 
-                if (!FileInfo.ContainsKey(entry.NameHash64))
+                if (!FileEntries.ContainsKey(entry.NameHash64))
                 {
-                    FileInfo.Add(entry.NameHash64, entry);
+                    FileEntries.Add(entry.NameHash64, entry);
                 }
                 else
                 {
@@ -67,14 +71,14 @@ namespace CP77Tools.Model
                 }
             }
 
-            for (int i = 0; i < Table2count; i++)
+            for (int i = 0; i < FileSegmentCount; i++)
             {
-                Offsets.Add(new OffsetEntry(br, i));
+                FileSegments.Add(new FileSegment(br, i));
             }
 
-            for (int i = 0; i < Table3count; i++)
+            for (int i = 0; i < ResourceDependencyCount; i++)
             {
-                Dependencies.Add(new HashEntry(br, i));
+                Dependencies.Add(new Dependency(br, i));
             }
         }
 
@@ -84,20 +88,20 @@ namespace CP77Tools.Model
             using var ms = new MemoryStream();
             using var tablewriter = new BinaryWriter(ms);
             
-            Table1count = (uint)FileInfo.Count;
-            Table2count = (uint)Offsets.Count;
-            Table3count = (uint)Dependencies.Count;
-            //tablewriter.Write(Checksum);
-            tablewriter.Write(Table1count);
-            tablewriter.Write(Table2count);
-            tablewriter.Write(Table3count);
+            FileEntryCount = (uint)FileEntries.Count;
+            FileSegmentCount = (uint)FileSegments.Count;
+            ResourceDependencyCount = (uint)Dependencies.Count;
+            //tablewriter.Write(Crc);
+            tablewriter.Write(FileEntryCount);
+            tablewriter.Write(FileSegmentCount);
+            tablewriter.Write(ResourceDependencyCount);
 
-            foreach (var archiveItem in FileInfo)
+            foreach (var archiveItem in FileEntries)
             {
                 archiveItem.Value.Write(tablewriter);
             }
 
-            foreach (var offsetEntry in Offsets)
+            foreach (var offsetEntry in FileSegments)
             {
                 offsetEntry.Write(tablewriter);
             }
@@ -107,8 +111,8 @@ namespace CP77Tools.Model
                 dependency.Write(tablewriter);
             }
 
-            Num = 8; //TODO
-            bw.Write(Num);
+            FileTableOffset = 8; //TODO
+            bw.Write(FileTableOffset);
             bw.Write((uint)ms.Length + 8);
             //crc64 calculate
             bw.Write(Crc64.Compute(tablewriter.BaseStream.ToByteArray()));
@@ -118,9 +122,9 @@ namespace CP77Tools.Model
     
 
     /// <summary>
-    /// An entry in Table 2 (OffsetTable)
+    /// An entry in Index 2 (OffsetTable)
     /// </summary>
-    public class OffsetEntry
+    public class FileSegment
     {
         public int Idx { get; private set; }
 
@@ -128,14 +132,14 @@ namespace CP77Tools.Model
         public uint ZSize { get; private set; }
         public uint Size { get; private set; }
 
-        public OffsetEntry(ulong offset, uint zsize, uint size)
+        public FileSegment(ulong offset, uint zsize, uint size)
         {
             Offset = offset;
             ZSize = zsize;
             Size = size;
         }
         
-        public OffsetEntry(BinaryReader br, int idx)
+        public FileSegment(BinaryReader br, int idx)
         {
             Idx = idx;
 
@@ -159,9 +163,9 @@ namespace CP77Tools.Model
     }
 
     /// <summary>
-    /// An entry in Table 3 (DependencyTable)
+    /// An entry in Index 3 (DependencyTable)
     /// </summary>
-    public class HashEntry
+    public class Dependency
     {
         
         public string HashStr { get; private set; }
@@ -170,12 +174,12 @@ namespace CP77Tools.Model
         [JsonProperty]
         private int _idx;
         
-        public HashEntry(ulong hash)
+        public Dependency(ulong hash)
         {
             _hash = hash;
         }
         
-        public HashEntry(BinaryReader br, int idx)
+        public Dependency(BinaryReader br, int idx)
         {
             _idx = idx;
             var mainController = ServiceLocator.Default.ResolveType<IHashService>();

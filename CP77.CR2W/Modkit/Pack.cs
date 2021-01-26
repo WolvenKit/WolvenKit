@@ -14,6 +14,7 @@ using CP77Tools.Model;
 using RED.CRC32;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Oodle;
+using Index = CP77Tools.Model.Index;
 
 namespace CP77.CR2W
 {
@@ -38,7 +39,7 @@ namespace CP77.CR2W
             var ar = new Archive.Archive
             {
                 ArchiveAbsolutePath = outfile,
-                Table = new ArTable()
+                Index = new Index()
             };
             using var fs = new FileStream(outfile, FileMode.Create);
             using var bw = new BinaryWriter(fs);
@@ -83,10 +84,10 @@ namespace CP77.CR2W
                 using var fileBinaryReader = new BinaryReader(fileStream);
 
                 // fileinfo data
-                uint firstimportidx = (uint)ar.Table.Dependencies.Count;
-                uint lastimportidx = (uint)ar.Table.Dependencies.Count;
-                uint firstoffsetidx = (uint)ar.Table.Offsets.Count;
-                uint lastoffsetidx = (uint)ar.Table.Offsets.Count;
+                uint firstimportidx = (uint)ar.Index.Dependencies.Count;
+                uint lastimportidx = (uint)ar.Index.Dependencies.Count;
+                uint firstoffsetidx = (uint)ar.Index.FileSegments.Count;
+                uint lastoffsetidx = (uint)ar.Index.FileSegments.Count;
                 int flags = 0;
                 
                 var cr2w = TryReadCr2WFileHeaders(fileBinaryReader);
@@ -95,11 +96,11 @@ namespace CP77.CR2W
                     //register imports
                     foreach (var cr2WImportWrapper in cr2w.Imports)
                     {
-                        if (!ar.Table.Dependencies.Select(_ => _.HashStr).Contains(cr2WImportWrapper.DepotPathStr))
-                            ar.Table.Dependencies.Add(
-                                new HashEntry(FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPathStr)));
+                        if (!ar.Index.Dependencies.Select(_ => _.HashStr).Contains(cr2WImportWrapper.DepotPathStr))
+                            ar.Index.Dependencies.Add(
+                                new Dependency(FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPathStr)));
                     }
-                    lastimportidx = (uint)ar.Table.Dependencies.Count;
+                    lastimportidx = (uint)ar.Index.Dependencies.Count;
                     
                     // kraken the file and write
                     var cr2wfilesize = (int)cr2w.Header.fileSize;
@@ -108,7 +109,7 @@ namespace CP77.CR2W
                     var offset = bw.BaseStream.Position;
                     
                     var (zsize, crc) = bw.CompressAndWrite(cr2winbuffer);
-                    ar.Table.Offsets.Add(new OffsetEntry(
+                    ar.Index.FileSegments.Add(new FileSegment(
                         (ulong) offset, 
                         zsize,
                         (uint) cr2winbuffer.Length));
@@ -125,12 +126,12 @@ namespace CP77.CR2W
                         var boffset = bw.BaseStream.Position;
                         
                         bw.Write(b);
-                        ar.Table.Offsets.Add(new OffsetEntry(
+                        ar.Index.FileSegments.Add(new FileSegment(
                             (ulong)boffset,
                             bzsize,
                             bsize));
                     }
-                    lastoffsetidx = (uint)ar.Table.Offsets.Count;
+                    lastoffsetidx = (uint)ar.Index.FileSegments.Count;
                     
                     flags = cr2w.Buffers.Count > 0 ? cr2w.Buffers.Count - 1 : 0;
                 }
@@ -140,18 +141,18 @@ namespace CP77.CR2W
                     fileStream.Seek(0, SeekOrigin.Begin);
                     var cr2winbuffer = Catel.IO.StreamExtensions.ToByteArray(fileStream);
                     var (zsize, crc) = bw.CompressAndWrite(cr2winbuffer);
-                    ar.Table.Offsets.Add(new OffsetEntry((ulong) bw.BaseStream.Position, zsize,
+                    ar.Index.FileSegments.Add(new FileSegment((ulong) bw.BaseStream.Position, zsize,
                         (uint) cr2winbuffer.Length));
                 }
                 
                 // save table data
                 var sha1 = new System.Security.Cryptography.SHA1Managed();
                 var sha1hash = sha1.ComputeHash(Catel.IO.StreamExtensions.ToByteArray(fileBinaryReader.BaseStream)); //TODO: this is only correct for files with no buffer
-                var item = new ArchiveItem(hash, DateTime.Now, (uint)flags
+                var item = new FileEntry(hash, DateTime.Now, (uint)flags
                     , firstoffsetidx, lastoffsetidx, 
                     firstimportidx, lastimportidx
                     , sha1hash);
-                ar.Table.FileInfo.Add(hash, item);
+                ar.Index.FileEntries.Add(hash, item);
                 
 
                 Interlocked.Increment(ref progress);
@@ -167,7 +168,7 @@ namespace CP77.CR2W
 
             // write tables
             var tableoffset = bw.BaseStream.Position;
-            ar.Table.Write(bw);
+            ar.Index.Write(bw);
             var tablesize = bw.BaseStream.Position - tableoffset;
 
             // padding to page (4096 bytes)
@@ -175,8 +176,8 @@ namespace CP77.CR2W
             var filesize = bw.BaseStream.Position;
 
             // write the header again
-            ar.Header.Tableoffset = (ulong)tableoffset;
-            ar.Header.Tablesize = (uint)tablesize;
+            ar.Header.IndexPosition = (ulong)tableoffset;
+            ar.Header.IndexSize = (uint)tablesize;
             ar.Header.Filesize = (ulong)filesize;
             bw.BaseStream.Seek(0, SeekOrigin.Begin);
             ar.Header.Write(bw);

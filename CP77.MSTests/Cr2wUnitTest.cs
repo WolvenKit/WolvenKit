@@ -797,8 +797,8 @@ namespace CP77.MSTests
                 files = GroupedFiles.Keys.Where(k => k.Equals(extension)).ToList();
 
             var sb = new StringBuilder();
-            
-            Parallel.ForEach(files, ext =>
+
+            foreach (var ext in files)
             {
                 var results = Read_Archive_Items(GroupedFiles[ext]);
 
@@ -818,7 +818,7 @@ namespace CP77.MSTests
                         File.WriteAllText(resultPath, csv);
                     }
                 }
-            });
+            }
             
             var logPath = Path.Combine(resultDir, $"logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
             File.WriteAllText(logPath, sb.ToString());
@@ -827,7 +827,7 @@ namespace CP77.MSTests
             if (!success) Assert.Fail();
         }
 
-        private IEnumerable<TestResult> Read_Archive_Items(List<ArchiveItem> files)
+        private IEnumerable<TestResult> Read_Archive_Items(List<FileEntry> files)
         {
             var results = new List<TestResult>();
             
@@ -841,7 +841,7 @@ namespace CP77.MSTests
                     using var ms = new MemoryStream(fileBytes);
                     using var br = new BinaryReader(ms);
 
-                    var c = new CR2WFile();
+                    var c = new CR2WFile {FileName = file.NameOrHash};
                     var readResult = c.Read(br);
 
                     switch (readResult)
@@ -849,7 +849,7 @@ namespace CP77.MSTests
                         case EFileReadErrorCodes.NoCr2w:
                             results.Add(new TestResult
                             {
-                                ArchiveItem = file,
+                                FileEntry = file,
                                 Success = true,
                                 Result = TestResult.ResultType.NoCr2W
                             });
@@ -857,7 +857,7 @@ namespace CP77.MSTests
                         case EFileReadErrorCodes.UnsupportedVersion:
                             results.Add(new TestResult
                             {
-                                ArchiveItem = file,
+                                FileEntry = file,
                                 Success = false,
                                 Result = TestResult.ResultType.UnsupportedVersion,
                                 Message = $"Unsupported Version ({c.GetFileHeader().version})"
@@ -867,7 +867,7 @@ namespace CP77.MSTests
                             var hasAdditionalBytes = c.additionalCr2WFileBytes != null && c.additionalCr2WFileBytes.Any();
                             results.Add(new TestResult
                             {
-                                ArchiveItem = file,
+                                FileEntry = file,
                                 Success = !hasAdditionalBytes,
                                 Result = hasAdditionalBytes ? TestResult.ResultType.HasAdditionalBytes : TestResult.ResultType.NoError,
                                 Message = hasAdditionalBytes ? $"Additional Bytes: {c.additionalCr2WFileBytes.Length}" : null,
@@ -880,7 +880,7 @@ namespace CP77.MSTests
                 {
                     results.Add(new TestResult
                     {
-                        ArchiveItem = file,
+                        FileEntry = file,
                         Success = false,
                         Result = TestResult.ResultType.RuntimeException,
                         ExceptionType = e.GetType(),
@@ -896,12 +896,12 @@ namespace CP77.MSTests
             var sb = new StringBuilder();
 
             sb.AppendLine(
-                $@"{nameof(ArchiveItem.NameHash64)},{nameof(ArchiveItem.FileName)},{nameof(TestResult.Result)},{nameof(TestResult.Success)},{nameof(TestResult.AdditionalBytes)},{nameof(TestResult.ExceptionType)},{nameof(TestResult.Message)}");
+                $@"{nameof(FileEntry.NameHash64)},{nameof(FileEntry.FileName)},{nameof(TestResult.Result)},{nameof(TestResult.Success)},{nameof(TestResult.AdditionalBytes)},{nameof(TestResult.ExceptionType)},{nameof(TestResult.Message)}");
 
             foreach (var r in results)
             {
                 sb.AppendLine(
-                    $"{r.ArchiveItem.NameHash64},{r.ArchiveItem.FileName},{r.Result},{r.Success},{r.AdditionalBytes},{r.ExceptionType?.FullName},{r.Message}");
+                    $"{r.FileEntry.NameHash64},{r.FileEntry.FileName},{r.Result},{r.Success},{r.AdditionalBytes},{r.ExceptionType?.FullName},{r.Message}");
             }
 
             return sb.ToString();
@@ -918,7 +918,7 @@ namespace CP77.MSTests
                 NoError
             }
             
-            public ArchiveItem ArchiveItem { get; set; }
+            public FileEntry FileEntry { get; set; }
             
             [JsonConverter(typeof(StringEnumConverter))]
             public ResultType Result { get; set; }

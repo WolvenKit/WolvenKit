@@ -28,7 +28,7 @@ namespace CP77.CR2W.Archive
             _parentDirectoryInfo = indir;
 
             Archives = new Dictionary<string, Archive>();
-            Files = new Dictionary<ulong, List<ArchiveItem>>();
+            Files = new Dictionary<ulong, List<FileEntry>>();
 
             // load files
             Reload(indir);
@@ -38,8 +38,8 @@ namespace CP77.CR2W.Archive
 
         #region properties
         public Dictionary<string, Archive> Archives { get; set; }
-        public Dictionary<ulong, List<ArchiveItem>> Files { get; }
-        public Dictionary<string, List<ArchiveItem>> GroupedFiles =>
+        public Dictionary<ulong, List<FileEntry>> Files { get; }
+        public Dictionary<string, List<FileEntry>> GroupedFiles =>
 
             Files.Values.GroupBy(
                 f => f.FirstOrDefault().Extension,
@@ -90,7 +90,7 @@ namespace CP77.CR2W.Archive
                 {
                     // add file
                     if (!Files.ContainsKey(hash))
-                        Files.Add(hash, new List<ArchiveItem>());
+                        Files.Add(hash, new List<FileEntry>());
                     Files[hash].Add(value);
 
                     // add extension
@@ -136,7 +136,7 @@ namespace CP77.CR2W.Archive
             if (Archives.ContainsKey(filename))
                 return;
             var bundle = new Archive(filename);
-            foreach (KeyValuePair<ulong, ArchiveItem> item in bundle.Files)
+            foreach (KeyValuePair<ulong, FileEntry> item in bundle.Files)
             {
                 // add new key if the file isn't already in another bundle
                 if (!Items.ContainsKey(item.Key.ToString()))

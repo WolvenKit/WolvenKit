@@ -13,7 +13,7 @@ namespace CP77Tools.Model
     /// <summary>
     /// 
     /// </summary>
-    public class ArHeader
+    public class Header
     {
         public const uint MAGIC = 1380009042;
         public const int SIZE = 40;
@@ -21,23 +21,21 @@ namespace CP77Tools.Model
         
         public uint Magic { get; private set; }
         public uint Version { get; private set; }
-        public ulong Tableoffset { get; set; }
-        public uint Tablesize { get; set; }
-        public uint Unk1 { get; private set; }
-        public uint Unk2 { get; private set; }
-        public uint Unk3 { get; private set; }
+        public ulong IndexPosition { get; set; }
+        public uint IndexSize { get; set; }
+        public ulong DebugPosition { get; private set; }
+        public uint DebugSize { get; private set; }
         public ulong Filesize { get; set; }
 
-        public ArHeader()
+        public Header()
         {
             Magic = MAGIC;
             Version = 12;
-            Unk1 = 0;
-            Unk2 = 0;
-            Unk3 = 0;
+            DebugPosition = 0;
+            DebugSize = 0;
         }
         
-        public ArHeader(BinaryReader br)
+        public Header(BinaryReader br)
         {
             Read(br);
         }
@@ -51,11 +49,10 @@ namespace CP77Tools.Model
                 throw new NotImplementedException();
 
             Version = br.ReadUInt32();
-            Tableoffset = br.ReadUInt64();
-            Tablesize = br.ReadUInt32();
-            Unk1 = br.ReadUInt32();
-            Unk2 = br.ReadUInt32();
-            Unk3 = br.ReadUInt32();
+            IndexPosition = br.ReadUInt64();
+            IndexSize = br.ReadUInt32();
+            DebugPosition = br.ReadUInt64();
+            DebugSize = br.ReadUInt32();
             Filesize = br.ReadUInt64();
         }
 
@@ -63,11 +60,10 @@ namespace CP77Tools.Model
         {
             bw.Write(MAGIC);
             bw.Write(Version);
-            bw.Write(Tableoffset);
-            bw.Write(Tablesize);
-            bw.Write(Unk1);
-            bw.Write(Unk2);
-            bw.Write(Unk3);
+            bw.Write(IndexPosition);
+            bw.Write(IndexSize);
+            bw.Write(DebugPosition);
+            bw.Write(DebugSize);
             bw.Write(Filesize);
         }
     }
