@@ -30,10 +30,10 @@
 
   <ItemGroup>
     <PackageReference Include="Luna.ConsoleProgressBar" Version="1.0.29" />
-    <PackageReference Include="CsvHelper" Version="21.1.1" />
+    <PackageReference Include="CsvHelper" Version="21.2.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
-	<PackageReference Include="WolvenKit.Common" Version="1.0.2" GeneratePathProperty="true" />
-    <PackageReference Include="WolvenKit.Cyberformats" Version="1.0.4" />
+	<PackageReference Include="WolvenKit.Common" Version="1.0.3" GeneratePathProperty="true" />
+    <PackageReference Include="WolvenKit.Cyberformats" Version="1.0.5" />
   </ItemGroup>
 
 	<ItemGroup>
