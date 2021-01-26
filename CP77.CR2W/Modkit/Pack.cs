@@ -128,7 +128,7 @@ namespace CP77.CR2W
                         ar.Table.Offsets.Add(new OffsetEntry(
                             (ulong)boffset,
                             bzsize,
-                            (uint) b.Length));
+                            bsize));
                     }
                     lastoffsetidx = (uint)ar.Table.Offsets.Count;
                     
