@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
@@ -798,33 +799,41 @@ namespace CP77.MSTests
 
             var sb = new StringBuilder();
 
-            foreach (var ext in files)
+            int successCount = 0;
+            int totalCount = GroupedFiles[extension].Count;
+
+            var results = Read_Archive_Items(GroupedFiles[extension]).ToList();
+
+            successCount = results.Count(r => r.Success);
+
+            sb.AppendLine(
+                $"{extension} -> Successful Reads: {successCount} / {totalCount} ({(int) (((double) successCount / (double) totalCount) * 100)}%)");
+
+            if (results.Any(r => !r.Success))
+                success = false;
+
+            if (WriteToFile)
             {
-                var results = Read_Archive_Items(GroupedFiles[ext]);
-
-                var successCount = results.Count(r => r.Success);
-                var totalCount = GroupedFiles[ext].Count;
-                
-                sb.AppendLine($"{ext} -> Successful Reads: {successCount} / {totalCount} ({(int)(((double)successCount / (double)totalCount) * 100)}%)");
-
-                if (success && results.Any(r => !r.Success)) success = false;
-                
-                if (WriteToFile)
+                if (results.Any(r => !r.Success))
                 {
-                    if (results.Any(r => !r.Success))
-                    {
-                        var resultPath = Path.Combine(resultDir, $"{ext[1..]}.csv");
-                        var csv = TestResultAsCsv(results.Where(r => !r.Success));
-                        File.WriteAllText(resultPath, csv);
-                    }
+                    var resultPath = Path.Combine(resultDir, $"{extension[1..]}.csv");
+                    var csv = TestResultAsCsv(results.Where(r => !r.Success));
+                    File.WriteAllText(resultPath, csv);
                 }
             }
-            
+
             var logPath = Path.Combine(resultDir, $"logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
             File.WriteAllText(logPath, sb.ToString());
             Console.WriteLine(sb.ToString());
 
-            if (!success) Assert.Fail();
+
+
+            if (!success)
+            {
+                Assert.Fail($"Stringtable recreation failed for some files or file was not read.");
+            }
+            
+            Assert.AreEqual(successCount, totalCount);
         }
 
         private IEnumerable<TestResult> Read_Archive_Items(List<FileEntry> files)
@@ -865,14 +874,49 @@ namespace CP77.MSTests
                             break;
                         default:
                             var hasAdditionalBytes = c.additionalCr2WFileBytes != null && c.additionalCr2WFileBytes.Any();
+                            
+
+                            var oldst = c.StringDictionary.Values.ToList();
+                            var newst = c.GenerateStringtable().Item1.Values.ToList();
+                            var compstr = "OLD,NEW";
+                            var correctStringTable = oldst.Count == newst.Count;
+
+                            // Stringtable test
+                            for (int i = 0; i < Math.Max(oldst.Count, newst.Count); i++)
+                            {
+                                string str1 = "";
+                                string str2 = "";
+                                if (i < oldst.Count)
+                                    compstr += oldst[i];
+                                compstr += ",";
+                                if (i < newst.Count)
+                                    compstr += newst[i];
+                                compstr += "\n";
+
+                                if (str1 != str2)
+                                    correctStringTable = false;
+                            }
+
+                            var res = TestResult.ResultType.NoError;
+                            if (hasAdditionalBytes)
+                                res &= TestResult.ResultType.HasAdditionalBytes;
+                            if (!correctStringTable)
+                                res &= TestResult.ResultType.HasIncorrectStringTable;
+
+                            var msg = hasAdditionalBytes
+                                ? $"Additional Bytes: {c.additionalCr2WFileBytes.Length}"
+                                : null;
+
                             results.Add(new TestResult
                             {
                                 FileEntry = file,
-                                Success = !hasAdditionalBytes,
-                                Result = hasAdditionalBytes ? TestResult.ResultType.HasAdditionalBytes : TestResult.ResultType.NoError,
-                                Message = hasAdditionalBytes ? $"Additional Bytes: {c.additionalCr2WFileBytes.Length}" : null,
-                                AdditionalBytes = hasAdditionalBytes ? c.additionalCr2WFileBytes.Length : 0
+                                Success = !hasAdditionalBytes && correctStringTable,
+                                Result = res,
+                                Message = msg,
+                                AdditionalBytes = hasAdditionalBytes ? c.additionalCr2WFileBytes.Length : 0,
+                                StringTableSuccess = correctStringTable
                             });
+
                             break;
                     }
                 }
@@ -907,15 +951,18 @@ namespace CP77.MSTests
             return sb.ToString();
         }
 
+        
         private class TestResult
         {
+            [Flags]
             public enum ResultType
             {
+                NoError,
                 NoCr2W,
                 UnsupportedVersion,
                 RuntimeException,
                 HasAdditionalBytes,
-                NoError
+                HasIncorrectStringTable
             }
             
             public FileEntry FileEntry { get; set; }
@@ -923,6 +970,7 @@ namespace CP77.MSTests
             [JsonConverter(typeof(StringEnumConverter))]
             public ResultType Result { get; set; }
             public int AdditionalBytes { get; set; }
+            public bool StringTableSuccess { get; set; }
             public bool Success { get; set; }
             public Type ExceptionType { get; set; }
             public string Message { get; set; }
