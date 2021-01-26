@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -826,25 +827,24 @@ namespace CP77.MSTests
             File.WriteAllText(logPath, sb.ToString());
             Console.WriteLine(sb.ToString());
 
-
-
+            Assert.AreEqual(totalCount, successCount);
             if (!success)
             {
                 Assert.Fail($"Stringtable recreation failed for some files or file was not read.");
             }
-            
-            Assert.AreEqual(successCount, totalCount);
         }
 
         private IEnumerable<TestResult> Read_Archive_Items(List<FileEntry> files)
         {
-            var results = new List<TestResult>();
-            
-            foreach (var file in files)
+            var results = new ConcurrentBag<TestResult>();
+
+            //foreach (var file in files)
+            Parallel.ForEach(files, file =>
+            {
                 try
                 {
                     if (file.Archive is not Archive ar)
-                        continue;
+                        return;
                     var (fileBytes, bufferBytes) = ar.GetFileData(file.NameHash64, false);
 
                     using var ms = new MemoryStream(fileBytes);
@@ -873,8 +873,9 @@ namespace CP77.MSTests
                             });
                             break;
                         default:
-                            var hasAdditionalBytes = c.additionalCr2WFileBytes != null && c.additionalCr2WFileBytes.Any();
-                            
+                            var hasAdditionalBytes =
+                                c.additionalCr2WFileBytes != null && c.additionalCr2WFileBytes.Any();
+
 
                             var oldst = c.StringDictionary.Values.ToList();
                             var newst = c.GenerateStringtable().Item1.Values.ToList();
@@ -931,6 +932,7 @@ namespace CP77.MSTests
                         Message = $"{file.NameOrHash} - {e.Message}"
                     });
                 }
+            });
 
             return results;
         }
