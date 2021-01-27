@@ -30,9 +30,9 @@
                                     <LineBreak/>
                                     <Run Text="(Optional)"></Run>
                                 </TextBlock>
-                                <hc:ImageSelector  Margin="100,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
+                                <hc:ImageSelector  Margin="200,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
 
-                                <TextBlock Margin="210,0,0,0" VerticalAlignment="Center" Text="Username"></TextBlock>
+                                <TextBlock Margin="205,0,0,5" VerticalAlignment="Bottom" Text="Username"></TextBlock>
                             </Grid>
                             <hc:Divider Margin="0,32,10,0" Content="Theme" HorizontalContentAlignment="Left"></hc:Divider>
 
@@ -40,7 +40,7 @@
 
                                 <TextBlock Text="Selected Theme" VerticalAlignment="Center"></TextBlock>
                                 <hc:Divider Margin="200,0,0,0"  Orientation="Vertical" HorizontalAlignment="Left"></hc:Divider>
-                                <Rectangle Margin="205,0,0,0" Height="25" Width="25"  Fill="{DynamicResource MahApps.Brushes.AccentBase}" VerticalAlignment="Stretch" HorizontalAlignment="Left"></Rectangle>
+                                <Rectangle Margin="205,0,0,0" Height="25" Width="25"  Fill="{DynamicResource MahApps.Brushes.Accent3}" VerticalAlignment="Stretch" HorizontalAlignment="Left"></Rectangle>
                             </Grid>
                             <hc:Divider Margin="0,32,10,0" Content="Initial Preferences" HorizontalContentAlignment="Left"></hc:Divider>
 

@@ -1,0 +1,25 @@
+﻿<catel:UserControl x:Class="WolvenKit.Views.SettingsPages.EditorSettingsView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol">
+
+    <Grid hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+        <hc:SideMenu Width="150" SideBrush="{DynamicResource MahApps.Brushes.Accent}" HorizontalAlignment="Left" >
+
+            <hc:SideMenuItem  >
+                <hc:SideMenuItem.Header>
+                    <TextBlock Text="Global" FontSize="10.5"/>
+                </hc:SideMenuItem.Header>
+            </hc:SideMenuItem>
+            <hc:SideMenuItem  >
+                <hc:SideMenuItem.Header>
+                    <TextBlock Text="Personalize" FontSize="10.5"/>
+                </hc:SideMenuItem.Header>
+            </hc:SideMenuItem>
+        </hc:SideMenu>
+
+
+
+    </Grid>
+
+</catel:UserControl>

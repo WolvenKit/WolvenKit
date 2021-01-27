@@ -28,7 +28,7 @@
     <catel:DataWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources AccentColor="{DynamicResource MahApps.Brushes.Accent3}"/>
+                <hc:ThemeResources/>
                 <hc:Theme/>
             </ResourceDictionary.MergedDictionaries>
 

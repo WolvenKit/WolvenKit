@@ -33,7 +33,7 @@
 
             <hc:TransitioningContentControl Margin="0,60,0,0">
 
-                <hc:SideMenu x:Name="LeftSideMenu" SideBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" BorderThickness="0" Width="200" SubSideBrush="{DynamicResource MahApps.Brushes.Accent}">
+                <hc:SideMenu x:Name="LeftSideMenu" SideBrush="{DynamicResource MahApps.Brushes.AccentBase}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" BorderThickness="0" Width="200" SubSideBrush="{DynamicResource MahApps.Brushes.Accent2}">
                     <hc:Interaction.Triggers>
                         <hc:EventTrigger EventName="SelectionChanged">
                             <hc:EventToCommand Command="{Binding SwitchItemCmd}" PassEventArgsToCommand="True" />
@@ -110,6 +110,7 @@
                                 <iconPacks:PackIconCodicons Height="13" Kind="Cloud" Width="13" HorizontalAlignment="Center"/>
                             </hc:SideMenuItem.Icon>
                         </hc:SideMenuItem>
+            
                     </hc:SideMenuItem>
                 </hc:SideMenu>
 
