@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -100,7 +101,7 @@ namespace CP77Tools.Tasks
 
                         if (!correctStringTable)
                         {
-
+                            Debugger.Break();
                         }
 
                         break;
