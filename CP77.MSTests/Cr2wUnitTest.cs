@@ -827,10 +827,9 @@ namespace CP77.MSTests
             File.WriteAllText(logPath, sb.ToString());
             Console.WriteLine(sb.ToString());
 
-            Assert.AreEqual(totalCount, successCount);
             if (!success)
             {
-                Assert.Fail($"Stringtable recreation failed for some files or file was not read.");
+                Assert.Fail($"Stringtable creataion failed for some files or file was not read. Successful Reads: {successCount} / {totalCount}");
             }
         }
 
@@ -900,9 +899,9 @@ namespace CP77.MSTests
 
                             var res = TestResult.ResultType.NoError;
                             if (hasAdditionalBytes)
-                                res &= TestResult.ResultType.HasAdditionalBytes;
+                                res |= TestResult.ResultType.HasAdditionalBytes;
                             if (!correctStringTable)
-                                res &= TestResult.ResultType.HasIncorrectStringTable;
+                                res |= TestResult.ResultType.HasIncorrectStringTable;
 
                             var msg = hasAdditionalBytes
                                 ? $"Additional Bytes: {c.additionalCr2WFileBytes.Length}"
@@ -942,12 +941,24 @@ namespace CP77.MSTests
             var sb = new StringBuilder();
 
             sb.AppendLine(
-                $@"{nameof(FileEntry.NameHash64)},{nameof(FileEntry.FileName)},{nameof(TestResult.Result)},{nameof(TestResult.Success)},{nameof(TestResult.AdditionalBytes)},{nameof(TestResult.ExceptionType)},{nameof(TestResult.Message)}");
+                $"{nameof(FileEntry.NameHash64)}," +
+                $"{nameof(FileEntry.FileName)}," +
+                $"{nameof(TestResult.Result)}," +
+                $"{nameof(TestResult.Success)}," +
+                $"{nameof(TestResult.AdditionalBytes)}," +
+                $"{nameof(TestResult.ExceptionType)}," +
+                $"{nameof(TestResult.Message)}");
 
             foreach (var r in results)
             {
                 sb.AppendLine(
-                    $"{r.FileEntry.NameHash64},{r.FileEntry.FileName},{r.Result},{r.Success},{r.AdditionalBytes},{r.ExceptionType?.FullName},{r.Message}");
+                    $"{r.FileEntry.NameHash64}," +
+                    $"{r.FileEntry.FileName}," +
+                    $"{r.Result}," +
+                    $"{r.Success}," +
+                    $"{r.AdditionalBytes}," +
+                    $"{r.ExceptionType?.FullName}," +
+                    $"{r.Message}");
             }
 
             return sb.ToString();

@@ -101,12 +101,12 @@ namespace WolvenKit.Common.DDS
 
     public enum EUncookExtension
     {
+        dds,
         tga,
         bmp,
         jpg,
         jpeg,
         png,
-        dds,
     }
 
     public static class TexconvWrapper
