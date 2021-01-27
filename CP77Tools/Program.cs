@@ -67,6 +67,7 @@ namespace CP77Tools
                 new ExportCommand(),
                 
                 new DumpCommand(),
+                new VerifyCommand(),
                 new CR2WCommand(),
                 
                 new HashCommand(),

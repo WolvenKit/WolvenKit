@@ -844,7 +844,7 @@ namespace CP77.MSTests
                 {
                     if (file.Archive is not Archive ar)
                         return;
-                    var (fileBytes, bufferBytes) = ar.GetFileData(file.NameHash64, false);
+                    var (fileBytes, _) = ar.GetFileData(file.NameHash64, false);
 
                     using var ms = new MemoryStream(fileBytes);
                     using var br = new BinaryReader(ms);
@@ -943,6 +943,7 @@ namespace CP77.MSTests
             sb.AppendLine(
                 $"{nameof(FileEntry.NameHash64)}," +
                 $"{nameof(FileEntry.FileName)}," +
+                $"{nameof(FileEntry.Archive)}," +
                 $"{nameof(TestResult.Result)}," +
                 $"{nameof(TestResult.Success)}," +
                 $"{nameof(TestResult.AdditionalBytes)}," +
@@ -954,6 +955,7 @@ namespace CP77.MSTests
                 sb.AppendLine(
                     $"{r.FileEntry.NameHash64}," +
                     $"{r.FileEntry.FileName}," +
+                    $"{Path.GetFileName(r.FileEntry.Archive.ArchiveAbsolutePath)}," +
                     $"{r.Result}," +
                     $"{r.Success}," +
                     $"{r.AdditionalBytes}," +

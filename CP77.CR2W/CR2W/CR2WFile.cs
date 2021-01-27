@@ -1028,7 +1028,7 @@ namespace CP77.CR2W
                         switch (a)
                         {
                             case CArray<CName> cacn:
-                                returnedVariables.Add(new SNameArg(EStringTableMod.None, a)); ///???
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, a)); //???
                                 break;
                             case CArray<CBool> cacb:
                             case CArray<CUInt16> cacu16:
@@ -1116,7 +1116,7 @@ namespace CP77.CR2W
                 {
                     if (!(string.IsNullOrEmpty(s.ClassName) && string.IsNullOrEmpty(s.DepotPath)))
                     {
-                        AddUniqueToTable(s.REDType);
+                        //AddUniqueToTable(s.REDType);
                         var stuple = new SImportEntry(s.ClassName, s.DepotPath, EImportFlags.Soft);
                         if (!newsoftlist.Contains(stuple))
                         {
@@ -1172,10 +1172,6 @@ namespace CP77.CR2W
                     {
                         AddUniqueToTable(enumstring);
                     }
-                }
-                else
-                {
-                    CheckVarNameAndTypes();
                 }
 
 
