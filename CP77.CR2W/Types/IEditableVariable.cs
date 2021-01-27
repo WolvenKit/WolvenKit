@@ -17,8 +17,8 @@ namespace CP77.CR2W
         [JsonIgnore]
         ushort REDFlags { get; }
 
-        [JsonIgnore]
-        Guid InternalGuid { get; set; }
+        [JsonIgnore] string UniqueIdentifier { get; }
+
         [JsonIgnore]
         IEditableVariable ParentVar { get; }
         [JsonIgnore]

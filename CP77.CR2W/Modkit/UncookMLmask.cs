@@ -55,6 +55,7 @@ namespace CP77.CR2W.Uncooker
 
             uint maskTileSize = blob.Header.MaskTileSize.val;
 
+            uint maskCount = blob.Header.NumLayers.val;
 
             byte[] atlas = buffers[0];
             uint[] tiles;
@@ -91,13 +92,13 @@ namespace CP77.CR2W.Uncooker
             
 
             Directory.CreateDirectory(path);
-            for (int i = 0; i < maskTileSize; i++)
+            for (int i = 0; i < maskCount; i++)
             {
                 var mFilename = filename + $"_{i}.dds";
                 var newpath = Path.Combine(path, mFilename);
 
                 //Clear instead of allocate new is faster?
-                //Mandatory cause decode does not always right to every pixel
+                //Mandatory cause decode does not always write to every pixel
                 Array.Clear(maskData, 0, maskData.Length);
                 Decode(ref maskData, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth, atlasHeight, tiles, maskTileSize, i);
 
@@ -128,7 +129,7 @@ namespace CP77.CR2W.Uncooker
 
             for (uint x = 0; x < maskWidth; x++)
             {
-                for (uint y = 0; y < maskWidth; y++)
+                for (uint y = 0; y < maskHeight; y++)
                 {
                     DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight, x, y, tileData, maskTileSize, maskIndex, smallOffset, smallScale);
                     DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight, x, y, tileData, maskTileSize, maskIndex, 0, 1);
@@ -141,32 +142,34 @@ namespace CP77.CR2W.Uncooker
         {
             uint widthInTiles = DivCeil(maskWidth / smallScale, maskTileSize);
 
-            uint xTile = x / maskTileSize / smallScale;
-            uint yTile = y / maskTileSize / smallScale;
+            var xTile = x / maskTileSize / smallScale;
+            var yTile = y / maskTileSize / smallScale;
 
-            uint tileIndex = widthInTiles * yTile + xTile + tilesOffset;
+            var tileIndex = widthInTiles * yTile + xTile + tilesOffset;
 
-            uint paramOffset = tilesData[tileIndex * 2];
-            uint paramBits = tilesData[tileIndex * 2 + 1];
+            var paramOffset = tilesData[tileIndex * 2];
+            var paramBits = tilesData[tileIndex * 2 + 1];
 
-            if ((paramBits & (1 << maskIndex)) == 0)
+            if ((uint)(paramBits & (1 << maskIndex)) == 0U)
                 return;
 
-            uint extraAdd = CountBits((uint)(paramBits & ((1 << maskIndex) - 1)));
+            var extraAdd = CountBits((uint)(paramBits & ((1 << maskIndex) - 1)));
 
-            uint tileDecl = tilesData[paramOffset + extraAdd];
+            uint tileDecl = 0;
+            if (paramOffset + extraAdd < tilesData.Length)
+                tileDecl = tilesData[paramOffset + extraAdd];
 
-            uint dx = tileDecl & 0x3ffU;
-            uint dy = (tileDecl >> 10) & 0x3ffU;
-            uint sx = (tileDecl >> 20) & 0xfU;
-            uint sy = (tileDecl >> 24) & 0xfU;
+            var dx = tileDecl & 0x3ff;
+            var dy = (tileDecl >> 10) & 0x3ff;
+            var sx = (tileDecl >> 20) & 0xf;
+            var sy = (tileDecl >> 24) & 0xf;
 
-            uint atlasTileSize = maskTileSize + 2;
+            var atlasTileSize = maskTileSize + 2;
 
-            int x1 = (1 << (int)sx) - 1;
-            int xi = (int)(x & x1);
-            int y1 = (1 << (int)sy) - 1;
-            int yi = (int)(y & y1);
+            var x1 = (1 << (int)sx) - 1;
+            var xi = (int)(x & x1);
+            var y1 = (1 << (int)sy) - 1;
+            var yi = (int)(y & y1);
 
             uint ux = (x >> (int)sx) % maskTileSize + 1 + dx * atlasTileSize;
             uint uy = (y >> (int)sy) % maskTileSize + 1 + dy * atlasTileSize;
@@ -182,26 +185,24 @@ namespace CP77.CR2W.Uncooker
 
         }
 
-
-        private static int Lerp(int l, int r, float t)
-        {
-            return (int)(l + (r - l) * t);
-        }
         private static byte BilinearInterpolation(byte q00, byte q10, byte q01, byte q11, int x, int x1, int y, int y1)
         {
             const int sc = 256;
+
+            if (x1 == 0 || y1 == 0)
+                return q00;
 
             int q00s = q00 * sc;
             int q10s = q10 * sc;
             int q01s = q01 * sc;
             int q11s = q11 * sc;
 
+            int a0 = q00s;
+            int a1 = (q10s - q00s) * x / x1;
+            int a2 = (q01s - q00s) * y / y1;
+            int a3 = (q00s - q01s - q10s + q11s) * x * y / x1 / y1;
 
-            int a1 = Lerp(q00s, q10s, x / (float)x1);
-            int a2 = Lerp(q01s, q11s, x / (float)x1);
-            int a = Lerp(a1, a2, y / (float)y1);
-
-
+            int a = a0 + a1 + a2 + a3;
             int r = a / sc;
             if (r > 255)
                 r = 255;

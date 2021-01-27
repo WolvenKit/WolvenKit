@@ -11,10 +11,16 @@
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
 		<PackageTags>wolvenkit, cyberpunk2077</PackageTags>
-		<AssemblyVersion>1.0.4.0</AssemblyVersion>
-		<FileVersion>1.0.4.0</FileVersion>
-		<Version>1.0.4</Version>
+		<AssemblyVersion>1.0.5.0</AssemblyVersion>
+		<FileVersion>1.0.5.0</FileVersion>
+		<Version>1.0.5</Version>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Resources\**" />
+	  <EmbeddedResource Remove="Resources\**" />
+	  <None Remove="Resources\**" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Catel.Core" Version="5.12.11" />
@@ -26,10 +32,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Resources\" />
 	</ItemGroup>
 
 </Project>

@@ -18,6 +18,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using CP77.CR2W.Types;
 using WolvenKit.Common.Oodle;
+using Index = CP77Tools.Model.Index;
 
 namespace CP77.CR2W.Archive
 {
@@ -27,8 +28,8 @@ namespace CP77.CR2W.Archive
 
         public Archive()
         {
-            Header = new ArHeader();
-            Table = new ArTable();
+            Header = new Header();
+            Index = new Index();
         }
 
         /// <summary>
@@ -47,12 +48,16 @@ namespace CP77.CR2W.Archive
         #region properties
         public EArchiveType TypeName => EArchiveType.Archive;
 
-        public ArHeader Header { get; set; }
-        public ArTable Table { get; set; }
+        public Header Header { get; set; }
+
+
+        public Index Index { get; set; }
+
+
         public string ArchiveAbsolutePath { get; set; }
 
         [JsonIgnore]
-        public Dictionary<ulong, ArchiveItem> Files => Table?.FileInfo;
+        public Dictionary<ulong, FileEntry> Files => Index?.FileEntries;
 
         public int FileCount => Files?.Count ?? 0;
 
@@ -77,13 +82,13 @@ namespace CP77.CR2W.Archive
             // using (var vs = mmf.CreateViewStream((long)_header.Tableoffset, (long)_header.Tablesize,
             //     MemoryMappedFileAccess.Read))
             // {
-            //     _table = new ArTable(new BinaryReader(vs), this);
+            //     _table = new Index(new BinaryReader(vs), this);
             // }
 
             using var vs = new FileStream(ArchiveAbsolutePath, FileMode.Open, FileAccess.Read);
-            Header = new ArHeader(new BinaryReader(vs));
-            vs.Seek((long) Header.Tableoffset, SeekOrigin.Begin);
-            Table = new ArTable(new BinaryReader(vs), this);
+            Header = new Header(new BinaryReader(vs));
+            vs.Seek((long) Header.IndexPosition, SeekOrigin.Begin);
+            Index = new Index(new BinaryReader(vs), this);
             vs.Close();
         }
 
@@ -105,7 +110,7 @@ namespace CP77.CR2W.Archive
                 return false;
             var archiveItem = Files[hash]; 
             string name = archiveItem.FileName;
-            var hasBuffers = (archiveItem.LastOffsetTableIdx - archiveItem.FirstOffsetTableIdx) > 1;
+            var hasBuffers = (archiveItem.SegmentsEnd - archiveItem.SegmentsStart) > 1;
 
             var values = Enum.GetNames(typeof(ECookedFileFormat));
             var b = values.Any(e => e == Path.GetExtension(name)[1..]) || hasBuffers ;
@@ -125,17 +130,17 @@ namespace CP77.CR2W.Archive
             if (!Files.ContainsKey(hash)) return (null, null);
 
             var entry = Files[hash];
-            var startindex = (int)entry.FirstOffsetTableIdx;
-            var nextindex = (int)entry.LastOffsetTableIdx;
+            var startindex = (int)entry.SegmentsStart;
+            var nextindex = (int)entry.SegmentsEnd;
             
             // decompress main file
-            var file = ExtractFile(this.Table.Offsets[startindex], true);
+            var file = ExtractFile(this.Index.FileSegments[startindex], true);
             
             // don't decompress buffers
             var buffers = new List<byte[]>();
             for (int j = startindex + 1; j < nextindex; j++)
             {
-                var offsetentry = this.Table.Offsets[j];
+                var offsetentry = this.Index.FileSegments[j];
                 var buffer = ExtractFile(offsetentry, decompressBuffers);
                 buffers.Add(buffer);
             }
@@ -143,7 +148,7 @@ namespace CP77.CR2W.Archive
             return (file, buffers);
 
             // local
-            byte[] ExtractFile(OffsetEntry offsetentry, bool decompress)
+            byte[] ExtractFile(FileSegment offsetentry, bool decompress)
             {
                 using var ms = new MemoryStream();
                 using var bw = new BinaryWriter(ms);

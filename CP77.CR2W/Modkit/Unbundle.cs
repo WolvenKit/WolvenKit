@@ -105,7 +105,7 @@ namespace CP77.CR2W
             // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
 
             // check search pattern then regex
-            IEnumerable<ArchiveItem> finalmatches = ar.Files.Values;
+            IEnumerable<FileEntry> finalmatches = ar.Files.Values;
             if (!string.IsNullOrEmpty(pattern))
                 finalmatches = ar.Files.Values.MatchesWildcard(item => item.FileName, pattern);
             if (!string.IsNullOrEmpty(regex))

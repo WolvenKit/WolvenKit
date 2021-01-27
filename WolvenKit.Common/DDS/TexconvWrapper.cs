@@ -124,6 +124,12 @@ namespace WolvenKit.Common.DDS
         {
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
+            if (filepath.Length > 255)
+            {
+                logger.LogString($"{filepath} - Filepath exceedds 255 characters. Please move the archive to extract to a shorter path.", Logtype.Error);
+                return "";
+            }
+
             var proc = new ProcessStartInfo(textconvpath)
             {
                 WorkingDirectory = Path.GetDirectoryName(textconvpath),
