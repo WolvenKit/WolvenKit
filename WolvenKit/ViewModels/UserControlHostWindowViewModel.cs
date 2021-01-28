@@ -15,15 +15,17 @@ namespace WolvenKit.ViewModels
             var views = viewManager.GetViewsOfViewModel(vm);
 
             ContentUserControl = views.FirstOrDefault();
+        }
 
-            // TODO: Move code below to constructor
-            Exit = new Command(OnExitExecute);
-            // TODO: Move code above to constructor
+
+        public UserControlHostWindowViewModel(UserControl uc)
+        {
+            ContentUserControl = uc;
         }
 
         public UserControlHostWindowViewModel(UserControl uc, int height, int width)
+            : this(uc)
         {
-            ContentUserControl = uc;
             Height = height;
             Width = width;
             uc.Height = height;
@@ -32,13 +34,8 @@ namespace WolvenKit.ViewModels
 
         public IView ContentUserControl { get; internal set; }
         public int Height { get; }
-        public Command Exit { get; private set; }
         public int Width { get; }
 
-        private void OnExitExecute()
-        {
-            _ = CloseAsync();
-        }
 
         // TODO: Register commands with the vmcommand or vmcommandwithcanexecute codesnippets
 
