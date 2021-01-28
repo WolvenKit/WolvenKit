@@ -8,14 +8,15 @@
 
             <hc:SideMenuItem  >
                 <hc:SideMenuItem.Header>
-                    <TextBlock Text="Global" FontSize="10.5"/>
+                    <TextBlock Text="General" FontSize="10.5"/>
                 </hc:SideMenuItem.Header>
             </hc:SideMenuItem>
             <hc:SideMenuItem  >
                 <hc:SideMenuItem.Header>
-                    <TextBlock Text="Personalize" FontSize="10.5"/>
+                    <TextBlock Text="Compatibility Library Paths" FontSize="10.5"/>
                 </hc:SideMenuItem.Header>
             </hc:SideMenuItem>
+
         </hc:SideMenu>
 
 
