@@ -3,7 +3,7 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
-    <Grid Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
+    <Grid  hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
         <Grid Margin="3,75,3,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>

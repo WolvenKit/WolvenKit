@@ -7,8 +7,8 @@
                   ResizeMode="CanResizeWithGrip" 
                   BorderBrush="{x:Null}" 
                   WindowStartupLocation="CenterScreen"  
-                  MinHeight="600" 
-                  MinWidth="400"
+            
+                  
                   WindowStyle="None" 
                   Title="Code Editor" >
     <catel:DataWindow.Resources>
@@ -17,87 +17,83 @@
 
             <ResourceDictionary.MergedDictionaries>
 
-                <hc:Theme Name="HandyTheme"/>
-                <hc:Theme Skin="Dark"/>
+                <hc:ThemeResources/>
+                <hc:Theme/>
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
     </catel:DataWindow.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+    <Border  hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" Width="auto" Height="auto" BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
 
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="9*"/>
-        </Grid.RowDefinitions>
+        <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="auto"/>
-        </Grid.ColumnDefinitions>
+            <Grid x:Name="DraggableTitleBar" VerticalAlignment="Top" Grid.ColumnSpan="2" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown">
+                <!--TitleBar  Please add onmousedown event to be able to drag the window-->
+                <Button Click="Button_Click" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" BorderBrush="{x:Null}"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,5,3" >
+                    <iconPacks:PackIconCodicons   Kind="Close"/>
+                </Button>
+                <Button  Click="Button_Click_1" BorderBrush="{x:Null}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,45,3" >
+                    <iconPacks:PackIconCodicons  Kind="ChromeMinimize"/>
+                </Button>
 
-        <Grid x:Name="DraggableTitleBar" Grid.ColumnSpan="2" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
-            <!--TitleBar  Please add onmousedown event to be able to drag the window-->
-            <Button Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" BorderBrush="{x:Null}"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,5,3" >
-                <iconPacks:PackIconCodicons   Kind="Close"/>
-            </Button>
-            <Button BorderBrush="{x:Null}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,45,3" >
-                <iconPacks:PackIconCodicons  Kind="ChromeMinimize"/>
-            </Button>
-            <TextBlock Text="Code Editor" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+
+                <Menu MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" HorizontalAlignment="Left" Margin="50,0,0,0">
+                    <MenuItem Header="File"/>
+                    <MenuItem Header="Edit"/>
+                    <MenuItem Header="View"/>
+                    <MenuItem Header="Compile"/>
+
+                </Menu>
+                <iconPacks:PackIconCodicons Margin="13,0,0,0" Height="23" Kind="Code" Width="23" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+            </Grid>
+
+
+
+         
+
+            <Grid  Margin="3,33,3,3">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <hc:TabControl ShowCloseButton="True" Grid.Column="1" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+                    <hc:TabItem Header="wat">
+
+                    </hc:TabItem>
+                    <hc:TabItem Header="wat">
+
+                    </hc:TabItem>
+                </hc:TabControl>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+              
+
+            </Grid>
+
+
+
+
+
+
+
+
         </Grid>
 
+    </Border>
 
-        <hc:TabControl Style="{StaticResource TabControlInLine}" TabStripPlacement="Bottom" Grid.Row="2">
-            <hc:TabItem Header="Edit">
-                <avalonEdit:TextEditor
-            Margin="3"
-            Grid.Row="2"
-                    Name="avEditor"
-                    Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
-                            SyntaxHighlighting="C#"
-
-                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                    LineNumbersForeground="Black">
-
-                </avalonEdit:TextEditor>
-            </hc:TabItem>
-            <hc:TabItem Header="Compare">
-                
-            </hc:TabItem>
-        </hc:TabControl>
-
-
-        <ToolBarTray Orientation="Vertical" Grid.Row="2" Grid.Column="1">
-            <ToolBar Style="{StaticResource ToolBarBaseStyle}" Padding="6" Header="{}">
-                <CheckBox IsChecked="True" Margin="0,10,0,0"/>
-                <Separator Margin="0,10,0,0"/>
-                <RadioButton Margin="0,10,0,0"/>
-                <StackPanel>
-                    <RadioButton IsChecked="True" Margin="0,10,0,0"/>
-                    <RadioButton Margin="0,10,0,0"/>
-                </StackPanel>
-                <Button Content="" Margin="0,10,0,0"/>
-                <Button Content="" Margin="0,10,0,0" Style="{StaticResource ButtonPrimary}"/>
-            </ToolBar>
-            <ToolBar Style="{StaticResource ToolBarBaseStyle}" Band="1" Padding="6" Header="{}">
-                <CheckBox IsChecked="True" Margin="0,10,0,0"/>
-                <Separator Margin="0,10,0,0"/>
-                <RadioButton Margin="0,10,0,0"/>
-                <StackPanel>
-                    <RadioButton IsChecked="True" Margin="0,10,0,0"/>
-                    <RadioButton Margin="0,10,0,0"/>
-                </StackPanel>
-                <Button Content="" Margin="0,10,0,0"/>
-                <Button Content="" Margin="0,10,0,0" Style="{StaticResource ButtonPrimary}"/>
-            </ToolBar>
-
-        </ToolBarTray>
-       
-
-
-   
-    </Grid>
-    
 </catel:DataWindow>
