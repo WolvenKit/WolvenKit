@@ -75,7 +75,7 @@ namespace CP77Tools.Tasks
                         break;
                     default:
                         var hasAdditionalBytes =
-                            c.additionalCr2WFileBytes != null && c.additionalCr2WFileBytes.Any();
+                            c.AdditionalCr2WFileBytes != null && c.AdditionalCr2WFileBytes.Any();
 
 
                         var oldst = c.StringDictionary.Values.ToList();
