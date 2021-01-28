@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.ViewModels.SettingsPages.SubPages.General
+namespace WolvenKit.ViewModels.SettingsPages.SubPages.Tool
 {
-    class AccountSubSettingsViewModel : ViewModelBase
+    class CodeEditorSubSettingsViewModel : ViewModelBase
     {
     }
 }

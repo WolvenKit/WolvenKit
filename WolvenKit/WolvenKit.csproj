@@ -304,11 +304,9 @@
     <Folder Include="Resources\Styles\Custom\" />
     <Folder Include="ViewModels\SettingsPages\SubPages\Editor\" />
     <Folder Include="ViewModels\SettingsPages\SubPages\Integration\" />
-    <Folder Include="ViewModels\SettingsPages\SubPages\Tool\" />
     <Folder Include="ViewModels\SettingsPages\SubPages\Packaging\" />
     <Folder Include="Views\SettingsPages\SubPages\Editor\" />
     <Folder Include="Views\SettingsPages\SubPages\Integration\" />
     <Folder Include="Views\SettingsPages\SubPages\Packaging\" />
-    <Folder Include="Views\SettingsPages\SubPages\Tool\" />
   </ItemGroup>
 </Project>

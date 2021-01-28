@@ -8,34 +8,25 @@
 
             <hc:SideMenuItem  >
                 <hc:SideMenuItem.Header>
-                    <TextBlock Text="Global" FontSize="10.5"/>
+                    <TextBlock Text="Asset Browser" FontSize="10.5"/>
                 </hc:SideMenuItem.Header>
             </hc:SideMenuItem>
             <hc:SideMenuItem  >
                 <hc:SideMenuItem.Header>
-                    <TextBlock Text="Account" FontSize="10.5"/>
+                    <TextBlock Text="Plugin Manager" FontSize="10.5"/>
                 </hc:SideMenuItem.Header>
             </hc:SideMenuItem>
             <hc:SideMenuItem  >
                 <hc:SideMenuItem.Header>
-                    <TextBlock Text="Language" FontSize="10.5"/>
+                    <TextBlock Text="Code Editor" FontSize="10.5"/>
                 </hc:SideMenuItem.Header>
             </hc:SideMenuItem>
             <hc:SideMenuItem  >
                 <hc:SideMenuItem.Header>
-                    <TextBlock Text="Updates" FontSize="10.5"/>
+                    <TextBlock Text="Visual Editor" FontSize="10.5"/>
                 </hc:SideMenuItem.Header>
             </hc:SideMenuItem>
-            <hc:SideMenuItem  >
-                <hc:SideMenuItem.Header>
-                    <TextBlock Text="Theme" FontSize="10.5"/>
-                </hc:SideMenuItem.Header>
-            </hc:SideMenuItem>
-            <hc:SideMenuItem  >
-                <hc:SideMenuItem.Header>
-                    <TextBlock Text="Logging" FontSize="10.5"/>
-                </hc:SideMenuItem.Header>
-            </hc:SideMenuItem>
+     
         </hc:SideMenu>
 
 
