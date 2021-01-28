@@ -19,18 +19,29 @@ namespace WolvenKit
     using Common;
     using Common.Model;
     using Common.Services;
+    using WolvenKit.ViewModels.Wizards;
+    using WolvenKit.Views.Wizards;
+    using WolvenKit.ViewModels;
+    using WolvenKit.Views;
+
     public class ApplicationNewProjectCommandContainer : ProjectCommandContainerBase
     {
         private readonly INavigationService _navigationService;
         private readonly ILoggerService _loggerService;
         private readonly ISaveFileService _saveFileService;
+        private readonly IUIVisualizerService _uIVisualizerService;
+        private readonly IViewModelFactory _viewModelFactory;
+        private readonly IMessageService _messageService;
 
         public ApplicationNewProjectCommandContainer(
-            ICommandManager commandManager, 
-            INavigationService navigationService, 
+            ICommandManager commandManager,
+            INavigationService navigationService,
             IProjectManager projectManager,
             ISaveFileService saveFileService,
             INotificationService notificationService,
+            IUIVisualizerService uIVisualizerService,
+            IViewModelFactory viewModelFactory,
+            IMessageService messageService,
             ILoggerService loggerService)
             : base(AppCommands.Application.NewProject, commandManager, projectManager, notificationService, loggerService)
         {
@@ -41,6 +52,9 @@ namespace WolvenKit
             _navigationService = navigationService;
             _loggerService = loggerService;
             _saveFileService = saveFileService;
+            _uIVisualizerService = uIVisualizerService;
+            _viewModelFactory = viewModelFactory;
+            _messageService = messageService;
         }
 
         protected override bool CanExecute(object parameter) => true;
@@ -49,72 +63,14 @@ namespace WolvenKit
         {
             try
             {
-                var location = parameter as string;
+                var vm = new UserControlHostWindowViewModel(new ProjectWizardView(), 500, 2500);
+                
+                var result = await _uIVisualizerService.ShowDialogAsync(vm);
 
-                var result = await _saveFileService.DetermineFileAsync(new DetermineSaveFileContext()
-                {
-                    Filter = "Witcher 3 Project (*.w3modproj)|*.w3modproj| Cyberpunk 2077 Project (*.cpmodproj)|*.cpmodproj",
-                    Title = "Please select a location to save your WolvenKit project"
-                });
-
-                if (result.Result)
-                {
-                    location = result.FileName;
-                }
-
-                if (!string.IsNullOrWhiteSpace(location))
-                {
-                    using (_pleaseWaitService.PushInScope())
-                    {
-                        switch (Path.GetExtension(location))
-                        {
-                            case ".w3modproj":
-                            {
-                                var np = new Tw3Project(location)
-                                {
-                                    Name = Path.GetFileNameWithoutExtension(location),
-                                    Data = new W3Mod()
-                                    {
-                                        FileName = location,
-                                        Name = Path.GetFileNameWithoutExtension(location),
-                                        Author = "WolvenKit",
-                                        Email = "",
-                                        Version = "1.0"
-                                    }
-                                };
-                                np.Save(location);
-                                np.CreateDefaultDirectories();
-                                break;
-                            }
-                            case ".cpmodproj":
-                            {
-                                var np = new Cp77Project(location)
-                                {
-                                    Name = Path.GetFileNameWithoutExtension(location),
-                                    Data = new CP77Mod()
-                                    {
-                                        FileName = location,
-                                        Name = Path.GetFileNameWithoutExtension(location),
-                                        Author = "WolvenKit",
-                                        Email = "",
-                                        Version = "1.0"
-                                    }
-                                };
-                                np.Save(location);
-                                np.CreateDefaultDirectories();
-                                break;
-                            }
-                            default:
-                                _loggerService.LogString("Invalid project path!", Logtype.Error);
-                                break;
-
-                        }
-                    }
-                    await _projectManager.LoadAsync(location);
-                }
             }
             catch (Exception ex)
             {
+                _loggerService.LogString(ex.Message, Logtype.Error);
                 _loggerService.LogString("Failed to create a new project!", Logtype.Error);
             }
         }
