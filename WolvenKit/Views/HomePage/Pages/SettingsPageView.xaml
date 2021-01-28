@@ -3,66 +3,62 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"          
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 
-                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol">
+                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:sp="clr-namespace:WolvenKit.Views.SettingsPages">
 
 
-    <Grid Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
+    <Grid  hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
         <Grid Margin="3,75,3,0">
-            <hc:TabControl x:Name="TabControlDemo" IsAnimationEnabled="True" ShowCloseButton="False" IsDraggable="False" IsTabFillEnabled="True" Margin="0,0,0,0" >
-                <hc:TabItem  IsSelected="True" >
+            <hc:TabControl x:Name="TabControlDemo" IsAnimationEnabled="True" ShowCloseButton="False" IsDraggable="False" IsTabFillEnabled="True" Margin="0,0,0,0" SelectionChanged="TabControlDemo_SelectionChanged" >
+                <hc:TabItem  x:Name="GeneralTabItem" IsSelected="True" >
                     <hc:TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconCodicons Kind="VM"></iconPacks:PackIconCodicons>
                             <TextBlock Text="General" Margin="10,0,0,0"></TextBlock>
                         </StackPanel>
                     </hc:TabItem.Header>
-                    <hc:SimplePanel Background="{DynamicResource RegionBrush}"/>
+                    <sp:GeneralSettingsView/>
                 </hc:TabItem>
 
 
-                <hc:TabItem  IsSelected="True" >
-                    <hc:TabItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconCodicons Kind="Code"></iconPacks:PackIconCodicons>
-                            <TextBlock Text="Project" Margin="10,0,0,0"></TextBlock>
-                        </StackPanel>
-                    </hc:TabItem.Header>
-                    <hc:SimplePanel Background="{DynamicResource RegionBrush}">
-
-                    </hc:SimplePanel>
-                </hc:TabItem>
-                <hc:TabItem  IsSelected="True" >
+                <hc:TabItem x:Name="ToolsTabItems" IsSelected="True" >
                     <hc:TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconCodicons Kind="Code"></iconPacks:PackIconCodicons>
                             <TextBlock Text="Tools" Margin="10,0,0,0"></TextBlock>
                         </StackPanel>
                     </hc:TabItem.Header>
-                    <hc:SimplePanel Background="{DynamicResource RegionBrush}">
+                    <sp:ToolSettingsView/>
 
-                    </hc:SimplePanel>
                 </hc:TabItem>
-                <hc:TabItem  IsSelected="True" >
+                <hc:TabItem x:Name="EditorTabItem" IsSelected="True" >
                     <hc:TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconCodicons Kind="Code"></iconPacks:PackIconCodicons>
-                            <TextBlock Text="Cyberpunk 2077" Margin="10,0,0,0"></TextBlock>
+                            <TextBlock Text="Editor" Margin="10,0,0,0"></TextBlock>
                         </StackPanel>
                     </hc:TabItem.Header>
-                    <hc:SimplePanel Background="{DynamicResource RegionBrush}">
+                    <sp:EditorSettingsView/>
 
-                    </hc:SimplePanel>
                 </hc:TabItem>
-                <hc:TabItem  IsSelected="True" >
+                <hc:TabItem x:Name="PackagingTabItem"  IsSelected="True" >
                     <hc:TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconCodicons Kind="Code"></iconPacks:PackIconCodicons>
-                            <TextBlock Text="The Witcher 3" Margin="10,0,0,0"></TextBlock>
+                            <TextBlock Text="Packaging" Margin="10,0,0,0"></TextBlock>
                         </StackPanel>
                     </hc:TabItem.Header>
-                    <hc:SimplePanel Background="{DynamicResource RegionBrush}">
+                    <sp:PackagingSettingsView/>
 
-                    </hc:SimplePanel>
+                </hc:TabItem>
+                <hc:TabItem x:Name="IntegrationsTabItem"  IsSelected="True" >
+                    <hc:TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconCodicons Kind="Code"></iconPacks:PackIconCodicons>
+                            <TextBlock Text="Integrations" Margin="10,0,0,0"></TextBlock>
+                        </StackPanel>
+                    </hc:TabItem.Header>
+                    <sp:IntegrationsSettingsView/>
+
                 </hc:TabItem>
                
             </hc:TabControl>

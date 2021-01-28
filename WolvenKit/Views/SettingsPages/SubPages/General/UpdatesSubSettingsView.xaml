@@ -1,0 +1,51 @@
+﻿<catel:UserControl x:Class="WolvenKit.Views.SettingsPages.SubPages.General.UpdatesSubSettingsView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:hc="https://handyorg.github.io/handycontrol"
+                   xmlns:catel="http://schemas.catelproject.com">
+
+    <Grid hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}">
+        <Grid VerticalAlignment="Top" HorizontalAlignment="Left">
+
+            <StackPanel>
+
+
+                <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                    <Grid>
+                        <TextBlock Text="Automatically Update WolvenKit" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                        <StackPanel  Orientation="Horizontal">
+                            <ToggleButton Margin="250,0,0,0" BorderThickness="0" IsEnabled="True"  VerticalAlignment="Center"  HorizontalAlignment="Left" Style="{StaticResource ToggleButtonFlip}">
+                                <hc:StatusSwitchElement.CheckedElement>
+                                    <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="On" Foreground="{DynamicResource TextIconBrush}"/>
+                                    </Border>
+                                </hc:StatusSwitchElement.CheckedElement>
+                                <Border Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
+                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Off" Foreground="{DynamicResource TextIconBrush}"/>
+                                </Border>
+                            </ToggleButton>
+                        </StackPanel>
+                    </Grid>
+
+
+                </Border>
+
+                <Border BorderThickness="4,0,0,2" Margin="15,5,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                    <Grid>
+                        <TextBlock Text="Update Channel" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox Margin="250,0,0,0" VerticalAlignment="Center" Width="250" Text=""/>
+
+                        </StackPanel>
+                    </Grid>
+
+                </Border>
+
+
+            </StackPanel>
+
+        </Grid>
+
+    </Grid>
+
+</catel:UserControl>
