@@ -78,7 +78,8 @@ namespace CP77.CR2W
         //private bool m_hasInternalBuffer;
 
         private CR2WFile additionalCr2WFile;
-        public byte[] additionalCr2WFileBytes;
+        public byte[] AdditionalCr2WFileBytes;
+
         #endregion
 
         #region Properties
@@ -114,6 +115,7 @@ namespace CP77.CR2W
         #endregion
 
         #region Supporting Functions
+        public int GetUnknownBytes() => Chunks.Sum(chunk => chunk.unknownBytes.Bytes.Length);
 
         public void GenerateChunksDict() => Chunksdict = Chunks.ToDictionary(_ => _.ChunkIndex, _ => _);
 
@@ -629,7 +631,7 @@ namespace CP77.CR2W
             if (readbytes != file.BaseStream.Length)
             {
                 var bytesleft = file.BaseStream.Length - readbytes;
-                additionalCr2WFileBytes = file.ReadBytes((int)bytesleft);
+                AdditionalCr2WFileBytes = file.ReadBytes((int)bytesleft);
 
 
             }
@@ -643,8 +645,8 @@ namespace CP77.CR2W
 
         public CR2WFile GetAdditionalCr2wFile()
         {
-            if (additionalCr2WFileBytes == null) return null;
-            using (var ms2 = new MemoryStream(additionalCr2WFileBytes))
+            if (AdditionalCr2WFileBytes == null) return null;
+            using (var ms2 = new MemoryStream(AdditionalCr2WFileBytes))
             using (var br2 = new BinaryReader(ms2))
             {
                 additionalCr2WFile = new CR2WFile();
@@ -846,10 +848,10 @@ namespace CP77.CR2W
 
 
 
-            if (additionalCr2WFileBytes != null)
+            if (AdditionalCr2WFileBytes != null)
             {
                 file.BaseStream.Seek(0, SeekOrigin.End);
-                file.Write(additionalCr2WFileBytes);
+                file.Write(AdditionalCr2WFileBytes);
             }
 
 
@@ -1028,7 +1030,7 @@ namespace CP77.CR2W
                         switch (a)
                         {
                             case CArray<CName> cacn:
-                                returnedVariables.Add(new SNameArg(EStringTableMod.None, a)); ///???
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, a)); //???
                                 break;
                             case CArray<CBool> cacb:
                             case CArray<CUInt16> cacu16:
@@ -1116,7 +1118,7 @@ namespace CP77.CR2W
                 {
                     if (!(string.IsNullOrEmpty(s.ClassName) && string.IsNullOrEmpty(s.DepotPath)))
                     {
-                        AddUniqueToTable(s.REDType);
+                        //AddUniqueToTable(s.REDType);
                         var stuple = new SImportEntry(s.ClassName, s.DepotPath, EImportFlags.Soft);
                         if (!newsoftlist.Contains(stuple))
                         {
@@ -1172,10 +1174,6 @@ namespace CP77.CR2W
                     {
                         AddUniqueToTable(enumstring);
                     }
-                }
-                else
-                {
-                    CheckVarNameAndTypes();
                 }
 
 
