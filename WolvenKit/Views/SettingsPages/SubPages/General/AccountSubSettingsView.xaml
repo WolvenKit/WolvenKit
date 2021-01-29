@@ -25,27 +25,45 @@
                     <!--WolvenKit Profile-->
                     <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
 
+                        
+                        
                         <StackPanel>
-                            <Grid Margin="5">
-                                <TextBlock Text="WolvenKit Profile" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                                <hc:Tag HorizontalAlignment="Right"  ShowCloseButton="False" Content="UserName">
-                                    <hc:Tag.Header>
-                                        <Image Source="{DynamicResource Fluent.Ribbon.Images.DefaultPlaceholder}" />
-                                    </hc:Tag.Header>
-                                </hc:Tag>
+
+                            <Grid Margin="35" x:Name="WKProfileNotCreatedPanel" Visibility="Visible"> <!--Set to collapes if account is available-->
+                                <TextBlock HorizontalAlignment="Left" Text="No WolvenKit Profile created."/>
+                                <Button HorizontalAlignment="Right"  VerticalAlignment="Center">
+                                    <Grid >
+                                        <iconPacks:PackIconBootstrapIcons Kind="BoxArrowUpRight"/>
+                                        <TextBlock Margin="25,0,0,0" Text="Create Profile" />
+                                    </Grid>
+                                </Button>
                             </Grid>
-                            <Grid Margin="5">
-                                <TextBlock Text="Email" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                                <hc:TextBox IsEnabled="False" HorizontalAlignment="Right" Width="250"/>
+
+
+                            <Grid x:Name="WKProfileCreatedPanel" Visibility="Collapsed"> <!--Set to visisble if account is available-->
+
+                                <Grid Margin="5">
+                                    <TextBlock Text="WolvenKit Profile" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                                    <hc:Tag HorizontalAlignment="Right"  ShowCloseButton="False" Content="UserName">
+                                        <hc:Tag.Header>
+                                            <Image Source="{DynamicResource Fluent.Ribbon.Images.DefaultPlaceholder}" />
+                                        </hc:Tag.Header>
+                                    </hc:Tag>
+                                </Grid>
+                                <Grid Margin="5">
+                                    <TextBlock Text="Email" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                                    <hc:TextBox IsEnabled="False" HorizontalAlignment="Right" Width="250"/>
+                                </Grid>
+                                <Grid Margin="5">
+                                    <TextBlock Text="Donate Link" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                                    <hc:TextBox  IsEnabled="False" HorizontalAlignment="Right" Width="250"/>
+                                </Grid>
+                                <Grid Margin="5">
+                                    <TextBlock Text="Default Description" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                                    <RichTextBox IsEnabled="False" HorizontalAlignment="Right" Width="250" Height="150"/>
+                                </Grid>
                             </Grid>
-                            <Grid Margin="5">
-                                <TextBlock Text="Donate Link" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                                <hc:TextBox  IsEnabled="False" HorizontalAlignment="Right" Width="250"/>
-                            </Grid>
-                            <Grid Margin="5">
-                                <TextBlock Text="Default Description" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                                <RichTextBox IsEnabled="False" HorizontalAlignment="Right" Width="250" Height="150"/>
-                            </Grid>
+                            
                         </StackPanel>
                 
                     </Border>
@@ -62,21 +80,36 @@
                     <!--Nexus Account-->
                     <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                         <StackPanel>
-                            <Grid Margin="5">
-                                <TextBlock Text="Nexus Account" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                                <hc:Tag HorizontalAlignment="Right"  ShowCloseButton="False" Content="UserName">
-                                    <hc:Tag.Header>
-                                        <Image Source="{DynamicResource Fluent.Ribbon.Images.DefaultPlaceholder}" />
-                                    </hc:Tag.Header>
-                                </hc:Tag>
+                            
+                            
+                            <Grid Margin="35" x:Name="NexusNotLinkedPanel" Visibility="Visible">  <!--Set to Collapsed if linked-->
+                                <TextBlock HorizontalAlignment="Left" Text="No Nexus Account Linked."/>
+                                <Button HorizontalAlignment="Right"  VerticalAlignment="Center">
+                                    <Grid >
+                                        <iconPacks:PackIconBootstrapIcons Kind="BoxArrowUpRight"/>
+                                        <TextBlock Margin="25,0,0,0" Text="Link Account" />
+                                    </Grid>
+                                </Button>
                             </Grid>
-                            <Grid Margin="5">
-                                <TextBlock Text="UserID" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                                <hc:TextBox IsEnabled="False"  HorizontalAlignment="Right" Width="250"/>
-                            </Grid>
-                            <Grid Margin="5">
-                                <TextBlock Text="Email" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                                <hc:TextBox IsEnabled="False" HorizontalAlignment="Right" Width="250"/>
+
+
+                            <Grid x:Name="NexusLinkedPanel" Visibility="Collapsed"> <!--Set to visible if linked-->
+                                <Grid Margin="5">
+                                    <TextBlock Text="Nexus Account" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                                    <hc:Tag HorizontalAlignment="Right"  ShowCloseButton="False" Content="UserName">
+                                        <hc:Tag.Header>
+                                            <Image Source="{DynamicResource Fluent.Ribbon.Images.DefaultPlaceholder}" />
+                                        </hc:Tag.Header>
+                                    </hc:Tag>
+                                </Grid>
+                                <Grid Margin="5">
+                                    <TextBlock Text="UserID" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                                    <hc:TextBox IsEnabled="False"  HorizontalAlignment="Right" Width="250"/>
+                                </Grid>
+                                <Grid Margin="5">
+                                    <TextBlock Text="Email" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                                    <hc:TextBox IsEnabled="False" HorizontalAlignment="Right" Width="250"/>
+                                </Grid>
                             </Grid>
 
                         </StackPanel>
