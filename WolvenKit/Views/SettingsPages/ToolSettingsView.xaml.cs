@@ -7,15 +7,25 @@ namespace WolvenKit.Views.SettingsPages
     {
         public ToolSettingsView()
         {
+            ABSSV = new AssetBrowserSubSettingsView();
+            PMSSV = new PluginManagerSubSettingsView();
+            CESSV = new CodeEditorSubSettingsView();
+            VESSV = new VisualEditorSubSettingsView();
+
             InitializeComponent();
         }
+
+        private AssetBrowserSubSettingsView ABSSV;
+        private PluginManagerSubSettingsView PMSSV;
+        private CodeEditorSubSettingsView CESSV;
+        private VisualEditorSubSettingsView VESSV;
 
         private void AssetBrowserSubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
         {
             if (IsLoaded && IsVisible && IsInitialized)
             {
                 SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(new AssetBrowserSubSettingsView());
+                SettingsViewer.Children.Add(ABSSV);
             }
         }
 
@@ -24,7 +34,7 @@ namespace WolvenKit.Views.SettingsPages
             if (IsLoaded && IsVisible && IsInitialized)
             {
                 SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(new PluginManagerSubSettingsView());
+                SettingsViewer.Children.Add(PMSSV);
             }
         }
 
@@ -33,7 +43,7 @@ namespace WolvenKit.Views.SettingsPages
             if (IsLoaded && IsVisible && IsInitialized)
             {
                 SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(new CodeEditorSubSettingsView());
+                SettingsViewer.Children.Add(CESSV);
             }
         }
 
@@ -42,7 +52,7 @@ namespace WolvenKit.Views.SettingsPages
             if (IsLoaded && IsVisible && IsInitialized)
             {
                 SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(new VisualEditorSubSettingsView());
+                SettingsViewer.Children.Add(VESSV);
             }
         }
     }
