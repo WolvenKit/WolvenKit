@@ -4,113 +4,105 @@
                    xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
     <Grid hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}">
-        <Grid VerticalAlignment="Top" HorizontalAlignment="Left">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
 
+
+        <Grid Grid.Column="0">
             <StackPanel>
-
+                
                 <Border BorderThickness="4,0,0,6" Margin="15,15,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                     <Grid>
-                        <TextBlock Text="The Witcher 3" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0"/>
-               
-                    </Grid>
-
-
-                </Border>
-                <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
-                    <Grid>
-                        <TextBlock Text="Executable Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                        <Button Margin="-45,0,0,0">
-                            <iconPacks:PackIconCodicons Kind="FolderOpened"/>
-                        </Button>
-                        <StackPanel  Orientation="Horizontal">
-                            <TextBox Margin="250,0,0,0" Width="250" Text=""/>
-                        </StackPanel>
-                    </Grid>
-
-
-                </Border>
-
-                <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
-                    <Grid>
-                        <TextBlock Text="WCC_Lite.exe Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                        <Button Margin="-45,0,0,0">
-                            <iconPacks:PackIconCodicons Kind="FolderOpened"/>
-                        </Button>
-                        <StackPanel  Orientation="Horizontal">
-                            <TextBox Margin="250,0,0,0" Width="250" Text=""/>
-                        </StackPanel>
-                    </Grid>
-
-
-                </Border>
-                <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
-                    <Grid>
-                        <TextBlock Text="Uncooked Depot Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                        <Button Margin="-45,0,0,0">
-                            <iconPacks:PackIconCodicons Kind="FolderOpened"/>
-                        </Button>
-                        <StackPanel  Orientation="Horizontal">
-                            <TextBox Margin="250,0,0,0" Width="250" Text=""/>
-                        </StackPanel>
-                    </Grid>
-
-
-                </Border>
-                <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
-                    <Grid>
-                        <TextBlock Text="Mods Folder Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                        <Button Margin="-45,0,0,0">
-                            <iconPacks:PackIconCodicons Kind="FolderOpened"/>
-                        </Button>
-                        <StackPanel  Orientation="Horizontal">
-                            <TextBox Margin="250,0,0,0" Width="250" Text=""/>
-                        </StackPanel>
-                    </Grid>
-
-
-                </Border>
-                <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
-                    <Grid>
-                        <TextBlock Text="DLC Folder Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                        <Button Margin="-45,0,0,0">
-                            <iconPacks:PackIconCodicons Kind="FolderOpened"/>
-                        </Button>
-                        <StackPanel  Orientation="Horizontal">
-                            <TextBox Margin="250,0,0,0" Width="250" Text=""/>
-                        </StackPanel>
-                    </Grid>
-
-
-                </Border>
-
-
-                <Border BorderThickness="4,0,0,6" Margin="15,50,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
-                    <Grid>
                         <TextBlock Text="Cyberpunk 2077" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0"/>
-
                     </Grid>
-
-
                 </Border>
+                
                 <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                     <Grid>
                         <TextBlock Text="Executable Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                        <Button Margin="-45,0,0,0">
+                        <Button HorizontalAlignment="Right" Margin="0,0,250,0">
                             <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                         </Button>
-                        <StackPanel  Orientation="Horizontal">
-                            <TextBox Margin="250,0,0,0" Width="250" Text=""/>
-
-                        </StackPanel>
+                        <TextBox HorizontalAlignment="Right" Width="250" Text=""/>
                     </Grid>
-
-
                 </Border>
-       
+                
             </StackPanel>
 
         </Grid>
 
+        <Grid Grid.Column="1">
+            <StackPanel >
+
+                <Border BorderThickness="4,0,0,6" Margin="15,15,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                    <Grid>
+                        <TextBlock Text="The Witcher 3" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                    </Grid>
+                </Border>
+                
+                <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                    <StackPanel>
+                        
+                        
+                        <Grid Margin="5">
+                            <TextBlock Text="Executable Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                            <Button HorizontalAlignment="Right" Margin="0,0,250,0">
+                                <iconPacks:PackIconCodicons Kind="FolderOpened"/>
+                            </Button>
+                            <TextBox HorizontalAlignment="Right" Width="250" Text=""/>
+                        </Grid>
+
+
+
+                        <Grid Margin="5">
+                            <TextBlock Text="WCC_Lite.exe Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                            <Button HorizontalAlignment="Right" Margin="0,0,250,0">
+                                <iconPacks:PackIconCodicons Kind="FolderOpened"/>
+                            </Button>
+                            <TextBox HorizontalAlignment="Right" Width="250" Text=""/>
+                        </Grid>
+
+
+                        <Grid Margin="5">
+                            <TextBlock Text="Uncooked Depot Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                            <Button HorizontalAlignment="Right" Margin="0,0,250,0">
+                                <iconPacks:PackIconCodicons Kind="FolderOpened"/>
+                            </Button>
+                            <TextBox HorizontalAlignment="Right" Width="250" Text=""/>
+                        </Grid>
+
+
+                        <Grid Margin="5">
+                            <TextBlock Text="Mods Folder Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                            <Button HorizontalAlignment="Right" Margin="0,0,250,0">
+                                <iconPacks:PackIconCodicons Kind="FolderOpened"/>
+                            </Button>
+                            <TextBox HorizontalAlignment="Right" Width="250" Text=""/>
+                        </Grid>
+
+
+                        <Grid Margin="5">
+                            <TextBlock Text="DLC Folder Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                            <Button HorizontalAlignment="Right" Margin="0,0,250,0">
+                                <iconPacks:PackIconCodicons Kind="FolderOpened"/>
+                            </Button>
+                            <TextBox HorizontalAlignment="Right" Width="250" Text=""/>
+                        </Grid>
+
+
+                    </StackPanel>
+
+                </Border>
+
+
+
+            </StackPanel>
+        </Grid>
+
+
     </Grid>
+
 
 </catel:UserControl>

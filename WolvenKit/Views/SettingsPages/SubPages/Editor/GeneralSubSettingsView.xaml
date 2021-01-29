@@ -9,18 +9,49 @@
             <StackPanel>
 
 
+                
                 <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                     <Grid>
                         <TextBlock Text="Automatically install mods after creation" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                        <StackPanel Margin="250,0,0,0" Orientation="Horizontal">
-                            <Button>TEMPLATE</Button>
+                        <StackPanel  Orientation="Horizontal">
+                            <ToggleButton Margin="250,0,0,0" BorderThickness="0" IsEnabled="True"  VerticalAlignment="Center"  HorizontalAlignment="Left" Style="{StaticResource ToggleButtonFlip}">
+                                <hc:StatusSwitchElement.CheckedElement>
+                                    <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="On" Foreground="{DynamicResource TextIconBrush}"/>
+                                    </Border>
+                                </hc:StatusSwitchElement.CheckedElement>
+                                <Border Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
+                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Off" Foreground="{DynamicResource TextIconBrush}"/>
+                                </Border>
+                            </ToggleButton>
                         </StackPanel>
                     </Grid>
-
-
                 </Border>
 
-            
+                <!-- Project AutoSaving -->
+                <Border BorderThickness="4,0,0,2" Margin="15,5,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                    <Grid>
+                        <TextBlock Text="Project Autosaving" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                        <StackPanel Margin="250,0,0,0" Orientation="Horizontal">
+                            <CheckBox VerticalAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" Content="AutoSave Project" IsChecked="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"/>
+                            <hc:Divider VerticalAlignment="Center" Orientation="Vertical" Height="15" LineStrokeThickness="2" LineStroke="{DynamicResource MahApps.Brushes.Accent3}"/>
+                            <ComboBox VerticalAlignment="Center" SelectedIndex="0" Width="116">
+                                <ComboBoxItem Content="Interval"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!--Default Project Folder -->
+                <Border BorderThickness="4,0,0,2" Margin="15,5,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                    <Grid>
+                        <TextBlock Text="Default Project folder" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Margin="250,0,0,0" Width="250" Text=""/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
 
             </StackPanel>
 

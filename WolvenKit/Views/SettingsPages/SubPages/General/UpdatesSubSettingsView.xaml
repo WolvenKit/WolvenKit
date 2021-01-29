@@ -5,47 +5,67 @@
                    xmlns:catel="http://schemas.catelproject.com">
 
     <Grid hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}">
-        <Grid VerticalAlignment="Top" HorizontalAlignment="Left">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
 
-            <StackPanel>
 
+        <Grid Grid.Column="0">
+            <hc:ScrollViewer>
+                <StackPanel>
 
-                <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
-                    <Grid>
-                        <TextBlock Text="Automatically Update WolvenKit" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                        <StackPanel  Orientation="Horizontal">
-                            <ToggleButton Margin="250,0,0,0" BorderThickness="0" IsEnabled="True"  VerticalAlignment="Center"  HorizontalAlignment="Left" Style="{StaticResource ToggleButtonFlip}">
-                                <hc:StatusSwitchElement.CheckedElement>
-                                    <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
-                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="On" Foreground="{DynamicResource TextIconBrush}"/>
+                    <Border BorderThickness="4,0,0,6" Margin="15,15,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                        <Grid>
+                            <TextBlock Text="Application" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                        </Grid>
+                    </Border>
+                    
+                    <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                        <StackPanel>
+                            
+                            <Grid Margin="5">
+                                <TextBlock Text="Automatically Update WolvenKit" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                                <ToggleButton HorizontalAlignment="Right" BorderThickness="0" IsEnabled="True"  VerticalAlignment="Center"   Style="{StaticResource ToggleButtonFlip}">
+                                    <hc:StatusSwitchElement.CheckedElement>
+                                        <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="On" Foreground="{DynamicResource TextIconBrush}"/>
+                                        </Border>
+                                    </hc:StatusSwitchElement.CheckedElement>
+                                    <Border Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Off" Foreground="{DynamicResource TextIconBrush}"/>
                                     </Border>
-                                </hc:StatusSwitchElement.CheckedElement>
-                                <Border Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
-                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Off" Foreground="{DynamicResource TextIconBrush}"/>
-                                </Border>
-                            </ToggleButton>
-                        </StackPanel>
-                    </Grid>
+                                </ToggleButton>
+                            </Grid>
 
 
-                </Border>
-
-                <Border BorderThickness="4,0,0,2" Margin="15,5,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
-                    <Grid>
-                        <TextBlock Text="Update Channel" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                        <StackPanel Orientation="Horizontal">
-                            <ComboBox Margin="250,0,0,0" VerticalAlignment="Center" Width="250" Text=""/>
-
-                        </StackPanel>
-                    </Grid>
-
-                </Border>
+                            <Grid Margin="5">
+                                <TextBlock Text="Update Channel" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                                <ComboBox HorizontalAlignment="Right" VerticalAlignment="Center" Width="250" Text=""/>
+                            </Grid>
+                            
+                        </StackPanel>                  
+                    </Border>
 
 
-            </StackPanel>
-
+                </StackPanel>
+            </hc:ScrollViewer>
         </Grid>
 
+        <Grid Grid.Column="1">
+            <hc:ScrollViewer>
+                <StackPanel>
+
+
+
+
+
+                </StackPanel>
+            </hc:ScrollViewer>
+        </Grid>
+
+
     </Grid>
+   
 
 </catel:UserControl>
