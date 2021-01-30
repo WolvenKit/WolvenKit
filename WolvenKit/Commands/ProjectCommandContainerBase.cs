@@ -5,7 +5,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-using System;
 using Catel.IoC;
 using Catel.Services;
 using Orc.Notifications;
@@ -55,25 +54,21 @@ namespace WolvenKit
         #endregion
 
         #region Methods
-        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs e)
+        private async Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs e)
         {
             //await Task.Run(() => ProjectActivated((Project) e.OldProject, (Project) e.NewProject));
-            ProjectActivated((EditorProject)e.OldProject, (EditorProject)e.NewProject);
+            await ProjectActivatedAsync((EditorProject)e.OldProject, (EditorProject)e.NewProject);
 
             //TODO: why is that here?
             _commandManager.InvalidateCommands();
-
-            return TaskHelper.Completed;
         }
 
-        protected virtual async Task ProjectActivated(EditorProject oldEditorProject, EditorProject newEditorProject)
+        protected virtual async Task ProjectActivatedAsync(EditorProject oldEditorProject, EditorProject newEditorProject)
         {
             if (newEditorProject == null)
                 return;
 
             await Task.Run(() => newEditorProject.Initialize());
-
-            
         }
 
         protected override bool CanExecute(object parameter)

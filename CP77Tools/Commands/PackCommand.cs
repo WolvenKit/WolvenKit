@@ -5,8 +5,8 @@ namespace CP77Tools.Commands
 {
     public class PackCommand : Command
     {
-        private static string Name = "pack";
-        private static string Description = "Pack a folder of files into an .archive file.";
+        private new const string Name = "pack";
+        private new const string Description = "Pack a folder of files into an .archive file.";
         
         public PackCommand() : base(Name, Description)
         {

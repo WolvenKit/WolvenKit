@@ -290,9 +290,9 @@ namespace CP77.CR2W
                         variable.Variables = TryGetClassVariables(variable.Size);
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-
+                    // TODO: Are we intentionally swallowing this?
                 }
                 
 
@@ -300,7 +300,7 @@ namespace CP77.CR2W
                 br.BaseStream.Seek(endoffset, SeekOrigin.Begin);
                 o.Variables.Add(variable);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return o;
                 }
@@ -358,7 +358,7 @@ namespace CP77.CR2W
                         br.BaseStream.Seek(endoffset, SeekOrigin.Begin);
                         ret.Add(variable);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         return null;
                     }

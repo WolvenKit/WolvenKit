@@ -6,8 +6,8 @@ namespace CP77Tools.Commands
 {
     public class VerifyCommand : Command
     {
-        private static string Name = "verify";
-        private static string Description = "Some helper functions related to cr2w files.";
+        private new const string Name = "verify";
+        private new const string Description = "Some helper functions related to cr2w files.";
 
         public VerifyCommand() : base(Name, Description)
         {
