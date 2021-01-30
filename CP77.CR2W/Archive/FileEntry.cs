@@ -10,15 +10,15 @@ using WolvenKit.Common.Model;
 
 namespace CP77.CR2W.Archive
 {
-    public class ArchiveItem : IGameFile
+    public class FileEntry : IGameFile
     {
         public ulong NameHash64 { get; set; }
-        public DateTime DateTime { get; set; }
-        public uint FileFlags { get; set; }
-        public uint FirstOffsetTableIdx { get; set; }
-        public uint LastOffsetTableIdx { get; set; }
-        public uint FirstImportTableIdx { get; set; }
-        public uint LastImportTableIdx { get; set; }
+        public DateTime Timestamp { get; set; }
+        public uint NumInlineBufferSegments { get; set; }
+        public uint SegmentsStart { get; set; }
+        public uint SegmentsEnd { get; set; }
+        public uint ResourceDependenciesStart { get; set; }
+        public uint ResourceDependenciesEnd { get; set; }
         public byte[] SHA1Hash { get; set; }
 
         public string bytesAsString => BitConverter.ToString(SHA1Hash);
@@ -36,7 +36,7 @@ namespace CP77.CR2W.Archive
 
         public string CompressionType { get; set; }
 
-        public ArchiveItem(BinaryReader br, IGameArchive parent)
+        public FileEntry(BinaryReader br, IGameArchive parent)
         {
             Archive = parent;
             var mainController = ServiceLocator.Default.ResolveType<IHashService>();
@@ -44,16 +44,16 @@ namespace CP77.CR2W.Archive
             Read(br, mainController);
         }
 
-        public ArchiveItem(ulong hash, DateTime datetime, uint flags
-            , uint firstOffsetTableIdx, uint lastOffsetTableIdx, uint firstImportTableIdx, uint lastImportTableIdx, byte[] sha1hash)
+        public FileEntry(ulong hash, DateTime datetime, uint flags
+            , uint segmentsStart, uint segmentsEnd, uint resourceDependenciesStart, uint resourceDependenciesEnd, byte[] sha1hash)
         {
             NameHash64 = hash;
-            DateTime = datetime;
-            FileFlags = flags;
-            FirstImportTableIdx = firstImportTableIdx;
-            LastImportTableIdx = lastImportTableIdx;
-            FirstOffsetTableIdx = firstOffsetTableIdx;
-            LastOffsetTableIdx = lastOffsetTableIdx;
+            Timestamp = datetime;
+            NumInlineBufferSegments = flags;
+            ResourceDependenciesStart = resourceDependenciesStart;
+            ResourceDependenciesEnd = resourceDependenciesEnd;
+            SegmentsStart = segmentsStart;
+            SegmentsEnd = segmentsEnd;
             SHA1Hash = sha1hash;
         }
 
@@ -74,14 +74,14 @@ namespace CP77.CR2W.Archive
                     _nameStr = _nameStr.Replace('\\', Path.DirectorySeparatorChar);
             }
 
-            DateTime = DateTime.FromFileTime(br.ReadInt64());
+            Timestamp = DateTime.FromFileTime(br.ReadInt64());
 
 
-            FileFlags = br.ReadUInt32();
-            FirstOffsetTableIdx = br.ReadUInt32();
-            LastOffsetTableIdx = br.ReadUInt32();
-            FirstImportTableIdx = br.ReadUInt32();
-            LastImportTableIdx = br.ReadUInt32();
+            NumInlineBufferSegments = br.ReadUInt32();
+            SegmentsStart = br.ReadUInt32();
+            SegmentsEnd = br.ReadUInt32();
+            ResourceDependenciesStart = br.ReadUInt32();
+            ResourceDependenciesEnd = br.ReadUInt32();
 
             SHA1Hash = br.ReadBytes(20);
 
@@ -94,12 +94,12 @@ namespace CP77.CR2W.Archive
         public void Write(BinaryWriter bw)
         {
             bw.Write(NameHash64);
-            bw.Write(DateTime.ToFileTime());
-            bw.Write(FileFlags);
-            bw.Write(FirstOffsetTableIdx);
-            bw.Write(LastOffsetTableIdx);
-            bw.Write(FirstImportTableIdx);
-            bw.Write(LastImportTableIdx);
+            bw.Write(Timestamp.ToFileTime());
+            bw.Write(NumInlineBufferSegments);
+            bw.Write(SegmentsStart);
+            bw.Write(SegmentsEnd);
+            bw.Write(ResourceDependenciesStart);
+            bw.Write(ResourceDependenciesEnd);
             bw.Write(SHA1Hash);
         }
 

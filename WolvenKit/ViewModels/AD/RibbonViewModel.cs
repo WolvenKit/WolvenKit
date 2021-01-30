@@ -35,8 +35,8 @@ namespace WolvenKit.ViewModels
         public RibbonViewModel(
             ISettingsManager settingsManager,
             IProjectManager projectManager,
-            ILoggerService loggerService, 
-            INavigationService navigationService, 
+            ILoggerService loggerService,
+            INavigationService navigationService,
             IUIVisualizerService uiVisualizerService
             )
         {
@@ -77,8 +77,18 @@ namespace WolvenKit.ViewModels
         /// <summary>
         /// Dependency Property on RibbonView
         /// </summary>
-        public List<string> ListOfThemes => new List<string>(){
-            "Dark.Red", "Dark.Green", "Dark.Blue", "Dark.Purple", "Dark.Orange", "Dark.Lime", "Dark.Emerald", "Dark.Teal", "Dark.Cyan", "Dark.Cobalt", "Dark.Indigo", "Dark.Violet", "Dark.Pink", "Dark.Magenta", "Dark.Crimson", "Dark.Amber", "Dark.Yellow", "Dark.Brown", "Dark.Olive", "Dark.Steel", "Dark.Mauve", "Dark.Taupe", "Dark.Sienna" , "Light.Red", "Light.Green", "Light.Blue", "Light.Purple", "Light.Orange", "Light.Lime", "Light.Emerald", "Light.Teal", "Light.Cyan", "Light.Cobalt", "Light.Indigo", "Light.Violet", "Light.Pink", "Light.Magenta", "Light.Crimson", "Light.Amber", "Light.Yellow", "Light.Brown", "Light.Olive", "Light.Steel", "Light.Mauve", "Light.Taupe", "Light.Sienna"};
+        public List<string> ListOfThemes => new List<string>()
+        {
+            "Dark.Red", "Dark.Green", "Dark.Blue",
+            "Dark.Purple", "Dark.Orange", "Dark.Lime",
+            "Dark.Emerald", "Dark.Teal", "Dark.Cyan",
+            "Dark.Cobalt", "Dark.Indigo", "Dark.Violet",
+            "Dark.Pink", "Dark.Magenta", "Dark.Crimson",
+            "Dark.Amber", "Dark.Yellow", "Dark.Brown",
+            "Dark.Olive", "Dark.Steel", "Dark.Mauve",
+            "Dark.Taupe", "Dark.Sienna"
+        };
+
         private string _selectedTheme;
         /// <summary>
         /// Dependency Property on RibbonView
@@ -123,7 +133,7 @@ namespace WolvenKit.ViewModels
         private bool CanRunCommand1() => true;
         private void RunCommand1()
         {
-            
+
         }
         #endregion
 

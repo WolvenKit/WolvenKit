@@ -17,7 +17,8 @@
 
                             <StackPanel Orientation="Vertical">
                                 <TextBlock FontSize="14"  Margin="35,35,5,5" Text="What game(s) do you want to create mods for?" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"></TextBlock>
-                            <TextBlock VerticalAlignment="Center" FontSize="14"  Margin="35,40,5,5" Text="Automatically install mods after creation?" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"></TextBlock>
+                      
+                                <TextBlock VerticalAlignment="Center" FontSize="14"  Margin="35,40,5,5" Text="Automatically install mods after creation?" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"></TextBlock>
                             <TextBlock VerticalAlignment="Center" FontSize="14"  Margin="35,40,5,5" Text="Would you like to recieve automatic updates for Wolvenkit?" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"></TextBlock>
 
 
@@ -30,14 +31,14 @@
 
 
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox Margin="10,35,5,5" HorizontalAlignment="Left" Content="The Witcher 3" IsChecked="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Background="{DynamicResource MahApps.Brushes.Accent}" BorderBrush="{DynamicResource MahApps.Brushes.Accent}"/>
+                                <CheckBox Margin="10,35,5,5" HorizontalAlignment="Left" Content="The Witcher 3" IsChecked="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"/>
                                 <hc:Divider Margin="5,35,5,5" Orientation="Vertical" MaxHeight="20"></hc:Divider>
-                                <CheckBox Margin="5,35,5,5" HorizontalAlignment="Left" Content="Cyberpunk 2077" IsChecked="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Background="{DynamicResource MahApps.Brushes.Accent}" BorderBrush="{DynamicResource MahApps.Brushes.Accent}"/>
+                                <CheckBox Margin="5,35,5,5" HorizontalAlignment="Left" Content="Cyberpunk 2077" IsChecked="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"/>
 
                             </StackPanel>
                             <ToggleButton Margin="5,35,5,5" BorderThickness="0" IsEnabled="True" IsChecked="True" VerticalAlignment="Center"  HorizontalAlignment="Left" Style="{StaticResource ToggleButtonFlip}">
                                     <hc:StatusSwitchElement.CheckedElement>
-                                        <Border Background="{DynamicResource MahApps.Brushes.Accent}">
+                                        <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
                                             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="On" Foreground="{DynamicResource TextIconBrush}"/>
                                         </Border>
                                     </hc:StatusSwitchElement.CheckedElement>
@@ -48,7 +49,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <ToggleButton Margin="5,30,5,15" BorderThickness="0" IsEnabled="True" IsChecked="True" VerticalAlignment="Center"  HorizontalAlignment="Left" Style="{StaticResource ToggleButtonFlip}">
                                     <hc:StatusSwitchElement.CheckedElement>
-                                        <Border Background="{DynamicResource MahApps.Brushes.Accent}">
+                                        <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
                                             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="On" Foreground="{DynamicResource TextIconBrush}"/>
                                         </Border>
                                     </hc:StatusSwitchElement.CheckedElement>

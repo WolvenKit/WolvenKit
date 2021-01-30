@@ -11,14 +11,14 @@
 
             <ResourceDictionary.MergedDictionaries>
 
-                <hc:Theme Name="HandyTheme"/>
-                <hc:Theme Skin="Dark"/>
+                <hc:ThemeResources/>
+                <hc:Theme/>
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
     </catel:DataWindow.Resources>
-    <Border BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
+    <Border hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
 
         <Grid>
             
@@ -41,9 +41,9 @@
                 </Grid>
 
                 <StackPanel Grid.Row="1" VerticalAlignment="Top"  >
-                    <ToolBarTray Style="{DynamicResource MahApps.Styles.ToolBarTray}" >
+                <ToolBarTray     Style="{DynamicResource MahApps.Styles.ToolBarTray}" >
                         <!-- Toolbar Tray All toolbars go in here.  Toolbar Items do not have sub items yet but is straight forward to setup.-->
-                        <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
+                        <ToolBar  Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                             <Menu Background="Transparent" VerticalAlignment="Center">
                                 <MenuItem Header="View">
                                     <MenuItem Header="Empty">

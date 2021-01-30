@@ -101,18 +101,18 @@ namespace WolvenKit.Common.DDS
 
     public enum EUncookExtension
     {
+        dds,
         tga,
         bmp,
         jpg,
         jpeg,
         png,
-        dds,
     }
 
     public static class TexconvWrapper
     {
 
-        private static string textconvpath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "DDS/texconv.exe");
+        private static string textconvpath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "texconv.exe");
 
 
         public static string Convert(string outDir,
@@ -123,6 +123,12 @@ namespace WolvenKit.Common.DDS
             )
         {
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+
+            if (filepath.Length > 255)
+            {
+                logger.LogString($"{filepath} - Filepath exceedds 255 characters. Please move the archive to extract to a shorter path.", Logtype.Error);
+                return "";
+            }
 
             var proc = new ProcessStartInfo(textconvpath)
             {

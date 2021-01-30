@@ -73,4 +73,9 @@ namespace CP77.CR2W.Types
     {
 
     }
+
+    public interface ICurveDataAccessor
+    {
+        string Elementtype { get; set; }
+    }
 }

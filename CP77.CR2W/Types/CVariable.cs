@@ -25,7 +25,7 @@ namespace CP77.CR2W.Types
         protected CVariable()
         {
             this.VarChunkIndex = -1;
-            InternalGuid = Guid.NewGuid();
+            
             accessor = TypeAccessor.Create(this.GetType());
         }
 
@@ -36,7 +36,7 @@ namespace CP77.CR2W.Types
             this.REDName = name;
             this.VarChunkIndex = -1;
 
-            InternalGuid = Guid.NewGuid();
+            
             accessor = TypeAccessor.Create(this.GetType());
         }
 
@@ -88,12 +88,10 @@ namespace CP77.CR2W.Types
         public void SetREDFlags(ushort flag) => _redFlags = flag;
 
         /// <summary>
-        /// an internal guid that is used to track cvariables 
-        /// should be replaced by a better hashing algorithm
-        /// or the Fullname method
+        /// an internal id that is used to track cvariables 
         /// </summary>
         [JsonIgnore]
-        public Guid InternalGuid { get; set; }
+        public string UniqueIdentifier => GetFullDependencyStringName();
 
         /// <summary>
         /// Stores the parent CVariable 

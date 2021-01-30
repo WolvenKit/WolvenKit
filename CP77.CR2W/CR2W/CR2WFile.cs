@@ -78,7 +78,8 @@ namespace CP77.CR2W
         //private bool m_hasInternalBuffer;
 
         private CR2WFile additionalCr2WFile;
-        public byte[] additionalCr2WFileBytes;
+        public byte[] AdditionalCr2WFileBytes;
+
         #endregion
 
         #region Properties
@@ -114,6 +115,7 @@ namespace CP77.CR2W
         #endregion
 
         #region Supporting Functions
+        public int GetUnknownBytes() => Chunks.Sum(chunk => chunk.unknownBytes.Bytes.Length);
 
         public void GenerateChunksDict() => Chunksdict = Chunks.ToDictionary(_ => _.ChunkIndex, _ => _);
 
@@ -629,7 +631,7 @@ namespace CP77.CR2W
             if (readbytes != file.BaseStream.Length)
             {
                 var bytesleft = file.BaseStream.Length - readbytes;
-                additionalCr2WFileBytes = file.ReadBytes((int)bytesleft);
+                AdditionalCr2WFileBytes = file.ReadBytes((int)bytesleft);
 
 
             }
@@ -643,8 +645,8 @@ namespace CP77.CR2W
 
         public CR2WFile GetAdditionalCr2wFile()
         {
-            if (additionalCr2WFileBytes == null) return null;
-            using (var ms2 = new MemoryStream(additionalCr2WFileBytes))
+            if (AdditionalCr2WFileBytes == null) return null;
+            using (var ms2 = new MemoryStream(AdditionalCr2WFileBytes))
             using (var br2 = new BinaryReader(ms2))
             {
                 additionalCr2WFile = new CR2WFile();
@@ -846,10 +848,10 @@ namespace CP77.CR2W
 
 
 
-            if (additionalCr2WFileBytes != null)
+            if (AdditionalCr2WFileBytes != null)
             {
                 file.BaseStream.Seek(0, SeekOrigin.End);
-                file.Write(additionalCr2WFileBytes);
+                file.Write(AdditionalCr2WFileBytes);
             }
 
 
@@ -969,7 +971,261 @@ namespace CP77.CR2W
 
         private (List<string>, List<SImportEntry>) GenerateStringtableInner()
         {
-            throw new NotImplementedException();
+            var dbg_trace = new List<string>();
+            var newnameslist = new Dictionary<string, string>();
+            newnameslist.Add("", "");
+            var newimportslist = new List<SImportEntry>();
+            var newsoftlist = new List<SImportEntry>();
+            var guidlist = new HashSet<string>();
+            var chunkguidlist = new List<string>();
+
+            foreach (var c in Chunks)
+            {
+                chunkguidlist.Add(c.data.UniqueIdentifier);
+                LoopWrapper(new SNameArg(EStringTableMod.SkipName, c.data));
+            }
+
+            newimportslist.AddRange(newsoftlist);
+
+            return (newnameslist.Values.ToList(), newimportslist);
+
+            void LoopWrapper(SNameArg var)
+            {
+                if (guidlist.Contains(var.Item2.UniqueIdentifier))
+                {
+                    return;
+                }
+
+                //collection.Add(var);
+                dbg_trace.Add($"{var.Item2.REDName}[{var.Item2.REDType}] - {var.Item1}");
+                AddStrings(var);
+
+                List<SNameArg> nextl = GetVariables(var.Item2);
+                if (nextl == null)
+                    return;
+                foreach (var l in nextl)
+                {
+                    if (l.Item2 != null)
+                        LoopWrapper(l);
+                }
+            }
+
+
+
+            //struct SNameArg zobi ;
+            List<SNameArg> GetVariables(IEditableVariable ivar)
+            {
+                //check for looping references
+                if (guidlist.Contains(ivar.UniqueIdentifier))
+                    return null;
+                else
+                    guidlist.Add(ivar.UniqueIdentifier);
+
+                var returnedVariables = new List<SNameArg>();
+
+                // if variable is generic type or some special case 
+                switch (ivar)
+                {
+                    case IArrayAccessor a:
+                        switch (a)
+                        {
+                            case CArray<CName> cacn:
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, a)); //???
+                                break;
+                            case CArray<CBool> cacb:
+                            case CArray<CUInt16> cacu16:
+                            case CArray<CInt16> caci16:
+                            case CArray<CUInt32> cacu32:
+                            case CArray<CInt32> caci32:
+                            case CArray<CUInt64> cacu64:
+                            case CArray<CInt64> caci64:
+                                break;
+                            default:
+                                var elements = a.GetEditableVariables();
+                                foreach (var item in elements)
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item));
+                                break;
+                        }
+                        break;
+                    case IPtrAccessor p:
+                        if (p.Reference != null)
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, p.Reference.data));
+                        break;
+                    case IHandleAccessor h:
+                        if (h.ChunkHandle)
+                            if (h.Reference != null)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, h.Reference.data));
+                        break;
+                    case ISoftAccessor s:
+                        break;
+                    case IBufferVariantAccessor ivariant:
+                        EStringTableMod mod = EStringTableMod.None;
+                        returnedVariables.Add(new SNameArg(mod, ivariant.Variant));
+                        break;
+                    case CVariant cVariant:
+                        returnedVariables.Add(new SNameArg(EStringTableMod.SkipName, cVariant.Variant));
+                        break;
+                    // check all other CVariables
+                    case CVariable cvar:
+                        {
+                            // add parent if not already in guidlist
+                            // don't add array type parents, don't add IBufferVariantAccessor type parents
+                            if (cvar.ParentVar != null
+                                && !cvar.ParentVar.GetType().IsGenericType
+                                && !(cvar.ParentVar is IBufferVariantAccessor)
+                                && !guidlist.Contains(cvar.ParentVar.UniqueIdentifier))
+                            {
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, cvar.ParentVar));
+                            }
+
+                            // add all normal REDProperties
+                            returnedVariables.AddRange(cvar.GetExistingVariables(false)
+                                .Select(_ => new SNameArg(EStringTableMod.None, _)));
+
+                           
+                            break;
+                        }
+                    default:
+                        break;
+                }
+
+                return returnedVariables;
+            }
+
+            void AddStrings(SNameArg tvar)
+            {
+                var var = tvar.Item2;
+                CheckVarNameAndTypes();
+
+                if (var is IHandleAccessor h)
+                {
+                    if (!h.ChunkHandle)
+                    {
+                        AddUniqueToTable(h.ClassName);
+                        var flags = EImportFlags.Default;
+
+                        if (var.cr2w.Embedded.Any(_ => _.ImportPath == h.DepotPath && _.ImportClass == h.ClassName))
+                            flags = EImportFlags.Inplace;
+
+                        var importtuple = new SImportEntry(h.ClassName, h.DepotPath, flags);
+                        if (!newimportslist.Contains(importtuple))
+                        {
+                            newimportslist.Add(importtuple);
+                        }
+                    }
+                }
+                else if (var is ISoftAccessor s)
+                {
+                    if (!(string.IsNullOrEmpty(s.ClassName) && string.IsNullOrEmpty(s.DepotPath)))
+                    {
+                        //AddUniqueToTable(s.REDType);
+                        var stuple = new SImportEntry(s.ClassName, s.DepotPath, EImportFlags.Soft);
+                        if (!newsoftlist.Contains(stuple))
+                        {
+                            newsoftlist.Add(stuple);
+                        }
+                    }
+                }
+                else if (var is CName)
+                {
+                    var n = var as CName;
+                    AddUniqueToTable(n.Value);
+                }
+                else if (var is IArrayAccessor a)
+                {
+                    if (var is IBufferAccessor buffer)
+                    {
+                        foreach (IEditableVariable ivar in buffer.GetEditableVariables())
+                        {
+                            if (ivar is IHandleAccessor ha)
+                            {
+                                if (!ha.ChunkHandle)
+                                {
+                                    AddUniqueToTable(ha.ClassName);
+                                    var flags = EImportFlags.Default;
+                                    if (ha.REDName == "template")
+                                        flags = EImportFlags.Template;
+                                    var importtuple = new SImportEntry(ha.ClassName, ha.DepotPath, flags);
+                                    if (!newimportslist.Contains(importtuple))
+                                    {
+                                        newimportslist.Add(importtuple);
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        CheckVarNameAndTypes();
+
+                        if (var is CArray<CName> aa)
+                        {
+                            foreach (var element in aa)
+                            {
+                                AddUniqueToTable(element.Value);
+                            }
+                        }
+                    }
+                }
+                else if (var is IEnumAccessor enumAccessor)
+                {
+                    foreach (var enumstring in enumAccessor.Value)
+                    {
+                        AddUniqueToTable(enumstring);
+                    }
+                }
+
+
+                void CheckVarNameAndTypes()
+                {
+                    switch (tvar.Item1)
+                    {
+                        case EStringTableMod.SkipType:
+                            AddUniqueToTable(var.REDName);
+                            break;
+                        case EStringTableMod.SkipName:
+                            AddUniqueToTable(var.REDType);
+                            break;
+                        case EStringTableMod.SkipNameAndType:
+                            break;
+                        case EStringTableMod.TypeFirst:
+                            AddUniqueToTable(var.REDType);
+                            AddUniqueToTable(var.REDName);
+                            break;
+                        case EStringTableMod.None:
+                        default:
+                            AddUniqueToTable(var.REDName);
+                            AddUniqueToTable(var.REDType);
+                            break;
+                    }
+                }
+            }
+
+            void AddUniqueToTable(string str)
+            {
+                if (string.IsNullOrEmpty(str))
+                {
+                    // todo
+                }
+                else
+                {
+
+                    if (!newnameslist.ContainsKey(str))
+                    {
+                        // hack for CApexClothResource *sigh*
+                        if (str == "apexMaterialNames")
+                        {
+                            if (!newnameslist.ContainsKey("apexBinaryAsset"))
+                                newnameslist.Add("apexBinaryAsset", "apexBinaryAsset");
+                            if (!newnameslist.ContainsKey("array: 95, 0, Uint8"))
+                                newnameslist.Add("array:95,0,Uint8", "array:95,0,Uint8");
+                        }
+
+                        newnameslist.Add(str, str);
+                    }
+                }
+            }
         }
 
         public void WriteHeader(BinaryWriter file)

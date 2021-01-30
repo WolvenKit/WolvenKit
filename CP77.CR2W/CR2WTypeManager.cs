@@ -92,15 +92,22 @@ namespace CP77.CR2W.Types
                 {
                     case "CHandle":
                     case "handle":
-                        {
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            return MakeGenericType(typeof(CHandle<>), innerobject);
-                        }
+                    {
+                        CVariable innerobject = Create(innertype, "", cr2w, null);
+                        return MakeGenericType(typeof(CHandle<>), innerobject);
+                    }
                     case "wCHandle":
                     case "whandle":
                     {
                         CVariable innerobject = Create(innertype, "", cr2w, null);
                         return MakeGenericType(typeof(wCHandle<>), innerobject);
+                    }
+                    case "curveData":
+                    {
+                        CVariable innerobject = Create(innertype, "", cr2w, null);
+                        var obj = MakeGenericType(typeof(curveData<>), innerobject);
+                        (obj as ICurveDataAccessor).Elementtype = innertype;
+                        return obj;
                     }
                     case "CrRef":
                     case "rRef":

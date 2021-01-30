@@ -33,14 +33,15 @@ namespace CP77.CR2W
         /// <param name="flip"></param>
         /// <returns></returns>
         public static int UncookSingle(this Archive.Archive ar, ulong hash, DirectoryInfo outDir, 
-            EUncookExtension uncookext = EUncookExtension.tga, bool flip = false)
+            EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
             // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
             
             return ar.UncookSingleInner(hash, outDir, uncookext, flip);
         }
         
-        private static int UncookSingleInner(this Archive.Archive ar, ulong hash, DirectoryInfo outDir, EUncookExtension uncookext = EUncookExtension.tga, bool flip = false)
+        private static int UncookSingleInner(this Archive.Archive ar, ulong hash, DirectoryInfo outDir, 
+            EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
             // checks
             if (!ar.Files.ContainsKey(hash))
@@ -89,6 +90,8 @@ namespace CP77.CR2W
                     return -1;
                 }
 
+                (_, buffers) = ar.GetFileData(hash, true);
+
                 for (int i = 0; i < buffers.Count; i++)
                 {
                     var buffer = buffers[i];
@@ -112,7 +115,8 @@ namespace CP77.CR2W
         /// <param name="uncookext"></param>
         /// <param name="flip"></param>
         /// <returns></returns>
-        public static (List<string>, int) UncookAll(this Archive.Archive ar, DirectoryInfo outDir, string pattern = "", string regex = "", EUncookExtension uncookext = EUncookExtension.tga, bool flip = false)
+        public static (List<string>, int) UncookAll(this Archive.Archive ar, DirectoryInfo outDir, string pattern = "",
+            string regex = "", EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
@@ -122,7 +126,7 @@ namespace CP77.CR2W
             // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
             
             // check search pattern then regex
-            IEnumerable<ArchiveItem> finalmatches = ar.Files.Values;
+            IEnumerable<FileEntry> finalmatches = ar.Files.Values;
             if (!string.IsNullOrEmpty(pattern))
                 finalmatches = ar.Files.Values.MatchesWildcard(item => item.FileName, pattern);
             if (!string.IsNullOrEmpty(regex))
@@ -168,7 +172,7 @@ namespace CP77.CR2W
         /// 
         /// </summary>
         public static int Uncook(CR2WFile cr2w, List<byte[]> buffers, ECookedFileFormat ext, 
-            EUncookExtension uncookext = EUncookExtension.tga, bool flip = false)
+            EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
             var infile = new FileInfo(cr2w.FileName);
             var uncooksuccess = false;

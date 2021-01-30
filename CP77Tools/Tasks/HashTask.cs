@@ -56,16 +56,5 @@ namespace CP77Tools.Tasks
 
             return 1;
         }
-        
-        public static async Task<int> UpdateHashesAsync()
-        {
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
-            if (await hashService.RefreshAsync())
-            {
-                /*await*/ hashService.ReloadLocally();
-            }
-
-            return 1;
-        }
     }
 }

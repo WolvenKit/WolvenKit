@@ -10,7 +10,6 @@ using Catel.IoC;
 using WolvenKit.Common.Services;
 using CP77.CR2W;
 using CP77.CR2W.Archive;
-using CP77.CR2W.Resources;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;

@@ -1,23 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <AssemblyVersion>1.1.0.0</AssemblyVersion>
     <FileVersion>1.1.0.0</FileVersion>
-    <DefineConstants Condition=" '$(OS)' == 'Windows_NT' ">IS_WINDOWS_BUILD</DefineConstants>
+	<PublishSingleFile>true</PublishSingleFile>
+	  <SelfContained>false</SelfContained>
+	  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	  <PublishTrimmed>true</PublishTrimmed>
+	  <PublishReadyToRun>true</PublishReadyToRun>
+	<DebugType>embedded</DebugType>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Model\**" />
-    <Compile Remove="Oodle\**" />
-    <EmbeddedResource Remove="Model\**" />
-    <EmbeddedResource Remove="Oodle\**" />
-    <None Remove="Model\**" />
-    <None Remove="Oodle\**" />
-  </ItemGroup>
-
-  <ItemGroup>
+	<ItemGroup>
     <None Remove="lib\kraken.so" />
   </ItemGroup>
 
@@ -33,10 +29,8 @@
 
   <ItemGroup>
     <PackageReference Include="Luna.ConsoleProgressBar" Version="1.0.29" />
-    <PackageReference Include="CsvHelper" Version="18.0.0" />
+    <PackageReference Include="CsvHelper" Version="21.1.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
-    <PackageReference Include="WolvenKit.Common" Version="1.0.0" />
-    <PackageReference Include="WolvenKit.Cyberformats" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,22 +43,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="C:\Users\ghost\.nuget\packages\wolvenkit.common\1.0.0\contentFiles\any\net5.0-windows7.0\DDS\texconv.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Update="C:\Users\ghost\.nuget\packages\wolvenkit.cyberformats\1.0.0\contentFiles\any\net5.0-windows7.0\Resources\archivehashes.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <ProjectReference Include="..\CP77.CR2W\WolvenKit.Cyberformats.csproj" />
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="oo2core_8_win64.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-
-  <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
 	  <DefineConstants>_WINDOWS</DefineConstants>
   </PropertyGroup>
 </Project>

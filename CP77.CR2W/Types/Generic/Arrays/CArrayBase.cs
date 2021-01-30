@@ -53,7 +53,7 @@ namespace CP77.CR2W.Types
         {
             var v1 = flags.MoveNext() ? flags.Current : 0;
             var v2 = flags.MoveNext() ? flags.Current : 0;
-            return $"array:{v1},{v2},{elementtype}";
+            return $"array:{elementtype}";
         }
 
         public override List<IEditableVariable> GetEditableVariables()

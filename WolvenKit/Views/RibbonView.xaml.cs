@@ -8,6 +8,8 @@ using Catel;
 using Catel.Data;
 using WolvenKit.Views.AssetBrowser;
 using WolvenKit.Views.CodeEditor;
+using WolvenKit.Views.PluginManager;
+using WolvenKit.Views.VisualEditor;
 
 namespace WolvenKit.Views
 {
@@ -70,6 +72,18 @@ namespace WolvenKit.Views
         {
             CodeEditorView codeeditor = new CodeEditorView();
             codeeditor.Show();
+        }
+
+        private void CBPluginManager_Selected(object sender, RoutedEventArgs e)
+        {
+            PluginManagerView pluginmanager = new PluginManagerView();
+            pluginmanager.Show();
+        }
+
+        private void CBVisualEditorItem_Selected(object sender, RoutedEventArgs e)
+        {
+            VisualEditorView visualeditor = new VisualEditorView();
+            visualeditor.Show();
         }
     }
 }
