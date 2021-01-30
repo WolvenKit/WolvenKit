@@ -95,7 +95,7 @@ namespace CP77.CR2W
                 for (int i = 0; i < buffers.Count; i++)
                 {
                     var buffer = buffers[i];
-                    var bufferpath = $"{infile}.{i}.buffer";
+                    var bufferpath = $"{infile.FullName}.{i}.buffer";
                     Directory.CreateDirectory(infile.Directory.FullName);
                     File.WriteAllBytes(bufferpath, buffer);
                 }

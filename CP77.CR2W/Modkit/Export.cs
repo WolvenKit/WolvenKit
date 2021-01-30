@@ -34,12 +34,20 @@ namespace CP77.CR2W
         {
             #region checks
 
-            if (cr2wfile == null) return -1;
-            if (!cr2wfile.Exists) return -1;
-            if (cr2wfile.Directory != null && !cr2wfile.Directory.Exists) return -1;
-            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(cr2wfile.Extension[1..])) return -1;
+            if (cr2wfile == null)
+                return -1;
+            if (!cr2wfile.Exists)
+                return -1;
+            if (cr2wfile.Directory != null && !cr2wfile.Directory.Exists)
+                return -1;
+
+
+
+            //if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(cr2wfile.Extension[1..]))
+            //    return -1;
             var ext = Path.GetExtension(cr2wfile.FullName)[1..];
-            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext)) return 0;
+            //if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext))
+            //    return 0;
             #endregion
 
             // read file
@@ -54,7 +62,7 @@ namespace CP77.CR2W
             }
             cr2w.FileName = cr2wfile.FullName;
 
-            // read buffers
+            // read and decompress buffers
             var buffers = new List<byte[]>();
             foreach (var b in cr2w.Buffers.Select(_ => _.Buffer))
             {
@@ -73,12 +81,20 @@ namespace CP77.CR2W
                 
             }
 
-            
-            if (!Enum.TryParse(ext, true, out ECookedFileFormat extAsEnum))
-                return -1;
-
-            return Uncook(cr2w, buffers, extAsEnum, uncookext);
-
+            // uncook or extract buffers
+            if (Enum.TryParse(ext, true, out ECookedFileFormat extAsEnum))
+                return Uncook(cr2w, buffers, extAsEnum, uncookext);
+            else
+            {
+                for (int i = 0; i < buffers.Count; i++)
+                {
+                    var buffer = buffers[i];
+                    var bufferpath = $"{cr2wfile.FullName}.{i}.buffer";
+                    Directory.CreateDirectory(cr2wfile.Directory.FullName);
+                    File.WriteAllBytes(bufferpath, buffer);
+                }
+                return 1;
+            }
         }
     }
 }

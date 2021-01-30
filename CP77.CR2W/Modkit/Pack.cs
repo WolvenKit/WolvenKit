@@ -114,7 +114,7 @@ namespace CP77.CR2W
                         zsize,
                         (uint) cr2winbuffer.Length));
                     
-                    // TODO: each cr2w needs to have the buffer already kraken'd
+                    // HINT: each cr2w needs to have the buffer already kraken'd
                     // foreach buffer write
                     var bufferOffsets = cr2w.Buffers.Select(_ => _.Buffer);
                     foreach (var buffer in bufferOffsets)

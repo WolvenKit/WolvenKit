@@ -120,9 +120,7 @@ namespace CP77.CR2W
             foreach (var (parentPath, buffers) in buffersDict)
             {
                 var ext = Path.GetExtension(parentPath)[1..];
-                
-                var values = Enum.GetNames(typeof(ECookedFileFormat));
-                var canImport = values.Any(_ => _ == ext);
+                var canImport = Enum.GetNames(typeof(ECookedFileFormat)).Any(_ => _ == ext);
                 
                 // if the parent cr2w exists
                 if (File.Exists(parentPath))
@@ -197,7 +195,7 @@ namespace CP77.CR2W
                 }
             }
 
-            bool AppendBuffersToFile(string parentPath, List<FileInfo> buffers)
+            bool AppendBuffersToFile(string parentPath, List<FileInfo> buffers_in)
             {
                 //check if cr2w
                 using var fileStream = new FileStream(parentPath, FileMode.Open, FileAccess.ReadWrite);
@@ -210,6 +208,13 @@ namespace CP77.CR2W
                     return false;
                 }
                 
+                // sort buffers numerically
+                var buffers = buffers_in
+                    .OrderBy(_ =>
+                    int.Parse(Path.GetExtension(_.FullName.Remove(_.FullName.Length - 7))[1..]))
+                    .ToList();
+
+
                 if (keep)
                 {
                     // remove old buffers 
