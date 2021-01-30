@@ -74,6 +74,12 @@
                         </hc:SideMenuItem>
                     </hc:SideMenuItem>
 
+                    <hc:SideMenuItem x:Name="SideMenu_IntegratedItem" Header="Integrated Tools"  Margin="0,0,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_IntegratedItem_Selected" >
+                        <hc:SideMenuItem.Icon>
+                            <iconPacks:Codicons Height="25" Kind="Verified" Width="25" />
+                        </hc:SideMenuItem.Icon>
+                    </hc:SideMenuItem>
+
                     <hc:SideMenuItem x:Name="SideMenu_SettingsItem" Header="Settings"  Margin="0,0,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_SettingsItem_Selected">
                         <hc:SideMenuItem.Icon>
                             <iconPacks:Codicons Height="25" Kind="Settings" Width="25" />
@@ -124,7 +130,7 @@
 
             </Fluent:Button>
 
-            <hc:Tag Margin="35,0,0,18" VerticalAlignment="Bottom" ShowCloseButton="False" Content="USERNAME">
+            <hc:Tag Margin="35,0,0,18" VerticalAlignment="Bottom" ShowCloseButton="False" Content="USERNAME" MouseDown="Tag_MouseDown">
                 <hc:Tag.Header>
                     <iconPacks:PackIconCodicons Kind="Account"></iconPacks:PackIconCodicons>
 

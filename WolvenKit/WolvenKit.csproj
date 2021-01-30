@@ -304,7 +304,14 @@
     <Folder Include="Resources\Styles\Custom\" />
     <Folder Include="ViewModels\SettingsPages\SubPages\Integration\" />
     <Folder Include="ViewModels\SettingsPages\SubPages\Packaging\" />
+    <Folder Include="ViewModels\Wizards\WizardPages\InstallerWizard\" />
+    <Folder Include="ViewModels\Wizards\WizardPages\FeedbackWizard\" />
+    <Folder Include="ViewModels\Wizards\WizardPages\BugReportWizard\" />
+    <Folder Include="Views\IntegratedToolsPages\CyberCAT\" />
     <Folder Include="Views\SettingsPages\SubPages\Integration\" />
     <Folder Include="Views\SettingsPages\SubPages\Packaging\" />
+    <Folder Include="Views\Wizards\WizardPages\InstallerWizard\" />
+    <Folder Include="Views\Wizards\WizardPages\FeedbackWizard\" />
+    <Folder Include="Views\Wizards\WizardPages\BugReportWizard\" />
   </ItemGroup>
 </Project>
