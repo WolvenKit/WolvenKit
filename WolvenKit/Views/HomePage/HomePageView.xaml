@@ -23,7 +23,7 @@
 
     </catel:UserControl.Resources>
 
-    <Grid  hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="1024" MinHeight="720" >
+    <Grid  hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="1024" MinHeight="720" >
     
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="200,0,450,0">
             <Mid:TopicView x:Name="TopicViewer"/>
