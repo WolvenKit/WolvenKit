@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -131,7 +129,7 @@ namespace WolvenKit.Common.Wcc
                 catch (Exception ex)
                 {
                     _logger.LogString(ex.ToString(), Logtype.Error);
-                    throw ex;
+                    throw;
                 }
             }
         }

@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
-using CP77.CR2W.Archive;
 using Newtonsoft.Json;
 using ProtoBuf;
 using WolvenKit.Common;
@@ -62,10 +58,10 @@ namespace WolvenKit.Controllers
                     _settings.ManagerVersions[(int)EManagerType.BundleManager] = BundleManager.SerializationVersion;
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception)
             {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
-                    File.Delete(Tw3Controller.GetManagerPath(EManagerType.BundleManager));
+                if (File.Exists(GetManagerPath(EManagerType.BundleManager)))
+                    File.Delete(GetManagerPath(EManagerType.BundleManager));
                 bundleManager = new BundleManager();
                 bundleManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
@@ -229,10 +225,10 @@ namespace WolvenKit.Controllers
                     _settings.ManagerVersions[(int)EManagerType.SoundManager] = SoundManager.SerializationVersion;
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception)
             {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.SoundManager)))
-                    File.Delete(Tw3Controller.GetManagerPath(EManagerType.SoundManager));
+                if (File.Exists(GetManagerPath(EManagerType.SoundManager)))
+                    File.Delete(GetManagerPath(EManagerType.SoundManager));
                 soundManager = new SoundManager();
                 soundManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             }

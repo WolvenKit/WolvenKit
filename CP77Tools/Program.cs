@@ -4,14 +4,11 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using System.CommandLine;
 using System.ComponentModel;
-using System.Configuration;
 using System.IO;
-using System.Reflection;
 using CP77Tools.Commands;
 using CP77Tools.Extensions;
 using Luna.ConsoleProgressBar;
 using Microsoft.Win32;
-using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools
@@ -26,11 +23,10 @@ namespace CP77Tools
 
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
-            logger.OnStringLogged += delegate (object? sender, LogStringEventArgs args)
+            logger.OnStringLogged += delegate (object sender, LogStringEventArgs args)
             {
                 switch (args.Logtype)
                 {
-                    
                     case Logtype.Error:
                         Console.ForegroundColor = ConsoleColor.Red;
                         break;
@@ -101,7 +97,7 @@ namespace CP77Tools
                     var parsed = CommandLineExtensions.ParseText(line, ' ', '"');
 
                     logger.PropertyChanged += OnLoggerOnPropertyChanged;
-                    void OnLoggerOnPropertyChanged(object? sender, PropertyChangedEventArgs args)
+                    void OnLoggerOnPropertyChanged(object sender, PropertyChangedEventArgs args)
                     {
                         switch (args.PropertyName)
                         {
@@ -150,8 +146,12 @@ namespace CP77Tools
                     return;
 
                 var t = DateTime.Now.ToString("yyyyMMddHHmmss");
-                var fi = new FileInfo(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                    $"errorlogs/log_{t}.txt"));
+
+                var baseDirectory = AppContext.BaseDirectory;
+
+                if (string.IsNullOrEmpty(baseDirectory)) return;
+                
+                var fi = new FileInfo(Path.Combine(baseDirectory, $"errorlogs/log_{t}.txt"));
                 if (fi.Directory != null)
                 {
                     Directory.CreateDirectory(fi.Directory.FullName);
@@ -230,9 +230,9 @@ namespace CP77Tools
                 if (File.Exists(cp77exe))
                     cp77BinDir = new FileInfo(cp77exe).Directory.FullName;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-
+                return null;
             }
 
             if (string.IsNullOrEmpty(cp77BinDir))

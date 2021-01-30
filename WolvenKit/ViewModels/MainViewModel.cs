@@ -1021,7 +1021,6 @@ namespace WolvenKit.ViewModels
                 case EArchiveType.ANY:
                 default:
                     throw new NotImplementedException();
-                    break;
             }
             #endregion
 

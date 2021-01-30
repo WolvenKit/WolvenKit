@@ -14,12 +14,9 @@ namespace WolvenKit.ViewModels
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using System.Threading.Tasks;
     using Catel;
-    using Catel.Configuration;
-    using Catel.IoC;
     using Catel.MVVM;
     using Catel.Services;
     using Orc.Squirrel;
@@ -167,16 +164,15 @@ namespace WolvenKit.ViewModels
 
         private bool CanOpenMod() => true;
 
-        private async void ExecuteOpenMod()
+        private void ExecuteOpenMod()
         {
-            
         }
 
         public ICommand OpenDlcDirectoryCommand { get; private set; }
 
         private bool CanOpenDlc() => true;
 
-        private async void ExecuteOpenDlc()
+        private void ExecuteOpenDlc()
         {
             
         }
@@ -340,9 +336,9 @@ namespace WolvenKit.ViewModels
                     wccdel.Invoke(wcc);
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                
+                // TODO: Are we intentionally swallowing this?
             }
 
             if (File.Exists(witcherexe))

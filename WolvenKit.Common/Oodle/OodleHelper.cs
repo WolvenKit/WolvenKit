@@ -195,17 +195,13 @@ namespace WolvenKit.Common.Oodle
                                 $"Unpacked size {unpackedSize} doesn't match real size {size}");
                         bw.Write(outputBuffer);
                     }
-                    catch (DecompressionException e)
+                    catch (DecompressionException)
                     {
                         //logger.LogString(e.Message, Logtype.Error);
                         //logger.LogString(
                         //    $"Unable to decompress file {hash.ToString()}. Exporting uncompressed file",
                         //    Logtype.Error);
                         bw.Write(inputBuffer);
-                    }
-                    catch (Exception e)
-                    {
-                        throw e;
                     }
 
                 }

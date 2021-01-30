@@ -1,8 +1,5 @@
-﻿using RED.CRC32;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using CP77.CR2W.Types;
 
@@ -185,7 +182,7 @@ namespace CP77.CR2W
             if (unknownFlag)
             {
                 throw new NotImplementedException();
-                readstring = Encoding.Unicode.GetString(br.ReadBytes((len * 2) - 1));
+                // readstring = Encoding.Unicode.GetString(br.ReadBytes((len * 2) - 1));
             }
             else
                 readstring = Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(len - 1));

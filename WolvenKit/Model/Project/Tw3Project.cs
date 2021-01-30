@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using Catel;
 using Catel.IoC;
-using Catel.Threading;
-using Newtonsoft.Json;
 using Orc.Notifications;
-using ProtoBuf;
 namespace WolvenKit.Model
 {
     using Controllers;
@@ -389,7 +383,7 @@ namespace WolvenKit.Model
         // TODO: debug
         public override void Check() => _logger.LogString($"{initializeTask.Status.ToString()}", Logtype.Error);
 
-        public sealed override async Task Initialize()
+        public sealed override Task Initialize()
         {
             // if initializeTask is null
             if (initializeTask == null)
@@ -412,6 +406,7 @@ namespace WolvenKit.Model
                 }
             }
             
+            return initializeTask;
         }
 
         private async Task InitializeAsync()

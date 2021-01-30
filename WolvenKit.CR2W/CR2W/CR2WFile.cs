@@ -1,5 +1,4 @@
-﻿using Catel;
-using RED.CRC32;
+﻿using RED.CRC32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +14,6 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
 using WolvenKit.CR2W.Types.Utils;
-using System.Collections.ObjectModel;
 
 namespace WolvenKit.CR2W
 {
@@ -467,16 +465,16 @@ namespace WolvenKit.CR2W
             return (Imports, m_hasInternalBuffer, Buffers);
         }
 
-        public async Task<EFileReadErrorCodes> Read(byte[] data)
+        public async Task<EFileReadErrorCodes> ReadAsync(byte[] data)
         {
             await using (var ms = new MemoryStream(data))
             using (var br = new BinaryReader(ms))
             {
-                return await Read(br);
+                return await ReadAsync(br);
             }
         }
 
-        public async Task<EFileReadErrorCodes> Read(BinaryReader file)
+        public async Task<EFileReadErrorCodes> ReadAsync(BinaryReader file)
         {
             //m_stream = file.BaseStream;
 
@@ -491,11 +489,11 @@ namespace WolvenKit.CR2W
             // read file header
             var id = file.BaseStream.ReadStruct<uint>();
             if (id != MAGIC)
-                return EFileReadErrorCodes.NoCr2w;
+                return await Task.FromResult(EFileReadErrorCodes.NoCr2w);
 
             m_fileheader = file.BaseStream.ReadStruct<CR2WFileHeader>();
             if (m_fileheader.version > 195 || m_fileheader.version < 163)
-                return EFileReadErrorCodes.UnsupportedVersion;
+                return await Task.FromResult(EFileReadErrorCodes.UnsupportedVersion);
 
             var dt = new CDateTime(m_fileheader.timeStamp, null, "");
 
@@ -575,7 +573,7 @@ namespace WolvenKit.CR2W
             Logger?.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n", Logtype.Normal);
             stopwatch1.Stop();
             //m_stream = null;
-            return 0;
+            return await Task.FromResult(EFileReadErrorCodes.NoError);
         }
 
         public CR2WFile GetAdditionalCr2wFile()
@@ -585,7 +583,7 @@ namespace WolvenKit.CR2W
             using (var br2 = new BinaryReader(ms2))
             {
                 additionalCr2WFile = new CR2WFile();
-                additionalCr2WFile.Read(br2);
+                additionalCr2WFile.ReadAsync(br2).GetAwaiter().GetResult();
                 return additionalCr2WFile;
             }
         }

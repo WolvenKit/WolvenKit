@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using System.Threading.Tasks;
 using WolvenKit.Common;
-using WolvenKit.Common.Model;
 
 namespace WolvenKit.CR2W
 {
@@ -97,12 +96,12 @@ namespace WolvenKit.CR2W
         public async Task<CR2WFile> GetParsedFile()
         {
             var parsedFile = new CR2WFile();
-            switch (await parsedFile.Read(Data))
+            switch (await parsedFile.ReadAsync(Data))
             {
-                case (EFileReadErrorCodes)EFileReadErrorCodes.NoError:
+                case EFileReadErrorCodes.NoError:
                     break;
-                case (EFileReadErrorCodes)EFileReadErrorCodes.NoCr2w:
-                case (EFileReadErrorCodes)EFileReadErrorCodes.UnsupportedVersion:
+                case EFileReadErrorCodes.NoCr2w:
+                case EFileReadErrorCodes.UnsupportedVersion:
                     return null;
                 default:
                     throw new ArgumentOutOfRangeException();

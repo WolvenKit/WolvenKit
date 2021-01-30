@@ -2,7 +2,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -254,7 +253,7 @@ namespace CP77.CR2W
                             TexconvWrapper.Convert(di.FullName, $"{newpath}", uncookext);
                             uncooksuccess = true;
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                             uncooksuccess = false;
                         }

@@ -7,12 +7,10 @@
 
 namespace WolvenKit.Model.ProjectManagement
 {
-    using System.IO;
     using System.Threading.Tasks;
     using Catel;
     using Catel.Configuration;
     using Catel.Logging;
-    using Catel.Services;
     using Orc.CommandLine;
     using Orc.FileSystem;
 
@@ -47,12 +45,12 @@ namespace WolvenKit.Model.ProjectManagement
         #endregion
 
         #region Methods
-        public async Task<string> GetInitialProjectLocationAsync()
+        public Task<string> GetInitialProjectLocationAsync()
         {
             var commandLineContext = new CommandLineContext();
             _commandLineParser.Parse(_commandLineService.GetCommandLine(), commandLineContext);
 
-            return commandLineContext.InitialFile;
+            return Task.FromResult(commandLineContext.InitialFile);
         }
         #endregion
     }

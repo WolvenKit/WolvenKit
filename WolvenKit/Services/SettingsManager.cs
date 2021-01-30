@@ -1,12 +1,7 @@
 ﻿using MLib.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Xml.Serialization;
-using Catel.IoC;
-using Catel.MVVM;
-using WolvenKit.Commands;
 
 namespace WolvenKit.Services
 {
@@ -100,7 +95,7 @@ namespace WolvenKit.Services
                     };
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Defaults
                 config = new SettingsManager

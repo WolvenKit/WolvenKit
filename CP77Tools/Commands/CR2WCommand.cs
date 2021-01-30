@@ -5,8 +5,8 @@ namespace CP77Tools.Commands
 {
     public class CR2WCommand : Command
     {
-        private static string Name = "cr2w";
-        private static string Description = "Target a specific cr2w (extracted) file and dumps file information.";
+        private new const string Name = "cr2w";
+        private new const string Description = "Target a specific cr2w (extracted) file and dumps file information.";
 
         public CR2WCommand() : base(Name, Description)
         {
