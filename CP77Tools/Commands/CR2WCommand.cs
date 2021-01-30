@@ -14,8 +14,11 @@ namespace CP77Tools.Commands
             AddOption(new Option<string>(new []{"--outpath", "-o"}, "Output path."));
             AddOption(new Option<bool>(new[] {"--all", "-a"}, "Dump all information."));
             AddOption(new Option<bool>(new[] {"--chunks", "-c"}, "Dump all class information of file."));
+            AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern, e.g. *.ink. If both regex and pattern is defined, pattern will be used first"));
+            AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
 
-            Handler = CommandHandler.Create<string[], string, bool, bool>(Tasks.ConsoleFunctions.Cr2wTask);
+
+            Handler = CommandHandler.Create<string[], string, bool, bool, string, string>(Tasks.ConsoleFunctions.Cr2wTask);
         }
     }
 }

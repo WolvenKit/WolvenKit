@@ -88,7 +88,7 @@ namespace WolvenKit.Common.Oodle
                 //resize buffer
                 var writelist = new List<byte>()
                 {
-                    0x4B, 0x41, 0x52, 0x4B  //KRAKEN, TODO: make this variable and dependent on the compression algo
+                    0x4B, 0x41, 0x52, 0x4B  //KARK, TODO: make this dependent on the compression algo
                 };
                 writelist.AddRange(BitConverter.GetBytes(inputCount));
                 writelist.AddRange(compressedBuffer.Take(result));

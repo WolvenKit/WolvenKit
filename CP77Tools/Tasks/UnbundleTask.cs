@@ -112,33 +112,30 @@ namespace CP77Tools.Tasks
                 var isHash = ulong.TryParse(hash, out ulong hashNumber);
 
                 // run
+                if (!isHash && File.Exists(hash))
                 {
-                    if (!isHash && File.Exists(hash))
+                    var hashlist = File.ReadAllLines(hash)
+                        .ToList().Select(_ => ulong.TryParse(_, out ulong res) ? res : 0);
+                    logger.LogString($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...",
+                        Logtype.Normal);
+                    foreach (var hash_num in hashlist)
                     {
-                        var hashlist = File.ReadAllLines(hash)
-                            .ToList().Select(_ => ulong.TryParse(_, out ulong res) ? res : 0);
-                        logger.LogString($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...",
-                            Logtype.Normal);
-                        foreach (var hash_num in hashlist)
-                        {
-                            ar.ExtractSingle(hash_num, outDir);
-                            logger.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}", Logtype.Success);
-                        }
-
-                        logger.LogString($"Bulk extraction from hashlist file completed!", Logtype.Success);
-                    }
-                    else if (isHash && hashNumber != 0)
-                    {
-                        ar.ExtractSingle(hashNumber, outDir);
-                        logger.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}", Logtype.Success);
-                    }
-                    else
-                    {
-                        var r = ar.ExtractAll(outDir, pattern, regex);
-                        logger.LogString($"{ar.ArchiveAbsolutePath}: Extracted {r.Item1.Count}/{r.Item2} files.",
-                            Logtype.Success);
+                        ar.ExtractSingle(hash_num, outDir);
+                        logger.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}", Logtype.Success);
                     }
 
+                    logger.LogString($"Bulk extraction from hashlist file completed!", Logtype.Success);
+                }
+                else if (isHash && hashNumber != 0)
+                {
+                    ar.ExtractSingle(hashNumber, outDir);
+                    logger.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}", Logtype.Success);
+                }
+                else
+                {
+                    var r = ar.ExtractAll(outDir, pattern, regex);
+                    logger.LogString($"{ar.ArchiveAbsolutePath}: Extracted {r.Item1.Count}/{r.Item2} files.",
+                        Logtype.Success);
                 }
 
 
