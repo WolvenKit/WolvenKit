@@ -157,6 +157,42 @@
                     </Grid>
 
                     <Grid Grid.Column="1">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="auto" MinWidth="10" MaxWidth="500"/>
+                        <ColumnDefinition Width="auto"/>
+
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="1" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  >
+                        <Grid x:Name="PreviewGridAsset">  <!-- Use this grid for preview UC -->
+                            
+                        </Grid>
+
+
+
+
+                  
+
+                   
+                    </Grid>
+
+                    <GridSplitter   Grid.Row="0" Grid.Column="1" Margin="2,0,2,0"
+                  Width="3"   Height="40"      HorizontalAlignment="Left" 
+              VerticalAlignment="Stretch"
+              Background="{DynamicResource MahApps.Brushes.Accent3}" 
+              ShowsPreview="False" >
+
+                    </GridSplitter>
+
+            
+
+
+
+
+
+
                     <hc:TabControl IsAnimationEnabled="True" ShowCloseButton="True" IsDraggable="True"  >
                         <hc:TabItem Header="Depot"> <!-- Bind Header to selected item in treeview-->
                             <ListView BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" MouseDoubleClick="ListView_MouseDoubleClick" Background="Transparent" ItemsSource="{Binding CurrentNodeFiles}">
@@ -169,8 +205,11 @@
                             </ListView>
                         </hc:TabItem>
                     </hc:TabControl>
-             
-                 
+
+                    <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,15" Background="Transparent" BorderBrush="Transparent">
+                        <iconPacks:PackIconCodicons Kind="OpenPreview"></iconPacks:PackIconCodicons>
+
+                    </Button>
                 </Grid>
             </Grid>
 
