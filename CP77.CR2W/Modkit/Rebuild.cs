@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Catel.IoC;
 using WolvenKit.Common.Services;
 using WolvenKit.Common;
@@ -41,7 +39,7 @@ namespace CP77.CR2W
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
                 cr2w.Read(br);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -73,7 +71,7 @@ namespace CP77.CR2W
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
                 cr2w.ReadImportsAndBuffers(br);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -299,9 +297,6 @@ namespace CP77.CR2W
                                 fs.Seek(128, SeekOrigin.Begin);
                                 return br.ReadBytes((int)fs.Length - 128);
                             }
-                            break;
-                        default:
-                            break;
                     }
                 }
                 else

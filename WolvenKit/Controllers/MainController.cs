@@ -1,15 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Catel.IoC;
-using Microsoft.CodeAnalysis.CSharp;
-using ProtoBuf;
-using System.Diagnostics;
-using System.IO.Compression;
-using System.Reflection;
 
 namespace WolvenKit
 {
@@ -195,7 +188,7 @@ namespace WolvenKit
         /// Initializes the archive managers in an async thread
         /// </summary>
         /// <returns></returns>
-        public async Task Initialize()
+        public Task Initialize()
         {
             try
             {
@@ -265,8 +258,10 @@ namespace WolvenKit
             catch (Exception ex)
             {
                 mainController.Loaded = false;
-                System.Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message);
             }
+            
+            return Task.CompletedTask;
         }
 
         

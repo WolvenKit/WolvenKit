@@ -5,7 +5,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace WolvenKit.Model
 {
@@ -35,7 +34,7 @@ namespace WolvenKit.Model
                     return s;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MainController.LogString("Creating Csv file failed, please double-check your input.", Logtype.Error);
                 return null;
@@ -73,7 +72,7 @@ namespace WolvenKit.Model
                     return records;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MainController.LogString("Creating Csv file failed, please double-check your input.", Logtype.Error);
                 return null;

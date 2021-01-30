@@ -373,7 +373,7 @@ namespace WolvenKit.Model
         // TODO: debug
         public override void Check() => _logger.LogString($"{initializeTask.Status.ToString()}", Logtype.Error);
 
-        public sealed override async Task Initialize()
+        public sealed override Task Initialize()
         {
             // if initializeTask is null
             if (initializeTask == null)
@@ -396,9 +396,10 @@ namespace WolvenKit.Model
                 }
             }
 
+            return initializeTask;
         }
 
-        private async Task InitializeAsync()
+        private Task InitializeAsync()
         {
             // Hash all filepaths
             _logger.LogString("Starting additional tasks...", Logtype.Important);
@@ -413,6 +414,7 @@ namespace WolvenKit.Model
 
             ServiceLocator.Default.ResolveType<INotificationService>().ShowNotification("WolvenKit", $"Project {Name} has finished loading.");
 
+            return Task.CompletedTask;
         }
 
 

@@ -219,7 +219,9 @@ namespace WolvenKit.Layout.MLib
 		{
 			// Analyze the BOM
 			if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76)
+#pragma warning disable 618
 				return Encoding.UTF7;
+#pragma warning restore 618
 
 			if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf)
 				return Encoding.UTF8;

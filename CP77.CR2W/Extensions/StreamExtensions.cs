@@ -1,9 +1,6 @@
 ﻿using RED.CRC32;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-using CP77.CR2W.Types;
 
 namespace CP77.CR2W
 {
@@ -11,29 +8,20 @@ namespace CP77.CR2W
     {
         public static T ReadStruct<T>(this Stream m_stream, Crc32Algorithm crc32 = null) where T : struct
         {
-            try
-            {
-                var size = Marshal.SizeOf<T>();
+            var size = Marshal.SizeOf<T>();
 
-                var m_temp = new byte[size];
-                m_stream.Read(m_temp, 0, size);
+            var m_temp = new byte[size];
+            m_stream.Read(m_temp, 0, size);
 
-                var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
-                var item = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
+            var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
+            var item = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
 
-                if (crc32 != null)
-                    crc32.Append(m_temp);
+            if (crc32 != null)
+                crc32.Append(m_temp);
 
-                handle.Free();
+            handle.Free();
 
-                return item;
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-            
+            return item;
         }
         public static T[] ReadStructs<T>(this Stream m_stream, uint count, Crc32Algorithm crc32 = null) where T : struct
         {

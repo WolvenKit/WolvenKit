@@ -1,13 +1,11 @@
 ﻿using CsvHelper;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using Catel;
 using Catel.Services;
@@ -248,20 +246,8 @@ namespace WolvenKit.ViewModels
                 else
                 {
                     // import with wcc_lite
-                    try
-                    {
-                        await StartImport(file);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw ex;
-                    }
+                    await StartImport(file);
                 }
-               
-
-                
-
-                
             }
 
             async Task StartImport(ImportableFile file)

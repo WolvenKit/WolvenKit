@@ -6,8 +6,8 @@ namespace CP77Tools.Commands
 {
     public class HashCommand : Command
     {
-        private static string Name = "hash";
-        private static string Description = "Some helper functions related to hashes.";
+        private new const string Name = "hash";
+        private new const string Description = "Some helper functions related to hashes.";
 
         public HashCommand() : base(Name, Description)
         {

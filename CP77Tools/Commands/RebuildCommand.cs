@@ -5,8 +5,8 @@ namespace CP77Tools.Commands
 {
     public class RebuildCommand : Command
     {
-        private static string Name = "rebuild";
-        private static string Description = "Recombine split buffers and textures in a folder.";
+        private new const string Name = "rebuild";
+        private new const string Description = "Recombine split buffers and textures in a folder.";
         
         public RebuildCommand() : base(Name, Description)
         {
