@@ -107,7 +107,7 @@ namespace CP77.CR2W
                     fileBinaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
                     var cr2winbuffer = fileBinaryReader.ReadBytes(cr2wfilesize);
                     var offset = bw.BaseStream.Position;
-                    
+
                     var (zsize, crc) = bw.CompressAndWrite(cr2winbuffer);
                     ar.Index.FileSegments.Add(new FileSegment(
                         (ulong) offset, 
@@ -215,7 +215,9 @@ namespace CP77.CR2W
                 var r = OodleHelper.Compress(
                     inbuffer, 
                     (int)size,
-                    ref outBuffer);
+                    ref outBuffer, 
+                    OodleNative.OodleLZ_Compressor.Kraken, 
+                    OodleNative.OodleLZ_Compression.Normal);
 
                 var b = outBuffer.ToArray();
                 

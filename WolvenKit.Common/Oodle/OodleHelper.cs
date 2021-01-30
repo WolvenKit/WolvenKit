@@ -52,7 +52,7 @@ namespace WolvenKit.Common.Oodle
             // int outputOffset,
             // int outputCount,
             OodleNative.OodleLZ_Compressor algo = OodleNative.OodleLZ_Compressor.Kraken,
-            OodleNative.OodleLZ_Compression level = OodleNative.OodleLZ_Compression.Optimal5)
+            OodleNative.OodleLZ_Compression level = OodleNative.OodleLZ_Compression.Normal)
         {
             if (inputBytes == null)
                 throw new ArgumentNullException(nameof(inputBytes));
@@ -76,12 +76,14 @@ namespace WolvenKit.Common.Oodle
                     inputAddress,
                     inputCount,
                     outputAddress,
-                    compressedBufferSizeNeeded,
+                    (int)level,
                     IntPtr.Zero,
                     IntPtr.Zero,
                     IntPtr.Zero,
                     IntPtr.Zero,
-                    (int)level);
+                    (long)0
+                    );
+
                 inputHandle.Free();
                 outputHandle.Free();
 
@@ -139,7 +141,13 @@ namespace WolvenKit.Common.Oodle
         public static int GetCompressedBufferSizeNeeded(int count)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                return (int) OodleNative.GetCompressedBufferSizeNeeded((long) count);
+            {
+                var n = ((long)(count + 0x3ffff + (long)((uint)(count + 0x3ffff >> 0x3f) & 0x3ffff))
+                        >> 0x12) * 0x112 + count;
+                //var n  = OodleNative.GetCompressedBufferSizeNeeded((long)count);
+                return (int)n;
+            }
+                
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 try
                 {
