@@ -15,6 +15,7 @@
                             <TextBlock Text="CyberCAT" Margin="10,0,0,0"></TextBlock>
                         </StackPanel>
                     </hc:TabItem.Header>
+                    
                 </hc:TabItem>
 
 

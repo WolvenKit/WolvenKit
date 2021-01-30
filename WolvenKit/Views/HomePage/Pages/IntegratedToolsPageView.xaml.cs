@@ -6,6 +6,8 @@ namespace WolvenKit.Views.HomePage.Pages
         public IntegratedToolsPageView()
         {
             InitializeComponent();
+
+            GeneralTabItem.Content = new IntegratedToolsPages.CyberCAT.CyberCATPageView();
         }
     }
 }
