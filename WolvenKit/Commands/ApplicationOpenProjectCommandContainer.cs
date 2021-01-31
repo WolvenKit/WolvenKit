@@ -63,7 +63,7 @@ namespace WolvenKit
                 {
                     using (_pleaseWaitService.PushInScope())
                     {
-                        _projectManager.LoadAsync(location);
+                        await _projectManager.LoadAsync(location);
                     }
                 }
             }

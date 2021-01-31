@@ -46,7 +46,7 @@ namespace WolvenKit.Views.AssetBrowser
             this.DataContext = vm;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public new event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
