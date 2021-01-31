@@ -67,17 +67,8 @@ namespace CP77.CR2W.Types
         }
     }
 
-    [REDMeta]
-    public class RenderSceneLayerMask : CVariable
-    {
-        public RenderSceneLayerMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
 
-    [REDMeta]
-    public class workWorkspotItemPolicy : CVariable
-    {
-        public workWorkspotItemPolicy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
+    
     [REDMeta]
     public class MessageResourcePath : CVariable
     {
@@ -88,17 +79,5 @@ namespace CP77.CR2W.Types
     {
         public EditorObjectID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-    
-    [REDMeta]
-    public class animMuteAnimEvents : CVariable
-    {
-        public animMuteAnimEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
 
-    [REDMeta()]
-    public class physicsRagdollBodyPartE : CVariable, IREDPrimitive
-    {
-        public physicsRagdollBodyPartE(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
-    
 }

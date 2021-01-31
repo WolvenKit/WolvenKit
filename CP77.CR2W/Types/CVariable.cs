@@ -311,18 +311,18 @@ namespace CP77.CR2W.Types
                 // ... okay CDPR, is that a joke or what?
                 if (zero != 0)
                 {
-                    if (zero == 1)
+                    switch (zero)
                     {
-                        int joke = file.ReadInt32();
-                    }
-                    else if (zero == -128)
-                    {
-                        var dzero2 = file.ReadBit6();
-                        return;
-                    }
-                    else
-                    {
-                        throw new InvalidParsingException($"Tried parsing a CVariable: zero read {zero}.");
+                        case 1:
+                            int joke = file.ReadInt32();
+                            break;
+                        case -128:
+                            var dzero2 = file.ReadBit6();
+                            return;
+                        case -1:
+                            return;
+                        default:
+                            throw new InvalidParsingException($"Tried parsing a CVariable: zero read {zero}.");
                     }
                 }
                 #endregion

@@ -38,9 +38,41 @@ namespace CP77.CR2W.Types
 		{
 			EDAF_Togglable
 		}
-    
-    
-	    public enum ETextureRawFormat
+
+
+
+        public enum physicsRagdollBodyPartE
+		{
+			HEAD,
+            LARM_UPPER,
+            LARM_LOWER,
+            LARM_PALM,
+            RARM_UPPER,
+            RARM_LOWER,
+            RARM_PALM,
+            LLEG_UPPER,
+            LLEG_LOWER,
+            LLEG_FOOT,
+            RLEG_UPPER,
+            RLEG_LOWER,
+            RLEG_FOOT,
+            BODY
+		}
+
+        public enum animMuteAnimEvents
+		{
+            STANDARD,
+			FACE_ANIMS
+		}
+
+        public enum RenderSceneLayerMask
+        {
+            Default,
+            Cyberspace,
+            WorldMap
+        }
+
+        public enum ETextureRawFormat
 	    {
 		    TRF_Invalid,
 		    TRF_AlphaGrayscale,
@@ -77,11 +109,35 @@ namespace CP77.CR2W.Types
 		    TCM_HalfHDR_Signed,
 		    TCM_Max,
 	    }
-	    
-	    public enum Sample_Enum_As_Bitfield_2_9{}
-	    public enum Sample_Enum_As_Bitfield_2_2{}
-	    public enum scnChoiceNodeNsChoiceNodeBitFlags{}
-	    public enum gameLootSlotState{}
+
+        public enum Sample_Enum_As_Bitfield_2_9
+        {
+            Sample_Bitfield_Option_2_9_0
+		}
+
+        public enum Sample_Enum_As_Bitfield_2_2
+        {
+            Sample_Bitfield_Option_2_2_0
+		}
+
+        public enum scnChoiceNodeNsChoiceNodeBitFlags
+        {
+            IsFocusClue,
+            IsValidInteractionFailsafeDisabled
+		}
+
+        public enum gameLootSlotState
+        {
+            Looted,
+            Unavailable
+		}
+
+        public enum workWorkspotItemPolicy
+        {
+            ItemPolicy_SpawnItemOnIdleChange,
+            ItemPolicy_DespawnItemOnIdleChange,
+            ItemPolicy_DespawnItemOnReaction
+		}
 
         public enum worlduiContextVisibility
         {

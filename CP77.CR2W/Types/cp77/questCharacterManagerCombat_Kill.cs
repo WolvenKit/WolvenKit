@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questCharacterManagerCombat_Kill : questICharacterManagerCombat_NodeSubType
 	{
-		[Ordinal(0)]  [RED("bodyPart")] public physicsRagdollBodyPartE BodyPart { get; set; }
+		[Ordinal(0)]  [RED("bodyPart")] public CEnum<physicsRagdollBodyPartE> BodyPart { get; set; }
 		[Ordinal(1)]  [RED("dismembermentStrenght")] public CFloat DismembermentStrenght { get; set; }
 		[Ordinal(2)]  [RED("doDismemberment")] public CBool DoDismemberment { get; set; }
 		[Ordinal(3)]  [RED("isPlayer")] public CBool IsPlayer { get; set; }
