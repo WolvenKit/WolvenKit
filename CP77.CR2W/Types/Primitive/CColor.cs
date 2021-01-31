@@ -13,13 +13,13 @@ namespace CP77.CR2W.Types
     public class CColor : CVariable
     {
         [Browsable(false)]
-        [Ordinal(1)] [RED] public CUInt8 Red { get; set; }
+        [Ordinal(1)] [RED("Red")] public CUInt8 Red { get; set; }
         [Browsable(false)]
-        [Ordinal(2)][RED] public CUInt8 Green { get; set; }
+        [Ordinal(2)][RED("Green")] public CUInt8 Green { get; set; }
         [Browsable(false)]
-        [Ordinal(3)][RED] public CUInt8 Blue { get; set; }
+        [Ordinal(3)][RED("Blue")] public CUInt8 Blue { get; set; }
         [Browsable(false)]
-        [Ordinal(4)][RED] public CUInt8 Alpha { get; set; }
+        [Ordinal(4)][RED("Alpha")] public CUInt8 Alpha { get; set; }
 
 
         public CColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)

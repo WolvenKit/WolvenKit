@@ -124,9 +124,9 @@ namespace CP77.CR2W
         public string REDValue => this.ToString();
 
 
-        [NonSerialized]
-        [JsonIgnore]
-        public CBytes unknownBytes;
+        [NonSerialized] [JsonIgnore] public CBytes unknownBytes;
+
+        [NonSerialized] [JsonIgnore] public List<string> UnknownTypes = new();
 
 
         /// <summary>
@@ -438,6 +438,8 @@ namespace CP77.CR2W
             if (bytesLeft > 0)
             {
                 unknownBytes.Read(file, (uint)bytesLeft);
+                if (!UnknownTypes.Contains(data.REDType))
+                    UnknownTypes.Add(data.REDType);
             }
             else if (bytesLeft < 0)
             {
@@ -453,8 +455,8 @@ namespace CP77.CR2W
         {
             //await Task.Run(() =>
             //{
-            using (MemoryMappedViewStream vs = mmf.CreateViewStream(_export.dataOffset, _export.dataSize, MemoryMappedFileAccess.Read))
-            using (BinaryReader br = new BinaryReader(vs))
+            using (var vs = mmf.CreateViewStream(_export.dataOffset, _export.dataSize, MemoryMappedFileAccess.Read))
+            using (var br = new BinaryReader(vs))
             {
                 CreateDefaultData();
 

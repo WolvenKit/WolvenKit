@@ -121,6 +121,7 @@ namespace CP77.CR2W.Reflection
                 "string" => "CString",
                 "Color" => "CColor",
                 "Matrix" => "CMatrix",
+                "Variant" => "CVariant",
                 _ => typename
             };
         }

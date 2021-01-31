@@ -17,6 +17,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(6)]  [RED("parentRotationAltersTransformsOfNonDanglesAndItsChildren")] public CBool ParentRotationAltersTransformsOfNonDanglesAndItsChildren { get; set; }
 		[Ordinal(7)]  [RED("rotateParentToLookAtDangle")] public CBool RotateParentToLookAtDangle { get; set; }
 
+        [Ordinal(999)] [RED("debugDrawingEnabled")] public CBool debugDrawingEnabled { get; set; }
+
 		public animDangleConstraint_Simulation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

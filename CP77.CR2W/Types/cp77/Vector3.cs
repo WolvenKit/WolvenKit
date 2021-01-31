@@ -5,7 +5,7 @@ using static CP77.CR2W.Types.Enums;
 
 namespace CP77.CR2W.Types
 {
-	[REDMeta(EREDMetaInfo.REDStruct)]
+	[REDMeta]
 	public class Vector3 : CVariable
 	{
 		[Ordinal(0)]  [RED("X")] public CFloat X { get; set; }

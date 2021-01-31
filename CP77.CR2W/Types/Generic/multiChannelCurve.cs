@@ -12,7 +12,7 @@ namespace CP77.CR2W.Types
     /// A pointer to a chunk within the same cr2w file.
     /// </summary>
     [REDMeta]
-    public class multiChannelCurve<T> : CVariable where T : CVariable
+    public class multiChannelCurve<T> : CVariable, ICurveDataAccessor where T : CVariable
     {
        
 
@@ -20,53 +20,24 @@ namespace CP77.CR2W.Types
         {
         }
 
-        #region Properties
+        public string Elementtype { get; set; }
 
+        private List<CurvePoint<T>> Elements { get; set; } = new();
+        public uint Tail { get; set; }
 
-        #endregion
-
-        #region Methods
-
-
-        /// <summary>
-        /// Reads an int from the stream and stores a reference to a chunk.
-        /// A value of 0 means a null reference, all other chunk indeces are shifted by 1.
-        /// </summary>
-        /// <param name="file"></param>
-        /// <param name="size"></param>
         public override void Read(BinaryReader file, uint size)
         {
-            throw new NotImplementedException();
+            var pos = file.BaseStream.Position;
+            var count = file.ReadUInt32();
+
+
+            throw new NotImplementedException($"multiChannelCurve");
         }
 
-        private void SetValueInternal(int val)
+        public override List<IEditableVariable> GetEditableVariables()
         {
-            
+            return Elements.Cast<IEditableVariable>().ToList();
         }
-
-        public override void Write(BinaryWriter file)
-        {
-            
-        }
-
-        public override CVariable SetValue(object val)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override CVariable Copy(CR2WCopyAction context)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public override string REDLeanValue()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        #endregion
     }
 
 

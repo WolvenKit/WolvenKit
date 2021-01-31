@@ -5,7 +5,7 @@ using static CP77.CR2W.Types.Enums;
 
 namespace CP77.CR2W.Types
 {
-	[REDMeta(EREDMetaInfo.REDStruct)]
+	[REDMeta]
 	public class HDRColor : CVariable
 	{
 		[Ordinal(0)]  [RED("Alpha")] public CFloat Alpha { get; set; }

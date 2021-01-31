@@ -16,6 +16,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(5)]  [RED("weight")] public CFloat Weight { get; set; }
 		[Ordinal(6)]  [RED("weightNode")] public animFloatLink WeightNode { get; set; }
 
+		
+
 		public animAnimNode_FloatTrackDirectConnConstraint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

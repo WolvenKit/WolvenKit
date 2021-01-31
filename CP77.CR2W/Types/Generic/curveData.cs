@@ -9,7 +9,7 @@ using FastMember;
 
 namespace CP77.CR2W.Types
 {
-    [REDMeta]
+    [REDMeta(EREDMetaInfo.REDStruct)]
     public class CurvePoint<T> : CVariable where T : CVariable
     {
         public T Value { get; set; }
@@ -34,7 +34,7 @@ namespace CP77.CR2W.Types
 
         public string Elementtype { get; set; }
 
-        public List<CurvePoint<T>> Elements { get; set; } = new();
+        private List<CurvePoint<T>> Elements { get; set; } = new();
         public uint Tail { get; set; }
 
         public override void Read(BinaryReader file, uint size)
@@ -53,7 +53,7 @@ namespace CP77.CR2W.Types
                 // no actual way to find out the elementsize of an array element
                 // bacause cdpr serialized classes have no fixed size
                 // solution? not sure: pass 0 and disable checks?
-                element.Read(file, (uint)0);
+                element.ReadAsFixedSize(file, (uint)0);
                 point.Read(file, 4);
 
                 if (element is T te)

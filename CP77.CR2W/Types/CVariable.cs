@@ -279,7 +279,10 @@ namespace CP77.CR2W.Types
         /// <param name="size"></param>
         public virtual void ReadAsFixedSize(BinaryReader file, uint size)
         {
-            ReadAllRedVariables<REDAttribute>(file);
+            if (this is IREDPrimitive)
+                Read(file, size);
+            else
+                ReadAllRedVariables<REDAttribute>(file);
         }
 
         /// <summary>
@@ -446,7 +449,8 @@ namespace CP77.CR2W.Types
                     throw;
                 }
             }
-            Debug.WriteLine($"({value.REDType}){value.REDName} not found in ({this.REDType}){this.REDName}");
+            //throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.GetType()}){this.REDName}");
+            Console.WriteLine($"({value.REDType}){value.REDName} not found in ({this.UniqueIdentifier}){this.REDName}");
             return false;
 
             
