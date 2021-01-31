@@ -15,8 +15,8 @@ namespace WolvenKit.Controllers
 {
     public abstract class GameControllerBase
     {
-        public static string ManagerCacheDir => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ManagerCache");
-        public static string WorkDir => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "tmp_workdir");
+        public static string ManagerCacheDir => Path.Combine(AppContext.BaseDirectory, "ManagerCache");
+        public static string WorkDir => Path.Combine(AppContext.BaseDirectory, "tmp_workdir");
         public static string XBMDumpPath => Path.Combine(ManagerCacheDir, "__xbmdump_3768555366.csv");
 
         public abstract List<IGameArchiveManager> GetArchiveManagersManagers();

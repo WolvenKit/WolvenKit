@@ -20,7 +20,7 @@
 
 		#region Properties
 
-		public string Title
+		public new string Title
 		{
 			get => _title;
 			set
