@@ -35,11 +35,6 @@ namespace WolvenKit.Model
         private TextureManager TextureManager;
         private CollisionManager CollisionManager;
 
-        private BundleManager ModBundleManager;
-        private SoundManager ModSoundManager;
-        private TextureManager ModTextureManager;
-        private CollisionManager ModCollisionManager;
-
         private SpeechManager SpeechManager { get; set; }
 
         #endregion
