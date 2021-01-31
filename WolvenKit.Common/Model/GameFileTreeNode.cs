@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
@@ -41,6 +42,9 @@ namespace WolvenKit.Common
                     bundlename = bundlenodenames.First();
                 }
 
+                if (String.IsNullOrEmpty(bundlename))
+                    bundlename = EArchiveType.ANY.ToString();
+
                 return (EArchiveType)Enum.Parse(typeof(EArchiveType), bundlename);
             }
         }
@@ -62,6 +66,8 @@ namespace WolvenKit.Common
                 return path ?? "";
             }
         }
+
+        public List<GameFileTreeNode> SubDirectories => Directories.Values.ToList();
 
         public string Name { get; set; }
         public GameFileTreeNode Parent { get; set; }

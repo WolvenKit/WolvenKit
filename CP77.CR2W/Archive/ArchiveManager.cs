@@ -24,7 +24,7 @@ namespace CP77.CR2W.Archive
         public ArchiveManager()
         {
             Archives = new Dictionary<string, Archive>();
-            Files = new Dictionary<ulong, List<ArchiveItem>>();
+            Files = new Dictionary<ulong, List<FileEntry>>();
             Items = new Dictionary<string, List<IGameFile>>();
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
             hashService.ReloadLocally();
@@ -35,7 +35,7 @@ namespace CP77.CR2W.Archive
             _parentDirectoryInfo = indir;
 
             Archives = new Dictionary<string, Archive>();
-            Files = new Dictionary<ulong, List<ArchiveItem>>();
+            Files = new Dictionary<ulong, List<FileEntry>>();
             Items = new Dictionary<string, List<IGameFile>>();
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
             hashService.ReloadLocally();

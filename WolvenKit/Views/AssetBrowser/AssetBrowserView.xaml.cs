@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Catel.MVVM.Views;
 using Catel.Windows;
@@ -36,6 +37,7 @@ namespace WolvenKit.Views.AssetBrowser
                 vm.CurrentNode.Directories.Add(mngr.TypeName.ToString(), mngr.RootNode);
             }
             vm.CurrentNodeFiles = vm.CurrentNode.ToAssetBrowserData();
+            vm.RootNode = vm.CurrentNode;
             NotifyPropertyChanged();
             this.DataContext = vm;
         }

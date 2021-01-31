@@ -1,5 +1,4 @@
 ﻿using Catel.IoC;
-using CP77.CR2W.Resources;
 using Orchestra.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Services;
@@ -20,7 +19,6 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();
         serviceLocator.RegisterType<IHashService, HashService>();
         ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
-        ServiceLocator.Default.RegisterType<IAppSettingsService, AppSettingsService>();
 
         var hashService = ServiceLocator.Default.ResolveType<IHashService>();
         hashService.ReloadLocally();
