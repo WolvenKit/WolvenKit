@@ -8,8 +8,7 @@
         
         <Grid Margin="3,75,3,0">
          
-        </Grid>
-        
+        </Grid>      
         
         
         <Grid HorizontalAlignment="Right" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"></Grid>

@@ -19,17 +19,22 @@
 
         </Grid.RowDefinitions>
 
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15,15,0,0">
+            <Grid>
+                <iconPacks:PackIconCodicons  Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
 
-
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="5,5,5,4">
-            <iconPacks:PackIconCodicons  Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
-
-            <StackPanel  VerticalAlignment="Bottom" Orientation="Vertical" HorizontalAlignment="Stretch">
+            </Grid>
+            <StackPanel  VerticalAlignment="Center" Orientation="Vertical">
 
                 <TextBlock Text="Let's set you up!"  FontSize="20" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,0"></TextBlock>
-                <hc:Divider  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,10,0,0"></hc:Divider>
+                <hc:Divider  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,5,0,0"></hc:Divider>
             </StackPanel>
         </StackPanel>
+
+       
+
+        
+     
 
 
         <Grid x:Name="PageGrid" Grid.Row="1">
@@ -45,7 +50,7 @@
         <Grid Grid.Row="2"  VerticalAlignment="Bottom" Height="95" Margin="0,0,0,0">
 
             <Button  Margin="3" Width="50" Height="30" VerticalAlignment="Bottom" IsEnabled="True" hc:IconElement.Geometry="{StaticResource LeftGeometry}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Left" Click="Button_Click_1"/>
-            <hc:StepBar x:Name="StepMain" Margin="0,0,0,3" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Dock="Bottom"  >
+            <hc:StepBar x:Name="StepMain" Margin="50,0,50,3" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Dock="Bottom"  >
                 <hc:StepBarItem Content="Create User (Optional)" />
                 <hc:StepBarItem Content="Select Theme"/>
                 <hc:StepBarItem Content="Set Initial Preferences"/>
