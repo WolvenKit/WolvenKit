@@ -38,13 +38,6 @@ namespace WolvenKit.Model
 
         public abstract void Load(String path);
 
-
-        #region fields
-        [XmlIgnore]
-        private bool _isInitialized;
-
-        #endregion
-
         #region properties
         [XmlIgnore]
         [ReadOnly(true)]

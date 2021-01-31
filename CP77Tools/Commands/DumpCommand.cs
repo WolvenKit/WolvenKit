@@ -6,8 +6,8 @@ namespace CP77Tools.Commands
 {
     public class DumpCommand : Command
     {
-        private static string Name = "dump";
-        private static string Description = "Target an archive or a directory to dump archive information.";
+        private new const string Name = "dump";
+        private new const string Description = "Target an archive or a directory to dump archive information.";
         
         public DumpCommand() : base(Name, Description)
         {

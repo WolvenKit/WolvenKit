@@ -1,12 +1,8 @@
 ﻿using System;
 using Catel;
-using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
-using Orchestra;
-using Orchestra.Services;
 using System.Threading.Tasks;
-using Catel.Logging;
 using Orc.FileSystem;
 using Orc.ProjectManagement;
 using Orc.Notifications;
@@ -19,7 +15,7 @@ namespace WolvenKit
     {
         private readonly IOpenFileService _openFileService;
         private readonly IFileService _fileService;
-        private readonly IPleaseWaitService _pleaseWaitService;
+        private new readonly IPleaseWaitService _pleaseWaitService;
 
         public ApplicationOpenProjectCommandContainer(
             ICommandManager commandManager,
@@ -71,8 +67,9 @@ namespace WolvenKit
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                // TODO: Are we intentionally swallowing this?
                 //Log.Error(ex, "Failed to open file");
             }
         }

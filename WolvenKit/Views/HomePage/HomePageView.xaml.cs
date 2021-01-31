@@ -1,9 +1,7 @@
-﻿
-using HandyControl.Controls;
+﻿using HandyControl.Controls;
 using HandyControl.Data;
 using HandyControl.Tools;
 using Octokit;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -81,7 +79,9 @@ namespace WolvenKit.Views.HomePage
                 var general = await GhubClient.Repository.Get("WolvenKit", "Wolven-Kit");
                 var g_stars = general.StargazersCount;
                 var g_forks = general.ForksCount;
+#pragma warning disable 618
                 var g_watchers = general.SubscribersCount;  // Ignore that error its the only way to get the watchers atm. (Shit documentation online tbh)
+#pragma warning restore 618
 
 
                 WatchShield.SetCurrentValue(Shield.StatusProperty, g_watchers.ToString());
@@ -99,8 +99,8 @@ namespace WolvenKit.Views.HomePage
 
                 var item = new GithubTimeLine() { TitleLabel = latest.TagName, TitleInfo = latest.Name, TitleStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelViolet) };
 
-                var unresolvedbody = latest.Body;
-                var body = await ResolveBody(unresolvedbody);
+                var unresolvedBody = latest.Body;
+                var body = ResolveBody(unresolvedBody);
 
                 foreach (var line in body)
                 {
@@ -143,10 +143,10 @@ namespace WolvenKit.Views.HomePage
             catch { }
         }
 
-        private async Task<string[]> ResolveBody(string unresolvedbody)
+        private string[] ResolveBody(string unresolvedbody)
         {
-            var Step1 = Regex.Replace(unresolvedbody, @"^\s+$[\r\n]*", string.Empty, RegexOptions.Multiline);
-            var result = Regex.Split(Step1, "\r\n|\r|\n");
+            var step1 = Regex.Replace(unresolvedbody, @"^\s+$[\r\n]*", string.Empty, RegexOptions.Multiline);
+            var result = Regex.Split(step1, "\r\n|\r|\n");
 
             return result;
         }

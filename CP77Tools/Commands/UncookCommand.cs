@@ -7,8 +7,8 @@ namespace CP77Tools.Commands
 {
     public class UncookCommand : Command
     {
-        private static string Name = "uncook";
-        private static string Description = "Target an archive to uncook files.";
+        private new const string Name = "uncook";
+        private new const string Description = "Target an archive to uncook files.";
         
         public UncookCommand() : base(Name, Description)
         {

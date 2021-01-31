@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-//using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -35,8 +34,7 @@ namespace CP77Tools.Tasks
 
         public List<CR2WExportWrapper> Chunks { get; set; }
 
-        public List<CR2WExportWrapper.Cr2wVariableDumpObject> ChunkData { get; } =
-            new List<CR2WExportWrapper.Cr2wVariableDumpObject>();
+        public List<CR2WExportWrapper.Cr2wVariableDumpObject> ChunkData { get; } = new();
 
         public string Filename { get; set; }
     }
@@ -162,7 +160,7 @@ namespace CP77Tools.Tasks
                                 {
                                     cr2w.ReadImportsAndBuffers(br);
                                 }
-                                catch (Exception e)
+                                catch (Exception)
                                 {
                                     return;
                                 }
