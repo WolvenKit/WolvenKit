@@ -11,7 +11,6 @@
     <ProjectGuid>{1DD8B40B-2548-4663-B208-1D107EF47ACF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <StartupObject />
-    <NoWarn>$(NoWarn);SA1652</NoWarn>
     <ApplicationIcon>Wkit_Icon_Flattened_256x.ico</ApplicationIcon>
 	<PublishSingleFile>true</PublishSingleFile>
 	<SelfContained>false</SelfContained>
@@ -19,6 +18,8 @@
 	<PublishTrimmed>true</PublishTrimmed>
 	<PublishReadyToRun>true</PublishReadyToRun>
 	<DebugType>embedded</DebugType>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
   </PropertyGroup>
 
