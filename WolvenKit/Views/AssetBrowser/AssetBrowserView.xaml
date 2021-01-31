@@ -42,40 +42,32 @@
                             <Menu Background="Transparent" VerticalAlignment="Center">
                                 <MenuItem Header="View">
                                     <MenuItem Header="Empty">
-
                                     </MenuItem>
                                     <MenuItem Header="Empty">
-
                                     </MenuItem>
                                 </MenuItem>
                                 <MenuItem Header="Edit">
                                     <MenuItem Header="Empty">
-
                                     </MenuItem>
                                     <MenuItem Header="Empty">
-
                                     </MenuItem>
                                     <MenuItem Header="Empty">
-
                                     </MenuItem>
                                 </MenuItem>
                                 <MenuItem Header="Bookmarks"/>
                                 <MenuItem Header="Tabs"/>
-
                             </Menu>
                         </ToolBar>
 
-
-
-                        <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
+                    <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                             <Menu Background="Transparent" VerticalAlignment="Center">
                                 <Button Background="Transparent" BorderBrush="{x:Null}">
                                     <!-- Back button-->
                                     <iconPacks:Codicons Kind="ArrowLeft"/>
                                 </Button>
-                                <Button Background="Transparent" BorderBrush="{x:Null}">
+                                <Button Background="Transparent" BorderBrush="{x:Null}" Click="ButtonBase_OnClick">
                                     <!-- Folder button-->
-                                    <iconPacks:Codicons Kind="Folder"/>
+                                    <iconPacks:Codicons Kind="Home"/>
                                 </Button>
                             <hc:TextBox Text="{Binding Path=CurrentNode.FullPath, Mode=OneWay}" Width="500"></hc:TextBox>
 
@@ -89,21 +81,31 @@
                         <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                             <Menu Background="Transparent" VerticalAlignment="Center">
                                 <TextBlock Text="Class :"/>
-                            <hc:ComboBox ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" MinWidth="100"></hc:ComboBox>
-                                <!--Classes Box-->
+                            <hc:ComboBox ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" MinWidth="100">
+                                <ComboBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel />
+                                    </ItemsPanelTemplate>
+                                </ComboBox.ItemsPanel>
+                            </hc:ComboBox>
+                        </Menu>
+                        </ToolBar>
+
+                        <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
+                            <Menu Background="Transparent" VerticalAlignment="Center">
+                            <hc:SearchBar  MinWidth="100" SearchStarted="SearchBar_OnSearchStarted" hc:InfoElement.Placeholder="Search something"></hc:SearchBar>
                             </Menu>
                         </ToolBar>
 
                         <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                             <Menu Background="Transparent" VerticalAlignment="Center">
-                                <hc:SearchBar MinWidth="100" Text="Search something"></hc:SearchBar>
-                                <!-- Search bar-->
-                            </Menu>
-                        </ToolBar>
-
-                        <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
-                            <Menu Background="Transparent" VerticalAlignment="Center">
-                            <hc:ComboBox ItemsSource="{Binding Extensions}" SelectedItem="{Binding SelectedExtension}" MinWidth="100"></hc:ComboBox>
+                            <hc:ComboBox ItemsSource="{Binding Extensions}" SelectedItem="{Binding SelectedExtension}" MinWidth="100">
+                                <ComboBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel />
+                                    </ItemsPanelTemplate>
+                                </ComboBox.ItemsPanel>
+                            </hc:ComboBox>
                         </Menu>
                         </ToolBar>
 
@@ -151,8 +153,8 @@
                             <ListView BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" MouseDoubleClick="ListView_MouseDoubleClick" Background="Transparent" ItemsSource="{Binding CurrentNodeFiles}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
-                                        <GridViewColumn Header="Size" DisplayMemberBinding="{Binding Size}"/>
+                                        <GridViewColumn Width="Auto" Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                                        <GridViewColumn Width="Auto" Header="Size" DisplayMemberBinding="{Binding Size}"/>
                                     </GridView>
                                 </ListView.View>
                             </ListView>

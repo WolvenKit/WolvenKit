@@ -43,5 +43,36 @@ namespace WolvenKit.ViewModels.AssetBrowser
             this.Extensions = managers.SelectMany(x => x.Extensions).ToList();
             this.Classes = AvaliableClasses;
         }
+
+        public void PerformSearch(string query)
+        {
+            var newnode = new GameFileTreeNode()
+            {
+                Name = "",
+                Parent = CurrentNode,
+                Directories = new Dictionary<string, GameFileTreeNode>(),
+                Files = new Dictionary<string, List<IGameFile>>()
+            };
+            newnode.Files = Managers.SelectMany(_ => CollectFiles(query, _)).GroupBy(x => x.Name).Select(x => x.First())
+                .Select(f => new KeyValuePair<string, List<IGameFile>>(f.Name, new List<IGameFile>(){f})).ToDictionary(x => x.Key, x => x.Value);
+            this.CurrentNode = newnode;
+            CurrentNodeFiles = CurrentNode.ToAssetBrowserData();
+        }
+
+        public List<IGameFile> CollectFiles(string searchkeyword, IGameArchiveManager root)
+        {
+            var ret = new Dictionary<string, IGameFile>();
+            foreach (var f in root.FileList)
+            {
+                if (f.Name.ToUpper().Contains(searchkeyword.ToUpper()))
+                {
+                    if(!ret.ContainsKey(f.Name))
+                        ret.TryAdd(f.Name, f);
+                }
+            }
+            return ret.Values.ToList();
+        }
+
+        
     }
 }

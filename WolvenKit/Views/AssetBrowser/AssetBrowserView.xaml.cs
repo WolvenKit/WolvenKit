@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Catel.MVVM.Views;
 using Catel.Windows;
+using HandyControl.Data;
 using WolvenKit.Bundles;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
@@ -18,6 +19,7 @@ namespace WolvenKit.Views.AssetBrowser
 {
     public partial class AssetBrowserView : DataWindow, INotifyPropertyChanged
     {
+        private AssetBrowserViewModel viewmodel;
 
         public AssetBrowserView(List<IGameArchiveManager> managers, List<string> AvaliableClasses) : base(DataWindowMode.Custom)
         {
@@ -26,6 +28,7 @@ namespace WolvenKit.Views.AssetBrowser
             var vm = new AssetBrowserViewModel(managers, AvaliableClasses);
             NotifyPropertyChanged();
             this.DataContext = vm;
+            viewmodel = vm;
         }
 
         public new event PropertyChangedEventHandler PropertyChanged;
@@ -87,6 +90,17 @@ namespace WolvenKit.Views.AssetBrowser
                         throw new ArgumentOutOfRangeException();
                 }
             }
+        }
+
+        private void SearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
+        {
+            viewmodel.PerformSearch(e.Info);
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            viewmodel.CurrentNode = viewmodel.RootNode;
+            viewmodel.CurrentNodeFiles = viewmodel.RootNode.ToAssetBrowserData();
         }
     }
 }
