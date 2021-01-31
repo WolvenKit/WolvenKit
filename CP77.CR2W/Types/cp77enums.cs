@@ -82,10 +82,39 @@ namespace CP77.CR2W.Types
 	    public enum Sample_Enum_As_Bitfield_2_2{}
 	    public enum scnChoiceNodeNsChoiceNodeBitFlags{}
 	    public enum gameLootSlotState{}
-	    public enum worlduiContextVisibility{}
-	    public enum gameEItemDynamicTags{}
 
-	    public enum entdismembermentPlacementE
+        public enum worlduiContextVisibility
+        {
+            SceneDefault,
+            SceneTier1,
+            SceneTier2,
+            SceneTier3,
+            SceneTier4,
+            SceneTier5
+		}
+
+        public enum gameEItemDynamicTags
+        {
+            Quest,
+            UnequipBlocked
+		}
+
+		public enum gameuiContext
+        {
+			Default = 0,
+            QuickHack = 1,
+            Scanning = 2,
+            DeviceZoom = 3,
+            BraindanceEditor = 4,
+            BraindancePlayback = 5,
+            VehicleMounted = 6,
+            ModalPopup = 7,
+            RadialWheel = 8,
+            VehicleRace = 9,
+		}
+
+
+		public enum entdismembermentPlacementE
 	    {
 		    MAIN_MESH,
 		    DISM_MESH,

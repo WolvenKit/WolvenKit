@@ -160,9 +160,10 @@ namespace CP77.CR2W.Types
             {
                 var s = Value.Last();
                 var finalvalue = CVariable.NormalizeName(s);
-                
-                T en = (T)Enum.Parse(WrappedEnum.GetType(), finalvalue);
-                WrappedEnum = en;
+
+
+                if (Enum.TryParse(WrappedEnum.GetType(), finalvalue, out var par))
+                    WrappedEnum = (T)par;
             }
 
             return this;

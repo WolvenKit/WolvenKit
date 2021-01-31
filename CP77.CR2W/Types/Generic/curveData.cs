@@ -5,9 +5,21 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml;
 using CP77.CR2W.Reflection;
+using FastMember;
 
 namespace CP77.CR2W.Types
 {
+    [REDMeta]
+    public class CurvePoint<T> : CVariable where T : CVariable
+    {
+        public T Value { get; set; }
+        public CFloat Point { get; set; }
+
+        public CurvePoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+    }
+
+
+
     /// <summary>
     /// A pointer to a chunk within the same cr2w file.
     /// </summary>
@@ -22,7 +34,7 @@ namespace CP77.CR2W.Types
 
         public string Elementtype { get; set; }
 
-        public List<T> Elements { get; set; } = new List<T>();
+        public List<CurvePoint<T>> Elements { get; set; } = new();
         public uint Tail { get; set; }
 
         public override void Read(BinaryReader file, uint size)
@@ -30,24 +42,28 @@ namespace CP77.CR2W.Types
             var pos = file.BaseStream.Position;
             var count = file.ReadUInt32();
 
-            var elementcount = count * 2;
-            if (count == 2 && size == 26) //FIXME: pls
+            
+            for (int i = 0; i < count; i++)
             {
-                elementcount = 5;
-            }
+                var cpoint = new CurvePoint<T>(cr2w, this, i.ToString()) {IsSerialized = true};
 
-            for (int i = 0; i < elementcount; i++)
-            {
-                CVariable element = CR2WTypeManager.Create(Elementtype, i.ToString(), cr2w, this);
+                var point = new CFloat(cr2w, cpoint, "point") { IsSerialized = true };
+                CVariable element = CR2WTypeManager.Create(Elementtype, i.ToString(), cr2w, cpoint);
 
                 // no actual way to find out the elementsize of an array element
                 // bacause cdpr serialized classes have no fixed size
                 // solution? not sure: pass 0 and disable checks?
                 element.Read(file, (uint)0);
+                point.Read(file, 4);
+
                 if (element is T te)
                 {
                     te.IsSerialized = true;
-                    Elements.Add(te);
+
+                    cpoint.Point = point;
+                    cpoint.Value = te;
+
+                    Elements.Add(cpoint);
                 }
             }
 

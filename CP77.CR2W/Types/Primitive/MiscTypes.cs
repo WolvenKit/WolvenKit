@@ -88,11 +88,7 @@ namespace CP77.CR2W.Types
     {
         public EditorObjectID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-    [REDMeta]
-    public class gameuiContext : CVariable
-    {
-        public gameuiContext(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
+    
     [REDMeta]
     public class animMuteAnimEvents : CVariable
     {
