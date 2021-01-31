@@ -153,7 +153,7 @@
                             <ListView BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" MouseDoubleClick="ListView_MouseDoubleClick" Background="Transparent" ItemsSource="{Binding CurrentNodeFiles}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Width="Auto" Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                                        <GridViewColumn Width="500" Header="Name" DisplayMemberBinding="{Binding Name}"/>
                                         <GridViewColumn Width="Auto" Header="Size" DisplayMemberBinding="{Binding Size}"/>
                                     </GridView>
                                 </ListView.View>

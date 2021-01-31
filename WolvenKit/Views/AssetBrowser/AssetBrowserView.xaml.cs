@@ -62,33 +62,7 @@ namespace WolvenKit.Views.AssetBrowser
             var item = ((FrameworkElement)e.OriginalSource).DataContext as AssetBrowserData;
             if (item != null)
             {
-                switch (item.Type)
-                {
-                    case EntryType.Directory:
-                    {
-                        vm.CurrentNode = item.Children;
-                        vm.CurrentNode.Parent = item.This;
-                        vm.CurrentNodeFiles = item.Children.ToAssetBrowserData();
-                        break;
-                    }
-                    case EntryType.File:
-                    {
-                        MessageBox.Show(this, "Importing file: " + item.Name, "File import", MessageBoxButton.OK,
-                            MessageBoxImage.Information);
-                        break;
-                    }
-                    case EntryType.MoveUP:
-                    {
-                        if(item.Parent != null)
-                        {
-                            vm.CurrentNode = item.Parent;
-                            vm.CurrentNodeFiles = item.Parent.ToAssetBrowserData();
-                        }
-                        break;
-                    }
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                viewmodel.ImportFile(item);
             }
         }
 
