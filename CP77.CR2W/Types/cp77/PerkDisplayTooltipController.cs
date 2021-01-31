@@ -18,7 +18,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(7)]  [RED("perkNameText")] public inkTextWidgetReference PerkNameText { get; set; }
 		[Ordinal(8)]  [RED("perkTypeText")] public inkTextWidgetReference PerkTypeText { get; set; }
 		[Ordinal(9)]  [RED("perkTypeWrapper")] public inkWidgetReference PerkTypeWrapper { get; set; }
-		[Ordinal(10)]  [RED("root")] public inkWidgetReference Root { get; set; }
+		[Ordinal(10)]  [RED("root")] public new inkWidgetReference Root { get; set; }
 		[Ordinal(11)]  [RED("traitLevelGrowthText")] public inkTextWidgetReference TraitLevelGrowthText { get; set; }
 		[Ordinal(12)]  [RED("unlockInfoWrapper")] public inkWidgetReference UnlockInfoWrapper { get; set; }
 		[Ordinal(13)]  [RED("unlockPerkWrapper")] public inkWidgetReference UnlockPerkWrapper { get; set; }

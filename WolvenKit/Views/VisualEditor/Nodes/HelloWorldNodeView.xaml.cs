@@ -36,7 +36,7 @@ namespace WolvenKit.Views.VisualEditor.Nodes
         object IViewFor.ViewModel
         {
             get => ViewModel;
-            set => ViewModel = (HelloWorldNode)value;
+            set => SetValue(ViewModelProperty, (HelloWorldNode)value);
         }
         #endregion
 

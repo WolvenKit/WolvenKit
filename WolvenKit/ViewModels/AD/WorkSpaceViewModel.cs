@@ -32,13 +32,7 @@ namespace WolvenKit.ViewModels
 		private readonly ObservableCollection<DocumentViewModel> _files = new ObservableCollection<DocumentViewModel>();
 		private ToolViewModel[] _tools = null;
 
-		private ICommand _openCommand = null;
-		private ICommand _newCommand = null;
-
-
 		private DocumentViewModel _activeDocument = null;
-
-		private int _newDocumentCounter = 0;
 
         private readonly IMessageService _messageService;
         private readonly ILoggerService _loggerService;

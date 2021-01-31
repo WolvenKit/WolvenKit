@@ -162,7 +162,6 @@ namespace WolvenKit.ViewModels
 
         public event EventHandler PerformStep = delegate { };
         protected void OnPerformStepRequest() => this.PerformStep?.Invoke(this, new EventArgs());
-        public event EventHandler Reset = delegate { };
         protected void OnResetRequest() => this.PerformStep?.Invoke(this, new EventArgs());
 
         #region Fields

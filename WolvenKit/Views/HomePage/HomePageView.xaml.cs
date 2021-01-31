@@ -79,7 +79,9 @@ namespace WolvenKit.Views.HomePage
                 var general = await GhubClient.Repository.Get("WolvenKit", "Wolven-Kit");
                 var g_stars = general.StargazersCount;
                 var g_forks = general.ForksCount;
+#pragma warning disable 618
                 var g_watchers = general.SubscribersCount;  // Ignore that error its the only way to get the watchers atm. (Shit documentation online tbh)
+#pragma warning restore 618
 
 
                 WatchShield.SetCurrentValue(Shield.StatusProperty, g_watchers.ToString());
