@@ -1,5 +1,6 @@
 ﻿using Catel.IoC;
 using Orchestra.Services;
+using WolvenKit.Common.Services;
 using WolvenKit.Services;
 
 /// <summary>
@@ -16,5 +17,10 @@ public static class ModuleInitializer
 
         serviceLocator.RegisterType<IRibbonService, RibbonService>();
         serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();
+        serviceLocator.RegisterType<IHashService, HashService>();
+        ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
+
+        var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+        hashService.ReloadLocally();
     }
 }

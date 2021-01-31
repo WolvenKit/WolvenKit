@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using Catel.IoC;
 using WolvenKit.Common.Services;
@@ -28,12 +29,12 @@ namespace CP77.CR2W.Archive
         public string Extension => Path.GetExtension(FileName);
 
         public IGameArchive Archive { get; set; }
-        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public uint Size { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public uint ZSize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public long PageOffset { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Name { get; set; }
+        public uint Size { get; set; }
+        public uint ZSize { get; set; }
+        public long PageOffset { get; set; }
 
-        public string CompressionType => throw new NotImplementedException();
+        public string CompressionType { get; set; }
 
         public FileEntry(BinaryReader br, IGameArchive parent)
         {
@@ -61,7 +62,9 @@ namespace CP77.CR2W.Archive
             NameHash64 = br.ReadUInt64();
 
             if (mainController != null && mainController.Hashdict.ContainsKey(NameHash64))
+            {
                 _nameStr = mainController.Hashdict[NameHash64];
+            }
 
             // x-platform support
             if (System.Runtime.InteropServices.RuntimeInformation
@@ -81,6 +84,11 @@ namespace CP77.CR2W.Archive
             ResourceDependenciesEnd = br.ReadUInt32();
 
             SHA1Hash = br.ReadBytes(20);
+
+            if (!string.IsNullOrEmpty(_nameStr))
+                Name = _nameStr;
+            else
+                Name = NameHash64.ToString();
         }
 
         public void Write(BinaryWriter bw)

@@ -69,6 +69,11 @@ namespace WolvenKit
             controller.HandleStartup();
         }
 
+        public GameControllerBase GetGame()
+        {
+            return gameController;
+        }
+
         #region Fields
 
 

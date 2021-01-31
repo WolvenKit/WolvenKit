@@ -61,7 +61,8 @@ namespace WolvenKit.ViewModels
 
 
             CheckForUpdates = _settingsManager.CheckForUpdates;
-            ExecutablePath = _settingsManager.ExecutablePath;
+            W3ExePath = _settingsManager.W3ExecutablePath;
+            CP77ExePath = _settingsManager.CP77ExecutablePath;
             WccLitePath = _settingsManager.WccLitePath;
             GameModDir = _settingsManager.GameModDir;
             GameDlcDir = _settingsManager.GameDlcDir;
@@ -72,7 +73,7 @@ namespace WolvenKit.ViewModels
 
             // automatically scan the registry for exe paths for wcc and tw3
             // if either text field is empty
-            if (string.IsNullOrEmpty(ExecutablePath) || string.IsNullOrEmpty(WccLitePath))
+            if (string.IsNullOrEmpty(W3ExePath) || string.IsNullOrEmpty(WccLitePath) || string.IsNullOrEmpty(CP77ExePath))
             {
                 exeSearcherSlave_DoWork();
             }
@@ -83,8 +84,9 @@ namespace WolvenKit.ViewModels
         public bool IsUpdateSystemAvailable { get; private set; }
         public bool CheckForUpdates { get; set; }
 
-        public string ExecutablePath { get; set; }
-        public string ExecutablePathBG => string.IsNullOrEmpty(ExecutablePath) ? redBG : greenBG;
+        public string W3ExePath { get; set; }
+        public string CP77ExePath { get; set; }
+        public string ExecutablePathBG => string.IsNullOrEmpty(W3ExePath) ? redBG : greenBG;
 
         private string _wccLitePath;
         public string WccLitePath
@@ -135,7 +137,7 @@ namespace WolvenKit.ViewModels
 
             if (result.Result)
             {
-                ExecutablePath = result.FileName;
+                W3ExePath = result.FileName;
             }
         }
 
@@ -201,7 +203,8 @@ namespace WolvenKit.ViewModels
             //_updateService.CurrentChannel = UpdateChannel;
 
             _settingsManager.CheckForUpdates = CheckForUpdates;
-            _settingsManager.ExecutablePath = ExecutablePath;
+            _settingsManager.W3ExecutablePath = W3ExePath;
+            _settingsManager.CP77ExecutablePath = CP77ExePath;
             _settingsManager.WccLitePath = WccLitePath;
             _settingsManager.GameDlcDir = GameDlcDir;
             _settingsManager.GameModDir = GameModDir;
@@ -213,14 +216,14 @@ namespace WolvenKit.ViewModels
 
         private void SetDefaultModDir()
         {
-            if (string.IsNullOrEmpty(ExecutablePath))
-                ExecutablePath = witcherexe;
+            if (string.IsNullOrEmpty(W3ExePath))
+                W3ExePath = witcherexe;
 
             if (string.IsNullOrEmpty(GameModDir) || !Directory.Exists(GameModDir))
             {
-                if (File.Exists(ExecutablePath) && Path.GetExtension(ExecutablePath) == ".exe" && ExecutablePath.Contains("witcher3.exe"))
+                if (File.Exists(W3ExePath) && Path.GetExtension(W3ExePath) == ".exe" && W3ExePath.Contains("witcher3.exe"))
                 {
-                    var tw3ExeDirectory = new FileInfo(ExecutablePath).Directory;
+                    var tw3ExeDirectory = new FileInfo(W3ExePath).Directory;
                     var tw3Directory = tw3ExeDirectory?.Parent?.Parent;
                     if (tw3Directory != null)
                     {
@@ -236,14 +239,14 @@ namespace WolvenKit.ViewModels
 
         private void SetDefaultDlcDir()
         {
-            if (string.IsNullOrEmpty(ExecutablePath))
-                ExecutablePath = witcherexe;
+            if (string.IsNullOrEmpty(W3ExePath))
+                W3ExePath = witcherexe;
 
             if (string.IsNullOrEmpty(GameDlcDir) || !Directory.Exists(GameDlcDir))
             {
-                if (File.Exists(ExecutablePath) && Path.GetExtension(ExecutablePath) == ".exe" && ExecutablePath.Contains("witcher3.exe"))
+                if (File.Exists(W3ExePath) && Path.GetExtension(W3ExePath) == ".exe" && W3ExePath.Contains("witcher3.exe"))
                 {
-                    var tw3ExeDirectory = new FileInfo(ExecutablePath).Directory;
+                    var tw3ExeDirectory = new FileInfo(W3ExePath).Directory;
                     var tw3Directory = tw3ExeDirectory?.Parent?.Parent;
                     if (tw3Directory != null)
                     {
@@ -267,6 +270,7 @@ namespace WolvenKit.ViewModels
             const string uninstallkey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
             var w3 = "";
             var wcc = "";
+            var cp77 = "";
             try
             {
                 StrDelegate w3del = msg => witcherexe = msg;
@@ -319,6 +323,13 @@ namespace WolvenKit.ViewModels
                                 w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
                                 SearchOption.AllDirectories).First();
                         }
+
+                        if (programName.ToString().Contains("Cyberpunk 2077"))
+                        {
+                            if (Directory.Exists(installLocation.ToString()))
+                                w3 = Directory.GetFiles(installLocation.ToString(), "Cyberpunk2077.exe",
+                                    SearchOption.AllDirectories).First();
+                        }
                     }
 
                     w3del.Invoke(w3);
@@ -331,9 +342,11 @@ namespace WolvenKit.ViewModels
             }
 
             if (File.Exists(witcherexe))
-                ExecutablePath = witcherexe;
+                W3ExePath = witcherexe;
             if (File.Exists(wccLiteexe))
                 WccLitePath = wccLiteexe;
+            if (File.Exists(cp77))
+                CP77ExePath = cp77;
 
 
             // get the depot path

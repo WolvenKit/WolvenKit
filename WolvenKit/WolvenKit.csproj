@@ -304,4 +304,9 @@
     <Folder Include="Views\SettingsPages\SubPages\Packaging\" />
     <Folder Include="Views\Wizards\WizardPages\InstallerWizard\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+    </Compile>
+  </ItemGroup>
 </Project>
