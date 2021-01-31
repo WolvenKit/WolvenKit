@@ -49,12 +49,16 @@ namespace WolvenKit.Controllers
                 {
                     bundleManager = new BundleManager();
                     bundleManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
-                    File.WriteAllText(Tw3Controller.GetManagerPath(EManagerType.BundleManager), JsonConvert.SerializeObject(bundleManager, Formatting.None, new JsonSerializerSettings()
+                    using (StreamWriter writer = new StreamWriter(
+                        new FileStream(Tw3Controller.GetManagerPath(EManagerType.BundleManager), FileMode.Open)))
                     {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                        TypeNameHandling = TypeNameHandling.Auto
-                    }));
+                        writer.Write(JsonConvert.SerializeObject(bundleManager, Formatting.None, new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                            TypeNameHandling = TypeNameHandling.Auto
+                        }));
+                    }
                     _settings.ManagerVersions[(int)EManagerType.BundleManager] = BundleManager.SerializationVersion;
                 }
             }

@@ -436,12 +436,17 @@ namespace WolvenKit.ViewModels
         {
             if (ActiveMod == null)
                 return;
-
-            Treenodes.Clear();
+            System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke((Action)(() =>
+            {
+                Treenodes.Clear();
+            }));
             var fileDirectoryInfo = new DirectoryInfo(ActiveMod.FileDirectory);
             foreach (var fileSystemInfo in fileDirectoryInfo.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly))
             {
-                Treenodes.Add(new FileSystemInfoModel(fileSystemInfo, null));
+                System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke((Action)(() =>
+                {
+                    Treenodes.Add(new FileSystemInfoModel(fileSystemInfo, null));
+                }));
             }
         }
 
@@ -451,7 +456,7 @@ namespace WolvenKit.ViewModels
             if (activeProject == null)
                 return TaskHelper.Completed;
 
-            RepopulateTreeView();
+            RepopulateTreeView(); 
 
             return TaskHelper.Completed;
         }

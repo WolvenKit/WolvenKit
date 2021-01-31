@@ -42,7 +42,7 @@ namespace WolvenKit.Common
                     bundlename = bundlenodenames.First();
                 }
 
-                if (String.IsNullOrEmpty(bundlename))
+                if (String.IsNullOrEmpty(bundlename) || bundlename.ToUpper() == "ROOT" || bundlename.ToUpper() == "DEPOT")
                     bundlename = EArchiveType.ANY.ToString();
 
                 return (EArchiveType)Enum.Parse(typeof(EArchiveType), bundlename);

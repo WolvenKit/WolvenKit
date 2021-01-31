@@ -31,9 +31,13 @@ namespace WolvenKit.Views.AssetBrowser
             SelectedFiles = new List<IGameFile>();
             Managers = managers;
 
-            vm.CurrentNode = new GameFileTreeNode(EArchiveType.ANY);
+            vm.CurrentNode = new GameFileTreeNode(EArchiveType.ANY)
+            {
+                Name = "Depot"
+            };
             foreach(var mngr in managers)
             {
+                mngr.RootNode.Parent = vm.CurrentNode;
                 vm.CurrentNode.Directories.Add(mngr.TypeName.ToString(), mngr.RootNode);
             }
             vm.CurrentNodeFiles = vm.CurrentNode.ToAssetBrowserData();
