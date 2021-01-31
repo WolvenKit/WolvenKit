@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="lz4net" Version="1.0.15.93" />
-    <PackageReference Include="MarkerMetro.Unity.Ionic.Zlib" Version="2.0.0.14" />
+    <PackageReference Include="MarkerMetro.Unity.Ionic.Zlib" Version="2.0.0.14" NoWarn="NU1701" />
   </ItemGroup>
 
 

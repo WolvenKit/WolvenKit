@@ -63,7 +63,7 @@ namespace WolvenKit.ViewModels
 
         #region Title
         private string _title;
-        public string Title
+        public new string Title
         {
             get => _title;
             set
@@ -196,7 +196,7 @@ namespace WolvenKit.ViewModels
 
             // create git repo - rerunning git init is safe
             //MainController.LogString($"Running git init command...", Logtype.Important);
-            string templatedir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? throw new InvalidOperationException(), "Resources/GitTemplateDir");
+            string templatedir = Path.Combine(AppContext.BaseDirectory, "Resources/GitTemplateDir");
             var resultInit = await GitHelper.InitRepository(Logger, ActiveMod.ProjectDirectory, templatedir, ActiveMod.Author, ActiveMod.Email);
             if (resultInit)
             {
