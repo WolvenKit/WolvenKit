@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Catel.IoC;
+using Catel.Linq;
+using CP77.CR2W.Types;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 
@@ -69,6 +72,11 @@ namespace WolvenKit.Controllers
             {
                 archiveManager
             };
+        }
+
+        public override List<string> GetAvaliableClasses()
+        {
+            return CR2WTypeManager.AvailableTypes.ToList();
         }
 
         public override void HandleStartup()

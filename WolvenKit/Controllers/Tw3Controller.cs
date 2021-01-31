@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Catel.IoC;
+using Catel.Linq;
 using Newtonsoft.Json;
 using ProtoBuf;
 using WolvenKit.Common;
+using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Controllers
 {
@@ -263,6 +266,11 @@ namespace WolvenKit.Controllers
                 soundManager,
                 speechManager
             };
+        }
+
+        public override List<string> GetAvaliableClasses()
+        {
+            return CR2WTypeManager.AvailableTypes.ToList();
         }
 
         public override void HandleStartup()

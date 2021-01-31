@@ -89,23 +89,22 @@
                         <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                             <Menu Background="Transparent" VerticalAlignment="Center">
                                 <TextBlock Text="Class :"/>
-                                <hc:ComboBox MinWidth="100"></hc:ComboBox>
+                            <hc:ComboBox ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" MinWidth="100"></hc:ComboBox>
                                 <!--Classes Box-->
                             </Menu>
                         </ToolBar>
 
                         <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                             <Menu Background="Transparent" VerticalAlignment="Center">
-                                <hc:SearchBar MinWidth="100" Text="Navmesh"></hc:SearchBar>
+                                <hc:SearchBar MinWidth="100" Text="Search something"></hc:SearchBar>
                                 <!-- Search bar-->
                             </Menu>
                         </ToolBar>
 
                         <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                             <Menu Background="Transparent" VerticalAlignment="Center">
-                                <hc:ComboBox MinWidth="100"></hc:ComboBox>
-                                <!-- View Type for right panel -->
-                            </Menu>
+                            <hc:ComboBox ItemsSource="{Binding Extensions}" SelectedItem="{Binding SelectedExtension}" MinWidth="100"></hc:ComboBox>
+                        </Menu>
                         </ToolBar>
 
                     </ToolBarTray>

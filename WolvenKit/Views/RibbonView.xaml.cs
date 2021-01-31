@@ -64,7 +64,9 @@ namespace WolvenKit.Views
 
         private void CBAssetBrowserItem_Selected(object sender, RoutedEventArgs e)
         {
-            AssetBrowserView assetBrowser = new AssetBrowserView(MainController.Get().GetManagers(true));
+            AssetBrowserView assetBrowser = new AssetBrowserView(
+                MainController.Get().GetManagers(true),
+                MainController.Get().GetGame().GetAvaliableClasses());
             assetBrowser.Show();
         }
 

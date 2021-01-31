@@ -19,29 +19,11 @@ namespace WolvenKit.Views.AssetBrowser
     public partial class AssetBrowserView : DataWindow, INotifyPropertyChanged
     {
 
-        public List<IGameFile> SelectedFiles { get; set; }
-
-        public List<IGameArchiveManager> Managers { get; set; }
-
-        public AssetBrowserView(List<IGameArchiveManager> managers) : base(DataWindowMode.Custom)
+        public AssetBrowserView(List<IGameArchiveManager> managers, List<string> AvaliableClasses) : base(DataWindowMode.Custom)
         {
             InitializeComponent();
             ControlzEx.Theming.ThemeManager.Current.ChangeTheme(this, "Dark.Red"); //This aint needed was just for testing remove me.
-            var vm = new AssetBrowserViewModel();
-            SelectedFiles = new List<IGameFile>();
-            Managers = managers;
-
-            vm.CurrentNode = new GameFileTreeNode(EArchiveType.ANY)
-            {
-                Name = "Depot"
-            };
-            foreach(var mngr in managers)
-            {
-                mngr.RootNode.Parent = vm.CurrentNode;
-                vm.CurrentNode.Directories.Add(mngr.TypeName.ToString(), mngr.RootNode);
-            }
-            vm.CurrentNodeFiles = vm.CurrentNode.ToAssetBrowserData();
-            vm.RootNode = vm.CurrentNode;
+            var vm = new AssetBrowserViewModel(managers, AvaliableClasses);
             NotifyPropertyChanged();
             this.DataContext = vm;
         }
