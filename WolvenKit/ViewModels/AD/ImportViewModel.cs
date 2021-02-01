@@ -1,18 +1,17 @@
 ﻿using CsvHelper;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using Catel;
 using Catel.Services;
 using Catel.Threading;
 using Orc.ProjectManagement;
+using WolvenKit.Common.DDS;
 
 namespace WolvenKit.ViewModels
 {
@@ -20,16 +19,15 @@ namespace WolvenKit.ViewModels
     using Model;
     using Common;
     using Common.Extensions;
-    using Common.Tools.FNV1A;
+    using WolvenKit.Common.FNV1A;
     using Common.Model;
     using Common.Services;
     using Common.Tools;
-    using Common.Tools.DDS;
     using Common.Wcc;
     using CR2W;
     using CR2W.Types;
     using static CR2W.Types.Enums;
-    using static Common.Tools.DDS.TexconvWrapper;
+    using static TexconvWrapper;
     public class ImportViewModel : ToolViewModel
     {
 
@@ -248,20 +246,8 @@ namespace WolvenKit.ViewModels
                 else
                 {
                     // import with wcc_lite
-                    try
-                    {
-                        await StartImport(file);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw ex;
-                    }
+                    await StartImport(file);
                 }
-               
-
-                
-
-                
             }
 
             async Task StartImport(ImportableFile file)
@@ -346,7 +332,7 @@ namespace WolvenKit.ViewModels
             // create a temporary dds
             var tempdir = MainController.WorkDir;
             var textureformat = ImageUtility.GetEFormatFromCompression(compression);
-            var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, Common.Tools.DDS.EUncookExtension.dds, textureformat);
+            var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, textureformat);
 
             if (!File.Exists(ddsfile)) throw new NotImplementedException();
             var metadata = DDSUtils.ReadHeader(ddsfile);

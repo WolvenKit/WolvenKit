@@ -32,7 +32,7 @@ namespace WolvenKit.ViewModels
 
         #region Properties
         public object SaveTarget { get; set; }
-        public string Title => Path.GetFileName(FileName);
+        public override string Title => Path.GetFileName(FileName);
 
         #region File
         private IWolvenkitFile _file;
@@ -151,7 +151,7 @@ namespace WolvenKit.ViewModels
         }
 
 
-        public async Task<Common.Model.EFileReadErrorCodes> LoadFile(string filename, IVariableEditor variableEditor, LoggerService logger, Stream stream = null)
+        public async Task<Common.EFileReadErrorCodes> LoadFile(string filename, IVariableEditor variableEditor, LoggerService logger, Stream stream = null)
         {
 
             if (stream != null)
@@ -168,9 +168,9 @@ namespace WolvenKit.ViewModels
 
         }
 
-        private async Task<Common.Model.EFileReadErrorCodes> loadFile(Stream stream, string filename, IVariableEditor variableEditor, LoggerService logger)
+        private async Task<Common.EFileReadErrorCodes> loadFile(Stream stream, string filename, IVariableEditor variableEditor, LoggerService logger)
         {
-            Common.Model.EFileReadErrorCodes errorcode;
+            Common.EFileReadErrorCodes errorcode;
 
             using (var reader = new BinaryReader(stream))
             {

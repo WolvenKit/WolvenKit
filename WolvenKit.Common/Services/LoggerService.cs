@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Catel.Data;

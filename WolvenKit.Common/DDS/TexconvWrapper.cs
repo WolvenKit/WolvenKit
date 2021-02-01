@@ -1,12 +1,10 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using Catel.IoC;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 
-namespace WolvenKit.Common.Tools.DDS
+namespace WolvenKit.Common.DDS
 {
     /// <summary>
     /// Texconv format: DXGI format without the DXGI_FORMAT_ prefix
@@ -52,7 +50,7 @@ namespace WolvenKit.Common.Tools.DDS
         //R16_UINT,
         //R16_SNORM,
         //R16_SINT,
-        //R8_UNORM,
+        R8_UNORM,
         R8_UINT,
         //R8_SNORM,
         //R8_SINT,
@@ -103,16 +101,19 @@ namespace WolvenKit.Common.Tools.DDS
 
     public enum EUncookExtension
     {
+        dds,
         tga,
         bmp,
         jpg,
         jpeg,
         png,
-        dds,
     }
 
     public static class TexconvWrapper
     {
+
+        private static string textconvpath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "texconv.exe");
+
 
         public static string Convert(string outDir,
             string filepath,
@@ -121,10 +122,13 @@ namespace WolvenKit.Common.Tools.DDS
             int mipmaps = 0
             )
         {
-            string textconvpath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "DDS/texconv.exe");
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
-            var argsss = $" -o '{outDir}' -y -f {format}  -ft {filetype} '{filepath}'";
+            if (filepath.Length > 255)
+            {
+                logger.LogString($"{filepath} - Filepath exceedds 255 characters. Please move the archive to extract to a shorter path.", Logtype.Error);
+                return "";
+            }
 
             var proc = new ProcessStartInfo(textconvpath)
             {
@@ -145,11 +149,28 @@ namespace WolvenKit.Common.Tools.DDS
             if (!fi.Exists)
             {
                 logger.LogString($"Could not convert {fi.FullName}.", Logtype.Error);
+                return null;
             }
 
             return fi.FullName;
         }
 
+        public static void VFlip(string outDir, string filepath, EFormat format = EFormat.R8G8B8A8_UNORM)
+        {
+            var proc = new ProcessStartInfo(textconvpath)
+            {
+                WorkingDirectory = Path.GetDirectoryName(textconvpath),
+                Arguments = $" -o \"{outDir}\" -y -f {format} -vflip \"{filepath}\"",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true,
+
+            };
+            using (var p = Process.Start(proc))
+            {
+                p.WaitForExit();
+            }
+        }
 
         
     }

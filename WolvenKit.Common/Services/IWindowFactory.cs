@@ -25,7 +25,7 @@ namespace WolvenKit.Common.Services
     }
 
 
-    
+
 
     public class PackSettings
     {

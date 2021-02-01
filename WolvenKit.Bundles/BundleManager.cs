@@ -63,7 +63,7 @@ namespace WolvenKit.Bundles
             {
                 // add new key if the file isn't already in another bundle
                 if (!Items.ContainsKey(item.Key))
-                    Items.Add(item.Key, new List<IGameFile>());
+                    Items.TryAdd(item.Key, new List<IGameFile>());
 
                 // if file is already in another bundle
                 if (ispatch && Items[item.Key].Count > 0)

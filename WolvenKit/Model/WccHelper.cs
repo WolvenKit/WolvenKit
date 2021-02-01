@@ -563,7 +563,7 @@ namespace WolvenKit.Model
             // check if mod or vanilla file
             var indir = isDLC
                 ? Path.GetFullPath(MainController.Get().Configuration.GameDlcDir)
-                : Path.GetFullPath(MainController.Get().Configuration.GameContentDir);
+                : Path.GetFullPath(MainController.Get().Configuration.W3ExePath);
             if (basedir.Contains(Path.GetFullPath(MainController.Get().Configuration.GameModDir)))
             {
                 indir = basedir;
@@ -617,9 +617,9 @@ namespace WolvenKit.Model
 
                     addedFilesCount++;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Logger.LogString($"Unable to move uncooked file to ModProject, perhaps a file of that name is cuurrently open in Wkit.", Logtype.Error);
+                    Logger.LogString("Unable to move uncooked file to ModProject, perhaps a file of that name is currently open in Wkit.", Logtype.Error);
                 }
             }
             #endregion
@@ -760,7 +760,7 @@ namespace WolvenKit.Model
             {
                 exportedExtension = REDTypes.ExportExtensionToRawExtension((EExportable)Enum.Parse(typeof(EExportable), importedExtension));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Logger.LogString($"Not an exportable filetype: {importedExtension}.", Logtype.Error);
                 return;
@@ -778,7 +778,7 @@ namespace WolvenKit.Model
             //string workDir = "";                                            // add to mod
             //string workDir = MainController.Get().Configuration.DepotPath;  // r4depot
 
-            AddAllImports(fullpath, true, true, workDir);
+            await AddAllImportsAsync(fullpath, true, true, workDir);
 
             // copy the w2mesh and all imports to the depot
             var depotInfo = new FileInfo(Path.Combine(workDir, relativePath));
@@ -815,7 +815,7 @@ namespace WolvenKit.Model
         /// <param name="silent"></param>
         /// <param name="alternateOutDirectory"></param>
         /// <returns></returns>
-        public static async Task AddAllImports(string importfilepath, 
+        public static async Task AddAllImportsAsync(string importfilepath, 
             bool recursive = false, bool silent = false, string alternateOutDirectory = "", bool logonly = false)
         {
             if (!File.Exists(importfilepath))
@@ -842,7 +842,6 @@ namespace WolvenKit.Model
                 (importslist, hasinternalBuffer, bufferlist) = cr2w.ReadImportsAndBuffers(reader);
             }
 
-            bool success = true;
             // add imports
             foreach (var import in importslist)
             {
@@ -862,7 +861,7 @@ namespace WolvenKit.Model
                 {
                     // recursively add all 1st order dependencies :Gp:
                     if (recursive)
-                        AddAllImports(path, true, silent, alternateOutDirectory, logonly);
+                        await AddAllImportsAsync(path, true, silent, alternateOutDirectory, logonly);
                 }
             }
 

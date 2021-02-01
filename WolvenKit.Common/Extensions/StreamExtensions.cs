@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.InteropServices;
 
 namespace WolvenKit.Common
@@ -10,26 +8,17 @@ namespace WolvenKit.Common
     {
         public static T ReadStruct<T>(this Stream m_stream) where T : struct
         {
-            try
-            {
-                var size = Marshal.SizeOf<T>();
+            var size = Marshal.SizeOf<T>();
 
-                var m_temp = new byte[size];
-                m_stream.Read(m_temp, 0, size);
+            var m_temp = new byte[size];
+            m_stream.Read(m_temp, 0, size);
 
-                var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
-                var item = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
+            var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
+            var item = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
 
-                handle.Free();
+            handle.Free();
 
-                return item;
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-            
+            return item;
         }
         public static T[] ReadStructs<T>(this Stream m_stream, uint count) where T : struct
         {

@@ -2,7 +2,19 @@
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol">
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
 
+
+            <ResourceDictionary.MergedDictionaries>
+
+                <hc:ThemeResources/>
+                <hc:Theme/>
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </catel:UserControl.Resources>
     <Grid HorizontalAlignment="Stretch" Grid.Row="3" >
         <Grid Margin="5,5,5,5" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Stretch">
             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
@@ -22,27 +34,27 @@
                                     <LineBreak/>
                                     <Run Text="Optional"></Run>
                                 </TextBlock>
-                                <hc:ImageSelector Margin="100,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
+                                <hc:ImageSelector  Margin="100,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
                             </Grid>
                             <Grid Margin="5,32,0,0" >
 
                                 <TextBlock Text="Project Name" VerticalAlignment="Center">        </TextBlock>
-                                <TextBox Margin="100,0,0,0" Text="Project Name" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox  Margin="100,0,0,0" Text="Project Name" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
 
                             <Grid Margin="5,32,0,0" >
 
                                 <TextBlock Text="Project Type" VerticalAlignment="Center"></TextBlock>
-                                <TextBox Margin="100,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox   Margin="100,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <Grid Margin="5,32,0,0" >
 
                                 <TextBlock Text="Project Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox Margin="100,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox   Margin="100,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
 
-                            <hc:Divider></hc:Divider>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                            <hc:Divider Margin="10"></hc:Divider>
+                            <StackPanel Margin="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                                 <Button Height="45" Content="Yes, Create my project!" Margin="0,0,0,0"></Button>
 
                                 <Button Height="45" Content="No, Cancel my project!" Margin="15,0,0,0"></Button>

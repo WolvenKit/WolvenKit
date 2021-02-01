@@ -9,46 +9,13 @@
                    xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
                    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
                    xmlns:views="clr-namespace:WolvenKit.Views"
-                       xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-
-                   xmlns:orctheming="http://schemas.wildgums.com/orc/theming" xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage">
+                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                   xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
+                   xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage">
 
     <!-- Resources -->
     <UserControl.Resources>
-        <ResourceDictionary>
-            <svgc:SvgViewbox x:Key="IconMoveTo" Source="/Resources/Svg/MoveToSubmodule_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconSelectObject" Source="/Resources/Svg/SelectObject_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconNewSolutionFolder" Source="/Resources/Svg/NewSolutionFolder_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconOpenFolder" Source="/Resources/Svg/OpenFolder_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconClose" Source="/Resources/Svg/Close_16x.svg"/>
-
-            <svgc:SvgViewbox x:Key="IconNewFile" Source="/Resources/Svg/NewFile_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconOpenFile" Source="/Resources/Svg/OpenFile_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconImportFile" Source="/Resources/Svg/ImportFile_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconSearchFolder" Source="/Resources/Svg/SearchFolderClosed_16x.svg"/>
-
-            <svgc:SvgViewbox x:Key="IconRun" Source="/Resources/Svg/Run_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconRunTest" Source="/Resources/Svg/RunTest_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconSettings" Source="/Resources/Svg/Settings_16x.svg"/>
-
-
-            <svgc:SvgViewbox x:Key="IconLog" Source="/Resources/Svg/EventLog_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconProjectExplorer" Source="/Resources/Svg/SQLServerObjectExplorer_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconImportUtility" Source="/Resources/Svg/ImportTheme_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconProperties" Source="/Resources/Svg/Property_left_16x.svg"/>
-
-            <svgc:SvgViewbox x:Key="IconExpandAll" Source="/Resources/Svg/ExpandAll_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconCollapseAll" Source="/Resources/Svg/CollapseAll_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconExpand" Source="/Resources/Svg/ExpandChevronDownGroup_16x.svg"/>
-            <svgc:SvgViewbox x:Key="IconCollapse" Source="/Resources/Svg/CollapseChevronUpGroup_16x.svg"/>
-
-
-
-            <BitmapImage x:Key="IconGit" 
-                         UriSource="pack://application:,,,/Resources/Images/git.png" />
-            <BitmapImage x:Key="IconPreferences" 
-                         UriSource="pack://application:,,,/Resources/Images/Preferences_light_64x.png" />
-
+        <ResourceDictionary>      
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -76,7 +43,7 @@
             <fluent:Ribbon.Menu>
                 <fluent:Backstage x:Name="Backstage" >
 
-                    <fluent:BackstageTabControl x:Name="backstageTabControl"
+                    <fluent:BackstageTabControl SelectedContentMargin="0" x:Name="backstageTabControl"
                                                 
                     >
 
@@ -190,43 +157,47 @@
             <fluent:RibbonTabItem Header="Home" >
                 <!-- File -->
                 <fluent:RibbonGroupBox Header="File">
-                    <fluent:Button Header="Open File"
-                       Icon="{DynamicResource IconOpenFile}"
-                       LargeIcon="{DynamicResource IconOpenFile}" 
-                       Command="{catel:CommandManagerBinding Application.OpenFile}"/>
-                    <fluent:Button Header="New File" 
-                       Icon="{DynamicResource IconNewFile}"
-                       LargeIcon="{DynamicResource IconNewFile}" 
-                       Command="{catel:CommandManagerBinding Application.NewFile}"/>
-                    <fluent:Button Header="Game Assets" 
-                       Icon="{DynamicResource IconSearchFolder}"
-                       LargeIcon="{DynamicResource IconSearchFolder}" 
-                       Command="{catel:CommandManagerBinding Application.ShowAssetBrowser}"/>
+                    <fluent:Button Header="Open File" Command="{catel:CommandManagerBinding Application.OpenFile}">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="GoToFile" Height="25" Width="25"></iconPacks:PackIconCodicons>
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
+                    <fluent:Button Header="New File"  Command="{catel:CommandManagerBinding Application.NewFile}">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="NewFile" Height="25" Width="25"></iconPacks:PackIconCodicons>
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
+                    <fluent:Button Header="Game Assets"  Command="{catel:CommandManagerBinding Application.ShowAssetBrowser}">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="OpenPreview" Height="25" Width="25"></iconPacks:PackIconCodicons>
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
                     
                     
                 </fluent:RibbonGroupBox>
 
                 <!-- Project -->
                 <fluent:RibbonGroupBox Header="Project">
-                    <fluent:Button Header="Pack Mod"
-                       Icon="{DynamicResource IconRun}"
-                       LargeIcon="{DynamicResource IconRun}" 
-                       Command="{catel:CommandManagerBinding Application.PackMod}"/>
-                    <fluent:Button Header="Package Installer" 
-                       Icon="{DynamicResource IconRunTest}"
-                       LargeIcon="{DynamicResource IconRunTest}" 
-                       Command="{catel:CommandManagerBinding Application.ShowPackageInstaller}"
-                       Size="Middle"/>
-                    <fluent:Button Header="Backup Mod" 
-                       Icon="{DynamicResource IconGit}"
-                       LargeIcon="{DynamicResource IconGit}"
-                       Command="{catel:CommandManagerBinding Application.BackupMod}"
-                       Size="Middle"/>
-                    <fluent:Button Header="Mod Settings" 
-                       Icon="{DynamicResource IconSettings}"
-                       LargeIcon="{DynamicResource IconSettings}" 
-                       Command="{catel:CommandManagerBinding Settings.General}"
-                       Size="Middle"/>
+                    <fluent:Button Header="Pack Mod"  Command="{catel:CommandManagerBinding Application.PackMod}">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="Play" Height="25" Width="25"></iconPacks:PackIconCodicons>
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
+                    <fluent:Button Header="Package Installer" Command="{catel:CommandManagerBinding Application.ShowPackageInstaller}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons Kind="Package"></iconPacks:PackIconCodicons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+                    <fluent:Button Header="Backup Mod"  Command="{catel:CommandManagerBinding Application.BackupMod}"  Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons Kind="Archive"></iconPacks:PackIconCodicons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+                    <fluent:Button Header="Mod Settings" Command="{catel:CommandManagerBinding Settings.General}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons Kind="SettingsGear"></iconPacks:PackIconCodicons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
 
@@ -253,22 +224,28 @@
 
                 <!-- Project -->
                 <fluent:RibbonGroupBox Header="Tools">
-                    <fluent:Button Header="View Log"
-                                   Icon="{DynamicResource IconLog}"
-                                   LargeIcon="{DynamicResource IconLog}" 
-                                   Command="{catel:CommandManagerBinding Application.ShowLog}"/>
-                    <fluent:Button Header="View Project Explorer"
-                                   Icon="{DynamicResource IconProjectExplorer}"
-                                   LargeIcon="{DynamicResource IconProjectExplorer}" 
-                                   Command="{catel:CommandManagerBinding Application.ShowProjectExplorer}"/>
+                    <fluent:Button Header="View Log" Command="{catel:CommandManagerBinding Application.ShowLog}">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="Notebook" Height="25" Width="25"></iconPacks:PackIconCodicons>
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
+                    <fluent:Button Header="View Project Explorer" Command="{catel:CommandManagerBinding Application.ShowProjectExplorer}">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="Note" Height="25" Width="25"></iconPacks:PackIconCodicons>
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
                     <fluent:Button Header="View Import Utility"
-                                   Icon="{DynamicResource IconImportUtility}"
-                                   LargeIcon="{DynamicResource IconImportUtility}" 
-                                   Command="{catel:CommandManagerBinding Application.ShowImportUtility}"/>
-                    <fluent:Button Header="View Properties Window"
-                                   Icon="{DynamicResource IconProperties}"
-                                   LargeIcon="{DynamicResource IconProperties}" 
-                                   Command="{catel:CommandManagerBinding Application.ShowProperties}"/>
+                                   Command="{catel:CommandManagerBinding Application.ShowImportUtility}">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="Extensions" Height="25" Width="25"></iconPacks:PackIconCodicons>
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
+                    <fluent:Button Header="View Properties Window" 
+                                   Command="{catel:CommandManagerBinding Application.ShowProperties}">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="SymbolProperty" Height="25" Width="25"></iconPacks:PackIconCodicons>
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
                 </fluent:RibbonGroupBox>
 
                 
@@ -289,7 +266,10 @@
                                 <VirtualizingStackPanel />
                             </ItemsPanelTemplate>
                         </fluent:ComboBox.ItemsPanel>
-                        <ComboBoxItem Selected="ComboBoxItem_Selected" Content="Asset Browser"></ComboBoxItem>
+                        <ComboBoxItem x:Name="CBAssetBrowserItem" Content="Asset Browser" Selected="CBAssetBrowserItem_Selected"/>
+                        <ComboBoxItem x:Name="CBCodeEditorItem" Content="Code Editor (WIP)" Selected="CBCodeEditorItem_Selected"/>
+                        <ComboBoxItem x:Name="CBPluginManager" Content="Plugin Manager" Selected="CBPluginManager_Selected"/>
+                        <ComboBoxItem x:Name="CBVisualEditorItem" Content="Visual Editor (WIP)" Selected="CBVisualEditorItem_Selected"/>
                     </fluent:ComboBox>
 
 
@@ -297,7 +277,7 @@
 
                 <!-- Quick Access Tools -->
                 <fluent:RibbonGroupBox Header="Quick Access">
-                    <fluent:Button Click="ComboBoxItem_Selected" Header="Asset Browser"/>
+                    <fluent:Button Click="CBAssetBrowserItem_Selected" Header="Asset Browser"/>
 
 
                 </fluent:RibbonGroupBox>

@@ -63,7 +63,7 @@ namespace WolvenKit.ViewModels
 
         #region Title
         private string _title;
-        public string Title
+        public new string Title
         {
             get => _title;
             set
@@ -196,7 +196,7 @@ namespace WolvenKit.ViewModels
 
             // create git repo - rerunning git init is safe
             //MainController.LogString($"Running git init command...", Logtype.Important);
-            string templatedir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? throw new InvalidOperationException(), "Resources/GitTemplateDir");
+            string templatedir = Path.Combine(AppContext.BaseDirectory, "Resources/GitTemplateDir");
             var resultInit = await GitHelper.InitRepository(Logger, ActiveMod.ProjectDirectory, templatedir, ActiveMod.Author, ActiveMod.Email);
             if (resultInit)
             {
@@ -268,9 +268,9 @@ namespace WolvenKit.ViewModels
                 return;
             }
             var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.ExecutablePath)
+            var proc = new ProcessStartInfo(config.W3ExePath)
             {
-                WorkingDirectory = Path.GetDirectoryName(config.ExecutablePath),
+                WorkingDirectory = Path.GetDirectoryName(config.W3ExePath),
                 Arguments = args == "" ? "-net -debugscripts" : args,
                 UseShellExecute = false,
                 RedirectStandardOutput = true
@@ -1021,7 +1021,6 @@ namespace WolvenKit.ViewModels
                 case EArchiveType.ANY:
                 default:
                     throw new NotImplementedException();
-                    break;
             }
             #endregion
 

@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,191 +8,58 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Catel;
 using Catel.IoC;
-using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools.FNV1A;
+using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.Common.Services
 {
     public class HashService : IHashService
     {
-        private Dictionary<ulong, string> _hashdict = new();
-        public Dictionary<ulong, string> Hashdict
-        {
-            get
-            {
-                return _hashdict;
-                
-            }
-            set => _hashdict = value;
-        }
+        public Dictionary<ulong, string> Hashdict { get; set; } = new();
 
-        private static readonly ILoggerService Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-        private static readonly IAppSettingsService Appsettings = ServiceLocator.Default.ResolveType<IAppSettingsService>();
-
-        private readonly HttpClient _client = new();
-
-        //private const string ResourceUrl = "https://nyxmods.com/cp77/files/archivehashes.csv";
-        private const string ResourceUrl = "https://graphicscore.dev/cyberpunk/cyberbot/data/loosehashes.txt";
-        
-        
-
-        
-
-        public async Task<bool> RefreshAsync()
-        {
-            if (!File.Exists(Appsettings.LooseHashesPath))
-            {
-                // redownload
-                try
-                {
-                    if (File.Exists(Appsettings.ETagPath))
-                        File.Delete(Appsettings.ETagPath);
-                }
-                catch (Exception)
-                {
-                    Logger.LogString($"Could not delete file {Appsettings.ETagPath}.", Logtype.Error);
-                }
-            }
-
-
-            var request = new HttpRequestMessage(HttpMethod.Get, ResourceUrl);
-
-            var lastEtag = GetLastEtag();
-            if (!string.IsNullOrEmpty(lastEtag))
-            {
-                request.Headers.Add("If-None-Match", $"{lastEtag}");
-            }
-
-            try
-            {
-                
-                var response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-                if (response.StatusCode == HttpStatusCode.NotModified)
-                {
-                    Logger.LogString("Already using the latest Archive Hashes", Logtype.Success);
-                    return false;
-                }
-
-                var tags = response.Headers.GetValues("etag").ToList();
-                if (tags.Count != 1)
-                {
-                    throw new FormatException("Response etag had unexpected format");
-                }
-
-                var serverEtag = tags.Single();
-                if (!string.IsNullOrEmpty(lastEtag) && !string.IsNullOrEmpty(serverEtag) &&
-                    string.Equals(lastEtag, serverEtag, StringComparison.OrdinalIgnoreCase))
-                {
-                    return false;
-                }
-
-                Logger.LogString("Downloading latest Archive Hashes...", Logtype.Important);
-
-                var stream = await response.Content.ReadAsStreamAsync();
-
-                await WriteHashes(stream);
-                await WriteEtag(serverEtag);
-
-                Logger.LogString("Archive Hashes updated.", Logtype.Success);
-
-                return true;
-            }
-            catch (HttpRequestException)
-            {
-                Logger.LogString("Update Archive Hashes Failed - Server may not be available", Logtype.Error);
-            }
-            catch (FormatException)
-            {
-                Logger.LogString("Update Archive Hashes Failed - Server used unexpected eTag format", Logtype.Error);
-            }
-            catch (Exception)
-            {
-                Logger.LogString("Update Archive Hashes Failed - Unexpected Error", Logtype.Error);
-            }
-
-            return false;
-        }
-
-        private async Task WriteHashes(Stream source)
-        {
-            await using var fs = File.Create(Appsettings.LooseHashesPath);
-            await source.CopyToAsync(fs);
-        }
-
-        private async Task WriteEtag(string etag)
-        {
-            await using var fs = File.Create(Appsettings.ETagPath);
-            await using var writer = new StreamWriter(fs);
-            await writer.WriteLineAsync(etag);
-        }
-
-        private string GetLastEtag()
-        {
-            if (!File.Exists(Appsettings.ETagPath)) return null;
-            
-            var lines = File.ReadLines(Appsettings.ETagPath)
-                .ToList();
-
-            if (!lines.Any() || lines.Count > 1)
-                return null;
-
-            return lines.Single();
-        }
+        private const string HashZipName = "WolvenKit.Common.Resources.archivehashes.zip";
+        private const string HashFileName = "archivehashes.txt";
 
         public void ReloadLocally()
         {
-            Logger.LogString("Loading local filename hashes...", Logtype.Important);
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            logger.LogString("Loading local filename hashes...", Logtype.Important);
 
             Stopwatch watch = new();
             watch.Restart();
+            
+            Hashdict.EnsureCapacity(1_500_000);
 
-            var hashDictionary = new ConcurrentDictionary<ulong, string>();
-
-            // TODO: proper update handling
-            try
+            var assembly = Assembly.GetExecutingAssembly();
+            
+            using (var stream = assembly.GetManifestResourceStream(HashZipName))
             {
-                File.Delete(Appsettings.ArchiveHashesPath);
-            }
-            catch (Exception)
-            {
-                Logger.LogString($"Could not delete file {Appsettings.ArchiveHashesPath}.", Logtype.Error);
-            }
-
-            ZipFile.ExtractToDirectory(Appsettings.ArchiveHashesZipPath, Appsettings.ResourcesPath);
-            if (File.Exists(Appsettings.ArchiveHashesPath))
-                Parallel.ForEach(File.ReadLines(Appsettings.ArchiveHashesPath), line =>
+                var archive = new ZipArchive(stream);
+                var zipArchiveEntry = archive.GetEntry(HashFileName);
+                if (zipArchiveEntry != null)
                 {
-                    // check line
-                    if (line.Contains(','))
-                        line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
-                    if (string.IsNullOrEmpty(line))
-                        return;
-                    ulong hash = FNV1A64HashAlgorithm.HashString(line);
-                    hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
-                });
-
-            if (File.Exists(Appsettings.LooseHashesPath))
-                Parallel.ForEach(File.ReadLines(Appsettings.LooseHashesPath), line =>
-                {
-                    // check line
-                    if (line.Contains(','))
-                        line = line.Split(',', StringSplitOptions.RemoveEmptyEntries).First();
-                    if (string.IsNullOrEmpty(line))
-                        return;
-                    ulong hash = FNV1A64HashAlgorithm.HashString(line);
-                    hashDictionary.AddOrUpdate(hash, line, (key, val) => val);
-                });
-
-            Hashdict = hashDictionary.ToDictionary(
-                entry => entry.Key,
-                entry => entry.Value);
+                    using var zipstream = zipArchiveEntry.Open();
+                    AddHashesFromStream(Hashdict, zipstream);
+                }
+            }
 
             watch.Stop();
 
-            Logger.LogString($"Loaded {hashDictionary.Count} hashes in {watch.ElapsedMilliseconds}ms.", Logtype.Success);
+            logger.LogString($"Loaded {Hashdict.Count.ToString()} hashes in {watch.ElapsedMilliseconds.ToString()}ms.", Logtype.Success);
+        }
+
+        private static void AddHashesFromStream(IDictionary<ulong, string> dictionary, Stream stream)
+        {
+            string line;
+            using var sr = new StreamReader(stream, Encoding.UTF8);
+            while ((line = sr.ReadLine()) != null)
+            {
+                dictionary[FNV1A64HashAlgorithm.HashString(line)] = line;
+            }
         }
     }
 }

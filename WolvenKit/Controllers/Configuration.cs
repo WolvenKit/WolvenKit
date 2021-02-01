@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using WolvenKit.Common.DDS;
 
 namespace WolvenKit
 {
@@ -26,7 +27,8 @@ namespace WolvenKit
         /// <summary>
         ///     Configuration values
         /// </summary>
-        public string ExecutablePath { get; set; }
+        public string W3ExePath { get; set; }
+        public string CP77ExePath { get; set; }
 
         public string TextLanguage { get; set; }
         public string VoiceLanguage { get; set; }
@@ -51,9 +53,14 @@ namespace WolvenKit
 
 
         [XmlIgnore]
-        public string GameContentDir => Path.Combine(GameRootDir, "content");
+        public string W3GameContentDir => Path.Combine(W3GameRootDir, "content");
         [XmlIgnore]
-        public string GameRootDir => Path.Combine(ExecutablePath, @"..\..\..\");
+        public string W3GameRootDir => Path.Combine(W3ExePath, @"..\..\..\");
+
+        [XmlIgnore]
+        public string CP77GameContentDir => Path.Combine(CP77GameRootDir, "content");
+        [XmlIgnore]
+        public string CP77GameRootDir => Path.Combine(CP77ExePath, @"..\..\..\");
 
 
         ~Configuration()

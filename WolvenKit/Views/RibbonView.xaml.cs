@@ -7,6 +7,9 @@ using System.Windows;
 using Catel;
 using Catel.Data;
 using WolvenKit.Views.AssetBrowser;
+using WolvenKit.Views.CodeEditor;
+using WolvenKit.Views.PluginManager;
+using WolvenKit.Views.VisualEditor;
 
 namespace WolvenKit.Views
 {
@@ -49,17 +52,40 @@ namespace WolvenKit.Views
         }
 
         private void ShowStartScreen_OnClick(object sender, RoutedEventArgs e) // Convert me to MVVM
-        {
-            
+        {        
  
             this.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
                 this.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
         }
 
-        private void ComboBoxItem_Selected(object sender, RoutedEventArgs e) // Convert me to MVVM
+       
+
+     
+
+        private void CBAssetBrowserItem_Selected(object sender, RoutedEventArgs e)
         {
-            AssetBrowserView assetBrowser = new AssetBrowserView();
-            assetBrowser.Show(); 
+            AssetBrowserView assetBrowser = new AssetBrowserView(
+                MainController.Get().GetManagers(true),
+                MainController.Get().GetGame().GetAvaliableClasses());
+            assetBrowser.Show();
+        }
+
+        private void CBCodeEditorItem_Selected(object sender, RoutedEventArgs e)
+        {
+            CodeEditorView codeeditor = new CodeEditorView();
+            codeeditor.Show();
+        }
+
+        private void CBPluginManager_Selected(object sender, RoutedEventArgs e)
+        {
+            PluginManagerView pluginmanager = new PluginManagerView();
+            pluginmanager.Show();
+        }
+
+        private void CBVisualEditorItem_Selected(object sender, RoutedEventArgs e)
+        {
+            VisualEditorView visualeditor = new VisualEditorView();
+            visualeditor.Show();
         }
     }
 }

@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+	<PublishSingleFile>true</PublishSingleFile>
+	  <SelfContained>false</SelfContained>
+	  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	  <PublishTrimmed>true</PublishTrimmed>
+	  <PublishReadyToRun>true</PublishReadyToRun>
+	<DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+	<ItemGroup>
+    <None Remove="lib\kraken.so" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="lib\kraken.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Remove="lib\liboodle.dylib" />
+    <Content Include="lib\liboodle.dylib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Luna.ConsoleProgressBar" Version="1.0.29" />
+    <PackageReference Include="CsvHelper" Version="21.1.1" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="lib\\kraken.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\\kraken.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CP77.CR2W\WolvenKit.Cyberformats.csproj" />
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
+  </ItemGroup>
+
+	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+	  <DefineConstants>_WINDOWS</DefineConstants>
+  </PropertyGroup>
+</Project>
