@@ -6,8 +6,8 @@ namespace CP77Tools.Commands
 {
     public class UnbundleCommand : Command
     {
-        private static string Name = "unbundle";
-        private static string Description = "Target an archive to extract files.";
+        private new const string Name = "unbundle";
+        private new const string Description = "Target an archive to extract files.";
         
         public UnbundleCommand() : base(Name, Description)
         {

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entdismembermentWoundResource : ISerializable
 	{
-		[Ordinal(0)]  [RED("BodyPart")] public physicsRagdollBodyPartE BodyPart { get; set; }
+		[Ordinal(0)]  [RED("BodyPart")] public CEnum<physicsRagdollBodyPartE> BodyPart { get; set; }
 		[Ordinal(1)]  [RED("CensoredCookedPaths")] public CArray<raRef<CResource>> CensoredCookedPaths { get; set; }
 		[Ordinal(2)]  [RED("CensoredPaths")] public CArray<CUInt64> CensoredPaths { get; set; }
 		[Ordinal(3)]  [RED("CensorshipValid")] public CBool CensorshipValid { get; set; }

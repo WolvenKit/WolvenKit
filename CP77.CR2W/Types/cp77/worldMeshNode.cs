@@ -17,7 +17,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(6)]  [RED("occluderAutohideDistanceScale")] public CUInt8 OccluderAutohideDistanceScale { get; set; }
 		[Ordinal(7)]  [RED("occluderType")] public CEnum<visWorldOccluderType> OccluderType { get; set; }
 		[Ordinal(8)]  [RED("removeFromRainMap")] public CBool RemoveFromRainMap { get; set; }
-		[Ordinal(9)]  [RED("renderSceneLayerMask")] public RenderSceneLayerMask RenderSceneLayerMask { get; set; }
+		[Ordinal(9)]  [RED("renderSceneLayerMask")] public CEnum<RenderSceneLayerMask> RenderSceneLayerMask { get; set; }
 		[Ordinal(10)]  [RED("windImpulseEnabled")] public CBool WindImpulseEnabled { get; set; }
 
 		public worldMeshNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

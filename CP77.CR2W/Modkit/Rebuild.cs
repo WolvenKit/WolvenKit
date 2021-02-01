@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Catel.IoC;
 using WolvenKit.Common.Services;
 using WolvenKit.Common;
@@ -17,13 +15,20 @@ namespace CP77.CR2W
     public static partial class ModTools
     {
         private static readonly ILoggerService Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-        
+
         /// <summary>
-        /// 
+        /// Try reading a cr2w file from a stream, returns null if unsuccesful
         /// </summary>
-        /// <param name="br"></param>
+        /// <param name="stream"></param>
         /// <returns></returns>
-        public static CR2WFile TryReadCr2WFile(BinaryReader br)
+        public static CR2WFile TryReadCr2WFile(Stream stream)
+        {
+            using var br = new BinaryReader(stream);
+            return TryReadCr2WFile(br);
+        }
+
+
+        private static CR2WFile TryReadCr2WFile(BinaryReader br)
         {
             // peak if cr2w
             if (br.BaseStream.Length < 4) 
@@ -41,7 +46,7 @@ namespace CP77.CR2W
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
                 cr2w.Read(br);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -49,13 +54,19 @@ namespace CP77.CR2W
             return cr2w;
         }
 
-
         /// <summary>
-        /// 
+        /// Try reading the cr2w file headers only from a stream, returns null if unsuccesful
         /// </summary>
-        /// <param name="br"></param>
+        /// <param name="stream"></param>
         /// <returns></returns>
-        public static CR2WFile TryReadCr2WFileHeaders(BinaryReader br)
+        public static CR2WFile TryReadCr2WFileHeaders(Stream stream)
+        {
+            using var br = new BinaryReader(stream);
+            return TryReadCr2WFileHeaders(br);
+        }
+
+
+        private static CR2WFile TryReadCr2WFileHeaders(BinaryReader br)
         {
             // peak if cr2w
             if (br.BaseStream.Length < 4)
@@ -73,7 +84,7 @@ namespace CP77.CR2W
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
                 cr2w.ReadImportsAndBuffers(br);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -304,9 +315,6 @@ namespace CP77.CR2W
                                 fs.Seek(128, SeekOrigin.Begin);
                                 return br.ReadBytes((int)fs.Length - 128);
                             }
-                            break;
-                        default:
-                            break;
                     }
                 }
                 else

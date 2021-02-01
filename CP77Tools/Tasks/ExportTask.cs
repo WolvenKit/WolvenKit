@@ -46,7 +46,8 @@ namespace CP77Tools.Tasks
             Stopwatch watch = new();
             watch.Restart();
 
-            if (ModTools.Export(new FileInfo(path), uncookext) == 1)
+            if (ModTools.Export(new FileInfo(path), uncookext))
+
             {
                 watch.Stop();
                 logger.LogString($"Successfully exported {path} in {watch.ElapsedMilliseconds.ToString()}ms.", Logtype.Success);

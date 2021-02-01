@@ -20,7 +20,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(9)]  [RED("proxyMeshOnly")] public CEnum<worldPrefabProxyMeshOnly> ProxyMeshOnly { get; set; }
 		[Ordinal(10)]  [RED("proxyScale")] public Vector3 ProxyScale { get; set; }
 		[Ordinal(11)]  [RED("proxyScaleOverride")] public CBool ProxyScaleOverride { get; set; }
-		[Ordinal(12)]  [RED("renderSceneLayerMask")] public RenderSceneLayerMask RenderSceneLayerMask { get; set; }
+		[Ordinal(12)]  [RED("renderSceneLayerMask")] public CEnum<RenderSceneLayerMask> RenderSceneLayerMask { get; set; }
 
 		public worldPrefabNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

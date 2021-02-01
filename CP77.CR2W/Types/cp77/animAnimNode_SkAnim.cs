@@ -26,6 +26,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(15)]  [RED("pushSafeCutTag")] public CName PushSafeCutTag { get; set; }
 		[Ordinal(16)]  [RED("resume")] public CBool Resume { get; set; }
 
+		[Ordinal(999)]  [RED("debugFootsteps")] public CBool debugFootsteps { get; set; }
+
 		public animAnimNode_SkAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

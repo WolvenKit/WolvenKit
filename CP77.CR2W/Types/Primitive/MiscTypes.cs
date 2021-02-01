@@ -8,7 +8,7 @@ using CP77.CR2W.Reflection;
 namespace CP77.CR2W.Types
 {
     [REDMeta]
-    public class SharedDataBuffer : CVariable
+    public class SharedDataBuffer : CVariable, IDataBufferAccessor
     {
         
         public SharedDataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -28,7 +28,7 @@ namespace CP77.CR2W.Types
     }
     
     [REDMeta]
-    public class DataBuffer : CVariable
+    public class DataBuffer : CVariable, IDataBufferAccessor
     {
         
         public DataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -48,7 +48,7 @@ namespace CP77.CR2W.Types
     }
 
     [REDMeta]
-    public class serializationDeferredDataBuffer : CVariable
+    public class serializationDeferredDataBuffer : CVariable, IDataBufferAccessor
     {
         
         public serializationDeferredDataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -67,17 +67,8 @@ namespace CP77.CR2W.Types
         }
     }
 
-    [REDMeta]
-    public class RenderSceneLayerMask : CVariable
-    {
-        public RenderSceneLayerMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
 
-    [REDMeta]
-    public class workWorkspotItemPolicy : CVariable
-    {
-        public workWorkspotItemPolicy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
+    
     [REDMeta]
     public class MessageResourcePath : CVariable
     {
@@ -88,21 +79,5 @@ namespace CP77.CR2W.Types
     {
         public EditorObjectID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-    [REDMeta]
-    public class gameuiContext : CVariable
-    {
-        public gameuiContext(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
-    [REDMeta]
-    public class animMuteAnimEvents : CVariable
-    {
-        public animMuteAnimEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
 
-    [REDMeta()]
-    public class physicsRagdollBodyPartE : CVariable, IREDPrimitive
-    {
-        public physicsRagdollBodyPartE(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
-    
 }

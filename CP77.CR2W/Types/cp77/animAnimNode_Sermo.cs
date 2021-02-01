@@ -8,7 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_Sermo : animAnimNode_OnePoseInput
 	{
-
+        [Ordinal(0)] [RED("testController")] public animSermoTestController testController { get; set; }
+		
 		public animAnimNode_Sermo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

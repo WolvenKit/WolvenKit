@@ -10,6 +10,8 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("condition")] public animConditionalSegmentCondition Condition { get; set; }
 
+        [Ordinal(991)] [RED("segmentEndNodeId")] public CUInt32 segmentEndNodeId { get; set; }
+
 		public animAnimNode_ConditionalSegmentBegin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.IO.Packaging;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using Catel;
 using Catel.IoC;
 using Catel.MVVM;
@@ -171,7 +166,7 @@ namespace WolvenKit.ViewModels
         /// </summary>
         public ICommand ExpandAllCommand { get; private set; }
         private bool CanExpandAll() => _projectManager.ActiveProject is EditorProject;
-        private async void ExecuteExpandAll()
+        private void ExecuteExpandAll()
         {
             foreach (var node in Treenodes) node.ExpandChildren(true);
         }
@@ -181,7 +176,7 @@ namespace WolvenKit.ViewModels
         /// </summary>
         public ICommand CollapseAllCommand { get; private set; }
         private bool CanCollapseAll() => _projectManager.ActiveProject is EditorProject;
-        private async void ExecuteCollapseAll()
+        private void ExecuteCollapseAll()
         {
             foreach (var node in Treenodes) node.CollapseChildren(true);
         }
@@ -191,14 +186,14 @@ namespace WolvenKit.ViewModels
         /// </summary>
         public ICommand ExpandCommand { get; private set; }
         private bool CanExpand() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
-        private async void ExecuteExpand() => SelectedItem.ExpandChildren(true);
+        private void ExecuteExpand() => SelectedItem.ExpandChildren(true);
 
         /// <summary>
         /// Collapses all children of the selected node.
         /// </summary>
         public ICommand CollapseCommand { get; private set; }
         private bool CanCollapse() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
-        private async void ExecuteCollapse() => SelectedItem.CollapseChildren(true);
+        private void ExecuteCollapse() => SelectedItem.CollapseChildren(true);
 
         /// <summary>
         /// Delets selected node.
@@ -261,7 +256,7 @@ namespace WolvenKit.ViewModels
 
                 SelectedItem.RaiseRequestRefresh();
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 MainController.LogString("Failed to delete " + fullpath + "!\r\n", Common.Services.Logtype.Error);
             }
@@ -278,7 +273,7 @@ namespace WolvenKit.ViewModels
             
             var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
             var viewModel = new InputDialogViewModel() {Text = filename};
-            await visualizerService.ShowDialogAsync(viewModel, delegate(object? sender, UICompletedEventArgs args)
+            await visualizerService.ShowDialogAsync(viewModel, delegate(object sender, UICompletedEventArgs args)
             {
                 if (args.Result != true)
                     return;
@@ -422,7 +417,7 @@ namespace WolvenKit.ViewModels
         /// </summary>
         public ICommand AddAllImportsCommand { get; private set; }
         private bool CanAddAllImports() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null && SelectedItem.IsFile;
-        private async void AddAllImports() => await WccHelper.AddAllImports(SelectedItem.FullName, true);
+        private async void AddAllImports() => await WccHelper.AddAllImportsAsync(SelectedItem.FullName, true);
 
 
         // legacy

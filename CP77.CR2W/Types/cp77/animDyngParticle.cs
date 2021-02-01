@@ -18,6 +18,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(7)]  [RED("projectionType")] public CEnum<animDyngParticleProjectionType> ProjectionType { get; set; }
 		[Ordinal(8)]  [RED("pullForceFactor")] public CFloat PullForceFactor { get; set; }
 
+		[Ordinal(999)]  [RED("isDebugEnabled")] public CBool isDebugEnabled { get; set; }
+
 		public animDyngParticle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

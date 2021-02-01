@@ -165,14 +165,14 @@ namespace WolvenKit.Common.Oodle
         /// <summary>
         /// 
         /// </summary>
-        public static void DecompressBuffer(this BinaryReader binaryReader, BinaryWriter bw, uint zSize, uint size)
+        public static void DecompressBuffer(this BinaryReader binaryReader, Stream outstream, uint zSize, uint size)
         {
             if (zSize == size)
             {
                 try
                 {
                     var buffer = binaryReader.ReadBytes((int)zSize);
-                    bw.Write(buffer);
+                    outstream.Write(buffer);
                 }
                 catch (Exception e)
                 {
@@ -201,19 +201,15 @@ namespace WolvenKit.Common.Oodle
                         if (unpackedSize != size)
                             throw new DecompressionException(
                                 $"Unpacked size {unpackedSize} doesn't match real size {size}");
-                        bw.Write(outputBuffer);
+                        outstream.Write(outputBuffer);
                     }
-                    catch (DecompressionException e)
+                    catch (DecompressionException)
                     {
                         //logger.LogString(e.Message, Logtype.Error);
                         //logger.LogString(
                         //    $"Unable to decompress file {hash.ToString()}. Exporting uncompressed file",
                         //    Logtype.Error);
-                        bw.Write(inputBuffer);
-                    }
-                    catch (Exception e)
-                    {
-                        throw e;
+                        outstream.Write(inputBuffer);
                     }
 
                 }
@@ -221,7 +217,7 @@ namespace WolvenKit.Common.Oodle
                 {
                     binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
                     var buffer = binaryReader.ReadBytes((int)zSize);
-                    bw.Write(buffer);
+                    outstream.Write(buffer);
                 }
             }
         }

@@ -9,7 +9,7 @@ namespace CP77.CR2W.Types
 	public class entdismembermentEffectResource : ISerializable
 	{
 		[Ordinal(0)]  [RED("AppearanceNames")] public CArray<CName> AppearanceNames { get; set; }
-		[Ordinal(1)]  [RED("BodyPartMask")] public physicsRagdollBodyPartE BodyPartMask { get; set; }
+		[Ordinal(1)]  [RED("BodyPartMask")] public CEnum<physicsRagdollBodyPartE> BodyPartMask { get; set; }
 		[Ordinal(2)]  [RED("Effect")] public raRef<worldEffect> Effect { get; set; }
 		[Ordinal(3)]  [RED("MatchToWoundByName")] public CBool MatchToWoundByName { get; set; }
 		[Ordinal(4)]  [RED("Name")] public CName Name { get; set; }

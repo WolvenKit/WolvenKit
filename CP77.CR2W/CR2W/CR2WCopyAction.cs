@@ -199,7 +199,7 @@ namespace CP77.CR2W
             string vardepstring = null;
             if(targetVariable != null)
             {
-                vardepstring = targetVariable.GetFullDependencyStringName();
+                vardepstring = targetVariable.UniqueIdentifier;
             }
             var chunkdepstring = oldExportWrapper.GetFullChunkTypeDependencyString();
 

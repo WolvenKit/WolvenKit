@@ -59,21 +59,19 @@ namespace CP77Tools.Tasks
 
                 if (fileEntry.Archive is not Archive ar)
                     return;
-                var (fileBytes, _) = ar.GetFileData(fileEntry.NameHash64, false);
+                using var ms = new MemoryStream();
+                ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
 
-                using var ms = new MemoryStream(fileBytes);
-                using var br = new BinaryReader(ms);
-
-                var c = new CR2WFile {FileName = fileEntry.NameOrHash};
-                var readResult = c.Read(br);
+                var c = new CR2WFile { FileName = fileEntry.NameOrHash };
+                ms.Seek(0, SeekOrigin.Begin);
+                var readResult = c.Read(ms);
 
                 switch (readResult)
                 {
                     case EFileReadErrorCodes.NoCr2w:
                     case EFileReadErrorCodes.UnsupportedVersion:
-
                         break;
-                    default:
+                    case EFileReadErrorCodes.NoError:
                         var hasAdditionalBytes =
                             c.AdditionalCr2WFileBytes != null && c.AdditionalCr2WFileBytes.Any();
 
@@ -105,6 +103,8 @@ namespace CP77Tools.Tasks
                         }
 
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
 

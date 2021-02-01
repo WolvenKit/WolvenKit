@@ -99,6 +99,7 @@ namespace CP77.CR2W.Reflection
     public enum EREDMetaInfo
     {
         REDStruct,
+        REDPrimitive,
         //REDComplex,
     }
 

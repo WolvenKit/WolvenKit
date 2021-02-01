@@ -14,7 +14,7 @@ namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
-        public static void Cr2wTask(string[] path, string outpath, bool all, bool chunks, string pattern, string regex)
+        public static void Cr2wTask(string[] path, string outpath, bool chunks, string pattern, string regex)
         {
             if (path == null || path.Length < 1)
             {
@@ -24,18 +24,18 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                Cr2wTaskInner(file, outpath, all, chunks, pattern, regex);
+                Cr2wTaskInner(file, outpath, chunks, pattern, regex);
             });
 
         }
 
-        private static void Cr2wTaskInner(string path, string outpath, bool all, bool chunks, string pattern = "", string regex = "")
+        private static void Cr2wTaskInner(string path, string outpath, bool chunks, string pattern = "", string regex = "")
         {
             #region checks
 
             if (string.IsNullOrEmpty(path))
             {
-                logger.LogString("Please fill in an input path", Logtype.Error);
+                logger.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -46,7 +46,7 @@ namespace CP77Tools.Tasks
 
             if (!isDirectory && !isFile)
             {
-                logger.LogString("Input path does not exist", Logtype.Error);
+                logger.LogString("Input file does not exist.", Logtype.Error);
                 return;
             }
             #endregion
@@ -98,38 +98,15 @@ namespace CP77Tools.Tasks
                     return;
                 }
 
-                if (all)
-                {
-                    cr2w.ReadImportsAndBuffers(br);
-
-                    var obj = new Cr2wChunkInfo
-                    {
-                        Filename = fileInfo.FullName,
-                        Stringdict = cr2w.StringDictionary,
-                        Imports = cr2w.Imports,
-                        Buffers = cr2w.Buffers,
-                        Chunks = cr2w.Chunks
-                    };
-
-                    foreach (var chunk in cr2w.Chunks)
-                    {
-                        obj.ChunkData.Add(chunk.GetDumpObject(br));
-                    }
-
-                    //write
-                    File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.info.json"),
-                        JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                            PreserveReferencesHandling = PreserveReferencesHandling.None,
-                            TypeNameHandling = TypeNameHandling.Auto
-                        }));
-                }
+                
 
                 if (chunks)
                 {
-                    br.BaseStream.Seek(0, SeekOrigin.Begin);
-                    cr2w.Read(br);
+                    var f = File.ReadAllBytes(inputFileInfo.FullName);
+                    using var fs = new FileStream(inputFileInfo.FullName, FileMode.Open, FileAccess.Read);
+                    var cr2w = ModTools.TryReadCr2WFile(fs);
+                    if (cr2w == null)
+                        return;
 
                     //write
                     File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.json"),

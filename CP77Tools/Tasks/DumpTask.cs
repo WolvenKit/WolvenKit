@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-//using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -35,8 +34,7 @@ namespace CP77Tools.Tasks
 
         public List<CR2WExportWrapper> Chunks { get; set; }
 
-        public List<CR2WExportWrapper.Cr2wVariableDumpObject> ChunkData { get; } =
-            new List<CR2WExportWrapper.Cr2wVariableDumpObject>();
+        public List<CR2WExportWrapper.Cr2wVariableDumpObject> ChunkData { get; } = new();
 
         public string Filename { get; set; }
     }
@@ -153,24 +151,16 @@ namespace CP77Tools.Tasks
                         {
                             Parallel.ForEach(result.File, fi =>
                             {
-                                var (f, b) = ar.GetFileData(fi.NameHash64, false);
-                                using var ms = new MemoryStream(f);
-                                using var br = new BinaryReader(ms);
-
-                                var cr2w = new CR2WFile();
-                                try
-                                {
-                                    cr2w.ReadImportsAndBuffers(br);
-                                }
-                                catch (Exception e)
-                                {
+                                using var ms = new MemoryStream();
+                                ar.CopyFileToStream(ms, fi.NameHash64, false);
+                                var cr2w = ModTools.TryReadCr2WFile(ms);
+                                if (cr2w == null)
                                     return;
-                                }
-                                
-                                foreach (var chunk in cr2w.Chunks)
+
+                                foreach (var o in cr2w.Chunks.Select(chunk => chunk.GetDumpObject(ms))
+                                    .Where(o => o != null))
                                 {
-                                    var o = chunk.GetDumpObject(br);
-                                    if (o != null) Register(o);
+                                    Register(o);
                                 }
                             });
                         }
@@ -202,26 +192,16 @@ namespace CP77Tools.Tasks
 
                     Parallel.For(0, count, i =>
                     {
-                        var entry = ar.Files.ToList()[i];
-                        var hash = entry.Key;
-                        var filename = string.IsNullOrEmpty(entry.Value.FileName) ? hash.ToString() : entry.Value.FileName;
+                        var (hash, fileEntry) = ar.Files.ToList()[i];
+                        var filename = string.IsNullOrEmpty(fileEntry.FileName) ? hash.ToString() : fileEntry.FileName;
 
                         if (imports)
                         {
-                            var (f, buffers) = ar.GetFileData(hash, false);
-
-                            // check if cr2w file
-                            if (f.Length < 4)
+                            using var ms = new MemoryStream();
+                            ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
+                            var cr2w = ModTools.TryReadCr2WFileHeaders(ms);
+                            if (cr2w == null)
                                 return;
-                            var id = f.Take(4);
-                            if (!id.SequenceEqual(MAGIC))
-                                return;
-
-                            var cr2w = new CR2WFile();
-
-                            using var ms = new MemoryStream(f);
-                            using var br = new BinaryReader(ms);
-                            cr2w.ReadImportsAndBuffers(br);
 
                             var obj = new Cr2wChunkInfo
                             {
@@ -229,38 +209,23 @@ namespace CP77Tools.Tasks
                                 Imports = cr2w.Imports
                             };
 
-                            
-
                             fileDictionary.AddOrUpdate(hash, obj, (arg1, o) => obj);
                         }
 
                         if (texinfo)
                         {
-                            if (!string.IsNullOrEmpty(entry.Value.FileName) && entry.Value.FileName.Contains(".xbm"))
+                            if (!string.IsNullOrEmpty(fileEntry.FileName) && fileEntry.FileName.Contains(".xbm"))
                             {
-                                var (f, buffers) = ar.GetFileData(hash, false);
+                                using var ms = new MemoryStream();
+                                ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
+                                var cr2w = ModTools.TryReadCr2WFile(ms);
 
-                                // check if cr2w file
-                                if (f.Length < 4)
-                                    return;
-                                var id = f.Take(4);
-                                if (!id.SequenceEqual(MAGIC))
-                                    return;
-
-                                var cr2w = new CR2WFile();
-
-                                using var ms = new MemoryStream(f);
-                                using var br = new BinaryReader(ms);
-                                var result = cr2w.Read(br);
-
-                                if (result != EFileReadErrorCodes.NoError)
-                                    return;
-                                if (!(cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm) ||
+                                if (cr2w?.Chunks.FirstOrDefault()?.data is not CBitmapTexture xbm ||
                                     !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
                                     return;
 
                                 // create dds header
-                                var texinfo = new Cr2wTextureInfo()
+                                var texinfoObj = new Cr2wTextureInfo()
                                 {
                                     Filename = filename,
                                     width = blob.Header.SizeInfo.Width.val,
@@ -273,7 +238,7 @@ namespace CP77Tools.Tasks
                                     rawFormat = xbm.Setup.RawFormat,
                                 };
 
-                                texDictionary.AddOrUpdate(hash, texinfo, (arg1, o) => texinfo);
+                                texDictionary.AddOrUpdate(hash, texinfoObj, (arg1, o) => texinfoObj);
                             }
                         }
 

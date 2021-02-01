@@ -9,6 +9,94 @@ namespace CP77.CR2W.Types
     public static partial class Enums
     {
 		// flags
+        [Flags]
+		public enum rendLightChannel
+        {
+            LC_Channel1,
+            LC_Channel2,
+            LC_Channel3,
+            LC_Channel4,
+            LC_Channel5,
+            LC_Channel6,
+            LC_Channel7,
+            LC_Channel8,
+            LC_ChannelWorld,
+            LC_Character,
+            LC_Player,
+            LC_Automated
+        }
+		[Flags]
+		public enum workWorkspotItemPolicy
+        {
+            ItemPolicy_SpawnItemOnIdleChange,
+            ItemPolicy_DespawnItemOnIdleChange,
+            ItemPolicy_DespawnItemOnReaction
+        }
+		[Flags]
+		public enum entdismembermentWoundTypeE
+        {
+            CLEAN,
+            COARSE
+        }
+        [Flags]
+        public enum entdismembermentResourceSetMask
+        {
+            fleshPartMask,
+            FleshBodyMask,
+            cyberPartMask,
+            CyberBodyMask
+        }
+		[Flags]
+		public enum entdismembermentPlacementE
+        {
+            MAIN_MESH,
+            DISM_MESH,
+            RAGDOLL_CONTACT,
+            RAGDOLL_CONTACT_SLIDE,
+            RAGDOLL_SLEEP
+        }
+        [Flags]
+		public enum scnChoiceNodeNsChoiceNodeBitFlags
+        {
+            IsFocusClue,
+            IsValidInteractionFailsafeDisabled
+        }
+		[Flags]
+		public enum worlduiContextVisibility
+        {
+            SceneDefault,
+            SceneTier1,
+            SceneTier2,
+            SceneTier3,
+            SceneTier4,
+            SceneTier5
+        }
+        [Flags]
+        public enum animMuteAnimEvents
+        {
+            STANDARD,
+            FACE_ANIMS
+        }
+		[Flags]
+		public enum gameuiContext
+        {
+            Default = 0,
+            QuickHack = 1,
+            Scanning = 2,
+            DeviceZoom = 3,
+            BraindanceEditor = 4,
+            BraindancePlayback = 5,
+            VehicleMounted = 6,
+            ModalPopup = 7,
+            RadialWheel = 8,
+            VehicleRace = 9,
+        }
+        [Flags]
+		public enum gameEItemDynamicTags
+        {
+            Quest,
+            UnequipBlocked
+        }
 		[Flags]
 		public enum EMeshChunkFlags
 		{
@@ -38,9 +126,34 @@ namespace CP77.CR2W.Types
 		{
 			EDAF_Togglable
 		}
-    
-    
-	    public enum ETextureRawFormat
+
+        [Flags]
+		public enum physicsRagdollBodyPartE
+		{
+			HEAD,
+            LARM_UPPER,
+            LARM_LOWER,
+            LARM_PALM,
+            RARM_UPPER,
+            RARM_LOWER,
+            RARM_PALM,
+            LLEG_UPPER,
+            LLEG_LOWER,
+            LLEG_FOOT,
+            RLEG_UPPER,
+            RLEG_LOWER,
+            RLEG_FOOT,
+            BODY
+		}
+
+        public enum RenderSceneLayerMask
+        {
+            Default,
+            Cyberspace,
+            WorldMap
+        }
+
+        public enum ETextureRawFormat
 	    {
 		    TRF_Invalid,
 		    TRF_AlphaGrayscale,
@@ -77,22 +190,35 @@ namespace CP77.CR2W.Types
 		    TCM_HalfHDR_Signed,
 		    TCM_Max,
 	    }
-	    
-	    public enum Sample_Enum_As_Bitfield_2_9{}
-	    public enum Sample_Enum_As_Bitfield_2_2{}
-	    public enum scnChoiceNodeNsChoiceNodeBitFlags{}
-	    public enum gameLootSlotState{}
-	    public enum worlduiContextVisibility{}
-	    public enum gameEItemDynamicTags{}
 
-	    public enum entdismembermentPlacementE
-	    {
-		    MAIN_MESH,
-		    DISM_MESH,
-		    RAGDOLL_CONTACT,
-		    RAGDOLL_CONTACT_SLIDE,
-		    RAGDOLL_SLEEP
-	    }
+        public enum Sample_Enum_As_Bitfield_2_9
+        {
+            Sample_Bitfield_Option_2_9_0
+		}
+
+        public enum Sample_Enum_As_Bitfield_2_2
+        {
+            Sample_Bitfield_Option_2_2_0
+		}
+
+        
+
+        public enum gameLootSlotState
+        {
+            Looted,
+            Unavailable
+		}
+
+        
+
+        
+
+        
+
+		
+
+
+		
 
 	    public enum EMeshChunkRenderMask
 	    {
@@ -109,19 +235,9 @@ namespace CP77.CR2W.Types
 		    MCR_Cascades
 	    }
 	    
-	    public enum entdismembermentResourceSetMask
-	    {
-		    fleshPartMask,
-            FleshBodyMask,
-            cyberPartMask,
-            CyberBodyMask
-	    }
+		
 
-	    public enum entdismembermentWoundTypeE
-	    {
-		    CLEAN,
-            COARSE
-	    }
+	    
 
 	    public enum physicsEClothCollisionMaskEnum
 	    {
@@ -160,21 +276,7 @@ namespace CP77.CR2W.Types
 	    }
 
 	    
-	    public enum rendLightChannel
-	    {
-		    LC_Channel1,
-		    LC_Channel2,
-		    LC_Channel3,
-		    LC_Channel4,
-		    LC_Channel5,
-		    LC_Channel6,
-		    LC_Channel7,
-		    LC_Channel8,
-		    LC_ChannelWorld,
-		    LC_Character,
-		    LC_Player,
-		    LC_Automated
-	    }
+	    
 	    
         
 	    public enum ActiveMode

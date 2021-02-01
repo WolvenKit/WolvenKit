@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Newtonsoft.Json;
-using ProtoBuf;
 using WolvenKit.Common;
 
 namespace WolvenKit.Controllers
@@ -47,7 +43,7 @@ namespace WolvenKit.Controllers
                 {
                     archiveManager = new ArchiveManager();
                     archiveManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
-                    File.WriteAllText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager), JsonConvert.SerializeObject(archiveManager, Formatting.None, new JsonSerializerSettings()
+                    File.WriteAllText(GetManagerPath(EManagerType.ArchiveManager), JsonConvert.SerializeObject(archiveManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -56,10 +52,10 @@ namespace WolvenKit.Controllers
                     _settings.ManagerVersions[(int)EManagerType.ArchiveManager] = ArchiveManager.SerializationVersion;
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception)
             {
-                if (File.Exists(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager)))
-                    File.Delete(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager));
+                if (File.Exists(GetManagerPath(EManagerType.ArchiveManager)))
+                    File.Delete(GetManagerPath(EManagerType.ArchiveManager));
                 archiveManager = new ArchiveManager();
                 archiveManager.LoadAll(Path.GetDirectoryName(_settings.ExecutablePath));
             }
@@ -69,7 +65,7 @@ namespace WolvenKit.Controllers
 
         public override List<IGameArchiveManager> GetArchiveManagersManagers()
         {
-            return new List<IGameArchiveManager>()
+            return new()
             {
                 archiveManager
             };
