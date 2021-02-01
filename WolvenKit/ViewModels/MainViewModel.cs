@@ -1096,7 +1096,10 @@ namespace WolvenKit.ViewModels
                     File.Delete(newpath);
                 }
 
-                file.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
+                using (var fs = new FileStream(newpath, FileMode.Create))
+                {
+                    file.Extract(fs);
+                }
 
                 Logger.LogString($"Succesfully extracted {filename}.", Logtype.Success);
             }

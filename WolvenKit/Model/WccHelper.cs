@@ -715,8 +715,10 @@ namespace WolvenKit.Model
                     if (!File.Exists(newpath) && (extension != ".xbm" || !File.Exists(Path.ChangeExtension(newpath,
                         MainController.Get().Configuration.UncookExtension.ToString()))))
                     {
-                        string extractedfile = archive.Extract(new BundleFileExtractArgs(newpath,
-                            MainController.Get().Configuration.UncookExtension));
+                        using (var fs = new FileStream(newpath, FileMode.Create))
+                        {
+                            archive.Extract(fs);
+                        }
                         if (!silent)
                             Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
                     }
