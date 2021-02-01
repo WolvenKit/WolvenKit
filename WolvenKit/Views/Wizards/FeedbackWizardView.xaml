@@ -1,0 +1,68 @@
+﻿<catel:UserControl x:Class="WolvenKit.Views.Wizards.FeedbackWizardView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:catel="http://schemas.catelproject.com" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol">
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources/>
+                <hc:Theme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </catel:UserControl.Resources>
+    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="300" MinHeight="560" MaxHeight="560" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,2,5">
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="90*"/>
+            <RowDefinition Height="10*"/>
+
+        </Grid.RowDefinitions>
+
+
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="5,5,5,4">
+            <Grid>
+                <iconPacks:PackIconCodicons  Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="35" Width="35" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+
+            </Grid>
+
+            <StackPanel  VerticalAlignment="Bottom" Orientation="Vertical" HorizontalAlignment="Stretch">
+
+                <TextBlock Text="Rate your WolvenKit Experience!"  FontSize="20" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,0"></TextBlock>
+                <hc:Divider  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,10,0,0"></hc:Divider>
+            </StackPanel>
+        </StackPanel>
+
+
+        <Grid x:Name="PageGrid" Grid.Row="1">
+
+        </Grid>
+
+
+
+
+
+
+
+        <Grid Grid.Row="2"  VerticalAlignment="Bottom" Height="95" Margin="0,0,0,0">
+
+            <Button Margin="3" Width="50" Height="30" VerticalAlignment="Bottom" IsEnabled="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Left" Click="Button_Click_1">
+                <iconPacks:PackIconCodicons Kind="ArrowLeft"/>
+            </Button>
+            <hc:StepBar x:Name="StepMain" Margin="0,0,0,3" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Dock="Bottom"  >
+                <hc:StepBarItem Content="Rate"/>
+                <hc:StepBarItem Content="Review (optional)"/>
+                <hc:StepBarItem Content="Send"/>
+
+            </hc:StepBar>
+            <Button Command="{Binding NextCmd}" CommandParameter="{Binding ElementName=StepMain}" Margin="3" VerticalAlignment="Bottom" Height="30" Width="50" IsEnabled="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Right" Click="Button_Click">
+                <iconPacks:PackIconCodicons Kind="ArrowRight"/>
+            </Button>
+        </Grid>
+
+    </Grid>
+
+</catel:UserControl>

@@ -21,6 +21,8 @@ namespace WolvenKit.Controllers
 
         public abstract List<IGameArchiveManager> GetArchiveManagersManagers();
 
+        public abstract List<string> GetAvaliableClasses();
+
         public abstract void HandleStartup();
 
         public static string GetManagerPath(EManagerType type)

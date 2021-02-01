@@ -14,6 +14,11 @@ namespace WolvenKit.Controllers
             return new List<IGameArchiveManager>();
         }
 
+        public override List<string> GetAvaliableClasses()
+        {
+            return new List<string>();
+        }
+
         public override void HandleStartup()
         {
             //Nothing to do here :)

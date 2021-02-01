@@ -37,19 +37,20 @@ namespace WolvenKit.Model.ProjectManagement
                     case ".w3modproj":
                     {
                         project = new Tw3Project(location);
+                        MainController.Get().ActiveMod = project.Data;
                         MainController.Get().SetGame(new Tw3Controller());
                         break;
                     }
                     case ".cpmodproj":
                     {
                         project = new Cp77Project(location);
+                        MainController.Get().ActiveMod = project.Data;
                         MainController.Get().SetGame(new Cp77Controller());
                         break;
                     }
                 }
-
                 _notificationService.ShowNotification("Success", "Project " + Path.GetFileNameWithoutExtension(location) +
-                                                      " loaded!");
+                                                                 " loaded!");
                 return Task.FromResult<IProject>(project);
 
             } catch (IOException ex)

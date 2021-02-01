@@ -436,7 +436,6 @@ namespace WolvenKit.ViewModels
         {
             if (ActiveMod == null)
                 return;
-
             Treenodes.Clear();
             var fileDirectoryInfo = new DirectoryInfo(ActiveMod.FileDirectory);
             foreach (var fileSystemInfo in fileDirectoryInfo.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly))
@@ -452,6 +451,7 @@ namespace WolvenKit.ViewModels
                 return TaskHelper.Completed;
 
             RepopulateTreeView();
+
 
             return TaskHelper.Completed;
         }

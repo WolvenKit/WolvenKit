@@ -268,9 +268,9 @@ namespace WolvenKit.ViewModels
                 return;
             }
             var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.ExecutablePath)
+            var proc = new ProcessStartInfo(config.W3ExePath)
             {
-                WorkingDirectory = Path.GetDirectoryName(config.ExecutablePath),
+                WorkingDirectory = Path.GetDirectoryName(config.W3ExePath),
                 Arguments = args == "" ? "-net -debugscripts" : args,
                 UseShellExecute = false,
                 RedirectStandardOutput = true

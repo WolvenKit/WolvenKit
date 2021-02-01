@@ -32,7 +32,4 @@ namespace WolvenKit.Common
 
         void Extract(Stream output);
     }
-
-
-
 }
