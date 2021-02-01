@@ -83,12 +83,6 @@ namespace CP77Tools.Tasks
             logger.LogProgress(0);
             Parallel.ForEach(finalMatchesList, fileInfo =>
             {
-                var f = File.ReadAllBytes(fileInfo.FullName);
-                using var ms = new MemoryStream(f);
-                using var br = new BinaryReader(ms);
-
-                var cr2w = new CR2WFile();
-
                 var outputDirInfo = string.IsNullOrEmpty(outpath)
                     ? fileInfo.Directory
                     : new DirectoryInfo(outpath);
@@ -98,12 +92,10 @@ namespace CP77Tools.Tasks
                     return;
                 }
 
-                
-
                 if (chunks)
                 {
-                    var f = File.ReadAllBytes(inputFileInfo.FullName);
-                    using var fs = new FileStream(inputFileInfo.FullName, FileMode.Open, FileAccess.Read);
+                    var f = File.ReadAllBytes(fileInfo.FullName);
+                    using var fs = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read);
                     var cr2w = ModTools.TryReadCr2WFile(fs);
                     if (cr2w == null)
                         return;
