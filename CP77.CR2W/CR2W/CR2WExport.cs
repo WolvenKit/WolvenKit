@@ -433,14 +433,14 @@ namespace CP77.CR2W
 
             data.Read(file, _export.dataSize);
 
-            // Unknown bytes
+            // Unknown bytes after the normal serialized class
             var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);
             unknownBytes = new CBytes(cr2w, data, "unknownBytes");
             if (bytesLeft > 0)
             {
                 unknownBytes.Read(file, (uint)bytesLeft);
                 if (!UnknownTypes.Contains(data.REDType))
-                    UnknownTypes.Add(data.REDType);
+                    UnknownTypes.Add($"Type: {data.REDType}, File: {cr2w.FileName}, Offset: {file.BaseStream.Position}, UnknownBytes: {bytesLeft}");
             }
             else if (bytesLeft < 0)
             {

@@ -806,6 +806,7 @@ namespace CP77.MSTests
             int totalCount = GroupedFiles[extension].Count;
             var sb = new StringBuilder();
             var msg = "";
+            var logmsg = "";
 
             bool successRead = results.All(r => r.Success);
             bool successUB = !results.All(r => r.UnknownBytes > 0);
@@ -819,21 +820,22 @@ namespace CP77.MSTests
                 if (unknownBytes > 0)
                 {
                     msg += $" UnknownBytes: {unknownBytes}. ";
-                    var unkownTypes = string.Join(',', results.SelectMany(_ => _.UnknownTypes).Distinct());
-                    msg += $" UnknownTypes: {unkownTypes}";
+                    var unkownTypes = string.Join('\n', results.SelectMany(_ => _.UnknownTypes).Distinct());
+                    logmsg += $" UnknownTypes: {unkownTypes}";
                 }
 
                 if (additionalBytes > 0)
                     msg += $" UnknownBytes: {additionalBytes}. ";
 
-                
+                sb.AppendLine(logmsg);
+                var logPath = Path.Combine(resultDir, $"logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
+                File.WriteAllText(logPath, sb.ToString());
+                Console.WriteLine(sb.ToString());
+
                 Assert.Fail(msg);
             }
 
-            sb.AppendLine(msg);
-            var logPath = Path.Combine(resultDir, $"logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
-            File.WriteAllText(logPath, sb.ToString());
-            Console.WriteLine(sb.ToString());
+            
         }
 
         private static IEnumerable<ReadTestResult> Read_Archive_Items(IEnumerable<FileEntry> files)
