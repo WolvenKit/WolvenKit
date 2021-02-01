@@ -30,16 +30,6 @@ namespace CP77.CR2W.Types
             Alpha = new CUInt8(cr2w, this, nameof(Alpha));
         }
 
-        public override void Read(BinaryReader file, uint size)
-        {
-            base.Read(file, size);
-        }
-
-        public override void Write(BinaryWriter file)
-        {
-            base.Write(file);
-        }
-
         public Color Color
         {
             get { return Color.FromArgb(Alpha.val, Red.val, Green.val, Blue.val); }

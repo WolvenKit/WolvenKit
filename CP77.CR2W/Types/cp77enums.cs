@@ -10,6 +10,43 @@ namespace CP77.CR2W.Types
     {
 		// flags
         [Flags]
+        public enum TriggerChannel
+        {
+            TC_Default,
+            TC_Player,
+            TC_Camera,
+            TC_Human,
+            TC_SoundReverbArea,
+            TC_SoundAmbientArea,
+            TC_Quest,
+            TC_Projectiles,
+            TC_Vehicle,
+            TC_Environment,
+            TC_WaterNullArea,
+            TC_Custom0,
+            TC_Custom1,
+            TC_Custom2,
+            TC_Custom3,
+            TC_Custom4,
+            TC_Custom5,
+            TC_Custom6,
+            TC_Custom7,
+            TC_Custom8,
+            TC_Custom9,
+            TC_Custom10,
+            TC_Custom11,
+            TC_Custom12,
+            TC_Custom13,
+            TC_Custom14
+        }
+		[Flags]
+        public enum RenderSceneLayerMask
+        {
+            Default,
+            Cyberspace,
+            WorldMap
+        }
+		[Flags]
 		public enum rendLightChannel
         {
             LC_Channel1,
@@ -106,7 +143,12 @@ namespace CP77.CR2W.Types
 			MCF_IsRayTracedEmissive,
 			MCF_IsPrefabProxy
 		}
-    
+		[Flags]
+        public enum physicsEClothCollisionMaskEnum
+        {
+            CONVEX,
+            TRIMESH
+        }
 		[Flags]
 		public enum CensorshipFlags
 		{
@@ -146,12 +188,7 @@ namespace CP77.CR2W.Types
             BODY
 		}
 
-        public enum RenderSceneLayerMask
-        {
-            Default,
-            Cyberspace,
-            WorldMap
-        }
+		
 
         public enum ETextureRawFormat
 	    {
@@ -238,42 +275,8 @@ namespace CP77.CR2W.Types
 		
 
 	    
-
-	    public enum physicsEClothCollisionMaskEnum
-	    {
-		    CONVEX,
-		    TRIMESH
-	    }
-
-	    public enum TriggerChannel
-	    {
-		    TC_Default,
-		    TC_Player,
-		    TC_Camera,
-		    TC_Human,
-		    TC_SoundReverbArea,
-		    TC_SoundAmbientArea,
-		    TC_Quest,
-		    TC_Projectiles,
-		    TC_Vehicle,
-		    TC_Environment,
-		    TC_WaterNullArea,
-		    TC_Custom0,
-		    TC_Custom1,
-		    TC_Custom2,
-		    TC_Custom3,
-		    TC_Custom4,
-		    TC_Custom5,
-		    TC_Custom6,
-		    TC_Custom7,
-		    TC_Custom8,
-		    TC_Custom9,
-		    TC_Custom10,
-		    TC_Custom11,
-		    TC_Custom12,
-		    TC_Custom13,
-		    TC_Custom14
-	    }
+		
+		
 
 	    
 	    

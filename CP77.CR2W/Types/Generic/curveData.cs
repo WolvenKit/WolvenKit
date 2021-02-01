@@ -75,6 +75,11 @@ namespace CP77.CR2W.Types
             }
         }
 
+        public override void Write(BinaryWriter file)
+        {
+            throw new NotImplementedException();
+        }
+
         public override List<IEditableVariable> GetEditableVariables()
         {
             return Elements.Cast<IEditableVariable>().ToList();

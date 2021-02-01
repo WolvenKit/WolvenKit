@@ -421,8 +421,7 @@ namespace CP77.CR2W.Types
             foreach (Member item in redproperties)
             {
                 var att = item.GetMemberAttribute<T>();
-                if (att is REDBufferAttribute bufferAttribute
-                    && bufferAttribute.IsIgnored)
+                if (att is REDBufferAttribute {IsIgnored: true})
                 {
                     // add IsSerialized?
                     continue;
@@ -456,8 +455,8 @@ namespace CP77.CR2W.Types
             {
                 try
                 {
-                    var redAttribute = member.GetMemberAttribute<REDAttribute>();
-                    if (redAttribute == null || redAttribute.Name != value.REDName)
+                    var redname = REDReflection.GetREDNameString(member);
+                    if (redname != value.REDName)
                         continue;
                     accessor[this, member.Name] = value;
                     return true;

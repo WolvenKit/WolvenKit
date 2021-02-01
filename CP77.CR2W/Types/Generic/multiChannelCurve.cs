@@ -14,24 +14,55 @@ namespace CP77.CR2W.Types
     [REDMeta]
     public class multiChannelCurve<T> : CVariable, ICurveDataAccessor where T : CVariable
     {
-       
+        public enum EInterPolationType
+        {
+            Constant,
+            Linear, 
+            BezierQuadratic,
+            BezierCubic,
+            Hermite
+        }
+
+        public enum ELinkType
+        {
+            Normal,
+            Smooth,
+            SmoothSymmertric
+        }
 
         public multiChannelCurve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
+            NumChannels = new CUInt32(cr2w, this, nameof(NumChannels));
+            InterPolationType = new CEnum<EInterPolationType>(cr2w, this, nameof(InterPolationType));
+            LinkType = new CEnum<ELinkType>(cr2w, this, nameof(LinkType));
+            Alignment = new CUInt32(cr2w, this, nameof(Alignment));
+            Data = new CByteArray(cr2w, this, nameof(Data));
         }
+
+        public CUInt32 NumChannels;
+        public CEnum<EInterPolationType> InterPolationType;
+        public CEnum<ELinkType> LinkType;
+        public CUInt32 Alignment;
+        public CByteArray Data;
 
         public string Elementtype { get; set; }
 
         private List<CurvePoint<T>> Elements { get; set; } = new();
-        public uint Tail { get; set; }
 
         public override void Read(BinaryReader file, uint size)
         {
             var pos = file.BaseStream.Position;
-            var count = file.ReadUInt32();
 
+            NumChannels.Read(file, 4);
 
-            throw new NotImplementedException($"multiChannelCurve");
+            var interPolationTypeByte = (int)file.ReadByte();
+            InterPolationType.WrappedEnum = (EInterPolationType) interPolationTypeByte;
+
+            var linkTypeByte = (int)file.ReadByte();
+            LinkType.WrappedEnum = (ELinkType) linkTypeByte;
+
+            Alignment.Read(file, 4);
+            Data.Read(file, 0);
         }
 
         public override List<IEditableVariable> GetEditableVariables()
