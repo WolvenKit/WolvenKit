@@ -18,6 +18,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(7)]  [RED("videos")] public CArray<CHandle<gameJournalInternetVideo>> Videos { get; set; }
 		[Ordinal(8)]  [RED("widgetFile")] public raRef<inkWidgetLibraryResource> WidgetFile { get; set; }
 
+		[Ordinal(999)]  [RED("activatedAtStart")] public CBool activatedAtStart { get; set; }
+
 		public gameJournalInternetPage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

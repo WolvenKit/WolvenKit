@@ -10,7 +10,7 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("autoHideDistance")] public CFloat AutoHideDistance { get; set; }
 		[Ordinal(1)]  [RED("forceLODLevel")] public CInt8 ForceLODLevel { get; set; }
-		[Ordinal(2)]  [RED("renderSceneLayerMask")] public RenderSceneLayerMask RenderSceneLayerMask { get; set; }
+		[Ordinal(2)]  [RED("renderSceneLayerMask")] public CEnum<RenderSceneLayerMask> RenderSceneLayerMask { get; set; }
 
 		public entIVisualComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

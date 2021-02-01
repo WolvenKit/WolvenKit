@@ -31,6 +31,12 @@ namespace CP77.CR2W.Types
 		[Ordinal(20)]  [RED("renderResourceBlob")] public CHandle<IRenderResourceBlob> RenderResourceBlob { get; set; }
 		[Ordinal(21)]  [RED("surfaceAreaPerAxis")] public Vector3 SurfaceAreaPerAxis { get; set; }
 
+		[Ordinal(996)] [RED("saveDateTime")] public CDateTime saveDateTime { get; set; }
+		[Ordinal(997)] [RED("geometryHash")] public CUInt64 geometryHash { get; set; }
+		[Ordinal(998)] [RED("consoleBias")] public CUInt8 consoleBias { get; set; }
+		[Ordinal(999)] [RED("resourceVersion")] public CUInt8 ResourceVersion { get; set; }
+
+
 		public CMesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -16,6 +16,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(5)]  [RED("boundingBox")] public Box BoundingBox { get; set; }
 		[Ordinal(6)]  [RED("targets")] public CArray<MorphTargetMeshEntry> Targets { get; set; }
 
+		[Ordinal(999)]  [RED("resourceVersion")] public CUInt8 resourceVersion { get; set; }
+
 		public MorphTargetMesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Catel.IoC;
+using CP77.CR2W.Types;
 using WolvenKit.Common.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
@@ -97,12 +98,10 @@ namespace CP77.CR2W.Archive
 
         public void Extract(Stream output)
         {
-            throw new NotImplementedException();
-        }
+            if (Archive is not Archive ar)
+                throw new InvalidParsingException($"{Archive.ArchiveAbsolutePath} is not a cyberpunk77 archive.");
 
-        public string Extract(BundleFileExtractArgs e)
-        {
-            throw new NotImplementedException();
+            ar.CopyFileToStream(output, NameHash64, false);
         }
     }
 }

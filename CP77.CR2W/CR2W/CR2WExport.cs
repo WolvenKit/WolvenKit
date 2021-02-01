@@ -124,9 +124,9 @@ namespace CP77.CR2W
         public string REDValue => this.ToString();
 
 
-        [NonSerialized]
-        [JsonIgnore]
-        public CBytes unknownBytes;
+        [NonSerialized] [JsonIgnore] public CBytes unknownBytes;
+
+        [NonSerialized] [JsonIgnore] public List<string> UnknownTypes = new();
 
 
         /// <summary>
@@ -233,9 +233,10 @@ namespace CP77.CR2W
 
 
 
-        public Cr2wVariableDumpObject GetDumpObject(BinaryReader br)
+        public Cr2wVariableDumpObject GetDumpObject(Stream stream)
         {
-            br.BaseStream.Seek(Export.dataOffset, SeekOrigin.Begin);
+            stream.Seek(Export.dataOffset, SeekOrigin.Begin);
+            using var br = new BinaryReader(stream);
             var o = new Cr2wVariableDumpObject()
             {
                 Name = this.REDName,
@@ -432,12 +433,14 @@ namespace CP77.CR2W
 
             data.Read(file, _export.dataSize);
 
-            // Unknown bytes
+            // Unknown bytes after the normal serialized class
             var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);
             unknownBytes = new CBytes(cr2w, data, "unknownBytes");
             if (bytesLeft > 0)
             {
                 unknownBytes.Read(file, (uint)bytesLeft);
+                if (!UnknownTypes.Contains(data.REDType))
+                    UnknownTypes.Add($"Type: {data.REDType}, File: {cr2w.FileName}, Offset: {file.BaseStream.Position}, UnknownBytes: {bytesLeft}");
             }
             else if (bytesLeft < 0)
             {
@@ -453,8 +456,8 @@ namespace CP77.CR2W
         {
             //await Task.Run(() =>
             //{
-            using (MemoryMappedViewStream vs = mmf.CreateViewStream(_export.dataOffset, _export.dataSize, MemoryMappedFileAccess.Read))
-            using (BinaryReader br = new BinaryReader(vs))
+            using (var vs = mmf.CreateViewStream(_export.dataOffset, _export.dataSize, MemoryMappedFileAccess.Read))
+            using (var br = new BinaryReader(vs))
             {
                 CreateDefaultData();
 

@@ -78,4 +78,9 @@ namespace CP77.CR2W.Types
     {
         string Elementtype { get; set; }
     }
+
+    public interface IDataBufferAccessor
+    {
+
+    }
 }

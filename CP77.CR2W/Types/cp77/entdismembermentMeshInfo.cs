@@ -9,7 +9,7 @@ namespace CP77.CR2W.Types
 	public class entdismembermentMeshInfo : CVariable
 	{
 		[Ordinal(0)]  [RED("AppearanceMap")] public CArray<entdismembermentAppearanceMatch> AppearanceMap { get; set; }
-		[Ordinal(1)]  [RED("BodyPartMask")] public physicsRagdollBodyPartE BodyPartMask { get; set; }
+		[Ordinal(1)]  [RED("BodyPartMask")] public CEnum<physicsRagdollBodyPartE> BodyPartMask { get; set; }
 		[Ordinal(2)]  [RED("CullMesh")] public CEnum<entdismembermentWoundTypeE> CullMesh { get; set; }
 		[Ordinal(3)]  [RED("Mesh")] public raRef<CMesh> Mesh { get; set; }
 		[Ordinal(4)]  [RED("MeshAppearance")] public CName MeshAppearance { get; set; }

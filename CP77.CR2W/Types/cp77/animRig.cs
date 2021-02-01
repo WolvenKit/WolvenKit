@@ -26,6 +26,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(15)]  [RED("turnOffLOD")] public CInt32 TurnOffLOD { get; set; }
 		[Ordinal(16)]  [RED("turningOffUpdateAndSample")] public CBool TurningOffUpdateAndSample { get; set; }
 
+		[Ordinal(999)]  [RED("skipRigValidation")] public CBool skipRigValidation { get; set; }
+
 		public animRig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

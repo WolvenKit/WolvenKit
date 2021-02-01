@@ -81,18 +81,6 @@ namespace WolvenKit.W3Speech
             }
         }
 
-        public string Extract(BundleFileExtractArgs e)
-        {
-            PageOffset = cr2w_offs;
-            ZSize = cr2w_size;
-            Extract(new FileStream(Path.ChangeExtension(e.FileName, ".cr2w"), FileMode.Create));
-            PageOffset = wem_offs;
-            ZSize = wem_size;
-            Extract(new FileStream(Path.ChangeExtension(e.FileName, ".wem"), FileMode.Create));
-
-            return Path.ChangeExtension(e.FileName, ".wem");
-        }
-
         public override string ToString()
         {
             return $"ItemInfo({id},{id_high},{wem_offs},{wem_size},{cr2w_offs},{cr2w_size},{duration.ToString(CultureInfo.InvariantCulture)})";

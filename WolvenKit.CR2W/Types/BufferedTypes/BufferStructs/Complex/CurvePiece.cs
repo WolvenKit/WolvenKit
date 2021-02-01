@@ -43,11 +43,6 @@ namespace WolvenKit.CR2W.Types
             return copy;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CurvePiece(cr2w, parent, name);
-        }
-
         public override void Read(BinaryReader file, uint size)
         {
             valueCount.Read(file, size);
