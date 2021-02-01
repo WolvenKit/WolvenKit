@@ -83,6 +83,13 @@ namespace WolvenKit
             //-- Category : AssetBrowser
             viewModelLocator.Register(typeof(Views.AssetBrowser.AssetBrowserView), typeof(ViewModels.AssetBrowser.AssetBrowserViewModel));
 
+            //-- Category : JournalEditor
+            viewModelLocator.Register(typeof(Views.JournalEditor.JournalEditorView), typeof(ViewModels.JournalEditor.JournalEditorViewModel));
+
+            //-- Category : AudioTool
+            viewModelLocator.Register(typeof(Views.AudioTool.AudioToolView), typeof(ViewModels.AudioTool.AudioToolViewModel));
+
+
             //-- Category : CodeEditor
             viewModelLocator.Register(typeof(Views.CodeEditor.CodeEditorView), typeof(ViewModels.CodeEditor.CodeEditorViewModel));
 

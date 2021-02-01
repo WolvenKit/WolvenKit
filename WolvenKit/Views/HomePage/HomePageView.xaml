@@ -33,24 +33,20 @@
             <hc:TransitioningContentControl Margin="0,60,0,0">
                 
                 <hc:SideMenu x:Name="LeftSideMenu" SideBrush="{DynamicResource MahApps.Brushes.AccentBase}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" BorderThickness="0" Width="200" SubSideBrush="{DynamicResource MahApps.Brushes.Accent2}">
-                    <hc:Interaction.Triggers>
-                        <hc:EventTrigger EventName="SelectionChanged">
-                            <hc:EventToCommand Command="{Binding SwitchItemCmd}" PassEventArgsToCommand="True" />
-                        </hc:EventTrigger>
-                    </hc:Interaction.Triggers>
+                   
 
                     <hc:SideMenuItem x:Name="SideMenu_GetStartedItem" Header="Get Started"  Margin="0,0,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
                         <hc:SideMenuItem.Icon>
                             <iconPacks:Codicons Height="25" Kind="Tools" Width="25"/>
                         </hc:SideMenuItem.Icon>
 
-                        <hc:SideMenuItem x:Name="SideMenu_WelcomeItem" Header="Welcome" Command="{Binding SelectCmd}" CommandParameter="{Binding Header, RelativeSource={RelativeSource Self}}"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_WelcomeItem_Selected">
+                        <hc:SideMenuItem x:Name="SideMenu_WelcomeItem" Header="Welcome"   Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_WelcomeItem_Selected">
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:Codicons Height="15" Kind="Pinned" Width="15"/>
                             </hc:SideMenuItem.Icon>
                         </hc:SideMenuItem>
 
-                        <hc:SideMenuItem x:Name="SideMenu_FirstUseItem" Header="First Use Setup" Command="{Binding SelectCmd}" CommandParameter="{Binding Header, RelativeSource={RelativeSource Self}}"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_FirstUseItem_Selected">
+                        <hc:SideMenuItem x:Name="SideMenu_FirstUseItem" Header="First Use Setup"   Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_FirstUseItem_Selected">
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:Codicons Height="13" Kind="DebugStart" Width="13"/>
                             </hc:SideMenuItem.Icon>
