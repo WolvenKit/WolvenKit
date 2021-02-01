@@ -94,6 +94,13 @@ namespace CP77.CR2W.Types
         public string UniqueIdentifier => GetFullDependencyStringName();
 
         /// <summary>
+        /// an internal id that is used to track typenames 
+        /// </summary>
+        [JsonIgnore]
+        private string TypeNameWithParents => GetREDTypeNameWithParents();
+
+
+        /// <summary>
         /// Stores the parent CVariable 
         /// Is set on read,
         /// otherwise must be set manually
@@ -156,11 +163,7 @@ namespace CP77.CR2W.Types
         #endregion
 
         #region Methods
-        /// <summary>
-        /// We can use something like this for hashing
-        /// </summary>
-        /// <returns></returns>
-        public string GetFullDependencyStringName()
+        private string GetFullDependencyStringName()
         {
             var depstr = this.REDName;
             var par = this.ParentVar;
@@ -171,6 +174,22 @@ namespace CP77.CR2W.Types
             }
 
             return depstr;
+        }
+
+        private string GetREDTypeNameWithParents()
+        {
+            var t = GetType();
+            var s = new List<string>() {t.Name};
+            while (true)
+            {
+                t = t?.BaseType;
+                if (t == typeof(CVariable))
+                    break;
+                s.Add(t.Name);
+            }
+
+            s.Reverse();
+            return string.Join('.', s);
         }
 
         public ushort GettypeId() => (ushort)cr2w.GetStringIndex(REDType, true);
@@ -450,7 +469,7 @@ namespace CP77.CR2W.Types
                 }
             }
             //throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.GetType()}){this.REDName}");
-            Console.WriteLine($"({value.REDType}){value.REDName} not found in ({this.UniqueIdentifier}){this.REDName}");
+            Console.WriteLine($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
             return false;
 
             

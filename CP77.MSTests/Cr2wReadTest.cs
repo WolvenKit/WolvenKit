@@ -847,13 +847,13 @@ namespace CP77.MSTests
                 {
                     if (file.Archive is not Archive ar)
                         return;
-                    var (fileBytes, _) = ar.GetFileData(file.NameHash64, false);
 
-                    using var ms = new MemoryStream(fileBytes);
-                    using var br = new BinaryReader(ms);
+                    using var ms = new MemoryStream();
+                    ar.CopyFileToStream(ms, file.NameHash64, false);
 
                     var c = new CR2WFile {FileName = file.NameOrHash};
-                    var readResult = c.Read(br);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    var readResult = c.Read(ms);
 
                     switch (readResult)
                     {
@@ -874,7 +874,7 @@ namespace CP77.MSTests
                                 Message = $"Unsupported Version ({c.GetFileHeader().version})"
                             });
                             break;
-                        default:
+                        case EFileReadErrorCodes.NoError:
                             var hasAdditionalBytes =
                                 c.AdditionalCr2WFileBytes != null && c.AdditionalCr2WFileBytes.Any();
 
@@ -907,6 +907,8 @@ namespace CP77.MSTests
                             });
 
                             break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                 }
                 catch (Exception e)

@@ -233,9 +233,10 @@ namespace CP77.CR2W
 
 
 
-        public Cr2wVariableDumpObject GetDumpObject(BinaryReader br)
+        public Cr2wVariableDumpObject GetDumpObject(Stream stream)
         {
-            br.BaseStream.Seek(Export.dataOffset, SeekOrigin.Begin);
+            stream.Seek(Export.dataOffset, SeekOrigin.Begin);
+            using var br = new BinaryReader(stream);
             var o = new Cr2wVariableDumpObject()
             {
                 Name = this.REDName,

@@ -12,10 +12,9 @@ namespace CP77Tools.Commands
         {
             AddOption(new Option<string[]>(new[] {"--path", "-p"}, "Input path to a cr2w file."));
             AddOption(new Option<string>(new []{"--outpath", "-o"}, "Output path."));
-            AddOption(new Option<bool>(new[] {"--all", "-a"}, "Dump all information."));
             AddOption(new Option<bool>(new[] {"--chunks", "-c"}, "Dump all class information of file."));
 
-            Handler = CommandHandler.Create<string[], string, bool, bool>(Tasks.ConsoleFunctions.Cr2wTask);
+            Handler = CommandHandler.Create<string[], string, bool>(Tasks.ConsoleFunctions.Cr2wTask);
         }
     }
 }

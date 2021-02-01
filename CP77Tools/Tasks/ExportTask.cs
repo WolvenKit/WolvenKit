@@ -42,7 +42,7 @@ namespace CP77Tools.Tasks
 
             #endregion
 
-            if (ModTools.Export(new FileInfo(path), uncookext) == 1)
+            if (ModTools.Export(new FileInfo(path), uncookext))
             {
                 logger.LogString($"Successfully exported {path}.", Logtype.Success);
             }

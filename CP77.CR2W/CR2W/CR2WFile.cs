@@ -541,6 +541,22 @@ namespace CP77.CR2W
             return await Task.Run(() => Read(br));
         }
 
+        /// <summary>
+        /// Reads a Cr2wFile from a stream
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public EFileReadErrorCodes Read(Stream stream)
+        {
+            using var br = new BinaryReader(stream);
+            return Read(br);
+        }
+
+        /// <summary>
+        /// Reads a Cr2wFile from a BinaryReader stream
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         public EFileReadErrorCodes Read(BinaryReader file)
         {
             //m_stream = file.BaseStream;
