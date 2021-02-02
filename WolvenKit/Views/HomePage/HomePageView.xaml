@@ -30,7 +30,7 @@
         </Grid>
 
         <Grid HorizontalAlignment="Left" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
-            <hc:TransitioningContentControl Margin="0,60,0,0">
+            <hc:TransitioningContentControl TransitionMode="Bottom2TopWithFade" Margin="0,60,0,0">
                 
                 <hc:SideMenu x:Name="LeftSideMenu" SideBrush="{DynamicResource MahApps.Brushes.AccentBase}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" BorderThickness="0" Width="200" SubSideBrush="{DynamicResource MahApps.Brushes.Accent2}">
                    

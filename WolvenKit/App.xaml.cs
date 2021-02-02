@@ -18,6 +18,7 @@ using NodeNetwork;
 using System.Windows.Media;
 using MLib.Interfaces;
 using HandyControl.Controls.SplashWindow;
+using FmodAudio;
 
 namespace WolvenKit
 {
@@ -206,9 +207,10 @@ namespace WolvenKit
  
             Log.Info("Calling base.OnStartup");
 
+            Fmod.SetLibraryLocation("fmod.dll");
 
 
-      
+
             base.OnStartup(e); 
             NNViewRegistrar.RegisterSplat();
 
