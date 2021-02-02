@@ -237,7 +237,9 @@ namespace WolvenKit.ViewModels
         private bool CanPackMod() => _projectManager.ActiveProject is EditorProject proj;
         private void ExecutePackMod()
         {
-            //TODO
+            //TODO: For publishing we need to implement this, for witcher3 we can probably
+            // straight up reuse the old code more or less but for cyberpunk we need a new strategy
+            // but in terms of workflow it should be similar too
         }
 
 		/// <summary>
