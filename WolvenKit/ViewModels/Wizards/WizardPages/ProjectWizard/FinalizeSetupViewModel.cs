@@ -1,10 +1,8 @@
-﻿using Catel.IoC;
+﻿using Catel.Data;
+using Catel.Fody;
+using Catel.IoC;
 using Catel.MVVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WolvenKit.Model.Wizards;
 
 namespace WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard
 {
@@ -13,43 +11,32 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard
     /// </summary>
     class FinalizeSetupViewModel : ViewModelBase
     {
-        #region fields
-        private SelectProjectTypeViewModel _sptvm;
-        private ProjectConfigurationViewModel _pcvm;
-        #endregion fields
-
         #region constructors
         public FinalizeSetupViewModel()
         {
-            _sptvm = ServiceLocator.Default.ResolveType<SelectProjectTypeViewModel>();
-            _pcvm = ServiceLocator.Default.ResolveType<ProjectConfigurationViewModel>();
+            ProjectWizardModel = ServiceLocator.Default.ResolveType<ProjectWizardModel>();
         }
-        #endregion constructors
+        #endregion
 
         #region properties
         /// <summary>
-        /// Gets/Sets the project's type.
+        /// Gets or sets the projectWizardModel.
         /// </summary>
-        public string ProjectType
+        [Model]
+        [Expose("ProjectName")]
+        [Expose("ProjectPath")]
+        [Expose("ProjectType")]
+        private ProjectWizardModel ProjectWizardModel
         {
-            get => _sptvm.CyberpunkChecked ? _sptvm.CyberpunkGameName : (_sptvm.WitcherChecked ? _sptvm.WitcherGameName : "");
+            get { return GetValue<ProjectWizardModel>(ProjectWizardModelProperty); }
+            set { SetValue(ProjectWizardModelProperty, value); }
         }
 
-        /// <summary>
-        /// Gets/Sets the project's name.
-        /// </summary>
-        public string ProjectName
-        {
-            get => _pcvm.ProjectName;
-        }
 
         /// <summary>
-        /// Gets/Sets the project's path.
+        /// Register the ProjectWizardModel property so it is known in the class.
         /// </summary>
-        public string ProjectPath
-        {
-            get => _pcvm.ProjectPath;
-        }
+        public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("ProjectWizardModel", typeof(ProjectWizardModel));
         #endregion properties
     }
 }

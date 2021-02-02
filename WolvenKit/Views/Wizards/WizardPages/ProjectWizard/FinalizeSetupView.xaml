@@ -26,19 +26,19 @@
                             </Grid>
                             <Grid Margin="5,32,0,0" >
 
-                                <TextBlock Text="{Binding ProjectName}" VerticalAlignment="Center">        </TextBlock>
-                                <TextBox  Margin="100,0,0,0" Text="Project Name" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBlock Text="Project Name" VerticalAlignment="Center">        </TextBlock>
+                                <TextBox  Margin="100,0,0,0" Text="{Binding ProjectName}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
 
                             <Grid Margin="5,32,0,0" >
 
-                                <TextBlock Text="{Binding ProjectType}" VerticalAlignment="Center"></TextBlock>
-                                <TextBox   Margin="100,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBlock Text="Project Type" VerticalAlignment="Center"></TextBlock>
+                                <TextBox   Margin="100,0,0,0" Text="{Binding ProjectType}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <Grid Margin="5,32,0,0" >
 
-                                <TextBlock Text="{Binding ProjectPath}" VerticalAlignment="Center"></TextBlock>
-                                <TextBox   Margin="100,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBlock Text="Project Path" VerticalAlignment="Center"></TextBlock>
+                                <TextBox   Margin="100,0,0,0" Text="{Binding ProjectPath}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
 
                             <hc:Divider></hc:Divider>

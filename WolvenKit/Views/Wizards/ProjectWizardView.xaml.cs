@@ -1,4 +1,5 @@
 ﻿
+using Catel.IoC;
 using WolvenKit.Views.Wizards.WizardPages.ProjectWizard;
 
 namespace WolvenKit.Views.Wizards
@@ -7,6 +8,8 @@ namespace WolvenKit.Views.Wizards
     {
         public ProjectWizardView()
         {
+            ServiceLocator.Default.RegisterInstance(new Model.Wizards.ProjectWizardModel());
+
             SPTV = new SelectProjectTypeView();
             PCV = new ProjectConfigurationView();
             FSV = new FinalizeSetupView();

@@ -1,9 +1,8 @@
-﻿using Catel.MVVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Catel.Data;
+using Catel.Fody;
+using Catel.IoC;
+using Catel.MVVM;
+using WolvenKit.Model.Wizards;
 
 namespace WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard
 {
@@ -12,40 +11,33 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard
     /// </summary>
     class SelectProjectTypeViewModel : ViewModelBase
     {
-        #region fields
-        private bool _witcherGameChecked = false;
-        private bool _cyberpunkGameChecked = true;
-        #endregion fields
+        #region constructors
+        public SelectProjectTypeViewModel()
+        {
+            ProjectWizardModel = ServiceLocator.Default.ResolveType<ProjectWizardModel>();
+        }
+        #endregion
 
         #region properties
-        public string WitcherGameName { get; } = "The Witcher 3";
-        public string CyberpunkGameName { get; } = "Cyberpunk 2077";
-
         /// <summary>
-        /// Gets/Sets the project's name.
+        /// Gets or sets the projectWizardModel.
         /// </summary>
-        public bool WitcherChecked
+        [Model]
+        [Expose("WitcherChecked")]
+        [Expose("CyberpunkChecked")]
+        [Expose("WitcherGameName")]
+        [Expose("CyberpunkGameName")]
+        private ProjectWizardModel ProjectWizardModel
         {
-            get => _witcherGameChecked;
-            set
-            {
-                _witcherGameChecked = value;
-                RaisePropertyChanged(nameof(WitcherChecked));
-            }
+            get { return GetValue<ProjectWizardModel>(ProjectWizardModelProperty); }
+            set { SetValue(ProjectWizardModelProperty, value); }
         }
 
+
         /// <summary>
-        /// Gets/Sets the project's path.
+        /// Register the ProjectWizardModel property so it is known in the class.
         /// </summary>
-        public bool CyberpunkChecked
-        {
-            get => _cyberpunkGameChecked;
-            set
-            {
-                _cyberpunkGameChecked = value;
-                RaisePropertyChanged(nameof(CyberpunkChecked));
-            }
-        }
+        public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("ProjectWizardModel", typeof(ProjectWizardModel));
         #endregion properties
     }
 }
