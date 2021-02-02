@@ -440,7 +440,8 @@ namespace CP77.CR2W
             {
                 unknownBytes.Read(file, (uint)bytesLeft);
                 if (!UnknownTypes.Contains(data.REDType))
-                    UnknownTypes.Add($"Type: {data.REDType}, File: {cr2w.FileName}, Offset: {file.BaseStream.Position}, UnknownBytes: {bytesLeft}");
+                    UnknownTypes.Add(data.REDType);
+                    //UnknownTypes.Add($"Type: {data.REDType}, File: {cr2w.FileName}, Offset: {file.BaseStream.Position}, UnknownBytes: {bytesLeft}");
             }
             else if (bytesLeft < 0)
             {

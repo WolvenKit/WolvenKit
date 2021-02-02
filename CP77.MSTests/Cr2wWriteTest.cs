@@ -793,7 +793,7 @@ namespace CP77.MSTests
             {
                 if (results.Any(r => !r.Success))
                 {
-                    var resultPath = Path.Combine(resultDir, $"{extension[1..]}.csv");
+                    var resultPath = Path.Combine(resultDir, $"write.{extension[1..]}.csv");
                     var csv = TestResultAsCsv(results.Where(r => !r.Success));
                     File.WriteAllText(resultPath, csv);
                 }
@@ -803,18 +803,18 @@ namespace CP77.MSTests
             int totalCount = GroupedFiles[extension].Count;
             var sb = new StringBuilder();
             sb.AppendLine(
-                $"{extension} -> Successful Reads: {successCount} / {totalCount} ({(int)(((double)successCount / (double)totalCount) * 100)}%)");
+                $"{extension} -> Successful Writes: {successCount} / {totalCount} ({(int)(((double)successCount / (double)totalCount) * 100)}%)");
 
             bool success = results.All(r => r.Success);
 
 
-            var logPath = Path.Combine(resultDir, $"logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
+            var logPath = Path.Combine(resultDir, $"w_logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
             File.WriteAllText(logPath, sb.ToString());
             Console.WriteLine(sb.ToString());
 
             if (!success)
             {
-                var msg = $"Successful Reads: {successCount} / {totalCount}. ";
+                var msg = $"Successful Writes: {successCount} / {totalCount}. ";
 
                 Assert.Fail(msg);
             }
@@ -832,12 +832,14 @@ namespace CP77.MSTests
                     if (file.Archive is not Archive ar)
                         return;
 
+                    var c = new CR2WFile { FileName = file.NameOrHash };
                     using var ms = new MemoryStream();
                     ar.CopyFileToStream(ms, file.NameHash64, false);
-
-                    var c = new CR2WFile { FileName = file.NameOrHash };
                     ms.Seek(0, SeekOrigin.Begin);
-                    var readResult = c.Read(ms);
+                    using var br = new BinaryReader(ms);
+                    var readResult = c.Read(br);
+                    var originalbytes = StreamExtensions.ToByteArray(ms);
+
 
                     switch (readResult)
                     {
@@ -888,7 +890,7 @@ namespace CP77.MSTests
                             {
                                 c.Write(bw);
 
-                                isBinaryEqual = StreamExtensions.ToByteArray(ms).SequenceEqual(StreamExtensions.ToByteArray(wms));
+                                isBinaryEqual = originalbytes.SequenceEqual(StreamExtensions.ToByteArray(wms));
                             }
 
 
