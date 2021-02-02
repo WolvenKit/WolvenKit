@@ -9,9 +9,15 @@
 
 
     <catel:UserControl.Resources>
-        <Geometry x:Key="RightGeometry">M4.1666641,0 C5.2083321,0 6.25,0.41666794 7.0833321,1.25 L57.083331,46.666664 C57.916664,47.499998 58.33333,48.749998 58.333329,49.999998 58.33333,51.249997 57.916664,52.499997 57.083331,53.333331 L7.0833321,98.749996 C5.4166641,100.41666 2.9166641,100.41666 1.2499962,98.749996 -0.41666794,97.083328 -0.41666794,94.583328 1.2499962,92.916664 L48.333331,49.999998 1.2499962,7.0833321 C-0.41666794,5.4166641 -0.41666794,2.9166641 1.2499962,1.25 2.0833282,0.41666794 3.1249962,0 4.1666641,0 z</Geometry>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources/>
+                <hc:Theme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
     </catel:UserControl.Resources>
-    <Grid hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,2,5">
+    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="300" MinHeight="560" MaxHeight="560" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,2,5">
 
 
         <Grid.RowDefinitions>
@@ -24,7 +30,10 @@
 
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="5,5,5,4">
-            <iconPacks:PackIconCodicons  Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+            <Grid>
+                <iconPacks:PackIconCodicons  Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="35" Width="35" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+
+            </Grid>
 
             <StackPanel  VerticalAlignment="Bottom" Orientation="Vertical" HorizontalAlignment="Stretch">
 
@@ -46,16 +55,19 @@
 
         <Grid Grid.Row="2"  VerticalAlignment="Bottom" Height="95" Margin="0,0,0,0">
 
-            <Button Margin="3" Width="50" Height="30" VerticalAlignment="Bottom" IsEnabled="True" hc:IconElement.Geometry="{StaticResource LeftGeometry}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Left" Click="Button_Click_1"/>
+            <Button Margin="3" Width="50" Height="30" VerticalAlignment="Bottom" IsEnabled="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Left" Click="Button_Click_1">
+                <iconPacks:PackIconCodicons Kind="ArrowLeft"/>
+            </Button>
             <hc:StepBar x:Name="StepMain" Margin="0,0,0,3" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Dock="Bottom"  >
                         <hc:StepBarItem Content="Select Project Type"/>
                         <hc:StepBarItem Content="Project Configuration"/>
                         <hc:StepBarItem Content="Finalize Setup"/>
 
             </hc:StepBar>
-            <Button Command="{Binding NextCmd}" CommandParameter="{Binding ElementName=StepMain}" Margin="3" VerticalAlignment="Bottom" Height="30" Width="50" IsEnabled="True" hc:IconElement.Geometry="{StaticResource RightGeometry}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Right" Click="Button_Click"/>
-
-          </Grid>
+            <Button Command="{Binding NextCmd}" CommandParameter="{Binding ElementName=StepMain}" Margin="3" VerticalAlignment="Bottom" Height="30" Width="50" IsEnabled="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Right" Click="Button_Click">
+                <iconPacks:PackIconCodicons Kind="ArrowRight"/>
+            </Button>
+        </Grid>
 
     </Grid>
 

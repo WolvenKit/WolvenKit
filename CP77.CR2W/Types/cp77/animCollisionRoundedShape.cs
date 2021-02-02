@@ -15,6 +15,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(4)]  [RED("yBoxExtent")] public CFloat YBoxExtent { get; set; }
 		[Ordinal(5)]  [RED("zBoxExtent")] public CFloat ZBoxExtent { get; set; }
 
+		[Ordinal(999)]  [RED("drawAxis")] public CBool drawAxis { get; set; }
+
 		public animCollisionRoundedShape(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

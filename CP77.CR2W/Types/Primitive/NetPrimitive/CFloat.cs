@@ -5,7 +5,7 @@ using CP77.CR2W.Reflection;
 
 namespace CP77.CR2W.Types
 {
-    [REDMeta()]
+    [REDMeta]
     public class CFloat : CVariable, IREDPrimitive
     {
         public CFloat()

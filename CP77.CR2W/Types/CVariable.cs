@@ -94,6 +94,13 @@ namespace CP77.CR2W.Types
         public string UniqueIdentifier => GetFullDependencyStringName();
 
         /// <summary>
+        /// an internal id that is used to track typenames 
+        /// </summary>
+        [JsonIgnore]
+        private string TypeNameWithParents => GetREDTypeNameWithParents();
+
+
+        /// <summary>
         /// Stores the parent CVariable 
         /// Is set on read,
         /// otherwise must be set manually
@@ -156,11 +163,7 @@ namespace CP77.CR2W.Types
         #endregion
 
         #region Methods
-        /// <summary>
-        /// We can use something like this for hashing
-        /// </summary>
-        /// <returns></returns>
-        public string GetFullDependencyStringName()
+        private string GetFullDependencyStringName()
         {
             var depstr = this.REDName;
             var par = this.ParentVar;
@@ -171,6 +174,22 @@ namespace CP77.CR2W.Types
             }
 
             return depstr;
+        }
+
+        private string GetREDTypeNameWithParents()
+        {
+            var t = GetType();
+            var s = new List<string>() {t.Name};
+            while (true)
+            {
+                t = t?.BaseType;
+                if (t == typeof(CVariable))
+                    break;
+                s.Add(t.Name);
+            }
+
+            s.Reverse();
+            return string.Join('.', s);
         }
 
         public ushort GettypeId() => (ushort)cr2w.GetStringIndex(REDType, true);
@@ -256,7 +275,7 @@ namespace CP77.CR2W.Types
                 //if (includeBuffers && item.GetMemberAttribute<REDBufferAttribute>()==null)
                 //    continue;
 
-                object o = accessor[this, item.Name];
+                var o = accessor[this, item.Name];
                 if (o is CVariable cvar)
                 {
                     if (cvar.IsSerialized)
@@ -272,28 +291,35 @@ namespace CP77.CR2W.Types
         }
 
         /// <summary>
-        /// Reads a Cvariable from a binaryreader stream
+        /// Reads a CVariable as a fixed size struct
+        /// (not in the cr2w custom serialization)
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="size"></param>
+        public virtual void ReadAsFixedSize(BinaryReader file, uint size)
+        {
+            if (this is IREDPrimitive)
+                Read(file, size);
+            else
+                ReadAllRedVariables<REDAttribute>(file);
+        }
+
+        /// <summary>
+        /// Reads a CVariable from a binaryreader stream
         /// Can be overwritten by child classes
         /// </summary>
         /// <param name="file"></param>
         /// <param name="size"></param>
         public virtual void Read(BinaryReader file, uint size)
         {
-            REDMetaAttribute meta = (REDMetaAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(REDMetaAttribute));
+            var meta = (REDMetaAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(REDMetaAttribute));
             EREDMetaInfo[] tags = meta?.Keywords;
 
             var startpos = file.BaseStream.Position;
 
             // fixed class/struct (no leading null byte), read all properties in order
-            if (tags.Contains(EREDMetaInfo.REDStruct))
+            if ((tags ?? throw new InvalidOperationException()).Contains(EREDMetaInfo.REDStruct))
             {
-                //// CClipmapcookeddata has no trailing 0 ???
-                //if (this is CClipMapCookedData cClip)
-                //{
-                //    cClip.Data.Bytes = file.ReadBytes((int)size);
-                //    return;
-                //}
-
                 // parse all RED variables (normal + buffers)
                 ReadAllRedVariables<REDAttribute>(file);
             }
@@ -304,23 +330,21 @@ namespace CP77.CR2W.Types
                 sbyte zero = file.ReadSByte();
                 //var dzero = file.ReadBit6();
 
-                // quests\minor_quests\skellige\mq2008_lured_into_drowners.w2phase
-                // in a CVariant for class "@SItem"
                 // ... okay CDPR, is that a joke or what?
                 if (zero != 0)
                 {
-                    if (zero == 1)
+                    switch (zero)
                     {
-                        int joke = file.ReadInt32();
-                    }
-                    else if (zero == -128)
-                    {
-                        var dzero2 = file.ReadBit6();
-                        return;
-                    }
-                    else
-                    {
-                        throw new InvalidParsingException($"Tried parsing a CVariable: zero read {zero}.");
+                        case 1:
+                            int joke = file.ReadInt32();
+                            break;
+                        case -128:
+                            var dzero2 = file.ReadBit6();
+                            return;
+                        case -1:
+                            return;
+                        default:
+                            throw new InvalidParsingException($"Tried parsing a CVariable: zero read {zero}.");
                     }
                 }
                 #endregion
@@ -330,36 +354,22 @@ namespace CP77.CR2W.Types
                 while (true)
                 {
 
-                    //try
-                    {
-                        //cvar is a "children variable" : a property of a class.
-                        var cvar = cr2w.ReadVariable(file, this);
-                        if (cvar == null)
-                            break;
+                    //cvar is a "children variable" : a property of a class.
+                    var cvar = cr2w.ReadVariable(file, this);
+                    if (cvar == null)
+                        break;
 
-                        cvar.IsSerialized = true;
+                    cvar.IsSerialized = true;
 
 #if DEBUG
-                        dbg_varnames.Add($"[{cvar.REDType}] {cvar.REDName}");
+                    dbg_varnames.Add($"[{cvar.REDType}] {cvar.REDName}");
 #endif
 
-                        // unknown types
-                        if (cvar.REDName.Contains("UNKNOWN:"))
-                        {
-                            UnknownCVariables.Add(cvar);
-                        }
-                        else
-                        {
-                            TrySettingFastMemberAccessor(cvar);
-                        }
-                    }
-                    //catch (Exception e)
-                    //{
-                    //    Console.WriteLine(e);
-                    //    throw;
-                    //}
-
-                    
+                    // unknown types
+                    if (cvar.REDName.Contains("UNKNOWN:"))
+                        UnknownCVariables.Add(cvar);
+                    else
+                        TrySettingFastMemberAccessor(cvar);
                 }
                 #endregion
 
@@ -411,8 +421,7 @@ namespace CP77.CR2W.Types
             foreach (Member item in redproperties)
             {
                 var att = item.GetMemberAttribute<T>();
-                if (att is REDBufferAttribute bufferAttribute
-                    && bufferAttribute.IsIgnored)
+                if (att is REDBufferAttribute {IsIgnored: true})
                 {
                     // add IsSerialized?
                     continue;
@@ -442,23 +451,15 @@ namespace CP77.CR2W.Types
         /// <param name="value"></param>
         private bool TrySettingFastMemberAccessor(IEditableVariable value)
         {
-            string varname = value.REDName.FirstCharToUpper();
-            varname = NormalizeName(varname);
             foreach (var member in this.accessor.GetMembers())
             {
                 try
                 {
-                    if (member.Name == varname)
-                    {
-
-                        accessor[this, varname] = value;
-                        return true;
-                    }
-                    else if (member.Name == varname.FirstCharToLower())
-                    {
-                        accessor[this, varname.FirstCharToLower()] = value;
-                        return true;
-                    }
+                    var redname = REDReflection.GetREDNameString(member);
+                    if (redname != value.REDName)
+                        continue;
+                    accessor[this, member.Name] = value;
+                    return true;
                 }
                 catch (Exception e)
                 {
@@ -466,7 +467,8 @@ namespace CP77.CR2W.Types
                     throw;
                 }
             }
-            Debug.WriteLine($"({value.REDType}){varname} not found in ({this.REDType}){this.REDName}");
+            //throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.GetType()}){this.REDName}");
+            Console.WriteLine($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
             return false;
 
             
@@ -795,7 +797,7 @@ namespace CP77.CR2W.Types
                         normalizeChar.ToString()));
             }
 
-            if (char.IsDigit(finalvalue[0]))
+            if (finalvalue.Length > 0 &&  char.IsDigit(finalvalue[0]))
                 finalvalue = $"_{finalvalue}";
             finalvalue = finalvalue switch
             {

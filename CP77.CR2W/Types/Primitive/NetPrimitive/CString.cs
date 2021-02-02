@@ -56,9 +56,6 @@ namespace CP77.CR2W.Types
 
 
 
-        public override string ToString()
-        {
-            return val;
-        }
+        public override string ToString() => val;
     }
 }

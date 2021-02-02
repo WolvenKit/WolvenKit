@@ -17,7 +17,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(6)]  [RED("idleCanvas2")] public inkWidgetReference IdleCanvas2 { get; set; }
 		[Ordinal(7)]  [RED("idleCanvas3")] public inkWidgetReference IdleCanvas3 { get; set; }
 		[Ordinal(8)]  [RED("idleCanvas4")] public inkWidgetReference IdleCanvas4 { get; set; }
-		[Ordinal(9)]  [RED("idleGroup")] public inkWidgetReference IdleGroup { get; set; }
+		[Ordinal(9)]  [RED("idleGroup")] public new inkWidgetReference IdleGroup { get; set; }
 		[Ordinal(10)]  [RED("idleVPanelC1")] public inkWidgetReference IdleVPanelC1 { get; set; }
 		[Ordinal(11)]  [RED("idleVPanelC2")] public inkWidgetReference IdleVPanelC2 { get; set; }
 		[Ordinal(12)]  [RED("idleVPanelC3")] public inkWidgetReference IdleVPanelC3 { get; set; }

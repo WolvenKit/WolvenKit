@@ -43,21 +43,5 @@ namespace WolvenKit.Wwise
                 }
             }
         }
-
-        public string Extract(BundleFileExtractArgs e)
-        {
-            // create new directory and delete existing file
-            Directory.CreateDirectory(Path.GetDirectoryName(e.FileName) ?? "");
-            if (File.Exists(e.FileName))
-                File.Delete(e.FileName);
-
-            using (var output = new FileStream(e.FileName, FileMode.Create, FileAccess.Write))
-            {
-                Extract(output);
-                output.Close();
-            }
-
-            return e.FileName;
-        }
     }
 }

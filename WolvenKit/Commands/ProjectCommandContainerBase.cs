@@ -57,8 +57,8 @@ namespace WolvenKit
         #region Methods
         private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs e)
         {
-            //await Task.Run(() => ProjectActivated((Project) e.OldProject, (Project) e.NewProject));
-            ProjectActivated((EditorProject)e.OldProject, (EditorProject)e.NewProject);
+            //Task.Run(() => ProjectActivated((EditorProject) e.OldProject, (EditorProject) e.NewProject));
+            var asd = ProjectActivated((EditorProject)e.OldProject, (EditorProject)e.NewProject);
 
             //TODO: why is that here?
             _commandManager.InvalidateCommands();

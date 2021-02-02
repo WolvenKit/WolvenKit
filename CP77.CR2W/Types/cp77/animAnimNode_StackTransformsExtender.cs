@@ -17,6 +17,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(6)]  [RED("tag")] public CName Tag { get; set; }
 		[Ordinal(7)]  [RED("transformInfos")] public CArray<animTransformInfo> TransformInfos { get; set; }
 
+        [Ordinal(999)] [RED("shrinkerNodeId")] public CUInt32 shrinkerNodeId { get; set; }
+
 		public animAnimNode_StackTransformsExtender(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

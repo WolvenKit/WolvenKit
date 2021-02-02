@@ -23,7 +23,7 @@
 
     </catel:UserControl.Resources>
 
-    <Grid  hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="1024" MinHeight="720" >
+    <Grid  hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="1024" MinHeight="720" >
     
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="200,0,450,0">
             <Mid:TopicView x:Name="TopicViewer"/>
@@ -72,6 +72,12 @@
                                 <iconPacks:Codicons Height="13" Kind="NewFile" Width="13"/>
                             </hc:SideMenuItem.Icon>
                         </hc:SideMenuItem>
+                    </hc:SideMenuItem>
+
+                    <hc:SideMenuItem x:Name="SideMenu_IntegratedItem" Header="Integrated Tools"  Margin="0,0,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_IntegratedItem_Selected" >
+                        <hc:SideMenuItem.Icon>
+                            <iconPacks:Codicons Height="25" Kind="Verified" Width="25" />
+                        </hc:SideMenuItem.Icon>
                     </hc:SideMenuItem>
 
                     <hc:SideMenuItem x:Name="SideMenu_SettingsItem" Header="Settings"  Margin="0,0,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_SettingsItem_Selected">
@@ -124,7 +130,7 @@
 
             </Fluent:Button>
 
-            <hc:Tag Margin="35,0,0,18" VerticalAlignment="Bottom" ShowCloseButton="False" Content="USERNAME">
+            <hc:Tag Margin="35,0,0,18" VerticalAlignment="Bottom" ShowCloseButton="False" Content="USERNAME" MouseDown="Tag_MouseDown">
                 <hc:Tag.Header>
                     <iconPacks:PackIconCodicons Kind="Account"></iconPacks:PackIconCodicons>
 

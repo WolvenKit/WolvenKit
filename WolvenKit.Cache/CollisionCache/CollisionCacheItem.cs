@@ -145,34 +145,5 @@ namespace WolvenKit.Cache
                 }
             }
         }
-
-        public string Extract(BundleFileExtractArgs e)
-        {
-            var filename = e.FileName;
-            switch (Comtype)
-            {
-                case 1:
-                    filename = Path.ChangeExtension(filename, "bin");
-                    break;
-                case 2:
-                case 5:
-                    filename = Path.ChangeExtension(filename, "nxs"); 
-                    break;
-                case 3: 
-                case 4: 
-                    filename = Path.ChangeExtension(filename, "apb");
-                    break;
-                default:
-                    break;
-            }
-
-            Directory.CreateDirectory(Path.GetDirectoryName(filename) ?? "");
-            using (var output = new FileStream(filename, FileMode.Create, FileAccess.Write))
-            {
-                Extract(output);
-            }
-
-            return filename;
-        }
     }
 }

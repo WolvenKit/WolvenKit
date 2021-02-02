@@ -99,7 +99,7 @@ namespace CP77.CR2W
 
 
         public string FileName { get; set; }
-        public readonly List<string> UnknownTypes = new List<string>();
+        public readonly List<string> UnknownTypes = new();
 
         public Dictionary<uint, string> StringDictionary { get; private set; }
 
@@ -115,7 +115,18 @@ namespace CP77.CR2W
         #endregion
 
         #region Supporting Functions
-        public int GetUnknownBytes() => Chunks.Sum(chunk => chunk.unknownBytes.Bytes.Length);
+        public (List<string>, int) GetUnknownBytes()
+        {
+            List<string> types = new();
+            foreach (var x in Chunks.Select(chunk => chunk.UnknownTypes)
+                .SelectMany(s => s.Where(x => !types.Contains(x))))
+            {
+                types.Add(x);
+            }
+
+            return (types, 
+                Chunks.Sum(chunk => chunk.unknownBytes.Bytes.Length));
+        }
 
         public void GenerateChunksDict() => Chunksdict = Chunks.ToDictionary(_ => _.ChunkIndex, _ => _);
 
@@ -372,22 +383,9 @@ namespace CP77.CR2W
             var size = file.ReadUInt32();
 
             // Read Value
-
-            // CDPR changed the type of CPtr<IBehTreeNodeDefinition> RootNode
-            // to CHandle<IBehTreeNodeDefinition> RootNode in CBehTree in patch1
-            if (typename == "ptr:IBehTreeNodeDefinition" && varname == "rootNode" && parent.REDType == "CBehTree")
-                typename = "handle:IBehTreeNodeDefinition";
-
             var parsedvar = CR2WTypeManager.Create(typename, varname, this, parent);
             // The "size" variable read is something a bit strange : it takes itself into account.
-            //try
-            //{
             parsedvar.Read(file, size - 4);
-            //}
-            //catch
-            //{
-            //    System.Console.WriteLine("hohoho");
-            //}
 
             var afterVarPos = file.BaseStream.Position;
 
@@ -395,7 +393,7 @@ namespace CP77.CR2W
             if (bytesleft > 0)
             {
                 var unreadBytes = file.ReadBytes((int)bytesleft);
-                //?? why not throw ?? throw new InvalidParsingException($"Parsing Variable read too short. Difference: {bytesleft}");
+                throw new InvalidParsingException($"Parsing Variable read too short. Difference: {bytesleft}");
             }
             else if (bytesleft < 0)
             {
@@ -543,6 +541,22 @@ namespace CP77.CR2W
             return await Task.Run(() => Read(br));
         }
 
+        /// <summary>
+        /// Reads a Cr2wFile from a stream
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public EFileReadErrorCodes Read(Stream stream)
+        {
+            using var br = new BinaryReader(stream);
+            return Read(br);
+        }
+
+        /// <summary>
+        /// Reads a Cr2wFile from a BinaryReader stream
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         public EFileReadErrorCodes Read(BinaryReader file)
         {
             //m_stream = file.BaseStream;

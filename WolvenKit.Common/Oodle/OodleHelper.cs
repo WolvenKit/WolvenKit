@@ -52,7 +52,7 @@ namespace WolvenKit.Common.Oodle
             // int outputOffset,
             // int outputCount,
             OodleNative.OodleLZ_Compressor algo = OodleNative.OodleLZ_Compressor.Kraken,
-            OodleNative.OodleLZ_Compression level = OodleNative.OodleLZ_Compression.Optimal5)
+            OodleNative.OodleLZ_Compression level = OodleNative.OodleLZ_Compression.Normal)
         {
             if (inputBytes == null)
                 throw new ArgumentNullException(nameof(inputBytes));
@@ -76,19 +76,21 @@ namespace WolvenKit.Common.Oodle
                     inputAddress,
                     inputCount,
                     outputAddress,
-                    compressedBufferSizeNeeded,
+                    (int)level,
                     IntPtr.Zero,
                     IntPtr.Zero,
                     IntPtr.Zero,
                     IntPtr.Zero,
-                    (int)level);
+                    (long)0
+                    );
+
                 inputHandle.Free();
                 outputHandle.Free();
 
                 //resize buffer
                 var writelist = new List<byte>()
                 {
-                    0x4B, 0x41, 0x52, 0x4B  //KRAKEN, TODO: make this variable and dependent on the compression algo
+                    0x4B, 0x41, 0x52, 0x4B  //KARK, TODO: make this dependent on the compression algo
                 };
                 writelist.AddRange(BitConverter.GetBytes(inputCount));
                 writelist.AddRange(compressedBuffer.Take(result));
@@ -139,7 +141,13 @@ namespace WolvenKit.Common.Oodle
         public static int GetCompressedBufferSizeNeeded(int count)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                return (int) OodleNative.GetCompressedBufferSizeNeeded((long) count);
+            {
+                var n = ((long)(count + 0x3ffff + (long)((uint)(count + 0x3ffff >> 0x3f) & 0x3ffff))
+                        >> 0x12) * 0x112 + count;
+                //var n  = OodleNative.GetCompressedBufferSizeNeeded((long)count);
+                return (int)n;
+            }
+                
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 try
                 {
@@ -157,14 +165,14 @@ namespace WolvenKit.Common.Oodle
         /// <summary>
         /// 
         /// </summary>
-        public static void DecompressBuffer(this BinaryReader binaryReader, BinaryWriter bw, uint zSize, uint size)
+        public static void DecompressBuffer(this BinaryReader binaryReader, Stream outstream, uint zSize, uint size)
         {
             if (zSize == size)
             {
                 try
                 {
                     var buffer = binaryReader.ReadBytes((int)zSize);
-                    bw.Write(buffer);
+                    outstream.Write(buffer);
                 }
                 catch (Exception e)
                 {
@@ -193,19 +201,15 @@ namespace WolvenKit.Common.Oodle
                         if (unpackedSize != size)
                             throw new DecompressionException(
                                 $"Unpacked size {unpackedSize} doesn't match real size {size}");
-                        bw.Write(outputBuffer);
+                        outstream.Write(outputBuffer);
                     }
-                    catch (DecompressionException e)
+                    catch (DecompressionException)
                     {
                         //logger.LogString(e.Message, Logtype.Error);
                         //logger.LogString(
                         //    $"Unable to decompress file {hash.ToString()}. Exporting uncompressed file",
                         //    Logtype.Error);
-                        bw.Write(inputBuffer);
-                    }
-                    catch (Exception e)
-                    {
-                        throw e;
+                        outstream.Write(inputBuffer);
                     }
 
                 }
@@ -213,7 +217,7 @@ namespace WolvenKit.Common.Oodle
                 {
                     binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
                     var buffer = binaryReader.ReadBytes((int)zSize);
-                    bw.Write(buffer);
+                    outstream.Write(buffer);
                 }
             }
         }

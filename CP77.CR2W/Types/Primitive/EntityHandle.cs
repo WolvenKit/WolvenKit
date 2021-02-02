@@ -44,11 +44,6 @@ namespace CP77.CR2W.Types
             unk1.Write(file);
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new EntityHandle(cr2w, parent, name);
-        }
-
         public override string ToString()
         {
             return $"[{id.ToString()}]:{guid.ToString()}";
@@ -56,7 +51,7 @@ namespace CP77.CR2W.Types
 
         public override List<IEditableVariable> GetEditableVariables()
         {
-            return new List<IEditableVariable>() { id, guid, unk1};
+            return new() { id, guid, unk1};
         }
     }
 }

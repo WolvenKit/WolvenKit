@@ -1,6 +1,4 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -70,7 +68,7 @@ namespace WolvenKit.CR2W.SRT
         #endregion
 
         #region Read
-        public async Task<EFileReadErrorCodes> Read(BinaryReader br)
+        public EFileReadErrorCodes Read(BinaryReader br)
         {
             m_stream = br.BaseStream;
 

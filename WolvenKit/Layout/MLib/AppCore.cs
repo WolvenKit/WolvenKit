@@ -36,7 +36,7 @@
 		{
 			get
 			{
-				return System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+				return AppContext.BaseDirectory;
 			}
 		}
 

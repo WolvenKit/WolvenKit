@@ -13,6 +13,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(2)]  [RED("featureName")] public CName FeatureName { get; set; }
 		[Ordinal(3)]  [RED("featurePropertyName")] public CName FeaturePropertyName { get; set; }
 
+		[Ordinal(999)]  [RED("debugInput")] public CBool debugInput { get; set; }
+
 		public animAnimStateTransitionCondition_IntFeature(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

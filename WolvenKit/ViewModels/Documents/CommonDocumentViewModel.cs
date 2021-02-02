@@ -32,7 +32,7 @@ namespace WolvenKit.ViewModels
 
         #region Properties
         public object SaveTarget { get; set; }
-        public string Title => Path.GetFileName(FileName);
+        public override string Title => Path.GetFileName(FileName);
 
         #region File
         private IWolvenkitFile _file;

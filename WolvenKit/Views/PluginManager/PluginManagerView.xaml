@@ -45,7 +45,7 @@
 
             <DataTemplate x:Key="PluginListBoxItemContentUninstall">
                 <Grid Margin="-40,0,40,0">
-                    <hc:Tag MinWidth="400" hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Left"  Margin="15,0,50,0" ShowCloseButton="False" Content="TEMPLATEPLUGINTITLE" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+                    <hc:Tag MinWidth="400" hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Left"  Margin="15,0,50,0" ShowCloseButton="False" Content="TEMPLATEPLUGINTITLE" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
                         <hc:Tag.Header>
                             <iconPacks:PackIconBoxIcons Kind="RegularPlug"/>
                         </hc:Tag.Header>
@@ -60,7 +60,7 @@
 
 
 
-    <Border  hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}"  BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
+    <Border hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
         <Grid>
 
             <Grid.RowDefinitions>

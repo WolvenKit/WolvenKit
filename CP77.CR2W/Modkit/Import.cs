@@ -1,14 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Catel.IoC;
-using WolvenKit.Common.Services;
-using CP77.CR2W.Archive;
 using CP77.CR2W.Types;
-using CP77Tools.Model;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 
@@ -69,7 +62,7 @@ namespace CP77.CR2W
                 {
                     TexconvWrapper.Convert(rawFile.Directory.FullName, $"{ddsPath}", EUncookExtension.dds);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     //TODO: proper exception handling
                     return null;

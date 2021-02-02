@@ -11,6 +11,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(0)]  [RED("newTracks")] public CArray<animFloatTrackInfo> NewTracks { get; set; }
 		[Ordinal(1)]  [RED("tag")] public CName Tag { get; set; }
 
+		[Ordinal(999)]  [RED("shrinkerNodeId")] public CUInt32 shrinkerNodeId { get; set; }
+
 		public animAnimNode_StackTracksExtender(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }
