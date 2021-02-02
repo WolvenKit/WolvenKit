@@ -42,6 +42,7 @@ namespace WolvenKit
 
             public const string PackMod = "Application.PackMod";
             public const string BackupMod = "Application.BackupMod";
+            public const string PublishMod = "Application.PublishMod";
 
 
 

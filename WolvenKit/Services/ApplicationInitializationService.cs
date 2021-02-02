@@ -126,6 +126,7 @@ namespace WolvenKit.Services
             _commandManager.CreateCommand((AppCommands.Application.NewFile));
             _commandManager.CreateCommand((AppCommands.Application.PackMod));
             _commandManager.CreateCommand((AppCommands.Application.BackupMod));
+            _commandManager.CreateCommand((AppCommands.Application.PublishMod));
 
             // Project Explorer Viewmodel
             _commandManager.CreateCommand(AppCommands.ProjectExplorer.ExpandAll);

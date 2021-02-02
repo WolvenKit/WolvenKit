@@ -100,7 +100,7 @@
                                        Height="60"
                                         Icon="{iconPacks:Codicons Kind=NewFolder}"
                                        FontSize="18"
-                                       Command="{catel:CommandManagerBinding Application.NewProject}" >
+                                       Command="{catel:CommandManagerBinding Application.PublishMod}" >
                         </fluent:Button>
                         <fluent:SeparatorTabItem Height="Auto" Margin="20,10,20,10"/>
 
