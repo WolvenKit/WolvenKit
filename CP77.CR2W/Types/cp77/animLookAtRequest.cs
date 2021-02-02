@@ -20,6 +20,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(9)]  [RED("suppress")] public CFloat Suppress { get; set; }
 		[Ordinal(10)]  [RED("transitionSpeed")] public CFloat TransitionSpeed { get; set; }
 
+		[Ordinal(999)]  [RED("debugInfo")] public CString debugInfo { get; set; }
+
 		public animLookAtRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

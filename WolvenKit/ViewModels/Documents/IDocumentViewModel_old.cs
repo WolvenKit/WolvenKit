@@ -14,9 +14,6 @@ namespace WolvenKit.ViewModels
         string FileName { get; }
 
         void SaveFile();
-        
-        event EventHandler<FileSavedEventArgs> OnFileSaved;
-
 
         object SaveTarget { get; set; }
         string Title { get; }

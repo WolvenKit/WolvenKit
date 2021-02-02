@@ -24,6 +24,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(13)]  [RED("useLunaticMode")] public CBool UseLunaticMode { get; set; }
 		[Ordinal(14)]  [RED("variables")] public CHandle<animAnimVariableContainer> Variables { get; set; }
 
+		[Ordinal(999)]  [RED("jsonFilesDirectory")] public CString jsonFilesDirectory { get; set; }
+
 		public animAnimGraph(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

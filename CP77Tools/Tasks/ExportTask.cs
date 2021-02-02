@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using CP77.CR2W;
 using WolvenKit.Common.DDS;
@@ -42,12 +43,18 @@ namespace CP77Tools.Tasks
 
             #endregion
 
-            if (ModTools.Export(new FileInfo(path), uncookext) == 1)
+            Stopwatch watch = new();
+            watch.Restart();
+
+            if (ModTools.Export(new FileInfo(path), uncookext))
+
             {
-                logger.LogString($"Successfully exported {path}.", Logtype.Success);
+                watch.Stop();
+                logger.LogString($"Successfully exported {path} in {watch.ElapsedMilliseconds.ToString()}ms.", Logtype.Success);
             }
             else
             {
+                watch.Stop();
                 logger.LogString($"Failed to export {path}.", Logtype.Error);
             }
 

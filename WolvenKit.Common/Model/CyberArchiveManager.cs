@@ -103,6 +103,7 @@ namespace WolvenKit.Common
         /// </summary>
         private void RebuildAutoCompleteSource()
         {
+            AutocompleteSource = new List<string>();
             AutocompleteSource.AddRange(FileList.Select(x => GetFileName(x.Name)).Distinct().ToArray());
         }
 

@@ -60,7 +60,7 @@
 
 
 
-    <Border  hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}"  BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
+    <Border hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}"  BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
         <Grid>
 
             <Grid.RowDefinitions>

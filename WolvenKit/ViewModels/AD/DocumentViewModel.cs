@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Catel.MVVM;
 using System.IO;
@@ -170,7 +169,7 @@ namespace WolvenKit.ViewModels
 		}
 
 		/// <summary>Gets/sets whether the documents content has been changed without saving into file system or not.</summary>
-		public bool IsDirty
+		public new bool IsDirty
 		{
 			get => _isDirty;
 			set
@@ -273,12 +272,12 @@ namespace WolvenKit.ViewModels
 
 				// This is the same default buffer size as
 				// <see cref="StreamReader"/> and <see cref="FileStream"/>.
-				int DefaultBufferSize = 4096;
+				// int DefaultBufferSize = 4096;
 
 				// Indicates that
 				// 1. The file is to be used for asynchronous reading.
 				// 2. The file is to be accessed sequentially from beginning to end.
-				FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
+				// FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
 
                 var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
                 logger.LogString("Opening file: " + path + "...");
@@ -328,7 +327,7 @@ namespace WolvenKit.ViewModels
 
 				return true;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				// Not processing this catch in any other way than rejecting to initialize this
 				_isInitialized = false;
@@ -347,7 +346,9 @@ namespace WolvenKit.ViewModels
 		{
 			// Analyze the BOM
 			if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76)
+#pragma warning disable 618
 				return Encoding.UTF7;
+#pragma warning restore 618
 
 			if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf)
 				return Encoding.UTF8;

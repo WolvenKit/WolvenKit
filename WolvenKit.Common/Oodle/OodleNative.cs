@@ -28,7 +28,7 @@ namespace WolvenKit.Common.Oodle
         {
             None = 0,
             SuperFast = 1,
-            VertFast = 2,
+            VeryFast = 2,
             Fast = 3,
             Normal = 4,
             Optimal1 = 5,
@@ -82,7 +82,7 @@ namespace WolvenKit.Common.Oodle
             IntPtr inputBuffer,
             long inputSize,
             IntPtr outputBuffer,
-            long outputSize,
+            int level,
             IntPtr a6,
             IntPtr a7,
             IntPtr a8,

@@ -7,15 +7,23 @@
 
                   ShowInTaskbar="True" 
                   AllowsTransparency="True" 
-                  ResizeMode="CanResizeWithGrip" 
                   BorderBrush="{x:Null}" 
                   WindowStartupLocation="CenterScreen"  
             
                   WindowStyle="None" 
                   Title="Window Title">
+    
+    <catel:DataWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources/>
+                <hc:Theme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
 
+    </catel:DataWindow.Resources>
     <Grid>
-        <Border  hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" Width="auto" Height="auto" BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
+        <Border hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" Width="auto" Height="auto" BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
 
             <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
 

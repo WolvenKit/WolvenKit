@@ -37,6 +37,7 @@ namespace CP77.MSTests
         public ReadResultType ReadResult { get; set; }
         public int AdditionalBytes { get; set; }
         public int UnknownBytes { get; set; }
+        public List<string> UnknownTypes { get; set; }
         
     }
 

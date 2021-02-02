@@ -109,6 +109,14 @@ namespace WolvenKit
             viewModelLocator.Register(typeof(Views.HomePage.Pages.WelcomePageView), typeof(ViewModels.HomePage.Pages.WelcomePageViewModel));
             viewModelLocator.Register(typeof(Views.HomePage.Pages.WebsitePageView), typeof(ViewModels.HomePage.Pages.WebsitePageViewModel));
             viewModelLocator.Register(typeof(Views.HomePage.Pages.SettingsPageView), typeof(ViewModels.HomePage.Pages.SettingsPageViewModel));
+            viewModelLocator.Register(typeof(Views.HomePage.Pages.UserPageView), typeof(ViewModels.HomePage.Pages.UserPageViewModel));
+
+
+            //-- Category : Integrated Tools
+            viewModelLocator.Register(typeof(Views.HomePage.Pages.IntegratedToolsPageView), typeof(ViewModels.HomePage.Pages.IntegratedToolsPageViewModel));
+            viewModelLocator.Register(typeof(Views.IntegratedToolsPages.CyberCAT.CyberCATPageView), typeof(ViewModels.IntegratedToolsPages.CyberCAT.CyberCATPageViewModel));
+
+
 
             //-- Category : Settings Pages 
             viewModelLocator.Register(typeof(Views.SettingsPages.GeneralSettingsView), typeof(ViewModels.SettingsPages.GeneralSettingsViewModel));
@@ -117,27 +125,20 @@ namespace WolvenKit
             viewModelLocator.Register(typeof(Views.SettingsPages.SubPages.General.UpdatesSubSettingsView), typeof(ViewModels.SettingsPages.SubPages.General.UpdatesSubSettingsViewModel));
             viewModelLocator.Register(typeof(Views.SettingsPages.SubPages.General.ThemeSubSettingsView), typeof(ViewModels.SettingsPages.SubPages.General.ThemeSubSettingsViewModel));
             viewModelLocator.Register(typeof(Views.SettingsPages.SubPages.General.LoggingSubSettingsView), typeof(ViewModels.SettingsPages.SubPages.General.LoggingSubSettingsViewModel));
-
-
+            // - Tools
             viewModelLocator.Register(typeof(Views.SettingsPages.ToolSettingsView), typeof(ViewModels.SettingsPages.ToolSettingsViewModel));
             viewModelLocator.Register(typeof(Views.SettingsPages.SubPages.Tool.AssetBrowserSubSettingsView), typeof(ViewModels.SettingsPages.SubPages.Tool.AssetBrowserSubSettingsViewModel));
             viewModelLocator.Register(typeof(Views.SettingsPages.SubPages.Tool.CodeEditorSubSettingsView), typeof(ViewModels.SettingsPages.SubPages.Tool.CodeEditorSubSettingsViewModel));
             viewModelLocator.Register(typeof(Views.SettingsPages.SubPages.Tool.PluginManagerSubSettingsView), typeof(ViewModels.SettingsPages.SubPages.Tool.PluginManagerSubSettingsViewModel));
             viewModelLocator.Register(typeof(Views.SettingsPages.SubPages.Tool.VisualEditorSubSettingsView), typeof(ViewModels.SettingsPages.SubPages.Tool.VisualEditorSubSettingsViewModel));
-
-
+            // - Editor
             viewModelLocator.Register(typeof(Views.SettingsPages.EditorSettingsView), typeof(ViewModels.SettingsPages.EditorSettingsViewModel));
             viewModelLocator.Register(typeof(Views.SettingsPages.SubPages.Editor.GeneralSubSettingsView), typeof(ViewModels.SettingsPages.SubPages.Editor.GeneralSubSettingsViewModel));
             viewModelLocator.Register(typeof(Views.SettingsPages.SubPages.Editor.CompatibilitySubSettingsView), typeof(ViewModels.SettingsPages.SubPages.Editor.CompatibilitySubSettingsViewModel));
-
-
+            // - Packaging
             viewModelLocator.Register(typeof(Views.SettingsPages.PackagingSettingsView), typeof(ViewModels.SettingsPages.PackagingSettingsViewModel));
-
-
+            // - Integrations
             viewModelLocator.Register(typeof(Views.SettingsPages.IntegrationsSettingsView), typeof(ViewModels.SettingsPages.IntegrationsSettingsViewModel));
-
-
-
 
 
             // ---- HeadCategory : Wizards
@@ -169,6 +170,21 @@ namespace WolvenKit
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.FirstSetupWizard.LocateGameDateView), typeof(ViewModels.Wizards.WizardPages.FirstSetupWizard.LocateGameDataViewModel));
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupView), typeof(ViewModels.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupViewModel));
 
+            //-- Category : FeedBackWizard 
+            viewModelLocator.Register(typeof(Views.Wizards.FeedbackWizardView), typeof(ViewModels.Wizards.FeedbackWizardViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.FeedbackWizard.RateView), typeof(ViewModels.Wizards.WizardPages.FeedbackWizard.RateViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.FeedbackWizard.SendView), typeof(ViewModels.Wizards.WizardPages.FeedbackWizard.SendViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.FeedbackWizard.ReviewView), typeof(ViewModels.Wizards.WizardPages.FeedbackWizard.ReviewViewModel));
+
+
+            //-- Category : InstallerWizard 
+            viewModelLocator.Register(typeof(Views.Wizards.InstallerWizardView), typeof(ViewModels.Wizards.InstallerWizardViewModel));
+
+            //-- Category : BugReportWizard 
+            viewModelLocator.Register(typeof(Views.Wizards.BugReportWizard), typeof(ViewModels.Wizards.BugReportWizardViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.BugReportWizard.AttachBugView), typeof(ViewModels.Wizards.WizardPages.BugReportWizard.AttachBugViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.BugReportWizard.DescribeBugView), typeof(ViewModels.Wizards.WizardPages.BugReportWizard.DescribeBugViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.BugReportWizard.SendBugView), typeof(ViewModels.Wizards.WizardPages.BugReportWizard.SendBugViewModel));
 
 
             var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();

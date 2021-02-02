@@ -23,10 +23,10 @@
                 <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                     <Grid>
                         <TextBlock Text="Executable Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                        <Button HorizontalAlignment="Right" Margin="0,0,250,0">
+                        <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="CP77ExecutablePathBtn_Click">
                             <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                         </Button>
-                        <TextBox HorizontalAlignment="Right" Width="250" Text=""/>
+                        <TextBox HorizontalAlignment="Right" Width="250" Text="{Binding CP77ExecutablePath}"/>
                     </Grid>
                 </Border>
                 
@@ -49,10 +49,10 @@
                         
                         <Grid Margin="5">
                             <TextBlock Text="Executable Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                            <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="ExecutablePathBtn_Click">
+                            <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="W3ExecutablePathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                            <TextBox HorizontalAlignment="Right" Width="250" Text="{Binding ExecutablePath}"/>
+                            <TextBox HorizontalAlignment="Right" Width="250" Text="{Binding W3ExecutablePath}"/>
                         </Grid>
 
 

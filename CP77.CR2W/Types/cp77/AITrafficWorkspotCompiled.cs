@@ -5,10 +5,5 @@ using static CP77.CR2W.Types.Enums;
 
 namespace CP77.CR2W.Types
 {
-	[REDMeta]
-	public class AITrafficWorkspotCompiled : worldTrafficSpotCompiled
-	{
-
-		public AITrafficWorkspotCompiled(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-	}
+	
 }

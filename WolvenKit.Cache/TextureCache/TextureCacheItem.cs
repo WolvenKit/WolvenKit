@@ -177,60 +177,6 @@ namespace WolvenKit.Cache
             }
         }
 
-        public string Extract(BundleFileExtractArgs e)
-        {
-            var newpath = Path.ChangeExtension(e.FileName, "dds");
-            var ext = Path.GetExtension(e.FileName);
-
-            // create new directory and delete existing file
-            Directory.CreateDirectory(Path.GetDirectoryName(newpath) ?? "");
-            if (File.Exists(newpath))
-                File.Delete(newpath);
-
-            // extract to dds
-            using (var output = new FileStream(newpath, FileMode.Create, FileAccess.Write))
-            {
-                Extract(output);
-            }
-
-            // don't convert if user extract extension is already dds
-            if (e.Extension == EUncookExtension.dds)
-                return newpath;
-            // don't convert w2cube cubemaps
-            if (ext == ".w2cube")
-                return newpath;
-
-            var extractext = e.Extension;
-            // do not convert pngs, jpgs and dds
-            if (!(ext == ".dds" || ext == ".w2l"))
-            {
-                switch (ext)
-                {
-                    case ".png":
-                        extractext = EUncookExtension.png;
-                        break;
-                    case ".jpg":
-                        extractext = EUncookExtension.jpg;
-                        break;
-                }
-
-
-                //convert
-                var fi = new FileInfo(newpath);
-                if (fi.Exists)
-                {
-                    TexconvWrapper.Convert(Path.GetDirectoryName(newpath), newpath, (EUncookExtension)extractext);
-                }
-
-                // delete old DDS
-                fi.Delete();
-
-                
-            }
-
-            return newpath;
-        }
-
         void p_Exited(object sender, EventArgs e)
         {
            

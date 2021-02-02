@@ -117,69 +117,56 @@ namespace CP77.CR2W.Archive
             return b;
         }
 
-        /// <summary>
-        /// Gets the bytes of one file by index from the archive.
-        /// </summary>
-        /// <param name="hash"></param>
-        /// <param name="decompressBuffers"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public (byte[], List<byte[]>) GetFileData(ulong hash, bool decompressBuffers)
+        public void CopyFileToStream(Stream stream, ulong hash, bool decompressBuffers)
         {
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            if (!Files.ContainsKey(hash)) return (null, null);
+            if (!Files.ContainsKey(hash)) return;
 
             var entry = Files[hash];
             var startindex = (int)entry.SegmentsStart;
             var nextindex = (int)entry.SegmentsEnd;
-            
+
             // decompress main file
-            var file = ExtractFile(this.Index.FileSegments[startindex], true);
-            
-            // don't decompress buffers
-            var buffers = new List<byte[]>();
+            CopyFileSegmentToStream(stream, this.Index.FileSegments[startindex], true);
+
+            // get buffers, optionally decompressing them
             for (int j = startindex + 1; j < nextindex; j++)
             {
                 var offsetentry = this.Index.FileSegments[j];
-                var buffer = ExtractFile(offsetentry, decompressBuffers);
-                buffers.Add(buffer);
+                CopyFileSegmentToStream(stream, offsetentry, decompressBuffers);
             }
+        }
 
-            return (file, buffers);
+        /// <summary>
+        /// Extracts a FileSegment to a stream
+        /// </summary>
+        /// <param name="outstream"></param>
+        /// <param name="offsetentry"></param>
+        /// <param name="decompress"></param>
+        private void CopyFileSegmentToStream(Stream outstream, FileSegment offsetentry, bool decompress)
+        {
+            using var fs = new FileStream(ArchiveAbsolutePath, FileMode.Open, FileAccess.Read);
+            using var br = new BinaryReader(fs);
+            br.BaseStream.Seek((long)offsetentry.Offset, SeekOrigin.Begin);
 
-            // local
-            byte[] ExtractFile(FileSegment offsetentry, bool decompress)
+
+            var zSize = offsetentry.ZSize;
+            var size = offsetentry.Size;
+
+            if (!decompress)
             {
-                using var ms = new MemoryStream();
-                using var bw = new BinaryWriter(ms);
-                
-                using var stream = new FileStream(ArchiveAbsolutePath, FileMode.Open, FileAccess.Read);
-                using var binaryReader = new BinaryReader(stream);
-                binaryReader.BaseStream.Seek((long) offsetentry.Offset, SeekOrigin.Begin);
-
-
-                var zSize = offsetentry.ZSize;
-                var size = offsetentry.Size;
-
-                if (!decompress)
-                {
-                    var buffer = binaryReader.ReadBytes((int)zSize);
-                    bw.Write(buffer);
-                }
-                else
-                {
-                    binaryReader.DecompressBuffer(bw, zSize, size);
-                }
-
-                return ms.ToArray();
+                var buffer = br.ReadBytes((int)zSize);
+                outstream.Write(buffer);
+            }
+            else
+            {
+                br.DecompressBuffer(outstream, zSize, size);
             }
         }
 
 
-
         #endregion
 
-        
+
     }
 
 

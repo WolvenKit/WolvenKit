@@ -10,6 +10,7 @@ using Catel.IoC;
 using WolvenKit.Common.Services;
 using CP77.CR2W.Archive;
 using CP77.CR2W.Extensions;
+using CP77.CR2W.Types;
 using WolvenKit.Common;
 
 namespace CP77.CR2W
@@ -20,39 +21,6 @@ namespace CP77.CR2W
     public static partial class ModTools
     {
         /// <summary>
-        /// Expects uncompressed buffers
-        /// </summary>
-        /// <param name="file"></param>
-        /// <param name="buffers"></param>
-        /// <param name="outfile"></param>
-        /// <returns></returns>
-        public static int Unbundle(byte[] file, List<byte[]> buffers, FileInfo outfile)
-        {
-            var extractsuccess = false;
-            
-            // write main file
-            Directory.CreateDirectory(outfile.Directory.FullName);
-            using var fs = new FileStream(outfile.FullName, FileMode.Create, FileAccess.Write);
-            using var bw = new BinaryWriter(fs);
-            bw.Write(file);
-            extractsuccess = true;
-
-            // write buffers
-            // buffers are usually(?) appended to the main file
-            // TODO: dump all buffered files and check this
-            for (int j = 0; j < buffers.Count; j++)
-            {
-                var buffer = buffers[j];
-                bw.Write(buffer);
-                extractsuccess = true;
-            }
-
-
-            return extractsuccess ? 1 : 0;
-        }
-        
-        
-        /// <summary>
         /// Extracts a single file + buffers.
         /// </summary>
         /// <param name="ar"></param>
@@ -61,31 +29,27 @@ namespace CP77.CR2W
         /// <returns></returns>
         public static int ExtractSingle(this Archive.Archive ar, ulong hash, DirectoryInfo outDir)
         {
-            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
-
-            return ar.ExtractSingleInner(hash, outDir);
-        }
-        
-        private static int ExtractSingleInner(this Archive.Archive ar, ulong hash, DirectoryInfo outDir)
-        {
-            
-            var (file, buffers) = ar.GetFileData(hash, false);
-
             if (!ar.Files.ContainsKey(hash))
                 return -1;
+
+            using var ms = new MemoryStream();
+            ar.CopyFileToStream(ms, hash, false);
+
             string name = ar.Files[hash].FileName;
             if (string.IsNullOrEmpty(Path.GetExtension(name)))
             {
                 name += ".bin";
             }
 
-            var outfile = new FileInfo(Path.Combine(outDir.FullName,
-                $"{name}"));
+            var outfile = new FileInfo(Path.Combine(outDir.FullName, $"{name}"));
             if (outfile.Directory == null)
                 return -1;
+            Directory.CreateDirectory(outfile.Directory.FullName);
+            using var fs = new FileStream(outfile.FullName, FileMode.Create, FileAccess.Write);
+            ms.Seek(0, SeekOrigin.Begin);
+            ms.CopyTo(fs);
 
-
-            return Unbundle(file, buffers, outfile);
+            return 1;
         }
 
         /// <summary>
@@ -129,7 +93,7 @@ namespace CP77.CR2W
             Parallel.ForEach(finalMatchesList, info =>
             {
                 
-                var extracted = ar.ExtractSingleInner(info.NameHash64, outDir);
+                var extracted = ar.ExtractSingle(info.NameHash64, outDir);
 
                 if (extracted != 0)
                     extractedList.Add(info.FileName);

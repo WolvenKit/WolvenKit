@@ -40,11 +40,18 @@ namespace WolvenKit.Views.SettingsPages.SubPages.Editor
             return (result.Result, result.DirectoryName);
         }
 
-        private async void ExecutablePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
+        private async void CP77ExecutablePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             var result = await openFile();
             if (result.Result)
-                _settingsManager.ExecutablePath = result.FileName;
+                _settingsManager.CP77ExecutablePath = result.FileName;
+        }
+
+        private async void W3ExecutablePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var result = await openFile();
+            if (result.Result)
+                _settingsManager.W3ExecutablePath = result.FileName;
         }
 
         private async void WccLitePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)

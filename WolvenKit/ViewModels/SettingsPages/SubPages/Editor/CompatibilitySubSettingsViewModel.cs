@@ -23,7 +23,8 @@ namespace WolvenKit.ViewModels.SettingsPages.SubPages.Editor
         /// Gets or sets the SettingsManager.
         /// </summary>
         [Model]
-        [Expose("ExecutablePath")]
+        [Expose("W3ExecutablePath")]
+        [Expose("CP77ExecutablePath")]
         [Expose("WccLitePath")]
         [Expose("DepotPath")]
         [Expose("GameModDir")]

@@ -6,8 +6,8 @@ namespace CP77Tools.Commands
 {
     public class ExportCommand : Command
     {
-        private static string Name = "export";
-        private static string Description = "Export a file or a list of files into raw files.";
+        private new const string Name = "export";
+        private new const string Description = "Export a file or a list of files into raw files.";
         
         public ExportCommand() : base(Name, Description)
         {

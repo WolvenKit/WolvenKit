@@ -5,8 +5,8 @@ namespace CP77Tools.Commands
 {
     public class OodleCommand : Command
     {
-        private static string Name = "oodle";
-        private static string Description = "Some helper functions related to oodle compression.";
+        private new const string Name = "oodle";
+        private new const string Description = "Some helper functions related to oodle compression.";
 
         public OodleCommand() : base(Name, Description)
         {

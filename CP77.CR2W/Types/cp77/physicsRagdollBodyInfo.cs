@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class physicsRagdollBodyInfo : CVariable
 	{
-		[Ordinal(0)]  [RED("BodyPart")] public physicsRagdollBodyPartE BodyPart { get; set; }
+		[Ordinal(0)]  [RED("BodyPart")] public CEnum<physicsRagdollBodyPartE> BodyPart { get; set; }
 		[Ordinal(1)]  [RED("ChildAnimIndex")] public CInt32 ChildAnimIndex { get; set; }
 		[Ordinal(2)]  [RED("ExcludeFromEarlyCollision")] public CBool ExcludeFromEarlyCollision { get; set; }
 		[Ordinal(3)]  [RED("FilterDataOverride")] public CName FilterDataOverride { get; set; }

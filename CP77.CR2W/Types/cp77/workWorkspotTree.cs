@@ -29,7 +29,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(18)]  [RED("inertializationDurationExitForced")] public CFloat InertializationDurationExitForced { get; set; }
 		[Ordinal(19)]  [RED("inertializationDurationExitNatural")] public CFloat InertializationDurationExitNatural { get; set; }
 		[Ordinal(20)]  [RED("initialActions")] public CArray<CHandle<workIWorkspotItemAction>> InitialActions { get; set; }
-		[Ordinal(21)]  [RED("itemsPolicy")] public workWorkspotItemPolicy ItemsPolicy { get; set; }
+		[Ordinal(21)]  [RED("itemsPolicy")] public CEnum<workWorkspotItemPolicy> ItemsPolicy { get; set; }
 		[Ordinal(22)]  [RED("rootEntry")] public CHandle<workIEntry> RootEntry { get; set; }
 		[Ordinal(23)]  [RED("sequencesTimeLimit")] public CFloat SequencesTimeLimit { get; set; }
 		[Ordinal(24)]  [RED("snapToTerrain")] public CBool SnapToTerrain { get; set; }

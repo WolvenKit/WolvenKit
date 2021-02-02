@@ -14,7 +14,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(3)]  [RED("attachToSlot")] public CBool AttachToSlot { get; set; }
 		[Ordinal(4)]  [RED("contextVisibility")] public CEnum<worlduiContextVisibility> ContextVisibility { get; set; }
 		[Ordinal(5)]  [RED("enabled")] public CBool Enabled { get; set; }
-		[Ordinal(6)]  [RED("gameContextVisibility")] public gameuiContext GameContextVisibility { get; set; }
+		[Ordinal(6)]  [RED("gameContextVisibility")] public CEnum<gameuiContext> GameContextVisibility { get; set; }
 		[Ordinal(7)]  [RED("hudEntryName")] public CName HudEntryName { get; set; }
 		[Ordinal(8)]  [RED("margins")] public inkMargin Margins { get; set; }
 		[Ordinal(9)]  [RED("slotParams")] public inkWidgetSlotAttachmentParams SlotParams { get; set; }

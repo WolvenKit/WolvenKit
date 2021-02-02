@@ -1,13 +1,12 @@
 ﻿using MLib.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Xml.Serialization;
 using Catel.IoC;
 using Catel.MVVM;
 using WolvenKit.Commands;
 using Catel.Data;
+using System.Collections.Generic;
 
 namespace WolvenKit.Services
 {
@@ -15,7 +14,8 @@ namespace WolvenKit.Services
     {
         #region fields
 
-        private string _executablePath = "";
+        private string _w3ExecutablePath = "";
+        private string _cp77ExecutablePath = "";
         private string _wccLitePath = "";
         private string _gameModDir = "";
         private string _gameDlcDir = "";
@@ -59,13 +59,22 @@ namespace WolvenKit.Services
 
         public bool CheckForUpdates { get; set; }
 
-        public string ExecutablePath
+        public string W3ExecutablePath
         {
-            get => _executablePath;
+            get => _w3ExecutablePath;
             set
             {
-                _executablePath = value;
-                RaisePropertyChanged(nameof(ExecutablePath));
+                _w3ExecutablePath = value;
+                RaisePropertyChanged(nameof(W3ExecutablePath));
+            }
+        }
+        public string CP77ExecutablePath
+        {
+            get => _cp77ExecutablePath;
+            set
+            {
+                _cp77ExecutablePath = value;
+                RaisePropertyChanged(nameof(CP77ExecutablePath));
             }
         }
         public string WccLitePath
@@ -146,7 +155,7 @@ namespace WolvenKit.Services
                     };
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Defaults
                 config = new SettingsManager
@@ -180,8 +189,11 @@ namespace WolvenKit.Services
         /// <param name="validationResults">The validation results.</param>
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
         {
-            if (!File.Exists(ExecutablePath))
-                validationResults.Add(FieldValidationResult.CreateError(nameof(ExecutablePath), "Executable path does not exist"));
+            if (!File.Exists(W3ExecutablePath))
+                validationResults.Add(FieldValidationResult.CreateError(nameof(W3ExecutablePath), "Witcher 3 executable path does not exist"));
+
+            if (!File.Exists(CP77ExecutablePath))
+                validationResults.Add(FieldValidationResult.CreateError(nameof(CP77ExecutablePath), "Cyberpunk 2077 executable path does not exist"));
 
             if (!File.Exists(WccLitePath))
                 validationResults.Add(FieldValidationResult.CreateError(nameof(WccLitePath), "WccLite path does not exist"));

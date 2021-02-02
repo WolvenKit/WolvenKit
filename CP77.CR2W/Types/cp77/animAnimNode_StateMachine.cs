@@ -17,6 +17,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(6)]  [RED("states")] public CArray<CHandle<animAnimNode_State>> States { get; set; }
 		[Ordinal(7)]  [RED("transitions")] public CArray<CHandle<animAnimStateTransitionDescription>> Transitions { get; set; }
 
+        [Ordinal(999)] [RED("debugFlag")] public CBool debugFlag { get; set; }
+
 		public animAnimNode_StateMachine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

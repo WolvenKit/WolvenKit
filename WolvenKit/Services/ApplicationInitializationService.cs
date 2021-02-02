@@ -2,20 +2,13 @@
 using Catel.IoC;
 using Catel.Logging;
 using Catel.MVVM;
-using Orchestra.Models;
 using Orchestra.Services;
 using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Catel.Services;
 using Orc.ProjectManagement;
-using Orc.Squirrel;
-using WolvenKit;
-using WolvenKit.Services;
 using WolvenKit.Common.Services;
-using Settings = WolvenKit.Settings;
 using WolvenKit.Model.ProjectManagement;
 using System.Windows.Media;
 using WolvenKit.Commands;
@@ -71,12 +64,10 @@ namespace WolvenKit.Services
             });
         }
 
-        public override async Task InitializeAfterCreatingShellAsync()
+        // TODO: update main window title?
+        /*public override Task InitializeAfterCreatingShellAsync()
         {
-            // TODO: update main window title?
-
-            
-        }
+        }*/
 
         public override async Task InitializeAfterShowingShellAsync()
         {
@@ -84,7 +75,7 @@ namespace WolvenKit.Services
 
             // check settings
             var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            if (!File.Exists(settings.ExecutablePath) || !File.Exists(settings.WccLitePath))
+            if (!File.Exists(settings.W3ExecutablePath) || !File.Exists(settings.WccLitePath))
             {
                 _commandManager.GetCommand(AppCommands.Settings.General).SafeExecute();
             }
@@ -96,12 +87,14 @@ namespace WolvenKit.Services
         #endregion
 
         #region methods
-        private async Task InitializePerformanceAsync()
+        private Task InitializePerformanceAsync()
         {
             Log.Info("Improving performance");
 
             Catel.Windows.Controls.UserControl.DefaultCreateWarningAndErrorValidatorForViewModelValue = false;
             Catel.Windows.Controls.UserControl.DefaultSkipSearchingForInfoBarMessageControlValue = true;
+            
+            return Task.CompletedTask;
         }
 
         private void InitializeFonts()
@@ -180,9 +173,10 @@ namespace WolvenKit.Services
             _serviceLocator.RegisterTypeAndInstantiate<RecentlyUsedItemsProjectWatcher>();
         }
 
-        private async Task CheckForUpdatesAsync()
+        private Task CheckForUpdatesAsync()
         {
             //TODO: enable
+            return Task.CompletedTask;
 //            Log.Info("Checking for updates");
 
 //            var updateService = _serviceLocator.ResolveType<IUpdateService>();

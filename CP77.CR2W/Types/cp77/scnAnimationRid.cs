@@ -15,6 +15,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(4)]  [RED("offset")] public Transform Offset { get; set; }
 		[Ordinal(5)]  [RED("tag")] public scnRidTag Tag { get; set; }
 		[Ordinal(6)]  [RED("trajectoryBoneIndex")] public CInt32 TrajectoryBoneIndex { get; set; }
+        
+        [Ordinal(999)]  [RED("backendData")] public CHandle<IBackendData> backendData { get; set; }
 
 		public scnAnimationRid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

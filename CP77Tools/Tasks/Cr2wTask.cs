@@ -1,14 +1,20 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using CP77.CR2W;
+using CP77.CR2W.Archive;
+using CP77.CR2W.Extensions;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
-        public static void Cr2wTask(string[] path, string outpath, bool all, bool chunks)
+        public static void Cr2wTask(string[] path, string outpath, bool chunks, string pattern, string regex)
         {
             if (path == null || path.Length < 1)
             {
@@ -18,87 +24,100 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                Cr2wTaskInner(file, outpath, all, chunks);
+                Cr2wTaskInner(file, outpath, chunks, pattern, regex);
             });
 
         }
 
-        private static int Cr2wTaskInner(string path, string outpath, bool all, bool chunks)
+        private static void Cr2wTaskInner(string path, string outpath, bool chunks, string pattern = "", string regex = "")
         {
-            // initial checks
+            #region checks
+
             if (string.IsNullOrEmpty(path))
             {
                 logger.LogString("Please fill in an input path.", Logtype.Error);
-                return 0;
+                return;
             }
-            var inputFileInfo = new FileInfo(path);
-            if (!inputFileInfo.Exists)
+
+            var inFileInfo = new FileInfo(path);
+            var inDirInfo = new DirectoryInfo(path);
+            var isDirectory = !inFileInfo.Exists && inDirInfo.Exists;
+            var isFile = inFileInfo.Exists && !inDirInfo.Exists;
+
+            if (!isDirectory && !isFile)
             {
                 logger.LogString("Input file does not exist.", Logtype.Error);
-                return 0;
+                return;
+            }
+            #endregion
+
+            Stopwatch watch = new();
+            watch.Restart();
+
+            // get all files
+            var fileInfos = isDirectory 
+                ? inDirInfo.GetFiles("*", SearchOption.AllDirectories).ToList() 
+                : new List<FileInfo> { inFileInfo };
+
+            // check search pattern then regex
+            IEnumerable<FileInfo> finalmatches = fileInfos;
+            if (!string.IsNullOrEmpty(pattern))
+                finalmatches = fileInfos.MatchesWildcard(item => item.FullName, pattern);
+            if (!string.IsNullOrEmpty(regex))
+            {
+                var searchTerm = new System.Text.RegularExpressions.Regex($@"{regex}");
+                var queryMatchingFiles =
+                    from file in finalmatches
+                    let matches = searchTerm.Matches(file.FullName)
+                    where matches.Count > 0
+                    select file;
+
+                finalmatches = queryMatchingFiles;
             }
 
-            var outputDirInfo = string.IsNullOrEmpty(outpath) 
-                ? inputFileInfo.Directory 
-                : new DirectoryInfo(outpath);
-            if (outputDirInfo == null || !outputDirInfo.Exists)
+            var finalMatchesList = finalmatches.ToList();
+            logger.LogString($"Found {finalMatchesList.Count} files to dump.", Logtype.Important);
+
+            Thread.Sleep(1000);
+            int progress = 0;
+            logger.LogProgress(0);
+            Parallel.ForEach(finalMatchesList, fileInfo =>
             {
-                logger.LogString("Output directory is not valid.", Logtype.Error);
-                return 0;
-            }
-
-            var f = File.ReadAllBytes(inputFileInfo.FullName);
-            using var ms = new MemoryStream(f);
-            using var br = new BinaryReader(ms);
-
-            var cr2w = new CR2WFile();
-
-            if (all)
-            {
-                cr2w.ReadImportsAndBuffers(br);
-
-                var obj = new Cr2wChunkInfo { Filename = inputFileInfo.FullName };
-
-                obj.Stringdict = cr2w.StringDictionary;
-                obj.Imports = cr2w.Imports;
-                obj.Buffers = cr2w.Buffers;
-                obj.Chunks = cr2w.Chunks;
-                foreach (var chunk in cr2w.Chunks)
+                var outputDirInfo = string.IsNullOrEmpty(outpath)
+                    ? fileInfo.Directory
+                    : new DirectoryInfo(outpath);
+                if (outputDirInfo == null || !outputDirInfo.Exists)
                 {
-                    obj.ChunkData.Add(chunk.GetDumpObject(br));
+                    logger.LogString("Output directory is not valid.", Logtype.Error);
+                    return;
                 }
 
-                //write
-                File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{inputFileInfo.Name}.info.json"),
-                    JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        PreserveReferencesHandling = PreserveReferencesHandling.None,
-                        TypeNameHandling = TypeNameHandling.Auto
-                    }));
-                logger.LogString($"Finished. Dump file written to {Path.Combine(outputDirInfo.FullName, $"{inputFileInfo.Name}.info.json")}", Logtype.Success);
-            }
+                if (chunks)
+                {
+                    var f = File.ReadAllBytes(fileInfo.FullName);
+                    using var fs = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read);
+                    var cr2w = ModTools.TryReadCr2WFile(fs);
+                    if (cr2w == null)
+                        return;
 
-            if (chunks)
-            {
-                br.BaseStream.Seek(0, SeekOrigin.Begin);
-                cr2w.Read(br);
+                    //write
+                    File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.json"),
+                        JsonConvert.SerializeObject(cr2w, Formatting.Indented, new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                            PreserveReferencesHandling = PreserveReferencesHandling.None,
+                            TypeNameHandling = TypeNameHandling.None
+                        }));
+                }
 
-                //write
-                File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{inputFileInfo.Name}.json"),
-                    JsonConvert.SerializeObject(cr2w, Formatting.Indented, new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        PreserveReferencesHandling = PreserveReferencesHandling.None,
-                        TypeNameHandling = TypeNameHandling.None
-                    }));
-                logger.LogString($"Finished. Dump file written to {Path.Combine(outputDirInfo.FullName, $"{inputFileInfo.Name}.json")}", Logtype.Success);
-            }
+                Interlocked.Increment(ref progress);
+                logger.LogProgress(progress / (float)finalMatchesList.Count);
+            });
 
-
-
-
-            return 1;
+            watch.Stop();
+            logger.LogString(
+                $"Finished. Dumped {finalMatchesList.Count} files to json in {watch.ElapsedMilliseconds.ToString()}ms.",
+                Logtype.Success);
         }
     }
 }

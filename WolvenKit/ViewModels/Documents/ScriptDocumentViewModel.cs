@@ -24,13 +24,9 @@ namespace WolvenKit.ViewModels
             
         }
 
-        #region Fields
-        public event EventHandler<FileSavedEventArgs> OnFileSaved;
-        #endregion
-
         #region Properties
         public object SaveTarget { get; set; }
-        public string Title => FileName;
+        public override string Title => FileName;
         public bool IsUnsaved { get; private set; }
 
         public string FilePath { get; set; }

@@ -21,6 +21,9 @@ namespace CP77.CR2W.Types
 		[Ordinal(10)]  [RED("verticalPullSpeedByAngleCurve")] public curveData<CFloat> VerticalPullSpeedByAngleCurve { get; set; }
 		[Ordinal(11)]  [RED("verticalPullSpeedFactor")] public CFloat VerticalPullSpeedFactor { get; set; }
 
+		[Ordinal(998)]  [RED("innerSquareColor")] public CColor innerSquareColor { get; set; }
+		[Ordinal(999)]  [RED("outerSquareColor")] public CColor outerSquareColor { get; set; }
+
 		public animLookAtPartsDependency(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

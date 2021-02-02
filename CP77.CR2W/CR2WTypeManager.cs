@@ -74,7 +74,7 @@ namespace CP77.CR2W.Types
             // check for generic type
             else if (typename.StartsWith('['))
             {
-                string generictype = typename.Substring(3);
+                string generictype = typename.Substring(typename.IndexOf(']') + 1);
                 CVariable innerobject = Create(generictype, "", cr2w, null);
                 var arrayacc = MakeArray(typeof(CArrayFixedSize<>), innerobject.GetType());
                 //arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value) };
@@ -104,8 +104,15 @@ namespace CP77.CR2W.Types
                     }
                     case "curveData":
                     {
-                        CVariable innerobject = Create(innertype, "", cr2w, null);
+                        var innerobject = Create(innertype, "", cr2w, null);
                         var obj = MakeGenericType(typeof(curveData<>), innerobject);
+                        (obj as ICurveDataAccessor).Elementtype = innertype;
+                        return obj;
+                    }
+                    case "multiChannelCurve":
+                    {
+                        var innerobject = Create(innertype, "", cr2w, null);
+                        var obj = MakeGenericType(typeof(multiChannelCurve<>), innerobject);
                         (obj as ICurveDataAccessor).Elementtype = innertype;
                         return obj;
                     }

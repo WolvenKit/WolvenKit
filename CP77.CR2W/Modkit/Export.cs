@@ -30,16 +30,16 @@ namespace CP77.CR2W
         /// </summary>
         /// <param name="cr2wfile"></param>
         /// <param name="outpath"></param>
-        public static int Export(FileInfo cr2wfile, EUncookExtension uncookext = EUncookExtension.tga)
+        public static bool Export(FileInfo cr2wfile, EUncookExtension uncookext = EUncookExtension.tga)
         {
             #region checks
 
-            if (cr2wfile == null) return -1;
-            if (!cr2wfile.Exists) return -1;
-            if (cr2wfile.Directory != null && !cr2wfile.Directory.Exists) return -1;
-            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(cr2wfile.Extension[1..])) return -1;
+            if (cr2wfile == null) return false;
+            if (!cr2wfile.Exists) return false;
+            if (cr2wfile.Directory != null && !cr2wfile.Directory.Exists) return false;
+            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(cr2wfile.Extension[1..])) return false;
             var ext = Path.GetExtension(cr2wfile.FullName)[1..];
-            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext)) return 0;
+            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext)) return false;
             #endregion
 
             // read file
@@ -50,35 +50,16 @@ namespace CP77.CR2W
             if (cr2w == null)
             {
                 Logger.LogString($"Failed to read cr2w file {cr2wfile.FullName}", Logtype.Error);
-                return -1;
+                return false;
             }
             cr2w.FileName = cr2wfile.FullName;
 
-            // read buffers
-            var buffers = new List<byte[]>();
-            foreach (var b in cr2w.Buffers.Select(_ => _.Buffer))
-            {
-                br.BaseStream.Seek(b.offset, SeekOrigin.Begin);
-
-                var zbuffer = br.ReadBytes((int) b.diskSize);
-
-                // decompress buffers
-                using var input = new MemoryStream(zbuffer);
-                using var output = new MemoryStream();
-                using var reader = new BinaryReader(input);
-                using var writer = new BinaryWriter(output);
-                reader.DecompressBuffer(writer, (uint)zbuffer.Length, b.memSize);
-                
-                buffers.Add(Catel.IO.StreamExtensions.ToByteArray(output));
-                
-            }
-
-            
-            if (!Enum.TryParse(ext, true, out ECookedFileFormat extAsEnum))
-                return -1;
-
-            return Uncook(cr2w, buffers, extAsEnum, uncookext);
+            return Uncook(fs, cr2wfile, ext, uncookext);
 
         }
+
+
+
+
     }
 }
