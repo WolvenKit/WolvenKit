@@ -267,9 +267,13 @@
                             </ItemsPanelTemplate>
                         </fluent:ComboBox.ItemsPanel>
                         <ComboBoxItem x:Name="CBAssetBrowserItem" Content="Asset Browser" Selected="CBAssetBrowserItem_Selected"/>
-                        <ComboBoxItem x:Name="CBCodeEditorItem" Content="Code Editor (WIP)" Selected="CBCodeEditorItem_Selected"/>
                         <ComboBoxItem x:Name="CBPluginManager" Content="Plugin Manager" Selected="CBPluginManager_Selected"/>
                         <ComboBoxItem x:Name="CBVisualEditorItem" Content="Visual Editor (WIP)" Selected="CBVisualEditorItem_Selected"/>
+                        <ComboBoxItem x:Name="CBCodeEditorItem" Content="Code Editor (WIP)" Selected="CBCodeEditorItem_Selected"/>
+                        <ComboBoxItem x:Name="CBAudioToolItem" Content="Audio Tool (WIP)" Selected="CBAudioToolItem_Selected" />
+                        <ComboBoxItem x:Name="CBJournalEditorItem" Content="Journal Editor (WIP)" Selected="CBJournalEditorItem_Selected" />
+
+
                     </fluent:ComboBox>
 
 
