@@ -82,7 +82,7 @@ namespace CP77.CR2W
         public void ReadData(BinaryReader file)
         {
             file.BaseStream.Seek(_buffer.offset, SeekOrigin.Begin);
-            Data = file.ReadBytes((int) _buffer.memSize);
+            Data = file.ReadBytes((int) _buffer.diskSize);
         }
 
         public /*async Task*/ void ReadData(MemoryMappedFile mmf)

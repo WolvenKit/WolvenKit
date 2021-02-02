@@ -74,10 +74,13 @@ namespace CP77.CR2W.Types
             // check for generic type
             else if (typename.StartsWith('['))
             {
-                string generictype = typename.Substring(typename.IndexOf(']') + 1);
+                var idx = typename.IndexOf(']');
+
+                string generictype = typename[(idx + 1)..];
                 CVariable innerobject = Create(generictype, "", cr2w, null);
                 var arrayacc = MakeArray(typeof(CArrayFixedSize<>), innerobject.GetType());
-                //arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value) };
+                var flagstr = typename[1..idx];
+                arrayacc.Flags = new List<int>() { int.Parse(flagstr) };
                 arrayacc.Elementtype = generictype;
                 return arrayacc as CVariable;
             }
@@ -93,25 +96,25 @@ namespace CP77.CR2W.Types
                     case "CHandle":
                     case "handle":
                     {
-                        CVariable innerobject = Create(innertype, "", cr2w, null);
+                        CVariable innerobject = Create(innertype, "", cr2w, parentVariable);
                         return MakeGenericType(typeof(CHandle<>), innerobject);
                     }
                     case "wCHandle":
                     case "whandle":
                     {
-                        CVariable innerobject = Create(innertype, "", cr2w, null);
+                        CVariable innerobject = Create(innertype, "", cr2w, parentVariable);
                         return MakeGenericType(typeof(wCHandle<>), innerobject);
                     }
                     case "curveData":
                     {
-                        var innerobject = Create(innertype, "", cr2w, null);
+                        var innerobject = Create(innertype, "", cr2w, parentVariable);
                         var obj = MakeGenericType(typeof(curveData<>), innerobject);
                         (obj as ICurveDataAccessor).Elementtype = innertype;
                         return obj;
                     }
                     case "multiChannelCurve":
                     {
-                        var innerobject = Create(innertype, "", cr2w, null);
+                        var innerobject = Create(innertype, "", cr2w, parentVariable);
                         var obj = MakeGenericType(typeof(multiChannelCurve<>), innerobject);
                         (obj as ICurveDataAccessor).Elementtype = innertype;
                         return obj;
@@ -119,13 +122,13 @@ namespace CP77.CR2W.Types
                     case "CrRef":
                     case "rRef":
                     {
-                        CVariable innerobject = Create(innertype, "", cr2w, null);
+                        CVariable innerobject = Create(innertype, "", cr2w, parentVariable);
                         return MakeGenericType(typeof(rRef<>), innerobject);
                     }
                     case "CraRef":
                     case "raRef":
                     {
-                        CVariable innerobject = Create(innertype, "", cr2w, null);
+                        CVariable innerobject = Create(innertype, "", cr2w, parentVariable);
                         return MakeGenericType(typeof(raRef<>), innerobject);
                     }
                     case "array":
@@ -152,7 +155,7 @@ namespace CP77.CR2W.Types
                             {
                                 CVariable innerobject = Create(matchArrayType.Groups[2].Value, "", cr2w, null);
                                 var arrayacc = MakeArray(typeof(CStatic<>), innerobject.GetType());
-                                //arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value) };
+                                arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value) };
                                 arrayacc.Elementtype = matchArrayType.Groups[2].Value;
                                 return arrayacc as CVariable;
                             }

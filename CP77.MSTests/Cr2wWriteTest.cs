@@ -831,8 +831,9 @@ namespace CP77.MSTests
                 {
                     if (file.Archive is not Archive ar)
                         return;
+                    //continue;
 
-                    var c = new CR2WFile { FileName = file.NameOrHash };
+                    var c = new CR2WFile {FileName = file.NameOrHash};
                     using var ms = new MemoryStream();
                     ar.CopyFileToStream(ms, file.NameHash64, false);
                     ms.Seek(0, SeekOrigin.Begin);
@@ -890,7 +891,18 @@ namespace CP77.MSTests
                             {
                                 c.Write(bw);
 
-                                isBinaryEqual = originalbytes.SequenceEqual(StreamExtensions.ToByteArray(wms));
+                                var newbytes = StreamExtensions.ToByteArray(wms);
+                                isBinaryEqual = originalbytes.SequenceEqual(newbytes);
+#if DEBUG
+                                if (false)
+                                {
+                                    var resultDir = Path.Combine(Environment.CurrentDirectory, TestResultsDirectory);
+                                    var filename = Path.Combine(resultDir, Path.GetFileName(c.FileName));
+                                    File.WriteAllBytes($"{filename}.o.bin", originalbytes);
+                                    File.WriteAllBytes($"{filename}.n.bin", newbytes);
+                                }
+#endif
+
                             }
 
 
@@ -908,7 +920,7 @@ namespace CP77.MSTests
                                 msg += $"IsBinaryEqual: {isBinaryEqual}";
                             }
 
-                            
+
 
                             results.Add(new WriteTestResult
                             {
@@ -937,8 +949,9 @@ namespace CP77.MSTests
                     });
                 }
             });
+            //}
 
-            return results;
+           return results;
         }
 
         private string TestResultAsCsv(IEnumerable<WriteTestResult> results)

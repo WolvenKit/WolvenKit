@@ -167,9 +167,19 @@ namespace CP77.CR2W.Types
         {
             var depstr = this.REDName;
             var par = this.ParentVar;
-            while (par != null)
+            // top level chunk variables return the chunk index
+            if (par == null)
+                return $"{this.VarChunkIndex}.{this.REDName}";
+
+            while (true)
             {
                 depstr = $"{par.REDName}.{depstr}";
+                
+                if (par.ParentVar == null)
+                {
+                    depstr = $"{par.VarChunkIndex}.{depstr}";
+                    break;
+                }
                 par = par.ParentVar;
             }
 

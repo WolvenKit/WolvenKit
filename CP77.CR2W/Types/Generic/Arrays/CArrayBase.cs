@@ -25,7 +25,7 @@ namespace CP77.CR2W.Types
 
 
         [Browsable(false)]
-        //public List<int> Flags { get; set; }
+        public List<int> Flags { get; set; }
         public string Elementtype { get; set; }
         public Type InnerType => this.GetType().GetGenericArguments().Single();
         #endregion

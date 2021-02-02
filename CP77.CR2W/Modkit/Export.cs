@@ -37,9 +37,7 @@ namespace CP77.CR2W
             if (cr2wfile == null) return false;
             if (!cr2wfile.Exists) return false;
             if (cr2wfile.Directory != null && !cr2wfile.Directory.Exists) return false;
-            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(cr2wfile.Extension[1..])) return false;
             var ext = Path.GetExtension(cr2wfile.FullName)[1..];
-            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext)) return false;
             #endregion
 
             // read file
