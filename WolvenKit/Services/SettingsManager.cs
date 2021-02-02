@@ -11,7 +11,7 @@ using Catel.Data;
 
 namespace WolvenKit.Services
 {
-    public class SettingsManager : ModelBase, ISettingsManager
+    public class SettingsManager : ValidatableModelBase, ISettingsManager
     {
         #region fields
 
@@ -172,6 +172,28 @@ namespace WolvenKit.Services
             }
 
             return config;
+        }
+
+        /// <summary>
+        /// Validates the field values of SettingsManager.
+        /// </summary>
+        /// <param name="validationResults">The validation results.</param>
+        protected override void ValidateFields(List<IFieldValidationResult> validationResults)
+        {
+            if (!File.Exists(ExecutablePath))
+                validationResults.Add(FieldValidationResult.CreateError(nameof(ExecutablePath), "Executable path does not exist"));
+
+            if (!File.Exists(WccLitePath))
+                validationResults.Add(FieldValidationResult.CreateError(nameof(WccLitePath), "WccLite path does not exist"));
+
+            if (!Directory.Exists(GameModDir))
+                validationResults.Add(FieldValidationResult.CreateError(nameof(GameModDir), "Game mod dir does not exist"));
+
+            if (!Directory.Exists(GameDlcDir))
+                validationResults.Add(FieldValidationResult.CreateError(nameof(GameDlcDir), "Game dlc dir does not exist"));
+
+            if (!Directory.Exists(DepotPath))
+                validationResults.Add(FieldValidationResult.CreateError(nameof(DepotPath), "Depot dir does not exist"));
         }
 
         #endregion
