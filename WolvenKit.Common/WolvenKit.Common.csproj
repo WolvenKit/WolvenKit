@@ -44,6 +44,7 @@
     </PackageReference>
     <PackageReference Include="Catel.MVVM" Version="5.12.11" />
     <PackageReference Include="CsvHelper" Version="16.0.0" />
+    <PackageReference Include="FmodAudio" Version="2.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
     <PackageReference Include="protobuf-net" Version="3.0.73" />
   </ItemGroup>
