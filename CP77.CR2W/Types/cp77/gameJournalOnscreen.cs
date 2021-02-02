@@ -8,10 +8,10 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameJournalOnscreen : gameJournalEntry
 	{
-		[Ordinal(0)]  [RED("description")] public LocalizationString Description { get; set; }
-		[Ordinal(1)]  [RED("iconID")] public TweakDBID IconID { get; set; }
-		[Ordinal(2)]  [RED("tag")] public CName Tag { get; set; }
-		[Ordinal(3)]  [RED("title")] public LocalizationString Title { get; set; }
+		[Ordinal(0)]  [RED("tag")] public CName Tag { get; set; }
+		[Ordinal(1)]  [RED("title")] public LocalizationString Title { get; set; }
+		[Ordinal(2)]  [RED("description")] public LocalizationString Description { get; set; }
+		[Ordinal(3)]  [RED("iconID")] public TweakDBID IconID { get; set; }
 
 		public gameJournalOnscreen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

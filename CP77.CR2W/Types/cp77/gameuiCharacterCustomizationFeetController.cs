@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiCharacterCustomizationFeetController : gameuiCharacterCustomizationBodyPartsController
 	{
-		[Ordinal(0)]  [RED("flatFeetGroupName")] public CName FlatFeetGroupName { get; set; }
-		[Ordinal(1)]  [RED("liftedFeetGroupName")] public CName LiftedFeetGroupName { get; set; }
+		[Ordinal(0)]  [RED("liftedFeetGroupName")] public CName LiftedFeetGroupName { get; set; }
+		[Ordinal(1)]  [RED("flatFeetGroupName")] public CName FlatFeetGroupName { get; set; }
 
 		public gameuiCharacterCustomizationFeetController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

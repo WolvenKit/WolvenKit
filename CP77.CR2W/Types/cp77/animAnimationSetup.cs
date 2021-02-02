@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class animAnimationSetup : CVariable
 	{
 		[Ordinal(0)]  [RED("cinematics")] public animAnimSetCollection Cinematics { get; set; }
-		[Ordinal(1)]  [RED("finalAnimSetCollection")] public animAnimSetCollection FinalAnimSetCollection { get; set; }
-		[Ordinal(2)]  [RED("gameplay")] public animAnimSetCollection Gameplay { get; set; }
+		[Ordinal(1)]  [RED("gameplay")] public animAnimSetCollection Gameplay { get; set; }
+		[Ordinal(2)]  [RED("finalAnimSetCollection")] public animAnimSetCollection FinalAnimSetCollection { get; set; }
 
 		public animAnimationSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

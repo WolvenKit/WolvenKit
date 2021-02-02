@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class gameprojectileSpawnComponent : entIPlacedComponent
 	{
 		[Ordinal(0)]  [RED("projectileTemplates")] public CArray<CName> ProjectileTemplates { get; set; }
-		[Ordinal(1)]  [RED("slotName")] public CName SlotName { get; set; }
-		[Ordinal(2)]  [RED("spawnOffset")] public Vector3 SpawnOffset { get; set; }
+		[Ordinal(1)]  [RED("spawnOffset")] public Vector3 SpawnOffset { get; set; }
+		[Ordinal(2)]  [RED("slotName")] public CName SlotName { get; set; }
 
 		public gameprojectileSpawnComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

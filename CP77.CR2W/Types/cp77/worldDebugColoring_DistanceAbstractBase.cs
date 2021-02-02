@@ -8,10 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldDebugColoring_DistanceAbstractBase : worldEditorDebugColoringSettings
 	{
-		[Ordinal(0)]  [RED("maxColor")] public CColor MaxColor { get; set; }
-		[Ordinal(1)]  [RED("maxDistance")] public CFloat MaxDistance { get; set; }
-		[Ordinal(2)]  [RED("minColor")] public CColor MinColor { get; set; }
-		[Ordinal(3)]  [RED("minDistance")] public CFloat MinDistance { get; set; }
 
 		public worldDebugColoring_DistanceAbstractBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

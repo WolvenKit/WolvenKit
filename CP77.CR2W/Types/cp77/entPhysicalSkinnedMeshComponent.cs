@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class entPhysicalSkinnedMeshComponent : entSkinnedMeshComponent
 	{
 		[Ordinal(0)]  [RED("filterData")] public CHandle<physicsFilterData> FilterData { get; set; }
-		[Ordinal(1)]  [RED("filterDataSource")] public CEnum<physicsFilterDataSource> FilterDataSource { get; set; }
-		[Ordinal(2)]  [RED("simulationType")] public CEnum<physicsSimulationType> SimulationType { get; set; }
+		[Ordinal(1)]  [RED("simulationType")] public CEnum<physicsSimulationType> SimulationType { get; set; }
+		[Ordinal(2)]  [RED("filterDataSource")] public CEnum<physicsFilterDataSource> FilterDataSource { get; set; }
 		[Ordinal(3)]  [RED("startInactive")] public CBool StartInactive { get; set; }
 		[Ordinal(4)]  [RED("useResourceSimulationType")] public CBool UseResourceSimulationType { get; set; }
 

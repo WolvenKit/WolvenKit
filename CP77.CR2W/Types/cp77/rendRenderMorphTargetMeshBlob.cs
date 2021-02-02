@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class rendRenderMorphTargetMeshBlob : IRenderResourceBlob
 	{
 		[Ordinal(0)]  [RED("baseBlob")] public CHandle<IRenderResourceBlob> BaseBlob { get; set; }
-		[Ordinal(1)]  [RED("diffsBuffer")] public DataBuffer DiffsBuffer { get; set; }
-		[Ordinal(2)]  [RED("header")] public rendRenderMorphTargetMeshBlobHeader Header { get; set; }
+		[Ordinal(1)]  [RED("header")] public rendRenderMorphTargetMeshBlobHeader Header { get; set; }
+		[Ordinal(2)]  [RED("diffsBuffer")] public DataBuffer DiffsBuffer { get; set; }
 		[Ordinal(3)]  [RED("mappingBuffer")] public DataBuffer MappingBuffer { get; set; }
 		[Ordinal(4)]  [RED("textureDiffsBuffer")] public serializationDeferredDataBuffer TextureDiffsBuffer { get; set; }
 

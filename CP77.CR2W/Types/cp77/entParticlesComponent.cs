@@ -10,9 +10,8 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("autoHideRange")] public CFloat AutoHideRange { get; set; }
 		[Ordinal(1)]  [RED("emissionRate")] public CFloat EmissionRate { get; set; }
-		[Ordinal(2)]  [RED("isEnabled")] public CBool IsEnabled { get; set; }
-		[Ordinal(3)]  [RED("particleSystem")] public rRef<CParticleSystem> ParticleSystem { get; set; }
-		[Ordinal(4)]  [RED("renderLayerMask")] public CEnum<RenderSceneLayerMask> RenderLayerMask { get; set; }
+		[Ordinal(2)]  [RED("particleSystem")] public rRef<CParticleSystem> ParticleSystem { get; set; }
+		[Ordinal(3)]  [RED("renderLayerMask")] public CEnum<RenderSceneLayerMask> RenderLayerMask { get; set; }
 
 		public entParticlesComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

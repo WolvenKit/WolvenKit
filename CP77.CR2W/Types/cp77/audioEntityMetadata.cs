@@ -8,13 +8,13 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioEntityMetadata : audioAudioMetadata
 	{
-		[Ordinal(0)]  [RED("alwaysCreateDefaultEmitter")] public CBool AlwaysCreateDefaultEmitter { get; set; }
-		[Ordinal(1)]  [RED("defaultEmitterName")] public CName DefaultEmitterName { get; set; }
+		[Ordinal(0)]  [RED("fallbackDecorators")] public CArray<CName> FallbackDecorators { get; set; }
+		[Ordinal(1)]  [RED("emitterDescriptions")] public CArray<audioEntityEmitterSettings> EmitterDescriptions { get; set; }
 		[Ordinal(2)]  [RED("defaultPositionName")] public CName DefaultPositionName { get; set; }
-		[Ordinal(3)]  [RED("emitterDescriptions")] public CArray<audioEntityEmitterSettings> EmitterDescriptions { get; set; }
-		[Ordinal(4)]  [RED("fallbackDecorators")] public CArray<CName> FallbackDecorators { get; set; }
-		[Ordinal(5)]  [RED("isDefaultForEntityType")] public CName IsDefaultForEntityType { get; set; }
-		[Ordinal(6)]  [RED("preferSoundComponentPosition")] public CBool PreferSoundComponentPosition { get; set; }
+		[Ordinal(3)]  [RED("defaultEmitterName")] public CName DefaultEmitterName { get; set; }
+		[Ordinal(4)]  [RED("preferSoundComponentPosition")] public CBool PreferSoundComponentPosition { get; set; }
+		[Ordinal(5)]  [RED("alwaysCreateDefaultEmitter")] public CBool AlwaysCreateDefaultEmitter { get; set; }
+		[Ordinal(6)]  [RED("isDefaultForEntityType")] public CName IsDefaultForEntityType { get; set; }
 		[Ordinal(7)]  [RED("priority")] public CInt32 Priority { get; set; }
 		[Ordinal(8)]  [RED("rigMetadata")] public CName RigMetadata { get; set; }
 

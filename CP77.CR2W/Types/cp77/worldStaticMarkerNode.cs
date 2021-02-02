@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class worldStaticMarkerNode : worldSocketNode
 	{
 		[Ordinal(0)]  [RED("data")] public CHandle<worldIMarker> Data { get; set; }
-		[Ordinal(1)]  [RED("isEnabled")] public CBool IsEnabled { get; set; }
-		[Ordinal(2)]  [RED("tags")] public redTagList Tags { get; set; }
+		[Ordinal(1)]  [RED("tags")] public redTagList Tags { get; set; }
+		[Ordinal(2)]  [RED("isEnabled")] public CBool IsEnabled { get; set; }
 
 		public worldStaticMarkerNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

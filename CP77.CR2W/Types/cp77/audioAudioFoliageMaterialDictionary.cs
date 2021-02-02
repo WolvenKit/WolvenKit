@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioAudioFoliageMaterialDictionary : audioInlinedAudioMetadata
 	{
-		[Ordinal(0)]  [RED("entries")] public CArray<audioAudioFoliageMaterialDictionaryItem> Entries { get; set; }
-		[Ordinal(1)]  [RED("entryType")] public CHandle<audioAudioFoliageMaterialDictionaryItem> EntryType { get; set; }
+		[Ordinal(0)]  [RED("entryType")] public CHandle<audioAudioFoliageMaterialDictionaryItem> EntryType { get; set; }
+		[Ordinal(1)]  [RED("entries")] public CArray<audioAudioFoliageMaterialDictionaryItem> Entries { get; set; }
 
 		public audioAudioFoliageMaterialDictionary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

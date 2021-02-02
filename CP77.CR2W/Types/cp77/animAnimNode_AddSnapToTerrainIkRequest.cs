@@ -9,9 +9,9 @@ namespace CP77.CR2W.Types
 	public class animAnimNode_AddSnapToTerrainIkRequest : animAnimNode_OnePoseInput
 	{
 		[Ordinal(0)]  [RED("animDeltaZ")] public animFloatLink AnimDeltaZ { get; set; }
-		[Ordinal(1)]  [RED("hipsRequest")] public animHipsIkRequest HipsRequest { get; set; }
-		[Ordinal(2)]  [RED("leftFootRequest")] public animSnapToTerrainIkRequest LeftFootRequest { get; set; }
-		[Ordinal(3)]  [RED("rightFootRequest")] public animSnapToTerrainIkRequest RightFootRequest { get; set; }
+		[Ordinal(1)]  [RED("leftFootRequest")] public animSnapToTerrainIkRequest LeftFootRequest { get; set; }
+		[Ordinal(2)]  [RED("rightFootRequest")] public animSnapToTerrainIkRequest RightFootRequest { get; set; }
+		[Ordinal(3)]  [RED("hipsRequest")] public animHipsIkRequest HipsRequest { get; set; }
 
 		public animAnimNode_AddSnapToTerrainIkRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

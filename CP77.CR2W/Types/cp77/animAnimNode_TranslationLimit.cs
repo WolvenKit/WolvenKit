@@ -9,10 +9,10 @@ namespace CP77.CR2W.Types
 	public class animAnimNode_TranslationLimit : animAnimNode_OnePoseInput
 	{
 		[Ordinal(0)]  [RED("constrainedTransform")] public animTransformIndex ConstrainedTransform { get; set; }
-		[Ordinal(1)]  [RED("limitOnXAxis")] public animFloatClamp LimitOnXAxis { get; set; }
-		[Ordinal(2)]  [RED("limitOnYAxis")] public animFloatClamp LimitOnYAxis { get; set; }
-		[Ordinal(3)]  [RED("limitOnZAxis")] public animFloatClamp LimitOnZAxis { get; set; }
-		[Ordinal(4)]  [RED("parentTransform")] public animTransformIndex ParentTransform { get; set; }
+		[Ordinal(1)]  [RED("parentTransform")] public animTransformIndex ParentTransform { get; set; }
+		[Ordinal(2)]  [RED("limitOnXAxis")] public animFloatClamp LimitOnXAxis { get; set; }
+		[Ordinal(3)]  [RED("limitOnYAxis")] public animFloatClamp LimitOnYAxis { get; set; }
+		[Ordinal(4)]  [RED("limitOnZAxis")] public animFloatClamp LimitOnZAxis { get; set; }
 
 		public animAnimNode_TranslationLimit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

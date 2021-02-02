@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIVehicleCommand : AICommand
 	{
-		[Ordinal(0)]  [RED("needDriver")] public CBool NeedDriver { get; set; }
-		[Ordinal(1)]  [RED("useKinematic")] public CBool UseKinematic { get; set; }
+		[Ordinal(0)]  [RED("useKinematic")] public CBool UseKinematic { get; set; }
+		[Ordinal(1)]  [RED("needDriver")] public CBool NeedDriver { get; set; }
 
 		public AIVehicleCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

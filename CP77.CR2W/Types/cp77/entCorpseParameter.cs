@@ -8,11 +8,11 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entCorpseParameter : entEntityParameter
 	{
-		[Ordinal(0)]  [RED("bakedBoneNames")] public CArray<CName> BakedBoneNames { get; set; }
+		[Ordinal(0)]  [RED("lod")] public CUInt32 Lod { get; set; }
 		[Ordinal(1)]  [RED("bakedPose")] public CArray<QsTransform> BakedPose { get; set; }
-		[Ordinal(2)]  [RED("bones")] public CArray<QsTransform> Bones { get; set; }
-		[Ordinal(3)]  [RED("lod")] public CUInt32 Lod { get; set; }
-		[Ordinal(4)]  [RED("rigs")] public CArray<raRef<animRig>> Rigs { get; set; }
+		[Ordinal(2)]  [RED("bakedBoneNames")] public CArray<CName> BakedBoneNames { get; set; }
+		[Ordinal(3)]  [RED("rigs")] public CArray<raRef<animRig>> Rigs { get; set; }
+		[Ordinal(4)]  [RED("bones")] public CArray<QsTransform> Bones { get; set; }
 
 		public entCorpseParameter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

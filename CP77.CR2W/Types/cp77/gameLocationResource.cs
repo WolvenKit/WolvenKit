@@ -9,12 +9,6 @@ namespace CP77.CR2W.Types
 	public class gameLocationResource : CResource
 	{
 
-        public gameLocationResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
-        {
-
-
-
-
-        }
+		public gameLocationResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

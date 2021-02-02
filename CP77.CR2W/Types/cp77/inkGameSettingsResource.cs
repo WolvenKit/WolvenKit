@@ -10,8 +10,8 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("compositionResource")] public rRef<inkFullscreenCompositionResource> CompositionResource { get; set; }
 		[Ordinal(1)]  [RED("permanentTextureAtlases")] public CArray<raRef<inkTextureAtlas>> PermanentTextureAtlases { get; set; }
-        [Ordinal(2)]  [RED("permanentTextureAtlasesPC")] public CArray<raRef<inkTextureAtlas>> PermanentTextureAtlasesPC { get; set; }
-        [Ordinal(3)]  [RED("permanentTextureAtlasesDurango")] public CArray<raRef<inkTextureAtlas>> PermanentTextureAtlasesDurango { get; set; }
+		[Ordinal(2)]  [RED("permanentTextureAtlasesPC")] public CArray<raRef<inkTextureAtlas>> PermanentTextureAtlasesPC { get; set; }
+		[Ordinal(3)]  [RED("permanentTextureAtlasesDurango")] public CArray<raRef<inkTextureAtlas>> PermanentTextureAtlasesDurango { get; set; }
 		[Ordinal(4)]  [RED("permanentTextureAtlasesOrbis")] public CArray<raRef<inkTextureAtlas>> PermanentTextureAtlasesOrbis { get; set; }
 		[Ordinal(5)]  [RED("themes")] public CArray<inkStyleThemeDescriptor> Themes { get; set; }
 

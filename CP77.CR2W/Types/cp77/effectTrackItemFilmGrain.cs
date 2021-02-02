@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class effectTrackItemFilmGrain : effectTrackItem
 	{
 		[Ordinal(0)]  [RED("luminanceBias")] public effectEffectParameterEvaluatorFloat LuminanceBias { get; set; }
-		[Ordinal(1)]  [RED("override")] public CBool Override { get; set; }
-		[Ordinal(2)]  [RED("strength")] public effectEffectParameterEvaluatorVector Strength { get; set; }
+		[Ordinal(1)]  [RED("strength")] public effectEffectParameterEvaluatorVector Strength { get; set; }
+		[Ordinal(2)]  [RED("override")] public CBool Override { get; set; }
 
 		public effectTrackItemFilmGrain(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

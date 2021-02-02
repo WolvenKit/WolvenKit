@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkWidgetLibraryItemInstance : ISerializable
 	{
-		[Ordinal(0)]  [RED("gameController")] public CHandle<inkIWidgetController> GameController { get; set; }
-		[Ordinal(1)]  [RED("rootResolution")] public CEnum<inkETextureResolution> RootResolution { get; set; }
-		[Ordinal(2)]  [RED("rootWidget")] public CHandle<inkWidget> RootWidget { get; set; }
+		[Ordinal(0)]  [RED("rootResolution")] public CEnum<inkETextureResolution> RootResolution { get; set; }
+		[Ordinal(1)]  [RED("rootWidget")] public CHandle<inkWidget> RootWidget { get; set; }
+		[Ordinal(2)]  [RED("gameController")] public CHandle<inkIWidgetController> GameController { get; set; }
 
 		public inkWidgetLibraryItemInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

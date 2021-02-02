@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiInteractionMappinController : gameuiMappinBaseController
 	{
-		[Ordinal(0)]  [RED("arrowWidgetName")] public CName ArrowWidgetName { get; set; }
-		[Ordinal(1)]  [RED("canvasWidgetName")] public CName CanvasWidgetName { get; set; }
+		[Ordinal(0)]  [RED("canvasWidgetName")] public CName CanvasWidgetName { get; set; }
+		[Ordinal(1)]  [RED("arrowWidgetName")] public CName ArrowWidgetName { get; set; }
 		[Ordinal(2)]  [RED("isCurrentlyClamped")] public CBool IsCurrentlyClamped { get; set; }
 		[Ordinal(3)]  [RED("isUnderCrosshair")] public CBool IsUnderCrosshair { get; set; }
 

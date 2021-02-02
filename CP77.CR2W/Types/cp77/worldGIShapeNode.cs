@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class worldGIShapeNode : worldGeometryShapeNode
 	{
 		[Ordinal(0)]  [RED("group")] public CEnum<rendGIGroup> Group { get; set; }
-		[Ordinal(1)]  [RED("interior")] public CBool Interior { get; set; }
-		[Ordinal(2)]  [RED("priority")] public CUInt32 Priority { get; set; }
+		[Ordinal(1)]  [RED("priority")] public CUInt32 Priority { get; set; }
+		[Ordinal(2)]  [RED("interior")] public CBool Interior { get; set; }
 		[Ordinal(3)]  [RED("runtime")] public CBool Runtime { get; set; }
 		[Ordinal(4)]  [RED("updated")] public CBool Updated { get; set; }
 

@@ -8,11 +8,11 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkScrollAreaWidget : inkCompoundWidget
 	{
-		[Ordinal(0)]  [RED("constrainContentPosition")] public CBool ConstrainContentPosition { get; set; }
-		[Ordinal(1)]  [RED("fitToContentDirection")] public CEnum<inkFitToContentDirection> FitToContentDirection { get; set; }
-		[Ordinal(2)]  [RED("horizontalScrolling")] public CFloat HorizontalScrolling { get; set; }
+		[Ordinal(0)]  [RED("horizontalScrolling")] public CFloat HorizontalScrolling { get; set; }
+		[Ordinal(1)]  [RED("verticalScrolling")] public CFloat VerticalScrolling { get; set; }
+		[Ordinal(2)]  [RED("constrainContentPosition")] public CBool ConstrainContentPosition { get; set; }
 		[Ordinal(3)]  [RED("useInternalMask")] public CBool UseInternalMask { get; set; }
-		[Ordinal(4)]  [RED("verticalScrolling")] public CFloat VerticalScrolling { get; set; }
+		[Ordinal(4)]  [RED("fitToContentDirection")] public CEnum<inkFitToContentDirection> FitToContentDirection { get; set; }
 
 		public inkScrollAreaWidget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
