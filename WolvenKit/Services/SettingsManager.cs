@@ -7,12 +7,19 @@ using System.Xml.Serialization;
 using Catel.IoC;
 using Catel.MVVM;
 using WolvenKit.Commands;
+using Catel.Data;
 
 namespace WolvenKit.Services
 {
-    public class SettingsManager : ISettingsManager
+    public class SettingsManager : ModelBase, ISettingsManager
     {
         #region fields
+
+        private string _executablePath = "";
+        private string _wccLitePath = "";
+        private string _gameModDir = "";
+        private string _gameDlcDir = "";
+        private string _depotPath = "";
 
         private static string ConfigurationPath
         {
@@ -52,13 +59,53 @@ namespace WolvenKit.Services
 
         public bool CheckForUpdates { get; set; }
 
-        public string ExecutablePath { get; set; }
-        public string WccLitePath { get; set; }
+        public string ExecutablePath
+        {
+            get => _executablePath;
+            set
+            {
+                _executablePath = value;
+                RaisePropertyChanged(nameof(ExecutablePath));
+            }
+        }
+        public string WccLitePath
+        {
+            get => _wccLitePath;
+            set
+            {
+                _wccLitePath = value;
+                RaisePropertyChanged(nameof(WccLitePath));
+            }
+        }
 
-        public string GameModDir { get; set; }
-        public string GameDlcDir { get; set; }
+        public string GameModDir
+        {
+            get => _gameModDir;
+            set
+            {
+                _gameModDir = value;
+                RaisePropertyChanged(nameof(GameModDir));
+            }
+        }
+        public string GameDlcDir
+        {
+            get => _gameDlcDir;
+            set
+            {
+                _gameDlcDir = value;
+                RaisePropertyChanged(nameof(GameDlcDir));
+            }
+        }
 
-        public string DepotPath { get; set; }
+        public string DepotPath
+        {
+            get =>_depotPath;
+            set
+            {
+                _depotPath = value;
+                RaisePropertyChanged(nameof(DepotPath));
+            }
+        }
 
         public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
         public string TextLanguage { get; set; }

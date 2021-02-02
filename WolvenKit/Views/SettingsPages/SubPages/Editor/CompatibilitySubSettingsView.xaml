@@ -51,7 +51,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                            <TextBox HorizontalAlignment="Right" Width="250" Text=""/>
+                            <TextBox HorizontalAlignment="Right" Width="250" Text="{Binding ExecutablePath}"/>
                         </Grid>
 
 
@@ -61,7 +61,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                            <TextBox HorizontalAlignment="Right" Width="250" Text=""/>
+                            <TextBox HorizontalAlignment="Right" Width="250" Text="{Binding WccLitePath}"/>
                         </Grid>
 
 
@@ -70,7 +70,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                            <TextBox HorizontalAlignment="Right" Width="250" Text=""/>
+                            <TextBox HorizontalAlignment="Right" Width="250" Text="{Binding DepotPath}"/>
                         </Grid>
 
 
@@ -79,7 +79,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                            <TextBox HorizontalAlignment="Right" Width="250" Text=""/>
+                            <TextBox HorizontalAlignment="Right" Width="250" Text="{Binding GameModDir}"/>
                         </Grid>
 
 
@@ -88,7 +88,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                            <TextBox HorizontalAlignment="Right" Width="250" Text=""/>
+                            <TextBox HorizontalAlignment="Right" Width="250" Text="{Binding GameDlcDir}"/>
                         </Grid>
 
 

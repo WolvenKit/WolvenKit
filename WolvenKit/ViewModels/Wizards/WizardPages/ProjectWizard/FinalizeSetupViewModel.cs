@@ -1,4 +1,5 @@
-﻿using Catel.Data;
+﻿using Catel;
+using Catel.Data;
 using Catel.Fody;
 using Catel.IoC;
 using Catel.MVVM;
@@ -12,9 +13,11 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard
     class FinalizeSetupViewModel : ViewModelBase
     {
         #region constructors
-        public FinalizeSetupViewModel()
+        public FinalizeSetupViewModel(IServiceLocator serviceLocator)
         {
-            ProjectWizardModel = ServiceLocator.Default.ResolveType<ProjectWizardModel>();
+            Argument.IsNotNull(() => serviceLocator);
+
+            ProjectWizardModel = serviceLocator.ResolveType<ProjectWizardModel>();
         }
         #endregion
 
@@ -26,7 +29,7 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard
         [Expose("ProjectName")]
         [Expose("ProjectPath")]
         [Expose("ProjectType")]
-        private ProjectWizardModel ProjectWizardModel
+        public ProjectWizardModel ProjectWizardModel
         {
             get { return GetValue<ProjectWizardModel>(ProjectWizardModelProperty); }
             set { SetValue(ProjectWizardModelProperty, value); }

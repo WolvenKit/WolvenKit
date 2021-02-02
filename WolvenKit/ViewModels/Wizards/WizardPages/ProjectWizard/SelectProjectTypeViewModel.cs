@@ -1,4 +1,5 @@
-﻿using Catel.Data;
+﻿using Catel;
+using Catel.Data;
 using Catel.Fody;
 using Catel.IoC;
 using Catel.MVVM;
@@ -12,9 +13,11 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard
     class SelectProjectTypeViewModel : ViewModelBase
     {
         #region constructors
-        public SelectProjectTypeViewModel()
+        public SelectProjectTypeViewModel(IServiceLocator serviceLocator)
         {
-            ProjectWizardModel = ServiceLocator.Default.ResolveType<ProjectWizardModel>();
+            Argument.IsNotNull(() => serviceLocator);
+
+            ProjectWizardModel = serviceLocator.ResolveType<ProjectWizardModel>();
         }
         #endregion
 
@@ -27,7 +30,7 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard
         [Expose("CyberpunkChecked")]
         [Expose("WitcherGameName")]
         [Expose("CyberpunkGameName")]
-        private ProjectWizardModel ProjectWizardModel
+        public ProjectWizardModel ProjectWizardModel
         {
             get { return GetValue<ProjectWizardModel>(ProjectWizardModelProperty); }
             set { SetValue(ProjectWizardModelProperty, value); }
