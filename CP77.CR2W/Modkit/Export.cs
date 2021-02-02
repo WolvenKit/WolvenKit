@@ -30,7 +30,7 @@ namespace CP77.CR2W
         /// </summary>
         /// <param name="cr2wfile"></param>
         /// <param name="outpath"></param>
-        public static bool Export(FileInfo cr2wfile, EUncookExtension uncookext = EUncookExtension.tga)
+        public static bool Export(FileInfo cr2wfile, EUncookExtension uncookext = EUncookExtension.dds)
         {
             #region checks
 
