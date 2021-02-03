@@ -8,7 +8,6 @@ namespace WolvenKit.Views.Wizards
         public FeedbackWizardView()
         {
             InitializeComponent();
-            ShowPage();
         }
     }
 }
