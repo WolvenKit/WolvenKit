@@ -220,10 +220,14 @@ namespace CP77.CR2W
                 }
                 
                 // sort buffers numerically
-                var buffers = buffers_in
-                    .OrderBy(_ =>
-                    int.Parse(Path.GetExtension(_.FullName.Remove(_.FullName.Length - 7))[1..]))
-                    .ToList();
+                var buffers = buffers_in;
+                if (buffers_in.All(_ => _.Extension == "buffer"))
+                {
+                    buffers = buffers_in
+                        .OrderBy(_ =>
+                            int.Parse(Path.GetExtension(_.FullName.Remove(_.FullName.Length - 7))[1..]))
+                        .ToList();
+                }
 
 
                 if (keep)
