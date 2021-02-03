@@ -18,7 +18,7 @@ namespace WolvenKit.Views.AudioTool
             Systemz.Init(2);
 
 
-            Sound sound = Systemz.CreateSound("C:\\Users\\hamba\\Music\\dancetillyourdead.mp3", FmodAudio.Mode.CreateStream);
+            Sound sound = Systemz.CreateSound("testmp3.mp3", FmodAudio.Mode.CreateStream);
 
 
             channel = Systemz.PlaySound(sound);
