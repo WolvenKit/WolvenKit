@@ -114,7 +114,7 @@ namespace CP77.CR2W
         {
             if (string.IsNullOrEmpty(value))
             {
-                bw.Write((byte)0x80);
+                bw.Write((byte)0x00);
                 return;
             }
 

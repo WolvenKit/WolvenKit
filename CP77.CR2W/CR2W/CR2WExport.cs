@@ -231,8 +231,6 @@ namespace CP77.CR2W
             public string ToSimpleString() => $"{Type} {Name}";
         }
 
-
-
         public Cr2wVariableDumpObject GetDumpObject(Stream stream)
         {
             stream.Seek(Export.dataOffset, SeekOrigin.Begin);
@@ -452,90 +450,6 @@ namespace CP77.CR2W
                 unknownBytes.Bytes = new byte[0];
             }
         }
-
-        public /*async Task*/ void ReadData(MemoryMappedFile mmf)
-        {
-            //await Task.Run(() =>
-            //{
-            using (var vs = mmf.CreateViewStream(_export.dataOffset, _export.dataSize, MemoryMappedFileAccess.Read))
-            using (var br = new BinaryReader(vs))
-            {
-                CreateDefaultData();
-
-                data.Read(br, _export.dataSize);
-
-                // Unknown bytes
-                var bytesLeft = _export.dataSize - (br.BaseStream.Position - _export.dataOffset);
-                unknownBytes = new CBytes(cr2w, data, "unknownBytes");
-                if (bytesLeft > 0)
-                {
-                    unknownBytes.Read(br, (uint)bytesLeft);
-                }
-                else if (bytesLeft < 0)
-                {
-                    //throw new InvalidParsingException("File read too far.");
-                }
-                else
-                {
-                    unknownBytes.Bytes = new byte[0];
-                }
-
-                if (cr2w.Logger != null)
-                {
-                    float percentprogress = (float)(1 / (float)cr2w.Chunks.Count * 100.0);
-                    cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
-                }
-
-            }
-            //}
-            //);
-        }
-
-
-        public /*async Task*/ void ReadData(MemoryMappedViewStream vs)
-        {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            //await Task.Run(() =>
-            //{
-            using (BinaryReader br = new BinaryReader(vs))
-            {
-                CreateDefaultData();
-
-                data.VarChunkIndex = ChunkIndex;
-
-                data.Read(br, _export.dataSize);
-
-                // Unknown bytes
-                var bytesLeft = _export.dataSize - (br.BaseStream.Position - _export.dataOffset);
-                unknownBytes = new CBytes(cr2w, data, "unknownBytes");
-                if (bytesLeft > 0)
-                {
-                    unknownBytes.Read(br, (uint)bytesLeft);
-                }
-                else if (bytesLeft < 0)
-                {
-                    //throw new InvalidParsingException("File read too far.");
-                }
-                else
-                {
-                    unknownBytes.Bytes = new byte[0];
-                }
-
-                stopwatch.Stop();
-                if (cr2w.Logger != null)
-                {
-                    float percentprogress = (float)(1 / (float)cr2w.Chunks.Count * 100.0);
-                    cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
-                    //cr2w.Logger.LogString($"{stopwatch.Elapsed} CHUNK {REDName}\n");
-                }
-
-            }
-            //}
-            //);
-        }
-
 
         public void WriteData(BinaryWriter file)
         {

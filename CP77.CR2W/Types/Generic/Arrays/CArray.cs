@@ -29,12 +29,7 @@ namespace CP77.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            CUInt32 count = new CUInt32(cr2w, null, "")
-            {
-                val = (uint)Elements.Count
-            };
-            count.Write(file);
-
+            file.Write((uint)Elements.Count);
             base.Write(file);
         }
 

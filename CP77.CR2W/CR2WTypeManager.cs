@@ -143,6 +143,13 @@ namespace CP77.CR2W.Types
                             arrayacc.Elementtype = innertype;
                             return arrayacc as CVariable;
                         }
+                    case "CArrayVLQInt32":
+                    {
+                        var innerobject = Create(innertype, "", cr2w, null);
+                        var arrayacc = MakeArray(typeof(CArrayVLQInt32<>), innerobject.GetType());
+                        arrayacc.Elementtype = innertype;
+                        return arrayacc as CVariable;
+                    }
                     case "static":
                         {
                             typename = generictype;
@@ -216,6 +223,8 @@ namespace CP77.CR2W.Types
                     elementType = typeof(CArrayFixedSize<>).MakeGenericType(generictype);
                 else if (arraytype == typeof(CArray<>))
                     elementType = typeof(CArray<>).MakeGenericType(generictype);
+                else if (arraytype == typeof(CArrayVLQInt32<>))
+                    elementType = typeof(CArrayVLQInt32<>).MakeGenericType(generictype);
                 else
                 {
                     throw new NotImplementedException();

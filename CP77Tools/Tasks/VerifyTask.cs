@@ -11,6 +11,7 @@ using CP77.CR2W.Archive;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
+using StreamExtensions = Catel.IO.StreamExtensions;
 
 namespace CP77Tools.Tasks
 {
@@ -65,6 +66,7 @@ namespace CP77Tools.Tasks
                 var c = new CR2WFile { FileName = fileEntry.NameOrHash };
                 ms.Seek(0, SeekOrigin.Begin);
                 var readResult = c.Read(ms);
+                var originalbytes = StreamExtensions.ToByteArray(ms);
 
                 switch (readResult)
                 {
@@ -97,7 +99,28 @@ namespace CP77Tools.Tasks
                                 correctStringTable = false;
                         }
 
+                        // Binary Equal Test
+                        var isBinaryEqual = true;
+
+                        using (var wms = new MemoryStream())
+                        using (var bw = new BinaryWriter(wms))
+                        {
+                            c.Write(bw);
+
+                            var newbytes = StreamExtensions.ToByteArray(wms);
+                            isBinaryEqual = originalbytes.SequenceEqual(newbytes);
+
+
+                        }
+
+
+                        var msg = "";
                         if (!correctStringTable)
+                        {
+                            Debugger.Break();
+                        }
+
+                        if (!isBinaryEqual)
                         {
                             Debugger.Break();
                         }

@@ -824,14 +824,14 @@ namespace CP77.MSTests
         {
             var results = new ConcurrentBag<WriteTestResult>();
 
-            //foreach (var file in files)
-            Parallel.ForEach(files, file =>
+            foreach (var file in files)
+            //Parallel.ForEach(files, file =>
             {
                 try
                 {
                     if (file.Archive is not Archive ar)
-                        return;
-                    //continue;
+                    //    return;
+                    continue;
 
                     var c = new CR2WFile {FileName = file.NameOrHash};
                     using var ms = new MemoryStream();
@@ -894,7 +894,7 @@ namespace CP77.MSTests
                                 var newbytes = StreamExtensions.ToByteArray(wms);
                                 isBinaryEqual = originalbytes.SequenceEqual(newbytes);
 #if DEBUG
-                                if (false)
+                                if (!isBinaryEqual && true)
                                 {
                                     var resultDir = Path.Combine(Environment.CurrentDirectory, TestResultsDirectory);
                                     var filename = Path.Combine(resultDir, Path.GetFileName(c.FileName));
@@ -948,8 +948,8 @@ namespace CP77.MSTests
                         Message = $"{file.NameOrHash} - {e.Message}"
                     });
                 }
-            });
-            //}
+            //});
+            }
 
            return results;
         }
