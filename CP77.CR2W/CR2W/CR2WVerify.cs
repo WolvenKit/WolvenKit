@@ -69,7 +69,7 @@ namespace CP77.CR2W
 
             var dt = new CDateTime(m_fileheader.timeStamp, null, "");
 
-            m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+            m_hasInternalBuffer = m_fileheader.buffersEnd > m_fileheader.objectsEnd;
             m_tableheaders = ReadStructs<CR2WTable>(10);
 
             m_strings   = ReadStringsBuffer();
@@ -215,8 +215,8 @@ namespace CP77.CR2W
             hash.Append(BitConverter.GetBytes(m_fileheader.flags));
             hash.Append(BitConverter.GetBytes(m_fileheader.timeStamp));
             hash.Append(BitConverter.GetBytes(m_fileheader.buildVersion));
-            hash.Append(BitConverter.GetBytes(m_fileheader.fileSize));
-            hash.Append(BitConverter.GetBytes(m_fileheader.bufferSize));
+            hash.Append(BitConverter.GetBytes(m_fileheader.objectsEnd));
+            hash.Append(BitConverter.GetBytes(m_fileheader.buffersEnd));
             hash.Append(BitConverter.GetBytes(DEADBEEF));
             hash.Append(BitConverter.GetBytes(m_fileheader.numChunks));
             foreach (var h in m_tableheaders)

@@ -103,7 +103,7 @@ namespace CP77.CR2W
                     lastimportidx = (uint)ar.Index.Dependencies.Count;
                     
                     // kraken the file and write
-                    var cr2wfilesize = (int)cr2w.Header.fileSize;
+                    var cr2wfilesize = (int)cr2w.Header.objectsEnd;
                     fileBinaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
                     var cr2winbuffer = fileBinaryReader.ReadBytes(cr2wfilesize);
                     var offset = bw.BaseStream.Position;

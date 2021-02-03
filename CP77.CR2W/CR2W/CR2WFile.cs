@@ -467,8 +467,8 @@ namespace CP77.CR2W
             hash.Append(BitConverter.GetBytes(m_fileheader.flags));
             hash.Append(BitConverter.GetBytes(m_fileheader.timeStamp));
             hash.Append(BitConverter.GetBytes(m_fileheader.buildVersion));
-            hash.Append(BitConverter.GetBytes(m_fileheader.fileSize));
-            hash.Append(BitConverter.GetBytes(m_fileheader.bufferSize));
+            hash.Append(BitConverter.GetBytes(m_fileheader.objectsEnd));
+            hash.Append(BitConverter.GetBytes(m_fileheader.buffersEnd));
             hash.Append(BitConverter.GetBytes(DEADBEEF));
             hash.Append(BitConverter.GetBytes(m_fileheader.numChunks));
             foreach (var h in m_tableheaders)
@@ -581,7 +581,7 @@ namespace CP77.CR2W
 
             // Tables [7-9] are not used in cr2w so far.
             m_tableheaders = file.BaseStream.ReadStructs<CR2WTable>(10);
-            var m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+            var m_hasInternalBuffer = m_fileheader.buffersEnd > m_fileheader.objectsEnd;
 
             // read strings - block 1 (index 0)
             m_strings = ReadStringsBuffer(file.BaseStream);
@@ -839,7 +839,7 @@ namespace CP77.CR2W
                 var newoffset = embedded.Embedded.dataOffset + headerOffset;
                 embedded.SetOffset(newoffset);
             }
-            m_fileheader.fileSize += headerOffset;
+            m_fileheader.objectsEnd += headerOffset;
             #endregion
             
             foreach (var chunk in Chunks)
@@ -1264,10 +1264,10 @@ namespace CP77.CR2W
             file.BaseStream.Seek(0, SeekOrigin.Begin);
 
             // calculate filesize again
-            m_fileheader.fileSize = Chunks.Last().Export.dataOffset + Chunks.Last().Export.dataSize; 
+            m_fileheader.objectsEnd = Chunks.Last().Export.dataOffset + Chunks.Last().Export.dataSize; 
             
             // calculate buffersize again
-            m_fileheader.bufferSize = (uint)Buffers.Sum(_ => _.Buffer.diskSize) + m_fileheader.fileSize;
+            m_fileheader.buffersEnd = (uint)Buffers.Sum(_ => _.Buffer.diskSize) + m_fileheader.objectsEnd;
             
             file.BaseStream.WriteStruct<uint>(MAGIC);
             file.BaseStream.WriteStruct<CR2WFileHeader>(m_fileheader);
@@ -1283,14 +1283,14 @@ namespace CP77.CR2W
                 chunk.WriteData(bw);
             }
 
-            m_fileheader.fileSize = (uint)bw.BaseStream.Position;
+            m_fileheader.objectsEnd = (uint)bw.BaseStream.Position;
 
             //Write Buffer data
             foreach (var buffer in Buffers)
             {
                 buffer.WriteData(bw);
             }
-            m_fileheader.bufferSize = (uint)bw.BaseStream.Position;
+            m_fileheader.buffersEnd = (uint)bw.BaseStream.Position;
 
             // Write embedded data
             for (var i = 0; i < Embedded.Count; i++)

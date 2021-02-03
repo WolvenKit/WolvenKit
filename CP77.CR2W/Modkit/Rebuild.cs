@@ -234,7 +234,7 @@ namespace CP77.CR2W
                 {
                     // remove old buffers 
                     fileReader.BaseStream.Seek(0, SeekOrigin.Begin);
-                    fileStream.SetLength(cr2w.Header.fileSize);
+                    fileStream.SetLength(cr2w.Header.objectsEnd);
                         
                     // kraken the buffers and handle textures
                     using var fileWriter = new BinaryWriter(fileStream);
