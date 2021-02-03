@@ -10,6 +10,8 @@ using WolvenKit.Views.AssetBrowser;
 using WolvenKit.Views.CodeEditor;
 using WolvenKit.Views.PluginManager;
 using WolvenKit.Views.VisualEditor;
+using WolvenKit.Views.AudioTool;
+using WolvenKit.Views.JournalEditor;
 
 namespace WolvenKit.Views
 {
@@ -86,6 +88,18 @@ namespace WolvenKit.Views
         {
             VisualEditorView visualeditor = new VisualEditorView();
             visualeditor.Show();
+        }
+
+        private void CBAudioToolItem_Selected(object sender, RoutedEventArgs e)
+        {
+            AudioToolView audiotool = new AudioToolView();
+            audiotool.Show();
+        }
+
+        private void CBJournalEditorItem_Selected(object sender, RoutedEventArgs e)
+        {
+            JournalEditorView journaleditor = new JournalEditorView();
+            journaleditor.Show();
         }
     }
 }

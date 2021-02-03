@@ -18,6 +18,7 @@ using NodeNetwork;
 using System.Windows.Media;
 using MLib.Interfaces;
 using HandyControl.Controls.SplashWindow;
+using FmodAudio;
 
 namespace WolvenKit
 {
@@ -82,6 +83,13 @@ namespace WolvenKit
 
             //-- Category : AssetBrowser
             viewModelLocator.Register(typeof(Views.AssetBrowser.AssetBrowserView), typeof(ViewModels.AssetBrowser.AssetBrowserViewModel));
+
+            //-- Category : JournalEditor
+            viewModelLocator.Register(typeof(Views.JournalEditor.JournalEditorView), typeof(ViewModels.JournalEditor.JournalEditorViewModel));
+
+            //-- Category : AudioTool
+            viewModelLocator.Register(typeof(Views.AudioTool.AudioToolView), typeof(ViewModels.AudioTool.AudioToolViewModel));
+
 
             //-- Category : CodeEditor
             viewModelLocator.Register(typeof(Views.CodeEditor.CodeEditorView), typeof(ViewModels.CodeEditor.CodeEditorViewModel));
@@ -173,8 +181,7 @@ namespace WolvenKit
             //-- Category : FeedBackWizard 
             viewModelLocator.Register(typeof(Views.Wizards.FeedbackWizardView), typeof(ViewModels.Wizards.FeedbackWizardViewModel));
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.FeedbackWizard.RateView), typeof(ViewModels.Wizards.WizardPages.FeedbackWizard.RateViewModel));
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.FeedbackWizard.SendView), typeof(ViewModels.Wizards.WizardPages.FeedbackWizard.SendViewModel));
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.FeedbackWizard.ReviewView), typeof(ViewModels.Wizards.WizardPages.FeedbackWizard.ReviewViewModel));
+
 
 
             //-- Category : InstallerWizard 
@@ -182,8 +189,6 @@ namespace WolvenKit
 
             //-- Category : BugReportWizard 
             viewModelLocator.Register(typeof(Views.Wizards.BugReportWizard), typeof(ViewModels.Wizards.BugReportWizardViewModel));
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.BugReportWizard.AttachBugView), typeof(ViewModels.Wizards.WizardPages.BugReportWizard.AttachBugViewModel));
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.BugReportWizard.DescribeBugView), typeof(ViewModels.Wizards.WizardPages.BugReportWizard.DescribeBugViewModel));
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.BugReportWizard.SendBugView), typeof(ViewModels.Wizards.WizardPages.BugReportWizard.SendBugViewModel));
 
 
@@ -202,9 +207,10 @@ namespace WolvenKit
  
             Log.Info("Calling base.OnStartup");
 
+            Fmod.SetLibraryLocation("fmod.dll");
 
 
-      
+
             base.OnStartup(e); 
             NNViewRegistrar.RegisterSplat();
 

@@ -5,19 +5,25 @@
                    xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                   xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:wiz="clr-namespace:WolvenKit.Views.Wizards" xmlns:pag="clr-namespace:WolvenKit.Views.HomePage.Pages"
+                   xmlns:hc="https://handyorg.github.io/handycontrol" 
+                   xmlns:wiz="clr-namespace:WolvenKit.Views.Wizards"
+                   xmlns:pag="clr-namespace:WolvenKit.Views.HomePage.Pages"
                    mc:Ignorable="av" >
+    
+    
+    <!--Shows items in the middle of the homepage. (Welcome by default)-->
 
+    <Grid 
+        hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+        x:Name="TopicViewer"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Center"
+        Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+        Margin="35,35,35,35">
 
-    <catel:UserControl.Resources>
-
-
-
-    </catel:UserControl.Resources>
-    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  x:Name="TopicViewer" MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Margin="35,35,35,35">
-        <pag:WelcomePageView/>
-
-
+        <Grid.Children>
+            <pag:WelcomePageView/>
+        </Grid.Children>
     </Grid>
 
 </catel:UserControl>
