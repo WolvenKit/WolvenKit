@@ -1,7 +1,9 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.HomePage.Pages.IntegratedToolsPageView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
+                   xmlns:catel="http://schemas.catelproject.com" 
+                   xmlns:hc="https://handyorg.github.io/handycontrol" 
+                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
     <Grid hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
 
@@ -14,7 +16,7 @@
                             <iconPacks:PackIconCodicons Kind="VM"></iconPacks:PackIconCodicons>
                             <TextBlock Text="CyberCAT" Margin="10,0,0,0"></TextBlock>
                         </StackPanel>
-                    </hc:TabItem.Header>
+                    </hc:TabItem.Header>                    
                     
                 </hc:TabItem>
 

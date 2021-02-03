@@ -16,42 +16,37 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources  RequestedTheme="Dark"/>
-           <hc:Theme/>
+                <hc:Theme/>
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
     </catel:UserControl.Resources>
 
-    <Grid  hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="1024" MinHeight="720" >
-    
+    <Grid  hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="1024" MinHeight="720" >
+
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="200,0,450,0">
             <Mid:TopicView x:Name="TopicViewer"/>
         </Grid>
 
         <Grid HorizontalAlignment="Left" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
-
-            <hc:TransitioningContentControl Margin="0,60,0,0">
-
+            <hc:TransitioningContentControl TransitionMode="Bottom2TopWithFade" Margin="0,60,0,0">
+                
                 <hc:SideMenu x:Name="LeftSideMenu" SideBrush="{DynamicResource MahApps.Brushes.AccentBase}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" BorderThickness="0" Width="200" SubSideBrush="{DynamicResource MahApps.Brushes.Accent2}">
-                    <hc:Interaction.Triggers>
-                        <hc:EventTrigger EventName="SelectionChanged">
-                            <hc:EventToCommand Command="{Binding SwitchItemCmd}" PassEventArgsToCommand="True" />
-                        </hc:EventTrigger>
-                    </hc:Interaction.Triggers>
+                   
 
                     <hc:SideMenuItem x:Name="SideMenu_GetStartedItem" Header="Get Started"  Margin="0,0,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
                         <hc:SideMenuItem.Icon>
                             <iconPacks:Codicons Height="25" Kind="Tools" Width="25"/>
                         </hc:SideMenuItem.Icon>
 
-                        <hc:SideMenuItem x:Name="SideMenu_WelcomeItem" Header="Welcome" Command="{Binding SelectCmd}" CommandParameter="{Binding Header, RelativeSource={RelativeSource Self}}"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_WelcomeItem_Selected">
+                        <hc:SideMenuItem x:Name="SideMenu_WelcomeItem" Header="Welcome"   Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_WelcomeItem_Selected">
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:Codicons Height="15" Kind="Pinned" Width="15"/>
                             </hc:SideMenuItem.Icon>
                         </hc:SideMenuItem>
 
-                        <hc:SideMenuItem x:Name="SideMenu_FirstUseItem" Header="First Use Setup" Command="{Binding SelectCmd}" CommandParameter="{Binding Header, RelativeSource={RelativeSource Self}}"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_FirstUseItem_Selected">
+                        <hc:SideMenuItem x:Name="SideMenu_FirstUseItem" Header="First Use Setup"   Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_FirstUseItem_Selected">
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:Codicons Height="13" Kind="DebugStart" Width="13"/>
                             </hc:SideMenuItem.Icon>
@@ -116,7 +111,7 @@
                                 <iconPacks:PackIconCodicons Height="13" Kind="Cloud" Width="13" HorizontalAlignment="Center"/>
                             </hc:SideMenuItem.Icon>
                         </hc:SideMenuItem>
-            
+
                     </hc:SideMenuItem>
                 </hc:SideMenu>
 
@@ -127,7 +122,6 @@
                 <Fluent:Button.LargeIcon>
                     <iconPacks:PackIconBoxIcons Height="35" Width="35" Kind="RegularArrowBack"></iconPacks:PackIconBoxIcons>
                 </Fluent:Button.LargeIcon>
-
             </Fluent:Button>
 
             <hc:Tag Margin="35,0,0,18" VerticalAlignment="Bottom" ShowCloseButton="False" Content="USERNAME" MouseDown="Tag_MouseDown">
@@ -136,12 +130,11 @@
 
                 </hc:Tag.Header>
             </hc:Tag>
+            
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Height="54">
-
-
                 <Label Background="{x:Null}" Content="Home" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{x:Null}" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0,0,0,0" Height="50" Width="74" VerticalAlignment="Top"/>
-
             </StackPanel>
+            
             <hc:Divider LineStrokeThickness="3" VerticalAlignment="Top" Margin="10,54,10,0" LineStroke="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
 
 

@@ -5,15 +5,16 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <AssemblyVersion>1.1.0.0</AssemblyVersion>
     <FileVersion>1.1.0.0</FileVersion>
-	<PublishSingleFile>true</PublishSingleFile>
-	  <SelfContained>false</SelfContained>
-	  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-	  <PublishTrimmed>true</PublishTrimmed>
-	  <PublishReadyToRun>true</PublishReadyToRun>
-	<DebugType>embedded</DebugType>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>false</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <DebugType>embedded</DebugType>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
-	<ItemGroup>
+  <ItemGroup>
     <None Remove="lib\kraken.so" />
   </ItemGroup>
 
