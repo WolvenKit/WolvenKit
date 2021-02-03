@@ -17,9 +17,9 @@ namespace WolvenKit.Views.AudioTool
             Systemz = Fmod.CreateSystem(); 
             Systemz.Init(2);
 
-            Sound sound = Systemz.CreateSound("testmp3.mp3", FmodAudio.Mode.CreateStream);
 
-          
+            Sound sound = Systemz.CreateSound("C:\\Users\\hamba\\Music\\dancetillyourdead.mp3", FmodAudio.Mode.CreateStream);
+
 
             channel = Systemz.PlaySound(sound);
 
@@ -30,10 +30,7 @@ namespace WolvenKit.Views.AudioTool
             ResourceDictionary themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
             Resources.MergedDictionaries.Add(themeResources);
             //clockDisplay.SetCurrentValue(WPFSoundVisualizationLib.DigitalClock.TimeProperty, TimeSpan.FromMilliseconds(channel.CurrentSound.GetLength(TimeUnit.MS)));
-
             this.DataContext = new AudioToolViewModel(channel);
-
-
 
         }
 
@@ -88,6 +85,21 @@ namespace WolvenKit.Views.AudioTool
         }
 
 
+        private void PauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            channel.Paused = true;
+        }
+
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            channel.Paused = false;
+        }
+
+        private void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+            channel.Paused = true;
+            channel.SetPosition(TimeUnit.MS, 0);
+        }
     }
 
 }
