@@ -26,177 +26,6 @@
 
 
 
-            <Style x:Key="GridViewColumnHeaderGripper" TargetType="Thumb">
-                <Setter Property="Canvas.Right" Value="-9"/>
-                <Setter Property="Width" Value="18"/>
-                <Setter Property="Height" Value="{Binding ActualHeight, RelativeSource={RelativeSource TemplatedParent}}"/>
-                <Setter Property="Padding" Value="0"/>
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Thumb">
-                            <Border Background="Transparent" Padding="{TemplateBinding Padding}">
-                                <Rectangle Fill="{TemplateBinding Background}" HorizontalAlignment="Center" Width="1"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style x:Key="CustomHeader" TargetType="GridViewColumnHeader">
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-                <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
-                <Setter Property="Padding" Value="12,6,12,12"/>
-                <Setter Property="MinHeight" Value="44"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="GridViewColumnHeader">
-                            <hc:SimplePanel SnapsToDevicePixels="true">
-                                <Border x:Name="HeaderBorder" BorderBrush="{TemplateBinding BorderBrush}" Background="Transparent">
-                                    <ContentPresenter x:Name="HeaderContent" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                                </Border>
-                                <Canvas>
-                                    <Thumb x:Name="PART_HeaderGripper" Style="{StaticResource GridViewColumnHeaderGripper}"/>
-                                </Canvas>
-                            </hc:SimplePanel>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style x:Key="ListViewItemBaseStyle" TargetType="ListViewItem">
-                <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
-                <Setter Property="SnapsToDevicePixels" Value="true"/>
-                <Setter Property="Margin" Value="0,0,0,4"/>
-                <Setter Property="Padding" Value="{StaticResource DefaultControlPadding}"/>
-                <Setter Property="MinHeight" Value="44"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ListViewItem">
-                            <Border CornerRadius="4" x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-                                <GridViewRowPresenter Content="{TemplateBinding Content}" Columns="{TemplateBinding GridView.ColumnCollection}"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="true">
-                        <Setter Property="Background" Value="{DynamicResource DarkDefaultBrush}"/>
-                    </Trigger>
-                    <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
-                        <Setter Property="TextElement.Foreground" Value="{DynamicResource TextIconBrush}"/>
-                    </Trigger>
-                    <MultiTrigger>
-                        <MultiTrigger.Conditions>
-                            <Condition Property="IsSelected" Value="true"/>
-                            <Condition Property="Selector.IsSelectionActive" Value="false"/>
-                        </MultiTrigger.Conditions>
-                        <Setter Property="Background" Value="{DynamicResource DarkDefaultBrush}"/>
-                        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
-                    </MultiTrigger>
-                </Style.Triggers>
-            </Style>
-
-            <Style x:Key="ListViewScrollViewerStyle" TargetType="ScrollViewer">
-                <Setter Property="Focusable" Value="False"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ScrollViewer">
-                            <ControlTemplate.Resources>
-                                <Storyboard x:Key="Storyboard1">
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PART_VerticalScrollBar">
-                                        <EasingDoubleKeyFrame KeyTime="0:0:.2" Value=".8"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PART_HorizontalScrollBar">
-                                        <EasingDoubleKeyFrame KeyTime="0:0:.2" Value=".8"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                </Storyboard>
-                                <Storyboard x:Key="Storyboard2">
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PART_VerticalScrollBar">
-                                        <EasingDoubleKeyFrame KeyTime="0:0:.2" Value="0"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PART_HorizontalScrollBar">
-                                        <EasingDoubleKeyFrame KeyTime="0:0:.2" Value="0"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                </Storyboard>
-                            </ControlTemplate.Resources>
-                            <Grid Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <GridViewHeaderRowPresenter Grid.ColumnSpan="2" AllowsColumnReorder="{Binding TemplatedParent.View.AllowsColumnReorder, RelativeSource={RelativeSource TemplatedParent}}" ColumnHeaderContainerStyle="{Binding TemplatedParent.View.ColumnHeaderContainerStyle, RelativeSource={RelativeSource TemplatedParent}}" ColumnHeaderToolTip="{Binding TemplatedParent.View.ColumnHeaderToolTip, RelativeSource={RelativeSource TemplatedParent}}" ColumnHeaderContextMenu="{Binding TemplatedParent.View.ColumnHeaderContextMenu, RelativeSource={RelativeSource TemplatedParent}}" ColumnHeaderTemplate="{Binding TemplatedParent.View.ColumnHeaderTemplate, RelativeSource={RelativeSource TemplatedParent}}" Columns="{Binding TemplatedParent.View.Columns, RelativeSource={RelativeSource TemplatedParent}}" Margin="2,0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" Grid.ColumnSpan="2" Grid.Row="1" CanContentScroll="{TemplateBinding CanContentScroll}" CanHorizontallyScroll="False" CanVerticallyScroll="False" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" KeyboardNavigation.DirectionalNavigation="Local" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                <ScrollBar Style="{StaticResource ScrollBarBaseStyle}" Opacity="0" x:Name="PART_VerticalScrollBar" Grid.Column="1" Maximum="{TemplateBinding ScrollableHeight}" Orientation="Vertical" Grid.Row="1" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}"/>
-                                <ScrollBar Style="{StaticResource ScrollBarBaseStyle}" Opacity="0" x:Name="PART_HorizontalScrollBar" Grid.Column="0" Maximum="{TemplateBinding ScrollableWidth}" Orientation="Horizontal" VerticalAlignment="Bottom" Grid.Row="1" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}"/>
-                            </Grid>
-                            <ControlTemplate.Triggers>
-                                <EventTrigger RoutedEvent="MouseEnter">
-                                    <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
-                                </EventTrigger>
-                                <EventTrigger RoutedEvent="MouseLeave">
-                                    <BeginStoryboard Storyboard="{StaticResource Storyboard2}"/>
-                                </EventTrigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style x:Key="ListViewBaseStyle"  TargetType="ListView">
-                <Setter Property="Background" Value="{DynamicResource SecondaryRegionBrush}"/>
-                <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="Padding" Value="6"/>
-                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
-                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
-                <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-                <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
-                <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
-                <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-                <Setter Property="ItemContainerStyle" Value="{StaticResource ListViewItemBaseStyle}"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ListView">
-                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
-                                <hc:ToggleBlock IsChecked="{Binding HasItems,RelativeSource={RelativeSource TemplatedParent},Mode=OneWay}" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
-                                    <hc:ToggleBlock.CheckedContent>
-                                        <ScrollViewer Style="{StaticResource ListViewScrollViewerStyle}">
-                                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                        </ScrollViewer>
-                                    </hc:ToggleBlock.CheckedContent>
-                                    <hc:ToggleBlock.UnCheckedContent>
-                                        <hc:Empty />
-                                    </hc:ToggleBlock.UnCheckedContent>
-                                </hc:ToggleBlock>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <MultiTrigger>
-                        <MultiTrigger.Conditions>
-                            <Condition Property="IsGrouping" Value="true"/>
-                            <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
-                        </MultiTrigger.Conditions>
-                        <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
-                    </MultiTrigger>
-                </Style.Triggers>
-            </Style>
-
-
-
-
-
 
 
 
@@ -324,12 +153,26 @@
             <Grid x:Name="DraggableTitleBar" VerticalAlignment="Top" Grid.ColumnSpan="2" Background="{DynamicResource RegionBrush}" MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown">
 
                 <!--TitleBar  Please add onmousedown event to be able to drag the window-->
-                <Button Click="Button_Click" Background="Transparent" BorderBrush="{x:Null}"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,5,3" >
-                    <iconPacks:PackIconCodicons   Kind="Close"/>
+                <Button 
+                    Style="{StaticResource ButtonIcon}" 
+                    hc:IconElement.Geometry="{DynamicResource GlobalClose}" 
+                    Click="Button_Click" 
+                    Background="Transparent" 
+                    BorderBrush="{x:Null}"  
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Center" 
+                    Margin="3,3,5,3" >
                 </Button>
 
-                <Button  Click="Button_Click_1" BorderBrush="{x:Null}" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,45,3" >
-                    <iconPacks:PackIconCodicons  Kind="ChromeMinimize"/>
+                <Button  Width="40"
+                    Style="{StaticResource ButtonIcon}"
+                    hc:IconElement.Geometry="{DynamicResource GlobalMinimize}"
+                    Click="Button_Click_1"
+                    BorderBrush="{x:Null}"
+                    Background="Transparent" 
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="3,3,45,3" >
                 </Button>
 
 
@@ -350,8 +193,8 @@
                     <ColumnDefinition Width="1*" MinWidth="400"/>
 
                 </Grid.ColumnDefinitions>
-                
-     
+
+
 
                 <Grid Margin="0" Background="{DynamicResource RegionBrush}" Grid.Column="1">
 
@@ -359,36 +202,28 @@
                         <Grid>
                             <Border CornerRadius="5" Margin="10" VerticalAlignment="Bottom" Height="35" Background="{DynamicResource RegionBrush}">
                                 <Grid>
-                                    <hc:PreviewSlider Margin="125,0,125,0" Style="{StaticResource PreviewSliderBaseStyle}">
-                                        <hc:PreviewSlider.PreviewContent>
-                                            <Label Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Style="{StaticResource LabelPrimary}" Content="{Binding Path=CurrentPlayerTime}" ContentStringFormat="#0.00"></Label>
-                                        </hc:PreviewSlider.PreviewContent>
+                                    <hc:PreviewSlider Value="100" Maximum="100" Minimum="0"  Margin="130,0,100,0" Style="{StaticResource PreviewSliderBaseStyle}">
+                                  <!--Volume Slider-->
                                     </hc:PreviewSlider>
 
-                                    <StackPanel Margin="15,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
-                                        <Button Click="PlayButton_Click" Margin="0" Background="Transparent" BorderBrush="Transparent">
-                                            <iconPacks:PackIconBootstrapIcons Kind="Play"/>
+                                    <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
+                                        <Button Width="35" Height="25"  Style="{StaticResource ButtonIcon}" hc:IconElement.Geometry="{DynamicResource AudioPlay}"  x:Name="PlayButton" Click="PlayButton_Click" Margin="0" Background="Transparent" BorderBrush="Transparent">
                                         </Button>
                                         <hc:Divider LineStroke="{DynamicResource MahApps.Brushes.Accent3}" Orientation="Vertical" Height="10"/>
-                                        <Button Click="PauseButton_Click" Margin="0" Background="Transparent" BorderBrush="Transparent">
-                                            <iconPacks:PackIconBootstrapIcons Kind="Pause"/>
+                                        <Button  Width="35" Height="25"  Style="{StaticResource ButtonIcon}" hc:IconElement.Geometry="{DynamicResource AudioPause}"  x:Name="PauseButton" Click="PauseButton_Click" Margin="0" Background="Transparent" BorderBrush="Transparent">
                                         </Button>
                                         <hc:Divider LineStroke="{DynamicResource MahApps.Brushes.Accent3}" Orientation="Vertical" Height="10"/>
-                                        <Button Click="StopButton_Click" Margin="0" Background="Transparent" BorderBrush="Transparent">
-                                            <iconPacks:PackIconBootstrapIcons Kind="Stop"/>
+                                        <Button Width="35" Height="25"   Style="{StaticResource ButtonIcon}" hc:IconElement.Geometry="{DynamicResource AudioStop}"  x:Name="StopButton" Click="StopButton_Click" Margin="0" Background="Transparent" BorderBrush="Transparent">
                                         </Button>
                                     </StackPanel>
 
-                                    <svl1:DigitalClock 
+                                    <svl1:DigitalClock Grid.Row="1"
+                          Grid.ColumnSpan="2"
                           x:Name="clockDisplay"
-                                Background="Transparent"
-                                Foreground="Transparent"
-                                BorderBrush="Transparent"
                           ShowHours="False"
                           ShowSubSeconds="True"
                           HorizontalAlignment="Right"
-                          Margin="0,3,15,3"
-                                        Time="{Binding Path=CurrentPlayerTime, Mode=OneWay}"/>
+                          Margin="5,5,15,5" />
 
                                 </Grid>
 
@@ -398,8 +233,8 @@
 
                             <Border CornerRadius="5" Margin="10,10,10,55" VerticalAlignment="Bottom" Height="65" Background="{DynamicResource  RegionBrush}">
                                 <Grid>
-                                    <svl1:WaveformTimeline  x:Name="waveformTimeline"
-                                  Margin="0"
+                                    <svl1:WaveformTimeline x:Name="waveformTimeline"
+                                  Margin="5"
                                   BorderThickness="1" />
 
                                 </Grid>
@@ -418,32 +253,123 @@
                             <Border CornerRadius="5" Margin="10,10,10,205" VerticalAlignment="Bottom" Height="40" Background="{DynamicResource  RegionBrush}">
                                 <Grid>
 
-                                    <hc:RunningBlock Runaway="False" AutoReverse="True" Duration="00:00:30" BorderBrush="Transparent" Content="RisitasLiveInConcert.mp3audiofileyknow"/>
+                                    <hc:RunningBlock x:Name="RunnerText" Runaway="False" AutoReverse="True" Duration="00:00:30" BorderBrush="Transparent" Content="{Binding SelectedItem, ElementName=PlayListView}"/>
 
                                 </Grid>
 
                             </Border>
                         </Grid>
-                        
+
                     </Border>
 
 
 
-                    <Border  CornerRadius="15"  Margin="5,5,5,265" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" >
+                    <Border   CornerRadius="15"  Margin="5,5,5,265" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" >
                         <Grid>
-                            <Button Background="Transparent"  Margin="3,0,0,16" VerticalAlignment="Bottom" Height="30" Width="50" IsEnabled="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Left">
-                                <iconPacks:PackIconCodicons Kind="ArrowLeft"/>
+                            <Border x:Name="StepOne" CornerRadius="15" Background="{DynamicResource RegionBrush}" Margin="15,15,15,55">
+                                <Grid>
+                                    <StackPanel>
+                                        <TextBlock Margin="10" HorizontalAlignment="Center" Text="Convert"></TextBlock>
+                                        <hc:Divider Margin="5"></hc:Divider>
+                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center" >
+                                            <Run Text="To convert your audiofile to .wav ,"></Run>
+                                            <LineBreak/>
+                                            <Run Text="It is recommended to use the following converter."></Run>
+                                        </TextBlock>
+
+
+
+                                    </StackPanel>
+                                    <Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="35" Height="30" Background="{DynamicResource MahApps.Brushes.Accent3}"  Style="{StaticResource ButtonPrimary}" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <iconPacks:PackIconBootstrapIcons Kind="BoxArrowUpRight"/>
+                                            <TextBlock Margin="5,0,0,0" Text="Converter"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                </Grid>
+                            </Border>
+
+
+                            <Border x:Name="StepTwo"  CornerRadius="15" Background="{DynamicResource RegionBrush}" Margin="15,15,15,55">
+                                <Grid>
+                                    <StackPanel>
+                                        <TextBlock Margin="10" HorizontalAlignment="Center" Text="Prepare"></TextBlock>
+                                        <hc:Divider Margin="5"></hc:Divider>
+                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center" >
+                                            <Run Text="Prepare your .wav file for Wwise."></Run>
+                                            <LineBreak/>
+                                        </TextBlock>
+
+
+
+                                    </StackPanel>
+                                    <Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="35" Height="30" Background="{DynamicResource MahApps.Brushes.Accent3}"  Style="{StaticResource ButtonPrimary}" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <iconPacks:PackIconBootstrapIcons Kind="BoxArrowUpRight"/>
+                                            <TextBlock Margin="5,0,0,0" Text="Prepare"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                </Grid>
+                            </Border>
+
+                            <Border  x:Name="StepThree" CornerRadius="15" Background="{DynamicResource RegionBrush}" Margin="15,15,15,55">
+                                <Grid>
+                                    <StackPanel>
+                                        <TextBlock Margin="10" HorizontalAlignment="Center" Text="Edit"></TextBlock>
+                                        <hc:Divider Margin="5"></hc:Divider>
+                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center" >
+                                            <Run Text="1. Open your file in Wwise."></Run>
+                                            <LineBreak/>
+                                            <Run Text="2. Set the project setting to high Vorbis."></Run>  
+                                            <LineBreak/>
+                                            <Run Text="3. Right click the file and convert it."></Run>
+                                        </TextBlock>
+
+
+
+                                    </StackPanel>
+                                  
+
+                                </Grid>
+                            </Border>
+
+                            <Border x:Name="StepFour"  CornerRadius="15" Background="{DynamicResource RegionBrush}" Margin="15,15,15,55">
+                                <Grid>
+                                    <StackPanel>
+                                        <TextBlock Margin="10" HorizontalAlignment="Center" Text="Replace"></TextBlock>
+                                        <hc:Divider Margin="5"></hc:Divider>
+                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center" >
+                                            <Run Text="Replace the file with the file converted in Wwise."></Run>
+                                            <LineBreak/>
+                                            <Run Text="It is recommended to use the following converter."></Run>
+                                        </TextBlock>
+
+
+
+                                    </StackPanel>
+                                    <Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="35" Height="30" Background="{DynamicResource MahApps.Brushes.Accent3}"  Style="{StaticResource ButtonPrimary}" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <iconPacks:PackIconBootstrapIcons Kind="BoxArrowUpRight"/>
+                                            <TextBlock Margin="5,0,0,0" Text="Replace File"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                </Grid>
+                            </Border>
+                            
+                            <Button Style="{StaticResource ButtonIcon}" hc:IconElement.Geometry="{DynamicResource GlobalLeftArrow}" Background="Transparent"  Margin="3,0,0,16" VerticalAlignment="Bottom" Height="30" Width="50" IsEnabled="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Left" Click="PreviousPage">
                             </Button>
-                            <hc:StepBar Margin="35,15,35,15" VerticalAlignment="Bottom">
-                                <hc:StepBarItem></hc:StepBarItem>
-                                <hc:StepBarItem></hc:StepBarItem>
-                                <hc:StepBarItem></hc:StepBarItem>
-                                <hc:StepBarItem></hc:StepBarItem>
+                            <hc:StepBar x:Name="StepMain" Dock="Top" Margin="35,15,35,15" VerticalAlignment="Bottom">
+                                <hc:StepBarItem Content="Convert"></hc:StepBarItem>
+                                <hc:StepBarItem Content="Prepare"></hc:StepBarItem>
+                                <hc:StepBarItem Content="Edit"></hc:StepBarItem>
+                                <hc:StepBarItem Content="Replace"></hc:StepBarItem>
 
 
                             </hc:StepBar>
-                            <Button Background="Transparent"   Margin="0,0,3,16" VerticalAlignment="Bottom" Height="30" Width="50" IsEnabled="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Right">
-                                <iconPacks:PackIconCodicons Kind="ArrowRight"/>
+                            <Button Style="{StaticResource ButtonIcon}" hc:IconElement.Geometry="{DynamicResource GlobalRightArrow}"   Margin="0,0,3,16" VerticalAlignment="Bottom" Height="30" Width="50" IsEnabled="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Right" Click="NextPage">
                             </Button>
 
 
@@ -457,52 +383,26 @@
 
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
-                
+
 
                     </Grid.RowDefinitions>
 
                     <Border Margin="0" Background="{DynamicResource RegionBrush}">
-                        <Border Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" CornerRadius="15" Margin="5,5,0,5">
-                            <ListView   Style="{StaticResource ListViewBaseStyle}" Margin="3" BorderBrush="Transparent" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" MinWidth="250">
-                                <ListView.View>
-                                    <GridView ColumnHeaderContainerStyle="{StaticResource  CustomHeader}">
-                                        <GridViewColumn Width="80" Header="Title" DisplayMemberBinding="{Binding TrackTitle}"/>
-                                        <GridViewColumn Width="100" Header="Length" DisplayMemberBinding="{Binding TrackLength}"/>
-                                        <GridViewColumn Width="200" Header="Type" DisplayMemberBinding="{Binding TrackAudioType}"/>
+                        <Grid>
+                            <Border Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" CornerRadius="15" Margin="5,5,0,5">
+                                
+                                
+                                
+                                <ListView Margin="2,20,2,20" Style="{DynamicResource  MahApps.Styles.ListView}" ItemsSource="{Binding GivenRedAudioSource }"  x:Name="PlayListView"   BorderBrush="Transparent" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" MinWidth="250">
+                                    
+                                </ListView>
+                            </Border>
 
-                                    </GridView>
-                                </ListView.View>
+                        </Grid>
 
-              
-
-                            </ListView>
-                        </Border>
                     </Border>
-                  
-              
-
-                
-
                 </Grid>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </Grid>
-
-
         </Grid>
     </Border>
 

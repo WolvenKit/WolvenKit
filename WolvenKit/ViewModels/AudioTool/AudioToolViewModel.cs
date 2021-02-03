@@ -21,15 +21,7 @@ namespace WolvenKit.ViewModels.AudioTool
         public AudioToolViewModel(Channel channel)
         {
             Channel_ = channel;
-            Task.Run(new Action(() =>
-            {
-                for (;;)
-                {
-                    CurrentPlayerTime = TimeSpan.FromMilliseconds(Channel_.GetPosition(TimeUnit.MS));
-                    Thread.Sleep(50);
-                }
-            }));
-
+     
         }
 
         public TimeSpan CurrentPlayerTime { get; set; }
