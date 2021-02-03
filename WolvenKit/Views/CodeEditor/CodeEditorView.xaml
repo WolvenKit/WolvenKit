@@ -21,8 +21,8 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </catel:DataWindow.Resources>
-    
-    <Border hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" Width="auto" Height="auto" BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
+
+    <Border hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" Width="auto" Height="auto" BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
 
         <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
 

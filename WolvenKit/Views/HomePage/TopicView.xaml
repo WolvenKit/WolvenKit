@@ -14,7 +14,7 @@
     <!--Shows items in the middle of the homepage. (Welcome by default)-->
 
     <Grid 
-        hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+        hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}"
         x:Name="TopicViewer"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Center"
