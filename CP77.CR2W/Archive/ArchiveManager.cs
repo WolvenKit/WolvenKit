@@ -121,7 +121,7 @@ namespace CP77.CR2W.Archive
         public override void LoadModArchive(string filename)
         {
             return;
-            if (Archives.ContainsKey(filename))
+            /*if (Archives.ContainsKey(filename))
                 return;
 
             var bundle = new Archive(filename);
@@ -134,7 +134,7 @@ namespace CP77.CR2W.Archive
                 Items[GetModFolder(filename) + "\\" + item.Key].Add(item.Value);
             }
 
-            Archives.Add(filename, bundle);
+            Archives.Add(filename, bundle);*/
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace CP77.CR2W.Archive
         public override void LoadModsArchives(string mods, string dlc)
         {
             return;
-            if (!Directory.Exists(mods))
+            /*if (!Directory.Exists(mods))
                 Directory.CreateDirectory(mods);
             var modsdirs = new List<string>(Directory.GetDirectories(mods));
             modsdirs.Sort(new AlphanumComparator<string>());
@@ -205,7 +205,7 @@ namespace CP77.CR2W.Archive
                     LoadModArchive(file);
                 }
             }
-            RebuildRootNode();
+            RebuildRootNode();*/
         }
 
         #endregion

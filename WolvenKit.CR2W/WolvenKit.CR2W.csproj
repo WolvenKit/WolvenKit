@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
