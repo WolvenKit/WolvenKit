@@ -28,8 +28,6 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard
         [Model]
         [Expose("WitcherChecked")]
         [Expose("CyberpunkChecked")]
-        [Expose("WitcherGameName")]
-        [Expose("CyberpunkGameName")]
         public ProjectWizardModel ProjectWizardModel
         {
             get { return GetValue<ProjectWizardModel>(ProjectWizardModelProperty); }

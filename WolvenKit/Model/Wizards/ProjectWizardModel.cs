@@ -1,14 +1,10 @@
 ﻿using Catel.Data;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace WolvenKit.Model.Wizards
 {
-    public class ProjectWizardModel : ModelBase
+    public class ProjectWizardModel : ValidatableModelBase
     {
         #region fields
         private bool _witcherGameChecked = false;
@@ -18,8 +14,8 @@ namespace WolvenKit.Model.Wizards
         #endregion fields
 
         #region properties
-        public string WitcherGameName { get; } = "The Witcher 3";
-        public string CyberpunkGameName { get; } = "Cyberpunk 2077";
+        public static string WitcherGameName { get; } = "The Witcher 3";
+        public static string CyberpunkGameName { get; } = "Cyberpunk 2077";
 
         /// <summary>
         /// Gets/Sets the project's name.
@@ -80,6 +76,40 @@ namespace WolvenKit.Model.Wizards
         {
             get => CyberpunkChecked ? CyberpunkGameName : (WitcherChecked ? WitcherGameName : "");
         }
+
+        /// <summary>
+        /// Gets/Sets the project's type and path.
+        /// </summary>
+        public TypeAndPath ProjectTypeAndPath
+        {
+            get => new TypeAndPath(ProjectType, ProjectPath);
+        }
         #endregion properties
+
+        #region methods
+        /// <summary>
+        /// Validates the field values of ProjectWizardModel.
+        /// </summary>
+        /// <param name="validationResults">The validation results.</param>
+        protected override void ValidateFields(List<IFieldValidationResult> validationResults)
+        {
+            if (string.IsNullOrEmpty(ProjectName))
+                validationResults.Add(FieldValidationResult.CreateError(nameof(ProjectName), "WolvenKit name cannot be empty"));
+
+            if (!Directory.Exists(ProjectPath))
+                validationResults.Add(FieldValidationResult.CreateError(nameof(ProjectPath), "WolvenKit path does not exist"));
+        }
+        #endregion methods
+
+        public class TypeAndPath
+        {
+            public string Path;
+            public string Type;
+            public TypeAndPath(string type, string path)
+            {
+                Type = type;
+                Path = path;
+            }
+        }
     }
 }

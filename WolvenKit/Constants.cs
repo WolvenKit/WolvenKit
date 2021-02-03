@@ -23,6 +23,7 @@ namespace WolvenKit
             public static readonly InputGesture OpenProjectInputGesture = new InputGesture(Key.O, ModifierKeys.Control);
             public const string NewProject = "Application.NewProject";
             public static readonly InputGesture NewProjectInputGesture = new InputGesture(Key.N, ModifierKeys.Control);
+            public const string CreateNewProject = "Application.CreateNewProject";
 
             //public const string SaveAll = "Application.SaveAll";
             //public static readonly InputGesture SaveAllInputGesture = new InputGesture(Key.S, ModifierKeys.Control);

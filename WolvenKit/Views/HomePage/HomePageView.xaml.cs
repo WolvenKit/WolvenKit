@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Wizards;
 
@@ -45,6 +46,9 @@ namespace WolvenKit.Views.HomePage
             FirstSWV = new FirstSetupWizardView();
             RecentPV = new RecentProjectView();
             ProjectWV = new ProjectWizardView();
+            ProjectWV.Loaded += (_s, _e) =>
+                (ProjectWV.ViewModel as ProjectWizardViewModel).ClosingRequest
+                    += (s, e) => SideMenu_WelcomeItem_Selected(s, new RoutedEventArgs());
             WikitPV = new WikiPageView();
             AboutPV = new AboutPageView();
             SettingsPV = new SettingsPageView();
