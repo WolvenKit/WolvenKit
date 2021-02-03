@@ -893,7 +893,7 @@ namespace CP77.MSTests
 
                                 var newbytes = StreamExtensions.ToByteArray(wms);
                                 isBinaryEqual = originalbytes.SequenceEqual(newbytes);
-#if DEBUG
+#pragma warning disable
                                 if (!isBinaryEqual && true)
                                 {
                                     var resultDir = Path.Combine(Environment.CurrentDirectory, TestResultsDirectory);
@@ -901,7 +901,7 @@ namespace CP77.MSTests
                                     File.WriteAllBytes($"{filename}.o.bin", originalbytes);
                                     File.WriteAllBytes($"{filename}.n.bin", newbytes);
                                 }
-#endif
+#pragma 
 
                             }
 

@@ -199,7 +199,7 @@ namespace CP77.CR2W
             // set the two last bits
             // reserved utf bit 7
             if (requiresWideChar)
-                throw new NotImplementedException();
+                throw new NotImplementedException(nameof(WriteLengthPrefixedStringNullTerminated));
             else
             {
                 // do nothing

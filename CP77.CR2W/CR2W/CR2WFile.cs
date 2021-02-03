@@ -161,7 +161,7 @@ namespace CP77.CR2W
         {
             // checks to see if the variable from which the chunk is built is properly constructed
             if (cvar == null || cvar.REDName != cvar.REDType || cvar.ParentVar != null)
-                throw new NotImplementedException();
+                throw new InvalidChunkTypeException($"{nameof(CreateChunk)}");
 
             var chunk = new CR2WExportWrapper(this, cvar.REDType, parent);
             chunk.CreateDefaultData(cvar);
@@ -348,8 +348,7 @@ namespace CP77.CR2W
                     return i;
             }
 
-            throw new NotImplementedException();
-            //return -1;
+            throw new InvalidParsingException($"{nameof(GetStringIndex)}: {name}");
         }
 
         public string GetLocalizedString(uint val)
@@ -861,7 +860,7 @@ namespace CP77.CR2W
         /// <summary>
         /// How a REDEngine entity is to be serialized
         /// </summary>
-        public enum EStringTableMod
+        private enum EStringTableMod
         {
             None,
             SkipType,
@@ -871,15 +870,15 @@ namespace CP77.CR2W
         }
         // Those where before tuples, passed between functions. Got sick of them and made structs.
         // Got lazy and did not rewrite elements in code, hence ItemN attributes. //FIXME unimportant
-        public struct SNameArg
+        private readonly struct SNameArg
         {
-            public EStringTableMod Item1;
-            public IEditableVariable Item2;
+            public readonly EStringTableMod Mod;
+            public readonly IEditableVariable Var;
 
-            public SNameArg(EStringTableMod i1, IEditableVariable i2)
+            public SNameArg(EStringTableMod mod, IEditableVariable var)
             {
-                Item1 = i1;
-                Item2 = i2;
+                Mod = mod;
+                Var = var;
             }
         };
 
@@ -891,11 +890,11 @@ namespace CP77.CR2W
             public readonly string Path;
             public readonly EImportFlags Flags;
 
-            public SImportEntry(string i1, string i2, EImportFlags i3)
+            public SImportEntry(string classname, string path, EImportFlags flags)
             {
-                ClassName = i1;
-                Path = i2;
-                Flags = i3;
+                ClassName = classname;
+                Path = path;
+                Flags = flags;
             }
         };
 
@@ -974,11 +973,9 @@ namespace CP77.CR2W
             var newimportslist = new List<SImportEntry>();
             var newsoftlist = new List<SImportEntry>();
             var idlist = new HashSet<string>();
-            var chunkguidlist = new List<string>();
 
             foreach (var c in Chunks)
             {
-                chunkguidlist.Add(c.data.UniqueIdentifier);
                 LoopWrapper(new SNameArg(EStringTableMod.SkipName, c.data));
             }
 
@@ -988,26 +985,22 @@ namespace CP77.CR2W
 
             void LoopWrapper(SNameArg var)
             {
-                if (idlist.Contains(var.Item2.UniqueIdentifier))
+                if (idlist.Contains(var.Var.UniqueIdentifier))
                     return;
 
                 //collection.Add(var);
-                dbg_trace.Add($"{var.Item2.UniqueIdentifier} - {var.Item1}");
+                dbg_trace.Add($"{var.Var.UniqueIdentifier} - {var.Mod}");
                 AddStrings(var);
 
-                List<SNameArg> nextl = GetVariables(var.Item2);
+                List<SNameArg> nextl = GetVariables(var.Var);
                 if (nextl == null)
                     return;
-                foreach (var l in nextl)
+                foreach (var l in nextl.Where(l => l.Var != null))
                 {
-                    if (l.Item2 != null)
-                        LoopWrapper(l);
+                    LoopWrapper(l);
                 }
             }
 
-
-
-            //struct SNameArg zobi ;
             List<SNameArg> GetVariables(IEditableVariable ivar)
             {
                 //check for looping references
@@ -1085,7 +1078,7 @@ namespace CP77.CR2W
 
             void AddStrings(SNameArg tvar)
             {
-                var var = tvar.Item2;
+                var var = tvar.Var;
                 CheckVarNameAndTypes();
 
                 if (var is IHandleAccessor h)
@@ -1109,39 +1102,40 @@ namespace CP77.CR2W
                 {
                     if (/*!(string.IsNullOrEmpty(s.ClassName) &&*/ !string.IsNullOrEmpty(s.DepotPath))
                     {
-                        //AddUniqueToTable(s.REDType);
-                        var stuple = new SImportEntry("", s.DepotPath, EImportFlags.Default);
+
+                        var flags = EImportFlags.Default;
+
+                        if (s.REDType.StartsWith("raRef:"))
+                            flags = EImportFlags.Soft;
+
+                        var stuple = new SImportEntry("", s.DepotPath, flags);
                         if (!newsoftlist.Contains(stuple))
                         {
                             newsoftlist.Add(stuple);
                         }
                     }
                 }
-                else if (var is CName)
+                else if (var is CName n)
                 {
-                    var n = var as CName;
                     AddUniqueToTable(n.Value);
                 }
                 else if (var is IArrayAccessor a)
                 {
                     if (var is IBufferAccessor buffer)
                     {
-                        foreach (IEditableVariable ivar in buffer.GetEditableVariables())
+                        foreach (var ivar in buffer.GetEditableVariables())
                         {
-                            if (ivar is IHandleAccessor ha)
+                            if (ivar is not IHandleAccessor ha) continue;
+                            if (ha.ChunkHandle) continue;
+
+                            AddUniqueToTable(ha.ClassName);
+                            var flags = EImportFlags.Default;
+                            if (ha.REDName == "template")
+                                flags = EImportFlags.Template;
+                            var importtuple = new SImportEntry(ha.ClassName, ha.DepotPath, flags);
+                            if (!newimportslist.Contains(importtuple))
                             {
-                                if (!ha.ChunkHandle)
-                                {
-                                    AddUniqueToTable(ha.ClassName);
-                                    var flags = EImportFlags.Default;
-                                    if (ha.REDName == "template")
-                                        flags = EImportFlags.Template;
-                                    var importtuple = new SImportEntry(ha.ClassName, ha.DepotPath, flags);
-                                    if (!newimportslist.Contains(importtuple))
-                                    {
-                                        newimportslist.Add(importtuple);
-                                    }
-                                }
+                                newimportslist.Add(importtuple);
                             }
 
                         }
@@ -1170,7 +1164,7 @@ namespace CP77.CR2W
 
                 void CheckVarNameAndTypes()
                 {
-                    switch (tvar.Item1)
+                    switch (tvar.Mod)
                     {
                         case EStringTableMod.SkipType:
                             AddUniqueToTable(var.REDName);

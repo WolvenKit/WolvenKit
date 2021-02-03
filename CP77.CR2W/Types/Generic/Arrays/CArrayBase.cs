@@ -33,16 +33,7 @@ namespace CP77.CR2W.Types
 
 
         [Browsable(false)]
-        public override string REDType
-        {
-            get
-            {
-                return BuildTypeName(Elementtype);
-                //return Flags != null
-                //    ? BuildTypeName(Elementtype, Flags.ToArray())
-                //    : BuildTypeName(Elementtype);
-            }
-        }
+        public override string REDType => BuildTypeName(Elementtype);
 
         private string BuildTypeName(string type, params int[] flags)
         {

@@ -227,7 +227,7 @@ namespace CP77.CR2W.Types
                     elementType = typeof(CArrayVLQInt32<>).MakeGenericType(generictype);
                 else
                 {
-                    throw new NotImplementedException();
+                    throw new InvalidParsingException($"Could not create array type for {arraytype.Name}");
                 }
                 
 

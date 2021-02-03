@@ -481,18 +481,11 @@ namespace CP77.CR2W
             //if (Export.className != 1 && GetParentChunk() == null)
             //    throw new InvalidChunkTypeException("No parent chunk set!");
 
-            if (cvar == null)
-            {
-                data = CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data);
-            }
-            else
-            {
-                data = cvar;
-            }
+            data = cvar ?? CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data);
 
             if (data == null)
             {
-                throw new NotImplementedException();
+                throw new InvalidParsingException($"{nameof(CreateDefaultData)} failed: {this.REDName}");
             }
 
             data.IsSerialized = true;
@@ -522,22 +515,22 @@ namespace CP77.CR2W
 
         public void SetREDName(string val)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(SetREDName));
         }
 
         public void Read(BinaryReader file, uint size)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(Read));
         }
 
         public void Write(BinaryWriter file)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(Write));
         }
 
         public CVariable Copy(CR2WCopyAction context)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(Copy));
         }
         #endregion
     }
