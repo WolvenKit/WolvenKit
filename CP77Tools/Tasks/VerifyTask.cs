@@ -113,8 +113,6 @@ namespace CP77Tools.Tasks
 
                         }
 
-
-                        var msg = "";
                         if (!correctStringTable)
                         {
                             Debugger.Break();

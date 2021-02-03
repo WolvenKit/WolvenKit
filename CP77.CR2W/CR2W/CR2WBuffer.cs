@@ -85,28 +85,12 @@ namespace CP77.CR2W
             Data = file.ReadBytes((int) _buffer.diskSize);
         }
 
-        public /*async Task*/ void ReadData(MemoryMappedFile mmf)
-        {
-            //await Task.Run(() =>
-            //{
-                using (MemoryMappedViewStream vs = mmf.CreateViewStream(_buffer.offset, _buffer.memSize, MemoryMappedFileAccess.Read))
-                using (BinaryReader br = new BinaryReader(vs))
-                {
-                    Data = br.ReadBytes((int)_buffer.memSize);
-                }
-            //}
-            //);
-        }
-
         public void WriteData(BinaryWriter file)
         {
             _buffer.offset = (uint) file.BaseStream.Position;
-            if (Data != null)
-            {
-                file.Write(Data);
-                _buffer.memSize = (uint)Data.Length;
-            }
-            
+            if (Data == null) return;
+            file.Write(Data);
+            _buffer.diskSize = (uint)Data.Length;
         }
 
         public override string ToString()

@@ -629,10 +629,10 @@ namespace CP77.CR2W
             // Read embedded files //block 7
             for (int i = 0; i < Embedded.Count; i++)
             {
-                throw new NotImplementedException("embedded files for cp77 are not implemented");
+                //throw new NotImplementedException("embedded files for cp77 are not implemented");
 
-                CR2WEmbeddedWrapper emb = Embedded[i];
-                emb.ReadData(file);
+                //CR2WEmbeddedWrapper emb = Embedded[i];
+                //emb.ReadData(file);
 
                 //int percentprogress = (int)((float)i / (float)Embedded.Count * 100.0);
                 //Logger?.LogProgress(percentprogress, $"Reading embedded file {emb.ClassName}...");
@@ -648,8 +648,8 @@ namespace CP77.CR2W
             {
                 throw new NotImplementedException("additional files for cp77 are not implemented");
 
-                var bytesleft = file.BaseStream.Length - readbytes;
-                AdditionalCr2WFileBytes = file.ReadBytes((int)bytesleft);
+                //var bytesleft = file.BaseStream.Length - readbytes;
+                //AdditionalCr2WFileBytes = file.ReadBytes((int)bytesleft);
 
 
             }
@@ -717,8 +717,6 @@ namespace CP77.CR2W
         #region Write
         public void Write(BinaryWriter file)
         {
-            //m_stream = file.BaseStream;
-
             // update data
             //m_fileheader.timeStamp = CDateTime.Now.ToUInt64();    //this will change any vanilla assets simply by opening and saving in wkit
             var nn = new List<CR2WNameWrapper>(Names);
@@ -809,8 +807,10 @@ namespace CP77.CR2W
             #endregion
             #endregion
 
+            // Write headers once to allocate the space for it
+            WriteHeader(file);
+            headerOffset = (uint)file.BaseStream.Position;
 
-            headerOffset = 0;
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
             {
@@ -818,46 +818,35 @@ namespace CP77.CR2W
                 // this also sets m_fileheader.fileSize and m_fileheader.bufferSize, offsets
                 WriteData(bw);
 
-                // Write headers once to allocate the space for it
-                WriteHeader(file);
-
-                headerOffset = (uint)file.BaseStream.Position;
-
                 // Write buffers
                 ms.Seek(0, SeekOrigin.Begin);
                 ms.WriteTo(file.BaseStream);
             }
 
             #region Update Offsets
-            for (var i = 0; i < Chunks.Count; i++)
+            foreach (var chunk in Chunks)
             {
-                var newoffset = Chunks[i].Export.dataOffset + headerOffset;
-                Chunks[i].SetOffset(newoffset);
-                Chunks[i].SetType((ushort)GetStringIndex(Chunks[i].REDType));
+                var newoffset = chunk.Export.dataOffset + headerOffset;
+                chunk.SetOffset(newoffset);
+                chunk.SetType((ushort)GetStringIndex(chunk.REDType));
             }
-            for (var i = 0; i < Buffers.Count; i++)
+            foreach (var buffer in Buffers)
             {
-                var newoffset = Buffers[i].Buffer.offset + headerOffset;
-                Buffers[i].SetOffset(newoffset);
+                var newoffset = buffer.Buffer.offset + headerOffset;
+                buffer.SetOffset(newoffset);
             }
-            for (var i = 0; i < Embedded.Count; i++)
+            foreach (var embedded in Embedded)
             {
-                var newoffset = Embedded[i].Embedded.dataOffset + headerOffset;
-                Embedded[i].SetOffset(newoffset);
+                var newoffset = embedded.Embedded.dataOffset + headerOffset;
+                embedded.SetOffset(newoffset);
             }
             m_fileheader.fileSize += headerOffset;
-            //m_fileheader.bufferSize += headerOffset;
             #endregion
             
             foreach (var chunk in Chunks)
-            {
                 FixExportCRC32(file.BaseStream, chunk.Export);
-            }
-
             foreach (var buffer in Buffers)
-            {
                 FixBufferCRC32(file.BaseStream, buffer.Buffer);
-            }
 
             // Write headers again with fixed offsets
             WriteHeader(file);

@@ -806,7 +806,6 @@ namespace CP77.MSTests
             int totalCount = GroupedFiles[extension].Count;
             var sb = new StringBuilder();
             var msg = "";
-            var logmsg = "";
 
             bool successRead = results.All(r => r.Success);
             bool successUB = !results.All(r => r.UnknownBytes > 0);

@@ -478,8 +478,8 @@ namespace CP77.CR2W.Types
                 }
             }
             throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
-            Console.WriteLine($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
-            return false;
+            //Console.WriteLine($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
+            //return false;
 
             
         }
