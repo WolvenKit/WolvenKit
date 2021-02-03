@@ -83,7 +83,7 @@
     <PackageReference Include="WpfAnalyzers" Version="3.5.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Update="NETStandard.Library" Version="2.0.1" />
+    <!--<PackageReference Update="NETStandard.Library" Version="2.0.1" />-->
   </ItemGroup>
   
   <ItemGroup>
