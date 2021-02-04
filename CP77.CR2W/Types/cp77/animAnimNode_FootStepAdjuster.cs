@@ -20,10 +20,10 @@ namespace CP77.CR2W.Types
 		[Ordinal(9)]  [RED("calfHingeAxis")] public Vector4 CalfHingeAxis { get; set; }
 		[Ordinal(10)]  [RED("IKBlendTime")] public CFloat IKBlendTime { get; set; }
 		[Ordinal(11)]  [RED("pelvisAdjustmentBlendSpeed")] public CFloat PelvisAdjustmentBlendSpeed { get; set; }
-		[Ordinal(12)]  [RED("stepAdjustmentInterval")] public CFloat StepAdjustmentInterval { get; set; }
-		[Ordinal(13)]  [RED("adjustPelvisVertically")] public CBool AdjustPelvisVertically { get; set; }
-		[Ordinal(14)]  [RED("controlVectorNode")] public animVectorLink ControlVectorNode { get; set; }
-		[Ordinal(15)]  [RED("controlValueNode")] public animFloatLink ControlValueNode { get; set; }
+		[Ordinal(12)]  [RED("adjustPelvisVertically")] public CBool AdjustPelvisVertically { get; set; }
+		[Ordinal(13)]  [RED("stepAdjustmentInterval")] public CFloat StepAdjustmentInterval { get; set; }
+		[Ordinal(14)]  [RED("controlValueNode")] public animFloatLink ControlValueNode { get; set; }
+		[Ordinal(15)]  [RED("controlVectorNode")] public animVectorLink ControlVectorNode { get; set; }
 
 		public animAnimNode_FootStepAdjuster(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -12,8 +12,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(1)]  [RED("destinationTangent")] public Vector3 DestinationTangent { get; set; }
 		[Ordinal(2)]  [RED("startTangent")] public Vector3 StartTangent { get; set; }
 		[Ordinal(3)]  [RED("targetSmartObject")] public AIObjectId TargetSmartObject { get; set; }
-		[Ordinal(4)]  [RED("targetSmartObjectHash")] public CUInt64 TargetSmartObjectHash { get; set; }
-		[Ordinal(5)]  [RED("targetWorkspot")] public CHandle<gameSetupWorkspotActionEvent> TargetWorkspot { get; set; }
+		[Ordinal(4)]  [RED("targetWorkspot")] public CHandle<gameSetupWorkspotActionEvent> TargetWorkspot { get; set; }
+		[Ordinal(5)]  [RED("targetSmartObjectHash")] public CUInt64 TargetSmartObjectHash { get; set; }
 		[Ordinal(6)]  [RED("targetObject")] public wCHandle<gameObject> TargetObject { get; set; }
 		[Ordinal(7)]  [RED("strafingTarget")] public moveStrafingTarget StrafingTarget { get; set; }
 		[Ordinal(8)]  [RED("useFollowSlots")] public CBool UseFollowSlots { get; set; }
@@ -21,11 +21,11 @@ namespace CP77.CR2W.Types
 		[Ordinal(10)]  [RED("hasLocalTargetOffset")] public CBool HasLocalTargetOffset { get; set; }
 		[Ordinal(11)]  [RED("localTargetOffset")] public Vector3 LocalTargetOffset { get; set; }
 		[Ordinal(12)]  [RED("desiredDistance")] public CFloat DesiredDistance { get; set; }
-		[Ordinal(13)]  [RED("minMovementDistance")] public CFloat MinMovementDistance { get; set; }
-		[Ordinal(14)]  [RED("toleranceRadius")] public CFloat ToleranceRadius { get; set; }
-		[Ordinal(15)]  [RED("minFollowerDistance")] public CFloat MinFollowerDistance { get; set; }
-		[Ordinal(16)]  [RED("maxFollowerDistance")] public CFloat MaxFollowerDistance { get; set; }
-		[Ordinal(17)]  [RED("strafingRotationOffset")] public CFloat StrafingRotationOffset { get; set; }
+		[Ordinal(13)]  [RED("toleranceRadius")] public CFloat ToleranceRadius { get; set; }
+		[Ordinal(14)]  [RED("minMovementDistance")] public CFloat MinMovementDistance { get; set; }
+		[Ordinal(15)]  [RED("strafingRotationOffset")] public CFloat StrafingRotationOffset { get; set; }
+		[Ordinal(16)]  [RED("minFollowerDistance")] public CFloat MinFollowerDistance { get; set; }
+		[Ordinal(17)]  [RED("maxFollowerDistance")] public CFloat MaxFollowerDistance { get; set; }
 		[Ordinal(18)]  [RED("movementType")] public CEnum<moveMovementType> MovementType { get; set; }
 		[Ordinal(19)]  [RED("circlingDirection")] public CEnum<moveCirclingDirection> CirclingDirection { get; set; }
 		[Ordinal(20)]  [RED("stopOnObstacle")] public CBool StopOnObstacle { get; set; }

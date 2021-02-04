@@ -14,9 +14,9 @@ namespace CP77.CR2W.Types
 		[Ordinal(3)]  [RED("blendType")] public CEnum<vehiclePlayerToAIInterpolationType> BlendType { get; set; }
 		[Ordinal(4)]  [RED("blendTime")] public CFloat BlendTime { get; set; }
 		[Ordinal(5)]  [RED("reverseGear")] public CBool ReverseGear { get; set; }
-		[Ordinal(6)]  [RED("sceneBlendInDistance")] public CFloat SceneBlendInDistance { get; set; }
-		[Ordinal(7)]  [RED("sceneBlendOutDistance")] public CFloat SceneBlendOutDistance { get; set; }
-		[Ordinal(8)]  [RED("arriveWithPivot")] public CBool ArriveWithPivot { get; set; }
+		[Ordinal(6)]  [RED("arriveWithPivot")] public CBool ArriveWithPivot { get; set; }
+		[Ordinal(7)]  [RED("sceneBlendInDistance")] public CFloat SceneBlendInDistance { get; set; }
+		[Ordinal(8)]  [RED("sceneBlendOutDistance")] public CFloat SceneBlendOutDistance { get; set; }
 		[Ordinal(9)]  [RED("overrides")] public CHandle<questIVehicleMoveOnSpline_Overrides> Overrides { get; set; }
 		[Ordinal(10)]  [RED("audioCurves")] public rRef<vehicleAudioVehicleCurveSet> AudioCurves { get; set; }
 

@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class gameTransformAnimation_RotateOnAxis : gameTransformAnimationTrackItemImpl
 	{
 		[Ordinal(0)]  [RED("axis")] public CEnum<gameTransformAnimation_RotateOnAxisAxis> Axis { get; set; }
-		[Ordinal(1)]  [RED("startAngle")] public CFloat StartAngle { get; set; }
-		[Ordinal(2)]  [RED("numberOfFullRotations")] public CFloat NumberOfFullRotations { get; set; }
+		[Ordinal(1)]  [RED("numberOfFullRotations")] public CFloat NumberOfFullRotations { get; set; }
+		[Ordinal(2)]  [RED("startAngle")] public CFloat StartAngle { get; set; }
 		[Ordinal(3)]  [RED("reverseDirection")] public CBool ReverseDirection { get; set; }
 		[Ordinal(4)]  [RED("movement")] public CHandle<gameTransformAnimation_Movement> Movement { get; set; }
 

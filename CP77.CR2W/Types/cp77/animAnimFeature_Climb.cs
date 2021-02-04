@@ -10,10 +10,10 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("verticalPosition")] public Vector4 VerticalPosition { get; set; }
 		[Ordinal(1)]  [RED("horizontalPosition")] public Vector4 HorizontalPosition { get; set; }
-		[Ordinal(2)]  [RED("frontEdgePosition")] public Vector4 FrontEdgePosition { get; set; }
-		[Ordinal(3)]  [RED("frontEdgeNormal")] public Vector4 FrontEdgeNormal { get; set; }
-		[Ordinal(4)]  [RED("toVerticalTime")] public CFloat ToVerticalTime { get; set; }
-		[Ordinal(5)]  [RED("verticalToHorizontalTime")] public CFloat VerticalToHorizontalTime { get; set; }
+		[Ordinal(2)]  [RED("toVerticalTime")] public CFloat ToVerticalTime { get; set; }
+		[Ordinal(3)]  [RED("verticalToHorizontalTime")] public CFloat VerticalToHorizontalTime { get; set; }
+		[Ordinal(4)]  [RED("frontEdgePosition")] public Vector4 FrontEdgePosition { get; set; }
+		[Ordinal(5)]  [RED("frontEdgeNormal")] public Vector4 FrontEdgeNormal { get; set; }
 		[Ordinal(6)]  [RED("yawAngle")] public CFloat YawAngle { get; set; }
 		[Ordinal(7)]  [RED("stateLength")] public CFloat StateLength { get; set; }
 		[Ordinal(8)]  [RED("climbType")] public CInt32 ClimbType { get; set; }

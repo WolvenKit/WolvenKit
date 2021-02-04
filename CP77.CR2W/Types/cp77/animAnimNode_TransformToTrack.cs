@@ -12,8 +12,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(1)]  [RED("floatTrackIndex")] public animNamedTrackIndex FloatTrackIndex { get; set; }
 		[Ordinal(2)]  [RED("outputTransform")] public CInt16 OutputTransform { get; set; }
 		[Ordinal(3)]  [RED("transformIndex")] public animTransformIndex TransformIndex { get; set; }
-		[Ordinal(4)]  [RED("mulFactor")] public CFloat MulFactor { get; set; }
-		[Ordinal(5)]  [RED("channel")] public CEnum<animTransformChannel> Channel { get; set; }
+		[Ordinal(4)]  [RED("channel")] public CEnum<animTransformChannel> Channel { get; set; }
+		[Ordinal(5)]  [RED("mulFactor")] public CFloat MulFactor { get; set; }
 		[Ordinal(6)]  [RED("weight")] public CFloat Weight { get; set; }
 		[Ordinal(7)]  [RED("weightNode")] public animFloatLink WeightNode { get; set; }
 		[Ordinal(8)]  [RED("mulFactorNode")] public animFloatLink MulFactorNode { get; set; }

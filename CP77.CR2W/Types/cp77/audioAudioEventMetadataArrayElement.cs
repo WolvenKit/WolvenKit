@@ -11,9 +11,9 @@ namespace CP77.CR2W.Types
 		[Ordinal(0)]  [RED("redId")] public CName RedId { get; set; }
 		[Ordinal(1)]  [RED("wwiseId")] public CUInt32 WwiseId { get; set; }
 		[Ordinal(2)]  [RED("maxAttenuation")] public CFloat MaxAttenuation { get; set; }
-		[Ordinal(3)]  [RED("isLooping")] public CBool IsLooping { get; set; }
-		[Ordinal(4)]  [RED("minDuration")] public CFloat MinDuration { get; set; }
-		[Ordinal(5)]  [RED("maxDuration")] public CFloat MaxDuration { get; set; }
+		[Ordinal(3)]  [RED("minDuration")] public CFloat MinDuration { get; set; }
+		[Ordinal(4)]  [RED("maxDuration")] public CFloat MaxDuration { get; set; }
+		[Ordinal(5)]  [RED("isLooping")] public CBool IsLooping { get; set; }
 		[Ordinal(6)]  [RED("stopActionEvents")] public CArray<CName> StopActionEvents { get; set; }
 		[Ordinal(7)]  [RED("tags")] public CArray<CName> Tags { get; set; }
 

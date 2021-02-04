@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class gameEffectPostAction_Beam_RicochetPreviewPreviewEffect : CVariable
 	{
 		[Ordinal(0)]  [RED("effect")] public raRef<worldEffect> Effect { get; set; }
-		[Ordinal(1)]  [RED("effectSnap")] public raRef<worldEffect> EffectSnap { get; set; }
-		[Ordinal(2)]  [RED("effectTag")] public CName EffectTag { get; set; }
+		[Ordinal(1)]  [RED("effectTag")] public CName EffectTag { get; set; }
+		[Ordinal(2)]  [RED("effectSnap")] public raRef<worldEffect> EffectSnap { get; set; }
 		[Ordinal(3)]  [RED("effectSnapTag")] public CName EffectSnapTag { get; set; }
 		[Ordinal(4)]  [RED("forwardOffset")] public CFloat ForwardOffset { get; set; }
 

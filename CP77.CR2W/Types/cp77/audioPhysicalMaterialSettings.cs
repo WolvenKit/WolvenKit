@@ -15,17 +15,17 @@ namespace CP77.CR2W.Types
 		[Ordinal(4)]  [RED("enableRollingOrScraping")] public CBool EnableRollingOrScraping { get; set; }
 		[Ordinal(5)]  [RED("scrape")] public CName Scrape { get; set; }
 		[Ordinal(6)]  [RED("roll")] public CName Roll { get; set; }
-		[Ordinal(7)]  [RED("bulletImpact")] public CName BulletImpact { get; set; }
-		[Ordinal(8)]  [RED("bulletImpactSniper")] public CName BulletImpactSniper { get; set; }
-		[Ordinal(9)]  [RED("bulletImpactShotgun")] public CName BulletImpactShotgun { get; set; }
-		[Ordinal(10)]  [RED("bulletImpactRail")] public CName BulletImpactRail { get; set; }
-		[Ordinal(11)]  [RED("bulletImpactNpc")] public CName BulletImpactNpc { get; set; }
-		[Ordinal(12)]  [RED("bulletImpactNpcSniper")] public CName BulletImpactNpcSniper { get; set; }
-		[Ordinal(13)]  [RED("bulletImpactNpcAuto")] public CName BulletImpactNpcAuto { get; set; }
-		[Ordinal(14)]  [RED("bulletImpactNpcShotgun")] public CName BulletImpactNpcShotgun { get; set; }
-		[Ordinal(15)]  [RED("bulletImpactNpcRail")] public CName BulletImpactNpcRail { get; set; }
-		[Ordinal(16)]  [RED("materialHardnessOverride")] public CEnum<audioMaterialHardnessOverride> MaterialHardnessOverride { get; set; }
-		[Ordinal(17)]  [RED("collideOnlyOnce")] public CBool CollideOnlyOnce { get; set; }
+		[Ordinal(7)]  [RED("materialHardnessOverride")] public CEnum<audioMaterialHardnessOverride> MaterialHardnessOverride { get; set; }
+		[Ordinal(8)]  [RED("collideOnlyOnce")] public CBool CollideOnlyOnce { get; set; }
+		[Ordinal(9)]  [RED("bulletImpact")] public CName BulletImpact { get; set; }
+		[Ordinal(10)]  [RED("bulletImpactSniper")] public CName BulletImpactSniper { get; set; }
+		[Ordinal(11)]  [RED("bulletImpactShotgun")] public CName BulletImpactShotgun { get; set; }
+		[Ordinal(12)]  [RED("bulletImpactRail")] public CName BulletImpactRail { get; set; }
+		[Ordinal(13)]  [RED("bulletImpactNpc")] public CName BulletImpactNpc { get; set; }
+		[Ordinal(14)]  [RED("bulletImpactNpcSniper")] public CName BulletImpactNpcSniper { get; set; }
+		[Ordinal(15)]  [RED("bulletImpactNpcAuto")] public CName BulletImpactNpcAuto { get; set; }
+		[Ordinal(16)]  [RED("bulletImpactNpcShotgun")] public CName BulletImpactNpcShotgun { get; set; }
+		[Ordinal(17)]  [RED("bulletImpactNpcRail")] public CName BulletImpactNpcRail { get; set; }
 
 		public audioPhysicalMaterialSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

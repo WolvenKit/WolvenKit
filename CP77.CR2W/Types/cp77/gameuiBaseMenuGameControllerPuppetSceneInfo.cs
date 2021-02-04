@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class gameuiBaseMenuGameControllerPuppetSceneInfo : CVariable
 	{
 		[Ordinal(0)]  [RED("sceneName")] public CName SceneName { get; set; }
-		[Ordinal(1)]  [RED("prefabRef")] public NodeRef PrefabRef { get; set; }
-		[Ordinal(2)]  [RED("markerRef")] public NodeRef MarkerRef { get; set; }
+		[Ordinal(1)]  [RED("markerRef")] public NodeRef MarkerRef { get; set; }
+		[Ordinal(2)]  [RED("prefabRef")] public NodeRef PrefabRef { get; set; }
 		[Ordinal(3)]  [RED("entityTemplate")] public raRef<entEntityTemplate> EntityTemplate { get; set; }
 		[Ordinal(4)]  [RED("puppetRecordId")] public TweakDBID PuppetRecordId { get; set; }
 		[Ordinal(5)]  [RED("gender")] public CEnum<gameuiBaseMenuGameControllerPuppetGenderInfo> Gender { get; set; }

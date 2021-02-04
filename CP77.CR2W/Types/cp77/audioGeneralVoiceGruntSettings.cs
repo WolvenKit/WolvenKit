@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioGeneralVoiceGruntSettings : CVariable
 	{
-		[Ordinal(0)]  [RED("contextualVoiceGruntSettings")] public audioContextualVoiceGruntSettings ContextualVoiceGruntSettings { get; set; }
+		[Ordinal(0)]  [RED("variationsCount")] public CUInt32 VariationsCount { get; set; }
 		[Ordinal(1)]  [RED("painLong")] public CName PainLong { get; set; }
 		[Ordinal(2)]  [RED("agressionShort")] public CName AgressionShort { get; set; }
 		[Ordinal(3)]  [RED("agressionLong")] public CName AgressionLong { get; set; }
@@ -32,7 +32,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(21)]  [RED("braindanceFearful")] public CName BraindanceFearful { get; set; }
 		[Ordinal(22)]  [RED("braindanceNeutral")] public CName BraindanceNeutral { get; set; }
 		[Ordinal(23)]  [RED("braindanceSexual")] public CName BraindanceSexual { get; set; }
-		[Ordinal(24)]  [RED("variationsCount")] public CUInt32 VariationsCount { get; set; }
+		[Ordinal(24)]  [RED("contextualVoiceGruntSettings")] public audioContextualVoiceGruntSettings ContextualVoiceGruntSettings { get; set; }
 		[Ordinal(25)]  [RED("gruntVariations")] public audioVoiceGruntVariations GruntVariations { get; set; }
 
 		public audioGeneralVoiceGruntSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

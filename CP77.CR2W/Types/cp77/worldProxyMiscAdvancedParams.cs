@@ -32,8 +32,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(21)]  [RED("bcFilterSensitivity")] public CFloat BcFilterSensitivity { get; set; }
 		[Ordinal(22)]  [RED("bcBoundsRatioLimit")] public CFloat BcBoundsRatioLimit { get; set; }
 		[Ordinal(23)]  [RED("useClosestPointOnMesh")] public CBool UseClosestPointOnMesh { get; set; }
-		[Ordinal(24)]  [RED("backgroundColor")] public CColor BackgroundColor { get; set; }
-		[Ordinal(25)]  [RED("removeIslands")] public CBool RemoveIslands { get; set; }
+		[Ordinal(24)]  [RED("removeIslands")] public CBool RemoveIslands { get; set; }
+		[Ordinal(25)]  [RED("backgroundColor")] public CColor BackgroundColor { get; set; }
 
 		public worldProxyMiscAdvancedParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

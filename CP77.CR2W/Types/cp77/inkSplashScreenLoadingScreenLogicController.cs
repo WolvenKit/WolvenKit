@@ -15,14 +15,14 @@ namespace CP77.CR2W.Types
 		[Ordinal(4)]  [RED("unk1A0")] public raRef<Bink> Unk1A0 { get; set; }
 		[Ordinal(5)]  [RED("unk1A8")] public inkLocalizedBink Unk1A8 { get; set; }
 		[Ordinal(6)]  [RED("trailerBink")] public raRef<Bink> TrailerBink { get; set; }
-		[Ordinal(7)]  [RED("skipButtonPanel")] public inkCompoundWidgetReference SkipButtonPanel { get; set; }
-		[Ordinal(8)]  [RED("videoPlayer")] public inkVideoWidgetReference VideoPlayer { get; set; }
-		[Ordinal(9)]  [RED("logosTrainAnimation")] public CName LogosTrainAnimation { get; set; }
+		[Ordinal(7)]  [RED("logosTrainAnimation")] public CName LogosTrainAnimation { get; set; }
+		[Ordinal(8)]  [RED("localizedMessageAnimation")] public CName LocalizedMessageAnimation { get; set; }
+		[Ordinal(9)]  [RED("gameIntroAnimation")] public CName GameIntroAnimation { get; set; }
 		[Ordinal(10)]  [RED("longLogosTrainAnimation")] public CName LongLogosTrainAnimation { get; set; }
-		[Ordinal(11)]  [RED("localizedMessageAnimation")] public CName LocalizedMessageAnimation { get; set; }
-		[Ordinal(12)]  [RED("gameIntroAnimation")] public CName GameIntroAnimation { get; set; }
-		[Ordinal(13)]  [RED("stopIntroAudioEventName")] public CName StopIntroAudioEventName { get; set; }
-		[Ordinal(14)]  [RED("afterSkipAnimation")] public CName AfterSkipAnimation { get; set; }
+		[Ordinal(11)]  [RED("stopIntroAudioEventName")] public CName StopIntroAudioEventName { get; set; }
+		[Ordinal(12)]  [RED("afterSkipAnimation")] public CName AfterSkipAnimation { get; set; }
+		[Ordinal(13)]  [RED("videoPlayer")] public inkVideoWidgetReference VideoPlayer { get; set; }
+		[Ordinal(14)]  [RED("skipButtonPanel")] public inkCompoundWidgetReference SkipButtonPanel { get; set; }
 
 		public inkSplashScreenLoadingScreenLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -11,10 +11,10 @@ namespace CP77.CR2W.Types
 		[Ordinal(0)]  [RED("includes")] public CArray<entTemplateInclude> Includes { get; set; }
 		[Ordinal(1)]  [RED("appearances")] public CArray<entTemplateAppearance> Appearances { get; set; }
 		[Ordinal(2)]  [RED("defaultAppearance")] public CName DefaultAppearance { get; set; }
-		[Ordinal(3)]  [RED("componentResolveSettings")] public CArray<entTemplateComponentResolveSettings> ComponentResolveSettings { get; set; }
-		[Ordinal(4)]  [RED("bindingOverrides")] public CArray<entTemplateBindingOverride> BindingOverrides { get; set; }
-		[Ordinal(5)]  [RED("backendDataOverrides")] public CArray<entTemplateComponentBackendDataOverrideInfo> BackendDataOverrides { get; set; }
-		[Ordinal(6)]  [RED("visualTagsSchema")] public CHandle<entVisualTagsSchema> VisualTagsSchema { get; set; }
+		[Ordinal(3)]  [RED("visualTagsSchema")] public CHandle<entVisualTagsSchema> VisualTagsSchema { get; set; }
+		[Ordinal(4)]  [RED("componentResolveSettings")] public CArray<entTemplateComponentResolveSettings> ComponentResolveSettings { get; set; }
+		[Ordinal(5)]  [RED("bindingOverrides")] public CArray<entTemplateBindingOverride> BindingOverrides { get; set; }
+		[Ordinal(6)]  [RED("backendDataOverrides")] public CArray<entTemplateComponentBackendDataOverrideInfo> BackendDataOverrides { get; set; }
 		[Ordinal(7)]  [RED("localData")] public DataBuffer LocalData { get; set; }
 		[Ordinal(8)]  [RED("includeInstanceBuffer")] public DataBuffer IncludeInstanceBuffer { get; set; }
 		[Ordinal(9)]  [RED("compiledData")] public DataBuffer CompiledData { get; set; }

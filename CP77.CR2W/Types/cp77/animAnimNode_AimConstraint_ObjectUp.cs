@@ -10,9 +10,9 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("targetTransform")] public animTransformIndex TargetTransform { get; set; }
 		[Ordinal(1)]  [RED("upTransform")] public animTransformIndex UpTransform { get; set; }
-		[Ordinal(2)]  [RED("forwardAxisLS")] public Vector3 ForwardAxisLS { get; set; }
-		[Ordinal(3)]  [RED("upAxisLS")] public Vector3 UpAxisLS { get; set; }
-		[Ordinal(4)]  [RED("transformIndex")] public animTransformIndex TransformIndex { get; set; }
+		[Ordinal(2)]  [RED("transformIndex")] public animTransformIndex TransformIndex { get; set; }
+		[Ordinal(3)]  [RED("forwardAxisLS")] public Vector3 ForwardAxisLS { get; set; }
+		[Ordinal(4)]  [RED("upAxisLS")] public Vector3 UpAxisLS { get; set; }
 		[Ordinal(5)]  [RED("weightMode")] public CEnum<animConstraintWeightMode> WeightMode { get; set; }
 		[Ordinal(6)]  [RED("weight")] public CFloat Weight { get; set; }
 		[Ordinal(7)]  [RED("weightFloatTrack")] public animNamedTrackIndex WeightFloatTrack { get; set; }

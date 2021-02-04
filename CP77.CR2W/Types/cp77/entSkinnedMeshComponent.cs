@@ -10,14 +10,14 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("mesh")] public raRef<CMesh> Mesh { get; set; }
 		[Ordinal(1)]  [RED("meshAppearance")] public CName MeshAppearance { get; set; }
-		[Ordinal(2)]  [RED("renderingPlaneAnimationParam")] public CName RenderingPlaneAnimationParam { get; set; }
-		[Ordinal(3)]  [RED("visibilityAnimationParam")] public CName VisibilityAnimationParam { get; set; }
-		[Ordinal(4)]  [RED("chunkMask")] public CUInt64 ChunkMask { get; set; }
-		[Ordinal(5)]  [RED("LODMode")] public CEnum<entMeshComponentLODMode> LODMode { get; set; }
-		[Ordinal(6)]  [RED("useProxyMeshAsShadowMesh")] public CBool UseProxyMeshAsShadowMesh { get; set; }
-		[Ordinal(7)]  [RED("castShadows")] public CBool CastShadows { get; set; }
-		[Ordinal(8)]  [RED("castLocalShadows")] public CBool CastLocalShadows { get; set; }
-		[Ordinal(9)]  [RED("acceptDismemberment")] public CBool AcceptDismemberment { get; set; }
+		[Ordinal(2)]  [RED("castShadows")] public CBool CastShadows { get; set; }
+		[Ordinal(3)]  [RED("castLocalShadows")] public CBool CastLocalShadows { get; set; }
+		[Ordinal(4)]  [RED("acceptDismemberment")] public CBool AcceptDismemberment { get; set; }
+		[Ordinal(5)]  [RED("chunkMask")] public CUInt64 ChunkMask { get; set; }
+		[Ordinal(6)]  [RED("renderingPlaneAnimationParam")] public CName RenderingPlaneAnimationParam { get; set; }
+		[Ordinal(7)]  [RED("visibilityAnimationParam")] public CName VisibilityAnimationParam { get; set; }
+		[Ordinal(8)]  [RED("LODMode")] public CEnum<entMeshComponentLODMode> LODMode { get; set; }
+		[Ordinal(9)]  [RED("useProxyMeshAsShadowMesh")] public CBool UseProxyMeshAsShadowMesh { get; set; }
 
 		public entSkinnedMeshComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

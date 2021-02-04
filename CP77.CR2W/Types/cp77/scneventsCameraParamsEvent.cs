@@ -18,10 +18,10 @@ namespace CP77.CR2W.Types
 		[Ordinal(7)]  [RED("dofFarFocus")] public CFloat DofFarFocus { get; set; }
 		[Ordinal(8)]  [RED("useNearPlane")] public CBool UseNearPlane { get; set; }
 		[Ordinal(9)]  [RED("useFarPlane")] public CBool UseFarPlane { get; set; }
-		[Ordinal(10)]  [RED("targetActor")] public scnPerformerId TargetActor { get; set; }
-		[Ordinal(11)]  [RED("targetSlot")] public CName TargetSlot { get; set; }
-		[Ordinal(12)]  [RED("isPlayerCamera")] public CBool IsPlayerCamera { get; set; }
-		[Ordinal(13)]  [RED("cameraOverrideSettings")] public scneventsCameraOverrideSettings CameraOverrideSettings { get; set; }
+		[Ordinal(10)]  [RED("isPlayerCamera")] public CBool IsPlayerCamera { get; set; }
+		[Ordinal(11)]  [RED("cameraOverrideSettings")] public scneventsCameraOverrideSettings CameraOverrideSettings { get; set; }
+		[Ordinal(12)]  [RED("targetActor")] public scnPerformerId TargetActor { get; set; }
+		[Ordinal(13)]  [RED("targetSlot")] public CName TargetSlot { get; set; }
 
 		public scneventsCameraParamsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

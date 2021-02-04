@@ -10,11 +10,11 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("path")] public CHandle<AIArgumentMapping> Path { get; set; }
 		[Ordinal(1)]  [RED("patrolProgress")] public CHandle<AIArgumentMapping> PatrolProgress { get; set; }
-		[Ordinal(2)]  [RED("workspotData")] public CHandle<AIArgumentMapping> WorkspotData { get; set; }
-		[Ordinal(3)]  [RED("dependentWorkspotData")] public CHandle<AIArgumentMapping> DependentWorkspotData { get; set; }
-		[Ordinal(4)]  [RED("lookAtTarget")] public CHandle<AIArgumentMapping> LookAtTarget { get; set; }
-		[Ordinal(5)]  [RED("startFromClosestPoint")] public CHandle<AIArgumentMapping> StartFromClosestPoint { get; set; }
-		[Ordinal(6)]  [RED("playStartAnimation")] public CHandle<AIArgumentMapping> PlayStartAnimation { get; set; }
+		[Ordinal(2)]  [RED("startFromClosestPoint")] public CHandle<AIArgumentMapping> StartFromClosestPoint { get; set; }
+		[Ordinal(3)]  [RED("playStartAnimation")] public CHandle<AIArgumentMapping> PlayStartAnimation { get; set; }
+		[Ordinal(4)]  [RED("workspotData")] public CHandle<AIArgumentMapping> WorkspotData { get; set; }
+		[Ordinal(5)]  [RED("dependentWorkspotData")] public CHandle<AIArgumentMapping> DependentWorkspotData { get; set; }
+		[Ordinal(6)]  [RED("lookAtTarget")] public CHandle<AIArgumentMapping> LookAtTarget { get; set; }
 
 		public AIbehaviorPatrolActionNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

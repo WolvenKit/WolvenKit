@@ -12,13 +12,13 @@ namespace CP77.CR2W.Types
 		[Ordinal(1)]  [RED("diffuseWrapFactor")] public CFloat DiffuseWrapFactor { get; set; }
 		[Ordinal(2)]  [RED("backLightingFactor")] public CFloat BackLightingFactor { get; set; }
 		[Ordinal(3)]  [RED("lightingMipBias")] public CUInt32 LightingMipBias { get; set; }
-		[Ordinal(4)]  [RED("maxParticles")] public CUInt32 MaxParticles { get; set; }
-		[Ordinal(5)]  [RED("emitterLoops")] public CInt8 EmitterLoops { get; set; }
-		[Ordinal(6)]  [RED("internalPriority")] public CUInt8 InternalPriority { get; set; }
-		[Ordinal(7)]  [RED("maskInsideCar")] public CBool MaskInsideCar { get; set; }
-		[Ordinal(8)]  [RED("maskInsideInterior")] public CBool MaskInsideInterior { get; set; }
-		[Ordinal(9)]  [RED("maskAboveWater")] public CBool MaskAboveWater { get; set; }
-		[Ordinal(10)]  [RED("maskUnderWater")] public CBool MaskUnderWater { get; set; }
+		[Ordinal(4)]  [RED("maskInsideCar")] public CBool MaskInsideCar { get; set; }
+		[Ordinal(5)]  [RED("maskInsideInterior")] public CBool MaskInsideInterior { get; set; }
+		[Ordinal(6)]  [RED("maskAboveWater")] public CBool MaskAboveWater { get; set; }
+		[Ordinal(7)]  [RED("maskUnderWater")] public CBool MaskUnderWater { get; set; }
+		[Ordinal(8)]  [RED("maxParticles")] public CUInt32 MaxParticles { get; set; }
+		[Ordinal(9)]  [RED("emitterLoops")] public CInt8 EmitterLoops { get; set; }
+		[Ordinal(10)]  [RED("internalPriority")] public CUInt8 InternalPriority { get; set; }
 		[Ordinal(11)]  [RED("keepSimulationLocal")] public CBool KeepSimulationLocal { get; set; }
 		[Ordinal(12)]  [RED("killOnCollision")] public CBool KillOnCollision { get; set; }
 		[Ordinal(13)]  [RED("initialParticleCount")] public CUInt8 InitialParticleCount { get; set; }
@@ -31,8 +31,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(20)]  [RED("emitterGroup")] public CUInt32 EmitterGroup { get; set; }
 		[Ordinal(21)]  [RED("renderObjectType")] public CEnum<ERenderObjectType> RenderObjectType { get; set; }
 		[Ordinal(22)]  [RED("numModifiers")] public CUInt32 NumModifiers { get; set; }
-		[Ordinal(23)]  [RED("numInitializers")] public CUInt32 NumInitializers { get; set; }
-		[Ordinal(24)]  [RED("modifierSetMask")] public CUInt64 ModifierSetMask { get; set; }
+		[Ordinal(23)]  [RED("modifierSetMask")] public CUInt64 ModifierSetMask { get; set; }
+		[Ordinal(24)]  [RED("numInitializers")] public CUInt32 NumInitializers { get; set; }
 		[Ordinal(25)]  [RED("initializerSetMask")] public CUInt64 InitializerSetMask { get; set; }
 		[Ordinal(26)]  [RED("simulationHash")] public CUInt64 SimulationHash { get; set; }
 		[Ordinal(27)]  [RED("eventSetMask")] public CUInt16 EventSetMask { get; set; }

@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questvehicleToNodeParams : questVehicleSpecificCommandParams
 	{
-		[Ordinal(0)]  [RED("nodeRef")] public NodeRef NodeRef { get; set; }
-		[Ordinal(1)]  [RED("stopAtEnd")] public CBool StopAtEnd { get; set; }
+		[Ordinal(0)]  [RED("stopAtEnd")] public CBool StopAtEnd { get; set; }
+		[Ordinal(1)]  [RED("nodeRef")] public NodeRef NodeRef { get; set; }
 		[Ordinal(2)]  [RED("isPlayer")] public CBool IsPlayer { get; set; }
 		[Ordinal(3)]  [RED("useTraffic")] public CBool UseTraffic { get; set; }
 		[Ordinal(4)]  [RED("speedInTraffic")] public CFloat SpeedInTraffic { get; set; }

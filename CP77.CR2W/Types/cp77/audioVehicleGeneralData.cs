@@ -23,14 +23,14 @@ namespace CP77.CR2W.Types
 		[Ordinal(12)]  [RED("rainStartEvent")] public CName RainStartEvent { get; set; }
 		[Ordinal(13)]  [RED("rainStopEvent")] public CName RainStopEvent { get; set; }
 		[Ordinal(14)]  [RED("tyreBurstEvent")] public CName TyreBurstEvent { get; set; }
-		[Ordinal(15)]  [RED("collisionSoundEvent")] public CName CollisionSoundEvent { get; set; }
-		[Ordinal(16)]  [RED("interiorReverbBus")] public CName InteriorReverbBus { get; set; }
-		[Ordinal(17)]  [RED("skid")] public CName Skid { get; set; }
-		[Ordinal(18)]  [RED("inclination")] public CName Inclination { get; set; }
-		[Ordinal(19)]  [RED("impactVelocity")] public CName ImpactVelocity { get; set; }
-		[Ordinal(20)]  [RED("dopplerShift")] public CName DopplerShift { get; set; }
+		[Ordinal(15)]  [RED("skid")] public CName Skid { get; set; }
+		[Ordinal(16)]  [RED("inclination")] public CName Inclination { get; set; }
+		[Ordinal(17)]  [RED("impactVelocity")] public CName ImpactVelocity { get; set; }
+		[Ordinal(18)]  [RED("impactGridCellRawChange")] public CName ImpactGridCellRawChange { get; set; }
+		[Ordinal(19)]  [RED("collisionSoundEvent")] public CName CollisionSoundEvent { get; set; }
+		[Ordinal(20)]  [RED("interiorReverbBus")] public CName InteriorReverbBus { get; set; }
 		[Ordinal(21)]  [RED("acoustingIsolationFactor")] public CName AcoustingIsolationFactor { get; set; }
-		[Ordinal(22)]  [RED("impactGridCellRawChange")] public CName ImpactGridCellRawChange { get; set; }
+		[Ordinal(22)]  [RED("dopplerShift")] public CName DopplerShift { get; set; }
 		[Ordinal(23)]  [RED("vehicleDoorsSettings")] public audioVehicleDoorsSettingsMetadata VehicleDoorsSettings { get; set; }
 		[Ordinal(24)]  [RED("vehicleInteriorParameterData")] public audioVehicleInteriorParameterData VehicleInteriorParameterData { get; set; }
 		[Ordinal(25)]  [RED("vehicleTemperatureSettings")] public audioVehicleTemperatureSettings VehicleTemperatureSettings { get; set; }

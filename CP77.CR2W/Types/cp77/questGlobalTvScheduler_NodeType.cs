@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class questGlobalTvScheduler_NodeType : questIUIManagerNodeType
 	{
 		[Ordinal(0)]  [RED("channelId")] public TweakDBID ChannelId { get; set; }
-		[Ordinal(1)]  [RED("videoResource")] public raRef<Bink> VideoResource { get; set; }
-		[Ordinal(2)]  [RED("overlayResource")] public raRef<inkWidgetLibraryResource> OverlayResource { get; set; }
+		[Ordinal(1)]  [RED("overlayResource")] public raRef<inkWidgetLibraryResource> OverlayResource { get; set; }
+		[Ordinal(2)]  [RED("videoResource")] public raRef<Bink> VideoResource { get; set; }
 		[Ordinal(3)]  [RED("VOScene")] public raRef<scnSceneResource> VOScene { get; set; }
 		[Ordinal(4)]  [RED("audioEvent")] public CName AudioEvent { get; set; }
 		[Ordinal(5)]  [RED("newsTitleTweak")] public TweakDBID NewsTitleTweak { get; set; }

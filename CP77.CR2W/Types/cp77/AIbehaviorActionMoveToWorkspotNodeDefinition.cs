@@ -10,8 +10,8 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("workspotSetup")] public CHandle<AIArgumentMapping> WorkspotSetup { get; set; }
 		[Ordinal(1)]  [RED("lookAtTarget")] public CHandle<AIArgumentMapping> LookAtTarget { get; set; }
-		[Ordinal(2)]  [RED("tolerance")] public CHandle<AIArgumentMapping> Tolerance { get; set; }
-		[Ordinal(3)]  [RED("movementType")] public CHandle<AIArgumentMapping> MovementType { get; set; }
+		[Ordinal(2)]  [RED("movementType")] public CHandle<AIArgumentMapping> MovementType { get; set; }
+		[Ordinal(3)]  [RED("tolerance")] public CHandle<AIArgumentMapping> Tolerance { get; set; }
 		[Ordinal(4)]  [RED("ignoreNavigation")] public CHandle<AIArgumentMapping> IgnoreNavigation { get; set; }
 		[Ordinal(5)]  [RED("rotateEntity")] public CHandle<AIArgumentMapping> RotateEntity { get; set; }
 		[Ordinal(6)]  [RED("useStart")] public CHandle<AIArgumentMapping> UseStart { get; set; }

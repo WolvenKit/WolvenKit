@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioMeleeHitTypeMeleeSoundDictionary : audioInlinedAudioMetadata
 	{
-		[Ordinal(0)]  [RED("entryType")] public CHandle<audioMeleeHitTypeMeleeSoundDictionaryItem> EntryType { get; set; }
-		[Ordinal(1)]  [RED("entries")] public CArray<audioMeleeHitTypeMeleeSoundDictionaryItem> Entries { get; set; }
+		[Ordinal(0)]  [RED("entries")] public CArray<audioMeleeHitTypeMeleeSoundDictionaryItem> Entries { get; set; }
+		[Ordinal(1)]  [RED("entryType")] public CHandle<audioMeleeHitTypeMeleeSoundDictionaryItem> EntryType { get; set; }
 
 		public audioMeleeHitTypeMeleeSoundDictionary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

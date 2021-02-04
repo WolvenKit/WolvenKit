@@ -9,15 +9,15 @@ namespace CP77.CR2W.Types
 	public class audioAcousticZoneMetadata : audioAudioMetadata
 	{
 		[Ordinal(0)]  [RED("priority")] public CInt32 Priority { get; set; }
-		[Ordinal(1)]  [RED("eventsOnEnter")] public CArray<CName> EventsOnEnter { get; set; }
-		[Ordinal(2)]  [RED("eventsOnExit")] public CArray<CName> EventsOnExit { get; set; }
-		[Ordinal(3)]  [RED("eventsOnActive")] public CArray<CName> EventsOnActive { get; set; }
-		[Ordinal(4)]  [RED("soundBanks")] public CArray<CName> SoundBanks { get; set; }
-		[Ordinal(5)]  [RED("parameters")] public CArray<audioAcousticZoneParameterMapItem> Parameters { get; set; }
-		[Ordinal(6)]  [RED("reverbSettings")] public CName ReverbSettings { get; set; }
-		[Ordinal(7)]  [RED("voReverbSettings")] public CName VoReverbSettings { get; set; }
-		[Ordinal(8)]  [RED("footstepMaterialOverride")] public CName FootstepMaterialOverride { get; set; }
-		[Ordinal(9)]  [RED("bleadingDistance")] public CFloat BleadingDistance { get; set; }
+		[Ordinal(1)]  [RED("bleadingDistance")] public CFloat BleadingDistance { get; set; }
+		[Ordinal(2)]  [RED("eventsOnEnter")] public CArray<CName> EventsOnEnter { get; set; }
+		[Ordinal(3)]  [RED("eventsOnExit")] public CArray<CName> EventsOnExit { get; set; }
+		[Ordinal(4)]  [RED("eventsOnActive")] public CArray<CName> EventsOnActive { get; set; }
+		[Ordinal(5)]  [RED("soundBanks")] public CArray<CName> SoundBanks { get; set; }
+		[Ordinal(6)]  [RED("parameters")] public CArray<audioAcousticZoneParameterMapItem> Parameters { get; set; }
+		[Ordinal(7)]  [RED("reverbSettings")] public CName ReverbSettings { get; set; }
+		[Ordinal(8)]  [RED("voReverbSettings")] public CName VoReverbSettings { get; set; }
+		[Ordinal(9)]  [RED("footstepMaterialOverride")] public CName FootstepMaterialOverride { get; set; }
 
 		public audioAcousticZoneMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

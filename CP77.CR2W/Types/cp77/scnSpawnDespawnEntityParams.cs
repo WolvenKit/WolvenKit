@@ -9,9 +9,9 @@ namespace CP77.CR2W.Types
 	public class scnSpawnDespawnEntityParams : CVariable
 	{
 		[Ordinal(0)]  [RED("dynamicEntityUniqueName")] public CName DynamicEntityUniqueName { get; set; }
-		[Ordinal(1)]  [RED("spawnMarkerType")] public CEnum<scnMarkerType> SpawnMarkerType { get; set; }
-		[Ordinal(2)]  [RED("spawnMarkerNodeRef")] public NodeRef SpawnMarkerNodeRef { get; set; }
-		[Ordinal(3)]  [RED("spawnMarker")] public CName SpawnMarker { get; set; }
+		[Ordinal(1)]  [RED("spawnMarker")] public CName SpawnMarker { get; set; }
+		[Ordinal(2)]  [RED("spawnMarkerType")] public CEnum<scnMarkerType> SpawnMarkerType { get; set; }
+		[Ordinal(3)]  [RED("spawnMarkerNodeRef")] public NodeRef SpawnMarkerNodeRef { get; set; }
 		[Ordinal(4)]  [RED("spawnOffset")] public Transform SpawnOffset { get; set; }
 		[Ordinal(5)]  [RED("itemOwnerId")] public scnPerformerId ItemOwnerId { get; set; }
 		[Ordinal(6)]  [RED("specRecordId")] public TweakDBID SpecRecordId { get; set; }

@@ -8,11 +8,11 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameHumanoidBody : entIComponent
 	{
-		[Ordinal(0)]  [RED("stanceAnimFeatureName")] public CName StanceAnimFeatureName { get; set; }
-		[Ordinal(1)]  [RED("aimAnimFeatureName")] public CName AimAnimFeatureName { get; set; }
-		[Ordinal(2)]  [RED("basePersonalSpace")] public CFloat BasePersonalSpace { get; set; }
-		[Ordinal(3)]  [RED("baseHeight")] public CFloat BaseHeight { get; set; }
-		[Ordinal(4)]  [RED("baseEyesHeightRatio")] public CFloat BaseEyesHeightRatio { get; set; }
+		[Ordinal(0)]  [RED("basePersonalSpace")] public CFloat BasePersonalSpace { get; set; }
+		[Ordinal(1)]  [RED("baseHeight")] public CFloat BaseHeight { get; set; }
+		[Ordinal(2)]  [RED("baseEyesHeightRatio")] public CFloat BaseEyesHeightRatio { get; set; }
+		[Ordinal(3)]  [RED("stanceAnimFeatureName")] public CName StanceAnimFeatureName { get; set; }
+		[Ordinal(4)]  [RED("aimAnimFeatureName")] public CName AimAnimFeatureName { get; set; }
 
 		public gameHumanoidBody(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

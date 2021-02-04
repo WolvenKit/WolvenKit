@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class gameuiHDRSettingsGameController : gameuiMenuGameController
 	{
 		[Ordinal(0)]  [RED("callibrationScreen")] public rRef<CBitmapTexture> CallibrationScreen { get; set; }
-		[Ordinal(1)]  [RED("callibrationScreenAtlas")] public raRef<inkTextureAtlas> CallibrationScreenAtlas { get; set; }
-		[Ordinal(2)]  [RED("callibrationScreenTarget")] public inkWidgetReference CallibrationScreenTarget { get; set; }
+		[Ordinal(1)]  [RED("callibrationScreenTarget")] public inkWidgetReference CallibrationScreenTarget { get; set; }
+		[Ordinal(2)]  [RED("callibrationScreenAtlas")] public raRef<inkTextureAtlas> CallibrationScreenAtlas { get; set; }
 
 		public gameuiHDRSettingsGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

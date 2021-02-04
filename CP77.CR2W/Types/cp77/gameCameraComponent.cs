@@ -19,19 +19,19 @@ namespace CP77.CR2W.Types
 		[Ordinal(8)]  [RED("animParamdofNearFocus")] public CName AnimParamdofNearFocus { get; set; }
 		[Ordinal(9)]  [RED("animParamdofFarBlur")] public CName AnimParamdofFarBlur { get; set; }
 		[Ordinal(10)]  [RED("animParamdofFarFocus")] public CName AnimParamdofFarFocus { get; set; }
-		[Ordinal(11)]  [RED("animParamWeaponNearPlaneCM")] public CName AnimParamWeaponNearPlaneCM { get; set; }
-		[Ordinal(12)]  [RED("animParamWeaponFarPlaneCM")] public CName AnimParamWeaponFarPlaneCM { get; set; }
-		[Ordinal(13)]  [RED("animParamWeaponEdgesSharpness")] public CName AnimParamWeaponEdgesSharpness { get; set; }
-		[Ordinal(14)]  [RED("animParamWeaponVignetteIntensity")] public CName AnimParamWeaponVignetteIntensity { get; set; }
-		[Ordinal(15)]  [RED("animParamWeaponVignetteRadius")] public CName AnimParamWeaponVignetteRadius { get; set; }
-		[Ordinal(16)]  [RED("animParamWeaponVignetteCircular")] public CName AnimParamWeaponVignetteCircular { get; set; }
-		[Ordinal(17)]  [RED("animParamWeaponBlurIntensity")] public CName AnimParamWeaponBlurIntensity { get; set; }
-		[Ordinal(18)]  [RED("fovOverrideWeight")] public CFloat FovOverrideWeight { get; set; }
-		[Ordinal(19)]  [RED("fovOverrideValue")] public CFloat FovOverrideValue { get; set; }
-		[Ordinal(20)]  [RED("zoomOverrideWeight")] public CFloat ZoomOverrideWeight { get; set; }
-		[Ordinal(21)]  [RED("zoomOverrideValue")] public CFloat ZoomOverrideValue { get; set; }
-		[Ordinal(22)]  [RED("zoomWeaponOverrideWeight")] public CFloat ZoomWeaponOverrideWeight { get; set; }
-		[Ordinal(23)]  [RED("zoomWeaponOverrideValue")] public CFloat ZoomWeaponOverrideValue { get; set; }
+		[Ordinal(11)]  [RED("fovOverrideWeight")] public CFloat FovOverrideWeight { get; set; }
+		[Ordinal(12)]  [RED("fovOverrideValue")] public CFloat FovOverrideValue { get; set; }
+		[Ordinal(13)]  [RED("zoomOverrideWeight")] public CFloat ZoomOverrideWeight { get; set; }
+		[Ordinal(14)]  [RED("zoomOverrideValue")] public CFloat ZoomOverrideValue { get; set; }
+		[Ordinal(15)]  [RED("zoomWeaponOverrideWeight")] public CFloat ZoomWeaponOverrideWeight { get; set; }
+		[Ordinal(16)]  [RED("zoomWeaponOverrideValue")] public CFloat ZoomWeaponOverrideValue { get; set; }
+		[Ordinal(17)]  [RED("animParamWeaponNearPlaneCM")] public CName AnimParamWeaponNearPlaneCM { get; set; }
+		[Ordinal(18)]  [RED("animParamWeaponFarPlaneCM")] public CName AnimParamWeaponFarPlaneCM { get; set; }
+		[Ordinal(19)]  [RED("animParamWeaponEdgesSharpness")] public CName AnimParamWeaponEdgesSharpness { get; set; }
+		[Ordinal(20)]  [RED("animParamWeaponVignetteIntensity")] public CName AnimParamWeaponVignetteIntensity { get; set; }
+		[Ordinal(21)]  [RED("animParamWeaponVignetteRadius")] public CName AnimParamWeaponVignetteRadius { get; set; }
+		[Ordinal(22)]  [RED("animParamWeaponVignetteCircular")] public CName AnimParamWeaponVignetteCircular { get; set; }
+		[Ordinal(23)]  [RED("animParamWeaponBlurIntensity")] public CName AnimParamWeaponBlurIntensity { get; set; }
 
 		public gameCameraComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

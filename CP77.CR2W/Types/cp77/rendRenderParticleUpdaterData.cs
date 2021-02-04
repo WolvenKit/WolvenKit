@@ -26,9 +26,9 @@ namespace CP77.CR2W.Types
 		[Ordinal(15)]  [RED("eventReceive")] public CName EventReceive { get; set; }
 		[Ordinal(16)]  [RED("eventFrequency")] public CFloat EventFrequency { get; set; }
 		[Ordinal(17)]  [RED("eventProbability")] public CFloat EventProbability { get; set; }
-		[Ordinal(18)]  [RED("eventSpawnObject")] public CUInt8 EventSpawnObject { get; set; }
-		[Ordinal(19)]  [RED("noiseType")] public CUInt8 NoiseType { get; set; }
-		[Ordinal(20)]  [RED("randomPerChannel")] public CBool RandomPerChannel { get; set; }
+		[Ordinal(18)]  [RED("noiseType")] public CUInt8 NoiseType { get; set; }
+		[Ordinal(19)]  [RED("randomPerChannel")] public CBool RandomPerChannel { get; set; }
+		[Ordinal(20)]  [RED("eventSpawnObject")] public CUInt8 EventSpawnObject { get; set; }
 
 		public rendRenderParticleUpdaterData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

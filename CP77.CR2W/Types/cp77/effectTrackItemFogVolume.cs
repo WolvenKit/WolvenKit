@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class effectTrackItemFogVolume : effectTrackItem
 	{
-		[Ordinal(0)]  [RED("densityFalloff")] public CFloat DensityFalloff { get; set; }
-		[Ordinal(1)]  [RED("blendFalloff")] public CFloat BlendFalloff { get; set; }
-		[Ordinal(2)]  [RED("priority")] public CUInt8 Priority { get; set; }
+		[Ordinal(0)]  [RED("priority")] public CUInt8 Priority { get; set; }
+		[Ordinal(1)]  [RED("densityFalloff")] public CFloat DensityFalloff { get; set; }
+		[Ordinal(2)]  [RED("blendFalloff")] public CFloat BlendFalloff { get; set; }
 		[Ordinal(3)]  [RED("density")] public CHandle<IEvaluatorFloat> Density { get; set; }
 		[Ordinal(4)]  [RED("size")] public CHandle<IEvaluatorVector> Size { get; set; }
 		[Ordinal(5)]  [RED("color")] public CHandle<IEvaluatorColor> Color { get; set; }

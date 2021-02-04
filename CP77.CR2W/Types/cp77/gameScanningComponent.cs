@@ -9,11 +9,11 @@ namespace CP77.CR2W.Types
 	public class gameScanningComponent : gameComponent
 	{
 		[Ordinal(0)]  [RED("cpoEnableMultiplePlayersScanningModifier")] public CBool CpoEnableMultiplePlayersScanningModifier { get; set; }
-		[Ordinal(1)]  [RED("autoGenerateBoundingSphere")] public CBool AutoGenerateBoundingSphere { get; set; }
-		[Ordinal(2)]  [RED("ignoresScanningDistanceLimit")] public CBool IgnoresScanningDistanceLimit { get; set; }
-		[Ordinal(3)]  [RED("timeNeeded")] public CFloat TimeNeeded { get; set; }
+		[Ordinal(1)]  [RED("scannableData")] public CArray<gameScanningTooltipElementDef> ScannableData { get; set; }
+		[Ordinal(2)]  [RED("timeNeeded")] public CFloat TimeNeeded { get; set; }
+		[Ordinal(3)]  [RED("autoGenerateBoundingSphere")] public CBool AutoGenerateBoundingSphere { get; set; }
 		[Ordinal(4)]  [RED("boundingSphere")] public Sphere BoundingSphere { get; set; }
-		[Ordinal(5)]  [RED("scannableData")] public CArray<gameScanningTooltipElementDef> ScannableData { get; set; }
+		[Ordinal(5)]  [RED("ignoresScanningDistanceLimit")] public CBool IgnoresScanningDistanceLimit { get; set; }
 
 		public gameScanningComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -12,10 +12,10 @@ namespace CP77.CR2W.Types
 		[Ordinal(1)]  [RED("exposureAdaptationSpeedDown")] public curveData<CFloat> ExposureAdaptationSpeedDown { get; set; }
 		[Ordinal(2)]  [RED("exposurePercentageThresholdLow")] public curveData<CFloat> ExposurePercentageThresholdLow { get; set; }
 		[Ordinal(3)]  [RED("exposurePercentageThresholdHigh")] public curveData<CFloat> ExposurePercentageThresholdHigh { get; set; }
-		[Ordinal(4)]  [RED("exposureMin")] public curveData<CFloat> ExposureMin { get; set; }
-		[Ordinal(5)]  [RED("exposureMax")] public curveData<CFloat> ExposureMax { get; set; }
-		[Ordinal(6)]  [RED("exposureCompensation")] public curveData<CFloat> ExposureCompensation { get; set; }
-		[Ordinal(7)]  [RED("exposureSkyImpact")] public curveData<CFloat> ExposureSkyImpact { get; set; }
+		[Ordinal(4)]  [RED("exposureCompensation")] public curveData<CFloat> ExposureCompensation { get; set; }
+		[Ordinal(5)]  [RED("exposureSkyImpact")] public curveData<CFloat> ExposureSkyImpact { get; set; }
+		[Ordinal(6)]  [RED("exposureMin")] public curveData<CFloat> ExposureMin { get; set; }
+		[Ordinal(7)]  [RED("exposureMax")] public curveData<CFloat> ExposureMax { get; set; }
 		[Ordinal(8)]  [RED("exposureCenterImportance")] public curveData<CFloat> ExposureCenterImportance { get; set; }
 		[Ordinal(9)]  [RED("cameraVelocityFaloff")] public CFloat CameraVelocityFaloff { get; set; }
 

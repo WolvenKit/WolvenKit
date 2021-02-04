@@ -8,13 +8,13 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorSelectCoverTaskDefinition : AIbehaviorTaskDefinition
 	{
-		[Ordinal(0)]  [RED("sectorSelection")] public CName SectorSelection { get; set; }
-		[Ordinal(1)]  [RED("cover")] public CHandle<AIArgumentMapping> Cover { get; set; }
-		[Ordinal(2)]  [RED("coverID")] public CHandle<AIArgumentMapping> CoverID { get; set; }
-		[Ordinal(3)]  [RED("multiCoverID")] public CHandle<AIArgumentMapping> MultiCoverID { get; set; }
-		[Ordinal(4)]  [RED("combatTarget")] public CHandle<AIArgumentMapping> CombatTarget { get; set; }
-		[Ordinal(5)]  [RED("friendlyTarget")] public CHandle<AIArgumentMapping> FriendlyTarget { get; set; }
-		[Ordinal(6)]  [RED("combatZone")] public CHandle<AIArgumentMapping> CombatZone { get; set; }
+		[Ordinal(0)]  [RED("cover")] public CHandle<AIArgumentMapping> Cover { get; set; }
+		[Ordinal(1)]  [RED("coverID")] public CHandle<AIArgumentMapping> CoverID { get; set; }
+		[Ordinal(2)]  [RED("multiCoverID")] public CHandle<AIArgumentMapping> MultiCoverID { get; set; }
+		[Ordinal(3)]  [RED("combatTarget")] public CHandle<AIArgumentMapping> CombatTarget { get; set; }
+		[Ordinal(4)]  [RED("friendlyTarget")] public CHandle<AIArgumentMapping> FriendlyTarget { get; set; }
+		[Ordinal(5)]  [RED("combatZone")] public CHandle<AIArgumentMapping> CombatZone { get; set; }
+		[Ordinal(6)]  [RED("sectorSelection")] public CName SectorSelection { get; set; }
 		[Ordinal(7)]  [RED("ignoreRestrictMovementArea")] public CHandle<AIArgumentMapping> IgnoreRestrictMovementArea { get; set; }
 		[Ordinal(8)]  [RED("selectionPreset")] public CHandle<AIArgumentMapping> SelectionPreset { get; set; }
 		[Ordinal(9)]  [RED("onActivationSelectionPreset")] public CHandle<AIArgumentMapping> OnActivationSelectionPreset { get; set; }

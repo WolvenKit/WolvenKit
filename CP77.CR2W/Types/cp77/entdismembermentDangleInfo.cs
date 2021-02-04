@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entdismembermentDangleInfo : CVariable
 	{
-		[Ordinal(0)]  [RED("DangleVelocityDamping")] public CFloat DangleVelocityDamping { get; set; }
-		[Ordinal(1)]  [RED("DangleSegmentLenght")] public CFloat DangleSegmentLenght { get; set; }
+		[Ordinal(0)]  [RED("DangleSegmentLenght")] public CFloat DangleSegmentLenght { get; set; }
+		[Ordinal(1)]  [RED("DangleVelocityDamping")] public CFloat DangleVelocityDamping { get; set; }
 		[Ordinal(2)]  [RED("DangleBendStiffness")] public CFloat DangleBendStiffness { get; set; }
 		[Ordinal(3)]  [RED("DangleSegmentStiffness")] public CFloat DangleSegmentStiffness { get; set; }
 		[Ordinal(4)]  [RED("DangleCollisionSphereRadius")] public CFloat DangleCollisionSphereRadius { get; set; }

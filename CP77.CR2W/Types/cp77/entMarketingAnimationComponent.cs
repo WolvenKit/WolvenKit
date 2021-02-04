@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entMarketingAnimationComponent : entIPlacedComponent
 	{
-		[Ordinal(0)]  [RED("animations")] public CArray<entMarketingAnimationEntry> Animations { get; set; }
-		[Ordinal(1)]  [RED("freezeAnimations")] public CBool FreezeAnimations { get; set; }
+		[Ordinal(0)]  [RED("freezeAnimations")] public CBool FreezeAnimations { get; set; }
+		[Ordinal(1)]  [RED("animations")] public CArray<entMarketingAnimationEntry> Animations { get; set; }
 		[Ordinal(2)]  [RED("enableLookAt")] public CBool EnableLookAt { get; set; }
 		[Ordinal(3)]  [RED("lookAtSettings")] public CHandle<animLookAtPreset_FullControl> LookAtSettings { get; set; }
 		[Ordinal(4)]  [RED("lookAtOrbitDistance")] public CFloat LookAtOrbitDistance { get; set; }

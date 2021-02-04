@@ -18,14 +18,14 @@ namespace CP77.CR2W.Types
 		[Ordinal(7)]  [RED("communityParams")] public scnCommunityParams CommunityParams { get; set; }
 		[Ordinal(8)]  [RED("spawnerParams")] public scnSpawnerParams SpawnerParams { get; set; }
 		[Ordinal(9)]  [RED("animSets")] public CArray<scnSRRefId> AnimSets { get; set; }
-		[Ordinal(10)]  [RED("facialAnimSets")] public CArray<scnRidFacialAnimSetSRRefId> FacialAnimSets { get; set; }
-		[Ordinal(11)]  [RED("cyberwareAnimSets")] public CArray<scnRidCyberwareAnimSetSRRefId> CyberwareAnimSets { get; set; }
-		[Ordinal(12)]  [RED("deformationAnimSets")] public CArray<scnRidDeformationAnimSetSRRefId> DeformationAnimSets { get; set; }
-		[Ordinal(13)]  [RED("bodyCinematicAnimSets")] public CArray<scnCinematicAnimSetSRRefId> BodyCinematicAnimSets { get; set; }
-		[Ordinal(14)]  [RED("facialCinematicAnimSets")] public CArray<scnCinematicAnimSetSRRefId> FacialCinematicAnimSets { get; set; }
-		[Ordinal(15)]  [RED("cyberwareCinematicAnimSets")] public CArray<scnCinematicAnimSetSRRefId> CyberwareCinematicAnimSets { get; set; }
-		[Ordinal(16)]  [RED("dynamicAnimSets")] public CArray<scnDynamicAnimSetSRRefId> DynamicAnimSets { get; set; }
-		[Ordinal(17)]  [RED("lipsyncAnimSet")] public scnLipsyncAnimSetSRRefId LipsyncAnimSet { get; set; }
+		[Ordinal(10)]  [RED("lipsyncAnimSet")] public scnLipsyncAnimSetSRRefId LipsyncAnimSet { get; set; }
+		[Ordinal(11)]  [RED("facialAnimSets")] public CArray<scnRidFacialAnimSetSRRefId> FacialAnimSets { get; set; }
+		[Ordinal(12)]  [RED("cyberwareAnimSets")] public CArray<scnRidCyberwareAnimSetSRRefId> CyberwareAnimSets { get; set; }
+		[Ordinal(13)]  [RED("deformationAnimSets")] public CArray<scnRidDeformationAnimSetSRRefId> DeformationAnimSets { get; set; }
+		[Ordinal(14)]  [RED("bodyCinematicAnimSets")] public CArray<scnCinematicAnimSetSRRefId> BodyCinematicAnimSets { get; set; }
+		[Ordinal(15)]  [RED("facialCinematicAnimSets")] public CArray<scnCinematicAnimSetSRRefId> FacialCinematicAnimSets { get; set; }
+		[Ordinal(16)]  [RED("cyberwareCinematicAnimSets")] public CArray<scnCinematicAnimSetSRRefId> CyberwareCinematicAnimSets { get; set; }
+		[Ordinal(17)]  [RED("dynamicAnimSets")] public CArray<scnDynamicAnimSetSRRefId> DynamicAnimSets { get; set; }
 		[Ordinal(18)]  [RED("actorName")] public CString ActorName { get; set; }
 		[Ordinal(19)]  [RED("specCharacterRecordId")] public TweakDBID SpecCharacterRecordId { get; set; }
 		[Ordinal(20)]  [RED("specAppearance")] public CName SpecAppearance { get; set; }

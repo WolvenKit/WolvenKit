@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entDynamicActorRepellingComponent : entIPlacedComponent
 	{
-		[Ordinal(0)]  [RED("magnitude")] public CFloat Magnitude { get; set; }
-		[Ordinal(1)]  [RED("type")] public CEnum<entRepellingType> Type { get; set; }
-		[Ordinal(2)]  [RED("shape")] public CEnum<entRepellingShape> Shape { get; set; }
+		[Ordinal(0)]  [RED("type")] public CEnum<entRepellingType> Type { get; set; }
+		[Ordinal(1)]  [RED("shape")] public CEnum<entRepellingShape> Shape { get; set; }
+		[Ordinal(2)]  [RED("magnitude")] public CFloat Magnitude { get; set; }
 		[Ordinal(3)]  [RED("bendIntensity")] public CFloat BendIntensity { get; set; }
 		[Ordinal(4)]  [RED("anchorPointVert")] public CEnum<rendWindShapeAnchorPointVert> AnchorPointVert { get; set; }
 		[Ordinal(5)]  [RED("anchorPointHorz")] public CEnum<rendWindShapeAnchorPointHorz> AnchorPointHorz { get; set; }

@@ -11,21 +11,21 @@ namespace CP77.CR2W.Types
 		[Ordinal(0)]  [RED("playerSpawnHeight")] public CFloat PlayerSpawnHeight { get; set; }
 		[Ordinal(1)]  [RED("mainMenuScreenLibraryName")] public CName MainMenuScreenLibraryName { get; set; }
 		[Ordinal(2)]  [RED("scoreboardScreenLibraryName")] public CName ScoreboardScreenLibraryName { get; set; }
-		[Ordinal(3)]  [RED("uiLayerName")] public CName UiLayerName { get; set; }
-		[Ordinal(4)]  [RED("gameLayerName")] public CName GameLayerName { get; set; }
-		[Ordinal(5)]  [RED("platformLayerName")] public CName PlatformLayerName { get; set; }
-		[Ordinal(6)]  [RED("backgroundLayerName")] public CName BackgroundLayerName { get; set; }
-		[Ordinal(7)]  [RED("jumpKey")] public CName JumpKey { get; set; }
-		[Ordinal(8)]  [RED("goDownKey")] public CName GoDownKey { get; set; }
-		[Ordinal(9)]  [RED("goLeftKey")] public CName GoLeftKey { get; set; }
-		[Ordinal(10)]  [RED("goRightKey")] public CName GoRightKey { get; set; }
-		[Ordinal(11)]  [RED("lieDownKey")] public CName LieDownKey { get; set; }
-		[Ordinal(12)]  [RED("shootKey")] public CName ShootKey { get; set; }
-		[Ordinal(13)]  [RED("submitKey")] public CName SubmitKey { get; set; }
-		[Ordinal(14)]  [RED("axisDeadZone")] public CFloat AxisDeadZone { get; set; }
-		[Ordinal(15)]  [RED("moveXAxis")] public CName MoveXAxis { get; set; }
-		[Ordinal(16)]  [RED("moveYAxis")] public CName MoveYAxis { get; set; }
-		[Ordinal(17)]  [RED("shootTriggerName")] public CName ShootTriggerName { get; set; }
+		[Ordinal(3)]  [RED("jumpKey")] public CName JumpKey { get; set; }
+		[Ordinal(4)]  [RED("goDownKey")] public CName GoDownKey { get; set; }
+		[Ordinal(5)]  [RED("goLeftKey")] public CName GoLeftKey { get; set; }
+		[Ordinal(6)]  [RED("goRightKey")] public CName GoRightKey { get; set; }
+		[Ordinal(7)]  [RED("lieDownKey")] public CName LieDownKey { get; set; }
+		[Ordinal(8)]  [RED("shootKey")] public CName ShootKey { get; set; }
+		[Ordinal(9)]  [RED("submitKey")] public CName SubmitKey { get; set; }
+		[Ordinal(10)]  [RED("axisDeadZone")] public CFloat AxisDeadZone { get; set; }
+		[Ordinal(11)]  [RED("moveXAxis")] public CName MoveXAxis { get; set; }
+		[Ordinal(12)]  [RED("moveYAxis")] public CName MoveYAxis { get; set; }
+		[Ordinal(13)]  [RED("shootTriggerName")] public CName ShootTriggerName { get; set; }
+		[Ordinal(14)]  [RED("uiLayerName")] public CName UiLayerName { get; set; }
+		[Ordinal(15)]  [RED("gameLayerName")] public CName GameLayerName { get; set; }
+		[Ordinal(16)]  [RED("platformLayerName")] public CName PlatformLayerName { get; set; }
+		[Ordinal(17)]  [RED("backgroundLayerName")] public CName BackgroundLayerName { get; set; }
 		[Ordinal(18)]  [RED("tileLibraryName")] public CName TileLibraryName { get; set; }
 		[Ordinal(19)]  [RED("platformLibraryName")] public CName PlatformLibraryName { get; set; }
 		[Ordinal(20)]  [RED("platformTexturePartName")] public CName PlatformTexturePartName { get; set; }

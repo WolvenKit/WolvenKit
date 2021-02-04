@@ -16,8 +16,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(5)]  [RED("queuePriority")] public CInt32 QueuePriority { get; set; }
 		[Ordinal(6)]  [RED("sortingPriority")] public CInt32 SortingPriority { get; set; }
 		[Ordinal(7)]  [RED("tutorialActionCount")] public CInt32 TutorialActionCount { get; set; }
-		[Ordinal(8)]  [RED("enableHoldAnimation")] public CBool EnableHoldAnimation { get; set; }
-		[Ordinal(9)]  [RED("holdIndicationType")] public CEnum<inkInputHintHoldIndicationType> HoldIndicationType { get; set; }
+		[Ordinal(8)]  [RED("holdIndicationType")] public CEnum<inkInputHintHoldIndicationType> HoldIndicationType { get; set; }
+		[Ordinal(9)]  [RED("enableHoldAnimation")] public CBool EnableHoldAnimation { get; set; }
 
 		public gameuiInputHintData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

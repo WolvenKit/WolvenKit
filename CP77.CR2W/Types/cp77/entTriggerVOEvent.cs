@@ -8,10 +8,10 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entTriggerVOEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("triggerBaseName")] public CName TriggerBaseName { get; set; }
-		[Ordinal(1)]  [RED("triggerVariationIndex")] public CUInt32 TriggerVariationIndex { get; set; }
-		[Ordinal(2)]  [RED("triggerVariationNumber")] public CUInt32 TriggerVariationNumber { get; set; }
-		[Ordinal(3)]  [RED("debugInitialContext")] public CName DebugInitialContext { get; set; }
+		[Ordinal(0)]  [RED("debugInitialContext")] public CName DebugInitialContext { get; set; }
+		[Ordinal(1)]  [RED("triggerBaseName")] public CName TriggerBaseName { get; set; }
+		[Ordinal(2)]  [RED("triggerVariationIndex")] public CUInt32 TriggerVariationIndex { get; set; }
+		[Ordinal(3)]  [RED("triggerVariationNumber")] public CUInt32 TriggerVariationNumber { get; set; }
 		[Ordinal(4)]  [RED("answeringEntityIDHash")] public CUInt64 AnsweringEntityIDHash { get; set; }
 		[Ordinal(5)]  [RED("ignoreGlobalVoLimitCheck")] public CBool IgnoreGlobalVoLimitCheck { get; set; }
 		[Ordinal(6)]  [RED("overridingVoContext")] public CEnum<locVoiceoverContext> OverridingVoContext { get; set; }

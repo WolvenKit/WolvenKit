@@ -11,9 +11,9 @@ namespace CP77.CR2W.Types
 		[Ordinal(0)]  [RED("buildProxy")] public CBool BuildProxy { get; set; }
 		[Ordinal(1)]  [RED("type")] public CEnum<worldProxyMeshBuildType> Type { get; set; }
 		[Ordinal(2)]  [RED("usedMesh")] public CEnum<worldProxyMeshOutputType> UsedMesh { get; set; }
-		[Ordinal(3)]  [RED("polycount")] public CUInt32 Polycount { get; set; }
-		[Ordinal(4)]  [RED("polycountPercentage")] public CFloat PolycountPercentage { get; set; }
-		[Ordinal(5)]  [RED("resolution")] public CUInt32 Resolution { get; set; }
+		[Ordinal(3)]  [RED("resolution")] public CUInt32 Resolution { get; set; }
+		[Ordinal(4)]  [RED("polycount")] public CUInt32 Polycount { get; set; }
+		[Ordinal(5)]  [RED("polycountPercentage")] public CFloat PolycountPercentage { get; set; }
 		[Ordinal(6)]  [RED("coreAxis")] public CEnum<worldProxyCoreAxis> CoreAxis { get; set; }
 		[Ordinal(7)]  [RED("groupingNormals")] public CEnum<worldProxyGroupingNormals> GroupingNormals { get; set; }
 		[Ordinal(8)]  [RED("forceSurfaceFlattening")] public CBool ForceSurfaceFlattening { get; set; }

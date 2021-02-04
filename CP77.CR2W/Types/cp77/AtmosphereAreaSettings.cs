@@ -11,8 +11,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(0)]  [RED("skydomeColor")] public curveData<HDRColor> SkydomeColor { get; set; }
 		[Ordinal(1)]  [RED("skylightColor")] public curveData<HDRColor> SkylightColor { get; set; }
 		[Ordinal(2)]  [RED("groundReflectance")] public curveData<HDRColor> GroundReflectance { get; set; }
-		[Ordinal(3)]  [RED("horizonMinZ")] public curveData<CFloat> HorizonMinZ { get; set; }
-		[Ordinal(4)]  [RED("sunMinZ")] public curveData<CFloat> SunMinZ { get; set; }
+		[Ordinal(3)]  [RED("sunMinZ")] public curveData<CFloat> SunMinZ { get; set; }
+		[Ordinal(4)]  [RED("horizonMinZ")] public curveData<CFloat> HorizonMinZ { get; set; }
 		[Ordinal(5)]  [RED("horizonFalloff")] public curveData<CFloat> HorizonFalloff { get; set; }
 		[Ordinal(6)]  [RED("turbidity")] public curveData<CFloat> Turbidity { get; set; }
 		[Ordinal(7)]  [RED("lutTurbidity")] public curveData<CFloat> LutTurbidity { get; set; }
@@ -43,15 +43,15 @@ namespace CP77.CR2W.Types
 		[Ordinal(32)]  [RED("cloudSunShadowFaloff")] public curveData<CFloat> CloudSunShadowFaloff { get; set; }
 		[Ordinal(33)]  [RED("cloudSunScattering")] public curveData<CFloat> CloudSunScattering { get; set; }
 		[Ordinal(34)]  [RED("cloudMoonScattering")] public curveData<CFloat> CloudMoonScattering { get; set; }
-		[Ordinal(35)]  [RED("cloudCirrusOpacity")] public curveData<CFloat> CloudCirrusOpacity { get; set; }
-		[Ordinal(36)]  [RED("cloudAmbientIntensity")] public curveData<CFloat> CloudAmbientIntensity { get; set; }
+		[Ordinal(35)]  [RED("cloudAmbientIntensity")] public curveData<CFloat> CloudAmbientIntensity { get; set; }
+		[Ordinal(36)]  [RED("cloudCirrusOpacity")] public curveData<CFloat> CloudCirrusOpacity { get; set; }
 		[Ordinal(37)]  [RED("cloudCirrusScale")] public curveData<CFloat> CloudCirrusScale { get; set; }
 		[Ordinal(38)]  [RED("cloudCirrusAltitude")] public curveData<CFloat> CloudCirrusAltitude { get; set; }
 		[Ordinal(39)]  [RED("cloudCirrusTexture")] public rRef<CBitmapTexture> CloudCirrusTexture { get; set; }
 		[Ordinal(40)]  [RED("volWeatherTexture")] public rRef<CBitmapTexture> VolWeatherTexture { get; set; }
 		[Ordinal(41)]  [RED("volNoiseTexture")] public rRef<CBitmapTexture> VolNoiseTexture { get; set; }
-		[Ordinal(42)]  [RED("volCoverage")] public curveData<CFloat> VolCoverage { get; set; }
-		[Ordinal(43)]  [RED("volHorizonCoverage")] public CFloat VolHorizonCoverage { get; set; }
+		[Ordinal(42)]  [RED("volHorizonCoverage")] public CFloat VolHorizonCoverage { get; set; }
+		[Ordinal(43)]  [RED("volCoverage")] public curveData<CFloat> VolCoverage { get; set; }
 		[Ordinal(44)]  [RED("volDensity")] public curveData<CFloat> VolDensity { get; set; }
 		[Ordinal(45)]  [RED("cloudsBottom")] public CFloat CloudsBottom { get; set; }
 		[Ordinal(46)]  [RED("cloudsTop")] public CFloat CloudsTop { get; set; }
@@ -62,11 +62,11 @@ namespace CP77.CR2W.Types
 		[Ordinal(51)]  [RED("shadowIntensity")] public curveData<CFloat> ShadowIntensity { get; set; }
 		[Ordinal(52)]  [RED("worldShadowIntensity")] public curveData<CFloat> WorldShadowIntensity { get; set; }
 		[Ordinal(53)]  [RED("ambientIntensity")] public curveData<CFloat> AmbientIntensity { get; set; }
-		[Ordinal(54)]  [RED("inScatter")] public CFloat InScatter { get; set; }
-		[Ordinal(55)]  [RED("outScatter")] public CFloat OutScatter { get; set; }
-		[Ordinal(56)]  [RED("inVsOutScatter")] public CFloat InVsOutScatter { get; set; }
-		[Ordinal(57)]  [RED("silverLining")] public CFloat SilverLining { get; set; }
-		[Ordinal(58)]  [RED("ambientOutscatter")] public curveData<CFloat> AmbientOutscatter { get; set; }
+		[Ordinal(54)]  [RED("ambientOutscatter")] public curveData<CFloat> AmbientOutscatter { get; set; }
+		[Ordinal(55)]  [RED("inScatter")] public CFloat InScatter { get; set; }
+		[Ordinal(56)]  [RED("outScatter")] public CFloat OutScatter { get; set; }
+		[Ordinal(57)]  [RED("inVsOutScatter")] public CFloat InVsOutScatter { get; set; }
+		[Ordinal(58)]  [RED("silverLining")] public CFloat SilverLining { get; set; }
 		[Ordinal(59)]  [RED("volCoverageWindInfluence")] public CFloat VolCoverageWindInfluence { get; set; }
 		[Ordinal(60)]  [RED("volNoiseWindInfluence")] public CFloat VolNoiseWindInfluence { get; set; }
 		[Ordinal(61)]  [RED("volDetailWindInfluence")] public CFloat VolDetailWindInfluence { get; set; }

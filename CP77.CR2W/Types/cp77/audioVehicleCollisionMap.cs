@@ -9,11 +9,11 @@ namespace CP77.CR2W.Types
 	public class audioVehicleCollisionMap : audioAudioMetadata
 	{
 		[Ordinal(0)]  [RED("minImpactVelocityThreshold")] public CFloat MinImpactVelocityThreshold { get; set; }
-		[Ordinal(1)]  [RED("scrapingMinTangentialVelocityThreshold")] public CFloat ScrapingMinTangentialVelocityThreshold { get; set; }
-		[Ordinal(2)]  [RED("scrapingMaxCollisionCooldown")] public CFloat ScrapingMaxCollisionCooldown { get; set; }
-		[Ordinal(3)]  [RED("scrapingMinVehicleUpCollisionContactAngle")] public CFloat ScrapingMinVehicleUpCollisionContactAngle { get; set; }
-		[Ordinal(4)]  [RED("minRumbleVelocityThreshold")] public CFloat MinRumbleVelocityThreshold { get; set; }
-		[Ordinal(5)]  [RED("rumbleCooldown")] public CFloat RumbleCooldown { get; set; }
+		[Ordinal(1)]  [RED("minRumbleVelocityThreshold")] public CFloat MinRumbleVelocityThreshold { get; set; }
+		[Ordinal(2)]  [RED("rumbleCooldown")] public CFloat RumbleCooldown { get; set; }
+		[Ordinal(3)]  [RED("scrapingMinTangentialVelocityThreshold")] public CFloat ScrapingMinTangentialVelocityThreshold { get; set; }
+		[Ordinal(4)]  [RED("scrapingMaxCollisionCooldown")] public CFloat ScrapingMaxCollisionCooldown { get; set; }
+		[Ordinal(5)]  [RED("scrapingMinVehicleUpCollisionContactAngle")] public CFloat ScrapingMinVehicleUpCollisionContactAngle { get; set; }
 		[Ordinal(6)]  [RED("useScrapingMinVehicleUpCollisionContactAngle")] public CBool UseScrapingMinVehicleUpCollisionContactAngle { get; set; }
 		[Ordinal(7)]  [RED("explosionEvent")] public CName ExplosionEvent { get; set; }
 		[Ordinal(8)]  [RED("bigFireEvent")] public CName BigFireEvent { get; set; }

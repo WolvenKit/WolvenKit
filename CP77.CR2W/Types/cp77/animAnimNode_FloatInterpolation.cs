@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class animAnimNode_FloatInterpolation : animAnimNode_FloatValue
 	{
 		[Ordinal(0)]  [RED("x1")] public CFloat X1 { get; set; }
-		[Ordinal(1)]  [RED("y1")] public CFloat Y1 { get; set; }
-		[Ordinal(2)]  [RED("x2")] public CFloat X2 { get; set; }
+		[Ordinal(1)]  [RED("x2")] public CFloat X2 { get; set; }
+		[Ordinal(2)]  [RED("y1")] public CFloat Y1 { get; set; }
 		[Ordinal(3)]  [RED("y2")] public CFloat Y2 { get; set; }
 		[Ordinal(4)]  [RED("interpolationType")] public CEnum<animEAnimGraphMathInterpolation> InterpolationType { get; set; }
 		[Ordinal(5)]  [RED("inputNode")] public animFloatLink InputNode { get; set; }

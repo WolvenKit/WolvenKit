@@ -16,8 +16,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(5)]  [RED("evBlend")] public curveData<CFloat> EvBlend { get; set; }
 		[Ordinal(6)]  [RED("exposureIBL")] public curveData<CFloat> ExposureIBL { get; set; }
 		[Ordinal(7)]  [RED("luminanceIBL")] public curveData<CFloat> LuminanceIBL { get; set; }
-		[Ordinal(8)]  [RED("exposureScale")] public curveData<CFloat> ExposureScale { get; set; }
-		[Ordinal(9)]  [RED("curveRampIBL")] public CFloat CurveRampIBL { get; set; }
+		[Ordinal(8)]  [RED("curveRampIBL")] public CFloat CurveRampIBL { get; set; }
+		[Ordinal(9)]  [RED("exposureScale")] public curveData<CFloat> ExposureScale { get; set; }
 
 		public EmissiveColorSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

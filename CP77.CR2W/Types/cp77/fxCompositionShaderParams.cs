@@ -22,11 +22,9 @@ namespace CP77.CR2W.Types
 		[Ordinal(11)]  [RED("shadowDistance")] public Vector2 ShadowDistance { get; set; }
 		[Ordinal(12)]  [RED("shadowIntensity")] public CFloat ShadowIntensity { get; set; }
 		[Ordinal(13)]  [RED("shadowRadius")] public CFloat ShadowRadius { get; set; }
-
-        [Ordinal(14)] [RED("glowIntensity")] public CFloat GlowIntensity { get; set; }
+		[Ordinal(14)]  [RED("glowIntensity")] public CFloat GlowIntensity { get; set; }
 		[Ordinal(15)]  [RED("glowTresholdStart")] public CFloat GlowTresholdStart { get; set; }
 		[Ordinal(16)]  [RED("glowTresholdEnd")] public CFloat GlowTresholdEnd { get; set; }
-		
 		[Ordinal(17)]  [RED("glowBlurRadius")] public CFloat GlowBlurRadius { get; set; }
 		[Ordinal(18)]  [RED("vignetteStart")] public CFloat VignetteStart { get; set; }
 		[Ordinal(19)]  [RED("vignetteEnd")] public CFloat VignetteEnd { get; set; }

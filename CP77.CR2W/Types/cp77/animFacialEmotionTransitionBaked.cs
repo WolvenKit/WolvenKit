@@ -12,13 +12,13 @@ namespace CP77.CR2W.Types
 		[Ordinal(1)]  [RED("facialKey_Male")] public CName FacialKey_Male { get; set; }
 		[Ordinal(2)]  [RED("toIdleFemale")] public CName ToIdleFemale { get; set; }
 		[Ordinal(3)]  [RED("facialKey_Female")] public CName FacialKey_Female { get; set; }
-		[Ordinal(4)]  [RED("customTransitionAnim")] public CName CustomTransitionAnim { get; set; }
-		[Ordinal(5)]  [RED("transitionType")] public CEnum<animFacialEmotionTransitionType> TransitionType { get; set; }
-		[Ordinal(6)]  [RED("toIdleWeight")] public CFloat ToIdleWeight { get; set; }
-		[Ordinal(7)]  [RED("toIdleNeckWeight")] public CFloat ToIdleNeckWeight { get; set; }
-		[Ordinal(8)]  [RED("facialKeyWeight")] public CFloat FacialKeyWeight { get; set; }
-		[Ordinal(9)]  [RED("transitionDuration")] public CFloat TransitionDuration { get; set; }
-		[Ordinal(10)]  [RED("timeScale")] public CFloat TimeScale { get; set; }
+		[Ordinal(4)]  [RED("transitionType")] public CEnum<animFacialEmotionTransitionType> TransitionType { get; set; }
+		[Ordinal(5)]  [RED("transitionDuration")] public CFloat TransitionDuration { get; set; }
+		[Ordinal(6)]  [RED("timeScale")] public CFloat TimeScale { get; set; }
+		[Ordinal(7)]  [RED("toIdleWeight")] public CFloat ToIdleWeight { get; set; }
+		[Ordinal(8)]  [RED("toIdleNeckWeight")] public CFloat ToIdleNeckWeight { get; set; }
+		[Ordinal(9)]  [RED("facialKeyWeight")] public CFloat FacialKeyWeight { get; set; }
+		[Ordinal(10)]  [RED("customTransitionAnim")] public CName CustomTransitionAnim { get; set; }
 
 		public animFacialEmotionTransitionBaked(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class audioVehicleEmitterPositionData : CVariable
 	{
 		[Ordinal(0)]  [RED("engineEmitterPosition")] public Vector3 EngineEmitterPosition { get; set; }
-		[Ordinal(1)]  [RED("centralEmitterPosition")] public Vector3 CentralEmitterPosition { get; set; }
-		[Ordinal(2)]  [RED("exaustEmitterPosition")] public Vector3 ExaustEmitterPosition { get; set; }
+		[Ordinal(1)]  [RED("exaustEmitterPosition")] public Vector3 ExaustEmitterPosition { get; set; }
+		[Ordinal(2)]  [RED("centralEmitterPosition")] public Vector3 CentralEmitterPosition { get; set; }
 		[Ordinal(3)]  [RED("hoodEmitterPosition")] public Vector3 HoodEmitterPosition { get; set; }
 		[Ordinal(4)]  [RED("trunkEmitterPosition")] public Vector3 TrunkEmitterPosition { get; set; }
 		[Ordinal(5)]  [RED("wheel1Position")] public Vector3 Wheel1Position { get; set; }

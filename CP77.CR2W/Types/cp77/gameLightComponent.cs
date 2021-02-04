@@ -9,10 +9,10 @@ namespace CP77.CR2W.Types
 	public class gameLightComponent : entLightComponent
 	{
 		[Ordinal(0)]  [RED("emissiveOnly")] public CBool EmissiveOnly { get; set; }
-		[Ordinal(1)]  [RED("turnOnByDefault")] public CBool TurnOnByDefault { get; set; }
-		[Ordinal(2)]  [RED("materialZone")] public CEnum<gameEMaterialZone> MaterialZone { get; set; }
-		[Ordinal(3)]  [RED("meshBrokenAppearance")] public CName MeshBrokenAppearance { get; set; }
-		[Ordinal(4)]  [RED("onStrength")] public CFloat OnStrength { get; set; }
+		[Ordinal(1)]  [RED("materialZone")] public CEnum<gameEMaterialZone> MaterialZone { get; set; }
+		[Ordinal(2)]  [RED("meshBrokenAppearance")] public CName MeshBrokenAppearance { get; set; }
+		[Ordinal(3)]  [RED("onStrength")] public CFloat OnStrength { get; set; }
+		[Ordinal(4)]  [RED("turnOnByDefault")] public CBool TurnOnByDefault { get; set; }
 		[Ordinal(5)]  [RED("turnOnTime")] public CFloat TurnOnTime { get; set; }
 		[Ordinal(6)]  [RED("turnOnCurve")] public CName TurnOnCurve { get; set; }
 		[Ordinal(7)]  [RED("turnOffTime")] public CFloat TurnOffTime { get; set; }

@@ -8,10 +8,10 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_OrientConstraint : animAnimNode_OnePoseInput
 	{
-		[Ordinal(0)]  [RED("inputTransforms")] public CArray<CHandle<animAnimNodeSourceChannel_WeightedQuat>> InputTransforms { get; set; }
-		[Ordinal(1)]  [RED("areSourceChannelsResaved")] public CBool AreSourceChannelsResaved { get; set; }
-		[Ordinal(2)]  [RED("inputWeightedTransforms")] public CArray<animAnimNode_OrientConstraint_WeightedTransform> InputWeightedTransforms { get; set; }
-		[Ordinal(3)]  [RED("preprocessedWeights")] public CArray<CFloat> PreprocessedWeights { get; set; }
+		[Ordinal(0)]  [RED("areSourceChannelsResaved")] public CBool AreSourceChannelsResaved { get; set; }
+		[Ordinal(1)]  [RED("inputTransforms")] public CArray<CHandle<animAnimNodeSourceChannel_WeightedQuat>> InputTransforms { get; set; }
+		[Ordinal(2)]  [RED("preprocessedWeights")] public CArray<CFloat> PreprocessedWeights { get; set; }
+		[Ordinal(3)]  [RED("inputWeightedTransforms")] public CArray<animAnimNode_OrientConstraint_WeightedTransform> InputWeightedTransforms { get; set; }
 		[Ordinal(4)]  [RED("transformIndex")] public animTransformIndex TransformIndex { get; set; }
 		[Ordinal(5)]  [RED("weightMode")] public CEnum<animConstraintWeightMode> WeightMode { get; set; }
 		[Ordinal(6)]  [RED("weight")] public CFloat Weight { get; set; }

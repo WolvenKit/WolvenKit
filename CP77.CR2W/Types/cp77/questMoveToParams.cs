@@ -17,11 +17,11 @@ namespace CP77.CR2W.Types
 		[Ordinal(6)]  [RED("useStop")] public CBool UseStop { get; set; }
 		[Ordinal(7)]  [RED("desiredDistanceFromTarget")] public CFloat DesiredDistanceFromTarget { get; set; }
 		[Ordinal(8)]  [RED("finishWhenDestinationReached")] public CBool FinishWhenDestinationReached { get; set; }
-		[Ordinal(9)]  [RED("executeWhileDespawned")] public CBool ExecuteWhileDespawned { get; set; }
-		[Ordinal(10)]  [RED("removeAfterCombat")] public CBool RemoveAfterCombat { get; set; }
-		[Ordinal(11)]  [RED("ignoreInCombat")] public CBool IgnoreInCombat { get; set; }
-		[Ordinal(12)]  [RED("alwaysUseStealth")] public CBool AlwaysUseStealth { get; set; }
-		[Ordinal(13)]  [RED("repeatCommandOnInterrupt")] public CBool RepeatCommandOnInterrupt { get; set; }
+		[Ordinal(9)]  [RED("repeatCommandOnInterrupt")] public CBool RepeatCommandOnInterrupt { get; set; }
+		[Ordinal(10)]  [RED("executeWhileDespawned")] public CBool ExecuteWhileDespawned { get; set; }
+		[Ordinal(11)]  [RED("removeAfterCombat")] public CBool RemoveAfterCombat { get; set; }
+		[Ordinal(12)]  [RED("ignoreInCombat")] public CBool IgnoreInCombat { get; set; }
+		[Ordinal(13)]  [RED("alwaysUseStealth")] public CBool AlwaysUseStealth { get; set; }
 
 		public questMoveToParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

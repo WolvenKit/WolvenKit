@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class workIContainerEntry : workIEntry
 	{
-		[Ordinal(0)]  [RED("idleAnim")] public CName IdleAnim { get; set; }
-		[Ordinal(1)]  [RED("list")] public CArray<CHandle<workIEntry>> List { get; set; }
+		[Ordinal(0)]  [RED("list")] public CArray<CHandle<workIEntry>> List { get; set; }
+		[Ordinal(1)]  [RED("idleAnim")] public CName IdleAnim { get; set; }
 
 		public workIContainerEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

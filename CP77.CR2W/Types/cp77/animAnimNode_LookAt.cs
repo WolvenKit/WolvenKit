@@ -10,9 +10,9 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("transform")] public animTransformIndex Transform { get; set; }
 		[Ordinal(1)]  [RED("forwardAxis")] public CEnum<animAxis> ForwardAxis { get; set; }
-		[Ordinal(2)]  [RED("limitAngle")] public CFloat LimitAngle { get; set; }
+		[Ordinal(2)]  [RED("useLimits")] public CBool UseLimits { get; set; }
 		[Ordinal(3)]  [RED("limitAxis")] public CEnum<animAxis> LimitAxis { get; set; }
-		[Ordinal(4)]  [RED("useLimits")] public CBool UseLimits { get; set; }
+		[Ordinal(4)]  [RED("limitAngle")] public CFloat LimitAngle { get; set; }
 		[Ordinal(5)]  [RED("targetNode")] public animVectorLink TargetNode { get; set; }
 		[Ordinal(6)]  [RED("weightNode")] public animFloatLink WeightNode { get; set; }
 

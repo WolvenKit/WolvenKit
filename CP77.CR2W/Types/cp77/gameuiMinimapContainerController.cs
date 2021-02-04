@@ -16,11 +16,11 @@ namespace CP77.CR2W.Types
 		[Ordinal(5)]  [RED("visionRadiusExterior")] public CFloat VisionRadiusExterior { get; set; }
 		[Ordinal(6)]  [RED("clampedMappinContainer")] public inkCompoundWidgetReference ClampedMappinContainer { get; set; }
 		[Ordinal(7)]  [RED("unclampedMappinContainer")] public inkCompoundWidgetReference UnclampedMappinContainer { get; set; }
-		[Ordinal(8)]  [RED("worldGeometryCache")] public inkCacheWidgetReference WorldGeometryCache { get; set; }
-		[Ordinal(9)]  [RED("worldGeometryContainer")] public inkCanvasWidgetReference WorldGeometryContainer { get; set; }
-		[Ordinal(10)]  [RED("playerIconWidget")] public inkWidgetReference PlayerIconWidget { get; set; }
-		[Ordinal(11)]  [RED("compassWidget")] public inkWidgetReference CompassWidget { get; set; }
-		[Ordinal(12)]  [RED("maskWidget")] public inkMaskWidgetReference MaskWidget { get; set; }
+		[Ordinal(8)]  [RED("maskWidget")] public inkMaskWidgetReference MaskWidget { get; set; }
+		[Ordinal(9)]  [RED("playerIconWidget")] public inkWidgetReference PlayerIconWidget { get; set; }
+		[Ordinal(10)]  [RED("compassWidget")] public inkWidgetReference CompassWidget { get; set; }
+		[Ordinal(11)]  [RED("worldGeometryContainer")] public inkCanvasWidgetReference WorldGeometryContainer { get; set; }
+		[Ordinal(12)]  [RED("worldGeometryCache")] public inkCacheWidgetReference WorldGeometryCache { get; set; }
 		[Ordinal(13)]  [RED("geometryLibraryID")] public CName GeometryLibraryID { get; set; }
 		[Ordinal(14)]  [RED("timeDisplayWidget")] public inkCompoundWidgetReference TimeDisplayWidget { get; set; }
 

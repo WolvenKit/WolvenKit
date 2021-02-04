@@ -15,8 +15,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(4)]  [RED("dynamicParams")] public CArray<CName> DynamicParams { get; set; }
 		[Ordinal(5)]  [RED("event")] public audioAudEventStruct Event { get; set; }
 		[Ordinal(6)]  [RED("ambientUniqueName")] public CName AmbientUniqueName { get; set; }
-		[Ordinal(7)]  [RED("isMusic")] public CBool IsMusic { get; set; }
-		[Ordinal(8)]  [RED("emitter")] public CName Emitter { get; set; }
+		[Ordinal(7)]  [RED("emitter")] public CName Emitter { get; set; }
+		[Ordinal(8)]  [RED("isMusic")] public CBool IsMusic { get; set; }
 		[Ordinal(9)]  [RED("objectRef")] public gameEntityReference ObjectRef { get; set; }
 		[Ordinal(10)]  [RED("isPlayer")] public CBool IsPlayer { get; set; }
 

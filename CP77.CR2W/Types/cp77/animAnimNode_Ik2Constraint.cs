@@ -18,9 +18,9 @@ namespace CP77.CR2W.Types
 		[Ordinal(7)]  [RED("twistValue")] public CFloat TwistValue { get; set; }
 		[Ordinal(8)]  [RED("weight")] public CFloat Weight { get; set; }
 		[Ordinal(9)]  [RED("weightFloatTrack")] public animNamedTrackIndex WeightFloatTrack { get; set; }
-		[Ordinal(10)]  [RED("maxHingeAngle")] public CFloat MaxHingeAngle { get; set; }
-		[Ordinal(11)]  [RED("weightNode")] public animFloatLink WeightNode { get; set; }
-		[Ordinal(12)]  [RED("twistNode")] public animFloatLink TwistNode { get; set; }
+		[Ordinal(10)]  [RED("weightNode")] public animFloatLink WeightNode { get; set; }
+		[Ordinal(11)]  [RED("twistNode")] public animFloatLink TwistNode { get; set; }
+		[Ordinal(12)]  [RED("maxHingeAngle")] public CFloat MaxHingeAngle { get; set; }
 
 		public animAnimNode_Ik2Constraint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

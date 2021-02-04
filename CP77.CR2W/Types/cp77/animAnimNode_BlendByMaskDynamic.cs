@@ -12,8 +12,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(1)]  [RED("blend")] public animPoseLink Blend { get; set; }
 		[Ordinal(2)]  [RED("mask")] public animIntLink Mask { get; set; }
 		[Ordinal(3)]  [RED("weight")] public animFloatLink Weight { get; set; }
-		[Ordinal(4)]  [RED("syncMethod")] public CHandle<animISyncMethod> SyncMethod { get; set; }
-		[Ordinal(5)]  [RED("masks")] public CArray<CName> Masks { get; set; }
+		[Ordinal(4)]  [RED("masks")] public CArray<CName> Masks { get; set; }
+		[Ordinal(5)]  [RED("syncMethod")] public CHandle<animISyncMethod> SyncMethod { get; set; }
 
 		public animAnimNode_BlendByMaskDynamic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

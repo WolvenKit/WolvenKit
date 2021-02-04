@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameLootContainerBase : gameObject
 	{
-		[Ordinal(0)]  [RED("lootTables")] public CArray<TweakDBID> LootTables { get; set; }
-		[Ordinal(1)]  [RED("useAreaLoot")] public CBool UseAreaLoot { get; set; }
+		[Ordinal(0)]  [RED("useAreaLoot")] public CBool UseAreaLoot { get; set; }
+		[Ordinal(1)]  [RED("lootTables")] public CArray<TweakDBID> LootTables { get; set; }
 		[Ordinal(2)]  [RED("contentAssignment")] public TweakDBID ContentAssignment { get; set; }
 		[Ordinal(3)]  [RED("isIllegal")] public CBool IsIllegal { get; set; }
 

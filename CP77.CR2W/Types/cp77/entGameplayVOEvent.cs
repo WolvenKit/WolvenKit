@@ -8,12 +8,12 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entGameplayVOEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("voContext")] public CName VoContext { get; set; }
-		[Ordinal(1)]  [RED("isQuest")] public CBool IsQuest { get; set; }
-		[Ordinal(2)]  [RED("ignoreFrustumCheck")] public CBool IgnoreFrustumCheck { get; set; }
-		[Ordinal(3)]  [RED("ignoreDistanceCheck")] public CBool IgnoreDistanceCheck { get; set; }
-		[Ordinal(4)]  [RED("ignoreGlobalVoLimitCheck")] public CBool IgnoreGlobalVoLimitCheck { get; set; }
-		[Ordinal(5)]  [RED("debugInitialContext")] public CName DebugInitialContext { get; set; }
+		[Ordinal(0)]  [RED("debugInitialContext")] public CName DebugInitialContext { get; set; }
+		[Ordinal(1)]  [RED("voContext")] public CName VoContext { get; set; }
+		[Ordinal(2)]  [RED("isQuest")] public CBool IsQuest { get; set; }
+		[Ordinal(3)]  [RED("ignoreFrustumCheck")] public CBool IgnoreFrustumCheck { get; set; }
+		[Ordinal(4)]  [RED("ignoreDistanceCheck")] public CBool IgnoreDistanceCheck { get; set; }
+		[Ordinal(5)]  [RED("ignoreGlobalVoLimitCheck")] public CBool IgnoreGlobalVoLimitCheck { get; set; }
 		[Ordinal(6)]  [RED("answeringEntityId")] public entEntityID AnsweringEntityId { get; set; }
 		[Ordinal(7)]  [RED("overridingVoiceoverContext")] public CEnum<locVoiceoverContext> OverridingVoiceoverContext { get; set; }
 		[Ordinal(8)]  [RED("overridingVoiceoverExpression")] public CEnum<locVoiceoverExpression> OverridingVoiceoverExpression { get; set; }

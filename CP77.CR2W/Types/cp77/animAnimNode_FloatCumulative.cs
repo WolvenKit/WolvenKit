@@ -17,9 +17,9 @@ namespace CP77.CR2W.Types
 		[Ordinal(6)]  [RED("minValue")] public animFloatLink MinValue { get; set; }
 		[Ordinal(7)]  [RED("maxValue")] public animFloatLink MaxValue { get; set; }
 		[Ordinal(8)]  [RED("resetSpeed")] public animFloatLink ResetSpeed { get; set; }
-		[Ordinal(9)]  [RED("normalize180Input")] public animBoolLink Normalize180Input { get; set; }
-		[Ordinal(10)]  [RED("override")] public animBoolLink Override { get; set; }
-		[Ordinal(11)]  [RED("curValue")] public animFloatLink CurValue { get; set; }
+		[Ordinal(9)]  [RED("override")] public animBoolLink Override { get; set; }
+		[Ordinal(10)]  [RED("curValue")] public animFloatLink CurValue { get; set; }
+		[Ordinal(11)]  [RED("normalize180Input")] public animBoolLink Normalize180Input { get; set; }
 
 		public animAnimNode_FloatCumulative(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

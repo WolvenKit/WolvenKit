@@ -8,11 +8,11 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameMountEventData : IScriptable
 	{
-		[Ordinal(0)]  [RED("initialTransformLS")] public Transform InitialTransformLS { get; set; }
+		[Ordinal(0)]  [RED("slotName")] public CName SlotName { get; set; }
 		[Ordinal(1)]  [RED("mountParentEntityId")] public entEntityID MountParentEntityId { get; set; }
-		[Ordinal(2)]  [RED("slotName")] public CName SlotName { get; set; }
+		[Ordinal(2)]  [RED("isInstant")] public CBool IsInstant { get; set; }
 		[Ordinal(3)]  [RED("entryAnimName")] public CName EntryAnimName { get; set; }
-		[Ordinal(4)]  [RED("isInstant")] public CBool IsInstant { get; set; }
+		[Ordinal(4)]  [RED("initialTransformLS")] public Transform InitialTransformLS { get; set; }
 		[Ordinal(5)]  [RED("setEntityVisibleWhenMountFinish")] public CBool SetEntityVisibleWhenMountFinish { get; set; }
 		[Ordinal(6)]  [RED("removePitchRollRotationOnDismount")] public CBool RemovePitchRollRotationOnDismount { get; set; }
 		[Ordinal(7)]  [RED("ignoreHLS")] public CBool IgnoreHLS { get; set; }

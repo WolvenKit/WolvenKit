@@ -13,13 +13,13 @@ namespace CP77.CR2W.Types
 		[Ordinal(2)]  [RED("specularColor")] public CColor SpecularColor { get; set; }
 		[Ordinal(3)]  [RED("specularScale")] public CFloat SpecularScale { get; set; }
 		[Ordinal(4)]  [RED("specularBase")] public CFloat SpecularBase { get; set; }
-		[Ordinal(5)]  [RED("specularity")] public CFloat Specularity { get; set; }
-		[Ordinal(6)]  [RED("roughnessScale")] public CFloat RoughnessScale { get; set; }
-		[Ordinal(7)]  [RED("normalThreshold")] public CFloat NormalThreshold { get; set; }
-		[Ordinal(8)]  [RED("additiveNormals")] public CBool AdditiveNormals { get; set; }
-		[Ordinal(9)]  [RED("diffuseRandomColor0")] public CColor DiffuseRandomColor0 { get; set; }
-		[Ordinal(10)]  [RED("diffuseRandomColor1")] public CColor DiffuseRandomColor1 { get; set; }
-		[Ordinal(11)]  [RED("subUVType")] public CEnum<ERenderDynamicDecalAtlas> SubUVType { get; set; }
+		[Ordinal(5)]  [RED("roughnessScale")] public CFloat RoughnessScale { get; set; }
+		[Ordinal(6)]  [RED("normalThreshold")] public CFloat NormalThreshold { get; set; }
+		[Ordinal(7)]  [RED("additiveNormals")] public CBool AdditiveNormals { get; set; }
+		[Ordinal(8)]  [RED("diffuseRandomColor0")] public CColor DiffuseRandomColor0 { get; set; }
+		[Ordinal(9)]  [RED("diffuseRandomColor1")] public CColor DiffuseRandomColor1 { get; set; }
+		[Ordinal(10)]  [RED("subUVType")] public CEnum<ERenderDynamicDecalAtlas> SubUVType { get; set; }
+		[Ordinal(11)]  [RED("specularity")] public CFloat Specularity { get; set; }
 		[Ordinal(12)]  [RED("farZ")] public CFloat FarZ { get; set; }
 		[Ordinal(13)]  [RED("nearZ")] public CFloat NearZ { get; set; }
 		[Ordinal(14)]  [RED("size")] public CHandle<IEvaluatorFloat> Size { get; set; }

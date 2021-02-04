@@ -14,10 +14,10 @@ namespace CP77.CR2W.Types
 		[Ordinal(3)]  [RED("holdIndicatorContainerRef")] public inkCompoundWidgetReference HoldIndicatorContainerRef { get; set; }
 		[Ordinal(4)]  [RED("gamepadHoldIndicatorLibraryRef")] public inkWidgetLibraryReference GamepadHoldIndicatorLibraryRef { get; set; }
 		[Ordinal(5)]  [RED("keyboardHoldIndicatorLibraryRef")] public inkWidgetLibraryReference KeyboardHoldIndicatorLibraryRef { get; set; }
-		[Ordinal(6)]  [RED("fixedIconHeight")] public CFloat FixedIconHeight { get; set; }
-		[Ordinal(7)]  [RED("inputActionName")] public CName InputActionName { get; set; }
-		[Ordinal(8)]  [RED("supportAnimatedHoldIndicator")] public CBool SupportAnimatedHoldIndicator { get; set; }
-		[Ordinal(9)]  [RED("holdIndicationType")] public CEnum<inkInputHintHoldIndicationType> HoldIndicationType { get; set; }
+		[Ordinal(6)]  [RED("supportAnimatedHoldIndicator")] public CBool SupportAnimatedHoldIndicator { get; set; }
+		[Ordinal(7)]  [RED("holdIndicationType")] public CEnum<inkInputHintHoldIndicationType> HoldIndicationType { get; set; }
+		[Ordinal(8)]  [RED("inputActionName")] public CName InputActionName { get; set; }
+		[Ordinal(9)]  [RED("fixedIconHeight")] public CFloat FixedIconHeight { get; set; }
 
 		public inkInputDisplayController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
