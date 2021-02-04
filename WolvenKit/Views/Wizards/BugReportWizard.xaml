@@ -1,7 +1,10 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.Wizards.BugReportWizard"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:wiz="clr-namespace:WolvenKit.Views.Wizards.WizardPages.BugReportWizard">
+                   xmlns:catel="http://schemas.catelproject.com"
+                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                   xmlns:hc="https://handyorg.github.io/handycontrol"
+                   xmlns:wiz="clr-namespace:WolvenKit.Views.Wizards.WizardPages.BugReportWizard">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -12,13 +15,12 @@
         </ResourceDictionary>
 
     </catel:UserControl.Resources>
-    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="300" MinHeight="200" MaxHeight="550" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,2,5">
+    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  HorizontalAlignment="Stretch"  Margin="5,5,2,5">
 
 
         <Grid.RowDefinitions>
             <RowDefinition Height="15*"/>
             <RowDefinition Height="90*"/>
-            <RowDefinition Height="10*"/>
 
         </Grid.RowDefinitions>
 

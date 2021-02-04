@@ -39,7 +39,7 @@ namespace WolvenKit
             
             public const string OpenFile = "Application.OpenFile";
             public const string NewFile = "Application.NewFile";
-
+            public const string BugReport = "Application.BugReport";
             public const string PackMod = "Application.PackMod";
             public const string BackupMod = "Application.BackupMod";
 

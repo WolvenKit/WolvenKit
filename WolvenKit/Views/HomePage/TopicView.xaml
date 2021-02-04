@@ -12,8 +12,9 @@
     
     
     <!--Shows items in the middle of the homepage. (Welcome by default)-->
+    <hc:TransitioningContentControl TransitionMode="Fade" >
 
-    <Grid 
+        <Grid 
         hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"
         x:Name="TopicViewer"
         HorizontalAlignment="Stretch"
@@ -21,9 +22,9 @@
         Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
         Margin="35,35,35,35">
 
-        <Grid.Children>
-            <pag:WelcomePageView/>
-        </Grid.Children>
-    </Grid>
-
+            <Grid.Children>
+                <pag:WelcomePageView/>
+            </Grid.Children>
+        </Grid>
+    </hc:TransitioningContentControl>
 </catel:UserControl>

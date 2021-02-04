@@ -105,7 +105,7 @@
 
 
 
-        <Grid Margin="22,0,22,22">
+        <Grid Margin="22,0,22,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="4*"/>
@@ -127,7 +127,7 @@
                 </hc:ComboBox>
                 <TextBlock VerticalAlignment="Top" Margin="8,180,0,0" Text="What?"/>
 
-                <RichTextBox VerticalAlignment="Top" Margin="85,100,5,5" hc:InfoElement.TitleWidth="80" Height="200" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Where?">
+                <RichTextBox  Margin="85,100,5,5" hc:InfoElement.TitleWidth="80" MinHeight="200" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Where?">
 
                 </RichTextBox>
 
@@ -139,32 +139,37 @@
 
 
         <Border Grid.Column="0" Background="{DynamicResource RegionBrush}" BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" BorderThickness="0"  Margin="0,45,10,0">
+
+            <Grid>
                 <StackPanel>
                     <TextBlock FontSize="18"  HorizontalAlignment="Left" Margin="15" Text="Severity"/>
                     <hc:Divider Orientation="Horizontal" Margin="0"></hc:Divider>
-                    <StackPanel Orientation="Horizontal">
-                        <hc:Rate  Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"  ShowText="True"  Style="{StaticResource RateBaseStyle }"  AllowHalf="False" ItemMargin="3.4"    Foreground="{DynamicResource MahApps.Brushes.Accent2}" Count="5">
-                            <hc:Rate.LayoutTransform>
-                                <TransformGroup>
-                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
-                                </TransformGroup>
-                            </hc:Rate.LayoutTransform>
-
-                        </hc:Rate>
-                        <StackPanel Margin="-15,0,0,0" Orientation="Vertical">
-                            <TextBlock FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,10,0,0" Text="Frustrating"/>
-                            <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Unexpected behaviour"/>
-                            <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Unresposive"/>
-                            <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Crash"/>
-                            <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Lost Work"/>
 
 
-                        </StackPanel>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                    <hc:Rate  Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"  ShowText="True"  Style="{StaticResource RateBaseStyle }"  AllowHalf="False" ItemMargin="3.4"    Foreground="{DynamicResource MahApps.Brushes.Accent2}" Count="5">
+                        <hc:Rate.LayoutTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+                            </TransformGroup>
+                        </hc:Rate.LayoutTransform>
+
+                    </hc:Rate>
+                    <StackPanel Margin="-15,0,0,0" Orientation="Vertical">
+                        <TextBlock FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,10,0,0" Text="Frustrating"/>
+                        <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Unexpected behaviour"/>
+                        <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Unresposive"/>
+                        <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Crash"/>
+                        <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Lost Work"/>
 
 
                     </StackPanel>
 
+
                 </StackPanel>
+            </Grid>
+               
 
             </Border>
             

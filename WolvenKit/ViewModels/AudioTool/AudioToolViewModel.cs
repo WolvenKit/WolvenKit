@@ -16,15 +16,6 @@ namespace WolvenKit.ViewModels.AudioTool
     class AudioToolViewModel : ViewModelBase
     {
 
-        private Channel Channel_;
-
-        public AudioToolViewModel(Channel channel)
-        {
-            Channel_ = channel;
-     
-        }
-
-        public TimeSpan CurrentPlayerTime { get; set; }
 
 
 

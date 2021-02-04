@@ -121,7 +121,7 @@
                         <fluent:Button Header="Bug Report" 
                                        
                                         Icon="{iconPacks:Codicons Kind=Bug}"
-                                       Command="{catel:CommandManagerBinding Application.Options}" />
+                                       Command="{catel:CommandManagerBinding Application.BugReport}" />
 
                         <fluent:Button Header="About" 
                                         Icon="{iconPacks:Codicons Kind=Info}"

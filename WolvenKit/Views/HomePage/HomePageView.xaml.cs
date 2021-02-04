@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using WolvenKit.ViewModels;
+using WolvenKit.Views.AudioTool.Radio;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Wizards;
 
@@ -249,6 +251,17 @@ namespace WolvenKit.Views.HomePage
                 PageViewGrid.Children.Clear();
                 PageViewGrid.Children.Add(UserPV);
             }
+
+            RadioPlayerView rpv = new RadioPlayerView();
+            UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
+            UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
+            uchwv.Show();
+
+
+       
+
+
+
         }
 
         private void SideMenu_IntegratedItem_Selected(object sender, RoutedEventArgs e)

@@ -21,7 +21,13 @@
                 <ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Dark.Red.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Resources/Styles/CustomHandyStyles.xaml"/>
 
+              
+
             </ResourceDictionary.MergedDictionaries>
+            
+          
+
+           
 
             <SolidColorBrush x:Key="AccentColorBrush" Color="#D24726" />
         </ResourceDictionary>

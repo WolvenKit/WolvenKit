@@ -75,6 +75,9 @@ namespace WolvenKit
 
             //TODO: rename later to MainViewModel
 
+            // ---- HeadCategory : Extras
+            //-- Category : Radio
+            viewModelLocator.Register(typeof(Views.AudioTool.Radio.RadioPlayerView), typeof(ViewModels.AudioTool.Radio.RadioPlayerViewModel));
 
 
             // ---- HeadCategory : ProjectView
@@ -204,7 +207,9 @@ namespace WolvenKit
 
             ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark.Red");
             HandyControl.Tools.ThemeManager.Current.SetCurrentValue(HandyControl.Tools.ThemeManager.ApplicationThemeProperty, HandyControl.Tools.ApplicationTheme.Dark);
- 
+            HandyControl.Tools.ConfigHelper.Instance.SetLang("en");
+            HandyControl.Controls.ThemeResources tr = new HandyControl.Controls.ThemeResources(); tr.AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3");
+
             Log.Info("Calling base.OnStartup");
 
             Fmod.SetLibraryLocation("fmod.dll");
