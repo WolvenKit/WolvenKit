@@ -870,8 +870,14 @@ namespace CP77.MSTests
                             //var compstr = "OLD,NEW";
                             var /*correctStringTable = oldst.Count == newst.Count;*/
                                 correctStringTable = oldst.All(newst.Contains);
-
+                            if (!correctStringTable)
+                            {
+                                var complement1 = oldst.Except(newst);
+                                var complement2 = newst.Except(oldst);
+                            }
                             
+
+
                             //for (int i = 0; i < Math.Max(oldst.Count, newst.Count); i++)
                             //{
                             //    string str1 = "";
