@@ -53,6 +53,7 @@ namespace CP77.CR2W
                 return false;
             Directory.CreateDirectory(outfile.Directory.FullName);
             using var fs = new FileStream(outfile.FullName, FileMode.Create, FileAccess.Write);
+            ms.Seek(0, SeekOrigin.Begin);
             ms.CopyTo(fs);
 
             #endregion
@@ -191,7 +192,7 @@ namespace CP77.CR2W
             var cr2w = TryReadCr2WFileHeaders(br);
             if (cr2w == null)
             {
-                Logger.LogString($"Failed to read cr2w aaa {cr2wFileName.FullName}", Logtype.Error);
+                Logger.LogString($"Failed to read cr2w {cr2wFileName.FullName}", Logtype.Error);
                 return false;
             }
             cr2w.FileName = cr2wFileName.FullName;
