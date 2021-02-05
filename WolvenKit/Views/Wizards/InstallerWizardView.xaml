@@ -76,6 +76,7 @@
                     FontSize="20" Grid.Row="0"
                     HorizontalAlignment="Left" 
                     VerticalAlignment="Center"
+                            TextWrapping="Wrap"
                     Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                     Margin="5,0,0,0"/>
 
@@ -86,6 +87,7 @@
                         <TextBlock 
                         FontSize="16" 
                             Margin="5,15,0,0"
+                            TextWrapping="Wrap"
 
                         Text="Created by _UserName"/>
 

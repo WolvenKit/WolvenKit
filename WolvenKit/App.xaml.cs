@@ -203,7 +203,7 @@ namespace WolvenKit
 
             var shellService = serviceLocator.ResolveType<IShellService>();
             await shellService.CreateAsync<ShellWindow>();
-
+   
 
             ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark.Red");
             HandyControl.Tools.ThemeManager.Current.SetCurrentValue(HandyControl.Tools.ThemeManager.ApplicationThemeProperty, HandyControl.Tools.ApplicationTheme.Dark);
@@ -223,6 +223,7 @@ namespace WolvenKit
 
         }
 
+      
 
         protected override void OnExit(ExitEventArgs e)
         {

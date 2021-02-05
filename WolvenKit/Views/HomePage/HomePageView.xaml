@@ -10,6 +10,7 @@
     xmlns:HPPage="clr-namespace:WolvenKit.Views.HomePage.Pages" 
     xmlns:Fluent="urn:fluent-ribbon"
     mc:Ignorable="av"
+    
     x:Class="WolvenKit.Views.HomePage.HomePageView">
 
     <catel:UserControl.Resources>
@@ -22,10 +23,13 @@
     </catel:UserControl.Resources>
 
 
-    <Grid  hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" >
-        
-        
-        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="200,0,450,0">
+    <Grid   hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  >
+
+
+        <Grid Background="Transparent" MouseLeftButtonDown="Grid_MouseLeftButtonDown_1">
+
+        </Grid>
+        <Grid VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" Margin="200,0,450,0" MouseLeftButtonDown="Grid_MouseLeftButtonDown_1">
                 <Mid:TopicView x:Name="TopicViewer"/>
 
         </Grid>
@@ -263,6 +267,7 @@
             <hc:Divider LineStrokeThickness="3" VerticalAlignment="Top" Margin="0,75,0,0" LineStroke="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
         </Grid>
         <Grid x:Name="PageViewGrid" Margin="200,0,0,0"/>
+
     </Grid>
 
 

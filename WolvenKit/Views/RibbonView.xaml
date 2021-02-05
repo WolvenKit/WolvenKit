@@ -41,7 +41,7 @@
             
             <!-- Backstage -->
             <fluent:Ribbon.Menu>
-                <fluent:Backstage x:Name="Backstage" >
+                <fluent:Backstage  x:Name="Backstage" MouseLeftButtonDown="Backstage_MouseLeftButtonDown" >
 
                     <fluent:BackstageTabControl SelectedContentMargin="0" x:Name="backstageTabControl"
                                                 
