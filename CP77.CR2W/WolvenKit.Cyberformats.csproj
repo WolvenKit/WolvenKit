@@ -14,7 +14,6 @@
 		<AssemblyVersion>1.0.6.0</AssemblyVersion>
 		<FileVersion>1.0.6.0</FileVersion>
 		<Version>1.0.6</Version>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<NoWarn>$(NoWarn);NU5104</NoWarn>
 	</PropertyGroup>
 

@@ -4,7 +4,6 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Linq;
 using CP77.CR2W.Reflection;
-using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W.Types
 {
@@ -31,7 +30,7 @@ namespace CP77.CR2W.Types
         //public string ClassName { get; set; }
 
         //[DataMember(EmitDefaultValue = false)]
-        public EImportFlags Flags { get; set; }
+        //public ushort Flags { get; set; }
         #endregion
 
         #region Methods
@@ -46,16 +45,16 @@ namespace CP77.CR2W.Types
             {
                 DepotPath = cr2w.Imports[value - 1].DepotPathStr;
 
-                //var filetype = cr2w.Imports[value - 1].Import.className;
+                var filetype = cr2w.Imports[value - 1].Import.className;
                 //ClassName = cr2w.Names[filetype].Str;
 
-                Flags = (EImportFlags)cr2w.Imports[value - 1].Import.flags;
+                //Flags = cr2w.Imports[value - 1].Import.flags;
             }
             else
             {
                 DepotPath = "";
                 //ClassName = "";
-                Flags = EImportFlags.Default;
+                //Flags = 4;
             }
         }
 
@@ -81,27 +80,27 @@ namespace CP77.CR2W.Types
                 case ushort o:
                     this.SetValueInternal(o);
                     break;
-                case ISoftAccessor soft:
-                    this.DepotPath = soft.DepotPath;
+                case ISoftAccessor cvar:
+                    this.DepotPath = cvar.DepotPath;
                     //this.ClassName = cvar.ClassName;
-                    this.Flags = soft.Flags;
+                    //this.Flags = cvar.Flags;
                     break;
             }
 
             return this;
         }
 
-        public override CVariable Copy(ICR2WCopyAction context)
+        public override CVariable Copy(CR2WCopyAction context)
         {
             var copy = (raRef<T>)base.Copy(context);
 
             //copy.ClassName = ClassName;
-            copy.Flags = Flags;
+            //copy.Flags = Flags;
             copy.DepotPath = DepotPath;
             return copy;
         }
 
-        public override string ToString() => /*ClassName + ": " +*/ $"[{Flags}]{DepotPath}";
+        public override string ToString() => /*ClassName + ": " +*/ DepotPath;
 
 
         #endregion

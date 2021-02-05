@@ -2,12 +2,14 @@ using System;
 using System.IO;
 using Catel.IO;
 using CP77.CR2W.Reflection;
+using FastMember;
+using static CP77.CR2W.Types.Enums;
 
 namespace CP77.CR2W.Types
 {
-    [REDMeta]
-	public class gameLocationResource : gameLocationResource_
-    {
+	[REDMeta]
+	public class gameLocationResource : CResource
+	{
         private const uint Version = 0;
 
 		public gameLocationResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -26,6 +28,7 @@ namespace CP77.CR2W.Types
             {
                 // unused
             }
+
         }
 
         public override void Write(BinaryWriter file)

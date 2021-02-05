@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Catel.IoC;
 using CP77.CR2W.Reflection;
-using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Types
 {
@@ -36,7 +33,7 @@ namespace CP77.CR2W.Types
         }
 
         /// <summary>
-        /// The instantiation step of the RedEngine-4 reflection.
+        /// The instantiation step of the RedEngine-3 reflection.
         /// </summary>
         /// <param name="typename">Can be either a generic type such as CUint32 - then converted with GetWKitTypeFromREDType, or a complex type like a
         /// pointer to a class, a handle to an import file, an array, a soft reference, a static reference, various buffers, an enum.</param>
@@ -153,13 +150,6 @@ namespace CP77.CR2W.Types
                         arrayacc.Elementtype = innertype;
                         return arrayacc as CVariable;
                     }
-                    case "CArrayCompressed":
-                    {
-                        var innerobject = Create(innertype, "", cr2w, null);
-                        var arrayacc = MakeArray(typeof(CArrayCompressed<>), innerobject.GetType());
-                        arrayacc.Elementtype = innertype;
-                        return arrayacc as CVariable;
-                    }
                     case "static":
                         {
                             typename = generictype;
@@ -209,10 +199,6 @@ namespace CP77.CR2W.Types
 
                 if (!cr2w.UnknownTypes.Contains(fullname))
                     cr2w.UnknownTypes.Add(fullname);
-
-                var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-                Logger.LogString($"UNKNOWN:{typename}:{varname}", Logtype.Error);
-
 
                 if (readUnknownAsBytes)
                 {

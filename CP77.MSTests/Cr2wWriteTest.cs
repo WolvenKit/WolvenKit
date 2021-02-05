@@ -1,6 +1,3 @@
-#define IS_PARALLEL
-#undef IS_PARALLEL
-
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -8,12 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Catel.IoC;
 using CP77.CR2W;
 using CP77.CR2W.Archive;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common;
-using WolvenKit.Common.Services;
 using StreamExtensions = Catel.IO.StreamExtensions;
 
 namespace CP77.MSTests
@@ -26,11 +21,6 @@ namespace CP77.MSTests
         {
             Setup(context);
         }
-
-        private const bool TEST_EXISTING = true;
-        private const bool WRITE_FAILED = true;
-
-
 
 
         #region test methods
@@ -793,26 +783,7 @@ namespace CP77.MSTests
             Directory.CreateDirectory(resultDir);
 
             // Run Test
-            List<WriteTestResult> results = new();
-            List<FileEntry> filesToTest = new();
-            var resultPath = Path.Combine(resultDir, $"write.{extension[1..]}.csv");
-            if (File.Exists(resultPath) && TEST_EXISTING)
-            {
-
-                foreach (var line in File.ReadAllLines(resultPath)
-                    .Skip(1)
-                    .Where(_ => !string.IsNullOrEmpty(_)))
-                {
-                    if (ulong.TryParse(line.Split(',').First(), out var hash))
-                    {
-                        filesToTest.AddRange(bm.Files[hash]);
-                    }
-                }
-            }
-            else
-                filesToTest = GroupedFiles[extension];
-
-            results = Write_Archive_Items(filesToTest).ToList();
+            var results = Write_Archive_Items(GroupedFiles[extension]).ToList();
 
             // Evaluate
             var successCount = results.Count(r => r.Success);
@@ -822,6 +793,7 @@ namespace CP77.MSTests
             {
                 if (results.Any(r => !r.Success))
                 {
+                    var resultPath = Path.Combine(resultDir, $"write.{extension[1..]}.csv");
                     var csv = TestResultAsCsv(results.Where(r => !r.Success));
                     File.WriteAllText(resultPath, csv);
                 }
@@ -835,8 +807,6 @@ namespace CP77.MSTests
 
             bool success = results.All(r => r.Success);
 
-            var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            sb.AppendLine(Logger.ErrorLogStr);
 
             var logPath = Path.Combine(resultDir, $"w_logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
             File.WriteAllText(logPath, sb.ToString());
@@ -854,20 +824,14 @@ namespace CP77.MSTests
         {
             var results = new ConcurrentBag<WriteTestResult>();
 
-#if IS_PARALLEL
-            Parallel.ForEach(files, file =>
-#else
             foreach (var file in files)
-#endif
+            //Parallel.ForEach(files, file =>
             {
                 try
                 {
                     if (file.Archive is not Archive ar)
-#if IS_PARALLEL
-                        return;
-#else
-                        continue;
-#endif
+                    //    return;
+                    continue;
 
                     var c = new CR2WFile {FileName = file.NameOrHash};
                     using var ms = new MemoryStream();
@@ -899,7 +863,41 @@ namespace CP77.MSTests
                             break;
                         case EFileReadErrorCodes.NoError:
 
-#region test write
+                            #region test stringtable
+
+                            var correctStringTable = true;
+
+                            //var oldst = c.StringDictionary.Values.ToList();
+                            //var newst = c.GenerateStringtable().Item1.Values.ToList();
+                            //var compstr = "OLD,NEW";
+                            // /*correctStringTable = oldst.Count == newst.Count;*/
+                            //    correctStringTable = oldst.All(newst.Contains);
+                            //if (!correctStringTable)
+                            //{
+                            //    var complement1 = oldst.Except(newst).ToList();
+                            //    var complement2 = newst.Except(oldst).ToList();
+                            //}
+
+                            //for (int i = 0; i < Math.Max(oldst.Count, newst.Count); i++)
+                            //{
+                            //    string str1 = "";
+                            //    string str2 = "";
+                            //    if (i < oldst.Count)
+                            //        compstr += oldst[i];
+                            //    compstr += ",";
+                            //    if (i < newst.Count)
+                            //        compstr += newst[i];
+                            //    compstr += "\n";
+
+                            //    if (str1 != str2)
+                            //        correctStringTable = false;
+
+                            //}
+
+                            #endregion
+
+
+                            #region test write
 
                             var isBinaryEqual = true;
 
@@ -913,17 +911,15 @@ namespace CP77.MSTests
                                 var newbytes = StreamExtensions.ToByteArray(wms);
                                 isBinaryEqual = originalbytes.SequenceEqual(newbytes);
                                 //isBinaryEqual = originalbytes.Length == newbytes.Length;
-
-#pragma warning disable 162
-                                if (!isBinaryEqual && WRITE_FAILED)
+#pragma warning disable
+                                if (!isBinaryEqual && true)
                                 {
                                     var resultDir = Path.Combine(Environment.CurrentDirectory, TestResultsDirectory);
                                     var filename = Path.Combine(resultDir, Path.GetFileName(c.FileName));
                                     File.WriteAllBytes($"{filename}.o.bin", originalbytes);
                                     File.WriteAllBytes($"{filename}.n.bin", newbytes);
                                 }
-#pragma warning restore 162
-
+#pragma 
                                 // test reading again
                                 //bw.Seek(0, SeekOrigin.Begin);
                                 //using var br2 = new BinaryReader(wms);
@@ -931,11 +927,16 @@ namespace CP77.MSTests
                                 //isBinaryEqual = reread == EFileReadErrorCodes.NoError;
                             }
 
-#endregion
+                            #endregion
 
 
                             var res = WriteTestResult.WriteResultType.NoError;
                             var msg = "";
+                            if (!correctStringTable)
+                            {
+                                res |= WriteTestResult.WriteResultType.HasIncorrectStringTable;
+                                msg += $"CorrectStringTable: {correctStringTable}";
+                            }
 
                             if (!isBinaryEqual)
                             {
@@ -948,10 +949,11 @@ namespace CP77.MSTests
                             results.Add(new WriteTestResult
                             {
                                 FileEntry = file,
-                                Success = isBinaryEqual,
+                                Success = isBinaryEqual && correctStringTable,
                                 WriteResult = res,
                                 Message = msg,
                                 IsNotBinaryEqual = !isBinaryEqual,
+                                HasIncorrectStringTable = !correctStringTable
                             });
 
                             break;
@@ -967,16 +969,13 @@ namespace CP77.MSTests
                         Success = false,
                         WriteResult = WriteTestResult.WriteResultType.RuntimeException,
                         ExceptionType = e.GetType(),
-                        Message = $"{e.Message}"
+                        Message = $"{file.NameOrHash} - {e.Message}"
                     });
                 }
-#if IS_PARALLEL
-            });
-#else
+            //});
             }
-#endif
 
-            return results;
+           return results;
         }
 
         private string TestResultAsCsv(IEnumerable<WriteTestResult> results)
@@ -989,7 +988,7 @@ namespace CP77.MSTests
                 $"{nameof(FileEntry.Archive)}," +
                 $"{nameof(WriteTestResult)}," +
                 $"{nameof(WriteTestResult.Success)}," +
-                //$"{nameof(WriteTestResult.HasIncorrectStringTable)}," +
+                $"{nameof(WriteTestResult.HasIncorrectStringTable)}," +
                 $"{nameof(WriteTestResult.IsNotBinaryEqual)}," +
                 $"{nameof(WriteTestResult.ExceptionType)}," +
                 $"{nameof(WriteTestResult.Message)}");
@@ -1002,7 +1001,7 @@ namespace CP77.MSTests
                     $"{Path.GetFileName(r.FileEntry.Archive.ArchiveAbsolutePath)}," +
                     $"{r.WriteResult}," +
                     $"{r.Success}," +
-                    //$"{r.HasIncorrectStringTable}," +
+                    $"{r.HasIncorrectStringTable}," +
                     $"{r.IsNotBinaryEqual}," +
                     $"{r.ExceptionType?.FullName}," +
                     $"{r.Message}");

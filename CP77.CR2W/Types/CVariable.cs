@@ -12,14 +12,10 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Schema;
 using Catel.Data;
-using Catel.IoC;
 using Newtonsoft.Json;
 using WolvenKit.Common;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Extensions;
 using CP77.CR2W.Reflection;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
 using ObservableObject = Catel.Data.ObservableObject;
 
 namespace CP77.CR2W.Types
@@ -35,7 +31,7 @@ namespace CP77.CR2W.Types
 
         protected CVariable(CR2WFile cr2w, CVariable parent, string name)
         {
-            this.Cr2wFile = cr2w;
+            this.cr2w = cr2w;
             this.ParentVar = parent;
             this.REDName = name;
             this.VarChunkIndex = -1;
@@ -47,7 +43,7 @@ namespace CP77.CR2W.Types
 
         #region Fields
         [JsonIgnore]
-        public TypeAccessor accessor { get; }
+        public readonly TypeAccessor accessor;
 
         #endregion
 
@@ -56,15 +52,12 @@ namespace CP77.CR2W.Types
         [JsonIgnore]
         public List<CVariable> UnknownCVariables { get; set; } = new List<CVariable>();
 
-        [JsonIgnore]
-        public IWolvenkitFile Cr2wFile { get; set; }
-
         /// <summary>
         /// Stores the parent cr2w file.
         /// used a lot
         /// </summary>
         [JsonIgnore]
-        public CR2WFile cr2w => Cr2wFile as CR2WFile;
+        public CR2WFile cr2w { get; set; }
 
         /// <summary>
         /// Shows if the CVariable is to be serialized
@@ -83,8 +76,6 @@ namespace CP77.CR2W.Types
                 if (ParentVar is CVariable cparent)
                     cparent.SetIsSerialized();
         }
-
-        public bool IsNulled { get; set; }
 
         private ushort _redFlags;
         /// <summary>
@@ -384,6 +375,7 @@ namespace CP77.CR2W.Types
             {
                 #region initial checks
                 sbyte zero = file.ReadSByte();
+                //var dzero = file.ReadBit6();
 
                 // ... okay CDPR, is that a joke or what?
                 if (zero != 0)
@@ -396,8 +388,7 @@ namespace CP77.CR2W.Types
                         case -128:
                             var dzero2 = file.ReadBit6();
                             return;
-                        case -1: // nulled
-                            IsNulled = true;
+                        case -1:
                             return;
                         default:
                             throw new InvalidParsingException($"Tried parsing a CVariable: zero read {zero}.");
@@ -521,12 +512,7 @@ namespace CP77.CR2W.Types
                     throw;
                 }
             }
-            //throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
-            var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            Logger.LogString($"{this.TypeNameWithParents} - {value.REDType} {value.REDName}", Logtype.Error);
-            
-            
-            return false;
+            throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
         }
 
         /// <summary>
@@ -536,13 +522,6 @@ namespace CP77.CR2W.Types
         /// <param name="file"></param>
         public virtual void Write(BinaryWriter file)
         {
-            if (IsNulled)
-            {
-                file.Write((byte)0xFF);
-                return;
-            }
-
-
             REDMetaAttribute meta = (REDMetaAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(REDMetaAttribute));
             EREDMetaInfo[] tags = meta?.Keywords;
 
@@ -646,15 +625,11 @@ namespace CP77.CR2W.Types
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public virtual IEditableVariable Copy(ICR2WCopyAction icontext)
+        public virtual CVariable Copy(CR2WCopyAction context)
         {
-            if (icontext is not CR2WCopyAction context)
-                throw new InvalidParsingException("Tried copying tw3 assets.");
-
-
             // creates a new instance of the CVariable
             // with a new destination cr2wFile and a new parent CVariable if needed
-            var copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent as CVariable, false);
+            var copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent, false);
             //copy.REDFlags = this.REDFlags;
             copy.IsSerialized = this.IsSerialized;
 
@@ -688,7 +663,7 @@ namespace CP77.CR2W.Types
             return this;
         }
 
-        public virtual void AddVariable(IEditableVariable var)
+        public virtual void AddVariable(CVariable var)
         {
             throw new NotImplementedException();
         }
@@ -865,8 +840,6 @@ namespace CP77.CR2W.Types
 
             return finalvalue;
         }
-
-       
         #endregion
     }
 }
