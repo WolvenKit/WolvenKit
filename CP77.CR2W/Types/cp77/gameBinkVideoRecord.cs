@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameBinkVideoRecord : ISerializable
 	{
-		[Ordinal(0)]  [RED("binkDuration")] public CFloat BinkDuration { get; set; }
-		[Ordinal(1)]  [RED("resourceHash")] public CUInt64 ResourceHash { get; set; }
+		[Ordinal(0)]  [RED("resourceHash")] public CUInt64 ResourceHash { get; set; }
+		[Ordinal(1)]  [RED("binkDuration")] public CFloat BinkDuration { get; set; }
 
 		public gameBinkVideoRecord(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

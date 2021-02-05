@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldDebugColoring_MergedMeshes : worldEditorDebugColoringSettings
 	{
-		[Ordinal(0)]  [RED("defaultColor")] public CColor DefaultColor { get; set; }
-		[Ordinal(1)]  [RED("mergedMeshColor")] public CColor MergedMeshColor { get; set; }
+		[Ordinal(0)]  [RED("mergedMeshColor")] public CColor MergedMeshColor { get; set; }
+		[Ordinal(1)]  [RED("defaultColor")] public CColor DefaultColor { get; set; }
 
 		public worldDebugColoring_MergedMeshes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

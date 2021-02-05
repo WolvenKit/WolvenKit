@@ -25,7 +25,7 @@ namespace CP77.CR2W.Types
 
 
         [Browsable(false)]
-        //public List<int> Flags { get; set; }
+        public List<int> Flags { get; set; }
         public string Elementtype { get; set; }
         public Type InnerType => this.GetType().GetGenericArguments().Single();
         #endregion
@@ -33,16 +33,7 @@ namespace CP77.CR2W.Types
 
 
         [Browsable(false)]
-        public override string REDType
-        {
-            get
-            {
-                return BuildTypeName(Elementtype);
-                //return Flags != null
-                //    ? BuildTypeName(Elementtype, Flags.ToArray())
-                //    : BuildTypeName(Elementtype);
-            }
-        }
+        public override string REDType => BuildTypeName(Elementtype);
 
         private string BuildTypeName(string type, params int[] flags)
         {

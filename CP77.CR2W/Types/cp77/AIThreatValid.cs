@@ -8,10 +8,10 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIThreatValid : AIAIEvent
 	{
-		[Ordinal(0)]  [RED("isEnemy")] public CBool IsEnemy { get; set; }
-		[Ordinal(1)]  [RED("isHostile")] public CBool IsHostile { get; set; }
-		[Ordinal(2)]  [RED("owner")] public wCHandle<entEntity> Owner { get; set; }
-		[Ordinal(3)]  [RED("threat")] public wCHandle<entEntity> Threat { get; set; }
+		[Ordinal(0)]  [RED("owner")] public wCHandle<entEntity> Owner { get; set; }
+		[Ordinal(1)]  [RED("threat")] public wCHandle<entEntity> Threat { get; set; }
+		[Ordinal(2)]  [RED("isEnemy")] public CBool IsEnemy { get; set; }
+		[Ordinal(3)]  [RED("isHostile")] public CBool IsHostile { get; set; }
 
 		public AIThreatValid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

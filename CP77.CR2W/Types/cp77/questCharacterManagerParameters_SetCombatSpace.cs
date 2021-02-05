@@ -9,7 +9,6 @@ namespace CP77.CR2W.Types
 	public class questCharacterManagerParameters_SetCombatSpace : questICharacterManagerCombat_NodeSubType
 	{
 		[Ordinal(0)]  [RED("combatSpaceSize")] public CEnum<AICombatSpaceSize> CombatSpaceSize { get; set; }
-		[Ordinal(1)]  [RED("puppetRef")] public gameEntityReference PuppetRef { get; set; }
 
 		public questCharacterManagerParameters_SetCombatSpace(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

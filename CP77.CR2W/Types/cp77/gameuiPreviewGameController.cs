@@ -8,9 +8,10 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiPreviewGameController : gameuiMenuGameController
 	{
-		[Ordinal(0)]  [RED("isRotatable")] public CBool IsRotatable { get; set; }
-		[Ordinal(1)]  [RED("yawDefault")] public CFloat YawDefault { get; set; }
+		[Ordinal(0)]  [RED("sceneName")] public CName SceneName { get; set; }
+		[Ordinal(1)]  [RED("cameraRef")] public NodeRef CameraRef { get; set; }
 		[Ordinal(2)]  [RED("yawSpeed")] public CFloat YawSpeed { get; set; }
+		[Ordinal(3)]  [RED("yawDefault")] public CFloat YawDefault { get; set; }
 
 		public gameuiPreviewGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

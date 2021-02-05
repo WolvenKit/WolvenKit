@@ -53,6 +53,7 @@ namespace CP77.CR2W
                     return EFormat.BC1_UNORM;
                 case ETextureCompression.TCM_DXTAlphaLinear:
                 case ETextureCompression.TCM_DXTAlpha:
+                case ETextureCompression.TCM_NormalsHigh_DEPRECATED:
                     return EFormat.BC3_UNORM;
                 case ETextureCompression.TCM_None:
                 {
@@ -80,18 +81,17 @@ namespace CP77.CR2W
                             return EFormat.A8_UNORM;
                         
                         case ETextureRawFormat.TRF_Grayscale_Font:
-                            throw new NotImplementedException();
+                            throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_Grayscale_Font");
                         case ETextureRawFormat.TRF_R32UI:
                             //return EFormat.R32_UINT;
-                            throw new NotImplementedException();
-                        default:
+                            throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_R32UI");
+                            default:
                             throw new ArgumentOutOfRangeException(nameof(rawFormat), rawFormat, null);
                     }
                 }
 
                 case ETextureCompression.TCM_RGBE:
                 case ETextureCompression.TCM_Normals:
-                case ETextureCompression.TCM_NormalsHigh_DEPRECATED:
                 case ETextureCompression.TCM_NormalsHigh:
                 case ETextureCompression.TCM_NormalsGloss_DEPRECATED:
                 case ETextureCompression.TCM_NormalsGloss:
@@ -100,7 +100,7 @@ namespace CP77.CR2W
                 case ETextureCompression.TCM_HalfHDR:
                 case ETextureCompression.TCM_HalfHDR_Signed:
                 case ETextureCompression.TCM_Max:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TCM_Max");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(compression), compression, null);
             }
@@ -123,9 +123,9 @@ namespace CP77.CR2W
                 case EFormat.R10G10B10A2_UNORM:
                     return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_DeepColor, ETexGroupFlags.RawFormatOnly);
                 case EFormat.R8G8B8A8_UNORM:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException($"{nameof(GetRedFormatsFromDxgiFormat)}: R8G8B8A8_UNORM");
                 case EFormat.R32_UINT:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException($"{nameof(GetRedFormatsFromDxgiFormat)}: R32_UINT");
                 case EFormat.R8G8_UNORM:
                     return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_R8G8, ETexGroupFlags.RawFormatOnly);
                 case EFormat.R16_FLOAT:
@@ -137,7 +137,7 @@ namespace CP77.CR2W
                 case EFormat.BC1_UNORM:
                     return (ETextureCompression.TCM_DXTNoAlpha, ETextureRawFormat.TRF_Invalid, ETexGroupFlags.CompressionOnly);
                 case EFormat.BC2_UNORM:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException($"{nameof(GetRedFormatsFromDxgiFormat)}: BC2_UNORM");
                 case EFormat.BC3_UNORM:
                     return (ETextureCompression.TCM_DXTAlpha, ETextureRawFormat.TRF_Invalid, ETexGroupFlags.CompressionOnly);
                 case EFormat.BC4_UNORM:

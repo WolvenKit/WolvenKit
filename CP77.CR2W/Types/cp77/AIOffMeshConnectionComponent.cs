@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIOffMeshConnectionComponent : entIComponent
 	{
-		[Ordinal(0)]  [RED("agentSize")] public CEnum<NavGenAgentSize> AgentSize { get; set; }
-		[Ordinal(1)]  [RED("offMeshConnectionNodesRefs")] public CArray<NodeRef> OffMeshConnectionNodesRefs { get; set; }
+		[Ordinal(0)]  [RED("offMeshConnectionNodesRefs")] public CArray<NodeRef> OffMeshConnectionNodesRefs { get; set; }
+		[Ordinal(1)]  [RED("agentSize")] public CEnum<NavGenAgentSize> AgentSize { get; set; }
 
 		public AIOffMeshConnectionComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

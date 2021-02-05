@@ -116,12 +116,12 @@ namespace CP77.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(MessageResourcePath));
         }
 
         public override void Write(BinaryWriter file)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(MessageResourcePath));
         }
 
     }
@@ -132,12 +132,12 @@ namespace CP77.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(EditorObjectID));
         }
 
         public override void Write(BinaryWriter file)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(EditorObjectID));
         }
 
     }

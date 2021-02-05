@@ -8,13 +8,13 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scneventsBraindanceVisibilityEvent : scnSceneEvent
 	{
-		[Ordinal(0)]  [RED("customMaterialParam")] public CEnum<ECustomMaterialParam> CustomMaterialParam { get; set; }
-		[Ordinal(1)]  [RED("eventStartEndBlend")] public CFloat EventStartEndBlend { get; set; }
-		[Ordinal(2)]  [RED("override")] public CBool Override { get; set; }
-		[Ordinal(3)]  [RED("parameterIndex")] public CUInt32 ParameterIndex { get; set; }
-		[Ordinal(4)]  [RED("performerId")] public scnPerformerId PerformerId { get; set; }
-		[Ordinal(5)]  [RED("perspectiveBlend")] public CFloat PerspectiveBlend { get; set; }
-		[Ordinal(6)]  [RED("priority")] public CUInt8 Priority { get; set; }
+		[Ordinal(0)]  [RED("performerId")] public scnPerformerId PerformerId { get; set; }
+		[Ordinal(1)]  [RED("customMaterialParam")] public CEnum<ECustomMaterialParam> CustomMaterialParam { get; set; }
+		[Ordinal(2)]  [RED("parameterIndex")] public CUInt32 ParameterIndex { get; set; }
+		[Ordinal(3)]  [RED("override")] public CBool Override { get; set; }
+		[Ordinal(4)]  [RED("priority")] public CUInt8 Priority { get; set; }
+		[Ordinal(5)]  [RED("eventStartEndBlend")] public CFloat EventStartEndBlend { get; set; }
+		[Ordinal(6)]  [RED("perspectiveBlend")] public CFloat PerspectiveBlend { get; set; }
 		[Ordinal(7)]  [RED("renderSettingsFPP")] public WorldRenderAreaSettings RenderSettingsFPP { get; set; }
 		[Ordinal(8)]  [RED("renderSettingsTPP")] public WorldRenderAreaSettings RenderSettingsTPP { get; set; }
 

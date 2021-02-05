@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class animAnimNode_StackTracksShrinker : animAnimNode_OnePoseInput
 	{
 		[Ordinal(0)]  [RED("tag")] public CName Tag { get; set; }
-		[Ordinal(1)]  [RED("extenderNodeId")] public CUInt32 ExtenderNodeId { get; set; }
 
+        [Ordinal(999)] [RED("extenderNodeId")] public CUInt32 ExtenderNodeId { get; set; }
 
 		public animAnimNode_StackTracksShrinker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

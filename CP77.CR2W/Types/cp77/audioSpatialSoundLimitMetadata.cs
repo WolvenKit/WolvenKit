@@ -9,9 +9,9 @@ namespace CP77.CR2W.Types
 	public class audioSpatialSoundLimitMetadata : audioAudioMetadata
 	{
 		[Ordinal(0)]  [RED("eventNames")] public CArray<CName> EventNames { get; set; }
-		[Ordinal(1)]  [RED("radius")] public CFloat Radius { get; set; }
+		[Ordinal(1)]  [RED("writeOnlyEventNames")] public CArray<CName> WriteOnlyEventNames { get; set; }
 		[Ordinal(2)]  [RED("readOnlyEventNames")] public CArray<CName> ReadOnlyEventNames { get; set; }
-		[Ordinal(3)]  [RED("writeOnlyEventNames")] public CArray<CName> WriteOnlyEventNames { get; set; }
+		[Ordinal(3)]  [RED("radius")] public CFloat Radius { get; set; }
 
 		public audioSpatialSoundLimitMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

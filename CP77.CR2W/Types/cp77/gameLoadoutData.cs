@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameLoadoutData : CVariable
 	{
-		[Ordinal(0)]  [RED("itemID")] public gameItemID ItemID { get; set; }
-		[Ordinal(1)]  [RED("slotID")] public TweakDBID SlotID { get; set; }
+		[Ordinal(0)]  [RED("slotID")] public TweakDBID SlotID { get; set; }
+		[Ordinal(1)]  [RED("itemID")] public gameItemID ItemID { get; set; }
 
 		public gameLoadoutData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

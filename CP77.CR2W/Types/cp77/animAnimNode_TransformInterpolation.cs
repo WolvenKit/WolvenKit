@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_TransformInterpolation : animAnimNode_TransformValue
 	{
-		[Ordinal(0)]  [RED("firstInput")] public animTransformLink FirstInput { get; set; }
-		[Ordinal(1)]  [RED("interpolationType")] public CEnum<animQuaternionInterpolationType> InterpolationType { get; set; }
+		[Ordinal(0)]  [RED("interpolationType")] public CEnum<animQuaternionInterpolationType> InterpolationType { get; set; }
+		[Ordinal(1)]  [RED("firstInput")] public animTransformLink FirstInput { get; set; }
 		[Ordinal(2)]  [RED("secondInput")] public animTransformLink SecondInput { get; set; }
 		[Ordinal(3)]  [RED("weight")] public animFloatLink Weight { get; set; }
 

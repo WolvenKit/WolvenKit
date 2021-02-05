@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class workWorkspotFinishedEvent : redEvent
 	{
 		[Ordinal(0)]  [RED("nodeId")] public worldGlobalNodeID NodeId { get; set; }
-		[Ordinal(1)]  [RED("statusEffectID")] public TweakDBID StatusEffectID { get; set; }
-		[Ordinal(2)]  [RED("tags")] public CArray<CName> Tags { get; set; }
+		[Ordinal(1)]  [RED("tags")] public CArray<CName> Tags { get; set; }
+		[Ordinal(2)]  [RED("statusEffectID")] public TweakDBID StatusEffectID { get; set; }
 
 		public workWorkspotFinishedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -17,14 +17,7 @@ namespace CP77.CR2W.Types
     {
         public CStatic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        public override string REDType
-        {
-            get
-            {
-                return Elementtype;
-                //return BuildTypeName(Elementtype, Flags.AsEnumerable().GetEnumerator());
-            }
-        }
+        public override string REDType => BuildTypeName(Elementtype, Flags.AsEnumerable().GetEnumerator());
 
         private string BuildTypeName(string elementtype, IEnumerator<int> flags)
         {

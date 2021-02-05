@@ -793,7 +793,7 @@ namespace CP77.MSTests
             {
                 if (results.Any(r => !r.Success))
                 {
-                    var resultPath = Path.Combine(resultDir, $"{extension[1..]}.csv");
+                    var resultPath = Path.Combine(resultDir, $"write.{extension[1..]}.csv");
                     var csv = TestResultAsCsv(results.Where(r => !r.Success));
                     File.WriteAllText(resultPath, csv);
                 }
@@ -803,18 +803,18 @@ namespace CP77.MSTests
             int totalCount = GroupedFiles[extension].Count;
             var sb = new StringBuilder();
             sb.AppendLine(
-                $"{extension} -> Successful Reads: {successCount} / {totalCount} ({(int)(((double)successCount / (double)totalCount) * 100)}%)");
+                $"{extension} -> Successful Writes: {successCount} / {totalCount} ({(int)(((double)successCount / (double)totalCount) * 100)}%)");
 
             bool success = results.All(r => r.Success);
 
 
-            var logPath = Path.Combine(resultDir, $"logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
+            var logPath = Path.Combine(resultDir, $"w_logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
             File.WriteAllText(logPath, sb.ToString());
             Console.WriteLine(sb.ToString());
 
             if (!success)
             {
-                var msg = $"Successful Reads: {successCount} / {totalCount}. ";
+                var msg = $"Successful Writes: {successCount} / {totalCount}. ";
 
                 Assert.Fail(msg);
             }
@@ -824,20 +824,23 @@ namespace CP77.MSTests
         {
             var results = new ConcurrentBag<WriteTestResult>();
 
-            //foreach (var file in files)
-            Parallel.ForEach(files, file =>
+            foreach (var file in files)
+            //Parallel.ForEach(files, file =>
             {
                 try
                 {
                     if (file.Archive is not Archive ar)
-                        return;
+                    //    return;
+                    continue;
 
+                    var c = new CR2WFile {FileName = file.NameOrHash};
                     using var ms = new MemoryStream();
                     ar.CopyFileToStream(ms, file.NameHash64, false);
-
-                    var c = new CR2WFile { FileName = file.NameOrHash };
                     ms.Seek(0, SeekOrigin.Begin);
-                    var readResult = c.Read(ms);
+                    using var br = new BinaryReader(ms);
+                    var readResult = c.Read(br);
+                    var originalbytes = StreamExtensions.ToByteArray(ms);
+
 
                     switch (readResult)
                     {
@@ -859,37 +862,72 @@ namespace CP77.MSTests
                             });
                             break;
                         case EFileReadErrorCodes.NoError:
-                            var oldst = c.StringDictionary.Values.ToList();
-                            var newst = c.GenerateStringtable().Item1.Values.ToList();
-                            var compstr = "OLD,NEW";
-                            var correctStringTable = oldst.Count == newst.Count;
 
-                            // Stringtable test
-                            for (int i = 0; i < Math.Max(oldst.Count, newst.Count); i++)
-                            {
-                                string str1 = "";
-                                string str2 = "";
-                                if (i < oldst.Count)
-                                    compstr += oldst[i];
-                                compstr += ",";
-                                if (i < newst.Count)
-                                    compstr += newst[i];
-                                compstr += "\n";
+                            #region test stringtable
 
-                                if (str1 != str2)
-                                    correctStringTable = false;
-                            }
+                            var correctStringTable = true;
 
-                            // Binary Equal Test
+                            //var oldst = c.StringDictionary.Values.ToList();
+                            //var newst = c.GenerateStringtable().Item1.Values.ToList();
+                            //var compstr = "OLD,NEW";
+                            // /*correctStringTable = oldst.Count == newst.Count;*/
+                            //    correctStringTable = oldst.All(newst.Contains);
+                            //if (!correctStringTable)
+                            //{
+                            //    var complement1 = oldst.Except(newst).ToList();
+                            //    var complement2 = newst.Except(oldst).ToList();
+                            //}
+
+                            //for (int i = 0; i < Math.Max(oldst.Count, newst.Count); i++)
+                            //{
+                            //    string str1 = "";
+                            //    string str2 = "";
+                            //    if (i < oldst.Count)
+                            //        compstr += oldst[i];
+                            //    compstr += ",";
+                            //    if (i < newst.Count)
+                            //        compstr += newst[i];
+                            //    compstr += "\n";
+
+                            //    if (str1 != str2)
+                            //        correctStringTable = false;
+
+                            //}
+
+                            #endregion
+
+
+                            #region test write
+
                             var isBinaryEqual = true;
 
                             using (var wms = new MemoryStream())
                             using (var bw = new BinaryWriter(wms))
                             {
+                                // test writing
                                 c.Write(bw);
 
-                                isBinaryEqual = StreamExtensions.ToByteArray(ms).SequenceEqual(StreamExtensions.ToByteArray(wms));
+                                // test for binary equality 
+                                var newbytes = StreamExtensions.ToByteArray(wms);
+                                isBinaryEqual = originalbytes.SequenceEqual(newbytes);
+                                //isBinaryEqual = originalbytes.Length == newbytes.Length;
+#pragma warning disable
+                                if (!isBinaryEqual && true)
+                                {
+                                    var resultDir = Path.Combine(Environment.CurrentDirectory, TestResultsDirectory);
+                                    var filename = Path.Combine(resultDir, Path.GetFileName(c.FileName));
+                                    File.WriteAllBytes($"{filename}.o.bin", originalbytes);
+                                    File.WriteAllBytes($"{filename}.n.bin", newbytes);
+                                }
+#pragma 
+                                // test reading again
+                                //bw.Seek(0, SeekOrigin.Begin);
+                                //using var br2 = new BinaryReader(wms);
+                                //var reread = c.Read(br2);
+                                //isBinaryEqual = reread == EFileReadErrorCodes.NoError;
                             }
+
+                            #endregion
 
 
                             var res = WriteTestResult.WriteResultType.NoError;
@@ -906,7 +944,7 @@ namespace CP77.MSTests
                                 msg += $"IsBinaryEqual: {isBinaryEqual}";
                             }
 
-                            
+
 
                             results.Add(new WriteTestResult
                             {
@@ -934,9 +972,10 @@ namespace CP77.MSTests
                         Message = $"{file.NameOrHash} - {e.Message}"
                     });
                 }
-            });
+            //});
+            }
 
-            return results;
+           return results;
         }
 
         private string TestResultAsCsv(IEnumerable<WriteTestResult> results)

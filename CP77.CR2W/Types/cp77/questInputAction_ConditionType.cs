@@ -9,9 +9,9 @@ namespace CP77.CR2W.Types
 	public class questInputAction_ConditionType : questISystemConditionType
 	{
 		[Ordinal(0)]  [RED("anyInputAction")] public CBool AnyInputAction { get; set; }
-		[Ordinal(1)]  [RED("axisAction")] public CBool AxisAction { get; set; }
+		[Ordinal(1)]  [RED("inputAction")] public CName InputAction { get; set; }
 		[Ordinal(2)]  [RED("checkIfButtonAlreadyPressed")] public CBool CheckIfButtonAlreadyPressed { get; set; }
-		[Ordinal(3)]  [RED("inputAction")] public CName InputAction { get; set; }
+		[Ordinal(3)]  [RED("axisAction")] public CBool AxisAction { get; set; }
 		[Ordinal(4)]  [RED("valueLessThan")] public CFloat ValueLessThan { get; set; }
 		[Ordinal(5)]  [RED("valueMoreThan")] public CFloat ValueMoreThan { get; set; }
 

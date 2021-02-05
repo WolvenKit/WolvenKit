@@ -9,6 +9,9 @@ namespace CP77.CR2W.Types
 	public class worldTrafficLanesSpotsResource : resStreamedResource
 	{
 
-		public worldTrafficLanesSpotsResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-	}
+        [Ordinal(1000)] [REDBuffer] public CUInt32 Unk1 { get; set; }
+
+        public worldTrafficLanesSpotsResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+    }
 }

@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animPoseCorrectionParams : CVariable
 	{
-		[Ordinal(0)]  [RED("blendDuration")] public CFloat BlendDuration { get; set; }
-		[Ordinal(1)]  [RED("poseCorrectionGroup")] public animPoseCorrectionGroup PoseCorrectionGroup { get; set; }
+		[Ordinal(0)]  [RED("poseCorrectionGroup")] public animPoseCorrectionGroup PoseCorrectionGroup { get; set; }
+		[Ordinal(1)]  [RED("blendDuration")] public CFloat BlendDuration { get; set; }
 
 		public animPoseCorrectionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

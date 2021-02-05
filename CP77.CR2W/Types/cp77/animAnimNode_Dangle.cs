@@ -9,8 +9,6 @@ namespace CP77.CR2W.Types
 	public class animAnimNode_Dangle : animAnimNode_OnePoseInput
 	{
 		[Ordinal(0)]  [RED("dangleConstraint")] public CHandle<animDangleConstraint_Simulation> DangleConstraint { get; set; }
-		
-        
 
 		public animAnimNode_Dangle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

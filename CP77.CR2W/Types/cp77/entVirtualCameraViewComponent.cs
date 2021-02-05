@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entVirtualCameraViewComponent : entIVisualComponent
 	{
-		[Ordinal(0)]  [RED("targetPlaneSize")] public Vector2 TargetPlaneSize { get; set; }
-		[Ordinal(1)]  [RED("virtualCameraName")] public CName VirtualCameraName { get; set; }
+		[Ordinal(0)]  [RED("virtualCameraName")] public CName VirtualCameraName { get; set; }
+		[Ordinal(1)]  [RED("targetPlaneSize")] public Vector2 TargetPlaneSize { get; set; }
 
 		public entVirtualCameraViewComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

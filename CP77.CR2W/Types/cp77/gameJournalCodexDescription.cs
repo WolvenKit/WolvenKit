@@ -11,8 +11,6 @@ namespace CP77.CR2W.Types
 		[Ordinal(0)]  [RED("subTitle")] public LocalizationString SubTitle { get; set; }
 		[Ordinal(1)]  [RED("textContent")] public LocalizationString TextContent { get; set; }
 
-		[Ordinal(999)]  [RED("activatedAtStart")] public CBool activatedAtStart { get; set; }
-
 		public gameJournalCodexDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

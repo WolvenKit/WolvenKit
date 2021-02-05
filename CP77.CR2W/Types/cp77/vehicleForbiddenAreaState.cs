@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class vehicleForbiddenAreaState : CVariable
 	{
-		[Ordinal(0)]  [RED("dismount")] public CBool Dismount { get; set; }
+		[Ordinal(0)]  [RED("globalNodeIDHash")] public CUInt64 GlobalNodeIDHash { get; set; }
 		[Ordinal(1)]  [RED("enabled")] public CBool Enabled { get; set; }
-		[Ordinal(2)]  [RED("globalNodeIDHash")] public CUInt64 GlobalNodeIDHash { get; set; }
+		[Ordinal(2)]  [RED("dismount")] public CBool Dismount { get; set; }
 
 		public vehicleForbiddenAreaState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

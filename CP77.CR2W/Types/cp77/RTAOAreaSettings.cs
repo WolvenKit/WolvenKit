@@ -8,10 +8,10 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class RTAOAreaSettings : IAreaSettings
 	{
-		[Ordinal(0)]  [RED("RadiusFar")] public curveData<CFloat> RadiusFar { get; set; }
-		[Ordinal(1)]  [RED("RadiusNear")] public curveData<CFloat> RadiusNear { get; set; }
-		[Ordinal(2)]  [RED("RangeFar")] public curveData<CFloat> RangeFar { get; set; }
-		[Ordinal(3)]  [RED("RangeNear")] public curveData<CFloat> RangeNear { get; set; }
+		[Ordinal(0)]  [RED("RangeNear")] public curveData<CFloat> RangeNear { get; set; }
+		[Ordinal(1)]  [RED("RangeFar")] public curveData<CFloat> RangeFar { get; set; }
+		[Ordinal(2)]  [RED("RadiusNear")] public curveData<CFloat> RadiusNear { get; set; }
+		[Ordinal(3)]  [RED("RadiusFar")] public curveData<CFloat> RadiusFar { get; set; }
 		[Ordinal(4)]  [RED("coneAoDiffuseStrength")] public curveData<CFloat> ConeAoDiffuseStrength { get; set; }
 		[Ordinal(5)]  [RED("coneAoSpecularStrength")] public curveData<CFloat> ConeAoSpecularStrength { get; set; }
 		[Ordinal(6)]  [RED("coneAoSpecularTreshold")] public curveData<CFloat> ConeAoSpecularTreshold { get; set; }

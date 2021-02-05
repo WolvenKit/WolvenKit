@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class vehicleVehicleSlotsState : ISerializable
 	{
 		[Ordinal(0)]  [RED("vehicleDoorState")] public CEnum<vehicleVehicleDoorState> VehicleDoorState { get; set; }
-		[Ordinal(1)]  [RED("vehicleInteractionState")] public CEnum<vehicleVehicleDoorInteractionState> VehicleInteractionState { get; set; }
-		[Ordinal(2)]  [RED("vehicleWindowState")] public CEnum<vehicleEVehicleWindowState> VehicleWindowState { get; set; }
+		[Ordinal(1)]  [RED("vehicleWindowState")] public CEnum<vehicleEVehicleWindowState> VehicleWindowState { get; set; }
+		[Ordinal(2)]  [RED("vehicleInteractionState")] public CEnum<vehicleVehicleDoorInteractionState> VehicleInteractionState { get; set; }
 
 		public vehicleVehicleSlotsState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
