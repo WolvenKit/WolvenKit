@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PerkDisplayTooltipController : AGenericTooltipController
 	{
-		[Ordinal(0)]  [RED("Root")] public wCHandle<inkCompoundWidget> Root { get; set; }
+		[Ordinal(0)]  [RED("Root")] public wCHandle<inkCompoundWidget> Root_ { get; set; }
 		[Ordinal(1)]  [RED("root")] public inkWidgetReference Root { get; set; }
 		[Ordinal(2)]  [RED("perkNameText")] public inkTextWidgetReference PerkNameText { get; set; }
 		[Ordinal(3)]  [RED("videoWrapper")] public inkWidgetReference VideoWrapper { get; set; }

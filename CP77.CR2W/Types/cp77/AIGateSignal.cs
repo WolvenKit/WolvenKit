@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIGateSignal : CVariable
 	{
-		[Ordinal(0)]  [RED("tags", lignas(8) StaticArray<CNam, 4)] public alignas(8) StaticArray<CName> Tags { get; set; }
+		[Ordinal(0)]  [RED("tags", 4)] public CStatic<CName> Tags { get; set; }
 		[Ordinal(1)]  [RED("flags")] public CEnum<AISignalFlags> Flags { get; set; }
 		[Ordinal(2)]  [RED("priority")] public CFloat Priority { get; set; }
 		[Ordinal(3)]  [RED("lifeTime")] public CFloat LifeTime { get; set; }

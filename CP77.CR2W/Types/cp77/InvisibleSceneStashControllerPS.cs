@@ -111,7 +111,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(100)]  [RED("quickHackVulnerabiltiesInitialized")] public CBool QuickHackVulnerabiltiesInitialized { get; set; }
 		[Ordinal(101)]  [RED("willingInvestigators")] public CArray<entEntityID> WillingInvestigators { get; set; }
 		[Ordinal(102)]  [RED("isInteractive")] public CBool IsInteractive { get; set; }
-		[Ordinal(103)]  [RED("storedItems")] public CArray<ItemID> StoredItems { get; set; }
+		[Ordinal(103)]  [RED("storedItems")] public CArray<gameItemID> StoredItems { get; set; }
 
 		public InvisibleSceneStashControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

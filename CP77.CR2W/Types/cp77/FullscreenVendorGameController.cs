@@ -75,8 +75,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(64)]  [RED("itemDropQueue")] public CArray<gameItemModParams> ItemDropQueue { get; set; }
 		[Ordinal(65)]  [RED("soldItems")] public CHandle<SoldItemsCache> SoldItems { get; set; }
 		[Ordinal(66)]  [RED("isActivePanel")] public CBool IsActivePanel { get; set; }
-		[Ordinal(67)]  [RED("sellQueue")] public CArray<ItemID> SellQueue { get; set; }
-		[Ordinal(68)]  [RED("buyQueue")] public CArray<ItemID> BuyQueue { get; set; }
+		[Ordinal(67)]  [RED("sellQueue")] public CArray<gameItemID> SellQueue { get; set; }
+		[Ordinal(68)]  [RED("buyQueue")] public CArray<gameItemID> BuyQueue { get; set; }
 
 		public FullscreenVendorGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

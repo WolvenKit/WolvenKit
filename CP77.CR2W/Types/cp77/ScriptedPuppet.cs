@@ -94,7 +94,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(83)]  [RED("isCivilian")] public CBool IsCivilian { get; set; }
 		[Ordinal(84)]  [RED("isPolice")] public CBool IsPolice { get; set; }
 		[Ordinal(85)]  [RED("isGanger")] public CBool IsGanger { get; set; }
-		[Ordinal(86)]  [RED("attemptedShards")] public CArray<ItemID> AttemptedShards { get; set; }
+		[Ordinal(86)]  [RED("attemptedShards")] public CArray<gameItemID> AttemptedShards { get; set; }
 
 		public ScriptedPuppet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

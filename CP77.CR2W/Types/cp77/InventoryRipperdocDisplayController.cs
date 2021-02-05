@@ -79,7 +79,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(68)]  [RED("requirementsMet")] public CBool RequirementsMet { get; set; }
 		[Ordinal(69)]  [RED("tooltipData")] public CHandle<InventoryTooltipData> TooltipData { get; set; }
 		[Ordinal(70)]  [RED("isNew")] public CBool IsNew { get; set; }
-		[Ordinal(71)]  [RED("newItemsIDs")] public CArray<ItemID> NewItemsIDs { get; set; }
+		[Ordinal(71)]  [RED("newItemsIDs")] public CArray<gameItemID> NewItemsIDs { get; set; }
 		[Ordinal(72)]  [RED("newItemsFetched")] public CBool NewItemsFetched { get; set; }
 		[Ordinal(73)]  [RED("isBuybackStack")] public CBool IsBuybackStack { get; set; }
 		[Ordinal(74)]  [RED("parentItemData")] public wCHandle<gameItemData> ParentItemData { get; set; }

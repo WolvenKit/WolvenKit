@@ -13,7 +13,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(2)]  [RED("equipment")] public gameSLoadout Equipment { get; set; }
 		[Ordinal(3)]  [RED("lastUsedStruct")] public gameSLastUsedWeapon LastUsedStruct { get; set; }
 		[Ordinal(4)]  [RED("slotActiveItemsInHands")] public gameSSlotActiveItems SlotActiveItemsInHands { get; set; }
-		[Ordinal(5)]  [RED("hiddenItems")] public CArray<ItemID> HiddenItems { get; set; }
+		[Ordinal(5)]  [RED("hiddenItems")] public CArray<gameItemID> HiddenItems { get; set; }
 		[Ordinal(6)]  [RED("clothingSlotsInfo")] public CArray<gameSSlotInfo> ClothingSlotsInfo { get; set; }
 		[Ordinal(7)]  [RED("isPartialVisualTagActive")] public CBool IsPartialVisualTagActive { get; set; }
 		[Ordinal(8)]  [RED("visualTagProcessingInfo")] public CArray<gameSVisualTagProcessing> VisualTagProcessingInfo { get; set; }

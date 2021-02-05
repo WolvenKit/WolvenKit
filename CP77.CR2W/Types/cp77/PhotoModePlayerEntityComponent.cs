@@ -19,7 +19,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(8)]  [RED("fakePuppet")] public wCHandle<gamePuppet> FakePuppet { get; set; }
 		[Ordinal(9)]  [RED("playerPuppet")] public wCHandle<PlayerPuppet> PlayerPuppet { get; set; }
 		[Ordinal(10)]  [RED("TS")] public CHandle<gameTransactionSystem> TS { get; set; }
-		[Ordinal(11)]  [RED("loadingItems")] public CArray<ItemID> LoadingItems { get; set; }
+		[Ordinal(11)]  [RED("loadingItems")] public CArray<gameItemID> LoadingItems { get; set; }
 		[Ordinal(12)]  [RED("itemsLoadingTimeout")] public CFloat ItemsLoadingTimeout { get; set; }
 		[Ordinal(13)]  [RED("muzzleEffectEnabled")] public CBool MuzzleEffectEnabled { get; set; }
 

@@ -95,7 +95,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(84)]  [RED("isCivilian")] public CBool IsCivilian { get; set; }
 		[Ordinal(85)]  [RED("isPolice")] public CBool IsPolice { get; set; }
 		[Ordinal(86)]  [RED("isGanger")] public CBool IsGanger { get; set; }
-		[Ordinal(87)]  [RED("attemptedShards")] public CArray<ItemID> AttemptedShards { get; set; }
+		[Ordinal(87)]  [RED("attemptedShards")] public CArray<gameItemID> AttemptedShards { get; set; }
 		[Ordinal(88)]  [RED("lastHitEvent")] public CHandle<gameeventsHitEvent> LastHitEvent { get; set; }
 		[Ordinal(89)]  [RED("totalFrameReactionDamageReceived")] public CFloat TotalFrameReactionDamageReceived { get; set; }
 		[Ordinal(90)]  [RED("totalFrameWoundsDamageReceived")] public CFloat TotalFrameWoundsDamageReceived { get; set; }

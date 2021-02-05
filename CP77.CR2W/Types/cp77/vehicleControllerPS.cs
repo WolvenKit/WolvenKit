@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class vehicleControllerPS : gameComponentPS
 	{
-		[Ordinal(0)]  [RED("vehicleDoors", lignas(8) StaticArray<vehicleVehicleSlotsStat, 6)] public alignas(8) StaticArray<vehicleVehicleSlotsState> VehicleDoors { get; set; }
+		[Ordinal(0)]  [RED("vehicleDoors", 6)] public CStatic<vehicleVehicleSlotsState> VehicleDoors { get; set; }
 		[Ordinal(1)]  [RED("state")] public CEnum<vehicleEState> State { get; set; }
 		[Ordinal(2)]  [RED("lightMode")] public CEnum<vehicleELightMode> LightMode { get; set; }
 		[Ordinal(3)]  [RED("isAlarmOn")] public CBool IsAlarmOn { get; set; }

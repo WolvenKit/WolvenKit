@@ -11,7 +11,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(0)]  [RED("flags")] public CUInt32 Flags { get; set; }
 		[Ordinal(1)]  [RED("autopilotPos")] public CFloat AutopilotPos { get; set; }
 		[Ordinal(2)]  [RED("autopilotCurrentSpeed")] public CFloat AutopilotCurrentSpeed { get; set; }
-		[Ordinal(3)]  [RED("wheelRuntimeData", lignas(8) StaticArray<vehicleWheelRuntimePSDat, 4)] public alignas(8) StaticArray<vehicleWheelRuntimePSData> WheelRuntimeData { get; set; }
+		[Ordinal(3)]  [RED("wheelRuntimeData", 4)] public CStatic<vehicleWheelRuntimePSData> WheelRuntimeData { get; set; }
 		[Ordinal(4)]  [RED("questEnforcedTransform")] public Transform QuestEnforcedTransform { get; set; }
 		[Ordinal(5)]  [RED("destruction")] public vehicleDestructionPSData Destruction { get; set; }
 		[Ordinal(6)]  [RED("audio")] public vehicleAudioPSData Audio { get; set; }

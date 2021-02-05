@@ -24,7 +24,6 @@ namespace CP77.CR2W.Types
 		[Ordinal(13)]  [RED("bbCallbacksRegistered")] public CBool BbCallbacksRegistered { get; set; }
 		[Ordinal(14)]  [RED("thumbnailWidgetsData")] public CArray<SThumbnailWidgetPackage> ThumbnailWidgetsData { get; set; }
 		[Ordinal(15)]  [RED("onThumbnailWidgetsUpdateListener")] public CUInt32 OnThumbnailWidgetsUpdateListener { get; set; }
-		[Ordinal(16)]  [RED("IdleGroup")] public inkWidgetReference IdleGroup { get; set; }
 		[Ordinal(17)]  [RED("ConnectedGroup")] public inkWidgetReference ConnectedGroup { get; set; }
 		[Ordinal(18)]  [RED("IntroAnimationName")] public CName IntroAnimationName { get; set; }
 		[Ordinal(19)]  [RED("IdleAnimationName")] public CName IdleAnimationName { get; set; }

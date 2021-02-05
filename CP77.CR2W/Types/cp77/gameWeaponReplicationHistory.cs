@@ -9,7 +9,7 @@ namespace CP77.CR2W.Types
 	public class gameWeaponReplicationHistory : CVariable
 	{
 		[Ordinal(0)]  [RED("weaponSlot")] public TweakDBID WeaponSlot { get; set; }
-		[Ordinal(1)]  [RED("shots", lignas(8) StaticArray<gameReplicatedShotDat, 8)] public alignas(8) StaticArray<gameReplicatedShotData> Shots { get; set; }
+		[Ordinal(1)]  [RED("shots", 8)] public CStatic<gameReplicatedShotData> Shots { get; set; }
 		[Ordinal(2)]  [RED("latestShotId")] public CUInt32 LatestShotId { get; set; }
 		[Ordinal(3)]  [RED("continuousAttack")] public gameReplicatedContinuousAttack ContinuousAttack { get; set; }
 

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class UIVendorItemsSoldEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("itemsID")] public CArray<ItemID> ItemsID { get; set; }
+		[Ordinal(0)]  [RED("itemsID")] public CArray<gameItemID> ItemsID { get; set; }
 		[Ordinal(1)]  [RED("quantity")] public CArray<CInt32> Quantity { get; set; }
 		[Ordinal(2)]  [RED("piecesPrice")] public CArray<CInt32> PiecesPrice { get; set; }
 

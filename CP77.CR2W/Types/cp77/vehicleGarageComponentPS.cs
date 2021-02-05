@@ -11,7 +11,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(0)]  [RED("spawnedVehiclesData")] public CArray<vehicleGarageComponentVehicleData> SpawnedVehiclesData { get; set; }
 		[Ordinal(1)]  [RED("unlockedVehicles")] public CArray<vehicleGarageVehicleID> UnlockedVehicles { get; set; }
 		[Ordinal(2)]  [RED("unlockedVehicleArray")] public CArray<vehicleUnlockedVehicle> UnlockedVehicleArray { get; set; }
-		[Ordinal(3)]  [RED("activeVehicles", lignas(8) StaticArray<vehicleGarageVehicleI, 3)] public alignas(8) StaticArray<vehicleGarageVehicleID> ActiveVehicles { get; set; }
+		[Ordinal(3)]  [RED("activeVehicles", 3)] public CStatic<vehicleGarageVehicleID> ActiveVehicles { get; set; }
 		[Ordinal(4)]  [RED("mountedVehicleData")] public vehicleGarageComponentVehicleData MountedVehicleData { get; set; }
 		[Ordinal(5)]  [RED("mountedVehicleStolen")] public CBool MountedVehicleStolen { get; set; }
 

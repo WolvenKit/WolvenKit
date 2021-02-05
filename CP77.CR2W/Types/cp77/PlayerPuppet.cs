@@ -99,7 +99,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(88)]  [RED("isCivilian")] public CBool IsCivilian { get; set; }
 		[Ordinal(89)]  [RED("isPolice")] public CBool IsPolice { get; set; }
 		[Ordinal(90)]  [RED("isGanger")] public CBool IsGanger { get; set; }
-		[Ordinal(91)]  [RED("attemptedShards")] public CArray<ItemID> AttemptedShards { get; set; }
+		[Ordinal(91)]  [RED("attemptedShards")] public CArray<gameItemID> AttemptedShards { get; set; }
 		[Ordinal(92)]  [RED("quickSlotsManager")] public CHandle<QuickSlotsManager> QuickSlotsManager { get; set; }
 		[Ordinal(93)]  [RED("inspectionComponent")] public CHandle<InspectionComponent> InspectionComponent { get; set; }
 		[Ordinal(94)]  [RED("Phone")] public CHandle<PlayerPhone> Phone { get; set; }
