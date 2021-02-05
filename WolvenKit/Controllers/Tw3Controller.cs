@@ -295,7 +295,7 @@ namespace WolvenKit.Controllers
 
         public async override Task<bool> PackAndInstallroject()
         {
-            /*var ActiveMod = MainController.Get().ActiveMod;
+            var ActiveMod = MainController.Get().ActiveMod;
             var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             if (ActiveMod == null)
                 return false;
@@ -305,7 +305,7 @@ namespace WolvenKit.Controllers
                 return false;
             }
 
-            object packsettings = null;//m_windowFactory.ShowPackSettings();
+            var packsettings = new WolvenKit.Common.Model.WitcherPackSettings();
             if (packsettings != null)
             {
                 MainController.Get().ProjectStatus = EProjectStatus.Busy;
@@ -475,12 +475,12 @@ namespace WolvenKit.Controllers
                 int statusPack = -1;
 
                 //Handle bundle packing.
-                if (packsettings.PackBundles.Item1 || packsettings.PackBundles.Item2)
+                if (packsettings.dlcPackBundles || packsettings.modPackBundles)
                 {
                     // packing
                     //if (statusCookCol * statusCookTex != 0)
                     {
-                        var t = WccHelper.Pack(packsettings.PackBundles.Item1, packsettings.PackBundles.Item2);
+                        var t = WccHelper.Pack(packsettings.modPackBundles, packsettings.dlcPackBundles);
                         await t.ContinueWith(antecedent =>
                         {
                             //Logger.LogString($"Packing Bundles ended with status: {antecedent.Result}", Logtype.Important);
@@ -500,12 +500,12 @@ namespace WolvenKit.Controllers
                 //Handle metadata generation.
                 int statusMetaData = -1;
 
-                if (packsettings.GenMetadata.Item1 || packsettings.GenMetadata.Item2)
+                if (packsettings.modGenMetadata || packsettings.dlcGenMetadata)
                 {
                     if (statusPack == 1)
                     {
-                        var t = WccHelper.CreateMetaData(packsettings.GenMetadata.Item1,
-                            packsettings.GenMetadata.Item2);
+                        var t = WccHelper.CreateMetaData(packsettings.modGenMetadata,
+                            packsettings.dlcGenMetadata);
                         await t.ContinueWith(antecedent =>
                         {
                             statusMetaData = antecedent.Result;
@@ -528,10 +528,10 @@ namespace WolvenKit.Controllers
                 int statusTex = -1;
 
                 //Generate collision cache
-                if (packsettings.GenCollCache.Item1 || packsettings.GenCollCache.Item2)
+                if (packsettings.modGenCollCache || packsettings.dlcGenCollCache)
                 {
-                    var t = WccHelper.GenerateCache(EArchiveType.CollisionCache, packsettings.GenCollCache.Item1,
-                        packsettings.GenCollCache.Item2);
+                    var t = WccHelper.GenerateCache(EArchiveType.CollisionCache, packsettings.modGenCollCache,
+                        packsettings.dlcGenCollCache);
                     await t.ContinueWith(antecedent =>
                     {
                         statusCol = antecedent.Result;
@@ -542,9 +542,9 @@ namespace WolvenKit.Controllers
                 }
 
                 //Handle texture caching
-                if (packsettings.GenTexCache.Item1 || packsettings.GenTexCache.Item2)
+                if (packsettings.modGenTexCache || packsettings.dlcGenTexCache)
                 {
-                    var t = WccHelper.GenerateCache(EArchiveType.TextureCache, packsettings.GenTexCache.Item1, packsettings.GenTexCache.Item2);
+                    var t = WccHelper.GenerateCache(EArchiveType.TextureCache, packsettings.modGenTexCache, packsettings.dlcGenTexCache);
                     await t.ContinueWith(antecedent =>
                     {
                         statusTex = antecedent.Result;
@@ -556,9 +556,9 @@ namespace WolvenKit.Controllers
 
 
                 //Handle sound caching
-                if (packsettings.Sound.Item1 || packsettings.Sound.Item2)
+                if (packsettings.modSound || packsettings.dlcSound)
                 {
-                    if (packsettings.Sound.Item1)
+                    if (packsettings.modSound)
                     {
                         var soundmoddir = Path.Combine(ActiveMod.ModDirectory, EArchiveType.SoundCache.ToString());
 
@@ -616,7 +616,7 @@ namespace WolvenKit.Controllers
                         }
                     }
 
-                    if (packsettings.Sound.Item2)
+                    if (packsettings.dlcSound)
                     {
                         var sounddlcdir = Path.Combine(ActiveMod.DlcDirectory, EArchiveType.SoundCache.ToString());
 
@@ -642,7 +642,8 @@ namespace WolvenKit.Controllers
 
                 //---------------------------- SCRIPTS ----------------------------------//
                 #region Scripts
-                (bool packscriptsMod, bool packscriptsdlc) = packsettings.Scripts;
+                bool packscriptsMod = packsettings.modScripts;
+                bool packscriptsdlc = packsettings.dlcScripts;
                 //Handle mod scripts
                 if (packscriptsMod && Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
                 {
@@ -680,25 +681,19 @@ namespace WolvenKit.Controllers
                 //---------------------------- STRINGS ----------------------------------//
                 #region Strings
                 //Copy the generated w3strings
-                if (packsettings.Strings.Item1 || packsettings.Strings.Item2)
+                if (packsettings.modStrings || packsettings.dlcStrings)
                 {
                     var files = Directory.GetFiles((ActiveMod.ProjectDirectory + "\\strings")).Where(s => Path.GetExtension(s) == ".w3strings").ToList();
 
-                    if (packsettings.Strings.Item1)
+                    if (packsettings.modStrings)
                         files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedDlcDirectory, Path.GetFileName(x))));
-                    if (packsettings.Strings.Item2)
+                    if (packsettings.dlcStrings)
                         files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedModDirectory, Path.GetFileName(x))));
                 }
                 #endregion
                 MainController.Get().StatusProgress = 90;
 
                 //---------------------------- FINALIZE ---------------------------------//
-
-
-                //Install the mod TODO:
-                //if (!MainController.Get().Configuration.IsAutoInstallModsDisabled)
-                    //InstallMod();
-
                 //Report that we are done
                 MainController.Get().StatusProgress = 100;
                 MainController.Get().ProjectStatus = EProjectStatus.Ready;
@@ -707,8 +702,7 @@ namespace WolvenKit.Controllers
             else
             {
                 return false;
-            }*/
-            return false;
+            }
         }
     }
 }
