@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Catel.IoC;
 using Catel.Linq;
 using CP77.CR2W.Types;
@@ -98,7 +100,7 @@ namespace WolvenKit.Controllers
             if (cp77proj == null)
             {
                 _loggerService.LogString("Can't pack nor install project (no project/not cyberpunk project)!", Logtype.Error);
-                return new Task<bool>(new Func<bool>(() => false));
+                return Task.FromResult(false);
             }
             _loggerService.LogString("Rebuilding necessary files....", Logtype.Normal);
             CP77.CR2W.ModTools.Recombine(new DirectoryInfo(cp77proj.ModDirectory), true, true, true, true, true, true);
@@ -106,7 +108,82 @@ namespace WolvenKit.Controllers
             CP77.CR2W.ModTools.Pack(new DirectoryInfo(cp77proj.ModDirectory),
                 new DirectoryInfo(cp77proj.PackedModDirectory));
             _loggerService.LogString("Packing complete!", Logtype.Important);
-            return new Task<bool>(new Func<bool>(() => false));
+            InstallMod();
+            return Task.FromResult(true);
+        }
+
+        private static void InstallMod()
+        {
+            var ActiveMod = MainController.Get().ActiveMod;
+            var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            try
+            {
+                //Check if we have installed this mod before. If so do a little cleanup.
+                if (File.Exists(ActiveMod.ProjectDirectory + "\\install_log.xml"))
+                {
+                    XDocument log = XDocument.Load(ActiveMod.ProjectDirectory + "\\install_log.xml");
+                    var dirs = log.Root.Element("Files")?.Descendants("Directory");
+                    if (dirs != null)
+                    {
+                        //Loop throught dirs and delete the old files in them.
+                        foreach (var d in dirs)
+                        {
+                            foreach (var f in d.Elements("file"))
+                            {
+                                if (File.Exists(f.Value))
+                                {
+                                    File.Delete(f.Value);
+                                    Debug.WriteLine("File delete: " + f.Value);
+                                }
+                            }
+                        }
+                        //Delete the empty directories.
+                        foreach (var d in dirs)
+                        {
+                            if (d.Attribute("Path") != null)
+                            {
+                                if (Directory.Exists(d.Attribute("Path").Value))
+                                {
+                                    if (!(Directory.GetFiles(d.Attribute("Path").Value, "*", SearchOption.AllDirectories).Any()))
+                                    {
+                                        Directory.Delete(d.Attribute("Path").Value, true);
+                                        Debug.WriteLine("Directory delete: " + d.Attribute("Path").Value);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //Delete the old install log. We will make a new one so this is not needed anymore.
+                    File.Delete(ActiveMod.ProjectDirectory + "\\install_log.xml");
+                }
+                var installlog = new XDocument(new XElement("InstalLog", new XAttribute("Project", ActiveMod.Name), new XAttribute("Build_date", DateTime.Now.ToString())));
+                var fileroot = new XElement("Files");
+                //Copy and log the files.
+                if (!Directory.Exists(Path.Combine(ActiveMod.ProjectDirectory, "packed")))
+                {
+                    _logger.LogString("Failed to install the mod! The packed directory doesn't exist! You forgot to tick any of the packing options?", Logtype.Important);
+                    return;
+                }
+
+                var packedmoddir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "Mods");
+                if (Directory.Exists(packedmoddir))
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, MainController.Get().Configuration.GameModDir, true));
+
+                var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
+                if (Directory.Exists(packeddlcdir))
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.GameDlcDir, true));
+
+
+                installlog.Root.Add(fileroot);
+                //Save the log.
+                installlog.Save(ActiveMod.ProjectDirectory + "\\install_log.xml");
+                _logger.LogString(ActiveMod.Name + " installed!" + "\n", Logtype.Success);
+            }
+            catch (Exception ex)
+            {
+                //If we screwed up something. Log it.
+                _logger.LogString(ex.ToString() + "\n", Logtype.Error);
+            }
         }
     }
 }
