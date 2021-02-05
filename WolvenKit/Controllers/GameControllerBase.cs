@@ -27,6 +27,8 @@ namespace WolvenKit.Controllers
 
         public abstract Task<bool> PackAndInstallroject();
 
+        public abstract Task<bool> PackageMod();
+
         public static string GetManagerPath(EManagerType type)
         {
             switch (type)
