@@ -86,7 +86,7 @@ namespace CP77.CR2W
                 //Create the related chunk
                 var newchunk = DestinationFile.CreateChunk(
                         sourcechunk.data.REDType,
-                        DestinationFile.GetLastChildrenIndexRecursive(DestinationChunk) + 1);
+                        CR2WFile.GetLastChildrenIndexRecursive(DestinationChunk) + 1);
 
                 if(!chunkTranslation.ContainsKey(sourcechunk))
                 {
@@ -145,7 +145,7 @@ namespace CP77.CR2W
                 var newchunk = DestinationFile.CreateChunk(
                     sourcevirtualchildchunk.data.REDType,
                     inplace ? destinationchunk.ChunkIndex + sourcevirtualchildchunk.ChunkIndex - SourceChunk.ChunkIndex
-                            : destinationchunk.cr2w.GetLastChildrenIndexRecursive(destinationchunk) + 1);
+                            : CR2WFile.GetLastChildrenIndexRecursive(destinationchunk) + 1);
 
                 if(!chunkTranslation.ContainsKey(sourcevirtualchildchunk))
                 {

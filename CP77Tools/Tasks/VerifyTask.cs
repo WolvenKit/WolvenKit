@@ -55,6 +55,8 @@ namespace CP77Tools.Tasks
                         ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
                         if (VerifyFile(ms))
                             logger.LogString($"{fileEntry.NameOrHash} - No problems found", Logtype.Success);
+                        else
+                            logger.LogString($"{fileEntry.NameOrHash} - Failed", Logtype.Error);
                     }
                 }
             }

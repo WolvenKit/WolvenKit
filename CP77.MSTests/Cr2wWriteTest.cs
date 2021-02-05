@@ -872,11 +872,9 @@ namespace CP77.MSTests
                                 correctStringTable = oldst.All(newst.Contains);
                             if (!correctStringTable)
                             {
-                                var complement1 = oldst.Except(newst);
-                                var complement2 = newst.Except(oldst);
+                                var complement1 = oldst.Except(newst).ToList();
+                                var complement2 = newst.Except(oldst).ToList();
                             }
-
-
 
                             for (int i = 0; i < Math.Max(oldst.Count, newst.Count); i++)
                             {

@@ -327,17 +327,12 @@ namespace CP77.CR2W
             return removed;
         }
 
-        public int GetLastChildrenIndexRecursive(CR2WExportWrapper chunk)
+        public static int GetLastChildrenIndexRecursive(CR2WExportWrapper chunk)
         {
-            if (chunk.VirtualChildrenChunks.Count() == 0)
-            {
-                return chunk.ChunkIndex;
-            }
-            else
-            {
-                return GetLastChildrenIndexRecursive(chunk.VirtualChildrenChunks.Where(
-                    _ => _.ChunkIndex == chunk.VirtualChildrenChunks.Max(p => p.ChunkIndex)).FirstOrDefault());
-            }
+            return !chunk.VirtualChildrenChunks.Any() 
+                ? chunk.ChunkIndex 
+                : GetLastChildrenIndexRecursive(chunk.VirtualChildrenChunks
+                    .FirstOrDefault(_ => _.ChunkIndex == chunk.VirtualChildrenChunks.Max(p => p.ChunkIndex)));
         }
 
         public int GetStringIndex(string name, bool addnew = false)
@@ -353,10 +348,7 @@ namespace CP77.CR2W
 
         public string GetLocalizedString(uint val)
         {
-            if (LocalizedStringSource != null)
-                return LocalizedStringSource.GetLocalizedString(val);
-
-            return null;
+            return LocalizedStringSource?.GetLocalizedString(val);
         }
 
         public CR2WFileHeader GetFileHeader() => m_fileheader;
@@ -967,8 +959,7 @@ namespace CP77.CR2W
         private (List<string>, List<SImportEntry>) GenerateStringtableInner()
         {
             var dbg_trace = new List<string>();
-            var newnameslist = new Dictionary<string, string>();
-            newnameslist.Add("", "");
+            var newnameslist = new Dictionary<string, string> {{"", ""}};
             var newimportslist = new List<SImportEntry>();
             var newsoftlist = new List<SImportEntry>();
             var idlist = new HashSet<string>();
@@ -1042,7 +1033,7 @@ namespace CP77.CR2W
                     case ISoftAccessor s:
                         break;
                     case IBufferVariantAccessor ivariant:
-                        EStringTableMod mod = EStringTableMod.None;
+                        var mod = EStringTableMod.None;
                         returnedVariables.Add(new SNameArg(mod, ivariant.Variant));
                         break;
                     case CVariant cVariant:
@@ -1062,10 +1053,27 @@ namespace CP77.CR2W
                             }
 
                             // add all normal REDProperties
-                            returnedVariables.AddRange(cvar.GetExistingVariables(false)
+                            var props = cvar.GetExistingVariables(false);
+                            returnedVariables.AddRange(props
                                 .Select(_ => new SNameArg(EStringTableMod.None, _)));
 
-                           
+                            // get buffers
+                            var buffers = cvar.GetExistingVariables(true).Except(props).ToList();
+                            if (buffers.Count > 0)
+                            {
+
+                            }
+
+                            // custom serialization
+                            if (cvar is CMaterialInstance mi)
+                            {
+                                returnedVariables.AddRange(buffers
+                                    .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
+                            }
+
+
+                            
+
                             break;
                         }
                     default:
