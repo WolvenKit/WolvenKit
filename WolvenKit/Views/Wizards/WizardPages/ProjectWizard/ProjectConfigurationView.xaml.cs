@@ -1,30 +1,28 @@
 ﻿
 using Catel.IoC;
 using Catel.Services;
-using WolvenKit.Model.Wizards;
+using WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard;
 
 namespace WolvenKit.Views.Wizards.WizardPages.ProjectWizard
 {
     public partial class ProjectConfigurationView
     {
-        private readonly IOpenFileService _openFileService;
-        private readonly ProjectWizardModel _pwm;
+        private readonly ISelectDirectoryService _selectDirectoryService;
 
         public ProjectConfigurationView()
         {
             InitializeComponent();
 
-            _openFileService = ServiceLocator.Default.ResolveType<IOpenFileService>();
-            _pwm = ServiceLocator.Default.ResolveType<ProjectWizardModel>();
+            _selectDirectoryService = ServiceLocator.Default.ResolveType<ISelectDirectoryService>();
         }
 
         private async void ProjectPathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext() {
-                Filter = "Exe files|*.exe"
-            });
+            var result = await _selectDirectoryService.DetermineDirectoryAsync(
+                new DetermineDirectoryContext()
+            );
             if (result.Result)
-                _pwm.ProjectPath = result.FileName;
+                (ViewModel as ProjectConfigurationViewModel).ProjectWizardModel.ProjectPath = result.DirectoryName;
         }
     }
 }

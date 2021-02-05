@@ -1,5 +1,7 @@
 ﻿
+using Catel;
 using Catel.IoC;
+using Catel.MVVM;
 using WolvenKit.Views.Wizards.WizardPages.ProjectWizard;
 
 namespace WolvenKit.Views.Wizards
@@ -12,7 +14,7 @@ namespace WolvenKit.Views.Wizards
 
             SPTV = new SelectProjectTypeView();
             PCV = new ProjectConfigurationView();
-            FSV = new FinalizeSetupView();
+            FSV = new FinalizeSetupView(this);
 
             InitializeComponent();
             ShowPage();

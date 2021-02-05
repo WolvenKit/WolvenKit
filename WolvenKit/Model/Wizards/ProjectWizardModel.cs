@@ -14,8 +14,8 @@ namespace WolvenKit.Model.Wizards
         #endregion fields
 
         #region properties
-        public string WitcherGameName { get; } = "The Witcher 3";
-        public string CyberpunkGameName { get; } = "Cyberpunk 2077";
+        public static string WitcherGameName { get; } = "The Witcher 3";
+        public static string CyberpunkGameName { get; } = "Cyberpunk 2077";
 
         /// <summary>
         /// Gets/Sets the project's name.
@@ -76,6 +76,14 @@ namespace WolvenKit.Model.Wizards
         {
             get => CyberpunkChecked ? CyberpunkGameName : (WitcherChecked ? WitcherGameName : "");
         }
+
+        /// <summary>
+        /// Gets/Sets the project's type and path.
+        /// </summary>
+        public TypeAndPath ProjectTypeAndPath
+        {
+            get => new TypeAndPath(ProjectType, ProjectPath);
+        }
         #endregion properties
 
         #region methods
@@ -92,5 +100,16 @@ namespace WolvenKit.Model.Wizards
                 validationResults.Add(FieldValidationResult.CreateError(nameof(ProjectPath), "WolvenKit path does not exist"));
         }
         #endregion methods
+
+        public class TypeAndPath
+        {
+            public string Path;
+            public string Type;
+            public TypeAndPath(string type, string path)
+            {
+                Type = type;
+                Path = path;
+            }
+        }
     }
 }

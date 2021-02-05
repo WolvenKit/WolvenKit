@@ -29,6 +29,7 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard
         [Expose("ProjectName")]
         [Expose("ProjectPath")]
         [Expose("ProjectType")]
+        [Expose("ProjectTypeAndPath")]
         public ProjectWizardModel ProjectWizardModel
         {
             get { return GetValue<ProjectWizardModel>(ProjectWizardModelProperty); }

@@ -1,21 +1,25 @@
 ﻿
 using Catel.IoC;
-using WolvenKit.Views.HomePage;
+using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards.WizardPages.ProjectWizard
 {
     public partial class FinalizeSetupView
     {
-        public FinalizeSetupView()
+        ProjectWizardView _pwv;
+
+        public FinalizeSetupView(ProjectWizardView pwv)
         {
             InitializeComponent();
 
-            //_hpv = hpv;
+            _pwv = pwv;
+            var command = ServiceLocator.Default.ResolveType<ApplicationCreateNewProjectCommandContainer>();
+            command.OnCommandCompleted += () => CancelProjectBtn_Click(null, null);
         }
 
-        private void CancelProject_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void CancelProjectBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            (_pwv.ViewModel as ProjectWizardViewModel).Close();
         }
     }
 }
