@@ -26,23 +26,20 @@ namespace CP77Tools.Tasks
             var CP77_DIR = System.Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
             var gameDirectory = new DirectoryInfo(CP77_DIR);
             var gameArchiveDir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));
-            var bm = new ArchiveManager(gameArchiveDir);
-
+            
             if (path != null)
                 foreach (var s in path)
                 {
-                    var hash = FNV1A64HashAlgorithm.HashString(s);
+                    if (!File.Exists(s)) continue;
 
-                    if (!hashService.Hashdict.ContainsKey(hash))
-                        continue;
-
-                    var file = bm.Files[hash];
-
-                    foreach (var fileEntry in file)
-                        VerifyFile(fileEntry);
+                    using var fs = new FileStream(s, FileMode.Open, FileAccess.Read);
+                    if (VerifyFile(fs, s))
+                        logger.LogString($"{s} - No problems found", Logtype.Success);
                 }
 
             if (hashes != null)
+            {
+                var bm = new ArchiveManager(gameArchiveDir);
                 foreach (var hash in hashes)
                 {
                     if (!hashService.Hashdict.ContainsKey(hash))
@@ -51,22 +48,25 @@ namespace CP77Tools.Tasks
                     var file = bm.Files[hash];
 
                     foreach (var fileEntry in file)
-                        VerifyFile(fileEntry);
+                    {
+                        if (fileEntry.Archive is not Archive ar)
+                            continue;
+                        using var ms = new MemoryStream();
+                        ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
+                        if (VerifyFile(ms))
+                            logger.LogString($"{fileEntry.NameOrHash} - No problems found", Logtype.Success);
+                    }
                 }
+            }
 
 
-            void VerifyFile(FileEntry fileEntry)
+            static bool VerifyFile(Stream ms, string infilepath = "")
             {
-
-                if (fileEntry.Archive is not Archive ar)
-                    return;
-                using var ms = new MemoryStream();
-                ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
-
-                var c = new CR2WFile { FileName = fileEntry.NameOrHash };
+                var c = new CR2WFile();// { FileName = fileEntry.NameOrHash };
+                var originalbytes = StreamExtensions.ToByteArray(ms);
                 ms.Seek(0, SeekOrigin.Begin);
                 var readResult = c.Read(ms);
-                var originalbytes = StreamExtensions.ToByteArray(ms);
+                
 
                 switch (readResult)
                 {
@@ -110,26 +110,27 @@ namespace CP77Tools.Tasks
                             var newbytes = StreamExtensions.ToByteArray(wms);
                             isBinaryEqual = originalbytes.SequenceEqual(newbytes);
 
-
+                            if (!isBinaryEqual && !string.IsNullOrEmpty(infilepath))
+                            {
+                                File.WriteAllBytes($"{infilepath}.n.bin", newbytes);
+                                return false;
+                            }
                         }
 
                         if (!correctStringTable)
                         {
-                            Debugger.Break();
+                            return false;
                         }
 
-                        if (!isBinaryEqual)
-                        {
-                            Debugger.Break();
-                        }
 
-                        break;
+
+                        return true;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+
+                return false;
             }
-
-
 
 
             return 1;

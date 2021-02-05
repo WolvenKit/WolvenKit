@@ -595,9 +595,10 @@ namespace CP77.CR2W
             Embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
             {
                 ParentFile = this,
-                ParentImports = Imports,
-                Handle = StringDictionary[_.path],
             }).ToList(); // block 7
+
+            //if (Embedded.Count > 1)
+            //    throw new NotImplementedException("Embedded files present?");
 
             #endregion
 
@@ -630,8 +631,8 @@ namespace CP77.CR2W
             {
                 //throw new NotImplementedException("embedded files for cp77 are not implemented");
 
-                //CR2WEmbeddedWrapper emb = Embedded[i];
-                //emb.ReadData(file);
+                CR2WEmbeddedWrapper emb = Embedded[i];
+                emb.ReadData(file);
 
                 //int percentprogress = (int)((float)i / (float)Embedded.Count * 100.0);
                 //Logger?.LogProgress(percentprogress, $"Reading embedded file {emb.ClassName}...");
@@ -781,26 +782,24 @@ namespace CP77.CR2W
             #endregion
             
             #region Embedded 
-            for (var i = 0; i < Embedded.Count; i++)
+            foreach (var emb in Embedded)
             {
-                var emb = Embedded[i];
-                // update path index
-                var handleoffset = inverseDictionary[emb.Handle];
-                if (handleoffset != emb.Embedded.path)
-                {
-                    emb.SetPath(handleoffset);
-                    // check path hash
-                    var pathhash = FNV1A64HashAlgorithm.HashString(emb.Handle);
-                    if (pathhash != emb.Embedded.pathHash)
-                        emb.SetPathHash(pathhash);
-                }
                 // uddate import index
                 int realidx = (int)emb.Embedded.importIndex - 1;
-                if (Imports[realidx].ClassNameStr != emb.ImportClass || emb.ImportPath != Imports[realidx].DepotPathStr)
+                int chunkidx = (int)emb.Embedded.chunkIndex;
+                if (emb.ImportPath != Imports[realidx].DepotPathStr)
                 {
-                    var importindex = Imports.FindIndex(_ => _.ClassNameStr == emb.ImportClass && _.DepotPathStr == emb.ImportPath);
+                    var emb1 = emb;
+                    var importindex = Imports.FindIndex(_ => _.DepotPathStr == emb1.ImportPath);
                     if (importindex != -1)
                         emb.SetImportIndex((uint)importindex);
+                }
+                // update export index
+                if (emb.Export != Chunks[chunkidx])
+                {
+                    var chunkindex = Chunks.FindIndex(_ => _ == emb.Export);
+                    if (chunkindex != -1)
+                        emb.SetChunkIndex((uint)chunkindex);
                 }
             }
             #endregion
@@ -836,8 +835,9 @@ namespace CP77.CR2W
             }
             foreach (var embedded in Embedded)
             {
-                var newoffset = embedded.Embedded.dataOffset + headerOffset;
-                embedded.SetOffset(newoffset);
+                //var newoffset = embedded.Embedded.dataOffset + headerOffset;
+                //embedded.SetOffset(newoffset);
+                throw new NotImplementedException("Cr2w - write embedded");
             }
             m_fileheader.objectsEnd += headerOffset;
             #endregion
@@ -916,8 +916,7 @@ namespace CP77.CR2W
             }
             foreach (var emb in Embedded)
             {
-                if (!stringlist.Contains(emb.Handle))
-                    stringlist.Add(emb.Handle);
+                
             }
 
             // create new stringslist
@@ -1088,7 +1087,7 @@ namespace CP77.CR2W
                         AddUniqueToTable(h.ClassName);
                         var flags = EImportFlags.Default;
 
-                        if (var.cr2w.Embedded.Any(_ => _.ImportPath == h.DepotPath && _.ImportClass == h.ClassName))
+                        if (var.cr2w.Embedded.Any(_ => _.ImportPath == h.DepotPath))
                             flags = EImportFlags.Inplace;
 
                         var importtuple = new SImportEntry(h.ClassName, h.DepotPath, flags);
@@ -1291,12 +1290,6 @@ namespace CP77.CR2W
                 buffer.WriteData(bw);
             }
             m_fileheader.buffersEnd = (uint)bw.BaseStream.Position;
-
-            // Write embedded data
-            for (var i = 0; i < Embedded.Count; i++)
-            {
-                Embedded[i].WriteData(bw);
-            }
         }
 
 

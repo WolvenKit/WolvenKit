@@ -867,7 +867,7 @@ namespace CP77.MSTests
 
                             var oldst = c.StringDictionary.Values.ToList();
                             var newst = c.GenerateStringtable().Item1.Values.ToList();
-                            //var compstr = "OLD,NEW";
+                            var compstr = "OLD,NEW";
                             var /*correctStringTable = oldst.Count == newst.Count;*/
                                 correctStringTable = oldst.All(newst.Contains);
                             if (!correctStringTable)
@@ -875,24 +875,24 @@ namespace CP77.MSTests
                                 var complement1 = oldst.Except(newst);
                                 var complement2 = newst.Except(oldst);
                             }
-                            
 
 
-                            //for (int i = 0; i < Math.Max(oldst.Count, newst.Count); i++)
-                            //{
-                            //    string str1 = "";
-                            //    string str2 = "";
-                            //    if (i < oldst.Count)
-                            //        compstr += oldst[i];
-                            //    compstr += ",";
-                            //    if (i < newst.Count)
-                            //        compstr += newst[i];
-                            //    compstr += "\n";
 
-                            //    //if (str1 != str2)
-                            //    //    correctStringTable = false;
+                            for (int i = 0; i < Math.Max(oldst.Count, newst.Count); i++)
+                            {
+                                string str1 = "";
+                                string str2 = "";
+                                if (i < oldst.Count)
+                                    compstr += oldst[i];
+                                compstr += ",";
+                                if (i < newst.Count)
+                                    compstr += newst[i];
+                                compstr += "\n";
 
-                            //}
+                                if (str1 != str2)
+                                    correctStringTable = false;
+
+                            }
 
                             #endregion
 
@@ -909,8 +909,8 @@ namespace CP77.MSTests
 
                                 // test for binary equality 
                                 var newbytes = StreamExtensions.ToByteArray(wms);
-                                //isBinaryEqual = originalbytes.SequenceEqual(newbytes);
-                                isBinaryEqual = originalbytes.Length == newbytes.Length;
+                                isBinaryEqual = originalbytes.SequenceEqual(newbytes);
+                                //isBinaryEqual = originalbytes.Length == newbytes.Length;
 #pragma warning disable
                                 if (!isBinaryEqual && true)
                                 {
@@ -921,10 +921,10 @@ namespace CP77.MSTests
                                 }
 #pragma 
                                 // test reading again
-                                bw.Seek(0, SeekOrigin.Begin);
-                                using var br2 = new BinaryReader(wms);
-                                var reread = c.Read(br2);
-                                isBinaryEqual = reread == EFileReadErrorCodes.NoError;
+                                //bw.Seek(0, SeekOrigin.Begin);
+                                //using var br2 = new BinaryReader(wms);
+                                //var reread = c.Read(br2);
+                                //isBinaryEqual = reread == EFileReadErrorCodes.NoError;
                             }
 
                             #endregion

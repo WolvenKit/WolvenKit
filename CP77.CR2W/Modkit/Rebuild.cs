@@ -46,7 +46,7 @@ namespace CP77.CR2W
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
                 cr2w.Read(br);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }

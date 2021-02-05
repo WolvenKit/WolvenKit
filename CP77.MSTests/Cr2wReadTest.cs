@@ -826,6 +826,8 @@ namespace CP77.MSTests
                 if (additionalBytes > 0)
                     msg += $" UnknownBytes: {additionalBytes}. ";
 
+                sb.AppendLine(
+                    $"{extension} -> Successful Reads: {successCount} / {totalCount} ({(int) (((double) successCount / (double) totalCount) * 100)}%)");
                 sb.AppendLine(msg);
                 var logPath = Path.Combine(resultDir, $"logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
                 File.WriteAllText(logPath, sb.ToString());
