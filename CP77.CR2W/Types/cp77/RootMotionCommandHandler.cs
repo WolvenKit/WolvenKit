@@ -8,7 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class RootMotionCommandHandler : AICommandHandlerBase
 	{
-		[Ordinal(0)]  [RED("params")] public CHandle<AIArgumentMapping> Params { get; set; }
+		[Ordinal(0)]  [RED("inCommand")] public CHandle<AIArgumentMapping> InCommand { get; set; }
+		[Ordinal(1)]  [RED("params")] public CHandle<AIArgumentMapping> Params { get; set; }
 
 		public RootMotionCommandHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

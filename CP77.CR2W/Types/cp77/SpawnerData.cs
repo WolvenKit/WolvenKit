@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SpawnerData : CVariable
 	{
-		[Ordinal(0)]  [RED("entryNames")] public CArray<CName> EntryNames { get; set; }
-		[Ordinal(1)]  [RED("spawnerID")] public entEntityID SpawnerID { get; set; }
+		[Ordinal(0)]  [RED("spawnerID")] public entEntityID SpawnerID { get; set; }
+		[Ordinal(1)]  [RED("entryNames")] public CArray<CName> EntryNames { get; set; }
 
 		public SpawnerData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

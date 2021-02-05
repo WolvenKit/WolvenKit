@@ -8,9 +8,14 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DestroyWeakspot : AIActionHelperTask
 	{
-		[Ordinal(0)]  [RED("weakspotArray")] public CArray<wCHandle<gameWeakspotObject>> WeakspotArray { get; set; }
-		[Ordinal(1)]  [RED("weakspotComponent")] public CHandle<gameWeakspotComponent> WeakspotComponent { get; set; }
-		[Ordinal(2)]  [RED("weakspotIndex")] public CInt32 WeakspotIndex { get; set; }
+		[Ordinal(0)]  [RED("actionTweakIDMapping")] public CHandle<AIArgumentMapping> ActionTweakIDMapping { get; set; }
+		[Ordinal(1)]  [RED("actionStringName")] public CString ActionStringName { get; set; }
+		[Ordinal(2)]  [RED("initialized")] public CBool Initialized { get; set; }
+		[Ordinal(3)]  [RED("actionName")] public CName ActionName { get; set; }
+		[Ordinal(4)]  [RED("actionID")] public TweakDBID ActionID { get; set; }
+		[Ordinal(5)]  [RED("weakspotIndex")] public CInt32 WeakspotIndex { get; set; }
+		[Ordinal(6)]  [RED("weakspotComponent")] public CHandle<gameWeakspotComponent> WeakspotComponent { get; set; }
+		[Ordinal(7)]  [RED("weakspotArray")] public CArray<wCHandle<gameWeakspotObject>> WeakspotArray { get; set; }
 
 		public DestroyWeakspot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -9,9 +9,9 @@ namespace CP77.CR2W.Types
 	public class ScoreboardLogicController : inkWidgetLogicController
 	{
 		[Ordinal(0)]  [RED("gridItem")] public CName GridItem { get; set; }
-		[Ordinal(1)]  [RED("highScores")] public CArray<ScoreboardPlayer> HighScores { get; set; }
-		[Ordinal(2)]  [RED("namesWidget")] public inkCompoundWidgetReference NamesWidget { get; set; }
-		[Ordinal(3)]  [RED("scoresWidget")] public inkCompoundWidgetReference ScoresWidget { get; set; }
+		[Ordinal(1)]  [RED("namesWidget")] public inkCompoundWidgetReference NamesWidget { get; set; }
+		[Ordinal(2)]  [RED("scoresWidget")] public inkCompoundWidgetReference ScoresWidget { get; set; }
+		[Ordinal(3)]  [RED("highScores")] public CArray<ScoreboardPlayer> HighScores { get; set; }
 
 		public ScoreboardLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

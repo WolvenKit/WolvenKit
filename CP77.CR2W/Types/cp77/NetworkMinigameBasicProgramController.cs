@@ -8,6 +8,14 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class NetworkMinigameBasicProgramController : NetworkMinigameProgramController
 	{
+		[Ordinal(0)]  [RED("text")] public inkTextWidgetReference Text { get; set; }
+		[Ordinal(1)]  [RED("commandElementSlotsContainer")] public CArray<inkWidgetReference> CommandElementSlotsContainer { get; set; }
+		[Ordinal(2)]  [RED("elementLibraryName")] public CName ElementLibraryName { get; set; }
+		[Ordinal(3)]  [RED("completedMarker")] public inkWidgetReference CompletedMarker { get; set; }
+		[Ordinal(4)]  [RED("imageRef")] public inkImageWidgetReference ImageRef { get; set; }
+		[Ordinal(5)]  [RED("slotList")] public CArray<CArray<wCHandle<NetworkMinigameElementController>>> SlotList { get; set; }
+		[Ordinal(6)]  [RED("data")] public ProgramData Data { get; set; }
+		[Ordinal(7)]  [RED("animProxy")] public CHandle<inkanimProxy> AnimProxy { get; set; }
 
 		public NetworkMinigameBasicProgramController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

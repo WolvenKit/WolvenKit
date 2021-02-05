@@ -15,7 +15,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(4)]  [RED("referencePerformer")] public scnPerformerId ReferencePerformer { get; set; }
 		[Ordinal(5)]  [RED("referencePerformerSlotId")] public TweakDBID ReferencePerformerSlotId { get; set; }
 		[Ordinal(6)]  [RED("referencePerformerItemId")] public TweakDBID ReferencePerformerItemId { get; set; }
-		[Ordinal(7)]  [RED("fallbackCachedBones", 2)] public CStatic<scneventsAttachPropToWorldCachedFallbackBone> FallbackCachedBones { get; set; }
+		[Ordinal(7)]  [RED("fallbackCachedBones", lignas(16) StaticArray<scneventsAttachPropToWorldCachedFallbackBon, 2)] public alignas(16) StaticArray<scneventsAttachPropToWorldCachedFallbackBone> FallbackCachedBones { get; set; }
 		[Ordinal(8)]  [RED("fallbackAnimset")] public rRef<animAnimSet> FallbackAnimset { get; set; }
 		[Ordinal(9)]  [RED("fallbackAnimationName")] public CName FallbackAnimationName { get; set; }
 		[Ordinal(10)]  [RED("fallbackAnimTime")] public CFloat FallbackAnimTime { get; set; }

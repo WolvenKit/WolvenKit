@@ -8,21 +8,37 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CrosshairGameController_Basic : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(0)]  [RED("RicochetChance")] public CUInt32 RicochetChance { get; set; }
-		[Ordinal(1)]  [RED("bbcurrentFireMode")] public CUInt32 BbcurrentFireMode { get; set; }
-		[Ordinal(2)]  [RED("bufferedSpread")] public Vector2 BufferedSpread { get; set; }
-		[Ordinal(3)]  [RED("centerPart")] public inkImageWidgetReference CenterPart { get; set; }
-		[Ordinal(4)]  [RED("currentFireMode")] public CEnum<gamedataTriggerMode> CurrentFireMode { get; set; }
-		[Ordinal(5)]  [RED("downPart")] public inkImageWidgetReference DownPart { get; set; }
-		[Ordinal(6)]  [RED("gameplaySpreadMultiplier")] public CFloat GameplaySpreadMultiplier { get; set; }
-		[Ordinal(7)]  [RED("horizontalMinSpread")] public CFloat HorizontalMinSpread { get; set; }
-		[Ordinal(8)]  [RED("leftPart")] public inkImageWidgetReference LeftPart { get; set; }
-		[Ordinal(9)]  [RED("ricochetModeActive")] public CUInt32 RicochetModeActive { get; set; }
-		[Ordinal(10)]  [RED("rightPart")] public inkImageWidgetReference RightPart { get; set; }
-		[Ordinal(11)]  [RED("uiBlackboard")] public CHandle<gameIBlackboard> UiBlackboard { get; set; }
-		[Ordinal(12)]  [RED("upPart")] public inkImageWidgetReference UpPart { get; set; }
-		[Ordinal(13)]  [RED("verticalMinSpread")] public CFloat VerticalMinSpread { get; set; }
-		[Ordinal(14)]  [RED("weaponlocalBB")] public CHandle<gameIBlackboard> WeaponlocalBB { get; set; }
+		[Ordinal(0)]  [RED("rootWidget")] public wCHandle<inkWidget> RootWidget { get; set; }
+		[Ordinal(1)]  [RED("crosshairState")] public CEnum<gamePSMCrosshairStates> CrosshairState { get; set; }
+		[Ordinal(2)]  [RED("visionState")] public CEnum<gamePSMVision> VisionState { get; set; }
+		[Ordinal(3)]  [RED("crosshairStateBlackboardId")] public CUInt32 CrosshairStateBlackboardId { get; set; }
+		[Ordinal(4)]  [RED("bulletSpreedBlackboardId")] public CUInt32 BulletSpreedBlackboardId { get; set; }
+		[Ordinal(5)]  [RED("bbNPCStatsId")] public CUInt32 BbNPCStatsId { get; set; }
+		[Ordinal(6)]  [RED("isTargetDead")] public CBool IsTargetDead { get; set; }
+		[Ordinal(7)]  [RED("lastGUIStateUpdateFrame")] public CUInt64 LastGUIStateUpdateFrame { get; set; }
+		[Ordinal(8)]  [RED("targetBB")] public wCHandle<gameIBlackboard> TargetBB { get; set; }
+		[Ordinal(9)]  [RED("weaponBB")] public wCHandle<gameIBlackboard> WeaponBB { get; set; }
+		[Ordinal(10)]  [RED("currentAimTargetBBID")] public CUInt32 CurrentAimTargetBBID { get; set; }
+		[Ordinal(11)]  [RED("targetDistanceBBID")] public CUInt32 TargetDistanceBBID { get; set; }
+		[Ordinal(12)]  [RED("targetAttitudeBBID")] public CUInt32 TargetAttitudeBBID { get; set; }
+		[Ordinal(13)]  [RED("targetEntity")] public wCHandle<entEntity> TargetEntity { get; set; }
+		[Ordinal(14)]  [RED("healthListener")] public CHandle<CrosshairHealthChangeListener> HealthListener { get; set; }
+		[Ordinal(15)]  [RED("isActive")] public CBool IsActive { get; set; }
+		[Ordinal(16)]  [RED("leftPart")] public inkImageWidgetReference LeftPart { get; set; }
+		[Ordinal(17)]  [RED("rightPart")] public inkImageWidgetReference RightPart { get; set; }
+		[Ordinal(18)]  [RED("upPart")] public inkImageWidgetReference UpPart { get; set; }
+		[Ordinal(19)]  [RED("downPart")] public inkImageWidgetReference DownPart { get; set; }
+		[Ordinal(20)]  [RED("centerPart")] public inkImageWidgetReference CenterPart { get; set; }
+		[Ordinal(21)]  [RED("bufferedSpread")] public Vector2 BufferedSpread { get; set; }
+		[Ordinal(22)]  [RED("currentFireMode")] public CEnum<gamedataTriggerMode> CurrentFireMode { get; set; }
+		[Ordinal(23)]  [RED("weaponlocalBB")] public CHandle<gameIBlackboard> WeaponlocalBB { get; set; }
+		[Ordinal(24)]  [RED("bbcurrentFireMode")] public CUInt32 BbcurrentFireMode { get; set; }
+		[Ordinal(25)]  [RED("ricochetModeActive")] public CUInt32 RicochetModeActive { get; set; }
+		[Ordinal(26)]  [RED("RicochetChance")] public CUInt32 RicochetChance { get; set; }
+		[Ordinal(27)]  [RED("uiBlackboard")] public CHandle<gameIBlackboard> UiBlackboard { get; set; }
+		[Ordinal(28)]  [RED("horizontalMinSpread")] public CFloat HorizontalMinSpread { get; set; }
+		[Ordinal(29)]  [RED("verticalMinSpread")] public CFloat VerticalMinSpread { get; set; }
+		[Ordinal(30)]  [RED("gameplaySpreadMultiplier")] public CFloat GameplaySpreadMultiplier { get; set; }
 
 		public CrosshairGameController_Basic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

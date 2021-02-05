@@ -8,6 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class LeftHandCyberwareCatchActionEvents : LeftHandCyberwareActionAbstractEvents
 	{
+		[Ordinal(0)]  [RED("projectileReleased")] public CBool ProjectileReleased { get; set; }
 
 		public LeftHandCyberwareCatchActionEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

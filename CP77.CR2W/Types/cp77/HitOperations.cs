@@ -8,7 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class HitOperations : DeviceOperations
 	{
-		[Ordinal(0)]  [RED("hitOperations")] public CArray<SHitOperationData> _HitOperations { get; set; }
+		[Ordinal(0)]  [RED("components")] public CArray<wCHandle<entIPlacedComponent>> Components { get; set; }
+		[Ordinal(1)]  [RED("fxInstances")] public CArray<SVfxInstanceData> FxInstances { get; set; }
+		[Ordinal(2)]  [RED("hitOperations")] public CArray<SHitOperationData> _HitOperations { get; set; }
 
 		public HitOperations(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

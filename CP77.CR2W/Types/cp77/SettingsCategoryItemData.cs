@@ -8,6 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SettingsCategoryItemData : ListItemData
 	{
+		[Ordinal(0)]  [RED("label")] public CString Label { get; set; }
 
 		public SettingsCategoryItemData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

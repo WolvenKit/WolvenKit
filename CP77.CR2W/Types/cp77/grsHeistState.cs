@@ -10,7 +10,7 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("time")] public netTime Time { get; set; }
 		[Ordinal(1)]  [RED("status")] public CEnum<grsHeistStatus> Status { get; set; }
-		[Ordinal(2)]  [RED("playersInfo", 7)] public CStatic<grsHeistPlayerGameInfo> PlayersInfo { get; set; }
+		[Ordinal(2)]  [RED("playersInfo", lignas(16) StaticArray<grsHeistPlayerGameInf, 7)] public alignas(16) StaticArray<grsHeistPlayerGameInfo> PlayersInfo { get; set; }
 
 		public grsHeistState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

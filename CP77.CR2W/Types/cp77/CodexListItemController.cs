@@ -8,9 +8,10 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CodexListItemController : inkListItemController
 	{
-		[Ordinal(0)]  [RED("doMarkNew")] public CBool DoMarkNew { get; set; }
-		[Ordinal(1)]  [RED("stateMapper")] public wCHandle<ListItemStateMapper> StateMapper { get; set; }
+		[Ordinal(0)]  [RED("labelPathRef")] public inkTextWidgetReference LabelPathRef { get; set; }
+		[Ordinal(1)]  [RED("doMarkNew")] public CBool DoMarkNew { get; set; }
 		[Ordinal(2)]  [RED("stateMapperRef")] public inkWidgetReference StateMapperRef { get; set; }
+		[Ordinal(3)]  [RED("stateMapper")] public wCHandle<ListItemStateMapper> StateMapper { get; set; }
 
 		public CodexListItemController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

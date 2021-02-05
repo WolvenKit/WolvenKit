@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class physicsGeometryCache : CResource
 	{
-		[Ordinal(0)]  [RED("bufferTableSectors")] public CArray<serializationDeferredDataBuffer> BufferTableSectors { get; set; }
+		[Ordinal(0)]  [RED("bufferTableSectors")] public CArray<DeferredDataBuffer> BufferTableSectors { get; set; }
 		[Ordinal(1)]  [RED("sectorEntries")] public CArray<physicsSectorEntry> SectorEntries { get; set; }
 		[Ordinal(2)]  [RED("sectorGeometries")] public CArray<physicsGeometryKey> SectorGeometries { get; set; }
 		[Ordinal(3)]  [RED("sectorCacheEntries")] public CArray<physicsSectorCacheEntry> SectorCacheEntries { get; set; }

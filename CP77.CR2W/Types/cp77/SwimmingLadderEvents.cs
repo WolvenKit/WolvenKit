@@ -8,6 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SwimmingLadderEvents : LadderEvents
 	{
+		[Ordinal(0)]  [RED("ladderClimbCameraTimeStamp")] public CFloat LadderClimbCameraTimeStamp { get; set; }
 
 		public SwimmingLadderEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

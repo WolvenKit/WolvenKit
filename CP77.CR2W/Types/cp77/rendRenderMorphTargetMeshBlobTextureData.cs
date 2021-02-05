@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class rendRenderMorphTargetMeshBlobTextureData : CVariable
 	{
-		[Ordinal(0)]  [RED("targetDiffScale", 3)] public CStatic<Vector4> TargetDiffScale { get; set; }
-		[Ordinal(1)]  [RED("targetDiffOffset", 3)] public CStatic<Vector4> TargetDiffOffset { get; set; }
+		[Ordinal(0)]  [RED("targetDiffScale", lignas(16) StaticArray<Vector, 3)] public alignas(16) StaticArray<Vector4> TargetDiffScale { get; set; }
+		[Ordinal(1)]  [RED("targetDiffOffset", lignas(16) StaticArray<Vector, 3)] public alignas(16) StaticArray<Vector4> TargetDiffOffset { get; set; }
 		[Ordinal(2)]  [RED("targetDiffsDataOffset", 3)] public CStatic<CUInt32> TargetDiffsDataOffset { get; set; }
 		[Ordinal(3)]  [RED("targetDiffsDataSize", 3)] public CStatic<CUInt32> TargetDiffsDataSize { get; set; }
 		[Ordinal(4)]  [RED("targetDiffsWidth", 3)] public CStatic<CUInt16> TargetDiffsWidth { get; set; }

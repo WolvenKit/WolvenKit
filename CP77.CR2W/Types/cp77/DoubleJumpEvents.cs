@@ -8,6 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DoubleJumpEvents : LocomotionAirEvents
 	{
+		[Ordinal(0)]  [RED("maxSuperheroFallHeight")] public CBool MaxSuperheroFallHeight { get; set; }
+		[Ordinal(1)]  [RED("updateInputToggles")] public CBool UpdateInputToggles { get; set; }
 
 		public DoubleJumpEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

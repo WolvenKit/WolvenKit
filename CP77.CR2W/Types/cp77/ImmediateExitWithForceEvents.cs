@@ -8,9 +8,12 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ImmediateExitWithForceEvents : ExitingEventsBase
 	{
-		[Ordinal(0)]  [RED("bikeForce")] public gamestateMachineResultVector BikeForce { get; set; }
-		[Ordinal(1)]  [RED("exitForce")] public gamestateMachineResultVector ExitForce { get; set; }
-		[Ordinal(2)]  [RED("knockOverBike")] public CHandle<KnockOverBikeEvent> KnockOverBike { get; set; }
+		[Ordinal(0)]  [RED("stateMachineInitData")] public wCHandle<VehicleTransitionInitData> StateMachineInitData { get; set; }
+		[Ordinal(1)]  [RED("isCameraTogglePressed")] public CBool IsCameraTogglePressed { get; set; }
+		[Ordinal(2)]  [RED("cameraToggleHoldToResetTimeSeconds")] public CFloat CameraToggleHoldToResetTimeSeconds { get; set; }
+		[Ordinal(3)]  [RED("exitForce")] public gamestateMachineResultVector ExitForce { get; set; }
+		[Ordinal(4)]  [RED("bikeForce")] public gamestateMachineResultVector BikeForce { get; set; }
+		[Ordinal(5)]  [RED("knockOverBike")] public CHandle<KnockOverBikeEvent> KnockOverBike { get; set; }
 
 		public ImmediateExitWithForceEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,6 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AmmoStateHitTriggeredCallback : AmmoStateHitCallback
 	{
+		[Ordinal(0)]  [RED("state")] public wCHandle<GenericHitPrereqState> State { get; set; }
 
 		public AmmoStateHitTriggeredCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

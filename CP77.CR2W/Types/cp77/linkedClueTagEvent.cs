@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class linkedClueTagEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("requesterID")] public entEntityID RequesterID { get; set; }
-		[Ordinal(1)]  [RED("tag")] public CBool Tag { get; set; }
+		[Ordinal(0)]  [RED("tag")] public CBool Tag { get; set; }
+		[Ordinal(1)]  [RED("requesterID")] public entEntityID RequesterID { get; set; }
 
 		public linkedClueTagEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

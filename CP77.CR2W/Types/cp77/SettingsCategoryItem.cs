@@ -8,7 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SettingsCategoryItem : inkListItemController
 	{
-		[Ordinal(0)]  [RED("labelHighlight")] public inkTextWidgetReference LabelHighlight { get; set; }
+		[Ordinal(0)]  [RED("labelPathRef")] public inkTextWidgetReference LabelPathRef { get; set; }
+		[Ordinal(1)]  [RED("labelHighlight")] public inkTextWidgetReference LabelHighlight { get; set; }
 
 		public SettingsCategoryItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

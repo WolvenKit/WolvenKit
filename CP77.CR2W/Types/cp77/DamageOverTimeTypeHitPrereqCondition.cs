@@ -8,7 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DamageOverTimeTypeHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(0)]  [RED("dotType")] public CEnum<gamedataStatusEffectType> DotType { get; set; }
+		[Ordinal(0)]  [RED("invert")] public CBool Invert { get; set; }
+		[Ordinal(1)]  [RED("dotType")] public CEnum<gamedataStatusEffectType> DotType { get; set; }
 
 		public DamageOverTimeTypeHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

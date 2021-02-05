@@ -10,8 +10,6 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("coverRef")] public NodeRef CoverRef { get; set; }
 
-        [Ordinal(999)] [RED("puppetRef")] public gameEntityReference PuppetRef { get; set; }
-
 		public questCharacterCover_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

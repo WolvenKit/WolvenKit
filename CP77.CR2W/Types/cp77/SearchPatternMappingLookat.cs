@@ -8,8 +8,22 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SearchPatternMappingLookat : AISearchingLookat
 	{
-		[Ordinal(0)]  [RED("lookatTargetObject")] public wCHandle<gameObject> LookatTargetObject { get; set; }
-		[Ordinal(1)]  [RED("targetObjectMapping")] public CHandle<AIArgumentMapping> TargetObjectMapping { get; set; }
+		[Ordinal(0)]  [RED("lookAtEvent")] public CHandle<entLookAtAddEvent> LookAtEvent { get; set; }
+		[Ordinal(1)]  [RED("activationTimeStamp")] public CFloat ActivationTimeStamp { get; set; }
+		[Ordinal(2)]  [RED("lookatTarget")] public Vector4 LookatTarget { get; set; }
+		[Ordinal(3)]  [RED("currentLookatTarget")] public Vector4 CurrentLookatTarget { get; set; }
+		[Ordinal(4)]  [RED("minAngleDifferenceMapping")] public CHandle<AIArgumentMapping> MinAngleDifferenceMapping { get; set; }
+		[Ordinal(5)]  [RED("minAngleDifference")] public CFloat MinAngleDifference { get; set; }
+		[Ordinal(6)]  [RED("maxLookAroundAngleMapping")] public CHandle<AIArgumentMapping> MaxLookAroundAngleMapping { get; set; }
+		[Ordinal(7)]  [RED("maxLookAroundAngle")] public CFloat MaxLookAroundAngle { get; set; }
+		[Ordinal(8)]  [RED("currentTarget")] public Vector4 CurrentTarget { get; set; }
+		[Ordinal(9)]  [RED("lastTarget")] public Vector4 LastTarget { get; set; }
+		[Ordinal(10)]  [RED("targetSwitchTimeStamp")] public CFloat TargetSwitchTimeStamp { get; set; }
+		[Ordinal(11)]  [RED("targetSwitchCooldown")] public CFloat TargetSwitchCooldown { get; set; }
+		[Ordinal(12)]  [RED("sideHorizontal")] public CInt32 SideHorizontal { get; set; }
+		[Ordinal(13)]  [RED("sideVertical")] public CInt32 SideVertical { get; set; }
+		[Ordinal(14)]  [RED("targetObjectMapping")] public CHandle<AIArgumentMapping> TargetObjectMapping { get; set; }
+		[Ordinal(15)]  [RED("lookatTargetObject")] public wCHandle<gameObject> LookatTargetObject { get; set; }
 
 		public SearchPatternMappingLookat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

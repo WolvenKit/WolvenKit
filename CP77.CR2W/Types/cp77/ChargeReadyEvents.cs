@@ -8,6 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ChargeReadyEvents : ChargeEventsAbstract
 	{
+		[Ordinal(0)]  [RED("layerId")] public CUInt32 LayerId { get; set; }
 
 		public ChargeReadyEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

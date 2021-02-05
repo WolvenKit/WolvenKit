@@ -17,8 +17,6 @@ namespace CP77.CR2W.Types
 		[Ordinal(6)]  [RED("NearestAnimIndex")] public CInt16 NearestAnimIndex { get; set; }
 		[Ordinal(7)]  [RED("RagdollBodyIndex")] public CUInt16 RagdollBodyIndex { get; set; }
 
-		[Ordinal(999)]  [RED("Plane")] public Plane Plane { get; set; }
-
 		public entdismembermentCullObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

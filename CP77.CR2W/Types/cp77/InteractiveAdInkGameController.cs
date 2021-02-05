@@ -8,15 +8,29 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class InteractiveAdInkGameController : DeviceInkGameControllerBase
 	{
-		[Ordinal(0)]  [RED("CommonAd")] public inkVideoWidgetReference CommonAd { get; set; }
-		[Ordinal(1)]  [RED("PersonalAd")] public inkVideoWidgetReference PersonalAd { get; set; }
-		[Ordinal(2)]  [RED("ProcessingVideo")] public inkVideoWidgetReference ProcessingVideo { get; set; }
-		[Ordinal(3)]  [RED("animFade")] public CHandle<inkanimDefinition> AnimFade { get; set; }
-		[Ordinal(4)]  [RED("animOptions")] public inkanimPlaybackOptions AnimOptions { get; set; }
-		[Ordinal(5)]  [RED("fadeDuration")] public CFloat FadeDuration { get; set; }
-		[Ordinal(6)]  [RED("onShowAdListener")] public CUInt32 OnShowAdListener { get; set; }
-		[Ordinal(7)]  [RED("onShowVendorListener")] public CUInt32 OnShowVendorListener { get; set; }
-		[Ordinal(8)]  [RED("showAd")] public CBool ShowAd { get; set; }
+		[Ordinal(0)]  [RED("animationManager")] public CHandle<WidgetAnimationManager> AnimationManager { get; set; }
+		[Ordinal(1)]  [RED("rootWidget")] public wCHandle<inkCanvasWidget> RootWidget { get; set; }
+		[Ordinal(2)]  [RED("actionWidgetsData")] public CArray<SActionWidgetPackage> ActionWidgetsData { get; set; }
+		[Ordinal(3)]  [RED("deviceWidgetsData")] public CArray<SDeviceWidgetPackage> DeviceWidgetsData { get; set; }
+		[Ordinal(4)]  [RED("breadcrumbStack")] public CArray<SBreadcrumbElementData> BreadcrumbStack { get; set; }
+		[Ordinal(5)]  [RED("cashedState")] public CEnum<EDeviceStatus> CashedState { get; set; }
+		[Ordinal(6)]  [RED("isInitialized")] public CBool IsInitialized { get; set; }
+		[Ordinal(7)]  [RED("hasUICameraZoom")] public CBool HasUICameraZoom { get; set; }
+		[Ordinal(8)]  [RED("activeBreadcrumb")] public SBreadcrumbElementData ActiveBreadcrumb { get; set; }
+		[Ordinal(9)]  [RED("onRefreshListener")] public CUInt32 OnRefreshListener { get; set; }
+		[Ordinal(10)]  [RED("onActionWidgetsUpdateListener")] public CUInt32 OnActionWidgetsUpdateListener { get; set; }
+		[Ordinal(11)]  [RED("onDeviceWidgetsUpdateListener")] public CUInt32 OnDeviceWidgetsUpdateListener { get; set; }
+		[Ordinal(12)]  [RED("onBreadcrumbBarUpdateListener")] public CUInt32 OnBreadcrumbBarUpdateListener { get; set; }
+		[Ordinal(13)]  [RED("bbCallbacksRegistered")] public CBool BbCallbacksRegistered { get; set; }
+		[Ordinal(14)]  [RED("ProcessingVideo")] public inkVideoWidgetReference ProcessingVideo { get; set; }
+		[Ordinal(15)]  [RED("PersonalAd")] public inkVideoWidgetReference PersonalAd { get; set; }
+		[Ordinal(16)]  [RED("CommonAd")] public inkVideoWidgetReference CommonAd { get; set; }
+		[Ordinal(17)]  [RED("fadeDuration")] public CFloat FadeDuration { get; set; }
+		[Ordinal(18)]  [RED("animFade")] public CHandle<inkanimDefinition> AnimFade { get; set; }
+		[Ordinal(19)]  [RED("animOptions")] public inkanimPlaybackOptions AnimOptions { get; set; }
+		[Ordinal(20)]  [RED("showAd")] public CBool ShowAd { get; set; }
+		[Ordinal(21)]  [RED("onShowAdListener")] public CUInt32 OnShowAdListener { get; set; }
+		[Ordinal(22)]  [RED("onShowVendorListener")] public CUInt32 OnShowVendorListener { get; set; }
 
 		public InteractiveAdInkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

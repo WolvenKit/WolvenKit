@@ -8,8 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimFeature_ExitCover : animAnimFeature_AIAction
 	{
-		[Ordinal(0)]  [RED("coverStance")] public CInt32 CoverStance { get; set; }
-		[Ordinal(1)]  [RED("coverExitDirection")] public CInt32 CoverExitDirection { get; set; }
+		[Ordinal(0)]  [RED("direction")] public CFloat Direction { get; set; }
+		[Ordinal(1)]  [RED("coverStance")] public CInt32 CoverStance { get; set; }
+		[Ordinal(2)]  [RED("coverExitDirection")] public CInt32 CoverExitDirection { get; set; }
 
 		public animAnimFeature_ExitCover(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

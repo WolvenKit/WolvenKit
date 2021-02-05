@@ -8,8 +8,13 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class HitIsRarityPrereq : GenericHitPrereq
 	{
-		[Ordinal(0)]  [RED("invert")] public CBool Invert { get; set; }
-		[Ordinal(1)]  [RED("rarity")] public CEnum<gamedataNPCRarity> Rarity { get; set; }
+		[Ordinal(0)]  [RED("isSync")] public CBool IsSync { get; set; }
+		[Ordinal(1)]  [RED("callbackType")] public CEnum<gameDamageCallbackType> CallbackType { get; set; }
+		[Ordinal(2)]  [RED("pipelineStage")] public CEnum<gameDamagePipelineStage> PipelineStage { get; set; }
+		[Ordinal(3)]  [RED("attackType")] public CEnum<gamedataAttackType> AttackType { get; set; }
+		[Ordinal(4)]  [RED("conditions")] public CArray<CHandle<BaseHitPrereqCondition>> Conditions { get; set; }
+		[Ordinal(5)]  [RED("invert")] public CBool Invert { get; set; }
+		[Ordinal(6)]  [RED("rarity")] public CEnum<gamedataNPCRarity> Rarity { get; set; }
 
 		public HitIsRarityPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

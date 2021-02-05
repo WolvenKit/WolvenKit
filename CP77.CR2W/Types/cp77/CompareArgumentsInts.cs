@@ -8,7 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CompareArgumentsInts : CompareArguments
 	{
-		[Ordinal(0)]  [RED("comparator")] public CEnum<ECompareOp> Comparator { get; set; }
+		[Ordinal(0)]  [RED("var1")] public CName Var1 { get; set; }
+		[Ordinal(1)]  [RED("var2")] public CName Var2 { get; set; }
+		[Ordinal(2)]  [RED("comparator")] public CEnum<ECompareOp> Comparator { get; set; }
 
 		public CompareArgumentsInts(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

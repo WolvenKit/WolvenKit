@@ -8,6 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MenuScenario_Settings : MenuScenario_PreGameSubMenu
 	{
+		[Ordinal(0)]  [RED("prevScenario")] public CName PrevScenario { get; set; }
+		[Ordinal(1)]  [RED("currSubMenuName")] public CName CurrSubMenuName { get; set; }
 
 		public MenuScenario_Settings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

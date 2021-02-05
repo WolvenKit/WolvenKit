@@ -8,7 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class State : MorphData
 	{
-		[Ordinal(0)]  [RED("state")] public CEnum<ESecuritySystemState> _State { get; set; }
+		[Ordinal(0)]  [RED("changed")] public CBool Changed { get; set; }
+		[Ordinal(1)]  [RED("state")] public CEnum<ESecuritySystemState> _State { get; set; }
 
 		public State(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

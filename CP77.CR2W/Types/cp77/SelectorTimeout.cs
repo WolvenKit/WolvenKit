@@ -8,6 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SelectorTimeout : AITimeoutCondition
 	{
+		[Ordinal(0)]  [RED("timestamp")] public CFloat Timestamp { get; set; }
 
 		public SelectorTimeout(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

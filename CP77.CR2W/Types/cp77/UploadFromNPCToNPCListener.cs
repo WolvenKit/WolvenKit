@@ -8,7 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class UploadFromNPCToNPCListener : QuickHackUploadListener
 	{
-		[Ordinal(0)]  [RED("npcPuppet")] public wCHandle<ScriptedPuppet> NpcPuppet { get; set; }
+		[Ordinal(0)]  [RED("action")] public CHandle<ScriptableDeviceAction> Action { get; set; }
+		[Ordinal(1)]  [RED("gameInstance")] public ScriptGameInstance GameInstance { get; set; }
+		[Ordinal(2)]  [RED("npcPuppet")] public wCHandle<ScriptedPuppet> NpcPuppet { get; set; }
 
 		public UploadFromNPCToNPCListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

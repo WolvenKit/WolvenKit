@@ -8,6 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class NightPreset : SmartHousePreset
 	{
+		[Ordinal(0)]  [RED("timetable")] public SPresetTimetableEntry Timetable { get; set; }
 
 		public NightPreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

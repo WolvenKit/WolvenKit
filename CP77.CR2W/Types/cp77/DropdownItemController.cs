@@ -8,6 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DropdownItemController : BaseButtonView
 	{
+		[Ordinal(0)]  [RED("ButtonController")] public wCHandle<inkButtonController> ButtonController { get; set; }
 
 		public DropdownItemController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

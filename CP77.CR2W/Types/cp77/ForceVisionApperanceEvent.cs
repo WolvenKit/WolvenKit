@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ForceVisionApperanceEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("apply")] public CBool Apply { get; set; }
-		[Ordinal(1)]  [RED("forceCancel")] public CBool ForceCancel { get; set; }
-		[Ordinal(2)]  [RED("forcedHighlight")] public CHandle<FocusForcedHighlightData> ForcedHighlight { get; set; }
+		[Ordinal(0)]  [RED("forcedHighlight")] public CHandle<FocusForcedHighlightData> ForcedHighlight { get; set; }
+		[Ordinal(1)]  [RED("apply")] public CBool Apply { get; set; }
+		[Ordinal(2)]  [RED("forceCancel")] public CBool ForceCancel { get; set; }
 		[Ordinal(3)]  [RED("ignoreStackEvaluation")] public CBool IgnoreStackEvaluation { get; set; }
 		[Ordinal(4)]  [RED("responseData")] public CHandle<IScriptable> ResponseData { get; set; }
 

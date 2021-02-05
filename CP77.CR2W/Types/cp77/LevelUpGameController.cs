@@ -8,10 +8,17 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class LevelUpGameController : gameuiHUDGameController
 	{
-		[Ordinal(0)]  [RED("animationProxy")] public CHandle<inkanimProxy> AnimationProxy { get; set; }
-		[Ordinal(1)]  [RED("data")] public CHandle<LevelUpUserData> Data { get; set; }
-		[Ordinal(2)]  [RED("proficencyLabel")] public inkTextWidgetReference ProficencyLabel { get; set; }
-		[Ordinal(3)]  [RED("value")] public inkTextWidgetReference Value { get; set; }
+		[Ordinal(0)]  [RED("showAnimDef")] public CHandle<inkanimDefinition> ShowAnimDef { get; set; }
+		[Ordinal(1)]  [RED("hideAnimDef")] public CHandle<inkanimDefinition> HideAnimDef { get; set; }
+		[Ordinal(2)]  [RED("showAnimationName")] public CName ShowAnimationName { get; set; }
+		[Ordinal(3)]  [RED("hideAnimationName")] public CName HideAnimationName { get; set; }
+		[Ordinal(4)]  [RED("moduleShown")] public CBool ModuleShown { get; set; }
+		[Ordinal(5)]  [RED("showAnimProxy")] public CHandle<inkanimProxy> ShowAnimProxy { get; set; }
+		[Ordinal(6)]  [RED("hideAnimProxy")] public CHandle<inkanimProxy> HideAnimProxy { get; set; }
+		[Ordinal(7)]  [RED("value")] public inkTextWidgetReference Value { get; set; }
+		[Ordinal(8)]  [RED("proficencyLabel")] public inkTextWidgetReference ProficencyLabel { get; set; }
+		[Ordinal(9)]  [RED("animationProxy")] public CHandle<inkanimProxy> AnimationProxy { get; set; }
+		[Ordinal(10)]  [RED("data")] public CHandle<LevelUpUserData> Data { get; set; }
 
 		public LevelUpGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

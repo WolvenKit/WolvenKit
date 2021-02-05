@@ -8,6 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CheckArgumentObjectSet : CheckArguments
 	{
+		[Ordinal(0)]  [RED("argumentVar")] public CName ArgumentVar { get; set; }
 
 		public CheckArgumentObjectSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

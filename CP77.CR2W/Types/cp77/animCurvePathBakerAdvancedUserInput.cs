@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animCurvePathBakerAdvancedUserInput : CVariable
 	{
-		[Ordinal(0)]  [RED("partsInputs", 3)] public CStatic<animCurvePathPartInput> PartsInputs { get; set; }
+		[Ordinal(0)]  [RED("partsInputs", lignas(8) StaticArray<animCurvePathPartInpu, 3)] public alignas(8) StaticArray<animCurvePathPartInput> PartsInputs { get; set; }
 
 		public animCurvePathBakerAdvancedUserInput(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

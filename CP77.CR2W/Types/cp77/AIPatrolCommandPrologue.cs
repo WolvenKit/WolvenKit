@@ -8,7 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIPatrolCommandPrologue : AICommandHandlerBase
 	{
-		[Ordinal(0)]  [RED("outPatrolPath")] public CHandle<AIArgumentMapping> OutPatrolPath { get; set; }
+		[Ordinal(0)]  [RED("inCommand")] public CHandle<AIArgumentMapping> InCommand { get; set; }
+		[Ordinal(1)]  [RED("outPatrolPath")] public CHandle<AIArgumentMapping> OutPatrolPath { get; set; }
 
 		public AIPatrolCommandPrologue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

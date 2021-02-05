@@ -8,8 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CurrencyUpdateNotificationViewData : gameuiGenericNotificationViewData
 	{
-		[Ordinal(0)]  [RED("diff")] public CInt32 Diff { get; set; }
-		[Ordinal(1)]  [RED("total")] public CUInt32 Total { get; set; }
+		[Ordinal(0)]  [RED("action")] public CHandle<GenericNotificationBaseAction> Action { get; set; }
+		[Ordinal(1)]  [RED("diff")] public CInt32 Diff { get; set; }
+		[Ordinal(2)]  [RED("total")] public CUInt32 Total { get; set; }
 
 		public CurrencyUpdateNotificationViewData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
