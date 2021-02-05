@@ -7,7 +7,9 @@ using Catel.IoC;
 using Catel.Linq;
 using CP77.CR2W.Types;
 using Newtonsoft.Json;
+using Orc.ProjectManagement;
 using WolvenKit.Common;
+using WolvenKit.Model;
 
 namespace WolvenKit.Controllers
 {
@@ -86,6 +88,25 @@ namespace WolvenKit.Controllers
                 LoadArchiveManager
             };
             Parallel.ForEach(todo, _ => Task.Run(_));
+        }
+
+        public override Task<bool> PackAndInstallroject()
+        {
+            var _loggerService = ServiceLocator.Default.ResolveType<ILoggerService>();
+            var _projectService = ServiceLocator.Default.ResolveType<IProjectManager>();
+            var cp77proj = _projectService.ActiveProject as Cp77Project;
+            if (cp77proj == null)
+            {
+                _loggerService.LogString("Can't pack nor install project (no project/not cyberpunk project)!", Logtype.Error);
+                return new Task<bool>(new Func<bool>(() => false));
+            }
+            _loggerService.LogString("Rebuilding necessary files....", Logtype.Normal);
+            CP77.CR2W.ModTools.Recombine(new DirectoryInfo(cp77proj.ModDirectory), true, true, true, true, true, true);
+            _loggerService.LogString("Rebuilding done, packing files into archive(s)....", Logtype.Normal);
+            CP77.CR2W.ModTools.Pack(new DirectoryInfo(cp77proj.ModDirectory),
+                new DirectoryInfo(cp77proj.PackedModDirectory));
+            _loggerService.LogString("Packing complete!", Logtype.Important);
+            return new Task<bool>(new Func<bool>(() => false));
         }
     }
 }

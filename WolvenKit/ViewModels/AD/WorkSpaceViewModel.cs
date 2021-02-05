@@ -15,6 +15,7 @@ using Catel.MVVM;
 using Catel;
 using Catel.IoC;
 using Orc.ProjectManagement;
+using WolvenKit.Common;
 using WolvenKit.Views.Wizards;
 using NativeMethods = WolvenKit.NativeWin.NativeMethods;
 
@@ -237,9 +238,7 @@ namespace WolvenKit.ViewModels
         private bool CanPackMod() => _projectManager.ActiveProject is EditorProject proj;
         private void ExecutePackMod()
         {
-            //TODO: For publishing we need to implement this, for witcher3 we can probably
-            // straight up reuse the old code more or less but for cyberpunk we need a new strategy
-            // but in terms of workflow it should be similar too
+            MainController.Get().GetGame().PackAndInstallroject();
         }
 
 		/// <summary>
@@ -249,7 +248,7 @@ namespace WolvenKit.ViewModels
         private bool CanBackupMod() => _projectManager.ActiveProject is EditorProject;
         private void ExecuteBackupMod()
         {
-            //TODO
+            // TODO: Implement this
         }
 
         public ICommand PublishModCommand { get; private set; }
@@ -266,7 +265,7 @@ namespace WolvenKit.ViewModels
             catch (Exception ex)
             {
                 _loggerService.LogString(ex.Message, Logtype.Error);
-                _loggerService.LogString("Failed to create a new project!", Logtype.Error);
+                _loggerService.LogString("Failed to publish project!", Logtype.Error);
             }
         }
 

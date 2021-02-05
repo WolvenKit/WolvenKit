@@ -25,6 +25,8 @@ namespace WolvenKit.Controllers
 
         public abstract void HandleStartup();
 
+        public abstract Task<bool> PackAndInstallroject();
+
         public static string GetManagerPath(EManagerType type)
         {
             switch (type)
