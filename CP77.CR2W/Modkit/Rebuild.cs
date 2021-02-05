@@ -221,7 +221,7 @@ namespace CP77.CR2W
                 
                 // sort buffers numerically
                 var buffers = buffers_in;
-                if (buffers_in.All(_ => _.Extension == "buffer"))
+                if (buffers_in.All(_ => _.Extension == ".buffer"))
                 {
                     buffers = buffers_in
                         .OrderBy(_ =>
@@ -241,9 +241,8 @@ namespace CP77.CR2W
                     fileWriter.BaseStream.Seek(0, SeekOrigin.End);
 
                     var existingBufferCount = cr2w.Buffers.Count;
-                    var newBufferCount = buffers.Count;
 
-                    for (var i = 0; i < newBufferCount; i++)
+                    for (var i = 0; i < buffers.Count; i++)
                     {
                         var buffer = buffers[i];
                         if (!buffer.Exists)
