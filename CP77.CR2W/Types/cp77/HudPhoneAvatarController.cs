@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class HudPhoneAvatarController : HUDPhoneElement
 	{
-		[Ordinal(0)]  [RED("RootWidget")] public wCHandle<inkWidget> RootWidget { get; set; }
 		[Ordinal(1)]  [RED("ContactAvatar")] public inkImageWidgetReference ContactAvatar { get; set; }
 		[Ordinal(2)]  [RED("HolocallRenderTexture")] public inkImageWidgetReference HolocallRenderTexture { get; set; }
 		[Ordinal(3)]  [RED("SignalRangeIcon")] public inkImageWidgetReference SignalRangeIcon { get; set; }

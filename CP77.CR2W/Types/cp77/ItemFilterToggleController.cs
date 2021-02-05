@@ -8,9 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ItemFilterToggleController : ToggleController
 	{
-		[Ordinal(0)]  [RED("label")] public inkTextWidgetReference Label { get; set; }
-		[Ordinal(1)]  [RED("icon")] public inkImageWidgetReference Icon { get; set; }
-		[Ordinal(2)]  [RED("data")] public CInt32 Data { get; set; }
 		[Ordinal(3)]  [RED("newItemDot")] public inkWidgetReference NewItemDot { get; set; }
 		[Ordinal(4)]  [RED("useCategoryFilter")] public CBool UseCategoryFilter { get; set; }
 

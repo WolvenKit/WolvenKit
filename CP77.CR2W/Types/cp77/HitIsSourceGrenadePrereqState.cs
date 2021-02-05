@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class HitIsSourceGrenadePrereqState : GenericHitPrereqState
 	{
-		[Ordinal(0)]  [RED("listener")] public CHandle<HitCallback> Listener { get; set; }
-		[Ordinal(1)]  [RED("hitEvent")] public CHandle<gameeventsHitEvent> HitEvent { get; set; }
 
 		public HitIsSourceGrenadePrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

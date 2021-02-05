@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiQuadRacerLogicController : gameuiSideScrollerMiniGameLogicController
 	{
-		[Ordinal(0)]  [RED("isGameRunning")] public CBool IsGameRunning { get; set; }
 		[Ordinal(1)]  [RED("endgameDelay")] public CFloat EndgameDelay { get; set; }
 		[Ordinal(2)]  [RED("baseMultiplicatorScale")] public CFloat BaseMultiplicatorScale { get; set; }
 		[Ordinal(3)]  [RED("skyWidget")] public inkWidgetReference SkyWidget { get; set; }

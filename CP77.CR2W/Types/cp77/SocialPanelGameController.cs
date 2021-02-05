@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SocialPanelGameController : gameuiMenuGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(1)]  [RED("SocialPanelContactsListRef")] public inkWidgetReference SocialPanelContactsListRef { get; set; }
 		[Ordinal(2)]  [RED("SocialPanelContactsDetailsRef")] public inkWidgetReference SocialPanelContactsDetailsRef { get; set; }
 		[Ordinal(3)]  [RED("ContactsList")] public wCHandle<SocialPanelContactsList> ContactsList { get; set; }

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class InventoryFilterButton : BaseButtonView
 	{
-		[Ordinal(0)]  [RED("ButtonController")] public wCHandle<inkButtonController> ButtonController { get; set; }
 		[Ordinal(1)]  [RED("Label")] public inkTextWidgetReference Label { get; set; }
 		[Ordinal(2)]  [RED("InputIcon")] public inkImageWidgetReference InputIcon { get; set; }
 		[Ordinal(3)]  [RED("IntroPlayed")] public CBool IntroPlayed { get; set; }

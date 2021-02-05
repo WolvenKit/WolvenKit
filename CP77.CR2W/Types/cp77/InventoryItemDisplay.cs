@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class InventoryItemDisplay : BaseButtonView
 	{
-		[Ordinal(0)]  [RED("ButtonController")] public wCHandle<inkButtonController> ButtonController { get; set; }
 		[Ordinal(1)]  [RED("RarityRoot")] public inkWidgetReference RarityRoot { get; set; }
 		[Ordinal(2)]  [RED("ModsRoot")] public inkCompoundWidgetReference ModsRoot { get; set; }
 		[Ordinal(3)]  [RED("RarityWrapper")] public inkWidgetReference RarityWrapper { get; set; }

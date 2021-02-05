@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class GameplayPerkCondition : GameplayConditionBase
 	{
-		[Ordinal(0)]  [RED("entityID")] public entEntityID EntityID { get; set; }
 		[Ordinal(1)]  [RED("perkToCheck")] public TweakDBID PerkToCheck { get; set; }
 		[Ordinal(2)]  [RED("difficulty")] public CEnum<EGameplayChallengeLevel> Difficulty { get; set; }
 

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class QuickhacksListItemController : inkListItemController
 	{
-		[Ordinal(0)]  [RED("labelPathRef")] public inkTextWidgetReference LabelPathRef { get; set; }
 		[Ordinal(1)]  [RED("expandAnimationDuration")] public CFloat ExpandAnimationDuration { get; set; }
 		[Ordinal(2)]  [RED("icon")] public inkImageWidgetReference Icon { get; set; }
 		[Ordinal(3)]  [RED("description")] public inkTextWidgetReference Description { get; set; }

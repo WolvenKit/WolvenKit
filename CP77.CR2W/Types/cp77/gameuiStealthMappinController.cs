@@ -8,9 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiStealthMappinController : gameuiInteractionMappinController
 	{
-		[Ordinal(0)]  [RED("animPlayerTrackedWidget")] public inkWidgetReference AnimPlayerTrackedWidget { get; set; }
-		[Ordinal(1)]  [RED("animPlayerAboveBelowWidget")] public inkWidgetReference AnimPlayerAboveBelowWidget { get; set; }
-		[Ordinal(2)]  [RED("taggedWidgets")] public CArray<inkWidgetReference> TaggedWidgets { get; set; }
 		[Ordinal(3)]  [RED("animImage")] public inkImageWidgetReference AnimImage { get; set; }
 		[Ordinal(4)]  [RED("arrow")] public inkImageWidgetReference Arrow { get; set; }
 		[Ordinal(5)]  [RED("fill")] public inkWidgetReference Fill { get; set; }

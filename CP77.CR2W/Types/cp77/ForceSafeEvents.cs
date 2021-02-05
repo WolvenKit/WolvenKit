@@ -8,12 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ForceSafeEvents : UpperBodyEventsTransition
 	{
-		[Ordinal(0)]  [RED("switchButtonPushed")] public CBool SwitchButtonPushed { get; set; }
-		[Ordinal(1)]  [RED("cyclePushed")] public CBool CyclePushed { get; set; }
-		[Ordinal(2)]  [RED("delay")] public CFloat Delay { get; set; }
-		[Ordinal(3)]  [RED("cycleBlock")] public CFloat CycleBlock { get; set; }
-		[Ordinal(4)]  [RED("switchPending")] public CBool SwitchPending { get; set; }
-		[Ordinal(5)]  [RED("counter")] public CInt32 Counter { get; set; }
 		[Ordinal(6)]  [RED("safeAnimFeature")] public CHandle<AnimFeature_SafeAction> SafeAnimFeature { get; set; }
 		[Ordinal(7)]  [RED("weaponObjectID")] public TweakDBID WeaponObjectID { get; set; }
 

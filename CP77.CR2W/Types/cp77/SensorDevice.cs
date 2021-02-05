@@ -8,9 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SensorDevice : ExplosiveDevice
 	{
-		[Ordinal(0)]  [RED("e3HighlightHackStarted")] public CBool E3HighlightHackStarted { get; set; }
-		[Ordinal(1)]  [RED("e3ObjectRevealed")] public CBool E3ObjectRevealed { get; set; }
-		[Ordinal(2)]  [RED("debugOptions")] public DebuggerProperties DebugOptions { get; set; }
 		[Ordinal(3)]  [RED("debug_SS_inputsSendTargetLock")] public CInt32 Debug_SS_inputsSendTargetLock { get; set; }
 		[Ordinal(4)]  [RED("debug_SS_inputsSendIntresting")] public CInt32 Debug_SS_inputsSendIntresting { get; set; }
 		[Ordinal(5)]  [RED("debug_SS_inputsSendLoseTarget")] public CInt32 Debug_SS_inputsSendLoseTarget { get; set; }
@@ -20,110 +17,6 @@ namespace CP77.CR2W.Types
 		[Ordinal(9)]  [RED("debug_SS_reevaluatesDone")] public CInt32 Debug_SS_reevaluatesDone { get; set; }
 		[Ordinal(10)]  [RED("debug_SS_trespassingRecieved")] public CInt32 Debug_SS_trespassingRecieved { get; set; }
 		[Ordinal(11)]  [RED("debug_SS_TargetAssessmentRequest")] public CInt32 Debug_SS_TargetAssessmentRequest { get; set; }
-		[Ordinal(12)]  [RED("forceRegisterInHudManager")] public CBool ForceRegisterInHudManager { get; set; }
-		[Ordinal(13)]  [RED("prereqListeners")] public CArray<CHandle<GameObjectListener>> PrereqListeners { get; set; }
-		[Ordinal(14)]  [RED("statusEffectListeners")] public CArray<CHandle<StatusEffectTriggerListener>> StatusEffectListeners { get; set; }
-		[Ordinal(15)]  [RED("outlineRequestsManager")] public CHandle<OutlineRequestManager> OutlineRequestsManager { get; set; }
-		[Ordinal(16)]  [RED("outlineFadeCounter")] public CInt32 OutlineFadeCounter { get; set; }
-		[Ordinal(17)]  [RED("fadeOutStarted")] public CBool FadeOutStarted { get; set; }
-		[Ordinal(18)]  [RED("lastEngineTime")] public CFloat LastEngineTime { get; set; }
-		[Ordinal(19)]  [RED("accumulatedTimePasssed")] public CFloat AccumulatedTimePasssed { get; set; }
-		[Ordinal(20)]  [RED("scanningComponent")] public CHandle<gameScanningComponent> ScanningComponent { get; set; }
-		[Ordinal(21)]  [RED("visionComponent")] public CHandle<gameVisionModeComponent> VisionComponent { get; set; }
-		[Ordinal(22)]  [RED("isHighlightedInFocusMode")] public CBool IsHighlightedInFocusMode { get; set; }
-		[Ordinal(23)]  [RED("statusEffectComponent")] public CHandle<gameStatusEffectComponent> StatusEffectComponent { get; set; }
-		[Ordinal(24)]  [RED("lastFrameGreen")] public CHandle<OutlineRequest> LastFrameGreen { get; set; }
-		[Ordinal(25)]  [RED("lastFrameRed")] public CHandle<OutlineRequest> LastFrameRed { get; set; }
-		[Ordinal(26)]  [RED("markAsQuest")] public CBool MarkAsQuest { get; set; }
-		[Ordinal(27)]  [RED("forceHighlightSource")] public entEntityID ForceHighlightSource { get; set; }
-		[Ordinal(28)]  [RED("workspotMapper")] public CHandle<WorkspotMapperComponent> WorkspotMapper { get; set; }
-		[Ordinal(29)]  [RED("stimBroadcaster")] public CHandle<StimBroadcasterComponent> StimBroadcaster { get; set; }
-		[Ordinal(30)]  [RED("uiSlotComponent")] public CHandle<entSlotComponent> UiSlotComponent { get; set; }
-		[Ordinal(31)]  [RED("squadMemberComponent")] public CHandle<SquadMemberBaseComponent> SquadMemberComponent { get; set; }
-		[Ordinal(32)]  [RED("sourceShootComponent")] public CHandle<gameSourceShootComponent> SourceShootComponent { get; set; }
-		[Ordinal(33)]  [RED("targetShootComponent")] public CHandle<gameTargetShootComponent> TargetShootComponent { get; set; }
-		[Ordinal(34)]  [RED("receivedDamageHistory")] public CArray<DamageHistoryEntry> ReceivedDamageHistory { get; set; }
-		[Ordinal(35)]  [RED("forceDefeatReward")] public CBool ForceDefeatReward { get; set; }
-		[Ordinal(36)]  [RED("killRewardDisabled")] public CBool KillRewardDisabled { get; set; }
-		[Ordinal(37)]  [RED("willDieSoon")] public CBool WillDieSoon { get; set; }
-		[Ordinal(38)]  [RED("isScannerDataDirty")] public CBool IsScannerDataDirty { get; set; }
-		[Ordinal(39)]  [RED("hasVisibilityForcedInAnimSystem")] public CBool HasVisibilityForcedInAnimSystem { get; set; }
-		[Ordinal(40)]  [RED("isDead")] public CBool IsDead { get; set; }
-		[Ordinal(41)]  [RED("controller")] public CHandle<ScriptableDC> Controller { get; set; }
-		[Ordinal(42)]  [RED("wasVisible")] public CBool WasVisible { get; set; }
-		[Ordinal(43)]  [RED("isVisible")] public CBool IsVisible { get; set; }
-		[Ordinal(44)]  [RED("controllerTypeName")] public CName ControllerTypeName { get; set; }
-		[Ordinal(45)]  [RED("deviceState")] public CEnum<EDeviceStatus> DeviceState { get; set; }
-		[Ordinal(46)]  [RED("uiComponent")] public wCHandle<IWorldWidgetComponent> UiComponent { get; set; }
-		[Ordinal(47)]  [RED("screenDefinition")] public SUIScreenDefinition ScreenDefinition { get; set; }
-		[Ordinal(48)]  [RED("isUIdirty")] public CBool IsUIdirty { get; set; }
-		[Ordinal(49)]  [RED("personalLinkComponent")] public CHandle<workWorkspotResourceComponent> PersonalLinkComponent { get; set; }
-		[Ordinal(50)]  [RED("durabilityType")] public CEnum<EDeviceDurabilityType> DurabilityType { get; set; }
-		[Ordinal(51)]  [RED("disassemblableComponent")] public CHandle<DisassemblableComponent> DisassemblableComponent { get; set; }
-		[Ordinal(52)]  [RED("localization")] public CHandle<entLocalizationStringComponent> Localization { get; set; }
-		[Ordinal(53)]  [RED("IKslotComponent")] public CHandle<entSlotComponent> IKslotComponent { get; set; }
-		[Ordinal(54)]  [RED("ToggleZoomInteractionWorkspot")] public CHandle<workWorkspotResourceComponent> ToggleZoomInteractionWorkspot { get; set; }
-		[Ordinal(55)]  [RED("cameraZoomComponent")] public CHandle<gameCameraComponent> CameraZoomComponent { get; set; }
-		[Ordinal(56)]  [RED("slotComponent")] public CHandle<entSlotComponent> SlotComponent { get; set; }
-		[Ordinal(57)]  [RED("isInitialized")] public CBool IsInitialized { get; set; }
-		[Ordinal(58)]  [RED("isLogicready")] public CBool IsLogicready { get; set; }
-		[Ordinal(59)]  [RED("isInsideLogicArea")] public CBool IsInsideLogicArea { get; set; }
-		[Ordinal(60)]  [RED("cameraComponent")] public CHandle<gameCameraComponent> CameraComponent { get; set; }
-		[Ordinal(61)]  [RED("ZoomUIListenerID")] public CUInt32 ZoomUIListenerID { get; set; }
-		[Ordinal(62)]  [RED("ZoomStateMachineListenerID")] public CUInt32 ZoomStateMachineListenerID { get; set; }
-		[Ordinal(63)]  [RED("activeStatusEffect")] public TweakDBID ActiveStatusEffect { get; set; }
-		[Ordinal(64)]  [RED("activeProgramToUploadOnNPC")] public TweakDBID ActiveProgramToUploadOnNPC { get; set; }
-		[Ordinal(65)]  [RED("isQhackUploadInProgerss")] public CBool IsQhackUploadInProgerss { get; set; }
-		[Ordinal(66)]  [RED("scanningTweakDBRecord")] public TweakDBID ScanningTweakDBRecord { get; set; }
-		[Ordinal(67)]  [RED("updateRunning")] public CBool UpdateRunning { get; set; }
-		[Ordinal(68)]  [RED("updateID")] public gameDelayID UpdateID { get; set; }
-		[Ordinal(69)]  [RED("delayedUpdateDeviceStateID")] public gameDelayID DelayedUpdateDeviceStateID { get; set; }
-		[Ordinal(70)]  [RED("blackboard")] public CHandle<gameIBlackboard> Blackboard { get; set; }
-		[Ordinal(71)]  [RED("currentPlayerTargetCallbackID")] public CUInt32 CurrentPlayerTargetCallbackID { get; set; }
-		[Ordinal(72)]  [RED("wasLookedAtLast")] public CBool WasLookedAtLast { get; set; }
-		[Ordinal(73)]  [RED("lastPingSourceID")] public entEntityID LastPingSourceID { get; set; }
-		[Ordinal(74)]  [RED("networkGridBeamFX")] public gameFxResource NetworkGridBeamFX { get; set; }
-		[Ordinal(75)]  [RED("fxResourceMapper")] public CHandle<FxResourceMapperComponent> FxResourceMapper { get; set; }
-		[Ordinal(76)]  [RED("effectVisualization")] public CHandle<AreaEffectVisualizationComponent> EffectVisualization { get; set; }
-		[Ordinal(77)]  [RED("resourceLibraryComponent")] public CHandle<ResourceLibraryComponent> ResourceLibraryComponent { get; set; }
-		[Ordinal(78)]  [RED("gameplayRoleComponent")] public CHandle<GameplayRoleComponent> GameplayRoleComponent { get; set; }
-		[Ordinal(79)]  [RED("personalLinkHackSend")] public CBool PersonalLinkHackSend { get; set; }
-		[Ordinal(80)]  [RED("personalLinkFailsafeID")] public gameDelayID PersonalLinkFailsafeID { get; set; }
-		[Ordinal(81)]  [RED("wasAnimationFastForwarded")] public CBool WasAnimationFastForwarded { get; set; }
-		[Ordinal(82)]  [RED("contentScale")] public TweakDBID ContentScale { get; set; }
-		[Ordinal(83)]  [RED("networkGridBeamOffset")] public Vector4 NetworkGridBeamOffset { get; set; }
-		[Ordinal(84)]  [RED("areaEffectsData")] public CArray<SAreaEffectData> AreaEffectsData { get; set; }
-		[Ordinal(85)]  [RED("areaEffectsInFocusMode")] public CArray<SAreaEffectTargetData> AreaEffectsInFocusMode { get; set; }
-		[Ordinal(86)]  [RED("interaction")] public CHandle<gameinteractionsComponent> Interaction { get; set; }
-		[Ordinal(87)]  [RED("interactionIndicator")] public CHandle<gameLightComponent> InteractionIndicator { get; set; }
-		[Ordinal(88)]  [RED("disableAreaIndicatorID")] public gameDelayID DisableAreaIndicatorID { get; set; }
-		[Ordinal(89)]  [RED("delayedUIRefreshID")] public gameDelayID DelayedUIRefreshID { get; set; }
-		[Ordinal(90)]  [RED("isPlayerAround")] public CBool IsPlayerAround { get; set; }
-		[Ordinal(91)]  [RED("disableAreaIndicatorDelayActive")] public CBool DisableAreaIndicatorDelayActive { get; set; }
-		[Ordinal(92)]  [RED("objectActionsCallbackCtrl")] public CHandle<gameObjectActionsCallbackController> ObjectActionsCallbackCtrl { get; set; }
-		[Ordinal(93)]  [RED("animFeatureDataDistractor")] public CHandle<AnimFeature_DistractionState> AnimFeatureDataDistractor { get; set; }
-		[Ordinal(94)]  [RED("animFeatureDataNameDistractor")] public CName AnimFeatureDataNameDistractor { get; set; }
-		[Ordinal(95)]  [RED("distractionComponentSwapNamesToON")] public CArray<CName> DistractionComponentSwapNamesToON { get; set; }
-		[Ordinal(96)]  [RED("distractionComponentSwapNamesToOFF")] public CArray<CName> DistractionComponentSwapNamesToOFF { get; set; }
-		[Ordinal(97)]  [RED("distractionComponentON")] public CArray<CHandle<entIPlacedComponent>> DistractionComponentON { get; set; }
-		[Ordinal(98)]  [RED("cdistractionComponentOFF")] public CArray<CHandle<entIPlacedComponent>> CdistractionComponentOFF { get; set; }
-		[Ordinal(99)]  [RED("numberOfComponentsToON")] public CInt32 NumberOfComponentsToON { get; set; }
-		[Ordinal(100)]  [RED("numberOfComponentsToOFF")] public CInt32 NumberOfComponentsToOFF { get; set; }
-		[Ordinal(101)]  [RED("indexesOfComponentsToOFF")] public CArray<CInt32> IndexesOfComponentsToOFF { get; set; }
-		[Ordinal(102)]  [RED("shouldDistractionEnableCollider")] public CBool ShouldDistractionEnableCollider { get; set; }
-		[Ordinal(103)]  [RED("shouldDistractionVFXstay")] public CBool ShouldDistractionVFXstay { get; set; }
-		[Ordinal(104)]  [RED("loopAudioEvent")] public CName LoopAudioEvent { get; set; }
-		[Ordinal(105)]  [RED("spawnedFxInstancesToKill")] public CArray<CHandle<gameFxInstance>> SpawnedFxInstancesToKill { get; set; }
-		[Ordinal(106)]  [RED("mesh")] public CHandle<entMeshComponent> Mesh { get; set; }
-		[Ordinal(107)]  [RED("collider")] public CHandle<entIPlacedComponent> Collider { get; set; }
-		[Ordinal(108)]  [RED("distractionCollider")] public CHandle<entIPlacedComponent> DistractionCollider { get; set; }
-		[Ordinal(109)]  [RED("numberOfReceivedHits")] public CInt32 NumberOfReceivedHits { get; set; }
-		[Ordinal(110)]  [RED("devicePenetrationHealth")] public CFloat DevicePenetrationHealth { get; set; }
-		[Ordinal(111)]  [RED("killedByExplosion")] public CBool KilledByExplosion { get; set; }
-		[Ordinal(112)]  [RED("distractionTimeStart")] public CFloat DistractionTimeStart { get; set; }
-		[Ordinal(113)]  [RED("isBroadcastingEnvironmentalHazardStim")] public CBool IsBroadcastingEnvironmentalHazardStim { get; set; }
-		[Ordinal(114)]  [RED("componentsON")] public CArray<CHandle<entIPlacedComponent>> ComponentsON { get; set; }
-		[Ordinal(115)]  [RED("componentsOFF")] public CArray<CHandle<entIPlacedComponent>> ComponentsOFF { get; set; }
 		[Ordinal(116)]  [RED("attitudeAgent")] public CHandle<gameAttitudeAgent> AttitudeAgent { get; set; }
 		[Ordinal(117)]  [RED("senseComponent")] public CHandle<senseComponent> SenseComponent { get; set; }
 		[Ordinal(118)]  [RED("visibleObjectComponent")] public CHandle<senseVisibleObjectComponent> VisibleObjectComponent { get; set; }

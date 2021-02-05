@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TransparencyAnimationButtonView : BaseButtonView
 	{
-		[Ordinal(0)]  [RED("ButtonController")] public wCHandle<inkButtonController> ButtonController { get; set; }
 		[Ordinal(1)]  [RED("AnimationTime")] public CFloat AnimationTime { get; set; }
 		[Ordinal(2)]  [RED("HoverTransparency")] public CFloat HoverTransparency { get; set; }
 		[Ordinal(3)]  [RED("PressTransparency")] public CFloat PressTransparency { get; set; }

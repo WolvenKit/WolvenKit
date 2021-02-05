@@ -8,13 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiMinimapStealthMappinController : gameuiBaseMinimapMappinController
 	{
-		[Ordinal(0)]  [RED("animPlayerTrackedWidget")] public inkWidgetReference AnimPlayerTrackedWidget { get; set; }
-		[Ordinal(1)]  [RED("animPlayerAboveBelowWidget")] public inkWidgetReference AnimPlayerAboveBelowWidget { get; set; }
-		[Ordinal(2)]  [RED("taggedWidgets")] public CArray<inkWidgetReference> TaggedWidgets { get; set; }
-		[Ordinal(3)]  [RED("mappin")] public wCHandle<gamemappinsIMappin> Mappin { get; set; }
-		[Ordinal(4)]  [RED("root")] public wCHandle<inkWidget> Root { get; set; }
-		[Ordinal(5)]  [RED("aboveWidget")] public wCHandle<inkWidget> AboveWidget { get; set; }
-		[Ordinal(6)]  [RED("belowWidget")] public wCHandle<inkWidget> BelowWidget { get; set; }
 		[Ordinal(7)]  [RED("visionConeWidget")] public inkImageWidgetReference VisionConeWidget { get; set; }
 		[Ordinal(8)]  [RED("pulseWidget")] public inkWidgetReference PulseWidget { get; set; }
 		[Ordinal(9)]  [RED("stealthMappin")] public wCHandle<gamemappinsStealthMappin> StealthMappin { get; set; }

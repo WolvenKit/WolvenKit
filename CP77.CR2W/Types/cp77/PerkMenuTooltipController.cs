@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PerkMenuTooltipController : AGenericTooltipController
 	{
-		[Ordinal(0)]  [RED("Root")] public wCHandle<inkCompoundWidget> Root { get; set; }
 		[Ordinal(1)]  [RED("titleContainer")] public inkWidgetReference TitleContainer { get; set; }
 		[Ordinal(2)]  [RED("titleText")] public inkTextWidgetReference TitleText { get; set; }
 		[Ordinal(3)]  [RED("typeContainer")] public inkWidgetReference TypeContainer { get; set; }

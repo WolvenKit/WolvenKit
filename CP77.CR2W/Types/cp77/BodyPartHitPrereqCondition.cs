@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class BodyPartHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(0)]  [RED("invert")] public CBool Invert { get; set; }
 		[Ordinal(1)]  [RED("bodyPart")] public CName BodyPart { get; set; }
 		[Ordinal(2)]  [RED("attackSubtype")] public CEnum<gamedataAttackSubtype> AttackSubtype { get; set; }
 

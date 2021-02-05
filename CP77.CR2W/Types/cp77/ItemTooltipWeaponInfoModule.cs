@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ItemTooltipWeaponInfoModule : ItemTooltipModuleController
 	{
-		[Ordinal(0)]  [RED("lineWidget")] public inkWidgetReference LineWidget { get; set; }
 		[Ordinal(1)]  [RED("wrapper")] public inkWidgetReference Wrapper { get; set; }
 		[Ordinal(2)]  [RED("arrow")] public inkImageWidgetReference Arrow { get; set; }
 		[Ordinal(3)]  [RED("dpsText")] public inkTextWidgetReference DpsText { get; set; }

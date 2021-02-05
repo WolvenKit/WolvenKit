@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ItemPreviewGameController : gameuiItemPreviewGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
-		[Ordinal(1)]  [RED("isRotatable")] public CBool IsRotatable { get; set; }
 		[Ordinal(2)]  [RED("itemNameText")] public inkTextWidgetReference ItemNameText { get; set; }
 		[Ordinal(3)]  [RED("itemLevelText")] public inkTextWidgetReference ItemLevelText { get; set; }
 		[Ordinal(4)]  [RED("itemRarityWidget")] public inkWidgetReference ItemRarityWidget { get; set; }

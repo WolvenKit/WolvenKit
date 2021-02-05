@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class RequestDocumentWidgetUpdateEvent : RequestWidgetUpdateEvent
 	{
-		[Ordinal(0)]  [RED("requester")] public gamePersistentID Requester { get; set; }
-		[Ordinal(1)]  [RED("screenDefinition")] public ScreenDefinitionPackage ScreenDefinition { get; set; }
 		[Ordinal(2)]  [RED("documentType")] public CEnum<EDocumentType> DocumentType { get; set; }
 		[Ordinal(3)]  [RED("documentAdress")] public SDocumentAdress DocumentAdress { get; set; }
 

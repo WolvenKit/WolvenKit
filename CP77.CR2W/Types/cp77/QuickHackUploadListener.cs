@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class QuickHackUploadListener : ActionUploadListener
 	{
-		[Ordinal(0)]  [RED("action")] public CHandle<ScriptableDeviceAction> Action { get; set; }
-		[Ordinal(1)]  [RED("gameInstance")] public ScriptGameInstance GameInstance { get; set; }
 
 		public QuickHackUploadListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

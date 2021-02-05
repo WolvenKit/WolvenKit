@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class StatsMainGameController : gameuiMenuGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(1)]  [RED("MainViewRoot")] public inkWidgetReference MainViewRoot { get; set; }
 		[Ordinal(2)]  [RED("statsList")] public inkCompoundWidgetReference StatsList { get; set; }
 		[Ordinal(3)]  [RED("TooltipsManagerRef")] public inkWidgetReference TooltipsManagerRef { get; set; }

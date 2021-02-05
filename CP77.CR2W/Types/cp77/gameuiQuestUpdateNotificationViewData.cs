@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiQuestUpdateNotificationViewData : gameuiGenericNotificationViewData
 	{
-		[Ordinal(0)]  [RED("action")] public CHandle<GenericNotificationBaseAction> Action { get; set; }
 		[Ordinal(1)]  [RED("questEntryId")] public CString QuestEntryId { get; set; }
 		[Ordinal(2)]  [RED("canBeMerged")] public CBool CanBeMerged { get; set; }
 		[Ordinal(3)]  [RED("animation")] public CName Animation { get; set; }

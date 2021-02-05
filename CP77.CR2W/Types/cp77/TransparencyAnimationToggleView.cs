@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TransparencyAnimationToggleView : BaseToggleView
 	{
-		[Ordinal(0)]  [RED("ToggleController")] public wCHandle<inkToggleController> ToggleController { get; set; }
-		[Ordinal(1)]  [RED("OldState")] public CEnum<inkEToggleState> OldState { get; set; }
 		[Ordinal(2)]  [RED("AnimationTime")] public CFloat AnimationTime { get; set; }
 		[Ordinal(3)]  [RED("HoverTransparency")] public CFloat HoverTransparency { get; set; }
 		[Ordinal(4)]  [RED("PressTransparency")] public CFloat PressTransparency { get; set; }

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class BrightnessSettingsGameController : gameuiMenuGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(1)]  [RED("s_brightnessGroup")] public CName S_brightnessGroup { get; set; }
 		[Ordinal(2)]  [RED("settingsOptionsList")] public inkCompoundWidgetReference SettingsOptionsList { get; set; }
 		[Ordinal(3)]  [RED("menuEventDispatcher")] public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher { get; set; }

@@ -13,27 +13,6 @@ namespace CP77.CR2W.Types
 		[Ordinal(2)]  [RED("debugExposeQuickHacks")] public CBool DebugExposeQuickHacks { get; set; }
 		[Ordinal(3)]  [RED("debugPath")] public CName DebugPath { get; set; }
 		[Ordinal(4)]  [RED("debugID")] public CUInt32 DebugID { get; set; }
-		[Ordinal(5)]  [RED("markAsQuest")] public CBool MarkAsQuest { get; set; }
-		[Ordinal(6)]  [RED("autoToggleQuestMark")] public CBool AutoToggleQuestMark { get; set; }
-		[Ordinal(7)]  [RED("factToDisableQuestMark")] public CName FactToDisableQuestMark { get; set; }
-		[Ordinal(8)]  [RED("callbackToDisableQuestMarkID")] public CUInt32 CallbackToDisableQuestMarkID { get; set; }
-		[Ordinal(9)]  [RED("backdoorObjectiveData")] public CHandle<BackDoorObjectiveData> BackdoorObjectiveData { get; set; }
-		[Ordinal(10)]  [RED("controlPanelObjectiveData")] public CHandle<ControlPanelObjectiveData> ControlPanelObjectiveData { get; set; }
-		[Ordinal(11)]  [RED("blackboard")] public wCHandle<gameIBlackboard> Blackboard { get; set; }
-		[Ordinal(12)]  [RED("isScanned")] public CBool IsScanned { get; set; }
-		[Ordinal(13)]  [RED("isBeingScanned")] public CBool IsBeingScanned { get; set; }
-		[Ordinal(14)]  [RED("exposeQuickHacks")] public CBool ExposeQuickHacks { get; set; }
-		[Ordinal(15)]  [RED("isAttachedToGame")] public CBool IsAttachedToGame { get; set; }
-		[Ordinal(16)]  [RED("isLogicReady")] public CBool IsLogicReady { get; set; }
-		[Ordinal(17)]  [RED("deviceState")] public CEnum<EDeviceStatus> DeviceState { get; set; }
-		[Ordinal(18)]  [RED("authorizationProperties")] public AuthorizationData AuthorizationProperties { get; set; }
-		[Ordinal(19)]  [RED("wasStateCached")] public CBool WasStateCached { get; set; }
-		[Ordinal(20)]  [RED("wasStateSet")] public CBool WasStateSet { get; set; }
-		[Ordinal(21)]  [RED("cachedDeviceState")] public CEnum<EDeviceStatus> CachedDeviceState { get; set; }
-		[Ordinal(22)]  [RED("revealDevicesGrid")] public CBool RevealDevicesGrid { get; set; }
-		[Ordinal(23)]  [RED("revealDevicesGridWhenUnpowered")] public CBool RevealDevicesGridWhenUnpowered { get; set; }
-		[Ordinal(24)]  [RED("wasRevealedInNetworkPing")] public CBool WasRevealedInNetworkPing { get; set; }
-		[Ordinal(25)]  [RED("hasNetworkBackdoor")] public CBool HasNetworkBackdoor { get; set; }
 		[Ordinal(26)]  [RED("isInitialized")] public CBool IsInitialized { get; set; }
 		[Ordinal(27)]  [RED("forceResolveStateOnAttach")] public CBool ForceResolveStateOnAttach { get; set; }
 		[Ordinal(28)]  [RED("forceVisibilityInAnimSystemOnLogicReady")] public CBool ForceVisibilityInAnimSystemOnLogicReady { get; set; }

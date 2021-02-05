@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ItemTooltipHeaderController : ItemTooltipModuleController
 	{
-		[Ordinal(0)]  [RED("lineWidget")] public inkWidgetReference LineWidget { get; set; }
 		[Ordinal(1)]  [RED("itemNameText")] public inkTextWidgetReference ItemNameText { get; set; }
 		[Ordinal(2)]  [RED("itemRarityText")] public inkTextWidgetReference ItemRarityText { get; set; }
 		[Ordinal(3)]  [RED("itemTypeText")] public inkTextWidgetReference ItemTypeText { get; set; }

@@ -8,10 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MenuScenario_HubMenu : MenuScenario_BaseMenu
 	{
-		[Ordinal(0)]  [RED("currMenuName")] public CName CurrMenuName { get; set; }
-		[Ordinal(1)]  [RED("currUserData")] public CHandle<IScriptable> CurrUserData { get; set; }
-		[Ordinal(2)]  [RED("currSubMenuName")] public CName CurrSubMenuName { get; set; }
-		[Ordinal(3)]  [RED("prevMenuName")] public CName PrevMenuName { get; set; }
 		[Ordinal(4)]  [RED("hubMenuInitData")] public CHandle<HubMenuInitData> HubMenuInitData { get; set; }
 		[Ordinal(5)]  [RED("currentState")] public wCHandle<inkMenusState> CurrentState { get; set; }
 

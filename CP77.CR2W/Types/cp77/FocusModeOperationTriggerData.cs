@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class FocusModeOperationTriggerData : DeviceOperationTriggerData
 	{
-		[Ordinal(0)]  [RED("operationsToExecute")] public CArray<CHandle<OperationExecutionData>> OperationsToExecute { get; set; }
 		[Ordinal(1)]  [RED("operationType")] public CEnum<ETriggerOperationType> OperationType { get; set; }
 		[Ordinal(2)]  [RED("isLookedAt")] public CBool IsLookedAt { get; set; }
 

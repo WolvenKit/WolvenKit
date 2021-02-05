@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class InteractionAreaOperationTriggerData : DeviceOperationTriggerData
 	{
-		[Ordinal(0)]  [RED("operationsToExecute")] public CArray<CHandle<OperationExecutionData>> OperationsToExecute { get; set; }
 		[Ordinal(1)]  [RED("isActivatorPlayer")] public CBool IsActivatorPlayer { get; set; }
 		[Ordinal(2)]  [RED("isActivatorNPC")] public CBool IsActivatorNPC { get; set; }
 		[Ordinal(3)]  [RED("areaTag")] public CName AreaTag { get; set; }

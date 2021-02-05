@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DebugHubMenuGameController : gameuiMenuGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(1)]  [RED("menuCtrl")] public wCHandle<DebugHubMenuLogicController> MenuCtrl { get; set; }
 		[Ordinal(2)]  [RED("selectorCtrl")] public wCHandle<hubSelectorController> SelectorCtrl { get; set; }
 		[Ordinal(3)]  [RED("menuEventDispatcher")] public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher { get; set; }

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ItemTooltipGrenadeInfoModule : ItemTooltipModuleController
 	{
-		[Ordinal(0)]  [RED("lineWidget")] public inkWidgetReference LineWidget { get; set; }
 		[Ordinal(1)]  [RED("headerText")] public inkTextWidgetReference HeaderText { get; set; }
 		[Ordinal(2)]  [RED("totalDamageText")] public inkTextWidgetReference TotalDamageText { get; set; }
 		[Ordinal(3)]  [RED("durationText")] public inkTextWidgetReference DurationText { get; set; }

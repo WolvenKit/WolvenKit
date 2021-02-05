@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiRoachRaceGameLogicController : gameuiSideScrollerMiniGameLogicController
 	{
-		[Ordinal(0)]  [RED("isGameRunning")] public CBool IsGameRunning { get; set; }
 		[Ordinal(1)]  [RED("jumpAcceleration")] public CFloat JumpAcceleration { get; set; }
 		[Ordinal(2)]  [RED("jumpCancelAcceleration")] public CFloat JumpCancelAcceleration { get; set; }
 		[Ordinal(3)]  [RED("gravity")] public CFloat Gravity { get; set; }

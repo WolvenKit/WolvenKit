@@ -9,7 +9,6 @@ namespace CP77.CR2W.Types
 	public class gameuiBackpackMainGameController : gameuiMenuGameController
 	{
 		[Ordinal(0)]  [RED("isE3Demo")] public CBool IsE3Demo { get; set; }
-		[Ordinal(1)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(2)]  [RED("commonCraftingMaterialsGrid")] public inkCompoundWidgetReference CommonCraftingMaterialsGrid { get; set; }
 		[Ordinal(3)]  [RED("hackingCraftingMaterialsGrid")] public inkCompoundWidgetReference HackingCraftingMaterialsGrid { get; set; }
 		[Ordinal(4)]  [RED("filterButtonsGrid")] public inkCompoundWidgetReference FilterButtonsGrid { get; set; }

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiHDRSettingsGameController : gameuiMenuGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(1)]  [RED("callibrationScreen")] public rRef<CBitmapTexture> CallibrationScreen { get; set; }
 		[Ordinal(2)]  [RED("callibrationScreenTarget")] public inkWidgetReference CallibrationScreenTarget { get; set; }
 		[Ordinal(3)]  [RED("callibrationScreenAtlas")] public raRef<inkTextureAtlas> CallibrationScreenAtlas { get; set; }

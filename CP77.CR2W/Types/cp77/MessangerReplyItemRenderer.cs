@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MessangerReplyItemRenderer : JournalEntryListItemController
 	{
-		[Ordinal(0)]  [RED("labelPathRef")] public inkTextWidgetReference LabelPathRef { get; set; }
 		[Ordinal(1)]  [RED("textRoot")] public inkWidgetReference TextRoot { get; set; }
 		[Ordinal(2)]  [RED("background")] public inkWidgetReference Background { get; set; }
 		[Ordinal(3)]  [RED("animSelectionBackground")] public CHandle<inkanimProxy> AnimSelectionBackground { get; set; }

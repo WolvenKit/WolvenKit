@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ServerInfoController : inkListItemController
 	{
-		[Ordinal(0)]  [RED("labelPathRef")] public inkTextWidgetReference LabelPathRef { get; set; }
 		[Ordinal(1)]  [RED("settingsListCtrl")] public wCHandle<inkListController> SettingsListCtrl { get; set; }
 		[Ordinal(2)]  [RED("number")] public wCHandle<inkTextWidget> Number { get; set; }
 		[Ordinal(3)]  [RED("numberPath")] public CName NumberPath { get; set; }

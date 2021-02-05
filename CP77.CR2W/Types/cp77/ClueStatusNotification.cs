@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ClueStatusNotification : HUDManagerRequest
 	{
-		[Ordinal(0)]  [RED("ownerID")] public entEntityID OwnerID { get; set; }
 		[Ordinal(1)]  [RED("isClue")] public CBool IsClue { get; set; }
 		[Ordinal(2)]  [RED("clueGroupID")] public CName ClueGroupID { get; set; }
 

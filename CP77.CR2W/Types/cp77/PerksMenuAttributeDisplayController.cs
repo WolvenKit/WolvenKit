@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PerksMenuAttributeDisplayController : BaseButtonView
 	{
-		[Ordinal(0)]  [RED("ButtonController")] public wCHandle<inkButtonController> ButtonController { get; set; }
 		[Ordinal(1)]  [RED("widgetWrapper")] public inkWidgetReference WidgetWrapper { get; set; }
 		[Ordinal(2)]  [RED("foregroundWrapper")] public inkWidgetReference ForegroundWrapper { get; set; }
 		[Ordinal(3)]  [RED("johnnyWrapper")] public inkWidgetReference JohnnyWrapper { get; set; }

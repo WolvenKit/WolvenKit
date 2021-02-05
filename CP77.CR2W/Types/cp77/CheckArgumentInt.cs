@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CheckArgumentInt : CheckArguments
 	{
-		[Ordinal(0)]  [RED("argumentVar")] public CName ArgumentVar { get; set; }
 		[Ordinal(1)]  [RED("customVar")] public CInt32 CustomVar { get; set; }
 		[Ordinal(2)]  [RED("comparator")] public CEnum<ECompareOp> Comparator { get; set; }
 

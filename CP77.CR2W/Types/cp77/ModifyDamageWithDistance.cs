@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ModifyDamageWithDistance : ModifyDamageEffector
 	{
-		[Ordinal(0)]  [RED("operationType")] public CEnum<EMathOperator> OperationType { get; set; }
-		[Ordinal(1)]  [RED("value")] public CFloat Value { get; set; }
 		[Ordinal(2)]  [RED("increaseWithDistance")] public CBool IncreaseWithDistance { get; set; }
 		[Ordinal(3)]  [RED("percentMult")] public CFloat PercentMult { get; set; }
 		[Ordinal(4)]  [RED("unitThreshold")] public CFloat UnitThreshold { get; set; }

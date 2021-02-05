@@ -8,10 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SubtitleLineLogicController : BaseSubtitleLineLogicController
 	{
-		[Ordinal(0)]  [RED("root")] public CHandle<inkWidget> Root { get; set; }
-		[Ordinal(1)]  [RED("isKiroshiEnabled")] public CBool IsKiroshiEnabled { get; set; }
-		[Ordinal(2)]  [RED("c_tier1_duration")] public CFloat C_tier1_duration { get; set; }
-		[Ordinal(3)]  [RED("c_tier2_duration")] public CFloat C_tier2_duration { get; set; }
 		[Ordinal(4)]  [RED("speakerNameWidget")] public inkTextWidgetReference SpeakerNameWidget { get; set; }
 		[Ordinal(5)]  [RED("subtitleWidget")] public inkTextWidgetReference SubtitleWidget { get; set; }
 		[Ordinal(6)]  [RED("radioSpeaker")] public inkTextWidgetReference RadioSpeaker { get; set; }

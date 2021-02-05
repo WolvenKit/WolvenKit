@@ -8,10 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ListItemsGroupController : CodexListItemController
 	{
-		[Ordinal(0)]  [RED("labelPathRef")] public inkTextWidgetReference LabelPathRef { get; set; }
-		[Ordinal(1)]  [RED("doMarkNew")] public CBool DoMarkNew { get; set; }
-		[Ordinal(2)]  [RED("stateMapperRef")] public inkWidgetReference StateMapperRef { get; set; }
-		[Ordinal(3)]  [RED("stateMapper")] public wCHandle<ListItemStateMapper> StateMapper { get; set; }
 		[Ordinal(4)]  [RED("menuList")] public inkCompoundWidgetReference MenuList { get; set; }
 		[Ordinal(5)]  [RED("foldArrowRef")] public inkWidgetReference FoldArrowRef { get; set; }
 		[Ordinal(6)]  [RED("foldoutButton")] public inkWidgetReference FoldoutButton { get; set; }

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ShardsMenuGameController : gameuiMenuGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(1)]  [RED("buttonHintsManagerRef")] public inkWidgetReference ButtonHintsManagerRef { get; set; }
 		[Ordinal(2)]  [RED("entryViewRef")] public inkCompoundWidgetReference EntryViewRef { get; set; }
 		[Ordinal(3)]  [RED("virtualList")] public inkWidgetReference VirtualList { get; set; }

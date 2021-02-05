@@ -11,7 +11,6 @@ namespace CP77.CR2W.Types
 		[Ordinal(0)]  [RED("DEBUG_iconErrorWrapper")] public inkWidgetReference DEBUG_iconErrorWrapper { get; set; }
 		[Ordinal(1)]  [RED("DEBUG_iconErrorText")] public inkTextWidgetReference DEBUG_iconErrorText { get; set; }
 		[Ordinal(2)]  [RED("DEBUG_showAdditionalInfo")] public CBool DEBUG_showAdditionalInfo { get; set; }
-		[Ordinal(3)]  [RED("Root")] public wCHandle<inkCompoundWidget> Root { get; set; }
 		[Ordinal(4)]  [RED("backgroundContainer")] public inkWidgetReference BackgroundContainer { get; set; }
 		[Ordinal(5)]  [RED("itemEquippedContainer")] public inkWidgetReference ItemEquippedContainer { get; set; }
 		[Ordinal(6)]  [RED("itemHeaderContainer")] public inkWidgetReference ItemHeaderContainer { get; set; }

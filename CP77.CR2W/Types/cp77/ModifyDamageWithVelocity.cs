@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ModifyDamageWithVelocity : ModifyDamageEffector
 	{
-		[Ordinal(0)]  [RED("operationType")] public CEnum<EMathOperator> OperationType { get; set; }
-		[Ordinal(1)]  [RED("value")] public CFloat Value { get; set; }
 		[Ordinal(2)]  [RED("percentMult")] public CFloat PercentMult { get; set; }
 		[Ordinal(3)]  [RED("unitThreshold")] public CFloat UnitThreshold { get; set; }
 

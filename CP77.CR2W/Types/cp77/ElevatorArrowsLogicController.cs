@@ -8,10 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ElevatorArrowsLogicController : DeviceInkLogicControllerBase
 	{
-		[Ordinal(0)]  [RED("targetWidgetRef")] public inkWidgetReference TargetWidgetRef { get; set; }
-		[Ordinal(1)]  [RED("displayNameWidget")] public inkTextWidgetReference DisplayNameWidget { get; set; }
-		[Ordinal(2)]  [RED("isInitialized")] public CBool IsInitialized { get; set; }
-		[Ordinal(3)]  [RED("targetWidget")] public wCHandle<inkWidget> TargetWidget { get; set; }
 		[Ordinal(4)]  [RED("arrow1Widget")] public inkWidgetReference Arrow1Widget { get; set; }
 		[Ordinal(5)]  [RED("arrow2Widget")] public inkWidgetReference Arrow2Widget { get; set; }
 		[Ordinal(6)]  [RED("arrow3Widget")] public inkWidgetReference Arrow3Widget { get; set; }

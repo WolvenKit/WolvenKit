@@ -8,9 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class BuybackRequest : TransactionRequest
 	{
-		[Ordinal(0)]  [RED("owner")] public wCHandle<gameObject> Owner { get; set; }
-		[Ordinal(1)]  [RED("vendorID")] public TweakDBID VendorID { get; set; }
-		[Ordinal(2)]  [RED("items")] public CArray<TransactionRequestData> Items { get; set; }
 
 		public BuybackRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

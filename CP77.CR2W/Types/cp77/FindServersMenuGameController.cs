@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class FindServersMenuGameController : PreGameSubMenuGameController
 	{
-		[Ordinal(0)]  [RED("menuEventDispatcher")] public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher { get; set; }
 		[Ordinal(1)]  [RED("serversListCtrl")] public wCHandle<inkListController> ServersListCtrl { get; set; }
 		[Ordinal(2)]  [RED("NONE_CHOOSEN")] public CInt32 NONE_CHOOSEN { get; set; }
 		[Ordinal(3)]  [RED("curentlyChoosenServer")] public CInt32 CurentlyChoosenServer { get; set; }

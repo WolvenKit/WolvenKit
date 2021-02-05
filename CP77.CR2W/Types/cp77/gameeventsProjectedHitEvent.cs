@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameeventsProjectedHitEvent : gameeventsHitEvent
 	{
-		[Ordinal(0)]  [RED("wasAliveBeforeHit")] public CBool WasAliveBeforeHit { get; set; }
-		[Ordinal(1)]  [RED("projectionPipeline")] public CBool ProjectionPipeline { get; set; }
 
 		public gameeventsProjectedHitEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

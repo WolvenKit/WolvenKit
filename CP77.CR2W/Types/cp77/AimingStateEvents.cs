@@ -8,12 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AimingStateEvents : UpperBodyEventsTransition
 	{
-		[Ordinal(0)]  [RED("switchButtonPushed")] public CBool SwitchButtonPushed { get; set; }
-		[Ordinal(1)]  [RED("cyclePushed")] public CBool CyclePushed { get; set; }
-		[Ordinal(2)]  [RED("delay")] public CFloat Delay { get; set; }
-		[Ordinal(3)]  [RED("cycleBlock")] public CFloat CycleBlock { get; set; }
-		[Ordinal(4)]  [RED("switchPending")] public CBool SwitchPending { get; set; }
-		[Ordinal(5)]  [RED("counter")] public CInt32 Counter { get; set; }
 		[Ordinal(6)]  [RED("aim")] public CHandle<gameweaponAnimFeature_AimPlayer> Aim { get; set; }
 		[Ordinal(7)]  [RED("mouseZoomLevel")] public CFloat MouseZoomLevel { get; set; }
 		[Ordinal(8)]  [RED("zoomLevelNum")] public CInt32 ZoomLevelNum { get; set; }

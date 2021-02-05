@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class megatronFullAutoController : AmmoLogicController
 	{
-		[Ordinal(0)]  [RED("count")] public CUInt32 Count { get; set; }
-		[Ordinal(1)]  [RED("capacity")] public CUInt32 Capacity { get; set; }
 		[Ordinal(2)]  [RED("ammoCountText")] public wCHandle<inkTextWidget> AmmoCountText { get; set; }
 		[Ordinal(3)]  [RED("ammoBar")] public wCHandle<inkImageWidget> AmmoBar { get; set; }
 

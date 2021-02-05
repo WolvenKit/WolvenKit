@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class QuestMessageSelector : ScreenMessageSelector
 	{
-		[Ordinal(0)]  [RED("replaceTextWithCustomNumber")] public CBool ReplaceTextWithCustomNumber { get; set; }
-		[Ordinal(1)]  [RED("customNumber")] public CInt32 CustomNumber { get; set; }
 		[Ordinal(2)]  [RED("recordID")] public TweakDBID RecordID { get; set; }
 
 		public QuestMessageSelector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class HitFlagHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(0)]  [RED("invert")] public CBool Invert { get; set; }
 		[Ordinal(1)]  [RED("hitFlag")] public CEnum<hitFlag> HitFlag { get; set; }
 
 		public HitFlagHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

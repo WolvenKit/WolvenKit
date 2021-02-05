@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CrafringMaterialItemController : BaseButtonView
 	{
-		[Ordinal(0)]  [RED("ButtonController")] public wCHandle<inkButtonController> ButtonController { get; set; }
 		[Ordinal(1)]  [RED("nameText")] public inkTextWidgetReference NameText { get; set; }
 		[Ordinal(2)]  [RED("quantityText")] public inkTextWidgetReference QuantityText { get; set; }
 		[Ordinal(3)]  [RED("quantityChangeText")] public inkTextWidgetReference QuantityChangeText { get; set; }

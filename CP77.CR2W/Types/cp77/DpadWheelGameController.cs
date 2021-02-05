@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DpadWheelGameController : gameuiMenuGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(1)]  [RED("haskMarkContainer")] public inkCompoundWidgetReference HaskMarkContainer { get; set; }
 		[Ordinal(2)]  [RED("itemContainer")] public inkCompoundWidgetReference ItemContainer { get; set; }
 		[Ordinal(3)]  [RED("selectorWrapper")] public inkWidgetReference SelectorWrapper { get; set; }

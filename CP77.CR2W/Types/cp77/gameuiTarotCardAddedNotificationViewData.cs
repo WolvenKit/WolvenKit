@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiTarotCardAddedNotificationViewData : gameuiGenericNotificationViewData
 	{
-		[Ordinal(0)]  [RED("action")] public CHandle<GenericNotificationBaseAction> Action { get; set; }
 		[Ordinal(1)]  [RED("imagePart")] public CName ImagePart { get; set; }
 		[Ordinal(2)]  [RED("cardName")] public CString CardName { get; set; }
 		[Ordinal(3)]  [RED("animation")] public CName Animation { get; set; }

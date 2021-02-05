@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class UpdateStimSource : ReactionManagerTask
 	{
-		[Ordinal(0)]  [RED("reactionData")] public CHandle<AIReactionData> ReactionData { get; set; }
 
 		public UpdateStimSource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

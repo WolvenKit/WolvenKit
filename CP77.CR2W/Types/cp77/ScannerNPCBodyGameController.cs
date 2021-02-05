@@ -8,9 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ScannerNPCBodyGameController : BaseChunkGameController
 	{
-		[Ordinal(0)]  [RED("chunkBlackboard")] public CHandle<gameIBlackboard> ChunkBlackboard { get; set; }
-		[Ordinal(1)]  [RED("chunkBlackboardDef")] public CHandle<UI_ScannerModulesDef> ChunkBlackboardDef { get; set; }
-		[Ordinal(2)]  [RED("questClueBlackboardDef")] public CHandle<UI_ScannerDef> QuestClueBlackboardDef { get; set; }
 		[Ordinal(3)]  [RED("factionText")] public inkTextWidgetReference FactionText { get; set; }
 		[Ordinal(4)]  [RED("dataBaseWidgetHolder")] public inkWidgetReference DataBaseWidgetHolder { get; set; }
 		[Ordinal(5)]  [RED("factionCallbackID")] public CUInt32 FactionCallbackID { get; set; }

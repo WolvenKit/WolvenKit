@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class GrapplePreyDeadDecisions : GrappleStandEvents
 	{
-		[Ordinal(0)]  [RED("stateMachineInitData")] public wCHandle<LocomotionTakedownInitData> StateMachineInitData { get; set; }
-		[Ordinal(1)]  [RED("isWalking")] public CBool IsWalking { get; set; }
 
 		public GrapplePreyDeadDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

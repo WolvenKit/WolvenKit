@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MessangerItemRenderer : JournalEntryListItemController
 	{
-		[Ordinal(0)]  [RED("labelPathRef")] public inkTextWidgetReference LabelPathRef { get; set; }
 		[Ordinal(1)]  [RED("image")] public inkImageWidgetReference Image { get; set; }
 		[Ordinal(2)]  [RED("container")] public inkWidgetReference Container { get; set; }
 		[Ordinal(3)]  [RED("fluffText")] public inkTextWidgetReference FluffText { get; set; }

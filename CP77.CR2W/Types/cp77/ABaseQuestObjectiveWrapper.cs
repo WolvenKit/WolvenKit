@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ABaseQuestObjectiveWrapper : AJournalEntryWrapper
 	{
-		[Ordinal(0)]  [RED("UniqueId")] public CInt32 UniqueId { get; set; }
 		[Ordinal(1)]  [RED("questObjective")] public wCHandle<gameJournalQuestObjectiveBase> QuestObjective { get; set; }
 		[Ordinal(2)]  [RED("objectiveStatus")] public CEnum<gameJournalEntryState> ObjectiveStatus { get; set; }
 		[Ordinal(3)]  [RED("isTracked")] public CBool IsTracked { get; set; }

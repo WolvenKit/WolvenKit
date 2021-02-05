@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimFeature_CoverAction : animAnimFeature_AIAction
 	{
-		[Ordinal(0)]  [RED("direction")] public CFloat Direction { get; set; }
 		[Ordinal(1)]  [RED("coverStance")] public CInt32 CoverStance { get; set; }
 		[Ordinal(2)]  [RED("coverActionType")] public CInt32 CoverActionType { get; set; }
 		[Ordinal(3)]  [RED("coverShootType")] public CInt32 CoverShootType { get; set; }

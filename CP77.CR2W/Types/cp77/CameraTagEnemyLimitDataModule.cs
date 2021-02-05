@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CameraTagEnemyLimitDataModule : GameSessionDataModule
 	{
-		[Ordinal(0)]  [RED("moduleType")] public CEnum<EGameSessionDataType> ModuleType { get; set; }
 		[Ordinal(1)]  [RED("cameraLimit")] public CInt32 CameraLimit { get; set; }
 		[Ordinal(2)]  [RED("cameraList")] public CArray<wCHandle<SurveillanceCamera>> CameraList { get; set; }
 

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ArmorEquipGameController : gameuiMenuGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(1)]  [RED("inventoryCanvas")] public wCHandle<inkWidget> InventoryCanvas { get; set; }
 		[Ordinal(2)]  [RED("inventoryList")] public wCHandle<inkVerticalPanelWidget> InventoryList { get; set; }
 		[Ordinal(3)]  [RED("inventory")] public CArray<wCHandle<gameItemData>> Inventory { get; set; }

@@ -8,9 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ScannerBountySystemGameController : BaseChunkGameController
 	{
-		[Ordinal(0)]  [RED("chunkBlackboard")] public CHandle<gameIBlackboard> ChunkBlackboard { get; set; }
-		[Ordinal(1)]  [RED("chunkBlackboardDef")] public CHandle<UI_ScannerModulesDef> ChunkBlackboardDef { get; set; }
-		[Ordinal(2)]  [RED("questClueBlackboardDef")] public CHandle<UI_ScannerDef> QuestClueBlackboardDef { get; set; }
 		[Ordinal(3)]  [RED("moneyReward")] public inkTextWidgetReference MoneyReward { get; set; }
 		[Ordinal(4)]  [RED("moneyRewardRow")] public inkWidgetReference MoneyRewardRow { get; set; }
 		[Ordinal(5)]  [RED("streetCredReward")] public inkTextWidgetReference StreetCredReward { get; set; }

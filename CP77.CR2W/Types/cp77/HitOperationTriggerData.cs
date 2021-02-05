@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class HitOperationTriggerData : DeviceOperationTriggerData
 	{
-		[Ordinal(0)]  [RED("operationsToExecute")] public CArray<CHandle<OperationExecutionData>> OperationsToExecute { get; set; }
 		[Ordinal(1)]  [RED("isAttackerPlayer")] public CBool IsAttackerPlayer { get; set; }
 		[Ordinal(2)]  [RED("isAttackerNPC")] public CBool IsAttackerNPC { get; set; }
 		[Ordinal(3)]  [RED("bullets")] public CBool Bullets { get; set; }

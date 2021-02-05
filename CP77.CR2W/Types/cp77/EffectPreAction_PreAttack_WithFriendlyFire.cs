@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class EffectPreAction_PreAttack_WithFriendlyFire : EffectPreAction_PreAttack
 	{
-		[Ordinal(0)]  [RED("withFriendlyFire")] public CBool WithFriendlyFire { get; set; }
-		[Ordinal(1)]  [RED("withSelfDamage")] public CBool WithSelfDamage { get; set; }
 
 		public EffectPreAction_PreAttack_WithFriendlyFire(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

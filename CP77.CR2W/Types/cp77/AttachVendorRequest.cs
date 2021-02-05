@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AttachVendorRequest : MarketSystemRequest
 	{
-		[Ordinal(0)]  [RED("owner")] public wCHandle<gameObject> Owner { get; set; }
-		[Ordinal(1)]  [RED("vendorID")] public TweakDBID VendorID { get; set; }
 
 		public AttachVendorRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

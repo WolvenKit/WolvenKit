@@ -8,15 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class VehicleRadioPopupGameController : BaseModalListPopupGameController
 	{
-		[Ordinal(0)]  [RED("content")] public inkWidgetReference Content { get; set; }
-		[Ordinal(1)]  [RED("listController")] public wCHandle<inkVirtualListController> ListController { get; set; }
-		[Ordinal(2)]  [RED("playerPuppet")] public wCHandle<gameObject> PlayerPuppet { get; set; }
-		[Ordinal(3)]  [RED("popupData")] public CHandle<inkGameNotificationData> PopupData { get; set; }
-		[Ordinal(4)]  [RED("templateClassifier")] public CHandle<BaseModalListPopupTemplateClassifier> TemplateClassifier { get; set; }
-		[Ordinal(5)]  [RED("systemRequestsHandler")] public wCHandle<inkISystemRequestsHandler> SystemRequestsHandler { get; set; }
-		[Ordinal(6)]  [RED("switchAnimProxy")] public CHandle<inkanimProxy> SwitchAnimProxy { get; set; }
-		[Ordinal(7)]  [RED("transitionAnimProxy")] public CHandle<inkanimProxy> TransitionAnimProxy { get; set; }
-		[Ordinal(8)]  [RED("c_scrollInputThreshold")] public CFloat C_scrollInputThreshold { get; set; }
 		[Ordinal(9)]  [RED("icon")] public inkImageWidgetReference Icon { get; set; }
 		[Ordinal(10)]  [RED("scrollArea")] public inkScrollAreaWidgetReference ScrollArea { get; set; }
 		[Ordinal(11)]  [RED("scrollControllerWidget")] public inkWidgetReference ScrollControllerWidget { get; set; }

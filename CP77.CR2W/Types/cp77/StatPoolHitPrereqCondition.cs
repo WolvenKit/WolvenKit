@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class StatPoolHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(0)]  [RED("invert")] public CBool Invert { get; set; }
 		[Ordinal(1)]  [RED("valueToCheck")] public CFloat ValueToCheck { get; set; }
 		[Ordinal(2)]  [RED("objectToCheck")] public CName ObjectToCheck { get; set; }
 		[Ordinal(3)]  [RED("comparisonType")] public CEnum<EComparisonType> ComparisonType { get; set; }

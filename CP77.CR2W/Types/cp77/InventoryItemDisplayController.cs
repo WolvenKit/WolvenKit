@@ -15,7 +15,6 @@ namespace CP77.CR2W.Types
 		[Ordinal(4)]  [RED("DEBUG_innerItemName")] public CString DEBUG_innerItemName { get; set; }
 		[Ordinal(5)]  [RED("DEBUG_isIconManuallySet")] public CBool DEBUG_isIconManuallySet { get; set; }
 		[Ordinal(6)]  [RED("DEBUG_iconsNameResolverIsDebug")] public CBool DEBUG_iconsNameResolverIsDebug { get; set; }
-		[Ordinal(7)]  [RED("ButtonController")] public wCHandle<inkButtonController> ButtonController { get; set; }
 		[Ordinal(8)]  [RED("widgetWrapper")] public inkWidgetReference WidgetWrapper { get; set; }
 		[Ordinal(9)]  [RED("itemName")] public inkTextWidgetReference ItemName { get; set; }
 		[Ordinal(10)]  [RED("itemPrice")] public inkTextWidgetReference ItemPrice { get; set; }

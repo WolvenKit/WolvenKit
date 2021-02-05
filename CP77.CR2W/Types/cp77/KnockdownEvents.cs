@@ -8,9 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class KnockdownEvents : StatusEffectEvents
 	{
-		[Ordinal(0)]  [RED("statusEffectRecord")] public wCHandle<gamedataStatusEffect_Record> StatusEffectRecord { get; set; }
-		[Ordinal(1)]  [RED("playerStatusEffectRecordData")] public wCHandle<gamedataStatusEffectPlayerData_Record> PlayerStatusEffectRecordData { get; set; }
-		[Ordinal(2)]  [RED("animFeatureStatusEffect")] public CHandle<AnimFeature_StatusEffect> AnimFeatureStatusEffect { get; set; }
 		[Ordinal(3)]  [RED("cachedPlayerVelocity")] public Vector4 CachedPlayerVelocity { get; set; }
 		[Ordinal(4)]  [RED("secondaryKnockdownDir")] public Vector4 SecondaryKnockdownDir { get; set; }
 		[Ordinal(5)]  [RED("secondaryKnockdownTimer")] public CFloat SecondaryKnockdownTimer { get; set; }

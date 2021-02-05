@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ShardCollectedNotificationViewData : gameuiGenericNotificationViewData
 	{
-		[Ordinal(0)]  [RED("action")] public CHandle<GenericNotificationBaseAction> Action { get; set; }
 		[Ordinal(1)]  [RED("entry")] public CHandle<gameJournalOnscreen> Entry { get; set; }
 		[Ordinal(2)]  [RED("isCrypted")] public CBool IsCrypted { get; set; }
 		[Ordinal(3)]  [RED("itemID")] public gameItemID ItemID { get; set; }

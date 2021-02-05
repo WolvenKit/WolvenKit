@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DistanceCoveredHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(0)]  [RED("invert")] public CBool Invert { get; set; }
 		[Ordinal(1)]  [RED("distanceRequired")] public CFloat DistanceRequired { get; set; }
 		[Ordinal(2)]  [RED("comparisonType")] public CEnum<EComparisonType> ComparisonType { get; set; }
 

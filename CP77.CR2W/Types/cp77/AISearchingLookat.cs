@@ -8,10 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AISearchingLookat : AIGenericStaticLookatTask
 	{
-		[Ordinal(0)]  [RED("lookAtEvent")] public CHandle<entLookAtAddEvent> LookAtEvent { get; set; }
-		[Ordinal(1)]  [RED("activationTimeStamp")] public CFloat ActivationTimeStamp { get; set; }
-		[Ordinal(2)]  [RED("lookatTarget")] public Vector4 LookatTarget { get; set; }
-		[Ordinal(3)]  [RED("currentLookatTarget")] public Vector4 CurrentLookatTarget { get; set; }
 		[Ordinal(4)]  [RED("minAngleDifferenceMapping")] public CHandle<AIArgumentMapping> MinAngleDifferenceMapping { get; set; }
 		[Ordinal(5)]  [RED("minAngleDifference")] public CFloat MinAngleDifference { get; set; }
 		[Ordinal(6)]  [RED("maxLookAroundAngleMapping")] public CHandle<AIArgumentMapping> MaxLookAroundAngleMapping { get; set; }

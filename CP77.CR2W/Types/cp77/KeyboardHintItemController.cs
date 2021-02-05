@@ -8,9 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class KeyboardHintItemController : AHintItemController
 	{
-		[Ordinal(0)]  [RED("Icon")] public inkImageWidgetReference Icon { get; set; }
-		[Ordinal(1)]  [RED("UnavaliableText")] public inkTextWidgetReference UnavaliableText { get; set; }
-		[Ordinal(2)]  [RED("Root")] public wCHandle<inkWidget> Root { get; set; }
 		[Ordinal(3)]  [RED("NumberText")] public inkTextWidgetReference NumberText { get; set; }
 		[Ordinal(4)]  [RED("Frame")] public inkImageWidgetReference Frame { get; set; }
 		[Ordinal(5)]  [RED("DisabledStateName")] public CName DisabledStateName { get; set; }

@@ -10,7 +10,6 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("isE3Demo")] public CBool IsE3Demo { get; set; }
 		[Ordinal(1)]  [RED("telemetrySystem")] public wCHandle<gameTelemetryTelemetrySystem> TelemetrySystem { get; set; }
-		[Ordinal(2)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(3)]  [RED("TooltipsManagerRef")] public inkWidgetReference TooltipsManagerRef { get; set; }
 		[Ordinal(4)]  [RED("buttonHintsManagerRef")] public inkWidgetReference ButtonHintsManagerRef { get; set; }
 		[Ordinal(5)]  [RED("itemModeControllerRef")] public inkWidgetReference ItemModeControllerRef { get; set; }

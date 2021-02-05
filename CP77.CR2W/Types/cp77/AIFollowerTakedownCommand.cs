@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIFollowerTakedownCommand : AIFollowerCommand
 	{
-		[Ordinal(0)]  [RED("combatCommand")] public CBool CombatCommand { get; set; }
 		[Ordinal(1)]  [RED("targetRef")] public gameEntityReference TargetRef { get; set; }
 		[Ordinal(2)]  [RED("approachBeforeTakedown")] public CBool ApproachBeforeTakedown { get; set; }
 		[Ordinal(3)]  [RED("doNotTeleportIfTargetIsVisible")] public CBool DoNotTeleportIfTargetIsVisible { get; set; }

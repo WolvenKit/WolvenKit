@@ -8,13 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class InteractiveDeviceBlackboardDef : DeviceBaseBlackboardDef
 	{
-		[Ordinal(0)]  [RED("ActionWidgetsData")] public gamebbScriptID_Variant ActionWidgetsData { get; set; }
-		[Ordinal(1)]  [RED("DeviceWidgetsData")] public gamebbScriptID_Variant DeviceWidgetsData { get; set; }
-		[Ordinal(2)]  [RED("UIupdate")] public gamebbScriptID_Bool UIupdate { get; set; }
-		[Ordinal(3)]  [RED("BreadCrumbElement")] public gamebbScriptID_Variant BreadCrumbElement { get; set; }
-		[Ordinal(4)]  [RED("GlitchData")] public gamebbScriptID_Variant GlitchData { get; set; }
-		[Ordinal(5)]  [RED("UI_InteractivityBlocked")] public gamebbScriptID_Bool UI_InteractivityBlocked { get; set; }
-		[Ordinal(6)]  [RED("IsInvestigated")] public gamebbScriptID_Bool IsInvestigated { get; set; }
 		[Ordinal(7)]  [RED("showAd")] public gamebbScriptID_Bool ShowAd { get; set; }
 		[Ordinal(8)]  [RED("showVendor")] public gamebbScriptID_Bool ShowVendor { get; set; }
 

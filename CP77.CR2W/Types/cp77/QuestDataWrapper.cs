@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class QuestDataWrapper : AJournalEntryWrapper
 	{
-		[Ordinal(0)]  [RED("UniqueId")] public CInt32 UniqueId { get; set; }
 		[Ordinal(1)]  [RED("isNew")] public CBool IsNew { get; set; }
 		[Ordinal(2)]  [RED("quest")] public wCHandle<gameJournalQuest> Quest { get; set; }
 		[Ordinal(3)]  [RED("title")] public CString Title { get; set; }

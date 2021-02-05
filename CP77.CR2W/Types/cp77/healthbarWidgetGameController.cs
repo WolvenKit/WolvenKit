@@ -9,13 +9,6 @@ namespace CP77.CR2W.Types
 	public class healthbarWidgetGameController : gameuiHUDGameController
 	{
 		[Ordinal(0)]  [RED("godModeStatListener")] public CHandle<GodModeStatListener> GodModeStatListener { get; set; }
-		[Ordinal(1)]  [RED("showAnimDef")] public CHandle<inkanimDefinition> ShowAnimDef { get; set; }
-		[Ordinal(2)]  [RED("hideAnimDef")] public CHandle<inkanimDefinition> HideAnimDef { get; set; }
-		[Ordinal(3)]  [RED("showAnimationName")] public CName ShowAnimationName { get; set; }
-		[Ordinal(4)]  [RED("hideAnimationName")] public CName HideAnimationName { get; set; }
-		[Ordinal(5)]  [RED("moduleShown")] public CBool ModuleShown { get; set; }
-		[Ordinal(6)]  [RED("showAnimProxy")] public CHandle<inkanimProxy> ShowAnimProxy { get; set; }
-		[Ordinal(7)]  [RED("hideAnimProxy")] public CHandle<inkanimProxy> HideAnimProxy { get; set; }
 		[Ordinal(8)]  [RED("bbPlayerStats")] public CHandle<gameIBlackboard> BbPlayerStats { get; set; }
 		[Ordinal(9)]  [RED("bbPlayerEventId")] public CUInt32 BbPlayerEventId { get; set; }
 		[Ordinal(10)]  [RED("bbRightWeaponInfo")] public CHandle<gameIBlackboard> BbRightWeaponInfo { get; set; }

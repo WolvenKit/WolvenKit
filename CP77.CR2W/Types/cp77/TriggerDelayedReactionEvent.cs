@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TriggerDelayedReactionEvent : DelayedCrowdReactionEvent
 	{
-		[Ordinal(0)]  [RED("stimEvent")] public CHandle<senseStimuliEvent> StimEvent { get; set; }
-		[Ordinal(1)]  [RED("vehicleFearPhase")] public CInt32 VehicleFearPhase { get; set; }
 		[Ordinal(2)]  [RED("initAnim")] public CBool InitAnim { get; set; }
 		[Ordinal(3)]  [RED("behavior")] public CEnum<gamedataOutput> Behavior { get; set; }
 

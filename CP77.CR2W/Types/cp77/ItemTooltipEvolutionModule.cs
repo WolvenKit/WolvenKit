@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ItemTooltipEvolutionModule : ItemTooltipModuleController
 	{
-		[Ordinal(0)]  [RED("lineWidget")] public inkWidgetReference LineWidget { get; set; }
 		[Ordinal(1)]  [RED("weaponEvolutionIcon")] public inkImageWidgetReference WeaponEvolutionIcon { get; set; }
 		[Ordinal(2)]  [RED("weaponEvolutionName")] public inkTextWidgetReference WeaponEvolutionName { get; set; }
 		[Ordinal(3)]  [RED("weaponEvolutionDescription")] public inkTextWidgetReference WeaponEvolutionDescription { get; set; }

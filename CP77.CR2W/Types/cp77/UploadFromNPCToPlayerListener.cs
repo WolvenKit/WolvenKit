@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class UploadFromNPCToPlayerListener : QuickHackUploadListener
 	{
-		[Ordinal(0)]  [RED("action")] public CHandle<ScriptableDeviceAction> Action { get; set; }
-		[Ordinal(1)]  [RED("gameInstance")] public ScriptGameInstance GameInstance { get; set; }
 		[Ordinal(2)]  [RED("playerPuppet")] public wCHandle<ScriptedPuppet> PlayerPuppet { get; set; }
 		[Ordinal(3)]  [RED("npcPuppet")] public wCHandle<ScriptedPuppet> NpcPuppet { get; set; }
 		[Ordinal(4)]  [RED("variantHud")] public HUDProgressBarData VariantHud { get; set; }

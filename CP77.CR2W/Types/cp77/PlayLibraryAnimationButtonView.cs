@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PlayLibraryAnimationButtonView : BaseButtonView
 	{
-		[Ordinal(0)]  [RED("ButtonController")] public wCHandle<inkButtonController> ButtonController { get; set; }
 		[Ordinal(1)]  [RED("ToHoverAnimationName")] public CName ToHoverAnimationName { get; set; }
 		[Ordinal(2)]  [RED("ToPressedAnimationName")] public CName ToPressedAnimationName { get; set; }
 		[Ordinal(3)]  [RED("ToDefaultAnimationName")] public CName ToDefaultAnimationName { get; set; }

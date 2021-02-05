@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class GarmentItemPreviewGameController : gameuiInventoryPuppetPreviewGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
-		[Ordinal(1)]  [RED("isRotatable")] public CBool IsRotatable { get; set; }
 		[Ordinal(2)]  [RED("data")] public CHandle<InventoryItemPreviewData> Data { get; set; }
 		[Ordinal(3)]  [RED("placementSlot")] public TweakDBID PlacementSlot { get; set; }
 		[Ordinal(4)]  [RED("initialItem")] public gameItemID InitialItem { get; set; }

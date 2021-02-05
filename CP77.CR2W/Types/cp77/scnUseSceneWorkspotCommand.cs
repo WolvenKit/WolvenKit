@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnUseSceneWorkspotCommand : AIBaseUseWorkspotCommand
 	{
-		[Ordinal(0)]  [RED("movementType")] public CEnum<moveMovementType> MovementType { get; set; }
 		[Ordinal(1)]  [RED("sceneInstanceId")] public scnSceneInstanceId SceneInstanceId { get; set; }
 		[Ordinal(2)]  [RED("workspotInstanceId")] public scnSceneWorkspotInstanceId WorkspotInstanceId { get; set; }
 		[Ordinal(3)]  [RED("itemOverride")] public workWorkspotItemOverride ItemOverride { get; set; }

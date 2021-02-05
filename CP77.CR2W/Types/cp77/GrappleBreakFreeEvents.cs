@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class GrappleBreakFreeEvents : GrappleStandEvents
 	{
-		[Ordinal(0)]  [RED("stateMachineInitData")] public wCHandle<LocomotionTakedownInitData> StateMachineInitData { get; set; }
-		[Ordinal(1)]  [RED("isWalking")] public CBool IsWalking { get; set; }
 		[Ordinal(2)]  [RED("playerPositionVerified")] public CBool PlayerPositionVerified { get; set; }
 		[Ordinal(3)]  [RED("shouldPushPlayerAway")] public CBool ShouldPushPlayerAway { get; set; }
 

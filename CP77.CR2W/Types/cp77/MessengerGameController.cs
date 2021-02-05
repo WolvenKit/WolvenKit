@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MessengerGameController : gameuiMenuGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(1)]  [RED("buttonHintsManagerRef")] public inkWidgetReference ButtonHintsManagerRef { get; set; }
 		[Ordinal(2)]  [RED("contactsRef")] public inkWidgetReference ContactsRef { get; set; }
 		[Ordinal(3)]  [RED("dialogRef")] public inkWidgetReference DialogRef { get; set; }

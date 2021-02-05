@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MaterialTooltip : AGenericTooltipController
 	{
-		[Ordinal(0)]  [RED("Root")] public wCHandle<inkCompoundWidget> Root { get; set; }
 		[Ordinal(1)]  [RED("titleWrapper")] public inkWidgetReference TitleWrapper { get; set; }
 		[Ordinal(2)]  [RED("descriptionWrapper")] public inkWidgetReference DescriptionWrapper { get; set; }
 		[Ordinal(3)]  [RED("descriptionLine")] public inkWidgetReference DescriptionLine { get; set; }

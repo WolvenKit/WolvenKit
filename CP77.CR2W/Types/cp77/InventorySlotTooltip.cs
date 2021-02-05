@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class InventorySlotTooltip : AGenericTooltipController
 	{
-		[Ordinal(0)]  [RED("Root")] public wCHandle<inkCompoundWidget> Root { get; set; }
 		[Ordinal(1)]  [RED("itemName")] public inkTextWidgetReference ItemName { get; set; }
 		[Ordinal(2)]  [RED("itemCategory")] public inkTextWidgetReference ItemCategory { get; set; }
 		[Ordinal(3)]  [RED("itemPrice")] public inkTextWidgetReference ItemPrice { get; set; }

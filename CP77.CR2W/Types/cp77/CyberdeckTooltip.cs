@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CyberdeckTooltip : AGenericTooltipController
 	{
-		[Ordinal(0)]  [RED("Root")] public wCHandle<inkCompoundWidget> Root { get; set; }
 		[Ordinal(1)]  [RED("itemNameText")] public inkTextWidgetReference ItemNameText { get; set; }
 		[Ordinal(2)]  [RED("itemRarityText")] public inkTextWidgetReference ItemRarityText { get; set; }
 		[Ordinal(3)]  [RED("rarityBars")] public inkWidgetReference RarityBars { get; set; }

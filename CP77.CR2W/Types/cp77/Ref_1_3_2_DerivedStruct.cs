@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class Ref_1_3_2_DerivedStruct : Ref_1_3_2_NonTrivialStruct
 	{
-		[Ordinal(0)]  [RED("prop2")] public Ref_1_3_2_TrivialStruct Prop2 { get; set; }
 
 		public Ref_1_3_2_DerivedStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

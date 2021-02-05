@@ -8,11 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class HitStatusEffectPresentPrereq : GenericHitPrereq
 	{
-		[Ordinal(0)]  [RED("isSync")] public CBool IsSync { get; set; }
-		[Ordinal(1)]  [RED("callbackType")] public CEnum<gameDamageCallbackType> CallbackType { get; set; }
-		[Ordinal(2)]  [RED("pipelineStage")] public CEnum<gameDamagePipelineStage> PipelineStage { get; set; }
-		[Ordinal(3)]  [RED("attackType")] public CEnum<gamedataAttackType> AttackType { get; set; }
-		[Ordinal(4)]  [RED("conditions")] public CArray<CHandle<BaseHitPrereqCondition>> Conditions { get; set; }
 		[Ordinal(5)]  [RED("checkType")] public CString CheckType { get; set; }
 		[Ordinal(6)]  [RED("statusEffectParam")] public CString StatusEffectParam { get; set; }
 		[Ordinal(7)]  [RED("tag")] public CName Tag { get; set; }

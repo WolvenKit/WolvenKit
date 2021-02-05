@@ -8,10 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class WorldMapDistrictTooltipController : WorldMapTooltipBaseController
 	{
-		[Ordinal(0)]  [RED("root")] public inkWidgetReference Root { get; set; }
-		[Ordinal(1)]  [RED("showHideAnim")] public CHandle<inkanimProxy> ShowHideAnim { get; set; }
-		[Ordinal(2)]  [RED("visible")] public CBool Visible { get; set; }
-		[Ordinal(3)]  [RED("active")] public CBool Active { get; set; }
 		[Ordinal(4)]  [RED("titleText")] public inkTextWidgetReference TitleText { get; set; }
 		[Ordinal(5)]  [RED("levelRangeText")] public inkTextWidgetReference LevelRangeText { get; set; }
 		[Ordinal(6)]  [RED("threatText")] public inkTextWidgetReference ThreatText { get; set; }

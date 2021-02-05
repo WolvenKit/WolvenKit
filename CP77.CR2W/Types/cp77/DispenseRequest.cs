@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DispenseRequest : MarketSystemRequest
 	{
-		[Ordinal(0)]  [RED("owner")] public wCHandle<gameObject> Owner { get; set; }
-		[Ordinal(1)]  [RED("vendorID")] public TweakDBID VendorID { get; set; }
 		[Ordinal(2)]  [RED("position")] public Vector4 Position { get; set; }
 		[Ordinal(3)]  [RED("itemID")] public gameItemID ItemID { get; set; }
 		[Ordinal(4)]  [RED("shouldPay")] public CBool ShouldPay { get; set; }

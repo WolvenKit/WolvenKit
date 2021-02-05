@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questLogGameController : gameuiMenuGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(1)]  [RED("virtualList")] public inkWidgetReference VirtualList { get; set; }
 		[Ordinal(2)]  [RED("detailsPanel")] public inkWidgetReference DetailsPanel { get; set; }
 		[Ordinal(3)]  [RED("buttonHints")] public inkWidgetReference ButtonHints { get; set; }

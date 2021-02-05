@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DropdownElementController : BaseButtonView
 	{
-		[Ordinal(0)]  [RED("ButtonController")] public wCHandle<inkButtonController> ButtonController { get; set; }
 		[Ordinal(1)]  [RED("text")] public inkTextWidgetReference Text { get; set; }
 		[Ordinal(2)]  [RED("arrow")] public inkImageWidgetReference Arrow { get; set; }
 		[Ordinal(3)]  [RED("frame")] public inkWidgetReference Frame { get; set; }

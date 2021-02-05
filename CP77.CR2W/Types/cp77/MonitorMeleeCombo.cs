@@ -8,11 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MonitorMeleeCombo : AIActionHelperTask
 	{
-		[Ordinal(0)]  [RED("actionTweakIDMapping")] public CHandle<AIArgumentMapping> ActionTweakIDMapping { get; set; }
-		[Ordinal(1)]  [RED("actionStringName")] public CString ActionStringName { get; set; }
-		[Ordinal(2)]  [RED("initialized")] public CBool Initialized { get; set; }
-		[Ordinal(3)]  [RED("actionName")] public CName ActionName { get; set; }
-		[Ordinal(4)]  [RED("actionID")] public TweakDBID ActionID { get; set; }
 		[Ordinal(5)]  [RED("ExitComboBoolArgumentRef")] public CName ExitComboBoolArgumentRef { get; set; }
 		[Ordinal(6)]  [RED("PreviousReactionIntArgumentRef")] public CName PreviousReactionIntArgumentRef { get; set; }
 		[Ordinal(7)]  [RED("CurrentAttackIntArgumentRef")] public CName CurrentAttackIntArgumentRef { get; set; }

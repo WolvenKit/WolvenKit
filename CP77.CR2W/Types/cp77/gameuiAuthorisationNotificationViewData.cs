@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiAuthorisationNotificationViewData : gameuiGenericNotificationViewData
 	{
-		[Ordinal(0)]  [RED("action")] public CHandle<GenericNotificationBaseAction> Action { get; set; }
 		[Ordinal(1)]  [RED("authType")] public CEnum<gameuiAuthorisationNotificationType> AuthType { get; set; }
 
 		public gameuiAuthorisationNotificationViewData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

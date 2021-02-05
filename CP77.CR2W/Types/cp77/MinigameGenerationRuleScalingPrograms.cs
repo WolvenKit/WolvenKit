@@ -8,12 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MinigameGenerationRuleScalingPrograms : gameuiMinigameGenerationRule
 	{
-		[Ordinal(0)]  [RED("blackboardSystem")] public CHandle<gameBlackboardSystem> BlackboardSystem { get; set; }
-		[Ordinal(1)]  [RED("entity")] public wCHandle<entEntity> Entity { get; set; }
-		[Ordinal(2)]  [RED("player")] public wCHandle<PlayerPuppet> Player { get; set; }
-		[Ordinal(3)]  [RED("minigameRecord")] public wCHandle<gamedataMinigame_Def_Record> MinigameRecord { get; set; }
-		[Ordinal(4)]  [RED("bufferSize")] public CInt32 BufferSize { get; set; }
-		[Ordinal(5)]  [RED("isItemBreach")] public CBool IsItemBreach { get; set; }
 		[Ordinal(6)]  [RED("bbNetwork")] public CHandle<gameIBlackboard> BbNetwork { get; set; }
 		[Ordinal(7)]  [RED("isOfficerBreach")] public CBool IsOfficerBreach { get; set; }
 		[Ordinal(8)]  [RED("isRemoteBreach")] public CBool IsRemoteBreach { get; set; }

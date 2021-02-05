@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class VehicleInsideWheelEvents : QuickSlotsHoldEvents
 	{
-		[Ordinal(0)]  [RED("holdDirection")] public CEnum<EDPadSlot> HoldDirection { get; set; }
 
 		public VehicleInsideWheelEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

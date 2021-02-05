@@ -8,10 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class characterCreationSummaryMenu : gameuiBaseCharacterCreationController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
-		[Ordinal(1)]  [RED("eventDispatcher")] public wCHandle<inkMenuEventDispatcher> EventDispatcher { get; set; }
-		[Ordinal(2)]  [RED("characterCustomizationState")] public CHandle<gameuiICharacterCustomizationState> CharacterCustomizationState { get; set; }
-		[Ordinal(3)]  [RED("nextPageHitArea")] public inkWidgetReference NextPageHitArea { get; set; }
 		[Ordinal(4)]  [RED("backstoryTitle")] public inkTextWidgetReference BackstoryTitle { get; set; }
 		[Ordinal(5)]  [RED("backstoryIcon")] public inkImageWidgetReference BackstoryIcon { get; set; }
 		[Ordinal(6)]  [RED("backstory")] public inkTextWidgetReference Backstory { get; set; }

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class GameplayFactCondition : GameplayConditionBase
 	{
-		[Ordinal(0)]  [RED("entityID")] public entEntityID EntityID { get; set; }
 		[Ordinal(1)]  [RED("factName")] public CName FactName { get; set; }
 		[Ordinal(2)]  [RED("value")] public CInt32 Value { get; set; }
 		[Ordinal(3)]  [RED("comparisonType")] public CEnum<ECompareOp> ComparisonType { get; set; }

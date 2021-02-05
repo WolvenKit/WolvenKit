@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questLogV2GameController : gameuiMenuGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(1)]  [RED("QuestDetailsRef")] public inkWidgetReference QuestDetailsRef { get; set; }
 		[Ordinal(2)]  [RED("QuestDetailsHeader")] public inkWidgetReference QuestDetailsHeader { get; set; }
 		[Ordinal(3)]  [RED("OptinalObjectivesGroupRef")] public inkWidgetReference OptinalObjectivesGroupRef { get; set; }

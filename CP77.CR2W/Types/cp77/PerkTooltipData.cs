@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PerkTooltipData : BasePerksMenuTooltipData
 	{
-		[Ordinal(0)]  [RED("manager")] public CHandle<PlayerDevelopmentDataManager> Manager { get; set; }
 		[Ordinal(1)]  [RED("perkType")] public CEnum<gamedataPerkType> PerkType { get; set; }
 		[Ordinal(2)]  [RED("perkArea")] public CEnum<gamedataPerkArea> PerkArea { get; set; }
 		[Ordinal(3)]  [RED("attributeId")] public TweakDBID AttributeId { get; set; }

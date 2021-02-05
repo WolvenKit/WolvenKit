@@ -8,10 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CodexImageButton : CodexListItemController
 	{
-		[Ordinal(0)]  [RED("labelPathRef")] public inkTextWidgetReference LabelPathRef { get; set; }
-		[Ordinal(1)]  [RED("doMarkNew")] public CBool DoMarkNew { get; set; }
-		[Ordinal(2)]  [RED("stateMapperRef")] public inkWidgetReference StateMapperRef { get; set; }
-		[Ordinal(3)]  [RED("stateMapper")] public wCHandle<ListItemStateMapper> StateMapper { get; set; }
 		[Ordinal(4)]  [RED("image")] public inkImageWidgetReference Image { get; set; }
 		[Ordinal(5)]  [RED("border")] public inkImageWidgetReference Border { get; set; }
 		[Ordinal(6)]  [RED("translateOnSelect")] public inkWidgetReference TranslateOnSelect { get; set; }

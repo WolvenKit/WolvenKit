@@ -8,9 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class QuestContactLinkController : BaseCodexLinkController
 	{
-		[Ordinal(0)]  [RED("linkImage")] public inkImageWidgetReference LinkImage { get; set; }
-		[Ordinal(1)]  [RED("linkLabel")] public inkTextWidgetReference LinkLabel { get; set; }
-		[Ordinal(2)]  [RED("animProxy")] public CHandle<inkanimProxy> AnimProxy { get; set; }
 		[Ordinal(3)]  [RED("msgLabel")] public inkTextWidgetReference MsgLabel { get; set; }
 		[Ordinal(4)]  [RED("msgContainer")] public inkWidgetReference MsgContainer { get; set; }
 		[Ordinal(5)]  [RED("msgCounter")] public CInt32 MsgCounter { get; set; }

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CyberwareTooltip : AGenericTooltipController
 	{
-		[Ordinal(0)]  [RED("Root")] public wCHandle<inkCompoundWidget> Root { get; set; }
 		[Ordinal(1)]  [RED("slotList")] public inkCompoundWidgetReference SlotList { get; set; }
 		[Ordinal(2)]  [RED("label")] public inkTextWidgetReference Label { get; set; }
 		[Ordinal(3)]  [RED("data")] public CHandle<CyberwareTooltipData> Data { get; set; }

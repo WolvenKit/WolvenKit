@@ -8,9 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class QuestIllegalActionNotification : QuestSecuritySystemInput
 	{
-		[Ordinal(0)]  [RED("notificationScope")] public CEnum<SecurityEventScopeSettings> NotificationScope { get; set; }
-		[Ordinal(1)]  [RED("notifySpecificNPCs")] public CArray<NPCReference> NotifySpecificNPCs { get; set; }
-		[Ordinal(2)]  [RED("revealPlayerSettings")] public RevealPlayerSettings RevealPlayerSettings { get; set; }
 
 		public QuestIllegalActionNotification(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

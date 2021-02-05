@@ -8,13 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class hudCameraController : gameuiHUDGameController
 	{
-		[Ordinal(0)]  [RED("showAnimDef")] public CHandle<inkanimDefinition> ShowAnimDef { get; set; }
-		[Ordinal(1)]  [RED("hideAnimDef")] public CHandle<inkanimDefinition> HideAnimDef { get; set; }
-		[Ordinal(2)]  [RED("showAnimationName")] public CName ShowAnimationName { get; set; }
-		[Ordinal(3)]  [RED("hideAnimationName")] public CName HideAnimationName { get; set; }
-		[Ordinal(4)]  [RED("moduleShown")] public CBool ModuleShown { get; set; }
-		[Ordinal(5)]  [RED("showAnimProxy")] public CHandle<inkanimProxy> ShowAnimProxy { get; set; }
-		[Ordinal(6)]  [RED("hideAnimProxy")] public CHandle<inkanimProxy> HideAnimProxy { get; set; }
 		[Ordinal(7)]  [RED("pitch_min")] public CFloat Pitch_min { get; set; }
 		[Ordinal(8)]  [RED("pitch_max")] public CFloat Pitch_max { get; set; }
 		[Ordinal(9)]  [RED("yaw_min")] public CFloat Yaw_min { get; set; }

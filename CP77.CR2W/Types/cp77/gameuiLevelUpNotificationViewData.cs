@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiLevelUpNotificationViewData : gameuiGenericNotificationViewData
 	{
-		[Ordinal(0)]  [RED("action")] public CHandle<GenericNotificationBaseAction> Action { get; set; }
 		[Ordinal(1)]  [RED("canBeMerged")] public CBool CanBeMerged { get; set; }
 		[Ordinal(2)]  [RED("levelupdata")] public questLevelUpData Levelupdata { get; set; }
 		[Ordinal(3)]  [RED("proficiencyRecord")] public CHandle<gamedataProficiency_Record> ProficiencyRecord { get; set; }

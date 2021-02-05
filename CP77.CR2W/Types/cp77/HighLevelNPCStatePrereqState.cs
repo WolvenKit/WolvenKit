@@ -8,9 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class HighLevelNPCStatePrereqState : NPCStatePrereqState
 	{
-		[Ordinal(0)]  [RED("owner")] public wCHandle<gameObject> Owner { get; set; }
-		[Ordinal(1)]  [RED("listenerInt")] public CUInt32 ListenerInt { get; set; }
-		[Ordinal(2)]  [RED("prevValue")] public CInt32 PrevValue { get; set; }
 
 		public HighLevelNPCStatePrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

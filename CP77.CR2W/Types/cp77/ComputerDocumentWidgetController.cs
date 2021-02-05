@@ -8,10 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ComputerDocumentWidgetController : DeviceInkLogicControllerBase
 	{
-		[Ordinal(0)]  [RED("targetWidgetRef")] public inkWidgetReference TargetWidgetRef { get; set; }
-		[Ordinal(1)]  [RED("displayNameWidget")] public inkTextWidgetReference DisplayNameWidget { get; set; }
-		[Ordinal(2)]  [RED("isInitialized")] public CBool IsInitialized { get; set; }
-		[Ordinal(3)]  [RED("targetWidget")] public wCHandle<inkWidget> TargetWidget { get; set; }
 		[Ordinal(4)]  [RED("titleWidget")] public inkTextWidgetReference TitleWidget { get; set; }
 		[Ordinal(5)]  [RED("ownerNameWidget")] public inkTextWidgetReference OwnerNameWidget { get; set; }
 		[Ordinal(6)]  [RED("dateWidget")] public inkTextWidgetReference DateWidget { get; set; }

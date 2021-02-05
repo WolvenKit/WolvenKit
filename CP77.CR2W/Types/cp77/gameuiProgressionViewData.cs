@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiProgressionViewData : gameuiGenericNotificationViewData
 	{
-		[Ordinal(0)]  [RED("action")] public CHandle<GenericNotificationBaseAction> Action { get; set; }
 		[Ordinal(1)]  [RED("expValue")] public CInt32 ExpValue { get; set; }
 		[Ordinal(2)]  [RED("expProgress")] public CFloat ExpProgress { get; set; }
 		[Ordinal(3)]  [RED("delta")] public CInt32 Delta { get; set; }

@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PaymentBalanced_ScriptConditionType : PaymentConditionTypeBase
 	{
-		[Ordinal(0)]  [RED("inverted")] public CBool Inverted { get; set; }
-		[Ordinal(1)]  [RED("payWhenSucceded")] public CBool PayWhenSucceded { get; set; }
 		[Ordinal(2)]  [RED("questAssignment")] public TweakDBID QuestAssignment { get; set; }
 		[Ordinal(3)]  [RED("difficulty")] public CEnum<EGameplayChallengeLevel> Difficulty { get; set; }
 

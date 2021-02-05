@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PlayRadio : MusicSettings
 	{
-		[Ordinal(0)]  [RED("statusEffect")] public CEnum<ESoundStatusEffects> StatusEffect { get; set; }
 		[Ordinal(1)]  [RED("radioStation")] public CEnum<ERadioStationList> RadioStation { get; set; }
 
 		public PlayRadio(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

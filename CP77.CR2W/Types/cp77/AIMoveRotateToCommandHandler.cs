@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIMoveRotateToCommandHandler : AICommandHandlerBase
 	{
-		[Ordinal(0)]  [RED("inCommand")] public CHandle<AIArgumentMapping> InCommand { get; set; }
 		[Ordinal(1)]  [RED("target")] public CHandle<AIArgumentMapping> Target { get; set; }
 		[Ordinal(2)]  [RED("angleTolerance")] public CHandle<AIArgumentMapping> AngleTolerance { get; set; }
 		[Ordinal(3)]  [RED("angleOffset")] public CHandle<AIArgumentMapping> AngleOffset { get; set; }

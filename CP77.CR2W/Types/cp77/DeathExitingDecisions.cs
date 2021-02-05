@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DeathExitingDecisions : ExitingDecisions
 	{
-		[Ordinal(0)]  [RED("stateMachineInitData")] public wCHandle<VehicleTransitionInitData> StateMachineInitData { get; set; }
 
 		public DeathExitingDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

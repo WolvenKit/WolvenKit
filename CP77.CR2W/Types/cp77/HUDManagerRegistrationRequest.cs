@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class HUDManagerRegistrationRequest : HUDManagerRequest
 	{
-		[Ordinal(0)]  [RED("ownerID")] public entEntityID OwnerID { get; set; }
 		[Ordinal(1)]  [RED("isRegistering")] public CBool IsRegistering { get; set; }
 		[Ordinal(2)]  [RED("type")] public CEnum<HUDActorType> Type { get; set; }
 

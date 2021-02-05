@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CustomActionOperations : DeviceOperations
 	{
-		[Ordinal(0)]  [RED("components")] public CArray<wCHandle<entIPlacedComponent>> Components { get; set; }
-		[Ordinal(1)]  [RED("fxInstances")] public CArray<SVfxInstanceData> FxInstances { get; set; }
 		[Ordinal(2)]  [RED("customActions")] public SCustomDeviceActionsData CustomActions { get; set; }
 		[Ordinal(3)]  [RED("customActionsOperations")] public CArray<SCustomActionOperationData> CustomActionsOperations { get; set; }
 

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SettingsListItem : inkListItemController
 	{
-		[Ordinal(0)]  [RED("labelPathRef")] public inkTextWidgetReference LabelPathRef { get; set; }
 		[Ordinal(1)]  [RED("Selector")] public inkWidgetReference Selector { get; set; }
 		[Ordinal(2)]  [RED("settingsSelector")] public wCHandle<inkSettingsSelectorController> SettingsSelector { get; set; }
 

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIMoveToCommandHandler : AICommandHandlerBase
 	{
-		[Ordinal(0)]  [RED("inCommand")] public CHandle<AIArgumentMapping> InCommand { get; set; }
 		[Ordinal(1)]  [RED("outIsDynamicMove")] public CHandle<AIArgumentMapping> OutIsDynamicMove { get; set; }
 		[Ordinal(2)]  [RED("outMovementTarget")] public CHandle<AIArgumentMapping> OutMovementTarget { get; set; }
 		[Ordinal(3)]  [RED("outMovementTargetPos")] public CHandle<AIArgumentMapping> OutMovementTargetPos { get; set; }

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class GameplayItemCondition : GameplayConditionBase
 	{
-		[Ordinal(0)]  [RED("entityID")] public entEntityID EntityID { get; set; }
 		[Ordinal(1)]  [RED("itemToCheck")] public TweakDBID ItemToCheck { get; set; }
 
 		public GameplayItemCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

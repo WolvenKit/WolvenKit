@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AgentMovingHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(0)]  [RED("invert")] public CBool Invert { get; set; }
 		[Ordinal(1)]  [RED("isMoving")] public CBool IsMoving { get; set; }
 		[Ordinal(2)]  [RED("object")] public CName Object { get; set; }
 

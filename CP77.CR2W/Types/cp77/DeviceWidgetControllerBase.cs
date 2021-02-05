@@ -8,10 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DeviceWidgetControllerBase : DeviceInkLogicControllerBase
 	{
-		[Ordinal(0)]  [RED("targetWidgetRef")] public inkWidgetReference TargetWidgetRef { get; set; }
-		[Ordinal(1)]  [RED("displayNameWidget")] public inkTextWidgetReference DisplayNameWidget { get; set; }
-		[Ordinal(2)]  [RED("isInitialized")] public CBool IsInitialized { get; set; }
-		[Ordinal(3)]  [RED("targetWidget")] public wCHandle<inkWidget> TargetWidget { get; set; }
 		[Ordinal(4)]  [RED("backgroundTextureRef")] public inkImageWidgetReference BackgroundTextureRef { get; set; }
 		[Ordinal(5)]  [RED("statusNameWidget")] public inkTextWidgetReference StatusNameWidget { get; set; }
 		[Ordinal(6)]  [RED("actionsListWidget")] public inkWidgetReference ActionsListWidget { get; set; }

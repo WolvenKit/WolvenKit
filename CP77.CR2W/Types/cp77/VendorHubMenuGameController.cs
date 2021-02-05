@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class VendorHubMenuGameController : gameuiMenuGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(1)]  [RED("selectorWidget")] public inkWidgetReference SelectorWidget { get; set; }
 		[Ordinal(2)]  [RED("playerCurrency")] public inkTextWidgetReference PlayerCurrency { get; set; }
 		[Ordinal(3)]  [RED("vendorShopLabel")] public inkTextWidgetReference VendorShopLabel { get; set; }

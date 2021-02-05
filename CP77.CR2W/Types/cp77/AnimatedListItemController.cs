@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AnimatedListItemController : inkListItemController
 	{
-		[Ordinal(0)]  [RED("labelPathRef")] public inkTextWidgetReference LabelPathRef { get; set; }
 		[Ordinal(1)]  [RED("animOutName")] public CName AnimOutName { get; set; }
 		[Ordinal(2)]  [RED("animPulseName")] public CName AnimPulseName { get; set; }
 		[Ordinal(3)]  [RED("animTargetHover")] public inkWidgetReference AnimTargetHover { get; set; }

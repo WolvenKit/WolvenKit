@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ItemTooltipRequirementsModule : ItemTooltipModuleController
 	{
-		[Ordinal(0)]  [RED("lineWidget")] public inkWidgetReference LineWidget { get; set; }
 		[Ordinal(1)]  [RED("levelRequirementsWrapper")] public inkWidgetReference LevelRequirementsWrapper { get; set; }
 		[Ordinal(2)]  [RED("strenghtOrReflexWrapper")] public inkWidgetReference StrenghtOrReflexWrapper { get; set; }
 		[Ordinal(3)]  [RED("smartlinkGunWrapper")] public inkWidgetReference SmartlinkGunWrapper { get; set; }

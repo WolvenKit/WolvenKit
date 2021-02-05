@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ItemTooltipIconModule : ItemTooltipModuleController
 	{
-		[Ordinal(0)]  [RED("lineWidget")] public inkWidgetReference LineWidget { get; set; }
 		[Ordinal(1)]  [RED("icon")] public inkImageWidgetReference Icon { get; set; }
 		[Ordinal(2)]  [RED("iconicLines")] public inkImageWidgetReference IconicLines { get; set; }
 		[Ordinal(3)]  [RED("iconsNameResolver")] public CHandle<gameuiIconsNameResolver> IconsNameResolver { get; set; }

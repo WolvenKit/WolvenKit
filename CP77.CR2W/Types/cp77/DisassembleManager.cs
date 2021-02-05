@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DisassembleManager : gameuiMenuGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 		[Ordinal(1)]  [RED("listRef")] public inkCompoundWidgetReference ListRef { get; set; }
 		[Ordinal(2)]  [RED("initialPopupDelay")] public CFloat InitialPopupDelay { get; set; }
 		[Ordinal(3)]  [RED("popupList")] public CArray<CHandle<DisassemblePopupLogicController>> PopupList { get; set; }

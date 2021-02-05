@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ScannerWeaponDetailed : ScannerWeaponBasic
 	{
-		[Ordinal(0)]  [RED("weapon")] public CName Weapon { get; set; }
 		[Ordinal(1)]  [RED("damage")] public CName Damage { get; set; }
 
 		public ScannerWeaponDetailed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

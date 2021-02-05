@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CheckArgumentFloat : CheckArguments
 	{
-		[Ordinal(0)]  [RED("argumentVar")] public CName ArgumentVar { get; set; }
 		[Ordinal(1)]  [RED("customVar")] public CFloat CustomVar { get; set; }
 		[Ordinal(2)]  [RED("comparator")] public CEnum<ECompareOp> Comparator { get; set; }
 

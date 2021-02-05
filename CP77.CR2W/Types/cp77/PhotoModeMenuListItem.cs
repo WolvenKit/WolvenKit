@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PhotoModeMenuListItem : inkListItemController
 	{
-		[Ordinal(0)]  [RED("labelPathRef")] public inkTextWidgetReference LabelPathRef { get; set; }
 		[Ordinal(1)]  [RED("ScrollBarRef")] public inkWidgetReference ScrollBarRef { get; set; }
 		[Ordinal(2)]  [RED("CounterLabelRef")] public inkTextWidgetReference CounterLabelRef { get; set; }
 		[Ordinal(3)]  [RED("TextLabelRef")] public inkTextWidgetReference TextLabelRef { get; set; }

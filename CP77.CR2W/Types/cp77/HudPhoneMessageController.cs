@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class HudPhoneMessageController : HUDPhoneElement
 	{
-		[Ordinal(0)]  [RED("RootWidget")] public wCHandle<inkWidget> RootWidget { get; set; }
 		[Ordinal(1)]  [RED("MessageText")] public inkTextWidgetReference MessageText { get; set; }
 		[Ordinal(2)]  [RED("MessageAnim")] public CHandle<inkanimProxy> MessageAnim { get; set; }
 		[Ordinal(3)]  [RED("ShowingAnimationName")] public CName ShowingAnimationName { get; set; }

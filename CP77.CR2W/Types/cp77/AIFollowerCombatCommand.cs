@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIFollowerCombatCommand : AIFollowerCommand
 	{
-		[Ordinal(0)]  [RED("combatCommand")] public CBool CombatCommand { get; set; }
 
 		public AIFollowerCombatCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TweakAIActionCondition : TweakAIActionConditionAbstract
 	{
-		[Ordinal(0)]  [RED("actionDebugName")] public CString ActionDebugName { get; set; }
-		[Ordinal(1)]  [RED("actionRecord")] public wCHandle<gamedataAIAction_Record> ActionRecord { get; set; }
 		[Ordinal(2)]  [RED("record")] public TweakDBID Record { get; set; }
 
 		public TweakAIActionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ItemTooltipRecipeDataModule : ItemTooltipModuleController
 	{
-		[Ordinal(0)]  [RED("lineWidget")] public inkWidgetReference LineWidget { get; set; }
 		[Ordinal(1)]  [RED("statsLabel")] public inkTextWidgetReference StatsLabel { get; set; }
 		[Ordinal(2)]  [RED("statsWrapper")] public inkWidgetReference StatsWrapper { get; set; }
 		[Ordinal(3)]  [RED("statsContainer")] public inkCompoundWidgetReference StatsContainer { get; set; }

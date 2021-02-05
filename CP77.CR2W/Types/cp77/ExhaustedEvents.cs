@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ExhaustedEvents : StaminaEventsTransition
 	{
-		[Ordinal(0)]  [RED("staminaChangeToggle")] public CBool StaminaChangeToggle { get; set; }
 		[Ordinal(1)]  [RED("staminaVfxBlackboard")] public CHandle<worldEffectBlackboard> StaminaVfxBlackboard { get; set; }
 
 		public ExhaustedEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

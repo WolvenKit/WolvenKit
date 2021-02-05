@@ -8,13 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class hudCorpoController : gameuiHUDGameController
 	{
-		[Ordinal(0)]  [RED("showAnimDef")] public CHandle<inkanimDefinition> ShowAnimDef { get; set; }
-		[Ordinal(1)]  [RED("hideAnimDef")] public CHandle<inkanimDefinition> HideAnimDef { get; set; }
-		[Ordinal(2)]  [RED("showAnimationName")] public CName ShowAnimationName { get; set; }
-		[Ordinal(3)]  [RED("hideAnimationName")] public CName HideAnimationName { get; set; }
-		[Ordinal(4)]  [RED("moduleShown")] public CBool ModuleShown { get; set; }
-		[Ordinal(5)]  [RED("showAnimProxy")] public CHandle<inkanimProxy> ShowAnimProxy { get; set; }
-		[Ordinal(6)]  [RED("hideAnimProxy")] public CHandle<inkanimProxy> HideAnimProxy { get; set; }
 		[Ordinal(7)]  [RED("ScrollText")] public inkTextWidgetReference ScrollText { get; set; }
 		[Ordinal(8)]  [RED("ScrollTextWidget")] public inkWidgetReference ScrollTextWidget { get; set; }
 		[Ordinal(9)]  [RED("root_canvas")] public inkWidgetReference Root_canvas { get; set; }

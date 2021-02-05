@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CyberwareSlot : BaseButtonView
 	{
-		[Ordinal(0)]  [RED("ButtonController")] public wCHandle<inkButtonController> ButtonController { get; set; }
 		[Ordinal(1)]  [RED("IconImageRef")] public inkImageWidgetReference IconImageRef { get; set; }
 		[Ordinal(2)]  [RED("SlotEquipArea")] public CEnum<gamedataEquipmentArea> SlotEquipArea { get; set; }
 		[Ordinal(3)]  [RED("NumSlots")] public CInt32 NumSlots { get; set; }
