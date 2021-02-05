@@ -53,6 +53,7 @@ namespace CP77.CR2W
                     return EFormat.BC1_UNORM;
                 case ETextureCompression.TCM_DXTAlphaLinear:
                 case ETextureCompression.TCM_DXTAlpha:
+                case ETextureCompression.TCM_NormalsHigh_DEPRECATED:
                     return EFormat.BC3_UNORM;
                 case ETextureCompression.TCM_None:
                 {
@@ -91,7 +92,6 @@ namespace CP77.CR2W
 
                 case ETextureCompression.TCM_RGBE:
                 case ETextureCompression.TCM_Normals:
-                case ETextureCompression.TCM_NormalsHigh_DEPRECATED:
                 case ETextureCompression.TCM_NormalsHigh:
                 case ETextureCompression.TCM_NormalsGloss_DEPRECATED:
                 case ETextureCompression.TCM_NormalsGloss:
