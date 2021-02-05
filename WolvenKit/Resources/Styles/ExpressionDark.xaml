@@ -243,13 +243,13 @@
     <LinearGradientBrush x:Key="SpectrumBarBrush"
                          EndPoint="0.5,0"
                          StartPoint="0.5,1">
-        <GradientStop Color="#478AC1"
+        <GradientStop Color="{DynamicResource MahApps.Colors.Accent3}"
                       Offset="0" />
-        <GradientStop Color="#72C1EB"
+        <GradientStop Color="{DynamicResource MahApps.Colors.Accent}"
                       Offset="1" />
     </LinearGradientBrush>
     <SolidColorBrush x:Key="SpectrumPeakBrush"
-                     Color="#9DD5F2" />
+                     Color="{DynamicResource MahApps.Colors.ThemeBackground}" />
     <Style TargetType="{x:Type svl:SpectrumAnalyzer}">
         <Setter Property="BarStyle">
             <Setter.Value>
@@ -323,9 +323,9 @@
                         <LinearGradientBrush x:Key="DigitBrush"
                                              EndPoint="0,0"
                                              StartPoint="0,1">
-                            <GradientStop Color="{DynamicResource MahApps.Colors.Accent}"
+                            <GradientStop Color="{DynamicResource MahApps.Colors.ThemeForeground}"
                                           Offset="0" />
-                            <GradientStop Color="{DynamicResource MahApps.Colors.Accent3}"
+                            <GradientStop Color="{DynamicResource MahApps.Colors.ThemeForeground}"
                                           Offset="1" />
                         </LinearGradientBrush>
 

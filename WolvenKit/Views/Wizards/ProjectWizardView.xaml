@@ -17,20 +17,20 @@
         </ResourceDictionary>
 
     </catel:UserControl.Resources>
-    <Grid hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="300"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,2,5">
+    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="300"   Margin="5,5,2,5">
 
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="10*"/>
+            <RowDefinition Height="15*"/>
             <RowDefinition Height="90*"/>
             <RowDefinition Height="10*"/>
 
         </Grid.RowDefinitions>
 
 
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15,15,0,0">
-            <Grid>
-                <iconPacks:PackIconCodicons  Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+        <StackPanel  Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15,15,0,0">
+            <Grid >
+                <iconPacks:PackIconCodicons    Kind="Hubot" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
 
             </Grid>
             <StackPanel  VerticalAlignment="Center" Orientation="Vertical">

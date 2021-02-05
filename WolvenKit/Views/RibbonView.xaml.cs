@@ -12,6 +12,7 @@ using WolvenKit.Views.PluginManager;
 using WolvenKit.Views.VisualEditor;
 using WolvenKit.Views.AudioTool;
 using WolvenKit.Views.JournalEditor;
+using Orchestra.Views;
 
 namespace WolvenKit.Views
 {
@@ -100,6 +101,19 @@ namespace WolvenKit.Views
         {
             JournalEditorView journaleditor = new JournalEditorView();
             journaleditor.Show();
+        }
+
+        private void Backstage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+
+            var serviceLocator = ServiceLocator.Default;
+
+            var shellService = serviceLocator.ResolveType<IShellService>();
+
+            ShellWindow sh = (ShellWindow)shellService.Shell;
+
+            sh.DragMove();
         }
     }
 }

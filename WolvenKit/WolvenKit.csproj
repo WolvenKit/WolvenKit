@@ -56,6 +56,7 @@
     <PackageReference Include="MarkerMetro.Unity.Ionic.Zlib" Version="2.0.0.14" NoWarn="NU1701" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.664.37" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
+    <PackageReference Include="NAudio" Version="1.10.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NodeNetwork" Version="5.1.2" />
     <PackageReference Include="NodeNetworkToolkit" Version="5.1.2" />
@@ -81,6 +82,7 @@
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.1" />
     <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" NoWarn="NU1701" />
+    <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
     <PackageReference Include="WpfAnalyzers" Version="3.5.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -318,5 +320,12 @@
     <None Update="testmp3.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Properties\DesignTimeResources.xaml" Condition="'$(DesignTime)'=='true' OR ('$(SolutionPath)'!='' AND Exists('$(SolutionPath)') AND '$(BuildingInsideVisualStudio)'!='true' AND '$(BuildingInsideExpressionBlend)'!='true')">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
+    </Page>
   </ItemGroup>
 </Project>

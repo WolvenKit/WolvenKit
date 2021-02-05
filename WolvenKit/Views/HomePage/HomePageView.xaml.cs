@@ -1,14 +1,18 @@
-﻿using HandyControl.Controls;
+﻿using Catel.IoC;
+using HandyControl.Controls;
 using HandyControl.Data;
 using HandyControl.Tools;
 using Octokit;
+using Orchestra.Services;
+using Orchestra.Views;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using WolvenKit.ViewModels.Wizards;
+using WolvenKit.ViewModels;
+using WolvenKit.Views.AudioTool.Radio;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Wizards;
 
@@ -253,6 +257,14 @@ namespace WolvenKit.Views.HomePage
                 PageViewGrid.Children.Clear();
                 PageViewGrid.Children.Add(UserPV);
             }
+
+   
+
+
+
+
+
+
         }
 
         private void SideMenu_IntegratedItem_Selected(object sender, RoutedEventArgs e)
@@ -264,6 +276,25 @@ namespace WolvenKit.Views.HomePage
             }
 
         }
-  
+
+        private void Grid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+        
+        }
+
+        private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+          
+                var serviceLocator = ServiceLocator.Default;
+
+                var shellService = serviceLocator.ResolveType<IShellService>();
+
+                ShellWindow sh = (ShellWindow)shellService.Shell;
+      
+                sh.DragMove();
+            
+            // Begin dragging the window
+        }
     }
 }

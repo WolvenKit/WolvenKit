@@ -71,14 +71,29 @@
             </Grid.RowDefinitions>
 
 
+            <Grid x:Name="DraggableTitleBar" VerticalAlignment="Top" Grid.ColumnSpan="2" Background="{DynamicResource RegionBrush}" MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown">
 
-            <Grid x:Name="DraggableTitleBar" Grid.ColumnSpan="2" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown">
                 <!--TitleBar  Please add onmousedown event to be able to drag the window-->
-                <Button Click="Button_Click" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" BorderBrush="{x:Null}"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,5,3" >
-                    <iconPacks:PackIconCodicons   Kind="Close"/>
+                <Button 
+                    Style="{StaticResource ButtonIcon}" 
+                    hc:IconElement.Geometry="{DynamicResource GlobalClose}" 
+                    Click="Button_Click" 
+                    Background="Transparent" 
+                    BorderBrush="{x:Null}"  
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Center" 
+                    Margin="3,3,5,3" >
                 </Button>
-                <Button  Click="Button_Click_1" BorderBrush="{x:Null}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,45,3" >
-                    <iconPacks:PackIconCodicons  Kind="ChromeMinimize"/>
+
+                <Button  Width="40"
+                    Style="{StaticResource ButtonIcon}"
+                    hc:IconElement.Geometry="{DynamicResource GlobalMinimize}"
+                    Click="Button_Click_1"
+                    BorderBrush="{x:Null}"
+                    Background="Transparent" 
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="3,3,45,3" >
                 </Button>
                 <TextBlock Text="Plugin Manager" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </Grid>
