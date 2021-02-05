@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using WolvenKit.ViewModels;
+using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.AudioTool.Radio;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Wizards;

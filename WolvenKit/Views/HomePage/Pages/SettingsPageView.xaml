@@ -6,7 +6,7 @@
                    xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:sp="clr-namespace:WolvenKit.Views.SettingsPages">
 
 
-    <Grid hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
+    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
         <Grid Margin="3,75,3,0">
             <hc:TabControl x:Name="TabControlDemo" IsAnimationEnabled="True" ShowCloseButton="False" IsDraggable="False" IsTabFillEnabled="True" Margin="0,0,0,0" SelectionChanged="TabControlDemo_SelectionChanged" >
                 <hc:TabItem  x:Name="GeneralTabItem" IsSelected="True" >

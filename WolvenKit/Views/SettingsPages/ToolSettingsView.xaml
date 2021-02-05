@@ -3,7 +3,7 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol">
 
-    <Grid hc:ThemeManager.AccentColorElement="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
         <hc:SideMenu Width="150" SideBrush="{DynamicResource MahApps.Brushes.Accent}" HorizontalAlignment="Left" >
 
             <hc:SideMenuItem x:Name="AssetBrowserSubItem" Selected="AssetBrowserSubItem_Selected" >
