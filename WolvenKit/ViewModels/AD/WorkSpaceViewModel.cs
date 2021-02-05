@@ -23,10 +23,12 @@ namespace WolvenKit.ViewModels
     using Commands;
     using Common.Services;
     using CR2W;
+    using WolvenKit.Views;
+
     /// <summary>
-	/// The WorkSpaceViewModel implements AvalonDock demo specific properties, events and methods.
-	/// </summary>
-	public class WorkSpaceViewModel : ViewModelBase, IWorkSpaceViewModel
+    /// The WorkSpaceViewModel implements AvalonDock demo specific properties, events and methods.
+    /// </summary>
+    public class WorkSpaceViewModel : ViewModelBase, IWorkSpaceViewModel
 	{
 		#region fields
 		private readonly ObservableCollection<DocumentViewModel> _files = new ObservableCollection<DocumentViewModel>();
@@ -73,6 +75,7 @@ namespace WolvenKit.ViewModels
             ShowProjectExplorerCommand = new RelayCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer);
             ShowImportUtilityCommand = new RelayCommand(ExecuteShowImportUtility, CanShowImportUtility);
             ShowPropertiesCommand = new RelayCommand(ExecuteShowProperties, CanShowProperties);
+            ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
             OpenFileCommand = new DelegateCommand<FileSystemInfoModel>(
                 async (p ) => await ExecuteOpenFile(p), 
@@ -108,6 +111,7 @@ namespace WolvenKit.ViewModels
             commandManager.RegisterCommand(AppCommands.Application.ShowLog, ShowLogCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowProjectExplorer, ShowProjectExplorerCommand,
                 this);
+
             commandManager.RegisterCommand(AppCommands.Application.ShowImportUtility, ShowImportUtilityCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowProperties, ShowPropertiesCommand, this);
 
@@ -117,12 +121,14 @@ namespace WolvenKit.ViewModels
 
             commandManager.RegisterCommand(AppCommands.Application.PackMod, PackModCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.BackupMod, BackupModCommand, this);
-
-			
-		}
+            commandManager.RegisterCommand(AppCommands.Application.ShowPackageInstaller, ShowPackageInstallerCommand, this);
 
 
-		private void OnProjectExplorerOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+
+        }
+
+
+        private void OnProjectExplorerOnPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
             // executes a global command that can be subscribed to from any viewmodel
             // passes the currently active viewmodel
@@ -154,12 +160,28 @@ namespace WolvenKit.ViewModels
 
 			return base.CloseAsync();
 		}
-		#endregion
+        #endregion
 
-		#region commands
-		/// <summary>
-		/// Displays the LogView.
-		/// </summary>
+        #region commands
+        /// <summary>
+        /// Displays the Project Installer.
+        /// </summary>
+        public ICommand ShowPackageInstallerCommand { get; private set; }
+        private bool CanShowInstaller() => true;
+        private void ExecuteShowInstaller()
+        {
+            Views.Wizards.InstallerWizardView rpv = new Views.Wizards.InstallerWizardView();
+            UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
+            UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
+            uchwv.Show();
+        }
+
+
+
+
+        /// <summary>
+        /// Displays the LogView.
+        /// </summary>
         public ICommand ShowLogCommand { get; private set; }
 		private bool CanShowLog() => true;
         private void ExecuteShowLog() => Log.IsVisible = !Log.IsVisible;

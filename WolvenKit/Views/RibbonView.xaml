@@ -304,7 +304,7 @@
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
                     
-                    <fluent:Button Visibility="Collapsed" Click="" Header="Journal Editor">
+                    <fluent:Button Visibility="Collapsed"  Header="Journal Editor">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="JournalBookmarkFill" Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
                         </fluent:Button.LargeIcon>

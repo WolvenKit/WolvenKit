@@ -252,10 +252,7 @@ namespace WolvenKit.Views.HomePage
                 PageViewGrid.Children.Add(UserPV);
             }
 
-            RadioPlayerView rpv = new RadioPlayerView();
-            UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
-            UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
-            uchwv.Show();
+ 
 
 
        
