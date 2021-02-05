@@ -10,24 +10,24 @@
         
         <Grid Margin="3,75,3,0">
 
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
 
-            <StackPanel>
+            <Button Click="Button_Click"></Button>
+            <Grid Grid.Column="0">
 
-                <Border Background="Gray">
-                    <Grid>
-                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                            <Border Margin="15" BorderThickness="2" BorderBrush="Red">
-                                <TextBlock  Text="User"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
 
-                            </Border>
+                <Grid Grid.Row="1">
+                    <hc:CoverFlow x:Name="CoverFlowMain" Margin="32" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
-                        </StackPanel>
-
-                    </Grid>
-                </Border>
-            </StackPanel>
-            
-         
+                </Grid>
+            </Grid>
         </Grid>      
         
         
