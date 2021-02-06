@@ -18,7 +18,6 @@ using NodeNetwork;
 using System.Windows.Media;
 using MLib.Interfaces;
 using HandyControl.Controls.SplashWindow;
-using FmodAudio;
 
 namespace WolvenKit
 {
@@ -172,6 +171,8 @@ namespace WolvenKit
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.RequiredSettingsView), typeof(ViewModels.Wizards.WizardPages.PublishWizard.RequiredSettingsViewModel));
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.OptionalSettingsView), typeof(ViewModels.Wizards.WizardPages.PublishWizard.OptionalSettingsViewModel));
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.WizardPages.PublishWizard.FinalizeSetupViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.W3PackSettingsView), typeof(ViewModels.Wizards.WizardPages.PublishWizard.W3PackSettingsViewModel));
+
 
             //-- Category : FirstSetupWizard 
             viewModelLocator.Register(typeof(Views.Wizards.FirstSetupWizardView), typeof(ViewModels.Wizards.FirstSetupWizardViewModel));
@@ -212,7 +213,6 @@ namespace WolvenKit
 
             Log.Info("Calling base.OnStartup");
 
-            Fmod.SetLibraryLocation("fmod.dll");
 
 
 

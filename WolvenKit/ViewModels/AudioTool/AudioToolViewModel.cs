@@ -1,5 +1,4 @@
 ﻿using Catel.MVVM;
-using FmodAudio;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

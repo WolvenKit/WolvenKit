@@ -1,6 +1,5 @@
 ﻿
 using Catel.Windows;
-using FmodAudio;
 using Sample_NAudio;
 using System;
 using System.Collections.ObjectModel;
