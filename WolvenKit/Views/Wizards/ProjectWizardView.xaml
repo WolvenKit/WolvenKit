@@ -6,7 +6,7 @@
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:UCpage="clr-namespace:WolvenKit.Views.Wizards.WizardPages.ProjectWizard"
                    mc:Ignorable="av"
-                   Name="Project_Wizard">
+                   Tag="Project Wizard">
 
 
     <catel:UserControl.Resources>
