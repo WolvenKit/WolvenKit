@@ -5,7 +5,8 @@
                    xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:UCpage="clr-namespace:WolvenKit.Views.Wizards.WizardPages.ProjectWizard"
-                   mc:Ignorable="av" >
+                   mc:Ignorable="av"
+                   Name="Project_Wizard">
 
 
     <catel:UserControl.Resources>

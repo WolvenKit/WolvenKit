@@ -11,7 +11,7 @@
                   WindowStartupLocation="CenterScreen"  
             
                   WindowStyle="None" 
-                  Title="Window Title">
+                  Title="{Binding Content.Name, ElementName=UserContentControl}">
     
     <catel:DataWindow.Resources>
         <ResourceDictionary>
@@ -63,7 +63,7 @@
 
                 <Grid  Margin="3,3,3,3">
 
-                    <ContentControl  x:Name="UserContentControl"/>
+                    <ContentControl  x:Name="UserContentControl" Tag="{Binding Content.Name,  ElementName=UserContentControl}"/>
 
                 </Grid>
             </Grid>
