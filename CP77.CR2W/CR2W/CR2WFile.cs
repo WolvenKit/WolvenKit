@@ -744,7 +744,7 @@ namespace CP77.CR2W
                 var newoffset = inverseDictionary[name];
                 var hash64 = string.IsNullOrEmpty(name) 
                     ? 0 
-                    : FNV1A64HashAlgorithm.HashString(name);
+                    : FNV1A64HashAlgorithm.HashString(name, Encoding.GetEncoding("iso-8859-1"));
                 uint hash = (uint)(hash64 & 0xffffffff);
 
                 Names.Add(new CR2WNameWrapper(new CR2WName()
@@ -776,7 +776,7 @@ namespace CP77.CR2W
             #region Embedded 
             foreach (var emb in Embedded)
             {
-                // uddate import index
+                // update import index
                 int realidx = (int)emb.Embedded.importIndex - 1;
                 int chunkidx = (int)emb.Embedded.chunkIndex;
                 if (emb.ImportPath != Imports[realidx].DepotPathStr)
@@ -824,12 +824,6 @@ namespace CP77.CR2W
             {
                 var newoffset = buffer.Buffer.offset + headerOffset;
                 buffer.SetOffset(newoffset);
-            }
-            foreach (var embedded in Embedded)
-            {
-                //var newoffset = embedded.Embedded.dataOffset + headerOffset;
-                //embedded.SetOffset(newoffset);
-                throw new NotImplementedException("Cr2w - write embedded");
             }
             m_fileheader.objectsEnd += headerOffset;
             #endregion
@@ -1071,8 +1065,12 @@ namespace CP77.CR2W
                                     .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
                             }
 
+                            if (cvar is physicsMaterialLibraryResource pmlr)
+                            {
+                                returnedVariables.AddRange(buffers
+                                    .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
+                            }
 
-                            
 
                             break;
                         }
@@ -1116,7 +1114,7 @@ namespace CP77.CR2W
                             flags = EImportFlags.Soft;
 
                         var stuple = new SImportEntry("", s.DepotPath, flags);
-                        if (!newsoftlist.Contains(stuple))
+                        if (newsoftlist.All(_ => _.Path != s.DepotPath))
                         {
                             newsoftlist.Add(stuple);
                         }
@@ -1162,10 +1160,12 @@ namespace CP77.CR2W
                 }
                 else if (var is IEnumAccessor enumAccessor)
                 {
-                    foreach (var enumstring in enumAccessor.Value)
+                    if (enumAccessor.IsFlag)
                     {
-                        AddUniqueToTable(enumstring);
+                        foreach (var enumstring in enumAccessor.Value) AddUniqueToTable(enumstring);
                     }
+                    else
+                        AddUniqueToTable(enumAccessor.GetAttributeVal());
                 }
 
 

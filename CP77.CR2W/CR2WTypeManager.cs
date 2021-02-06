@@ -150,6 +150,13 @@ namespace CP77.CR2W.Types
                         arrayacc.Elementtype = innertype;
                         return arrayacc as CVariable;
                     }
+                    case "CArrayCompressed":
+                    {
+                        var innerobject = Create(innertype, "", cr2w, null);
+                        var arrayacc = MakeArray(typeof(CArrayCompressed<>), innerobject.GetType());
+                        arrayacc.Elementtype = innertype;
+                        return arrayacc as CVariable;
+                    }
                     case "static":
                         {
                             typename = generictype;

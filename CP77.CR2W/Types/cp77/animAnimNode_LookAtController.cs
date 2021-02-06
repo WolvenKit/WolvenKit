@@ -15,6 +15,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(4)]  [RED("substepTime")] public CFloat SubstepTime { get; set; }
 		[Ordinal(5)]  [RED("isFacial")] public CBool IsFacial { get; set; }
 
+        [Ordinal(999)] [RED("debugDrawingEnabled")] public CBool debugDrawingEnabled { get; set; }
+
 		public animAnimNode_LookAtController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

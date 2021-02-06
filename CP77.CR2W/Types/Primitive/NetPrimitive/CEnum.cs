@@ -17,6 +17,7 @@ namespace CP77.CR2W.Types
         CVariable SetValue(object val);
         Type GetEnumType();
 
+        string GetAttributeVal();
     }
 
 
@@ -39,7 +40,7 @@ namespace CP77.CR2W.Types
         }
 
         [DataMember]
-        public List<string> Value { get; set; } = new List<string>();
+        public List<string> Value { get; set; } = new();
 
         public bool IsFlag => WrappedEnum.GetType().IsDefined(typeof(FlagsAttribute), false);
 
@@ -56,6 +57,31 @@ namespace CP77.CR2W.Types
             }
 
             Value = strings;
+        }
+
+        public string GetAttributeVal()
+        {
+
+            if (IsFlag)
+            {
+                throw new NotImplementedException("CEnum - GetAttributeVal");
+            }
+
+            var type = typeof(T);
+            var memInfo = type.GetMember(WrappedEnum.ToString());
+            if (memInfo.Length < 1)
+            {
+
+            }
+            var att = memInfo[0].GetCustomAttributes(typeof(REDAttribute), false);
+
+            if (att.Length < 1)
+                return WrappedEnum.ToString();
+
+            if (!(att.First() is REDAttribute attribute) || string.IsNullOrWhiteSpace(attribute.Name))
+                return WrappedEnum.ToString();
+            else
+                return attribute.Name;
         }
 
         public Type GetEnumType() => WrappedEnum.GetType();
@@ -112,13 +138,25 @@ namespace CP77.CR2W.Types
         {
             ushort val = 0;
             //TODO
-            foreach (var item in Value)
+            if (IsFlag)
             {
-                var nw = cr2w.Names.First(_ => _.Str == item);
+                foreach (var item in Value)
+                {
+                    var nw = cr2w.Names.First(_ => _.Str == item);
+                    val = (ushort)cr2w.Names.IndexOf(nw);
+
+                    file.Write(val);
+                }
+            }
+            else
+            {
+                var s = GetAttributeVal();
+                var nw = cr2w.Names.First(_ => _.Str == s);
                 val = (ushort)cr2w.Names.IndexOf(nw);
 
                 file.Write(val);
             }
+                
             if (IsFlag)
                 file.Write((ushort)0x00);
         }
@@ -133,7 +171,8 @@ namespace CP77.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (!(val is List<string> l)) return this;
+            if (val is not List<string> l)
+                return this;
 
             Value = l;
 

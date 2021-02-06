@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameJournalFile : gameJournalEntry
 	{
-		[Ordinal(0)]  [RED("PictureFilename_legacy_")] public CString PictureFilename_legacy_ { get; set; }
+		[Ordinal(0)]  [RED("PictureFilename_legacy")] public CString PictureFilename_legacy_ { get; set; }
 		[Ordinal(1)]  [RED("title")] public LocalizationString Title { get; set; }
 		[Ordinal(2)]  [RED("content")] public LocalizationString Content { get; set; }
 		[Ordinal(3)]  [RED("videoResource")] public raRef<Bink> VideoResource { get; set; }

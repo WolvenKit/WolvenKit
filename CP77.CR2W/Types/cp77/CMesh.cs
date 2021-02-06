@@ -45,8 +45,8 @@ namespace CP77.CR2W.Types
         
         [Ordinal(997)] [RED("geometryHash")] public CUInt64 geometryHash { get; set; }
         
-        
 
-		public CMesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+        public CMesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

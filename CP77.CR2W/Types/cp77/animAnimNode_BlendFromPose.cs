@@ -14,6 +14,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(3)]  [RED("mode")] public CEnum<animEBlendFromPoseMode> Mode { get; set; }
 		[Ordinal(4)]  [RED("requestedByTag")] public CName RequestedByTag { get; set; }
 
+        [Ordinal(998)] [RED("debug")] public CBool debug { get; set; }
+
 		public animAnimNode_BlendFromPose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

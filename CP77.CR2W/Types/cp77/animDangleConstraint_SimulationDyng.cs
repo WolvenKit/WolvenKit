@@ -19,6 +19,7 @@ namespace CP77.CR2W.Types
         [Ordinal(996)] [RED("drawDebugConstraint")] public CBool drawDebugConstraint { get; set; }
         [Ordinal(997)] [RED("drawDebugAxis")] public CBool drawDebugAxis { get; set; }
         [Ordinal(998)] [RED("drawDebugText")] public CBool drawDebugText { get; set; }
+        [Ordinal(999)] [RED("debugDrawingEnabled")] public CBool debugDrawingEnabled { get; set; }
 
 		public animDangleConstraint_SimulationDyng(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

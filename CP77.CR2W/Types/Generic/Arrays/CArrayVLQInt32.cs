@@ -17,10 +17,7 @@ namespace CP77.CR2W.Types
             Elementtype = REDReflection.GetREDTypeString(typeof(T));
         }
 
-        public override void Read(BinaryReader file, uint size)
-        {
-            base.Read(file, size, (int)file.ReadVLQInt32());
-        }
+        public override void Read(BinaryReader file, uint size) => base.Read(file, size, (int)file.ReadVLQInt32());
 
         public override void Write(BinaryWriter file)
         {

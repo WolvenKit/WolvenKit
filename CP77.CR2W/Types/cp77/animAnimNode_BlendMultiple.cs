@@ -19,6 +19,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(8)]  [RED("weightNode")] public animFloatLink WeightNode { get; set; }
 		[Ordinal(9)]  [RED("inputNodes")] public CArray<animPoseLink> InputNodes { get; set; }
 
+        [Ordinal(999)] [RED("debug")] public CBool debug { get; set; }
+
 		public animAnimNode_BlendMultiple(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }
