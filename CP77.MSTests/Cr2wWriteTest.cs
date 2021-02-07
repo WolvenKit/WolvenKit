@@ -912,7 +912,7 @@ namespace CP77.MSTests
                                 isBinaryEqual = originalbytes.SequenceEqual(newbytes);
                                 //isBinaryEqual = originalbytes.Length == newbytes.Length;
 #pragma warning disable
-                                if (!isBinaryEqual && true)
+                                if (!isBinaryEqual && false)
                                 {
                                     var resultDir = Path.Combine(Environment.CurrentDirectory, TestResultsDirectory);
                                     var filename = Path.Combine(resultDir, Path.GetFileName(c.FileName));

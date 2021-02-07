@@ -1086,47 +1086,51 @@ namespace CP77.CR2W
                 var var = tvar.Var;
                 CheckVarNameAndTypes();
 
-                if (var is IHandleAccessor h)
+                switch (var)
                 {
-                    if (!h.ChunkHandle)
+                    case IHandleAccessor handle:
                     {
-                        AddUniqueToTable(h.ClassName);
-                        var flags = EImportFlags.Default;
-
-                        if (var.cr2w.Embedded.Any(_ => _.ImportPath == h.DepotPath))
-                            flags = EImportFlags.Inplace;
-
-                        var importtuple = new SImportEntry(h.ClassName, h.DepotPath, flags);
-                        if (!newimportslist.Contains(importtuple))
+                        if (!handle.ChunkHandle)
                         {
-                            newimportslist.Add(importtuple);
+                            AddUniqueToTable(handle.ClassName);
+                            var flags = EImportFlags.Default;
+
+                            if (var.cr2w.Embedded.Any(_ => _.ImportPath == handle.DepotPath))
+                                flags = EImportFlags.Inplace;
+
+                            var importtuple = new SImportEntry(handle.ClassName, handle.DepotPath, flags);
+                            if (!newimportslist.Contains(importtuple))
+                            {
+                                newimportslist.Add(importtuple);
+                            }
                         }
+
+                        break;
                     }
-                }
-                else if (var is ISoftAccessor s)
-                {
-                    if (/*!(string.IsNullOrEmpty(s.ClassName) &&*/ !string.IsNullOrEmpty(s.DepotPath))
+                    case ISoftAccessor soft:
                     {
-
-                        var flags = EImportFlags.Default;
-
-                        if (s.REDType.StartsWith("raRef:"))
-                            flags = EImportFlags.Soft;
-
-                        var stuple = new SImportEntry("", s.DepotPath, flags);
-                        if (newsoftlist.All(_ => _.Path != s.DepotPath))
+                        if (/*!(string.IsNullOrEmpty(s.ClassName) &&*/ !string.IsNullOrEmpty(soft.DepotPath))
                         {
-                            newsoftlist.Add(stuple);
+                            //FIXME: calculate this properly
+                            //var flags = EImportFlags.Default;
+                            //if (s.REDType.StartsWith("raRef:"))
+                            //    flags = EImportFlags.Soft;
+
+                            var flags = soft.Flags;
+
+                            var stuple = new SImportEntry("", soft.DepotPath, flags);
+                            if (newsoftlist.All(_ => _.Path != soft.DepotPath))
+                            {
+                                newsoftlist.Add(stuple);
+                            }
                         }
+
+                        break;
                     }
-                }
-                else if (var is CName n)
-                {
-                    AddUniqueToTable(n.Value);
-                }
-                else if (var is IArrayAccessor a)
-                {
-                    if (var is IBufferAccessor buffer)
+                    case CName n:
+                        AddUniqueToTable(n.Value);
+                        break;
+                    case IArrayAccessor when var is IBufferAccessor buffer:
                     {
                         foreach (var ivar in buffer.GetEditableVariables())
                         {
@@ -1144,8 +1148,10 @@ namespace CP77.CR2W
                             }
 
                         }
+
+                        break;
                     }
-                    else
+                    case IArrayAccessor:
                     {
                         CheckVarNameAndTypes();
 
@@ -1156,16 +1162,17 @@ namespace CP77.CR2W
                                 AddUniqueToTable(element.Value);
                             }
                         }
+
+                        break;
                     }
-                }
-                else if (var is IEnumAccessor enumAccessor)
-                {
-                    if (enumAccessor.IsFlag)
+                    case IEnumAccessor {IsFlag: true} enumAccessor:
                     {
                         foreach (var enumstring in enumAccessor.Value) AddUniqueToTable(enumstring);
+                        break;
                     }
-                    else
+                    case IEnumAccessor enumAccessor:
                         AddUniqueToTable(enumAccessor.GetAttributeVal());
+                        break;
                 }
 
 
