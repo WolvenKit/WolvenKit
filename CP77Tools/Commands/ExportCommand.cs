@@ -1,5 +1,6 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Invocation;
+using CP77Tools.Tasks;
 using WolvenKit.Common.DDS;
 
 namespace CP77Tools.Commands
@@ -13,8 +14,9 @@ namespace CP77Tools.Commands
         {
             AddOption(new Option<string[]>(new[] {"--path", "-p"}, "Input path. Must be a file or a list of files."));
             AddOption(new Option<EUncookExtension>(new[] { "--uext" }, "Uncook extension (tga, bmp, jpg, png, dds). Default is tga."));
+            AddOption(new Option<bool>(new[] { "--flip", "-f" }, "Flips textures vertically"));
 
-            Handler = CommandHandler.Create<string[], EUncookExtension>(Tasks.ConsoleFunctions.ExportTask);
+            Handler = CommandHandler.Create<string[], EUncookExtension, bool>(ConsoleFunctions.ExportTask);
         }
     }
 }
