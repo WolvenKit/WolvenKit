@@ -110,5 +110,13 @@ namespace WolvenKit.Views.VisualEditor
         {
             SetCurrentValue(WindowStateProperty, System.Windows.WindowState.Minimized);
         }
+
+        private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Visual Editor");
+            }
+        }
     }
 }

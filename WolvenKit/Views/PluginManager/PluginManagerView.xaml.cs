@@ -30,5 +30,13 @@ namespace WolvenKit.Views.PluginManager
         {
             SetCurrentValue(WindowStateProperty, System.Windows.WindowState.Minimized);
         }
+
+        private void DataWindow_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Plugin Manager");
+            }
+        }
     }
 }

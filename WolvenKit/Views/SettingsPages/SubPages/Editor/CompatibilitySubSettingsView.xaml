@@ -26,7 +26,10 @@
                         <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="CP77ExecutablePathBtn_Click">
                             <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                         </Button>
-                        <TextBox HorizontalAlignment="Right" Width="250" Text="{Binding CP77ExecutablePath}"/>
+
+                            <hc:Badge Background="{DynamicResource MahApps.Brushes.Accent2}" Status="Processing" Height="30" Margin="32,0,0,0" Style="{StaticResource BadgeDanger}">
+                                <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding CP77ExecutablePath}"/>
+                            </hc:Badge>
                     </Grid>
                 </Border>
                 
@@ -52,7 +55,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="W3ExecutablePathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                            <TextBox HorizontalAlignment="Right" Width="250" Text="{Binding W3ExecutablePath}"/>
+                                <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding W3ExecutablePath}"/>
                         </Grid>
 
 
@@ -62,7 +65,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="WccLitePathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                            <TextBox HorizontalAlignment="Right" Width="250" Text="{Binding WccLitePath}"/>
+                                <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding WccLitePath}"/>
                         </Grid>
 
 
@@ -71,7 +74,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="DepotPathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                            <TextBox HorizontalAlignment="Right" Width="250" Text="{Binding DepotPath}"/>
+                                <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding DepotPath}"/>
                         </Grid>
 
 
@@ -80,7 +83,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="GameModDirBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                            <TextBox HorizontalAlignment="Right" Width="250" Text="{Binding GameModDir}"/>
+                                <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding GameModDir}"/>
                         </Grid>
 
 
@@ -89,7 +92,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="GameDlcDirBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                            <TextBox HorizontalAlignment="Right" Width="250" Text="{Binding GameDlcDir}"/>
+                                <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding GameDlcDir}"/>
                         </Grid>
 
 

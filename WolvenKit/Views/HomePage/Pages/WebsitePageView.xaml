@@ -1,7 +1,10 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.HomePage.Pages.WebsitePageView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com" xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:hc="https://handyorg.github.io/handycontrol">
+                   xmlns:catel="http://schemas.catelproject.com"
+                   xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+                   xmlns:hc="https://handyorg.github.io/handycontrol"
+                   IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
         

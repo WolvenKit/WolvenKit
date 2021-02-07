@@ -76,5 +76,13 @@ namespace WolvenKit.Views.AssetBrowser
             viewmodel.CurrentNode = viewmodel.RootNode;
             viewmodel.CurrentNodeFiles = viewmodel.RootNode.ToAssetBrowserData();
         }
+
+        private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Asset Browser");
+            }
+        }
     }
 }

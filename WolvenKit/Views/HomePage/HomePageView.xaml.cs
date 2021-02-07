@@ -61,6 +61,8 @@ namespace WolvenKit.Views.HomePage
             UserPV = new UserPageView();
             GithubPV = new GithubPageView();
             IntegratedTPV = new IntegratedToolsPageView();
+
+          
         }
 
         private async void InitializeGitHub()
@@ -296,6 +298,15 @@ namespace WolvenKit.Views.HomePage
                 sh.DragMove();
             
             // Begin dragging the window
+        }
+
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Home");
+            }
+
         }
     }
 }

@@ -2,6 +2,8 @@
 using System.Windows.Input;
 using Orc.Squirrel;
 using InputGesture = Catel.Windows.Input.InputGesture;
+using DiscordRPC.Message;
+
 
 namespace WolvenKit
 {
@@ -37,7 +39,7 @@ namespace WolvenKit
             public const string ShowAssetBrowser = "Application.ShowAssetBrowser";
             public const string ShowModSettings = "Application.ShowModSettings";
             public const string ShowPackageInstaller = "Application.ShowPackageInstaller";
-            
+
             public const string OpenFile = "Application.OpenFile";
             public const string NewFile = "Application.NewFile";
             public const string BugReport = "Application.BugReport";
@@ -89,4 +91,35 @@ namespace WolvenKit
             }
         }
     }
+
+
+
+
+    public static class DiscordRPCHelper
+    {
+        public static void WhatAmIDoing(string details)
+        {
+            App.client.SetPresence(new DiscordRPC.RichPresence()
+            {
+                Details = details,
+                Timestamps = new DiscordRPC.Timestamps()
+                {
+                    Start = System.DateTime.UtcNow
+
+                },
+                Assets = new DiscordRPC.Assets()
+                {
+                    LargeImageKey = "bigwk",
+
+                    LargeImageText = "WolvenKit",
+
+                }      
+            });
+            App.client.Invoke();
+        }
+
+    }
+
+
+
 }

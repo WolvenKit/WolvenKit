@@ -11,7 +11,7 @@
                   BorderBrush="{x:Null}" 
                   WindowStartupLocation="CenterScreen"
                   WindowStyle="None" 
-                  Title="Code Editor">
+                  Title="Code Editor" IsVisibleChanged="DataWindow_IsVisibleChanged">
 
     <catel:DataWindow.Resources>
         <ResourceDictionary>

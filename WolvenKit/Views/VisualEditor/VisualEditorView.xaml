@@ -14,7 +14,7 @@
     ResizeMode="CanResizeWithGrip"
     Title="Visual Editor"
     MinHeight="800"        
-    MinWidth="600">
+    MinWidth="600" IsVisibleChanged="DataWindow_IsVisibleChanged">
 
 
 

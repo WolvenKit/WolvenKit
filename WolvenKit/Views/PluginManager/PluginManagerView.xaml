@@ -9,7 +9,7 @@
                   WindowStartupLocation="CenterScreen"  
                   MinWidth="250"
                   WindowStyle="None" 
-                  Title="Plugin Manager">
+                  Title="Plugin Manager" IsVisibleChanged="DataWindow_IsVisibleChanged">
 
     <!--
             Plugin Manager MVVM TODOLIST (REMOVE ITEM IF DONE)

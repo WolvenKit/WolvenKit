@@ -9,5 +9,13 @@ namespace WolvenKit.Views.JournalEditor
         {
             InitializeComponent();
         }
+
+        private void DataWindow_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Journal Editor");
+            }
+        }
     }
 }

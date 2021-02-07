@@ -275,6 +275,13 @@ namespace WolvenKit.Views.AudioTool
 
         public ObservableCollection<string> GivenRedAudioSource = new ObservableCollection<string>();
 
+        private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Audio Tool");
+            }
+        }
     }
 
 }

@@ -31,12 +31,14 @@
                 <Setter Property="Margin" Value="5,0"/>
                 <Setter Property="Background" Value="Transparent"/>
             </Style>
+            
+            
 
 
 
 
 
-            <SolidColorBrush x:Key="AccentColorBrush" Color="#D24726" />
+            <SolidColorBrush x:Key="AccentColorBrush" Color="Black" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

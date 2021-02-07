@@ -3,7 +3,7 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"     
                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                    xmlns:hc="https://handyorg.github.io/handycontrol"
-                  xmlns:catel="http://schemas.catelproject.com" xmlns:Fluent="urn:fluent-ribbon" ShowInTaskbar="True" AllowsTransparency="True" ResizeMode="CanResizeWithGrip" BorderBrush="{x:Null}" WindowStartupLocation="CenterScreen" Width="1200" MinHeight="600" MaxHeight="800" WindowStyle="None" Title="Asset Browser" >
+                  xmlns:catel="http://schemas.catelproject.com" xmlns:Fluent="urn:fluent-ribbon" ShowInTaskbar="True" AllowsTransparency="True" ResizeMode="CanResizeWithGrip" BorderBrush="{x:Null}" WindowStartupLocation="CenterScreen" Width="1200" MinHeight="600" MaxHeight="800" WindowStyle="None" Title="Asset Browser" IsVisibleChanged="DataWindow_IsVisibleChanged" >
 
     <catel:DataWindow.Resources>
         <ResourceDictionary>

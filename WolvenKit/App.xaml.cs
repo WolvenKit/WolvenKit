@@ -204,9 +204,13 @@ namespace WolvenKit
 
             var shellService = serviceLocator.ResolveType<IShellService>();
             await shellService.CreateAsync<ShellWindow>();
-   
 
-            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark.Red");
+            ShellWindow sh = (ShellWindow)shellService.Shell;
+            sh.IsVisibleChanged += Sh_IsVisibleChanged;
+
+            Orc.Theming.ThemeManager.Current.SynchronizeTheme();
+            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark.Green");
+
             HandyControl.Tools.ThemeManager.Current.SetCurrentValue(HandyControl.Tools.ThemeManager.ApplicationThemeProperty, HandyControl.Tools.ApplicationTheme.Dark);
             HandyControl.Tools.ConfigHelper.Instance.SetLang("en");
             HandyControl.Controls.ThemeResources tr = new HandyControl.Controls.ThemeResources(); tr.AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3");
@@ -218,12 +222,65 @@ namespace WolvenKit
 
             base.OnStartup(e); 
             NNViewRegistrar.RegisterSplat();
-
+            InitDiscordRPC();
 
 
         }
 
-      
+        private void Sh_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var a = (ShellWindow)sender;
+            if (a.IsVisible && a.IsLoaded )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Backstage - Open File");
+            }
+        }
+
+        public static DiscordRPC.DiscordRpcClient client;
+        private void InitDiscordRPC()
+        {
+            /*
+	Create a Discord client
+	NOTE: 	If you are using Unity3D, you must use the full constructor and define
+			 the pipe connection.
+	*/
+            client = new DiscordRPC.DiscordRpcClient("807752124078620732") ;
+
+            //Set the logger
+            client.Logger = new DiscordRPC.Logging.ConsoleLogger() { Level = DiscordRPC.Logging.LogLevel.Warning };
+
+            //Subscribe to events
+            client.OnReady += (sender, e) =>
+            {
+                Console.WriteLine("Received Ready from user {0}", e.User.Username);
+            };
+
+            client.OnPresenceUpdate += (sender, e) =>
+            {
+                Console.WriteLine("Received Update! {0}", e.Presence);
+            };
+
+            //Connect to the RPC
+            client.Initialize();
+
+            //Set the rich presence
+            //Call this as many times as you want and anywhere in your code.
+            client.SetPresence(new DiscordRPC.RichPresence()
+            {
+                Details = "Launching",
+               
+                Assets = new DiscordRPC.Assets()
+                {
+                    LargeImageKey = "bigwolf",
+                    LargeImageText = "Testing",
+                    SmallImageKey = "bigwolf"
+                }
+            }); 
+            client.Invoke();
+
+        }
+
+
 
         protected override void OnExit(ExitEventArgs e)
         {

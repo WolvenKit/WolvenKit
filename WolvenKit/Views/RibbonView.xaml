@@ -11,7 +11,7 @@
                    xmlns:views="clr-namespace:WolvenKit.Views"
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                    xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
-                   xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage">
+                   xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage" IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <!-- Resources -->
     <UserControl.Resources>
