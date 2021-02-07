@@ -23,6 +23,7 @@ namespace WolvenKit
             public static readonly InputGesture OpenProjectInputGesture = new InputGesture(Key.O, ModifierKeys.Control);
             public const string NewProject = "Application.NewProject";
             public static readonly InputGesture NewProjectInputGesture = new InputGesture(Key.N, ModifierKeys.Control);
+            public const string CreateNewProject = "Application.CreateNewProject";
 
             //public const string SaveAll = "Application.SaveAll";
             //public static readonly InputGesture SaveAllInputGesture = new InputGesture(Key.S, ModifierKeys.Control);
@@ -39,7 +40,7 @@ namespace WolvenKit
             
             public const string OpenFile = "Application.OpenFile";
             public const string NewFile = "Application.NewFile";
-
+            public const string BugReport = "Application.BugReport";
             public const string PackMod = "Application.PackMod";
             public const string BackupMod = "Application.BackupMod";
             public const string PublishMod = "Application.PublishMod";

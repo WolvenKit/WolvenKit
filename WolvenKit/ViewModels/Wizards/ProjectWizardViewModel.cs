@@ -1,15 +1,14 @@
-﻿using Catel.MVVM;
-using HandyControl.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using Catel;
+using Catel.Data;
+using Catel.Fody;
+
 
 namespace WolvenKit.ViewModels.Wizards
 {
-    class ProjectWizardViewModel : ViewModelBase
+    class ProjectWizardViewModel : CloseableViewModel
     {
+        public ProjectWizardViewModel() : base(null)
+        {
+        }
     }
 }

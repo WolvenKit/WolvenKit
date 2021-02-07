@@ -6,22 +6,22 @@
     <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
         <hc:SideMenu Width="150" SideBrush="{DynamicResource MahApps.Brushes.Accent}" HorizontalAlignment="Left" >
 
-            <hc:SideMenuItem  >
+            <hc:SideMenuItem x:Name="AssetBrowserSubItem" Selected="AssetBrowserSubItem_Selected" >
                 <hc:SideMenuItem.Header>
                     <TextBlock Text="Asset Browser" FontSize="10.5"/>
                 </hc:SideMenuItem.Header>
             </hc:SideMenuItem>
-            <hc:SideMenuItem  >
+            <hc:SideMenuItem x:Name="PluginManagerSubItem" Selected="PluginManagerSubItem_Selected"  >
                 <hc:SideMenuItem.Header>
                     <TextBlock Text="Plugin Manager" FontSize="10.5"/>
                 </hc:SideMenuItem.Header>
             </hc:SideMenuItem>
-            <hc:SideMenuItem  >
+            <hc:SideMenuItem x:Name="CodeEditorSubItem" Selected="CodeEditorSubItem_Selected" >
                 <hc:SideMenuItem.Header>
                     <TextBlock Text="Code Editor" FontSize="10.5"/>
                 </hc:SideMenuItem.Header>
             </hc:SideMenuItem>
-            <hc:SideMenuItem  >
+            <hc:SideMenuItem  x:Name="VisualEditorSubItem" Selected="VisualEditorSubItem_Selected" >
                 <hc:SideMenuItem.Header>
                     <TextBlock Text="Visual Editor" FontSize="10.5"/>
                 </hc:SideMenuItem.Header>
@@ -29,6 +29,7 @@
      
         </hc:SideMenu>
 
+        <Grid Margin="150,1,0,0" x:Name="SettingsViewer"></Grid>
 
 
     </Grid>

@@ -1,0 +1,195 @@
+﻿<catel:UserControl x:Class="WolvenKit.Views.Wizards.WizardPages.PublishWizard.W3PackSettingsView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:catel="http://schemas.catelproject.com" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"              
+    xmlns:hc="https://handyorg.github.io/handycontrol">
+
+
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources/>
+                <hc:Theme/>
+            </ResourceDictionary.MergedDictionaries>
+
+
+        </ResourceDictionary>
+    </catel:UserControl.Resources>
+
+
+    <Grid 
+        hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+        HorizontalAlignment="Stretch"
+        MinWidth=" 350"
+        MaxWidth="450"
+        MinHeight="350"
+        Margin="5">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="90*"/>
+        </Grid.RowDefinitions>
+
+        <Path
+            Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}" 
+            Style="{DynamicResource Path}"  
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Height="23"     
+            Width="30"                         
+            Stretch="Fill"                         
+            StrokeThickness="1"                        
+            Data="{StaticResource PackerIcon}"     
+            Fill="{DynamicResource MahApps.Brushes.ThemeForeground}"
+            Margin="-1">
+        </Path>
+
+        <StackPanel 
+            Orientation="Horizontal"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+            Margin="35,0,0,0">
+
+            <TextBlock 
+                Margin="0"
+                FontWeight="Bold"
+                FontSize="15"
+                Text="TW3 Pack Settings"/>
+
+        </StackPanel>
+
+
+        <Grid x:Name="PageGrid" 
+              Grid.Row="1">
+
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="4*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Margin="0,35,0,0" Grid.ColumnSpan="10" Grid.Row="1">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+
+                    <Button 
+                        Background="{DynamicResource MahApps.Brushes.Gray10}" 
+                        Content="Cancel" 
+                        Width="170"/>
+                    
+                    <hc:Divider Orientation="Vertical" Height="25"></hc:Divider>
+                    
+                    <Button
+                        Background="{DynamicResource MahApps.Brushes.Accent4}" 
+                        Content="Confirm" 
+                        Width="170"/>
+
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Grid.Column="1" Margin="3,15,3,0">
+                <!--Order : 
+                1: Pack Bundles 
+                2: Metadata
+                3: Text cache
+                4: collis cache
+                5: sound cache
+                6: shader cache
+                7: depric cache
+                8: Pack w3speech
+                9: Deploy scripts
+                10: Deploy W3Strings
+                -->
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="Mod"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="Mod"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="Mod"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="Mod"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="Mod"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="Mod"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="Mod"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="Mod"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="Mod"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="Mod"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,9,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="All"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Margin="0,15,0,0">
+                <!--Order : 
+                1: Pack Bundles 
+                2: Metadata
+                3: Text cache
+                4: collis cache
+                5: sound cache
+                6: shader cache
+                7: depric cache
+                8: Pack w3speech
+                9: Deploy scripts
+                10: Deploy W3Strings
+                -->
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="DLC"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="DLC"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="DLC"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="DLC"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="DLC"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="DLC"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="DLC"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="DLC"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="DLC"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,0,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="DLC"/>
+                <hc:Divider Margin="0,0,0,0"></hc:Divider>
+                <CheckBox Margin="0,8,9,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="All"/>
+            </StackPanel>
+            
+            
+            <StackPanel Grid.Column="0"  Margin="0,15,0,0">
+                <TextBlock Margin="0,10,0,0" Text="Pack Bundles"/>
+                <hc:Divider Margin="0,2,0,0"></hc:Divider>
+                <TextBlock Margin="0,10,0,0" Text="Generate metadata.store"/>
+                <hc:Divider Margin="0,2,0,0"></hc:Divider>
+                <TextBlock Margin="0,10,0,0" Text="Generate Texture Cache"/>
+                <hc:Divider Margin="0,2,0,0"></hc:Divider>
+                <TextBlock Margin="0,10,0,0" Text="Generate Collision Cache"/>
+                <hc:Divider Margin="0,2,0,0"></hc:Divider>
+                <TextBlock Margin="0,10,0,0" Text="Generate Sound Cache"/>
+                <hc:Divider Margin="0,2,0,0"></hc:Divider>
+                <TextBlock Margin="0,10,0,0" Text="Generate Shader Cache"/>
+                <hc:Divider Margin="0,2,0,0"></hc:Divider>
+                <TextBlock Margin="0,10,0,0" Text="Generate Deprication Cache"/>
+                <hc:Divider Margin="0,2,0,0"></hc:Divider>
+                <TextBlock Margin="0,10,0,0" Text="Pack W3Speech"/>
+                <hc:Divider Margin="0,2,0,0"></hc:Divider>
+                <TextBlock Margin="0,10,0,0" Text="Deploy Scripts"/>
+                <hc:Divider Margin="0,2,0,0"></hc:Divider>
+                <TextBlock Margin="0,10,0,0" Text="Deploy W3Strings"/>
+                <hc:Divider Margin="0,2,0,0"></hc:Divider>
+            </StackPanel>
+        </Grid>
+
+
+    </Grid>
+</catel:UserControl>
