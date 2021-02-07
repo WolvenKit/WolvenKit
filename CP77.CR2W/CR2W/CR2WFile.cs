@@ -1036,6 +1036,13 @@ namespace CP77.CR2W
                     // check all other CVariables
                     case CVariable cvar:
                         {
+                            // skip some custom buffers
+                            if (cvar is gameCookedDeviceDataCompressed)
+                            {
+                                return null;
+                            }
+
+
                             // add parent if not already in guidlist
                             // don't add array type parents, don't add IBufferVariantAccessor type parents
                             if (cvar.ParentVar != null
@@ -1053,10 +1060,6 @@ namespace CP77.CR2W
 
                             // get buffers
                             var buffers = cvar.GetExistingVariables(true).Except(props).ToList();
-                            if (buffers.Count > 0)
-                            {
-
-                            }
 
                             // custom serialization
                             if (cvar is CMaterialInstance mi)
@@ -1068,6 +1071,13 @@ namespace CP77.CR2W
                             if (cvar is physicsMaterialLibraryResource pmlr)
                             {
                                 returnedVariables.AddRange(buffers
+                                    .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
+                            }
+
+                            if (cvar is gameDeviceResourceData gdrd)
+                            {
+                                returnedVariables.AddRange(gdrd.CookedDeviceData
+                                    .Select(_ => _.ClassName)
                                     .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
                             }
 
@@ -1084,6 +1094,13 @@ namespace CP77.CR2W
             void AddStrings(SNameArg tvar)
             {
                 var var = tvar.Var;
+
+                // skip some custom buffers
+                if (var is gameCookedDeviceDataCompressed)
+                {
+                    return;
+                }
+
                 CheckVarNameAndTypes();
 
                 switch (var)

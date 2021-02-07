@@ -33,7 +33,7 @@ namespace CP77.CR2W.Types
         }
 
         /// <summary>
-        /// The instantiation step of the RedEngine-3 reflection.
+        /// The instantiation step of the RedEngine-4 reflection.
         /// </summary>
         /// <param name="typename">Can be either a generic type such as CUint32 - then converted with GetWKitTypeFromREDType, or a complex type like a
         /// pointer to a class, a handle to an import file, an array, a soft reference, a static reference, various buffers, an enum.</param>

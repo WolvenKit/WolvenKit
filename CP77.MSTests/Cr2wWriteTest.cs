@@ -1,3 +1,6 @@
+#define IS_PARALLEL
+#undef IS_PARALLEL
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -21,6 +24,11 @@ namespace CP77.MSTests
         {
             Setup(context);
         }
+
+        private const bool TEST_EXISTING = true;
+        private const bool WRITE_FAILED = true;
+
+
 
 
         #region test methods
@@ -783,7 +791,26 @@ namespace CP77.MSTests
             Directory.CreateDirectory(resultDir);
 
             // Run Test
-            var results = Write_Archive_Items(GroupedFiles[extension]).ToList();
+            List<WriteTestResult> results = new();
+            List<FileEntry> filesToTest = new();
+            var resultPath = Path.Combine(resultDir, $"write.{extension[1..]}.csv");
+            if (File.Exists(resultPath) && TEST_EXISTING)
+            {
+
+                foreach (var line in File.ReadAllLines(resultPath)
+                    .Skip(1)
+                    .Where(_ => !string.IsNullOrEmpty(_)))
+                {
+                    if (ulong.TryParse(line.Split(',').First(), out var hash))
+                    {
+                        filesToTest.AddRange(bm.Files[hash]);
+                    }
+                }
+            }
+            else
+                filesToTest = GroupedFiles[extension];
+
+            results = Write_Archive_Items(filesToTest).ToList();
 
             // Evaluate
             var successCount = results.Count(r => r.Success);
@@ -793,7 +820,6 @@ namespace CP77.MSTests
             {
                 if (results.Any(r => !r.Success))
                 {
-                    var resultPath = Path.Combine(resultDir, $"write.{extension[1..]}.csv");
                     var csv = TestResultAsCsv(results.Where(r => !r.Success));
                     File.WriteAllText(resultPath, csv);
                 }
@@ -824,14 +850,20 @@ namespace CP77.MSTests
         {
             var results = new ConcurrentBag<WriteTestResult>();
 
-            //foreach (var file in files)
+#if IS_PARALLEL
             Parallel.ForEach(files, file =>
+#else
+            foreach (var file in files)
+#endif
             {
                 try
                 {
                     if (file.Archive is not Archive ar)
+#if IS_PARALLEL
                         return;
-                    //continue;
+#else
+                        continue;
+#endif
 
                     var c = new CR2WFile {FileName = file.NameOrHash};
                     using var ms = new MemoryStream();
@@ -863,41 +895,7 @@ namespace CP77.MSTests
                             break;
                         case EFileReadErrorCodes.NoError:
 
-                            #region test stringtable
-
-                            var correctStringTable = true;
-
-                            //var oldst = c.StringDictionary.Values.ToList();
-                            //var newst = c.GenerateStringtable().Item1.Values.ToList();
-                            //var compstr = "OLD,NEW";
-                            // /*correctStringTable = oldst.Count == newst.Count;*/
-                            //    correctStringTable = oldst.All(newst.Contains);
-                            //if (!correctStringTable)
-                            //{
-                            //    var complement1 = oldst.Except(newst).ToList();
-                            //    var complement2 = newst.Except(oldst).ToList();
-                            //}
-
-                            //for (int i = 0; i < Math.Max(oldst.Count, newst.Count); i++)
-                            //{
-                            //    string str1 = "";
-                            //    string str2 = "";
-                            //    if (i < oldst.Count)
-                            //        compstr += oldst[i];
-                            //    compstr += ",";
-                            //    if (i < newst.Count)
-                            //        compstr += newst[i];
-                            //    compstr += "\n";
-
-                            //    if (str1 != str2)
-                            //        correctStringTable = false;
-
-                            //}
-
-                            #endregion
-
-
-                            #region test write
+#region test write
 
                             var isBinaryEqual = true;
 
@@ -911,15 +909,17 @@ namespace CP77.MSTests
                                 var newbytes = StreamExtensions.ToByteArray(wms);
                                 isBinaryEqual = originalbytes.SequenceEqual(newbytes);
                                 //isBinaryEqual = originalbytes.Length == newbytes.Length;
-#pragma warning disable
-                                if (!isBinaryEqual && false)
+
+#pragma warning disable 162
+                                if (!isBinaryEqual && WRITE_FAILED)
                                 {
                                     var resultDir = Path.Combine(Environment.CurrentDirectory, TestResultsDirectory);
                                     var filename = Path.Combine(resultDir, Path.GetFileName(c.FileName));
                                     File.WriteAllBytes($"{filename}.o.bin", originalbytes);
                                     File.WriteAllBytes($"{filename}.n.bin", newbytes);
                                 }
-#pragma 
+#pragma warning restore 162
+
                                 // test reading again
                                 //bw.Seek(0, SeekOrigin.Begin);
                                 //using var br2 = new BinaryReader(wms);
@@ -927,16 +927,11 @@ namespace CP77.MSTests
                                 //isBinaryEqual = reread == EFileReadErrorCodes.NoError;
                             }
 
-                            #endregion
+#endregion
 
 
                             var res = WriteTestResult.WriteResultType.NoError;
                             var msg = "";
-                            if (!correctStringTable)
-                            {
-                                res |= WriteTestResult.WriteResultType.HasIncorrectStringTable;
-                                msg += $"CorrectStringTable: {correctStringTable}";
-                            }
 
                             if (!isBinaryEqual)
                             {
@@ -949,11 +944,10 @@ namespace CP77.MSTests
                             results.Add(new WriteTestResult
                             {
                                 FileEntry = file,
-                                Success = isBinaryEqual && correctStringTable,
+                                Success = isBinaryEqual,
                                 WriteResult = res,
                                 Message = msg,
                                 IsNotBinaryEqual = !isBinaryEqual,
-                                HasIncorrectStringTable = !correctStringTable
                             });
 
                             break;
@@ -972,10 +966,13 @@ namespace CP77.MSTests
                         Message = $"{file.NameOrHash} - {e.Message}"
                     });
                 }
+#if IS_PARALLEL
             });
-            //}
+#else
+            }
+#endif
 
-           return results;
+            return results;
         }
 
         private string TestResultAsCsv(IEnumerable<WriteTestResult> results)
@@ -988,7 +985,7 @@ namespace CP77.MSTests
                 $"{nameof(FileEntry.Archive)}," +
                 $"{nameof(WriteTestResult)}," +
                 $"{nameof(WriteTestResult.Success)}," +
-                $"{nameof(WriteTestResult.HasIncorrectStringTable)}," +
+                //$"{nameof(WriteTestResult.HasIncorrectStringTable)}," +
                 $"{nameof(WriteTestResult.IsNotBinaryEqual)}," +
                 $"{nameof(WriteTestResult.ExceptionType)}," +
                 $"{nameof(WriteTestResult.Message)}");
@@ -1001,7 +998,7 @@ namespace CP77.MSTests
                     $"{Path.GetFileName(r.FileEntry.Archive.ArchiveAbsolutePath)}," +
                     $"{r.WriteResult}," +
                     $"{r.Success}," +
-                    $"{r.HasIncorrectStringTable}," +
+                    //$"{r.HasIncorrectStringTable}," +
                     $"{r.IsNotBinaryEqual}," +
                     $"{r.ExceptionType?.FullName}," +
                     $"{r.Message}");

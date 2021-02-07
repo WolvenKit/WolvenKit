@@ -23,7 +23,7 @@ namespace CP77.MSTests
         private const string GameDirectorySetting = "GameDirectory";
         private const string WriteToFileSetting = "WriteToFile";
 
-        private static ArchiveManager bm;
+        internal static ArchiveManager bm;
         internal static Dictionary<string, List<FileEntry>> GroupedFiles;
 
         private static IConfigurationRoot _config;
