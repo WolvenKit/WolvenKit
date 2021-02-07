@@ -709,6 +709,12 @@ namespace WolvenKit.Controllers
             }
         }
 
+        public override Task<bool> PackageMod()
+        {
+            //TODO: Create wkpackage from the mod
+            return Task.FromResult(true);
+        }
+
         private static void InstallMod()
         {
             var ActiveMod = MainController.Get().ActiveMod;

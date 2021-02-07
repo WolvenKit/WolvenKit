@@ -30,5 +30,11 @@ namespace WolvenKit.Controllers
             //Nothing to do here :)
             return new Task<bool>(new Func<bool>(() => true));
         }
+
+        public override Task<bool> PackageMod()
+        {
+            //Nothing to do here :)
+            return Task.FromResult(true);
+        }
     }
 }
