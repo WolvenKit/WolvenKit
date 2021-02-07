@@ -824,14 +824,14 @@ namespace CP77.MSTests
         {
             var results = new ConcurrentBag<WriteTestResult>();
 
-            foreach (var file in files)
-            //Parallel.ForEach(files, file =>
+            //foreach (var file in files)
+            Parallel.ForEach(files, file =>
             {
                 try
                 {
                     if (file.Archive is not Archive ar)
-                    //    return;
-                    continue;
+                        return;
+                    //continue;
 
                     var c = new CR2WFile {FileName = file.NameOrHash};
                     using var ms = new MemoryStream();
@@ -972,8 +972,8 @@ namespace CP77.MSTests
                         Message = $"{file.NameOrHash} - {e.Message}"
                     });
                 }
-            //});
-            }
+            });
+            //}
 
            return results;
         }
