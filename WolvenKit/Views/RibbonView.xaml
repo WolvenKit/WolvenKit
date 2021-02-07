@@ -15,7 +15,7 @@
 
     <!-- Resources -->
     <UserControl.Resources>
-        <ResourceDictionary>
+        <ResourceDictionary>      
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -26,25 +26,24 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <fluent:Ribbon Grid.Row="0" x:Name="ribbon">
 
-        <fluent:Ribbon Margin="0,0,0,0" Grid.Row="0" x:Name="ribbon">
-
-
+            
             <!-- StartScreen -->
             <fluent:Ribbon.StartScreen>
                 <fluent:StartScreen x:Name="startScreen" IsOpen="True" >
                     <HomeView:HomePageView />
 
-
+                    
                 </fluent:StartScreen>
             </fluent:Ribbon.StartScreen>
-
-
+            
+            
             <!-- Backstage -->
             <fluent:Ribbon.Menu>
-                <fluent:Backstage Margin="70,0,0,0"  x:Name="Backstage" MouseLeftButtonDown="Backstage_MouseLeftButtonDown" >
+                <fluent:Backstage  x:Name="Backstage" MouseLeftButtonDown="Backstage_MouseLeftButtonDown" >
 
-                    <fluent:BackstageTabControl  Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}" ItemsPanelBackground="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"  SelectedContentMargin="0" x:Name="backstageTabControl"
+                    <fluent:BackstageTabControl SelectedContentMargin="0" x:Name="backstageTabControl"
                                                 
                     >
 
@@ -58,7 +57,14 @@
                         </fluent:BackstageTabControl.Resources>
 
 
-
+                        <fluent:Button Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                        Height="60"
+                                        Icon="{iconPacks:Codicons Kind=Home}"
+                                        FontSize="18"
+                                       Click="ShowStartScreen_OnClick"
+                                       OverridesDefaultStyle="True">
+                            Home
+                        </fluent:Button>
                         <fluent:SeparatorTabItem Height="Auto" Margin="20,10,20,10"/>
                         <fluent:BackstageTabItem    Header="Files"
                                                     Height="60"
@@ -96,7 +102,7 @@
                                        Height="60"
                                         Icon="{iconPacks:Codicons Kind=NewFolder}"
                                        FontSize="18"
-                                       Command="{catel:CommandManagerBinding Application.PublishMod}" >
+                                       Command="{catel:CommandManagerBinding Application.NewProject}" >
                         </fluent:Button>
                         <fluent:SeparatorTabItem Height="Auto" Margin="20,10,20,10"/>
 
@@ -145,12 +151,12 @@
                                              />
             </fluent:Ribbon.ContextualGroups>
 
-
-
-
-
+            
+            
+        
+            
             <!-- Home Tab -->
-            <fluent:RibbonTabItem Header="General" >
+            <fluent:RibbonTabItem Header="Home" >
                 <!-- File -->
                 <fluent:RibbonGroupBox Header="File">
                     <fluent:Button Header="Open File" Command="{catel:CommandManagerBinding Application.OpenFile}">
@@ -168,8 +174,8 @@
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="OpenPreview" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-
-
+                    
+                    
                 </fluent:RibbonGroupBox>
 
                 <!-- Project -->
@@ -197,7 +203,7 @@
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
 
-
+            
 
             <!-- View Tab -->
             <fluent:RibbonTabItem Header="View" >
@@ -214,8 +220,8 @@
                             </ItemsPanelTemplate>
                         </fluent:ComboBox.ItemsPanel>
                     </fluent:ComboBox>
-
-
+                    
+                    
                 </fluent:RibbonGroupBox>
 
                 <!-- Project -->
@@ -244,14 +250,14 @@
                     </fluent:Button>
                 </fluent:RibbonGroupBox>
 
-
+                
 
             </fluent:RibbonTabItem>
 
-
+            
             <!-- Tools Dropdown Tab -->
 
-            <fluent:RibbonTabItem Header="Tools">
+                <fluent:RibbonTabItem Header="Tools">
                 <fluent:RibbonGroupBox Header="All">
                     <fluent:ComboBox IsEditable="False"
                                      InputWidth="120"
@@ -290,14 +296,14 @@
                     </fluent:Button>
 
 
-
+                
 
                     <fluent:Button Visibility="Visible" Click="CBPluginManager_Selected" Header="Plugin Manager">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="PlugFill" Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-
+                    
                     <fluent:Button Visibility="Collapsed"  Header="Journal Editor">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="JournalBookmarkFill" Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
@@ -318,13 +324,13 @@
 
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
+             
 
 
 
 
 
-
-
+            
             <!--Contextual  Tab-->
             <fluent:RibbonTabItem Header="Project Explorer" 
                               Group="{Binding Source={x:Reference ProjectExplorerContextualTabGroup}}" 
@@ -357,57 +363,6 @@
 
             </fluent:RibbonTabItem>
         </fluent:Ribbon>
-
-        <StackPanel Width="170" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="75,-21,0,0"  Orientation="Horizontal">
-            <TextBlock Background="{x:Null}" Text="RED Modding Tools - WolvenKit" />
-
-        </StackPanel>
-        <Border Margin="0,-25,0,0" Width="70" HorizontalAlignment="Left" CornerRadius="0,5,0,0" VerticalAlignment="top" Height="30" Background="{DynamicResource Fluent.Ribbon.Brushes.RibbonTabControl.Background}">
-
-        </Border>
-
-        <Border  Margin="13,-24,0,0" Width="42" HorizontalAlignment="Left"  VerticalAlignment="Top" Height="49" Background="Transparent" MouseEnter="Border_MouseEnter" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeave="Border_MouseLeave"  >
-            <Grid>
-
-                <Border>
-                    <Border.OpacityMask>
-                        <ImageBrush ImageSource="/Resources/Icons/SeeTroughIcon.png"/>
-                    </Border.OpacityMask>
-                    <Grid>
-
-                        <Grid Margin="1"  x:Name="HomeHighLighter"  Background="{DynamicResource MahApps.Brushes.AccentBase}">
-                        </Grid>
-
-
-                    </Grid>
-                </Border>
-            </Grid>
-
-
-
-        </Border>
-
-        <Border  Margin="13,-24,0,0" Width="42" HorizontalAlignment="Left"  VerticalAlignment="top" Height="49" Background="Transparent" MouseEnter="Border_MouseEnter" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeave="Border_MouseLeave"  >
-            <Border>
-                <Border.OpacityMask>
-                    <ImageBrush ImageSource="/Resources/Icons/HomeSickTransp.png"/>
-                </Border.OpacityMask>
-                <Grid>
-
-
-                    <Grid >
-
-                        <Grid  Margin="0">
-                            <Image  Stretch="Fill"  Source="pack://application:,,,/Resources/Icons/HomeSickTransp.png" Margin="0,-1,0,0" />
-
-                        </Grid>
-
-                    </Grid>
-
-                </Grid>
-            </Border>
-
-        </Border>
 
     </Grid>
 

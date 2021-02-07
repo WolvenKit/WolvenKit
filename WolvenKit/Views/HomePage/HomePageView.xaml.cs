@@ -21,42 +21,28 @@ namespace WolvenKit.Views.HomePage
 {
     public partial class HomePageView
     {
-        public static HomePageView GlobalHomePage;
 
 
-        public WelcomePageView WelcomePV;
-        public FirstSetupWizardView FirstSWV;
-        public RecentProjectView RecentPV;
-        public ProjectWizardView ProjectWV;
-        public WikiPageView WikitPV;
-        public AboutPageView AboutPV;
-        public SettingsPageView SettingsPV;
-        public WebsitePageView WebsitePV;
-        public UserPageView UserPV;
-        public IntegratedToolsPageView IntegratedTPV;
-        public GithubPageView GithubPV;
-        public DebugPageView DebugPV;
+
+        private WelcomePageView WelcomePV;
+        private FirstSetupWizardView FirstSWV;
+        private RecentProjectView RecentPV;
+        private ProjectWizardView ProjectWV;
+        private WikiPageView WikitPV;
+        private AboutPageView AboutPV;
+        private SettingsPageView SettingsPV;
+        private WebsitePageView WebsitePV;
+        private UserPageView UserPV;
+        private IntegratedToolsPageView IntegratedTPV;
+        private GithubPageView GithubPV;
 
 
         public HomePageView()
         {
             InitializeComponent();
-            GlobalHomePage = this;
             InitializeGitHub();
             InitializePages();
 
-        }
-
-        private void setupProjectWV()
-        {
-            ProjectWV.Loaded += (_s, _e) =>
-                (ProjectWV.ViewModel as ProjectWizardViewModel).ClosingRequest
-                    += (s, e) =>
-                    {
-                        SideMenu_WelcomeItem_Selected(s, new RoutedEventArgs());
-                        ProjectWV = new ProjectWizardView();
-                        setupProjectWV();
-                    };
         }
 
         private void InitializePages()
@@ -65,7 +51,9 @@ namespace WolvenKit.Views.HomePage
             FirstSWV = new FirstSetupWizardView();
             RecentPV = new RecentProjectView();
             ProjectWV = new ProjectWizardView();
-            setupProjectWV();
+            ProjectWV.Loaded += (_s, _e) =>
+                (ProjectWV.ViewModel as ProjectWizardViewModel).ClosingRequest
+                    += (s, e) => SideMenu_WelcomeItem_Selected(s, new RoutedEventArgs());
             WikitPV = new WikiPageView();
             AboutPV = new AboutPageView();
             SettingsPV = new SettingsPageView();
@@ -73,8 +61,8 @@ namespace WolvenKit.Views.HomePage
             UserPV = new UserPageView();
             GithubPV = new GithubPageView();
             IntegratedTPV = new IntegratedToolsPageView();
-            DebugPV = new DebugPageView();
 
+          
         }
 
         private async void InitializeGitHub()
@@ -107,9 +95,10 @@ namespace WolvenKit.Views.HomePage
 #pragma warning restore 618
 
 
-                //  WatchShield.SetCurrentValue(Shield.StatusProperty, g_watchers.ToString());
-                // ForkShield.SetCurrentValue(Shield.StatusProperty, g_forks.ToString());
-                //   StarShield.SetCurrentValue(Shield.StatusProperty, g_stars.ToString());
+                WatchShield.SetCurrentValue(Shield.StatusProperty, g_watchers.ToString());
+                ForkShield.SetCurrentValue(Shield.StatusProperty, g_forks.ToString());
+                StarShield.SetCurrentValue(Shield.StatusProperty, g_stars.ToString());
+
 
 
 
@@ -160,7 +149,7 @@ namespace WolvenKit.Views.HomePage
 
                 }
                 data.Add(item);
-                //  gitTime.SetCurrentValue(ItemsControl.ItemsSourceProperty, data);
+                gitTime.SetCurrentValue(ItemsControl.ItemsSourceProperty, data);
             }
             catch { }
         }
@@ -179,8 +168,8 @@ namespace WolvenKit.Views.HomePage
             {
                 PageViewGrid.Children.Clear();
 
-                PageViewGrid.Children.Clear();
-                PageViewGrid.Children.Add(WelcomePV);
+                TopicViewer.TopicViewer.Children.Clear();
+                TopicViewer.TopicViewer.Children.Add(WelcomePV);
             }
 
         }
@@ -192,13 +181,10 @@ namespace WolvenKit.Views.HomePage
         {
             if (IsLoaded && IsVisible && IsInitialized)
             {
-                Views.Wizards.FirstSetupWizardView rpv = new Views.Wizards.FirstSetupWizardView();
-                UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
-                UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
-                uchwv.Show();
+                PageViewGrid.Children.Clear();
 
-
-
+                TopicViewer.TopicViewer.Children.Clear();
+                TopicViewer.TopicViewer.Children.Add(FirstSWV);
             }
         }
 
@@ -215,10 +201,10 @@ namespace WolvenKit.Views.HomePage
         {
             if (IsLoaded && IsVisible && IsInitialized)
             {
-                Views.Wizards.ProjectWizardView rpv = new Views.Wizards.ProjectWizardView();
-                UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
-                UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
-                uchwv.Show();
+                PageViewGrid.Children.Clear();
+
+                TopicViewer.TopicViewer.Children.Clear();
+                TopicViewer.TopicViewer.Children.Add(ProjectWV);
             }
         }
 
@@ -230,7 +216,7 @@ namespace WolvenKit.Views.HomePage
                 PageViewGrid.Children.Add(WikitPV);
             }
         }
-
+   
         private void SideMenu_GitHubItem_Selected(object sender, RoutedEventArgs e)
         {
             if (IsLoaded && IsVisible && IsInitialized)
@@ -257,7 +243,7 @@ namespace WolvenKit.Views.HomePage
                 PageViewGrid.Children.Add(SettingsPV);
             }
         }
-
+        
         private void SideMenu_WebsiteItem_Selected(object sender, RoutedEventArgs e)
         {
             if (IsLoaded && IsVisible && IsInitialized)
@@ -267,7 +253,7 @@ namespace WolvenKit.Views.HomePage
             }
         }
 
-        private void SideMenu_UserItem_Selected(object sender, RoutedEventArgs e)
+        private void Tag_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (IsLoaded && IsVisible && IsInitialized)
             {
@@ -275,7 +261,7 @@ namespace WolvenKit.Views.HomePage
                 PageViewGrid.Children.Add(UserPV);
             }
 
-
+   
 
 
 
@@ -296,81 +282,31 @@ namespace WolvenKit.Views.HomePage
 
         private void Grid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            base.OnMouseLeftButtonDown(e);
-
-
-
-
-            WKitGlobal.AppHelper.GlobalShell.DragMove();
+        
         }
 
         private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
+          
+                var serviceLocator = ServiceLocator.Default;
 
+                var shellService = serviceLocator.ResolveType<IShellService>();
 
-
-
-            WKitGlobal.AppHelper.GlobalShell.DragMove();
-
+                ShellWindow sh = (ShellWindow)shellService.Shell;
+      
+                sh.DragMove();
+            
             // Begin dragging the window
         }
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible)
+            if (this.IsVisible )
             {
                 DiscordRPCHelper.WhatAmIDoing("Home");
-
-                if (IsVisible && IsLoaded)
-                {
-                    PageViewGrid.Children.Clear();
-                    PageViewGrid.Children.Add(WelcomePV);
-
-                }
-
             }
 
-        }
-
-
-
-        private void Grid_MouseLeftButtonDown_2(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2)
-            {
-                if (this.IsMouseOver)
-                {
-                    if (WKitGlobal.AppHelper.GlobalShell.WindowState == WindowState.Maximized)
-                    {
-                        WKitGlobal.AppHelper.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Normal);
-
-                    }
-                    else
-                    {
-                        WKitGlobal.AppHelper.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Maximized);
-
-                    }
-                }
-            }
-            else
-            {
-                base.OnMouseLeftButtonDown(e);
-
-
-
-
-                WKitGlobal.AppHelper.GlobalShell.DragMove();
-            }
-        }
-
-        private void SideMenu_DebugItem_Selected(object sender, RoutedEventArgs e)
-        {
-            if (IsLoaded && IsVisible && IsInitialized)
-            {
-                PageViewGrid.Children.Clear();
-                PageViewGrid.Children.Add(DebugPV);
-            }
         }
     }
 }

@@ -6,18 +6,17 @@
                    xmlns:hc="https://handyorg.github.io/handycontrol"
                    IsVisibleChanged="UserControl_IsVisibleChanged">
 
-    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
-
+    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
+        
         <Grid Margin="3,75,3,0">
-            <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
-
-                <wv2:WebView2 Source="https://wolvenkit.red/"/>
-            </hc:TransitioningContentControl>
-
+            <wv2:WebView2 Source="https://wolvenkit.red/"/>
         </Grid>
-        <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
-            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Orientation="Horizontal">
+        <Grid HorizontalAlignment="Right" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
+        <Grid HorizontalAlignment="left" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
+        <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Width="30" Height="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
+        
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Orientation="Horizontal">
             <TextBlock HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center " FontSize="20" ></TextBlock>
             <hc:Divider Margin="15" Orientation="Vertical" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center"></hc:Divider>
             <hc:AnimationPath Height="45" Width="45" Data="{DynamicResource WikiGeo}" 
@@ -34,16 +33,13 @@
                 </hc:AnimationPath.RenderTransform>
             </hc:AnimationPath>
         </StackPanel>
-        </hc:TransitioningContentControl>
 
-        <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
-                <hc:ComboBox HorizontalContentAlignment="Right" x:Name="SelectWebsiteTypeCombo" Background="Transparent"   Margin="0,20,75,0" SelectedIndex="0" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="20" Height="45">
+        <hc:ComboBox HorizontalContentAlignment="Right" x:Name="SelectWebsiteTypeCombo" Background="Transparent"   Margin="0,20,75,0" SelectedIndex="0" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="20" Height="45">
             <ComboBoxItem Content="WolvenKit Website"/>
             <ComboBoxItem Content="Organization Website"/>
         </hc:ComboBox>
 
-            </hc:TransitioningContentControl>
 
 
 

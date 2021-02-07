@@ -4,7 +4,7 @@
                    xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
     <AdornerDecorator>
-    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
@@ -76,6 +76,25 @@
                             </Button>
                                 <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding DepotPath}"/>
                         </Grid>
+
+
+                        <Grid Margin="5">
+                            <TextBlock Text="Mods Folder Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                            <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="GameModDirBtn_Click">
+                                <iconPacks:PackIconCodicons Kind="FolderOpened"/>
+                            </Button>
+                                <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding GameModDir}"/>
+                        </Grid>
+
+
+                        <Grid Margin="5">
+                            <TextBlock Text="DLC Folder Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                            <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="GameDlcDirBtn_Click">
+                                <iconPacks:PackIconCodicons Kind="FolderOpened"/>
+                            </Button>
+                                <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding GameDlcDir}"/>
+                        </Grid>
+
 
                     </StackPanel>
 

@@ -11,21 +11,12 @@
 	xmlns:model="clr-namespace:WolvenKit.Model"
 	xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:cmodel="clr-namespace:WolvenKit.Common.Model"
-	xmlns:types="clr-namespace:WolvenKit.Common.Model.Cr2w;assembly=WolvenKit.Common"
+	xmlns:types="clr-namespace:WolvenKit.CR2W.Types;assembly=WolvenKit.CR2W"
 	xmlns:cr2W="clr-namespace:WolvenKit.CR2W;assembly=WolvenKit.CR2W"
     xmlns:conv="clr-namespace:WolvenKit.Layout.Converters"
-    xmlns:hc="https://handyorg.github.io/handycontrol"
-    d:DesignHeight="450"
+	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d" IsVisibleChanged="UserControl_IsVisibleChanged">
-    <catel:UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources  RequestedTheme="Dark"/>
-                <hc:Theme/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </catel:UserControl.Resources>
     <Grid>
         <Grid.Resources>
             <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
@@ -37,7 +28,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TreeView Name="TreeView" Style="{DynamicResource TreeView}"
+        <TreeView Name="TreeView" 
                   Grid.Row="0"
                              ItemsSource="{Binding Chunks}"
                              
@@ -79,18 +70,16 @@
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
         </TreeView>
-
         <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" />
-        
         <TreeView Name="TreeViewProp" 
                   Grid.Row="2"
-                  ItemsSource="{Binding SelectEditableVariables}"
-                  
+                  ItemsSource="{Binding SelectEditableVariables, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                  Grid.IsSharedSizeScope =" True"
         >
 
 
             <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource TreeViewItemBaseStyle}">
+                <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                     <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
@@ -98,26 +87,28 @@
             </TreeView.ItemContainerStyle>
 
             <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkPropertyViewModel}" 
-                                          ItemsSource="{Binding Children}">
 
-                    <StackPanel Orientation="Horizontal">
+                
+                <HierarchicalDataTemplate DataType="{x:Type types:CVariable}" 
+                                          ItemsSource="{Binding ChildrEditableVariables}"
+                                          >
+                    <Grid Width="Auto">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="B" />
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                        <TextBlock  Text="{Binding Name}" MinWidth="200" 
-                                    Foreground="{Binding Path=ForegroundColor}" />
-                        <GridSplitter Height="5" HorizontalAlignment="Stretch" />
-                        <TextBlock   Text="{Binding Type}"
-                                     Foreground="{Binding Path=ForegroundColor}" 
-                                     MinWidth="200" Padding="10,0,0,0"/>
-                        <GridSplitter  Height="5" HorizontalAlignment="Stretch" />
-                        <TextBlock   Text="{Binding Value}"
-                                     Foreground="{Binding Path=ForegroundColor}"
-                                     MinWidth="200" Padding="10,0,0,0"/>
+                        <TextBlock Grid.Column="0" Text="{Binding Path=REDName}" MinWidth="200" />
+                        <GridSplitter Grid.Column="1" Height="5" HorizontalAlignment="Stretch" />
+                        <TextBlock  Grid.Column="2" Text="{Binding Path=REDType}" MinWidth="200" Padding="10,0,0,0"/>
+                        <GridSplitter Grid.Column="3" Height="5" HorizontalAlignment="Stretch" />
+                        <TextBlock  Grid.Column="4" Text="{Binding Path=REDValue}" MinWidth="200" Padding="10,0,0,0"/>
+                        
 
-
-                    </StackPanel>
-
-                    
+                    </Grid>
 
                 </HierarchicalDataTemplate>
             </TreeView.Resources>

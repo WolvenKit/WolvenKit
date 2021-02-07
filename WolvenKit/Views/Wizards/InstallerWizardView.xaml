@@ -19,7 +19,7 @@
 
 
     <Grid 
-        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+        hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"
         HorizontalAlignment="Stretch"
         MinWidth=" 350"
         MaxWidth="450"

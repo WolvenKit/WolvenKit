@@ -13,7 +13,6 @@ using WolvenKit.Views.VisualEditor;
 using WolvenKit.Views.AudioTool;
 using WolvenKit.Views.JournalEditor;
 using Orchestra.Views;
-using System.Windows.Media;
 
 namespace WolvenKit.Views
 {
@@ -24,9 +23,9 @@ namespace WolvenKit.Views
             InitializeComponent();
 
             ribbon.AddAboutButton();
+            
 
-            WKitGlobal.AppHelper.RibbonViewInstance = this;
-           
+
         }
 
         protected override void OnViewModelChanged()
@@ -57,7 +56,9 @@ namespace WolvenKit.Views
 
         private void ShowStartScreen_OnClick(object sender, RoutedEventArgs e) // Convert me to MVVM
         {        
-            // Nope we dont do that here . And I am not removing this >:)
+ 
+            this.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
+                this.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
         }
 
        
@@ -98,8 +99,8 @@ namespace WolvenKit.Views
 
         private void CBJournalEditorItem_Selected(object sender, RoutedEventArgs e)
         {
-          //  JournalEditorView journaleditor = new JournalEditorView();
-         //   journaleditor.Show();
+            JournalEditorView journaleditor = new JournalEditorView();
+            journaleditor.Show();
         }
 
         private void Backstage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -110,9 +111,9 @@ namespace WolvenKit.Views
 
             var shellService = serviceLocator.ResolveType<IShellService>();
 
+            ShellWindow sh = (ShellWindow)shellService.Shell;
 
-
-            WKitGlobal.AppHelper.GlobalShell.DragMove();
+            sh.DragMove();
         }
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -121,29 +122,6 @@ namespace WolvenKit.Views
             {
                 DiscordRPCHelper.WhatAmIDoing("Ribbon/Backstage");
             }
-        }
-
-        private void Border_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            var brush = (Brush)App.Current.FindResource("MahApps.Brushes.Accent3");
-
-            HomeHighLighter.SetCurrentValue(System.Windows.Controls.Panel.BackgroundProperty, brush);
-        }
-
-        private void Border_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            var brush = (Brush)App.Current.FindResource("MahApps.Brushes.AccentBase");
-
-            HomeHighLighter.SetCurrentValue(System.Windows.Controls.Panel.BackgroundProperty, brush);
-
-        }
-
-        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-
-
-            WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
-            WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
         }
     }
 }

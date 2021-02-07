@@ -20,7 +20,7 @@
         </ResourceDictionary>
 
     </catel:UserControl.Resources>
-    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="150"   Margin="5,5,2,5">
+    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="300"   Margin="5,5,2,5">
 
 
         <Grid.RowDefinitions>

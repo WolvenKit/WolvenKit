@@ -56,6 +56,22 @@ namespace WolvenKit.Views.SettingsPages.SubPages.Editor
                 _settingsManager.DepotPath = result.DirectoryName;
         }
 
-        
+        private async void GameModDirBtn_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var result = await _selectDirectoryService.DetermineDirectoryAsync(
+                new DetermineDirectoryContext()
+            );
+            if (result.Result)
+                _settingsManager.GameModDir = result.DirectoryName;
+        }
+
+        private async void GameDlcDirBtn_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var result = await _selectDirectoryService.DetermineDirectoryAsync(
+                new DetermineDirectoryContext()
+            );
+            if (result.Result)
+                _settingsManager.GameDlcDir = result.DirectoryName;
+        }
     }
 }

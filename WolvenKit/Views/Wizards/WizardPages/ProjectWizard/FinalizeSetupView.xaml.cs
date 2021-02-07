@@ -19,7 +19,7 @@ namespace WolvenKit.Views.Wizards.WizardPages.ProjectWizard
 
         private void CancelProjectBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            (_pwv.ViewModel as ProjectWizardViewModel)?.Close();
+            (_pwv.ViewModel as ProjectWizardViewModel).Close();
         }
     }
 }

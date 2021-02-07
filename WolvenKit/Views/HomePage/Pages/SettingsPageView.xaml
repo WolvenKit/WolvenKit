@@ -8,11 +8,9 @@
                    IsVisibleChanged="UserControl_IsVisibleChanged">
 
 
-    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
+    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
         <Grid Margin="3,75,3,0">
-            <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
-
-                <hc:TabControl x:Name="TabControlDemo" IsAnimationEnabled="True" ShowCloseButton="False" IsDraggable="False" IsTabFillEnabled="True" Margin="0,0,0,0" SelectionChanged="TabControlDemo_SelectionChanged" >
+            <hc:TabControl x:Name="TabControlDemo" IsAnimationEnabled="True" ShowCloseButton="False" IsDraggable="False" IsTabFillEnabled="True" Margin="0,0,0,0" SelectionChanged="TabControlDemo_SelectionChanged" >
                 <hc:TabItem  x:Name="GeneralTabItem" IsSelected="True" >
                     <hc:TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -64,14 +62,14 @@
                     <sp:IntegrationsSettingsView/>
 
                 </hc:TabItem>
-
+               
             </hc:TabControl>
-            </hc:TransitioningContentControl>
-
         </Grid>
-        <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
+        <Grid HorizontalAlignment="Right" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"></Grid>
 
-            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Orientation="Horizontal">
+        <Grid HorizontalAlignment="left" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"></Grid>
+        <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Width="30" Height="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"></Grid>
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Orientation="Horizontal">
 
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center " FontSize="20" Text="Settings"></TextBlock>
             <hc:Divider Margin="15" Orientation="Vertical" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center"></hc:Divider>
@@ -79,9 +77,7 @@
                           Duration="00:00:06" 
                           Stretch="Uniform" StrokeThickness="1.5"
                           Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="5" PathLength="30" HorizontalAlignment="Center" VerticalAlignment="Center"></hc:AnimationPath>
-            </StackPanel>
-        </hc:TransitioningContentControl>
-
+        </StackPanel>
 
     </Grid>
     

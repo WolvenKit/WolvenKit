@@ -4,19 +4,15 @@
                   xmlns:catel="http://schemas.catelproject.com" 
                   xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit" 
                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
-                  xmlns:hc="https://handyorg.github.io/handycontrol"   
-                  xmlns:aeditCmd="clr-namespace:ICSharpCode.AvalonEdit;assembly=ICSharpCode.AvalonEdit"
-                  xmlns:behav="clr-namespace:WolvenKit.Behavior"
+                  xmlns:hc="https://handyorg.github.io/handycontrol"
                   ShowInTaskbar="True" 
                   AllowsTransparency="True" 
                   ResizeMode="CanResizeWithGrip" 
                   BorderBrush="{x:Null}" 
                   WindowStartupLocation="CenterScreen"
                   WindowStyle="None" 
-                  MaxHeight="600"
-                  MaxWidth="500"
                   Title="Code Editor" IsVisibleChanged="DataWindow_IsVisibleChanged">
-
+    
     <catel:DataWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -26,7 +22,7 @@
         </ResourceDictionary>
     </catel:DataWindow.Resources>
 
-    <Border hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Width="auto" Height="auto" BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
+    <Border hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" Width="auto" Height="auto" BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
 
         <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
 
@@ -62,7 +58,7 @@
                     <MenuItem Header="View"/>
                     <MenuItem Header="Compile"/>
                 </Menu>
-
+                
                 <iconPacks:PackIconCodicons Margin="13,0,0,0" Height="23" Kind="Code" Width="23" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
             </Grid>
@@ -74,20 +70,20 @@
             <Grid  Margin="3,33,3,3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                
-                <hc:TabControl ShowCloseButton="True" Grid.Column="0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+
+                <hc:TabControl ShowCloseButton="True" Grid.Column="1" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
                     <hc:TabItem Header="wat">
-                      
+
                     </hc:TabItem>
                     <hc:TabItem Header="wat">
 
                     </hc:TabItem>
                 </hc:TabControl>
             </Grid>
-
-
+            
+            
         </Grid>
     </Border>
 

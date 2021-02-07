@@ -112,7 +112,6 @@ namespace WolvenKit.Services
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Settings), nameof(AppCommands.Settings.General));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.Options));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.BugReport));
-            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.ThemeWizard));
 
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.NewProject));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.CreateNewProject));
@@ -130,7 +129,6 @@ namespace WolvenKit.Services
             _commandManager.CreateCommand((AppCommands.Application.NewFile));
             _commandManager.CreateCommand((AppCommands.Application.PackMod));
             _commandManager.CreateCommand((AppCommands.Application.BackupMod));
-            _commandManager.CreateCommand((AppCommands.Application.PublishMod));
 
             // Project Explorer Viewmodel
             _commandManager.CreateCommand(AppCommands.ProjectExplorer.ExpandAll);

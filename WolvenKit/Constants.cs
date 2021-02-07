@@ -42,12 +42,9 @@ namespace WolvenKit
 
             public const string OpenFile = "Application.OpenFile";
             public const string NewFile = "Application.NewFile";
-            public const string BugReport = "Application.BugReport"; 
-            public const string ThemeWizard = "Application.ThemeWizard";
-
+            public const string BugReport = "Application.BugReport";
             public const string PackMod = "Application.PackMod";
             public const string BackupMod = "Application.BackupMod";
-            public const string PublishMod = "Application.PublishMod";
 
 
 
@@ -102,39 +99,23 @@ namespace WolvenKit
     {
         public static void WhatAmIDoing(string details)
         {
-            if (WKitGlobal.AppHelper.RibbonViewInstance.IsLoaded && WKitGlobal.AppHelper.RibbonViewInstance.IsInitialized)
+            App.client.SetPresence(new DiscordRPC.RichPresence()
             {
-                try
+                Details = details,
+                Timestamps = new DiscordRPC.Timestamps()
                 {
-                    if (WKitGlobal.DiscordHelper.client != null)
-                    {
-                        WKitGlobal.DiscordHelper.client.SetPresence(new DiscordRPC.RichPresence()
-                        {
-                            Details = details,
-                            Timestamps = new DiscordRPC.Timestamps()
-                            {
-                                Start = System.DateTime.UtcNow
+                    Start = System.DateTime.UtcNow
 
-                            },
-                            Assets = new DiscordRPC.Assets()
-                            {
-                                LargeImageKey = "bigwk",
-
-                                LargeImageText = "WolvenKit",
-
-                            }
-                        });
-                        WKitGlobal.DiscordHelper.client.Invoke();
-                    }
-          
-                }
-                catch
+                },
+                Assets = new DiscordRPC.Assets()
                 {
+                    LargeImageKey = "bigwk",
 
-                }
-              
-            }
-           
+                    LargeImageText = "WolvenKit",
+
+                }      
+            });
+            App.client.Invoke();
         }
 
     }

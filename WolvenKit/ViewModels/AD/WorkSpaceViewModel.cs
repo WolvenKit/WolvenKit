@@ -15,7 +15,6 @@ using Catel.MVVM;
 using Catel;
 using Catel.IoC;
 using Orc.ProjectManagement;
-using WolvenKit.Views.Wizards;
 using NativeMethods = WolvenKit.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels
@@ -85,7 +84,6 @@ namespace WolvenKit.ViewModels
 
             PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
             BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
-            PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
 
 
             addfiledel = vm => _files.Add(vm);
@@ -123,7 +121,6 @@ namespace WolvenKit.ViewModels
 
             commandManager.RegisterCommand(AppCommands.Application.PackMod, PackModCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.BackupMod, BackupModCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.PublishMod, PublishModCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowPackageInstaller, ShowPackageInstallerCommand, this);
 
 
@@ -259,7 +256,7 @@ namespace WolvenKit.ViewModels
         private bool CanPackMod() => _projectManager.ActiveProject is EditorProject proj;
         private void ExecutePackMod()
         {
-            MainController.Get().GetGame().PackAndInstallProject();
+            //TODO
         }
 
 		/// <summary>
@@ -269,25 +266,7 @@ namespace WolvenKit.ViewModels
         private bool CanBackupMod() => _projectManager.ActiveProject is EditorProject;
         private void ExecuteBackupMod()
         {
-            // TODO: Implement this
-        }
-
-        public ICommand PublishModCommand { get; private set; }
-        private bool CanPublishMod() => _projectManager.ActiveProject is EditorProject;
-        private void ExecutePublishMod()
-        {
-            try
-            {
-                var vm = new UserControlHostWindowViewModel(new PublishWizardView(), 600, 1200);
-                
-                ServiceLocator.Default.ResolveType<IUIVisualizerService>().ShowDialogAsync(vm);
-
-            }
-            catch (Exception ex)
-            {
-                _loggerService.LogString(ex.Message, Logtype.Error);
-                _loggerService.LogString("Failed to publish project!", Logtype.Error);
-            }
+            //TODO
         }
 
 		

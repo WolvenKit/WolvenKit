@@ -1,27 +1,27 @@
 ﻿<Application x:Class="WolvenKit.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"          
-             xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
              xmlns:hc="https://handyorg.github.io/handycontrol">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Crimson.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-
                 <!-- Theme setting -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Blue.xaml" />
                 <hc:ThemeResources/>
                 <hc:Theme/>
 
 
                 <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Dark.Red.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Dark.Blue.xaml"      />
 
+                <ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Dark.Red.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Resources/Styles/CustomHandyStyles.xaml"/>
 
-
+              
 
             </ResourceDictionary.MergedDictionaries>
 
@@ -31,14 +31,12 @@
                 <Setter Property="Margin" Value="5,0"/>
                 <Setter Property="Background" Value="Transparent"/>
             </Style>
+            
+            
 
-            <DrawingBrush o:Freeze="True" Opacity="0.5" x:Key="CloudDrawingBrush" RenderOptions.CacheInvalidationThresholdMinimum="0.5" RenderOptions.CacheInvalidationThresholdMaximum="2.0" RenderOptions.CachingHint="Cache" Viewport="0,0,55,55" ViewportUnits="Absolute" Stretch="Uniform" TileMode="Tile">
-                <DrawingBrush.Drawing>
-                    <ImageDrawing o:Freeze="True" ImageSource="pack://application:,,,/Resources/Icons/Cloud.png" Rect="0,0,55,55"/>
-                </DrawingBrush.Drawing>
-            </DrawingBrush>
 
-            <Geometry x:Key="HomeIcon">M 16,8.41421L 11.5,3.91421L 4.41421,11L 6,11L 6,12L 6,19L 9,19L 9,13L 14,13L 14,19L 17,19L 17,11L 18.5858,11L 17,9.41421L 17,6.00001L 16,6.00001L 16,8.41421 Z M 2,12L 11.5,2.50001L 15,6L 15,5L 18,5L 18,9L 21,12L 18,12L 17.9993,19.9983L 12.9993,19.9983L 12.9993,13.9983L 9.99939,13.998L 9.99939,19.998L 4.99939,19.998L 4.99939,12L 2,12 Z</Geometry>
+
+
 
             <SolidColorBrush x:Key="AccentColorBrush" Color="Black" />
         </ResourceDictionary>
