@@ -236,7 +236,13 @@ namespace WolvenKit
 
 
             // ---- HeadCategory : Dialogs
-            viewLocator.Register(typeof(ViewModels.InputDialogViewModel), typeof(Views.Dialogs.InputDialog));
+            viewLocator.Register(typeof(ViewModels.Dialogs.InputDialogViewModel), typeof(Views.Dialogs.InputDialog));
+            viewLocator.Register(typeof(ViewModels.Dialogs.AddChunkDialogViewModel), typeof(Views.Dialogs.AddChunkDialog));
+            viewLocator.Register(typeof(ViewModels.Dialogs.ExtractAmbigiousDialogViewModel), typeof(Views.Dialogs.ExtractAmbigiousDialog));
+            viewLocator.Register(typeof(ViewModels.Dialogs.RenameDialogViewModel), typeof(Views.Dialogs.RenameDialog));
+            viewLocator.Register(typeof(ViewModels.Dialogs.StringsGUIImporterIDDialogViewModel), typeof(Views.Dialogs.StringsGUIImporterIDDialog));
+            viewLocator.Register(typeof(ViewModels.Dialogs.StringsGuiScriptsPrefixDialogViewModel), typeof(Views.Dialogs.StringsGuiScriptsPrefixDialog));
+
 
 
 
