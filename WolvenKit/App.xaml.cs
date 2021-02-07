@@ -92,7 +92,6 @@ namespace WolvenKit
             //-- Category : AudioTool
             viewModelLocator.Register(typeof(Views.AudioTool.AudioToolView), typeof(ViewModels.AudioTool.AudioToolViewModel));
 
-
             //-- Category : CodeEditor
             viewModelLocator.Register(typeof(Views.CodeEditor.CodeEditorView), typeof(ViewModels.CodeEditor.CodeEditorViewModel));
 
@@ -101,6 +100,42 @@ namespace WolvenKit
 
             //-- Category : VisualEditor
             viewModelLocator.Register(typeof(Views.VisualEditor.VisualEditorView), typeof(ViewModels.VisualEditor.VisualEditorViewModel));
+
+            //-- Category : AnimationTool
+            viewModelLocator.Register(typeof(Views.AnimationTool.AnimsView), typeof(ViewModels.AnimationTool.AnimsViewModel));
+            viewModelLocator.Register(typeof(Views.AnimationTool.MimicsView), typeof(ViewModels.AnimationTool.MimicsViewModel));
+
+            //-- Category : BulkEditor
+            viewModelLocator.Register(typeof(Views.BulkEditor.BulkEditorView), typeof(ViewModels.BulkEditor.BulkEditorViewModel));
+
+            //-- Category : CR2WToTextTool
+            viewModelLocator.Register(typeof(Views.CR2WToTextTool.CR2WToTextToolView), typeof(ViewModels.CR2WToTextTool.CR2WToTextToolViewModel));
+
+            //-- Category : CsvEditor
+            viewModelLocator.Register(typeof(Views.CsvEditor.CsvEditorView), typeof(ViewModels.CsvEditor.CsvEditorViewModel));
+
+            //-- Category : EditorBars
+            viewModelLocator.Register(typeof(Views.EditorBars.ArrayEditorView), typeof(ViewModels.EditorBars.ArrayEditorViewModel));
+            viewModelLocator.Register(typeof(Views.EditorBars.ByteArrayEditorView), typeof(ViewModels.EditorBars.ByteArrayEditorViewModel));
+            viewModelLocator.Register(typeof(Views.EditorBars.IdTagEditorView), typeof(ViewModels.EditorBars.IdTagEditorViewModel));
+            viewModelLocator.Register(typeof(Views.EditorBars.PtrEditorView), typeof(ViewModels.EditorBars.PtrEditorViewModel));
+
+            //-- Category : GameDebuggerTool
+            viewModelLocator.Register(typeof(Views.GameDebuggerTool.GameDebuggerToolView), typeof(ViewModels.GameDebuggerTool.GameDebuggerToolViewModel));
+
+            //-- Category : HexEditor
+            viewModelLocator.Register(typeof(Views.HexEditor.HexEditorView), typeof(ViewModels.HexEditor.HexEditorViewModel));
+
+            //-- Category : ImporterTool
+            viewModelLocator.Register(typeof(Views.ImporterTool.ImporterToolView), typeof(ViewModels.ImporterTool.ImporterToolViewModel));
+
+            //-- Category : RadishTool
+            viewModelLocator.Register(typeof(Views.RadishTool.RadishToolView), typeof(ViewModels.RadishTool.RadishToolViewModel));
+
+            //-- Category : WccTool
+            viewModelLocator.Register(typeof(Views.WccTool.WccToolView), typeof(ViewModels.WccTool.WccToolViewModel));
+
+
 
 
 
@@ -198,6 +233,9 @@ namespace WolvenKit
 
             var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
             viewLocator.Register(typeof(ViewModels.SettingsViewModel), typeof(Views.SettingsWindow));
+
+
+            // ---- HeadCategory : Dialogs
             viewLocator.Register(typeof(ViewModels.InputDialogViewModel), typeof(Views.Dialogs.InputDialog));
 
 
