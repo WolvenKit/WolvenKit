@@ -46,7 +46,7 @@ namespace CP77.CR2W
                 case ERawFileFormat.fbx:
                     throw new NotImplementedException();
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException($"Import fbx");
             }
         }
 

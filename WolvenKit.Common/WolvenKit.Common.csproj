@@ -12,7 +12,7 @@
     <RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>wolvenkit</PackageTags>
-    <Version>1.0.3</Version>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>

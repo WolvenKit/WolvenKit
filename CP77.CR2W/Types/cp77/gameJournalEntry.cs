@@ -9,6 +9,7 @@ namespace CP77.CR2W.Types
 	public class gameJournalEntry : IScriptable
 	{
 		[Ordinal(0)]  [RED("id")] public CString Id { get; set; }
+        [Ordinal(999)] [RED("activatedAtStart")] public CBool activatedAtStart { get; set; }
 
 		public gameJournalEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

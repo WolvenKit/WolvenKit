@@ -26,11 +26,11 @@ namespace CP77.CR2W.Types
         [DataMember(EmitDefaultValue = false)]
         public string DepotPath { get; set; }
 
-        [DataMember(EmitDefaultValue = false)]
-        public string ClassName { get; set; }
+        //[DataMember(EmitDefaultValue = false)]
+        //public string ClassName { get; set; }
 
-        [DataMember(EmitDefaultValue = false)]
-        public ushort Flags { get; set; }
+        //[DataMember(EmitDefaultValue = false)]
+        //public ushort Flags { get; set; }
         #endregion
 
         #region Methods
@@ -46,15 +46,15 @@ namespace CP77.CR2W.Types
                 DepotPath = cr2w.Imports[value - 1].DepotPathStr;
 
                 var filetype = cr2w.Imports[value - 1].Import.className;
-                ClassName = cr2w.Names[filetype].Str;
+                //ClassName = cr2w.Names[filetype].Str;
 
-                Flags = cr2w.Imports[value - 1].Import.flags;
+                //Flags = cr2w.Imports[value - 1].Import.flags;
             }
             else
             {
                 DepotPath = "";
-                ClassName = "";
-                Flags = 4;
+                //ClassName = "";
+                //Flags = 4;
             }
         }
 
@@ -66,7 +66,7 @@ namespace CP77.CR2W.Types
         {
             ushort val = 0;
 
-            var import = cr2w.Imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName && _.Flags == Flags);
+            var import = cr2w.Imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath /*&& _.ClassNameStr == ClassName && _.Flags == Flags*/);
             val = (ushort)(cr2w.Imports.IndexOf(import) + 1);
 
 
@@ -82,8 +82,8 @@ namespace CP77.CR2W.Types
                     break;
                 case ISoftAccessor cvar:
                     this.DepotPath = cvar.DepotPath;
-                    this.ClassName = cvar.ClassName;
-                    this.Flags = cvar.Flags;
+                    //this.ClassName = cvar.ClassName;
+                    //this.Flags = cvar.Flags;
                     break;
             }
 
@@ -94,13 +94,13 @@ namespace CP77.CR2W.Types
         {
             var copy = (raRef<T>)base.Copy(context);
 
-            copy.ClassName = ClassName;
-            copy.Flags = Flags;
+            //copy.ClassName = ClassName;
+            //copy.Flags = Flags;
             copy.DepotPath = DepotPath;
             return copy;
         }
 
-        public override string ToString() => ClassName + ": " + DepotPath;
+        public override string ToString() => /*ClassName + ": " +*/ DepotPath;
 
 
         #endregion

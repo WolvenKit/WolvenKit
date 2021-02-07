@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class scneventsUIAnimationBraindanceEvent : scnSceneEvent
 	{
 		[Ordinal(0)]  [RED("animationName")] public CName AnimationName { get; set; }
-		[Ordinal(1)]  [RED("nodeRef")] public NodeRef NodeRef { get; set; }
-		[Ordinal(2)]  [RED("performerId")] public scnPerformerId PerformerId { get; set; }
+		[Ordinal(1)]  [RED("performerId")] public scnPerformerId PerformerId { get; set; }
+		[Ordinal(2)]  [RED("nodeRef")] public NodeRef NodeRef { get; set; }
 
 		public scneventsUIAnimationBraindanceEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

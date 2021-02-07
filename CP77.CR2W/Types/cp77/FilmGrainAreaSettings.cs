@@ -8,10 +8,10 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class FilmGrainAreaSettings : IAreaSettings
 	{
-		[Ordinal(0)]  [RED("applyAfterUpsampling")] public CBool ApplyAfterUpsampling { get; set; }
-		[Ordinal(1)]  [RED("grainSize")] public Vector3 GrainSize { get; set; }
-		[Ordinal(2)]  [RED("luminanceBias")] public curveData<CFloat> LuminanceBias { get; set; }
-		[Ordinal(3)]  [RED("strength")] public curveData<Vector4> Strength { get; set; }
+		[Ordinal(0)]  [RED("strength")] public curveData<Vector4> Strength { get; set; }
+		[Ordinal(1)]  [RED("luminanceBias")] public curveData<CFloat> LuminanceBias { get; set; }
+		[Ordinal(2)]  [RED("grainSize")] public Vector3 GrainSize { get; set; }
+		[Ordinal(3)]  [RED("applyAfterUpsampling")] public CBool ApplyAfterUpsampling { get; set; }
 
 		public FilmGrainAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

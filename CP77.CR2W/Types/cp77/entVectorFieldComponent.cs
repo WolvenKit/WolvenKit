@@ -9,7 +9,6 @@ namespace CP77.CR2W.Types
 	public class entVectorFieldComponent : entIVisualComponent
 	{
 		[Ordinal(0)]  [RED("direction")] public Vector3 Direction { get; set; }
-		[Ordinal(1)]  [RED("isEnabled")] public CBool IsEnabled { get; set; }
 
 		public entVectorFieldComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

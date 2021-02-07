@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entInstancedAnimationComponent : entISkinableComponent
 	{
-		[Ordinal(0)]  [RED("animToSample")] public CName AnimToSample { get; set; }
-		[Ordinal(1)]  [RED("animations")] public rRef<animAnimSet> Animations { get; set; }
+		[Ordinal(0)]  [RED("animations")] public rRef<animAnimSet> Animations { get; set; }
+		[Ordinal(1)]  [RED("animToSample")] public CName AnimToSample { get; set; }
 		[Ordinal(2)]  [RED("variantAnimToSample")] public CName VariantAnimToSample { get; set; }
 		[Ordinal(3)]  [RED("variantTriggerTag")] public CName VariantTriggerTag { get; set; }
 

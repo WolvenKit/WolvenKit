@@ -9,8 +9,6 @@ namespace CP77.CR2W.Types
 	public class questCharacterBodyType_CondtionType : questICharacterConditionType
 	{
 		[Ordinal(0)]  [RED("gender")] public CName Gender { get; set; }
-		[Ordinal(1)]  [RED("isPlayer")] public CBool IsPlayer { get; set; }
-		[Ordinal(2)]  [RED("objectRef")] public gameEntityReference ObjectRef { get; set; }
 
 		public questCharacterBodyType_CondtionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

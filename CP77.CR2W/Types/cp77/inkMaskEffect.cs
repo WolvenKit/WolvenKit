@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class inkMaskEffect : inkIEffect
 	{
 		[Ordinal(0)]  [RED("angle")] public CFloat Angle { get; set; }
-		[Ordinal(1)]  [RED("invert")] public CBool Invert { get; set; }
-		[Ordinal(2)]  [RED("opacity")] public CFloat Opacity { get; set; }
+		[Ordinal(1)]  [RED("opacity")] public CFloat Opacity { get; set; }
+		[Ordinal(2)]  [RED("invert")] public CBool Invert { get; set; }
 
 		public inkMaskEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

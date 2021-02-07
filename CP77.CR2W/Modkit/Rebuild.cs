@@ -46,7 +46,7 @@ namespace CP77.CR2W
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
                 cr2w.Read(br);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -220,26 +220,29 @@ namespace CP77.CR2W
                 }
                 
                 // sort buffers numerically
-                var buffers = buffers_in
-                    .OrderBy(_ =>
-                    int.Parse(Path.GetExtension(_.FullName.Remove(_.FullName.Length - 7))[1..]))
-                    .ToList();
+                var buffers = buffers_in;
+                if (buffers_in.All(_ => _.Extension == ".buffer"))
+                {
+                    buffers = buffers_in
+                        .OrderBy(_ =>
+                            int.Parse(Path.GetExtension(_.FullName.Remove(_.FullName.Length - 7))[1..]))
+                        .ToList();
+                }
 
 
                 if (keep)
                 {
                     // remove old buffers 
                     fileReader.BaseStream.Seek(0, SeekOrigin.Begin);
-                    fileStream.SetLength(cr2w.Header.fileSize);
+                    fileStream.SetLength(cr2w.Header.objectsEnd);
                         
                     // kraken the buffers and handle textures
                     using var fileWriter = new BinaryWriter(fileStream);
                     fileWriter.BaseStream.Seek(0, SeekOrigin.End);
 
                     var existingBufferCount = cr2w.Buffers.Count;
-                    var newBufferCount = buffers.Count;
 
-                    for (var i = 0; i < newBufferCount; i++)
+                    for (var i = 0; i < buffers.Count; i++)
                     {
                         var buffer = buffers[i];
                         if (!buffer.Exists)

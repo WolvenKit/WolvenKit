@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameVisionModeVisualEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("activated")] public CBool Activated { get; set; }
+		[Ordinal(0)]  [RED("group")] public TweakDBID Group { get; set; }
 		[Ordinal(1)]  [RED("changedModule")] public CName ChangedModule { get; set; }
-		[Ordinal(2)]  [RED("group")] public TweakDBID Group { get; set; }
+		[Ordinal(2)]  [RED("activated")] public CBool Activated { get; set; }
 		[Ordinal(3)]  [RED("meshComponentName")] public CName MeshComponentName { get; set; }
 		[Ordinal(4)]  [RED("type")] public CEnum<gameVisionModeType> Type { get; set; }
 

@@ -9,10 +9,10 @@ namespace CP77.CR2W.Types
 	public class audioAmbientPaletteBrush : CVariable
 	{
 		[Ordinal(0)]  [RED("distributionBucketSize")] public CFloat DistributionBucketSize { get; set; }
-		[Ordinal(1)]  [RED("eventsPool")] public CArray<CName> EventsPool { get; set; }
+		[Ordinal(1)]  [RED("virtualHearingRadius")] public CFloat VirtualHearingRadius { get; set; }
 		[Ordinal(2)]  [RED("hearingDistanceCooldown")] public CFloat HearingDistanceCooldown { get; set; }
-		[Ordinal(3)]  [RED("radioStationMetadata")] public CName RadioStationMetadata { get; set; }
-		[Ordinal(4)]  [RED("virtualHearingRadius")] public CFloat VirtualHearingRadius { get; set; }
+		[Ordinal(3)]  [RED("eventsPool")] public CArray<CName> EventsPool { get; set; }
+		[Ordinal(4)]  [RED("radioStationMetadata")] public CName RadioStationMetadata { get; set; }
 
 		public audioAmbientPaletteBrush(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

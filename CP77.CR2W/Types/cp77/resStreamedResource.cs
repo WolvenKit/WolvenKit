@@ -8,6 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class resStreamedResource : CResource
 	{
+        [Ordinal(999)] [RED("resourceVersion")] public CUInt8 ResourceVersion { get; set; }
 
 		public resStreamedResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

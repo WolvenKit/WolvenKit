@@ -178,7 +178,7 @@ namespace CP77.CR2W
             string readstring;
             if (unknownFlag)
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException(nameof(ReadLengthPrefixedStringNullTerminated));
                 // readstring = Encoding.Unicode.GetString(br.ReadBytes((len * 2) - 1));
             }
             else

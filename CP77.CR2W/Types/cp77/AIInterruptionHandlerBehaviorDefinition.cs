@@ -9,9 +9,9 @@ namespace CP77.CR2W.Types
 	public class AIInterruptionHandlerBehaviorDefinition : AIInterruptionHandlerDefinition
 	{
 		[Ordinal(0)]  [RED("ai")] public CHandle<LibTreeINodeDefinition> Ai { get; set; }
-		[Ordinal(1)]  [RED("blockInterruption")] public CBool BlockInterruption { get; set; }
-		[Ordinal(2)]  [RED("parallelActivation")] public CBool ParallelActivation { get; set; }
-		[Ordinal(3)]  [RED("parallelExecution")] public CBool ParallelExecution { get; set; }
+		[Ordinal(1)]  [RED("parallelActivation")] public CBool ParallelActivation { get; set; }
+		[Ordinal(2)]  [RED("parallelExecution")] public CBool ParallelExecution { get; set; }
+		[Ordinal(3)]  [RED("blockInterruption")] public CBool BlockInterruption { get; set; }
 
 		public AIInterruptionHandlerBehaviorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

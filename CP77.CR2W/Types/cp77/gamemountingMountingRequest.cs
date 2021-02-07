@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class gamemountingMountingRequest : IScriptable
 	{
 		[Ordinal(0)]  [RED("lowLevelMountingInfo")] public gamemountingMountingInfo LowLevelMountingInfo { get; set; }
-		[Ordinal(1)]  [RED("mountData")] public CHandle<gameMountEventData> MountData { get; set; }
-		[Ordinal(2)]  [RED("preservePositionAfterMounting")] public CBool PreservePositionAfterMounting { get; set; }
+		[Ordinal(1)]  [RED("preservePositionAfterMounting")] public CBool PreservePositionAfterMounting { get; set; }
+		[Ordinal(2)]  [RED("mountData")] public CHandle<gameMountEventData> MountData { get; set; }
 
 		public gamemountingMountingRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

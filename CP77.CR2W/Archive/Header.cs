@@ -46,7 +46,7 @@ namespace CP77Tools.Model
         {
             Magic = br.ReadUInt32();
             if (Magic != MAGIC)
-                throw new NotImplementedException();
+                throw new InvalidParsingException("not an ArchiveHeader");
 
             Version = br.ReadUInt32();
             IndexPosition = br.ReadUInt64();

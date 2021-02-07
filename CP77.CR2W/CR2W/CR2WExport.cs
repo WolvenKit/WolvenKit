@@ -231,8 +231,6 @@ namespace CP77.CR2W
             public string ToSimpleString() => $"{Type} {Name}";
         }
 
-
-
         public Cr2wVariableDumpObject GetDumpObject(Stream stream)
         {
             stream.Seek(Export.dataOffset, SeekOrigin.Begin);
@@ -440,7 +438,8 @@ namespace CP77.CR2W
             {
                 unknownBytes.Read(file, (uint)bytesLeft);
                 if (!UnknownTypes.Contains(data.REDType))
-                    UnknownTypes.Add($"Type: {data.REDType}, File: {cr2w.FileName}, Offset: {file.BaseStream.Position}, UnknownBytes: {bytesLeft}");
+                    UnknownTypes.Add(data.REDType);
+                    //UnknownTypes.Add($"Type: {data.REDType}, File: {cr2w.FileName}, Offset: {file.BaseStream.Position}, UnknownBytes: {bytesLeft}");
             }
             else if (bytesLeft < 0)
             {
@@ -451,90 +450,6 @@ namespace CP77.CR2W
                 unknownBytes.Bytes = new byte[0];
             }
         }
-
-        public /*async Task*/ void ReadData(MemoryMappedFile mmf)
-        {
-            //await Task.Run(() =>
-            //{
-            using (var vs = mmf.CreateViewStream(_export.dataOffset, _export.dataSize, MemoryMappedFileAccess.Read))
-            using (var br = new BinaryReader(vs))
-            {
-                CreateDefaultData();
-
-                data.Read(br, _export.dataSize);
-
-                // Unknown bytes
-                var bytesLeft = _export.dataSize - (br.BaseStream.Position - _export.dataOffset);
-                unknownBytes = new CBytes(cr2w, data, "unknownBytes");
-                if (bytesLeft > 0)
-                {
-                    unknownBytes.Read(br, (uint)bytesLeft);
-                }
-                else if (bytesLeft < 0)
-                {
-                    //throw new InvalidParsingException("File read too far.");
-                }
-                else
-                {
-                    unknownBytes.Bytes = new byte[0];
-                }
-
-                if (cr2w.Logger != null)
-                {
-                    float percentprogress = (float)(1 / (float)cr2w.Chunks.Count * 100.0);
-                    cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
-                }
-
-            }
-            //}
-            //);
-        }
-
-
-        public /*async Task*/ void ReadData(MemoryMappedViewStream vs)
-        {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            //await Task.Run(() =>
-            //{
-            using (BinaryReader br = new BinaryReader(vs))
-            {
-                CreateDefaultData();
-
-                data.VarChunkIndex = ChunkIndex;
-
-                data.Read(br, _export.dataSize);
-
-                // Unknown bytes
-                var bytesLeft = _export.dataSize - (br.BaseStream.Position - _export.dataOffset);
-                unknownBytes = new CBytes(cr2w, data, "unknownBytes");
-                if (bytesLeft > 0)
-                {
-                    unknownBytes.Read(br, (uint)bytesLeft);
-                }
-                else if (bytesLeft < 0)
-                {
-                    //throw new InvalidParsingException("File read too far.");
-                }
-                else
-                {
-                    unknownBytes.Bytes = new byte[0];
-                }
-
-                stopwatch.Stop();
-                if (cr2w.Logger != null)
-                {
-                    float percentprogress = (float)(1 / (float)cr2w.Chunks.Count * 100.0);
-                    cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
-                    //cr2w.Logger.LogString($"{stopwatch.Elapsed} CHUNK {REDName}\n");
-                }
-
-            }
-            //}
-            //);
-        }
-
 
         public void WriteData(BinaryWriter file)
         {
@@ -566,18 +481,11 @@ namespace CP77.CR2W
             //if (Export.className != 1 && GetParentChunk() == null)
             //    throw new InvalidChunkTypeException("No parent chunk set!");
 
-            if (cvar == null)
-            {
-                data = CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data);
-            }
-            else
-            {
-                data = cvar;
-            }
+            data = cvar ?? CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data);
 
             if (data == null)
             {
-                throw new NotImplementedException();
+                throw new InvalidParsingException($"{nameof(CreateDefaultData)} failed: {this.REDName}");
             }
 
             data.IsSerialized = true;
@@ -607,22 +515,22 @@ namespace CP77.CR2W
 
         public void SetREDName(string val)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(SetREDName));
         }
 
         public void Read(BinaryReader file, uint size)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(Read));
         }
 
         public void Write(BinaryWriter file)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(Write));
         }
 
         public CVariable Copy(CR2WCopyAction context)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(Copy));
         }
         #endregion
     }

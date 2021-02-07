@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameAmmoData : CVariable
 	{
-		[Ordinal(0)]  [RED("available")] public CInt32 Available { get; set; }
-		[Ordinal(1)]  [RED("equipped")] public CInt32 Equipped { get; set; }
-		[Ordinal(2)]  [RED("id")] public gameItemID Id { get; set; }
+		[Ordinal(0)]  [RED("id")] public gameItemID Id { get; set; }
+		[Ordinal(1)]  [RED("available")] public CInt32 Available { get; set; }
+		[Ordinal(2)]  [RED("equipped")] public CInt32 Equipped { get; set; }
 
 		public gameAmmoData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

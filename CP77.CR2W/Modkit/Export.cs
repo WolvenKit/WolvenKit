@@ -30,16 +30,14 @@ namespace CP77.CR2W
         /// </summary>
         /// <param name="cr2wfile"></param>
         /// <param name="outpath"></param>
-        public static bool Export(FileInfo cr2wfile, EUncookExtension uncookext = EUncookExtension.tga)
+        public static bool Export(FileInfo cr2wfile, EUncookExtension uncookext = EUncookExtension.dds)
         {
             #region checks
 
             if (cr2wfile == null) return false;
             if (!cr2wfile.Exists) return false;
             if (cr2wfile.Directory != null && !cr2wfile.Directory.Exists) return false;
-            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(cr2wfile.Extension[1..])) return false;
             var ext = Path.GetExtension(cr2wfile.FullName)[1..];
-            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext)) return false;
             #endregion
 
             // read file

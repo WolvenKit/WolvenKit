@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiHUDVideoStopEvent : CVariable
 	{
-		[Ordinal(0)]  [RED("isSkip")] public CBool IsSkip { get; set; }
-		[Ordinal(1)]  [RED("videoPathHash")] public CUInt64 VideoPathHash { get; set; }
+		[Ordinal(0)]  [RED("videoPathHash")] public CUInt64 VideoPathHash { get; set; }
+		[Ordinal(1)]  [RED("isSkip")] public CBool IsSkip { get; set; }
 
 		public gameuiHUDVideoStopEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
