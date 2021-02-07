@@ -30,7 +30,7 @@ namespace CP77.CR2W
         /// </summary>
         /// <param name="cr2wfile"></param>
         /// <param name="outpath"></param>
-        public static bool Export(FileInfo cr2wfile, EUncookExtension uncookext = EUncookExtension.dds)
+        public static bool Export(FileInfo cr2wfile, EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
             #region checks
 
@@ -52,7 +52,7 @@ namespace CP77.CR2W
             }
             cr2w.FileName = cr2wfile.FullName;
 
-            return Uncook(fs, cr2wfile, ext, uncookext);
+            return Uncook(fs, cr2wfile, ext, uncookext, flip);
 
         }
 
