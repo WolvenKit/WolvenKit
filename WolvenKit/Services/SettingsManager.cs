@@ -2,12 +2,24 @@
 using System;
 using System.IO;
 using System.Xml.Serialization;
+using Catel.IoC;
+using Catel.MVVM;
+using WolvenKit.Commands;
+using Catel.Data;
+using System.Collections.Generic;
 
 namespace WolvenKit.Services
 {
-    public class SettingsManager : ISettingsManager
+    public class SettingsManager : ValidatableModelBase, ISettingsManager
     {
         #region fields
+
+        private string _w3ExecutablePath = "";
+        private string _cp77ExecutablePath = "";
+        private string _wccLitePath = "";
+        private string _gameModDir = "";
+        private string _gameDlcDir = "";
+        private string _depotPath = "";
 
         private static string ConfigurationPath
         {
@@ -47,14 +59,62 @@ namespace WolvenKit.Services
 
         public bool CheckForUpdates { get; set; }
 
-        public string W3ExecutablePath { get; set; }
-        public string CP77ExecutablePath { get; set; }
-        public string WccLitePath { get; set; }
+        public string W3ExecutablePath
+        {
+            get => _w3ExecutablePath;
+            set
+            {
+                _w3ExecutablePath = value;
+                RaisePropertyChanged(nameof(W3ExecutablePath));
+            }
+        }
+        public string CP77ExecutablePath
+        {
+            get => _cp77ExecutablePath;
+            set
+            {
+                _cp77ExecutablePath = value;
+                RaisePropertyChanged(nameof(CP77ExecutablePath));
+            }
+        }
+        public string WccLitePath
+        {
+            get => _wccLitePath;
+            set
+            {
+                _wccLitePath = value;
+                RaisePropertyChanged(nameof(WccLitePath));
+            }
+        }
 
-        public string GameModDir { get; set; }
-        public string GameDlcDir { get; set; }
+        public string GameModDir
+        {
+            get => _gameModDir;
+            set
+            {
+                _gameModDir = value;
+                RaisePropertyChanged(nameof(GameModDir));
+            }
+        }
+        public string GameDlcDir
+        {
+            get => _gameDlcDir;
+            set
+            {
+                _gameDlcDir = value;
+                RaisePropertyChanged(nameof(GameDlcDir));
+            }
+        }
 
-        public string DepotPath { get; set; }
+        public string DepotPath
+        {
+            get =>_depotPath;
+            set
+            {
+                _depotPath = value;
+                RaisePropertyChanged(nameof(DepotPath));
+            }
+        }
 
         public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
         public string TextLanguage { get; set; }
@@ -121,6 +181,33 @@ namespace WolvenKit.Services
             }
 
             return config;
+        }
+
+        /// <summary>
+        /// Validates the field values of SettingsManager.
+        /// </summary>
+        /// <param name="validationResults">The validation results.</param>
+        protected override void ValidateFields(List<IFieldValidationResult> validationResults)
+        {
+            // Please use handy controls.
+            //
+            //if (!File.Exists(W3ExecutablePath))
+            //    validationResults.Add(FieldValidationResult.CreateError(nameof(W3ExecutablePath), "Witcher 3 executable path does not exist"));
+
+            //if (!File.Exists(CP77ExecutablePath))
+            //    validationResults.Add(FieldValidationResult.CreateError(nameof(CP77ExecutablePath), "Cyberpunk 2077 executable path does not exist"));
+
+            //if (!File.Exists(WccLitePath))
+            //    validationResults.Add(FieldValidationResult.CreateError(nameof(WccLitePath), "WccLite path does not exist"));
+
+            //if (!Directory.Exists(GameModDir))
+            //    validationResults.Add(FieldValidationResult.CreateError(nameof(GameModDir), "Game mod dir does not exist"));
+
+            //if (!Directory.Exists(GameDlcDir))
+            //    validationResults.Add(FieldValidationResult.CreateError(nameof(GameDlcDir), "Game dlc dir does not exist"));
+
+            //if (!Directory.Exists(DepotPath))
+            //    validationResults.Add(FieldValidationResult.CreateError(nameof(DepotPath), "Depot dir does not exist"));
         }
 
         #endregion

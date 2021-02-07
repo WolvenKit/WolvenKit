@@ -8,35 +8,12 @@ namespace WolvenKit.Views.Wizards
             InitializeComponent();
         }
 
-
-
-
-        private void ShowPage()
+        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            switch (StepMain.StepIndex)
+            if (this.IsVisible )
             {
-                case 0:
-
-                    break;
-                case 1:
-
-                    break;
-                case 2:
-
-                    break;
+                DiscordRPCHelper.WhatAmIDoing("Bug Report Wizard");
             }
-        }
-
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            StepMain.Next();
-            ShowPage();
-        }
-
-        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
-        {
-            StepMain.Prev();
-            ShowPage();
         }
     }
 }

@@ -1,4 +1,7 @@
 ﻿
+using Catel;
+using Catel.IoC;
+using Catel.MVVM;
 using WolvenKit.Views.Wizards.WizardPages.ProjectWizard;
 
 namespace WolvenKit.Views.Wizards
@@ -7,9 +10,11 @@ namespace WolvenKit.Views.Wizards
     {
         public ProjectWizardView()
         {
+            ServiceLocator.Default.RegisterInstance(new Model.Wizards.ProjectWizardModel());
+
             SPTV = new SelectProjectTypeView();
             PCV = new ProjectConfigurationView();
-            FSV = new FinalizeSetupView();
+            FSV = new FinalizeSetupView(this);
 
             InitializeComponent();
             ShowPage();
@@ -48,6 +53,14 @@ namespace WolvenKit.Views.Wizards
         {
             StepMain.Prev();
             ShowPage();
+        }
+
+        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Project Wizard");
+            }
         }
     }
 }

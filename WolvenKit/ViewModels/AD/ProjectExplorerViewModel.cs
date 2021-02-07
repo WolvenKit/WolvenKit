@@ -272,12 +272,12 @@ namespace WolvenKit.ViewModels
             var filename = SelectedItem.FullName;
             
             var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
-            var viewModel = new InputDialogViewModel() {Text = filename};
+            var viewModel = new Dialogs.InputDialogViewModel() {Text = filename};
             await visualizerService.ShowDialogAsync(viewModel, delegate(object sender, UICompletedEventArgs args)
             {
                 if (args.Result != true)
                     return;
-                if (!(args.DataContext is InputDialogViewModel vm))
+                if (!(args.DataContext is Dialogs.InputDialogViewModel vm))
                     return;
                 var newfullpath = Path.Combine(ActiveMod.FileDirectory, vm.Text);
 

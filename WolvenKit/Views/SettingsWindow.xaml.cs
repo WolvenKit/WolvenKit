@@ -39,5 +39,13 @@ namespace WolvenKit.Views
             InitializeComponent();
         }
         #endregion
+
+        private void DataWindow_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible && IsLoaded)
+            {
+               DiscordRPCHelper.WhatAmIDoing("Update Dialog");
+            }
+        }
     }
 }

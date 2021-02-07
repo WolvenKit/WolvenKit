@@ -8,7 +8,9 @@
                    xmlns:orchestra="http://schemas.wildgums.com/orchestra"
                    xmlns:orccontrols="http://schemas.wildgums.com/orc/controls" 
                    xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
-                   xmlns:WolvenKit="clr-namespace:WolvenKit"
+                   xmlns:WolvenKit="clr-namespace:WolvenKit"       
+                   xmlns:hc="https://handyorg.github.io/handycontrol" 
+
                    mc:Ignorable="d"
                    d:DesignWidth="300">
     <UserControl.Resources>
@@ -27,7 +29,7 @@
 
         <StackPanel x:Name="stackPanel">
             <StackPanel>
-                <Separator Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
+                <Separator Background="{DynamicResource MahApps.Brushes.Accent3}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
                     <Separator.LayoutTransform>
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>
@@ -39,7 +41,7 @@
                 <TextBlock Text="Column "/>
                 <TextBlock Text="{Binding Column}"/>
 
-                <Separator Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
+                <Separator Background="{DynamicResource MahApps.Brushes.Accent3}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
                     <Separator.LayoutTransform>
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>
@@ -47,7 +49,7 @@
 
                 <TextBlock FontWeight="Bold" Text="{Binding Heading}"/>
 
-                <Separator Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
+                <Separator Background="{DynamicResource MahApps.Brushes.Accent3}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
                     <Separator.LayoutTransform>
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>
@@ -58,7 +60,7 @@
                 <Image Width="16" Height="16" Source="{orctheming:FontImage {x:Static WolvenKit:FontAwesome.Download}}" 
                     ToolTip="Update is installed, restart to enable new features" />
 
-                <Separator  Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
+                <Separator Background="{DynamicResource MahApps.Brushes.Accent3}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
                     <Separator.LayoutTransform>
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>
@@ -68,7 +70,7 @@
             <StackPanel>
                 <TextBlock Text="{Binding ReceivingAutomaticUpdates}" />
 
-                <Separator Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
+                <Separator Background="{DynamicResource MahApps.Brushes.Accent3}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
                     <Separator.LayoutTransform>
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>
@@ -76,6 +78,8 @@
 
                 <TextBlock Text="{Binding Version}" />
             </StackPanel>
+
+        
 
         </StackPanel>
     </Grid>

@@ -1,13 +1,19 @@
-﻿using HandyControl.Controls;
+﻿using Catel.IoC;
+using HandyControl.Controls;
 using HandyControl.Data;
 using HandyControl.Tools;
 using Octokit;
+using Orchestra.Services;
+using Orchestra.Views;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using WolvenKit.ViewModels;
+using WolvenKit.ViewModels.Wizards;
+using WolvenKit.Views.AudioTool.Radio;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Wizards;
 
@@ -45,6 +51,9 @@ namespace WolvenKit.Views.HomePage
             FirstSWV = new FirstSetupWizardView();
             RecentPV = new RecentProjectView();
             ProjectWV = new ProjectWizardView();
+            ProjectWV.Loaded += (_s, _e) =>
+                (ProjectWV.ViewModel as ProjectWizardViewModel).ClosingRequest
+                    += (s, e) => SideMenu_WelcomeItem_Selected(s, new RoutedEventArgs());
             WikitPV = new WikiPageView();
             AboutPV = new AboutPageView();
             SettingsPV = new SettingsPageView();
@@ -52,6 +61,8 @@ namespace WolvenKit.Views.HomePage
             UserPV = new UserPageView();
             GithubPV = new GithubPageView();
             IntegratedTPV = new IntegratedToolsPageView();
+
+          
         }
 
         private async void InitializeGitHub()
@@ -249,6 +260,14 @@ namespace WolvenKit.Views.HomePage
                 PageViewGrid.Children.Clear();
                 PageViewGrid.Children.Add(UserPV);
             }
+
+   
+
+
+
+
+
+
         }
 
         private void SideMenu_IntegratedItem_Selected(object sender, RoutedEventArgs e)
@@ -260,6 +279,34 @@ namespace WolvenKit.Views.HomePage
             }
 
         }
-  
+
+        private void Grid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+        
+        }
+
+        private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+          
+                var serviceLocator = ServiceLocator.Default;
+
+                var shellService = serviceLocator.ResolveType<IShellService>();
+
+                ShellWindow sh = (ShellWindow)shellService.Shell;
+      
+                sh.DragMove();
+            
+            // Begin dragging the window
+        }
+
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Home");
+            }
+
+        }
     }
 }

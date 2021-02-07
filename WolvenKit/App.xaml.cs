@@ -74,6 +74,9 @@ namespace WolvenKit
 
             //TODO: rename later to MainViewModel
 
+            // ---- HeadCategory : Extras
+            //-- Category : Radio
+            viewModelLocator.Register(typeof(Views.AudioTool.Radio.RadioPlayerView), typeof(ViewModels.AudioTool.Radio.RadioPlayerViewModel));
 
 
             // ---- HeadCategory : ProjectView
@@ -83,6 +86,12 @@ namespace WolvenKit
             //-- Category : AssetBrowser
             viewModelLocator.Register(typeof(Views.AssetBrowser.AssetBrowserView), typeof(ViewModels.AssetBrowser.AssetBrowserViewModel));
 
+            //-- Category : JournalEditor
+            viewModelLocator.Register(typeof(Views.JournalEditor.JournalEditorView), typeof(ViewModels.JournalEditor.JournalEditorViewModel));
+
+            //-- Category : AudioTool
+            viewModelLocator.Register(typeof(Views.AudioTool.AudioToolView), typeof(ViewModels.AudioTool.AudioToolViewModel));
+
             //-- Category : CodeEditor
             viewModelLocator.Register(typeof(Views.CodeEditor.CodeEditorView), typeof(ViewModels.CodeEditor.CodeEditorViewModel));
 
@@ -91,6 +100,42 @@ namespace WolvenKit
 
             //-- Category : VisualEditor
             viewModelLocator.Register(typeof(Views.VisualEditor.VisualEditorView), typeof(ViewModels.VisualEditor.VisualEditorViewModel));
+
+            //-- Category : AnimationTool
+            viewModelLocator.Register(typeof(Views.AnimationTool.AnimsView), typeof(ViewModels.AnimationTool.AnimsViewModel));
+            viewModelLocator.Register(typeof(Views.AnimationTool.MimicsView), typeof(ViewModels.AnimationTool.MimicsViewModel));
+
+            //-- Category : BulkEditor
+            viewModelLocator.Register(typeof(Views.BulkEditor.BulkEditorView), typeof(ViewModels.BulkEditor.BulkEditorViewModel));
+
+            //-- Category : CR2WToTextTool
+            viewModelLocator.Register(typeof(Views.CR2WToTextTool.CR2WToTextToolView), typeof(ViewModels.CR2WToTextTool.CR2WToTextToolViewModel));
+
+            //-- Category : CsvEditor
+            viewModelLocator.Register(typeof(Views.CsvEditor.CsvEditorView), typeof(ViewModels.CsvEditor.CsvEditorViewModel));
+
+            //-- Category : EditorBars
+            viewModelLocator.Register(typeof(Views.EditorBars.ArrayEditorView), typeof(ViewModels.EditorBars.ArrayEditorViewModel));
+            viewModelLocator.Register(typeof(Views.EditorBars.ByteArrayEditorView), typeof(ViewModels.EditorBars.ByteArrayEditorViewModel));
+            viewModelLocator.Register(typeof(Views.EditorBars.IdTagEditorView), typeof(ViewModels.EditorBars.IdTagEditorViewModel));
+            viewModelLocator.Register(typeof(Views.EditorBars.PtrEditorView), typeof(ViewModels.EditorBars.PtrEditorViewModel));
+
+            //-- Category : GameDebuggerTool
+            viewModelLocator.Register(typeof(Views.GameDebuggerTool.GameDebuggerToolView), typeof(ViewModels.GameDebuggerTool.GameDebuggerToolViewModel));
+
+            //-- Category : HexEditor
+            viewModelLocator.Register(typeof(Views.HexEditor.HexEditorView), typeof(ViewModels.HexEditor.HexEditorViewModel));
+
+            //-- Category : ImporterTool
+            viewModelLocator.Register(typeof(Views.ImporterTool.ImporterToolView), typeof(ViewModels.ImporterTool.ImporterToolViewModel));
+
+            //-- Category : RadishTool
+            viewModelLocator.Register(typeof(Views.RadishTool.RadishToolView), typeof(ViewModels.RadishTool.RadishToolViewModel));
+
+            //-- Category : WccTool
+            viewModelLocator.Register(typeof(Views.WccTool.WccToolView), typeof(ViewModels.WccTool.WccToolViewModel));
+
+
 
 
 
@@ -161,6 +206,8 @@ namespace WolvenKit
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.RequiredSettingsView), typeof(ViewModels.Wizards.WizardPages.PublishWizard.RequiredSettingsViewModel));
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.OptionalSettingsView), typeof(ViewModels.Wizards.WizardPages.PublishWizard.OptionalSettingsViewModel));
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.WizardPages.PublishWizard.FinalizeSetupViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.W3PackSettingsView), typeof(ViewModels.Wizards.WizardPages.PublishWizard.W3PackSettingsViewModel));
+
 
             //-- Category : FirstSetupWizard 
             viewModelLocator.Register(typeof(Views.Wizards.FirstSetupWizardView), typeof(ViewModels.Wizards.FirstSetupWizardViewModel));
@@ -173,8 +220,7 @@ namespace WolvenKit
             //-- Category : FeedBackWizard 
             viewModelLocator.Register(typeof(Views.Wizards.FeedbackWizardView), typeof(ViewModels.Wizards.FeedbackWizardViewModel));
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.FeedbackWizard.RateView), typeof(ViewModels.Wizards.WizardPages.FeedbackWizard.RateViewModel));
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.FeedbackWizard.SendView), typeof(ViewModels.Wizards.WizardPages.FeedbackWizard.SendViewModel));
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.FeedbackWizard.ReviewView), typeof(ViewModels.Wizards.WizardPages.FeedbackWizard.ReviewViewModel));
+
 
 
             //-- Category : InstallerWizard 
@@ -182,35 +228,102 @@ namespace WolvenKit
 
             //-- Category : BugReportWizard 
             viewModelLocator.Register(typeof(Views.Wizards.BugReportWizard), typeof(ViewModels.Wizards.BugReportWizardViewModel));
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.BugReportWizard.AttachBugView), typeof(ViewModels.Wizards.WizardPages.BugReportWizard.AttachBugViewModel));
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.BugReportWizard.DescribeBugView), typeof(ViewModels.Wizards.WizardPages.BugReportWizard.DescribeBugViewModel));
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.BugReportWizard.SendBugView), typeof(ViewModels.Wizards.WizardPages.BugReportWizard.SendBugViewModel));
 
 
             var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
             viewLocator.Register(typeof(ViewModels.SettingsViewModel), typeof(Views.SettingsWindow));
-            viewLocator.Register(typeof(ViewModels.InputDialogViewModel), typeof(Views.Dialogs.InputDialog));
+
+
+            // ---- HeadCategory : Dialogs
+            viewLocator.Register(typeof(ViewModels.Dialogs.InputDialogViewModel), typeof(Views.Dialogs.InputDialog));
+            viewLocator.Register(typeof(ViewModels.Dialogs.AddChunkDialogViewModel), typeof(Views.Dialogs.AddChunkDialog));
+            viewLocator.Register(typeof(ViewModels.Dialogs.ExtractAmbigiousDialogViewModel), typeof(Views.Dialogs.ExtractAmbigiousDialog));
+            viewLocator.Register(typeof(ViewModels.Dialogs.RenameDialogViewModel), typeof(Views.Dialogs.RenameDialog));
+            viewLocator.Register(typeof(ViewModels.Dialogs.StringsGUIImporterIDDialogViewModel), typeof(Views.Dialogs.StringsGUIImporterIDDialog));
+            viewLocator.Register(typeof(ViewModels.Dialogs.StringsGuiScriptsPrefixDialogViewModel), typeof(Views.Dialogs.StringsGuiScriptsPrefixDialog));
+
 
 
 
             var shellService = serviceLocator.ResolveType<IShellService>();
             await shellService.CreateAsync<ShellWindow>();
 
+            ShellWindow sh = (ShellWindow)shellService.Shell;
+            sh.IsVisibleChanged += Sh_IsVisibleChanged;
 
-            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark.Red");
+            Orc.Theming.ThemeManager.Current.SynchronizeTheme();
+            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark.Green");
+
             HandyControl.Tools.ThemeManager.Current.SetCurrentValue(HandyControl.Tools.ThemeManager.ApplicationThemeProperty, HandyControl.Tools.ApplicationTheme.Dark);
- 
+            HandyControl.Tools.ConfigHelper.Instance.SetLang("en");
+            HandyControl.Controls.ThemeResources tr = new HandyControl.Controls.ThemeResources(); tr.AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3");
+
             Log.Info("Calling base.OnStartup");
 
 
 
-      
+
             base.OnStartup(e); 
             NNViewRegistrar.RegisterSplat();
-
+            InitDiscordRPC();
 
 
         }
+
+        private void Sh_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var a = (ShellWindow)sender;
+            if (a.IsVisible && a.IsLoaded )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Backstage - Open File");
+            }
+        }
+
+        public static DiscordRPC.DiscordRpcClient client;
+        private void InitDiscordRPC()
+        {
+            /*
+	Create a Discord client
+	NOTE: 	If you are using Unity3D, you must use the full constructor and define
+			 the pipe connection.
+	*/
+            client = new DiscordRPC.DiscordRpcClient("807752124078620732") ;
+
+            //Set the logger
+            client.Logger = new DiscordRPC.Logging.ConsoleLogger() { Level = DiscordRPC.Logging.LogLevel.Warning };
+
+            //Subscribe to events
+            client.OnReady += (sender, e) =>
+            {
+                Console.WriteLine("Received Ready from user {0}", e.User.Username);
+            };
+
+            client.OnPresenceUpdate += (sender, e) =>
+            {
+                Console.WriteLine("Received Update! {0}", e.Presence);
+            };
+
+            //Connect to the RPC
+            client.Initialize();
+
+            //Set the rich presence
+            //Call this as many times as you want and anywhere in your code.
+            client.SetPresence(new DiscordRPC.RichPresence()
+            {
+                Details = "Launching",
+               
+                Assets = new DiscordRPC.Assets()
+                {
+                    LargeImageKey = "bigwolf",
+                    LargeImageText = "Testing",
+                    SmallImageKey = "bigwolf"
+                }
+            }); 
+            client.Invoke();
+
+        }
+
 
 
         protected override void OnExit(ExitEventArgs e)
