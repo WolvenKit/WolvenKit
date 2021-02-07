@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DistantLightsAreaSettings : IAreaSettings
 	{
-		[Ordinal(0)]  [RED("distantLightFadeDistance")] public CFloat DistantLightFadeDistance { get; set; }
-		[Ordinal(1)]  [RED("distantLightStartDistance")] public CFloat DistantLightStartDistance { get; set; }
+		[Ordinal(0)]  [RED("distantLightStartDistance")] public CFloat DistantLightStartDistance { get; set; }
+		[Ordinal(1)]  [RED("distantLightFadeDistance")] public CFloat DistantLightFadeDistance { get; set; }
 
 		public DistantLightsAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class worldDebugColoring_CollisionMeshes : worldEditorDebugColoringSettings
 	{
 		[Ordinal(0)]  [RED("collisionMeshColor")] public CColor CollisionMeshColor { get; set; }
-		[Ordinal(1)]  [RED("defaultColor")] public CColor DefaultColor { get; set; }
-		[Ordinal(2)]  [RED("prefabColor")] public CColor PrefabColor { get; set; }
+		[Ordinal(1)]  [RED("prefabColor")] public CColor PrefabColor { get; set; }
+		[Ordinal(2)]  [RED("defaultColor")] public CColor DefaultColor { get; set; }
 
 		public worldDebugColoring_CollisionMeshes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questEnableScanning_NodeType : questIVisionModeNodeType
 	{
-		[Ordinal(0)]  [RED("enable")] public CBool Enable { get; set; }
-		[Ordinal(1)]  [RED("objectRef")] public gameEntityReference ObjectRef { get; set; }
+		[Ordinal(0)]  [RED("objectRef")] public gameEntityReference ObjectRef { get; set; }
+		[Ordinal(1)]  [RED("enable")] public CBool Enable { get; set; }
 
 		public questEnableScanning_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

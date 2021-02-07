@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiPhoneMessageNotificationViewData : gameuiQuestUpdateNotificationViewData
 	{
-		[Ordinal(0)]  [RED("contactHash")] public CInt32 ContactHash { get; set; }
-		[Ordinal(1)]  [RED("threadHash")] public CInt32 ThreadHash { get; set; }
+		[Ordinal(0)]  [RED("threadHash")] public CInt32 ThreadHash { get; set; }
+		[Ordinal(1)]  [RED("contactHash")] public CInt32 ContactHash { get; set; }
 
 		public gameuiPhoneMessageNotificationViewData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

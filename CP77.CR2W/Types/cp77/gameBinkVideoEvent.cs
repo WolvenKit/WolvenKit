@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameBinkVideoEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("action")] public CEnum<gameBinkVideoAction> Action { get; set; }
-		[Ordinal(1)]  [RED("videoPath")] public CString VideoPath { get; set; }
+		[Ordinal(0)]  [RED("videoPath")] public CString VideoPath { get; set; }
+		[Ordinal(1)]  [RED("action")] public CEnum<gameBinkVideoAction> Action { get; set; }
 
 		public gameBinkVideoEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

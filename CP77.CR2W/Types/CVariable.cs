@@ -165,11 +165,29 @@ namespace CP77.CR2W.Types
         #region Methods
         private string GetFullDependencyStringName()
         {
-            var depstr = this.REDName;
             var par = this.ParentVar;
-            while (par != null)
+            // top level chunk variables return the chunk index
+            if (par == null)
+                return $"{this.VarChunkIndex}.{this.REDName}";
+
+            // all chunks get their chunk id prefixed
+            var depstr = this.VarChunkIndex > 0 
+                ? $"{this.VarChunkIndex}.{this.REDName}" 
+                : this.REDName;
+            
+            while (true)
             {
-                depstr = $"{par.REDName}.{depstr}";
+                //depstr = $"{par.REDName}.{depstr}";
+                depstr = par.VarChunkIndex > 0
+                    ? $"{par.VarChunkIndex}.{par.REDName}.{depstr}"
+                    : $"{par.REDName}.{depstr}";
+
+
+                if (par.ParentVar == null)
+                {
+                    depstr = $"{par.VarChunkIndex}.{depstr}";
+                    break;
+                }
                 par = par.ParentVar;
             }
 
@@ -305,6 +323,35 @@ namespace CP77.CR2W.Types
         }
 
         /// <summary>
+        /// Writes a CVariable as a fixed size struct
+        /// </summary>
+        /// <param name="file"></param>
+        public virtual void WriteAsFixedSize(BinaryWriter file)
+        {
+            if (this is IREDPrimitive)
+                Write(file);
+            else
+            {
+                // write all CVariables
+                var members = this.GetREDMembers(true);
+                foreach (var item in members)
+                {
+                    var att = item.GetMemberAttribute<REDAttribute>();
+                    // don't write ignored buffers, they get written in the class
+                    if (att is REDBufferAttribute bufferAttribute && bufferAttribute.IsIgnored)
+                    {
+                        // add IsSerialized?
+                        continue;
+                    }
+
+                    // just write the RedBuffer without variable id
+                    if (this.accessor[this, item.Name] is CVariable av)
+                        av.Write(file);
+                }
+            }
+        }
+
+        /// <summary>
         /// Reads a CVariable from a binaryreader stream
         /// Can be overwritten by child classes
         /// </summary>
@@ -403,8 +450,6 @@ namespace CP77.CR2W.Types
             }
         }
 
-        
-
         /// <summary>
         /// Instantiates and reads all REDVariables and REDBuffers in a CVariable 
         /// </summary>
@@ -467,11 +512,7 @@ namespace CP77.CR2W.Types
                     throw;
                 }
             }
-            //throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.GetType()}){this.REDName}");
-            Console.WriteLine($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
-            return false;
-
-            
+            throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
         }
 
         /// <summary>
@@ -488,7 +529,8 @@ namespace CP77.CR2W.Types
             if ((tags ?? throw new InvalidOperationException()).Contains(EREDMetaInfo.REDStruct))
             {
                 // write all CVariables
-                foreach (Member item in this.GetREDMembers(true))
+                var members = this.GetREDMembers(true);
+                foreach (var item in members)
                 {
                     var att = item.GetMemberAttribute<REDAttribute>();
                     // don't write ignored buffers, they get written in the class
@@ -501,11 +543,6 @@ namespace CP77.CR2W.Types
                     // just write the RedBuffer without variable id
                     if (this.accessor[this, item.Name] is CVariable av)
                         av.Write(file);
-
-                    //if (pi?.GetValue(this) is CVariable cbuf)
-                    //{
-                    //    cbuf.Write(file);
-                    //}
                 }
             }
             // CVectors
@@ -515,7 +552,8 @@ namespace CP77.CR2W.Types
                 file.Write((byte)0);
 
                 // write all initialized CVariables (no buffers!)
-                foreach (Member item in this.GetREDMembers(false))
+                var members = this.GetREDMembers(false);
+                foreach (var item in members)
                 {
                     var att = item.GetMemberAttribute<REDAttribute>();
                     if (this.accessor[this, item.Name] is CVariable av)
@@ -537,12 +575,6 @@ namespace CP77.CR2W.Types
                         }
                         else
                             throw new SerializationException();
-                    }
-                    // proper enums
-                    // never happens
-                    else if (this.accessor[this, item.Name] is Enum @enum)
-                    {
-                        throw new NotImplementedException();
                     }
                 }
 

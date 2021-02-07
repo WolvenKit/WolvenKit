@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldGuardAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(0)]  [RED("combatCommunityEntries")] public CArray<AICombatGuardAreaConnectedCommunity> CombatCommunityEntries { get; set; }
-		[Ordinal(1)]  [RED("communityEntries")] public CArray<AIGuardAreaConnectedCommunity> CommunityEntries { get; set; }
+		[Ordinal(0)]  [RED("communityEntries")] public CArray<AIGuardAreaConnectedCommunity> CommunityEntries { get; set; }
+		[Ordinal(1)]  [RED("combatCommunityEntries")] public CArray<AICombatGuardAreaConnectedCommunity> CombatCommunityEntries { get; set; }
 		[Ordinal(2)]  [RED("pursuitArea")] public NodeRef PursuitArea { get; set; }
 		[Ordinal(3)]  [RED("pursuitRange")] public CFloat PursuitRange { get; set; }
 

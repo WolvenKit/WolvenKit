@@ -10,8 +10,8 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)]  [RED("libraryName")] public CName LibraryName { get; set; }
 		[Ordinal(1)]  [RED("offset")] public CFloat Offset { get; set; }
-		[Ordinal(2)]  [RED("segmentOffset")] public CUInt32 SegmentOffset { get; set; }
-		[Ordinal(3)]  [RED("speed")] public CFloat Speed { get; set; }
+		[Ordinal(2)]  [RED("speed")] public CFloat Speed { get; set; }
+		[Ordinal(3)]  [RED("segmentOffset")] public CUInt32 SegmentOffset { get; set; }
 
 		public gameuiRoadEditorObstacleSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

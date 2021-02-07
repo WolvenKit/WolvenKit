@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkVideoSequenceController : inkWidgetLogicController
 	{
-		[Ordinal(0)]  [RED("videoSequence")] public CArray<inkVideoSequenceEntry> VideoSequence { get; set; }
-		[Ordinal(1)]  [RED("videoWidget")] public inkVideoWidgetReference VideoWidget { get; set; }
+		[Ordinal(0)]  [RED("videoWidget")] public inkVideoWidgetReference VideoWidget { get; set; }
+		[Ordinal(1)]  [RED("videoSequence")] public CArray<inkVideoSequenceEntry> VideoSequence { get; set; }
 
 		public inkVideoSequenceController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,14 +8,14 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animDangleConstraint_Simulation : ISerializable
 	{
-		[Ordinal(0)]  [RED("alpha")] public CFloat Alpha { get; set; }
-		[Ordinal(1)]  [RED("collisionRoundedShapes")] public CArray<animCollisionRoundedShape> CollisionRoundedShapes { get; set; }
-		[Ordinal(2)]  [RED("dangleAltersTransformsOfItsChildren")] public CBool DangleAltersTransformsOfItsChildren { get; set; }
-		[Ordinal(3)]  [RED("jsonCollisionShapes")] public rRef<JsonResource> JsonCollisionShapes { get; set; }
-		[Ordinal(4)]  [RED("jsonCollisionShapesLoadedSuccessfully")] public CBool JsonCollisionShapesLoadedSuccessfully { get; set; }
+		[Ordinal(0)]  [RED("collisionRoundedShapes")] public CArray<animCollisionRoundedShape> CollisionRoundedShapes { get; set; }
+		[Ordinal(1)]  [RED("jsonCollisionShapes")] public rRef<JsonResource> JsonCollisionShapes { get; set; }
+		[Ordinal(2)]  [RED("jsonCollisionShapesLoadedSuccessfully")] public CBool JsonCollisionShapesLoadedSuccessfully { get; set; }
+		[Ordinal(3)]  [RED("alpha")] public CFloat Alpha { get; set; }
+		[Ordinal(4)]  [RED("rotateParentToLookAtDangle")] public CBool RotateParentToLookAtDangle { get; set; }
 		[Ordinal(5)]  [RED("parentRotationAltersTransformsOfDangleAndItsChildren")] public CBool ParentRotationAltersTransformsOfDangleAndItsChildren { get; set; }
 		[Ordinal(6)]  [RED("parentRotationAltersTransformsOfNonDanglesAndItsChildren")] public CBool ParentRotationAltersTransformsOfNonDanglesAndItsChildren { get; set; }
-		[Ordinal(7)]  [RED("rotateParentToLookAtDangle")] public CBool RotateParentToLookAtDangle { get; set; }
+		[Ordinal(7)]  [RED("dangleAltersTransformsOfItsChildren")] public CBool DangleAltersTransformsOfItsChildren { get; set; }
 
         [Ordinal(999)] [RED("debugDrawingEnabled")] public CBool debugDrawingEnabled { get; set; }
 

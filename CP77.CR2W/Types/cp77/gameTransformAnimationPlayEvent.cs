@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameTransformAnimationPlayEvent : gameTransformAnimationEvent
 	{
-		[Ordinal(0)]  [RED("looping")] public CBool Looping { get; set; }
-		[Ordinal(1)]  [RED("timeScale")] public CFloat TimeScale { get; set; }
+		[Ordinal(0)]  [RED("timeScale")] public CFloat TimeScale { get; set; }
+		[Ordinal(1)]  [RED("looping")] public CBool Looping { get; set; }
 		[Ordinal(2)]  [RED("timesPlayed")] public CUInt32 TimesPlayed { get; set; }
 		[Ordinal(3)]  [RED("useEntitySetup")] public CBool UseEntitySetup { get; set; }
 

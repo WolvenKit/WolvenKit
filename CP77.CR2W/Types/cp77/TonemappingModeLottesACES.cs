@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TonemappingModeLottesACES : ITonemappingMode
 	{
-		[Ordinal(0)]  [RED("contrast")] public CFloat Contrast { get; set; }
-		[Ordinal(1)]  [RED("maxInput")] public CFloat MaxInput { get; set; }
+		[Ordinal(0)]  [RED("maxInput")] public CFloat MaxInput { get; set; }
+		[Ordinal(1)]  [RED("contrast")] public CFloat Contrast { get; set; }
 		[Ordinal(2)]  [RED("midIn")] public CFloat MidIn { get; set; }
 		[Ordinal(3)]  [RED("midOut")] public CFloat MidOut { get; set; }
 

@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class worldInteriorAreaNotifier : worldITriggerAreaNotifer
 	{
 		[Ordinal(0)]  [RED("gameRestrictionIDs")] public CArray<TweakDBID> GameRestrictionIDs { get; set; }
-		[Ordinal(1)]  [RED("setTier2")] public CBool SetTier2 { get; set; }
-		[Ordinal(2)]  [RED("treatAsInterior")] public CBool TreatAsInterior { get; set; }
+		[Ordinal(1)]  [RED("treatAsInterior")] public CBool TreatAsInterior { get; set; }
+		[Ordinal(2)]  [RED("setTier2")] public CBool SetTier2 { get; set; }
 
 		public worldInteriorAreaNotifier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

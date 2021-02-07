@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameJournalContact : gameJournalFileEntry
 	{
-		[Ordinal(0)]  [RED("avatarID")] public TweakDBID AvatarID { get; set; }
-		[Ordinal(1)]  [RED("name")] public LocalizationString Name { get; set; }
+		[Ordinal(0)]  [RED("name")] public LocalizationString Name { get; set; }
+		[Ordinal(1)]  [RED("avatarID")] public TweakDBID AvatarID { get; set; }
 		[Ordinal(2)]  [RED("type")] public CEnum<gameContactType> Type { get; set; }
 		[Ordinal(3)]  [RED("useFlatMessageLayout")] public CBool UseFlatMessageLayout { get; set; }
 

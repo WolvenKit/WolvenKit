@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameEffectExecutor_VisualEffect : gameEffectExecutor
 	{
-		[Ordinal(0)]  [RED("attached")] public CBool Attached { get; set; }
-		[Ordinal(1)]  [RED("breakLoopOnDetach")] public CBool BreakLoopOnDetach { get; set; }
-		[Ordinal(2)]  [RED("effect")] public raRef<worldEffect> Effect { get; set; }
+		[Ordinal(0)]  [RED("effect")] public raRef<worldEffect> Effect { get; set; }
+		[Ordinal(1)]  [RED("attached")] public CBool Attached { get; set; }
+		[Ordinal(2)]  [RED("breakLoopOnDetach")] public CBool BreakLoopOnDetach { get; set; }
 		[Ordinal(3)]  [RED("effectTag")] public CName EffectTag { get; set; }
 		[Ordinal(4)]  [RED("vectorEvaluator")] public CHandle<gameEffectVectorEvaluator> VectorEvaluator { get; set; }
 

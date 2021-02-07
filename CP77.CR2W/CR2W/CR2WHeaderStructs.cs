@@ -26,11 +26,11 @@ namespace CP77.CR2W
 
         [DataMember]
         [FieldOffset(20)]
-        public uint fileSize;
+        public uint objectsEnd;
 
         [DataMember]
         [FieldOffset(24)]
-        public uint bufferSize;
+        public uint buffersEnd;
 
         [DataMember]
         [FieldOffset(28)]

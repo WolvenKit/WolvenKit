@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameJournalPhoneChoiceEntry : gameJournalEntry
 	{
-		[Ordinal(0)]  [RED("isQuestImportant")] public CBool IsQuestImportant { get; set; }
-		[Ordinal(1)]  [RED("text")] public LocalizationString Text { get; set; }
+		[Ordinal(0)]  [RED("text")] public LocalizationString Text { get; set; }
+		[Ordinal(1)]  [RED("isQuestImportant")] public CBool IsQuestImportant { get; set; }
 
 		public gameJournalPhoneChoiceEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

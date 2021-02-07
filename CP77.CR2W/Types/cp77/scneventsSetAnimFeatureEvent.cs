@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class scneventsSetAnimFeatureEvent : scnSceneEvent
 	{
 		[Ordinal(0)]  [RED("actorId")] public scnActorId ActorId { get; set; }
-		[Ordinal(1)]  [RED("animFeature")] public CHandle<animAnimFeature> AnimFeature { get; set; }
-		[Ordinal(2)]  [RED("animFeatureName")] public CName AnimFeatureName { get; set; }
+		[Ordinal(1)]  [RED("animFeatureName")] public CName AnimFeatureName { get; set; }
+		[Ordinal(2)]  [RED("animFeature")] public CHandle<animAnimFeature> AnimFeature { get; set; }
 
 		public scneventsSetAnimFeatureEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

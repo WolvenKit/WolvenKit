@@ -9,7 +9,6 @@ namespace CP77.CR2W.Types
 	public class animAnimNode_OnePoseInput : animAnimNode_Base
 	{
 		[Ordinal(0)]  [RED("inputLink")] public animPoseLink InputLink { get; set; }
-        
 
 		public animAnimNode_OnePoseInput(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

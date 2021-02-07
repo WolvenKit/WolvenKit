@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AISharedVarDefinition : CVariable
 	{
-		[Ordinal(0)]  [RED("name")] public LibTreeSharedVarRegistrationName Name { get; set; }
-		[Ordinal(1)]  [RED("type")] public CEnum<AIESharedVarDefinitionType> Type { get; set; }
+		[Ordinal(0)]  [RED("type")] public CEnum<AIESharedVarDefinitionType> Type { get; set; }
+		[Ordinal(1)]  [RED("name")] public LibTreeSharedVarRegistrationName Name { get; set; }
 
 		public AISharedVarDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

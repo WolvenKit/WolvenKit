@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameinteractionsCOrientedBoxDefinition : gameinteractionsIShapeDefinition
 	{
-		[Ordinal(0)]  [RED("forward")] public Vector4 Forward { get; set; }
-		[Ordinal(1)]  [RED("position")] public Vector4 Position { get; set; }
+		[Ordinal(0)]  [RED("position")] public Vector4 Position { get; set; }
+		[Ordinal(1)]  [RED("forward")] public Vector4 Forward { get; set; }
 		[Ordinal(2)]  [RED("right")] public Vector4 Right { get; set; }
 		[Ordinal(3)]  [RED("up")] public Vector4 Up { get; set; }
 

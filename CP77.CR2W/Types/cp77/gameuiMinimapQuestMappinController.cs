@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiMinimapQuestMappinController : gameuiBaseMinimapMappinController
 	{
-		[Ordinal(0)]  [RED("questMappin")] public wCHandle<gamemappinsQuestMappin> QuestMappin { get; set; }
 
 		public gameuiMinimapQuestMappinController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -21,7 +21,7 @@ namespace CP77.CR2W
         {
             // checks to see if the variable from which the chunk is built is properly constructed
             if (res == null || res.REDName != res.REDType || res.ParentVar != null)
-                throw new NotImplementedException();
+                return null;
 
             file.CreateChunk(res);
 
