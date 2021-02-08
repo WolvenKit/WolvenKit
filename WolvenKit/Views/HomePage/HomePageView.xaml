@@ -133,7 +133,6 @@
                             hc:BorderElement.CornerRadius="5"  >
 
             </Fluent:Button>
-            <hc:Divider LineStrokeThickness="3" VerticalAlignment="Bottom" Margin="0,0,0,135" LineStroke="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
 
   
             <StackPanel Margin="5,15,0,0" Orientation="Horizontal" VerticalAlignment="Top" Height="54">
