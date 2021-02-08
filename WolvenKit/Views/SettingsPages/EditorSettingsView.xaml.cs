@@ -7,15 +7,21 @@ namespace WolvenKit.Views.SettingsPages
     {
         public EditorSettingsView()
         {
+            GSSV = new GeneralSubSettingsView();
+            CSSV = new CompatibilitySubSettingsView();
+
             InitializeComponent();
         }
+
+        private GeneralSubSettingsView GSSV;
+        private CompatibilitySubSettingsView CSSV;
 
         private void CompatibilitySubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
         {
             if (IsLoaded && IsVisible && IsInitialized)
             {
                 SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(new CompatibilitySubSettingsView());
+                SettingsViewer.Children.Add(CSSV);
             }
         }
 
@@ -24,8 +30,19 @@ namespace WolvenKit.Views.SettingsPages
             if (IsLoaded && IsVisible && IsInitialized)
             {
                 SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(new GeneralSubSettingsView());
+                SettingsViewer.Children.Add(GSSV);
             }
+        }
+
+        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Setting - Editor");
+            }
+
+
         }
     }
 }

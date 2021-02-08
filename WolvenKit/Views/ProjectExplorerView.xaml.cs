@@ -27,7 +27,13 @@ namespace WolvenKit.Views
             //ControlzEx.Theming.ThemeManager.Current.ChangeTheme(this, "Dark.Blue");
         }
 
-        
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Project Explorer");
+            }
+        }
     }
 
     

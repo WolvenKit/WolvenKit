@@ -2,6 +2,8 @@
 using System.Windows.Input;
 using Orc.Squirrel;
 using InputGesture = Catel.Windows.Input.InputGesture;
+using DiscordRPC.Message;
+
 
 namespace WolvenKit
 {
@@ -23,6 +25,7 @@ namespace WolvenKit
             public static readonly InputGesture OpenProjectInputGesture = new InputGesture(Key.O, ModifierKeys.Control);
             public const string NewProject = "Application.NewProject";
             public static readonly InputGesture NewProjectInputGesture = new InputGesture(Key.N, ModifierKeys.Control);
+            public const string CreateNewProject = "Application.CreateNewProject";
 
             //public const string SaveAll = "Application.SaveAll";
             //public static readonly InputGesture SaveAllInputGesture = new InputGesture(Key.S, ModifierKeys.Control);
@@ -36,12 +39,13 @@ namespace WolvenKit
             public const string ShowAssetBrowser = "Application.ShowAssetBrowser";
             public const string ShowModSettings = "Application.ShowModSettings";
             public const string ShowPackageInstaller = "Application.ShowPackageInstaller";
-            
+
             public const string OpenFile = "Application.OpenFile";
             public const string NewFile = "Application.NewFile";
-
+            public const string BugReport = "Application.BugReport";
             public const string PackMod = "Application.PackMod";
             public const string BackupMod = "Application.BackupMod";
+            public const string PublishMod = "Application.PublishMod";
 
 
 
@@ -88,4 +92,35 @@ namespace WolvenKit
             }
         }
     }
+
+
+
+
+    public static class DiscordRPCHelper
+    {
+        public static void WhatAmIDoing(string details)
+        {
+            App.client.SetPresence(new DiscordRPC.RichPresence()
+            {
+                Details = details,
+                Timestamps = new DiscordRPC.Timestamps()
+                {
+                    Start = System.DateTime.UtcNow
+
+                },
+                Assets = new DiscordRPC.Assets()
+                {
+                    LargeImageKey = "bigwk",
+
+                    LargeImageText = "WolvenKit",
+
+                }      
+            });
+            App.client.Invoke();
+        }
+
+    }
+
+
+
 }

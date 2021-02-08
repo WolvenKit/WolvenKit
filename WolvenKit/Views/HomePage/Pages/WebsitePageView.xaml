@@ -1,25 +1,23 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.HomePage.Pages.WebsitePageView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com" xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:hc="https://handyorg.github.io/handycontrol">
+                   xmlns:catel="http://schemas.catelproject.com"
+                   xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+                   xmlns:hc="https://handyorg.github.io/handycontrol"
+                   IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
-
-
-  
+        
         <Grid Margin="3,75,3,0">
-
             <wv2:WebView2 Source="https://wolvenkit.red/"/>
-
         </Grid>
-     
-        <Grid HorizontalAlignment="Right" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"></Grid>
 
-        <Grid HorizontalAlignment="left" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"></Grid>
-        <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Width="30" Height="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"></Grid>
+        <Grid HorizontalAlignment="Right" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
+        <Grid HorizontalAlignment="left" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
+        <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Width="30" Height="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
+        
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Orientation="Horizontal">
-
-            <TextBlock HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center " FontSize="20" Text="Website"></TextBlock>
+            <TextBlock HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center " FontSize="20" ></TextBlock>
             <hc:Divider Margin="15" Orientation="Vertical" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center"></hc:Divider>
             <hc:AnimationPath Height="45" Width="45" Data="{DynamicResource WikiGeo}" 
                           Duration="00:00:08" 
@@ -37,10 +35,10 @@
         </StackPanel>
 
 
-            <hc:ComboBox HorizontalContentAlignment="Right" x:Name="SelectWebsiteTypeCombo" Background="Transparent" Width="200"  Margin="0,20,155,0" SelectedIndex="0" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="20" Height="45">
-                <ComboBoxItem Content="Project"/>
-                <ComboBoxItem Content="Organization"/>
-            </hc:ComboBox>
+        <hc:ComboBox HorizontalContentAlignment="Right" x:Name="SelectWebsiteTypeCombo" Background="Transparent"   Margin="0,20,75,0" SelectedIndex="0" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="20" Height="45">
+            <ComboBoxItem Content="WolvenKit Website"/>
+            <ComboBoxItem Content="Organization Website"/>
+        </hc:ComboBox>
 
 
 

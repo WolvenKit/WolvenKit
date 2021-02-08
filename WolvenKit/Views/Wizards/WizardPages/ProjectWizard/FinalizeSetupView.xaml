@@ -3,7 +3,8 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol">
     <catel:UserControl.Resources>
-        <ResourceDictionary>
+        <catel:BooleanToOppositeBooleanConverter x:Key="booleanToOppositeBooleanConverter" />
+        <ResourceDictionary x:Key="resourceDictionary">
 
 
             <ResourceDictionary.MergedDictionaries>
@@ -15,7 +16,7 @@
         </ResourceDictionary>
 
     </catel:UserControl.Resources>
-    <Grid HorizontalAlignment="Stretch" Grid.Row="3" >
+    <Grid  VerticalAlignment="Center" Grid.Row="3" >
         <Grid Margin="5,5,5,5" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Stretch">
             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
                 <StackPanel Margin="0,10,0,0" Orientation="Vertical" VerticalAlignment="Top">
@@ -25,41 +26,43 @@
                             <ColumnDefinition Width="6*"></ColumnDefinition>
 
                         </Grid.ColumnDefinitions>
-                        <StackPanel>
-                            <Grid Margin="5,32,0,0" >
+                        <AdornerDecorator>
+                            <StackPanel>
+                                <Grid Margin="5,32,0,0" >
 
-                                <TextBlock   VerticalAlignment="Center">                               
-                                    <Run Text="Project Image"></Run>
+                                    <TextBlock   VerticalAlignment="Center">                               
+                                        <Run Text="Project Image"></Run>
 
-                                    <LineBreak/>
-                                    <Run Text="Optional"></Run>
-                                </TextBlock>
-                                <hc:ImageSelector  Margin="100,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
-                            </Grid>
-                            <Grid Margin="5,32,0,0" >
+                                        <LineBreak/>
+                                        <Run Text="Optional"></Run>
+                                    </TextBlock>
+                                    <hc:ImageSelector  Margin="100,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
+                                </Grid>
+                                <Grid Margin="5,32,0,0" >
 
-                                <TextBlock Text="Project Name" VerticalAlignment="Center">        </TextBlock>
-                                <TextBox  Margin="100,0,0,0" Text="Project Name" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
-                            </Grid>
+                                    <TextBlock Text="Project Name" VerticalAlignment="Center"></TextBlock>
+                                    <TextBox  Margin="100,0,0,0" Text="{Binding ProjectName}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsEnabled="False"></TextBox>
+                                </Grid>
 
-                            <Grid Margin="5,32,0,0" >
+                                <Grid Margin="5,32,0,0" >
 
-                                <TextBlock Text="Project Type" VerticalAlignment="Center"></TextBlock>
-                                <TextBox   Margin="100,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
-                            </Grid>
-                            <Grid Margin="5,32,0,0" >
+                                    <TextBlock Text="Project Type" VerticalAlignment="Center"></TextBlock>
+                                    <TextBox   Margin="100,0,0,0" Text="{Binding ProjectType}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsEnabled="False"></TextBox>
+                                </Grid>
+                                <Grid Margin="5,32,0,0" >
 
-                                <TextBlock Text="Project Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox   Margin="100,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
-                            </Grid>
+                                    <TextBlock Text="Project Path" VerticalAlignment="Center"></TextBlock>
+                                    <TextBox   Margin="100,0,0,0" Text="{Binding ProjectPath}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsEnabled="False"></TextBox>
+                                </Grid>
 
-                            <hc:Divider Margin="10"></hc:Divider>
-                            <StackPanel Margin="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                                <Button Height="45" Content="Yes, Create my project!" Margin="0,0,0,0"></Button>
+                                <hc:Divider Margin="10"></hc:Divider>
+                                <StackPanel Margin="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                                    <Button Height="45" Content="Yes, Create my project!" Margin="0,0,0,0" IsEnabled="{Binding HasErrors, Converter={StaticResource booleanToOppositeBooleanConverter}}" CommandParameter="{Binding ProjectTypeAndPath}" Command="{catel:CommandManagerBinding Application.CreateNewProject}"></Button>
 
-                                <Button Height="45" Content="No, Cancel my project!" Margin="15,0,0,0"></Button>
+                                    <Button Height="45" Content="No, Cancel my project!" Margin="15,0,0,0" Click="CancelProjectBtn_Click"></Button>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
+                        </AdornerDecorator>
 
 
                         <Grid Grid.Column="0">

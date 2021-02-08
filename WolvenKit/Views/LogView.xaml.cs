@@ -87,5 +87,13 @@ namespace WolvenKit.Views
             }
             
         }
+
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Log View");
+            }
+        }
     }
 }

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiMenuGameController : gameuiWidgetGameController
 	{
-		[Ordinal(0)]  [RED("baseEventDispatcher")] public wCHandle<inkMenuEventDispatcher> BaseEventDispatcher { get; set; }
 
 		public gameuiMenuGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -15,5 +15,13 @@ namespace WolvenKit.Views
             InitializeComponent();
         }
         #endregion
+
+        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("BackStage - Recently Used");
+            }
+        }
     }
 }

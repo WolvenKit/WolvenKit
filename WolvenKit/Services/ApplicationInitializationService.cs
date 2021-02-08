@@ -111,8 +111,10 @@ namespace WolvenKit.Services
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.About));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Settings), nameof(AppCommands.Settings.General));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.Options));
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.BugReport));
 
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.NewProject));
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.CreateNewProject));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.OpenProject));
 
             // application-wide commands that viewmodels can subscribe to
@@ -121,11 +123,13 @@ namespace WolvenKit.Services
             _commandManager.CreateCommand((AppCommands.Application.ShowProjectExplorer));
             _commandManager.CreateCommand((AppCommands.Application.ShowImportUtility));
             _commandManager.CreateCommand((AppCommands.Application.ShowProperties));
+            _commandManager.CreateCommand((AppCommands.Application.ShowPackageInstaller));
 
             _commandManager.CreateCommand((AppCommands.Application.OpenFile));
             _commandManager.CreateCommand((AppCommands.Application.NewFile));
             _commandManager.CreateCommand((AppCommands.Application.PackMod));
             _commandManager.CreateCommand((AppCommands.Application.BackupMod));
+            _commandManager.CreateCommand((AppCommands.Application.PublishMod));
 
             // Project Explorer Viewmodel
             _commandManager.CreateCommand(AppCommands.ProjectExplorer.ExpandAll);

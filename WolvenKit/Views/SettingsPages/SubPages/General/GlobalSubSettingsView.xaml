@@ -5,50 +5,81 @@
                    xmlns:catel="http://schemas.catelproject.com">
 
     <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-        <Grid VerticalAlignment="Top" HorizontalAlignment="Left">
 
-            <StackPanel>
-
-
-                <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
-                    <Grid>
-                        <TextBlock Text="Project Autosaving" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                        <StackPanel Margin="250,0,0,0" Orientation="Horizontal">
-                            <CheckBox VerticalAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" Content="AutoSave Project" IsChecked="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"/>
-                            <hc:Divider VerticalAlignment="Center" Orientation="Vertical" Height="15" LineStrokeThickness="2" LineStroke="{DynamicResource MahApps.Brushes.Accent3}"/>
-                            <ComboBox VerticalAlignment="Center" SelectedIndex="0" Width="116">
-                                <ComboBoxItem Content="Interval"/>
-                            </ComboBox>
-                        </StackPanel>
-                    </Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
 
 
-                </Border>
+        <Grid Grid.Column="0">
+            <hc:ScrollViewer>
+                <StackPanel>
 
-                <Border BorderThickness="4,0,0,2" Margin="15,5,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
-                    <Grid>
-                        <TextBlock Text="Default Project folder" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox Margin="250,0,0,0" Width="250" Text=""/>
-                        </StackPanel>
-                    </Grid>
-        
-                </Border>
-                
-                <Border BorderThickness="4,0,0,2" Margin="15,5,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
-                    <Grid>
-                        <TextBlock Text="Application Language" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                        <StackPanel Orientation="Horizontal">
-                            <hc:ComboBox Margin="250,0,0,0" Width="250"/>
-                        </StackPanel>
-                    </Grid>
 
-                </Border>
+                    <!--Basic Header-->
+                    <Border BorderThickness="4,0,0,6" Margin="15,15,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                        <Grid>
+                            <TextBlock Text="Notifications" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                        </Grid>
+                    </Border>
 
-            </StackPanel>
 
+                    <!--Application Language-->
+                    <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                        <Grid>
+                            <TextBlock Text="Receive Desktop Notifications" VerticalAlignment="Center" Margin="0,0,50,0"/>
+
+                            <ToggleButton HorizontalAlignment="Right" BorderThickness="0" IsEnabled="True"  VerticalAlignment="Center"   Style="{StaticResource ToggleButtonFlip}">
+                                <hc:StatusSwitchElement.CheckedElement>
+                                    <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="On" Foreground="{DynamicResource TextIconBrush}"/>
+                                    </Border>
+                                </hc:StatusSwitchElement.CheckedElement>
+                                <Border Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
+                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Off" Foreground="{DynamicResource TextIconBrush}"/>
+                                </Border>
+                            </ToggleButton>
+                        </Grid>
+                    </Border>
+
+
+
+                    <!--Language Header-->
+                    <Border BorderThickness="4,0,0,6" Margin="15,50,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                        <Grid>
+                            <TextBlock Text="Language" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                        </Grid>
+                    </Border>
+
+
+                    <!--Application Language-->
+                    <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                        <Grid>
+                            <TextBlock Text="Application Language" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                            <hc:ComboBox HorizontalAlignment="Right" Width="250"/>
+
+                        </Grid>
+                    </Border>
+
+
+                </StackPanel>
+            </hc:ScrollViewer>
         </Grid>
-    
+
+        <Grid Grid.Column="1">
+            <hc:ScrollViewer>
+                <StackPanel>
+
+
+            
+
+
+                </StackPanel>
+            </hc:ScrollViewer>
+        </Grid>
+
+
     </Grid>
-    
+
 </catel:UserControl>
