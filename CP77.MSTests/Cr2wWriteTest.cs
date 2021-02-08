@@ -8,10 +8,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Catel.IoC;
 using CP77.CR2W;
 using CP77.CR2W.Archive;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
 using StreamExtensions = Catel.IO.StreamExtensions;
 
 namespace CP77.MSTests
@@ -833,6 +835,8 @@ namespace CP77.MSTests
 
             bool success = results.All(r => r.Success);
 
+            var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            sb.AppendLine(Logger.ErrorLogStr);
 
             var logPath = Path.Combine(resultDir, $"w_logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
             File.WriteAllText(logPath, sb.ToString());
@@ -963,7 +967,7 @@ namespace CP77.MSTests
                         Success = false,
                         WriteResult = WriteTestResult.WriteResultType.RuntimeException,
                         ExceptionType = e.GetType(),
-                        Message = $"{file.NameOrHash} - {e.Message}"
+                        Message = $"{e.Message}"
                     });
                 }
 #if IS_PARALLEL

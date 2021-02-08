@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Catel.IoC;
 using CP77.CR2W.Reflection;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Types
 {
@@ -206,6 +208,10 @@ namespace CP77.CR2W.Types
 
                 if (!cr2w.UnknownTypes.Contains(fullname))
                     cr2w.UnknownTypes.Add(fullname);
+
+                var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+                Logger.LogString($"UNKNOWN:{typename}:{varname}", Logtype.Error);
+
 
                 if (readUnknownAsBytes)
                 {

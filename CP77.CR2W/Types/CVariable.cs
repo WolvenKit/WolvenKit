@@ -516,9 +516,11 @@ namespace CP77.CR2W.Types
                     throw;
                 }
             }
-            throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
-            //var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            //Logger.LogString($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}", Logtype.Error);
+            //throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
+            var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            Logger.LogString($"{this.TypeNameWithParents} - {value.REDType} {value.REDName}", Logtype.Error);
+            
+            
             return false;
         }
 
