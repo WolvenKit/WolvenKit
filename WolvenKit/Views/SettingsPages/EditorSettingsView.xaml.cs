@@ -33,5 +33,16 @@ namespace WolvenKit.Views.SettingsPages
                 SettingsViewer.Children.Add(GSSV);
             }
         }
+
+        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Setting - Editor");
+            }
+
+
+        }
     }
 }

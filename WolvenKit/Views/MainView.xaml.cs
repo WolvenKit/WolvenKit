@@ -230,8 +230,18 @@ namespace WolvenKit.Views
             layoutSerializer.Serialize(AvalonDockConfigPath);
         }
 
-		#endregion
+        #endregion
+
         #endregion methods
 
-	}
+    
+
+        private void UserControl_IsVisibleChanged_1(object sender, DependencyPropertyChangedEventArgs e)
+        {
+			if (this.IsVisible && this.IsLoaded)
+			{
+				DiscordRPCHelper.WhatAmIDoing("Main View");
+			}
+		}
+    }
 }

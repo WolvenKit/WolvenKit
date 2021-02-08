@@ -55,5 +55,13 @@ namespace WolvenKit.Views.SettingsPages
                 SettingsViewer.Children.Add(VESSV);
             }
         }
+
+        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Setting - Tools");
+            }
+        }
     }
 }

@@ -54,5 +54,13 @@ namespace WolvenKit.Views.Wizards
             StepMain.Prev();
             ShowPage();
         }
+
+        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Project Wizard");
+            }
+        }
     }
 }

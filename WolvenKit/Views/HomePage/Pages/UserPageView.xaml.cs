@@ -3,6 +3,7 @@ using Catel.IoC;
 using MLib.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Media;
 using WolvenKit.Services;
 
@@ -36,6 +37,16 @@ namespace WolvenKit.Views.HomePage.Pages
 
 		}
 
-		
-	}
+
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("User Page");
+            }
+
+        }
+
+
+    }
 }

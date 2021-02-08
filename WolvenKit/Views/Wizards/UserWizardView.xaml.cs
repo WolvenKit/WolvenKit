@@ -7,5 +7,13 @@ namespace WolvenKit.Views.Wizards
         {
             InitializeComponent();
         }
+
+        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("User Wizard");
+            }
+        }
     }
 }

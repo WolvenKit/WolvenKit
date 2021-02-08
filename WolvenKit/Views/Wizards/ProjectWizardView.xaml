@@ -1,12 +1,14 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.Wizards.ProjectWizardView"
- xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com" 
                    xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:UCpage="clr-namespace:WolvenKit.Views.Wizards.WizardPages.ProjectWizard"
+                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                   xmlns:hc="https://handyorg.github.io/handycontrol"
+                   xmlns:UCpage="clr-namespace:WolvenKit.Views.Wizards.WizardPages.ProjectWizard"
                    mc:Ignorable="av"
-                   Tag="Project Wizard">
+                   Tag="Project Wizard" IsVisibleChanged="UserControl_IsVisibleChanged">
 
 
     <catel:UserControl.Resources>

@@ -1,4 +1,6 @@
 ﻿
+using System.Windows;
+
 namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class IntegratedToolsPageView
@@ -8,6 +10,16 @@ namespace WolvenKit.Views.HomePage.Pages
             InitializeComponent();
 
             GeneralTabItem.Content = new IntegratedToolsPages.CyberCAT.CyberCATPageView();
+        }
+
+
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Integrated Tools");
+            }
+
         }
     }
 }

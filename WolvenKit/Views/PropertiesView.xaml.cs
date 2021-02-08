@@ -25,7 +25,13 @@ namespace WolvenKit.Views
             InitializeComponent();
         }
 
-        
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Properties View");
+            }
+        }
     }
 
     

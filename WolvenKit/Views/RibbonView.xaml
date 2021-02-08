@@ -11,7 +11,7 @@
                    xmlns:views="clr-namespace:WolvenKit.Views"
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                    xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
-                   xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage">
+                   xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage" IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <!-- Resources -->
     <UserControl.Resources>
@@ -26,7 +26,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <fluent:Ribbon Grid.Row="0" x:Name="ribbon">
+        <fluent:Ribbon  Grid.Row="0" x:Name="ribbon">
 
             
             <!-- StartScreen -->
@@ -43,7 +43,7 @@
             <fluent:Ribbon.Menu>
                 <fluent:Backstage  x:Name="Backstage" MouseLeftButtonDown="Backstage_MouseLeftButtonDown" >
 
-                    <fluent:BackstageTabControl SelectedContentMargin="0" x:Name="backstageTabControl"
+                    <fluent:BackstageTabControl Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}" ItemsPanelBackground="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"  SelectedContentMargin="0" x:Name="backstageTabControl"
                                                 
                     >
 
@@ -156,7 +156,7 @@
         
             
             <!-- Home Tab -->
-            <fluent:RibbonTabItem Header="Home" >
+            <fluent:RibbonTabItem Header="General" >
                 <!-- File -->
                 <fluent:RibbonGroupBox Header="File">
                     <fluent:Button Header="Open File" Command="{catel:CommandManagerBinding Application.OpenFile}">
