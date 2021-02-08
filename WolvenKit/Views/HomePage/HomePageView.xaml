@@ -23,7 +23,7 @@
     </catel:UserControl.Resources>
 
 
-    <Grid   hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  >
+    <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"  hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  >
 
 
         <Grid Background="Transparent" MouseLeftButtonDown="Grid_MouseLeftButtonDown_1">
@@ -33,7 +33,7 @@
                 <Mid:TopicView x:Name="TopicViewer"/>
 
         </Grid>
-        <Grid HorizontalAlignment="Left" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+        <Grid HorizontalAlignment="Left" Background="{DynamicResource MahApps.Brushes.AccentBase}">
 
             <hc:SideMenu   x:Name="LeftSideMenu" Margin="0,80,0,0" SideBrush="{DynamicResource MahApps.Brushes.AccentBase}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" BorderThickness="0" Width="200" SubSideBrush="{DynamicResource MahApps.Brushes.Accent2}">
 
@@ -133,21 +133,12 @@
                             hc:BorderElement.CornerRadius="5"  >
 
             </Fluent:Button>
-            <hc:Divider LineStrokeThickness="3" VerticalAlignment="Bottom" Margin="0,0,0,135" LineStroke="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
 
-            <hc:Tag Margin="0,0,0,85" VerticalAlignment="Bottom" ShowCloseButton="False" Content="USERNAME" MouseDown="Tag_MouseDown">
-                <hc:Tag.Header>
-                    <iconPacks:PackIconCodicons Kind="Account"></iconPacks:PackIconCodicons>
-
-                </hc:Tag.Header>
-            </hc:Tag>
-            <hc:Divider LineStrokeThickness="3" VerticalAlignment="Bottom" Margin="0,0,0,65" LineStroke="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
-
+  
             <StackPanel Margin="5,15,0,0" Orientation="Horizontal" VerticalAlignment="Top" Height="54">
                 <Label Background="{x:Null}" Content="Home" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{x:Null}" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0,0,0,0" Height="50" Width="74" VerticalAlignment="Top"/>
             </StackPanel>
 
-            <hc:Divider LineStrokeThickness="3" VerticalAlignment="Top" Margin="0,75,0,0" LineStroke="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
 
 
         </Grid>
@@ -159,7 +150,7 @@
             <Grid Width="450" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,690,0,0">
                 <hc:AnimationPath Data="{DynamicResource GithubGeometry}" 
                           Duration="00:00:08" 
-                          Stretch="Uniform" StrokeThickness="1.5"
+                          Stretch="Uniform" StrokeThickness="2"
                           Stroke="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" PathLength="70" Margin="385,-2,0,2" HorizontalAlignment="Left"></hc:AnimationPath>
 
                 <StackPanel      Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Right" Margin="0,0,75,0">
