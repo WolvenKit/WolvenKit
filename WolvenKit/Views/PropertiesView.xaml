@@ -10,7 +10,7 @@
              xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:behavior="clr-namespace:WolvenKit.Behavior"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" IsVisibleChanged="UserControl_IsVisibleChanged">
     <Grid
         xmlns:conv="clr-namespace:WolvenKit.Layout.Converters">
         <Grid.Resources>

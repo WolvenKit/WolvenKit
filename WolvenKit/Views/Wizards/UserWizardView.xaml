@@ -1,7 +1,7 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.Wizards.UserWizardView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:thmPage="clr-namespace:WolvenKit.Views.Wizards.WizardPages.UserWizard">
+                   xmlns:catel="http://schemas.catelproject.com" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:thmPage="clr-namespace:WolvenKit.Views.Wizards.WizardPages.UserWizard" IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <Grid MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,2,5">
 

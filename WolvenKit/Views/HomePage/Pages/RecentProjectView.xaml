@@ -3,7 +3,8 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:hc="https://handyorg.github.io/handycontrol"
-                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
+                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                   IsVisibleChanged="UserControl_IsVisibleChanged">
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ControlTemplate x:Key="GroupBoxBaseTopTemplate" TargetType="GroupBox">

@@ -4,7 +4,7 @@
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                    xmlns:hc="https://handyorg.github.io/handycontrol"
-                   xmlns:wiz="clr-namespace:WolvenKit.Views.Wizards.WizardPages.BugReportWizard">
+                   xmlns:wiz="clr-namespace:WolvenKit.Views.Wizards.WizardPages.BugReportWizard" IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>

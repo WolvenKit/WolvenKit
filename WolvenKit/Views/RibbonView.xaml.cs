@@ -115,5 +115,13 @@ namespace WolvenKit.Views
 
             sh.DragMove();
         }
+
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible && IsLoaded)
+            {
+                DiscordRPCHelper.WhatAmIDoing("Ribbon/Backstage");
+            }
+        }
     }
 }
