@@ -706,6 +706,9 @@ namespace CP77.CR2W
         }
         #endregion
 
+       
+
+
         #region Write
         public void Write(BinaryWriter file)
         {
@@ -742,6 +745,9 @@ namespace CP77.CR2W
             foreach (var name in nameslist)
             {
                 var newoffset = inverseDictionary[name];
+
+                
+                
                 var hash64 = string.IsNullOrEmpty(name) 
                     ? 0 
                     : FNV1A64HashAlgorithm.HashString(name, Encoding.GetEncoding("iso-8859-1"));
