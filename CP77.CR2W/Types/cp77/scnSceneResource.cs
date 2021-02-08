@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnSceneResource : CResource
 	{
-		[Ordinal(0)]  [RED("debugSymbols")] public scnDebugSymbols DebugSymbols { get; set; }
 		[Ordinal(1)]  [RED("entryPoints")] public CArray<scnEntryPoint> EntryPoints { get; set; }
 		[Ordinal(2)]  [RED("exitPoints")] public CArray<scnExitPoint> ExitPoints { get; set; }
 		[Ordinal(3)]  [RED("notablePoints")] public CArray<scnNotablePoint> NotablePoints { get; set; }
@@ -33,6 +32,9 @@ namespace CP77.CR2W.Types
 		[Ordinal(22)]  [RED("interruptionScenarios")] public CArray<scnInterruptionScenario> InterruptionScenarios { get; set; }
 		[Ordinal(23)]  [RED("sceneSolutionHash")] public scnSceneSolutionHash SceneSolutionHash { get; set; }
 		[Ordinal(24)]  [RED("sceneCategoryTag")] public CEnum<scnSceneCategoryTag> SceneCategoryTag { get; set; }
+
+        [Ordinal(999)] [RED("debugSymbols")] public scnDebugSymbols DebugSymbols { get; set; }
+
 
 		public scnSceneResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

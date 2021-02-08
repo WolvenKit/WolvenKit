@@ -10,7 +10,7 @@ namespace CP77.CR2W.Types
     {
 		// flags
 
-        [Flags]
+        
 		public enum EGameplayRole
         {
             UnAssigned = 0,
@@ -224,6 +224,15 @@ namespace CP77.CR2W.Types
 
 		
 
+        public enum toolsSocketDirection
+		{
+            Output,
+		}
+        public enum toolsSocketPlacement
+		{
+		    Bottom,
+		    Right,
+		}
         public enum scnbPerformerAcquisitionPlanType
 		{
 		    Community,
@@ -12580,6 +12589,7 @@ namespace CP77.CR2W.Types
 			Facial = 1,
 			Cyberware = 2
 		}
+		[Flags]
 		public enum scnAnimNameType
 		{
 			direct = 0,

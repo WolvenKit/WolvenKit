@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using Catel.IoC;
 using CP77.CR2W.Reflection;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Types
 {
@@ -200,9 +202,20 @@ namespace CP77.CR2W.Types
                 var s = Value.Last();
                 var finalvalue = CVariable.NormalizeName(s);
 
+                if (s == "GenericRole")
+                {
+
+                }
 
                 if (Enum.TryParse(WrappedEnum.GetType(), finalvalue, out var par))
-                    WrappedEnum = (T)par;
+                    WrappedEnum = (T) par;
+                else
+                {
+                    //throw new InvalidParsingException($"Tried setting enum value {s} in {WrappedEnum.GetType().Name}");
+                    var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+                    Logger.LogString($"Tried setting enum value {s} in {WrappedEnum.GetType().Name}", Logtype.Error);
+
+                }
             }
 
             return this;

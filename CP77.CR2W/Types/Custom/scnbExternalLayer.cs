@@ -49,8 +49,7 @@ namespace CP77.CR2W.Types
         [Ordinal(5)] [RED("template")] public rRef<communityCommunityTemplate> template { get; set; }
         [Ordinal(6)] [RED("phaseName")] public CName phaseName { get; set; }
 
-
-public scnbPerformerInScene_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbPerformerInScene_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
     [REDMeta]
