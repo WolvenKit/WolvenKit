@@ -21,6 +21,7 @@ using HandyControl.Controls.SplashWindow;
 using System.Windows.Media.Imaging;
 using ControlzEx.Theming;
 using System.Windows.Media.Effects;
+using Fluent;
 
 namespace WolvenKit
 {
@@ -368,10 +369,21 @@ namespace WolvenKit
             sh.LeftWindowCommands.Items.Add(windowCommands);
           // var a = (System.Windows.Controls.Button)sh.RightWindowCommands.Items[0];
            // a.Content = ""
+           
         }
+
+        public static RibbonView RibbonViewInstance;
 
         private void Tick_Click(object sender, RoutedEventArgs e)
         {
+
+
+
+
+
+            RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
+            RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
+
             Views.JournalEditor.JournalEditorView rpv = new Views.JournalEditor.JournalEditorView();
             rpv.Margin = new Thickness(35);
             UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
