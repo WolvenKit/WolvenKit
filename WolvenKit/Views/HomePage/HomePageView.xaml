@@ -259,6 +259,9 @@
         </Grid>
         <Grid x:Name="PageViewGrid" Margin="200,0,0,0"/>
 
+        <Grid Background="Black">
+            <TextBlock Foreground="White" FontSize="50" Text="Not available" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+        </Grid>
     </Grid>
 
 
