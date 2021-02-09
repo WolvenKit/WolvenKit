@@ -18,6 +18,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(7)]  [RED("attackPentration")] public CFloat AttackPentration { get; set; }
 		[Ordinal(8)]  [RED("hasPiercedTechSurface")] public CBool HasPiercedTechSurface { get; set; }
 		[Ordinal(9)]  [RED("attackComputed")] public CHandle<gameAttackComputed> AttackComputed { get; set; }
+		[Ordinal(10)]  [RED("wasAliveBeforeHit")] public CBool WasAliveBeforeHit { get; set; }
+		[Ordinal(11)]  [RED("projectionPipeline")] public CBool ProjectionPipeline { get; set; }
 
 		public gameeventsHitEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -16,8 +16,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(5)]  [RED("isInfinite")] public CBool IsInfinite { get; set; }
 		[Ordinal(6)]  [RED("numberOfLoops")] public CUInt32 NumberOfLoops { get; set; }
 		[Ordinal(7)]  [RED("sortPatrolPoints")] public CBool SortPatrolPoints { get; set; }
-
-        [Ordinal(999)] [RED("patrolAction")] public TweakDBID PatrolAction { get; set; }
+		[Ordinal(8)]  [RED("patrolAction")] public TweakDBID PatrolAction { get; set; }
 
 		public AIPatrolPathParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

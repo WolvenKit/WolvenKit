@@ -24,6 +24,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(13)]  [RED("hasDeflectAnim")] public CBool HasDeflectAnim { get; set; }
 		[Ordinal(14)]  [RED("hasHitAnim")] public CBool HasHitAnim { get; set; }
 		[Ordinal(15)]  [RED("attackType")] public CInt32 AttackType { get; set; }
+		[Ordinal(16)]  [RED("isParried")] public CBool IsParried { get; set; }
 
 		public animAnimFeature_MeleeData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

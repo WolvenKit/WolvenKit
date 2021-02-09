@@ -38,7 +38,6 @@ namespace CP77.CR2W.Types
         private List<CurvePoint<T>> Elements { get; set; } = new();
         public ushort Tail { get; set; }
 
-        [Browsable(false)]
         public override string REDType => $"curveData:{Elementtype}";
 
         public override void Read(BinaryReader file, uint size)
