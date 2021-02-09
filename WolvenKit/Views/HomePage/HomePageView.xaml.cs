@@ -45,15 +45,25 @@ namespace WolvenKit.Views.HomePage
 
         }
 
+        private void setupProjectWV()
+        {
+            ProjectWV.Loaded += (_s, _e) =>
+                (ProjectWV.ViewModel as ProjectWizardViewModel).ClosingRequest
+                    += (s, e) =>
+                    {
+                        SideMenu_WelcomeItem_Selected(s, new RoutedEventArgs());
+                        ProjectWV = new ProjectWizardView();
+                        setupProjectWV();
+                    };
+        }
+
         private void InitializePages()
         {
             WelcomePV = new WelcomePageView();
             FirstSWV = new FirstSetupWizardView();
             RecentPV = new RecentProjectView();
             ProjectWV = new ProjectWizardView();
-            ProjectWV.Loaded += (_s, _e) =>
-                (ProjectWV.ViewModel as ProjectWizardViewModel).ClosingRequest
-                    += (s, e) => SideMenu_WelcomeItem_Selected(s, new RoutedEventArgs());
+            setupProjectWV();
             WikitPV = new WikiPageView();
             AboutPV = new AboutPageView();
             SettingsPV = new SettingsPageView();

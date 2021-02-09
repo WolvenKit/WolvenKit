@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Catel.IoC;
+using Orc.ProjectManagement;
+using WolvenKit.Model;
 
 namespace WolvenKit
 {

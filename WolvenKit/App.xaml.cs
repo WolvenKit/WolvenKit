@@ -18,6 +18,9 @@ using NodeNetwork;
 using System.Windows.Media;
 using MLib.Interfaces;
 using HandyControl.Controls.SplashWindow;
+using System.Windows.Media.Imaging;
+using ControlzEx.Theming;
+using System.Windows.Media.Effects;
 
 namespace WolvenKit
 {
@@ -252,12 +255,14 @@ namespace WolvenKit
             ShellWindow sh = (ShellWindow)shellService.Shell;
             sh.IsVisibleChanged += Sh_IsVisibleChanged;
 
-            Orc.Theming.ThemeManager.Current.SynchronizeTheme();
-            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark.Green");
+           
 
+            Orc.Theming.ThemeManager.Current.SynchronizeTheme();
+            //  ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark.Green");
             HandyControl.Tools.ThemeManager.Current.SetCurrentValue(HandyControl.Tools.ThemeManager.ApplicationThemeProperty, HandyControl.Tools.ApplicationTheme.Dark);
             HandyControl.Tools.ConfigHelper.Instance.SetLang("en");
             HandyControl.Controls.ThemeResources tr = new HandyControl.Controls.ThemeResources(); tr.AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3");
+            ApplyCustomLibSettings(sh);
 
             Log.Info("Calling base.OnStartup");
 
@@ -276,18 +281,14 @@ namespace WolvenKit
             var a = (ShellWindow)sender;
             if (a.IsVisible && a.IsLoaded )
             {
-                DiscordRPCHelper.WhatAmIDoing("Backstage - Open File");
+                DiscordRPCHelper.WhatAmIDoing("Project Editor");
             }
         }
 
         public static DiscordRPC.DiscordRpcClient client;
         private void InitDiscordRPC()
         {
-            /*
-	Create a Discord client
-	NOTE: 	If you are using Unity3D, you must use the full constructor and define
-			 the pipe connection.
-	*/
+   
             client = new DiscordRPC.DiscordRpcClient("807752124078620732") ;
 
             //Set the logger
@@ -330,5 +331,44 @@ namespace WolvenKit
         {
             base.OnExit(e);
         }
+
+
+
+
+        private void ApplyCustomLibSettings(ShellWindow sh)
+        {
+            sh.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 35);            
+            var color = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DF2935"));
+            ThemeManager.Current.AddTheme(new Theme("CustomLightRed", "CustomLightRed", "Dark", "Red", (Color)ColorConverter.ConvertFromString("#DF2935"), color, true, false));
+            ThemeManager.Current.AddTheme(RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", Colors.Red));
+            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "CustomLightRed");
+            System.Windows.Controls.StackPanel stack = new System.Windows.Controls.StackPanel();
+            stack.Orientation = System.Windows.Controls.Orientation.Horizontal;
+            System.Windows.Controls.Image IconImage = new System.Windows.Controls.Image();
+            IconImage.Source = new BitmapImage(new Uri(@"pack://application:,,/Resources/Icons/whitelogo.png"));
+            IconImage.Stretch = Stretch.Uniform;
+            IconImage.Margin = new Thickness(10, 9, 15, 9);
+            IconImage.FixBlurriness();
+            IconImage.Effect = new DropShadowEffect
+            {
+                ShadowDepth = 1,
+                BlurRadius = 0,
+                Color = Colors.White,
+                Opacity = 0.8,     
+            };
+            System.Windows.Controls.Button tick = new System.Windows.Controls.Button();
+            tick.LayoutTransform = new RotateTransform(180,0.5,0.5);
+            tick.Style = (Style)FindResource("ButtonIcon");
+            HandyControl.Controls.IconElement.SetGeometry(tick, (Geometry)FindResource("HomeIcon"));           
+            MahApps.Metro.Controls.WindowCommands windowCommands = new MahApps.Metro.Controls.WindowCommands();
+            windowCommands.Items.Add(IconImage);
+            windowCommands.Items.Add(tick);
+
+            sh.LeftWindowCommands.Items.Add(windowCommands);
+          // var a = (System.Windows.Controls.Button)sh.RightWindowCommands.Items[0];
+           // a.Content = ""
+        }
+       
+
     }
 }
