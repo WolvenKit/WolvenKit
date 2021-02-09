@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiHUDVideoPlayerController : gameuiHUDGameController
 	{
-		[Ordinal(0)]  [RED("playOnHud")] public CBool PlayOnHud { get; set; }
+		[Ordinal(7)]  [RED("playOnHud")] public CBool PlayOnHud { get; set; }
 
 		public gameuiHUDVideoPlayerController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

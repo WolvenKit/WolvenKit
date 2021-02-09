@@ -12,10 +12,12 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Schema;
 using Catel.Data;
+using Catel.IoC;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using CP77.CR2W.Reflection;
+using WolvenKit.Common.Services;
 using ObservableObject = Catel.Data.ObservableObject;
 
 namespace CP77.CR2W.Types
@@ -76,6 +78,8 @@ namespace CP77.CR2W.Types
                 if (ParentVar is CVariable cparent)
                     cparent.SetIsSerialized();
         }
+
+        public bool IsNulled { get; set; }
 
         private ushort _redFlags;
         /// <summary>
@@ -375,7 +379,6 @@ namespace CP77.CR2W.Types
             {
                 #region initial checks
                 sbyte zero = file.ReadSByte();
-                //var dzero = file.ReadBit6();
 
                 // ... okay CDPR, is that a joke or what?
                 if (zero != 0)
@@ -388,7 +391,8 @@ namespace CP77.CR2W.Types
                         case -128:
                             var dzero2 = file.ReadBit6();
                             return;
-                        case -1:
+                        case -1: // nulled
+                            IsNulled = true;
                             return;
                         default:
                             throw new InvalidParsingException($"Tried parsing a CVariable: zero read {zero}.");
@@ -512,7 +516,12 @@ namespace CP77.CR2W.Types
                     throw;
                 }
             }
-            throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
+            //throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
+            var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            Logger.LogString($"{this.TypeNameWithParents} - {value.REDType} {value.REDName}", Logtype.Error);
+            
+            
+            return false;
         }
 
         /// <summary>
@@ -522,6 +531,13 @@ namespace CP77.CR2W.Types
         /// <param name="file"></param>
         public virtual void Write(BinaryWriter file)
         {
+            if (IsNulled)
+            {
+                file.Write((byte)0xFF);
+                return;
+            }
+
+
             REDMetaAttribute meta = (REDMetaAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(REDMetaAttribute));
             EREDMetaInfo[] tags = meta?.Keywords;
 

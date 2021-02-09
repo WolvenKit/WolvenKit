@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class Stash : InteractiveDevice
 	{
-		[Ordinal(0)]  [RED("inventory")] public CHandle<gameInventory> Inventory { get; set; }
+		[Ordinal(84)]  [RED("inventory")] public CHandle<gameInventory> Inventory { get; set; }
 
 		public Stash(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

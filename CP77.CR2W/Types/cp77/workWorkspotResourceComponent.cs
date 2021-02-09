@@ -12,6 +12,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(1)]  [RED("npcResource")] public rRef<workWorkspotResource> NpcResource { get; set; }
 		[Ordinal(2)]  [RED("deviceResource")] public rRef<workWorkspotResource> DeviceResource { get; set; }
 		[Ordinal(3)]  [RED("syncSlotName")] public CName SyncSlotName { get; set; }
+		[Ordinal(4)]  [RED("shouldCrouch")] public CBool ShouldCrouch { get; set; }
 
 		public workWorkspotResourceComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

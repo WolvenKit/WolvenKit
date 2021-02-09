@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DisassembleItemRequest : gamePlayerScriptableSystemRequest
 	{
-		[Ordinal(0)]  [RED("amount")] public CInt32 Amount { get; set; }
+		[Ordinal(0)]  [RED("target")] public wCHandle<gameObject> Target { get; set; }
 		[Ordinal(1)]  [RED("itemID")] public gameItemID ItemID { get; set; }
-		[Ordinal(2)]  [RED("target")] public wCHandle<gameObject> Target { get; set; }
+		[Ordinal(2)]  [RED("amount")] public CInt32 Amount { get; set; }
 
 		public DisassembleItemRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

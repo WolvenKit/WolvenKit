@@ -9,9 +9,9 @@ namespace CP77.CR2W.Types
 	public class FollowSlot : IScriptable
 	{
 		[Ordinal(0)]  [RED("id")] public CInt32 Id { get; set; }
-		[Ordinal(1)]  [RED("isAvailable")] public CBool IsAvailable { get; set; }
+		[Ordinal(1)]  [RED("slotTransform")] public Transform SlotTransform { get; set; }
 		[Ordinal(2)]  [RED("isEnabled")] public CBool IsEnabled { get; set; }
-		[Ordinal(3)]  [RED("slotTransform")] public Transform SlotTransform { get; set; }
+		[Ordinal(3)]  [RED("isAvailable")] public CBool IsAvailable { get; set; }
 
 		public FollowSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

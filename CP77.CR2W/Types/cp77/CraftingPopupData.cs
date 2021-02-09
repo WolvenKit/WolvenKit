@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CraftingPopupData : inkGameNotificationData
 	{
-		[Ordinal(0)]  [RED("craftingCommand")] public CEnum<CraftingCommands> CraftingCommand { get; set; }
-		[Ordinal(1)]  [RED("itemTooltipData")] public CHandle<InventoryTooltipData> ItemTooltipData { get; set; }
+		[Ordinal(0)]  [RED("itemTooltipData")] public CHandle<InventoryTooltipData> ItemTooltipData { get; set; }
+		[Ordinal(1)]  [RED("craftingCommand")] public CEnum<CraftingCommands> CraftingCommand { get; set; }
 
 		public CraftingPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

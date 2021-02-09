@@ -13,6 +13,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(2)]  [RED("startupDuration")] public CFloat StartupDuration { get; set; }
 		[Ordinal(3)]  [RED("activeDuration")] public CFloat ActiveDuration { get; set; }
 		[Ordinal(4)]  [RED("recoverDuration")] public CFloat RecoverDuration { get; set; }
+		[Ordinal(5)]  [RED("activeHitDuration")] public CFloat ActiveHitDuration { get; set; }
+		[Ordinal(6)]  [RED("recoverHitDuration")] public CFloat RecoverHitDuration { get; set; }
 
 		public animAnimFeature_MeleeSlotData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

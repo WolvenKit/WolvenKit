@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class Sample_All_Supported_Replicated_Types : CVariable
 	{
-		[Ordinal(0)]  [RED("bool_")] public CBool Bool_ { get; set; }
+		[Ordinal(0)]  [RED("bool")] public CBool Bool_ { get; set; }
 		[Ordinal(1)]  [RED("uint8")] public CUInt8 Uint8 { get; set; }
 		[Ordinal(2)]  [RED("int8")] public CInt8 Int8 { get; set; }
 		[Ordinal(3)]  [RED("uint16")] public CUInt16 Uint16 { get; set; }

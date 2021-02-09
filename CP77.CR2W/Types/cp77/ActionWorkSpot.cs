@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ActionWorkSpot : ActionBool
 	{
-		[Ordinal(0)]  [RED("workspotTarget")] public wCHandle<gamePuppet> WorkspotTarget { get; set; }
+		[Ordinal(22)]  [RED("workspotTarget")] public wCHandle<gamePuppet> WorkspotTarget { get; set; }
 
 		public ActionWorkSpot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

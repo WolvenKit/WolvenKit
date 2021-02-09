@@ -706,6 +706,9 @@ namespace CP77.CR2W
         }
         #endregion
 
+       
+
+
         #region Write
         public void Write(BinaryWriter file)
         {
@@ -742,9 +745,12 @@ namespace CP77.CR2W
             foreach (var name in nameslist)
             {
                 var newoffset = inverseDictionary[name];
+
+                
+                
                 var hash64 = string.IsNullOrEmpty(name) 
                     ? 0 
-                    : FNV1A64HashAlgorithm.HashString(name);
+                    : FNV1A64HashAlgorithm.HashString(name, Encoding.GetEncoding("iso-8859-1"));
                 uint hash = (uint)(hash64 & 0xffffffff);
 
                 Names.Add(new CR2WNameWrapper(new CR2WName()
@@ -776,7 +782,7 @@ namespace CP77.CR2W
             #region Embedded 
             foreach (var emb in Embedded)
             {
-                // uddate import index
+                // update import index
                 int realidx = (int)emb.Embedded.importIndex - 1;
                 int chunkidx = (int)emb.Embedded.chunkIndex;
                 if (emb.ImportPath != Imports[realidx].DepotPathStr)
@@ -824,12 +830,6 @@ namespace CP77.CR2W
             {
                 var newoffset = buffer.Buffer.offset + headerOffset;
                 buffer.SetOffset(newoffset);
-            }
-            foreach (var embedded in Embedded)
-            {
-                //var newoffset = embedded.Embedded.dataOffset + headerOffset;
-                //embedded.SetOffset(newoffset);
-                throw new NotImplementedException("Cr2w - write embedded");
             }
             m_fileheader.objectsEnd += headerOffset;
             #endregion
@@ -1042,6 +1042,13 @@ namespace CP77.CR2W
                     // check all other CVariables
                     case CVariable cvar:
                         {
+                            // skip some custom buffers
+                            if (cvar is gameCookedDeviceDataCompressed)
+                            {
+                                return null;
+                            }
+
+
                             // add parent if not already in guidlist
                             // don't add array type parents, don't add IBufferVariantAccessor type parents
                             if (cvar.ParentVar != null
@@ -1059,10 +1066,6 @@ namespace CP77.CR2W
 
                             // get buffers
                             var buffers = cvar.GetExistingVariables(true).Except(props).ToList();
-                            if (buffers.Count > 0)
-                            {
-
-                            }
 
                             // custom serialization
                             if (cvar is CMaterialInstance mi)
@@ -1071,8 +1074,19 @@ namespace CP77.CR2W
                                     .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
                             }
 
+                            if (cvar is physicsMaterialLibraryResource pmlr)
+                            {
+                                returnedVariables.AddRange(buffers
+                                    .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
+                            }
 
-                            
+                            if (cvar is gameDeviceResourceData gdrd)
+                            {
+                                returnedVariables.AddRange(gdrd.CookedDeviceData
+                                    .Select(_ => _.ClassName)
+                                    .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
+                            }
+
 
                             break;
                         }
@@ -1086,49 +1100,60 @@ namespace CP77.CR2W
             void AddStrings(SNameArg tvar)
             {
                 var var = tvar.Var;
+
+                // skip some custom buffers
+                if (var is gameCookedDeviceDataCompressed)
+                {
+                    return;
+                }
+
                 CheckVarNameAndTypes();
 
-                if (var is IHandleAccessor h)
+                switch (var)
                 {
-                    if (!h.ChunkHandle)
+                    case IHandleAccessor handle:
                     {
-                        AddUniqueToTable(h.ClassName);
-                        var flags = EImportFlags.Default;
-
-                        if (var.cr2w.Embedded.Any(_ => _.ImportPath == h.DepotPath))
-                            flags = EImportFlags.Inplace;
-
-                        var importtuple = new SImportEntry(h.ClassName, h.DepotPath, flags);
-                        if (!newimportslist.Contains(importtuple))
+                        if (!handle.ChunkHandle)
                         {
-                            newimportslist.Add(importtuple);
+                            AddUniqueToTable(handle.ClassName);
+                            var flags = EImportFlags.Default;
+
+                            if (var.cr2w.Embedded.Any(_ => _.ImportPath == handle.DepotPath))
+                                flags = EImportFlags.Inplace;
+
+                            var importtuple = new SImportEntry(handle.ClassName, handle.DepotPath, flags);
+                            if (!newimportslist.Contains(importtuple))
+                            {
+                                newimportslist.Add(importtuple);
+                            }
                         }
+
+                        break;
                     }
-                }
-                else if (var is ISoftAccessor s)
-                {
-                    if (/*!(string.IsNullOrEmpty(s.ClassName) &&*/ !string.IsNullOrEmpty(s.DepotPath))
+                    case ISoftAccessor soft:
                     {
-
-                        var flags = EImportFlags.Default;
-
-                        if (s.REDType.StartsWith("raRef:"))
-                            flags = EImportFlags.Soft;
-
-                        var stuple = new SImportEntry("", s.DepotPath, flags);
-                        if (!newsoftlist.Contains(stuple))
+                        if (/*!(string.IsNullOrEmpty(s.ClassName) &&*/ !string.IsNullOrEmpty(soft.DepotPath))
                         {
-                            newsoftlist.Add(stuple);
+                            //FIXME: calculate this properly
+                            //var flags = EImportFlags.Default;
+                            //if (s.REDType.StartsWith("raRef:"))
+                            //    flags = EImportFlags.Soft;
+
+                            var flags = soft.Flags;
+
+                            var stuple = new SImportEntry("", soft.DepotPath, flags);
+                            if (newsoftlist.All(_ => _.Path != soft.DepotPath))
+                            {
+                                newsoftlist.Add(stuple);
+                            }
                         }
+
+                        break;
                     }
-                }
-                else if (var is CName n)
-                {
-                    AddUniqueToTable(n.Value);
-                }
-                else if (var is IArrayAccessor a)
-                {
-                    if (var is IBufferAccessor buffer)
+                    case CName n:
+                        AddUniqueToTable(n.Value);
+                        break;
+                    case IArrayAccessor when var is IBufferAccessor buffer:
                     {
                         foreach (var ivar in buffer.GetEditableVariables())
                         {
@@ -1146,8 +1171,10 @@ namespace CP77.CR2W
                             }
 
                         }
+
+                        break;
                     }
-                    else
+                    case IArrayAccessor:
                     {
                         CheckVarNameAndTypes();
 
@@ -1158,14 +1185,17 @@ namespace CP77.CR2W
                                 AddUniqueToTable(element.Value);
                             }
                         }
+
+                        break;
                     }
-                }
-                else if (var is IEnumAccessor enumAccessor)
-                {
-                    foreach (var enumstring in enumAccessor.Value)
+                    case IEnumAccessor {IsFlag: true} enumAccessor:
                     {
-                        AddUniqueToTable(enumstring);
+                        foreach (var enumstring in enumAccessor.Value) AddUniqueToTable(enumstring);
+                        break;
                     }
+                    case IEnumAccessor enumAccessor:
+                        AddUniqueToTable(enumAccessor.GetAttributeVal());
+                        break;
                 }
 
 

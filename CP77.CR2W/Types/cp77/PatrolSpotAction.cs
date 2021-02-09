@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PatrolSpotAction : TweakAIActionSmartComposite
 	{
-		[Ordinal(0)]  [RED("patrolAction")] public CHandle<AIArgumentMapping> PatrolAction { get; set; }
+		[Ordinal(38)]  [RED("patrolAction")] public CHandle<AIArgumentMapping> PatrolAction { get; set; }
 
 		public PatrolSpotAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

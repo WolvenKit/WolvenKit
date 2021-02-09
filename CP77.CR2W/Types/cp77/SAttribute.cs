@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class SAttribute : CVariable
 	{
 		[Ordinal(0)]  [RED("attributeName")] public CEnum<gamedataStatType> AttributeName { get; set; }
-		[Ordinal(1)]  [RED("id")] public TweakDBID Id { get; set; }
-		[Ordinal(2)]  [RED("value")] public CInt32 Value { get; set; }
+		[Ordinal(1)]  [RED("value")] public CInt32 Value { get; set; }
+		[Ordinal(2)]  [RED("id")] public TweakDBID Id { get; set; }
 
 		public SAttribute(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DebugTextDrawer : gameObject
 	{
-		[Ordinal(0)]  [RED("color")] public CColor Color { get; set; }
-		[Ordinal(1)]  [RED("text")] public CString Text { get; set; }
+		[Ordinal(31)]  [RED("text")] public CString Text { get; set; }
+		[Ordinal(32)]  [RED("color")] public CColor Color { get; set; }
 
 		public DebugTextDrawer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

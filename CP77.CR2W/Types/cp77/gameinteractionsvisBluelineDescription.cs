@@ -9,6 +9,7 @@ namespace CP77.CR2W.Types
 	public class gameinteractionsvisBluelineDescription : IScriptable
 	{
 		[Ordinal(0)]  [RED("parts")] public CArray<CHandle<gameinteractionsvisBluelinePart>> Parts { get; set; }
+		[Ordinal(1)]  [RED("logicOperator")] public CEnum<ELogicOperator> LogicOperator { get; set; }
 
 		public gameinteractionsvisBluelineDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

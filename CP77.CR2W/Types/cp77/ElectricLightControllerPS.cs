@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ElectricLightControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(0)]  [RED("isConnectedToCLS")] public CBool IsConnectedToCLS { get; set; }
-		[Ordinal(1)]  [RED("wasCLSInitTriggered")] public CBool WasCLSInitTriggered { get; set; }
+		[Ordinal(103)]  [RED("isConnectedToCLS")] public CBool IsConnectedToCLS { get; set; }
+		[Ordinal(104)]  [RED("wasCLSInitTriggered")] public CBool WasCLSInitTriggered { get; set; }
 
 		public ElectricLightControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

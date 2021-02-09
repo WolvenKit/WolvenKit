@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ScannerRequirementItemLogicController : inkWidgetLogicController
 	{
-		[Ordinal(0)]  [RED("requirementIcon")] public inkImageWidgetReference RequirementIcon { get; set; }
+		[Ordinal(0)]  [RED("requirementNameText")] public inkTextWidgetReference RequirementNameText { get; set; }
 		[Ordinal(1)]  [RED("requirementLevelText")] public inkTextWidgetReference RequirementLevelText { get; set; }
-		[Ordinal(2)]  [RED("requirementNameText")] public inkTextWidgetReference RequirementNameText { get; set; }
+		[Ordinal(2)]  [RED("requirementIcon")] public inkImageWidgetReference RequirementIcon { get; set; }
 		[Ordinal(3)]  [RED("requirementStruct")] public UIInteractionSkillCheck RequirementStruct { get; set; }
 		[Ordinal(4)]  [RED("skillCheck")] public CEnum<EDeviceChallengeSkill> SkillCheck { get; set; }
 

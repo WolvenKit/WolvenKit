@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DeviceActionWidgetControllerBase : DeviceButtonLogicControllerBase
 	{
-		[Ordinal(0)]  [RED("actionData")] public CHandle<ResolveActionData> ActionData { get; set; }
-		[Ordinal(1)]  [RED("actions")] public CArray<wCHandle<gamedeviceAction>> Actions { get; set; }
+		[Ordinal(16)]  [RED("actions")] public CArray<wCHandle<gamedeviceAction>> Actions { get; set; }
+		[Ordinal(17)]  [RED("actionData")] public CHandle<ResolveActionData> ActionData { get; set; }
 
 		public DeviceActionWidgetControllerBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

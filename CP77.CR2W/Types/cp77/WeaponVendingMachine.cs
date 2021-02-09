@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class WeaponVendingMachine : VendingMachine
 	{
-		[Ordinal(0)]  [RED("bigAdScreen")] public wCHandle<IWorldWidgetComponent> BigAdScreen { get; set; }
+		[Ordinal(88)]  [RED("bigAdScreen")] public wCHandle<IWorldWidgetComponent> BigAdScreen { get; set; }
 
 		public WeaponVendingMachine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ConsumeGateSignal : GateSignal
 	{
-		[Ordinal(0)]  [RED("consumeCallName")] public CName ConsumeCallName { get; set; }
-		[Ordinal(1)]  [RED("signalToConsume")] public CHandle<GateSignal> SignalToConsume { get; set; }
+		[Ordinal(3)]  [RED("consumeCallName")] public CName ConsumeCallName { get; set; }
+		[Ordinal(4)]  [RED("signalToConsume")] public CHandle<GateSignal> SignalToConsume { get; set; }
 
 		public ConsumeGateSignal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

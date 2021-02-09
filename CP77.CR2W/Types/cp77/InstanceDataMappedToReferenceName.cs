@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class InstanceDataMappedToReferenceName : CVariable
 	{
-		[Ordinal(0)]  [RED("attachmentSlot")] public CString AttachmentSlot { get; set; }
-		[Ordinal(1)]  [RED("itemHandlingFeatureName")] public CName ItemHandlingFeatureName { get; set; }
+		[Ordinal(0)]  [RED("itemHandlingFeatureName")] public CName ItemHandlingFeatureName { get; set; }
+		[Ordinal(1)]  [RED("attachmentSlot")] public CString AttachmentSlot { get; set; }
 
 		public InstanceDataMappedToReferenceName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

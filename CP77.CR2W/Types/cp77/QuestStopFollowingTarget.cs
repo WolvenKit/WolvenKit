@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class QuestStopFollowingTarget : ActionBool
 	{
-		[Ordinal(0)]  [RED("targetEntityID")] public entEntityID TargetEntityID { get; set; }
+		[Ordinal(22)]  [RED("targetEntityID")] public entEntityID TargetEntityID { get; set; }
 
 		public QuestStopFollowingTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

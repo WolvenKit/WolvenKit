@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PreventionCombatStartedRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)]  [RED("requester")] public wCHandle<gameObject> Requester { get; set; }
-		[Ordinal(1)]  [RED("requesterPosition")] public Vector4 RequesterPosition { get; set; }
+		[Ordinal(0)]  [RED("requesterPosition")] public Vector4 RequesterPosition { get; set; }
+		[Ordinal(1)]  [RED("requester")] public wCHandle<gameObject> Requester { get; set; }
 
 		public PreventionCombatStartedRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

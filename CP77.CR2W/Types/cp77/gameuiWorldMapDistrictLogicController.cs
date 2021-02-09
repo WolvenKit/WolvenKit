@@ -13,6 +13,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(2)]  [RED("selected")] public CBool Selected { get; set; }
 		[Ordinal(3)]  [RED("outlineWidget")] public inkLinePatternWidgetReference OutlineWidget { get; set; }
 		[Ordinal(4)]  [RED("iconWidget")] public inkImageWidgetReference IconWidget { get; set; }
+		[Ordinal(5)]  [RED("selectAnim")] public CHandle<inkanimProxy> SelectAnim { get; set; }
 
 		public gameuiWorldMapDistrictLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

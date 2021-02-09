@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkLayerDefinitionCollection : CVariable
 	{
-		[Ordinal(0)]  [RED("debugLayer")] public inkDebugLayerDefinition DebugLayer { get; set; }
 		[Ordinal(1)]  [RED("menuLayer")] public inkMenuLayerDefinition MenuLayer { get; set; }
 		[Ordinal(2)]  [RED("menuLayerMP")] public inkMenuLayerDefinition MenuLayerMP { get; set; }
 		[Ordinal(3)]  [RED("hudLayer")] public inkHUDLayerDefinition HudLayer { get; set; }
@@ -16,6 +15,9 @@ namespace CP77.CR2W.Types
 		[Ordinal(5)]  [RED("offscreenLayer")] public inkOffscreenLayerDefinition OffscreenLayer { get; set; }
 		[Ordinal(6)]  [RED("gameNotificationsLayer")] public inkGameNotificationsLayerDefinition GameNotificationsLayer { get; set; }
 		[Ordinal(7)]  [RED("photoModeLayer")] public inkPhotoModeLayerDefinition PhotoModeLayer { get; set; }
+
+        [Ordinal(8)] [RED("debugLayer")] public inkDebugLayerDefinition DebugLayer { get; set; }
+
 
 		public inkLayerDefinitionCollection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

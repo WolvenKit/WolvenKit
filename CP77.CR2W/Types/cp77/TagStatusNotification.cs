@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TagStatusNotification : HUDManagerRequest
 	{
-		[Ordinal(0)]  [RED("isTagged")] public CBool IsTagged { get; set; }
+		[Ordinal(1)]  [RED("isTagged")] public CBool IsTagged { get; set; }
 
 		public TagStatusNotification(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

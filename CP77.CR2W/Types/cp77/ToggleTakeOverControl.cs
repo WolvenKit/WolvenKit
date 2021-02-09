@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ToggleTakeOverControl : ActionBool
 	{
-		[Ordinal(0)]  [RED("isRequestedFormOtherDevice")] public CBool IsRequestedFormOtherDevice { get; set; }
+		[Ordinal(22)]  [RED("isRequestedFormOtherDevice")] public CBool IsRequestedFormOtherDevice { get; set; }
 
 		public ToggleTakeOverControl(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

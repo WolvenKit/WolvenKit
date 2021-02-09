@@ -14,6 +14,8 @@ namespace CP77.CR2W.Types
 		[Ordinal(3)]  [RED("constraintScale1")] public CFloat ConstraintScale1 { get; set; }
 		[Ordinal(4)]  [RED("constraintScale2")] public CFloat ConstraintScale2 { get; set; }
 
+        [Ordinal(996)] [RED("drawDebugConstraint")] public CBool drawDebugConstraint { get; set; }
+
 		public animDyngConstraintEllipsoid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

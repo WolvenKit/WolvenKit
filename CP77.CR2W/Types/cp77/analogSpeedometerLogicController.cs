@@ -8,10 +8,10 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class analogSpeedometerLogicController : IVehicleModuleController
 	{
-		[Ordinal(0)]  [RED("analogSpeedNeedleMaxRotation")] public CFloat AnalogSpeedNeedleMaxRotation { get; set; }
-		[Ordinal(1)]  [RED("analogSpeedNeedleMaxValue")] public CFloat AnalogSpeedNeedleMaxValue { get; set; }
-		[Ordinal(2)]  [RED("analogSpeedNeedleMinRotation")] public CFloat AnalogSpeedNeedleMinRotation { get; set; }
-		[Ordinal(3)]  [RED("analogSpeedNeedleWidget")] public inkWidgetReference AnalogSpeedNeedleWidget { get; set; }
+		[Ordinal(0)]  [RED("analogSpeedNeedleWidget")] public inkWidgetReference AnalogSpeedNeedleWidget { get; set; }
+		[Ordinal(1)]  [RED("analogSpeedNeedleMinRotation")] public CFloat AnalogSpeedNeedleMinRotation { get; set; }
+		[Ordinal(2)]  [RED("analogSpeedNeedleMaxRotation")] public CFloat AnalogSpeedNeedleMaxRotation { get; set; }
+		[Ordinal(3)]  [RED("analogSpeedNeedleMaxValue")] public CFloat AnalogSpeedNeedleMaxValue { get; set; }
 		[Ordinal(4)]  [RED("speedBBConnectionId")] public CUInt32 SpeedBBConnectionId { get; set; }
 		[Ordinal(5)]  [RED("vehBB")] public wCHandle<gameIBlackboard> VehBB { get; set; }
 		[Ordinal(6)]  [RED("vehicle")] public wCHandle<vehicleBaseObject> Vehicle { get; set; }

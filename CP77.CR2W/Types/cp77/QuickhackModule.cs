@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class QuickhackModule : HUDModule
 	{
-		[Ordinal(0)]  [RED("calculateClose")] public CBool CalculateClose { get; set; }
+		[Ordinal(3)]  [RED("calculateClose")] public CBool CalculateClose { get; set; }
 
 		public QuickhackModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

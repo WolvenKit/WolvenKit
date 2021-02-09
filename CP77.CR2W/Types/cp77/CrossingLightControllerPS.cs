@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CrossingLightControllerPS : TrafficLightControllerPS
 	{
-		[Ordinal(0)]  [RED("crossingLightSFXSetup")] public CrossingLightSetup CrossingLightSFXSetup { get; set; }
+		[Ordinal(103)]  [RED("crossingLightSFXSetup")] public CrossingLightSetup CrossingLightSFXSetup { get; set; }
 
 		public CrossingLightControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

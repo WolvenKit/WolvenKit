@@ -16,6 +16,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(5)]  [RED("gameplayRoot")] public inkCompoundWidgetReference GameplayRoot { get; set; }
 		[Ordinal(6)]  [RED("baseSpeed")] public CFloat BaseSpeed { get; set; }
 		[Ordinal(7)]  [RED("spawnedListLibraryNames")] public CArray<CName> SpawnedListLibraryNames { get; set; }
+		[Ordinal(8)]  [RED("isGameRunning")] public CBool IsGameRunning { get; set; }
 
 		public gameuiSideScrollerMiniGameLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

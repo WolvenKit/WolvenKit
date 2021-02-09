@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class DelayedVisibilityInAnimSystemRequest : gameScriptableSystemRequest
 	{
 		[Ordinal(0)]  [RED("data")] public CHandle<ForcedVisibilityInAnimSystemData> Data { get; set; }
-		[Ordinal(1)]  [RED("entityID")] public entEntityID EntityID { get; set; }
-		[Ordinal(2)]  [RED("isVisible")] public CBool IsVisible { get; set; }
+		[Ordinal(1)]  [RED("isVisible")] public CBool IsVisible { get; set; }
+		[Ordinal(2)]  [RED("entityID")] public entEntityID EntityID { get; set; }
 
 		public DelayedVisibilityInAnimSystemRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

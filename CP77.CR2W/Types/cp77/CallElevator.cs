@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CallElevator : ActionBool
 	{
-		[Ordinal(0)]  [RED("destination")] public CInt32 Destination { get; set; }
+		[Ordinal(22)]  [RED("destination")] public CInt32 Destination { get; set; }
 
 		public CallElevator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

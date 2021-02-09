@@ -28,7 +28,7 @@ namespace CP77.CR2W.Types
     {
         string DepotPath { get; set; }
         //string ClassName { get; set; }
-        //ushort Flags { get; set; }
+        EImportFlags Flags { get; set; }
 
         string REDName { get; }
         string REDType { get; }

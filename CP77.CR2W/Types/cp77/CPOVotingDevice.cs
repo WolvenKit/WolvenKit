@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CPOVotingDevice : CPOMissionDevice
 	{
-		[Ordinal(0)]  [RED("deviceName")] public CName DeviceName { get; set; }
+		[Ordinal(36)]  [RED("deviceName")] public CName DeviceName { get; set; }
 
 		public CPOVotingDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

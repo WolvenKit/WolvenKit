@@ -1,16 +1,24 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.HexEditor.HexEditorView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com" IsVisibleChanged="UserControl_IsVisibleChanged">
+                   xmlns:catel="http://schemas.catelproject.com" IsVisibleChanged="UserControl_IsVisibleChanged"
+                   xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:hexz="clr-namespace:WpfHexaEditor;assembly=WPFHexaEditor">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources/>
+                <hc:Theme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </catel:UserControl.Resources>
+
+
+    <Grid Width="600" Height="300"> 
+        <hexz:HexEditor Width="Auto" Height="Auto"/>
+
         <Label Grid.Row="0" Content="{Binding Title}" />
         <Label Grid.Row="1" Content="Here goes your real content" />
     </Grid>
-    
+
 </catel:UserControl>

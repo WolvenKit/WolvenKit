@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DoorInkGameController : DeviceInkGameControllerBase
 	{
-		[Ordinal(0)]  [RED("doorStaturTextWidget")] public wCHandle<inkTextWidget> DoorStaturTextWidget { get; set; }
+		[Ordinal(14)]  [RED("doorStaturTextWidget")] public wCHandle<inkTextWidget> DoorStaturTextWidget { get; set; }
 
 		public DoorInkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

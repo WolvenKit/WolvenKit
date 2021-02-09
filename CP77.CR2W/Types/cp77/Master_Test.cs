@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class Master_Test : gameObject
 	{
-		[Ordinal(0)]  [RED("deviceComponent")] public CHandle<gameMasterDeviceComponent> DeviceComponent { get; set; }
+		[Ordinal(31)]  [RED("deviceComponent")] public CHandle<gameMasterDeviceComponent> DeviceComponent { get; set; }
 
 		public Master_Test(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

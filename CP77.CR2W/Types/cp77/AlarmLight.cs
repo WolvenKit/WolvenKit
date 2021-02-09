@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AlarmLight : BasicDistractionDevice
 	{
-		[Ordinal(0)]  [RED("isGlitching")] public CBool IsGlitching { get; set; }
+		[Ordinal(90)]  [RED("isGlitching")] public CBool IsGlitching { get; set; }
 
 		public AlarmLight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

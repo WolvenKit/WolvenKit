@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class VentilationEffector : ActivatedDeviceTransfromAnim
 	{
-		[Ordinal(0)]  [RED("effectComponent")] public CHandle<entIPlacedComponent> EffectComponent { get; set; }
+		[Ordinal(85)]  [RED("effectComponent")] public CHandle<entIPlacedComponent> EffectComponent { get; set; }
 
 		public VentilationEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
