@@ -14,33 +14,30 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static WolvenKit.Views.VisualEditor.VisualEditorView;
 
-namespace WolvenKit.Views.VisualEditor.Nodes
+namespace WolvenKit.Views.Editors.VisualEditor.Nodes
 {
     /// <summary>
-    /// Interaction logic for HelloWorldNodeView.xaml
+    /// Interaction logic for OUT_Node.xaml
     /// </summary>
-    public partial class HelloWorldNodeView : IViewFor<HelloWorldNode>
+    public partial class OUT_Node : IViewFor<Views.VisualEditor.VisualEditorView.OUT_Node_Class>
     {
-        #region ViewModel
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register(nameof(ViewModel), typeof(HelloWorldNode), typeof(HelloWorldNodeView), new PropertyMetadata(null));
+                DependencyProperty.Register(nameof(ViewModel), typeof(Views.VisualEditor.VisualEditorView.OUT_Node_Class), typeof(OUT_Node), new PropertyMetadata(null));
 
-        public HelloWorldNode ViewModel
+        public Views.VisualEditor.VisualEditorView.OUT_Node_Class ViewModel
         {
-            get => (HelloWorldNode)GetValue(ViewModelProperty);
+            get => (Views.VisualEditor.VisualEditorView.OUT_Node_Class)GetValue(ViewModelProperty);
             set => SetValue(ViewModelProperty, value);
         }
 
         object IViewFor.ViewModel
         {
             get => ViewModel;
-            set => SetValue(ViewModelProperty, (HelloWorldNode)value);
+            set => SetValue(ViewModelProperty, (Views.VisualEditor.VisualEditorView.OUT_Node_Class)value);
         }
-        #endregion
 
-        public HelloWorldNodeView()
+        public OUT_Node()
         {
             InitializeComponent();
 
