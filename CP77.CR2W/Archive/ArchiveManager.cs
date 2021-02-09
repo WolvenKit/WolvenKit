@@ -163,7 +163,6 @@ namespace CP77.CR2W.Archive
         /// <param name="exedir">Path to executable directory</param>
         public override void LoadAll(string exedir)
         {
-            exedir = "D:\\SteamLibrary\\steamapps\\common\\Cyberpunk 2077\\bin\\x64\\";
             var di = new DirectoryInfo(exedir);
             if (!di.Exists)
                 return;

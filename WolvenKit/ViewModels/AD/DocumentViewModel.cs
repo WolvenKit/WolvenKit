@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using Catel.IoC;
+using CP77.CR2W;
+using Orc.ProjectManagement;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 
@@ -268,9 +270,7 @@ namespace WolvenKit.ViewModels
 		{
 			try
 			{
-				string textContent = string.Empty;
-
-				// This is the same default buffer size as
+                // This is the same default buffer size as
 				// <see cref="StreamReader"/> and <see cref="FileStream"/>.
 				// int DefaultBufferSize = 4096;
 
@@ -301,18 +301,42 @@ namespace WolvenKit.ViewModels
                         }
                         else
                         {
-                            File = new CR2WFile()
+                            // check game
+							var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
+                            var fileService = ServiceLocator.Default.ResolveType<IWolvenkitFileService>();
+							switch (pm.ActiveProject)
                             {
-                                FileName = path,
+                                case Cp77Project cp77proj:
 
-								//TODO: ???
-                                //EditorController = variableEditor/*UIController.Get()*/,
+                                    // read file
+                                    var cr2w = ModTools.TryReadCr2WFile(reader);
+                                    if (cr2w == null)
+                                    {
+                                        //Logger.LogString($"Failed to read cr2w file {cr2wfile.FullName}", Logtype.Error);
+                                        return false;
+                                    }
+                                    cr2w.FileName = path;
 
-                                LocalizedStringSource = MainController.Get()
-                            };
-                            errorcode = await File.Read(reader);
 
-                            //File.PropertyChanged += File_PropertyChanged;
+
+									break;
+                                case Tw3Project tw3proj:
+                                    throw new NotImplementedException();
+                                    //File = new CR2WFile()
+                                    //{
+                                    //    FileName = path,
+
+                                    //    //TODO: ???
+                                    //    //EditorController = variableEditor/*UIController.Get()*/,
+
+                                    //    LocalizedStringSource = MainController.Get()
+                                    //};
+                                    //errorcode = await File.Read(reader);
+                                    //break;
+                                default:
+                                    _isInitialized = false;
+                                    return false;
+                            }
                         }
                     }
 
@@ -335,6 +359,9 @@ namespace WolvenKit.ViewModels
 
 			return false;
 		}
+
+
+
 
 		/// <summary>
 		/// Gets the encoding of a file from its first 4 bytes.

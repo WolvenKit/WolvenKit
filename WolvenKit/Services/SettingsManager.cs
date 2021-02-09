@@ -17,8 +17,8 @@ namespace WolvenKit.Services
         private string _w3ExecutablePath = "";
         private string _cp77ExecutablePath = "";
         private string _wccLitePath = "";
-        private string _gameModDir = "";
-        private string _gameDlcDir = "";
+        //private string _gameModDir = "";
+        //private string _gameDlcDir = "";
         private string _depotPath = "";
 
         private static string ConfigurationPath
@@ -84,25 +84,6 @@ namespace WolvenKit.Services
             {
                 _wccLitePath = value;
                 RaisePropertyChanged(nameof(WccLitePath));
-            }
-        }
-
-        public string GameModDir
-        {
-            get => _gameModDir;
-            set
-            {
-                _gameModDir = value;
-                RaisePropertyChanged(nameof(GameModDir));
-            }
-        }
-        public string GameDlcDir
-        {
-            get => _gameDlcDir;
-            set
-            {
-                _gameDlcDir = value;
-                RaisePropertyChanged(nameof(GameDlcDir));
             }
         }
 

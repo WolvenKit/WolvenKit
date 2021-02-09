@@ -201,7 +201,7 @@ namespace WolvenKit.Scaleform
 
         public static byte GetLowNibble(byte value)
         {
-            return (byte)((value) & 0x0F); ;
+            return (byte)((value) & 0x0F);
         }
 
         public static byte[] GetBytesFromHexString(string hexValue)
