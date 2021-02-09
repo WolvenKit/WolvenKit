@@ -23,9 +23,9 @@ namespace WolvenKit.Views
             InitializeComponent();
 
             ribbon.AddAboutButton();
-            
 
-
+            App.RibbonViewInstance = this;
+           
         }
 
         protected override void OnViewModelChanged()
@@ -56,9 +56,7 @@ namespace WolvenKit.Views
 
         private void ShowStartScreen_OnClick(object sender, RoutedEventArgs e) // Convert me to MVVM
         {        
- 
-            this.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
-                this.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
+            // Nope we dont do that here . And I am not removing this >:)
         }
 
        
