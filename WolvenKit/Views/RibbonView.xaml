@@ -57,14 +57,7 @@
                         </fluent:BackstageTabControl.Resources>
 
 
-                        <fluent:Button Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                        Height="60"
-                                        Icon="{iconPacks:Codicons Kind=Home}"
-                                        FontSize="18"
-                                       Click="ShowStartScreen_OnClick"
-                                       OverridesDefaultStyle="True">
-                            Home
-                        </fluent:Button>
+                 
                         <fluent:SeparatorTabItem Height="Auto" Margin="20,10,20,10"/>
                         <fluent:BackstageTabItem    Header="Files"
                                                     Height="60"
