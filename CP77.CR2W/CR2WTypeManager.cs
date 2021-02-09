@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Catel.IoC;
 using CP77.CR2W.Reflection;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Types

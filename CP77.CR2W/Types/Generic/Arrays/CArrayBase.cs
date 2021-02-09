@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
-
+using WolvenKit.Common.Model.Cr2w;
 using System.Linq;
 using CP77.CR2W.Reflection;
 using System.ComponentModel;
@@ -105,7 +105,7 @@ namespace CP77.CR2W.Types
             return newvar == null || newvar is T;
         }
 
-        public override void AddVariable(CVariable variable)
+        public override void AddVariable(IEditableVariable variable)
         {
             if (variable is T tvar)
             {
@@ -166,7 +166,7 @@ namespace CP77.CR2W.Types
             }
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = base.Copy(context) as CArrayBase<T>;
             context.Parent = copy;

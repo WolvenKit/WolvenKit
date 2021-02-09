@@ -3,28 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.Common.Services;
 using CP77.CR2W.Types;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W
 {
     /// <summary>
     /// Copy-pasting has been scattered /TODO recentralize here
     /// </summary>
-    public class CR2WCopyAction
+    public class CR2WCopyAction : ICR2WCopyAction
     {
-        public Dictionary<CR2WExportWrapper, CR2WExportWrapper> chunkTranslation; // source, target
+        public Dictionary<ICR2WExport, ICR2WExport> chunkTranslation; // source, target
 
         public CR2WCopyAction()
         {
-            chunkTranslation = new Dictionary<CR2WExportWrapper, CR2WExportWrapper>();
+            chunkTranslation = new Dictionary<ICR2WExport, ICR2WExport>();
         }
 
-        public CR2WExportWrapper SourceChunk { get; set; }
-        public CR2WExportWrapper DestinationChunk { get; set; }
-        public CVariable SourceCVar => SourceChunk.data;
-        public CVariable DestinationCVar => DestinationChunk.data;
+        public ICR2WExport SourceChunk { get; set; }
+        public ICR2WExport DestinationChunk { get; set; }
+        public IEditableVariable SourceCVar => SourceChunk.data;
+        public IEditableVariable DestinationCVar => DestinationChunk.data;
         public CR2WFile SourceFile { get; set; }
         public CR2WFile DestinationFile { get; set; }
-        public CVariable Parent { get; set; }
+        public IEditableVariable Parent { get; set; }
 
         /// <summary>
         /// Used when pasting-in-place a chunk, takes care of (virtual) children.
@@ -33,10 +34,10 @@ namespace CP77.CR2W
         /// <param name="destinationchunk"></param>
         /// <param name="oldparentinghierarchy"></param>
         public void AddChildrenChunks(
-            CR2WExportWrapper sourcechunk,
-            CR2WExportWrapper destinationchunk = null,
-            Dictionary<CR2WExportWrapper,
-                (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)> oldparentinghierarchy = null)
+            ICR2WExport sourcechunk,
+            ICR2WExport destinationchunk = null,
+            Dictionary<ICR2WExport,
+                (ICR2WExport oldchunkparent, ICR2WExport oldchunkvparent)> oldparentinghierarchy = null)
         {
             // First recursion to create the "empty" chunk descendent shells
             DeepChunkCopy(SourceChunk, DestinationChunk);
@@ -74,10 +75,10 @@ namespace CP77.CR2W
         /// <param name="targetarray"></param>
         /// <param name="oldparentinghierarchy"></param>
         public void PasteChunksInArray(
-            List<CR2WExportWrapper> sourcechunks,
+            List<ICR2WExport> sourcechunks,
             IArrayAccessor targetarray,
-            Dictionary<CR2WExportWrapper,
-                (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)> oldparentinghierarchy = null)
+            Dictionary<ICR2WExport,
+                (ICR2WExport oldchunkparent, ICR2WExport oldchunkvparent)> oldparentinghierarchy = null)
         {
             // First recursion to create the "empty" chunk descendent shells
             foreach (var sourcechunk in sourcechunks)
@@ -137,7 +138,7 @@ namespace CP77.CR2W
         /// <param name="sourcechunk"></param>
         /// <param name="destinationchunk"></param>
         /// <param name="inplace"></param>
-        private void DeepChunkCopy (CR2WExportWrapper sourcechunk, CR2WExportWrapper destinationchunk, bool inplace = true)
+        private void DeepChunkCopy (ICR2WExport sourcechunk, ICR2WExport destinationchunk, bool inplace = true)
         {
             Parent = null;
             foreach (var sourcevirtualchildchunk in sourcechunk.VirtualChildrenChunks)
@@ -171,7 +172,7 @@ namespace CP77.CR2W
         /// <param name="oldExportWrapper"></param>
         /// <param name="targetVariable"></param>
         /// <returns></returns>
-        internal CR2WExportWrapper TryLookupReference(CR2WExportWrapper oldExportWrapper, CVariable targetVariable = null)
+        public ICR2WExport TryLookupReference(ICR2WExport oldExportWrapper, IEditableVariable targetVariable = null)
         {
             if (oldExportWrapper == null)
             {
@@ -185,7 +186,7 @@ namespace CP77.CR2W
             }
 
             // Try going up the chunk hierarchy
-            CR2WExportWrapper parent = DestinationChunk;
+            ICR2WExport parent = DestinationChunk;
             while (parent != null)
             {
                 if (parent.REDType == oldExportWrapper.REDType)

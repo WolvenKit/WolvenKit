@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W
 {
@@ -43,7 +44,7 @@ namespace CP77.CR2W
         }
 
         public string ImportPath { get; private set; } = "<failed to get import path>";
-        public CR2WExportWrapper Export { get; private set; }
+        public ICR2WExport Export { get; private set; }
 
 
         public void SetChunkIndex(uint offset) => _embedded.chunkIndex = offset;

@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using Catel.IoC;
-using CP77.CR2W;
 using Orc.ProjectManagement;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
@@ -20,6 +19,7 @@ namespace WolvenKit.ViewModels
 	using CR2W;
 	using CR2W.SRT;
 	using Commands;
+    using WolvenKit.Common.Model.Cr2w;
 
     public class DocumentViewModel : PaneViewModel, IDocumentViewModel
 	{
@@ -99,7 +99,7 @@ namespace WolvenKit.ViewModels
 		/// <summary>
 		/// Bound to the View
 		/// </summary>
-        public List<ChunkViewModel> Chunks => (File as CR2WFile)?.Chunks.Select(_ => new ChunkViewModel(_)).ToList();
+        public List<ChunkViewModel> Chunks => File.Chunks.Select(_ => new ChunkViewModel(_)).ToList();
 
         /// <summary>
         /// Bound to the View via TreeViewBehavior.cs
@@ -268,6 +268,8 @@ namespace WolvenKit.ViewModels
 		/// <returns>True if file read was successful, otherwise false</returns>
 		public async Task<bool> OpenFileAsync(string path)
 		{
+            _isInitialized = false;
+
 			try
 			{
                 // This is the same default buffer size as
@@ -286,61 +288,44 @@ namespace WolvenKit.ViewModels
                 await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
 					EFileReadErrorCodes errorcode;
-                    using (var reader = new BinaryReader(stream))
+                    using var reader = new BinaryReader(stream);
+                    
+                    if (Path.GetExtension(path) == ".srt")
                     {
-						// switch between cr2wfiles and others (e.g. srt)
-                        
-
-						if (Path.GetExtension(path) == ".srt")
+                        File = new Srtfile()
                         {
-                            File = new Srtfile()
-                            {
-                                FileName = path
-							};
-                            errorcode = await File.Read(reader);
-                        }
-                        else
+                            FileName = path
+                        };
+                        errorcode = await File.Read(reader);
+                    }
+                    else
+                    {
+                        // check game
+                        var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
+                        //var fileService = ServiceLocator.Default.ResolveType<IWolvenkitFileService>();
+                        switch (pm.ActiveProject)
                         {
-                            // check game
-							var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
-                            var fileService = ServiceLocator.Default.ResolveType<IWolvenkitFileService>();
-							switch (pm.ActiveProject)
-                            {
-                                case Cp77Project cp77proj:
-
-                                    // read file
-                                    var cr2w = ModTools.TryReadCr2WFile(reader);
-                                    if (cr2w == null)
-                                    {
-                                        //Logger.LogString($"Failed to read cr2w file {cr2wfile.FullName}", Logtype.Error);
-                                        return false;
-                                    }
-                                    cr2w.FileName = path;
-
-
-
-									break;
-                                case Tw3Project tw3proj:
-                                    throw new NotImplementedException();
-                                    //File = new CR2WFile()
-                                    //{
-                                    //    FileName = path,
-
-                                    //    //TODO: ???
-                                    //    //EditorController = variableEditor/*UIController.Get()*/,
-
-                                    //    LocalizedStringSource = MainController.Get()
-                                    //};
-                                    //errorcode = await File.Read(reader);
-                                    //break;
-                                default:
-                                    _isInitialized = false;
+                            case Cp77Project cp77proj:
+                                var cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(reader);
+                                if (cr2w == null)
+                                {
+                                    logger.LogString($"Failed to read cr2w file {path}", Logtype.Error);
                                     return false;
-                            }
+                                }
+                                cr2w.FileName = path;
+
+                                File = cr2w;
+
+                                break;
+                            case Tw3Project tw3proj:
+                                throw new NotImplementedException();
+
+                            default:
+                                _isInitialized = false;
+                                return false;
                         }
                     }
-
-				}
+                }
 
 
 				ContentId = path;

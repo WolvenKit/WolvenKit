@@ -1,5 +1,6 @@
 ﻿using DotNetHelper.FastMember.Extension.Extension;
 using FastMember;
+using Newtonsoft.Json;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ using System.Xml;
 using System.Xml.Schema;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.Reflection;
 using WolvenKit.Utils;
 
@@ -24,34 +27,36 @@ namespace WolvenKit.CR2W.Types
         protected CVariable()
         {
             this.VarChunkIndex = -1;
-            InternalGuid = Guid.NewGuid();
             accessor = TypeAccessor.Create(this.GetType());
         }
 
         protected CVariable(CR2WFile cr2w, CVariable parent, string name)
         {
-            this.cr2w = cr2w;
+            this.Cr2wFile = cr2w;
             this.ParentVar = parent;
             this.REDName = name;
             this.VarChunkIndex = -1;
 
-            InternalGuid = Guid.NewGuid();
             accessor = TypeAccessor.Create(this.GetType());
         }
 
 
         #region Fields
-        public readonly TypeAccessor accessor;
+        public TypeAccessor accessor { get; }
 
         #endregion
 
         #region Properties
 
+        [JsonIgnore]
+        public IWolvenkitFile Cr2wFile { get; set; }
+
         /// <summary>
         /// Stores the parent cr2w file.
         /// used a lot
         /// </summary>
-        public CR2WFile cr2w { get; set; }
+        [JsonIgnore]
+        public CR2WFile cr2w => Cr2wFile as CR2WFile;
 
         /// <summary>
         /// Shows if the CVariable is to be serialized
@@ -82,11 +87,10 @@ namespace WolvenKit.CR2W.Types
         public void SetREDFlags(ushort flag) => _redFlags = flag;
 
         /// <summary>
-        /// an internal guid that is used to track cvariables 
-        /// should be replaced by a better hashing algorithm
-        /// or the Fullname method
+        /// an internal id that is used to track cvariables 
         /// </summary>
-        public Guid InternalGuid { get; set; }
+        [JsonIgnore]
+        public string UniqueIdentifier => GetFullDependencyStringName();
 
         /// <summary>
         /// Stores the parent CVariable 
@@ -155,13 +159,31 @@ namespace WolvenKit.CR2W.Types
         /// We can use something like this for hashing
         /// </summary>
         /// <returns></returns>
-        public string GetFullDependencyStringName()
+        private string GetFullDependencyStringName()
         {
-            var depstr = this.REDName;
             var par = this.ParentVar;
-            while (par != null)
+            // top level chunk variables return the chunk index
+            if (par == null)
+                return $"{this.VarChunkIndex}.{this.REDName}";
+
+            // all chunks get their chunk id prefixed
+            var depstr = this.VarChunkIndex > 0
+                ? $"{this.VarChunkIndex}.{this.REDName}"
+                : this.REDName;
+
+            while (true)
             {
-                depstr = $"{par.REDName}.{depstr}";
+                //depstr = $"{par.REDName}.{depstr}";
+                depstr = par.VarChunkIndex > 0
+                    ? $"{par.VarChunkIndex}.{par.REDName}.{depstr}"
+                    : $"{par.REDName}.{depstr}";
+
+
+                if (par.ParentVar == null)
+                {
+                    depstr = $"{par.VarChunkIndex}.{depstr}";
+                    break;
+                }
                 par = par.ParentVar;
             }
 
@@ -570,11 +592,14 @@ namespace WolvenKit.CR2W.Types
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public virtual CVariable Copy(CR2WCopyAction context)
+        public virtual IEditableVariable Copy(ICR2WCopyAction icontext)
         {
+            if (icontext is not CR2WCopyAction context)
+                throw new InvalidParsingException("Tried copying cp77 assets.");
+
             // creates a new instance of the CVariable
             // with a new destination cr2wFile and a new parent CVariable if needed
-            var copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent, false);
+            var copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent as CVariable, false);
             //copy.REDFlags = this.REDFlags;
             copy.IsSerialized = this.IsSerialized;
 
@@ -608,7 +633,7 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public virtual void AddVariable(CVariable var)
+        public virtual void AddVariable(IEditableVariable var)
         {
             throw new NotImplementedException();
         }

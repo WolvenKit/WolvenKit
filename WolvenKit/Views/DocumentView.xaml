@@ -11,7 +11,7 @@
 	xmlns:model="clr-namespace:WolvenKit.Model"
 	xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:cmodel="clr-namespace:WolvenKit.Common.Model"
-	xmlns:types="clr-namespace:WolvenKit.CR2W.Types;assembly=WolvenKit.CR2W"
+	xmlns:types="clr-namespace:WolvenKit.Common.Model.Cr2w;assembly=WolvenKit.Common"
 	xmlns:cr2W="clr-namespace:WolvenKit.CR2W;assembly=WolvenKit.CR2W"
     xmlns:conv="clr-namespace:WolvenKit.Layout.Converters"
 	d:DesignHeight="450"
@@ -89,7 +89,7 @@
             <TreeView.Resources>
 
                 
-                <HierarchicalDataTemplate DataType="{x:Type types:CVariable}" 
+                <HierarchicalDataTemplate DataType="{x:Type types:IEditableVariable}" 
                                           ItemsSource="{Binding ChildrEditableVariables}"
                                           >
                     <Grid Width="Auto">

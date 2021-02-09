@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using FastMember;
 using Newtonsoft.Json;
-using CP77.CR2W;
-using CP77.CR2W.Types;
 
-namespace CP77.CR2W
+namespace WolvenKit.Common.Model.Cr2w
 {
     public interface IEditableVariable
     {
@@ -28,9 +27,9 @@ namespace CP77.CR2W
         
 
         [JsonIgnore]
-        CR2WFile cr2w { get; set; }
+        IWolvenkitFile Cr2wFile { get; set; }
 
-
+        public TypeAccessor accessor { get; }
 
         [JsonIgnore]
         List<IEditableVariable> ChildrEditableVariables { get; }
@@ -43,11 +42,13 @@ namespace CP77.CR2W
         int LookUpChunkIndex();
         bool CanRemoveVariable(IEditableVariable child);
         bool CanAddVariable(IEditableVariable newvar);
-        void AddVariable(CVariable var);
+        void AddVariable(IEditableVariable var);
         bool RemoveVariable(IEditableVariable child);
 
         void Read(BinaryReader file, uint size);
         void Write(BinaryWriter file);
-        CVariable Copy(CR2WCopyAction context);
+        IEditableVariable Copy(ICR2WCopyAction context);
+
+
     }
 }

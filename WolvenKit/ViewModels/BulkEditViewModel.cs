@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.ViewModels
 {
@@ -283,7 +284,7 @@ namespace WolvenKit.ViewModels
             List<string> includedvalues = opts.Include == null ? new List<string>() : opts.Include.Split(',').ToList();
 
             // get chunks that match chunkname
-            List<CR2WExportWrapper> chunks = opts.ChunkName != null ? file.Chunks.Where(_ => _.data.GetType().Name == opts.ChunkName).ToList() : file.Chunks;
+            List<ICR2WExport> chunks = opts.ChunkName != null ? file.Chunks.Where(_ => _.data.GetType().Name == opts.ChunkName).ToList() : file.Chunks;
             
             var splits = opts.Name.Split('.');
 
@@ -293,7 +294,7 @@ namespace WolvenKit.ViewModels
                 CheckProperties(chunk);
             }
 
-            void CheckProperties(CVariable cvar)
+            void CheckProperties(IEditableVariable cvar)
             {
                 // edit lists
                 if (cvar is IList && cvar.GetType().IsGenericType)
@@ -321,7 +322,7 @@ namespace WolvenKit.ViewModels
                 }
             }
 
-            void TrySetValue(CVariable cvar)
+            void TrySetValue(IEditableVariable cvar)
             {
                 var propname = splits.Last();
 

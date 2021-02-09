@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta()]
     public class CVariantSizeNameType : CVariable, IBufferVariantAccessor
     {
-        public CVariable Variant { get; set; }
+        public IEditableVariable Variant { get; set; }
 
         public CVariantSizeNameType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
@@ -68,8 +68,8 @@ namespace WolvenKit.CR2W.Types
 
             // write variable
             file.Write(varsize);
-            file.Write(Variant.GetnameId());
-            file.Write(Variant.GettypeId());
+            file.Write((Variant as CVariable).GetnameId());
+            file.Write((Variant as CVariable).GettypeId());
             file.Write(varvalue);
         }
 
@@ -78,7 +78,7 @@ namespace WolvenKit.CR2W.Types
             return Variant == null ? "NULL" : Variant.ToString();
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = (CVariantSizeNameType)base.Copy(context);
             if (Variant != null)

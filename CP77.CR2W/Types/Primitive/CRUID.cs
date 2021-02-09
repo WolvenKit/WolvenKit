@@ -5,6 +5,9 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Linq;
 using CP77.CR2W.Reflection;
+using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common.Model.Cr2w;
+
 
 namespace CP77.CR2W.Types
 {

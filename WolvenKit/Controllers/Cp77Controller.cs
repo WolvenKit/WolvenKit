@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Catel.IoC;
 using Catel.Linq;
+using CP77.CR2W;
 using CP77.CR2W.Types;
 using Newtonsoft.Json;
 using Orc.ProjectManagement;
@@ -87,12 +88,22 @@ namespace WolvenKit.Controllers
         {
             List<Func<IGameArchiveManager>> todo = new List<Func<IGameArchiveManager>>()
             {
-                LoadArchiveManager
+                LoadArchiveManager,
             };
             Parallel.ForEach(todo, _ => Task.Run(_));
+            RegisterServices();
         }
 
-        public override Task<bool> PackAndInstallroject()
+        private static void RegisterServices()
+        {
+            if (ServiceLocator.Default.IsTypeRegistered<IWolvenkitFileService>())
+            {
+                ServiceLocator.Default.RemoveType<IWolvenkitFileService>();
+            }
+            ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
+        }
+
+        public override Task<bool> PackAndInstallProject()
         {
             var _loggerService = ServiceLocator.Default.ResolveType<ILoggerService>();
             var _projectService = ServiceLocator.Default.ResolveType<IProjectManager>();
