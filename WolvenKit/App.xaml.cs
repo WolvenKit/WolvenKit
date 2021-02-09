@@ -357,6 +357,7 @@ namespace WolvenKit
                 Opacity = 0.8,     
             };
             System.Windows.Controls.Button tick = new System.Windows.Controls.Button();
+            tick.Click += Tick_Click;
             tick.LayoutTransform = new RotateTransform(180,0.5,0.5);
             tick.Style = (Style)FindResource("ButtonIcon");
             HandyControl.Controls.IconElement.SetGeometry(tick, (Geometry)FindResource("HomeIcon"));           
@@ -368,7 +369,14 @@ namespace WolvenKit
           // var a = (System.Windows.Controls.Button)sh.RightWindowCommands.Items[0];
            // a.Content = ""
         }
-       
 
+        private void Tick_Click(object sender, RoutedEventArgs e)
+        {
+            Views.JournalEditor.JournalEditorView rpv = new Views.JournalEditor.JournalEditorView();
+            rpv.Margin = new Thickness(35);
+            UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
+            UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
+            uchwv.Show();
+        }
     }
 }
