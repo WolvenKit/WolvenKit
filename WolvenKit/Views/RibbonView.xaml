@@ -31,7 +31,7 @@
             
             <!-- StartScreen -->
             <fluent:Ribbon.StartScreen>
-                <fluent:StartScreen x:Name="startScreen" IsOpen="True" >
+                <fluent:StartScreen x:Name="startScreen" IsOpen="False" >
                     <HomeView:HomePageView />
 
                     
