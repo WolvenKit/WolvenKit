@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ActivatedDeviceNPCControllerPS : ActivatedDeviceControllerPS
 	{
-		[Ordinal(0)]  [RED("activatedDeviceNPCSetup")] public ActivatedDeviceNPCSetup ActivatedDeviceNPCSetup { get; set; }
+		[Ordinal(107)]  [RED("activatedDeviceNPCSetup")] public ActivatedDeviceNPCSetup ActivatedDeviceNPCSetup { get; set; }
 
 		public ActivatedDeviceNPCControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

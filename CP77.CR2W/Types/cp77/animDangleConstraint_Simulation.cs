@@ -17,7 +17,12 @@ namespace CP77.CR2W.Types
 		[Ordinal(6)]  [RED("parentRotationAltersTransformsOfNonDanglesAndItsChildren")] public CBool ParentRotationAltersTransformsOfNonDanglesAndItsChildren { get; set; }
 		[Ordinal(7)]  [RED("dangleAltersTransformsOfItsChildren")] public CBool DangleAltersTransformsOfItsChildren { get; set; }
 
-        [Ordinal(999)] [RED("debugDrawingEnabled")] public CBool debugDrawingEnabled { get; set; }
+		[Ordinal(995)] [RED("debugDrawingEnabled")] public CBool debugDrawingEnabled { get; set; }
+		//[Ordinal(996)] [RED("drawDebugConstraint")] public CBool drawDebugConstraint { get; set; }
+		[Ordinal(997)] [RED("drawDebugText")] public CBool drawDebugText { get; set; }
+        [Ordinal(998)] [RED("drawDebugAxis")] public CBool drawDebugAxis { get; set; }
+        [Ordinal(999)] [RED("drawDebugCollisionCapsule")] public CBool drawDebugCollisionCapsule { get; set; }
+        [Ordinal(1000)] [RED("drawDebugCollisionShapes")] public CBool drawDebugCollisionShapes { get; set; }
 
 		public animDangleConstraint_Simulation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

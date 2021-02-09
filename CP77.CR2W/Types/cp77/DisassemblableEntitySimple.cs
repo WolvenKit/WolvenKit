@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DisassemblableEntitySimple : InteractiveDevice
 	{
-		[Ordinal(0)]  [RED("collider")] public CHandle<entIComponent> Collider { get; set; }
-		[Ordinal(1)]  [RED("mesh")] public CHandle<entMeshComponent> Mesh { get; set; }
+		[Ordinal(84)]  [RED("mesh")] public CHandle<entMeshComponent> Mesh { get; set; }
+		[Ordinal(85)]  [RED("collider")] public CHandle<entIComponent> Collider { get; set; }
 
 		public DisassemblableEntitySimple(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

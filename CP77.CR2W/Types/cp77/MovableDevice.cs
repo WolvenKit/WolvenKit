@@ -8,14 +8,14 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MovableDevice : InteractiveDevice
 	{
-		[Ordinal(0)]  [RED("UseWorkspotComponentPosition")] public CBool UseWorkspotComponentPosition { get; set; }
-		[Ordinal(1)]  [RED("additionalMeshComponent")] public CHandle<entMeshComponent> AdditionalMeshComponent { get; set; }
-		[Ordinal(2)]  [RED("offMeshConnectionsToOpen")] public CArray<CHandle<AIOffMeshConnectionComponent>> OffMeshConnectionsToOpen { get; set; }
-		[Ordinal(3)]  [RED("offMeshConnectionsToOpenNames")] public CArray<CName> OffMeshConnectionsToOpenNames { get; set; }
-		[Ordinal(4)]  [RED("shouldMoveRight")] public CBool ShouldMoveRight { get; set; }
-		[Ordinal(5)]  [RED("sideTriggerNames")] public CArray<CName> SideTriggerNames { get; set; }
-		[Ordinal(6)]  [RED("triggerComponents")] public CArray<CHandle<gameStaticTriggerAreaComponent>> TriggerComponents { get; set; }
-		[Ordinal(7)]  [RED("workspotSideName")] public CName WorkspotSideName { get; set; }
+		[Ordinal(84)]  [RED("workspotSideName")] public CName WorkspotSideName { get; set; }
+		[Ordinal(85)]  [RED("sideTriggerNames")] public CArray<CName> SideTriggerNames { get; set; }
+		[Ordinal(86)]  [RED("triggerComponents")] public CArray<CHandle<gameStaticTriggerAreaComponent>> TriggerComponents { get; set; }
+		[Ordinal(87)]  [RED("offMeshConnectionsToOpenNames")] public CArray<CName> OffMeshConnectionsToOpenNames { get; set; }
+		[Ordinal(88)]  [RED("offMeshConnectionsToOpen")] public CArray<CHandle<AIOffMeshConnectionComponent>> OffMeshConnectionsToOpen { get; set; }
+		[Ordinal(89)]  [RED("additionalMeshComponent")] public CHandle<entMeshComponent> AdditionalMeshComponent { get; set; }
+		[Ordinal(90)]  [RED("UseWorkspotComponentPosition")] public CBool UseWorkspotComponentPosition { get; set; }
+		[Ordinal(91)]  [RED("shouldMoveRight")] public CBool ShouldMoveRight { get; set; }
 
 		public MovableDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

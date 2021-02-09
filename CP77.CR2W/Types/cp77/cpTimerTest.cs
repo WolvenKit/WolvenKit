@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class cpTimerTest : gameObject
 	{
-		[Ordinal(0)]  [RED("counter")] public CInt32 Counter { get; set; }
+		[Ordinal(31)]  [RED("counter")] public CInt32 Counter { get; set; }
 
 		public cpTimerTest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

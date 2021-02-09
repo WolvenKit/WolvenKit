@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class characterCreationNavigationBtn : inkButtonController
 	{
 		[Ordinal(0)]  [RED("icon1")] public inkWidgetReference Icon1 { get; set; }
-		[Ordinal(1)]  [RED("root")] public CHandle<inkWidget> Root { get; set; }
-		[Ordinal(2)]  [RED("shouldPlaySoundOnHover")] public CBool ShouldPlaySoundOnHover { get; set; }
+		[Ordinal(1)]  [RED("shouldPlaySoundOnHover")] public CBool ShouldPlaySoundOnHover { get; set; }
+		[Ordinal(2)]  [RED("root")] public CHandle<inkWidget> Root { get; set; }
 
 		public characterCreationNavigationBtn(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

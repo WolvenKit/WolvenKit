@@ -8,10 +8,10 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CarHotkeyController : GenericHotkeyController
 	{
-		[Ordinal(0)]  [RED("bbListener")] public CUInt32 BbListener { get; set; }
-		[Ordinal(1)]  [RED("carIconSlot")] public inkImageWidgetReference CarIconSlot { get; set; }
-		[Ordinal(2)]  [RED("psmBB")] public CHandle<gameIBlackboard> PsmBB { get; set; }
-		[Ordinal(3)]  [RED("vehicleSystem")] public wCHandle<gameVehicleSystem> VehicleSystem { get; set; }
+		[Ordinal(17)]  [RED("carIconSlot")] public inkImageWidgetReference CarIconSlot { get; set; }
+		[Ordinal(18)]  [RED("vehicleSystem")] public wCHandle<gameVehicleSystem> VehicleSystem { get; set; }
+		[Ordinal(19)]  [RED("psmBB")] public CHandle<gameIBlackboard> PsmBB { get; set; }
+		[Ordinal(20)]  [RED("bbListener")] public CUInt32 BbListener { get; set; }
 
 		public CarHotkeyController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

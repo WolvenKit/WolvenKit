@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class LeaveCoverImmediately : AIbehaviortaskScript
 	{
-		[Ordinal(0)]  [RED("completeOnLeave")] public CBool CompleteOnLeave { get; set; }
-		[Ordinal(1)]  [RED("delay")] public CFloat Delay { get; set; }
+		[Ordinal(0)]  [RED("delay")] public CFloat Delay { get; set; }
+		[Ordinal(1)]  [RED("completeOnLeave")] public CBool CompleteOnLeave { get; set; }
 		[Ordinal(2)]  [RED("timeStamp")] public CFloat TimeStamp { get; set; }
 		[Ordinal(3)]  [RED("triggered")] public CBool Triggered { get; set; }
 

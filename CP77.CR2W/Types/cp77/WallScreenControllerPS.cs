@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class WallScreenControllerPS : TVControllerPS
 	{
-		[Ordinal(0)]  [RED("isShown")] public CBool IsShown { get; set; }
+		[Ordinal(113)]  [RED("isShown")] public CBool IsShown { get; set; }
 
 		public WallScreenControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TweakAIActionCondition : TweakAIActionConditionAbstract
 	{
-		[Ordinal(0)]  [RED("record")] public TweakDBID Record { get; set; }
+		[Ordinal(2)]  [RED("record")] public TweakDBID Record { get; set; }
 
 		public TweakAIActionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

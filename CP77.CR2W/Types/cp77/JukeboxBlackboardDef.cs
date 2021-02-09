@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class JukeboxBlackboardDef : DeviceBaseBlackboardDef
 	{
-		[Ordinal(0)]  [RED("IsPlaying")] public gamebbScriptID_Bool IsPlaying { get; set; }
+		[Ordinal(7)]  [RED("IsPlaying")] public gamebbScriptID_Bool IsPlaying { get; set; }
 
 		public JukeboxBlackboardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

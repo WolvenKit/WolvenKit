@@ -17,6 +17,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(6)]  [RED("noWeaponAimOutTime")] public CFloat NoWeaponAimOutTime { get; set; }
 		[Ordinal(7)]  [RED("shouldUseWeaponZoomStats")] public CBool ShouldUseWeaponZoomStats { get; set; }
 		[Ordinal(8)]  [RED("focusModeActive")] public CBool FocusModeActive { get; set; }
+		[Ordinal(9)]  [RED("weaponScopeFov")] public CFloat WeaponScopeFov { get; set; }
 
 		public AnimFeature_Zoom(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

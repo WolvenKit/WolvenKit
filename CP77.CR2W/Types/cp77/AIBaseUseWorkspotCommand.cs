@@ -17,6 +17,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(6)]  [RED("infiniteSequenceEntryId")] public workWorkEntryId InfiniteSequenceEntryId { get; set; }
 		[Ordinal(7)]  [RED("idleOnlyMode")] public CBool IdleOnlyMode { get; set; }
 		[Ordinal(8)]  [RED("continueInCombat")] public CBool ContinueInCombat { get; set; }
+		[Ordinal(9)]  [RED("movementType")] public CEnum<moveMovementType> MovementType { get; set; }
 
 		public AIBaseUseWorkspotCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

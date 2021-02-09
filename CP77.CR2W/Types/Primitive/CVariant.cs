@@ -16,6 +16,8 @@ namespace CP77.CR2W.Types
 
         public CVariant(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
+        public override string REDType => "Variant";
+
         public override void Read(BinaryReader file, uint size)
         {
             var typepos = file.BaseStream.Position;

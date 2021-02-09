@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class UIMenuNotificationViewData : gameuiGenericNotificationViewData
 	{
-		[Ordinal(0)]  [RED("canBeMerged")] public CBool CanBeMerged { get; set; }
+		[Ordinal(1)]  [RED("canBeMerged")] public CBool CanBeMerged { get; set; }
 
 		public UIMenuNotificationViewData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

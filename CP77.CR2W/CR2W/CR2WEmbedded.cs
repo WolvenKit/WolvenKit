@@ -19,7 +19,7 @@ namespace CP77.CR2W
         public uint chunkIndex;               // updated on cr2w write
 
         [FieldOffset(8)]
-        public ulong pathHash;          // updated on cr2w write
+        public ulong pathHash;          // updated on cr2w write // always 0 in cp77?
     }
 
     public class CR2WEmbeddedWrapper

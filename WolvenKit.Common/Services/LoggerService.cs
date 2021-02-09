@@ -112,7 +112,7 @@ namespace WolvenKit.Common.Services
             OnStringLogged?.Invoke(this, new LogStringEventArgs(text, type));
 
             if (type == Logtype.Error)
-                ErrorLogStr += text + "\r\n";
+                ErrorLogStr += value + "\r\n";
         }
         /// <summary>
         /// Log progress value

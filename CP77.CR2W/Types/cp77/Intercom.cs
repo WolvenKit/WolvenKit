@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class Intercom : InteractiveDevice
 	{
-		[Ordinal(0)]  [RED("distractionSound")] public CName DistractionSound { get; set; }
-		[Ordinal(1)]  [RED("isShortGlitchActive")] public CBool IsShortGlitchActive { get; set; }
-		[Ordinal(2)]  [RED("shortGlitchDelayID")] public gameDelayID ShortGlitchDelayID { get; set; }
+		[Ordinal(84)]  [RED("isShortGlitchActive")] public CBool IsShortGlitchActive { get; set; }
+		[Ordinal(85)]  [RED("shortGlitchDelayID")] public gameDelayID ShortGlitchDelayID { get; set; }
+		[Ordinal(86)]  [RED("distractionSound")] public CName DistractionSound { get; set; }
 
 		public Intercom(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

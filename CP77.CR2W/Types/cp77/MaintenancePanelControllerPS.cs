@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MaintenancePanelControllerPS : MasterControllerPS
 	{
-		[Ordinal(0)]  [RED("maintenancePanelSkillChecks")] public CHandle<EngineeringContainer> MaintenancePanelSkillChecks { get; set; }
+		[Ordinal(104)]  [RED("maintenancePanelSkillChecks")] public CHandle<EngineeringContainer> MaintenancePanelSkillChecks { get; set; }
 
 		public MaintenancePanelControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

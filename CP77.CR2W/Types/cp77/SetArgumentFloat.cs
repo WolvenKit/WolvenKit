@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SetArgumentFloat : SetArguments
 	{
-		[Ordinal(0)]  [RED("customVar")] public CFloat CustomVar { get; set; }
+		[Ordinal(1)]  [RED("customVar")] public CFloat CustomVar { get; set; }
 
 		public SetArgumentFloat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

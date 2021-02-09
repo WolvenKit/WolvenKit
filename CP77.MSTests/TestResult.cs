@@ -50,7 +50,7 @@ namespace CP77.MSTests
             NoCr2W,
             UnsupportedVersion,
             RuntimeException,
-            HasIncorrectStringTable,
+            //HasIncorrectStringTable,
             IsNotBinaryEqual
         }
 
@@ -58,7 +58,7 @@ namespace CP77.MSTests
 
         [JsonConverter(typeof(StringEnumConverter))]
         public WriteResultType WriteResult { get; set; }
-        public bool HasIncorrectStringTable { get; set; }
+        //public bool HasIncorrectStringTable { get; set; }
         public bool IsNotBinaryEqual { get; set; }
 
     }

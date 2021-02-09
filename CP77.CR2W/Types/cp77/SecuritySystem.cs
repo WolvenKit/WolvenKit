@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SecuritySystem : DeviceSystemBase
 	{
-		[Ordinal(0)]  [RED("savedOutputCache")] public CArray<OutputValidationDataStruct> SavedOutputCache { get; set; }
+		[Ordinal(84)]  [RED("savedOutputCache")] public CArray<OutputValidationDataStruct> SavedOutputCache { get; set; }
 
 		public SecuritySystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

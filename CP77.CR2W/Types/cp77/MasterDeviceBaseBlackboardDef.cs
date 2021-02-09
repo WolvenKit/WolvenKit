@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MasterDeviceBaseBlackboardDef : DeviceBaseBlackboardDef
 	{
-		[Ordinal(0)]  [RED("ThumbnailWidgetsData")] public gamebbScriptID_Variant ThumbnailWidgetsData { get; set; }
+		[Ordinal(7)]  [RED("ThumbnailWidgetsData")] public gamebbScriptID_Variant ThumbnailWidgetsData { get; set; }
 
 		public MasterDeviceBaseBlackboardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

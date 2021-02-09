@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameLootSlotSingleItem : gameLootSlot
 	{
-		[Ordinal(0)]  [RED("itemTDBID")] public TweakDBID ItemTDBID { get; set; }
+		[Ordinal(37)]  [RED("itemTDBID")] public TweakDBID ItemTDBID { get; set; }
 
 		public gameLootSlotSingleItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

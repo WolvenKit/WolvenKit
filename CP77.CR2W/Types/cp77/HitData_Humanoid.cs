@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class HitData_Humanoid : HitData_Base
 	{
-		[Ordinal(0)]  [RED("reactionZonesSide")] public CEnum<ReactionZones_Humanoid_Side> ReactionZonesSide { get; set; }
+		[Ordinal(3)]  [RED("reactionZonesSide")] public CEnum<ReactionZones_Humanoid_Side> ReactionZonesSide { get; set; }
 
 		public HitData_Humanoid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

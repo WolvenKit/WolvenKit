@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ToggleLock : ActionBool
 	{
-		[Ordinal(0)]  [RED("shouldOpen")] public CBool ShouldOpen { get; set; }
+		[Ordinal(22)]  [RED("shouldOpen")] public CBool ShouldOpen { get; set; }
 
 		public ToggleLock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

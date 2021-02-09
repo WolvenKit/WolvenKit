@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DelayedDeviceOperationTriggerEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("namedOperation")] public CHandle<OperationExecutionData> NamedOperation { get; set; }
-		[Ordinal(1)]  [RED("triggerHandler")] public CHandle<DeviceOperationsTrigger> TriggerHandler { get; set; }
+		[Ordinal(0)]  [RED("triggerHandler")] public CHandle<DeviceOperationsTrigger> TriggerHandler { get; set; }
+		[Ordinal(1)]  [RED("namedOperation")] public CHandle<OperationExecutionData> NamedOperation { get; set; }
 
 		public DelayedDeviceOperationTriggerEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

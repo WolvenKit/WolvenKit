@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ApartmentScreen : LcdScreen
 	{
-		[Ordinal(0)]  [RED("timeSystemCallbackID")] public CUInt32 TimeSystemCallbackID { get; set; }
+		[Ordinal(86)]  [RED("timeSystemCallbackID")] public CUInt32 TimeSystemCallbackID { get; set; }
 
 		public ApartmentScreen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

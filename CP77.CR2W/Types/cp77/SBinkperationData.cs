@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SBinkperationData : CVariable
 	{
-		[Ordinal(0)]  [RED("binkPath")] public redResourceReferenceScriptToken BinkPath { get; set; }
-		[Ordinal(1)]  [RED("componentName")] public CName ComponentName { get; set; }
+		[Ordinal(0)]  [RED("componentName")] public CName ComponentName { get; set; }
+		[Ordinal(1)]  [RED("binkPath")] public redResourceReferenceScriptToken BinkPath { get; set; }
 		[Ordinal(2)]  [RED("loop")] public CBool Loop { get; set; }
 		[Ordinal(3)]  [RED("operationType")] public CEnum<EBinkOperationType> OperationType { get; set; }
 

@@ -9,7 +9,7 @@ namespace CP77.CR2W.Types
 	public class AIbehaviorActionItemHandlingNodeDefinition : AIbehaviorActionTreeNodeDefinition
 	{
 		[Ordinal(0)]  [RED("slotId")] public CHandle<AIArgumentMapping> SlotId { get; set; }
-		[Ordinal(1)]  [RED("duration")] public CHandle<AIArgumentMapping> Duration { get; set; }
+		
 
 		public AIbehaviorActionItemHandlingNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

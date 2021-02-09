@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ElevatorTerminalFakeGameController : DeviceInkGameControllerBase
 	{
-		[Ordinal(0)]  [RED("elevatorTerminalWidget")] public inkCanvasWidgetReference ElevatorTerminalWidget { get; set; }
+		[Ordinal(14)]  [RED("elevatorTerminalWidget")] public inkCanvasWidgetReference ElevatorTerminalWidget { get; set; }
 
 		public ElevatorTerminalFakeGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

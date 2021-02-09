@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ThumbnailUI : ActionBool
 	{
-		[Ordinal(0)]  [RED("thumbnailWidgetPackage")] public SThumbnailWidgetPackage ThumbnailWidgetPackage { get; set; }
+		[Ordinal(22)]  [RED("thumbnailWidgetPackage")] public SThumbnailWidgetPackage ThumbnailWidgetPackage { get; set; }
 
 		public ThumbnailUI(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

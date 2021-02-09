@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class FullSystemRestart : ActionBool
 	{
-		[Ordinal(0)]  [RED("restartDuration")] public CInt32 RestartDuration { get; set; }
+		[Ordinal(22)]  [RED("restartDuration")] public CInt32 RestartDuration { get; set; }
 
 		public FullSystemRestart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
