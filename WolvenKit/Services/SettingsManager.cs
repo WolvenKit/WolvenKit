@@ -7,6 +7,7 @@ using Catel.MVVM;
 using WolvenKit.Commands;
 using Catel.Data;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace WolvenKit.Services
 {
@@ -28,7 +29,7 @@ namespace WolvenKit.Services
                 var path = AppDomain.CurrentDomain.BaseDirectory;
                 var filename = Path.GetFileNameWithoutExtension(path);
                 var dir = Path.GetDirectoryName(path);
-                return Path.Combine(dir ?? "", filename + "_config_n.xml");
+                return Path.Combine(dir ?? "", filename + "_config_n.json");
             }
         }
 
@@ -106,10 +107,13 @@ namespace WolvenKit.Services
 
         public void Save()
         {
-            var ser = new XmlSerializer(typeof(SettingsManager));
-            var stream = new FileStream(ConfigurationPath, FileMode.Create, FileAccess.Write);
-            ser.Serialize(stream, this);
-            stream.Close();
+            File.WriteAllText(ConfigurationPath,
+                JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.None,
+                    TypeNameHandling = TypeNameHandling.None
+                }));
         }
 
         public static SettingsManager Load()
@@ -119,12 +123,7 @@ namespace WolvenKit.Services
             {
                 if (File.Exists(ConfigurationPath))
                 {
-                    var ser = new XmlSerializer(typeof(SettingsManager));
-                    
-                    using (var stream = new FileStream(ConfigurationPath, FileMode.Open, FileAccess.Read))
-                    {
-                        config = (SettingsManager) ser.Deserialize(stream);
-                    }
+                    config = JsonConvert.DeserializeObject<SettingsManager>(ConfigurationPath);
                 }
                 else
                 {
