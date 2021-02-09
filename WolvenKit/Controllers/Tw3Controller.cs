@@ -294,7 +294,7 @@ namespace WolvenKit.Controllers
             Parallel.ForEach(todo, _ => Task.Run(_));
         }
 
-        public async override Task<bool> PackAndInstallProject()
+        public async override Task<bool> PackAndInstallroject()
         {
             var ActiveMod = MainController.Get().ActiveMod;
             var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();

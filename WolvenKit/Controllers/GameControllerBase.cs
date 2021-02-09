@@ -25,7 +25,7 @@ namespace WolvenKit.Controllers
 
         public abstract void HandleStartup();
 
-        public abstract Task<bool> PackAndInstallProject();
+        public abstract Task<bool> PackAndInstallroject();
 
         public abstract Task<bool> PackageMod();
 

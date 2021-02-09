@@ -71,7 +71,7 @@ namespace WolvenKit
                     location = result.FileName;
                 }
 
-                if (!string.IsNullOrWhiteSpace(location))
+                if (!string.IsNullOrWhiteSpace(location) && result.Result)
                 {
                     using (_pleaseWaitService.PushInScope())
                     {

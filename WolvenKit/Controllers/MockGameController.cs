@@ -25,7 +25,7 @@ namespace WolvenKit.Controllers
             //Nothing to do here :)
         }
 
-        public override Task<bool> PackAndInstallProject()
+        public override Task<bool> PackAndInstallroject()
         {
             //Nothing to do here :)
             return new Task<bool>(new Func<bool>(() => true));
