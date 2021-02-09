@@ -99,8 +99,8 @@ namespace WolvenKit.Views
 
         private void CBJournalEditorItem_Selected(object sender, RoutedEventArgs e)
         {
-            JournalEditorView journaleditor = new JournalEditorView();
-            journaleditor.Show();
+          //  JournalEditorView journaleditor = new JournalEditorView();
+         //   journaleditor.Show();
         }
 
         private void Backstage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
