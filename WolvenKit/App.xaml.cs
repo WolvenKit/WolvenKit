@@ -22,6 +22,7 @@ using System.Windows.Media.Imaging;
 using ControlzEx.Theming;
 using System.Windows.Media.Effects;
 using Fluent;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace WolvenKit
 {
@@ -276,6 +277,8 @@ namespace WolvenKit
 
 
         }
+
+        public static ShellWindow GlobalShell;
 
         private void Sh_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {

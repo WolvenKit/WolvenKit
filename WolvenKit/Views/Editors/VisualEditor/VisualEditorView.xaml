@@ -26,8 +26,6 @@
                 <hc:Theme/>
             </ResourceDictionary.MergedDictionaries>
 
- 
-
         </ResourceDictionary>
 
     </catel:DataWindow.Resources>
@@ -37,7 +35,7 @@
     <Border hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
         <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
 
-
+            
 
 
 
@@ -68,14 +66,35 @@
                 <TextBlock Text="Visual Editor" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </Grid>
 
+            
+            
+            
+
             <Menu Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" Margin="0,33,0,0">
                 <MenuItem Header="File"/>
                 <MenuItem Header="Edit"/>
                 <MenuItem Header="View"/>
                 <MenuItem Header="Compile"/>
-
             </Menu>
-            <nodenetwork:NetworkView  x:Name="networkView" Grid.Row="2"  Margin="3,33,3,3">
+
+   
+            
+            <nodenetwork:NetworkView  x:Name="networkView" Grid.Row="2"  Margin="3,66,3,3">
+
+
+                <nodenetwork:NetworkView.NetworkBackground>
+                    <DrawingBrush TileMode="Tile" Viewport="0,0,96,96" ViewportUnits="Absolute" Viewbox="0,0,96,96" ViewboxUnits="Absolute">
+                        <DrawingBrush.Drawing>
+                            <GeometryDrawing Brush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
+                                <GeometryDrawing.Geometry>
+                                    <Geometry>M 77.000,37.000 L 59.000,37.000 L 59.000,19.000 L 77.000,19.000 L 77.000,37.000 Z M 77.000,57.000 L 59.000,57.000 L 59.000,38.000 L 77.000,38.000 L 77.000,57.000 Z M 77.000,76.000 L 59.000,76.000 L 59.000,58.000 L 77.000,58.000 L 77.000,76.000 Z M 77.000,94.000 L 59.000,94.000 L 59.000,77.000 L 77.000,77.000 L 77.000,94.000 Z M 39.000,94.000 L 39.000,77.000 L 58.000,77.000 L 58.000,94.000 L 39.000,94.000 Z M 20.000,94.000 L 20.000,77.000 L 38.000,77.000 L 38.000,94.000 L 20.000,94.000 Z M 2.000,94.000 L 2.000,77.000 L 19.000,77.000 L 19.000,94.000 L 2.000,94.000 Z M 2.000,58.000 L 19.000,58.000 L 19.000,76.000 L 2.000,76.000 L 2.000,58.000 Z M 2.000,38.000 L 19.000,38.000 L 19.000,57.000 L 2.000,57.000 L 2.000,38.000 Z M 2.000,19.000 L 19.000,19.000 L 19.000,37.000 L 2.000,37.000 L 2.000,19.000 Z M 38.000,19.000 L 38.000,37.000 L 20.000,37.000 L 20.000,19.000 L 38.000,19.000 Z M 39.000,57.000 L 39.000,38.000 L 58.000,38.000 L 58.000,57.000 L 39.000,57.000 Z M 39.000,58.000 L 58.000,58.000 L 58.000,76.000 L 39.000,76.000 L 39.000,58.000 Z M 20.000,57.000 L 20.000,38.000 L 38.000,38.000 L 38.000,57.000 L 20.000,57.000 Z M 38.000,58.000 L 38.000,76.000 L 20.000,76.000 L 20.000,58.000 L 38.000,58.000 Z M 58.000,19.000 L 58.000,37.000 L 39.000,37.000 L 39.000,19.000 L 58.000,19.000 Z M 96.000,19.000 L 96.000,18.000 L 78.000,18.000 L 78.000,0.000 L 77.000,0.000 L 77.000,18.000 L 59.000,18.000 L 59.000,0.000 L 58.000,0.000 L 58.000,18.000 L 39.000,18.000 L 39.000,0.000 L 38.000,0.000 L 38.000,18.000 L 20.000,18.000 L 20.000,0.000 L 19.000,0.000 L 19.000,18.000 L 2.000,18.000 L 2.000,0.000 L 0.000,0.000 L 0.000,18.000 L 0.000,19.000 L 0.000,37.000 L 0.000,38.000 L 0.000,57.000 L 0.000,58.000 L 0.000,76.000 L 0.000,77.000 L 0.000,94.000 L 0.000,96.000 L 2.000,96.000 L 19.000,96.000 L 20.000,96.000 L 38.000,96.000 L 39.000,96.000 L 58.000,96.000 L 59.000,96.000 L 77.000,96.000 L 78.000,96.000 L 96.000,96.000 L 96.000,94.000 L 78.000,94.000 L 78.000,77.000 L 96.000,77.000 L 96.000,76.000 L 78.000,76.000 L 78.000,58.000 L 96.000,58.000 L 96.000,57.000 L 78.000,57.000 L 78.000,38.000 L 96.000,38.000 L 96.000,37.000 L 78.000,37.000 L 78.000,19.000 L 96.000,19.000 Z</Geometry>
+                                </GeometryDrawing.Geometry>
+                            </GeometryDrawing>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </nodenetwork:NetworkView.NetworkBackground>
+
+
                 <nodenetwork:NetworkView.ContextMenu>
                     <ContextMenu HorizontalOffset="75" VerticalOffset="-75"    Background="Transparent">
                         <ContextMenu.Template>
@@ -141,10 +160,15 @@
                         <iconPacks:PackIconBootstrapIcons Kind="NodePlus" Margin="0"/>
                     </hc:Tag.Header>
                 </hc:Tag>
-   
+
 
 
             </hc:UniformSpacingPanel>
+            <hc:AnimationPath VerticalAlignment="Bottom" Margin="15" HorizontalAlignment="Right" PathLength="400" Duration="0:0:16" Stretch="Uniform" Width="76" Height="76" StrokeThickness="1" Stroke="{DynamicResource MahApps.Brushes.Accent2}" Data="{StaticResource Try}" ></hc:AnimationPath>
+
+            <hc:Drawer Dock="Bottom" IsOpen="True" Height="150" MaskBrush="Red">
+
+            </hc:Drawer>
         </Grid>
     </Border>
 </catel:DataWindow>
