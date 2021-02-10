@@ -24,5 +24,12 @@ namespace WolvenKit.Views.Wizards.WizardPages.ProjectWizard
             if (result.Result)
                 (ViewModel as ProjectConfigurationViewModel).ProjectWizardModel.ProjectPath = result.DirectoryName;
         }
+
+        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str)
+        {
+            return System.IO.Directory.Exists(str)
+                ? HandyControl.Data.OperationResult.Success()
+                : HandyControl.Data.OperationResult.Failed("WolvenKit path does not exist");
+        }
     }
 }

@@ -19,6 +19,9 @@
             </Grid>
         </hc:Badge>
         <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="True">
+                <Setter Property="IsError" Value="True"/>
+            </Trigger>
             <Trigger Property="IsEnabled" Value="false">
                 <Setter Property="Opacity" TargetName="border" Value="0.4" />
                 <Setter Property="Opacity" TargetName="PART_ContentHost" Value="0.4" />
@@ -44,13 +47,10 @@
         <Setter Property="hc:InfoElement.ContentHeight" Value="{x:Static system:Double.NaN}" />
         <Setter Property="hc:InfoElement.MinContentHeight" Value="{StaticResource DefaultControlHeight}" />
         <Setter Property="Height" Value="Auto" />
-        <Setter Property="Template" Value="{StaticResource TextBoxExtendTopTemplate}" />
-        <Style.Triggers>
-            <Trigger Property="hc:InfoElement.TitlePlacement" Value="Left">
-                <Setter Property="Template" Value="{StaticResource TextBoxExtendLeftTemplateCustom}" />
-                <Setter Property="Width" Value="Auto" />
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="Width" Value="Auto" />
+        <Setter Property="Template" Value="{StaticResource TextBoxExtendLeftTemplateCustom}" />
+        <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
     </Style>
     <Style x:Key="TextBoxExtendCustom" BasedOn="{StaticResource TextBoxExtendBaseStyleCustom}" TargetType="hc:TextBox"/>
 </ResourceDictionary>

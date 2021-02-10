@@ -86,21 +86,6 @@ namespace WolvenKit.Model.Wizards
         }
         #endregion properties
 
-        #region methods
-        /// <summary>
-        /// Validates the field values of ProjectWizardModel.
-        /// </summary>
-        /// <param name="validationResults">The validation results.</param>
-        protected override void ValidateFields(List<IFieldValidationResult> validationResults)
-        {
-            if (string.IsNullOrEmpty(ProjectName))
-                validationResults.Add(FieldValidationResult.CreateError(nameof(ProjectName), "WolvenKit name cannot be empty"));
-
-            if (!Directory.Exists(ProjectPath))
-                validationResults.Add(FieldValidationResult.CreateError(nameof(ProjectPath), "WolvenKit path does not exist"));
-        }
-        #endregion methods
-
         public class TypeAndPath
         {
             public string Path;

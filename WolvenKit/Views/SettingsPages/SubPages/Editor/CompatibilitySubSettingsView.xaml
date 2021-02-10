@@ -3,7 +3,14 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
-    <AdornerDecorator>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Themes/TextBoxExtendedCustom.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -13,13 +20,13 @@
 
         <Grid Grid.Column="0">
             <StackPanel>
-                
+
                 <Border BorderThickness="4,0,0,6" Margin="15,15,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                     <Grid>
                         <TextBlock Text="Cyberpunk 2077" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0"/>
                     </Grid>
                 </Border>
-                
+
                 <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                     <Grid>
                         <TextBlock Text="Executable Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
@@ -27,12 +34,10 @@
                             <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                         </Button>
 
-                            <hc:Badge Background="{DynamicResource MahApps.Brushes.Accent2}" Status="Processing" Height="30" Margin="32,0,0,0" Style="{StaticResource BadgeDanger}">
-                                <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding CP77ExecutablePath}"/>
-                            </hc:Badge>
+                        <hc:TextBox hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFile" Text="{Binding CP77ExecutablePath}"/>
                     </Grid>
                 </Border>
-                
+
             </StackPanel>
 
         </Grid>
@@ -45,17 +50,17 @@
                         <TextBlock Text="The Witcher 3" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0"/>
                     </Grid>
                 </Border>
-                
+
                 <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                     <StackPanel>
-                        
-                        
+
+
                         <Grid Margin="5">
                             <TextBlock Text="Executable Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="W3ExecutablePathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                                <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding W3ExecutablePath}"/>
+                            <hc:TextBox hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFile" Text="{Binding W3ExecutablePath}"/>
                         </Grid>
 
 
@@ -65,7 +70,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="WccLitePathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                                <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding WccLitePath}"/>
+                            <hc:TextBox hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFile" Text="{Binding WccLitePath}"/>
                         </Grid>
 
 
@@ -74,7 +79,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="DepotPathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                                <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding DepotPath}"/>
+                            <hc:TextBox hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFolder" Text="{Binding DepotPath}"/>
                         </Grid>
 
 
@@ -83,7 +88,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="GameModDirBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                                <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding GameModDir}"/>
+                            <hc:TextBox hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFolder" Text="{Binding GameModDir}"/>
                         </Grid>
 
 
@@ -92,7 +97,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="GameDlcDirBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                                <hc:TextBox HorizontalAlignment="Right" Width="250" Text="{Binding GameDlcDir}"/>
+                            <hc:TextBox hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFolder" Text="{Binding GameDlcDir}"/>
                         </Grid>
 
 
@@ -107,7 +112,6 @@
 
 
     </Grid>
-    </AdornerDecorator>
 
 
 </catel:UserControl>
