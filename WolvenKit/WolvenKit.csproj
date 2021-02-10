@@ -34,6 +34,8 @@
     <Page Remove="Views\Wizards\WizardPages\InstallerWizard\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Resources\Icons\3.png" />
+    <None Remove="Resources\Icons\Homelogo.png" />
     <None Remove="Resources\Icons\whitelogo.png" />
     <None Remove="Wkit_Icon_Flattened_256x.ico" />
   </ItemGroup>
@@ -215,6 +217,8 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Fonts\fontawesome-webfont.ttf" />
+    <Resource Include="Resources\Icons\3.png" />
+    <Resource Include="Resources\Icons\Homelogo.png" />
     <Resource Include="Resources\Icons\Logo.ico" />
     <Resource Include="Resources\Icons\whitelogo.png" />
     <Resource Include="Resources\Images\Files\apb_32x.png" />

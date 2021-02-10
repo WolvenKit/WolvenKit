@@ -65,11 +65,7 @@
                
             </hc:TabControl>
         </Grid>
-        <Grid HorizontalAlignment="Right" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"></Grid>
-
-        <Grid HorizontalAlignment="left" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"></Grid>
-        <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Width="30" Height="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"></Grid>
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Orientation="Horizontal">
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Orientation="Horizontal">
 
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center " FontSize="20" Text="Settings"></TextBlock>
             <hc:Divider Margin="15" Orientation="Vertical" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center"></hc:Divider>
