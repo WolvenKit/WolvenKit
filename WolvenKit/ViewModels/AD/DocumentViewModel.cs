@@ -88,9 +88,7 @@ namespace WolvenKit.ViewModels
 
 		#region Properties
 
-        
-
-		/// <summary>
+        /// <summary>
 		/// 
 		/// </summary>
         [Model]
@@ -99,7 +97,9 @@ namespace WolvenKit.ViewModels
 		/// <summary>
 		/// Bound to the View
 		/// </summary>
-        public List<ChunkViewModel> Chunks => File.Chunks.Select(_ => new ChunkViewModel(_)).ToList();
+        public List<ChunkViewModel> Chunks => File.Chunks
+            .Where(_ => _.VirtualParentChunk == null)
+            .Select(_ => new ChunkViewModel(_)).ToList();
 
         /// <summary>
         /// Bound to the View via TreeViewBehavior.cs
@@ -118,14 +118,14 @@ namespace WolvenKit.ViewModels
                     _selectedChunk = value;
                     RaisePropertyChanged(() => SelectedChunk, oldValue, value);
 
-                    SelectEditableVariables = _selectedChunk.Data.ChildrEditableVariables;
+                    SelectEditableVariables = _selectedChunk?.ChildrenProperties;
 
                 }
             }
         }
 
-        public List<IEditableVariable> _selectEditableVariables;
-		public List<IEditableVariable> SelectEditableVariables
+        public List<ChunkPropertyViewModel> _selectEditableVariables;
+		public List<ChunkPropertyViewModel> SelectEditableVariables
         {
             get => _selectEditableVariables;
             set
@@ -346,38 +346,7 @@ namespace WolvenKit.ViewModels
 		}
 
 
-
-
-		/// <summary>
-		/// Gets the encoding of a file from its first 4 bytes.
-		/// </summary>
-		/// <param name="bom">BOM to be translated into an <see cref="Encoding"/>.
-		/// This should be at least 4 bytes long.</param>
-		/// <returns>Recommended <see cref="Encoding"/> to be used to read text from this file.</returns>
-		public Encoding GetEncoding(byte[] bom)
-		{
-			// Analyze the BOM
-			if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76)
-#pragma warning disable 618
-				return Encoding.UTF7;
-#pragma warning restore 618
-
-			if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf)
-				return Encoding.UTF8;
-
-			if (bom[0] == 0xff && bom[1] == 0xfe)
-				return Encoding.Unicode; //UTF-16LE
-
-			if (bom[0] == 0xfe && bom[1] == 0xff)
-				return Encoding.BigEndianUnicode; //UTF-16BE
-
-			if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff)
-				return Encoding.UTF32;
-
-			return Encoding.Default;
-		}
-
-		private bool CanClose()
+        private bool CanClose()
 		{
 			return true;
 		}

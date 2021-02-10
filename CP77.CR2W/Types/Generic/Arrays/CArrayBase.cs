@@ -33,19 +33,7 @@ namespace CP77.CR2W.Types
 
 
         [Browsable(false)]
-        public override string REDType => BuildTypeName(Elementtype);
-
-        private string BuildTypeName(string type, params int[] flags)
-        {
-            return BuildTypeName(type, flags.AsEnumerable().GetEnumerator());
-        }
-
-        private string BuildTypeName(string elementtype, IEnumerator<int> flags)
-        {
-            var v1 = flags.MoveNext() ? flags.Current : 0;
-            var v2 = flags.MoveNext() ? flags.Current : 0;
-            return $"array:{elementtype}";
-        }
+        public override string REDType => $"array:{Elementtype}";
 
         public override List<IEditableVariable> GetEditableVariables()
         {
