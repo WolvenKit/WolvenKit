@@ -11,11 +11,7 @@
         <Grid Margin="3,75,3,0">
             <wv2:WebView2 Source="https://wolvenkit.red/"/>
         </Grid>
-
-        <Grid HorizontalAlignment="Right" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
-        <Grid HorizontalAlignment="left" Width="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
-        <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Width="30" Height="3" Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"/>
-        
+  
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Orientation="Horizontal">
             <TextBlock HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center " FontSize="20" ></TextBlock>
             <hc:Divider Margin="15" Orientation="Vertical" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center"></hc:Divider>

@@ -22,6 +22,7 @@ using System.Windows.Media.Imaging;
 using ControlzEx.Theming;
 using System.Windows.Media.Effects;
 using Fluent;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace WolvenKit
 {
@@ -254,6 +255,7 @@ namespace WolvenKit
             await shellService.CreateAsync<ShellWindow>();
 
             ShellWindow sh = (ShellWindow)shellService.Shell;
+            GlobalShell = sh;
             sh.IsVisibleChanged += Sh_IsVisibleChanged;
 
            
@@ -263,7 +265,7 @@ namespace WolvenKit
             HandyControl.Tools.ThemeManager.Current.SetCurrentValue(HandyControl.Tools.ThemeManager.ApplicationThemeProperty, HandyControl.Tools.ApplicationTheme.Dark);
             HandyControl.Tools.ConfigHelper.Instance.SetLang("en");
             HandyControl.Controls.ThemeResources tr = new HandyControl.Controls.ThemeResources(); tr.AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3");
-            ApplyCustomLibSettings(sh);
+            ApplyCustomLibSettings();
 
             Log.Info("Calling base.OnStartup");
 
@@ -276,6 +278,8 @@ namespace WolvenKit
 
 
         }
+
+        public static ShellWindow GlobalShell;
 
         private void Sh_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -336,9 +340,9 @@ namespace WolvenKit
 
 
 
-        private void ApplyCustomLibSettings(ShellWindow sh)
+        private void ApplyCustomLibSettings()
         {
-            sh.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 35);            
+            GlobalShell.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 35);
             var color = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DF2935"));
             ThemeManager.Current.AddTheme(new Theme("CustomLightRed", "CustomLightRed", "Dark", "Red", (Color)ColorConverter.ConvertFromString("#DF2935"), color, true, false));
             ThemeManager.Current.AddTheme(RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", Colors.Red));
@@ -355,21 +359,42 @@ namespace WolvenKit
                 ShadowDepth = 1,
                 BlurRadius = 0,
                 Color = Colors.White,
-                Opacity = 0.8,     
+                Opacity = 0.8,
             };
             System.Windows.Controls.Button tick = new System.Windows.Controls.Button();
             tick.Click += Tick_Click;
-            tick.LayoutTransform = new RotateTransform(180,0.5,0.5);
+           // tick.LayoutTransform = new RotateTransform(180, 0.5, 0.5);
             tick.Style = (Style)FindResource("ButtonIcon");
-            HandyControl.Controls.IconElement.SetGeometry(tick, (Geometry)FindResource("HomeIcon"));           
+            HandyControl.Controls.IconElement.SetGeometry(tick, (Geometry)FindResource("HomeIcon"));
             MahApps.Metro.Controls.WindowCommands windowCommands = new MahApps.Metro.Controls.WindowCommands();
-            windowCommands.Items.Add(IconImage);
+
+
+
+            System.Windows.Controls.Button MainIcon = new System.Windows.Controls.Button();
+            MainIcon.Style = (Style)FindResource("ButtonIcon");
+
+            Geometry Bob = (Geometry)FindResource("Try");
+
+            HandyControl.Controls.IconElement.SetGeometry(MainIcon, Bob.GetWidenedPathGeometry(new Pen(new SolidColorBrush(Colors.White), 7)));
+
+            
+            MainIcon.Foreground = new SolidColorBrush(Colors.White);
+            MainIcon.Margin = new Thickness(0);
+
+            MainIcon.Height = 40;
+
+            
+
+
+
+            windowCommands.Items.Add(MainIcon);
             windowCommands.Items.Add(tick);
 
-            sh.LeftWindowCommands.Items.Add(windowCommands);
-          // var a = (System.Windows.Controls.Button)sh.RightWindowCommands.Items[0];
-           // a.Content = ""
-           
+            GlobalShell.LeftWindowCommands.Items.Add(windowCommands);
+            // var a = (System.Windows.Controls.Button)sh.RightWindowCommands.Items[0];
+            // a.Content = ""
+           // GlobalShell.ShowMessageAsync("This is the title", "Some message");
+
         }
 
         public static RibbonView RibbonViewInstance;
