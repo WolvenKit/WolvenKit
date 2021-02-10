@@ -15,6 +15,7 @@ using System.Text;
 using Newtonsoft.Json;
 using WolvenKit.Common.Extensions;
 using CP77.CR2W.Reflection;
+using WolvenKit.Common.Model.Cr2w;
 
 [assembly: ContractNamespaceAttribute("", ClrNamespace = "CP77.CR2W")]
 
@@ -59,7 +60,7 @@ namespace CP77.CR2W
         public uint crc32;              // created upon write   //done
     }
 
-    public class CR2WExportWrapper
+    public class CR2WExportWrapper : ICR2WExport
     {
 
         #region  Constructors
@@ -112,7 +113,7 @@ namespace CP77.CR2W
 
 
         public CR2WExport Export => _export;
-        public CVariable data { get; private set; }
+        public IEditableVariable data { get; private set; }
         public string REDType { get; private set; }
         public string REDName => REDType + " #" + (ChunkIndex);
 
@@ -123,6 +124,9 @@ namespace CP77.CR2W
         [JsonIgnore]
         public string REDValue => this.ToString();
 
+        IEditableVariable ICR2WExport.unknownBytes => unknownBytes;
+
+        List<string> ICR2WExport.UnknownTypes => UnknownTypes;
 
         [NonSerialized] [JsonIgnore] public CBytes unknownBytes;
 
@@ -139,22 +143,22 @@ namespace CP77.CR2W
         }
 
         [JsonIgnore]
-        public CR2WExportWrapper ParentChunk
+        public ICR2WExport ParentChunk
         {
             get => ParentChunkIndex == -1 ? null : cr2w.Chunks[ParentChunkIndex];
             set => ParentChunkIndex = value == null ? -1 : cr2w.Chunks.IndexOf(value);
         }
         [JsonIgnore]
-        public CR2WExportWrapper VirtualParentChunk { get; set; }
+        public ICR2WExport VirtualParentChunk { get; set; }
 
         [JsonIgnore]
         public int VirtualParentChunkIndex => cr2w.Chunks.IndexOf(VirtualParentChunk);
 
         [JsonIgnore]
-        public List<CR2WExportWrapper> ChildrenChunks => cr2w.Chunks.Where(_ => _.ParentChunk == this).ToList();
+        public List<ICR2WExport> ChildrenChunks => cr2w.Chunks.Where(_ => _.ParentChunk == this).ToList();
 
         [JsonIgnore]
-        public List<CR2WExportWrapper> VirtualChildrenChunks => cr2w.Chunks.Where(_ => _.VirtualParentChunk == this).ToList();
+        public List<ICR2WExport> VirtualChildrenChunks => cr2w.Chunks.Where(_ => _.VirtualParentChunk == this).ToList();
 
         /// <summary>
         /// Playing with latin here, ab means toward, ab away from.
@@ -162,7 +166,7 @@ namespace CP77.CR2W
         /// CVariables, being CPtr or CHandle, which reference this chunk.
         /// </summary>
         [JsonIgnore]
-        public List<IChunkPtrAccessor> AdReferences;
+        public List<IChunkPtrAccessor> AdReferences { get; }
 
         /// <summary>
         /// Playing with latin here, ab means toward, ab away from.
@@ -170,7 +174,7 @@ namespace CP77.CR2W
         /// CVariables, being CPtr or CHandle, which are referenced by this chunk.
         /// </summary>
         [JsonIgnore]
-        public List<IChunkPtrAccessor> AbReferences;
+        public List<IChunkPtrAccessor> AbReferences { get; }
 
 
         public int ChunkIndex => cr2w.Chunks.IndexOf(this);
@@ -206,6 +210,8 @@ namespace CP77.CR2W
 
         [JsonIgnore]
         public bool IsSerialized => true;
+
+        
 
         #endregion
 
@@ -413,7 +419,7 @@ namespace CP77.CR2W
                 //cr2w.Logger.LogString($"Mounted {this.REDName} to {VirtualParentChunk.REDName}.");
             }
         }
-        public void MountChunkVirtually(CR2WExportWrapper virtualparentchunk, bool force = false)
+        public void MountChunkVirtually(ICR2WExport virtualparentchunk, bool force = false)
         {
             if (VirtualParentChunk == null || force)
             {
@@ -433,7 +439,7 @@ namespace CP77.CR2W
 
             // Unknown bytes after the normal serialized class
             var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);
-            unknownBytes = new CBytes(cr2w, data, "unknownBytes");
+            unknownBytes = new CBytes(cr2w, data as CVariable, "unknownBytes");
             if (bytesLeft > 0)
             {
                 unknownBytes.Read(file, (uint)bytesLeft);
@@ -476,20 +482,20 @@ namespace CP77.CR2W
         /// <summary>
         /// Needs the parentChunk idx to be set!
         /// </summary>
-        public void CreateDefaultData(CVariable cvar = null)
+        public void CreateDefaultData(IEditableVariable cvar = null)
         {
             //if (Export.className != 1 && GetParentChunk() == null)
             //    throw new InvalidChunkTypeException("No parent chunk set!");
 
-            data = cvar ?? CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data);
+            data = cvar ?? CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data as CVariable);
 
-            if (data == null)
+            if (data == null || data is not CVariable cdata)
             {
                 throw new InvalidParsingException($"{nameof(CreateDefaultData)} failed: {this.REDName}");
             }
 
             data.IsSerialized = true;
-            data.SetREDFlags(Export.objectFlags);
+            cdata.SetREDFlags(Export.objectFlags);
         }
 
         public override string ToString() => REDName;

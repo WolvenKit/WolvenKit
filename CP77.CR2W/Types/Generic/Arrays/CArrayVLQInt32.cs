@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using CP77.CR2W.Reflection;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W.Types
 {

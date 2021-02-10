@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using Catel.IoC;
 using CP77.CR2W.Reflection;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W.Types
 {
@@ -163,7 +164,7 @@ namespace CP77.CR2W.Types
                 file.Write((ushort)0x00);
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CEnum<T>)base.Copy(context);
             var.Value = Value;
