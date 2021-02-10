@@ -5,6 +5,7 @@ using Catel.IoC;
 using System.CommandLine;
 using System.ComponentModel;
 using System.IO;
+using CP77.CR2W;
 using CP77Tools.Commands;
 using CP77Tools.Extensions;
 using Luna.ConsoleProgressBar;
@@ -20,6 +21,7 @@ namespace CP77Tools
         {
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
+            ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
 
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();

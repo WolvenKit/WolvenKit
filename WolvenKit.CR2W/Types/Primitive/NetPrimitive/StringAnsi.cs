@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
 using WolvenKit.CR2W.Reflection;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -45,7 +46,7 @@ namespace WolvenKit.CR2W.Types
             return new StringAnsi(cr2w, parent, name);
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (StringAnsi) base.Copy(context);
             var.val = val;

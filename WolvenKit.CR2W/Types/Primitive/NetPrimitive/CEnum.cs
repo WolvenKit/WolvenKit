@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -123,7 +124,7 @@ namespace WolvenKit.CR2W.Types
                 file.Write((ushort)0x00);
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CEnum<T>)base.Copy(context);
             var.Value = Value;

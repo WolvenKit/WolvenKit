@@ -3,6 +3,7 @@
 namespace WolvenKit.Model
 {
     using CR2W;
+    using WolvenKit.Common.Model.Cr2w;
 
     public static class CopyController
     {

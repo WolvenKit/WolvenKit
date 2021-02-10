@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Linq;
 using CP77.CR2W.Reflection;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W.Types
 {
@@ -90,7 +91,7 @@ namespace CP77.CR2W.Types
             return this;
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = (raRef<T>)base.Copy(context);
 

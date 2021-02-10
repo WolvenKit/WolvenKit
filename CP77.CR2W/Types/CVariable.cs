@@ -15,8 +15,10 @@ using Catel.Data;
 using Catel.IoC;
 using Newtonsoft.Json;
 using WolvenKit.Common;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Extensions;
 using CP77.CR2W.Reflection;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using ObservableObject = Catel.Data.ObservableObject;
 
@@ -33,7 +35,7 @@ namespace CP77.CR2W.Types
 
         protected CVariable(CR2WFile cr2w, CVariable parent, string name)
         {
-            this.cr2w = cr2w;
+            this.Cr2wFile = cr2w;
             this.ParentVar = parent;
             this.REDName = name;
             this.VarChunkIndex = -1;
@@ -45,7 +47,7 @@ namespace CP77.CR2W.Types
 
         #region Fields
         [JsonIgnore]
-        public readonly TypeAccessor accessor;
+        public TypeAccessor accessor { get; }
 
         #endregion
 
@@ -54,12 +56,15 @@ namespace CP77.CR2W.Types
         [JsonIgnore]
         public List<CVariable> UnknownCVariables { get; set; } = new List<CVariable>();
 
+        [JsonIgnore]
+        public IWolvenkitFile Cr2wFile { get; set; }
+
         /// <summary>
         /// Stores the parent cr2w file.
         /// used a lot
         /// </summary>
         [JsonIgnore]
-        public CR2WFile cr2w { get; set; }
+        public CR2WFile cr2w => Cr2wFile as CR2WFile;
 
         /// <summary>
         /// Shows if the CVariable is to be serialized
@@ -641,11 +646,15 @@ namespace CP77.CR2W.Types
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public virtual CVariable Copy(CR2WCopyAction context)
+        public virtual IEditableVariable Copy(ICR2WCopyAction icontext)
         {
+            if (icontext is not CR2WCopyAction context)
+                throw new InvalidParsingException("Tried copying tw3 assets.");
+
+
             // creates a new instance of the CVariable
             // with a new destination cr2wFile and a new parent CVariable if needed
-            var copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent, false);
+            var copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent as CVariable, false);
             //copy.REDFlags = this.REDFlags;
             copy.IsSerialized = this.IsSerialized;
 
@@ -679,7 +688,7 @@ namespace CP77.CR2W.Types
             return this;
         }
 
-        public virtual void AddVariable(CVariable var)
+        public virtual void AddVariable(IEditableVariable var)
         {
             throw new NotImplementedException();
         }
@@ -856,6 +865,8 @@ namespace CP77.CR2W.Types
 
             return finalvalue;
         }
+
+       
         #endregion
     }
 }

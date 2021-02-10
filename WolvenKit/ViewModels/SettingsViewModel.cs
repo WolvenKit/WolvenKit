@@ -31,6 +31,7 @@ namespace WolvenKit.ViewModels
 
         private string witcherexe = "";
         private string wccLiteexe = "";
+        private string cp77eexe = "";
         
 
         private const string wcc_sha256 = "fb20d7aa45b95446baac9b376533b06b86add732cbe40fd0620e4a4feffae47b";
@@ -64,11 +65,11 @@ namespace WolvenKit.ViewModels
             W3ExePath = _settingsManager.W3ExecutablePath;
             CP77ExePath = _settingsManager.CP77ExecutablePath;
             WccLitePath = _settingsManager.WccLitePath;
-            GameModDir = _settingsManager.GameModDir;
-            GameDlcDir = _settingsManager.GameDlcDir;
+            //GameModDir = _settingsManager.GameModDir;
+            //GameDlcDir = _settingsManager.GameDlcDir;
 
-            SetDefaultModDir();
-            SetDefaultDlcDir();
+            //SetDefaultModDir();
+            //SetDefaultDlcDir();
             
 
             // automatically scan the registry for exe paths for wcc and tw3
@@ -77,6 +78,11 @@ namespace WolvenKit.ViewModels
             {
                 exeSearcherSlave_DoWork();
             }
+
+            //TODO: handle this case!
+            if (!TryCopyOodleLib())
+                throw new NotImplementedException();
+
         }
         #endregion
 
@@ -111,8 +117,8 @@ namespace WolvenKit.ViewModels
         }
         public string WccLitePathBG => string.IsNullOrEmpty(WccLitePath) ? redBG : greenBG;
 
-        public string GameModDir { get; set; }
-        public string GameDlcDir { get; set; }
+        //public string GameModDir { get; set; }
+        //public string GameDlcDir { get; set; }
 
 
         public List<UpdateChannel> AvailableUpdateChannels { get; private set; }
@@ -179,6 +185,35 @@ namespace WolvenKit.ViewModels
         #endregion
 
         #region Methods
+        private bool TryCopyOodleLib()
+        {
+            var path = AppDomain.CurrentDomain.BaseDirectory;
+            var dir = Path.GetDirectoryName(path);
+
+            if (dir == null) return false;
+
+            var destFileName = Path.Combine(dir, "oo2ext_7_win64.dll");
+            if (File.Exists(destFileName))
+                return true;
+
+            var directory = new FileInfo(CP77ExePath).Directory;
+            if (directory == null)
+                return false;
+            var cp77BinDir = directory.FullName;
+            if (string.IsNullOrEmpty(cp77BinDir))
+                return false;
+
+            // copy oodle dll
+            var oodleInfo = new FileInfo(Path.Combine(cp77BinDir, "oo2ext_7_win64.dll"));
+            if (!oodleInfo.Exists)
+                return false;
+
+            if (!File.Exists(destFileName))
+                oodleInfo.CopyTo(destFileName);
+
+            return true;
+        }
+
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();
@@ -206,59 +241,59 @@ namespace WolvenKit.ViewModels
             _settingsManager.W3ExecutablePath = W3ExePath;
             _settingsManager.CP77ExecutablePath = CP77ExePath;
             _settingsManager.WccLitePath = WccLitePath;
-            _settingsManager.GameDlcDir = GameDlcDir;
-            _settingsManager.GameModDir = GameModDir;
+            //_settingsManager.GameDlcDir = GameDlcDir;
+            //_settingsManager.GameModDir = GameModDir;
 
             _settingsManager.Save();
 
             return await base.SaveAsync();
         }
 
-        private void SetDefaultModDir()
-        {
-            if (string.IsNullOrEmpty(W3ExePath))
-                W3ExePath = witcherexe;
+        //private void SetDefaultModDir()
+        //{
+        //    if (string.IsNullOrEmpty(W3ExePath))
+        //        W3ExePath = witcherexe;
 
-            if (string.IsNullOrEmpty(GameModDir) || !Directory.Exists(GameModDir))
-            {
-                if (File.Exists(W3ExePath) && Path.GetExtension(W3ExePath) == ".exe" && W3ExePath.Contains("witcher3.exe"))
-                {
-                    var tw3ExeDirectory = new FileInfo(W3ExePath).Directory;
-                    var tw3Directory = tw3ExeDirectory?.Parent?.Parent;
-                    if (tw3Directory != null)
-                    {
-                        string gamemoddir = Path.Combine(tw3Directory.FullName, "Mods");
-                        if (Directory.Exists(gamemoddir))
-                        {
-                            GameModDir = gamemoddir;
-                        }
-                    }
-                }
-            }
-        }
+        //    if (string.IsNullOrEmpty(GameModDir) || !Directory.Exists(GameModDir))
+        //    {
+        //        if (File.Exists(W3ExePath) && Path.GetExtension(W3ExePath) == ".exe" && W3ExePath.Contains("witcher3.exe"))
+        //        {
+        //            var tw3ExeDirectory = new FileInfo(W3ExePath).Directory;
+        //            var tw3Directory = tw3ExeDirectory?.Parent?.Parent;
+        //            if (tw3Directory != null)
+        //            {
+        //                string gamemoddir = Path.Combine(tw3Directory.FullName, "Mods");
+        //                if (Directory.Exists(gamemoddir))
+        //                {
+        //                    GameModDir = gamemoddir;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
-        private void SetDefaultDlcDir()
-        {
-            if (string.IsNullOrEmpty(W3ExePath))
-                W3ExePath = witcherexe;
+        //private void SetDefaultDlcDir()
+        //{
+        //    if (string.IsNullOrEmpty(W3ExePath))
+        //        W3ExePath = witcherexe;
 
-            if (string.IsNullOrEmpty(GameDlcDir) || !Directory.Exists(GameDlcDir))
-            {
-                if (File.Exists(W3ExePath) && Path.GetExtension(W3ExePath) == ".exe" && W3ExePath.Contains("witcher3.exe"))
-                {
-                    var tw3ExeDirectory = new FileInfo(W3ExePath).Directory;
-                    var tw3Directory = tw3ExeDirectory?.Parent?.Parent;
-                    if (tw3Directory != null)
-                    {
-                        string gamedlcdir = Path.Combine(tw3Directory.FullName, "DLC");
-                        if (Directory.Exists(gamedlcdir))
-                        {
-                            GameDlcDir = gamedlcdir;
-                        }
-                    }
-                }
-            }
-        }
+        //    if (string.IsNullOrEmpty(GameDlcDir) || !Directory.Exists(GameDlcDir))
+        //    {
+        //        if (File.Exists(W3ExePath) && Path.GetExtension(W3ExePath) == ".exe" && W3ExePath.Contains("witcher3.exe"))
+        //        {
+        //            var tw3ExeDirectory = new FileInfo(W3ExePath).Directory;
+        //            var tw3Directory = tw3ExeDirectory?.Parent?.Parent;
+        //            if (tw3Directory != null)
+        //            {
+        //                string gamedlcdir = Path.Combine(tw3Directory.FullName, "DLC");
+        //                if (Directory.Exists(gamedlcdir))
+        //                {
+        //                    GameDlcDir = gamedlcdir;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
 
 
@@ -275,6 +310,7 @@ namespace WolvenKit.ViewModels
             {
                 StrDelegate w3del = msg => witcherexe = msg;
                 StrDelegate wccdel = msg => wccLiteexe = msg;
+                StrDelegate cp77del = msg => cp77eexe = msg;
 
                 Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
                 {
@@ -295,6 +331,13 @@ namespace WolvenKit.ViewModels
                         {
                             w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
                                 SearchOption.AllDirectories).First();
+                        }
+
+                        if (programName.ToString().Contains("Cyberpunk 2077"))
+                        {
+                            if (Directory.Exists(installLocation.ToString()))
+                                cp77 = Directory.GetFiles(installLocation.ToString(), "Cyberpunk2077.exe",
+                                    SearchOption.AllDirectories).First();
                         }
                     }
 
@@ -327,13 +370,14 @@ namespace WolvenKit.ViewModels
                         if (programName.ToString().Contains("Cyberpunk 2077"))
                         {
                             if (Directory.Exists(installLocation.ToString()))
-                                w3 = Directory.GetFiles(installLocation.ToString(), "Cyberpunk2077.exe",
+                                cp77 = Directory.GetFiles(installLocation.ToString(), "Cyberpunk2077.exe",
                                     SearchOption.AllDirectories).First();
                         }
                     }
 
                     w3del.Invoke(w3);
                     wccdel.Invoke(wcc);
+                    cp77del.Invoke(cp77);
                 });
             }
             catch (Exception)
@@ -345,8 +389,8 @@ namespace WolvenKit.ViewModels
                 W3ExePath = witcherexe;
             if (File.Exists(wccLiteexe))
                 WccLitePath = wccLiteexe;
-            if (File.Exists(cp77))
-                CP77ExePath = cp77;
+            if (File.Exists(cp77eexe))
+                CP77ExePath = cp77eexe;
 
 
             // get the depot path
@@ -369,8 +413,8 @@ namespace WolvenKit.ViewModels
             }
 
             // if custom mod folder is empty or incorrect in the configuration, get the game mod dir and dlc dir
-            SetDefaultModDir();
-            SetDefaultDlcDir();
+            //SetDefaultModDir();
+            //SetDefaultDlcDir();
         }
 
         #endregion

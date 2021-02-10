@@ -18,8 +18,8 @@ namespace WolvenKit.Services
         /*public*/ string CP77ExecutablePath { get; set; }
         /*public*/ string WccLitePath { get; set; }
 
-        string GameModDir { get; set; }
-        string GameDlcDir { get; set; }
+        //string GameModDir { get; set; }
+        //string GameDlcDir { get; set; }
 
         string DepotPath { get; set; }
 

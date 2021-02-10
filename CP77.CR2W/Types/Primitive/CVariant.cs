@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using CP77.CR2W.Reflection;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W.Types
 {
@@ -12,7 +13,7 @@ namespace CP77.CR2W.Types
     [REDMeta()]
     public class CVariant : CVariable, IVariantAccessor
     {
-        public CVariable Variant { get; set; }
+        public IEditableVariable Variant { get; set; }
 
         public CVariant(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
@@ -48,7 +49,7 @@ namespace CP77.CR2W.Types
             }
             else
             {
-                file.Write(Variant.GettypeId());
+                file.Write((Variant as CVariable).GettypeId());
 
                 byte[] buffer = System.Array.Empty<byte>();
                 using (var ms = new MemoryStream())
@@ -81,7 +82,7 @@ namespace CP77.CR2W.Types
             return this;
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = (CVariant) base.Copy(context);
             if (Variant != null)

@@ -18,6 +18,7 @@ using Catel.Data;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.FNV1A;
 using Newtonsoft.Json;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W
 {
@@ -46,7 +47,7 @@ namespace CP77.CR2W
             Names = new List<CR2WNameWrapper>();            //block 2
             Imports = new List<CR2WImportWrapper>();        //block 3
             Properties = new List<CR2WPropertyWrapper>();   //block 4
-            Chunks = new List<CR2WExportWrapper>();         //block 5
+            Chunks = new List<ICR2WExport>();               //block 5
             Buffers = new List<CR2WBufferWrapper>();        //block 6
             Embedded = new List<CR2WEmbeddedWrapper>();     //block 7
 
@@ -93,7 +94,7 @@ namespace CP77.CR2W
         public IVariableEditor EditorController { get; set; }
 
         [JsonIgnore]
-        public Dictionary<int, CR2WExportWrapper> Chunksdict { get; private set; }
+        public Dictionary<int, ICR2WExport> Chunksdict { get; private set; }
         [JsonIgnore]
         public List<LocalizedString> LocalizedStrings = new List<LocalizedString>();
 
@@ -107,7 +108,7 @@ namespace CP77.CR2W
         public List<CR2WNameWrapper> Names { get; private set; }
         public List<CR2WImportWrapper> Imports { get; private set; }
         public List<CR2WPropertyWrapper> Properties { get; private set; }
-        public List<CR2WExportWrapper> Chunks { get; private set; }
+        public List<ICR2WExport> Chunks { get; private set; }
         public List<CR2WBufferWrapper> Buffers { get; private set; }
         public List<CR2WEmbeddedWrapper> Embedded { get; private set; }
 
@@ -125,7 +126,7 @@ namespace CP77.CR2W
             }
 
             return (types, 
-                Chunks.Sum(chunk => chunk.unknownBytes.Bytes.Length));
+                Chunks.Sum(chunk => (chunk.unknownBytes as CBytes).Bytes.Length));
         }
 
         public void GenerateChunksDict() => Chunksdict = Chunks.ToDictionary(_ => _.ChunkIndex, _ => _);
@@ -191,17 +192,17 @@ namespace CP77.CR2W
         /// <param name="passedoldparentinghierarchy">Passed for children chunks</param>
         /// <returns>Number of chunks removed</returns>
         public int RemoveChunks(
-            List<CR2WExportWrapper> toberemovedchunks,
+            List<ICR2WExport> toberemovedchunks,
             bool onlychildren = false,
             EChunkDisplayMode recursionmode = EChunkDisplayMode.VirtualParent,
             bool purgereferrers = false,
             bool reentrant = false,
-            Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)> passedoldparentinghierarchy = null)
+            Dictionary<ICR2WExport, (ICR2WExport oldchunkparent, ICR2WExport oldchunkvparent)> passedoldparentinghierarchy = null)
         {
             int removed = onlychildren ? 0 : 1;
 
             // To reindex later, we need a middle-ground copy, between deep and shallow, of the parenting hierarchy.
-            var oldparentinghierarchy = new Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)>();
+            var oldparentinghierarchy = new Dictionary<ICR2WExport, (ICR2WExport oldchunkparent, ICR2WExport oldchunkvparent)>();
             if (!reentrant)
             {
                 foreach (var achunk in Chunks)
@@ -246,7 +247,7 @@ namespace CP77.CR2W
                             if (oldparentinghierarchy[achunk].oldchunkparent == chunk)
                             {
                                 removed += RemoveChunks(
-                                    new List<CR2WExportWrapper>() { achunk },
+                                    new List<ICR2WExport>() { achunk },
                                     false,
                                     recursionmode,
                                     true,
@@ -260,7 +261,7 @@ namespace CP77.CR2W
                             if (passedoldparentinghierarchy[achunk].oldchunkparent == chunk)
                             {
                                 removed += RemoveChunks(
-                                    new List<CR2WExportWrapper>() { achunk },
+                                    new List<ICR2WExport>() { achunk },
                                     false,
                                     recursionmode,
                                     true,
@@ -277,7 +278,7 @@ namespace CP77.CR2W
                             if (oldparentinghierarchy[achunk].oldchunkvparent == chunk)
                             {
                                 removed += RemoveChunks(
-                                    new List<CR2WExportWrapper>() { achunk },
+                                    new List<ICR2WExport>() { achunk },
                                     false,
                                     recursionmode,
                                     true,
@@ -291,7 +292,7 @@ namespace CP77.CR2W
                             if (passedoldparentinghierarchy[achunk].oldchunkvparent == chunk)
                             {
                                 removed += RemoveChunks(
-                                    new List<CR2WExportWrapper>() { achunk },
+                                    new List<ICR2WExport>() { achunk },
                                     false,
                                     recursionmode,
                                     true,
@@ -327,7 +328,7 @@ namespace CP77.CR2W
             return removed;
         }
 
-        public static int GetLastChildrenIndexRecursive(CR2WExportWrapper chunk)
+        public static int GetLastChildrenIndexRecursive(ICR2WExport chunk)
         {
             return !chunk.VirtualChildrenChunks.Any() 
                 ? chunk.ChunkIndex 
@@ -504,7 +505,7 @@ namespace CP77.CR2W
             Names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
             Imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
             Properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
-            Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
+            Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this) as ICR2WExport).ToList();
             Buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList();
             //Embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
             //{
@@ -582,7 +583,7 @@ namespace CP77.CR2W
             Names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList(); // block 2
             Imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList(); // block 3
             Properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList(); // block 4
-            Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this)).ToList(); // block 5
+            Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this) as ICR2WExport).ToList(); // block 5
             Buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList(); // block 6
             Embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
             {
@@ -599,7 +600,7 @@ namespace CP77.CR2W
             // Read object data //block 5
             for (int i = 0; i < Chunks.Count; i++)
             {
-                CR2WExportWrapper chunk = Chunks[i];
+                ICR2WExport chunk = Chunks[i];
 
                 chunk.ReadData(file);
 
@@ -820,8 +821,9 @@ namespace CP77.CR2W
             }
 
             #region Update Offsets
-            foreach (var chunk in Chunks)
+            foreach (var ichunk in Chunks)
             {
+                var chunk = ichunk as CR2WExportWrapper;
                 var newoffset = chunk.Export.dataOffset + headerOffset;
                 chunk.SetOffset(newoffset);
                 chunk.SetType((ushort)GetStringIndex(chunk.REDType));
@@ -835,7 +837,7 @@ namespace CP77.CR2W
             #endregion
             
             foreach (var chunk in Chunks)
-                FixExportCRC32(file.BaseStream, chunk.Export);
+                FixExportCRC32(file.BaseStream, (chunk as CR2WExportWrapper).Export);
             foreach (var buffer in Buffers)
                 FixBufferCRC32(file.BaseStream, buffer.Buffer);
 
@@ -1118,7 +1120,7 @@ namespace CP77.CR2W
                             AddUniqueToTable(handle.ClassName);
                             var flags = EImportFlags.Default;
 
-                            if (var.cr2w.Embedded.Any(_ => _.ImportPath == handle.DepotPath))
+                            if ((var.Cr2wFile as CR2WFile).Embedded.Any(_ => _.ImportPath == handle.DepotPath))
                                 flags = EImportFlags.Inplace;
 
                             var importtuple = new SImportEntry(handle.ClassName, handle.DepotPath, flags);
@@ -1269,7 +1271,7 @@ namespace CP77.CR2W
 
             m_tableheaders[4].itemCount = (uint)Chunks.Count;
             m_tableheaders[4].offset = (uint)file.BaseStream.Position;
-            WriteTable<CR2WExport>(file.BaseStream, Chunks.Select(_ => _.Export).ToArray(), 4);
+            WriteTable<CR2WExport>(file.BaseStream, Chunks.Select(_ => (_ as CR2WExportWrapper).Export).ToArray(), 4);
 
             if (Buffers.Count > 0)
             {
@@ -1301,7 +1303,7 @@ namespace CP77.CR2W
             file.BaseStream.Seek(0, SeekOrigin.Begin);
 
             // calculate filesize again
-            m_fileheader.objectsEnd = Chunks.Last().Export.dataOffset + Chunks.Last().Export.dataSize; 
+            m_fileheader.objectsEnd = (Chunks.Last() as CR2WExportWrapper).Export.dataOffset + (Chunks.Last() as CR2WExportWrapper).Export.dataSize; 
             
             // calculate buffersize again
             m_fileheader.buffersEnd = (uint)Buffers.Sum(_ => _.Buffer.diskSize) + m_fileheader.objectsEnd;

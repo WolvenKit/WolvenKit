@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
@@ -53,7 +53,7 @@ namespace WolvenKit.CR2W.Types
             padding.Write(file);
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = base.Copy(context) as CPaddedBuffer<T>;
 

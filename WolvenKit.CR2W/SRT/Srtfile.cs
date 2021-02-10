@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.CR2W.SRT
 {
@@ -53,6 +55,8 @@ namespace WolvenKit.CR2W.SRT
 
         [Browsable(false)]
         public string FileName { get; set; }
+
+        public List<ICR2WExport> Chunks => throw new NotImplementedException();
         #endregion
 
 

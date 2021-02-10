@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Xml;
 using CP77.CR2W.Reflection;
 using FastMember;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W.Types
 {

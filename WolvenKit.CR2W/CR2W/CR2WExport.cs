@@ -1,10 +1,8 @@
-﻿//using RED.CRC32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using WolvenKit.CR2W.Types;
 using System.Runtime.InteropServices;
-//using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml;
 using WolvenKit.Utils;
@@ -12,6 +10,7 @@ using System.Linq;
 using System.IO.MemoryMappedFiles;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using WolvenKit.Common.Model.Cr2w;
 
 [assembly: ContractNamespaceAttribute("",    ClrNamespace = "WolvenKit.CR2W")]
 
@@ -69,7 +68,7 @@ namespace WolvenKit.CR2W
         /// <param name="redtype"></param>
         /// <param name="parentchunk"></param>
         /// <param name="cooked"></param>
-        public CR2WExportWrapper(CR2WFile file, string redtype, CR2WExportWrapper parentchunk, bool cooked = false)
+        public CR2WExportWrapper(CR2WFile file, string redtype, ICR2WExport parentchunk, bool cooked = false)
         {
             _export = new CR2WExport
             {
@@ -123,19 +122,19 @@ namespace WolvenKit.CR2W
             private set => _export.parentID = (uint)(value + 1);
         }
 
-        public CR2WExportWrapper ParentChunk
+        public ICR2WExport ParentChunk
         {
             get => ParentChunkIndex == -1 ? null : cr2w.Chunks[ParentChunkIndex];
             set => ParentChunkIndex = value == null ? -1 : cr2w.Chunks.IndexOf(value);
         }
 
-        public CR2WExportWrapper VirtualParentChunk;
+        public ICR2WExport VirtualParentChunk;
 
         public int VirtualParentChunkIndex => cr2w.Chunks.IndexOf(VirtualParentChunk);
 
-        public List<CR2WExportWrapper> ChildrenChunks => cr2w.Chunks.Where(_ => _.ParentChunk == this).ToList();
+        public List<ICR2WExport> ChildrenChunks => cr2w.Chunks.Where(_ => _.ParentChunk == this).ToList();
 
-        public List<CR2WExportWrapper> VirtualChildrenChunks => cr2w.Chunks.Where(_ => _.VirtualParentChunk == this).ToList();
+        public List<ICR2WExport> VirtualChildrenChunks => cr2w.Chunks.Where(_ => _.VirtualParentChunk == this).ToList();
 
         /// <summary>
         /// Playing with latin here, ab means toward, ab away from.
@@ -157,7 +156,7 @@ namespace WolvenKit.CR2W
         [DataMember]
         public string REDName => REDType + " #" + (ChunkIndex);
 
-        public int ChunkIndex => cr2w.Chunks.IndexOf(this);
+        public int ChunkIndex => cr2w.Chunks.IndexOf(this as ICR2WExport);
 
         /// <summary>
         /// This property is used as BindingProperty in frmChunkProperties
@@ -243,7 +242,7 @@ namespace WolvenKit.CR2W
                 //cr2w.Logger.LogString($"Mounted {this.REDName} to {VirtualParentChunk.REDName}.");
             }
         }
-        public void MountChunkVirtually(CR2WExportWrapper virtualparentchunk, bool force = false)
+        public void MountChunkVirtually(ICR2WExport virtualparentchunk, bool force = false)
         {
             if (VirtualParentChunk == null || force)
             {
@@ -394,7 +393,7 @@ namespace WolvenKit.CR2W
 
             if (cvar == null)
             {
-                data = CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data);
+                data = CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data as CVariable);
             }
             else
             {

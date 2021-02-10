@@ -137,8 +137,8 @@ namespace CP77.CR2W
 
             // read the cr2wfile
             using var br = new BinaryReader(cr2wStream);
-            var cr2w = TryReadCr2WFile(br);
-            if (cr2w == null)
+            var cr2w = ModTools.TryReadCr2WFile(br);
+            if (cr2w != null)
             {
                 Logger.LogString($"Failed to read cr2w file {cr2wFileName.FullName}", Logtype.Error);
                 return false;
@@ -189,8 +189,8 @@ namespace CP77.CR2W
         {
             // read the cr2wfile
             using var br = new BinaryReader(cr2wStream);
-            var cr2w = TryReadCr2WFileHeaders(br);
-            if (cr2w == null)
+            var cr2w = ModTools.TryReadCr2WFileHeaders(br);
+            if (cr2w != null)
             {
                 Logger.LogString($"Failed to read cr2w {cr2wFileName.FullName}", Logtype.Error);
                 return false;

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-
+using WolvenKit.Common.Model.Cr2w;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
@@ -24,7 +24,7 @@ namespace WolvenKit.CR2W.Types
             pieces = new CCompressedBuffer<CurvePiece>(cr2w, this, nameof(pieces)) { IsSerialized = true };
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = base.Copy(context) as CurveInfo;
             copy.someName = someName.Copy(context) as CName;

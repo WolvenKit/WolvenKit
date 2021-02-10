@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 using FastMember;
@@ -34,7 +34,7 @@ namespace WolvenKit.CR2W.Types
 
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = base.Copy(context) as CurvePiece;
             copy.valueCount = valueCount.Copy(context) as CUInt16;

@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Linq;
 using WolvenKit.CR2W.Reflection;
+using WolvenKit.Common.Model.Cr2w;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -87,7 +88,7 @@ namespace WolvenKit.CR2W.Types
             return newvar == null || newvar is T;
         }
 
-        public override void AddVariable(CVariable variable)
+        public override void AddVariable(IEditableVariable variable)
         {
             if (variable is T tvar)
             {
@@ -151,7 +152,7 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = base.Copy(context) as CBufferBase<T>;
             context.Parent = copy;

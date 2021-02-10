@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.Common.Model
 {
@@ -16,11 +17,11 @@ namespace WolvenKit.Common.Model
     {
         string FileName { get; set; }
 
+        List<ICR2WExport> Chunks { get; }
+
         Task<EFileReadErrorCodes> Read(BinaryReader file);
 
         void Write(BinaryWriter writer);
-
-        void GetChunks();
 
     }
 }

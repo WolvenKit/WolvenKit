@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
@@ -183,7 +183,7 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override IEditableVariable Copy(ICR2WCopyAction context)
         {
             return W3ReaderExtensions.CopyViaBuffer(this, base.Copy(context));
         }

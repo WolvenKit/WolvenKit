@@ -9,6 +9,7 @@ using CP77.CR2W.Reflection;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W.Types
 {
