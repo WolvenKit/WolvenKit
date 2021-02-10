@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class NameplateBarLogicController : ProgressBarSimpleWidgetLogicController
 	{
-		[Ordinal(0)]  [RED("damagePreview")] public CHandle<DamagePreviewController> DamagePreview { get; set; }
+		[Ordinal(23)]  [RED("damagePreview")] public CHandle<DamagePreviewController> DamagePreview { get; set; }
 
 		public NameplateBarLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

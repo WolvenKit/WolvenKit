@@ -35,6 +35,8 @@ namespace CP77Tools.Tasks
                     using var fs = new FileStream(s, FileMode.Open, FileAccess.Read);
                     if (VerifyFile(fs, s))
                         logger.LogString($"{s} - No problems found", Logtype.Success);
+                    else
+                        logger.LogString($"{s} - Failed", Logtype.Error);
                 }
 
             if (hashes != null)

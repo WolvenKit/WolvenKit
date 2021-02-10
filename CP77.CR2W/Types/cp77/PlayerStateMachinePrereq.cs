@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PlayerStateMachinePrereq : gameIScriptablePrereq
 	{
-		[Ordinal(0)]  [RED("isInState")] public CBool IsInState { get; set; }
-		[Ordinal(1)]  [RED("previousState")] public CBool PreviousState { get; set; }
+		[Ordinal(0)]  [RED("previousState")] public CBool PreviousState { get; set; }
+		[Ordinal(1)]  [RED("isInState")] public CBool IsInState { get; set; }
 		[Ordinal(2)]  [RED("skipWhenApplied")] public CBool SkipWhenApplied { get; set; }
 		[Ordinal(3)]  [RED("valueToListen")] public CInt32 ValueToListen { get; set; }
 

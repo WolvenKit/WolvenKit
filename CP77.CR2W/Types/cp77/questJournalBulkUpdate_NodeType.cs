@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questJournalBulkUpdate_NodeType : questIJournal_NodeType
 	{
-		[Ordinal(0)]  [RED("path")] public CHandle<gameJournalPath> Path { get; set; }
 		[Ordinal(1)]  [RED("requiredEntryType")] public CName RequiredEntryType { get; set; }
 		[Ordinal(2)]  [RED("requiredEntryState")] public CName RequiredEntryState { get; set; }
 		[Ordinal(3)]  [RED("newEntryState")] public CName NewEntryState { get; set; }

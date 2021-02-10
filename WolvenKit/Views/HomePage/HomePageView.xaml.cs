@@ -105,10 +105,9 @@ namespace WolvenKit.Views.HomePage
 #pragma warning restore 618
 
 
-                WatchShield.SetCurrentValue(Shield.StatusProperty, g_watchers.ToString());
-                ForkShield.SetCurrentValue(Shield.StatusProperty, g_forks.ToString());
-                StarShield.SetCurrentValue(Shield.StatusProperty, g_stars.ToString());
-
+              //  WatchShield.SetCurrentValue(Shield.StatusProperty, g_watchers.ToString());
+               // ForkShield.SetCurrentValue(Shield.StatusProperty, g_forks.ToString());
+             //   StarShield.SetCurrentValue(Shield.StatusProperty, g_stars.ToString());
 
 
 
@@ -159,7 +158,7 @@ namespace WolvenKit.Views.HomePage
 
                 }
                 data.Add(item);
-                gitTime.SetCurrentValue(ItemsControl.ItemsSourceProperty, data);
+              //  gitTime.SetCurrentValue(ItemsControl.ItemsSourceProperty, data);
             }
             catch { }
         }
@@ -178,8 +177,8 @@ namespace WolvenKit.Views.HomePage
             {
                 PageViewGrid.Children.Clear();
 
-                TopicViewer.TopicViewer.Children.Clear();
-                TopicViewer.TopicViewer.Children.Add(WelcomePV);
+                PageViewGrid.Children.Clear();
+                PageViewGrid.Children.Add(WelcomePV);
             }
 
         }
@@ -193,8 +192,8 @@ namespace WolvenKit.Views.HomePage
             {
                 PageViewGrid.Children.Clear();
 
-                TopicViewer.TopicViewer.Children.Clear();
-                TopicViewer.TopicViewer.Children.Add(FirstSWV);
+                PageViewGrid.Children.Clear();
+                PageViewGrid.Children.Add(FirstSWV);
             }
         }
 
@@ -213,8 +212,8 @@ namespace WolvenKit.Views.HomePage
             {
                 PageViewGrid.Children.Clear();
 
-                TopicViewer.TopicViewer.Children.Clear();
-                TopicViewer.TopicViewer.Children.Add(ProjectWV);
+                PageViewGrid.Children.Clear();
+                PageViewGrid.Children.Add(ProjectWV);
             }
         }
 

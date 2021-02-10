@@ -223,7 +223,7 @@ namespace WolvenKit.CR2W.Reflection
             // get only RED
             else
             {
-                return redproperties.Where(z => !(z.GetMemberAttribute<REDAttribute>() is REDBufferAttribute)); ;
+                return redproperties.Where(z => !(z.GetMemberAttribute<REDAttribute>() is REDBufferAttribute));
             }
         }
 

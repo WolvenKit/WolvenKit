@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
-
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
@@ -61,7 +61,7 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CXml) base.Copy(context);
             var.backingfield = backingfield;

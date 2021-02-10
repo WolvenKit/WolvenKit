@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using WolvenKit.CR2W.Reflection;
 using FastMember;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.CR2W.Types
 {

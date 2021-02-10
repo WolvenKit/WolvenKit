@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PlaySoundEvent : MusicSettings
 	{
-		[Ordinal(0)]  [RED("soundEvent")] public CName SoundEvent { get; set; }
+		[Ordinal(1)]  [RED("soundEvent")] public CName SoundEvent { get; set; }
 
 		public PlaySoundEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

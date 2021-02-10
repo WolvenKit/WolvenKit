@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MeleeDeflectAttackEvents : MeleeAttackGenericEvents
 	{
-		[Ordinal(0)]  [RED("slowMoSet")] public CBool SlowMoSet { get; set; }
+		[Ordinal(8)]  [RED("slowMoSet")] public CBool SlowMoSet { get; set; }
 
 		public MeleeDeflectAttackEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

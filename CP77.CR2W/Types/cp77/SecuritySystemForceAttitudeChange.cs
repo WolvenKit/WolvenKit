@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SecuritySystemForceAttitudeChange : ScriptableDeviceAction
 	{
-		[Ordinal(0)]  [RED("newAttitude")] public CName NewAttitude { get; set; }
+		[Ordinal(22)]  [RED("newAttitude")] public CName NewAttitude { get; set; }
 
 		public SecuritySystemForceAttitudeChange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

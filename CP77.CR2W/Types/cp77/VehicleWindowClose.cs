@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class VehicleWindowClose : ActionBool
 	{
-		[Ordinal(0)]  [RED("isInteractionSource")] public CBool IsInteractionSource { get; set; }
-		[Ordinal(1)]  [RED("slotID")] public CName SlotID { get; set; }
-		[Ordinal(2)]  [RED("speed")] public CName Speed { get; set; }
+		[Ordinal(22)]  [RED("slotID")] public CName SlotID { get; set; }
+		[Ordinal(23)]  [RED("speed")] public CName Speed { get; set; }
+		[Ordinal(24)]  [RED("isInteractionSource")] public CBool IsInteractionSource { get; set; }
 
 		public VehicleWindowClose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

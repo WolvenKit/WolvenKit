@@ -3,7 +3,9 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.Reflection;
+
 
 namespace WolvenKit.CR2W.Types
 {
@@ -52,7 +54,7 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = (CByteArray2) base.Copy(context);
 

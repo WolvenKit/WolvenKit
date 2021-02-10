@@ -12,7 +12,7 @@ using System.Reactive.Linq;
 using NodeNetwork.Toolkit.ValueNode;
 using ReactiveUI;
 using NodeNetwork.Views;
-using WolvenKit.Views.VisualEditor.Nodes;
+using WolvenKit.Views.Editors.VisualEditor.Nodes;
 
 namespace WolvenKit.Views.VisualEditor
 {
@@ -29,28 +29,16 @@ namespace WolvenKit.Views.VisualEditor
             var network = new NetworkViewModel();
 
             //Create the node for the first node, set its name and add it to the network.
-            var node1 = new HelloWorldNode();
-            node1.Name = "Node 1";
-            network.Nodes.Add(node1);
+            var innode = new IN_Node_Class();
+            innode.Name = "IN";
+            network.Nodes.Add(innode);
 
-            //Create the viewmodel for the input on the first node, set its name and add it to the node.
-            var node1Input = new ValueNodeInputViewModel<string>();
 
-            node1Input.Name = "Node 1 input";
-            node1.Inputs.Add(node1Input);
-            node1Input.ValueChanged.Subscribe(newValue =>
-            {
-                Console.WriteLine(newValue);
-            });
-            //Create the second node viewmodel, set its name, add it to the network and add an output in a similar fashion.
-            var node2 = new NodeViewModel();
-            node2.Name = "Node 2";
-            network.Nodes.Add(node2);
+            var outnode = new OUT_Node_Class();
+            outnode.Name = "OUT";
+            network.Nodes.Add(outnode);
 
-            var node2Output = new ValueNodeOutputViewModel<string>();
-            node2Output.Name = "Node 2 output";
-            node2.Outputs.Add(node2Output); 
-            node2Output.Value = Observable.Return("Example string");
+        
 
 
 
@@ -60,35 +48,49 @@ namespace WolvenKit.Views.VisualEditor
 
         }
 
-        public class HelloWorldNode : NodeViewModel
+        public class IN_Node_Class : NodeViewModel
         {
             public ValueNodeInputViewModel<string> NameInput { get; }
             public ValueNodeOutputViewModel<string> TextOutput { get; }
 
-            public HelloWorldNode()
-            {
-                this.Name = "Hello World Node";
-
-                NameInput = new ValueNodeInputViewModel<string>()
-                {
-                    Name = "Name"
-                };
-                this.Inputs.Add(NameInput);
+            public IN_Node_Class()
+            {       
 
                 TextOutput = new ValueNodeOutputViewModel<string>()
                 {
-                    Name = "Text",
+                    Name = "Input",
                     Value = this.WhenAnyObservable(vm => vm.NameInput.ValueChanged)
                         .Select(name => $"Hello {name}!")
                 };
                 this.Outputs.Add(TextOutput);
             }
-            static HelloWorldNode()
+            static IN_Node_Class()
             {
-                Splat.Locator.CurrentMutable.Register(() => new HelloWorldNodeView(), typeof(IViewFor<HelloWorldNode>));
+                Splat.Locator.CurrentMutable.Register(() => new IN_Node(), typeof(IViewFor<IN_Node_Class>));
             }
         }
 
+
+        public class OUT_Node_Class : NodeViewModel
+        {
+            public ValueNodeInputViewModel<string> NameInput { get; }
+            public ValueNodeOutputViewModel<string> TextOutput { get; }
+
+            public OUT_Node_Class()
+            {
+
+                NameInput = new ValueNodeInputViewModel<string>()
+                {
+                    Name = "Output",
+             
+                };
+                this.Inputs.Add(NameInput);
+            }
+            static OUT_Node_Class()
+            {
+                Splat.Locator.CurrentMutable.Register(() => new OUT_Node(), typeof(IViewFor<OUT_Node_Class>));
+            }
+        }
 
 
 

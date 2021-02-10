@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using FastMember;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -120,7 +121,7 @@ namespace WolvenKit.CR2W.Types
                             Enum.GetName(typeof(Enums.BlockDataObjectType), packedObjectType) + "] object";
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override IEditableVariable Copy(ICR2WCopyAction context)
         {
             if (packedObject != null)
             {

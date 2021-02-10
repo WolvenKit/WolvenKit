@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using CP77.CR2W.Reflection;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W.Types
 {
@@ -17,10 +18,7 @@ namespace CP77.CR2W.Types
             Elementtype = REDReflection.GetREDTypeString(typeof(T));
         }
 
-        public override void Read(BinaryReader file, uint size)
-        {
-            base.Read(file, size, (int)file.ReadVLQInt32());
-        }
+        public override void Read(BinaryReader file, uint size) => base.Read(file, size, (int)file.ReadVLQInt32());
 
         public override void Write(BinaryWriter file)
         {

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameCpoArmouryItem : gameObject
 	{
-		[Ordinal(0)]  [RED("armouryItemID")] public TweakDBID ArmouryItemID { get; set; }
+		[Ordinal(31)]  [RED("armouryItemID")] public TweakDBID ArmouryItemID { get; set; }
 
 		public gameCpoArmouryItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

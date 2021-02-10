@@ -9,8 +9,8 @@ namespace CP77.CR2W.Types
 	public class RoachRaceGameController : gameuiSideScrollerMiniGameController
 	{
 		[Ordinal(0)]  [RED("gameMenu")] public inkWidgetReference GameMenu { get; set; }
-		[Ordinal(1)]  [RED("isCutsceneInProgress")] public CBool IsCutsceneInProgress { get; set; }
-		[Ordinal(2)]  [RED("scoreboardMenu")] public inkWidgetReference ScoreboardMenu { get; set; }
+		[Ordinal(1)]  [RED("scoreboardMenu")] public inkWidgetReference ScoreboardMenu { get; set; }
+		[Ordinal(2)]  [RED("isCutsceneInProgress")] public CBool IsCutsceneInProgress { get; set; }
 
 		public RoachRaceGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

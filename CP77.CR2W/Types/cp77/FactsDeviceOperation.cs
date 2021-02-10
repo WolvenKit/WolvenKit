@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class FactsDeviceOperation : DeviceOperationBase
 	{
-		[Ordinal(0)]  [RED("facts")] public CArray<SFactOperationData> Facts { get; set; }
+		[Ordinal(5)]  [RED("facts")] public CArray<SFactOperationData> Facts { get; set; }
 
 		public FactsDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.CR2W.Reflection;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -55,7 +56,7 @@ namespace WolvenKit.CR2W.Types
             file.Write(_guid);
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (IdTag)base.Copy(context);
             var._type = _type;

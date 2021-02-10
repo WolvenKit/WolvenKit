@@ -20,6 +20,7 @@
 	<DebugType>embedded</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);SA1652</NoWarn>
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
   </PropertyGroup>
   <ItemGroup>
@@ -33,6 +34,8 @@
     <Page Remove="Views\Wizards\WizardPages\InstallerWizard\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Resources\Icons\3.png" />
+    <None Remove="Resources\Icons\Homelogo.png" />
     <None Remove="Resources\Icons\whitelogo.png" />
     <None Remove="Wkit_Icon_Flattened_256x.ico" />
   </ItemGroup>
@@ -98,6 +101,7 @@
     <PackageReference Include="WpfAnalyzers" Version="3.5.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="WPFHexaEditor" Version="2.1.6" />
     <!--<PackageReference Update="NETStandard.Library" Version="2.0.1" />-->
   </ItemGroup>
   
@@ -213,6 +217,8 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Fonts\fontawesome-webfont.ttf" />
+    <Resource Include="Resources\Icons\3.png" />
+    <Resource Include="Resources\Icons\Homelogo.png" />
     <Resource Include="Resources\Icons\Logo.ico" />
     <Resource Include="Resources\Icons\whitelogo.png" />
     <Resource Include="Resources\Images\Files\apb_32x.png" />

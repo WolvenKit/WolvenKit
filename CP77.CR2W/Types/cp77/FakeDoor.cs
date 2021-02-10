@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class FakeDoor : gameObject
 	{
-		[Ordinal(0)]  [RED("interaction")] public CHandle<gameinteractionsComponent> Interaction { get; set; }
+		[Ordinal(31)]  [RED("interaction")] public CHandle<gameinteractionsComponent> Interaction { get; set; }
 
 		public FakeDoor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

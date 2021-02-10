@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SecurityAreaCrossingPerimeter : SecurityAreaEvent
 	{
-		[Ordinal(0)]  [RED("entered")] public CBool Entered { get; set; }
+		[Ordinal(24)]  [RED("entered")] public CBool Entered { get; set; }
 
 		public SecurityAreaCrossingPerimeter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

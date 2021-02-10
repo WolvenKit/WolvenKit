@@ -10,6 +10,7 @@ namespace WolvenKit.Model
 {
     using Common.Services;
     using CR2W.Types;
+    using WolvenKit.Common.Model.Cr2w;
 
     public static class CsvCommonFunctions
     {

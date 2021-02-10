@@ -259,7 +259,7 @@ namespace WolvenKit.ViewModels
         private bool CanPackMod() => _projectManager.ActiveProject is EditorProject proj;
         private void ExecutePackMod()
         {
-            MainController.Get().GetGame().PackAndInstallroject();
+            MainController.Get().GetGame().PackAndInstallProject();
         }
 
 		/// <summary>

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SurveillanceSystemControllerPS : DeviceSystemBaseControllerPS
 	{
-		[Ordinal(0)]  [RED("isRevealingEnemies")] public CBool IsRevealingEnemies { get; set; }
+		[Ordinal(105)]  [RED("isRevealingEnemies")] public CBool IsRevealingEnemies { get; set; }
 
 		public SurveillanceSystemControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

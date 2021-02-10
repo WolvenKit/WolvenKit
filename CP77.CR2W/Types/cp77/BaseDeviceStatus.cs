@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class BaseDeviceStatus : ActionEnum
 	{
-		[Ordinal(0)]  [RED("isRestarting")] public CBool IsRestarting { get; set; }
+		[Ordinal(22)]  [RED("isRestarting")] public CBool IsRestarting { get; set; }
 
 		public BaseDeviceStatus(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

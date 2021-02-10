@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class IconsInstance : ModuleInstance
 	{
-		[Ordinal(0)]  [RED("isForcedVisibleThroughWalls")] public CBool IsForcedVisibleThroughWalls { get; set; }
+		[Ordinal(6)]  [RED("isForcedVisibleThroughWalls")] public CBool IsForcedVisibleThroughWalls { get; set; }
 
 		public IconsInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

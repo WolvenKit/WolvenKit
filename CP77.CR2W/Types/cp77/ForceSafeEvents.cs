@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ForceSafeEvents : UpperBodyEventsTransition
 	{
-		[Ordinal(0)]  [RED("safeAnimFeature")] public CHandle<AnimFeature_SafeAction> SafeAnimFeature { get; set; }
-		[Ordinal(1)]  [RED("weaponObjectID")] public TweakDBID WeaponObjectID { get; set; }
+		[Ordinal(6)]  [RED("safeAnimFeature")] public CHandle<AnimFeature_SafeAction> SafeAnimFeature { get; set; }
+		[Ordinal(7)]  [RED("weaponObjectID")] public TweakDBID WeaponObjectID { get; set; }
 
 		public ForceSafeEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

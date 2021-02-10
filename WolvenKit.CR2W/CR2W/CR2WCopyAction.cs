@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Catel.IoC;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
 
@@ -9,22 +12,22 @@ namespace WolvenKit.CR2W
     /// <summary>
     /// Copy-pasting has been scattered /TODO recentralize here
     /// </summary>
-    public class CR2WCopyAction
+    public class CR2WCopyAction : ICR2WCopyAction
     {
-        public Dictionary<CR2WExportWrapper, CR2WExportWrapper> chunkTranslation; // source, target
+        public Dictionary<ICR2WExport, ICR2WExport> chunkTranslation; // source, target
 
         public CR2WCopyAction()
         {
-            chunkTranslation = new Dictionary<CR2WExportWrapper, CR2WExportWrapper>();
+            chunkTranslation = new Dictionary<ICR2WExport, ICR2WExport>();
         }
 
-        public CR2WExportWrapper SourceChunk { get; set; }
-        public CR2WExportWrapper DestinationChunk { get; set; }
-        public CVariable SourceCVar => SourceChunk.data;
-        public CVariable DestinationCVar => DestinationChunk.data;
-        public CR2WFile SourceFile { get; set; }
-        public CR2WFile DestinationFile { get; set; }
-        public CVariable Parent { get; set; }
+        public ICR2WExport SourceChunk { get; set; }
+        public ICR2WExport DestinationChunk { get; set; }
+        public IEditableVariable SourceCVar => SourceChunk.data;
+        public IEditableVariable DestinationCVar => DestinationChunk.data;
+        public IWolvenkitFile SourceFile { get; set; }
+        public IWolvenkitFile DestinationFile { get; set; }
+        public IEditableVariable Parent { get; set; }
 
         /// <summary>
         /// Used when pasting-in-place a chunk, takes care of (virtual) children.
@@ -33,10 +36,10 @@ namespace WolvenKit.CR2W
         /// <param name="destinationchunk"></param>
         /// <param name="oldparentinghierarchy"></param>
         public void AddChildrenChunks(
-            CR2WExportWrapper sourcechunk,
-            CR2WExportWrapper destinationchunk = null,
-            Dictionary<CR2WExportWrapper,
-                (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)> oldparentinghierarchy = null)
+            ICR2WExport sourcechunk,
+            ICR2WExport destinationchunk = null,
+            Dictionary<ICR2WExport,
+                (ICR2WExport oldchunkparent, ICR2WExport oldchunkvparent)> oldparentinghierarchy = null)
         {
             // First recursion to create the "empty" chunk descendent shells
             DeepChunkCopy(SourceChunk, DestinationChunk);
@@ -74,19 +77,19 @@ namespace WolvenKit.CR2W
         /// <param name="targetarray"></param>
         /// <param name="oldparentinghierarchy"></param>
         public void PasteChunksInArray(
-            List<CR2WExportWrapper> sourcechunks,
+            List<ICR2WExport> sourcechunks,
             IArrayAccessor targetarray,
-            Dictionary<CR2WExportWrapper,
-                (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)> oldparentinghierarchy = null)
+            Dictionary<ICR2WExport,
+                (ICR2WExport oldchunkparent, ICR2WExport oldchunkvparent)> oldparentinghierarchy = null)
         {
             // First recursion to create the "empty" chunk descendent shells
             foreach (var sourcechunk in sourcechunks)
             {
                 SourceChunk = sourcechunk;
                 //Create the related chunk
-                var newchunk = DestinationFile.CreateChunk(
+                var newchunk = (DestinationFile as CR2WFile).CreateChunk(
                         sourcechunk.data.REDType,
-                        DestinationFile.GetLastChildrenIndexRecursive(DestinationChunk) + 1);
+                        (DestinationFile as CR2WFile).GetLastChildrenIndexRecursive(DestinationChunk) + 1);
 
                 if(!chunkTranslation.ContainsKey(sourcechunk))
                 {
@@ -136,15 +139,15 @@ namespace WolvenKit.CR2W
         /// <param name="sourcechunk"></param>
         /// <param name="destinationchunk"></param>
         /// <param name="inplace"></param>
-        private void DeepChunkCopy (CR2WExportWrapper sourcechunk, CR2WExportWrapper destinationchunk, bool inplace = true)
+        private void DeepChunkCopy (ICR2WExport sourcechunk, ICR2WExport destinationchunk, bool inplace = true)
         {
             Parent = null;
             foreach (var sourcevirtualchildchunk in sourcechunk.VirtualChildrenChunks)
             {
-                var newchunk = DestinationFile.CreateChunk(
+                var newchunk = (DestinationFile as CR2WFile).CreateChunk(
                     sourcevirtualchildchunk.data.REDType,
                     inplace ? destinationchunk.ChunkIndex + sourcevirtualchildchunk.ChunkIndex - SourceChunk.ChunkIndex
-                            : destinationchunk.cr2w.GetLastChildrenIndexRecursive(destinationchunk) + 1);
+                            : (destinationchunk.data.Cr2wFile as CR2WFile).GetLastChildrenIndexRecursive(destinationchunk) + 1);
 
                 if(!chunkTranslation.ContainsKey(sourcevirtualchildchunk))
                 {
@@ -170,7 +173,7 @@ namespace WolvenKit.CR2W
         /// <param name="oldExportWrapper"></param>
         /// <param name="targetVariable"></param>
         /// <returns></returns>
-        internal CR2WExportWrapper TryLookupReference(CR2WExportWrapper oldExportWrapper, CVariable targetVariable = null)
+        public ICR2WExport TryLookupReference(ICR2WExport oldExportWrapper, IEditableVariable targetVariable = null)
         {
             if (oldExportWrapper == null)
             {
@@ -184,7 +187,7 @@ namespace WolvenKit.CR2W
             }
 
             // Try going up the chunk hierarchy
-            CR2WExportWrapper parent = DestinationChunk;
+            ICR2WExport parent = DestinationChunk;
             while (parent != null)
             {
                 if (parent.REDType == oldExportWrapper.REDType)
@@ -198,7 +201,7 @@ namespace WolvenKit.CR2W
             string vardepstring = null;
             if(targetVariable != null)
             {
-                vardepstring = targetVariable.GetFullDependencyStringName();
+                vardepstring = targetVariable.UniqueIdentifier;
             }
             var chunkdepstring = oldExportWrapper.GetFullChunkTypeDependencyString();
 
@@ -206,6 +209,7 @@ namespace WolvenKit.CR2W
                 _.GetFullChunkTypeDependencyString() == chunkdepstring)
                 .ToList();
 
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             if (targetchunk.Count == 1)
             {
                 //Logger?.LogString($"Found exactly one chunk target. Please double check pointer targets in {vardepstring}", Logtype.Success);
@@ -213,12 +217,12 @@ namespace WolvenKit.CR2W
             }
             else if (targetchunk.Count > 1)
             {
-                DestinationFile.Logger?.LogString($"More than one chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}", Logtype.Error);
+                logger?.LogString($"More than one chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}", Logtype.Error);
                 return null;
             }
             else
             {
-                DestinationFile.Logger?.LogString($"No chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}", Logtype.Error);
+                logger?.LogString($"No chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}", Logtype.Error);
                 return null;
             }
         }

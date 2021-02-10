@@ -15,6 +15,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(4)]  [RED("distanceToReactFront")] public CFloat DistanceToReactFront { get; set; }
 		[Ordinal(5)]  [RED("reactionSettings")] public CArray<gameinfluenceBumpReactionSetting> ReactionSettings { get; set; }
 		[Ordinal(6)]  [RED("autoPlayBumpAnimation")] public CBool AutoPlayBumpAnimation { get; set; }
+		[Ordinal(7)]  [RED("isBumpable")] public CBool IsBumpable { get; set; }
 
 		public gameinfluenceBumpComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

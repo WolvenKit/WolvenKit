@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class StillageControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(0)]  [RED("isCleared")] public CBool IsCleared { get; set; }
+		[Ordinal(103)]  [RED("isCleared")] public CBool IsCleared { get; set; }
 
 		public StillageControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

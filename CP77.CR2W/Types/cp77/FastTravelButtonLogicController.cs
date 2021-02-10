@@ -9,10 +9,10 @@ namespace CP77.CR2W.Types
 	public class FastTravelButtonLogicController : inkButtonController
 	{
 		[Ordinal(0)]  [RED("districtName")] public inkTextWidgetReference DistrictName { get; set; }
-		[Ordinal(1)]  [RED("fastTravelPointData")] public wCHandle<gameFastTravelPointData> FastTravelPointData { get; set; }
-		[Ordinal(2)]  [RED("isInitialized")] public CBool IsInitialized { get; set; }
-		[Ordinal(3)]  [RED("locationName")] public inkTextWidgetReference LocationName { get; set; }
-		[Ordinal(4)]  [RED("soundData")] public SSoundData SoundData { get; set; }
+		[Ordinal(1)]  [RED("locationName")] public inkTextWidgetReference LocationName { get; set; }
+		[Ordinal(2)]  [RED("soundData")] public SSoundData SoundData { get; set; }
+		[Ordinal(3)]  [RED("isInitialized")] public CBool IsInitialized { get; set; }
+		[Ordinal(4)]  [RED("fastTravelPointData")] public wCHandle<gameFastTravelPointData> FastTravelPointData { get; set; }
 
 		public FastTravelButtonLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

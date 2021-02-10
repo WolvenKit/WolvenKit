@@ -12,6 +12,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(1)]  [RED("oneTimeSelection")] public CBool OneTimeSelection { get; set; }
 		[Ordinal(2)]  [RED("forcedEntryAnimation")] public CName ForcedEntryAnimation { get; set; }
 		[Ordinal(3)]  [RED("exposureMethods")] public CArray<CEnum<AICoverExposureMethod>> ExposureMethods { get; set; }
+		[Ordinal(4)]  [RED("limitToTheseExposureMethods")] public CHandle<CoverCommandParams> LimitToTheseExposureMethods { get; set; }
 
 		public AIUseCoverCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

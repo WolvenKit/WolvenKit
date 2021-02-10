@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DropPointTerminalInkGameController : DeviceInkGameControllerBase
 	{
-		[Ordinal(0)]  [RED("onGlitchingStateChangedListener")] public CUInt32 OnGlitchingStateChangedListener { get; set; }
-		[Ordinal(1)]  [RED("sellAction")] public inkWidgetReference SellAction { get; set; }
+		[Ordinal(14)]  [RED("sellAction")] public inkWidgetReference SellAction { get; set; }
+		[Ordinal(15)]  [RED("onGlitchingStateChangedListener")] public CUInt32 OnGlitchingStateChangedListener { get; set; }
 
 		public DropPointTerminalInkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

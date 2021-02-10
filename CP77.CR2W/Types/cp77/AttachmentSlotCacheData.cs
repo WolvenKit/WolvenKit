@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AttachmentSlotCacheData : CVariable
 	{
-		[Ordinal(0)]  [RED("attachmentSlotRecord")] public wCHandle<gamedataAttachmentSlot_Record> AttachmentSlotRecord { get; set; }
-		[Ordinal(1)]  [RED("empty")] public CBool Empty { get; set; }
+		[Ordinal(0)]  [RED("empty")] public CBool Empty { get; set; }
+		[Ordinal(1)]  [RED("attachmentSlotRecord")] public wCHandle<gamedataAttachmentSlot_Record> AttachmentSlotRecord { get; set; }
 		[Ordinal(2)]  [RED("shouldBeAvailable")] public CBool ShouldBeAvailable { get; set; }
 		[Ordinal(3)]  [RED("slotId")] public TweakDBID SlotId { get; set; }
 

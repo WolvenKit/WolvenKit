@@ -14,10 +14,10 @@ namespace CP77.CR2W.Types
 		[Ordinal(3)]  [RED("enableLookAtLeftHanded")] public CInt32 EnableLookAtLeftHanded { get; set; }
 		[Ordinal(4)]  [RED("enableLookAtRightHanded")] public CInt32 EnableLookAtRightHanded { get; set; }
 		[Ordinal(5)]  [RED("enableLookAtTwoHanded")] public CInt32 EnableLookAtTwoHanded { get; set; }
-		[Ordinal(6)]  [RED("gpLookAtTarget")] public Vector4 GpLookAtTarget { get; set; }
-		[Ordinal(7)]  [RED("gpLookAtTargetBlend")] public CFloat GpLookAtTargetBlend { get; set; }
-		[Ordinal(8)]  [RED("gpLookAtUp")] public Vector4 GpLookAtUp { get; set; }
-		[Ordinal(9)]  [RED("gpLookAtUpBlend")] public CFloat GpLookAtUpBlend { get; set; }
+		[Ordinal(6)]  [RED("gpLookAtTargetBlend")] public CFloat GpLookAtTargetBlend { get; set; }
+		[Ordinal(7)]  [RED("gpLookAtUpBlend")] public CFloat GpLookAtUpBlend { get; set; }
+		[Ordinal(8)]  [RED("gpLookAtTarget")] public Vector4 GpLookAtTarget { get; set; }
+		[Ordinal(9)]  [RED("gpLookAtUp")] public Vector4 GpLookAtUp { get; set; }
 		[Ordinal(10)]  [RED("lookAtChestMode")] public CInt32 LookAtChestMode { get; set; }
 		[Ordinal(11)]  [RED("lookAtChestOverride")] public CFloat LookAtChestOverride { get; set; }
 		[Ordinal(12)]  [RED("lookAtHeadMode")] public CInt32 LookAtHeadMode { get; set; }

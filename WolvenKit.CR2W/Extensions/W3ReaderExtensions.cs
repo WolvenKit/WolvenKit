@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W
 {
     public static class W3ReaderExtensions
     {
-        public static CVariable CopyViaBuffer(CVariable source, CVariable destination)
+        public static IEditableVariable CopyViaBuffer(IEditableVariable source, IEditableVariable destination)
         {
             using (MemoryStream ms = new MemoryStream())
             using (BinaryWriter bw = new BinaryWriter(ms))

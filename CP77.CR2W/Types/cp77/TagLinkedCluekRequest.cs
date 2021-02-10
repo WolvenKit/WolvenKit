@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TagLinkedCluekRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)]  [RED("linkedCluekData")] public LinkedFocusClueData LinkedCluekData { get; set; }
-		[Ordinal(1)]  [RED("tag")] public CBool Tag { get; set; }
+		[Ordinal(0)]  [RED("tag")] public CBool Tag { get; set; }
+		[Ordinal(1)]  [RED("linkedCluekData")] public LinkedFocusClueData LinkedCluekData { get; set; }
 
 		public TagLinkedCluekRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
