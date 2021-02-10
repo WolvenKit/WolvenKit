@@ -7,7 +7,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="150" />
+            <RowDefinition Height="200" />
             <RowDefinition Height="50" />
 
             <RowDefinition Height="50" />
@@ -16,22 +16,46 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="150"/>
+
             <ColumnDefinition Width="*"/>
 
         </Grid.ColumnDefinitions>
 
+
+        <Grid Grid.ColumnSpan="10">
+            <Border Margin="15,0,0,0" Height="50" BorderThickness="0,1,0,1" BorderBrush="{DynamicResource MahApps.Brushes.Accent2}" Background="{DynamicResource RegionBrush}">
+
+            </Border>
+        </Grid>
+        
+
+        <Grid Margin="15" >
+            <Border BorderThickness="0,1,0,1" BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}" Background="{DynamicResource RegionBrush}"   CornerRadius="55">
+           
+            </Border>
+        </Grid>
+
+
+
         <Grid >
-            <Border Background="{DynamicResource MahApps.Brushes.Accent}" CornerRadius="0,0,0,0">
-                <hc:AnimationPath Data="{DynamicResource Try}" 
-                          Duration="00:00:08" 
-                          Stretch="Uniform" StrokeThickness="2"
-                          Stroke="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" PathLength="70" Margin="0" HorizontalAlignment="Left"></hc:AnimationPath>
+            <Border  CornerRadius="0,0,0,0">
+                <Grid>
+                    <Image HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Width="153" Height="153"  Source="pack://application:,,,/Resources/Icons/3.png">
+                     
+                    </Image>
+                    <hc:AnimationPath Data="{DynamicResource Try}" 
+                          Duration="00:00:1" 
+                          Stretch="Uniform" StrokeThickness="0.3"
+                          Stroke="{DynamicResource MahApps.Brushes.AccentBase}" Height="151" Width="200" PathLength="25"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,1,0"></hc:AnimationPath>
+                </Grid>
+               
             </Border>
         </Grid>
 
         <Grid Grid.Row="2" >
-            <Border Background="{DynamicResource MahApps.Brushes.Accent}" CornerRadius="0,0,45,0">
+            <Border Background="{DynamicResource MahApps.Brushes.Accent2}" CornerRadius="150,150,0,0">
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15,0,0,0" FontSize="35" Text="Home"/>
             </Border>
         </Grid>

@@ -9,7 +9,7 @@
 
 
     </catel:UserControl.Resources>
-    <Grid MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,2,5">
+    <Grid MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,2,5">
 
 
         <Grid.RowDefinitions>

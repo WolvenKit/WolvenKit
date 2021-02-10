@@ -388,7 +388,7 @@ namespace WolvenKit
 
 
             windowCommands.Items.Add(MainIcon);
-          //  windowCommands.Items.Add(tick);
+            windowCommands.Items.Add(tick);
 
             GlobalShell.LeftWindowCommands.Items.Add(windowCommands);
             // var a = (System.Windows.Controls.Button)sh.RightWindowCommands.Items[0];

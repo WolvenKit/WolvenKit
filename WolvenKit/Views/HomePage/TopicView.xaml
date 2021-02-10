@@ -23,7 +23,6 @@
         Margin="35,35,35,35">
 
             <Grid.Children>
-                <pag:WelcomePageView/>
             </Grid.Children>
         </Grid>
     </hc:TransitioningContentControl>
