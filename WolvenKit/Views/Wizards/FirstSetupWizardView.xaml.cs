@@ -1,4 +1,5 @@
 ﻿
+using Catel.IoC;
 using WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard;
 
 namespace WolvenKit.Views.Wizards
@@ -7,6 +8,7 @@ namespace WolvenKit.Views.Wizards
     {
         public FirstSetupWizardView()
         {
+            ServiceLocator.Default.RegisterInstance(new Model.Wizards.ProjectWizardModel());
 
             CUV = new CreateUserView();
             STV = new SelectThemeView();

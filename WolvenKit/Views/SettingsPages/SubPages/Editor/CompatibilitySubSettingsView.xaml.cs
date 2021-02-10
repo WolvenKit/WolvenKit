@@ -1,5 +1,4 @@
-﻿
-using Catel.IoC;
+﻿using Catel.IoC;
 using Catel.Services;
 using WolvenKit.Services;
 
@@ -56,6 +55,18 @@ namespace WolvenKit.Views.SettingsPages.SubPages.Editor
                 _settingsManager.DepotPath = result.DirectoryName;
         }
 
-        
+        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str)
+        {
+            return System.IO.Directory.Exists(str)
+                ? HandyControl.Data.OperationResult.Success()
+                : HandyControl.Data.OperationResult.Failed();
+        }
+
+        private HandyControl.Data.OperationResult<bool> VerifyFile(string str)
+        {
+            return System.IO.File.Exists(str)
+                ? HandyControl.Data.OperationResult.Success()
+                : HandyControl.Data.OperationResult.Failed();
+        }
     }
 }

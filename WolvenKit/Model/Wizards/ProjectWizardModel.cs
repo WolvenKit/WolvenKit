@@ -1,10 +1,8 @@
 ﻿using Catel.Data;
-using System.Collections.Generic;
-using System.IO;
 
 namespace WolvenKit.Model.Wizards
 {
-    public class ProjectWizardModel : ValidatableModelBase
+    public class ProjectWizardModel : ModelBase
     {
         #region fields
         private bool _witcherGameChecked = false;

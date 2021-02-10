@@ -10,7 +10,7 @@ namespace WolvenKit.Views.Wizards
     {
         public ProjectWizardView()
         {
-            ServiceLocator.Default.RegisterInstance(new Model.Wizards.ProjectWizardModel());
+            ServiceLocator.Default.RegisterInstance(new Model.Wizards.FirstSetupWizardModel());
 
             SPTV = new SelectProjectTypeView();
             PCV = new ProjectConfigurationView();

@@ -48,6 +48,7 @@
         <Setter Property="hc:InfoElement.MinContentHeight" Value="{StaticResource DefaultControlHeight}" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="Width" Value="Auto" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="Template" Value="{StaticResource TextBoxExtendLeftTemplateCustom}" />
         <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
