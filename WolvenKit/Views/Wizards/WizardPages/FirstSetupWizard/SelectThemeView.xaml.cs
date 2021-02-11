@@ -72,23 +72,30 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
                         {
                             if (!Theme.DisplayName.Contains("Colorful"))
                             {
-                                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                                if (!Theme.DisplayName.Contains('#'))
                                 {
+                                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                                    {
 
-                                    Ellipse circle = new Ellipse();
-                                    circle.Height = 25;
-                                    circle.Width = 25;
-                                    circle.Margin = new Thickness(5);
-                                    circle.MouseEnter += Circle_MouseEnter;
-                                    circle.MouseLeave += Circle_MouseLeave;
-                                    circle.MouseLeftButtonDown += Circle_MouseLeftButtonDown;
-                                    circle.Name = Theme.DisplayName.Split('(')[0].ToString().Trim();
-                                    circle.Fill = Theme.ShowcaseBrush;
+                                        Ellipse circle = new Ellipse();
+                                        circle.Height = 25;
+                                        circle.Width = 25;
+                                        circle.Margin = new Thickness(5);
+                                        circle.MouseEnter += Circle_MouseEnter;
+                                        circle.MouseLeave += Circle_MouseLeave;
+                                        circle.MouseLeftButtonDown += Circle_MouseLeftButtonDown;
+                                        circle.Name = Theme.DisplayName.Split('(')[0].ToString().Trim();
+                                        circle.Fill = Theme.ShowcaseBrush;
 
-                                    CircleTest.Children.Add(circle);
+                                        CircleTest.Children.Add(circle);
 
-                                }));
+                                    }));
+
+                                }
+                            
                             }
+                        
+                            
 
 
 
