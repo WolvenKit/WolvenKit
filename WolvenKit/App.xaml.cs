@@ -264,8 +264,8 @@ namespace WolvenKit
             sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             sh.IsVisibleChanged += Sh_IsVisibleChanged;
 
-            GlobalShell.SetCurrentValue(FrameworkElement.MinHeightProperty, (double)810);
-            GlobalShell.SetCurrentValue(FrameworkElement.MinWidthProperty, (double)1060);
+        //    GlobalShell.SetCurrentValue(FrameworkElement.MinHeightProperty, (double)810);
+         //   GlobalShell.SetCurrentValue(FrameworkElement.MinWidthProperty, (double)1060);
 
 
             InitDiscordRPC();
