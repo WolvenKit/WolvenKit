@@ -254,13 +254,21 @@ namespace WolvenKit
             var shellService = serviceLocator.ResolveType<IShellService>();
             await shellService.CreateAsync<ShellWindow>();
 
-            ShellWindow sh = (ShellWindow)shellService.Shell;
-            GlobalShell = sh;
-            sh.MinHeight = 810;
+            ShellWindow sh = (ShellWindow)shellService.Shell; GlobalShell = sh;
+
             sh.MinWidth = 1060;
+            sh.MinHeight = 810;
+            sh.Height = 810;
+            sh.Width = 1060;
+            sh.WindowState = WindowState.Normal;
+            sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             sh.IsVisibleChanged += Sh_IsVisibleChanged;
 
-           
+            GlobalShell.SetCurrentValue(FrameworkElement.MinHeightProperty, (double)810);
+            GlobalShell.SetCurrentValue(FrameworkElement.MinWidthProperty, (double)1060);
+
+
+            InitDiscordRPC();
 
             Orc.Theming.ThemeManager.Current.SynchronizeTheme();
             //  ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark.Green");
@@ -276,7 +284,6 @@ namespace WolvenKit
 
             base.OnStartup(e); 
             NNViewRegistrar.RegisterSplat();
-            InitDiscordRPC();
 
 
         }
@@ -395,7 +402,9 @@ namespace WolvenKit
             GlobalShell.LeftWindowCommands.Items.Add(windowCommands);
             // var a = (System.Windows.Controls.Button)sh.RightWindowCommands.Items[0];
             // a.Content = ""
-           // GlobalShell.ShowMessageAsync("This is the title", "Some message");
+            // GlobalShell.ShowMessageAsync("This is the title", "Some message");
+            GlobalShell.SetCurrentValue(FrameworkElement.MinHeightProperty, (double)810);
+            GlobalShell.SetCurrentValue(FrameworkElement.MinWidthProperty, (double)1060);
 
         }
 

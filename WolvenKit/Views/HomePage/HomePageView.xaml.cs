@@ -297,27 +297,21 @@ namespace WolvenKit.Views.HomePage
         {
             base.OnMouseLeftButtonDown(e);
 
-            var serviceLocator = ServiceLocator.Default;
 
-            var shellService = serviceLocator.ResolveType<IShellService>();
 
-            ShellWindow sh = (ShellWindow)shellService.Shell;
 
-            sh.DragMove();
+            App.GlobalShell.DragMove();
         }
 
         private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
           
-                var serviceLocator = ServiceLocator.Default;
 
-                var shellService = serviceLocator.ResolveType<IShellService>();
 
-                ShellWindow sh = (ShellWindow)shellService.Shell;
-      
-                sh.DragMove();
-            
+
+            App.GlobalShell.DragMove();
+
             // Begin dragging the window
         }
 
@@ -336,6 +330,24 @@ namespace WolvenKit.Views.HomePage
 
             }
 
+        }
+
+        private void UserControl_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (this.IsMouseOver)
+            {
+                if (App.GlobalShell.WindowState == WindowState.Maximized)
+                {
+                    App.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Normal);
+
+                }
+                else
+                {
+                    App.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Maximized);
+
+                }
+            }
+      
         }
     }
 }

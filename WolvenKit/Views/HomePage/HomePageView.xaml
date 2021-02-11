@@ -12,6 +12,7 @@
     mc:Ignorable="av"
     MinHeight="810"
     MinWidth="1060"
+    MouseDoubleClick="UserControl_MouseDoubleClick"
     
     x:Class="WolvenKit.Views.HomePage.HomePageView" IsVisibleChanged="UserControl_IsVisibleChanged">
 
@@ -25,18 +26,19 @@
     </catel:UserControl.Resources>
 
 
-    <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"  hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  >
+    <Grid x:Name="FocusGrid" Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"  hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  >
 
 
-        <Grid Background="Transparent" MouseLeftButtonDown="Grid_MouseLeftButtonDown_1">
+        <Grid  Background="Transparent" MouseLeftButtonDown="Grid_MouseLeftButtonDown_1">
 
         </Grid>
-        <Grid VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" Margin="200,0,450,0" MouseLeftButtonDown="Grid_MouseLeftButtonDown_1">
+        <Grid   VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" Margin="200,0,450,0" MouseLeftButtonDown="Grid_MouseLeftButtonDown_1">
                 <Mid:TopicView x:Name="TopicViewer"/>
 
         </Grid>
         <Grid Margin="15" HorizontalAlignment="Left">
 
+          
             <Border CornerRadius="15" Background="{DynamicResource RegionBrush}">
 
                 <hc:SideMenu   x:Name="LeftSideMenu" Margin="0,90,0,15" SideBrush="{DynamicResource MahApps.Brushes.AccentBase}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}"  BorderThickness="0" Width="200" SubSideBrush="{DynamicResource MahApps.Brushes.Accent2}">

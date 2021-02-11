@@ -128,13 +128,10 @@ namespace WolvenKit
                 _loggerService.LogString(ex.Message, Logtype.Error);
                 _loggerService.LogString("Failed to create a new project!", Logtype.Error);
             }
+  
             OnCommandCompleted?.Invoke();
 
-            if (App.RibbonViewInstance.startScreen.IsVisible)
-            {
-                App.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
-                App.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, false);
-            }
+      
          
         }
 

@@ -109,9 +109,9 @@ namespace WolvenKit.Views
 
             var shellService = serviceLocator.ResolveType<IShellService>();
 
-            ShellWindow sh = (ShellWindow)shellService.Shell;
+            
 
-            sh.DragMove();
+            App.GlobalShell.DragMove();
         }
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
