@@ -110,7 +110,8 @@
     </catel:UserControl.Resources>
 
     <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}"  >
-        <Grid Margin="3,75,3,0">
+
+            <Grid Margin="3,75,3,0">
             <StackPanel Orientation="Vertical">
                 <hc:TransitioningContentControl Margin="0,5,0,0">
                     <hc:CoverView  ShowContent="False" BorderBrush="{x:Null}"  Grid.RowSpan="1" ItemContentHeight="55" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Margin="5,5,5,5" BorderThickness="1,1,1,1" ItemMargin="15,8,15,8" ItemHeight="200" ItemWidth="350">
@@ -202,9 +203,10 @@
                 </hc:TransitioningContentControl>
             </StackPanel>
         </Grid>
-       
-        
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Orientation="Horizontal">
+
+        <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
+
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Orientation="Horizontal">
 
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center " FontSize="20" Text="Recent Projects"></TextBlock>
             <hc:Divider Margin="15" Orientation="Vertical" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center"></hc:Divider>
@@ -213,6 +215,7 @@
                           Stretch="Uniform" StrokeThickness="1.5"
                           Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="5" PathLength="150" HorizontalAlignment="Center" VerticalAlignment="Center"></hc:AnimationPath>
         </StackPanel>
+        </hc:TransitioningContentControl>
 
     </Grid>
 

@@ -223,8 +223,16 @@
 
                 <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}"  >
                 <Grid Margin="3,0,3,0">
-                    <TextBlock Text="Recent Projects"/>
-                    <hc:TransitioningContentControl Height="250" Margin="0,35,0,0">
+                        <StackPanel>
+                            
+                        <StackPanel Orientation="Horizontal" Margin="32,0,32,5">
+                            <iconPacks:PackIconCodicons   Grid.Row="0"   Kind="GoToFile" Spin="False" SpinAutoReverse="False" Height="25" Width="25" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"  />
+
+                            <TextBlock  Margin="10,0,0,0" Text="Recent Projects" FontSize="18"/>
+
+                        </StackPanel>
+                        <hc:Divider Margin="32,0,32,0"></hc:Divider>
+                    <hc:TransitioningContentControl MinHeight="250" MaxHeight="200" Margin="0,0,0,0">
                             <hc:CoverView  ShowContent="False" BorderBrush="{x:Null}"  Grid.RowSpan="1" ItemContentHeight="55" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Margin="15" BorderThickness="1,1,1,1" ItemMargin="15,8,15,8" ItemHeight="200"  ItemWidth="350">
 
                                 <hc:CoverView.ItemHeaderTemplate>
@@ -311,8 +319,10 @@
                                 <hc:CoverViewItem ></hc:CoverViewItem>
                                 <hc:CoverViewItem ></hc:CoverViewItem>
                             </hc:CoverView>
-                        </hc:TransitioningContentControl>
-                </Grid>
+                            </hc:TransitioningContentControl>
+                        </StackPanel>
+
+                    </Grid>
             </Grid>
             </hc:TransitioningContentControl>
 

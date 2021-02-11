@@ -256,6 +256,8 @@ namespace WolvenKit
 
             ShellWindow sh = (ShellWindow)shellService.Shell;
             GlobalShell = sh;
+            sh.MinHeight = 810;
+            sh.MinWidth = 1060;
             sh.IsVisibleChanged += Sh_IsVisibleChanged;
 
            

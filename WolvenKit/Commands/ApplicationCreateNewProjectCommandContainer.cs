@@ -20,6 +20,7 @@ namespace WolvenKit
     using Common.Model;
     using Common.Services;
     using WolvenKit.Model.Wizards;
+    using Fluent;
 
     public class ApplicationCreateNewProjectCommandContainer : ProjectCommandContainerBase
     {
@@ -128,6 +129,13 @@ namespace WolvenKit
                 _loggerService.LogString("Failed to create a new project!", Logtype.Error);
             }
             OnCommandCompleted?.Invoke();
+
+            if (App.RibbonViewInstance.startScreen.IsVisible)
+            {
+                App.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
+                App.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, false);
+            }
+         
         }
 
         public event Action OnCommandCompleted;

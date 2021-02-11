@@ -10,6 +10,8 @@
     xmlns:HPPage="clr-namespace:WolvenKit.Views.HomePage.Pages" 
     xmlns:Fluent="urn:fluent-ribbon"
     mc:Ignorable="av"
+    MinHeight="810"
+    MinWidth="1060"
     
     x:Class="WolvenKit.Views.HomePage.HomePageView" IsVisibleChanged="UserControl_IsVisibleChanged">
 
