@@ -15,6 +15,7 @@ using Catel.Services;
 
 namespace WolvenKit.Commands
 {
+    using System.Threading;
     using ViewModels;
 
     public class SettingsGeneralCommandContainer : CommandContainerBase
@@ -45,6 +46,8 @@ namespace WolvenKit.Commands
             }
 
             var viewModel = _viewModelFactory.CreateViewModel(settingsViewModelType, null, null);
+
+
 
             await _uiVisualizerService.ShowDialogAsync(viewModel);
         }
