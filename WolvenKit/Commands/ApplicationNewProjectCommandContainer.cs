@@ -36,7 +36,7 @@ namespace WolvenKit
         {
             try
             {
-                var vm = new UserControlHostWindowViewModel(new ProjectWizardView(), 600, 1200);
+                var vm = new UserControlHostWindowViewModel(new ProjectWizardView());
 
                 var result = await _uIVisualizerService.ShowDialogAsync(vm);
 

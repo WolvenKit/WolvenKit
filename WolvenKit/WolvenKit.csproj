@@ -36,8 +36,12 @@
   <ItemGroup>
     <None Remove="Resources\Icons\3.png" />
     <None Remove="Resources\Icons\Homelogo.png" />
+    <None Remove="Resources\Icons\Somthlikedis.png" />
     <None Remove="Resources\Icons\whitelogo.png" />
     <None Remove="Wkit_Icon_Flattened_256x.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Somthlikedis.png" />
   </ItemGroup>
 
   <ItemGroup>
