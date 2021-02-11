@@ -14,9 +14,18 @@
 	xmlns:types="clr-namespace:WolvenKit.Common.Model.Cr2w;assembly=WolvenKit.Common"
 	xmlns:cr2W="clr-namespace:WolvenKit.CR2W;assembly=WolvenKit.CR2W"
     xmlns:conv="clr-namespace:WolvenKit.Layout.Converters"
-	d:DesignHeight="450"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d" IsVisibleChanged="UserControl_IsVisibleChanged">
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources  RequestedTheme="Dark"/>
+                <hc:Theme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </catel:UserControl.Resources>
     <Grid>
         <Grid.Resources>
             <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
@@ -28,7 +37,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TreeView Name="TreeView" 
+        <TreeView Name="TreeView" Style="{DynamicResource TreeView}"
                   Grid.Row="0"
                              ItemsSource="{Binding Chunks}"
                              
@@ -81,7 +90,7 @@
 
 
             <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
+                <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource TreeViewItemBaseStyle}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                     <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />

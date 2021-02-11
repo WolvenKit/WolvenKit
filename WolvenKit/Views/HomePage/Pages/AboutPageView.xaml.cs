@@ -125,13 +125,5 @@ namespace WolvenKit.Views.HomePage.Pages
 
             return result;
         }
-
-        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
-        {
-            if (this.IsVisible )
-            {
-                DiscordRPCHelper.WhatAmIDoing("About Page");
-            }
-        }
     }
 }
