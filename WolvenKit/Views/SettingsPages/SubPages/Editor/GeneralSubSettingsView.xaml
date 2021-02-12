@@ -4,7 +4,7 @@
                    xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol">
 
 
-    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>

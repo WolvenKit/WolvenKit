@@ -109,7 +109,7 @@
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
-    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}"  >
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}"  >
 
             <Grid Margin="3,75,3,0">
             <StackPanel Orientation="Vertical">

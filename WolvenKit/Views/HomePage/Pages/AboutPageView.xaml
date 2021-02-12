@@ -5,7 +5,7 @@
                    xmlns:hc="https://handyorg.github.io/handycontrol"
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" IsVisibleChanged="UserControl_IsVisibleChanged">
 
-    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
         <Grid Margin="3,75,3,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" MinWidth="300"/>

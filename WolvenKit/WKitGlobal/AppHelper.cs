@@ -116,7 +116,6 @@ namespace WolvenKit.WKitGlobal
             viewModelLocator.Register(typeof(Views.HomePage.Pages.WebsitePageView), typeof(ViewModels.HomePage.Pages.WebsitePageViewModel));
             viewModelLocator.Register(typeof(Views.HomePage.Pages.SettingsPageView), typeof(ViewModels.HomePage.Pages.SettingsPageViewModel));
             viewModelLocator.Register(typeof(Views.HomePage.Pages.UserPageView), typeof(ViewModels.HomePage.Pages.UserPageViewModel));
-            viewModelLocator.Register(typeof(Views.HomePage.Pages.DebugPageView), typeof(ViewModels.HomePage.Pages.DebugPageViewModel));
 
 
             //-- Category : Integrated Tools
@@ -215,10 +214,10 @@ namespace WolvenKit.WKitGlobal
             await shellService.CreateAsync<ShellWindow>();
             ShellWindow sh = (ShellWindow)shellService.Shell;
             WKitGlobal.AppHelper.GlobalShell = sh;
-            sh.MinWidth = 1590;
+            sh.MinWidth = 1060;
             sh.MinHeight = 810;
             sh.Height = 810;
-            sh.Width = 1590;
+            sh.Width = 1060;
             sh.WindowState = WindowState.Normal;
             sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             sh.IsVisibleChanged += Sh_IsVisibleChanged;
@@ -226,7 +225,6 @@ namespace WolvenKit.WKitGlobal
 
             GlobalShell.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 25);
             GlobalShell.SetCurrentValue(System.Windows.Window.TitleProperty, "");
-
             var color = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DF2935"));
             ThemeManager.Current.AddTheme(new Theme("CustomLightRed", "CustomLightRed", "Dark", "Red", (Color)ColorConverter.ConvertFromString("#DF2935"), color, true, false));
             ThemeManager.Current.AddTheme(RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", Colors.Red));

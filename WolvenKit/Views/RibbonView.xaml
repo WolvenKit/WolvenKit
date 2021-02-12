@@ -15,7 +15,7 @@
 
     <!-- Resources -->
     <UserControl.Resources>
-        <ResourceDictionary>      
+        <ResourceDictionary>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -26,24 +26,25 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <fluent:Ribbon  Grid.Row="0" x:Name="ribbon">
 
-            
+        <fluent:Ribbon Margin="0,0,0,0" Grid.Row="0" x:Name="ribbon">
+
+
             <!-- StartScreen -->
             <fluent:Ribbon.StartScreen>
                 <fluent:StartScreen x:Name="startScreen" IsOpen="True" >
                     <HomeView:HomePageView />
 
-                    
+
                 </fluent:StartScreen>
             </fluent:Ribbon.StartScreen>
-            
-            
+
+
             <!-- Backstage -->
             <fluent:Ribbon.Menu>
-                <fluent:Backstage  x:Name="Backstage" MouseLeftButtonDown="Backstage_MouseLeftButtonDown" >
+                <fluent:Backstage Margin="70,0,0,0"  x:Name="Backstage" MouseLeftButtonDown="Backstage_MouseLeftButtonDown" >
 
-                    <fluent:BackstageTabControl Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}" ItemsPanelBackground="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"  SelectedContentMargin="0" x:Name="backstageTabControl"
+                    <fluent:BackstageTabControl  Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}" ItemsPanelBackground="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"  SelectedContentMargin="0" x:Name="backstageTabControl"
                                                 
                     >
 
@@ -57,7 +58,7 @@
                         </fluent:BackstageTabControl.Resources>
 
 
-                 
+
                         <fluent:SeparatorTabItem Height="Auto" Margin="20,10,20,10"/>
                         <fluent:BackstageTabItem    Header="Files"
                                                     Height="60"
@@ -144,10 +145,10 @@
                                              />
             </fluent:Ribbon.ContextualGroups>
 
-            
-            
-        
-            
+
+
+
+
             <!-- Home Tab -->
             <fluent:RibbonTabItem Header="General" >
                 <!-- File -->
@@ -167,8 +168,8 @@
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="OpenPreview" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-                    
-                    
+
+
                 </fluent:RibbonGroupBox>
 
                 <!-- Project -->
@@ -196,7 +197,7 @@
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
 
-            
+
 
             <!-- View Tab -->
             <fluent:RibbonTabItem Header="View" >
@@ -213,8 +214,8 @@
                             </ItemsPanelTemplate>
                         </fluent:ComboBox.ItemsPanel>
                     </fluent:ComboBox>
-                    
-                    
+
+
                 </fluent:RibbonGroupBox>
 
                 <!-- Project -->
@@ -243,14 +244,14 @@
                     </fluent:Button>
                 </fluent:RibbonGroupBox>
 
-                
+
 
             </fluent:RibbonTabItem>
 
-            
+
             <!-- Tools Dropdown Tab -->
 
-                <fluent:RibbonTabItem Header="Tools">
+            <fluent:RibbonTabItem Header="Tools">
                 <fluent:RibbonGroupBox Header="All">
                     <fluent:ComboBox IsEditable="False"
                                      InputWidth="120"
@@ -289,14 +290,14 @@
                     </fluent:Button>
 
 
-                
+
 
                     <fluent:Button Visibility="Visible" Click="CBPluginManager_Selected" Header="Plugin Manager">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="PlugFill" Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-                    
+
                     <fluent:Button Visibility="Collapsed"  Header="Journal Editor">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="JournalBookmarkFill" Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
@@ -317,13 +318,13 @@
 
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
-             
 
 
 
 
 
-            
+
+
             <!--Contextual  Tab-->
             <fluent:RibbonTabItem Header="Project Explorer" 
                               Group="{Binding Source={x:Reference ProjectExplorerContextualTabGroup}}" 
@@ -356,6 +357,38 @@
 
             </fluent:RibbonTabItem>
         </fluent:Ribbon>
+
+        <StackPanel Width="170" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="75,-21,0,0"  Orientation="Horizontal">
+            <TextBlock Background="{x:Null}" Text="RED Modding Tools - WolvenKit" />
+
+        </StackPanel>
+        <Border Margin="0,-25,0,0" Width="70" HorizontalAlignment="Left" CornerRadius="0,5,0,0" VerticalAlignment="top" Height="30" Background="{DynamicResource Fluent.Ribbon.Brushes.RibbonTabControl.Background}">
+
+        </Border>
+        <Ellipse HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-21,0,0" Height="45" Width="47" Fill="{DynamicResource MahApps.Brushes.Accent3}"></Ellipse>
+
+        <Border  Margin="12,-24,0,0" Width="43" HorizontalAlignment="Left"  VerticalAlignment="top" Height="50" Background="Transparent" MouseEnter="Border_MouseEnter" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeave="Border_MouseLeave"  >
+            <Border.OpacityMask>
+                <ImageBrush ImageSource="/Resources/Icons/3.png"/>
+            </Border.OpacityMask>
+            <Grid>
+
+                <Grid Margin="-0.1"  x:Name="HomeHighLighter" Width="43" Height="50"  Background="{DynamicResource MahApps.Brushes.AccentBase}">
+
+
+                </Grid>
+                <Grid >
+
+                    <Grid  Margin="0">
+                        <Image Margin="0,0,0,0" Height="50" Width="43" Stretch="Fill"  Source="pack://application:,,,/Resources/Icons/TinyTest.png" />
+
+                    </Grid>
+
+                </Grid>
+
+            </Grid>
+
+        </Border>
 
     </Grid>
 
