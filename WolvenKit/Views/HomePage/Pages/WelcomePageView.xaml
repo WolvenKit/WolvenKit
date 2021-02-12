@@ -331,26 +331,42 @@
 
 
 
-        <Grid Grid.Column="1" Grid.Row="1" >
-            <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
+        <Grid HorizontalAlignment="Left" Height="400" VerticalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="5" Grid.RowSpan="10" Grid.Row="0" >
+            <hc:RunningBlock>
+                <Grid>
+
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top"  Orientation="Horizontal">
+                        <hc:ImageBlock Height="100" Width="100"  Source="pack://application:,,,/Resources/Icons/work.png" >
+                            
+                        </hc:ImageBlock>
+                        <TextBlock Text="GET TO WORK" Margin="0,0,0,0"  Foreground="red" FontSize="60"/>
+                        <hc:ImageBlock Height="100" Width="100"  Source="pack://application:,,,/Resources/Icons/work.png" >
+
+                        </hc:ImageBlock>
+                    </StackPanel>
+
+                    <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
 
 
-                <hc:FlipClock  Margin="0,0,5,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" RenderTransformOrigin="0,0.5">
-                <hc:FlipClock.Effect>
-                    <hc:GrayScaleEffect></hc:GrayScaleEffect>
-                </hc:FlipClock.Effect>
-                <hc:FlipClock.LayoutTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleX="0.2" ScaleY="0.2"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </hc:FlipClock.LayoutTransform>
+                    <hc:FlipClock hc:ThemeManager.RequestedAccentColor="red"  Margin="0,0,5,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" RenderTransformOrigin="0,0.5">
 
-                </hc:FlipClock>
-            </hc:TransitioningContentControl>
+                        <hc:FlipClock.LayoutTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="2" ScaleY="2"/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="0"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </hc:FlipClock.LayoutTransform>
+
+                    </hc:FlipClock>
+                </hc:TransitioningContentControl>
+                </Grid>
+
+
+            </hc:RunningBlock>
+           
         </Grid>
 
 
