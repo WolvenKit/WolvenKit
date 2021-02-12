@@ -21,25 +21,26 @@ namespace WolvenKit.Views.HomePage
 {
     public partial class HomePageView
     {
+        public static HomePageView GlobalHomePage;
 
 
-
-        private WelcomePageView WelcomePV;
-        private FirstSetupWizardView FirstSWV;
-        private RecentProjectView RecentPV;
-        private ProjectWizardView ProjectWV;
-        private WikiPageView WikitPV;
-        private AboutPageView AboutPV;
-        private SettingsPageView SettingsPV;
-        private WebsitePageView WebsitePV;
-        private UserPageView UserPV;
-        private IntegratedToolsPageView IntegratedTPV;
-        private GithubPageView GithubPV;
+        public WelcomePageView WelcomePV;
+        public FirstSetupWizardView FirstSWV;
+        public RecentProjectView RecentPV;
+        public ProjectWizardView ProjectWV;
+        public WikiPageView WikitPV;
+        public AboutPageView AboutPV;
+        public SettingsPageView SettingsPV;
+        public WebsitePageView WebsitePV;
+        public UserPageView UserPV;
+        public IntegratedToolsPageView IntegratedTPV;
+        public GithubPageView GithubPV;
 
 
         public HomePageView()
         {
             InitializeComponent();
+            GlobalHomePage = this;
             InitializeGitHub();
             InitializePages();
 
@@ -190,10 +191,13 @@ namespace WolvenKit.Views.HomePage
         {
             if (IsLoaded && IsVisible && IsInitialized)
             {
-                PageViewGrid.Children.Clear();
+                Views.Wizards.FirstSetupWizardView rpv = new Views.Wizards.FirstSetupWizardView();              
+                UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
+                UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
+                uchwv.Show();
 
-                PageViewGrid.Children.Clear();
-                PageViewGrid.Children.Add(FirstSWV);
+
+               
             }
         }
 
@@ -210,10 +214,10 @@ namespace WolvenKit.Views.HomePage
         {
             if (IsLoaded && IsVisible && IsInitialized)
             {
-                PageViewGrid.Children.Clear();
-
-                PageViewGrid.Children.Clear();
-                PageViewGrid.Children.Add(ProjectWV);
+                Views.Wizards.ProjectWizardView rpv = new Views.Wizards.ProjectWizardView();
+                UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
+                UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
+                uchwv.Show();
             }
         }
 
@@ -291,21 +295,23 @@ namespace WolvenKit.Views.HomePage
 
         private void Grid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-        
+            base.OnMouseLeftButtonDown(e);
+
+
+
+
+            WKitGlobal.AppHelper.GlobalShell.DragMove();
         }
 
         private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-          
-                var serviceLocator = ServiceLocator.Default;
 
-                var shellService = serviceLocator.ResolveType<IShellService>();
 
-                ShellWindow sh = (ShellWindow)shellService.Shell;
-      
-                sh.DragMove();
-            
+
+
+            WKitGlobal.AppHelper.GlobalShell.DragMove();
+
             // Begin dragging the window
         }
 
@@ -314,8 +320,34 @@ namespace WolvenKit.Views.HomePage
             if (this.IsVisible )
             {
                 DiscordRPCHelper.WhatAmIDoing("Home");
+
+                if (IsVisible && IsLoaded)
+                {
+                    PageViewGrid.Children.Clear();
+                    PageViewGrid.Children.Add(WelcomePV);
+
+                }
+
             }
 
+        }
+
+        private void UserControl_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (this.IsMouseOver)
+            {
+                if (WKitGlobal.AppHelper.GlobalShell.WindowState == WindowState.Maximized)
+                {
+                    WKitGlobal.AppHelper.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Normal);
+
+                }
+                else
+                {
+                    WKitGlobal.AppHelper.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Maximized);
+
+                }
+            }
+      
         }
     }
 }

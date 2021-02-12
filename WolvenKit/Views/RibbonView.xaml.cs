@@ -13,6 +13,7 @@ using WolvenKit.Views.VisualEditor;
 using WolvenKit.Views.AudioTool;
 using WolvenKit.Views.JournalEditor;
 using Orchestra.Views;
+using System.Windows.Media;
 
 namespace WolvenKit.Views
 {
@@ -24,7 +25,7 @@ namespace WolvenKit.Views
 
             ribbon.AddAboutButton();
 
-            App.RibbonViewInstance = this;
+            WKitGlobal.AppHelper.RibbonViewInstance = this;
            
         }
 
@@ -109,9 +110,9 @@ namespace WolvenKit.Views
 
             var shellService = serviceLocator.ResolveType<IShellService>();
 
-            ShellWindow sh = (ShellWindow)shellService.Shell;
 
-            sh.DragMove();
+
+            WKitGlobal.AppHelper.GlobalShell.DragMove();
         }
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -120,6 +121,29 @@ namespace WolvenKit.Views
             {
                 DiscordRPCHelper.WhatAmIDoing("Ribbon/Backstage");
             }
+        }
+
+        private void Border_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var brush = (Brush)App.Current.FindResource("MahApps.Brushes.Accent3");
+
+            HomeHighLighter.SetCurrentValue(System.Windows.Controls.Panel.BackgroundProperty, brush);
+        }
+
+        private void Border_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var brush = (Brush)App.Current.FindResource("MahApps.Brushes.AccentBase");
+
+            HomeHighLighter.SetCurrentValue(System.Windows.Controls.Panel.BackgroundProperty, brush);
+
+        }
+
+        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
+
+            WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
+            WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
         }
     }
 }

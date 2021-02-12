@@ -110,7 +110,7 @@
     </catel:UserControl.Resources>
 
    
-        <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,2,5">
+        <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"  MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,2,5">
 
 
         <Grid.RowDefinitions>
@@ -125,9 +125,12 @@
         </Grid.ColumnDefinitions>
 
 
+            
 
         <Grid Grid.Column="0" Grid.Row="0" >
-            <StackPanel>
+            <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
+
+                <StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0">
                     <Grid>
                         <iconPacks:PackIconCodicons  Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
@@ -150,7 +153,12 @@
                     <Run Text="The WolvenKit Team."/>
 
                 </TextBlock>
+
             </StackPanel>
+
+            </hc:TransitioningContentControl>
+
+
         </Grid>
         
         
@@ -158,7 +166,9 @@
         
         
         <Grid Grid.Column="1" Grid.Row="0" >
-            <StackPanel Margin="0,15,10,0" HorizontalAlignment="Right">
+            <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
+
+                <StackPanel Margin="0,15,10,0" HorizontalAlignment="Right">
                 <StackPanel Margin="0,0,15,0" FlowDirection="RightToLeft" Orientation="Horizontal">
                     <iconPacks:PackIconBoxIcons   Grid.Row="0"   Kind="RegularBoltCircle" Spin="False" SpinAutoReverse="False" Height="25" Width="25" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"  />
 
@@ -167,24 +177,63 @@
                 </StackPanel>
                 <hc:Divider Margin="15,5,15,5"/>
                         <hc:ButtonGroup Margin="5,5,5,5" Style="{DynamicResource ButtonGroupSolid}" Orientation="Vertical">
-                        <Button Width="250" Height="50" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch" Content="Create Project"/>
-                    <Button Width="250" Height="50" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Content="Open Project"/>
-                    <Button Width="250" Height="50" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Content="WolvenKit Wiki"/>
-                    <Button Width="250" Height="50" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Content="Tutorials"/>
+                    <Button x:Name="CreateProjectButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.NewProject}" >
+                        
+                        <Grid Width="125" >
+                            <iconPacks:PackIconCodicons Kind="Add" HorizontalAlignment="Right"/>
+                            <TextBlock Margin="5,0,35,0" Text="Create Project" HorizontalAlignment="Right"/>
+                        </Grid>                      
+                    </Button>
 
-                    <Button Width="250" Height="50" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalLast}" HorizontalAlignment="Stretch" Content="Settings"/>
+                    <Button x:Name="OpenProjectButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.OpenProject}"  >
+                        <Grid Width="125" >
+                            <iconPacks:PackIconCodicons Kind="GoToFile" HorizontalAlignment="Right"/>
+                            <TextBlock Margin="5,0,35,0" Text="Open Project" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </Button>
+                    <Button x:Name="SettingsButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Click="SettingsButton_Click" >
+                        <Grid Width="125" >
+                            <iconPacks:PackIconCodicons Kind="Settings" HorizontalAlignment="Right"/>
+                            <TextBlock Margin="5,0,35,0" Text="Settings" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </Button>
 
-                        </hc:ButtonGroup>
+                    <Button x:Name="TutorialsButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Click="TutorialsButton_Click" >
+                        <Grid Width="125" >
+                            <iconPacks:PackIconCodicons Kind="Question" HorizontalAlignment="Right"/>
+                            <TextBlock Margin="5,0,35,0" Text="Tutorials" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </Button>
+                    <Button x:Name="WikiButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalLast}" HorizontalAlignment="Stretch" Click="WikiButton_Click" >
+                        <Grid Width="125" >
+                            <iconPacks:PackIconCodicons Kind="Info" HorizontalAlignment="Right"/>
+                            <TextBlock Margin="5,0,35,0" Text="Wiki" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </Button>
+
+
+                </hc:ButtonGroup>
             </StackPanel>
-            
+            </hc:TransitioningContentControl>
+
         </Grid>
 
         <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" >
+            <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
-            <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}"  >
+                <Grid  hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}"  >
                 <Grid Margin="3,0,3,0">
-                        <hc:TransitioningContentControl Height="250" Margin="0,35,0,0">
-                            <hc:CoverView  ShowContent="False" BorderBrush="{x:Null}"  Grid.RowSpan="1" ItemContentHeight="55" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Margin="15" BorderThickness="1,1,1,1" ItemMargin="15,8,15,8" ItemHeight="200"  ItemWidth="350">
+                        <StackPanel>
+                            
+                        <StackPanel Orientation="Horizontal" Margin="32,0,32,5">
+                            <iconPacks:PackIconCodicons   Grid.Row="0"   Kind="GoToFile" Spin="False" SpinAutoReverse="False" Height="25" Width="25" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"  />
+
+                            <TextBlock  Margin="10,0,0,0" Text="Recent Projects" FontSize="18"/>
+
+                        </StackPanel>
+                        <hc:Divider Margin="32,0,32,0"></hc:Divider>
+                    <hc:TransitioningContentControl MinHeight="250" MaxHeight="200" Margin="0,0,0,0">
+                                <hc:CoverView                        ItemsSource="{Binding RecentlyUsedItems}"  ShowContent="False" BorderBrush="{x:Null}"  Grid.RowSpan="1" ItemContentHeight="55" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Margin="15" BorderThickness="1,1,1,1" ItemMargin="15,8,15,8" ItemHeight="200"  ItemWidth="350">
 
                                 <hc:CoverView.ItemHeaderTemplate>
                                     <DataTemplate>
@@ -193,7 +242,7 @@
                                                 <Border Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}" CornerRadius="15,2,2,2">
                                                     <hc:Tag  Height="40" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Background="{x:Null}"  MinWidth="350" MaxWidth="350" Margin="3" ShowCloseButton="False">
                                                         <hc:Tag.Content>
-                                                            <TextBlock HorizontalAlignment="Left" Margin="0,0,0,0" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" FontSize="16"   Text="Project Name"></TextBlock>
+                                                            <TextBlock HorizontalAlignment="Left" Margin="0,0,0,0" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" FontSize="16"   Text="{Binding Name}"></TextBlock>
                                                         </hc:Tag.Content>
                                                         <hc:Tag.Header>
                                                             <Border>
@@ -222,15 +271,23 @@
                                                             <hc:Divider Margin="5,15" LineStroke="{DynamicResource MahApps.Brushes.Accent3}" LineStrokeThickness="2" Width="15"/>
 
                                                             <Border VerticalAlignment="Center" Height="25" Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}" CornerRadius="5,2,2,2">
-                                                                <TextBlock Width="280" Margin="5" VerticalAlignment="Center"  Text="Project Type : "/>
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <TextBlock Width="74" Margin="5" VerticalAlignment="Center"  Text="Project Type : "/>
+                                                                        <TextBlock Width="280" Margin="5" VerticalAlignment="Center"  Text="NOTHING TO BIND"/>
+
+                                                                    </StackPanel>
                                                             </Border>
 
                                                         </StackPanel>
                                                         <StackPanel Margin="5" Orientation="Horizontal">
                                                             <hc:Divider Margin="5,15" LineStroke="{DynamicResource MahApps.Brushes.Accent3}" LineStrokeThickness="2" Width="15"/>
                                                             <Border VerticalAlignment="Center" Height="25" Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}" CornerRadius="5,2,2,2">
-                                                                <TextBlock Width="280" Margin="5" VerticalAlignment="Center"  Text="Last Modified : "/>
-                                                            </Border>
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <TextBlock Width="80" Margin="5" VerticalAlignment="Center"  Text="Last Modified : "/>
+                                                                        <TextBlock Width="280" Margin="5" VerticalAlignment="Center"  Text="{Binding DateTime}"/>
+
+                                                                    </StackPanel>
+                                                                </Border>
                                                         </StackPanel>
 
                                                     </StackPanel>
@@ -260,27 +317,26 @@
                                     </DataTemplate>
 
                                 </hc:CoverView.ItemHeaderTemplate>
-                                <hc:CoverViewItem ></hc:CoverViewItem>
-                                <hc:CoverViewItem ></hc:CoverViewItem>
-                                <hc:CoverViewItem ></hc:CoverViewItem>
-                                <hc:CoverViewItem ></hc:CoverViewItem>
-                                <hc:CoverViewItem ></hc:CoverViewItem>
-                                <hc:CoverViewItem ></hc:CoverViewItem>
-                                <hc:CoverViewItem ></hc:CoverViewItem>
-                                <hc:CoverViewItem ></hc:CoverViewItem>
-                                <hc:CoverViewItem ></hc:CoverViewItem>
+                          
                             </hc:CoverView>
-                        </hc:TransitioningContentControl>
-                </Grid>
+                            </hc:TransitioningContentControl>
+                        </StackPanel>
+
+                    </Grid>
             </Grid>
+            </hc:TransitioningContentControl>
+
         </Grid>
 
 
 
 
         <Grid Grid.Column="1" Grid.Row="1" >
+            <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
-            <hc:FlipClock  Margin="0,0,5,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" RenderTransformOrigin="0,0.5">
+
+
+                <hc:FlipClock  Margin="0,0,5,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" RenderTransformOrigin="0,0.5">
                 <hc:FlipClock.Effect>
                     <hc:GrayScaleEffect></hc:GrayScaleEffect>
                 </hc:FlipClock.Effect>
@@ -293,14 +349,16 @@
                     </TransformGroup>
                 </hc:FlipClock.LayoutTransform>
 
-            </hc:FlipClock></Grid>
+                </hc:FlipClock>
+            </hc:TransitioningContentControl>
+        </Grid>
 
 
 
 
 
 
-        
+
 
     </Grid>
 </catel:UserControl>

@@ -32,7 +32,7 @@
 
 
 
-    <Border hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
+    <Border hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"  BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
         <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
 
             

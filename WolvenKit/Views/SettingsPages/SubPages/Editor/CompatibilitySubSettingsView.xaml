@@ -11,7 +11,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
@@ -34,9 +34,7 @@
                             <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                         </Button>
 
-                        <hc:Badge Background="{DynamicResource MahApps.Brushes.Accent2}" Status="Processing" Height="30" Margin="32,0,0,0" Style="{StaticResource BadgeDanger}">
-                            <hc:TextBox hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFile" Text="{Binding CP77ExecutablePath}"/>
-                        </hc:Badge>
+                        <hc:TextBox hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFile" Text="{Binding CP77ExecutablePath}"/>
                     </Grid>
                 </Border>
 

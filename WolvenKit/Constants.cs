@@ -100,23 +100,39 @@ namespace WolvenKit
     {
         public static void WhatAmIDoing(string details)
         {
-            App.client.SetPresence(new DiscordRPC.RichPresence()
+            if (WKitGlobal.AppHelper.RibbonViewInstance.IsLoaded && WKitGlobal.AppHelper.RibbonViewInstance.IsInitialized)
             {
-                Details = details,
-                Timestamps = new DiscordRPC.Timestamps()
+                try
                 {
-                    Start = System.DateTime.UtcNow
+                    if (WKitGlobal.DiscordHelper.client != null)
+                    {
+                        WKitGlobal.DiscordHelper.client.SetPresence(new DiscordRPC.RichPresence()
+                        {
+                            Details = details,
+                            Timestamps = new DiscordRPC.Timestamps()
+                            {
+                                Start = System.DateTime.UtcNow
 
-                },
-                Assets = new DiscordRPC.Assets()
+                            },
+                            Assets = new DiscordRPC.Assets()
+                            {
+                                LargeImageKey = "bigwk",
+
+                                LargeImageText = "WolvenKit",
+
+                            }
+                        });
+                        WKitGlobal.DiscordHelper.client.Invoke();
+                    }
+          
+                }
+                catch
                 {
-                    LargeImageKey = "bigwk",
 
-                    LargeImageText = "WolvenKit",
-
-                }      
-            });
-            App.client.Invoke();
+                }
+              
+            }
+           
         }
 
     }
