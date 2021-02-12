@@ -100,13 +100,13 @@ namespace WolvenKit
     {
         public static void WhatAmIDoing(string details)
         {
-            if (App.RibbonViewInstance.IsLoaded && App.RibbonViewInstance.IsInitialized)
+            if (WKitGlobal.AppHelper.RibbonViewInstance.IsLoaded && WKitGlobal.AppHelper.RibbonViewInstance.IsInitialized)
             {
                 try
                 {
-                    if (App.client != null)
+                    if (WKitGlobal.DiscordHelper.client != null)
                     {
-                        App.client.SetPresence(new DiscordRPC.RichPresence()
+                        WKitGlobal.DiscordHelper.client.SetPresence(new DiscordRPC.RichPresence()
                         {
                             Details = details,
                             Timestamps = new DiscordRPC.Timestamps()
@@ -122,7 +122,7 @@ namespace WolvenKit
 
                             }
                         });
-                        App.client.Invoke();
+                        WKitGlobal.DiscordHelper.client.Invoke();
                     }
           
                 }

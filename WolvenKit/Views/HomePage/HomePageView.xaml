@@ -26,7 +26,7 @@
     </catel:UserControl.Resources>
 
 
-    <Grid x:Name="FocusGrid" Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"  hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"  >
+    <Grid x:Name="FocusGrid" Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"  hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"  >
 
 
         <Grid  Background="Transparent" MouseLeftButtonDown="Grid_MouseLeftButtonDown_1">
