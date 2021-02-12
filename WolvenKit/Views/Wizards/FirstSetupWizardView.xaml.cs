@@ -1,5 +1,6 @@
 ﻿
 using Catel.IoC;
+using Catel.MVVM;
 using WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard;
 
 namespace WolvenKit.Views.Wizards
@@ -9,7 +10,8 @@ namespace WolvenKit.Views.Wizards
         public FirstSetupWizardView()
         {
             ServiceLocator.Default.RegisterInstance(new Model.Wizards.ProjectWizardModel());
-
+            ServiceLocator.Default.RegisterTypeAndInstantiate<ViewModels.Wizards.FirstSetupWizardViewModel>();
+            
             CUV = new CreateUserView();
             STV = new SelectThemeView();
             LGDV = new LocateGameDateView();

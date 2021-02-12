@@ -29,11 +29,11 @@
 
                             <hc:Divider HorizontalContentAlignment="Left" Content="The Witcher 3" Margin="0,32,0,0"></hc:Divider>
 
-                            <hc:TextBox  hc:InfoElement.Necessary="True" hc:InfoElement.TitleWidth="200" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Executable Path" VerifyFunc="VerifyFile" Style="{StaticResource TextBoxExtendCustom}" Margin="0,32,0,0" Text="{Binding W3ExecutablePath}"/>
+                            <hc:TextBox  hc:InfoElement.Necessary="True" hc:InfoElement.TitleWidth="200" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Executable Path" VerifyFunc="VerifyFile" Style="{StaticResource TextBoxExtendCustom}" Margin="0,32,0,0" Text="{Binding W3ExePath}"/>
                             <hc:TextBox  hc:InfoElement.Necessary="True" hc:InfoElement.TitleWidth="200" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="WCC_Lite.exe Path" VerifyFunc="VerifyFile" Style="{StaticResource TextBoxExtendCustom}" Margin="0,32,0,0" Text="{Binding WccLitePath}"/>
                             <hc:TextBox  hc:InfoElement.Necessary="True" hc:InfoElement.TitleWidth="200" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Uncooked Depot Path" VerifyFunc="VerifyFolder" Style="{StaticResource TextBoxExtendCustom}" Margin="0,32,0,0" Text="{Binding DepotPath}"/>
                             <hc:Divider  HorizontalContentAlignment="Left"  Content="Cyberpunk 2077" Margin="0,32,0,0"></hc:Divider>
-                            <hc:TextBox  hc:InfoElement.Necessary="True" hc:InfoElement.TitleWidth="200" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Executable Path" VerifyFunc="VerifyFile" Style="{StaticResource TextBoxExtendCustom}" Margin="0,32,0,0" Text="{Binding CP77ExecutablePath}"/>
+                            <hc:TextBox  hc:InfoElement.Necessary="True" hc:InfoElement.TitleWidth="200" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Executable Path" VerifyFunc="VerifyFile" Style="{StaticResource TextBoxExtendCustom}" Margin="0,32,0,0" Text="{Binding CP77ExePath}"/>
 
 
 

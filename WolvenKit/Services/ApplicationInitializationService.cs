@@ -77,7 +77,7 @@ namespace WolvenKit.Services
             var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             if (!File.Exists(settings.W3ExecutablePath) || !File.Exists(settings.WccLitePath))
             {
-                _commandManager.GetCommand(AppCommands.Settings.General).SafeExecute();
+                //_commandManager.GetCommand(AppCommands.Settings.General).SafeExecute();
             }
 
             await LoadProjectAsync();

@@ -15,6 +15,7 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.FirstSetupWizard
             Argument.IsNotNull(() => serviceLocator);
 
             SettingsManager = serviceLocator.ResolveType<ISettingsManager>();
+            FirstSetupWizardViewModel = serviceLocator.ResolveType<FirstSetupWizardViewModel>();
         }
         #endregion
 
@@ -23,14 +24,24 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.FirstSetupWizard
         /// Gets or sets the SettingsManager.
         /// </summary>
         [Model]
-        [Expose("W3ExecutablePath")]
-        [Expose("WccLitePath")]
         [Expose("DepotPath")]
-        [Expose("CP77ExecutablePath")]
         public ISettingsManager SettingsManager
         {
             get { return GetValue<ISettingsManager>(SettingsManagerProperty); }
             set { SetValue(SettingsManagerProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the FirstSetupWizardViewModel.
+        /// </summary>
+        [Model]
+        [Expose("W3ExePath")]
+        [Expose("WccLitePath")]
+        [Expose("CP77ExePath")]
+        public FirstSetupWizardViewModel FirstSetupWizardViewModel
+        {
+            get { return GetValue<FirstSetupWizardViewModel>(FirstSetupWizardViewModelProperty); }
+            set { SetValue(FirstSetupWizardViewModelProperty, value); }
         }
 
 
@@ -38,6 +49,11 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.FirstSetupWizard
         /// Register the SettingsManager property so it is known in the class.
         /// </summary>
         public static readonly PropertyData SettingsManagerProperty = RegisterProperty("SettingsManager", typeof(ISettingsManager));
+
+        /// <summary>
+        /// Register the FirstSetupWizardViewModel property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData FirstSetupWizardViewModelProperty = RegisterProperty("FirstSetupWizardViewModel", typeof(FirstSetupWizardViewModel));
         #endregion properties
     }
 }

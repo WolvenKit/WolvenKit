@@ -1,12 +1,14 @@
 ﻿using Catel.IoC;
 using Catel.Services;
 using WolvenKit.Services;
+using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
 {
     public partial class LocateGameDateView
     {
         private readonly ISettingsManager _settingsManager;
+        private readonly FirstSetupWizardViewModel _firstSetupWizardViewModel;
         private readonly IOpenFileService _openFileService;
         private readonly ISelectDirectoryService _selectDirectoryService;
 
@@ -15,38 +17,33 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
             InitializeComponent();
 
             _settingsManager = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            _firstSetupWizardViewModel = ServiceLocator.Default.ResolveType<FirstSetupWizardViewModel>();
             _openFileService = ServiceLocator.Default.ResolveType<IOpenFileService>();
             _selectDirectoryService = ServiceLocator.Default.ResolveType<ISelectDirectoryService>();
         }
 
-        private async void CP77ExecutablePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void CP77ExecutablePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext()
+            if (_firstSetupWizardViewModel.OpenCP77GamePathCommand.CanExecute(null))
             {
-                Filter = "Exe files|*.exe"
-            });
-            if (result.Result)
-                _settingsManager.CP77ExecutablePath = result.FileName;
+                _firstSetupWizardViewModel.OpenCP77GamePathCommand.Execute(null);
+            }
         }
 
-        private async void W3ExecutablePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void W3ExecutablePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext()
+            if (_firstSetupWizardViewModel.OpenW3GamePathCommand.CanExecute(null))
             {
-                Filter = "Exe files|*.exe"
-            });
-            if (result.Result)
-                _settingsManager.W3ExecutablePath = result.FileName;
+                _firstSetupWizardViewModel.OpenW3GamePathCommand.Execute(null);
+            }
         }
 
-        private async void WccLitePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void WccLitePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext()
+            if (_firstSetupWizardViewModel.OpenWccPathCommand.CanExecute(null))
             {
-                Filter = "wcc_lite.exe file|wcc_lite.exe"
-            });
-            if (result.Result)
-                _settingsManager.WccLitePath = result.FileName;
+                _firstSetupWizardViewModel.OpenWccPathCommand.Execute(null);
+            }
         }
 
         private async void DepotPathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
