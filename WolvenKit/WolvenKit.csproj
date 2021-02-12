@@ -40,6 +40,7 @@
     <None Remove="Resources\Icons\Somthlikedis.png" />
     <None Remove="Resources\Icons\TinyTest.png" />
     <None Remove="Resources\Icons\whitelogo.png" />
+    <None Remove="Resources\Icons\work.png" />
     <None Remove="Wkit_Icon_Flattened_256x.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -231,6 +232,7 @@
     <Resource Include="Resources\Icons\Logo.ico" />
     <Resource Include="Resources\Icons\TinyTest.png" />
     <Resource Include="Resources\Icons\whitelogo.png" />
+    <Resource Include="Resources\Icons\work.png" />
     <Resource Include="Resources\Images\Files\apb_32x.png" />
     <Resource Include="Resources\Images\Files\BlankFile_16x.png" />
     <Resource Include="Resources\Images\Files\blend_32x.png" />
