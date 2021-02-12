@@ -98,6 +98,8 @@ namespace WolvenKit.Services
             }
         }
 
+        public static bool FirstTimeSetupForUser { get; set; } = true;
+
         public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
         public string TextLanguage { get; set; }
 
@@ -124,6 +126,7 @@ namespace WolvenKit.Services
                 if (File.Exists(ConfigurationPath))
                 {
                     config = JsonConvert.DeserializeObject<SettingsManager>(ConfigurationPath);
+                    FirstTimeSetupForUser = false;
                 }
                 else
                 {
