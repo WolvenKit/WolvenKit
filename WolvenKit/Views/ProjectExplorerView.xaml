@@ -24,7 +24,7 @@
         </ResourceDictionary>
     </catel:UserControl.Resources>
     
-    <Grid hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
         xmlns:conv="clr-namespace:WolvenKit.Layout.Converters">
         <Grid.Resources>
             <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>

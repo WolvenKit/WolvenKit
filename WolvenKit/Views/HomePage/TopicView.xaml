@@ -15,7 +15,7 @@
     <hc:TransitioningContentControl TransitionMode="Fade" >
 
         <Grid 
-        hc:ThemeManager.AccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
         x:Name="TopicViewer"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Center"
