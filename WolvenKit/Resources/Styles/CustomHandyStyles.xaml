@@ -201,7 +201,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-  
+
 
     <Style BasedOn="{StaticResource WatermarkTextBoxBaseStyle}" TargetType="hc:WatermarkTextBox"/>
 
@@ -211,4 +211,21 @@
 
     <Style BasedOn="{StaticResource TextBoxPlusBaseStyle}" TargetType="hc:TextBox"/>
     <Style BasedOn="{StaticResource TextBoxPlusBaseStyle}" TargetType="hc:MaskedTextBox"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </ResourceDictionary>

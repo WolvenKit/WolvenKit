@@ -365,28 +365,47 @@
         <Border Margin="0,-25,0,0" Width="70" HorizontalAlignment="Left" CornerRadius="0,5,0,0" VerticalAlignment="top" Height="30" Background="{DynamicResource Fluent.Ribbon.Brushes.RibbonTabControl.Background}">
 
         </Border>
-        <Ellipse HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-21,0,0" Height="45" Width="47" Fill="{DynamicResource MahApps.Brushes.Accent3}"></Ellipse>
 
-        <Border  Margin="12,-24,0,0" Width="43" HorizontalAlignment="Left"  VerticalAlignment="top" Height="50" Background="Transparent" MouseEnter="Border_MouseEnter" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeave="Border_MouseLeave"  >
-            <Border.OpacityMask>
-                <ImageBrush ImageSource="/Resources/Icons/3.png"/>
-            </Border.OpacityMask>
+        <Border  Margin="13,-24,0,0" Width="42" HorizontalAlignment="Left"  VerticalAlignment="Top" Height="49" Background="Transparent" MouseEnter="Border_MouseEnter" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeave="Border_MouseLeave"  >
             <Grid>
 
-                <Grid Margin="-0.1"  x:Name="HomeHighLighter" Width="43" Height="50"  Background="{DynamicResource MahApps.Brushes.AccentBase}">
+                <Border>
+                    <Border.OpacityMask>
+                        <ImageBrush ImageSource="/Resources/Icons/SeeTroughIcon.png"/>
+                    </Border.OpacityMask>
+                    <Grid>
+
+                        <Grid Margin="1"  x:Name="HomeHighLighter"  Background="{DynamicResource MahApps.Brushes.AccentBase}">
+                        </Grid>
 
 
-                </Grid>
-                <Grid >
+                    </Grid>
+                </Border>
+            </Grid>
 
-                    <Grid  Margin="0">
-                        <Image Margin="0,0,0,0" Height="50" Width="43" Stretch="Fill"  Source="pack://application:,,,/Resources/Icons/TinyTest.png" />
+
+
+        </Border>
+
+        <Border  Margin="13,-24,0,0" Width="42" HorizontalAlignment="Left"  VerticalAlignment="top" Height="49" Background="Transparent" MouseEnter="Border_MouseEnter" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeave="Border_MouseLeave"  >
+            <Border>
+                <Border.OpacityMask>
+                    <ImageBrush ImageSource="/Resources/Icons/HomeSickTransp.png"/>
+                </Border.OpacityMask>
+                <Grid>
+
+
+                    <Grid >
+
+                        <Grid  Margin="0">
+                            <Image  Stretch="Fill"  Source="pack://application:,,,/Resources/Icons/HomeSickTransp.png" Margin="0,-1,0,0" />
+
+                        </Grid>
 
                     </Grid>
 
                 </Grid>
-
-            </Grid>
+            </Border>
 
         </Border>
 
