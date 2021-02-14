@@ -35,7 +35,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\Icons\3.png" />
+    <None Remove="Resources\Icons\cloud.png" />
     <None Remove="Resources\Icons\Homelogo.png" />
+    <None Remove="Resources\Icons\HomeSickTransp.png" />
+    <None Remove="Resources\Icons\HomeSickTransp2.png" />
     <None Remove="Resources\Icons\SeeTroughIcon.png" />
     <None Remove="Resources\Icons\Somthlikedis.png" />
     <None Remove="Resources\Icons\TinyTest.png" />
@@ -44,6 +47,9 @@
     <None Remove="Wkit_Icon_Flattened_256x.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Icons\cloud.png" />
+    <Resource Include="Resources\Icons\HomeSickTransp.png" />
+    <Resource Include="Resources\Icons\HomeSickTransp2.png" />
     <Resource Include="Resources\Icons\SeeTroughIcon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +97,7 @@
     <PackageReference Include="Orc.ProjectManagement" Version="4.1.1" />
     <PackageReference Include="Orc.Squirrel" Version="4.1.0" />
     <PackageReference Include="Orc.Squirrel.Xaml" Version="4.1.0" />
+    <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.1" />
     <PackageReference Include="Pfim" Version="0.9.1" />
     <PackageReference Include="protobuf-net" Version="3.0.73" />
     <PackageReference Include="SharpZipLib" Version="1.3.1" />
@@ -336,6 +343,9 @@
     <Folder Include="Resources\Styles\Custom\" />
     <Folder Include="ViewModels\SettingsPages\SubPages\Integration\" />
     <Folder Include="ViewModels\SettingsPages\SubPages\Packaging\" />
+    <Folder Include="Views\Editors\VisualEditor\Nodes\Audio\" />
+    <Folder Include="Views\Editors\VisualEditor\Nodes\Scene\" />
+    <Folder Include="Views\Editors\VisualEditor\Nodes\Quest\" />
     <Folder Include="Views\SettingsPages\SubPages\Integration\" />
     <Folder Include="Views\SettingsPages\SubPages\Packaging\" />
   </ItemGroup>

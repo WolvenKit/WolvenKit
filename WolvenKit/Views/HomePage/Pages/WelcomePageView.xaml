@@ -114,7 +114,8 @@
 
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="3*"/>
             <RowDefinition Height="1*"/>
 
         </Grid.RowDefinitions>
@@ -331,42 +332,16 @@
 
 
 
-        <Grid HorizontalAlignment="Left" Height="400" VerticalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="5" Grid.RowSpan="10" Grid.Row="0" >
-            <hc:RunningBlock>
-                <Grid>
+        <Grid   Grid.ColumnSpan="5" Grid.RowSpan="10" Grid.Row="2" >
 
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top"  Orientation="Horizontal">
-                        <hc:ImageBlock Height="100" Width="100"  Source="pack://application:,,,/Resources/Icons/work.png" >
-                            
-                        </hc:ImageBlock>
-                        <TextBlock Text="GET TO WORK" Margin="0,0,0,0"  Foreground="red" FontSize="60"/>
-                        <hc:ImageBlock Height="100" Width="100"  Source="pack://application:,,,/Resources/Icons/work.png" >
-
-                        </hc:ImageBlock>
-                    </StackPanel>
-
-                    <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
+            <hc:UniformSpacingPanel HorizontalAlignment="Left" Spacing="20" VerticalAlignment="Bottom">
 
 
 
-                    <hc:FlipClock hc:ThemeManager.RequestedAccentColor="red"  Margin="0,0,5,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" RenderTransformOrigin="0,0.5">
+            </hc:UniformSpacingPanel>
+            <iconPacks:PackIconCodicons Foreground="{DynamicResource Fluent.Ribbon.Brushes.IdealForegroundDisabledBrush}"  HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Bottom" Kind="Versions" Width="20" Height="20"/>
 
-                        <hc:FlipClock.LayoutTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="2" ScaleY="2"/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="0"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </hc:FlipClock.LayoutTransform>
-
-                    </hc:FlipClock>
-                </hc:TransitioningContentControl>
-                </Grid>
-
-
-            </hc:RunningBlock>
-           
+            <TextBlock FontSize="10" Foreground="{DynamicResource Fluent.Ribbon.Brushes.IdealForegroundDisabledBrush}" IsEnabled="False" FlowDirection="LeftToRight" Text="V1.032323230.0" Margin="5,5,30,4" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
         </Grid>
 
 

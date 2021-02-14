@@ -76,6 +76,7 @@ namespace WolvenKit
             themehelper = new ThemeHelper();
 
             await apphelper.InitializeMVVM();
+            themehelper.InitializeThemeHelper();
             await apphelper.InitializeShell();
             discordhelper.InitDiscordRPC();  
 

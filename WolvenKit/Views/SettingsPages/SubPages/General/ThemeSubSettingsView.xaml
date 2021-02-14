@@ -16,19 +16,19 @@
         <Grid Grid.Column="0">
             <hc:ScrollViewer>
                 <StackPanel>
-                    
-                    
+
+
                     <Border BorderThickness="4,0,0,6" Margin="15,15,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                         <Grid>
                             <TextBlock Text="Application" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0"/>
                         </Grid>
-                    </Border>                  
-                    
-                   
+                    </Border>
+
+
 
                     <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
-                        <StackPanel>                            
-                            
+                        <StackPanel>
+
                             <Grid Margin="5">
                                 <TextBlock Text="Application Theme" VerticalAlignment="Center"/>
                                 <ComboBox HorizontalAlignment="Right" VerticalAlignment="Center" Width="250" Text=""/>
@@ -38,14 +38,14 @@
 
                             <Grid Margin="5">
                                 <TextBlock Text="Create A Theme" VerticalAlignment="Center"/>
-                                <Button Margin="0" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <Button Command="{catel:CommandManagerBinding Application.ThemeWizard}"  Margin="0" HorizontalAlignment="Right" VerticalAlignment="Center" >
                                     <Grid Margin="0">
                                         <iconPacks:PackIconBootstrapIcons Kind="BoxArrowUpRight"/>
                                         <TextBlock Margin="25,0,0,0" Text="Theme Creator"/>
                                     </Grid>
                                 </Button>
                             </Grid>
-                            
+
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -65,9 +65,9 @@
         </Grid>
 
 
-       
 
-       
+
+
     </Grid>
 
 </catel:UserControl>
