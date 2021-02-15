@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CEvaluatorVectorConst : IEvaluatorVector
 	{
-		[Ordinal(0)]  [RED("value")] public Vector4 Value { get; set; }
+		[Ordinal(2)] [RED("value")] public Vector4 Value { get; set; }
 
 		public CEvaluatorVectorConst(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

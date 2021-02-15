@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamedataWeaponEvolution_Record : gamedataTweakDBRecord
 	{
-
 		public gamedataWeaponEvolution_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

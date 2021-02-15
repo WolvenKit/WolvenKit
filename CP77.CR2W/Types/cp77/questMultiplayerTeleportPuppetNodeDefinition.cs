@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questMultiplayerTeleportPuppetNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		[Ordinal(0)]  [RED("params")] public questMultiplayerTeleportPuppetParams Params { get; set; }
+		[Ordinal(2)] [RED("params")] public questMultiplayerTeleportPuppetParams Params { get; set; }
 
 		public questMultiplayerTeleportPuppetNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

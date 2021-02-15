@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class workWorkspotResource : animAnimGraph
 	{
-		[Ordinal(0)]  [RED("workspotTree")] public CHandle<workWorkspotTree> WorkspotTree { get; set; }
+		[Ordinal(16)] [RED("workspotTree")] public CHandle<workWorkspotTree> WorkspotTree { get; set; }
 
 		public workWorkspotResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

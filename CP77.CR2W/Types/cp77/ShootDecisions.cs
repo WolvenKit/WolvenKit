@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ShootDecisions : WeaponTransition
 	{
-		[Ordinal(0)]  [RED("stateBodyDone")] public CBool StateBodyDone { get; set; }
+		[Ordinal(0)] [RED("stateBodyDone")] public CBool StateBodyDone { get; set; }
 
 		public ShootDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

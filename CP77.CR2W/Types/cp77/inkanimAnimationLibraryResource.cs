@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkanimAnimationLibraryResource : CResource
 	{
-		[Ordinal(0)]  [RED("sequences")] public CArray<CHandle<inkanimSequence>> Sequences { get; set; }
+		[Ordinal(1)] [RED("sequences")] public CArray<CHandle<inkanimSequence>> Sequences { get; set; }
 
 		public inkanimAnimationLibraryResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

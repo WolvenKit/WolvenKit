@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimStateTransitionCondition_IntEdgeToFeature : animAnimStateTransitionCondition_IntEdgeFeature
 	{
-		[Ordinal(0)]  [RED("toValue")] public CInt32 ToValue { get; set; }
+		[Ordinal(2)] [RED("toValue")] public CInt32 ToValue { get; set; }
 
 		public animAnimStateTransitionCondition_IntEdgeToFeature(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

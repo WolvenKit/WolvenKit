@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameHitShape_OBB : gameHitShapeBase
 	{
-		[Ordinal(0)]  [RED("dimensions")] public Vector3 Dimensions { get; set; }
+		[Ordinal(3)] [RED("dimensions")] public Vector3 Dimensions { get; set; }
 
 		public gameHitShape_OBB(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

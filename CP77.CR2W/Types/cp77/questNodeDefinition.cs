@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questNodeDefinition : graphGraphNodeDefinition
 	{
-		[Ordinal(0)]  [RED("id")] public CUInt16 Id { get; set; }
+		[Ordinal(1)] [RED("id")] public CUInt16 Id { get; set; }
 
 		public questNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

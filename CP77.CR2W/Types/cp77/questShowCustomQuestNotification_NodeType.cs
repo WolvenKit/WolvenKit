@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questShowCustomQuestNotification_NodeType : questIUIManagerNodeType
 	{
-		[Ordinal(0)]  [RED("customQuestNotificationData")] public questCustomQuestNotificationData CustomQuestNotificationData { get; set; }
+		[Ordinal(0)] [RED("customQuestNotificationData")] public questCustomQuestNotificationData CustomQuestNotificationData { get; set; }
 
 		public questShowCustomQuestNotification_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldAIDirectorSpawnAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(0)]  [RED("groupKey")] public CName GroupKey { get; set; }
+		[Ordinal(4)] [RED("groupKey")] public CName GroupKey { get; set; }
 
 		public worldAIDirectorSpawnAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

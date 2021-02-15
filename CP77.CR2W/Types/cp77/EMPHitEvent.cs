@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class EMPHitEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("lifetime")] public CFloat Lifetime { get; set; }
+		[Ordinal(0)] [RED("lifetime")] public CFloat Lifetime { get; set; }
 
 		public EMPHitEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

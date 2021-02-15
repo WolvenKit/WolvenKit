@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameJournalResource : gameJournalBaseResource
 	{
-		[Ordinal(0)]  [RED("entry")] public CHandle<gameJournalEntry> Entry { get; set; }
+		[Ordinal(1)] [RED("entry")] public CHandle<gameJournalEntry> Entry { get; set; }
 
 		public gameJournalResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

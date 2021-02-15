@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ScannerModule : HUDModule
 	{
-		[Ordinal(3)]  [RED("activeScans")] public CArray<CHandle<ScanInstance>> ActiveScans { get; set; }
+		[Ordinal(3)] [RED("activeScans")] public CArray<CHandle<ScanInstance>> ActiveScans { get; set; }
 
 		public ScannerModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

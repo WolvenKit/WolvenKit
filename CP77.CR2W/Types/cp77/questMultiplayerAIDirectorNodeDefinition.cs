@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questMultiplayerAIDirectorNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		[Ordinal(0)]  [RED("params")] public CHandle<questMultiplayerAIDirectorParams> Params { get; set; }
+		[Ordinal(2)] [RED("params")] public CHandle<questMultiplayerAIDirectorParams> Params { get; set; }
 
 		public questMultiplayerAIDirectorNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

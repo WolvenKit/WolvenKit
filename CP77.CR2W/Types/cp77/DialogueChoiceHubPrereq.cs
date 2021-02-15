@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DialogueChoiceHubPrereq : gameIScriptablePrereq
 	{
-		[Ordinal(0)]  [RED("isChoiceHubActive")] public CBool IsChoiceHubActive { get; set; }
+		[Ordinal(0)] [RED("isChoiceHubActive")] public CBool IsChoiceHubActive { get; set; }
 
 		public DialogueChoiceHubPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

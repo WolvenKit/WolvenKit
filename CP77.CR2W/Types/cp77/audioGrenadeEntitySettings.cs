@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioGrenadeEntitySettings : audioEntitySettings
 	{
-		[Ordinal(0)]  [RED("explosionSound")] public CName ExplosionSound { get; set; }
+		[Ordinal(6)] [RED("explosionSound")] public CName ExplosionSound { get; set; }
 
 		public audioGrenadeEntitySettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

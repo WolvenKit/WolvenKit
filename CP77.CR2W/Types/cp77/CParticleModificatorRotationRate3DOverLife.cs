@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CParticleModificatorRotationRate3DOverLife : IParticleModificator
 	{
-		[Ordinal(0)]  [RED("rotationRate")] public CHandle<IEvaluatorVector> RotationRate { get; set; }
+		[Ordinal(4)] [RED("rotationRate")] public CHandle<IEvaluatorVector> RotationRate { get; set; }
 
 		public CParticleModificatorRotationRate3DOverLife(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

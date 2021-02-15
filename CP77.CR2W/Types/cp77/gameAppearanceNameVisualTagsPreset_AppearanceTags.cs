@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameAppearanceNameVisualTagsPreset_AppearanceTags : ISerializable
 	{
-		[Ordinal(0)]  [RED("appearanceName")] public CName AppearanceName { get; set; }
-		[Ordinal(1)]  [RED("visualTags")] public redTagList VisualTags { get; set; }
+		[Ordinal(0)] [RED("appearanceName")] public CName AppearanceName { get; set; }
+		[Ordinal(1)] [RED("visualTags")] public redTagList VisualTags { get; set; }
 
 		public gameAppearanceNameVisualTagsPreset_AppearanceTags(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

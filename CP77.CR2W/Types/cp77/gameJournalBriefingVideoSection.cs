@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameJournalBriefingVideoSection : gameJournalBriefingBaseSection
 	{
-		[Ordinal(0)]  [RED("videoResource")] public raRef<Bink> VideoResource { get; set; }
+		[Ordinal(1)] [RED("videoResource")] public raRef<Bink> VideoResource { get; set; }
 
 		public gameJournalBriefingVideoSection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

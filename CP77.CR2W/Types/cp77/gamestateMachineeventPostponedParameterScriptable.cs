@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamestateMachineeventPostponedParameterScriptable : gamestateMachineeventPostponedParameterBase
 	{
-		[Ordinal(0)]  [RED("value")] public CHandle<IScriptable> Value { get; set; }
+		[Ordinal(2)] [RED("value")] public CHandle<IScriptable> Value { get; set; }
 
 		public gamestateMachineeventPostponedParameterScriptable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

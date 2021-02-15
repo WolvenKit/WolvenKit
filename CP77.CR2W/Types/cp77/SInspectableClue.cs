@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SInspectableClue : CVariable
 	{
-		[Ordinal(0)]  [RED("clueName")] public CName ClueName { get; set; }
-		[Ordinal(1)]  [RED("isScanned")] public CBool IsScanned { get; set; }
+		[Ordinal(0)] [RED("clueName")] public CName ClueName { get; set; }
+		[Ordinal(1)] [RED("isScanned")] public CBool IsScanned { get; set; }
 
 		public SInspectableClue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

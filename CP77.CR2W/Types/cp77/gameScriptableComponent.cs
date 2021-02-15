@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameScriptableComponent : gameComponent
 	{
-		[Ordinal(0)]  [RED("priority")] public CUInt32 Priority { get; set; }
+		[Ordinal(4)] [RED("priority")] public CUInt32 Priority { get; set; }
 
 		public gameScriptableComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

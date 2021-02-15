@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class communityArea : ISerializable
 	{
-		[Ordinal(0)]  [RED("entriesData")] public CArray<communityCommunityEntrySpotsData> EntriesData { get; set; }
+		[Ordinal(0)] [RED("entriesData")] public CArray<communityCommunityEntrySpotsData> EntriesData { get; set; }
 
 		public communityArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

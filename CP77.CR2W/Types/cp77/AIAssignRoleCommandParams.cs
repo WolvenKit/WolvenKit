@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIAssignRoleCommandParams : questScriptedAICommandParams
 	{
-		[Ordinal(0)]  [RED("role")] public CHandle<AIRole> Role { get; set; }
+		[Ordinal(0)] [RED("role")] public CHandle<AIRole> Role { get; set; }
 
 		public AIAssignRoleCommandParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

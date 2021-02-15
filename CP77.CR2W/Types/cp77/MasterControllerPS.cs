@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MasterControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(103)]  [RED("clearance")] public CHandle<gamedeviceClearance> Clearance { get; set; }
+		[Ordinal(103)] [RED("clearance")] public CHandle<gamedeviceClearance> Clearance { get; set; }
 
 		public MasterControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

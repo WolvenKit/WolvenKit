@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkLocalizedBink : CVariable
 	{
-		[Ordinal(0)]  [RED("binks")] public CArray<inkBinkLanguageDescriptor> Binks { get; set; }
+		[Ordinal(0)] [RED("binks")] public CArray<inkBinkLanguageDescriptor> Binks { get; set; }
 
 		public inkLocalizedBink(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

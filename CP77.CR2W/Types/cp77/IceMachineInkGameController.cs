@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class IceMachineInkGameController : DeviceInkGameControllerBase
 	{
-		[Ordinal(14)]  [RED("buttonContainer")] public inkWidgetReference ButtonContainer { get; set; }
+		[Ordinal(16)] [RED("buttonContainer")] public inkWidgetReference ButtonContainer { get; set; }
 
 		public IceMachineInkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

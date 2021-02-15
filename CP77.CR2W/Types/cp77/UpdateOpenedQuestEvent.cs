@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class UpdateOpenedQuestEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("openedQuest")] public wCHandle<gameJournalQuest> OpenedQuest { get; set; }
+		[Ordinal(0)] [RED("openedQuest")] public wCHandle<gameJournalQuest> OpenedQuest { get; set; }
 
 		public UpdateOpenedQuestEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

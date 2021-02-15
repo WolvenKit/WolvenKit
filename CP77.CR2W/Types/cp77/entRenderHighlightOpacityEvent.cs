@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entRenderHighlightOpacityEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("opacity")] public CFloat Opacity { get; set; }
+		[Ordinal(0)] [RED("opacity")] public CFloat Opacity { get; set; }
 
 		public entRenderHighlightOpacityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class vehicleGlassDestructionEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("glassName")] public CName GlassName { get; set; }
+		[Ordinal(0)] [RED("glassName")] public CName GlassName { get; set; }
 
 		public vehicleGlassDestructionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

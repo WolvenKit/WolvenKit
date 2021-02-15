@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class EmitterGroupAreaSettings : IAreaSettings
 	{
-		[Ordinal(0)]  [RED("emitterGroupParams")] public CArray<EmitterGroupParams> EmitterGroupParams_ { get; set; }
-		[Ordinal(1)]  [RED("EmitterGroupParams")] public CArray<EmitterGroupAreaParams> EmitterGroupParams { get; set; }
+		[Ordinal(2)] [RED("emitterGroupParams")] public CArray<EmitterGroupParams> EmitterGroupParams_72 { get; set; }
+		[Ordinal(3)] [RED("EmitterGroupParams")] public CArray<EmitterGroupAreaParams> EmitterGroupParams_88 { get; set; }
 
 		public EmitterGroupAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

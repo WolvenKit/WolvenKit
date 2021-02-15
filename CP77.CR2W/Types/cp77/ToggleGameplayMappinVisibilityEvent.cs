@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ToggleGameplayMappinVisibilityEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("isHidden")] public CBool IsHidden { get; set; }
+		[Ordinal(0)] [RED("isHidden")] public CBool IsHidden { get; set; }
 
 		public ToggleGameplayMappinVisibilityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

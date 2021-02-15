@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class NPCIsAggressiveState : gamePrereqState
 	{
-
 		public NPCIsAggressiveState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

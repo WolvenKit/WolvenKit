@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkWidgetPath : CVariable
 	{
-		[Ordinal(0)]  [RED("names")] public CArray<CName> Names { get; set; }
+		[Ordinal(0)] [RED("names")] public CArray<CName> Names { get; set; }
 
 		public inkWidgetPath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

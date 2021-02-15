@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIHumanComponentPS : AICommandQueuePS
 	{
-		[Ordinal(0)]  [RED("spotUsageToken")] public AISpotUsageToken SpotUsageToken { get; set; }
+		[Ordinal(2)] [RED("spotUsageToken")] public AISpotUsageToken SpotUsageToken { get; set; }
 
 		public AIHumanComponentPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

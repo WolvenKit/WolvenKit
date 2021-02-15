@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questSetPossesion_NodeType : questISceneManagerNodeType
 	{
-		[Ordinal(0)]  [RED("playerPossesion")] public CEnum<gamedataPlayerPossesion> PlayerPossesion { get; set; }
+		[Ordinal(0)] [RED("playerPossesion")] public CEnum<gamedataPlayerPossesion> PlayerPossesion { get; set; }
 
 		public questSetPossesion_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

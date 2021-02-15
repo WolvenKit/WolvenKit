@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class BackpackInventoryListenerCallback : gameInventoryScriptCallback
 	{
-		[Ordinal(0)]  [RED("backpackInstance")] public wCHandle<gameuiBackpackMainGameController> BackpackInstance { get; set; }
+		[Ordinal(1)] [RED("backpackInstance")] public wCHandle<gameuiBackpackMainGameController> BackpackInstance { get; set; }
 
 		public BackpackInventoryListenerCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

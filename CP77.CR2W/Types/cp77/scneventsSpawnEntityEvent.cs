@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scneventsSpawnEntityEvent : scnSceneEvent
 	{
-		[Ordinal(0)]  [RED("params")] public scneventsSpawnEntityEventParams Params { get; set; }
+		[Ordinal(6)] [RED("params")] public scneventsSpawnEntityEventParams Params { get; set; }
 
 		public scneventsSpawnEntityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

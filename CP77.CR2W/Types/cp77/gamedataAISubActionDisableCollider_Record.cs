@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamedataAISubActionDisableCollider_Record : gamedataAISubAction_Record
 	{
-
 		public gamedataAISubActionDisableCollider_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

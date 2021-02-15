@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioPlayerInVehicleASTCD : audioAudioStateTransitionConditionData
 	{
-		[Ordinal(0)]  [RED("isInside")] public CBool IsInside { get; set; }
+		[Ordinal(1)] [RED("isInside")] public CBool IsInside { get; set; }
 
 		public audioPlayerInVehicleASTCD(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

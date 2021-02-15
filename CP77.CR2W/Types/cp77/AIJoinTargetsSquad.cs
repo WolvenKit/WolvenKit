@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIJoinTargetsSquad : AICommand
 	{
-		[Ordinal(0)]  [RED("targetPuppetRef")] public gameEntityReference TargetPuppetRef { get; set; }
+		[Ordinal(4)] [RED("targetPuppetRef")] public gameEntityReference TargetPuppetRef { get; set; }
 
 		public AIJoinTargetsSquad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

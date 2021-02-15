@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiGlobaltvWidgetGameController : gameuiWidgetGameController
 	{
-		[Ordinal(0)]  [RED("overlayContainer")] public inkCompoundWidgetReference OverlayContainer { get; set; }
+		[Ordinal(2)] [RED("overlayContainer")] public inkCompoundWidgetReference OverlayContainer { get; set; }
 
 		public gameuiGlobaltvWidgetGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

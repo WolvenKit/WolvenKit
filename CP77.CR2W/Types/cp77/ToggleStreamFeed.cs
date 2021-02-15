@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ToggleStreamFeed : ActionBool
 	{
-		[Ordinal(22)]  [RED("vRoomFake")] public CBool VRoomFake { get; set; }
+		[Ordinal(25)] [RED("vRoomFake")] public CBool VRoomFake { get; set; }
 
 		public ToggleStreamFeed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

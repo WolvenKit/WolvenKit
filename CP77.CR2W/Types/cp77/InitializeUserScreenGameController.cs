@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class InitializeUserScreenGameController : gameuiMenuGameController
 	{
-		[Ordinal(1)]  [RED("backgroundVideo")] public inkVideoWidgetReference BackgroundVideo { get; set; }
-		[Ordinal(2)]  [RED("menuEventDispatcher")] public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher { get; set; }
+		[Ordinal(3)] [RED("backgroundVideo")] public inkVideoWidgetReference BackgroundVideo { get; set; }
+		[Ordinal(4)] [RED("menuEventDispatcher")] public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher { get; set; }
 
 		public InitializeUserScreenGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

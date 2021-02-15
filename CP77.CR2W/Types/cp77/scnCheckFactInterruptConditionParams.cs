@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnCheckFactInterruptConditionParams : CVariable
 	{
-		[Ordinal(0)]  [RED("factCondition")] public CHandle<scnInterruptFactConditionType> FactCondition { get; set; }
+		[Ordinal(0)] [RED("factCondition")] public CHandle<scnInterruptFactConditionType> FactCondition { get; set; }
 
 		public scnCheckFactInterruptConditionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

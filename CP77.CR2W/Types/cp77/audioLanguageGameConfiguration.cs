@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioLanguageGameConfiguration : audioAudioMetadata
 	{
-		[Ordinal(0)]  [RED("langsInProject")] public CArray<audioLanguageMapItem> LangsInProject { get; set; }
+		[Ordinal(1)] [RED("langsInProject")] public CArray<audioLanguageMapItem> LangsInProject { get; set; }
 
 		public audioLanguageGameConfiguration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

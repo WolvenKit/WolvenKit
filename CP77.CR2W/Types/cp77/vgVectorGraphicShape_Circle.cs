@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class vgVectorGraphicShape_Circle : vgBaseVectorGraphicShape
 	{
-		[Ordinal(0)]  [RED("dius")] public CFloat Dius { get; set; }
+		[Ordinal(2)] [RED("dius")] public CFloat Dius { get; set; }
 
 		public vgVectorGraphicShape_Circle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

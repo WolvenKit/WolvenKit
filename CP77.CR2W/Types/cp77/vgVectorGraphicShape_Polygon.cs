@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class vgVectorGraphicShape_Polygon : vgBaseVectorGraphicShape
 	{
-		[Ordinal(0)]  [RED("ints")] public CArray<Vector2> Ints { get; set; }
+		[Ordinal(2)] [RED("ints")] public CArray<Vector2> Ints { get; set; }
 
 		public vgVectorGraphicShape_Polygon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamestateMachineeventPostponedParameterBool : gamestateMachineeventPostponedParameterBase
 	{
-		[Ordinal(0)]  [RED("value")] public CBool Value { get; set; }
+		[Ordinal(2)] [RED("value")] public CBool Value { get; set; }
 
 		public gamestateMachineeventPostponedParameterBool(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entEffectSpawnerComponent : entIVisualComponent
 	{
-		[Ordinal(0)]  [RED("effectDescs")] public CArray<CHandle<entEffectDesc>> EffectDescs { get; set; }
+		[Ordinal(8)] [RED("effectDescs")] public CArray<CHandle<entEffectDesc>> EffectDescs { get; set; }
 
 		public entEffectSpawnerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

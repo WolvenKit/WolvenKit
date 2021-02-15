@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CameraSetup : CVariable
 	{
-		[Ordinal(0)]  [RED("canStreamVideo")] public CBool CanStreamVideo { get; set; }
+		[Ordinal(0)] [RED("canStreamVideo")] public CBool CanStreamVideo { get; set; }
 
 		public CameraSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkShowInitializeUserScreen : IScriptable
 	{
-		[Ordinal(0)]  [RED("show")] public CBool Show { get; set; }
+		[Ordinal(0)] [RED("show")] public CBool Show { get; set; }
 
 		public inkShowInitializeUserScreen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

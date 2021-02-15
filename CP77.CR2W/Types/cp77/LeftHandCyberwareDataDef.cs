@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class LeftHandCyberwareDataDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)]  [RED("ProjectileCaught")] public gamebbScriptID_Bool ProjectileCaught { get; set; }
+		[Ordinal(0)] [RED("ProjectileCaught")] public gamebbScriptID_Bool ProjectileCaught { get; set; }
 
 		public LeftHandCyberwareDataDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldAudioAttractAreaNodeSettings : CVariable
 	{
-		[Ordinal(0)]  [RED("metadataName")] public CName MetadataName { get; set; }
+		[Ordinal(0)] [RED("metadataName")] public CName MetadataName { get; set; }
 
 		public worldAudioAttractAreaNodeSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

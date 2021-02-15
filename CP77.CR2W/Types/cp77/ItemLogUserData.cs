@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ItemLogUserData : inkGameNotificationData
 	{
-		[Ordinal(0)]  [RED("itemID")] public gameItemID ItemID { get; set; }
-		[Ordinal(1)]  [RED("itemLogQueueEmpty")] public CBool ItemLogQueueEmpty { get; set; }
+		[Ordinal(6)] [RED("itemID")] public gameItemID ItemID { get; set; }
+		[Ordinal(7)] [RED("itemLogQueueEmpty")] public CBool ItemLogQueueEmpty { get; set; }
 
 		public ItemLogUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

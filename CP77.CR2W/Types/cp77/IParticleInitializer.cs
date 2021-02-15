@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class IParticleInitializer : IParticleModule
 	{
-		[Ordinal(0)]  [RED("seed")] public CUInt32 Seed { get; set; }
+		[Ordinal(3)] [RED("seed")] public CUInt32 Seed { get; set; }
 
 		public IParticleInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

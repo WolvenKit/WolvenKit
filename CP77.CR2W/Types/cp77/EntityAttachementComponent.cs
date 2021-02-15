@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class EntityAttachementComponent : gameScriptableComponent
 	{
-		[Ordinal(0)]  [RED("parentAttachementData")] public EntityAttachementData ParentAttachementData { get; set; }
+		[Ordinal(5)] [RED("parentAttachementData")] public EntityAttachementData ParentAttachementData { get; set; }
 
 		public EntityAttachementComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

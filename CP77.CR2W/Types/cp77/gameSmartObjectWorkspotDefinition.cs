@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameSmartObjectWorkspotDefinition : gameSmartObjectDefinition
 	{
-		[Ordinal(0)]  [RED("workspotTemplate")] public rRef<workWorkspotResource> WorkspotTemplate { get; set; }
+		[Ordinal(5)] [RED("workspotTemplate")] public rRef<workWorkspotResource> WorkspotTemplate { get; set; }
 
 		public gameSmartObjectWorkspotDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

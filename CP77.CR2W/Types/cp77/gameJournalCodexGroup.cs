@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameJournalCodexGroup : gameJournalContainerEntry
 	{
-		[Ordinal(0)]  [RED("groupName")] public LocalizationString GroupName { get; set; }
+		[Ordinal(2)] [RED("groupName")] public LocalizationString GroupName { get; set; }
 
 		public gameJournalCodexGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

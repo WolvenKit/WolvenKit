@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameDebugPath : CVariable
 	{
-		[Ordinal(0)]  [RED("str")] public CString Str { get; set; }
+		[Ordinal(0)] [RED("str")] public CString Str { get; set; }
 
 		public gameDebugPath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

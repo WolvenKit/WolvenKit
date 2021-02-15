@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldCompiledCommunityAreaNode : worldNode
 	{
-		[Ordinal(0)]  [RED("area")] public CHandle<communityArea> Area { get; set; }
-		[Ordinal(1)]  [RED("sourceObjectId")] public entEntityID SourceObjectId { get; set; }
+		[Ordinal(2)] [RED("area")] public CHandle<communityArea> Area { get; set; }
+		[Ordinal(3)] [RED("sourceObjectId")] public entEntityID SourceObjectId { get; set; }
 
 		public worldCompiledCommunityAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

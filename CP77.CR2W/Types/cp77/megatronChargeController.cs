@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class megatronChargeController : ChargeLogicController
 	{
-		[Ordinal(0)]  [RED("chargeBar")] public wCHandle<inkImageWidget> ChargeBar { get; set; }
+		[Ordinal(1)] [RED("chargeBar")] public wCHandle<inkImageWidget> ChargeBar { get; set; }
 
 		public megatronChargeController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

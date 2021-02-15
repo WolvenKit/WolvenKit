@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_EnumSwitch : animAnimNode_InputSwitch
 	{
-		[Ordinal(0)]  [RED("enumName")] public CName EnumName { get; set; }
+		[Ordinal(8)] [RED("enumName")] public CName EnumName { get; set; }
 
 		public animAnimNode_EnumSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

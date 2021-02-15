@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameEntitySpawnerComponent : gameComponent
 	{
-		[Ordinal(0)]  [RED("slotDataArray")] public CArray<gameEntitySpawnerSlotData> SlotDataArray { get; set; }
+		[Ordinal(4)] [RED("slotDataArray")] public CArray<gameEntitySpawnerSlotData> SlotDataArray { get; set; }
 
 		public gameEntitySpawnerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CraftItemForTarget : ActionBool
 	{
-		[Ordinal(22)]  [RED("itemID")] public TweakDBID ItemID { get; set; }
+		[Ordinal(25)] [RED("itemID")] public TweakDBID ItemID { get; set; }
 
 		public CraftItemForTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

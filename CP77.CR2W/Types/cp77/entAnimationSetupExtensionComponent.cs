@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entAnimationSetupExtensionComponent : entIComponent
 	{
-		[Ordinal(0)]  [RED("animations")] public animAnimSetup Animations { get; set; }
-		[Ordinal(1)]  [RED("controlBinding")] public CHandle<entAnimationControlBinding> ControlBinding { get; set; }
+		[Ordinal(3)] [RED("animations")] public animAnimSetup Animations { get; set; }
+		[Ordinal(4)] [RED("controlBinding")] public CHandle<entAnimationControlBinding> ControlBinding { get; set; }
 
 		public entAnimationSetupExtensionComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SetIsSpiderbotInteractionOrderedEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("value")] public CBool Value { get; set; }
+		[Ordinal(0)] [RED("value")] public CBool Value { get; set; }
 
 		public SetIsSpiderbotInteractionOrderedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

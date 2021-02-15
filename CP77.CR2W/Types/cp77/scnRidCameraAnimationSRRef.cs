@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnRidCameraAnimationSRRef : CVariable
 	{
-		[Ordinal(0)]  [RED("resourceId")] public scnRidResourceId ResourceId { get; set; }
-		[Ordinal(1)]  [RED("animationSN")] public scnRidSerialNumber AnimationSN { get; set; }
+		[Ordinal(0)] [RED("resourceId")] public scnRidResourceId ResourceId { get; set; }
+		[Ordinal(1)] [RED("animationSN")] public scnRidSerialNumber AnimationSN { get; set; }
 
 		public scnRidCameraAnimationSRRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

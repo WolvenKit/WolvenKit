@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class HoloDevice : InteractiveDevice
 	{
-		[Ordinal(84)]  [RED("questFactName")] public CName QuestFactName { get; set; }
+		[Ordinal(93)] [RED("questFactName")] public CName QuestFactName { get; set; }
 
 		public HoloDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

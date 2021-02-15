@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entStaticOrientationProvider : entIOrientationProvider
 	{
-		[Ordinal(0)]  [RED("staticOrientation")] public Quaternion StaticOrientation { get; set; }
+		[Ordinal(0)] [RED("staticOrientation")] public Quaternion StaticOrientation { get; set; }
 
 		public entStaticOrientationProvider(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

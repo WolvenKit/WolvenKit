@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioVehicleNpcOcclusionMetadata : audioEmitterMetadata
 	{
-		[Ordinal(0)]  [RED("void")] public CBool Void { get; set; }
+		[Ordinal(1)] [RED("void")] public CBool Void { get; set; }
 
 		public audioVehicleNpcOcclusionMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

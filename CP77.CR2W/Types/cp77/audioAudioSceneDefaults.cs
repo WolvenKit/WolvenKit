@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioAudioSceneDefaults : audioAudioMetadata
 	{
-		[Ordinal(0)]  [RED("parameters")] public CArray<audioAudSimpleParameter> Parameters { get; set; }
+		[Ordinal(1)] [RED("parameters")] public CArray<audioAudSimpleParameter> Parameters { get; set; }
 
 		public audioAudioSceneDefaults(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

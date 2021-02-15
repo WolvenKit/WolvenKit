@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class RegisterPingNetworkLinkRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)]  [RED("linksData")] public CArray<SNetworkLinkData> LinksData { get; set; }
+		[Ordinal(0)] [RED("linksData")] public CArray<SNetworkLinkData> LinksData { get; set; }
 
 		public RegisterPingNetworkLinkRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ExpressionTreeCParametrizationNodeDefinition : ExpressionTreeCNodeDefinition
 	{
-
 		public ExpressionTreeCParametrizationNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

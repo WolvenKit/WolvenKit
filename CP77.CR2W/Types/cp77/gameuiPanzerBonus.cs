@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiPanzerBonus : gameuiSideScrollerMiniGameDynObjectLogicAdvanced
 	{
-		[Ordinal(0)]  [RED("fallingSpeed")] public CFloat FallingSpeed { get; set; }
+		[Ordinal(1)] [RED("fallingSpeed")] public CFloat FallingSpeed { get; set; }
 
 		public gameuiPanzerBonus(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

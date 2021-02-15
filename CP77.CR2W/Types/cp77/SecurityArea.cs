@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SecurityArea : InteractiveMasterDevice
 	{
-		[Ordinal(84)]  [RED("area")] public CHandle<gameStaticTriggerAreaComponent> Area { get; set; }
+		[Ordinal(93)] [RED("area")] public CHandle<gameStaticTriggerAreaComponent> Area { get; set; }
 
 		public SecurityArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

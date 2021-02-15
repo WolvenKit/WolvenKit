@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questClearForcedBehavioursNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		[Ordinal(0)]  [RED("puppet")] public gameEntityReference Puppet { get; set; }
+		[Ordinal(2)] [RED("puppet")] public gameEntityReference Puppet { get; set; }
 
 		public questClearForcedBehavioursNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

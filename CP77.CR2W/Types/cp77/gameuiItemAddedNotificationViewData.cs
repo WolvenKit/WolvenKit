@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiItemAddedNotificationViewData : gameuiGenericNotificationViewData
 	{
-		[Ordinal(1)]  [RED("itemID")] public gameItemID ItemID { get; set; }
-		[Ordinal(2)]  [RED("animation")] public CName Animation { get; set; }
-		[Ordinal(3)]  [RED("itemRarity")] public CName ItemRarity { get; set; }
+		[Ordinal(5)] [RED("itemID")] public gameItemID ItemID { get; set; }
+		[Ordinal(6)] [RED("animation")] public CName Animation { get; set; }
+		[Ordinal(7)] [RED("itemRarity")] public CName ItemRarity { get; set; }
 
 		public gameuiItemAddedNotificationViewData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

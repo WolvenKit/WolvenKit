@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamehitRepresentationEventsResetSingleScaleMultiplier : redEvent
 	{
-		[Ordinal(0)]  [RED("shapeName")] public CName ShapeName { get; set; }
+		[Ordinal(0)] [RED("shapeName")] public CName ShapeName { get; set; }
 
 		public gamehitRepresentationEventsResetSingleScaleMultiplier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

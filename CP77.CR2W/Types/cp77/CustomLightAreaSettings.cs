@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CustomLightAreaSettings : IAreaSettings
 	{
-		[Ordinal(0)]  [RED("characterLocalLightRoughnesBias")] public curveData<CFloat> CharacterLocalLightRoughnesBias { get; set; }
+		[Ordinal(2)] [RED("characterLocalLightRoughnesBias")] public curveData<CFloat> CharacterLocalLightRoughnesBias { get; set; }
 
 		public CustomLightAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

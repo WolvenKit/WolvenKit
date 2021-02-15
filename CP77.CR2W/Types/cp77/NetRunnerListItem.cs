@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class NetRunnerListItem : inkWidgetLogicController
 	{
-		[Ordinal(0)]  [RED("highlight")] public inkWidgetReference Highlight { get; set; }
+		[Ordinal(1)] [RED("highlight")] public inkWidgetReference Highlight { get; set; }
 
 		public NetRunnerListItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

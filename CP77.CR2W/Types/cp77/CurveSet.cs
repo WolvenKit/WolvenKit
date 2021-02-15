@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CurveSet : CResource
 	{
-		[Ordinal(0)]  [RED("curves")] public CArray<CurveSetEntry> Curves { get; set; }
+		[Ordinal(1)] [RED("curves")] public CArray<CurveSetEntry> Curves { get; set; }
 
 		public CurveSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

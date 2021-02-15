@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldGlobalNodeID : CVariable
 	{
-		[Ordinal(0)]  [RED("hash")] public CUInt64 Hash { get; set; }
+		[Ordinal(0)] [RED("hash")] public CUInt64 Hash { get; set; }
 
 		public worldGlobalNodeID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

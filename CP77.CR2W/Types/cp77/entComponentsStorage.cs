@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entComponentsStorage : ISerializable
 	{
-		[Ordinal(0)]  [RED("components")] public CArray<CHandle<entIComponent>> Components { get; set; }
+		[Ordinal(0)] [RED("components")] public CArray<CHandle<entIComponent>> Components { get; set; }
 
 		public entComponentsStorage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

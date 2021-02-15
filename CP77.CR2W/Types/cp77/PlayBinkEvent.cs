@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PlayBinkEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("data")] public SBinkperationData Data { get; set; }
+		[Ordinal(0)] [RED("data")] public SBinkperationData Data { get; set; }
 
 		public PlayBinkEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

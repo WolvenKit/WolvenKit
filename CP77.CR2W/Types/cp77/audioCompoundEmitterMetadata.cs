@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioCompoundEmitterMetadata : audioEmitterMetadata
 	{
-		[Ordinal(0)]  [RED("childrenNames")] public CArray<CName> ChildrenNames { get; set; }
+		[Ordinal(1)] [RED("childrenNames")] public CArray<CName> ChildrenNames { get; set; }
 
 		public audioCompoundEmitterMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

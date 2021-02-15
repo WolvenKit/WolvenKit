@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questFactsDBManagerNodeDefinition : questDisableableNodeDefinition
 	{
-		[Ordinal(0)]  [RED("type")] public CHandle<questIFactsDBManagerNodeType> Type { get; set; }
+		[Ordinal(2)] [RED("type")] public CHandle<questIFactsDBManagerNodeType> Type { get; set; }
 
 		public questFactsDBManagerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

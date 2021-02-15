@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AICTreeNodeDecisionDefinition : AICTreeNodeCompositeDefinition
 	{
-		[Ordinal(0)]  [RED("child")] public CHandle<LibTreeINodeDefinition> Child { get; set; }
-		[Ordinal(1)]  [RED("expressions")] public CArray<CHandle<LibTreeINodeDefinition>> Expressions { get; set; }
-		[Ordinal(2)]  [RED("interruption")] public AIInterruptionSignal Interruption { get; set; }
+		[Ordinal(0)] [RED("child")] public CHandle<LibTreeINodeDefinition> Child { get; set; }
+		[Ordinal(1)] [RED("expressions")] public CArray<CHandle<LibTreeINodeDefinition>> Expressions { get; set; }
+		[Ordinal(2)] [RED("interruption")] public AIInterruptionSignal Interruption { get; set; }
 
 		public AICTreeNodeDecisionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

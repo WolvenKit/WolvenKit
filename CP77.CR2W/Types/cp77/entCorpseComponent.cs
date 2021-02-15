@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entCorpseComponent : entISkinableComponent
 	{
-		[Ordinal(0)]  [RED("filterData")] public CHandle<physicsFilterData> FilterData { get; set; }
-		[Ordinal(1)]  [RED("material")] public CName Material { get; set; }
+		[Ordinal(5)] [RED("filterData")] public CHandle<physicsFilterData> FilterData { get; set; }
+		[Ordinal(6)] [RED("material")] public CName Material { get; set; }
 
 		public entCorpseComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

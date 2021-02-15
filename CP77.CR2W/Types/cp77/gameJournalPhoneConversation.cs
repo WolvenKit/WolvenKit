@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameJournalPhoneConversation : gameJournalContainerEntry
 	{
-		[Ordinal(0)]  [RED("title")] public LocalizationString Title { get; set; }
+		[Ordinal(2)] [RED("title")] public LocalizationString Title { get; set; }
 
 		public gameJournalPhoneConversation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

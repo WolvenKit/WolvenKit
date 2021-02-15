@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldAIDirectorSpawnNode : worldNode
 	{
-		[Ordinal(0)]  [RED("tags")] public redTagList Tags { get; set; }
+		[Ordinal(2)] [RED("tags")] public redTagList Tags { get; set; }
 
 		public worldAIDirectorSpawnNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

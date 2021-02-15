@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioRadioTracksMetadata : audioAudioMetadata
 	{
-		[Ordinal(0)]  [RED("radioTracks")] public CArray<audioRadioTrack> RadioTracks { get; set; }
+		[Ordinal(1)] [RED("radioTracks")] public CArray<audioRadioTrack> RadioTracks { get; set; }
 
 		public audioRadioTracksMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

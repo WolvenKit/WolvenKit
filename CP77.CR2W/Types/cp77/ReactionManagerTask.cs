@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ReactionManagerTask : AIbehaviortaskScript
 	{
-		[Ordinal(0)]  [RED("reactionData")] public CHandle<AIReactionData> ReactionData { get; set; }
+		[Ordinal(0)] [RED("reactionData")] public CHandle<AIReactionData> ReactionData { get; set; }
 
 		public ReactionManagerTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

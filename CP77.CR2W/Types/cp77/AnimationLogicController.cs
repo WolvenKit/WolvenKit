@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AnimationLogicController : inkWidgetLogicController
 	{
-		[Ordinal(0)]  [RED("imageView")] public inkImageWidgetReference ImageView { get; set; }
+		[Ordinal(1)] [RED("imageView")] public inkImageWidgetReference ImageView { get; set; }
 
 		public AnimationLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

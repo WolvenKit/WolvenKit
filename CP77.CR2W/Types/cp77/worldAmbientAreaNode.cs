@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldAmbientAreaNode : worldTriggerAreaNode
 	{
-		[Ordinal(0)]  [RED("useCustomColor")] public CBool UseCustomColor { get; set; }
+		[Ordinal(5)] [RED("useCustomColor")] public CBool UseCustomColor { get; set; }
 
 		public worldAmbientAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class workActorTagCondition : workIWorkspotCondition
 	{
-		[Ordinal(0)]  [RED("tag")] public CName Tag { get; set; }
+		[Ordinal(2)] [RED("tag")] public CName Tag { get; set; }
 
 		public workActorTagCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

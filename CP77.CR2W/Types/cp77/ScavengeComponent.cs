@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ScavengeComponent : gameScriptableComponent
 	{
-		[Ordinal(0)]  [RED("scavengeTargets")] public CArray<wCHandle<gameObject>> ScavengeTargets { get; set; }
+		[Ordinal(5)] [RED("scavengeTargets")] public CArray<wCHandle<gameObject>> ScavengeTargets { get; set; }
 
 		public ScavengeComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

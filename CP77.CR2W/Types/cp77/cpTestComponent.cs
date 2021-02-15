@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class cpTestComponent : gameComponent
 	{
-		[Ordinal(0)]  [RED("whatever")] public CFloat Whatever { get; set; }
-		[Ordinal(1)]  [RED("whateverIE")] public CFloat WhateverIE { get; set; }
+		[Ordinal(4)] [RED("whatever")] public CFloat Whatever { get; set; }
+		[Ordinal(5)] [RED("whateverIE")] public CFloat WhateverIE { get; set; }
 
 		public cpTestComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

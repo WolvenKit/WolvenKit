@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TonemappingModeACES : ITonemappingMode
 	{
-		[Ordinal(0)]  [RED("params")] public STonemappingACESParams Params { get; set; }
+		[Ordinal(1)] [RED("params")] public STonemappingACESParams Params { get; set; }
 
 		public TonemappingModeACES(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

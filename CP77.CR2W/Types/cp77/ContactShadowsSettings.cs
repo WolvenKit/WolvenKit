@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ContactShadowsSettings : IAreaSettings
 	{
-		[Ordinal(0)]  [RED("contactShadows")] public ContactShadowsConfig ContactShadows { get; set; }
+		[Ordinal(2)] [RED("contactShadows")] public ContactShadowsConfig ContactShadows { get; set; }
 
 		public ContactShadowsSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

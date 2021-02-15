@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PreventionSystemConfig : CVariable
 	{
-		[Ordinal(0)]  [RED("record")] public TweakDBID Record { get; set; }
+		[Ordinal(0)] [RED("record")] public TweakDBID Record { get; set; }
 
 		public PreventionSystemConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

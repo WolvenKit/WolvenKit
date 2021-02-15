@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioAudBulletTimeModeMap : audioAudioMetadata
 	{
-		[Ordinal(0)]  [RED("bulletTimeMapItems")] public CArray<audioAudBulletTimeModeMapItem> BulletTimeMapItems { get; set; }
+		[Ordinal(1)] [RED("bulletTimeMapItems")] public CArray<audioAudBulletTimeModeMapItem> BulletTimeMapItems { get; set; }
 
 		public audioAudBulletTimeModeMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

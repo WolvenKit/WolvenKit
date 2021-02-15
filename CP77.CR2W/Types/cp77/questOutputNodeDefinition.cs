@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questOutputNodeDefinition : questIONodeDefinition
 	{
-		[Ordinal(0)]  [RED("type")] public CEnum<questExitType> Type { get; set; }
+		[Ordinal(3)] [RED("type")] public CEnum<questExitType> Type { get; set; }
 
 		public questOutputNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

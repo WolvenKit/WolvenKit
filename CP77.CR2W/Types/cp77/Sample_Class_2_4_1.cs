@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class Sample_Class_2_4_1 : CVariable
 	{
-		[Ordinal(0)]  [RED("var0")] public CHandle<Sample_Class_2_4_0> Var0 { get; set; }
+		[Ordinal(0)] [RED("var0")] public CHandle<Sample_Class_2_4_0> Var0 { get; set; }
 
 		public Sample_Class_2_4_1(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

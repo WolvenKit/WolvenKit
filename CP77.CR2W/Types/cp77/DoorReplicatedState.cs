@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DoorReplicatedState : gameDeviceReplicatedState
 	{
-		[Ordinal(0)]  [RED("isOpen")] public CBool IsOpen { get; set; }
-		[Ordinal(1)]  [RED("wasImmediateChange")] public CBool WasImmediateChange { get; set; }
+		[Ordinal(0)] [RED("isOpen")] public CBool IsOpen { get; set; }
+		[Ordinal(1)] [RED("wasImmediateChange")] public CBool WasImmediateChange { get; set; }
 
 		public DoorReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

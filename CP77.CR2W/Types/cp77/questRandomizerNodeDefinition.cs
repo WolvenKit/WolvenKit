@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questRandomizerNodeDefinition : questDisableableNodeDefinition
 	{
-		[Ordinal(0)]  [RED("mode")] public CEnum<questRandomizerMode> Mode { get; set; }
-		[Ordinal(1)]  [RED("outputWeights")] public CArray<CUInt8> OutputWeights { get; set; }
+		[Ordinal(2)] [RED("mode")] public CEnum<questRandomizerMode> Mode { get; set; }
+		[Ordinal(3)] [RED("outputWeights")] public CArray<CUInt8> OutputWeights { get; set; }
 
 		public questRandomizerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

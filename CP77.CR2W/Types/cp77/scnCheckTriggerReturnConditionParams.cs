@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnCheckTriggerReturnConditionParams : CVariable
 	{
-		[Ordinal(0)]  [RED("inside")] public CBool Inside { get; set; }
-		[Ordinal(1)]  [RED("triggerArea")] public NodeRef TriggerArea { get; set; }
+		[Ordinal(0)] [RED("inside")] public CBool Inside { get; set; }
+		[Ordinal(1)] [RED("triggerArea")] public NodeRef TriggerArea { get; set; }
 
 		public scnCheckTriggerReturnConditionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

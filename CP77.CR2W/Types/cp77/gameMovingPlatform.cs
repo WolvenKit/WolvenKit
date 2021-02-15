@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameMovingPlatform : entIPlacedComponent
 	{
-		[Ordinal(0)]  [RED("loopType")] public CEnum<gameMovingPlatformLoopType> LoopType { get; set; }
+		[Ordinal(5)] [RED("loopType")] public CEnum<gameMovingPlatformLoopType> LoopType { get; set; }
 
 		public gameMovingPlatform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

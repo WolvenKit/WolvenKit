@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioAmbientPaletteBrushCategory : audioAudioMetadata
 	{
-		[Ordinal(0)]  [RED("brushes")] public CHandle<audioAmbientPaletteBrushDictionary> Brushes { get; set; }
+		[Ordinal(1)] [RED("brushes")] public CHandle<audioAmbientPaletteBrushDictionary> Brushes { get; set; }
 
 		public audioAmbientPaletteBrushCategory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

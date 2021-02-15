@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIHostJoinedSquad : AIAIEvent
 	{
-		[Ordinal(0)]  [RED("squad")] public CName Squad { get; set; }
+		[Ordinal(2)] [RED("squad")] public CName Squad { get; set; }
 
 		public AIHostJoinedSquad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamePointOfInterestMappinResource : CResource
 	{
-		[Ordinal(0)]  [RED("cookedData")] public CArray<gameCookedPointOfInterestMappinData> CookedData { get; set; }
+		[Ordinal(1)] [RED("cookedData")] public CArray<gameCookedPointOfInterestMappinData> CookedData { get; set; }
 
 		public gamePointOfInterestMappinResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

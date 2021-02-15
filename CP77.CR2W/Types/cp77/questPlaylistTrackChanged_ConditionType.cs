@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questPlaylistTrackChanged_ConditionType : questISystemConditionType
 	{
-		[Ordinal(0)]  [RED("playlistName")] public CName PlaylistName { get; set; }
+		[Ordinal(0)] [RED("playlistName")] public CName PlaylistName { get; set; }
 
 		public questPlaylistTrackChanged_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

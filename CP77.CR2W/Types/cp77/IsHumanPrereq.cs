@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class IsHumanPrereq : gameIScriptablePrereq
 	{
-		[Ordinal(0)]  [RED("invert")] public CBool Invert { get; set; }
+		[Ordinal(0)] [RED("invert")] public CBool Invert { get; set; }
 
 		public IsHumanPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

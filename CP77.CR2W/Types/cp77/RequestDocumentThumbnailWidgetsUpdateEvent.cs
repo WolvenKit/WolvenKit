@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class RequestDocumentThumbnailWidgetsUpdateEvent : RequestWidgetUpdateEvent
 	{
-		[Ordinal(2)]  [RED("documentType")] public CEnum<EDocumentType> DocumentType { get; set; }
+		[Ordinal(2)] [RED("documentType")] public CEnum<EDocumentType> DocumentType { get; set; }
 
 		public RequestDocumentThumbnailWidgetsUpdateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

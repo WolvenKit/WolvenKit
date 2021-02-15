@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MovableQuestTrigger : gameObject
 	{
-		[Ordinal(31)]  [RED("factName")] public CName FactName { get; set; }
-		[Ordinal(32)]  [RED("onlyDetectsPlayer")] public CBool OnlyDetectsPlayer { get; set; }
+		[Ordinal(40)] [RED("factName")] public CName FactName { get; set; }
+		[Ordinal(41)] [RED("onlyDetectsPlayer")] public CBool OnlyDetectsPlayer { get; set; }
 
 		public MovableQuestTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class UnequipItemsRequest : gamePlayerScriptableSystemRequest
 	{
-		[Ordinal(0)]  [RED("items")] public CArray<gameItemID> Items { get; set; }
+		[Ordinal(1)] [RED("items")] public CArray<gameItemID> Items { get; set; }
 
 		public UnequipItemsRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

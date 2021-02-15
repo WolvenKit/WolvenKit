@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class LightColorSettings : IAreaSettings
 	{
-		[Ordinal(0)]  [RED("light")] public worldWorldGlobalLightParameters Light { get; set; }
+		[Ordinal(2)] [RED("light")] public worldWorldGlobalLightParameters Light { get; set; }
 
 		public LightColorSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

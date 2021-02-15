@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class FriendlyTargetWeaponChangeCallback : gameAttachmentSlotsScriptCallback
 	{
-		[Ordinal(0)]  [RED("followerRole")] public CHandle<AIFollowerRole> FollowerRole { get; set; }
+		[Ordinal(2)] [RED("followerRole")] public CHandle<AIFollowerRole> FollowerRole { get; set; }
 
 		public FriendlyTargetWeaponChangeCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

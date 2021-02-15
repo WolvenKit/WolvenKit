@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class BossHealthStatListener : gameScriptStatPoolsListener
 	{
-		[Ordinal(0)]  [RED("healthbar")] public wCHandle<BossHealthBarGameController> Healthbar { get; set; }
+		[Ordinal(0)] [RED("healthbar")] public wCHandle<BossHealthBarGameController> Healthbar { get; set; }
 
 		public BossHealthStatListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

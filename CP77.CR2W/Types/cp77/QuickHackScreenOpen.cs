@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class QuickHackScreenOpen : redEvent
 	{
-		[Ordinal(0)]  [RED("setToOpen")] public CBool SetToOpen { get; set; }
+		[Ordinal(0)] [RED("setToOpen")] public CBool SetToOpen { get; set; }
 
 		public QuickHackScreenOpen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

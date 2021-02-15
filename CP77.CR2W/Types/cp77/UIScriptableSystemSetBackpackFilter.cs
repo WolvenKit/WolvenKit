@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class UIScriptableSystemSetBackpackFilter : gameScriptableSystemRequest
 	{
-		[Ordinal(0)]  [RED("filterMode")] public CInt32 FilterMode { get; set; }
+		[Ordinal(0)] [RED("filterMode")] public CInt32 FilterMode { get; set; }
 
 		public UIScriptableSystemSetBackpackFilter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

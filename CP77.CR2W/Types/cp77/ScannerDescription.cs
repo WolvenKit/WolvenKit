@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ScannerDescription : ScannerChunk
 	{
-		[Ordinal(0)]  [RED("defaultFluffDescription")] public CString DefaultFluffDescription { get; set; }
-		[Ordinal(1)]  [RED("customDescriptions")] public CArray<CString> CustomDescriptions { get; set; }
+		[Ordinal(0)] [RED("defaultFluffDescription")] public CString DefaultFluffDescription { get; set; }
+		[Ordinal(1)] [RED("customDescriptions")] public CArray<CString> CustomDescriptions { get; set; }
 
 		public ScannerDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiRequestPushContextEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("context")] public CEnum<UIGameContext> Context { get; set; }
+		[Ordinal(0)] [RED("context")] public CEnum<UIGameContext> Context { get; set; }
 
 		public gameuiRequestPushContextEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

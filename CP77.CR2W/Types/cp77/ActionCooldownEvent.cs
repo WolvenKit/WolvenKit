@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ActionCooldownEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("storageID")] public CooldownStorageID StorageID { get; set; }
+		[Ordinal(0)] [RED("storageID")] public CooldownStorageID StorageID { get; set; }
 
 		public ActionCooldownEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

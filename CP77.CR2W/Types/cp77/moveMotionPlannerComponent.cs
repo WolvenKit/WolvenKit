@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class moveMotionPlannerComponent : moveIMotionPlannerComponent
 	{
-		[Ordinal(0)]  [RED("snapToGround")] public CBool SnapToGround { get; set; }
+		[Ordinal(3)] [RED("snapToGround")] public CBool SnapToGround { get; set; }
 
 		public moveMotionPlannerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

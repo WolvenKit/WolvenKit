@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class grsGatherAreaManager : CVariable
 	{
-		[Ordinal(0)]  [RED("activeGatherAreaRepInfo")] public grsGatherAreaReplicatedInfo ActiveGatherAreaRepInfo { get; set; }
+		[Ordinal(0)] [RED("activeGatherAreaRepInfo")] public grsGatherAreaReplicatedInfo ActiveGatherAreaRepInfo { get; set; }
 
 		public grsGatherAreaManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

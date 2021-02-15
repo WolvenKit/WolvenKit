@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questEntityCondition : questTypedCondition
 	{
-		[Ordinal(0)]  [RED("type")] public CHandle<questIEntityConditionType> Type { get; set; }
+		[Ordinal(0)] [RED("type")] public CHandle<questIEntityConditionType> Type { get; set; }
 
 		public questEntityCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameEffectExecutor : gameEffectNode
 	{
-		[Ordinal(0)]  [RED("usesHitCooldown")] public CBool UsesHitCooldown { get; set; }
+		[Ordinal(0)] [RED("usesHitCooldown")] public CBool UsesHitCooldown { get; set; }
 
 		public gameEffectExecutor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

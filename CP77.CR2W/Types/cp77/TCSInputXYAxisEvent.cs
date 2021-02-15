@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TCSInputXYAxisEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("isAnyInput")] public CBool IsAnyInput { get; set; }
+		[Ordinal(0)] [RED("isAnyInput")] public CBool IsAnyInput { get; set; }
 
 		public TCSInputXYAxisEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

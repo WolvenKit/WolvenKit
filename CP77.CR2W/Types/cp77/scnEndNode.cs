@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnEndNode : scnSceneGraphNode
 	{
-		[Ordinal(0)]  [RED("type")] public CEnum<scnEndNodeNsType> Type { get; set; }
+		[Ordinal(3)] [RED("type")] public CEnum<scnEndNodeNsType> Type { get; set; }
 
 		public scnEndNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questMinimize_NodeType : questIPhoneManagerNodeType
 	{
-		[Ordinal(0)]  [RED("minimize")] public CBool Minimize { get; set; }
+		[Ordinal(0)] [RED("minimize")] public CBool Minimize { get; set; }
 
 		public questMinimize_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

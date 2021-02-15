@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class LabelInputDisplayController : inkInputDisplayController
 	{
-		[Ordinal(0)]  [RED("inputLabel")] public inkTextWidgetReference InputLabel { get; set; }
+		[Ordinal(11)] [RED("inputLabel")] public inkTextWidgetReference InputLabel { get; set; }
 
 		public LabelInputDisplayController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class resResourceSnapshot : CResource
 	{
-		[Ordinal(0)]  [RED("resources")] public CArray<raRef<CResource>> Resources { get; set; }
+		[Ordinal(1)] [RED("resources")] public CArray<raRef<CResource>> Resources { get; set; }
 
 		public resResourceSnapshot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

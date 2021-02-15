@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PublicSafeEvents : WeaponEventsTransition
 	{
-		[Ordinal(0)]  [RED("weaponUnequipRequestSent")] public CBool WeaponUnequipRequestSent { get; set; }
+		[Ordinal(0)] [RED("weaponUnequipRequestSent")] public CBool WeaponUnequipRequestSent { get; set; }
 
 		public PublicSafeEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

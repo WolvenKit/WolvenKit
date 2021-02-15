@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questCharacterManagerNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		[Ordinal(0)]  [RED("type")] public CHandle<questICharacterManager_NodeType> Type { get; set; }
+		[Ordinal(2)] [RED("type")] public CHandle<questICharacterManager_NodeType> Type { get; set; }
 
 		public questCharacterManagerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldAutoFoliageMapping : CResource
 	{
-		[Ordinal(0)]  [RED("Items")] public CArray<worldAutoFoliageMappingItem> Items { get; set; }
+		[Ordinal(1)] [RED("Items")] public CArray<worldAutoFoliageMappingItem> Items { get; set; }
 
 		public worldAutoFoliageMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

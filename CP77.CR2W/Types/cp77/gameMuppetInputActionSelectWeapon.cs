@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameMuppetInputActionSelectWeapon : gameIMuppetInputAction
 	{
-		[Ordinal(0)]  [RED("wantedWeapon")] public gameItemID WantedWeapon { get; set; }
+		[Ordinal(0)] [RED("wantedWeapon")] public gameItemID WantedWeapon { get; set; }
 
 		public gameMuppetInputActionSelectWeapon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

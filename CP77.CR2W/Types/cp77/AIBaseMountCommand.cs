@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIBaseMountCommand : AICommand
 	{
-		[Ordinal(0)]  [RED("mountData")] public CHandle<gameMountEventData> MountData { get; set; }
+		[Ordinal(4)] [RED("mountData")] public CHandle<gameMountEventData> MountData { get; set; }
 
 		public AIBaseMountCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

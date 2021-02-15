@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class vgVectorGraphicShape_Text : vgBaseVectorGraphicShape
 	{
-		[Ordinal(0)]  [RED("xt")] public CString Xt { get; set; }
+		[Ordinal(2)] [RED("xt")] public CString Xt { get; set; }
 
 		public vgVectorGraphicShape_Text(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PullSquadSyncRequest : AIAIEvent
 	{
-		[Ordinal(0)]  [RED("squadType")] public CEnum<AISquadType> SquadType { get; set; }
+		[Ordinal(2)] [RED("squadType")] public CEnum<AISquadType> SquadType { get; set; }
 
 		public PullSquadSyncRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

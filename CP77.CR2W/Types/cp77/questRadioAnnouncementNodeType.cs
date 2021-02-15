@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questRadioAnnouncementNodeType : questIAudioNodeType
 	{
-		[Ordinal(0)]  [RED("radioStationEvents")] public CArray<questRadioStationAnnouncementEventStruct> RadioStationEvents { get; set; }
+		[Ordinal(0)] [RED("radioStationEvents")] public CArray<questRadioStationAnnouncementEventStruct> RadioStationEvents { get; set; }
 
 		public questRadioAnnouncementNodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkMultiChildren : inkChildren
 	{
-		[Ordinal(0)]  [RED("children")] public CArray<CHandle<inkWidget>> Children { get; set; }
+		[Ordinal(0)] [RED("children")] public CArray<CHandle<inkWidget>> Children { get; set; }
 
 		public inkMultiChildren(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

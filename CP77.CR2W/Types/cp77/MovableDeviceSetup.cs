@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MovableDeviceSetup : CVariable
 	{
-		[Ordinal(0)]  [RED("numberOfUses")] public CInt32 NumberOfUses { get; set; }
+		[Ordinal(0)] [RED("numberOfUses")] public CInt32 NumberOfUses { get; set; }
 
 		public MovableDeviceSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

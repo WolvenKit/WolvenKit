@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TemporalPrereq : gameIScriptablePrereq
 	{
-		[Ordinal(0)]  [RED("totalDuration")] public CFloat TotalDuration { get; set; }
+		[Ordinal(0)] [RED("totalDuration")] public CFloat TotalDuration { get; set; }
 
 		public TemporalPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

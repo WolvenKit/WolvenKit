@@ -8,8 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questIEntityConditionType : questIConditionType
 	{
-		[Ordinal(0)]  [RED("entityRef")] public gameEntityReference EntityRef { get; set; }
-
 		public questIEntityConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

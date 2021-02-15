@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CallOffReactionAction : SquadTask
 	{
-		[Ordinal(0)]  [RED("squadActionName")] public CEnum<EAISquadAction> SquadActionName { get; set; }
+		[Ordinal(0)] [RED("squadActionName")] public CEnum<EAISquadAction> SquadActionName { get; set; }
 
 		public CallOffReactionAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

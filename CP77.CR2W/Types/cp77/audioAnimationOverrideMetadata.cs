@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioAnimationOverrideMetadata : audioAudioMetadata
 	{
-		[Ordinal(0)]  [RED("animationOverrides")] public CHandle<audioAnimationOverrideDictionary> AnimationOverrides { get; set; }
+		[Ordinal(1)] [RED("animationOverrides")] public CHandle<audioAnimationOverrideDictionary> AnimationOverrides { get; set; }
 
 		public audioAnimationOverrideMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

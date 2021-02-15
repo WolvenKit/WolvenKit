@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldMirrorNode : worldMeshNode
 	{
-		[Ordinal(0)]  [RED("cullingBoxExtents")] public Vector3 CullingBoxExtents { get; set; }
-		[Ordinal(1)]  [RED("cullingBoxOffset")] public Vector3 CullingBoxOffset { get; set; }
+		[Ordinal(13)] [RED("cullingBoxExtents")] public Vector3 CullingBoxExtents { get; set; }
+		[Ordinal(14)] [RED("cullingBoxOffset")] public Vector3 CullingBoxOffset { get; set; }
 
 		public worldMirrorNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

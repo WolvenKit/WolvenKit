@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioMeleeRigMap : audioAudioMetadata
 	{
-		[Ordinal(0)]  [RED("mapItems")] public CArray<audioMeleeRigMapItem> MapItems { get; set; }
+		[Ordinal(1)] [RED("mapItems")] public CArray<audioMeleeRigMapItem> MapItems { get; set; }
 
 		public audioMeleeRigMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DoorSystemUIPS : VirtualSystemPS
 	{
-		[Ordinal(107)]  [RED("isOpen")] public CBool IsOpen { get; set; }
+		[Ordinal(107)] [RED("isOpen")] public CBool IsOpen { get; set; }
 
 		public DoorSystemUIPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

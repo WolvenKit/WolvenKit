@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CanNPCRun : AIbehaviorconditionScript
 	{
-		[Ordinal(0)]  [RED("maxRunners")] public CInt32 MaxRunners { get; set; }
+		[Ordinal(0)] [RED("maxRunners")] public CInt32 MaxRunners { get; set; }
 
 		public CanNPCRun(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

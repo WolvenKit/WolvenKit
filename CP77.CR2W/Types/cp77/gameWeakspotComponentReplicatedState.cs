@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameWeakspotComponentReplicatedState : netIComponentState
 	{
-		[Ordinal(0)]  [RED("WeakspotRepInfos")] public CArray<gameWeakSpotReplicatedInfo> WeakspotRepInfos { get; set; }
+		[Ordinal(2)] [RED("WeakspotRepInfos")] public CArray<gameWeakSpotReplicatedInfo> WeakspotRepInfos { get; set; }
 
 		public gameWeakspotComponentReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

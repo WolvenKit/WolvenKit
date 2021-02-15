@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorAttachToElevatorCommandTaskDefinition : AIbehaviorTaskDefinition
 	{
-		[Ordinal(0)]  [RED("command")] public CHandle<AIArgumentMapping> Command { get; set; }
+		[Ordinal(1)] [RED("command")] public CHandle<AIArgumentMapping> Command { get; set; }
 
 		public AIbehaviorAttachToElevatorCommandTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

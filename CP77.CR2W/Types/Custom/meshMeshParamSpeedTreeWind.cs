@@ -1,13 +1,12 @@
 using System.IO;
 using CP77.CR2W.Reflection;
 using FastMember;
-using static CP77.CR2W.Types.Enums;
 
 namespace CP77.CR2W.Types
 {
-	[REDMeta]
-	public class meshMeshParamSpeedTreeWind : meshMeshParameter
-	{
+    [REDMeta]
+	public class meshMeshParamSpeedTreeWind : meshMeshParamSpeedTreeWind_
+    {
         [Ordinal(0)] [REDBuffer] public CUInt32 Unk1 { get; set; }
         [Ordinal(1)] [REDBuffer(true)] public CArrayCompressed<CFloat> Unk2 { get; set; }
 

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ResourceLibraryComponent : gameScriptableComponent
 	{
-		[Ordinal(0)]  [RED("resources")] public CArray<FxResourceMapData> Resources { get; set; }
+		[Ordinal(5)] [RED("resources")] public CArray<FxResourceMapData> Resources { get; set; }
 
 		public ResourceLibraryComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

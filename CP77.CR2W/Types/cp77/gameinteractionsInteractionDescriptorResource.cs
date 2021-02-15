@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameinteractionsInteractionDescriptorResource : CResource
 	{
-		[Ordinal(0)]  [RED("definition")] public gameinteractionsCHotSpotDefinition Definition { get; set; }
+		[Ordinal(1)] [RED("definition")] public gameinteractionsCHotSpotDefinition Definition { get; set; }
 
 		public gameinteractionsInteractionDescriptorResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

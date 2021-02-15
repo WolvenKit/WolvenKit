@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class StrikeExecutor_Heal : gameEffectExecutor_Scripted
 	{
-		[Ordinal(0)]  [RED("healthPerc")] public CFloat HealthPerc { get; set; }
+		[Ordinal(1)] [RED("healthPerc")] public CFloat HealthPerc { get; set; }
 
 		public StrikeExecutor_Heal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
