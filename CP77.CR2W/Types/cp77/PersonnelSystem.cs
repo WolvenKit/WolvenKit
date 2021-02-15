@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PersonnelSystem : DeviceSystemBase
 	{
-		[Ordinal(3)]  [RED("EnableE3QuickHacks")] public CBool EnableE3QuickHacks { get; set; }
+		[Ordinal(93)] [RED("EnableE3QuickHacks")] public CBool EnableE3QuickHacks { get; set; }
 
 		public PersonnelSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

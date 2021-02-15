@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldEntityProxyMeshNode : worldPrefabProxyMeshNode
 	{
-		[Ordinal(0)]  [RED("ownerGlobalId")] public worldGlobalNodeID OwnerGlobalId { get; set; }
-		[Ordinal(1)]  [RED("entityAttachDistance")] public CFloat EntityAttachDistance { get; set; }
+		[Ordinal(17)] [RED("ownerGlobalId")] public worldGlobalNodeID OwnerGlobalId { get; set; }
+		[Ordinal(18)] [RED("entityAttachDistance")] public CFloat EntityAttachDistance { get; set; }
 
 		public worldEntityProxyMeshNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

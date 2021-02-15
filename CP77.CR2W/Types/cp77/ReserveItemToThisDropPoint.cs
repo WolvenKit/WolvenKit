@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ReserveItemToThisDropPoint : ScriptableDeviceAction
 	{
-		[Ordinal(22)]  [RED("item")] public TweakDBID Item { get; set; }
+		[Ordinal(25)] [RED("item")] public TweakDBID Item { get; set; }
 
 		public ReserveItemToThisDropPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

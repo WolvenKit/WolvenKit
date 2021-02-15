@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameinputContextDisplayData : CVariable
 	{
-		[Ordinal(0)]  [RED("name")] public CName Name { get; set; }
-		[Ordinal(1)]  [RED("actions")] public CArray<gameinputActionDisplayData> Actions { get; set; }
+		[Ordinal(0)] [RED("name")] public CName Name { get; set; }
+		[Ordinal(1)] [RED("actions")] public CArray<gameinputActionDisplayData> Actions { get; set; }
 
 		public gameinputContextDisplayData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

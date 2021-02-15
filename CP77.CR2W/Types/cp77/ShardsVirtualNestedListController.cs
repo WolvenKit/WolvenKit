@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ShardsVirtualNestedListController : VirtualNestedListController
 	{
-		[Ordinal(5)]  [RED("currentDataView")] public wCHandle<ShardsNestedListDataView> CurrentDataView { get; set; }
+		[Ordinal(13)] [RED("currentDataView")] public wCHandle<ShardsNestedListDataView> CurrentDataView { get; set; }
 
 		public ShardsVirtualNestedListController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class BloodPuddleEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("slotName")] public CName SlotName { get; set; }
-		[Ordinal(1)]  [RED("cyberBlood")] public CBool CyberBlood { get; set; }
+		[Ordinal(0)] [RED("slotName")] public CName SlotName { get; set; }
+		[Ordinal(1)] [RED("cyberBlood")] public CBool CyberBlood { get; set; }
 
 		public BloodPuddleEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

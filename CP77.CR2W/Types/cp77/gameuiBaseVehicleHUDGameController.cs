@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiBaseVehicleHUDGameController : gameuiHUDGameController
 	{
-		[Ordinal(7)]  [RED("mounted")] public CBool Mounted { get; set; }
+		[Ordinal(9)] [RED("mounted")] public CBool Mounted { get; set; }
 
 		public gameuiBaseVehicleHUDGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

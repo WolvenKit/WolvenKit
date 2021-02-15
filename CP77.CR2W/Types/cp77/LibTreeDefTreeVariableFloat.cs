@@ -8,7 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class LibTreeDefTreeVariableFloat : LibTreeDefTreeVariable
 	{
-		[Ordinal(0)]  [RED("defaultValue")] public CFloat DefaultValue { get; set; }
+		[Ordinal(2)] [RED("exportAsProperty")] public CBool ExportAsProperty { get; set; }
+		[Ordinal(3)] [RED("defaultValue")] public CFloat DefaultValue { get; set; }
 
 		public LibTreeDefTreeVariableFloat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

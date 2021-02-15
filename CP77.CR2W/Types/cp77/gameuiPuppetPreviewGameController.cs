@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiPuppetPreviewGameController : gameuiPreviewGameController
 	{
-		[Ordinal(2)]  [RED("cameraController")] public gameuiPuppetPreviewCameraController CameraController { get; set; }
+		[Ordinal(6)] [RED("cameraController")] public gameuiPuppetPreviewCameraController CameraController { get; set; }
 
 		public gameuiPuppetPreviewGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

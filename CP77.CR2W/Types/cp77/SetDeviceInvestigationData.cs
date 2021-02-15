@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SetDeviceInvestigationData : AIbehaviortaskScript
 	{
-		[Ordinal(0)]  [RED("ownerPuppet")] public wCHandle<ScriptedPuppet> OwnerPuppet { get; set; }
-		[Ordinal(1)]  [RED("listener")] public wCHandle<gameObject> Listener { get; set; }
+		[Ordinal(0)] [RED("ownerPuppet")] public wCHandle<ScriptedPuppet> OwnerPuppet { get; set; }
+		[Ordinal(1)] [RED("listener")] public wCHandle<gameObject> Listener { get; set; }
 
 		public SetDeviceInvestigationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

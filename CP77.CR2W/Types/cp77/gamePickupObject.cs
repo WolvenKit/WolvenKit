@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamePickupObject : gameObject
 	{
-		[Ordinal(31)]  [RED("interactionTag")] public CName InteractionTag { get; set; }
+		[Ordinal(40)] [RED("interactionTag")] public CName InteractionTag { get; set; }
 
 		public gamePickupObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class LibTreeDefTreeVariableCName : LibTreeDefTreeVariable
 	{
-		[Ordinal(0)]  [RED("defaultValue")] public CName DefaultValue { get; set; }
+		[Ordinal(2)] [RED("exportAsProperty")] public CBool ExportAsProperty { get; set; }
+		[Ordinal(3)] [RED("defaultValue")] public CName DefaultValue { get; set; }
 
 		public LibTreeDefTreeVariableCName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

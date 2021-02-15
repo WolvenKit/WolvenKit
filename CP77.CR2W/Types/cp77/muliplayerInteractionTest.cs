@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class muliplayerInteractionTest : gameObject
 	{
-		[Ordinal(31)]  [RED("counter")] public CInt32 Counter { get; set; }
+		[Ordinal(40)] [RED("counter")] public CInt32 Counter { get; set; }
 
 		public muliplayerInteractionTest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

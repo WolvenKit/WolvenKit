@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CpoCharacterButtonItemController : inkButtonDpadSupportedController
 	{
-		[Ordinal(16)]  [RED("characterRecordId")] public TweakDBID CharacterRecordId { get; set; }
+		[Ordinal(26)] [RED("characterRecordId")] public TweakDBID CharacterRecordId { get; set; }
 
 		public CpoCharacterButtonItemController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

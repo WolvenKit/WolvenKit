@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameDestructibleObject : gameObject
 	{
-		[Ordinal(31)]  [RED("recordID")] public TweakDBID RecordID { get; set; }
+		[Ordinal(40)] [RED("recordID")] public TweakDBID RecordID { get; set; }
 
 		public gameDestructibleObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

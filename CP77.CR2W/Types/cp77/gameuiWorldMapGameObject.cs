@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiWorldMapGameObject : gameObject
 	{
-		[Ordinal(31)]  [RED("districts")] public CArray<gameuiDistrictTriggerData> Districts { get; set; }
+		[Ordinal(40)] [RED("districts")] public CArray<gameuiDistrictTriggerData> Districts { get; set; }
 
 		public gameuiWorldMapGameObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

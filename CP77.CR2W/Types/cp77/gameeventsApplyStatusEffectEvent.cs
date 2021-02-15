@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameeventsApplyStatusEffectEvent : gameeventsStatusEffectEvent
 	{
-		[Ordinal(0)]  [RED("isNewApplication")] public CBool IsNewApplication { get; set; }
-		[Ordinal(1)]  [RED("instigatorEntityID")] public entEntityID InstigatorEntityID { get; set; }
+		[Ordinal(2)] [RED("isNewApplication")] public CBool IsNewApplication { get; set; }
+		[Ordinal(3)] [RED("instigatorEntityID")] public entEntityID InstigatorEntityID { get; set; }
 
 		public gameeventsApplyStatusEffectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

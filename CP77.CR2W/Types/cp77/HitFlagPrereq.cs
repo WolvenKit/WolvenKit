@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class HitFlagPrereq : GenericHitPrereq
 	{
-		[Ordinal(5)]  [RED("flag")] public CEnum<hitFlag> Flag { get; set; }
+		[Ordinal(5)] [RED("flag")] public CEnum<hitFlag> Flag { get; set; }
 
 		public HitFlagPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

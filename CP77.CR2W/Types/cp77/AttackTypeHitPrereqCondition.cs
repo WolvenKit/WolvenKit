@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AttackTypeHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)]  [RED("attackType")] public CEnum<gamedataAttackType> AttackType { get; set; }
+		[Ordinal(1)] [RED("attackType")] public CEnum<gamedataAttackType> AttackType { get; set; }
 
 		public AttackTypeHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

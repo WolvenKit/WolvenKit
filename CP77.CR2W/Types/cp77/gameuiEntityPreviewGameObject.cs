@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiEntityPreviewGameObject : gameObject
 	{
-		[Ordinal(31)]  [RED("cameraSettings")] public gameuiEntityPreviewCameraSettings CameraSettings { get; set; }
+		[Ordinal(40)] [RED("cameraSettings")] public gameuiEntityPreviewCameraSettings CameraSettings { get; set; }
 
 		public gameuiEntityPreviewGameObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

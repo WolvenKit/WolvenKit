@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AOEEffectorControllerPS : ActivatedDeviceControllerPS
 	{
-		[Ordinal(107)]  [RED("effectsToPlay")] public CArray<CName> EffectsToPlay { get; set; }
+		[Ordinal(107)] [RED("effectsToPlay")] public CArray<CName> EffectsToPlay { get; set; }
 
 		public AOEEffectorControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

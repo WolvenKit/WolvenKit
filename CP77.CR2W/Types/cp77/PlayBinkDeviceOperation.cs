@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PlayBinkDeviceOperation : DeviceOperationBase
 	{
-		[Ordinal(5)]  [RED("bink")] public SBinkperationData Bink { get; set; }
+		[Ordinal(5)] [RED("bink")] public SBinkperationData Bink { get; set; }
 
 		public PlayBinkDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TrafficIntersectionManagerControllerPS : MasterControllerPS
 	{
-		[Ordinal(104)]  [RED("trafficLightStatus")] public CEnum<worldTrafficLightColor> TrafficLightStatus { get; set; }
+		[Ordinal(104)] [RED("trafficLightStatus")] public CEnum<worldTrafficLightColor> TrafficLightStatus { get; set; }
 
 		public TrafficIntersectionManagerControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

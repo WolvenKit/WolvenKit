@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class PingSquad : PuppetAction
 	{
-		[Ordinal(22)]  [RED("shouldForward")] public CBool ShouldForward { get; set; }
+		[Ordinal(25)] [RED("shouldForward")] public CBool ShouldForward { get; set; }
 
 		public PingSquad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entdismembermentWoundConfig : ISerializable
 	{
-		[Ordinal(0)]  [RED("WoundName")] public CName WoundName { get; set; }
-		[Ordinal(1)]  [RED("ResourceSet")] public CEnum<entdismembermentResourceSetE> ResourceSet { get; set; }
+		[Ordinal(0)] [RED("WoundName")] public CName WoundName { get; set; }
+		[Ordinal(1)] [RED("ResourceSet")] public CEnum<entdismembermentResourceSetE> ResourceSet { get; set; }
 
 		public entdismembermentWoundConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
