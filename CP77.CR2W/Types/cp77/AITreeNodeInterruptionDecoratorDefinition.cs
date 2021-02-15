@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AITreeNodeInterruptionDecoratorDefinition : AICTreeNodeDecoratorDefinition
 	{
-		[Ordinal(0)]  [RED("interruptions")] public CArray<CHandle<AIInterruptionHandlerDefinition>> Interruptions { get; set; }
+		[Ordinal(1)] [RED("interruptions")] public CArray<CHandle<AIInterruptionHandlerDefinition>> Interruptions { get; set; }
 
 		public AITreeNodeInterruptionDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

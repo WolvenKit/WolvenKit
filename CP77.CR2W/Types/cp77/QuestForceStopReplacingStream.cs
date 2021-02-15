@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class QuestForceStopReplacingStream : ActionBool
 	{
-
 		public QuestForceStopReplacingStream(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

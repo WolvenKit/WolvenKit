@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamePrereqParams : CVariable
 	{
-		[Ordinal(0)]  [RED("objectID")] public gameStatsObjectID ObjectID { get; set; }
-		[Ordinal(1)]  [RED("otherObjectID")] public gameStatsObjectID OtherObjectID { get; set; }
-		[Ordinal(2)]  [RED("otherData")] public CVariant OtherData { get; set; }
+		[Ordinal(0)] [RED("objectID")] public gameStatsObjectID ObjectID { get; set; }
+		[Ordinal(1)] [RED("otherObjectID")] public gameStatsObjectID OtherObjectID { get; set; }
+		[Ordinal(2)] [RED("otherData")] public CVariant OtherData { get; set; }
 
 		public gamePrereqParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

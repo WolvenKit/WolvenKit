@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameJournalQuestDescription : gameJournalEntry
 	{
-		[Ordinal(0)]  [RED("description")] public LocalizationString Description { get; set; }
+		[Ordinal(1)] [RED("description")] public LocalizationString Description { get; set; }
 
 		public gameJournalQuestDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

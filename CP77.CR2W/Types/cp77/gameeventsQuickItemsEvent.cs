@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameeventsQuickItemsEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("questName")] public CName QuestName { get; set; }
+		[Ordinal(0)] [RED("questName")] public CName QuestName { get; set; }
 
 		public gameeventsQuickItemsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

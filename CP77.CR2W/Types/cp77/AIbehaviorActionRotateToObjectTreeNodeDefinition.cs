@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorActionRotateToObjectTreeNodeDefinition : AIbehaviorActionRotateBaseTreeNodeDefinition
 	{
-		[Ordinal(0)]  [RED("completeWhenRotated")] public CHandle<AIArgumentMapping> CompleteWhenRotated { get; set; }
+		[Ordinal(5)] [RED("completeWhenRotated")] public CHandle<AIArgumentMapping> CompleteWhenRotated { get; set; }
 
 		public AIbehaviorActionRotateToObjectTreeNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

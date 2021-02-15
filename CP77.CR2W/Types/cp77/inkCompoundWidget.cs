@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkCompoundWidget : inkWidget
 	{
-		[Ordinal(0)]  [RED("childOrder")] public CEnum<inkEChildOrder> ChildOrder { get; set; }
-		[Ordinal(1)]  [RED("children")] public CHandle<inkMultiChildren> Children { get; set; }
-		[Ordinal(2)]  [RED("childMargin")] public inkMargin ChildMargin { get; set; }
+		[Ordinal(20)] [RED("childOrder")] public CEnum<inkEChildOrder> ChildOrder { get; set; }
+		[Ordinal(21)] [RED("children")] public CHandle<inkMultiChildren> Children { get; set; }
+		[Ordinal(22)] [RED("childMargin")] public inkMargin ChildMargin { get; set; }
 
 		public inkCompoundWidget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

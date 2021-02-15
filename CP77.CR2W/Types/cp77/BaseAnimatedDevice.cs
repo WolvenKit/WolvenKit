@@ -8,11 +8,11 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class BaseAnimatedDevice : InteractiveDevice
 	{
-		[Ordinal(84)]  [RED("openingSpeed")] public CFloat OpeningSpeed { get; set; }
-		[Ordinal(85)]  [RED("closingSpeed")] public CFloat ClosingSpeed { get; set; }
-		[Ordinal(86)]  [RED("animationController")] public CHandle<entAnimationControllerComponent> AnimationController { get; set; }
-		[Ordinal(87)]  [RED("animFeature")] public CHandle<AnimFeature_RoadBlock> AnimFeature { get; set; }
-		[Ordinal(88)]  [RED("animationType")] public CEnum<EAnimationType> AnimationType { get; set; }
+		[Ordinal(93)] [RED("openingSpeed")] public CFloat OpeningSpeed { get; set; }
+		[Ordinal(94)] [RED("closingSpeed")] public CFloat ClosingSpeed { get; set; }
+		[Ordinal(95)] [RED("animationController")] public CHandle<entAnimationControllerComponent> AnimationController { get; set; }
+		[Ordinal(96)] [RED("animFeature")] public CHandle<AnimFeature_RoadBlock> AnimFeature { get; set; }
+		[Ordinal(97)] [RED("animationType")] public CEnum<EAnimationType> AnimationType { get; set; }
 
 		public BaseAnimatedDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

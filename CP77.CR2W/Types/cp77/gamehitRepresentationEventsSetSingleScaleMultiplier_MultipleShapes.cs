@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamehitRepresentationEventsSetSingleScaleMultiplier_MultipleShapes : gamehitRepresentationEventsSetSingleScaleMultiplier_AllShapes
 	{
-		[Ordinal(0)]  [RED("shapeNames")] public CArray<CName> ShapeNames { get; set; }
+		[Ordinal(1)] [RED("shapeNames")] public CArray<CName> ShapeNames { get; set; }
 
 		public gamehitRepresentationEventsSetSingleScaleMultiplier_MultipleShapes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

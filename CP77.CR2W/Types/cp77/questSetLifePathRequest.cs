@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questSetLifePathRequest : gamePlayerScriptableSystemRequest
 	{
-		[Ordinal(0)]  [RED("lifePathID")] public TweakDBID LifePathID { get; set; }
+		[Ordinal(1)] [RED("lifePathID")] public TweakDBID LifePathID { get; set; }
 
 		public questSetLifePathRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioConversationMetadata : audioAudioMetadata
 	{
-		[Ordinal(0)]  [RED("conversations")] public CArray<audioConversationItemMetadata> Conversations { get; set; }
+		[Ordinal(1)] [RED("conversations")] public CArray<audioConversationItemMetadata> Conversations { get; set; }
 
 		public audioConversationMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class vehicleAudioEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("action")] public CEnum<vehicleAudioEventAction> Action { get; set; }
+		[Ordinal(0)] [RED("action")] public CEnum<vehicleAudioEventAction> Action { get; set; }
 
 		public vehicleAudioEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

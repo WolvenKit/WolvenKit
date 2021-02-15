@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioVoiceTriggerPerSquadOrderMap : audioAudioMetadata
 	{
-		[Ordinal(0)]  [RED("items")] public CArray<audioVoiceTriggerPerSquadOrderMapItem> Items { get; set; }
+		[Ordinal(1)] [RED("items")] public CArray<audioVoiceTriggerPerSquadOrderMapItem> Items { get; set; }
 
 		public audioVoiceTriggerPerSquadOrderMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

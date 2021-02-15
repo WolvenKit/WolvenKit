@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CMaterialParameterTerrainSetup : CMaterialParameter
 	{
-		[Ordinal(0)]  [RED("setup")] public rRef<CTerrainSetup> Setup { get; set; }
+		[Ordinal(2)] [RED("setup")] public rRef<CTerrainSetup> Setup { get; set; }
 
 		public CMaterialParameterTerrainSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

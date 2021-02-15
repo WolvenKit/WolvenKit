@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ExampleNavigationTask : AIbehaviortaskScript
 	{
-		[Ordinal(0)]  [RED("queryId")] public CUInt32 QueryId { get; set; }
-		[Ordinal(1)]  [RED("queryStarted")] public CBool QueryStarted { get; set; }
+		[Ordinal(0)] [RED("queryId")] public CUInt32 QueryId { get; set; }
+		[Ordinal(1)] [RED("queryStarted")] public CBool QueryStarted { get; set; }
 
 		public ExampleNavigationTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

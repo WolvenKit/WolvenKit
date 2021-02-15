@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorRandomConditionDefinition : AIbehaviorConditionDefinition
 	{
-		[Ordinal(0)]  [RED("chance")] public CFloat Chance { get; set; }
+		[Ordinal(1)] [RED("chance")] public CFloat Chance { get; set; }
 
 		public AIbehaviorRandomConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

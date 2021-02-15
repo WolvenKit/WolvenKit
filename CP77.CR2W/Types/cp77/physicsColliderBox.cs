@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class physicsColliderBox : physicsICollider
 	{
-		[Ordinal(0)]  [RED("halfExtents")] public Vector3 HalfExtents { get; set; }
-		[Ordinal(1)]  [RED("isObstacle")] public CBool IsObstacle { get; set; }
+		[Ordinal(8)] [RED("halfExtents")] public Vector3 HalfExtents { get; set; }
+		[Ordinal(9)] [RED("isObstacle")] public CBool IsObstacle { get; set; }
 
 		public physicsColliderBox(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

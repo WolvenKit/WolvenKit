@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimEvent_KeyPose : animAnimEvent
 	{
-
 		public animAnimEvent_KeyPose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

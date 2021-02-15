@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamedataQuestSystemSetup_Record : gamedataTweakDBRecord
 	{
-
 		public gamedataQuestSystemSetup_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

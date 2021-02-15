@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiTweakDBIconReference : inkIconReference
 	{
-		[Ordinal(0)]  [RED("iconID")] public TweakDBID IconID { get; set; }
+		[Ordinal(0)] [RED("iconID")] public TweakDBID IconID { get; set; }
 
 		public gameuiTweakDBIconReference(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

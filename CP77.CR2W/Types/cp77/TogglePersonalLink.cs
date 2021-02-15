@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TogglePersonalLink : ActionBool
 	{
-		[Ordinal(22)]  [RED("cachedStatus")] public CEnum<EPersonalLinkConnectionStatus> CachedStatus { get; set; }
-		[Ordinal(23)]  [RED("shouldSkipMiniGame")] public CBool ShouldSkipMiniGame { get; set; }
+		[Ordinal(25)] [RED("cachedStatus")] public CEnum<EPersonalLinkConnectionStatus> CachedStatus { get; set; }
+		[Ordinal(26)] [RED("shouldSkipMiniGame")] public CBool ShouldSkipMiniGame { get; set; }
 
 		public TogglePersonalLink(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

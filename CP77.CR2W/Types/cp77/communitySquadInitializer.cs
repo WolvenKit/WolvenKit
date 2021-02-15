@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class communitySquadInitializer : communitySpawnInitializer
 	{
-		[Ordinal(0)]  [RED("entries")] public CArray<communitySquadInitializerEntry> Entries { get; set; }
+		[Ordinal(0)] [RED("entries")] public CArray<communitySquadInitializerEntry> Entries { get; set; }
 
 		public communitySquadInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

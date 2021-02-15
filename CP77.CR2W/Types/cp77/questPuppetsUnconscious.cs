@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questPuppetsUnconscious : questPuppetsEffector
 	{
-		[Ordinal(0)]  [RED("setUnconscious")] public CBool SetUnconscious { get; set; }
+		[Ordinal(0)] [RED("setUnconscious")] public CBool SetUnconscious { get; set; }
 
 		public questPuppetsUnconscious(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

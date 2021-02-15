@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class QuestExecuteTransition : redEvent
 	{
-		[Ordinal(0)]  [RED("transition")] public AreaTypeTransition Transition { get; set; }
+		[Ordinal(0)] [RED("transition")] public AreaTypeTransition Transition { get; set; }
 
 		public QuestExecuteTransition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

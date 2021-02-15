@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameActionScript : gameIObjectScriptBase
 	{
-		[Ordinal(0)]  [RED("actionFlags")] public CUInt32 ActionFlags { get; set; }
+		[Ordinal(1)] [RED("actionFlags")] public CUInt32 ActionFlags { get; set; }
 
 		public gameActionScript(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

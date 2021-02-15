@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TarotCardPreviewPopupEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("data")] public CHandle<TarotCardPreviewData> Data { get; set; }
+		[Ordinal(0)] [RED("data")] public CHandle<TarotCardPreviewData> Data { get; set; }
 
 		public TarotCardPreviewPopupEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

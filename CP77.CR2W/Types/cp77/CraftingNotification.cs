@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CraftingNotification : GenericNotificationController
 	{
-		[Ordinal(9)]  [RED("introAnimation")] public CHandle<inkanimProxy> IntroAnimation { get; set; }
+		[Ordinal(12)] [RED("introAnimation")] public CHandle<inkanimProxy> IntroAnimation { get; set; }
 
 		public CraftingNotification(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

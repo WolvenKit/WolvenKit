@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorDebugFailsafeConditionDefinition : AIbehaviorConditionDefinition
 	{
-		[Ordinal(0)]  [RED("logMessage")] public CHandle<AIArgumentMapping> LogMessage { get; set; }
+		[Ordinal(1)] [RED("logMessage")] public CHandle<AIArgumentMapping> LogMessage { get; set; }
 
 		public AIbehaviorDebugFailsafeConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

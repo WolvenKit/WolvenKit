@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimEvent_FoleyAction : animAnimEvent
 	{
-		[Ordinal(0)]  [RED("actionName")] public CName ActionName { get; set; }
+		[Ordinal(3)] [RED("actionName")] public CName ActionName { get; set; }
 
 		public animAnimEvent_FoleyAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

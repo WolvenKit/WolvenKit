@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TurretRipOffEvents : TurretTransition
 	{
-		[Ordinal(0)]  [RED("stateMachineInitData")] public wCHandle<TurretInitData> StateMachineInitData { get; set; }
+		[Ordinal(0)] [RED("stateMachineInitData")] public wCHandle<TurretInitData> StateMachineInitData { get; set; }
 
 		public TurretRipOffEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

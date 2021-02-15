@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnVoicesetComponent : gameComponent
 	{
-		[Ordinal(0)]  [RED("combatVoSettingsName")] public CName CombatVoSettingsName { get; set; }
+		[Ordinal(4)] [RED("combatVoSettingsName")] public CName CombatVoSettingsName { get; set; }
 
 		public scnVoicesetComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

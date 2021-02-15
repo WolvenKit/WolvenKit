@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioFootstepDecalMaterialEntry : CVariable
 	{
-		[Ordinal(0)]  [RED("materialTag")] public CName MaterialTag { get; set; }
-		[Ordinal(1)]  [RED("eventsByLocomotionState")] public CHandle<audioLocomotionStateEventDictionary> EventsByLocomotionState { get; set; }
+		[Ordinal(0)] [RED("materialTag")] public CName MaterialTag { get; set; }
+		[Ordinal(1)] [RED("eventsByLocomotionState")] public CHandle<audioLocomotionStateEventDictionary> EventsByLocomotionState { get; set; }
 
 		public audioFootstepDecalMaterialEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

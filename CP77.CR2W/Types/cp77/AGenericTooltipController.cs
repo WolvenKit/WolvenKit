@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AGenericTooltipController : inkWidgetLogicController
 	{
-		[Ordinal(0)]  [RED("Root")] public wCHandle<inkCompoundWidget> Root { get; set; }
+		[Ordinal(1)] [RED("Root")] public wCHandle<inkCompoundWidget> Root { get; set; }
 
 		public AGenericTooltipController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

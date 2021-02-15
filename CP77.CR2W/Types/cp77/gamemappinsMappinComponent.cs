@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamemappinsMappinComponent : entIPlacedComponent
 	{
-		[Ordinal(0)]  [RED("data")] public gamemappinsMappinData Data { get; set; }
+		[Ordinal(5)] [RED("data")] public gamemappinsMappinData Data { get; set; }
 
 		public gamemappinsMappinComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

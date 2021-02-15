@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entDismembermentAudioEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("bodyPart")] public CEnum<entAudioDismembermentPart> BodyPart { get; set; }
-		[Ordinal(1)]  [RED("position")] public Vector4 Position { get; set; }
+		[Ordinal(0)] [RED("bodyPart")] public CEnum<entAudioDismembermentPart> BodyPart { get; set; }
+		[Ordinal(1)] [RED("position")] public Vector4 Position { get; set; }
 
 		public entDismembermentAudioEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

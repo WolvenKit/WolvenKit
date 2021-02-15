@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ItemAddedInventoryCallback : gameInventoryScriptCallback
 	{
-		[Ordinal(0)]  [RED("notificationQueue")] public CHandle<ItemsNotificationQueue> NotificationQueue { get; set; }
+		[Ordinal(1)] [RED("notificationQueue")] public CHandle<ItemsNotificationQueue> NotificationQueue { get; set; }
 
 		public ItemAddedInventoryCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiBinkResource : CVariable
 	{
-		[Ordinal(0)]  [RED("video")] public raRef<Bink> Video { get; set; }
+		[Ordinal(0)] [RED("video")] public raRef<Bink> Video { get; set; }
 
 		public gameuiBinkResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

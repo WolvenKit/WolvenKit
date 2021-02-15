@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scneventsSocket : scnSceneEvent
 	{
-		[Ordinal(0)]  [RED("osockStamp")] public scnOutputSocketStamp OsockStamp { get; set; }
+		[Ordinal(6)] [RED("osockStamp")] public scnOutputSocketStamp OsockStamp { get; set; }
 
 		public scneventsSocket(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

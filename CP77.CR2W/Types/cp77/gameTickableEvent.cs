@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameTickableEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("state")] public CEnum<gameTickableEventState> State { get; set; }
+		[Ordinal(0)] [RED("state")] public CEnum<gameTickableEventState> State { get; set; }
 
 		public gameTickableEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

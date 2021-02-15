@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkanimPlaySoundEvent : inkanimEvent
 	{
-		[Ordinal(0)]  [RED("soundEventName")] public CName SoundEventName { get; set; }
+		[Ordinal(1)] [RED("soundEventName")] public CName SoundEventName { get; set; }
 
 		public inkanimPlaySoundEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

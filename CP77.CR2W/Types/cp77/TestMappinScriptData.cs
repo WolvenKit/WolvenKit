@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TestMappinScriptData : gamemappinsMappinScriptData
 	{
-		[Ordinal(0)]  [RED("test")] public CInt32 Test { get; set; }
+		[Ordinal(1)] [RED("test")] public CInt32 Test { get; set; }
 
 		public TestMappinScriptData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

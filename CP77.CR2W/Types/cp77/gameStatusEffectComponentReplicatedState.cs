@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameStatusEffectComponentReplicatedState : netIComponentState
 	{
-		[Ordinal(0)]  [RED("replicatedInfo")] public CArray<gameStatusEffectReplicatedInfo> ReplicatedInfo { get; set; }
+		[Ordinal(2)] [RED("replicatedInfo")] public CArray<gameStatusEffectReplicatedInfo> ReplicatedInfo { get; set; }
 
 		public gameStatusEffectComponentReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

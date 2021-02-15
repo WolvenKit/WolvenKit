@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class cpPlayerDetector : gameObject
 	{
-		[Ordinal(31)]  [RED("range")] public CFloat Range { get; set; }
+		[Ordinal(40)] [RED("range")] public CFloat Range { get; set; }
 
 		public cpPlayerDetector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

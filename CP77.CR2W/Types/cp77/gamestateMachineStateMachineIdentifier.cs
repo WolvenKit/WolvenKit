@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamestateMachineStateMachineIdentifier : CVariable
 	{
-		[Ordinal(0)]  [RED("definitionName")] public CName DefinitionName { get; set; }
-		[Ordinal(1)]  [RED("referenceName")] public CName ReferenceName { get; set; }
+		[Ordinal(0)] [RED("definitionName")] public CName DefinitionName { get; set; }
+		[Ordinal(1)] [RED("referenceName")] public CName ReferenceName { get; set; }
 
 		public gamestateMachineStateMachineIdentifier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

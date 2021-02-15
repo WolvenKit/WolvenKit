@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questFXManagerNodeDefinition : questDisableableNodeDefinition
 	{
-		[Ordinal(0)]  [RED("type")] public CHandle<questIFXManagerNodeType> Type { get; set; }
+		[Ordinal(2)] [RED("type")] public CHandle<questIFXManagerNodeType> Type { get; set; }
 
 		public questFXManagerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

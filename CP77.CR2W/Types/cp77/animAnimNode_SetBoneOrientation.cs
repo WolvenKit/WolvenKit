@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SetBoneOrientation : animAnimNode_OnePoseInput
 	{
-		[Ordinal(0)]  [RED("bone")] public animTransformIndex Bone { get; set; }
-		[Ordinal(1)]  [RED("orientationMs")] public animQuaternionLink OrientationMs { get; set; }
+		[Ordinal(2)] [RED("bone")] public animTransformIndex Bone { get; set; }
+		[Ordinal(3)] [RED("orientationMs")] public animQuaternionLink OrientationMs { get; set; }
 
 		public animAnimNode_SetBoneOrientation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

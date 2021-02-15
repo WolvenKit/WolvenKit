@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldRaceSplineNode : worldSpeedSplineNode
 	{
-		[Ordinal(0)]  [RED("offsets")] public CArray<worldRaceSplineNodeOffset> Offsets { get; set; }
-		[Ordinal(1)]  [RED("offsetDefault")] public CFloat OffsetDefault { get; set; }
+		[Ordinal(15)] [RED("offsets")] public CArray<worldRaceSplineNodeOffset> Offsets { get; set; }
+		[Ordinal(16)] [RED("offsetDefault")] public CFloat OffsetDefault { get; set; }
 
 		public worldRaceSplineNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

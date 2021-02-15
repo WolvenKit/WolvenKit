@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIEntityReuseEvent : AIAIEvent
 	{
-		[Ordinal(0)]  [RED("destination")] public worldGlobalNodeID Destination { get; set; }
+		[Ordinal(2)] [RED("destination")] public worldGlobalNodeID Destination { get; set; }
 
 		public AIEntityReuseEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

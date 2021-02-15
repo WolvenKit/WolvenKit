@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class VendingMachineSetup : CVariable
 	{
-		[Ordinal(0)]  [RED("timeToCompletePurchase")] public CFloat TimeToCompletePurchase { get; set; }
+		[Ordinal(0)] [RED("timeToCompletePurchase")] public CFloat TimeToCompletePurchase { get; set; }
 
 		public VendingMachineSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

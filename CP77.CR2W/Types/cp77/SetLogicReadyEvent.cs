@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SetLogicReadyEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("isReady")] public CBool IsReady { get; set; }
+		[Ordinal(0)] [RED("isReady")] public CBool IsReady { get; set; }
 
 		public SetLogicReadyEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

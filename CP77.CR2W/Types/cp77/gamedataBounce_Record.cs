@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamedataBounce_Record : gamedataProjectileCollision_Record
 	{
-
 		public gamedataBounce_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class FollowSlotsComponent : gameScriptableComponent
 	{
-		[Ordinal(0)]  [RED("followSlots")] public CArray<CHandle<FollowSlot>> FollowSlots { get; set; }
+		[Ordinal(5)] [RED("followSlots")] public CArray<CHandle<FollowSlot>> FollowSlots { get; set; }
 
 		public FollowSlotsComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

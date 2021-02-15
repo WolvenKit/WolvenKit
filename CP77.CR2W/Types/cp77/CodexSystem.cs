@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CodexSystem : gameScriptableSystem
 	{
-		[Ordinal(0)]  [RED("codex")] public CArray<SCodexRecord> Codex { get; set; }
-		[Ordinal(1)]  [RED("blackboard")] public wCHandle<gameIBlackboard> Blackboard { get; set; }
+		[Ordinal(0)] [RED("codex")] public CArray<SCodexRecord> Codex { get; set; }
+		[Ordinal(1)] [RED("blackboard")] public wCHandle<gameIBlackboard> Blackboard { get; set; }
 
 		public CodexSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

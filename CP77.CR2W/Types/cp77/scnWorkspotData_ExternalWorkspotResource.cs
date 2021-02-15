@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnWorkspotData_ExternalWorkspotResource : scnWorkspotData
 	{
-		[Ordinal(0)]  [RED("workspotResource")] public rRef<workWorkspotResource> WorkspotResource { get; set; }
+		[Ordinal(1)] [RED("workspotResource")] public rRef<workWorkspotResource> WorkspotResource { get; set; }
 
 		public scnWorkspotData_ExternalWorkspotResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

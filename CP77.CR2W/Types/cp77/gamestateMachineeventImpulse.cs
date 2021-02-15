@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamestateMachineeventImpulse : gamestateMachineeventBaseEvent
 	{
-		[Ordinal(0)]  [RED("impulse")] public Vector4 Impulse { get; set; }
+		[Ordinal(1)] [RED("impulse")] public Vector4 Impulse { get; set; }
 
 		public gamestateMachineeventImpulse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

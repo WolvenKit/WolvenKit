@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnscreenplayLineUsage : CVariable
 	{
-		[Ordinal(0)]  [RED("playerGenderMask")] public scnGenderMask PlayerGenderMask { get; set; }
+		[Ordinal(0)] [RED("playerGenderMask")] public scnGenderMask PlayerGenderMask { get; set; }
 
 		public scnscreenplayLineUsage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

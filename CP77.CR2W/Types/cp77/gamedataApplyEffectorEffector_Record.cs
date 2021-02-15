@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamedataApplyEffectorEffector_Record : gamedataEffector_Record
 	{
-
 		public gamedataApplyEffectorEffector_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

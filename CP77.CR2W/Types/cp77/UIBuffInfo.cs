@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class UIBuffInfo : gameuiBuffInfo
 	{
-		[Ordinal(0)]  [RED("isBuff")] public CBool IsBuff { get; set; }
-		[Ordinal(1)]  [RED("stackCount")] public CUInt32 StackCount { get; set; }
+		[Ordinal(2)] [RED("isBuff")] public CBool IsBuff { get; set; }
+		[Ordinal(3)] [RED("stackCount")] public CUInt32 StackCount { get; set; }
 
 		public UIBuffInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

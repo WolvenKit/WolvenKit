@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DeviceTimetable : gameScriptableComponent
 	{
-		[Ordinal(0)]  [RED("timeTableSetup")] public CHandle<DeviceTimeTableManager> TimeTableSetup { get; set; }
+		[Ordinal(5)] [RED("timeTableSetup")] public CHandle<DeviceTimeTableManager> TimeTableSetup { get; set; }
 
 		public DeviceTimetable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

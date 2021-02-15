@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SvgResource : CResource
 	{
-		[Ordinal(0)]  [RED("vectorGraphicDef")] public CHandle<vgVectorGraphicDefinition> VectorGraphicDef { get; set; }
+		[Ordinal(1)] [RED("vectorGraphicDef")] public CHandle<vgVectorGraphicDefinition> VectorGraphicDef { get; set; }
 
 		public SvgResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

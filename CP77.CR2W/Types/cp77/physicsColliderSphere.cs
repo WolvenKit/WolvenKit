@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class physicsColliderSphere : physicsICollider
 	{
-		[Ordinal(0)]  [RED("radius")] public CFloat Radius { get; set; }
+		[Ordinal(8)] [RED("radius")] public CFloat Radius { get; set; }
 
 		public physicsColliderSphere(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

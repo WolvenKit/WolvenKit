@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkanimMarkerEvent : inkanimEvent
 	{
-		[Ordinal(0)]  [RED("markerName")] public CName MarkerName { get; set; }
+		[Ordinal(1)] [RED("markerName")] public CName MarkerName { get; set; }
 
 		public inkanimMarkerEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

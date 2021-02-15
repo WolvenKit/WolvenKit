@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIHostLeftSquad : AIAIEvent
 	{
-		[Ordinal(0)]  [RED("squadInterface")] public wCHandle<AISquadScriptInterface> SquadInterface { get; set; }
+		[Ordinal(2)] [RED("squadInterface")] public wCHandle<AISquadScriptInterface> SquadInterface { get; set; }
 
 		public AIHostLeftSquad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

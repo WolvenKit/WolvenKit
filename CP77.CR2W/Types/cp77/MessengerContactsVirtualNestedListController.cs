@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class MessengerContactsVirtualNestedListController : VirtualNestedListController
 	{
-		[Ordinal(5)]  [RED("currentDataView")] public wCHandle<MessengerContactDataView> CurrentDataView { get; set; }
+		[Ordinal(13)] [RED("currentDataView")] public wCHandle<MessengerContactDataView> CurrentDataView { get; set; }
 
 		public MessengerContactsVirtualNestedListController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SmartHouse : InteractiveMasterDevice
 	{
-		[Ordinal(84)]  [RED("timetableActive")] public CBool TimetableActive { get; set; }
+		[Ordinal(93)] [RED("timetableActive")] public CBool TimetableActive { get; set; }
 
 		public SmartHouse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

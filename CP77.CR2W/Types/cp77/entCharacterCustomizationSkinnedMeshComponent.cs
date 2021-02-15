@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class entCharacterCustomizationSkinnedMeshComponent : entSkinnedMeshComponent
 	{
-		[Ordinal(0)]  [RED("tags")] public redTagList Tags { get; set; }
+		[Ordinal(21)] [RED("tags")] public redTagList Tags { get; set; }
 
 		public entCharacterCustomizationSkinnedMeshComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

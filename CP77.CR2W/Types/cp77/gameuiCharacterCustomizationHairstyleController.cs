@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiCharacterCustomizationHairstyleController : gameuiCharacterCustomizationBodyPartsController
 	{
-		[Ordinal(0)]  [RED("headGroupName")] public CName HeadGroupName { get; set; }
+		[Ordinal(3)] [RED("headGroupName")] public CName HeadGroupName { get; set; }
 
 		public gameuiCharacterCustomizationHairstyleController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

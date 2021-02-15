@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class LiftWidgetCustomData : WidgetCustomData
 	{
-		[Ordinal(0)]  [RED("movementState")] public CEnum<gamePlatformMovementState> MovementState { get; set; }
+		[Ordinal(0)] [RED("movementState")] public CEnum<gamePlatformMovementState> MovementState { get; set; }
 
 		public LiftWidgetCustomData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

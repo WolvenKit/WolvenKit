@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameHardcodedSignalPriorityDefinition : gameSignalPriorityDefinition
 	{
-		[Ordinal(0)]  [RED("signals")] public CArray<CName> Signals { get; set; }
+		[Ordinal(1)] [RED("signals")] public CArray<CName> Signals { get; set; }
 
 		public gameHardcodedSignalPriorityDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

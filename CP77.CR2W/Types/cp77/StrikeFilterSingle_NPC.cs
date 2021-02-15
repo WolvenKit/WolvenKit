@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class StrikeFilterSingle_NPC : gameEffectObjectSingleFilter_Scripted
 	{
-		[Ordinal(0)]  [RED("onlyAlive")] public CBool OnlyAlive { get; set; }
+		[Ordinal(0)] [RED("onlyAlive")] public CBool OnlyAlive { get; set; }
 
 		public StrikeFilterSingle_NPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

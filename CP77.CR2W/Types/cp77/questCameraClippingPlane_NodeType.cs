@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questCameraClippingPlane_NodeType : questISceneManagerNodeType
 	{
-		[Ordinal(0)]  [RED("preset")] public CEnum<questCameraPlanesPreset> Preset { get; set; }
+		[Ordinal(0)] [RED("preset")] public CEnum<questCameraPlanesPreset> Preset { get; set; }
 
 		public questCameraClippingPlane_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

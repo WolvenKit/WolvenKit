@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamedataComplexValueNode : gamedataValueDataNode
 	{
-		[Ordinal(0)]  [RED("data")] public CArray<CString> Data { get; set; }
+		[Ordinal(3)] [RED("data")] public CArray<CString> Data { get; set; }
 
 		public gamedataComplexValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

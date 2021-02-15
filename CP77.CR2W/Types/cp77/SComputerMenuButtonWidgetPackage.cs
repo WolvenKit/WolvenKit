@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SComputerMenuButtonWidgetPackage : SWidgetPackage
 	{
-		[Ordinal(0)]  [RED("counter")] public CInt32 Counter { get; set; }
+		[Ordinal(17)] [RED("counter")] public CInt32 Counter { get; set; }
 
 		public SComputerMenuButtonWidgetPackage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

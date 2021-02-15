@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SkAnimDecorator : animAnimNode_SkAnim
 	{
-		[Ordinal(0)]  [RED("Fallback")] public animPoseLink Fallback { get; set; }
+		[Ordinal(18)] [RED("Fallback")] public animPoseLink Fallback { get; set; }
 
 		public animAnimNode_SkAnimDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

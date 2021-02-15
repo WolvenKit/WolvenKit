@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class EffectExecutor_Device : gameEffectExecutor_Scripted
 	{
-		[Ordinal(0)]  [RED("maxDelay")] public CFloat MaxDelay { get; set; }
+		[Ordinal(1)] [RED("maxDelay")] public CFloat MaxDelay { get; set; }
 
 		public EffectExecutor_Device(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

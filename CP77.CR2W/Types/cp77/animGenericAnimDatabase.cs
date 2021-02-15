@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animGenericAnimDatabase : CResource
 	{
-		[Ordinal(0)]  [RED("rows")] public CArray<animGenericAnimDatabase_DatabaseRow> Rows { get; set; }
+		[Ordinal(1)] [RED("rows")] public CArray<animGenericAnimDatabase_DatabaseRow> Rows { get; set; }
 
 		public animGenericAnimDatabase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

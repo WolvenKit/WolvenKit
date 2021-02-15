@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameMuppetControllersSnapshot : CVariable
 	{
-		[Ordinal(0)]  [RED("controllers")] public CArray<gameMuppetControllerSnapshot> Controllers { get; set; }
+		[Ordinal(0)] [RED("controllers")] public CArray<gameMuppetControllerSnapshot> Controllers { get; set; }
 
 		public gameMuppetControllersSnapshot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

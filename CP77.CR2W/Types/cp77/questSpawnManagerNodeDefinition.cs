@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questSpawnManagerNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		[Ordinal(0)]  [RED("actions")] public CArray<questSpawnManagerNodeActionEntry> Actions { get; set; }
+		[Ordinal(2)] [RED("actions")] public CArray<questSpawnManagerNodeActionEntry> Actions { get; set; }
 
 		public questSpawnManagerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

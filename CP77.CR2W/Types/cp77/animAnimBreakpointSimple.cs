@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimBreakpointSimple : animIAnimBreakpoint
 	{
-		[Ordinal(0)]  [RED("hitCount")] public CUInt32 HitCount { get; set; }
+		[Ordinal(1)] [RED("hitCount")] public CUInt32 HitCount { get; set; }
 
 		public animAnimBreakpointSimple(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

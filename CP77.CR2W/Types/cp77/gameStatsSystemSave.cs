@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameStatsSystemSave : ISerializable
 	{
-		[Ordinal(0)]  [RED("statsObjectsData")] public CArray<gameStatsSeedKey> StatsObjectsData { get; set; }
-		[Ordinal(1)]  [RED("statModifiersData")] public CArray<gameStatModifierSave> StatModifiersData { get; set; }
+		[Ordinal(0)] [RED("statsObjectsData")] public CArray<gameStatsSeedKey> StatsObjectsData { get; set; }
+		[Ordinal(1)] [RED("statModifiersData")] public CArray<gameStatModifierSave> StatModifiersData { get; set; }
 
 		public gameStatsSystemSave(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

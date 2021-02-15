@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioDroneGlobalSettings : audioAudioMetadata
 	{
-		[Ordinal(0)]  [RED("speedRtpc")] public CName SpeedRtpc { get; set; }
-		[Ordinal(1)]  [RED("thrustRtpc")] public CName ThrustRtpc { get; set; }
+		[Ordinal(1)] [RED("speedRtpc")] public CName SpeedRtpc { get; set; }
+		[Ordinal(2)] [RED("thrustRtpc")] public CName ThrustRtpc { get; set; }
 
 		public audioDroneGlobalSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

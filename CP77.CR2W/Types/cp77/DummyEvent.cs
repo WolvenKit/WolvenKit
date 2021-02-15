@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DummyEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("disable")] public CBool Disable { get; set; }
-		[Ordinal(1)]  [RED("ix")] public CInt32 Ix { get; set; }
+		[Ordinal(0)] [RED("disable")] public CBool Disable { get; set; }
+		[Ordinal(1)] [RED("ix")] public CInt32 Ix { get; set; }
 
 		public DummyEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CTextureRegionSet : CResource
 	{
-		[Ordinal(0)]  [RED("regions")] public CArray<rendTextureRegion> Regions { get; set; }
+		[Ordinal(1)] [RED("regions")] public CArray<rendTextureRegion> Regions { get; set; }
 
 		public CTextureRegionSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

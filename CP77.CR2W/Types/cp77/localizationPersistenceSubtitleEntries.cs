@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class localizationPersistenceSubtitleEntries : ISerializable
 	{
-		[Ordinal(0)]  [RED("entries")] public CArray<localizationPersistenceSubtitleEntry> Entries { get; set; }
+		[Ordinal(0)] [RED("entries")] public CArray<localizationPersistenceSubtitleEntry> Entries { get; set; }
 
 		public localizationPersistenceSubtitleEntries(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

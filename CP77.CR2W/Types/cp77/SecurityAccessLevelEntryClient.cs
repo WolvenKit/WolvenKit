@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SecurityAccessLevelEntryClient : SecurityAccessLevelEntry
 	{
-		[Ordinal(0)]  [RED("level")] public CEnum<ESecurityAccessLevel> Level { get; set; }
+		[Ordinal(2)] [RED("level")] public CEnum<ESecurityAccessLevel> Level { get; set; }
 
 		public SecurityAccessLevelEntryClient(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

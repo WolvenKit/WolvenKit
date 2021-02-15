@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gamePingComponent : entIPlacedComponent
 	{
-		[Ordinal(0)]  [RED("associatedPingType")] public CEnum<gamedataPingType> AssociatedPingType { get; set; }
+		[Ordinal(5)] [RED("associatedPingType")] public CEnum<gamedataPingType> AssociatedPingType { get; set; }
 
 		public gamePingComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

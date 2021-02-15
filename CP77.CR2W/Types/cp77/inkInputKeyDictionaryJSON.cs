@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkInputKeyDictionaryJSON : ISerializable
 	{
-		[Ordinal(0)]  [RED("devicesMappings")] public CArray<inkInputDevicesMappingsJSON> DevicesMappings { get; set; }
+		[Ordinal(0)] [RED("devicesMappings")] public CArray<inkInputDevicesMappingsJSON> DevicesMappings { get; set; }
 
 		public inkInputKeyDictionaryJSON(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIAssignRoleCommand : AICommand
 	{
-		[Ordinal(0)]  [RED("role")] public CHandle<AIRole> Role { get; set; }
+		[Ordinal(4)] [RED("role")] public CHandle<AIRole> Role { get; set; }
 
 		public AIAssignRoleCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnLookAtEvent : scnSceneEvent
 	{
-		[Ordinal(0)]  [RED("basicData")] public scnLookAtBasicEventData BasicData { get; set; }
+		[Ordinal(6)] [RED("basicData")] public scnLookAtBasicEventData BasicData { get; set; }
 
 		public scnLookAtEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

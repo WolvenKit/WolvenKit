@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class StatusEffectManagerComponent : AIMandatoryComponents
 	{
-		[Ordinal(0)]  [RED("weaponDropedInWounded")] public CBool WeaponDropedInWounded { get; set; }
+		[Ordinal(5)] [RED("weaponDropedInWounded")] public CBool WeaponDropedInWounded { get; set; }
 
 		public StatusEffectManagerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

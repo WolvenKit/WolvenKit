@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorUsedSpotTokensList : ISerializable
 	{
-		[Ordinal(0)]  [RED("tokens")] public CArray<AISpotUsageToken> Tokens { get; set; }
+		[Ordinal(0)] [RED("tokens")] public CArray<AISpotUsageToken> Tokens { get; set; }
 
 		public AIbehaviorUsedSpotTokensList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

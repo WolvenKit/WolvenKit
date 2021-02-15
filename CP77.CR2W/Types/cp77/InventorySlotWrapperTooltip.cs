@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class InventorySlotWrapperTooltip : AGenericTooltipController
 	{
-		[Ordinal(1)]  [RED("itemDisplayController")] public wCHandle<InventoryItemDisplayController> ItemDisplayController { get; set; }
+		[Ordinal(2)] [RED("itemDisplayController")] public wCHandle<InventoryItemDisplayController> ItemDisplayController { get; set; }
 
 		public InventorySlotWrapperTooltip(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

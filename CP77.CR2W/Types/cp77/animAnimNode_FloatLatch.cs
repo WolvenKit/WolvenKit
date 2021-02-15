@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_FloatLatch : animAnimNode_FloatValue
 	{
-		[Ordinal(0)]  [RED("input")] public animFloatLink Input { get; set; }
+		[Ordinal(1)] [RED("input")] public animFloatLink Input { get; set; }
 
 		public animAnimNode_FloatLatch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

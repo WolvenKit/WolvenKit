@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class VehicleDoorOpen : ActionBool
 	{
-		[Ordinal(22)]  [RED("slotID")] public CName SlotID { get; set; }
-		[Ordinal(23)]  [RED("shouldAutoClose")] public CBool ShouldAutoClose { get; set; }
-		[Ordinal(24)]  [RED("autoCloseTime")] public CFloat AutoCloseTime { get; set; }
+		[Ordinal(25)] [RED("slotID")] public CName SlotID { get; set; }
+		[Ordinal(26)] [RED("shouldAutoClose")] public CBool ShouldAutoClose { get; set; }
+		[Ordinal(27)] [RED("autoCloseTime")] public CFloat AutoCloseTime { get; set; }
 
 		public VehicleDoorOpen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimEvent_WorkspotItem : animAnimEvent
 	{
-		[Ordinal(0)]  [RED("actions")] public CArray<CHandle<workIWorkspotItemAction>> Actions { get; set; }
+		[Ordinal(3)] [RED("actions")] public CArray<CHandle<workIWorkspotItemAction>> Actions { get; set; }
 
 		public animAnimEvent_WorkspotItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

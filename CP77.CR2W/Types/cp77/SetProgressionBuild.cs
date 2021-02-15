@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SetProgressionBuild : gamePlayerScriptableSystemRequest
 	{
-		[Ordinal(0)]  [RED("buildType")] public CEnum<gamedataBuildType> BuildType { get; set; }
+		[Ordinal(1)] [RED("buildType")] public CEnum<gamedataBuildType> BuildType { get; set; }
 
 		public SetProgressionBuild(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

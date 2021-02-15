@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkMenuLayer_SetGender : redEvent
 	{
-
 		public inkMenuLayer_SetGender(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

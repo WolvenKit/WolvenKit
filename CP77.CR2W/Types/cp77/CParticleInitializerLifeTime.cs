@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CParticleInitializerLifeTime : IParticleInitializer
 	{
-		[Ordinal(0)]  [RED("lifeTime")] public CHandle<IEvaluatorFloat> LifeTime { get; set; }
+		[Ordinal(4)] [RED("lifeTime")] public CHandle<IEvaluatorFloat> LifeTime { get; set; }
 
 		public CParticleInitializerLifeTime(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldLightChannelVolumeNode : worldAreaShapeNode
 	{
-		[Ordinal(0)]  [RED("channels")] public CEnum<rendLightChannel> Channels { get; set; }
-		[Ordinal(1)]  [RED("streamingDistanceFactor")] public CFloat StreamingDistanceFactor { get; set; }
+		[Ordinal(4)] [RED("channels")] public CEnum<rendLightChannel> Channels { get; set; }
+		[Ordinal(5)] [RED("streamingDistanceFactor")] public CFloat StreamingDistanceFactor { get; set; }
 
 		public worldLightChannelVolumeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

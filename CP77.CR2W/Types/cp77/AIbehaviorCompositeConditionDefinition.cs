@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorCompositeConditionDefinition : AIbehaviorConditionDefinition
 	{
-		[Ordinal(0)]  [RED("conditions")] public CArray<CHandle<AIbehaviorConditionDefinition>> Conditions { get; set; }
+		[Ordinal(1)] [RED("conditions")] public CArray<CHandle<AIbehaviorConditionDefinition>> Conditions { get; set; }
 
 		public AIbehaviorCompositeConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

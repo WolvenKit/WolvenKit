@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class SCustomDeviceActionsData : CVariable
 	{
-		[Ordinal(0)]  [RED("actions")] public CArray<SDeviceActionCustomData> Actions { get; set; }
+		[Ordinal(0)] [RED("actions")] public CArray<SDeviceActionCustomData> Actions { get; set; }
 
 		public SCustomDeviceActionsData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

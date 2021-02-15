@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnAndNode : scnSceneGraphNode
 	{
-		[Ordinal(0)]  [RED("numInSockets")] public CUInt32 NumInSockets { get; set; }
+		[Ordinal(3)] [RED("numInSockets")] public CUInt32 NumInSockets { get; set; }
 
 		public scnAndNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

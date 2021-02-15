@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class vehicleCameraSceneEnableEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("scene")] public CBool Scene { get; set; }
+		[Ordinal(0)] [RED("scene")] public CBool Scene { get; set; }
 
 		public vehicleCameraSceneEnableEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

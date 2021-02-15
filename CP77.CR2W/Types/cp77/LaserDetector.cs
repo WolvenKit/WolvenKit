@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class LaserDetector : ProximityDetector
 	{
-		[Ordinal(83)]  [RED("lasers", 2)] public CArrayFixedSize<CHandle<entMeshComponent>> Lasers { get; set; }
+		[Ordinal(92)] [RED("lasers", 2)] public CArrayFixedSize<CHandle<entMeshComponent>> Lasers { get; set; }
 
 		public LaserDetector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

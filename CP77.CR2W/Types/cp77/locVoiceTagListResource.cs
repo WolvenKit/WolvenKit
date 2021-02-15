@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class locVoiceTagListResource : CResource
 	{
-		[Ordinal(0)]  [RED("voiceTags")] public CArray<locVoiceTag> VoiceTags { get; set; }
+		[Ordinal(1)] [RED("voiceTags")] public CArray<locVoiceTag> VoiceTags { get; set; }
 
 		public locVoiceTagListResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

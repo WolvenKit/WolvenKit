@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class vehicleDriveToGameObjectEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("targetObjToReach")] public wCHandle<gameObject> TargetObjToReach { get; set; }
+		[Ordinal(0)] [RED("targetObjToReach")] public wCHandle<gameObject> TargetObjToReach { get; set; }
 
 		public vehicleDriveToGameObjectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

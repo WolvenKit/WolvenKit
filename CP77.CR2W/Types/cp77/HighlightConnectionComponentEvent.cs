@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class HighlightConnectionComponentEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("IsHighlightON")] public CBool IsHighlightON { get; set; }
+		[Ordinal(0)] [RED("IsHighlightON")] public CBool IsHighlightON { get; set; }
 
 		public HighlightConnectionComponentEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

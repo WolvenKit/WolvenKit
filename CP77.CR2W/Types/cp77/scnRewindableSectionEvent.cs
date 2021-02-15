@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnRewindableSectionEvent : redEvent
 	{
-		[Ordinal(0)]  [RED("active")] public CBool Active { get; set; }
+		[Ordinal(0)] [RED("active")] public CBool Active { get; set; }
 
 		public scnRewindableSectionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

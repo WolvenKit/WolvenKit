@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SkSyncedSlaveAnim : animAnimNode_SkAnim
 	{
-		[Ordinal(0)]  [RED("syncTag")] public CName SyncTag { get; set; }
+		[Ordinal(18)] [RED("syncTag")] public CName SyncTag { get; set; }
 
 		public animAnimNode_SkSyncedSlaveAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

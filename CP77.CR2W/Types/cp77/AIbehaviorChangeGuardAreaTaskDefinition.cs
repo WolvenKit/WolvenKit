@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorChangeGuardAreaTaskDefinition : AIbehaviorTaskDefinition
 	{
-		[Ordinal(0)]  [RED("guardAreaNodeRef")] public CHandle<AIArgumentMapping> GuardAreaNodeRef { get; set; }
+		[Ordinal(1)] [RED("guardAreaNodeRef")] public CHandle<AIArgumentMapping> GuardAreaNodeRef { get; set; }
 
 		public AIbehaviorChangeGuardAreaTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

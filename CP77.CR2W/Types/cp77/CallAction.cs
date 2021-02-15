@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CallAction : redEvent
 	{
-		[Ordinal(0)]  [RED("calledAction")] public CEnum<QuickSlotActionType> CalledAction { get; set; }
+		[Ordinal(0)] [RED("calledAction")] public CEnum<QuickSlotActionType> CalledAction { get; set; }
 
 		public CallAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

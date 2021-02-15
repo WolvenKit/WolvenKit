@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorUnaryConditionDefinition : AIbehaviorConditionDefinition
 	{
-		[Ordinal(0)]  [RED("child")] public CHandle<AIbehaviorConditionDefinition> Child { get; set; }
+		[Ordinal(1)] [RED("child")] public CHandle<AIbehaviorConditionDefinition> Child { get; set; }
 
 		public AIbehaviorUnaryConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

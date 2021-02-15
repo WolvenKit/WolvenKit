@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkTweakDBIDSelector : IScriptable
 	{
-		[Ordinal(0)]  [RED("baseTweakID")] public TweakDBID BaseTweakID { get; set; }
+		[Ordinal(0)] [RED("baseTweakID")] public TweakDBID BaseTweakID { get; set; }
 
 		public inkTweakDBIDSelector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

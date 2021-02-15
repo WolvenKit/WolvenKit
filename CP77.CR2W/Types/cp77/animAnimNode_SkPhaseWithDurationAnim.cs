@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SkPhaseWithDurationAnim : animAnimNode_SkPhaseAnim
 	{
-		[Ordinal(0)]  [RED("durationLink")] public animFloatLink DurationLink { get; set; }
+		[Ordinal(19)] [RED("durationLink")] public animFloatLink DurationLink { get; set; }
 
 		public animAnimNode_SkPhaseWithDurationAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

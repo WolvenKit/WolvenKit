@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameMovingPlatformMovementDynamic : gameIMovingPlatformMovementPointToPoint
 	{
-		[Ordinal(0)]  [RED("curveName")] public CName CurveName { get; set; }
+		[Ordinal(1)] [RED("curveName")] public CName CurveName { get; set; }
 
 		public gameMovingPlatformMovementDynamic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

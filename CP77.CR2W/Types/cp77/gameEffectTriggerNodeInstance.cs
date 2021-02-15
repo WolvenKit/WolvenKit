@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameEffectTriggerNodeInstance : worldAreaShapeNodeInstance
 	{
-
 		public gameEffectTriggerNodeInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

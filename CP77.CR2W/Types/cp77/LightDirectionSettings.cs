@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class LightDirectionSettings : IAreaSettings
 	{
-		[Ordinal(0)]  [RED("direction")] public GlobalLightingTrajectoryOverride Direction { get; set; }
+		[Ordinal(2)] [RED("direction")] public GlobalLightingTrajectoryOverride Direction { get; set; }
 
 		public LightDirectionSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

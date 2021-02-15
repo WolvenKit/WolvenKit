@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldNavigationDeniedAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(0)]  [RED("flags")] public CEnum<worldEDeniedAreaFlags> Flags { get; set; }
+		[Ordinal(4)] [RED("flags")] public CEnum<worldEDeniedAreaFlags> Flags { get; set; }
 
 		public worldNavigationDeniedAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

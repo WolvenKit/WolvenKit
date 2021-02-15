@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class inkStylePropertyReference : CVariable
 	{
-		[Ordinal(0)]  [RED("referencedPath")] public CName ReferencedPath { get; set; }
+		[Ordinal(0)] [RED("referencedPath")] public CName ReferencedPath { get; set; }
 
 		public inkStylePropertyReference(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

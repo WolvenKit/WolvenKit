@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameTransformAnimatorComponent : entIPlacedComponent
 	{
-		[Ordinal(0)]  [RED("animations")] public CArray<gameTransformAnimationDefinition> Animations { get; set; }
+		[Ordinal(5)] [RED("animations")] public CArray<gameTransformAnimationDefinition> Animations { get; set; }
 
 		public gameTransformAnimatorComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

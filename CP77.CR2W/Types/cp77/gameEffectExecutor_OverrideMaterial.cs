@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameEffectExecutor_OverrideMaterial : gameEffectExecutor
 	{
-		[Ordinal(0)]  [RED("material")] public rRef<IMaterial> Material { get; set; }
+		[Ordinal(1)] [RED("material")] public rRef<IMaterial> Material { get; set; }
 
 		public gameEffectExecutor_OverrideMaterial(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

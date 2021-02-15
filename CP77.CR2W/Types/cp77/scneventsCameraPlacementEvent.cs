@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scneventsCameraPlacementEvent : scnSceneEvent
 	{
-		[Ordinal(0)]  [RED("cameraRef")] public NodeRef CameraRef { get; set; }
-		[Ordinal(1)]  [RED("cameraTransformLS")] public Transform CameraTransformLS { get; set; }
+		[Ordinal(6)] [RED("cameraRef")] public NodeRef CameraRef { get; set; }
+		[Ordinal(7)] [RED("cameraTransformLS")] public Transform CameraTransformLS { get; set; }
 
 		public scneventsCameraPlacementEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

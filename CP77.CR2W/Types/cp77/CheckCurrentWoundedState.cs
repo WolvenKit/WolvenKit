@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CheckCurrentWoundedState : AIStatusEffectCondition
 	{
-		[Ordinal(0)]  [RED("woundedTypeToCompare")] public CEnum<EWoundedBodyPart> WoundedTypeToCompare { get; set; }
+		[Ordinal(0)] [RED("woundedTypeToCompare")] public CEnum<EWoundedBodyPart> WoundedTypeToCompare { get; set; }
 
 		public CheckCurrentWoundedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

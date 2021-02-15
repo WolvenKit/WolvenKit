@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class questPhoneCallPhase_ConditionType : questIPhoneConditionType
 	{
-		[Ordinal(0)]  [RED("callPhase")] public CEnum<questPhoneCallPhase> CallPhase { get; set; }
+		[Ordinal(1)] [RED("callPhase")] public CEnum<questPhoneCallPhase> CallPhase { get; set; }
 
 		public questPhoneCallPhase_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animVectorLink : CVariable
 	{
-		[Ordinal(0)]  [RED("node")] public wCHandle<animAnimNode_VectorValue> Node { get; set; }
+		[Ordinal(0)] [RED("node")] public wCHandle<animAnimNode_VectorValue> Node { get; set; }
 
 		public animVectorLink(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AICTreeNodeSingleSharedVarDecoratorDefinition : AICTreeNodeSharedVarsBaseDecoratorDefinition
 	{
-		[Ordinal(0)]  [RED("sharedVarName")] public LibTreeSharedVarRegistrationName SharedVarName { get; set; }
+		[Ordinal(1)] [RED("sharedVarName")] public LibTreeSharedVarRegistrationName SharedVarName { get; set; }
 
 		public AICTreeNodeSingleSharedVarDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiAdvertTranslationController : gameuiWidgetGameController
 	{
-		[Ordinal(0)]  [RED("advertText")] public inkTextWidgetReference AdvertText { get; set; }
+		[Ordinal(2)] [RED("advertText")] public inkTextWidgetReference AdvertText { get; set; }
 
 		public gameuiAdvertTranslationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

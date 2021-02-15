@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnRidAnimSetSRRef : CVariable
 	{
-		[Ordinal(0)]  [RED("animations")] public CArray<scnSRRefId> Animations { get; set; }
+		[Ordinal(0)] [RED("animations")] public CArray<scnSRRefId> Animations { get; set; }
 
 		public scnRidAnimSetSRRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

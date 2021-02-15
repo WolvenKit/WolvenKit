@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class RemovePerk : gamePlayerScriptableSystemRequest
 	{
-		[Ordinal(0)]  [RED("perkType")] public CEnum<gamedataPerkType> PerkType { get; set; }
+		[Ordinal(1)] [RED("perkType")] public CEnum<gamedataPerkType> PerkType { get; set; }
 
 		public RemovePerk(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class toolsMessageToken_Location : toolsIMessageToken
 	{
-		[Ordinal(0)]  [RED("location")] public CHandle<toolsIMessageLocation> Location { get; set; }
+		[Ordinal(0)] [RED("location")] public CHandle<toolsIMessageLocation> Location { get; set; }
 
 		public toolsMessageToken_Location(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

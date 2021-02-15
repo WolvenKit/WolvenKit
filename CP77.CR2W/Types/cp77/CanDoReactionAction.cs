@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class CanDoReactionAction : AIbehaviorconditionScript
 	{
-		[Ordinal(0)]  [RED("reactionName")] public CName ReactionName { get; set; }
+		[Ordinal(0)] [RED("reactionName")] public CName ReactionName { get; set; }
 
 		public CanDoReactionAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

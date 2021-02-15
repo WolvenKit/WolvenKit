@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiSideScrollerMiniGameControllerAdvanced : gameuiWidgetGameController
 	{
-		[Ordinal(0)]  [RED("gameplayCanvas")] public inkWidgetReference GameplayCanvas { get; set; }
+		[Ordinal(2)] [RED("gameplayCanvas")] public inkWidgetReference GameplayCanvas { get; set; }
 
 		public gameuiSideScrollerMiniGameControllerAdvanced(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

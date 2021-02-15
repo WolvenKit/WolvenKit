@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ScannerVehicleHorsepower : ScannerChunk
 	{
-		[Ordinal(0)]  [RED("horsepower")] public CInt32 Horsepower { get; set; }
+		[Ordinal(0)] [RED("horsepower")] public CInt32 Horsepower { get; set; }
 
 		public ScannerVehicleHorsepower(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

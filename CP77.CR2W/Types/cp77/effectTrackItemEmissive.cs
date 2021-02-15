@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class effectTrackItemEmissive : effectTrackItem
 	{
-		[Ordinal(0)]  [RED("override")] public CBool Override { get; set; }
-		[Ordinal(1)]  [RED("brigtness")] public effectEffectParameterEvaluatorFloat Brigtness { get; set; }
+		[Ordinal(3)] [RED("override")] public CBool Override { get; set; }
+		[Ordinal(4)] [RED("brigtness")] public effectEffectParameterEvaluatorFloat Brigtness { get; set; }
 
 		public effectTrackItemEmissive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

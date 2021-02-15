@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class FridgeControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(103)]  [RED("isOpen")] public CBool IsOpen { get; set; }
+		[Ordinal(103)] [RED("isOpen")] public CBool IsOpen { get; set; }
 
 		public FridgeControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

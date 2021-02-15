@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class rendGradientEntry : ISerializable
 	{
-		[Ordinal(0)]  [RED("value")] public CFloat Value { get; set; }
-		[Ordinal(1)]  [RED("color")] public CColor Color { get; set; }
+		[Ordinal(0)] [RED("value")] public CFloat Value { get; set; }
+		[Ordinal(1)] [RED("color")] public CColor Color { get; set; }
 
 		public rendGradientEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

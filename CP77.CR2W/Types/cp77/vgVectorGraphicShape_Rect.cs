@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class vgVectorGraphicShape_Rect : vgBaseVectorGraphicShape
 	{
-		[Ordinal(0)]  [RED("mensions")] public Vector2 Mensions { get; set; }
+		[Ordinal(2)] [RED("mensions")] public Vector2 Mensions { get; set; }
 
 		public vgVectorGraphicShape_Rect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

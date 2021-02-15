@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameJournalPrimaryFolderEntry : gameJournalFolderEntry
 	{
-
 		public gameJournalPrimaryFolderEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

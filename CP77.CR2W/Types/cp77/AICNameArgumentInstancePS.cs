@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class AICNameArgumentInstancePS : AIArgumentInstancePS
 	{
-		[Ordinal(0)]  [RED("value")] public CName Value { get; set; }
+		[Ordinal(1)] [RED("value")] public CName Value { get; set; }
 
 		public AICNameArgumentInstancePS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

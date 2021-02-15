@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class WorldLightingConfig : CVariable
 	{
-		[Ordinal(0)]  [RED("lightAttenuationClamp")] public CFloat LightAttenuationClamp { get; set; }
+		[Ordinal(0)] [RED("lightAttenuationClamp")] public CFloat LightAttenuationClamp { get; set; }
 
 		public WorldLightingConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class NPCAttitudeTowardsPlayerPrereq : gameIScriptablePrereq
 	{
-		[Ordinal(0)]  [RED("attitude")] public CEnum<EAIAttitude> Attitude { get; set; }
+		[Ordinal(0)] [RED("attitude")] public CEnum<EAIAttitude> Attitude { get; set; }
 
 		public NPCAttitudeTowardsPlayerPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

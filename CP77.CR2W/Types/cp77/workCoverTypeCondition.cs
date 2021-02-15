@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class workCoverTypeCondition : workIWorkspotCondition
 	{
-		[Ordinal(0)]  [RED("isHighCover")] public CBool IsHighCover { get; set; }
+		[Ordinal(2)] [RED("isHighCover")] public CBool IsHighCover { get; set; }
 
 		public workCoverTypeCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

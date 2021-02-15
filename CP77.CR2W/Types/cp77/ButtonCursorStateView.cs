@@ -8,9 +8,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class ButtonCursorStateView : BaseButtonView
 	{
-		[Ordinal(1)]  [RED("HoverStateName")] public CName HoverStateName { get; set; }
-		[Ordinal(2)]  [RED("PressStateName")] public CName PressStateName { get; set; }
-		[Ordinal(3)]  [RED("DefaultStateName")] public CName DefaultStateName { get; set; }
+		[Ordinal(2)] [RED("HoverStateName")] public CName HoverStateName { get; set; }
+		[Ordinal(3)] [RED("PressStateName")] public CName PressStateName { get; set; }
+		[Ordinal(4)] [RED("DefaultStateName")] public CName DefaultStateName { get; set; }
 
 		public ButtonCursorStateView(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class InventoryStatItem : inkWidgetLogicController
 	{
-		[Ordinal(0)]  [RED("label")] public wCHandle<inkTextWidget> Label { get; set; }
-		[Ordinal(1)]  [RED("value")] public wCHandle<inkTextWidget> Value { get; set; }
+		[Ordinal(1)] [RED("label")] public wCHandle<inkTextWidget> Label { get; set; }
+		[Ordinal(2)] [RED("value")] public wCHandle<inkTextWidget> Value { get; set; }
 
 		public InventoryStatItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

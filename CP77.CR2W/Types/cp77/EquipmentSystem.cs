@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class EquipmentSystem : gameScriptableSystem
 	{
-		[Ordinal(0)]  [RED("ownerData")] public CArray<CHandle<EquipmentSystemPlayerData>> OwnerData { get; set; }
+		[Ordinal(0)] [RED("ownerData")] public CArray<CHandle<EquipmentSystemPlayerData>> OwnerData { get; set; }
 
 		public EquipmentSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

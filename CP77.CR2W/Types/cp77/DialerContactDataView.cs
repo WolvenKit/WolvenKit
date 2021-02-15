@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DialerContactDataView : inkScriptableDataViewWrapper
 	{
-		[Ordinal(0)]  [RED("compareBuilder")] public CHandle<CompareBuilder> CompareBuilder { get; set; }
+		[Ordinal(0)] [RED("compareBuilder")] public CHandle<CompareBuilder> CompareBuilder { get; set; }
 
 		public DialerContactDataView(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

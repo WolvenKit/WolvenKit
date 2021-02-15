@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SharedMetaPose : animAnimNode_OnePoseInput
 	{
-		[Ordinal(0)]  [RED("weightLink")] public animFloatLink WeightLink { get; set; }
+		[Ordinal(2)] [RED("weightLink")] public animFloatLink WeightLink { get; set; }
 
 		public animAnimNode_SharedMetaPose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

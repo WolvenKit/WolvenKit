@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class audioPhysicalMaterialToAudioMetadataMatrix : audioAudioMetadata
 	{
-		[Ordinal(0)]  [RED("physicalToAudioMaterialAssignments")] public CArray<audioAudioMaterialMetadataMapItem> PhysicalToAudioMaterialAssignments { get; set; }
+		[Ordinal(1)] [RED("physicalToAudioMaterialAssignments")] public CArray<audioAudioMaterialMetadataMapItem> PhysicalToAudioMaterialAssignments { get; set; }
 
 		public audioPhysicalMaterialToAudioMetadataMatrix(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

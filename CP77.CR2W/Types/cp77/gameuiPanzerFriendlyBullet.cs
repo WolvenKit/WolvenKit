@@ -8,7 +8,6 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameuiPanzerFriendlyBullet : gameuiPanzerBullet
 	{
-
 		public gameuiPanzerFriendlyBullet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

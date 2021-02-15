@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class TurretInitData : IScriptable
 	{
-		[Ordinal(0)]  [RED("turret")] public wCHandle<gameObject> Turret { get; set; }
+		[Ordinal(0)] [RED("turret")] public wCHandle<gameObject> Turret { get; set; }
 
 		public TurretInitData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

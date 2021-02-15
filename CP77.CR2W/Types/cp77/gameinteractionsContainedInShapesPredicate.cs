@@ -8,7 +8,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class gameinteractionsContainedInShapesPredicate : gameinteractionsIPredicateType
 	{
-		[Ordinal(0)]  [RED("useCameraPosition")] public CBool UseCameraPosition { get; set; }
+		[Ordinal(0)] [RED("useCameraPosition")] public CBool UseCameraPosition { get; set; }
 
 		public gameinteractionsContainedInShapesPredicate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

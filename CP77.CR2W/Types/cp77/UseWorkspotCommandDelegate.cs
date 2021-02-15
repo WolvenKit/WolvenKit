@@ -8,8 +8,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class UseWorkspotCommandDelegate : AIbehaviorScriptBehaviorDelegate
 	{
-		[Ordinal(0)]  [RED("inCommand")] public CHandle<AIArgumentMapping> InCommand { get; set; }
-		[Ordinal(1)]  [RED("movementType")] public CEnum<moveMovementType> MovementType { get; set; }
+		[Ordinal(0)] [RED("inCommand")] public CHandle<AIArgumentMapping> InCommand { get; set; }
+		[Ordinal(1)] [RED("movementType")] public CEnum<moveMovementType> MovementType { get; set; }
 
 		public UseWorkspotCommandDelegate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
