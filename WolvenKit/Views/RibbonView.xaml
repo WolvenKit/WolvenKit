@@ -11,11 +11,11 @@
                    xmlns:views="clr-namespace:WolvenKit.Views"
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                    xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
-                   xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage">
+                   xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage" IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <!-- Resources -->
     <UserControl.Resources>
-        <ResourceDictionary>      
+        <ResourceDictionary>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -26,24 +26,25 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <fluent:Ribbon Grid.Row="0" x:Name="ribbon">
 
-            
+        <fluent:Ribbon Margin="0,0,0,0" Grid.Row="0" x:Name="ribbon">
+
+
             <!-- StartScreen -->
             <fluent:Ribbon.StartScreen>
                 <fluent:StartScreen x:Name="startScreen" IsOpen="True" >
                     <HomeView:HomePageView />
 
-                    
+
                 </fluent:StartScreen>
             </fluent:Ribbon.StartScreen>
-            
-            
+
+
             <!-- Backstage -->
             <fluent:Ribbon.Menu>
-                <fluent:Backstage x:Name="Backstage" >
+                <fluent:Backstage Margin="70,0,0,0"  x:Name="Backstage" MouseLeftButtonDown="Backstage_MouseLeftButtonDown" >
 
-                    <fluent:BackstageTabControl SelectedContentMargin="0" x:Name="backstageTabControl"
+                    <fluent:BackstageTabControl  Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}" ItemsPanelBackground="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"  SelectedContentMargin="0" x:Name="backstageTabControl"
                                                 
                     >
 
@@ -57,12 +58,7 @@
                         </fluent:BackstageTabControl.Resources>
 
 
-                        <fluent:Button Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                        Height="60"
-                                        Icon="{iconPacks:Codicons Kind=Home}"
-                                        FontSize="18" Click="ShowStartScreen_OnClick" OverridesDefaultStyle="True">
-                            Home
-                        </fluent:Button>
+
                         <fluent:SeparatorTabItem Height="Auto" Margin="20,10,20,10"/>
                         <fluent:BackstageTabItem    Header="Files"
                                                     Height="60"
@@ -100,7 +96,7 @@
                                        Height="60"
                                         Icon="{iconPacks:Codicons Kind=NewFolder}"
                                        FontSize="18"
-                                       Command="{catel:CommandManagerBinding Application.NewProject}" >
+                                       Command="{catel:CommandManagerBinding Application.PublishMod}" >
                         </fluent:Button>
                         <fluent:SeparatorTabItem Height="Auto" Margin="20,10,20,10"/>
 
@@ -121,7 +117,7 @@
                         <fluent:Button Header="Bug Report" 
                                        
                                         Icon="{iconPacks:Codicons Kind=Bug}"
-                                       Command="{catel:CommandManagerBinding Application.Options}" />
+                                       Command="{catel:CommandManagerBinding Application.BugReport}" />
 
                         <fluent:Button Header="About" 
                                         Icon="{iconPacks:Codicons Kind=Info}"
@@ -149,12 +145,12 @@
                                              />
             </fluent:Ribbon.ContextualGroups>
 
-            
-            
-        
-            
+
+
+
+
             <!-- Home Tab -->
-            <fluent:RibbonTabItem Header="Home" >
+            <fluent:RibbonTabItem Header="General" >
                 <!-- File -->
                 <fluent:RibbonGroupBox Header="File">
                     <fluent:Button Header="Open File" Command="{catel:CommandManagerBinding Application.OpenFile}">
@@ -172,8 +168,8 @@
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="OpenPreview" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-                    
-                    
+
+
                 </fluent:RibbonGroupBox>
 
                 <!-- Project -->
@@ -201,7 +197,7 @@
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
 
-            
+
 
             <!-- View Tab -->
             <fluent:RibbonTabItem Header="View" >
@@ -218,8 +214,8 @@
                             </ItemsPanelTemplate>
                         </fluent:ComboBox.ItemsPanel>
                     </fluent:ComboBox>
-                    
-                    
+
+
                 </fluent:RibbonGroupBox>
 
                 <!-- Project -->
@@ -248,14 +244,14 @@
                     </fluent:Button>
                 </fluent:RibbonGroupBox>
 
-                
+
 
             </fluent:RibbonTabItem>
 
-            
+
             <!-- Tools Dropdown Tab -->
 
-                <fluent:RibbonTabItem Header="Tools">
+            <fluent:RibbonTabItem Header="Tools">
                 <fluent:RibbonGroupBox Header="All">
                     <fluent:ComboBox IsEditable="False"
                                      InputWidth="120"
@@ -267,9 +263,13 @@
                             </ItemsPanelTemplate>
                         </fluent:ComboBox.ItemsPanel>
                         <ComboBoxItem x:Name="CBAssetBrowserItem" Content="Asset Browser" Selected="CBAssetBrowserItem_Selected"/>
-                        <ComboBoxItem x:Name="CBCodeEditorItem" Content="Code Editor (WIP)" Selected="CBCodeEditorItem_Selected"/>
                         <ComboBoxItem x:Name="CBPluginManager" Content="Plugin Manager" Selected="CBPluginManager_Selected"/>
                         <ComboBoxItem x:Name="CBVisualEditorItem" Content="Visual Editor (WIP)" Selected="CBVisualEditorItem_Selected"/>
+                        <ComboBoxItem x:Name="CBCodeEditorItem" Content="Code Editor (WIP)" Selected="CBCodeEditorItem_Selected"/>
+                        <ComboBoxItem x:Name="CBAudioToolItem" Content="Audio Tool (WIP)" Selected="CBAudioToolItem_Selected" />
+                        <ComboBoxItem x:Name="CBJournalEditorItem" Content="Journal Editor (WIP)" Selected="CBJournalEditorItem_Selected" />
+
+
                     </fluent:ComboBox>
 
 
@@ -277,18 +277,54 @@
 
                 <!-- Quick Access Tools -->
                 <fluent:RibbonGroupBox Header="Quick Access">
-                    <fluent:Button Click="CBAssetBrowserItem_Selected" Header="Asset Browser"/>
+                    <fluent:Button Click="CBAssetBrowserItem_Selected" Header="Asset Browser">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="InboxesFill" Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
 
+                    <fluent:Button Click="CBAudioToolItem_Selected" Header="Audio Tool">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="Soundwave" Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
+
+
+
+
+                    <fluent:Button Visibility="Visible" Click="CBPluginManager_Selected" Header="Plugin Manager">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="PlugFill" Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
+
+                    <fluent:Button Visibility="Collapsed"  Header="Journal Editor">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="JournalBookmarkFill" Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
+
+                    <fluent:Button Visibility="Collapsed" Click="CBVisualEditorItem_Selected" Header="Visual Editor">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="Eye" Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
+
+                    <fluent:Button Visibility="Collapsed" Click="CBCodeEditorItem_Selected" Header="Code Editor">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="FileEarmarkCode" Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
 
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
-             
 
 
 
 
 
-            
+
+
             <!--Contextual  Tab-->
             <fluent:RibbonTabItem Header="Project Explorer" 
                               Group="{Binding Source={x:Reference ProjectExplorerContextualTabGroup}}" 
@@ -321,6 +357,57 @@
 
             </fluent:RibbonTabItem>
         </fluent:Ribbon>
+
+        <StackPanel Width="170" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="75,-21,0,0"  Orientation="Horizontal">
+            <TextBlock Background="{x:Null}" Text="RED Modding Tools - WolvenKit" />
+
+        </StackPanel>
+        <Border Margin="0,-25,0,0" Width="70" HorizontalAlignment="Left" CornerRadius="0,5,0,0" VerticalAlignment="top" Height="30" Background="{DynamicResource Fluent.Ribbon.Brushes.RibbonTabControl.Background}">
+
+        </Border>
+
+        <Border  Margin="13,-24,0,0" Width="42" HorizontalAlignment="Left"  VerticalAlignment="Top" Height="49" Background="Transparent" MouseEnter="Border_MouseEnter" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeave="Border_MouseLeave"  >
+            <Grid>
+
+                <Border>
+                    <Border.OpacityMask>
+                        <ImageBrush ImageSource="/Resources/Icons/SeeTroughIcon.png"/>
+                    </Border.OpacityMask>
+                    <Grid>
+
+                        <Grid Margin="1"  x:Name="HomeHighLighter"  Background="{DynamicResource MahApps.Brushes.AccentBase}">
+                        </Grid>
+
+
+                    </Grid>
+                </Border>
+            </Grid>
+
+
+
+        </Border>
+
+        <Border  Margin="13,-24,0,0" Width="42" HorizontalAlignment="Left"  VerticalAlignment="top" Height="49" Background="Transparent" MouseEnter="Border_MouseEnter" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeave="Border_MouseLeave"  >
+            <Border>
+                <Border.OpacityMask>
+                    <ImageBrush ImageSource="/Resources/Icons/HomeSickTransp.png"/>
+                </Border.OpacityMask>
+                <Grid>
+
+
+                    <Grid >
+
+                        <Grid  Margin="0">
+                            <Image  Stretch="Fill"  Source="pack://application:,,,/Resources/Icons/HomeSickTransp.png" Margin="0,-1,0,0" />
+
+                        </Grid>
+
+                    </Grid>
+
+                </Grid>
+            </Border>
+
+        </Border>
 
     </Grid>
 

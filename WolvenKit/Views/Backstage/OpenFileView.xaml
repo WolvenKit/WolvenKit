@@ -13,7 +13,7 @@
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 
                    mc:Ignorable="d" 
-                   d:DesignHeight="300" d:DesignWidth="300">
+                   d:DesignHeight="300" d:DesignWidth="300" IsVisibleChanged="UserControl_IsVisibleChanged">
     <Grid>
         <Grid Style="{DynamicResource InnerBackstageGridStyle}">
             <Grid.RowDefinitions>

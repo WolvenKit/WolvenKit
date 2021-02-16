@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
-
+using WolvenKit.Common.Model.Cr2w;
 using System.Linq;
 using CP77.CR2W.Reflection;
 using System.ComponentModel;
@@ -25,7 +25,7 @@ namespace CP77.CR2W.Types
 
 
         [Browsable(false)]
-        //public List<int> Flags { get; set; }
+        public List<int> Flags { get; set; }
         public string Elementtype { get; set; }
         public Type InnerType => this.GetType().GetGenericArguments().Single();
         #endregion
@@ -33,28 +33,7 @@ namespace CP77.CR2W.Types
 
 
         [Browsable(false)]
-        public override string REDType
-        {
-            get
-            {
-                return BuildTypeName(Elementtype);
-                //return Flags != null
-                //    ? BuildTypeName(Elementtype, Flags.ToArray())
-                //    : BuildTypeName(Elementtype);
-            }
-        }
-
-        private string BuildTypeName(string type, params int[] flags)
-        {
-            return BuildTypeName(type, flags.AsEnumerable().GetEnumerator());
-        }
-
-        private string BuildTypeName(string elementtype, IEnumerator<int> flags)
-        {
-            var v1 = flags.MoveNext() ? flags.Current : 0;
-            var v2 = flags.MoveNext() ? flags.Current : 0;
-            return $"array:{elementtype}";
-        }
+        public override string REDType => $"array:{Elementtype}";
 
         public override List<IEditableVariable> GetEditableVariables()
         {
@@ -114,7 +93,7 @@ namespace CP77.CR2W.Types
             return newvar == null || newvar is T;
         }
 
-        public override void AddVariable(CVariable variable)
+        public override void AddVariable(IEditableVariable variable)
         {
             if (variable is T tvar)
             {
@@ -175,7 +154,7 @@ namespace CP77.CR2W.Types
             }
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = base.Copy(context) as CArrayBase<T>;
             context.Parent = copy;

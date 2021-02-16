@@ -9,7 +9,7 @@ namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
-        public static void ExportTask(string[] path, EUncookExtension uncookext)
+        public static void ExportTask(string[] path, EUncookExtension uncookext, bool flip)
         {
             if (path == null || path.Length < 1)
             {
@@ -19,12 +19,12 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                ExportTaskInner(file, uncookext);
+                ExportTaskInner(file, uncookext, flip);
             });
 
         }
 
-        private static int ExportTaskInner(string path, EUncookExtension uncookext)
+        private static int ExportTaskInner(string path, EUncookExtension uncookext, bool flip)
         {
 
             #region checks
@@ -46,7 +46,7 @@ namespace CP77Tools.Tasks
             Stopwatch watch = new();
             watch.Restart();
 
-            if (ModTools.Export(new FileInfo(path), uncookext))
+            if (ModTools.Export(new FileInfo(path), uncookext, flip))
 
             {
                 watch.Stop();

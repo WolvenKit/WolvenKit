@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using Catel.IoC;
+using Orc.ProjectManagement;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 
@@ -18,6 +19,7 @@ namespace WolvenKit.ViewModels
 	using CR2W;
 	using CR2W.SRT;
 	using Commands;
+    using WolvenKit.Common.Model.Cr2w;
 
     public class DocumentViewModel : PaneViewModel, IDocumentViewModel
 	{
@@ -86,9 +88,7 @@ namespace WolvenKit.ViewModels
 
 		#region Properties
 
-        
-
-		/// <summary>
+        /// <summary>
 		/// 
 		/// </summary>
         [Model]
@@ -97,7 +97,9 @@ namespace WolvenKit.ViewModels
 		/// <summary>
 		/// Bound to the View
 		/// </summary>
-        public List<ChunkViewModel> Chunks => (File as CR2WFile)?.Chunks.Select(_ => new ChunkViewModel(_)).ToList();
+        public List<ChunkViewModel> Chunks => File.Chunks
+            .Where(_ => _.VirtualParentChunk == null)
+            .Select(_ => new ChunkViewModel(_)).ToList();
 
         /// <summary>
         /// Bound to the View via TreeViewBehavior.cs
@@ -116,14 +118,14 @@ namespace WolvenKit.ViewModels
                     _selectedChunk = value;
                     RaisePropertyChanged(() => SelectedChunk, oldValue, value);
 
-                    SelectEditableVariables = _selectedChunk.Data.ChildrEditableVariables;
+                    SelectEditableVariables = _selectedChunk?.ChildrenProperties;
 
                 }
             }
         }
 
-        public List<IEditableVariable> _selectEditableVariables;
-		public List<IEditableVariable> SelectEditableVariables
+        public List<ChunkPropertyViewModel> _selectEditableVariables;
+		public List<ChunkPropertyViewModel> SelectEditableVariables
         {
             get => _selectEditableVariables;
             set
@@ -266,11 +268,11 @@ namespace WolvenKit.ViewModels
 		/// <returns>True if file read was successful, otherwise false</returns>
 		public async Task<bool> OpenFileAsync(string path)
 		{
+            _isInitialized = false;
+
 			try
 			{
-				string textContent = string.Empty;
-
-				// This is the same default buffer size as
+                // This is the same default buffer size as
 				// <see cref="StreamReader"/> and <see cref="FileStream"/>.
 				// int DefaultBufferSize = 4096;
 
@@ -286,37 +288,44 @@ namespace WolvenKit.ViewModels
                 await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
 					EFileReadErrorCodes errorcode;
-                    using (var reader = new BinaryReader(stream))
+                    using var reader = new BinaryReader(stream);
+                    
+                    if (Path.GetExtension(path) == ".srt")
                     {
-						// switch between cr2wfiles and others (e.g. srt)
-                        
-
-						if (Path.GetExtension(path) == ".srt")
+                        File = new Srtfile()
                         {
-                            File = new Srtfile()
-                            {
-                                FileName = path
-							};
-                            errorcode = await File.Read(reader);
-                        }
-                        else
+                            FileName = path
+                        };
+                        errorcode = await File.Read(reader);
+                    }
+                    else
+                    {
+                        // check game
+                        var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
+                        //var fileService = ServiceLocator.Default.ResolveType<IWolvenkitFileService>();
+                        switch (pm.ActiveProject)
                         {
-                            File = new CR2WFile()
-                            {
-                                FileName = path,
+                            case Cp77Project cp77proj:
+                                var cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(reader);
+                                if (cr2w == null)
+                                {
+                                    logger.LogString($"Failed to read cr2w file {path}", Logtype.Error);
+                                    return false;
+                                }
+                                cr2w.FileName = path;
 
-								//TODO: ???
-                                //EditorController = variableEditor/*UIController.Get()*/,
+                                File = cr2w;
 
-                                LocalizedStringSource = MainController.Get()
-                            };
-                            errorcode = await File.Read(reader);
+                                break;
+                            case Tw3Project tw3proj:
+                                throw new NotImplementedException();
 
-                            //File.PropertyChanged += File_PropertyChanged;
+                            default:
+                                _isInitialized = false;
+                                return false;
                         }
                     }
-
-				}
+                }
 
 
 				ContentId = path;
@@ -336,36 +345,8 @@ namespace WolvenKit.ViewModels
 			return false;
 		}
 
-		/// <summary>
-		/// Gets the encoding of a file from its first 4 bytes.
-		/// </summary>
-		/// <param name="bom">BOM to be translated into an <see cref="Encoding"/>.
-		/// This should be at least 4 bytes long.</param>
-		/// <returns>Recommended <see cref="Encoding"/> to be used to read text from this file.</returns>
-		public Encoding GetEncoding(byte[] bom)
-		{
-			// Analyze the BOM
-			if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76)
-#pragma warning disable 618
-				return Encoding.UTF7;
-#pragma warning restore 618
 
-			if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf)
-				return Encoding.UTF8;
-
-			if (bom[0] == 0xff && bom[1] == 0xfe)
-				return Encoding.Unicode; //UTF-16LE
-
-			if (bom[0] == 0xfe && bom[1] == 0xff)
-				return Encoding.BigEndianUnicode; //UTF-16BE
-
-			if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff)
-				return Encoding.UTF32;
-
-			return Encoding.Default;
-		}
-
-		private bool CanClose()
+        private bool CanClose()
 		{
 			return true;
 		}

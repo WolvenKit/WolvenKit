@@ -6,6 +6,7 @@ using System.Linq;
 using WolvenKit.CR2W.Reflection;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -43,7 +44,7 @@ namespace WolvenKit.CR2W.Types
 
         // Pointer
         [DataMember(EmitDefaultValue = false)]
-        public CR2WExportWrapper Reference { get; set; }
+        public ICR2WExport Reference { get; set; }
 
         public string ReferenceType => REDType.Split(':').Last();
         #endregion
@@ -144,7 +145,7 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = (CHandle<T>)base.Copy(context);
             copy.ChunkHandle = ChunkHandle;
@@ -157,7 +158,7 @@ namespace WolvenKit.CR2W.Types
             // Ptr
             if (ChunkHandle && Reference != null)
             {
-                CR2WExportWrapper newref = context.TryLookupReference(Reference, copy);
+                ICR2WExport newref = context.TryLookupReference(Reference, copy);
                 if (newref != null)
                     copy.Reference = newref;
             }

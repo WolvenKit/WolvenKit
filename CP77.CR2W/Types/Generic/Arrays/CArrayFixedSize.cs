@@ -17,19 +17,13 @@ namespace CP77.CR2W.Types
     {
         public CArrayFixedSize(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        public override string REDType
-        {
-            get
-            {
-                return Elementtype;
-            }
-        }
+        public override string REDType => BuildTypeName(Elementtype, Flags.AsEnumerable().GetEnumerator());
 
-        //private string BuildTypeName(string elementtype, IEnumerator<int> flags)
-        //{
-        //    var v1 = flags.MoveNext() ? flags.Current : 0;
-        //    return $"[{v1}]{Elementtype}";
-        //}
+        private string BuildTypeName(string elementtype, IEnumerator<int> flags)
+        {
+            var v1 = flags.MoveNext() ? flags.Current : 0;
+            return $"[{v1}]{Elementtype}";
+        }
 
     }
 }

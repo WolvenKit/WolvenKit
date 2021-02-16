@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
@@ -42,8 +44,11 @@ namespace WolvenKit.CR2W.Types
         /// <param name="parentVariable">The class owning this attribute</param>
         /// <param name="readUnknownAsBytes"></param>
         /// <returns></returns>
-        public static CVariable Create(string typename, string varname, CR2WFile cr2w, CVariable parentVariable, bool readUnknownAsBytes = true)
+        public static CVariable Create(string typename, string varname, IWolvenkitFile icr2w, CVariable parentVariable, bool readUnknownAsBytes = true)
         {
+            if (icr2w is not CR2WFile cr2w)
+                throw new InvalidGameContextException("tried parsing a cp77 file from tw3 context");
+
             typename = REDReflection.GetWKitBaseTypeFromREDBaseType(typename);
             var fullname = typename;
 

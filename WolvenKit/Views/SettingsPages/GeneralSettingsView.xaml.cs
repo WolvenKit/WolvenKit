@@ -7,15 +7,27 @@ namespace WolvenKit.Views.SettingsPages
     {
         public GeneralSettingsView()
         {
+            GSSV = new GlobalSubSettingsView();
+            ASSV = new AccountSubSettingsView();
+            USSV = new UpdatesSubSettingsView();
+            TSSV = new ThemeSubSettingsView();
+            LSSV = new LoggingSubSettingsView();
+
             InitializeComponent();
         }
+
+        private GlobalSubSettingsView GSSV;
+        private AccountSubSettingsView ASSV;
+        private UpdatesSubSettingsView USSV;
+        private ThemeSubSettingsView TSSV;
+        private LoggingSubSettingsView LSSV;
 
         private void GlobalSubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
         {
             if (IsLoaded && IsVisible && IsInitialized)
             {
                 SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(new GlobalSubSettingsView());
+                SettingsViewer.Children.Add(GSSV);
             }
         }
 
@@ -24,7 +36,7 @@ namespace WolvenKit.Views.SettingsPages
             if (IsLoaded && IsVisible && IsInitialized)
             {
                 SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(new AccountSubSettingsView());
+                SettingsViewer.Children.Add(ASSV);
             }
         }
 
@@ -35,7 +47,7 @@ namespace WolvenKit.Views.SettingsPages
             if (IsLoaded && IsVisible && IsInitialized)
             {
                 SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(new UpdatesSubSettingsView());
+                SettingsViewer.Children.Add(USSV);
             }
         }
 
@@ -44,7 +56,7 @@ namespace WolvenKit.Views.SettingsPages
             if (IsLoaded && IsVisible && IsInitialized)
             {
                 SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(new ThemeSubSettingsView());
+                SettingsViewer.Children.Add(TSSV);
             }
         }
 
@@ -53,7 +65,15 @@ namespace WolvenKit.Views.SettingsPages
             if (IsLoaded && IsVisible && IsInitialized)
             {
                 SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(new LoggingSubSettingsView());
+                SettingsViewer.Children.Add(LSSV);
+            }
+        }
+
+        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Setting - General");
             }
         }
     }

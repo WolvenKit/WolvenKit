@@ -9,16 +9,28 @@
              xmlns:model="clr-namespace:WolvenKit.Model"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                                      xmlns:hc="https://handyorg.github.io/handycontrol"
+
              xmlns:behavior="clr-namespace:WolvenKit.Behavior" xmlns:i1="http://schemas.microsoft.com/xaml/behaviors"
                    mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid
+             d:DesignHeight="450" d:DesignWidth="800" IsVisibleChanged="UserControl_IsVisibleChanged">
+
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources  RequestedTheme="Dark"/>
+                <hc:Theme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </catel:UserControl.Resources>
+    
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
         xmlns:conv="clr-namespace:WolvenKit.Layout.Converters">
         <Grid.Resources>
             <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
         </Grid.Resources>
 
-        <TreeView Name="TreeView" 
+        <TreeView  Style="{DynamicResource TreeView}" Name="TreeView" 
                              ItemsSource="{Binding Treenodes}"
                              
                              >
@@ -61,8 +73,9 @@
                 </ContextMenu>
             </TreeView.ContextMenu>
 
+
             <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
+                <Style BasedOn="{StaticResource TreeViewItemBaseStyle}" TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                     <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />

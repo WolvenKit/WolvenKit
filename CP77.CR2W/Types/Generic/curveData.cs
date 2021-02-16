@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml;
 using CP77.CR2W.Reflection;
 using FastMember;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W.Types
 {
@@ -35,7 +37,9 @@ namespace CP77.CR2W.Types
         public string Elementtype { get; set; }
 
         private List<CurvePoint<T>> Elements { get; set; } = new();
-        public uint Tail { get; set; }
+        public ushort Tail { get; set; }
+
+        public override string REDType => $"curveData:{Elementtype}";
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -48,7 +52,7 @@ namespace CP77.CR2W.Types
                 var cpoint = new CurvePoint<T>(cr2w, this, i.ToString()) {IsSerialized = true};
 
                 var point = new CFloat(cr2w, cpoint, "point") { IsSerialized = true };
-                CVariable element = CR2WTypeManager.Create(Elementtype, i.ToString(), cr2w, cpoint);
+                var element = CR2WTypeManager.Create(Elementtype, i.ToString(), cr2w, cpoint);
 
                 // no actual way to find out the elementsize of an array element
                 // bacause cdpr serialized classes have no fixed size
@@ -77,7 +81,15 @@ namespace CP77.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            throw new NotImplementedException();
+            file.Write((uint)Elements.Count);
+
+            foreach (var curvePoint in Elements)
+            {
+                curvePoint.Value.WriteAsFixedSize(file);
+                curvePoint.Point.Write(file);
+            }
+
+            file.Write(Tail);
         }
 
         public override List<IEditableVariable> GetEditableVariables()

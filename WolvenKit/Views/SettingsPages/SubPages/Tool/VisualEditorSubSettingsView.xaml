@@ -1,16 +1,64 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.SettingsPages.SubPages.Tool.VisualEditorSubSettingsView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com">
+                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        
-        <Label Grid.Row="0" Content="{Binding Title}" />
-        <Label Grid.Row="1" Content="Here goes your real content" />
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+
+        <Grid Grid.Column="0">
+            <hc:ScrollViewer>
+                <StackPanel>
+
+
+                    <Border BorderThickness="4,0,0,6" Margin="15,15,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                        <Grid>
+                            <TextBlock Text="General" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                        </Grid>
+                    </Border>
+
+
+
+                    <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                        <StackPanel>
+
+                            <Grid Margin="5">
+                                <TextBlock Text="Open Mode" VerticalAlignment="Center"/>
+                                <ComboBox HorizontalAlignment="Right" VerticalAlignment="Center" Width="250" Text=""/>
+                                <!-- Discussed with rfuzzo that each tool should be dockable even if it takes the full editor view. But a personal settings to open it in a window should be setable (This is that option) -->
+
+                            </Grid>
+
+
+
+
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </hc:ScrollViewer>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <hc:ScrollViewer>
+                <StackPanel>
+
+
+
+
+
+                </StackPanel>
+            </hc:ScrollViewer>
+        </Grid>
+
+
+
+
+
     </Grid>
-    
+
 </catel:UserControl>

@@ -53,6 +53,7 @@ namespace CP77.CR2W
                 return false;
             Directory.CreateDirectory(outfile.Directory.FullName);
             using var fs = new FileStream(outfile.FullName, FileMode.Create, FileAccess.Write);
+            ms.Seek(0, SeekOrigin.Begin);
             ms.CopyTo(fs);
 
             #endregion
@@ -128,87 +129,85 @@ namespace CP77.CR2W
         public static bool Uncook(Stream cr2wStream, FileInfo cr2wFileName, string ext, 
             EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
-            
+            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext))
+                return GenerateBuffers(cr2wStream, cr2wFileName);
 
-            if (Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext))
+            if (!Enum.TryParse(ext, true, out ECookedFileFormat extAsEnum))
+                return false;
+
+            // read the cr2wfile
+            using var br = new BinaryReader(cr2wStream);
+            var cr2w = ModTools.TryReadCr2WFile(br);
+            if (cr2w != null)
             {
-                if (!Enum.TryParse(ext, true, out ECookedFileFormat extAsEnum))
-                    return false;
+                Logger.LogString($"Failed to read cr2w file {cr2wFileName.FullName}", Logtype.Error);
+                return false;
+            }
+            cr2w.FileName = cr2wFileName.FullName;
 
-                // read the cr2wfile
-                using var br = new BinaryReader(cr2wStream);
-                var cr2w = TryReadCr2WFile(br);
-                if (cr2w == null)
-                {
-                    Logger.LogString($"Failed to read cr2w file {cr2wFileName.FullName}", Logtype.Error);
-                    return false;
-                }
-                cr2w.FileName = cr2wFileName.FullName;
+            // decompress buffers
+            var buffers = GetBuffers(cr2w, br);
+
+
+            // uncook textures, meshes etc
+            return extAsEnum switch
+            {
+                ECookedFileFormat.mesh => GenerateBuffers(cr2wStream, cr2wFileName),
+                ECookedFileFormat.xbm => UncookXbm(cr2wFileName, uncookext, flip, buffers, cr2w),
+                ECookedFileFormat.csv => UncookCsv(cr2wFileName, cr2w),
+                ECookedFileFormat.json => false,
+                ECookedFileFormat.mlmask => Mlmask.Uncook(cr2w, buffers, cr2wFileName, uncookext),
+                ECookedFileFormat.cubemap => UncookCubeMap(cr2wFileName, cr2w, buffers),
+                ECookedFileFormat.envprobe => UncookEnvprobe(cr2wFileName, cr2w, buffers),
+                ECookedFileFormat.texarray => UncookTexarray(cr2wFileName, cr2w, buffers),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+
+        private static List<byte[]> GetBuffers(CR2WFile cr2w, BinaryReader br)
+        {
+            var buffers = new List<byte[]>();
+            foreach (var b in cr2w.Buffers.Select(_ => _.Buffer))
+            {
+                br.BaseStream.Seek(b.offset, SeekOrigin.Begin);
+
+                var zbuffer = br.ReadBytes((int)b.diskSize);
 
                 // decompress buffers
-                var buffers = GetBuffers(cr2w, br);
+                using var input = new MemoryStream(zbuffer);
+                using var output = new MemoryStream();
+                using var reader = new BinaryReader(input);
+                reader.DecompressBuffer(output, (uint)zbuffer.Length, b.memSize);
 
-
-                // uncook textures, meshes etc
-                return extAsEnum switch
-                {
-                    ECookedFileFormat.xbm => UncookXbm(cr2wFileName, uncookext, flip, buffers, cr2w),
-                    ECookedFileFormat.csv => UncookCsv(cr2wFileName, cr2w),
-                    ECookedFileFormat.json => false,
-                    ECookedFileFormat.mlmask => Mlmask.Uncook(cr2w, buffers, cr2wFileName, uncookext),
-                    ECookedFileFormat.cubemap => UncookCubeMap(cr2wFileName, cr2w, buffers),
-                    ECookedFileFormat.envprobe => UncookEnvprobe(cr2wFileName, cr2w, buffers),
-                    ECookedFileFormat.texarray => UncookTexarray(cr2wFileName, cr2w, buffers),
-                    _ => throw new ArgumentOutOfRangeException()
-                };
+                buffers.Add(Catel.IO.StreamExtensions.ToByteArray(output));
             }
-            else // extract buffers
+
+            return buffers;
+        }
+
+        private static bool GenerateBuffers(Stream cr2wStream, FileInfo cr2wFileName)
+        {
+            // read the cr2wfile
+            using var br = new BinaryReader(cr2wStream);
+            var cr2w = ModTools.TryReadCr2WFileHeaders(br);
+            if (cr2w != null)
             {
-                // read the cr2wfile
-                using var br = new BinaryReader(cr2wStream);
-                var cr2w = TryReadCr2WFileHeaders(br);
-                if (cr2w == null)
-                {
-                    Logger.LogString($"Failed to read cr2w file {cr2wFileName.FullName}", Logtype.Error);
-                    return false;
-                }
-                cr2w.FileName = cr2wFileName.FullName;
-
-                // decompress buffers
-                var buffers = GetBuffers(cr2w, br);
-
-                for (int i = 0; i < buffers.Count; i++)
-                {
-                    var buffer = buffers[i];
-                    var bufferpath = $"{cr2wFileName}.{i}.buffer";
-                    Directory.CreateDirectory(cr2wFileName.Directory.FullName);
-                    File.WriteAllBytes(bufferpath, buffer);
-                }
+                Logger.LogString($"Failed to read cr2w {cr2wFileName.FullName}", Logtype.Error);
+                return false;
             }
+            cr2w.FileName = cr2wFileName.FullName;
 
+            // decompress buffers
+            var buffers = GetBuffers(cr2w, br);
+
+            for (int i = 0; i < buffers.Count; i++)
+            {
+                var buffer = buffers[i];
+                var bufferpath = $"{cr2wFileName}.{i}.buffer";
+                Directory.CreateDirectory(cr2wFileName.Directory.FullName);
+                File.WriteAllBytes(bufferpath, buffer);
+            }
             return true;
-
-            // local
-            static List<byte[]> GetBuffers(CR2WFile cr2w, BinaryReader br)
-            {
-                var buffers = new List<byte[]>();
-                foreach (var b in cr2w.Buffers.Select(_ => _.Buffer))
-                {
-                    br.BaseStream.Seek(b.offset, SeekOrigin.Begin);
-
-                    var zbuffer = br.ReadBytes((int)b.diskSize);
-
-                    // decompress buffers
-                    using var input = new MemoryStream(zbuffer);
-                    using var output = new MemoryStream();
-                    using var reader = new BinaryReader(input);
-                    reader.DecompressBuffer(output, (uint)zbuffer.Length, b.memSize);
-
-                    buffers.Add(Catel.IO.StreamExtensions.ToByteArray(output));
-                }
-
-                return buffers;
-            }
         }
 
         private static bool UncookTexarray(FileInfo cr2wFileName, CR2WFile cr2w, IReadOnlyList<byte[]> buffers)

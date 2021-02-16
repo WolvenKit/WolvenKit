@@ -157,7 +157,7 @@ namespace CP77Tools.Tasks
                                 if (cr2w == null)
                                     return;
 
-                                foreach (var o in cr2w.Chunks.Select(chunk => chunk.GetDumpObject(ms))
+                                foreach (var o in cr2w.Chunks.Select(chunk => (chunk as CR2WExportWrapper).GetDumpObject(ms))
                                     .Where(o => o != null))
                                 {
                                     Register(o);

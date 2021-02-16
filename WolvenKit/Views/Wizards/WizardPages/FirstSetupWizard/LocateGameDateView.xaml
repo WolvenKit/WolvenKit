@@ -3,11 +3,10 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
-    <Grid HorizontalAlignment="Stretch" Grid.Row="3" >
+    <Grid VerticalAlignment="Center" Grid.Row="3" >
         <Grid Margin="5,5,5,5" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Stretch">
             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
                 <StackPanel Margin="0,10,0,0" Orientation="Vertical" VerticalAlignment="Top">
-                    <TextBlock Text="Locate Game Data"  FontSize="14" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,10"></TextBlock>
                     <Grid Margin="22,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="3*"></ColumnDefinition>

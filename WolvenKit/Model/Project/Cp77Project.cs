@@ -68,6 +68,8 @@ namespace WolvenKit.Model
                 this.Author = obj.Author;
                 this.Email = obj.Email;
                 this.GameType = GameType.Cyberpunk2077;
+                this.Data = obj;
+                this.Data.FileName = path;
             }
         }
 

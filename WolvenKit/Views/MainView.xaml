@@ -4,7 +4,7 @@
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                   xmlns:ad="clr-namespace:WolvenKit.Layout"
+                   xmlns:ad="clr-namespace:WolvenKit.Layout" IsVisibleChanged="UserControl_IsVisibleChanged_1"
                    >
 
     <Grid

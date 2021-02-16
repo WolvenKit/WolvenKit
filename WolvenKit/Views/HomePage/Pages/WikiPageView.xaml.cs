@@ -11,6 +11,13 @@ namespace WolvenKit.Views.HomePage.Pages
 
         }
 
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsVisible )
+            {
+                DiscordRPCHelper.WhatAmIDoing("Wiki");
+            }
 
+        }
     }
 }

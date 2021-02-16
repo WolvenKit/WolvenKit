@@ -14,6 +14,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
 using WolvenKit.CR2W.Types.Utils;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.CR2W
 {
@@ -41,7 +42,7 @@ namespace WolvenKit.CR2W
             Names = new List<CR2WNameWrapper>();            //block 2
             Imports = new List<CR2WImportWrapper>();        //block 3
             Properties = new List<CR2WPropertyWrapper>();   //block 4
-            Chunks = new List<CR2WExportWrapper>();         //block 5
+            Chunks = new List<ICR2WExport>();               //block 5
             Buffers = new List<CR2WBufferWrapper>();        //block 6
             Embedded = new List<CR2WEmbeddedWrapper>();     //block 7
 
@@ -86,12 +87,12 @@ namespace WolvenKit.CR2W
 
         //[DataMember(Order = 2)]
 
-        public List<CR2WExportWrapper> Chunks { get; private set; }
+        public List<ICR2WExport> Chunks { get; private set; }
         public List<CR2WBufferWrapper> Buffers { get; private set; }
         public List<CR2WEmbeddedWrapper> Embedded { get; private set; }
 
         public void GenerateChunksDict() => Chunksdict = Chunks.ToDictionary(_ => _.ChunkIndex, _ => _);
-        public Dictionary<int, CR2WExportWrapper> Chunksdict { get; private set; }
+        public Dictionary<int, ICR2WExport> Chunksdict { get; private set; }
 
         public List<LocalizedString> LocalizedStrings = new List<LocalizedString>();
         public readonly List<string> UnknownTypes = new List<string>();
@@ -113,9 +114,9 @@ namespace WolvenKit.CR2W
 
         #region Supporting Functions
         // Does not reindex /TODO
-        public CR2WExportWrapper CreateChunk(string type, int chunkindex=0, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null, CVariable cvar = null)
+        public ICR2WExport CreateChunk(string type, int chunkindex=0, ICR2WExport parent = null, ICR2WExport virtualparent = null, CVariable cvar = null)
         {
-            var chunk = new CR2WExportWrapper(this, type, parent);
+            var chunk = new CR2WExportWrapper(this, type, parent) as ICR2WExport;
             if (cvar != null)
             {
                 chunk.CreateDefaultData();
@@ -139,13 +140,13 @@ namespace WolvenKit.CR2W
         }
 
         // Does not reindex /TODO
-        public CR2WExportWrapper CreateChunk(CVariable cvar, int chunkindex=0, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null)
+        public ICR2WExport CreateChunk(CVariable cvar, int chunkindex=0, ICR2WExport parent = null, ICR2WExport virtualparent = null)
         {
             // checks to see if the variable from which the chunk is built is properly constructed
             if (cvar == null || cvar.REDName != cvar.REDType || cvar.ParentVar != null)
                 throw new NotImplementedException();
 
-            var chunk = new CR2WExportWrapper(this, cvar.REDType, parent);
+            var chunk = new CR2WExportWrapper(this, cvar.REDType, parent) as ICR2WExport;
             chunk.CreateDefaultData(cvar);
 
             if (parent != null)
@@ -173,17 +174,17 @@ namespace WolvenKit.CR2W
         /// <param name="passedoldparentinghierarchy">Passed for children chunks</param>
         /// <returns>Number of chunks removed</returns>
         public int RemoveChunks(
-            List<CR2WExportWrapper> toberemovedchunks,
+            List<ICR2WExport> toberemovedchunks,
             bool onlychildren = false,
             EChunkDisplayMode recursionmode = EChunkDisplayMode.VirtualParent,
             bool purgereferrers = false,
             bool reentrant = false,
-            Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)> passedoldparentinghierarchy= null)
+            Dictionary<ICR2WExport, (ICR2WExport oldchunkparent, ICR2WExport oldchunkvparent)> passedoldparentinghierarchy= null)
         {
             int removed = onlychildren ? 0 : 1;
 
             // To reindex later, we need a middle-ground copy, between deep and shallow, of the parenting hierarchy.
-            var oldparentinghierarchy = new Dictionary<CR2WExportWrapper, (CR2WExportWrapper oldchunkparent, CR2WExportWrapper oldchunkvparent)>();
+            var oldparentinghierarchy = new Dictionary<ICR2WExport, (ICR2WExport oldchunkparent, ICR2WExport oldchunkvparent)>();
             if (!reentrant)
             {
                 foreach (var achunk in Chunks)
@@ -228,7 +229,7 @@ namespace WolvenKit.CR2W
                             if (oldparentinghierarchy[achunk].oldchunkparent == chunk)
                             {
                                 removed += RemoveChunks(
-                                    new List<CR2WExportWrapper>() { achunk },
+                                    new List<ICR2WExport>() { achunk },
                                     false,
                                     recursionmode,
                                     true,
@@ -242,7 +243,7 @@ namespace WolvenKit.CR2W
                             if (passedoldparentinghierarchy[achunk].oldchunkparent == chunk)
                             {
                                 removed += RemoveChunks(
-                                    new List<CR2WExportWrapper>() { achunk },
+                                    new List<ICR2WExport>() { achunk },
                                     false,
                                     recursionmode,
                                     true,
@@ -259,7 +260,7 @@ namespace WolvenKit.CR2W
                             if (oldparentinghierarchy[achunk].oldchunkvparent == chunk)
                             {
                                 removed += RemoveChunks(
-                                    new List<CR2WExportWrapper>() { achunk },
+                                    new List<ICR2WExport>() { achunk },
                                     false,
                                     recursionmode,
                                     true,
@@ -273,7 +274,7 @@ namespace WolvenKit.CR2W
                             if (passedoldparentinghierarchy[achunk].oldchunkvparent == chunk)
                             {
                                 removed += RemoveChunks(
-                                    new List<CR2WExportWrapper>() { achunk },
+                                    new List<ICR2WExport>() { achunk },
                                     false,
                                     recursionmode,
                                     true,
@@ -309,7 +310,7 @@ namespace WolvenKit.CR2W
             return removed;
         }
 
-        public int GetLastChildrenIndexRecursive(CR2WExportWrapper chunk)
+        public int GetLastChildrenIndexRecursive(ICR2WExport chunk)
         {
             if (chunk.VirtualChildrenChunks.Count() == 0)
             {
@@ -451,7 +452,7 @@ namespace WolvenKit.CR2W
             Names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
             Imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
             Properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
-            Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
+            Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this) as ICR2WExport).ToList();
             Buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList();
             Embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
             {
@@ -508,7 +509,7 @@ namespace WolvenKit.CR2W
             Names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList(); // block 2
             Imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList(); // block 3
             Properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList(); // block 4
-            Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this)).ToList(); // block 5
+            Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this) as ICR2WExport).ToList(); // block 5
             Buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList(); // block 6
             Embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
             {
@@ -526,7 +527,7 @@ namespace WolvenKit.CR2W
             // Read object data //block 5
             for (int i = 0; i < Chunks.Count; i++)
             {
-                CR2WExportWrapper chunk = Chunks[i];
+                ICR2WExport chunk = Chunks[i];
 
                 chunk.ReadData(file);
 
@@ -742,9 +743,10 @@ namespace WolvenKit.CR2W
             #region Update Offsets
             for (var i = 0; i < Chunks.Count; i++)
             {
-                var newoffset = Chunks[i].Export.dataOffset + headerOffset;
-                Chunks[i].SetOffset(newoffset);
-                Chunks[i].SetType( (ushort)GetStringIndex(Chunks[i].REDType));
+                var exportwrapper = Chunks[i] as CR2WExportWrapper;
+                var newoffset = exportwrapper.Export.dataOffset + headerOffset;
+                exportwrapper.SetOffset(newoffset);
+                exportwrapper.SetType( (ushort)GetStringIndex(Chunks[i].REDType));
             }
             if (m_hasInternalBuffer)
             {
@@ -765,7 +767,7 @@ namespace WolvenKit.CR2W
 
             foreach (var chunk in Chunks)
             {
-                FixExportCRC32(chunk.Export);
+                FixExportCRC32((chunk as CR2WExportWrapper).Export);
             }
 
             foreach (var buffer in Buffers)
@@ -968,8 +970,7 @@ namespace WolvenKit.CR2W
             newnameslist.Add("", "");
             var newimportslist = new List<SImportEntry>();
             var newsoftlist = new List<SImportEntry>();
-            var guidlist = new HashSet<Guid>();
-            var chunkguidlist = new List<Guid>();
+            var idlist = new HashSet<string>();
 
             // CDPR changed the type of CPtr<IBehTreeNodeDefinition> RootNode
             // to CHandle<IBehTreeNodeDefinition> RootNode in CBehTree in patch1
@@ -977,7 +978,6 @@ namespace WolvenKit.CR2W
 
             foreach (var c in Chunks)
             {
-                chunkguidlist.Add(c.data.InternalGuid);
                 LoopWrapper(new SNameArg(EStringTableMod.SkipName, c.data));
             }
             
@@ -987,7 +987,7 @@ namespace WolvenKit.CR2W
 
             void LoopWrapper(SNameArg var)
             {
-                if (guidlist.Contains(var.Item2.InternalGuid))
+                if (idlist.Contains(var.Item2.UniqueIdentifier))
                 {
                     return;
                 }
@@ -1021,10 +1021,10 @@ namespace WolvenKit.CR2W
         List<SNameArg> GetVariables(IEditableVariable ivar)
         {
             //check for looping references
-            if (guidlist.Contains(ivar.InternalGuid))
+            if (idlist.Contains(ivar.UniqueIdentifier))
                 return null;
             else
-                guidlist.Add(ivar.InternalGuid);
+                idlist.Add(ivar.UniqueIdentifier);
 
             var returnedVariables = new List<SNameArg>();
 
@@ -1085,7 +1085,7 @@ namespace WolvenKit.CR2W
                         && !cvar.ParentVar.GetType().IsGenericType
                         && !(cvar.ParentVar is IBufferVariantAccessor)
                         && !(cvar.ParentVar is SEntityBufferType2)
-                        && !guidlist.Contains(cvar.ParentVar.InternalGuid))
+                        && !idlist.Contains(cvar.ParentVar.UniqueIdentifier))
                     {
                         returnedVariables.Add(new SNameArg(EStringTableMod.None, cvar.ParentVar));
                     }
@@ -1313,7 +1313,7 @@ namespace WolvenKit.CR2W
                                 flags = EImportFlags.Template;
                         }
                             
-                        if (var.cr2w.Embedded.Any(_ => _.ImportPath == h.DepotPath && _.ImportClass == h.ClassName))
+                        if ((var.Cr2wFile as CR2WFile).Embedded.Any(_ => _.ImportPath == h.DepotPath && _.ImportClass == h.ClassName))
                             flags = EImportFlags.Inplace;
 
                         var importtuple = new SImportEntry(h.ClassName, h.DepotPath, flags);
@@ -1490,7 +1490,7 @@ namespace WolvenKit.CR2W
 
             m_tableheaders[4].itemCount = (uint)Chunks.Count;
             m_tableheaders[4].offset = (uint) file.BaseStream.Position;
-            WriteTable<CR2WExport>(file.BaseStream, Chunks.Select(_ => _.Export).ToArray(), 4);
+            WriteTable<CR2WExport>(file.BaseStream, Chunks.Select(_ => (_ as CR2WExportWrapper).Export).ToArray(), 4);
 
             if (Buffers.Count > 0)
             {

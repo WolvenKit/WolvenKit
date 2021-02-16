@@ -73,6 +73,8 @@ namespace WolvenKit.Model
                 this.Author = obj.Author;
                 this.Email = obj.Email;
                 this.GameType = GameType.Witcher3;
+                this.Data = obj;
+                this.Data.FileName = path;
             }
         }
 

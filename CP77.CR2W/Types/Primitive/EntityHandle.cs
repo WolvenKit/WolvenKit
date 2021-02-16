@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-
+using WolvenKit.Common.Model.Cr2w;
 using System.Diagnostics;
 using System;
 using System.Linq;

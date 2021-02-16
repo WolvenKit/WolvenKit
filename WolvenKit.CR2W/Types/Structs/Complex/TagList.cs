@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
@@ -43,7 +43,7 @@ namespace WolvenKit.CR2W.Types
             return new TagList(cr2w, parent, name);
         }
 
-        public override void AddVariable(CVariable var)
+        public override void AddVariable(IEditableVariable var)
         {
             if (var is CName)
             {

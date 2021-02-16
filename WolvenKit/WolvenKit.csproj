@@ -20,8 +20,107 @@
 	<DebugType>embedded</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);SA1652</NoWarn>
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
+    <Compile Remove="Views\Wizards\WizardPages\InstallerWizard\**" />
+    <EmbeddedResource Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
+    <EmbeddedResource Remove="Views\Wizards\WizardPages\InstallerWizard\**" />
+    <None Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
+    <None Remove="Views\Wizards\WizardPages\InstallerWizard\**" />
+    <Page Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
+    <Page Remove="Views\Wizards\WizardPages\InstallerWizard\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\Icons\3.png" />
+    <None Remove="Resources\Icons\cloud.png" />
+    <None Remove="Resources\Icons\FileIcons\aiarch3.svg" />
+    <None Remove="Resources\Icons\FileIcons\animation.svg" />
+    <None Remove="Resources\Icons\FileIcons\aningraph.svg" />
+    <None Remove="Resources\Icons\FileIcons\app.svg" />
+    <None Remove="Resources\Icons\FileIcons\audiometadata2.svg" />
+    <None Remove="Resources\Icons\FileIcons\audiovehcurveset.svg" />
+    <None Remove="Resources\Icons\FileIcons\behavior_graph3.svg" />
+    <None Remove="Resources\Icons\FileIcons\bk2.svg" />
+    <None Remove="Resources\Icons\FileIcons\bnk.svg" />
+    <None Remove="Resources\Icons\FileIcons\camcurveset.svg" />
+    <None Remove="Resources\Icons\FileIcons\cfoilage.svg" />
+    <None Remove="Resources\Icons\FileIcons\cubemap.svg" />
+    <None Remove="Resources\Icons\FileIcons\font.svg" />
+    <None Remove="Resources\Icons\FileIcons\json.svg" />
+    <None Remove="Resources\Icons\FileIcons\lights.svg" />
+    <None Remove="Resources\Icons\FileIcons\materialinstance.svg" />
+    <None Remove="Resources\Icons\FileIcons\mesh.svg" />
+    <None Remove="Resources\Icons\FileIcons\nvmesh.svg" />
+    <None Remove="Resources\Icons\FileIcons\particle.svg" />
+    <None Remove="Resources\Icons\FileIcons\quest.svg" />
+    <None Remove="Resources\Icons\FileIcons\scenesversions_Cutscene_versioning.svg" />
+    <None Remove="Resources\Icons\FileIcons\scene_Cutscene.svg" />
+    <None Remove="Resources\Icons\FileIcons\texarray.svg" />
+    <None Remove="Resources\Icons\FileIcons\traffic_collisions.svg" />
+    <None Remove="Resources\Icons\FileIcons\traffic_persistent.svg" />
+    <None Remove="Resources\Icons\FileIcons\w2mesh.svg" />
+    <None Remove="Resources\Icons\FileIcons\w2mi2.svg" />
+    <None Remove="Resources\Icons\FileIcons\W3Dyng.svg" />
+    <None Remove="Resources\Icons\FileIcons\W3Occulsion.svg" />
+    <None Remove="Resources\Icons\FileIcons\wem.svg" />
+    <None Remove="Resources\Icons\FileIcons\xbm.svg" />
+    <None Remove="Resources\Icons\FileIcons\xcube.svg" />
+    <None Remove="Resources\Icons\FileIcons\xml.svg" />
+    <None Remove="Resources\Icons\Homelogo.png" />
+    <None Remove="Resources\Icons\HomeSickTransp.png" />
+    <None Remove="Resources\Icons\HomeSickTransp2.png" />
+    <None Remove="Resources\Icons\SeeTroughIcon.png" />
+    <None Remove="Resources\Icons\Somthlikedis.png" />
+    <None Remove="Resources\Icons\TinyTest.png" />
+    <None Remove="Resources\Icons\whitelogo.png" />
+    <None Remove="Resources\Icons\work.png" />
+    <None Remove="Wkit_Icon_Flattened_256x.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\cloud.png" />
+    <Resource Include="Resources\Icons\FileIcons\aiarch3.svg" />
+    <Resource Include="Resources\Icons\FileIcons\animation.svg" />
+    <Resource Include="Resources\Icons\FileIcons\aningraph.svg" />
+    <Resource Include="Resources\Icons\FileIcons\app.svg" />
+    <Resource Include="Resources\Icons\FileIcons\audiometadata2.svg" />
+    <Resource Include="Resources\Icons\FileIcons\audiovehcurveset.svg" />
+    <Resource Include="Resources\Icons\FileIcons\behavior_graph3.svg" />
+    <Resource Include="Resources\Icons\FileIcons\bk2.svg" />
+    <Resource Include="Resources\Icons\FileIcons\bnk.svg" />
+    <Resource Include="Resources\Icons\FileIcons\camcurveset.svg" />
+    <Resource Include="Resources\Icons\FileIcons\cfoilage.svg" />
+    <Resource Include="Resources\Icons\FileIcons\cubemap.svg" />
+    <Resource Include="Resources\Icons\FileIcons\font.svg" />
+    <Resource Include="Resources\Icons\FileIcons\json.svg" />
+    <Resource Include="Resources\Icons\FileIcons\lights.svg" />
+    <Resource Include="Resources\Icons\FileIcons\materialinstance.svg" />
+    <Resource Include="Resources\Icons\FileIcons\mesh.svg" />
+    <Resource Include="Resources\Icons\FileIcons\nvmesh.svg" />
+    <Resource Include="Resources\Icons\FileIcons\particle.svg" />
+    <Resource Include="Resources\Icons\FileIcons\quest.svg" />
+    <Resource Include="Resources\Icons\FileIcons\scenesversions_Cutscene_versioning.svg" />
+    <Resource Include="Resources\Icons\FileIcons\scene_Cutscene.svg" />
+    <Resource Include="Resources\Icons\FileIcons\texarray.svg" />
+    <Resource Include="Resources\Icons\FileIcons\traffic_collisions.svg" />
+    <Resource Include="Resources\Icons\FileIcons\traffic_persistent.svg" />
+    <Resource Include="Resources\Icons\FileIcons\w2mesh.svg" />
+    <Resource Include="Resources\Icons\FileIcons\w2mi2.svg" />
+    <Resource Include="Resources\Icons\FileIcons\W3Dyng.svg" />
+    <Resource Include="Resources\Icons\FileIcons\W3Occulsion.svg" />
+    <Resource Include="Resources\Icons\FileIcons\wem.svg" />
+    <Resource Include="Resources\Icons\FileIcons\xbm.svg" />
+    <Resource Include="Resources\Icons\FileIcons\xcube.svg" />
+    <Resource Include="Resources\Icons\FileIcons\xml.svg" />
+    <Resource Include="Resources\Icons\HomeSickTransp.png" />
+    <Resource Include="Resources\Icons\HomeSickTransp2.png" />
+    <Resource Include="Resources\Icons\SeeTroughIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Somthlikedis.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CP77.CR2W\WolvenKit.Cyberformats.csproj" />
@@ -36,18 +135,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AvalonEdit" Version="6.0.1" />
     <PackageReference Include="Catel.Core" Version="5.12.11" />
     <PackageReference Include="Catel.MVVM" Version="5.12.11" />
-    <PackageReference Include="Catel.Fody" Version="4.5.0" PrivateAssets="all" />
-    <PackageReference Include="Dirkster.AvalonDock" Version="4.50.0" />
-    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.50.0" />
+    <PackageReference Include="Catel.Fody" Version="4.7.0-alpha0115" PrivateAssets="all" />
     <PackageReference Include="Dirkster.MWindowLib" Version="1.3.1.2" />
+    <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
     <PackageReference Include="Fody" Version="6.3.0" PrivateAssets="all" />
     <PackageReference Include="CsvHelper" Version="16.1.0" />
     <PackageReference Include="Dirkster.MLib" Version="1.3.1.2" />
     <PackageReference Include="FastMember" Version="1.5.0" />
-    <PackageReference Include="HandyControls" Version="3.1.0-rc.1" />
+    <PackageReference Include="HandyControls" Version="3.1.1" />
     <PackageReference Include="MahApps.Metro" Version="2.4.3" />
     <PackageReference Include="MahApps.Metro.IconPacks.BootstrapIcons" Version="4.8.0" />
     <PackageReference Include="MahApps.Metro.IconPacks.BoxIcons" Version="4.8.0" />
@@ -55,15 +152,17 @@
     <PackageReference Include="MarkerMetro.Unity.Ionic.Zlib" Version="2.0.0.14" NoWarn="NU1701" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.664.37" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
+    <PackageReference Include="NAudio" Version="1.10.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NodeNetwork" Version="5.1.2" />
     <PackageReference Include="NodeNetworkToolkit" Version="5.1.2" />
     <PackageReference Include="Octokit" Version="0.48.0" />
-    <PackageReference Include="Orc.CommandLine" Version="4.0.0" />
-    <PackageReference Include="Orc.FileSystem" Version="4.1.1" />
-    <PackageReference Include="Orc.Notifications" Version="4.0.0" />
-    <PackageReference Include="Orc.ProjectManagement" Version="4.0.2" />
-    <PackageReference Include="Orc.Theming" Version="4.2.0" />
+    <PackageReference Include="Orc.CommandLine" Version="4.1.1" />
+    <PackageReference Include="Orc.Notifications" Version="4.1.0" />
+    <PackageReference Include="Orc.ProjectManagement" Version="4.1.1" />
+    <PackageReference Include="Orc.Squirrel" Version="4.1.0" />
+    <PackageReference Include="Orc.Squirrel.Xaml" Version="4.1.0" />
+    <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.1" />
     <PackageReference Include="Pfim" Version="0.9.1" />
     <PackageReference Include="protobuf-net" Version="3.0.73" />
     <PackageReference Include="SharpZipLib" Version="1.3.1" />
@@ -73,17 +172,20 @@
     </PackageReference>
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
-    <PackageReference Include="Orc.ProjectManagement" Version="4.0.2" />
-    <PackageReference Include="Orc.Squirrel" Version="4.0.4" />
-    <PackageReference Include="Orc.Squirrel.Xaml" Version="4.0.4" />
-    <PackageReference Include="Orchestra.Shell.Ribbon.Fluent" Version="6.2" />
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.1" />
     <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" NoWarn="NU1701" />
+    <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
+    <PackageReference Include="WolvenKit.AvalonDock.Themes.VS2013" Version="4.50.4" />
+    <PackageReference Include="WolvenKit.AvalonEdit" Version="6.1.1" />
+    <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.1" />
+    <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="4.2.1" />
+    <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageReference Include="WpfAnalyzers" Version="3.5.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Update="NETStandard.Library" Version="2.0.1" />
+    <PackageReference Include="WPFHexaEditor" Version="2.1.6" />
+    <!--<PackageReference Update="NETStandard.Library" Version="2.0.1" />-->
   </ItemGroup>
   
   <ItemGroup>
@@ -198,7 +300,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Fonts\fontawesome-webfont.ttf" />
+    <Resource Include="Resources\Icons\3.png" />
+    <Resource Include="Resources\Icons\Homelogo.png" />
     <Resource Include="Resources\Icons\Logo.ico" />
+    <Resource Include="Resources\Icons\TinyTest.png" />
+    <Resource Include="Resources\Icons\whitelogo.png" />
+    <Resource Include="Resources\Icons\work.png" />
     <Resource Include="Resources\Images\Files\apb_32x.png" />
     <Resource Include="Resources\Images\Files\BlankFile_16x.png" />
     <Resource Include="Resources\Images\Files\blend_32x.png" />
@@ -273,6 +380,9 @@
     <Resource Include="Resources\Images\RedEngine\w2surf.png" />
     <Resource Include="Resources\Images\RedEngine\w2w.png" />
     <Resource Include="Resources\Images\RedEngine\worldmap.png" />
+    <Resource Include="Wkit_Icon_Flattened_256x.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\Images\Preferences_light_64x.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -299,14 +409,20 @@
     <Folder Include="Resources\Styles\Custom\" />
     <Folder Include="ViewModels\SettingsPages\SubPages\Integration\" />
     <Folder Include="ViewModels\SettingsPages\SubPages\Packaging\" />
-    <Folder Include="ViewModels\Wizards\WizardPages\InstallerWizard\" />
+    <Folder Include="Views\Editors\VisualEditor\Nodes\Audio\" />
+    <Folder Include="Views\Editors\VisualEditor\Nodes\Scene\" />
+    <Folder Include="Views\Editors\VisualEditor\Nodes\Quest\" />
     <Folder Include="Views\SettingsPages\SubPages\Integration\" />
     <Folder Include="Views\SettingsPages\SubPages\Packaging\" />
-    <Folder Include="Views\Wizards\WizardPages\InstallerWizard\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="testmp3.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

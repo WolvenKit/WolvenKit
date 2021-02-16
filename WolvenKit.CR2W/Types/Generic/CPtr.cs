@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml;
 using WolvenKit.CR2W.Reflection;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -22,7 +23,7 @@ namespace WolvenKit.CR2W.Types
 
         #region Properties
 
-        public CR2WExportWrapper Reference { get; set; }
+        public ICR2WExport Reference { get; set; }
         public string ReferenceType => REDType.Split(':').Last();
         #endregion
 
@@ -103,7 +104,7 @@ namespace WolvenKit.CR2W.Types
         {
             switch (val)
             {
-                case CR2WExportWrapper wrapper:
+                case ICR2WExport wrapper:
                     Reference = wrapper;
                     break;
                 case IPtrAccessor cval:
@@ -114,13 +115,13 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = (CPtr<T>)base.Copy(context);
 
             if (Reference != null)
             {
-                CR2WExportWrapper newref = context.TryLookupReference(Reference, copy);
+                ICR2WExport newref = context.TryLookupReference(Reference, copy);
                 if (newref != null)
                     copy.SetValue(newref);
             }

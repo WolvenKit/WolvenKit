@@ -9,6 +9,7 @@ using CP77.CR2W.Reflection;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W.Types
 {
@@ -29,12 +30,7 @@ namespace CP77.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            CUInt32 count = new CUInt32(cr2w, null, "")
-            {
-                val = (uint)Elements.Count
-            };
-            count.Write(file);
-
+            file.Write((uint)Elements.Count);
             base.Write(file);
         }
 

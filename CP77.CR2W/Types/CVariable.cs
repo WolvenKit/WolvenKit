@@ -12,10 +12,14 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Schema;
 using Catel.Data;
+using Catel.IoC;
 using Newtonsoft.Json;
 using WolvenKit.Common;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Extensions;
 using CP77.CR2W.Reflection;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
 using ObservableObject = Catel.Data.ObservableObject;
 
 namespace CP77.CR2W.Types
@@ -31,7 +35,7 @@ namespace CP77.CR2W.Types
 
         protected CVariable(CR2WFile cr2w, CVariable parent, string name)
         {
-            this.cr2w = cr2w;
+            this.Cr2wFile = cr2w;
             this.ParentVar = parent;
             this.REDName = name;
             this.VarChunkIndex = -1;
@@ -43,7 +47,7 @@ namespace CP77.CR2W.Types
 
         #region Fields
         [JsonIgnore]
-        public readonly TypeAccessor accessor;
+        public TypeAccessor accessor { get; }
 
         #endregion
 
@@ -52,12 +56,15 @@ namespace CP77.CR2W.Types
         [JsonIgnore]
         public List<CVariable> UnknownCVariables { get; set; } = new List<CVariable>();
 
+        [JsonIgnore]
+        public IWolvenkitFile Cr2wFile { get; set; }
+
         /// <summary>
         /// Stores the parent cr2w file.
         /// used a lot
         /// </summary>
         [JsonIgnore]
-        public CR2WFile cr2w { get; set; }
+        public CR2WFile cr2w => Cr2wFile as CR2WFile;
 
         /// <summary>
         /// Shows if the CVariable is to be serialized
@@ -76,6 +83,8 @@ namespace CP77.CR2W.Types
                 if (ParentVar is CVariable cparent)
                     cparent.SetIsSerialized();
         }
+
+        public bool IsNulled { get; set; }
 
         private ushort _redFlags;
         /// <summary>
@@ -165,11 +174,29 @@ namespace CP77.CR2W.Types
         #region Methods
         private string GetFullDependencyStringName()
         {
-            var depstr = this.REDName;
             var par = this.ParentVar;
-            while (par != null)
+            // top level chunk variables return the chunk index
+            if (par == null)
+                return $"{this.VarChunkIndex}.{this.REDName}";
+
+            // all chunks get their chunk id prefixed
+            var depstr = this.VarChunkIndex > 0 
+                ? $"{this.VarChunkIndex}.{this.REDName}" 
+                : this.REDName;
+            
+            while (true)
             {
-                depstr = $"{par.REDName}.{depstr}";
+                //depstr = $"{par.REDName}.{depstr}";
+                depstr = par.VarChunkIndex > 0
+                    ? $"{par.VarChunkIndex}.{par.REDName}.{depstr}"
+                    : $"{par.REDName}.{depstr}";
+
+
+                if (par.ParentVar == null)
+                {
+                    depstr = $"{par.VarChunkIndex}.{depstr}";
+                    break;
+                }
                 par = par.ParentVar;
             }
 
@@ -305,6 +332,35 @@ namespace CP77.CR2W.Types
         }
 
         /// <summary>
+        /// Writes a CVariable as a fixed size struct
+        /// </summary>
+        /// <param name="file"></param>
+        public virtual void WriteAsFixedSize(BinaryWriter file)
+        {
+            if (this is IREDPrimitive)
+                Write(file);
+            else
+            {
+                // write all CVariables
+                var members = this.GetREDMembers(true);
+                foreach (var item in members)
+                {
+                    var att = item.GetMemberAttribute<REDAttribute>();
+                    // don't write ignored buffers, they get written in the class
+                    if (att is REDBufferAttribute bufferAttribute && bufferAttribute.IsIgnored)
+                    {
+                        // add IsSerialized?
+                        continue;
+                    }
+
+                    // just write the RedBuffer without variable id
+                    if (this.accessor[this, item.Name] is CVariable av)
+                        av.Write(file);
+                }
+            }
+        }
+
+        /// <summary>
         /// Reads a CVariable from a binaryreader stream
         /// Can be overwritten by child classes
         /// </summary>
@@ -328,7 +384,6 @@ namespace CP77.CR2W.Types
             {
                 #region initial checks
                 sbyte zero = file.ReadSByte();
-                //var dzero = file.ReadBit6();
 
                 // ... okay CDPR, is that a joke or what?
                 if (zero != 0)
@@ -341,7 +396,8 @@ namespace CP77.CR2W.Types
                         case -128:
                             var dzero2 = file.ReadBit6();
                             return;
-                        case -1:
+                        case -1: // nulled
+                            IsNulled = true;
                             return;
                         default:
                             throw new InvalidParsingException($"Tried parsing a CVariable: zero read {zero}.");
@@ -402,8 +458,6 @@ namespace CP77.CR2W.Types
                 }
             }
         }
-
-        
 
         /// <summary>
         /// Instantiates and reads all REDVariables and REDBuffers in a CVariable 
@@ -467,11 +521,12 @@ namespace CP77.CR2W.Types
                     throw;
                 }
             }
-            //throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.GetType()}){this.REDName}");
-            Console.WriteLine($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
-            return false;
-
+            //throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
+            var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            Logger.LogString($"{this.TypeNameWithParents} - {value.REDType} {value.REDName}", Logtype.Error);
             
+            
+            return false;
         }
 
         /// <summary>
@@ -481,6 +536,13 @@ namespace CP77.CR2W.Types
         /// <param name="file"></param>
         public virtual void Write(BinaryWriter file)
         {
+            if (IsNulled)
+            {
+                file.Write((byte)0xFF);
+                return;
+            }
+
+
             REDMetaAttribute meta = (REDMetaAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(REDMetaAttribute));
             EREDMetaInfo[] tags = meta?.Keywords;
 
@@ -488,7 +550,8 @@ namespace CP77.CR2W.Types
             if ((tags ?? throw new InvalidOperationException()).Contains(EREDMetaInfo.REDStruct))
             {
                 // write all CVariables
-                foreach (Member item in this.GetREDMembers(true))
+                var members = this.GetREDMembers(true);
+                foreach (var item in members)
                 {
                     var att = item.GetMemberAttribute<REDAttribute>();
                     // don't write ignored buffers, they get written in the class
@@ -501,11 +564,6 @@ namespace CP77.CR2W.Types
                     // just write the RedBuffer without variable id
                     if (this.accessor[this, item.Name] is CVariable av)
                         av.Write(file);
-
-                    //if (pi?.GetValue(this) is CVariable cbuf)
-                    //{
-                    //    cbuf.Write(file);
-                    //}
                 }
             }
             // CVectors
@@ -515,7 +573,8 @@ namespace CP77.CR2W.Types
                 file.Write((byte)0);
 
                 // write all initialized CVariables (no buffers!)
-                foreach (Member item in this.GetREDMembers(false))
+                var members = this.GetREDMembers(false);
+                foreach (var item in members)
                 {
                     var att = item.GetMemberAttribute<REDAttribute>();
                     if (this.accessor[this, item.Name] is CVariable av)
@@ -537,12 +596,6 @@ namespace CP77.CR2W.Types
                         }
                         else
                             throw new SerializationException();
-                    }
-                    // proper enums
-                    // never happens
-                    else if (this.accessor[this, item.Name] is Enum @enum)
-                    {
-                        throw new NotImplementedException();
                     }
                 }
 
@@ -593,11 +646,15 @@ namespace CP77.CR2W.Types
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public virtual CVariable Copy(CR2WCopyAction context)
+        public virtual IEditableVariable Copy(ICR2WCopyAction icontext)
         {
+            if (icontext is not CR2WCopyAction context)
+                throw new InvalidParsingException("Tried copying tw3 assets.");
+
+
             // creates a new instance of the CVariable
             // with a new destination cr2wFile and a new parent CVariable if needed
-            var copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent, false);
+            var copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent as CVariable, false);
             //copy.REDFlags = this.REDFlags;
             copy.IsSerialized = this.IsSerialized;
 
@@ -631,7 +688,7 @@ namespace CP77.CR2W.Types
             return this;
         }
 
-        public virtual void AddVariable(CVariable var)
+        public virtual void AddVariable(IEditableVariable var)
         {
             throw new NotImplementedException();
         }
@@ -808,6 +865,8 @@ namespace CP77.CR2W.Types
 
             return finalvalue;
         }
+
+       
         #endregion
     }
 }

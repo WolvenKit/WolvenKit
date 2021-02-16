@@ -36,14 +36,7 @@ namespace WolvenKit.ViewModels
 		/// </summary>
 		ICommand SaveAsCommand { get; }
 
-		/// <summary>
-		/// Gets an encoding for a given BOM sequence of 4 bytes.
-		/// </summary>
-		/// <param name="bom"></param>
-		/// <returns></returns>
-		Encoding GetEncoding(byte[] bom);
-
-		/// <summary>
+        /// <summary>
 		/// Attempts to read the contents of a text file and assigns it to
 		/// text content of this viewmodel.
 		/// </summary>

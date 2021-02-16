@@ -31,6 +31,7 @@
     /// </summary>
     public enum ECookedFileFormat
     {
+        mesh,
         xbm,
         csv,
         json,

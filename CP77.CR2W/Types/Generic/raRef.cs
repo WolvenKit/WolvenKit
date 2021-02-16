@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Linq;
 using CP77.CR2W.Reflection;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W.Types
 {
@@ -26,11 +27,11 @@ namespace CP77.CR2W.Types
         [DataMember(EmitDefaultValue = false)]
         public string DepotPath { get; set; }
 
-        [DataMember(EmitDefaultValue = false)]
-        public string ClassName { get; set; }
+        //[DataMember(EmitDefaultValue = false)]
+        //public string ClassName { get; set; }
 
-        [DataMember(EmitDefaultValue = false)]
-        public ushort Flags { get; set; }
+        //[DataMember(EmitDefaultValue = false)]
+        public EImportFlags Flags { get; set; }
         #endregion
 
         #region Methods
@@ -45,16 +46,16 @@ namespace CP77.CR2W.Types
             {
                 DepotPath = cr2w.Imports[value - 1].DepotPathStr;
 
-                var filetype = cr2w.Imports[value - 1].Import.className;
-                ClassName = cr2w.Names[filetype].Str;
+                //var filetype = cr2w.Imports[value - 1].Import.className;
+                //ClassName = cr2w.Names[filetype].Str;
 
-                Flags = cr2w.Imports[value - 1].Import.flags;
+                Flags = (EImportFlags)cr2w.Imports[value - 1].Import.flags;
             }
             else
             {
                 DepotPath = "";
-                ClassName = "";
-                Flags = 4;
+                //ClassName = "";
+                Flags = EImportFlags.Default;
             }
         }
 
@@ -66,7 +67,7 @@ namespace CP77.CR2W.Types
         {
             ushort val = 0;
 
-            var import = cr2w.Imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName && _.Flags == Flags);
+            var import = cr2w.Imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath /*&& _.ClassNameStr == ClassName && _.Flags == Flags*/);
             val = (ushort)(cr2w.Imports.IndexOf(import) + 1);
 
 
@@ -80,27 +81,27 @@ namespace CP77.CR2W.Types
                 case ushort o:
                     this.SetValueInternal(o);
                     break;
-                case ISoftAccessor cvar:
-                    this.DepotPath = cvar.DepotPath;
-                    this.ClassName = cvar.ClassName;
-                    this.Flags = cvar.Flags;
+                case ISoftAccessor soft:
+                    this.DepotPath = soft.DepotPath;
+                    //this.ClassName = cvar.ClassName;
+                    this.Flags = soft.Flags;
                     break;
             }
 
             return this;
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = (raRef<T>)base.Copy(context);
 
-            copy.ClassName = ClassName;
+            //copy.ClassName = ClassName;
             copy.Flags = Flags;
             copy.DepotPath = DepotPath;
             return copy;
         }
 
-        public override string ToString() => ClassName + ": " + DepotPath;
+        public override string ToString() => /*ClassName + ": " +*/ $"[{Flags}]{DepotPath}";
 
 
         #endregion

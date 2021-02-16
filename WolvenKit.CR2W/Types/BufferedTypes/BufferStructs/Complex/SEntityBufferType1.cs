@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using WolvenKit.CR2W.Reflection;
 using FastMember;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.CR2W.Types.Utils
 {
@@ -55,7 +56,7 @@ namespace WolvenKit.CR2W.Types.Utils
             }
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
+        public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (SEntityBufferType1)base.Copy(context);
 

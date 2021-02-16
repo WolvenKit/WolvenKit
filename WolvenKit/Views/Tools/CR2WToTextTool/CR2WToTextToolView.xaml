@@ -1,0 +1,64 @@
+﻿<catel:UserControl x:Class="WolvenKit.Views.CR2WToTextTool.CR2WToTextToolView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:catel="http://schemas.catelproject.com" IsVisibleChanged="UserControl_IsVisibleChanged"
+                   xmlns:hc="https://handyorg.github.io/handycontrol">
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources/>
+                <hc:Theme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </catel:UserControl.Resources>
+
+
+    <Grid>
+
+        <StackPanel >
+
+            <RichTextBox Width="650" Height="150" AcceptsReturn="False">
+            </RichTextBox>
+            <Grid Margin="0,15,0,0">
+
+
+
+                <hc:UniformSpacingPanel Spacing="15" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel HorizontalAlignment="Center" Margin="10,0,0,0" Orientation="Horizontal">
+                        <hc:ComboBox  VerticalAlignment="Top" IsEditable="True" Width="450" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Source Folder"  Text="None"/>
+                        <Button Width="50" Margin="5,0,0,0" Content="Browse"/>
+
+
+
+                    </StackPanel>
+                    <hc:UniformSpacingPanel HorizontalAlignment="Right" Spacing="15" Orientation="Horizontal">
+                        <RadioButton  Width="150" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="One file per source file"/>
+                        <RadioButton  Width="150" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="Single file"/>
+                    </hc:UniformSpacingPanel>
+                   
+                    <hc:NumericUpDown HorizontalAlignment="Right" VerticalAlignment="Center" Width="380" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Number of Threads" Style="{StaticResource NumericUpDownPlus}" Margin="15,0,0,0"/>
+                    <StackPanel HorizontalAlignment="Center" Margin="10,0,0,0" Orientation="Horizontal">
+                        <hc:ComboBox  VerticalAlignment="Top" IsEditable="True" Width="450" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Source Folder"  Text="None"/>
+                        <Button Width="50" Margin="5,0,0,0" Content="Browse"/>
+
+
+
+                    </StackPanel>
+
+                    <hc:CheckComboBox  ItemsSource="{Binding DataList}" ShowClearButton="True" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" Style="{StaticResource CheckComboBoxPlus}" hc:InfoElement.Title="Dump Options" Margin="0,0,0,0" ShowSelectAllButton="True"/>
+
+                    <hc:UniformSpacingPanel HorizontalAlignment="Right" Spacing="15" Orientation="Horizontal">
+                        <RadioButton  Width="150" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="Overwrite Existing Files"/>
+                        <RadioButton  Width="150" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="Skip Existing Files"/>
+                    </hc:UniformSpacingPanel>
+                    
+                </hc:UniformSpacingPanel>
+         
+              
+            </Grid>
+        </StackPanel>
+
+
+    </Grid>
+
+</catel:UserControl>

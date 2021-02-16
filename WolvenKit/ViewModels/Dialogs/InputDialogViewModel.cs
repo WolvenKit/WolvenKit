@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using WolvenKit.Common.Services;
 using Catel.MVVM;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.ViewModels.Dialogs
 {
 
     /// <summary>
