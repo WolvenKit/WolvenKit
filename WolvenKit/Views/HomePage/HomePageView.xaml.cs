@@ -35,6 +35,7 @@ namespace WolvenKit.Views.HomePage
         public UserPageView UserPV;
         public IntegratedToolsPageView IntegratedTPV;
         public GithubPageView GithubPV;
+        public DebugPageView DebugPV;
 
 
         public HomePageView()
@@ -72,7 +73,7 @@ namespace WolvenKit.Views.HomePage
             UserPV = new UserPageView();
             GithubPV = new GithubPageView();
             IntegratedTPV = new IntegratedToolsPageView();
-
+            DebugPV = new DebugPageView();
 
         }
 
@@ -360,6 +361,15 @@ namespace WolvenKit.Views.HomePage
 
 
                 WKitGlobal.AppHelper.GlobalShell.DragMove();
+            }
+        }
+
+        private void SideMenu_DebugItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (IsLoaded && IsVisible && IsInitialized)
+            {
+                PageViewGrid.Children.Clear();
+                PageViewGrid.Children.Add(DebugPV);
             }
         }
     }
