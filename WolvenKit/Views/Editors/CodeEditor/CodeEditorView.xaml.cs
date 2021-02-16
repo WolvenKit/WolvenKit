@@ -1,6 +1,8 @@
 ﻿
 using Catel.Windows;
+using ICSharpCode.AvalonEdit.Folding;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace WolvenKit.Views.CodeEditor
 {
@@ -12,6 +14,8 @@ namespace WolvenKit.Views.CodeEditor
             ControlzEx.Theming.ThemeManager.Current.ChangeTheme(this, "Dark.Red"); //This aint needed was just for testing remove me.
 
         }
+
+
 
         private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -33,7 +37,7 @@ namespace WolvenKit.Views.CodeEditor
 
         private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordRPCHelper.WhatAmIDoing("Code Editor");
             }
