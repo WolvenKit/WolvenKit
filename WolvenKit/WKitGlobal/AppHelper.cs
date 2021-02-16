@@ -116,6 +116,7 @@ namespace WolvenKit.WKitGlobal
             viewModelLocator.Register(typeof(Views.HomePage.Pages.WebsitePageView), typeof(ViewModels.HomePage.Pages.WebsitePageViewModel));
             viewModelLocator.Register(typeof(Views.HomePage.Pages.SettingsPageView), typeof(ViewModels.HomePage.Pages.SettingsPageViewModel));
             viewModelLocator.Register(typeof(Views.HomePage.Pages.UserPageView), typeof(ViewModels.HomePage.Pages.UserPageViewModel));
+            viewModelLocator.Register(typeof(Views.HomePage.Pages.DebugPageView), typeof(ViewModels.HomePage.Pages.DebugPageViewModel));
 
 
             //-- Category : Integrated Tools

@@ -1,8 +1,4 @@
-<<<<<<< HEAD:WolvenKit/Views/HomePage/Pages/DebugPageView.xaml
 ﻿<catel:UserControl x:Class="WolvenKit.Views.HomePage.Pages.DebugPageView"
-=======
-﻿<catel:UserControl x:Class="WolvenKit.Views.Dialogs.AddChunkDialog"
->>>>>>> 169b15f00 (Dev UI (#343)):WolvenKit/Views/Dialogs/AddChunkDialog.xaml
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com">
