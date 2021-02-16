@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Reflection
         public static string GetREDNameString(Member item)
         {
             var attribute = item.GetMemberAttribute<REDAttribute>();
-            if (attribute is null || string.IsNullOrWhiteSpace(attribute.Name))
+            if (attribute == null || string.IsNullOrWhiteSpace(attribute.Name))
             {
                 return item.Name;
             }
@@ -209,21 +209,23 @@ namespace WolvenKit.CR2W.Reflection
 
         private static IEnumerable<Member> GetREDMembersInternal(this CVariable cvar, bool getBuffers)
         {
-            var a = cvar.accessor.GetMembers().OrderBy(p => p.Ordinal);
-
-            var redproperties = cvar.accessor.GetMembers()
-                    .OrderBy(p => p.Ordinal)
-                    .Where(_ => _.GetMemberAttribute<REDAttribute>() != null);
-
             // get RED and REDBuffers
             if (getBuffers)
             {
-                return redproperties;
+                return GetREDBuffersInternal(cvar);
             }
             // get only RED
             else
             {
-                return redproperties.Where(z => !(z.GetMemberAttribute<REDAttribute>() is REDBufferAttribute));
+                var redproperties = cvar.accessor.GetMembers()
+                    .OrderBy(p => p.Ordinal)
+                    .Where(delegate(Member z)
+                    {
+                        var t = z.GetMemberAttribute<REDAttribute>();
+                        return (t != null) && !(t is REDBufferAttribute); 
+                    });
+
+                return redproperties;
             }
         }
 
