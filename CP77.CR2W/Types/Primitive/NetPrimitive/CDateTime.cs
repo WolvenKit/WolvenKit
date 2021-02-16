@@ -119,6 +119,9 @@ namespace CP77.CR2W.Types
         /// <returns>Boolean indicating if the value was sucsessfully set.</returns>
         public static bool TryParse(CDateTime datetime, UInt64 value)
         {
+            if (value == 0)
+                return false;
+
             //Date
             value >>= 0xA;
             var day = Convert.ToInt32(value & 0x1F) + 1;
@@ -137,14 +140,7 @@ namespace CP77.CR2W.Types
             value >>= 0x6;
             var hour = Convert.ToInt32(value & 0X1FF);
 
-            try
-            {
-                datetime.m_value = new DateTime(year, month, day, hour, minute, second, millisecond);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                return false;
-            }
+            datetime.m_value = new DateTime(year, month, day, hour, minute, second, millisecond);
             return true;
         }
 
