@@ -219,7 +219,11 @@ namespace WolvenKit.CR2W.Reflection
             {
                 var redproperties = cvar.accessor.GetMembers()
                     .OrderBy(p => p.Ordinal)
-                    .Where(z => !(z.GetMemberAttribute<REDAttribute>() is REDBufferAttribute));
+                    .Where(z =>
+                    {
+                        var attrib = z.GetMemberAttribute<REDAttribute>();
+                        return (attrib != null) && !(attrib is REDBufferAttribute); 
+                    });
 
                 return redproperties;
             }
