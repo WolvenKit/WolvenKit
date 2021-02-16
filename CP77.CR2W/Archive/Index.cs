@@ -188,12 +188,10 @@ namespace CP77Tools.Model
             
         }
 
-        private void Read(BinaryReader br, IHashService mainController)
+        private void Read(BinaryReader br, IHashService hashService)
         {
             _hash = br.ReadUInt64();
-
-            if (mainController != null && mainController.Hashdict.ContainsKey(_hash))
-                HashStr = mainController.Hashdict[_hash];
+            HashStr = hashService?.Get(_hash);
         }
 
         public void Write(BinaryWriter bw)

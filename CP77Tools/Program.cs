@@ -24,7 +24,6 @@ namespace CP77Tools
             ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
 
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
             logger.OnStringLogged += delegate (object sender, LogStringEventArgs args)
             {
                 switch (args.Logtype)
@@ -66,7 +65,7 @@ namespace CP77Tools
             };
 
             //await ConsoleFunctions.UpdateHashesAsync();
-            hashService.ReloadLocally();
+            _ = ServiceLocator.Default.ResolveType<IHashService>();
 
             // try get oodle dll from game
             if (!TryCopyOodleLib())
