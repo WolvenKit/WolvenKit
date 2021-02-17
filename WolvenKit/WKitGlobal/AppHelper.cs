@@ -249,15 +249,19 @@ namespace WolvenKit.WKitGlobal
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         Views.Wizards.FirstSetupWizardView rpv = new Views.Wizards.FirstSetupWizardView();
-                        var vm = ServiceLocator.Default.ResolveType<ViewModels.Wizards.FirstSetupWizardViewModel>();
                         ViewModels.UserControlHostWindowViewModel zxc = new ViewModels.UserControlHostWindowViewModel(rpv);
                         UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
-                        vm.ClosedAsync += async (s, e) =>
+                        rpv.ViewModelChanged += (_s, _e) =>
                         {
-                            await Task.Run(() =>
+                            if (rpv.ViewModel == null)
+                                return;
+                            rpv.ViewModel.ClosedAsync += async (s, e) =>
                             {
-                                Application.Current.Dispatcher.Invoke(() => uchwv.Close());
-                            });
+                                await Task.Run(() =>
+                                {
+                                    Application.Current.Dispatcher.Invoke(() => uchwv.Close());
+                                });
+                            };
                         };
                         uchwv.Show();
                     });

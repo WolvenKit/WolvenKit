@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="av"
     x:Class="WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard.SelectThemeView"
-    Initialized="UserControl_Initialized_1">
+    Initialized="UserControl_Initialized_1"
+    Loaded="UserControl_Loaded">
 
     <Grid VerticalAlignment="Center" Grid.Row="3" >
         <Grid Margin="5,5,5,5" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Stretch">

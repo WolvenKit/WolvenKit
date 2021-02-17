@@ -1,5 +1,6 @@
 ﻿using Catel.IoC;
 using Catel.Services;
+using WolvenKit.Model.Wizards;
 using WolvenKit.Services;
 using WolvenKit.ViewModels.Wizards;
 
@@ -9,7 +10,7 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
     {
         private readonly ISettingsManager _settingsManager;
         private readonly FirstSetupWizardViewModel _firstSetupWizardViewModel;
-        private readonly IOpenFileService _openFileService;
+        private readonly FirstSetupWizardModel _firstSetupWizardModel;
         private readonly ISelectDirectoryService _selectDirectoryService;
 
         public LocateGameDateView()
@@ -18,7 +19,7 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
 
             _settingsManager = ServiceLocator.Default.ResolveType<ISettingsManager>();
             _firstSetupWizardViewModel = ServiceLocator.Default.ResolveType<FirstSetupWizardViewModel>();
-            _openFileService = ServiceLocator.Default.ResolveType<IOpenFileService>();
+            _firstSetupWizardModel = ServiceLocator.Default.ResolveType<FirstSetupWizardModel>();
             _selectDirectoryService = ServiceLocator.Default.ResolveType<ISelectDirectoryService>();
         }
 
@@ -67,6 +68,21 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
             return System.IO.File.Exists(str)
                 ? HandyControl.Data.OperationResult.Success()
                 : HandyControl.Data.OperationResult.Failed();
+        }
+
+        private void validateAllFields()
+        {
+            bool w3IsValid = true, cp77IsValid = true;
+            if (_firstSetupWizardModel.CreateModForW3)
+                w3IsValid = w3ExeTxtb.VerifyData() && wccLiteExeTxtb.VerifyData() && uncookedDepTxtb.VerifyData();
+            if (_firstSetupWizardModel.CreateModForCP77)
+                cp77IsValid = cp77ExeTxtb.VerifyData();
+            _firstSetupWizardViewModel.AllFieldIsValid = w3IsValid && cp77IsValid;
+        }
+
+        private void Field_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            validateAllFields();
         }
     }
 }

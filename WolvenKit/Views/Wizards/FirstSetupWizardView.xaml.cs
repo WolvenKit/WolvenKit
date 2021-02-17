@@ -9,16 +9,22 @@ namespace WolvenKit.Views.Wizards
     {
         public FirstSetupWizardView()
         {
-            ServiceLocator.Default.RegisterInstance(new Model.Wizards.ProjectWizardModel());
-            ServiceLocator.Default.RegisterTypeAndInstantiate<ViewModels.Wizards.FirstSetupWizardViewModel>();
-            
+            ServiceLocator.Default.RegisterTypeAndInstantiate<Model.Wizards.ProjectWizardModel>();
+
+            InitializeComponent();
+        }
+
+        private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
+        {
+            if (ViewModel != null)
+                ServiceLocator.Default.RegisterInstance(ViewModel as ViewModels.Wizards.FirstSetupWizardViewModel);
+
             CUV = new CreateUserView();
             STV = new SelectThemeView();
             LGDV = new LocateGameDateView();
             FSV = new FinalizeSetupView();
             SIPV = new SetInitialPreferencesView();
 
-            InitializeComponent();
             ShowPage();
         }
 

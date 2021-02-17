@@ -33,7 +33,6 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.FirstSetupWizard
             set { SetValue(ProjectWizardModelProperty, value); }
         }
 
-
         /// <summary>
         /// Register the FirstSetupWizardModel property so it is known in the class.
         /// </summary>

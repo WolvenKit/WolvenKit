@@ -3,6 +3,7 @@ using Catel.Data;
 using Catel.Fody;
 using Catel.IoC;
 using Catel.MVVM;
+using WolvenKit.Model.Wizards;
 using WolvenKit.Services;
 
 namespace WolvenKit.ViewModels.Wizards.WizardPages.FirstSetupWizard
@@ -16,6 +17,7 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.FirstSetupWizard
 
             SettingsManager = serviceLocator.ResolveType<ISettingsManager>();
             FirstSetupWizardViewModel = serviceLocator.ResolveType<FirstSetupWizardViewModel>();
+            FirstSetupWizardModel = serviceLocator.ResolveType<FirstSetupWizardModel>();
         }
         #endregion
 
@@ -44,6 +46,18 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.FirstSetupWizard
             set { SetValue(FirstSetupWizardViewModelProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the FirstSetupWizardModel.
+        /// </summary>
+        [Model]
+        [Expose("CreateModForW3")]
+        [Expose("CreateModForCP77")]
+        public FirstSetupWizardModel FirstSetupWizardModel
+        {
+            get { return GetValue<FirstSetupWizardModel>(ProjectWizardModelProperty); }
+            set { SetValue(ProjectWizardModelProperty, value); }
+        }
+
 
         /// <summary>
         /// Register the SettingsManager property so it is known in the class.
@@ -54,6 +68,11 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.FirstSetupWizard
         /// Register the FirstSetupWizardViewModel property so it is known in the class.
         /// </summary>
         public static readonly PropertyData FirstSetupWizardViewModelProperty = RegisterProperty("FirstSetupWizardViewModel", typeof(FirstSetupWizardViewModel));
+
+        /// <summary>
+        /// Register the FirstSetupWizardModel property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("FirstSetupWizardModel", typeof(FirstSetupWizardModel));
         #endregion properties
     }
 }

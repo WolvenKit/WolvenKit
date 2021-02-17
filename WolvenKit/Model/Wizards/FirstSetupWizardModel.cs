@@ -1,4 +1,5 @@
 ﻿using Catel.Data;
+using System.Windows.Media;
 
 namespace WolvenKit.Model.Wizards
 {
@@ -9,6 +10,8 @@ namespace WolvenKit.Model.Wizards
         private string _email = "";
         private string _donateLink = "";
         private string _defaultDescription = "";
+        private ImageBrush _profileImageBrush = default(ImageBrush);
+        private string _profileImagePath = "";
         private bool _createModForW3 = true;
         private bool _createModForCP77 = true;
         private bool _autoInstallMods = true;
@@ -16,6 +19,32 @@ namespace WolvenKit.Model.Wizards
         #endregion fields
 
         #region properties
+        /// <summary>
+        /// Gets/Sets the author's profile image brush.
+        /// </summary>
+        public ImageBrush ProfileImageBrush
+        {
+            get => _profileImageBrush;
+            set
+            {
+                _profileImageBrush = value;
+                RaisePropertyChanged(nameof(ProfileImageBrush));
+            }
+        }
+
+        /// <summary>
+        /// Gets/Sets the author's profile image path.
+        /// </summary>
+        public string ProfileImageBrushPath
+        {
+            get => _profileImagePath;
+            set
+            {
+                _profileImagePath = value;
+                RaisePropertyChanged(nameof(ProfileImageBrushPath));
+            }
+        }
+
         /// <summary>
         /// Gets/Sets the author's name.
         /// </summary>

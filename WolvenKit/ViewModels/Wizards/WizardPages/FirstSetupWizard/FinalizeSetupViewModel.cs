@@ -26,9 +26,12 @@ namespace WolvenKit.ViewModels.Wizards.WizardPages.FirstSetupWizard
         /// Gets or sets the FirstSetupWizardModel.
         /// </summary>
         [Model]
+        [Expose("Author")]
         [Expose("SelectedGames")]
         [Expose("AutoInstallMods")]
         [Expose("AutoUpdatesEnabled")]
+        [Expose("CreateModForW3")]
+        [Expose("CreateModForCP77")]
         public FirstSetupWizardModel FirstSetupWizardModel
         {
             get { return GetValue<FirstSetupWizardModel>(ProjectWizardModelProperty); }

@@ -103,6 +103,18 @@ namespace WolvenKit.ViewModels.Wizards
                 RaisePropertyChanged(nameof(CP77ExePath));
             }
         }
+
+        private bool _allFieldIsValid = false;
+        public bool AllFieldIsValid
+        {
+            get => _allFieldIsValid;
+            set
+            {
+                _allFieldIsValid = value;
+                RaisePropertyChanged(nameof(AllFieldIsValid));
+            }
+        }
+
         public string ExecutablePathBG => string.IsNullOrEmpty(W3ExePath) ? redBG : greenBG;
 
         private string _wccLitePath;
