@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dirkster.UnitComboLib" Version="1.1.0" />
+    <PackageReference Include="WolvenKit.AvalonEdit" Version="6.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Behaviours\" />
+  </ItemGroup>
+
+</Project>

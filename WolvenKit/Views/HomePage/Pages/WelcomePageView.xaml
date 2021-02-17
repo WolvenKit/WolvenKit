@@ -114,7 +114,8 @@
 
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="3*"/>
             <RowDefinition Height="1*"/>
 
         </Grid.RowDefinitions>
@@ -331,26 +332,16 @@
 
 
 
-        <Grid Grid.Column="1" Grid.Row="1" >
-            <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
+        <Grid   Grid.ColumnSpan="5" Grid.RowSpan="10" Grid.Row="2" >
+
+            <hc:UniformSpacingPanel HorizontalAlignment="Left" Spacing="20" VerticalAlignment="Bottom">
 
 
 
-                <hc:FlipClock  Margin="0,0,5,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" RenderTransformOrigin="0,0.5">
-                <hc:FlipClock.Effect>
-                    <hc:GrayScaleEffect></hc:GrayScaleEffect>
-                </hc:FlipClock.Effect>
-                <hc:FlipClock.LayoutTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleX="0.2" ScaleY="0.2"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </hc:FlipClock.LayoutTransform>
+            </hc:UniformSpacingPanel>
+            <iconPacks:PackIconCodicons Foreground="{DynamicResource Fluent.Ribbon.Brushes.IdealForegroundDisabledBrush}"  HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Bottom" Kind="Versions" Width="20" Height="20"/>
 
-                </hc:FlipClock>
-            </hc:TransitioningContentControl>
+            <TextBlock FontSize="10" Foreground="{DynamicResource Fluent.Ribbon.Brushes.IdealForegroundDisabledBrush}" IsEnabled="False" FlowDirection="LeftToRight" Text="V1.032323230.0" Margin="5,5,30,4" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
         </Grid>
 
 

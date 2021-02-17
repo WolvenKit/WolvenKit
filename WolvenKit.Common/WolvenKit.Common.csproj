@@ -33,7 +33,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Catel.Core" Version="5.12.11" />
-    <PackageReference Include="Catel.Fody" Version="4.5.0">
+    <PackageReference Include="Catel.Fody" Version="4.7.0-alpha0115">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Catel.MVVM" Version="5.12.11" />

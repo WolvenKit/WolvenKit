@@ -1,4 +1,3 @@
-using System.IO;
 using CP77.CR2W.Reflection;
 using FastMember;
 using static CP77.CR2W.Types.Enums;
@@ -8,9 +7,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class DestructibleRoadSign : BaseDestructibleDevice
 	{
-		[Ordinal(80)]  [RED("frameMesh")] public CHandle<entMeshComponent> FrameMesh { get; set; }
-		[Ordinal(81)]  [RED("uiMesh")] public CHandle<entMeshComponent> UiMesh { get; set; }
-		[Ordinal(82)]  [RED("uiMesh_2")] public CHandle<entMeshComponent> UiMesh_2 { get; set; }
+		[Ordinal(89)] [RED("frameMesh")] public CHandle<entMeshComponent> FrameMesh { get; set; }
+		[Ordinal(90)] [RED("uiMesh")] public CHandle<entMeshComponent> UiMesh { get; set; }
+		[Ordinal(91)] [RED("uiMesh_2")] public CHandle<entMeshComponent> UiMesh_2 { get; set; }
 
 		public DestructibleRoadSign(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

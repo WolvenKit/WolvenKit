@@ -64,7 +64,7 @@ namespace WolvenKit.Views.Wizards.WizardPages.ThemeWizard
                         Thread.Sleep(15);
                         if (Theme.BaseColorScheme == "Dark")
                         {
-                            if (!Theme.DisplayName.Contains("Colorful"))
+                            if (!Theme.DisplayName.Contains("Colorful") || !Theme.DisplayName.Contains("#"))
                             {
                                 Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                                 {
@@ -76,10 +76,8 @@ namespace WolvenKit.Views.Wizards.WizardPages.ThemeWizard
                                     circle.MouseEnter += Circle_MouseEnter;
                                     circle.MouseLeave += Circle_MouseLeave;
                                     circle.MouseLeftButtonDown += Circle_MouseLeftButtonDown;
-                                    circle.Name = Theme.DisplayName.Split('(')[0].ToString().Trim();
                                     circle.Fill = Theme.ShowcaseBrush;
 
-                                    HoneyColors.Children.Add(circle);
 
                                 }));
                             }
