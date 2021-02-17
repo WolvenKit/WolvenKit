@@ -11,21 +11,27 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout github repo (+ download lfs dependencies)
-      uses: actions/checkout@v2
-    - name: Setup Nuget.exe
-      uses: NuGet/setup-nuget@v1.0.5
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
       with:
-        nuget-version: latest
-    - name: Restore packages
-      run: nuget restore WolvenKit.sln
-    - name: setup-msbuild
-      uses: microsoft/setup-msbuild@v1
-    - name: Build with MSBuild
-      run: msbuild  WolvenKit.sln -p:Configuration=Release  -p:Platform=x64 -m
+        dotnet-version: 5.0.100
+    - name: Clean
+      run: dotnet clean ./WolvenKit.sln --configuration Release && dotnet nuget locals all --clear
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        name: artifact
+        path: ./WolvenKit/bin/Release/net5.0-windows
     - name: Zip Release
-      run: |
-        Compress-Archive -Path $Env:GITHUB_WORKSPACE\\WolvenKit\\bin\\Release\\net5.0-windows\\ -DestinationPath $Env:GITHUB_WORKSPACE\\WolvenKit.zip
+      uses: papeloto/action-zip@v1
+      with:
+        files: ./WolvenKit/bin/Release/net5.0-windows
+        dest: WolvenKit.zip
     - name: Deploy Nightly
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
