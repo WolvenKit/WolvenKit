@@ -68,5 +68,18 @@ namespace WolvenKit.Views.SettingsPages.SubPages.Editor
                 ? HandyControl.Data.OperationResult.Success()
                 : HandyControl.Data.OperationResult.Failed();
         }
+
+        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (cp77Txtbx.VerifyData())
+                _settingsManager.CP77ExecutablePath = cp77Txtbx.Text;
+            if (w3Txtbx.VerifyData())
+                _settingsManager.W3ExecutablePath = w3Txtbx.Text;
+            if (wccliteTxtbx.VerifyData())
+                _settingsManager.WccLitePath = wccliteTxtbx.Text;
+            if (depotTxtbx.VerifyData())
+                _settingsManager.DepotPath = depotTxtbx.Text;
+            _settingsManager.Save();
+        }
     }
 }

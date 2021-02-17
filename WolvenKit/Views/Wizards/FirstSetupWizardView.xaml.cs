@@ -16,8 +16,10 @@ namespace WolvenKit.Views.Wizards
 
         private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
         {
-            if (ViewModel != null)
-                ServiceLocator.Default.RegisterInstance(ViewModel as ViewModels.Wizards.FirstSetupWizardViewModel);
+            if (ViewModel == null)
+                return;
+            
+            ServiceLocator.Default.RegisterInstance(ViewModel as ViewModels.Wizards.FirstSetupWizardViewModel);
 
             CUV = new CreateUserView();
             STV = new SelectThemeView();

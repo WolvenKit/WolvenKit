@@ -34,7 +34,7 @@
                             <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                         </Button>
 
-                        <hc:TextBox hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFile" Text="{Binding CP77ExecutablePath}"/>
+                        <hc:TextBox x:Name="cp77Txtbx" hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFile" Text="{Binding CP77ExecutablePath, Mode=OneWay}" TextChanged="TextBox_TextChanged"/>
                     </Grid>
                 </Border>
 
@@ -60,7 +60,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="W3ExecutablePathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                            <hc:TextBox hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFile" Text="{Binding W3ExecutablePath}"/>
+                            <hc:TextBox x:Name="w3Txtbx" hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFile" Text="{Binding W3ExecutablePath, Mode=OneWay}" TextChanged="TextBox_TextChanged"/>
                         </Grid>
 
 
@@ -70,7 +70,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="WccLitePathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                            <hc:TextBox hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFile" Text="{Binding WccLitePath}"/>
+                            <hc:TextBox x:Name="wccliteTxtbx" hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFile" Text="{Binding WccLitePath, Mode=OneWay}" TextChanged="TextBox_TextChanged"/>
                         </Grid>
 
 
@@ -79,7 +79,7 @@
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="DepotPathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
-                            <hc:TextBox hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFolder" Text="{Binding DepotPath}"/>
+                            <hc:TextBox x:Name="depotTxtbx" hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFolder" Text="{Binding DepotPath, Mode=OneWay}" TextChanged="TextBox_TextChanged"/>
                         </Grid>
 
                     </StackPanel>

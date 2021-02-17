@@ -57,10 +57,11 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
             }
         }
 
-        private void ConfirmSettings_Click(object sender, System.Windows.RoutedEventArgs e)
+        private async void ConfirmSettings_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            await _fswvm.SaveViewModelAsync();
             _settingsManager.Save();
-            _fswvm.CloseViewModelAsync(null);
+            await _fswvm.CloseViewModelAsync(null);
         }
 
         private void CancelSettings_Click(object sender, System.Windows.RoutedEventArgs e)

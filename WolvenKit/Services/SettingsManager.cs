@@ -125,7 +125,7 @@ namespace WolvenKit.Services
             {
                 if (File.Exists(ConfigurationPath))
                 {
-                    config = JsonConvert.DeserializeObject<SettingsManager>(ConfigurationPath);
+                    config = JsonConvert.DeserializeObject<SettingsManager>(File.ReadAllText(ConfigurationPath));
                     FirstTimeSetupForUser = false;
                 }
                 else
