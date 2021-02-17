@@ -27,8 +27,6 @@ namespace WolvenKit.ViewModels.SettingsPages.SubPages.Editor
         [Expose("CP77ExecutablePath")]
         [Expose("WccLitePath")]
         [Expose("DepotPath")]
-        [Expose("GameModDir")]
-        [Expose("GameDlcDir")]
         private ISettingsManager SettingsManager
         {
             get { return GetValue<ISettingsManager>(SettingsManagerProperty); }
