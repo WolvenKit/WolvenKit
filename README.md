@@ -3,7 +3,7 @@
   <br>
   <a href="https://redmodding.org/"><img src="https://media.discordapp.net/attachments/803619861170225203/811665837218856970/banner2.png?width=960&height=305" alt="" ></a>
   <br>
-  Red-Engine Community Toolkit
+  REDengine Community Toolkit
   <br>
 </h3>
 
@@ -118,7 +118,9 @@ Rfuzzo | Core Development | [Email](mailto:r.fuzzo@gmail.com)
 Nightmarea | MVVM Development | [Email](mailto:kote2ster@gmail.com) 
 Offline | UI Development | [Email](mailto:sodanakin@gmail.com) 
 
+
 <!-- readme: contributors -start -->
+
 <!-- readme: contributors -end -->
 
 <h3 align="center"><a href="https://imgbb.com/"><img src="https://i.ibb.co/ky17Xj9/download-1.png" alt="download-1" border="0"></a>
