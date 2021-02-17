@@ -52,7 +52,7 @@ This repository was created to demonstrate how the proprietary game engine of CD
 <p align="center">You can either build WolvenKit yourself or use our Installer.</p>
   
 <h3 align="center">
-  <a href="#build">Build</a> •
+  <a href="#building">Build</a> •
   <a href="#install">Install</a> 
 </h3>
 
