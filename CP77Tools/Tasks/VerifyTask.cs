@@ -44,7 +44,7 @@ namespace CP77Tools.Tasks
                 var bm = new ArchiveManager(gameArchiveDir);
                 foreach (var hash in hashes)
                 {
-                    if (!hashService.Hashdict.ContainsKey(hash))
+                    if (!hashService.Contains(hash))
                         continue;
 
                     var file = bm.Files[hash];

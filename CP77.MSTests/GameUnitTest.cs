@@ -1,13 +1,7 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using Catel.IoC;
 using CP77.CR2W.Archive;
 using Microsoft.Extensions.Configuration;
@@ -64,15 +58,12 @@ namespace CP77.MSTests
             if (!File.Exists(destFileName))
                 oodleInfo.CopyTo(destFileName);
 
-
-
-            WriteToFile = Boolean.Parse(_config.GetSection(WriteToFileSetting).Value);
+            WriteToFile = bool.Parse(_config.GetSection(WriteToFileSetting).Value);
 
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
 
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
-            hashService.ReloadLocally();
+            _ = ServiceLocator.Default.ResolveType<IHashService>();
 
             DirectoryInfo gameArchiveDir;
             try
