@@ -140,13 +140,13 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid>
-                    <hc:CheckTreeView Margin="0" ItemsSource="{Binding RootNode.SubDirectories}"  BorderBrush="{DynamicResource MahApps.Brushes.Accent4}">
+                    <TreeView SelectedItemChanged="TreeView_OnSelectedItemChanged" Margin="0" ItemsSource="{Binding RootNode.SubDirectories}"  BorderBrush="{DynamicResource MahApps.Brushes.Accent4}">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
                                 <TextBlock Text="{Binding Name}" />
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
-                    </hc:CheckTreeView>
+                    </TreeView>
                 </Grid>
 
                 <Grid Grid.Column="1">

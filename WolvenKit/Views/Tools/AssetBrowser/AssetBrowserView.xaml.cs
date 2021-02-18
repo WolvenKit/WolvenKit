@@ -98,5 +98,11 @@ namespace WolvenKit.Views.AssetBrowser
                 viewmodel.PreviewVisible = false;
             }
         }
+
+        private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            viewmodel.CurrentNode = e.NewValue as GameFileTreeNode;
+            viewmodel.CurrentNodeFiles = (e.NewValue as GameFileTreeNode)?.ToAssetBrowserData();
+        }
     }
 }
