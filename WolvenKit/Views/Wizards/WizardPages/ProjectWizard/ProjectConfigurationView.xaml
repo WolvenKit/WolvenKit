@@ -5,7 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"                   
     xmlns:catel="http://schemas.catelproject.com"                    
     xmlns:hc="https://handyorg.github.io/handycontrol"                   
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -29,12 +30,17 @@
                         <StackPanel>
 
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock VerticalAlignment="Center" Text="Project Image (Optional)"></TextBlock>
-                                <hc:ImageSelector   Margin="10,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
+                                <TextBlock VerticalAlignment="Center">
+                                    <Run Text="Project Image"></Run>
+
+                                    <LineBreak/>
+                                    <Run Text="(Optional)"></Run>
+                                </TextBlock>
+                                <hc:ImageSelector   x:Name="imgSelector" Margin="10,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
                             </StackPanel>
 
-                            <hc:TextBox    hc:InfoElement.Necessary="True" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Project Name" Style="{StaticResource TextBoxExtendCustom}" Margin="0,32,0,0" Text="{Binding ProjectName}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" SelectionBrush="{DynamicResource MahApps.Brushes.Accent}" HorizontalAlignment="Stretch"/>
-                            <hc:TextBox    hc:InfoElement.Necessary="True" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Project Path" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFolder" Margin="0,32,50,0" Text="{Binding ProjectPath}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" SelectionBrush="{DynamicResource MahApps.Brushes.Accent}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                            <hc:TextBox    x:Name="projectNameTxtbx" hc:InfoElement.Necessary="True" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Project Name" Style="{StaticResource TextBoxExtendCustom}" Margin="0,32,0,0" Text="{Binding ProjectName}" HorizontalAlignment="Stretch" TextChanged="TextBox_TextChanged"/>
+                            <hc:TextBox    x:Name="projectPathTxtbx" hc:InfoElement.Necessary="True" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Project Path" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFolder" Margin="0,32,50,0" Text="{Binding ProjectPath}" HorizontalAlignment="Stretch" VerticalAlignment="Top" TextChanged="TextBox_TextChanged"/>
 
                         </StackPanel>
 

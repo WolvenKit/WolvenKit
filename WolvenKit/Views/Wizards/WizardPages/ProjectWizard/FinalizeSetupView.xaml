@@ -1,7 +1,9 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol">
+                   xmlns:catel="http://schemas.catelproject.com"
+                   xmlns:hc="https://handyorg.github.io/handycontrol"
+                   Loaded="UserControl_Loaded">
     <catel:UserControl.Resources>
         <catel:BooleanToOppositeBooleanConverter x:Key="booleanToOppositeBooleanConverter" />
         <ResourceDictionary x:Key="resourceDictionary">
@@ -30,13 +32,13 @@
                             <StackPanel>
                                 <Grid Margin="5,32,0,0" >
 
-                                    <TextBlock   VerticalAlignment="Center">                               
+                                    <TextBlock   VerticalAlignment="Center">
                                         <Run Text="Project Image"></Run>
 
                                         <LineBreak/>
-                                        <Run Text="Optional"></Run>
+                                        <Run Text="(Optional)"></Run>
                                     </TextBlock>
-                                    <hc:ImageSelector  Margin="100,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
+                                    <hc:ImageSelector  x:Name="imgSelector" Margin="100,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
                                 </Grid>
                                 <Grid Margin="5,32,0,0" >
 
