@@ -1,4 +1,4 @@
-﻿<catel:DataWindow x:Class="WolvenKit.Views.AssetBrowser.AssetBrowserView"
+<catel:DataWindow x:Class="WolvenKit.Views.AssetBrowser.AssetBrowserView"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"     
                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -135,7 +135,7 @@
 
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="4*"/>
                 </Grid.ColumnDefinitions>
 
@@ -153,27 +153,26 @@
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="auto" MinWidth="10" MaxWidth="500"/>
-                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="{Binding PreviewWidth}" MinWidth="10" MaxWidth="500"/>
+                        <ColumnDefinition Width="0"/>
 
                     </Grid.ColumnDefinitions>
 
                     <Grid Grid.Column="1" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  >
-                        <Grid x:Name="PreviewGridAsset">
-                            <!-- Use this grid for preview UC -->
-
+                        <Grid Visibility="{Binding PreviewVisible}" x:Name="PreviewGridAsset">
+                            <Label HorizontalAlignment="Center" Content="{Binding SelectedNode.Name, FallbackValue='No file selected'}"></Label>
                         </Grid>
                     </Grid>
-                    <GridSplitter   Grid.Row="0" Grid.Column="1" Margin="2,0,2,0"
-                                        Width="3"   Height="40"      HorizontalAlignment="Left" 
+                    <GridSplitter Grid.Row="0" Grid.Column="1" Margin="2,0,2,0"
+                                        Width="3"  HorizontalAlignment="Left" 
                                         VerticalAlignment="Stretch"
                                         Background="{DynamicResource MahApps.Brushes.Accent3}" 
                                         ShowsPreview="False" >
                     </GridSplitter>
-                    <hc:TabControl IsAnimationEnabled="True" ShowCloseButton="True" IsDraggable="True"  >
+                    <hc:TabControl Grid.Column="0" IsAnimationEnabled="True" ShowCloseButton="True" IsDraggable="True">
                         <hc:TabItem Header="Depot">
                             <!-- Bind Header to selected item in treeview-->
-                            <ListView BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" MouseDoubleClick="ListView_MouseDoubleClick" Background="Transparent" ItemsSource="{Binding CurrentNodeFiles}">
+                            <ListView BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" MouseDoubleClick="ListView_MouseDoubleClick" Background="Transparent" SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}" ItemsSource="{Binding CurrentNodeFiles}">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Width="500" Header="Name" DisplayMemberBinding="{Binding Name}"/>
@@ -183,7 +182,7 @@
                             </ListView>
                         </hc:TabItem>
                     </hc:TabControl>
-                    <Button Style="{StaticResource ButtonIcon}" Width="40" hc:IconElement.Geometry="{DynamicResource AssetBrowserOpenPreview}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,15" Background="Transparent" BorderBrush="Transparent" RenderTransformOrigin="0.5,0.5">
+                    <Button Click="ShowPreviewButton_Click" Style="{StaticResource ButtonIcon}" Width="40" hc:IconElement.Geometry="{DynamicResource AssetBrowserOpenPreview}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,15" Background="Transparent" BorderBrush="Transparent" RenderTransformOrigin="0.5,0.5">
                         <Button.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>

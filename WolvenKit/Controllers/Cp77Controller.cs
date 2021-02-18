@@ -33,6 +33,11 @@ namespace WolvenKit.Controllers
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
+            if (!File.Exists(_settings.CP77ExecutablePath))
+            {
+                _logger.LogString("Settings are not set up properly... can't load the archive manager... ", Logtype.Error);
+                return null;
+            }
             _logger.LogString("Loading archive Manager ... ", Logtype.Important);
             try
             {
