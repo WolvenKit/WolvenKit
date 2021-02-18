@@ -1,6 +1,9 @@
-﻿using DotNetHelper.FastMember.Extension.Extension;
+// Replacing IEnumerable<Member> with Member[] saves ~9 seconds
+
+using DotNetHelper.FastMember.Extension.Extension;
 using FastMember;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -33,7 +36,7 @@ namespace CP77.CR2W.Reflection
         {
             // FIXME wkit doesn't support .NET types right now
 
-            
+
             // Handles .Net types that have different names.
             // Types such as Double, Int32, or Int16 are the same.
             //switch (Type.GetTypeCode(type))
@@ -88,7 +91,7 @@ namespace CP77.CR2W.Reflection
                 }
                 if (gentype == typeof(CEnum<>))
                 {
-                    
+
                 }
 
                 return type.GetPrettyGenericTypes();
@@ -96,7 +99,7 @@ namespace CP77.CR2W.Reflection
             else
             {
                 return GetREDTypeFroWkitType(type.Name);
-                
+
             }
         }
 
@@ -148,65 +151,10 @@ namespace CP77.CR2W.Reflection
             }
         }
 
-
         /// https://stackoverflow.com/questions/14734374/c-sharp-reflection-property-order
         public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool getBuffers)
         {
-            Type type = cvar.GetType();
-            Dictionary<Type, int> lookup = new Dictionary<Type, int>();
-
-            // get hierarchical list of types
-            int count = 0;
-            lookup[type] = count++;
-            Type parent = type.BaseType;
-            while (parent != null)
-            {
-                lookup[parent] = count;
-                count++;
-                parent = parent.BaseType;
-            }
-
-            return cvar.GetREDMembersInternal(getBuffers)
-                .OrderByDescending(prop => lookup[prop.GetMemberInfo().DeclaringType]);
-        }
-
-        public static IEnumerable<Member> GetREDBuffers(this CVariable cvar)
-        {
-            Type type = cvar.GetType();
-            Dictionary<Type, int> lookup = new Dictionary<Type, int>();
-
-            int count = 0;
-            lookup[type] = count++;
-            Type parent = type.BaseType;
-            while (parent != null)
-            {
-                lookup[parent] = count;
-                count++;
-                parent = parent.BaseType;
-            }
-
-            return cvar.GetREDBuffersInternal()
-                .OrderByDescending(prop => lookup[prop.GetMemberInfo().DeclaringType]);
-        }
-
-
-        private static IEnumerable<Member> GetREDBuffersInternal(this CVariable cvar)
-        {
-            // get only REDBuffers
-            var redproperties = cvar.accessor.GetMembers()
-                    .OrderBy(p => p.Ordinal)
-                    .Where(_ => _.GetMemberAttribute<REDBufferAttribute>() != null);
-
-            return redproperties;
-        }
-
-        private static IEnumerable<Member> GetREDMembersInternal(this CVariable cvar, bool getBuffers)
-        {
-            var a = cvar.accessor.GetMembers().OrderBy(p => p.Ordinal);
-
-            var redproperties = cvar.accessor.GetMembers()
-                    .OrderBy(p => p.Ordinal)
-                    .Where(_ => _.GetMemberAttribute<REDAttribute>() != null);
+            var redproperties = GetMembers(cvar);
 
             // get RED and REDBuffers
             if (getBuffers)
@@ -220,6 +168,57 @@ namespace CP77.CR2W.Reflection
             }
         }
 
-       
+        public static IEnumerable<Member> GetREDBuffers(this CVariable cvar)
+        {
+            // get only REDBuffers
+            var redproperties = GetMembers(cvar)
+                .Where(_ => _.GetMemberAttribute<REDBufferAttribute>() != null);
+
+            return redproperties;
+        }
+
+        private static readonly ConcurrentDictionary<Type, Lazy<IEnumerable<Member>>> MembersCache = new();
+
+        private static IEnumerable<Member> GetMembers(CVariable cvar)
+        {
+            return MembersCache.GetOrAdd(cvar.GetType(), new Lazy<IEnumerable<Member>>(() => GetMembersInternal(cvar))).Value;
+        }
+
+        private static IEnumerable<Member> GetMembersInternal(CVariable cvar)
+        {
+            var result = new List<Member>();
+
+            var properties = cvar.GetType().GetProperties();
+            if (properties.Length > 0)
+            {
+                var lastIndex = properties.Length - 1;
+                var lastDeclaringType = properties[lastIndex].DeclaringType;
+                for (var i = properties.Length - 1; i >= 0; i--)
+                {
+                    if (properties[i].DeclaringType == lastDeclaringType)
+                        continue;
+
+                    AddMembers(i + 1, lastIndex);
+
+                    lastIndex = i;
+                    lastDeclaringType = properties[i].DeclaringType;
+                }
+
+                AddMembers(0, lastIndex);
+
+                void AddMembers(int start, int end)
+                {
+                    for (var i = start; i <= end; i++)
+                    {
+                        if (!Attribute.IsDefined(properties[i], typeof(REDAttribute)))
+                            continue;
+
+                        result.Add((Member)System.Activator.CreateInstance(typeof(Member), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { properties[i] }, null));
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }
