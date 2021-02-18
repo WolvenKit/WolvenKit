@@ -7,7 +7,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class physicsSystemJoint : physicsISystemObject
 	{
-		[Ordinal(1)] [RED("localToWorld")] public Matrix LocalToWorld { get; set; }
+		[Ordinal(1)] [RED("localToWorld")] public CMatrix LocalToWorld { get; set; }
 		[Ordinal(2)] [RED("pinA")] public CHandle<physicsPhysicalJointPin> PinA { get; set; }
 		[Ordinal(3)] [RED("pinB")] public CHandle<physicsPhysicalJointPin> PinB { get; set; }
 		[Ordinal(4)] [RED("linearLimit")] public physicsPhysicsJointLinearLimit LinearLimit { get; set; }
@@ -20,7 +20,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(11)] [RED("driveSwing")] public physicsPhysicsJointDrive DriveSwing { get; set; }
 		[Ordinal(12)] [RED("driveSLERP")] public physicsPhysicsJointDrive DriveSLERP { get; set; }
 		[Ordinal(13)] [RED("driveVelocity")] public physicsPhysicsJointDriveVelocity DriveVelocity { get; set; }
-		[Ordinal(14)] [RED("drivePosition")] public Matrix DrivePosition { get; set; }
+		[Ordinal(14)] [RED("drivePosition")] public CMatrix DrivePosition { get; set; }
 		[Ordinal(15)] [RED("projectionEnabled")] public CBool ProjectionEnabled { get; set; }
 		[Ordinal(16)] [RED("linearTolerance")] public CFloat LinearTolerance { get; set; }
 		[Ordinal(17)] [RED("angularTolerance")] public CFloat AngularTolerance { get; set; }
