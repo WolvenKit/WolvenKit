@@ -1,4 +1,4 @@
-﻿using Catel.MVVM;
+using Catel.MVVM;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,6 +30,10 @@ namespace WolvenKit.ViewModels.AssetBrowser
         public string SelectedExtension { get; set; }
         public List<string> Classes { get; set; }
         public string SelectedClass { get; set; }
+        public GridLength PreviewWidth { get; set; }
+        public bool PreviewVisible { get; set; }
+        public AssetBrowserData SelectedNode { get; set; }
+        public List<AssetBrowserData> SelectedNodes { get; set; }
 
         public AssetBrowserViewModel(List<IGameArchiveManager> managers, List<string> AvaliableClasses)
         {
@@ -52,6 +56,8 @@ namespace WolvenKit.ViewModels.AssetBrowser
             this.RootNode = this.CurrentNode;
             this.Extensions = managers.SelectMany(x => x.Extensions).ToList();
             this.Classes = AvaliableClasses;
+            this.PreviewWidth = new GridLength(0, GridUnitType.Pixel);
+            this.PreviewVisible = false;
         }
 
         public void PerformSearch(string query)
