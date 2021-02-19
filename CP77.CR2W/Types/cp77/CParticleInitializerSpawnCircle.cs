@@ -11,7 +11,7 @@ namespace CP77.CR2W.Types
 		[Ordinal(5)] [RED("outerRadius")] public CHandle<IEvaluatorFloat> OuterRadius { get; set; }
 		[Ordinal(6)] [RED("surfaceOnly")] public CBool SurfaceOnly { get; set; }
 		[Ordinal(7)] [RED("worldSpace")] public CBool WorldSpace { get; set; }
-		[Ordinal(8)] [RED("spawnToLocal")] public Matrix SpawnToLocal { get; set; }
+		[Ordinal(8)] [RED("spawnToLocal")] public CMatrix SpawnToLocal { get; set; }
 
 		public CParticleInitializerSpawnCircle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
