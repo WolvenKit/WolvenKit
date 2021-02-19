@@ -146,80 +146,37 @@ namespace CP77.CR2W.Reflection
                 default:
                     return typename;
             }
+
         }
 
-
-        /// https://stackoverflow.com/questions/14734374/c-sharp-reflection-property-order
-        public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool getBuffers)
+        public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool includeBuffers)
         {
-            Type type = cvar.GetType();
-            Dictionary<Type, int> lookup = new Dictionary<Type, int>();
+            return cvar.accessor
+                .GetMembers()
+                .Where(p =>
+                {
+                    var attr = p.GetMemberAttribute<REDAttribute>();
+                    if (attr is null)
+                    {
+                        return false;
+                    }
 
-            // get hierarchical list of types
-            int count = 0;
-            lookup[type] = count++;
-            Type parent = type.BaseType;
-            while (parent != null)
-            {
-                lookup[parent] = count;
-                count++;
-                parent = parent.BaseType;
-            }
+                    if (!includeBuffers)
+                    {
+                        return attr is not REDBufferAttribute;
+                    }
 
-            return cvar.GetREDMembersInternal(getBuffers)
-                .OrderByDescending(prop => lookup[prop.GetMemberInfo().DeclaringType]);
+                    return true;
+                })
+                .OrderBy(p => p.Ordinal);
         }
 
         public static IEnumerable<Member> GetREDBuffers(this CVariable cvar)
         {
-            Type type = cvar.GetType();
-            Dictionary<Type, int> lookup = new Dictionary<Type, int>();
-
-            int count = 0;
-            lookup[type] = count++;
-            Type parent = type.BaseType;
-            while (parent != null)
-            {
-                lookup[parent] = count;
-                count++;
-                parent = parent.BaseType;
-            }
-
-            return cvar.GetREDBuffersInternal()
-                .OrderByDescending(prop => lookup[prop.GetMemberInfo().DeclaringType]);
+            return cvar.accessor
+                .GetMembers()
+                .Where(p => p.GetMemberAttribute<REDBufferAttribute>() is not null)
+                .OrderBy(p => p.Ordinal);
         }
-
-
-        private static IEnumerable<Member> GetREDBuffersInternal(this CVariable cvar)
-        {
-            // get only REDBuffers
-            var redproperties = cvar.accessor.GetMembers()
-                    .OrderBy(p => p.Ordinal)
-                    .Where(_ => _.GetMemberAttribute<REDBufferAttribute>() != null);
-
-            return redproperties;
-        }
-
-        private static IEnumerable<Member> GetREDMembersInternal(this CVariable cvar, bool getBuffers)
-        {
-            var a = cvar.accessor.GetMembers().OrderBy(p => p.Ordinal);
-
-            var redproperties = cvar.accessor.GetMembers()
-                    .OrderBy(p => p.Ordinal)
-                    .Where(_ => _.GetMemberAttribute<REDAttribute>() != null);
-
-            // get RED and REDBuffers
-            if (getBuffers)
-            {
-                return redproperties;
-            }
-            // get only RED
-            else
-            {
-                return redproperties.Where(z => !(z.GetMemberAttribute<REDAttribute>() is REDBufferAttribute));
-            }
-        }
-
-       
     }
 }
