@@ -193,11 +193,11 @@ namespace CP77Tools
 
             try
             {
-                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
+                Parallel.ForEach(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
                 {
-                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                    var programName = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)
                         ?.GetValue("DisplayName");
-                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                    var installLocation = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)
                         ?.GetValue("InstallLocation");
                     if (programName != null && installLocation != null)
                     {
@@ -211,11 +211,11 @@ namespace CP77Tools
 
                     strDelegate.Invoke(exePath);
                 });
-                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
+                Parallel.ForEach(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
                 {
-                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                    var programName = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
                         ?.GetValue("DisplayName");
-                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                    var installLocation = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
                         ?.GetValue("InstallLocation");
                     if (programName != null && installLocation != null)
                     {
