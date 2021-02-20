@@ -5,6 +5,7 @@ using Catel.IoC;
 using System.CommandLine;
 using System.ComponentModel;
 using System.IO;
+using System.Runtime.InteropServices;
 using CP77.CR2W;
 using CP77Tools.Commands;
 using CP77Tools.Extensions;
@@ -44,7 +45,7 @@ namespace CP77Tools
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                
+
                 Console.WriteLine("[" + args.Logtype + "]" + args.Message);
                 Console.ResetColor();
             };
@@ -56,11 +57,11 @@ namespace CP77Tools
                 new RebuildCommand(),
                 new PackCommand(),
                 new ExportCommand(),
-                
+
                 new DumpCommand(),
                 new VerifyCommand(),
                 new CR2WCommand(),
-                
+
                 new HashCommand(),
                 new OodleCommand(),
             };
@@ -69,7 +70,7 @@ namespace CP77Tools
             hashService.ReloadLocally();
 
             // try get oodle dll from game
-            if (!TryCopyOodleLib())
+            if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
             {
                 logger.LogString("Could not automatically find oo2ext_7_win64.dll. " +
                                  "Please manually copy and paste the dll found here Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
@@ -85,7 +86,7 @@ namespace CP77Tools
                 while (true)
                 {
                     string line = System.Console.ReadLine();
-                    
+
 
                     if (line == "q()")
                         return;
@@ -152,7 +153,7 @@ namespace CP77Tools
                 var baseDirectory = AppContext.BaseDirectory;
 
                 if (string.IsNullOrEmpty(baseDirectory)) return;
-                
+
                 var fi = new FileInfo(Path.Combine(baseDirectory, $"errorlogs/log_{t}.txt"));
                 if (fi.Directory != null)
                 {
@@ -162,7 +163,7 @@ namespace CP77Tools
                 }
                 else
                 {
-                    
+
                 }
             }
 
@@ -172,6 +173,7 @@ namespace CP77Tools
 
         private static string TryGetGameInstallDir()
         {
+#if _WINDOWS
             var cp77BinDir = "";
             var cp77exe = "";
             // check for CP77_DIR environment variable first
@@ -243,6 +245,9 @@ namespace CP77Tools
                 return null;
 
             return cp77BinDir;
+#endif
+
+            return "";
         }
 
         private static bool TryCopyOodleLib()
