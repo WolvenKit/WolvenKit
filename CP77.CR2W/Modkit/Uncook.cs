@@ -32,13 +32,13 @@ namespace CP77.CR2W
         /// <param name="uncookext"></param>
         /// <param name="flip"></param>
         /// <returns></returns>
-        public static bool UncookSingle(this Archive.Archive ar, ulong hash, DirectoryInfo outDir, 
+        public static bool UncookSingle(this Archive.Archive ar, ulong hash, DirectoryInfo outDir,
             EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
             // checks
             if (!ar.Files.ContainsKey(hash))
                 return false;
-            
+
 
             // extract the main file with uncompressed buffers
 
@@ -60,7 +60,7 @@ namespace CP77.CR2W
             var ext = Path.GetExtension(name)[1..];
             return Uncook(ms, outfile, ext, uncookext, flip);
         }
-        
+
         /// <summary>
         /// Uncooks all Files to the specified directory.
         /// </summary>
@@ -78,9 +78,9 @@ namespace CP77.CR2W
 
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
-            
+
             // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
-            
+
             // check search pattern then regex
             IEnumerable<FileEntry> finalmatches = ar.Files.Values;
             if (!string.IsNullOrEmpty(pattern))
@@ -121,12 +121,12 @@ namespace CP77.CR2W
             return (extractedList.ToList(), finalMatchesList.Count);
         }
 
-        
+
         /// <summary>
         /// Extracts and decompresses buffers of a cr2wstream
-        /// uncooks buffers to raw format and 
+        /// uncooks buffers to raw format and
         /// </summary>
-        public static bool Uncook(Stream cr2wStream, FileInfo cr2wFileName, string ext, 
+        public static bool Uncook(Stream cr2wStream, FileInfo cr2wFileName, string ext,
             EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
             if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext))
@@ -138,7 +138,7 @@ namespace CP77.CR2W
             // read the cr2wfile
             using var br = new BinaryReader(cr2wStream);
             var cr2w = ModTools.TryReadCr2WFile(br);
-            if (cr2w != null)
+            if (cr2w == null)
             {
                 Logger.LogString($"Failed to read cr2w file {cr2wFileName.FullName}", Logtype.Error);
                 return false;
@@ -371,7 +371,7 @@ namespace CP77.CR2W
 
             #endregion
 
-            // extract and write buffer 
+            // extract and write buffer
             Directory.CreateDirectory(cr2wFileName.Directory.FullName);
             using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
             {
