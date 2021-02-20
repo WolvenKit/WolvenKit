@@ -173,8 +173,9 @@ namespace CP77Tools
 
         private static string TryGetGameInstallDir()
         {
-#if _WINDOWS
             var cp77BinDir = "";
+#if _WINDOWS
+
             var cp77exe = "";
             // check for CP77_DIR environment variable first
             var CP77_DIR = System.Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
@@ -243,11 +244,10 @@ namespace CP77Tools
                 return null;
             if (!File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
                 return null;
-
-            return cp77BinDir;
 #endif
 
-            return "";
+
+            return cp77BinDir;
         }
 
         private static bool TryCopyOodleLib()
