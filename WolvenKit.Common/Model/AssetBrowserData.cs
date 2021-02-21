@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Documents;
 
 namespace WolvenKit.Common.Model
 {

@@ -5,7 +5,6 @@ using System.Text;
 using Catel.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Navigation;
 using Catel.Collections;
  using Catel.IoC;
  using CP77Tools.Model;
