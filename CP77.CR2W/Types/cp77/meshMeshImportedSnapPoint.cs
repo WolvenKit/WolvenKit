@@ -7,7 +7,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class meshMeshImportedSnapPoint : ISerializable
 	{
-		[Ordinal(0)] [RED("localToCloud")] public Matrix LocalToCloud { get; set; }
+		[Ordinal(0)] [RED("localToCloud")] public CMatrix LocalToCloud { get; set; }
 		[Ordinal(1)] [RED("range")] public CFloat Range { get; set; }
 		[Ordinal(2)] [RED("rotationAlignmentSteps")] public CUInt8 RotationAlignmentSteps { get; set; }
 		[Ordinal(3)] [RED("snapTags")] public meshImportedSnapTags SnapTags { get; set; }

@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Runtime.Serialization;
 using CP77.CR2W.Reflection;
 
@@ -6,7 +6,7 @@ namespace CP77.CR2W.Types
 {
     [DataContract(Namespace = "")]
     [REDMeta()]
-    public class CColor : Color_
+    public class CColor : CColor_
     {
         public CColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

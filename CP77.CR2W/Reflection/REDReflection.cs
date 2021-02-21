@@ -151,30 +151,33 @@ namespace CP77.CR2W.Reflection
             }
         }
 
-        /// https://stackoverflow.com/questions/14734374/c-sharp-reflection-property-order
-        public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool getBuffers)
+        public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool includeBuffers)
         {
-            var redproperties = GetMembers(cvar);
+            return GetMembers(cvar)
+                .Where(p =>
+                {
+                    var attr = p.GetMemberAttribute<REDAttribute>();
+                    if (attr is null)
+                    {
+                        return false;
+                    }
 
-            // get RED and REDBuffers
-            if (getBuffers)
-            {
-                return redproperties;
-            }
-            // get only RED
-            else
-            {
-                return redproperties.Where(z => !(z.GetMemberAttribute<REDAttribute>() is REDBufferAttribute));
-            }
+                    if (!includeBuffers)
+                    {
+                        return attr is not REDBufferAttribute;
+                    }
+
+                    return true;
+                })
+                .OrderBy(p => p.Ordinal);
         }
 
         public static IEnumerable<Member> GetREDBuffers(this CVariable cvar)
         {
-            // get only REDBuffers
-            var redproperties = GetMembers(cvar)
-                .Where(_ => _.GetMemberAttribute<REDBufferAttribute>() != null);
-
-            return redproperties;
+            return cvar.accessor
+                .GetMembers()
+                .Where(p => p.GetMemberAttribute<REDBufferAttribute>() is not null)
+                .OrderBy(p => p.Ordinal);
         }
 
         private static readonly ConcurrentDictionary<Type, Lazy<IEnumerable<Member>>> MembersCache = new();
@@ -186,39 +189,9 @@ namespace CP77.CR2W.Reflection
 
         private static IEnumerable<Member> GetMembersInternal(CVariable cvar)
         {
-            var result = new List<Member>();
-
-            var properties = cvar.GetType().GetProperties();
-            if (properties.Length > 0)
-            {
-                var lastIndex = properties.Length - 1;
-                var lastDeclaringType = properties[lastIndex].DeclaringType;
-                for (var i = properties.Length - 1; i >= 0; i--)
-                {
-                    if (properties[i].DeclaringType == lastDeclaringType)
-                        continue;
-
-                    AddMembers(i + 1, lastIndex);
-
-                    lastIndex = i;
-                    lastDeclaringType = properties[i].DeclaringType;
-                }
-
-                AddMembers(0, lastIndex);
-
-                void AddMembers(int start, int end)
-                {
-                    for (var i = start; i <= end; i++)
-                    {
-                        if (!Attribute.IsDefined(properties[i], typeof(REDAttribute)))
-                            continue;
-
-                        result.Add((Member)System.Activator.CreateInstance(typeof(Member), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { properties[i] }, null));
-                    }
-                }
-            }
-
-            return result;
+            return cvar.accessor
+                .GetMembers();
         }
+
     }
 }
