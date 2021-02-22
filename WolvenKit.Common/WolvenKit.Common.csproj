@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -13,6 +12,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>wolvenkit</PackageTags>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <TargetFrameworks>net5.0;net5.0-windows</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,7 +36,6 @@
     <PackageReference Include="Catel.Fody" Version="4.7.0-alpha0115">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Catel.MVVM" Version="5.12.11" />
     <PackageReference Include="CsvHelper" Version="16.0.0" />
     <PackageReference Include="FastMember" Version="1.5.0" />
     <PackageReference Include="FmodAudio" Version="2.0.0" />
