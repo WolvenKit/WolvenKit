@@ -5,6 +5,7 @@ using Catel.IoC;
 using System.CommandLine;
 using System.ComponentModel;
 using System.IO;
+using System.Runtime.InteropServices;
 using CP77.CR2W;
 using CP77Tools.Commands;
 using CP77Tools.Extensions;
@@ -24,7 +25,6 @@ namespace CP77Tools
             ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
 
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
             logger.OnStringLogged += delegate (object sender, LogStringEventArgs args)
             {
                 switch (args.Logtype)
@@ -44,7 +44,7 @@ namespace CP77Tools
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                
+
                 Console.WriteLine("[" + args.Logtype + "]" + args.Message);
                 Console.ResetColor();
             };
@@ -56,20 +56,20 @@ namespace CP77Tools
                 new RebuildCommand(),
                 new PackCommand(),
                 new ExportCommand(),
-                
+
                 new DumpCommand(),
                 new VerifyCommand(),
                 new CR2WCommand(),
-                
+
                 new HashCommand(),
                 new OodleCommand(),
             };
 
             //await ConsoleFunctions.UpdateHashesAsync();
-            hashService.ReloadLocally();
+            _ = ServiceLocator.Default.ResolveType<IHashService>();
 
             // try get oodle dll from game
-            if (!TryCopyOodleLib())
+            if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
             {
                 logger.LogString("Could not automatically find oo2ext_7_win64.dll. " +
                                  "Please manually copy and paste the dll found here Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
@@ -85,7 +85,7 @@ namespace CP77Tools
                 while (true)
                 {
                     string line = System.Console.ReadLine();
-                    
+
 
                     if (line == "q()")
                         return;
@@ -152,7 +152,7 @@ namespace CP77Tools
                 var baseDirectory = AppContext.BaseDirectory;
 
                 if (string.IsNullOrEmpty(baseDirectory)) return;
-                
+
                 var fi = new FileInfo(Path.Combine(baseDirectory, $"errorlogs/log_{t}.txt"));
                 if (fi.Directory != null)
                 {
@@ -162,7 +162,7 @@ namespace CP77Tools
                 }
                 else
                 {
-                    
+
                 }
             }
 
@@ -173,6 +173,8 @@ namespace CP77Tools
         private static string TryGetGameInstallDir()
         {
             var cp77BinDir = "";
+#if _WINDOWS
+
             var cp77exe = "";
             // check for CP77_DIR environment variable first
             var CP77_DIR = System.Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
@@ -191,11 +193,11 @@ namespace CP77Tools
 
             try
             {
-                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
+                Parallel.ForEach(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
                 {
-                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                    var programName = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)
                         ?.GetValue("DisplayName");
-                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                    var installLocation = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)
                         ?.GetValue("InstallLocation");
                     if (programName != null && installLocation != null)
                     {
@@ -209,11 +211,11 @@ namespace CP77Tools
 
                     strDelegate.Invoke(exePath);
                 });
-                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
+                Parallel.ForEach(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
                 {
-                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                    var programName = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
                         ?.GetValue("DisplayName");
-                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                    var installLocation = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
                         ?.GetValue("InstallLocation");
                     if (programName != null && installLocation != null)
                     {
@@ -241,6 +243,8 @@ namespace CP77Tools
                 return null;
             if (!File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
                 return null;
+#endif
+
 
             return cp77BinDir;
         }

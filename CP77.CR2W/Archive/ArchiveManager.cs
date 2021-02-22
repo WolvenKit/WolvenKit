@@ -5,7 +5,6 @@ using System.Text;
 using Catel.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Navigation;
 using Catel.Collections;
  using Catel.IoC;
  using CP77Tools.Model;
@@ -26,19 +25,12 @@ namespace CP77.CR2W.Archive
             Archives = new Dictionary<string, Archive>();
             Files = new Dictionary<ulong, List<FileEntry>>();
             Items = new Dictionary<string, List<IGameFile>>();
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
-            hashService.ReloadLocally();
         }
 
         public ArchiveManager(DirectoryInfo indir)
+            : this()
         {
             _parentDirectoryInfo = indir;
-
-            Archives = new Dictionary<string, Archive>();
-            Files = new Dictionary<ulong, List<FileEntry>>();
-            Items = new Dictionary<string, List<IGameFile>>();
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
-            hashService.ReloadLocally();
 
             // load files
             Reload(indir);

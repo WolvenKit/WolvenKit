@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
