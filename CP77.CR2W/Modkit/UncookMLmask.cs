@@ -6,6 +6,7 @@ using System.Linq;
 using System.IO;
 using System.Runtime.InteropServices;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Oodle;
 
 namespace CP77.CR2W.Uncooker
 {
@@ -31,16 +32,21 @@ namespace CP77.CR2W.Uncooker
             return (l + r - 1) / r;
         }
 
-        public static bool Uncook(CR2WFile cr2w, List<byte[]> buffers, FileInfo outfile, EUncookExtension uncookext)
+        public static bool Uncook(Stream cr2wStream, CR2WFile cr2w, EUncookExtension uncookext)
         {
             //We need 2 buffers one for atlas one for tile data
-            if (buffers.Count < 2)
-                return false;
 
             if (!(cr2w.Chunks.FirstOrDefault()?.data is Multilayer_Mask mlmask) ||
                 !(cr2w.Chunks[1]?.data is rendRenderMultilayerMaskBlobPC blob))
                 return false;
 
+            var outfile = new FileInfo(cr2w.FileName);
+            if (outfile.Directory == null)
+            {
+                return false;
+            }
+
+            Directory.CreateDirectory(outfile.Directory.FullName);
             string filename = Path.GetFileNameWithoutExtension(outfile.FullName);
             string path = outfile.Directory.FullName;
 
@@ -57,17 +63,32 @@ namespace CP77.CR2W.Uncooker
 
             uint maskCount = blob.Header.NumLayers.val;
 
-            byte[] atlas = buffers[0];
-            uint[] tiles;
+            byte[] atlas;
+            var atlasRaw = new byte[atlasWidth * atlasHeight];
+            var atlasBuffer = cr2w.Buffers[0].Buffer;
+            cr2wStream.Seek(atlasBuffer.offset, SeekOrigin.Begin);
+            using (var ms = new MemoryStream())
+            {
+                cr2wStream.DecompressAndCopySegment(ms, atlasBuffer.diskSize, atlasBuffer.memSize);
+                atlas = ms.ToArray();
+            }
+
 
             //Read tilesdata buffer into appropriate variable type
-            var b = buffers[1];
-            tiles = new uint[b.Length / 4];
-            for (int i = 0, j = 0; i < b.Length; i += 4, j++)
+            byte[] tile;
+            var tileBuffer = cr2w.Buffers[0].Buffer;
+            cr2wStream.Seek(tileBuffer.offset, SeekOrigin.Begin);
+            using (var ms = new MemoryStream())
             {
-                tiles[j] = BitConverter.ToUInt32(b, i);
+                cr2wStream.DecompressAndCopySegment(ms, tileBuffer.diskSize, tileBuffer.memSize);
+                tile = ms.ToArray();
             }
-            byte[] atlasRaw = new byte[atlasWidth * atlasHeight];
+            var tiles = new uint[tile.Length / 4];
+            for (int i = 0, j = 0; i < tile.Length; i += 4, j++)
+            {
+                tiles[j] = BitConverter.ToUInt32(tile, i);
+            }
+
 
             //Decode compressed data into single channel uncompressed
             //Mlmask always BC4?
@@ -86,10 +107,10 @@ namespace CP77.CR2W.Uncooker
             //        ddsStream.Write(atlasRaw);
             //    }
             //}
-            
+
 
             byte[] maskData = new byte[maskWidth * maskHeight];
-            
+
 
             Directory.CreateDirectory(path);
             for (int i = 0; i < maskCount; i++)
@@ -137,7 +158,7 @@ namespace CP77.CR2W.Uncooker
             }
 
         }
-        
+
         private static void DecodeSingle(ref byte[] maskData, uint maskWidth, uint maskHeight, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint x, uint y, uint[] tilesData, uint maskTileSize, int maskIndex, uint tilesOffset, uint smallScale)
         {
             uint widthInTiles = DivCeil(maskWidth / smallScale, maskTileSize);

@@ -19,7 +19,7 @@ namespace CP77.CR2W
         /// <returns></returns>
         public IWolvenkitFile TryReadCr2WFile(Stream stream)
         {
-            using var br = new BinaryReader(stream);
+            using var br = new BinaryReader(stream, Encoding.Default, true);
             return TryReadCr2WFile(br);
         }
 
@@ -57,7 +57,7 @@ namespace CP77.CR2W
         /// <returns></returns>
         public IWolvenkitFile TryReadCr2WFileHeaders(Stream stream)
         {
-            using var br = new BinaryReader(stream);
+            using var br = new BinaryReader(stream, Encoding.Default, true);
             return TryReadCr2WFileHeaders(br);
         }
 
