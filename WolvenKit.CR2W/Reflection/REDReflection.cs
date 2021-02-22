@@ -156,78 +156,36 @@ namespace WolvenKit.CR2W.Reflection
         }
 
 
-        /// https://stackoverflow.com/questions/14734374/c-sharp-reflection-property-order
-        public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool getBuffers)
-        {
-            Type type = cvar.GetType();
-            Dictionary<Type, int> lookup = new Dictionary<Type, int>();
-
-            // get hierarchical list of types
-            int count = 0;
-            lookup[type] = count++;
-            Type parent = type.BaseType;
-            while (parent != null)
-            {
-                lookup[parent] = count;
-                count++;
-                parent = parent.BaseType;
-            }
-
-            return cvar.GetREDMembersInternal(getBuffers)
-                .OrderByDescending(prop => lookup[prop.GetMemberInfo().DeclaringType]);
-        }
-
-        public static IEnumerable<Member> GetREDBuffers(this CVariable cvar)
-        {
-            Type type = cvar.GetType();
-            Dictionary<Type, int> lookup = new Dictionary<Type, int>();
-
-            int count = 0;
-            lookup[type] = count++;
-            Type parent = type.BaseType;
-            while (parent != null)
-            {
-                lookup[parent] = count;
-                count++;
-                parent = parent.BaseType;
-            }
-
-            return cvar.GetREDBuffersInternal()
-                .OrderByDescending(prop => lookup[prop.GetMemberInfo().DeclaringType]);
-        }
-
-
-        private static IEnumerable<Member> GetREDBuffersInternal(this CVariable cvar)
-        {
-            // get only REDBuffers
-            var redproperties = cvar.accessor.GetMembers()
-                    .OrderBy(p => p.Ordinal)
-                    .Where(_ => _.GetMemberAttribute<REDBufferAttribute>() != null);
-
-            return redproperties;
-        }
-
-        private static IEnumerable<Member> GetREDMembersInternal(this CVariable cvar, bool getBuffers)
-        {
-            // get RED and REDBuffers
-            if (getBuffers)
-            {
-                return GetREDBuffersInternal(cvar);
-            }
-            // get only RED
-            else
-            {
-                var redproperties = cvar.accessor.GetMembers()
-                    .OrderBy(p => p.Ordinal)
-                    .Where(z =>
+        public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool includeBuffers) =>
+            GetMembers(cvar)
+                .Where(p =>
+                {
+                    var attr = p.GetMemberAttribute<REDAttribute>();
+                    if (attr is null)
                     {
-                        var attrib = z.GetMemberAttribute<REDAttribute>();
-                        return (attrib != null) && !(attrib is REDBufferAttribute); 
-                    });
+                        return false;
+                    }
 
-                return redproperties;
-            }
-        }
+                    if (!includeBuffers)
+                    {
+                        return attr is not REDBufferAttribute;
+                    }
+
+                    return true;
+                })
+                .OrderBy(p => p.Ordinal);
+
+        public static IEnumerable<Member> GetREDBuffers(this CVariable cvar) =>
+            GetMembers(cvar)
+                .Where(p => p.GetMemberAttribute<REDBufferAttribute>() is not null)
+                .OrderBy(p => p.Ordinal);
+
+        private static readonly ConcurrentDictionary<Type, Lazy<IEnumerable<Member>>> MembersCache = new();
+
+        private static IEnumerable<Member> GetMembers(CVariable cvar) =>
+            MembersCache.GetOrAdd(cvar.GetType(), new Lazy<IEnumerable<Member>>(() => GetMembersInternal(cvar))).Value;
+
+        private static IEnumerable<Member> GetMembersInternal(CVariable cvar) => cvar.accessor.GetMembers();
 
         public static string GetREDExtensionFromREDType(string redtype)
         {

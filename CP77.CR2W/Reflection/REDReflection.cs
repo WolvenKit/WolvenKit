@@ -161,14 +161,14 @@ namespace CP77.CR2W.Reflection
                 .OrderBy(p => p.Ordinal);
 
         public static IEnumerable<Member> GetREDBuffers(this CVariable cvar) =>
-            cvar.accessor
-                .GetMembers()
+            GetMembers(cvar)
                 .Where(p => p.GetMemberAttribute<REDBufferAttribute>() is not null)
                 .OrderBy(p => p.Ordinal);
 
         private static readonly ConcurrentDictionary<Type, Lazy<IEnumerable<Member>>> MembersCache = new();
 
-        private static IEnumerable<Member> GetMembers(CVariable cvar) => MembersCache.GetOrAdd(cvar.GetType(), new Lazy<IEnumerable<Member>>(() => GetMembersInternal(cvar))).Value;
+        private static IEnumerable<Member> GetMembers(CVariable cvar) =>
+            MembersCache.GetOrAdd(cvar.GetType(), new Lazy<IEnumerable<Member>>(() => GetMembersInternal(cvar))).Value;
 
         private static IEnumerable<Member> GetMembersInternal(CVariable cvar) => cvar.accessor.GetMembers();
     }
