@@ -195,7 +195,7 @@ namespace WolvenKit.Common.Oodle
         {
             if (zSize == size)
             {
-                stream.CopyTo(outStream);
+                stream.CopyToWithLength(outStream, (int)zSize);
             }
             else
             {
@@ -239,7 +239,7 @@ namespace WolvenKit.Common.Oodle
                 else
                 {
                     stream.Seek(0, SeekOrigin.Begin);
-                    stream.CopyTo(outStream);
+                    stream.CopyToWithLength(outStream, (int)zSize);
                 }
             }
         }
