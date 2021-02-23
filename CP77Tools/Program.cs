@@ -174,6 +174,7 @@ namespace CP77Tools
         {
             var cp77BinDir = "";
 
+#pragma warning disable CA1416
 #if _WINDOWS
             var cp77exe = "";
             // check for CP77_DIR environment variable first
@@ -244,6 +245,7 @@ namespace CP77Tools
             if (!File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
                 return null;
 #endif
+#pragma warning restore CA1416
 
             return cp77BinDir;
         }
