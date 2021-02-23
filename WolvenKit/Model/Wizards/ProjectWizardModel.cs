@@ -1,10 +1,8 @@
 ﻿using Catel.Data;
-using System.Collections.Generic;
-using System.IO;
 
 namespace WolvenKit.Model.Wizards
 {
-    public class ProjectWizardModel : ValidatableModelBase
+    public class ProjectWizardModel : ModelBase
     {
         #region fields
         private bool _witcherGameChecked = false;
@@ -85,21 +83,6 @@ namespace WolvenKit.Model.Wizards
             get => new TypeAndPath(ProjectType, ProjectPath);
         }
         #endregion properties
-
-        #region methods
-        /// <summary>
-        /// Validates the field values of ProjectWizardModel.
-        /// </summary>
-        /// <param name="validationResults">The validation results.</param>
-        protected override void ValidateFields(List<IFieldValidationResult> validationResults)
-        {
-            if (string.IsNullOrEmpty(ProjectName))
-                validationResults.Add(FieldValidationResult.CreateError(nameof(ProjectName), "WolvenKit name cannot be empty"));
-
-            if (!Directory.Exists(ProjectPath))
-                validationResults.Add(FieldValidationResult.CreateError(nameof(ProjectPath), "WolvenKit path does not exist"));
-        }
-        #endregion methods
 
         public class TypeAndPath
         {

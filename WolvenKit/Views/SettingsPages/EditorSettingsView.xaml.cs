@@ -11,6 +11,9 @@ namespace WolvenKit.Views.SettingsPages
             CSSV = new CompatibilitySubSettingsView();
 
             InitializeComponent();
+
+            SettingsViewer.Children.Add(GSSV);
+            GeneralSubItem.IsSelected = true;
         }
 
         private GeneralSubSettingsView GSSV;

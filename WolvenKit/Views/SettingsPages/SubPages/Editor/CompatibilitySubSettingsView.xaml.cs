@@ -1,5 +1,4 @@
-﻿
-using Catel.IoC;
+﻿using Catel.IoC;
 using Catel.Services;
 using WolvenKit.Services;
 
@@ -56,6 +55,31 @@ namespace WolvenKit.Views.SettingsPages.SubPages.Editor
                 _settingsManager.DepotPath = result.DirectoryName;
         }
 
-        
+        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str)
+        {
+            return System.IO.Directory.Exists(str)
+                ? HandyControl.Data.OperationResult.Success()
+                : HandyControl.Data.OperationResult.Failed();
+        }
+
+        private HandyControl.Data.OperationResult<bool> VerifyFile(string str)
+        {
+            return System.IO.File.Exists(str)
+                ? HandyControl.Data.OperationResult.Success()
+                : HandyControl.Data.OperationResult.Failed();
+        }
+
+        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (cp77Txtbx.VerifyData())
+                _settingsManager.CP77ExecutablePath = cp77Txtbx.Text;
+            if (w3Txtbx.VerifyData())
+                _settingsManager.W3ExecutablePath = w3Txtbx.Text;
+            if (wccliteTxtbx.VerifyData())
+                _settingsManager.WccLitePath = wccliteTxtbx.Text;
+            if (depotTxtbx.VerifyData())
+                _settingsManager.DepotPath = depotTxtbx.Text;
+            _settingsManager.Save();
+        }
     }
 }

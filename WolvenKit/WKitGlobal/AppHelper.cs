@@ -239,9 +239,35 @@ namespace WolvenKit.WKitGlobal
 
 
 
-
-
-
+        public void ShowFirstTimeSetup()
+        {
+            if (Services.SettingsManager.FirstTimeSetupForUser)
+            {
+                Task.Run(() =>
+                {
+                    //await Task.Delay(5000);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Views.Wizards.FirstSetupWizardView rpv = new Views.Wizards.FirstSetupWizardView();
+                        ViewModels.UserControlHostWindowViewModel zxc = new ViewModels.UserControlHostWindowViewModel(rpv);
+                        UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
+                        rpv.ViewModelChanged += (_s, _e) =>
+                        {
+                            if (rpv.ViewModel == null)
+                                return;
+                            rpv.ViewModel.ClosedAsync += async (s, e) =>
+                            {
+                                await Task.Run(() =>
+                                {
+                                    Application.Current.Dispatcher.Invoke(() => uchwv.Close());
+                                });
+                            };
+                        };
+                        uchwv.Show();
+                    });
+                });
+            }
+        }
 
         private void Sh_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {

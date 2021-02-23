@@ -1,6 +1,7 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.Wizards.FirstSetupWizardView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   ViewModelChanged="UserControl_ViewModelChanged"
                    xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" IsVisibleChanged="UserControl_IsVisibleChanged">
 
 
@@ -60,7 +61,7 @@
                 <hc:StepBarItem Content="Finalize Setup"/>
 
             </hc:StepBar>
-            <Button  Command="{Binding NextCmd}" CommandParameter="{Binding ElementName=StepMain}" Margin="3" VerticalAlignment="Bottom" Height="30" Width="50" IsEnabled="True"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Right" Click="Button_Click">
+            <Button  Command="{Binding NextCmd}" CommandParameter="{Binding ElementName=StepMain}" Margin="3" VerticalAlignment="Bottom" Height="30" Width="50" IsEnabled="{Binding AllFieldIsValid}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Right" Click="Button_Click">
                 <iconPacks:PackIconCodicons Kind="ArrowRight"/>
             </Button>
 
