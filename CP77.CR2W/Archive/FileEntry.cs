@@ -58,14 +58,10 @@ namespace CP77.CR2W.Archive
             SHA1Hash = sha1hash;
         }
 
-        private void Read(BinaryReader br, IHashService mainController)
+        private void Read(BinaryReader br, IHashService hashService)
         {
             NameHash64 = br.ReadUInt64();
-
-            if (mainController != null && mainController.Hashdict.ContainsKey(NameHash64))
-            {
-                _nameStr = mainController.Hashdict[NameHash64];
-            }
+            _nameStr = hashService?.Get(NameHash64);
 
             // x-platform support
             if (System.Runtime.InteropServices.RuntimeInformation

@@ -1,6 +1,7 @@
-﻿using DotNetHelper.FastMember.Extension.Extension;
+using DotNetHelper.FastMember.Extension.Extension;
 using FastMember;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,7 +10,7 @@ using CP77.CR2W.Types;
 namespace CP77.CR2W.Reflection
 {
     /// <summary>
-    /// Provides static methods for reading .NET runtime information 
+    /// Provides static methods for reading .NET runtime information
     /// and converting to redengine compatible representations.
     /// </summary>
     public static class REDReflection
@@ -24,16 +25,13 @@ namespace CP77.CR2W.Reflection
             return attribute.Name;
         }
 
-        public static string GetREDTypeString(Type type, params int[] flags)
-        {
-            return GetREDTypeString(type, flags.AsEnumerable().GetEnumerator());
-        }
+        public static string GetREDTypeString(Type type, params int[] flags) => GetREDTypeString(type, flags.AsEnumerable().GetEnumerator());
 
         private static string GetREDTypeString(Type type, IEnumerator<int> flags)
         {
             // FIXME wkit doesn't support .NET types right now
 
-            
+
             // Handles .Net types that have different names.
             // Types such as Double, Int32, or Int16 are the same.
             //switch (Type.GetTypeCode(type))
@@ -56,7 +54,7 @@ namespace CP77.CR2W.Reflection
             //    return $"[{size}]{GetREDTypeString(arrProp, flags)}";
             //}
 
-            // Handles the 5 generic types: array:2,0,Int8, ptr:CObject, 
+            // Handles the 5 generic types: array:2,0,Int8, ptr:CObject,
             // static:4,Int32, handle:ISerializable and soft:CResource.
             if (type.IsGenericType)
             {
@@ -88,7 +86,7 @@ namespace CP77.CR2W.Reflection
                 }
                 if (gentype == typeof(CEnum<>))
                 {
-                    
+
                 }
 
                 return type.GetPrettyGenericTypes();
@@ -96,13 +94,12 @@ namespace CP77.CR2W.Reflection
             else
             {
                 return GetREDTypeFroWkitType(type.Name);
-                
+
             }
         }
 
-        public static string GetWKitBaseTypeFromREDBaseType(string typename)
-        {
-            return typename switch
+        public static string GetWKitBaseTypeFromREDBaseType(string typename) =>
+            typename switch
             {
                 "Uint8" => "CUInt8",
                 "Int8" => "CInt8",
@@ -124,102 +121,55 @@ namespace CP77.CR2W.Reflection
                 "Variant" => "CVariant",
                 _ => typename
             };
-        }
 
-        private static string GetREDTypeFroWkitType(string typename)
-        {
-            switch (typename)
+        private static string GetREDTypeFroWkitType(string typename) =>
+            typename switch
             {
-                case "CUInt8": return "Uint8";
-                case "CInt8": return "Int8";
-                case "CUInt16": return "Uint16";
-                case "CInt16": return "Int16";
-                case "CUInt32": return "Uint32";
-                case "CInt32": return "Int32";
-                case "CUInt64": return "Uint64";
-                case "CInt64": return "Int64";
-                case "CBool": return "Bool";
-                case "CFloat": return "Float";
-                case "CString": return "String";
-                case "CColor": return "Color";
-                case "CMatrix": return "Matrix";
-                default:
-                    return typename;
-            }
-        }
+                "CUInt8" => "Uint8",
+                "CInt8" => "Int8",
+                "CUInt16" => "Uint16",
+                "CInt16" => "Int16",
+                "CUInt32" => "Uint32",
+                "CInt32" => "Int32",
+                "CUInt64" => "Uint64",
+                "CInt64" => "Int64",
+                "CBool" => "Bool",
+                "CFloat" => "Float",
+                "CString" => "String",
+                "CColor" => "Color",
+                "CMatrix" => "Matrix",
+                _ => typename
+            };
 
+        public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool includeBuffers) =>
+            GetMembers(cvar)
+                .Where(p =>
+                {
+                    var attr = p.GetMemberAttribute<REDAttribute>();
+                    if (attr is null)
+                    {
+                        return false;
+                    }
 
-        /// https://stackoverflow.com/questions/14734374/c-sharp-reflection-property-order
-        public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool getBuffers)
-        {
-            Type type = cvar.GetType();
-            Dictionary<Type, int> lookup = new Dictionary<Type, int>();
+                    if (!includeBuffers)
+                    {
+                        return attr is not REDBufferAttribute;
+                    }
 
-            // get hierarchical list of types
-            int count = 0;
-            lookup[type] = count++;
-            Type parent = type.BaseType;
-            while (parent != null)
-            {
-                lookup[parent] = count;
-                count++;
-                parent = parent.BaseType;
-            }
+                    return true;
+                })
+                .OrderBy(p => p.Ordinal);
 
-            return cvar.GetREDMembersInternal(getBuffers)
-                .OrderByDescending(prop => lookup[prop.GetMemberInfo().DeclaringType]);
-        }
+        public static IEnumerable<Member> GetREDBuffers(this CVariable cvar) =>
+            GetMembers(cvar)
+                .Where(p => p.GetMemberAttribute<REDBufferAttribute>() is not null)
+                .OrderBy(p => p.Ordinal);
 
-        public static IEnumerable<Member> GetREDBuffers(this CVariable cvar)
-        {
-            Type type = cvar.GetType();
-            Dictionary<Type, int> lookup = new Dictionary<Type, int>();
+        private static readonly ConcurrentDictionary<Type, Lazy<IEnumerable<Member>>> MembersCache = new();
 
-            int count = 0;
-            lookup[type] = count++;
-            Type parent = type.BaseType;
-            while (parent != null)
-            {
-                lookup[parent] = count;
-                count++;
-                parent = parent.BaseType;
-            }
+        private static IEnumerable<Member> GetMembers(CVariable cvar) =>
+            MembersCache.GetOrAdd(cvar.GetType(), new Lazy<IEnumerable<Member>>(() => GetMembersInternal(cvar))).Value;
 
-            return cvar.GetREDBuffersInternal()
-                .OrderByDescending(prop => lookup[prop.GetMemberInfo().DeclaringType]);
-        }
-
-
-        private static IEnumerable<Member> GetREDBuffersInternal(this CVariable cvar)
-        {
-            // get only REDBuffers
-            var redproperties = cvar.accessor.GetMembers()
-                    .OrderBy(p => p.Ordinal)
-                    .Where(_ => _.GetMemberAttribute<REDBufferAttribute>() != null);
-
-            return redproperties;
-        }
-
-        private static IEnumerable<Member> GetREDMembersInternal(this CVariable cvar, bool getBuffers)
-        {
-            var a = cvar.accessor.GetMembers().OrderBy(p => p.Ordinal);
-
-            var redproperties = cvar.accessor.GetMembers()
-                    .OrderBy(p => p.Ordinal)
-                    .Where(_ => _.GetMemberAttribute<REDAttribute>() != null);
-
-            // get RED and REDBuffers
-            if (getBuffers)
-            {
-                return redproperties;
-            }
-            // get only RED
-            else
-            {
-                return redproperties.Where(z => !(z.GetMemberAttribute<REDAttribute>() is REDBufferAttribute));
-            }
-        }
-
-       
+        private static IEnumerable<Member> GetMembersInternal(CVariable cvar) => cvar.accessor.GetMembers();
     }
 }

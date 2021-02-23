@@ -14,10 +14,10 @@ namespace CP77.CR2W
     /// </summary>
     public static partial class ModTools
     {
-        
+
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="infolder"></param>
         /// <param name="useBuffers"></param>
@@ -28,35 +28,35 @@ namespace CP77.CR2W
         /// <param name="unsaferaw"></param>
         /// <returns></returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public static bool Recombine(DirectoryInfo infolder, 
-            bool useBuffers, 
+        public static bool Recombine(DirectoryInfo infolder,
+            bool useBuffers,
             bool useTextures,
             bool import,    //create new
             bool keep,
             bool clean,
-            bool unsaferaw  
+            bool unsaferaw
         )
         {
-            var allFiles = infolder.GetFiles("*", SearchOption.AllDirectories).ToList(); 
+            var allFiles = infolder.GetFiles("*", SearchOption.AllDirectories).ToList();
             var buffersDict = new Dictionary<string, List<FileInfo>>();
-            
+
             // get all buffers and textures to recombine
             // if both buffers and textures is selected and a file has both buffers and textures
             // then the texture has priority
             if (useBuffers) GetBuffers();
             if (useTextures) GetTextures();
             Logger.LogString($"Found {buffersDict.Count.ToString()} file(s) to rebuild.", Logtype.Important);
-            
+
             Thread.Sleep(1000);
             var progress = 0;
             Logger.LogProgress(0);
-            
+
             // loop through the buffersDict
             foreach (var (parentPath, buffers) in buffersDict)
             {
                 var ext = Path.GetExtension(parentPath)[1..];
                 var canImport = Enum.GetNames(typeof(ECookedFileFormat)).Any(_ => _ == ext);
-                
+
                 // if the parent cr2w exists
                 if (File.Exists(parentPath))
                 {
@@ -75,13 +75,13 @@ namespace CP77.CR2W
                     //TODO: loop and delet buffers
                     Logger.LogString("Deleting raw files after rebuilding is not yet implemented.", Logtype.Error);
                 }
-                
-                
+
+
                 Interlocked.Increment(ref progress);
                 Logger.LogProgress(progress / (float)buffersDict.Count);
             }
-            
-            
+
+
             Logger.LogString($"Successfully rebuilt {buffersDict.Count.ToString()} file(s).", Logtype.Success);
             return true;
 
@@ -105,12 +105,12 @@ namespace CP77.CR2W
                     buffersDict[key].Add(fileInfo);
                 }
             }
-            
+
             void GetTextures()
             {
                 if (!import && !unsaferaw)
                     return;
-                
+
                 var texturesList = allFiles.Where(_ => _.Extension.ToLower() == ".dds");
                 foreach (var fileInfo in texturesList)
                 {
@@ -125,7 +125,7 @@ namespace CP77.CR2W
                         buffersDict.Add(key, new List<FileInfo>());
                     else
                         // there can always only be one texture and it get's priority
-                        buffersDict[key] = new List<FileInfo>(); 
+                        buffersDict[key] = new List<FileInfo>();
                     buffersDict[key].Add(fileInfo);
                 }
             }
@@ -136,13 +136,13 @@ namespace CP77.CR2W
                 using var fileStream = new FileStream(parentPath, FileMode.Open, FileAccess.ReadWrite);
                 using var fileReader = new BinaryReader(fileStream);
 
-                var cr2w = ModTools.TryReadCr2WFileHeaders(fileReader); 
-                if (cr2w != null)
+                var cr2w = ModTools.TryReadCr2WFileHeaders(fileReader);
+                if (cr2w == null)
                 {
                     Logger.LogString($"Failed to read cr2w file {parentPath}", Logtype.Error);
                     return false;
                 }
-                
+
                 // sort buffers numerically
                 var buffers = buffers_in;
                 if (buffers_in.All(_ => _.Extension == ".buffer"))
@@ -156,10 +156,10 @@ namespace CP77.CR2W
 
                 if (keep)
                 {
-                    // remove old buffers 
+                    // remove old buffers
                     fileReader.BaseStream.Seek(0, SeekOrigin.Begin);
                     fileStream.SetLength(cr2w.Header.objectsEnd);
-                        
+
                     // kraken the buffers and handle textures
                     using var fileWriter = new BinaryWriter(fileStream);
                     fileWriter.BaseStream.Seek(0, SeekOrigin.End);
@@ -197,7 +197,7 @@ namespace CP77.CR2W
                                 diskSize = zsize,
                                 memSize = (uint)inbuffer.Length,
                                 crc32 = crc
-                            }));   
+                            }));
                         }
                     }
 
@@ -220,11 +220,11 @@ namespace CP77.CR2W
                 using var fs = new FileStream(buffer.FullName, FileMode.Open, FileAccess.Read);
                 using var br = new BinaryReader(fs);
                 var bext = buffer.Extension.ToLower();
-                
-                // if dds file, delete the 
+
+                // if dds file, delete the
                 if (unsaferaw && bext != ".buffer")
                 {
-                    
+
                     switch (bext)
                     {
                         case ".dds":
@@ -253,7 +253,7 @@ namespace CP77.CR2W
             }
 
             #endregion
-            
+
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0-windows</TargetFramework>
+        <TargetFrameworks>net5.0;net5.0-windows</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Authors>Hambalkó Bence, Moritz Baron</Authors>
 		<Company>WolvenKit</Company>
@@ -29,8 +29,8 @@
 		<PackageReference Include="FastMember" Version="1.5.0" />
 		<PackageReference Include="FastMember.NetCore" Version="1.1.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-		<PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0020" NoWarn="NU5104" />
-		<PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0020" NoWarn="NU5104" />
+		<PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0020" />
+		<PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0020" />
 	</ItemGroup>
 
 	<ItemGroup>

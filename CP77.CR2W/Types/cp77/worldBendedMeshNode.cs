@@ -9,7 +9,7 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(2)] [RED("mesh")] public raRef<CMesh> Mesh { get; set; }
 		[Ordinal(3)] [RED("meshAppearance")] public CName MeshAppearance { get; set; }
-		[Ordinal(4)] [RED("deformationData")] public CArray<Matrix> DeformationData { get; set; }
+		[Ordinal(4)] [RED("deformationData")] public CArray<CMatrix> DeformationData { get; set; }
 		[Ordinal(5)] [RED("deformedBox")] public Box DeformedBox { get; set; }
 		[Ordinal(6)] [RED("isBendedRoad")] public CBool IsBendedRoad { get; set; }
 		[Ordinal(7)] [RED("castShadows")] public CBool CastShadows { get; set; }

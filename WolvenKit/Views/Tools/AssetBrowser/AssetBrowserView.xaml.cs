@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -83,6 +83,26 @@ namespace WolvenKit.Views.AssetBrowser
             {
                 DiscordRPCHelper.WhatAmIDoing("Asset Browser");
             }
+        }
+
+        private void ShowPreviewButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(viewmodel.PreviewWidth.GridUnitType != GridUnitType.Pixel)
+            {
+                viewmodel.PreviewWidth = new GridLength(0, GridUnitType.Pixel);
+                viewmodel.PreviewVisible = true;
+            }
+            else
+            {
+                viewmodel.PreviewWidth = new GridLength(1, GridUnitType.Star);
+                viewmodel.PreviewVisible = false;
+            }
+        }
+
+        private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            viewmodel.CurrentNode = e.NewValue as GameFileTreeNode;
+            viewmodel.CurrentNodeFiles = (e.NewValue as GameFileTreeNode)?.ToAssetBrowserData();
         }
     }
 }

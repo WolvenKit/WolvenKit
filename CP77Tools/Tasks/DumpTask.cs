@@ -269,7 +269,7 @@ namespace CP77Tools.Tasks
                         foreach (var str in allimports.Distinct())
                         {
                             var hash = FNV1A64HashAlgorithm.HashString(str);
-                            if (!mainController.Hashdict.ContainsKey(hash))
+                            if (!mainController.Contains(hash))
                                 hwriter.WriteLine($"{str},{hash}");
                         }
 

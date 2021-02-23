@@ -14,7 +14,6 @@ using CP77.CR2W.Archive;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using StreamExtensions = Catel.IO.StreamExtensions;
 
 namespace CP77.MSTests
 {
@@ -868,15 +867,14 @@ namespace CP77.MSTests
 #else
                         continue;
 #endif
+                    using var originalStream = new MemoryStream();
+                    ar.CopyFileToStream(originalStream, file.NameHash64, false);
+                    originalStream.Seek(0, SeekOrigin.Begin);
 
-                    var c = new CR2WFile {FileName = file.NameOrHash};
-                    using var ms = new MemoryStream();
-                    ar.CopyFileToStream(ms, file.NameHash64, false);
-                    ms.Seek(0, SeekOrigin.Begin);
-                    using var br = new BinaryReader(ms);
-                    var readResult = c.Read(br);
-                    var originalbytes = StreamExtensions.ToByteArray(ms);
+                    using var originalReader = new BinaryReader(originalStream);
 
+                    var cr2wFile = new CR2WFile { FileName = file.NameOrHash };
+                    var readResult = cr2wFile.Read(originalReader);
 
                     switch (readResult)
                     {
@@ -894,67 +892,75 @@ namespace CP77.MSTests
                                 FileEntry = file,
                                 Success = false,
                                 WriteResult = WriteTestResult.WriteResultType.UnsupportedVersion,
-                                Message = $"Unsupported Version ({c.GetFileHeader().version})"
+                                Message = $"Unsupported Version ({cr2wFile.GetFileHeader().version})"
                             });
                             break;
                         case EFileReadErrorCodes.NoError:
-
-#region test write
-
-                            var isBinaryEqual = true;
-
-                            using (var wms = new MemoryStream())
-                            using (var bw = new BinaryWriter(wms))
                             {
+                                using var writeStream = new MemoryStream();
+                                using var bw = new BinaryWriter(writeStream);
+
                                 // test writing
-                                c.Write(bw);
+                                cr2wFile.Write(bw);
 
                                 // test for binary equality 
-                                var newbytes = StreamExtensions.ToByteArray(wms);
-                                isBinaryEqual = originalbytes.SequenceEqual(newbytes);
-                                //isBinaryEqual = originalbytes.Length == newbytes.Length;
+                                originalStream.Seek(0, SeekOrigin.Begin);
+                                writeStream.Seek(0, SeekOrigin.Begin);
 
-#pragma warning disable 162
+                                var isBinaryEqual = originalStream.Length == writeStream.Length;
+                                if (isBinaryEqual)
+                                {
+                                    for (int i = 0; i < originalStream.Length; i++)
+                                    {
+                                        if (originalStream.ReadByte() != writeStream.ReadByte())
+                                        {
+                                            isBinaryEqual = false;
+                                            break;
+                                        }
+                                    }
+                                }
+
                                 if (!isBinaryEqual && WRITE_FAILED)
                                 {
                                     var resultDir = Path.Combine(Environment.CurrentDirectory, TestResultsDirectory);
-                                    var filename = Path.Combine(resultDir, Path.GetFileName(c.FileName));
-                                    File.WriteAllBytes($"{filename}.o.bin", originalbytes);
-                                    File.WriteAllBytes($"{filename}.n.bin", newbytes);
+                                    var filename = Path.Combine(resultDir, Path.GetFileName(cr2wFile.FileName));
+
+                                    using var oFile = new FileStream($"{filename}.o.bin", FileMode.OpenOrCreate, FileAccess.Write);
+                                    originalStream.CopyTo(oFile);
+                                    oFile.Flush();
+
+                                    using var nFile = new FileStream($"{filename}.n.bin", FileMode.OpenOrCreate, FileAccess.Write);
+                                    writeStream.CopyTo(nFile);
+                                    nFile.Flush();
                                 }
-#pragma warning restore 162
+
 
                                 // test reading again
                                 //bw.Seek(0, SeekOrigin.Begin);
                                 //using var br2 = new BinaryReader(wms);
                                 //var reread = c.Read(br2);
                                 //isBinaryEqual = reread == EFileReadErrorCodes.NoError;
+
+                                var res = WriteTestResult.WriteResultType.NoError;
+                                var msg = "";
+
+                                if (!isBinaryEqual)
+                                {
+                                    res |= WriteTestResult.WriteResultType.IsNotBinaryEqual;
+                                    msg += $"IsBinaryEqual: {isBinaryEqual}";
+                                }
+
+                                results.Add(new WriteTestResult
+                                {
+                                    FileEntry = file,
+                                    Success = isBinaryEqual,
+                                    WriteResult = res,
+                                    Message = msg,
+                                    IsNotBinaryEqual = !isBinaryEqual,
+                                });
+
+                                break;
                             }
-
-#endregion
-
-
-                            var res = WriteTestResult.WriteResultType.NoError;
-                            var msg = "";
-
-                            if (!isBinaryEqual)
-                            {
-                                res |= WriteTestResult.WriteResultType.IsNotBinaryEqual;
-                                msg += $"IsBinaryEqual: {isBinaryEqual}";
-                            }
-
-
-
-                            results.Add(new WriteTestResult
-                            {
-                                FileEntry = file,
-                                Success = isBinaryEqual,
-                                WriteResult = res,
-                                Message = msg,
-                                IsNotBinaryEqual = !isBinaryEqual,
-                            });
-
-                            break;
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
