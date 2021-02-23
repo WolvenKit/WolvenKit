@@ -124,11 +124,11 @@ jobs:
       uses: actions/upload-artifact@v2.2.1
       with:
         name: artifact_console-OSX
-        path: ./CP77Tools/bin/Release/net5.0-windows
+        path: ./CP77Tools/bin/Release/net5.0
     - name: zip
       uses: papeloto/action-zip@v1
       with:
-        files: ./CP77Tools/bin/Release/net5.0-windows
+        files: ./CP77Tools/bin/Release/net5.0
         dest: wolvenkit_console_osx.zip
 
     - name: Upload Release Asset
