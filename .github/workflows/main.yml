@@ -10,7 +10,7 @@ on:
  
 jobs:
   create_release:
-
+    runs-on: windows-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
 
