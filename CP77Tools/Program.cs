@@ -10,7 +10,6 @@ using CP77.CR2W;
 using CP77Tools.Commands;
 using CP77Tools.Extensions;
 using Luna.ConsoleProgressBar;
-using Microsoft.Win32;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools
@@ -174,6 +173,8 @@ namespace CP77Tools
         {
             var cp77BinDir = "";
 
+
+
 #pragma warning disable CA1416
 #if _WINDOWS
             var cp77exe = "";
@@ -194,11 +195,11 @@ namespace CP77Tools
 
             try
             {
-                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
+                Parallel.ForEach(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
                 {
-                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                    var programName = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)
                         ?.GetValue("DisplayName");
-                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                    var installLocation = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)
                         ?.GetValue("InstallLocation");
                     if (programName != null && installLocation != null)
                     {
@@ -212,11 +213,11 @@ namespace CP77Tools
 
                     strDelegate.Invoke(exePath);
                 });
-                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
+                Parallel.ForEach(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
                 {
-                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                    var programName = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
                         ?.GetValue("DisplayName");
-                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                    var installLocation = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
                         ?.GetValue("InstallLocation");
                     if (programName != null && installLocation != null)
                     {

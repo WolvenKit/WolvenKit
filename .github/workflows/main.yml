@@ -52,10 +52,7 @@ jobs:
         asset_name: wolvenkit.zip
         asset_content_type: application/zip
         
-    - name: Clean
-      run: dotnet clean ./CP77Tools.sln --configuration Release && dotnet nuget locals all --clear
-    - name: Install dependencies
-      run: dotnet restore ./CP77Tools.sln 
+    
     - name: Build
       run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
     - name: Upload a Build Artifact
