@@ -1,4 +1,4 @@
-﻿using Catel.Data;
+using Catel.Data;
 using System.Windows.Media;
 
 namespace WolvenKit.Model.Wizards
@@ -72,9 +72,9 @@ namespace WolvenKit.Model.Wizards
         }
 
         /// <summary>
-		/// Gets/Sets the donate link.
-		/// </summary>
-		public string DonateLink
+        /// Gets/Sets the donate link.
+        /// </summary>
+	    public string DonateLink
         {
             get => _donateLink;
             set
@@ -85,9 +85,9 @@ namespace WolvenKit.Model.Wizards
         }
 
         /// <summary>
-		/// Gets/Sets the description.
-		/// </summary>
-		public string DefaultDescription
+        /// Gets/Sets the description.
+        /// </summary>
+	    public string DefaultDescription
         {
             get => _defaultDescription;
             set
@@ -98,9 +98,9 @@ namespace WolvenKit.Model.Wizards
         }
 
         /// <summary>
-		/// Gets/Sets the CreateModForW3 bool.
-		/// </summary>
-		public bool CreateModForW3
+	    /// Gets/Sets the CreateModForW3 bool.
+	    /// </summary>
+	    public bool CreateModForW3
         {
             get => _createModForW3;
             set
@@ -111,9 +111,9 @@ namespace WolvenKit.Model.Wizards
         }
 
         /// <summary>
-		/// Gets/Sets the CreateModForCP77 bool.
-		/// </summary>
-		public bool CreateModForCP77
+	    /// Gets/Sets the CreateModForCP77 bool.
+	    /// </summary>
+	    public bool CreateModForCP77
         {
             get => _createModForCP77;
             set
@@ -124,9 +124,9 @@ namespace WolvenKit.Model.Wizards
         }
 
         /// <summary>
-		/// Gets/Sets the AutoInstallMods bool.
-		/// </summary>
-		public bool AutoInstallMods
+	    /// Gets/Sets the AutoInstallMods bool.
+	    /// </summary>
+	    public bool AutoInstallMods
         {
             get => _autoInstallMods;
             set
@@ -137,9 +137,9 @@ namespace WolvenKit.Model.Wizards
         }
 
         /// <summary>
-		/// Gets/Sets the AutoUpdatesEnabled bool.
-		/// </summary>
-		public bool AutoUpdatesEnabled
+	    /// Gets/Sets the AutoUpdatesEnabled bool.
+	    /// </summary>
+	    public bool AutoUpdatesEnabled
         {
             get => _autoUpdatesEnabled;
             set
@@ -150,8 +150,8 @@ namespace WolvenKit.Model.Wizards
         }
 
         /// <summary>
-		/// Gets the SelectedGames string.
-		/// </summary>
+	    /// Gets the SelectedGames string.
+	    /// </summary>
         public string SelectedGames
         {
             get => (CreateModForW3 ? ProjectWizardModel.WitcherGameName + "\t" : "") + (CreateModForCP77 ? ProjectWizardModel.CyberpunkGameName : "");
