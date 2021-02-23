@@ -18,8 +18,6 @@ namespace WolvenKit.Services
         private string _w3ExecutablePath = "";
         private string _cp77ExecutablePath = "";
         private string _wccLitePath = "";
-        //private string _gameModDir = "";
-        //private string _gameDlcDir = "";
         private string _depotPath = "";
 
         private static string ConfigurationPath
@@ -179,12 +177,6 @@ namespace WolvenKit.Services
 
             //if (!File.Exists(WccLitePath))
             //    validationResults.Add(FieldValidationResult.CreateError(nameof(WccLitePath), "WccLite path does not exist"));
-
-            //if (!Directory.Exists(GameModDir))
-            //    validationResults.Add(FieldValidationResult.CreateError(nameof(GameModDir), "Game mod dir does not exist"));
-
-            //if (!Directory.Exists(GameDlcDir))
-            //    validationResults.Add(FieldValidationResult.CreateError(nameof(GameDlcDir), "Game dlc dir does not exist"));
 
             //if (!Directory.Exists(DepotPath))
             //    validationResults.Add(FieldValidationResult.CreateError(nameof(DepotPath), "Depot dir does not exist"));

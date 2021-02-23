@@ -187,13 +187,14 @@ namespace WolvenKit.Controllers
                     return;
                 }
 
-                var packedmoddir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "Mods");
+                //TODO: fix this once we have mod support
+                /*var packedmoddir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "Mods");
                 if (Directory.Exists(packedmoddir))
-                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, MainController.Get().Configuration.GameModDir, true));
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, MainController.Get().Configuration.CP77GameModDir, true));
 
                 var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
                 if (Directory.Exists(packeddlcdir))
-                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.GameDlcDir, true));
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.CP77GameDlcDir, true));*/
 
 
                 installlog.Root.Add(fileroot);

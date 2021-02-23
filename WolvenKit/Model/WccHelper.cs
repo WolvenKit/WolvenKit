@@ -564,7 +564,7 @@ namespace WolvenKit.Model
             var indir = isDLC
                 ? Path.GetFullPath(MainController.Get().Configuration.GameDlcDir)
                 : Path.GetFullPath(MainController.Get().Configuration.W3ExePath);
-            if (basedir.Contains(Path.GetFullPath(MainController.Get().Configuration.GameModDir)))
+            if (basedir.Contains(Path.GetFullPath(MainController.Get().Configuration.W3GameModDir)))
             {
                 indir = basedir;
             }

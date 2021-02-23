@@ -770,11 +770,11 @@ namespace WolvenKit.Controllers
 
                 var packedmoddir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "Mods");
                 if (Directory.Exists(packedmoddir))
-                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, MainController.Get().Configuration.GameModDir, true));
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, MainController.Get().Configuration.W3GameModDir, true));
 
                 var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
                 if (Directory.Exists(packeddlcdir))
-                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.GameDlcDir, true));
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.W3GameDlcDir, true));
 
 
                 installlog.Root.Add(fileroot);
