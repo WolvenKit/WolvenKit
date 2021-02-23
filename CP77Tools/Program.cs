@@ -173,8 +173,8 @@ namespace CP77Tools
         private static string TryGetGameInstallDir()
         {
             var cp77BinDir = "";
-#if _WINDOWS
 
+#if _WINDOWS
             var cp77exe = "";
             // check for CP77_DIR environment variable first
             var CP77_DIR = System.Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
@@ -193,11 +193,11 @@ namespace CP77Tools
 
             try
             {
-                Parallel.ForEach(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
+                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
                 {
-                    var programName = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
                         ?.GetValue("DisplayName");
-                    var installLocation = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
                         ?.GetValue("InstallLocation");
                     if (programName != null && installLocation != null)
                     {
@@ -211,11 +211,11 @@ namespace CP77Tools
 
                     strDelegate.Invoke(exePath);
                 });
-                Parallel.ForEach(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
+                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
                 {
-                    var programName = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
                         ?.GetValue("DisplayName");
-                    var installLocation = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
                         ?.GetValue("InstallLocation");
                     if (programName != null && installLocation != null)
                     {
@@ -244,7 +244,6 @@ namespace CP77Tools
             if (!File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
                 return null;
 #endif
-
 
             return cp77BinDir;
         }
