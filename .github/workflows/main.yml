@@ -37,9 +37,9 @@ jobs:
       with:
         dotnet-version: 5.0.100
     - name: dotnet clean
-      run: dotnet clean ./WolvenKit.sln --configuration Release && dotnet nuget locals all --clear
+      run: dotnet clean ./CP77Tools.sln --configuration Release && dotnet nuget locals all --clear
     - name: dotnet restore
-      run: dotnet restore ./WolvenKit.sln 
+      run: dotnet restore ./CP77Tools.sln
 
     - name: dotnet build CP77Tools.sln
       run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
@@ -115,9 +115,9 @@ jobs:
       with:
         dotnet-version: 5.0.100
     - name: dotnet clean
-      run: dotnet clean ./WolvenKit.sln --configuration Release && dotnet nuget locals all --clear
+      run: dotnet clean ./CP77Tools.sln --configuration Release && dotnet nuget locals all --clear
     - name: dotnet restore
-      run: dotnet restore ./WolvenKit.sln 
+      run: dotnet restore ./CP77Tools.sln
     
     - name: dotnet build CP77Tools.sln
       run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
