@@ -1,4 +1,4 @@
-﻿<catel:UserControl x:Class="WolvenKit.Views.CR2WToTextTool.CR2WToTextToolView"
+<catel:UserControl x:Class="WolvenKit.Views.CR2WToTextTool.CR2WToTextToolView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com" IsVisibleChanged="UserControl_IsVisibleChanged"
@@ -18,6 +18,15 @@
         <StackPanel >
 
             <RichTextBox Width="650" Height="150" AcceptsReturn="False">
+                <FlowDocument>
+                    <Paragraph>This tool will dump all CR2W files (w2ent, w2l, w2scene, w2p, etc) in the specified folder and all its subfolders, into a human-readable text format.
+
+This text output can then be compared using a tool such as WinMerge, or searched.  This can provide a way to compare modified files to visualise changes, or to search through files in bulk to find references to files or values of interest.
+
+Be aware that text dumps can be much larger than the original files; some vanilla CR2W files will produce text dumps of several megabytes each.  To dump the vanilla game plus its DLCs with default settings will consume 35+ GB.
+
+The following file extensions will not be opened:</Paragraph>
+                </FlowDocument>
             </RichTextBox>
             <Grid Margin="0,15,0,0">
 
@@ -51,11 +60,18 @@
                         <RadioButton  Width="150" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="Overwrite Existing Files"/>
                         <RadioButton  Width="150" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="Skip Existing Files"/>
                     </hc:UniformSpacingPanel>
+
+                  
                     
                 </hc:UniformSpacingPanel>
-         
-              
+
+
+
+
             </Grid>
+            <hc:ProgressButton Margin="35" Content="Run CR2W Dump" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+
+            </hc:ProgressButton>
         </StackPanel>
 
 
