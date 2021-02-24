@@ -60,6 +60,7 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
         private async void ConfirmSettings_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             await _fswvm.SaveViewModelAsync();
+            _settingsManager.ProfileImageBrush = _fswm.ProfileImageBrush;
             _settingsManager.Save();
             await _fswvm.CloseViewModelAsync(null);
         }
