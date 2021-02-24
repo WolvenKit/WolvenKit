@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,10 +10,14 @@ using Catel.Services;
 using Microsoft.Win32;
 using Orc.Squirrel;
 using WolvenKit.Commands;
+using WolvenKit.Common.Services;
 using WolvenKit.Services;
 
 namespace WolvenKit.ViewModels.Wizards
 {
+    /// <summary>
+    /// During the first time setup it tries to automatically determine the missing paths and settings.
+    /// </summary>
     public class FirstSetupWizardViewModel : ViewModelBase
     {
         #region Fields
@@ -35,11 +39,12 @@ namespace WolvenKit.ViewModels.Wizards
         #endregion
 
         #region Constructors
-        public FirstSetupWizardViewModel(ISettingsManager settingsManager, IUpdateService updateService, IOpenFileService openFileService)
+        public FirstSetupWizardViewModel(ISettingsManager settingsManager, IUpdateService updateService, IOpenFileService openFileService, ILoggerService loggerService)
         {
             Argument.IsNotNull(() => settingsManager);
             Argument.IsNotNull(() => updateService);
             Argument.IsNotNull(() => openFileService);
+            Argument.IsNotNull(() => loggerService);
 
             _settingsManager = settingsManager;
             _updateService = updateService;
@@ -74,7 +79,9 @@ namespace WolvenKit.ViewModels.Wizards
 
             //TODO: handle this case!
             if (!TryCopyOodleLib())
-                throw new NotImplementedException();
+            {
+                loggerService.LogString($"The oodle dll was not found!");
+            }
 
         }
         #endregion

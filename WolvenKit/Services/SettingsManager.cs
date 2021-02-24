@@ -1,4 +1,4 @@
-﻿using MLib.Interfaces;
+using MLib.Interfaces;
 using System;
 using System.IO;
 using System.Xml.Serialization;
@@ -11,6 +11,9 @@ using Newtonsoft.Json;
 
 namespace WolvenKit.Services
 {
+    /// <summary>
+    /// This handles the application settings defined by the user.
+    /// </summary>
     public class SettingsManager : ValidatableModelBase, ISettingsManager
     {
         #region fields
