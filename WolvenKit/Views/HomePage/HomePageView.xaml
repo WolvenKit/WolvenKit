@@ -1,4 +1,4 @@
-﻿<catel:UserControl    
+<catel:UserControl    
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:catel="http://schemas.catelproject.com"
@@ -165,7 +165,7 @@
             <Grid VerticalAlignment="Top" Margin="0,15,0,0" >
                 <Border  CornerRadius="0,0,0,0">
                     <Grid>
-                        <Image HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Width="152" Height="152"  Source="pack://application:,,,/Resources/Icons/3.png">
+                        <Image MouseLeftButtonDown="Image_MouseLeftButtonDown" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Width="152" Height="152"  Source="pack://application:,,,/Resources/Icons/3.png">
 
                         </Image>
 

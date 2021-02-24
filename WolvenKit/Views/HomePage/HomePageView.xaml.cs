@@ -1,4 +1,5 @@
-﻿using Catel.IoC;
+using Catel.IoC;
+using Fluent;
 using HandyControl.Controls;
 using HandyControl.Data;
 using HandyControl.Tools;
@@ -371,6 +372,12 @@ namespace WolvenKit.Views.HomePage
                 PageViewGrid.Children.Clear();
                 PageViewGrid.Children.Add(DebugPV);
             }
+        }
+
+        private void Image_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
+            WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, false);
         }
     }
 }
