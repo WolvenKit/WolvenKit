@@ -1,4 +1,4 @@
-﻿
+
 using Catel.Windows;
 using WolvenKit.ViewModels;
 
@@ -6,7 +6,7 @@ namespace WolvenKit.Views
 {
     public partial class ToolControlHostWindowView : DataWindow
     {
-        public ToolControlHostWindowView(UserControlHostWindowViewModel ucvm)
+        public ToolControlHostWindowView(ToolControlHostWindowViewModel ucvm)
             : base(DataWindowMode.Custom)
         {
             InitializeComponent();

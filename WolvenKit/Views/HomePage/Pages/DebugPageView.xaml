@@ -7,157 +7,258 @@
                    xmlns:catel="http://schemas.catelproject.com">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
 
 
-        <hc:UniformSpacingPanel Spacing="10">
+        <hc:ScrollViewer Grid.Column="2">
+            <Border   BorderThickness="2" BorderBrush="{DynamicResource RegionBrush}" CornerRadius="15">
+            </Border>
 
-            <hc:ComboBox MaxDropDownHeight="1200" x:Name="TesterBro" HorizontalAlignment="Stretch" Height="1200" Width="1200" SelectionChanged="TesterBro_SelectionChanged">
-           
-            </hc:ComboBox>
-            
-            <TreeView>
-                <TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/app.svg}"/>
+        </hc:ScrollViewer>
 
-                                <TextBlock  Margin="5" Text="Okay"     />
-                            </StackPanel>
-                          
-                        </TreeViewItem.Header>
+        <hc:ScrollViewer Grid.Column="3">
+            <Border   BorderThickness="2" BorderBrush="{DynamicResource RegionBrush}" CornerRadius="15">
+            </Border>
 
+        </hc:ScrollViewer>
 
-
-
-                    </TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image VerticalAlignment="Center" HorizontalAlignment="Center" Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/aiarch3.svg}"/>
-
-                                <TextBlock  Margin="5" Text="Okay"     />
-                            </StackPanel>
-
-                        </TreeViewItem.Header>
+        
+        <hc:ScrollViewer>
+            <Border   BorderThickness="2" BorderBrush="{DynamicResource RegionBrush}" CornerRadius="15">
+                
+            <StackPanel  >
+                    <TextBlock HorizontalAlignment="Center" Margin="5" Text="Window UI tests / Runtime Design Helpers."/>
 
 
 
+                    <hc:ComboBox ItemsSource="{Binding DialogsUC}"  hc:TitleElement.Title="Dialogs" x:Name="DialogCB" Width="auto" Margin="15" Text="Dialogs" SelectionChanged="DialogCB_SelectionChanged">
 
-                    </TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/animation.svg}"/>
+                </hc:ComboBox>
+                    <hc:ComboBox ItemsSource="{Binding WizardsUC}"  hc:TitleElement.Title="Wizards"  x:Name="WizardsCB" Width="auto" Margin="15" Text="Dialogs" SelectionChanged="WizardsCB_SelectionChanged">
 
-                                <TextBlock  Margin="5" Text="Okay"     />
-                            </StackPanel>
+                </hc:ComboBox>
+                    <hc:ComboBox ItemsSource="{Binding EditorsUC}"  hc:TitleElement.Title="Editors"  x:Name="EditorsCB" Width="auto" Margin="15" Text="Dialogs" SelectionChanged="EditorsCB_SelectionChanged">
 
-                        </TreeViewItem.Header>
+                </hc:ComboBox>
+                    <hc:ComboBox ItemsSource="{Binding ToolsUC}"  hc:TitleElement.Title="Tools"  x:Name="ToolsCB" Width="auto" Margin="15" Text="Dialogs" SelectionChanged="ToolsCB_SelectionChanged">
+
+                </hc:ComboBox>
 
 
 
 
-                    </TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/aningraph.svg}"/>
-
-                                <TextBlock  Margin="5" Text="Okay"     />
-                            </StackPanel>
-
-                        </TreeViewItem.Header>
 
 
 
 
-                    </TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/audiovehcurveset.svg}"/>
+                </StackPanel>
+            </Border>
 
-                                <TextBlock  Margin="5" Text="Okay"     />
-                            </StackPanel>
-
-                        </TreeViewItem.Header>
+        </hc:ScrollViewer>
 
 
+        <hc:ScrollViewer Grid.Column="1">
+            <Border  BorderThickness="2" BorderBrush="{DynamicResource RegionBrush}" CornerRadius="15">
+                <StackPanel>
+
+                    <TextBlock HorizontalAlignment="Center" Margin="5" Text="Icon Tests"/>
 
 
-                    </TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/app.svg}"/>
+                    <hc:HoneycombPanel x:Name="MyIcons" >
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22" Margin="5" Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/aiarch3.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/animation.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/aningraph.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/app.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/audiometadata2.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/audiovehcurveset.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/behavior_graph3.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/bk2.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/bnk.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/camcurveset.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/cfoilage.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/cubemap.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/font.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/json.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/lights.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/materialinstance.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/mesh.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/nvmesh.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/particle.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/quest.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/scenerid_Cutscene_info.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/scenesversions_Cutscene_versioning.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/scene_Cutscene.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/texarray.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/traffic_collisions.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/traffic_persistent.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/w2mesh.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/w2mi2.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/W3Occulsion.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/wem.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/xbm.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/xcube.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/xml.svg}"/>
 
-                                <TextBlock  Margin="5" Text="Okay"     />
-                            </StackPanel>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/charcustpreset.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/cminimap.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/conversations.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/curveset.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/dat.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/envparam.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/envprob a.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/envprob b.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/foldest.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/mappins.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/osupak.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/poimappins.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/questphase.svg}"/>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="22" Width="22"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/rig.svg}"/>
 
-                        </TreeViewItem.Header>
+                    </hc:HoneycombPanel>
+                    <TreeView hc:TitleElement.Title="IconTest" Margin="15">
+                        <TreeViewItem>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/app.svg}"/>
 
+                                        <TextBlock  Margin="5" Text="Okay"     />
+                                    </StackPanel>
 
-
-
-                    </TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/app.svg}"/>
-
-                                <TextBlock  Margin="5" Text="Okay"     />
-                            </StackPanel>
-
-                        </TreeViewItem.Header>
-
-
-
-
-                    </TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/bnk.svg}"/>
-
-                                <TextBlock  Margin="5" Text="Okay"     />
-                            </StackPanel>
-
-                        </TreeViewItem.Header>
+                                </TreeViewItem.Header>
 
 
 
 
-                    </TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/audiometadata2.svg}"/>
+                            </TreeViewItem>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/aiarch3.svg}"/>
 
-                                <TextBlock  Margin="5" Text="Okay"     />
-                            </StackPanel>
+                                        <TextBlock  Margin="5" Text="Okay"     />
+                                    </StackPanel>
 
-                        </TreeViewItem.Header>
-
-
+                                </TreeViewItem.Header>
 
 
-                    </TreeViewItem>
-                    <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/behavior_graph3.svg}"/>
-                    <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/bk2.svg}"/>
-                    <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/camcurveset.svg}"/>
-                    <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/cfoilage.svg}"/>
-                </TreeViewItem>
-    
-            </TreeView>
-  
 
-        </hc:UniformSpacingPanel>
-  
+
+                            </TreeViewItem>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/animation.svg}"/>
+
+                                        <TextBlock  Margin="5" Text="Okay"     />
+                                    </StackPanel>
+
+                                </TreeViewItem.Header>
+
+
+
+
+                            </TreeViewItem>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/aningraph.svg}"/>
+
+                                        <TextBlock  Margin="5" Text="Okay"     />
+                                    </StackPanel>
+
+                                </TreeViewItem.Header>
+
+
+
+
+                            </TreeViewItem>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/audiovehcurveset.svg}"/>
+
+                                        <TextBlock  Margin="5" Text="Okay"     />
+                                    </StackPanel>
+
+                                </TreeViewItem.Header>
+
+
+
+
+                            </TreeViewItem>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/app.svg}"/>
+
+                                        <TextBlock  Margin="5" Text="Okay"     />
+                                    </StackPanel>
+
+                                </TreeViewItem.Header>
+
+
+
+
+                            </TreeViewItem>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/app.svg}"/>
+
+                                        <TextBlock  Margin="5" Text="Okay"     />
+                                    </StackPanel>
+
+                                </TreeViewItem.Header>
+
+
+
+
+                            </TreeViewItem>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/bnk.svg}"/>
+
+                                        <TextBlock  Margin="5" Text="Okay"     />
+                                    </StackPanel>
+
+                                </TreeViewItem.Header>
+
+
+
+
+                            </TreeViewItem>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/audiometadata2.svg}"/>
+
+                                        <TextBlock  Margin="5" Text="Okay"     />
+                                    </StackPanel>
+
+                                </TreeViewItem.Header>
+
+
+
+
+                            </TreeViewItem>
+                            <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/behavior_graph3.svg}"/>
+                            <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/bk2.svg}"/>
+                            <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/camcurveset.svg}"/>
+                            <Image VerticalAlignment="Center" HorizontalAlignment="Center"  Source="{svgc:SvgImage Source=/Resources/Icons/FileIcons/cfoilage.svg}"/>
+                        </TreeViewItem>
+
+                    </TreeView>
+                </StackPanel>
+            </Border>
+
+        </hc:ScrollViewer>
     </Grid>
     
 </catel:UserControl>
