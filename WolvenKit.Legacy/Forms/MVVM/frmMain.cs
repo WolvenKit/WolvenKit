@@ -1399,8 +1399,8 @@ namespace WolvenKit
             //Load/Setup the config
             var exit = false;
             while (!File.Exists(MainController.Get().Configuration.ExecutablePath) 
-            || !Directory.Exists(MainController.Get().Configuration.GameModDir) 
-            || !Directory.Exists(MainController.Get().Configuration.GameDlcDir))
+            || !Directory.Exists(MainController.Get().Configuration.W3GameModDir) 
+            || !Directory.Exists(MainController.Get().Configuration.W3GameDlcDir))
             {
                 var sets = new frmSettings();
                 if (sets.ShowDialog() != DialogResult.OK)
@@ -2696,9 +2696,9 @@ Would you like to open the problem steps recorder?", "Bug reporting", System.Win
             }
         }
 
-        private void openModFolderToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.ShowFolderInExplorer(MainController.Get().Configuration.GameModDir);
+        private void openModFolderToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.ShowFolderInExplorer(MainController.Get().Configuration.W3GameModDir);
         
-        private void openDlcFolderToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.ShowFolderInExplorer(MainController.Get().Configuration.GameDlcDir);
+        private void openDlcFolderToolStripMenuItem_Click(object sender, EventArgs e) => Commonfunctions.ShowFolderInExplorer(MainController.Get().Configuration.W3GameDlcDir);
 
         #endregion
     }

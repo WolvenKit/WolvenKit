@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using WolvenKit.CR2W.Types;
+using System.Collections.Concurrent;
+
 
 namespace WolvenKit.CR2W.Reflection
 {

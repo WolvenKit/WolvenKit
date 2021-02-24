@@ -8,7 +8,9 @@
                    xmlns:hc="https://handyorg.github.io/handycontrol"
                    xmlns:UCpage="clr-namespace:WolvenKit.Views.Wizards.WizardPages.ProjectWizard"
                    mc:Ignorable="av"
-                   Tag="Project Wizard" IsVisibleChanged="UserControl_IsVisibleChanged">
+                   Tag="Project Wizard"
+                   IsVisibleChanged="UserControl_IsVisibleChanged"
+                   ViewModelChanged="UserControl_ViewModelChanged">
 
 
     <catel:UserControl.Resources>
@@ -64,7 +66,7 @@
                         <hc:StepBarItem Content="Finalize Setup"/>
 
             </hc:StepBar>
-            <Button Command="{Binding NextCmd}" CommandParameter="{Binding ElementName=StepMain}" Margin="3" VerticalAlignment="Bottom" Height="30" Width="50" IsEnabled="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Right" Click="Button_Click">
+            <Button Command="{Binding NextCmd}" CommandParameter="{Binding ElementName=StepMain}" Margin="3" VerticalAlignment="Bottom" Height="30" Width="50" IsEnabled="{Binding AllFieldIsValid}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Right" Click="Button_Click">
                 <iconPacks:PackIconCodicons Kind="ArrowRight"/>
             </Button>
         </Grid>

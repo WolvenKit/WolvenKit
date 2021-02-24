@@ -45,17 +45,19 @@ namespace WolvenKit
 
         public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
 
-
-        public string GameModDir { get; set; }
-        public string GameDlcDir { get; set; }
+        
 
         public EUpdateChannel UpdateChannel { get; set; }
 
-
+        
+        [XmlIgnore]
+        public string W3GameRootDir => Path.Combine(W3ExePath, @"..\..\..\");
         [XmlIgnore]
         public string W3GameContentDir => Path.Combine(W3GameRootDir, "content");
         [XmlIgnore]
-        public string W3GameRootDir => Path.Combine(W3ExePath, @"..\..\..\");
+        public string W3GameModDir => Path.Combine(W3GameRootDir, "Mods");
+        [XmlIgnore]
+        public string W3GameDlcDir => Path.Combine(W3GameRootDir, "DLC");
 
         [XmlIgnore]
         public string CP77GameContentDir => Path.Combine(CP77GameRootDir, "content");

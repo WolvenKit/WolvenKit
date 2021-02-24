@@ -1,12 +1,13 @@
 ﻿
+using Catel.IoC;
 using ControlzEx.Theming;
 using System;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
 {
@@ -109,6 +110,11 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
 
             }
             filled = true;
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            ServiceLocator.Default.ResolveType<FirstSetupWizardViewModel>().AllFieldIsValid = true;
         }
     }
 }

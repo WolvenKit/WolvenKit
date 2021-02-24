@@ -1,4 +1,6 @@
 ﻿
+using Catel.IoC;
+using Catel.MVVM;
 using WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard;
 
 namespace WolvenKit.Views.Wizards
@@ -7,6 +9,17 @@ namespace WolvenKit.Views.Wizards
     {
         public FirstSetupWizardView()
         {
+            ServiceLocator.Default.RegisterTypeAndInstantiate<Model.Wizards.ProjectWizardModel>();
+
+            InitializeComponent();
+        }
+
+        private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
+        {
+            if (ViewModel == null)
+                return;
+            
+            ServiceLocator.Default.RegisterInstance(ViewModel as ViewModels.Wizards.FirstSetupWizardViewModel);
 
             CUV = new CreateUserView();
             STV = new SelectThemeView();
@@ -14,7 +27,6 @@ namespace WolvenKit.Views.Wizards
             FSV = new FinalizeSetupView();
             SIPV = new SetInitialPreferencesView();
 
-            InitializeComponent();
             ShowPage();
         }
 

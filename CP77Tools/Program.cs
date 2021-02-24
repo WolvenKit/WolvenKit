@@ -10,7 +10,6 @@ using CP77.CR2W;
 using CP77Tools.Commands;
 using CP77Tools.Extensions;
 using Luna.ConsoleProgressBar;
-using Microsoft.Win32;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools
@@ -173,8 +172,11 @@ namespace CP77Tools
         private static string TryGetGameInstallDir()
         {
             var cp77BinDir = "";
-#if _WINDOWS
 
+
+
+#pragma warning disable CA1416
+#if _WINDOWS
             var cp77exe = "";
             // check for CP77_DIR environment variable first
             var CP77_DIR = System.Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
@@ -244,7 +246,7 @@ namespace CP77Tools
             if (!File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
                 return null;
 #endif
-
+#pragma warning restore CA1416
 
             return cp77BinDir;
         }
