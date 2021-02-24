@@ -8,27 +8,27 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Catel.MVVM.Views;
+using Catel.Services;
 using Catel.Windows;
 using HandyControl.Data;
+using Orc.ProjectManagement;
 using WolvenKit.Bundles;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
 using WolvenKit.ViewModels.AssetBrowser;
 
 namespace WolvenKit.Views.AssetBrowser
 {
-    public partial class AssetBrowserView : DataWindow, INotifyPropertyChanged
+    public partial class AssetBrowserView : INotifyPropertyChanged
     {
-        private AssetBrowserViewModel viewmodel;
-
-        public AssetBrowserView(List<IGameArchiveManager> managers, List<string> AvaliableClasses) : base(DataWindowMode.Custom)
+      
+      
+        public AssetBrowserView()
         {
             InitializeComponent();
             ControlzEx.Theming.ThemeManager.Current.ChangeTheme(this, "Dark.Red"); //This aint needed was just for testing remove me.
-            var vm = new AssetBrowserViewModel(managers, AvaliableClasses);
             NotifyPropertyChanged();
-            this.DataContext = vm;
-            viewmodel = vm;
         }
 
         public new event PropertyChangedEventHandler PropertyChanged;
@@ -43,17 +43,17 @@ namespace WolvenKit.Views.AssetBrowser
             base.OnMouseLeftButtonDown(e);
 
             // Begin dragging the window
-            this.DragMove();
+            //this.DragMove();
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.Close();
+           // this.Close();
         }
 
         private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
         {
-            SetCurrentValue(WindowStateProperty, System.Windows.WindowState.Minimized);
+           // SetCurrentValue(WindowStateProperty, System.Windows.WindowState.Minimized);
         }
 
         void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -62,19 +62,23 @@ namespace WolvenKit.Views.AssetBrowser
             var item = ((FrameworkElement)e.OriginalSource).DataContext as AssetBrowserData;
             if (item != null)
             {
-                viewmodel.ImportFile(item);
+                vm.ImportFile(item);
             }
         }
 
         private void SearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
         {
-            viewmodel.PerformSearch(e.Info);
+            var vm = this.DataContext as AssetBrowserViewModel;
+
+            vm.PerformSearch(e.Info);
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            viewmodel.CurrentNode = viewmodel.RootNode;
-            viewmodel.CurrentNodeFiles = viewmodel.RootNode.ToAssetBrowserData();
+            var vm = this.DataContext as AssetBrowserViewModel;
+
+            vm.CurrentNode = vm.RootNode;
+            vm.CurrentNodeFiles = vm.RootNode.ToAssetBrowserData();
         }
 
         private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -87,22 +91,26 @@ namespace WolvenKit.Views.AssetBrowser
 
         private void ShowPreviewButton_Click(object sender, RoutedEventArgs e)
         {
-            if(viewmodel.PreviewWidth.GridUnitType != GridUnitType.Pixel)
+            var vm = this.DataContext as AssetBrowserViewModel;
+
+            if (vm.PreviewWidth.GridUnitType != GridUnitType.Pixel)
             {
-                viewmodel.PreviewWidth = new GridLength(0, GridUnitType.Pixel);
-                viewmodel.PreviewVisible = true;
+                vm.PreviewWidth = new GridLength(0, GridUnitType.Pixel);
+                vm.PreviewVisible = true;
             }
             else
             {
-                viewmodel.PreviewWidth = new GridLength(1, GridUnitType.Star);
-                viewmodel.PreviewVisible = false;
+                vm.PreviewWidth = new GridLength(1, GridUnitType.Star);
+                vm.PreviewVisible = false;
             }
         }
 
         private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            viewmodel.CurrentNode = e.NewValue as GameFileTreeNode;
-            viewmodel.CurrentNodeFiles = (e.NewValue as GameFileTreeNode)?.ToAssetBrowserData();
+            var vm = this.DataContext as AssetBrowserViewModel;
+
+            vm.CurrentNode = e.NewValue as GameFileTreeNode;
+            vm.CurrentNodeFiles = (e.NewValue as GameFileTreeNode)?.ToAssetBrowserData();
         }
     }
 }

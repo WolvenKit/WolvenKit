@@ -28,7 +28,18 @@
 
     <Grid  x:Name="FocusGrid" Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"  hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"  >
 
+        <StackPanel Margin="5,5,0,5" HorizontalAlignment="Right" VerticalAlignment="Top"  Orientation="Horizontal">
+            <iconPacks:PackIconCodicons Height="13" Width="13" Kind="ChromeMinimize" Margin="15,3,15,3">
+                <iconPacks:PackIconCodicons.Effect>
+                    <DropShadowEffect>
+                        
+                    </DropShadowEffect>
+                </iconPacks:PackIconCodicons.Effect>
+            </iconPacks:PackIconCodicons>
+            <iconPacks:PackIconCodicons Height="13" Width="13" Kind="ChromeRestore" Margin="15,3,15,3"/>
+            <iconPacks:PackIconCodicons Height="13" Width="13" Kind="ChromeClose" Margin="15,3,7,3"/>
 
+        </StackPanel>
 
 
         <Grid MouseLeftButtonDown="Grid_MouseLeftButtonDown_2"  Background="Transparent" >
@@ -38,8 +49,7 @@
         <Grid        MouseLeftButtonDown="Grid_MouseLeftButtonDown_1" VerticalAlignment="Top" Height="20" >
         </Grid>
 
-        <Grid Effect="{DynamicResource  MahApps.DropShadowEffect.Menu}"  Margin="15" HorizontalAlignment="Left">
-
+        <Grid Effect="{DynamicResource  MahApps.DropShadowEffect.Menu}"  Margin="15,25,15,15" HorizontalAlignment="Left">
 
             <Border CornerRadius="15" Background="{DynamicResource RegionBrush}">
 
@@ -182,7 +192,7 @@
 
 
 
-        <Border  Effect="{DynamicResource  MahApps.DropShadowEffect.Menu}" CornerRadius="10" Margin="230,15,15,15" Background="{DynamicResource RegionBrush}" >
+        <Border  Effect="{DynamicResource  MahApps.DropShadowEffect.Menu}" CornerRadius="10" Margin="230,25,15,15" Background="{DynamicResource RegionBrush}" >
             <Border Margin="1,15,1,15" CornerRadius="10" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
                 <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
                     <Grid x:Name="PageViewGrid" Margin="0"/>

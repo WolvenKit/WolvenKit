@@ -1,18 +1,20 @@
-﻿using AvalonDock.Layout;
+using AvalonDock.Layout;
 
 namespace WolvenKit.Layout
 {
 	using System.Windows.Controls;
 	using System.Windows;
 	using ViewModels;
+    using WolvenKit.Views.AssetBrowser;
+    using WolvenKit.ViewModels.AssetBrowser;
 
-	/// <summary>
-	/// Implements a <see ref="DataTemplateSelector"/> for AvalonDock's documents and toolwindows.
-	///
-	/// One instance of this class is usually initialized in XAML and it returns
-	/// a view for a specific given type of viewmodel.
-	/// </summary>
-	internal class PanesTemplateSelector : DataTemplateSelector
+    /// <summary>
+    /// Implements a <see ref="DataTemplateSelector"/> for AvalonDock's documents and toolwindows.
+    ///
+    /// One instance of this class is usually initialized in XAML and it returns
+    /// a view for a specific given type of viewmodel.
+    /// </summary>
+    internal class PanesTemplateSelector : DataTemplateSelector
 	{
 		/// <summary>
 		/// Default class constructor.
@@ -37,12 +39,16 @@ namespace WolvenKit.Layout
 		public DataTemplate ProjectExplorerTemplate { get; set; }
 
 
-		/// <summary>
-		/// Determines the matching view for a specific given type of viewmodel.
-		/// </summary>
-		/// <param name="item">Identifies the viewmodel object for which we require an associated view.</param>
-		/// <param name="container">Identifies the container's instance that wants to resolve this association.</param>
-		public override System.Windows.DataTemplate SelectTemplate(object item,
+
+        public DataTemplate AssetBrowserTemplate { get; set; }
+
+
+        /// <summary>
+        /// Determines the matching view for a specific given type of viewmodel.
+        /// </summary>
+        /// <param name="item">Identifies the viewmodel object for which we require an associated view.</param>
+        /// <param name="container">Identifies the container's instance that wants to resolve this association.</param>
+        public override System.Windows.DataTemplate SelectTemplate(object item,
 																   System.Windows.DependencyObject container)
         {
             return item switch
@@ -50,6 +56,7 @@ namespace WolvenKit.Layout
                 IDocumentViewModel _ => FileViewTemplate,
                 LogViewModel _ => LogViewTemplate,
                 ProjectExplorerViewModel _ => ProjectExplorerTemplate,
+                AssetBrowserViewModel _ => AssetBrowserTemplate,
                 _ => base.SelectTemplate(item, container)
             };
         }

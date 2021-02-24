@@ -16,11 +16,32 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Model;
 using MessageBox = System.Windows.Forms.MessageBox;
+using WolvenKit.Common.Services;
+using Catel.Services;
+using Catel;
+using Catel.Threading;
 
 namespace WolvenKit.ViewModels.AssetBrowser
 {
-    class AssetBrowserViewModel : ViewModelBase
+    public class AssetBrowserViewModel : ToolViewModel
     {
+
+        /// <summary>
+        /// Identifies the <see ref="ContentId"/> of this tool window.
+        /// </summary>
+        public const string ToolContentId = "AssetBrowser_Tool";
+
+        /// <summary>
+        /// Identifies the caption string used for this tool window.
+        /// </summary>
+        public const string ToolTitle = "AssetBrowser";
+        private readonly IMessageService _messageService;
+        private readonly ILoggerService _loggerService;
+        private readonly IProjectManager _projectManager;
+
+
+        private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
+
         public GameFileTreeNode CurrentNode { get; set; } = new GameFileTreeNode();
         public List<AssetBrowserData> CurrentNodeFiles { get; set; } = new List<AssetBrowserData>();
         public GameFileTreeNode RootNode { get; set; }
@@ -35,16 +56,28 @@ namespace WolvenKit.ViewModels.AssetBrowser
         public AssetBrowserData SelectedNode { get; set; }
         public List<AssetBrowserData> SelectedNodes { get; set; }
 
-        public AssetBrowserViewModel(List<IGameArchiveManager> managers, List<string> AvaliableClasses)
+        public AssetBrowserViewModel(
+            IProjectManager projectManager,
+            ILoggerService loggerService,
+            IMessageService messageService) : base(ToolTitle)
         {
+            Argument.IsNotNull(() => projectManager);
+            Argument.IsNotNull(() => messageService);
+            Argument.IsNotNull(() => loggerService);
+            _projectManager = projectManager;
+            _loggerService = loggerService;
+            _messageService = messageService;
+         
+            SetupToolDefaults();
+                
             SelectedFiles = new List<IGameFile>();
-            Managers = managers;
+            Managers = MainController.Get().GetManagers(true);
 
             this.CurrentNode = new GameFileTreeNode(EArchiveType.ANY)
             {
                 Name = "Depot"
             };
-            foreach (var mngr in managers)
+            foreach (var mngr in MainController.Get().GetManagers(true))
             {
                 if (mngr.RootNode != null)
                 {
@@ -54,12 +87,13 @@ namespace WolvenKit.ViewModels.AssetBrowser
             }
             this.CurrentNodeFiles = this.CurrentNode.ToAssetBrowserData();
             this.RootNode = this.CurrentNode;
-            this.Extensions = managers.SelectMany(x => x.Extensions).ToList();
-            this.Classes = AvaliableClasses;
+            this.Extensions = MainController.Get().GetManagers(true).SelectMany(x => x.Extensions).ToList();
+            this.Classes = MainController.Get().GetGame().GetAvaliableClasses();
             this.PreviewWidth = new GridLength(0, GridUnitType.Pixel);
             this.PreviewVisible = false;
         }
 
+      
         public void PerformSearch(string query)
         {
             var newnode = new GameFileTreeNode()
@@ -77,6 +111,17 @@ namespace WolvenKit.ViewModels.AssetBrowser
                 .ToDictionary(x => x.Key, x => x.Value);
             this.CurrentNode = newnode;
             CurrentNodeFiles = CurrentNode.ToAssetBrowserData();
+        }
+
+        private void SetupToolDefaults()
+        {
+            ContentId = ToolContentId;           // Define a unique contentid for this toolwindow
+
+            //BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow
+            //bi.BeginInit();
+            //bi.UriSource = new Uri("pack://application:,,/Resources/Images/property-blue.png");
+            //bi.EndInit();
+            //IconSource = bi;
         }
 
         public void ImportFile(AssetBrowserData item)
@@ -157,6 +202,21 @@ namespace WolvenKit.ViewModels.AssetBrowser
             return ret.Values.ToList();
         }
 
-        
+        protected override async Task InitializeAsync()
+        {
+            await base.InitializeAsync();
+
+            // TODO: Write initialization code here and subscribe to events
+        }
+
+        protected override Task CloseAsync()
+        {
+            // TODO: Unsubscribe from events
+
+
+            return base.CloseAsync();
+        }
+
+
     }
 }

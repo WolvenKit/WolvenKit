@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using Catel.IoC;
 using Fluent;
 using Orchestra;
@@ -66,10 +66,7 @@ namespace WolvenKit.Views
 
         private void CBAssetBrowserItem_Selected(object sender, RoutedEventArgs e)
         {
-            AssetBrowserView assetBrowser = new AssetBrowserView(
-                MainController.Get().GetManagers(true),
-                MainController.Get().GetGame().GetAvaliableClasses());
-            assetBrowser.Show();
+     
         }
 
         private void CBCodeEditorItem_Selected(object sender, RoutedEventArgs e)

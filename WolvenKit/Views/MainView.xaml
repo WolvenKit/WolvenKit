@@ -1,10 +1,10 @@
-﻿<catel:UserControl x:Class="WolvenKit.Views.MainView"
+<catel:UserControl x:Class="WolvenKit.Views.MainView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                   xmlns:ad="clr-namespace:WolvenKit.Layout" IsVisibleChanged="UserControl_IsVisibleChanged_1"
+                   xmlns:ad="clr-namespace:WolvenKit.Layout" xmlns:views2="clr-namespace:WolvenKit.Views.AssetBrowser" IsVisibleChanged="UserControl_IsVisibleChanged_1"
                    >
 
     <Grid
@@ -58,7 +58,12 @@
                             <views:ProjectExplorerView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.ProjectExplorerTemplate>
-                    
+                    <ad:PanesTemplateSelector.AssetBrowserTemplate>
+                        <DataTemplate>
+                            <views2:AssetBrowserView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.AssetBrowserTemplate>
+
                 </ad:PanesTemplateSelector>
             </DockingManager.LayoutItemTemplateSelector>
 

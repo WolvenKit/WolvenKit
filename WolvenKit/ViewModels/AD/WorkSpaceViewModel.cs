@@ -1,4 +1,4 @@
-﻿using Catel.Services;
+using Catel.Services;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -25,6 +25,8 @@ namespace WolvenKit.ViewModels
     using Common.Services;
     using CR2W;
     using WolvenKit.Views;
+    using WolvenKit.ViewModels.AssetBrowser;
+    using WolvenKit.Views.AssetBrowser;
 
     /// <summary>
     /// The WorkSpaceViewModel implements AvalonDock demo specific properties, events and methods.
@@ -76,6 +78,8 @@ namespace WolvenKit.ViewModels
             ShowProjectExplorerCommand = new RelayCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer);
             ShowImportUtilityCommand = new RelayCommand(ExecuteShowImportUtility, CanShowImportUtility);
             ShowPropertiesCommand = new RelayCommand(ExecuteShowProperties, CanShowProperties);
+            ShowAssetsCommand = new RelayCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
+
             ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
             OpenFileCommand = new DelegateCommand<FileSystemInfoModel>(
@@ -116,6 +120,8 @@ namespace WolvenKit.ViewModels
 
             commandManager.RegisterCommand(AppCommands.Application.ShowImportUtility, ShowImportUtilityCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowProperties, ShowPropertiesCommand, this);
+            commandManager.RegisterCommand(AppCommands.Application.ShowAssetBrowser, ShowAssetsCommand, this);
+
 
             // Home Tab
             commandManager.RegisterCommand(AppCommands.Application.OpenFile, OpenFileCommand, this);
@@ -180,6 +186,12 @@ namespace WolvenKit.ViewModels
         }
 
 
+        /// <summary>
+        /// Displays the AssetBrowser.
+        /// </summary>
+        public ICommand ShowAssetsCommand { get; private set; }
+        private bool CanShowAssetBrowser() => true;
+        private void ExecuteAssetBrowser() => AssetBrowser.IsVisible = !AssetBrowser.IsVisible;
 
 
         /// <summary>
@@ -337,7 +349,8 @@ namespace WolvenKit.ViewModels
             Log, 
             ProjectExplorer, 
             PropertiesViewModel, 
-            ImportViewModel
+            ImportViewModel,
+            AssetBrowser,
         };
 
         private LogViewModel _logViewModel = null;
@@ -359,6 +372,29 @@ namespace WolvenKit.ViewModels
 				return _projectExplorerViewModel;
 			}
         }
+
+
+
+        private AssetBrowserViewModel _AssetBrowserViewModel = null;
+        /// <summary>
+        /// Gets an instance of the LogViewModel.
+        /// </summary>
+        ///
+        ///
+        ///
+        public AssetBrowserViewModel AssetBrowser
+        {
+            get
+            {
+       
+                _AssetBrowserViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AssetBrowserViewModel>();
+                //_AssetBrowserViewModel.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                return _AssetBrowserViewModel;
+            }
+        }
+
+
+
 
         private ImportViewModel _importViewModel = null;
 		/// <summary>
