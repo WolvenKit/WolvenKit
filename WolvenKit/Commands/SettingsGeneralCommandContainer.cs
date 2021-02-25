@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SettingsGeneralCommandContainer.cs" company="WildGums">
 //   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
 // </copyright>
@@ -20,10 +20,6 @@ namespace WolvenKit.Commands
 
     public class SettingsGeneralCommandContainer : CommandContainerBase
     {
-        private const string ViewModelType = nameof(SettingsViewModel);
-
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IViewModelFactory _viewModelFactory;
 
@@ -37,19 +33,6 @@ namespace WolvenKit.Commands
             _viewModelFactory = viewModelFactory;
         }
 
-        protected override async Task ExecuteAsync(object parameter)
-        {
-            var settingsViewModelType = TypeCache.GetTypes(x => string.Equals(x.Name, ViewModelType)).FirstOrDefault();
-            if (settingsViewModelType == null)
-            {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot find type '{0}'", ViewModelType);
-            }
-
-            var viewModel = _viewModelFactory.CreateViewModel(settingsViewModelType, null, null);
-
-
-
-            await _uiVisualizerService.ShowDialogAsync(viewModel);
-        }
+        
     }
 }
