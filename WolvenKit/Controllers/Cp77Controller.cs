@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -84,19 +84,19 @@ namespace WolvenKit.Controllers
             };
         }
 
-        public override List<string> GetAvaliableClasses()
-        {
-            return CR2WTypeManager.AvailableTypes.ToList();
-        }
+        public override List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
 
-        public override void HandleStartup()
+        public override async Task HandleStartup()
         {
-            List<Func<IGameArchiveManager>> todo = new List<Func<IGameArchiveManager>>()
+            RegisterServices();
+
+            var todo = new List<Func<IGameArchiveManager>>()
             {
                 LoadArchiveManager,
             };
-            Parallel.ForEach(todo, _ => Task.Run(_));
-            RegisterServices();
+            //Parallel.ForEach(todo, _ => Task.Run(_));
+
+            await Task.WhenAll( todo.Select(_ => Task.Run(_)));
         }
 
         private static void RegisterServices()

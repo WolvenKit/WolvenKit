@@ -83,7 +83,7 @@ namespace WolvenKit.ViewModels.AssetBrowser
             {
                 Name = "Depot"
             };
-            foreach (var mngr in MainController.Get().GetManagers(true))
+            foreach (var mngr in Managers)
             {
                 if (mngr.RootNode != null)
                 {

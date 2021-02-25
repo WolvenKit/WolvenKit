@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,7 +23,7 @@ namespace WolvenKit.Controllers
 
         public abstract List<string> GetAvaliableClasses();
 
-        public abstract void HandleStartup();
+        public abstract Task HandleStartup();
 
         public abstract Task<bool> PackAndInstallProject();
 

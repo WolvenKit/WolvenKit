@@ -69,9 +69,11 @@ namespace WolvenKit
                 {
                     using (_pleaseWaitService.PushInScope())
                     {
-                        await _projectManager.LoadAsync(location);
-                        AssetBrowserViewModel z = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
-                        z.ReInit();
+                        await _projectManager.LoadAsync(location).ContinueWith(t =>
+                            {
+                                var z = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
+                                z.ReInit();
+                        }, TaskContinuationOptions.OnlyOnRanToCompletion);
                     }
                 }
             }

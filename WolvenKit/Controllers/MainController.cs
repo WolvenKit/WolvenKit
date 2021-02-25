@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -66,16 +66,13 @@ namespace WolvenKit
             return mainController;
         }
 
-        public void SetGame(GameControllerBase controller)
+        public async Task SetGame(GameControllerBase controller)
         {
             gameController = controller;
-            controller.HandleStartup();
+            await controller.HandleStartup();
         }
 
-        public GameControllerBase GetGame()
-        {
-            return gameController;
-        }
+        public GameControllerBase GetGame() => gameController;
 
         #region Fields
 

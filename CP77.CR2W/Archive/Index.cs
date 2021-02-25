@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -132,6 +132,7 @@ namespace CP77Tools.Model
         public uint ZSize { get; private set; }
         public uint Size { get; private set; }
 
+        [JsonConstructor]
         public FileSegment(ulong offset, uint zsize, uint size)
         {
             Offset = offset;
@@ -170,33 +171,30 @@ namespace CP77Tools.Model
         
         public string HashStr { get; private set; }
 
-        private ulong _hash;
-        [JsonProperty]
-        private int _idx;
-        
+        public ulong Hash { get; set; }
+
+        [JsonConstructor]
         public Dependency(ulong hash)
         {
-            _hash = hash;
+            Hash = hash;
         }
         
         public Dependency(BinaryReader br, int idx)
         {
-            _idx = idx;
             var mainController = ServiceLocator.Default.ResolveType<IHashService>();
 
             Read(br, mainController);
-            
         }
 
         private void Read(BinaryReader br, IHashService hashService)
         {
-            _hash = br.ReadUInt64();
-            HashStr = hashService?.Get(_hash);
+            Hash = br.ReadUInt64();
+            HashStr = hashService?.Get(Hash);
         }
 
         public void Write(BinaryWriter bw)
         {
-            bw.Write(_hash);
+            bw.Write(Hash);
         }
     }
 

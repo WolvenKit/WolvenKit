@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection.Metadata.Ecma335;
@@ -36,6 +36,11 @@ namespace CP77.CR2W.Archive
         public long PageOffset { get; set; }
 
         public string CompressionType { get; set; }
+
+        public FileEntry()
+        {
+            
+        }
 
         public FileEntry(BinaryReader br, IGameArchive parent)
         {

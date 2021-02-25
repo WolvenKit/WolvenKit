@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -281,9 +281,10 @@ namespace WolvenKit.Controllers
             return CR2WTypeManager.AvailableTypes.ToList();
         }
 
-        public override void HandleStartup()
+        //TODO: make this async Tasks?
+        public override async Task HandleStartup()
         {
-            List<Func<IGameArchiveManager>> todo = new List<Func<IGameArchiveManager>>()
+            var todo = new List<Func<IGameArchiveManager>>()
             {
                 LoadBundleManager,
                 LoadTextureManager,
@@ -292,6 +293,7 @@ namespace WolvenKit.Controllers
                 LoadSpeechManager
             };
             Parallel.ForEach(todo, _ => Task.Run(_));
+            await Task.CompletedTask;
         }
 
         public async override Task<bool> PackAndInstallProject()

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +20,9 @@ namespace WolvenKit.Controllers
             return new List<string>();
         }
 
-        public override void HandleStartup()
+        public override async Task HandleStartup()
         {
+            await Task.CompletedTask;
             //Nothing to do here :)
         }
 

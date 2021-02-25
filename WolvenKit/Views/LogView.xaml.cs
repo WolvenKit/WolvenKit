@@ -40,9 +40,6 @@ namespace WolvenKit.Views
         private delegate void LogDelegate(string t, Logtype type);
         private async void LoggerServiceOnOnStringLogged(object sender, LogStringEventArgs e)
         {
-            var typ = e.Logtype;
-            var msg = e.Message;
-
             var logdel = new LogDelegate(AddText);
 
             await Task.Run(() => logdel(((LoggerService)sender).Log + "\n", ((LoggerService)sender).Logtype));
