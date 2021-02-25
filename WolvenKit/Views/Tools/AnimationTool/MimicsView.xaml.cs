@@ -1,4 +1,4 @@
-﻿
+
 namespace WolvenKit.Views.AnimationTool
 {
     public partial class MimicsView

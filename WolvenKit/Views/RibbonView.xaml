@@ -195,6 +195,109 @@
                         </fluent:Button.Icon>
                     </fluent:Button>
                 </fluent:RibbonGroupBox>
+
+                <fluent:RibbonGroupBox Header="Quick Access">
+         
+                    <fluent:Button Header="Asset Browser" Command="{catel:CommandManagerBinding Application.ShowAssetBrowser}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="InboxesFill"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+                    <fluent:Button Header="Audio Tool"  Command="{catel:CommandManagerBinding Application.ShowAudioTool}"  Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="Soundwave"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+                    <fluent:Button Header="Plugin Manager" Command="{catel:CommandManagerBinding Application.ShowPluginManager}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="PlugFill"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+                    <fluent:Button Header="Wcc Tool" Command="{catel:CommandManagerBinding Application.ShowPackageInstaller}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="Thermometer"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+                    <fluent:Button Header="Radish Tool"  Command="{catel:CommandManagerBinding Application.BackupMod}"  Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="UiRadios"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+                    <fluent:Button Header="CR2WToText" Command="{catel:CommandManagerBinding Application.ShowCR2WToTextTool}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="FileEarmarkXFill"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+                    <fluent:Button Header="Game Debugger" Command="{catel:CommandManagerBinding Application.ShowGameDebuggerTool}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons Kind="Debug"></iconPacks:PackIconCodicons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+                    <fluent:Button Header="Menu Creator" Command="{catel:CommandManagerBinding Application.ShowMenuCreatorTool}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="HddRack"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+                    <fluent:Button Header="Importer Tool" Command="{catel:CommandManagerBinding Application.ShowImporterTool}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="ArrowDown"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+                    <fluent:Button Header="Anims Tool" Command="{catel:CommandManagerBinding Application.ShowAnimationTool}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="Stickies"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+                    <fluent:Button Header="Mimics Tool" Command="{catel:CommandManagerBinding Application.ShowMimicsTool}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="Stickies"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+                    <fluent:Button Header="Visual Editor" Command="{catel:CommandManagerBinding Application.ShowVisualEditor}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="UiRadiosGrid"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+                    <fluent:Button Header="Journal Editor" Command="{catel:CommandManagerBinding Application.ShowJournalEditor}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="JournalCode"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+                    <fluent:Button Header="Code Editor" Command="{catel:CommandManagerBinding Application.ShowCodeEditor}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="CodeSquare"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+                    <fluent:Button Header="Hex Editor" Command="{catel:CommandManagerBinding Application.ShowHexEditor}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:Codicons Kind="Edit"></iconPacks:Codicons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+                    <fluent:Button Header="Csv Editor" Command="{catel:CommandManagerBinding Application.ShowCsvEditor}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="TextIndentLeft"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+                    <fluent:Button Header="Bulk Editor" Command="{catel:CommandManagerBinding Application.ShowBulkEditor}" Size="Middle">
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="Command"></iconPacks:PackIconBootstrapIcons>
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+                    
+
+                </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
 
 
@@ -205,7 +308,7 @@
                 <fluent:RibbonGroupBox Header="Themes">
                     <fluent:ComboBox IsEditable="False"
                                      InputWidth="120"
-                                     Header="Fonts"
+                                     Header="Accents"
                                      SelectedItem="{Binding SelectedTheme, UpdateSourceTrigger=PropertyChanged}"
                                      ItemsSource="{Binding ListOfThemes, Mode=OneWay}">
                         <fluent:ComboBox.ItemsPanel>

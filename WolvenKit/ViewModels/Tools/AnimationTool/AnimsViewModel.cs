@@ -13,7 +13,7 @@ using WolvenKit.Model;
 
 namespace WolvenKit.ViewModels.AnimationTool
 {
-    class AnimsViewModel : ToolViewModel
+    public class AnimsViewModel : ToolViewModel
     {
 
         /// <summary>

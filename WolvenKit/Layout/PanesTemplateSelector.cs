@@ -20,6 +20,7 @@ namespace WolvenKit.Layout
     using WolvenKit.ViewModels.PluginManager;
     using WolvenKit.ViewModels.ImporterTool;
     using WolvenKit.ViewModels.Tools.MenuTool;
+    using WolvenKit.ViewModels.AnimationTool;
 
     /// <summary>
     /// Implements a <see ref="DataTemplateSelector"/> for AvalonDock's documents and toolwindows.
@@ -132,6 +133,16 @@ namespace WolvenKit.Layout
         /// </summary>
         public DataTemplate VisualEditorTemplate { get; set; }
 
+        /// <summary>
+        /// Gets/sets the view instance of the WccTool.
+        /// </summary>
+        public DataTemplate AnimsViewTemplate { get; set; }
+
+        /// <summary>
+        /// Gets/sets the view instance of the WccTool.
+        /// </summary>
+        public DataTemplate MimicsViewTemplate { get; set; }
+
 
         /// <summary>
         /// Determines the matching view for a specific given type of viewmodel.
@@ -142,8 +153,9 @@ namespace WolvenKit.Layout
 																   System.Windows.DependencyObject container)
         {
             return item switch
-            {               // AnimationToolViewModel _ => AssetBrowserTemplate,
-
+            {
+                 AnimsViewModel _ => AnimsViewTemplate,
+                 MimicsViewModel _ => MimicsViewTemplate,
                 IDocumentViewModel _ => FileViewTemplate,
                 LogViewModel _ => LogViewTemplate,
                 ProjectExplorerViewModel _ => ProjectExplorerTemplate,

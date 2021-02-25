@@ -40,6 +40,7 @@ namespace WolvenKit.ViewModels
     using WolvenKit.ViewModels.PluginManager;
     using WolvenKit.ViewModels.ImporterTool;
     using WolvenKit.ViewModels.Tools.MenuTool;
+    using WolvenKit.ViewModels.AnimationTool;
 
     /// <summary>
     /// The WorkSpaceViewModel implements AvalonDock demo specific properties, events and methods.
@@ -97,7 +98,8 @@ namespace WolvenKit.ViewModels
             ShowHexEditorCommand = new RelayCommand(ExecuteHexEditor, CanShowHexEditor);
             ShowJournalEditorCommand = new RelayCommand(ExecuteJournalEditor, CanShowJournalEditor);
             ShowVisualEditorCommand = new RelayCommand(ExecuteVisualEditor, CanShowVisualEditor);
-          //  ShowAnimationToolCommand = new RelayCommand(ExecuteAnimationTool, CanShowAnimationTool);
+            ShowAnimationToolCommand = new RelayCommand(ExecuteAnimationTool, CanShowAnimationTool);
+            ShowMimicsToolCommand = new RelayCommand(ExecuteMimicsTool, CanShowMimicsTool);
             ShowAudioToolCommand = new RelayCommand(ExecuteAudioTool, CanShowAudioTool);
             ShowImporterToolCommand = new RelayCommand(ExecuteImporterTool, CanShowImporterTool);
             ShowCR2WToTextToolCommand = new RelayCommand(ExecuteCR2WToTextTool, CanShowCR2WToTextTool);
@@ -153,7 +155,10 @@ namespace WolvenKit.ViewModels
             commandManager.RegisterCommand(AppCommands.Application.ShowHexEditor, ShowHexEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowJournalEditor, ShowJournalEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowVisualEditor, ShowVisualEditorCommand, this);
-        //    commandManager.RegisterCommand(AppCommands.Application.ShowAnimationTool, ShowAnimationToolCommand, this);
+
+            commandManager.RegisterCommand(AppCommands.Application.ShowAnimationTool, ShowAnimationToolCommand, this);
+            commandManager.RegisterCommand(AppCommands.Application.ShowMimicsTool, ShowMimicsToolCommand, this);
+
             commandManager.RegisterCommand(AppCommands.Application.ShowAudioTool, ShowAudioToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowImporterTool, ShowImporterToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowCR2WToTextTool, ShowCR2WToTextToolCommand, this);
@@ -267,9 +272,16 @@ namespace WolvenKit.ViewModels
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
-     //   public ICommand ShowAnimationToolCommand { get; private set; }
-     //   private bool CanShowAnimationTool() => true;
-      //  private void ExecuteAnimationTool() => AnimationTool.IsVisible = !AnimationTool.IsVisible;
+       public ICommand ShowAnimationToolCommand { get; private set; }
+       private bool CanShowAnimationTool() => true;
+       private void ExecuteAnimationTool() => AnimationToolVM.IsVisible = !AnimationToolVM.IsVisible;
+
+        /// <summary>
+        /// Displays the AssetBrowser.
+        /// </summary>
+        public ICommand ShowMimicsToolCommand { get; private set; }
+        private bool CanShowMimicsTool() => true;
+        private void ExecuteMimicsTool() => MimicsToolVM.IsVisible = !MimicsToolVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
@@ -503,7 +515,7 @@ namespace WolvenKit.ViewModels
             CodeEditorVM,
             JournalEditorVM,
              VisualEditorVM,
-            // AnimationToolVM,
+             AnimationToolVM,
              AudioToolVM,
              ImporterToolVM,
              CR2WToTextToolVM,
@@ -512,6 +524,7 @@ namespace WolvenKit.ViewModels
              PluginManagerVM,
              RadishToolVM,
              WccToolVM,
+             MimicsToolVM
         };
 
         /// <summary>
@@ -616,16 +629,33 @@ namespace WolvenKit.ViewModels
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         ///
-        //private AnimationTool.AnimsViewModel _AnimationToolVM = null;
-        //public ProjectExplorerViewModel AnimationToolVM
-        //{
-        //    get
-        //    {
-        //        _AnimationToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectExplorerViewModel>();
-        //        _AnimationToolVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
-        //        return _AnimationToolVM;
-        //    }
-        //}/// </summary>
+        private AnimationTool.AnimsViewModel _AnimationToolVM = null;
+        public AnimsViewModel AnimationToolVM
+        {
+            get
+            {
+                _AnimationToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AnimsViewModel>();
+                _AnimationToolVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                return _AnimationToolVM;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets an instance of the ProjectExplorerViewModer.
+        ///
+        private AnimationTool.AnimsViewModel _MimicsToolVM = null;
+        public AnimsViewModel MimicsToolVM
+        {
+            get
+            {
+                _MimicsToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AnimsViewModel>();
+                _MimicsToolVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                return _MimicsToolVM;
+            }
+        }
+
+        /// </summary>
 
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.

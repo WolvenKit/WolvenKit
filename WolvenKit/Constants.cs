@@ -39,11 +39,14 @@ namespace WolvenKit
             public const string ShowCsvEditor = "Application.ShowCsvEditor";
             public const string ShowBulkEditor = "Application.ShowBulkEditor";
             public const string ShowGameDebuggerTool = "Application.ShowGameDebuggerTool";
+            public const string ShowCodeEditor = "Application.ShowCodeEditor";
 
             public const string ShowHexEditor = "Application.ShowHexEditor";
             public const string ShowJournalEditor = "Application.ShowJournalEditor";
             public const string ShowVisualEditor = "Application.ShowVisualEditor";
             public const string ShowAnimationTool = "Application.ShowAnimationTool";
+            public const string ShowMimicsTool = "Application.ShowMimicsTool";
+
             public const string ShowAudioTool = "Application.ShowAudioTool";
             public const string ShowImporterTool = "Application.ShowImporterTool";
             public const string ShowCR2WToTextTool = "Application.ShowCR2WToTextTool";

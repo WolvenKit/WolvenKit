@@ -1,4 +1,4 @@
-﻿using Catel;
+using Catel;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Reflection;
@@ -88,6 +88,9 @@ namespace WolvenKit.ViewModels
             "Dark.Olive", "Dark.Steel", "Dark.Mauve",
             "Dark.Taupe", "Dark.Sienna"
         };
+
+
+
 
         private string _selectedTheme;
         /// <summary>
