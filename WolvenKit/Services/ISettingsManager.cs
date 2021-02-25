@@ -24,6 +24,8 @@ namespace WolvenKit.Services
         string[] ManagerVersions { get; set; }
         string TextLanguage { get; set; }
 
+        public System.Windows.Media.ImageBrush ProfileImageBrush { get; set; }
+
         void Save();
         
 

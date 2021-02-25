@@ -1,4 +1,4 @@
-﻿using MLib.Interfaces;
+using MLib.Interfaces;
 using System;
 using System.IO;
 using System.Xml.Serialization;
@@ -11,6 +11,9 @@ using Newtonsoft.Json;
 
 namespace WolvenKit.Services
 {
+    /// <summary>
+    /// This handles the application settings defined by the user.
+    /// </summary>
     public class SettingsManager : ValidatableModelBase, ISettingsManager
     {
         #region fields
@@ -19,6 +22,7 @@ namespace WolvenKit.Services
         private string _cp77ExecutablePath = "";
         private string _wccLitePath = "";
         private string _depotPath = "";
+        private System.Windows.Media.ImageBrush _profileImageBrush;
 
         private static string ConfigurationPath
         {
@@ -28,6 +32,17 @@ namespace WolvenKit.Services
                 var filename = Path.GetFileNameWithoutExtension(path);
                 var dir = Path.GetDirectoryName(path);
                 return Path.Combine(dir ?? "", filename + "_config_n.json");
+            }
+        }
+
+        private static string ImagePath
+        {
+            get
+            {
+                var path = AppDomain.CurrentDomain.BaseDirectory;
+                var filename = Path.GetFileNameWithoutExtension(path);
+                var dir = Path.GetDirectoryName(path);
+                return Path.Combine(dir ?? "", filename + "_profile_image.png");
             }
         }
 
@@ -96,6 +111,19 @@ namespace WolvenKit.Services
             }
         }
 
+        /// <summary>
+        /// Gets/Sets the author's profile image brush.
+        /// </summary>
+        public System.Windows.Media.ImageBrush ProfileImageBrush
+        {
+            get => _profileImageBrush;
+            set
+            {
+                _profileImageBrush = value;
+                RaisePropertyChanged(nameof(ProfileImageBrush));
+            }
+        }
+
         public static bool FirstTimeSetupForUser { get; set; } = true;
 
         public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
@@ -107,6 +135,18 @@ namespace WolvenKit.Services
 
         public void Save()
         {
+            var src = (System.Windows.Media.Imaging.BitmapSource)ProfileImageBrush?.ImageSource;
+            if (src != null)
+            {
+                using (var fs1 = new FileStream(ImagePath, FileMode.OpenOrCreate))
+                {
+                    var frame = System.Windows.Media.Imaging.BitmapFrame.Create(src);
+                    var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
+                    enc.Frames.Add(frame);
+                    enc.Save(fs1);
+                }
+            }
+
             File.WriteAllText(ConfigurationPath,
                 JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings()
                 {

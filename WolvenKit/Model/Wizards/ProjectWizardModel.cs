@@ -1,7 +1,10 @@
-﻿using Catel.Data;
+using Catel.Data;
 
 namespace WolvenKit.Model.Wizards
 {
+    /// <summary>
+    /// Keeps track of which game was selected by the user during setting up a project.
+    /// </summary>
     public class ProjectWizardModel : ModelBase
     {
         #region fields
@@ -80,7 +83,7 @@ namespace WolvenKit.Model.Wizards
         /// </summary>
         public TypeAndPath ProjectTypeAndPath
         {
-            get => new TypeAndPath(ProjectType, ProjectPath);
+            get => new TypeAndPath(ProjectType, ProjectPath, ProjectName);
         }
         #endregion properties
 
@@ -88,10 +91,12 @@ namespace WolvenKit.Model.Wizards
         {
             public string Path;
             public string Type;
-            public TypeAndPath(string type, string path)
+            public string Name;
+            public TypeAndPath(string type, string path, string name)
             {
                 Type = type;
                 Path = path;
+                Name = name;
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,10 +10,14 @@ using Catel.Services;
 using Microsoft.Win32;
 using Orc.Squirrel;
 using WolvenKit.Commands;
+using WolvenKit.Common.Services;
 using WolvenKit.Services;
 
 namespace WolvenKit.ViewModels.Wizards
 {
+    /// <summary>
+    /// During the first time setup it tries to automatically determine the missing paths and settings.
+    /// </summary>
     public class FirstSetupWizardViewModel : ViewModelBase
     {
         #region Fields
@@ -35,11 +39,12 @@ namespace WolvenKit.ViewModels.Wizards
         #endregion
 
         #region Constructors
-        public FirstSetupWizardViewModel(ISettingsManager settingsManager, IUpdateService updateService, IOpenFileService openFileService)
+        public FirstSetupWizardViewModel(ISettingsManager settingsManager, IUpdateService updateService, IOpenFileService openFileService, ILoggerService loggerService)
         {
             Argument.IsNotNull(() => settingsManager);
             Argument.IsNotNull(() => updateService);
             Argument.IsNotNull(() => openFileService);
+            Argument.IsNotNull(() => loggerService);
 
             _settingsManager = settingsManager;
             _updateService = updateService;
@@ -58,12 +63,6 @@ namespace WolvenKit.ViewModels.Wizards
             W3ExePath = _settingsManager.W3ExecutablePath;
             CP77ExePath = _settingsManager.CP77ExecutablePath;
             WccLitePath = _settingsManager.WccLitePath;
-            //GameModDir = _settingsManager.GameModDir;
-            //GameDlcDir = _settingsManager.GameDlcDir;
-
-            //SetDefaultModDir();
-            //SetDefaultDlcDir();
-
 
             // automatically scan the registry for exe paths for wcc and tw3
             // if either text field is empty
@@ -74,7 +73,9 @@ namespace WolvenKit.ViewModels.Wizards
 
             //TODO: handle this case!
             if (!TryCopyOodleLib())
-                throw new NotImplementedException();
+            {
+                loggerService.LogString($"The oodle dll was not found!");
+            }
 
         }
         #endregion
@@ -140,11 +141,6 @@ namespace WolvenKit.ViewModels.Wizards
             }
         }
         public string WccLitePathBG => string.IsNullOrEmpty(WccLitePath) ? redBG : greenBG;
-
-        //public string GameModDir { get; set; }
-        //public string GameDlcDir { get; set; }
-
-
         public List<UpdateChannel> AvailableUpdateChannels { get; private set; }
         public UpdateChannel UpdateChannel { get; set; }
 
@@ -283,61 +279,11 @@ namespace WolvenKit.ViewModels.Wizards
             _settingsManager.W3ExecutablePath = W3ExePath;
             _settingsManager.CP77ExecutablePath = CP77ExePath;
             _settingsManager.WccLitePath = WccLitePath;
-            //_settingsManager.GameDlcDir = GameDlcDir;
-            //_settingsManager.GameModDir = GameModDir;
 
             _settingsManager.Save();
 
             return await base.SaveAsync();
         }
-
-        //private void SetDefaultModDir()
-        //{
-        //    if (string.IsNullOrEmpty(W3ExePath))
-        //        W3ExePath = witcherexe;
-
-        //    if (string.IsNullOrEmpty(GameModDir) || !Directory.Exists(GameModDir))
-        //    {
-        //        if (File.Exists(W3ExePath) && Path.GetExtension(W3ExePath) == ".exe" && W3ExePath.Contains("witcher3.exe"))
-        //        {
-        //            var tw3ExeDirectory = new FileInfo(W3ExePath).Directory;
-        //            var tw3Directory = tw3ExeDirectory?.Parent?.Parent;
-        //            if (tw3Directory != null)
-        //            {
-        //                string gamemoddir = Path.Combine(tw3Directory.FullName, "Mods");
-        //                if (Directory.Exists(gamemoddir))
-        //                {
-        //                    GameModDir = gamemoddir;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        //private void SetDefaultDlcDir()
-        //{
-        //    if (string.IsNullOrEmpty(W3ExePath))
-        //        W3ExePath = witcherexe;
-
-        //    if (string.IsNullOrEmpty(GameDlcDir) || !Directory.Exists(GameDlcDir))
-        //    {
-        //        if (File.Exists(W3ExePath) && Path.GetExtension(W3ExePath) == ".exe" && W3ExePath.Contains("witcher3.exe"))
-        //        {
-        //            var tw3ExeDirectory = new FileInfo(W3ExePath).Directory;
-        //            var tw3Directory = tw3ExeDirectory?.Parent?.Parent;
-        //            if (tw3Directory != null)
-        //            {
-        //                string gamedlcdir = Path.Combine(tw3Directory.FullName, "DLC");
-        //                if (Directory.Exists(gamedlcdir))
-        //                {
-        //                    GameDlcDir = gamedlcdir;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-
 
         private delegate void StrDelegate(string value);
 
@@ -453,10 +399,6 @@ namespace WolvenKit.ViewModels.Wizards
                     }
                 }
             }
-
-            // if custom mod folder is empty or incorrect in the configuration, get the game mod dir and dlc dir
-            //SetDefaultModDir();
-            //SetDefaultDlcDir();
         }
 
         #endregion

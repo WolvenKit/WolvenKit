@@ -3,6 +3,12 @@ using System.Windows.Media;
 
 namespace WolvenKit.Model.Wizards
 {
+    /// <summary>
+    /// Keeps track of which settings was selected by the user during the first time setup wizard.
+    /// These settings will only be saved if the SettingsManager.Save gets called.
+    /// See <see cref="Views.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupView.ConfirmSettings_Click(object, System.Windows.RoutedEventArgs)"/> for fist time setup saving.
+    /// See <see cref="Services.SettingsManager.Save()"/> for settings saving.
+    /// </summary>
     public class FirstSetupWizardModel : ModelBase
     {
         #region fields
