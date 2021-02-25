@@ -195,7 +195,6 @@ namespace WolvenKit.WKitGlobal
 
 
             var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
-            viewLocator.Register(typeof(ViewModels.SettingsViewModel), typeof(Views.SettingsWindow));
 
             // ---- HeadCategory : Dialogs
             viewModelLocator.Register(typeof(Views.Dialogs.AddChunkDialog), typeof(ViewModels.Dialogs.AddChunkDialogViewModel));
