@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +19,8 @@ namespace WolvenKit.Views
 {
     using Common.Services;
     using Extensions;
+    using MahApps.Metro.Controls;
+
     /// <summary>
     /// Interaction logic for LogView.xaml
     /// </summary>
@@ -36,13 +38,14 @@ namespace WolvenKit.Views
         }
 
         private delegate void LogDelegate(string t, Logtype type);
-        private void LoggerServiceOnOnStringLogged(object sender, LogStringEventArgs e)
+        private async void LoggerServiceOnOnStringLogged(object sender, LogStringEventArgs e)
         {
             var typ = e.Logtype;
             var msg = e.Message;
 
-            this.Dispatcher.Invoke(new LogDelegate(AddText), ((LoggerService)sender).Log + "\n",
-                ((LoggerService)sender).Logtype);
+            var logdel = new LogDelegate(AddText);
+
+            await Task.Run(() => logdel(((LoggerService)sender).Log + "\n", ((LoggerService)sender).Logtype));
         }
 
 
@@ -67,25 +70,25 @@ namespace WolvenKit.Views
                 defaultColor = Colors.Black.ToString();
             }
 
-
+            var color = defaultColor;
             switch (type)
             {
                 case Logtype.Error:
-                    this.LogRichTextBox.AppendText(text, errorColor);
+                    color = errorColor;
                     break;
                 case Logtype.Important:
-                    LogRichTextBox.AppendText(text, importantColor);
+                    color = importantColor;
                     break;
                 case Logtype.Success:
-                    LogRichTextBox.AppendText(text, successColor);
+                    color = successColor;
                     break;
                 case Logtype.Normal:
                 case Logtype.Wcc:
                 default:
-                    LogRichTextBox.AppendText(text, defaultColor);
                     break;
             }
-            
+
+            LogRichTextBox.Invoke(() => LogRichTextBox.AppendText(text, color));
         }
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
