@@ -14,6 +14,9 @@ namespace WolvenKit.Views.SettingsPages
             LSSV = new LoggingSubSettingsView();
 
             InitializeComponent();
+
+            SettingsViewer.Children.Add(GSSV);
+            GlobalSubItem.IsSelected = true;
         }
 
         private GlobalSubSettingsView GSSV;

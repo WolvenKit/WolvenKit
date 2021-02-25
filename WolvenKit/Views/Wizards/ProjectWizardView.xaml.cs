@@ -1,7 +1,6 @@
 ﻿
-using Catel;
 using Catel.IoC;
-using Catel.MVVM;
+using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Wizards.WizardPages.ProjectWizard;
 
 namespace WolvenKit.Views.Wizards
@@ -10,13 +9,22 @@ namespace WolvenKit.Views.Wizards
     {
         public ProjectWizardView()
         {
-            ServiceLocator.Default.RegisterInstance(new Model.Wizards.ProjectWizardModel());
+            ServiceLocator.Default.RegisterTypeAndInstantiate<Model.Wizards.FirstSetupWizardModel>();
+
+            InitializeComponent();
+        }
+
+        private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
+        {
+            if (ViewModel == null)
+                return;
+
+            ServiceLocator.Default.RegisterInstance(ViewModel as ProjectWizardViewModel);
 
             SPTV = new SelectProjectTypeView();
             PCV = new ProjectConfigurationView();
-            FSV = new FinalizeSetupView(this);
+            FSV = new FinalizeSetupView();
 
-            InitializeComponent();
             ShowPage();
         }
 

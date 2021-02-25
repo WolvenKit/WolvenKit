@@ -49,14 +49,14 @@ namespace WolvenKit.Views.HomePage
 
         private void setupProjectWV()
         {
-            ProjectWV.Loaded += (_s, _e) =>
+            /*ProjectWV.Loaded += (_s, _e) =>
                 (ProjectWV.ViewModel as ProjectWizardViewModel).ClosingRequest
                     += (s, e) =>
                     {
                         SideMenu_WelcomeItem_Selected(s, new RoutedEventArgs());
                         ProjectWV = new ProjectWizardView();
                         setupProjectWV();
-                    };
+                    };*/
         }
 
         private void InitializePages()

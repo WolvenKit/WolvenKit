@@ -1,7 +1,10 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol">
+                   xmlns:catel="http://schemas.catelproject.com"
+                   xmlns:hc="https://handyorg.github.io/handycontrol"
+                   MaxHeight="600"
+                   Loaded="UserControl_Loaded">
 
     <Grid VerticalAlignment="Center" Grid.Row="3" >
         <Grid Margin="5,5,5,5" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Stretch">
@@ -30,9 +33,9 @@
                                     <LineBreak/>
                                     <Run Text="(Optional)"></Run>
                                 </TextBlock>
-                                <hc:ImageSelector  Margin="200,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
+                                <hc:ImageSelector x:Name="imgSelector" Margin="200,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
 
-                                <TextBlock Margin="205,0,0,5" VerticalAlignment="Bottom" Text="Username"></TextBlock>
+                                <TextBlock Margin="205,0,0,5" VerticalAlignment="Bottom" Text="{Binding Author}"></TextBlock>
                             </Grid>
                             <hc:Divider Margin="0,32,10,0" Content="Theme" HorizontalContentAlignment="Left"></hc:Divider>
 
@@ -47,55 +50,49 @@
                             <Grid Margin="5,32,10,0" >
 
                                 <TextBlock Text="Games" VerticalAlignment="Center"></TextBlock>
-                                <TextBox  Margin="200,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox  IsEnabled="False" Margin="200,0,0,0" Text="{Binding SelectedGames}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <Grid Margin="5,32,10,0" >
 
                                 <TextBlock Text="Auto Install Mods" VerticalAlignment="Center"></TextBlock>
-                                <TextBox  Margin="200,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox  IsEnabled="False" Margin="200,0,0,0" Text="{Binding AutoInstallMods}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <Grid Margin="5,32,10,0" >
 
                                 <TextBlock Text="Automatic Updates" VerticalAlignment="Center"></TextBlock>
-                                <TextBox  Margin="200,0,0,0" Text="Project Type" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                <TextBox  IsEnabled="False" Margin="200,0,0,0" Text="{Binding AutoUpdatesEnabled}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <hc:Divider Margin="0,32,10,0" Content="Game Data" HorizontalContentAlignment="Left"></hc:Divider>
-                            <Grid Margin="5,32,10,0" >
+                            <StackPanel Visibility="{Binding CreateModForW3, Converter={StaticResource Boolean2VisibilityConverter}}">
+                                <Grid Margin="5,32,10,0" >
 
-                                <TextBlock Text="TW3 Executable Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox  Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
-                            </Grid>
-                            <Grid Margin="5,32,10,0" >
+                                    <TextBlock Text="TW3 Executable Path" VerticalAlignment="Center"></TextBlock>
+                                    <TextBox  IsEnabled="False" Margin="200,0,0,0" Text="{Binding W3ExePath}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                </Grid>
+                                <Grid Margin="5,32,10,0" >
 
-                                <TextBlock Text="TW3 WCC_Lite.exe Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox  Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
-                            </Grid>
-                            <Grid Margin="5,32,10,0" >
+                                    <TextBlock Text="TW3 WCC_Lite.exe Path" VerticalAlignment="Center"></TextBlock>
+                                    <TextBox  IsEnabled="False" Margin="200,0,0,0" Text="{Binding WccLitePath}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                </Grid>
+                                <Grid Margin="5,32,10,0" >
 
-                                <TextBlock Text="TW3 Uncooked Depot Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox   Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
-                            </Grid>
-                            <Grid Margin="5,32,10,0" >
+                                    <TextBlock Text="TW3 Uncooked Depot Path" VerticalAlignment="Center"></TextBlock>
+                                    <TextBox   IsEnabled="False" Margin="200,0,0,0" Text="{Binding DepotPath}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding CreateModForCP77, Converter={StaticResource Boolean2VisibilityConverter}}">
+                                <Grid Margin="5,32,10,0" >
 
-                                <TextBlock Text="TW3 Mods Folder Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox  Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
-                            </Grid>
-                            <Grid Margin="5,32,10,0" >
-
-                                <TextBlock Text="TW3 DLC Folder Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox  Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
-                            </Grid>
-                            <Grid Margin="5,32,10,0" >
-
-                                <TextBlock Text="CP77 Executable Path" VerticalAlignment="Center"></TextBlock>
-                                <TextBox  Margin="200,0,0,0" Text="Project Path" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
-                            </Grid>
+                                    <TextBlock Text="CP77 Executable Path" VerticalAlignment="Center"></TextBlock>
+                                    <TextBox IsEnabled="False" Margin="200,0,0,0" Text="{Binding CP77ExePath}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
+                                </Grid>
+                            </StackPanel>
 
                             <hc:Divider Margin="0,32,10,5"></hc:Divider>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                                <Button Height="45" Content="Yes, Confirm my settings!" Margin="0,0,0,0"></Button>
+                                <Button Height="45" Content="Yes, Confirm my settings!" Margin="0,0,0,0" Click="ConfirmSettings_Click"></Button>
 
-                                <Button Height="45" Content="No, Cancel my settings!" Margin="15,0,10,0"></Button>
+                                <Button Height="45" Content="No, Cancel my settings!" Margin="15,0,10,0" Click="CancelSettings_Click"></Button>
                             </StackPanel>
                         </StackPanel>
 

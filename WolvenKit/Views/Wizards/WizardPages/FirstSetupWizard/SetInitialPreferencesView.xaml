@@ -33,12 +33,12 @@
 
 
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox Margin="10,35,5,5" HorizontalAlignment="Left" Content="The Witcher 3" IsChecked="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"/>
+                                <CheckBox x:Name="w3Checkbox" Margin="10,35,5,5" HorizontalAlignment="Left" Content="The Witcher 3" IsChecked="{Binding CreateModForW3}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="{DynamicResource MahApps.Brushes.Accent3}" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
                                 <hc:Divider Margin="5,35,5,5" Orientation="Vertical" MaxHeight="20"></hc:Divider>
-                                <CheckBox Margin="5,35,5,5" HorizontalAlignment="Left" Content="Cyberpunk 2077" IsChecked="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"/>
+                                <CheckBox x:Name="cp77Checkbox" Margin="5,35,5,5" HorizontalAlignment="Left" Content="Cyberpunk 2077" IsChecked="{Binding CreateModForCP77}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="{DynamicResource MahApps.Brushes.Accent3}" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
 
                             </StackPanel>
-                            <ToggleButton Margin="5,35,5,5" BorderThickness="0" IsEnabled="True" IsChecked="True" VerticalAlignment="Center"  HorizontalAlignment="Left" Style="{StaticResource ToggleButtonFlip}">
+                            <ToggleButton Margin="5,35,5,5" BorderThickness="0" IsEnabled="True" IsChecked="{Binding AutoInstallMods}" VerticalAlignment="Center"  HorizontalAlignment="Left" Style="{StaticResource ToggleButtonFlip}">
                                 <hc:StatusSwitchElement.CheckedElement>
                                     <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
                                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="On" Foreground="{DynamicResource TextIconBrush}"/>
@@ -49,7 +49,7 @@
                                 </Border>
                             </ToggleButton>
                             <StackPanel Orientation="Vertical">
-                                <ToggleButton Margin="5,30,5,15" BorderThickness="0" IsEnabled="True" IsChecked="True" VerticalAlignment="Center"  HorizontalAlignment="Left" Style="{StaticResource ToggleButtonFlip}">
+                                <ToggleButton Margin="5,30,5,15" BorderThickness="0" IsEnabled="True" IsChecked="{Binding AutoUpdatesEnabled}" VerticalAlignment="Center"  HorizontalAlignment="Left" Style="{StaticResource ToggleButtonFlip}">
                                     <hc:StatusSwitchElement.CheckedElement>
                                         <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
                                             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="On" Foreground="{DynamicResource TextIconBrush}"/>
