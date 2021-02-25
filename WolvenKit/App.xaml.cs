@@ -78,6 +78,7 @@ namespace WolvenKit
             await apphelper.InitializeMVVM();
             themehelper.InitializeThemeHelper();
             await apphelper.InitializeShell();
+            apphelper.ShowFirstTimeSetup();
             discordhelper.InitDiscordRPC();  
 
 

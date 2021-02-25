@@ -21,6 +21,15 @@ namespace WolvenKit.ViewModels
         public UserControlHostWindowViewModel(UserControl uc)
         {
             ContentUserControl = uc;
+            uc.ViewModelChanged += (_s, _e) =>
+            {
+                if (uc.ViewModel == null)
+                    return;
+                uc.ViewModel.ClosedAsync += (s, e) =>
+                {
+                    return CloseViewModelAsync(null);
+                };
+            };
         }
 
         public UserControlHostWindowViewModel(UserControl uc, int height, int width)

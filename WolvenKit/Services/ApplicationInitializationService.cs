@@ -1,4 +1,4 @@
-﻿using Catel;
+using Catel;
 using Catel.IoC;
 using Catel.Logging;
 using Catel.MVVM;

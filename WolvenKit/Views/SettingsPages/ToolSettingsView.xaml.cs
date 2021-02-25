@@ -13,6 +13,9 @@ namespace WolvenKit.Views.SettingsPages
             VESSV = new VisualEditorSubSettingsView();
 
             InitializeComponent();
+
+            SettingsViewer.Children.Add(ABSSV);
+            AssetBrowserSubItem.IsSelected = true;
         }
 
         private AssetBrowserSubSettingsView ABSSV;

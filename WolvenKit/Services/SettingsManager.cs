@@ -1,4 +1,4 @@
-﻿using MLib.Interfaces;
+using MLib.Interfaces;
 using System;
 using System.IO;
 using System.Xml.Serialization;
@@ -11,6 +11,9 @@ using Newtonsoft.Json;
 
 namespace WolvenKit.Services
 {
+    /// <summary>
+    /// This handles the application settings defined by the user.
+    /// </summary>
     public class SettingsManager : ValidatableModelBase, ISettingsManager
     {
         #region fields
@@ -21,6 +24,7 @@ namespace WolvenKit.Services
         //private string _gameModDir = "";
         //private string _gameDlcDir = "";
         private string _depotPath = "";
+        private System.Windows.Media.ImageBrush _profileImageBrush;
 
         private static string ConfigurationPath
         {
@@ -30,6 +34,17 @@ namespace WolvenKit.Services
                 var filename = Path.GetFileNameWithoutExtension(path);
                 var dir = Path.GetDirectoryName(path);
                 return Path.Combine(dir ?? "", filename + "_config_n.json");
+            }
+        }
+
+        private static string ImagePath
+        {
+            get
+            {
+                var path = AppDomain.CurrentDomain.BaseDirectory;
+                var filename = Path.GetFileNameWithoutExtension(path);
+                var dir = Path.GetDirectoryName(path);
+                return Path.Combine(dir ?? "", filename + "_profile_image.png");
             }
         }
 
@@ -98,6 +113,21 @@ namespace WolvenKit.Services
             }
         }
 
+        /// <summary>
+        /// Gets/Sets the author's profile image brush.
+        /// </summary>
+        public System.Windows.Media.ImageBrush ProfileImageBrush
+        {
+            get => _profileImageBrush;
+            set
+            {
+                _profileImageBrush = value;
+                RaisePropertyChanged(nameof(ProfileImageBrush));
+            }
+        }
+
+        public static bool FirstTimeSetupForUser { get; set; } = true;
+
         public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
         public string TextLanguage { get; set; }
 
@@ -107,6 +137,18 @@ namespace WolvenKit.Services
 
         public void Save()
         {
+            var src = (System.Windows.Media.Imaging.BitmapSource)ProfileImageBrush?.ImageSource;
+            if (src != null)
+            {
+                using (var fs1 = new FileStream(ImagePath, FileMode.OpenOrCreate))
+                {
+                    var frame = System.Windows.Media.Imaging.BitmapFrame.Create(src);
+                    var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
+                    enc.Frames.Add(frame);
+                    enc.Save(fs1);
+                }
+            }
+
             File.WriteAllText(ConfigurationPath,
                 JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings()
                 {
@@ -123,7 +165,8 @@ namespace WolvenKit.Services
             {
                 if (File.Exists(ConfigurationPath))
                 {
-                    config = JsonConvert.DeserializeObject<SettingsManager>(ConfigurationPath);
+                    config = JsonConvert.DeserializeObject<SettingsManager>(File.ReadAllText(ConfigurationPath));
+                    FirstTimeSetupForUser = false;
                 }
                 else
                 {
@@ -161,33 +204,6 @@ namespace WolvenKit.Services
             }
 
             return config;
-        }
-
-        /// <summary>
-        /// Validates the field values of SettingsManager.
-        /// </summary>
-        /// <param name="validationResults">The validation results.</param>
-        protected override void ValidateFields(List<IFieldValidationResult> validationResults)
-        {
-            // Please use handy controls.
-            //
-            //if (!File.Exists(W3ExecutablePath))
-            //    validationResults.Add(FieldValidationResult.CreateError(nameof(W3ExecutablePath), "Witcher 3 executable path does not exist"));
-
-            //if (!File.Exists(CP77ExecutablePath))
-            //    validationResults.Add(FieldValidationResult.CreateError(nameof(CP77ExecutablePath), "Cyberpunk 2077 executable path does not exist"));
-
-            //if (!File.Exists(WccLitePath))
-            //    validationResults.Add(FieldValidationResult.CreateError(nameof(WccLitePath), "WccLite path does not exist"));
-
-            //if (!Directory.Exists(GameModDir))
-            //    validationResults.Add(FieldValidationResult.CreateError(nameof(GameModDir), "Game mod dir does not exist"));
-
-            //if (!Directory.Exists(GameDlcDir))
-            //    validationResults.Add(FieldValidationResult.CreateError(nameof(GameDlcDir), "Game dlc dir does not exist"));
-
-            //if (!Directory.Exists(DepotPath))
-            //    validationResults.Add(FieldValidationResult.CreateError(nameof(DepotPath), "Depot dir does not exist"));
         }
 
         #endregion
