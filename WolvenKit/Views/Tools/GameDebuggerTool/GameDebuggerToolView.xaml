@@ -12,11 +12,11 @@
     </catel:UserControl.Resources>
 
 
-    <Grid Height="600" Width="600">
+    <Grid >
 
 
         
-        <hc:TabControl Height="400" VerticalAlignment="Top">
+        <hc:TabControl Margin="0,0,0,150">
             <hc:TabItem Header="Game">
                 <Grid>
                     <StackPanel Margin="35" HorizontalAlignment="Left" Orientation="Vertical" Width="250">
@@ -69,7 +69,7 @@
             </hc:TabItem>
         </hc:TabControl>
 
-        <RichTextBox Height="200" VerticalAlignment="Bottom">
+        <RichTextBox Height="150" VerticalAlignment="Bottom">
             
         </RichTextBox>
        

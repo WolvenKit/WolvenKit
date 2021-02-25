@@ -1,4 +1,4 @@
-﻿<catel:DataWindow x:Class="WolvenKit.Views.CodeEditor.CodeEditorView"
+<catel:UserControl x:Class="WolvenKit.Views.CodeEditor.CodeEditorView"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:catel="http://schemas.catelproject.com" 
@@ -7,24 +7,18 @@
                   xmlns:hc="https://handyorg.github.io/handycontrol"   
                   xmlns:aeditCmd="clr-namespace:ICSharpCode.AvalonEdit;assembly=ICSharpCode.AvalonEdit"
                   xmlns:behav="clr-namespace:WolvenKit.Behavior"
-                  ShowInTaskbar="True" 
-                  AllowsTransparency="True" 
-                  ResizeMode="CanResizeWithGrip" 
                   BorderBrush="{x:Null}" 
-                  WindowStartupLocation="CenterScreen"
-                  WindowStyle="None" 
-                  MaxHeight="600"
-                  MaxWidth="500"
-                  Title="Code Editor" IsVisibleChanged="DataWindow_IsVisibleChanged">
+                
+                  IsVisibleChanged="DataWindow_IsVisibleChanged">
 
-    <catel:DataWindow.Resources>
+    <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources/>
                 <hc:Theme/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </catel:DataWindow.Resources>
+    </catel:UserControl.Resources>
 
     <Border hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Width="auto" Height="auto" BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
 
@@ -32,31 +26,10 @@
 
             <Grid x:Name="DraggableTitleBar" VerticalAlignment="Top" Grid.ColumnSpan="2" Background="{DynamicResource RegionBrush}" MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown">
 
-                <!--TitleBar  Please add onmousedown event to be able to drag the window-->
-                <Button 
-                    Style="{StaticResource ButtonIcon}" 
-                    hc:IconElement.Geometry="{DynamicResource GlobalClose}" 
-                    Click="Button_Click" 
-                    Background="Transparent" 
-                    BorderBrush="{x:Null}"  
-                    HorizontalAlignment="Right" 
-                    VerticalAlignment="Center" 
-                    Margin="3,3,5,3" >
-                </Button>
-
-                <Button  Width="40"
-                    Style="{StaticResource ButtonIcon}"
-                    hc:IconElement.Geometry="{DynamicResource GlobalMinimize}"
-                    Click="Button_Click_1"
-                    BorderBrush="{x:Null}"
-                    Background="Transparent" 
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Margin="3,3,45,3" >
-                </Button>
+        
 
 
-                <Menu MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" HorizontalAlignment="Left" Margin="50,0,0,0">
+                <Menu  Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" HorizontalAlignment="Left" Margin="50,0,0,0">
                     <MenuItem Header="File"/>
                     <MenuItem Header="Edit"/>
                     <MenuItem Header="View"/>
@@ -72,12 +45,9 @@
 
 
             <Grid  Margin="3,33,3,3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="100"/>
-                </Grid.ColumnDefinitions>
+            
                 
-                <hc:TabControl ShowCloseButton="True" Grid.Column="0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+                <hc:TabControl ShowCloseButton="True"  Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
                     <hc:TabItem Header="wat">
                       
                     </hc:TabItem>
@@ -91,4 +61,4 @@
         </Grid>
     </Border>
 
-</catel:DataWindow>
+</catel:UserControl>

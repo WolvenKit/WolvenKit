@@ -1,15 +1,11 @@
-﻿<catel:DataWindow x:Class="WolvenKit.Views.PluginManager.PluginManagerView"
+<catel:UserControl x:Class="WolvenKit.Views.PluginManager.PluginManagerView"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:catel="http://schemas.catelproject.com"  
                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol"
-                  ShowInTaskbar="True" 
-                  AllowsTransparency="True"           
                   BorderBrush="{x:Null}" 
-                  WindowStartupLocation="CenterScreen"  
                   MinWidth="250"
-                  WindowStyle="None" 
-                  Title="Plugin Manager" IsVisibleChanged="DataWindow_IsVisibleChanged">
+                  IsVisibleChanged="DataWindow_IsVisibleChanged">
 
     <!--
             Plugin Manager MVVM TODOLIST (REMOVE ITEM IF DONE)
@@ -25,7 +21,7 @@
 
 
 
-    <catel:DataWindow.Resources>
+    <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources/>
@@ -56,7 +52,7 @@
 
         </ResourceDictionary>
 
-    </catel:DataWindow.Resources>
+    </catel:UserControl.Resources>
 
 
 
@@ -160,4 +156,4 @@
         </Grid>
     </Border>
 
-</catel:DataWindow>
+</catel:UserControl>

@@ -1,4 +1,4 @@
-﻿
+
 using Catel.Windows;
 using ICSharpCode.AvalonEdit.Folding;
 using System.Windows;
@@ -8,10 +8,9 @@ namespace WolvenKit.Views.CodeEditor
 {
     public partial class CodeEditorView
     {
-        public CodeEditorView() : base(DataWindowMode.Custom)
+        public CodeEditorView()
         {
             InitializeComponent();
-            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(this, "Dark.Red"); //This aint needed was just for testing remove me.
 
         }
 
@@ -22,17 +21,14 @@ namespace WolvenKit.Views.CodeEditor
             base.OnMouseLeftButtonDown(e);
 
             // Begin dragging the window
-            this.DragMove();
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.Close();
         }
 
         private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
         {
-            SetCurrentValue(WindowStateProperty, System.Windows.WindowState.Minimized);
         }
 
         private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)

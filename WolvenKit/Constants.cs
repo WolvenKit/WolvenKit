@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Windows.Input;
 using Orc.Squirrel;
 using InputGesture = Catel.Windows.Input.InputGesture;
@@ -36,6 +36,21 @@ namespace WolvenKit
             public const string ShowImportUtility = "Application.ShowImportUtility";
             public const string ShowProperties = "Application.ShowProperties";
 
+            public const string ShowCsvEditor = "Application.ShowCsvEditor";
+            public const string ShowBulkEditor = "Application.ShowBulkEditor";
+            public const string ShowGameDebuggerTool = "Application.ShowGameDebuggerTool";
+
+            public const string ShowHexEditor = "Application.ShowHexEditor";
+            public const string ShowJournalEditor = "Application.ShowJournalEditor";
+            public const string ShowVisualEditor = "Application.ShowVisualEditor";
+            public const string ShowAnimationTool = "Application.ShowAnimationTool";
+            public const string ShowAudioTool = "Application.ShowAudioTool";
+            public const string ShowImporterTool = "Application.ShowImporterTool";
+            public const string ShowCR2WToTextTool = "Application.ShowCR2WToTextTool";
+            public const string ShowMenuCreatorTool = "Application.ShowMenuCreatorTool";
+            public const string ShowPluginManager = "Application.ShowPluginManager";
+            public const string ShowWccTool = "Application.ShowWccTool";
+            public const string ShowRadishTool = "Application.ShowRadishTool";
             public const string ShowAssetBrowser = "Application.ShowAssetBrowser";
             public const string ShowModSettings = "Application.ShowModSettings";
             public const string ShowPackageInstaller = "Application.ShowPackageInstaller";

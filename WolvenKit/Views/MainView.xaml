@@ -4,7 +4,23 @@
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                   xmlns:ad="clr-namespace:WolvenKit.Layout" xmlns:views2="clr-namespace:WolvenKit.Views.AssetBrowser" IsVisibleChanged="UserControl_IsVisibleChanged_1"
+                   xmlns:ad="clr-namespace:WolvenKit.Layout"
+                   xmlns:views2="clr-namespace:WolvenKit.Views.AssetBrowser"
+                   xmlns:radishtool="clr-namespace:WolvenKit.Views.RadishTool"
+                   xmlns:pluginmanagerz="clr-namespace:WolvenKit.Views.PluginManager"
+                   xmlns:views21="clr-namespace:WolvenKit.Views.WccTool"
+                   xmlns:menutool="clr-namespace:WolvenKit.Views.Tools.MenuTool"
+                   xmlns:importertool="clr-namespace:WolvenKit.Views.ImporterTool"
+                   xmlns:gamedebuggertool="clr-namespace:WolvenKit.Views.GameDebuggerTool"
+                   xmlns:cr2wtotexttool="clr-namespace:WolvenKit.Views.CR2WToTextTool"
+                   xmlns:audiotoolz="clr-namespace:WolvenKit.Views.AudioTool"
+                   xmlns:visualeditorz="clr-namespace:WolvenKit.Views.VisualEditor"
+                   xmlns:journaleditor="clr-namespace:WolvenKit.Views.JournalEditor"
+                   xmlns:hexeditor="clr-namespace:WolvenKit.Views.HexEditor"
+                   xmlns:csveditor="clr-namespace:WolvenKit.Views.CsvEditor"
+                   xmlns:codeeditorz="clr-namespace:WolvenKit.Views.CodeEditor"
+                   xmlns:bulkeditor="clr-namespace:WolvenKit.Views.BulkEditor"
+                   IsVisibleChanged="UserControl_IsVisibleChanged_1"
                    >
 
     <Grid
@@ -46,23 +62,126 @@
                             <views:DocumentView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.FileViewTemplate>
+                    
                     <!-- LogView -->
                     <ad:PanesTemplateSelector.LogViewTemplate>
                         <DataTemplate>
                             <views:LogView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.LogViewTemplate>
+                    
                     <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.ProjectExplorerTemplate>
                         <DataTemplate>
                             <views:ProjectExplorerView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.ProjectExplorerTemplate>
+                    
+                    <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.AssetBrowserTemplate>
                         <DataTemplate>
                             <views2:AssetBrowserView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.AssetBrowserTemplate>
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.BulkEditorTemplate>
+                        <DataTemplate>
+                            <bulkeditor:BulkEditorView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.BulkEditorTemplate>
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.CodeEditorTemplate>
+                        <DataTemplate>
+                            <codeeditorz:CodeEditorView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.CodeEditorTemplate>
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.CsvEditorTemplate>
+                        <DataTemplate>
+                            <csveditor:CsvEditorView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.CsvEditorTemplate>
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.HexEditorTemplate>
+                        <DataTemplate>
+                            <hexeditor:HexEditorView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.HexEditorTemplate>
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.JournalEditorTemplate>
+                        <DataTemplate>
+                            <journaleditor:JournalEditorView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.JournalEditorTemplate>
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.VisualEditorTemplate>
+                        <DataTemplate>
+                            <visualeditorz:VisualEditorView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.VisualEditorTemplate>
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.AudioToolTemplate>
+                        <DataTemplate>
+                            <audiotoolz:AudioToolView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.AudioToolTemplate>
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.CR2WToTextToolTemplate>
+                        <DataTemplate>
+                            <cr2wtotexttool:CR2WToTextToolView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.CR2WToTextToolTemplate>
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.GameDebuggerToolTemplate>
+                        <DataTemplate>
+                            <gamedebuggertool:GameDebuggerToolView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.GameDebuggerToolTemplate>
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.ImporterToolTemplate>
+                        <DataTemplate>
+                            <importertool:ImporterToolView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.ImporterToolTemplate>
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.MenuToolTemplate>
+                        <DataTemplate>
+                            <menutool:MenuCreatorToolView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.MenuToolTemplate>
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.WccToolTemplate>
+                        <DataTemplate>
+                            <views21:WccToolView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.WccToolTemplate>
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.RadishToolTemplate>
+                        <DataTemplate>
+                            <radishtool:RadishToolView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.RadishToolTemplate>
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.PluginManagerTemplate>
+                        <DataTemplate>
+                            <pluginmanagerz:PluginManagerView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.PluginManagerTemplate>
+          
 
                 </ad:PanesTemplateSelector>
             </DockingManager.LayoutItemTemplateSelector>

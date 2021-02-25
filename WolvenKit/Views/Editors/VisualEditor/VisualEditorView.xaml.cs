@@ -1,4 +1,4 @@
-﻿
+
 using Catel.Windows;
 using DynamicData;
 using NodeNetwork.ViewModels;
@@ -20,7 +20,7 @@ namespace WolvenKit.Views.VisualEditor
     {
 
 
-        public VisualEditorView() : base(DataWindowMode.Custom)
+        public VisualEditorView()
         {
             InitializeComponent();
 
@@ -100,17 +100,14 @@ namespace WolvenKit.Views.VisualEditor
             base.OnMouseLeftButtonDown(e);
 
             // Begin dragging the window
-            this.DragMove();
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.Close();
         }
 
         private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
         {
-            SetCurrentValue(WindowStateProperty, System.Windows.WindowState.Minimized);
         }
 
         private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)

@@ -69,7 +69,13 @@ namespace WolvenKit.ViewModels.AssetBrowser
             _messageService = messageService;
          
             SetupToolDefaults();
-                
+            ReInit();
+
+
+        }
+
+        public void ReInit()
+        {
             SelectedFiles = new List<IGameFile>();
             Managers = MainController.Get().GetManagers(true);
 

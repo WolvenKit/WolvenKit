@@ -13,7 +13,7 @@
     </catel:UserControl.Resources>
 
 
-    <Grid Height="600" Width="900">
+    <Grid >
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>

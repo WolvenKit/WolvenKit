@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
@@ -9,7 +9,10 @@ using Orc.Notifications;
 
 namespace WolvenKit
 {
+    using Catel.IoC;
     using Common.Services;
+    using WolvenKit.ViewModels.AssetBrowser;
+    using WolvenKit.Views.AssetBrowser;
 
     public class ApplicationOpenProjectCommandContainer : ProjectCommandContainerBase
     {
@@ -34,6 +37,9 @@ namespace WolvenKit
             _pleaseWaitService = pleaseWaitService;
             _openFileService = openFileService;
             _fileService = fileService;
+
+
+            
         }
 
         protected override bool CanExecute(object parameter) => true;
@@ -64,6 +70,8 @@ namespace WolvenKit
                     using (_pleaseWaitService.PushInScope())
                     {
                         await _projectManager.LoadAsync(location);
+                        AssetBrowserViewModel z = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
+                        z.ReInit();
                     }
                 }
             }

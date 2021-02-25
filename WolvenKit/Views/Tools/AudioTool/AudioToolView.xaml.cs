@@ -1,4 +1,4 @@
-﻿
+
 using Catel.Windows;
 using Sample_NAudio;
 using System;
@@ -17,13 +17,19 @@ namespace WolvenKit.Views.AudioTool
     public partial class AudioToolView
     {
 
-        public AudioToolView() : base(DataWindowMode.Custom)
+        public AudioToolView()
         {
             InitializeComponent();
 
 
+            Reinit();
 
+        
+            ShowPage();
+        }
 
+        public void Reinit()
+        {
             GivenRedAudioSource.Add("Red");
             GivenRedAudioSource.Add("Blue");
             GivenRedAudioSource.Add("Green");
@@ -31,28 +37,27 @@ namespace WolvenKit.Views.AudioTool
             GivenRedAudioSource.Add("Purple");
             GivenRedAudioSource.Add("White");
             GivenRedAudioSource.Add("Black");
-            PlayListView.ItemsSource = GivenRedAudioSource;
+            PlayListView.SetCurrentValue(ItemsControl.ItemsSourceProperty, GivenRedAudioSource);
 
 
             ResourceDictionary themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
             Resources.MergedDictionaries.Add(themeResources);
             //clockDisplay.SetCurrentValue(WPFSoundVisualizationLib.DigitalClock.TimeProperty, TimeSpan.FromMilliseconds(channel.CurrentSound.GetLength(TimeUnit.MS)));
-           // this.DataContext = new AudioToolViewModel();
+            // this.DataContext = new AudioToolViewModel();
 
 
             NAudioEngine soundEngine = NAudioEngine.Instance;
             soundEngine.PropertyChanged += NAudioEngine_PropertyChanged;
 
-           // UIHelper.Bind(soundEngine, "CanStop", StopButton, Button.IsEnabledProperty);
-           // UIHelper.Bind(soundEngine, "CanPlay", PlayButton, Button.IsEnabledProperty);
-           // UIHelper.Bind(soundEngine, "CanPause", PauseButton, Button.IsEnabledProperty);
-      
+            // UIHelper.Bind(soundEngine, "CanStop", StopButton, Button.IsEnabledProperty);
+            // UIHelper.Bind(soundEngine, "CanPlay", PlayButton, Button.IsEnabledProperty);
+            // UIHelper.Bind(soundEngine, "CanPause", PauseButton, Button.IsEnabledProperty);
+
 
             spectrumAnalyzer.RegisterSoundPlayer(soundEngine);
             waveformTimeline.RegisterSoundPlayer(soundEngine);
 
             //LoadExpressionDarkTheme();
-            ShowPage();
         }
 
 
@@ -240,13 +245,12 @@ namespace WolvenKit.Views.AudioTool
 
         private void CloseMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            Close();
         }
 
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-        {
-            NAudioEngine.Instance.Dispose();
-        }
+      //  protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+    //    {
+     //       NAudioEngine.Instance.Dispose();
+     //   }
 
 
 
@@ -256,7 +260,6 @@ namespace WolvenKit.Views.AudioTool
             base.OnMouseLeftButtonDown(e);
 
             // Begin dragging the window
-            this.DragMove();
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -264,12 +267,10 @@ namespace WolvenKit.Views.AudioTool
             NAudioEngine.Instance.Dispose();
             if (NAudioEngine.Instance.CanStop)
                 NAudioEngine.Instance.Stop();
-            this.Close();
         }
 
         private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
         {
-            SetCurrentValue(WindowStateProperty, System.Windows.WindowState.Minimized);
         }
 
 

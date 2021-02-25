@@ -72,25 +72,21 @@ namespace WolvenKit.Views
         private void CBCodeEditorItem_Selected(object sender, RoutedEventArgs e)
         {
             CodeEditorView codeeditor = new CodeEditorView();
-            codeeditor.Show();
         }
 
         private void CBPluginManager_Selected(object sender, RoutedEventArgs e)
         {
             PluginManagerView pluginmanager = new PluginManagerView();
-            pluginmanager.Show();
         }
 
         private void CBVisualEditorItem_Selected(object sender, RoutedEventArgs e)
         {
             VisualEditorView visualeditor = new VisualEditorView();
-            visualeditor.Show();
         }
 
         private void CBAudioToolItem_Selected(object sender, RoutedEventArgs e)
         {
             AudioToolView audiotool = new AudioToolView();
-            audiotool.Show();
         }
 
         private void CBJournalEditorItem_Selected(object sender, RoutedEventArgs e)

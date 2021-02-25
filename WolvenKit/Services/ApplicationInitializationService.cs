@@ -125,7 +125,24 @@ namespace WolvenKit.Services
             _commandManager.CreateCommand((AppCommands.Application.ShowImportUtility));
             _commandManager.CreateCommand((AppCommands.Application.ShowProperties));
             _commandManager.CreateCommand((AppCommands.Application.ShowPackageInstaller));
+
             _commandManager.CreateCommand((AppCommands.Application.ShowAssetBrowser));
+            _commandManager.CreateCommand((AppCommands.Application.ShowBulkEditor));
+            _commandManager.CreateCommand((AppCommands.Application.ShowCsvEditor));
+            _commandManager.CreateCommand((AppCommands.Application.ShowHexEditor));
+            _commandManager.CreateCommand((AppCommands.Application.ShowJournalEditor));
+            _commandManager.CreateCommand((AppCommands.Application.ShowVisualEditor));
+            _commandManager.CreateCommand((AppCommands.Application.ShowAnimationTool));
+            _commandManager.CreateCommand((AppCommands.Application.ShowAudioTool));
+            _commandManager.CreateCommand((AppCommands.Application.ShowImporterTool));
+            _commandManager.CreateCommand((AppCommands.Application.ShowCR2WToTextTool));
+            _commandManager.CreateCommand((AppCommands.Application.ShowGameDebuggerTool));
+            _commandManager.CreateCommand((AppCommands.Application.ShowMenuCreatorTool));
+            _commandManager.CreateCommand((AppCommands.Application.ShowPluginManager));
+            _commandManager.CreateCommand((AppCommands.Application.ShowRadishTool));
+            _commandManager.CreateCommand((AppCommands.Application.ShowWccTool));
+
+
             _commandManager.CreateCommand((AppCommands.Application.OpenFile));
             _commandManager.CreateCommand((AppCommands.Application.NewFile));
             _commandManager.CreateCommand((AppCommands.Application.PackMod));
