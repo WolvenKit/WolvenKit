@@ -94,6 +94,7 @@ namespace WolvenKit.ViewModels
             ShowAssetsCommand = new RelayCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
             ShowBulkEditorCommand = new RelayCommand(ExecuteBulkEditor, CanShowBulkEditor);
             ShowCsvEditorCommand = new RelayCommand(ExecuteCsvEditor, CanShowCsvEditor);
+            ShowCR2WEditorCommand = new RelayCommand(ExecuteCR2WEditor, CanShowCR2WEditor);
             ShowHexEditorCommand = new RelayCommand(ExecuteHexEditor, CanShowHexEditor);
             ShowJournalEditorCommand = new RelayCommand(ExecuteJournalEditor, CanShowJournalEditor);
             ShowVisualEditorCommand = new RelayCommand(ExecuteVisualEditor, CanShowVisualEditor);
@@ -154,6 +155,7 @@ namespace WolvenKit.ViewModels
             commandManager.RegisterCommand(AppCommands.Application.ShowHexEditor, ShowHexEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowJournalEditor, ShowJournalEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowVisualEditor, ShowVisualEditorCommand, this);
+            commandManager.RegisterCommand(AppCommands.Application.ShowCR2WEditor, ShowCR2WEditorCommand, this);
 
             commandManager.RegisterCommand(AppCommands.Application.ShowAnimationTool, ShowAnimationToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowMimicsTool, ShowMimicsToolCommand, this);
@@ -233,6 +235,13 @@ namespace WolvenKit.ViewModels
             var uchwv = new UserControlHostWindowView(zxc);
             uchwv.Show();
         }
+
+        /// <summary>
+        /// Displays the BulkEditor.
+        /// </summary>
+        public ICommand ShowCR2WEditorCommand { get; private set; }
+        private bool CanShowCR2WEditor() => true;
+        private void ExecuteCR2WEditor() => CR2WEditorVM.IsVisible = !CR2WEditorVM.IsVisible;
 
 
         /// <summary>
@@ -512,18 +521,33 @@ namespace WolvenKit.ViewModels
             HexEditorVM,
             CodeEditorVM,
             JournalEditorVM,
-            VisualEditorVM,
-            AnimationToolVM,
-            AudioToolVM,
-            ImporterToolVM,
-            CR2WToTextToolVM,
-            GameDebuggerToolVM,
-            MenuCreatorToolVM,
-            PluginManagerVM,
-            RadishToolVM,
-            WccToolVM,
-            MimicsToolVM
+             VisualEditorVM,
+             AnimationToolVM,
+             AudioToolVM,
+             ImporterToolVM,
+             CR2WToTextToolVM,
+             GameDebuggerToolVM,
+             MenuCreatorToolVM,
+             PluginManagerVM,
+             RadishToolVM,
+             WccToolVM,
+             MimicsToolVM,
+            CR2WEditorVM
         };
+
+        /// <summary>
+        /// Gets an instance of the ProjectExplorerViewModer.
+        /// </summary>
+        private CR2WEditorViewModel _CR2WEditorVM = null;
+        public CR2WEditorViewModel CR2WEditorVM
+        {
+            get
+            {
+                _CR2WEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<CR2WEditorViewModel>();
+                _CR2WEditorVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                return _CR2WEditorVM;
+            }
+        }
 
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.

@@ -21,6 +21,7 @@ namespace WolvenKit.Layout
     using WolvenKit.ViewModels.ImporterTool;
     using WolvenKit.ViewModels.Tools.MenuTool;
     using WolvenKit.ViewModels.AnimationTool;
+    using WolvenKit.ViewModels.Editors.CR2WEditor;
 
     /// <summary>
     /// Implements a <see ref="DataTemplateSelector"/> for AvalonDock's documents and toolwindows.
@@ -29,28 +30,28 @@ namespace WolvenKit.Layout
     /// a view for a specific given type of viewmodel.
     /// </summary>
     internal class PanesTemplateSelector : DataTemplateSelector
-	{
-		/// <summary>
-		/// Default class constructor.
-		/// </summary>
-		public PanesTemplateSelector()
-		{
-		}
+    {
+        /// <summary>
+        /// Default class constructor.
+        /// </summary>
+        public PanesTemplateSelector()
+        {
+        }
 
-		/// <summary>
-		/// Gets/sets the view instance of the file document.
-		/// </summary>
-		public DataTemplate FileViewTemplate { get; set; }
+        /// <summary>
+        /// Gets/sets the view instance of the file document.
+        /// </summary>
+        public DataTemplate FileViewTemplate { get; set; }
 
-		/// <summary>
-		/// Gets/sets the view instance of the LogView.
-		/// </summary>
-		public DataTemplate LogViewTemplate { get; set; }
+        /// <summary>
+        /// Gets/sets the view instance of the LogView.
+        /// </summary>
+        public DataTemplate LogViewTemplate { get; set; }
 
-		/// <summary>
-		/// Gets/sets the view instance of the ProjectExplorerView.
-		/// </summary>
-		public DataTemplate ProjectExplorerTemplate { get; set; }
+        /// <summary>
+        /// Gets/sets the view instance of the ProjectExplorerView.
+        /// </summary>
+        public DataTemplate ProjectExplorerTemplate { get; set; }
 
 
         /// <summary>
@@ -82,6 +83,11 @@ namespace WolvenKit.Layout
         /// Gets/sets the view instance of the JournalEditor.
         /// </summary>
         public DataTemplate JournalEditorTemplate { get; set; }
+
+        /// <summary>
+        /// Gets/sets the view instance of the CR2WEditor.
+        /// </summary>
+        public DataTemplate CR2WEditorTemplate { get; set; }
 
         /// <summary>
         /// Gets/sets the view instance of the AnimationTool.
@@ -149,13 +155,12 @@ namespace WolvenKit.Layout
         /// </summary>
         /// <param name="item">Identifies the viewmodel object for which we require an associated view.</param>
         /// <param name="container">Identifies the container's instance that wants to resolve this association.</param>
-        public override System.Windows.DataTemplate SelectTemplate(object item,
-																   System.Windows.DependencyObject container)
+        public override System.Windows.DataTemplate SelectTemplate(object item, System.Windows.DependencyObject container)
         {
             return item switch
             {
-                 AnimsViewModel _ => AnimsViewTemplate,
-                 MimicsViewModel _ => MimicsViewTemplate,
+                AnimsViewModel _ => AnimsViewTemplate,
+                MimicsViewModel _ => MimicsViewTemplate,
                 IDocumentViewModel _ => FileViewTemplate,
                 LogViewModel _ => LogViewTemplate,
                 ProjectExplorerViewModel _ => ProjectExplorerTemplate,
@@ -174,9 +179,10 @@ namespace WolvenKit.Layout
                 PluginManagerViewModel _ => PluginManagerTemplate,
                 RadishToolViewModel _ => RadishToolTemplate,
                 WccToolViewModel _ => WccToolTemplate,
+                CR2WEditorViewModel _ => CR2WEditorTemplate,
 
                 _ => base.SelectTemplate(item, container)
             };
         }
-	}
+    }
 }

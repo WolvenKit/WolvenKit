@@ -119,6 +119,7 @@ namespace WolvenKit.Services
             _commandManager.CreateCommand((AppCommands.Application.ShowProperties));
             _commandManager.CreateCommand((AppCommands.Application.ShowPackageInstaller));
             _commandManager.CreateCommand((AppCommands.Application.ShowMimicsTool));
+            _commandManager.CreateCommand((AppCommands.Application.ShowCR2WEditor));
 
             _commandManager.CreateCommand((AppCommands.Application.ShowAssetBrowser));
             _commandManager.CreateCommand((AppCommands.Application.ShowBulkEditor));

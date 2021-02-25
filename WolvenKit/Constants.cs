@@ -46,6 +46,7 @@ namespace WolvenKit
             public const string ShowVisualEditor = "Application.ShowVisualEditor";
             public const string ShowAnimationTool = "Application.ShowAnimationTool";
             public const string ShowMimicsTool = "Application.ShowMimicsTool";
+            public const string ShowCR2WEditor = "Application.ShowCR2WEditor";
 
             public const string ShowAudioTool = "Application.ShowAudioTool";
             public const string ShowImporterTool = "Application.ShowImporterTool";
