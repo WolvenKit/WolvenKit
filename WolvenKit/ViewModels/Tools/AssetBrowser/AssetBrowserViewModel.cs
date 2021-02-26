@@ -1,30 +1,27 @@
-using Catel.MVVM;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Input;
 using Catel.IoC;
-using CP77.CR2W.Types;
 using Orc.ProjectManagement;
-using ProtoBuf.Meta;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Model;
-using MessageBox = System.Windows.Forms.MessageBox;
 using WolvenKit.Common.Services;
 using Catel.Services;
 using Catel;
-using Catel.Threading;
+using HandyControl.Data;
+using Orc.Notifications;
+using WolvenKit.Commands;
 
 namespace WolvenKit.ViewModels.AssetBrowser
 {
     public class AssetBrowserViewModel : ToolViewModel
     {
+
+        #region constants
 
         /// <summary>
         /// Identifies the <see ref="ContentId"/> of this tool window.
@@ -35,72 +32,156 @@ namespace WolvenKit.ViewModels.AssetBrowser
         /// Identifies the caption string used for this tool window.
         /// </summary>
         public const string ToolTitle = "AssetBrowser";
+
+        #endregion
+
+        #region fields
+
         private readonly IMessageService _messageService;
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
+        private readonly INotificationService _notificationService;
 
+        private List<IGameArchiveManager> Managers { get; set; }
 
-        private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
+        #endregion
 
+        #region properties
+        public bool IsLoaded { get; set; }
         public GameFileTreeNode CurrentNode { get; set; } = new GameFileTreeNode();
         public List<AssetBrowserData> CurrentNodeFiles { get; set; } = new List<AssetBrowserData>();
         public GameFileTreeNode RootNode { get; set; }
-        public List<IGameFile> SelectedFiles { get; set; }
-        public List<IGameArchiveManager> Managers { get; set; }
-        public List<string> Extensions { get; set; }
+        
         public string SelectedExtension { get; set; }
+
+
+        // binding properties. do not make private
+// ReSharper disable MemberCanBePrivate.Global
+        public bool PreviewVisible { get; set; }
+        public System.Windows.GridLength PreviewWidth { get; set; } = new(0, System.Windows.GridUnitType.Pixel);
+        
+        
+
+        public List<IGameFile> SelectedFiles { get; set; }
+        public List<string> Extensions { get; set; }
+
         public List<string> Classes { get; set; }
         public string SelectedClass { get; set; }
-        public GridLength PreviewWidth { get; set; }
-        public bool PreviewVisible { get; set; }
+        
+
         public AssetBrowserData SelectedNode { get; set; }
         public List<AssetBrowserData> SelectedNodes { get; set; }
+        // ReSharper restore MemberCanBePrivate.Global
+
+        #endregion
+
+        #region ctor
 
         public AssetBrowserViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
-            IMessageService messageService) : base(ToolTitle)
+            IMessageService messageService,
+            INotificationService notificationService
+        ) : base(ToolTitle)
         {
             Argument.IsNotNull(() => projectManager);
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => loggerService);
+            Argument.IsNotNull(() => notificationService);
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
-         
+            _notificationService = notificationService;
+
+            SearchStartedCommand = new DelegateCommand<object>(ExecuteSearchStartedCommand, CanSearchStartedCommand);
+            TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
+            ImportFileCommand = new RelayCommand(ExecuteImportFile, CanImportFile);
+            HomeCommand = new RelayCommand(ExecuteHome, CanHome);
+
             SetupToolDefaults();
             ReInit();
 
 
         }
 
+        #endregion
+
+        #region commands
+
+        public ICommand HomeCommand { get; private set; }
+        private bool CanHome() => true;
+        private void ExecuteHome()
+        {
+            CurrentNode = RootNode;
+            CurrentNodeFiles = RootNode.ToAssetBrowserData();
+        }
+
+        public ICommand TogglePreviewCommand { get; private set; }
+        private bool CanTogglePreview() => true;
+        private void ExecuteTogglePreview()
+        {
+
+            if (PreviewWidth.GridUnitType != System.Windows.GridUnitType.Pixel)
+            {
+                PreviewWidth = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+                PreviewVisible = true;
+            }
+            else
+            {
+                PreviewWidth = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
+                PreviewVisible = false;
+            }
+        }
+
+        public ICommand SearchStartedCommand { get; private set; }
+        private bool CanSearchStartedCommand(object arg) => true;
+        private void ExecuteSearchStartedCommand(object arg)
+        {
+            if (arg is FunctionEventArgs<string> e)
+            {
+                PerformSearch(e.Info);
+            }
+        }
+
+        public ICommand ImportFileCommand { get; private set; }
+        private bool CanImportFile() => SelectedNode != null;
+        private void ExecuteImportFile() => ImportFile(SelectedNode);
+
+        #endregion
+
+        
+
+        #region methods
+
+        /// <summary>
+        /// Initializes the Asset Browser and populates the data nodes.
+        /// </summary>
         public void ReInit()
         {
             SelectedFiles = new List<IGameFile>();
             Managers = MainController.Get().GetManagers(true);
 
-            this.CurrentNode = new GameFileTreeNode(EArchiveType.ANY)
-            {
-                Name = "Depot"
-            };
+            CurrentNode = new GameFileTreeNode(EArchiveType.ANY) {Name = "Depot"};
             foreach (var mngr in Managers)
             {
                 if (mngr.RootNode != null)
                 {
-                    mngr.RootNode.Parent = this.CurrentNode;
-                    this.CurrentNode.Directories.Add(mngr.TypeName.ToString(), mngr.RootNode);
+                    mngr.RootNode.Parent = CurrentNode;
+                    CurrentNode.Directories.Add(mngr.TypeName.ToString(), mngr.RootNode);
                 }
             }
-            this.CurrentNodeFiles = this.CurrentNode.ToAssetBrowserData();
-            this.RootNode = this.CurrentNode;
-            this.Extensions = MainController.Get().GetManagers(true).SelectMany(x => x.Extensions).ToList();
-            this.Classes = MainController.Get().GetGame().GetAvaliableClasses();
-            this.PreviewWidth = new GridLength(0, GridUnitType.Pixel);
-            this.PreviewVisible = false;
+
+            CurrentNodeFiles = CurrentNode.ToAssetBrowserData();
+            RootNode = CurrentNode;
+            Extensions = MainController.Get().GetManagers(true).SelectMany(x => x.Extensions).ToList();
+            Classes = MainController.GetGame().GetAvaliableClasses();
+            PreviewVisible = false;
+
+            IsLoaded = true;
+            _notificationService.ShowNotification("Asset Browser", $"Asset Browser is initialized");
         }
 
-      
-        public void PerformSearch(string query)
+        private void PerformSearch(string query)
         {
             var newnode = new GameFileTreeNode()
             {
@@ -130,7 +211,7 @@ namespace WolvenKit.ViewModels.AssetBrowser
             //IconSource = bi;
         }
 
-        public void ImportFile(AssetBrowserData item)
+        private void ImportFile(AssetBrowserData item)
         {
             switch (item.Type)
             {
@@ -144,7 +225,7 @@ namespace WolvenKit.ViewModels.AssetBrowser
                 case EntryType.File:
                 {
                     Task.Run(new Action(() => AddToMod(item.This.Files.First(x => x.Key == item.Name).Value.First())));
-                    MessageBox.Show( "Importing file: " + item.Name, "File import");
+                    _notificationService.ShowNotification("File import", $"Importing file: {item.Name}");
                     break;
                 }
                 case EntryType.MoveUP:
@@ -161,7 +242,7 @@ namespace WolvenKit.ViewModels.AssetBrowser
             }
         }
 
-        public void AddToMod(IGameFile file)
+        private static void AddToMod(IGameFile file)
         {
             var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
             var project = ((EditorProject) (pm.ActiveProject));
@@ -170,23 +251,19 @@ namespace WolvenKit.ViewModels.AssetBrowser
                 case GameType.Witcher3:
                 {
                     var witcherProject = project as Tw3Project;
-                    var DiskPath = Path.Combine(witcherProject.ModCookedDirectory, file.Name);
-                    Directory.CreateDirectory(Path.GetDirectoryName(DiskPath));
-                    using (FileStream fs = new FileStream(DiskPath, FileMode.Create))
-                    {
-                        file.Extract(fs);
-                    }
+                    var diskPath = Path.Combine(witcherProject.ModCookedDirectory, file.Name);
+                    Directory.CreateDirectory(Path.GetDirectoryName(diskPath));
+                    using var fs = new FileStream(diskPath, FileMode.Create);
+                    file.Extract(fs);
                     break;
                 }
                 case GameType.Cyberpunk2077:
                 {
                     var cyberpunkProject = project as Cp77Project;
-                    var DiskPath = Path.Combine(cyberpunkProject.ModDirectory, file.Name);
-                    Directory.CreateDirectory(Path.GetDirectoryName(DiskPath));
-                    using (FileStream fs = new FileStream(DiskPath, FileMode.Create))
-                    {
-                        file.Extract(fs);
-                    }
+                    var diskPath = Path.Combine(cyberpunkProject.ModDirectory, file.Name);
+                    Directory.CreateDirectory(Path.GetDirectoryName(diskPath));
+                    using var fs = new FileStream(diskPath, FileMode.Create);
+                    file.Extract(fs);
                     break;
                 }
                 default:
@@ -194,7 +271,7 @@ namespace WolvenKit.ViewModels.AssetBrowser
             }   
         }
 
-        public List<IGameFile> CollectFiles(string searchkeyword, IGameArchiveManager root)
+        private static IEnumerable<IGameFile> CollectFiles(string searchkeyword, IGameArchiveManager root)
         {
             var ret = new Dictionary<string, IGameFile>();
             foreach (var f in root.FileList)
@@ -202,7 +279,9 @@ namespace WolvenKit.ViewModels.AssetBrowser
                 if (f.Name.ToUpper().Contains(searchkeyword.ToUpper()))
                 {
                     if(!ret.ContainsKey(f.Name))
+                    {
                         ret.TryAdd(f.Name, f);
+                    }
                 }
             }
             return ret.Values.ToList();
@@ -222,7 +301,8 @@ namespace WolvenKit.ViewModels.AssetBrowser
 
             return base.CloseAsync();
         }
-
+        
+        #endregion
 
     }
 }

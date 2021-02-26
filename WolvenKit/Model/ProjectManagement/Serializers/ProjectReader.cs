@@ -40,7 +40,7 @@ namespace WolvenKit.Model.ProjectManagement
                     {
                         project = new Tw3Project(location);
                         MainController.Get().ActiveMod = project.Data;
-                        await MainController.Get().SetGame(new Tw3Controller()).ContinueWith(t =>
+                        await MainController.SetGame(new Tw3Controller()).ContinueWith(t =>
                             {
                                 _notificationService.ShowNotification("Success", "Project " + Path.GetFileNameWithoutExtension(location) +
                                     " loaded!");
@@ -51,7 +51,7 @@ namespace WolvenKit.Model.ProjectManagement
                     {
                         project = new Cp77Project(location);
                         MainController.Get().ActiveMod = project.Data;
-                        await MainController.Get().SetGame(new Cp77Controller()).ContinueWith(t =>
+                        await MainController.SetGame(new Cp77Controller()).ContinueWith(t =>
                             {
                                 _notificationService.ShowNotification("Success", "Project " + Path.GetFileNameWithoutExtension(location) +
                                     " loaded!");

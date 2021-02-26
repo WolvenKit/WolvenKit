@@ -43,9 +43,8 @@ namespace WolvenKit
     /// </summary>
     public class MainController : ObservableObject, ILocalizedStringSource
     {
-        private static MainController mainController;
-
-        private static GameControllerBase gameController;
+        private static MainController s_mainController;
+        private static GameControllerBase s_gameController;
 
         private MainController()
         {
@@ -53,26 +52,28 @@ namespace WolvenKit
 
         public static MainController Get()
         {
-            if (mainController == null)
+            if (s_mainController != null)
             {
-                mainController = new MainController
-                {
-                    Configuration = Configuration.Load(),
-                    Logger = new LoggerService(),
-                };
-                gameController = new MockGameController();
+                return s_mainController;
             }
 
-            return mainController;
+            s_mainController = new MainController
+            {
+                Configuration = Configuration.Load(),
+                Logger = new LoggerService(),
+            };
+            s_gameController = new MockGameController();
+
+            return s_mainController;
         }
 
-        public async Task SetGame(GameControllerBase controller)
+        public static async Task SetGame(GameControllerBase controller)
         {
-            gameController = controller;
+            s_gameController = controller;
             await controller.HandleStartup();
         }
 
-        public GameControllerBase GetGame() => gameController;
+        public static GameControllerBase GetGame() => s_gameController;
 
         #region Fields
 
@@ -123,11 +124,8 @@ namespace WolvenKit
 
         #region Archive Managers
 
-        public List<IGameArchiveManager> GetManagers(bool loadmods)
-        {
-            //TODO: Implement mod loading, it's not a priority atm so I left it out but we should support it.
-            return gameController.GetArchiveManagersManagers();
-        }
+        //TODO: Implement mod loading, it's not a priority atm so I left it out but we should support it.
+        public List<IGameArchiveManager> GetManagers(bool loadmods) => s_gameController.GetArchiveManagersManagers();
 
         #endregion
 
@@ -186,8 +184,8 @@ namespace WolvenKit
         public static string ManagerCacheDir => GameControllerBase.ManagerCacheDir;
         public static string WorkDir => GameControllerBase.WorkDir;
         public static string XBMDumpPath => GameControllerBase.XBMDumpPath;
-        public static string GetManagerPath(EManagerType type) => Tw3Controller.GetManagerPath(type);
-        public static string GetManagerVersion(EManagerType type) => Tw3Controller.GetManagerVersion(type);
+        public static string GetManagerPath(EManagerType type) => GameControllerBase.GetManagerPath(type);
+        public static string GetManagerVersion(EManagerType type) => GameControllerBase.GetManagerVersion(type);
 
         /// <summary>
         /// Initializes the archive managers in an async thread
@@ -204,15 +202,14 @@ namespace WolvenKit
                     var e = (EManagerType)j;
                     var curversion = GameControllerBase.GetManagerVersion(e);
 
-                    if (savedversions != curversion)
+                    if (savedversions != curversion && File.Exists(GameControllerBase.GetManagerPath(e)))
                     {
-                        if (File.Exists(GameControllerBase.GetManagerPath(e)))
-                            File.Delete(GameControllerBase.GetManagerPath(e));
+                        File.Delete(GameControllerBase.GetManagerPath(e));
                     }
                 }
 
                 //multithread these
-                gameController.HandleStartup();
+                s_gameController.HandleStartup();
 
 
 
@@ -258,11 +255,11 @@ namespace WolvenKit
                 
                 WccHelper = new WccLite(MainController.Get().Configuration.WccLite, Logger);
 
-                mainController.Loaded = true;
+                s_mainController.Loaded = true;
             }
             catch (Exception ex)
             {
-                mainController.Loaded = false;
+                s_mainController.Loaded = false;
                 Console.WriteLine(ex.Message);
             }
             
@@ -279,14 +276,12 @@ namespace WolvenKit
         /// <returns></returns>
         public static List<byte[]> ImportFile(string name,IGameArchiveManager archive)
         {
-            List<byte[]> ret = new List<byte[]>();
+            var ret = new List<byte[]>();
             archive.FileList.ToList().Where(x => x.Name.Contains(name)).ToList().ForEach(x =>
             {
-                using (var ms = new MemoryStream())
-                {
-                    x.Extract(ms);
-                    ret.Add(ms.ToArray());
-                }
+                using var ms = new MemoryStream();
+                x.Extract(ms);
+                ret.Add(ms.ToArray());
             });
             return ret;
         }
@@ -302,7 +297,7 @@ namespace WolvenKit
         {
             if(WccHelper == null)
             {
-                mainController.WccHelper = new WccLite(wccLite, mainController.Logger);
+                s_mainController.WccHelper = new WccLite(wccLite, s_mainController.Logger);
             }
             WccHelper.UpdatePath(wccLite);
         }

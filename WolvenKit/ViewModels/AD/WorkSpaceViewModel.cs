@@ -17,31 +17,30 @@ using Catel.IoC;
 using Orc.ProjectManagement;
 using WolvenKit.Views.Wizards;
 using NativeMethods = WolvenKit.NativeWin.NativeMethods;
+using WolvenKit.Model;
+using WolvenKit.Commands;
+using WolvenKit.Common.Services;
+using WolvenKit.CR2W;
+using WolvenKit.Views;
+using WolvenKit.ViewModels.AssetBrowser;
+using WolvenKit.Views.AssetBrowser;
+using WolvenKit.ViewModels.CodeEditor;
+using WolvenKit.ViewModels.CsvEditor;
+using WolvenKit.ViewModels.HexEditor;
+using WolvenKit.ViewModels.AudioTool;
+using WolvenKit.ViewModels.VisualEditor;
+using WolvenKit.ViewModels.JournalEditor;
+using WolvenKit.ViewModels.WccTool;
+using WolvenKit.ViewModels.RadishTool;
+using WolvenKit.ViewModels.CR2WToTextTool;
+using WolvenKit.ViewModels.GameDebuggerTool;
+using WolvenKit.ViewModels.PluginManager;
+using WolvenKit.ViewModels.ImporterTool;
+using WolvenKit.ViewModels.Tools.MenuTool;
+using WolvenKit.ViewModels.AnimationTool;
 
 namespace WolvenKit.ViewModels
 {
-    using Model;
-    using Commands;
-    using Common.Services;
-    using CR2W;
-    using WolvenKit.Views;
-    using WolvenKit.ViewModels.AssetBrowser;
-    using WolvenKit.Views.AssetBrowser;
-    using WolvenKit.ViewModels.CodeEditor;
-    using WolvenKit.ViewModels.CsvEditor;
-    using WolvenKit.ViewModels.HexEditor;
-    using WolvenKit.ViewModels.AudioTool;
-    using WolvenKit.ViewModels.VisualEditor;
-    using WolvenKit.ViewModels.JournalEditor;
-    using WolvenKit.ViewModels.WccTool;
-    using WolvenKit.ViewModels.RadishTool;
-    using WolvenKit.ViewModels.CR2WToTextTool;
-    using WolvenKit.ViewModels.GameDebuggerTool;
-    using WolvenKit.ViewModels.PluginManager;
-    using WolvenKit.ViewModels.ImporterTool;
-    using WolvenKit.ViewModels.Tools.MenuTool;
-    using WolvenKit.ViewModels.AnimationTool;
-
     /// <summary>
     /// The WorkSpaceViewModel implements AvalonDock demo specific properties, events and methods.
     /// </summary>
@@ -190,9 +189,11 @@ namespace WolvenKit.ViewModels
             // executes a global command that can be subscribed to from any viewmodel
             // passes the currently active viewmodel
             if (args.PropertyName == "IsActive" && sender is PaneViewModel panevm)
+            {
                 ServiceLocator.Default.ResolveType<ICommandManager>()
                     .GetCommand(AppCommands.Application.ViewSelected)
                     .SafeExecute(new Tuple<PaneViewModel, bool>(panevm, panevm.IsActive));
+            }
         }
 
         protected override async Task InitializeAsync()
@@ -227,9 +228,9 @@ namespace WolvenKit.ViewModels
         private bool CanShowInstaller() => true;
         private void ExecuteShowInstaller()
         {
-            Views.Wizards.InstallerWizardView rpv = new Views.Wizards.InstallerWizardView();
-            UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
-            UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
+            var rpv = new InstallerWizardView();
+            var zxc = new UserControlHostWindowViewModel(rpv);
+            var uchwv = new UserControlHostWindowView(zxc);
             uchwv.Show();
         }
 
@@ -348,7 +349,7 @@ namespace WolvenKit.ViewModels
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowAssetsCommand { get; private set; }
-        private bool CanShowAssetBrowser() => true;
+        private bool CanShowAssetBrowser() => AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
         private void ExecuteAssetBrowser() => AssetBrowserVM.IsVisible = !AssetBrowserVM.IsVisible;
 
 
@@ -427,10 +428,7 @@ namespace WolvenKit.ViewModels
         /// </summary>
         public ICommand PackModCommand { get; private set; }
         private bool CanPackMod() => _projectManager.ActiveProject is EditorProject proj;
-        private void ExecutePackMod()
-        {
-            MainController.Get().GetGame().PackAndInstallProject();
-        }
+        private static void ExecutePackMod() => MainController.GetGame().PackAndInstallProject();
 
         /// <summary>
         /// Git-backup current mod project
@@ -504,27 +502,27 @@ namespace WolvenKit.ViewModels
         /// </summary>
         public IEnumerable<ToolViewModel> Tools => _tools ??= new ToolViewModel[]
         {
-                Log,
-                ProjectExplorer,
-                PropertiesViewModel,
-                ImportViewModel,
-                AssetBrowserVM,
+            Log,
+            ProjectExplorer,
+            PropertiesViewModel,
+            ImportViewModel,
+            AssetBrowserVM,
             BulkEditorVM,
             CsvEditorVM,
             HexEditorVM,
             CodeEditorVM,
             JournalEditorVM,
-             VisualEditorVM,
-             AnimationToolVM,
-             AudioToolVM,
-             ImporterToolVM,
-             CR2WToTextToolVM,
-             GameDebuggerToolVM,
-             MenuCreatorToolVM,
-             PluginManagerVM,
-             RadishToolVM,
-             WccToolVM,
-             MimicsToolVM
+            VisualEditorVM,
+            AnimationToolVM,
+            AudioToolVM,
+            ImporterToolVM,
+            CR2WToTextToolVM,
+            GameDebuggerToolVM,
+            MenuCreatorToolVM,
+            PluginManagerVM,
+            RadishToolVM,
+            WccToolVM,
+            MimicsToolVM
         };
 
         /// <summary>

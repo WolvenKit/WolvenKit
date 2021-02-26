@@ -6,87 +6,89 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Catel.IoC;
-using Catel.Linq;
 using CP77.CR2W;
 using CP77.CR2W.Types;
 using Newtonsoft.Json;
 using Orc.ProjectManagement;
 using WolvenKit.Common;
 using WolvenKit.Model;
+using WolvenKit.ViewModels.AssetBrowser;
+using WolvenKit.Services;
+using WolvenKit.Common.Services;
+using CP77.CR2W.Archive;
 
 namespace WolvenKit.Controllers
 {
-    using Services;
-    using Bundles;
-    using Cache;
-    using Common.Services;
-    using W3Speech;
-    using W3Strings;
-    using CP77.CR2W.Archive;
-
     public class Cp77Controller : GameControllerBase
     {
-        private static ArchiveManager archiveManager { get; set; } = new ArchiveManager();
+        private static ArchiveManager ArchiveManager { get; set; } = new ArchiveManager();
 
         public ArchiveManager LoadArchiveManager()
         {
-            var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
-            if (!File.Exists(_settings.CP77ExecutablePath))
+            if (!File.Exists(settings.CP77ExecutablePath))
             {
-                _logger.LogString("Settings are not set up properly... can't load the archive manager... ", Logtype.Error);
+                logger.LogString("Settings are not set up properly... can't load the archive manager... ", Logtype.Error);
                 return null;
             }
-            _logger.LogString("Loading archive Manager ... ", Logtype.Important);
+            logger.LogString("Loading archive Manager ... ", Logtype.Important);
             try
             {
                 if (File.Exists(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager)))
                 {
-                    using (StreamReader file = File.OpenText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager)))
+                    using var file = File.OpenText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager));
+                    var serializer = new JsonSerializer
                     {
-                        JsonSerializer serializer = new JsonSerializer();
-                        serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                        serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                        serializer.TypeNameHandling = TypeNameHandling.Auto;
-                        archiveManager = (ArchiveManager)serializer.Deserialize(file, typeof(ArchiveManager));
-                    }
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                        TypeNameHandling = TypeNameHandling.Auto
+                    };
+                    ArchiveManager = (ArchiveManager)serializer.Deserialize(file, typeof(ArchiveManager));
                 }
                 else
                 {
-                    archiveManager = new ArchiveManager();
-                    archiveManager.LoadAll(Path.GetDirectoryName(_settings.CP77ExecutablePath));
-                    File.WriteAllText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager), JsonConvert.SerializeObject(archiveManager, Formatting.None, new JsonSerializerSettings()
+                    ArchiveManager = new ArchiveManager();
+                    ArchiveManager.LoadAll(Path.GetDirectoryName(settings.CP77ExecutablePath));
+                    File.WriteAllText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager), JsonConvert.SerializeObject(ArchiveManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                         TypeNameHandling = TypeNameHandling.Auto
                     }));
-                    _settings.ManagerVersions[(int)EManagerType.ArchiveManager] = ArchiveManager.SerializationVersion;
+                    settings.ManagerVersions[(int)EManagerType.ArchiveManager] = ArchiveManager.SerializationVersion;
                 }
             }
             catch (Exception)
             {
                 if (File.Exists(GetManagerPath(EManagerType.ArchiveManager)))
+                {
                     File.Delete(GetManagerPath(EManagerType.ArchiveManager));
-                archiveManager = new ArchiveManager();
-                archiveManager.LoadAll(Path.GetDirectoryName(_settings.CP77ExecutablePath));
+                }
+
+                ArchiveManager = new ArchiveManager();
+                ArchiveManager.LoadAll(Path.GetDirectoryName(settings.CP77ExecutablePath));
             }
-            _logger.LogString("Finished loading archive manager.", Logtype.Success);
-            return archiveManager;
+            logger.LogString("Finished loading archive manager.", Logtype.Success);
+
+
+            // init asset browser here after the manager has loaded
+            var assetBrowserViewModel = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
+            assetBrowserViewModel.ReInit();
+
+            return ArchiveManager;
         }
 
-        public override List<IGameArchiveManager> GetArchiveManagersManagers()
-        {
-            return new()
+        public override List<IGameArchiveManager> GetArchiveManagersManagers() =>
+            new()
             {
-                archiveManager
+                ArchiveManager
             };
-        }
 
         public override List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
 
-        public override async Task HandleStartup()
+        public override Task HandleStartup()
         {
             RegisterServices();
 
@@ -94,9 +96,8 @@ namespace WolvenKit.Controllers
             {
                 LoadArchiveManager,
             };
-            //Parallel.ForEach(todo, _ => Task.Run(_));
-
-            await Task.WhenAll( todo.Select(_ => Task.Run(_)));
+            Parallel.ForEach(todo, _ => Task.Run(_));
+            return Task.CompletedTask;
         }
 
         private static void RegisterServices()
@@ -110,40 +111,36 @@ namespace WolvenKit.Controllers
 
         public override Task<bool> PackAndInstallProject()
         {
-            var _loggerService = ServiceLocator.Default.ResolveType<ILoggerService>();
-            var _projectService = ServiceLocator.Default.ResolveType<IProjectManager>();
-            var cp77proj = _projectService.ActiveProject as Cp77Project;
-            if (cp77proj == null)
+            var loggerService = ServiceLocator.Default.ResolveType<ILoggerService>();
+            var projectService = ServiceLocator.Default.ResolveType<IProjectManager>();
+            if (!(projectService.ActiveProject is Cp77Project cp77Proj))
             {
-                _loggerService.LogString("Can't pack nor install project (no project/not cyberpunk project)!", Logtype.Error);
+                loggerService.LogString("Can't pack nor install project (no project/not cyberpunk project)!", Logtype.Error);
                 return Task.FromResult(false);
             }
-            _loggerService.LogString("Rebuilding necessary files....", Logtype.Normal);
-            CP77.CR2W.ModTools.Recombine(new DirectoryInfo(cp77proj.ModDirectory), true, true, true, true, true, true);
-            _loggerService.LogString("Rebuilding done, packing files into archive(s)....", Logtype.Normal);
-            CP77.CR2W.ModTools.Pack(new DirectoryInfo(cp77proj.ModDirectory),
-                new DirectoryInfo(cp77proj.PackedModDirectory));
-            _loggerService.LogString("Packing complete!", Logtype.Important);
+            loggerService.LogString("Rebuilding necessary files....");
+            ModTools.Recombine(new DirectoryInfo(cp77Proj.ModDirectory), true, true, true, true, true, true);
+            loggerService.LogString("Rebuilding done, packing files into archive(s)....");
+            ModTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory),
+                new DirectoryInfo(cp77Proj.PackedModDirectory));
+            loggerService.LogString("Packing complete!", Logtype.Important);
             InstallMod();
             return Task.FromResult(true);
         }
 
-        public override Task<bool> PackageMod()
-        {
-            //TODO: Create wkpackage from the mod
-            return Task.FromResult(true);
-        }
+        //TODO: Create wkpackage from the mod
+        public override Task<bool> PackageMod() => Task.FromResult(true);
 
         private static void InstallMod()
         {
-            var ActiveMod = MainController.Get().ActiveMod;
-            var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            var activeMod = MainController.Get().ActiveMod;
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             try
             {
                 //Check if we have installed this mod before. If so do a little cleanup.
-                if (File.Exists(ActiveMod.ProjectDirectory + "\\install_log.xml"))
+                if (File.Exists(activeMod.ProjectDirectory + "\\install_log.xml"))
                 {
-                    XDocument log = XDocument.Load(ActiveMod.ProjectDirectory + "\\install_log.xml");
+                    var log = XDocument.Load(activeMod.ProjectDirectory + "\\install_log.xml");
                     var dirs = log.Root.Element("Files")?.Descendants("Directory");
                     if (dirs != null)
                     {
@@ -162,28 +159,24 @@ namespace WolvenKit.Controllers
                         //Delete the empty directories.
                         foreach (var d in dirs)
                         {
-                            if (d.Attribute("Path") != null)
+                            if (d.Attribute("Path") != null
+                                && Directory.Exists(d.Attribute("Path").Value)
+                                && !(Directory.GetFiles(d.Attribute("Path").Value, "*", SearchOption.AllDirectories).Any()))
                             {
-                                if (Directory.Exists(d.Attribute("Path").Value))
-                                {
-                                    if (!(Directory.GetFiles(d.Attribute("Path").Value, "*", SearchOption.AllDirectories).Any()))
-                                    {
-                                        Directory.Delete(d.Attribute("Path").Value, true);
-                                        Debug.WriteLine("Directory delete: " + d.Attribute("Path").Value);
-                                    }
-                                }
+                                Directory.Delete(d.Attribute("Path").Value, true);
+                                Debug.WriteLine("Directory delete: " + d.Attribute("Path").Value);
                             }
                         }
                     }
                     //Delete the old install log. We will make a new one so this is not needed anymore.
-                    File.Delete(ActiveMod.ProjectDirectory + "\\install_log.xml");
+                    File.Delete(activeMod.ProjectDirectory + "\\install_log.xml");
                 }
-                var installlog = new XDocument(new XElement("InstalLog", new XAttribute("Project", ActiveMod.Name), new XAttribute("Build_date", DateTime.Now.ToString())));
+                var installlog = new XDocument(new XElement("InstalLog", new XAttribute("Project", activeMod.Name), new XAttribute("Build_date", DateTime.Now.ToString())));
                 var fileroot = new XElement("Files");
                 //Copy and log the files.
-                if (!Directory.Exists(Path.Combine(ActiveMod.ProjectDirectory, "packed")))
+                if (!Directory.Exists(Path.Combine(activeMod.ProjectDirectory, "packed")))
                 {
-                    _logger.LogString("Failed to install the mod! The packed directory doesn't exist! You forgot to tick any of the packing options?", Logtype.Important);
+                    logger.LogString("Failed to install the mod! The packed directory doesn't exist! You forgot to tick any of the packing options?", Logtype.Important);
                     return;
                 }
 
@@ -199,13 +192,13 @@ namespace WolvenKit.Controllers
 
                 installlog.Root.Add(fileroot);
                 //Save the log.
-                installlog.Save(ActiveMod.ProjectDirectory + "\\install_log.xml");
-                _logger.LogString(ActiveMod.Name + " installed!" + "\n", Logtype.Success);
+                installlog.Save(activeMod.ProjectDirectory + "\\install_log.xml");
+                logger.LogString(activeMod.Name + " installed!" + "\n", Logtype.Success);
             }
             catch (Exception ex)
             {
                 //If we screwed up something. Log it.
-                _logger.LogString(ex.ToString() + "\n", Logtype.Error);
+                logger.LogString(ex + "\n", Logtype.Error);
             }
         }
     }
