@@ -32,7 +32,9 @@ namespace WolvenKit.Views
 
             var path = Path.GetFullPath(AvalonDockConfigPath);
             LayoutLoader = new LayoutLoader(AvalonDockConfigPath);
-		}
+
+            WKitGlobal.AppHelper.MainView = this;
+        }
 
         /// <summary>
         /// Gets an object that loads the AvalonDock Xml layout string
@@ -101,7 +103,7 @@ namespace WolvenKit.Views
                         return;
                     }
 
-                    if (result.LoadwasSuccesful == true)
+                    if (result.LoadwasSuccesful)
                     {
                         // Make sure AvalonDock control is visible at the end of restoring layout
                         var stringLayoutSerializer = new XmlLayoutSerializer(dockManager);
@@ -137,12 +139,10 @@ namespace WolvenKit.Views
                 wspace.CloseAllDocuments();
             }
 
-            var myApp = (App)Application.Current;
-
-            var LoaderResult = await this.LayoutLoader.GetLayoutString(OnLayoutLoaded_Event);
+            var loaderResult = await this.LayoutLoader.GetLayoutString(OnLayoutLoaded_Event);
 
 			// Call this even with null to ensure standard initialization takes place
-			this.OnLayoutLoaded_Event(null, (LoaderResult == null ? null : new LayoutLoadedEventArgs(LoaderResult)));
+			this.OnLayoutLoaded_Event(null, (loaderResult == null ? null : new LayoutLoadedEventArgs(loaderResult)));
 		}
 
 		#endregion

@@ -235,7 +235,7 @@ namespace WolvenKit.ViewModels
                 
             }
         }
-        
+
         protected override Task OnClosingAsync()
         {
             _projectManager.ProjectActivationAsync -= OnProjectActivationAsync;
@@ -1031,7 +1031,9 @@ namespace WolvenKit.ViewModels
             {
                 var res = MessageBox.Show($"Save changes for file '{fileToClose.FileName}'?", "AvalonDock Test App", MessageBoxButton.YesNoCancel);
                 if (res == MessageBoxResult.Cancel)
+                {
                     return;
+                }
 
                 if (res == MessageBoxResult.Yes)
                 {

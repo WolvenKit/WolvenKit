@@ -20,7 +20,7 @@ namespace WolvenKit.WKitGlobal
     {
         public static RibbonView RibbonViewInstance;
         public static ShellWindow GlobalShell;
-
+        public static MainView MainView;
 
         public async Task InitializeMVVM()
         {

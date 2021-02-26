@@ -81,14 +81,9 @@ namespace WolvenKit
             apphelper.ShowFirstTimeSetup();
             discordhelper.InitDiscordRPC();
 
-
-
             Log.Info("Calling base.OnStartup");
-
-
-
-
             base.OnStartup(e);
+
             NNViewRegistrar.RegisterSplat();
 
             if (MainWindow != null)
@@ -101,10 +96,8 @@ namespace WolvenKit
         // TODO: add closing logic here for now since MainViewModel.OnClosing isn't realiable. Investigate this
         private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var x = AppHelper.GlobalShell;
-            var y = MainWindow;
-
-
+            var mainView = AppHelper.MainView;
+            mainView.OnSaveLayout();
         }
     }
 }
