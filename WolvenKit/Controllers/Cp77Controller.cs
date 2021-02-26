@@ -23,7 +23,27 @@ namespace WolvenKit.Controllers
     {
         private static ArchiveManager ArchiveManager { get; set; } = new ArchiveManager();
 
-        public ArchiveManager LoadArchiveManager()
+        public override List<IGameArchiveManager> GetArchiveManagersManagers() =>
+            new()
+            {
+                ArchiveManager
+            };
+
+        public override List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
+
+        public override Task HandleStartup()
+        {
+            RegisterServices();
+
+            var todo = new List<Func<IGameArchiveManager>>()
+            {
+                LoadArchiveManager,
+            };
+            Parallel.ForEach(todo, _ => Task.Run(_));
+            return Task.CompletedTask;
+        }
+
+        private static ArchiveManager LoadArchiveManager()
         {
             var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
@@ -78,26 +98,6 @@ namespace WolvenKit.Controllers
             assetBrowserViewModel.ReInit();
 
             return ArchiveManager;
-        }
-
-        public override List<IGameArchiveManager> GetArchiveManagersManagers() =>
-            new()
-            {
-                ArchiveManager
-            };
-
-        public override List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
-
-        public override Task HandleStartup()
-        {
-            RegisterServices();
-
-            var todo = new List<Func<IGameArchiveManager>>()
-            {
-                LoadArchiveManager,
-            };
-            Parallel.ForEach(todo, _ => Task.Run(_));
-            return Task.CompletedTask;
         }
 
         private static void RegisterServices()

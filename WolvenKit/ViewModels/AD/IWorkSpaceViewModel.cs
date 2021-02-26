@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -21,7 +21,7 @@ namespace WolvenKit.ViewModels
 		DocumentViewModel ActiveDocument { get; set; }
 
 		/// <summary>Gets an enumeration of all currently available tool window viewmodels.</summary>
-		IEnumerable<ToolViewModel> Tools { get; }
+		ObservableCollection<ToolViewModel> Tools { get; }
 
 		/// <summary>Gets an enumeration of all currently available document viewmodels.</summary>
 		IEnumerable<DocumentViewModel> Files { get; }

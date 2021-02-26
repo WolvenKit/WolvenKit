@@ -1,4 +1,6 @@
-﻿namespace WolvenKit.ViewModels
+using WolvenKit.ViewModels.CsvEditor;
+
+namespace WolvenKit.ViewModels
 {
 	public class ToolViewModel : PaneViewModel
 	{
@@ -42,7 +44,7 @@
 			{
 				if (_isVisible != value)
 				{
-					_isVisible = value;
+                    _isVisible = value;
 					RaisePropertyChanged(() => IsVisible);
 				}
 			}

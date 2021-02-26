@@ -131,8 +131,10 @@ namespace WolvenKit.Layout.MLib
 			try
 			{
 				if (this._LayoutLoaded != null)
-					return this._LayoutLoaded;
-				else
+                {
+                    return this._LayoutLoaded;
+                }
+                else
 				{
 					// Attach event to return result later
 					LayoutLoadedEvent += loadEventHandler;

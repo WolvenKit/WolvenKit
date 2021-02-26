@@ -214,7 +214,7 @@
                         </fluent:Button.Icon>
                     </fluent:Button>
 
-                    <fluent:Button Header="Wcc Tool" Command="{catel:CommandManagerBinding Application.ShowPackageInstaller}" Size="Middle">
+                    <fluent:Button Header="Wcc Tool" Command="{catel:CommandManagerBinding Application.ShowWccTool}" Size="Middle">
                         <fluent:Button.Icon>
                             <iconPacks:PackIconBootstrapIcons Kind="Thermometer"></iconPacks:PackIconBootstrapIcons>
                         </fluent:Button.Icon>

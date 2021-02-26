@@ -1,10 +1,9 @@
-﻿using AvalonDock.Layout;
+using AvalonDock.Layout;
+using System.Linq;
 
 namespace WolvenKit.Layout
 {
-	using System.Linq;
-
-	class LayoutInitializer : ILayoutUpdateStrategy
+    internal class LayoutInitializer : ILayoutUpdateStrategy
 	{
 		public bool BeforeInsertAnchorable(LayoutRoot layout,
 										   LayoutAnchorable anchorableToShow,
@@ -13,22 +12,22 @@ namespace WolvenKit.Layout
             // AD wants to add the anchorable into destinationContainer
             // just for test provide a new anchorablepane 
             // if the pane is floating let the manager go ahead
-            LayoutAnchorablePane destPane = destinationContainer as LayoutAnchorablePane;
-            if (destinationContainer != null &&
-                destinationContainer.FindParent<LayoutFloatingWindow>() != null)
+            var destPane = destinationContainer as LayoutAnchorablePane;
+            if (destinationContainer?.FindParent<LayoutFloatingWindow>() != null)
+            {
                 return false;
+            }
 
             var toolsPane = layout.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault(d => d.Name == "ToolsPane");
             if (toolsPane != null)
             {
                 // do not allow this as Tabbed Document
                 anchorableToShow.CanDockAsTabbedDocument = false;
-                toolsPane.Children.Add(anchorableToShow);
+                toolsPane.Children.Add(anchorableToShow);   // this sets visibility to true...
                 return true;
             }
 
             return false;
-            //return true;
         }
 
 
@@ -39,12 +38,10 @@ namespace WolvenKit.Layout
 
 		public bool BeforeInsertDocument(LayoutRoot layout,
 										LayoutDocument layoutDocumentToShow,
-										ILayoutContainer destinationContainer)
-		{
-			return false;
-		}
+										ILayoutContainer destinationContainer) =>
+            false;
 
-		public void AfterInsertDocument(LayoutRoot layout, LayoutDocument layoutDocumentToShow)
+        public void AfterInsertDocument(LayoutRoot layout, LayoutDocument layoutDocumentToShow)
 		{
 		}
 	}

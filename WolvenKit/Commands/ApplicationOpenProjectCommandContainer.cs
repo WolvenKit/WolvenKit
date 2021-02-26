@@ -37,9 +37,6 @@ namespace WolvenKit
             _pleaseWaitService = pleaseWaitService;
             _openFileService = openFileService;
             _fileService = fileService;
-
-
-            
         }
 
         protected override bool CanExecute(object parameter) => true;
@@ -72,6 +69,9 @@ namespace WolvenKit
                         await _projectManager.LoadAsync(location);
                     }
                 }
+
+                WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
+                WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
             }
             catch (Exception)
             {

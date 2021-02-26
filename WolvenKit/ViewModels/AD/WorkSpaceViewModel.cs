@@ -49,7 +49,6 @@ namespace WolvenKit.ViewModels
     {
         #region fields
         private readonly ObservableCollection<DocumentViewModel> _files = new ObservableCollection<DocumentViewModel>();
-        private ToolViewModel[] _tools = null;
 
         private DocumentViewModel _activeDocument = null;
 
@@ -95,7 +94,7 @@ namespace WolvenKit.ViewModels
             ShowAssetsCommand = new RelayCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
             ShowBulkEditorCommand = new RelayCommand(ExecuteBulkEditor, CanShowBulkEditor);
             ShowCsvEditorCommand = new RelayCommand(ExecuteCsvEditor, CanShowCsvEditor);
-            ShowCR2WEditorCommand = new RelayCommand(ExecuteCR2WEditor, CanShowCR2WEditor);
+            ShowCR2WEditorCommand = new RelayCommand(ExecuteShowCR2WEditor, CanShowCR2WEditor);
             ShowHexEditorCommand = new RelayCommand(ExecuteHexEditor, CanShowHexEditor);
             ShowJournalEditorCommand = new RelayCommand(ExecuteJournalEditor, CanShowJournalEditor);
             ShowVisualEditorCommand = new RelayCommand(ExecuteVisualEditor, CanShowVisualEditor);
@@ -136,6 +135,30 @@ namespace WolvenKit.ViewModels
 
             #endregion
 
+            Tools = new ObservableCollection<ToolViewModel> {
+                Log,
+                ProjectExplorer,
+                PropertiesViewModel,
+                ImportViewModel,
+                AssetBrowserVM,
+                BulkEditorVM,
+                CsvEditorVM,
+                HexEditorVM,
+                CodeEditorVM,
+                JournalEditorVM,
+                VisualEditorVM,
+                AnimationToolVM,
+                AudioToolVM,
+                ImporterToolVM,
+                CR2WToTextToolVM,
+                GameDebuggerToolVM,
+                MenuCreatorToolVM,
+                PluginManagerVM,
+                RadishToolVM,
+                WccToolVM,
+                MimicsToolVM,
+                CR2WEditorVM
+            };
         }
         #endregion constructors
 
@@ -242,7 +265,10 @@ namespace WolvenKit.ViewModels
         /// </summary>
         public ICommand ShowCR2WEditorCommand { get; private set; }
         private bool CanShowCR2WEditor() => true;
-        private void ExecuteCR2WEditor() => CR2WEditorVM.IsVisible = !CR2WEditorVM.IsVisible;
+        private void ExecuteShowCR2WEditor()
+        {
+            CR2WEditorVM.IsVisible = !CR2WEditorVM.IsVisible;
+        }
 
 
         /// <summary>
@@ -510,31 +536,7 @@ namespace WolvenKit.ViewModels
         /// <summary>
         /// Gets an enumeration of all currently available tool window viewmodels.
         /// </summary>
-        public IEnumerable<ToolViewModel> Tools => _tools ??= new ToolViewModel[]
-        {
-            Log,
-            ProjectExplorer,
-            PropertiesViewModel,
-            ImportViewModel,
-            AssetBrowserVM,
-            BulkEditorVM,
-            CsvEditorVM,
-            HexEditorVM,
-            CodeEditorVM,
-            JournalEditorVM,
-             VisualEditorVM,
-             AnimationToolVM,
-             AudioToolVM,
-             ImporterToolVM,
-             CR2WToTextToolVM,
-             GameDebuggerToolVM,
-             MenuCreatorToolVM,
-             PluginManagerVM,
-             RadishToolVM,
-             WccToolVM,
-             MimicsToolVM,
-            CR2WEditorVM
-        };
+        public ObservableCollection<ToolViewModel> Tools { get; set; }
 
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.

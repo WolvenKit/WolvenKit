@@ -247,7 +247,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\AvalonDock.Layout.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Images\git.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
