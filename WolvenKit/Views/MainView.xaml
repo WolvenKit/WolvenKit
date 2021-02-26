@@ -20,6 +20,7 @@
                    xmlns:csveditor="clr-namespace:WolvenKit.Views.CsvEditor"
                    xmlns:codeeditorz="clr-namespace:WolvenKit.Views.CodeEditor"
                    xmlns:bulkeditor="clr-namespace:WolvenKit.Views.BulkEditor"
+                   xmlns:cr2weditor="clr-namespace:WolvenKit.Views.Editors.CR2WEditor"
                    IsVisibleChanged="UserControl_IsVisibleChanged_1"
                    >
 
@@ -181,7 +182,13 @@
                             <pluginmanagerz:PluginManagerView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.PluginManagerTemplate>
-          
+                    
+                    <!-- ProjectExplorerView -->
+                    <ad:PanesTemplateSelector.CR2WEditorTemplate>
+                        <DataTemplate>
+                            <cr2weditor:CR2WEditorView/>
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.CR2WEditorTemplate>
 
                 </ad:PanesTemplateSelector>
             </DockingManager.LayoutItemTemplateSelector>

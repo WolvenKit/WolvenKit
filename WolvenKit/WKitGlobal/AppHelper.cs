@@ -53,6 +53,10 @@ namespace WolvenKit.WKitGlobal
             //-- Category : AudioTool
             viewModelLocator.Register(typeof(Views.AudioTool.AudioToolView), typeof(ViewModels.AudioTool.AudioToolViewModel));
 
+
+            //-- Category : CR2WEditor
+            viewModelLocator.Register(typeof(Views.Editors.CR2WEditor.CR2WEditorView), typeof(ViewModels.Editors.CR2WEditor.CR2WEditorViewModel));
+
             //-- Category : CodeEditor
             viewModelLocator.Register(typeof(Views.CodeEditor.CodeEditorView), typeof(ViewModels.CodeEditor.CodeEditorViewModel));
 
