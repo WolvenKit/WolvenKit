@@ -38,6 +38,7 @@ using WolvenKit.ViewModels.PluginManager;
 using WolvenKit.ViewModels.ImporterTool;
 using WolvenKit.ViewModels.Tools.MenuTool;
 using WolvenKit.ViewModels.AnimationTool;
+using WolvenKit.ViewModels.Editors.CR2WEditor;
 
 namespace WolvenKit.ViewModels
 {
