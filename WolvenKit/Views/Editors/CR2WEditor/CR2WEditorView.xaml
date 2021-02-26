@@ -19,20 +19,20 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0">
-            <hc:TabControl>
-                <hc:TabItem MinWidth="150" Width="150" Header="CHUNKS">
+            <hc:TabControl IsTabFillEnabled="True" ShowCloseButton="False" IsAnimationEnabled="True">
+                <hc:TabItem Header="CHUNKS">
                     
                 </hc:TabItem>
 
-                <hc:TabItem  MinWidth="150" Width="150" Header="IMPORTS">
+                <hc:TabItem  Header="IMPORTS">
 
                 </hc:TabItem>
 
-                <hc:TabItem  MinWidth="150" Width="150" Header="BUFFERS">
+                <hc:TabItem Header="BUFFERS">
 
                 </hc:TabItem>
 
-                <hc:TabItem MinWidth="150" Width="150" Header="PREVIEW">
+                <hc:TabItem Header="PREVIEW">
 
                 </hc:TabItem>
             </hc:TabControl>
