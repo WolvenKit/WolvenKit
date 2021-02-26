@@ -21,19 +21,27 @@
         <Grid Grid.Column="0">
             <hc:TabControl IsTabFillEnabled="True" ShowCloseButton="False" IsAnimationEnabled="True">
                 <hc:TabItem Header="CHUNKS">
-                    
+                    <TreeView>
+                        
+                    </TreeView>
                 </hc:TabItem>
 
                 <hc:TabItem  Header="IMPORTS">
+                    <TreeView>
 
+                    </TreeView>
                 </hc:TabItem>
 
                 <hc:TabItem Header="BUFFERS">
+                    <TreeView>
 
+                    </TreeView>
                 </hc:TabItem>
 
                 <hc:TabItem Header="PREVIEW">
+                    <TreeView>
 
+                    </TreeView>
                 </hc:TabItem>
             </hc:TabControl>
         </Grid>
