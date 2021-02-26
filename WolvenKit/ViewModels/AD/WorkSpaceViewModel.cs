@@ -666,12 +666,12 @@ namespace WolvenKit.ViewModels
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         ///
-        private AnimationTool.AnimsViewModel _MimicsToolVM = null;
-        public AnimsViewModel MimicsToolVM
+        private AnimationTool.MimicsViewModel _MimicsToolVM = null;
+        public MimicsViewModel MimicsToolVM
         {
             get
             {
-                _MimicsToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AnimsViewModel>();
+                _MimicsToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<MimicsViewModel>();
                 _MimicsToolVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
                 return _MimicsToolVM;
             }
@@ -810,7 +810,7 @@ namespace WolvenKit.ViewModels
             {
 
                 _AssetBrowserViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AssetBrowserViewModel>();
-                //_AssetBrowserViewModel.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _AssetBrowserViewModel.PropertyChanged += OnProjectExplorerOnPropertyChanged;
                 return _AssetBrowserViewModel;
             }
         }

@@ -19,13 +19,23 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0">
-            <hc:ButtonGroup>
-                <RadioButton Content="CHUNKS" IsChecked="True"/>
-                <RadioButton Content="CHUNKS"/>
-                <RadioButton Content="CHUNKS"/>
-                <RadioButton Content="CHUNKS"/>
-                <RadioButton Content="CHUNKS"/>
-            </hc:ButtonGroup>
+            <hc:TabControl>
+                <hc:TabItem MinWidth="150" Width="150" Header="CHUNKS">
+                    
+                </hc:TabItem>
+
+                <hc:TabItem  MinWidth="150" Width="150" Header="IMPORTS">
+
+                </hc:TabItem>
+
+                <hc:TabItem  MinWidth="150" Width="150" Header="BUFFERS">
+
+                </hc:TabItem>
+
+                <hc:TabItem MinWidth="150" Width="150" Header="PREVIEW">
+
+                </hc:TabItem>
+            </hc:TabControl>
         </Grid>
 
         <Grid Grid.Column="1">
