@@ -15,6 +15,7 @@ using Catel;
 using HandyControl.Data;
 using Orc.Notifications;
 using WolvenKit.Commands;
+using WolvenKit.Controllers;
 
 namespace WolvenKit.ViewModels.AssetBrowser
 {
@@ -178,7 +179,10 @@ namespace WolvenKit.ViewModels.AssetBrowser
             PreviewVisible = false;
 
             IsLoaded = true;
-            _notificationService.ShowNotification("Asset Browser", $"Asset Browser is initialized");
+            if (MainController.GetGame() is not MockGameController)
+            {
+                _notificationService.ShowNotification("Asset Browser", $"Asset Browser is initialized");
+            }
         }
 
         private void PerformSearch(string query)

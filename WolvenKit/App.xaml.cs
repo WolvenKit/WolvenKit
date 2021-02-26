@@ -1,4 +1,4 @@
-﻿using Catel.IoC;
+using Catel.IoC;
 using Catel.Logging;
 using Catel.Reflection;
 using Catel.Windows;
@@ -79,7 +79,7 @@ namespace WolvenKit
             themehelper.InitializeThemeHelper();
             await apphelper.InitializeShell();
             apphelper.ShowFirstTimeSetup();
-            discordhelper.InitDiscordRPC();  
+            discordhelper.InitDiscordRPC();
 
 
 
@@ -88,17 +88,23 @@ namespace WolvenKit
 
 
 
-            base.OnStartup(e); 
+            base.OnStartup(e);
             NNViewRegistrar.RegisterSplat();
 
+            if (MainWindow != null)
+            {
+                MainWindow.Closing += OnClosing;
+            }
 
         }
 
-
-
-        protected override void OnExit(ExitEventArgs e)
+        // TODO: add closing logic here for now since MainViewModel.OnClosing isn't realiable. Investigate this
+        private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            base.OnExit(e);
-        } 
+            var x = AppHelper.GlobalShell;
+            var y = MainWindow;
+
+
+        }
     }
 }

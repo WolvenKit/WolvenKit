@@ -154,7 +154,7 @@ namespace WolvenKit.Views
 
         private bool CanSaveLayout(object parameter) => true;
 
-        private void OnSaveLayout(object parameter = null)
+        internal void OnSaveLayout(object parameter = null)
 		{
             var layoutSerializer = new XmlLayoutSerializer(dockManager);
             layoutSerializer.Serialize(AvalonDockConfigPath);

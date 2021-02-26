@@ -160,7 +160,6 @@ namespace WolvenKit.ViewModels
                 CR2WEditorVM
             };
 
-            this.ClosingAsync += OnClosingAsync;
             this.PropertyChanged += OnPropertyChanged;
         }
 
@@ -235,19 +234,13 @@ namespace WolvenKit.ViewModels
             {
                 
             }
-
-            switch (e.PropertyName)
-            {
-                case "IsClosing":
-                    
-                    break;
-                default:
-                    break;
-            }
         }
-        private Task OnClosingAsync(object sender, EventArgs e)
+        
+        protected override Task OnClosingAsync()
         {
-            return Task.CompletedTask;
+            _projectManager.ProjectActivationAsync -= OnProjectActivationAsync;
+
+            return base.OnClosingAsync();
         }
 
         protected override async Task InitializeAsync()
@@ -255,27 +248,6 @@ namespace WolvenKit.ViewModels
             _projectManager.ProjectActivationAsync += OnProjectActivationAsync;
 
             await base.InitializeAsync();
-        }
-
-        protected override Task OnClosedAsync(bool? result)
-        {
-            return base.OnClosedAsync(result);
-        }
-
-        protected override Task OnClosingAsync()
-        {
-            _projectManager.ProjectActivationAsync -= OnProjectActivationAsync;
-            RaisePropertyChanged(nameof(SaveLayout));
-
-            return base.OnClosingAsync();
-        }
-
-        protected override Task CloseAsync()
-        {
-            // TODO: Unsubscribe from events
-
-
-            return base.CloseAsync();
         }
         #endregion
 
@@ -540,8 +512,6 @@ namespace WolvenKit.ViewModels
         public event EventHandler ActiveDocumentChanged;
 
         public EditorProject EditorProject { get; set; }
-
-        public bool SaveLayout { get; set; }
 
         /// <summary>
         /// Gets/Sets the currently active document.
