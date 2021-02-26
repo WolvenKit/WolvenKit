@@ -159,7 +159,13 @@ namespace WolvenKit.ViewModels
                 MimicsToolVM,
                 CR2WEditorVM
             };
+
+            this.ClosingAsync += OnClosingAsync;
+            this.PropertyChanged += OnPropertyChanged;
         }
+
+        
+
         #endregion constructors
 
         #region init
@@ -222,11 +228,38 @@ namespace WolvenKit.ViewModels
             }
         }
 
+
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (IsSaving || IsCanceling || IsClosing || IsClosed)
+            {
+                
+            }
+
+            switch (e.PropertyName)
+            {
+                case "IsClosing":
+                    
+                    break;
+                default:
+                    break;
+            }
+        }
+        private Task OnClosingAsync(object sender, EventArgs e)
+        {
+            return Task.CompletedTask;
+        }
+
         protected override async Task InitializeAsync()
         {
             _projectManager.ProjectActivationAsync += OnProjectActivationAsync;
 
             await base.InitializeAsync();
+        }
+
+        protected override Task OnClosedAsync(bool? result)
+        {
+            return base.OnClosedAsync(result);
         }
 
         protected override Task OnClosingAsync()

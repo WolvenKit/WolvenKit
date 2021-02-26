@@ -88,7 +88,8 @@ namespace WolvenKit.Views
 
 		private bool CanLoadLayout(object parameter) => LayoutLoader.CanLoadLayout();
 
-        private void OnLayoutLoaded_Event(object sender, LayoutLoadedEventArgs layoutLoadedEvent) =>
+        private void OnLayoutLoaded_Event(object sender, LayoutLoadedEventArgs layoutLoadedEvent)
+        {
             Application.Current.Dispatcher.Invoke(() =>
             {
                 try
@@ -127,13 +128,16 @@ namespace WolvenKit.Views
                     //    .SafeExecute(true);
                 }
             }, System.Windows.Threading.DispatcherPriority.Background);
+        }
 
         private async void OnLoadLayoutAsync(object parameter = null)
 		{
 			if (this.DataContext is WorkSpaceViewModel wspace)
-				wspace.CloseAllDocuments();
+            {
+                wspace.CloseAllDocuments();
+            }
 
-			var myApp = (App)Application.Current;
+            var myApp = (App)Application.Current;
 
             var LoaderResult = await this.LayoutLoader.GetLayoutString(OnLayoutLoaded_Event);
 
