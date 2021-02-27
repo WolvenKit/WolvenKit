@@ -1,10 +1,10 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
 using Orc.ProjectManagement;
 
 namespace WolvenKit.Model.ProjectManagement
 {
-    public class WkitProjectValidator : ProjectValidatorBase
+    public class WolvenKitProjectValidator : ProjectValidatorBase
     {
         #region IProjectValidator 
         public override Task<bool> CanStartLoadingProjectAsync(string location)

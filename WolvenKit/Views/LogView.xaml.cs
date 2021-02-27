@@ -95,5 +95,6 @@ namespace WolvenKit.Views
                 WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Log View");
             }
         }
+
     }
 }

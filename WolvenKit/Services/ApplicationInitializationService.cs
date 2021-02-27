@@ -158,18 +158,18 @@ namespace WolvenKit.Services
 
         private void RegisterTypes()
         {
-
-
-
             // project management
+            _serviceLocator.RegisterType<IProjectRefresherSelector, MyProjectRefresherSelector>();
+            _serviceLocator.RegisterType<IProjectRefresher, WolvenKitProjectRefresher>();
+
             _serviceLocator.RegisterType<IProjectSerializerSelector, ProjectSerializerSelector>();  //TODO: not needed?
             //_serviceLocator.RegisterType<IMainWindowTitleService, MainWindowTitleService>();      //TODO: 
             //_serviceLocator.RegisterType<IProjectValidator, WkitProjectValidator>();
             _serviceLocator.RegisterType<ISaveProjectChangesService, SaveProjectChangesService>();
             _serviceLocator.RegisterType<IInitialProjectLocationService, Model.ProjectManagement.InitialProjectLocationService>();
             _serviceLocator.RegisterType<IProjectInitializer, FileProjectInitializer>();
-            _serviceLocator.RegisterType<IProjectRefresherSelector, MyProjectRefresherSelector>();
-            _serviceLocator.RegisterType<IProjectRefresher, FileProjectRefresher>();
+
+            
 
             _serviceLocator.RegisterTypeAndInstantiate<ProjectManagementCloseApplicationWatcher>();
 

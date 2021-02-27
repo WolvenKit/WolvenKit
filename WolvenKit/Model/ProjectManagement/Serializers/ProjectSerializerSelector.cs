@@ -1,17 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ProjectSerializerSelector.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
+using System;
+using Catel;
+using Catel.IoC;
+using Orc.ProjectManagement;
 
 namespace WolvenKit.Model.ProjectManagement
 {
-    using System;
-    using Catel;
-    using Catel.IoC;
-    using Orc.ProjectManagement;
-
     public class ProjectSerializerSelector : IProjectSerializerSelector
     {
         #region Fields
@@ -28,15 +21,10 @@ namespace WolvenKit.Model.ProjectManagement
         #endregion
 
         #region Methods
-        public IProjectReader GetReader(string location)
-        {
-            return _typeFactory.CreateInstance<ProjectReader>();
-        }
+        public IProjectReader GetReader(string location) => _typeFactory.CreateInstance<ProjectReader>();
 
-        public IProjectWriter GetWriter(string location)
-        {
-            return _typeFactory.CreateInstance<ProjectWriter>();
-        }
+        public IProjectWriter GetWriter(string location) => _typeFactory.CreateInstance<ProjectWriter>();
+
         #endregion
     }
 }
