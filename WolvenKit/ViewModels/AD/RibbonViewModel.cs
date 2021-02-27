@@ -52,7 +52,6 @@ namespace WolvenKit.ViewModels
             _uiVisualizerService = uiVisualizerService;
             _settingsManager = settingsManager;
 
-            Command1 = new RelayCommand(RunCommand1, CanRunCommand1);
             ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
 
 
@@ -124,20 +123,19 @@ namespace WolvenKit.ViewModels
         private bool CanViewSelected(object view) => true;
         private void ExecuteViewSelected(object viewmodel)
         {
-            if (!(viewmodel is Tuple<PaneViewModel, bool> tuple)) return;
+            if (viewmodel is not Tuple<PaneViewModel, bool> tuple)
+            {
+                return;
+            }
 
             if (tuple.Item1 is ProjectExplorerViewModel)
+            {
                 ProjectExplorerContextualTabGroupVisibility = tuple.Item2
                     ? ERibbonContextualTabGroupVisibility.Visible
                     : ERibbonContextualTabGroupVisibility.Collapsed;
+            }
         }
 
-        public ICommand Command1 { get; }
-        private bool CanRunCommand1() => true;
-        private void RunCommand1()
-        {
-
-        }
         #endregion
 
         #region methods
@@ -145,9 +143,11 @@ namespace WolvenKit.ViewModels
         {
             await base.InitializeAsync();
 
-            // TODO: Write initialization code here and subscribe to events
-            var commandManager = ServiceLocator.Default.ResolveType<ICommandManager>();
-            commandManager.RegisterCommand(AppCommands.Application.ViewSelected, ViewSelectedCommand, this);
+            // Write initialization code here and subscribe to events
+
+
+            ServiceLocator.Default.ResolveType<ICommandManager>()
+                .RegisterCommand(AppCommands.Application.ViewSelected, ViewSelectedCommand, this);
         }
 
         protected override Task CloseAsync()

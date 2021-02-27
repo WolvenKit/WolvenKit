@@ -159,8 +159,6 @@ namespace WolvenKit.ViewModels
                 MimicsToolVM,
                 CR2WEditorVM
             };
-
-            this.PropertyChanged += OnPropertyChanged;
         }
 
         
@@ -215,7 +213,7 @@ namespace WolvenKit.ViewModels
         }
 
 
-        private void OnProjectExplorerOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        private static void OnToolViewModelPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
             // executes a global command that can be subscribed to from any viewmodel
             // passes the currently active viewmodel
@@ -224,15 +222,6 @@ namespace WolvenKit.ViewModels
                 ServiceLocator.Default.ResolveType<ICommandManager>()
                     .GetCommand(AppCommands.Application.ViewSelected)
                     .SafeExecute(new Tuple<PaneViewModel, bool>(panevm, panevm.IsActive));
-            }
-        }
-
-
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (IsSaving || IsCanceling || IsClosing || IsClosed)
-            {
-                
             }
         }
 
@@ -550,7 +539,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _CR2WEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<CR2WEditorViewModel>();
-                _CR2WEditorVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _CR2WEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _CR2WEditorVM;
             }
         }
@@ -564,7 +553,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _CodeEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<CodeEditorViewModel>();
-                _CodeEditorVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _CodeEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _CodeEditorVM;
             }
         }
@@ -579,7 +568,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _BulkEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<BulkEditor.BulkEditorViewModel>();
-                _BulkEditorVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _BulkEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _BulkEditorVM;
             }
         }
@@ -593,7 +582,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _CsvEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<CsvEditorViewModel>();
-                _CsvEditorVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _CsvEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _CsvEditorVM;
             }
         }
@@ -607,7 +596,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _HexEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<HexEditorViewModel>();
-                _HexEditorVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _HexEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _HexEditorVM;
             }
         }
@@ -621,7 +610,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _AudioToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AudioToolViewModel>();
-                _AudioToolVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _AudioToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _AudioToolVM;
             }
         }
@@ -635,7 +624,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _JournalEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<JournalEditorViewModel>();
-                _JournalEditorVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _JournalEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _JournalEditorVM;
             }
         }
@@ -649,7 +638,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _VisualEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<VisualEditorViewModel>();
-                _VisualEditorVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _VisualEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _VisualEditorVM;
             }
         }
@@ -663,7 +652,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _AnimationToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AnimsViewModel>();
-                _AnimationToolVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _AnimationToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _AnimationToolVM;
             }
         }
@@ -678,7 +667,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _MimicsToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<MimicsViewModel>();
-                _MimicsToolVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _MimicsToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _MimicsToolVM;
             }
         }
@@ -694,7 +683,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _ImporterToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ImporterToolViewModel>();
-                _ImporterToolVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _ImporterToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _ImporterToolVM;
             }
         }
@@ -708,7 +697,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _CR2WToTextToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<CR2WToTextToolViewModel>();
-                _CR2WToTextToolVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _CR2WToTextToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _CR2WToTextToolVM;
             }
         }
@@ -722,7 +711,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _GameDebuggerToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<GameDebuggerToolViewModel>();
-                _GameDebuggerToolVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _GameDebuggerToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _GameDebuggerToolVM;
             }
         }
@@ -736,7 +725,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _MenuCreatorToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<MenuCreatorToolViewModel>();
-                _MenuCreatorToolVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _MenuCreatorToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _MenuCreatorToolVM;
             }
         }
@@ -750,7 +739,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _PluginManagerVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<PluginManagerViewModel>();
-                _PluginManagerVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _PluginManagerVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _PluginManagerVM;
             }
         }
@@ -764,7 +753,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _RadishToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<RadishToolViewModel>();
-                _RadishToolVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _RadishToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _RadishToolVM;
             }
         }
@@ -778,7 +767,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _WccToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<WccToolViewModel>();
-                _WccToolVM.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _WccToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _WccToolVM;
             }
         }
@@ -801,7 +790,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 _projectExplorerViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectExplorerViewModel>();
-                _projectExplorerViewModel.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _projectExplorerViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _projectExplorerViewModel;
             }
         }
@@ -816,7 +805,7 @@ namespace WolvenKit.ViewModels
             {
 
                 _AssetBrowserViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AssetBrowserViewModel>();
-                _AssetBrowserViewModel.PropertyChanged += OnProjectExplorerOnPropertyChanged;
+                _AssetBrowserViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _AssetBrowserViewModel;
             }
         }

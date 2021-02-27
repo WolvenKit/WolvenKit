@@ -1,11 +1,3 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Project.cs" company="WildGums"> //TODO
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -34,9 +26,9 @@ namespace WolvenKit.Model
 
         public EditorProjectData Data;
 
-        public abstract void Save(String path);
+        public abstract void Save(string path);
 
-        public abstract void Load(String path);
+        public abstract void Load(string path);
 
         #region properties
         [XmlIgnore]

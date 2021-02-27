@@ -79,6 +79,8 @@ namespace WolvenKit
             public const string CollapseAll = "ProjectExplorer.CollapseAll";
             public const string Expand = "ProjectExplorer.Expand";
             public const string Collapse = "ProjectExplorer.Collapse";
+
+            public const string Refresh = "ProjectExplorer.Refresh";
         }
 
 

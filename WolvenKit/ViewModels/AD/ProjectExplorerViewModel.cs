@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -14,6 +15,7 @@ using Catel.Services;
 using Catel.Threading;
 using Orc.FileSystem;
 using Orc.ProjectManagement;
+using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.ViewModels
 {
@@ -43,10 +45,11 @@ namespace WolvenKit.ViewModels
         private readonly IMessageService _messageService;
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
+        private readonly ICommandManager _commandManager;
 
 
         private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
-
+        private readonly ConcurrentDictionary<ulong, FileSystemInfoModel> _flatNodeDictionary;
 
         #endregion
 
@@ -55,27 +58,30 @@ namespace WolvenKit.ViewModels
         public ProjectExplorerViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
-            IMessageService messageService
+            IMessageService messageService,
+            ICommandManager commandManager
             ) : base(ToolTitle)
         {
             Argument.IsNotNull(() => projectManager);
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => loggerService);
+            Argument.IsNotNull(() => commandManager);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
+            _commandManager = commandManager;
 
             _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
             _projectManager.ProjectRefreshedAsync += ProjectManagerOnProjectRefreshedAsync;
 
-
             SetupCommands();
             SetupToolDefaults();
 
-
+            _flatNodeDictionary = new ConcurrentDictionary<ulong, FileSystemInfoModel>();
             Treenodes = new BindingList<FileSystemInfoModel>();
             Treenodes.ListChanged += new ListChangedEventHandler(Treenodes_ListChanged);
+
         }
 
         
@@ -84,7 +90,7 @@ namespace WolvenKit.ViewModels
 
         #region properties
 
-        private EditorProject ActiveEditorProject => _projectManager.ActiveProject as EditorProject;
+        
 
         private BindingList<FileSystemInfoModel> _treenodes = null;
         public BindingList<FileSystemInfoModel> Treenodes
@@ -116,13 +122,69 @@ namespace WolvenKit.ViewModels
             }
         }
 
-        #region SelectedItem
-
-
-        #endregion
         #endregion
 
         #region commands
+
+        /// <summary>
+        /// Refresh a node in the ProjectExplorer tree with a given physical path
+        /// </summary>
+        public ICommand RefreshNodeCommand { get; private set; }
+        private bool CanRefreshNode(DirectoryInfo path) => true;
+        private void ExecuteRefreshNode(DirectoryInfo dir)
+        {
+            // get parents
+            var dirlist = new List<DirectoryInfo>();
+            var currentdir = dir;
+            while (currentdir.Parent != null && currentdir.FullName != ActiveMod.FileDirectory)
+            {
+                dirlist.Add(currentdir);
+                currentdir = currentdir.Parent;
+            }
+            dirlist.Reverse();
+
+            if (dirlist.Count < 1)
+            {
+                return;
+            }
+
+            // descend down and update last
+            var m = Treenodes.FirstOrDefault(_ => _.IsDirectory && _.FullName == dirlist.First().FullName);
+            if (m == null)
+            {
+                return;
+            }
+
+            m.IsExpanded = true;
+            for (var i = 1; i < dirlist.Count; i++)
+            {
+                var node = dirlist[i];
+                var x = m.Children.FirstOrDefault(_ => _.IsDirectory && _.FullName == node.FullName);
+                if (x == null)
+                {
+                    if (i < dirlist.Count - 1)
+                    {
+                        m.ReloadSync();
+                        x = m.Children.FirstOrDefault(_ => _.IsDirectory && _.FullName == node.FullName);
+                        if (x == null)
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                m = x;
+                if (!m.IsExpanded)
+                {
+                    m.IsExpanded = true;
+                }
+            }
+
+            m?.RaiseRequestRefresh();
+        }
 
         #region general commands
 
@@ -253,12 +315,14 @@ namespace WolvenKit.ViewModels
                     //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
                     //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
                 }
-
-                SelectedItem.RaiseRequestRefresh();
             }
             catch (Exception)
             {
                 MainController.LogString("Failed to delete " + fullpath + "!\r\n", Common.Services.Logtype.Error);
+            }
+            finally
+            {
+                SelectedItem.RaiseRequestRefresh();
             }
         }
 
@@ -283,7 +347,7 @@ namespace WolvenKit.ViewModels
 
                 if (File.Exists(newfullpath))
                     return;
-                    
+
                 try
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
@@ -295,11 +359,14 @@ namespace WolvenKit.ViewModels
                     {
                         File.Move(filename, newfullpath);
                     }
-                    SelectedItem.RaiseRequestRefresh();
                 }
                 catch
                 {
-                    throw new NotImplementedException();
+
+                }
+                finally
+                {
+                    SelectedItem.RaiseRequestRefresh();
                 }
                 
             });
@@ -435,7 +502,10 @@ namespace WolvenKit.ViewModels
         private void RepopulateTreeView()
         {
             if (ActiveMod == null)
+            {
                 return;
+            }
+
             Treenodes.Clear();
             var fileDirectoryInfo = new DirectoryInfo(ActiveMod.FileDirectory);
             foreach (var fileSystemInfo in fileDirectoryInfo.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly))
@@ -448,7 +518,9 @@ namespace WolvenKit.ViewModels
         {
             var activeProject = args.NewProject;
             if (activeProject == null)
+            {
                 return TaskHelper.Completed;
+            }
 
             RepopulateTreeView();
 
@@ -486,6 +558,9 @@ namespace WolvenKit.ViewModels
             CollapseAllCommand = new RelayCommand(ExecuteCollapseAll, CanCollapseAll);
             ExpandCommand = new RelayCommand(ExecuteExpand, CanExpand);
             CollapseCommand = new RelayCommand(ExecuteCollapse, CanCollapse);
+
+            RefreshNodeCommand = new DelegateCommand<DirectoryInfo>(ExecuteRefreshNode, CanRefreshNode);
+            _commandManager.RegisterCommand(AppCommands.ProjectExplorer.Refresh, RefreshNodeCommand, this);
         }
 
         /// <summary>
@@ -602,13 +677,8 @@ namespace WolvenKit.ViewModels
                 };
                 await Task.Run(() => MainController.Get().WccHelper.RunCommand(cook));
             }
-#pragma warning disable CS0169 // ~~~[[maybe_unused]] c++ compiler attribute
-#pragma warning disable CS0168
-#pragma warning disable IDE0051
-            catch (Exception ex)
-#pragma warning restore CS0169 // ~~~[[maybe_unused]] c++ compiler attribute
-#pragma warning restore CS0168
-#pragma warning restore IDE0051
+
+            catch (Exception)
             {
                 MainController.LogString("Error cooking files.", Logtype.Error);
             }

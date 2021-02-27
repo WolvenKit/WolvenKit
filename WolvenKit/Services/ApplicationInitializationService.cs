@@ -149,6 +149,7 @@ namespace WolvenKit.Services
             _commandManager.CreateCommand(AppCommands.ProjectExplorer.Expand);
             _commandManager.CreateCommand(AppCommands.ProjectExplorer.CollapseAll);
             _commandManager.CreateCommand(AppCommands.ProjectExplorer.Collapse);
+            _commandManager.CreateCommand(AppCommands.ProjectExplorer.Refresh);
 
 
             _commandManager.CreateCommand(AppCommands.Application.ViewSelected);
@@ -165,11 +166,10 @@ namespace WolvenKit.Services
             //_serviceLocator.RegisterType<IMainWindowTitleService, MainWindowTitleService>();      //TODO: 
             //_serviceLocator.RegisterType<IProjectValidator, WkitProjectValidator>();
             _serviceLocator.RegisterType<ISaveProjectChangesService, SaveProjectChangesService>();
-            _serviceLocator.RegisterType<IInitialProjectLocationService, WolvenKit.Model.ProjectManagement.InitialProjectLocationService>();
-
+            _serviceLocator.RegisterType<IInitialProjectLocationService, Model.ProjectManagement.InitialProjectLocationService>();
             _serviceLocator.RegisterType<IProjectInitializer, FileProjectInitializer>();
             _serviceLocator.RegisterType<IProjectRefresherSelector, MyProjectRefresherSelector>();
-
+            _serviceLocator.RegisterType<IProjectRefresher, FileProjectRefresher>();
 
             _serviceLocator.RegisterTypeAndInstantiate<ProjectManagementCloseApplicationWatcher>();
 

@@ -12,6 +12,7 @@ using WolvenKit.Model;
 using WolvenKit.Common.Services;
 using Catel.Services;
 using Catel;
+using Catel.MVVM;
 using HandyControl.Data;
 using Orc.Notifications;
 using WolvenKit.Commands;
@@ -249,25 +250,51 @@ namespace WolvenKit.ViewModels.AssetBrowser
         private static void AddToMod(IGameFile file)
         {
             var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
-            var project = ((EditorProject) (pm.ActiveProject));
+            var project = (EditorProject)pm.ActiveProject;
             switch (project.GameType)
             {
                 case GameType.Witcher3:
                 {
-                    var witcherProject = project as Tw3Project;
-                    var diskPath = Path.Combine(witcherProject.ModCookedDirectory, file.Name);
-                    Directory.CreateDirectory(Path.GetDirectoryName(diskPath));
-                    using var fs = new FileStream(diskPath, FileMode.Create);
-                    file.Extract(fs);
+                    if (project is Tw3Project witcherProject)
+                    {
+                        var diskPathInfo = new FileInfo(Path.Combine(witcherProject.ModCookedDirectory, file.Name));
+                        if (diskPathInfo.Directory == null)
+                        {
+                            break;
+                        }
+
+                        Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+                        using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
+                        file.Extract(fs);
+
+                        // refresh project Explorer
+                        ServiceLocator.Default.ResolveType<ICommandManager>()
+                            .GetCommand(AppCommands.ProjectExplorer.Refresh)
+                            .SafeExecute(diskPathInfo.Directory);
+                    }
                     break;
                 }
                 case GameType.Cyberpunk2077:
                 {
-                    var cyberpunkProject = project as Cp77Project;
-                    var diskPath = Path.Combine(cyberpunkProject.ModDirectory, file.Name);
-                    Directory.CreateDirectory(Path.GetDirectoryName(diskPath));
-                    using var fs = new FileStream(diskPath, FileMode.Create);
-                    file.Extract(fs);
+                    if (project is Cp77Project cyberpunkProject)
+                    {
+                        var diskPathInfo = new FileInfo(Path.Combine(cyberpunkProject.ModDirectory, file.Name));
+                        if (diskPathInfo.Directory == null)
+                        {
+                            break;
+                        }
+
+                        Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+                        using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
+                        file.Extract(fs);
+
+                        // refresh project Explorer
+                        ServiceLocator.Default.ResolveType<ICommandManager>()
+                            .GetCommand(AppCommands.ProjectExplorer.Refresh)
+                            .SafeExecute(diskPathInfo.Directory);
+                    }
+                    
+
                     break;
                 }
                 default:
