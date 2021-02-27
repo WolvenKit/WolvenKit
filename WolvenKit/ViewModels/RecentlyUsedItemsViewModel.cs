@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RecentlyUsedFilesViewModel.cs" company="WildGums">
 //   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
 // </copyright>
@@ -9,13 +9,23 @@ namespace WolvenKit.ViewModels
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics;
+    using System.Drawing;
+    using System.IO;
     using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Threading;
     using Catel;
+    using Catel.Data;
+    using Catel.IoC;
     using Catel.MVVM;
     using Catel.Services;
     using Orc.FileSystem;
     using Orchestra.Models;
     using Orchestra.Services;
+    using WolvenKit.WKitGlobal;
+    using static WolvenKit.WKitGlobal.ProjectHelper;
 
     public class RecentlyUsedItemsViewModel : ViewModelBase
     {
@@ -108,12 +118,86 @@ namespace WolvenKit.ViewModels
 
         private void UpdateRecentlyUsedItems()
         {
-            RecentlyUsedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.Items);            
+            RecentlyUsedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.Items);
+            ConvertRecentProjects();
         }
 
         private void UpdatePinnedItem()
         {
             PinnedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.PinnedItems);
         }
+
+        public ObservableCollection<FancyProjectObject> BFancyProjectObjects = new ObservableCollection<FancyProjectObject>();
+        public ObservableCollection<FancyProjectObject> FancyProjects { get { return BFancyProjectObjects; }
+
+            set
+            {
+                BFancyProjectObjects = value;
+            }
+
+        }
+        public void ConvertRecentProjects() // Converts Recent projects for the homepage.
+        {
+            var RCUI = RecentlyUsedItems;
+            foreach (var item in RCUI)
+            {
+                var fi = new FileInfo(item.Name);
+
+                var n = item.Name;
+                var cd = item.DateTime;
+                var p = item.Name;
+
+                FancyProjectObject NewItem;
+                if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.cpmodproj.ToString())
+                {
+
+                    NewItem = new FancyProjectObject(fi.Name, cd, "Cyberpunk 2077", p, "pack://application:,,,/Resources/Icons/thankyoumoonded.png");
+                    Application.Current.Dispatcher.BeginInvoke(
+                                            DispatcherPriority.Background,
+                                            new Action(() =>
+                                            {
+                                                FancyProjects.Add(NewItem);
+                                            }));
+                }
+                if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.w3modproj.ToString())
+                {
+                    NewItem = new FancyProjectObject(n, cd, "The Witcher 3", p, "pack://application:,,,/Resources/Icons/tw3proj.png");
+                    Application.Current.Dispatcher.BeginInvoke(
+                                           DispatcherPriority.Background,
+                                           new Action(() =>
+                                           {
+                                               FancyProjects.Add(NewItem);
+                                           }));
+                }
+            }
+        }
+
+        public string VersionWkit { get { return GetAssemblyVersion(); } }
+        public string GetAssemblyVersion()
+        {
+            return GetType().Assembly.GetName().Version.ToString();
+        }
+
+
+        public class FancyProjectObject : ObservableObject
+        {
+            public string Name { get; set; }
+            public DateTime CreationDate { get; set; }
+            public DateTime LastEditDate { get; set; }
+            public string Type { get; set; }
+            public string ProjectPath { get; set; }
+            public string Image { get; set; }
+
+            public FancyProjectObject(string name, DateTime createdate,string type, string path ,string image)
+            {
+                Name = name;
+                CreationDate = createdate;
+                Type = type;
+                ProjectPath = path;
+                Image = image;
+            }
+        }
     }
+
+   
 }

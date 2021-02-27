@@ -12,7 +12,7 @@ namespace WolvenKit.WKitGlobal
         public static bool DiscordRPCEnabled = true;
         public static bool DiscordRPCInitizialized = false;
 
-        public static void InitDiscordRPC()
+        public static void InitializeDiscordRPC()
         {
             
             if (DiscordRPCEnabled == true && DiscordRPCInitizialized == false)

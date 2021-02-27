@@ -68,12 +68,12 @@ namespace WolvenKit
             await AppHelper.InitializeShell();
             AppHelper.ShowFirstTimeSetup();
             Log.Info("Initializing Discord RPC");
-            DiscordHelper.InitDiscordRPC();
+            DiscordHelper.InitializeDiscordRPC();
             Log.Info("Calling base.OnStartup");
             base.OnStartup(e);
             Log.Info("Initializing NodeNetwork");
             NNViewRegistrar.RegisterSplat();
-
+    
 
 
 

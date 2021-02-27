@@ -229,8 +229,8 @@ namespace WolvenKit.WKitGlobal
             ShellWindow sh = (ShellWindow)shellService.Shell;
             GlobalShell = sh;
             sh.MinWidth = 1590;
-            sh.MinHeight = 810;
-            sh.Height = 810;
+            sh.MinHeight = 830;
+            sh.Height = 830;
             sh.Width = 1590;
             sh.WindowState = WindowState.Normal;
             sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;

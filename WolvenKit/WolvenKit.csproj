@@ -22,6 +22,7 @@
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
+    <Version>0.7.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
@@ -36,6 +37,8 @@
   <ItemGroup>
     <None Remove="Resources\Icons\3.png" />
     <None Remove="Resources\Icons\cloud.png" />
+    <None Remove="Resources\Icons\cp77proj.ico" />
+    <None Remove="Resources\Icons\cp77proj.png" />
     <None Remove="Resources\Icons\FileIcons\aiarch3.svg" />
     <None Remove="Resources\Icons\FileIcons\animation.svg" />
     <None Remove="Resources\Icons\FileIcons\aningraph.svg" />
@@ -101,13 +104,17 @@
     <None Remove="Resources\Icons\HomeSickTransp2.png" />
     <None Remove="Resources\Icons\SeeTroughIcon.png" />
     <None Remove="Resources\Icons\Somthlikedis.png" />
+    <None Remove="Resources\Icons\thankyoumoonded.png" />
     <None Remove="Resources\Icons\TinyTest.png" />
+    <None Remove="Resources\Icons\tw3proj.ico" />
+    <None Remove="Resources\Icons\tw3proj.png" />
     <None Remove="Resources\Icons\whitelogo.png" />
     <None Remove="Resources\Icons\work.png" />
     <None Remove="Wkit_Icon_Flattened_256x.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\cloud.png" />
+    <Resource Include="Resources\Icons\cp77proj.png" />
     <Resource Include="Resources\Icons\FileIcons\aiarch3.svg" />
     <Resource Include="Resources\Icons\FileIcons\animation.svg" />
     <Resource Include="Resources\Icons\FileIcons\aningraph.svg" />
@@ -357,7 +364,9 @@
     <Resource Include="Resources\Icons\3.png" />
     <Resource Include="Resources\Icons\Homelogo.png" />
     <Resource Include="Resources\Icons\Logo.ico" />
+    <Resource Include="Resources\Icons\thankyoumoonded.png" />
     <Resource Include="Resources\Icons\TinyTest.png" />
+    <Resource Include="Resources\Icons\tw3proj.png" />
     <Resource Include="Resources\Icons\whitelogo.png" />
     <Resource Include="Resources\Icons\work.png" />
     <Resource Include="Resources\Images\Files\apb_32x.png" />
@@ -473,8 +482,17 @@
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Update="testmp3.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
