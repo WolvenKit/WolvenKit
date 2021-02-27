@@ -12,7 +12,7 @@ namespace WolvenKit.Views.Wizards
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Installer Wizard");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Installer Wizard");
             }
         }
     }

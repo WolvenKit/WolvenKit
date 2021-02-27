@@ -12,7 +12,7 @@ namespace WolvenKit.Views.GameDebuggerTool
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Game Debugger");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Game Debugger");
             }
         }
     }

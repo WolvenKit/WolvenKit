@@ -61,7 +61,7 @@ namespace WolvenKit.Views
         {
 			if (this.IsVisible)
 			{
-				DiscordRPCHelper.WhatAmIDoing("Document View");
+				WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Document View");
 			}
 		}
     }

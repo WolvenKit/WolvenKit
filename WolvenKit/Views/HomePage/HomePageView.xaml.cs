@@ -321,7 +321,7 @@ namespace WolvenKit.Views.HomePage
         {
             if (this.IsVisible)
             {
-                DiscordRPCHelper.WhatAmIDoing("Home");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Home");
 
                 if (IsVisible && IsLoaded)
                 {

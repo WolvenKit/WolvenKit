@@ -33,36 +33,26 @@ namespace WolvenKit
     public partial class App : Application
     {
         #region fields
-        public static AppHelper apphelper;
-        public static DiscordHelper discordhelper;
-        public static GithubHelper GithubHelper;
-        public static ThemeHelper themehelper;
-
         #endregion fields
 
         #region constructors
+        // Main Constructor
         static App()
         {
 
-
-         
-
-
-
         }
 
-        /// <summary>
-        /// Class constructor
-        /// </summary>
+        // Alternative Constructor
         public App()
         {
 
         }
         #endregion constructors
 
-
-
+        // Get Logger.
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+
 
         protected override async void OnStartup(StartupEventArgs e)
         {
@@ -70,22 +60,24 @@ namespace WolvenKit
             LogManager.AddDebugListener();
 #endif
             Log.Info("Starting application");
-            apphelper = new WKitGlobal.AppHelper();
-            discordhelper = new DiscordHelper();
-            GithubHelper = new GithubHelper();
-            themehelper = new ThemeHelper();
-
-            await apphelper.InitializeMVVM();
-            themehelper.InitializeThemeHelper();
-            await apphelper.InitializeShell();
-            apphelper.ShowFirstTimeSetup();
-            discordhelper.InitDiscordRPC();
-
+            Log.Info("Initializing MVVM");
+            await AppHelper.InitializeMVVM();
+            Log.Info("Initializing Theme Helper");
+            ThemeHelper.InitializeThemeHelper();
+            Log.Info("Initializing Shell");
+            await AppHelper.InitializeShell();
+            AppHelper.ShowFirstTimeSetup();
+            Log.Info("Initializing Discord RPC");
+            DiscordHelper.InitDiscordRPC();
             Log.Info("Calling base.OnStartup");
             base.OnStartup(e);
-
+            Log.Info("Initializing NodeNetwork");
             NNViewRegistrar.RegisterSplat();
 
+
+
+
+            // Temp Fix for MainViewModel.OnClosing
             if (MainWindow != null)
             {
                 MainWindow.Closing += OnClosing;

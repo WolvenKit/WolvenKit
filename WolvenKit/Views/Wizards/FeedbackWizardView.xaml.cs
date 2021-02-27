@@ -14,7 +14,7 @@ namespace WolvenKit.Views.Wizards
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Feedback Wizard");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Feedback Wizard");
             }
         }
     }

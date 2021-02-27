@@ -44,7 +44,7 @@ namespace WolvenKit.Views.AssetBrowser
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Asset Browser");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Asset Browser");
             }
         }
 

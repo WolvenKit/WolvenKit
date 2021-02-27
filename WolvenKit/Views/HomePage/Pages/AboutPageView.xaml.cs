@@ -25,7 +25,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("About Page");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("About Page");
             }
         }
 

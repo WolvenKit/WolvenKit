@@ -280,7 +280,7 @@ namespace WolvenKit.Views.AudioTool
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Audio Tool");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Audio Tool");
             }
         }
     }

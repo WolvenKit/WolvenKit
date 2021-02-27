@@ -114,7 +114,7 @@ namespace WolvenKit.Views.VisualEditor
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Visual Editor");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Visual Editor");
             }
         }
     }

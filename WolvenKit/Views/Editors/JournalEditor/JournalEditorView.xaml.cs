@@ -14,7 +14,7 @@ namespace WolvenKit.Views.JournalEditor
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Journal Editor");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Journal Editor");
             }
         }
     }

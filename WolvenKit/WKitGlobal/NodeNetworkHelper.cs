@@ -1,4 +1,4 @@
-﻿using DynamicData;
+using DynamicData;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using ReactiveUI;
@@ -13,7 +13,7 @@ using System.Windows.Media;
 
 namespace WolvenKit.WKitGlobal
 {
-    class NodeNetworkHelper
+    public class NodeNetworkHelper
     {
         public enum NodeType
         {

@@ -92,7 +92,7 @@ namespace WolvenKit.Views
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Log View");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Log View");
             }
         }
     }

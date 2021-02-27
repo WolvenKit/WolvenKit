@@ -31,7 +31,7 @@ namespace WolvenKit.Views
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Project Explorer");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Project Explorer");
             }
         }
     }

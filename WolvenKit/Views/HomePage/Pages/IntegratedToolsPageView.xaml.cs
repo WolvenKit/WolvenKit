@@ -17,7 +17,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Integrated Tools");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Integrated Tools");
             }
 
         }

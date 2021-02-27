@@ -67,7 +67,7 @@ namespace WolvenKit.Views.Wizards
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Project Wizard");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Project Wizard");
             }
         }
     }

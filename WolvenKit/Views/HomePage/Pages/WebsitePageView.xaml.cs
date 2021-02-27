@@ -14,7 +14,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Website Viewer");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Website Viewer");
             }
 
         }

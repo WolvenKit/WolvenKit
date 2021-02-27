@@ -52,7 +52,7 @@ namespace WolvenKit.Views.AudioTool.Radio
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Radio Player");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Radio Player");
             }
         }
     }

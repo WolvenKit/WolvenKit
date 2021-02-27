@@ -12,7 +12,7 @@ namespace WolvenKit.Views.CR2WToTextTool
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("CR2W To Text Tool");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("CR2W To Text Tool");
             }
         }
     }

@@ -29,7 +29,7 @@ namespace WolvenKit.Views
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Properties View");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Properties View");
             }
         }
     }

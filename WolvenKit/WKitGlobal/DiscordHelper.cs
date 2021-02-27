@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,47 +6,52 @@ using System.Threading.Tasks;
 
 namespace WolvenKit.WKitGlobal
 {
-    public class DiscordHelper
+    public static class DiscordHelper
     {
-
         public static DiscordRPC.DiscordRpcClient client;
-        public void InitDiscordRPC()
+        public static bool DiscordRPCEnabled = true;
+        public static bool DiscordRPCInitizialized = false;
+
+        public static void InitDiscordRPC()
         {
-
-            client = new DiscordRPC.DiscordRpcClient("807752124078620732");
-
-            //Set the logger
-            client.Logger = new DiscordRPC.Logging.ConsoleLogger() { Level = DiscordRPC.Logging.LogLevel.Warning };
-
-            //Subscribe to events
-            client.OnReady += (sender, e) =>
+            
+            if (DiscordRPCEnabled == true && DiscordRPCInitizialized == false)
             {
-                Console.WriteLine("Received Ready from user {0}", e.User.Username);
-            };
+                //Create Client
+                client = new DiscordRPC.DiscordRpcClient("807752124078620732");
+                //Set the logger (Disabled for now ..)
+                //client.Logger = new DiscordRPC.Logging.ConsoleLogger() { Level = DiscordRPC.Logging.LogLevel.Warning };
+                //Subscribe to events
+                client.OnReady += (sender, e) => { Console.WriteLine("Received Ready from user {0}", e.User.Username); };
+                client.OnPresenceUpdate += (sender, e) => { Console.WriteLine("Received Update! {0}", e.Presence); };
+                //Connect to the RPC
+                client.Initialize();
+                DiscordRPCInitizialized = true;
+            }           
+        }
 
-            client.OnPresenceUpdate += (sender, e) =>
+        public static void SetDiscordRPCStatus(string details)
+        {
+            if (DiscordRPCEnabled == true)
             {
-                Console.WriteLine("Received Update! {0}", e.Presence);
-            };
-
-            //Connect to the RPC
-            client.Initialize();
-
-            //Set the rich presence
-            //Call this as many times as you want and anywhere in your code.
-            client.SetPresence(new DiscordRPC.RichPresence()
-            {
-                Details = "Launching",
-
-                Assets = new DiscordRPC.Assets()
+                if (AppHelper.RibbonViewInstance.IsLoaded && AppHelper.RibbonViewInstance.IsInitialized)
                 {
-                    LargeImageKey = "bigwolf",
-                    LargeImageText = "Testing",
-                    SmallImageKey = "bigwolf"
+                    try
+                    {
+                        if (client != null)
+                        {
+                            client.SetPresence(new DiscordRPC.RichPresence()
+                            {
+                                Details = details,
+                                Timestamps = new DiscordRPC.Timestamps() { Start = DateTime.UtcNow },
+                                Assets = new DiscordRPC.Assets() { LargeImageKey = "bigwk", LargeImageText = "WolvenKit", }
+                            });
+                            client.Invoke();
+                        }
+                    }
+                    catch { }
                 }
-            });
-            client.Invoke();
-
+            }
         }
     }
 }

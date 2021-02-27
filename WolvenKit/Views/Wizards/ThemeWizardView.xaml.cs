@@ -12,7 +12,7 @@ namespace WolvenKit.Views.Wizards
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Theme Wizard");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Theme Wizard");
             }
         }
     }

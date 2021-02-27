@@ -170,7 +170,7 @@ namespace WolvenKit.Views
         {
 			if (this.IsVisible && this.IsLoaded)
 			{
-				DiscordRPCHelper.WhatAmIDoing("Main View");
+				WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Main View");
 			}
 		}
     }

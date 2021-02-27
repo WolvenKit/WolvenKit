@@ -13,7 +13,7 @@ namespace WolvenKit.Views.IntegratedToolsPages.CyberCAT
 
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("CyberCAT Save Editor");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("CyberCAT Save Editor");
             }
 
 

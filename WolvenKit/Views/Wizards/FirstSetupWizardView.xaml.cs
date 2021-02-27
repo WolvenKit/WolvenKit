@@ -80,7 +80,7 @@ namespace WolvenKit.Views.Wizards
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("First Setup Wizard");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("First Setup Wizard");
             }
         }
     }

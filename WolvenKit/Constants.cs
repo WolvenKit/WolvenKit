@@ -117,46 +117,7 @@ namespace WolvenKit
 
 
 
-    public static class DiscordRPCHelper
-    {
-        public static void WhatAmIDoing(string details)
-        {
-            if (WKitGlobal.AppHelper.RibbonViewInstance.IsLoaded && WKitGlobal.AppHelper.RibbonViewInstance.IsInitialized)
-            {
-                try
-                {
-                    if (WKitGlobal.DiscordHelper.client != null)
-                    {
-                        WKitGlobal.DiscordHelper.client.SetPresence(new DiscordRPC.RichPresence()
-                        {
-                            Details = details,
-                            Timestamps = new DiscordRPC.Timestamps()
-                            {
-                                Start = System.DateTime.UtcNow
-
-                            },
-                            Assets = new DiscordRPC.Assets()
-                            {
-                                LargeImageKey = "bigwk",
-
-                                LargeImageText = "WolvenKit",
-
-                            }
-                        });
-                        WKitGlobal.DiscordHelper.client.Invoke();
-                    }
-          
-                }
-                catch
-                {
-
-                }
-              
-            }
-           
-        }
-
-    }
+  
 
 
 

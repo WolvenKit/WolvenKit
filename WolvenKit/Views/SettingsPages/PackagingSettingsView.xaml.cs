@@ -12,7 +12,7 @@ namespace WolvenKit.Views.SettingsPages
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Setting - Packaging");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Setting - Packaging");
             }
         }
     }

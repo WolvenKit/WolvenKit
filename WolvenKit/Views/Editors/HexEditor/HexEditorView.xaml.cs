@@ -12,7 +12,7 @@ namespace WolvenKit.Views.HexEditor
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Hex Editor");           
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Hex Editor");           
             }
         }
     }

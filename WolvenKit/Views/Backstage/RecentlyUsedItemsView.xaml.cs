@@ -20,7 +20,7 @@ namespace WolvenKit.Views
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("BackStage - Recently Used");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("BackStage - Recently Used");
             }
         }
     }

@@ -14,7 +14,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Recent Projects");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Recent Projects");
             }
 
         }

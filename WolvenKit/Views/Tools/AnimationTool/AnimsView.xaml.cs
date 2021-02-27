@@ -1,4 +1,4 @@
-﻿
+
 namespace WolvenKit.Views.AnimationTool
 {
     public partial class AnimsView
@@ -12,7 +12,7 @@ namespace WolvenKit.Views.AnimationTool
         {
             if (this.IsVisible)
             {
-                DiscordRPCHelper.WhatAmIDoing("Animation Exporter");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Animation Exporter");
             }
         }
     }

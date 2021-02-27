@@ -42,7 +42,7 @@ namespace WolvenKit.Views.SettingsPages
 
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Setting - Editor");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Setting - Editor");
             }
 
 

@@ -76,7 +76,7 @@ namespace WolvenKit.Views.SettingsPages
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Setting - General");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Setting - General");
             }
         }
     }

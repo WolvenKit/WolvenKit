@@ -112,7 +112,7 @@ namespace WolvenKit.Views
         {
             if (this.IsVisible && IsLoaded)
             {
-                DiscordRPCHelper.WhatAmIDoing("Ribbon/Backstage");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Ribbon/Backstage");
             }
         }
 

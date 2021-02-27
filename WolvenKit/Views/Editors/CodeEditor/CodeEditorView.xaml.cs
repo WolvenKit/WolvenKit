@@ -35,7 +35,7 @@ namespace WolvenKit.Views.CodeEditor
         {
             if (this.IsVisible)
             {
-                DiscordRPCHelper.WhatAmIDoing("Code Editor");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Code Editor");
             }
         }
     }

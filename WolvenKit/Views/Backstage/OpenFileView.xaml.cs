@@ -20,7 +20,7 @@ namespace WolvenKit.Views
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Backstage - Open File");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Backstage - Open File");
             }
         }
     }

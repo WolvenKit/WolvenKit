@@ -63,7 +63,7 @@ namespace WolvenKit.Views.SettingsPages
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Setting - Tools");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Setting - Tools");
             }
         }
     }

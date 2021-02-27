@@ -32,7 +32,7 @@ namespace WolvenKit.Views.PluginManager
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Plugin Manager");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Plugin Manager");
             }
         }
     }

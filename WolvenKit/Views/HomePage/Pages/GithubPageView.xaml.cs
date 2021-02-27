@@ -1,4 +1,4 @@
-﻿
+
 using System.Windows;
 
 namespace WolvenKit.Views.HomePage.Pages
@@ -13,7 +13,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Github Viewer");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Github Viewer");
             }
 
         }

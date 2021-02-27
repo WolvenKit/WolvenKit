@@ -69,7 +69,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("User Page");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("User Page");
             }
 
         }

@@ -12,7 +12,7 @@ namespace WolvenKit.Views.AnimationTool
         {
             if (this.IsVisible )
             {
-                DiscordRPCHelper.WhatAmIDoing("Mimics Exporter");
+                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Mimics Exporter");
             }
         }
     }
