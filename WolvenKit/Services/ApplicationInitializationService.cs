@@ -113,14 +113,14 @@ namespace WolvenKit.Services
 
             // application-wide commands that viewmodels can subscribe to
             // Workspace Viewmodel
-            _commandManager.CreateCommand((AppCommands.Application.DelProject));
-            _commandManager.CreateCommand((AppCommands.Application.SaveAsProject));
-            _commandManager.CreateCommand((AppCommands.Application.SaveProject));
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.DelProject));
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.SaveAsProject));
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.SaveProject));
 
 
-            _commandManager.CreateCommand((AppCommands.Application.ShowAbout));
-            _commandManager.CreateCommand((AppCommands.Application.ShowFeedback));
-            _commandManager.CreateCommand((AppCommands.Application.ShowSettings));
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.ShowAbout));
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.ShowFeedback));
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.ShowSettings));
 
 
 

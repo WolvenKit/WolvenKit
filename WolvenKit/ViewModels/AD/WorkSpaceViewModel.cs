@@ -159,7 +159,7 @@ namespace WolvenKit.ViewModels
             };
         }
 
-        
+
 
         #endregion constructors
 
@@ -169,9 +169,7 @@ namespace WolvenKit.ViewModels
         {
             // View Tab
             commandManager.RegisterCommand(AppCommands.Application.ShowLog, ShowLogCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowProjectExplorer, ShowProjectExplorerCommand,
-                this);
-
+            commandManager.RegisterCommand(AppCommands.Application.ShowProjectExplorer, ShowProjectExplorerCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowImportUtility, ShowImportUtilityCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowProperties, ShowPropertiesCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowAssetBrowser, ShowAssetsCommand, this);
@@ -180,10 +178,8 @@ namespace WolvenKit.ViewModels
             commandManager.RegisterCommand(AppCommands.Application.ShowHexEditor, ShowHexEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowJournalEditor, ShowJournalEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowVisualEditor, ShowVisualEditorCommand, this);
-
             commandManager.RegisterCommand(AppCommands.Application.ShowAnimationTool, ShowAnimationToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowMimicsTool, ShowMimicsToolCommand, this);
-
             commandManager.RegisterCommand(AppCommands.Application.ShowAudioTool, ShowAudioToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowImporterTool, ShowImporterToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowCR2WToTextTool, ShowCR2WToTextToolCommand, this);
@@ -193,24 +189,13 @@ namespace WolvenKit.ViewModels
             commandManager.RegisterCommand(AppCommands.Application.ShowRadishTool, ShowRadishToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowWccTool, ShowWccToolCommand, this);
 
-       
-
-
-
-
-
-
             // Home Tab
             commandManager.RegisterCommand(AppCommands.Application.OpenFile, OpenFileCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.NewFile, NewFileCommand, this);
-
             commandManager.RegisterCommand(AppCommands.Application.PackMod, PackModCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.BackupMod, BackupModCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.PublishMod, PublishModCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowPackageInstaller, ShowPackageInstallerCommand, this);
-
-
-
         }
 
 

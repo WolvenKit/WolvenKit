@@ -21,7 +21,7 @@ using WolvenKit.Common.Services;
 
 namespace WolvenKit.Commands
 {
-    class ApplicationDeleteProjectCommandContainer : Catel.MVVM.CommandContainerBase
+    public class ApplicationDeleteProjectCommandContainer : Catel.MVVM.CommandContainerBase
     {
         private readonly INavigationService _navigationService;
         private readonly ILoggerService _loggerService;

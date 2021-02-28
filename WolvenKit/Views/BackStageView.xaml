@@ -94,24 +94,14 @@
                                         </StackPanel>
                                     </Button>
 
-                                    <Button  Command="{catel:CommandManagerBinding Application.ShowSettings}" Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <iconPacks:PackIconCodicons Kind="Settings" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
-                                            <TextBlock Text="Settings"/>
-                                        </StackPanel>
-                                    </Button>
-                                    <Button  Command="{catel:CommandManagerBinding Application.BugReport}" IsEnabled="False" Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                             
+                                    <Button  Command="{catel:CommandManagerBinding Application.BugReport}" Visibility="Collapsed" IsEnabled="False" Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                             <iconPacks:PackIconCodicons Kind="Bug" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
                                             <TextBlock Text="Bug Report"/>
                                         </StackPanel>
                                     </Button>
-                                    <Button  Command="{catel:CommandManagerBinding Application.About}" Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <iconPacks:PackIconCodicons Kind="Info" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
-                                            <TextBlock Text="About"/>
-                                        </StackPanel>
-                                    </Button>
+                              
 
                                 </hc:UniformSpacingPanel>
 

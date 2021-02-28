@@ -57,12 +57,12 @@
             <fluent:RibbonTabItem  Header="General">
                 <!-- File -->
                 <fluent:RibbonGroupBox Header="File">
-                    <fluent:Button Header="Open File" Command="{catel:CommandManagerBinding Application.OpenFile}">
+                    <fluent:Button Header="Open Project" Command="{catel:CommandManagerBinding Application.OpenFile}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="GoToFile" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-                    <fluent:Button Header="New File"  Command="{catel:CommandManagerBinding Application.NewFile}">
+                    <fluent:Button Header="New Project"  Command="{catel:CommandManagerBinding Application.NewProject}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="NewFile" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>

@@ -150,6 +150,8 @@ namespace WolvenKit
                         }
                     }
                     await _projectManager.LoadAsync(location);
+                    WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
+                    WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
                 }
             }
             catch (Exception ex)
