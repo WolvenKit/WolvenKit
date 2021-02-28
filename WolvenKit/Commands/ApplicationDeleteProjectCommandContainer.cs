@@ -9,7 +9,6 @@ using Orchestra.Services;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using Orc.Notifications;
 using Orc.ProjectManagement;
 using Settings = Orc.Squirrel.Settings;
 
@@ -18,6 +17,7 @@ using Fluent;
 using Catel.IoC;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Common.Services;
+using WolvenKit.Services;
 
 namespace WolvenKit.Commands
 {
@@ -35,7 +35,7 @@ namespace WolvenKit.Commands
             INavigationService navigationService,
             IProjectManager projectManager,
             ISaveFileService saveFileService,
-            INotificationService notificationService,
+            IGrowlNotificationService notificationService,
             IUIVisualizerService uIVisualizerService,
             IViewModelFactory viewModelFactory,
             IMessageService messageService,

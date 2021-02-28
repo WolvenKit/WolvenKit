@@ -6,7 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Catel.IoC;
-using Orc.Notifications;
+using WolvenKit.WKitGlobal;
+
 namespace WolvenKit.Model
 {
     using Controllers;
@@ -431,9 +432,7 @@ namespace WolvenKit.Model
             CR2WManager.Init(FileDirectory, MainController.Get().Logger);
             _logger.LogString("Finished additional tasks...", Logtype.Success);
 
-           // ServiceLocator.Default.ResolveType<INotificationService>().ShowNotification("WolvenKit", $"Project {Name} has finished loading.");
-            await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => { Growl.SuccessGlobal($"Project {Name} has finished loading."); }));
-
+            NotificationHelper.Growl.Success($"Project {Name} has finished loading.");
         }
 
 

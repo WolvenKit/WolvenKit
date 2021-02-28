@@ -5,7 +5,7 @@ using Catel.Services;
 using System.Threading.Tasks;
 using Orc.FileSystem;
 using Orc.ProjectManagement;
-using Orc.Notifications;
+using WolvenKit.Services;
 
 namespace WolvenKit
 {
@@ -26,7 +26,7 @@ namespace WolvenKit
             IProjectManager projectManager,
             IOpenFileService openFileService,
             IPleaseWaitService pleaseWaitService,
-            INotificationService notificationService,
+            IGrowlNotificationService notificationService,
             ILoggerService loggerService)
             : base(AppCommands.Application.OpenProject, commandManager, projectManager, notificationService, loggerService)
         {

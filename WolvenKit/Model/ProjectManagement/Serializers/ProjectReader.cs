@@ -5,20 +5,20 @@ using System.Windows;
 using System.Windows.Threading;
 using Catel;
 using HandyControl.Controls;
-using Orc.Notifications;
 using Orc.ProjectManagement;
 using WolvenKit.Controllers;
+using WolvenKit.Services;
 
 namespace WolvenKit.Model.ProjectManagement
 {
     public class ProjectReader : ProjectReaderBase
     {
         #region Fields
-        private readonly INotificationService _notificationService;
+        private readonly IGrowlNotificationService _notificationService;
         #endregion
 
         #region Constructors
-        public ProjectReader(INotificationService notificationService)
+        public ProjectReader(IGrowlNotificationService notificationService)
         {
             Argument.IsNotNull(() => notificationService);
 
@@ -46,10 +46,9 @@ namespace WolvenKit.Model.ProjectManagement
                         MainController.Get().ActiveMod = project.Data;
                         await MainController.SetGame(new Tw3Controller()).ContinueWith(t =>
                             {
-                                // _notificationService.ShowNotification("Success", "Project " + Path.GetFileNameWithoutExtension(location) +
-                                //   " loaded!");
+                                 _notificationService.Success( "Project " + Path.GetFileNameWithoutExtension(location) +
+                                   " loaded!");
 
-                                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => { Growl.SuccessGlobal("Project " + Path.GetFileNameWithoutExtension(location) + " loaded!"); }));
                             }, TaskContinuationOptions.OnlyOnRanToCompletion);
                         break;
                     }
@@ -59,8 +58,7 @@ namespace WolvenKit.Model.ProjectManagement
                         MainController.Get().ActiveMod = project.Data;
                         await MainController.SetGame(new Cp77Controller()).ContinueWith(t =>
                             {
-                               // _notificationService.ShowNotification("Success", "Project " + Path.GetFileNameWithoutExtension(location) + " loaded!");
-                                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => { Growl.SuccessGlobal("Project " + Path.GetFileNameWithoutExtension(location) + " loaded!"); }));
+                                _notificationService.Success( "Project " + Path.GetFileNameWithoutExtension(location) + " loaded!");
                             }, TaskContinuationOptions.OnlyOnRanToCompletion);
                         break;
                     }
@@ -71,9 +69,7 @@ namespace WolvenKit.Model.ProjectManagement
             }
             catch (IOException ex)
             {
-               // _notificationService.ShowNotification("Could not open file", ex.Message);
-                await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => { Growl.ErrorGlobal("Could not open file : "+ ex.Message); }));
-
+                _notificationService.Error(ex.Message);
             }
 
             return null;

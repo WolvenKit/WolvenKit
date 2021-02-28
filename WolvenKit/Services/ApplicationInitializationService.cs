@@ -171,7 +171,8 @@ namespace WolvenKit.Services
         private void RegisterTypes()
         {
             // project management
-            
+            _serviceLocator.RegisterType<IGrowlNotificationService, GrowlNotificationService>();
+
 
             _serviceLocator.RegisterType<IProjectSerializerSelector, ProjectSerializerSelector>();  //TODO: not needed?
             _serviceLocator.RegisterType<ISaveProjectChangesService, SaveProjectChangesService>();

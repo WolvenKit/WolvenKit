@@ -225,7 +225,6 @@
     <PackageReference Include="Octokit" Version="0.48.0" />
     <PackageReference Include="Open.ChannelExtensions" Version="3.5.0" />
     <PackageReference Include="Orc.CommandLine" Version="4.1.1" />
-    <PackageReference Include="Orc.Notifications" Version="4.1.0" />
     <PackageReference Include="Orc.ProjectManagement" Version="4.1.1" />
     <PackageReference Include="Orc.Squirrel" Version="4.1.0" />
     <PackageReference Include="Orc.Squirrel.Xaml" Version="4.1.0" />

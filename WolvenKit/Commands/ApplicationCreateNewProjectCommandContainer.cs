@@ -9,8 +9,8 @@ using Orchestra.Services;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using Orc.Notifications;
 using Orc.ProjectManagement;
+using WolvenKit.Services;
 using Settings = Orc.Squirrel.Settings;
 
 namespace WolvenKit
@@ -33,7 +33,7 @@ namespace WolvenKit
             ICommandManager commandManager,
             IProjectManager projectManager,
             ISaveFileService saveFileService,
-            INotificationService notificationService,
+            IGrowlNotificationService notificationService,
             ILoggerService loggerService)
             : base(AppCommands.Application.CreateNewProject, commandManager, projectManager, notificationService, loggerService)
         {

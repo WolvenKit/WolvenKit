@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ProjectCommandContainerBase.cs" company="WildGums">
 //   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
 // </copyright>
@@ -8,7 +8,7 @@
 using System;
 using Catel.IoC;
 using Catel.Services;
-using Orc.Notifications;
+using WolvenKit.Services;
 
 namespace WolvenKit
 {
@@ -25,7 +25,7 @@ namespace WolvenKit
     {
         #region Fields
         protected readonly ICommandManager _commandManager;
-        protected readonly INotificationService _notificationService;
+        protected readonly IGrowlNotificationService _notificationService;
         protected readonly ILoggerService _logger;
         protected readonly IProjectManager _projectManager;
         protected readonly IPleaseWaitService _pleaseWaitService;
@@ -35,7 +35,7 @@ namespace WolvenKit
         protected ProjectCommandContainerBase(string commandName, 
             ICommandManager commandManager, 
             IProjectManager projectManager,
-            INotificationService notificationService,
+            IGrowlNotificationService notificationService,
             ILoggerService loggerService)
             : base(commandName, commandManager)
         {

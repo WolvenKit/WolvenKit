@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
-using Orc.Notifications;
 using Orc.ProjectManagement;
+using WolvenKit.Services;
 
 namespace WolvenKit
 {
@@ -19,7 +19,7 @@ namespace WolvenKit
         public ApplicationNewProjectCommandContainer(
             ICommandManager commandManager,
             IProjectManager projectManager,
-            INotificationService notificationService,
+            IGrowlNotificationService notificationService,
             IUIVisualizerService uIVisualizerService,
             ILoggerService loggerService)
             : base(AppCommands.Application.NewProject, commandManager, projectManager, notificationService, loggerService)

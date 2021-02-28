@@ -14,12 +14,12 @@ using Catel.Services;
 using Catel;
 using Catel.MVVM;
 using HandyControl.Data;
-using Orc.Notifications;
 using WolvenKit.Commands;
 using WolvenKit.Controllers;
 using System.Windows;
 using System.Windows.Threading;
 using HandyControl.Controls;
+using WolvenKit.Services;
 
 namespace WolvenKit.ViewModels.AssetBrowser
 {
@@ -45,7 +45,7 @@ namespace WolvenKit.ViewModels.AssetBrowser
         private readonly IMessageService _messageService;
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
-        private readonly INotificationService _notificationService;
+        private readonly IGrowlNotificationService _notificationService;
 
         private List<IGameArchiveManager> Managers { get; set; }
 
@@ -86,7 +86,7 @@ namespace WolvenKit.ViewModels.AssetBrowser
             IProjectManager projectManager,
             ILoggerService loggerService,
             IMessageService messageService,
-            INotificationService notificationService
+            IGrowlNotificationService notificationService
         ) : base(ToolTitle)
         {
             Argument.IsNotNull(() => projectManager);
@@ -185,10 +185,7 @@ namespace WolvenKit.ViewModels.AssetBrowser
             IsLoaded = true;
             if (MainController.GetGame() is not MockGameController)
             {
-
-                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => { Growl.SuccessGlobal($"Asset Browser is initialized"); }));
-
-                //_notificationService.ShowNotification("Asset Browser", $"Asset Browser is initialized");
+                _notificationService.Success($"Asset Browser is initialized");
             }
         }
 
@@ -236,8 +233,7 @@ namespace WolvenKit.ViewModels.AssetBrowser
                 case EntryType.File:
                 {
                     Task.Run(new Action(() => AddToMod(item.This.Files.First(x => x.Key == item.Name).Value.First())));
-                   // _notificationService.ShowNotification("File import", $"Importing file: {item.Name}");
-                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => { Growl.InfoGlobal($"Importing file: {item.Name}"); }));
+                    _notificationService.Info($"Importing file: {item.Name}");
 
                     break;
                 }
@@ -274,11 +270,6 @@ namespace WolvenKit.ViewModels.AssetBrowser
                         Directory.CreateDirectory(diskPathInfo.Directory.FullName);
                         using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
                         file.Extract(fs);
-
-                        // refresh project Explorer
-                        //ServiceLocator.Default.ResolveType<ICommandManager>()
-                        //    .GetCommand(AppCommands.ProjectExplorer.Refresh)
-                        //    .SafeExecute(diskPathInfo.Directory);
                     }
                     break;
                 }
@@ -295,11 +286,6 @@ namespace WolvenKit.ViewModels.AssetBrowser
                         Directory.CreateDirectory(diskPathInfo.Directory.FullName);
                         using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
                         file.Extract(fs);
-
-                        // refresh project Explorer
-                        //ServiceLocator.Default.ResolveType<ICommandManager>()
-                        //    .GetCommand(AppCommands.ProjectExplorer.Refresh)
-                        //    .SafeExecute(diskPathInfo.Directory);
                     }
                     
 

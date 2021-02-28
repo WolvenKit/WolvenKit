@@ -1,4 +1,4 @@
-﻿using Catel.MVVM;
+using Catel.MVVM;
 using Catel.Services;
 using System;
 using System.Collections.Generic;
@@ -10,8 +10,8 @@ using WolvenKit.ViewModels;
 using WolvenKit.Views.Wizards;
 using WolvenKit.Views;
 using Orc.ProjectManagement;
-using Orc.Notifications;
 using Catel;
+using WolvenKit.Services;
 
 namespace WolvenKit.Commands
 {
@@ -29,7 +29,7 @@ namespace WolvenKit.Commands
             INavigationService navigationService,
             IProjectManager projectManager,
             ISaveFileService saveFileService,
-            INotificationService notificationService,
+            IGrowlNotificationService notificationService,
             IUIVisualizerService uIVisualizerService,
             IViewModelFactory viewModelFactory,
             IMessageService messageService,
