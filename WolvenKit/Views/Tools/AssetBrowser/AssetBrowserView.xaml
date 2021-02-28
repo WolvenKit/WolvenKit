@@ -28,7 +28,7 @@
             
 
             <StackPanel Grid.Row="0" VerticalAlignment="Top"  >
-                <ToolBarTray     Style="{DynamicResource MahApps.Styles.ToolBarTray}" >
+                <ToolBarTray    Style="{DynamicResource MahApps.Styles.ToolBarTray}" >
                     <ToolBar  Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                         <Menu Background="Transparent" VerticalAlignment="Center">
                             <MenuItem Header="View">

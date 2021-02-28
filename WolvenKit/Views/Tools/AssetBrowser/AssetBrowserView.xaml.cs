@@ -25,7 +25,6 @@ namespace WolvenKit.Views.AssetBrowser
         public AssetBrowserView()
         {
             InitializeComponent();
-            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(this, "Dark.Red"); //This aint needed was just for testing remove me.
             NotifyPropertyChanged();
         }
 

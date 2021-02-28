@@ -75,30 +75,9 @@ namespace WolvenKit.ViewModels
         public string ProjectExplorerContextualTabGroupVisibilityStr =>
             ProjectExplorerContextualTabGroupVisibility.ToString();
 
-        /// <summary>
-        /// Dependency Property on RibbonView
-        /// </summary>
-        public List<string> ListOfThemes => new List<string>()
-        {
-            "Dark.Red", "Dark.Green", "Dark.Blue",
-            "Dark.Purple", "Dark.Orange", "Dark.Lime",
-            "Dark.Emerald", "Dark.Teal", "Dark.Cyan",
-            "Dark.Cobalt", "Dark.Indigo", "Dark.Violet",
-            "Dark.Pink", "Dark.Magenta", "Dark.Crimson",
-            "Dark.Amber", "Dark.Yellow", "Dark.Brown",
-            "Dark.Olive", "Dark.Steel", "Dark.Mauve",
-            "Dark.Taupe", "Dark.Sienna"
-        };
+        
 
-
-
-
-        private Color _selectedTheme;
-        /// <summary>
-        /// Dependency Property on RibbonView
-        /// </summary>
-        ///
-
+        private Color _selectedTheme;  
         public Random rnd = new Random();
         public Color SelectedTheme
         {
