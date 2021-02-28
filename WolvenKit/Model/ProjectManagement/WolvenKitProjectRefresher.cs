@@ -22,18 +22,14 @@ namespace WolvenKit.Model.ProjectManagement
 
         #region ctors
 
-
-        public WolvenKitProjectRefresher(string projectLocation, string directoryToWatch, string fileFilter)
-            : this(projectLocation)
-        {
-        }
-
-        public WolvenKitProjectRefresher(string location)
+        public WolvenKitProjectRefresher(string location = "")
             : base(location)
         {
+            Argument.IsNotNullOrWhitespace(() => location);
 
             ValidateLocation(location);
-            
+
+            IsEnabled = true;
         }
 
         #endregion
@@ -92,8 +88,6 @@ namespace WolvenKit.Model.ProjectManagement
 
         private void OnFileSystemWatcherChanged(object sender, FileSystemEventArgs e)
         {
-            var x = ServiceLocator.Default.ResolveType<IProjectManager>();
-
             if (IsSuspended)
             {
                 return;

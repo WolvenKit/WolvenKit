@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -23,6 +24,8 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.CR2W;
+using WolvenKit.Model.ProjectManagement;
+using Open.ChannelExtensions;
 
 namespace WolvenKit.ViewModels
 {
@@ -45,6 +48,7 @@ namespace WolvenKit.ViewModels
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly ICommandManager _commandManager;
+        private readonly IProjectRefresherSelector _refresherSelector;
 
 
         private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
@@ -58,22 +62,25 @@ namespace WolvenKit.ViewModels
             IProjectManager projectManager,
             ILoggerService loggerService,
             IMessageService messageService,
-            ICommandManager commandManager
+            ICommandManager commandManager,
+            IProjectRefresherSelector refresherSelector
             ) : base(ToolTitle)
         {
             Argument.IsNotNull(() => projectManager);
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => loggerService);
             Argument.IsNotNull(() => commandManager);
+            Argument.IsNotNull(() => refresherSelector);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
             _commandManager = commandManager;
-
-            _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
-            _projectManager.ProjectRefreshedAsync += ProjectManagerOnProjectRefreshedAsync;
-            _projectManager.ProjectRefreshingAsync += ProjectManagerOnProjectRefreshingAsync;
+            _refresherSelector = refresherSelector;
+            if (_refresherSelector is MyProjectRefresherSelector myrefresher)
+            {
+                myrefresher.ProjectRefresherUpdatedAsync += OnProjectRefresherUpdatedAsync;
+            }
 
             SetupCommands();
             SetupToolDefaults();
@@ -83,6 +90,8 @@ namespace WolvenKit.ViewModels
             Treenodes.ListChanged += new ListChangedEventHandler(Treenodes_ListChanged);
 
         }
+
+        
 
         #endregion constructors
 
@@ -128,9 +137,18 @@ namespace WolvenKit.ViewModels
         /// Refresh a node in the ProjectExplorer tree with a given physical path
         /// </summary>
         public ICommand RefreshNodeCommand { get; private set; }
-        private bool CanRefreshNode(DirectoryInfo path) => true;
-        private void ExecuteRefreshNode(DirectoryInfo dir)
+        private bool CanRefreshNode(string path) => true;
+        private void ExecuteRefreshNode(string path)
         {
+            var dir = new DirectoryInfo(path);
+            var fi = new FileInfo(path);
+            if (string.IsNullOrEmpty(path))
+                return;
+            if (fi.Exists)
+                dir = fi.Directory;
+            if (!dir.Exists)
+                return;
+
             // get parents
             var dirlist = new List<DirectoryInfo>();
             var currentdir = dir;
@@ -162,6 +180,7 @@ namespace WolvenKit.ViewModels
                 {
                     if (i < dirlist.Count - 1)
                     {
+                        //TODO: make this better
                         m.ReloadSync();
                         x = m.Children.FirstOrDefault(_ => _.IsDirectory && _.FullName == node.FullName);
                         if (x == null)
@@ -320,7 +339,7 @@ namespace WolvenKit.ViewModels
             }
             finally
             {
-                SelectedItem.RaiseRequestRefresh();
+                //SelectedItem.RaiseRequestRefresh();
             }
         }
 
@@ -364,7 +383,7 @@ namespace WolvenKit.ViewModels
                 }
                 finally
                 {
-                    SelectedItem.RaiseRequestRefresh();
+                    //SelectedItem.RaiseRequestRefresh();
                 }
                 
             });
@@ -512,6 +531,25 @@ namespace WolvenKit.ViewModels
             }
         }
 
+        protected override async Task InitializeAsync()
+        {
+            await base.InitializeAsync();
+
+            var commandManager = ServiceLocator.Default.ResolveType<ICommandManager>();
+            commandManager.RegisterCommand(AppCommands.ProjectExplorer.ExpandAll, ExpandAllCommand, this);
+            commandManager.RegisterCommand(AppCommands.ProjectExplorer.CollapseAll, CollapseAllCommand, this);
+            commandManager.RegisterCommand(AppCommands.ProjectExplorer.Expand, ExpandCommand, this);
+            commandManager.RegisterCommand(AppCommands.ProjectExplorer.Collapse, CollapseCommand, this);
+
+            _projectManager.ProjectRefreshRequiredAsync += ProjectManagerOnProjectRefreshRequiredAsync;
+            _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
+        }
+
+        private Task ProjectManagerOnProjectRefreshRequiredAsync(object sender, ProjectEventArgs e)
+        {
+            return Task.CompletedTask;
+        }
+
         private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
         {
             var activeProject = args.NewProject;
@@ -522,20 +560,27 @@ namespace WolvenKit.ViewModels
 
             RepopulateTreeView();
 
-
             return TaskHelper.Completed;
         }
 
-        private Task ProjectManagerOnProjectRefreshingAsync(object sender, ProjectCancelEventArgs e)
+        /// <summary>
+        /// Is raised when the PorjectRefresher registers a filesytem change.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private async Task OnProjectRefresherUpdatedAsync(object sender, ProjectEventArgs e)
         {
-            return TaskHelper.Completed;
-        }
-        private Task ProjectManagerOnProjectRefreshedAsync(object sender, ProjectEventArgs e)
-        {
-
-
-
-            return TaskHelper.Completed;
+            if (e is ProjectFileSystemEventArgs args)
+            {
+                await Channel
+                    .CreateBounded<string>(50000)
+                    .Source(args.FileNames)
+                    .ReadAllAsync(async path =>
+                    {
+                        await Task.Run(() => RefreshNodeCommand.SafeExecute(path));
+                    });
+            }
         }
 
         /// <summary>
@@ -564,7 +609,7 @@ namespace WolvenKit.ViewModels
             ExpandCommand = new RelayCommand(ExecuteExpand, CanExpand);
             CollapseCommand = new RelayCommand(ExecuteCollapse, CanCollapse);
 
-            RefreshNodeCommand = new DelegateCommand<DirectoryInfo>(ExecuteRefreshNode, CanRefreshNode);
+            RefreshNodeCommand = new DelegateCommand<string>(ExecuteRefreshNode, CanRefreshNode);
             _commandManager.RegisterCommand(AppCommands.ProjectExplorer.Refresh, RefreshNodeCommand, this);
         }
 
@@ -582,18 +627,7 @@ namespace WolvenKit.ViewModels
             //IconSource = bi;
         }
 
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
-
-            var commandManager = ServiceLocator.Default.ResolveType<ICommandManager>();
-            commandManager.RegisterCommand(AppCommands.ProjectExplorer.ExpandAll, ExpandAllCommand, this);
-            commandManager.RegisterCommand(AppCommands.ProjectExplorer.CollapseAll, CollapseAllCommand, this);
-            commandManager.RegisterCommand(AppCommands.ProjectExplorer.Expand, ExpandCommand, this);
-            commandManager.RegisterCommand(AppCommands.ProjectExplorer.Collapse, CollapseCommand, this);
-
-            _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
-        }
+        
 
         protected override async Task CloseAsync()
         {

@@ -276,9 +276,9 @@ namespace WolvenKit.ViewModels.AssetBrowser
                         file.Extract(fs);
 
                         // refresh project Explorer
-                        ServiceLocator.Default.ResolveType<ICommandManager>()
-                            .GetCommand(AppCommands.ProjectExplorer.Refresh)
-                            .SafeExecute(diskPathInfo.Directory);
+                        //ServiceLocator.Default.ResolveType<ICommandManager>()
+                        //    .GetCommand(AppCommands.ProjectExplorer.Refresh)
+                        //    .SafeExecute(diskPathInfo.Directory);
                     }
                     break;
                 }
@@ -297,9 +297,9 @@ namespace WolvenKit.ViewModels.AssetBrowser
                         file.Extract(fs);
 
                         // refresh project Explorer
-                        ServiceLocator.Default.ResolveType<ICommandManager>()
-                            .GetCommand(AppCommands.ProjectExplorer.Refresh)
-                            .SafeExecute(diskPathInfo.Directory);
+                        //ServiceLocator.Default.ResolveType<ICommandManager>()
+                        //    .GetCommand(AppCommands.ProjectExplorer.Refresh)
+                        //    .SafeExecute(diskPathInfo.Directory);
                     }
                     
 

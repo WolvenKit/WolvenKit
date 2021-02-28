@@ -52,7 +52,7 @@ namespace WolvenKit.Model
 
         #region fields
 
-        private object _childrenLock = new object();
+        private object _childrenLock = new();
         private readonly IProjectManager _projectManager;
         
 
@@ -147,9 +147,6 @@ namespace WolvenKit.Model
             }
         }
 
-
-
-
         private FileSystemInfo _fileSystemInfo;
         public FileSystemInfo FileSystemInfo
         {
@@ -225,10 +222,6 @@ namespace WolvenKit.Model
 
         private void AddUpdateToken()
         {
-            //Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            //{
-            //    Children.Add(new UpdateToken(this));
-            //}));
             lock (_childrenLock)
             {
                 Children.Add(new UpdateToken(this));
@@ -241,10 +234,6 @@ namespace WolvenKit.Model
 
         private void RemoveDummy()
         {
-            //Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            //{
-            //    Children.Remove(GetDummy());
-            //}));
             lock (_childrenLock)
             {
                 Children.Remove(GetDummy());
@@ -255,10 +244,6 @@ namespace WolvenKit.Model
         {
             if (Children.Count > 0)
             {
-                //Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                //{
-                //    Children.Clear();
-                //}));
                 lock (_childrenLock)
                 {
                     Children.Clear();
@@ -288,10 +273,6 @@ namespace WolvenKit.Model
                     fileSystemObject.AfterExplore += FileSystemObject_AfterExplore;
                     fileSystemObject.RequestRefresh += FileSystemObject_RequestRefresh;
 
-                    //Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                    //{
-                    //    Children.Add(fileSystemObject);
-                    //}));
                     lock (_childrenLock)
                     {
                         Children.Add(fileSystemObject);
@@ -316,10 +297,6 @@ namespace WolvenKit.Model
                     var fileSystemObject = new FileSystemInfoModel(file, this);
                     fileSystemObject.RequestRefresh += FileSystemObject_RequestRefresh;
 
-                    //Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                    //{
-                    //    Children.Add(fileSystemObject);
-                    //}));
                     lock (_childrenLock)
                     {
                         Children.Add(fileSystemObject);
@@ -344,10 +321,6 @@ namespace WolvenKit.Model
             IsExpanded = false;
             if (Children.Count > 0)
             {
-                //Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                //{
-                //    Children.Clear();
-                //}));
                 lock (_childrenLock)
                 {
                     Children.Clear();
