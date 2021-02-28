@@ -14,13 +14,13 @@ namespace WolvenKit.Console
         [Option(HelpText = "Specify the cache path.", Required = true)]
         public string path { get; set; }
 
-        [Option(HelpText = "Specify wether to create a texture cache from the path specified.", Required = false)]
+        [Option(HelpText = "Specify whether or not to create a texture cache from the path specified.", Required = false)]
         public bool create { get; set; }
 
-        [Option(HelpText = "Specify wether to create a txt dump of the cache.", Required = false)]
+        [Option(HelpText = "Specify whether or not to dump the cache to a text file.", Required = false)]
         public bool dump { get; set; }
 
-        [Option(HelpText = "Specify wether to extract the dds files of the cache.", Required = false)]
+        [Option(HelpText = "Specify whether or not to extract DDS files from the cache.", Required = false)]
         public bool extract { get; set; }
     }
 
@@ -30,43 +30,43 @@ namespace WolvenKit.Console
         
     }
 
-    [Verb("dumpXBM", HelpText = "Dumps xbm info from bundles.")]
+    [Verb("dumpXBM", HelpText = "Dumps XBM info from bundles.")]
     public class DumpXbmsOptions
     {
 
     }
 
-    [Verb("dumpeffects", HelpText = "Dumps cookedEffect names info from bundles.")]
+    [Verb("dumpeffects", HelpText = "Dumps cookedEffect name info from bundles.")]
     public class DumpCookedEffectsOptions
     {
         
     }
 
-    [Verb("dumpDDS", HelpText = "Dumps dds info from texture caches.")]
+    [Verb("dumpDDS", HelpText = "Dumps DDS info from texture caches.")]
     public class DumpDDSOptions
     {
 
     }
 
-    [Verb("dumpCOL", HelpText = "Dumps collision cache info from collision caches.")]
+    [Verb("dumpCOL", HelpText = "Dumps collision info from collision caches.")]
     public class DumpCollisionOptions
     {
         
     }
 
-    [Verb("dumpFileNames1", HelpText = "Dumps all file names found in the archives.")]
+    [Verb("dumpFileNames1", HelpText = "Dumps all filenames found in the archives.")]
     public class DumpArchivedFileInfosOptions
     {
 
     }
 
-    [Verb("dumpMetadataStore", HelpText = "Dumps the content of metadata.store.")]
+    [Verb("dumpMetadataStore", HelpText = "Dumps the contents of a given metadata.store.")]
     public class DumpMetadataStoreOptions
     {
 
     }
 
-    [Verb("cr", HelpText = "Load cr2w content in postgres")]
+    [Verb("cr", HelpText = "Load CR2W content in postgres.")]
     public class CR2WToPostgresOptions
     {
 
