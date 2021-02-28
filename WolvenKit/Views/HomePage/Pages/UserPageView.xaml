@@ -1,4 +1,4 @@
-﻿<catel:UserControl x:Class="WolvenKit.Views.HomePage.Pages.UserPageView"
+<catel:UserControl x:Class="WolvenKit.Views.HomePage.Pages.UserPageView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com" 
@@ -206,7 +206,10 @@
 
 
 
+        <Grid Background="{DynamicResource RegionBrush}">
+            <Label VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent" FontSize="50" Grid.Row="1" Content="COMING SOON" />
 
+        </Grid>
     </Grid>
 
 </catel:UserControl>

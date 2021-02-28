@@ -21,6 +21,8 @@ namespace WolvenKit.ViewModels
     using Commands;
     using Services;
     using Common.Services;
+    using System.Timers;
+
     public class RibbonViewModel : ViewModel
     {
         #region fields
@@ -91,23 +93,35 @@ namespace WolvenKit.ViewModels
 
 
 
-        private string _selectedTheme;
+        private Color _selectedTheme;
         /// <summary>
         /// Dependency Property on RibbonView
         /// </summary>
-        public string SelectedTheme
+        ///
+
+        public Random rnd = new Random();
+        public Color SelectedTheme
         {
             get => _selectedTheme;
             set
             {
                 if (_selectedTheme != value)
                 {
-                    var oldValue = _selectedTheme;
+                    var stringint = "RandomTheme" + rnd.Next(0, 9999) + "Name";
                     _selectedTheme = value;
-                    RaisePropertyChanged(() => SelectedTheme, oldValue, value);
+                    var color = new SolidColorBrush(value);
+                    ControlzEx.Theming.ThemeManager.Current.AddTheme(new ControlzEx.Theming.Theme(stringint, "asfasf", "Dark", "Red", value, color, true, false));
+                    ControlzEx.Theming.ThemeManager.Current.AddTheme(ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", Colors.Red));
+                    ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, stringint);
+           
+
                 }
+
             }
         }
+
+
+        
 
 
 

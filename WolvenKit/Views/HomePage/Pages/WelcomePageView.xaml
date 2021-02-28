@@ -163,60 +163,134 @@
 
 
         </Grid>
-        
-        
-        
-        
-        
+
+
+
+
+
         <Grid Grid.Column="1" Grid.Row="0" >
             <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Grid.RowSpan="2" Margin="-20,15,10,0" HorizontalAlignment="Left">
+                        <StackPanel Margin="0,0,15,0" FlowDirection="RightToLeft" Orientation="Horizontal">
+                            <iconPacks:PackIconBoxIcons   Grid.Row="0"   Kind="RegularNetworkChart" Spin="False" SpinAutoReverse="False" Height="25" Width="25" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"  />
 
-                <StackPanel Margin="0,15,10,0" HorizontalAlignment="Right">
-                <StackPanel Margin="0,0,15,0" FlowDirection="RightToLeft" Orientation="Horizontal">
-                    <iconPacks:PackIconBoxIcons   Grid.Row="0"   Kind="RegularBoltCircle" Spin="False" SpinAutoReverse="False" Height="25" Width="25" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"  />
+                            <TextBlock  VerticalAlignment="Center" Text="Social Media" HorizontalAlignment="Right" Margin="10,0,5,0" FontSize="18"/>
 
-                    <TextBlock  VerticalAlignment="Center" Text="Quick Access" HorizontalAlignment="Right" Margin="10,0,5,0" FontSize="18"/>
-
-                </StackPanel>
-                <hc:Divider Margin="15,5,15,5"/>
+                        </StackPanel>
+                        <hc:Divider Margin="15,5,15,5"/>
                         <hc:ButtonGroup Margin="5,5,5,5" Style="{DynamicResource ButtonGroupSolid}" Orientation="Vertical">
-                    <Button x:Name="CreateProjectButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.NewProject}" >
-                        
-                        <Grid Width="125" >
-                            <iconPacks:PackIconCodicons Kind="Add" HorizontalAlignment="Right"/>
-                            <TextBlock Margin="5,0,35,0" Text="Create Project" HorizontalAlignment="Right"/>
-                        </Grid>                      
-                    </Button>
+                            <Button x:Name="CreateProjectButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.NewProject}" >
 
-                    <Button x:Name="OpenProjectButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.OpenProject}"  >
-                        <Grid Width="125" >
-                            <iconPacks:PackIconCodicons Kind="GoToFile" HorizontalAlignment="Right"/>
-                            <TextBlock Margin="5,0,35,0" Text="Open Project" HorizontalAlignment="Right"/>
-                        </Grid>
-                    </Button>
-                    <Button x:Name="SettingsButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Click="SettingsButton_Click" >
-                        <Grid Width="125" >
-                            <iconPacks:PackIconCodicons Kind="Settings" HorizontalAlignment="Right"/>
-                            <TextBlock Margin="5,0,35,0" Text="Settings" HorizontalAlignment="Right"/>
-                        </Grid>
-                    </Button>
-
-                    <Button x:Name="TutorialsButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Click="TutorialsButton_Click" >
-                        <Grid Width="125" >
-                            <iconPacks:PackIconCodicons Kind="Question" HorizontalAlignment="Right"/>
-                            <TextBlock Margin="5,0,35,0" Text="Tutorials" HorizontalAlignment="Right"/>
-                        </Grid>
-                    </Button>
-                    <Button x:Name="WikiButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalLast}" HorizontalAlignment="Stretch" Click="WikiButton_Click" >
-                        <Grid Width="125" >
-                            <iconPacks:PackIconCodicons Kind="Info" HorizontalAlignment="Right"/>
-                            <TextBlock Margin="5,0,35,0" Text="Wiki" HorizontalAlignment="Right"/>
-                        </Grid>
-                    </Button>
+                                <Grid Width="125" >
+                                    <iconPacks:PackIconBoxIcons Kind="LogosDiscord" HorizontalAlignment="Right"/>
+                                    <TextBlock Margin="5,0,35,0" Text="Discord" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Button>
 
 
-                </hc:ButtonGroup>
-            </StackPanel>
+                            <Button x:Name="SettingsButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Click="SettingsButton_Click" >
+                                <Grid Width="125" >
+                                    <iconPacks:PackIconBoxIcons Kind="LogosTwitter" HorizontalAlignment="Right"/>
+                                    <TextBlock Margin="5,0,35,0" Text="Twitter" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Button>
+
+
+
+
+                        </hc:ButtonGroup>
+
+                        <StackPanel Grid.Row="1"  HorizontalAlignment="Left">
+                            <StackPanel Margin="0,10,15,0" FlowDirection="RightToLeft" Orientation="Horizontal">
+                                <iconPacks:PackIconBoxIcons   Grid.Row="0"   Kind="RegularNetworkChart" Spin="False" SpinAutoReverse="False" Height="25" Width="25" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"  />
+
+                                <TextBlock  VerticalAlignment="Center" Text="Support Us" HorizontalAlignment="Right" Margin="10,0,5,0" FontSize="18"/>
+
+                            </StackPanel>
+                            <hc:Divider Margin="15,5,15,5"/>
+                            <hc:ButtonGroup Margin="5,5,5,5" Style="{DynamicResource ButtonGroupSolid}" Orientation="Vertical">
+                                <Button x:Name="z342a" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.NewProject}" >
+
+                                    <Grid Width="125" >
+                                        <iconPacks:PackIconBoxIcons Kind="SolidDonateHeart" HorizontalAlignment="Right"/>
+                                        <TextBlock Margin="5,0,35,0" Text="Open Collective" HorizontalAlignment="Right"/>
+                                    </Grid>
+                                </Button>
+
+
+                                <Button x:Name="af3" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Click="SettingsButton_Click" >
+                                    <Grid Width="125" >
+                                        <iconPacks:PackIconBoxIcons Kind="LogosPatreon" HorizontalAlignment="Right"/>
+                                        <TextBlock Margin="5,0,35,0" Text="Patreon" HorizontalAlignment="Right"/>
+                                    </Grid>
+                                </Button>
+
+
+
+
+                            </hc:ButtonGroup>
+
+
+                        </StackPanel>
+
+
+                    
+                    </StackPanel>
+
+                    <StackPanel Grid.RowSpan="2" Margin="5,15,10,0" HorizontalAlignment="Right">
+                        <StackPanel Margin="0,0,15,0" FlowDirection="RightToLeft" Orientation="Horizontal">
+                            <iconPacks:PackIconBoxIcons   Grid.Row="0"   Kind="RegularBoltCircle" Spin="False" SpinAutoReverse="False" Height="25" Width="25" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"  />
+
+                            <TextBlock  VerticalAlignment="Center" Text="Quick Access" HorizontalAlignment="Right" Margin="10,0,5,0" FontSize="18"/>
+
+                        </StackPanel>
+                        <hc:Divider Margin="15,5,15,5"/>
+                        <hc:ButtonGroup Margin="5,5,5,5" Style="{DynamicResource ButtonGroupSolid}" Orientation="Vertical">
+                            <Button x:Name="sdasd" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.NewProject}" >
+
+                                <Grid Width="125" >
+                                    <iconPacks:PackIconCodicons Kind="Add" HorizontalAlignment="Right"/>
+                                    <TextBlock Margin="5,0,35,0" Text="Create Project" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Button>
+
+                            <Button x:Name="asd" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.OpenProject}"  >
+                                <Grid Width="125" >
+                                    <iconPacks:PackIconCodicons Kind="GoToFile" HorizontalAlignment="Right"/>
+                                    <TextBlock Margin="5,0,35,0" Text="Open Project" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Button>
+                            <Button x:Name="asad" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Click="SettingsButton_Click" >
+                                <Grid Width="125" >
+                                    <iconPacks:PackIconCodicons Kind="Settings" HorizontalAlignment="Right"/>
+                                    <TextBlock Margin="5,0,35,0" Text="Settings" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Button>
+
+                            <Button x:Name="asda" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Click="TutorialsButton_Click" >
+                                <Grid Width="125" >
+                                    <iconPacks:PackIconCodicons Kind="Question" HorizontalAlignment="Right"/>
+                                    <TextBlock Margin="5,0,35,0" Text="Tutorials" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Button>
+                            <Button x:Name="asdasd" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalLast}" HorizontalAlignment="Stretch" Click="WikiButton_Click" >
+                                <Grid Width="125" >
+                                    <iconPacks:PackIconCodicons Kind="Info" HorizontalAlignment="Right"/>
+                                    <TextBlock Margin="5,0,35,0" Text="Wiki" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Button>
+
+
+                        </hc:ButtonGroup>
+                    </StackPanel>
+                </Grid>
+                    
+                   
             </hc:TransitioningContentControl>
 
         </Grid>
@@ -250,7 +324,7 @@
                                                         <hc:Tag.Header>
                                                             <Border>
                                                               
-                                                                <Image Source="{Binding Image}">
+                                                                <Image Stretch="Fill" Source="{Binding Image}">
                                                                     <Image.Effect>
 
                                                                         <hc:BrightnessEffect Brightness="0.9"/>
@@ -317,7 +391,8 @@
 
                                                         </Button>
                                                         <hc:Divider LineStrokeThickness="2" LineStroke="{DynamicResource MahApps.Brushes.Accent3}" Orientation="Vertical" MaxHeight="16"/>
-                                                        <Button IsEnabled="False" Height="35"  HorizontalAlignment="Left">
+                                                            <Button  Command="{catel:CommandManagerBinding Application.DeleteProject}"
+                                                     CommandParameter="{Binding ProjectPath}" Height="35"  HorizontalAlignment="Left">
                                                             <iconPacks:PackIconCodicons Kind="Trash"></iconPacks:PackIconCodicons>
 
                                                         </Button>

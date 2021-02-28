@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <AssemblyName>WolvenKit</AssemblyName>
@@ -22,7 +22,8 @@
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
-    <Version>0.7.1</Version>
+    <Version>0.8.0.1-Beta</Version>
+    <Description>WPF</Description>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
@@ -39,6 +40,7 @@
     <None Remove="Resources\Icons\cloud.png" />
     <None Remove="Resources\Icons\cp77proj.ico" />
     <None Remove="Resources\Icons\cp77proj.png" />
+    <None Remove="Resources\Icons\CpProj.png" />
     <None Remove="Resources\Icons\FileIcons\aiarch3.svg" />
     <None Remove="Resources\Icons\FileIcons\animation.svg" />
     <None Remove="Resources\Icons\FileIcons\aningraph.svg" />
@@ -115,6 +117,7 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\cloud.png" />
     <Resource Include="Resources\Icons\cp77proj.png" />
+    <Resource Include="Resources\Icons\CpProj.png" />
     <Resource Include="Resources\Icons\FileIcons\aiarch3.svg" />
     <Resource Include="Resources\Icons\FileIcons\animation.svg" />
     <Resource Include="Resources\Icons\FileIcons\aningraph.svg" />

@@ -14,6 +14,7 @@ using WolvenKit.Views.AudioTool;
 using WolvenKit.Views.JournalEditor;
 using Orchestra.Views;
 using System.Windows.Media;
+using ControlzEx.Theming;
 
 namespace WolvenKit.Views
 {
@@ -33,7 +34,7 @@ namespace WolvenKit.Views
         {
             base.OnViewModelChanged();
 #pragma warning disable WPF0041
-            backstageTabControl.DataContext = ViewModel;
+            //backstageTabControl.DataContext = ViewModel;
 #pragma warning restore WPF0041
         }
 
@@ -47,8 +48,15 @@ namespace WolvenKit.Views
             switch (property.PropertyName)
             {
                 case "SelectedTheme":
-                    if (property.NewValue is string themename)
-                        ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, themename);
+                    if (property.NewValue is Color themename)
+                    {
+                        //wtf is this even
+                
+                    }
+
+
+
+
                     break;
                 default:
                     break;
@@ -57,7 +65,7 @@ namespace WolvenKit.Views
 
         private void ShowStartScreen_OnClick(object sender, RoutedEventArgs e) // Convert me to MVVM
         {        
-            // Nope we dont do that here . And I am not removing this >:)
+            // Nope we dont do that here . And I am not removing this >:) lol
         }
 
        
@@ -137,6 +145,11 @@ namespace WolvenKit.Views
 
             WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
             WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
+        }
+
+        private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            // No
         }
     }
 }

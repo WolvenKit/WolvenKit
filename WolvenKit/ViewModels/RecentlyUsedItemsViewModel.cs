@@ -147,11 +147,19 @@ namespace WolvenKit.ViewModels
                 var cd = item.DateTime;
                 var p = item.Name;
 
+                var newfo = fi.Name.Split('.');
+                var newfi = fi.Directory + "\\" + newfo[0] + "\\" + "img.png";
+
+                var IsThere = File.Exists(newfi);
+
+
+
                 FancyProjectObject NewItem;
                 if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.cpmodproj.ToString())
                 {
-
-                    NewItem = new FancyProjectObject(fi.Name, cd, "Cyberpunk 2077", p, "pack://application:,,,/Resources/Icons/thankyoumoonded.png");
+                    if (!IsThere)
+                    { newfi = "pack://application:,,,/Resources/Icons/CpProj.png"; }
+                    NewItem = new FancyProjectObject(fi.Name, cd, "Cyberpunk 2077", p, newfi);
                     Application.Current.Dispatcher.BeginInvoke(
                                             DispatcherPriority.Background,
                                             new Action(() =>
@@ -161,7 +169,10 @@ namespace WolvenKit.ViewModels
                 }
                 if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.w3modproj.ToString())
                 {
-                    NewItem = new FancyProjectObject(n, cd, "The Witcher 3", p, "pack://application:,,,/Resources/Icons/tw3proj.png");
+                    if (!IsThere)
+                    { newfi = "pack://application:,,,/Resources/Icons/tw3proj.png"; }
+
+                    NewItem = new FancyProjectObject(n, cd, "The Witcher 3", p, newfi);
                     Application.Current.Dispatcher.BeginInvoke(
                                            DispatcherPriority.Background,
                                            new Action(() =>
@@ -195,6 +206,7 @@ namespace WolvenKit.ViewModels
                 Type = type;
                 ProjectPath = path;
                 Image = image;
+               
             }
         }
     }

@@ -1,20 +1,27 @@
+using System;
+using System.IO;
+using System.Text;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
+using Orchestra;
+using Orchestra.Services;
+using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 using Orc.Notifications;
 using Orc.ProjectManagement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Settings = Orc.Squirrel.Settings;
+
+using WolvenKit.Model.Wizards;
+using Fluent;
+using Catel.IoC;
+using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Common.Services;
-using WolvenKit.ViewModels;
-using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Commands
 {
-    class ApplicationThemeWizardCommandContainer : Catel.MVVM.CommandContainerBase
+    class ApplicationDeleteProjectCommandContainer : Catel.MVVM.CommandContainerBase
     {
         private readonly INavigationService _navigationService;
         private readonly ILoggerService _loggerService;
@@ -23,7 +30,7 @@ namespace WolvenKit.Commands
         private readonly IViewModelFactory _viewModelFactory;
         private readonly IMessageService _messageService;
 
-        public ApplicationThemeWizardCommandContainer(
+        public ApplicationDeleteProjectCommandContainer(
             ICommandManager commandManager,
             INavigationService navigationService,
             IProjectManager projectManager,
@@ -49,11 +56,11 @@ namespace WolvenKit.Commands
 
         protected override bool CanExecute(object parameter) => true;
 
-        protected override void Execute(object parameter)
+        protected override  void Execute(object parameter)
         {
             try
             {
-                // What is the parameter here ? 
+              
 
             }
             catch (Exception ex)
