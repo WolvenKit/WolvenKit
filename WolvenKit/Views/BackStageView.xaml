@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WolvenKit.Views" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:local="clr-namespace:WolvenKit.Views" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:Fluent="urn:fluent-ribbon"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -15,17 +15,21 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
                 <RowDefinition Height="4*"/>
-                <RowDefinition Height="1*"/>
+   
             </Grid.RowDefinitions>
-            <Grid VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" Margin="15,15,0,15">
+            <Grid Grid.Row="1" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" Margin="15,15,0,15">
 
                 <Border  Effect="{DynamicResource  MahApps.DropShadowEffect.Menu}" CornerRadius="10"  Background="{DynamicResource RegionBrush}" >
                     <Border Margin="1,50,1,15" CornerRadius="10" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
                         <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
                             <Grid>
-                                <TextBlock Margin="0,-40,0,0" Text="Templates" Foreground="Gray" FontSize="16" HorizontalAlignment="Center"/>
+                                <TextBlock Margin="0,-40,0,0" Text="Templates" Foreground="Gray" FontSize="20" HorizontalAlignment="Center"/>
                                 <StackPanel>
+                                    <Image Margin="35" Source="pack://application:,,,/Resources/Images/Files/.cpmodproj.png"/>
+                                    <Image Margin="35" Source="pack://application:,,,/Resources/Images/Files/.w3modproj.png"/>
+
                                 </StackPanel>
 
                             </Grid>
@@ -35,7 +39,7 @@
                 </Border>
             </Grid>
 
-            <Grid VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" Margin="15" Grid.Column="1">
+            <Grid Grid.Row="1" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" Margin="15" Grid.Column="1">
                 <Border  Effect="{DynamicResource  MahApps.DropShadowEffect.Menu}" CornerRadius="10"  Background="{DynamicResource RegionBrush}" >
                     <Border Margin="1,50,1,15" CornerRadius="10" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
                         <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
@@ -48,66 +52,113 @@
 
             </Grid>
 
+            <Grid Grid.Row="0" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" Margin="15,15,15,0" Grid.Column="1">
+                <Border  Effect="{DynamicResource  MahApps.DropShadowEffect.Menu}" CornerRadius="10"  Background="{DynamicResource RegionBrush}" >
+                    <Border VerticalAlignment="Center" CornerRadius="10" Margin="1,5,1,5" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+                        <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
+                            <Grid Grid.Row="0"  Grid.ColumnSpan="2">
 
 
 
-            <Grid Grid.Row="1" Background="{DynamicResource RegionBrush}" Grid.ColumnSpan="2">
-                <hc:ButtonGroup HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Button FontSize="20" Height="70" Width="150"   >
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <iconPacks:PackIconCodicons Kind="GoToFile" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
-                            <TextBlock Text="Open"/>
-                        </StackPanel>
 
-                    </Button>
-                    <Button FontSize="20" Height="70" Width="150"   >
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <iconPacks:PackIconCodicons Kind="NewFile" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
-                            <TextBlock Text="New"/>
-                        </StackPanel>
-                    </Button>
-                    <Button FontSize="20" Height="70" Width="150"   >
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <iconPacks:PackIconCodicons Kind="Save" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
-                            <TextBlock Text="Save"/>
-                        </StackPanel>
-                    </Button>
-                    <Button FontSize="20" Height="70" Width="150"   >
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <iconPacks:PackIconCodicons Kind="SaveAs" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
-                            <TextBlock Text="Save As"/>
-                        </StackPanel>
-                    </Button>
-                    <Button FontSize="20" Height="70" Width="150"   >
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <iconPacks:PackIconCodicons Kind="Package" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
-                            <TextBlock Text="Publish"/>
-                        </StackPanel>
-                    </Button>
+                                <hc:ButtonGroup  VerticalAlignment="Center">
+                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <iconPacks:PackIconCodicons Kind="GoToFile" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
+                                            <TextBlock Text="Open"/>
+                                        </StackPanel>
 
-                    <Button FontSize="20" Height="70" Width="150"   >
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <iconPacks:PackIconCodicons Kind="Settings" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
-                            <TextBlock Text="Settings"/>
-                        </StackPanel>
-                    </Button>
-                    <Button FontSize="20" Height="70" Width="150"   >
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <iconPacks:PackIconCodicons Kind="Bug" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
-                            <TextBlock Text="Bug Report"/>
-                        </StackPanel>
-                    </Button>
-                    <Button FontSize="20" Height="70" Width="150"   >
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <iconPacks:PackIconCodicons Kind="Info" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
-                            <TextBlock Text="About"/>
-                        </StackPanel>
-                    </Button>
+                                    </Button>
+                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <iconPacks:PackIconCodicons Kind="NewFile" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
+                                            <TextBlock Text="New"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <iconPacks:PackIconCodicons Kind="Save" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
+                                            <TextBlock Text="Save"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <iconPacks:PackIconCodicons Kind="SaveAs" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
+                                            <TextBlock Text="Save As"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <iconPacks:PackIconCodicons Kind="Package" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
+                                            <TextBlock Text="Publish"/>
+                                        </StackPanel>
+                                    </Button>
 
-                </hc:ButtonGroup>
+                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <iconPacks:PackIconCodicons Kind="Settings" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
+                                            <TextBlock Text="Settings"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <iconPacks:PackIconCodicons Kind="Bug" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
+                                            <TextBlock Text="Bug Report"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <iconPacks:PackIconCodicons Kind="Info" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
+                                            <TextBlock Text="About"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                </hc:ButtonGroup>
+
+                            </Grid>
+                        </hc:TransitioningContentControl>
+
+                    </Border>
+                </Border>
 
             </Grid>
 
+
+
+            <Grid  VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" Margin="15,15,0,0" >
+                <Border  Effect="{DynamicResource  MahApps.DropShadowEffect.Menu}" CornerRadius="10"  Background="{DynamicResource RegionBrush}" >
+                    <Border Margin="1,5,1,5" CornerRadius="10" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+                        <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
+                            <Fluent:Button  
+                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"                        
+                            BorderThickness="1"
+                            IsDefinitive="True"
+                            Style="{StaticResource ButtonIcon}" 
+                            hc:IconElement.Geometry="{DynamicResource GlobalLeftArrow}"                
+                            hc:BorderElement.CornerRadius="5"  
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            VerticalAlignment="Stretch"
+                            Grid.RowSpan="1"
+                            HorizontalAlignment="Stretch"
+                            FontSize="20"
+                
+             Height="auto"
+                Margin="15"
+                            Width="200"
+             >
+
+
+                            </Fluent:Button>
+                        </hc:TransitioningContentControl>
+
+                    </Border>
+                  
+                </Border>
+
+            </Grid>
+
+         
         </Grid>
 
     </Grid>

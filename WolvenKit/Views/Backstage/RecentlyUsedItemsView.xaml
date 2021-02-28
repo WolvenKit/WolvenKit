@@ -20,8 +20,8 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <orchestra:RibbonBackstageTabItemHeader  Grid.Row="0" HeaderText="Recent documents" Height="60" 
-                                                Icon="{orctheming:FontImage {x:Static global:FontAwesome.FolderOpenO}, FontFamily=FontAwesome}" />
+        <orchestra:RibbonBackstageTabItemHeader Foreground="Gray"  Grid.Row="0" HeaderText="Recent documents" Height="60" 
+                                                 />
 
         <ItemsControl Grid.Row="1"
                       ItemsSource="{Binding PinnedItems}"
@@ -44,7 +44,7 @@
                                                              Width="24" 
                                                              Height="24" 
                                                              ShowBorder="False">
-                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.ThumbTack}, FontFamily=FontAwesome}" />
+                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.ThumbTack}}" />
                             </orchestra:RibbonBackstageButton>
 
                             <Label Grid.Column="1"
@@ -57,7 +57,7 @@
                                                              Height="24"
                                                              ToolTip="Open in explorer" 
                                                              ShowBorder="False">
-                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.FolderOpenO}, FontFamily=FontAwesome}" />
+                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.FolderOpenO}}" />
                             </orchestra:RibbonBackstageButton>
                         </Grid>
                     </orchestra:RibbonBackstageButton>
@@ -93,7 +93,7 @@
                                                              Width="24" 
                                                              Height="24" 
                                                              ShowBorder="False">
-                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.ThumbTack}, FontFamily=FontAwesome}" >
+                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.ThumbTack}}" >
                                     <Image.RenderTransform>
                                         <RotateTransform Angle="90" 
                                                          CenterX="9" 
@@ -112,7 +112,7 @@
                                                              Height="24" 
                                                              ToolTip="Open in explorer" 
                                                              ShowBorder="False">
-                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.FolderOpenO}, FontFamily=FontAwesome}" />
+                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.FolderOpenO}}" />
                             </orchestra:RibbonBackstageButton>
                         </Grid>
                     </orchestra:RibbonBackstageButton>
