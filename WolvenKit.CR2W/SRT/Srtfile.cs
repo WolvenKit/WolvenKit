@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -57,6 +57,10 @@ namespace WolvenKit.CR2W.SRT
         public string FileName { get; set; }
 
         public List<ICR2WExport> Chunks => throw new NotImplementedException();
+
+        public List<ICR2WBuffer> Buffers => throw new NotImplementedException();
+
+        public List<ICR2WImport> Imports => throw new NotImplementedException();
         #endregion
 
 
@@ -1074,7 +1078,6 @@ namespace WolvenKit.CR2W.SRT
             return true;
         }
         #endregion
-
 
         #region Enums
         // user data

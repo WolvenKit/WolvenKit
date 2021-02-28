@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.CR2W
 {
@@ -28,14 +29,13 @@ namespace WolvenKit.CR2W
         public uint crc32;
     }
     
-    public class CR2WBufferWrapper
+    public class CR2WBufferWrapper : ICR2WBuffer
     {
         private CR2WBuffer _buffer;
-        public CR2WBuffer Buffer {
-            get => _buffer;
-            set => _buffer = value;
-        }
+        public CR2WBuffer Buffer => _buffer;
+
         private byte[] _data;
+
         public byte[] Data {
             get => _data;
             set => _data = value;
@@ -52,6 +52,34 @@ namespace WolvenKit.CR2W
         }
 
         public void SetOffset(uint offset) => _buffer.offset = offset;
+
+        public uint Flags => _buffer.flags;
+
+        public uint Index => _buffer.index;
+
+        public uint Offset
+        {
+            get => _buffer.offset;
+            set => _buffer.offset = value;
+        }
+
+        public uint DiskSize
+        {
+            get => _buffer.diskSize;
+            set => _buffer.diskSize = value;
+        }
+
+        public uint MemSize
+        {
+            get => _buffer.memSize;
+            set => _buffer.memSize = value;
+        }
+
+        public uint Crc32
+        {
+            get => _buffer.crc32;
+            set => _buffer.crc32 = value;
+        }
 
         public void ReadData(BinaryReader file)
         {
@@ -85,7 +113,7 @@ namespace WolvenKit.CR2W
 
         public override string ToString()
         {
-            return Buffer.index.ToString();
+            return _buffer.index.ToString();
         }
     }
 }

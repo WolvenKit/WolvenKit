@@ -1,5 +1,6 @@
-﻿using System.IO;
+using System.IO;
 using System.Runtime.InteropServices;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.CR2W
 {
@@ -33,19 +34,23 @@ namespace WolvenKit.CR2W
         public ushort flags;
     }
 
-    public class CR2WImportWrapper
+    public class CR2WImportWrapper : ICR2WImport
     {
-        public CR2WImport Import { get; set; }
+        private CR2WImport _import;
+        public CR2WImport Import => _import;
 
         private readonly CR2WFile _cr2w;
 
-        public string DepotPathStr => _cr2w.StringDictionary[Import.depotPath];
-        public string ClassNameStr => _cr2w.Names[Import.className].Str;
-        public ushort Flags => Import.flags;
+        public uint DepotPath => _import.depotPath;
+        public ushort ClassName => _import.className;
+        public ushort Flags => _import.flags;
+
+        public string DepotPathStr => _cr2w.StringDictionary[_import.depotPath];
+        public string ClassNameStr => _cr2w.Names[_import.className].Str;
 
         public CR2WImportWrapper(CR2WImport import, CR2WFile cr2w)
         {
-            Import = import;
+            _import = import;
             _cr2w = cr2w;
         }
 

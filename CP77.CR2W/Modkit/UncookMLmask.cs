@@ -1,4 +1,4 @@
-﻿using CP77.Common.Image;
+using CP77.Common.Image;
 using CP77.CR2W.Types;
 using System;
 using System.Collections.Generic;
@@ -65,11 +65,11 @@ namespace CP77.CR2W.Uncooker
 
             byte[] atlas;
             var atlasRaw = new byte[atlasWidth * atlasHeight];
-            var atlasBuffer = cr2w.Buffers[0].Buffer;
-            cr2wStream.Seek(atlasBuffer.offset, SeekOrigin.Begin);
+            var atlasBuffer = cr2w.Buffers[0];
+            cr2wStream.Seek(atlasBuffer.Offset, SeekOrigin.Begin);
             using (var ms = new MemoryStream())
             {
-                cr2wStream.DecompressAndCopySegment(ms, atlasBuffer.diskSize, atlasBuffer.memSize);
+                cr2wStream.DecompressAndCopySegment(ms, atlasBuffer.DiskSize, atlasBuffer.MemSize);
                 atlas = ms.ToArray();
             }
 
@@ -92,13 +92,13 @@ namespace CP77.CR2W.Uncooker
             //}
 
             //Read tilesdata buffer into appropriate variable type
-            var tileBuffer = cr2w.Buffers[0].Buffer;
-            var tiles = new uint[tileBuffer.memSize / 4];
-            cr2wStream.Seek(tileBuffer.offset, SeekOrigin.Begin);
+            var tileBuffer = cr2w.Buffers[0];
+            var tiles = new uint[tileBuffer.MemSize / 4];
+            cr2wStream.Seek(tileBuffer.Offset, SeekOrigin.Begin);
             using (var ms = new MemoryStream())
             using (var br = new BinaryReader(ms))
             {
-                cr2wStream.DecompressAndCopySegment(ms, tileBuffer.diskSize, tileBuffer.memSize);
+                cr2wStream.DecompressAndCopySegment(ms, tileBuffer.DiskSize, tileBuffer.MemSize);
                 ms.Seek(0, SeekOrigin.Begin);
 
                 for (var i = 0; i < tiles.Length; i++)

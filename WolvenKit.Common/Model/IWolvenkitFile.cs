@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -18,6 +18,9 @@ namespace WolvenKit.Common.Model
         string FileName { get; set; }
 
         List<ICR2WExport> Chunks { get; }
+        List<ICR2WBuffer> Buffers { get; }
+        List<ICR2WImport> Imports { get; }
+        //List<ICR2WEmbedded> Embedded { get; }
 
         Task<EFileReadErrorCodes> Read(BinaryReader file);
 

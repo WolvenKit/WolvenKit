@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -23,7 +23,7 @@ namespace CP77.CR2W
         public ulong pathHash;          // updated on cr2w write // always 0 in cp77?
     }
 
-    public class CR2WEmbeddedWrapper
+    public class CR2WEmbeddedWrapper : ICR2WEmbedded
     {
         public CR2WEmbeddedWrapper()
         {

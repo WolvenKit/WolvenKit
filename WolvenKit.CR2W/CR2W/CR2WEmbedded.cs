@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Linq;
 using System.Threading.Tasks;
 using WolvenKit.Common;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.CR2W
 {
@@ -27,7 +28,7 @@ namespace WolvenKit.CR2W
         public uint dataSize;           // updated on data write
     }
 
-    public class CR2WEmbeddedWrapper
+    public class CR2WEmbeddedWrapper : ICR2WEmbedded
     {
         private CR2WEmbedded _embedded;
         public CR2WEmbedded Embedded {
@@ -38,7 +39,7 @@ namespace WolvenKit.CR2W
 
         //private CR2WFile parsedFile;
         
-        public List<CR2WImportWrapper> ParentImports { get; set; }
+        public List<ICR2WImport> ParentImports { get; set; }
 
         public string ClassName { get; set; } = "<failed to get class name>";
         public string ImportPath { get; set; } = "<failed to get import path>";

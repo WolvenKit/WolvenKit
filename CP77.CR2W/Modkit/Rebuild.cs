@@ -180,12 +180,11 @@ namespace CP77.CR2W
 
                         if (i < existingBufferCount)
                         {
-                            var oldBuffer = cr2w.Buffers[i].Buffer;
-                            oldBuffer.offset = offset;
-                            oldBuffer.diskSize = zsize;
-                            oldBuffer.memSize = (uint)inbuffer.Length;
-                            oldBuffer.crc32 = crc;
-                            cr2w.Buffers[i].Buffer = oldBuffer;
+                            var b = cr2w.Buffers[i];
+                            b.Offset = offset;
+                            b.DiskSize = zsize;
+                            b.MemSize = (uint)inbuffer.Length;
+                            b.Crc32 = crc;
                         }
                         else
                         {
