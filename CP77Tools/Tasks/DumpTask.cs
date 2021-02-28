@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +15,7 @@ using CP77.CR2W;
 using CP77.CR2W.Reflection;
 using CP77.CR2W.Types;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
@@ -29,8 +30,8 @@ namespace CP77Tools.Tasks
     public class Cr2wChunkInfo
     {
         public Dictionary<uint, string> Stringdict { get; set; }
-        public List<CR2WImportWrapper> Imports { get; set; }
-        public List<CR2WBufferWrapper> Buffers { get; set; }
+        public List<ICR2WImport> Imports { get; set; }
+        public List<ICR2WBuffer> Buffers { get; set; }
 
         public List<CR2WExportWrapper> Chunks { get; set; }
 

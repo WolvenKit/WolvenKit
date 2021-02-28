@@ -189,9 +189,9 @@ namespace CP77.CR2W
 
                 var bufferpath = $"{cr2wFileName}.{i}.buffer";
                 using var fs = new FileStream(bufferpath, FileMode.Create, FileAccess.Write);
-                var b = buffers[i].Buffer;
-                cr2wStream.Seek(b.offset, SeekOrigin.Begin);
-                cr2wStream.DecompressAndCopySegment(fs, b.diskSize, b.memSize);
+                var b = buffers[i];
+                cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
+                cr2wStream.DecompressAndCopySegment(fs, b.DiskSize, b.MemSize);
             }
 
             return true;
@@ -239,9 +239,9 @@ namespace CP77.CR2W
                 new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
                     true));
 
-            var b = cr2w.Buffers[0].Buffer;
-            cr2wStream.Seek(b.offset, SeekOrigin.Begin);
-            cr2wStream.DecompressAndCopySegment(ddsStream, b.diskSize, b.memSize);
+            var b = cr2w.Buffers[0];
+            cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
+            cr2wStream.DecompressAndCopySegment(ddsStream, b.DiskSize, b.MemSize);
 
             return true;
         }
@@ -275,9 +275,9 @@ namespace CP77.CR2W
             DDSUtils.GenerateAndWriteHeader(ddsStream,
                 new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
                     true));
-            var b = cr2w.Buffers[0].Buffer;
-            cr2wStream.Seek(b.offset, SeekOrigin.Begin);
-            cr2wStream.DecompressAndCopySegment(ddsStream, b.diskSize, b.memSize);
+            var b = cr2w.Buffers[0];
+            cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
+            cr2wStream.DecompressAndCopySegment(ddsStream, b.DiskSize, b.MemSize);
 
             return true;
         }
@@ -325,9 +325,9 @@ namespace CP77.CR2W
             DDSUtils.GenerateAndWriteHeader(ddsStream,
                 new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
                     true));
-            var b = cr2w.Buffers[0].Buffer;
-            cr2wStream.Seek(b.offset, SeekOrigin.Begin);
-            cr2wStream.DecompressAndCopySegment(ddsStream, b.diskSize, b.memSize);
+            var b = cr2w.Buffers[0];
+            cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
+            cr2wStream.DecompressAndCopySegment(ddsStream, b.DiskSize, b.MemSize);
 
             return true;
         }
@@ -416,9 +416,9 @@ namespace CP77.CR2W
                 DDSUtils.GenerateAndWriteHeader(ddsStream,
                     new DDSMetadata(width, height, mips, texformat, alignment, false, slicecount,
                         true));
-                var b = cr2w.Buffers[0].Buffer;
-                cr2wStream.Seek(b.offset, SeekOrigin.Begin);
-                cr2wStream.DecompressAndCopySegment(ddsStream, b.diskSize, b.memSize);
+                var b = cr2w.Buffers[0];
+                cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
+                cr2wStream.DecompressAndCopySegment(ddsStream, b.DiskSize, b.MemSize);
             }
 
             if (flip && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

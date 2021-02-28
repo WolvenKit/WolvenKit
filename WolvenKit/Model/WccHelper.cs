@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.Model
 {
@@ -833,8 +834,8 @@ namespace WolvenKit.Model
                 relativepath = importfilepath.Substring(alternateOutDirectory.Length + 1);
             }
 
-            List<CR2WImportWrapper> importslist = new List<CR2WImportWrapper>();
-            List<CR2WBufferWrapper> bufferlist = new List<CR2WBufferWrapper>();
+            var importslist = new List<ICR2WImport>();
+            var bufferlist = new List<ICR2WBuffer>();
             bool hasinternalBuffer;
 
             using (var fs = new FileStream(importfilepath, FileMode.Open, FileAccess.Read))
@@ -875,9 +876,9 @@ namespace WolvenKit.Model
             else
             {
                 // unbundle external buffers
-                foreach (CR2WBufferWrapper buffer in bufferlist)
+                foreach (var buffer in bufferlist)
                 {
-                    var index = buffer.Buffer.index;
+                    var index = buffer.Index;
                     string bufferpath = $"{relativepath}.{index}.buffer";
                     var bufferName = $"{Path.GetFileName(relativepath)}.{index}.buffer";
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using WolvenKit.CR2W.Types;
@@ -10,6 +10,7 @@ using System.Linq;
 using System.IO.MemoryMappedFiles;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Newtonsoft.Json;
 using WolvenKit.Common.Model.Cr2w;
 
 [assembly: ContractNamespaceAttribute("",    ClrNamespace = "WolvenKit.CR2W")]
@@ -57,7 +58,7 @@ namespace WolvenKit.CR2W
     }
 
     [DataContract(Namespace = "")]
-    public class CR2WExportWrapper
+    public class CR2WExportWrapper : ICR2WExport
     {
 
         #region  Constructors
@@ -99,19 +100,23 @@ namespace WolvenKit.CR2W
         #endregion
 
         private CR2WExport _export;
-        [DataMember()]
         public CR2WExport Export => _export;
 
         #region Fields
 
-        [NonSerialized]
-        public CBytes unknownBytes;
+        IEditableVariable ICR2WExport.unknownBytes => unknownBytes;
+
+        List<string> ICR2WExport.UnknownTypes => UnknownTypes;
+
+        [NonSerialized] [JsonIgnore] public CBytes unknownBytes;
+
+        [NonSerialized] [JsonIgnore] public List<string> UnknownTypes = new();
         #endregion
 
         #region Properties
         public CR2WFile cr2w { get; }
 
-        public CVariable data { get; private set; }
+        public IEditableVariable data { get; private set; }
 
         /// <summary>
         /// Main CR2WExport.parentId wrapper
@@ -128,7 +133,7 @@ namespace WolvenKit.CR2W
             set => ParentChunkIndex = value == null ? -1 : cr2w.Chunks.IndexOf(value);
         }
 
-        public ICR2WExport VirtualParentChunk;
+        public ICR2WExport VirtualParentChunk { get; set; }
 
         public int VirtualParentChunkIndex => cr2w.Chunks.IndexOf(VirtualParentChunk);
 
@@ -141,14 +146,14 @@ namespace WolvenKit.CR2W
         /// This is the directed-graph in-edge list :
         /// CVariables, being CPtr or CHandle, which reference this chunk.
         /// </summary>
-        public List<IChunkPtrAccessor> AdReferences;
+        public List<IChunkPtrAccessor> AdReferences { get; }
 
         /// <summary>
         /// Playing with latin here, ab means toward, ab away from.
         /// This is the directed-graph out-edge list :
         /// CVariables, being CPtr or CHandle, which are referenced by this chunk.
         /// </summary>
-        public List<IChunkPtrAccessor> AbReferences;
+        public List<IChunkPtrAccessor> AbReferences { get; }
 
         public string REDType { get; private set; }
 
@@ -262,7 +267,7 @@ namespace WolvenKit.CR2W
 
             // Unknown bytes
             var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);
-            unknownBytes = new CBytes(cr2w, data, "unknownBytes");
+            unknownBytes = new CBytes(cr2w, data as CVariable, "unknownBytes");
             if (bytesLeft > 0)
             {
                 unknownBytes.Read(file, (uint) bytesLeft);
@@ -276,90 +281,6 @@ namespace WolvenKit.CR2W
                 unknownBytes.Bytes = new byte[0];
             }
         }
-
-        public /*async Task*/ void ReadData(MemoryMappedFile mmf)
-        {
-            //await Task.Run(() =>
-            //{
-                using (MemoryMappedViewStream vs = mmf.CreateViewStream(_export.dataOffset, _export.dataSize, MemoryMappedFileAccess.Read))
-                using (BinaryReader br = new BinaryReader(vs))
-                {
-                    CreateDefaultData();
-
-                    data.Read(br, _export.dataSize);
-
-                    // Unknown bytes
-                    var bytesLeft = _export.dataSize - (br.BaseStream.Position - _export.dataOffset);
-                    unknownBytes = new CBytes(cr2w, data, "unknownBytes");
-                    if (bytesLeft > 0)
-                    {
-                        unknownBytes.Read(br, (uint)bytesLeft);
-                    }
-                    else if (bytesLeft < 0)
-                    {
-                        //throw new InvalidParsingException("File read too far.");
-                    }
-                    else
-                    {
-                        unknownBytes.Bytes = new byte[0];
-                    }
-
-                    if (cr2w.Logger!= null)
-                    {
-                        float percentprogress = (float)(1 / (float)cr2w.Chunks.Count * 100.0);
-                        cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
-                    }
-                    
-                }
-            //}
-            //);
-        }
-
-
-        public /*async Task*/ void ReadData(MemoryMappedViewStream vs)
-        {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            //await Task.Run(() =>
-            //{
-            using (BinaryReader br = new BinaryReader(vs))
-            {
-                CreateDefaultData();
-
-                data.VarChunkIndex = ChunkIndex;
-
-                data.Read(br, _export.dataSize);
-
-                // Unknown bytes
-                var bytesLeft = _export.dataSize - (br.BaseStream.Position - _export.dataOffset);
-                unknownBytes = new CBytes(cr2w, data, "unknownBytes");
-                if (bytesLeft > 0)
-                {
-                    unknownBytes.Read(br, (uint)bytesLeft);
-                }
-                else if (bytesLeft < 0)
-                {
-                    //throw new InvalidParsingException("File read too far.");
-                }
-                else
-                {
-                    unknownBytes.Bytes = new byte[0];
-                }
-
-                stopwatch.Stop();
-                if (cr2w.Logger != null)
-                {
-                    float percentprogress = (float)(1 / (float)cr2w.Chunks.Count * 100.0);
-                    cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
-                    //cr2w.Logger.LogString($"{stopwatch.Elapsed} CHUNK {REDName}\n");
-                }
-
-            }
-            //}
-            //);
-        }
-
 
         public void WriteData(BinaryWriter file)
         {
@@ -386,27 +307,20 @@ namespace WolvenKit.CR2W
         /// <summary>
         /// Needs the parentChunk idx to be set!
         /// </summary>
-        public void CreateDefaultData(CVariable cvar = null)
+        public void CreateDefaultData(IEditableVariable cvar = null)
         {
             //if (Export.className != 1 && GetParentChunk() == null)
             //    throw new InvalidChunkTypeException("No parent chunk set!");
 
-            if (cvar == null)
-            {
-                data = CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data as CVariable);
-            }
-            else
-            {
-                data = cvar;
-            }
+            data = cvar ?? CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data as CVariable);
 
-            if (data == null)
+            if (data == null || data is not CVariable cdata)
             {
-                throw new NotImplementedException();
+                throw new InvalidParsingException($"{nameof(CreateDefaultData)} failed: {this.REDName}");
             }
 
             data.IsSerialized = true;
-            data.SetREDFlags(Export.objectFlags);
+            cdata.SetREDFlags(Export.objectFlags);
         }
 
         public override string ToString() => REDName;
@@ -444,8 +358,6 @@ namespace WolvenKit.CR2W
         {
             throw new NotImplementedException();
         }
-
-        public Guid InternalGuid { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public CVariable Copy(CR2WCopyAction context)
         {

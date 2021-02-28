@@ -1,5 +1,6 @@
-﻿using System.IO;
+using System.IO;
 using System.Runtime.InteropServices;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W
 {
@@ -33,26 +34,42 @@ namespace CP77.CR2W
         public ushort flags;
     }
 
-    public class CR2WImportWrapper
+    public class CR2WImportWrapper : ICR2WImport
     {
-        public CR2WImport Import { get; set; }
-
-        private readonly CR2WFile _cr2w;
-
-        public string DepotPathStr => _cr2w.StringDictionary.ContainsKey(Import.depotPath) 
-            ?_cr2w.StringDictionary[Import.depotPath]
-            : "PATH NOT FOUND";
-        public string ClassNameStr => _cr2w.Names.Count <= Import.className 
-            ? _cr2w.Names[Import.className].Str
-            : "NAME NOT FOUND";
-        public ushort Flags => Import.flags;
+        #region ctor
 
         public CR2WImportWrapper(CR2WImport import, CR2WFile cr2w)
         {
-            Import = import;
+            _import = import;
             _cr2w = cr2w;
         }
 
+        #endregion
+
+        private readonly CR2WFile _cr2w;
+        private CR2WImport _import;
+        public CR2WImport Import => _import;
+        
+        #region properties
+
+        public uint DepotPath => _import.depotPath;
+        public ushort ClassName => _import.className;
+        public ushort Flags => _import.flags;
+
+        public string DepotPathStr => _cr2w.StringDictionary.ContainsKey(_import.depotPath)
+            ? _cr2w.StringDictionary[_import.depotPath]
+            : "PATH NOT FOUND";
+
+        public string ClassNameStr => _cr2w.Names.Count <= _import.className
+            ? _cr2w.Names[_import.className].Str
+            : "NAME NOT FOUND";
+
+        #endregion
+
+        #region methods
+
         public override string ToString() => DepotPathStr;
+
+        #endregion
     }
 }

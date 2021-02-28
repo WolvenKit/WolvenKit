@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Catel.MVVM;
@@ -43,12 +43,7 @@ namespace WolvenKit.ViewModels
 		#endregion fields
 
 		#region ctors
-		/// <summary>
-		/// class constructor
-		/// </summary>
-		/// <param name="workSpaceViewModel"></param>
-		/// <param name="initialPath"></param>
-		/// <param name="isExistingInFileSystem"></param>
+		
 		public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel,
 								FileSystemInfoModel model,
 								bool isExistingInFileSystem)
@@ -67,19 +62,12 @@ namespace WolvenKit.ViewModels
 			_IsExistingInFileSystem = isExistingInFileSystem;
 		}
 
-		/// <summary>
-		/// class constructor
-		/// </summary>
-		/// <param name="workSpaceViewModel"></param>
 		public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel)
 			: this()
 		{
 			_workSpaceViewModel = workSpaceViewModel;
 		}
 
-		/// <summary>
-		/// class constructor
-		/// </summary>
 		public DocumentViewModel()
 		{
 			IsDirty = false;
@@ -102,11 +90,19 @@ namespace WolvenKit.ViewModels
             .Select(_ => new ChunkViewModel(_)).ToList();
 
         /// <summary>
-        /// Bound to the View via TreeViewBehavior.cs
+        /// Bound to the View
         /// </summary>
-        //public ChunkViewModel SelectedChunk { get; set; }
+        public List<ICR2WImport> Imports => File.Imports;
+
+        /// <summary>
+        /// Bound to the View
+        /// </summary>
+        public List<ICR2WBuffer> Buffers => File.Buffers;
 
         private ChunkViewModel _selectedChunk;
+        /// <summary>
+        /// Bound to the View via TreeViewBehavior.cs
+        /// </summary>
         public ChunkViewModel SelectedChunk
         {
             get => _selectedChunk;

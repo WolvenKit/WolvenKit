@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -14,9 +14,28 @@ namespace WolvenKit.Common.Model.Cr2w
         string ReferenceType { get; }
     }
 
+    public interface ICR2WImport
+    {
+        public uint DepotPath { get; }
+        public ushort ClassName { get; }
+        public ushort Flags { get; }
+
+        public string DepotPathStr { get; }
+        public string ClassNameStr { get; }
+    }
     public interface ICR2WBuffer
     {
+        public uint Flags { get; }
+        public uint Index { get; }
+        public uint Offset { get; set; }
+        public uint DiskSize { get; set; }
+        public uint MemSize { get; set; }
+        public uint Crc32 { get; set; }
 
+
+        public void ReadData(BinaryReader file);
+        public void WriteData(BinaryWriter file);
+        public void SetOffset(uint offset);
     }
     public interface ICR2WEmbedded
     {

@@ -116,12 +116,12 @@ namespace CP77.CR2W
                     
                     // HINT: each cr2w needs to have the buffer already kraken'd
                     // foreach buffer write
-                    var bufferOffsets = cr2w.Buffers.Select(_ => _.Buffer);
+                    var bufferOffsets = cr2w.Buffers;
                     foreach (var buffer in bufferOffsets)
                     {
-                        var bsize = buffer.memSize;
-                        var bzsize = buffer.diskSize;  //compressed size of the buffer inside the cr2wfile
-                        fileBinaryReader.BaseStream.Seek(buffer.offset, SeekOrigin.Begin);
+                        var bsize = buffer.MemSize;
+                        var bzsize = buffer.DiskSize;  //compressed size of the buffer inside the cr2wfile
+                        fileBinaryReader.BaseStream.Seek(buffer.Offset, SeekOrigin.Begin);
                         var b = fileBinaryReader.ReadBytes((int)bzsize);   //read bzsize bytes from the cr2w
                         var boffset = bw.BaseStream.Position;
                         
