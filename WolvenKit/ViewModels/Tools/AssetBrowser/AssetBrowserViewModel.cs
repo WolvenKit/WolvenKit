@@ -19,7 +19,7 @@ using WolvenKit.Controllers;
 using System.Windows;
 using System.Windows.Threading;
 using HandyControl.Controls;
-using WolvenKit.Services;
+using Orchestra.Services;
 
 namespace WolvenKit.ViewModels.AssetBrowser
 {
@@ -234,7 +234,7 @@ namespace WolvenKit.ViewModels.AssetBrowser
                 {
                     Task.Run(new Action(() => AddToMod(item.This.Files.First(x => x.Key == item.Name).Value.First())));
                     _notificationService.Info($"Importing file: {item.Name}");
-
+                    
                     break;
                 }
                 case EntryType.MoveUP:

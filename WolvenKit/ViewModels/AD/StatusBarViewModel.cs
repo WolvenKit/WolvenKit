@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="StatusBarViewModel.cs" company="WildGums">
 //   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
 // </copyright>
@@ -61,7 +61,7 @@ namespace WolvenKit.ViewModels
 
             IsUpdatedInstalled = _updateService.IsUpdatedInstalled;
             //Version = VersionHelper.GetCurrentVersion(); //TODO
-
+            Version = "Version 0.8.1"; // TempFix
             UpdateAutoUpdateInfo();
         }
 

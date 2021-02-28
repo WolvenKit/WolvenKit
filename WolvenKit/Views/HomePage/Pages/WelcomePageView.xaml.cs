@@ -56,5 +56,13 @@ namespace WolvenKit.Views.HomePage.Pages
             HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
             HomePageView.GlobalHomePage.PageViewGrid.Children.Add(HomePageView.GlobalHomePage.WikitPV);
         }
+
+        private void irathernot_Click(object sender, RoutedEventArgs e)
+        {
+                        System.Diagnostics.Process.Start("");
+
+            // backup if this joke doesnt work
+
+        }
     }
 }

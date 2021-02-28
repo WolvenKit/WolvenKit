@@ -190,6 +190,11 @@ namespace WolvenKit.ViewModels
         }
 
 
+        public string DiscordLink { get { return "https://discord.gg/tKZXma5SaA"; } }
+        public string PatreonLink { get { return "https://www.patreon.com/m/RedModdingTools"; } }
+        public string OpenCollectiveLink { get { return "https://opencollective.com/redmodding"; } }
+        public string TwitterLink { get { return "https://twitter.com/ModdingRed"; } }
+
         public class FancyProjectObject : ObservableObject
         {
             public string Name { get; set; }

@@ -11,6 +11,7 @@ namespace WolvenKit
 {
     using Catel.IoC;
     using Common.Services;
+    using Orchestra.Services;
     using WolvenKit.ViewModels.AssetBrowser;
     using WolvenKit.Views.AssetBrowser;
 

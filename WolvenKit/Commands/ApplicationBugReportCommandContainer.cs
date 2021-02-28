@@ -12,6 +12,7 @@ using WolvenKit.Views;
 using Orc.ProjectManagement;
 using Catel;
 using WolvenKit.Services;
+using Orchestra.Services;
 
 namespace WolvenKit.Commands
 {

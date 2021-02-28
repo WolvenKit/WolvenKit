@@ -225,10 +225,10 @@ namespace WolvenKit.WKitGlobal
             await shellService.CreateAsync<ShellWindow>();
             ShellWindow sh = (ShellWindow)shellService.Shell;
             GlobalShell = sh;
-            sh.MinWidth = 1590;
+            sh.MinWidth = 1081;
             sh.MinHeight = 830;
             sh.Height = 830;
-            sh.Width = 1590;
+            sh.Width = 1081;
             sh.WindowState = WindowState.Normal;
             sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 

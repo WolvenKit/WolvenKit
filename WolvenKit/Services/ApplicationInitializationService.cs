@@ -109,6 +109,7 @@ namespace WolvenKit.Services
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.NewProject));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.CreateNewProject));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.OpenProject));
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.OpenLink));
 
 
             // application-wide commands that viewmodels can subscribe to

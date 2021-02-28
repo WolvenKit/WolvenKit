@@ -144,16 +144,15 @@
                     </StackPanel>
                 </StackPanel>
                 <TextBlock Margin="15" TextWrapping="Wrap">
-               
-
-          We would like to thank everyone for their continued support!                    <LineBreak/><LineBreak/>     
-
-                    Without, this project wouldn't be possible
-
-                    <LineBreak/><LineBreak/>     
-                    <Run Text="Have fun modding!"/>
+               We would like to thank every person and enitity who helped and contributed to this ambitious project, <LineBreak/>
+                    whom, without their support it wouldn't exist. 
+ <LineBreak/><LineBreak/>
+Happy Modding!
                     <LineBreak/><LineBreak/><LineBreak/>                   
-                    <Run Text="The WolvenKit Team."/>
+
+- RED Modding Tools team
+
+        
 
                 </TextBlock>
 
@@ -184,7 +183,7 @@
                         </StackPanel>
                         <hc:Divider Margin="15,5,15,5"/>
                         <hc:ButtonGroup Margin="5,5,5,5" Style="{DynamicResource ButtonGroupSolid}" Orientation="Vertical">
-                            <Button  Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.OpenLink}" CommandParameter="link" >
+                            <Button x:Name="irathernot"  Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch" Command="{catel:CommandManagerBinding Application.OpenLink}" CommandParameter="{Binding DiscordLink}" >
 
                                 <Grid Width="125" >
                                     <iconPacks:PackIconBoxIcons Kind="LogosDiscord" HorizontalAlignment="Right"/>
@@ -193,7 +192,7 @@
                             </Button>
 
 
-                            <Button  Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Command="{catel:CommandManagerBinding Application.OpenLink}" CommandParameter="link" >
+                            <Button  Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Command="{catel:CommandManagerBinding Application.OpenLink}"  CommandParameter="{Binding TwitterLink}" >
                                 <Grid Width="125" >
                                     <iconPacks:PackIconBoxIcons Kind="LogosTwitter" HorizontalAlignment="Right"/>
                                     <TextBlock Margin="5,0,35,0" Text="Twitter" HorizontalAlignment="Right"/>
@@ -207,14 +206,14 @@
 
                         <StackPanel Grid.Row="1"  HorizontalAlignment="Left">
                             <StackPanel Margin="0,10,15,0" FlowDirection="RightToLeft" Orientation="Horizontal">
-                                <iconPacks:PackIconBoxIcons   Grid.Row="0"   Kind="RegularNetworkChart" Spin="False" SpinAutoReverse="False" Height="25" Width="25" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"  />
+                                <iconPacks:PackIconBoxIcons   Grid.Row="0"   Kind="RegularDonateHeart" Spin="False" SpinAutoReverse="False" Height="25" Width="25" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"  />
 
                                 <TextBlock  VerticalAlignment="Center" Text="Support Us" HorizontalAlignment="Right" Margin="10,0,5,0" FontSize="18"/>
 
                             </StackPanel>
                             <hc:Divider Margin="15,5,15,5"/>
                             <hc:ButtonGroup Margin="5,5,5,5" Style="{DynamicResource ButtonGroupSolid}" Orientation="Vertical">
-                                <Button  Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.OpenLink}" CommandParameter="link" >
+                                <Button  Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.OpenLink}"  CommandParameter="{Binding OpenCollectiveLink}" >
 
                                     <Grid Width="125" >
                                         <iconPacks:PackIconBoxIcons Kind="SolidDonateHeart" HorizontalAlignment="Right"/>
@@ -223,7 +222,7 @@
                                 </Button>
 
 
-                                <Button  Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Command="{catel:CommandManagerBinding Application.OpenLink}" CommandParameter="link" >
+                                <Button  Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Command="{catel:CommandManagerBinding Application.OpenLink}"  CommandParameter="{Binding PatreonLink}" >
                                     <Grid Width="125" >
                                         <iconPacks:PackIconBoxIcons Kind="LogosPatreon" HorizontalAlignment="Right"/>
                                         <TextBlock Margin="5,0,35,0" Text="Patreon" HorizontalAlignment="Right"/>

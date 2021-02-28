@@ -20,6 +20,7 @@ namespace WolvenKit
     using Catel.MVVM;
     using Catel.Threading;
     using Orc.ProjectManagement;
+    using Orchestra.Services;
 
     public abstract class ProjectCommandContainerBase : CommandContainerBase
     {

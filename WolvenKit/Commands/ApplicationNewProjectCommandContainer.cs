@@ -10,6 +10,7 @@ namespace WolvenKit
     using Common.Services;
     using WolvenKit.Views.Wizards;
     using WolvenKit.ViewModels;
+    using Orchestra.Services;
 
     public class ApplicationNewProjectCommandContainer : ProjectCommandContainerBase
     {

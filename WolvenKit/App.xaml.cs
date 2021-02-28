@@ -73,7 +73,7 @@ namespace WolvenKit
             base.OnStartup(e);
             Log.Info("Initializing NodeNetwork");
             NNViewRegistrar.RegisterSplat();
-    
+            NotificationHelper.InitializeNotificationHelper();
 
 
 

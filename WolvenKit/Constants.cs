@@ -21,6 +21,8 @@ namespace WolvenKit
             public static readonly InputGesture OptionsInputGesture = new InputGesture(Key.F12);
 
 
+            public const string OpenLink = "Application.OpenLink";
+
             public const string DelProject = "Application.DeleteProject";
             public const string SaveProject = "Application.SaveProject";
             public const string SaveAsProject = "Application.SaveAsProject";

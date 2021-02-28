@@ -29,7 +29,7 @@
 
             <StackPanel Grid.Row="0" VerticalAlignment="Top"  >
                 <ToolBarTray    Style="{DynamicResource MahApps.Styles.ToolBarTray}" >
-                    <ToolBar  Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
+                    <ToolBar Visibility="Collapsed" Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                         <Menu Background="Transparent" VerticalAlignment="Center">
                             <MenuItem Header="View">
                                 <MenuItem Header="Empty">
@@ -85,7 +85,7 @@
                         </Menu>
                     </ToolBar>
 
-                    <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
+                    <ToolBar Visibility="Collapsed" Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                         <Menu Background="Transparent" VerticalAlignment="Center">
                             <TextBlock Text="Class :"/>
                             <hc:ComboBox ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" MinWidth="100">
@@ -111,7 +111,7 @@
                         </Menu>
                     </ToolBar>
 
-                    <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
+                    <ToolBar Visibility="Collapsed" Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                         <Menu Background="Transparent" VerticalAlignment="Center">
                             <hc:ComboBox ItemsSource="{Binding Extensions}" SelectedItem="{Binding SelectedExtension}" MinWidth="100">
                                 <ComboBox.ItemsPanel>
@@ -146,15 +146,18 @@
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="{Binding PreviewWidth}" MinWidth="10" MaxWidth="500"/>
+                        <ColumnDefinition Width="{Binding PreviewWidth}" MinWidth="8" MaxWidth="500"/>
                         <ColumnDefinition Width="0"/>
 
                     </Grid.ColumnDefinitions>
 
                     <Grid Grid.Column="1" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  >
-                        <Grid Visibility="{Binding PreviewVisible}" x:Name="PreviewGridAsset">
-                            <Label HorizontalAlignment="Center" Content="{Binding SelectedNode.Name, FallbackValue='No file selected'}"></Label>
-                        </Grid>
+                        <Border BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" BorderThickness="1">
+                            <Grid Visibility="{Binding PreviewVisible}" x:Name="PreviewGridAsset">
+                                <Label HorizontalAlignment="Center" Content="{Binding SelectedNode.Name, FallbackValue='No file selected'}"></Label>
+                            </Grid>
+                        </Border>
+                    
                     </Grid>
                     <GridSplitter Grid.Row="0" Grid.Column="1" Margin="2,0,2,0"
                                         Width="3"  HorizontalAlignment="Left" 

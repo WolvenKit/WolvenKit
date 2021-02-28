@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
+using Orchestra.Services;
 using WolvenKit.Services;
 
 namespace WolvenKit.WKitGlobal
@@ -14,7 +15,10 @@ namespace WolvenKit.WKitGlobal
         /// 
         /// </summary>
         public static IGrowlNotificationService Growl => ServiceLocator.Default.ResolveType<IGrowlNotificationService>();
-
+        public static void InitializeNotificationHelper()
+        {
+            Growl.NotificationCategory = ENotificationCategory.App;
+        }
 
     }
 }

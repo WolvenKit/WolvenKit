@@ -6,6 +6,7 @@ using System.Windows.Threading;
 using Catel;
 using HandyControl.Controls;
 using Orc.ProjectManagement;
+using Orchestra.Services;
 using WolvenKit.Controllers;
 using WolvenKit.Services;
 
