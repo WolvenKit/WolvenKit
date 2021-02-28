@@ -22,6 +22,8 @@ namespace WolvenKit
 
 
             public const string DelProject = "Application.DeleteProject";
+            public const string SaveProject = "Application.SaveProject";
+            public const string SaveAsProject = "Application.SaveAsProject";
 
             public const string OpenProject = "Application.OpenProject";
             public static readonly InputGesture OpenProjectInputGesture = new InputGesture(Key.O, ModifierKeys.Control);
@@ -32,6 +34,9 @@ namespace WolvenKit
             //public const string SaveAll = "Application.SaveAll";
             //public static readonly InputGesture SaveAllInputGesture = new InputGesture(Key.S, ModifierKeys.Control);
 
+            public const string ShowFeedback = "Application.ShowFeedback";
+            public const string ShowAbout = "Application.ShowAbout";
+            public const string ShowSettings = "Application.ShowSettings";
 
             public const string ShowLog = "Application.ShowLog";
             public const string ShowProjectExplorer = "Application.ShowProjectExplorer";
@@ -64,7 +69,7 @@ namespace WolvenKit
             public const string OpenFile = "Application.OpenFile";
             public const string NewFile = "Application.NewFile";
             public const string BugReport = "Application.BugReport"; 
-            public const string ThemeWizard = "Application.ThemeWizard";
+
 
             public const string PackMod = "Application.PackMod";
             public const string BackupMod = "Application.BackupMod";

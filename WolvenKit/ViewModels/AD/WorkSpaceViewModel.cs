@@ -193,6 +193,10 @@ namespace WolvenKit.ViewModels
             commandManager.RegisterCommand(AppCommands.Application.ShowRadishTool, ShowRadishToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowWccTool, ShowWccToolCommand, this);
 
+       
+
+
+
 
 
 

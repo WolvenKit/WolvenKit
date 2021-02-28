@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WolvenKit.Views" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:Fluent="urn:fluent-ribbon"
+             xmlns:local="clr-namespace:WolvenKit.Views" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:Fluent="urn:fluent-ribbon" xmlns:catel="http://schemas.catelproject.com"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -17,7 +17,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="4*"/>
-   
+
             </Grid.RowDefinitions>
             <Grid Grid.Row="1" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" Margin="15,15,0,15">
 
@@ -61,59 +61,59 @@
 
 
 
-                                <hc:ButtonGroup  VerticalAlignment="Center">
-                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                <hc:UniformSpacingPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <Button Command="{catel:CommandManagerBinding Application.OpenProject}"  Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                             <iconPacks:PackIconCodicons Kind="GoToFile" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
                                             <TextBlock Text="Open"/>
                                         </StackPanel>
 
                                     </Button>
-                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                    <Button Command="{catel:CommandManagerBinding Application.NewProject}"  Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                             <iconPacks:PackIconCodicons Kind="NewFile" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
                                             <TextBlock Text="New"/>
                                         </StackPanel>
                                     </Button>
-                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                    <Button Command="{catel:CommandManagerBinding Application.SaveProject}"  Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                             <iconPacks:PackIconCodicons Kind="Save" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
                                             <TextBlock Text="Save"/>
                                         </StackPanel>
                                     </Button>
-                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                    <Button  Command="{catel:CommandManagerBinding Application.SaveAsProject}" Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                             <iconPacks:PackIconCodicons Kind="SaveAs" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
                                             <TextBlock Text="Save As"/>
                                         </StackPanel>
                                     </Button>
-                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                    <Button  Command="{catel:CommandManagerBinding Application.PublishMod}" Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                             <iconPacks:PackIconCodicons Kind="Package" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
                                             <TextBlock Text="Publish"/>
                                         </StackPanel>
                                     </Button>
 
-                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                    <Button  Command="{catel:CommandManagerBinding Application.ShowSettings}" Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                             <iconPacks:PackIconCodicons Kind="Settings" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
                                             <TextBlock Text="Settings"/>
                                         </StackPanel>
                                     </Button>
-                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                    <Button  Command="{catel:CommandManagerBinding Application.BugReport}" IsEnabled="False" Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                             <iconPacks:PackIconCodicons Kind="Bug" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
                                             <TextBlock Text="Bug Report"/>
                                         </StackPanel>
                                     </Button>
-                                    <Button   Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
+                                    <Button  Command="{catel:CommandManagerBinding Application.About}" Style="{DynamicResource MahApps.Styles.Button.Chromeless}"  BorderBrush="{DynamicResource RegionBrush}"  FontSize="20" Height="70" Width="150"   >
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                             <iconPacks:PackIconCodicons Kind="Info" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,5,0"/>
                                             <TextBlock Text="About"/>
                                         </StackPanel>
                                     </Button>
 
-                                </hc:ButtonGroup>
+                                </hc:UniformSpacingPanel>
 
                             </Grid>
                         </hc:TransitioningContentControl>

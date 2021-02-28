@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -20,6 +20,9 @@ namespace WolvenKit.Model
     using CR2W.Types;
     using W3Speech;
     using W3Strings;
+    using System.Windows.Threading;
+    using HandyControl.Controls;
+    using System.Windows;
 
     public sealed class Tw3Project : EditorProject, ICloneable
     {
@@ -428,7 +431,8 @@ namespace WolvenKit.Model
             CR2WManager.Init(FileDirectory, MainController.Get().Logger);
             _logger.LogString("Finished additional tasks...", Logtype.Success);
 
-            ServiceLocator.Default.ResolveType<INotificationService>().ShowNotification("WolvenKit", $"Project {Name} has finished loading.");
+           // ServiceLocator.Default.ResolveType<INotificationService>().ShowNotification("WolvenKit", $"Project {Name} has finished loading.");
+            await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => { Growl.SuccessGlobal($"Project {Name} has finished loading."); }));
 
         }
 

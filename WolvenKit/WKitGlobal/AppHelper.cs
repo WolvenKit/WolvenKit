@@ -59,10 +59,8 @@ using WolvenKit.ViewModels.Wizards.WizardPages.FeedbackWizard;
 using WolvenKit.ViewModels.Wizards.WizardPages.FirstSetupWizard;
 using WolvenKit.ViewModels.Wizards.WizardPages.PublishWizard;
 using WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard;
-using WolvenKit.ViewModels.Wizards.WizardPages.ThemeWizard;
 using WolvenKit.Views.Wizards.WizardPages.ProjectWizard;
 using WolvenKit.Views.Wizards.WizardPages.PublishWizard;
-using WolvenKit.Views.Wizards.WizardPages.ThemeWizard;
 using WolvenKit.Views.Wizards.WizardPages.UserWizard;
 using WolvenKit.ViewModels.Wizards.WizardPages.UserWizard;
 using WolvenKit.ViewModels.SettingsPages;
@@ -182,8 +180,7 @@ namespace WolvenKit.WKitGlobal
             viewModelLocator.Register(typeof(UserWizardView), typeof(UserWizardViewModel));
             viewModelLocator.Register(typeof(UserWizardPageView), typeof(UserWizardPageViewModel));
             //-- Category : ThemeWizard
-            viewModelLocator.Register(typeof(ThemeWizardView), typeof(ThemeWizardViewModel));
-            viewModelLocator.Register(typeof(ThemeWizardPageView), typeof(ThemeWizardPageViewModel));
+   
             //-- Category : ProjectWizard
             viewModelLocator.Register(typeof(ProjectWizardView), typeof(ProjectWizardViewModel));
             viewModelLocator.Register(typeof(SelectProjectTypeView), typeof(SelectProjectTypeViewModel));

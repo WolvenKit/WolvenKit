@@ -184,7 +184,7 @@
                         </StackPanel>
                         <hc:Divider Margin="15,5,15,5"/>
                         <hc:ButtonGroup Margin="5,5,5,5" Style="{DynamicResource ButtonGroupSolid}" Orientation="Vertical">
-                            <Button x:Name="CreateProjectButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.NewProject}" >
+                            <Button  Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.OpenLink}" CommandParameter="link" >
 
                                 <Grid Width="125" >
                                     <iconPacks:PackIconBoxIcons Kind="LogosDiscord" HorizontalAlignment="Right"/>
@@ -193,7 +193,7 @@
                             </Button>
 
 
-                            <Button x:Name="SettingsButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Click="SettingsButton_Click" >
+                            <Button  Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Command="{catel:CommandManagerBinding Application.OpenLink}" CommandParameter="link" >
                                 <Grid Width="125" >
                                     <iconPacks:PackIconBoxIcons Kind="LogosTwitter" HorizontalAlignment="Right"/>
                                     <TextBlock Margin="5,0,35,0" Text="Twitter" HorizontalAlignment="Right"/>
@@ -214,7 +214,7 @@
                             </StackPanel>
                             <hc:Divider Margin="15,5,15,5"/>
                             <hc:ButtonGroup Margin="5,5,5,5" Style="{DynamicResource ButtonGroupSolid}" Orientation="Vertical">
-                                <Button x:Name="z342a" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.NewProject}" >
+                                <Button  Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.OpenLink}" CommandParameter="link" >
 
                                     <Grid Width="125" >
                                         <iconPacks:PackIconBoxIcons Kind="SolidDonateHeart" HorizontalAlignment="Right"/>
@@ -223,7 +223,7 @@
                                 </Button>
 
 
-                                <Button x:Name="af3" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Click="SettingsButton_Click" >
+                                <Button  Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Command="{catel:CommandManagerBinding Application.OpenLink}" CommandParameter="link" >
                                     <Grid Width="125" >
                                         <iconPacks:PackIconBoxIcons Kind="LogosPatreon" HorizontalAlignment="Right"/>
                                         <TextBlock Margin="5,0,35,0" Text="Patreon" HorizontalAlignment="Right"/>

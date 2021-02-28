@@ -105,16 +105,26 @@ namespace WolvenKit.Services
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Settings), nameof(AppCommands.Settings.General));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.Options));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.BugReport));
-            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.ThemeWizard));
 
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.NewProject));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.CreateNewProject));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.OpenProject));
-            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.DelProject));
 
 
             // application-wide commands that viewmodels can subscribe to
             // Workspace Viewmodel
+            _commandManager.CreateCommand((AppCommands.Application.DelProject));
+            _commandManager.CreateCommand((AppCommands.Application.SaveAsProject));
+            _commandManager.CreateCommand((AppCommands.Application.SaveProject));
+
+
+            _commandManager.CreateCommand((AppCommands.Application.ShowAbout));
+            _commandManager.CreateCommand((AppCommands.Application.ShowFeedback));
+            _commandManager.CreateCommand((AppCommands.Application.ShowSettings));
+
+
+
+
             _commandManager.CreateCommand((AppCommands.Application.ShowLog));
             _commandManager.CreateCommand((AppCommands.Application.ShowProjectExplorer));
             _commandManager.CreateCommand((AppCommands.Application.ShowImportUtility));

@@ -40,7 +40,7 @@ namespace WolvenKit.Commands
             IViewModelFactory viewModelFactory,
             IMessageService messageService,
             ILoggerService loggerService)
-            : base(AppCommands.Application.ThemeWizard, commandManager)
+            : base(AppCommands.Application.DelProject, commandManager)
         {
             Argument.IsNotNull(() => navigationService);
             Argument.IsNotNull(() => loggerService);

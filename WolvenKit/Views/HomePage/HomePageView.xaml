@@ -144,7 +144,7 @@
                     </hc:SideMenuItem>
 
 
-                    <hc:SideMenuItem IsSelected="False" x:Name="SideMenu_DebugItem" Header="DEBUG"  Margin="0,30,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_DebugItem_Selected">
+                    <hc:SideMenuItem IsSelected="False" Visibility="Hidden" x:Name="SideMenu_DebugItem" Header="DEBUG"  Margin="0,30,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_DebugItem_Selected">
                         <hc:SideMenuItem.Icon>
                             <iconPacks:Codicons Height="25" Kind="Debug" Width="25"/>
                         </hc:SideMenuItem.Icon>

@@ -17,6 +17,9 @@ using HandyControl.Data;
 using Orc.Notifications;
 using WolvenKit.Commands;
 using WolvenKit.Controllers;
+using System.Windows;
+using System.Windows.Threading;
+using HandyControl.Controls;
 
 namespace WolvenKit.ViewModels.AssetBrowser
 {
@@ -182,7 +185,10 @@ namespace WolvenKit.ViewModels.AssetBrowser
             IsLoaded = true;
             if (MainController.GetGame() is not MockGameController)
             {
-                _notificationService.ShowNotification("Asset Browser", $"Asset Browser is initialized");
+
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => { Growl.SuccessGlobal($"Asset Browser is initialized"); }));
+
+                //_notificationService.ShowNotification("Asset Browser", $"Asset Browser is initialized");
             }
         }
 
@@ -230,7 +236,9 @@ namespace WolvenKit.ViewModels.AssetBrowser
                 case EntryType.File:
                 {
                     Task.Run(new Action(() => AddToMod(item.This.Files.First(x => x.Key == item.Name).Value.First())));
-                    _notificationService.ShowNotification("File import", $"Importing file: {item.Name}");
+                   // _notificationService.ShowNotification("File import", $"Importing file: {item.Name}");
+                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => { Growl.InfoGlobal($"Importing file: {item.Name}"); }));
+
                     break;
                 }
                 case EntryType.MoveUP:

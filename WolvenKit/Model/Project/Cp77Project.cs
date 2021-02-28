@@ -20,6 +20,9 @@ using WolvenKit.CR2W;
 using WolvenKit.W3Speech;
 using WolvenKit.W3Strings;
 using CP77.CR2W.Archive;
+using HandyControl.Controls;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace WolvenKit.Model
 {
@@ -243,7 +246,11 @@ namespace WolvenKit.Model
             CR2WManager.Init(FileDirectory, MainController.Get().Logger);
             _logger.LogString("Finished additional tasks...", Logtype.Success);
 
-            ServiceLocator.Default.ResolveType<INotificationService>().ShowNotification("WolvenKit", $"Project {Name} has finished loading.");
+            //  ServiceLocator.Default.ResolveType<INotificationService>().ShowNotification("WolvenKit", $"Project {Name} has finished loading.");
+
+            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => { Growl.SuccessGlobal($"Project {Name} has finished loading."); }));
+   
+
 
             return Task.CompletedTask;
         }
