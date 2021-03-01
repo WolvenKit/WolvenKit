@@ -834,8 +834,8 @@ namespace WolvenKit.Model
                 relativepath = importfilepath.Substring(alternateOutDirectory.Length + 1);
             }
 
-            var importslist = new List<CR2WImportWrapper>();
-            var bufferlist = new List<CR2WBufferWrapper>();
+            var importslist = new List<ICR2WImport>();
+            var bufferlist = new List<ICR2WBuffer>();
             bool hasinternalBuffer;
 
             using (var fs = new FileStream(importfilepath, FileMode.Open, FileAccess.Read))

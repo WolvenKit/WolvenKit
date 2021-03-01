@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using HandyControl.Controls;
+using WolvenKit.Extensions;
 using WolvenKit.ViewModels;
 
 namespace WolvenKit.Views
@@ -16,12 +18,12 @@ namespace WolvenKit.Views
 		/// Class constructor
 		/// </summary>
 		public DocumentView()
-		{
-			InitializeComponent();
+        {
+            InitializeComponent();
 
-			WeakEventManager<FrameworkElement, RoutedEventArgs>
+            WeakEventManager<FrameworkElement, RoutedEventArgs>
 				.AddHandler(this, "Loaded", View_LoadedAsync);
-		}
+        }
 
 		/// <summary>
 		/// Initializes the viewmodel and view as soon as the view is loaded.

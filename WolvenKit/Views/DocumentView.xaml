@@ -33,6 +33,7 @@
         </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
@@ -84,26 +85,58 @@
                 </hc:TabItem>
 
                 <hc:TabItem  Header="IMPORTS">
-                    <TreeView>
+                    <ListView ItemsSource="{Binding Imports}" Margin="20">
+                        <hc:Interaction.Triggers>
+                            <hc:EventTrigger EventName="MouseDoubleClick">
+                                <hc:EventToCommand Command="{Binding OpenImportCommand}" PassEventArgsToCommand="True"/>
+                            </hc:EventTrigger>
+                        </hc:Interaction.Triggers>
 
-                    </TreeView>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </hc:TabItem>
 
                 <hc:TabItem Header="BUFFERS">
-                    <TreeView>
+                    <ListView ItemsSource="{Binding Buffers}">
+                        <hc:Interaction.Triggers>
+                            <hc:EventTrigger EventName="MouseDoubleClick">
+                                <hc:EventToCommand Command="{Binding OpenBufferCommand}" PassEventArgsToCommand="True"/>
+                            </hc:EventTrigger>
+                        </hc:Interaction.Triggers>
 
-                    </TreeView>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </hc:TabItem>
 
-                <hc:TabItem Header="PREVIEW">
-                    <TreeView>
+                <hc:TabItem Header="EDITORS">
+                    <ListView ItemsSource="{Binding Editors}" >
+                        <hc:Interaction.Triggers>
+                            <hc:EventTrigger EventName="MouseDoubleClick">
+                                <hc:EventToCommand Command="{Binding OpenEditorCommand}" PassEventArgsToCommand="True"/>
+                            </hc:EventTrigger>
+                        </hc:Interaction.Triggers>
 
-                    </TreeView>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </hc:TabItem>
             </hc:TabControl>
         </Grid>
 
-        <Grid Grid.Column="1">
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+
+        <Grid Grid.Column="2">
             <hc:PropertyGrid SelectedObject="{Binding SelectEditableVariables}">
 
             </hc:PropertyGrid>

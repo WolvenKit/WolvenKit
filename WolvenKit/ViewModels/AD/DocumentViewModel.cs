@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Drawing.Design;
 using System.Linq;
 using Catel.MVVM;
 using System.IO;
@@ -8,18 +11,28 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using Catel.IoC;
+using HandyControl.Controls;
 using Orc.ProjectManagement;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Commands;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.CR2W.SRT;
+using WolvenKit.Extensions;
+using WolvenKit.Model;
 
 namespace WolvenKit.ViewModels
 {
-	using Model;
-	using Common.Model;
-	using CR2W;
-	using CR2W.SRT;
-	using Commands;
-    using WolvenKit.Common.Model.Cr2w;
+    public class EditorViewModel
+    {
+        public EditorViewModel()
+        {
+            
+        }
+
+        public string Name { get; } = "TBA";
+    }
 
     public class DocumentViewModel : PaneViewModel, IDocumentViewModel
 	{
@@ -71,14 +84,52 @@ namespace WolvenKit.ViewModels
 		public DocumentViewModel()
 		{
 			IsDirty = false;
-        }
-		#endregion ctors
 
-		#region Properties
+            OpenEditorCommand = new RelayCommand(ExecuteOpenEditor, CanOpenEditor);
+            OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer, CanOpenBuffer);
+            OpenImportCommand = new RelayCommand(ExecuteOpenImport, CanOpenImport);
+        }
+        #endregion ctors
+
+        #region commands
+
+        public ICommand OpenImportCommand { get; private set; }
+        private bool CanOpenImport() => true;
+        private void ExecuteOpenImport()
+        {
+            // TODO: Handle command logic here
+        }
+
+        public ICommand OpenBufferCommand { get; private set; }
+        private bool CanOpenBuffer()
+        {
+            return true;
+        }
+        private void ExecuteOpenBuffer()
+        {
+            // TODO: Handle command logic here
+        }
+
+        public ICommand OpenEditorCommand { get; private set; }
+        private bool CanOpenEditor()
+        {
+            return true;
+        }
+        private void ExecuteOpenEditor()
+        {
+            // TODO: Handle command logic here
+        }
+
+        
+
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
-		/// 
-		/// </summary>
+        /// 
+        /// </summary>
         [Model]
         private IWolvenkitFile File { get; set; }
 
@@ -99,6 +150,16 @@ namespace WolvenKit.ViewModels
         /// </summary>
         public List<ICR2WBuffer> Buffers => File.Buffers;
 
+        /// <summary>
+        /// Bound to the View
+        /// </summary>
+        public List<EditorViewModel> Editors => GetEditorsForFile(File);
+
+        private List<EditorViewModel> GetEditorsForFile(IWolvenkitFile file)
+        {
+            return new();
+        }
+
         private ChunkViewModel _selectedChunk;
         /// <summary>
         /// Bound to the View via TreeViewBehavior.cs
@@ -114,26 +175,26 @@ namespace WolvenKit.ViewModels
                     _selectedChunk = value;
                     RaisePropertyChanged(() => SelectedChunk, oldValue, value);
 
-                    SelectEditableVariables = _selectedChunk?.ChildrenProperties;
+                    //SelectEditableVariables = _selectedChunk?.ChildrenProperties;
 
                 }
             }
         }
 
-        public List<ChunkPropertyViewModel> _selectEditableVariables;
-		public List<ChunkPropertyViewModel> SelectEditableVariables
-        {
-            get => _selectEditableVariables;
-            set
-            {
-                if (_selectEditableVariables != value)
-                {
-                    var oldValue = _selectEditableVariables;
-                    _selectEditableVariables = value;
-                    RaisePropertyChanged(() => SelectEditableVariables, oldValue, value);
-                }
-            }
-        }
+  //      public List<ChunkPropertyViewModel> _selectEditableVariables;
+		//public List<ChunkPropertyViewModel> SelectEditableVariables
+  //      {
+  //          get => _selectEditableVariables;
+  //          set
+  //          {
+  //              if (_selectEditableVariables != value)
+  //              {
+  //                  var oldValue = _selectEditableVariables;
+  //                  _selectEditableVariables = value;
+  //                  RaisePropertyChanged(() => SelectEditableVariables, oldValue, value);
+  //              }
+  //          }
+  //      }
 
 		/// <summary>
 		/// Gets the current path of the file being managed in this document viewmodel.
@@ -371,6 +432,49 @@ namespace WolvenKit.ViewModels
 		{
 			_workSpaceViewModel.Save(this, true);
 		}
-		#endregion methods
-	}
+        #endregion methods
+
+
+        public PropertyGridDemoModel DemoModel { get; set; } = new PropertyGridDemoModel
+        {
+            String = "TestString",
+            Enum = Gender.Female,
+            Boolean = true,
+            Integer = 98,
+        };
+
+}
+
+
+
+
+    public class PropertyGridDemoModel
+    {
+
+        public PropertyGridDemoModel()
+        {
+            List = new List<string>() {"aaa", "bbb"};
+        }
+
+
+
+        [Category("Category1")]
+        [Editor(typeof(IListPropertyEditor), typeof(PropertyEditorBase))]
+        public List<string> List { get; set; }
+        [Category("Category1")]
+        public string String { get; set; }
+        [Category("Category2")]
+        public int Integer { get; set; }
+        [Category("Category2")]
+        public bool Boolean { get; set; }
+        [Category("Category1")]
+        public Gender Enum { get; set; }
+        public ImageSource ImageSource { get; set; }
+    }
+    public enum Gender
+    {
+        Male,
+        Female
+    }
+    
 }
