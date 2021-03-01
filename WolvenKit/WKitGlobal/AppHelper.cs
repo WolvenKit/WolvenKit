@@ -228,8 +228,8 @@ namespace WolvenKit.WKitGlobal
             sh.MinWidth = 1081;
             sh.MinHeight = 830;
             sh.Height = 830;
-            sh.Width = 1081;
-            sh.WindowState = WindowState.Normal;
+            sh.Width = 1590;
+            sh.WindowState = WindowState.Maximized;
             sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
 

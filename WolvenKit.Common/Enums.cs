@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.Common
+namespace WolvenKit.Common
 {
     public enum EArchiveType
     {
@@ -49,5 +49,21 @@
         tga,
         dds,
         fbx
+    }
+
+    public enum ECustomImageKeys
+    {
+        OpenDirImageKey, //= "<ODIR>";
+        ClosedDirImageKey, //= "<CDIR>";
+        ModImageKey, //= "<MOD>";
+        DlcImageKey, //= "<DLC>";
+        DlcCookedImageKey, //= "<DLCC>";
+        DlcUncookedImageKey, //= "<DLCU>";
+        ModCookedImageKey, //= "<MODC>";
+        ModUncookedImageKey, //= "<MODU>";
+        RawImageKey, //= "<RAW>";
+        RadishImageKey,
+        RawModImageKey,
+        RawDlcImageKey
     }
 }

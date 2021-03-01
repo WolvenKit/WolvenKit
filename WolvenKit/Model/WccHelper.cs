@@ -834,8 +834,8 @@ namespace WolvenKit.Model
                 relativepath = importfilepath.Substring(alternateOutDirectory.Length + 1);
             }
 
-            var importslist = new List<ICR2WImport>();
-            var bufferlist = new List<ICR2WBuffer>();
+            var importslist = new List<CR2WImportWrapper>();
+            var bufferlist = new List<CR2WBufferWrapper>();
             bool hasinternalBuffer;
 
             using (var fs = new FileStream(importfilepath, FileMode.Open, FileAccess.Read))
@@ -878,7 +878,7 @@ namespace WolvenKit.Model
                 // unbundle external buffers
                 foreach (var buffer in bufferlist)
                 {
-                    var index = buffer.Index;
+                    var index = buffer;
                     string bufferpath = $"{relativepath}.{index}.buffer";
                     var bufferName = $"{Path.GetFileName(relativepath)}.{index}.buffer";
 

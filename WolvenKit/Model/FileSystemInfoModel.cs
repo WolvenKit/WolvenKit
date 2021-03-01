@@ -14,12 +14,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using Catel.Data;
 using Catel.IoC;
 using Catel.MVVM;
 using Orc.ProjectManagement;
+using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
+using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.Model
 {
@@ -32,22 +33,6 @@ namespace WolvenKit.Model
                 : base(new DirectoryInfo("DummyFileSystemObjectInfo"), parent)
             {
             }
-        }
-
-        public enum ECustomImageKeys
-        {
-            OpenDirImageKey, //= "<ODIR>";
-            ClosedDirImageKey, //= "<CDIR>";
-            ModImageKey, //= "<MOD>";
-            DlcImageKey, //= "<DLC>";
-            DlcCookedImageKey, //= "<DLCC>";
-            DlcUncookedImageKey, //= "<DLCU>";
-            ModCookedImageKey, //= "<MODC>";
-            ModUncookedImageKey, //= "<MODU>";
-            RawImageKey, //= "<RAW>";
-            RadishImageKey,
-            RawModImageKey,
-            RawDlcImageKey
         }
 
         #region fields

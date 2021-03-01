@@ -125,23 +125,34 @@
 
                 </ToolBarTray>
             </StackPanel>
-
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="4*"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid>
+                <Grid Grid.Column="0" xmlns:conv="clr-namespace:WolvenKit.Layout.Converters">
+                    <Grid.Resources>
+                        <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
+                    </Grid.Resources>
                     <TreeView SelectedItemChanged="TreeView_OnSelectedItemChanged" Margin="0" ItemsSource="{Binding RootNode.SubDirectories}"  BorderBrush="{DynamicResource MahApps.Brushes.Accent4}">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
-                                <TextBlock Text="{Binding Name}" />
+                                <StackPanel Orientation="Horizontal" Margin="2">
+                                    <Image Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}" 
+                                           Margin="0,1,8,1"
+                                           Height="16"/>
+                                    <TextBlock Text="{Binding Name}" />
+                                </StackPanel>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
                 </Grid>
-
+                <GridSplitter Grid.Column="0" Margin="2,0,2,0"
+                              Width="3" VerticalAlignment="Stretch"
+                              Background="{DynamicResource MahApps.Brushes.Accent3}" 
+                              ShowsPreview="False" >
+                </GridSplitter>
                 <Grid Grid.Column="1">
 
                     <Grid.ColumnDefinitions>
@@ -171,9 +182,21 @@
                             <ListView BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
                                       Background="Transparent"
                                       SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
-                                      ItemsSource="{Binding CurrentNodeFiles}">
+                                      ItemsSource="{Binding CurrentNodeFiles}" xmlns:conv="clr-namespace:WolvenKit.Layout.Converters">
+                                <ListView.Resources>
+                                    <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
+                                </ListView.Resources>
                                 <ListView.View>
                                     <GridView>
+                                        <GridViewColumn Width="Auto">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Image Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}" 
+                                                           Margin="0,1,8,1"
+                                                           Height="16"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
                                         <GridViewColumn Width="500" Header="Name" DisplayMemberBinding="{Binding Name}"/>
                                         <GridViewColumn Width="Auto" Header="Size" DisplayMemberBinding="{Binding Size}"/>
                                     </GridView>

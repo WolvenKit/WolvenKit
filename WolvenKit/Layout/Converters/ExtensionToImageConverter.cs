@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Catel.MVVM.Converters;
+using WolvenKit.Common;
 using WolvenKit.Model;
 
 namespace WolvenKit.Layout.Converters
@@ -15,7 +16,7 @@ namespace WolvenKit.Layout.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
-                return string.Empty;
+                return DependencyProperty.UnsetValue;
 
             string extension = value.ToString();
 
@@ -38,7 +39,7 @@ namespace WolvenKit.Layout.Converters
 
         private static string GetSmallIconForFileType(string extension)
         {
-            extension = extension.TrimStart('.');
+            extension = extension.TrimStart('.').Trim();
             switch (extension)
             {
                 case "w2ent":
@@ -101,21 +102,21 @@ namespace WolvenKit.Layout.Converters
                 case "ctw":
                     return $"Files/apb_32x.png";
 
-                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.ClosedDirImageKey):
+                case nameof(ECustomImageKeys.ClosedDirImageKey):
                     return $"Files/FolderClosed_16x.png";
-                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.OpenDirImageKey):
+                case nameof(ECustomImageKeys.OpenDirImageKey):
                     return $"Files/FolderOpened_16x.png";
 
-                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.RawImageKey):
-                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.RawModImageKey): 
-                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.RawDlcImageKey): 
-                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.RadishImageKey):
-                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.ModImageKey): 
-                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.ModCookedImageKey): 
-                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.ModUncookedImageKey): 
-                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.DlcImageKey): 
-                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.DlcCookedImageKey): 
-                case nameof(Model.FileSystemInfoModel.ECustomImageKeys.DlcUncookedImageKey):
+                case nameof(ECustomImageKeys.RawImageKey):
+                case nameof(ECustomImageKeys.RawModImageKey): 
+                case nameof(ECustomImageKeys.RawDlcImageKey): 
+                case nameof(ECustomImageKeys.RadishImageKey):
+                case nameof(ECustomImageKeys.ModImageKey): 
+                case nameof(ECustomImageKeys.ModCookedImageKey): 
+                case nameof(ECustomImageKeys.ModUncookedImageKey): 
+                case nameof(ECustomImageKeys.DlcImageKey): 
+                case nameof(ECustomImageKeys.DlcCookedImageKey): 
+                case nameof(ECustomImageKeys.DlcUncookedImageKey):
                     return $"Files/Project_Explorer_Base_Dir_16x.png";
 
                 default: return $"Files/BlankFile_32x.png";

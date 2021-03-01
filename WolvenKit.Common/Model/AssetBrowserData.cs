@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace WolvenKit.Common.Model
 {
@@ -6,6 +6,7 @@ namespace WolvenKit.Common.Model
     {
         public string Name { get; set; }
         public string Size { get; set; }
+        public string Extension { get; set; }
         public GameFileTreeNode Parent { get; set; }
         public GameFileTreeNode This { get; set; }
         public GameFileTreeNode Children { get; set; }

@@ -1,10 +1,15 @@
 using System;
+using System.IO;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using Orc.FileSystem;
 using Orc.ProjectManagement;
+using Orchestra.Services;
+using Orchestra.Views;
 using WolvenKit.Services;
 
 namespace WolvenKit
@@ -14,6 +19,7 @@ namespace WolvenKit
     using Orchestra.Services;
     using WolvenKit.ViewModels.AssetBrowser;
     using WolvenKit.Views.AssetBrowser;
+    using WolvenKit.WKitGlobal;
 
     public class ApplicationOpenProjectCommandContainer : ProjectCommandContainerBase
     {
@@ -68,6 +74,8 @@ namespace WolvenKit
                     using (_pleaseWaitService.PushInScope())
                     {
                         await _projectManager.LoadAsync(location);
+                        var btn = (AppHelper.GlobalShell.FindName("ProjectNameDisplay") as System.Windows.Controls.Button);
+                        btn?.SetCurrentValue(ContentControl.ContentProperty, Path.GetFileNameWithoutExtension(location)); ;
                     }
                 }
 

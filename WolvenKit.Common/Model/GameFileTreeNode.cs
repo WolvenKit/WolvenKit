@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -61,7 +61,6 @@ namespace WolvenKit.Common
                     if (current == null)
                         break;
                 }
-
                 return path ?? "";
             }
         }
@@ -69,6 +68,7 @@ namespace WolvenKit.Common
         public List<GameFileTreeNode> SubDirectories => Directories.Values.ToList();
 
         public string Name { get; set; }
+        public string Extension => nameof(ECustomImageKeys.ClosedDirImageKey);
         public GameFileTreeNode Parent { get; set; }
         public Dictionary<string, GameFileTreeNode> Directories { get; set; }
         public Dictionary<string, List<IGameFile>> Files { get; set; }
@@ -79,6 +79,7 @@ namespace WolvenKit.Common
             ret.Add(new AssetBrowserData()
             {
                 Name = "..",
+                Extension = nameof(ECustomImageKeys.OpenDirImageKey),
                 Type = EntryType.MoveUP,
                 This = this,
                 Parent = this.Parent
@@ -89,6 +90,7 @@ namespace WolvenKit.Common
                 Size = d.Value.Directories.Count + " directories, " + d.Value.Files.Count + " files",
                 Parent = this.Parent,
                 Children = d.Value,
+                Extension = nameof(ECustomImageKeys.ClosedDirImageKey),
                 This = this,
                 Type = EntryType.Directory
             }));
@@ -98,6 +100,7 @@ namespace WolvenKit.Common
                 Name = f.Key,
                 Size = f.Value[0].Size + " bytes",
                 This = this,
+                Extension = Path.GetExtension(f.Key),
                 Type = EntryType.File,
                 Parent = this.Parent
             }));
