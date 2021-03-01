@@ -76,9 +76,20 @@ using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.IntegratedToolsPages.CyberCAT;
+using System.Runtime.InteropServices;
 
 namespace WolvenKit.WKitGlobal
 {
+    public static class InternetHelper
+    {
+        [DllImport("wininet.dll")]
+        private static extern bool InternetGetConnectedState(out int Description, int ReservedValue);
+        public static bool IsConnectedToInternet()
+        {
+            return InternetGetConnectedState(out int Desc, 0);
+        }
+    }
+
     public static class AppHelper
     {
         public static RibbonView RibbonViewInstance;

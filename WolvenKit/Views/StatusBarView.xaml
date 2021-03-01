@@ -9,8 +9,7 @@
                    xmlns:orccontrols="http://schemas.wildgums.com/orc/controls" 
                    xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
                    xmlns:WolvenKit="clr-namespace:WolvenKit"       
-                   xmlns:hc="https://handyorg.github.io/handycontrol" 
-
+                   xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                    mc:Ignorable="d"
                    >
 
@@ -61,11 +60,11 @@
                         </Separator.LayoutTransform>
                     </Separator>
 
-                    <TextBlock Text="Line "/>
+               <!--     <TextBlock Text="Line "/>
                     <TextBlock Text="{Binding Line}"/>
 
                     <TextBlock Text="Column "/>
-                    <TextBlock Text="{Binding Column}"/>
+                    <TextBlock Text="{Binding Column}"/> 
 
                     <Separator Background="{DynamicResource RegionBrush}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
                         <Separator.LayoutTransform>
@@ -74,8 +73,15 @@
                     </Separator>
 
                     <TextBlock FontWeight="Bold" Text="{Binding Heading}"/>
+                    -->
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconBootstrapIcons  Grid.Row="0"   Kind="Wifi" Spin="False" SpinAutoReverse="False" Height="15" Width="15" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding InternetConnected}" />
 
-                    <Separator Background="{DynamicResource RegionBrush}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
+                </StackPanel>
+
+
+                <Separator Background="{DynamicResource RegionBrush}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
                         <Separator.LayoutTransform>
                             <RotateTransform Angle="90" />
                         </Separator.LayoutTransform>

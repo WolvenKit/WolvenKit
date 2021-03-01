@@ -13,6 +13,7 @@ using Orc.ProjectManagement;
 using Orc.Squirrel;
 using System;
 using Catel.Configuration;
+using WolvenKit.WKitGlobal;
 
 namespace WolvenKit.ViewModels
 {
@@ -48,6 +49,7 @@ namespace WolvenKit.ViewModels
         public int Column { get; private set; }
         public string Heading { get; private set; }
         public int Line { get; private set; }
+        public string InternetConnected { get; private set; }
         #endregion
 
         #region Methods
@@ -62,6 +64,11 @@ namespace WolvenKit.ViewModels
             IsUpdatedInstalled = _updateService.IsUpdatedInstalled;
             //Version = VersionHelper.GetCurrentVersion(); //TODO
             Version = "Version 0.8.1"; // TempFix
+            bool Connected = InternetHelper.IsConnectedToInternet();
+            if (Connected)
+            { InternetConnected = "Connected"; }
+
+
             UpdateAutoUpdateInfo();
         }
 
