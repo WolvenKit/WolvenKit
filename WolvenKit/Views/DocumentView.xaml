@@ -137,7 +137,7 @@
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
 
         <Grid Grid.Column="2">
-            <hc:PropertyGrid SelectedObject="{Binding SelectEditableVariables}">
+            <hc:PropertyGrid SelectedObject="{Binding DemoModel}">
 
             </hc:PropertyGrid>
 
