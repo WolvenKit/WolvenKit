@@ -139,9 +139,8 @@
         <Grid Grid.Column="2">
             <hc:PropertyGrid SelectedObject="{Binding SelectEditableVariables}">
 
-                    </HierarchicalDataTemplate>
-                </hc:PropertyGrid.Resources>
             </hc:PropertyGrid>
+
         </Grid>
     </Grid>
 
