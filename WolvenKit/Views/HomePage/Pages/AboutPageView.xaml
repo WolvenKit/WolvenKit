@@ -162,36 +162,33 @@
                                     <LineBreak></LineBreak>
                                     <LineBreak></LineBreak>
 
-                                    This program is created to extend modability to The Witcher 3 and Cyberpunk 2077.
+                                    This program is being created to extend mod support for games made by CD Projekt Red on their proprietary REDEngine™, namely The Witcher 3 and Cyberpunk 2077.
                                     <LineBreak></LineBreak>
                                     <LineBreak></LineBreak>
 
-                                    The whole program is made fully for educational purposes, WolvenKit/Authors are in no way responsible if your PC or game breaks.
+                                    This tool is being made fully for educational purposes, thus the authors are in no way responsible of complications regarding your PC or your game installation(s).
                                     <LineBreak></LineBreak>
                                     <LineBreak></LineBreak>
 
-                                    This project is completely open source and everyone is free to contribute to it and in no way it is made to generate revenue.
+                                    This project is completely open source, open to contribution and in no way made with the aim of generating revenue.
                                     <LineBreak></LineBreak>
                                     <LineBreak></LineBreak>
 
-                                    It was originally started by Sarcen in 2015 when the game originally came out.
+                                    The precursor to this project, W3Edit, was developed by Sarcenzzz in 2015 when the game originally came out.
                                     <LineBreak></LineBreak>
                                     <LineBreak></LineBreak>
-                                    After he abbandoned the project a few of us picked it up to continue it.
-                                    <LineBreak></LineBreak>
-                                    <LineBreak></LineBreak>
-
-                                    It allows reading and writing nearly every file format by REDengine 3 to some extent.
-                                    <LineBreak></LineBreak>
-                                    <LineBreak></LineBreak>
-                                    It can be used to create file modifications to the assets of the game.
+                                    Upon him eventually abandoning it, a few of us modders decided to continue it.
                                     <LineBreak></LineBreak>
                                     <LineBreak></LineBreak>
 
-                                    This is far from done so please make sure to check on the project often since it is in heavy development.
+                                    Currently, the reading/writing of nearly every REDEngine file format is possible to some extent.
                                     <LineBreak></LineBreak>
                                     <LineBreak></LineBreak>
-                                    Currently we are progressing with support for CDPR's new game Cyberpunk 2077.
+
+                                    It goes without saying that this is a work in progress, so do make sure to check on its status regularly.
+                                    <LineBreak></LineBreak>
+                                    <LineBreak></LineBreak>
+                                    Our current primary focus is advancing support for CDPR's new game, Cyberpunk 2077.
                                 </Paragraph>
                             </FlowDocument>
                             </FlowDocumentPageViewer>
