@@ -4,10 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WolvenKit.Views" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:Fluent="urn:fluent-ribbon" xmlns:catel="http://schemas.catelproject.com"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"                                xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <DrawingBrush o:Freeze="True"   Opacity=".04" x:Key="CloudDrawingBrushMain" RenderOptions.CacheInvalidationThresholdMinimum="0.5" RenderOptions.CacheInvalidationThresholdMaximum="2.0" RenderOptions.CachingHint="Cache"  Viewport="0,0,44,44" ViewportUnits="Absolute" Stretch="Uniform"  TileMode="Tile">
+            <DrawingBrush.Drawing>
+                <ImageDrawing o:Freeze="True"   ImageSource="pack://application:,,,/Resources/Icons/SeeTroughIcon.png" Rect="0,0,70,80"/>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+    </UserControl.Resources>
+    
     <Grid>
-        <Grid Background="{DynamicResource CloudDrawingBrush}">
+        <Grid Background="{DynamicResource CloudDrawingBrushMain}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="5*"/>
@@ -128,9 +138,9 @@
                             hc:BorderElement.CornerRadius="5"  
                             Background="Transparent"
                             BorderBrush="Transparent"
-                            VerticalAlignment="Stretch"
+                            VerticalAlignment="Center"
                             Grid.RowSpan="1"
-                            HorizontalAlignment="Stretch"
+                            HorizontalAlignment="Center"
                             FontSize="20"
                 
              Height="auto"

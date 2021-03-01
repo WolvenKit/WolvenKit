@@ -21,26 +21,26 @@
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources/>
+                <hc:ThemeResources  RequestedTheme="Dark"/>
                 <hc:Theme/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
-    <Grid>
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.Resources>
             <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
         </Grid.Resources>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
+        <Grid.ColumnDefinitions>  
+            <ColumnDefinition Width="308"/>            
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0">
-            <hc:TabControl IsTabFillEnabled="True" ShowCloseButton="False" IsAnimationEnabled="True">
-                <hc:TabItem Header="CHUNKS">
-                    <TreeView Name="TreeView" Style="{DynamicResource TreeView}"
+            <hc:TabControl  Style="{DynamicResource MahApps.Styles.TabControl.AnimatedSingleRow}"  IsTabFillEnabled="True" ShowCloseButton="False" IsAnimationEnabled="True">
+                <hc:TabItem Width="75" Header="CHUNKS">
+                    <TreeView  Style="{DynamicResource TreeView}" Name="TreeView"
                   Grid.Row="0"
                              ItemsSource="{Binding Chunks}"
                              
@@ -57,7 +57,7 @@
                         </TreeView.ContextMenu>
 
                         <TreeView.ItemContainerStyle>
-                            <Style TargetType="{x:Type TreeViewItem}">
+                            <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource TreeViewItemBaseStyle}">
                                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
                                 <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                                 <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
@@ -139,6 +139,8 @@
         <Grid Grid.Column="2">
             <hc:PropertyGrid SelectedObject="{Binding SelectEditableVariables}">
 
+                    </HierarchicalDataTemplate>
+                </hc:PropertyGrid.Resources>
             </hc:PropertyGrid>
         </Grid>
     </Grid>

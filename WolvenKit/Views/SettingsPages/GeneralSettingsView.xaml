@@ -8,7 +8,7 @@
                    >
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
-        <hc:SideMenu Width="150" SideBrush="{DynamicResource MahApps.Brushes.Accent}" HorizontalAlignment="Left" >
+        <hc:SideMenu ExpandMode="ShowOne" Width="150" SideBrush="{DynamicResource MahApps.Brushes.Accent}" HorizontalAlignment="Left" >
 
             <hc:SideMenuItem x:Name="GlobalSubItem" Selected="GlobalSubItem_Selected" >
                 <hc:SideMenuItem.Header>

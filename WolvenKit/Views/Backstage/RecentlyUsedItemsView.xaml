@@ -8,7 +8,7 @@
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:orchestra="http://schemas.wildgums.com/orchestra"
                    xmlns:orccontrols="http://schemas.wildgums.com/orc/controls" 
-                   xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
+                   xmlns:orctheming="http://schemas.wildgums.com/orc/theming" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                    mc:Ignorable="d" 
                    d:DesignHeight="300" d:DesignWidth="300" IsVisibleChanged="UserControl_IsVisibleChanged">
 
@@ -42,13 +42,14 @@
                                                              Command="{Binding ElementName=topGrid, Path=DataContext.UnpinItem}"
                                                              CommandParameter="{Binding Name}" 
                                                              Width="24" 
-                                                             Height="24" 
+                                                             Height="24"
+                                                             Foreground="{DynamicResource MahApps.Brushes.AccentBase}"
                                                              ShowBorder="False">
-                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.ThumbTack}}" />
+                                <iconPacks:PackIconCodicons Kind="Pinned" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,0,0"/>
                             </orchestra:RibbonBackstageButton>
 
-                            <Label Grid.Column="1"
-                                   Content="{Binding Name, Converter={orchestra:PathToStringConverter}, ConverterParameter=100}" />
+                            <TextBlock  Margin="5" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Grid.Column="1"
+                                   Text="{Binding Name, Converter={orchestra:PathToStringConverter}, ConverterParameter=100}" />
 
                             <orchestra:RibbonBackstageButton Grid.Column="2"
                                                              Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
@@ -57,7 +58,7 @@
                                                              Height="24"
                                                              ToolTip="Open in explorer" 
                                                              ShowBorder="False">
-                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.FolderOpenO}}" />
+                                <iconPacks:PackIconCodicons Kind="FolderOpened" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,0,0"/>
                             </orchestra:RibbonBackstageButton>
                         </Grid>
                     </orchestra:RibbonBackstageButton>
@@ -81,29 +82,23 @@
                                                       ShowBorder="False">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="60" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="6" />
                             </Grid.ColumnDefinitions>
 
-                            <orchestra:RibbonBackstageButton Grid.Column="0" 
+                            <orchestra:RibbonBackstageButton Grid.Column="0"  VerticalAlignment="Center"
                                                              Command="{Binding ElementName=topGrid, Path=DataContext.PinItem}"
                                                              CommandParameter="{Binding Name}" 
                                                              Width="24" 
                                                              Height="24" 
                                                              ShowBorder="False">
-                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.ThumbTack}}" >
-                                    <Image.RenderTransform>
-                                        <RotateTransform Angle="90" 
-                                                         CenterX="9" 
-                                                         CenterY="12.5"/>
-                                    </Image.RenderTransform>
-                                </Image>
+                                <iconPacks:PackIconCodicons Kind="pin" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,0,0"/>
                             </orchestra:RibbonBackstageButton>
 
-                            <Label Grid.Column="1" 
-                                   Content="{Binding Name, Converter={orchestra:PathToStringConverter}, ConverterParameter=100}" />
+                            <TextBlock VerticalAlignment="Center" Margin="5" Grid.Column="1" 
+                                   Text="{Binding Name, Converter={orchestra:PathToStringConverter}, ConverterParameter=100}" />
 
                             <orchestra:RibbonBackstageButton Grid.Column="2" 
                                                              Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
@@ -112,7 +107,7 @@
                                                              Height="24" 
                                                              ToolTip="Open in explorer" 
                                                              ShowBorder="False">
-                                <Image Source="{orctheming:FontImage {x:Static global:FontAwesome.FolderOpenO}}" />
+                                <iconPacks:PackIconCodicons Kind="FolderOpened" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,0,0"/>
                             </orchestra:RibbonBackstageButton>
                         </Grid>
                     </orchestra:RibbonBackstageButton>

@@ -50,13 +50,15 @@ namespace WolvenKit.ViewModels
         public string Heading { get; private set; }
         public int Line { get; private set; }
         public string InternetConnected { get; private set; }
+        public string LoadingString { get; set; }
+        public bool IsLoading { get; set; }
         #endregion
 
         #region Methods
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();
-
+            AppHelper.GlobalStatusBar = this;
             _configurationService.ConfigurationChanged += OnConfigurationChanged;
             _updateService.UpdateInstalled += OnUpdateInstalled;
             _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
@@ -68,7 +70,8 @@ namespace WolvenKit.ViewModels
             if (Connected)
             { InternetConnected = "Connected"; }
 
-
+            IsLoading = false;
+            LoadingString = "";
             UpdateAutoUpdateInfo();
         }
 

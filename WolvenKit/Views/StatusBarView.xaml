@@ -48,8 +48,8 @@
                     </Separator>
                     <Grid   >
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="5,0,5,0" x:Name="LoadingTextStatusBar" Text=""/> <!-- FIRSTRELEASE -->
-                        <hc:LoadingIndicator IsEnabled="True" Foreground="{DynamicResource RegionBrush}"  MaxHeight="25" Width="25" Style="{StaticResource  LoadingIndicatorGridsStyle}"></hc:LoadingIndicator>
+                        <TextBlock Margin="5,0,5,0" x:Name="LoadingTextStatusBar" Text="{Binding LoadingString}"/> <!-- FIRSTRELEASE -->
+                        <hc:LoadingIndicator IsEnabled="True" Visibility="{Binding IsLoading,Converter={StaticResource Boolean2VisibilityConverter}}" Foreground="{DynamicResource RegionBrush}"  MaxHeight="25" Width="25" Style="{StaticResource  LoadingIndicatorGridsStyle}"></hc:LoadingIndicator>
 
                     </StackPanel>
 

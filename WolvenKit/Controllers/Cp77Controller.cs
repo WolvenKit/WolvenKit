@@ -16,6 +16,8 @@ using WolvenKit.ViewModels.AssetBrowser;
 using WolvenKit.Services;
 using WolvenKit.Common.Services;
 using CP77.CR2W.Archive;
+using WolvenKit.ViewModels;
+using WolvenKit.WKitGlobal;
 
 namespace WolvenKit.Controllers
 {
@@ -91,8 +93,8 @@ namespace WolvenKit.Controllers
                 ArchiveManager.LoadAll(Path.GetDirectoryName(settings.CP77ExecutablePath));
             }
             logger.LogString("Finished loading archive manager.", Logtype.Success);
-
-
+            //start LOAD INDICATOR
+            AppHelper.GlobalStatusBar.LoadingString = "loading";
             // init asset browser here after the manager has loaded
             var assetBrowserViewModel = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
             assetBrowserViewModel.ReInit();
