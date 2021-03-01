@@ -3,7 +3,10 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"     
                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                   xmlns:hc="https://handyorg.github.io/handycontrol"
-                  xmlns:catel="http://schemas.catelproject.com" xmlns:Fluent="urn:fluent-ribbon"  BorderBrush="{x:Null}"     IsVisibleChanged="DataWindow_IsVisibleChanged" >
+
+                  xmlns:catel="http://schemas.catelproject.com" xmlns:Fluent="urn:fluent-ribbon"
+                    xmlns:controls1="clr-namespace:WolvenKit.AssetBrowserBar.Controls;assembly=WolvenKit.AssetBrowserBar"
+                   BorderBrush="{x:Null}"     IsVisibleChanged="DataWindow_IsVisibleChanged" >
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -77,6 +80,19 @@
                                 </Button.RenderTransform>
 
                             </Button>
+
+                            <controls1:BreadcrumbBar
+                                Visibility="Hidden"
+                                x:Name="bar" 
+                                Background="Transparent"
+                                Root="{Binding Path=CurrentNode.Name, Mode=OneWay}"
+  TraceBinding="{Binding CurrentNode.Name}"                           
+
+    ImageBinding="{Binding Image}" >
+
+
+
+                            </controls1:BreadcrumbBar>
                             <hc:TextBox Text="{Binding Path=CurrentNode.FullPath, Mode=OneWay}" Width="500"></hc:TextBox>
 
                             <Button   Style="{StaticResource ButtonIcon}" Width="40" hc:IconElement.Geometry="{DynamicResource AssetBrowserStar}" Background="Transparent" BorderBrush="{x:Null}">

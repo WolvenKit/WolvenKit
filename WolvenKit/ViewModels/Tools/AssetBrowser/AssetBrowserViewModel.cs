@@ -20,6 +20,7 @@ using System.Windows;
 using System.Windows.Threading;
 using HandyControl.Controls;
 using Orchestra.Services;
+using System.Windows.Media;
 
 namespace WolvenKit.ViewModels.AssetBrowser
 {
@@ -64,9 +65,12 @@ namespace WolvenKit.ViewModels.AssetBrowser
 // ReSharper disable MemberCanBePrivate.Global
         public bool PreviewVisible { get; set; }
         public System.Windows.GridLength PreviewWidth { get; set; } = new(0, System.Windows.GridUnitType.Pixel);
-        
-        
 
+
+        public string Folder { get; set; }
+        public ImageSource Image { get; set; }
+
+       
         public List<IGameFile> SelectedFiles { get; set; }
         public List<string> Extensions { get; set; }
 
@@ -163,6 +167,8 @@ namespace WolvenKit.ViewModels.AssetBrowser
         /// </summary>
         public void ReInit()
         {
+       
+
             SelectedFiles = new List<IGameFile>();
             Managers = MainController.Get().GetManagers(true);
 
@@ -326,8 +332,20 @@ namespace WolvenKit.ViewModels.AssetBrowser
 
             return base.CloseAsync();
         }
-        
+
         #endregion
 
+    }
+
+    public class FolderItem
+    {
+        public string Folder { get; set; }
+        public ImageSource Image { get; set; }
+
+        public FolderItem()
+            : base()
+        {
+    
+        }
     }
 }
