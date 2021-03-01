@@ -12,12 +12,12 @@
     <OutputType>WinExe</OutputType>
     <StartupObject />
     <ApplicationIcon>Wkit_Icon_Flattened_256x.ico</ApplicationIcon>
-	<PublishSingleFile>true</PublishSingleFile>
-	<SelfContained>false</SelfContained>
-	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
-	<PublishTrimmed>true</PublishTrimmed>
-	<PublishReadyToRun>true</PublishReadyToRun>
-	<DebugType>embedded</DebugType>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>false</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <DebugType>embedded</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
@@ -205,12 +205,12 @@
     <PackageReference Include="Catel.MVVM" Version="5.12.11" />
     <PackageReference Include="Catel.Fody" Version="4.7.0-alpha0115" PrivateAssets="all" />
     <PackageReference Include="Dirkster.MWindowLib" Version="1.3.1.2" />
+    <PackageReference Include="Dirkster.WSF" Version="1.2.0" />
     <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
     <PackageReference Include="Fody" Version="6.3.0" PrivateAssets="all" />
     <PackageReference Include="CsvHelper" Version="16.1.0" />
     <PackageReference Include="Dirkster.MLib" Version="1.3.1.2" />
     <PackageReference Include="FastMember" Version="1.5.0" />
-    <PackageReference Include="HandyControls" Version="3.1.1" />
     <PackageReference Include="MahApps.Metro" Version="2.4.3" />
     <PackageReference Include="MahApps.Metro.IconPacks.BootstrapIcons" Version="4.8.0" />
     <PackageReference Include="MahApps.Metro.IconPacks.BoxIcons" Version="4.8.0" />
@@ -232,7 +232,7 @@
     <PackageReference Include="Pfim" Version="0.9.1" />
     <PackageReference Include="protobuf-net" Version="3.0.73" />
     <PackageReference Include="SharpZipLib" Version="1.3.1" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -244,6 +244,8 @@
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
     <PackageReference Include="WolvenKit.AvalonDock.Themes.VS2013" Version="4.50.4" />
     <PackageReference Include="WolvenKit.AvalonEdit" Version="6.1.1" />
+    <PackageReference Include="WolvenKit.ExplorerControl" Version="1.3.0" />
+    <PackageReference Include="WolvenKit.HandyControl" Version="3.1.3" />
     <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.2" />
     <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="4.2.5" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
@@ -253,7 +255,7 @@
     <PackageReference Include="WPFHexaEditor" Version="2.1.6" />
     <!--<PackageReference Update="NETStandard.Library" Version="2.0.1" />-->
   </ItemGroup>
-  
+
   <ItemGroup>
     <Content Include="ManagerCache\__xbmdump_3768555366.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

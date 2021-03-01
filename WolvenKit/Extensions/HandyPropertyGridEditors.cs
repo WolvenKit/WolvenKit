@@ -26,7 +26,7 @@ namespace WolvenKit.Extensions
     {
         public MyPropertyResolver() : base()
         {
-            
+
         }
 
         private enum EditorTypeCode
@@ -38,15 +38,6 @@ namespace WolvenKit.Extensions
             [typeof(IList)] = EditorTypeCode.IList,
         };
 
-        public override PropertyEditorBase CreateEditor(Type type) =>
-            MyTypeCodeDic.TryGetValue(type, out var editorType)
-                ? editorType switch
-                {
-                    EditorTypeCode.IList => new IListPropertyEditor(),
-
-                    _ => base.CreateEditor(type)
-                }
-                : base.CreateEditor(type);
     }
 
 }
