@@ -43,7 +43,11 @@
 
 
         <Grid MouseLeftButtonDown="Grid_MouseLeftButtonDown_2"  Background="Transparent" >
-
+            <hc:SideMenu>
+                <hc:SideMenuItem>
+                    
+                </hc:SideMenuItem>
+            </hc:SideMenu>
         </Grid>
 
         <Grid        MouseLeftButtonDown="Grid_MouseLeftButtonDown_1" VerticalAlignment="Top" Height="20" >
@@ -53,21 +57,18 @@
 
             <Border CornerRadius="15" Background="{DynamicResource RegionBrush}">
                 <hc:TransitioningContentControl>
-                    <hc:SideMenu   Style="{DynamicResource SideMenuBaseStyle}" ExpandMode="ShowOne"   x:Name="LeftSideMenu" Margin="0,90,0,15" SideBrush="{DynamicResource MahApps.Brushes.AccentBase}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}"  BorderThickness="0" Width="200" SubSideBrush="{DynamicResource MahApps.Brushes.Accent2}">
+                    <hc:SideMenu    ExpandMode="ShowOne"   x:Name="LeftSideMenu" Margin="0,90,0,15" SideBrush="{DynamicResource MahApps.Brushes.AccentBase}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}"  BorderThickness="0" Width="200" SubSideBrush="{DynamicResource MahApps.Brushes.Accent2}">
+
+               
 
 
 
-
-
-
-
-
-                        <hc:SideMenuItem DataContext="{Binding ElementName=LeftSideMenu}" IsSelected="True" x:Name="SideMenu_GetStartedItem" Header="Get Started"  Margin="0,100,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
+                        <hc:SideMenuItem IsSelected="True" x:Name="SideMenu_GetStartedItem" Header="Get Started"  Margin="0,100,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:Codicons Height="25" Kind="Tools" Width="25"/>
                             </hc:SideMenuItem.Icon>
 
-                            <hc:SideMenuItem x:Name="SideMenu_WelcomeItem" Header="Welcome" IsSelected="True"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_WelcomeItem_Selected">
+                            <hc:SideMenuItem  x:Name="SideMenu_WelcomeItem" Header="Welcome" IsSelected="True"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_WelcomeItem_Selected">
                                 <hc:SideMenuItem.Icon>
                                     <iconPacks:Codicons Height="15" Kind="Pinned" Width="15"/>
                                 </hc:SideMenuItem.Icon>
@@ -102,7 +103,7 @@
                             </hc:SideMenuItem.Icon>
                         </hc:SideMenuItem>
 
-                        <hc:SideMenuItem IsSelected="False" x:Name="SideMenu_UserItem" Header="Account"  Margin="0,0,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_UserItem_Selected">
+                        <hc:SideMenuItem  IsSelected="False" x:Name="SideMenu_UserItem" Header="Account"  Margin="0,0,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_UserItem_Selected">
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:Codicons Height="25" Kind="Account" Width="25"/>
                             </hc:SideMenuItem.Icon>

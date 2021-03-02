@@ -262,10 +262,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Functionality\ManagerCache\__xbmdump_3768555366.csv">
+    <Content Include="Config\__xbmdump_3768555366.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\AvalonDock.Layout.config">
+    <Content Include="Config\AvalonDock.Layout.config">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Images\git.png">
@@ -509,5 +509,8 @@
     <None Update="testmp3.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\cancerPC\.nuget\packages\microsoft.web.webview2\1.0.664.37\build\\..\runtimes\win-x64\native\WebView2Loader.dll" />
   </ItemGroup>
 </Project>

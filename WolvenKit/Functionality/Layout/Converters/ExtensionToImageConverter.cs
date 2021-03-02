@@ -119,7 +119,7 @@ namespace WolvenKit.Functionality.Layout.Converters
                 case nameof(ECustomImageKeys.DlcUncookedImageKey):
                     return $"Files/Project_Explorer_Base_Dir_16x.png";
 
-                default: return $"Files/BlankFile_32x.png";
+                default: return $"Files/BlankFile_16x.png";
             }
         }
     }

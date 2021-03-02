@@ -15,7 +15,7 @@ namespace WolvenKit.Functionality.Controllers
 {
     public abstract class GameControllerBase
     {
-        public static string ManagerCacheDir => Path.Combine(AppContext.BaseDirectory, "Functionality/ManagerCache");
+        public static string ManagerCacheDir => Path.Combine(AppContext.BaseDirectory, "Config");
         public static string WorkDir => Path.Combine(AppContext.BaseDirectory, "tmp_workdir");
         public static string XBMDumpPath => Path.Combine(ManagerCacheDir, "__xbmdump_3768555366.csv");
 

@@ -1,4 +1,4 @@
-﻿using Catel.MVVM;
+using Catel.MVVM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
