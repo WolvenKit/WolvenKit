@@ -27,13 +27,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
-    <Compile Remove="Views\Wizards\WizardPages\InstallerWizard\**" />
+    <Compile Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
     <EmbeddedResource Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
-    <EmbeddedResource Remove="Views\Wizards\WizardPages\InstallerWizard\**" />
+    <EmbeddedResource Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
     <None Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
-    <None Remove="Views\Wizards\WizardPages\InstallerWizard\**" />
+    <None Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
     <Page Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
-    <Page Remove="Views\Wizards\WizardPages\InstallerWizard\**" />
+    <Page Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\Icons\3.png" />
@@ -478,15 +478,16 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="NewFolder1\" />
     <Folder Include="Resources\Styles\CustomBase\" />
     <Folder Include="Resources\Styles\Custom\" />
     <Folder Include="ViewModels\SettingsPages\SubPages\Integration\" />
     <Folder Include="ViewModels\SettingsPages\SubPages\Packaging\" />
-    <Folder Include="Views\Editors\VisualEditor\Nodes\Audio\" />
-    <Folder Include="Views\Editors\VisualEditor\Nodes\Scene\" />
-    <Folder Include="Views\Editors\VisualEditor\Nodes\Quest\" />
-    <Folder Include="Views\SettingsPages\SubPages\Integration\" />
-    <Folder Include="Views\SettingsPages\SubPages\Packaging\" />
+    <Folder Include="MVVM\Views\Components\Editors\VisualEditor\Nodes\Audio\" />
+    <Folder Include="MVVM\Views\Components\Editors\VisualEditor\Nodes\Scene\" />
+    <Folder Include="MVVM\Views\Components\Editors\VisualEditor\Nodes\Quest\" />
+    <Folder Include="MVVM\Views\Shell\HomePage\Pages\SettingsPages\SubPages\Integration\" />
+    <Folder Include="MVVM\Views\Shell\HomePage\Pages\SettingsPages\SubPages\Packaging\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
