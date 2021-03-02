@@ -4,7 +4,9 @@ using Sample_NAudio;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -21,23 +23,14 @@ namespace WolvenKit.Views.AudioTool
         {
             InitializeComponent();
 
-
             Reinit();
 
-        
-            ShowPage();
+      
         }
 
         public void Reinit()
         {
-            GivenRedAudioSource.Add("Red");
-            GivenRedAudioSource.Add("Blue");
-            GivenRedAudioSource.Add("Green");
-            GivenRedAudioSource.Add("Orange");
-            GivenRedAudioSource.Add("Purple");
-            GivenRedAudioSource.Add("White");
-            GivenRedAudioSource.Add("Black");
-            PlayListView.SetCurrentValue(ItemsControl.ItemsSourceProperty, GivenRedAudioSource);
+
 
 
             ResourceDictionary themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
@@ -57,7 +50,8 @@ namespace WolvenKit.Views.AudioTool
             spectrumAnalyzer.RegisterSoundPlayer(soundEngine);
             waveformTimeline.RegisterSoundPlayer(soundEngine);
 
-            //LoadExpressionDarkTheme();
+            //LoadExpressionDarkTheme();  
+            ShowPage();
         }
 
 
@@ -98,6 +92,63 @@ namespace WolvenKit.Views.AudioTool
             StepMain.Next();
             ShowPage();
         }
+
+        public void AddAudioItem(string path)
+        {
+            TempConvertToWemWav( path);
+        }
+
+        const string wdir = "vgmstream\\AudioWorkingDir\\";
+
+        public void TempConvertToWemWav(string path)
+        {
+            Directory.CreateDirectory(wdir);
+
+        
+                string outf = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Path.GetFileNameWithoutExtension(path) + ".wav");
+                string arg = path + " -o " + outf;
+                var si = new ProcessStartInfo(
+                        "vgmstream\\test.exe",
+                        arg
+                    );
+                si.CreateNoWindow = true;
+                si.WindowStyle = ProcessWindowStyle.Hidden;
+                si.UseShellExecute = false;
+                var proc = Process.Start(si);
+                proc.WaitForExit();
+          
+
+            foreach (var f in Directory.GetFiles(wdir))
+            {
+                var lvi = new TextBlock()
+                {
+                    Text = Path.GetFullPath(f),
+                    Tag = Path.GetFileName(f)
+                };
+                PlayListView.Items.Add(lvi);
+                PlayListView.Items.Add(lvi);
+                PlayListView.Items.Add(lvi);
+                PlayListView.Items.Add(lvi);
+                PlayListView.Items.Add(lvi);
+
+            }
+
+            Trace.WriteLine("WeDiDThis");
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         private void PreviousPage(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -274,7 +325,6 @@ namespace WolvenKit.Views.AudioTool
         }
 
 
-        public ObservableCollection<string> GivenRedAudioSource = new ObservableCollection<string>();
 
         private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {

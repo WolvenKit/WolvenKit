@@ -360,7 +360,7 @@
                                 
                                 
                                 
-                                <ListView Margin="2,20,2,20" Style="{DynamicResource  MahApps.Styles.ListView}" ItemsSource="{Binding GivenRedAudioSource }"  x:Name="PlayListView"   BorderBrush="Transparent" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" MinWidth="250">
+                                <ListView Margin="2,20,2,20"   x:Name="PlayListView"   BorderBrush="Transparent" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" MinWidth="250">
                                     
                                 </ListView>
                             </Border>

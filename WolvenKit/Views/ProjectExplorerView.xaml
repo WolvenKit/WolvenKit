@@ -30,7 +30,13 @@
             <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
         </Grid.Resources>
 
-        <TreeView  Style="{DynamicResource TreeView}" Name="TreeView" 
+
+        <Grid VerticalAlignment="Top">
+            <hc:SearchBar Margin="3"></hc:SearchBar>
+        </Grid>
+        
+
+        <TreeView BorderBrush="Transparent" Margin="0,33,0,0" Style="{DynamicResource TreeView}" Name="TreeView" 
                              ItemsSource="{Binding Treenodes}"
                              
                              >

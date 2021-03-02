@@ -39,6 +39,7 @@ using WolvenKit.ViewModels.ImporterTool;
 using WolvenKit.ViewModels.Tools.MenuTool;
 using WolvenKit.ViewModels.AnimationTool;
 using WolvenKit.ViewModels.Editors.CR2WEditor;
+using WolvenKit.Views.AudioTool;
 
 namespace WolvenKit.ViewModels
 {
@@ -118,6 +119,8 @@ namespace WolvenKit.ViewModels
             PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
             BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
             PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
+
+
 
 
             addfiledel = vm => _files.Add(vm);
@@ -296,7 +299,7 @@ namespace WolvenKit.ViewModels
         /// </summary>
         public ICommand ShowAudioToolCommand { get; private set; }
         private bool CanShowAudioTool() => true;
-        private void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
+        public void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
@@ -898,6 +901,8 @@ namespace WolvenKit.ViewModels
                 case ".BNK":
                 case ".WEM":
                 {
+
+                    OpenAudioFile(fullpath);
                     // TODO: port winforms
                     //using (var sp = new frmAudioPlayer(fullpath))
                     //{
@@ -921,6 +926,14 @@ namespace WolvenKit.ViewModels
                 default:
                     ActiveDocument = await OpenAsync(model);
                     break;
+            }
+
+
+            void OpenAudioFile(string full)
+            {
+                AudioToolView z = (AudioToolView)ServiceLocator.Default.ResolveType(typeof(AudioToolView));
+                ExecuteAudioTool();
+                z.AddAudioItem(full);
             }
 
             void ShellExecute(string path)
