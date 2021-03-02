@@ -89,7 +89,7 @@
                 </StackPanel>
 
                 <StackPanel Visibility="{Binding IsUpdatedInstalled, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}">
-                    <Image Width="16" Height="16" Source="{orctheming:FontImage {x:Static WolvenKit:FontAwesome.Download}}" 
+                    <Image Width="16" Height="16" Source="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}" 
                     ToolTip="Update is installed, restart to enable new features" />
 
                     <Separator Background="{DynamicResource RegionBrush}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">

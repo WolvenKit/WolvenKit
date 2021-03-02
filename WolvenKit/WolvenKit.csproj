@@ -262,7 +262,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="ManagerCache\__xbmdump_3768555366.csv">
+    <Content Include="Functionality\ManagerCache\__xbmdump_3768555366.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\AvalonDock.Layout.config">
@@ -372,7 +372,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Fonts\fontawesome-webfont.ttf" />
     <Resource Include="Resources\Icons\3.png" />
     <Resource Include="Resources\Icons\Homelogo.png" />
     <Resource Include="Resources\Icons\Logo.ico" />
