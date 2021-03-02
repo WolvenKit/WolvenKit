@@ -1,4 +1,4 @@
-namespace WolvenKit.Layout.MLib
+namespace WolvenKit.Functionality.Layout.MLib
 {
 	using System;
     using System.IO;

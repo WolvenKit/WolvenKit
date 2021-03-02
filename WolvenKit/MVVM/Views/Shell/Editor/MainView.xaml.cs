@@ -11,7 +11,7 @@ using Catel.IoC;
 using Catel.MVVM;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.ViewModels;
-using WolvenKit.Layout.MLib;
+using WolvenKit.Functionality.Layout.MLib;
 
 namespace WolvenKit.Views
 {

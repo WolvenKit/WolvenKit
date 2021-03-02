@@ -4,7 +4,7 @@
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                   xmlns:ad="clr-namespace:WolvenKit.Layout"
+                   xmlns:ad="clr-namespace:WolvenKit.Functionality.Layout"
                    xmlns:views2="clr-namespace:WolvenKit.Views.AssetBrowser"
                    xmlns:radishtool="clr-namespace:WolvenKit.Views.RadishTool"
                    xmlns:pluginmanagerz="clr-namespace:WolvenKit.Views.PluginManager"
@@ -36,7 +36,7 @@
 
         <Grid  Background="{DynamicResource CloudDrawingBrushMain}"
 
-        xmlns:conv="clr-namespace:WolvenKit.Layout.Converters">
+        xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters">
         <Grid.Resources>
             <conv:ActiveDocumentConverter x:Key="ActiveDocumentConverter"/>
             <BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />

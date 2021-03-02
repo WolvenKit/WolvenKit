@@ -13,7 +13,7 @@
     xmlns:cmodel="clr-namespace:WolvenKit.Common.Model"
     xmlns:types="clr-namespace:WolvenKit.Common.Model.Cr2w;assembly=WolvenKit.Common"
     xmlns:cr2W="clr-namespace:WolvenKit.CR2W;assembly=WolvenKit.CR2W"
-    xmlns:conv="clr-namespace:WolvenKit.Layout.Converters"
+    xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     d:DesignHeight="450"
     d:DesignWidth="800"

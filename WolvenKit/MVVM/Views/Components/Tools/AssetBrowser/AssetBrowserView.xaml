@@ -147,7 +147,7 @@
                     <ColumnDefinition Width="4*"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="0" xmlns:conv="clr-namespace:WolvenKit.Layout.Converters">
+                <Grid Grid.Column="0" xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters">
                     <Grid.Resources>
                         <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
                     </Grid.Resources>
@@ -198,7 +198,7 @@
                             <ListView BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
                                       Background="Transparent"
                                       SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
-                                      ItemsSource="{Binding CurrentNodeFiles}" xmlns:conv="clr-namespace:WolvenKit.Layout.Converters">
+                                      ItemsSource="{Binding CurrentNodeFiles}" xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters">
                                 <ListView.Resources>
                                     <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
                                 </ListView.Resources>

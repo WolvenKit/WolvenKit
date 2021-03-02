@@ -23,7 +23,7 @@
     </catel:UserControl.Resources>
     
     <Grid
-        xmlns:conv="clr-namespace:WolvenKit.Layout.Converters">
+        xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters">
         <Grid.Resources>
             <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
         </Grid.Resources>

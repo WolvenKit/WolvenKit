@@ -9,7 +9,7 @@ using Catel.MVVM.Converters;
 using WolvenKit.Common;
 using WolvenKit.Model;
 
-namespace WolvenKit.Layout.Converters
+namespace WolvenKit.Functionality.Layout.Converters
 {
     public class ExtensionToImageConverter : IValueConverter
     {

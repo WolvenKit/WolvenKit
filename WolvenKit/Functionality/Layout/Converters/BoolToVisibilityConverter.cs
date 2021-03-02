@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.Layout.Converters
+﻿namespace WolvenKit.Functionality.Layout.Converters
 {
 	using System;
 	using System.Globalization;

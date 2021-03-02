@@ -1,7 +1,7 @@
 using AvalonDock.Layout;
 using System.Linq;
 
-namespace WolvenKit.Layout
+namespace WolvenKit.Functionality.Layout
 {
     internal class LayoutInitializer : ILayoutUpdateStrategy
 	{

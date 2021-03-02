@@ -2,7 +2,7 @@
 using System.Windows.Data;
 using WolvenKit.ViewModels;
 
-namespace WolvenKit.Layout.Converters
+namespace WolvenKit.Functionality.Layout.Converters
 {
     public class ActiveDocumentConverter : IValueConverter
 	{

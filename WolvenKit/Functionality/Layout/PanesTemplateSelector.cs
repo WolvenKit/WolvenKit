@@ -1,6 +1,6 @@
 using AvalonDock.Layout;
 
-namespace WolvenKit.Layout
+namespace WolvenKit.Functionality.Layout
 {
 	using System.Windows.Controls;
 	using System.Windows;

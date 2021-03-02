@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.Layout
+namespace WolvenKit.Functionality.Layout
 {
 	using System.Windows;
 
